@@ -138,7 +138,7 @@ object Libs {
    * https://developer.android.com/topic/libraries/architecture/index.html
    */
   const val navigation_ui_ktx: String = "androidx.navigation:navigation-ui-ktx:" +
-    Versions.androidx_navigation
+    Versions.navigation_ui_ktx
 
   /**
    * https://github.com/google/dagger

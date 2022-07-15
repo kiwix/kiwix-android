@@ -144,7 +144,9 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
         checkNearbyWifiDevicesPermission()
       ) {
         startStopServer()
-      } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P || checkCoarseLocationAccessPermission()) {
+      } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P ||
+        checkCoarseLocationAccessPermission()
+      ) {
         startStopServer()
       }
     }
@@ -430,6 +432,6 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   companion object {
     const val SELECTED_ZIM_PATHS_KEY = "selected_zim_paths"
-    private const val PERMISSION_REQUEST_CODE_COARSE_LOCATION = 10
+    const val PERMISSION_REQUEST_CODE_COARSE_LOCATION = 10
   }
 }
