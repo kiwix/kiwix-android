@@ -52,8 +52,4 @@ class NewNoteDao @Inject constructor(val box: Box<NotesEntity>) : PageDao {
       equal(NotesEntity_.noteTitle, noteUniqueKey)
     }.remove()
   }
-
-  fun deleteAllNotes() {
-    box.removeAll()
-  }
 }

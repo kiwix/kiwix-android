@@ -51,5 +51,4 @@ interface DataSource {
   fun saveNote(noteListItem: NoteListItem): Completable
   fun deleteNote(noteUniqueKey: String): Completable
   fun deleteNotes(noteList: List<NoteListItem>): Completable
-  fun clearNotes(): Completable
 }

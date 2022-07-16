@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2020 Kiwix <android.kiwix.org>
+ * Copyright (c) 2022 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.dao.entities
 
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
+import io.objectbox.annotation.Unique
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 
 @Entity
@@ -28,7 +29,7 @@ data class NotesEntity(
   val zimId: String,
   var zimFilePath: String?,
   val zimUrl: String,
-  // @Unique(onConflict = ConflictStrategy.REPLACE) add resolve conflict dependency update required
+  @Unique
   var noteTitle: String,
   var noteFilePath: String,
   var favicon: String?
