@@ -313,4 +313,12 @@
     <item>1</item>
     <item>-1</item>
   </string-array>
+  <string name="no_notes">No Notes</string>
+  <string name="notes_from_all_books">View Notes From All Books</string>
+  <string name="search_notes">Search Notes</string>
+  <string name="choose_your_action">Choose your Action</string>
+  <string name="open_note">Open Note</string>
+  <string name="open_article">Open Article</string>
+  <string name="delete_note_dialog_message">Note: Notes are not deleted from your storage</string>
+  <string name="delete_selected_notes">Delete Selected Notes?</string>
 </resources>

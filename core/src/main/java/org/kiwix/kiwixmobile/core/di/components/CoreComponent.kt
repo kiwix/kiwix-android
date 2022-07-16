@@ -31,6 +31,7 @@ import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.core.dao.NewNoteDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.data.DataModule
 import org.kiwix.kiwixmobile.core.data.DataSource
@@ -87,6 +88,7 @@ interface CoreComponent {
   fun fetchDownloadDao(): FetchDownloadDao
   fun newBookDao(): NewBookDao
   fun historyDao(): HistoryDao
+  fun noteDao(): NewNoteDao
   fun newLanguagesDao(): NewLanguagesDao
   fun recentSearchDao(): NewRecentSearchDao
   fun newBookmarksDao(): NewBookmarksDao
