@@ -75,7 +75,7 @@ class Repository @Inject internal constructor(
         { current, next -> current.locale.displayName != next.locale.displayName }
       )
     }
-    .map { it.toList() }
+    .map(MutableList<BooksOnDiskListItem>::toList)
 
   override fun saveBooks(books: List<BookOnDisk>) =
     Completable.fromAction { bookDao.insert(books) }
@@ -123,15 +123,15 @@ class Repository @Inject internal constructor(
     Completable.fromAction { bookmarksDao.deleteBookmark(bookmarkUrl) }
       .subscribeOn(io)
 
-  override fun saveNote(noteListItem: NoteListItem): Completable? =
+  override fun saveNote(noteListItem: NoteListItem): Completable =
     Completable.fromAction { notesDao.saveNote(noteListItem) }
       .subscribeOn(io)
 
-  override fun deleteNotes(noteList: MutableList<NoteListItem>) =
+  override fun deleteNotes(noteList: List<NoteListItem>) =
     Completable.fromAction { notesDao.deleteNotes(noteList) }
       .subscribeOn(io)
 
-  override fun deleteNote(noteUniqueKey: String): Completable? =
+  override fun deleteNote(noteUniqueKey: String): Completable =
     Completable.fromAction { notesDao.deleteNote(noteUniqueKey) }
       .subscribeOn(io)
 

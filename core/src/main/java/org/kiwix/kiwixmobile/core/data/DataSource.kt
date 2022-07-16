@@ -23,6 +23,7 @@ import io.reactivex.Single
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
@@ -46,4 +47,9 @@ interface DataSource {
   fun deleteBookmarks(bookmarks: List<BookmarkItem>): Completable
   fun deleteBookmark(bookmarkUrl: String): Completable?
   fun booksOnDiskAsListItems(): Flowable<List<BooksOnDiskListItem>>
+
+  fun saveNote(noteListItem: NoteListItem): Completable
+  fun deleteNote(noteUniqueKey: String): Completable
+  fun deleteNotes(noteList: List<NoteListItem>): Completable
+  fun clearNotes(): Completable
 }
