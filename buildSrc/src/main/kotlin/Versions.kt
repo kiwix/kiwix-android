@@ -20,6 +20,8 @@ object Versions {
 
   const val androidx_test_espresso: String = "3.4.0"
 
+  const val androidx_test_espresso_contrib: String = "3.3.0"
+
   const val com_squareup_retrofit2: String = "2.9.0"
 
   const val com_squareup_okhttp3: String = "4.9.0"
