@@ -3,6 +3,7 @@
 * Dyolf77
 * Eyas
 * Meno25
+* Mohanad Kh
 * Tala Ali
 * Ulhvulgv
 * بدارين
@@ -287,4 +288,5 @@
   <string name="how_to_update_content">كيفية تحديث المحتوى؟</string>
   <string name="update_content_description">لتحديث احتوى (ملف zim)، تحتاج إلى تنزيل أحدث إصدارٍ كاملٍ من المحتوى نفسه. يمكنك القيام بذلك عبر قسم التنزيل.</string>
   <string name="all_files_permission_needed_message">In order to access all the zim files across device we need to have All Files Permission</string>
+  <string name="allow">السماح</string>
 </resources>

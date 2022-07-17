@@ -254,6 +254,9 @@
   <string name="on">ߊ߬ ߟߊߞߎߣߎ߲߫</string>
   <string name="off">ߊ߬ ߓߐ߫ ߊ߬ ߟߊ߫</string>
   <string name="auto">ߞߍߒߖߘߍߦߋ</string>
+  <string name="crash_checkbox_file_system">ߞߐߕߐ߮ ߞߊ߲ߞߋ ߝߊߙߊ߲ߝߊ߯ߛߌ</string>
+  <string name="diagnostic_report">ߛߍ߯ߛߍ߯ߟߌ ߘߊ߲߬ߕߍ߰ߟߌ</string>
+  <string name="diagnostic_report_message">ߝߊߙߊ߲ߝߊ߯ߛߟߌ ߣߌ߲߬ ߠߎ߬ ߓߍ߯ ߗߋ߫ ߊ߲ ߡߊ߬ ߖߊ߰ߣߌ߲߫ ߛߴߊ߲ ߘߌ߫ ߛߋ߫ ߝߙߋߞߋ ߛߎ߯ߦߊ ߛߍ߯ߛߍ߯ ߟߊ߫</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">ߞߟߏߜߍ ߟߊߓߏ߲߬ߧߊ</string>
   <string name="search_open_in_new_tab">ߊ߬ ߟߊߞߊ߬ ߝߢߐߘߊ߫ ߞߎߘߊ ߞߊ߲߬</string>
