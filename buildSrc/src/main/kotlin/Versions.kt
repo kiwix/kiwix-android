@@ -12,6 +12,8 @@ import org.gradle.plugin.use.PluginDependencySpec
  */
 object Versions {
 
+  const val google_android_play_core: String = "1.7.3"
+
   const val document_file_version: String = "1.0.1"
 
   const val org_jetbrains_kotlinx_kotlinx_coroutines: String = "1.4.1"
