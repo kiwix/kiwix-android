@@ -15,28 +15,32 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.data.local.dao
+package org.kiwix.kiwixmobile.core.data.local.dao
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yahoo.squidb.data.AbstractModel
-import com.yahoo.squidb.data.SquidCursor
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
-import org.junit.Test
-import org.junit.runner.RunWith
+import android.database.sqlite.SQLiteException
+import com.yahoo.squidb.sql.Query
 import org.kiwix.kiwixmobile.core.data.local.KiwixDatabase
-import org.kiwix.kiwixmobile.core.data.local.dao.RecentSearchDao
+import org.kiwix.kiwixmobile.core.data.local.entity.RecentSearch
+import javax.inject.Inject
 
-@RunWith(AndroidJUnit4::class)
-class RecentSearchDaoTest {
+/**
+ * Dao class for recent searches.
+ */
+class RecentSearchDao @Inject constructor(private val mDb: KiwixDatabase) {
 
-  @Test fun testGetRecentSearches() {
-    val kiwixDatabase = mockk<KiwixDatabase>()
-    every {
-      kiwixDatabase.query(any<Class<AbstractModel>>(), any())
-    } returns mockk<SquidCursor<AbstractModel>>(relaxed = true)
-    RecentSearchDao(kiwixDatabase).getRecentSearches()
-    verify { kiwixDatabase.query(any<Class<AbstractModel>>(), any()) }
+  fun getRecentSearches(): MutableList<RecentSearch> {
+    val result: MutableList<RecentSearch> = ArrayList()
+    try {
+      val searchCursor = mDb.query(
+        RecentSearch::class.java, Query.select()
+      )
+      while (searchCursor.moveToNext()) {
+        result.add(RecentSearch(searchCursor))
+      }
+    } catch (exception: SQLiteException) {
+      exception.printStackTrace()
+    }
+
+    return result
   }
 }
