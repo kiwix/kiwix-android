@@ -36,7 +36,7 @@ class RecentSearchDaoTest {
     every {
       kiwixDatabase.query(any<Class<AbstractModel>>(), any())
     } returns mockk<SquidCursor<AbstractModel>>(relaxed = true)
-    RecentSearchDao(kiwixDatabase).recentSearches
+    RecentSearchDao(kiwixDatabase).getRecentSearches()
     verify { kiwixDatabase.query(any<Class<AbstractModel>>(), any()) }
   }
 }
