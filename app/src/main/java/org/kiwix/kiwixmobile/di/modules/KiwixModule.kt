@@ -27,9 +27,9 @@ import dagger.Provides
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.zim_manager.MountPointProducer
 import org.kiwix.kiwixmobile.di.KiwixScope
-import org.kiwix.kiwixmobile.zim_manager.Fat32Checker
-import org.kiwix.kiwixmobile.zim_manager.FileWritingFileSystemChecker
-import org.kiwix.kiwixmobile.zim_manager.MountFileSystemChecker
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker
+import org.kiwix.kiwixmobile.zimManager.FileWritingFileSystemChecker
+import org.kiwix.kiwixmobile.zimManager.MountFileSystemChecker
 
 @Module
 object KiwixModule {
