@@ -126,12 +126,13 @@ class FetchDownloadNotificationManager(private val context: Context) :
     downloadNotification: DownloadNotification,
     actionType: DownloadNotification.ActionType
   ): PendingIntent {
-    val intent = Intent(notificationManagerAction)
-    intent.putExtra(EXTRA_NAMESPACE, downloadNotification.namespace)
-    intent.putExtra(EXTRA_DOWNLOAD_ID, downloadNotification.notificationId)
-    intent.putExtra(EXTRA_NOTIFICATION_ID, downloadNotification.notificationId)
-    intent.putExtra(EXTRA_GROUP_ACTION, false)
-    intent.putExtra(EXTRA_NOTIFICATION_GROUP_ID, downloadNotification.groupId)
+    val intent = Intent(notificationManagerAction).apply {
+      putExtra(EXTRA_NAMESPACE, downloadNotification.namespace)
+      putExtra(EXTRA_DOWNLOAD_ID, downloadNotification.notificationId)
+      putExtra(EXTRA_NOTIFICATION_ID, downloadNotification.notificationId)
+      putExtra(EXTRA_GROUP_ACTION, false)
+      putExtra(EXTRA_NOTIFICATION_GROUP_ID, downloadNotification.groupId)
+    }
     val action = when (actionType) {
       DownloadNotification.ActionType.CANCEL -> ACTION_TYPE_CANCEL
       DownloadNotification.ActionType.DELETE -> ACTION_TYPE_DELETE
@@ -146,7 +147,7 @@ class FetchDownloadNotificationManager(private val context: Context) :
     } else {
       PendingIntent.FLAG_UPDATE_CURRENT
     }
-    return@getActionPendingIntent PendingIntent.getBroadcast(
+    return PendingIntent.getBroadcast(
       context,
       downloadNotification.notificationId + action,
       intent,
