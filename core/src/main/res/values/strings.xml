@@ -321,4 +321,5 @@
   <string name="open_article">Open Article</string>
   <string name="delete_note_dialog_message">Note: Notes are not deleted from your storage</string>
   <string name="delete_selected_notes">Delete Selected Notes?</string>
+  <string name="missing_split_version_for_objectbox">Un-Supported architecture, your device isn\'t compatible with this app</string>
 </resources>
