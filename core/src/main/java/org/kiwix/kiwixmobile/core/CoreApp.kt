@@ -80,8 +80,8 @@ abstract class CoreApp : Application() {
   override fun onCreate() {
     if (MissingSplitsManagerFactory.create(this).disableAppIfMissingRequiredSplits()) {
       AlertDialog.Builder(this)
-        .setMessage(org.kiwix.kiwixmobile.core.R.string.missing_split_version_for_objectbox)
-        .setPositiveButton(R.string.yes) { dialog, which ->
+        .setMessage(R.string.missing_split_version_for_objectbox)
+        .setPositiveButton(R.string.yes) { _, _ ->
           android.os.Process.killProcess(android.os.Process.myPid())
         }
         .show()
