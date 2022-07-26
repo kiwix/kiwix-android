@@ -199,9 +199,9 @@ class AddNoteDialog : DialogFragment() {
       saveItem.isEnabled = false
       shareItem.isEnabled = false
       deleteItem.isEnabled = false
-      saveItem.icon.alpha = DISABLE_ICON_ITEM_ALPHA
-      shareItem.icon.alpha = DISABLE_ICON_ITEM_ALPHA
-      deleteItem.icon.alpha = DISABLE_ICON_ITEM_ALPHA
+      saveItem.icon?.alpha = DISABLE_ICON_ITEM_ALPHA
+      shareItem.icon?.alpha = DISABLE_ICON_ITEM_ALPHA
+      deleteItem.icon?.alpha = DISABLE_ICON_ITEM_ALPHA
     } else {
       Log.d(TAG, "Toolbar without inflated menu")
     }
@@ -210,7 +210,7 @@ class AddNoteDialog : DialogFragment() {
   private fun enableSaveNoteMenuItem() {
     if (toolbar.menu != null) {
       saveItem.isEnabled = true
-      saveItem.icon.alpha = ENABLE_ICON_ITEM_ALPHA
+      saveItem.icon?.alpha = ENABLE_ICON_ITEM_ALPHA
     } else {
       Log.d(TAG, "Toolbar without inflated menu")
     }
@@ -219,7 +219,7 @@ class AddNoteDialog : DialogFragment() {
   private fun enableDeleteNoteMenuItem() {
     if (toolbar.menu != null) {
       deleteItem.isEnabled = true
-      deleteItem.icon.alpha = ENABLE_ICON_ITEM_ALPHA
+      deleteItem.icon?.alpha = ENABLE_ICON_ITEM_ALPHA
     } else {
       Log.d(TAG, "Toolbar without inflated menu")
     }
@@ -228,7 +228,7 @@ class AddNoteDialog : DialogFragment() {
   private fun enableShareNoteMenuItem() {
     if (toolbar.menu != null) {
       shareItem.isEnabled = true
-      shareItem.icon.alpha = ENABLE_ICON_ITEM_ALPHA
+      shareItem.icon?.alpha = ENABLE_ICON_ITEM_ALPHA
     } else {
       Log.d(TAG, "Toolbar without inflated menu")
     }

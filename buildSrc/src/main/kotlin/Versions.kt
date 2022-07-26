@@ -18,7 +18,9 @@ object Versions {
 
   const val org_jetbrains_kotlinx_kotlinx_coroutines: String = "1.4.1"
 
-  const val androidx_test_espresso: String = "3.3.0"
+  const val androidx_test_espresso: String = "3.4.0"
+
+  const val androidx_test_espresso_contrib: String = "3.3.0"
 
   const val com_squareup_retrofit2: String = "2.9.0"
 
@@ -27,6 +29,8 @@ object Versions {
   const val org_jetbrains_kotlin: String = "1.7.0"
 
   const val androidx_navigation: String = "2.3.1"
+
+  const val navigation_ui_ktx: String = "2.4.1"
 
   const val com_google_dagger: String = "2.42"
 
@@ -52,7 +56,7 @@ object Versions {
 
   const val javax_annotation_api: String = "1.3.2"
 
-  const val leakcanary_android: String = "2.5"
+  const val leakcanary_android: String = "2.9.1"
 
   const val constraintlayout: String = "2.0.4"
 

@@ -236,6 +236,7 @@
   <string name="connection_failed" tools:keep="@string/connection_failed">Connection failed</string>
   <string name="permission_rationale_location">Location permission is required by Android to allow the app to detect peer devices</string>
   <string name="permission_rationale_location_on_host_zim_file">Location permission is required by Android to allow the app to Host Zim files</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">Nearby wifi devices permission is required by Android to allow the app to Host Zim files</string>
   <string name="permission_refused_location" tools:keep="@string/permission_refused_location">Cannot locate peer devices without location permissions</string>
   <string name="permission_refused_storage" tools:keep="@string/permission_refused_storage">Cannot access zim files without storage permission</string>
   <string name="request_enable_location">Enable location to allow detection of peers</string>

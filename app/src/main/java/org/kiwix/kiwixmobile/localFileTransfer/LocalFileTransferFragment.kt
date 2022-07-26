@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.Manifest
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest.permission.NEARBY_WIFI_DEVICES
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -40,6 +41,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -63,6 +65,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getDeviceStatus
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiP2pDelegate
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiPeerListAdapter
+import org.kiwix.kiwixmobile.webserver.ZimHostFragment.Companion.PERMISSION_REQUEST_CODE_COARSE_LOCATION
 import javax.inject.Inject
 
 /**
@@ -227,6 +230,20 @@ class LocalFileTransferFragment :
   /* Helper methods used for checking permissions and states of services */
   private fun checkFineLocationAccessPermission(): Boolean {
     // Required by Android to detect wifi-p2p peers
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      return permissionIsGranted(NEARBY_WIFI_DEVICES).also { permissionGranted ->
+        if (!permissionGranted) {
+          if (shouldShowRationale(NEARBY_WIFI_DEVICES)) {
+            alertDialogShower.show(
+              KiwixDialog.NearbyWifiPermissionRationaleOnHostZimFile,
+              ::askNearbyWifiDevicesPermission
+            )
+          } else {
+            askNearbyWifiDevicesPermission()
+          }
+        }
+      }
+    }
     return permissionIsGranted(ACCESS_FINE_LOCATION).also { permissionGranted ->
       if (!permissionGranted) {
         if (shouldShowRationale(ACCESS_FINE_LOCATION)) {
@@ -241,12 +258,22 @@ class LocalFileTransferFragment :
     }
   }
 
+  @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+  private fun askNearbyWifiDevicesPermission() {
+    ActivityCompat.requestPermissions(
+      requireActivity(), arrayOf(Manifest.permission.NEARBY_WIFI_DEVICES),
+      PERMISSION_REQUEST_CODE_COARSE_LOCATION
+    )
+  }
+
   private fun requestLocationPermission() {
     requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, PERMISSION_REQUEST_FINE_LOCATION)
   }
 
   private fun checkExternalStorageWritePermission(): Boolean { // To access and store the zims
-    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
+      Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+    ) {
       return permissionIsGranted(WRITE_EXTERNAL_STORAGE).also { permissionGranted ->
         if (!permissionGranted) {
           if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
@@ -301,7 +328,11 @@ class LocalFileTransferFragment :
   }
 
   private val isLocationServiceEnabled: Boolean
-    get() = isProviderEnabled(GPS_PROVIDER) || isProviderEnabled(NETWORK_PROVIDER)
+    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      true
+    } else {
+      isProviderEnabled(GPS_PROVIDER) || isProviderEnabled(NETWORK_PROVIDER)
+    }
 
   private fun isProviderEnabled(locationProvider: String): Boolean {
     return try {
