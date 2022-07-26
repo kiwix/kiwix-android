@@ -69,12 +69,12 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.FileSelectListState
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
+import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import java.io.File
 import javax.inject.Inject
 

@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2022 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,16 +15,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.zimManager.libraryView
 
-package org.kiwix.kiwixmobile
+import org.kiwix.kiwixmobile.core.base.BaseContract
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import java.util.LinkedList
 
-import android.net.ConnectivityManager
-import org.kiwix.kiwixmobile.zimManager.NetworkState
-import org.kiwix.kiwixmobile.zimManager.NetworkState.CONNECTED
-import org.kiwix.kiwixmobile.zimManager.NetworkState.NOT_CONNECTED
-
-val ConnectivityManager.networkState: NetworkState
-  get() = if (activeNetworkInfo?.isConnected == true)
-    CONNECTED
-  else
-    NOT_CONNECTED
+/**
+ * Created by EladKeyshawn on 06/04/2017.
+ */
+interface LibraryViewCallback : BaseContract.View<Any?> {
+  fun showBooks(books: LinkedList<LibraryNetworkEntity.Book?>?)
+  fun displayNoNetworkConnection()
+  fun displayNoItemsFound()
+  fun displayNoItemsAvailable()
+  fun displayScanningContent()
+  fun stopScanningContent()
+  fun downloadFile(book: LibraryNetworkEntity.Book?)
+}
