@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleTextWatcher
@@ -66,8 +67,10 @@ const val DISABLE_ICON_ITEM_ALPHA = 130
 const val ENABLE_ICON_ITEM_ALPHA = 255
 
 class AddNoteDialog : DialogFragment() {
+  private lateinit var zimId: String
   private var zimFileName: String? = null
   private var zimFileTitle: String? = null
+  private lateinit var zimFileUrl: String
   private var articleTitle: String? = null
 
   // Corresponds to "ArticleUrl" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
@@ -90,6 +93,9 @@ class AddNoteDialog : DialogFragment() {
   @Inject
   lateinit var alertDialogShower: AlertDialogShower
 
+  @Inject
+  lateinit var mainRepositoryActions: MainRepositoryActions
+
   private val saveItem by lazy { toolbar.menu.findItem(R.id.save_note) }
 
   private val shareItem by lazy { toolbar.menu.findItem(R.id.share_note) }
@@ -108,13 +114,20 @@ class AddNoteDialog : DialogFragment() {
     zimFileName = zimReaderContainer.zimCanonicalPath
     if (zimFileName != null) { // No zim file currently opened
       zimFileTitle = zimReaderContainer.zimFileTitle
-      articleTitle = (activity as WebViewProvider?)?.getCurrentWebView()?.title
+      zimId = zimReaderContainer.id.orEmpty()
+
+      if (arguments != null) {
+        articleTitle = arguments?.getString(NOTES_TITLE)
+        zimFileUrl = arguments?.getString(ARTICLE_URL).orEmpty()
+      } else {
+        val webView = (activity as WebViewProvider?)?.getCurrentWebView()
+        articleTitle = webView?.title
+        zimFileUrl = webView?.url.orEmpty()
+      }
 
       // Corresponds to "ZimFileName" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
-      articleNoteFileName = getArticleNotefileName()
+      articleNoteFileName = getArticleNoteFileName()
       zimNotesDirectory = "$NOTES_DIRECTORY$zimNoteDirectoryName/"
-    } else {
-      onFailureToCreateAddNoteDialog()
     }
   }
 
@@ -140,8 +153,12 @@ class AddNoteDialog : DialogFragment() {
       return (if (noteDirectoryName.isNotEmpty()) noteDirectoryName else zimFileTitle) ?: ""
     }
 
-  private fun getArticleNotefileName(): String {
+  private fun getArticleNoteFileName(): String {
     // Returns url of the form: "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html"
+    arguments?.getString(NOTE_FILE_PATH)?.let {
+      return@getArticleNoteFileName getTextAfterLastSlashWithoutExtension(it)
+    }
+
     val articleUrl = (activity as WebViewProvider?)?.getCurrentWebView()?.url
     var noteFileName = ""
     if (articleUrl == null) {
@@ -149,7 +166,7 @@ class AddNoteDialog : DialogFragment() {
     } else {
       noteFileName = getTextAfterLastSlashWithoutExtension(articleUrl)
     }
-    return (if (noteFileName.isNotEmpty()) noteFileName else articleTitle) ?: ""
+    return noteFileName.ifEmpty { articleTitle } ?: ""
   }
 
   /* From ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim", returns "granbluefantasy_en_all_all_nopic_2018-10"
@@ -182,9 +199,9 @@ class AddNoteDialog : DialogFragment() {
       saveItem.isEnabled = false
       shareItem.isEnabled = false
       deleteItem.isEnabled = false
-      saveItem.icon.alpha = DISABLE_ICON_ITEM_ALPHA
-      shareItem.icon.alpha = DISABLE_ICON_ITEM_ALPHA
-      deleteItem.icon.alpha = DISABLE_ICON_ITEM_ALPHA
+      saveItem.icon?.alpha = DISABLE_ICON_ITEM_ALPHA
+      shareItem.icon?.alpha = DISABLE_ICON_ITEM_ALPHA
+      deleteItem.icon?.alpha = DISABLE_ICON_ITEM_ALPHA
     } else {
       Log.d(TAG, "Toolbar without inflated menu")
     }
@@ -193,7 +210,7 @@ class AddNoteDialog : DialogFragment() {
   private fun enableSaveNoteMenuItem() {
     if (toolbar.menu != null) {
       saveItem.isEnabled = true
-      saveItem.icon.alpha = ENABLE_ICON_ITEM_ALPHA
+      saveItem.icon?.alpha = ENABLE_ICON_ITEM_ALPHA
     } else {
       Log.d(TAG, "Toolbar without inflated menu")
     }
@@ -202,7 +219,7 @@ class AddNoteDialog : DialogFragment() {
   private fun enableDeleteNoteMenuItem() {
     if (toolbar.menu != null) {
       deleteItem.isEnabled = true
-      deleteItem.icon.alpha = ENABLE_ICON_ITEM_ALPHA
+      deleteItem.icon?.alpha = ENABLE_ICON_ITEM_ALPHA
     } else {
       Log.d(TAG, "Toolbar without inflated menu")
     }
@@ -211,7 +228,7 @@ class AddNoteDialog : DialogFragment() {
   private fun enableShareNoteMenuItem() {
     if (toolbar.menu != null) {
       shareItem.isEnabled = true
-      shareItem.icon.alpha = ENABLE_ICON_ITEM_ALPHA
+      shareItem.icon?.alpha = ENABLE_ICON_ITEM_ALPHA
     } else {
       Log.d(TAG, "Toolbar without inflated menu")
     }
@@ -264,7 +281,6 @@ class AddNoteDialog : DialogFragment() {
   }
 
   private fun saveNote(noteText: String) {
-
     /* String content of the EditText, given by noteText, is saved into the text file given by:
      *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
      * */
@@ -298,16 +314,39 @@ class AddNoteDialog : DialogFragment() {
           context.toast(R.string.note_save_successful, Toast.LENGTH_SHORT)
           noteEdited = false // As no unsaved changes remain
           enableDeleteNoteMenuItem()
+          // adding only if saving file is success
+          addNoteToDao(noteFile.canonicalPath, "${zimFileTitle.orEmpty()}: $articleTitle")
         } catch (e: IOException) {
           e.printStackTrace()
             .also { context.toast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG) }
         }
       } else {
-        context.toast(R.string.note_save_successful, Toast.LENGTH_LONG)
+        context.toast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG)
         Log.d(TAG, "Required folder doesn't exist")
       }
     } else {
       context.toast(R.string.note_save_error_storage_not_writable, Toast.LENGTH_LONG)
+    }
+  }
+
+  private fun addNoteToDao(noteFilePath: String?, title: String) {
+    noteFilePath?.let { filePath ->
+      if (filePath.isNotEmpty() && zimFileUrl.isNotEmpty()) {
+        val zimReader = zimReaderContainer.zimFileReader
+        if (zimReader != null) {
+          val noteToSave = NoteListItem(
+            title = title,
+            url = zimFileUrl,
+            noteFilePath = noteFilePath,
+            zimFileReader = zimReader
+          )
+          mainRepositoryActions.saveNote(noteToSave)
+        } else {
+          Log.d(TAG, "zim reader found null")
+        }
+      } else {
+        Log.d(TAG, "Cannot process with empty zim url or noteFilePath")
+      }
     }
   }
 
@@ -318,6 +357,7 @@ class AddNoteDialog : DialogFragment() {
     val noteDeleted = noteFile.delete()
     if (noteDeleted) {
       add_note_edit_text.text.clear()
+      mainRepositoryActions.deleteNote(articleNoteFileName)
       disableMenuItems()
       context.toast(R.string.note_delete_successful, Toast.LENGTH_LONG)
     } else {
@@ -330,7 +370,6 @@ class AddNoteDialog : DialogFragment() {
    * is displayed in the EditText field (note content area)
    */
   private fun displayNote() {
-
     val noteFile = File("$zimNotesDirectory$articleNoteFileName.txt")
     if (noteFile.exists()) {
       readNoteFromFile(noteFile)
@@ -403,5 +442,8 @@ class AddNoteDialog : DialogFragment() {
     @JvmField val NOTES_DIRECTORY =
       instance.getExternalFilesDir("").toString() + "/Kiwix/Notes/"
     const val TAG = "AddNoteDialog"
+    const val NOTE_FILE_PATH = "NoteFilePath"
+    const val ARTICLE_URL = "ArticleUrl"
+    const val NOTES_TITLE = "NotesTitle"
   }
 }

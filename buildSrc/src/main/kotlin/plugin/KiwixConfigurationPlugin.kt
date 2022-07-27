@@ -44,6 +44,7 @@ class KiwixConfigurationPlugin : Plugin<Project> {
     allProjectConfigurer.configurePlugins(target)
     allProjectConfigurer.applyScripts(target)
     allProjectConfigurer.configureDependencies(target)
+    allProjectConfigurer.configureJacoco(target)
   }
 
   private fun doDefaultConfiguration(target: Project) {

@@ -27,7 +27,7 @@
   <string name="menu_wifi_hotspot">Розташувати книги</string>
   <string name="save_media">Зберегти медіафайл</string>
   <string name="save_media_error">Сталася помилка при спробі зберегти медіафайл!</string>
-  <string name="save_media_saved">Медіафайл збережено як %s до Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Медіафайл збережено як %s до Android/media/org.kiwix…/</string>
   <string name="search_label">Пошук</string>
   <string name="choose_file">Виберіть файл вмісту (*.zim)</string>
   <string name="open_in_new_tab">Відкрити посилання в новій вкладці?</string>
@@ -114,7 +114,7 @@
   <string name="local_zims">Пристрій</string>
   <string name="remote_zims">Онлайн</string>
   <string name="library">Бібліотека</string>
-  <string name="delete_zim_body">Такі zim файли буде видалено:\n\n\%s</string>
+  <string name="delete_zim_body">Такі zim файли буде видалено:\n\n%s</string>
   <string name="delete_zims_toast">Файл вилучено</string>
   <string name="no_files_here">Тут немає файлів</string>
   <string name="download_no_space">Недостатньо простору для завантаження.</string>
@@ -227,7 +227,7 @@
   <string name="ext_storage_permission_not_granted">Помилка: Відсутній дозвіл на зберігання</string>
   <string name="notes_deletion_successful">Папку з нотатками повністю видалено</string>
   <string name="notes_deletion_unsuccessful">Певні файли не було видалено</string>
-  <string name="books_count">\%d книг(а)</string>
+  <string name="books_count">%d книг(а)</string>
   <string name="discovery_initiated">Сканування почато</string>
   <string name="discovery_failed">Сканування не вдалося</string>
   <string name="severe_loss_error">Серйозна помилка! Попробуйте вимкнути і наново вмикнути WiFi P2P</string>
@@ -240,11 +240,11 @@
   <string name="discovery_needs_location">Пошук сусідніх пристроїв неможливий без сервісу місцезнаходження</string>
   <string name="request_enable_wifi">Ввімкніть WiFi P2P у налаштуваннях системи</string>
   <string name="discovery_needs_wifi">Пошук пристроїв неможливий без ввімкненого WiFi</string>
-  <string name="transfer_to">Передати файли до \%s?</string>
+  <string name="transfer_to">Передати файли до %s?</string>
   <string name="device_not_cooperating">Обраний пристрій не співпрацює щодо передачі</string>
   <string name="file_transfer_complete">Передачу файлу завершено</string>
   <string name="error_during_transfer">Сталася помилка під час передачі</string>
-  <string name="error_transferring">Помилка передачі файлу \%s</string>
+  <string name="error_transferring">Помилка передачі файлу %s</string>
   <string name="get_content_from_nearby_device">Отримати вміст із близько розташованих пристроїв</string>
   <string name="search_for_peers">Пошук сусідніх пристроїв</string>
   <string name="your_device">Ваш пристрій:</string>
@@ -257,7 +257,7 @@
   <string name="pref_clear_all_notes_summary">Очистити всі нотатки в усіх статтях</string>
   <string name="pref_clear_all_notes_title">Очистити всі нотатки</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Дозволяє читати і записувати ZIP-файли на SD-карту</string>
-  <string name="pref_text_zoom_summary">Змінити розмір тексту з 25\%-відсотковим кроком.</string>
+  <string name="pref_text_zoom_summary">Змінити розмір тексту з 25%-відсотковим кроком.</string>
   <string name="tag_pic">Зображення</string>
   <string name="tag_vid">Відео</string>
   <string name="tag_text_only">Тільки текст</string>

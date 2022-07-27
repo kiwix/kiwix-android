@@ -45,8 +45,8 @@
   <string name="rate_dialog_neutral">Vėliau</string>
   <string name="pref_newtab_background_title">Atidaryti naujame skirtuke</string>
   <string name="library">Biblioteka</string>
-  <string name="books_count">\%d knyga(-os)</string>
-  <string name="transfer_to">Perkelti failus į \%s?</string>
+  <string name="books_count">%d knyga(-os)</string>
+  <string name="transfer_to">Perkelti failus į %s?</string>
   <string name="no_bookmarks" fuzzy="true">Jokių žymių!</string>
   <string name="percentage">%d%%</string>
 </resources>

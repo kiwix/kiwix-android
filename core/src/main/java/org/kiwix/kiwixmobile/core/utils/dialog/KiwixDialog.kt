@@ -56,6 +56,13 @@ sealed class KiwixDialog(
     android.R.string.cancel
   )
 
+  object NearbyWifiPermissionRationaleOnHostZimFile : KiwixDialog(
+    null,
+    R.string.permission_rationale_location_on_host_zim_file,
+    android.R.string.yes,
+    android.R.string.cancel
+  )
+
   object StoragePermissionRationale : KiwixDialog(
     null,
     R.string.request_storage,
@@ -264,6 +271,27 @@ sealed class KiwixDialog(
     null,
     positiveMessage = R.string.delete,
     negativeMessage = R.string.cancel
+  )
+
+  object DeleteAllNotes : KiwixDialog(
+    R.string.delete_notes_confirmation_msg,
+    R.string.delete_note_dialog_message,
+    positiveMessage = R.string.delete,
+    negativeMessage = R.string.cancel
+  )
+
+  object DeleteSelectedNotes : KiwixDialog(
+    R.string.delete_selected_notes,
+    R.string.delete_note_dialog_message,
+    positiveMessage = R.string.delete,
+    negativeMessage = R.string.cancel
+  )
+
+  object ShowNoteDialog : KiwixDialog(
+    R.string.choose_your_action,
+    null,
+    positiveMessage = R.string.open_article,
+    negativeMessage = R.string.open_note
   )
 }
 

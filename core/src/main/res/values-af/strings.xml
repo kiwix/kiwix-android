@@ -19,7 +19,7 @@
   <string name="menu_support_kiwix">Ondersteun Kiwix</string>
   <string name="save_media">Stoor media</string>
   <string name="save_media_error">Kon nie die mediuma red nie!</string>
-  <string name="save_media_saved">Medium gestoor as %s op Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Medium gestoor as %s op Android/media/org.kiwix…/</string>
   <string name="search_label">Soek</string>
   <string name="choose_file">Kies \'n inhoudslêer (*.zim)</string>
   <string name="open_in_new_tab">Open skakel in nuwe oortjie?</string>

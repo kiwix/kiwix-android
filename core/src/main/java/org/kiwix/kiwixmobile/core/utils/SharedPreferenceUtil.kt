@@ -151,10 +151,17 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
       putBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, prefShowBookmarksFromCurrentBook)
     }
 
+
   var showStorageOption: Boolean
     get() = sharedPreferences.getBoolean(PREF_SHOW_STORAGE_OPTION, true)
     set(prefShowStorageOption) = sharedPreferences.edit {
       putBoolean(PREF_SHOW_STORAGE_OPTION, prefShowStorageOption)
+    }
+    
+  var showNotesAllBooks: Boolean
+    get() = sharedPreferences.getBoolean(PREF_SHOW_NOTES_ALL_BOOKS, true)
+    set(prefShowBookmarksFromCurrentBook) = sharedPreferences.edit {
+      putBoolean(PREF_SHOW_NOTES_ALL_BOOKS, prefShowBookmarksFromCurrentBook)
     }
 
   val nightMode: NightModeConfig.Mode
@@ -216,6 +223,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val PREF_IS_FIRST_RUN = "isFirstRun"
     private const val PREF_SHOW_BOOKMARKS_ALL_BOOKS = "show_bookmarks_current_book"
     private const val PREF_SHOW_HISTORY_ALL_BOOKS = "show_history_current_book"
+    private const val PREF_SHOW_NOTES_ALL_BOOKS = "show_notes_current_book"
     private const val PREF_HOSTED_BOOKS = "hosted_books"
     const val PREF_NIGHT_MODE = "pref_night_mode"
     private const val TEXT_ZOOM = "true_text_zoom"

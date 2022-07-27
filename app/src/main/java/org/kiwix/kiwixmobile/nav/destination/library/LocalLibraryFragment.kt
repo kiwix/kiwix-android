@@ -26,6 +26,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -69,12 +70,12 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.FileSelectListState
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
+import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import java.io.File
 import javax.inject.Inject
 
@@ -285,14 +286,21 @@ class LocalLibraryFragment : BaseFragment() {
         Manifest.permission.READ_EXTERNAL_STORAGE
       ) != PackageManager.PERMISSION_GRANTED
     ) {
-      context.toast(R.string.request_storage)
-      requestPermissions(
-        arrayOf(
-          Manifest.permission.READ_EXTERNAL_STORAGE,
-          Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ),
-        REQUEST_STORAGE_PERMISSION
-      )
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        dialogShower.show(
+          KiwixDialog.StoragePermissionRationale,
+          ::openAppSettings
+        )
+      } else {
+        context.toast(R.string.request_storage)
+        requestPermissions(
+          arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+          ),
+          REQUEST_STORAGE_PERMISSION
+        )
+      }
     } else {
       if (sharedPreferenceUtil.isPlayStoreBuild) {
         requestFileSystemCheck()
@@ -320,6 +328,15 @@ class LocalLibraryFragment : BaseFragment() {
         }
       }
     }
+  }
+
+  private fun openAppSettings() {
+    val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
+    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+      flags = Intent.FLAG_ACTIVITY_NEW_TASK
+      data = uri
+    }
+    startActivity(intent)
   }
 
   private fun requestFileSystemCheck() {

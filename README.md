@@ -8,10 +8,10 @@
 
 # Kiwix Android
 
-Kiwix is an offline reader for Web content. One of its main purpose
+Kiwix is an offline reader for Web content. One of its main purposes
 is to make Wikipedia available offline. This is done by reading the
 content of a file in the ZIM format, a highly compressed open format
-with additional meta-data. This is the version for Android.
+with additional metadata. This is the version for Android.
 
 Kiwix Android is written in [Kotlin](https://kotlinlang.org/) (with a few old
 pieces in Java).
@@ -23,7 +23,6 @@ pieces in Java).
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Public Chat](https://img.shields.io/badge/public-chat-green)](https://chat.kiwix.org)
 [![Slack](https://img.shields.io/badge/Slack-chat-E01E5A)](https://kiwixoffline.slack.com)
-[![Nightly](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml/badge.svg)](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml)
 
 ## Build Instructions
 

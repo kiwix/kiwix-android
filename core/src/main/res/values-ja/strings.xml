@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Ajeje Brazorf
+* MathXplore
 * Omotecho
 * S2KTS
 * Shirayuki
@@ -37,6 +38,7 @@
   <string name="library">ライブラリ</string>
   <string name="do_not_ask_anymore">これ以上聞かないでください</string>
   <string name="other_languages">その他の言語:</string>
-  <string name="pref_text_zoom_summary">テキストサイズを 25\% 増やす</string>
+  <string name="pref_text_zoom_summary">テキストサイズを 25% 増やす</string>
   <string name="search_open_in_new_tab">新しいタブで開く</string>
+  <string name="allow">許可</string>
 </resources>

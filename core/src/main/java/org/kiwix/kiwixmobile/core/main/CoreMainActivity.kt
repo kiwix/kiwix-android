@@ -72,6 +72,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val bookmarksFragmentResId: Int
   abstract val settingsFragmentResId: Int
   abstract val historyFragmentResId: Int
+  abstract val notesFragmentResId: Int
   abstract val helpFragmentResId: Int
   abstract val cachedComponent: CoreActivityComponent
   abstract val topLevelDestinations: Set<Int>
@@ -97,7 +98,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
-    activeFragments().forEach { it.onActivityResult(requestCode, resultCode, data) }
+    activeFragments().iterator().forEach { it.onActivityResult(requestCode, resultCode, data) }
   }
 
   override fun onStart() {
@@ -128,7 +129,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     grantResults: IntArray
   ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    activeFragments().forEach {
+    activeFragments().iterator().forEach {
       it.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
   }
@@ -194,6 +195,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       R.id.menu_support_kiwix -> openSupportKiwixExternalLink()
       R.id.menu_settings -> openSettings()
       R.id.menu_help -> openHelpFragment()
+      R.id.menu_notes -> openNotes()
       R.id.menu_history -> openHistory()
       R.id.menu_bookmarks_list -> openBookmarks()
       else -> return false
@@ -250,7 +252,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     supportFragmentManager.fragments
 
   fun navigate(action: NavDirections) {
-    navController.navigate(action)
+    navController.currentDestination?.getAction(action.actionId)?.run {
+      navController.navigate(action)
+    }
   }
 
   fun navigate(fragmentId: Int) {
@@ -299,6 +303,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   private fun openBookmarks() {
     navigate(bookmarksFragmentResId)
     handleDrawerOnNavigation()
+  }
+
+  private fun openNotes() {
+    navigate(notesFragmentResId)
   }
 
   protected fun handleDrawerOnNavigation() {

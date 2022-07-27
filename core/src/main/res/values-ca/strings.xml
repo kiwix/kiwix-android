@@ -20,7 +20,7 @@
   <string name="menu_read_aloud_stop">Deixar de llegir en veu alta</string>
   <string name="save_media">Anomena i desa el fitxer…</string>
   <string name="save_media_error">S\'ha produït un error en mirar de desar el fitxer!</string>
-  <string name="save_media_saved">Multimèdia desat com %s en Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Multimèdia desat com %s en Android/media/org.kiwix…/</string>
   <string name="search_label">Cercar</string>
   <string name="choose_file">Seleccioneu un fitxer de contingut ZIM (*.zim)</string>
   <string name="open_in_new_tab">Obrir l\'enllaç en una pestanya nova?</string>
@@ -61,7 +61,7 @@
   <string name="new_tab_snack_bar">Article obert en una pestanya nova</string>
   <string name="local_zims">Dispositiu</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_zim_body">Els següents arxius ZIM seran eliminats:\n\n\%s</string>
+  <string name="delete_zim_body">Els següents arxius ZIM seran eliminats:\n\n%s</string>
   <string name="delete_zims_toast">Fitxer esborrat</string>
   <string name="no_files_here">Cap fitxer aquí</string>
   <string name="download_no_space">L’espai és insuficient per a la baixada.</string>
@@ -100,7 +100,7 @@
   <string name="note">Nota</string>
   <string name="note_share_error_file_missing">El fitxer de la nota no existeix</string>
   <string name="connection_failed">Ha fallat la connexió</string>
-  <string name="error_transferring">S’ha produït un error en transferir el fitxer \%s</string>
+  <string name="error_transferring">S’ha produït un error en transferir el fitxer %s</string>
   <string name="your_device">El vostre dispositiu:</string>
   <string name="nearby_devices">DISPOSITIUS A PROP</string>
   <string name="files_for_transfer">FITXERS PENDENTS DE TRANSFERIR</string>

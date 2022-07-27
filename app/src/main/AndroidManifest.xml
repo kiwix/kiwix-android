@@ -4,7 +4,13 @@
   package="org.kiwix.kiwixmobile">
 
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission
+    android:name="android.permission.ACCESS_FINE_LOCATION"
+    android:maxSdkVersion="32" />
+  <uses-permission
+    android:name="android.permission.NEARBY_WIFI_DEVICES"
+    android:usesPermissionFlags="neverForLocation"
+    tools:targetApi="s" />
   <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
   <uses-permission android:name="${permission}" />
 
@@ -28,11 +34,11 @@
     <activity
       android:name=".main.KiwixMainActivity"
       android:configChanges="orientation|keyboardHidden|screenSize"
+      android:exported="true"
       android:label="@string/app_name"
       android:launchMode="singleTop"
       android:theme="@style/KiwixTheme.Launcher"
-      android:windowSoftInputMode="adjustPan"
-      android:exported="true">
+      android:windowSoftInputMode="adjustPan">
       <meta-data
         android:name="android.app.shortcuts"
         android:resource="@xml/shortcuts" />
@@ -145,7 +151,8 @@
 
     <service android:name=".webserver.wifi_hotspot.HotspotService" />
 
-    <receiver android:name=".main.KiwixSearchWidget"
+    <receiver
+      android:name=".main.KiwixSearchWidget"
       android:exported="true">
       <meta-data
         android:name="android.appwidget.provider"

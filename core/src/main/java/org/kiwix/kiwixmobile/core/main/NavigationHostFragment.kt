@@ -30,7 +30,8 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldNo
 class NavigationHostFragment : NavHostFragment(), WebViewProvider, FragmentActivityExtensions {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
-    childFragmentManager.fragments.forEach { it.onActivityResult(requestCode, resultCode, data) }
+    childFragmentManager.fragments.iterator()
+      .forEach { it.onActivityResult(requestCode, resultCode, data) }
   }
 
   override fun getCurrentWebView(): KiwixWebView? {
@@ -44,7 +45,7 @@ class NavigationHostFragment : NavHostFragment(), WebViewProvider, FragmentActiv
     grantResults: IntArray
   ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    childFragmentManager.fragments.forEach {
+    childFragmentManager.fragments.iterator().forEach {
       it.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
   }

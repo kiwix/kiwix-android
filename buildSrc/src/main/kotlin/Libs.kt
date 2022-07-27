@@ -32,7 +32,7 @@ object Libs {
    * https://developer.android.com/testing
    */
   const val espresso_contrib: String = "androidx.test.espresso:espresso-contrib:" +
-    Versions.androidx_test_espresso
+    Versions.androidx_test_espresso_contrib
 
   /**
    * https://developer.android.com/testing
@@ -138,7 +138,7 @@ object Libs {
    * https://developer.android.com/topic/libraries/architecture/index.html
    */
   const val navigation_ui_ktx: String = "androidx.navigation:navigation-ui-ktx:" +
-    Versions.androidx_navigation
+    Versions.navigation_ui_ktx
 
   /**
    * https://github.com/google/dagger
@@ -420,4 +420,10 @@ object Libs {
    * https://developer.android.com/testing
    */
   const val junit: String = "androidx.test.ext:junit:" + Versions.junit
+
+  /**
+   * https://developer.android.com/reference/com/google/android/play/core/release-notes
+   */
+  const val google_android_play_core: String =
+    "com.google.android.play:core:" + Versions.google_android_play_core
 }
