@@ -151,13 +151,12 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
       putBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, prefShowBookmarksFromCurrentBook)
     }
 
-
   var showStorageOption: Boolean
     get() = sharedPreferences.getBoolean(PREF_SHOW_STORAGE_OPTION, true)
     set(prefShowStorageOption) = sharedPreferences.edit {
       putBoolean(PREF_SHOW_STORAGE_OPTION, prefShowStorageOption)
     }
-    
+
   var showNotesAllBooks: Boolean
     get() = sharedPreferences.getBoolean(PREF_SHOW_NOTES_ALL_BOOKS, true)
     set(prefShowBookmarksFromCurrentBook) = sharedPreferences.edit {

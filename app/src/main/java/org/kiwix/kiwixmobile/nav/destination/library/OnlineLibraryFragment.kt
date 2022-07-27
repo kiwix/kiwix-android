@@ -436,7 +436,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         else -> if (sharedPreferenceUtil.showStorageOption) {
           showStorageConfigureDialog()
         } else {
-          availableSpaceCalculator.hasAvailableSpaceFor(item,
+          availableSpaceCalculator.hasAvailableSpaceFor(
+            item,
             { downloadFile(item.book) },
             {
               libraryList.snack(
@@ -447,7 +448,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
                 R.string.download_change_storage,
                 ::showStorageSelectDialog
               )
-            })
+            }
+          )
         }
       }
     }
