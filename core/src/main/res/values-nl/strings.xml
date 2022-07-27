@@ -50,8 +50,6 @@
   <string name="undo">Ongedaan maken</string>
   <string name="bookmark_added">Bladwijzer toegevoegd</string>
   <string name="rate_dialog_title">Beoordeel ons alstublieft</string>
-  <string name="rate_dialog_msg_1">Als u geniet van het gebruik van</string>
-  <string name="rate_dialog_msg_2">, geef dan even een beoordeling. Dank u wel voor uw steun!</string>
   <string name="rate_dialog_positive">Beoordelen!</string>
   <string name="no_thanks">Nee, bedankt</string>
   <string name="rate_dialog_neutral">Later</string>

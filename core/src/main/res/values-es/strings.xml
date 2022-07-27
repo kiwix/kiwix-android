@@ -103,8 +103,6 @@
   <string name="tab_closed">Pestaña cerrada</string>
   <string name="bookmark_added">Marcador agregado</string>
   <string name="rate_dialog_title">Califícanos</string>
-  <string name="rate_dialog_msg_1">Si disfrutas usar</string>
-  <string name="rate_dialog_msg_2">, toma un momento para calificarla. ¡Gracias por tu apoyo!</string>
   <string name="rate_dialog_positive">¡Califica!</string>
   <string name="no_thanks">No, gracias</string>
   <string name="rate_dialog_neutral">Después</string>

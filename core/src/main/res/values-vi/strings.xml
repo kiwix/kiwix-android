@@ -58,8 +58,6 @@
   <string name="tab_closed">Thẻ đã đóng</string>
   <string name="bookmark_added">Đã thêm dấu trang</string>
   <string name="rate_dialog_title">Xin vui lòng Đánh giá Chúng tôi</string>
-  <string name="rate_dialog_msg_1">Nếu bạn thích sử dụng</string>
-  <string name="rate_dialog_msg_2">, xin vui lòng mất một chút thời gian để đánh giá nó. Chân thành cảm ơn bạn vì sự ủng hộ!</string>
   <string name="rate_dialog_positive">Đánh giá!</string>
   <string name="no_thanks">Thôi</string>
   <string name="rate_dialog_neutral">Lát nữa</string>

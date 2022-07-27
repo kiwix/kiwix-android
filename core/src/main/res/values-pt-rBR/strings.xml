@@ -94,8 +94,6 @@
   <string name="tab_closed">Guia fechada</string>
   <string name="bookmark_added">Favorito adicionado</string>
   <string name="rate_dialog_title">Por favor nos avalie</string>
-  <string name="rate_dialog_msg_1">Se você gosta de usar</string>
-  <string name="rate_dialog_msg_2">, por favor leve um momento para avaliá-lo. Obrigado por seu apoio!</string>
   <string name="rate_dialog_positive">Avalie!</string>
   <string name="no_thanks">Não, obrigado</string>
   <string name="rate_dialog_neutral">Mais tarde</string>

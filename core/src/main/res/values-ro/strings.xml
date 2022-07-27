@@ -89,8 +89,6 @@
   <string name="tab_closed">Filă închisă</string>
   <string name="bookmark_added">Marcaj adăugat</string>
   <string name="rate_dialog_title">Vă rugăm să ne evaluați</string>
-  <string name="rate_dialog_msg_1">Dacă v-a plăcut</string>
-  <string name="rate_dialog_msg_2">, oferiți-ne câteva momente pentru a o evalua. Mulțumim pentru sprijin!</string>
   <string name="rate_dialog_positive">Evaluează!</string>
   <string name="no_thanks">Nu, mulțumesc</string>
   <string name="rate_dialog_neutral">Mai târziu</string>

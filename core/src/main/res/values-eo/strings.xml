@@ -65,8 +65,6 @@
   <string name="tab_closed">Fermis langeton</string>
   <string name="bookmark_added">Aldonis legosignon</string>
   <string name="rate_dialog_title">Bonvolu Taksi Nin</string>
-  <string name="rate_dialog_msg_1">Se vi ĝuas uzadon de</string>
-  <string name="rate_dialog_msg_2">, bonvolu taksi ĝin. Dankon pro via subteno!</string>
   <string name="rate_dialog_positive">Taksi!</string>
   <string name="no_thanks">Ne, dankon</string>
   <string name="rate_dialog_neutral">Poste</string>

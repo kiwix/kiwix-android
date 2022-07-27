@@ -63,8 +63,6 @@
   <string name="tab_closed">टैब बंद कर दिया गया</string>
   <string name="bookmark_added">बूकमार्क जोड़ा गया</string>
   <string name="rate_dialog_title">कृपया दरनिर्धारण करें</string>
-  <string name="rate_dialog_msg_1">क्या आप का उपयोग का आनंद ले रहे</string>
-  <string name="rate_dialog_msg_2">, कृपया इसे दर करने के लिए कुछ समय दें आपके समर्थन के लिए धन्यवाद!</string>
   <string name="rate_dialog_positive">दरनिर्धारण!</string>
   <string name="no_thanks">नहीं, धन्यवाद</string>
   <string name="rate_dialog_neutral">बाद में</string>

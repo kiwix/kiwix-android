@@ -92,8 +92,6 @@
   <string name="tab_closed">தாவல் மூடப்பட்டது</string>
   <string name="bookmark_added">புத்தகக்குறி சேர்க்கப்பட்டது</string>
   <string name="rate_dialog_title">தயவுசெய்து எங்களை மதிப்பிடுங்கள்</string>
-  <string name="rate_dialog_msg_1">நீங்கள் பயன்படுத்தி மகிழ்ந்தால்</string>
-  <string name="rate_dialog_msg_2">, தயவுசெய்து மதிப்பிட சிறிது நேரம் ஒதுக்குங்கள். உங்கள் ஒத்துழைப்புக்கு நன்றி!</string>
   <string name="rate_dialog_positive">எங்களின் தரம்!</string>
   <string name="no_thanks">வேண்டாம், நன்றிகள்</string>
   <string name="rate_dialog_neutral">பின்னர்</string>

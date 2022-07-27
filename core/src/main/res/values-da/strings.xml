@@ -62,8 +62,6 @@
   <string name="tab_closed">Faneblad lukket</string>
   <string name="bookmark_added">Bogmærke tilføjet</string>
   <string name="rate_dialog_title">Bedøm os venligst</string>
-  <string name="rate_dialog_msg_1">Hvis du kan lide at bruge</string>
-  <string name="rate_dialog_msg_2">, så brug et øjeblik til at bedømme det. Tak for din støtte!</string>
   <string name="rate_dialog_positive">Bedøm!</string>
   <string name="no_thanks">Nej, tak</string>
   <string name="rate_dialog_neutral">Senere</string>

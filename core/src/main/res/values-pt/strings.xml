@@ -98,8 +98,6 @@
   <string name="tab_closed">Separador fechado</string>
   <string name="bookmark_added">Marcador adicionado</string>
   <string name="rate_dialog_title">Por Favor, Avalie-Nos</string>
-  <string name="rate_dialog_msg_1">Se gosta de usar</string>
-  <string name="rate_dialog_msg_2">, avalie-o por favor. Obrigado pelo seu apoio!</string>
   <string name="rate_dialog_positive">Avalie!</string>
   <string name="no_thanks">Não, obrigado</string>
   <string name="rate_dialog_neutral">Mais tarde</string>

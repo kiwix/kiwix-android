@@ -97,8 +97,6 @@
   <string name="tab_closed">Scheda chiusa</string>
   <string name="bookmark_added">Segnalibro aggiunto</string>
   <string name="rate_dialog_title">Valutaci</string>
-  <string name="rate_dialog_msg_1">Se ti piace usare</string>
-  <string name="rate_dialog_msg_2">, prenditi un momento per valutarla. Grazie per il tuo sostegno!</string>
   <string name="rate_dialog_positive">Valuta!</string>
   <string name="no_thanks">No, grazie</string>
   <string name="rate_dialog_neutral">Più tardi</string>

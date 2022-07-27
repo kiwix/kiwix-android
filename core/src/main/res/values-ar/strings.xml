@@ -94,8 +94,6 @@
   <string name="tab_closed">تم إغلاق علامة التبويب</string>
   <string name="bookmark_added">أضيفت الإشارة المرجعية</string>
   <string name="rate_dialog_title">يرجى تقييمنا</string>
-  <string name="rate_dialog_msg_1">إذا كنت تتمتع بالاستخدام</string>
-  <string name="rate_dialog_msg_2">يرجى أن تتوقف لحظة لتقييمنا. شكرًا لدعمك!</string>
   <string name="rate_dialog_positive">قيّم!</string>
   <string name="no_thanks">لا، شكراً</string>
   <string name="rate_dialog_neutral">لاحقًا</string>

@@ -31,8 +31,6 @@
   <string name="pref_language_chooser">Dili seçin</string>
   <string name="no_section_info" fuzzy="true">Məzmunun heç bir başlıqı tapılmadı.</string>
   <string name="rate_dialog_title">Xahiş edirik bizi dəyərləndirin</string>
-  <string name="rate_dialog_msg_1">Əgər, istifadədən xoşlandınızsa</string>
-  <string name="rate_dialog_msg_2">xahiş edirik, dəyərləndirmək üçün bir az vaxt ayırın. Dəstəklədiyiniz üçün təşəkkür edirik!</string>
   <string name="rate_dialog_positive">Dəyərləndir!</string>
   <string name="no_thanks">Yox, sağ olun</string>
   <string name="rate_dialog_neutral">Daha sonra</string>

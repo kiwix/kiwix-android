@@ -33,8 +33,6 @@
   <string name="pref_language_chooser">भाषां चिनोतु</string>
   <string name="no_section_info" fuzzy="true">पाठस्य शीर्षकं न प्राप्तम्</string>
   <string name="rate_dialog_title">कृपया अस्माकं मूलाङ्कनं कुरु</string>
-  <string name="rate_dialog_msg_1">यदि त्वया उपयोगन लाभः स्वीकृतः</string>
-  <string name="rate_dialog_msg_2">, कृपया क्षणमात्रं मूल्याङ्कनं कुरु. तव प्रतिस्पन्दार्थं कृतज्ञता !</string>
   <string name="rate_dialog_positive">मूल्याङ्कनम्</string>
   <string name="no_thanks">न, कृतज्ञताः</string>
   <string name="rate_dialog_neutral">पश्चात्</string>

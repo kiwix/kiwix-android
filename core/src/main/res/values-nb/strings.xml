@@ -40,8 +40,6 @@
   <string name="request_storage" fuzzy="true">For å få åpnet ZIM-filer trenger vi tilgang til lagringsplassen din</string>
   <string name="bookmark_added">Bokmerke lagt til</string>
   <string name="rate_dialog_title">Vennligst Ranger Oss</string>
-  <string name="rate_dialog_msg_1">Om du liker å bruke</string>
-  <string name="rate_dialog_msg_2">, ta noen minutter til å rangere oss. Takk for støtten din!</string>
   <string name="rate_dialog_positive">Ranger!</string>
   <string name="no_thanks">Nei takk</string>
   <string name="rate_dialog_neutral">Senere</string>

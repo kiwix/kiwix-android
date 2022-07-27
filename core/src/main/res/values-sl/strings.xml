@@ -62,8 +62,6 @@
   <string name="tab_closed">Zavihek je zaprt</string>
   <string name="bookmark_added">Zaznamek je dodan</string>
   <string name="rate_dialog_title">Prosimo, ocenite nas</string>
-  <string name="rate_dialog_msg_1">Če ste uživali ob uporabi</string>
-  <string name="rate_dialog_msg_2">, prosimo vzemite si trenutek in ocenite. Hvala za vašo podporo!</string>
   <string name="rate_dialog_positive">Oceniti!</string>
   <string name="no_thanks">Ne, hvala</string>
   <string name="rate_dialog_neutral">Kasneje</string>

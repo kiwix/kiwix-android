@@ -98,8 +98,6 @@
   <string name="tab_closed">Karta zavřena</string>
   <string name="bookmark_added">Záložka přidána</string>
   <string name="rate_dialog_title">Prosím ohodnoťte nás</string>
-  <string name="rate_dialog_msg_1">Pokud jste si užili používání</string>
-  <string name="rate_dialog_msg_2">, prosím, ohodnoťte tuto aplikaci. Díky za vaši podporu!</string>
   <string name="rate_dialog_positive">Ohodnotit!</string>
   <string name="no_thanks">Ne, děkuji</string>
   <string name="rate_dialog_neutral">Později</string>

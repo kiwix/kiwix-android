@@ -64,8 +64,6 @@
   <string name="tab_closed">ট্যাব বন্ধ করা হয়েছে</string>
   <string name="bookmark_added">বুকমার্ক যোগ হয়েছে</string>
   <string name="rate_dialog_title">দয়া করে আমাদের মূল্যায়ন করুন</string>
-  <string name="rate_dialog_msg_1">যদি আপনি ব্যবহার করতে পছন্দ করেন</string>
-  <string name="rate_dialog_msg_2">, দয়া করে এক মিনিট ব্যয় করে মূল্যায়ন করুন। আপনার সমর্থনের জন্য ধন্যবাদ!</string>
   <string name="rate_dialog_positive">মূল্যায়ন করুন!</string>
   <string name="no_thanks">না, ধন্যবাদ</string>
   <string name="rate_dialog_neutral">পরে</string>

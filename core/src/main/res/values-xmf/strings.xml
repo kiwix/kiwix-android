@@ -62,8 +62,6 @@
   <string name="tab_closed">აშნაკიდაქ დიკილუ</string>
   <string name="bookmark_added">მიკაწონებელი გეძნელი რე</string>
   <string name="rate_dialog_title">ქორთხინთ, დუმაფასით</string>
-  <string name="rate_dialog_msg_1">ქომორქონა-და</string>
-  <string name="rate_dialog_msg_2">, ქორთხინთ, ართ წუთი ქემიჩომილეთ ჩქინი დაფასებელო. მარდი თქვანი აზარაშ გეშა!</string>
   <string name="rate_dialog_positive">დაფასება!</string>
   <string name="no_thanks">ვარი, მარდი</string>
   <string name="rate_dialog_neutral">შხვა ბორჯის</string>

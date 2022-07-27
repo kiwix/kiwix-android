@@ -89,8 +89,6 @@
   <string name="tab_closed">Јазичето е затворено</string>
   <string name="bookmark_added">Обележувачот е додаден</string>
   <string name="rate_dialog_title">Дајте ни оценка</string>
-  <string name="rate_dialog_msg_1">Ако ви се допаѓа</string>
-  <string name="rate_dialog_msg_2">, ќе ве молиме да одвоите еден миг за да дадете своја оценка. Ви благодариме на поддршката!</string>
   <string name="rate_dialog_positive">Оцени!</string>
   <string name="no_thanks">Не, благодарам</string>
   <string name="rate_dialog_neutral">Подоцна</string>

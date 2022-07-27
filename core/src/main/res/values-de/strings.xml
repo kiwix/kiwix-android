@@ -101,8 +101,6 @@
   <string name="tab_closed">Registerkarte geschlossen</string>
   <string name="bookmark_added">Lesezeichen hinzugefügt</string>
   <string name="rate_dialog_title">Bitte bewerten Sie uns</string>
-  <string name="rate_dialog_msg_1">Wenn Sie</string>
-  <string name="rate_dialog_msg_2">mögen, nehmen Sie sich zur Bewertung einen Moment Zeit. Vielen Dank für Ihre Unterstützung!</string>
   <string name="rate_dialog_positive">Bewerten Sie!</string>
   <string name="no_thanks">Nein danke</string>
   <string name="rate_dialog_neutral">Später</string>

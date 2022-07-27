@@ -109,8 +109,6 @@
   <string name="tab_closed">Вкладка закрыта</string>
   <string name="bookmark_added">Закладка добавлена</string>
   <string name="rate_dialog_title">Пожалуйста, оцените нас</string>
-  <string name="rate_dialog_msg_1">Если вам нравится</string>
-  <string name="rate_dialog_msg_2">, пожалуйста, найдите минутку, чтобы оценить его. Спасибо за вашу поддержку!</string>
   <string name="rate_dialog_positive">Оценить!</string>
   <string name="no_thanks">Нет, спасибо</string>
   <string name="rate_dialog_neutral">Позже</string>

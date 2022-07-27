@@ -39,8 +39,6 @@
   <string name="request_storage" fuzzy="true">Каб атрымаць доступ да ZIM-файлаў, нам трэба мець доступ да вашага сховішча</string>
   <string name="bookmark_added">Закладка дададзеная</string>
   <string name="rate_dialog_title">Калі ласка, ацаніце нас</string>
-  <string name="rate_dialog_msg_1">Калі вам падабаецца</string>
-  <string name="rate_dialog_msg_2">, калі ласка, знайдзіце час, каб ацаніць. Дзякуем за Вашу падтрымку!</string>
   <string name="rate_dialog_positive">Ацаніць!</string>
   <string name="no_thanks">Не, дзякуй</string>
   <string name="rate_dialog_neutral">Пазней</string>
