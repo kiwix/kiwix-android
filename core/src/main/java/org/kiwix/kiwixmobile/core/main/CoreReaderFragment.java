@@ -613,15 +613,9 @@ public abstract class CoreReaderFragment extends BaseFragment
     } else if (drawerLayout != null && drawerLayout.isDrawerOpen(GravityCompat.END)) {
       drawerLayout.closeDrawers();
       return ShouldNotCall;
-    } else if (getCurrentWebView() != null) {
-      KiwixWebView kiwixWebView = getCurrentWebView();
-      kiwixWebView.goBack();
-      if (kiwixWebView.canGoBack()) {
-        kiwixWebView.goBack();
-        return ShouldNotCall;
-      } else {
-        return ShouldCall;
-      }
+    } else if (getCurrentWebView() != null && getCurrentWebView().canGoBack()) {
+      getCurrentWebView().goBack();
+      return ShouldNotCall;
     }
     return ShouldCall;
   }
