@@ -17,7 +17,7 @@
   <string name="menu_wifi_hotspot">Безжично жариште</string>
   <string name="save_media">Зачувај медиум</string>
   <string name="save_media_error">Настана грешка при зачувувањето на податотеката!</string>
-  <string name="save_media_saved" fuzzy="true">Податотеката е зачувана како %s во Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Податотеката е зачувана како %s во Downloads/org.kiwix…/</string>
   <string name="search_label">Пребарај</string>
   <string name="choose_file">Изберете содржинска податотека (*.zim)</string>
   <string name="open_in_new_tab">Да ја отворам врската во ново јазиче?</string>
@@ -226,6 +226,7 @@
   <string name="connection_failed">Врската е прекината</string>
   <string name="permission_rationale_location">Андроид бара дозвола за местоположба за да му даде на прилогот да пронаоѓа уреди за сврзување</string>
   <string name="permission_rationale_location_on_host_zim_file">Андроид бара дозвола за местоположба за да му даде на прилогот да вдомува ZIM-податотеки</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">Андроид бара дозвола од околните безжични уреди за да му даде на прилогот да вдомува ZIM-податотеки</string>
   <string name="permission_refused_location">Не можам да пронаоѓам уреди за сврзување без дозвола за местоположба</string>
   <string name="permission_refused_storage">Не можам да дојдам до ZIM-податотеките без дозвола за складирање</string>
   <string name="request_enable_location">Овозможете местоположба за да можам да пронаоѓам уреди за сврзување</string>
@@ -292,4 +293,13 @@
   <string name="system_unable_to_grant_permission_message">Системот не може да ја даде дозволата!</string>
   <string name="allow">Дозволи</string>
   <string name="allow_internet_permission_message">Дајте дозвола за семрежен пристап за преземање на содржините</string>
+  <string name="no_notes">Нема белешки</string>
+  <string name="notes_from_all_books">Погл. белешки од сите книги</string>
+  <string name="search_notes">Пребарај белешки</string>
+  <string name="choose_your_action">Изберете дејство</string>
+  <string name="open_note">Отвори белешка</string>
+  <string name="open_article">Отвори статија</string>
+  <string name="delete_note_dialog_message">Напомена: Белешките не се избришани од вашиот склад</string>
+  <string name="delete_selected_notes">Да ги избришам избраните белешки?</string>
+  <string name="missing_split_version_for_objectbox">Неподдржана архитектура. Вашито уред не е складен со прилогов</string>
 </resources>

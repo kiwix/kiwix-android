@@ -97,8 +97,8 @@
   <string name="tab_closed">לשונית נסגרה</string>
   <string name="bookmark_added">הסימנייה נוספה</string>
   <string name="rate_dialog_title">אנא דרגו אותנו</string>
-  <string name="rate_dialog_msg_1">אם אתם נהנים להשתמש</string>
-  <string name="rate_dialog_msg_2">, אנא הקדישו רגע ודרגו את התכונה הזאת. תודה על התמיכה!</string>
+  <string name="rate_dialog_msg_1">אם אתם אוהבים את</string>
+  <string name="rate_dialog_msg_2">אנא הקדישו רגע ודרגו אותנו. תודה על התמיכה!</string>
   <string name="rate_dialog_positive">דירוג!</string>
   <string name="no_thanks">לא, תודה</string>
   <string name="rate_dialog_neutral">פעם אחרת</string>
@@ -125,8 +125,8 @@
   <string name="zim_no_vid">אין סרטונים</string>
   <string name="no_network_connection">אין חיבור לרשת</string>
   <string name="help_2">מה קיוויקס עושה?</string>
-  <string name="help_3">קיוויקס היא תוכנה להצגת תוכן באופן לא-מקוון. היא פועלת כמעט כמו דפדפן אינטרנט, אך במקום גישה לדפי אינטרנט מקוונים, היא מאפשרת קריאת תוכן מקבצים בפורמט ZIM.</string>
-  <string name="help_4">בעוד שקיוויקס נועדה במקור לספק את תוכני האתר ויקיפדיה באופן לא־מקוון, היא מאפשרת גם קריאת תכנים נוספים.</string>
+  <string name="help_3">קיוויקס היא תוכנה להצגת תוכן ללא חיבור לרשת. היא פועלת כמעט כמו דפדפן, אך במקום גישה לדפי אינטרנט מקוונים, היא מאפשרת קריאת תוכן מקבצים בפורמט ZIM.</string>
+  <string name="help_4">בעוד שקיוויקס נועדה במקור לספק את תוכני ויקיפדיה ללא חיבור לרשת, היא מאפשרת גם קריאת תכנים נוספים.</string>
   <string name="help_5">איפה התוכן?</string>
   <string name="help_6">התוכן שלנו מתארח באתר של קיוויקס.</string>
   <string name="help_7">הם זמינים כקבצי ZIM. ישנם קבצים רבים כאלו:</string>
@@ -300,4 +300,12 @@
   <string name="system_unable_to_grant_permission_message">המערכת אינה יכולה לתת הרשאה!</string>
   <string name="allow">לאפשר</string>
   <string name="allow_internet_permission_message">נא לאפשר הרשאת אינטרנט כדי להוריד תוכן</string>
+  <string name="no_notes">אין הערות</string>
+  <string name="notes_from_all_books">הצגת הערות מכל הספרים</string>
+  <string name="search_notes">חיפוש בהערות</string>
+  <string name="choose_your_action">נא לבחור את הפעולה שלך</string>
+  <string name="open_note">פתיחת הערה</string>
+  <string name="open_article">פתיחת ערך</string>
+  <string name="delete_note_dialog_message">הערה: הערות אינן נמחקות מהאחסון שלך</string>
+  <string name="delete_selected_notes">למחוק את ההערות הנבחרות?</string>
 </resources>

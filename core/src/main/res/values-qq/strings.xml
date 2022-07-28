@@ -37,6 +37,8 @@
   <string name="delete">{{Identical|Delete}}</string>
   <string name="cancel">{{identical|Cancel}}</string>
   <string name="undo">{{Identical|Undo}}</string>
+  <string name="rate_dialog_msg_1">This is the first part of a message, which ends in {{Msg-kiwix|Android.ui.rate dialog msg 2}}. The word \"Kiwix\" is inserted between them.\n\n(These two messages should be merged into one. [https://github.com/kiwix/kiwix-android/issues/2919 Bug report].)</string>
+  <string name="rate_dialog_msg_2">This is the second part of a message, which ends in {{Msg-kiwix|Android.ui.rate dialog msg 1}}. The word \"Kiwix\" is inserted between them.\n\n(These two messages should be merged into one. [https://github.com/kiwix/kiwix-android/issues/2919 Bug report].)</string>
   <string name="rate_dialog_positive">{{Identical|Rate}}</string>
   <string name="no_thanks">{{Identical|No thanks}}</string>
   <string name="rate_dialog_neutral">{{Identical|Later}}</string>

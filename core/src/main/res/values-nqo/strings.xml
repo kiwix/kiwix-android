@@ -2,8 +2,9 @@
 <!-- Authors:
 * Aboubacar.banamoridou.toure
 * Lancine.kounfantoh.fofana
+* ߒߓߋ߫ ߝߏߝߣߊ߫
 -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">ߘߍ߬ߡߍ߲߬ߠߌ߲</string>
   <string name="menu_home">ߓߏ߬ߟߏ߲߬ߘߊ</string>
   <string name="menu_settings">ߟߊ߬ߓߍ߲߬ߢߐ߲߰ߡߦߊ߬ߘߊ</string>
@@ -72,6 +73,7 @@
   <string name="clear_recent_and_tabs_history_dialog">ߌ ߟߊߣߴߊ߬ ߟߊ߫ ߞߴߌ ߦߴߊ߬ ߝߍ߬ ߞߵߌ ߟߊ߫ ߕߌߙߌ߲ߠߌ߲ ߘߐ߬ߝߐ ߖߏ߲߫ ߊ߬ ߣߌ߫ ߞߵߌ ߟߊ߫ ߞߊ߲ߠߊߛߓߍ ߓߍ߯ ߞߐߦߟߍ߬ߡߊ߲߫؟</string>
   <string name="delete_recent_search_item">ߞߊ߬ ߝߌ߬ߛߌ ߣߌ߲߬ ߖߏ߰ߛߌ߫؟</string>
   <string name="pref_clear_all_history_title">ߘߐ߬ߝߐ ߖߏ߬ߛߌ߬</string>
+  <string name="pref_clear_all_history_summary">ߞߐ߯ߟߊ߫ ߕߌߙߌ߲ߠߌ߲ ߠߎ߬ ߟߊߛߊ߬ ߊ߬ ߣߌ߫ ߘߊߞߎ߲ ߘߐ߬ߝߐ</string>
   <string name="pref_notes">ߦߟߌߣߐ ߟߎ߬</string>
   <string name="pref_permission">ߘߌ߬ߢߍ߬ߒ߬ߡߊ߬ߟߌ</string>
   <string name="all_history_cleared">ߘߐ߬ߝߐ ߓߍ߯ ߓߘߊ߫ ߖߏ߰ߛߌ߫</string>
@@ -96,6 +98,8 @@
   <string name="rate_dialog_neutral">ߞߐ߯ߟߊ߫</string>
   <string name="open">ߊ߬ ߘߟߊߞߊ߬</string>
   <string name="bookmark_removed">ߟߊ߬ߡߊ ߖߏ߲߫</string>
+  <string name="pref_newtab_background_title">ߘߊߞߎ߲߫ ߞߎߘߊ߫ ߟߊߞߊ߬ ߝߊ߲߬ߝߘߊ ߞߘߐߟߊ ߘߐ߫</string>
+  <string name="pref_newtab_background_summary">ߣߴߌ ߞߍ߫ ߘߊ߫ ߘߊߞߎ߲߫ ߞߎߘߊ߫ ߘߊߦߟߍ߬ ߟߊ߫ ߸ ߊ߬ ߘߌ߫ ߟߊߞߊ߬ ߝߊ߲߬ߝߘߊ ߞߘߐߟߊ ߘߐ߫</string>
   <string name="pref_extras">ߡߞߊ߬ߝߏ߬ߟߌ ߟߎ߬</string>
   <string name="new_tab_snack_bar">ߞߎߡߘߊ ߓߘߊ߫ ߟߊߞߊ߬ ߝߢߐߘߊ߫ ߞߎߘߊ ߟߊ߫</string>
   <string name="search_widget_text">ߢߌߣߌ߲ߠߌ߲ ߞߍ߫ ߞߥߌߞߛ ߞߣߐ߫</string>
@@ -115,11 +119,15 @@
   <string name="zim_no_vid">ߖߌ߬ߦߊ߬ߖߟߎ߬ ߕߴߊ߬ ߟߊ߫</string>
   <string name="no_network_connection">ߜߊ߲߬ߞߎ߲߬ߠߌ߲ ߞߙߏ߬ߝߏ ߕߴߦߋ߲߬</string>
   <string name="help_2">ߞߥߌ ߦߋ߫ ߡߎ߲߬ ߞߍ߫ ߟߊ߫ ؟</string>
+  <string name="help_3">ߞߥߌߞߛ ߦߋ߫ ߜߊ߲߬ߞߎ߲߬ߓߊߟߌߦߊ ߞߣߐߘߐ ߘߐ߬ߞߊ߬ߙߊ߲߬ߠߌ߲ ߠߋ߬ ߘߌ߫. ߊ߬ ߓߊ߯ߙߊ߫ ߢߊ ߡߎߣߎ߲ߣߍ߲ߓߊ ߟߋ߬ ߦߋ߫ ߛߏ߲߯ߓߊߟߊ߲ ߠߊ߫ ߞߏߛߓߍ߫߸ ߞߏ߬ߣߌ߲߬ ߦߊ߬ߣߴߊ߬ ߦߋ߫ ߓߟߐߟߐߟߊ߫ ߞߐߜߍ ߟߎ߬ ߡߊߛߐ߬ߘߐ߲߫ ߞߋߟߋ߲ߘߌ߫߸ ߊ߬ߟߋ߬ ߦߋ߫ ߞߣߐߘߐ ߟߎ߬ ߘߐߞߊ߬ߙߊ߲߫ ߠߊ߫ ߞߊ߬ ߝߘߊ߫ ߖ߭ߌߡ ߖߙߎߡߎ߲ ߠߋ߬ ߘߐ߫.</string>
+  <string name="help_4">ߣߌ߫ ߞߥߌߞߛ ߟߊߘߊ߲߫ ߞߎ߲ ߠߋ߬ ߕߘߍ߬ ߦߋ߫ ߥߞߌߔߋߘߌߦߊ ߡߊߛߐ ߟߋ߬ ߘߌ߫ ߜߊ߲߬ߞߎ߲߬ߓߊߟߌߦߊ ߘߐ߫߸ ߞߏ߬ߣߌ߲߬ ߌ߬ߦߏ߯ ߞߟߋ߫߸ ߊ߬ ߦߋ߫ ߝߋ߲߫ ߜߘߍ ߟߎ߬ ߞߣߐߘߐ ߝߣߊ߫ ߘߐߞߊ߬ߙߊ߲߬ ߠߊ߫.</string>
   <string name="help_5">ߞߣߐߘߐ ߦߋ߫ ߡߌ߲߫؟</string>
   <string name="help_6">ߒ߬ ߠߊ߫ ߞߣߐߘߐ ߟߎ߬ ߟߊߖߌ߬ߦߊ߬ߣߍ߲߫ ߦߋ߫ ߞߥߌߞߛ ߓߟߐߟߐ߫ ߞߍߦߙߐ ߟߋ߬ ߞߊ߲߬.</string>
   <string name="help_7">ߊ߬ߟߎ߬ ߦߋ߫ ߦߋ߲߬ ZIM ߞߐߕߐ߮ ߟߎ߬ ߟߋ߬ ߘߌ߫. ߤߋߦߌ߬߸ ߊ߬ߟߎ߫ ߘߏ߲߬ ߛߌߦߊߡߊ߲ߓߊ ߟߋ߬ ߦߋ߲߬:</string>
   <string name="help_8">• ߥߞߌߡߋߘߌߦߊ ߦߋ߫ ߦߋ߲߬. ߞߏ߬ߣߌ߲߬ ߞߊ߲ ߓߍ߯ ߦߴߊ߬ ߞߏ߫ ߟߊ߫ ߟߋ߬</string>
   <string name="help_9">• ߞߣߐߘߐ߫ ߜߘߍ ߟߎ߬ ߦߏ߫ ߥߞߌߟߌߞߛ ߥߟߊ߫ ߥߞߌߛߎߙߛ ߟߎ߫ ߝߣߊ߫ ߦߋ߫ ߦߋ߲߬</string>
+  <string name="help_10">ߌ ߘߌ߫ ߛߴߌ ߟߊ߫ ߖ߭ߌߡ ߞߐߕߐ߯ ߛߎߥߊ߲ߘߌߣߍ߲ ߠߊߖߌ߰ ߟߴߌ ߞߎ߲߬ ߟߥߊ߬ߟߌ߬ߟߊ߲-ߠߊ߫ ߕߋ߲߬ ߝߛߊߦߌ߫߸ ߥߟߊ߫ ߞߵߌ ߘߌߦߊߣߊ߲ߕߊ߫ ߞߋߟߋ߲߫ ߛߎߥߊ߲ߘߌ߫ ߞߵߊ߬ ߟߊߖߵߌ ߞߎ߲߬ ߞߊ߬ ߝߘߊ߫ ߕߟߋ߬ߓߊ߮ ߟߊ߫ ߦߊ߬ߣߴߌ ߞߍߕߐ߫ ߊ߬ ߟߊߦߌ߬ߙߌ߲߬ߘߌ߫ ߟߴߌ ߟߊ߫ SD card ߞߊ߲߬.</string>
+  <string name="help_11">ߖ߭ߌߡ ߞߐߕߐ߮ ߟߊߖߌ߰ߟߌ ߟߥߊ߬ߟߌ߬ߟߊ߲ ߞߣߐ߫ ߏ߬ ߦߴߊ߬ ߛߌ߲߫ ߠߊ߫ ߞߐߞߊ߲ߠߊ ߟߊ߬ߡߙߊ߬ߦߙߐ ߟߋ߬ ߟߊ߫ ߞߎ߲ߓߍ߲ ߘߏ߫ ߘߐ߫ ߡߍ߲ ߕߐ߯ ߦߋ߫ ߞߏ߫ ߞߥߌߞߛ.</string>
   <string name="pref_storage">ߟߊ߬ߡߊ߲߬ߘߌ߬ߦߙߐ</string>
   <string name="pref_current_folder">ߕߋ߲߭ߕߋ߲߭ ߝߙߏߞߏ</string>
   <string name="delete_zim_failed">ߤߊߞߍ߬ߕߏ߬߸ ߊ߲ ߡߊ߫ ߛߋ߫ ߞߐߕߐ߮ ߘߏ߫ ߟߎ߫ ߖߏ߲߫ ߠߊ߫. ߌ ߘߌ߫ ߛߴߊ߬ ߡߊߝߍߣߍ߲߫ ߠߊ߫ ߞߐߕߐ߮ ߡߙߊ߬ߓߊ߮ ߝߍ߬ ߒߕߋߟߋ߲ߡߊ߬.</string>
@@ -186,6 +194,7 @@
   <string name="selected_items">%1$d ߓߘߊ߫ ߓߊߕߐ߬ߡߐ߲߫</string>
   <string name="bookmarks_from_current_book">ߞߊ߬ߝߊ ߟߎ߬ ߓߍ߯ ߟߊ߬ߡߊ ߟߎ߬ ߦߋ߫</string>
   <string name="search_bookmarks">ߟߊ߬ߡߊ ߟߎ߬ ߢߌߣߌ߲߫</string>
+  <string name="close_all_tabs">ߘߊߞߎ߲ ߓߍ߯ ߘߊߕߎ߲߯</string>
   <string name="pending_state">ߘߞߐ߬ߣߐ߲߬ߠߌ߲ ߞߍ߫</string>
   <string name="running_state">ߊ߬ ߦߋ߫ ߛߋ߲߬ߠߊ߫</string>
   <string name="complete">ߊ߬ ߓߘߊ߫ ߓߊ߲߫</string>
@@ -215,6 +224,7 @@
   <string name="connection_failed">ߜߊ߲߬ߞߎ߲߬ߠߌ߲ ߓߘߊ߫ ߗߌߙߏ߲߫</string>
   <string name="permission_rationale_location">ߘߌ߲߬ߞߌߙߊ ߟߊߘߤߊ߬ߟߌ ߞߊ߬ߣߌ߲߬ߣߍ߲߫ ߦߋ߫ ߊ߲ߘߙߏߦߌߘ ߓߟߏ߫ ߛߊ߫ ߞߊ߬ ߞߙߍ߬ߝߍ߬ ߞߍߟߊ߲ ߠߎ߬ ߡߊߟߐ߲߫</string>
   <string name="permission_rationale_location_on_host_zim_file">ߘߌ߲߬ߞߌߙߊ ߟߊ߬ߘߤߊ߬ߟߌ ߞߊ߬ߣߌ߲߬ߣߍ߲߫ ߦߋ߫ ߊ߲ߘߙߏߦߌߘ ߓߟߏ߫ ߛߊ߫ ߞߵߊ߬ ߕߏ߫ ߟߥߊ߬ߟߌ߬ߟߊ߲ ߦߋ߫ ߛߋ߫ ߖ߭ߌߡ ߞߐߕߐ߮ ߟߎ߬ ߟߊߛߣߍ߫ ߟߊ߫</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">ߞߙߍ߬ߝߍ߬ ߥߌߝߌ ߞߍߟߊ߲ ߟߊ߫ ߘߌ߬ߢߍ ߞߊ߬ߣߌ߲߬ߣߍ߲߫ ߦߋ߫ ߊ߲ߘߙߏߦߌߘ ߓߟߏ߫ ߛߊ߫ ߞߵߊ߬ ߕߏ߫ ߟߥߊ߬ߟߌ߬ߟߊ߲ ߦߋ߫ ߛߋ߫ ߖ߭ߌߡ ߞߐߕߐ߮ ߟߎ߬ ߟߊߛߣߍ߫ ߟߊ߫</string>
   <string name="permission_refused_location">ߞߙߍ߬ߝߍ߬ ߞߍߟߊ߲ ߕߍ߫ ߛߐ߲߬ ߡߊߟߐ߲߫ ߠߊ߫ ߣߌ߫ ߘߌ߲߬ߞߌߙߊ ߡߊ߫ ߟߊߘߊ߬ߤߊ߫</string>
   <string name="permission_refused_storage">ߖ߭ߌߡ ߞߐߕߐ߮ ߟߎ߬ ߕߍߣߊ߬ ߟߊߛߐ߬ߘߐ߲߬ ߠߊ߫ ߣߌ߫ ߟߊ߬ߡߙߊ߬ߦߙߐ ߡߊ߫ ߟߊߘߤߊ߬</string>
   <string name="request_enable_location">ߘߌ߲߬ߞߌߙߊ ߟߊߘߤߊ߬ ߛߊ߫ ߞߊ߬ ߞߙߍ߬ߝߍ߬ߟߊ ߟߊߛߐ߬ߘߐ߲߬</string>
@@ -238,6 +248,7 @@
   <string name="pref_clear_all_notes_summary">ߦߟߌߣߐ ߓߍ߯ ߖߏ߲߫ ߞߎߡߘߊ ߟߎ߬ ߓߍ߯ ߘߐ߫</string>
   <string name="pref_clear_all_notes_title">ߦߟߌߣߐ ߟߎ߬ ߓߍ߯ ߖߏ߰ߛߌ߫</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">ZIM ߞߐߕߐ߮ ߟߎ߬ ߘߐߞߊ߬ߙߊ߲ ߣߴߊ߬ ߛߓߍ ߟߎ߬ ߟߊߘߤߊ߬ SD ߜߍ߲ߜߍߘߍ߲ ߞߊ߲߬</string>
+  <string name="pref_text_zoom_summary" tools:ignore="StringFormatCount">ߞߟߏߘߋ߲ ߢߊ߲ߞߊ߲ ߡߊߝߊ߬ߟߋ߲߫ ߡߞߊ߬ߝߏ߬ߟߌ ٪߂߅ ߘߌ߫.</string>
   <string name="tag_pic">ߖߌ߬ߦߊ߬ߓߍ</string>
   <string name="tag_vid">ߖߌ߬ߦߊ߬ߖߟߎ</string>
   <string name="tag_text_only">ߛߓߍߟߌ ߜߊ߲߰ߛߊ߲</string>
@@ -247,6 +258,7 @@
   <string name="no_results">ߞߐߝߟߌ߫ ߕߴߦߋ߲߬</string>
   <string name="no_bookmarks">ߟߊ߬ߡߊ߫ ߕߴߦߋ߲߬</string>
   <string name="no_history">ߘߝߐ߬ ߕߴߦߋ߲߬</string>
+  <string name="device_default">ߞߍߟߊ߲ ߝߍ߭</string>
   <string name="delete_history">ߋ߫߸ ߞߊ߬ ߘߐ߬ߝߐ ߓߍ߯ ߖߏ߲߫؟</string>
   <string name="delete_selected_history">ߋ߫߸ ߞߊ߬ ߘߝߐ߬ ߓߊߕߐ߬ߡߐ߲߬ߣߍ߲ ߠߎ߬ ߖߏ߲߫؟</string>
   <string name="delete_bookmarks">ߋ߫߸ ߟߊ߬ߡߊ ߟߎ߬ ߓߍ߯ ߖߏ߲߫؟</string>
@@ -254,6 +266,7 @@
   <string name="on">ߊ߬ ߟߊߞߎߣߎ߲߫</string>
   <string name="off">ߊ߬ ߓߐ߫ ߊ߬ ߟߊ߫</string>
   <string name="auto">ߞߍߒߖߘߍߦߋ</string>
+  <string name="send_report">ߛߍ߯ߛߍ߯ߟߌ ߘߊ߲߬ߕߍ߰ߟߌ ߗߋ߫</string>
   <string name="crash_checkbox_file_system">ߞߐߕߐ߮ ߞߊ߲ߞߋ ߝߊߙߊ߲ߝߊ߯ߛߌ</string>
   <string name="diagnostic_report">ߛߍ߯ߛߍ߯ߟߌ ߘߊ߲߬ߕߍ߰ߟߌ</string>
   <string name="diagnostic_report_message">ߝߊߙߊ߲ߝߊ߯ߛߟߌ ߣߌ߲߬ ߠߎ߬ ߓߍ߯ ߗߋ߫ ߊ߲ ߡߊ߬ ߖߊ߰ߣߌ߲߫ ߛߴߊ߲ ߘߌ߫ ߛߋ߫ ߝߙߋߞߋ ߛߎ߯ߦߊ ߛߍ߯ߛߍ߯ ߟߊ߫</string>
@@ -263,4 +276,26 @@
   <string name="reader">ߞߊ߬ߙߊ߲߬ߠߊ</string>
   <string name="no_open_book">ߞߝߊ߬ ߘߊߟߊߞߊ߬ߣߍ߲߫ ߕߍ߫</string>
   <string name="open_library">ߟߍߙߊߓߏ߲ ߟߊߞߊ߬ߣߍ߲</string>
+  <string name="tab_restored">ߘߊߞߎ߲ ߟߊߞߎߣߎ߲߫</string>
+  <string name="open_drawer">ߛߊߥߎߙߊߟߊ߲ ߘߊߦߟߍ߬</string>
+  <string name="close_drawer">ߛߊ߬ߥߎߙߊߟߊ߲ ߘߊߕߎ߲߯</string>
+  <string name="how_to_update_content">ߞߣߐߘߐ ߦߋ߫ ߟߊߞߎߘߦߊ߫ ߟߊ߫ ߘߌ߬؟</string>
+  <string name="update_content_description">ߖߐ߲߬ߛߊ߫ ߞߊ߬ ߞߣߐߘߐ ߟߊߞߎߘߦߊ߫ (ߖ߭ߌߡ ߞߐߕߐ߮ ߘߏ߫) ߌ ߞߊߡߊ߲߫ ߦߋ߫ ߞߊ߬ ߦߌߟߡߊ߫ ߘߝߊߣߍ߲ ߡߎ߰ߡߍ ߟߋ߬ ߟߊߖߌ߰ ߌ ߞߎ߲߬ ߊ߬ߟߋ߬ ߞߣߐߘߐ߫ ߞߋߟߋ߲ ߣߌ߲߬ ߗߐ߫. ߌ ߝߊ߲߭ ߘߌ߫ ߛߴߏ߬ ߞߍ߫ ߟߊ߫ ߟߊ߬ߖߌ߰ߒ߬ߞߎ߲߬ߠߌ߲ ߕߍߕߍ߮ ߘߐ߫.</string>
+  <string name="all_files_permission_needed">ߡߊ߬ߞߏ ߦߋ߫ ߞߐߕߐ߮ ߓߍ߯ ߟߊߘߌ߬ߢߍ߬ߟߌ ߟߊ߫</string>
+  <string name="all_files_permission_needed_message">ߖߐ߲߬ߛߊ߫ ߞߊ߬ ߛߋ߫ ߖ߭ߌߡ ߞߐߕߐ߮ ߟߎ߬ ߓߍ߯ ߟߊߛߐ߬ߘߐ߲߬ ߠߊ߫ ߞߍߟߊ߲ ߝߊ߲߭ ߓߍ߯ ߘߐ߫߸ ߊ߲ ߡߊ߬ߞߏ ߦߋ߫ ߞߐߕߐ߮ ߛߎ߯ߦߊ ߓߍ߯ ߟߊߘߌ߬ߢߍ߬ߟߌ ߟߊ߫</string>
+  <string name="allowed">ߟߊߘߌ߬ߢߍ߬ߣߍ߲</string>
+  <string name="not_allowed">ߟߊߘߌ߬ߢߍ߬ߓߊߟߌ</string>
+  <string name="denied_internet_permission_message">ߥߌߝߌ ߟߊߞߎߣߎ߲߫ ߖߊ߰ߣߌ߲߫ ߛߊ߫ ߞߊ߬ ߛߋ߫ ߞߣߐߘߐ ߓߍ߯ ߟߊߖߌ߰ ߟߴߌ ߞߎ߲߬</string>
+  <string name="select_folder">ߞߎ߲ߓߍ߲ ߘߏ߫ ߛߎߥߊ߲ߘߌ߫ ߖߊ߰ߣߌ߲߫ ߞߣߐߘߐ ߟߊ߬ߡߙߊ߬ߦߙߐ߬ ߞߏ ߘߐ߫.</string>
+  <string name="system_unable_to_grant_permission_message">ߘߌ߬ߢߍ߬ ߞߍߣߍ߲߫ ߣߍ߫ ߞߊ߲ߞߋ ߢߍ߫ ߖߡߊ߬ߙߌ߬ߟߌ ߘߐ߫߹</string>
+  <string name="allow">ߊ߬ ߟߊߘߌ߬ߢߍ߬</string>
+  <string name="allow_internet_permission_message">ߓߟߐߟߐ ߖߡߊ߬ߙߌ߬ߦߊ ߟߊߘߌ߬ߢߍ߫ ߖߊ߰ߣߌ߲߫ ߞߊ߬ ߛߋ߫ ߞߣߐߘߐ ߡߊߞߍ߫ ߟߴߌ ߞߎ߲߬</string>
+  <string name="no_notes">ߦߟߌߣߐ߫ ߕߴߦߋ߲߬</string>
+  <string name="notes_from_all_books">ߦߟߌߣߐ ߘߐߜߍ߫ ߞߊ߬ ߝߘߊ߫ ߞߊ߬ߝߊ ߟߎ߬ ߓߍ߯ ߟߊ߫</string>
+  <string name="search_notes">ߞߐߕߐ߮ ߟߎ߬ ߢߌߣߌ߲߫</string>
+  <string name="choose_your_action">ߌ ߟߊ߫ ߞߍߟߌ ߟߎ߬ ߛߎߥߊ߲ߘߌ߫</string>
+  <string name="open_note">ߦߟߌߣߐ ߟߊߞߊ߬</string>
+  <string name="open_article">ߞߎߡߘߊ ߟߊߞߊ߬</string>
+  <string name="delete_note_dialog_message">ߦߟߌߣߐ: ߦߟߌߣߐ ߡߊ߫ ߖߏ߰ߛߌ߫ ߞߊ߬ ߝߘߊ߫ ߌ ߟߊ߫ ߟߊ߬ߡߙߊ߬ߟߌ߫ ߞߣߍ ߞߊ߲߬</string>
+  <string name="delete_selected_notes">ߞߊ߬ ߦߟߌߣߐ߫ ߓߊߓߌ߬ߟߊ߬ߣߍ߲ ߖߏ߰ߛߌ߬؟</string>
 </resources>

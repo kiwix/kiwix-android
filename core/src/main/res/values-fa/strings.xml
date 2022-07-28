@@ -168,4 +168,12 @@
   <string name="open_library">کتابخانهٔ آزاد</string>
   <string name="allowed">مجاز</string>
   <string name="not_allowed">مجاز نیست</string>
+  <string name="no_notes">یادداشتی موجود نیست</string>
+  <string name="notes_from_all_books">مشاهدهٔ یادداشت‌ها از تمام کتاب‌ها</string>
+  <string name="search_notes">جستجوی یادداشت‌ها</string>
+  <string name="choose_your_action">عمل خود را انتخاب کنید</string>
+  <string name="open_note">گشودن یادداشت</string>
+  <string name="open_article">گشودن مقاله</string>
+  <string name="delete_note_dialog_message">نکته: یادداشت‌ها از مخزن شما حذف نشده‌اند</string>
+  <string name="delete_selected_notes">حذف یادداشت‌های منتخب؟</string>
 </resources>
