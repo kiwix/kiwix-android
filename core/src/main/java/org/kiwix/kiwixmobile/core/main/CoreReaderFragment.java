@@ -1065,7 +1065,7 @@ public abstract class CoreReaderFragment extends BaseFragment
       if (mainMenu != null) {
         mainMenu.onFileOpened(urlIsValid());
       }
-      openArticle(UNINITIALISER_ADDRESS);
+      openArticle(zimFileReader.getMainPage());
       safeDispose();
       bookmarkingDisposable = Flowable.combineLatest(
           newBookmarksDao.bookmarkUrlsForCurrentBook(zimFileReader),
