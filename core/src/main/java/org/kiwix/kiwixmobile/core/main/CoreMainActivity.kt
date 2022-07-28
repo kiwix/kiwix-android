@@ -229,7 +229,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
     activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
       if (it.onBackPressed(this) == FragmentActivityExtensions.Super.ShouldCall) {
-        super.onBackPressed()
+        finish()
       }
     }
   }
