@@ -103,7 +103,7 @@
   <string name="local_zims" tools:keep="@string/local_zims">Device</string>
   <string name="remote_zims" tools:keep="@string/remote_zims">Online</string>
   <string name="library">Library</string>
-  <string name="delete_zim_body">The following zim file(s) will be deleted:n\n%s</string>
+  <string name="delete_zim_body">The following zim file(s) will be deleted:\n\n%s</string>
   <string name="delete_zims_toast" tools:keep="@string/delete_zims_toast">Files deleted successfully</string>
   <string name="no_files_here" tools:keep="@string/no_files_here">No files here</string>
   <string name="download_no_space" tools:keep="@string/download_no_space">Insufficient space to download.</string>
