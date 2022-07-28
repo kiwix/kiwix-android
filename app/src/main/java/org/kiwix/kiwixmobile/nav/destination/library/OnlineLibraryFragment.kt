@@ -94,11 +94,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   @Inject lateinit var conMan: ConnectivityManager
   @Inject lateinit var downloader: Downloader
   @Inject lateinit var dialogShower: DialogShower
-  @Inject lateinit var alertDialogShower: AlertDialogShower
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var bookUtils: BookUtils
   @Inject lateinit var availableSpaceCalculator: AvailableSpaceCalculator
+  @Inject lateinit var alertDialogShower: AlertDialogShower
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
   }
@@ -433,19 +433,24 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           })
           return
         }
-        else -> availableSpaceCalculator.hasAvailableSpaceFor(
-          item,
-          { downloadFile(item.book) },
-          {
-            libraryList.snack(
-              getString(R.string.download_no_space) +
-                "\n" + getString(R.string.space_available) + " " +
-                it,
-              R.string.download_change_storage,
-              ::showStorageSelectDialog
-            )
-          }
-        )
+        else -> if (sharedPreferenceUtil.showStorageOption) {
+          showStorageConfigureDialog()
+        } else {
+          availableSpaceCalculator.hasAvailableSpaceFor(
+            item,
+            { downloadFile(item.book) },
+            {
+              libraryList.snack(
+                """ 
+                ${getString(R.string.download_no_space)}
+                ${getString(R.string.space_available)} $it
+                """.trimIndent(),
+                R.string.download_change_storage,
+                ::showStorageSelectDialog
+              )
+            }
+          )
+        }
       }
     }
   }
@@ -455,4 +460,17 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       onSelectAction = ::storeDeviceInPreferences
     }
     .show(requireFragmentManager(), getString(R.string.pref_storage))
+
+  private fun showStorageConfigureDialog() {
+    alertDialogShower.show(
+      KiwixDialog.StorageConfigure,
+      {
+        showStorageSelectDialog()
+        sharedPreferenceUtil.showStorageOption = false
+      },
+      {
+        sharedPreferenceUtil.showStorageOption = false
+      }
+    )
+  }
 }

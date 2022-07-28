@@ -237,6 +237,14 @@ sealed class KiwixDialog(
     )
   }
 
+  object StorageConfigure : KiwixDialog(
+    R.string.configure_storage_option,
+    null,
+    positiveMessage = R.string.configure,
+    negativeMessage = R.string.yes,
+    icon = R.drawable.ic_baseline_storage_24
+  )
+
   object DeleteSelectedHistory : KiwixDialog(
     R.string.delete_selected_history,
     null,
