@@ -229,7 +229,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
     activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
       if (it.onBackPressed(this) == FragmentActivityExtensions.Super.ShouldCall) {
-        finish()
+        if (navController.currentDestination?.label?.equals("Reader") == true) {
+          finish()
+        } else {
+          super.onBackPressed()
+        }
       }
     }
   }
