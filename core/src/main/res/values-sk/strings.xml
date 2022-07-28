@@ -20,7 +20,7 @@
   <string name="menu_wifi_hotspot">WiFi hotspot</string>
   <string name="save_media">Uložiť médiá</string>
   <string name="save_media_error">Pri ukladaní došlo k chybe!</string>
-  <string name="save_media_saved" fuzzy="true">Médiá uložené ako %s do Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Médiá boli uložené ako %s na Downloads/org.kiwix…/</string>
   <string name="search_label">Hľadať</string>
   <string name="choose_file">Vyberte súbor (*.zim)</string>
   <string name="open_in_new_tab">Otvoriť odkaz na novej karte?</string>
@@ -229,6 +229,7 @@
   <string name="connection_failed">Spojenie zlyhalo</string>
   <string name="permission_rationale_location">Aby aplikácia mohla objavovať zariadenia v okolí, systém Android vyžaduje povolenie k polohe</string>
   <string name="permission_rationale_location_on_host_zim_file">Aby aplikácia mohla hosťovať súbory Zim, systém Android vyžaduje povolenie k polohe</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">Android vyžaduje povolenie pre zariadenia Wi-Fi v okolí, aby mohla aplikácia hostiť súbory Zim</string>
   <string name="permission_refused_location">Bez prístupu k polohe nie je možné lokalizovať zariadenia v okolí</string>
   <string name="permission_refused_storage">Bez prístupu na úložisko nie je možný prístup k súborom zim</string>
   <string name="request_enable_location">Pre zistenie zariadení v okolí povoľte prístup k polohe</string>
@@ -293,4 +294,15 @@
   <string name="denied_internet_permission_message">Pre stiahnutie obsahu zapnite wifi</string>
   <string name="select_folder">Prosím vyberte priečinok pre externé úložisko.</string>
   <string name="system_unable_to_grant_permission_message">Systému sa nedarí udeliť povolenie!</string>
+  <string name="allow">Povoliť</string>
+  <string name="allow_internet_permission_message">Povoľte internetové povolenie na sťahovanie obsahu</string>
+  <string name="no_notes">Žiadne poznámky</string>
+  <string name="notes_from_all_books">Zobraziť poznámky zo všetkých kníh</string>
+  <string name="search_notes">Hľadať v poznámkach</string>
+  <string name="choose_your_action">Vyberte svoju akciu</string>
+  <string name="open_note">Otvorte poznámku</string>
+  <string name="open_article">Otvoriť článok</string>
+  <string name="delete_note_dialog_message">Poznámka: Poznámky z vášho úložiska nie sú vymazané</string>
+  <string name="delete_selected_notes">Odstrániť vybraté poznámky?</string>
+  <string name="missing_split_version_for_objectbox">Nepodporovaná architektúra, vaše zariadenie nie je kompatibilné s touto aplikáciou</string>
 </resources>

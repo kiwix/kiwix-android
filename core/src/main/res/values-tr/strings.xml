@@ -31,7 +31,7 @@
   <string name="menu_wifi_hotspot">WiFi erişim paylaşımı alanı</string>
   <string name="save_media">Ortam dosyasını kaydet</string>
   <string name="save_media_error">Medya kaydedilmeye çalışılırken bir hata oluştu!</string>
-  <string name="save_media_saved" fuzzy="true">Medyayı %s olarak şuraya kaydet: Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Medya %s olarak Downloads/org.kiwix…/\'e kaydedildi</string>
   <string name="search_label">Ara</string>
   <string name="choose_file">Bir İçerik Dosyası seçin (*.zim)</string>
   <string name="open_in_new_tab">Bağlantı yeni sekmede açılsın mı?</string>
@@ -62,6 +62,7 @@
   <string name="server_started_message">%s sunucusuna erişmek için tarayıcınıza bu ip adresini girin.</string>
   <string name="share_host_address">URL\'yi diğer uygulamalar aracılığıyla paylaşın</string>
   <string name="error_file_not_found">Hata: Seçili ZIM dosyası bulunamadı.</string>
+  <string name="unable_to_read_zim_file">Bu zim dosyası okunamıyor!</string>
   <string name="zim_not_opened">Zim dosyası açılamıyor</string>
   <string name="error_file_invalid">Hata: Seçili dosya geçerli bir ZIM dosyası değil.</string>
   <string name="error_article_url_not_found">Hata: (Url: %1$s) makalesinin yüklemesi başarısız.</string>
@@ -80,6 +81,7 @@
   <string name="no_reader_application_installed">Bu dosya türü için yüklü bir uygulama bulunamadı</string>
   <string name="no_section_info">İçerik başlığı bulunamadı</string>
   <string name="request_storage">Çevrimdışı içeriğe erişmek için belleğinize erişmemiz gerekmektedir.</string>
+  <string name="request_write_storage">Zim dosyalarını indirmek için depolama alanınıza yazma erişimine ihtiyacımız var</string>
   <string name="clear_recent_and_tabs_history_dialog">Tüm aktif sekmeleri sıfırlamak ve arama geçmişinizi silmek istediğinize emin misiniz?</string>
   <string name="delete_recent_search_item">Bu öğe silinsin mi?</string>
   <string name="pref_clear_all_history_title">Geçmişi temizle</string>
@@ -299,4 +301,17 @@
   <string name="all_files_permission_needed_message">Cihaz içindeki tüm zim dosyalara erişmek için Tüm Dosyalar İzni\'ne ihtiyacımız var</string>
   <string name="allowed">İzin verildi</string>
   <string name="not_allowed">İzin verilmedi</string>
+  <string name="denied_internet_permission_message">Lütfen içeriği indirmek için wifi özelliğini etkinleştirin</string>
+  <string name="select_folder">Lütfen harici depolama için bir klasör seçin.</string>
+  <string name="system_unable_to_grant_permission_message">Sistem izin veremiyor!</string>
+  <string name="allow">İzin ver</string>
+  <string name="allow_internet_permission_message">Lütfen içeriği indirmek için internet iznine izin verin</string>
+  <string name="no_notes">Not Yok</string>
+  <string name="notes_from_all_books">Tüm Kitaplardan Notları Görüntüle</string>
+  <string name="search_notes">Notları Ara</string>
+  <string name="choose_your_action">Eyleminizi seçin</string>
+  <string name="open_note">Notu Aç</string>
+  <string name="open_article">Makaleyi Aç</string>
+  <string name="delete_note_dialog_message">Not: Notlar, depolama alanınızdan silinmez</string>
+  <string name="delete_selected_notes">Seçili Notlar Silinsin mi?</string>
 </resources>

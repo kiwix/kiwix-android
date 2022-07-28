@@ -79,7 +79,7 @@
   <string name="delete_recent_search_item">刪除此項目？</string>
   <string name="pref_clear_all_history_title">清除歷史記錄</string>
   <string name="pref_clear_all_history_summary">清除近期搜尋和分頁歷史記錄</string>
-  <string name="pref_notes">備註</string>
+  <string name="pref_notes">註釋</string>
   <string name="pref_permission">權限</string>
   <string name="all_history_cleared">所有歷史記錄已清除</string>
   <string name="pref_clear_all_bookmarks_title">清除書籤</string>
@@ -253,7 +253,7 @@
   <string name="preparing_files">準備檔案傳送…</string>
   <string name="performing_handshake">執行交握…</string>
   <string name="status">狀態</string>
-  <string name="pref_clear_all_notes_summary">清除在所有條目裡的所有註解</string>
+  <string name="pref_clear_all_notes_summary">清除在所有條目裡的所有註釋</string>
   <string name="pref_clear_all_notes_title">清除所有註釋</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">允許讀寫 ZIM 檔案在 SD 卡裡</string>
   <string name="pref_text_zoom_summary">以 25% 更改文字大小</string>
@@ -299,4 +299,12 @@
   <string name="system_unable_to_grant_permission_message">系統無法授予權限！</string>
   <string name="allow">允許</string>
   <string name="allow_internet_permission_message">請允許網路權限來下載內容</string>
+  <string name="no_notes">沒有註釋</string>
+  <string name="notes_from_all_books">檢視來自所有書籍的註釋</string>
+  <string name="search_notes">搜尋註釋</string>
+  <string name="choose_your_action">選擇您的操作</string>
+  <string name="open_note">開啟註釋</string>
+  <string name="open_article">開啟條目</string>
+  <string name="delete_note_dialog_message">備註：註釋不會從您的儲存中刪除</string>
+  <string name="delete_selected_notes">刪除所選註釋？</string>
 </resources>

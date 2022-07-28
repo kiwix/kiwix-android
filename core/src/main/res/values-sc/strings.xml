@@ -293,4 +293,12 @@
   <string name="system_unable_to_grant_permission_message">Su sistema no est in gradu de frunire su permissu!</string>
   <string name="allow">Permite</string>
   <string name="allow_internet_permission_message">Pro praghere fruni su permissu pro sa retze ìnternet pro iscarrigare cuntenutos</string>
+  <string name="no_notes">Peruna nota</string>
+  <string name="notes_from_all_books">Pòmpia sas notas de totu sos libros</string>
+  <string name="search_notes">Chirca notas</string>
+  <string name="choose_your_action">Issèbera s\'atzione tua</string>
+  <string name="open_note">Aberi sa nota</string>
+  <string name="open_article">Aberi s\'artìculu</string>
+  <string name="delete_note_dialog_message">Dae cara: sas notas non s\'iscantzellant dae sa memòria tua</string>
+  <string name="delete_selected_notes">Iscantzellare sas notas seletzionadas?</string>
 </resources>

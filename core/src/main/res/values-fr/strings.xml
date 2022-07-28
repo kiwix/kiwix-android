@@ -114,7 +114,7 @@
   <string name="bookmark_removed">Marque-page supprimé</string>
   <string name="pref_newtab_background_title">Ouvrir un nouvel onglet en arrière-plan</string>
   <string name="pref_newtab_background_summary">Lors de l’ouverture d’un nouvel onglet, il s’ouvrira en arrière-plan</string>
-  <string name="pref_extras">Extras</string>
+  <string name="pref_extras">Suppléments</string>
   <string name="new_tab_snack_bar">Article ouvert dans un nouvel onglet</string>
   <string name="search_widget_text">Rechercher dans Kiwix</string>
   <string name="speech_prompt_text">Parler pour rechercher %s</string>
@@ -178,7 +178,7 @@
   <string name="your_languages">Langues sélectionnées :</string>
   <string name="other_languages">Autres langues :</string>
   <string name="no_items_msg">Aucun élément disponible</string>
-  <string name="crash_title">Hé bien… c’est embarrassant.</string>
+  <string name="crash_title">Hé bien... c’est embarrassant.</string>
   <string name="crash_description">Il semble que nous ayons planté.\n\nPourriez-vous nous aider à corriger ce problème en envoyant l’information suivante ?</string>
   <string name="crash_checkbox_language">Vos paramètres de langue</string>
   <string name="crash_checkbox_zimfiles">Une liste de vos fichiers ZIM</string>
@@ -242,6 +242,7 @@
   <string name="connection_failed">La connexion a échoué</string>
   <string name="permission_rationale_location">L’autorisation de géolocalisation est requise par Android pour permettre à l’application de détecter des appareils à proximité.</string>
   <string name="permission_rationale_location_on_host_zim_file">La permission d’emplacement est nécessaire sur Android pour autoriser l’appli à héberger des fichiers Zim.</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">Une autorisation des appareils Wi-Fi à proximité est requise par Android pour permettre à l’application d’héberger des fichiers Zim.</string>
   <string name="permission_refused_location">Impossible de trouver des appareils proches sans les autorisations de géolocalisation</string>
   <string name="permission_refused_storage">Impossible d’accéder aux fichiers ZIM sans autorisation d’accès au stockage</string>
   <string name="request_enable_location">Activer la géolocalisation pour permettre la détection d’appareils proches</string>
@@ -259,8 +260,8 @@
   <string name="nearby_devices">APPAREILS À PROXIMITÉ</string>
   <string name="no_devices_found">Aucun appareil détecté. Tapez le bouton Rechercher pour essayer à nouveau.</string>
   <string name="files_for_transfer">FICHIERS À TRANSFÉRER</string>
-  <string name="preparing_files">Préparation des fichiers pour le transfert…</string>
-  <string name="performing_handshake">Négociation de la liaison…</string>
+  <string name="preparing_files">Préparation des fichiers pour le transfert...</string>
+  <string name="performing_handshake">Négociation de la liaison...</string>
   <string name="status">État</string>
   <string name="pref_clear_all_notes_summary">Effacer toutes les notes sur tous les articles</string>
   <string name="pref_clear_all_notes_title">Effacer toutes les notes</string>
@@ -308,4 +309,13 @@
   <string name="system_unable_to_grant_permission_message">Le système n’a pas pu accorder le droit d’accès !</string>
   <string name="allow">Autoriser</string>
   <string name="allow_internet_permission_message">Veuillez autoriser le droit sur Internet de télécharger le contenu.</string>
+  <string name="no_notes">Aucune note</string>
+  <string name="notes_from_all_books">Afficher les notes de tous les livres</string>
+  <string name="search_notes">Rechercher des notes</string>
+  <string name="choose_your_action">Choisissez votre action</string>
+  <string name="open_note">Ouvrir la note</string>
+  <string name="open_article">Ouvrir l’article</string>
+  <string name="delete_note_dialog_message">Remarque : les notes ne sont pas supprimées de votre espace de stockage</string>
+  <string name="delete_selected_notes">Supprimer les notes sélectionnées ?</string>
+  <string name="missing_split_version_for_objectbox">Architecture non prise en charge, votre appareil n’est pas compatible avec cette application.</string>
 </resources>

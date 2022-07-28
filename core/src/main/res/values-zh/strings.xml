@@ -64,6 +64,7 @@
   <string name="server_started_message">将这个 IP 地址输入到你的浏览器中来连接服务器 %s</string>
   <string name="share_host_address">通过其他应用程序分享 URL</string>
   <string name="error_file_not_found">错误：找不到选定的 ZIM 文件。</string>
+  <string name="unable_to_read_zim_file">无法读取此 ZIM 文件！</string>
   <string name="zim_not_opened">无法打开 ZIM 文件</string>
   <string name="error_file_invalid">错误：选定的文件不是有效的 ZIM 文件。</string>
   <string name="error_article_url_not_found">错误：加载条目（网址：%1$s）失败。</string>
@@ -82,6 +83,7 @@
   <string name="no_reader_application_installed">找不到用于此种文件类型的已安装应用程序</string>
   <string name="no_section_info">未找到内容标题</string>
   <string name="request_storage">要访问离线内容，我们需要访问您的存储</string>
+  <string name="request_write_storage">要下载 ZIM 文件，我们需要获取写入您的存储空间的权限</string>
   <string name="clear_recent_and_tabs_history_dialog">您确定要删除您的搜索历史，并重置所有活跃标签么？</string>
   <string name="delete_recent_search_item">删除此项？</string>
   <string name="pref_clear_all_history_title">清空历史</string>
@@ -234,6 +236,7 @@
   <string name="notes_deletion_successful">已删除整个笔记文件夹</string>
   <string name="notes_deletion_unsuccessful">有些文件未被删除</string>
   <string name="books_count">%d 本书</string>
+  <string name="severe_loss_error">严重错误！请尝试禁用/重新启用 WiFi P2P</string>
   <string name="connection_failed">连接失败</string>
   <string name="permission_rationale_location">为了寻找对等设备，我们需要定位权限（这是 Android 系统的要求）</string>
   <string name="permission_rationale_location_on_host_zim_file">要成为 ZIM 文件主机，我们需要定位权限（这是 Android 系统的要求）</string>
@@ -289,8 +292,15 @@
   <string name="reader">读者</string>
   <string name="no_open_book">没有打开的书</string>
   <string name="open_library">打开图书馆</string>
+  <string name="tab_restored">标签已恢复</string>
   <string name="open_drawer">打开绘画器</string>
   <string name="close_drawer">关闭绘画器</string>
+  <string name="how_to_update_content">如何更新内容？</string>
   <string name="allowed">允许</string>
   <string name="not_allowed">不允许</string>
+  <string name="denied_internet_permission_message">请启用 wifi 来下载内容</string>
+  <string name="select_folder">请选择用于外部存储的文件夹。</string>
+  <string name="system_unable_to_grant_permission_message">系统无法授予权限！</string>
+  <string name="allow">允许</string>
+  <string name="allow_internet_permission_message">请允许联网权限来下载内容</string>
 </resources>
