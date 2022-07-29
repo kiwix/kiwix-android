@@ -175,7 +175,10 @@ sealed class KiwixDialog(
     HasBodyFormatArgs {
     constructor(icon: Int?, activity: Activity) : this(
       listOf(
-        activity.getString(R.string.rate_dialog_msg)
+        String.format(
+          activity.getString(R.string.rate_dialog_msg),
+          activity.getString(R.string.app_name)
+        )
       ),
       icon
     )

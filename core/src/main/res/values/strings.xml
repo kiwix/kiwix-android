@@ -86,7 +86,7 @@
   <string name="tab_closed">Tab closed</string>
   <string name="bookmark_added">Bookmark added</string>
   <string name="rate_dialog_title">Please Rate Us</string>
-  <string name="rate_dialog_msg">If you enjoy using Kiwix , please take a moment to rate it. Thanks for your support!</string>
+  <string name="rate_dialog_msg">If you enjoy using %s , please take a moment to rate it. Thanks for your support!</string>
   <string name="rate_dialog_positive">Rate!</string>
   <string name="no_thanks">No, thanks</string>
   <string name="rate_dialog_neutral">Later</string>
