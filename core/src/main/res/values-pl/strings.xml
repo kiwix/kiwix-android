@@ -100,8 +100,6 @@
   <string name="tab_closed">Zakładka zamknięta</string>
   <string name="bookmark_added">Dodano zakładkę</string>
   <string name="rate_dialog_title">Prosimy nas ocenić</string>
-  <string name="rate_dialog_msg_1">Jeśli podoba ci się korzystanie z</string>
-  <string name="rate_dialog_msg_2">, znajdź chwilę na jego ocenienie. Dziękujemy za Twoje wsparcie!</string>
   <string name="rate_dialog_positive">Oceń!</string>
   <string name="no_thanks">Nie, dziękuję</string>
   <string name="rate_dialog_neutral">Później</string>

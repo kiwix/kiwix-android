@@ -44,8 +44,6 @@
   <string name="did_you_know">Wèts se det?</string>
   <string name="bookmark_added">Blaadwiezer tougeveug</string>
   <string name="rate_dialog_title">Beoeardeil ós estebleef</string>
-  <string name="rate_dialog_msg_1">Es se blie bös mit</string>
-  <string name="rate_dialog_msg_2">, gaef den efkes \'n beoeardeiling. Danke veure stäön!</string>
   <string name="rate_dialog_positive">Beoeardeil!</string>
   <string name="no_thanks">Nae, danke</string>
   <string name="rate_dialog_neutral">Later</string>

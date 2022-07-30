@@ -103,8 +103,6 @@
   <string name="tab_closed">Sekme kapatıldı</string>
   <string name="bookmark_added">Yer imi eklendi</string>
   <string name="rate_dialog_title">Lütfen bizi değerlendirin</string>
-  <string name="rate_dialog_msg_1">Eğer kullanırken keyif alıyorsanız</string>
-  <string name="rate_dialog_msg_2">Lütfen bir dakikanızı ayırarak bunu değerlendirin. Desteğiniz için teşekkürler!</string>
   <string name="rate_dialog_positive">Değerlendirin!</string>
   <string name="no_thanks">Hayır, teşekkürler</string>
   <string name="rate_dialog_neutral">Sonra</string>

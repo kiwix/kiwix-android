@@ -105,8 +105,6 @@
   <string name="tab_closed">Onglet fermé</string>
   <string name="bookmark_added">Marque-page ajouté</string>
   <string name="rate_dialog_title">Merci de nous évaluer</string>
-  <string name="rate_dialog_msg_1">Si vous aimez utiliser</string>
-  <string name="rate_dialog_msg_2">, veuillez prendre un moment pour l’évaluer. Merci pour votre soutien !</string>
   <string name="rate_dialog_positive">Donnez nous une note !</string>
   <string name="no_thanks">Non merci</string>
   <string name="rate_dialog_neutral">Plus tard</string>

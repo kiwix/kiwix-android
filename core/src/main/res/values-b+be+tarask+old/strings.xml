@@ -48,8 +48,6 @@
   <string name="did_you_know">Ці ведалі вы?</string>
   <string name="bookmark_added">Закладка дададзеная</string>
   <string name="rate_dialog_title">Калі ласка, ацаніце нас</string>
-  <string name="rate_dialog_msg_1">Калі вам падабаецца карыстацца</string>
-  <string name="rate_dialog_msg_2">, калі ласка, знайдзіце час, каб ацаніць. Дзякуем за вашую падтрымку!</string>
   <string name="rate_dialog_positive">Ацаніць!</string>
   <string name="no_thanks">Не, дзякуй</string>
   <string name="rate_dialog_neutral">Пазьней</string>

@@ -49,8 +49,6 @@
   <string name="did_you_know">Јесте ли знали?</string>
   <string name="bookmark_added">Обележивачи су додати</string>
   <string name="rate_dialog_title">Молимо Вас да нас оцените</string>
-  <string name="rate_dialog_msg_1">Ако уживате користећи</string>
-  <string name="rate_dialog_msg_2">, сачекајте моменат да оцените. Хвала на подршци!</string>
   <string name="rate_dialog_positive">Оцени!</string>
   <string name="no_thanks">Не, хвала</string>
   <string name="rate_dialog_neutral">Касније</string>

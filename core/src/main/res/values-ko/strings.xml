@@ -99,8 +99,6 @@
   <string name="tab_closed">탭 닫힘</string>
   <string name="bookmark_added">북마크가 추가됨</string>
   <string name="rate_dialog_title">평가해 주세요</string>
-  <string name="rate_dialog_msg_1">즐겁게 사용하고 있다면</string>
-  <string name="rate_dialog_msg_2">, 잠시 시간을 내어 평가해 주세요. 여러분의 응원 감사합니다!</string>
   <string name="rate_dialog_positive">평가해 주세요!</string>
   <string name="no_thanks">아니오, 괜찮습니다</string>
   <string name="rate_dialog_neutral">나중에</string>

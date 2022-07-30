@@ -63,8 +63,6 @@
   <string name="tab_closed">Erlaitza itxita</string>
   <string name="bookmark_added">Liburu-marka gehitu da</string>
   <string name="rate_dialog_title">Mesedez, puntua gaitzazu</string>
-  <string name="rate_dialog_msg_1">Erabiltzen gozatzen baduzu</string>
-  <string name="rate_dialog_msg_2">Mesedez, har ezazu momentu bat puntuatzeko. Eskerrik asko zure laguntzagatik!</string>
   <string name="rate_dialog_positive">Puntuatu!</string>
   <string name="no_thanks">Ez, eskerrik asko</string>
   <string name="rate_dialog_neutral">Geroago</string>

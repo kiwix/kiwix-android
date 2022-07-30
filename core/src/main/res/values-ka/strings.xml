@@ -35,7 +35,6 @@
   <string name="pref_language_chooser">აირჩიეთ ენა</string>
   <string name="bookmark_added">სანიშნი დამატებულია</string>
   <string name="rate_dialog_title">გთხოვთ, შეგვაფასეთ</string>
-  <string name="rate_dialog_msg_1">თუ თქვენ მოგწონთ</string>
   <string name="rate_dialog_positive">შეფასება!</string>
   <string name="no_thanks">არა, გმადლობთ</string>
   <string name="rate_dialog_neutral">მოგვიანებით</string>

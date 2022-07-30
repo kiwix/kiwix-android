@@ -92,8 +92,6 @@
   <string name="tab_closed">Flik stängdes</string>
   <string name="bookmark_added">Bokmärke lades till</string>
   <string name="rate_dialog_title">Sätt betyg på oss</string>
-  <string name="rate_dialog_msg_1">Om du gillar att använda</string>
-  <string name="rate_dialog_msg_2">, ta dig tid att betygsätta den. Tack för ditt stöd!</string>
   <string name="rate_dialog_positive">Betygsätt!</string>
   <string name="no_thanks">Nej, tack</string>
   <string name="rate_dialog_neutral">Senare</string>

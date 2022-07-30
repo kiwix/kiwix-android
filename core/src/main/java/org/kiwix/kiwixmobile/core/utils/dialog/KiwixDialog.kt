@@ -166,7 +166,7 @@ sealed class KiwixDialog(
   data class ShowRate(override val args: List<Any>, val customIcon: Int?) :
     KiwixDialog(
       R.string.rate_dialog_title,
-      R.string.triple_arg_format_string,
+      R.string.single_arg_format_string,
       R.string.rate_dialog_positive,
       R.string.no_thanks,
       icon = customIcon,
@@ -175,9 +175,10 @@ sealed class KiwixDialog(
     HasBodyFormatArgs {
     constructor(icon: Int?, activity: Activity) : this(
       listOf(
-        activity.getString(R.string.rate_dialog_msg_1),
-        activity.getString(R.string.app_name),
-        activity.getString(R.string.rate_dialog_msg_2)
+        String.format(
+          activity.getString(R.string.rate_dialog_msg),
+          activity.getString(R.string.app_name)
+        )
       ),
       icon
     )

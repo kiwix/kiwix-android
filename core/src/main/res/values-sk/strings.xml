@@ -92,8 +92,6 @@
   <string name="tab_closed">Karta zatvorená</string>
   <string name="bookmark_added">Záložka bola pridaná</string>
   <string name="rate_dialog_title">Prosím, ohodnoťte nás</string>
-  <string name="rate_dialog_msg_1">Ak sa vám náš produkt páči</string>
-  <string name="rate_dialog_msg_2">, prosím, obetujte chvíľu vášho času a ohodnoťte ho. Vďaka za vašu podporu!</string>
   <string name="rate_dialog_positive">Ohodnotiť!</string>
   <string name="no_thanks">Nie, vďaka</string>
   <string name="rate_dialog_neutral">Neskôr</string>

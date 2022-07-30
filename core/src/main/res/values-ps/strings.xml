@@ -40,8 +40,6 @@
   <string name="tab_closed">ټب تړل شوی</string>
   <string name="bookmark_added">کتاب نښه ورگډه شوه</string>
   <string name="rate_dialog_title">لطفاً زموږ ارزونه وکړئ</string>
-  <string name="rate_dialog_msg_1">که تاسې يې په کارولو خوند اخيستی وي</string>
-  <string name="rate_dialog_msg_2">، نو مهرباني وکړئ يوه شېبه وخت مو د دې په ارزولو کې ولگوئ. ستاسې له ملاتړ څخه مننه!</string>
   <string name="rate_dialog_positive">ارزول!</string>
   <string name="no_thanks">نه، مننه</string>
   <string name="rate_dialog_neutral">وروسته</string>

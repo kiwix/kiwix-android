@@ -39,8 +39,6 @@
   <string name="request_storage" fuzzy="true">ZIM Filesలో పోందుపరచడానికి మేము మీ నిల్వ లను పోందుపరచాలి</string>
   <string name="bookmark_added">పుస్తకగుర్తులు జతచేయబడింది</string>
   <string name="rate_dialog_title">దయచేసి మమల్ని నక్షత్రాలతో వెలకట్టండి</string>
-  <string name="rate_dialog_msg_1">మీరు ఒకవేళ ఉపయోగిస్తు ఆనందిస్తున్నారా</string>
-  <string name="rate_dialog_msg_2">, మమల్ని నక్షత్రాలతో వెల కట్టడానికి చర్య తీసుకోండి.మమల్ని సహకరించినందుకు ధన్యవాదములు!</string>
   <string name="rate_dialog_positive">నక్షత్రాలతో వెల కట్టు!</string>
   <string name="no_thanks">వద్దు, ధన్యవాదములు</string>
   <string name="rate_dialog_neutral">తరువాత</string>
