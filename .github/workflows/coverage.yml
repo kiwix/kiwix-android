@@ -29,6 +29,16 @@ jobs:
         with:
           java-version: 11
 
+      - name: Restore Cache
+        uses: actions/cache@v2
+        with:
+            path: |
+              ~/.gradle/caches
+              ~/.gradle/wrapper
+            key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+            restore-keys: |
+              ${{ runner.os }}-gradle-
+
       - name: create instrumentation coverage
         uses: ReactiveCircus/android-emulator-runner@v2.23.0
         env:
@@ -58,7 +68,7 @@ jobs:
 
       - name: Upload Coverage to GH-Actions
         uses: actions/upload-artifact@v2.2.0
-        if: ${{ matrix.api-level==21  }}
+        if: ${{ always()  }}
         with:
           name: Tests Coverage Report
           path: |
