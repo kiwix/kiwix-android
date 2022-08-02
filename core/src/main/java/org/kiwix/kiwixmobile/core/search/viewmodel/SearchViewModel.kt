@@ -55,8 +55,8 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.OpenSearchItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.PopFragmentBackstack
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ProcessActivityResult
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SaveSearchToRecents
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchArgumentProcessing
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScreen
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
@@ -140,7 +140,7 @@ class SearchViewModel @Inject constructor(
 
   private fun saveSearchAndOpenItem(searchListItem: SearchListItem, openInNewTab: Boolean) {
     _effects.offer(SaveSearchToRecents(recentSearchDao, searchListItem, zimReaderContainer.id))
-    _effects.offer(OpenSearchItem(searchListItem, openInNewTab))
+    _effects.sendBlocking(OpenSearchItem(searchListItem, openInNewTab))
   }
 }
 
