@@ -18,13 +18,14 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - uses: actions/cache@v2
-      with:
-        path: |
+      - name: Restore Cache
+        uses: actions/cache@v2
+        with:
+         path: |
               ~/.gradle/caches
               ~/.gradle/wrapper
-            key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-            restore-keys: |
+              key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+              restore-keys: |
               ${{ runner.os }}-gradle-
 
       - name: Static Analysis
@@ -53,9 +54,10 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - uses: actions/cache@v2
-      with:
-        path: |
+      - name: Restore Cache
+        uses: actions/cache@v2
+        with:
+         path: |
           ~/.gradle/caches
           ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
@@ -139,5 +141,3 @@ jobs:
             name: kiwix-android
             path: |
               **/*.apk
-
-
