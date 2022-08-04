@@ -37,4 +37,8 @@ class OnlineLibraryRobot : BaseRobot() {
     clickOn(ViewId(R.id.select_language))
     language(func)
   }
+
+  override fun waitTillLoad() {
+    TODO("Not yet implemented")
+  }
 }

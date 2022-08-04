@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile
 import android.R.id
 import android.app.Instrumentation
 import android.content.Context
+import android.util.Log
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.Direction
@@ -65,6 +66,17 @@ abstract class BaseRobot(
   }
 
   protected fun clickOn(findable: Findable, timeout: Long = VERY_LONG_WAIT) {
+    for (i in 0 until numberOfClickAttempts) {
+      val uiObject2: UiObject2? = waitFor(findable, timeout)
+      if (uiObject2 != null) {
+        uiObject2.click()
+        break
+      }
+      Log.i(
+        BaseActivityTest.TAG,
+        "Could not find selector with name $findable, retrying $i"
+      )
+    }
     isVisible(findable, timeout).click()
   }
 
@@ -102,5 +114,14 @@ abstract class BaseRobot(
     percent: Float = 0.8f
   ) {
     swipe(direction, percent)
+  }
+
+  /**
+   * Waits till the given screen is loaded.
+   */
+  abstract fun waitTillLoad()
+
+  companion object {
+    private const val numberOfClickAttempts = 3
   }
 }

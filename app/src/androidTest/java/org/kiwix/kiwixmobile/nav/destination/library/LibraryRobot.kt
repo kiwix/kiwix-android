@@ -36,4 +36,8 @@ class LibraryRobot : BaseRobot() {
     clickOn(ViewId(R.id.get_zim_nearby_device))
     localFileTransfer(func)
   }
+
+  override fun waitTillLoad() {
+    TODO("Not yet implemented")
+  }
 }

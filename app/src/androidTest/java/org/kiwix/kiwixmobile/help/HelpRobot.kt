@@ -80,4 +80,8 @@ class HelpRobot : BaseRobot() {
 
   private fun helpTextFormat(vararg stringIds: Int) =
     stringIds.joinToString(separator = "\n", transform = context::getString)
+
+  override fun waitTillLoad() {
+    TODO("Not yet implemented")
+  }
 }

@@ -39,4 +39,8 @@ class HistoryRobot : BaseRobot() {
   fun assertDeleteHistoryDialogDisplayed() {
     isVisible(TextId(R.string.delete_history))
   }
+
+  override fun waitTillLoad() {
+    TODO("Not yet implemented")
+  }
 }

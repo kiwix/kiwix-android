@@ -42,4 +42,8 @@ class SearchRobot : BaseRobot() {
   fun checkZimFileSearchSuccessful(readerFragment: Int) {
     isVisible(ViewId(readerFragment))
   }
+
+  override fun waitTillLoad() {
+    TODO("Not yet implemented")
+  }
 }

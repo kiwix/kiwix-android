@@ -29,4 +29,8 @@ class LanguageRobot : BaseRobot() {
   init {
     isVisible(ViewId(R.id.language_recycler_view))
   }
+
+  override fun waitTillLoad() {
+    TODO("Not yet implemented")
+  }
 }

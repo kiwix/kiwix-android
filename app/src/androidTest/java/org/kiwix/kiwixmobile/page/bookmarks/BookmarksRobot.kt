@@ -40,4 +40,8 @@ class BookmarksRobot : BaseRobot() {
   fun assertDeleteBookmarksDialogDisplayed() {
     isVisible(TextId(R.string.delete_bookmarks))
   }
+
+  override fun waitTillLoad() {
+    TODO("Not yet implemented")
+  }
 }

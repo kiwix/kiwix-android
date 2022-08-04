@@ -130,4 +130,7 @@ class SettingsRobot : BaseRobot() {
     context.resources.getStringArray(R.array.pref_night_modes_entries)
 
   private fun IntArray.matchers() = map(::withText).toTypedArray()
+  override fun waitTillLoad() {
+    TODO("Not yet implemented")
+  }
 }

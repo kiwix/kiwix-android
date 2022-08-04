@@ -47,6 +47,10 @@ fun topLevel(func: TopLevelDestinationRobot.() -> Unit) =
 
 class TopLevelDestinationRobot : BaseRobot() {
 
+  init {
+    waitTillLoad()
+  }
+
   fun clickReaderOnBottomNav(func: ReaderRobot.() -> Unit) {
     isVisible(ViewId(R.id.navigation_container))
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
@@ -117,5 +121,9 @@ class TopLevelDestinationRobot : BaseRobot() {
 
   fun assertExternalLinkDialogDisplayed() {
     isVisible(TextId(R.string.external_link_popup_dialog_title))
+  }
+
+  override fun waitTillLoad() {
+    uiDevice.waitForIdle()
   }
 }

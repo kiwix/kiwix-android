@@ -18,8 +18,11 @@
 
 package org.kiwix.kiwixmobile.localFileTransfer
 
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.Until
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.DEFAULT_WAIT
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.R
 
@@ -33,6 +36,11 @@ fun localFileTransfer(func: LocalFileTransferRobot.() -> Unit) =
 class LocalFileTransferRobot : BaseRobot() {
 
   init {
+    waitTillLoad()
     isVisible(TextId(R.string.receive_files_title))
+  }
+
+  override fun waitTillLoad() {
+    uiDevice.wait(Until.findObjects(By.res(R.string.receive_files_title.toString())), DEFAULT_WAIT)
   }
 }

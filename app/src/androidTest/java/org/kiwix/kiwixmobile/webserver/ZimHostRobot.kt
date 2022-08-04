@@ -29,4 +29,8 @@ class ZimHostRobot : BaseRobot() {
   init {
     isVisible(TextId(R.string.menu_wifi_hotspot))
   }
+
+  override fun waitTillLoad() {
+    TODO("Not yet implemented")
+  }
 }

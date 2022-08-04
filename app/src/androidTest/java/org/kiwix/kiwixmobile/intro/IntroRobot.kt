@@ -18,9 +18,12 @@
 
 package org.kiwix.kiwixmobile.intro
 
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.Until
 import applyWithViewHierarchyPrinting
 import attempt
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.DEFAULT_WAIT
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
@@ -30,6 +33,9 @@ import org.kiwix.kiwixmobile.main.topLevel
 fun intro(func: IntroRobot.() -> Unit) = IntroRobot().applyWithViewHierarchyPrinting(func)
 
 class IntroRobot : BaseRobot() {
+  init {
+    waitTillLoad()
+  }
 
   private val getStarted = ViewId(R.id.get_started)
   private val viewPager = ViewId(R.id.view_pager)
@@ -48,5 +54,11 @@ class IntroRobot : BaseRobot() {
   infix fun clickGetStarted(func: TopLevelDestinationRobot.() -> Unit): TopLevelDestinationRobot {
     clickOn(getStarted)
     return topLevel(func)
+  }
+
+  override fun waitTillLoad() {
+    uiDevice.waitForIdle()
+    uiDevice.wait(Until.findObjects(By.res(getStarted.toString())), DEFAULT_WAIT)
+    uiDevice.wait(Until.findObjects(By.res(viewPager.toString())), DEFAULT_WAIT)
   }
 }

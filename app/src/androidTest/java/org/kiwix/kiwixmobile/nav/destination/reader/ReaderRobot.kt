@@ -29,4 +29,8 @@ class ReaderRobot : BaseRobot() {
   init {
     isVisible(ViewId(R.id.activity_main_root))
   }
+
+  override fun waitTillLoad() {
+    TODO("Not yet implemented")
+  }
 }
