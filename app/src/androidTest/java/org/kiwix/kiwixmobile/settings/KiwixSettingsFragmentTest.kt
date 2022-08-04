@@ -18,9 +18,12 @@
 package org.kiwix.kiwixmobile.settings
 
 import android.Manifest
+import android.view.Gravity
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
+import androidx.test.uiautomator.UiDevice
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.junit.Before
 import org.junit.Rule
@@ -44,10 +47,12 @@ class KiwixSettingsFragmentTest {
     GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
   @Before fun setup() {
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
     // Go to IntroFragment
     UiThreadStatement.runOnUiThread { activityTestRule.activity.navigate(R.id.introFragment) }
     intro(IntroRobot::swipeLeft) clickGetStarted { }
-    StandardActions.openDrawer()
+    Thread.sleep(5000)
+    StandardActions.openDrawer(R.id.navigation_container, Gravity.LEFT)
     StandardActions.enterSettings()
   }
 

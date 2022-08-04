@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.utils;
 
 import android.util.Log;
+import android.view.Gravity;
 import com.adevinta.android.barista.interaction.BaristaClickInteractions;
 import com.adevinta.android.barista.interaction.BaristaDrawerInteractions;
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions;
@@ -42,8 +43,8 @@ public class StandardActions {
     BaristaClickInteractions.clickOn(getResourceString(R.string.menu_settings));
   }
 
-  public static void openDrawer() {
-    BaristaDrawerInteractions.openDrawer();
+  public static void openDrawer(Integer drawerId, int gravity) {
+    BaristaDrawerInteractions.openDrawerWithGravity(drawerId, gravity);
   }
 
   public static void deleteZimIfExists(String zimName, Integer adapterId) {

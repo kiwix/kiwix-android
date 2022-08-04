@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.main
 
+import android.view.Gravity
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
@@ -71,7 +72,7 @@ class TopLevelDestinationRobot : BaseRobot() {
   }
 
   private fun inNavDrawer(navDrawerAction: () -> Unit) {
-    openDrawer()
+    openDrawer(R.id.navigation_container, Gravity.LEFT)
     navDrawerAction.invoke()
     pressBack()
   }

@@ -60,7 +60,7 @@ abstract class BaseActivityTest {
   @BeforeClass
   @Test
   fun setUpBeforeClass() {
-    uiDevice = UiDevice.getInstance(getInstrumentation());
+    uiDevice = UiDevice.getInstance(getInstrumentation())
     registerANRWatcher()
   }
 

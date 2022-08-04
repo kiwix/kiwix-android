@@ -76,8 +76,8 @@ abstract class BaseRobot(
         BaseActivityTest.TAG,
         "Could not find selector with name $findable, retrying $i"
       )
+      throw RuntimeException(findable.errorMessage(this))
     }
-    isVisible(findable, timeout).click()
   }
 
   protected fun longClickOn(findable: Findable) {
