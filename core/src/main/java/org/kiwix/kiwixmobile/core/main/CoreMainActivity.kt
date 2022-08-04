@@ -155,10 +155,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
   }
 
-  override fun onNewIntent(intent: Intent) {
-    super.onNewIntent(intent)
+  override fun onNewIntent(newIntent: Intent) {
+    super.onNewIntent(newIntent)
+    intent.action = newIntent.action
     activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
-      it.onNewIntent(intent, this)
+      it.onNewIntent(newIntent, this)
     }
   }
 
