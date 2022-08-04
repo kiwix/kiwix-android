@@ -49,6 +49,7 @@ import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book;
 public class TestUtils {
   private static final String TAG = "TESTUTILS";
   public static int TEST_PAUSE_MS = 250;
+  public static int TEST_PAUSE_MS_FOR_SEARCH_TEST = 1000;
   /*
     TEST_PAUSE_MS is used as such:
         BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
@@ -143,4 +144,3 @@ public class TestUtils {
     return targetContext.getResources().getString(id);
   }
 }
-

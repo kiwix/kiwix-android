@@ -17,19 +17,67 @@
  */
 package org.kiwix.kiwixmobile.search
 
+import androidx.core.content.edit
+import androidx.core.net.toUri
+import androidx.preference.PreferenceManager
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
-import org.junit.Before
+import androidx.test.rule.ActivityTestRule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 
 class SearchFragmentTest : BaseActivityTest() {
-  @Before fun setUp() {
-    UiThreadStatement.runOnUiThread { activityRule.activity.navigate(R.id.searchFragment) }
+  override var activityRule: ActivityTestRule<KiwixMainActivity> = activityTestRule {
+    PreferenceManager.getDefaultSharedPreferences(context).edit {
+      putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
+      putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
+    }
   }
 
   @Test fun searchFragmentSimple() {
-    assertDisplayed(R.string.menu_search_in_text)
+    UiThreadStatement.runOnUiThread { activityRule.activity.navigate(R.id.libraryFragment) }
+    val loadFileStream =
+      SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
+    val zimFile = File(context.cacheDir, "testzim.zim")
+    if (zimFile.exists()) zimFile.delete()
+    zimFile.createNewFile()
+    loadFileStream.use { inputStream ->
+      val outputStream: OutputStream = FileOutputStream(zimFile)
+      outputStream.use { it ->
+        val buffer = ByteArray(1024)
+        var length: Int
+        while (inputStream.read(buffer).also { length = it } > 0) {
+          it.write(buffer, 0, length)
+        }
+      }
+    }
+    UiThreadStatement.runOnUiThread {
+      activityRule.activity.navigate(
+        actionNavigationLibraryToNavigationReader()
+          .apply { zimFileUri = zimFile.toUri().toString() }
+      )
+    }
+    search { checkZimFileSearchSuccessful(R.id.readerFragment) }
+    UiThreadStatement.runOnUiThread {
+      if (zimFile.canRead()) {
+        activityRule.activity.openSearch(searchString = "Android")
+      } else {
+        throw RuntimeException(
+          "File $zimFile is not readable." +
+            " Original File $zimFile is readable = ${zimFile.canRead()}" +
+            " Size ${zimFile.length()}"
+        )
+      }
+    }
+    search {
+      clickOnSearchItemInSearchList()
+      checkZimFileSearchSuccessful(R.id.readerFragment)
+    }
   }
 }

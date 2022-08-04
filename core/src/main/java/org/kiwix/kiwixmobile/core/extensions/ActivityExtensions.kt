@@ -130,4 +130,11 @@ object ActivityExtensions {
       result
     )
   }
+
+  fun <T> Activity.setNavigationResultOnCurrent(result: T, key: String = "result") {
+    coreMainActivity.navController.currentBackStackEntry?.savedStateHandle?.set(
+      key,
+      result
+    )
+  }
 }
