@@ -18,13 +18,17 @@
 package org.kiwix.kiwixmobile.settings
 
 import android.Manifest
+import android.os.Build
 import android.view.Gravity
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiObject
+import androidx.test.uiautomator.UiSelector
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -46,14 +50,17 @@ class KiwixSettingsFragmentTest {
   @Rule @JvmField var writePermissionRule: GrantPermissionRule =
     GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
-  @Before fun setup() {
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
-    // Go to IntroFragment
-    UiThreadStatement.runOnUiThread { activityTestRule.activity.navigate(R.id.introFragment) }
+  @Before fun setup() = runBlocking {
+    waitForUIDeviceToIdle()
+    UiThreadStatement.runOnUiThread {
+      activityTestRule.activity.navigate(R.id.introFragment) // Go to IntroFragment
+    }
     intro(IntroRobot::swipeLeft) clickGetStarted { }
-    Thread.sleep(5000)
+    waitForUIDeviceToIdle()
+    grantPermission()
+    clickExternalStorageDialogIfPresent()
     StandardActions.openDrawer(R.id.navigation_container, Gravity.LEFT)
-    StandardActions.enterSettings()
+    StandardActions.enterSettings() // Go to SettingFragment
   }
 
   @Test
@@ -70,7 +77,7 @@ class KiwixSettingsFragmentTest {
       toggleWifiDownloadsOnlyPref()
       clickStoragePreference()
       // Let's pause here for a moment because calculating storage takes some time
-      BaristaSleepInteractions.sleep(TEST_PAUSE_MS.toLong())
+      sleepForMoment()
       assertStorageDialogDisplayed()
       dismissDialog()
       clickClearHistoryPreference()
@@ -82,6 +89,59 @@ class KiwixSettingsFragmentTest {
       clickCredits()
       assertContributorsDialogDisplayed()
       dismissDialog()
+    }
+  }
+
+  /**
+   * Waits for the application to idle.
+   */
+  private fun waitForUIDeviceToIdle() {
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
+  }
+
+  /**
+   * Sleeps for to finish the job.
+   * @param timeToSleep the amount of sleep
+   */
+  private fun sleepForMoment(timeToSleep: Int = TEST_PAUSE_MS) {
+    BaristaSleepInteractions.sleep(timeToSleep.toLong())
+  }
+
+  /**
+   * Checks if the Build version is greater than [Build.VERSION_CODES.R] and clicks depends on the
+   * [positive] parameter.Note that if you pass true to  the [positive] parameter then it goes
+   * to system's setting screen. You should handle the app accordingly.
+   * @param positive Clicks on the positive or negative button.
+   */
+  private fun clickExternalStorageDialogIfPresent(positive: Boolean = false) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      val text = if (positive) "YES" else "NO"
+      val dialogObject: UiObject? =
+        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+          .findObject(UiSelector().text(text))
+      dialogObject?.click()
+    } else {
+      // There was No ManageExternalFilesPermission yet. It was a great time :))
+      UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressBack()
+    }
+  }
+
+  private fun grantPermission() {
+    val instrumentation = InstrumentationRegistry.getInstrumentation()
+    if (Build.VERSION.SDK_INT >= 23) {
+      val allowPermission = UiDevice.getInstance(instrumentation).findObject(
+        UiSelector().text(
+          when {
+            Build.VERSION.SDK_INT == 23 -> "Allow"
+            Build.VERSION.SDK_INT <= 28 -> "ALLOW"
+            Build.VERSION.SDK_INT == 29 -> "Allow only while using the app"
+            else -> "While using the app"
+          }
+        )
+      )
+      if (allowPermission.exists()) {
+        allowPermission.click()
+      }
     }
   }
 }

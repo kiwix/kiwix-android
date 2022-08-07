@@ -26,7 +26,9 @@ class IntroFragmentTest : BaseActivityTest() {
 
   @Test
   fun viewIsSwipeableAndNavigatesToMain() {
-    runOnUiThread { activityRule.activity.navigate(R.id.introFragment) }
-    intro(IntroRobot::swipeLeft) clickGetStarted { }
+    runOnUiThread {
+      activityRule.activity.navigate(R.id.introFragment)
+      intro(IntroRobot::swipeLeft) clickGetStarted { }
+    }
   }
 }

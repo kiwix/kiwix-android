@@ -105,7 +105,7 @@ sealed class KiwixDialog(
     R.string.all_files_permission_needed_message,
     R.string.yes,
     R.string.no,
-    cancelable = false
+    cancelable = true
   )
 
   data class ShowHotspotDetails(override val args: List<Any>) :
