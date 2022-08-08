@@ -114,10 +114,10 @@ class KiwixMainActivity : CoreMainActivity() {
     actionMode = mode
   }
 
-  override fun onNewIntent(newIntent: Intent) {
-    super.onNewIntent(newIntent)
+  override fun onNewIntent(intent: Intent) {
+    super.onNewIntent(intent)
     supportFragmentManager.fragments.filterIsInstance<FragmentActivityExtensions>().forEach {
-      it.onNewIntent(newIntent, this)
+      it.onNewIntent(intent, this)
     }
   }
 
