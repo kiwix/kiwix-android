@@ -21,19 +21,11 @@ package org.kiwix.kiwixmobile
 import android.Manifest.permission
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
-import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.UiObject
-import androidx.test.uiautomator.UiObjectNotFoundException
-import androidx.test.uiautomator.UiSelector
-import okhttp3.internal.trimSubstring
-import org.junit.BeforeClass
 import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.di.components.DaggerTestComponent
 import org.kiwix.kiwixmobile.core.di.components.TestComponent
@@ -55,46 +47,6 @@ abstract class BaseActivityTest {
   val context: Context by lazy {
     getInstrumentation().targetContext.applicationContext
   }
-  private lateinit var uiDevice: UiDevice
-
-  @BeforeClass
-  @Test
-  fun setUpBeforeClass() {
-    uiDevice = UiDevice.getInstance(getInstrumentation())
-    registerANRWatcher()
-  }
-
-  private fun registerANRWatcher() {
-    uiDevice.registerWatcher("ANR") {
-      val anrDialog = uiDevice.findObject(
-        UiSelector()
-          .packageName("android")
-          .textContains(anrText)
-      )
-      checkForAnrDialogToClose(anrDialog)
-    }
-  }
-
-  private fun closeAnrWithWait(anrDialog: UiObject): Boolean {
-    Log.i(TAG, "ANR dialog detected!")
-    try {
-      uiDevice.findObject(
-        UiSelector().text("Wait").className("android.widget.Button").packageName(
-          "android"
-        )
-      ).click()
-      val anrDialogText = anrDialog.text
-      val appName: String = anrDialogText.trimSubstring(0, anrDialogText.length - anrText.length)
-      Log.i(TAG, "Application $appName is not responding!")
-    } catch (e: UiObjectNotFoundException) {
-      Log.i(TAG, "Detected ANR, but window disappeared!")
-    }
-    Log.i(TAG, "ANR dialog closed: pressed on wait!")
-    return true
-  }
-
-  private fun checkForAnrDialogToClose(anrDialog: UiObject): Boolean =
-    anrDialog.exists() && closeAnrWithWait(anrDialog)
 
   protected inline fun <reified T : Activity> activityTestRule(
     noinline beforeActivityAction: (() -> Unit)? = null
@@ -112,6 +64,5 @@ abstract class BaseActivityTest {
 
   companion object {
     const val TAG = "ui_test_tag"
-    private const val anrText = "isn't responding"
   }
 }
