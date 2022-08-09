@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.search
 
-import android.os.Build
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
@@ -31,15 +30,13 @@ fun search(func: SearchRobot.() -> Unit) = SearchRobot().applyWithViewHierarchyP
 class SearchRobot : BaseRobot() {
 
   fun clickOnSearchItemInSearchList() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-      pressBack()
-    }
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
     isVisible(ViewId(R.id.search_list))
     clickOn(ViewId(R.id.list_item_search_text))
   }
 
   fun checkZimFileSearchSuccessful(readerFragment: Int) {
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
     isVisible(ViewId(readerFragment))
   }
 }
