@@ -1240,12 +1240,15 @@ public abstract class CoreReaderFragment extends BaseFragment
       }
       case CoreSearchWidget.TEXT_CLICKED:
         goToSearch(false);
+        intent.setAction(null);
         break;
       case CoreSearchWidget.STAR_CLICKED:
         goToBookmarks();
+        intent.setAction(null);
         break;
       case CoreSearchWidget.MIC_CLICKED:
         goToSearch(true);
+        intent.setAction(null);
         break;
       case Intent.ACTION_VIEW:
         if (intent.getType() == null || !intent.getType().equals("application/octet-stream")) {
