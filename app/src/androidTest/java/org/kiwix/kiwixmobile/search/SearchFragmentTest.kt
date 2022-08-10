@@ -21,7 +21,10 @@ import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.PreferenceManager
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
+import androidx.test.uiautomator.UiDevice
+import org.junit.Before
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
@@ -40,6 +43,11 @@ class SearchFragmentTest : BaseActivityTest() {
     }
   }
 
+  @Before
+  fun waitForIdle() {
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
+  }
+
   @Test fun searchFragmentSimple() {
     UiThreadStatement.runOnUiThread { activityRule.activity.navigate(R.id.libraryFragment) }
     val loadFileStream =
@@ -50,7 +58,7 @@ class SearchFragmentTest : BaseActivityTest() {
     loadFileStream.use { inputStream ->
       val outputStream: OutputStream = FileOutputStream(zimFile)
       outputStream.use { it ->
-        val buffer = ByteArray(1024)
+        val buffer = ByteArray(inputStream.available())
         var length: Int
         while (inputStream.read(buffer).also { length = it } > 0) {
           it.write(buffer, 0, length)
