@@ -80,3 +80,11 @@ jobs:
           mkdir $DATE
           cp $UNIVERSAL_DEBUG_APK $DATE
           scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no $DATE ci@master.download.kiwix.org:/data/download/nightly/
+
+      - name: fdroid nightly
+        run: |
+            sudo add-apt-repository ppa:fdroid/fdroidserver
+            sudo apt-get update
+            sudo apt-get install apksigner fdroidserver --no-install-recommends
+            export DEBUG_KEYSTORE=$\{\{ secrets.DEBUG_KEYSTORE \}\}
+            fdroid nightly --archive-older 10
