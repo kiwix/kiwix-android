@@ -8,7 +8,11 @@
 * FIX: Pdf/Epub files opening issue fixes.
 * FIX: Same pictures are saved multiple times.
 * FIX: Introductory screen hangup issue fixed.
-* FIX: Better Management of Permission require in project.
+* FIX: Search Widget navigation issue fixed.
+* FIX: Search screen were missing while pressing back fixed.
+* FIX: Unsatisfied Link error fixed.
+* FIX: IllegalStateException report in core reader fragment fixed.
+
 
 3.5.0
 * FIX: Storing Zim/Book files inside the public Kiwix Directory on internal storage.
