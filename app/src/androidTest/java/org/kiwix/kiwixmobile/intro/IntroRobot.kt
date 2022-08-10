@@ -18,6 +18,9 @@
 
 package org.kiwix.kiwixmobile.intro
 
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import applyWithViewHierarchyPrinting
 import attempt
 import org.kiwix.kiwixmobile.BaseRobot
@@ -49,7 +52,7 @@ class IntroRobot : BaseRobot() {
   }
 
   infix fun clickGetStarted(func: TopLevelDestinationRobot.() -> Unit): TopLevelDestinationRobot {
-    clickOn(getStarted)
+    onView(withId(R.id.get_started)).perform(click())
     return topLevel(func)
   }
 
