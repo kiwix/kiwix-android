@@ -23,7 +23,7 @@
   <string name="menu_support_kiwix">Subteni Kiwix</string>
   <string name="save_media">Konservi Aŭdvidaĵon</string>
   <string name="save_media_error">Eraro okazis dum provo konservi la plurmediaĵon!</string>
-  <string name="save_media_saved">Aŭdvidaĵoj konservitaj kiel %1$s en dosierujo Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Aŭdvidaĵoj konservitaj kiel %1$s en dosierujo Android/media/org.kiwix…/</string>
   <string name="search_label">Serĉi</string>
   <string name="choose_file">Elektu Dosieron de Enhavo (*.zim)</string>
   <string name="open_in_new_tab">Ĉu malfermi ligilon en nova langeto?</string>
@@ -65,8 +65,6 @@
   <string name="tab_closed">Fermis langeton</string>
   <string name="bookmark_added">Aldonis legosignon</string>
   <string name="rate_dialog_title">Bonvolu Taksi Nin</string>
-  <string name="rate_dialog_msg_1">Se vi ĝuas uzadon de</string>
-  <string name="rate_dialog_msg_2">, bonvolu taksi ĝin. Dankon pro via subteno!</string>
   <string name="rate_dialog_positive">Taksi!</string>
   <string name="no_thanks">Ne, dankon</string>
   <string name="rate_dialog_neutral">Poste</string>
@@ -77,7 +75,7 @@
   <string name="pref_extras">Kromaĵoj</string>
   <string name="new_tab_snack_bar">Artikolo malfermiĝis en nova langeto</string>
   <string name="search_widget_text">Serĉi Kiwix</string>
-  <string name="speech_prompt_text">Paroli por serĉi \%s</string>
+  <string name="speech_prompt_text">Paroli por serĉi %s</string>
   <string name="speech_not_supported">Domaĝe, via aparato ne subtenas voĉan enigon</string>
   <string name="local_zims">Aparato</string>
   <string name="remote_zims">Konektita</string>
@@ -174,7 +172,7 @@
   <string name="running_state">Progresante</string>
   <string name="complete">Kompleta</string>
   <string name="paused_state" fuzzy="true">Paŭzita</string>
-  <string name="failed_state">Malsukceso: \%s</string>
+  <string name="failed_state">Malsukceso: %s</string>
   <string name="save">Konservi</string>
   <string name="note">Noto</string>
   <string name="wiki_article_title">Titolo de Vikia Artikolo</string>
@@ -190,7 +188,7 @@
   <string name="ext_storage_permission_not_granted">Eraro: Permeso pri konservejo mankas</string>
   <string name="notes_deletion_successful">La tuta dosierujo da notoj foriĝis</string>
   <string name="notes_deletion_unsuccessful">Iuj dosieroj ne foriĝis</string>
-  <string name="books_count">\%d libro(j)</string>
+  <string name="books_count">%d libro(j)</string>
   <string name="connection_failed">Konektado fiaskis</string>
   <string name="your_device">Via Aparato:</string>
   <string name="nearby_devices">PROKSIMAJ APARATOJ</string>

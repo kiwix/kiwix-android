@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Abijeet Patro
+* AnupamM
 * Bl707
 * Innocentbunny
 * Nikhilsheth
@@ -25,7 +26,7 @@
   <string name="menu_read_aloud_stop">पढ़ा कर सुनना रोकें</string>
   <string name="save_media">मीडिया सहेजें</string>
   <string name="save_media_error">मीडिया को सहेजते समय एक त्रुटि आयी।</string>
-  <string name="save_media_saved">सहेजे गये मीडिया को %s के रूप में Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">सहेजे गये मीडिया को %s के रूप में Android/media/org.kiwix…/</string>
   <string name="search_label">खोजें</string>
   <string name="choose_file">सामग्री फ़ाइल चुनें (*.zim)</string>
   <string name="open_in_new_tab">नए टैब में लिंक खोलें?</string>
@@ -62,8 +63,6 @@
   <string name="tab_closed">टैब बंद कर दिया गया</string>
   <string name="bookmark_added">बूकमार्क जोड़ा गया</string>
   <string name="rate_dialog_title">कृपया दरनिर्धारण करें</string>
-  <string name="rate_dialog_msg_1">क्या आप का उपयोग का आनंद ले रहे</string>
-  <string name="rate_dialog_msg_2">, कृपया इसे दर करने के लिए कुछ समय दें आपके समर्थन के लिए धन्यवाद!</string>
   <string name="rate_dialog_positive">दरनिर्धारण!</string>
   <string name="no_thanks">नहीं, धन्यवाद</string>
   <string name="rate_dialog_neutral">बाद में</string>
@@ -74,12 +73,12 @@
   <string name="pref_extras">अतिरिक्त</string>
   <string name="new_tab_snack_bar">आलेख नए टैब में खोला गया</string>
   <string name="search_widget_text">किवीक्स खोजें</string>
-  <string name="speech_prompt_text">\%s को खोजने के लिए बोलें</string>
+  <string name="speech_prompt_text">%s को खोजने के लिए बोलें</string>
   <string name="speech_not_supported">माफ़ कीजिये! आपका उपकरण भाषण इनपुट का समर्थन नहीं करता है</string>
   <string name="local_zims">डिवाइस</string>
   <string name="remote_zims">ऑनलाइन</string>
   <string name="library">पुस्तकालय</string>
-  <string name="delete_zim_body">निम्न ज़िम फ़ाइल (ओं) को हटा दिया जाएगा:\n\n\%s</string>
+  <string name="delete_zim_body">निम्न ज़िम फ़ाइल (ओं) को हटा दिया जाएगा:\n\n%s</string>
   <string name="delete_zims_toast">फाइल हटा दी गई</string>
   <string name="no_files_here">यहां कोई फ़ाइल नहीं</string>
   <string name="download_no_space" fuzzy="true">इस फ़ाइल को डाउनलोड करने के लिए अपर्याप्त जगह।</string>
@@ -132,4 +131,6 @@
   <string name="no_bookmarks">बुकमार्क्स नहीं</string>
   <string name="on">चालू</string>
   <string name="off">बंद</string>
+  <string name="allow">अनुमति दें</string>
+  <string name="allow_internet_permission_message">कृपया कंटैट डाउनलोड करने के लिए इंटरनेट की अनुमति दें</string>
 </resources>

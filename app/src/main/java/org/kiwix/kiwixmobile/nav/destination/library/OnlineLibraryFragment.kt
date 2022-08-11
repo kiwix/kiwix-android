@@ -43,10 +43,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.tonyodev.fetch2.Status
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageSelectDialog
+import kotlinx.android.synthetic.main.fragment_destination_download.allowInternetPermissionButton
 import kotlinx.android.synthetic.main.fragment_destination_download.libraryErrorText
 import kotlinx.android.synthetic.main.fragment_destination_download.libraryList
 import kotlinx.android.synthetic.main.fragment_destination_download.librarySwipeRefresh
@@ -78,12 +81,12 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.SelectFolder
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getPathFromUri
-import org.kiwix.kiwixmobile.zim_manager.NetworkState
-import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
-import org.kiwix.kiwixmobile.zim_manager.library_view.AvailableSpaceCalculator
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryAdapter
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryDelegate
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
+import org.kiwix.kiwixmobile.zimManager.NetworkState
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
+import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
+import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryAdapter
+import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryDelegate
+import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import javax.inject.Inject
 
 class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
@@ -91,11 +94,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   @Inject lateinit var conMan: ConnectivityManager
   @Inject lateinit var downloader: Downloader
   @Inject lateinit var dialogShower: DialogShower
-  @Inject lateinit var alertDialogShower: AlertDialogShower
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var bookUtils: BookUtils
   @Inject lateinit var availableSpaceCalculator: AvailableSpaceCalculator
+  @Inject lateinit var alertDialogShower: AlertDialogShower
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
   }
@@ -104,9 +107,18 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     LibraryAdapter(
       LibraryDelegate.BookDelegate(bookUtils, ::onBookItemClick),
       LibraryDelegate.DownloadDelegate {
-        dialogShower.show(
-          KiwixDialog.YesNoDialog.StopDownload,
-          { downloader.cancelDownload(it.downloadId) })
+        if (it.currentDownloadState == Status.FAILED) {
+          if (isNotConnected) {
+            noInternetSnackbar()
+          } else {
+            downloader.retryDownload(it.downloadId)
+          }
+        } else {
+          dialogShower.show(
+            KiwixDialog.YesNoDialog.StopDownload,
+            { downloader.cancelDownload(it.downloadId) }
+          )
+        }
       },
       LibraryDelegate.DividerDelegate
     )
@@ -152,31 +164,49 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       viewLifecycleOwner, Observer(::onRefreshStateChange)
     )
     zimManageViewModel.networkStates.observe(viewLifecycleOwner, Observer(::onNetworkStateChange))
-    zimManageViewModel.shouldShowWifiOnlyDialog.observe(viewLifecycleOwner, Observer {
+    zimManageViewModel.shouldShowWifiOnlyDialog.observe(
+      viewLifecycleOwner
+    ) {
       if (it) {
-        dialogShower.show(
-          WifiOnly,
-          {
-            sharedPreferenceUtil.putPrefWifiOnly(false)
-            zimManageViewModel.shouldShowWifiOnlyDialog.value = false
-          },
-          {
-            onRefreshStateChange(false)
-            context.toast(
-              resources.getString(R.string.denied_internet_permission_message),
-              Toast.LENGTH_SHORT
-            )
-          }
-        )
+        showInternetPermissionDialog()
       }
-    })
+    }
 
     // hides keyboard when scrolled
-    libraryList.addOnScrollListener(SimpleRecyclerViewScrollListener { _, newState ->
-      if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-        libraryList.closeKeyboard()
+    libraryList.addOnScrollListener(
+      SimpleRecyclerViewScrollListener { _, newState ->
+        if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+          libraryList.closeKeyboard()
+        }
       }
-    })
+    )
+
+    allowInternetPermissionButton.setOnClickListener {
+      showInternetPermissionDialog()
+    }
+  }
+
+  private fun showInternetPermissionDialog() {
+    dialogShower.show(
+      WifiOnly,
+      {
+        onRefreshStateChange(true)
+        libraryErrorText.visibility = View.GONE
+        allowInternetPermissionButton.visibility = View.GONE
+        sharedPreferenceUtil.putPrefWifiOnly(false)
+        zimManageViewModel.shouldShowWifiOnlyDialog.value = false
+      },
+      {
+        onRefreshStateChange(false)
+        context.toast(
+          resources.getString(R.string.denied_internet_permission_message),
+          Toast.LENGTH_SHORT
+        )
+        libraryErrorText.setText(R.string.allow_internet_permission_message)
+        libraryErrorText.visibility = View.VISIBLE
+        allowInternetPermissionButton.visibility = View.VISIBLE
+      }
+    )
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -227,8 +257,10 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           libraryErrorText.setText(R.string.no_network_connection)
           libraryErrorText.visibility = View.VISIBLE
         }
+        allowInternetPermissionButton.visibility = View.GONE
         librarySwipeRefresh.isRefreshing = false
       }
+      else -> {}
     }
   }
 
@@ -255,6 +287,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     } else {
       libraryErrorText.visibility = View.GONE
     }
+    allowInternetPermissionButton.visibility = View.GONE
   }
 
   private fun refreshFragment() {
@@ -277,14 +310,22 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       )
       sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION)
     } else {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        val view = LayoutInflater.from(activity).inflate(R.layout.select_folder_dialog, null)
-        dialogShower.show(SelectFolder { view }, ::selectFolder)
+      if (sharedPreferenceUtil.isPlayStoreBuild) {
+        setExternalStoragePath(storageDevice)
       } else {
-        sharedPreferenceUtil.putPrefStorage(storageDevice.name)
-        sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+          val view = LayoutInflater.from(activity).inflate(R.layout.select_folder_dialog, null)
+          dialogShower.show(SelectFolder { view }, ::selectFolder)
+        } else {
+          setExternalStoragePath(storageDevice)
+        }
       }
     }
+  }
+
+  private fun setExternalStoragePath(storageDevice: StorageDevice) {
+    sharedPreferenceUtil.putPrefStorage(storageDevice.name)
+    sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
   }
 
   private fun selectFolder() {
@@ -319,21 +360,24 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun checkExternalStorageWritePermission(): Boolean {
-    return hasPermission(WRITE_EXTERNAL_STORAGE).also { permissionGranted ->
-      if (!permissionGranted) {
-        if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
-          alertDialogShower.show(
-            KiwixDialog.WriteStoragePermissionRationale,
-            ::requestExternalStoragePermission
-          )
-        } else {
-          alertDialogShower.show(
-            KiwixDialog.WriteStoragePermissionRationale,
-            ::openAppSettings
-          )
+    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+      return hasPermission(WRITE_EXTERNAL_STORAGE).also { permissionGranted ->
+        if (!permissionGranted) {
+          if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
+            alertDialogShower.show(
+              KiwixDialog.WriteStoragePermissionRationale,
+              ::requestExternalStoragePermission
+            )
+          } else {
+            alertDialogShower.show(
+              KiwixDialog.WriteStoragePermissionRationale,
+              ::openAppSettings
+            )
+          }
         }
       }
     }
+    return true
   }
 
   private fun openAppSettings() {
@@ -366,7 +410,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       permissions[0] == Manifest.permission.WRITE_EXTERNAL_STORAGE
     ) {
       if (grantResults[0] != PERMISSION_GRANTED) {
-        checkExternalStorageWritePermission()
+        if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove())
+          checkExternalStorageWritePermission()
       }
     }
   }
@@ -388,17 +433,24 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           })
           return
         }
-        else -> availableSpaceCalculator.hasAvailableSpaceFor(item,
-          { downloadFile(item.book) },
-          {
-            libraryList.snack(
-              getString(R.string.download_no_space) +
-                "\n" + getString(R.string.space_available) + " " +
-                it,
-              R.string.download_change_storage,
-              ::showStorageSelectDialog
-            )
-          })
+        else -> if (sharedPreferenceUtil.showStorageOption) {
+          showStorageConfigureDialog()
+        } else {
+          availableSpaceCalculator.hasAvailableSpaceFor(
+            item,
+            { downloadFile(item.book) },
+            {
+              libraryList.snack(
+                """ 
+                ${getString(R.string.download_no_space)}
+                ${getString(R.string.space_available)} $it
+                """.trimIndent(),
+                R.string.download_change_storage,
+                ::showStorageSelectDialog
+              )
+            }
+          )
+        }
       }
     }
   }
@@ -408,4 +460,17 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       onSelectAction = ::storeDeviceInPreferences
     }
     .show(requireFragmentManager(), getString(R.string.pref_storage))
+
+  private fun showStorageConfigureDialog() {
+    alertDialogShower.show(
+      KiwixDialog.StorageConfigure,
+      {
+        showStorageSelectDialog()
+        sharedPreferenceUtil.showStorageOption = false
+      },
+      {
+        sharedPreferenceUtil.showStorageOption = false
+      }
+    )
+  }
 }

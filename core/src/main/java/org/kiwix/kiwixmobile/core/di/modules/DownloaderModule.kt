@@ -34,7 +34,10 @@ import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.downloader.DownloaderImpl
 import org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManager
 import org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadRequester
+import org.kiwix.kiwixmobile.core.utils.CONNECT_TIME_OUT
+import org.kiwix.kiwixmobile.core.utils.READ_TIME_OUT
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -77,6 +80,8 @@ object DownloaderModule {
   @Singleton
   fun provideOkHttpDownloader() = OkHttpDownloader(
     OkHttpClient.Builder()
+      .connectTimeout(CONNECT_TIME_OUT, TimeUnit.MINUTES)
+      .readTimeout(READ_TIME_OUT, TimeUnit.MINUTES)
       .followRedirects(true)
       .followSslRedirects(true)
       .build()

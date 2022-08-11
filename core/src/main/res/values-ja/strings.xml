@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Ajeje Brazorf
+* MathXplore
 * Omotecho
 * S2KTS
 * Shirayuki
@@ -39,4 +40,9 @@
   <string name="other_languages">その他の言語:</string>
   <string name="pref_text_zoom_summary">テキストサイズを 25% 増やす</string>
   <string name="search_open_in_new_tab">新しいタブで開く</string>
+  <string name="allow">許可</string>
+  <string name="no_notes">ノートはありません</string>
+  <string name="search_notes">ノートを検索する</string>
+  <string name="open_note">ノートを開く</string>
+  <string name="open_article">記事を開く</string>
 </resources>

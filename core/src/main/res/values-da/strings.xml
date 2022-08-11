@@ -21,7 +21,7 @@
   <string name="menu_read_aloud_stop">Stop med at læse højt</string>
   <string name="save_media">Gem medie</string>
   <string name="save_media_error">Der opstod en fejl under forsøg på at gemme mediet!</string>
-  <string name="save_media_saved">Gemte medie som %s til Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Gemte medie som %s til Android/media/org.kiwix…/</string>
   <string name="search_label">Søg</string>
   <string name="choose_file">Vælg en indholdsfil (*.zim)</string>
   <string name="open_in_new_tab">Åbn link i nyt faneblad?</string>
@@ -62,8 +62,6 @@
   <string name="tab_closed">Faneblad lukket</string>
   <string name="bookmark_added">Bogmærke tilføjet</string>
   <string name="rate_dialog_title">Bedøm os venligst</string>
-  <string name="rate_dialog_msg_1">Hvis du kan lide at bruge</string>
-  <string name="rate_dialog_msg_2">, så brug et øjeblik til at bedømme det. Tak for din støtte!</string>
   <string name="rate_dialog_positive">Bedøm!</string>
   <string name="no_thanks">Nej, tak</string>
   <string name="rate_dialog_neutral">Senere</string>
@@ -74,7 +72,7 @@
   <string name="pref_extras">Ekstra</string>
   <string name="new_tab_snack_bar">Artikel åbnet i nyt faneblad</string>
   <string name="search_widget_text">Søg i Kiwix</string>
-  <string name="speech_prompt_text">Tal for at søge \%s</string>
+  <string name="speech_prompt_text">Tal for at søge %s</string>
   <string name="speech_not_supported">Beklager! Din enhed understøtter ikke tale</string>
   <string name="local_zims">Enhed</string>
   <string name="remote_zims">På nettet</string>
@@ -146,7 +144,7 @@
   <string name="close_all_tabs">Luk alle faner</string>
   <string name="running_state">I gang</string>
   <string name="save">Gem</string>
-  <string name="books_count">\%d bog/bøger</string>
+  <string name="books_count">%d bog/bøger</string>
   <string name="your_device">Din enhed:</string>
   <string name="tag_pic">Billede</string>
   <string name="tag_vid">Video</string>

@@ -19,8 +19,34 @@ plugins {
 plugins.apply(KiwixConfigurationPlugin::class)
 apply(plugin = "io.objectbox")
 apply(plugin = "com.jakewharton.butterknife")
+ext {
+  set("versionMajor", 3)
+  set("versionMinor", 6)
+  set("versionPatch", 0)
+}
+
+/*
+* max version code: 21-0-0-00-00-00
+* our template    : UU-D-A-ZZ-YY-XX
+* where:
+* X = patch version
+* Y = minor version
+* Z = major version (+ 20 to distinguish from previous, non semantic, versions of the app)
+* A = number representing ABI split
+* D = number representing density split
+* U = unused
+*/
+
+fun generateVersionCode() =
+  20 * 10000 +
+    ext["versionMajor"] as Int * 10000 +
+    ext["versionMinor"] as Int * 100 +
+    ext["versionPatch"] as Int
 
 android {
+  defaultConfig {
+    buildConfigField("long", "VERSION_CODE", "${generateVersionCode()}")
+  }
   buildTypes {
     getByName("release") {
       isMinifyEnabled = false
@@ -31,7 +57,6 @@ android {
 fun shouldUseLocalVersion() = File(projectDir, "libs").exists()
 
 dependencies {
-
   // use jdk8 java.time backport, as long app < Build.VERSION_CODES.O
   implementation(Libs.threetenabp)
 

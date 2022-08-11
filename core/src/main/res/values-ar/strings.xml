@@ -3,6 +3,7 @@
 * Dyolf77
 * Eyas
 * Meno25
+* Mohanad Kh
 * Tala Ali
 * Ulhvulgv
 * بدارين
@@ -10,7 +11,7 @@
 * علاء
 * محمد أحمد عبد الفتاح
 -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">المساعدة</string>
   <string name="menu_home">الصفحة الرئيسية</string>
   <string name="menu_settings">الإعدادات</string>
@@ -25,7 +26,7 @@
   <string name="menu_wifi_hotspot">كتب المضيف</string>
   <string name="save_media">حفظ الوسائط</string>
   <string name="save_media_error">حدث خطأ عند محاولة حفظ الوسائط!</string>
-  <string name="save_media_saved">حفظ الوسائط كـ%s إلى Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">حفظ الوسائط كـ%s إلى Android/media/org.kiwix…/</string>
   <string name="search_label">البحث</string>
   <string name="choose_file">حدد ملف محتوى (*.zim)</string>
   <string name="open_in_new_tab">افتح الوصلة في علامة تبويب جديدة؟</string>
@@ -93,8 +94,6 @@
   <string name="tab_closed">تم إغلاق علامة التبويب</string>
   <string name="bookmark_added">أضيفت الإشارة المرجعية</string>
   <string name="rate_dialog_title">يرجى تقييمنا</string>
-  <string name="rate_dialog_msg_1">إذا كنت تتمتع بالاستخدام</string>
-  <string name="rate_dialog_msg_2">يرجى أن تتوقف لحظة لتقييمنا. شكرًا لدعمك!</string>
   <string name="rate_dialog_positive">قيّم!</string>
   <string name="no_thanks">لا، شكراً</string>
   <string name="rate_dialog_neutral">لاحقًا</string>
@@ -105,12 +104,12 @@
   <string name="pref_extras">إضافات</string>
   <string name="new_tab_snack_bar">فُتحت المقالة في علامة تبويب جديدة</string>
   <string name="search_widget_text">بحث كيويكس</string>
-  <string name="speech_prompt_text">تحدث للبحث \%s</string>
+  <string name="speech_prompt_text">تحدث للبحث %s</string>
   <string name="speech_not_supported">نعتذر! جهازك لا يدعم الإدخال الكلامي</string>
   <string name="local_zims">جهاز</string>
   <string name="remote_zims">متصل</string>
   <string name="library">المكتبة</string>
-  <string name="delete_zim_body">ملف(ات) zim التالية سيتم حذفها:n\n\%\s</string>
+  <string name="delete_zim_body">ملف(ات) zim التالية سيتم حذفها:n\n%s</string>
   <string name="delete_zims_toast">حُذف الملف</string>
   <string name="no_files_here">لا توجد ملفات هنا</string>
   <string name="download_no_space">لا توجد مساحة كافية للتنزيل.</string>
@@ -205,7 +204,7 @@
   <string name="running_state">في تقدم</string>
   <string name="complete">اكتمال</string>
   <string name="paused_state">متوقف مؤقتًا</string>
-  <string name="failed_state">فشل: %\s</string>
+  <string name="failed_state">فشل: %s</string>
   <string name="save">حفظ</string>
   <string name="note">ملاحظة</string>
   <string name="wiki_article_title">عنوان مقالة الويكي</string>
@@ -223,7 +222,7 @@
   <string name="ext_storage_permission_not_granted">خطأ: أذونات التخزين غير ممنوحة</string>
   <string name="notes_deletion_successful">حُذف مجلد الملاحظات بالكامل</string>
   <string name="notes_deletion_unsuccessful">لم تحذف بعض الملفات</string>
-  <string name="books_count">\%d كتاب</string>
+  <string name="books_count" tools:ignore="StringFormatCount">%d كتاب</string>
   <string name="discovery_initiated">بدأ الاكتشاف</string>
   <string name="discovery_failed">فشل الاكتشاف</string>
   <string name="severe_loss_error">خطأ شديد! حاول تعطيل/إعادة تمكين الواي فاي P2P</string>
@@ -236,11 +235,11 @@
   <string name="discovery_needs_location">لا يمكن اكتشاف الأجهزة المقترنة دون خدمات الموقع</string>
   <string name="request_enable_wifi">تمكين واي فاي P2P من إعدادات النظام</string>
   <string name="discovery_needs_wifi">لا يمكن اكتشاف الأجهزة المقترنة دون تشغيل الواي فاي</string>
-  <string name="transfer_to">نقل الملفات إلى \%s؟</string>
+  <string name="transfer_to">نقل الملفات إلى %s؟</string>
   <string name="device_not_cooperating">الجهاز المحدد لا يتعاون للنقل</string>
   <string name="file_transfer_complete">اكتمل نقل الملفات</string>
   <string name="error_during_transfer">حدث خطأ أثناء النقل</string>
-  <string name="error_transferring">خطأ في نقل الملف \%s</string>
+  <string name="error_transferring">خطأ في نقل الملف %s</string>
   <string name="get_content_from_nearby_device">الحصول على محتوى من جهاز قريب</string>
   <string name="search_for_peers">البحث عن الأجهزة المقترنة</string>
   <string name="your_device">جهازك:</string>
@@ -287,4 +286,5 @@
   <string name="how_to_update_content">كيفية تحديث المحتوى؟</string>
   <string name="update_content_description">لتحديث احتوى (ملف zim)، تحتاج إلى تنزيل أحدث إصدارٍ كاملٍ من المحتوى نفسه. يمكنك القيام بذلك عبر قسم التنزيل.</string>
   <string name="all_files_permission_needed_message">In order to access all the zim files across device we need to have All Files Permission</string>
+  <string name="allow">السماح</string>
 </resources>

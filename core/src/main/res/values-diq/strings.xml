@@ -22,7 +22,7 @@
   <string name="menu_wifi_hotspot">Kıtabê esasi</string>
   <string name="save_media">Medyay bışevekne</string>
   <string name="save_media_error">Medya qeyd kerdış de yew xeta ameyê meydan!</string>
-  <string name="save_media_saved">Medyay gorey %s\'i  tiya dı qeyd kerê Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Medyay gorey %s\'i  tiya dı qeyd kerê Android/media/org.kiwix…/</string>
   <string name="search_label">Cı geyre</string>
   <string name="choose_file">Yew dosyay zerreki weçine (*.zim)</string>
   <string name="open_in_new_tab">Gıre xıldayışo newe de abo?</string>
@@ -76,6 +76,7 @@
   <string name="pref_clear_all_history_title">verore cı besterne</string>
   <string name="pref_clear_all_history_summary">Cıgeyrayışê peyêni u Verocê tavaya bıesterne</string>
   <string name="pref_notes">Noti</string>
+  <string name="pref_permission">Desturi</string>
   <string name="all_history_cleared">Tarix pêro biyo pak</string>
   <string name="pref_clear_all_bookmarks_title">Bookmarka pak kerê</string>
   <string name="clear_all_history_dialog_title">Verori pêro wa pak kerê?</string>
@@ -91,8 +92,6 @@
   <string name="tab_closed">Tab qefılneyê</string>
   <string name="bookmark_added">Cay debiyay</string>
   <string name="rate_dialog_title">Nısbi kerê</string>
-  <string name="rate_dialog_msg_1">Qayılê bıkarnê se</string>
-  <string name="rate_dialog_msg_2">, reca kem deqekê nısbi kerê.  Qandê destegi teşekur kem</string>
   <string name="rate_dialog_positive">Nısbi!</string>
   <string name="no_thanks">Nê, teşekur</string>
   <string name="rate_dialog_neutral">Bahdo</string>
@@ -103,12 +102,12 @@
   <string name="pref_extras">Ekstray</string>
   <string name="new_tab_snack_bar">Meqale tabê neweyi de bi a</string>
   <string name="search_widget_text">Kiwix\'i cıgeyre</string>
-  <string name="speech_prompt_text">Serva cıgeyrayışi \%s vacê</string>
+  <string name="speech_prompt_text">Serva cıgeyrayışi %s vacê</string>
   <string name="speech_not_supported">Malesef, cihazê şımayo dekerderê qısekerdışi rê desteg nêdano</string>
   <string name="local_zims">Cihaz</string>
   <string name="remote_zims">Online</string>
   <string name="library">Kıtıbxane</string>
-  <string name="delete_zim_body">Dosyay zim\'ê cêrêni do bıesteriyê:\n\n\%s</string>
+  <string name="delete_zim_body">Dosyay zim\'ê cêrêni do bıesteriyê:\n\n%s</string>
   <string name="delete_zims_toast">Dosyay hewl esteriyayê</string>
   <string name="no_files_here">Tiya dosyeyi çıniyê</string>
   <string name="download_no_space">Serba ronayışi rê ca bes niyo.</string>
@@ -203,7 +202,7 @@
   <string name="running_state">Rameno</string>
   <string name="complete">Temam</string>
   <string name="paused_state">Vındarneya</string>
-  <string name="failed_state">Xırab: \%s</string>
+  <string name="failed_state">Xırab: %s</string>
   <string name="save">Qeyd kerê</string>
   <string name="note">Note</string>
   <string name="wiki_article_title">Serekê Meqaley Wiki</string>
@@ -221,7 +220,7 @@
   <string name="ext_storage_permission_not_granted">Xeta:Mısadey depoyi nêdeyayo</string>
   <string name="notes_deletion_successful">Klasorê notan pêroy esteriyay</string>
   <string name="notes_deletion_unsuccessful">Tat dosyay nêesreriyayê</string>
-  <string name="books_count">\%d book(s)</string>
+  <string name="books_count">%d book(s)</string>
   <string name="discovery_initiated">Kaşır serneyayo</string>
   <string name="discovery_failed">Kaşır nêşayo</string>
   <string name="severe_loss_error">Xetaya gıran! WiFi P2P\'yi Dewre ra vec/Retnanaltiv kerê bıcerrebnê</string>
@@ -234,11 +233,11 @@
   <string name="discovery_needs_location">Servisê mehali taypêyi nêvineyênê</string>
   <string name="request_enable_wifi">WiFi P2P\'yi eyaranê sistemi ra aktiv ke</string>
   <string name="discovery_needs_wifi">WiFi AKERDE nêbo se tekê cı keşf nêbeno</string>
-  <string name="transfer_to">\%s ya wa dosya transfer vo?</string>
+  <string name="transfer_to">%s ya wa dosya transfer vo?</string>
   <string name="device_not_cooperating">Weçineyaye cihazo seba transferi piya nêguriyeno</string>
   <string name="file_transfer_complete">Transferê dosya biyo temam</string>
   <string name="error_during_transfer">Çerğa transferi de yew xeta veciyê</string>
-  <string name="error_transferring">Dosyay \%s transfer kerdış de xeta veciyê</string>
+  <string name="error_transferring">Dosyay %s transfer kerdış de xeta veciyê</string>
   <string name="get_content_from_nearby_device">Cihazê nezdiy ra zerrek bıgêrê</string>
   <string name="search_for_peers">Zey pêyan cıgeyre</string>
   <string name="your_device">Cihazê Şıma:</string>
@@ -284,4 +283,5 @@
   <string name="close_drawer">Antergey bıqefelne</string>
   <string name="how_to_update_content">Zerrek seni rocane beno?</string>
   <string name="update_content_description">Seba rocane kerdışê zerreki (yu dosyay zimi), etni zerrekiya versiyonê tewr peyêni ronayış ganiyo. Ney kışta ronayışi ra şenê bıkerê.</string>
+  <string name="not_allowed">Mısade nêdiyayo</string>
 </resources>

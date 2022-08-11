@@ -9,4 +9,5 @@
   <string name="cannot_open_file">פתיחת הקובץ נכשלה\nנא לנסות לחפש את הקובץ הזה בלשונית \"מכשיר\" בספרייה שלך</string>
   <string name="send_files_title">שליחת קבצים</string>
   <string name="receive_files_title">קבלת קבצים</string>
+  <string name="no_app_found_to_open">לא נמצא יישום שיכול לבחור קובץ zim!</string>
 </resources>

@@ -40,15 +40,13 @@
   <string name="tab_closed">ټب تړل شوی</string>
   <string name="bookmark_added">کتاب نښه ورگډه شوه</string>
   <string name="rate_dialog_title">لطفاً زموږ ارزونه وکړئ</string>
-  <string name="rate_dialog_msg_1">که تاسې يې په کارولو خوند اخيستی وي</string>
-  <string name="rate_dialog_msg_2">، نو مهرباني وکړئ يوه شېبه وخت مو د دې په ارزولو کې ولگوئ. ستاسې له ملاتړ څخه مننه!</string>
   <string name="rate_dialog_positive">ارزول!</string>
   <string name="no_thanks">نه، مننه</string>
   <string name="rate_dialog_neutral">وروسته</string>
   <string name="pref_newtab_background_title">نوې کړکۍ په شاځمکه کې پرانيستل</string>
   <string name="pref_newtab_background_summary">کله چې يوه نوې کړکۍ پرانيزئ هغه به په شاځمکه کې پرانيستل شي</string>
   <string name="search_widget_text">کيويس پلټل</string>
-  <string name="speech_prompt_text">خبري د لټون لپاره \%s</string>
+  <string name="speech_prompt_text">خبري د لټون لپاره %s</string>
   <string name="speech_not_supported">وبخښي! ستاسو وسیله د بیان انډول ملاتړ نه کوي</string>
   <string name="library">د منځپانګې مدیریت</string>
   <string name="space_available">ځای شتون لري:</string>

@@ -23,7 +23,7 @@
   <string name="menu_read_aloud_stop">Спиране четенето на глас</string>
   <string name="save_media">Запази медията</string>
   <string name="save_media_error">Възникна грешка при опита за съхранение на медийния файл!</string>
-  <string name="save_media_saved">Медийният файл е съхранен под името %s в Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Медийният файл е съхранен под името %s в Android/media/org.kiwix…/</string>
   <string name="search_label">Търсене</string>
   <string name="choose_file">Изберете файл със съдържание (*.zim)</string>
   <string name="open_in_new_tab">Отваряне на препратката в нов раздел?</string>
@@ -61,8 +61,6 @@
   <string name="tab_closed">Табът е затворен</string>
   <string name="bookmark_added">Добавена е отметка</string>
   <string name="rate_dialog_title">Моля, оценете ни</string>
-  <string name="rate_dialog_msg_1">Ако ви допадна</string>
-  <string name="rate_dialog_msg_2">,моля, отделете малко време, за да го оцените. Благодаря за подкрепата!</string>
   <string name="rate_dialog_positive">Оцени!</string>
   <string name="no_thanks">Не, благодаря</string>
   <string name="rate_dialog_neutral">По-късно</string>
@@ -73,7 +71,7 @@
   <string name="pref_extras">Екстри</string>
   <string name="new_tab_snack_bar">Публикацията отворена в нов таб</string>
   <string name="search_widget_text">Търсене в Kiwix</string>
-  <string name="speech_prompt_text">Говорете, за да търсите \%s</string>
+  <string name="speech_prompt_text">Говорете, за да търсите %s</string>
   <string name="speech_not_supported">Съжаляваме! Вашето устройство не поддържа  въвеждане чрез глас.</string>
   <string name="local_zims">Устройство</string>
   <string name="remote_zims">Онлайн</string>

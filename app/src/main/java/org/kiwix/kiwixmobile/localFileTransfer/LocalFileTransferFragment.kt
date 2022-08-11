@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.Manifest
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest.permission.NEARBY_WIFI_DEVICES
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -40,6 +41,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -57,12 +59,13 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getDeviceStatus
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiP2pDelegate
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiPeerListAdapter
-import java.util.ArrayList
+import org.kiwix.kiwixmobile.webserver.ZimHostFragment.Companion.PERMISSION_REQUEST_CODE_COARSE_LOCATION
 import javax.inject.Inject
 
 /**
@@ -82,7 +85,8 @@ import javax.inject.Inject
 const val URIS_KEY = "uris"
 
 @SuppressLint("GoogleAppIndexingApiWarning", "Registered")
-class LocalFileTransferFragment : BaseFragment(),
+class LocalFileTransferFragment :
+  BaseFragment(),
   WifiDirectManager.Callbacks {
   @Inject
   lateinit var alertDialogShower: AlertDialogShower
@@ -92,6 +96,9 @@ class LocalFileTransferFragment : BaseFragment(),
 
   @Inject
   lateinit var locationManager: LocationManager
+
+  @Inject
+  lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
   private var fileListAdapter: FileListAdapter? = null
   private var wifiPeerListAdapter: WifiPeerListAdapter? = null
@@ -223,6 +230,20 @@ class LocalFileTransferFragment : BaseFragment(),
   /* Helper methods used for checking permissions and states of services */
   private fun checkFineLocationAccessPermission(): Boolean {
     // Required by Android to detect wifi-p2p peers
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      return permissionIsGranted(NEARBY_WIFI_DEVICES).also { permissionGranted ->
+        if (!permissionGranted) {
+          if (shouldShowRationale(NEARBY_WIFI_DEVICES)) {
+            alertDialogShower.show(
+              KiwixDialog.NearbyWifiPermissionRationaleOnHostZimFile,
+              ::askNearbyWifiDevicesPermission
+            )
+          } else {
+            askNearbyWifiDevicesPermission()
+          }
+        }
+      }
+    }
     return permissionIsGranted(ACCESS_FINE_LOCATION).also { permissionGranted ->
       if (!permissionGranted) {
         if (shouldShowRationale(ACCESS_FINE_LOCATION)) {
@@ -237,23 +258,36 @@ class LocalFileTransferFragment : BaseFragment(),
     }
   }
 
+  @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+  private fun askNearbyWifiDevicesPermission() {
+    ActivityCompat.requestPermissions(
+      requireActivity(), arrayOf(Manifest.permission.NEARBY_WIFI_DEVICES),
+      PERMISSION_REQUEST_CODE_COARSE_LOCATION
+    )
+  }
+
   private fun requestLocationPermission() {
     requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, PERMISSION_REQUEST_FINE_LOCATION)
   }
 
   private fun checkExternalStorageWritePermission(): Boolean { // To access and store the zims
-    return permissionIsGranted(WRITE_EXTERNAL_STORAGE).also { permissionGranted ->
-      if (!permissionGranted) {
-        if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
-          alertDialogShower.show(
-            KiwixDialog.StoragePermissionRationale,
-            ::requestStoragePermissionPermission
-          )
-        } else {
-          requestStoragePermissionPermission()
+    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
+      Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+    ) {
+      return permissionIsGranted(WRITE_EXTERNAL_STORAGE).also { permissionGranted ->
+        if (!permissionGranted) {
+          if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
+            alertDialogShower.show(
+              KiwixDialog.StoragePermissionRationale,
+              ::requestStoragePermissionPermission
+            )
+          } else {
+            requestStoragePermissionPermission()
+          }
         }
       }
     }
+    return true
   }
 
   private fun shouldShowRationale(writeExternalStorage: String) =
@@ -294,7 +328,11 @@ class LocalFileTransferFragment : BaseFragment(),
   }
 
   private val isLocationServiceEnabled: Boolean
-    get() = isProviderEnabled(GPS_PROVIDER) || isProviderEnabled(NETWORK_PROVIDER)
+    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      true
+    } else {
+      isProviderEnabled(GPS_PROVIDER) || isProviderEnabled(NETWORK_PROVIDER)
+    }
 
   private fun isProviderEnabled(locationProvider: String): Boolean {
     return try {

@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat.getExternalFilesDirs
@@ -69,6 +70,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   val prefExternalLinkPopup: Boolean
     get() = sharedPreferences.getBoolean(PREF_EXTERNAL_LINK_POPUP, true)
+
+  val isPlayStoreBuild: Boolean
+    get() = sharedPreferences.getBoolean(IS_PLAY_STORE_BUILD, false)
 
   val prefLanguage: String
     get() = sharedPreferences.getString(PREF_LANG, "") ?: Locale.ROOT.toString()
@@ -121,6 +125,10 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     sharedPreferences.edit { putInt(STORAGE_POSITION, pos) }
   }
 
+  fun setIsPlayStoreBuildType(isPlayStoreBuildType: Boolean) {
+    sharedPreferences.edit { putBoolean(IS_PLAY_STORE_BUILD, isPlayStoreBuildType) }
+  }
+
   fun putPrefFullScreen(fullScreen: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_FULLSCREEN, fullScreen) }
 
@@ -141,6 +149,18 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     get() = sharedPreferences.getBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, true)
     set(prefShowBookmarksFromCurrentBook) = sharedPreferences.edit {
       putBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, prefShowBookmarksFromCurrentBook)
+    }
+
+  var showStorageOption: Boolean
+    get() = sharedPreferences.getBoolean(PREF_SHOW_STORAGE_OPTION, true)
+    set(prefShowStorageOption) = sharedPreferences.edit {
+      putBoolean(PREF_SHOW_STORAGE_OPTION, prefShowStorageOption)
+    }
+
+  var showNotesAllBooks: Boolean
+    get() = sharedPreferences.getBoolean(PREF_SHOW_NOTES_ALL_BOOKS, true)
+    set(prefShowBookmarksFromCurrentBook) = sharedPreferences.edit {
+      putBoolean(PREF_SHOW_NOTES_ALL_BOOKS, prefShowBookmarksFromCurrentBook)
     }
 
   val nightMode: NightModeConfig.Mode
@@ -174,7 +194,16 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     }
 
   fun getPublicDirectoryPath(path: String): String =
-    path.substringBefore(context.getString(R.string.android_directory_seperator))
+    if (isPlayStoreBuild)
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+        path
+      else
+        path.substringBefore(context.getString(R.string.android_directory_seperator))
+    else
+      path.substringBefore(context.getString(R.string.android_directory_seperator))
+
+  fun isPlayStoreBuildWithAndroid11OrAbove(): Boolean =
+    isPlayStoreBuild && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
 
   companion object {
     // Prefs
@@ -189,13 +218,16 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val PREF_NEW_TAB_BACKGROUND = "pref_newtab_background"
     private const val PREF_STORAGE_TITLE = "pref_selected_title"
     private const val PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup"
+    private const val PREF_SHOW_STORAGE_OPTION = "show_storgae_option"
     private const val PREF_IS_FIRST_RUN = "isFirstRun"
     private const val PREF_SHOW_BOOKMARKS_ALL_BOOKS = "show_bookmarks_current_book"
     private const val PREF_SHOW_HISTORY_ALL_BOOKS = "show_history_current_book"
+    private const val PREF_SHOW_NOTES_ALL_BOOKS = "show_notes_current_book"
     private const val PREF_HOSTED_BOOKS = "hosted_books"
     const val PREF_NIGHT_MODE = "pref_night_mode"
     private const val TEXT_ZOOM = "true_text_zoom"
     private const val DEFAULT_ZOOM = 100
     private const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"
+    private const val IS_PLAY_STORE_BUILD = "is_play_store_build"
   }
 }

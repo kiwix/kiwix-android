@@ -17,6 +17,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
       - name: Decrypt files
         env:
           keystore: ${{ secrets.keystore }}
@@ -42,13 +47,18 @@ jobs:
           cp $UNIVERSAL_RELEASE_APK kiwix-${TAG}.apk
           scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no kiwix-${TAG}.apk ci@master.download.kiwix.org:/data/download/release/kiwix-android/
 
-          - name: Publish to github releases
-            uses: ncipollo/release-action@v1
-            with:
-              artifacts: "app/build/outputs/apk/release/**"
-              token: ${{ secrets.GITHUB_TOKEN }}
-              draft: true
-              prerelease: true
+      - name: Publish  versionInfo to download.kiwix.org
+        run: |
+          ./gradlew generateVersionCodeAndName
+          scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no VERSION_INFO ci@master.download.kiwix.org:/data/download/release/kiwix-android/
+
+      - name: Publish to github releases
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "app/build/outputs/apk/release/**"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          draft: true
+          prerelease: true
 
 
       - name: Publish app to play store
@@ -56,4 +66,4 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
-        run: ./gradlew publishReleaseBundle
+        run: ./gradlew publishPlayStoreBundle

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Mechanizatar
+* No Sleep till Krupki
 * ZlyiLev
 -->
 <resources>
@@ -20,7 +21,7 @@
   <string name="search_label">Пошук</string>
   <string name="choose_file" fuzzy="true">Абярыце ZIM-файл (*.zim)</string>
   <string name="open_in_new_tab">Адкрыць спасылку ў новым вакенцы?</string>
-  <string name="error_file_not_found">Памылка: абраны ZIM-файл ня знойдзены.</string>
+  <string name="error_file_not_found">Памылка: абраны ZIM-файл не знойдзены.</string>
   <string name="error_file_invalid">Памылка: абраны файл не з’яўляецца слушным ZIM-файлам.</string>
   <string name="error_article_url_not_found">Памылка: загрузка артыкула не атрымалася (Url: %1$s).</string>
   <string name="pref_display_title">Паказаць</string>
@@ -38,8 +39,6 @@
   <string name="request_storage" fuzzy="true">Каб атрымаць доступ да ZIM-файлаў, нам трэба мець доступ да вашага сховішча</string>
   <string name="bookmark_added">Закладка дададзеная</string>
   <string name="rate_dialog_title">Калі ласка, ацаніце нас</string>
-  <string name="rate_dialog_msg_1">Калі вам падабаецца</string>
-  <string name="rate_dialog_msg_2">, калі ласка, знайдзіце час, каб ацаніць. Дзякуем за Вашу падтрымку!</string>
   <string name="rate_dialog_positive">Ацаніць!</string>
   <string name="no_thanks">Не, дзякуй</string>
   <string name="rate_dialog_neutral">Пазней</string>

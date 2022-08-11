@@ -3,9 +3,11 @@
 * Alno
 * Derugon
 * Djiboun
+* Eneelk
 * Eneelktransfer_to
 * Fitoschido
 * Gomoko
+* I'm mender
 * Kelson
 * Stephane
 * The RedBurn
@@ -31,7 +33,7 @@
   <string name="menu_wifi_hotspot">Diffuser des contenus</string>
   <string name="save_media">Enregistrer le média</string>
   <string name="save_media_error">Une erreur s’est produite en essayant d’enregistrer le média !</string>
-  <string name="save_media_saved">Média enregistré sous %s dans le dossier Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Média enregistré sous %s dans le dossier Downloads/org.kiwix…/</string>
   <string name="search_label">Rechercher</string>
   <string name="choose_file">Sélectionner un fichier de contenu (*.zim)</string>
   <string name="open_in_new_tab">Ouvrir le lien dans un nouvel onglet ?</string>
@@ -62,11 +64,12 @@
   <string name="server_started_message">Entrez cette adresse IP dans votre navigateur pour accéder au serveur %s</string>
   <string name="share_host_address">Partager l’URL avec d’autres applications</string>
   <string name="error_file_not_found">Erreur : le fichier ZIM sélectionné est introuvable.</string>
+  <string name="unable_to_read_zim_file">Impossible de lire ce fichier ZIM !</string>
   <string name="zim_not_opened">Impossible d’ouvrir le fichier zim</string>
   <string name="error_file_invalid">Erreur : le fichier sélectionné n’est pas un fichier ZIM valide.</string>
   <string name="error_article_url_not_found">Erreur : le chargement de l’article (URL : %1$s) a échoué.</string>
   <string name="pref_display_title">Affichage</string>
-  <string name="pref_info_title">Information</string>
+  <string name="pref_info_title">Informations</string>
   <string name="pref_info_version">Version</string>
   <string name="pref_night_mode">Mode nocturne</string>
   <string name="pref_night_mode_summary">Afficher les articles en couleurs inversées</string>
@@ -80,6 +83,7 @@
   <string name="no_reader_application_installed">Impossible de trouver une application installée pour ce type de fichier</string>
   <string name="no_section_info">Aucun entête de contenu trouvé</string>
   <string name="request_storage">Pour accéder au contenu hors connexion, nous avons besoin d’un accès à votre espace de stockage</string>
+  <string name="request_write_storage">Télécharger des fichiers ZIM nécessite l’accès en écriture à votre stockage local.</string>
   <string name="clear_recent_and_tabs_history_dialog">Êtes-vous sûr de vouloir supprimer votre historique de recherche et de réinitialiser tous les onglets actifs ?</string>
   <string name="delete_recent_search_item">Supprimer cet élément ?</string>
   <string name="pref_clear_all_history_title">Effacer l’historique</string>
@@ -101,8 +105,6 @@
   <string name="tab_closed">Onglet fermé</string>
   <string name="bookmark_added">Marque-page ajouté</string>
   <string name="rate_dialog_title">Merci de nous évaluer</string>
-  <string name="rate_dialog_msg_1">Si vous aimez utiliser</string>
-  <string name="rate_dialog_msg_2">, veuillez prendre un moment pour l’évaluer. Merci pour votre soutien !</string>
   <string name="rate_dialog_positive">Donnez nous une note !</string>
   <string name="no_thanks">Non merci</string>
   <string name="rate_dialog_neutral">Plus tard</string>
@@ -110,15 +112,15 @@
   <string name="bookmark_removed">Marque-page supprimé</string>
   <string name="pref_newtab_background_title">Ouvrir un nouvel onglet en arrière-plan</string>
   <string name="pref_newtab_background_summary">Lors de l’ouverture d’un nouvel onglet, il s’ouvrira en arrière-plan</string>
-  <string name="pref_extras">Extras</string>
+  <string name="pref_extras">Suppléments</string>
   <string name="new_tab_snack_bar">Article ouvert dans un nouvel onglet</string>
   <string name="search_widget_text">Rechercher dans Kiwix</string>
-  <string name="speech_prompt_text">Parler pour rechercher \%s</string>
+  <string name="speech_prompt_text">Parler pour rechercher %s</string>
   <string name="speech_not_supported">Désolé ! Votre appareil ne prend pas en charge la saisie vocale</string>
   <string name="local_zims">Appareil</string>
   <string name="remote_zims">En ligne</string>
   <string name="library">Bibliothèque</string>
-  <string name="delete_zim_body">Le ou les fichiers zim suivants seront supprimés :\n\n\%s</string>
+  <string name="delete_zim_body">Le ou les fichiers zim suivants seront supprimés :\n\n%s</string>
   <string name="delete_zims_toast">Les fichiers ont bien été supprimés</string>
   <string name="no_files_here">Aucun fichier ici</string>
   <string name="download_no_space">Espace insuffisant pour le téléchargement.</string>
@@ -213,7 +215,7 @@
   <string name="running_state">En cours</string>
   <string name="complete">Terminer</string>
   <string name="paused_state">En pause</string>
-  <string name="failed_state">Échec : \%s</string>
+  <string name="failed_state">Échec : %s</string>
   <string name="save">Enregistrer</string>
   <string name="note">Note</string>
   <string name="wiki_article_title">Titre de l’article du Wiki</string>
@@ -231,24 +233,25 @@
   <string name="ext_storage_permission_not_granted">Erreur : permissions de stockage non accordées</string>
   <string name="notes_deletion_successful">Dossier entier de notes supprimé</string>
   <string name="notes_deletion_unsuccessful">Certains fichiers n’ont pas été supprimés</string>
-  <string name="books_count">\%d livre(s)</string>
+  <string name="books_count">%d livre(s)</string>
   <string name="discovery_initiated">Découverte lancée</string>
   <string name="discovery_failed">La découverte a échoué</string>
   <string name="severe_loss_error">Erreur sévère ! Essayez de désactiver/réactiver le pair-à-pair en WiFi</string>
   <string name="connection_failed">La connexion a échoué</string>
   <string name="permission_rationale_location">L’autorisation de géolocalisation est requise par Android pour permettre à l’application de détecter des appareils à proximité.</string>
-  <string name="permission_rationale_location_on_host_zim_file">La permission d’emplacement est nécessaire sur Android pour autoriser l’appli à héberger des fichiers Zim</string>
+  <string name="permission_rationale_location_on_host_zim_file">La permission d’emplacement est nécessaire sur Android pour autoriser l’appli à héberger des fichiers Zim.</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">Une autorisation des appareils Wi-Fi à proximité est requise par Android pour permettre à l’application d’héberger des fichiers Zim.</string>
   <string name="permission_refused_location">Impossible de trouver des appareils proches sans les autorisations de géolocalisation</string>
   <string name="permission_refused_storage">Impossible d’accéder aux fichiers ZIM sans autorisation d’accès au stockage</string>
   <string name="request_enable_location">Activer la géolocalisation pour permettre la détection d’appareils proches</string>
   <string name="discovery_needs_location">Impossible de découvrir des pairs sans service de géolocalisation</string>
   <string name="request_enable_wifi">Activer le pair-à-pair WiFi dans les paramètres système</string>
   <string name="discovery_needs_wifi">Impossible de découvrir des pairs sans WiFi activé</string>
-  <string name="transfer_to">Transférer les fichiers vers \%s ?</string>
+  <string name="transfer_to">Transférer les fichiers vers %s ?</string>
   <string name="device_not_cooperating">L’appareil sélectionné ne coopère pas pour le transfert</string>
   <string name="file_transfer_complete">Transfert de fichier bien terminé</string>
   <string name="error_during_transfer">Une erreur est survenue durant le transfert</string>
-  <string name="error_transferring">Erreur durant le transfert du fichier \%s</string>
+  <string name="error_transferring">Erreur durant le transfert du fichier %s</string>
   <string name="get_content_from_nearby_device">Obtenir des contenus depuis un appareil à proximité</string>
   <string name="search_for_peers">Rechercher des appareils pairs</string>
   <string name="your_device">Votre appareil :</string>
@@ -299,4 +302,18 @@
   <string name="all_files_permission_needed_message">Afin d’accéder à tous les fichiers zim sur l’appareil, nous devons avoir tous les droits sur les fichiers</string>
   <string name="allowed">Autorisé</string>
   <string name="not_allowed">Non autorisé</string>
+  <string name="denied_internet_permission_message">Veuillez activer le Wi-Fi pour télécharger le contenu</string>
+  <string name="select_folder">Veuillez sélectionner un dossier pour le stockage externe.</string>
+  <string name="system_unable_to_grant_permission_message">Le système n’a pas pu accorder le droit d’accès !</string>
+  <string name="allow">Autoriser</string>
+  <string name="allow_internet_permission_message">Veuillez autoriser le droit sur Internet de télécharger le contenu.</string>
+  <string name="no_notes">Aucune note</string>
+  <string name="notes_from_all_books">Afficher les notes de tous les livres</string>
+  <string name="search_notes">Rechercher des notes</string>
+  <string name="choose_your_action">Choisissez votre action</string>
+  <string name="open_note">Ouvrir la note</string>
+  <string name="open_article">Ouvrir l’article</string>
+  <string name="delete_note_dialog_message">Remarque : les notes ne sont pas supprimées de votre espace de stockage</string>
+  <string name="delete_selected_notes">Supprimer les notes sélectionnées ?</string>
+  <string name="missing_split_version_for_objectbox">Architecture non prise en charge, votre appareil n’est pas compatible avec cette application.</string>
 </resources>

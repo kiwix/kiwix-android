@@ -28,7 +28,7 @@
   <string name="menu_wifi_hotspot">와이파이 핫스팟</string>
   <string name="save_media">미디어 저장</string>
   <string name="save_media_error">미디어 저장 중, 오류가 발생하였습니다!</string>
-  <string name="save_media_saved">미디어(%s)를 Android/media/org.kiwix…/에 저장했습니다</string>
+  <string name="save_media_saved" fuzzy="true">미디어(%s)를 Android/media/org.kiwix…/에 저장했습니다</string>
   <string name="search_label">검색</string>
   <string name="choose_file">내용 파일 (*.zim) 선택</string>
   <string name="open_in_new_tab">새 탭에서 링크를 여시겠습니까?</string>
@@ -59,6 +59,7 @@
   <string name="server_started_message">%s 서버에 접속하려면 브라우저에 이 IP 주소를 입력하십시오</string>
   <string name="share_host_address">다른 애플리케이션을 통해 URL 공유</string>
   <string name="error_file_not_found">오류: 선택된 ZIM 파일을 찾을 수 없습니다.</string>
+  <string name="unable_to_read_zim_file">이 zim 파일을 읽을 수 없습니다!</string>
   <string name="zim_not_opened">zim 파일을 열 수 없음</string>
   <string name="error_file_invalid">오류: 선택한 파일은 올바른 ZIM 파일이 아닙니다.</string>
   <string name="error_article_url_not_found">오류: 문서(Url: %1$s)를 불러오는 데 실패했습니다.</string>
@@ -98,8 +99,6 @@
   <string name="tab_closed">탭 닫힘</string>
   <string name="bookmark_added">북마크가 추가됨</string>
   <string name="rate_dialog_title">평가해 주세요</string>
-  <string name="rate_dialog_msg_1">즐겁게 사용하고 있다면</string>
-  <string name="rate_dialog_msg_2">, 잠시 시간을 내어 평가해 주세요. 여러분의 응원 감사합니다!</string>
   <string name="rate_dialog_positive">평가해 주세요!</string>
   <string name="no_thanks">아니오, 괜찮습니다</string>
   <string name="rate_dialog_neutral">나중에</string>
@@ -110,12 +109,12 @@
   <string name="pref_extras">기타</string>
   <string name="new_tab_snack_bar">새 탭에 열린 문서</string>
   <string name="search_widget_text">Kiwix 검색</string>
-  <string name="speech_prompt_text">\%s을(를) 찾으려면 말하세요</string>
+  <string name="speech_prompt_text">%s을(를) 찾으려면 말하세요</string>
   <string name="speech_not_supported">죄송합니다! 당신의 기기가 음성 입력을 지원하지 않습니다</string>
   <string name="local_zims">장치</string>
   <string name="remote_zims">온라인</string>
   <string name="library">라이브러리</string>
-  <string name="delete_zim_body">다음 zim 파일이 삭제됩니다:\n\n\%s</string>
+  <string name="delete_zim_body">다음 zim 파일이 삭제됩니다:\n\n%s</string>
   <string name="delete_zims_toast">파일이 삭제되었습니다</string>
   <string name="no_files_here">여기에 파일이 없습니다</string>
   <string name="download_no_space">다운로드할 공간이 충분하지 않습니다.</string>
@@ -210,7 +209,7 @@
   <string name="running_state">진행 중</string>
   <string name="complete">완료</string>
   <string name="paused_state">일시 중단됨</string>
-  <string name="failed_state">실패: \%s</string>
+  <string name="failed_state">실패: %s</string>
   <string name="save">저장</string>
   <string name="note">노트</string>
   <string name="wiki_article_title">위키 문서 제목</string>
@@ -228,7 +227,7 @@
   <string name="ext_storage_permission_not_granted">오류: 스토리지 권한이 없습니다</string>
   <string name="notes_deletion_successful">전체 노트 폴더가 삭제되었습니다.</string>
   <string name="notes_deletion_unsuccessful">일부 파일은 삭제되지 않았습니다</string>
-  <string name="books_count">책 \%d권</string>
+  <string name="books_count">책 %d권</string>
   <string name="discovery_initiated">발견을 시작했습니다</string>
   <string name="discovery_failed">발견을 실패했습니다</string>
   <string name="severe_loss_error">서버 오류! 와이파이 P2P를 비활성화/재활성화해 보십시오</string>
@@ -241,11 +240,11 @@
   <string name="discovery_needs_location">위치 서비스 없이 피어를 찾을 수 없습니다</string>
   <string name="request_enable_wifi">시스템 설정에서 와이파이 P2P 활성화</string>
   <string name="discovery_needs_wifi">와이파이가 켜져있지 않은 상태에서 피어를 찾을 수 없습니다</string>
-  <string name="transfer_to">파일을 \%s(으)로 전송하시겠습니까?</string>
+  <string name="transfer_to">파일을 %s(으)로 전송하시겠습니까?</string>
   <string name="device_not_cooperating">선택된 단말기가 이동을 위해 함께 작동할 수 없습니다</string>
   <string name="file_transfer_complete">파일 전송 완료</string>
   <string name="error_during_transfer">전송 도중에 오류가 발생했습니다</string>
-  <string name="error_transferring">파일 \%s 전송 오류</string>
+  <string name="error_transferring">파일 %s 전송 오류</string>
   <string name="get_content_from_nearby_device">주변 장치로부터 콘텐츠 가져오기</string>
   <string name="search_for_peers">친구 찾기</string>
   <string name="your_device">내 장치:</string>
@@ -296,4 +295,8 @@
   <string name="all_files_permission_needed_message">장치의 모든 ZIM 파일에 접근하려면 모든 파일 권한이 있어야 합니다</string>
   <string name="allowed">허용됨</string>
   <string name="not_allowed">허용하지 않음</string>
+  <string name="denied_internet_permission_message">내용을 다운로드하려면 와이파이를 활성화해 주십시오</string>
+  <string name="select_folder">외부 저장을 위한 폴더를 선택해 주십시오.</string>
+  <string name="system_unable_to_grant_permission_message">시스템이 권한을 부여할 수 없습니다!</string>
+  <string name="allow">허용</string>
 </resources>

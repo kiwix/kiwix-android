@@ -119,7 +119,8 @@ class SearchFragment : BaseFragment() {
         override fun handleOnBackPressed() {
           goBack()
         }
-      })
+      }
+    )
   }
 
   private fun setupToolbar(view: View) {
@@ -149,11 +150,13 @@ class SearchFragment : BaseFragment() {
     val searchMenuItem = menu.findItem(R.id.menu_search)
     searchMenuItem.expandActionView()
     searchView = searchMenuItem.actionView as SearchView
-    searchView.setOnQueryTextListener(SimpleTextListener {
-      if (it.isNotEmpty()) {
-        searchViewModel.actions.offer(Filter(it))
+    searchView.setOnQueryTextListener(
+      SimpleTextListener {
+        if (it.isNotEmpty()) {
+          searchViewModel.actions.offer(Filter(it))
+        }
       }
-    })
+    )
     searchMenuItem.setOnActionExpandListener(object : OnActionExpandListener {
       override fun onMenuItemActionExpand(item: MenuItem) = false
 
@@ -180,8 +183,8 @@ class SearchFragment : BaseFragment() {
   private fun render(state: SearchState) {
     searchInTextMenuItem.isVisible = state.searchOrigin == FromWebView
     searchInTextMenuItem.isEnabled = state.searchTerm.isNotBlank()
-    searchLoadingIndicator.isShowing(state.isLoading)
-    searchNoResults.isVisible = state.visibleResults.isEmpty()
+    searchLoadingIndicator?.isShowing(state.isLoading)
+    searchNoResults?.isVisible = state.visibleResults.isEmpty()
     searchAdapter.items = state.visibleResults
   }
 

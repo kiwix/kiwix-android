@@ -51,8 +51,6 @@
   <string name="tab_closed">Onglet tampat</string>
   <string name="bookmark_added">Signet apondut</string>
   <string name="rate_dialog_title">Notatz-nos</string>
-  <string name="rate_dialog_msg_1">Se vos agradar d\'utilizar</string>
-  <string name="rate_dialog_msg_2">, prenètz un moment per l\'avalorar. Mercé per vòstre sosten !</string>
   <string name="rate_dialog_positive">Notatz !</string>
   <string name="no_thanks">Non, mercé</string>
   <string name="rate_dialog_neutral">Pus tard</string>
@@ -62,7 +60,7 @@
   <string name="pref_newtab_background_summary">Al moment de la dobertura d\'un onglet novèl, se dobrirà en rèireplan</string>
   <string name="pref_extras">Extras</string>
   <string name="search_widget_text">Recercar dins Kiwix</string>
-  <string name="speech_prompt_text">Parlar per recercar \%s</string>
+  <string name="speech_prompt_text">Parlar per recercar %s</string>
   <string name="local_zims">Aparelh</string>
   <string name="remote_zims">En linha</string>
   <string name="library">Bibliotèca</string>

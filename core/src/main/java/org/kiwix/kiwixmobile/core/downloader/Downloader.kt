@@ -22,4 +22,5 @@ import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 interface Downloader {
   fun download(book: LibraryNetworkEntity.Book)
   fun cancelDownload(downloadId: Long)
+  fun retryDownload(downloadId: Long)
 }

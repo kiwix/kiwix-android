@@ -6,7 +6,7 @@
 * Ghybu
 * Kur
 -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Alîkarî</string>
   <string name="menu_home">Mal</string>
   <string name="menu_settings">Mîheng</string>
@@ -21,7 +21,7 @@
   <string name="menu_wifi_hotspot">Kitêban Bihewîne</string>
   <string name="save_media">Medyayê Tomar Bike</string>
   <string name="save_media_error">Gava ku medya dihat tomarkirin çewtiyek derket holêǃ</string>
-  <string name="save_media_saved">Medya wek %s ji Android/media/org.kiwix…/ re hate qeydkirin</string>
+  <string name="save_media_saved" fuzzy="true">Medya wek %s ji Android/media/org.kiwix…/ re hate qeydkirin</string>
   <string name="search_label">Lê bigere</string>
   <string name="choose_file">Peldankeke Naverokê Hilbijêre (*.zim)</string>
   <string name="open_in_new_tab">Bila lînk di hilpekîneke nû de were vekirin?</string>
@@ -50,7 +50,9 @@
   <string name="start_server_label">Serverê bide destpêkirin</string>
   <string name="stop_server_label">Serverê bide sekinandin</string>
   <string name="server_started_message">Vê adresa IPyê di geroka xwe de binivîsîne ji bo ku xwe bigihînî servera %s</string>
+  <string name="share_host_address">URLyê bi riya sepanên din parve bike</string>
   <string name="error_file_not_found">Çewtîː Peldanka ZIM\'ê ya bijartî nehate dîtin.</string>
+  <string name="unable_to_read_zim_file">Nebû ku vê dosyeya zimê bixwîne!</string>
   <string name="zim_not_opened">Nikare dosyeya zim-ê veke</string>
   <string name="error_file_invalid">Çewtîː Peldanka bijartî ne peldankeke ZIMê ya derbasdar e.</string>
   <string name="error_article_url_not_found">Çewtîː Barkirina gotara (Url: %1$s) têk çû.</string>
@@ -69,11 +71,13 @@
   <string name="no_reader_application_installed">Ji bo cureya vê peldankê sepanekî sazkirî nehat dîtin</string>
   <string name="no_section_info">Sernavê Naverok Nehat Dîtin</string>
   <string name="request_storage">Ji bo ku em têkevin naveroka offline divê em têkevin depoya we</string>
+  <string name="request_write_storage">Ji bo daxistina dosyeyên zimê îhtiyaciya me bi îznê gihîna depoya cîhaza te heye</string>
   <string name="clear_recent_and_tabs_history_dialog">Tu ji daxwazên xwe yên jêbirina raboriya lêgerînê û sifirkirina hemû paceyên çalak bawer î?</string>
   <string name="delete_recent_search_item">Vê pelê jê bibe?</string>
   <string name="pref_clear_all_history_title">Raboriyê paqij bike</string>
   <string name="pref_clear_all_history_summary">Lêgerînên dawî û raboriya hilpekînan paqij bike</string>
   <string name="pref_notes">Not</string>
+  <string name="pref_permission">Destûr</string>
   <string name="all_history_cleared">Hemû Raborî Hat Paqijkirin</string>
   <string name="pref_clear_all_bookmarks_title">Bijareyan paqij bike</string>
   <string name="clear_all_history_dialog_title">Hemû Dîrokê Paqij Bike</string>
@@ -89,8 +93,6 @@
   <string name="tab_closed">Hilpekîn hat girtin</string>
   <string name="bookmark_added">Bijare hat tevlîkirin</string>
   <string name="rate_dialog_title">Ji kerema xwe Deng Bide Me</string>
-  <string name="rate_dialog_msg_1">Heke kêfa te ji bikaranînê tê</string>
-  <string name="rate_dialog_msg_2">ji kerema xwe deqekê xwe bide û wê binirxîne. Spas ji bo piştgiriya te!</string>
   <string name="rate_dialog_positive">Deng Bide!</string>
   <string name="no_thanks">Na, spas</string>
   <string name="rate_dialog_neutral">Paşê</string>
@@ -101,12 +103,12 @@
   <string name="pref_extras">Xizmetên din</string>
   <string name="new_tab_snack_bar">Gotar li hilpekînekî nû vebû</string>
   <string name="search_widget_text">Li Kiwixê bigere</string>
-  <string name="speech_prompt_text">Ji bo ku li \%s bigerî xeber bide</string>
+  <string name="speech_prompt_text">Ji bo ku li %s bigerî xeber bide</string>
   <string name="speech_not_supported">Bibore! Amûra te piştgirî nade alava axaftinê</string>
   <string name="local_zims">Amûr</string>
   <string name="remote_zims">Online</string>
   <string name="library">Pirtûkxane</string>
-  <string name="delete_zim_body">Dosyeya(yên) li jêr yên zim-ê wê bêne jêbirin:\n\n\%s</string>
+  <string name="delete_zim_body">Dosyeya(yên) li jêr yên zim-ê wê bêne jêbirin:\n\n%s</string>
   <string name="delete_zims_toast">Pel hat jêbirin</string>
   <string name="no_files_here">Li vir peldank tune ne</string>
   <string name="download_no_space">Ji bo daxistinê cihê ku hewce dike, tune ye.</string>
@@ -201,7 +203,7 @@
   <string name="running_state">Didome</string>
   <string name="complete">Temam bû</string>
   <string name="paused_state">Sekinandî ye</string>
-  <string name="failed_state">Bi ser neket: \%s</string>
+  <string name="failed_state">Bi ser neket: %s</string>
   <string name="save">Qeyd bike</string>
   <string name="note">Not</string>
   <string name="wiki_article_title">Sernavê Gotara Wîkiyê</string>
@@ -219,7 +221,7 @@
   <string name="ext_storage_permission_not_granted">Çewtî: Destûrên depoyê nehate dayîn</string>
   <string name="notes_deletion_successful">Temamiya peldankên notê hate jêbirin</string>
   <string name="notes_deletion_unsuccessful">Hin peldank nehate jêbirin</string>
-  <string name="books_count">\%d kitêb</string>
+  <string name="books_count">%d kitêb</string>
   <string name="discovery_initiated">Kişf dest pê kir</string>
   <string name="discovery_failed">Kişf bi ser neket</string>
   <string name="severe_loss_error">Çewtiya dijwar! WiFi P2P-yê neçalak bike/dîsa aktîv bike</string>
@@ -232,11 +234,11 @@
   <string name="discovery_needs_location">Bêyî xizmetên lokasyonê hevcinsan nikare tesbît bike</string>
   <string name="request_enable_wifi">Ji mîhengan Wîfî P2Pyê aktîv bike</string>
   <string name="discovery_needs_wifi">Hevcinsan nikare tesbît bike bêyî Wîfiya Vekirî</string>
-  <string name="transfer_to">Dixwazî dosyeyan transferê \%s bikî?</string>
+  <string name="transfer_to">Dixwazî dosyeyan transferê %s bikî?</string>
   <string name="device_not_cooperating">Cîhaza bijartî ji bo transferkirinê kooperasyon nake</string>
   <string name="file_transfer_complete">Transferkirina dosyeyê temam bû</string>
   <string name="error_during_transfer">Gava transferê çewtiyekê rû da</string>
-  <string name="error_transferring">Gava transferkirina \%s çewtiyeke derket holê</string>
+  <string name="error_transferring">Gava transferkirina %s çewtiyeke derket holê</string>
   <string name="get_content_from_nearby_device">Naverokê peyda bike ji cîhaza nêz</string>
   <string name="search_for_peers">Li Hevcinsan Bigere</string>
   <string name="your_device">Cîhaza Te:</string>
@@ -248,7 +250,8 @@
   <string name="status">Rewş</string>
   <string name="pref_clear_all_notes_summary">Hemû notan ji hemû gotaran bibe</string>
   <string name="pref_clear_all_notes_title">Temamiya notan paqij bike</string>
-  <string name="pref_text_zoom_summary">Mezinahiya nivîsê bi bilindkirinên 25\% biguherîne.</string>
+  <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Destûr bide ku dosyeyên ZIMê yên li ser SD karta te bixwîne û binivîse</string>
+  <string name="pref_text_zoom_summary" tools:ignore="StringFormatInvalid">Mezinahiya nivîsê bi bilindkirinên 25% biguherîne.</string>
   <string name="tag_pic">Wêne</string>
   <string name="tag_vid">Vîdeo</string>
   <string name="tag_text_only">Tenê Nivîs</string>
@@ -282,4 +285,11 @@
   <string name="close_drawer">Çaviyê bigire</string>
   <string name="how_to_update_content">Naverok çawa tê rojanekirin?</string>
   <string name="update_content_description">Ji bo rojanekirina naverokê (dosyeyeke zim-ê) divê tu fullversiyona dawîn a eynî naverokê daxînî. Tu vê yekê bi riya beşa daxistinê dikarî pêk bînî.</string>
+  <string name="all_files_permission_needed">Îzna Temamê Dosyeyan Lazim e</string>
+  <string name="all_files_permission_needed_message">Ji bo ku em karibin bigihin temamê dosyeyên zim-ê yê di cîhaza te de divê Îzna Temamê Dosyeyan bidî me</string>
+  <string name="allowed">Destûrdayî</string>
+  <string name="not_allowed">Ne destûrdayî</string>
+  <string name="denied_internet_permission_message">Ji bo daxistina naverokê ji kerema xwe wîfiyê aktîv bike</string>
+  <string name="select_folder">Ji kerema xwe peldankekê bibijêre ji bo depokirina xaricî.</string>
+  <string name="system_unable_to_grant_permission_message">Sîstem nikare destûrê werbigire!</string>
 </resources>

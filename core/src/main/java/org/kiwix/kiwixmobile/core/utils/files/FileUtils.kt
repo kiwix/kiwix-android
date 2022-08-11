@@ -28,16 +28,17 @@ import android.provider.DocumentsContract
 import android.util.Log
 import android.widget.Toast
 import androidx.documentfile.provider.DocumentFile
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.get
 import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
-import java.lang.Exception
-import java.util.ArrayList
 
 object FileUtils {
 
@@ -252,8 +253,10 @@ object FileUtils {
   @SuppressLint("WrongConstant")
   @JvmStatic fun getPathFromUri(activity: Activity, data: Intent): String? {
     val uri: Uri? = data.data
-    val takeFlags: Int = data.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION
-      or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+    val takeFlags: Int = data.flags and (
+      Intent.FLAG_GRANT_READ_URI_PERMISSION
+        or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+      )
     uri?.let {
       activity.grantUriPermission(
         activity.packageName, it,
@@ -287,5 +290,59 @@ object FileUtils {
       )
     }
     return null
+  }
+
+  /**
+   * Returns the file name from the url or src. In url it gets the file name from the last '/' and
+   * if it contains '.'. If the url is null then it'll get the file name from the last '/'.
+   * If the url and src doesn't exist it returns the empty string.
+   */
+  fun getDecodedFileName(url: String?, src: String?): String =
+    url?.substringAfterLast("/", "")
+      ?.takeIf { it.contains(".") }
+      ?: src?.substringAfterLast("/", "")
+        ?.substringAfterLast("%3A") ?: ""
+
+  @JvmStatic fun downloadFileFromUrl(
+    url: String?,
+    src: String?,
+    zimReaderContainer: ZimReaderContainer,
+    sharedPreferenceUtil: SharedPreferenceUtil
+  ): File? {
+    val fileName = getDecodedFileName(url, src)
+    var root: File? = null
+    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+      if (CoreApp.instance.externalMediaDirs.isNotEmpty()) {
+        root = CoreApp.instance.externalMediaDirs[0]
+      }
+    } else {
+      root =
+        File(
+          "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}" +
+            "/org.kiwix"
+        )
+      if (!root.exists()) root.mkdir()
+    }
+    if (File(root, fileName).exists()) return File(root, fileName)
+    val fileToSave = sequence {
+      yield(File(root, fileName))
+      yieldAll(
+        generateSequence(1) { it + 1 }.map {
+          File(
+            root, fileName.replace(".", "_$it.")
+          )
+        }
+      )
+    }.first { !it.exists() }
+    val source = if (url == null) Uri.parse(src) else Uri.parse(url)
+    return try {
+      zimReaderContainer.load("$source", emptyMap()).data.use { inputStream ->
+        fileToSave.outputStream().use(inputStream::copyTo)
+      }
+      fileToSave
+    } catch (e: IOException) {
+      Log.w("kiwix", "Couldn't save file", e)
+      null
+    }
   }
 }

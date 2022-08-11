@@ -1,0 +1,18 @@
+codecov:
+  notify:
+    require_ci_to_pass: yes
+
+coverage:
+  status:
+    project:
+      default:
+        threshold: 1%
+    patch:
+      default:
+        target: 90%
+        threshold: 0%
+
+ignore:
+  - "docs"
+  - "fastlane"
+  - "core/src/test/java/"

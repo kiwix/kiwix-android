@@ -20,6 +20,11 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
       - name: run instrumentation tests
         uses: ReactiveCircus/android-emulator-runner@v2.19.1
         with:
@@ -43,6 +48,11 @@ jobs:
         uses: actions/checkout@v1
         with:
           fetch-depth: 1
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
 
       - name: Install NDK
         run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;22.0.7026061" --sdk_root=${ANDROID_SDK_ROOT}
@@ -71,3 +81,10 @@ jobs:
           cp $UNIVERSAL_DEBUG_APK $DATE
           scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no $DATE ci@master.download.kiwix.org:/data/download/nightly/
 
+      - name: fdroid nightly
+        run: |
+            sudo add-apt-repository ppa:fdroid/fdroidserver
+            sudo apt-get update
+            sudo apt-get install apksigner fdroidserver --no-install-recommends
+            export DEBUG_KEYSTORE=$\{\{ secrets.DEBUG_KEYSTORE \}\}
+            fdroid nightly --archive-older 10

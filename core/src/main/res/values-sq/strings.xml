@@ -18,7 +18,7 @@
   <string name="menu_wifi_hotspot">Hotspot WiFi</string>
   <string name="save_media">Ruajë Median</string>
   <string name="save_media_error">Ndodhi një gabim teksa provohej të ruhej media!</string>
-  <string name="save_media_saved">U ruajt media si %s te Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">U ruajt media si %s te Android/media/org.kiwix…/</string>
   <string name="search_label">Kērko</string>
   <string name="choose_file">Përzgjidhni një Kartelë Lënde  (*.zim)</string>
   <string name="open_in_new_tab">Të hapet lidhja në skedë të re?</string>
@@ -88,8 +88,6 @@
   <string name="tab_closed">Skeda u mbyll</string>
   <string name="bookmark_added">U shtua faqerojtës</string>
   <string name="rate_dialog_title">Ju Lutemi, Vlerësonani</string>
-  <string name="rate_dialog_msg_1">Nëse ju pëlqen përdorimi i</string>
-  <string name="rate_dialog_msg_2">, ju lutemi, ndaluni një çast dhe vlerësojeni. Faleminderit për përkrahjen që na bëni!</string>
   <string name="rate_dialog_positive">Vlerësojeni!</string>
   <string name="no_thanks">Jo, faleminderit</string>
   <string name="rate_dialog_neutral">Më vonë</string>
@@ -100,12 +98,12 @@
   <string name="pref_extras">Ekstra</string>
   <string name="new_tab_snack_bar">Artikulli u hap në skedë të re</string>
   <string name="search_widget_text">Kërkoni në Kiwix</string>
-  <string name="speech_prompt_text">Flisni që të kërkohet %\s</string>
+  <string name="speech_prompt_text">Flisni që të kërkohet %s</string>
   <string name="speech_not_supported">Na ndjeni! Pajisja juaj nuk mbulon input përmes të folurës</string>
   <string name="local_zims">Pajisje</string>
   <string name="remote_zims">Në linjë</string>
   <string name="library">Bibliotekë</string>
-  <string name="delete_zim_body">Kartela(t) zim vijuese do të fshihen:\n\n\%s</string>
+  <string name="delete_zim_body">Kartela(t) zim vijuese do të fshihen:\n\n%s</string>
   <string name="delete_zims_toast">Kartela u fshi</string>
   <string name="no_files_here">S’ka kartela këtu</string>
   <string name="download_no_space">Hapësirë e pamjaftueshme për shkarkim.</string>
@@ -200,7 +198,7 @@
   <string name="running_state">Në Ecuri e Sipër</string>
   <string name="complete">I plotësuar</string>
   <string name="paused_state">Pushuar</string>
-  <string name="failed_state">Dështoi: \%s</string>
+  <string name="failed_state">Dështoi: %s</string>
   <string name="save">Ruaje</string>
   <string name="note">Shënim</string>
   <string name="wiki_article_title">Titull Artikulli Wiki</string>
@@ -218,7 +216,7 @@
   <string name="ext_storage_permission_not_granted">Gabim: S’janë akorduar leje mbi depozitën</string>
   <string name="notes_deletion_successful">U fshi krejt dosja e shënimeve</string>
   <string name="notes_deletion_unsuccessful">Disa kartela s’u fshinë</string>
-  <string name="books_count">\%d libër(a)</string>
+  <string name="books_count">%d libër(a)</string>
   <string name="discovery_initiated">Nisi pikasja</string>
   <string name="discovery_failed">Pikasja dështoi</string>
   <string name="severe_loss_error">Gabim shërbyesi! Provoni të Çaktivizoni/Riaktivizoni WiFi P2P</string>
@@ -231,11 +229,11 @@
   <string name="discovery_needs_location">Pa shërbime vendndodhje s’mund të zbulohen ortakë</string>
   <string name="request_enable_wifi">Aktivizoni WiFi P2P që nga rregullimet e sistemit</string>
   <string name="discovery_needs_wifi">S’mund të zbulohen ortakë pa WiFi-n ON</string>
-  <string name="transfer_to">Të shpërngulen kartela te \%s?</string>
+  <string name="transfer_to">Të shpërngulen kartela te %s?</string>
   <string name="device_not_cooperating">Pajisja e përzgjedhur s’po bashkëpunon për shpërnguljen</string>
   <string name="file_transfer_complete">Shpërngulje kartelash e plotësuar</string>
   <string name="error_during_transfer">U has një gabim gjatë shpërnguljes</string>
-  <string name="error_transferring">Gabim në shpërnguljen e kartelës \%s</string>
+  <string name="error_transferring">Gabim në shpërnguljen e kartelës %s</string>
   <string name="get_content_from_nearby_device">Merr lëndë prej pajisjes atypari</string>
   <string name="search_for_peers">Kërko Për Ortakë</string>
   <string name="your_device">Pajisja Juaj:</string>

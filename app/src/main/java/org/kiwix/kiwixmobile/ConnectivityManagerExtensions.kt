@@ -19,9 +19,9 @@
 package org.kiwix.kiwixmobile
 
 import android.net.ConnectivityManager
-import org.kiwix.kiwixmobile.zim_manager.NetworkState
-import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
-import org.kiwix.kiwixmobile.zim_manager.NetworkState.NOT_CONNECTED
+import org.kiwix.kiwixmobile.zimManager.NetworkState
+import org.kiwix.kiwixmobile.zimManager.NetworkState.CONNECTED
+import org.kiwix.kiwixmobile.zimManager.NetworkState.NOT_CONNECTED
 
 val ConnectivityManager.networkState: NetworkState
   get() = if (activeNetworkInfo?.isConnected == true)

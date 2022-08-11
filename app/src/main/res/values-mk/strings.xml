@@ -8,4 +8,5 @@
   <string name="cannot_open_file">Не можев да ја отворам податотеката\nВидете дали можете да ја најдете во јазичето „Уред“ на вашата Библиотека</string>
   <string name="send_files_title">Испраќање на податотеки</string>
   <string name="receive_files_title">Примање на податотеки</string>
+  <string name="no_app_found_to_open">Не пронајдов прилог за избирање на ZIM-податотека!</string>
 </resources>

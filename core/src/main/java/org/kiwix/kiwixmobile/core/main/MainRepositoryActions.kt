@@ -22,6 +22,7 @@ import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import javax.inject.Inject
 
 private const val TAG = "MainPresenter"
@@ -41,6 +42,17 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
 
   fun deleteBookmark(bookmarkUrl: String) {
     dataSource.deleteBookmark(bookmarkUrl)
-      .subscribe({}, { e -> Log.e(TAG, "Unable to delete bookmark", e) })
+      ?.subscribe({}, { e -> Log.e(TAG, "Unable to delete bookmark", e) })
+      ?: Log.e(TAG, "Unable to delete bookmark")
+  }
+
+  fun saveNote(note: NoteListItem) {
+    dataSource.saveNote(note)
+      .subscribe({}, { e -> Log.e(TAG, "Unable to save note", e) })
+  }
+
+  fun deleteNote(noteUniqueKey: String) {
+    dataSource.deleteNote(noteUniqueKey)
+      .subscribe({}, { e -> Log.e(TAG, "Unable to delete note", e) })
   }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* GuoPC
 * Lynzrand
 * StarrySky
 -->
@@ -9,4 +10,5 @@
   <string name="cannot_open_file">未能打开文件\n请尝试在图书馆界面的“设备”选项卡中寻找这个文件</string>
   <string name="send_files_title">发送文件</string>
   <string name="receive_files_title">接收文件</string>
+  <string name="no_app_found_to_open">没有找到选择 ZIM 文件的应用程序！</string>
 </resources>

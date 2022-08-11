@@ -112,16 +112,19 @@ class WifiDirectManager @Inject constructor(
   private fun unregisterWifiDirectBroadcastReceiver() = context.unregisterReceiver(receiver)
 
   fun discoverPeerDevices() {
-    manager?.discoverPeers(channel, object : ActionListener {
-      override fun onSuccess() {
-        context.toast(R.string.discovery_initiated, Toast.LENGTH_SHORT)
-      }
+    manager?.discoverPeers(
+      channel,
+      object : ActionListener {
+        override fun onSuccess() {
+          context.toast(R.string.discovery_initiated, Toast.LENGTH_SHORT)
+        }
 
-      override fun onFailure(reason: Int) {
-        Log.d(TAG, "${context.getString(R.string.discovery_failed)}: ${getErrorMessage(reason)}")
-        context.toast(R.string.discovery_failed, Toast.LENGTH_SHORT)
+        override fun onFailure(reason: Int) {
+          Log.d(TAG, "${context.getString(R.string.discovery_failed)}: ${getErrorMessage(reason)}")
+          context.toast(R.string.discovery_failed, Toast.LENGTH_SHORT)
+        }
       }
-    })
+    )
   }
 
   /* From KiwixWifiP2pBroadcastReceiver.P2pEventListener callback-interface*/
@@ -188,7 +191,8 @@ class WifiDirectManager @Inject constructor(
           hasSenderStartedConnection = true
           connect(senderSelectedPeerDevice)
           context.toast(R.string.performing_handshake, Toast.LENGTH_LONG)
-        })
+        }
+      )
     }
   }
 
@@ -197,17 +201,21 @@ class WifiDirectManager @Inject constructor(
       deviceAddress = senderSelectedPeerDevice.deviceAddress
       wps.setup = WpsInfo.PBC
     }
-    manager?.connect(channel, config, object : ActionListener {
-      override fun onSuccess() {
-        // UI updated from broadcast receiver
-      }
+    manager?.connect(
+      channel,
+      config,
+      object : ActionListener {
+        override fun onSuccess() {
+          // UI updated from broadcast receiver
+        }
 
-      override fun onFailure(reason: Int) {
-        val errorMessage = getErrorMessage(reason)
-        Log.d(TAG, context.getString(R.string.connection_failed) + ": " + errorMessage)
-        context.toast(R.string.connection_failed, Toast.LENGTH_LONG)
+        override fun onFailure(reason: Int) {
+          val errorMessage = getErrorMessage(reason)
+          Log.d(TAG, context.getString(R.string.connection_failed) + ": " + errorMessage)
+          context.toast(R.string.connection_failed, Toast.LENGTH_LONG)
+        }
       }
-    })
+    )
   }
 
   private fun performHandshakeWith(groupInfo: WifiP2pInfo) {
@@ -291,17 +299,20 @@ class WifiDirectManager @Inject constructor(
   }
 
   private fun disconnect() {
-    manager?.removeGroup(channel, object : ActionListener {
-      override fun onFailure(reasonCode: Int) {
-        Log.d(TAG, "Disconnect failed. Reason: $reasonCode")
-        closeChannel()
-      }
+    manager?.removeGroup(
+      channel,
+      object : ActionListener {
+        override fun onFailure(reasonCode: Int) {
+          Log.d(TAG, "Disconnect failed. Reason: $reasonCode")
+          closeChannel()
+        }
 
-      override fun onSuccess() {
-        Log.d(TAG, "Disconnect successful")
-        closeChannel()
+        override fun onSuccess() {
+          Log.d(TAG, "Disconnect successful")
+          closeChannel()
+        }
       }
-    })
+    )
   }
 
   private fun closeChannel() {

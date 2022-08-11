@@ -34,7 +34,7 @@ import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragment
 import org.kiwix.kiwixmobile.settings.KiwixSettingsFragment
 import org.kiwix.kiwixmobile.webserver.ZimHostFragment
 import org.kiwix.kiwixmobile.webserver.ZimHostModule
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
+import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 
 @ActivityScope
 @Subcomponent(

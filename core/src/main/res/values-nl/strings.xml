@@ -23,7 +23,7 @@
   <string name="menu_read_aloud_stop">Stoppen met voorlezen</string>
   <string name="save_media">Media opslaan als…</string>
   <string name="save_media_error">Er is een fout opgetreden bij het opslaan van de media!</string>
-  <string name="save_media_saved">Het bestand is opgeslagen als %s in Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Het bestand is opgeslagen als %s in Android/media/org.kiwix…/</string>
   <string name="search_label">Zoeken</string>
   <string name="choose_file">Selecteer een inhoudsbestand (*.zim)</string>
   <string name="open_in_new_tab">Koppeling openen in nieuw tabblad?</string>
@@ -50,8 +50,6 @@
   <string name="undo">Ongedaan maken</string>
   <string name="bookmark_added">Bladwijzer toegevoegd</string>
   <string name="rate_dialog_title">Beoordeel ons alstublieft</string>
-  <string name="rate_dialog_msg_1">Als u geniet van het gebruik van</string>
-  <string name="rate_dialog_msg_2">, geef dan even een beoordeling. Dank u wel voor uw steun!</string>
   <string name="rate_dialog_positive">Beoordelen!</string>
   <string name="no_thanks">Nee, bedankt</string>
   <string name="rate_dialog_neutral">Later</string>
@@ -94,7 +92,7 @@
   <string name="running_state">In behandeling</string>
   <string name="complete">Afgerond</string>
   <string name="paused_state">Gepauzeerd</string>
-  <string name="failed_state">Mislukt: \%s</string>
+  <string name="failed_state">Mislukt: %s</string>
   <string name="save">Opslaan</string>
   <string name="note">Opmerking</string>
   <string name="file_transfer_complete">Bestandsoverdracht compleet</string>

@@ -4,7 +4,21 @@
     <ignore path="**-qq/**.xml" />
     <ignore path="**-iw/**.xml" />
   </issue>
-
+  <issue id="LintError">
+    <ignore regexp=".*BookmarksRobot.kt.*"/>
+    <ignore regexp=".*DebugFunctions.kt.*"/>
+    <ignore regexp=".*HistoryRobot.kt.*"/>
+    <ignore regexp=".*IntroRobot.kt.*"/>
+    <ignore regexp=".*LanguageRobot.kt.*"/>
+    <ignore regexp=".*LibraryRobot.kt.*"/>
+    <ignore regexp=".*LocalFileTransferRobot.kt.*"/>
+    <ignore regexp=".*OnlineLibraryRobot.kt.*"/>
+    <ignore regexp=".*ReaderRobot.kt.*"/>
+    <ignore regexp=".*SettingsRobot.kt.*"/>
+    <ignore regexp=".*TopLevelDestinationRobot.kt.*"/>
+    <ignore regexp=".*ZimHostRobot.kt.*"/>
+    <ignore regexp=".*SearchRobot.kt.*"/>
+  </issue>
   <issue id="TypographyEllipsis">
     <ignore path="**-iw/**.xml" />
   </issue>
@@ -15,17 +29,16 @@
   <issue id="Typos">
     <ignore path="**/values-tr/**.xml" />
   </issue>
-
   <issue id="InvalidPackage">
     <ignore path="**simple-xml-2.7.1.jar" />
-    <ignore path="**/squidb*.jar" />
+    <ignore path="**javapoet-1.8.0.jar" />
+    <ignore path="**/org.jacoco.agent-0.8.7-runtime.jar" />
   </issue>
   <issue id="IconLocation">
     <ignore path="src/main/res/drawable/kiwix_icon_with_title.png" />
-    <ignore path="src/main/res/drawable/search_widget_preview.png" />
+    <ignore path="core/src/main/res/drawable/search_widget_preview.png" />
   </issue>
   <issue id="ConvertToWebp">
     <ignore path="src/main/res/drawable/search_widget_preview.png" />
   </issue>
-
 </lint>

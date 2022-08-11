@@ -33,7 +33,7 @@ class SenderHandShake(private val wifiDirectManager: WifiDirectManager, groupInf
         // Send total number of files which will be transferred
         objectOutputStream.writeObject(wifiDirectManager.totalFilesForTransfer)
         // Send the names of each of those files, in order
-        wifiDirectManager.getFilesForTransfer().forEach { fileItem ->
+        wifiDirectManager.getFilesForTransfer().iterator().forEach { fileItem ->
           objectOutputStream.writeObject(fileItem.fileName)
           Log.d(TAG, "Sending " + fileItem.fileUri.toString())
         }

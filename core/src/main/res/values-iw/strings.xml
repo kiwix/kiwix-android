@@ -25,7 +25,7 @@
   <string name="menu_wifi_hotspot">לארח ספרים</string>
   <string name="save_media">שמירת מדיה</string>
   <string name="save_media_error">אירעה שגיאה בעת ניסיון לשמור את המדיה!</string>
-  <string name="save_media_saved">המדיה נשמרה בתור %s אל Android/media/org.kiwix…/‎</string>
+  <string name="save_media_saved">המדיה נשמרה בתור %s לתיקייה Android/media/org.kiwix…/‎</string>
   <string name="search_label">חיפוש</string>
   <string name="choose_file">בחירת קובץ תוכן (‎*.zim)</string>
   <string name="open_in_new_tab">לפתוח קישור בלשונית חדשה?</string>
@@ -56,9 +56,10 @@
   <string name="server_started_message">יש להזין את כתובת ה־IP הזאת לדפדפן שלך כדי לגשת לשרת %s</string>
   <string name="share_host_address">שיתוף URL דרך יישומים אחרים</string>
   <string name="error_file_not_found">שגיאה: קובץ ה־ZIM שנבחר לא נמצא.</string>
+  <string name="unable_to_read_zim_file">לא ניתן לקרוא מקובץ ה־zim הזה!</string>
   <string name="zim_not_opened">לא ניתן לפתוח את קובץ ה־zim</string>
   <string name="error_file_invalid">שגיאה: הקובץ שנבחר אינו קובץ ZIM תקין.</string>
-  <string name="error_article_url_not_found">שגיאה: טעינת הערך נכשלה (כתובת: %1$s\).</string>
+  <string name="error_article_url_not_found">שגיאה: טעינת הערך נכשלה (כתובת: %1$s).</string>
   <string name="pref_display_title">תצוגה</string>
   <string name="pref_info_title">מידע</string>
   <string name="pref_info_version">גרסה</string>
@@ -74,6 +75,7 @@
   <string name="no_reader_application_installed">לא נמצאה אפליקציה מותקנת עבור סוג הקובץ הזה</string>
   <string name="no_section_info">לא נמצאו כותרות תוכן</string>
   <string name="request_storage">כדי לגשת לתכנים לא־מקוונים אנחנו צריכים גישה לאחסון שלך</string>
+  <string name="request_write_storage">כדי להוריד קובצי zim, אנחנו זקוקים להרשאת גישה לאחסון שלך.</string>
   <string name="clear_recent_and_tabs_history_dialog">למחוק את היסטוריית החיפוש ולאפס את כל הלשוניות הפעילות?</string>
   <string name="delete_recent_search_item">למחוק את הפריט הזה?</string>
   <string name="pref_clear_all_history_title">ניקוי ההיסטוריה</string>
@@ -95,8 +97,6 @@
   <string name="tab_closed">לשונית נסגרה</string>
   <string name="bookmark_added">הסימנייה נוספה</string>
   <string name="rate_dialog_title">אנא דרגו אותנו</string>
-  <string name="rate_dialog_msg_1">אם אתם נהנים להשתמש</string>
-  <string name="rate_dialog_msg_2">, אנא הקדישו רגע ודרגו את התכונה הזאת. תודה על התמיכה!</string>
   <string name="rate_dialog_positive">דירוג!</string>
   <string name="no_thanks">לא, תודה</string>
   <string name="rate_dialog_neutral">פעם אחרת</string>
@@ -107,12 +107,12 @@
   <string name="pref_extras">תוספות</string>
   <string name="new_tab_snack_bar">הערך נפתח בלשונית חדשה</string>
   <string name="search_widget_text">חיפוש בקיוויקס</string>
-  <string name="speech_prompt_text">יש לדבר כדי לחפש \%s</string>
+  <string name="speech_prompt_text">יש לדבר כדי לחפש %s</string>
   <string name="speech_not_supported">המכשיר שלך אינו תומך בקלט דיבור, עמך הסליחה</string>
   <string name="local_zims">מכשיר</string>
   <string name="remote_zims">מקוון</string>
   <string name="library">ספרייה</string>
-  <string name="delete_zim_body">קובצי ה־zim הבאים יימחקו:n\n\%\s</string>
+  <string name="delete_zim_body">קובצי ה־zim הבאים יימחקו:\n\n%s</string>
   <string name="delete_zims_toast">הקבצים נמחקו בהצלחה</string>
   <string name="no_files_here">אין כאן קבצים</string>
   <string name="download_no_space">אין מספיק מקום להורדה.</string>
@@ -123,8 +123,8 @@
   <string name="zim_no_vid">אין סרטונים</string>
   <string name="no_network_connection">אין חיבור לרשת</string>
   <string name="help_2">מה קיוויקס עושה?</string>
-  <string name="help_3">קיוויקס היא תוכנה להצגת תוכן באופן לא-מקוון. היא פועלת כמעט כמו דפדפן אינטרנט, אך במקום גישה לדפי אינטרנט מקוונים, היא מאפשרת קריאת תוכן מקבצים בפורמט ZIM.</string>
-  <string name="help_4">בעוד שקיוויקס נועדה במקור לספק את תוכני האתר ויקיפדיה באופן לא־מקוון, היא מאפשרת גם קריאת תכנים נוספים.</string>
+  <string name="help_3">קיוויקס היא תוכנה להצגת תוכן ללא חיבור לרשת. היא פועלת כמעט כמו דפדפן, אך במקום גישה לדפי אינטרנט מקוונים, היא מאפשרת קריאת תוכן מקבצים בפורמט ZIM.</string>
+  <string name="help_4">בעוד שקיוויקס נועדה במקור לספק את תוכני ויקיפדיה ללא חיבור לרשת, היא מאפשרת גם קריאת תכנים נוספים.</string>
   <string name="help_5">איפה התוכן?</string>
   <string name="help_6">התוכן שלנו מתארח באתר של קיוויקס.</string>
   <string name="help_7">הם זמינים כקבצי ZIM. ישנם קבצים רבים כאלו:</string>
@@ -198,7 +198,7 @@
   <string name="history">היסטוריה</string>
   <string name="history_from_current_book">צפייה בהיסטוריה מכל הספרים</string>
   <string name="search_history">חיפוש בהיסטוריה</string>
-  <string name="selected_items">נבחרו %1$d\</string>
+  <string name="selected_items">נבחרו %1$d</string>
   <string name="bookmarks_from_current_book">הצגת סימניות מכל הספרים</string>
   <string name="search_bookmarks">חיפוש סימניות</string>
   <string name="switch_tabs">החלפת כרטיסיות</string>
@@ -207,7 +207,7 @@
   <string name="running_state">בעבודה</string>
   <string name="complete">הושלם</string>
   <string name="paused_state">מושהה</string>
-  <string name="failed_state">נכשל: %\s</string>
+  <string name="failed_state">נכשל: %s</string>
   <string name="save">שמירה</string>
   <string name="note">הערה</string>
   <string name="wiki_article_title">כותרת ערך בוויקי</string>
@@ -225,7 +225,7 @@
   <string name="ext_storage_permission_not_granted">שגיאה: לא ניתנה הרשאה לאחסון</string>
   <string name="notes_deletion_successful">כל תיקיית ההערות נמחקה</string>
   <string name="notes_deletion_unsuccessful">קבצים אחדים לא נמחקו</string>
-  <string name="books_count">מספר הספרים: %\d</string>
+  <string name="books_count">מספר הספרים: %d</string>
   <string name="discovery_initiated">תהליך הגילוי התחיל</string>
   <string name="discovery_failed">תהליך הגילוי נכשל</string>
   <string name="severe_loss_error">שגיאה חמורה! נא לנסות לכבות ולהדליק מחדש את ה־P2P בווייפיי</string>
@@ -238,11 +238,11 @@
   <string name="discovery_needs_location">לא ניתן לזהות עמיתים ללא שירותי מיקום</string>
   <string name="request_enable_wifi">נא להפעיל P2P בווייפיי בהגדרות המערכת</string>
   <string name="discovery_needs_wifi">לא ניתן לגלות עמיתים בלי שהווייפיי מופעל</string>
-  <string name="transfer_to">להעביר קבצים אל %\s?</string>
+  <string name="transfer_to">להעביר קבצים אל %s?</string>
   <string name="device_not_cooperating">המכשיר שנבחר לא משתף פעולה עם ההעברה</string>
   <string name="file_transfer_complete">העברת הקובץ הושלמה</string>
   <string name="error_during_transfer">אירעה שגיאה בעת ההעברה</string>
-  <string name="error_transferring">שגיאה בהעברת הקובץ \%s</string>
+  <string name="error_transferring">שגיאה בהעברת הקובץ %s</string>
   <string name="get_content_from_nearby_device">קבלת תוכן ממכשיר בסביבה</string>
   <string name="search_for_peers">חיפוש עמיתים</string>
   <string name="your_device">המכשיר שלך:</string>
@@ -293,4 +293,17 @@
   <string name="all_files_permission_needed_message">כדי לגשת לכל קובצי ה־zim במכשיר, אנחנו זקוקים להרשאת כל הקבצים</string>
   <string name="allowed">מותר</string>
   <string name="not_allowed">אסור</string>
+  <string name="denied_internet_permission_message">נא להפעיל וייפיי כדי להוריד תוכן</string>
+  <string name="select_folder">נא לבחור תיקייה לאחסון חיצוני.</string>
+  <string name="system_unable_to_grant_permission_message">המערכת אינה יכולה לתת הרשאה!</string>
+  <string name="allow">לאפשר</string>
+  <string name="allow_internet_permission_message">נא לאפשר הרשאת אינטרנט כדי להוריד תוכן</string>
+  <string name="no_notes">אין הערות</string>
+  <string name="notes_from_all_books">הצגת הערות מכל הספרים</string>
+  <string name="search_notes">חיפוש בהערות</string>
+  <string name="choose_your_action">נא לבחור את הפעולה שלך</string>
+  <string name="open_note">פתיחת הערה</string>
+  <string name="open_article">פתיחת ערך</string>
+  <string name="delete_note_dialog_message">הערה: הערות אינן נמחקות מהאחסון שלך</string>
+  <string name="delete_selected_notes">למחוק את ההערות הנבחרות?</string>
 </resources>

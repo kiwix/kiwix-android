@@ -762,7 +762,7 @@ public abstract class CoreReaderFragment extends BaseFragment
     if (activityMainRoot != null) {
       return new ToolbarScrollingKiwixWebView(
         getActivity(), this, attrs, (ViewGroup) activityMainRoot, videoView,
-        new CoreWebViewClient(this, zimReaderContainer),
+        new CoreWebViewClient(this, zimReaderContainer, sharedPreferenceUtil),
         toolbarContainer, bottomToolbar,
         sharedPreferenceUtil);
     } else {
@@ -944,30 +944,35 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private boolean requestExternalStorageWritePermissionForNotes() {
-    if (Build.VERSION.SDK_INT >= 23) { // For Marshmallow & higher API levels
+    boolean isPermissionGranted = false;
+    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+      if (Build.VERSION.SDK_INT >= 23) { // For Marshmallow & higher API levels
 
-      if (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        == PERMISSION_GRANTED) {
-        return true;
-      } else {
-        if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-          /* shouldShowRequestPermissionRationale() returns false when:
-           *  1) User has previously checked on "Don't ask me again", and/or
-           *  2) Permission has been disabled on device
-           */
-          ContextExtensionsKt.toast(getActivity(),
-            R.string.ext_storage_permission_rationale_add_note,
-            Toast.LENGTH_LONG);
+        if (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+          == PERMISSION_GRANTED) {
+          isPermissionGranted = true;
+        } else {
+          if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            /* shouldShowRequestPermissionRationale() returns false when:
+             *  1) User has previously checked on "Don't ask me again", and/or
+             *  2) Permission has been disabled on device
+             */
+            ContextExtensionsKt.toast(getActivity(),
+              R.string.ext_storage_permission_rationale_add_note,
+              Toast.LENGTH_LONG);
+          }
+
+          requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+            REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE);
         }
-
-        requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-          REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE);
+      } else { // For Android versions below Marshmallow 6.0 (API 23)
+        isPermissionGranted = true; // As already requested at install time
       }
-    } else { // For Android versions below Marshmallow 6.0 (API 23)
-      return true; // As already requested at install time
+    } else {
+      isPermissionGranted = true;
     }
 
-    return false;
+    return isPermissionGranted;
   }
 
   @SuppressWarnings("SameReturnValue")
@@ -1032,6 +1037,9 @@ public abstract class CoreReaderFragment extends BaseFragment
   }
 
   private boolean hasPermission(String permission) {
+    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+      return true;
+    }
     return ContextCompat.checkSelfPermission(getActivity(), permission) == PERMISSION_GRANTED;
   }
 
@@ -1057,13 +1065,13 @@ public abstract class CoreReaderFragment extends BaseFragment
       if (mainMenu != null) {
         mainMenu.onFileOpened(urlIsValid());
       }
-      openArticle(UNINITIALISER_ADDRESS);
+      openArticle(zimFileReader.getMainPage());
       safeDispose();
       bookmarkingDisposable = Flowable.combineLatest(
-        newBookmarksDao.bookmarkUrlsForCurrentBook(zimFileReader),
-        webUrlsProcessor,
-        (bookmarkUrls, currentUrl) -> bookmarkUrls.contains(currentUrl)
-      ).observeOn(AndroidSchedulers.mainThread())
+          newBookmarksDao.bookmarkUrlsForCurrentBook(zimFileReader),
+          webUrlsProcessor,
+          (bookmarkUrls, currentUrl) -> bookmarkUrls.contains(currentUrl)
+        ).observeOn(AndroidSchedulers.mainThread())
         .subscribe(isBookmarked -> {
             this.isBookmarked = isBookmarked;
             bottomToolbarBookmark.setImageResource(
@@ -1116,7 +1124,7 @@ public abstract class CoreReaderFragment extends BaseFragment
           showAddNoteDialog();
         } else {
           Toast.makeText(getActivity().getApplicationContext(),
-            getString(R.string.ext_storage_write_permission_denied_add_note), Toast.LENGTH_LONG)
+              getString(R.string.ext_storage_write_permission_denied_add_note), Toast.LENGTH_LONG)
             .show();
         }
 
@@ -1232,12 +1240,15 @@ public abstract class CoreReaderFragment extends BaseFragment
       }
       case CoreSearchWidget.TEXT_CLICKED:
         goToSearch(false);
+        intent.setAction(null);
         break;
       case CoreSearchWidget.STAR_CLICKED:
         goToBookmarks();
+        intent.setAction(null);
         break;
       case CoreSearchWidget.MIC_CLICKED:
         goToSearch(true);
+        intent.setAction(null);
         break;
       case Intent.ACTION_VIEW:
         if (intent.getType() == null || !intent.getType().equals("application/octet-stream")) {
@@ -1473,8 +1484,10 @@ public abstract class CoreReaderFragment extends BaseFragment
 
   @Override
   public void webViewFailedLoading(String url) {
-    String error = String.format(getString(R.string.error_article_url_not_found), url);
-    Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+    if (isAdded()) {
+      String error = String.format(getString(R.string.error_article_url_not_found), url);
+      Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+    }
   }
 
   @Override

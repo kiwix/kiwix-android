@@ -151,13 +151,15 @@ class CustomReaderFragment : CoreReaderFragment() {
             it.zimFile.delete()
             openZimFile(it.obbFile)
           }
+          else -> {}
         }
       },
       onNoFilesFound = {
         if (ContextCompat.checkSelfPermission(
             requireActivity(),
             READ_EXTERNAL_STORAGE
-          ) == PERMISSION_DENIED
+          ) == PERMISSION_DENIED &&
+          !sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()
         ) {
           requestPermissions(arrayOf(READ_EXTERNAL_STORAGE), REQUEST_READ_FOR_OBB)
         } else {
@@ -183,9 +185,11 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   private fun goToSettings() {
-    startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-      data = Uri.fromParts("package", activity?.packageName, null)
-    })
+    startActivity(
+      Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+        data = Uri.fromParts("package", activity?.packageName, null)
+      }
+    )
   }
 
   private fun readStorageHasBeenPermanentlyDenied(grantResults: IntArray) =

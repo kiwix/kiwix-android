@@ -34,9 +34,11 @@ sealed class KiwixDialog(
   val getView: (() -> View)? = null
 ) {
 
-  data class DeleteZims(override val args: List<Any>) : KiwixDialog(
-    null, R.string.delete_zim_body, R.string.delete, R.string.no
-  ), HasBodyFormatArgs {
+  data class DeleteZims(override val args: List<Any>) :
+    KiwixDialog(
+      null, R.string.delete_zim_body, R.string.delete, R.string.no
+    ),
+    HasBodyFormatArgs {
     constructor(zimNameList: String) : this(listOf(zimNameList))
   }
 
@@ -48,6 +50,13 @@ sealed class KiwixDialog(
   )
 
   object LocationPermissionRationaleOnHostZimFile : KiwixDialog(
+    null,
+    R.string.permission_rationale_location_on_host_zim_file,
+    android.R.string.yes,
+    android.R.string.cancel
+  )
+
+  object NearbyWifiPermissionRationaleOnHostZimFile : KiwixDialog(
     null,
     R.string.permission_rationale_location_on_host_zim_file,
     android.R.string.yes,
@@ -99,12 +108,14 @@ sealed class KiwixDialog(
     cancelable = false
   )
 
-  data class ShowHotspotDetails(override val args: List<Any>) : KiwixDialog(
-    R.string.hotspot_turned_on,
-    R.string.hotspot_details_message,
-    android.R.string.ok,
-    null
-  ), HasBodyFormatArgs {
+  data class ShowHotspotDetails(override val args: List<Any>) :
+    KiwixDialog(
+      R.string.hotspot_turned_on,
+      R.string.hotspot_details_message,
+      android.R.string.ok,
+      null
+    ),
+    HasBodyFormatArgs {
     constructor(wifiConfiguration: WifiConfiguration) : this(
       listOf(wifiConfiguration.SSID, wifiConfiguration.preSharedKey)
     )
@@ -125,9 +136,11 @@ sealed class KiwixDialog(
     neutralMessage = R.string.hotspot_dialog_neutral_button
   )
 
-  data class FileTransferConfirmation(override val args: List<Any>) : KiwixDialog(
-    null, R.string.transfer_to, R.string.yes, android.R.string.cancel
-  ), HasBodyFormatArgs {
+  data class FileTransferConfirmation(override val args: List<Any>) :
+    KiwixDialog(
+      null, R.string.transfer_to, R.string.yes, android.R.string.cancel
+    ),
+    HasBodyFormatArgs {
     constructor(selectedPeerDeviceName: String) : this(listOf(selectedPeerDeviceName))
   }
 
@@ -153,7 +166,7 @@ sealed class KiwixDialog(
   data class ShowRate(override val args: List<Any>, val customIcon: Int?) :
     KiwixDialog(
       R.string.rate_dialog_title,
-      R.string.triple_arg_format_string,
+      R.string.single_arg_format_string,
       R.string.rate_dialog_positive,
       R.string.no_thanks,
       icon = customIcon,
@@ -162,9 +175,10 @@ sealed class KiwixDialog(
     HasBodyFormatArgs {
     constructor(icon: Int?, activity: Activity) : this(
       listOf(
-        activity.getString(R.string.rate_dialog_msg_1),
-        activity.getString(R.string.app_name),
-        activity.getString(R.string.rate_dialog_msg_2)
+        String.format(
+          activity.getString(R.string.rate_dialog_msg),
+          activity.getString(R.string.app_name)
+        )
       ),
       icon
     )
@@ -224,6 +238,14 @@ sealed class KiwixDialog(
     )
   }
 
+  object StorageConfigure : KiwixDialog(
+    R.string.configure_storage_option,
+    null,
+    positiveMessage = R.string.configure,
+    negativeMessage = R.string.yes,
+    icon = R.drawable.ic_baseline_storage_24
+  )
+
   object DeleteSelectedHistory : KiwixDialog(
     R.string.delete_selected_history,
     null,
@@ -250,6 +272,27 @@ sealed class KiwixDialog(
     null,
     positiveMessage = R.string.delete,
     negativeMessage = R.string.cancel
+  )
+
+  object DeleteAllNotes : KiwixDialog(
+    R.string.delete_notes_confirmation_msg,
+    R.string.delete_note_dialog_message,
+    positiveMessage = R.string.delete,
+    negativeMessage = R.string.cancel
+  )
+
+  object DeleteSelectedNotes : KiwixDialog(
+    R.string.delete_selected_notes,
+    R.string.delete_note_dialog_message,
+    positiveMessage = R.string.delete,
+    negativeMessage = R.string.cancel
+  )
+
+  object ShowNoteDialog : KiwixDialog(
+    R.string.choose_your_action,
+    null,
+    positiveMessage = R.string.open_article,
+    negativeMessage = R.string.open_note
   )
 }
 

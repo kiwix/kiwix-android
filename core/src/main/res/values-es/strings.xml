@@ -33,7 +33,7 @@
   <string name="menu_wifi_hotspot">Punto de acceso WiFi</string>
   <string name="save_media">Guardar multimedia</string>
   <string name="save_media_error">¡Se produjo un error al intentar guardar los medios!</string>
-  <string name="save_media_saved">Multimedia guardado como %s en Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Multimedia guardado como %s en Android/media/org.kiwix…/</string>
   <string name="search_label">Buscar</string>
   <string name="choose_file">Selecciona un archivo de contenido (*.zim)</string>
   <string name="open_in_new_tab">¿Abrir enlace en una nueva pestaña?</string>
@@ -103,8 +103,6 @@
   <string name="tab_closed">Pestaña cerrada</string>
   <string name="bookmark_added">Marcador agregado</string>
   <string name="rate_dialog_title">Califícanos</string>
-  <string name="rate_dialog_msg_1">Si disfrutas usar</string>
-  <string name="rate_dialog_msg_2">, toma un momento para calificarla. ¡Gracias por tu apoyo!</string>
   <string name="rate_dialog_positive">¡Califica!</string>
   <string name="no_thanks">No, gracias</string>
   <string name="rate_dialog_neutral">Después</string>
@@ -115,12 +113,12 @@
   <string name="pref_extras">Extras</string>
   <string name="new_tab_snack_bar">Artículo abierto en una pestaña nueva</string>
   <string name="search_widget_text">Buscar en Kiwix</string>
-  <string name="speech_prompt_text">Habla para buscar \%s</string>
+  <string name="speech_prompt_text">Habla para buscar %s</string>
   <string name="speech_not_supported">Tu dispositivo no admite entrada de voz</string>
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">En línea</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_zim_body">Los siguientes archivos ZIM serán eliminados:\n\n\%s</string>
+  <string name="delete_zim_body">Los siguientes archivos ZIM serán eliminados:\n\n%s</string>
   <string name="delete_zims_toast">Archivo eliminado</string>
   <string name="no_files_here">Ningún archivo aquí</string>
   <string name="download_no_space">No queda espacio suficiente para la descarga.</string>
@@ -215,7 +213,7 @@
   <string name="running_state">En proceso</string>
   <string name="complete">Completado</string>
   <string name="paused_state">En pausa</string>
-  <string name="failed_state">Error: \%s</string>
+  <string name="failed_state">Error: %s</string>
   <string name="save">Guardar</string>
   <string name="note">Nota</string>
   <string name="wiki_article_title">Título del artículo de la wiki</string>
@@ -233,7 +231,7 @@
   <string name="ext_storage_permission_not_granted">Error: no se concedió el permiso de almacenamiento</string>
   <string name="notes_deletion_successful">Carpeta de notas eliminada</string>
   <string name="notes_deletion_unsuccessful">No se borraron algunos artículos</string>
-  <string name="books_count">\%d libros</string>
+  <string name="books_count">%d libros</string>
   <string name="discovery_initiated">Descubrimiento iniciado</string>
   <string name="discovery_failed">Descubrimiento fallido</string>
   <string name="severe_loss_error">¡Error grave! Prueba inhabilitando / rehabilitando WiFi punto a punto</string>
@@ -246,11 +244,11 @@
   <string name="discovery_needs_location">No se pueden descubrir pares sin servicios de ubicación</string>
   <string name="request_enable_wifi">Habilita WiFi punto a punt en ajustes del sistema</string>
   <string name="discovery_needs_wifi">No se pueden descubrir compañeros sin WiFi ON</string>
-  <string name="transfer_to">Transferir archivos a \%s?</string>
+  <string name="transfer_to">Transferir archivos a %s?</string>
   <string name="device_not_cooperating">El dispositivo seleccionado no coopera para la transferencia</string>
   <string name="file_transfer_complete">Transferencia de archivo completada</string>
   <string name="error_during_transfer">Se encontró un error durante la transferencia</string>
-  <string name="error_transferring">Error al transferir el archivo \%s</string>
+  <string name="error_transferring">Error al transferir el archivo %s</string>
   <string name="get_content_from_nearby_device">Obtener contenido de un dispositivo cercano</string>
   <string name="search_for_peers">Buscar compañeros</string>
   <string name="your_device">Tu dispositivo:</string>
@@ -289,4 +287,6 @@
   <string name="tab_restored">Pestaña restaurada</string>
   <string name="close_drawer">Cerrar cajón</string>
   <string name="how_to_update_content">¿Cómo actualizar contenido?</string>
+  <string name="system_unable_to_grant_permission_message">Sistema incapaz de conceder permiso!</string>
+  <string name="allow">Permitir</string>
 </resources>

@@ -229,7 +229,8 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
     if (CoreApp.getInstance().isExternalStorageWritable()) {
       if (ContextCompat.checkSelfPermission(getActivity(),
         Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        != PackageManager.PERMISSION_GRANTED) {
+        != PackageManager.PERMISSION_GRANTED &&
+        !sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
         Snackbar.make(getView(), R.string.ext_storage_permission_not_granted, Snackbar.LENGTH_SHORT)
           .show();
         return;
@@ -292,19 +293,28 @@ public abstract class CorePrefsFragment extends PreferenceFragmentCompat impleme
       findPreference(PREF_STORAGE).setTitle(getString(R.string.internal_storage));
       sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION);
     } else {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        @SuppressLint("InflateParams") View view = LayoutInflater.from(getActivity()).inflate(R.layout.select_folder_dialog, null);
-        alertDialogShower.show(new KiwixDialog.SelectFolder(() -> view), () -> {
-          selectFolder();
-          return Unit.INSTANCE;
-        });
+      if (sharedPreferenceUtil.isPlayStoreBuild()) {
+        setExternalStoragePath(storageDevice);
       } else {
-        sharedPreferenceUtil.putPrefStorage(storageDevice.getName());
-        findPreference(PREF_STORAGE).setTitle(getString(R.string.external_storage));
-        sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+          @SuppressLint("InflateParams") View view =
+            LayoutInflater.from(getActivity()).inflate(R.layout.select_folder_dialog, null);
+          alertDialogShower.show(new KiwixDialog.SelectFolder(() -> view), () -> {
+            selectFolder();
+            return Unit.INSTANCE;
+          });
+        } else {
+          setExternalStoragePath(storageDevice);
+        }
       }
     }
     return Unit.INSTANCE;
+  }
+
+  private void setExternalStoragePath(StorageDevice storageDevice) {
+    sharedPreferenceUtil.putPrefStorage(storageDevice.getName());
+    findPreference(PREF_STORAGE).setTitle(getString(R.string.external_storage));
+    sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION);
   }
 
   private void selectFolder() {

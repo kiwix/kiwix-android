@@ -59,8 +59,6 @@
   <string name="tab_closed">เปิดแท็บแล้ว</string>
   <string name="bookmark_added">เพิ่มบุ๊คมาร์คแล้ว</string>
   <string name="rate_dialog_title">โปรดให้คะแนนเรา</string>
-  <string name="rate_dialog_msg_1">ถ้าคุณชอบใช้</string>
-  <string name="rate_dialog_msg_2">ได้โปรดสละเวลาสักเล็กน้อยเพื่อให้คะแนน ขอบคุณที่สนับสนุนเรา!</string>
   <string name="rate_dialog_positive">ให้คะแนน</string>
   <string name="no_thanks">ไม่ ขอบคุณ</string>
   <string name="rate_dialog_neutral">ทีหลัง</string>

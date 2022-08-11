@@ -17,7 +17,8 @@
       android:configChanges="orientation|keyboardHidden|screenSize|locale"
       android:theme="@style/KiwixTheme.Launcher"
       android:label="@string/app_name"
-      android:windowSoftInputMode="adjustPan">
+      android:windowSoftInputMode="adjustPan"
+      android:exported="true">
       <meta-data
         android:name="android.app.shortcuts"
         android:resource="@xml/shortcuts" />
@@ -53,7 +54,8 @@
       </intent-filter>
     </activity>
 
-    <receiver android:name=".main.CustomSearchWidget">
+    <receiver android:name=".main.CustomSearchWidget"
+      android:exported="true">
       <intent-filter>
         <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
         <action android:name="KiwixSearchWidget.TEXT_CLICKED" />

@@ -30,7 +30,7 @@
   <string name="menu_wifi_hotspot">Ponto de acesso de Wi-Fi</string>
   <string name="save_media">Guardar conteúdo</string>
   <string name="save_media_error">Ocorreu um erro ao tentar guardar o conteúdo!</string>
-  <string name="save_media_saved">Conteúdo guardado como %s em Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Conteúdo guardado como %s em Android/media/org.kiwix…/</string>
   <string name="search_label">Pesquisar</string>
   <string name="choose_file">Selecionar um ficheiro de conteúdo (*.zim)</string>
   <string name="open_in_new_tab">Abrir ligação num novo separador?</string>
@@ -98,8 +98,6 @@
   <string name="tab_closed">Separador fechado</string>
   <string name="bookmark_added">Marcador adicionado</string>
   <string name="rate_dialog_title">Por Favor, Avalie-Nos</string>
-  <string name="rate_dialog_msg_1">Se gosta de usar</string>
-  <string name="rate_dialog_msg_2">, avalie-o por favor. Obrigado pelo seu apoio!</string>
   <string name="rate_dialog_positive">Avalie!</string>
   <string name="no_thanks">Não, obrigado</string>
   <string name="rate_dialog_neutral">Mais tarde</string>
@@ -110,12 +108,12 @@
   <string name="pref_extras">Extras</string>
   <string name="new_tab_snack_bar">Artigo aberto num novo separador</string>
   <string name="search_widget_text">Procurar no Kiwix</string>
-  <string name="speech_prompt_text">Falar para pesquisar \%s</string>
+  <string name="speech_prompt_text">Falar para pesquisar %s</string>
   <string name="speech_not_supported">Desculpe! O seu dispositivo não suporta entrada de voz</string>
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">Ligado</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_zim_body">Os seguintes ficheiros zim serão eliminados:\n\n\%s</string>
+  <string name="delete_zim_body">Os seguintes ficheiros zim serão eliminados:\n\n%s</string>
   <string name="delete_zims_toast">Ficheiros apagados</string>
   <string name="no_files_here">Não há ficheiros aqui</string>
   <string name="download_no_space">Espaço insuficiente para descarregar este ficheiro.</string>
@@ -210,7 +208,7 @@
   <string name="running_state">Em curso</string>
   <string name="complete">Completo</string>
   <string name="paused_state">Pausado</string>
-  <string name="failed_state">Falhou: \%s</string>
+  <string name="failed_state">Falhou: %s</string>
   <string name="save">Guardar</string>
   <string name="note">Nota</string>
   <string name="wiki_article_title">Título do artigo da wiki</string>
@@ -228,7 +226,7 @@
   <string name="ext_storage_permission_not_granted">Erro: permissões de armazenamento não concedidas</string>
   <string name="notes_deletion_successful">Pasta de notas eliminada</string>
   <string name="notes_deletion_unsuccessful">Alguns ficheiros não foram eliminados</string>
-  <string name="books_count">\%d livro(s)</string>
+  <string name="books_count">%d livro(s)</string>
   <string name="discovery_initiated">Descoberta iniciada</string>
   <string name="discovery_failed">Falha na descoberta</string>
   <string name="connection_failed">Falha na conexão</string>

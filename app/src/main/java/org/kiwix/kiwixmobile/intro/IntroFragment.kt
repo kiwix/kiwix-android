@@ -35,7 +35,7 @@ import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.zim_manager.SimplePageChangeListener
+import org.kiwix.kiwixmobile.zimManager.SimplePageChangeListener
 import java.util.Timer
 import java.util.TimerTask
 import javax.inject.Inject
@@ -72,14 +72,18 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
       addOnPageChangeListener(SimplePageChangeListener(::updateView, ::handleDraggingState))
     }
     tab_indicator.setViewPager(view_pager)
-    timer?.schedule(object : TimerTask() {
-      override fun run() {
-        handler.post {
-          if (currentPage == views.size) currentPage = 0
-          view_pager.setCurrentItem(currentPage++, true)
+    timer?.schedule(
+      object : TimerTask() {
+        override fun run() {
+          handler.post {
+            if (currentPage == views.size) currentPage = 0
+            view_pager.setCurrentItem(currentPage++, true)
+          }
         }
-      }
-    }, timerDelay, timerPeriod)
+      },
+      timerDelay,
+      timerPeriod
+    )
     views.forEach {
       it.setOnClickListener { dismissAutoRotate() }
     }

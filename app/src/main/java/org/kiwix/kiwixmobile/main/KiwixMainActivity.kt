@@ -33,6 +33,7 @@ import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
 import kotlinx.android.synthetic.main.activity_kiwix_main.drawer_nav_view
 import kotlinx.android.synthetic.main.activity_kiwix_main.navigation_container
 import kotlinx.android.synthetic.main.activity_kiwix_main.reader_drawer_nav_view
+import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -54,11 +55,13 @@ class KiwixMainActivity : CoreMainActivity() {
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val settingsFragmentResId: Int = R.id.kiwixSettingsFragment
   override val historyFragmentResId: Int = R.id.historyFragment
+  override val notesFragmentResId: Int = R.id.notesFragment
   override val readerFragmentResId: Int = R.id.readerFragment
   override val helpFragmentResId: Int = R.id.helpFragment
   override val topLevelDestinations =
     setOf(R.id.downloadsFragment, R.id.libraryFragment, R.id.readerFragment)
 
+  private var isIntroScreenVisible: Boolean = false
   override fun injection(coreComponent: CoreComponent) {
     cachedComponent.inject(this)
   }
@@ -97,10 +100,14 @@ class KiwixMainActivity : CoreMainActivity() {
         handleDrawerOnNavigation()
       }
     }
-    if (sharedPreferenceUtil.showIntro()) {
+    if (sharedPreferenceUtil.showIntro() && !isIntroScreenNotVisible()) {
       navigate(KiwixReaderFragmentDirections.actionReaderFragmentToIntroFragment())
     }
+    sharedPreferenceUtil.setIsPlayStoreBuildType(BuildConfig.IS_PLAYSTORE)
   }
+
+  private fun isIntroScreenNotVisible(): Boolean =
+    isIntroScreenVisible.also { isIntroScreenVisible = true }
 
   override fun onSupportActionModeStarted(mode: ActionMode) {
     super.onSupportActionModeStarted(mode)

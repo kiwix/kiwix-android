@@ -22,7 +22,7 @@
   <string name="menu_support_kiwix">Kiwix Pomoč</string>
   <string name="save_media">Shrani predstavnost kot …</string>
   <string name="save_media_error">Pri poskusu shranjevanja medija je prišlo do napake!</string>
-  <string name="save_media_saved">Shrani medij kot %s na Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Shrani medij kot %s na Android/media/org.kiwix…/</string>
   <string name="search_label">Iskanje</string>
   <string name="choose_file">Izberite datoteko z vsebino (*.zim)</string>
   <string name="open_in_new_tab">Odprem povezavo na novem zavihku?</string>
@@ -62,8 +62,6 @@
   <string name="tab_closed">Zavihek je zaprt</string>
   <string name="bookmark_added">Zaznamek je dodan</string>
   <string name="rate_dialog_title">Prosimo, ocenite nas</string>
-  <string name="rate_dialog_msg_1">Če ste uživali ob uporabi</string>
-  <string name="rate_dialog_msg_2">, prosimo vzemite si trenutek in ocenite. Hvala za vašo podporo!</string>
   <string name="rate_dialog_positive">Oceniti!</string>
   <string name="no_thanks">Ne, hvala</string>
   <string name="rate_dialog_neutral">Kasneje</string>
@@ -74,7 +72,7 @@
   <string name="pref_extras">Pripomočki</string>
   <string name="new_tab_snack_bar">Članek odprt na novem zavihku</string>
   <string name="search_widget_text">Iskanje Kiwix</string>
-  <string name="speech_prompt_text">Govori za iskanje %\s</string>
+  <string name="speech_prompt_text">Govori za iskanje %s</string>
   <string name="speech_not_supported">Žal vaša naprava ne podpira vnosa govora</string>
   <string name="local_zims">Naprava</string>
   <string name="remote_zims">Na spletu</string>
@@ -170,7 +168,7 @@
   <string name="running_state">V teku</string>
   <string name="complete">Končano</string>
   <string name="paused_state" fuzzy="true">Premor</string>
-  <string name="failed_state">Neuspešno: \%s</string>
+  <string name="failed_state">Neuspešno: %s</string>
   <string name="save">Shrani</string>
   <string name="note">Beležka</string>
   <string name="wiki_article_title">Naslov članka Wiki</string>

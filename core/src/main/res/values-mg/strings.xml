@@ -38,8 +38,6 @@
   <string name="pref_permission">Alalana</string>
   <string name="bookmark_added">Mari-boky nampiana</string>
   <string name="rate_dialog_title">Omeo naoty izahay azafady</string>
-  <string name="rate_dialog_msg_1">Raha tianao ny mampiasa</string>
-  <string name="rate_dialog_msg_2">, makà fotoana kely dia kely hanomezana naoty an\'ilay izy. Misaotra anao manohana!</string>
   <string name="rate_dialog_positive">Naoteo!</string>
   <string name="no_thanks">Aoka fa misaotra</string>
   <string name="rate_dialog_neutral">Amin\'ny manaraka</string>

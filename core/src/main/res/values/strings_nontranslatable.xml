@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="triple_arg_format_string" translatable="false">%s %s %s</string>
+  <string name="single_arg_format_string" translatable="false">%s</string>
 </resources>

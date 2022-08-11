@@ -29,6 +29,9 @@ import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
 import org.kiwix.kiwixmobile.core.page.history.HistoryFragment
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHistoryDialog
+import org.kiwix.kiwixmobile.core.page.notes.NotesFragment
+import org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects.ShowDeleteNotesDialog
+import org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects.ShowOpenNoteDialog
 import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
@@ -40,11 +43,14 @@ interface CoreActivityComponent {
   fun inject(showDeleteSearchDialog: ShowDeleteSearchDialog)
   fun inject(showDeleteBookmarksDialog: ShowDeleteBookmarksDialog)
   fun inject(showDeleteHistoryDialog: ShowDeleteHistoryDialog)
+  fun inject(showOpenNoteDialog: ShowOpenNoteDialog)
+  fun inject(showDeleteNotesDialog: ShowDeleteNotesDialog)
   fun inject(corePrefsFragment: CorePrefsFragment)
   fun inject(historyFragment: HistoryFragment)
   fun inject(bookmarksFragment: BookmarksFragment)
   fun inject(addNoteDialog: AddNoteDialog)
   fun inject(helpFragment: HelpFragment)
+  fun inject(notesFragment: NotesFragment)
 
   @Subcomponent.Builder
   interface Builder {

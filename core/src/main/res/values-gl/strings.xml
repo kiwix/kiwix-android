@@ -19,7 +19,7 @@
   <string name="menu_read_aloud_stop">Deixar de ler en voz alta</string>
   <string name="save_media">Gardar multimedia</string>
   <string name="save_media_error">Houbo un erro ao intentar gardar o multimedia!</string>
-  <string name="save_media_saved">Multimedia gardado como %s en Android/media/org.kiwix…/</string>
+  <string name="save_media_saved" fuzzy="true">Multimedia gardado como %s en Android/media/org.kiwix…/</string>
   <string name="search_label">Procurar</string>
   <string name="choose_file">Seleccione un ficheiro de contido (*.zim)</string>
   <string name="open_in_new_tab">Quere abrir a ligazón nunha nova lapela?</string>
@@ -56,8 +56,6 @@
   <string name="tab_closed">Lapela pechada</string>
   <string name="bookmark_added">Marcador engadido</string>
   <string name="rate_dialog_title">Por favor, cualifícanos</string>
-  <string name="rate_dialog_msg_1">Se gozas co uso</string>
-  <string name="rate_dialog_msg_2">, por favor bote un momento para cualificala. Grazas polo seu apoio!</string>
   <string name="rate_dialog_positive">Cualificaǃ</string>
   <string name="no_thanks">Non, grazas</string>
   <string name="rate_dialog_neutral">Máis tarde</string>
@@ -68,7 +66,7 @@
   <string name="pref_extras">Extras</string>
   <string name="new_tab_snack_bar">Artigo aberto nunha lapela nova</string>
   <string name="search_widget_text">Procurar en Kiwix</string>
-  <string name="speech_prompt_text">Fale para procurar \%s</string>
+  <string name="speech_prompt_text">Fale para procurar %s</string>
   <string name="speech_not_supported">Sentímoloǃ O seu dispositivo non admite entrada de voz</string>
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">En liña</string>
