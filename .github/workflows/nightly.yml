@@ -16,7 +16,7 @@ jobs:
     steps:
 
       - name: checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
@@ -26,7 +26,7 @@ jobs:
           java-version: 11
 
       - name: run instrumentation tests
-        uses: ReactiveCircus/android-emulator-runner@v2.19.1
+        uses: ReactiveCircus/android-emulator-runner@v2.23.0
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
