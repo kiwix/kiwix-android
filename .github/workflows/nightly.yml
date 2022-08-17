@@ -16,7 +16,7 @@ jobs:
     steps:
 
       - name: checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
@@ -26,11 +26,13 @@ jobs:
           java-version: 11
 
       - name: run instrumentation tests
-        uses: ReactiveCircus/android-emulator-runner@v2.19.1
+        uses: ReactiveCircus/android-emulator-runner@v2.23.0
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
           ndk: 21.4.7075529
+          sdcard-path-or-size: '1000M'
+          disable-animations: false
           script: bash contrib/instrumentation_nightly.sh
 
       - name: Upload screenshot result
@@ -80,11 +82,3 @@ jobs:
           mkdir $DATE
           cp $UNIVERSAL_DEBUG_APK $DATE
           scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no $DATE ci@master.download.kiwix.org:/data/download/nightly/
-
-      - name: fdroid nightly
-        run: |
-            sudo add-apt-repository ppa:fdroid/fdroidserver
-            sudo apt-get update
-            sudo apt-get install apksigner fdroidserver --no-install-recommends
-            export DEBUG_KEYSTORE=$\{\{ secrets.DEBUG_KEYSTORE \}\}
-            fdroid nightly --archive-older 10
