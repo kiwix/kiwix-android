@@ -23,6 +23,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import applyWithViewHierarchyPrinting
 import attempt
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
@@ -58,5 +59,6 @@ class IntroRobot : BaseRobot() {
 
   override fun waitTillLoad() {
     uiDevice.waitForIdle()
+    BaristaSleepInteractions.sleep(3000)
   }
 }
