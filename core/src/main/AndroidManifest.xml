@@ -43,7 +43,7 @@
 
     <activity
       android:name=".error.ErrorActivity"
-      android:exported="false"
+      android:exported="true"
       android:process=":error_activity" />
 
     <provider
@@ -58,7 +58,7 @@
 
     <activity
       android:name=".error.DiagnosticReportActivity"
-      android:exported="false" />
+      android:exported="true" />
 
   </application>
 </manifest>
