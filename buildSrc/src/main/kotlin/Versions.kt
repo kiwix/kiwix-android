@@ -38,7 +38,7 @@ object Versions {
 
   const val com_jakewharton: String = "10.2.3"
 
-  const val androidx_test: String = "1.3.0"
+  const val androidx_test: String = "1.4.0"
 
   const val io_objectbox: String = "2.9.1"
 
