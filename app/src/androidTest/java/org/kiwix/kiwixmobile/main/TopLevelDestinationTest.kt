@@ -39,6 +39,7 @@ class TopLevelDestinationTest : BaseActivityTest() {
       clickReaderOnBottomNav {
       }
       clickLibraryOnBottomNav {
+        assertDisplayedZimNearByDevice()
         clickFileTransferIcon {
         }
       }

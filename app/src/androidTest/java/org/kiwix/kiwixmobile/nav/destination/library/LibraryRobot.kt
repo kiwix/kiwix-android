@@ -28,7 +28,8 @@ import org.kiwix.kiwixmobile.localFileTransfer.localFileTransfer
 fun library(func: LibraryRobot.() -> Unit) = LibraryRobot().applyWithViewHierarchyPrinting(func)
 
 class LibraryRobot : BaseRobot() {
-  init {
+
+  fun assertDisplayedZimNearByDevice() {
     isVisible(ViewId(R.id.get_zim_nearby_device))
   }
 
