@@ -299,5 +299,4 @@
   <string name="open_article">Отвори статија</string>
   <string name="delete_note_dialog_message">Напомена: Белешките не се избришани од вашиот склад</string>
   <string name="delete_selected_notes">Да ги избришам избраните белешки?</string>
-  <string name="missing_split_version_for_objectbox">Неподдржана архитектура. Вашито уред не е складен со прилогов</string>
 </resources>
