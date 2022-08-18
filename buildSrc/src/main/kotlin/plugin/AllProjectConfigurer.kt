@@ -204,7 +204,6 @@ class AllProjectConfigurer {
       implementation(Libs.rxandroid)
       implementation(Libs.rxjava)
       implementation(Libs.preference_ktx)
-      implementation(Libs.google_android_play_core)
     }
   }
 }

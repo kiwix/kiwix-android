@@ -315,5 +315,4 @@
   <string name="open_article">Ouvrir l’article</string>
   <string name="delete_note_dialog_message">Remarque : les notes ne sont pas supprimées de votre espace de stockage</string>
   <string name="delete_selected_notes">Supprimer les notes sélectionnées ?</string>
-  <string name="missing_split_version_for_objectbox">Architecture non prise en charge, votre appareil n’est pas compatible avec cette application.</string>
 </resources>

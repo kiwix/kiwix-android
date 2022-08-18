@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.core
 
-import android.app.AlertDialog
 import android.app.Application
 import android.content.Context
 import android.os.Build
@@ -26,7 +25,6 @@ import android.os.Environment.getExternalStorageState
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
 import androidx.multidex.MultiDex
-import com.google.android.play.core.missingsplits.MissingSplitsManagerFactory
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.kiwix.kiwixmobile.core.data.local.KiwixDatabase
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -78,15 +76,6 @@ abstract class CoreApp : Application() {
   }
 
   override fun onCreate() {
-    if (MissingSplitsManagerFactory.create(this).disableAppIfMissingRequiredSplits()) {
-      AlertDialog.Builder(this)
-        .setMessage(R.string.missing_split_version_for_objectbox)
-        .setPositiveButton(R.string.yes) { _, _ ->
-          android.os.Process.killProcess(android.os.Process.myPid())
-        }
-        .show()
-      return
-    }
     super.onCreate()
     instance = this
     coreComponent = DaggerCoreComponent.builder()
