@@ -11,6 +11,7 @@ jobs:
     strategy:
       matrix:
         api-level: [21, 22, 23, 24, 25, 27, 28, 30]
+        target: [google_apis]
       fail-fast: false
     runs-on: macos-latest
     steps:
@@ -40,6 +41,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
+          profile: pixel_2
           ndk: 21.4.7075529
           sdcard-path-or-size: '1000M'
           disable-animations: false
