@@ -66,4 +66,4 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
-        run: ./gradlew publishPlayStoreBundle
+        run: ./gradlew publishPlayStoreBundle --scan
