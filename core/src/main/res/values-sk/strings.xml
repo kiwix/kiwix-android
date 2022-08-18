@@ -302,5 +302,4 @@
   <string name="open_article">Otvoriť článok</string>
   <string name="delete_note_dialog_message">Poznámka: Poznámky z vášho úložiska nie sú vymazané</string>
   <string name="delete_selected_notes">Odstrániť vybraté poznámky?</string>
-  <string name="missing_split_version_for_objectbox">Nepodporovaná architektúra, vaše zariadenie nie je kompatibilné s touto aplikáciou</string>
 </resources>

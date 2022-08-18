@@ -420,10 +420,4 @@ object Libs {
    * https://developer.android.com/testing
    */
   const val junit: String = "androidx.test.ext:junit:" + Versions.junit
-
-  /**
-   * https://developer.android.com/reference/com/google/android/play/core/release-notes
-   */
-  const val google_android_play_core: String =
-    "com.google.android.play:core:" + Versions.google_android_play_core
 }
