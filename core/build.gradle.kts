@@ -4,7 +4,6 @@ buildscript {
   repositories {
     google()
     mavenCentral()
-    jcenter()
     maven { setUrl("https://jitpack.io") }
   }
 
@@ -64,7 +63,7 @@ dependencies {
   if (!shouldUseLocalVersion()) {
     api(Libs.kiwixlib)
   } else {
-    implementation("com.getkeepsafe.relinker:relinker:1.3.1")
+    implementation("com.getkeepsafe.relinker:relinker:1.4.5")
     api(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))
   }
 
