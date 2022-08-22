@@ -105,8 +105,6 @@ class AllProjectConfigurer {
           "LabelFor",
           "LogConditional",
           "ConvertToWebp",
-          //TODO remove this when we remove jcenter from gradle
-          "JcenterRepositoryObsolete",
           "UnknownNullness",
           "SelectableText",
           "MissingTranslation",

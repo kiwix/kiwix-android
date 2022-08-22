@@ -72,7 +72,7 @@ object Versions {
 
   const val lint_gradle: String = "27.1.1"
 
-  const val testing_ktx: String = "1.1.2"
+  const val testing_ktx: String = "1.2.0"
 
   const val threetenabp: String = "1.3.0"
 
@@ -88,7 +88,7 @@ object Versions {
 
   const val core_ktx: String = "1.3.2"
 
-  const val kiwixlib: String = "9.4.1"
+  const val kiwixlib: String = "9.4.1-SNAPSHOT"
 
   const val material: String = "1.2.1"
 
