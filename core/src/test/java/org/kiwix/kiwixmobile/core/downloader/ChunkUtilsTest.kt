@@ -107,7 +107,7 @@ class ChunkUtilsTest {
     for (i in listReturned.indices) {
       val extension = listReturned[i]
         .fileName
-        .substringAfter('.')
+        ?.substringAfter('.')
       val expectedExtension = "zim" + alphabet[i / 26] + alphabet[i % 26] + ".part.part"
       assertThat(extension).isEqualTo(expectedExtension)
     }
