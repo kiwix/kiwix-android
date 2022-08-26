@@ -15,18 +15,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.core.data
 
-package org.kiwix.kiwixmobile.core.data;
-
-import dagger.Module;
-import dagger.Provides;
-import javax.inject.Singleton;
+import dagger.Module
+import dagger.Provides
+import javax.inject.Singleton
 
 @Module
-public class DataModule {
+class DataModule {
   @Singleton
   @Provides
-  public DataSource provideDataSource(Repository repository) {
-    return repository;
-  }
+  fun provideDataSource(repository: Repository): DataSource = repository
 }
