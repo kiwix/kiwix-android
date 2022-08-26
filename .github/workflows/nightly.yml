@@ -55,7 +55,7 @@ jobs:
           path: screencap.png
 
   unit_test_and_release:
-    runs-on: macos-latest
+    runs-on: ubuntu-22.04
     steps:
 
       - name: checkout
