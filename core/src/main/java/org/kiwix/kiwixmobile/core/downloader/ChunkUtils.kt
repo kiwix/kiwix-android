@@ -46,7 +46,8 @@ object ChunkUtils {
     val ranges = fileNames.indices.map { it * (CHUNK_SIZE + 1) }.map { it..it + CHUNK_SIZE }
     return fileNames.zip(ranges).map { (filename, currentRange) ->
       Chunk(
-        "${currentRange.first}-${if (contentLength in currentRange)
+        "${currentRange.first}-${
+        if (contentLength in currentRange)
           ""
         else
           "${currentRange.last}"
