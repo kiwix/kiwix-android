@@ -60,9 +60,9 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService
-import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_CHECK_IP_ADDRESS
-import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_START_SERVER
-import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_STOP_SERVER
+import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.Companion.ACTION_START_SERVER
+import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.Companion.ACTION_STOP_SERVER
+import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.Companion.ACTION_CHECK_IP_ADDRESS
 import javax.inject.Inject
 
 class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
