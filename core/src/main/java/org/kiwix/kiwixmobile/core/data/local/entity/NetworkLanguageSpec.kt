@@ -15,14 +15,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.core.data.local.entity
 
-package org.kiwix.kiwixmobile.core.data.local.entity;
-
-import com.yahoo.squidb.annotations.TableModelSpec;
+import com.yahoo.squidb.annotations.TableModelSpec
 
 @TableModelSpec(className = "NetworkLanguageDatabaseEntity", tableName = "networkLanguages")
-public class NetworkLanguageSpec {
-  public String languageISO3;
-  public boolean enabled;
-  public int numberOfOccurences;
+class NetworkLanguageSpec {
+  var languageISO3: String? = null
+  var enabled = false
+  var numberOfOccurences = 0
 }
