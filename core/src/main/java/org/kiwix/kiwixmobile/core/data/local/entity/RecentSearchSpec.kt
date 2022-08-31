@@ -15,16 +15,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.data.local.entity;
+package org.kiwix.kiwixmobile.core.data.local.entity
 
-import com.yahoo.squidb.annotations.TableModelSpec;
-import com.yahoo.squidb.annotations.tables.constraints.NotNull;
+import com.yahoo.squidb.annotations.TableModelSpec
+import com.yahoo.squidb.annotations.tables.constraints.NotNull
 
 /**
  * Squidb spec for recent searches.
  */
 @TableModelSpec(className = "RecentSearch", tableName = "recentSearches")
-public class RecentSearchSpec {
-  @NotNull public String searchString;
-  @NotNull String zimID;
+class RecentSearchSpec {
+  @NotNull
+  lateinit var searchString: String
+
+  @NotNull
+  lateinit var zimID: String
 }
