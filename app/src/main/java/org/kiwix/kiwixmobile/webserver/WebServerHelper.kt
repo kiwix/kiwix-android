@@ -18,14 +18,14 @@
 package org.kiwix.kiwixmobile.webserver
 
 import android.util.Log
-import org.kiwix.kiwixmobile.core.utils.ServerUtils.getIpAddress
-import org.kiwix.kiwixmobile.core.utils.ServerUtils.getIp
-import org.kiwix.kiwixmobile.webserver.wifi_hotspot.IpAddressCallbacks
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import org.kiwix.kiwixmobile.core.utils.DEFAULT_PORT
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
 import org.kiwix.kiwixmobile.core.utils.ServerUtils.INVALID_IP
-import java.util.ArrayList
+import org.kiwix.kiwixmobile.core.utils.ServerUtils.getIp
+import org.kiwix.kiwixmobile.core.utils.ServerUtils.getIpAddress
+import org.kiwix.kiwixmobile.webserver.wifi_hotspot.IpAddressCallbacks
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -41,15 +41,15 @@ class WebServerHelper @Inject constructor(
   private var kiwixServer: KiwixServer? = null
   private var isServerStarted = false
 
-  @Suppress("ReturnCount")
   fun startServerHelper(selectedBooksPath: ArrayList<String>): Boolean {
     val ip = getIpAddress()
-    if (ip.isNullOrEmpty()) {
-      return false
+    return if (ip.isNullOrEmpty()) {
+      false
     } else if (startAndroidWebServer(selectedBooksPath)) {
-      return true
+      true
+    } else {
+      isServerStarted
     }
-    return isServerStarted
   }
 
   fun stopAndroidWebServer() {
@@ -59,10 +59,9 @@ class WebServerHelper @Inject constructor(
     }
   }
 
-  @Suppress("MagicNumber")
   private fun startAndroidWebServer(selectedBooksPath: ArrayList<String>): Boolean {
     if (!isServerStarted) {
-      ServerUtils.port = 8080
+      ServerUtils.port = DEFAULT_PORT
       kiwixServer = kiwixServerFactory.createKiwixServer(selectedBooksPath).also {
         updateServerState(it.startServer(ServerUtils.port))
         Log.d(TAG, "Server status$isServerStarted")
@@ -81,7 +80,7 @@ class WebServerHelper @Inject constructor(
   @Suppress("MagicNumber")
   fun pollForValidIpAddress() {
     Flowable.interval(1, TimeUnit.SECONDS)
-      .map { _: Long? -> getIp() }
+      .map { getIp() }
       .filter { s: String? -> s != INVALID_IP }
       .timeout(15, TimeUnit.SECONDS)
       .take(1)
