@@ -16,7 +16,7 @@ object Versions {
 
   const val org_jetbrains_kotlinx_kotlinx_coroutines: String = "1.4.1"
 
-  const val androidx_test_espresso: String = "3.4.0"
+  const val androidx_test_espresso: String = "3.3.0"
 
   const val androidx_test_espresso_contrib: String = "3.3.0"
 
