@@ -15,18 +15,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.data.local.entity;
+package org.kiwix.kiwixmobile.core.data.local.entity
 
-import com.yahoo.squidb.annotations.TableModelSpec;
-import com.yahoo.squidb.annotations.tables.constraints.NotNull;
+import com.yahoo.squidb.annotations.TableModelSpec
+import com.yahoo.squidb.annotations.tables.constraints.NotNull
 
 /**
  * Squidb spec for saved bookmarks.
  */
+@Suppress("VariableNaming")
 @TableModelSpec(className = "Bookmark", tableName = "Bookmarks")
-public class BookmarksSpec {
-  @NotNull public String ZimId;
-  @NotNull public String ZimName;
-  @NotNull public String bookmarkUrl;
-  @NotNull public String bookmarkTitle;
+class BookmarksSpec {
+  @NotNull
+  lateinit var ZimId: String
+
+  @NotNull
+  lateinit var ZimName: String
+
+  @NotNull
+  lateinit var bookmarkUrl: String
+
+  @NotNull
+  lateinit var bookmarkTitle: String
 }
