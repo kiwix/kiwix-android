@@ -25,7 +25,7 @@
 ########################
 -dontobfuscate
 
--keepclassmembers class com.cprcrack.videowebview.VideoEnabledWebView$JavascriptInterface { public *; }
+-keepclassmembers class org.kiwix.videowebview.VideoEnabledWebView$JavascriptInterface { public *; }
 
 #keep everything in kiwixlib
 -keep class org.kiwix.kiwixlib.** { *; }

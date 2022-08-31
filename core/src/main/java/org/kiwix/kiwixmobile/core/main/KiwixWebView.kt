@@ -27,7 +27,7 @@ import android.view.ContextMenu
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
-import com.cprcrack.videowebview.VideoEnabledWebView
+import org.kiwix.videowebview.VideoEnabledWebView
 import io.reactivex.disposables.CompositeDisposable
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
