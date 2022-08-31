@@ -51,3 +51,6 @@ const val CONNECT_TIME_OUT = 1L
 
 // For autoRetryMaxAttempts in download zim file
 const val AUTO_RETRY_MAX_ATTEMPTS = 20
+
+// Default port for http request
+const val DEFAULT_PORT = 8080
