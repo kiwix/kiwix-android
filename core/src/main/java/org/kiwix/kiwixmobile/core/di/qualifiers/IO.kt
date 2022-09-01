@@ -15,14 +15,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.core.di.qualifiers
 
-package org.kiwix.kiwixmobile.core.di.qualifiers;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import javax.inject.Qualifier;
+import javax.inject.Qualifier
 
 @Qualifier
-@Retention(RetentionPolicy.RUNTIME)
-public @interface IO {
-}
+@kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
+annotation class IO
