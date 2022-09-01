@@ -20,5 +20,5 @@ package org.kiwix.kiwixmobile.core.di.qualifiers
 import javax.inject.Qualifier
 
 @Qualifier
-@kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
+@kotlin.annotation.Retention
 annotation class IO
