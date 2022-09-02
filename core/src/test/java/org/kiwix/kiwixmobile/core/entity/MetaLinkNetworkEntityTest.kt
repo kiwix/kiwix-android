@@ -79,7 +79,7 @@ class MetaLinkNetworkEntityTest {
     ).isEqualTo("83126775538cf588a85edb10db04d6e012321a2025278a08a084b258849b3a5c")
 
     // Pieces
-    assertThat(result.file?.pieces?.pieceHashes).isEqualTo("sha-1")
+    assertThat(result.file?.pieces?.hashType).isEqualTo("sha-1")
     assertThat(result.file?.pieces?.length).isEqualTo(1048576)
 
     // Check only the first and the last elements of the piece hashes

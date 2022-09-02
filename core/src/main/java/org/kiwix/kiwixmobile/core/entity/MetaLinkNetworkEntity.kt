@@ -26,7 +26,7 @@ import org.simpleframework.xml.Text
 
 @Root(strict = false, name = "metalink")
 class MetaLinkNetworkEntity {
-  @Element
+  @field:Element
   var file: FileElement? = null
   val urls: List<Url>?
     get() = file?.urls
@@ -35,17 +35,23 @@ class MetaLinkNetworkEntity {
 
   @Root(strict = false)
   class FileElement {
-    @Attribute
+    @field:Attribute
     var name: String? = null
 
-    @ElementList(inline = true, entry = "url")
+    @field:ElementList(inline = true, entry = "url")
     var urls: List<Url>? = null
-    @Element val size: Long = 0
+    @field:Element var size: Long = 0
 
-    @ElementMap(entry = "hash", key = "type", attribute = true, inline = true, required = false)
+    @field:ElementMap(
+      entry = "hash",
+      key = "type",
+      attribute = true,
+      inline = true,
+      required = false
+    )
     var hashes: Map<String, String>? = null
 
-    @Element(required = false)
+    @field:Element(required = false)
     var pieces: Pieces? = null
     val pieceHashes: List<String>?
       get() = pieces?.pieceHashes
@@ -60,24 +66,24 @@ class MetaLinkNetworkEntity {
   }
 
   class Pieces {
-    @Attribute
-    val length = 0
+    @field:Attribute
+    var length = 0
 
-    @Attribute(name = "type")
+    @field:Attribute(name = "type")
     var hashType: String? = null
 
-    @ElementList(inline = true, entry = "hash")
+    @field:ElementList(inline = true, entry = "hash")
     var pieceHashes: List<String>? = null
   }
 
   class Url {
-    @Attribute
+    @field:Attribute
     var location: String? = null
 
-    @Attribute
+    @field:Attribute
     var priority = 0
 
-    @Text
+    @field:Text
     var value: String? = null
   }
 }
