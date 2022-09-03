@@ -17,7 +17,7 @@ jobs:
       matrix:
         api-level: [21,33]
       fail-fast: false
-    runs-on: ubuntu-22.04
+    runs-on: macos-11
     steps:
       - name: checkout
         uses: actions/checkout@v3
