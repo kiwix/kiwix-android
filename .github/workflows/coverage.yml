@@ -15,7 +15,7 @@ jobs:
   coverageReport:
     strategy:
       matrix:
-        api-level: [21, 32]
+        api-level: [21, 31]
       fail-fast: false
     runs-on: macos-11
     steps:
