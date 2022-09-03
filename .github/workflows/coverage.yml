@@ -15,7 +15,7 @@ jobs:
   coverageReport:
     strategy:
       matrix:
-        api-level: [21,30]
+        api-level: [21,33]
       fail-fast: false
     runs-on: macos-10.15
     steps:
@@ -59,11 +59,11 @@ jobs:
           path: screencap.png
 
       - name: create unit coverage
-        if: ${{ matrix.api-level==21  }}
+        if: ${{ matrix.api-level==21 }}
         run: ./gradlew jacocoTestDebugUnitTestReport jacocoTestCustomExampleDebugUnitTestReport
 
       - name: Upload coverage to Codecov
-        if: ${{ matrix.api-level==21  }}
+        if: ${{ matrix.api-level==21 }}
         uses: codecov/codecov-action@v2
 
       - name: Upload Coverage to GH-Actions
