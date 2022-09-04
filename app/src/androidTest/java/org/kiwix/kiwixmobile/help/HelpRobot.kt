@@ -28,7 +28,7 @@ fun help(func: HelpRobot.() -> Unit) = HelpRobot().apply(func)
 
 class HelpRobot : BaseRobot() {
 
-  init {
+  fun assertToolbarDisplayed() {
     isVisible(ViewId(id.toolbar))
   }
 

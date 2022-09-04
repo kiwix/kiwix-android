@@ -28,7 +28,8 @@ import org.kiwix.kiwixmobile.R
 fun history(func: HistoryRobot.() -> Unit) = HistoryRobot().applyWithViewHierarchyPrinting(func)
 
 class HistoryRobot : BaseRobot() {
-  init {
+
+  fun assertHistoryDisplayed() {
     assertDisplayed(R.string.history_from_current_book)
   }
 
