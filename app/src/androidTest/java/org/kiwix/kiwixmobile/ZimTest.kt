@@ -15,13 +15,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile
 
-//@LargeTest
-//@RunWith(AndroidJUnit4.class)
-public class ZimTest {
-
-  /*
+// @LargeTest
+// @RunWith(AndroidJUnit4.class)
+class ZimTest { /*
   Temporary Disabled
   @Inject
   Context context;
