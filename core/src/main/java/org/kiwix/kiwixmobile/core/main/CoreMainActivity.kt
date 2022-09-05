@@ -234,6 +234,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
           navController.previousBackStackEntry?.destination
             ?.id?.equals(searchFragmentResId) == false
         ) {
+          drawerToggle = null
           finish()
         } else {
           super.onBackPressed()
