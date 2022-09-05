@@ -52,7 +52,7 @@ class KiwixTextToSpeech internal constructor(
   val context: Context,
   onInitSucceedListener: OnInitSucceedListener,
   val onSpeakingListener: OnSpeakingListener,
-  private val onAudioFocusChangeListener: OnAudioFocusChangeListener,
+  private var onAudioFocusChangeListener: OnAudioFocusChangeListener? = null,
   private val zimReaderContainer: ZimReaderContainer
 ) {
   private val focusLock: Any = Any()
@@ -151,6 +151,7 @@ class KiwixTextToSpeech internal constructor(
       currentTTSTask = null
       tts.setOnUtteranceProgressListener(null)
       onSpeakingListener.onSpeakingEnded()
+      onAudioFocusChangeListener = null
     }
   }
 
