@@ -58,7 +58,6 @@ class ZimTest { /*
       openContextualActionModeOverflowMenu();
       onView(withText("Home")).perform(click());
     }
-    
     onWebView().withElement(findElement(Locator.LINK_TEXT, "A Fool for You"));
 
     onView(withId(R.id.drawer_layout)).perform(DrawerActions.open(Gravity.RIGHT));
