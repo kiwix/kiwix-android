@@ -29,7 +29,8 @@ fun bookmarks(func: BookmarksRobot.() -> Unit) =
   BookmarksRobot().applyWithViewHierarchyPrinting(func)
 
 class BookmarksRobot : BaseRobot() {
-  init {
+
+  fun assertBookMarksDisplayed() {
     assertDisplayed(R.string.bookmarks_from_current_book)
   }
 

@@ -23,6 +23,9 @@ import androidx.test.rule.ActivityTestRule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.help.HelpRobot
+import org.kiwix.kiwixmobile.settings.SettingsRobot
+import org.kiwix.kiwixmobile.webserver.ZimHostRobot
 
 class TopLevelDestinationTest : BaseActivityTest() {
 
@@ -39,27 +42,28 @@ class TopLevelDestinationTest : BaseActivityTest() {
       clickReaderOnBottomNav {
       }
       clickLibraryOnBottomNav {
+        assertGetZimNearbyDeviceDisplayed()
         clickFileTransferIcon {
         }
       }
       clickDownloadOnBottomNav {
+        assertLibraryListDisplayed()
         clickOnGlobeIcon {
         }
       }
       clickBookmarksOnNavDrawer {
+        assertBookMarksDisplayed()
         clickOnTrashIcon()
         assertDeleteBookmarksDialogDisplayed()
       }
       clickHistoryOnSideNav {
+        assertHistoryDisplayed()
         clickOnTrashIcon()
         assertDeleteHistoryDialogDisplayed()
       }
-      clickHostBooksOnSideNav {
-      }
-      clickSettingsOnSideNav {
-      }
-      clickHelpOnSideNav {
-      }
+      clickHostBooksOnSideNav(ZimHostRobot::assertMenuWifiHotspotDiplayed)
+      clickSettingsOnSideNav(SettingsRobot::assertMenuSettingsDisplayed)
+      clickHelpOnSideNav(HelpRobot::assertToolbarDisplayed)
       clickSupportKiwixOnSideNav()
       assertExternalLinkDialogDisplayed()
       pressBack()

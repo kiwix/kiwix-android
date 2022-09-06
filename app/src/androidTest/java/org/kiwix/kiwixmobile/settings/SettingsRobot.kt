@@ -42,7 +42,7 @@ fun settingsRobo(func: SettingsRobot.() -> Unit) =
 
 class SettingsRobot : BaseRobot() {
 
-  init {
+  fun assertMenuSettingsDisplayed() {
     assertDisplayed(R.string.menu_settings)
   }
 

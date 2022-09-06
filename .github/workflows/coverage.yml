@@ -16,8 +16,9 @@ jobs:
     strategy:
       matrix:
         api-level: [21,30]
+        target: [ google_apis ]
       fail-fast: false
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -32,12 +33,12 @@ jobs:
       - name: Restore Cache
         uses: actions/cache@v2
         with:
-            path: |
-              ~/.gradle/caches
-              ~/.gradle/wrapper
-            key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-            restore-keys: |
-              ${{ runner.os }}-gradle-
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: create instrumentation coverage
         uses: ReactiveCircus/android-emulator-runner@v2.23.0
@@ -46,6 +47,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
+          profile: pixel_2
           ndk: 21.4.7075529
           sdcard-path-or-size: '1000M'
           disable-animations: false

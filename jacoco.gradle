@@ -49,6 +49,7 @@ task jacocoInstrumentationTestReport(type: JacocoReport, dependsOn: ['createDebu
     kotlinSrc << "$proj.projectDir/src/main/kotlin"
     execution << fileTree(dir: proj.buildDir,
       includes: ['jacoco/testDebugUnitTest.exec',
+        'outputs/code-coverage/connected/*coverage.ec',
         'outputs/code_coverage/debugAndroidTest/connected/**/*.ec'])
   }
   sourceDirectories.from = files(javaSrc, kotlinSrc)
