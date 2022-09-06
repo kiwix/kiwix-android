@@ -15,12 +15,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.core.data.local.entity
 
-package org.kiwix.kiwixmobile.core.data.local.entity;
-
-import com.yahoo.squidb.annotations.TableModelSpec;
+import com.yahoo.squidb.annotations.TableModelSpec
 
 @TableModelSpec(className = "LibraryDatabaseEntity", tableName = "library")
-public class LibraryDataSource {
-  public String libraryVersion;
+class LibraryDataSource {
+  var libraryVersion: String? = null
 }
