@@ -15,27 +15,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.main;
+package org.kiwix.kiwixmobile.core.main
 
-import android.content.Intent;
-import org.jetbrains.annotations.NotNull;
+import android.content.Intent
 
-public interface WebViewCallback {
-  void webViewUrlLoading();
-
-  void webViewUrlFinishedLoading();
-
-  void webViewFailedLoading(String failingUrl);
-
-  void openExternalUrl(Intent intent);
-
-  void webViewProgressChanged(int progress);
-
-  void webViewTitleUpdated(String title);
-
-  void webViewPageChanged(int page, int maxPages);
-
-  void webViewLongClick(String url);
-
-  void onFullscreenVideoToggled(boolean isFullScreen);
+interface WebViewCallback {
+  fun webViewUrlLoading()
+  fun webViewUrlFinishedLoading()
+  fun webViewFailedLoading(failingUrl: String)
+  fun openExternalUrl(intent: Intent)
+  fun webViewProgressChanged(progress: Int)
+  fun webViewTitleUpdated(title: String)
+  fun webViewPageChanged(page: Int, maxPages: Int)
+  fun webViewLongClick(url: String)
+  fun onFullscreenVideoToggled(isFullScreen: Boolean)
 }

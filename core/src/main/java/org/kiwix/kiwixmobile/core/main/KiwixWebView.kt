@@ -95,7 +95,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   override fun performLongClick(): Boolean {
     val result = hitTestResult
     if (result.type == HitTestResult.SRC_ANCHOR_TYPE) {
-      callback.webViewLongClick(result.extra)
+      result.extra?.let(callback::webViewLongClick)
       return true
     }
     return super.performLongClick()
