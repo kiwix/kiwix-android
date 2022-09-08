@@ -11,8 +11,8 @@
   <string name="menu_search_in_text">Cercar in pagina</string>
   <string name="bookmarks">Marcapaginas</string>
   <string name="menu_random_article">Articulo aleatori</string>
-  <string name="menu_full_screen">Schermo complete</string>
-  <string name="menu_exit_full_screen">Exir del schermo complete</string>
+  <string name="menu_full_screen">Plen schermo</string>
+  <string name="menu_exit_full_screen">Exir del plen schermo</string>
   <string name="menu_read_aloud">Leger a voce alte</string>
   <string name="menu_read_aloud_stop">Cessar de leger a voce alte</string>
   <string name="menu_support_kiwix">Supportar Kiwix</string>

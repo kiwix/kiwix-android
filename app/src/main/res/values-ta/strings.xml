@@ -8,4 +8,5 @@
   <string name="cannot_open_file">கோப்பைத் திறப்பதில் தோல்வி! N! தயவுசெய்து உங்கள் கோப்பகத்தை உங்கள் நூலகத்தின் சாதன தாவலில் தேட முயற்சிக்கவும்</string>
   <string name="send_files_title">கோப்புகளை அனுப்பவும்</string>
   <string name="receive_files_title">கோப்புகளைப் பெறுக</string>
+  <string name="no_app_found_to_open">zim கோப்பைத் தேர்ந்தெடுக்க எந்தப் பயன்பாடும் இல்லை!</string>
 </resources>

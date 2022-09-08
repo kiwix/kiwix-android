@@ -97,6 +97,7 @@
   <string name="tab_closed">לשונית נסגרה</string>
   <string name="bookmark_added">הסימנייה נוספה</string>
   <string name="rate_dialog_title">אנא דרגו אותנו</string>
+  <string name="rate_dialog_msg">אם כיף לך להשתמש ב־%s, אולי אפשר לבקש להקדיש רגע כדי לדרג אותו? תודה על תמיכתך!</string>
   <string name="rate_dialog_positive">דירוג!</string>
   <string name="no_thanks">לא, תודה</string>
   <string name="rate_dialog_neutral">פעם אחרת</string>
@@ -138,8 +139,10 @@
   <string name="tts_pause">השהיה</string>
   <string name="tts_resume">המשך</string>
   <string name="stop">עצירה</string>
+  <string name="configure_storage_option">להוריד את הספר לאחסון פנימי?</string>
   <string name="internal_storage">פנימי</string>
   <string name="external_storage">חיצוני</string>
+  <string name="configure">הגדרות</string>
   <string name="yes">כן</string>
   <string name="no">לא</string>
   <string name="confirm_stop_download_title">לעצור הורדה?</string>
@@ -231,7 +234,8 @@
   <string name="severe_loss_error">שגיאה חמורה! נא לנסות לכבות ולהדליק מחדש את ה־P2P בווייפיי</string>
   <string name="connection_failed">החיבור נכשל</string>
   <string name="permission_rationale_location">נדרשת הרשאת גישה באנדרואיד כדי לאפשר ליישום לזהות מכשירים עמיתים</string>
-  <string name="permission_rationale_location_on_host_zim_file">נדרש אישור לגשת למיקום על ידי Android כדי לאפשרים ליישומון לאחסן קובצי Zim</string>
+  <string name="permission_rationale_location_on_host_zim_file">הרשאת גישה למיקום נדרשת על־ידי אנדרואיד כדי לאפשר ליישום לארח קובצי Zim</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">הרשאת התקני וייפיי בקרבת מקום נדרשת על־ידי אנדרואיד כדי לאפשר ליישום לארח קובצי Zim</string>
   <string name="permission_refused_location">לא ניתן לאתר מגשירים עמיתים ללא הרשאות מיקום</string>
   <string name="permission_refused_storage">לא ניתן לגשת לקובצי zim ללא הרשאות אחסון</string>
   <string name="request_enable_location">נא להפעיל מיקום כדי לאפשר זיהוי עמיתים</string>

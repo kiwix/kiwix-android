@@ -89,6 +89,7 @@
   <string name="tab_closed">Јазичето е затворено</string>
   <string name="bookmark_added">Обележувачот е додаден</string>
   <string name="rate_dialog_title">Дајте ни оценка</string>
+  <string name="rate_dialog_msg">Ако ви се допаѓа %s, би ве змолиле да му дадете оценка. Ви благодариме на поддршката!</string>
   <string name="rate_dialog_positive">Оцени!</string>
   <string name="no_thanks">Не, благодарам</string>
   <string name="rate_dialog_neutral">Подоцна</string>
@@ -130,8 +131,10 @@
   <string name="tts_pause">паузирај</string>
   <string name="tts_resume">продолжи</string>
   <string name="stop">запри</string>
+  <string name="configure_storage_option">Да ја преземам книгата во внатрешен склад?</string>
   <string name="internal_storage">Внатрешен</string>
   <string name="external_storage">Надворешен</string>
+  <string name="configure">Нагоди</string>
   <string name="yes">Да</string>
   <string name="no">Не</string>
   <string name="confirm_stop_download_title">Да го прекинам преземањето?</string>

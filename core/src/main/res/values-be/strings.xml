@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Kareyac
 * Mechanizatar
 * No Sleep till Krupki
 * ZlyiLev
@@ -37,6 +38,18 @@
   <string name="no_reader_application_installed">Не ўдалося знайсці ўсталяваную праграму для гэтага тыпу файлаў</string>
   <string name="no_section_info" fuzzy="true">Ня знойдзеныя загалоўкі кантэнту</string>
   <string name="request_storage" fuzzy="true">Каб атрымаць доступ да ZIM-файлаў, нам трэба мець доступ да вашага сховішча</string>
+  <string name="delete_recent_search_item">Выдаліць гэты элемент?</string>
+  <string name="pref_clear_all_history_title">Ачысціць гісторыю</string>
+  <string name="pref_notes">Нататкі</string>
+  <string name="pref_permission">Дазволы</string>
+  <string name="all_history_cleared">Уся гісторыя ачышчана</string>
+  <string name="pref_clear_all_bookmarks_title">Ачысціць закладкі</string>
+  <string name="clear_all_history_dialog_title">Ачысціць усю гісторыю?</string>
+  <string name="share">Падзяліцца</string>
+  <string name="delete">Выдаліць</string>
+  <string name="cancel">Адмена</string>
+  <string name="got_it">Зразумела</string>
+  <string name="undo">Адмяніць</string>
   <string name="bookmark_added">Закладка дададзеная</string>
   <string name="rate_dialog_title">Калі ласка, ацаніце нас</string>
   <string name="rate_dialog_positive">Ацаніць!</string>
@@ -45,5 +58,17 @@
   <string name="pref_newtab_background_title">Адкрыць новае вакенца на фоне</string>
   <string name="pref_newtab_background_summary">Пры адкрыцці новага вакенца, яно будзе адкрытае ў фоне</string>
   <string name="library">Бібліятэка</string>
+  <string name="tts_pause">паўза</string>
+  <string name="tts_resume">аднавіць</string>
+  <string name="yes">Так</string>
+  <string name="no">Не</string>
+  <string name="next">Далей</string>
+  <string name="time_day">дзень</string>
+  <string name="time_hour">ч</string>
+  <string name="time_minute">мін</string>
+  <string name="time_second">с</string>
+  <string name="time_today">Сёння</string>
+  <string name="time_yesterday">Учора</string>
+  <string name="history">Гісторыя</string>
   <string name="no_bookmarks" fuzzy="true">Няма закладак!</string>
 </resources>

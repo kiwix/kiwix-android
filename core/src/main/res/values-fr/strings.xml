@@ -105,6 +105,7 @@
   <string name="tab_closed">Onglet fermé</string>
   <string name="bookmark_added">Marque-page ajouté</string>
   <string name="rate_dialog_title">Merci de nous évaluer</string>
+  <string name="rate_dialog_msg">Si vous aimez utiliser %s, veuillez prendre un moment pour l’évaluer. Merci pour votre aide !</string>
   <string name="rate_dialog_positive">Donnez nous une note !</string>
   <string name="no_thanks">Non merci</string>
   <string name="rate_dialog_neutral">Plus tard</string>
@@ -146,12 +147,14 @@
   <string name="tts_pause">pause</string>
   <string name="tts_resume">reprendre</string>
   <string name="stop">arrêter</string>
+  <string name="configure_storage_option">Télécharger le livre sur la mémoire de stockage interne ?</string>
   <string name="internal_storage">Interne</string>
   <string name="external_storage">Externe</string>
+  <string name="configure">Configurer</string>
   <string name="yes">Oui</string>
   <string name="no">Non</string>
   <string name="confirm_stop_download_title">Arrêter le téléchargement ?</string>
-  <string name="confirm_stop_download_msg">Êtes-vous sûr de vouloir arrêter ce téléchargement ?</string>
+  <string name="confirm_stop_download_msg">Êtes-vous sûr(e) de vouloir arrêter ce téléchargement ?</string>
   <string name="download_change_storage">Sélecteur de périphérique de stockage</string>
   <string name="tts_not_enabled">La synthèse vocale n’est pas activée pour ce fichier ZIM</string>
   <string name="texttospeech_initialization_failed">L’initialisation de Texte en Paroles a échoué. Veuillez réessayer.</string>
@@ -176,7 +179,7 @@
   <string name="your_languages">Langues sélectionnées :</string>
   <string name="other_languages">Autres langues :</string>
   <string name="no_items_msg">Aucun élément disponible</string>
-  <string name="crash_title">Hé bien… c’est embarrassant.</string>
+  <string name="crash_title">Hé bien... c’est embarrassant.</string>
   <string name="crash_description">Il semble que nous ayons planté.\n\nPourriez-vous nous aider à corriger ce problème en envoyant l’information suivante ?</string>
   <string name="crash_checkbox_language">Vos paramètres de langue</string>
   <string name="crash_checkbox_zimfiles">Une liste de vos fichiers ZIM</string>
@@ -200,7 +203,7 @@
   <string name="go_to_next_page">Aller à la page suivante</string>
   <string name="table_of_contents">Table des matières</string>
   <string name="select_languages">Sélectionner les langues</string>
-  <string name="save_languages">Sauvegarder les langues</string>
+  <string name="save_languages">Enregistrer les langues</string>
   <string name="send_feedback">Envoyer un avis</string>
   <string name="expand">Développer</string>
   <string name="history">Historique</string>
@@ -258,8 +261,8 @@
   <string name="nearby_devices">APPAREILS À PROXIMITÉ</string>
   <string name="no_devices_found">Aucun appareil détecté. Tapez le bouton Rechercher pour essayer à nouveau.</string>
   <string name="files_for_transfer">FICHIERS À TRANSFÉRER</string>
-  <string name="preparing_files">Préparation des fichiers pour le transfert…</string>
-  <string name="performing_handshake">Négociation de la liaison…</string>
+  <string name="preparing_files">Préparation des fichiers pour le transfert...</string>
+  <string name="performing_handshake">Négociation de la liaison...</string>
   <string name="status">État</string>
   <string name="pref_clear_all_notes_summary">Effacer toutes les notes sur tous les articles</string>
   <string name="pref_clear_all_notes_title">Effacer toutes les notes</string>

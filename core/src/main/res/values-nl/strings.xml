@@ -23,7 +23,7 @@
   <string name="menu_read_aloud_stop">Stoppen met voorlezen</string>
   <string name="save_media">Media opslaan als…</string>
   <string name="save_media_error">Er is een fout opgetreden bij het opslaan van de media!</string>
-  <string name="save_media_saved" fuzzy="true">Het bestand is opgeslagen als %s in Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Het bestand is opgeslagen als %s in Downloads/org.kiwix…/</string>
   <string name="search_label">Zoeken</string>
   <string name="choose_file">Selecteer een inhoudsbestand (*.zim)</string>
   <string name="open_in_new_tab">Koppeling openen in nieuw tabblad?</string>

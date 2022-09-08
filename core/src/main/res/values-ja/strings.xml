@@ -6,6 +6,7 @@
 * S2KTS
 * Shirayuki
 * SkyDaisy9
+* Sou0012
 * Tmv
 -->
 <resources>
@@ -36,6 +37,7 @@
   <string name="all_history_cleared">全履歴を削除しました</string>
   <string name="delete">削除</string>
   <string name="library">ライブラリ</string>
+  <string name="configure">設定</string>
   <string name="do_not_ask_anymore">これ以上聞かないでください</string>
   <string name="other_languages">その他の言語:</string>
   <string name="pref_text_zoom_summary">テキストサイズを 25% 増やす</string>

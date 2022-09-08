@@ -9,4 +9,5 @@
   <string name="cannot_open_file">Nepodařilo se otevřít soubor\nZkuste prosím tento soubor vyhledat na kartě Zařízení ve Vaší knihovně</string>
   <string name="send_files_title">Odeslat soubory</string>
   <string name="receive_files_title">Příjem souborů</string>
+  <string name="no_app_found_to_open">Nebyla nalezena žádná aplikace pro výběr souboru zim!</string>
 </resources>

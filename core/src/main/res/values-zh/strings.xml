@@ -6,12 +6,14 @@
 * GuoPC
 * Josephine W.
 * LClightcat
+* Lanyun1103
 * Liuxinyu970226
 * Lynzrand
 * Shuiwater
 * SomeyaMako
 * StarrySky
 * VulpesVulpes825
+* Wzl19371
 * Yfdyh000
 * Ywang
 * Zjzengdongyang
@@ -105,6 +107,7 @@
   <string name="tab_closed">标签页已关闭</string>
   <string name="bookmark_added">书签已添加</string>
   <string name="rate_dialog_title">请评价我们</string>
+  <string name="rate_dialog_msg">如果您喜欢使用%s，请花点时间为它评分，谢谢您的支持！</string>
   <string name="rate_dialog_positive">评价吧！</string>
   <string name="no_thanks">不用了，谢谢</string>
   <string name="rate_dialog_neutral">以后再说</string>
@@ -148,6 +151,7 @@
   <string name="stop">停止</string>
   <string name="internal_storage">内部</string>
   <string name="external_storage">外部</string>
+  <string name="configure">配置</string>
   <string name="yes">是</string>
   <string name="no">否</string>
   <string name="confirm_stop_download_title">停止下载？</string>

@@ -90,6 +90,7 @@
   <string name="tab_closed">Ischeda serrada</string>
   <string name="bookmark_added">Sinnalibros annantos</string>
   <string name="rate_dialog_title">Pro praghere avalora·nos</string>
+  <string name="rate_dialog_msg">Si t\'agradat a impreare %s piga·ti unu momentu pro li dare unu votu. Ti torramus gràtzias pro su suportu tuo!</string>
   <string name="rate_dialog_positive">Vota!</string>
   <string name="no_thanks">Nono, gràtzias</string>
   <string name="rate_dialog_neutral">Prus a tardu</string>
@@ -131,8 +132,10 @@
   <string name="tts_pause">pàusa</string>
   <string name="tts_resume">sighi</string>
   <string name="stop">firma</string>
+  <string name="configure_storage_option">Iscarrigare su libru in sa memòria interna?</string>
   <string name="internal_storage">Interna</string>
   <string name="external_storage">Esterna</string>
+  <string name="configure">Cunfigura</string>
   <string name="yes">Eja</string>
   <string name="no">Nono</string>
   <string name="confirm_stop_download_title">Firmare s\'iscarrigamentu?</string>
@@ -225,6 +228,7 @@
   <string name="connection_failed">Connessione fallida</string>
   <string name="permission_rationale_location">Android tenet bisòngiu de su permissu de localizatzione pro rilevare dispositivos pares (peers)</string>
   <string name="permission_rationale_location_on_host_zim_file">Android tenet bisòngiu de su permissu de localizatzione pro permìtere a s\'aplicatzione de istrangiare documentos Zim</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">Android tenet bisòngiu de su permissu de localizatzione de sos dispositivos wifi a curtzu pro permìtere a s\'aplicatzione de istrangiare archìvios Zim</string>
   <string name="permission_refused_location">Impossìbile localizare dispositivos pares (peers) chene sos permissos de localizatzione</string>
   <string name="permission_refused_storage">Impossìbile tènnere atzessu a sos documentos zim chene su permissu de archiviatzione</string>
   <string name="request_enable_location">Abìlita sa localizatzione pro permìtere su rilevamentu de pares (peers)</string>
