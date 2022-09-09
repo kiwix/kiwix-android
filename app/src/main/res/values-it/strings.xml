@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Albano
 * Beta16
 -->
 <resources>
+  <string name="file_system_does_not_support_4gb">Il tuo file system non supporta file superiori a 4 GB</string>
+  <string name="detecting_file_system">Sto rilevando se il file system può creare file da 4 GB</string>
+  <string name="cannot_open_file">Impossibile aprire il file\nProva a cercare questo file nella scheda Dispositivo della tua libreria</string>
   <string name="send_files_title">Invia file</string>
   <string name="receive_files_title">Ricevi file</string>
+  <string name="no_app_found_to_open">Nessuna app trovata per selezionare il file zim!</string>
 </resources>

@@ -20,7 +20,7 @@
   <string name="menu_wifi_hotspot">WiFi பகிரலை</string>
   <string name="save_media">ஊடகத்தை சேமிக்கவும்</string>
   <string name="save_media_error">ஊடகப்பொருளை சேமிக்கும் முயற்சியில் ஒரு பிழை நேர்ந்துவிட்டது!</string>
-  <string name="save_media_saved" fuzzy="true">தங்களுடைய ஊடகப்பொருளை %s to Android/media/org.kiwix…/ ல் சேமிக்கவும்</string>
+  <string name="save_media_saved">தங்களுடைய ஊடகப்பொருளை %s to Android/media/org.kiwix…/ ல் சேமிக்கவும்</string>
   <string name="search_label">தேடு</string>
   <string name="choose_file">கோப்பை தேர்வு செய் (*.zim)</string>
   <string name="open_in_new_tab">புதிய தாவலில் இணைப்பைத் திறக்கவா?</string>
@@ -92,6 +92,7 @@
   <string name="tab_closed">தாவல் மூடப்பட்டது</string>
   <string name="bookmark_added">புத்தகக்குறி சேர்க்கப்பட்டது</string>
   <string name="rate_dialog_title">தயவுசெய்து எங்களை மதிப்பிடுங்கள்</string>
+  <string name="rate_dialog_msg">நீங்கள் %s ஐப் பயன்படுத்தி மகிழ்ந்தால், அதை மதிப்பிட சிறிது நேரம் ஒதுக்குங்கள். உங்கள் ஒத்துழைப்புக்கு நன்றி!</string>
   <string name="rate_dialog_positive">எங்களின் தரம்!</string>
   <string name="no_thanks">வேண்டாம், நன்றிகள்</string>
   <string name="rate_dialog_neutral">பின்னர்</string>
@@ -133,8 +134,10 @@
   <string name="tts_pause">இடைநிறுத்து</string>
   <string name="tts_resume">தொடர்க</string>
   <string name="stop">நிறுத்து</string>
+  <string name="configure_storage_option">புத்தகத்தை உள் சேமிப்பகத்தில் பதிவிறக்கவா?</string>
   <string name="internal_storage">உள்ளே</string>
   <string name="external_storage">வெளியிலுள்ள</string>
+  <string name="configure">கட்டமைக்கவும்</string>
   <string name="yes">ஆம்</string>
   <string name="no">இல்லை</string>
   <string name="confirm_stop_download_title">பதிவிறக்குவதை நிறுத்தவா?</string>
@@ -227,6 +230,7 @@
   <string name="connection_failed">இணைப்பு தோல்வியடைந்தது</string>
   <string name="permission_rationale_location">சக சாதனங்களைக் கண்டறிவதற்கான செயலியை அனுமதிக்க ஆன்ட்ராய்டுக்கு இருப்பிட அனுமதி தேவை</string>
   <string name="permission_rationale_location_on_host_zim_file">Zim கோப்புகளை ஹோஸ்ட் செய்வதற்கான செயலியை அனுமதிக்க ஆன்ட்ராய்டுக்கு இருப்பிட அனுமதி தேவை</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">Zim கோப்புகளை ஹோஸ்ட் செய்ய ஆப்ஸை அனுமதிக்க, அருகிலுள்ள வைஃபை சாதனங்களின் அனுமதி Androidக்கு தேவை</string>
   <string name="permission_refused_location">இருப்பிட அனுமதியின்றி சக சாதனங்களைக் கண்டுபிடிக்க முடியாது</string>
   <string name="permission_refused_storage">சேமிப்பக அனுமதியின்றி zim கோப்புகளை அணுக முடியாது</string>
   <string name="request_enable_location">சகாக்களைக் கண்டறிய அனுமதிக்க இருப்பிடத்தை இயக்கவும்</string>
@@ -293,4 +297,12 @@
   <string name="system_unable_to_grant_permission_message">அமைப்பு அனுமதி வழங்க முடியவில்லை!</string>
   <string name="allow">அனுமதிக்கவும்</string>
   <string name="allow_internet_permission_message">உள்ளடக்கத்தைப் பதிவிறக்க இணைய அனுமதியை அனுமதிக்கவும்</string>
+  <string name="no_notes">குறிப்புகள் இல்லை</string>
+  <string name="notes_from_all_books">எல்லா புத்தகங்களிலிருந்தும் குறிப்புகளைப் பார்க்கவும்</string>
+  <string name="search_notes">குறிப்புகளைத் தேடு</string>
+  <string name="choose_your_action">உங்கள் செயலைத் தேர்ந்தெடுக்கவும்</string>
+  <string name="open_note">குறிப்பைத் திறக்கவும்</string>
+  <string name="open_article">கட்டுரையைத் திறக்கவும்</string>
+  <string name="delete_note_dialog_message">குறிப்பு: உங்கள் சேமிப்பகத்திலிருந்து குறிப்புகள் நீக்கப்படாது</string>
+  <string name="delete_selected_notes">தேர்ந்தெடுக்கப்பட்ட குறிப்புகளை நீக்கவா?</string>
 </resources>

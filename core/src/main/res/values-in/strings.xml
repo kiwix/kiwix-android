@@ -8,6 +8,7 @@
 * Polos
 * Relly Komaruzaman
 * Rizkiahmadz
+* Veracious
 -->
 <resources>
   <string name="menu_help">Bantuan</string>
@@ -123,8 +124,10 @@
   <string name="tts_pause">jeda</string>
   <string name="tts_resume">lanjut</string>
   <string name="stop">berhenti</string>
+  <string name="configure_storage_option">Unduh buku ke penyimpanan internal?</string>
   <string name="internal_storage">Internal</string>
   <string name="external_storage">Eksternal</string>
+  <string name="configure">Konfigurasikan</string>
   <string name="yes">Ya</string>
   <string name="no">Tidak</string>
   <string name="confirm_stop_download_title">Hentikan unduhan?</string>

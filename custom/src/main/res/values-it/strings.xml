@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Albano
 * Beta16
 -->
 <resources>
   <string name="retry">Riprova</string>
+  <string name="invalid_installation">Installazione non valida. Scarica Zim.\n Assicurati che il Wi-Fi sia attivo e di avere spazio di archiviazione sufficiente</string>
 </resources>

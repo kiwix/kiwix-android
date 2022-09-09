@@ -96,6 +96,7 @@
   <string name="tab_closed">分頁已關閉</string>
   <string name="bookmark_added">書籤已增加</string>
   <string name="rate_dialog_title">請給予我們評價</string>
+  <string name="rate_dialog_msg">如果您喜歡使用%s，請花點時間為它評分。感謝您的支持！</string>
   <string name="rate_dialog_positive">評價！</string>
   <string name="no_thanks">不用了，謝謝</string>
   <string name="rate_dialog_neutral">以後再說</string>
@@ -137,8 +138,10 @@
   <string name="tts_pause">暫停</string>
   <string name="tts_resume">繼續</string>
   <string name="stop">停止</string>
+  <string name="configure_storage_option">將書籍下載至內部儲存空間？</string>
   <string name="internal_storage">內部</string>
   <string name="external_storage">外部</string>
+  <string name="configure">配置</string>
   <string name="yes">是</string>
   <string name="no">否</string>
   <string name="confirm_stop_download_title">停止下載？</string>

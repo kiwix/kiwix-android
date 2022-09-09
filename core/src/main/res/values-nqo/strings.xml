@@ -91,6 +91,7 @@
   <string name="tab_closed">ߘߎ߲ߛߓߍ ߓߘߊ߫ ߕߎ߲߯</string>
   <string name="bookmark_added">ߟߊ߬ߡߊ ߝߊ߬ߙߊ߫</string>
   <string name="rate_dialog_title">ߡߐ߬ߟߐ߲߬ ߘߌ߫ ߒ߬ ߡߊ߫ ߖߊ߰ߣߌ߲߫</string>
+  <string name="rate_dialog_msg">ߣߴߌ ߛߍߥߊߣߍ߲߫ ߞߍ߫ ߘߊ߫ %s ߟߊߓߊ߯ߙߊ ߟߊ߫߸ ߥߊ߯ߕߌ ߘߏ߫ ߕߊ߬ ߏ߬ ߘߐ߫ ߖߊ߰ߣߌ߲߫ ߞߊ߬ ߡߐ߬ߟߐ߲߬ ߘߴߊ߬ ߡߊ߬. ߌ ߣߌ߫ ߗߋ߫ ߌ ߟߊ߫ ߘߍ߬ߡߍ߲ ߠߊ߫߹</string>
   <string name="rate_dialog_positive">ߡߐ߬ߟߐ߲߬ ߘߌ߫ ߒ߬ ߡߊ߬ ߦߟߌߣߐ߫ ߣߍ߲߫ ߠߊ߫߹</string>
   <string name="no_thanks">ߊ߬ߦߌ߫߸ ߌ ߣߌ߫ ߗߋ߫</string>
   <string name="rate_dialog_neutral">ߞߐ߯ߟߊ߫</string>
@@ -132,8 +133,10 @@
   <string name="tts_pause">ߊ߬ ߟߊߟߐ߬</string>
   <string name="tts_resume">ߊ߬ ߘߊߡߌ߬ߣߊ߬</string>
   <string name="stop">ߌ ߟߐ߬</string>
+  <string name="configure_storage_option">ߞߊ߬ ߞߊ߬ߝߊ ߡߊߞߍ߫ ߞߣߐߟߊ ߟߊ߬ߡߙߊ߬ߦߙߐ ߘߐ߫؟</string>
   <string name="internal_storage">ߞߣߐߟߊ</string>
   <string name="external_storage">ߞߐߞߊ߲ߠߊ</string>
+  <string name="configure">ߊ߬ ߢߊߓߐ߫</string>
   <string name="yes">ߊ߬ߥߐ߫</string>
   <string name="no">ߍ߲߬ߍ߲߫</string>
   <string name="confirm_stop_download_title">ߥߎߟߊߟߊߖߛߐߟߌ ߟߊߟߐ߬؟</string>
@@ -155,12 +158,15 @@
   <string name="time_today">ߓߌ߬</string>
   <string name="time_yesterday">ߞߎߣߎ߲߬</string>
   <string name="pref_external_link_popup_title">ߞߊ߬ ߖߊ߬ߛߙߋ߬ߡߊ߬ߟߊ ߞߍ߫ ߘߏ߲߬ ߕߎߡߊ ߟߊ߫ ߞߐߞߊ߲߫ ߛߘߌߜߋ߲ ߠߎ߬ ߟߊ߫</string>
+  <string name="pref_external_link_popup_summary">ߦߌ߬ߘߊ߬ߥߟߊ ߟߊߓߊ߯ߙߊ߫ ߞߊ߬ ߟߊ߬ߟߌ߰ߟߌ ߞߍ߫ ߛߐ߲߬ߞߐ ߡߊߞߊ߬ߝߏ߬ߞߏ ߟߊ߫ ߥߟߊ߫ ߞߏ߫ ߛߘߌ߬ߜߋ߲ ߕߍ߫ ߓߊ߯ߙߊ߫ ߟߊ߫ ߓߟߐߟߐߒߕߊ߲ߧߊ ߘߐ߫.</string>
   <string name="external_link_popup_dialog_title">ߞߐߞߊ߲߫ ߛߘߌߜߋ߲ ߟߊߛߐ߬ߘߐ߲</string>
+  <string name="external_link_popup_dialog_message">ߌ ߦߴߌ ߘߐ߫ ߞߊ߬ ߞߐߞߊ߲߫ ߛߘߌߜߋ߲ ߠߋ߬ ߟߊߘߏ߲߬ ߏ߬ ߘߌ߫. ߏ߬ ߘߏ߲߬ ߘߌ߫ ߛߋ߫ ߥߟߏ߫ ߟߊ߫ ߓߟߏߡߟߊ ߟߊߕߊ߬ߡߌ߲ ߛߐ߲߬ߞߐ ߡߊߞߊ߬ߝߏ߬ߟߌ ߟߊ߫ ߤߊߡߊ߲ߕߍ߫ ߊ߬ ߕߍ߫ ߣߊ߬ ߓߊ߯ߙߊ߫ ߟߊ߫ ߞߵߌ ߕߏ߫ ߜߊ߲߬ߞߎ߲߬ߓߊߟߌߦߊ ߘߐ߫. ߌ ߦߴߊ߬ ߝߍ߬ ߞߵߊ߬ ߘߊߓߊ߲߫ ߖߋߎ߫؟</string>
   <string name="do_not_ask_anymore">ߢߌ߬ߣߌ߲߬ߞߊ߬ߟߌ߫ ߜߘߍ߫ ߞߊ߫ ߞߴߏ߬ ߞߐ߫</string>
   <string name="your_languages">ߞߊ߲ ߛߎߥߊ߲ߘߌ߫</string>
   <string name="other_languages">ߞߊ߲߫ ߜߘߍ ߟߎ߬:</string>
   <string name="no_items_msg">ߝߌ߬ߛߌ߬ ߛߌ߫ ߛߐ߬ߘߐ߲߬ߕߊ߫ ߕߍ߫</string>
   <string name="crash_title">ߏ߬ ߓߘߊ߫ ߓߍ߲߬… ߏ߬ ߦߋ߫ ߞߏ߫ ߓߘߍ߫ ߓߊ߫ ߟߋ߬ ߘߌ߫</string>
+  <string name="crash_description">ߊ߬ ߞߍߣߍ߲߫ ߦߋ߫ ߦߴߊ߲ ߓߘߊ߫ ߜߊߛߊ߲߫. \n\nߊ߬ ߝߐ߫ ߌ ߘߌ߫ ߛߵߊ߲ ߘߍ߬ߡߍ߲߬ ߠߊ߫ ߝߙߋߞߋ ߏ߬ ߝߎߟߋ߲ ߡߊ߬ ߞߎ߲߬ߠߊ߬ߝߏߣߌ߲ ߢߌ߲߬ ߠߎ߬ ߗߋߟߌ ߟߊ߫؟</string>
   <string name="crash_checkbox_language">ߌ ߟߊ߫ ߞߊ߲ ߟߊ߬ߓߍ߲߬ߢߐ߲߰ߡߦߊ߬ߘߊ ߟߎ߫</string>
   <string name="crash_checkbox_zimfiles">ߌ ߟߊ߫ ZIM ߞߐߕߐ߮ ߟߎ߬ ߛߙߍߘߍ</string>
   <string name="crash_checkbox_exception">ߜߊߛߊ߲ߠߌ߲ ߝߊߙߊ߲ߝߊ߯ߛߌ ߟߎ߬</string>
@@ -192,6 +198,7 @@
   <string name="selected_items">%1$d ߓߘߊ߫ ߓߊߕߐ߬ߡߐ߲߫</string>
   <string name="bookmarks_from_current_book">ߞߊ߬ߝߊ ߟߎ߬ ߓߍ߯ ߟߊ߬ߡߊ ߟߎ߬ ߦߋ߫</string>
   <string name="search_bookmarks">ߟߊ߬ߡߊ ߟߎ߬ ߢߌߣߌ߲߫</string>
+  <string name="switch_tabs">ߘߊߞߎ߲ ߡߊߝߊ߬ߟߋ߲߫</string>
   <string name="close_all_tabs">ߘߊߞߎ߲ ߓߍ߯ ߘߊߕߎ߲߯</string>
   <string name="pending_state">ߘߞߐ߬ߣߐ߲߬ߠߌ߲ ߞߍ߫</string>
   <string name="running_state">ߊ߬ ߦߋ߫ ߛߋ߲߬ߠߊ߫</string>
@@ -252,6 +259,7 @@
   <string name="tag_text_only">ߛߓߍߟߌ ߜߊ߲߰ߛߊ߲</string>
   <string name="tag_short_text">ߛߓߍߟߌ߫ ߛߎߘߎ߲</string>
   <string name="storage_permission_denied">ߓߊ߲߬ ߓߘߊ߫ ߞߍ߫ ߟߊ߬ߡߙߊ߬ߦߙߐ ߟߊߘߤߊ߬ߞߏ ߡߊ߬</string>
+  <string name="grant_read_storage_permission">ߟߥߊ߬ߟߌ߬ߟߊ߲ ߣߌ߲߬ ߡߊ߬ߞߏ ߦߋ߫ ߛߋߞߏߦߊ ߟߊ߫ ߞߊ߬ ߛߋ߫ ߟߊ߬ߡߙߊ߬ߦߙߐ ߘߐߞߊ߬ߙߊ߲߬ ߠߊ߫ ߞߊ߬ ߛߋ߫ ߓߊ߯ߙߊ߫ ߟߊ߫. ߒ߬ߓߊ߬ ߏ߬ ߟߊߡߌ߬ߣߊ߫ ߌ ߟߊ߫ ߟߊ߬ߓߍ߲߬ߢߐ߲߰ߡߦߊ߬ߘߊ ߞߣߐ߫ ߖߊ߰ߣߌ߲߫</string>
   <string name="go_to_settings">ߕߊ߯ ߟߊ߬ߛߐ߬ߘߐ߲߬ ߛߌߟߊ ߟߊ߬ߓߍ߲߬ߢߐ߲߰ߡߦߊ߬ߘߊ ߞߊ߲߬</string>
   <string name="no_results">ߞߐߝߟߌ߫ ߕߴߦߋ߲߬</string>
   <string name="no_bookmarks">ߟߊ߬ߡߊ߫ ߕߴߦߋ߲߬</string>

@@ -22,7 +22,7 @@
   <string name="menu_wifi_hotspot">Värdböcker</string>
   <string name="save_media">Spara media</string>
   <string name="save_media_error">Ett fel uppstod när media skulle sparas!</string>
-  <string name="save_media_saved" fuzzy="true">Sparade media som %s i Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Sparade media som %s i Downloads/org.kiwix…/</string>
   <string name="search_label">Sök</string>
   <string name="choose_file">Välj en innehållsfil (*.zim)</string>
   <string name="open_in_new_tab">Öppna länk i ny flik?</string>
@@ -53,6 +53,7 @@
   <string name="server_started_message">Ange denna IP-adress i din webbläsare för att komma åt servern %s</string>
   <string name="share_host_address">Dela webbadress med andra appar</string>
   <string name="error_file_not_found">Fel: Den valda ZIM-filen kunde inte hittas.</string>
+  <string name="unable_to_read_zim_file">Kunde inte läsa denna zim-fil!</string>
   <string name="zim_not_opened">Kunde inte öppna zip-fil</string>
   <string name="error_file_invalid">Fel: Den valda filen är inte en giltig ZIM-fil.</string>
   <string name="error_article_url_not_found">Fel: Inläsning av artikel (url: %1$s) misslyckades.</string>
@@ -71,6 +72,7 @@
   <string name="no_reader_application_installed">Kunde inte hitta ett installerat program för denna filtyp</string>
   <string name="no_section_info">Ingen innehållsrubrik hittades</string>
   <string name="request_storage">För att komma åt offlineinnehåll behöver vi tillgång till ditt lagringsutrymme</string>
+  <string name="request_write_storage">För att ladda ned zim-filer behöver vi skrivåtkomst till din lagring</string>
   <string name="clear_recent_and_tabs_history_dialog">Är du säker på att du vill radera din sökhistorik och återställa alla aktiva flikar?</string>
   <string name="delete_recent_search_item">Radera detta objekt?</string>
   <string name="pref_clear_all_history_title">Rensa historik</string>
@@ -92,6 +94,7 @@
   <string name="tab_closed">Flik stängdes</string>
   <string name="bookmark_added">Bokmärke lades till</string>
   <string name="rate_dialog_title">Sätt betyg på oss</string>
+  <string name="rate_dialog_msg">Om du gillar %s kan du ta en stund och betygsätta det. Tack för ditt stöd!</string>
   <string name="rate_dialog_positive">Betygsätt!</string>
   <string name="no_thanks">Nej, tack</string>
   <string name="rate_dialog_neutral">Senare</string>
@@ -133,8 +136,10 @@
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">återuppta</string>
   <string name="stop">stoppa</string>
+  <string name="configure_storage_option">Ladda ned bok till intern lagring?</string>
   <string name="internal_storage">Internt</string>
   <string name="external_storage">Extern</string>
+  <string name="configure">Konfigurera</string>
   <string name="yes">Ja</string>
   <string name="no">Nej</string>
   <string name="confirm_stop_download_title">Stoppa nedladdning?</string>
@@ -288,4 +293,12 @@
   <string name="all_files_permission_needed_message">För att kunna komma åt alla ZIM-filer på enheten behöver vi behörighet för alla filer</string>
   <string name="allowed">Tillåten</string>
   <string name="not_allowed">Inte tillåtet</string>
+  <string name="allow">Tillåt</string>
+  <string name="no_notes">Inga anteckningar</string>
+  <string name="notes_from_all_books">Visa anteckningar från alla böcker</string>
+  <string name="search_notes">Sök i anteckningar</string>
+  <string name="choose_your_action">Välj din åtgärd</string>
+  <string name="open_note">Öppna anteckning</string>
+  <string name="open_article">Öppna artikel</string>
+  <string name="delete_selected_notes">Radera markerade anteckningar?</string>
 </resources>

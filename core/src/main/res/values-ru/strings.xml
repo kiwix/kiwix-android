@@ -152,6 +152,7 @@
   <string name="stop">остановить</string>
   <string name="internal_storage">Внутренний</string>
   <string name="external_storage">Внешний</string>
+  <string name="configure">Настроить</string>
   <string name="yes">Да</string>
   <string name="no">Нет</string>
   <string name="confirm_stop_download_title">Остановить загрузку?</string>
@@ -310,4 +311,5 @@
   <string name="system_unable_to_grant_permission_message">Система не может предоставить разрешение!</string>
   <string name="allow">Разрешить</string>
   <string name="allow_internet_permission_message">Пожалуйста разрешите доступ в интернет для загрузки контента</string>
+  <string name="open_article">Открыть статью</string>
 </resources>
