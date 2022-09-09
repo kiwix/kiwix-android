@@ -15,8 +15,10 @@
   <string name="menu_read_aloud">Чытаць уголас</string>
   <string name="menu_read_aloud_stop">Спыніць чытаньне ўголас</string>
   <string name="menu_support_kiwix">Падтрымаць Kiwix</string>
+  <string name="menu_wifi_hotspot">Пункт доступу WiFi</string>
+  <string name="save_media">Захаваць мэдыя</string>
   <string name="save_media_error">Узьнікла памылка пры захаваньні мэдыяфайлу!</string>
-  <string name="save_media_saved" fuzzy="true">Мэдыя-файл захаваны як %s у Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Мэдыя-файл захаваны як %s у Downloads/org.kiwix…/</string>
   <string name="choose_file">Абярыце файл зьместу (*.zim)</string>
   <string name="open_in_new_tab">Адкрыць спасылку ў новай укладцы?</string>
   <string name="hotspot_failed_message">Падобна, што ваш пункт доступу ўжо ўключаны. Каб працягнуць, адключыце пункт доступу вай-фай.</string>
