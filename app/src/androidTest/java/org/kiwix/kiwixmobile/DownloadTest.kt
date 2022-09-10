@@ -83,9 +83,9 @@ class DownloadTest {
     } catch (e: Exception) {
       Assert.fail(
         """
-  Couldn't find downloaded file 'ray_charles'
-  Original Exception:
-  ${e.localizedMessage}
+        Couldn't find downloaded file 'ray_charles'
+        Original Exception:
+        ${e.localizedMessage}
         """.trimIndent()
       )
     }
@@ -98,15 +98,16 @@ class DownloadTest {
       Log.w(KIWIX_DOWNLOAD_TEST, "Failed to refresh ZIM list: " + e.localizedMessage)
     }
 
-    /*
-     Commented out the following as it uses another Activity.
-     TODO Once we find a good way to run cross-activity re-implement
-     this functionality in the tests.
+    /**
+     * Commented out the following as it uses another Activity.
+     * TODO Once we find a good way to run cross-activity re-implement
+     * this functionality in the tests.
 
-    onData(withContent("ray_charles")).inAdapterView(withId(R.id.zimfilelist)).perform(click());
-    openContextualActionModeOverflowMenu();
-    onView(withText("Get Content")).perform(click());
-   */StandardActions.deleteZimIfExists("ray_charles", R.id.zimfilelist)
+     * onData(withContent("ray_charles")).inAdapterView(withId(R.id.zimfilelist)).perform(click());
+     * openContextualActionModeOverflowMenu();
+     * onView(withText("Get Content")).perform(click());
+     */
+    StandardActions.deleteZimIfExists("ray_charles", R.id.zimfilelist)
   }
 
   @After fun finish() {
