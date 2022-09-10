@@ -32,8 +32,8 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.clickMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
-import junit.framework.Assert
 import org.junit.After
+import org.junit.Assert
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Ignore
