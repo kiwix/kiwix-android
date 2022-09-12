@@ -1,0 +1,32 @@
+name: Publish nightly build
+
+on:
+  pull_request:
+    branches:
+      - testing
+
+jobs:
+  nightly:
+    name: Publish nightly build
+    runs-on: ubuntu-22.04
+    environment: nightly
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+      - name: Build
+        run: |
+          # use timestamp as Version Code
+          export versionCode=$(date '+%s')
+          sed -i "s,^\(\s*versionCode\)  *[0-9].*,\1 $versionCode," app/build.gradle.kts
+          ./gradlew assembleDebug
+      - name: fdroid nightly
+        run: |
+          sudo add-apt-repository ppa:fdroid/fdroidserver
+          sudo apt-get update
+          sudo apt-get install apksigner fdroidserver --no-install-recommends
+          export DEBUG_KEYSTORE=$\{\{ secrets.DEBUG_KEYSTORE \}\}
+          fdroid nightly --archive-older 10
