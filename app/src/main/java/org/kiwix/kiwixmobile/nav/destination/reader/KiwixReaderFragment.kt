@@ -47,6 +47,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigatio
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.getAttribute
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
+import org.kiwix.kiwixmobile.core.extensions.setParentFragmentsBottomMarginTo
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -201,12 +202,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
         )
       )
     }
-  }
-
-  private fun setParentFragmentsBottomMarginTo(margin: Int) {
-    val params = parentFragment?.view?.layoutParams as ViewGroup.MarginLayoutParams?
-    params?.bottomMargin = margin
-    parentFragment?.view?.requestLayout()
   }
 
   override fun onPause() {

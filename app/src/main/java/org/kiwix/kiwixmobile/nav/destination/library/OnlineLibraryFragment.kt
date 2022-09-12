@@ -63,6 +63,7 @@ import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
+import org.kiwix.kiwixmobile.core.extensions.setParentFragmentsBottomMarginTo
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -160,6 +161,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       setHasFixedSize(true)
     }
     zimManageViewModel.libraryItems.observe(viewLifecycleOwner, Observer(::onLibraryItemsChange))
+      .also {
+        setParentFragmentsBottomMarginTo(0)
+      }
     zimManageViewModel.libraryListIsRefreshing.observe(
       viewLifecycleOwner, Observer(::onRefreshStateChange)
     )

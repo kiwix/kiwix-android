@@ -57,6 +57,7 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
+import org.kiwix.kiwixmobile.core.extensions.setParentFragmentsBottomMarginTo
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.navigateToSettings
@@ -140,6 +141,9 @@ class LocalLibraryFragment : BaseFragment() {
       setHasFixedSize(true)
     }
     zimManageViewModel.fileSelectListStates.observe(viewLifecycleOwner, Observer(::render))
+      .also {
+        setParentFragmentsBottomMarginTo(0)
+      }
     disposable.add(sideEffects())
     zimManageViewModel.deviceListIsRefreshing.observe(viewLifecycleOwner) {
       zim_swiperefresh.isRefreshing = it!!
