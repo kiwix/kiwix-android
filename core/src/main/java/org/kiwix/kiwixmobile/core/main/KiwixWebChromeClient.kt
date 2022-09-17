@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.main
 import android.view.ViewGroup
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
-import com.cprcrack.videowebview.VideoEnabledWebChromeClient
+import org.kiwix.videowebview.VideoEnabledWebChromeClient
 
 class KiwixWebChromeClient(
   private val callback: WebViewCallback,
