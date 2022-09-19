@@ -26,8 +26,4 @@ jobs:
       - name: fdroid nightly
         env:
           DEBUG_KEYSTORE: ${{ secrets.DEBUG_KEYSTORE }}
-        run: |
-          sudo add-apt-repository ppa:fdroid/fdroidserver
-          sudo apt-get update
-          sudo apt-get install apksigner fdroidserver --no-install-recommends
-          fdroid nightly --archive-older 10
+        uses: wardvl/f-droid-nightly-action@v2.1
