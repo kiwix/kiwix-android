@@ -24,6 +24,4 @@ jobs:
           sed -i "s,^\(\s*versionCode\)  *[0-9].*,\1 $versionCode," app/build.gradle.kts
           ./gradlew assembleDebug
       - name: fdroid nightly
-        env:
-          DEBUG_KEYSTORE: ${{ secrets.DEBUG_KEYSTORE }}
         uses: wardvl/f-droid-nightly-action@v2.1
