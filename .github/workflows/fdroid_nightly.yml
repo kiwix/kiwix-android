@@ -17,11 +17,5 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: 11
-      - name: Build
-        run: |
-          # use timestamp as Version Code
-          export versionCode=$(date '+%s')
-          sed -i "s,^\(\s*versionCode\)  *[0-9].*,\1 $versionCode," app/build.gradle.kts
-          ./gradlew assembleDebug
       - name: fdroid nightly
         uses: wardvl/f-droid-nightly-action@v2.1
