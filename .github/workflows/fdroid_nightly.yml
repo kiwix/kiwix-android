@@ -24,9 +24,10 @@ jobs:
           sed -i "s,^\(\s*versionCode\)  *[0-9].*,\1 $versionCode," app/build.gradle.kts
           ./gradlew assembleDebug
       - name: fdroid nightly
+        env:
+          DEBUG_KEYSTORE: ${{ secrets.DEBUG_KEYSTORE }}
         run: |
           sudo add-apt-repository ppa:fdroid/fdroidserver
           sudo apt-get update
           sudo apt-get install apksigner fdroidserver --no-install-recommends
-          export DEBUG_KEYSTORE=${{ secrets.FDROID_DEBUG_KEYSTORE }}
           fdroid nightly --archive-older 10
