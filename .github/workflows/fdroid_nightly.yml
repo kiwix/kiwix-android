@@ -30,3 +30,4 @@ jobs:
           sudo add-apt-repository ppa:fdroid/fdroidserver
           sudo apt-get update
           sudo apt-get install apksigner fdroidserver --no-install-recommends
+          fdroid nightly
