@@ -42,6 +42,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.allowStoragePermission
+import org.kiwix.kiwixmobile.testutils.TestUtils.hasStoragePermission
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource.Companion.getInstance
 import org.kiwix.kiwixmobile.utils.StandardActions
 import java.util.concurrent.TimeUnit
@@ -71,7 +73,9 @@ class DownloadTest {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     clickMenu(TestUtils.getResourceString(R.string.library))
     clickOn(R.string.local_zims)
-    TestUtils.allowPermissionsIfNeeded()
+    if (!hasStoragePermission()) {
+      allowStoragePermission()
+    }
     StandardActions.deleteZimIfExists("ray_charles", R.id.zimfilelist)
     clickOn(R.string.remote_zims)
     TestUtils.captureAndSaveScreenshot("Before-checking-for-ZimManager-Main-Activity")

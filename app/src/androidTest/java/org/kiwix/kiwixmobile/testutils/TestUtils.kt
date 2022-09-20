@@ -18,25 +18,26 @@
 package org.kiwix.kiwixmobile.testutils
 
 import android.Manifest
-import androidx.core.content.ContextCompat
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Environment
 import android.util.Log
-import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.UiSelector
-import androidx.test.uiautomator.UiObjectNotFoundException
-import androidx.test.runner.screenshot.Screenshot
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.runner.screenshot.Screenshot
+import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiObjectNotFoundException
+import androidx.test.uiautomator.UiSelector
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
-import java.io.IOException
+import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -60,29 +61,39 @@ object TestUtils {
         however I'm unsure if
     it's speed related, or Android Version related.
    */
-  private fun hasStoragePermission(): Boolean {
-    return ContextCompat.checkSelfPermission(
+
+  private fun hasReadExternalStoragePermission(): Boolean =
+    ContextCompat.checkSelfPermission(
       InstrumentationRegistry.getInstrumentation().targetContext,
       Manifest.permission.READ_EXTERNAL_STORAGE
-    ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+    ) == PackageManager.PERMISSION_GRANTED
+
+  private fun hasWriteExternalStoragePermission(): Boolean =
+    ContextCompat.checkSelfPermission(
       InstrumentationRegistry.getInstrumentation().targetContext,
       Manifest.permission.WRITE_EXTERNAL_STORAGE
     ) == PackageManager.PERMISSION_GRANTED
-  }
 
-  @JvmStatic fun allowPermissionsIfNeeded() {
-    if (Build.VERSION.SDK_INT >= 23 && !hasStoragePermission()) {
-      val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-      val allowPermissions =
-        device.findObject(
-          UiSelector().clickable(true)
-            .checkable(false).index(1)
-        )
-      if (allowPermissions.exists()) {
-        try {
-          allowPermissions.click()
-        } catch (e: UiObjectNotFoundException) {
-        }
+  @RequiresApi(Build.VERSION_CODES.R)
+  private fun hasManageExternalStoragePermission(): Boolean =
+    Environment.isExternalStorageManager()
+
+  @JvmStatic fun hasStoragePermission(): Boolean =
+    if (Build.VERSION.SDK_INT < 23) true
+    else hasReadExternalStoragePermission() && hasWriteExternalStoragePermission()
+
+  @JvmStatic fun allowStoragePermission() {
+    val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+    val allowPermissions =
+      device.findObject(
+        UiSelector().clickable(true)
+          .checkable(false).index(1)
+      )
+    if (allowPermissions.exists()) {
+      try {
+        allowPermissions.click()
+      } catch (e: UiObjectNotFoundException) {
+        Log.w(TAG, "Unable to find allow permission dialog", e)
       }
     }
   }
@@ -101,14 +112,14 @@ object TestUtils {
     val fileName = "TEST_${timestamp}_$name.png"
     val outFile = File(screenshotDir.path + File.separator + fileName)
     val screenshot = Screenshot.capture().bitmap ?: return
+    var fos: OutputStream? = null
     try {
-      val fos = FileOutputStream(outFile)
+      fos = FileOutputStream(outFile)
       screenshot.compress(Bitmap.CompressFormat.PNG, 90, fos)
-      fos.close()
     } catch (e: FileNotFoundException) {
-      Log.w(TAG, "Failed to save Screenshot", e)
-    } catch (e: IOException) {
-      Log.w(TAG, "Failed to save Screenshot", e)
+      Log.w(TAG, "Unable to create file $outFile", e)
+    } finally {
+      fos?.close()
     }
   }
 
