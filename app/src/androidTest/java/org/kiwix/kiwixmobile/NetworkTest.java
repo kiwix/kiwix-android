@@ -49,7 +49,9 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
+import static com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.clickMenu;
 import static com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
@@ -116,7 +118,7 @@ public class NetworkTest {
     mActivityTestRule.launchActivity(null);
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.library));
+    clickMenu(getResourceString(R.string.library));
 
     if (!TestUtils.hasStoragePermission()) {
       TestUtils.allowStoragePermission();
