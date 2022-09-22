@@ -18,6 +18,7 @@
     <ignore regexp=".*TopLevelDestinationRobot.kt.*"/>
     <ignore regexp=".*ZimHostRobot.kt.*"/>
     <ignore regexp=".*SearchRobot.kt.*"/>
+    <ignore regexp=".*InitialDownloadRobot.kt.*"/>
   </issue>
   <issue id="TypographyEllipsis">
     <ignore path="**-iw/**.xml" />
