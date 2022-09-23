@@ -7,4 +7,5 @@
   <string name="send_files_title">Send Files</string>
   <string name="receive_files_title">Receive Files</string>
   <string name="no_app_found_to_open">No app found to select zim file!</string>
+  <string name="select_zim_file">Select zim file to read</string>
 </resources>

@@ -84,7 +84,7 @@
     android:layout_height="wrap_content"
     android:layout_marginEnd="10dp"
     android:layout_marginBottom="66dp"
-    android:contentDescription="@string/app_name"
+    android:contentDescription="@string/select_zim_file"
     android:src="@drawable/ic_add_blue_24dp"
     app:backgroundTint="@color/black"
     app:fabSize="auto"
