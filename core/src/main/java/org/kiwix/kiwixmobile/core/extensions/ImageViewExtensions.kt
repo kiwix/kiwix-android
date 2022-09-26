@@ -24,11 +24,13 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 
 fun ImageView.setBitmap(base64String: Base64String) {
   base64String.toBitmap()
     ?.let(::setImageBitmap)
+    ?: kotlin.run { setImageDrawableCompat(R.drawable.default_zim_file_icon) }
 }
 
 // methods that accept inline classes as parameters are not allowed to be called from java
