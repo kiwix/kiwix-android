@@ -18,17 +18,12 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: 11
-      - name: Build
-        run: |
-          # use timestamp as Version Code
-          export versionCode=$(date '+%s')
-          sed -i "s,^\(\s*versionCode\)  *[0-9].*,\1 $versionCode," app/build.gradle.kts
-          ./gradlew assembleDebug
       - name: fdroid nightly
         env:
           DEBUG_KEYSTORE: ${{ secrets.DEBUG_KEYSTORE }}
         run: |
           echo "${{ secrets.DEBUG_KEYSTORE }}"
+          echo "${{ secrets.KEY_ALIAS }}"
           sudo add-apt-repository ppa:fdroid/fdroidserver
           sudo apt-get update
           sudo apt-get install apksigner fdroidserver --no-install-recommends
