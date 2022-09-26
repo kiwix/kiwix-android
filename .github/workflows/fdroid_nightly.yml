@@ -21,14 +21,9 @@ jobs:
       - name: fdroid nightly
         env:
           DEBUG_KEYSTORE: ${{ secrets.DEBUG_KEYSTORE }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         run: |
-          echo "${{ secrets.KEY_STORE_PASSWORD }}"
-          echo "${{ secrets.KEY_ALIAS }}"
-          echo "${{ secrets.KEY_PASSWORD }}"
-          echo "${{ secrets.GITHUB_TOKEN }}"
           sudo add-apt-repository ppa:fdroid/fdroidserver
           sudo apt-get update
           sudo apt-get install apksigner fdroidserver --no-install-recommends
-          export DEBUG_KEYSTORE=${{ secrets.DEBUG_KEYSTORE }}
+          export DEBUG_KEYSTORE=${{ secrets.GITHUB_TOKEN }}
           fdroid nightly
