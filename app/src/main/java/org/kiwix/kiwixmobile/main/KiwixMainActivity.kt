@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.main
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.view.ActionMode
@@ -85,6 +86,24 @@ class KiwixMainActivity : CoreMainActivity() {
       onNavigationItemSelected(item)
     }
     bottom_nav_view.setupWithNavController(navController)
+  }
+
+  override fun onConfigurationChanged(newConfig: Configuration) {
+    super.onConfigurationChanged(newConfig)
+    bottom_nav_view?.menu?.apply {
+      findItem(R.id.readerFragment)?.title = resources.getString(R.string.reader)
+      findItem(R.id.libraryFragment)?.title = resources.getString(R.string.library)
+      findItem(R.id.downloadsFragment)?.title = resources.getString(R.string.download)
+    }
+    drawer_nav_view?.menu?.apply {
+      findItem(R.id.menu_bookmarks_list)?.title = resources.getString(R.string.bookmarks)
+      findItem(R.id.menu_history)?.title = resources.getString(R.string.history)
+      findItem(R.id.menu_notes)?.title = resources.getString(R.string.pref_notes)
+      findItem(R.id.menu_host_books)?.title = resources.getString(R.string.menu_wifi_hotspot)
+      findItem(R.id.menu_settings)?.title = resources.getString(R.string.menu_settings)
+      findItem(R.id.menu_help)?.title = resources.getString(R.string.menu_help)
+      findItem(R.id.menu_support_kiwix)?.title = resources.getString(R.string.menu_support_kiwix)
+    }
   }
 
   override fun configureActivityBasedOn(destination: NavDestination) {
