@@ -23,7 +23,7 @@ jobs:
         run: |
           # use timestamp as Version Code
           export versionCode=$(date '+%s')
-          sed -i "s,^\(\s*versionCode\)  *[0-9].*,\1 $versionCode," app/build.gradle
+          sed -i "s,^\(\s*versionCode\)  *[0-9].*,\1 $versionCode," app/build.gradle.kts
           ./gradlew assembleDebug
       - name: fdroid nightly
         run: |
