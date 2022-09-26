@@ -100,6 +100,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   @Inject lateinit var bookUtils: BookUtils
   @Inject lateinit var availableSpaceCalculator: AvailableSpaceCalculator
   @Inject lateinit var alertDialogShower: AlertDialogShower
+
+  private var downloadBookItem: LibraryNetworkEntity.Book? = null
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
   }
@@ -302,17 +304,23 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
   }
 
-  private fun downloadFile(book: LibraryNetworkEntity.Book) {
-    downloader.download(book)
+  private fun downloadFile() {
+    downloadBookItem?.let {
+      downloader.download(it)
+      downloadBookItem = null
+    }
   }
 
   @SuppressLint("InflateParams")
-  private fun storeDeviceInPreferences(storageDevice: StorageDevice) {
+  private fun storeDeviceInPreferences(
+    storageDevice: StorageDevice
+  ) {
     if (storageDevice.isInternal) {
       sharedPreferenceUtil.putPrefStorage(
         sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
       )
       sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION)
+      downloadFile()
     } else {
       if (sharedPreferenceUtil.isPlayStoreBuild) {
         setExternalStoragePath(storageDevice)
@@ -330,6 +338,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private fun setExternalStoragePath(storageDevice: StorageDevice) {
     sharedPreferenceUtil.putPrefStorage(storageDevice.name)
     sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
+    downloadFile()
   }
 
   private fun selectFolder() {
@@ -353,6 +362,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       data?.let {
         getPathFromUri(requireActivity(), data)?.let(sharedPreferenceUtil::putPrefStorage)
         sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
+        downloadFile()
       } ?: run {
         activity.toast(
           resources
@@ -425,6 +435,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   private fun onBookItemClick(item: LibraryListItem.BookItem) {
     if (checkExternalStorageWritePermission()) {
+      downloadBookItem = item.book
       when {
         isNotConnected -> {
           noInternetSnackbar()
@@ -433,7 +444,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         noWifiWithWifiOnlyPreferenceSet -> {
           dialogShower.show(WifiOnly, {
             sharedPreferenceUtil.putPrefWifiOnly(false)
-            downloadFile(item.book)
+            downloadFile()
           })
           return
         }
@@ -442,7 +453,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         } else {
           availableSpaceCalculator.hasAvailableSpaceFor(
             item,
-            { downloadFile(item.book) },
+            { downloadFile() },
             {
               libraryList.snack(
                 """ 
@@ -474,6 +485,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       },
       {
         sharedPreferenceUtil.showStorageOption = false
+        downloadFile()
       }
     )
   }
