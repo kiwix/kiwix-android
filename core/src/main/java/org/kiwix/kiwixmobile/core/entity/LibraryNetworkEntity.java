@@ -92,6 +92,7 @@ public class LibraryNetworkEntity {
 
     public int searchMatches = 0;
 
+    @Deprecated
     public File file;
     @Deprecated
     public String remoteUrl;

@@ -25,7 +25,6 @@ import androidx.test.espresso.IdlingRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
-import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions;
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions;
 import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
@@ -40,7 +39,6 @@ import org.kiwix.kiwixmobile.core.CoreApp;
 import org.kiwix.kiwixmobile.core.di.components.DaggerTestComponent;
 import org.kiwix.kiwixmobile.core.di.components.TestComponent;
 import org.kiwix.kiwixmobile.main.KiwixMainActivity;
-import org.kiwix.kiwixmobile.testutils.TestUtils;
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
 
 import static androidx.test.InstrumentationRegistry.getInstrumentation;
@@ -55,6 +53,7 @@ import static com.adevinta.android.barista.interaction.BaristaMenuClickInteracti
 import static com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.allowStoragePermissionsIfNeeded;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 
@@ -120,9 +119,7 @@ public class NetworkTest {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     clickMenu(getResourceString(R.string.library));
 
-    if (!TestUtils.hasStoragePermission()) {
-      TestUtils.allowStoragePermission();
-    }
+    allowStoragePermissionsIfNeeded();
 
     onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.libraryList))
       .perform(click());

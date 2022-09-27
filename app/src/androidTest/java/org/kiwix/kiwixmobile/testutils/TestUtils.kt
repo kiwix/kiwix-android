@@ -78,22 +78,23 @@ object TestUtils {
   private fun hasManageExternalStoragePermission(): Boolean =
     Environment.isExternalStorageManager()
 
-  @JvmStatic fun hasStoragePermission(): Boolean =
-    if (Build.VERSION.SDK_INT < 23) true
-    else hasReadExternalStoragePermission() && hasWriteExternalStoragePermission()
+  @JvmStatic fun hasStoragePermission() = Build.VERSION.SDK_INT > Build.VERSION_CODES.M &&
+    hasReadExternalStoragePermission() && hasWriteExternalStoragePermission()
 
-  @JvmStatic fun allowStoragePermission() {
-    val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-    val allowPermissions =
-      device.findObject(
-        UiSelector().clickable(true)
-          .checkable(false).index(1)
-      )
-    if (allowPermissions.exists()) {
-      try {
-        allowPermissions.click()
-      } catch (e: UiObjectNotFoundException) {
-        Log.w(TAG, "Unable to find allow permission dialog", e)
+  @JvmStatic fun allowStoragePermissionsIfNeeded() {
+    if (!hasStoragePermission()) {
+      val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+      val allowPermissions =
+        device.findObject(
+          UiSelector().clickable(true)
+            .checkable(false).index(1)
+        )
+      if (allowPermissions.exists()) {
+        try {
+          allowPermissions.click()
+        } catch (e: UiObjectNotFoundException) {
+          Log.w(TAG, "Unable to find allow permission dialog", e)
+        }
       }
     }
   }
