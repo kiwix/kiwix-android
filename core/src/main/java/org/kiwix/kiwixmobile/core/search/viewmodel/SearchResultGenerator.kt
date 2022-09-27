@@ -57,6 +57,7 @@ class ZimSearchResultGenerator @Inject constructor() : SearchResultGenerator {
   }
     .distinct()
     .toList()
+    .sortedBy(ZimSearchResultListItem::value)
 
   private suspend fun <T> createList(readSearchResult: suspend () -> T?): List<T> {
     return mutableListOf<T>().apply {
