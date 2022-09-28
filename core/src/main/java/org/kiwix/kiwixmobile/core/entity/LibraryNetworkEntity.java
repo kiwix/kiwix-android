@@ -91,6 +91,7 @@ public class LibraryNetworkEntity {
     public String tags;
 
     public int searchMatches = 0;
+
     @Deprecated
     public File file;
     @Deprecated
