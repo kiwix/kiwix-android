@@ -57,7 +57,7 @@ data class DownloadCustom @Inject constructor(val downloader: Downloader) : Side
       this.articleCount = articleCount
       this.mediaCount = mediaCount
       this.size = size
-      bookName = name
+      this.name = name
       favicon = favIcon
     }
 }

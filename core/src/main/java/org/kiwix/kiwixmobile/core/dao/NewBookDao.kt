@@ -67,7 +67,7 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
   }
 
   fun migrationInsert(books: List<Book>) {
-    insert(books.map { BookOnDisk(book = it, file = it.file) })
+    insert(books.map { BookOnDisk(book = it, file = it.file!!) })
   }
 
   private fun removeBooksThatDoNotExist(books: MutableList<BookOnDiskEntity>) {
@@ -82,7 +82,7 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
     val bookOnDiskEntity = box.query {
       equal(BookOnDiskEntity_.bookId, it.zimId)
     }.find().getOrNull(0)
-    return bookOnDiskEntity?.let { Pair(it.favIcon, it.file.path) } ?: Pair(null, null)
+    return bookOnDiskEntity?.let { it.favIcon to it.file.path } ?: null to null
   }
 
   fun bookMatching(downloadTitle: String) = box.query {

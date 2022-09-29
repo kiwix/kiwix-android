@@ -58,9 +58,9 @@ sealed class BookOnDiskViewHolder<in T : BooksOnDiskListItem>(containerView: Vie
       selectionMode: SelectionMode
     ) {
       val book = item.book
-      item_book_title.text = book.getTitle()
-      item_book_date.text = book.getDate()
-      item_book_description.text = book.getDescription()
+      item_book_title.text = book.title
+      item_book_date.text = book.date
+      item_book_description.text = book.description
       item_book_size.text = (KiloByte(book.size).humanReadable)
       book.articleCount?.let {
         item_book_article_count.text =

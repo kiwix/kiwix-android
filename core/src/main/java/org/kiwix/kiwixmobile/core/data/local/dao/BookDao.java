@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.core.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.core.data.local.entity.BookDatabaseEntity;
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils;
 
@@ -53,7 +54,7 @@ public class BookDao {
     book.mediaCount = bookCursor.get(BookDatabaseEntity.MEDIA_COUNT);
     book.size = bookCursor.get(BookDatabaseEntity.SIZE);
     book.favicon = bookCursor.get(BookDatabaseEntity.FAVICON);
-    book.bookName = bookCursor.get(BookDatabaseEntity.NAME);
+    book.name = bookCursor.get(BookDatabaseEntity.NAME);
   }
 
   public ArrayList<Book> getBooks() {

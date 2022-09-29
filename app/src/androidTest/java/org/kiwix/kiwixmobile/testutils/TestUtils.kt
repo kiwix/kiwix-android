@@ -130,10 +130,10 @@ object TestUtils {
         if (myObj !is LibraryNetworkEntity.Book) {
           return false
         }
-        return if (myObj.getUrl() != null) {
-          myObj.getUrl().contains(content)
+        return if (myObj.url != null) {
+          myObj.url?.contains(content) == true
         } else {
-          myObj.file.path.contains(content)
+          myObj.file?.path?.contains(content) == true
         }
       }
 

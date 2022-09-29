@@ -18,9 +18,6 @@
 
 package org.kiwix.kiwixmobile.zimManager.libraryView.adapter
 
-import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -35,45 +32,45 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.Book
 
 internal class LibraryListItemTest {
 
-  val book = mockk<Book>()
+  private val book = Book()
 
   @BeforeEach
   fun init() {
-    clearAllMocks()
-    every { book.getId() } returns "0"
-    every { book.getSize() } returns "0"
+    book.id = "0"
+    book.size = "0"
+    book.tags = null
   }
 
   @Test
   internal fun `Unknown file system state files under 4GB can be downloaded`() {
-    assertThat(canBeDownloaded(book, Unknown)).isTrue()
+    assertThat(canBeDownloaded(book, Unknown)).isTrue
   }
 
   @Test
   internal fun `Unknown file system state greater than 4GB can't be downloaded`() {
-    every { book.getSize() } returns (Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES + 1).toString()
-    assertThat(canBeDownloaded(book, Unknown)).isFalse()
+    book.size = (Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES + 1).toString()
+    assertThat(canBeDownloaded(book, Unknown)).isFalse
   }
 
   @Test
   internal fun `Unknown file system state empty size can be downloaded`() {
-    every { book.getSize() } returns ""
-    assertThat(canBeDownloaded(book, Unknown)).isTrue()
+    book.size = ""
+    assertThat(canBeDownloaded(book, Unknown)).isTrue
   }
 
   @Test
   internal fun `CannotWrite4GB file system state can be downloaded`() {
-    assertThat(canBeDownloaded(book, CannotWrite4GbFile)).isTrue()
+    assertThat(canBeDownloaded(book, CannotWrite4GbFile)).isTrue
   }
 
   @Test
   internal fun `CanWrite4GbFile file system state can be downloaded`() {
-    assertThat(canBeDownloaded(book, CanWrite4GbFile)).isTrue()
+    assertThat(canBeDownloaded(book, CanWrite4GbFile)).isTrue
   }
 
   @Test
   internal fun `NotEnoughSpaceFor4GbFile file system state can be downloaded`() {
-    assertThat(canBeDownloaded(book, NotEnoughSpaceFor4GbFile)).isTrue()
+    assertThat(canBeDownloaded(book, NotEnoughSpaceFor4GbFile)).isTrue
   }
 
   private fun canBeDownloaded(book: Book, fileSystemState: FileSystemState) =

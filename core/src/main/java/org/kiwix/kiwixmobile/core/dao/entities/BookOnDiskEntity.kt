@@ -49,19 +49,19 @@ data class BookOnDiskEntity(
   constructor(bookOnDisk: BookOnDisk) : this(
     0,
     bookOnDisk.file,
-    bookOnDisk.book.getId(),
-    bookOnDisk.book.getTitle(),
-    bookOnDisk.book.getDescription(),
-    bookOnDisk.book.getLanguage(),
-    bookOnDisk.book.getCreator(),
-    bookOnDisk.book.getPublisher(),
-    bookOnDisk.book.getDate(),
-    bookOnDisk.book.getUrl(),
-    bookOnDisk.book.getArticleCount(),
-    bookOnDisk.book.getMediaCount(),
-    bookOnDisk.book.getSize(),
+    bookOnDisk.book.id,
+    bookOnDisk.book.title,
+    bookOnDisk.book.description,
+    bookOnDisk.book.language,
+    bookOnDisk.book.creator,
+    bookOnDisk.book.publisher,
+    bookOnDisk.book.date,
+    bookOnDisk.book.url,
+    bookOnDisk.book.articleCount,
+    bookOnDisk.book.mediaCount,
+    bookOnDisk.book.size,
     bookOnDisk.book.name,
-    bookOnDisk.book.getFavicon(),
+    bookOnDisk.book.favicon,
     bookOnDisk.book.tags
   )
 
@@ -77,7 +77,7 @@ data class BookOnDiskEntity(
     articleCount = this@BookOnDiskEntity.articleCount
     mediaCount = this@BookOnDiskEntity.mediaCount
     size = this@BookOnDiskEntity.size
-    bookName = name
+    name = this@BookOnDiskEntity.name
     favicon = favIcon
     tags = this@BookOnDiskEntity.tags
   }

@@ -60,63 +60,63 @@ class BookDaoTest {
     verify(exactly = 0) {
       kiwixDatabase.deleteWhere(
         BookDatabaseEntity::class.java,
-        BookDatabaseEntity.URL.eq(booksToAdd[0].file.path)
+        BookDatabaseEntity.URL.eq(booksToAdd[0].file?.path)
       )
     }
     if (booksRetrieved.contains(booksToAdd[1])) fail()
     verify(exactly = 0) {
       kiwixDatabase.deleteWhere(
         BookDatabaseEntity::class.java,
-        BookDatabaseEntity.URL.eq(booksToAdd[1].file.path)
+        BookDatabaseEntity.URL.eq(booksToAdd[1].file?.path)
       )
     }
     if (booksRetrieved.contains(booksToAdd[2])) fail()
     verify(exactly = 0) {
       kiwixDatabase.deleteWhere(
         BookDatabaseEntity::class.java,
-        BookDatabaseEntity.URL.eq(booksToAdd[2].file.path)
+        BookDatabaseEntity.URL.eq(booksToAdd[2].file?.path)
       )
     }
     if (booksRetrieved.contains(booksToAdd[3])) fail()
     verify {
       kiwixDatabase.deleteWhere(
         BookDatabaseEntity::class.java,
-        BookDatabaseEntity.URL.eq(booksToAdd[3].file.path)
+        BookDatabaseEntity.URL.eq(booksToAdd[3].file?.path)
       )
     }
     if (!booksRetrieved.contains(booksToAdd[4])) fail()
     verify(exactly = 0) {
       kiwixDatabase.deleteWhere(
         BookDatabaseEntity::class.java,
-        BookDatabaseEntity.URL.eq(booksToAdd[4].file.path)
+        BookDatabaseEntity.URL.eq(booksToAdd[4].file?.path)
       )
     }
     if (!booksRetrieved.contains(booksToAdd[5])) fail()
     verify(exactly = 0) {
       kiwixDatabase.deleteWhere(
         BookDatabaseEntity::class.java,
-        BookDatabaseEntity.URL.eq(booksToAdd[5].file.path)
+        BookDatabaseEntity.URL.eq(booksToAdd[5].file?.path)
       )
     }
     if (booksRetrieved.contains(booksToAdd[6])) fail()
     verify {
       kiwixDatabase.deleteWhere(
         BookDatabaseEntity::class.java,
-        BookDatabaseEntity.URL.eq(booksToAdd[6].file.path)
+        BookDatabaseEntity.URL.eq(booksToAdd[6].file?.path)
       )
     }
     if (!booksRetrieved.contains(booksToAdd[7])) fail()
     verify(exactly = 0) {
       kiwixDatabase.deleteWhere(
         BookDatabaseEntity::class.java,
-        BookDatabaseEntity.URL.eq(booksToAdd[7].file.path)
+        BookDatabaseEntity.URL.eq(booksToAdd[7].file?.path)
       )
     }
     if (booksRetrieved.contains(booksToAdd[8])) fail()
     verify {
       kiwixDatabase.deleteWhere(
         BookDatabaseEntity::class.java,
-        BookDatabaseEntity.URL.eq(booksToAdd[8].file.path)
+        BookDatabaseEntity.URL.eq(booksToAdd[8].file?.path)
       )
     }
   }
@@ -131,17 +131,17 @@ class BookDaoTest {
       ArrayList<Book>()
     for (i in 0..8) {
       val book = Book()
-      book.bookName = "Test Copy $i"
+      book.name = "Test Copy $i"
       book.id = "Test ID $i"
       val fileName = baseFileName + i
       when (i) {
         0 -> {
           book.file = File("$fileName.zim")
-          book.file.createNewFile()
+          book.file?.createNewFile()
         }
         1 -> {
           book.file = File("$fileName.part")
-          book.file.createNewFile()
+          book.file?.createNewFile()
         }
         2 -> {
           book.file = File("$fileName.zim")
@@ -151,7 +151,7 @@ class BookDaoTest {
         3 -> book.file = File("$fileName.zim")
         4 -> {
           book.file = File("$fileName.zim")
-          book.file.createNewFile()
+          book.file?.createNewFile()
           val t4 = File("$fileName.zim.part")
           t4.createNewFile()
         }
