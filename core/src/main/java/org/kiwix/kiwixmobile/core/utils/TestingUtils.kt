@@ -15,47 +15,39 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.utils;
-
-import java.util.HashSet;
-import java.util.Set;
+package org.kiwix.kiwixmobile.core.utils
 
 /**
  * Created by mhutti1 on 19/04/17.
  */
-
-public class TestingUtils {
-
-  private static TestingUtils.IdleListener callback;
-
-  private static Set<Class> resources = new HashSet<>();
-
-  public static void bindResource(Class bindClass) {
-    if (callback != null) {
-      resources.add(bindClass);
-      if (resources.size() == 1) {
-        callback.startTask();
+object TestingUtils {
+  private var callback: IdleListener? = null
+  private val resources: MutableSet<Class<*>> = HashSet()
+  @JvmStatic fun bindResource(bindClass: Class<*>) {
+    callback?.let {
+      resources.add(bindClass)
+      if (resources.size == 1) {
+        it.startTask()
       }
     }
   }
 
-  public static void unbindResource(Class bindClass) {
-    if (callback != null) {
-      resources.remove(bindClass);
+  @JvmStatic fun unbindResource(bindClass: Class<*>) {
+    callback?.let {
+      resources.remove(bindClass)
       if (resources.isEmpty()) {
-        callback.finishTask();
+        it.finishTask()
       }
     }
   }
 
-  public static void registerIdleCallback(TestingUtils.IdleListener listListener) {
-    resources.clear();
-    callback = listListener;
+  @JvmStatic fun registerIdleCallback(listListener: IdleListener) {
+    resources.clear()
+    callback = listListener
   }
 
-  public interface IdleListener {
-    void startTask();
-
-    void finishTask();
+  interface IdleListener {
+    fun startTask()
+    fun finishTask()
   }
 }

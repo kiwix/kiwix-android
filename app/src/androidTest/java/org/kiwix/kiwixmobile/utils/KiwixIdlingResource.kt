@@ -44,22 +44,18 @@ class KiwixIdlingResource : IdlingResource, IdleListener {
 
   override fun finishTask() {
     idle = true
-    if (resourceCallback != null) {
-      resourceCallback?.onTransitionToIdle()
-    }
+    resourceCallback?.onTransitionToIdle()
   }
 
   companion object {
-    private var kiwixIdlingResource: KiwixIdlingResource? = null
+    private lateinit var kiwixIdlingResource: KiwixIdlingResource
 
     @JvmStatic
-    fun getInstance(): KiwixIdlingResource? {
-      if (kiwixIdlingResource == null) {
+    fun getInstance(): KiwixIdlingResource {
+      if (!::kiwixIdlingResource.isInitialized) {
         kiwixIdlingResource = KiwixIdlingResource()
       }
-      if (kiwixIdlingResource != null) {
-        kiwixIdlingResource!!.idle = true
-      }
+      kiwixIdlingResource.idle = true
       TestingUtils.registerIdleCallback(kiwixIdlingResource)
       return kiwixIdlingResource
     }
