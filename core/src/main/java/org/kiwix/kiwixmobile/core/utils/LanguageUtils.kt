@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Typeface
@@ -185,28 +186,29 @@ class LanguageUtils(private val context: Context) {
 
     @JvmStatic
     fun handleLocaleChange(
-      context: Context,
+      activity: Activity,
       sharedPreferenceUtil: SharedPreferenceUtil
     ) {
       sharedPreferenceUtil.prefLanguage.takeIf { it != Locale.ROOT.toString() }?.let {
-        handleLocaleChange(context, it)
+        handleLocaleChange(activity, it)
       }
     }
 
     @SuppressLint("AppBundleLocaleChanges")
     @JvmStatic
-    fun handleLocaleChange(context: Context, language: String) {
+    fun handleLocaleChange(activity: Activity, language: String) {
       val locale =
         if (language == Locale.ROOT.toString())
-          ConfigurationCompat.getLocales(context.applicationContext.resources.configuration)[0]
+          ConfigurationCompat.getLocales(activity.applicationContext.resources.configuration)[0]
         else
           Locale(language)
       Locale.setDefault(locale)
       val config = Configuration()
       config.setLocale(locale)
       config.setLayoutDirection(locale)
-      context.resources
-        .updateConfiguration(config, context.resources.displayMetrics)
+      activity.resources
+        .updateConfiguration(config, activity.resources.displayMetrics)
+      activity.onConfigurationChanged(config)
     }
 
     /**
