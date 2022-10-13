@@ -9,4 +9,5 @@
   <string name="send_files_title">Dosyeyan Bişîne</string>
   <string name="receive_files_title">Dosyeyan Werbigire</string>
   <string name="no_app_found_to_open">Ji bo bijartina dosyeya zim-ê ti sepanekê nehate dîtin!</string>
+  <string name="select_zim_file">Ji bo xwendinê zim-ê bibijêre</string>
 </resources>

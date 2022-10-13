@@ -11,4 +11,5 @@
   <string name="send_files_title">Dosya Yükle</string>
   <string name="receive_files_title">Dosya Al</string>
   <string name="no_app_found_to_open">zim dosyasını seçecek uygulama bulunamadı!</string>
+  <string name="select_zim_file">Okumak için zim dosyasını seçin</string>
 </resources>

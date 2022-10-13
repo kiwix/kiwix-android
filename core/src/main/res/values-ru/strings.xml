@@ -20,6 +20,7 @@
 * Rivka Silinsky
 * Smavrina
 * Teretalexev
+* UniCollab
 * Артём 13327
 -->
 <resources>
@@ -109,6 +110,7 @@
   <string name="tab_closed">Вкладка закрыта</string>
   <string name="bookmark_added">Закладка добавлена</string>
   <string name="rate_dialog_title">Пожалуйста, оцените нас</string>
+  <string name="rate_dialog_msg">Если вам нравится использовать %s , пожалуйста, найдите минутку, чтобы оценить его. Спасибо за поддержку!</string>
   <string name="rate_dialog_positive">Оценить!</string>
   <string name="no_thanks">Нет, спасибо</string>
   <string name="rate_dialog_neutral">Позже</string>
@@ -150,6 +152,7 @@
   <string name="tts_pause">пауза</string>
   <string name="tts_resume">продолжить</string>
   <string name="stop">остановить</string>
+  <string name="configure_storage_option">Загрузить книгу во внутреннюю память?</string>
   <string name="internal_storage">Внутренний</string>
   <string name="external_storage">Внешний</string>
   <string name="configure">Настроить</string>
@@ -245,6 +248,7 @@
   <string name="connection_failed">Не удалось установить соединение</string>
   <string name="permission_rationale_location">Доступ к местонахождению требуется Android для поиска близлежащих устройств</string>
   <string name="permission_rationale_location_on_host_zim_file">Доступ к местонахождению требуется Android для размещения файлов Zim</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">Разрешение на использование устройств Wi-Fi поблизости требуется системой Android, чтобы приложение могло размещать файлы Zim</string>
   <string name="permission_refused_location">Невозможно обнаружить устройства без доступа к местоположению</string>
   <string name="permission_refused_storage">Невозможно получить доступ к файлам zim без разрешения на доступ к хранилищу</string>
   <string name="request_enable_location">Разрешите доступ к местоположению, чтобы позволить поиск устройств</string>
@@ -311,5 +315,12 @@
   <string name="system_unable_to_grant_permission_message">Система не может предоставить разрешение!</string>
   <string name="allow">Разрешить</string>
   <string name="allow_internet_permission_message">Пожалуйста разрешите доступ в интернет для загрузки контента</string>
+  <string name="no_notes">Нет заметок</string>
+  <string name="notes_from_all_books">Просмотр заметок из всех книг</string>
+  <string name="search_notes">Искать заметки</string>
+  <string name="choose_your_action">Выберите действие</string>
+  <string name="open_note">Открыть заметку</string>
   <string name="open_article">Открыть статью</string>
+  <string name="delete_note_dialog_message">Примечание: Заметки не удаляются из вашего хранилища</string>
+  <string name="delete_selected_notes">Удалить выбранные заметки?</string>
 </resources>
