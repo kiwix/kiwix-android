@@ -80,7 +80,7 @@ open class VideoEnabledWebView : WebView {
    * @return true it the video is being displayed using a custom view (typically full-screen)
    */
   val isVideoFullscreen: Boolean
-    get() = videoEnabledWebChromeClient?.isVideoFullscreen == true
+    get() = videoEnabledWebChromeClient?.isVideoFullscreen() == true
 
   /**
    * Pass only a VideoEnabledWebChromeClient instance.
