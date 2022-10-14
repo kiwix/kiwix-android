@@ -33,7 +33,7 @@ class TestNetworkModule {
 
   @Provides
   fun provideKiwixService(okHttpClient: OkHttpClient): KiwixService =
-    KiwixService.ServiceCreator.newHacklistService(
+    KiwixService.ServiceCreator.newHackListService(
       okHttpClient,
       MOCK_BASE_URL
     )
