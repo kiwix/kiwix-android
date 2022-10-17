@@ -21,7 +21,7 @@
   <string name="menu_wifi_hotspot">Kitêban Bihewîne</string>
   <string name="save_media">Medyayê Tomar Bike</string>
   <string name="save_media_error">Gava ku medya dihat tomarkirin çewtiyek derket holêǃ</string>
-  <string name="save_media_saved" fuzzy="true">Medya wek %s ji Android/media/org.kiwix…/ re hate qeydkirin</string>
+  <string name="save_media_saved">Medya wek %s ji Downloads/org.kiwix…/ re hate qeydkirin</string>
   <string name="search_label">Lê bigere</string>
   <string name="choose_file">Peldankeke Naverokê Hilbijêre (*.zim)</string>
   <string name="open_in_new_tab">Bila lînk di hilpekîneke nû de were vekirin?</string>
@@ -93,6 +93,7 @@
   <string name="tab_closed">Hilpekîn hat girtin</string>
   <string name="bookmark_added">Bijare hat tevlîkirin</string>
   <string name="rate_dialog_title">Ji kerema xwe Deng Bide Me</string>
+  <string name="rate_dialog_msg">Ger tu bi emilandina %s kêfxweş bî, xêra xwe ji bo nirxandina wê deqeyekê veqetîne. Spas ji bo desteka te!</string>
   <string name="rate_dialog_positive">Deng Bide!</string>
   <string name="no_thanks">Na, spas</string>
   <string name="rate_dialog_neutral">Paşê</string>
@@ -104,7 +105,7 @@
   <string name="new_tab_snack_bar">Gotar li hilpekînekî nû vebû</string>
   <string name="search_widget_text">Li Kiwixê bigere</string>
   <string name="speech_prompt_text">Ji bo ku li %s bigerî xeber bide</string>
-  <string name="speech_not_supported">Bibore! Amûra te piştgirî nade alava axaftinê</string>
+  <string name="speech_not_supported">Bibore! Amûra te piştgirî nade alava xeberdanê</string>
   <string name="local_zims">Amûr</string>
   <string name="remote_zims">Online</string>
   <string name="library">Pirtûkxane</string>
@@ -134,8 +135,10 @@
   <string name="tts_pause">rawestîne</string>
   <string name="tts_resume">dewam bike</string>
   <string name="stop">rawestîne</string>
+  <string name="configure_storage_option">Bila kitêbê daxîne depoya daxilî?</string>
   <string name="internal_storage">xwemalî</string>
   <string name="external_storage">Derveyî</string>
+  <string name="configure">Eyar bike</string>
   <string name="yes">Erê</string>
   <string name="no">Na</string>
   <string name="confirm_stop_download_title">Daxistinê rabiwestîne?</string>
@@ -228,6 +231,7 @@
   <string name="connection_failed">Girêdan têk çû</string>
   <string name="permission_rationale_location">Destûra lokasyonê lazim e ji aliyê Androîdê ve ji bo destûr bidin sepanê ku karibe cîhazên din ên wekhev tesbît bike.</string>
   <string name="permission_rationale_location_on_host_zim_file">Ji bo sepan karibe dosyeyên Zim-ê bihewîne destûra lokasyonê ji aliyê Androîdê ve lazim e.</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">Ji bo destûr bide sepanê ku dosyeyên Zi-ê bihewîne, destûra cîhazên wîfiyê yên li nêzîkê lazim e ji aliyê Androîdê ve.</string>
   <string name="permission_refused_location">Nikare cîhazên wekhev tesbît bike bêyî destûrên lokasyonê</string>
   <string name="permission_refused_storage">Nikare bigihe pelên zim-ê bêyî destûra depoyê</string>
   <string name="request_enable_location">Lokasyonê aktîv bike ji bo destûr vidî tesbîtkirina hevcinsan</string>
@@ -292,4 +296,14 @@
   <string name="denied_internet_permission_message">Ji bo daxistina naverokê ji kerema xwe wîfiyê aktîv bike</string>
   <string name="select_folder">Ji kerema xwe peldankekê bibijêre ji bo depokirina xaricî.</string>
   <string name="system_unable_to_grant_permission_message">Sîstem nikare destûrê werbigire!</string>
+  <string name="allow">Destûr bide</string>
+  <string name="allow_internet_permission_message">Ji kerema xwe destûra înternetê bide da ku karibe naverokê daxîne</string>
+  <string name="no_notes">Not tine</string>
+  <string name="notes_from_all_books">Notan Bibîne Ji Hemû Kitêban</string>
+  <string name="search_notes">Li notan bigere</string>
+  <string name="choose_your_action">Kiryara xwe bibijêre</string>
+  <string name="open_note">Notê Veke</string>
+  <string name="open_article">Gotarê Veke</string>
+  <string name="delete_note_dialog_message">Not: Not ji depoya te nayên birin</string>
+  <string name="delete_selected_notes">Bila notên bijartî jê bibe?</string>
 </resources>

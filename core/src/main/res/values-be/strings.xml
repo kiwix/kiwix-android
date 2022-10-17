@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Artsiom91
 * Kareyac
 * Mechanizatar
 * No Sleep till Krupki
@@ -8,7 +9,7 @@
 <resources>
   <string name="menu_help">Даведка</string>
   <string name="menu_home">Дадому</string>
-  <string name="menu_settings">Настройкі</string>
+  <string name="menu_settings">Налады</string>
   <string name="menu_search_in_text">Знайсці ў тэксце</string>
   <string name="bookmarks">Закладкі</string>
   <string name="menu_random_article">Выпадковы артыкул</string>

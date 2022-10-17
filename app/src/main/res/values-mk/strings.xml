@@ -9,4 +9,5 @@
   <string name="send_files_title">Испраќање на податотеки</string>
   <string name="receive_files_title">Примање на податотеки</string>
   <string name="no_app_found_to_open">Не пронајдов прилог за избирање на ZIM-податотека!</string>
+  <string name="select_zim_file">Изберете ZIM-податотека за читање</string>
 </resources>

@@ -22,7 +22,7 @@
   <string name="menu_support_kiwix">Kiwix Pomoč</string>
   <string name="save_media">Shrani predstavnost kot …</string>
   <string name="save_media_error">Pri poskusu shranjevanja medija je prišlo do napake!</string>
-  <string name="save_media_saved" fuzzy="true">Shrani medij kot %s na Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Shrani medij kot %s na Downloads/org.kiwix…/</string>
   <string name="search_label">Iskanje</string>
   <string name="choose_file">Izberite datoteko z vsebino (*.zim)</string>
   <string name="open_in_new_tab">Odprem povezavo na novem zavihku?</string>
@@ -50,7 +50,7 @@
   <string name="pref_clear_all_history_title">Izbriši zgodovino</string>
   <string name="pref_clear_all_history_summary">Počisti zgodovino nedavnih iskanj in zavihkov</string>
   <string name="all_history_cleared">Vsa zgodovina izbrisana</string>
-  <string name="clear_all_history_dialog_title" fuzzy="true">Počisti vso zgodovino</string>
+  <string name="clear_all_history_dialog_title">Počistim vso zgodovino?</string>
   <string name="share">Deli</string>
   <string name="selected_file_cab_app_chooser_title">Deli ZIM datoteke z:</string>
   <string name="delete">Odstrani</string>
@@ -80,7 +80,7 @@
   <string name="library">Knjižnica</string>
   <string name="delete_zims_toast">Datoteka je izbrisana</string>
   <string name="no_files_here">Ni datotek tukaj</string>
-  <string name="download_no_space" fuzzy="true">Premalo prostora za prenos te datoteke.</string>
+  <string name="download_no_space">Premalo prostora za prenos.</string>
   <string name="space_available">Prostor na voljo:</string>
   <string name="zim_simple">Preprosto</string>
   <string name="zim_no_pic">Ni slik</string>
@@ -98,7 +98,7 @@
   <string name="help_11">ZIM datoteke za prenos v aplikaciji se nahajajo v imeniku zunanjih pomnilnikov v mapi z imenom Kiwix</string>
   <string name="pref_storage">Shranjevanje</string>
   <string name="pref_current_folder">Trenutna mapa</string>
-  <string name="delete_zim_failed" fuzzy="true">Žal te datoteke ni bilo mogoče izbrisati. Poskusite uporabiti upravitelja datotek.</string>
+  <string name="delete_zim_failed">Žal nekaterih datotek ni bilo mogoče izbrisati. Poskusite uporabiti upravitelja datotek.</string>
   <string name="tts_pause">premor</string>
   <string name="tts_resume">nadaljuj</string>
   <string name="stop">ustavi</string>
@@ -124,7 +124,7 @@
   <string name="time_yesterday">Včeraj</string>
   <string name="pref_external_link_popup_title">Opozori pri vnosu zunanjih povezav</string>
   <string name="pref_external_link_popup_summary">Prikaže pojavno okno, da opozori na dodatne stroške ali da ne delujejo povezave v načinu brez povezave.</string>
-  <string name="external_link_popup_dialog_title" fuzzy="true">Vnesi zunanjo povezavo</string>
+  <string name="external_link_popup_dialog_title">Vnesi zunanjo povezavo!</string>
   <string name="external_link_popup_dialog_message">Vnašate zunanjo povezavo. To bi lahko povzročilo dodatne stroške za prenos podatkov ali preprosto ne bo delovalo, ko ste brez povezave. Ali želite nadaljevati?</string>
   <string name="do_not_ask_anymore">Ne sprašuj več</string>
   <string name="your_languages">Izbrani jeziki:</string>
@@ -146,7 +146,7 @@
   <string name="get_started">Začni</string>
   <string name="download_books">Prenesi knjige</string>
   <string name="humankind_knowledge">Znanje človeške vrste, na vašem telefonu.</string>
-  <string name="welcome_to_the_family">Dobrodošli v družini</string>
+  <string name="welcome_to_the_family">Pozdravljeni v družini</string>
   <string name="save_books_offline">Shrani knjige brez povezave</string>
   <string name="download_books_message">Prenesi knjige in preberi, kjer koli že si.</string>
   <string name="unable_to_add_to_bookmarks">Zaznamkov ni mogoče dodati</string>
@@ -158,17 +158,17 @@
   <string name="send_feedback">Sporočite svoje mnenje</string>
   <string name="expand">Razširi</string>
   <string name="history">Zgodovina</string>
-  <string name="history_from_current_book" fuzzy="true">Zgodovina iz trenutne knjige</string>
+  <string name="history_from_current_book">Ogled zgodovinr iz vseh knjig</string>
   <string name="search_history">Zgodovina iskanja</string>
   <string name="selected_items">%1$d izbrano</string>
-  <string name="bookmarks_from_current_book" fuzzy="true">Zaznamki iz trenutne knjige</string>
+  <string name="bookmarks_from_current_book">Ogled zaznamkov iz vseh knjig</string>
   <string name="search_bookmarks">Iskanje zaznamkov</string>
   <string name="switch_tabs">Preklopi zavihke</string>
   <string name="close_all_tabs">Zapri vse zavihke</string>
   <string name="pending_state">V delu</string>
   <string name="running_state">V teku</string>
   <string name="complete">Končano</string>
-  <string name="paused_state" fuzzy="true">Premor</string>
+  <string name="paused_state">Premor</string>
   <string name="failed_state">Neuspešno: %s</string>
   <string name="save">Shrani</string>
   <string name="note">Beležka</string>
@@ -185,6 +185,6 @@
   <string name="ext_storage_permission_not_granted">Napaka: Dovoljenja za shranjevanje niso odobrena</string>
   <string name="notes_deletion_successful">Izbrisana je celotna mapa z beležkami</string>
   <string name="notes_deletion_unsuccessful">Nekatere datoteke niso izbrisane</string>
-  <string name="pref_clear_all_notes_title" fuzzy="true">Počisti vse beležke</string>
+  <string name="pref_clear_all_notes_title">Počisti vse beležke</string>
   <string name="no_bookmarks">Ni zaznamkov</string>
 </resources>

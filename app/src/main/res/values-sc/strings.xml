@@ -9,4 +9,5 @@
   <string name="send_files_title">Imbia documentos</string>
   <string name="receive_files_title">Retzi documentos</string>
   <string name="no_app_found_to_open">Peruna aplicatzione atzapada pro seletzionare s\'archìviu zim!</string>
+  <string name="select_zim_file">Seletziona un\'archìviu zim de lèghere</string>
 </resources>

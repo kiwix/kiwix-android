@@ -80,7 +80,7 @@
   <string name="yes">हो</string>
   <string name="no">होइन</string>
   <string name="confirm_stop_download_title">डाउनलोड रोक्ने हो?</string>
-  <string name="confirm_stop_download_msg">तपाईँ डाउनलोड रद्द गर्न निश्चित हुनुहुन्छ??</string>
+  <string name="confirm_stop_download_msg">तपाईं डाउनलोड रद्द गर्न निश्चित हुनुहुन्छ?</string>
   <string name="download_change_storage">भण्डारण यन्त्र छनौटकर्ता</string>
   <string name="next">अर्को</string>
   <string name="previous">पहिलेको</string>

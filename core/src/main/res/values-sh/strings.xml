@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Macofe
+* Vlad5250
 -->
 <resources>
   <string name="menu_help">Pomoć</string>
@@ -10,6 +11,7 @@
   <string name="bookmarks">Oznake</string>
   <string name="menu_random_article">Slučajni članak</string>
   <string name="menu_full_screen">Cijeli ekran</string>
+  <string name="menu_exit_full_screen">Izađi iz cijelog ekrana</string>
   <string name="search_label">Traži</string>
   <string name="pref_display_title">Prikaži</string>
   <string name="pref_info_title">Informacija</string>

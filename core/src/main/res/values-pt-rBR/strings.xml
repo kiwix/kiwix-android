@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Amire80
 * Duke of Wikipädia
 * Eduardo Addad de Oliveira
 * Eduardoaddad
@@ -279,7 +280,7 @@
   <string name="search_open_in_new_tab">Abrir em uma nova guia</string>
   <string name="reader">Leitor</string>
   <string name="no_open_book">Sem livro aberto</string>
-  <string name="open_library">Biblioteca aberta</string>
+  <string name="open_library" fuzzy="true">Biblioteca aberta</string>
   <string name="tab_restored">Guia restaurada</string>
   <string name="open_drawer">Abrir gaveta</string>
   <string name="close_drawer">Fechar gaveta</string>

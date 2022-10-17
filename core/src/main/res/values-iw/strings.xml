@@ -130,7 +130,7 @@
   <string name="help_6">התוכן שלנו מתארח באתר של קיוויקס.</string>
   <string name="help_7">הם זמינים כקבצי ZIM. ישנם קבצים רבים כאלו:</string>
   <string name="help_8">• ויקיפדיה זמינה באופן נפרד לכל שפה</string>
-  <string name="help_9">• ישנם מקורות נוספים זמינים כגון ויקיליקס או ויקיטקסט.</string>
+  <string name="help_9">• ישנם מקורות נוספים זמינים כגון ויקיליקס או ויקיטקסט</string>
   <string name="help_10">באפשרותך להוריד את קובצי ה־ZIM שנבחרו מתוך היישום או לחלופין לבחור בזהירות בקובץ אחד או מספר קבצים שאתה רוצה ולהוריד ממחשב שולחני לפני העברת קובצי ה־ZIM לכרטיס ה־SD שלך.</string>
   <string name="help_11">קובצי ה־ZIM המורדים דרך היישום נמצאים בספריית האחסון החיצוני בתוך תיקייה בשם Kiwix.</string>
   <string name="pref_storage">אחסון</string>
@@ -287,7 +287,7 @@
   <string name="search_open_in_new_tab">פתיחה בלשונית חדשה</string>
   <string name="reader">מציג</string>
   <string name="no_open_book">אין ספר פתוח</string>
-  <string name="open_library">ספרייה פתוחה</string>
+  <string name="open_library">פתיחת ספרייה</string>
   <string name="tab_restored">הלשונית שוחזרה</string>
   <string name="open_drawer">פתיחת מגירה</string>
   <string name="close_drawer">סגירת מגירה</string>
