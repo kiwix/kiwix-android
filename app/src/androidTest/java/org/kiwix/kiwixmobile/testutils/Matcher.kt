@@ -28,7 +28,7 @@ class Matcher {
   companion object {
     @JvmStatic
     fun childAtPosition(
-      parentMatcher: Matcher<View>,
+      parentMatcher: Matcher<View?>,
       position: Int
     ): Matcher<View> {
       return object : TypeSafeMatcher<View>() {
