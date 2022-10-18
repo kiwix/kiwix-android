@@ -33,65 +33,63 @@ class MetaLinkNetworkEntityTest {
         "wikipedia_af_all_nopic_2016-05.zim.meta4"
       )
     )
-
-    MetaLinkNetworkEntityUrlAssert(result.urls).hasItems(
-      listOf(
-        DummyUrl(
-          "us",
-          1,
-          "http://ftpmirror.your.org/pub/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"
-        ),
-        DummyUrl(
-          "gb",
-          2,
-          "http://www.mirrorservice.org/sites/download.kiwix.org/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim" // ktlint-disable
-        ),
-        DummyUrl(
-          "us",
-          3,
-          "http://download.wikimedia.org/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"
-        ),
-        DummyUrl(
-          "de",
-          4,
-          "http://mirror.netcologne.de/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"
-        ),
-        DummyUrl(
-          "fr",
-          5,
-          "http://mirror3.kiwix.org/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"
+    result?.urls?.let {
+      MetaLinkNetworkEntityUrlAssert(it).hasItems(
+        listOf(
+          DummyUrl(
+            "us",
+            1,
+            "http://ftpmirror.your.org/pub/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"
+          ),
+          DummyUrl(
+            "gb",
+            2,
+            "http://www.mirrorservice.org/sites/download.kiwix.org/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim" // ktlint-disable
+          ),
+          DummyUrl(
+            "us",
+            3,
+            "http://download.wikimedia.org/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"
+          ),
+          DummyUrl(
+            "de",
+            4,
+            "http://mirror.netcologne.de/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"
+          ),
+          DummyUrl(
+            "fr",
+            5,
+            "http://mirror3.kiwix.org/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"
+          )
         )
       )
-    )
-
+    }
     // Basic file attributes
-    assertThat(result.getFile().getName()).isEqualTo("wikipedia_af_all_nopic_2016-05.zim")
+    assertThat(result.file?.name).isEqualTo("wikipedia_af_all_nopic_2016-05.zim")
 
-    assertThat(result.getFile().size).isEqualTo(63973123L)
+    assertThat(result.file?.size).isEqualTo(63973123L)
 
     // File hashes
-    assertThat(result.getFile().getHash("md5")).isEqualTo("6f06866b61c4a921b57f28cfd4307220")
+    assertThat(result.file?.getHash("md5")).isEqualTo("6f06866b61c4a921b57f28cfd4307220")
     assertThat(
-      result.getFile().getHash("sha-1")
+      result.file?.getHash("sha-1")
     ).isEqualTo("8aac4c7f89e3cdd45b245695e19ecde5aac59593")
     assertThat(
-      result.getFile().getHash("sha-256")
+      result.file?.getHash("sha-256")
     ).isEqualTo("83126775538cf588a85edb10db04d6e012321a2025278a08a084b258849b3a5c")
 
     // Pieces
-    assertThat(result.getFile().pieceHashType).isEqualTo("sha-1")
-    assertThat(result.getFile().pieceLength).isEqualTo(1048576)
+    assertThat(result.file?.pieces?.hashType).isEqualTo("sha-1")
+    assertThat(result.file?.pieces?.length).isEqualTo(1048576)
 
     // Check only the first and the last elements of the piece hashes
-    assertThat(result.getFile().pieceHashes.size).isEqualTo(62)
+    assertThat(result.file?.pieceHashes?.size).isEqualTo(62)
     assertThat(
-      result.getFile().pieceHashes[0]
-    )
-      .isEqualTo("f36815d904d4fd563aaef4ee6ef2600fb1fd70b2")
+      result.file?.pieceHashes?.get(0) ?: ""
+    ).isEqualTo("f36815d904d4fd563aaef4ee6ef2600fb1fd70b2")
     assertThat(
-      result.getFile().pieceHashes[61]
-    )
-      .isEqualTo("8055e515aa6e78f2810bbb0e0cd07330838b8920")
+      result.file?.pieceHashes?.get(61) ?: ""
+    ).isEqualTo("8055e515aa6e78f2810bbb0e0cd07330838b8920")
   }
 
   data class DummyUrl(val location: String, val priority: Int, val value: String)
