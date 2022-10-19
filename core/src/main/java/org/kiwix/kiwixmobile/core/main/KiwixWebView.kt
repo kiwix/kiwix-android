@@ -25,8 +25,12 @@ import android.os.Message
 import android.util.AttributeSet
 import android.view.ContextMenu
 import android.view.ViewGroup
+import android.view.WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN
+import android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
 import android.webkit.WebView
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import io.reactivex.disposables.CompositeDisposable
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
@@ -63,6 +67,20 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   private fun setWindowVisibility(isFullScreen: Boolean) {
     val window = (context as Activity).window
     WindowCompat.setDecorFitsSystemWindows(window, !isFullScreen)
+    WindowInsetsControllerCompat(window, window.decorView.rootView).apply {
+      if (isFullScreen) {
+        hide(WindowInsetsCompat.Type.systemBars())
+        systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        window.clearFlags(FLAG_FULLSCREEN)
+        window.addFlags(FLAG_FULLSCREEN)
+        window.decorView.rootView.requestLayout()
+      } else {
+        show(WindowInsetsCompat.Type.systemBars())
+        window.clearFlags(FLAG_FULLSCREEN)
+        window.addFlags(FLAG_FORCE_NOT_FULLSCREEN)
+        window.decorView.rootView.requestLayout()
+      }
+    }
   }
 
   init {
