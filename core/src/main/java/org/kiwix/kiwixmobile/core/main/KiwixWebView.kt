@@ -27,8 +27,6 @@ import android.view.ContextMenu
 import android.view.ViewGroup
 import android.webkit.WebView
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import io.reactivex.disposables.CompositeDisposable
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
@@ -65,15 +63,6 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   private fun setWindowVisibility(isFullScreen: Boolean) {
     val window = (context as Activity).window
     WindowCompat.setDecorFitsSystemWindows(window, !isFullScreen)
-    WindowInsetsControllerCompat(window, window.decorView.rootView).apply {
-      if (isFullScreen) {
-        hide(WindowInsetsCompat.Type.statusBars())
-        hide(WindowInsetsCompat.Type.navigationBars())
-      } else {
-        show(WindowInsetsCompat.Type.statusBars())
-        show(WindowInsetsCompat.Type.navigationBars())
-      }
-    }
   }
 
   init {
