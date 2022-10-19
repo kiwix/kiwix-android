@@ -111,7 +111,7 @@ abstract class CorePrefsFragment :
   }
 
   private fun updateTextZoomSummary(textZoom: Preference?) {
-    textZoom?.summary = getString(R.string.percentage, sharedPreferenceUtil!!.textZoom)
+    textZoom?.summary = getString(R.string.percentage, sharedPreferenceUtil?.textZoom)
   }
 
   protected abstract fun setStorage()
@@ -303,7 +303,7 @@ abstract class CorePrefsFragment :
         sharedPreferenceUtil.putPrefStorage(
           sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
         )
-        findPreference<Preference>(SharedPreferenceUtil.PREF_STORAGE)!!.title =
+        findPreference<Preference>(SharedPreferenceUtil.PREF_STORAGE)?.title =
           getString(R.string.internal_storage)
         sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION)
       } else {
