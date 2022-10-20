@@ -40,14 +40,16 @@ class KiwixPrefsFragment : CorePrefsFragment() {
   }
 
   override fun setStorage() {
-    findPreference<Preference>(PREF_STORAGE)?.title = getString(
-      if (sharedPreferenceUtil.prefStorage == internalStorage()?.let(
-          sharedPreferenceUtil::getPublicDirectoryPath
-        )
-      ) R.string.internal_storage
-      else R.string.external_storage
-    )
-    findPreference<Preference>(PREF_STORAGE)?.summary = storageCalculator.calculateAvailableSpace()
+    sharedPreferenceUtil?.let {
+      findPreference<Preference>(PREF_STORAGE)?.title = getString(
+        if (it.prefStorage == internalStorage()?.let(
+            it::getPublicDirectoryPath
+          )
+        ) R.string.internal_storage
+        else R.string.external_storage
+      )
+    }
+    findPreference<Preference>(PREF_STORAGE)?.summary = storageCalculator?.calculateAvailableSpace()
   }
 
   private fun internalStorage(): String? =
@@ -55,7 +57,9 @@ class KiwixPrefsFragment : CorePrefsFragment() {
 
   private fun setMangeExternalStoragePermission() {
     val permissionPref = findPreference<Preference>(PREF_MANAGE_EXTERNAL_STORAGE_PERMISSION)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !sharedPreferenceUtil.isPlayStoreBuild) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+      sharedPreferenceUtil?.isPlayStoreBuild == false
+    ) {
       showPermissionPreference()
       val externalStorageManager = Environment.isExternalStorageManager()
       if (externalStorageManager) {
