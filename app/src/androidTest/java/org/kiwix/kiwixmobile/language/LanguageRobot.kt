@@ -18,15 +18,44 @@
 
 package org.kiwix.kiwixmobile.language
 
+import android.widget.AutoCompleteTextView
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.Findable
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 
 fun language(func: LanguageRobot.() -> Unit) = LanguageRobot().applyWithViewHierarchyPrinting(func)
 
 class LanguageRobot : BaseRobot() {
-  init {
-    isVisible(ViewId(R.id.language_recycler_view))
+
+  private var retryCountForDataToLoad = 5
+
+  fun waitForDataToLoad() {
+    try {
+      isVisible(Findable.Text("Off the Grid"))
+    } catch (e: RuntimeException) {
+      if (retryCountForDataToLoad > 0) {
+        retryCountForDataToLoad--
+        waitForDataToLoad()
+      }
+    }
+  }
+
+  fun clickOnLanguageIcon() {
+    clickOn(ViewId(R.id.select_language))
+  }
+
+  fun searchAndSaveLanguage(searchLanguage: String, matchLanguage: String) {
+    onView(withId(R.id.menu_language_search)).perform(click())
+    onView(isAssignableFrom(AutoCompleteTextView::class.java)).perform(typeText(searchLanguage))
+    onView(withText(matchLanguage)).perform(click())
+    onView(withId(R.id.menu_language_save)).perform(click())
   }
 }
