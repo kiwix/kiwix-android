@@ -78,20 +78,20 @@ class KiwixReaderFragment : CoreReaderFragment() {
     super.onViewCreated(view, savedInstanceState)
 
     val activity = activity as CoreMainActivity
-    noOpenBookButton.setOnClickListener {
+    noOpenBookButton?.setOnClickListener {
       activity.navigate(
         KiwixReaderFragmentDirections.actionNavigationReaderToNavigationLibrary()
       )
     }
-    activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    activity.setupDrawerToggle(toolbar)
+    activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    toolbar?.let(activity::setupDrawerToggle)
     setFragmentContainerBottomMarginToSizeOfNavBar()
     openPageInBookFromNavigationArguments()
 
     requireActivity().observeNavigationResult<String>(
       FIND_IN_PAGE_SEARCH_STRING,
       viewLifecycleOwner,
-      Observer(this::findInPage)
+      Observer(::findInPage)
     )
     requireActivity().observeNavigationResult<SearchItemToOpen>(
       TAG_FILE_SEARCHED,
@@ -101,11 +101,11 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private fun openSearchItem(item: SearchItemToOpen) {
-    zimReaderContainer.titleToUrl(item.pageTitle)?.let {
+    zimReaderContainer?.titleToUrl(item.pageTitle)?.let {
       if (item.shouldOpenInNewTab) {
         createNewTab()
       }
-      loadUrlWithCurrentWebview(zimReaderContainer.urlSuffixToParsableUrl(it))
+      loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(it))
     }
     requireActivity().consumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)
   }
@@ -147,15 +147,15 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   private fun exitBook() {
     showNoBookOpenViews()
-    bottomToolbar.visibility = GONE
-    actionBar.title = getString(R.string.reader)
-    contentFrame.visibility = GONE
+    bottomToolbar?.visibility = GONE
+    actionBar?.title = getString(R.string.reader)
+    contentFrame?.visibility = GONE
     mainMenu?.hideBookSpecificMenuItems()
     closeZimBook()
   }
 
   private fun closeZimBook() {
-    zimReaderContainer.setZimFile(null)
+    zimReaderContainer?.setZimFile(null)
   }
 
   override fun openHomeScreen() {
@@ -167,23 +167,21 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   override fun hideTabSwitcher() {
-    if (actionBar != null) {
+    actionBar?.let { actionBar ->
       actionBar.setDisplayShowTitleEnabled(true)
-      activity?.setupDrawerToggle(toolbar)
+      toolbar?.let { activity?.setupDrawerToggle(it) }
 
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
 
-      closeAllTabsButton.setImageDrawableCompat(R.drawable.ic_close_black_24dp)
-      if (tabSwitcherRoot.visibility == View.VISIBLE) {
-        tabSwitcherRoot.visibility = GONE
+      closeAllTabsButton?.setImageDrawableCompat(R.drawable.ic_close_black_24dp)
+      if (tabSwitcherRoot?.visibility == View.VISIBLE) {
+        tabSwitcherRoot?.visibility = GONE
         startAnimation(tabSwitcherRoot, anim.slide_up)
-        progressBar.visibility = View.GONE
-        progressBar.progress = 0
-        contentFrame.visibility = View.VISIBLE
+        progressBar?.visibility = View.GONE
+        progressBar?.progress = 0
+        contentFrame?.visibility = View.VISIBLE
       }
-      if (mainMenu != null) {
-        mainMenu.showWebViewOptions(true)
-      }
+      mainMenu?.showWebViewOptions(true)
       if (webViewList.isEmpty()) {
         exitBook()
       } else {
@@ -213,7 +211,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, menuInflater)
-    if (zimReaderContainer.zimFileReader == null) {
+    if (zimReaderContainer?.zimFileReader == null) {
       mainMenu?.hideBookSpecificMenuItems()
     }
   }
@@ -225,7 +223,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun onResume() {
     super.onResume()
-    if (zimReaderContainer.zimFile == null) {
+    if (zimReaderContainer?.zimFile == null) {
       exitBook()
     }
     if (isFullScreenVideo) {
@@ -239,15 +237,15 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   override fun restoreViewStateOnValidJSON(
-    zimArticles: String,
-    zimPositions: String,
+    zimArticles: String?,
+    zimPositions: String?,
     currentTab: Int
   ) {
     val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
     val zimFile = settings.getString(TAG_CURRENT_FILE, null)
 
     if (zimFile != null && File(zimFile).exists()) {
-      if (zimReaderContainer.zimFile == null) {
+      if (zimReaderContainer?.zimFile == null) {
         openZimFile(File(zimFile))
         Log.d(
           TAG_KIWIX,
@@ -255,16 +253,16 @@ class KiwixReaderFragment : CoreReaderFragment() {
         )
       }
     } else {
-      getCurrentWebView().snack(R.string.zim_not_opened)
+      getCurrentWebView()?.snack(R.string.zim_not_opened)
     }
     restoreTabs(zimArticles, zimPositions, currentTab)
   }
 
-  override fun createWebView(attrs: AttributeSet): ToolbarScrollingKiwixWebView {
+  override fun createWebView(attrs: AttributeSet?): ToolbarScrollingKiwixWebView {
     return ToolbarScrollingKiwixWebView(
-      requireContext(), this, attrs, activityMainRoot as ViewGroup, videoView,
-      CoreWebViewClient(this, zimReaderContainer, sharedPreferenceUtil),
-      toolbarContainer, bottomToolbar, sharedPreferenceUtil = sharedPreferenceUtil,
+      requireContext(), this, attrs!!, activityMainRoot as ViewGroup, videoView!!,
+      CoreWebViewClient(this, zimReaderContainer!!, sharedPreferenceUtil!!),
+      toolbarContainer!!, bottomToolbar!!, sharedPreferenceUtil = sharedPreferenceUtil!!,
       parentNavigationBar = requireActivity().bottom_nav_view
     )
   }
@@ -292,7 +290,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   private fun hideNavBar() {
     requireActivity().bottom_nav_view.visibility = GONE
     setParentFragmentsBottomMarginTo(0)
-    getCurrentWebView().translationY = 0f
+    getCurrentWebView()?.translationY = 0f
   }
 
   private fun showNavBar() {
