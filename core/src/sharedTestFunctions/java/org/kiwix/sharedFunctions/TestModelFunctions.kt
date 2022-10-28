@@ -157,7 +157,7 @@ fun book(
     this.mediaCount = mediaCount
     this.size = size
     this.file = file
-    this.name = name
+    bookName = name
     favicon = favIcon
   }
 

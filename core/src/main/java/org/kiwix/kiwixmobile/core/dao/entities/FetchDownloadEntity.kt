@@ -67,7 +67,7 @@ data class FetchDownloadEntity(
     articleCount = book.articleCount,
     mediaCount = book.mediaCount,
     size = book.size,
-    name = book.name,
+    name = book.bookName,
     favIcon = book.favicon,
     tags = book.tags
   )
@@ -84,7 +84,7 @@ data class FetchDownloadEntity(
     articleCount = this@FetchDownloadEntity.articleCount
     mediaCount = this@FetchDownloadEntity.mediaCount
     size = this@FetchDownloadEntity.size
-    name = this@FetchDownloadEntity.name
+    bookName = name
     favicon = favIcon
     tags = this@FetchDownloadEntity.tags
   }

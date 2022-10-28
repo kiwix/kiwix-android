@@ -60,7 +60,7 @@ data class BookOnDiskEntity(
     bookOnDisk.book.articleCount,
     bookOnDisk.book.mediaCount,
     bookOnDisk.book.size,
-    bookOnDisk.book.name,
+    bookOnDisk.book.bookName,
     bookOnDisk.book.favicon,
     bookOnDisk.book.tags
   )
@@ -77,7 +77,7 @@ data class BookOnDiskEntity(
     articleCount = this@BookOnDiskEntity.articleCount
     mediaCount = this@BookOnDiskEntity.mediaCount
     size = this@BookOnDiskEntity.size
-    name = this@BookOnDiskEntity.name
+    bookName = name
     favicon = favIcon
     tags = this@BookOnDiskEntity.tags
   }

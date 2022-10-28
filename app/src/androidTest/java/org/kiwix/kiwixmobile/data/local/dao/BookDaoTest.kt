@@ -131,7 +131,7 @@ class BookDaoTest {
       ArrayList<Book>()
     for (i in 0..8) {
       val book = Book()
-      book.name = "Test Copy $i"
+      book.bookName = "Test Copy $i"
       book.id = "Test ID $i"
       val fileName = baseFileName + i
       when (i) {

@@ -18,6 +18,9 @@
 
 package org.kiwix.kiwixmobile.zimManager.libraryView.adapter
 
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -32,13 +35,14 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.Book
 
 internal class LibraryListItemTest {
 
-  private val book = Book()
+  private val book = mockk<Book>()
 
   @BeforeEach
   fun init() {
-    book.id = "0"
-    book.size = "0"
-    book.tags = null
+    clearAllMocks()
+    every { book.id } returns "0"
+    every { book.size } returns "0"
+    every { book.tags } returns null
   }
 
   @Test
@@ -48,13 +52,13 @@ internal class LibraryListItemTest {
 
   @Test
   internal fun `Unknown file system state greater than 4GB can't be downloaded`() {
-    book.size = (Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES + 1).toString()
+    every { book.size } returns (Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES + 1).toString()
     assertThat(canBeDownloaded(book, Unknown)).isFalse
   }
 
   @Test
   internal fun `Unknown file system state empty size can be downloaded`() {
-    book.size = ""
+    every { book.size } returns ""
     assertThat(canBeDownloaded(book, Unknown)).isTrue
   }
 

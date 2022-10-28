@@ -34,53 +34,53 @@ class LibraryNetworkEntity {
 
   @Root(name = "book", strict = false)
   class Book : Serializable {
-    @kotlin.jvm.JvmField @field:Attribute(name = "id", required = false)
+    @field:Attribute(name = "id", required = false)
     var id: String = ""
 
-    @kotlin.jvm.JvmField @field:Attribute(name = "title", required = false)
+    @field:Attribute(name = "title", required = false)
     var title: String = ""
 
-    @kotlin.jvm.JvmField @field:Attribute(name = "description", required = false)
+    @field:Attribute(name = "description", required = false)
     var description: String? = null
 
-    @kotlin.jvm.JvmField @field:Attribute(name = "language", required = false)
+    @field:Attribute(name = "language", required = false)
     var language: String = ""
 
-    @kotlin.jvm.JvmField @field:Attribute(name = "creator", required = false)
+    @field:Attribute(name = "creator", required = false)
     var creator: String = ""
 
-    @kotlin.jvm.JvmField @field:Attribute(name = "publisher", required = false)
+    @field:Attribute(name = "publisher", required = false)
     var publisher: String = ""
 
-    @kotlin.jvm.JvmField @field:Attribute(name = "favicon", required = false)
+    @field:Attribute(name = "favicon", required = false)
     var favicon: String = ""
 
-    @kotlin.jvm.JvmField @field:Attribute(name = "faviconMimeType", required = false)
+    @field:Attribute(name = "faviconMimeType", required = false)
     var faviconMimeType: String? = null
 
-    @kotlin.jvm.JvmField @field:Attribute(name = "date", required = false)
+    @field:Attribute(name = "date", required = false)
     var date: String = ""
 
-    @kotlin.jvm.JvmField @field:Attribute(name = "url", required = false)
+    @field:Attribute(name = "url", required = false)
     var url: String? = null
 
-    @kotlin.jvm.JvmField @field:Attribute(name = "articleCount", required = false)
+    @field:Attribute(name = "articleCount", required = false)
     var articleCount: String? = null
 
-    @kotlin.jvm.JvmField @field:Attribute(name = "mediaCount", required = false)
+    @field:Attribute(name = "mediaCount", required = false)
     var mediaCount: String? = null
 
-    @kotlin.jvm.JvmField @field:Attribute(name = "size", required = false)
+    @field:Attribute(name = "size", required = false)
     var size: String = ""
 
-    @kotlin.jvm.JvmField @field:Attribute(name = "name", required = false)
-    var name: String? = null
+    @field:Attribute(name = "name", required = false)
+    var bookName: String? = null
 
-    @kotlin.jvm.JvmField @field:Attribute(name = "tags", required = false)
+    @field:Attribute(name = "tags", required = false)
     var tags: String? = null
     var searchMatches = 0
 
-    @kotlin.jvm.JvmField @Deprecated("")
+    @Deprecated("")
     var file: File? = null
 
     @Deprecated("")
