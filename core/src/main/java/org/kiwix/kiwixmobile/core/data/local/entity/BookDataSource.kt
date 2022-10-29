@@ -15,39 +15,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.core.data.local.entity
 
-package org.kiwix.kiwixmobile.core.data.local.entity;
-
-import com.yahoo.squidb.annotations.TableModelSpec;
+import com.yahoo.squidb.annotations.TableModelSpec
 
 @TableModelSpec(className = "BookDatabaseEntity", tableName = "book")
-public class BookDataSource {
-
-  public String bookId;
-
-  public String title;
-
-  public String description;
-
-  public String language;
-
-  public String bookCreator;
-
-  public String publisher;
-
-  public String date;
-
-  public String url;
-
-  public String remoteUrl;
-
-  public String articleCount;
-
-  public String mediaCount;
-
-  public String size;
-
-  public String favicon;
-
-  public String name;
+class BookDataSource {
+  var bookId: String? = null
+  var title: String? = null
+  var description: String? = null
+  var language: String? = null
+  var bookCreator: String? = null
+  var publisher: String? = null
+  var date: String? = null
+  var url: String? = null
+  var remoteUrl: String? = null
+  var articleCount: String? = null
+  var mediaCount: String? = null
+  var size: String? = null
+  var favicon: String? = null
+  var name: String? = null
 }
