@@ -19,18 +19,24 @@ package org.kiwix.kiwixmobile.main
 
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import androidx.test.rule.ActivityTestRule
+import androidx.test.core.app.ActivityScenario
+import androidx.test.platform.app.InstrumentationRegistry
+import org.junit.Before
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.help.HelpRobot
+import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryRobot
 import org.kiwix.kiwixmobile.settings.SettingsRobot
 import org.kiwix.kiwixmobile.webserver.ZimHostRobot
 
 class TopLevelDestinationTest : BaseActivityTest() {
 
-  override var activityRule: ActivityTestRule<KiwixMainActivity> = activityTestRule {
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
+  @Before
+  fun setUp() {
+    PreferenceManager.getDefaultSharedPreferences(
+      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
+    ).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
     }
@@ -38,6 +44,7 @@ class TopLevelDestinationTest : BaseActivityTest() {
 
   @Test
   fun testTopLevelDestination() {
+    ActivityScenario.launch(KiwixMainActivity::class.java)
     topLevel {
       clickReaderOnBottomNav {
       }
@@ -46,11 +53,7 @@ class TopLevelDestinationTest : BaseActivityTest() {
         clickFileTransferIcon {
         }
       }
-      clickDownloadOnBottomNav {
-        assertLibraryListDisplayed()
-        clickOnGlobeIcon {
-        }
-      }
+      clickDownloadOnBottomNav(OnlineLibraryRobot::assertLibraryListDisplayed)
       clickBookmarksOnNavDrawer {
         assertBookMarksDisplayed()
         clickOnTrashIcon()

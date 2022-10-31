@@ -18,16 +18,16 @@
 package org.kiwix.kiwixmobile.utils
 
 import android.util.Log
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions
-import org.kiwix.kiwixmobile.R
+import androidx.core.view.GravityCompat
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions
-import com.adevinta.android.barista.interaction.BaristaDrawerInteractions
+import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDrawerWithGravity
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions
+import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.testutils.TestUtils
-import java.lang.RuntimeException
 
 /**
  * Created by mhutti1 on 27/04/17.
@@ -39,7 +39,7 @@ object StandardActions {
   }
 
   fun openDrawer() {
-    BaristaDrawerInteractions.openDrawer()
+    openDrawerWithGravity(R.id.navigation_container, GravityCompat.START)
   }
 
   @JvmStatic
