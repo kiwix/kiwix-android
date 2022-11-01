@@ -64,8 +64,11 @@ class CustomReaderFragment : CoreReaderFragment() {
     baseActivity.customActivityComponent.inject(this)
   }
 
-  @Inject lateinit var customFileValidator: CustomFileValidator
-  @Inject lateinit var dialogShower: DialogShower
+  @Inject
+  lateinit var customFileValidator: CustomFileValidator
+
+  @Inject
+  lateinit var dialogShower: DialogShower
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     if (enforcedLanguage()) {
@@ -80,14 +83,14 @@ class CustomReaderFragment : CoreReaderFragment() {
       }
       with(activity as AppCompatActivity) {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        setupDrawerToggle(toolbar)
+        toolbar?.let { setupDrawerToggle(it) }
       }
       loadPageFromNavigationArguments()
 
       requireActivity().observeNavigationResult<String>(
         FIND_IN_PAGE_SEARCH_STRING,
         viewLifecycleOwner,
-        Observer(this::findInPage)
+        Observer(::findInPage)
       )
       requireActivity().observeNavigationResult<SearchItemToOpen>(
         TAG_FILE_SEARCHED,
@@ -103,11 +106,11 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   private fun openSearchItem(item: SearchItemToOpen) {
-    zimReaderContainer.titleToUrl(item.pageTitle)?.apply {
+    zimReaderContainer?.titleToUrl(item.pageTitle)?.apply {
       if (item.shouldOpenInNewTab) {
         createNewTab()
       }
-      loadUrlWithCurrentWebview(zimReaderContainer.urlSuffixToParsableUrl(this))
+      loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(this))
     }
   }
 
@@ -127,8 +130,8 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   override fun restoreViewStateOnValidJSON(
-    zimArticles: String,
-    zimPositions: String,
+    zimArticles: String?,
+    zimPositions: String?,
     currentTab: Int
   ) {
     restoreTabs(zimArticles, zimPositions, currentTab)
@@ -159,7 +162,7 @@ class CustomReaderFragment : CoreReaderFragment() {
             requireActivity(),
             READ_EXTERNAL_STORAGE
           ) == PERMISSION_DENIED &&
-          !sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()
+          sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == false
         ) {
           requestPermissions(arrayOf(READ_EXTERNAL_STORAGE), REQUEST_READ_FOR_OBB)
         } else {
@@ -171,7 +174,7 @@ class CustomReaderFragment : CoreReaderFragment() {
 
   override fun onRequestPermissionsResult(
     requestCode: Int,
-    permissions: Array<out String>,
+    permissions: Array<String>,
     grantResults: IntArray
   ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -209,7 +212,7 @@ class CustomReaderFragment : CoreReaderFragment() {
     val currentLocaleCode = Locale.getDefault().toString()
     if (BuildConfig.ENFORCED_LANG.isNotEmpty() && BuildConfig.ENFORCED_LANG != currentLocaleCode) {
       LanguageUtils.handleLocaleChange(requireActivity(), BuildConfig.ENFORCED_LANG)
-      sharedPreferenceUtil.putPrefLanguage(BuildConfig.ENFORCED_LANG)
+      sharedPreferenceUtil?.putPrefLanguage(BuildConfig.ENFORCED_LANG)
       activity?.recreate()
       return true
     }
@@ -221,8 +224,8 @@ class CustomReaderFragment : CoreReaderFragment() {
     tableDrawerRightContainer = requireActivity().findViewById(R.id.activity_main_nav_view)
   }
 
-  override fun createMainMenu(menu: Menu?): MainMenu {
-    return menuFactory.create(
+  override fun createMainMenu(menu: Menu?): MainMenu? {
+    return menuFactory?.create(
       menu!!,
       webViewList,
       urlIsValid(),
@@ -232,7 +235,7 @@ class CustomReaderFragment : CoreReaderFragment() {
     )
   }
 
-  override fun showOpenInNewTabDialog(url: String?) {
+  override fun showOpenInNewTabDialog(url: String) {
     if (BuildConfig.DISABLE_TABS) return
     super.showOpenInNewTabDialog(url)
   }
