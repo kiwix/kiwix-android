@@ -56,19 +56,19 @@ data class FetchDownloadEntity(
 ) {
   constructor(downloadId: Long, book: Book) : this(
     downloadId = downloadId,
-    bookId = book.getId(),
-    title = book.getTitle(),
-    description = book.getDescription(),
-    language = book.getLanguage(),
-    creator = book.getCreator(),
-    publisher = book.getPublisher(),
-    date = book.getDate(),
-    url = book.getUrl(),
-    articleCount = book.getArticleCount(),
-    mediaCount = book.getMediaCount(),
-    size = book.getSize(),
-    name = book.name,
-    favIcon = book.getFavicon(),
+    bookId = book.id,
+    title = book.title,
+    description = book.description,
+    language = book.language,
+    creator = book.creator,
+    publisher = book.publisher,
+    date = book.date,
+    url = book.url,
+    articleCount = book.articleCount,
+    mediaCount = book.mediaCount,
+    size = book.size,
+    name = book.bookName,
+    favIcon = book.favicon,
     tags = book.tags
   )
 

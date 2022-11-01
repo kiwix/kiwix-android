@@ -41,19 +41,19 @@ public class BookDao {
   }
 
   private void setBookDetails(Book book, SquidCursor<BookDatabaseEntity> bookCursor) {
-    book.id = bookCursor.get(BookDatabaseEntity.BOOK_ID);
-    book.title = bookCursor.get(BookDatabaseEntity.TITLE);
-    book.description = bookCursor.get(BookDatabaseEntity.DESCRIPTION);
-    book.language = bookCursor.get(BookDatabaseEntity.LANGUAGE);
-    book.creator = bookCursor.get(BookDatabaseEntity.BOOK_CREATOR);
-    book.publisher = bookCursor.get(BookDatabaseEntity.PUBLISHER);
-    book.date = bookCursor.get(BookDatabaseEntity.DATE);
-    book.file = new File(bookCursor.get(BookDatabaseEntity.URL));
-    book.articleCount = bookCursor.get(BookDatabaseEntity.ARTICLE_COUNT);
-    book.mediaCount = bookCursor.get(BookDatabaseEntity.MEDIA_COUNT);
-    book.size = bookCursor.get(BookDatabaseEntity.SIZE);
-    book.favicon = bookCursor.get(BookDatabaseEntity.FAVICON);
-    book.bookName = bookCursor.get(BookDatabaseEntity.NAME);
+    book.setId(bookCursor.get(BookDatabaseEntity.BOOK_ID));
+    book.setTitle(bookCursor.get(BookDatabaseEntity.TITLE));
+    book.setDescription(bookCursor.get(BookDatabaseEntity.DESCRIPTION));
+    book.setLanguage(bookCursor.get(BookDatabaseEntity.LANGUAGE));
+    book.setCreator(bookCursor.get(BookDatabaseEntity.BOOK_CREATOR));
+    book.setPublisher(bookCursor.get(BookDatabaseEntity.PUBLISHER));
+    book.setDate(bookCursor.get(BookDatabaseEntity.DATE));
+    book.setFile(new File(bookCursor.get(BookDatabaseEntity.URL)));
+    book.setArticleCount(bookCursor.get(BookDatabaseEntity.ARTICLE_COUNT));
+    book.setMediaCount(bookCursor.get(BookDatabaseEntity.MEDIA_COUNT));
+    book.setSize(bookCursor.get(BookDatabaseEntity.SIZE));
+    book.setFavicon(bookCursor.get(BookDatabaseEntity.FAVICON));
+    book.setBookName(bookCursor.get(BookDatabaseEntity.NAME));
   }
 
   public ArrayList<Book> getBooks() {
@@ -75,12 +75,12 @@ public class BookDao {
   public ArrayList<Book> filterBookResults(ArrayList<Book> books) {
     ArrayList<Book> filteredBookList = new ArrayList<>();
     for (Book book : books) {
-      if (!FileUtils.hasPart(book.file)) {
-        if (book.file.exists()) {
+      if (!FileUtils.hasPart(book.getFile())) {
+        if (book.getFile().exists()) {
           filteredBookList.add(book);
         } else {
           kiwixDatabase.deleteWhere(BookDatabaseEntity.class,
-            BookDatabaseEntity.URL.eq(book.file.getPath()));
+            BookDatabaseEntity.URL.eq(book.getFile().getPath()));
         }
       }
     }

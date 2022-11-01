@@ -180,24 +180,27 @@ object FileUtils {
     }
   }
 
+  @Suppress("NestedBlockDepth")
   @JvmStatic fun getAllZimParts(book: Book): List<File> {
     val files = ArrayList<File>()
-    if (book.file.path.endsWith(".zim") || book.file.path.endsWith(".zim.part")) {
-      if (book.file.exists()) {
-        files.add(book.file)
+    book.file?.let {
+      if (it.path.endsWith(".zim") || it.path.endsWith(".zim.part")) {
+        if (it.exists()) {
+          files.add(it)
+        } else {
+          files.add(File("$it.part"))
+        }
       } else {
-        files.add(File(book.file.toString() + ".part"))
-      }
-      return files
-    }
-    var path = book.file.path
-    for (firstCharacter in 'a'..'z') {
-      for (secondCharacter in 'a'..'z') {
-        path = path.substring(0, path.length - 2) + firstCharacter + secondCharacter
-        when {
-          File(path).exists() -> files.add(File(path))
-          File("$path.part").exists() -> files.add(File("$path.part"))
-          else -> return files
+        var path = it.path
+        for (firstCharacter in 'a'..'z') {
+          for (secondCharacter in 'a'..'z') {
+            path = path.substring(0, path.length - 2) + firstCharacter + secondCharacter
+            when {
+              File(path).exists() -> files.add(File(path))
+              File("$path.part").exists() -> files.add(File("$path.part"))
+              else -> return@getAllZimParts files
+            }
+          }
         }
       }
     }

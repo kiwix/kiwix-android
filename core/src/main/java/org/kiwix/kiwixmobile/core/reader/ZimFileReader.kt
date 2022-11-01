@@ -217,7 +217,7 @@ class ZimFileReader constructor(
     title = this@ZimFileReader.title
     id = this@ZimFileReader.id
     size = "$fileSize"
-    favicon = this@ZimFileReader.favicon
+    favicon = this@ZimFileReader.favicon.toString()
     creator = this@ZimFileReader.creator
     publisher = this@ZimFileReader.publisher
     date = this@ZimFileReader.date

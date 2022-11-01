@@ -171,7 +171,7 @@ internal class NewBookDaoTest {
     every { box.store.callInTx(capture(slot)) } returns Unit
     newBookDao.migrationInsert(listOf(book))
     slot.captured.call()
-    verify { box.put(listOf(BookOnDiskEntity(BookOnDisk(book = book, file = book.file)))) }
+    verify { box.put(listOf(BookOnDiskEntity(BookOnDisk(book = book, file = book.file!!)))) }
   }
 
   @Test

@@ -43,7 +43,8 @@ class DownloaderImpl @Inject constructor(
   }
 
   private fun urlProvider(book: Book): Observable<String> =
-    if (book.url.endsWith("meta4")) kiwixService.getMetaLinks(book.url).map { it.relevantUrl.value }
+    if (book.url?.endsWith("meta4") == true) kiwixService.getMetaLinks(book.url!!)
+      .map { it.relevantUrl.value }
     else Observable.just(book.url)
 
   override fun cancelDownload(downloadId: Long) {

@@ -226,9 +226,8 @@ class ZimManageViewModel @Inject constructor(
       requestDownloadLibrary,
       connectivityBroadcastReceiver.networkStates.distinctUntilChanged().filter(
         CONNECTED::equals
-      ),
-      BiFunction<Unit, NetworkState, Unit> { _, _ -> }
-    )
+      )
+    ) { _, _ -> }
       .switchMap {
         if (connectivityManager.activeNetworkInfo?.type == ConnectivityManager.TYPE_WIFI) {
           Flowable.just(Unit)
@@ -270,7 +269,7 @@ class ZimManageViewModel @Inject constructor(
   ) = Flowable.combineLatest(
     booksFromDao,
     downloads,
-    languages.filter { it.isNotEmpty() },
+    languages.filter(List<Language>::isNotEmpty),
     library,
     Flowable.merge(
       Flowable.just(""),
@@ -294,13 +293,13 @@ class ZimManageViewModel @Inject constructor(
     languages: Flowable<List<Language>>
   ) = library
     .subscribeOn(Schedulers.io())
-    .map { it.books }
+    .map(LibraryNetworkEntity::book)
     .withLatestFrom(
       languages,
       BiFunction(::combineToLanguageList)
     )
     .map { it.sortedBy(Language::language) }
-    .filter { it.isNotEmpty() }
+    .filter(List<Language>::isNotEmpty)
     .subscribe(
       languageDao::insert,
       Throwable::printStackTrace
@@ -326,12 +325,11 @@ class ZimManageViewModel @Inject constructor(
   private fun networkLanguageCounts(booksFromNetwork: List<Book>) =
     booksFromNetwork.mapNotNull(Book::language)
       .fold(
-        mutableMapOf<String, Int>(),
-        { acc, language -> acc.increment(language) }
-      )
+        mutableMapOf<String, Int>()
+      ) { acc, language -> acc.increment(language) }
 
   private fun <K> MutableMap<K, Int>.increment(key: K) =
-    apply { set(key, getOrElse(key, { 0 }) + 1) }
+    apply { set(key, getOrElse(key) { 0 } + 1) }
 
   private fun fromLocalesWithNetworkMatchesSetActiveBy(
     networkLanguageCounts: MutableMap<String, Int>,
@@ -343,7 +341,7 @@ class ZimManageViewModel @Inject constructor(
       Language(
         locale.isO3Language,
         languageIsActive(listToActivateBy, locale),
-        networkLanguageCounts.getOrElse(locale.isO3Language, { 0 })
+        networkLanguageCounts.getOrElse(locale.isO3Language) { 0 }
       )
     }
 
@@ -369,7 +367,7 @@ class ZimManageViewModel @Inject constructor(
       .map(Language::languageCode)
     val booksUnfilteredByLanguage =
       applySearchFilter(
-        libraryNetworkEntity.books - booksOnFileSystem.map(BookOnDisk::book),
+        libraryNetworkEntity.book!! - booksOnFileSystem.map(BookOnDisk::book),
         filter
       )
 
@@ -437,7 +435,7 @@ class ZimManageViewModel @Inject constructor(
       )
       .onBackpressureDrop()
       .doOnNext { deviceListIsRefreshing.postValue(false) }
-      .filter { it.isNotEmpty() }
+      .filter(List<BookOnDisk>::isNotEmpty)
       .map { it.distinctBy { bookOnDisk -> bookOnDisk.book.id } }
       .subscribe(
         bookDao::insert,

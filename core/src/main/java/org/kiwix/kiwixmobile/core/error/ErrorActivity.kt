@@ -129,9 +129,9 @@ open class ErrorActivity : BaseActivity() {
   private fun zimFiles(): String {
     val allZimFiles = bookDao.getBooks().joinToString {
       """
-      ${it.book.getTitle()}:
-      Articles: [${it.book.getArticleCount()}]
-      Creator: [${it.book.getCreator()}]
+      ${it.book.title}:
+      Articles: [${it.book.articleCount}]
+      Creator: [${it.book.creator}]
       """.trimIndent()
     }
     return """
