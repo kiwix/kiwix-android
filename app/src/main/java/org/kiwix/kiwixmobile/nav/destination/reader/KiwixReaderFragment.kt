@@ -276,6 +276,15 @@ class KiwixReaderFragment : CoreReaderFragment() {
     }
   }
 
+  override fun onDesktopModeMenuClicked(isEnable: Boolean) {
+    getCurrentWebView()?.settings?.apply {
+      useWideViewPort = isEnable
+    }.also {
+      sharedPreferenceUtil?.isDesktopModeEnable = isEnable
+      mainMenu?.setDesktopModeEnable(!isEnable)
+    }
+  }
+
   override fun openFullScreen() {
     super.openFullScreen()
     hideNavBar()

@@ -46,4 +46,12 @@
     app:showAsAction="never"
     tools:visible="true" />
 
+  <item
+    android:id="@+id/menu_desktop_mode"
+    android:title="@string/menu_desktop_mode"
+    android:visible="false"
+    android:checkable="true"
+    app:showAsAction="never"
+    tools:visible="true"/>
+
 </menu>

@@ -827,7 +827,9 @@ abstract class CoreReaderFragment :
   }
 
   private fun loadUrl(url: String?, webview: KiwixWebView) {
-    if (url != null && !url.endsWith("null")) {
+    if (url?.endsWith("null") == false) {
+      webview.settings.useWideViewPort = sharedPreferenceUtil?.isDesktopModeEnable == true
+      mainMenu?.setDesktopModeEnable(sharedPreferenceUtil?.isDesktopModeEnable == false)
       webview.loadUrl(url)
     }
   }
@@ -1472,6 +1474,7 @@ abstract class CoreReaderFragment :
     super<BaseFragment>.onCreateOptionsMenu(menu, inflater)
     menu.clear()
     mainMenu = createMainMenu(menu)
+    mainMenu?.setDesktopModeEnable(sharedPreferenceUtil?.isDesktopModeEnable == false)
   }
 
   protected open fun createMainMenu(menu: Menu?): MainMenu? =

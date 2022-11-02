@@ -57,6 +57,7 @@ class MainMenu(
     fun onRandomArticleMenuClicked()
     fun onReadAloudMenuClicked()
     fun onFullscreenMenuClicked()
+    fun onDesktopModeMenuClicked(isEnable: Boolean)
   }
 
   init {
@@ -71,6 +72,7 @@ class MainMenu(
   private val randomArticle = menu.findItem(R.id.menu_random_article)
   private val fullscreen = menu.findItem(R.id.menu_fullscreen)
   private var readAloud: MenuItem? = menu.findItem(R.id.menu_read_aloud)
+  private var desktopMode: MenuItem? = menu.findItem(R.id.menu_desktop_mode)
   private var isInTabSwitcher: Boolean = false
 
   init {
@@ -96,6 +98,7 @@ class MainMenu(
     randomArticle.menuItemClickListener { menuClickListener.onRandomArticleMenuClicked() }
     readAloud.menuItemClickListener { menuClickListener.onReadAloudMenuClicked() }
     fullscreen.menuItemClickListener { menuClickListener.onFullscreenMenuClicked() }
+    desktopMode.menuItemClickListener { menuClickListener.onDesktopModeMenuClicked(it.isChecked) }
 
     showWebViewOptions(urlIsValid)
     zimFileReader?.let {
@@ -114,27 +117,27 @@ class MainMenu(
     }
 
   fun onFileOpened(urlIsValid: Boolean) {
-    setVisibility(urlIsValid, randomArticle, search, readAloud, addNote, fullscreen)
+    setVisibility(urlIsValid, randomArticle, search, readAloud, addNote, fullscreen, desktopMode)
     search.setOnMenuItemClickListener { navigateToSearch() }
   }
 
   fun hideBookSpecificMenuItems() {
-    setVisibility(false, search, tabSwitcher, randomArticle, addNote)
+    setVisibility(false, search, tabSwitcher, randomArticle, addNote, desktopMode)
   }
 
   fun showBookSpecificMenuItems() {
-    setVisibility(true, search, tabSwitcher, randomArticle, addNote)
+    setVisibility(true, search, tabSwitcher, randomArticle, addNote, desktopMode)
   }
 
   fun showTabSwitcherOptions() {
     isInTabSwitcher = true
-    setVisibility(false, randomArticle, readAloud, addNote, fullscreen)
+    setVisibility(false, randomArticle, readAloud, addNote, fullscreen, desktopMode)
   }
 
   fun showWebViewOptions(urlIsValid: Boolean) {
     isInTabSwitcher = false
     fullscreen.isVisible = true
-    setVisibility(urlIsValid, randomArticle, search, readAloud, addNote)
+    setVisibility(urlIsValid, randomArticle, search, readAloud, addNote, desktopMode)
   }
 
   fun updateTabIcon(tabs: Int) {
@@ -152,6 +155,10 @@ class MainMenu(
 
   fun onTextToSpeechStoppedTalking() {
     readAloud?.setTitle(R.string.menu_read_aloud)
+  }
+
+  fun setDesktopModeEnable(isEnable: Boolean) {
+    desktopMode?.isChecked = isEnable
   }
 
   private fun setVisibility(visibility: Boolean, vararg menuItems: MenuItem?) {

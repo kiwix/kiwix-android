@@ -208,6 +208,15 @@ class CustomReaderFragment : CoreReaderFragment() {
     menu.findItem(R.id.menu_host_books)?.isVisible = false
   }
 
+  override fun onDesktopModeMenuClicked(isEnable: Boolean) {
+    getCurrentWebView()?.settings?.apply {
+      useWideViewPort = isEnable
+    }.also {
+      sharedPreferenceUtil?.isDesktopModeEnable = isEnable
+      mainMenu?.setDesktopModeEnable(!isEnable)
+    }
+  }
+
   private fun enforcedLanguage(): Boolean {
     val currentLocaleCode = Locale.getDefault().toString()
     if (BuildConfig.ENFORCED_LANG.isNotEmpty() && BuildConfig.ENFORCED_LANG != currentLocaleCode) {

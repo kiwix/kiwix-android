@@ -139,6 +139,12 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   fun setIntroShown() = sharedPreferences.edit { putBoolean(PREF_SHOW_INTRO, false) }
 
+  var isDesktopModeEnable: Boolean
+    get() = sharedPreferences.getBoolean(PREF_DESKTOP_MODE_ENABLE, true)
+    set(isEnable) {
+      sharedPreferences.edit { putBoolean(PREF_DESKTOP_MODE_ENABLE, isEnable) }
+    }
+
   var showHistoryAllBooks: Boolean
     get() = sharedPreferences.getBoolean(PREF_SHOW_HISTORY_ALL_BOOKS, true)
     set(prefShowHistoryAllBooks) {
@@ -213,6 +219,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_WIFI_ONLY = "pref_wifi_only"
     const val PREF_KIWIX_MOBILE = "kiwix-mobile"
     const val PREF_SHOW_INTRO = "showIntro"
+    const val PREF_DESKTOP_MODE_ENABLE = "desktop_mode_enable"
     private const val PREF_BACK_TO_TOP = "pref_backtotop"
     private const val PREF_FULLSCREEN = "pref_fullscreen"
     private const val PREF_NEW_TAB_BACKGROUND = "pref_newtab_background"

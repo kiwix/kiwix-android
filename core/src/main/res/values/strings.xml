@@ -323,4 +323,5 @@
   <string name="open_article">Open Article</string>
   <string name="delete_note_dialog_message">Note: Notes are not deleted from your storage</string>
   <string name="delete_selected_notes">Delete Selected Notes?</string>
+  <string name="menu_desktop_mode">Desktop Mode</string>
 </resources>
