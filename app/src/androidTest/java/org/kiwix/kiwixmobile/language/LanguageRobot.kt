@@ -18,13 +18,10 @@
 
 package org.kiwix.kiwixmobile.language
 
-import android.widget.AutoCompleteTextView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable
@@ -54,7 +51,7 @@ class LanguageRobot : BaseRobot() {
 
   fun searchAndSaveLanguage(searchLanguage: String, matchLanguage: String) {
     onView(withId(R.id.menu_language_search)).perform(click())
-    onView(isAssignableFrom(AutoCompleteTextView::class.java)).perform(typeText(searchLanguage))
+    isVisible(ViewId(androidx.appcompat.R.id.search_src_text)).text = searchLanguage
     onView(withText(matchLanguage)).perform(click())
     onView(withId(R.id.menu_language_save)).perform(click())
   }
