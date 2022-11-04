@@ -197,13 +197,16 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     }
 
   fun getPublicDirectoryPath(path: String): String =
-    if (isPlayStoreBuild)
+    if (isPlayStoreBuild) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
         path
       else
         path.substringBefore(context.getString(R.string.android_directory_seperator))
-    else
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      path
+    } else {
       path.substringBefore(context.getString(R.string.android_directory_seperator))
+    }
 
   fun isPlayStoreBuildWithAndroid11OrAbove(): Boolean =
     isPlayStoreBuild && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R

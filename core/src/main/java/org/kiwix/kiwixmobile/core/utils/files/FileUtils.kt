@@ -23,6 +23,7 @@ import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.util.Log
@@ -42,18 +43,23 @@ import java.io.IOException
 
 object FileUtils {
 
-  @JvmStatic fun getFileCacheDir(context: Context): File? =
+  @JvmStatic
+  fun getFileCacheDir(context: Context): File? =
     if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
       context.externalCacheDir
     } else {
       context.cacheDir
     }
 
-  @JvmStatic @Synchronized fun deleteCachedFiles(context: Context) {
+  @JvmStatic
+  @Synchronized
+  fun deleteCachedFiles(context: Context) {
     getFileCacheDir(context)?.deleteRecursively()
   }
 
-  @JvmStatic @Synchronized fun deleteZimFile(path: String) {
+  @JvmStatic
+  @Synchronized
+  fun deleteZimFile(path: String) {
     var path = path
     if (path.substring(path.length - ChunkUtils.PART.length) == ChunkUtils.PART) {
       path = path.substring(0, path.length - ChunkUtils.PART.length)
@@ -82,7 +88,8 @@ object FileUtils {
     }
   }
 
-  @Synchronized private fun deleteZimFileParts(path: String): Boolean {
+  @Synchronized
+  private fun deleteZimFileParts(path: String): Boolean {
     val file = File(path + ChunkUtils.PART)
     if (file.exists()) {
       file.delete()
@@ -96,7 +103,8 @@ object FileUtils {
     return false
   }
 
-  @JvmStatic fun getLocalFilePathByUri(
+  @JvmStatic
+  fun getLocalFilePathByUri(
     context: Context,
     uri: Uri
   ): String? {
@@ -164,7 +172,8 @@ object FileUtils {
     }
   }
 
-  @JvmStatic fun readLocalesFromAssets(context: Context) =
+  @JvmStatic
+  fun readLocalesFromAssets(context: Context) =
     readContentFromLocales(context).split(',')
 
   private fun readContentFromLocales(context: Context): String {
@@ -207,7 +216,8 @@ object FileUtils {
     return files
   }
 
-  @JvmStatic fun hasPart(file: File): Boolean {
+  @JvmStatic
+  fun hasPart(file: File): Boolean {
     var file = file
     file = File(getFileName(file.path))
     if (file.path.endsWith(".zim")) {
@@ -231,14 +241,16 @@ object FileUtils {
     return false
   }
 
-  @JvmStatic fun getFileName(fileName: String) =
+  @JvmStatic
+  fun getFileName(fileName: String) =
     when {
       File(fileName).exists() -> fileName
       File("$fileName.part").exists() -> "$fileName.part"
       else -> "${fileName}aa"
     }
 
-  @JvmStatic fun Context.readFile(filePath: String): String = try {
+  @JvmStatic
+  fun Context.readFile(filePath: String): String = try {
     assets.open(filePath)
       .bufferedReader()
       .use(BufferedReader::readText)
@@ -246,15 +258,18 @@ object FileUtils {
     "".also { e.printStackTrace() }
   }
 
-  @JvmStatic fun isValidZimFile(filePath: String): Boolean =
+  @JvmStatic
+  fun isValidZimFile(filePath: String): Boolean =
     filePath.endsWith(".zim") || filePath.endsWith(".zimaa")
 
-  @JvmStatic fun getSdCardMainPath(context: Context): String =
+  @JvmStatic
+  fun getSdCardMainPath(context: Context): String =
     "${context.getExternalFilesDirs("")[1]}"
       .substringBefore(context.getString(R.string.android_directory_seperator))
 
   @SuppressLint("WrongConstant")
-  @JvmStatic fun getPathFromUri(activity: Activity, data: Intent): String? {
+  @JvmStatic
+  fun getPathFromUri(activity: Activity, data: Intent): String? {
     val uri: Uri? = data.data
     val takeFlags: Int = data.flags and (
       Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -306,7 +321,8 @@ object FileUtils {
       ?: src?.substringAfterLast("/", "")
         ?.substringAfterLast("%3A") ?: ""
 
-  @JvmStatic fun downloadFileFromUrl(
+  @JvmStatic
+  fun downloadFileFromUrl(
     url: String?,
     src: String?,
     zimReaderContainer: ZimReaderContainer,
@@ -314,7 +330,9 @@ object FileUtils {
   ): File? {
     val fileName = getDecodedFileName(url, src)
     var root: File? = null
-    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() ||
+      Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+    ) {
       if (CoreApp.instance.externalMediaDirs.isNotEmpty()) {
         root = CoreApp.instance.externalMediaDirs[0]
       }

@@ -289,7 +289,8 @@ class AddNoteDialog : DialogFragment() {
           requireContext(),
           Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) != PackageManager.PERMISSION_GRANTED &&
-        !sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()
+        !sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
+        Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
       ) {
         Log.d(
           TAG,
