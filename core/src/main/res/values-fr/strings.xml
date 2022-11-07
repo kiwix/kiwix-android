@@ -179,7 +179,7 @@
   <string name="your_languages">Langues sélectionnées :</string>
   <string name="other_languages">Autres langues :</string>
   <string name="no_items_msg">Aucun élément disponible</string>
-  <string name="crash_title">Hé bien… c’est embarrassant.</string>
+  <string name="crash_title">Hé bien... c’est embarrassant.</string>
   <string name="crash_description">Il semble que nous ayons planté.\n\nPourriez-vous nous aider à corriger ce problème en envoyant l’information suivante ?</string>
   <string name="crash_checkbox_language">Vos paramètres de langue</string>
   <string name="crash_checkbox_zimfiles">Une liste de vos fichiers ZIM</string>
@@ -261,8 +261,8 @@
   <string name="nearby_devices">APPAREILS À PROXIMITÉ</string>
   <string name="no_devices_found">Aucun appareil détecté. Tapez le bouton Rechercher pour essayer à nouveau.</string>
   <string name="files_for_transfer">FICHIERS À TRANSFÉRER</string>
-  <string name="preparing_files">Préparation des fichiers pour le transfert…</string>
-  <string name="performing_handshake">Négociation de la liaison…</string>
+  <string name="preparing_files">Préparation des fichiers pour le transfert...</string>
+  <string name="performing_handshake">Négociation de la liaison...</string>
   <string name="status">État</string>
   <string name="pref_clear_all_notes_summary">Effacer toutes les notes sur tous les articles</string>
   <string name="pref_clear_all_notes_title">Effacer toutes les notes</string>

@@ -67,7 +67,7 @@
   <string name="pref_language_title">Språk</string>
   <string name="pref_language_chooser">Välj ett språk</string>
   <string name="pref_credits">Bidragsgivare och licenser</string>
-  <string name="pref_credits_title">Tacka till</string>
+  <string name="pref_credits_title">Erkännanden</string>
   <string name="tts_lang_not_supported">Språket på denna sida stöds inte, eller så har lämplig språkdata inte installerats. Artikeln kan kanske inte läsas på rätt sätt.</string>
   <string name="no_reader_application_installed">Kunde inte hitta ett installerat program för denna filtyp</string>
   <string name="no_section_info">Ingen innehållsrubrik hittades</string>
