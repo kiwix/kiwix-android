@@ -19,15 +19,18 @@
   <string name="menu_exit_full_screen">Forlad fuldskærm</string>
   <string name="menu_read_aloud">Læs højt</string>
   <string name="menu_read_aloud_stop">Stop med at læse højt</string>
+  <string name="menu_support_kiwix">Støt Kiwix</string>
   <string name="save_media">Gem medie</string>
   <string name="save_media_error">Der opstod en fejl under forsøg på at gemme mediet!</string>
-  <string name="save_media_saved" fuzzy="true">Gemte medie som %s til Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Gemte medie som %s til Downloads/org.kiwix…/</string>
   <string name="search_label">Søg</string>
   <string name="choose_file">Vælg en indholdsfil (*.zim)</string>
   <string name="open_in_new_tab">Åbn link i nyt faneblad?</string>
   <string name="no_books_selected_toast_message">Vælg venligst bøger først</string>
   <string name="server_failed_toast_message">Kunne ikke starte serveren.</string>
   <string name="progress_dialog_starting_server">Starter serveren</string>
+  <string name="start_server_label">Start server</string>
+  <string name="stop_server_label">Stop server</string>
   <string name="error_file_not_found">Fejl: Den valgte ZIM fil blev ikke fundet.</string>
   <string name="error_file_invalid">Fejl: Den valgte fil er ikke en gyldig ZIM fil.</string>
   <string name="error_article_url_not_found">Fejl: Indlæsning af artikel (Url: %1$s) mislykkedes.</string>
@@ -50,6 +53,7 @@
   <string name="delete_recent_search_item">Slet dette element?</string>
   <string name="pref_clear_all_history_title">Ryd historik</string>
   <string name="pref_clear_all_history_summary">Ryd seneste søgninger og fanebladshistorik</string>
+  <string name="pref_permission">Tilladelser</string>
   <string name="all_history_cleared">Al historik fjernet</string>
   <string name="clear_all_history_dialog_title">Ryd al historik?</string>
   <string name="share">Del</string>
@@ -79,7 +83,7 @@
   <string name="library">Bibliotek</string>
   <string name="delete_zims_toast">Fil slettet</string>
   <string name="no_files_here">Ingen filer her</string>
-  <string name="download_no_space" fuzzy="true">Utilstrækkelig med plads til at hente denne fil.</string>
+  <string name="download_no_space">Utilstrækkelig med plads til at downloade.</string>
   <string name="space_available">Ledig plads:</string>
   <string name="zim_simple">Enkelt</string>
   <string name="zim_no_pic">Ingen billeder</string>
@@ -128,7 +132,11 @@
   <string name="do_not_ask_anymore">Spørg ikke igen</string>
   <string name="your_languages">Valgte sprog:</string>
   <string name="other_languages">Andre sprog:</string>
+  <string name="crash_checkbox_language">Dine sprogindstillinger</string>
+  <string name="crash_checkbox_zimfiles">En liste over dine Zim-filer</string>
+  <string name="crash_button_confirm">SEND DETALJER</string>
   <string name="new_tab_shortcut_label">Ny fane</string>
+  <string name="get_content_shortcut_label">Få indhold</string>
   <string name="articleCount">%s artikler</string>
   <string name="get_started">Kom igang</string>
   <string name="welcome_to_the_family">Velkommen i familien</string>
@@ -142,18 +150,27 @@
   <string name="history">Historik</string>
   <string name="search_bookmarks">Søg i bogmærker</string>
   <string name="close_all_tabs">Luk alle faner</string>
+  <string name="pending_state">Afventer</string>
   <string name="running_state">I gang</string>
+  <string name="complete">Færdig</string>
   <string name="save">Gem</string>
   <string name="books_count">%d bog/bøger</string>
+  <string name="transfer_to">Overfør filer til %s?</string>
   <string name="your_device">Din enhed:</string>
+  <string name="status">Status</string>
   <string name="tag_pic">Billede</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Kun tekst</string>
   <string name="tag_short_text">kort tekst</string>
   <string name="go_to_settings" fuzzy="true">Gå til indstillinger</string>
+  <string name="no_results">Ingen resultater</string>
   <string name="no_bookmarks">Ingen bogmærker</string>
+  <string name="percentage">%d%%</string>
   <string name="reader">Læser</string>
   <string name="open_library">Åbn bibliotek</string>
   <string name="open_drawer">Åbn skuffe</string>
   <string name="close_drawer">Luk skuffe</string>
+  <string name="allowed">Tilladt</string>
+  <string name="not_allowed">Ikke tilladt</string>
+  <string name="allow">Tillad</string>
 </resources>

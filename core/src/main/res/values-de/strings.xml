@@ -14,9 +14,10 @@
 * Stephane
 * Susann Schweden
 * Symposiarch
+* ThisCarthing
 * Umlaut
 -->
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="menu_help">Hilfe</string>
   <string name="menu_home">Start</string>
   <string name="menu_settings">Einstellungen</string>
@@ -31,7 +32,7 @@
   <string name="menu_wifi_hotspot">WLAN Hotspot</string>
   <string name="save_media">Medium speichern</string>
   <string name="save_media_error">Beim Versuch, das Medium zu speichern, ist ein Fehler aufgetreten!</string>
-  <string name="save_media_saved" fuzzy="true">Medium als %s nach Android/media/org.kiwix…/ gespeichert</string>
+  <string name="save_media_saved">Medium als %s nach Downloads/org.kiwix…/ gespeichert</string>
   <string name="search_label">Suchen</string>
   <string name="choose_file">Wähle eine Inhaltsdatei aus (*.zim)</string>
   <string name="open_in_new_tab">Link in neuer Registerkarte öffnen?</string>
@@ -101,6 +102,7 @@
   <string name="tab_closed">Registerkarte geschlossen</string>
   <string name="bookmark_added">Lesezeichen hinzugefügt</string>
   <string name="rate_dialog_title">Bitte bewerten Sie uns</string>
+  <string name="rate_dialog_msg">Wenn Sie %s gerne verwenden, nehmen Sie sich bitte einen Moment Zeit, um es zu bewerten. Danke für Ihre Unterstützung!</string>
   <string name="rate_dialog_positive">Bewerten Sie!</string>
   <string name="no_thanks">Nein danke</string>
   <string name="rate_dialog_neutral">Später</string>
@@ -258,7 +260,7 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Löscht alle Notizen zu allen Artikeln</string>
   <string name="pref_clear_all_notes_title">Alle Notizen löschen</string>
-  <string name="pref_text_zoom_summary" tools:ignore="StringFormatCount">Schriftgröße in 25%-Schritten ändern.</string>
+  <string name="pref_text_zoom_summary">Schriftgröße in 25%-Schritten ändern.</string>
   <string name="tag_pic">Bild</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Nur Text</string>
