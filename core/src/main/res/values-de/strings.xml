@@ -17,7 +17,7 @@
 * ThisCarthing
 * Umlaut
 -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Hilfe</string>
   <string name="menu_home">Start</string>
   <string name="menu_settings">Einstellungen</string>
@@ -260,7 +260,7 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Löscht alle Notizen zu allen Artikeln</string>
   <string name="pref_clear_all_notes_title">Alle Notizen löschen</string>
-  <string name="pref_text_zoom_summary">Schriftgröße in 25%-Schritten ändern.</string>
+  <string name="pref_text_zoom_summary" tools:ignore="StringFormatCount">Schriftgröße in 25%-Schritten ändern.</string>
   <string name="tag_pic">Bild</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Nur Text</string>
