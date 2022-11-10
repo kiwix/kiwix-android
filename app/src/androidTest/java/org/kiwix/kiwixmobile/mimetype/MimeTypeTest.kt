@@ -20,8 +20,11 @@ package org.kiwix.kiwixmobile.mimetype
 
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
+import androidx.test.uiautomator.UiDevice
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 import org.kiwix.kiwixlib.JNIKiwixReader
 import org.kiwix.kiwixmobile.BaseActivityTest
@@ -40,6 +43,11 @@ class MimeTypeTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
     }
+  }
+
+  @Before
+  override fun waitForIdle() {
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
   }
 
   @Test

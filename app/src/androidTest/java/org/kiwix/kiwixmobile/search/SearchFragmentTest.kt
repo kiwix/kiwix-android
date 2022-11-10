@@ -24,6 +24,7 @@ import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import androidx.test.uiautomator.UiDevice
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
@@ -40,15 +41,17 @@ class SearchFragmentTest : BaseActivityTest() {
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
+      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
     }
   }
 
   @Before
-  fun waitForIdle() {
+  override fun waitForIdle() {
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
   }
 
-  @Test fun searchFragmentSimple() {
+  @Test
+  fun searchFragmentSimple() {
     UiThreadStatement.runOnUiThread { activityRule.activity.navigate(R.id.libraryFragment) }
     val loadFileStream =
       SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
@@ -86,6 +89,13 @@ class SearchFragmentTest : BaseActivityTest() {
     search {
       clickOnSearchItemInSearchList()
       checkZimFileSearchSuccessful(R.id.readerFragment)
+    }
+  }
+
+  @After
+  fun setIsTestPreference() {
+    PreferenceManager.getDefaultSharedPreferences(context).edit {
+      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, false)
     }
   }
 }

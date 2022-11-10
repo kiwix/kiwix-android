@@ -31,7 +31,7 @@ import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assert
 import org.hamcrest.Matchers
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.Text
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 
 /**
  * Authored by Ayush Shrivastava on 25/8/20

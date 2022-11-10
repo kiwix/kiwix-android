@@ -26,7 +26,7 @@ fun note(func: NoteRobot.() -> Unit) = NoteRobot().apply(func)
 
 class NoteRobot : BaseRobot() {
 
-  init {
+  fun assertToolbarExist() {
     isVisible(Findable.ViewId(R.id.toolbar))
   }
 

@@ -47,7 +47,7 @@ class InitialDownloadTest : BaseActivityTest() {
   }
 
   @Before
-  fun waitForIdle() {
+  override fun waitForIdle() {
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
   }
 
