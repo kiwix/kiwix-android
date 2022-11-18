@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.language
 
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.Findable
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
@@ -32,7 +33,7 @@ class LanguageRobot : BaseRobot() {
 
   fun waitForDataToLoad() {
     try {
-      isVisible(Text("Off the Grid"))
+      isVisible(Findable.Text("Off the Grid"))
     } catch (e: RuntimeException) {
       if (retryCountForDataToLoad > 0) {
         retryCountForDataToLoad--

@@ -33,20 +33,15 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS
 import org.kiwix.kiwixmobile.utils.StandardActions
 
 class KiwixSettingsFragmentTest {
-  @Rule
-  @JvmField
-  var activityTestRule = ActivityTestRule(
+
+  @Rule @JvmField var activityTestRule = ActivityTestRule(
     KiwixMainActivity::class.java
   )
 
-  @Rule
-  @JvmField
-  var readPermissionRule: GrantPermissionRule =
+  @Rule @JvmField var readPermissionRule: GrantPermissionRule =
     GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE)
 
-  @Rule
-  @JvmField
-  var writePermissionRule: GrantPermissionRule =
+  @Rule @JvmField var writePermissionRule: GrantPermissionRule =
     GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
   @Before
