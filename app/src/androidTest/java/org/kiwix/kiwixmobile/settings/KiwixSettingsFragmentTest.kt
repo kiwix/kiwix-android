@@ -33,6 +33,7 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS
 import org.kiwix.kiwixmobile.utils.StandardActions
 
 class KiwixSettingsFragmentTest {
+
   @Rule @JvmField var activityTestRule = ActivityTestRule(
     KiwixMainActivity::class.java
   )
@@ -43,7 +44,8 @@ class KiwixSettingsFragmentTest {
   @Rule @JvmField var writePermissionRule: GrantPermissionRule =
     GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
-  @Before fun setup() {
+  @Before
+  fun setup() {
     // Go to IntroFragment
     UiThreadStatement.runOnUiThread { activityTestRule.activity.navigate(R.id.introFragment) }
     intro(IntroRobot::swipeLeft) clickGetStarted { }

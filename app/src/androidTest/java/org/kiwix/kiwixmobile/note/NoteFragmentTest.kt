@@ -19,15 +19,25 @@
 package org.kiwix.kiwixmobile.note
 
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
+import org.junit.Before
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 
 class NoteFragmentTest : BaseActivityTest() {
+
+  @Before
+  override fun waitForIdle() {
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
+  }
+
   @Test
   fun verifyNoteFragment() {
     UiThreadStatement.runOnUiThread { activityRule.activity.navigate(R.id.notesFragment) }
     note {
+      assertToolbarExist()
       assertNoteRecyclerViewExist()
       assertSwitchWidgetExist()
     }

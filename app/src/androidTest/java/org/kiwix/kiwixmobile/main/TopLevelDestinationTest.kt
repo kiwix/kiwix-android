@@ -21,6 +21,8 @@ import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
@@ -33,12 +35,15 @@ import org.kiwix.kiwixmobile.webserver.ZimHostRobot
 class TopLevelDestinationTest : BaseActivityTest() {
 
   @Before
-  fun setUp() {
+  override fun waitForIdle() {
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
     PreferenceManager.getDefaultSharedPreferences(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
     ).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
+      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
+      putBoolean(SharedPreferenceUtil.PREF_EXTERNAL_LINK_POPUP, true)
     }
   }
 
@@ -70,6 +75,13 @@ class TopLevelDestinationTest : BaseActivityTest() {
       clickSupportKiwixOnSideNav()
       assertExternalLinkDialogDisplayed()
       pressBack()
+    }
+  }
+
+  @After
+  fun setIsTestPreference() {
+    PreferenceManager.getDefaultSharedPreferences(context).edit {
+      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, false)
     }
   }
 }

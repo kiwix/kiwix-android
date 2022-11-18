@@ -18,13 +18,10 @@
 
 package org.kiwix.kiwixmobile.language
 
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable
+import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 
@@ -50,9 +47,9 @@ class LanguageRobot : BaseRobot() {
   }
 
   fun searchAndSaveLanguage(searchLanguage: String, matchLanguage: String) {
-    onView(withId(R.id.menu_language_search)).perform(click())
+    clickOn(ViewId(R.id.menu_language_search))
     isVisible(ViewId(androidx.appcompat.R.id.search_src_text)).text = searchLanguage
-    onView(withText(matchLanguage)).perform(click())
-    onView(withId(R.id.menu_language_save)).perform(click())
+    clickOn(Text(matchLanguage))
+    clickOn(ViewId(R.id.menu_language_save))
   }
 }

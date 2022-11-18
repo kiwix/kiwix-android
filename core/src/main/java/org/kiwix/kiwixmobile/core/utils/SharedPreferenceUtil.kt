@@ -59,6 +59,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefIsFirstRun: Boolean
     get() = sharedPreferences.getBoolean(PREF_IS_FIRST_RUN, true)
 
+  val prefIsTest: Boolean
+    get() = sharedPreferences.getBoolean(PREF_IS_TEST, false)
+
   val prefFullScreen: Boolean
     get() = sharedPreferences.getBoolean(PREF_FULLSCREEN, false)
 
@@ -213,11 +216,12 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_WIFI_ONLY = "pref_wifi_only"
     const val PREF_KIWIX_MOBILE = "kiwix-mobile"
     const val PREF_SHOW_INTRO = "showIntro"
+    const val PREF_IS_TEST = "is_test"
     private const val PREF_BACK_TO_TOP = "pref_backtotop"
     private const val PREF_FULLSCREEN = "pref_fullscreen"
     private const val PREF_NEW_TAB_BACKGROUND = "pref_newtab_background"
     private const val PREF_STORAGE_TITLE = "pref_selected_title"
-    private const val PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup"
+    const val PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup"
     const val PREF_SHOW_STORAGE_OPTION = "show_storgae_option"
     private const val PREF_IS_FIRST_RUN = "isFirstRun"
     private const val PREF_SHOW_BOOKMARKS_ALL_BOOKS = "show_bookmarks_current_book"

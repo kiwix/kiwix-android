@@ -61,4 +61,6 @@ abstract class BaseActivityTest {
   protected fun testComponent(): TestComponent = DaggerTestComponent.builder()
     .context(context)
     .build()
+
+  abstract fun waitForIdle()
 }
