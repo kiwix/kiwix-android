@@ -15,8 +15,7 @@ jobs:
   coverageReport:
     strategy:
       matrix:
-        api-level: [21,30]
-        target: [ google_apis ]
+        api-level: [21,30,33]
       fail-fast: false
     runs-on: macos-11
     steps:
@@ -41,20 +40,41 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: create instrumentation coverage
-        uses: ReactiveCircus/android-emulator-runner@v2.23.0
+        uses: ReactiveCircus/android-emulator-runner@v2.25.0
         env:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
+        if: ${{ matrix.api-level != 33 }}
         with:
           api-level: ${{ matrix.api-level }}
+          target: default
           arch: x86_64
           profile: pixel_2
           ndk: 21.4.7075529
+          ram-size: '4096M'
+          disk-size: '14G'
+          sdcard-path-or-size: '1000M'
+          disable-animations: false
+          script: bash contrib/instrumentation.sh
+
+      - name: create instrumentation coverage on google_apis for android 33
+        uses: ReactiveCircus/android-emulator-runner@v2.25.0
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
+        if: ${{ matrix.api-level == 33 }}
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          ndk: 21.4.7075529
+          ram-size: '4096M'
+          disk-size: '14G'
           sdcard-path-or-size: '1000M'
           disable-animations: false
           script: bash contrib/instrumentation.sh
 
       - name: Upload screenshot result
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         if: failure()
         with:
           name: ${{ matrix.api-level }}

@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.intro
 
+import android.os.Build
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -29,8 +30,10 @@ class IntroFragmentTest : BaseActivityTest() {
 
   @Test
   fun viewIsSwipeableAndNavigatesToMain() {
-    runOnUiThread { activityRule.activity.navigate(R.id.introFragment) }
-    intro(IntroRobot::swipeLeft) clickGetStarted {}
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      runOnUiThread { activityRule.activity.navigate(R.id.introFragment) }
+      intro(IntroRobot::swipeLeft) clickGetStarted {}
+    }
   }
 
   @Before
