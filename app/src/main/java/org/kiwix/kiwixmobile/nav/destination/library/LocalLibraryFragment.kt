@@ -26,7 +26,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -293,12 +292,7 @@ class LocalLibraryFragment : BaseFragment() {
         Manifest.permission.READ_EXTERNAL_STORAGE
       ) != PackageManager.PERMISSION_GRANTED
     ) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        dialogShower.show(
-          KiwixDialog.StoragePermissionRationale,
-          ::openAppSettings
-        )
-      } else {
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
         context.toast(R.string.request_storage)
         requestPermissions(
           arrayOf(
@@ -335,15 +329,6 @@ class LocalLibraryFragment : BaseFragment() {
         }
       }
     }
-  }
-
-  private fun openAppSettings() {
-    val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
-    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-      flags = Intent.FLAG_ACTIVITY_NEW_TASK
-      data = uri
-    }
-    startActivity(intent)
   }
 
   private fun requestFileSystemCheck() {

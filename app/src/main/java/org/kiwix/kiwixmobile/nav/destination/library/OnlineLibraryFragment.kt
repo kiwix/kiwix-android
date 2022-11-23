@@ -325,7 +325,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       if (sharedPreferenceUtil.isPlayStoreBuild) {
         setExternalStoragePath(storageDevice)
       } else {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+          Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+        ) {
           val view = LayoutInflater.from(activity).inflate(R.layout.select_folder_dialog, null)
           dialogShower.show(SelectFolder { view }, ::selectFolder)
         } else {
@@ -375,18 +377,22 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   private fun checkExternalStorageWritePermission(): Boolean {
     if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
-      return hasPermission(WRITE_EXTERNAL_STORAGE).also { permissionGranted ->
-        if (!permissionGranted) {
-          if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
-            alertDialogShower.show(
-              KiwixDialog.WriteStoragePermissionRationale,
-              ::requestExternalStoragePermission
-            )
-          } else {
-            alertDialogShower.show(
-              KiwixDialog.WriteStoragePermissionRationale,
-              ::openAppSettings
-            )
+      return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        true
+      } else {
+        hasPermission(WRITE_EXTERNAL_STORAGE).also { permissionGranted ->
+          if (!permissionGranted) {
+            if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
+              alertDialogShower.show(
+                KiwixDialog.WriteStoragePermissionRationale,
+                ::requestExternalStoragePermission
+              )
+            } else {
+              alertDialogShower.show(
+                KiwixDialog.WriteStoragePermissionRationale,
+                ::openAppSettings
+              )
+            }
           }
         }
       }

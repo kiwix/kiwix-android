@@ -162,7 +162,8 @@ class CustomReaderFragment : CoreReaderFragment() {
             requireActivity(),
             READ_EXTERNAL_STORAGE
           ) == PERMISSION_DENIED &&
-          sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == false
+          sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
+          Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
         ) {
           requestPermissions(arrayOf(READ_EXTERNAL_STORAGE), REQUEST_READ_FOR_OBB)
         } else {

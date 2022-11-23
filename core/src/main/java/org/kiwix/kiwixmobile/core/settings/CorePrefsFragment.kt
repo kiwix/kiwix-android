@@ -235,7 +235,8 @@ abstract class CorePrefsFragment :
           Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
         != PackageManager.PERMISSION_GRANTED &&
-        sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == false
+        sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
+        Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
       ) {
         Snackbar.make(
           requireView(),
@@ -310,7 +311,9 @@ abstract class CorePrefsFragment :
         if (sharedPreferenceUtil.isPlayStoreBuild) {
           setExternalStoragePath(storageDevice)
         } else {
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+          ) {
             @SuppressLint("InflateParams") val view = LayoutInflater.from(
               activity
             ).inflate(R.layout.select_folder_dialog, null)

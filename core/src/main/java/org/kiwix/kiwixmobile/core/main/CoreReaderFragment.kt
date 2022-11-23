@@ -1039,7 +1039,9 @@ abstract class CoreReaderFragment :
   @Suppress("NestedBlockDepth")
   private fun requestExternalStorageWritePermissionForNotes(): Boolean {
     var isPermissionGranted = false
-    if (sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == false) {
+    if (sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
+      Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+    ) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // For Marshmallow & higher API levels
         if (requireActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
           == PackageManager.PERMISSION_GRANTED
@@ -1130,7 +1132,9 @@ abstract class CoreReaderFragment :
   }
 
   private fun hasPermission(permission: String): Boolean {
-    return if (sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == true) {
+    return if (sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == true ||
+      Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+    ) {
       true
     } else ContextCompat.checkSelfPermission(
       requireActivity(),
