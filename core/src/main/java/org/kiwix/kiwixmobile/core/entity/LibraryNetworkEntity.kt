@@ -17,66 +17,66 @@
  */
 package org.kiwix.kiwixmobile.core.entity
 
-import org.simpleframework.xml.Attribute
-import org.simpleframework.xml.ElementList
-import org.simpleframework.xml.Root
 import java.io.File
 import java.io.Serializable
 import java.util.LinkedList
+import javax.xml.bind.annotation.XmlAttribute
+import javax.xml.bind.annotation.XmlElement
+import javax.xml.bind.annotation.XmlRootElement
 
-@Root(name = "library")
+@XmlRootElement(name = "library")
 class LibraryNetworkEntity {
-  @field:ElementList(name = "book", inline = true, required = false)
+  @field:XmlElement(name = "book")
   var book: LinkedList<Book>? = null
 
-  @field:Attribute(name = "version", required = false)
+  @field:XmlAttribute(name = "version")
   var version: String? = null
 
-  @Root(name = "book", strict = false)
+  @XmlRootElement(name = "book")
   class Book : Serializable {
-    @field:Attribute(name = "id", required = false)
+    @field:XmlAttribute(name = "id")
     var id: String = ""
 
-    @field:Attribute(name = "title", required = false)
+    @field:XmlAttribute(name = "title")
     var title: String = ""
 
-    @field:Attribute(name = "description", required = false)
+    @field:XmlAttribute(name = "description")
     var description: String? = null
 
-    @field:Attribute(name = "language", required = false)
+    @field:XmlAttribute(name = "language")
     var language: String = ""
 
-    @field:Attribute(name = "creator", required = false)
+    @field:XmlAttribute(name = "creator")
     var creator: String = ""
 
-    @field:Attribute(name = "publisher", required = false)
+    @field:XmlAttribute(name = "publisher")
     var publisher: String = ""
 
-    @field:Attribute(name = "favicon", required = false)
+    @field:XmlAttribute(name = "favicon")
     var favicon: String = ""
 
-    @field:Attribute(name = "faviconMimeType", required = false)
+    @field:XmlAttribute(name = "faviconMimeType")
     var faviconMimeType: String? = null
 
-    @field:Attribute(name = "date", required = false)
+    @field:XmlAttribute(name = "date")
     var date: String = ""
 
-    @field:Attribute(name = "url", required = false)
+    @field:XmlAttribute(name = "url")
     var url: String? = null
 
-    @field:Attribute(name = "articleCount", required = false)
+    @field:XmlAttribute(name = "articleCount")
     var articleCount: String? = null
 
-    @field:Attribute(name = "mediaCount", required = false)
+    @field:XmlAttribute(name = "mediaCount")
     var mediaCount: String? = null
 
-    @field:Attribute(name = "size", required = false)
+    @field:XmlAttribute(name = "size")
     var size: String = ""
 
-    @field:Attribute(name = "name", required = false)
+    @field:XmlAttribute(name = "name")
     var bookName: String? = null
 
-    @field:Attribute(name = "tags", required = false)
+    @field:XmlAttribute(name = "tags")
     var tags: String? = null
     var searchMatches = 0
 

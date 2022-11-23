@@ -17,30 +17,27 @@
  */
 package org.kiwix.kiwixmobile.core.entity
 
-import org.simpleframework.xml.Attribute
-import org.simpleframework.xml.Element
-import org.simpleframework.xml.ElementList
-import org.simpleframework.xml.ElementMap
-import org.simpleframework.xml.Root
-import org.simpleframework.xml.Text
+import javax.xml.bind.annotation.XmlAttribute
+import javax.xml.bind.annotation.XmlElement
+import javax.xml.bind.annotation.XmlRootElement
 
-@Root(strict = false, name = "metalink")
+@XmlRootElement(name = "metalink")
 class MetaLinkNetworkEntity {
-  @field:Element
+  @field:XmlElement
   var file: FileElement? = null
   val urls: List<Url>?
     get() = file?.urls
   val relevantUrl: Url
     get() = file?.urls?.get(0) ?: Url()
 
-  @Root(strict = false)
+  @XmlRootElement()
   class FileElement {
-    @field:Attribute
+    @field:XmlAttribute
     var name: String? = null
 
-    @field:ElementList(inline = true, entry = "url")
+    @field:XmlElement(name = "url")
     var urls: List<Url>? = null
-    @field:Element var size: Long = 0
+    @field:XmlElement var size: Long = 0
 
     @field:ElementMap(
       entry = "hash",
@@ -51,7 +48,7 @@ class MetaLinkNetworkEntity {
     )
     var hashes: Map<String, String>? = null
 
-    @field:Element(required = false)
+    @field:XmlElement(required = false)
     var pieces: Pieces? = null
     val pieceHashes: List<String>?
       get() = pieces?.pieceHashes
@@ -66,24 +63,24 @@ class MetaLinkNetworkEntity {
   }
 
   class Pieces {
-    @field:Attribute
+    @field:XmlAttribute
     var length = 0
 
-    @field:Attribute(name = "type")
+    @field:XmlAttribute(name = "type")
     var hashType: String? = null
 
-    @field:ElementList(inline = true, entry = "hash")
+    @field:XmlElement(name = "hash")
     var pieceHashes: List<String>? = null
   }
 
   class Url {
-    @field:Attribute
+    @field:XmlAttribute
     var location: String? = null
 
-    @field:Attribute
+    @field:XmlAttribute
     var priority = 0
 
-    @field:Text
+    @field:XmlAttribute
     var value: String? = null
   }
 }

@@ -74,11 +74,7 @@ dependencies {
   implementation(Libs.select_folder_document_file)
 
   // Square
-  implementation(Libs.converter_simplexml) {
-    exclude(group = "xpp3", module = "xpp3")
-    exclude(group = "stax", module = "stax-api")
-    exclude(group = "stax", module = "stax")
-  }
+  implementation(Libs.converter_jaxb)
 
   // Leak canary
   debugImplementation(Libs.leakcanary_android)

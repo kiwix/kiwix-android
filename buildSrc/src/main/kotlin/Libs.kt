@@ -59,7 +59,7 @@ object Libs {
   /**
    * https://github.com/square/retrofit
    */
-  const val converter_simplexml: String = "com.squareup.retrofit2:converter-simplexml:" +
+  const val converter_jaxb: String = "com.squareup.retrofit2:converter-jaxb:" +
     Versions.com_squareup_retrofit2
 
   /**
