@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.help
 
+import android.os.Build
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -34,18 +35,20 @@ class HelpFragmentTest : BaseActivityTest() {
 
   @Test
   fun verifyHelpActivity() {
-    runOnUiThread { activityRule.activity.navigate(R.id.helpFragment) }
-    help {
-      clickOnWhatDoesKiwixDo()
-      assertWhatDoesKiwixDoIsExpanded()
-      clickOnWhatDoesKiwixDo()
-      clickOnWhereIsContent()
-      assertWhereIsContentIsExpanded()
-      clickOnWhereIsContent()
-      clickOnHowToUpdateContent()
-      assertHowToUpdateContentIsExpanded()
-      clickOnHowToUpdateContent()
-      clickOnSendFeedback()
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      runOnUiThread { activityRule.activity.navigate(R.id.helpFragment) }
+      help {
+        clickOnWhatDoesKiwixDo()
+        assertWhatDoesKiwixDoIsExpanded()
+        clickOnWhatDoesKiwixDo()
+        clickOnWhereIsContent()
+        assertWhereIsContentIsExpanded()
+        clickOnWhereIsContent()
+        clickOnHowToUpdateContent()
+        assertHowToUpdateContentIsExpanded()
+        clickOnHowToUpdateContent()
+        clickOnSendFeedback()
+      }
     }
   }
 }

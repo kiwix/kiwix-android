@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.note
 
+import android.os.Build
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -35,11 +36,13 @@ class NoteFragmentTest : BaseActivityTest() {
 
   @Test
   fun verifyNoteFragment() {
-    UiThreadStatement.runOnUiThread { activityRule.activity.navigate(R.id.notesFragment) }
-    note {
-      assertToolbarExist()
-      assertNoteRecyclerViewExist()
-      assertSwitchWidgetExist()
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      UiThreadStatement.runOnUiThread { activityRule.activity.navigate(R.id.notesFragment) }
+      note {
+        assertToolbarExist()
+        assertNoteRecyclerViewExist()
+        assertSwitchWidgetExist()
+      }
     }
   }
 }

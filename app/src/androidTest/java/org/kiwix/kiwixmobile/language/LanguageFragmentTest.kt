@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.language
 
 import android.Manifest
 import android.app.Instrumentation
+import android.os.Build
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -67,18 +68,20 @@ class LanguageFragmentTest {
 
   @Test
   fun testLanguageFragment() {
-    UiThreadStatement.runOnUiThread {
-      activityScenarioRule.scenario.onActivity {
-        it.navigate(R.id.downloadsFragment)
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      UiThreadStatement.runOnUiThread {
+        activityScenarioRule.scenario.onActivity {
+          it.navigate(R.id.downloadsFragment)
+        }
       }
-    }
 
-    language {
-      waitForDataToLoad()
-      clickOnLanguageIcon()
-      searchAndSaveLanguage("german", "German")
-      clickOnLanguageIcon()
-      searchAndSaveLanguage("italiano", "Italian")
+      language {
+        waitForDataToLoad()
+        clickOnLanguageIcon()
+        searchAndSaveLanguage("german", "German")
+        clickOnLanguageIcon()
+        searchAndSaveLanguage("italiano", "Italian")
+      }
     }
   }
 }

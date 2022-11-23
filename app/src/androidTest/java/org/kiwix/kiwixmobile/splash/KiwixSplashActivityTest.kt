@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.splash
 
 import android.Manifest
 import android.content.Context
+import android.os.Build
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
@@ -66,38 +67,42 @@ class KiwixSplashActivityTest {
 
   @Test
   fun testFirstRun() {
-    shouldShowIntro(true)
-    activityScenario.recreate()
-    activityScenario.onActivity {
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-      Espresso.onView(ViewMatchers.withId(R.id.get_started))
-        .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      shouldShowIntro(true)
+      activityScenario.recreate()
+      activityScenario.onActivity {
+        BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+        Espresso.onView(ViewMatchers.withId(R.id.get_started))
+          .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
 
-      // Verify that the value of the "intro shown" boolean inside
-      // the SharedPreferences Database is not changed until
-      // the "Get started" button is pressed
-      val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-      Assert.assertEquals(
-        true,
-        preferences.getBoolean(
-          SharedPreferenceUtil.PREF_SHOW_INTRO,
-          true
+        // Verify that the value of the "intro shown" boolean inside
+        // the SharedPreferences Database is not changed until
+        // the "Get started" button is pressed
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        Assert.assertEquals(
+          true,
+          preferences.getBoolean(
+            SharedPreferenceUtil.PREF_SHOW_INTRO,
+            true
+          )
         )
-      )
+      }
     }
   }
 
   @Test
   fun testNormalRun() {
-    shouldShowIntro(false)
-    activityScenario.recreate()
-    activityScenario.onActivity {
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-      Intents.intended(
-        IntentMatchers.hasComponent(
-          KiwixMainActivity::class.java.canonicalName
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      shouldShowIntro(false)
+      activityScenario.recreate()
+      activityScenario.onActivity {
+        BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+        Intents.intended(
+          IntentMatchers.hasComponent(
+            KiwixMainActivity::class.java.canonicalName
+          )
         )
-      )
+      }
     }
   }
 

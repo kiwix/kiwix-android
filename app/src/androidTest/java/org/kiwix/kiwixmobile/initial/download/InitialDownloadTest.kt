@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.initial.download
 
+import android.os.Build
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -53,15 +54,17 @@ class InitialDownloadTest : BaseActivityTest() {
 
   @Test
   fun initialDownloadTest() {
-    UiThreadStatement.runOnUiThread { activityRule.activity.navigate(R.id.downloadsFragment) }
-    initialDownload {
-      assertLibraryListDisplayed()
-      refreshList()
-      waitForDataToLoad()
-      downloadZimFile()
-      assertStorageConfigureDialogDisplayed()
-      clickYesToConfigureStorage()
-      assertDownloadStart()
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      UiThreadStatement.runOnUiThread { activityRule.activity.navigate(R.id.downloadsFragment) }
+      initialDownload {
+        assertLibraryListDisplayed()
+        refreshList()
+        waitForDataToLoad()
+        downloadZimFile()
+        assertStorageConfigureDialogDisplayed()
+        clickYesToConfigureStorage()
+        assertDownloadStart()
+      }
     }
   }
 

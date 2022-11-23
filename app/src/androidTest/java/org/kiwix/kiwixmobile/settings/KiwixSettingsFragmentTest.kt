@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.settings
 
 import android.Manifest
+import android.os.Build
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
@@ -47,38 +48,42 @@ class KiwixSettingsFragmentTest {
   @Before
   fun setup() {
     // Go to IntroFragment
-    UiThreadStatement.runOnUiThread { activityTestRule.activity.navigate(R.id.introFragment) }
-    intro(IntroRobot::swipeLeft) clickGetStarted { }
-    StandardActions.openDrawer()
-    StandardActions.enterSettings()
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      UiThreadStatement.runOnUiThread { activityTestRule.activity.navigate(R.id.introFragment) }
+      intro(IntroRobot::swipeLeft) clickGetStarted { }
+      StandardActions.openDrawer()
+      StandardActions.enterSettings()
+    }
   }
 
   @Test
   fun testSettingsActivity() {
-    settingsRobo {
-      assertZoomTextViewPresent()
-      assertVersionTextViewPresent()
-      clickLanguagePreference()
-      assertLanguagePrefDialogDisplayed()
-      dismissDialog()
-      toggleBackToTopPref()
-      toggleOpenNewTabInBackground()
-      toggleExternalLinkWarningPref()
-      toggleWifiDownloadsOnlyPref()
-      clickStoragePreference()
-      // Let's pause here for a moment because calculating storage takes some time
-      BaristaSleepInteractions.sleep(TEST_PAUSE_MS.toLong())
-      assertStorageDialogDisplayed()
-      dismissDialog()
-      clickClearHistoryPreference()
-      assertHistoryDialogDisplayed()
-      dismissDialog()
-      clickNightModePreference()
-      assertNightModeDialogDisplayed()
-      dismissDialog()
-      clickCredits()
-      assertContributorsDialogDisplayed()
-      dismissDialog()
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      settingsRobo {
+        assertZoomTextViewPresent()
+        assertVersionTextViewPresent()
+        clickLanguagePreference()
+        assertLanguagePrefDialogDisplayed()
+        dismissDialog()
+        toggleBackToTopPref()
+        toggleOpenNewTabInBackground()
+        toggleExternalLinkWarningPref()
+        toggleWifiDownloadsOnlyPref()
+        clickStoragePreference()
+        // Let's pause here for a moment because calculating storage takes some time
+        BaristaSleepInteractions.sleep(TEST_PAUSE_MS.toLong())
+        assertStorageDialogDisplayed()
+        dismissDialog()
+        clickClearHistoryPreference()
+        assertHistoryDialogDisplayed()
+        dismissDialog()
+        clickNightModePreference()
+        assertNightModeDialogDisplayed()
+        dismissDialog()
+        clickCredits()
+        assertContributorsDialogDisplayed()
+        dismissDialog()
+      }
     }
   }
 }
