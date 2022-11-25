@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.download
 
+import android.os.Build
 import android.util.Log
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
@@ -63,34 +64,36 @@ class DownloadTest : BaseActivityTest() {
 
   @Test
   fun downloadTest() {
-    ActivityScenario.launch(KiwixMainActivity::class.java)
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    try {
-      downloadRobot {
-        clickLibraryOnBottomNav()
-        deleteZimIfExists()
-        clickDownloadOnBottomNav()
-        waitForDataToLoad()
-        scrollToAlpineWikiZim()
-        downloadZimFile()
-        assertDownloadStart()
-        waitUntilDownloadComplete()
-        clickLibraryOnBottomNav()
-        checkIfZimFileDownloaded()
-      }
-    } catch (e: Exception) {
-      Assert.fail(
-        """
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      ActivityScenario.launch(KiwixMainActivity::class.java)
+      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+      try {
+        downloadRobot {
+          clickLibraryOnBottomNav()
+          deleteZimIfExists()
+          clickDownloadOnBottomNav()
+          waitForDataToLoad()
+          scrollToAlpineWikiZim()
+          downloadZimFile()
+          assertDownloadStart()
+          waitUntilDownloadComplete()
+          clickLibraryOnBottomNav()
+          checkIfZimFileDownloaded()
+        }
+      } catch (e: Exception) {
+        Assert.fail(
+          """
         Couldn't find downloaded file 'A little question a day'
         Original Exception:
         ${e.localizedMessage}
-        """.trimIndent()
-      )
-    }
-    try {
-      refresh(R.id.zim_swiperefresh)
-    } catch (e: RuntimeException) {
-      Log.w(KIWIX_DOWNLOAD_TEST, "Failed to refresh ZIM list: " + e.localizedMessage)
+          """.trimIndent()
+        )
+      }
+      try {
+        refresh(R.id.zim_swiperefresh)
+      } catch (e: RuntimeException) {
+        Log.w(KIWIX_DOWNLOAD_TEST, "Failed to refresh ZIM list: " + e.localizedMessage)
+      }
     }
   }
 
