@@ -18,19 +18,14 @@
 
 package org.kiwix.kiwixmobile.core.dao.entities
 
-import io.objectbox.annotation.Convert
-import io.objectbox.annotation.Entity
-import io.objectbox.annotation.Id
-import io.objectbox.converter.PropertyConverter
+import androidx.room.PrimaryKey
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import java.io.File
 
-@Deprecated(message = "Replaced with Room")
-@Entity
-data class BookOnDiskEntity(
-  @Id var id: Long = 0,
-  @Convert(converter = StringToFileConverter::class, dbType = String::class)
+@androidx.room.Entity
+data class BookOnDiskRoomEntity(
+  @PrimaryKey var id: Long = 0,
   val file: File = File(""),
   val bookId: String,
   val title: String,
@@ -50,19 +45,19 @@ data class BookOnDiskEntity(
   constructor(bookOnDisk: BookOnDisk) : this(
     0,
     bookOnDisk.file,
-    bookOnDisk.book.id,
-    bookOnDisk.book.title,
-    bookOnDisk.book.description,
-    bookOnDisk.book.language,
-    bookOnDisk.book.creator,
-    bookOnDisk.book.publisher,
-    bookOnDisk.book.date,
-    bookOnDisk.book.url,
-    bookOnDisk.book.articleCount,
-    bookOnDisk.book.mediaCount,
-    bookOnDisk.book.size,
-    bookOnDisk.book.bookName,
-    bookOnDisk.book.favicon,
+    bookOnDisk.book.getId(),
+    bookOnDisk.book.getTitle(),
+    bookOnDisk.book.getDescription(),
+    bookOnDisk.book.getLanguage(),
+    bookOnDisk.book.getCreator(),
+    bookOnDisk.book.getPublisher(),
+    bookOnDisk.book.getDate(),
+    bookOnDisk.book.getUrl(),
+    bookOnDisk.book.getArticleCount(),
+    bookOnDisk.book.getMediaCount(),
+    bookOnDisk.book.getSize(),
+    bookOnDisk.book.name,
+    bookOnDisk.book.getFavicon(),
     bookOnDisk.book.tags
   )
 
@@ -84,8 +79,11 @@ data class BookOnDiskEntity(
   }
 }
 
-class StringToFileConverter : PropertyConverter<File, String> {
-  override fun convertToDatabaseValue(entityProperty: File?) = entityProperty?.path ?: ""
-
-  override fun convertToEntityProperty(databaseValue: String?) = File(databaseValue ?: "")
-}
+// TODO: Add this in database converter
+// class StringToFileConverter {
+//   @TypeConverter
+//   fun convertToString(entityProperty: File?) = entityProperty?.path ?: ""
+//
+//   @TypeConverter
+//   fun convertToFile(databaseValue: String?) = File(databaseValue ?: "")
+// }
