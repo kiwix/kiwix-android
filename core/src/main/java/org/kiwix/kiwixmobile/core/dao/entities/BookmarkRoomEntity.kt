@@ -17,15 +17,13 @@
  */
 package org.kiwix.kiwixmobile.core.dao.entities
 
-import io.objectbox.annotation.Entity
-import io.objectbox.annotation.Id
+import androidx.room.PrimaryKey
 import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 
-@Deprecated(message = "Replaced with Room")
-@Entity
-data class BookmarkEntity(
-  @Id var id: Long = 0,
+@androidx.room.Entity
+data class BookmarkRoomEntity(
+  @PrimaryKey var id: Long = 0,
   val zimId: String,
   var zimName: String,
   var zimFilePath: String?,
