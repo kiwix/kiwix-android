@@ -33,6 +33,7 @@ import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
 
+@Deprecated("Deprecated with the Room")
 class FetchDownloadDao @Inject constructor(
   private val box: Box<FetchDownloadEntity>,
   private val newBookDao: NewBookDao
