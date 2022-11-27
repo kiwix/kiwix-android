@@ -18,19 +18,17 @@
 
 package org.kiwix.kiwixmobile.core.dao.entities
 
-import io.objectbox.annotation.Entity
-import io.objectbox.annotation.Id
-import io.objectbox.annotation.Unique
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 
-@Deprecated(message = "Replaced with Room")
-@Entity
-data class NotesEntity(
-  @Id var id: Long = 0L,
+@Entity(indices = [Index(value = ["noteTitle"], unique = true)])
+data class NotesRoomEntity(
+  @PrimaryKey var id: Long = 0L,
   val zimId: String,
   var zimFilePath: String?,
   val zimUrl: String,
-  @Unique
   var noteTitle: String,
   var noteFilePath: String,
   var favicon: String?
