@@ -17,27 +17,24 @@
  */
 package org.kiwix.kiwixmobile.core.dao.entities
 
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
 import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
-import io.objectbox.annotation.Convert
-import io.objectbox.annotation.Entity
-import io.objectbox.annotation.Id
-import io.objectbox.converter.PropertyConverter
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 
-@@Deprecated(message = "Replaced with Room")
-@Entity
-data class FetchDownloadEntity(
-  @Id var id: Long = 0,
+@androidx.room.Entity
+data class FetchDownloadRoomEntity(
+  @PrimaryKey var id: Long = 0,
   var downloadId: Long,
   val file: String? = null,
   val etaInMilliSeconds: Long = -1L,
   val bytesDownloaded: Long = -1L,
   val totalSizeOfDownload: Long = -1L,
-  @Convert(converter = StatusConverter::class, dbType = Int::class)
+  // todo add converter in database class
   val status: Status = Status.NONE,
-  @Convert(converter = ErrorConverter::class, dbType = Int::class)
+  // todo add converter in database class
   val error: Error = Error.NONE,
   val progress: Int = -1,
   val bookId: String,
@@ -57,19 +54,19 @@ data class FetchDownloadEntity(
 ) {
   constructor(downloadId: Long, book: Book) : this(
     downloadId = downloadId,
-    bookId = book.id,
-    title = book.title,
-    description = book.description,
-    language = book.language,
-    creator = book.creator,
-    publisher = book.publisher,
-    date = book.date,
-    url = book.url,
-    articleCount = book.articleCount,
-    mediaCount = book.mediaCount,
-    size = book.size,
-    name = book.bookName,
-    favIcon = book.favicon,
+    bookId = book.getId(),
+    title = book.getTitle(),
+    description = book.getDescription(),
+    language = book.getLanguage(),
+    creator = book.getCreator(),
+    publisher = book.getPublisher(),
+    date = book.getDate(),
+    url = book.getUrl(),
+    articleCount = book.getArticleCount(),
+    mediaCount = book.getMediaCount(),
+    size = book.getSize(),
+    name = book.name,
+    favIcon = book.getFavicon(),
     tags = book.tags
   )
 
@@ -100,15 +97,13 @@ data class FetchDownloadEntity(
     progress = download.progress
   )
 }
-
-class StatusConverter : EnumConverter<Status>() {
-  override fun convertToEntityProperty(databaseValue: Int) = Status.valueOf(databaseValue)
-}
-
-class ErrorConverter : EnumConverter<Error>() {
-  override fun convertToEntityProperty(databaseValue: Int) = Error.valueOf(databaseValue)
-}
-
-abstract class EnumConverter<E : Enum<E>> : PropertyConverter<E, Int> {
-  override fun convertToDatabaseValue(entityProperty: E): Int = entityProperty.ordinal
-}
+// TODO: Add this in database converter
+// class StatusConverter {
+//   @TypeConverter
+//   fun convertToStatus(databaseValue: Int) = Status.valueOf(databaseValue)
+// }
+//
+// class ErrorConverter {
+//   @TypeConverter
+//   fun convertToErrorConverter(databaseValue: Int) = Error.valueOf(databaseValue)
+// }
