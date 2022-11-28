@@ -18,12 +18,19 @@
 
 package org.kiwix.kiwixmobile.language
 
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isChecked
+import androidx.test.espresso.matcher.ViewMatchers.isNotChecked
 import applyWithViewHierarchyPrinting
+import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
 
 fun language(func: LanguageRobot.() -> Unit) = LanguageRobot().applyWithViewHierarchyPrinting(func)
 
@@ -46,10 +53,48 @@ class LanguageRobot : BaseRobot() {
     clickOn(ViewId(R.id.select_language))
   }
 
-  fun searchAndSaveLanguage(searchLanguage: String, matchLanguage: String) {
+  fun clickOnLanguageSearchIcon() {
     clickOn(ViewId(R.id.menu_language_search))
+  }
+
+  fun searchLanguage(searchLanguage: String) {
     isVisible(ViewId(androidx.appcompat.R.id.search_src_text)).text = searchLanguage
+  }
+
+  fun selectLanguage(matchLanguage: String) {
     clickOn(Text(matchLanguage))
+  }
+
+  fun clickOnSaveLanguageIcon() {
     clickOn(ViewId(R.id.menu_language_save))
+  }
+
+  fun checkIsLanguageSelected() {
+    onView(
+      RecyclerViewMatcher(R.id.language_recycler_view).atPositionOnView(
+        1,
+        R.id.item_language_checkbox
+      )
+    ).check(
+      matches(isChecked())
+    )
+  }
+
+  fun deSelectLanguageIfAlreadySelected() {
+    try {
+      onView(
+        RecyclerViewMatcher(R.id.language_recycler_view).atPositionOnView(
+          1,
+          R.id.item_language_checkbox
+        )
+      ).check(matches(isNotChecked()))
+    } catch (assertionError: AssertionFailedError) {
+      onView(
+        RecyclerViewMatcher(R.id.language_recycler_view).atPositionOnView(
+          1,
+          R.id.item_language_checkbox
+        )
+      ).perform(click())
+    }
   }
 }
