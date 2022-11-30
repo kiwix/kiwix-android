@@ -80,6 +80,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefLanguage: String
     get() = sharedPreferences.getString(PREF_LANG, "") ?: Locale.ROOT.toString()
 
+  val prefDeviceDefaultLanguage: String
+    get() = sharedPreferences.getString(PREF_DEVICE_DEFAULT_LANG, "") ?: ""
+
   val prefStorage: String
     get() {
       val storage = sharedPreferences.getString(PREF_STORAGE, null)
@@ -107,6 +110,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   fun putPrefLanguage(language: String) =
     sharedPreferences.edit { putString(PREF_LANG, language) }
+
+  fun putPrefDeviceDefaultLanguage(language: String) =
+    sharedPreferences.edit { putString(PREF_DEVICE_DEFAULT_LANG, language) }
 
   fun putPrefIsFirstRun(isFirstRun: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_IS_FIRST_RUN, isFirstRun) }
@@ -214,6 +220,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   companion object {
     // Prefs
     const val PREF_LANG = "pref_language_chooser"
+    const val PREF_DEVICE_DEFAULT_LANG = "pref_device_default_language"
     const val PREF_STORAGE = "pref_select_folder"
     const val STORAGE_POSITION = "storage_position"
     const val PREF_WIFI_ONLY = "pref_wifi_only"

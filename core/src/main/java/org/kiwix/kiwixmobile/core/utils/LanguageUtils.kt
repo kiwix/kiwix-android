@@ -31,7 +31,6 @@ import android.view.InflateException
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import androidx.core.os.ConfigurationCompat
 import org.kiwix.kiwixmobile.core.extensions.locale
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import java.text.Collator
@@ -190,16 +189,20 @@ class LanguageUtils(private val context: Context) {
       sharedPreferenceUtil: SharedPreferenceUtil
     ) {
       sharedPreferenceUtil.prefLanguage.takeIf { it != Locale.ROOT.toString() }?.let {
-        handleLocaleChange(activity, it)
+        handleLocaleChange(activity, it, sharedPreferenceUtil)
       }
     }
 
     @SuppressLint("AppBundleLocaleChanges")
     @JvmStatic
-    fun handleLocaleChange(activity: Activity, language: String) {
+    fun handleLocaleChange(
+      activity: Activity,
+      language: String,
+      sharedPreferenceUtil: SharedPreferenceUtil
+    ) {
       val locale =
         if (language == Locale.ROOT.toString())
-          ConfigurationCompat.getLocales(activity.applicationContext.resources.configuration)[0]
+          Locale(sharedPreferenceUtil.prefDeviceDefaultLanguage)
         else
           Locale(language)
       Locale.setDefault(locale)
@@ -207,7 +210,10 @@ class LanguageUtils(private val context: Context) {
       config.setLocale(locale)
       config.setLayoutDirection(locale)
       activity.resources
-        .updateConfiguration(config, activity.resources.displayMetrics)
+        .updateConfiguration(config, activity.resources.displayMetrics).also {
+          activity.applicationContext.resources
+            .updateConfiguration(config, activity.resources.displayMetrics)
+        }
       activity.onConfigurationChanged(config)
     }
 
