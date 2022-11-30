@@ -10,8 +10,7 @@ jobs:
   instrumentation_tests:
     strategy:
       matrix:
-        api-level: [21, 22, 23, 24, 25, 27, 28, 30]
-        target: [default]
+        api-level: [21, 22, 23, 24, 25, 27, 28, 30, 31, 32, 33]
       fail-fast: false
     runs-on: macos-11
     steps:
@@ -22,8 +21,9 @@ jobs:
           fetch-depth: 1
 
       - name: Set up JDK 11
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
+          distribution: temurin
           java-version: 11
 
       - name: Restore Cache
@@ -37,19 +37,37 @@ jobs:
               ${{ runner.os }}-gradle-
 
       - name: run instrumentation tests
-        uses: ReactiveCircus/android-emulator-runner@v2.23.0
+        uses: ReactiveCircus/android-emulator-runner@v2.25.0
+        if: ${{ matrix.api-level != 33 }}
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ matrix.target }}
+          target: default
           arch: x86_64
           profile: pixel_2
           ndk: 21.4.7075529
+          ram-size: '4096M'
+          disk-size: '14G'
+          sdcard-path-or-size: '1000M'
+          disable-animations: false
+          script: bash contrib/instrumentation_nightly.sh
+
+      - name: run instrumentation tests on google_apis for android 33
+        uses: ReactiveCircus/android-emulator-runner@v2.25.0
+        if: ${{ matrix.api-level == 33 }}
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          ndk: 21.4.7075529
+          ram-size: '4096M'
+          disk-size: '14G'
           sdcard-path-or-size: '1000M'
           disable-animations: false
           script: bash contrib/instrumentation_nightly.sh
 
       - name: Upload screenshot result
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         if: failure()
         with:
           name: ${{ matrix.api-level }}
