@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.utils
 
+import android.net.wifi.SupplicantState.COMPLETED
 import android.net.wifi.WifiManager
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
@@ -25,7 +26,8 @@ import javax.inject.Inject
 
 class ConnectivityReporter @Inject constructor(private val wifiManager: WifiManager) {
 
-  fun checkWifi(): Boolean = wifiManager.isWifiEnabled && wifiManager.connectionInfo.networkId != -1
+  fun checkWifi(): Boolean =
+    wifiManager.isWifiEnabled && wifiManager.connectionInfo.supplicantState == COMPLETED
 
   fun checkTethering(): Boolean = try {
     val method: Method = wifiManager.javaClass.getDeclaredMethod("isWifiApEnabled")
