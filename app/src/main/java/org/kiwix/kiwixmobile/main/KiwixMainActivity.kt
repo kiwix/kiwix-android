@@ -23,6 +23,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.view.ActionMode
+import androidx.core.os.ConfigurationCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -39,6 +40,7 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragmentDirections
 
@@ -124,6 +126,22 @@ class KiwixMainActivity : CoreMainActivity() {
     }
     if (!sharedPreferenceUtil.prefIsTest) {
       sharedPreferenceUtil.setIsPlayStoreBuildType(BuildConfig.IS_PLAYSTORE)
+    }
+    setDefaultDeviceLanguage()
+  }
+
+  private fun setDefaultDeviceLanguage() {
+    if (sharedPreferenceUtil.prefDeviceDefaultLanguage.isEmpty()) {
+      sharedPreferenceUtil.putPrefDeviceDefaultLanguage(
+        ConfigurationCompat.getLocales(
+          applicationContext.resources.configuration
+        )[0].language
+      )
+      handleLocaleChange(
+        this,
+        sharedPreferenceUtil.prefLanguage,
+        sharedPreferenceUtil
+      )
     }
   }
 
