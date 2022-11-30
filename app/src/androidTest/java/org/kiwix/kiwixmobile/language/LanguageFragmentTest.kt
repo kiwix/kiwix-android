@@ -77,10 +77,48 @@ class LanguageFragmentTest {
 
       language {
         waitForDataToLoad()
+
+        // search and de-select if german language already selected
         clickOnLanguageIcon()
-        searchAndSaveLanguage("german", "German")
+        clickOnLanguageSearchIcon()
+        searchLanguage("german")
+        deSelectLanguageIfAlreadySelected()
+        clickOnSaveLanguageIcon()
+
+        // search and de-select if italian language already selected
         clickOnLanguageIcon()
-        searchAndSaveLanguage("italiano", "Italian")
+        clickOnLanguageSearchIcon()
+        searchLanguage("italiano")
+        deSelectLanguageIfAlreadySelected()
+        clickOnSaveLanguageIcon()
+
+        // Search and save language for german
+        clickOnLanguageIcon()
+        clickOnLanguageSearchIcon()
+        searchLanguage("german")
+        selectLanguage("German")
+        clickOnSaveLanguageIcon()
+
+        // Search and save language for italian
+        clickOnLanguageIcon()
+        clickOnLanguageSearchIcon()
+        searchLanguage("italiano")
+        selectLanguage("Italian")
+        clickOnSaveLanguageIcon()
+
+        // verify is german language selected
+        clickOnLanguageIcon()
+        clickOnLanguageSearchIcon()
+        searchLanguage("german")
+        checkIsLanguageSelected()
+        clickOnSaveLanguageIcon()
+
+        // verify is italian language selected
+        clickOnLanguageIcon()
+        clickOnLanguageSearchIcon()
+        searchLanguage("italiano")
+        checkIsLanguageSelected()
+        clickOnSaveLanguageIcon()
       }
     }
   }
