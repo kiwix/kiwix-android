@@ -122,7 +122,9 @@ class KiwixMainActivity : CoreMainActivity() {
     if (sharedPreferenceUtil.showIntro() && !isIntroScreenNotVisible()) {
       navigate(KiwixReaderFragmentDirections.actionReaderFragmentToIntroFragment())
     }
-    sharedPreferenceUtil.setIsPlayStoreBuildType(BuildConfig.IS_PLAYSTORE)
+    if (!sharedPreferenceUtil.prefIsTest) {
+      sharedPreferenceUtil.setIsPlayStoreBuildType(BuildConfig.IS_PLAYSTORE)
+    }
   }
 
   private fun isIntroScreenNotVisible(): Boolean =

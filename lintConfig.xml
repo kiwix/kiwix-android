@@ -19,6 +19,7 @@
     <ignore regexp=".*ZimHostRobot.kt.*"/>
     <ignore regexp=".*SearchRobot.kt.*"/>
     <ignore regexp=".*InitialDownloadRobot.kt.*"/>
+    <ignore regexp=".*DownloadRobot.kt.*"/>
   </issue>
   <issue id="TypographyEllipsis">
     <ignore path="**-iw/**.xml" />
