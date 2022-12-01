@@ -9,4 +9,6 @@
   <string name="cannot_open_file">Misslyckades att öppna fil\nVar god försök leta efter denna fil i enhetsfliken i ditt bibliotek</string>
   <string name="send_files_title">Skicka filer</string>
   <string name="receive_files_title">Ta emot filer</string>
+  <string name="no_app_found_to_open">Ingen app hittades för att välja zim-fil!</string>
+  <string name="select_zim_file">Välj zim-fil att läsa</string>
 </resources>

@@ -4,6 +4,7 @@
 * Eyas
 * Meno25
 * Mohanad Kh
+* Ravan
 * Tala Ali
 * Ulhvulgv
 * بدارين
@@ -55,7 +56,9 @@
   <string name="start_server_label">بدء الخادم</string>
   <string name="stop_server_label">إيقاف الخادم</string>
   <string name="server_started_message">أدخل عنوان الآيبي هذا في متصفحك للوصول إلى الخادم %s</string>
+  <string name="share_host_address">مشاركة URL عبر تطبيقات أخرى</string>
   <string name="error_file_not_found">خطأ: تعذر العثور على الملف زيم (ZIM) المحدد</string>
+  <string name="unable_to_read_zim_file">غير قادر على قراءة ملف zim هذا!</string>
   <string name="zim_not_opened">غير قادرٍ على فتح ملف zim</string>
   <string name="error_file_invalid">خطأ: ملف زيم (ZIM) المحدد ليس صالحًا.</string>
   <string name="error_article_url_not_found">خطأ: لم ينجح تحميل المقالة (Url: %1$s).</string>
@@ -74,11 +77,13 @@
   <string name="no_reader_application_installed">تعذر العثور على تطبيق مثبت لهذا النوع من الملفات</string>
   <string name="no_section_info">لم يتم العثور على عناوين محتوى</string>
   <string name="request_storage">للوصول إلى المحتوى بلا اتصال، نحتاج إلى الوصول إلى وحدة التخزين</string>
+  <string name="request_write_storage">لتنزيل ملفات zim، نحتاج إلى وصول للكتابة إلى مساحة التخزين الخاصة بك</string>
   <string name="clear_recent_and_tabs_history_dialog">هل أنت متأكد من أنك تريد حذف سجل بحثك وإعادة تعيين كافة علامات التبويب النشطة؟</string>
   <string name="delete_recent_search_item">حذف هذا العنصر؟</string>
   <string name="pref_clear_all_history_title">إفراغ التاريخ</string>
   <string name="pref_clear_all_history_summary">إفراغ عمليات البحث الحديثة وعلامات التبويب</string>
   <string name="pref_notes">ملاحظات</string>
+  <string name="pref_permission">الصلاحيات</string>
   <string name="all_history_cleared">أُفرغ سجل التاريخ</string>
   <string name="pref_clear_all_bookmarks_title">حذف الإشارات المرجعية</string>
   <string name="clear_all_history_dialog_title">مسح كل التاريخ</string>
@@ -94,6 +99,7 @@
   <string name="tab_closed">تم إغلاق علامة التبويب</string>
   <string name="bookmark_added">أضيفت الإشارة المرجعية</string>
   <string name="rate_dialog_title">يرجى تقييمنا</string>
+  <string name="rate_dialog_msg">إذا كنت تستمتع باستخدام %s، فالرجاء تخصيص بعض الوقت لتقييمه. شكرا لدعمك!</string>
   <string name="rate_dialog_positive">قيّم!</string>
   <string name="no_thanks">لا، شكراً</string>
   <string name="rate_dialog_neutral">لاحقًا</string>
@@ -135,8 +141,10 @@
   <string name="tts_pause">إيقاف مؤقت</string>
   <string name="tts_resume">استئناف</string>
   <string name="stop">إيقاف</string>
+  <string name="configure_storage_option">هل تريد تنزيل الكتاب إلى وحدة التخزين الداخلية؟</string>
   <string name="internal_storage">داخلي</string>
   <string name="external_storage">خارجي</string>
+  <string name="configure">اضبط الإعدادات</string>
   <string name="yes">نعم</string>
   <string name="no">لا</string>
   <string name="confirm_stop_download_title">إيقاف التنزيل؟</string>
@@ -229,6 +237,7 @@
   <string name="connection_failed">فشل الاتصال</string>
   <string name="permission_rationale_location">مطلوب إذن للموقع بواسطة أندرويد للسماح للتطبيق باكتشاف الأجهزة المقترنة</string>
   <string name="permission_rationale_location_on_host_zim_file">مطلوب إذن للموقع بواسطة أندرويد للسماح للتطبيق باكتشاف ملفات زيم (Zim) المستضافة</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">يتطلب Android إذنًا لأجهزة wifi المجاورة للسماح للتطبيق باستضافة ملفات Zim</string>
   <string name="permission_refused_location">لا يمكن تحديد موقع الأجهزة المقترنة دون أذونات الموقع</string>
   <string name="permission_refused_storage">لا يمكن الوصول إلى ملفات زيم (ZIM) دون إذن وحدة تخزين</string>
   <string name="request_enable_location">تمكين الموقع للسماح باكتشاف الأجهزة المقترنة</string>
@@ -251,6 +260,7 @@
   <string name="status">الحالة</string>
   <string name="pref_clear_all_notes_summary">مسح جميع الملاحظات على جميع المقالات</string>
   <string name="pref_clear_all_notes_title">مسح جميع الملاحظات</string>
+  <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">السماح لقراءة وكتابة ملفات ZIM على بطاقة SD</string>
   <string name="pref_text_zoom_summary">تغيير حجم النص بزيادة مقدارها 25%.</string>
   <string name="tag_pic">صورة</string>
   <string name="tag_vid">فيديو</string>
@@ -285,6 +295,21 @@
   <string name="close_drawer">أغلق الدرج</string>
   <string name="how_to_update_content">كيفية تحديث المحتوى؟</string>
   <string name="update_content_description">لتحديث احتوى (ملف zim)، تحتاج إلى تنزيل أحدث إصدارٍ كاملٍ من المحتوى نفسه. يمكنك القيام بذلك عبر قسم التنزيل.</string>
+  <string name="all_files_permission_needed">مطلوب إذن كافة الملفات</string>
   <string name="all_files_permission_needed_message">In order to access all the zim files across device we need to have All Files Permission</string>
+  <string name="allowed">مسموح به</string>
+  <string name="not_allowed">غير مسموح به</string>
+  <string name="denied_internet_permission_message">يرجى تمكين wifi لتنزيل المحتوى</string>
+  <string name="select_folder">الرجاء تحديد مجلد للتخزين الخارجي.</string>
+  <string name="system_unable_to_grant_permission_message">النظام غير قادر على منح الإذن!</string>
   <string name="allow">السماح</string>
+  <string name="allow_internet_permission_message">يرجى السماح بإذن الإنترنت لتنزيل المحتوى</string>
+  <string name="no_notes">لا توجد ملاحظات</string>
+  <string name="notes_from_all_books">عرض الملاحظات من جميع الكتب</string>
+  <string name="search_notes">ملاحظات البحث</string>
+  <string name="choose_your_action">اختر الإجراء الخاص بك</string>
+  <string name="open_note">افتح الملاحظة</string>
+  <string name="open_article">افتح المادة</string>
+  <string name="delete_note_dialog_message">ملاحظة: لا يتم حذف الملاحظات من التخزين الخاص بك</string>
+  <string name="delete_selected_notes">هل تريد حذف الملاحظات المحددة؟</string>
 </resources>
