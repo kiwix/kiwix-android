@@ -24,7 +24,6 @@ import com.yahoo.squidb.data.ISQLiteDatabase
 import com.yahoo.squidb.data.ISQLiteOpenHelper
 import com.yahoo.squidb.data.SquidDatabase
 import com.yahoo.squidb.sql.Table
-import org.kiwix.kiwixlib.Book
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
@@ -158,7 +157,7 @@ open class KiwixDatabase @Inject constructor(
             }
           oldBookmarksDao.processBookmark(stringOperationImpl)
           bookDao?.let {
-            bookmarksDao?.migrationInsert(oldBookmarksDao.bookmarks, it)
+            bookmarksDao?.migrationInsert(oldBookmarksDao.bookmarks.toMutableList(), it)
           }
         } catch (e: Exception) {
           e.printStackTrace()
