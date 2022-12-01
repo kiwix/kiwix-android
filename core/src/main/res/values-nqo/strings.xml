@@ -4,7 +4,7 @@
 * Lancine.kounfantoh.fofana
 * ߒߓߋ߫ ߝߏߝߣߊ߫
 -->
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="menu_help">ߘߍ߬ߡߍ߲߬ߠߌ߲</string>
   <string name="menu_home">ߓߏ߬ߟߏ߲߬ߘߊ</string>
   <string name="menu_settings">ߟߊ߬ߓߍ߲߬ߢߐ߲߰ߡߦߊ߬ߘߊ</string>
@@ -253,7 +253,7 @@
   <string name="pref_clear_all_notes_summary">ߦߟߌߣߐ ߓߍ߯ ߖߏ߲߫ ߞߎߡߘߊ ߟߎ߬ ߓߍ߯ ߘߐ߫</string>
   <string name="pref_clear_all_notes_title">ߦߟߌߣߐ ߟߎ߬ ߓߍ߯ ߖߏ߰ߛߌ߫</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">ZIM ߞߐߕߐ߮ ߟߎ߬ ߘߐߞߊ߬ߙߊ߲ ߣߴߊ߬ ߛߓߍ ߟߎ߬ ߟߊߘߤߊ߬ SD ߜߍ߲ߜߍߘߍ߲ ߞߊ߲߬</string>
-  <string name="pref_text_zoom_summary" tools:ignore="StringFormatCount">ߞߟߏߘߋ߲ ߢߊ߲ߞߊ߲ ߡߊߝߊ߬ߟߋ߲߫ ߡߞߊ߬ߝߏ߬ߟߌ ٪߂߅ ߘߌ߫.</string>
+  <string name="pref_text_zoom_summary">ߞߟߏߘߋ߲ ߢߊ߲ߞߊ߲ ߡߊߝߊ߬ߟߋ߲߫ ߡߞߊ߬ߝߏ߬ߟߌ ٪߂߅ ߘߌ߫.</string>
   <string name="tag_pic">ߖߌ߬ߦߊ߬ߓߍ</string>
   <string name="tag_vid">ߖߌ߬ߦߊ߬ߖߟߎ</string>
   <string name="tag_text_only">ߛߓߍߟߌ ߜߊ߲߰ߛߊ߲</string>

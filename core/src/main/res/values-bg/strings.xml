@@ -23,7 +23,7 @@
   <string name="menu_read_aloud_stop">Спиране четенето на глас</string>
   <string name="save_media">Запази медията</string>
   <string name="save_media_error">Възникна грешка при опита за съхранение на медийния файл!</string>
-  <string name="save_media_saved" fuzzy="true">Медийният файл е съхранен под името %s в Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Медийният файл е съхранен под името %s в Downloads/org.kiwix…/</string>
   <string name="search_label">Търсене</string>
   <string name="choose_file">Изберете файл със съдържание (*.zim)</string>
   <string name="open_in_new_tab">Отваряне на препратката в нов раздел?</string>

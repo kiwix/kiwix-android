@@ -3,6 +3,7 @@
 * Aefgh39622
 * B20180
 * Bluegram
+* Ekminarin
 * Just Sayori
 * Macofe
 * Patsagorn Y.
@@ -60,7 +61,7 @@
   <string name="bookmark_added">เพิ่มบุ๊คมาร์คแล้ว</string>
   <string name="rate_dialog_title">โปรดให้คะแนนเรา</string>
   <string name="rate_dialog_positive">ให้คะแนน</string>
-  <string name="no_thanks">ไม่ ขอบคุณ</string>
+  <string name="no_thanks">ไม่ขอบคุณ</string>
   <string name="rate_dialog_neutral">ทีหลัง</string>
   <string name="bookmark_removed">ลบบุ๊คมาร์คแล้ว</string>
   <string name="library">รายการ</string>
