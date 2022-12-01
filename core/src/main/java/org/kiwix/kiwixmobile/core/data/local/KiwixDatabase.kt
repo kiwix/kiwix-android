@@ -24,6 +24,7 @@ import com.yahoo.squidb.data.ISQLiteDatabase
 import com.yahoo.squidb.data.ISQLiteOpenHelper
 import com.yahoo.squidb.data.SquidDatabase
 import com.yahoo.squidb.sql.Table
+import org.kiwix.kiwixlib.Book
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
@@ -150,7 +151,12 @@ open class KiwixDatabase @Inject constructor(
       TWO_POINT_FIVE_POINT_THREE -> {
         try {
           val oldBookmarksDao = BookmarksDao(this)
-          oldBookmarksDao.processBookmark(UpdateUtils::reformatProviderUrl)
+          val stringOperationImpl: BookmarksDao.StringOperation =
+            object : BookmarksDao.StringOperation {
+              override fun apply(string: String?): String? =
+                string?.let(UpdateUtils::reformatProviderUrl)
+            }
+          oldBookmarksDao.processBookmark(stringOperationImpl)
           bookDao?.let {
             bookmarksDao?.migrationInsert(oldBookmarksDao.bookmarks, it)
           }
