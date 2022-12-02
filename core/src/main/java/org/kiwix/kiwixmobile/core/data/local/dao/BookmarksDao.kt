@@ -58,13 +58,11 @@ class BookmarksDao @Inject constructor(private val kiwixDatabase: KiwixDatabase)
         Query.select(Bookmark.ROWID, Bookmark.BOOKMARK_URL)
       )
       while (bookmarkCursor.moveToNext()) {
-        var url = bookmarkCursor.get(Bookmark.BOOKMARK_URL)
-        url = operation.apply(url)
-        if (url != null) {
+        operation.apply(bookmarkCursor.get(Bookmark.BOOKMARK_URL))?.let { bookmarkUrl ->
           kiwixDatabase.update(
             Update.table(Bookmark.TABLE)
               .where(Bookmark.ROWID.eq(bookmarkCursor.get(Bookmark.ROWID)))
-              .set(Bookmark.BOOKMARK_URL, url)
+              .set(Bookmark.BOOKMARK_URL, bookmarkUrl)
           )
         }
       }
