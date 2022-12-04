@@ -26,6 +26,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity_
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 import javax.inject.Inject
 
+@Deprecated(message = "Replaced with Room")
 class NewRecentSearchDao @Inject constructor(
   private val box: Box<RecentSearchEntity>,
   private val flowBuilder: FlowBuilder
