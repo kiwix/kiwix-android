@@ -19,10 +19,17 @@
 package org.kiwix.kiwixmobile.core.dao.entities
 
 import androidx.room.PrimaryKey
+import org.kiwix.kiwixmobile.core.data.local.entity.RecentSearch
 
 @androidx.room.Entity
 data class RecentSearchRoomEntity(
   @PrimaryKey var id: Long = 0L,
   val searchTerm: String,
   val zimId: String
-)
+) {
+  constructor(recentSearch: RecentSearch) : this(
+    0,
+    recentSearch.searchString,
+    recentSearch.zimID
+  )
+}
