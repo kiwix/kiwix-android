@@ -21,6 +21,7 @@ import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import org.kiwix.kiwixmobile.core.data.local.entity.RecentSearch
 
+@Deprecated(message = "Replaced with Room")
 @Entity
 data class RecentSearchEntity(
   @Id var id: Long = 0L,
