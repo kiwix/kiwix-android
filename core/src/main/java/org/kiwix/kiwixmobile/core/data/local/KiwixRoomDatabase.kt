@@ -22,6 +22,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
+@Suppress("UnnecessaryAbstractClass")
 abstract class KiwixRoomDatabase : RoomDatabase() {
 
   companion object {
