@@ -245,7 +245,7 @@ class ZimFileReader constructor(
 
     private val INVERT_IMAGES_VIDEO =
       """
-        img, video, div[poster], div#header { 
+        img, video, div[poster] { 
            -webkit-filter: invert(1); 
            filter: invert(1); 
         }
