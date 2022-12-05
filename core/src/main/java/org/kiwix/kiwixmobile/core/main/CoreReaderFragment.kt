@@ -574,7 +574,7 @@ abstract class CoreReaderFragment :
       override fun onSectionClick(view: View?, position: Int) {
         loadUrlWithCurrentWebview(
           "javascript:document.getElementById('" +
-            documentSections!![position].id +
+            documentSections!![position].id.replace("'", "\\'") +
             "').scrollIntoView();"
         )
         drawerLayout?.closeDrawers()
