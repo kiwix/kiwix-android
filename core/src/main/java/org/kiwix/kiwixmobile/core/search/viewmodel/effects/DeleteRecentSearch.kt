@@ -21,11 +21,12 @@ package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
+import org.kiwix.kiwixmobile.core.dao.NewRecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 
 data class DeleteRecentSearch(
   private val searchListItem: SearchListItem,
-  private val recentSearchDao: NewRecentSearchDao
+  private val recentSearchDao: NewRecentSearchRoomDao
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     recentSearchDao.deleteSearchString(searchListItem.value)

@@ -21,14 +21,15 @@ package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
+import org.kiwix.kiwixmobile.core.dao.NewRecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 
 data class SaveSearchToRecents(
-  private val recentSearchDao: NewRecentSearchDao,
+  private val recentSearchDao: NewRecentSearchRoomDao,
   private val searchListItem: SearchListItem,
   private val id: String?
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    id?.let { recentSearchDao.saveSearch(searchListItem.value, it) }
+    id?.let { recentSearchDao.saveSearch(searchListItem.value, it.toLong()) }
   }
 }
