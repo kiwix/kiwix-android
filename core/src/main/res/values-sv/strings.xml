@@ -232,6 +232,7 @@
   <string name="connection_failed">Anslutning misslyckades</string>
   <string name="permission_rationale_location">Platsåtkomst krävs från Android för att låta appen söka efter närliggande enheter.</string>
   <string name="permission_rationale_location_on_host_zim_file">Platsåtkomst krävs från Android för att låta appen hantera Host Zim-filer.</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">Android kräver behörighet till närliggande wifi-enheter för att låta appen hantera Zim-filer</string>
   <string name="permission_refused_location">Kan inte hitta närliggande enheter utan platsåtkomst.</string>
   <string name="permission_refused_storage">Kan inte komma åt zim-filer utan lagringsbehörighet</string>
   <string name="request_enable_location">Aktivera plats för att tillåta sökning efter närliggande enheter</string>
@@ -293,12 +294,17 @@
   <string name="all_files_permission_needed_message">För att kunna komma åt alla ZIM-filer på enheten behöver vi behörighet för alla filer</string>
   <string name="allowed">Tillåten</string>
   <string name="not_allowed">Inte tillåtet</string>
+  <string name="denied_internet_permission_message">Aktivera wifi för att ladda ner innehåll</string>
+  <string name="select_folder">Välj mapp för extern lagring.</string>
+  <string name="system_unable_to_grant_permission_message">Systemet kunde inte ge tillstånd!</string>
   <string name="allow">Tillåt</string>
+  <string name="allow_internet_permission_message">Tillåt internetbehörigheter för att ladda ner innehåll</string>
   <string name="no_notes">Inga anteckningar</string>
   <string name="notes_from_all_books">Visa anteckningar från alla böcker</string>
   <string name="search_notes">Sök i anteckningar</string>
   <string name="choose_your_action">Välj din åtgärd</string>
   <string name="open_note">Öppna anteckning</string>
   <string name="open_article">Öppna artikel</string>
+  <string name="delete_note_dialog_message">Obs: Noter raderas inte från ditt utrymme</string>
   <string name="delete_selected_notes">Radera markerade anteckningar?</string>
 </resources>

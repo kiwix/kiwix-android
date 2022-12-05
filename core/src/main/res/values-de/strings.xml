@@ -8,6 +8,7 @@
 * FF11
 * Falwye
 * Killarnee
+* Lucas Werkmeister
 * Metalhead64
 * Pittigrilli
 * Sebastian Wallroth
@@ -63,6 +64,7 @@
   <string name="server_started_message">Geben Sie diese IP-Adresse in Ihren Browser ein, um auf den Server %s zuzugreifen</string>
   <string name="share_host_address">URL mit anderen Applikationen teilen</string>
   <string name="error_file_not_found">Fehler: Die ausgewählte ZIM-Datei konnte nicht gefunden werden.</string>
+  <string name="unable_to_read_zim_file">Diese Zim-Datei kann nicht gelesen werden!</string>
   <string name="zim_not_opened">Konnte die ZIM-Datei nicht öffnen</string>
   <string name="error_file_invalid">Fehler: Die ausgewählte Datei ist keine gültige ZIM-Datei.</string>
   <string name="error_article_url_not_found">Fehler: Das Laden des Artikels (URL: %1$s) ist fehlgeschlagen.</string>
@@ -81,6 +83,7 @@
   <string name="no_reader_application_installed">Es konnte keine installierte Anwendung für diesen Dateityp gefunden werden</string>
   <string name="no_section_info">Keine Inhaltsheader gefunden</string>
   <string name="request_storage">Um auf Offlineinhalt zuzugreifen, müssen wir auf Ihren Speicher zugreifen.</string>
+  <string name="request_write_storage">Um zim-Dateien herunterzuladen, benötigen wir Schreibzugriff auf Ihren Speicher</string>
   <string name="clear_recent_and_tabs_history_dialog">Sind Sie sicher, dass Sie Ihren Suchverlauf löschen und alle aktiven Registerkarten zurücksetzen möchten?</string>
   <string name="delete_recent_search_item">Dieses Element löschen?</string>
   <string name="pref_clear_all_history_title">Verlauf löschen</string>
@@ -144,8 +147,10 @@
   <string name="tts_pause">pausieren</string>
   <string name="tts_resume">fortfahren</string>
   <string name="stop">abbrechen</string>
+  <string name="configure_storage_option">Buch in den internen Speicher herunterladen?</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Extern</string>
+  <string name="configure">Konfigurieren</string>
   <string name="yes">Ja</string>
   <string name="no">Nein</string>
   <string name="confirm_stop_download_title">Herunterladen beenden?</string>
@@ -238,6 +243,7 @@
   <string name="connection_failed">Verbindung fehlgeschlagen</string>
   <string name="permission_rationale_location">Android benötigt eine Standorterlaubnis, damit die App Peer-Geräte erkennen kann.</string>
   <string name="permission_rationale_location_on_host_zim_file">Android benötigt eine Standorterlaubnis, damit die App Zim-Dateien hosten kann</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">Android erfordert die Berechtigung für WLAN-Geräte in der Nähe, damit die App Zim-Dateien hosten kann</string>
   <string name="permission_refused_location">Ohne Standortberechtigungen können Peer-Geräte nicht lokalisiert werden</string>
   <string name="permission_refused_storage">Ohne Speichererlaubnis ist kein Zugriff auf ZIM-Dateien möglich</string>
   <string name="request_enable_location">Standort aktivieren, um Peer-Geräte zu finden</string>
@@ -260,6 +266,7 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Löscht alle Notizen zu allen Artikeln</string>
   <string name="pref_clear_all_notes_title">Alle Notizen löschen</string>
+  <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Zulassen, dass ZIM-Dateien auf der SD-Karte gelesen und geschrieben werden</string>
   <string name="pref_text_zoom_summary" tools:ignore="StringFormatCount">Schriftgröße in 25%-Schritten ändern.</string>
   <string name="tag_pic">Bild</string>
   <string name="tag_vid">Video</string>
@@ -293,7 +300,14 @@
   <string name="open_drawer">Schublade öffnen</string>
   <string name="close_drawer">Schublade schließen</string>
   <string name="how_to_update_content">Wie erneuert man Inhalte?</string>
+  <string name="update_content_description">Um Inhalte (eine Zim-Datei) zu aktualisieren, musst du die vollständige neueste Version genau derselben Inhalte herunterladen. Das kannst du über den Download-Bereich tun.</string>
+  <string name="all_files_permission_needed">Berechtigung für alle Dateien erforderlich</string>
+  <string name="all_files_permission_needed_message">Um geräteübergreifend auf alle Zim-Dateien zugreifen zu können, benötigen wir die Berechtigung für alle Dateien</string>
   <string name="allowed">Erlaubt</string>
   <string name="not_allowed">Nicht erlaubt</string>
+  <string name="denied_internet_permission_message">Bitte WLAN aktivieren, um Inhalte herunterzuladen</string>
+  <string name="select_folder">Bitte einen Ordner für externe Speicherung auswählen.</string>
+  <string name="system_unable_to_grant_permission_message">System kann keine Berechtigung erteilen!</string>
   <string name="allow">Erlauben</string>
+  <string name="allow_internet_permission_message">Bitte erteile die Internet-Erlaubnis, um Inhalte herunterzuladen</string>
 </resources>
