@@ -423,4 +423,8 @@ object Libs {
    * https://developer.android.com/testing
    */
   const val junit: String = "androidx.test.ext:junit:" + Versions.junit
+
+  const val roomKtx = "androidx.room:room-ktx:" + Versions.roomVersion
+
+  const val roomCompiler = "androidx.room:room-compiler:" + Versions.roomVersion
 }
