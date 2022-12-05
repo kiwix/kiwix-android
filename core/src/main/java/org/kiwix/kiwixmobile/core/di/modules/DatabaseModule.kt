@@ -31,6 +31,7 @@ import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.dao.NewNoteDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.dao.entities.MyObjectBox
+import org.kiwix.kiwixmobile.core.data.local.KiwixRoomDatabase
 import javax.inject.Singleton
 
 @Module
@@ -72,4 +73,16 @@ open class DatabaseModule {
     newBookDao: NewBookDao
   ): FetchDownloadDao =
     FetchDownloadDao(boxStore.boxFor(), newBookDao)
+
+  @Singleton
+  @Provides
+  fun provideYourDatabase(
+    context: Context
+  ) =
+    KiwixRoomDatabase.getInstance(context = context)// The reason we can construct a database for the repo
+
+  @Singleton
+  @Provides
+  fun provideYourDao(db: KiwixRoomDatabase) = db.newRecentSearchRoomDao()
+
 }
