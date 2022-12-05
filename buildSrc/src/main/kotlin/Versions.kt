@@ -106,6 +106,8 @@ object Versions {
 
   const val roomVersion = "2.3.0"
 
+  const val roomVersion = "2.3.0"
+
   /**
    * Current version: "6.2"
    * See issue 19: How to update Gradle itself?
