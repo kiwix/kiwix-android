@@ -26,23 +26,23 @@ import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
-import javax.inject.Inject
 
 @Suppress("UnnecessaryAbstractClass")
 @Database(entities = [RecentSearchRoomEntity::class], version = 19)
 abstract class KiwixRoomDatabase : RoomDatabase() {
   abstract fun newRecentSearchRoomDao(): NewRecentSearchRoomDao
-  @Inject lateinit var boxStore: BoxStore
 
   companion object {
     private var db: KiwixRoomDatabase? = null
-    fun getInstance(context: Context): KiwixRoomDatabase {
+    fun getInstance(context: Context, boxStore: BoxStore): KiwixRoomDatabase {
       return db ?: synchronized(KiwixRoomDatabase::class) {
         return@getInstance db
           ?: Room.databaseBuilder(context, KiwixRoomDatabase::class.java, "KiwixRoom.db")
             // We have already database name called kiwix.db in order to avoid complexity we named as
             // kiwixRoom.db
-            .build().also(KiwixRoomDatabase::migrateRecentSearch)
+            .build().also {
+              it.migrateRecentSearch(boxStore)
+            }
       }
     }
 
@@ -51,7 +51,7 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
     }
   }
 
-  fun migrateRecentSearch() {
+  fun migrateRecentSearch(boxStore: BoxStore) {
     newRecentSearchRoomDao().migrationToRoomInsert(boxStore.boxFor())
   }
 }
