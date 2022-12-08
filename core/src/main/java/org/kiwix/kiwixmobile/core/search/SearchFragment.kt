@@ -71,18 +71,11 @@ class SearchFragment : BaseFragment() {
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
-  private lateinit var searchView: SearchView
-  private lateinit var searchInTextMenuItem: MenuItem
+  private var searchView: SearchView? = null
+  private var searchInTextMenuItem: MenuItem? = null
 
   private val searchViewModel by lazy { viewModel<SearchViewModel>(viewModelFactory) }
-  private val searchAdapter: SearchAdapter by lazy {
-    SearchAdapter(
-      RecentSearchDelegate(::onItemClick, ::onItemClickNewTab) {
-        searchViewModel.actions.offer(OnItemLongClick(it))
-      },
-      ZimSearchResultDelegate(::onItemClick, ::onItemClickNewTab)
-    )
-  }
+  private var searchAdapter: SearchAdapter? = null
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
@@ -100,6 +93,12 @@ class SearchFragment : BaseFragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    searchAdapter = SearchAdapter(
+      RecentSearchDelegate(::onItemClick, ::onItemClickNewTab) {
+        searchViewModel.actions.offer(OnItemLongClick(it))
+      },
+      ZimSearchResultDelegate(::onItemClick, ::onItemClickNewTab)
+    )
     setupToolbar(view)
     search_list.run {
       adapter = searchAdapter
@@ -137,6 +136,9 @@ class SearchFragment : BaseFragment() {
     super.onDestroyView()
     closeKeyboard()
     activity?.intent?.action = null
+    searchView = null
+    searchInTextMenuItem = null
+    searchAdapter = null
   }
 
   private fun goBack() {
@@ -150,7 +152,7 @@ class SearchFragment : BaseFragment() {
     val searchMenuItem = menu.findItem(R.id.menu_search)
     searchMenuItem.expandActionView()
     searchView = searchMenuItem.actionView as SearchView
-    searchView.setOnQueryTextListener(
+    searchView?.setOnQueryTextListener(
       SimpleTextListener {
         if (it.isNotEmpty()) {
           searchViewModel.actions.offer(Filter(it))
@@ -166,7 +168,7 @@ class SearchFragment : BaseFragment() {
       }
     })
     searchInTextMenuItem = menu.findItem(R.id.menu_searchintext)
-    searchInTextMenuItem.setOnMenuItemClickListener {
+    searchInTextMenuItem?.setOnMenuItemClickListener {
       searchViewModel.actions.offer(ClickedSearchInText)
       true
     }
@@ -175,17 +177,17 @@ class SearchFragment : BaseFragment() {
     }
     val searchStringFromArguments = arguments?.getString(NAV_ARG_SEARCH_STRING)
     if (searchStringFromArguments != null) {
-      searchView.setQuery(searchStringFromArguments, false)
+      searchView?.setQuery(searchStringFromArguments, false)
     }
     searchViewModel.actions.offer(Action.CreatedWithArguments(arguments))
   }
 
   private fun render(state: SearchState) {
-    searchInTextMenuItem.isVisible = state.searchOrigin == FromWebView
-    searchInTextMenuItem.isEnabled = state.searchTerm.isNotBlank()
+    searchInTextMenuItem?.isVisible = state.searchOrigin == FromWebView
+    searchInTextMenuItem?.isEnabled = state.searchTerm.isNotBlank()
     searchLoadingIndicator?.isShowing(state.isLoading)
     searchNoResults?.isVisible = state.visibleResults.isEmpty()
-    searchAdapter.items = state.visibleResults
+    searchAdapter?.items = state.visibleResults
   }
 
   private fun onItemClick(it: SearchListItem) {
