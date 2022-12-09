@@ -140,7 +140,7 @@ class SearchViewModel @Inject constructor(
   }
 
   private fun saveSearchAndOpenItem(searchListItem: SearchListItem, openInNewTab: Boolean) {
-    _effects.offer(SaveSearchToRecents(recentSearchDao, searchListItem, zimReaderContainer.id))
+    _effects.offer(SaveSearchToRecents(recentSearchDao, searchListItem, zimReaderContainer.id, viewModelScope))
     _effects.sendBlocking(OpenSearchItem(searchListItem, openInNewTab))
   }
 }
