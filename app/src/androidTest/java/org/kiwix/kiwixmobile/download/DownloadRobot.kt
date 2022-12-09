@@ -19,11 +19,9 @@
 package org.kiwix.kiwixmobile.download
 
 import android.util.Log
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
-import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
@@ -42,7 +40,7 @@ class DownloadRobot : BaseRobot() {
 
   private var retryCountForDataToLoad = 5
   private var retryCountForCheckDownloadStart = 5
-  private val zimFileTitle = "A little question a day"
+  private val zimFileTitle = "Off the Grid"
 
   fun clickLibraryOnBottomNav() {
     clickOn(ViewId(R.id.libraryFragment))
@@ -68,17 +66,13 @@ class DownloadRobot : BaseRobot() {
 
   fun waitForDataToLoad() {
     try {
-      isVisible(Text("Off the Grid"))
+      isVisible(Text(zimFileTitle))
     } catch (e: RuntimeException) {
       if (retryCountForDataToLoad > 0) {
         retryCountForDataToLoad--
         waitForDataToLoad()
       }
     }
-  }
-
-  fun scrollToAlpineWikiZim() {
-    onView(withId(R.id.libraryList)).perform(scrollToPosition<ViewHolder>(20))
   }
 
   fun checkIfZimFileDownloaded() {
