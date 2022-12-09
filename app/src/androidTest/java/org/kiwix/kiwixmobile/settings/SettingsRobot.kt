@@ -27,9 +27,9 @@ import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withResourceName
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import org.hamcrest.Matchers
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.core.R
 
@@ -43,7 +43,7 @@ fun settingsRobo(func: SettingsRobot.() -> Unit) =
 class SettingsRobot : BaseRobot() {
 
   fun assertMenuSettingsDisplayed() {
-    assertDisplayed(R.string.menu_settings)
+    isVisible(TextId(R.string.menu_settings))
   }
 
   private fun clickRecyclerViewItems(@StringRes vararg stringIds: Int) {
@@ -77,7 +77,7 @@ class SettingsRobot : BaseRobot() {
   }
 
   fun assertLanguagePrefDialogDisplayed() {
-    assertDisplayed(R.string.pref_language_title)
+    isVisible(TextId(R.string.pref_language_title))
   }
 
   fun clickStoragePreference() {
@@ -85,7 +85,7 @@ class SettingsRobot : BaseRobot() {
   }
 
   fun assertStorageDialogDisplayed() {
-    assertDisplayed(R.string.pref_storage)
+    isVisible(TextId(R.string.pref_storage))
   }
 
   fun clickClearHistoryPreference() {
@@ -93,7 +93,7 @@ class SettingsRobot : BaseRobot() {
   }
 
   fun assertHistoryDialogDisplayed() {
-    assertDisplayed(R.string.clear_all_history_dialog_title)
+    isVisible(TextId(R.string.clear_all_history_dialog_title))
   }
 
   fun clickNightModePreference() {
@@ -102,7 +102,7 @@ class SettingsRobot : BaseRobot() {
 
   fun assertNightModeDialogDisplayed() {
     for (nightModeString in nightModeStrings()) {
-      assertDisplayed(nightModeString)
+      isVisible(Text(nightModeString))
     }
   }
 

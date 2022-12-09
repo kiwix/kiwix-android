@@ -78,7 +78,7 @@ class DownloadRobot : BaseRobot() {
   }
 
   fun scrollToAlpineWikiZim() {
-    onView(withId(R.id.libraryList)).perform(scrollToPosition<ViewHolder>(15))
+    onView(withId(R.id.libraryList)).perform(scrollToPosition<ViewHolder>(20))
   }
 
   fun checkIfZimFileDownloaded() {
