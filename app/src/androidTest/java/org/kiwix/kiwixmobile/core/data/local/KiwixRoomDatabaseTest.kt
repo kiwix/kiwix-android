@@ -24,6 +24,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.mockk
 import io.objectbox.Box
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.*
@@ -62,6 +63,49 @@ class KiwixRoomDatabaseTest {
         Assertions.assertEquals(searchTerm, entity.searchTerm)
       }
     }
+  }
+
+  @Test
+  @Throws(IOException::class)
+  fun testMigrationTest2() = runBlocking {
+    val context = ApplicationProvider.getApplicationContext<Context>()
+    db = Room.inMemoryDatabaseBuilder(
+      context, KiwixRoomDatabase::class.java
+    ).build()
+    newRecentSearchRoomDao = db.newRecentSearchRoomDao()
+    val searchTerm = "title"
+    val zimId = "zimId"
+    val searchTerm2 = "title2"
+    val searchTerm3 = "title3"
+    box.put(RecentSearchEntity(searchTerm = searchTerm, zimId = zimId))
+    box.put(RecentSearchEntity(searchTerm = searchTerm2, zimId = zimId))
+    box.put(RecentSearchEntity(searchTerm = searchTerm3, zimId = zimId))
+    newRecentSearchRoomDao.migrationToRoomInsert(box)
+    newRecentSearchRoomDao.search("zimId").collect { recentSearchEntites ->
+      Assertions.assertEquals(3, recentSearchEntites.size)
+    }
+  }
+
+  @Test
+  @Throws(IOException::class)
+  fun testMigrationTest3() = runBlocking {
+    val context = ApplicationProvider.getApplicationContext<Context>()
+    db = Room.inMemoryDatabaseBuilder(
+      context, KiwixRoomDatabase::class.java
+    ).build()
+    newRecentSearchRoomDao = db.newRecentSearchRoomDao()
+    val searchTerm = "title"
+    val zimId = "zimId"
+    val searchTerm2 = "title2"
+    val zimId2 = "zimId2"
+    val zimId3 = "zimId3"
+    val searchTerm3 = "title3"
+    box.put(RecentSearchEntity(searchTerm = searchTerm, zimId = zimId))
+    box.put(RecentSearchEntity(searchTerm = searchTerm2, zimId = zimId2))
+    box.put(RecentSearchEntity(searchTerm = searchTerm3, zimId = zimId3))
+    newRecentSearchRoomDao.migrationToRoomInsert(box)
+    val fullSearchList = newRecentSearchRoomDao.fullSearch().toList()
+    Assertions.assertEquals(3, fullSearchList[0].size)
   }
 
   @After
