@@ -73,17 +73,17 @@ class DownloadTest : BaseActivityTest() {
           deleteZimIfExists()
           clickDownloadOnBottomNav()
           waitForDataToLoad()
-          scrollToAlpineWikiZim()
           downloadZimFile()
           assertDownloadStart()
           waitUntilDownloadComplete()
           clickLibraryOnBottomNav()
           checkIfZimFileDownloaded()
+          deleteZimIfExists()
         }
       } catch (e: Exception) {
         Assert.fail(
           """
-        Couldn't find downloaded file 'A little question a day'
+        Couldn't find downloaded file 'Off the Grid'
         Original Exception:
         ${e.localizedMessage}
           """.trimIndent()

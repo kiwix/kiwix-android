@@ -20,13 +20,18 @@ package org.kiwix.kiwixmobile.initial.download
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
+import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.testutils.TestUtils
 
 fun initialDownload(func: InitialDownloadRobot.() -> Unit) =
   InitialDownloadRobot().applyWithViewHierarchyPrinting(func)
@@ -63,7 +68,7 @@ class InitialDownloadRobot : BaseRobot() {
     isVisible(Text("Download book to internal storage?"))
   }
 
-  fun clickYesToConfigureStorage() {
+  fun clickOnYesToConfirm() {
     onView(withText("YES")).perform(click())
   }
 
@@ -75,6 +80,19 @@ class InitialDownloadRobot : BaseRobot() {
         retryCountForCheckDownloadStart--
         assertDownloadStart()
       }
+    }
+  }
+
+  fun stopDownload() {
+    clickOn(ViewId(R.id.stop))
+  }
+
+  fun assertDownloadStop() {
+    try {
+      onView(withId(R.id.stop)).check(doesNotExist())
+    } catch (e: AssertionFailedError) {
+      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
+      assertDownloadStop()
     }
   }
 }
