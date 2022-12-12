@@ -293,6 +293,10 @@ object Libs {
   const val leakcanary_android: String = "com.squareup.leakcanary:leakcanary-android:" +
     Versions.leakcanary_android
 
+  const val leakcanary_android_instrumentation: String =
+    "com.squareup.leakcanary:leakcanary-android-instrumentation:" +
+      Versions.leakcanary_android
+
   /**
    * http://tools.android.com
    */

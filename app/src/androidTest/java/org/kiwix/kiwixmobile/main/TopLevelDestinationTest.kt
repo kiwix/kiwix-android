@@ -23,6 +23,7 @@ import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import leakcanary.LeakAssertions
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -78,6 +79,7 @@ class TopLevelDestinationTest : BaseActivityTest() {
         assertExternalLinkDialogDisplayed()
         pressBack()
       }
+      LeakAssertions.assertNoLeaks()
     }
   }
 

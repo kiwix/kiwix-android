@@ -29,6 +29,7 @@ import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
+import leakcanary.LeakAssertions
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -120,6 +121,7 @@ class LanguageFragmentTest {
         checkIsLanguageSelected()
         clickOnSaveLanguageIcon()
       }
+      LeakAssertions.assertNoLeaks()
     }
   }
 }

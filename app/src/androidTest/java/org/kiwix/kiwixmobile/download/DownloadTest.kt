@@ -30,6 +30,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
+import leakcanary.LeakAssertions
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -94,6 +95,7 @@ class DownloadTest : BaseActivityTest() {
       } catch (e: RuntimeException) {
         Log.w(KIWIX_DOWNLOAD_TEST, "Failed to refresh ZIM list: " + e.localizedMessage)
       }
+      LeakAssertions.assertNoLeaks()
     }
   }
 
