@@ -134,7 +134,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       }
 
       override fun onServiceConnected(className: ComponentName, service: IBinder) {
-        hotspotService = (service as HotspotService.HotspotBinder).service
+        hotspotService = (service as HotspotService.HotspotBinder).service.get()
         hotspotService?.registerCallBack(this@ZimHostFragment)
       }
     }

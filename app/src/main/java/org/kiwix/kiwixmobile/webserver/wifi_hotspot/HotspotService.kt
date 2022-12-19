@@ -30,6 +30,7 @@ import org.kiwix.kiwixmobile.core.utils.ServerUtils.getSocketAddress
 import org.kiwix.kiwixmobile.webserver.WebServerHelper
 import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks
 import org.kiwix.kiwixmobile.webserver.ZimHostFragment
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 /**
@@ -50,7 +51,7 @@ class HotspotService :
   var hotspotStateReceiver: HotspotStateReceiver? = null
 
   private var zimHostCallbacks: ZimHostCallbacks? = null
-  private val serviceBinder: IBinder = HotspotBinder()
+  private val serviceBinder: IBinder = HotspotBinder(this)
 
   override fun onCreate() {
     (this.application as KiwixApp).kiwixComponent
@@ -136,9 +137,12 @@ class HotspotService :
     stopHotspotAndDismissNotification()
   }
 
-  inner class HotspotBinder : Binder() {
-    val service: HotspotService
-      get() = this@HotspotService
+  class HotspotBinder(hotspotService: HotspotService) : Binder() {
+    val service: WeakReference<HotspotService>
+
+    init {
+      service = WeakReference<HotspotService>(hotspotService)
+    }
   }
 
   companion object {
