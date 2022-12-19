@@ -820,6 +820,7 @@ abstract class CoreReaderFragment :
       shutdown()
       tts = null
     }
+    tempWebViewForUndo = null
   }
 
   private fun updateTableOfContents() {
