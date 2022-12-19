@@ -21,6 +21,7 @@ import android.os.Build
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import leakcanary.LeakAssertions
 import org.junit.Before
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
@@ -49,6 +50,7 @@ class HelpFragmentTest : BaseActivityTest() {
         clickOnHowToUpdateContent()
         clickOnSendFeedback()
       }
+      LeakAssertions.assertNoLeaks()
     }
   }
 }
