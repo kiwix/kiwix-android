@@ -67,6 +67,7 @@ class InitialDownloadTest : BaseActivityTest() {
         clickOnYesToConfirm()
         assertDownloadStart()
         stopDownload()
+        assertStopDownloadDialogDisplayed()
         clickOnYesToConfirm()
         assertDownloadStop()
       }
