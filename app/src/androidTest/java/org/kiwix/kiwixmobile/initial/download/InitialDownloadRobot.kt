@@ -68,6 +68,10 @@ class InitialDownloadRobot : BaseRobot() {
     isVisible(Text("Download book to internal storage?"))
   }
 
+  fun assertStopDownloadDialogDisplayed() {
+    isVisible(Text("Stop download?"))
+  }
+
   fun clickOnYesToConfirm() {
     onView(withText("YES")).perform(click())
   }
