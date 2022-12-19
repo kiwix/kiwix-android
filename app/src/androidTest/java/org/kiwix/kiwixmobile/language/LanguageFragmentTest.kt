@@ -25,7 +25,6 @@ import androidx.preference.PreferenceManager
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
@@ -33,7 +32,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 
@@ -69,13 +67,9 @@ class LanguageFragmentTest {
   @Test
   fun testLanguageFragment() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      UiThreadStatement.runOnUiThread {
-        activityScenarioRule.scenario.onActivity {
-          it.navigate(R.id.downloadsFragment)
-        }
-      }
 
       language {
+        clickDownloadOnBottomNav()
         waitForDataToLoad()
 
         // search and de-select if german language already selected

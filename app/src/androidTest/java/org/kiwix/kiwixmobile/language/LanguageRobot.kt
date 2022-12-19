@@ -38,6 +38,10 @@ class LanguageRobot : BaseRobot() {
 
   private var retryCountForDataToLoad = 5
 
+  fun clickDownloadOnBottomNav() {
+    clickOn(ViewId(R.id.downloadsFragment))
+  }
+
   fun waitForDataToLoad() {
     try {
       isVisible(Findable.Text("Off the Grid"))
