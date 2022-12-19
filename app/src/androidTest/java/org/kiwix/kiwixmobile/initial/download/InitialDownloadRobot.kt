@@ -38,7 +38,6 @@ fun initialDownload(func: InitialDownloadRobot.() -> Unit) =
 
 class InitialDownloadRobot : BaseRobot() {
 
-  private var retryCountForDataToLoad = 5
   private var retryCountForCheckDownloadStart = 5
 
   fun assertLibraryListDisplayed() {
@@ -53,10 +52,8 @@ class InitialDownloadRobot : BaseRobot() {
     try {
       isVisible(Text("Off the Grid"))
     } catch (e: RuntimeException) {
-      if (retryCountForDataToLoad > 0) {
-        retryCountForDataToLoad--
-        waitForDataToLoad()
-      }
+      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
+      waitForDataToLoad()
     }
   }
 
