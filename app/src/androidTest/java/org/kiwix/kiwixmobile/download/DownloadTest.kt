@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource.Companion.getInstance
 import java.util.concurrent.TimeUnit
+import leakcanary.LeakAssertions
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -94,6 +95,7 @@ class DownloadTest : BaseActivityTest() {
       } catch (e: RuntimeException) {
         Log.w(KIWIX_DOWNLOAD_TEST, "Failed to refresh ZIM list: " + e.localizedMessage)
       }
+      LeakAssertions.assertNoLeaks()
     }
   }
 

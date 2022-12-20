@@ -798,6 +798,10 @@ abstract class CoreReaderFragment :
 
   override fun onDestroyView() {
     super.onDestroyView()
+    if (sharedPreferenceUtil?.showIntro() == true) {
+      val activity = requireActivity() as AppCompatActivity?
+      activity?.setSupportActionBar(null)
+    }
     safeDispose()
     tabCallback = null
     hideBackToTopTimer?.cancel()
@@ -816,6 +820,7 @@ abstract class CoreReaderFragment :
       shutdown()
       tts = null
     }
+    tempWebViewForUndo = null
   }
 
   private fun updateTableOfContents() {

@@ -32,6 +32,7 @@ import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
+import leakcanary.LeakAssertions
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -87,6 +88,7 @@ class KiwixSplashActivityTest {
           )
         )
       }
+      LeakAssertions.assertNoLeaks()
     }
   }
 
@@ -103,6 +105,7 @@ class KiwixSplashActivityTest {
           )
         )
       }
+      LeakAssertions.assertNoLeaks()
     }
   }
 
