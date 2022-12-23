@@ -18,6 +18,8 @@
 package org.kiwix.kiwixmobile.intro
 
 import android.os.Build
+import androidx.core.content.edit
+import androidx.preference.PreferenceManager
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -26,6 +28,7 @@ import org.junit.Before
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 class IntroFragmentTest : BaseActivityTest() {
 
@@ -41,5 +44,8 @@ class IntroFragmentTest : BaseActivityTest() {
   @Before
   override fun waitForIdle() {
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
+    PreferenceManager.getDefaultSharedPreferences(context).edit {
+      putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, true)
+    }
   }
 }
