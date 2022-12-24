@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.dao
 
-import android.util.Log
 import androidx.room.Dao
 import androidx.room.Query
 import io.objectbox.Box
@@ -64,8 +63,8 @@ abstract class NewRecentSearchRoomDao {
     }
   }
 
-  @Query("INSERT INTO RecentSearchRoomEntity(searchTerm, zimId) VALUES (:title , :id)")
-  abstract fun saveSearch(title: String, id: String)
+  @Query("INSERT INTO RecentSearchRoomEntity(searchTerm, zimId) VALUES (:title , :zimId)")
+  abstract fun saveSearch(title: String, zimId: String)
 
   @Query("DELETE FROM RecentSearchRoomEntity WHERE searchTerm=:searchTerm")
   abstract fun deleteSearchString(searchTerm: String)
@@ -77,9 +76,10 @@ abstract class NewRecentSearchRoomDao {
     box: Box<RecentSearchEntity>
   ) {
     val searchRoomEntityList = box.all
-    searchRoomEntityList.forEach {
+    searchRoomEntityList.forEachIndexed { _, recentSearchEntity ->
       CoroutineScope(Dispatchers.IO).launch {
-        saveSearch(it.searchTerm, it.zimId)
+        saveSearch(recentSearchEntity.searchTerm, recentSearchEntity.zimId)
+        // Todo Should we remove object store data now?
       }
     }
   }
