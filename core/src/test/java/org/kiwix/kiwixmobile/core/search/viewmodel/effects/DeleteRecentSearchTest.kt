@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile.core.search.viewmodel.effects// /*
+package org.kiwix.kiwixmobile.core.search.viewmodel.effects /*
 //  * Kiwix Android
 //  * Copyright (c) 2020 Kiwix <android.kiwix.org>
 //  * This program is free software: you can redistribute it and/or modify
