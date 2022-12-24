@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.dao
 
+import android.util.Log
 import androidx.room.Dao
 import androidx.room.Query
 import io.objectbox.Box
@@ -78,7 +79,7 @@ abstract class NewRecentSearchRoomDao {
     val searchRoomEntityList = box.all
     searchRoomEntityList.forEach {
       CoroutineScope(Dispatchers.IO).launch {
-        saveSearch(it.searchTerm, it.id.toString())
+        saveSearch(it.searchTerm, it.zimId)
       }
     }
   }
