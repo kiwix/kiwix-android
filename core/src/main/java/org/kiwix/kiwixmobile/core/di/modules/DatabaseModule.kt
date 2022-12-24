@@ -83,9 +83,9 @@ open class DatabaseModule {
     KiwixRoomDatabase.getInstance(
       context = context,
       boxStore
-    )// The reason we can construct a database for the repo
+    ) // The reason we can construct a database for the repo
 
   @Singleton
   @Provides
-  fun provideYourDao(db: KiwixRoomDatabase) = db.newRecentSearchRoomDao()
+  fun provideNewRecentSearchRoomDao(db: KiwixRoomDatabase) = db.newRecentSearchRoomDao()
 }

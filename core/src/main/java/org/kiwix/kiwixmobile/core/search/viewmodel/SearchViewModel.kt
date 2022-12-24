@@ -34,7 +34,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
@@ -128,7 +127,7 @@ class SearchViewModel @Inject constructor(
   }
 
   private fun deleteItemAndShowToast(it: ConfirmedDelete) {
-    _effects.offer(DeleteRecentSearch(it.searchListItem, recentSearchDao))
+    _effects.offer(DeleteRecentSearch(it.searchListItem, recentSearchDao, viewModelScope))
     _effects.offer(ShowToast(R.string.delete_specific_search_toast))
   }
 
@@ -140,7 +139,14 @@ class SearchViewModel @Inject constructor(
   }
 
   private fun saveSearchAndOpenItem(searchListItem: SearchListItem, openInNewTab: Boolean) {
-    _effects.offer(SaveSearchToRecents(recentSearchDao, searchListItem, zimReaderContainer.id, viewModelScope))
+    _effects.offer(
+      SaveSearchToRecents(
+        recentSearchDao,
+        searchListItem,
+        zimReaderContainer.id,
+        viewModelScope
+      )
+    )
     _effects.sendBlocking(OpenSearchItem(searchListItem, openInNewTab))
   }
 }

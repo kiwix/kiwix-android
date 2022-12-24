@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
 import android.os.Bundle
+import androidx.lifecycle.viewModelScope
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.every
@@ -45,7 +46,7 @@ import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
+import org.kiwix.kiwixmobile.core.dao.NewRecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
@@ -76,7 +77,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class SearchViewModelTest {
-  private val recentSearchDao: NewRecentSearchDao = mockk()
+  private val recentSearchDao: NewRecentSearchRoomDao = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val searchResultGenerator: SearchResultGenerator = mockk()
   private val zimFileReader: ZimFileReader = mockk()
@@ -164,7 +165,7 @@ internal class SearchViewModelTest {
       val searchListItem = RecentSearchListItem("")
       actionResultsInEffects(
         OnOpenInNewTabClick(searchListItem),
-        SaveSearchToRecents(recentSearchDao, searchListItem, "id"),
+        SaveSearchToRecents(recentSearchDao, searchListItem, "id", viewModel.viewModelScope),
         OpenSearchItem(searchListItem, true)
       )
     }
