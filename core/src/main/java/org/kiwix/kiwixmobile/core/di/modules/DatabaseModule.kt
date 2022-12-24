@@ -87,5 +87,5 @@ open class DatabaseModule {
 
   @Singleton
   @Provides
-  fun provideYourDao(db: KiwixRoomDatabase) = db.newRecentSearchRoomDao()
+  fun provideNewRecentSearchRoomDao(db: KiwixRoomDatabase) = db.newRecentSearchRoomDao()
 }
