@@ -155,7 +155,7 @@ internal class SearchViewModelTest {
       val searchListItem = RecentSearchListItem("")
       actionResultsInEffects(
         OnItemClick(searchListItem),
-        SaveSearchToRecents(recentSearchDao, searchListItem, "id"),
+        SaveSearchToRecents(recentSearchDao, searchListItem, "id", viewModel.viewModelScope),
         OpenSearchItem(searchListItem, false)
       )
     }
@@ -189,7 +189,7 @@ internal class SearchViewModelTest {
       val searchListItem = RecentSearchListItem("")
       actionResultsInEffects(
         ConfirmedDelete(searchListItem),
-        DeleteRecentSearch(searchListItem, recentSearchDao),
+        DeleteRecentSearch(searchListItem, recentSearchDao, viewModel.viewModelScope),
         ShowToast(R.string.delete_specific_search_toast)
       )
     }
