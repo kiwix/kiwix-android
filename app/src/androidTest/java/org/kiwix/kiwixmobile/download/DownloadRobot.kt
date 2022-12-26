@@ -22,6 +22,8 @@ import android.util.Log
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
@@ -54,7 +56,8 @@ class DownloadRobot : BaseRobot() {
     try {
       longClickOn(Text(zimFileTitle))
       clickOn(ViewId(R.id.zim_file_delete_item))
-      isVisible(Text("DELETE"))
+      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+      onView(withText("DELETE")).check(matches(isDisplayed()))
       onView(withText("DELETE")).perform(click())
     } catch (e: Exception) {
       if (shouldDeleteZimFile) {
