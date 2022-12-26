@@ -30,6 +30,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
+import leakcanary.LeakAssertions
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -43,7 +44,6 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource.Companion.getInstance
 import java.util.concurrent.TimeUnit
-import leakcanary.LeakAssertions
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -71,7 +71,7 @@ class DownloadTest : BaseActivityTest() {
       try {
         downloadRobot {
           clickLibraryOnBottomNav()
-          deleteZimIfExists()
+          deleteZimIfExists(false)
           clickDownloadOnBottomNav()
           waitForDataToLoad()
           downloadZimFile()
@@ -79,15 +79,11 @@ class DownloadTest : BaseActivityTest() {
           waitUntilDownloadComplete()
           clickLibraryOnBottomNav()
           checkIfZimFileDownloaded()
-          deleteZimIfExists()
+          deleteZimIfExists(true)
         }
       } catch (e: Exception) {
         Assert.fail(
-          """
-        Couldn't find downloaded file 'Off the Grid'
-        Original Exception:
-        ${e.localizedMessage}
-          """.trimIndent()
+          "Couldn't find downloaded file ' Off the Grid ' Original Exception: ${e.message}"
         )
       }
       try {

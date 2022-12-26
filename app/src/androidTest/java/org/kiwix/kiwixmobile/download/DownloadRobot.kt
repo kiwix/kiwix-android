@@ -50,12 +50,19 @@ class DownloadRobot : BaseRobot() {
     clickOn(ViewId(R.id.downloadsFragment))
   }
 
-  fun deleteZimIfExists() {
+  fun deleteZimIfExists(shouldDeleteZimFile: Boolean) {
     try {
       longClickOn(Text(zimFileTitle))
       clickOn(ViewId(R.id.zim_file_delete_item))
+      isVisible(Text("DELETE"))
       onView(withText("DELETE")).perform(click())
-    } catch (e: RuntimeException) {
+    } catch (e: Exception) {
+      if (shouldDeleteZimFile) {
+        throw Exception(
+          "$zimFileTitle downloaded successfully. " +
+            "But failed to delete $zimFileTitle file"
+        )
+      }
       Log.i(
         "TEST_DELETE_ZIM",
         "Failed to delete ZIM file with title [" + zimFileTitle + "]... " +
