@@ -142,4 +142,26 @@ class NewRecentSearchRoomDaoTest {
     Assertions.assertEquals(0, newRecentSearchRoomDao.search(zimId).count())
     Assertions.assertEquals(0, newRecentSearchRoomDao.search(zimId2).count())
   }
+
+  @Test
+  @Throws(IOException::class)
+  fun testDeleteAllTheTable() = runBlocking {
+    val context = ApplicationProvider.getApplicationContext<Context>()
+    db = Room.inMemoryDatabaseBuilder(
+      context, KiwixRoomDatabase::class.java
+    ).build()
+    newRecentSearchRoomDao = db.newRecentSearchRoomDao()
+    val searchTerm = "title"
+    val searchTerm2 = "title2"
+    val searchTerm3 = "title3"
+    val zimId = "zimId"
+    val zimId2 = "zimId2"
+    newRecentSearchRoomDao.saveSearch(searchTerm, zimId)
+    newRecentSearchRoomDao.saveSearch(searchTerm2, zimId2)
+    newRecentSearchRoomDao.saveSearch(searchTerm3, zimId)
+    newRecentSearchRoomDao.deleteSearchHistory()
+    Assertions.assertEquals(0, newRecentSearchRoomDao.fullSearch().count())
+    Assertions.assertEquals(0, newRecentSearchRoomDao.search(zimId).count())
+    Assertions.assertEquals(0, newRecentSearchRoomDao.search(zimId2).count())
+  }
 }
