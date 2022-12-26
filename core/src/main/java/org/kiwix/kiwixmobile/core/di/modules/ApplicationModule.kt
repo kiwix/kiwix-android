@@ -63,7 +63,6 @@ class ApplicationModule {
 
   @Provides
   @Singleton
-
   internal fun provideBookUtils(): BookUtils = BookUtils()
 
   @IO
