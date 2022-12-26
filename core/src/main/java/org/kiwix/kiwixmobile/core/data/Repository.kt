@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.data
 
+import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
@@ -102,7 +103,7 @@ class Repository @Inject internal constructor(
   override fun clearHistory() = Completable.fromAction {
     historyDao.deleteAllHistory()
     recentSearchDao.deleteSearchHistory()
-  }
+  }.subscribeOn(io)
 
   override fun getBookmarks() = bookmarksDao.bookmarks() as Flowable<List<BookmarkItem>>
 
