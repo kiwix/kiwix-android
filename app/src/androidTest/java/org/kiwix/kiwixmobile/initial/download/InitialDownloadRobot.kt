@@ -40,6 +40,10 @@ class InitialDownloadRobot : BaseRobot() {
 
   private var retryCountForCheckDownloadStart = 5
 
+  fun clickDownloadOnBottomNav() {
+    clickOn(ViewId(R.id.downloadsFragment))
+  }
+
   fun assertLibraryListDisplayed() {
     isVisible(ViewId(R.id.libraryList))
   }
