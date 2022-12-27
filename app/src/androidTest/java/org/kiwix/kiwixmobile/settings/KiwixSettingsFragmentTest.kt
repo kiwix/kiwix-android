@@ -32,9 +32,14 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.intro.IntroRobot
 import org.kiwix.kiwixmobile.intro.intro
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.utils.StandardActions
 
 class KiwixSettingsFragmentTest {
+
+  @Rule
+  @JvmField
+  var retryRule = RetryRule()
 
   @get:Rule
   var activityScenarioRule = ActivityScenarioRule(KiwixMainActivity::class.java)

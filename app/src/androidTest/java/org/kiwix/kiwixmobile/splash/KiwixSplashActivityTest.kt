@@ -42,11 +42,16 @@ import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class KiwixSplashActivityTest {
+
+  @Rule
+  @JvmField
+  var retryRule = RetryRule()
 
   private val activityScenario: ActivityScenario<KiwixMainActivity> =
     ActivityScenario.launch(KiwixMainActivity::class.java)

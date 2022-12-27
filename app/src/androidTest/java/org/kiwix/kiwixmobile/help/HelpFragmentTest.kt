@@ -23,9 +23,11 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import leakcanary.LeakAssertions
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.testutils.RetryRule
 
 class HelpFragmentTest : BaseActivityTest() {
 
@@ -33,6 +35,10 @@ class HelpFragmentTest : BaseActivityTest() {
   override fun waitForIdle() {
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
   }
+
+  @Rule
+  @JvmField
+  var retryRule = RetryRule()
 
   @Test
   fun verifyHelpActivity() {

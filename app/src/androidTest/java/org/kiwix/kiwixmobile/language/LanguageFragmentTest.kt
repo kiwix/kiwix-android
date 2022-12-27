@@ -35,10 +35,15 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.testutils.RetryRule
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class LanguageFragmentTest {
+
+  @Rule
+  @JvmField
+  var retryRule = RetryRule()
 
   @get:Rule
   var activityScenarioRule = ActivityScenarioRule(KiwixMainActivity::class.java)

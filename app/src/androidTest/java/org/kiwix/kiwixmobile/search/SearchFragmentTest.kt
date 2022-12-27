@@ -28,17 +28,24 @@ import androidx.test.uiautomator.UiDevice
 import leakcanary.LeakAssertions
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader
+import org.kiwix.kiwixmobile.testutils.RetryRule
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 
 class SearchFragmentTest : BaseActivityTest() {
+
+  @Rule
+  @JvmField
+  var retryRule = RetryRule()
+
   override var activityRule: ActivityTestRule<KiwixMainActivity> = activityTestRule {
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)

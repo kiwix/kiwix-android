@@ -25,12 +25,18 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import leakcanary.LeakAssertions
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.testutils.RetryRule
 
 class IntroFragmentTest : BaseActivityTest() {
+
+  @Rule
+  @JvmField
+  var retryRule = RetryRule()
 
   @Test
   fun viewIsSwipeableAndNavigatesToMain() {

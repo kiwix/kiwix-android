@@ -29,11 +29,13 @@ import androidx.test.uiautomator.UiDevice
 import leakcanary.LeakAssertions
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.testutils.RetryRule
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -47,6 +49,10 @@ class InitialDownloadTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
     }
   }
+
+  @Rule
+  @JvmField
+  var retryRule = RetryRule()
 
   @Before
   override fun waitForIdle() {
