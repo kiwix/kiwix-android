@@ -18,9 +18,12 @@
 
 package org.kiwix.kiwixmobile.initial.download
 
+import android.util.Log
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
@@ -39,6 +42,12 @@ fun initialDownload(func: InitialDownloadRobot.() -> Unit) =
 class InitialDownloadRobot : BaseRobot() {
 
   private var retryCountForCheckDownloadStart = 5
+  private var retryCountForCheckDataLoaded = 5
+  private val zimFileTitle = "Off the Grid"
+
+  fun clickLibraryOnBottomNav() {
+    clickOn(ViewId(R.id.libraryFragment))
+  }
 
   fun clickDownloadOnBottomNav() {
     clickOn(ViewId(R.id.downloadsFragment))
@@ -48,21 +57,39 @@ class InitialDownloadRobot : BaseRobot() {
     isVisible(ViewId(R.id.libraryList))
   }
 
+  fun deleteZimIfExists() {
+    try {
+      longClickOn(Text(zimFileTitle))
+      clickOn(ViewId(R.id.zim_file_delete_item))
+      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+      onView(withText("DELETE")).check(matches(isDisplayed()))
+      onView(withText("DELETE")).perform(click())
+    } catch (e: Exception) {
+      Log.i(
+        "TEST_DELETE_ZIM",
+        "Failed to delete ZIM file with title [" + zimFileTitle + "]... " +
+          "Probably because it doesn't exist"
+      )
+    }
+  }
+
   fun refreshList() {
     refresh(R.id.librarySwipeRefresh)
   }
 
   fun waitForDataToLoad() {
     try {
-      isVisible(Text("Off the Grid"))
+      isVisible(Text(zimFileTitle))
     } catch (e: RuntimeException) {
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
-      waitForDataToLoad()
+      if (retryCountForCheckDataLoaded > 0) {
+        retryCountForCheckDataLoaded--
+        waitForDataToLoad()
+      }
     }
   }
 
   fun downloadZimFile() {
-    clickOn(Text("Off the Grid"))
+    clickOn(Text(zimFileTitle))
   }
 
   fun assertStorageConfigureDialogDisplayed() {

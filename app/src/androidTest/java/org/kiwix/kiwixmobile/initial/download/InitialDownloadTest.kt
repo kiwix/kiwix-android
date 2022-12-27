@@ -63,6 +63,9 @@ class InitialDownloadTest : BaseActivityTest() {
   fun initialDownloadTest() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
       initialDownload {
+        clickLibraryOnBottomNav()
+        // This is for if download test fails for some reason after downloading the zim file
+        deleteZimIfExists()
         clickDownloadOnBottomNav()
         assertLibraryListDisplayed()
         refreshList()
