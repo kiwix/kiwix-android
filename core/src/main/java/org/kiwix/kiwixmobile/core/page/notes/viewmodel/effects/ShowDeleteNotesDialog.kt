@@ -22,7 +22,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.PageDao
+import org.kiwix.kiwixmobile.core.dao.BasePageDao
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesState
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.DeletePageItems
@@ -34,7 +34,7 @@ import javax.inject.Inject
 data class ShowDeleteNotesDialog(
   private val effects: PublishProcessor<SideEffect<*>>,
   private val state: NotesState,
-  private val pageDao: PageDao
+  private val basePageDao: BasePageDao
 ) : SideEffect<Unit> {
   @Inject lateinit var dialogShower: DialogShower
   override fun invokeWith(activity: AppCompatActivity) {
@@ -43,7 +43,7 @@ data class ShowDeleteNotesDialog(
     dialogShower.show(
       if (state.isInSelectionState) DeleteSelectedNotes else DeleteAllNotes,
       {
-        effects.offer(DeletePageItems(state, pageDao))
+        effects.offer(DeletePageItems(state, basePageDao))
       }
     )
   }

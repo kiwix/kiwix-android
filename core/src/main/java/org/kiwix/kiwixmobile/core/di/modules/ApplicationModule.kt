@@ -25,10 +25,12 @@ import android.net.ConnectivityManager
 import android.os.storage.StorageManager
 import dagger.Module
 import dagger.Provides
+import io.objectbox.BoxStore
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.NightModeConfig
+import org.kiwix.kiwixmobile.core.data.local.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.di.qualifiers.Computation
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
@@ -96,4 +98,15 @@ class ApplicationModule {
   @Singleton
   fun provideConnectivityManager(context: Context): ConnectivityManager =
     context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+  @Singleton
+  @Provides
+  fun provideYourDatabase(
+    context: Context,
+    boxStore: BoxStore
+  ) =
+    KiwixRoomDatabase.getInstance(
+      context = context,
+      boxStore
+    )
 }

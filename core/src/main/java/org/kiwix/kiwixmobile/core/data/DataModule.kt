@@ -17,8 +17,11 @@
  */
 package org.kiwix.kiwixmobile.core.data
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
+import io.objectbox.BoxStore
+import org.kiwix.kiwixmobile.core.data.local.KiwixRoomDatabase
 import javax.inject.Singleton
 
 @Module

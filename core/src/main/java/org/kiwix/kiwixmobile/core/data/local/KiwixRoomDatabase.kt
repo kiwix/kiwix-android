@@ -19,29 +19,46 @@
 package org.kiwix.kiwixmobile.core.data.local
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
+import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
+import org.kiwix.kiwixmobile.core.dao.HistoryRoomDaoCoverts
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchRoomDao
+import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
+import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 
 @Suppress("UnnecessaryAbstractClass")
-@Database(entities = [RecentSearchRoomEntity::class], version = 1)
+@Database(
+  entities = [RecentSearchRoomEntity::class, HistoryRoomEntity::class],
+  version = 2
+)
+@TypeConverters(HistoryRoomDaoCoverts::class)
 abstract class KiwixRoomDatabase : RoomDatabase() {
   abstract fun newRecentSearchRoomDao(): NewRecentSearchRoomDao
+  abstract fun historyRoomDao(): HistoryRoomDao
 
   companion object {
     private var db: KiwixRoomDatabase? = null
+    private var box: BoxStore? = null
     fun getInstance(context: Context, boxStore: BoxStore): KiwixRoomDatabase {
+      box = boxStore
       return db ?: synchronized(KiwixRoomDatabase::class) {
         return@getInstance db
           ?: Room.databaseBuilder(context, KiwixRoomDatabase::class.java, "KiwixRoom.db")
             // We have already database name called kiwix.db in order to avoid complexity we named as
             // kiwixRoom.db
+            // .addMigrations(MIGRATION_1_2)
             .build().also {
               it.migrateRecentSearch(boxStore)
+              it.migrateHistory(boxStore)
             }
       }
     }
@@ -49,9 +66,21 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
     fun destroyInstance() {
       db = null
     }
+
+    val MIGRATION_1_2 = object : Migration(1, 2) {
+      override fun migrate(database: SupportSQLiteDatabase) {
+        db!!::migrateHistory.let { box?.let(it) } ?: run {
+          Log.d("gouri", "box store is null")
+        }
+      }
+    }
   }
 
   fun migrateRecentSearch(boxStore: BoxStore) {
     newRecentSearchRoomDao().migrationToRoomInsert(boxStore.boxFor())
+  }
+
+  fun migrateHistory(boxStore: BoxStore) {
+    historyRoomDao().migrationToRoomHistory(boxStore.boxFor())
   }
 }

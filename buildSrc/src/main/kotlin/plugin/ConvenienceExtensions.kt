@@ -54,5 +54,11 @@ internal fun DependencyHandlerScope.testImplementation(dependency: String) =
 internal fun DependencyHandlerScope.implementation(dependency: String) =
   addDependency("implementation", dependency)
 
+internal fun DependencyHandlerScope.annotationProcessor(dependency: String) =
+  addDependency("annotationProcessor", dependency)
+
+internal fun DependencyHandlerScope.ksp(dependency: String) =
+  addDependency("ksp", dependency)
+
 private fun DependencyHandlerScope.addDependency(configurationName: String, dependency: String) =
   add(configurationName, dependency)

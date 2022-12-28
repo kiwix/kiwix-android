@@ -48,6 +48,8 @@ open class DatabaseModule {
     return boxStore!!
   }
 
+ // The reason we can construct a database for the repo
+
   @Provides @Singleton fun providesNewBookDao(boxStore: BoxStore): NewBookDao =
     NewBookDao(boxStore.boxFor())
 
@@ -74,18 +76,22 @@ open class DatabaseModule {
   ): FetchDownloadDao =
     FetchDownloadDao(boxStore.boxFor(), newBookDao)
 
-  @Singleton
-  @Provides
-  fun provideYourDatabase(
-    context: Context,
-    boxStore: BoxStore
-  ) =
-    KiwixRoomDatabase.getInstance(
-      context = context,
-      boxStore
-    ) // The reason we can construct a database for the repo
+  // @Singleton
+  // @Provides
+  // fun provideYourDatabase(
+  //   context: Context,
+  //   boxStore: BoxStore
+  // ) =
+  //   KiwixRoomDatabase.getInstance(
+  //     context = context,
+  //     boxStore
+  //   ) // The reason we can construct a database for the repo
 
   @Singleton
   @Provides
   fun provideNewRecentSearchRoomDao(db: KiwixRoomDatabase) = db.newRecentSearchRoomDao()
+
+  @Provides
+  @Singleton
+  fun provideHistoryDao(db: KiwixRoomDatabase) = db.historyRoomDao()
 }

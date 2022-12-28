@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.page.history.viewmodel
 
-import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHistoryDialog
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.UpdateAllHistoryPreference
@@ -29,10 +29,10 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
 class HistoryViewModel @Inject constructor(
-  historyDao: HistoryDao,
+  historyRoomDao: HistoryRoomDao,
   zimReaderContainer: ZimReaderContainer,
   sharedPrefs: SharedPreferenceUtil
-) : PageViewModel<HistoryItem, HistoryState>(historyDao, sharedPrefs, zimReaderContainer) {
+) : PageViewModel<HistoryItem, HistoryState>(historyRoomDao, sharedPrefs, zimReaderContainer) {
 
   override fun initialState(): HistoryState =
     HistoryState(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
@@ -58,7 +58,7 @@ class HistoryViewModel @Inject constructor(
   }
 
   override fun createDeletePageDialogEffect(state: HistoryState) =
-    ShowDeleteHistoryDialog(effects, state, pageDao)
+    ShowDeleteHistoryDialog(effects, state, basePageDao)
 
   override fun deselectAllPages(state: HistoryState): HistoryState =
     state.copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })

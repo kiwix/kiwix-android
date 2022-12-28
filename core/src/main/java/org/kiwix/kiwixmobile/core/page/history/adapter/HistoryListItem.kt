@@ -17,13 +17,15 @@
  */
 package org.kiwix.kiwixmobile.core.page.history.adapter
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
+import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 
 sealed class HistoryListItem : PageRelated {
-
   data class HistoryItem constructor(
     val databaseId: Long = 0L,
     override val zimId: String,
@@ -68,6 +70,19 @@ sealed class HistoryListItem : PageRelated {
       historyEntity.timeStamp,
       false
     )
+
+    constructor(historyRoomEntity: HistoryRoomEntity) : this(
+      historyRoomEntity.id,
+      historyRoomEntity.zimId,
+      historyRoomEntity.zimName,
+      historyRoomEntity.zimFilePath,
+      historyRoomEntity.favicon,
+      historyRoomEntity.historyUrl,
+      historyRoomEntity.historyTitle,
+      historyRoomEntity.dateString,
+      historyRoomEntity.timeStamp,
+      false
+    )
   }
 
   data class DateItem(
@@ -75,3 +90,71 @@ sealed class HistoryListItem : PageRelated {
     override val id: Long = dateString.hashCode().toLong()
   ) : HistoryListItem()
 }
+
+// @Entity
+// sealed class HistoryListRoomItem : PageRelated {
+//   @Entity
+//   data class HistoryItem constructor(
+//     val databaseId: Long = 0L,
+//     override val zimId: String,
+//     val zimName: String,
+//     override val zimFilePath: String,
+//     override val favicon: String?,
+//     val historyUrl: String,
+//     override val title: String,
+//     val dateString: String,
+//     val timeStamp: Long,
+//     override var isSelected: Boolean = false,
+//     override val id: Long = databaseId,
+//     override val url: String = historyUrl
+//   ) : HistoryListItem(), Page {
+//
+//     constructor(
+//       url: String,
+//       title: String,
+//       dateString: String,
+//       timeStamp: Long,
+//       zimFileReader: ZimFileReader
+//     ) : this(
+//       zimId = zimFileReader.id,
+//       zimName = zimFileReader.name,
+//       zimFilePath = zimFileReader.zimFile.canonicalPath,
+//       favicon = zimFileReader.favicon,
+//       historyUrl = url,
+//       title = title,
+//       dateString = dateString,
+//       timeStamp = timeStamp
+//     )
+//
+//     constructor(historyEntity: HistoryEntity) : this(
+//       historyEntity.id,
+//       historyEntity.zimId,
+//       historyEntity.zimName,
+//       historyEntity.zimFilePath,
+//       historyEntity.favicon,
+//       historyEntity.historyUrl,
+//       historyEntity.historyTitle,
+//       historyEntity.dateString,
+//       historyEntity.timeStamp,
+//       false
+//     )
+//
+//     constructor(historyRoomEntity: HistoryRoomEntity) : this(
+//       historyRoomEntity.id,
+//       historyRoomEntity.zimId,
+//       historyRoomEntity.zimName,
+//       historyRoomEntity.zimFilePath,
+//       historyRoomEntity.favicon,
+//       historyRoomEntity.historyUrl,
+//       historyRoomEntity.historyTitle,
+//       historyRoomEntity.dateString,
+//       historyRoomEntity.timeStamp,
+//       false
+//     )
+//   }
+//
+//   data class DateItem(
+//     val dateString: String,
+//     override val id: Long = dateString.hashCode().toLong()
+//   ) : HistoryListItem()
+// }

@@ -28,6 +28,7 @@ import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
@@ -36,6 +37,7 @@ import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.data.DataModule
 import org.kiwix.kiwixmobile.core.data.DataSource
+import org.kiwix.kiwixmobile.core.data.local.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.data.local.dao.BookDao
 import org.kiwix.kiwixmobile.core.data.local.dao.BookmarksDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
@@ -77,6 +79,7 @@ interface CoreComponent {
     fun build(): CoreComponent
   }
 
+  fun kiwixRoomDataBase(): KiwixRoomDatabase
   fun activityComponentBuilder(): CoreActivityComponent.Builder
   fun zimReaderContainer(): ZimReaderContainer
   fun sharedPrefUtil(): SharedPreferenceUtil
@@ -93,6 +96,7 @@ interface CoreComponent {
   fun newLanguagesDao(): NewLanguagesDao
   fun recentSearchDao(): NewRecentSearchDao
   fun recentSearchRoomDao(): NewRecentSearchRoomDao
+  fun historyRoomDao(): HistoryRoomDao
   fun newBookmarksDao(): NewBookmarksDao
   fun connectivityManager(): ConnectivityManager
   fun context(): Context

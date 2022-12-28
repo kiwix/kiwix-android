@@ -203,7 +203,10 @@ class AllProjectConfigurer {
       implementation(Libs.rxjava)
       implementation(Libs.preference_ktx)
       implementation(Libs.roomKtx)
+      annotationProcessor(Libs.roomCompiler)
+      implementation(Libs.roomRuntime)
       kapt(Libs.roomCompiler)
+      // ksp(Libs.roomCompiler)
     }
   }
 }
