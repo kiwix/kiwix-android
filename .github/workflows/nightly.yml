@@ -43,7 +43,6 @@ jobs:
           target: ${{ matrix.target }}
           arch: x86_64
           profile: pixel_2
-          ndk: 21.4.7075529
           sdcard-path-or-size: '1000M'
           disable-animations: false
           script: bash contrib/instrumentation_nightly.sh
@@ -68,9 +67,6 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-
-      - name: Install NDK
-        run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;22.0.7026061" --sdk_root=${ANDROID_SDK_ROOT}
 
       - name: run unit tests
         run: ./gradlew testDebugUnitTest testCustomExampleDebugUnitTest

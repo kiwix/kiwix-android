@@ -50,7 +50,6 @@ jobs:
           target: default
           arch: x86_64
           profile: pixel_2
-          ndk: 21.4.7075529
           ram-size: '4096M'
           disk-size: '14G'
           sdcard-path-or-size: '1000M'
@@ -67,7 +66,6 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: pixel_2
-          ndk: 21.4.7075529
           ram-size: '4096M'
           disk-size: '14G'
           sdcard-path-or-size: '1000M'
