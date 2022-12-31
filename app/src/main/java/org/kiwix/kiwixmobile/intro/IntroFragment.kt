@@ -69,7 +69,7 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
     )
     view_pager.run {
       adapter = IntroPagerAdapter(views)
-      addOnPageChangeListener(SimplePageChangeListener(::updateView, ::handleDraggingState))
+      simplePageChangeListener?.let(::addOnPageChangeListener)
     }
     tab_indicator.setViewPager(view_pager)
     timer?.schedule(
@@ -104,6 +104,7 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
       it.setOnClickListener(null)
     }
     views = emptyArray()
+    simplePageChangeListener = null
   }
 
   private fun navigateToLibrary() {
@@ -135,4 +136,7 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
     handler.removeCallbacksAndMessages(null)
     timer?.cancel()
   }
+
+  private var simplePageChangeListener: SimplePageChangeListener? =
+    SimplePageChangeListener(::updateView, ::handleDraggingState)
 }

@@ -23,19 +23,19 @@ import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import androidx.test.uiautomator.UiDevice
 import leakcanary.LeakAssertions
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.testutils.RetryRule
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -50,6 +50,10 @@ class InitialDownloadTest : BaseActivityTest() {
     }
   }
 
+  @Rule
+  @JvmField
+  var retryRule = RetryRule()
+
   @Before
   override fun waitForIdle() {
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
@@ -58,8 +62,11 @@ class InitialDownloadTest : BaseActivityTest() {
   @Test
   fun initialDownloadTest() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      UiThreadStatement.runOnUiThread { activityRule.activity.navigate(R.id.downloadsFragment) }
       initialDownload {
+        clickLibraryOnBottomNav()
+        // This is for if download test fails for some reason after downloading the zim file
+        deleteZimIfExists()
+        clickDownloadOnBottomNav()
         assertLibraryListDisplayed()
         refreshList()
         waitForDataToLoad()
