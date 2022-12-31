@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.page.notes.viewmodel
 
-import org.kiwix.kiwixmobile.core.dao.NewNoteDao
+import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects.ShowDeleteNotesDialog
@@ -32,7 +32,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
 class NotesViewModel @Inject constructor(
-  notesDao: NewNoteDao,
+  notesDao: NotesRoomDao,
   zimReaderContainer: ZimReaderContainer,
   sharedPrefs: SharedPreferenceUtil
 ) : PageViewModel<NoteListItem, NotesState>(notesDao, sharedPrefs, zimReaderContainer),

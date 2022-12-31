@@ -26,30 +26,30 @@ import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity_
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import javax.inject.Inject
-
-class NewNoteDao @Inject constructor(val box: Box<NotesEntity>) : PageDao {
-  fun notes(): Flowable<List<Page>> = box.asFlowable(
-    box.query {
-      order(NotesEntity_.noteTitle)
-    }
-  ).map { it.map(::NoteListItem) }
-
-  override fun pages(): Flowable<List<Page>> = notes()
-
-  override fun deletePages(pagesToDelete: List<Page>) =
-    deleteNotes(pagesToDelete as List<NoteListItem>)
-
-  fun saveNote(noteItem: NoteListItem) {
-    box.put(NotesEntity(noteItem))
-  }
-
-  fun deleteNotes(noteList: List<NoteListItem>) {
-    box.remove(noteList.map(::NotesEntity))
-  }
-
-  fun deleteNote(noteUniqueKey: String) {
-    box.query {
-      equal(NotesEntity_.noteTitle, noteUniqueKey)
-    }.remove()
-  }
-}
+// @Deprecated("Replaced with the Room")
+// class NewNoteDao @Inject constructor(val box: Box<NotesEntity>) : PageDao {
+//   fun notes(): Flowable<List<Page>> = box.asFlowable(
+//     box.query {
+//       order(NotesEntity_.noteTitle)
+//     }
+//   ).map { it.map(::NoteListItem) }
+//
+//   override fun pages(): Flowable<List<Page>> = notes()
+//
+//   override fun deletePages(pagesToDelete: List<Page>) =
+//     deleteNotes(pagesToDelete as List<NoteListItem>)
+//
+//   fun saveNote(noteItem: NoteListItem) {
+//     box.put(NotesEntity(noteItem))
+//   }
+//
+//   fun deleteNotes(noteList: List<NoteListItem>) {
+//     box.remove(noteList.map(::NotesEntity))
+//   }
+//
+//   fun deleteNote(noteUniqueKey: String) {
+//     box.query {
+//       equal(NotesEntity_.noteTitle, noteUniqueKey)
+//     }.remove()
+//   }
+// }

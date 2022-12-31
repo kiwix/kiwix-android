@@ -26,8 +26,8 @@ import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
-import org.kiwix.kiwixmobile.core.dao.NewNoteDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchRoomDao
+import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
 import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
@@ -55,7 +55,7 @@ class Repository @Inject internal constructor(
   private val bookDao: NewBookDao,
   private val bookmarksDao: NewBookmarksDao,
   private val historyDao: HistoryDao,
-  private val notesDao: NewNoteDao,
+  private val notesDao: NotesRoomDao,
   private val languageDao: NewLanguagesDao,
   private val recentSearchDao: NewRecentSearchRoomDao,
   private val zimReaderContainer: ZimReaderContainer
