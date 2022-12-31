@@ -23,20 +23,30 @@ import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
+import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
+import org.kiwix.kiwixmobile.core.dao.StringToLocalConverterDao
+import org.kiwix.kiwixmobile.core.dao.entities.LanguageRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
 
 @Suppress("UnnecessaryAbstractClass")
-@Database(entities = [RecentSearchRoomEntity::class, NotesRoomEntity::class], version = 1)
+@Database(
+  entities = [RecentSearchRoomEntity::class, NotesRoomEntity::class, LanguageRoomEntity::class],
+  version = 2
+)
+@TypeConverters(StringToLocalConverterDao::class)
 abstract class KiwixRoomDatabase : RoomDatabase() {
   abstract fun newRecentSearchRoomDao(): NewRecentSearchRoomDao
   abstract fun noteRoomDao(): NotesRoomDao
+  abstract fun languageRoomDao(): LanguageRoomDao
 
   companion object {
     private var db: KiwixRoomDatabase? = null

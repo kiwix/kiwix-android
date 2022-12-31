@@ -23,6 +23,7 @@ import io.reactivex.Flowable
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
@@ -56,7 +57,7 @@ class Repository @Inject internal constructor(
   private val bookmarksDao: NewBookmarksDao,
   private val historyDao: HistoryDao,
   private val notesDao: NotesRoomDao,
-  private val languageDao: NewLanguagesDao,
+  private val languageDao: LanguageRoomDao,
   private val recentSearchDao: NewRecentSearchRoomDao,
   private val zimReaderContainer: ZimReaderContainer
 ) : DataSource {

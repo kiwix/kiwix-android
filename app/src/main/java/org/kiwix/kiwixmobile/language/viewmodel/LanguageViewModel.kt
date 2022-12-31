@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
@@ -35,7 +36,7 @@ import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
 import javax.inject.Inject
 
 class LanguageViewModel @Inject constructor(
-  private val languageDao: NewLanguagesDao
+  private val languageDao: LanguageRoomDao
 ) : ViewModel() {
 
   val state = MutableLiveData<State>().apply { value = Loading }

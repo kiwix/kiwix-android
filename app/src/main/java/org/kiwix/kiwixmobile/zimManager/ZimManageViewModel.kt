@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.zimManager
 
 import android.app.Application
 import android.net.ConnectivityManager
+import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,6 +36,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.data.DataSource
@@ -80,7 +82,7 @@ import javax.inject.Inject
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: FetchDownloadDao,
   private val bookDao: NewBookDao,
-  private val languageDao: NewLanguagesDao,
+  private val languageDao: LanguageRoomDao,
   private val storageObserver: StorageObserver,
   private val kiwixService: KiwixService,
   private val context: Application,
@@ -152,7 +154,9 @@ class ZimManageViewModel @Inject constructor(
       updateNetworkStates(),
       requestsAndConnectivtyChangesToLibraryRequests(networkLibrary),
       fileSelectActions()
-    )
+    ).also {
+      Log.d("gouriz", " languages ${languages.toList()}")
+    }
   }
 
   private fun fileSelectActions() = fileSelectActions.subscribe({
