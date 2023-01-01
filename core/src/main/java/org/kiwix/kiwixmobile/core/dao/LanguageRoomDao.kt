@@ -35,16 +35,18 @@ abstract class LanguageRoomDao {
   abstract fun languageEntityList(): Flowable<List<LanguageRoomEntity>>
 
   fun languages(): Flowable<List<Language>> = languageEntityList().map {
+    Log.d("gouri", "language entity list $it and size ${it.size}")
     it.map(LanguageRoomEntity::toLanguageModel)
   }
+
   @Query("DELETE FROM LanguageRoomEntity")
   abstract fun deleteLanguages()
-
 
   @Insert
   abstract fun insert(languageRoomEntity: LanguageRoomEntity)
 
-  fun insert(languages: List<Language>) {
+  @Transaction
+  open fun insert(languages: List<Language>) {
     deleteLanguages()
     languages.map {
       insert(LanguageRoomEntity(it))
