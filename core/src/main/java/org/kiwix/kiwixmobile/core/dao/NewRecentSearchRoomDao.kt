@@ -21,8 +21,11 @@ package org.kiwix.kiwixmobile.core.dao
 import androidx.room.Dao
 import androidx.room.Query
 import io.objectbox.Box
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
@@ -31,20 +34,37 @@ import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 abstract class NewRecentSearchRoomDao {
 
   @Query(
-    "SELECT * FROM RecentSearchRoomEntity WHERE id LIKE :zimId ORDER BY" +
+    "SELECT * FROM RecentSearchRoomEntity WHERE zimId LIKE :zimId ORDER BY" +
       " RecentSearchRoomEntity.id DESC"
   )
   abstract fun search(zimId: String?): Flow<List<RecentSearchRoomEntity>>
 
-  fun recentSearches(zimId: String?): Flow<List<SearchListItem.RecentSearchListItem>> {
-    return search(zimId = zimId).map { searchEntities ->
-      searchEntities.distinctBy(RecentSearchRoomEntity::searchTerm).take(NUM_RECENT_RESULTS)
-        .map { searchEntity -> SearchListItem.RecentSearchListItem(searchEntity.searchTerm) }
+  @Query(
+    "SELECT * FROM RecentSearchRoomEntity"
+  )
+  abstract fun fullSearch(): Flow<List<RecentSearchRoomEntity>>
+
+  fun recentSearches(zimId: String? = ""): Flow<List<SearchListItem.RecentSearchListItem>> {
+    return if (zimId != "") {
+      search(zimId).map { searchEntities ->
+        searchEntities.distinctBy(RecentSearchRoomEntity::searchTerm).take(NUM_RECENT_RESULTS)
+          .map { searchEntity -> SearchListItem.RecentSearchListItem(searchEntity.searchTerm) }
+      }
+    } else {
+      return fullSearch().map { searchEntities ->
+        searchEntities.distinctBy(RecentSearchRoomEntity::searchTerm)
+          .take(NUM_RECENT_RESULTS)
+          .map { searchEntity ->
+            org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem(
+              searchEntity.searchTerm
+            )
+          }
+      }
     }
   }
 
   @Query("INSERT INTO RecentSearchRoomEntity(searchTerm, zimId) VALUES (:title , :id)")
-  abstract fun saveSearch(title: String, id: Long)
+  abstract fun saveSearch(title: String, id: String)
 
   @Query("DELETE FROM RecentSearchRoomEntity WHERE searchTerm=:searchTerm")
   abstract fun deleteSearchString(searchTerm: String)
@@ -57,7 +77,9 @@ abstract class NewRecentSearchRoomDao {
   ) {
     val searchRoomEntityList = box.all
     searchRoomEntityList.forEach {
-      saveSearch(it.searchTerm, it.id)
+      CoroutineScope(Dispatchers.IO).launch {
+        saveSearch(it.searchTerm, it.id.toString())
+      }
     }
   }
 

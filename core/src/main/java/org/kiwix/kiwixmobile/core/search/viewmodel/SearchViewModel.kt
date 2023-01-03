@@ -33,7 +33,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
@@ -155,7 +154,8 @@ class SearchViewModel @Inject constructor(
       SaveSearchToRecents(
         recentSearchDao,
         searchListItem,
-        zimReaderContainer.id
+        zimReaderContainer.id,
+        viewModelScope
       )
     ).isSuccess
     _effects.trySendBlocking(OpenSearchItem(searchListItem, openInNewTab))
