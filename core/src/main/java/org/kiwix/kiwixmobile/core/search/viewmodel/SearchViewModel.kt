@@ -138,7 +138,13 @@ class SearchViewModel @Inject constructor(
   }
 
   private fun deleteItemAndShowToast(it: ConfirmedDelete) {
-    _effects.trySend(DeleteRecentSearch(it.searchListItem, recentSearchDao)).isSuccess
+    _effects.trySend(
+      DeleteRecentSearch(
+        it.searchListItem,
+        recentSearchDao,
+        viewModelScope
+      )
+    ).isSuccess
     _effects.trySend(ShowToast(R.string.delete_specific_search_toast)).isSuccess
   }
 

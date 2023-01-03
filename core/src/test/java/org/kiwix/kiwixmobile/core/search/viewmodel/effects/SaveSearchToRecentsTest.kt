@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 package org.kiwix.kiwixmobile.core.search.viewmodel.effects
-=======
-package org.kiwix.kiwixmobile.core.search.viewmodel.effects /*
->>>>>>> 3e20ea895 (lint fix and coverage test fix)
 //  * Kiwix Android
 //  * Copyright (c) 2020 Kiwix <android.kiwix.org>
 //  * This program is free software: you can redistribute it and/or modify
