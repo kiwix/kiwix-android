@@ -18,10 +18,12 @@
 package org.kiwix.kiwixmobile.zimManager.libraryView.adapter
 
 import android.view.ViewGroup
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.adapter.AbsDelegateAdapter
-import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
+import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.viewBinding
 import org.kiwix.kiwixmobile.core.utils.BookUtils
+import org.kiwix.kiwixmobile.databinding.ItemDownloadBinding
+import org.kiwix.kiwixmobile.databinding.ItemLibraryBinding
+import org.kiwix.kiwixmobile.databinding.LibraryDividerBinding
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.DividerItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.LibraryDownloadItem
@@ -40,7 +42,7 @@ sealed class LibraryDelegate<I : LibraryListItem, out VH : LibraryViewHolder<I>>
 
     override fun createViewHolder(parent: ViewGroup) =
       LibraryBookViewHolder(
-        parent.inflate(R.layout.item_library, false),
+        parent.viewBinding(ItemLibraryBinding::inflate, false),
         bookUtils,
         clickAction
       )
@@ -51,7 +53,10 @@ sealed class LibraryDelegate<I : LibraryListItem, out VH : LibraryViewHolder<I>>
     override val itemClass = LibraryDownloadItem::class.java
 
     override fun createViewHolder(parent: ViewGroup) =
-      DownloadViewHolder(parent.inflate(R.layout.item_download, false), clickAction)
+      DownloadViewHolder(
+        parent.viewBinding(ItemDownloadBinding::inflate, false),
+        clickAction
+      )
   }
 
   object DividerDelegate : LibraryDelegate<DividerItem, LibraryDividerViewHolder>() {
@@ -59,6 +64,8 @@ sealed class LibraryDelegate<I : LibraryListItem, out VH : LibraryViewHolder<I>>
     override val itemClass = DividerItem::class.java
 
     override fun createViewHolder(parent: ViewGroup) =
-      LibraryDividerViewHolder(parent.inflate(R.layout.library_divider, false))
+      LibraryDividerViewHolder(
+        parent.viewBinding(LibraryDividerBinding::inflate, false)
+      )
   }
 }

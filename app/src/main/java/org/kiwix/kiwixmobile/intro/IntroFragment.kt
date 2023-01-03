@@ -23,18 +23,16 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
-import kotlinx.android.synthetic.main.fragment_intro.get_started
-import kotlinx.android.synthetic.main.fragment_intro.tab_indicator
-import kotlinx.android.synthetic.main.fragment_intro.view_pager
-import kotlinx.android.synthetic.main.item_intro_2.airplane
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.databinding.FragmentIntroBinding
 import org.kiwix.kiwixmobile.zimManager.SimplePageChangeListener
 import java.util.Timer
 import java.util.TimerTask
@@ -50,6 +48,7 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
 
   private val handler = Handler(Looper.getMainLooper())
   private var timer: Timer? = Timer()
+  private var fragmentIntroBinding: FragmentIntroBinding? = null
 
   @Inject
   internal lateinit var presenter: IntroContract.Presenter
@@ -62,22 +61,24 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    get_started.setOnClickListener { navigateToLibrary() }
-    views = arrayOf(
-      layoutInflater.inflate(R.layout.item_intro_1, view_pager, false),
-      layoutInflater.inflate(R.layout.item_intro_2, view_pager, false)
-    )
-    view_pager.run {
-      adapter = IntroPagerAdapter(views)
-      simplePageChangeListener?.let(::addOnPageChangeListener)
+    fragmentIntroBinding?.getStarted?.setOnClickListener { navigateToLibrary() }
+    fragmentIntroBinding?.viewPager?.let { viewPager ->
+      views = arrayOf(
+        layoutInflater.inflate(R.layout.item_intro_1, viewPager, false),
+        layoutInflater.inflate(R.layout.item_intro_2, viewPager, false)
+      )
+      viewPager.run {
+        adapter = IntroPagerAdapter(views)
+        simplePageChangeListener?.let(::addOnPageChangeListener)
+      }
+      fragmentIntroBinding?.tabIndicator?.setViewPager(viewPager)
     }
-    tab_indicator.setViewPager(view_pager)
     timer?.schedule(
       object : TimerTask() {
         override fun run() {
           handler.post {
             if (currentPage == views.size) currentPage = 0
-            view_pager.setCurrentItem(currentPage++, true)
+            fragmentIntroBinding?.viewPager?.setCurrentItem(currentPage++, true)
           }
         }
       },
@@ -93,7 +94,10 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View = inflater.inflate(R.layout.fragment_intro, container, false)
+  ): View? {
+    fragmentIntroBinding = FragmentIntroBinding.inflate(inflater, container, false)
+    return fragmentIntroBinding?.root
+  }
 
   override fun onDestroyView() {
     super.onDestroyView()
@@ -105,6 +109,7 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
     }
     views = emptyArray()
     simplePageChangeListener = null
+    fragmentIntroBinding = null
   }
 
   private fun navigateToLibrary() {
@@ -114,9 +119,7 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
   }
 
   private fun updateView(position: Int) {
-    if (airplane == null) {
-      return
-    }
+    val airplane = views[1].findViewById<ImageView>(R.id.airplane) ?: return
     airplane.isVisible = position == 1
     if (position == 1) {
       airplane.animate().translationX(airplane.width.toFloat()).duration = animationDuration

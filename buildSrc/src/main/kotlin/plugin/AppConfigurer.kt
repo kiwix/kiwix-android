@@ -50,9 +50,7 @@ class AppConfigurer {
           )
         }
       }
-      dexOptions {
-        javaMaxHeapSize = "4g"
-      }
+
       val abiCodes = mapOf("arm64-v8a" to 6, "x86" to 3, "x86_64" to 4, "armeabi-v7a" to 5)
       splits {
         abi {

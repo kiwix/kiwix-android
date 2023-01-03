@@ -62,13 +62,14 @@ internal class HistoryDaoTest {
     val queryBuilder: QueryBuilder<HistoryEntity> = mockk()
     every { box.query() } returns queryBuilder
     every {
-      queryBuilder.equal(HistoryEntity_.historyUrl, "")
+      queryBuilder.equal(HistoryEntity_.historyUrl, "", QueryBuilder.StringOrder.CASE_INSENSITIVE)
     } returns queryBuilder
     every { queryBuilder.and() } returns queryBuilder
     every {
       queryBuilder.equal(
         HistoryEntity_.dateString,
-        ""
+        "",
+        QueryBuilder.StringOrder.CASE_INSENSITIVE
       )
     } returns queryBuilder
     val query: Query<HistoryEntity> = mockk(relaxed = true)

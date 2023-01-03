@@ -24,17 +24,9 @@ import android.os.Bundle
 import android.os.Process
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import kotlinx.android.synthetic.main.activity_kiwix_error.allowCrash
-import kotlinx.android.synthetic.main.activity_kiwix_error.allowDeviceDetails
-import kotlinx.android.synthetic.main.activity_kiwix_error.allowFileSystemDetails
-import kotlinx.android.synthetic.main.activity_kiwix_error.allowLanguage
-import kotlinx.android.synthetic.main.activity_kiwix_error.allowLogs
-import kotlinx.android.synthetic.main.activity_kiwix_error.allowZims
-import kotlinx.android.synthetic.main.activity_kiwix_error.reportButton
-import kotlinx.android.synthetic.main.activity_kiwix_error.restartButton
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
+import org.kiwix.kiwixmobile.core.databinding.ActivityKiwixErrorBinding
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
@@ -63,9 +55,12 @@ open class ErrorActivity : BaseActivity() {
 
   private var exception: Throwable? = null
 
+  var activityKiwixErrorBinding: ActivityKiwixErrorBinding? = null
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_kiwix_error)
+    activityKiwixErrorBinding = ActivityKiwixErrorBinding.inflate(layoutInflater)
+    setContentView(activityKiwixErrorBinding!!.root)
     val extras = intent.extras
     exception = if (extras != null && safeContains(extras)) {
       extras.getSerializable(EXCEPTION_KEY) as Throwable
@@ -73,11 +68,16 @@ open class ErrorActivity : BaseActivity() {
       null
     }
     setupReportButton()
-    restartButton.setOnClickListener { restartApp() }
+    activityKiwixErrorBinding?.restartButton?.setOnClickListener { restartApp() }
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    activityKiwixErrorBinding = null
   }
 
   private fun setupReportButton() {
-    reportButton.setOnClickListener {
+    activityKiwixErrorBinding?.reportButton?.setOnClickListener {
       startActivityForResult(
         Intent.createChooser(emailIntent(), "Send email..."), 1
       )
@@ -94,7 +94,7 @@ open class ErrorActivity : BaseActivity() {
       )
       putExtra(Intent.EXTRA_SUBJECT, subject)
       putExtra(Intent.EXTRA_TEXT, emailBody)
-      if (allowLogs.isChecked) {
+      if (activityKiwixErrorBinding?.allowLogs?.isChecked == true) {
         val file = fileLogger.writeLogFile(this@ErrorActivity)
         file.appendText(emailBody)
         val path =
@@ -112,11 +112,11 @@ open class ErrorActivity : BaseActivity() {
   private fun buildBody(): String = """ 
   $initialBody
     
-  ${if (allowCrash.isChecked && exception != null) exceptionDetails() else ""}
-  ${if (allowZims.isChecked) zimFiles() else ""}
-  ${if (allowLanguage.isChecked) languageLocale() else ""}
-  ${if (allowDeviceDetails.isChecked) deviceDetails() else ""}
-  ${if (allowFileSystemDetails.isChecked) systemDetails() else ""} 
+  ${if (activityKiwixErrorBinding?.allowCrash?.isChecked == true && exception != null) exceptionDetails() else ""}
+  ${if (activityKiwixErrorBinding?.allowZims?.isChecked == true) zimFiles() else ""}
+  ${if (activityKiwixErrorBinding?.allowLanguage?.isChecked == true) languageLocale() else ""}
+  ${if (activityKiwixErrorBinding?.allowDeviceDetails?.isChecked == true) deviceDetails() else ""}
+  ${if (activityKiwixErrorBinding?.allowFileSystemDetails?.isChecked == true) systemDetails() else ""} 
   
   """.trimIndent()
 

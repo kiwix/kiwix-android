@@ -19,17 +19,9 @@
 package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter
 
 import android.view.View
-import kotlinx.android.synthetic.main.header_language.header_language
-import kotlinx.android.synthetic.main.item_book.itemBookCheckbox
-import kotlinx.android.synthetic.main.item_book.item_book_article_count
-import kotlinx.android.synthetic.main.item_book.item_book_clickable_area
-import kotlinx.android.synthetic.main.item_book.item_book_date
-import kotlinx.android.synthetic.main.item_book.item_book_description
-import kotlinx.android.synthetic.main.item_book.item_book_icon
-import kotlinx.android.synthetic.main.item_book.item_book_size
-import kotlinx.android.synthetic.main.item_book.item_book_title
-import kotlinx.android.synthetic.main.item_book.tags
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
+import org.kiwix.kiwixmobile.core.databinding.HeaderLanguageBinding
+import org.kiwix.kiwixmobile.core.databinding.ItemBookBinding
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.zim_manager.KiloByte
@@ -44,11 +36,11 @@ sealed class BookOnDiskViewHolder<in T : BooksOnDiskListItem>(containerView: Vie
   BaseViewHolder<T>(containerView) {
 
   class BookViewHolder(
-    containerView: View,
+    private val itemBookBinding: ItemBookBinding,
     private val clickAction: ((BookOnDisk) -> Unit)?,
     private val longClickAction: ((BookOnDisk) -> Unit)?,
     private val multiSelectAction: ((BookOnDisk) -> Unit)?
-  ) : BookOnDiskViewHolder<BookOnDisk>(containerView) {
+  ) : BookOnDiskViewHolder<BookOnDisk>(itemBookBinding.root) {
 
     override fun bind(item: BookOnDisk) {
     }
@@ -58,31 +50,33 @@ sealed class BookOnDiskViewHolder<in T : BooksOnDiskListItem>(containerView: Vie
       selectionMode: SelectionMode
     ) {
       val book = item.book
-      item_book_title.text = book.title
-      item_book_date.text = book.date
-      item_book_description.text = book.description
-      item_book_size.text = (KiloByte(book.size).humanReadable)
+      itemBookBinding.itemBookTitle.text = book.title
+      itemBookBinding.itemBookDate.text = book.date
+      itemBookBinding.itemBookDescription.text = book.description
+      itemBookBinding.itemBookSize.text = (KiloByte(book.size).humanReadable)
       book.articleCount?.let {
-        item_book_article_count.text =
+        itemBookBinding.itemBookArticleCount.text =
           ArticleCount(it).toHumanReadable(containerView.context)
       }
 
-      item_book_icon.setBitmap(Base64String(book.favicon))
+      itemBookBinding.itemBookIcon.setBitmap(Base64String(book.favicon))
 
-      tags.visibility = if (item.tags.isEmpty()) View.GONE else View.VISIBLE
-      tags.render(item.tags)
+      itemBookBinding.tags.visibility = if (item.tags.isEmpty()) View.GONE else View.VISIBLE
+      itemBookBinding.tags.render(item.tags)
 
-      itemBookCheckbox.isChecked = item.isSelected
+      itemBookBinding.itemBookCheckbox.isChecked = item.isSelected
       when (selectionMode) {
         MULTI -> {
-          itemBookCheckbox.visibility = View.VISIBLE
-          item_book_clickable_area.setOnClickListener { multiSelectAction?.invoke(item) }
-          item_book_clickable_area.setOnLongClickListener(null)
+          itemBookBinding.itemBookCheckbox.visibility = View.VISIBLE
+          itemBookBinding.itemBookClickableArea.setOnClickListener {
+            multiSelectAction?.invoke(item)
+          }
+          itemBookBinding.itemBookClickableArea.setOnLongClickListener(null)
         }
         NORMAL -> {
-          itemBookCheckbox.visibility = View.GONE
-          item_book_clickable_area.setOnClickListener { clickAction?.invoke(item) }
-          item_book_clickable_area.setOnLongClickListener {
+          itemBookBinding.itemBookCheckbox.visibility = View.GONE
+          itemBookBinding.itemBookClickableArea.setOnClickListener { clickAction?.invoke(item) }
+          itemBookBinding.itemBookClickableArea.setOnLongClickListener {
             longClickAction?.invoke(item)
             return@setOnLongClickListener true
           }
@@ -92,10 +86,10 @@ sealed class BookOnDiskViewHolder<in T : BooksOnDiskListItem>(containerView: Vie
   }
 }
 
-class LanguageItemViewHolder(containerView: View) :
-  BookOnDiskViewHolder<LanguageItem>(containerView) {
+class LanguageItemViewHolder(private val headerLanguageBinding: HeaderLanguageBinding) :
+  BookOnDiskViewHolder<LanguageItem>(headerLanguageBinding.root) {
 
   override fun bind(item: LanguageItem) {
-    header_language.text = item.text
+    headerLanguageBinding.headerLanguage.text = item.text
   }
 }

@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.children
+import androidx.viewbinding.ViewBinding
 
 object ViewGroupExtensions {
 
@@ -30,4 +31,10 @@ object ViewGroupExtensions {
 
   @JvmStatic
   fun ViewGroup.findFirstTextView() = children.firstOrNull { it is TextView }
+
+  fun <T : ViewBinding> ViewGroup.viewBinding(
+    bindingInflater: (LayoutInflater, ViewGroup, Boolean) -> T,
+    attachToParent: Boolean = true
+  ) =
+    bindingInflater.invoke(LayoutInflater.from(context), this, attachToParent)
 }

@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.dao
 
 import io.objectbox.Box
 import io.objectbox.kotlin.query
+import io.objectbox.query.QueryBuilder
 import kotlinx.coroutines.flow.map
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity_
@@ -32,7 +33,11 @@ class NewRecentSearchDao @Inject constructor(
 ) {
   fun recentSearches(zimId: String?) = flowBuilder.buildCallbackFlow(
     box.query {
-      equal(RecentSearchEntity_.zimId, zimId ?: "")
+      equal(
+        RecentSearchEntity_.zimId,
+        zimId ?: "",
+        QueryBuilder.StringOrder.CASE_INSENSITIVE
+      )
       orderDesc(RecentSearchEntity_.id)
     }
   ).map { searchEntities ->
@@ -48,7 +53,11 @@ class NewRecentSearchDao @Inject constructor(
   fun deleteSearchString(searchTerm: String) {
     box
       .query {
-        equal(RecentSearchEntity_.searchTerm, searchTerm)
+        equal(
+          RecentSearchEntity_.searchTerm,
+          searchTerm,
+          QueryBuilder.StringOrder.CASE_INSENSITIVE
+        )
       }
       .remove()
   }

@@ -45,18 +45,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_destination_library.file_management_no_files
-import kotlinx.android.synthetic.main.fragment_destination_library.go_to_downloads_button_no_files
-import kotlinx.android.synthetic.main.fragment_destination_library.select_file
-import kotlinx.android.synthetic.main.fragment_destination_library.zim_swiperefresh
-import kotlinx.android.synthetic.main.fragment_destination_library.zimfilelist
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
-import org.kiwix.kiwixmobile.core.extensions.setParentFragmentsBottomMarginTo
+import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
+import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.navigateToSettings
@@ -70,6 +66,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
+import org.kiwix.kiwixmobile.databinding.FragmentDestinationLibraryBinding
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
@@ -89,6 +86,7 @@ class LocalLibraryFragment : BaseFragment() {
 
   private var actionMode: ActionMode? = null
   private val disposable = CompositeDisposable()
+  private var fragmentDestinationLibraryBinding: FragmentDestinationLibraryBinding? = null
 
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
@@ -117,41 +115,50 @@ class LocalLibraryFragment : BaseFragment() {
   ): View? {
     LanguageUtils(requireActivity())
       .changeFont(requireActivity().layoutInflater, sharedPreferenceUtil)
-    val root = inflater.inflate(R.layout.fragment_destination_library, container, false)
-    val toolbar = root.findViewById<Toolbar>(R.id.toolbar)
+    fragmentDestinationLibraryBinding = FragmentDestinationLibraryBinding.inflate(
+      inflater,
+      container,
+      false
+    )
+    val toolbar = fragmentDestinationLibraryBinding?.root?.findViewById<Toolbar>(R.id.toolbar)
     val activity = activity as CoreMainActivity
     activity.setSupportActionBar(toolbar)
     activity.supportActionBar?.apply {
       setDisplayHomeAsUpEnabled(true)
       setTitle(R.string.library)
     }
-    activity.setupDrawerToggle(toolbar)
+    if (toolbar != null) {
+      activity.setupDrawerToggle(toolbar)
+    }
     setHasOptionsMenu(true)
 
-    return root
+    return fragmentDestinationLibraryBinding?.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    zim_swiperefresh.setOnRefreshListener(::requestFileSystemCheck)
-    zimfilelist.run {
+    fragmentDestinationLibraryBinding?.zimSwiperefresh?.setOnRefreshListener(
+      ::requestFileSystemCheck
+    )
+    fragmentDestinationLibraryBinding?.zimfilelist?.run {
       adapter = booksOnDiskAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
     zimManageViewModel.fileSelectListStates.observe(viewLifecycleOwner, Observer(::render))
       .also {
-        setParentFragmentsBottomMarginTo(0)
+        coreMainActivity.navHostContainer
+          .setBottomMarginToFragmentContainerView(0)
       }
     disposable.add(sideEffects())
     zimManageViewModel.deviceListIsRefreshing.observe(viewLifecycleOwner) {
-      zim_swiperefresh.isRefreshing = it!!
+      fragmentDestinationLibraryBinding?.zimSwiperefresh?.isRefreshing = it!!
     }
     if (savedInstanceState != null && savedInstanceState.getBoolean(WAS_IN_ACTION_MODE)) {
       zimManageViewModel.fileSelectActions.offer(FileSelectActions.RestartActionMode)
     }
 
-    go_to_downloads_button_no_files.setOnClickListener {
+    fragmentDestinationLibraryBinding?.goToDownloadsButtonNoFiles?.setOnClickListener {
       offerAction(FileSelectActions.UserClickedDownloadBooksButton)
     }
     hideFilePickerButton()
@@ -160,11 +167,11 @@ class LocalLibraryFragment : BaseFragment() {
   private fun hideFilePickerButton() {
     if (sharedPreferenceUtil.isPlayStoreBuild) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        select_file.visibility = View.GONE
+        fragmentDestinationLibraryBinding?.selectFile?.visibility = View.GONE
       }
     }
 
-    select_file.setOnClickListener {
+    fragmentDestinationLibraryBinding?.selectFile?.setOnClickListener {
       showFileChooser()
     }
   }
@@ -254,7 +261,8 @@ class LocalLibraryFragment : BaseFragment() {
   override fun onDestroyView() {
     super.onDestroyView()
     actionMode = null
-    zimfilelist.adapter = null
+    fragmentDestinationLibraryBinding?.zimfilelist?.adapter = null
+    fragmentDestinationLibraryBinding = null
     disposable.clear()
   }
 
@@ -277,8 +285,15 @@ class LocalLibraryFragment : BaseFragment() {
       actionMode?.finish()
     }
     actionMode?.title = String.format("%d", state.selectedBooks.size)
-    file_management_no_files.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
-    go_to_downloads_button_no_files.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
+    fragmentDestinationLibraryBinding?.apply {
+      if (items.isEmpty()) {
+        fileManagementNoFiles.visibility = View.VISIBLE
+        goToDownloadsButtonNoFiles.visibility = View.VISIBLE
+      } else {
+        fileManagementNoFiles.visibility = View.GONE
+        goToDownloadsButtonNoFiles.visibility = View.GONE
+      }
+    }
   }
 
   override fun onSaveInstanceState(outState: Bundle) {

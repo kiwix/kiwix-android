@@ -19,9 +19,10 @@ package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.AbsDelegateAdapter
-import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
+import org.kiwix.kiwixmobile.core.databinding.HeaderLanguageBinding
+import org.kiwix.kiwixmobile.core.databinding.ItemBookBinding
+import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.viewBinding
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
@@ -52,7 +53,7 @@ sealed class BookOnDiskDelegate<I : BooksOnDiskListItem, out VH : BookOnDiskView
 
     override fun createViewHolder(parent: ViewGroup) =
       BookViewHolder(
-        parent.inflate(R.layout.item_book, false),
+        parent.viewBinding(ItemBookBinding::inflate, false),
         clickAction,
         longClickAction,
         multiSelectAction
@@ -64,6 +65,8 @@ sealed class BookOnDiskDelegate<I : BooksOnDiskListItem, out VH : BookOnDiskView
     override val itemClass = LanguageItem::class.java
 
     override fun createViewHolder(parent: ViewGroup) =
-      LanguageItemViewHolder(parent.inflate(R.layout.header_language, false))
+      LanguageItemViewHolder(
+        parent.viewBinding(HeaderLanguageBinding::inflate, false)
+      )
   }
 }

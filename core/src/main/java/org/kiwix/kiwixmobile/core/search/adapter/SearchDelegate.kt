@@ -19,9 +19,9 @@
 package org.kiwix.kiwixmobile.core.search.adapter
 
 import android.view.ViewGroup
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.AbsDelegateAdapter
-import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
+import org.kiwix.kiwixmobile.core.databinding.ListItemSearchBinding
+import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.viewBinding
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultListItem
 import org.kiwix.kiwixmobile.core.search.adapter.SearchViewHolder.RecentSearchViewHolder
@@ -39,7 +39,7 @@ sealed class SearchDelegate<I : SearchListItem, out VH : SearchViewHolder<I>> :
 
     override fun createViewHolder(parent: ViewGroup) =
       RecentSearchViewHolder(
-        parent.inflate(R.layout.list_item_search, false),
+        parent.viewBinding(ListItemSearchBinding::inflate, false),
         onClickListener,
         onClickListenerNewTab,
         onLongClickListener
@@ -54,7 +54,7 @@ sealed class SearchDelegate<I : SearchListItem, out VH : SearchViewHolder<I>> :
 
     override fun createViewHolder(parent: ViewGroup) =
       ZimSearchResultViewHolder(
-        parent.inflate(R.layout.list_item_search, false),
+        parent.viewBinding(ListItemSearchBinding::inflate, false),
         onClickListener,
         onClickListenerNewTab
       )

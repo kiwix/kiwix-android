@@ -29,13 +29,14 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
@@ -116,7 +117,7 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `SearchState combines sources from inputs`() = runBlockingTest {
+    fun `SearchState combines sources from inputs`() = runTest {
       val item = ZimSearchResultListItem("")
       val searchTerm = "searchTerm"
       val searchOrigin = FromWebView
@@ -232,13 +233,13 @@ internal class SearchViewModelTest {
     ) {
       viewModel.effects
         .test(this)
-        .also { viewModel.actions.offer(action) }
+        .also { viewModel.actions.trySend(action).isSuccess }
         .assertValues(*effects)
         .finish()
     }
   }
 
-  private fun TestCoroutineScope.emissionOf(
+  private fun TestScope.emissionOf(
     searchTerm: String,
     searchResults: List<ZimSearchResultListItem>,
     databaseResults: List<RecentSearchListItem>,
@@ -248,10 +249,13 @@ internal class SearchViewModelTest {
     coEvery {
       searchResultGenerator.generateSearchResults(searchTerm, zimFileReader)
     } returns searchResults
-    viewModel.actions.offer(Filter(searchTerm))
-    recentsFromDb.offer(databaseResults)
-    viewModel.actions.offer(ScreenWasStartedFrom(searchOrigin))
-    advanceTimeBy(500)
+    viewModel.actions.trySend(Filter(searchTerm)).isSuccess
+    recentsFromDb.trySend(databaseResults).isSuccess
+    viewModel.actions.trySend(ScreenWasStartedFrom(searchOrigin)).isSuccess
+    testScheduler.apply {
+      advanceTimeBy(500)
+      runCurrent()
+    }
   }
 }
 

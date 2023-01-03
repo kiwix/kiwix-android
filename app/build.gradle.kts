@@ -39,15 +39,15 @@ val apkPrefix get() = System.getenv("TAG") ?: "dev"
 android {
 
   defaultConfig {
-    base.archivesBaseName = apkPrefix
+    base.archivesName.set(apkPrefix)
     resValue("string", "app_name", "Kiwix")
     resValue("string", "app_search_string", "Search Kiwix")
     versionCode = generateVersionCode()
     versionName = generateVersionName()
     manifestPlaceholders["permission"] = "android.permission.MANAGE_EXTERNAL_STORAGE"
   }
-  lintOptions {
-    isCheckDependencies = true
+  lint {
+    checkDependencies = true
   }
 
   buildTypes {
@@ -65,8 +65,9 @@ android {
       }
     }
     create("playStore") {
+      manifestPlaceholders += mapOf()
       initWith(getByName("release"))
-      setMatchingFallbacks("release")
+      matchingFallbacks += "release"
       buildConfigField("boolean", "IS_PLAYSTORE", "true")
       manifestPlaceholders["permission"] = "android.permission.placeholder"
     }

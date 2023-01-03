@@ -19,22 +19,19 @@
 package org.kiwix.kiwixmobile.language.adapter
 
 import android.view.View
-import kotlinx.android.synthetic.main.header_date.header_date
-import kotlinx.android.synthetic.main.item_language.item_language_books_count
-import kotlinx.android.synthetic.main.item_language.item_language_checkbox
-import kotlinx.android.synthetic.main.item_language.item_language_clickable_area
-import kotlinx.android.synthetic.main.item_language.item_language_localized_name
-import kotlinx.android.synthetic.main.item_language.item_language_name
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
+import org.kiwix.kiwixmobile.databinding.HeaderDateBinding
+import org.kiwix.kiwixmobile.databinding.ItemLanguageBinding
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.HeaderItem
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.LanguageItem
 
 sealed class LanguageListViewHolder<in T : LanguageListItem>(override val containerView: View) :
   BaseViewHolder<T>(containerView) {
-  class HeaderViewHolder(view: View) : LanguageListViewHolder<HeaderItem>(view) {
+  class HeaderViewHolder(private val headerDateBinding: HeaderDateBinding) :
+    LanguageListViewHolder<HeaderItem>(headerDateBinding.root) {
     override fun bind(item: HeaderItem) {
-      header_date.setText(
+      headerDateBinding.headerDate.setText(
         if (item.id == HeaderItem.SELECTED) R.string.your_languages
         else R.string.other_languages
       )
@@ -42,17 +39,17 @@ sealed class LanguageListViewHolder<in T : LanguageListItem>(override val contai
   }
 
   class LanguageViewHolder(
-    view: View,
+    private val itemLanguageBinding: ItemLanguageBinding,
     val clickAction: (LanguageItem) -> Unit
-  ) : LanguageListViewHolder<LanguageItem>(view) {
+  ) : LanguageListViewHolder<LanguageItem>(itemLanguageBinding.root) {
     override fun bind(item: LanguageItem) {
       val language = item.language
-      item_language_name.text = language.language
-      item_language_localized_name.text = language.languageLocalized
-      item_language_books_count.text = containerView.context
+      itemLanguageBinding.itemLanguageName.text = language.language
+      itemLanguageBinding.itemLanguageLocalizedName.text = language.languageLocalized
+      itemLanguageBinding.itemLanguageBooksCount.text = containerView.context
         .getString(R.string.books_count, language.occurencesOfLanguage)
-      item_language_checkbox.isChecked = language.active
-      item_language_clickable_area.setOnClickListener { clickAction(item) }
+      itemLanguageBinding.itemLanguageCheckbox.isChecked = language.active
+      itemLanguageBinding.itemLanguageClickableArea.setOnClickListener { clickAction(item) }
     }
   }
 }

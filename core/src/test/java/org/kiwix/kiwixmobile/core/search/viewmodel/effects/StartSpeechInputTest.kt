@@ -42,7 +42,7 @@ internal class StartSpeechInputTest {
     val activity = mockk<AppCompatActivity>(relaxed = true)
     every { activity.startActivityForResult(any(), any()) } throws ActivityNotFoundException()
     StartSpeechInput(actions).invokeWith(activity)
-    verify { actions.offer(StartSpeechInputFailed) }
+    verify { actions.trySend(StartSpeechInputFailed).isSuccess }
   }
 
   @Test

@@ -25,13 +25,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_custom_download.cd_view_animator
-import kotlinx.android.synthetic.main.layout_custom_download_error.cd_error_text
-import kotlinx.android.synthetic.main.layout_custom_download_error.cd_retry_button
-import kotlinx.android.synthetic.main.layout_custom_download_in_progress.cd_download_state
-import kotlinx.android.synthetic.main.layout_custom_download_in_progress.cd_eta
-import kotlinx.android.synthetic.main.layout_custom_download_in_progress.cd_progress
-import kotlinx.android.synthetic.main.layout_custom_download_required.cd_download_button
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
@@ -39,8 +32,8 @@ import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.extensions.setDistinctDisplayedChild
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
+import org.kiwix.kiwixmobile.custom.databinding.FragmentCustomDownloadBinding
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedDownload
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedRetry
 import org.kiwix.kiwixmobile.custom.download.State.DownloadComplete
@@ -57,6 +50,8 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
+  private var fragmentCustomDownloadBinding: FragmentCustomDownloadBinding? = null
+
   private val compositeDisposable = CompositeDisposable()
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.customActivityComponent.inject(this)
@@ -68,7 +63,8 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
     savedInstanceState: Bundle?
   ): View? {
     super.onCreate(savedInstanceState)
-    val root = inflater.inflate(R.layout.fragment_custom_download, container, false)
+    fragmentCustomDownloadBinding =
+      FragmentCustomDownloadBinding.inflate(inflater, container, false)
     val activity = requireActivity() as CoreMainActivity
     downloadViewModel.state.observe(viewLifecycleOwner, Observer(::render))
     compositeDisposable.add(
@@ -77,13 +73,25 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
         Throwable::printStackTrace
       )
     )
-    return root
+    return fragmentCustomDownloadBinding?.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    cd_download_button.setOnClickListener { downloadViewModel.actions.offer(ClickedDownload) }
-    cd_retry_button.setOnClickListener { downloadViewModel.actions.offer(ClickedRetry) }
+    fragmentCustomDownloadBinding?.customDownloadRequired
+      ?.cdDownloadButton
+      ?.setOnClickListener {
+        downloadViewModel.actions.offer(
+          ClickedDownload
+        )
+      }
+    fragmentCustomDownloadBinding?.customDownloadError
+      ?.cdRetryButton
+      ?.setOnClickListener {
+        downloadViewModel.actions.offer(
+          ClickedRetry
+        )
+      }
   }
 
   override fun onDestroy() {
@@ -94,22 +102,32 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
 
   private fun render(state: State) {
     return when (state) {
-      DownloadRequired -> cd_view_animator.setDistinctDisplayedChild(0)
+      DownloadRequired ->
+        fragmentCustomDownloadBinding?.cdViewAnimator?.setDistinctDisplayedChild(0)
       is DownloadInProgress -> {
-        cd_view_animator.setDistinctDisplayedChild(1)
+        fragmentCustomDownloadBinding?.cdViewAnimator?.setDistinctDisplayedChild(1)
         render(state.downloads[0])
       }
       is DownloadFailed -> {
-        cd_view_animator.setDistinctDisplayedChild(2)
-        cd_error_text.text = context?.let(state.downloadState::toReadableState)
+        fragmentCustomDownloadBinding?.cdViewAnimator?.setDistinctDisplayedChild(2)
+        fragmentCustomDownloadBinding?.customDownloadError?.cdErrorText?.text =
+          context?.let(state.downloadState::toReadableState)
       }
-      DownloadComplete -> cd_view_animator.setDistinctDisplayedChild(3)
-    }
+      DownloadComplete ->
+        fragmentCustomDownloadBinding?.cdViewAnimator?.setDistinctDisplayedChild(3)
+    }!!
   }
 
   private fun render(downloadItem: DownloadItem) {
-    cd_progress.progress = downloadItem.progress
-    cd_eta.text = downloadItem.readableEta
-    cd_download_state.text = context?.let(downloadItem.downloadState::toReadableState)
+    fragmentCustomDownloadBinding?.customDownloadInProgress?.apply {
+      cdDownloadState.text = downloadItem.readableEta
+      cdEta.text = context?.let(downloadItem.downloadState::toReadableState)
+      cdProgress.progress = downloadItem.progress
+    }
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
+    fragmentCustomDownloadBinding = null
   }
 }

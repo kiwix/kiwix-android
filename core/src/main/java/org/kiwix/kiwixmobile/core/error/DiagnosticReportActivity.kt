@@ -20,18 +20,15 @@ package org.kiwix.kiwixmobile.core.error
 
 import android.os.Bundle
 import android.view.View
-import kotlinx.android.synthetic.main.activity_kiwix_error.allowCrash
-import kotlinx.android.synthetic.main.activity_kiwix_error.messageText
-import kotlinx.android.synthetic.main.activity_kiwix_error.textView2
 import org.kiwix.kiwixmobile.core.R
 
 class DiagnosticReportActivity : ErrorActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    textView2.setText(R.string.diagnostic_report)
-    messageText.setText(R.string.diagnostic_report_message)
-    allowCrash.visibility = View.GONE
+    activityKiwixErrorBinding?.textView2?.setText(R.string.diagnostic_report)
+    activityKiwixErrorBinding?.messageText?.setText(R.string.diagnostic_report_message)
+    activityKiwixErrorBinding?.allowCrash?.visibility = View.GONE
   }
 
   override fun restartApp() {
