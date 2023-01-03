@@ -25,10 +25,14 @@ import com.tonyodev.fetch2core.DownloadBlock
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.dao.FetchDownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import javax.inject.Inject
 
-class FetchDownloadMonitor @Inject constructor(fetch: Fetch, fetchDownloadDao: FetchDownloadDao) :
+class FetchDownloadMonitor @Inject constructor(
+  fetch: Fetch,
+  fetchDownloadDao: FetchDownloadRoomDao
+) :
   DownloadMonitor {
   private val updater = PublishSubject.create<() -> Unit>()
   private val fetchListener = object : FetchListener {
@@ -95,11 +99,17 @@ class FetchDownloadMonitor @Inject constructor(fetch: Fetch, fetchDownloadDao: F
     }
 
     private fun update(download: Download) {
-      updater.onNext { fetchDownloadDao.update(download) }
+      updater
+        .subscribeOn(Schedulers.io())
+        .observeOn(Schedulers.computation())
+        .doOnNext { fetchDownloadDao.update(download) }
     }
 
     private fun delete(download: Download) {
-      updater.onNext { fetchDownloadDao.delete(download) }
+      updater
+        .subscribeOn(Schedulers.io())
+        .observeOn(Schedulers.computation())
+        .doOnNext { fetchDownloadDao.delete(download) }
     }
   }
 

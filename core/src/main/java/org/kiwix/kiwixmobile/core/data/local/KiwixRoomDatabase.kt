@@ -29,24 +29,30 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
+import org.kiwix.kiwixmobile.core.dao.ErrorConverter
+import org.kiwix.kiwixmobile.core.dao.FetchDownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
+import org.kiwix.kiwixmobile.core.dao.StatusConverter
 import org.kiwix.kiwixmobile.core.dao.StringToLocalConverterDao
+import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.LanguageRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 
 @Suppress("UnnecessaryAbstractClass")
 @Database(
-  entities = [RecentSearchRoomEntity::class, NotesRoomEntity::class, LanguageRoomEntity::class],
+  entities = [RecentSearchRoomEntity::class, NotesRoomEntity::class, LanguageRoomEntity::class, FetchDownloadRoomEntity::class],
   version = 2
 )
-@TypeConverters(StringToLocalConverterDao::class)
+@TypeConverters(StringToLocalConverterDao::class, StatusConverter::class, ErrorConverter::class)
 abstract class KiwixRoomDatabase : RoomDatabase() {
   abstract fun newRecentSearchRoomDao(): NewRecentSearchRoomDao
   abstract fun noteRoomDao(): NotesRoomDao
   abstract fun languageRoomDao(): LanguageRoomDao
+  abstract fun fetchDownloadRoomDao(): FetchDownloadRoomDao
 
   companion object {
     private var db: KiwixRoomDatabase? = null

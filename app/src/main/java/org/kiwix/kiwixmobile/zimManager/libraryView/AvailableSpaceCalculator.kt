@@ -23,13 +23,14 @@ import eu.mhutti1.utils.storage.Kb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.dao.FetchDownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import javax.inject.Inject
 
 class AvailableSpaceCalculator @Inject constructor(
-  private val downloadDao: FetchDownloadDao,
+  private val downloadDao: FetchDownloadRoomDao,
   private val storageCalculator: StorageCalculator
 ) {
   fun hasAvailableSpaceFor(

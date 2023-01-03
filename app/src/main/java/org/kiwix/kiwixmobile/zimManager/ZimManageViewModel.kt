@@ -36,6 +36,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.dao.FetchDownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
@@ -80,7 +81,7 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 class ZimManageViewModel @Inject constructor(
-  private val downloadDao: FetchDownloadDao,
+  private val downloadDao: FetchDownloadRoomDao,
   private val bookDao: NewBookDao,
   private val languageDao: LanguageRoomDao,
   private val storageObserver: StorageObserver,

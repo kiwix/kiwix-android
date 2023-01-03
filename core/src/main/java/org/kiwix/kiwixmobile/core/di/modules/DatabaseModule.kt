@@ -96,4 +96,8 @@ open class DatabaseModule {
   @Singleton
   @Provides
   fun provideLanguageRoomDao(db: KiwixRoomDatabase) = db.languageRoomDao()
+
+  @Singleton
+  @Provides
+  fun provideFetchDownloadRoomDao(db: KiwixRoomDatabase) = db.fetchDownloadRoomDao()
 }

@@ -24,6 +24,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.dao.FetchDownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState.Failed
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedDownload
@@ -39,7 +40,7 @@ import org.kiwix.kiwixmobile.custom.download.effects.SetPreferredStorageWithMost
 import javax.inject.Inject
 
 class CustomDownloadViewModel @Inject constructor(
-  downloadDao: FetchDownloadDao,
+  downloadDao: FetchDownloadRoomDao,
   setPreferredStorageWithMostSpace: SetPreferredStorageWithMostSpace,
   private val downloadCustom: DownloadCustom,
   private val navigateToCustomReader: NavigateToCustomReader
@@ -63,7 +64,7 @@ class CustomDownloadViewModel @Inject constructor(
     .distinctUntilChanged()
     .subscribe(state::postValue, Throwable::printStackTrace)
 
-  private fun downloadsAsActions(downloadDao: FetchDownloadDao) =
+  private fun downloadsAsActions(downloadDao: FetchDownloadRoomDao) =
     downloadDao.downloads()
       .map { it.map(::DownloadItem) }
       .subscribe(

@@ -22,6 +22,7 @@ import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.dao.FetchDownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.files.FileSearch
@@ -30,7 +31,7 @@ import java.io.File
 import javax.inject.Inject
 
 class StorageObserver @Inject constructor(
-  private val downloadDao: FetchDownloadDao,
+  private val downloadDao: FetchDownloadRoomDao,
   private val fileSearch: FileSearch,
   private val zimReaderFactory: ZimFileReader.Factory
 ) {

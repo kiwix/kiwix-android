@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.downloader.model
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadEntity
+import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadRoomEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.utils.StorageUtils
 
@@ -39,6 +40,19 @@ data class DownloadModel(
   val fileNameFromUrl: String by lazy { StorageUtils.getFileNameFromUrl(book.url) }
 
   constructor(downloadEntity: FetchDownloadEntity) : this(
+    downloadEntity.id,
+    downloadEntity.downloadId,
+    downloadEntity.file,
+    downloadEntity.etaInMilliSeconds,
+    downloadEntity.bytesDownloaded,
+    downloadEntity.totalSizeOfDownload,
+    downloadEntity.status,
+    downloadEntity.error,
+    downloadEntity.progress,
+    downloadEntity.toBook()
+  )
+
+  constructor(downloadEntity: FetchDownloadRoomEntity) : this(
     downloadEntity.id,
     downloadEntity.downloadId,
     downloadEntity.file,

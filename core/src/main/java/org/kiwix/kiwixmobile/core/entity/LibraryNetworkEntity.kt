@@ -17,6 +17,9 @@
  */
 package org.kiwix.kiwixmobile.core.entity
 
+import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.TypeConverter
 import org.simpleframework.xml.Attribute
 import org.simpleframework.xml.ElementList
 import org.simpleframework.xml.Root

@@ -27,6 +27,7 @@ import eu.mhutti1.utils.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.dao.FetchDownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
@@ -93,6 +94,7 @@ interface CoreComponent {
 
   // fun noteDao(): NewNoteDao
   fun languageRoomDao(): LanguageRoomDao
+  fun fetchDownloadRoomDao(): FetchDownloadRoomDao
   fun newLanguagesDao(): NewLanguagesDao
   fun recentSearchDao(): NewRecentSearchDao
   fun recentSearchRoomDao(): NewRecentSearchRoomDao

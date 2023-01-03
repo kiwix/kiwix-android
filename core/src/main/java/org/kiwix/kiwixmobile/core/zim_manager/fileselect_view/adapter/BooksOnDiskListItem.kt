@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter
 
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadEntity
+import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadRoomEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag
@@ -61,6 +62,11 @@ sealed class BooksOnDiskListItem {
     constructor(fetchDownloadEntity: FetchDownloadEntity) : this(
       book = fetchDownloadEntity.toBook(),
       file = File(fetchDownloadEntity.file)
+    )
+
+    constructor(fetchDownloadRoomEntity: FetchDownloadRoomEntity) : this(
+      book = fetchDownloadRoomEntity.toBook(),
+      file = File(fetchDownloadRoomEntity.file)
     )
 
     constructor(file: File, zimFileReader: ZimFileReader) : this(
