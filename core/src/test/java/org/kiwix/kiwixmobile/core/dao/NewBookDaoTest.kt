@@ -108,7 +108,11 @@ internal class NewBookDaoTest {
       val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk(relaxed = true)
       every { box.query() } returns queryBuilder
       every {
-        queryBuilder.`in`(BookOnDiskEntity_.file, arrayOf(distinctBook.file.path))
+        queryBuilder.`in`(
+          BookOnDiskEntity_.file,
+          arrayOf(distinctBook.file.path),
+          QueryBuilder.StringOrder.CASE_INSENSITIVE
+        )
       } returns queryBuilder
       val query: Query<BookOnDiskEntity> = mockk(relaxed = true)
       every { queryBuilder.build() } returns query
@@ -126,7 +130,11 @@ internal class NewBookDaoTest {
       val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk(relaxed = true)
       every { box.query() } returns queryBuilder
       every {
-        queryBuilder.`in`(BookOnDiskEntity_.file, arrayOf(distinctBook.file.path))
+        queryBuilder.`in`(
+          BookOnDiskEntity_.file,
+          arrayOf(distinctBook.file.path),
+          QueryBuilder.StringOrder.CASE_INSENSITIVE
+        )
       } returns queryBuilder
       val query: Query<BookOnDiskEntity> = mockk(relaxed = true)
       every { queryBuilder.build() } returns query
@@ -144,13 +152,21 @@ internal class NewBookDaoTest {
       val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk()
       every { box.query() } returns queryBuilder
       every {
-        queryBuilder.`in`(BookOnDiskEntity_.file, arrayOf(distinctBook.file.path))
+        queryBuilder.`in`(
+          BookOnDiskEntity_.file,
+          arrayOf(distinctBook.file.path),
+          QueryBuilder.StringOrder.CASE_INSENSITIVE
+        )
       } returns queryBuilder
       val query: Query<BookOnDiskEntity> = mockk()
       every { queryBuilder.build() } returns query
       every { query.find() } returns listOf()
       every {
-        queryBuilder.`in`(BookOnDiskEntity_.bookId, arrayOf(distinctBook.book.id))
+        queryBuilder.`in`(
+          BookOnDiskEntity_.bookId,
+          arrayOf(distinctBook.book.id),
+          QueryBuilder.StringOrder.CASE_INSENSITIVE
+        )
       } returns queryBuilder
       every { query.remove() } returns 0L
       slot.captured.call()
@@ -198,7 +214,13 @@ internal class NewBookDaoTest {
     every { bookmark.zimId } returns expectedZimId
     val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk()
     every { box.query() } returns queryBuilder
-    every { queryBuilder.equal(BookOnDiskEntity_.bookId, expectedZimId) } returns queryBuilder
+    every {
+      queryBuilder.equal(
+        BookOnDiskEntity_.bookId,
+        expectedZimId,
+        QueryBuilder.StringOrder.CASE_INSENSITIVE
+      )
+    } returns queryBuilder
     val query: Query<BookOnDiskEntity> = mockk()
     every { queryBuilder.build() } returns query
     every { query.find() } returns queryResult
@@ -209,7 +231,13 @@ internal class NewBookDaoTest {
     val downloadTitle = "title"
     val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk()
     every { box.query() } returns queryBuilder
-    every { queryBuilder.endsWith(BookOnDiskEntity_.file, downloadTitle) } returns queryBuilder
+    every {
+      queryBuilder.endsWith(
+        BookOnDiskEntity_.file,
+        downloadTitle,
+        QueryBuilder.StringOrder.CASE_INSENSITIVE
+      )
+    } returns queryBuilder
     val query: Query<BookOnDiskEntity> = mockk()
     every { queryBuilder.build() } returns query
     val bookOnDiskEntity: BookOnDiskEntity = bookOnDiskEntity()

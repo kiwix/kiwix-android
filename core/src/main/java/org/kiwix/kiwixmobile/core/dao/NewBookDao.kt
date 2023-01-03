@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.dao
 import io.objectbox.Box
 import io.objectbox.kotlin.inValues
 import io.objectbox.kotlin.query
+import io.objectbox.query.QueryBuilder
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity_
 import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark
@@ -53,12 +54,21 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
 
   private fun booksWithSameFilePath(booksOnDisk: List<BookOnDisk>) =
     box.query {
-      inValues(BookOnDiskEntity_.file, booksOnDisk.map { it.file.path }.toTypedArray())
+      inValues(
+        BookOnDiskEntity_.file, booksOnDisk.map { it.file.path }.toTypedArray(),
+        QueryBuilder.StringOrder.CASE_INSENSITIVE
+      )
     }.find()
       .map(::BookOnDisk)
 
   private fun removeEntriesWithMatchingIds(uniqueBooks: List<BookOnDisk>) {
-    box.query { inValues(BookOnDiskEntity_.bookId, uniqueBooks.map { it.book.id }.toTypedArray()) }
+    box.query {
+      inValues(
+        BookOnDiskEntity_.bookId,
+        uniqueBooks.map { it.book.id }.toTypedArray(),
+        QueryBuilder.StringOrder.CASE_INSENSITIVE
+      )
+    }
       .remove()
   }
 
@@ -80,12 +90,15 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
 
   fun getFavIconAndZimFile(it: Bookmark): Pair<String?, String?> {
     val bookOnDiskEntity = box.query {
-      equal(BookOnDiskEntity_.bookId, it.zimId)
+      equal(BookOnDiskEntity_.bookId, it.zimId, QueryBuilder.StringOrder.CASE_INSENSITIVE)
     }.find().getOrNull(0)
     return bookOnDiskEntity?.let { it.favIcon to it.file.path } ?: null to null
   }
 
   fun bookMatching(downloadTitle: String) = box.query {
-    endsWith(BookOnDiskEntity_.file, downloadTitle)
+    endsWith(
+      BookOnDiskEntity_.file, downloadTitle,
+      QueryBuilder.StringOrder.CASE_INSENSITIVE
+    )
   }.findFirst()
 }

@@ -31,8 +31,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.activity_language.language_progressbar
-import kotlinx.android.synthetic.main.activity_language.language_recycler_view
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -41,6 +39,7 @@ import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
+import org.kiwix.kiwixmobile.databinding.ActivityLanguageBinding
 import org.kiwix.kiwixmobile.language.adapter.LanguageAdapter
 import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.HeaderDelegate
 import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.LanguageItemDelegate
@@ -61,6 +60,7 @@ class LanguageFragment : BaseFragment() {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
   private val compositeDisposable = CompositeDisposable()
+  private var activityLanguageBinding: ActivityLanguageBinding? = null
 
   private val languageAdapter =
     LanguageAdapter(
@@ -82,7 +82,7 @@ class LanguageFragment : BaseFragment() {
       it.setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp)
       it.setTitle(R.string.select_languages)
     }
-    language_recycler_view.run {
+    activityLanguageBinding?.languageRecyclerView?.run {
       adapter = languageAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
@@ -104,7 +104,8 @@ class LanguageFragment : BaseFragment() {
     savedInstanceState: Bundle?
   ): View? {
     setHasOptionsMenu(true)
-    return inflater.inflate(R.layout.activity_language, container, false)
+    activityLanguageBinding = ActivityLanguageBinding.inflate(inflater, container, false)
+    return activityLanguageBinding?.root
   }
 
   override fun onDestroy() {
@@ -113,9 +114,9 @@ class LanguageFragment : BaseFragment() {
   }
 
   private fun render(state: State) = when (state) {
-    Loading -> language_progressbar.show()
+    Loading -> activityLanguageBinding?.languageProgressbar?.show()
     is Content -> {
-      language_progressbar.hide()
+      activityLanguageBinding?.languageProgressbar?.hide()
       languageAdapter.items = state.viewItems
     }
     Saving -> Unit
@@ -141,5 +142,10 @@ class LanguageFragment : BaseFragment() {
       }
       else -> super.onOptionsItemSelected(item)
     }
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
+    activityLanguageBinding = null
   }
 }

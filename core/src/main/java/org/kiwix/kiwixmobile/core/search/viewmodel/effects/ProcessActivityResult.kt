@@ -40,7 +40,7 @@ data class ProcessActivityResult(
     ) {
       data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.apply {
         first()?.let {
-          actions.offer(Filter(it))
+          actions.trySend(Filter(it)).isSuccess
         }
       }
     }

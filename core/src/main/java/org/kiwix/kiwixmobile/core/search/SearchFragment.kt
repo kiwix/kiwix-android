@@ -35,15 +35,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_search.searchLoadingIndicator
-import kotlinx.android.synthetic.main.fragment_search.searchNoResults
-import kotlinx.android.synthetic.main.fragment_search.search_list
-import kotlinx.coroutines.flow.collect
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.databinding.FragmentSearchBinding
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
-import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -73,6 +69,7 @@ class SearchFragment : BaseFragment() {
 
   private var searchView: SearchView? = null
   private var searchInTextMenuItem: MenuItem? = null
+  private var fragmentSearchBinding: FragmentSearchBinding? = null
 
   private val searchViewModel by lazy { viewModel<SearchViewModel>(viewModelFactory) }
   private var searchAdapter: SearchAdapter? = null
@@ -86,21 +83,21 @@ class SearchFragment : BaseFragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    val root = inflater.inflate(R.layout.fragment_search, container, false)
+    fragmentSearchBinding = FragmentSearchBinding.inflate(inflater, container, false)
     setHasOptionsMenu(true)
-    return root
+    return fragmentSearchBinding?.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     searchAdapter = SearchAdapter(
       RecentSearchDelegate(::onItemClick, ::onItemClickNewTab) {
-        searchViewModel.actions.offer(OnItemLongClick(it))
+        searchViewModel.actions.trySend(OnItemLongClick(it)).isSuccess
       },
       ZimSearchResultDelegate(::onItemClick, ::onItemClickNewTab)
     )
     setupToolbar(view)
-    search_list.run {
+    fragmentSearchBinding?.searchList?.run {
       adapter = searchAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
@@ -134,11 +131,11 @@ class SearchFragment : BaseFragment() {
 
   override fun onDestroyView() {
     super.onDestroyView()
-    closeKeyboard()
     activity?.intent?.action = null
     searchView = null
     searchInTextMenuItem = null
     searchAdapter = null
+    fragmentSearchBinding = null
   }
 
   private fun goBack() {
@@ -155,7 +152,7 @@ class SearchFragment : BaseFragment() {
     searchView?.setOnQueryTextListener(
       SimpleTextListener {
         if (it.isNotEmpty()) {
-          searchViewModel.actions.offer(Filter(it))
+          searchViewModel.actions.trySend(Filter(it)).isSuccess
         }
       }
     )
@@ -163,13 +160,13 @@ class SearchFragment : BaseFragment() {
       override fun onMenuItemActionExpand(item: MenuItem) = false
 
       override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-        searchViewModel.actions.offer(ExitedSearch)
+        searchViewModel.actions.trySend(ExitedSearch).isSuccess
         return false
       }
     })
     searchInTextMenuItem = menu.findItem(R.id.menu_searchintext)
     searchInTextMenuItem?.setOnMenuItemClickListener {
-      searchViewModel.actions.offer(ClickedSearchInText)
+      searchViewModel.actions.trySend(ClickedSearchInText).isSuccess
       true
     }
     lifecycleScope.launchWhenCreated {
@@ -179,28 +176,28 @@ class SearchFragment : BaseFragment() {
     if (searchStringFromArguments != null) {
       searchView?.setQuery(searchStringFromArguments, false)
     }
-    searchViewModel.actions.offer(Action.CreatedWithArguments(arguments))
+    searchViewModel.actions.trySend(Action.CreatedWithArguments(arguments)).isSuccess
   }
 
   private fun render(state: SearchState) {
     searchInTextMenuItem?.isVisible = state.searchOrigin == FromWebView
     searchInTextMenuItem?.isEnabled = state.searchTerm.isNotBlank()
-    searchLoadingIndicator?.isShowing(state.isLoading)
-    searchNoResults?.isVisible = state.visibleResults.isEmpty()
+    fragmentSearchBinding?.searchLoadingIndicator?.isShowing(state.isLoading)
+    fragmentSearchBinding?.searchNoResults?.isVisible = state.visibleResults.isEmpty()
     searchAdapter?.items = state.visibleResults
   }
 
   private fun onItemClick(it: SearchListItem) {
-    searchViewModel.actions.offer(OnItemClick(it))
+    searchViewModel.actions.trySend(OnItemClick(it)).isSuccess
   }
 
   private fun onItemClickNewTab(it: SearchListItem) {
-    searchViewModel.actions.offer(OnOpenInNewTabClick(it))
+    searchViewModel.actions.trySend(OnOpenInNewTabClick(it)).isSuccess
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
-    searchViewModel.actions.offer(ActivityResultReceived(requestCode, resultCode, data))
+    searchViewModel.actions.trySend(ActivityResultReceived(requestCode, resultCode, data)).isSuccess
   }
 }
 

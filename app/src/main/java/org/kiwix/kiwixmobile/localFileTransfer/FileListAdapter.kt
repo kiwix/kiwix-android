@@ -19,16 +19,14 @@
 
 package org.kiwix.kiwixmobile.localFileTransfer
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_transfer_list.image_view_file_transferred
-import kotlinx.android.synthetic.main.item_transfer_list.progress_bar_transferring_file
-import kotlinx.android.synthetic.main.item_transfer_list.text_view_file_item_name
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
-import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
+import org.kiwix.kiwixmobile.databinding.ItemTransferListBinding
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.ERROR
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENDING
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENT
@@ -43,7 +41,14 @@ class FileListAdapter(private val fileItems: List<FileItem>) :
   RecyclerView.Adapter<FileViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileViewHolder =
-    FileViewHolder(parent.inflate(R.layout.item_transfer_list, false), this)
+    FileViewHolder(
+      ItemTransferListBinding.inflate(
+        LayoutInflater.from(parent.context),
+        parent,
+        false
+      ),
+      this
+    )
 
   override fun onBindViewHolder(holder: FileViewHolder, position: Int) {
     holder.bind(fileItems[position])
@@ -51,24 +56,31 @@ class FileListAdapter(private val fileItems: List<FileItem>) :
 
   override fun getItemCount(): Int = fileItems.size
 
-  inner class FileViewHolder(itemView: View, val fileListAdapter: FileListAdapter) :
-    BaseViewHolder<FileItem>(itemView) {
+  inner class FileViewHolder(
+    private val itemTransferListBinding: ItemTransferListBinding,
+    val fileListAdapter: FileListAdapter
+  ) :
+    BaseViewHolder<FileItem>(itemTransferListBinding.root) {
     override fun bind(item: FileItem) {
-      text_view_file_item_name.text = item.fileName
-      image_view_file_transferred.isVisible = item.fileStatus != SENDING
-      progress_bar_transferring_file.isVisible = item.fileStatus == SENDING
+      itemTransferListBinding.textViewFileItemName.text = item.fileName
+      itemTransferListBinding.imageViewFileTransferred.isVisible = item.fileStatus != SENDING
+      itemTransferListBinding.progressBarTransferringFile.isVisible = item.fileStatus == SENDING
       if (item.fileStatus != FileItem.FileStatus.TO_BE_SENT) {
         // Icon for TO_BE_SENT is assigned by default in the item layout
-        progress_bar_transferring_file.visibility = View.GONE
+        itemTransferListBinding.progressBarTransferringFile.visibility = View.GONE
         when (item.fileStatus) {
-          SENDING -> progress_bar_transferring_file.visibility = View.VISIBLE
+          SENDING -> itemTransferListBinding.progressBarTransferringFile.visibility = View.VISIBLE
           SENT -> {
-            image_view_file_transferred.setImageResource(R.drawable.ic_baseline_check_24px)
-            progress_bar_transferring_file.visibility = View.GONE
+            itemTransferListBinding.imageViewFileTransferred.setImageResource(
+              R.drawable.ic_baseline_check_24px
+            )
+            itemTransferListBinding.progressBarTransferringFile.visibility = View.GONE
           }
           ERROR -> {
-            image_view_file_transferred.setImageResource(R.drawable.ic_baseline_error_24px)
-            progress_bar_transferring_file.visibility = View.GONE
+            itemTransferListBinding.imageViewFileTransferred.setImageResource(
+              R.drawable.ic_baseline_error_24px
+            )
+            itemTransferListBinding.progressBarTransferringFile.visibility = View.GONE
           }
           else -> {
           }

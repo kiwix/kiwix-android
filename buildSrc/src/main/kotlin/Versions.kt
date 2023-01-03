@@ -26,7 +26,7 @@ object Versions {
 
   const val org_jetbrains_kotlin: String = "1.7.0"
 
-  const val androidx_navigation: String = "2.3.1"
+  const val androidx_navigation: String = "2.5.3"
 
   const val navigation_ui_ktx: String = "2.4.1"
 
@@ -42,7 +42,7 @@ object Versions {
 
   const val androidx_test_orchestrator: String = "1.4.1"
 
-  const val io_objectbox: String = "2.9.1"
+  const val io_objectbox: String = "3.5.0"
 
   const val org_jacoco: String = "0.8.7"
 
@@ -50,7 +50,7 @@ object Versions {
 
   const val android_arch_lifecycle_extensions: String = "1.1.1"
 
-  const val com_android_tools_build_gradle: String = "7.1.0"
+  const val com_android_tools_build_gradle: String = "7.3.1"
 
   const val de_fayard_buildsrcversions_gradle_plugin: String = "0.7.0"
 

@@ -31,10 +31,8 @@ import eu.mhutti1.utils.storage.adapter.StorageDelegate
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.storage_select_dialog.device_list
-import kotlinx.android.synthetic.main.storage_select_dialog.title
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.databinding.StorageSelectDialogBinding
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
@@ -45,6 +43,7 @@ class StorageSelectDialog : DialogFragment() {
   @Inject lateinit var storageCalculator: StorageCalculator
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private var aTitle: String? = null
+  private var storageSelectDialogViewBinding: StorageSelectDialogBinding? = null
 
   private val storageAdapter: StorageAdapter by lazy {
     StorageAdapter(
@@ -59,13 +58,16 @@ class StorageSelectDialog : DialogFragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View = inflater.inflate(R.layout.storage_select_dialog, container, false)
+  ): View? {
+    storageSelectDialogViewBinding = StorageSelectDialogBinding.inflate(inflater, container, false)
+    return storageSelectDialogViewBinding?.root
+  }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     CoreApp.coreComponent.inject(this)
-    title.text = aTitle
-    device_list.run {
+    storageSelectDialogViewBinding?.title?.text = aTitle
+    storageSelectDialogViewBinding?.deviceList?.run {
       adapter = storageAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
@@ -83,5 +85,10 @@ class StorageSelectDialog : DialogFragment() {
   override fun show(fm: FragmentManager, text: String?) {
     aTitle = text
     super.show(fm, text)
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
+    storageSelectDialogViewBinding = null
   }
 }

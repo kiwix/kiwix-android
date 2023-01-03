@@ -25,9 +25,10 @@ import io.mockk.mockkObject
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions
-import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
+import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.viewBinding
+import org.kiwix.kiwixmobile.databinding.HeaderDateBinding
+import org.kiwix.kiwixmobile.databinding.ItemLanguageBinding
 import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.HeaderDelegate
 import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.LanguageItemDelegate
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.HeaderItem
@@ -47,7 +48,8 @@ class LanguageDelegateTest {
     fun `creates HeaderViewHolder`() {
       val parent = mockk<ViewGroup>()
       mockkObject(ViewGroupExtensions)
-      every { parent.inflate(R.layout.header_date, false) } returns mockk()
+      every { parent.viewBinding(HeaderDateBinding::inflate, false) } returns mockk()
+      every { parent.viewBinding(HeaderDateBinding::inflate, false).root } returns mockk()
       assertThat(HeaderDelegate().createViewHolder(parent))
         .isInstanceOf(HeaderViewHolder::class.java)
     }
@@ -64,7 +66,8 @@ class LanguageDelegateTest {
     fun `creates LanguageViewHolder`() {
       val parent = mockk<ViewGroup>()
       mockkObject(ViewGroupExtensions)
-      every { parent.inflate(R.layout.item_language, false) } returns mockk()
+      every { parent.viewBinding(ItemLanguageBinding::inflate, false) } returns mockk()
+      every { parent.viewBinding(ItemLanguageBinding::inflate, false).root } returns mockk()
       val clickAction = mockk<(LanguageItem) -> Unit>()
       assertThat(LanguageItemDelegate(clickAction).createViewHolder(parent))
         .isInstanceOf(LanguageViewHolder::class.java)

@@ -50,6 +50,6 @@ internal class ShowDeleteSearchDialogTest {
       dialogShower.show(DeleteSearch, capture(lambdaSlot))
     }
     lambdaSlot.captured.invoke()
-    verify { actions.offer(ConfirmedDelete(searchListItem)) }
+    verify { actions.trySend(ConfirmedDelete(searchListItem)).isSuccess }
   }
 }

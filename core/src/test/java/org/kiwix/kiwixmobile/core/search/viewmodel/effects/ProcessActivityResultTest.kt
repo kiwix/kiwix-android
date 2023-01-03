@@ -72,6 +72,6 @@ internal class ProcessActivityResultTest {
   fun `invoke with sends filter action with data`() {
     every { data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS) } returns arrayListOf("")
     successfulResult.invokeWith(activity)
-    verify { actions.offer(Filter("")) }
+    verify { actions.trySend(Filter("")).isSuccess }
   }
 }

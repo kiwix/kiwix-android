@@ -30,9 +30,9 @@ task jacocoInstrumentationTestReport(type: JacocoReport, dependsOn: ['createDebu
   group "Reporting"
   description "Generate Jacoco coverage reports."
   reports {
-    xml.enabled = true
-    html.enabled = true
-    html.destination file("${rootProject.buildDir}/coverage-report")
+    xml.required.set(true)
+    html.required.set(true)
+    html.outputLocation.set(file("${rootProject.buildDir}/coverage-report"))
   }
   def javaClasses = []
   def kotlinClasses = []
@@ -57,6 +57,6 @@ task jacocoInstrumentationTestReport(type: JacocoReport, dependsOn: ['createDebu
   print execution
   executionData.from = files(execution)
   doLast() {
-    print "file://${reports.html.destination}/index.html"
+    print "file://${reports.html.outputLocation.get()}/index.html"
   }
 }

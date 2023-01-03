@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.extensions
 
 import android.content.Context
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -49,9 +48,3 @@ fun View.closeKeyboard() {
 }
 
 val Fragment.coreMainActivity get() = activity as CoreMainActivity
-
-fun Fragment.setParentFragmentsBottomMarginTo(margin: Int) {
-  val params = parentFragment?.view?.layoutParams as ViewGroup.MarginLayoutParams?
-  params?.bottomMargin = margin
-  parentFragment?.view?.requestLayout()
-}

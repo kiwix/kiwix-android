@@ -22,26 +22,38 @@ import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.activity_custom_main.activity_main_nav_view
-import kotlinx.android.synthetic.main.activity_custom_main.custom_drawer_container
-import kotlinx.android.synthetic.main.activity_custom_main.drawer_nav_view
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
+import org.kiwix.kiwixmobile.custom.databinding.ActivityCustomMainBinding
 
 const val REQUEST_READ_FOR_OBB = 5002
 
 class CustomMainActivity : CoreMainActivity() {
 
   override val navController: NavController by lazy {
-    findNavController(R.id.custom_nav_controller)
+    (
+      supportFragmentManager.findFragmentById(
+        R.id.custom_nav_controller
+      ) as NavHostFragment
+      )
+      .navController
   }
-  override val drawerContainerLayout: DrawerLayout by lazy { custom_drawer_container }
-  override val drawerNavView: NavigationView by lazy { drawer_nav_view }
-  override val readerTableOfContentsDrawer: NavigationView by lazy { activity_main_nav_view }
+  override val drawerContainerLayout: DrawerLayout by lazy {
+    activityCustomMainBinding.customDrawerContainer
+  }
+  override val drawerNavView: NavigationView by lazy { activityCustomMainBinding.drawerNavView }
+  override val readerTableOfContentsDrawer: NavigationView by lazy {
+    activityCustomMainBinding.activityMainNavView
+  }
+
+  override val navHostContainer by lazy {
+    activityCustomMainBinding.customNavController
+  }
+
   override val searchFragmentResId: Int = R.id.searchFragment
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val settingsFragmentResId: Int = R.id.customSettingsFragment
@@ -53,13 +65,16 @@ class CustomMainActivity : CoreMainActivity() {
   override val topLevelDestinations =
     setOf(R.id.customReaderFragment)
 
+  private lateinit var activityCustomMainBinding: ActivityCustomMainBinding
+
   override fun injection(coreComponent: CoreComponent) {
     customActivityComponent.inject(this)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_custom_main)
+    activityCustomMainBinding = ActivityCustomMainBinding.inflate(layoutInflater)
+    setContentView(activityCustomMainBinding.root)
     if (savedInstanceState != null) {
       return
     }
@@ -76,12 +91,14 @@ class CustomMainActivity : CoreMainActivity() {
 
   override fun setupDrawerToggle(toolbar: Toolbar) {
     super.setupDrawerToggle(toolbar)
-    drawer_nav_view.setNavigationItemSelectedListener { item ->
-      closeNavigationDrawer()
-      onNavigationItemSelected(item)
+    activityCustomMainBinding.drawerNavView.apply {
+      setNavigationItemSelectedListener { item ->
+        closeNavigationDrawer()
+        onNavigationItemSelected(item)
+      }
+      menu.findItem(R.id.menu_host_books)
+        .isVisible = false
     }
-    drawer_nav_view.menu.findItem(R.id.menu_host_books)
-      .isVisible = false
   }
 
   override fun getIconResId() = R.mipmap.ic_launcher

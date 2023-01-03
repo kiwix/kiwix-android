@@ -28,7 +28,7 @@ open class ViewModelFactory @Inject constructor(
 ) : ViewModelProvider.Factory {
 
   @Suppress("TooGenericExceptionCaught", "TooGenericExceptionThrown")
-  override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+  override fun <T : ViewModel> create(modelClass: Class<T>): T {
     var creator: Provider<out ViewModel?>? = creators[modelClass]
     if (creator == null) {
       for ((key, value) in creators) {

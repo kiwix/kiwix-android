@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2020 Kiwix <android.kiwix.org>
+ * Copyright (c) 2022 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,20 +16,13 @@
  *
  */
 
-package org.kiwix.kiwixmobile.localFileTransfer.adapter
+package org.kiwix.kiwixmobile.core.extensions
 
-import android.net.wifi.p2p.WifiP2pDevice
-import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
-import org.kiwix.kiwixmobile.databinding.RowPeerDeviceBinding
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.fragment.app.FragmentContainerView
 
-class WifiP2pViewHolder(
-  private val rowPeerDeviceBinding: RowPeerDeviceBinding,
-  private val onItemClickAction: (WifiP2pDevice) -> Unit
-) : BaseViewHolder<WifiP2pDevice>(rowPeerDeviceBinding.root) {
-  override fun bind(item: WifiP2pDevice) {
-    rowPeerDeviceBinding.rowDeviceName.text = item.deviceName
-    containerView.setOnClickListener {
-      onItemClickAction.invoke(item)
-    }
-  }
+fun FragmentContainerView.setBottomMarginToFragmentContainerView(margin: Int) {
+  val params = layoutParams as CoordinatorLayout.LayoutParams?
+  params?.bottomMargin = margin
+  requestLayout()
 }

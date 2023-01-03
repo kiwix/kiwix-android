@@ -94,7 +94,13 @@ internal class NewRecentSearchDaoTest {
     private fun expectFromRecentSearches(queryResult: List<RecentSearchEntity>, zimId: String) {
       val queryBuilder = mockk<QueryBuilder<RecentSearchEntity>>()
       every { box.query() } returns queryBuilder
-      every { queryBuilder.equal(RecentSearchEntity_.zimId, zimId) } returns queryBuilder
+      every {
+        queryBuilder.equal(
+          RecentSearchEntity_.zimId,
+          zimId,
+          QueryBuilder.StringOrder.CASE_INSENSITIVE
+        )
+      } returns queryBuilder
       every { queryBuilder.orderDesc(RecentSearchEntity_.id) } returns queryBuilder
       val query = mockk<Query<RecentSearchEntity>>()
       every { queryBuilder.build() } returns query
@@ -113,7 +119,13 @@ internal class NewRecentSearchDaoTest {
     val searchTerm = "searchTerm"
     val queryBuilder: QueryBuilder<RecentSearchEntity> = mockk()
     every { box.query() } returns queryBuilder
-    every { queryBuilder.equal(RecentSearchEntity_.searchTerm, searchTerm) } returns queryBuilder
+    every {
+      queryBuilder.equal(
+        RecentSearchEntity_.searchTerm,
+        searchTerm,
+        QueryBuilder.StringOrder.CASE_INSENSITIVE
+      )
+    } returns queryBuilder
     val query: Query<RecentSearchEntity> = mockk(relaxed = true)
     every { queryBuilder.build() } returns query
     newRecentSearchDao.deleteSearchString(searchTerm)

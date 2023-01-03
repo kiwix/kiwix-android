@@ -35,7 +35,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
-import kotlinx.android.synthetic.main.activity_kiwix_main.bottom_nav_view
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.anim
@@ -45,9 +45,10 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCa
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
+import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.getAttribute
+import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
-import org.kiwix.kiwixmobile.core.extensions.setParentFragmentsBottomMarginTo
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -193,7 +194,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   private fun setFragmentContainerBottomMarginToSizeOfNavBar() {
     val actionBarHeight = context?.getAttribute(android.R.attr.actionBarSize)
     if (actionBarHeight != null) {
-      setParentFragmentsBottomMarginTo(
+      setBottomMarginToNavHostContainer(
         complexToDimensionPixelSize(
           actionBarHeight,
           resources.displayMetrics
@@ -206,7 +207,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     super.onPause()
     // ScrollingViewWithBottomNavigationBehavior changes the margin to the size of the nav bar,
     // this resets the margin to zero, before fragment navigation.
-    setParentFragmentsBottomMarginTo(0)
+    setBottomMarginToNavHostContainer(0)
   }
 
   override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -263,7 +264,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       requireContext(), this, attrs!!, activityMainRoot as ViewGroup, videoView!!,
       CoreWebViewClient(this, zimReaderContainer!!, sharedPreferenceUtil!!),
       toolbarContainer!!, bottomToolbar!!, sharedPreferenceUtil = sharedPreferenceUtil!!,
-      parentNavigationBar = requireActivity().bottom_nav_view
+      parentNavigationBar = requireActivity().findViewById(R.id.bottom_nav_view)
     )
   }
 
@@ -288,13 +289,13 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private fun hideNavBar() {
-    requireActivity().bottom_nav_view.visibility = GONE
-    setParentFragmentsBottomMarginTo(0)
+    requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view).visibility = GONE
+    setBottomMarginToNavHostContainer(0)
     getCurrentWebView()?.translationY = 0f
   }
 
   private fun showNavBar() {
-    requireActivity().bottom_nav_view.visibility = VISIBLE
+    requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view).visibility = VISIBLE
   }
 
   override fun createNewTab() {
@@ -311,5 +312,10 @@ class KiwixReaderFragment : CoreReaderFragment() {
       else activity.toast(R.string.cannot_open_file)
     }
     return ShouldCall
+  }
+
+  private fun setBottomMarginToNavHostContainer(margin: Int) {
+    coreMainActivity.navHostContainer
+      .setBottomMarginToFragmentContainerView(margin)
   }
 }

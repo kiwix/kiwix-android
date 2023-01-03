@@ -27,7 +27,6 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
-import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
@@ -35,8 +34,8 @@ class AllProjectConfigurer {
 
   fun applyPlugins(target: Project) {
     target.plugins.apply("kotlin-android")
-    target.plugins.apply("kotlin-android-extensions")
     target.plugins.apply("kotlin-kapt")
+    target.plugins.apply("kotlin-parcelize")
     target.plugins.apply("com.dicedmelon.gradle.jacoco-android")
     target.plugins.apply("org.jlleitschuh.gradle.ktlint")
     target.plugins.apply("io.gitlab.arturbosch.detekt")
@@ -47,7 +46,7 @@ class AllProjectConfigurer {
     target.configureExtension<BaseExtension> {
       setCompileSdkVersion(Config.compileSdk)
       defaultConfig {
-        setMinSdkVersion(Config.minSdk)
+        minSdk = Config.minSdk
         setTargetSdkVersion(Config.targetSdk)
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
       }
@@ -67,6 +66,7 @@ class AllProjectConfigurer {
       target.tasks.withType(KotlinCompile::class.java) {
         kotlinOptions.jvmTarget = "1.8"
       }
+      buildFeatures.viewBinding = true
 
       testOptions {
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
@@ -151,7 +151,6 @@ class AllProjectConfigurer {
 
   fun configurePlugins(target: Project) {
     target.run {
-      configureExtension<AndroidExtensionsExtension> { isExperimental = true }
       configureExtension<JacocoPluginExtension> { toolVersion = "0.8.7" }
       configureExtension<KtlintExtension> { android.set(true) }
       configureExtension<DetektExtension> {

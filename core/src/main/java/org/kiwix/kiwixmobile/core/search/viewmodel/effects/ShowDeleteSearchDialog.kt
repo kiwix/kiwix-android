@@ -37,6 +37,9 @@ data class ShowDeleteSearchDialog(
 
   override fun invokeWith(activity: AppCompatActivity) {
     activity.cachedComponent.inject(this)
-    dialogShower.show(DeleteSearch, { actions.offer(Action.ConfirmedDelete(searchListItem)) })
+    dialogShower.show(
+      DeleteSearch,
+      { actions.trySend(Action.ConfirmedDelete(searchListItem)) }
+    )
   }
 }

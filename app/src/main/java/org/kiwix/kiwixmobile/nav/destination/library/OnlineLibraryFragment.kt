@@ -49,10 +49,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tonyodev.fetch2.Status
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageSelectDialog
-import kotlinx.android.synthetic.main.fragment_destination_download.allowInternetPermissionButton
-import kotlinx.android.synthetic.main.fragment_destination_download.libraryErrorText
-import kotlinx.android.synthetic.main.fragment_destination_download.libraryList
-import kotlinx.android.synthetic.main.fragment_destination_download.librarySwipeRefresh
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -63,7 +59,8 @@ import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
-import org.kiwix.kiwixmobile.core.extensions.setParentFragmentsBottomMarginTo
+import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
+import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -82,6 +79,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.SelectFolder
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getPathFromUri
+import org.kiwix.kiwixmobile.databinding.FragmentDestinationDownloadBinding
 import org.kiwix.kiwixmobile.zimManager.NetworkState
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
@@ -100,6 +98,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   @Inject lateinit var bookUtils: BookUtils
   @Inject lateinit var availableSpaceCalculator: AvailableSpaceCalculator
   @Inject lateinit var alertDialogShower: AlertDialogShower
+  private var fragmentDestinationDownloadBinding: FragmentDestinationDownloadBinding? = null
 
   private var downloadBookItem: LibraryNetworkEntity.Book? = null
   private val zimManageViewModel by lazy {
@@ -140,31 +139,35 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View {
+  ): View? {
     setHasOptionsMenu(true)
-    val root = inflater.inflate(R.layout.fragment_destination_download, container, false)
-    val toolbar = root.findViewById<Toolbar>(R.id.toolbar)
+    fragmentDestinationDownloadBinding =
+      FragmentDestinationDownloadBinding.inflate(inflater, container, false)
+    val toolbar = fragmentDestinationDownloadBinding?.root?.findViewById<Toolbar>(R.id.toolbar)
     val activity = activity as CoreMainActivity
     activity.setSupportActionBar(toolbar)
     activity.supportActionBar?.apply {
       setDisplayHomeAsUpEnabled(true)
       setTitle(R.string.download)
     }
-    activity.setupDrawerToggle(toolbar)
-    return root
+    if (toolbar != null) {
+      activity.setupDrawerToggle(toolbar)
+    }
+    return fragmentDestinationDownloadBinding?.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    librarySwipeRefresh.setOnRefreshListener(::refreshFragment)
-    libraryList.run {
+    fragmentDestinationDownloadBinding?.librarySwipeRefresh?.setOnRefreshListener(::refreshFragment)
+    fragmentDestinationDownloadBinding?.libraryList?.run {
       adapter = libraryAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
     zimManageViewModel.libraryItems.observe(viewLifecycleOwner, Observer(::onLibraryItemsChange))
       .also {
-        setParentFragmentsBottomMarginTo(0)
+        coreMainActivity.navHostContainer
+          .setBottomMarginToFragmentContainerView(0)
       }
     zimManageViewModel.libraryListIsRefreshing.observe(
       viewLifecycleOwner, Observer(::onRefreshStateChange)
@@ -179,15 +182,15 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
 
     // hides keyboard when scrolled
-    libraryList.addOnScrollListener(
+    fragmentDestinationDownloadBinding?.libraryList?.addOnScrollListener(
       SimpleRecyclerViewScrollListener { _, newState ->
         if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-          libraryList.closeKeyboard()
+          fragmentDestinationDownloadBinding?.libraryList?.closeKeyboard()
         }
       }
     )
 
-    allowInternetPermissionButton.setOnClickListener {
+    fragmentDestinationDownloadBinding?.allowInternetPermissionButton?.setOnClickListener {
       showInternetPermissionDialog()
     }
   }
@@ -197,8 +200,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       WifiOnly,
       {
         onRefreshStateChange(true)
-        libraryErrorText.visibility = View.GONE
-        allowInternetPermissionButton.visibility = View.GONE
+        fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.GONE
+        fragmentDestinationDownloadBinding?.allowInternetPermissionButton?.visibility = View.GONE
         sharedPreferenceUtil.putPrefWifiOnly(false)
         zimManageViewModel.shouldShowWifiOnlyDialog.value = false
       },
@@ -208,9 +211,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           resources.getString(R.string.denied_internet_permission_message),
           Toast.LENGTH_SHORT
         )
-        libraryErrorText.setText(R.string.allow_internet_permission_message)
-        libraryErrorText.visibility = View.VISIBLE
-        allowInternetPermissionButton.visibility = View.VISIBLE
+        fragmentDestinationDownloadBinding?.libraryErrorText?.setText(
+          R.string.allow_internet_permission_message
+        )
+        fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.VISIBLE
+        fragmentDestinationDownloadBinding?.allowInternetPermissionButton?.visibility = View.VISIBLE
       }
     )
   }
@@ -240,7 +245,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   override fun onDestroyView() {
     super.onDestroyView()
-    libraryList.adapter = null
+    fragmentDestinationDownloadBinding?.libraryList?.adapter = null
+    fragmentDestinationDownloadBinding = null
   }
 
   override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
@@ -249,7 +255,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun onRefreshStateChange(isRefreshing: Boolean?) {
-    librarySwipeRefresh.isRefreshing = isRefreshing!!
+    fragmentDestinationDownloadBinding?.librarySwipeRefresh?.isRefreshing = isRefreshing!!
   }
 
   private fun onNetworkStateChange(networkState: NetworkState?) {
@@ -260,11 +266,13 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         if (libraryAdapter.itemCount > 0) {
           noInternetSnackbar()
         } else {
-          libraryErrorText.setText(R.string.no_network_connection)
-          libraryErrorText.visibility = View.VISIBLE
+          fragmentDestinationDownloadBinding?.libraryErrorText?.setText(
+            R.string.no_network_connection
+          )
+          fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.VISIBLE
         }
-        allowInternetPermissionButton.visibility = View.GONE
-        librarySwipeRefresh.isRefreshing = false
+        fragmentDestinationDownloadBinding?.allowInternetPermissionButton?.visibility = View.GONE
+        fragmentDestinationDownloadBinding?.librarySwipeRefresh?.isRefreshing = false
       }
       else -> {}
     }
@@ -285,15 +293,15 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private fun onLibraryItemsChange(it: List<LibraryListItem>?) {
     libraryAdapter.items = it!!
     if (it.isEmpty()) {
-      libraryErrorText.setText(
+      fragmentDestinationDownloadBinding?.libraryErrorText?.setText(
         if (isNotConnected) R.string.no_network_connection
         else R.string.no_items_msg
       )
-      libraryErrorText.visibility = View.VISIBLE
+      fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.VISIBLE
     } else {
-      libraryErrorText.visibility = View.GONE
+      fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.GONE
     }
-    allowInternetPermissionButton.visibility = View.GONE
+    fragmentDestinationDownloadBinding?.allowInternetPermissionButton?.visibility = View.GONE
   }
 
   private fun refreshFragment() {
@@ -461,7 +469,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
             item,
             { downloadFile() },
             {
-              libraryList.snack(
+              fragmentDestinationDownloadBinding?.libraryList?.snack(
                 """ 
                 ${getString(R.string.download_no_space)}
                 ${getString(R.string.space_available)} $it

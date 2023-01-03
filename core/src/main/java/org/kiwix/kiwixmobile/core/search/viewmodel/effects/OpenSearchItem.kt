@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
 import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity

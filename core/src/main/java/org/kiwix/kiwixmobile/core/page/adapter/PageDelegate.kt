@@ -19,10 +19,10 @@
 package org.kiwix.kiwixmobile.core.page.adapter
 
 import android.view.ViewGroup
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R.layout
 import org.kiwix.kiwixmobile.core.base.adapter.AbsDelegateAdapter
-import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
+import org.kiwix.kiwixmobile.core.databinding.HeaderDateBinding
+import org.kiwix.kiwixmobile.core.databinding.ItemBookmarkHistoryBinding
+import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.viewBinding
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelatedListItemViewHolder.DateItemViewHolder
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelatedListItemViewHolder.PageListItemViewHolder
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.DateItem
@@ -37,7 +37,8 @@ sealed class PageDelegate<I : PageRelated, out VH : PageRelatedListItemViewHolde
 
     override fun createViewHolder(parent: ViewGroup) =
       PageListItemViewHolder(
-        parent.inflate(layout.item_bookmark_history, false), itemClickListener
+        parent.viewBinding(ItemBookmarkHistoryBinding::inflate, false),
+        itemClickListener
       )
   }
 
@@ -45,6 +46,8 @@ sealed class PageDelegate<I : PageRelated, out VH : PageRelatedListItemViewHolde
     override val itemClass = DateItem::class.java
 
     override fun createViewHolder(parent: ViewGroup): DateItemViewHolder =
-      DateItemViewHolder(parent.inflate(R.layout.header_date, false))
+      DateItemViewHolder(
+        parent.viewBinding(HeaderDateBinding::inflate, false)
+      )
   }
 }

@@ -21,15 +21,15 @@ package org.kiwix.kiwixmobile.localFileTransfer.adapter
 import android.net.wifi.p2p.WifiP2pDevice
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.adapter.AdapterDelegate
-import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
+import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.viewBinding
+import org.kiwix.kiwixmobile.databinding.RowPeerDeviceBinding
 
 class WifiP2pDelegate(private val onItemClickAction: (WifiP2pDevice) -> Unit) :
   AdapterDelegate<WifiP2pDevice> {
   override fun createViewHolder(parent: ViewGroup): ViewHolder =
     WifiP2pViewHolder(
-      parent.inflate(R.layout.row_peer_device, false),
+      parent.viewBinding(RowPeerDeviceBinding::inflate, false),
       onItemClickAction
     )
 

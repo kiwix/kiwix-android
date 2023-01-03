@@ -25,23 +25,6 @@ import android.view.View.MeasureSpec
 import android.widget.Toast
 import androidx.annotation.StringRes
 import com.tonyodev.fetch2.Status
-import kotlinx.android.synthetic.main.item_download.downloadProgress
-import kotlinx.android.synthetic.main.item_download.downloadState
-import kotlinx.android.synthetic.main.item_download.eta
-import kotlinx.android.synthetic.main.item_download.libraryDownloadDescription
-import kotlinx.android.synthetic.main.item_download.libraryDownloadFavicon
-import kotlinx.android.synthetic.main.item_download.libraryDownloadTitle
-import kotlinx.android.synthetic.main.item_download.stop
-import kotlinx.android.synthetic.main.item_library.libraryBookCreator
-import kotlinx.android.synthetic.main.item_library.libraryBookDate
-import kotlinx.android.synthetic.main.item_library.libraryBookDescription
-import kotlinx.android.synthetic.main.item_library.libraryBookFavicon
-import kotlinx.android.synthetic.main.item_library.libraryBookLanguage
-import kotlinx.android.synthetic.main.item_library.libraryBookSize
-import kotlinx.android.synthetic.main.item_library.libraryBookTitle
-import kotlinx.android.synthetic.main.item_library.tags
-import kotlinx.android.synthetic.main.item_library.unableToDownload
-import kotlinx.android.synthetic.main.library_divider.divider_text
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
@@ -49,6 +32,9 @@ import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.extensions.setTextAndVisibility
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.zim_manager.KiloByte
+import org.kiwix.kiwixmobile.databinding.ItemDownloadBinding
+import org.kiwix.kiwixmobile.databinding.ItemLibraryBinding
+import org.kiwix.kiwixmobile.databinding.LibraryDividerBinding
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.Unknown
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.BookItem
@@ -59,26 +45,29 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
   BaseViewHolder<T>(containerView) {
 
   class LibraryBookViewHolder(
-    view: View,
+    private val itemLibraryBinding: ItemLibraryBinding,
     private val bookUtils: BookUtils,
     private val clickAction: (BookItem) -> Unit
-  ) : LibraryViewHolder<BookItem>(view) {
+  ) : LibraryViewHolder<BookItem>(itemLibraryBinding.root) {
     override fun bind(item: BookItem) {
-      libraryBookTitle.setTextAndVisibility(item.book.title)
-      libraryBookDescription.setTextAndVisibility(item.book.description)
-      libraryBookCreator.setTextAndVisibility(item.book.creator)
-      libraryBookDate.setTextAndVisibility(item.book.date)
-      libraryBookSize.setTextAndVisibility(KiloByte(item.book.size).humanReadable)
-      libraryBookLanguage.text = bookUtils.getLanguage(item.book.language)
-      libraryBookFavicon.setBitmap(Base64String(item.book.favicon))
+      itemLibraryBinding.libraryBookTitle.setTextAndVisibility(item.book.title)
+      itemLibraryBinding.libraryBookDescription.setTextAndVisibility(item.book.description)
+      itemLibraryBinding.libraryBookCreator.setTextAndVisibility(item.book.creator)
+      itemLibraryBinding.libraryBookDate.setTextAndVisibility(item.book.date)
+      itemLibraryBinding.libraryBookSize.setTextAndVisibility(
+        KiloByte(item.book.size).humanReadable
+      )
+      itemLibraryBinding.libraryBookLanguage.text = bookUtils.getLanguage(item.book.language)
+      itemLibraryBinding.libraryBookFavicon.setBitmap(Base64String(item.book.favicon))
 
       containerView.setOnClickListener { clickAction.invoke(item) }
       containerView.isClickable = item.canBeDownloaded
 
-      tags.render(item.tags)
+      itemLibraryBinding.tags.render(item.tags)
 
-      unableToDownload.visibility = if (item.canBeDownloaded) View.GONE else View.VISIBLE
-      unableToDownload.setOnLongClickListener {
+      itemLibraryBinding.unableToDownload.visibility =
+        if (item.canBeDownloaded) View.GONE else View.VISIBLE
+      itemLibraryBinding.unableToDownload.setOnLongClickListener {
         it.centreToast(
           when (item.fileSystemState) {
             CannotWrite4GbFile -> R.string.file_system_does_not_support_4gb
@@ -91,26 +80,31 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
     }
   }
 
-  class DownloadViewHolder(view: View, private val clickAction: (LibraryDownloadItem) -> Unit) :
-    LibraryViewHolder<LibraryDownloadItem>(view) {
+  class DownloadViewHolder(
+    private val itemDownloadBinding: ItemDownloadBinding,
+    private val clickAction: (LibraryDownloadItem) -> Unit
+  ) :
+    LibraryViewHolder<LibraryDownloadItem>(itemDownloadBinding.root) {
 
     override fun bind(item: LibraryDownloadItem) {
-      libraryDownloadFavicon.setBitmap(item.favIcon)
-      libraryDownloadTitle.text = item.title
-      libraryDownloadDescription.text = item.description
-      downloadProgress.progress = item.progress
-      stop.setOnClickListener { clickAction.invoke(item) }
-      downloadState.text = item.downloadState.toReadableState(containerView.context)
+      itemDownloadBinding.libraryDownloadFavicon.setBitmap(item.favIcon)
+      itemDownloadBinding.libraryDownloadTitle.text = item.title
+      itemDownloadBinding.libraryDownloadDescription.text = item.description
+      itemDownloadBinding.downloadProgress.progress = item.progress
+      itemDownloadBinding.stop.setOnClickListener { clickAction.invoke(item) }
+      itemDownloadBinding.downloadState.text =
+        item.downloadState.toReadableState(containerView.context)
       if (item.currentDownloadState == Status.FAILED) {
         clickAction.invoke(item)
       }
-      eta.text = item.readableEta
+      itemDownloadBinding.eta.text = item.readableEta
     }
   }
 
-  class LibraryDividerViewHolder(view: View) : LibraryViewHolder<DividerItem>(view) {
+  class LibraryDividerViewHolder(private val libraryDividerBinding: LibraryDividerBinding) :
+    LibraryViewHolder<DividerItem>(libraryDividerBinding.root) {
     override fun bind(item: DividerItem) {
-      divider_text.setText(item.stringId)
+      libraryDividerBinding.dividerText.setText(item.stringId)
     }
   }
 }

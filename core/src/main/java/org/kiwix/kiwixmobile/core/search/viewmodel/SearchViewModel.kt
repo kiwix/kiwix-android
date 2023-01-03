@@ -24,10 +24,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.consumeEach
-import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -110,37 +109,55 @@ class SearchViewModel @Inject constructor(
 
   private suspend fun actionMapper() = actions.consumeEach {
     when (it) {
-      ExitedSearch -> _effects.offer(PopFragmentBackstack)
+      ExitedSearch -> _effects.trySend(PopFragmentBackstack).isSuccess
       is OnItemClick -> saveSearchAndOpenItem(it.searchListItem, false)
       is OnOpenInNewTabClick -> saveSearchAndOpenItem(it.searchListItem, true)
       is OnItemLongClick -> showDeleteDialog(it)
-      is Filter -> filter.sendBlocking(it.term)
+      is Filter -> filter.trySendBlocking(it.term)
       ClickedSearchInText -> searchPreviousScreenWhenStateIsValid()
       is ConfirmedDelete -> deleteItemAndShowToast(it)
-      is CreatedWithArguments -> _effects.offer(SearchArgumentProcessing(it.arguments, actions))
-      ReceivedPromptForSpeechInput -> _effects.offer(StartSpeechInput(actions))
-      StartSpeechInputFailed -> _effects.offer(ShowToast(R.string.speech_not_supported))
+      is CreatedWithArguments -> _effects.trySend(
+        SearchArgumentProcessing(
+          it.arguments,
+          actions
+        )
+      ).isSuccess
+      ReceivedPromptForSpeechInput -> _effects.trySend(StartSpeechInput(actions)).isSuccess
+      StartSpeechInputFailed -> _effects.trySend(ShowToast(R.string.speech_not_supported)).isSuccess
       is ActivityResultReceived ->
-        _effects.offer(ProcessActivityResult(it.requestCode, it.resultCode, it.data, actions))
-      is ScreenWasStartedFrom -> searchOrigin.sendBlocking(it.searchOrigin)
+        _effects.trySend(
+          ProcessActivityResult(
+            it.requestCode,
+            it.resultCode,
+            it.data,
+            actions
+          )
+        ).isSuccess
+      is ScreenWasStartedFrom -> searchOrigin.trySendBlocking(it.searchOrigin)
     }
   }
 
   private fun deleteItemAndShowToast(it: ConfirmedDelete) {
-    _effects.offer(DeleteRecentSearch(it.searchListItem, recentSearchDao))
-    _effects.offer(ShowToast(R.string.delete_specific_search_toast))
+    _effects.trySend(DeleteRecentSearch(it.searchListItem, recentSearchDao)).isSuccess
+    _effects.trySend(ShowToast(R.string.delete_specific_search_toast)).isSuccess
   }
 
   private fun searchPreviousScreenWhenStateIsValid(): Any =
-    _effects.offer(SearchInPreviousScreen(state.value.searchTerm))
+    _effects.trySend(SearchInPreviousScreen(state.value.searchTerm)).isSuccess
 
   private fun showDeleteDialog(longClick: OnItemLongClick) {
-    _effects.offer(ShowDeleteSearchDialog(longClick.searchListItem, actions))
+    _effects.trySend(ShowDeleteSearchDialog(longClick.searchListItem, actions)).isSuccess
   }
 
   private fun saveSearchAndOpenItem(searchListItem: SearchListItem, openInNewTab: Boolean) {
-    _effects.offer(SaveSearchToRecents(recentSearchDao, searchListItem, zimReaderContainer.id))
-    _effects.sendBlocking(OpenSearchItem(searchListItem, openInNewTab))
+    _effects.trySend(
+      SaveSearchToRecents(
+        recentSearchDao,
+        searchListItem,
+        zimReaderContainer.id
+      )
+    ).isSuccess
+    _effects.trySendBlocking(OpenSearchItem(searchListItem, openInNewTab))
   }
 }
 

@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.dao
 
 import io.objectbox.Box
 import io.objectbox.kotlin.query
+import io.objectbox.query.QueryBuilder
 import io.reactivex.Flowable
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity_
@@ -42,8 +43,16 @@ class HistoryDao @Inject constructor(val box: Box<HistoryEntity>) : PageDao {
     box.store.callInTx {
       box
         .query {
-          equal(HistoryEntity_.historyUrl, historyItem.historyUrl).and()
-            .equal(HistoryEntity_.dateString, historyItem.dateString)
+          equal(
+            HistoryEntity_.historyUrl,
+            historyItem.historyUrl,
+            QueryBuilder.StringOrder.CASE_INSENSITIVE
+          ).and()
+            .equal(
+              HistoryEntity_.dateString,
+              historyItem.dateString,
+              QueryBuilder.StringOrder.CASE_INSENSITIVE
+            )
         }
         .remove()
       box.put(HistoryEntity(historyItem))

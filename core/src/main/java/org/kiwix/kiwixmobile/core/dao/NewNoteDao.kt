@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.dao
 
 import io.objectbox.Box
 import io.objectbox.kotlin.query
+import io.objectbox.query.QueryBuilder
 import io.reactivex.Flowable
 import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity_
@@ -49,7 +50,11 @@ class NewNoteDao @Inject constructor(val box: Box<NotesEntity>) : PageDao {
 
   fun deleteNote(noteUniqueKey: String) {
     box.query {
-      equal(NotesEntity_.noteTitle, noteUniqueKey)
+      equal(
+        NotesEntity_.noteTitle,
+        noteUniqueKey,
+        QueryBuilder.StringOrder.CASE_INSENSITIVE
+      )
     }.remove()
   }
 }
