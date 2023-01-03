@@ -27,7 +27,6 @@ import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.dao.NewNoteDao
-import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
