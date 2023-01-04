@@ -27,7 +27,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity_
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import javax.inject.Inject
-
+@Deprecated("Replaced with the Room")
 class NewNoteDao @Inject constructor(val box: Box<NotesEntity>) : PageDao {
   fun notes(): Flowable<List<Page>> = box.asFlowable(
     box.query {
