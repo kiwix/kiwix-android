@@ -23,7 +23,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.schedulers.Schedulers
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.sharedFunctions.resetSchedulers
 import org.kiwix.sharedFunctions.setScheduler
@@ -33,12 +33,12 @@ class SaveLanguagesAndFinishTest {
   @Test
   fun `invoke saves and finishes`() {
     setScheduler(Schedulers.trampoline())
-    val languageDao = mockk<NewLanguagesDao>()
+    val languageRoomDao = mockk<LanguageRoomDao>()
     val activity = mockk<AppCompatActivity>()
     val languages = listOf<Language>()
-    SaveLanguagesAndFinish(languages, languageDao).invokeWith(activity)
+    SaveLanguagesAndFinish(languages, languageRoomDao).invokeWith(activity)
     verify {
-      languageDao.insert(languages)
+      languageRoomDao.insert(languages)
       activity.onBackPressed()
     }
     resetSchedulers()

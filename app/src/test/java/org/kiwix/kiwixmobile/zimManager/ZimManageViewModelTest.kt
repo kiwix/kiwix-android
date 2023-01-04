@@ -37,8 +37,8 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
-import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
@@ -83,7 +83,7 @@ class ZimManageViewModelTest {
 
   private val downloadDao: FetchDownloadDao = mockk()
   private val newBookDao: NewBookDao = mockk()
-  private val newLanguagesDao: NewLanguagesDao = mockk()
+  private val newLanguagesDao: LanguageRoomDao = mockk()
   private val storageObserver: StorageObserver = mockk()
   private val kiwixService: KiwixService = mockk()
   private val application: Application = mockk()
@@ -238,7 +238,7 @@ class ZimManageViewModelTest {
         ),
         language(isActive = true, occurencesOfLanguage = 1)
       )
-      verify(exactly = 0) { newLanguagesDao.insert(any()) }
+      verify(exactly = 0) { newLanguagesDao.insert(listOf()) }
     }
 
     @Test
