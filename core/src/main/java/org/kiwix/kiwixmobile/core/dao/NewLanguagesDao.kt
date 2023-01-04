@@ -28,6 +28,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.Language
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@Deprecated("Replaced with the Room")
 @Singleton
 class NewLanguagesDao @Inject constructor(private val box: Box<LanguageEntity>) {
   fun languages() = box.asFlowable()

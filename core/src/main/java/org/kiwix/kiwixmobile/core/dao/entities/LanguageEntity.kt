@@ -25,6 +25,7 @@ import io.objectbox.converter.PropertyConverter
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import java.util.Locale
 
+@Deprecated("Replaced with the Room")
 @Entity
 data class LanguageEntity(
   @Id var id: Long = 0,
