@@ -23,9 +23,9 @@ import io.reactivex.Flowable
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
-import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
@@ -56,7 +56,7 @@ class Repository @Inject internal constructor(
   private val bookmarksDao: NewBookmarksDao,
   private val historyDao: HistoryDao,
   private val notesRoomDao: NotesRoomDao,
-  private val languageDao: NewLanguagesDao,
+  private val languageRoomDao: LanguageRoomDao,
   private val recentSearchDao: NewRecentSearchRoomDao,
   private val zimReaderContainer: ZimReaderContainer
 ) : DataSource {
@@ -86,7 +86,7 @@ class Repository @Inject internal constructor(
       .subscribeOn(io)
 
   override fun saveLanguages(languages: List<Language>) =
-    Completable.fromAction { languageDao.insert(languages) }
+    Completable.fromAction { languageRoomDao.insert(languages) }
       .subscribeOn(io)
 
   override fun saveHistory(history: HistoryItem) =

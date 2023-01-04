@@ -35,8 +35,8 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
-import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
@@ -77,10 +77,11 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
+@Suppress("LongParameterList")
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: FetchDownloadDao,
   private val bookDao: NewBookDao,
-  private val languageDao: NewLanguagesDao,
+  private val languageRoomDao: LanguageRoomDao,
   private val storageObserver: StorageObserver,
   private val kiwixService: KiwixService,
   private val context: Application,
@@ -143,7 +144,7 @@ class ZimManageViewModel @Inject constructor(
     val downloads = downloadDao.downloads()
     val booksFromDao = books()
     val networkLibrary = PublishProcessor.create<LibraryNetworkEntity>()
-    val languages = languageDao.languages()
+    val languages = languageRoomDao.languages()
     return arrayOf(
       updateBookItems(),
       checkFileSystemForBooksOnRequest(booksFromDao),
@@ -301,7 +302,7 @@ class ZimManageViewModel @Inject constructor(
     .map { it.sortedBy(Language::language) }
     .filter(List<Language>::isNotEmpty)
     .subscribe(
-      languageDao::insert,
+      languageRoomDao::insert,
       Throwable::printStackTrace
     )
 
