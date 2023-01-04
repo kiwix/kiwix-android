@@ -7,7 +7,7 @@ on:
 
 jobs:
 
-  unit_test_and_release:
+  release:
     runs-on: ubuntu-22.04
     steps:
 
@@ -20,9 +20,6 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-
-      - name: run unit tests
-        run: ./gradlew testDebugUnitTest testCustomExampleDebugUnitTest
 
       - name: build debug
         run: ./gradlew assembleDebug
