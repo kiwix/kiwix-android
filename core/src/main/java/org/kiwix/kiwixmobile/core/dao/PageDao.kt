@@ -19,18 +19,17 @@
 package org.kiwix.kiwixmobile.core.dao
 
 import io.reactivex.Flowable
-import kotlinx.coroutines.flow.Flow
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 
-interface PageDao : BasePageDao {
-  override fun pages(): Flowable<List<Page>>
-}
-
-interface PageRoomDao : BasePageDao {
-  override fun pages(): Flow<List<Page>>
-}
-
-interface BasePageDao {
-  fun pages(): Any
+interface PageDao {
+  fun pages(): Flowable<List<Page>>
   fun deletePages(pagesToDelete: List<Page>)
 }
+
+// interface PageRoomDao : BasePageDao {
+//   override fun pages(): Flow<List<Page>>
+// }
+//
+// interface BasePageDao {
+//   fun pages(): Any
+// }

@@ -427,4 +427,5 @@ object Libs {
   const val roomKtx = "androidx.room:room-ktx:" + Versions.roomVersion
 
   const val roomCompiler = "androidx.room:room-compiler:" + Versions.roomVersion
+  const val roomRxjava2 = "androidx.room:room-rxjava2:" + Versions.roomVersion
 }

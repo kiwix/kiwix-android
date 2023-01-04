@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.page.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
@@ -38,8 +37,7 @@ internal class DeletePageItemsTest {
     item1.isSelected = true
     DeletePageItems(
       historyState(listOf(item1, item2)),
-      pageDao,
-      activity.lifecycleScope
+      pageDao
     ).invokeWith(activity)
     verify { pageDao.deletePages(listOf(item1)) }
   }
@@ -49,8 +47,7 @@ internal class DeletePageItemsTest {
     item1.isSelected = false
     DeletePageItems(
       historyState(listOf(item1, item2)),
-      pageDao,
-      activity.lifecycleScope
+      pageDao
     ).invokeWith(activity)
     verify { pageDao.deletePages(listOf(item1, item2)) }
   }

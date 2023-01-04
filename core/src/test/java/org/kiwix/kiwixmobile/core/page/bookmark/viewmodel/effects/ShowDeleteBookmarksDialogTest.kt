@@ -18,12 +18,12 @@
 
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects
 
-import androidx.lifecycle.lifecycleScope
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.CoroutineScope
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
@@ -40,11 +40,12 @@ internal class ShowDeleteBookmarksDialogTest {
   private val newBookmarksDao = mockk<NewBookmarksDao>()
   val activity = mockk<CoreMainActivity>()
   private val dialogShower = mockk<DialogShower>(relaxed = true)
+  private val coroutineScope: CoroutineScope = mockk(relaxed = true)
 
   @Test
   fun `invoke with shows dialog that offers ConfirmDelete action`() {
     val showDeleteBookmarksDialog =
-      ShowDeleteBookmarksDialog(effects, bookmarkState(), newBookmarksDao)
+      ShowDeleteBookmarksDialog(effects, bookmarkState(), newBookmarksDao, coroutineScope)
     mockkActivityInjection(showDeleteBookmarksDialog)
     val lambdaSlot = slot<() -> Unit>()
     showDeleteBookmarksDialog.invokeWith(activity)
@@ -54,8 +55,7 @@ internal class ShowDeleteBookmarksDialogTest {
       effects.offer(
         DeletePageItems(
           bookmarkState(),
-          newBookmarksDao,
-          activity.lifecycleScope
+          newBookmarksDao
         )
       )
     }
@@ -74,7 +74,8 @@ internal class ShowDeleteBookmarksDialogTest {
       ShowDeleteBookmarksDialog(
         effects,
         bookmarkState(listOf(bookmark(isSelected = true))),
-        newBookmarksDao
+        newBookmarksDao,
+        coroutineScope
       )
     mockkActivityInjection(showDeleteBookmarksDialog)
     showDeleteBookmarksDialog.invokeWith(activity)
@@ -87,7 +88,8 @@ internal class ShowDeleteBookmarksDialogTest {
       ShowDeleteBookmarksDialog(
         effects,
         bookmarkState(listOf(bookmark())),
-        newBookmarksDao
+        newBookmarksDao,
+        coroutineScope
       )
     mockkActivityInjection(showDeleteBookmarksDialog)
     showDeleteBookmarksDialog.invokeWith(activity)
