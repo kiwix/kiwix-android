@@ -20,16 +20,12 @@ package org.kiwix.kiwixmobile.core.page.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.BasePageDao
 import org.kiwix.kiwixmobile.core.dao.PageDao
-import org.kiwix.kiwixmobile.core.dao.PageRoomDao
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Exit
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.ExitActionModeMenu
@@ -46,7 +42,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.PopFragmentBackstack
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 abstract class PageViewModel<T : Page, S : PageState<T>>(
-  protected val basePageDao: BasePageDao,
+  protected val pageDao: PageDao,
   val sharedPreferenceUtil: SharedPreferenceUtil,
   val zimReaderContainer: ZimReaderContainer
 ) : ViewModel() {
@@ -74,23 +70,11 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
       .subscribe(state::postValue, Throwable::printStackTrace)
 
   protected fun addDisposablesToCompositeDisposable() {
-    when (basePageDao) {
-      is PageDao -> {
-        compositeDisposable.addAll(
-          viewStateReducer(),
-          basePageDao.pages().subscribeOn(Schedulers.io())
-            .subscribe({ actions.offer(UpdatePages(it)) }, Throwable::printStackTrace)
-        )
-      }
-      is PageRoomDao -> {
-        compositeDisposable.add(viewStateReducer())
-        viewModelScope.launch {
-          basePageDao.pages().collect {
-            actions.offer(UpdatePages(it))
-          }
-        }
-      }
-    }
+    compositeDisposable.addAll(
+      viewStateReducer(),
+      pageDao.pages().subscribeOn(Schedulers.io())
+        .subscribe({ actions.offer(UpdatePages(it)) }, Throwable::printStackTrace)
+    )
   }
 
   private fun reduce(action: Action, state: S): S = when (action) {

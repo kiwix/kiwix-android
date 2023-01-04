@@ -1,11 +1,11 @@
 package org.kiwix.kiwixmobile.core.page.history.viewmodel.effects
 
-import androidx.lifecycle.lifecycleScope
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.CoroutineScope
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
@@ -22,6 +22,7 @@ internal class ShowDeleteHistoryDialogTest {
   private val historyDao = mockk<HistoryDao>()
   val activity = mockk<CoreMainActivity>()
   private val dialogShower = mockk<DialogShower>(relaxed = true)
+  private val coroutineScope: CoroutineScope = mockk(relaxed = true)
 
   @Test
   fun `invoke with shows dialog that offers ConfirmDelete action`() {
@@ -29,14 +30,15 @@ internal class ShowDeleteHistoryDialogTest {
       ShowDeleteHistoryDialog(
         effects,
         historyState(),
-        historyDao
+        historyDao,
+        coroutineScope
       )
     mockkActivityInjection(showDeleteHistoryDialog)
     val lambdaSlot = slot<() -> Unit>()
     showDeleteHistoryDialog.invokeWith(activity)
     verify { dialogShower.show(any(), capture(lambdaSlot)) }
     lambdaSlot.captured.invoke()
-    verify { effects.offer(DeletePageItems(historyState(), historyDao, activity.lifecycleScope)) }
+    verify { effects.offer(DeletePageItems(historyState(), historyDao)) }
   }
 
   @Test
@@ -45,7 +47,8 @@ internal class ShowDeleteHistoryDialogTest {
       ShowDeleteHistoryDialog(
         effects,
         historyState(listOf(historyItem(isSelected = true))),
-        historyDao
+        historyDao,
+        coroutineScope
       )
     mockkActivityInjection(showDeleteHistoryDialog)
     showDeleteHistoryDialog.invokeWith(activity)
@@ -58,7 +61,8 @@ internal class ShowDeleteHistoryDialogTest {
       ShowDeleteHistoryDialog(
         effects,
         historyState(),
-        historyDao
+        historyDao,
+        coroutineScope
       )
     mockkActivityInjection(showDeleteHistoryDialog)
     showDeleteHistoryDialog.invokeWith(activity)

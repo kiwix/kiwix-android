@@ -201,6 +201,7 @@ class AllProjectConfigurer {
       implementation(Libs.rxjava)
       implementation(Libs.preference_ktx)
       implementation(Libs.roomKtx)
+      implementation(Libs.roomRxjava2)
       kapt(Libs.roomCompiler)
     }
   }

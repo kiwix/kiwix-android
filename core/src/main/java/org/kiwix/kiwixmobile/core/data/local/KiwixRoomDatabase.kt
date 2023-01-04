@@ -45,6 +45,7 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
             // kiwixRoom.db
             .build().also {
               it.migrateRecentSearch(boxStore)
+              it.migrateNote(boxStore)
             }
       }
     }
