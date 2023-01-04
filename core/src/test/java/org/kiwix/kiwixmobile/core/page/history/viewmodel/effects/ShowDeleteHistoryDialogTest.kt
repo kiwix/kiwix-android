@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.core.page.history.viewmodel.effects
 
+import androidx.lifecycle.lifecycleScope
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -35,7 +36,7 @@ internal class ShowDeleteHistoryDialogTest {
     showDeleteHistoryDialog.invokeWith(activity)
     verify { dialogShower.show(any(), capture(lambdaSlot)) }
     lambdaSlot.captured.invoke()
-    verify { effects.offer(DeletePageItems(historyState(), historyDao)) }
+    verify { effects.offer(DeletePageItems(historyState(), historyDao, activity.lifecycleScope)) }
   }
 
   @Test

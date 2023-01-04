@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects
 
+import androidx.lifecycle.lifecycleScope
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -49,7 +50,15 @@ internal class ShowDeleteBookmarksDialogTest {
     showDeleteBookmarksDialog.invokeWith(activity)
     verify { dialogShower.show(any(), capture(lambdaSlot)) }
     lambdaSlot.captured.invoke()
-    verify { effects.offer(DeletePageItems(bookmarkState(), newBookmarksDao)) }
+    verify {
+      effects.offer(
+        DeletePageItems(
+          bookmarkState(),
+          newBookmarksDao,
+          activity.lifecycleScope
+        )
+      )
+    }
   }
 
   private fun mockkActivityInjection(showDeleteBookmarksDialog: ShowDeleteBookmarksDialog) {
