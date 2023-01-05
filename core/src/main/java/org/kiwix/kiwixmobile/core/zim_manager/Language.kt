@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.zim_manager
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import org.kiwix.kiwixmobile.core.dao.entities.LanguageEntity
 import java.util.Locale
 
 @Parcelize
@@ -46,6 +47,13 @@ data class Language constructor(
     locale.getDisplayLanguage(locale),
     locale.isO3Language,
     locale.language
+  )
+
+  constructor(languageEntity: LanguageEntity) : this(
+    languageEntity.locale,
+    languageEntity.active,
+    languageEntity.occurencesOfLanguage,
+    languageEntity.id
   )
 
   constructor(

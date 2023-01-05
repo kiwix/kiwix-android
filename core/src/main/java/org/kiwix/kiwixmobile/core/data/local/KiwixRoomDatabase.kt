@@ -55,6 +55,7 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
             .build().also {
               it.migrateRecentSearch(boxStore)
               it.migrateNote(boxStore)
+              it.migrateLanguages(boxStore)
             }
       }
     }
@@ -70,5 +71,9 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
 
   fun migrateNote(boxStore: BoxStore) {
     noteRoomDao().migrationToRoomInsert(boxStore.boxFor())
+  }
+
+  fun migrateLanguages(boxStore: BoxStore) {
+    languageRoomDao().migrationToRoomInsert(boxStore.boxFor())
   }
 }

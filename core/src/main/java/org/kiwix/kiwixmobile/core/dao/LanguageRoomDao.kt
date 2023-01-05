@@ -23,7 +23,12 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.TypeConverter
+import io.objectbox.Box
 import io.reactivex.Flowable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.core.dao.entities.LanguageEntity
 import org.kiwix.kiwixmobile.core.dao.entities.LanguageRoomEntity
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import java.util.Locale
@@ -48,6 +53,17 @@ abstract class LanguageRoomDao {
     deleteLanguages()
     languages.map {
       insert(LanguageRoomEntity(it))
+    }
+  }
+
+  fun migrationToRoomInsert(
+    box: Box<LanguageEntity>
+  ) {
+    val languageEntities = box.all
+    languageEntities.forEachIndexed { _, languageEntity ->
+      CoroutineScope(Dispatchers.IO).launch {
+        insert(LanguageRoomEntity(Language(languageEntity)))
+      }
     }
   }
 }
