@@ -23,11 +23,14 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.mockk
+import io.objectbox.Box
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
+import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.core.dao.entities.LanguageEntity
 import org.kiwix.kiwixmobile.core.dao.entities.LanguageRoomEntity
 import org.kiwix.kiwixmobile.core.data.local.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.zim_manager.Language
@@ -38,6 +41,8 @@ class LanguageRoomDaoTest {
 
   private lateinit var languageRoomDao: LanguageRoomDao
   private lateinit var db: KiwixRoomDatabase
+  private val languageBox: Box<LanguageEntity> = mockk(relaxed = true)
+  private val languageDao = NewLanguagesDao(languageBox)
 
   @Test
   @Throws(IOException::class)
@@ -93,5 +98,22 @@ class LanguageRoomDaoTest {
     languageRoomDao.insert(languageLists)
     languageRoomDao.deleteLanguages()
     Assertions.assertEquals(0, languageRoomDao.languages().count())
+  }
+
+  @Test
+  @Throws(IOException::class)
+  fun migrationTest() = runBlocking {
+    val context = ApplicationProvider.getApplicationContext<Context>()
+
+    val language: Language = mockk(relaxed = true)
+    val language2: Language = mockk(relaxed = true)
+    languageDao.insert(listOf(language, language2))
+    db = Room.inMemoryDatabaseBuilder(
+      context, KiwixRoomDatabase::class.java
+    ).build()
+    languageRoomDao = db.languageRoomDao()
+    languageRoomDao.languages().subscribe {
+      Assertions.assertEquals(2, it.size)
+    }
   }
 }
