@@ -36,7 +36,7 @@ import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
-import org.kiwix.kiwixmobile.core.dao.NewBookDao
+import org.kiwix.kiwixmobile.core.dao.NewBookRoomDao
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
@@ -80,7 +80,7 @@ import javax.inject.Inject
 @Suppress("LongParameterList")
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: FetchDownloadDao,
-  private val bookDao: NewBookDao,
+  private val bookRoomDao: NewBookRoomDao,
   private val languageRoomDao: LanguageRoomDao,
   private val storageObserver: StorageObserver,
   private val kiwixService: KiwixService,
@@ -439,11 +439,11 @@ class ZimManageViewModel @Inject constructor(
       .filter(List<BookOnDisk>::isNotEmpty)
       .map { it.distinctBy { bookOnDisk -> bookOnDisk.book.id } }
       .subscribe(
-        bookDao::insert,
+        bookRoomDao::insert,
         Throwable::printStackTrace
       )
 
-  private fun books() = bookDao.books()
+  private fun books() = bookRoomDao.books()
     .subscribeOn(Schedulers.io())
     .map { it.sortedBy { book -> book.book.title } }
 

@@ -26,23 +26,30 @@ import androidx.room.TypeConverters
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
 import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
+import org.kiwix.kiwixmobile.core.dao.NewBookRoomDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
+import org.kiwix.kiwixmobile.core.dao.StringToFileConverterDao
 import org.kiwix.kiwixmobile.core.dao.StringToLocalConverterDao
+import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.LanguageRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
 
 @Suppress("UnnecessaryAbstractClass")
 @Database(
-  entities = [RecentSearchRoomEntity::class, NotesRoomEntity::class, LanguageRoomEntity::class],
-  version = 3
+  entities = [
+    RecentSearchRoomEntity::class, NotesRoomEntity::class,
+    LanguageRoomEntity::class, BookOnDiskRoomEntity::class
+  ],
+  version = 4
 )
-@TypeConverters(StringToLocalConverterDao::class)
+@TypeConverters(StringToLocalConverterDao::class, StringToFileConverterDao::class)
 abstract class KiwixRoomDatabase : RoomDatabase() {
   abstract fun newRecentSearchRoomDao(): NewRecentSearchRoomDao
   abstract fun noteRoomDao(): NotesRoomDao
   abstract fun languageRoomDao(): LanguageRoomDao
+  abstract fun newBookRoomDao(): NewBookRoomDao
 
   companion object {
     private var db: KiwixRoomDatabase? = null
@@ -56,6 +63,7 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
               it.migrateRecentSearch(boxStore)
               it.migrateNote(boxStore)
               it.migrateLanguages(boxStore)
+              it.migrateNewBookDao(boxStore)
             }
       }
     }
@@ -75,5 +83,9 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
 
   fun migrateLanguages(boxStore: BoxStore) {
     languageRoomDao().migrationToRoomInsert(boxStore.boxFor())
+  }
+
+  fun migrateNewBookDao(boxStore: BoxStore) {
+    newBookRoomDao().migrationInsert(boxStore.boxFor())
   }
 }

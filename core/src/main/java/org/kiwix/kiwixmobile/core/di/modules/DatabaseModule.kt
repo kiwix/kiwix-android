@@ -26,6 +26,7 @@ import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.dao.FlowBuilder
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
+import org.kiwix.kiwixmobile.core.dao.NewBookRoomDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.dao.NewNoteDao
@@ -70,9 +71,9 @@ open class DatabaseModule {
 
   @Provides @Singleton fun providesFetchDownloadDao(
     boxStore: BoxStore,
-    newBookDao: NewBookDao
+    newBookRoomDao: NewBookRoomDao
   ): FetchDownloadDao =
-    FetchDownloadDao(boxStore.boxFor(), newBookDao)
+    FetchDownloadDao(boxStore.boxFor(), newBookRoomDao)
 
   @Singleton
   @Provides
@@ -96,4 +97,8 @@ open class DatabaseModule {
   @Singleton
   @Provides
   fun provideLanguageRoomDao(db: KiwixRoomDatabase) = db.languageRoomDao()
+
+  @Singleton
+  @Provides
+  fun provideNewBookRoomDao(db: KiwixRoomDatabase) = db.newBookRoomDao()
 }

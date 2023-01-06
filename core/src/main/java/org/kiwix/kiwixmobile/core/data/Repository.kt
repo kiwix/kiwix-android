@@ -24,7 +24,7 @@ import io.reactivex.Scheduler
 import io.reactivex.Single
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.LanguageRoomDao
-import org.kiwix.kiwixmobile.core.dao.NewBookDao
+import org.kiwix.kiwixmobile.core.dao.NewBookRoomDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
@@ -52,7 +52,7 @@ import javax.inject.Singleton
 class Repository @Inject internal constructor(
   @param:IO private val io: Scheduler,
   @param:MainThread private val mainThread: Scheduler,
-  private val bookDao: NewBookDao,
+  private val bookRoomDao: NewBookRoomDao,
   private val bookmarksDao: NewBookmarksDao,
   private val historyDao: HistoryDao,
   private val notesRoomDao: NotesRoomDao,
@@ -67,7 +67,7 @@ class Repository @Inject internal constructor(
       .subscribeOn(io)
       .observeOn(mainThread)
 
-  override fun booksOnDiskAsListItems(): Flowable<List<BooksOnDiskListItem>> = bookDao.books()
+  override fun booksOnDiskAsListItems(): Flowable<List<BooksOnDiskListItem>> = bookRoomDao.books()
     .map { it.sortedBy { bookOnDisk -> bookOnDisk.book.language + bookOnDisk.book.title } }
     .map {
       HeaderizableList<BooksOnDiskListItem, BookOnDisk, LanguageItem>(it).foldOverAddingHeaders(
@@ -78,11 +78,11 @@ class Repository @Inject internal constructor(
     .map(MutableList<BooksOnDiskListItem>::toList)
 
   override fun saveBooks(books: List<BookOnDisk>) =
-    Completable.fromAction { bookDao.insert(books) }
+    Completable.fromAction { bookRoomDao.insert(books) }
       .subscribeOn(io)
 
   override fun saveBook(book: BookOnDisk) =
-    Completable.fromAction { bookDao.insert(listOf(book)) }
+    Completable.fromAction { bookRoomDao.insert(listOf(book)) }
       .subscribeOn(io)
 
   override fun saveLanguages(languages: List<Language>) =

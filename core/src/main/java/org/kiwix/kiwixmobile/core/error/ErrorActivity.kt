@@ -25,7 +25,7 @@ import android.os.Process
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.dao.NewBookDao
+import org.kiwix.kiwixmobile.core.dao.NewBookRoomDao
 import org.kiwix.kiwixmobile.core.databinding.ActivityKiwixErrorBinding
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -42,7 +42,7 @@ private const val ZERO = 0
 
 open class ErrorActivity : BaseActivity() {
   @Inject
-  lateinit var bookDao: NewBookDao
+  lateinit var bookRoomDao: NewBookRoomDao
 
   @Inject
   lateinit var zimReaderContainer: ZimReaderContainer
@@ -127,7 +127,7 @@ open class ErrorActivity : BaseActivity() {
     """.trimIndent()
 
   private fun zimFiles(): String {
-    val allZimFiles = bookDao.getBooks().joinToString {
+    val allZimFiles = bookRoomDao.getBooks().joinToString {
       """
       ${it.book.title}:
       Articles: [${it.book.articleCount}]

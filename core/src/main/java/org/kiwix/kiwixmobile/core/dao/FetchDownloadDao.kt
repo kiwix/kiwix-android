@@ -36,7 +36,7 @@ import javax.inject.Inject
 
 class FetchDownloadDao @Inject constructor(
   private val box: Box<FetchDownloadEntity>,
-  private val newBookDao: NewBookDao
+  private val newBookRoomDao: NewBookRoomDao
 ) {
 
   fun downloads(): Flowable<List<DownloadModel>> =
@@ -51,7 +51,7 @@ class FetchDownloadDao @Inject constructor(
     downloadEntities.filter { it.status == COMPLETED }.takeIf { it.isNotEmpty() }?.let {
       box.store.callInTx {
         box.remove(it)
-        newBookDao.insert(it.map(::BookOnDisk))
+        newBookRoomDao.insert(it.map(::BookOnDisk))
       }
     }
   }
