@@ -117,7 +117,7 @@ abstract class NewBookRoomDao {
   fun getFavIconAndZimFile(it: Bookmark): Pair<String?, String?> {
     return getBookOnDiskById(it.zimId).let {
       return@let it.favIcon to it.file.path
-    } ?: (null to null)
+    }
   }
 
   @Query("SELECT * FROM BookOnDiskRoomEntity WHERE bookId LIKE :zimId")
