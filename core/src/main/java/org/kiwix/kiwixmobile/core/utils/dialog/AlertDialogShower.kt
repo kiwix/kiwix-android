@@ -70,17 +70,17 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) :
           textView.setPadding(5, 5, 5, 5)
           textView.gravity = Gravity.CENTER
           textView.setLinkTextColor(Color.BLUE)
-          textView.setOnClickListener {
+          textView.setOnLongClickListener {
             val clipboard =
               ContextCompat.getSystemService(activity.baseContext, ClipboardManager::class.java)
             val clip = ClipData.newPlainText("External Url", "$url")
             clipboard?.setPrimaryClip(clip)
-
             Toast.makeText(
               activity.baseContext,
               "External Link Copied to Clipboard",
               Toast.LENGTH_SHORT
             ).show()
+            true
           }
           textView.text = Html.fromHtml("</br><a href=$url> <b>$url</b>")
 
