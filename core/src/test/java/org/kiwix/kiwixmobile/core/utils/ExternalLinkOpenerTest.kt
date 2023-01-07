@@ -47,7 +47,13 @@ internal class ExternalLinkOpenerTest {
     val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
     externalLinkOpener.openExternalUrl(intent)
     verify {
-      alertDialogShower.show(KiwixDialog.ExternalLinkPopup, capture(lambdaSlot), any(), any())
+      alertDialogShower.show(
+        KiwixDialog.ExternalLinkPopup,
+        capture(lambdaSlot),
+        any(),
+        any(),
+        any()
+      )
     }
     lambdaSlot.captured.invoke()
     verify { activity.startActivity(intent) }
@@ -61,7 +67,13 @@ internal class ExternalLinkOpenerTest {
     val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
     externalLinkOpener.openExternalUrl(intent)
     verify {
-      alertDialogShower.show(KiwixDialog.ExternalLinkPopup, any(), capture(lambdaSlot), any())
+      alertDialogShower.show(
+        KiwixDialog.ExternalLinkPopup,
+        any(),
+        capture(lambdaSlot),
+        any(),
+        any()
+      )
     }
     lambdaSlot.captured.invoke()
     verify(exactly = 0) { activity.startActivity(intent) }
@@ -75,7 +87,13 @@ internal class ExternalLinkOpenerTest {
     val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
     externalLinkOpener.openExternalUrl(intent)
     verify {
-      alertDialogShower.show(KiwixDialog.ExternalLinkPopup, any(), any(), capture(lambdaSlot))
+      alertDialogShower.show(
+        KiwixDialog.ExternalLinkPopup,
+        any(),
+        any(),
+        capture(lambdaSlot),
+        any()
+      )
     }
     lambdaSlot.captured.invoke()
     verify {

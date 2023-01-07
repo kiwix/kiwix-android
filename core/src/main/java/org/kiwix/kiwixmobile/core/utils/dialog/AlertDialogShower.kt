@@ -34,6 +34,11 @@ import javax.inject.Inject
 
 class AlertDialogShower @Inject constructor(private val activity: Activity) :
   DialogShower {
+  private val viewSpacingLeftForLink = 0
+  private val viewSpacingRightForLink = 0
+  private val viewSpacingTopForLink = 10
+  private val viewSpacingBottomForLink = 0
+
   override fun show(dialog: KiwixDialog, vararg clickListeners: () -> Unit, url: URL?) =
     create(dialog, *clickListeners, url = url).show()
 
@@ -77,14 +82,14 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) :
               Toast.LENGTH_SHORT
             ).show()
           }
-          textView.text = Html.fromHtml(" <b>Link - <b></br><a href=$url> <b>$url</b>")
+          textView.text = Html.fromHtml("</br><a href=$url> <b>$url</b>")
 
           setView(
             textView,
-            0,
-            20,
-            0,
-            0
+            viewSpacingLeftForLink,
+            viewSpacingTopForLink,
+            viewSpacingRightForLink,
+            viewSpacingBottomForLink
           )
         }
         dialog.getView?.let { setView(it()) }
