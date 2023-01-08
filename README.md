@@ -13,8 +13,7 @@ is to make Wikipedia available offline. This is done by reading the
 content of a file in the ZIM format, a highly compressed open format
 with additional metadata. This is the version for Android.
 
-Kiwix Android is written in [Kotlin](https://kotlinlang.org/) (with a few old
-pieces in Java).
+Kiwix Android is written in [Kotlin](https://kotlinlang.org/)
 
 [![Build Status](https://github.com/kiwix/kiwix-android/workflows/CI/badge.svg?query=branch%3Adevelop+workflow%3ANightly)](https://github.com/kiwix/kiwix-android/actions?query=workflow%3ANightly+branch%3Adevelop)
 [![Nightly](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml/badge.svg)](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml)
