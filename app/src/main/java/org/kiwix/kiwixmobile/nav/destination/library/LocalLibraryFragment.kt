@@ -283,6 +283,7 @@ class LocalLibraryFragment : BaseFragment() {
     booksOnDiskAdapter.items = items
     if (items.none(BooksOnDiskListItem::isSelected)) {
       actionMode?.finish()
+      actionMode = null
     }
     actionMode?.title = String.format("%d", state.selectedBooks.size)
     fragmentDestinationLibraryBinding?.apply {
