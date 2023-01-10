@@ -52,18 +52,36 @@ class DownloadRobot : BaseRobot() {
     clickOn(ViewId(R.id.downloadsFragment))
   }
 
+  private fun longClickOnZimFile() {
+    longClickOn(Text(zimFileTitle))
+  }
+
+  private fun clickOnFileDeleteIcon() {
+    clickOn(ViewId(R.id.zim_file_delete_item))
+  }
+
+  private fun assertDeleteDialogDisplayed() {
+    onView(withText("DELETE")).check(matches(isDisplayed()))
+  }
+
+  private fun clickOnDeleteZimFile() {
+    onView(withText("DELETE")).perform(click())
+  }
+
   fun deleteZimIfExists(shouldDeleteZimFile: Boolean) {
     try {
-      longClickOn(Text(zimFileTitle))
-      clickOn(ViewId(R.id.zim_file_delete_item))
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-      onView(withText("DELETE")).check(matches(isDisplayed()))
-      onView(withText("DELETE")).perform(click())
+      longClickOnZimFile()
+      clickOnFileDeleteIcon()
+      assertDeleteDialogDisplayed()
+      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_ESPRESSO.toLong())
+      clickOnDeleteZimFile()
+      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_ESPRESSO.toLong())
     } catch (e: Exception) {
       if (shouldDeleteZimFile) {
         throw Exception(
           "$zimFileTitle downloaded successfully. " +
-            "But failed to delete $zimFileTitle file"
+            "But failed to delete $zimFileTitle file " +
+            "Actual exception ${e.localizedMessage}"
         )
       }
       Log.i(

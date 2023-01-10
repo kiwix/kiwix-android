@@ -57,13 +57,30 @@ class InitialDownloadRobot : BaseRobot() {
     isVisible(ViewId(R.id.libraryList))
   }
 
+  private fun longClickOnZimFile() {
+    longClickOn(Text(zimFileTitle))
+  }
+
+  private fun clickOnFileDeleteIcon() {
+    clickOn(ViewId(R.id.zim_file_delete_item))
+  }
+
+  private fun assertDeleteDialogDisplayed() {
+    onView(withText("DELETE")).check(matches(isDisplayed()))
+  }
+
+  private fun clickOnDeleteZimFile() {
+    onView(withText("DELETE")).perform(click())
+  }
+
   fun deleteZimIfExists() {
     try {
-      longClickOn(Text(zimFileTitle))
-      clickOn(ViewId(R.id.zim_file_delete_item))
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-      onView(withText("DELETE")).check(matches(isDisplayed()))
-      onView(withText("DELETE")).perform(click())
+      longClickOnZimFile()
+      clickOnFileDeleteIcon()
+      assertDeleteDialogDisplayed()
+      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_ESPRESSO.toLong())
+      clickOnDeleteZimFile()
+      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_ESPRESSO.toLong())
     } catch (e: Exception) {
       Log.i(
         "TEST_DELETE_ZIM",

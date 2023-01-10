@@ -48,6 +48,7 @@ object TestUtils {
   private const val TAG = "TESTUTILS"
   @JvmField var TEST_PAUSE_MS = 250
   var TEST_PAUSE_MS_FOR_SEARCH_TEST = 1000
+  var TEST_PAUSE_MS_FOR_ESPRESSO = 3000
   var TEST_PAUSE_MS_FOR_DOWNLOAD_TEST = 10000
   const val RETRY_COUNT_FOR_FLAKY_TEST = 3
 
