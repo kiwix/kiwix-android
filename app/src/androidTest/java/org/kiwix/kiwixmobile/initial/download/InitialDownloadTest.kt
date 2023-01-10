@@ -21,11 +21,13 @@ package org.kiwix.kiwixmobile.initial.download
 import android.os.Build
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import androidx.test.uiautomator.UiDevice
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import leakcanary.LeakAssertions
 import org.junit.After
 import org.junit.Before
@@ -36,6 +38,7 @@ import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
+import org.kiwix.kiwixmobile.testutils.TestUtils
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -62,6 +65,8 @@ class InitialDownloadTest : BaseActivityTest() {
   @Test
   fun initialDownloadTest() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      ActivityScenario.launch(KiwixMainActivity::class.java)
+      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
       initialDownload {
         clickLibraryOnBottomNav()
         // This is for if download test fails for some reason after downloading the zim file
