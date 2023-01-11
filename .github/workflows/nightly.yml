@@ -22,7 +22,7 @@ jobs:
           java-version: 11
 
       - name: build debug
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleNightly
 
       - name: Decrypt files
         env:
@@ -36,7 +36,7 @@ jobs:
 
       - name: release debug to kiwix.download.org
         env:
-          UNIVERSAL_DEBUG_APK: app/build/outputs/apk/debug/*universal*.apk
+          UNIVERSAL_DEBUG_APK: app/build/outputs/apk/nightly/*universal*.apk
         run: |
           mkdir $DATE
           cp $UNIVERSAL_DEBUG_APK $DATE
