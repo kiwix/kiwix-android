@@ -83,7 +83,7 @@ abstract class BaseRobot(
   private fun waitFor(
     findable: Findable,
     timeout: Long = VERY_LONG_WAIT,
-    retryCount: Int = 5
+    retryCount: Int = 10
   ): UiObject2? {
     var uiObject2: UiObject2? = null
     for (i in 0 until retryCount) {

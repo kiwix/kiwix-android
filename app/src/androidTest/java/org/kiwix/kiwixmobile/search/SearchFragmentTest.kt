@@ -17,20 +17,21 @@
  */
 package org.kiwix.kiwixmobile.search
 
-import android.os.Build
+import android.Manifest
+import android.content.Context
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.PreferenceManager
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
+import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
 import leakcanary.LeakAssertions
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
@@ -40,13 +41,32 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 
-class SearchFragmentTest : BaseActivityTest() {
+class SearchFragmentTest {
 
   @Rule
   @JvmField
   var retryRule = RetryRule()
 
-  override var activityRule: ActivityTestRule<KiwixMainActivity> = activityTestRule {
+  @get:Rule
+  var readPermissionRule: GrantPermissionRule =
+    GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE)
+
+  @get:Rule
+  var writePermissionRule: GrantPermissionRule =
+    GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+  val context: Context by lazy {
+    InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
+  }
+
+  @Rule
+  @JvmField
+  var activityRule: ActivityTestRule<KiwixMainActivity> =
+    ActivityTestRule(KiwixMainActivity::class.java)
+
+  @Before
+  fun waitForIdle() {
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
@@ -54,54 +74,47 @@ class SearchFragmentTest : BaseActivityTest() {
     }
   }
 
-  @Before
-  override fun waitForIdle() {
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
-  }
-
   @Test
   fun searchFragmentSimple() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      UiThreadStatement.runOnUiThread { activityRule.activity.navigate(R.id.libraryFragment) }
-      val loadFileStream =
-        SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-      val zimFile = File(context.cacheDir, "testzim.zim")
-      if (zimFile.exists()) zimFile.delete()
-      zimFile.createNewFile()
-      loadFileStream.use { inputStream ->
-        val outputStream: OutputStream = FileOutputStream(zimFile)
-        outputStream.use { it ->
-          val buffer = ByteArray(inputStream.available())
-          var length: Int
-          while (inputStream.read(buffer).also { length = it } > 0) {
-            it.write(buffer, 0, length)
-          }
+    UiThreadStatement.runOnUiThread { activityRule.activity.navigate(R.id.libraryFragment) }
+    val loadFileStream =
+      SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
+    val zimFile = File(context.cacheDir, "testzim.zim")
+    if (zimFile.exists()) zimFile.delete()
+    zimFile.createNewFile()
+    loadFileStream.use { inputStream ->
+      val outputStream: OutputStream = FileOutputStream(zimFile)
+      outputStream.use { it ->
+        val buffer = ByteArray(inputStream.available())
+        var length: Int
+        while (inputStream.read(buffer).also { length = it } > 0) {
+          it.write(buffer, 0, length)
         }
       }
-      UiThreadStatement.runOnUiThread {
-        activityRule.activity.navigate(
-          actionNavigationLibraryToNavigationReader()
-            .apply { zimFileUri = zimFile.toUri().toString() }
+    }
+    UiThreadStatement.runOnUiThread {
+      activityRule.activity.navigate(
+        actionNavigationLibraryToNavigationReader()
+          .apply { zimFileUri = zimFile.toUri().toString() }
+      )
+    }
+    search { checkZimFileSearchSuccessful(R.id.readerFragment) }
+    UiThreadStatement.runOnUiThread {
+      if (zimFile.canRead()) {
+        activityRule.activity.openSearch(searchString = "Android")
+      } else {
+        throw RuntimeException(
+          "File $zimFile is not readable." +
+            " Original File $zimFile is readable = ${zimFile.canRead()}" +
+            " Size ${zimFile.length()}"
         )
       }
-      search { checkZimFileSearchSuccessful(R.id.readerFragment) }
-      UiThreadStatement.runOnUiThread {
-        if (zimFile.canRead()) {
-          activityRule.activity.openSearch(searchString = "Android")
-        } else {
-          throw RuntimeException(
-            "File $zimFile is not readable." +
-              " Original File $zimFile is readable = ${zimFile.canRead()}" +
-              " Size ${zimFile.length()}"
-          )
-        }
-      }
-      search {
-        clickOnSearchItemInSearchList()
-        checkZimFileSearchSuccessful(R.id.readerFragment)
-      }
-      LeakAssertions.assertNoLeaks()
     }
+    search {
+      clickOnSearchItemInSearchList()
+      checkZimFileSearchSuccessful(R.id.readerFragment)
+    }
+    LeakAssertions.assertNoLeaks()
   }
 
   @After

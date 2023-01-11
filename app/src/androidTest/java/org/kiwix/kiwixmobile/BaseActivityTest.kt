@@ -19,11 +19,10 @@
 package org.kiwix.kiwixmobile
 
 import android.Manifest.permission
-import android.app.Activity
 import android.content.Context
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -34,7 +33,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 @RunWith(AndroidJUnit4::class)
 abstract class BaseActivityTest {
   @get:Rule
-  open var activityRule = ActivityTestRule(KiwixMainActivity::class.java)
+  var activityScenarioRule = ActivityScenarioRule(KiwixMainActivity::class.java)
 
   @get:Rule
   var readPermissionRule: GrantPermissionRule =
@@ -47,16 +46,6 @@ abstract class BaseActivityTest {
   val context: Context by lazy {
     getInstrumentation().targetContext.applicationContext
   }
-
-  protected inline fun <reified T : Activity> activityTestRule(
-    noinline beforeActivityAction: (() -> Unit)? = null
-  ) =
-    object : ActivityTestRule<T>(T::class.java) {
-      override fun beforeActivityLaunched() {
-        super.beforeActivityLaunched()
-        beforeActivityAction?.invoke()
-      }
-    }
 
   protected fun testComponent(): TestComponent = DaggerTestComponent.builder()
     .context(context)
