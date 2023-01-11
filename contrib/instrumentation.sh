@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 adb logcat -c
-adb logcat *:E -v color &
+adb logcat ./*:E -v color &
 retry=0
 while [ $retry -le 3 ]
 do
@@ -12,6 +12,7 @@ do
     adb kill-server
     adb start-server
     adb logcat -c
+    adb logcat ./*:E -v color &
     ./gradlew clean
     retry=$(( $retry + 1 ))
     if [ $retry == 3 ]; then
