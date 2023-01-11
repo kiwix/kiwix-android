@@ -3,7 +3,11 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   package="org.kiwix.kiwixmobile">
 
+  <!-- support for androidx.test.orchestrator clearPackageData for android 33
+       see more information here https://github.com/kiwix/kiwix-android/issues/3172
+  -->
   <application
+    android:forceQueryable="true"
     android:usesCleartextTraffic="true"/>
   <uses-sdk tools:overrideLibrary="android_libs.ub_uiautomator" />
 </manifest>
