@@ -24,7 +24,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.AttributeSet
 import android.util.Log
-import android.util.TypedValue.complexToDimensionPixelSize
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -46,7 +45,6 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservabl
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
-import org.kiwix.kiwixmobile.core.extensions.getAttribute
 import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.snack
@@ -192,13 +190,11 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private fun setFragmentContainerBottomMarginToSizeOfNavBar() {
-    val actionBarHeight = context?.getAttribute(android.R.attr.actionBarSize)
-    if (actionBarHeight != null) {
+    val bottomNavigationView =
+      requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view)
+    bottomNavigationView?.let {
       setBottomMarginToNavHostContainer(
-        complexToDimensionPixelSize(
-          actionBarHeight,
-          resources.displayMetrics
-        )
+        bottomNavigationView.measuredHeight
       )
     }
   }
