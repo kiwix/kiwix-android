@@ -37,6 +37,11 @@ class ScrollingViewWithBottomNavigationBehavior(context: Context, attrs: Attribu
   AppBarLayout.ScrollingViewBehavior(context, attrs) {
   private var bottomMargin = 0
 
+  companion object {
+    const val DEFAULT_BOTTOM_NAVIGATION_MARGIN_ON_HIDDEN = -2
+    const val EXTRA_MARGIN_FOR_BOTTOM_BAR = 30
+  }
+
   override fun layoutDependsOn(parent: CoordinatorLayout, child: View, dependency: View): Boolean =
     super.layoutDependsOn(parent, child, dependency) || dependency is BottomNavigationView
 
@@ -71,7 +76,13 @@ class ScrollingViewWithBottomNavigationBehavior(context: Context, attrs: Attribu
   private fun calculateNewBottomMargin(
     navigationBar: BottomNavigationView,
     coordinatorLayout: CoordinatorLayout
-  ): Int = (coordinatorLayout.height - navigationBar.y).toInt()
+  ): Int {
+    var newBottomMargin = (coordinatorLayout.height - navigationBar.y).toInt()
+    if (newBottomMargin >= DEFAULT_BOTTOM_NAVIGATION_MARGIN_ON_HIDDEN) {
+      newBottomMargin -= EXTRA_MARGIN_FOR_BOTTOM_BAR
+    }
+    return newBottomMargin
+  }
 
   private fun changeReaderToolbarMargin(
     newBottomMargin: Int,
