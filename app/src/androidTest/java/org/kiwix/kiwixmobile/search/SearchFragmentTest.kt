@@ -17,21 +17,19 @@
  */
 package org.kiwix.kiwixmobile.search
 
-import android.Manifest
-import android.content.Context
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.PreferenceManager
+import androidx.test.core.app.ActivityScenario
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
-import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
 import leakcanary.LeakAssertions
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
@@ -41,31 +39,16 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 
-class SearchFragmentTest {
+class SearchFragmentTest : BaseActivityTest() {
 
   @Rule
   @JvmField
   var retryRule = RetryRule()
 
-  @get:Rule
-  var readPermissionRule: GrantPermissionRule =
-    GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE)
-
-  @get:Rule
-  var writePermissionRule: GrantPermissionRule =
-    GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-
-  val context: Context by lazy {
-    InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
-  }
-
-  @Rule
-  @JvmField
-  var activityRule: ActivityTestRule<KiwixMainActivity> =
-    ActivityTestRule(KiwixMainActivity::class.java)
+  private lateinit var kiwixMainActivity: KiwixMainActivity
 
   @Before
-  fun waitForIdle() {
+  override fun waitForIdle() {
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
@@ -76,7 +59,10 @@ class SearchFragmentTest {
 
   @Test
   fun searchFragmentSimple() {
-    UiThreadStatement.runOnUiThread { activityRule.activity.navigate(R.id.libraryFragment) }
+    ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
+      kiwixMainActivity = it
+      kiwixMainActivity.navigate(R.id.libraryFragment)
+    }
     val loadFileStream =
       SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
     val zimFile = File(context.cacheDir, "testzim.zim")
@@ -93,7 +79,7 @@ class SearchFragmentTest {
       }
     }
     UiThreadStatement.runOnUiThread {
-      activityRule.activity.navigate(
+      kiwixMainActivity.navigate(
         actionNavigationLibraryToNavigationReader()
           .apply { zimFileUri = zimFile.toUri().toString() }
       )
@@ -101,7 +87,7 @@ class SearchFragmentTest {
     search { checkZimFileSearchSuccessful(R.id.readerFragment) }
     UiThreadStatement.runOnUiThread {
       if (zimFile.canRead()) {
-        activityRule.activity.openSearch(searchString = "Android")
+        kiwixMainActivity.openSearch(searchString = "Android")
       } else {
         throw RuntimeException(
           "File $zimFile is not readable." +
