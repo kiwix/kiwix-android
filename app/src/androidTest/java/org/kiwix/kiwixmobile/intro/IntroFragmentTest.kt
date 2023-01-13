@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.intro
 import android.os.Build
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import leakcanary.LeakAssertions
