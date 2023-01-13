@@ -41,7 +41,9 @@ class IntroFragmentTest : BaseActivityTest() {
   @Test
   fun viewIsSwipeableAndNavigatesToMain() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      runOnUiThread { activityRule.activity.navigate(R.id.introFragment) }
+      activityScenarioRule.scenario.onActivity {
+        it.navigate(R.id.introFragment)
+      }
       intro(IntroRobot::swipeLeft) clickGetStarted {}
       LeakAssertions.assertNoLeaks()
     }
