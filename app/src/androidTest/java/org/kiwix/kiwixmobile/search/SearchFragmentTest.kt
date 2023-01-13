@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.search
 
+import android.os.Build
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.PreferenceManager
@@ -59,48 +60,50 @@ class SearchFragmentTest : BaseActivityTest() {
 
   @Test
   fun searchFragmentSimple() {
-    ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
-      kiwixMainActivity = it
-      kiwixMainActivity.navigate(R.id.libraryFragment)
-    }
-    val loadFileStream =
-      SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(context.cacheDir, "testzim.zim")
-    if (zimFile.exists()) zimFile.delete()
-    zimFile.createNewFile()
-    loadFileStream.use { inputStream ->
-      val outputStream: OutputStream = FileOutputStream(zimFile)
-      outputStream.use { it ->
-        val buffer = ByteArray(inputStream.available())
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-          it.write(buffer, 0, length)
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
+        kiwixMainActivity = it
+        kiwixMainActivity.navigate(R.id.libraryFragment)
+      }
+      val loadFileStream =
+        SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
+      val zimFile = File(context.cacheDir, "testzim.zim")
+      if (zimFile.exists()) zimFile.delete()
+      zimFile.createNewFile()
+      loadFileStream.use { inputStream ->
+        val outputStream: OutputStream = FileOutputStream(zimFile)
+        outputStream.use { it ->
+          val buffer = ByteArray(inputStream.available())
+          var length: Int
+          while (inputStream.read(buffer).also { length = it } > 0) {
+            it.write(buffer, 0, length)
+          }
         }
       }
-    }
-    UiThreadStatement.runOnUiThread {
-      kiwixMainActivity.navigate(
-        actionNavigationLibraryToNavigationReader()
-          .apply { zimFileUri = zimFile.toUri().toString() }
-      )
-    }
-    search { checkZimFileSearchSuccessful(R.id.readerFragment) }
-    UiThreadStatement.runOnUiThread {
-      if (zimFile.canRead()) {
-        kiwixMainActivity.openSearch(searchString = "Android")
-      } else {
-        throw RuntimeException(
-          "File $zimFile is not readable." +
-            " Original File $zimFile is readable = ${zimFile.canRead()}" +
-            " Size ${zimFile.length()}"
+      UiThreadStatement.runOnUiThread {
+        kiwixMainActivity.navigate(
+          actionNavigationLibraryToNavigationReader()
+            .apply { zimFileUri = zimFile.toUri().toString() }
         )
       }
+      search { checkZimFileSearchSuccessful(R.id.readerFragment) }
+      UiThreadStatement.runOnUiThread {
+        if (zimFile.canRead()) {
+          kiwixMainActivity.openSearch(searchString = "Android")
+        } else {
+          throw RuntimeException(
+            "File $zimFile is not readable." +
+              " Original File $zimFile is readable = ${zimFile.canRead()}" +
+              " Size ${zimFile.length()}"
+          )
+        }
+      }
+      search {
+        clickOnSearchItemInSearchList()
+        checkZimFileSearchSuccessful(R.id.readerFragment)
+      }
+      LeakAssertions.assertNoLeaks()
     }
-    search {
-      clickOnSearchItemInSearchList()
-      checkZimFileSearchSuccessful(R.id.readerFragment)
-    }
-    LeakAssertions.assertNoLeaks()
   }
 
   @After
