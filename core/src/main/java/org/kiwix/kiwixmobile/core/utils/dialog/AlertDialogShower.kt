@@ -32,6 +32,7 @@ import androidx.core.content.ContextCompat
 import java.net.URL
 import javax.inject.Inject
 
+@Suppress("MagicNumber")
 class AlertDialogShower @Inject constructor(private val activity: Activity) :
   DialogShower {
   private val viewSpacingLeftForLink = 0

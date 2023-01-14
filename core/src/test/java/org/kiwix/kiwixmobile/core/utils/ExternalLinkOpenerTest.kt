@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.utils
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import io.mockk.every
 import io.mockk.justRun
@@ -32,6 +33,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import java.net.URL
 
 internal class ExternalLinkOpenerTest {
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
@@ -43,6 +45,8 @@ internal class ExternalLinkOpenerTest {
   internal fun `alertDialogShower opens link if confirm-button is clicked`() {
     every { intent.resolveActivity(activity.packageManager) } returns mockk()
     every { sharedPreferenceUtil.prefExternalLinkPopup } returns true
+    val url = URL("https://github.com/")
+    every { intent.data } returns Uri.parse(url.toString())
     val lambdaSlot = slot<() -> Unit>()
     val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
     externalLinkOpener.openExternalUrl(intent)
@@ -50,7 +54,6 @@ internal class ExternalLinkOpenerTest {
       alertDialogShower.show(
         KiwixDialog.ExternalLinkPopup,
         capture(lambdaSlot),
-        any(),
         any(),
         any()
       )
@@ -63,6 +66,7 @@ internal class ExternalLinkOpenerTest {
   internal fun `alertDialogShower does not open link if negative-button is clicked`() {
     every { intent.resolveActivity(activity.packageManager) } returns mockk()
     every { sharedPreferenceUtil.prefExternalLinkPopup } returns true
+    every { intent.data } returns Uri.parse("https://github.com/")
     val lambdaSlot = slot<() -> Unit>()
     val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
     externalLinkOpener.openExternalUrl(intent)
@@ -71,7 +75,6 @@ internal class ExternalLinkOpenerTest {
         KiwixDialog.ExternalLinkPopup,
         any(),
         capture(lambdaSlot),
-        any(),
         any()
       )
     }
@@ -83,6 +86,7 @@ internal class ExternalLinkOpenerTest {
   internal fun `alertDialogShower opens link and saves preferences if neutral-button is clicked`() {
     every { intent.resolveActivity(activity.packageManager) } returns mockk()
     every { sharedPreferenceUtil.prefExternalLinkPopup } returns true
+    every { intent.data } returns Uri.parse("https://github.com/")
     val lambdaSlot = slot<() -> Unit>()
     val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
     externalLinkOpener.openExternalUrl(intent)
@@ -91,8 +95,7 @@ internal class ExternalLinkOpenerTest {
         KiwixDialog.ExternalLinkPopup,
         any(),
         any(),
-        capture(lambdaSlot),
-        any()
+        capture(lambdaSlot)
       )
     }
     lambdaSlot.captured.invoke()
