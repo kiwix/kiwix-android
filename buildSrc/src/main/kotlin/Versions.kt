@@ -16,7 +16,7 @@ object Versions {
 
   const val org_jetbrains_kotlinx_kotlinx_coroutines: String = "1.4.1"
 
-  const val androidx_test_espresso: String = "3.4.0"
+  const val androidx_test_espresso: String = "3.5.0"
 
   const val androidx_test_espresso_contrib: String = "3.3.0"
 
@@ -36,9 +36,9 @@ object Versions {
 
   const val com_jakewharton: String = "10.2.3"
 
-  const val androidx_test: String = "1.4.0"
+  const val androidx_test: String = "1.5.1"
 
-  const val androidx_test_core: String = "1.5.0-alpha02"
+  const val androidx_test_core: String = "1.5.0"
 
   const val androidx_test_orchestrator: String = "1.4.1"
 
@@ -66,7 +66,7 @@ object Versions {
 
   const val preference_ktx: String = "1.1.1"
 
-  const val junit_jupiter: String = "5.7.0"
+  const val junit_jupiter: String = "5.9.1"
 
   const val assertj_core: String = "3.18.1"
 
@@ -112,7 +112,7 @@ object Versions {
 
   const val aapt2: String = "4.1.1-6503028"
 
-  const val junit: String = "1.1.2"
+  const val junit: String = "1.1.4"
 
   /**
    * Current version: "6.2"

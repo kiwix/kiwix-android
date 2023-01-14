@@ -21,9 +21,9 @@ import android.os.Build
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.PreferenceManager
+import androidx.test.core.app.ActivityScenario
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
 import androidx.test.uiautomator.UiDevice
 import leakcanary.LeakAssertions
 import org.junit.After
@@ -46,7 +46,11 @@ class SearchFragmentTest : BaseActivityTest() {
   @JvmField
   var retryRule = RetryRule()
 
-  override var activityRule: ActivityTestRule<KiwixMainActivity> = activityTestRule {
+  private lateinit var kiwixMainActivity: KiwixMainActivity
+
+  @Before
+  override fun waitForIdle() {
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
@@ -54,15 +58,13 @@ class SearchFragmentTest : BaseActivityTest() {
     }
   }
 
-  @Before
-  override fun waitForIdle() {
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
-  }
-
   @Test
   fun searchFragmentSimple() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      UiThreadStatement.runOnUiThread { activityRule.activity.navigate(R.id.libraryFragment) }
+      ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
+        kiwixMainActivity = it
+        kiwixMainActivity.navigate(R.id.libraryFragment)
+      }
       val loadFileStream =
         SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
       val zimFile = File(context.cacheDir, "testzim.zim")
@@ -79,7 +81,7 @@ class SearchFragmentTest : BaseActivityTest() {
         }
       }
       UiThreadStatement.runOnUiThread {
-        activityRule.activity.navigate(
+        kiwixMainActivity.navigate(
           actionNavigationLibraryToNavigationReader()
             .apply { zimFileUri = zimFile.toUri().toString() }
         )
@@ -87,7 +89,7 @@ class SearchFragmentTest : BaseActivityTest() {
       search { checkZimFileSearchSuccessful(R.id.readerFragment) }
       UiThreadStatement.runOnUiThread {
         if (zimFile.canRead()) {
-          activityRule.activity.openSearch(searchString = "Android")
+          kiwixMainActivity.openSearch(searchString = "Android")
         } else {
           throw RuntimeException(
             "File $zimFile is not readable." +
