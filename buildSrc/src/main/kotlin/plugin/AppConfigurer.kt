@@ -94,7 +94,7 @@ class AppConfigurer {
     "kiwix-universal-${getCurrentDate()}.apk"
 
   private fun getCurrentDate() =
-    Date().let(SimpleDateFormat("dd-MM-yyyy", Locale.ROOT)::format)
+    Date().let(SimpleDateFormat("yyyy-MM-dd", Locale.ROOT)::format)
 
   private fun configureDependencies(target: Project) {
     target.dependencies {
