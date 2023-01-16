@@ -31,7 +31,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 
 @Dao
-abstract class NewRecentSearchRoomDao {
+abstract class RecentSearchRoomDao {
 
   @Query(
     "SELECT * FROM RecentSearchRoomEntity WHERE zimId LIKE :zimId ORDER BY" +

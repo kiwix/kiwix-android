@@ -29,14 +29,14 @@ import org.junit.After
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.core.dao.NewRecentSearchRoomDao
+import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
 class KiwixRoomDatabaseTest {
   private val box: Box<RecentSearchEntity> = mockk(relaxed = true)
-  private lateinit var newRecentSearchRoomDao: NewRecentSearchRoomDao
+  private lateinit var recentSearchRoomDao: RecentSearchRoomDao
   private lateinit var db: KiwixRoomDatabase
 
   // @Before
@@ -50,12 +50,12 @@ class KiwixRoomDatabaseTest {
     db = Room.inMemoryDatabaseBuilder(
       context, KiwixRoomDatabase::class.java
     ).build()
-    newRecentSearchRoomDao = db.newRecentSearchRoomDao()
+    recentSearchRoomDao = db.recentSearchRoomDao()
     val searchTerm = "title"
     val zimId = "zimId"
     box.put(RecentSearchEntity(searchTerm = searchTerm, zimId = zimId))
-    newRecentSearchRoomDao.migrationToRoomInsert(box)
-    newRecentSearchRoomDao.search("zimId").collect { recentSearchEntites ->
+    recentSearchRoomDao.migrationToRoomInsert(box)
+    recentSearchRoomDao.search("zimId").collect { recentSearchEntites ->
       val entity = recentSearchEntites.find { it.zimId == zimId }
       if (entity != null) {
         Assertions.assertEquals(searchTerm, entity.searchTerm)
@@ -70,7 +70,7 @@ class KiwixRoomDatabaseTest {
     db = Room.inMemoryDatabaseBuilder(
       context, KiwixRoomDatabase::class.java
     ).build()
-    newRecentSearchRoomDao = db.newRecentSearchRoomDao()
+    recentSearchRoomDao = db.recentSearchRoomDao()
     val searchTerm = "title"
     val zimId = "zimId"
     val searchTerm2 = "title2"
@@ -78,8 +78,8 @@ class KiwixRoomDatabaseTest {
     box.put(RecentSearchEntity(searchTerm = searchTerm, zimId = zimId))
     box.put(RecentSearchEntity(searchTerm = searchTerm2, zimId = zimId))
     box.put(RecentSearchEntity(searchTerm = searchTerm3, zimId = zimId))
-    newRecentSearchRoomDao.migrationToRoomInsert(box)
-    newRecentSearchRoomDao.search("zimId").collect { recentSearchEntites ->
+    recentSearchRoomDao.migrationToRoomInsert(box)
+    recentSearchRoomDao.search("zimId").collect { recentSearchEntites ->
       Assertions.assertEquals(3, recentSearchEntites.size)
     }
   }
@@ -91,7 +91,7 @@ class KiwixRoomDatabaseTest {
     db = Room.inMemoryDatabaseBuilder(
       context, KiwixRoomDatabase::class.java
     ).build()
-    newRecentSearchRoomDao = db.newRecentSearchRoomDao()
+    recentSearchRoomDao = db.recentSearchRoomDao()
     val searchTerm = "title"
     val zimId = "zimId"
     val searchTerm2 = "title2"
@@ -101,8 +101,8 @@ class KiwixRoomDatabaseTest {
     box.put(RecentSearchEntity(searchTerm = searchTerm, zimId = zimId))
     box.put(RecentSearchEntity(searchTerm = searchTerm2, zimId = zimId2))
     box.put(RecentSearchEntity(searchTerm = searchTerm3, zimId = zimId3))
-    newRecentSearchRoomDao.migrationToRoomInsert(box)
-    val fullSearchList = newRecentSearchRoomDao.fullSearch().toList()
+    recentSearchRoomDao.migrationToRoomInsert(box)
+    val fullSearchList = recentSearchRoomDao.fullSearch().toList()
     Assertions.assertEquals(3, fullSearchList[0].size)
   }
 

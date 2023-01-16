@@ -23,12 +23,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.NewRecentSearchRoomDao
+import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 
 data class DeleteRecentSearch(
   private val searchListItem: SearchListItem,
-  private val recentSearchDao: NewRecentSearchRoomDao,
+  private val recentSearchDao: RecentSearchRoomDao,
   private val viewModelScope: CoroutineScope
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {

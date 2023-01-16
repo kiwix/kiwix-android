@@ -47,7 +47,7 @@ import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.NewRecentSearchRoomDao
+import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
@@ -78,7 +78,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class SearchViewModelTest {
-  private val recentSearchDao: NewRecentSearchRoomDao = mockk()
+  private val recentSearchDao: RecentSearchRoomDao = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val searchResultGenerator: SearchResultGenerator = mockk()
   private val zimFileReader: ZimFileReader = mockk()

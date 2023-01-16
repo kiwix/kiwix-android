@@ -22,21 +22,20 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.core.dao.NewRecentSearchRoomDao
+import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.data.local.KiwixRoomDatabase
 import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
-class NewRecentSearchRoomDaoTest {
+class RecentSearchRoomDaoTest {
 
-  private lateinit var newRecentSearchRoomDao: NewRecentSearchRoomDao
+  private lateinit var recentSearchRoomDao: RecentSearchRoomDao
   private lateinit var db: KiwixRoomDatabase
 
   @Test
@@ -46,14 +45,14 @@ class NewRecentSearchRoomDaoTest {
     db = Room.inMemoryDatabaseBuilder(
       context, KiwixRoomDatabase::class.java
     ).build()
-    newRecentSearchRoomDao = db.newRecentSearchRoomDao()
+    recentSearchRoomDao = db.recentSearchRoomDao()
     val searchTerm = "title"
     val searchTerm2 = "title2"
     val zimId = "zimId"
     val zimId2 = "zimId2"
-    newRecentSearchRoomDao.saveSearch(searchTerm, zimId)
-    newRecentSearchRoomDao.saveSearch(searchTerm2, zimId2)
-    newRecentSearchRoomDao.fullSearch().collect {
+    recentSearchRoomDao.saveSearch(searchTerm, zimId)
+    recentSearchRoomDao.saveSearch(searchTerm2, zimId2)
+    recentSearchRoomDao.fullSearch().collect {
       Assertions.assertEquals(2, it.size)
     }
   }
@@ -65,19 +64,19 @@ class NewRecentSearchRoomDaoTest {
     db = Room.inMemoryDatabaseBuilder(
       context, KiwixRoomDatabase::class.java
     ).build()
-    newRecentSearchRoomDao = db.newRecentSearchRoomDao()
+    recentSearchRoomDao = db.recentSearchRoomDao()
     val searchTerm = "title"
     val searchTerm2 = "title2"
     val searchTerm3 = "title3"
     val zimId = "zimId"
     val zimId2 = "zimId2"
-    newRecentSearchRoomDao.saveSearch(searchTerm, zimId)
-    newRecentSearchRoomDao.saveSearch(searchTerm2, zimId2)
-    Assertions.assertEquals(1, newRecentSearchRoomDao.search(zimId).count())
-    Assertions.assertEquals(1, newRecentSearchRoomDao.search(zimId2).count())
-    newRecentSearchRoomDao.saveSearch(searchTerm3, zimId)
-    Assertions.assertEquals(2, newRecentSearchRoomDao.search(zimId).count())
-    Assertions.assertEquals(1, newRecentSearchRoomDao.search(zimId2).count())
+    recentSearchRoomDao.saveSearch(searchTerm, zimId)
+    recentSearchRoomDao.saveSearch(searchTerm2, zimId2)
+    Assertions.assertEquals(1, recentSearchRoomDao.search(zimId).count())
+    Assertions.assertEquals(1, recentSearchRoomDao.search(zimId2).count())
+    recentSearchRoomDao.saveSearch(searchTerm3, zimId)
+    Assertions.assertEquals(2, recentSearchRoomDao.search(zimId).count())
+    Assertions.assertEquals(1, recentSearchRoomDao.search(zimId2).count())
   }
 
   @Test
@@ -87,16 +86,16 @@ class NewRecentSearchRoomDaoTest {
     db = Room.inMemoryDatabaseBuilder(
       context, KiwixRoomDatabase::class.java
     ).build()
-    newRecentSearchRoomDao = db.newRecentSearchRoomDao()
+    recentSearchRoomDao = db.recentSearchRoomDao()
     val searchTerm = "title"
     val searchTerm2 = "title2"
     val searchTerm3 = "title3"
     val zimId = "zimId"
     val zimId2 = "zimId2"
-    newRecentSearchRoomDao.saveSearch(searchTerm, zimId)
-    newRecentSearchRoomDao.saveSearch(searchTerm2, zimId2)
-    newRecentSearchRoomDao.saveSearch(searchTerm3, zimId)
-    Assertions.assertEquals(searchTerm3, newRecentSearchRoomDao.recentSearches(zimId).first())
+    recentSearchRoomDao.saveSearch(searchTerm, zimId)
+    recentSearchRoomDao.saveSearch(searchTerm2, zimId2)
+    recentSearchRoomDao.saveSearch(searchTerm3, zimId)
+    Assertions.assertEquals(searchTerm3, recentSearchRoomDao.recentSearches(zimId).first())
   }
 
   @Test
@@ -106,18 +105,18 @@ class NewRecentSearchRoomDaoTest {
     db = Room.inMemoryDatabaseBuilder(
       context, KiwixRoomDatabase::class.java
     ).build()
-    newRecentSearchRoomDao = db.newRecentSearchRoomDao()
+    recentSearchRoomDao = db.recentSearchRoomDao()
     val searchTerm = "title"
     val searchTerm2 = "title2"
     val searchTerm3 = "title3"
     val zimId = "zimId"
     val zimId2 = "zimId2"
-    newRecentSearchRoomDao.saveSearch(searchTerm, zimId)
-    newRecentSearchRoomDao.saveSearch(searchTerm2, zimId2)
-    newRecentSearchRoomDao.saveSearch(searchTerm3, zimId)
-    newRecentSearchRoomDao.deleteSearchString(searchTerm)
-    Assertions.assertEquals(1, newRecentSearchRoomDao.search(zimId).count())
-    Assertions.assertEquals(1, newRecentSearchRoomDao.search(zimId2).count())
+    recentSearchRoomDao.saveSearch(searchTerm, zimId)
+    recentSearchRoomDao.saveSearch(searchTerm2, zimId2)
+    recentSearchRoomDao.saveSearch(searchTerm3, zimId)
+    recentSearchRoomDao.deleteSearchString(searchTerm)
+    Assertions.assertEquals(1, recentSearchRoomDao.search(zimId).count())
+    Assertions.assertEquals(1, recentSearchRoomDao.search(zimId2).count())
   }
 
   @Test
@@ -127,20 +126,20 @@ class NewRecentSearchRoomDaoTest {
     db = Room.inMemoryDatabaseBuilder(
       context, KiwixRoomDatabase::class.java
     ).build()
-    newRecentSearchRoomDao = db.newRecentSearchRoomDao()
+    recentSearchRoomDao = db.recentSearchRoomDao()
     val searchTerm = "title"
     val searchTerm2 = "title2"
     val searchTerm3 = "title3"
     val zimId = "zimId"
     val zimId2 = "zimId2"
-    newRecentSearchRoomDao.saveSearch(searchTerm, zimId)
-    newRecentSearchRoomDao.saveSearch(searchTerm2, zimId2)
-    newRecentSearchRoomDao.saveSearch(searchTerm3, zimId)
-    newRecentSearchRoomDao.deleteSearchString(searchTerm)
-    newRecentSearchRoomDao.deleteSearchString(searchTerm2)
-    newRecentSearchRoomDao.deleteSearchString(searchTerm3)
-    Assertions.assertEquals(0, newRecentSearchRoomDao.search(zimId).count())
-    Assertions.assertEquals(0, newRecentSearchRoomDao.search(zimId2).count())
+    recentSearchRoomDao.saveSearch(searchTerm, zimId)
+    recentSearchRoomDao.saveSearch(searchTerm2, zimId2)
+    recentSearchRoomDao.saveSearch(searchTerm3, zimId)
+    recentSearchRoomDao.deleteSearchString(searchTerm)
+    recentSearchRoomDao.deleteSearchString(searchTerm2)
+    recentSearchRoomDao.deleteSearchString(searchTerm3)
+    Assertions.assertEquals(0, recentSearchRoomDao.search(zimId).count())
+    Assertions.assertEquals(0, recentSearchRoomDao.search(zimId2).count())
   }
 
   @Test
@@ -150,18 +149,18 @@ class NewRecentSearchRoomDaoTest {
     db = Room.inMemoryDatabaseBuilder(
       context, KiwixRoomDatabase::class.java
     ).build()
-    newRecentSearchRoomDao = db.newRecentSearchRoomDao()
+    recentSearchRoomDao = db.recentSearchRoomDao()
     val searchTerm = "title"
     val searchTerm2 = "title2"
     val searchTerm3 = "title3"
     val zimId = "zimId"
     val zimId2 = "zimId2"
-    newRecentSearchRoomDao.saveSearch(searchTerm, zimId)
-    newRecentSearchRoomDao.saveSearch(searchTerm2, zimId2)
-    newRecentSearchRoomDao.saveSearch(searchTerm3, zimId)
-    newRecentSearchRoomDao.deleteSearchHistory()
-    Assertions.assertEquals(0, newRecentSearchRoomDao.fullSearch().count())
-    Assertions.assertEquals(0, newRecentSearchRoomDao.search(zimId).count())
-    Assertions.assertEquals(0, newRecentSearchRoomDao.search(zimId2).count())
+    recentSearchRoomDao.saveSearch(searchTerm, zimId)
+    recentSearchRoomDao.saveSearch(searchTerm2, zimId2)
+    recentSearchRoomDao.saveSearch(searchTerm3, zimId)
+    recentSearchRoomDao.deleteSearchHistory()
+    Assertions.assertEquals(0, recentSearchRoomDao.fullSearch().count())
+    Assertions.assertEquals(0, recentSearchRoomDao.search(zimId).count())
+    Assertions.assertEquals(0, recentSearchRoomDao.search(zimId2).count())
   }
 }

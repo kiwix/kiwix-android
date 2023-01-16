@@ -24,13 +24,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
-import org.kiwix.kiwixmobile.core.dao.NewRecentSearchRoomDao
+import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
 
 @Suppress("UnnecessaryAbstractClass")
 @Database(entities = [RecentSearchRoomEntity::class], version = 1)
 abstract class KiwixRoomDatabase : RoomDatabase() {
-  abstract fun newRecentSearchRoomDao(): NewRecentSearchRoomDao
+  abstract fun recentSearchRoomDao(): RecentSearchRoomDao
 
   companion object {
     private var db: KiwixRoomDatabase? = null
@@ -52,6 +52,6 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
   }
 
   fun migrateRecentSearch(boxStore: BoxStore) {
-    newRecentSearchRoomDao().migrationToRoomInsert(boxStore.boxFor())
+    recentSearchRoomDao().migrationToRoomInsert(boxStore.boxFor())
   }
 }
