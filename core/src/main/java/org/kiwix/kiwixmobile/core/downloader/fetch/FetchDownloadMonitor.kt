@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.downloader.fetch
 
+import android.annotation.SuppressLint
 import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Fetch
@@ -28,6 +29,7 @@ import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import javax.inject.Inject
 
+@SuppressLint("CheckResult")
 class FetchDownloadMonitor @Inject constructor(fetch: Fetch, fetchDownloadDao: FetchDownloadDao) :
   DownloadMonitor {
   private val updater = PublishSubject.create<() -> Unit>()

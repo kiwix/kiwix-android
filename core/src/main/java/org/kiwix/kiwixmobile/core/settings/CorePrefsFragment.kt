@@ -127,6 +127,11 @@ abstract class CorePrefsFragment :
       .unregisterOnSharedPreferenceChangeListener(this)
   }
 
+  override fun onDestroyView() {
+    presenter?.dispose()
+    super.onDestroyView()
+  }
+
   private fun setUpSettings() {
     setAppVersionNumber()
   }

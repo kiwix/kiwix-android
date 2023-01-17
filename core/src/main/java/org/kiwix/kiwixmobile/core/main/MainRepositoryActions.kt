@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.util.Log
+import io.reactivex.disposables.Disposable
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
@@ -29,14 +30,18 @@ private const val TAG = "MainPresenter"
 
 @ActivityScope
 class MainRepositoryActions @Inject constructor(private val dataSource: DataSource) {
+  private var saveHistoryDisposable: Disposable? = null
+  private var saveBookmarkDisposable: Disposable? = null
+  private var saveNoteDisposable: Disposable? = null
+  private var deleteNoteDisposable: Disposable? = null
 
   fun saveHistory(history: HistoryItem) {
-    dataSource.saveHistory(history)
+    saveHistoryDisposable = dataSource.saveHistory(history)
       .subscribe({}, { e -> Log.e(TAG, "Unable to save history", e) })
   }
 
   fun saveBookmark(bookmark: BookmarkItem) {
-    dataSource.saveBookmark(bookmark)
+    saveBookmarkDisposable = dataSource.saveBookmark(bookmark)
       .subscribe({}, { e -> Log.e(TAG, "Unable to save bookmark", e) })
   }
 
@@ -47,12 +52,19 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
   }
 
   fun saveNote(note: NoteListItem) {
-    dataSource.saveNote(note)
+    saveNoteDisposable = dataSource.saveNote(note)
       .subscribe({}, { e -> Log.e(TAG, "Unable to save note", e) })
   }
 
   fun deleteNote(noteUniqueKey: String) {
-    dataSource.deleteNote(noteUniqueKey)
+    deleteNoteDisposable = dataSource.deleteNote(noteUniqueKey)
       .subscribe({}, { e -> Log.e(TAG, "Unable to delete note", e) })
+  }
+
+  fun dispose() {
+    saveHistoryDisposable?.dispose()
+    saveBookmarkDisposable?.dispose()
+    saveNoteDisposable?.dispose()
+    deleteNoteDisposable?.dispose()
   }
 }

@@ -439,6 +439,7 @@ class AddNoteDialog : DialogFragment() {
 
   override fun onDestroyView() {
     super.onDestroyView()
+    mainRepositoryActions.dispose()
     dialogNoteAddNoteBinding = null
   }
 

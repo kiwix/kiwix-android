@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.dao
 
+import android.annotation.SuppressLint
 import io.mockk.CapturingSlot
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -63,6 +64,7 @@ internal class NewBookDaoTest {
       newBookDao.books().test().assertValues(listOf(BookOnDisk(expectedEntity)))
     }
 
+    @SuppressLint("CheckResult")
     @Test
     fun `books deletes entities whose file does not exist`() {
       val (_, deletedEntity) = expectEmissionOfExistingAndNotExistingBook()

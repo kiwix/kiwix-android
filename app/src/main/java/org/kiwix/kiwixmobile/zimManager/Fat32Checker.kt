@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.zimManager
 
+import android.annotation.SuppressLint
 import android.os.FileObserver
 import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
@@ -32,6 +33,7 @@ import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.CAN_WRITE_4GB
 import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.INCONCLUSIVE
 import java.io.File
 
+@SuppressLint("CheckResult")
 class Fat32Checker constructor(
   sharedPreferenceUtil: SharedPreferenceUtil,
   private val fileSystemCheckers: List<FileSystemChecker>
