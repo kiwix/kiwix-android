@@ -202,6 +202,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         onRefreshStateChange(true)
         fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.GONE
         fragmentDestinationDownloadBinding?.allowInternetPermissionButton?.visibility = View.GONE
+        fragmentDestinationDownloadBinding?.libraryList?.visibility = View.VISIBLE
         sharedPreferenceUtil.putPrefWifiOnly(false)
         zimManageViewModel.shouldShowWifiOnlyDialog.value = false
       },
@@ -216,6 +217,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         )
         fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.VISIBLE
         fragmentDestinationDownloadBinding?.allowInternetPermissionButton?.visibility = View.VISIBLE
+        fragmentDestinationDownloadBinding?.libraryList?.visibility = View.GONE
       }
     )
   }
