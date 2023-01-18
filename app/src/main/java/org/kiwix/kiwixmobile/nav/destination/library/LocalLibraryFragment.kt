@@ -36,6 +36,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
@@ -43,6 +44,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import org.kiwix.kiwixmobile.R
@@ -149,6 +151,12 @@ class LocalLibraryFragment : BaseFragment() {
       .also {
         coreMainActivity.navHostContainer
           .setBottomMarginToFragmentContainerView(0)
+
+        val bottomNavigationView =
+          requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view)
+        bottomNavigationView?.let {
+          setBottomMarginToSwipeRefreshLayout(bottomNavigationView.measuredHeight)
+        }
       }
     disposable.add(sideEffects())
     zimManageViewModel.deviceListIsRefreshing.observe(viewLifecycleOwner) {
@@ -162,6 +170,14 @@ class LocalLibraryFragment : BaseFragment() {
       offerAction(FileSelectActions.UserClickedDownloadBooksButton)
     }
     hideFilePickerButton()
+  }
+
+  private fun setBottomMarginToSwipeRefreshLayout(marginBottom: Int) {
+    fragmentDestinationLibraryBinding?.zimSwiperefresh?.apply {
+      val params = layoutParams as CoordinatorLayout.LayoutParams?
+      params?.bottomMargin = marginBottom
+      requestLayout()
+    }
   }
 
   private fun hideFilePickerButton() {
