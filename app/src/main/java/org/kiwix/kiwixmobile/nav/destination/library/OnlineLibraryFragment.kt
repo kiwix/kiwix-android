@@ -189,10 +189,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         }
       }
     )
-
-    fragmentDestinationDownloadBinding?.allowInternetPermissionButton?.setOnClickListener {
-      showInternetPermissionDialog()
-    }
   }
 
   private fun showInternetPermissionDialog() {
@@ -201,7 +197,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       {
         onRefreshStateChange(true)
         fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.GONE
-        fragmentDestinationDownloadBinding?.allowInternetPermissionButton?.visibility = View.GONE
         fragmentDestinationDownloadBinding?.libraryList?.visibility = View.VISIBLE
         sharedPreferenceUtil.putPrefWifiOnly(false)
         zimManageViewModel.shouldShowWifiOnlyDialog.value = false
@@ -213,10 +208,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           Toast.LENGTH_SHORT
         )
         fragmentDestinationDownloadBinding?.libraryErrorText?.setText(
-          R.string.allow_internet_permission_message
+          R.string.swipe_down_for_library
         )
         fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.VISIBLE
-        fragmentDestinationDownloadBinding?.allowInternetPermissionButton?.visibility = View.VISIBLE
         fragmentDestinationDownloadBinding?.libraryList?.visibility = View.GONE
       }
     )
@@ -274,7 +268,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           )
           fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.VISIBLE
         }
-        fragmentDestinationDownloadBinding?.allowInternetPermissionButton?.visibility = View.GONE
         fragmentDestinationDownloadBinding?.librarySwipeRefresh?.isRefreshing = false
       }
       else -> {}
@@ -304,7 +297,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     } else {
       fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.GONE
     }
-    fragmentDestinationDownloadBinding?.allowInternetPermissionButton?.visibility = View.GONE
   }
 
   private fun refreshFragment() {
@@ -313,6 +305,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     } else {
       zimManageViewModel.requestDownloadLibrary.onNext(Unit)
     }
+    fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.GONE
+    fragmentDestinationDownloadBinding?.libraryList?.visibility = View.VISIBLE
   }
 
   private fun downloadFile() {

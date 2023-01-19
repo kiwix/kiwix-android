@@ -314,7 +314,6 @@
   <string name="select_folder">Выберите папку для внешнего хранилища.</string>
   <string name="system_unable_to_grant_permission_message">Система не может предоставить разрешение!</string>
   <string name="allow">Разрешить</string>
-  <string name="allow_internet_permission_message">Пожалуйста разрешите доступ в интернет для загрузки контента</string>
   <string name="no_notes">Нет заметок</string>
   <string name="notes_from_all_books">Просмотр заметок из всех книг</string>
   <string name="search_notes">Искать заметки</string>

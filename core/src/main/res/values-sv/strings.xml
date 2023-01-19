@@ -298,7 +298,6 @@
   <string name="select_folder">Välj mapp för extern lagring.</string>
   <string name="system_unable_to_grant_permission_message">Systemet kunde inte ge tillstånd!</string>
   <string name="allow">Tillåt</string>
-  <string name="allow_internet_permission_message">Tillåt internetbehörigheter för att ladda ner innehåll</string>
   <string name="no_notes">Inga anteckningar</string>
   <string name="notes_from_all_books">Visa anteckningar från alla böcker</string>
   <string name="search_notes">Sök i anteckningar</string>

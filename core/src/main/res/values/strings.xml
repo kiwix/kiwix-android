@@ -304,7 +304,7 @@
   <string name="select_folder">Please select a folder for external storage.</string>
   <string name="system_unable_to_grant_permission_message">System unable to grant permission!</string>
   <string name="allow">Allow</string>
-  <string name="allow_internet_permission_message">Please allow internet permission to download content</string>
+  <string name="swipe_down_for_library">Swipe Down for Library</string>
   <string-array name="pref_night_modes_entries">
     <item>@string/on</item>
     <item>@string/off</item>

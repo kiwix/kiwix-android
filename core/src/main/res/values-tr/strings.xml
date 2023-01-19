@@ -307,7 +307,6 @@
   <string name="select_folder">Lütfen harici depolama için bir klasör seçin.</string>
   <string name="system_unable_to_grant_permission_message">Sistem izin veremiyor!</string>
   <string name="allow">İzin ver</string>
-  <string name="allow_internet_permission_message">Lütfen içeriği indirmek için internet iznine izin verin</string>
   <string name="no_notes">Not Yok</string>
   <string name="notes_from_all_books">Tüm Kitaplardan Notları Görüntüle</string>
   <string name="search_notes">Notları Ara</string>

@@ -304,7 +304,6 @@
   <string name="select_folder">Vyberte složku pro externí úložiště.</string>
   <string name="system_unable_to_grant_permission_message">Systém nemůže udělit oprávnění!</string>
   <string name="allow">Povolit</string>
-  <string name="allow_internet_permission_message">Povolte prosím internetové povolení ke stahování obsahu</string>
   <string name="no_notes">Žádné poznámky</string>
   <string name="notes_from_all_books">Zobrazit poznámky ze všech knih</string>
   <string name="search_notes">Hledat poznámky</string>

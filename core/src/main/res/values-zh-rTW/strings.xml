@@ -299,7 +299,6 @@
   <string name="select_folder">請選取用於外部儲存的資料夾。</string>
   <string name="system_unable_to_grant_permission_message">系統無法授予權限！</string>
   <string name="allow">允許</string>
-  <string name="allow_internet_permission_message">請允許網路權限來下載內容</string>
   <string name="no_notes">沒有註釋</string>
   <string name="notes_from_all_books">檢視來自所有書籍的註釋</string>
   <string name="search_notes">搜尋註釋</string>

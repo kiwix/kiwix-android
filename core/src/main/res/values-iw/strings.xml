@@ -301,7 +301,6 @@
   <string name="select_folder">נא לבחור תיקייה לאחסון חיצוני.</string>
   <string name="system_unable_to_grant_permission_message">המערכת אינה יכולה לתת הרשאה!</string>
   <string name="allow">לאפשר</string>
-  <string name="allow_internet_permission_message">נא לאפשר הרשאת אינטרנט כדי להוריד תוכן</string>
   <string name="no_notes">אין הערות</string>
   <string name="notes_from_all_books">הצגת הערות מכל הספרים</string>
   <string name="search_notes">חיפוש בהערות</string>

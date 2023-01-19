@@ -309,7 +309,6 @@
   <string name="select_folder">Veuillez sélectionner un dossier pour le stockage externe.</string>
   <string name="system_unable_to_grant_permission_message">Le système n’a pas pu accorder le droit d’accès !</string>
   <string name="allow">Autoriser</string>
-  <string name="allow_internet_permission_message">Veuillez autoriser le droit sur Internet de télécharger le contenu.</string>
   <string name="no_notes">Aucune note</string>
   <string name="notes_from_all_books">Afficher les notes de tous les livres</string>
   <string name="search_notes">Rechercher des notes</string>
