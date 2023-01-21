@@ -323,4 +323,6 @@
   <string name="open_article">Open Article</string>
   <string name="delete_note_dialog_message">Note: Notes are not deleted from your storage</string>
   <string name="delete_selected_notes">Delete Selected Notes?</string>
+  <string name="download_tts_language_title">Download this language for read aloud feature</string>
+  <string name="download_tts_language_message">Please click download button it will automatically download the required language.</string>
 </resources>
