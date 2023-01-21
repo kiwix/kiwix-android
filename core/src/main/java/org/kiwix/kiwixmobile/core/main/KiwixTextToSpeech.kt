@@ -117,7 +117,8 @@ class KiwixTextToSpeech internal constructor(
       } else {
         tts.language = locale
         if (getFeatures(tts).contains(Engine.KEY_FEATURE_NOT_INSTALLED)) {
-          (context as CoreMainActivity).externalLinkOpener.showTTSLanguageDownloadDialog()
+          val activity = context as CoreMainActivity?
+          activity?.externalLinkOpener?.showTTSLanguageDownloadDialog()
         } else if (requestAudioFocus()) {
           loadURL(webView)
         }

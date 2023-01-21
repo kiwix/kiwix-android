@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.utils
 
 import android.app.Activity
 import android.content.Intent
-import android.speech.tts.TextToSpeech
+import android.speech.tts.TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -69,7 +69,7 @@ class ExternalLinkOpener @Inject constructor(
       {
         activity.startActivity(
           Intent().apply {
-            action = TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA
+            action = ACTION_INSTALL_TTS_DATA
           }
         )
       }
