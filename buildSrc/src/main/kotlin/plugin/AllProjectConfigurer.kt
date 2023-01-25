@@ -100,7 +100,6 @@ class AllProjectConfigurer {
           "GoogleAppIndexingApiWarning",
           "LockedOrientationActivity",
           //TODO stop ignoring below this
-          "CheckResult",
           "LabelFor",
           "LogConditional",
           "ConvertToWebp",

@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.reader
 
+import android.annotation.SuppressLint
 import android.content.res.AssetFileDescriptor
 import android.net.Uri
 import android.os.ParcelFileDescriptor
@@ -173,6 +174,7 @@ class ZimFileReader constructor(
 
   private fun getContent(url: String) = getContentAndMimeType(url).let { (content, _) -> content }
 
+  @SuppressLint("CheckResult")
   private fun streamZimContentToPipe(uri: String, outputStream: OutputStream) {
     Completable.fromAction {
       try {

@@ -245,6 +245,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   override fun onDestroyView() {
     super.onDestroyView()
+    availableSpaceCalculator.dispose()
     fragmentDestinationDownloadBinding?.libraryList?.adapter = null
     fragmentDestinationDownloadBinding = null
   }

@@ -802,6 +802,7 @@ abstract class CoreReaderFragment :
       val activity = requireActivity() as AppCompatActivity?
       activity?.setSupportActionBar(null)
     }
+    repositoryActions?.dispose()
     safeDispose()
     tabCallback = null
     hideBackToTopTimer?.cancel()

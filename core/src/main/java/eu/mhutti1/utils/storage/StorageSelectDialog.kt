@@ -30,6 +30,7 @@ import eu.mhutti1.utils.storage.adapter.StorageAdapter
 import eu.mhutti1.utils.storage.adapter.StorageDelegate
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.databinding.StorageSelectDialogBinding
@@ -44,6 +45,7 @@ class StorageSelectDialog : DialogFragment() {
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private var aTitle: String? = null
   private var storageSelectDialogViewBinding: StorageSelectDialogBinding? = null
+  private var storageDisposable: Disposable? = null
 
   private val storageAdapter: StorageAdapter by lazy {
     StorageAdapter(
@@ -73,13 +75,14 @@ class StorageSelectDialog : DialogFragment() {
       setHasFixedSize(true)
     }
 
-    Flowable.fromCallable { StorageDeviceUtils.getWritableStorage(requireActivity()) }
-      .subscribeOn(Schedulers.io())
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe(
-        { storageAdapter.items = it },
-        Throwable::printStackTrace
-      )
+    storageDisposable =
+      Flowable.fromCallable { StorageDeviceUtils.getWritableStorage(requireActivity()) }
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(
+          { storageAdapter.items = it },
+          Throwable::printStackTrace
+        )
   }
 
   override fun show(fm: FragmentManager, text: String?) {
@@ -89,6 +92,7 @@ class StorageSelectDialog : DialogFragment() {
 
   override fun onDestroyView() {
     super.onDestroyView()
+    storageDisposable?.dispose()
     storageSelectDialogViewBinding = null
   }
 }

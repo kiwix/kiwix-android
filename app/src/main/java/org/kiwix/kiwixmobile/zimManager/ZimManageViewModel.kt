@@ -246,12 +246,14 @@ class ZimManageViewModel @Inject constructor(
       .observeOn(Schedulers.io())
       .subscribe(
         {
-          kiwixService.library
-            .retry(5)
-            .subscribe(library::onNext) {
-              it.printStackTrace()
-              library.onNext(LibraryNetworkEntity().apply { book = LinkedList() })
-            }
+          compositeDisposable?.add(
+            kiwixService.library
+              .retry(5)
+              .subscribe(library::onNext) {
+                it.printStackTrace()
+                library.onNext(LibraryNetworkEntity().apply { book = LinkedList() })
+              }
+          )
         },
         Throwable::printStackTrace
       )

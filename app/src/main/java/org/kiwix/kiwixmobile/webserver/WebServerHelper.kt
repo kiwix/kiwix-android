@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.webserver
 import android.util.Log
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import org.kiwix.kiwixmobile.core.utils.DEFAULT_PORT
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
 import org.kiwix.kiwixmobile.core.utils.ServerUtils.INVALID_IP
@@ -40,6 +41,7 @@ class WebServerHelper @Inject constructor(
 ) {
   private var kiwixServer: KiwixServer? = null
   private var isServerStarted = false
+  private var validIpAddressDisposable: Disposable? = null
 
   fun startServerHelper(selectedBooksPath: ArrayList<String>): Boolean {
     val ip = getIpAddress()
@@ -79,7 +81,7 @@ class WebServerHelper @Inject constructor(
   // If no ip is found after 15 seconds, dismisses the progress dialog
   @Suppress("MagicNumber")
   fun pollForValidIpAddress() {
-    Flowable.interval(1, TimeUnit.SECONDS)
+    validIpAddressDisposable = Flowable.interval(1, TimeUnit.SECONDS)
       .map { getIp() }
       .filter { s: String? -> s != INVALID_IP }
       .timeout(15, TimeUnit.SECONDS)
@@ -94,6 +96,10 @@ class WebServerHelper @Inject constructor(
         Log.d(TAG, "Unable to turn on server", e)
         ipAddressCallbacks.onIpAddressInvalid()
       }
+  }
+
+  fun dispose() {
+    validIpAddressDisposable?.dispose()
   }
 
   companion object {

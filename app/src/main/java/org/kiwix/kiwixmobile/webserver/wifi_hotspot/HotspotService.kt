@@ -64,6 +64,7 @@ class HotspotService :
   }
 
   override fun onDestroy() {
+    webServerHelper?.dispose()
     hotspotStateReceiver?.let(this@HotspotService::unregisterReceiver)
     super.onDestroy()
   }

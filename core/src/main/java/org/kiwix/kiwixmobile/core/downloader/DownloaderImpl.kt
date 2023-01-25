@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.downloader
 
+import android.annotation.SuppressLint
 import io.reactivex.Observable
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
@@ -31,6 +32,7 @@ class DownloaderImpl @Inject constructor(
   private val kiwixService: KiwixService
 ) : Downloader {
 
+  @SuppressLint("CheckResult")
   override fun download(book: LibraryNetworkEntity.Book) {
     urlProvider(book)
       .take(1)
