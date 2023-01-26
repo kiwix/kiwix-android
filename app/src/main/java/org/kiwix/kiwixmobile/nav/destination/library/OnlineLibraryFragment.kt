@@ -177,7 +177,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       viewLifecycleOwner
     ) {
       if (it) {
-        showInternetPermissionDialog()
+        showInternetAccessViaMobileNetworkDialog()
       }
     }
 
@@ -189,19 +189,14 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         }
       }
     )
-
-    fragmentDestinationDownloadBinding?.allowInternetPermissionButton?.setOnClickListener {
-      showInternetPermissionDialog()
-    }
   }
 
-  private fun showInternetPermissionDialog() {
+  private fun showInternetAccessViaMobileNetworkDialog() {
     dialogShower.show(
       WifiOnly,
       {
         onRefreshStateChange(true)
-        fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.GONE
-        fragmentDestinationDownloadBinding?.allowInternetPermissionButton?.visibility = View.GONE
+        showRecyclerviewAndHideSwipeDownForLibraryErrorText()
         sharedPreferenceUtil.putPrefWifiOnly(false)
         zimManageViewModel.shouldShowWifiOnlyDialog.value = false
       },
@@ -211,13 +206,26 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           resources.getString(R.string.denied_internet_permission_message),
           Toast.LENGTH_SHORT
         )
-        fragmentDestinationDownloadBinding?.libraryErrorText?.setText(
-          R.string.allow_internet_permission_message
-        )
-        fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.VISIBLE
-        fragmentDestinationDownloadBinding?.allowInternetPermissionButton?.visibility = View.VISIBLE
+        hideRecyclerviewAndShowSwipeDownForLibraryErrorText()
       }
     )
+  }
+
+  private fun showRecyclerviewAndHideSwipeDownForLibraryErrorText() {
+    fragmentDestinationDownloadBinding?.apply {
+      libraryErrorText.visibility = View.GONE
+      libraryList.visibility = View.VISIBLE
+    }
+  }
+
+  private fun hideRecyclerviewAndShowSwipeDownForLibraryErrorText() {
+    fragmentDestinationDownloadBinding?.apply {
+      libraryErrorText.setText(
+        R.string.swipe_down_for_library
+      )
+      libraryErrorText.visibility = View.VISIBLE
+      libraryList.visibility = View.GONE
+    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -262,6 +270,13 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private fun onNetworkStateChange(networkState: NetworkState?) {
     when (networkState) {
       NetworkState.CONNECTED -> {
+        if (NetworkUtils.isWiFi(requireContext())) {
+          onRefreshStateChange(true)
+          refreshFragment()
+        } else if (noWifiWithWifiOnlyPreferenceSet) {
+          onRefreshStateChange(false)
+          hideRecyclerviewAndShowSwipeDownForLibraryErrorText()
+        }
       }
       NetworkState.NOT_CONNECTED -> {
         if (libraryAdapter.itemCount > 0) {
@@ -272,7 +287,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           )
           fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.VISIBLE
         }
-        fragmentDestinationDownloadBinding?.allowInternetPermissionButton?.visibility = View.GONE
         fragmentDestinationDownloadBinding?.librarySwipeRefresh?.isRefreshing = false
       }
       else -> {}
@@ -302,7 +316,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     } else {
       fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.GONE
     }
-    fragmentDestinationDownloadBinding?.allowInternetPermissionButton?.visibility = View.GONE
   }
 
   private fun refreshFragment() {
@@ -311,6 +324,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     } else {
       zimManageViewModel.requestDownloadLibrary.onNext(Unit)
     }
+    fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.GONE
+    fragmentDestinationDownloadBinding?.libraryList?.visibility = View.VISIBLE
   }
 
   private fun downloadFile() {

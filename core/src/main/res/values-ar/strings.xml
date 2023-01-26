@@ -303,7 +303,6 @@
   <string name="select_folder">الرجاء تحديد مجلد للتخزين الخارجي.</string>
   <string name="system_unable_to_grant_permission_message">النظام غير قادر على منح الإذن!</string>
   <string name="allow">السماح</string>
-  <string name="allow_internet_permission_message">يرجى السماح بإذن الإنترنت لتنزيل المحتوى</string>
   <string name="no_notes">لا توجد ملاحظات</string>
   <string name="notes_from_all_books">عرض الملاحظات من جميع الكتب</string>
   <string name="search_notes">ملاحظات البحث</string>

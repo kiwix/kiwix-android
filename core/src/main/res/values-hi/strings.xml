@@ -132,5 +132,4 @@
   <string name="on">चालू</string>
   <string name="off">बंद</string>
   <string name="allow">अनुमति दें</string>
-  <string name="allow_internet_permission_message">कृपया कंटैट डाउनलोड करने के लिए इंटरनेट की अनुमति दें</string>
 </resources>

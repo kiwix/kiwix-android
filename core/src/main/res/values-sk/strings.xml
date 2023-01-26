@@ -293,7 +293,6 @@
   <string name="select_folder">Prosím vyberte priečinok pre externé úložisko.</string>
   <string name="system_unable_to_grant_permission_message">Systému sa nedarí udeliť povolenie!</string>
   <string name="allow">Povoliť</string>
-  <string name="allow_internet_permission_message">Povoľte internetové povolenie na sťahovanie obsahu</string>
   <string name="no_notes">Žiadne poznámky</string>
   <string name="notes_from_all_books">Zobraziť poznámky zo všetkých kníh</string>
   <string name="search_notes">Hľadať v poznámkach</string>

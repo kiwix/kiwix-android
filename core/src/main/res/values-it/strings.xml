@@ -304,7 +304,6 @@
   <string name="select_folder">Seleziona una cartella per l\'archiviazione esterna.</string>
   <string name="system_unable_to_grant_permission_message">Il sistema non è in grado di concedere l\'autorizzazione!</string>
   <string name="allow">Consenti</string>
-  <string name="allow_internet_permission_message">Si prega di consentire l\'autorizzazione a Internet per scaricare i contenuti</string>
   <string name="no_notes">Nessuna nota</string>
   <string name="notes_from_all_books">Visualizza le note di tutti i libri</string>
   <string name="search_notes">Cerca note</string>

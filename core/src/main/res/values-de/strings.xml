@@ -309,5 +309,4 @@
   <string name="select_folder">Bitte einen Ordner für externe Speicherung auswählen.</string>
   <string name="system_unable_to_grant_permission_message">System kann keine Berechtigung erteilen!</string>
   <string name="allow">Erlauben</string>
-  <string name="allow_internet_permission_message">Bitte erteile die Internet-Erlaubnis, um Inhalte herunterzuladen</string>
 </resources>

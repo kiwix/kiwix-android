@@ -65,16 +65,4 @@
     app:layout_constraintVertical_bias="0.45"
     tools:ignore="RequiredSize" />
 
-  <Button
-    android:id="@+id/allowInternetPermissionButton"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:text="@string/allow"
-    android:visibility="gone"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/libraryErrorText" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -296,7 +296,6 @@
   <string name="select_folder">வெளிப்புற சேமிப்பகத்திற்கான கோப்புறையைத் தேர்ந்தெடுக்கவும்.</string>
   <string name="system_unable_to_grant_permission_message">அமைப்பு அனுமதி வழங்க முடியவில்லை!</string>
   <string name="allow">அனுமதிக்கவும்</string>
-  <string name="allow_internet_permission_message">உள்ளடக்கத்தைப் பதிவிறக்க இணைய அனுமதியை அனுமதிக்கவும்</string>
   <string name="no_notes">குறிப்புகள் இல்லை</string>
   <string name="notes_from_all_books">எல்லா புத்தகங்களிலிருந்தும் குறிப்புகளைப் பார்க்கவும்</string>
   <string name="search_notes">குறிப்புகளைத் தேடு</string>

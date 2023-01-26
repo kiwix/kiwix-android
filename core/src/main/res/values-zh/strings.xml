@@ -311,7 +311,6 @@
   <string name="select_folder">请选择用于外部存储的文件夹。</string>
   <string name="system_unable_to_grant_permission_message">系统无法授予权限！</string>
   <string name="allow">允许</string>
-  <string name="allow_internet_permission_message">请允许联网权限来下载内容</string>
   <string name="no_notes">没有注释</string>
   <string name="notes_from_all_books">查看来自所有书籍的注释</string>
   <string name="search_notes">搜索注释</string>
