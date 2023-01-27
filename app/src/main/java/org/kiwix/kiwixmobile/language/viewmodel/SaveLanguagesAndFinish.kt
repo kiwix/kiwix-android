@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.language.viewmodel
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.Flowable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
@@ -34,6 +35,7 @@ data class SaveLanguagesAndFinish(
   override fun invokeWith(activity: AppCompatActivity) {
     Flowable.fromCallable { languageDao.insert(languages) }
       .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
       .subscribe({
         activity.onBackPressed()
       }, Throwable::printStackTrace)
