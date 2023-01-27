@@ -19,17 +19,10 @@ package org.kiwix.kiwixmobile.core.dao.entities
 
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
-import org.kiwix.kiwixmobile.core.data.local.entity.RecentSearch
 
 @Entity
 data class RecentSearchEntity(
   @Id var id: Long = 0L,
   val searchTerm: String,
   val zimId: String
-) {
-  constructor(recentSearch: RecentSearch) : this(
-    0,
-    recentSearch.searchString,
-    recentSearch.zimID
-  )
-}
+)

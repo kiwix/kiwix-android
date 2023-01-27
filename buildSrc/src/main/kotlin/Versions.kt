@@ -32,8 +32,6 @@ object Versions {
 
   const val com_google_dagger: String = "2.42"
 
-  const val com_yahoo_squidb: String = "4.0.0-beta.2" // available: "3.2.3"
-
   const val com_jakewharton: String = "10.2.3"
 
   const val androidx_test: String = "1.5.1"
@@ -61,6 +59,8 @@ object Versions {
   const val leakcanary_android: String = "2.9.1"
 
   const val constraintlayout: String = "2.0.4"
+
+  const val swipe_refresh_layout: String = "1.1.0"
 
   const val collection_ktx: String = "1.1.0"
 

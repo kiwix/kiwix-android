@@ -35,8 +35,6 @@ import org.kiwix.kiwixmobile.core.dao.NewNoteDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.data.DataModule
 import org.kiwix.kiwixmobile.core.data.DataSource
-import org.kiwix.kiwixmobile.core.data.local.dao.BookDao
-import org.kiwix.kiwixmobile.core.data.local.dao.BookmarksDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
@@ -95,8 +93,6 @@ interface CoreComponent {
   fun connectivityManager(): ConnectivityManager
   fun context(): Context
   fun downloader(): Downloader
-  fun bookDao(): BookDao
-  fun bookmarksDao(): BookmarksDao
   fun notificationManager(): NotificationManager
   fun searchResultGenerator(): SearchResultGenerator
 

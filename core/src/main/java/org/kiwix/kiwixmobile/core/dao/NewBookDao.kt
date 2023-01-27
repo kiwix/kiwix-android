@@ -23,7 +23,6 @@ import io.objectbox.kotlin.query
 import io.objectbox.query.QueryBuilder
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity_
-import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
@@ -86,13 +85,6 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
 
   private fun delete(books: List<BookOnDiskEntity>) {
     box.remove(books)
-  }
-
-  fun getFavIconAndZimFile(it: Bookmark): Pair<String?, String?> {
-    val bookOnDiskEntity = box.query {
-      equal(BookOnDiskEntity_.bookId, it.zimId, QueryBuilder.StringOrder.CASE_INSENSITIVE)
-    }.find().getOrNull(0)
-    return bookOnDiskEntity?.let { it.favIcon to it.file.path } ?: null to null
   }
 
   fun bookMatching(downloadTitle: String) = box.query {

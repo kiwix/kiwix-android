@@ -23,7 +23,6 @@ import io.objectbox.query.QueryBuilder
 import kotlinx.coroutines.flow.map
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity_
-import org.kiwix.kiwixmobile.core.data.local.entity.RecentSearch
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 import javax.inject.Inject
 
@@ -64,10 +63,6 @@ class NewRecentSearchDao @Inject constructor(
 
   fun deleteSearchHistory() {
     box.removeAll()
-  }
-
-  fun migrationInsert(recentSearches: MutableList<RecentSearch>) {
-    box.put(recentSearches.map(::RecentSearchEntity))
   }
 
   companion object {

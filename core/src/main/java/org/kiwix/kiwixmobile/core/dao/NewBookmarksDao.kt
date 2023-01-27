@@ -24,7 +24,6 @@ import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity_
-import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -90,12 +89,5 @@ class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) : PageDa
         QueryBuilder.StringOrder.CASE_INSENSITIVE
       )
     }.remove()
-  }
-
-  fun migrationInsert(
-    bookmarks: MutableList<Bookmark>,
-    bookDao: NewBookDao
-  ) {
-    box.put(bookmarks.zip(bookmarks.map(bookDao::getFavIconAndZimFile)).map(::BookmarkEntity))
   }
 }

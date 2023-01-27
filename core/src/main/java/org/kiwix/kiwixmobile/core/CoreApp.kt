@@ -26,7 +26,6 @@ import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
 import androidx.multidex.MultiDex
 import com.jakewharton.threetenabp.AndroidThreeTen
-import org.kiwix.kiwixmobile.core.data.local.KiwixDatabase
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.di.components.DaggerCoreComponent
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
@@ -47,9 +46,6 @@ abstract class CoreApp : Application() {
 
   @Inject
   lateinit var nightModeConfig: NightModeConfig
-
-  @Inject
-  lateinit var kiwixDatabase: KiwixDatabase
 
   /**
    * The init of this class does the work of initializing,
@@ -83,7 +79,6 @@ abstract class CoreApp : Application() {
       .build()
     AndroidThreeTen.init(this)
     coreComponent.inject(this)
-    kiwixDatabase.forceMigration()
     downloadMonitor.init()
     nightModeConfig.init()
     fileLogger.writeLogFile(this)
