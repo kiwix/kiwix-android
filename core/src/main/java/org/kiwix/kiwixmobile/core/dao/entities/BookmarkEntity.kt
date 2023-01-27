@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.core.dao.entities
 
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
-import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 
 @Entity
@@ -40,21 +39,5 @@ data class BookmarkEntity(
     item.bookmarkUrl,
     item.title,
     item.favicon
-  )
-
-  private constructor(bookmark: Bookmark, zimFilePath: String?, favicon: String?) : this(
-    0,
-    bookmark.zimId,
-    bookmark.zimName,
-    zimFilePath,
-    bookmark.bookmarkUrl,
-    bookmark.bookmarkTitle,
-    favicon
-  )
-
-  constructor(bookmarkWithFavIconAndFile: Pair<Bookmark, Pair<String?, String?>>) : this(
-    bookmarkWithFavIconAndFile.first,
-    bookmarkWithFavIconAndFile.second.first,
-    bookmarkWithFavIconAndFile.second.second
   )
 }

@@ -99,7 +99,6 @@ play {
 }
 
 dependencies {
-  implementation(Libs.squidb)
   androidTestImplementation(Libs.leakcanary_android_instrumentation)
 }
 task("generateVersionCodeAndName") {

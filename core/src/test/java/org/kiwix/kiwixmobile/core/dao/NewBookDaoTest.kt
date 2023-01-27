@@ -37,7 +37,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity_
-import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.sharedFunctions.book
@@ -190,42 +189,6 @@ internal class NewBookDaoTest {
     newBookDao.migrationInsert(listOf(book))
     slot.captured.call()
     verify { box.put(listOf(BookOnDiskEntity(BookOnDisk(book = book, file = book.file!!)))) }
-  }
-
-  @Test
-  fun `getFavIconAndZimFile with no result returns pair with null values`() {
-    val bookmark: Bookmark = mockk()
-    expectGetFavIconAndZimFileWith(bookmark, listOf())
-    assertThat(newBookDao.getFavIconAndZimFile(bookmark)).isEqualTo(Pair(null, null))
-  }
-
-  @Test
-  fun `getFavIconAndZimFile with result returns valid pair`() {
-    val bookmark: Bookmark = mockk()
-    val bookOnDiskEntity: BookOnDiskEntity = bookOnDiskEntity()
-    expectGetFavIconAndZimFileWith(bookmark, listOf(bookOnDiskEntity))
-    assertThat(newBookDao.getFavIconAndZimFile(bookmark))
-      .isEqualTo(Pair(bookOnDiskEntity.favIcon, bookOnDiskEntity.file.path))
-  }
-
-  private fun expectGetFavIconAndZimFileWith(
-    bookmark: Bookmark,
-    queryResult: List<BookOnDiskEntity>
-  ) {
-    val expectedZimId = "zimId"
-    every { bookmark.zimId } returns expectedZimId
-    val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk()
-    every { box.query() } returns queryBuilder
-    every {
-      queryBuilder.equal(
-        BookOnDiskEntity_.bookId,
-        expectedZimId,
-        QueryBuilder.StringOrder.CASE_INSENSITIVE
-      )
-    } returns queryBuilder
-    val query: Query<BookOnDiskEntity> = mockk()
-    every { queryBuilder.build() } returns query
-    every { query.find() } returns queryResult
   }
 
   @Test

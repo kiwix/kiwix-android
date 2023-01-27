@@ -171,6 +171,7 @@ class AllProjectConfigurer {
       implementation(Libs.appcompat)
       implementation(Libs.material)
       implementation(Libs.constraintlayout)
+      implementation(Libs.swipe_refresh_layout)
       implementation(Libs.multidex)
       // navigation
       implementation(Libs.navigation_fragment_ktx)

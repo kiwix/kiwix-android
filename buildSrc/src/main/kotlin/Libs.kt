@@ -162,11 +162,6 @@ object Libs {
     Versions.com_google_dagger
 
   /**
-   * https://jitpack.io/p/yahoo/squidb
-   */
-  const val squidb: String = "com.github.yahoo:squidb:" + Versions.com_yahoo_squidb
-
-  /**
    * https://github.com/JakeWharton/butterknife/
    */
   const val butterknife: String = "com.jakewharton:butterknife:" + Versions.com_jakewharton
@@ -302,6 +297,9 @@ object Libs {
    */
   const val constraintlayout: String = "androidx.constraintlayout:constraintlayout:" +
     Versions.constraintlayout
+
+  const val swipe_refresh_layout: String = "androidx.swiperefreshlayout:swiperefreshlayout:" +
+    Versions.swipe_refresh_layout
 
   /**
    * http://developer.android.com/tools/extras/support-library.html

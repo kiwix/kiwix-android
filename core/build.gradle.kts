@@ -67,9 +67,6 @@ dependencies {
     api(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))
   }
 
-  // SquiDB
-  implementation(Libs.squidb)
-
   // Document File
   implementation(Libs.select_folder_document_file)
 
