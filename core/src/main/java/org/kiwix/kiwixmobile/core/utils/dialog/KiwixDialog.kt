@@ -221,6 +221,13 @@ sealed class KiwixDialog(
     android.R.string.cancel
   )
 
+  object DownloadTTSLanguage : KiwixDialog(
+    R.string.download_tts_language_title,
+    R.string.download_tts_language_message,
+    R.string.download,
+    android.R.string.cancel
+  )
+
   open class YesNoDialog(
     title: Int?,
     message: Int
