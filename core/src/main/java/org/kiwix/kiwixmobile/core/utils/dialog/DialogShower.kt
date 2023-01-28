@@ -25,7 +25,6 @@ interface DialogShower {
     dialog: KiwixDialog,
     vararg clickListeners: (() -> Unit),
     url: URL? = null
-
   )
 
   fun create(

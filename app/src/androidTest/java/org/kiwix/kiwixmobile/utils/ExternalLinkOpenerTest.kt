@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2020 Kiwix <android.kiwix.org>
+ * Copyright (c) 2023 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.utils
+package org.kiwix.kiwixmobile.utils
 
 import android.app.Activity
 import android.content.Intent
@@ -31,6 +31,8 @@ import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import java.net.URL
@@ -42,7 +44,7 @@ internal class ExternalLinkOpenerTest {
   private val activity: Activity = mockk()
 
   @Test
-  internal fun `alertDialogShower opens link if confirm-button is clicked`() {
+  internal fun alertDialogShowerOpensLinkIfConfirmButtonIsClicked() {
     every { intent.resolveActivity(activity.packageManager) } returns mockk()
     every { sharedPreferenceUtil.prefExternalLinkPopup } returns true
     val url = URL("https://github.com/")
@@ -63,7 +65,7 @@ internal class ExternalLinkOpenerTest {
   }
 
   @Test
-  internal fun `alertDialogShower does not open link if negative-button is clicked`() {
+  internal fun alertDialogShowerDoesNoOpenLinkIfNegativeButtonIsClicked() {
     every { intent.resolveActivity(activity.packageManager) } returns mockk()
     every { sharedPreferenceUtil.prefExternalLinkPopup } returns true
     every { intent.data } returns Uri.parse("https://github.com/")
@@ -83,7 +85,7 @@ internal class ExternalLinkOpenerTest {
   }
 
   @Test
-  internal fun `alertDialogShower opens link and saves preferences if neutral-button is clicked`() {
+  internal fun alertDialogShowerOpensLinkAndSavesPreferencesIfNeutralButtonIsClicked() {
     every { intent.resolveActivity(activity.packageManager) } returns mockk()
     every { sharedPreferenceUtil.prefExternalLinkPopup } returns true
     every { intent.data } returns Uri.parse("https://github.com/")
@@ -106,7 +108,7 @@ internal class ExternalLinkOpenerTest {
   }
 
   @Test
-  internal fun `intent is started if external link popup preference is false`() {
+  internal fun intentIsStartedIfExternalLinkPopupPreferenceIsFalse() {
     every { intent.resolveActivity(activity.packageManager) } returns mockk()
     every { sharedPreferenceUtil.prefExternalLinkPopup } returns false
     val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
@@ -115,7 +117,7 @@ internal class ExternalLinkOpenerTest {
   }
 
   @Test
-  internal fun `toast if packageManager is null`() {
+  internal fun toastIfPackageManagerIsNull() {
     every { intent.resolveActivity(activity.packageManager) } returns null
     val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
     mockkStatic(Toast::class)

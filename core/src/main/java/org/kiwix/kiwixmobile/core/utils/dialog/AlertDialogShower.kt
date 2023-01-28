@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.utils.dialog
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.ClipData
@@ -29,20 +30,22 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import org.kiwix.kiwixmobile.core.R
 import java.net.URL
 import javax.inject.Inject
 
 @Suppress("MagicNumber")
 class AlertDialogShower @Inject constructor(private val activity: Activity) :
   DialogShower {
-  private val viewSpacingLeftForLink = 0
-  private val viewSpacingRightForLink = 0
-  private val viewSpacingTopForLink = 10
-  private val viewSpacingBottomForLink = 0
+  private val externalLinkLeftMargin = 0
+  private val externalLinkRightMargin = 0
+  private val externalLinkTopMargin = 10
+  private val externalLinkBottomMargin = 0
 
   override fun show(dialog: KiwixDialog, vararg clickListeners: () -> Unit, url: URL?) =
     create(dialog, *clickListeners, url = url).show()
 
+  @SuppressLint("RestrictedApi")
   override fun create(dialog: KiwixDialog, vararg clickListeners: () -> Unit, url: URL?): Dialog {
     return AlertDialog.Builder(activity)
       .apply {
@@ -66,7 +69,7 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) :
               ?.invoke()
           }
         }
-        if (url != null) {
+        url?.let {
           val textView = TextView(activity.baseContext)
           textView.setPadding(5, 5, 5, 5)
           textView.gravity = Gravity.CENTER
@@ -78,7 +81,7 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) :
             clipboard?.setPrimaryClip(clip)
             Toast.makeText(
               activity.baseContext,
-              "External Link Copied to Clipboard",
+              R.string.external_link_copied_message,
               Toast.LENGTH_SHORT
             ).show()
             true
@@ -87,10 +90,10 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) :
 
           setView(
             textView,
-            viewSpacingLeftForLink,
-            viewSpacingTopForLink,
-            viewSpacingRightForLink,
-            viewSpacingBottomForLink
+            externalLinkLeftMargin,
+            externalLinkTopMargin,
+            externalLinkRightMargin,
+            externalLinkBottomMargin
           )
         }
         dialog.getView?.let { setView(it()) }

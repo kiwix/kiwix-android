@@ -325,4 +325,5 @@
   <string name="delete_selected_notes">Delete Selected Notes?</string>
   <string name="download_tts_language_title">Download this language for read aloud feature</string>
   <string name="download_tts_language_message">Please click the Download button. It will automatically download the required language.</string>
+  <string name="external_link_copied_message">External Link Copied to Clipboard</string>
 </resources>
