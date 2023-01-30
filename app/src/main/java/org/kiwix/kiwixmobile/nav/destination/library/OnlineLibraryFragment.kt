@@ -176,7 +176,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     zimManageViewModel.shouldShowWifiOnlyDialog.observe(
       viewLifecycleOwner
     ) {
-      if (it) {
+      if (it && !NetworkUtils.isWiFi(requireContext())) {
         showInternetAccessViaMobileNetworkDialog()
       }
     }
