@@ -111,3 +111,19 @@ task("generateVersionCodeAndName") {
     )
   }
 }
+
+task("renameTarakFile") {
+  val taraskFile = File("core/src/main/res/values-b+be+tarask/strings.xml")
+  if (taraskFile.exists()) {
+    val taraskOldFile = File("core/src/main/res/values-b+be+tarask+old/strings.xml")
+    if (!taraskOldFile.exists()) taraskOldFile.createNewFile()
+    taraskOldFile.printWriter().use {
+      it.print(taraskFile.readText())
+    }
+    taraskFile.delete()
+  }
+}
+
+tasks.build {
+  dependsOn("renameTarakFile")
+}
