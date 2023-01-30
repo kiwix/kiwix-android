@@ -16,24 +16,9 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.main
+package org.kiwix.kiwixmobile.webserver
 
-import android.app.Service
-import android.content.Intent
-import android.os.Binder
-import android.os.IBinder
-import java.lang.ref.WeakReference
-
-class ReadAloudService : Service() {
-  private val serviceBinder: IBinder = ReadAloudBinder(this)
-
-  override fun onBind(p0: Intent?): IBinder = serviceBinder
-
-  class ReadAloudBinder(readAloudService: ReadAloudService) : Binder() {
-    val service: WeakReference<ReadAloudService>
-
-    init {
-      service = WeakReference<ReadAloudService>(readAloudService)
-    }
-  }
+interface ReadAloudCallbacks {
+  fun onReadAloudPauseOrResume(isPauseTTS: Boolean)
+  fun onReadAloudStop()
 }
