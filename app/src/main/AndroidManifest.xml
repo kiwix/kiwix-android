@@ -150,7 +150,6 @@
     </activity>
 
     <service android:name=".webserver.wifi_hotspot.HotspotService" />
-    <service android:name=".webserver.read_aloud.ReadAloudService" />
 
     <receiver
       android:name=".main.KiwixSearchWidget"

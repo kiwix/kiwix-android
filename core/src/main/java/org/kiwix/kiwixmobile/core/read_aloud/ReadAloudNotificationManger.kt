@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.webserver.read_aloud
+package org.kiwix.kiwixmobile.core.read_aloud
 
 import android.annotation.SuppressLint
 import android.app.Notification
@@ -26,14 +26,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import androidx.navigation.NavDeepLinkBuilder
-import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.utils.HOTSPOT_SERVICE_CHANNEL_ID
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.IS_TTS_PAUSE_OR_RESUME
 import org.kiwix.kiwixmobile.core.utils.READ_ALOUD_SERVICE_CHANNEL_ID
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.webserver.read_aloud.ReadAloudService.Companion.IS_TTS_PAUSE_OR_RESUME
+import javax.inject.Inject
 
-class ReadAloudNotificationManger(
+class ReadAloudNotificationManger @Inject constructor(
   private val notificationManager: NotificationManager,
   private val context: Context
 ) {
@@ -55,12 +53,6 @@ class ReadAloudNotificationManger(
 
   @SuppressLint("UnspecifiedImmutableFlag")
   fun buildForegroundNotification(isPauseTTS: Boolean): Notification {
-    val contentIntent = NavDeepLinkBuilder(context).setComponentName(
-      KiwixMainActivity::class.java
-    )
-      .setGraph(R.navigation.kiwix_nav_graph)
-      .setDestination(R.id.readerFragment)
-      .createPendingIntent()
     readAloudNotificationChannel()
     val stopIntent = Intent(context, ReadAloudService::class.java).setAction(
       ReadAloudService.ACTION_STOP_TTS
@@ -77,7 +69,7 @@ class ReadAloudNotificationManger(
     }
     val pauseOrResumeIntent = Intent(context, ReadAloudService::class.java).setAction(
       ReadAloudService.ACTION_PAUSE_OR_RESUME_TTS
-    ).putExtra(IS_TTS_PAUSE_OR_RESUME, isPauseTTS)
+    ).putExtra(IS_TTS_PAUSE_OR_RESUME, !isPauseTTS)
     val pauseOrResumeReadAloud = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       PendingIntent.getService(
         context,
@@ -88,28 +80,31 @@ class ReadAloudNotificationManger(
     } else {
       PendingIntent.getService(context, 0, pauseOrResumeIntent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
-    return NotificationCompat.Builder(context)
-      .setContentTitle(context.getString(R.string.read_aloud_notification_content_title))
+    return NotificationCompat.Builder(context, READ_ALOUD_SERVICE_CHANNEL_ID)
+      .setContentTitle(context.getString(R.string.menu_read_aloud))
       .setContentText(context.getString(R.string.read_aloud_running))
-      .setContentIntent(contentIntent)
+      .setContentIntent(null)
       .setSmallIcon(R.mipmap.ic_launcher)
       .setWhen(System.currentTimeMillis())
       .addAction(
-        R.drawable.ic_stop_24dp,
+        R.drawable.ic_baseline_stop,
         context.getString(R.string.stop),
         stopReadAloud
       ).addAction(
-        R.drawable.ic_close_white_24dp,
+        getPauseOrResumeIcon(isPauseTTS),
         getPauseOrResumeTitle(isPauseTTS),
         pauseOrResumeReadAloud
       )
-      .setChannelId(HOTSPOT_SERVICE_CHANNEL_ID)
       .build()
   }
 
   private fun getPauseOrResumeTitle(isPauseTTS: Boolean) =
     if (isPauseTTS) context.getString(R.string.tts_resume)
     else context.getString(R.string.tts_pause)
+
+  private fun getPauseOrResumeIcon(isPauseTTS: Boolean) =
+    if (isPauseTTS) R.drawable.ic_baseline_play
+    else R.drawable.ic_baseline_pause
 
   fun dismissNotification() {
     notificationManager.cancel(READ_ALOUD_NOTIFICATION_ID)

@@ -23,7 +23,6 @@ import android.app.Service
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import org.kiwix.kiwixmobile.webserver.read_aloud.ReadAloudNotificationManger
 import org.kiwix.kiwixmobile.di.ServiceScope
 import org.kiwix.kiwixmobile.webserver.KiwixServer
 import org.kiwix.kiwixmobile.webserver.WebServerHelper
@@ -63,11 +62,4 @@ class ServiceModule {
   @ServiceScope
   fun providesHotspotStateReceiverCallback(service: Service): HotspotStateReceiver.Callback =
     service as Callback
-
-  @Provides
-  @ServiceScope
-  fun providesReadAloudNotificationManager(
-    notificationManager: NotificationManager,
-    context: Context
-  ): ReadAloudNotificationManger = ReadAloudNotificationManger(notificationManager, context)
 }

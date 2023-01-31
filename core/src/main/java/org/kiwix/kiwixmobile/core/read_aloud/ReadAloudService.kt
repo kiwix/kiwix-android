@@ -16,14 +16,14 @@
  *
  */
 
-package org.kiwix.kiwixmobile.webserver.read_aloud
+package org.kiwix.kiwixmobile.core.read_aloud
 
 import android.app.Service
 import android.content.Intent
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
-import org.kiwix.kiwixmobile.webserver.ReadAloudCallbacks
+import org.kiwix.kiwixmobile.core.CoreApp
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
@@ -33,12 +33,21 @@ class ReadAloudService : Service() {
   private val serviceBinder: IBinder = ReadAloudBinder(this)
   private var readAloudCallbacks: ReadAloudCallbacks? = null
 
+  override fun onCreate() {
+    CoreApp.coreComponent
+      .coreServiceComponent()
+      .service(this)
+      .build()
+      .inject(this)
+    super.onCreate()
+  }
+
   override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
     when (intent.action) {
       ACTION_PAUSE_OR_RESUME_TTS -> {
-        startForegroundNotificationHelper(
-          intent.getBooleanExtra(IS_TTS_PAUSE_OR_RESUME, false)
-        )
+        val isPauseTTS = intent.getBooleanExtra(IS_TTS_PAUSE_OR_RESUME, false)
+        startForegroundNotificationHelper(isPauseTTS)
+        readAloudCallbacks?.onReadAloudPauseOrResume(isPauseTTS)
       }
       ACTION_STOP_TTS -> {
         stopReadAloudAndDismissNotification()
@@ -57,14 +66,18 @@ class ReadAloudService : Service() {
   }
 
   private fun startForegroundNotificationHelper(isPauseTTS: Boolean) {
-    readAloudCallbacks?.onReadAloudPauseOrResume(isPauseTTS)
+    val notification = readAloudNotificationManager?.buildForegroundNotification(isPauseTTS)
     startForeground(
       ReadAloudNotificationManger.READ_ALOUD_NOTIFICATION_ID,
-      readAloudNotificationManager?.buildForegroundNotification(isPauseTTS)
+      notification
     )
   }
 
   override fun onBind(p0: Intent?): IBinder = serviceBinder
+
+  fun registerCallBack(readAloudCallbacks: ReadAloudCallbacks?) {
+    this.readAloudCallbacks = readAloudCallbacks
+  }
 
   class ReadAloudBinder(readAloudService: ReadAloudService) : Binder() {
     val service: WeakReference<ReadAloudService>

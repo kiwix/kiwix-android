@@ -328,6 +328,5 @@
   <string name="external_link_copied_message">External Link Copied to Clipboard</string>
   <string name="read_aloud_service_channel_name" tools:keep="@string/read_aloud_service_channel_name">Read Aloud Service Channel</string>
   <string name="read_aloud_channel_description" tools:keep="@string/read_aloud_channel_description">Text to speech controls.</string>
-  <string name="read_aloud_notification_content_title" tools:keep="@string/read_aloud_notification_content_title">Read Aloud</string>
   <string name="read_aloud_running" tools:keep="@string/read_aloud_running">Running Read Aloud</string>
 </resources>
