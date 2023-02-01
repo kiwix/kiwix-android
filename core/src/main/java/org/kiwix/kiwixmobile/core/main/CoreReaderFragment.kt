@@ -1787,7 +1787,9 @@ abstract class CoreReaderFragment :
   }
 
   override fun onReadAloudStop() {
-    stopTts()
+    tts?.currentTTSTask?.let {
+      stopTts()
+    }
   }
 
   override fun onStart() {
