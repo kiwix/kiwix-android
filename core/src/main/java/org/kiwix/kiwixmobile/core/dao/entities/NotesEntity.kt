@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.dao.entities
 
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
-import io.objectbox.annotation.Unique
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 
 @Entity
@@ -29,7 +28,6 @@ data class NotesEntity(
   val zimId: String,
   var zimFilePath: String?,
   val zimUrl: String,
-  @Unique
   var noteTitle: String,
   var noteFilePath: String,
   var favicon: String?
