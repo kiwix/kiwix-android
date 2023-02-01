@@ -27,6 +27,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.util.Log
+import android.webkit.URLUtil
 import android.widget.Toast
 import androidx.documentfile.provider.DocumentFile
 import org.kiwix.kiwixmobile.core.CoreApp
@@ -310,16 +311,14 @@ object FileUtils {
     return null
   }
 
-  /**
-   * Returns the file name from the url or src. In url it gets the file name from the last '/' and
-   * if it contains '.'. If the url is null then it'll get the file name from the last '/'.
-   * If the url and src doesn't exist it returns the empty string.
-   */
-  fun getDecodedFileName(url: String?, src: String?): String =
-    url?.substringAfterLast("/", "")
-      ?.takeIf { it.contains(".") }
-      ?: src?.substringAfterLast("/", "")
-        ?.substringAfterLast("%3A") ?: ""
+  fun getDecodedFileName(url: String?): String {
+    var fileName = ""
+    val decodedFileName = URLUtil.guessFileName(url, null, null)
+    if (decodedFileName != "downloadfile.bin") {
+      fileName = decodedFileName
+    }
+    return fileName
+  }
 
   @JvmStatic
   fun downloadFileFromUrl(
@@ -328,7 +327,7 @@ object FileUtils {
     zimReaderContainer: ZimReaderContainer,
     sharedPreferenceUtil: SharedPreferenceUtil
   ): File? {
-    val fileName = getDecodedFileName(url, src)
+    val fileName = getDecodedFileName(url ?: src)
     var root: File? = null
     if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() ||
       Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
