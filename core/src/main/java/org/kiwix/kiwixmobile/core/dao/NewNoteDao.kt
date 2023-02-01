@@ -41,7 +41,11 @@ class NewNoteDao @Inject constructor(val box: Box<NotesEntity>) : PageDao {
     deleteNotes(pagesToDelete as List<NoteListItem>)
 
   fun saveNote(noteItem: NoteListItem) {
-    box.put(NotesEntity(noteItem))
+    box.store.callInTx {
+      if (doesNotAlreadyExist(noteItem)) {
+        box.put(NotesEntity(noteItem))
+      }
+    }
   }
 
   fun deleteNotes(noteList: List<NoteListItem>) {
@@ -57,4 +61,9 @@ class NewNoteDao @Inject constructor(val box: Box<NotesEntity>) : PageDao {
       )
     }.remove()
   }
+
+  private fun doesNotAlreadyExist(noteItem: NoteListItem) =
+    box.query {
+      equal(NotesEntity_.noteTitle, noteItem.title, QueryBuilder.StringOrder.CASE_INSENSITIVE)
+    }.count() == 0L
 }
