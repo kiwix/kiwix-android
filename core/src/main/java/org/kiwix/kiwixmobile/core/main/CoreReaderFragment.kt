@@ -857,6 +857,7 @@ abstract class CoreReaderFragment :
     }
     tempWebViewForUndo = null
     readAloudService?.registerCallBack(null)
+    readAloudService = null
   }
 
   private fun updateTableOfContents() {
