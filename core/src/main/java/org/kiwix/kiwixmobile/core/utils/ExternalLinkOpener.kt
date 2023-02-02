@@ -60,7 +60,8 @@ class ExternalLinkOpener @Inject constructor(
       {
         sharedPreferenceUtil.putPrefExternalLinkPopup(false)
         openLink(intent)
-      }, url = URL(intent.data.toString())
+      },
+      url = URL(intent.data.toString())
     )
   }
 
