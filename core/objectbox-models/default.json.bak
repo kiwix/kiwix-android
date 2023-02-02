@@ -111,14 +111,12 @@
         {
           "id": "3:452531964346972307",
           "name": "active",
-          "type": 1,
-          "flags": 4
+          "type": 1
         },
         {
           "id": "4:8812214350305159407",
           "name": "occurencesOfLanguage",
-          "type": 5,
-          "flags": 4
+          "type": 5
         }
       ],
       "relations": []
@@ -167,8 +165,7 @@
         {
           "id": "9:6094002746638656105",
           "name": "timeStamp",
-          "type": 6,
-          "flags": 4
+          "type": 6
         },
         {
           "id": "10:8395372122440621469",
@@ -325,32 +322,27 @@
         {
           "id": "16:217454020763036675",
           "name": "etaInMilliSeconds",
-          "type": 6,
-          "flags": 4
+          "type": 6
         },
         {
           "id": "17:1136630637198901642",
           "name": "bytesDownloaded",
-          "type": 6,
-          "flags": 4
+          "type": 6
         },
         {
           "id": "18:8939019296899137627",
           "name": "totalSizeOfDownload",
-          "type": 6,
-          "flags": 4
+          "type": 6
         },
         {
           "id": "19:3378789699620971394",
           "name": "status",
-          "type": 5,
-          "flags": 2
+          "type": 5
         },
         {
           "id": "20:6867355950440828062",
           "name": "error",
-          "type": 5,
-          "flags": 2
+          "type": 5
         },
         {
           "id": "21:5555873126720275555",
@@ -360,14 +352,12 @@
         {
           "id": "22:2724607601244650879",
           "name": "downloadId",
-          "type": 6,
-          "flags": 4
+          "type": 6
         },
         {
           "id": "23:5485468735259326535",
           "name": "progress",
-          "type": 5,
-          "flags": 4
+          "type": 5
         },
         {
           "id": "24:4272820830206771469",
@@ -379,7 +369,7 @@
     },
     {
       "id": "10:3205842982118792800",
-      "lastPropertyId": "8:4304230668306976620",
+      "lastPropertyId": "9:5286545520416917562",
       "name": "NotesEntity",
       "properties": [
         {
@@ -401,12 +391,9 @@
         {
           "id": "5:7998345745727500384",
           "name": "noteTitle",
-          "type": 9
-        },
-        {
-          "id": "6:1899740026144478138",
-          "name": "noteBody",
-          "type": 9
+          "indexId": "5:7599267150617990347",
+          "type": 9,
+          "flags": 2080
         },
         {
           "id": "7:2160052450778801841",
@@ -417,13 +404,18 @@
           "id": "8:4304230668306976620",
           "name": "noteFilePath",
           "type": 9
+        },
+        {
+          "id": "9:5286545520416917562",
+          "name": "zimUrl",
+          "type": 9
         }
       ],
       "relations": []
     }
   ],
   "lastEntityId": "10:3205842982118792800",
-  "lastIndexId": "4:4868787482832538530",
+  "lastIndexId": "5:7599267150617990347",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
@@ -481,7 +473,8 @@
     3582932035787057158,
     8819082642546094709,
     7233601933599801875,
-    4335394620556092321
+    4335394620556092321,
+    1899740026144478138
   ],
   "retiredRelationUids": [],
   "version": 1
