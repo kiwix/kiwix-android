@@ -127,15 +127,15 @@ class FileUtilsTest : BaseActivityTest() {
       ),
       DummyUrlData(
         "https://kiwix.org/contributors/",
-        ""
+        null
       ),
       DummyUrlData(
         "android_tutorials.pdf",
-        ""
+        null
       ),
       DummyUrlData(
         null,
-        ""
+        null
       ),
       DummyUrlData(
         "/html/images/test.png",
@@ -143,11 +143,15 @@ class FileUtilsTest : BaseActivityTest() {
       ),
       DummyUrlData(
         "/html/images/",
-        ""
+        null
       ),
       DummyUrlData(
         "https://kiwix.org/contributors/images/wikipedia.png",
         "wikipedia.png"
+      ),
+      DummyUrlData(
+        "https://kiwix.org/contributors/images/wikipedia",
+        null
       )
     )
     dummyUrlArray.forEach {
@@ -158,5 +162,5 @@ class FileUtilsTest : BaseActivityTest() {
     }
   }
 
-  data class DummyUrlData(val url: String?, val expectedFileName: String)
+  data class DummyUrlData(val url: String?, val expectedFileName: String?)
 }
