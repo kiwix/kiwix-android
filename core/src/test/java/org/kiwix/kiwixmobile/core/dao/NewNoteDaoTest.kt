@@ -18,8 +18,10 @@
 
 package org.kiwix.kiwixmobile.core.dao
 
+import io.mockk.CapturingSlot
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.verify
 import io.objectbox.Box
 import io.objectbox.query.Query
@@ -29,6 +31,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity_
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import java.util.concurrent.Callable
 
 internal class NewNoteDaoTest {
 
@@ -65,7 +68,22 @@ internal class NewNoteDaoTest {
   @Test
   fun saveNotePage() {
     val newNote: NoteListItem = mockk(relaxed = true)
+    val slot: CapturingSlot<Callable<Unit>> = slot()
+    every { notesBox.store.callInTx(capture(slot)) } returns Unit
+    val queryBuilder: QueryBuilder<NotesEntity> = mockk(relaxed = true)
+    every { notesBox.query() } returns queryBuilder
+    val query: Query<NotesEntity> = mockk(relaxed = true)
+    every { queryBuilder.build() } returns query
+    every { newNote.title } returns ""
+    every {
+      queryBuilder.equal(
+        NotesEntity_.noteTitle,
+        newNote.title,
+        QueryBuilder.StringOrder.CASE_INSENSITIVE
+      )
+    } returns queryBuilder
     newNotesDao.saveNote(newNote)
+    slot.captured.call()
     verify { notesBox.put(NotesEntity(newNote)) }
   }
 }
