@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.data.local
 
 import android.content.Context
+import androidx.multidex.BuildConfig
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -41,7 +42,9 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
             // We have already database name called kiwix.db in order to avoid complexity we named as
             // kiwixRoom.db
             .build().also {
-              it.migrateRecentSearch(boxStore)
+              if (!BuildConfig.BUILD_TYPE.contentEquals("fdroid")) {
+                it.migrateRecentSearch(boxStore)
+              }
             }
       }
     }

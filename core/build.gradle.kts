@@ -47,8 +47,26 @@ android {
     buildConfigField("long", "VERSION_CODE", "${generateVersionCode()}")
   }
   buildTypes {
+    getByName("debug") {
+      dependencies {
+        implementation(Libs.objectbox_kotlin)
+        implementation(Libs.objectbox_rxjava)
+      }
+    }
     getByName("release") {
       isMinifyEnabled = false
+      apply(plugin = "io.objectbox")
+      dependencies {
+        implementation(Libs.objectbox_kotlin)
+        implementation(Libs.objectbox_rxjava)
+      }
+    }
+    create("playStore") {
+      apply(plugin = "io.objectbox")
+      dependencies {
+        implementation(Libs.objectbox_kotlin)
+        implementation(Libs.objectbox_rxjava)
+      }
     }
   }
 }

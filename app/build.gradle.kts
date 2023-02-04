@@ -56,13 +56,16 @@ android {
       buildConfigField("boolean", "KIWIX_ERROR_ACTIVITY", "false")
       buildConfigField("boolean", "IS_PLAYSTORE", "false")
     }
-
-    getByName("release") {
+    create("baseRelease") {
       buildConfigField("boolean", "KIWIX_ERROR_ACTIVITY", "true")
       buildConfigField("boolean", "IS_PLAYSTORE", "false")
       if (properties.containsKey("disableSigning")) {
         signingConfig = null
       }
+    }
+
+    getByName("release") {
+      initWith(getByName("baseRelease"))
     }
     create("playStore") {
       manifestPlaceholders += mapOf()
@@ -70,10 +73,6 @@ android {
       matchingFallbacks += "release"
       buildConfigField("boolean", "IS_PLAYSTORE", "true")
       manifestPlaceholders["permission"] = "android.permission.placeholder"
-    }
-    create("nightly") {
-      initWith(getByName("debug"))
-      setMatchingFallbacks("debug")
     }
   }
   bundle {
