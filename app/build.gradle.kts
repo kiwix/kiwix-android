@@ -74,6 +74,10 @@ android {
       buildConfigField("boolean", "IS_PLAYSTORE", "true")
       manifestPlaceholders["permission"] = "android.permission.placeholder"
     }
+    create("fdroid") {
+      initWith(getByName("baseRelease"))
+      versionNameSuffix = ".fdroid"
+    }
   }
   bundle {
     language {
