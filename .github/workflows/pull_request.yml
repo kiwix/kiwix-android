@@ -21,7 +21,8 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 11
-	  distribution: temurin
+          distribution: temurin
+
       - name: Restore Cache
         uses: actions/cache@v3
         with:
@@ -58,7 +59,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 11
-	  distribution: temurin
+          distribution: temurin
 
       - name: Restore Cache
         uses: actions/cache@v3
@@ -90,13 +91,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-            fetch-depth: 1
+          fetch-depth: 1
 
       - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
-            java-version: 11
-	    distribution: temurin
+          java-version: 11
+          distribution: temurin
 
       - name: Restore Cache
         uses: actions/cache@v3
@@ -114,8 +115,8 @@ jobs:
         uses: actions/upload-artifact@v3
         if: ${{ always() }}
         with:
-            name: lint-report
-            path: '**/build/reports/lint-results-*'
+          name: lint-report
+          path: '**/build/reports/lint-results-*'
 
 
 
