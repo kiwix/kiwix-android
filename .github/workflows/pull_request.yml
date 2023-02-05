@@ -13,16 +13,17 @@ jobs:
     continue-on-error: true
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
       - name: Set up JDK 11
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: 11
+	  distribution: temurin
       - name: Restore Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.gradle/caches
@@ -36,7 +37,7 @@ jobs:
 
       - name: Upload ktlint Reports
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
          name: ktlint-report
          path: '**/build/reports/ktlint'
@@ -49,16 +50,18 @@ jobs:
     continue-on-error: true
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
       - name: Set up JDK 11
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: 11
+	  distribution: temurin
+
       - name: Restore Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.gradle/caches
@@ -70,7 +73,7 @@ jobs:
       - name: Static Analysis
         run: ./gradlew detekt
       - name: Upload Lint Reports
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: ${{ always() }}
         with:
           name: detekt-report
@@ -85,17 +88,18 @@ jobs:
     steps:
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
             fetch-depth: 1
 
       - name: Set up JDK 11
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
             java-version: 11
+	    distribution: temurin
 
       - name: Restore Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.gradle/caches
@@ -107,7 +111,7 @@ jobs:
         run: ./gradlew app:lintDebug custom:lintCustomexampleDebug
 
       - name: Upload Lint Reports
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: ${{ always() }}
         with:
             name: lint-report
@@ -122,20 +126,21 @@ jobs:
     continue-on-error: true
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
       - name: Set up JDK 11
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: 11
+	  distribution: temurin
 
       - name: Build all configurations
         run: ./gradlew assemble
 
       - name: Upload APK as Artifacts
-        uses: actions/upload-artifact@v2.2.0
+        uses: actions/upload-artifact@v3
         if: ${{ always() }}
         with:
             name: kiwix-android
