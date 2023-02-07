@@ -37,6 +37,7 @@ import org.kiwix.kiwixmobile.databinding.ItemLibraryBinding
 import org.kiwix.kiwixmobile.databinding.LibraryDividerBinding
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.Unknown
+import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.DividerItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.LibraryDownloadItem
@@ -47,7 +48,8 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
   class LibraryBookViewHolder(
     private val itemLibraryBinding: ItemLibraryBinding,
     private val bookUtils: BookUtils,
-    private val clickAction: (BookItem) -> Unit
+    private val clickAction: (BookItem) -> Unit,
+    private val availableSpaceCalculator: AvailableSpaceCalculator
   ) : LibraryViewHolder<BookItem>(itemLibraryBinding.root) {
     override fun bind(item: BookItem) {
       itemLibraryBinding.libraryBookTitle.setTextAndVisibility(item.book.title)
@@ -60,21 +62,30 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
       itemLibraryBinding.libraryBookLanguage.text = bookUtils.getLanguage(item.book.language)
       itemLibraryBinding.libraryBookFavicon.setBitmap(Base64String(item.book.favicon))
 
+      val hasAvailableSpaceInStorage = availableSpaceCalculator.hasAvailableSpaceForBook(item.book)
       containerView.setOnClickListener { clickAction.invoke(item) }
-      containerView.isClickable = item.canBeDownloaded
+      containerView.isClickable =
+        item.canBeDownloaded && hasAvailableSpaceInStorage
 
       itemLibraryBinding.tags.render(item.tags)
 
       itemLibraryBinding.unableToDownload.visibility =
-        if (item.canBeDownloaded) View.GONE else View.VISIBLE
+        if (item.canBeDownloaded && hasAvailableSpaceInStorage)
+          View.GONE
+        else
+          View.VISIBLE
       itemLibraryBinding.unableToDownload.setOnLongClickListener {
-        it.centreToast(
-          when (item.fileSystemState) {
-            CannotWrite4GbFile -> R.string.file_system_does_not_support_4gb
-            Unknown -> R.string.detecting_file_system
-            else -> throw RuntimeException("impossible invalid state: ${item.fileSystemState}")
+        when (item.fileSystemState) {
+          CannotWrite4GbFile -> it.centreToast(R.string.file_system_does_not_support_4gb)
+          Unknown -> it.centreToast(R.string.detecting_file_system)
+          else -> {
+            if (item.canBeDownloaded && !hasAvailableSpaceInStorage) {
+              clickAction.invoke(item)
+            } else {
+              throw RuntimeException("impossible invalid state: ${item.fileSystemState}")
+            }
           }
-        )
+        }
         true
       }
     }

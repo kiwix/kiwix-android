@@ -107,7 +107,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   private val libraryAdapter: LibraryAdapter by lazy {
     LibraryAdapter(
-      LibraryDelegate.BookDelegate(bookUtils, ::onBookItemClick),
+      LibraryDelegate.BookDelegate(bookUtils, ::onBookItemClick, availableSpaceCalculator),
       LibraryDelegate.DownloadDelegate {
         if (it.currentDownloadState == Status.FAILED) {
           if (isNotConnected) {

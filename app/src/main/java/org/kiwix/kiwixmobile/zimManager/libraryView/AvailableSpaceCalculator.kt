@@ -25,6 +25,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import javax.inject.Inject
@@ -52,6 +53,9 @@ class AvailableSpaceCalculator @Inject constructor(
         }
       }
   }
+
+  fun hasAvailableSpaceForBook(book: Book) =
+    book.size.toLong() * Kb < storageCalculator.availableBytes()
 
   fun dispose() {
     availableSpaceCalculatorDisposable?.dispose()
