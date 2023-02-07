@@ -57,6 +57,8 @@ android {
       buildConfigField("boolean", "IS_PLAYSTORE", "false")
     }
     create("baseRelease") {
+      initWith(getByName("debug"))
+      matchingFallbacks += "debug"
       buildConfigField("boolean", "KIWIX_ERROR_ACTIVITY", "true")
       buildConfigField("boolean", "IS_PLAYSTORE", "false")
       if (properties.containsKey("disableSigning")) {
@@ -66,6 +68,7 @@ android {
 
     getByName("release") {
       initWith(getByName("baseRelease"))
+      matchingFallbacks += "baseRelease"
     }
     create("playStore") {
       manifestPlaceholders += mapOf()
@@ -76,6 +79,7 @@ android {
     }
     create("fdroid") {
       initWith(getByName("baseRelease"))
+      matchingFallbacks += "baseRelease"
       versionNameSuffix = ".fdroid"
     }
   }
