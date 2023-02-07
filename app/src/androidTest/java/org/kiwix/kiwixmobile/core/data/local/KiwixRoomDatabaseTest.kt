@@ -39,10 +39,6 @@ class KiwixRoomDatabaseTest {
   private lateinit var recentSearchRoomDao: RecentSearchRoomDao
   private lateinit var db: KiwixRoomDatabase
 
-  // @Before
-  // fun createDb() {
-  // }
-
   @Test
   @Throws(IOException::class)
   fun testMigrationTest() = runBlocking {

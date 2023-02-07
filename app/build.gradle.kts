@@ -77,6 +77,10 @@ android {
       buildConfigField("boolean", "IS_PLAYSTORE", "true")
       manifestPlaceholders["permission"] = "android.permission.placeholder"
     }
+    create("nightly") {
+      initWith(getByName("debug"))
+      setMatchingFallbacks("debug")
+    }
     create("fdroid") {
       initWith(getByName("baseRelease"))
       matchingFallbacks += "baseRelease"
