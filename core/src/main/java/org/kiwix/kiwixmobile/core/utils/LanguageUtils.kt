@@ -24,12 +24,8 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Handler
-import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
-import android.view.InflateException
-import android.view.LayoutInflater
-import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import org.kiwix.kiwixmobile.core.extensions.locale
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
@@ -83,8 +79,8 @@ class LanguageUtils(private val context: Context) {
   // which also sets a Factory on the LayoutInflator, we have to access the private field of the
   // LayoutInflater, that handles this restriction via Java's reflection API
   // and make it accessible set it to false again.
-  @SuppressLint("SoonBlockedPrivateApi") fun changeFont(
-    layoutInflater: LayoutInflater,
+  fun changeFont(
+    activity: Activity,
     sharedPreferenceUtil: SharedPreferenceUtil
   ) {
 
@@ -92,69 +88,34 @@ class LanguageUtils(private val context: Context) {
       return
     }
 
-    try {
-      val field = LayoutInflater::class.java.getDeclaredField("mFactorySet")
-      field.isAccessible = true
-      field.setBoolean(layoutInflater, false)
-      layoutInflater.factory = LayoutInflaterFactory(
-        context,
-        layoutInflater
-      )
-    } catch (e: NoSuchFieldException) {
-      Log.w(
-        TAG_KIWIX,
-        "Font Change Failed: Could not access private field of the LayoutInflater",
-        e
-      )
-    } catch (e: IllegalAccessException) {
-      Log.w(
-        TAG_KIWIX,
-        "Font Change Failed: Could not access private field of the LayoutInflater",
-        e
-      )
-    } catch (e: IllegalArgumentException) {
-      Log.w(
-        TAG_KIWIX,
-        "Font Change Failed: Could not access private field of the LayoutInflater",
-        e
-      )
+    setTypeFace(activity.window.decorView as ViewGroup, activity)
+  }
+
+  private fun setTypeFace(viewGroup: ViewGroup, activity: Activity) {
+    for (i in 0 until viewGroup.childCount) {
+      val child = viewGroup.getChildAt(i)
+      if (child is ViewGroup) {
+        setTypeFace(child, activity)
+        continue
+      }
+      if (child is TextView) {
+        setTyfaceToTextView(child, activity)
+      }
     }
   }
 
-  // That's the Factory, that will handle the manipulation of all our TextView's and its subcalsses
-  // while the content is being parsed
-  class LayoutInflaterFactory(
-    private val mContext: Context,
-    private val mLayoutInflater: LayoutInflater
-  ) : LayoutInflater.Factory {
-
-    @SuppressWarnings("ImplicitSamInstance")
-    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
-
-      // Apply the custom font, if the xml equals "TextView", "EditText" or "AutoCompleteTextView"
-      if (name.equals("TextView", ignoreCase = true) ||
-        name.equals("EditText", ignoreCase = true) ||
-        name.equals("AutoCompleteTextView", ignoreCase = true)
-      ) {
-        try {
-          val view = mLayoutInflater.createView(name, null, attrs)
-          Handler().post {
-            (view as TextView).apply {
-              typeface = Typeface.createFromAsset(
-                mContext.assets,
-                getTypeface(Locale.getDefault().language)
-              )
-              setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize - 2f)
-            }
-          }
-          return view
-        } catch (e: InflateException) {
-          Log.w(TAG_KIWIX, "Could not apply the custom font to $name", e)
-        } catch (e: ClassNotFoundException) {
-          Log.w(TAG_KIWIX, "Could not apply the custom font to $name", e)
-        }
+  private fun setTyfaceToTextView(child: TextView, activity: Activity) {
+    Handler().post {
+      child.apply {
+        setTypeface(
+          Typeface.createFromAsset(
+            activity.assets,
+            getTypeface(Locale.getDefault().language)
+          ),
+          Typeface.NORMAL
+        )
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize - 2f)
       }
-      return null
     }
   }
 

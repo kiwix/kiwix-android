@@ -792,7 +792,7 @@ abstract class CoreReaderFragment :
   private fun handleLocaleCheck() {
     sharedPreferenceUtil?.let {
       handleLocaleChange(requireActivity(), it)
-      LanguageUtils(requireActivity()).changeFont(layoutInflater, it)
+      LanguageUtils(requireActivity()).changeFont(requireActivity(), it)
     }
   }
 
