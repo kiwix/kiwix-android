@@ -110,19 +110,21 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onConfigurationChanged(newConfig: Configuration) {
     super.onConfigurationChanged(newConfig)
-    activityKiwixMainBinding.bottomNavView.menu.apply {
-      findItem(R.id.readerFragment)?.title = resources.getString(R.string.reader)
-      findItem(R.id.libraryFragment)?.title = resources.getString(R.string.library)
-      findItem(R.id.downloadsFragment)?.title = resources.getString(R.string.download)
-    }
-    activityKiwixMainBinding.drawerNavView.menu.apply {
-      findItem(R.id.menu_bookmarks_list)?.title = resources.getString(R.string.bookmarks)
-      findItem(R.id.menu_history)?.title = resources.getString(R.string.history)
-      findItem(R.id.menu_notes)?.title = resources.getString(R.string.pref_notes)
-      findItem(R.id.menu_host_books)?.title = resources.getString(R.string.menu_wifi_hotspot)
-      findItem(R.id.menu_settings)?.title = resources.getString(R.string.menu_settings)
-      findItem(R.id.menu_help)?.title = resources.getString(R.string.menu_help)
-      findItem(R.id.menu_support_kiwix)?.title = resources.getString(R.string.menu_support_kiwix)
+    if (::activityKiwixMainBinding.isInitialized) {
+      activityKiwixMainBinding.bottomNavView.menu.apply {
+        findItem(R.id.readerFragment)?.title = resources.getString(R.string.reader)
+        findItem(R.id.libraryFragment)?.title = resources.getString(R.string.library)
+        findItem(R.id.downloadsFragment)?.title = resources.getString(R.string.download)
+      }
+      activityKiwixMainBinding.drawerNavView.menu.apply {
+        findItem(R.id.menu_bookmarks_list)?.title = resources.getString(R.string.bookmarks)
+        findItem(R.id.menu_history)?.title = resources.getString(R.string.history)
+        findItem(R.id.menu_notes)?.title = resources.getString(R.string.pref_notes)
+        findItem(R.id.menu_host_books)?.title = resources.getString(R.string.menu_wifi_hotspot)
+        findItem(R.id.menu_settings)?.title = resources.getString(R.string.menu_settings)
+        findItem(R.id.menu_help)?.title = resources.getString(R.string.menu_help)
+        findItem(R.id.menu_support_kiwix)?.title = resources.getString(R.string.menu_support_kiwix)
+      }
     }
   }
 
