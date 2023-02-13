@@ -116,7 +116,7 @@ class LocalLibraryFragment : BaseFragment() {
     savedInstanceState: Bundle?
   ): View? {
     LanguageUtils(requireActivity())
-      .changeFont(requireActivity().layoutInflater, sharedPreferenceUtil)
+      .changeFont(requireActivity(), sharedPreferenceUtil)
     fragmentDestinationLibraryBinding = FragmentDestinationLibraryBinding.inflate(
       inflater,
       container,

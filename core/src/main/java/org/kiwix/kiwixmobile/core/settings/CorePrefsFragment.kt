@@ -93,7 +93,7 @@ abstract class CorePrefsFragment :
     setupZoom()
     sharedPreferenceUtil?.let {
       LanguageUtils(requireActivity()).changeFont(
-        requireActivity().layoutInflater,
+        requireActivity(),
         it
       )
     }
