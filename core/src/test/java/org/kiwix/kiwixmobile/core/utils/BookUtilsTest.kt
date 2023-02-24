@@ -34,12 +34,16 @@ class BookUtilsTest {
     assertEquals("code length more than 3", "", t.getLanguage("english"))
 
     // testing the hashmap created inside the BookUtils class
-    assertEquals("code length equals 3 (English)", "English", t.getLanguage("eng"))
-    assertEquals("code length equals 3 (Hindi)", "Hindi", t.getLanguage("hin"))
-    assertEquals("code length equals 3 (French)", "French", t.getLanguage("fra"))
-    assertEquals("code length equals 3 (Akan)", "Akan", t.getLanguage("aka"))
-    assertEquals("code length equals 3 (Burmese)", "Burmese", t.getLanguage("mya"))
-    assertEquals("code length equals 3 (Catalan)", "Catalan", t.getLanguage("cat"))
+    assertEquals("code length equals 3 (English)", "English (India)", t.getLanguage("eng"))
+    assertEquals("code length equals 3 (Hindi)", "Hindi (India)", t.getLanguage("hin"))
+    assertEquals("code length equals 3 (French)", "French (Rwanda)", t.getLanguage("fra"))
+    assertEquals("code length equals 3 (Akan)", "Akan (Ghana)", t.getLanguage("aka"))
+    assertEquals(
+      "code length equals 3 (Burmese)",
+      "Burmese (Myanmar (Burma))",
+      t.getLanguage("mya")
+    )
+    assertEquals("code length equals 3 (Catalan)", "Catalan (Spain)", t.getLanguage("cat"))
 
     // this case uses the result from the container nested class inside LanguageUtils. It will be tested in LanguageUtilsTest
     assertEquals("code length equals 2 (dummy)", "English", t.getLanguage("en"))

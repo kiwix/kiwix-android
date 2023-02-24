@@ -24,12 +24,21 @@ class LanguageContainer private constructor(val languageCode: String, val langua
   constructor(languageCode: String) : this(languageCode, chooseLanguageName(languageCode))
 
   companion object {
+
     private fun chooseLanguageName(languageCode: String): String {
       val displayLanguage = Locale(languageCode).displayLanguage
+      val displayCountry =
+        Locale(languageCode).displayCountry
       return if (displayLanguage.length == 2 || displayLanguage.isEmpty())
-        Locale.ENGLISH.displayLanguage
+        Locale.ENGLISH.displayLanguage + " (${Locale.ENGLISH.displayCountry})"
       else
-        displayLanguage
+        "${displayLanguage}${getCountry(displayCountry)}"
+    }
+
+    private fun getCountry(displayCountry: String) = if (displayCountry.isNotEmpty()) {
+      " ($displayCountry)"
+    } else {
+      ""
     }
   }
 }

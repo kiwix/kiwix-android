@@ -31,8 +31,20 @@ class BookUtils {
     return when {
       languageCode == null -> ""
       languageCode.length == 2 -> LanguageContainer(languageCode).languageName
-      languageCode.length == 3 -> localeMap[languageCode]?.displayLanguage.orEmpty()
+      languageCode.length == 3 -> localeMap[languageCode]?.displayLanguage.orEmpty() +
+        getCountryFromLanguageCode(
+          languageCode
+        )
       else -> ""
+    }
+  }
+
+  private fun getCountryFromLanguageCode(languageCode: String): String {
+    val local = LanguageUtils.iSO3ToLocale(languageCode)
+    return if (local?.displayCountry?.isNotEmpty() == true) {
+      " (${local.displayCountry})"
+    } else {
+      ""
     }
   }
 }
