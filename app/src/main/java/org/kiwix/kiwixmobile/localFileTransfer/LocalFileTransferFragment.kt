@@ -42,13 +42,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.kiwix.kiwixmobile.R
@@ -114,9 +110,14 @@ class LocalFileTransferFragment :
     return fragmentLocalFileTransferBinding?.root
   }
 
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    inflater.inflate(R.menu.wifi_file_share_items, menu)
+    super.onCreateOptionsMenu(menu, inflater)
+  }
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    setupMenu()
+    setHasOptionsMenu(true)
     val activity = requireActivity() as CoreMainActivity
     val filesForTransfer = getFilesForTransfer()
     val isReceiver = filesForTransfer.isEmpty()
@@ -131,45 +132,6 @@ class LocalFileTransferFragment :
     wifiDirectManager.callbacks = this
     wifiDirectManager.lifecycleCoroutineScope = lifecycleScope
     wifiDirectManager.startWifiDirectManager(filesForTransfer)
-  }
-
-  private fun setupMenu() {
-    (requireActivity() as MenuHost).addMenuProvider(
-      object : MenuProvider {
-        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-          menuInflater.inflate(R.menu.wifi_file_share_items, menu)
-        }
-
-        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-          if (menuItem.itemId == R.id.menu_item_search_devices) {
-            /* Permissions essential for this module */
-            return when {
-              !checkFineLocationAccessPermission() ->
-                true
-              !checkExternalStorageWritePermission() ->
-                true
-              /* Initiate discovery */
-              !wifiDirectManager.isWifiP2pEnabled -> {
-                requestEnableWifiP2pServices()
-                true
-              }
-              Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServiceEnabled -> {
-                requestEnableLocationServices()
-                true
-              }
-              else -> {
-                showPeerDiscoveryProgressBar()
-                wifiDirectManager.discoverPeerDevices()
-                true
-              }
-            }
-          }
-          return false
-        }
-      },
-      viewLifecycleOwner,
-      Lifecycle.State.RESUMED
-    )
   }
 
   private fun setupPeerDevicesList(activity: CoreMainActivity) {
@@ -193,6 +155,33 @@ class LocalFileTransferFragment :
   private fun getFilesForTransfer() =
     LocalFileTransferFragmentArgs.fromBundle(requireArguments()).uris?.map(::FileItem)
       ?: emptyList()
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    if (item.itemId == R.id.menu_item_search_devices) {
+      /* Permissions essential for this module */
+      return when {
+        !checkFineLocationAccessPermission() ->
+          true
+        !checkExternalStorageWritePermission() ->
+          true
+        /* Initiate discovery */
+        !wifiDirectManager.isWifiP2pEnabled -> {
+          requestEnableWifiP2pServices()
+          true
+        }
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServiceEnabled -> {
+          requestEnableLocationServices()
+          true
+        }
+        else -> {
+          showPeerDiscoveryProgressBar()
+          wifiDirectManager.discoverPeerDevices()
+          true
+        }
+      }
+    }
+    return super.onOptionsItemSelected(item)
+  }
 
   private fun showPeerDiscoveryProgressBar() { // Setup UI for searching peers
     fragmentLocalFileTransferBinding?.progressBarSearchingPeers?.visibility = View.VISIBLE

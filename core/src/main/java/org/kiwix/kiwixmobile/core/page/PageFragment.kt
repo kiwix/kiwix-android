@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.page
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -32,9 +31,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -97,44 +93,33 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    setHasOptionsMenu(true)
   }
 
-  private fun setupMenu() {
-    (requireActivity() as MenuHost).addMenuProvider(
-      object : MenuProvider {
-        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-          menuInflater.inflate(R.menu.menu_page, menu)
-          val search = menu.findItem(R.id.menu_page_search).actionView as SearchView
-          search.queryHint = searchQueryHint
-          search.setOnQueryTextListener(
-            SimpleTextListener {
-              pageViewModel.actions.offer(Action.Filter(it))
-            }
-          )
-        }
-
-        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-          when (menuItem.itemId) {
-            android.R.id.home -> {
-              pageViewModel.actions.offer(Action.Exit)
-              return true
-            }
-            R.id.menu_pages_clear -> {
-              pageViewModel.actions.offer(Action.UserClickedDeleteButton)
-              return true
-            }
-          }
-          return false
-        }
-      },
-      viewLifecycleOwner,
-      Lifecycle.State.RESUMED
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    super<BaseFragment>.onCreateOptionsMenu(menu, inflater)
+    inflater.inflate(R.menu.menu_page, menu)
+    val search = menu.findItem(R.id.menu_page_search).actionView as SearchView
+    search.queryHint = searchQueryHint
+    search.setOnQueryTextListener(
+      SimpleTextListener {
+        pageViewModel.actions.offer(Action.Filter(it))
+      }
     )
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    if (item.itemId == android.R.id.home) {
+      pageViewModel.actions.offer(Action.Exit)
+    }
+    if (item.itemId == R.id.menu_pages_clear) {
+      pageViewModel.actions.offer(Action.UserClickedDeleteButton)
+    }
+    return super.onOptionsItemSelected(item)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    setupMenu()
     val activity = requireActivity() as CoreMainActivity
     fragmentPageBinding?.recyclerView?.layoutManager =
       LinearLayoutManager(activity, RecyclerView.VERTICAL, false)

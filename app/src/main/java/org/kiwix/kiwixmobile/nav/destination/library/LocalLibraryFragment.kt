@@ -42,10 +42,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -143,35 +140,9 @@ class LocalLibraryFragment : BaseFragment() {
     if (toolbar != null) {
       activity.setupDrawerToggle(toolbar)
     }
-    setupMenu()
+    setHasOptionsMenu(true)
 
     return fragmentDestinationLibraryBinding?.root
-  }
-
-  private fun setupMenu() {
-    (requireActivity() as MenuHost).addMenuProvider(
-      object : MenuProvider {
-        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-          menuInflater.inflate(R.menu.menu_zim_manager, menu)
-          val searchItem = menu.findItem(R.id.action_search)
-          val languageItem = menu.findItem(R.id.select_language)
-          languageItem.isVisible = false
-          searchItem.isVisible = false
-        }
-
-        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-          when (menuItem.itemId) {
-            R.id.get_zim_nearby_device -> {
-              navigateToLocalFileTransferFragment()
-              return true
-            }
-          }
-          return false
-        }
-      },
-      viewLifecycleOwner,
-      Lifecycle.State.RESUMED
-    )
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -306,6 +277,22 @@ class LocalLibraryFragment : BaseFragment() {
           .apply { zimFileUri = file.toUri().toString() }
       )
     }
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    inflater.inflate(R.menu.menu_zim_manager, menu)
+    val searchItem = menu.findItem(R.id.action_search)
+    val languageItem = menu.findItem(R.id.select_language)
+    languageItem.isVisible = false
+    searchItem.isVisible = false
+    super.onCreateOptionsMenu(menu, inflater)
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+      R.id.get_zim_nearby_device -> navigateToLocalFileTransferFragment()
+    }
+    return super.onOptionsItemSelected(item)
   }
 
   override fun onResume() {
