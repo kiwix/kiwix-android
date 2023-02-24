@@ -26,6 +26,9 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -103,9 +106,38 @@ class LanguageFragment : BaseFragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    setHasOptionsMenu(true)
+    setupMenu()
     activityLanguageBinding = ActivityLanguageBinding.inflate(inflater, container, false)
     return activityLanguageBinding?.root
+  }
+
+  private fun setupMenu() {
+    (requireActivity() as MenuHost).addMenuProvider(
+      object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+          menuInflater.inflate(R.menu.menu_language, menu)
+          val search = menu.findItem(R.id.menu_language_search)
+          (search.actionView as SearchView).setOnQueryTextListener(
+            SimpleTextListener {
+              languageViewModel.actions.offer(Filter(it))
+            }
+          )
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+          return when (menuItem.itemId) {
+            R.id.menu_language_save -> {
+              languageViewModel.actions.offer(Action.SaveAll)
+              closeKeyboard()
+              true
+            }
+            else -> false
+          }
+        }
+      },
+      viewLifecycleOwner,
+      Lifecycle.State.RESUMED
+    )
   }
 
   override fun onDestroy() {
@@ -120,28 +152,6 @@ class LanguageFragment : BaseFragment() {
       languageAdapter.items = state.viewItems
     }
     Saving -> Unit
-  }
-
-  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    super.onCreateOptionsMenu(menu, inflater)
-    inflater.inflate(R.menu.menu_language, menu)
-    val search = menu.findItem(R.id.menu_language_search)
-    (search.actionView as SearchView).setOnQueryTextListener(
-      SimpleTextListener {
-        languageViewModel.actions.offer(Filter(it))
-      }
-    )
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    return when (item.itemId) {
-      R.id.menu_language_save -> {
-        languageViewModel.actions.offer(Action.SaveAll)
-        closeKeyboard()
-        true
-      }
-      else -> super.onOptionsItemSelected(item)
-    }
   }
 
   override fun onDestroyView() {
