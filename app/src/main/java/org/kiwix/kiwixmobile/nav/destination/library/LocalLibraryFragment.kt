@@ -38,6 +38,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
@@ -116,6 +117,7 @@ class LocalLibraryFragment : BaseFragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
+    checkStoragePermission()
     LanguageUtils(requireActivity())
       .changeFont(requireActivity(), sharedPreferenceUtil)
     fragmentDestinationLibraryBinding = FragmentDestinationLibraryBinding.inflate(
@@ -134,11 +136,6 @@ class LocalLibraryFragment : BaseFragment() {
       activity.setupDrawerToggle(toolbar)
     }
     setHasOptionsMenu(true)
-    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
-      !sharedPreferenceUtil.prefIsTest
-    ) {
-      checkPermissions()
-    }
 
     return fragmentDestinationLibraryBinding?.root
   }
@@ -315,30 +312,15 @@ class LocalLibraryFragment : BaseFragment() {
     outState.putBoolean(WAS_IN_ACTION_MODE, actionMode != null)
   }
 
-  private fun showAppSettings() {
-    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-    intent.data = Uri.fromParts("package", requireActivity().packageName, null)
-    startActivity(intent)
-  }
-
-  private fun checkPermissions() {
+  @Suppress("NestedBlockDepth")
+  private fun checkStoragePermission() {
     if (ContextCompat.checkSelfPermission(
-        requireActivity(),
+        requireContext(),
         Manifest.permission.READ_EXTERNAL_STORAGE
-      ) != PackageManager.PERMISSION_GRANTED
+      )
+      == PackageManager.PERMISSION_GRANTED
     ) {
-      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-        context.toast(R.string.request_storage)
-        requestPermissions(
-          arrayOf(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-          ),
-          REQUEST_STORAGE_PERMISSION
-        )
-        showAppSettings()
-      }
-    } else {
+      // Permission is granted
       if (sharedPreferenceUtil.isPlayStoreBuild) {
         requestFileSystemCheck()
       } else {
@@ -363,6 +345,71 @@ class LocalLibraryFragment : BaseFragment() {
         } else {
           requestFileSystemCheck()
         }
+      }
+    } else {
+      // Permission is not granted
+      // Request permission
+      context.toast(R.string.request_storage)
+      ActivityCompat.requestPermissions(
+        requireActivity(),
+        arrayOf(
+          Manifest.permission.READ_EXTERNAL_STORAGE,
+          Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ),
+        REQUEST_STORAGE_PERMISSION
+      )
+    }
+  }
+
+  private fun showAppSettings() {
+    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+    intent.data = Uri.fromParts("package", requireActivity().packageName, null)
+    startActivity(intent)
+  }
+
+  @Suppress("NestedBlockDepth")
+  override fun onRequestPermissionsResult(
+    requestCode: Int,
+    permissions: Array<String>,
+    grantResults: IntArray
+  ) {
+    when (requestCode) {
+      REQUEST_STORAGE_PERMISSION -> {
+        // If request is cancelled, the result arrays are empty.
+        if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+          // Permission is granted
+          if (sharedPreferenceUtil.isPlayStoreBuild) {
+            requestFileSystemCheck()
+          } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+              if (Environment.isExternalStorageManager()) {
+                // We already have permission!!
+                requestFileSystemCheck()
+              } else {
+                if (sharedPreferenceUtil.manageExternalFilesPermissionDialog) {
+                  // We should only ask for first time, If the users wants to revoke settings
+                  // then they can directly toggle this feature from settings screen
+                  sharedPreferenceUtil.manageExternalFilesPermissionDialog = false
+                  // Show Dialog and  Go to settings to give permission
+                  dialogShower.show(
+                    KiwixDialog.ManageExternalFilesPermissionDialog,
+                    {
+                      this.activity?.let(FragmentActivity::navigateToSettings)
+                    }
+                  )
+                }
+              }
+            } else {
+              requestFileSystemCheck()
+            }
+          }
+        } else {
+          // Permission is not granted
+          // Show a message or exit the app
+          requireActivity().finish()
+          showAppSettings()
+        }
+        return
       }
     }
   }
