@@ -26,6 +26,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -133,6 +134,11 @@ class LocalLibraryFragment : BaseFragment() {
       activity.setupDrawerToggle(toolbar)
     }
     setHasOptionsMenu(true)
+    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
+      !sharedPreferenceUtil.prefIsTest
+    ) {
+      checkPermissions()
+    }
 
     return fragmentDestinationLibraryBinding?.root
   }
@@ -265,15 +271,6 @@ class LocalLibraryFragment : BaseFragment() {
     return super.onOptionsItemSelected(item)
   }
 
-  override fun onResume() {
-    super.onResume()
-    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
-      !sharedPreferenceUtil.prefIsTest
-    ) {
-      checkPermissions()
-    }
-  }
-
   override fun onDestroyView() {
     super.onDestroyView()
     actionMode = null
@@ -318,6 +315,12 @@ class LocalLibraryFragment : BaseFragment() {
     outState.putBoolean(WAS_IN_ACTION_MODE, actionMode != null)
   }
 
+  private fun showAppSettings() {
+    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+    intent.data = Uri.fromParts("package", requireActivity().packageName, null)
+    startActivity(intent)
+  }
+
   private fun checkPermissions() {
     if (ContextCompat.checkSelfPermission(
         requireActivity(),
@@ -333,6 +336,7 @@ class LocalLibraryFragment : BaseFragment() {
           ),
           REQUEST_STORAGE_PERMISSION
         )
+        showAppSettings()
       }
     } else {
       if (sharedPreferenceUtil.isPlayStoreBuild) {
