@@ -88,6 +88,7 @@ abstract class HelpFragment : BaseFragment() {
     requireActivity().start<DiagnosticReportActivity>()
   }
 
+  @Suppress("DEPRECATION") // queryIntentActivities
   private fun sendFeedback() {
     val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
       data = (
@@ -99,8 +100,7 @@ abstract class HelpFragment : BaseFragment() {
     val packageManager = requireActivity().packageManager
     val activities = packageManager.queryIntentActivities(emailIntent, 0)
     if (activities.isNotEmpty()) {
-      val chooserIntent = Intent.createChooser(emailIntent, "Send Feedback via Email")
-      startActivity(chooserIntent)
+      startActivity(Intent.createChooser(emailIntent, "Send Feedback via Email"))
     } else {
       activity.toast(getString(R.string.no_email_application_installed, CONTACT_EMAIL_ADDRESS))
     }
