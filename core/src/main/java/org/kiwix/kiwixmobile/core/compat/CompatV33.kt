@@ -23,7 +23,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 
-@TargetApi(33)
+const val API_33 = 33
+
+@TargetApi(API_33)
 open class CompatV33 : Compat {
   override fun queryIntentActivities(
     packageManager: PackageManager,

@@ -19,13 +19,9 @@
 package org.kiwix.kiwixmobile.core.compat
 
 import android.content.pm.ApplicationInfo
-import android.content.pm.ComponentInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.content.pm.ResolveInfo
-import android.os.UserManager
 import androidx.annotation.LongDef
-
 
 /*
  * Provides [PackageInfoFlagsCompat] to Android versions before SDK 33,
