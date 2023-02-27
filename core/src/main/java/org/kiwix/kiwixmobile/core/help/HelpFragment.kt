@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.help
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -30,6 +31,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.queryIntentActivitiesCompat
+import org.kiwix.kiwixmobile.core.compat.ResolveInfoFlagsCompat
 import org.kiwix.kiwixmobile.core.databinding.FragmentHelpBinding
 import org.kiwix.kiwixmobile.core.error.DiagnosticReportActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
@@ -88,7 +91,6 @@ abstract class HelpFragment : BaseFragment() {
     requireActivity().start<DiagnosticReportActivity>()
   }
 
-  @Suppress("DEPRECATION") // queryIntentActivities
   private fun sendFeedback() {
     val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
       data = (
@@ -98,7 +100,8 @@ abstract class HelpFragment : BaseFragment() {
         ).toUri()
     }
     val packageManager = requireActivity().packageManager
-    val activities = packageManager.queryIntentActivities(emailIntent, 0)
+    val activities =
+      packageManager.queryIntentActivitiesCompat(emailIntent, ResolveInfoFlagsCompat.EMPTY)
     if (activities.isNotEmpty()) {
       startActivity(Intent.createChooser(emailIntent, "Send Feedback via Email"))
     } else {
