@@ -62,6 +62,9 @@ import org.kiwix.kiwixmobile.core.utils.FILE_SELECT_CODE
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
+import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener.Companion.SCROLL_DOWN
+import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener.Companion.SCROLL_UP
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
@@ -152,10 +155,8 @@ class LocalLibraryFragment : BaseFragment() {
         coreMainActivity.navHostContainer
           .setBottomMarginToFragmentContainerView(0)
 
-        val bottomNavigationView =
-          requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view)
-        bottomNavigationView?.let {
-          setBottomMarginToSwipeRefreshLayout(bottomNavigationView.measuredHeight)
+        getBottomNavigationView()?.let {
+          setBottomMarginToSwipeRefreshLayout(it.measuredHeight)
         }
       }
     disposable.add(sideEffects())
@@ -170,7 +171,25 @@ class LocalLibraryFragment : BaseFragment() {
       offerAction(FileSelectActions.UserClickedDownloadBooksButton)
     }
     hideFilePickerButton()
+
+    fragmentDestinationLibraryBinding?.zimfilelist?.addOnScrollListener(
+      SimpleRecyclerViewScrollListener { _, newState ->
+        when (newState) {
+          SCROLL_DOWN -> {
+            setBottomMarginToSwipeRefreshLayout(0)
+          }
+          SCROLL_UP -> {
+            getBottomNavigationView()?.let {
+              setBottomMarginToSwipeRefreshLayout(it.measuredHeight)
+            }
+          }
+        }
+      }
+    )
   }
+
+  private fun getBottomNavigationView() =
+    requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view)
 
   private fun setBottomMarginToSwipeRefreshLayout(marginBottom: Int) {
     fragmentDestinationLibraryBinding?.zimSwiperefresh?.apply {
