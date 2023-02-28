@@ -20,8 +20,6 @@ package org.kiwix.kiwixmobile.core.compat
 
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import androidx.annotation.LongDef
 
 /*
  * Provides [PackageInfoFlagsCompat] to Android versions before SDK 33,
@@ -111,43 +109,3 @@ const val MATCH_APEX = 0x40000000 // API 29
  * [PackageInfo] flag: return all attributions declared in the package manifest
  */
 const val GET_ATTRIBUTIONS = -0x80000000 // API 31
-
-@LongDef(
-  flag = true,
-  // prefix = ["GET_", "MATCH_"],
-  value = [
-    PackageManager.GET_ACTIVITIES.toLong(),
-    PackageManager.GET_CONFIGURATIONS.toLong(),
-    PackageManager.GET_GIDS.toLong(),
-    PackageManager.GET_INSTRUMENTATION.toLong(),
-    PackageManager.GET_META_DATA.toLong(),
-    PackageManager.GET_PERMISSIONS.toLong(),
-    PackageManager.GET_PROVIDERS.toLong(),
-    PackageManager.GET_RECEIVERS.toLong(),
-    PackageManager.GET_SERVICES.toLong(),
-    PackageManager.GET_SHARED_LIBRARY_FILES.toLong(),
-    GET_SIGNING_CERTIFICATES.toLong(),
-    PackageManager.GET_URI_PERMISSION_PATTERNS.toLong(),
-    MATCH_UNINSTALLED_PACKAGES.toLong(),
-    MATCH_DISABLED_COMPONENTS.toLong(),
-    MATCH_DISABLED_UNTIL_USED_COMPONENTS.toLong(),
-    MATCH_SYSTEM_ONLY.toLong(),
-    MATCH_APEX.toLong(),
-    GET_ATTRIBUTIONS.toLong()
-
-    // not handled: Deprecated & unused in our code
-    // PackageManager.GET_INTENT_FILTERS.toLong(),
-    // PackageManager.GET_SIGNATURES.toLong(),
-    // PackageManager.GET_DISABLED_COMPONENTS.toLong(),
-    // PackageManager.GET_DISABLED_UNTIL_USED_COMPONENTS.toLong(),
-    // PackageManager.GET_UNINSTALLED_PACKAGES.toLong(),
-
-    // not handled: values with @SystemApi
-    // PackageManager.MATCH_FACTORY_ONLY,
-    // PackageManager.MATCH_DEBUG_TRIAGED_MISSING,
-    // PackageManager.MATCH_INSTANT,
-    // PackageManager.MATCH_HIDDEN_UNTIL_INSTALLED_COMPONENTS,
-  ]
-)
-@Retention(AnnotationRetention.SOURCE)
-annotation class PackageInfoFlagsBits

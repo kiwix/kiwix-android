@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.compat
 
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 
@@ -29,4 +30,11 @@ open class CompatV21 : Compat {
     intent: Intent,
     flags: ResolveInfoFlagsCompat
   ): List<ResolveInfo> = packageManager.queryIntentActivities(intent, flags.value.toInt())
+
+  override fun getPackageInfo(
+    packageManager: PackageManager,
+    packageName: String,
+    flags: PackageInfoFlagsCompat
+  ): PackageInfo? =
+    packageManager.getPackageInfo(packageName, flags.value.toInt())
 }

@@ -19,7 +19,9 @@
 package org.kiwix.kiwixmobile.core.compat
 
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.pm.PackageManager.NameNotFoundException
 import android.content.pm.ResolveInfo
 import android.os.Build
 
@@ -59,5 +61,19 @@ class CompatHelper private constructor() {
       intent: Intent,
       flags: ResolveInfoFlagsCompat
     ): List<ResolveInfo> = compat.queryIntentActivities(this, intent, flags)
+
+    /**
+     * Retrieve overall information about an application package that is
+     * installed on the system.
+     *
+     * @see PackageManager.getPackageInfo
+     * @throws NameNotFoundException if no such package is available to the caller.
+     */
+    @Throws(NameNotFoundException::class)
+    fun PackageManager.getPackageInfoCompat(
+      packageName: String,
+      flags: PackageInfoFlagsCompat
+    ): PackageInfo? =
+      compat.getPackageInfo(this, packageName, flags)
   }
 }
