@@ -20,8 +20,6 @@ package org.kiwix.kiwixmobile.core.compat
 
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import androidx.annotation.LongDef
 
 /**
  * Flag parameter to retrieve some information about all applications (even
