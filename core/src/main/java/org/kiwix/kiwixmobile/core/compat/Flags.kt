@@ -18,21 +18,19 @@
 
 package org.kiwix.kiwixmobile.core.compat
 
-import android.annotation.TargetApi
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.content.pm.ResolveInfo
+/*
+ * Provides [PackageInfoFlagsCompat] to Android versions before SDK 33,
+ * keeping a near consistent API for [Compat.getPackageInfo],
+ * constraining the flags to the correct values (or types when available)
+ *
+ * Allows for either long flags to be provided (new API), or int flags (old API).
+ * The old API is currently better as it means .toLong() isn't needed on constants provided
+ * to the API.
+ * For future: Can Kotlin can accept either the int or long in a `@LongDef`
+ */
 
-const val API_33 = 33
-
-@TargetApi(API_33)
-open class CompatV33 : Compat {
-  override fun queryIntentActivities(
-    packageManager: PackageManager,
-    intent: Intent,
-    flags: ResolveInfoFlagsCompat
-  ): List<ResolveInfo> = packageManager.queryIntentActivities(
-    intent,
-    PackageManager.ResolveInfoFlags.of(flags.value)
-  )
-}
+/**
+ * Flags class that wraps around the bitmask flags used in methods that retrieve package or
+ * application info.
+ */
+open class Flags protected constructor(val value: Long)
