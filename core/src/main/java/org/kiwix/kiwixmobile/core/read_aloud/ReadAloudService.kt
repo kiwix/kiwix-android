@@ -34,12 +34,12 @@ class ReadAloudService : Service() {
   private var readAloudCallbacks: ReadAloudCallbacks? = null
 
   override fun onCreate() {
+    super.onCreate()
     CoreApp.coreComponent
       .coreServiceComponent()
       .service(this)
       .build()
       .inject(this)
-    super.onCreate()
   }
 
   override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
