@@ -21,13 +21,10 @@ package org.kiwix.kiwixmobile.custom.main
 import android.Manifest
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.annotation.TargetApi
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.PERMISSION_DENIED
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -45,6 +42,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggl
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.main.MainMenu
+import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
@@ -181,19 +179,14 @@ class CustomReaderFragment : CoreReaderFragment() {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     if (permissions.isNotEmpty() && permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE) {
       if (readStorageHasBeenPermanentlyDenied(grantResults)) {
-        dialogShower.show(KiwixDialog.ReadPermissionRequired, ::goToSettings)
+        dialogShower.show(
+          KiwixDialog.ReadPermissionRequired,
+          requireActivity()::navigateToAppSettings
+        )
       } else {
         openObbOrZim()
       }
     }
-  }
-
-  private fun goToSettings() {
-    startActivity(
-      Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-        data = Uri.fromParts("package", activity?.packageName, null)
-      }
-    )
   }
 
   private fun readStorageHasBeenPermanentlyDenied(grantResults: IntArray) =
