@@ -104,4 +104,5 @@ interface CoreComponent {
   fun inject(searchFragment: SearchFragment)
 
   fun inject(settingsFragment: CoreSettingsFragment)
+  fun coreServiceComponent(): CoreServiceComponent.Builder
 }

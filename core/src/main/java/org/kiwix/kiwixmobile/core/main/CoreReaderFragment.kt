@@ -19,7 +19,10 @@ package org.kiwix.kiwixmobile.core.main
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -32,6 +35,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.os.IBinder
 import android.provider.Settings
 import android.util.AttributeSet
 import android.util.Log
@@ -104,6 +108,10 @@ import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudCallbacks
+import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
+import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_PAUSE_OR_RESUME_TTS
+import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_STOP_TTS
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate
@@ -141,7 +149,8 @@ abstract class CoreReaderFragment :
   WebViewCallback,
   MenuClickListener,
   FragmentActivityExtensions,
-  WebViewProvider {
+  WebViewProvider,
+  ReadAloudCallbacks {
   protected val webViewList: MutableList<KiwixWebView> = ArrayList()
   private val webUrlsProcessor = BehaviorProcessor.create<String>()
 
@@ -300,6 +309,8 @@ abstract class CoreReaderFragment :
   private var bookmarkingDisposable: Disposable? = null
   private var isBookmarked = false
   private var unbinder: Unbinder? = null
+  private lateinit var serviceConnection: ServiceConnection
+  private var readAloudService: ReadAloudService? = null
   override fun onActionModeStarted(
     mode: ActionMode,
     appCompatActivity: AppCompatActivity
@@ -405,6 +416,17 @@ abstract class CoreReaderFragment :
     // when "Don't keep activities" is on.
     if (savedInstanceState == null) {
       handleIntentActions(requireActivity().intent)
+    }
+
+    serviceConnection = object : ServiceConnection {
+      override fun onServiceDisconnected(name: ComponentName?) {
+        /*do nothing*/
+      }
+
+      override fun onServiceConnected(className: ComponentName, service: IBinder) {
+        readAloudService = (service as ReadAloudService.ReadAloudBinder).service.get()
+        readAloudService?.registerCallBack(this@CoreReaderFragment)
+      }
     }
   }
 
@@ -734,6 +756,7 @@ abstract class CoreReaderFragment :
               requireActivity().runOnUiThread {
                 mainMenu?.onTextToSpeechStartedTalking()
                 ttsControls?.visibility = View.VISIBLE
+                setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, false)
               }
             }
 
@@ -742,6 +765,7 @@ abstract class CoreReaderFragment :
                 mainMenu?.onTextToSpeechStoppedTalking()
                 ttsControls?.visibility = View.GONE
                 pauseTTSButton?.setText(R.string.tts_pause)
+                setActionAndStartTTSService(ACTION_STOP_TTS)
               }
             }
           },
@@ -750,14 +774,19 @@ abstract class CoreReaderFragment :
               Log.d(TAG_KIWIX, "Focus change: $focusChange")
               tts?.currentTTSTask?.let {
                 tts?.stop()
+                setActionAndStartTTSService(ACTION_STOP_TTS)
                 return@label
               }
               when (focusChange) {
                 AudioManager.AUDIOFOCUS_LOSS -> {
                   if (tts?.currentTTSTask?.paused == false) tts?.pauseOrResume()
                   pauseTTSButton?.setText(R.string.tts_resume)
+                  setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, true)
                 }
-                AudioManager.AUDIOFOCUS_GAIN -> pauseTTSButton?.setText(R.string.tts_pause)
+                AudioManager.AUDIOFOCUS_GAIN -> {
+                  pauseTTSButton?.setText(R.string.tts_pause)
+                  setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, false)
+                }
               }
             }
           },
@@ -770,15 +799,18 @@ abstract class CoreReaderFragment :
   fun pauseTts() {
     if (tts?.currentTTSTask == null) {
       tts?.stop()
+      setActionAndStartTTSService(ACTION_STOP_TTS)
       return
     }
     tts?.currentTTSTask?.let {
       if (it.paused) {
         tts?.pauseOrResume()
         pauseTTSButton?.setText(R.string.tts_pause)
+        setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, false)
       } else {
         tts?.pauseOrResume()
         pauseTTSButton?.setText(R.string.tts_resume)
+        setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, true)
       }
     }
   }
@@ -786,6 +818,7 @@ abstract class CoreReaderFragment :
   @OnClick(R2.id.activity_main_button_stop_tts)
   fun stopTts() {
     tts?.stop()
+    setActionAndStartTTSService(ACTION_STOP_TTS)
   }
 
   // Reset the Locale and change the font of all TextViews and its subclasses, if necessary
@@ -818,10 +851,13 @@ abstract class CoreReaderFragment :
     // create a base Activity class that class this.
     deleteCachedFiles(requireActivity())
     tts?.apply {
+      setActionAndStartTTSService(ACTION_STOP_TTS)
       shutdown()
       tts = null
     }
     tempWebViewForUndo = null
+    readAloudService?.registerCallBack(null)
+    readAloudService = null
   }
 
   private fun updateTableOfContents() {
@@ -1741,6 +1777,55 @@ abstract class CoreReaderFragment :
       Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e)
       activity.toast("Could not restore tabs.", Toast.LENGTH_LONG)
     }
+  }
+
+  override fun onReadAloudPauseOrResume(isPauseTTS: Boolean) {
+    tts?.currentTTSTask?.let {
+      if (it.paused != isPauseTTS) {
+        pauseTts()
+      }
+    }
+  }
+
+  override fun onReadAloudStop() {
+    tts?.currentTTSTask?.let {
+      stopTts()
+    }
+  }
+
+  override fun onStart() {
+    super.onStart()
+    bindService()
+  }
+
+  override fun onStop() {
+    super.onStop()
+    unbindService()
+  }
+
+  private fun bindService() {
+    requireActivity().bindService(
+      Intent(requireActivity(), ReadAloudService::class.java), serviceConnection,
+      Context.BIND_AUTO_CREATE
+    )
+  }
+
+  private fun unbindService() {
+    readAloudService?.let {
+      requireActivity().unbindService(serviceConnection)
+    }
+  }
+
+  private fun createReadAloudIntent(action: String, isPauseTTS: Boolean): Intent =
+    Intent(requireActivity(), ReadAloudService::class.java).apply {
+      setAction(action)
+      putExtra(
+        ReadAloudService.IS_TTS_PAUSE_OR_RESUME, isPauseTTS
+      )
+    }
+
+  private fun setActionAndStartTTSService(action: String, isPauseTTS: Boolean = false) {
+    requireActivity().startService(createReadAloudIntent(action, isPauseTTS))
   }
 
   protected abstract fun restoreViewStateOnValidJSON(

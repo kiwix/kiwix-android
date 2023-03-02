@@ -74,5 +74,8 @@
     <ID>TopLevelPropertyNaming:Bytes.kt$const val Mb = Kb * 1024</ID>
     <ID>TopLevelPropertyNaming:Bytes.kt$const val Pb = Tb * 1024</ID>
     <ID>TopLevelPropertyNaming:Bytes.kt$const val Tb = Gb * 1024</ID>
+    <ID>PackageNaming:ReadAloudNotificationManger.kt$package org.kiwix.kiwixmobile.core.read_aloud</ID>
+    <ID>PackageNaming:ReadAloudService.kt$package org.kiwix.kiwixmobile.core.read_aloud</ID>
+    <ID>PackageNaming:ReadAloudCallbacks.kt$package org.kiwix.kiwixmobile.core.read_aloud</ID>
   </CurrentIssues>
 </SmellBaseline>

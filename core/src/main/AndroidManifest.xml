@@ -61,6 +61,6 @@
     <activity
       android:name=".error.DiagnosticReportActivity"
       android:exported="false" />
-
+    <service android:name=".read_aloud.ReadAloudService" />
   </application>
 </manifest>
