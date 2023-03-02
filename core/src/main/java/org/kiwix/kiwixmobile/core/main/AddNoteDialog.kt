@@ -41,6 +41,7 @@ import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.databinding.DialogAddNoteBinding
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
+import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -359,14 +360,23 @@ class AddNoteDialog : DialogFragment() {
     val noteFile =
       File(notesFolder.absolutePath, "$articleNoteFileName.txt")
     val noteDeleted = noteFile.delete()
+    val noteText = dialogNoteAddNoteBinding?.addNoteEditText?.text.toString()
     if (noteDeleted) {
       dialogNoteAddNoteBinding?.addNoteEditText?.text?.clear()
       mainRepositoryActions.deleteNote(articleNoteFileName)
       disableMenuItems()
-      context.toast(R.string.note_delete_successful, Toast.LENGTH_LONG)
+      view?.snack(
+        R.string.note_delete_successful,
+        R.string.undo,
+        actionClick = { onUndoCLicked(noteText) }
+      )
     } else {
       context.toast(R.string.note_delete_unsuccessful, Toast.LENGTH_LONG)
     }
+  }
+
+  private fun onUndoCLicked(text: String) {
+    dialogNoteAddNoteBinding?.addNoteEditText?.setText(text)
   }
 
   /* String content of the note text file given at:
