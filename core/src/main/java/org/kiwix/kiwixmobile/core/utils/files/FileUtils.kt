@@ -27,6 +27,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.util.Log
+import android.webkit.URLUtil
 import android.widget.Toast
 import androidx.documentfile.provider.DocumentFile
 import org.kiwix.kiwixmobile.core.CoreApp
@@ -310,17 +311,30 @@ object FileUtils {
     return null
   }
 
-  /**
-   * Returns the file name from the url or src. In url it gets the file name from the last '/' and
-   * if it contains '.'. If the url is null then it'll get the file name from the last '/'.
-   * If the url and src doesn't exist it returns the empty string.
-   */
-  fun getDecodedFileName(url: String?, src: String?): String =
-    url?.substringAfterLast("/", "")
-      ?.takeIf { it.contains(".") }
-      ?: src?.substringAfterLast("/", "")
-        ?.substringAfterLast("%3A") ?: ""
+  /*
+   * This method returns a file name guess from the url using URLUtils.guessFileName()
+     method of android.webkit. which is using Uri.decode method to extract the filename
+     from url. After that it splits filename between base and extension
+     (e.g for DemoFile.png, DemoFile is base and png is extension).
+     if there is no extension in url then it will automatically add the .bin extension to filename.
 
+   * If it's failed to guess the file name then it will return default filename downloadfile.bin.
+     If it returns this default value or containing the .bin in file name,
+     then we are returning null from this function which is handled in downloadFileFromUrl method.
+
+   * We are placing a condition here for if the file name does not have a .bin extension,
+     then it returns the original file name.
+   */
+  fun getDecodedFileName(url: String?): String? {
+    var fileName: String? = null
+    val decodedFileName = URLUtil.guessFileName(url, null, null)
+    if (!decodedFileName.endsWith(".bin")) {
+      fileName = decodedFileName
+    }
+    return fileName
+  }
+
+  @Suppress("ReturnCount")
   @JvmStatic
   fun downloadFileFromUrl(
     url: String?,
@@ -328,7 +342,7 @@ object FileUtils {
     zimReaderContainer: ZimReaderContainer,
     sharedPreferenceUtil: SharedPreferenceUtil
   ): File? {
-    val fileName = getDecodedFileName(url, src)
+    val fileName = getDecodedFileName(url ?: src) ?: return null
     var root: File? = null
     if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() ||
       Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
