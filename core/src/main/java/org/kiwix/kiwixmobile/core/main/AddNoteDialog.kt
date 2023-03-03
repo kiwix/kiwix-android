@@ -368,14 +368,14 @@ class AddNoteDialog : DialogFragment() {
       view?.snack(
         R.string.note_delete_successful,
         R.string.undo,
-        actionClick = { onUndoCLicked(noteText) }
+        actionClick = { restoreDeletedNote(noteText) }
       )
     } else {
       context.toast(R.string.note_delete_unsuccessful, Toast.LENGTH_LONG)
     }
   }
 
-  private fun onUndoCLicked(text: String) {
+  private fun restoreDeletedNote(text: String) {
     dialogNoteAddNoteBinding?.addNoteEditText?.setText(text)
   }
 
