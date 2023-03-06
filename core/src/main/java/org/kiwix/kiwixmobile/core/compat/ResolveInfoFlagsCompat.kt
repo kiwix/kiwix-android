@@ -23,7 +23,6 @@ import android.content.pm.ComponentInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.os.UserManager
-import androidx.annotation.LongDef
 
 class ResolveInfoFlagsCompat private constructor(@ResolveInfoFlagsBitsCompat value: Long) :
   Flags(value) {
@@ -136,29 +135,3 @@ const val MATCH_DIRECT_BOOT_AWARE = 0x00080000
  * @see UserManager.isUserUnlocked
  */
 const val MATCH_DIRECT_BOOT_UNAWARE = 0x00040000
-
-@LongDef(
-  flag = true,
-  // prefix = ["GET_", "MATCH_"],
-  value = [
-    GET_META_DATA.toLong(),
-    GET_RESOLVED_FILTER.toLong(),
-    GET_SHARED_LIBRARY_FILES.toLong(),
-    MATCH_ALL.toLong(),
-    MATCH_DISABLED_COMPONENTS.toLong(),
-    MATCH_DISABLED_UNTIL_USED_COMPONENTS.toLong(),
-    MATCH_DEFAULT_ONLY.toLong(),
-    MATCH_DIRECT_BOOT_AUTO.toLong(),
-    MATCH_DIRECT_BOOT_AWARE.toLong(),
-    MATCH_DIRECT_BOOT_UNAWARE.toLong(),
-    MATCH_SYSTEM_ONLY.toLong(),
-    MATCH_UNINSTALLED_PACKAGES.toLong()
-    // PackageManager.MATCH_INSTANT, // @SystemApi
-    // PackageManager.MATCH_DEBUG_TRIAGED_MISSING, // deprecated
-    // PackageManager.GET_DISABLED_COMPONENTS, // deprecated
-    // PackageManager.GET_DISABLED_UNTIL_USED_COMPONENTS, // deprecated
-    // PackageManager.GET_UNINSTALLED_PACKAGES.toLong() // deprecated
-  ]
-)
-@Retention(AnnotationRetention.SOURCE)
-annotation class ResolveInfoFlagsBitsCompat
