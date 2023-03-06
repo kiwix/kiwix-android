@@ -311,6 +311,7 @@ abstract class CoreReaderFragment :
   private var file: File? = null
   private var actionMode: ActionMode? = null
   private var tempWebViewForUndo: KiwixWebView? = null
+  private var tempWebViewListForUndo: List<KiwixWebView>? = null
   private var tempZimFileForUndo: File? = null
   private var isFirstRun = false
   private var tableDrawerAdapter: TableDrawerAdapter? = null
@@ -1382,9 +1383,36 @@ abstract class CoreReaderFragment :
   @OnClick(R2.id.tab_switcher_close_all_tabs)
   fun closeAllTabs() {
     closeAllTabsButton?.rotate()
+    tempZimFileForUndo = zimReaderContainer?.zimFile
+    tempWebViewListForUndo = webViewList.toList()
     webViewList.clear()
     tabsAdapter?.notifyDataSetChanged()
     openHomeScreen()
+    snackBarRoot?.let { root ->
+      root.bringToFront()
+      Snackbar.make(root, R.string.tabs_closed, Snackbar.LENGTH_LONG).apply {
+        setAction(R.string.undo) {
+          restoreDeletedTabs()
+        }
+        show()
+      }
+    }
+  }
+
+  private fun restoreDeletedTabs() {
+    tempWebViewListForUndo?.let {
+      zimReaderContainer?.setZimFile(tempZimFileForUndo)
+      webViewList.addAll(it)
+      tabsAdapter?.notifyDataSetChanged()
+      snackBarRoot?.let { root ->
+        Snackbar.make(root, R.string.tabs_restored, Snackbar.LENGTH_SHORT).show()
+      }
+      reopenBook()
+      showTabSwitcher()
+      setUpWithTextToSpeech(it.last())
+      updateBottomToolbarVisibility()
+      contentFrame?.addView(it.last())
+    }
   }
 
   // opens home screen when user closes all tabs
