@@ -311,7 +311,7 @@ abstract class CoreReaderFragment :
   private var file: File? = null
   private var actionMode: ActionMode? = null
   private var tempWebViewForUndo: KiwixWebView? = null
-  private var tempWebViewListForUndo: List<KiwixWebView>? = null
+  private var tempWebViewListForUndo: MutableList<KiwixWebView>? = null
   private var tempZimFileForUndo: File? = null
   private var isFirstRun = false
   private var tableDrawerAdapter: TableDrawerAdapter? = null
@@ -1384,7 +1384,7 @@ abstract class CoreReaderFragment :
   fun closeAllTabs() {
     closeAllTabsButton?.rotate()
     tempZimFileForUndo = zimReaderContainer?.zimFile
-    tempWebViewListForUndo = webViewList.toList()
+    tempWebViewListForUndo = webViewList.toMutableList()
     webViewList.clear()
     tabsAdapter?.notifyDataSetChanged()
     openHomeScreen()
