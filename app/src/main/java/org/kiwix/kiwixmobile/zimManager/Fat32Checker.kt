@@ -26,8 +26,8 @@ import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.DetectingFileSystem
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.Unknown
 import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.CANNOT_WRITE_4GB
 import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.CAN_WRITE_4GB
 import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.INCONCLUSIVE
@@ -46,7 +46,7 @@ class Fat32Checker constructor(
     Flowable.combineLatest(
       sharedPreferenceUtil.prefStorages
         .distinctUntilChanged()
-        .doOnNext { fileSystemStates.offer(Unknown) },
+        .doOnNext { fileSystemStates.offer(DetectingFileSystem) },
       requestCheckSystemFileType,
       BiFunction { storage: String, _: Unit -> storage }
     )
@@ -100,6 +100,6 @@ class Fat32Checker constructor(
     object NotEnoughSpaceFor4GbFile : FileSystemState()
     object CanWrite4GbFile : FileSystemState()
     object CannotWrite4GbFile : FileSystemState()
-    object Unknown : FileSystemState()
+    object DetectingFileSystem : FileSystemState()
   }
 }

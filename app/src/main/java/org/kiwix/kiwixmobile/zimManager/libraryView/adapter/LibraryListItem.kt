@@ -31,7 +31,7 @@ import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.Unknown
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.DetectingFileSystem
 
 sealed class LibraryListItem {
   abstract val id: Long
@@ -49,7 +49,7 @@ sealed class LibraryListItem {
   ) : LibraryListItem() {
 
     val canBeDownloaded: Boolean = when (fileSystemState) {
-      Unknown, CannotWrite4GbFile -> book.isLessThan4GB()
+      DetectingFileSystem, CannotWrite4GbFile -> book.isLessThan4GB()
       NotEnoughSpaceFor4GbFile, CanWrite4GbFile -> true
     }
 

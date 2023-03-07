@@ -55,7 +55,6 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.downloader.Downloader
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
@@ -100,14 +99,14 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   @Inject lateinit var alertDialogShower: AlertDialogShower
   private var fragmentDestinationDownloadBinding: FragmentDestinationDownloadBinding? = null
 
-  private var downloadBookItem: LibraryNetworkEntity.Book? = null
+  private var downloadBookItem: LibraryListItem.BookItem? = null
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
   }
 
   private val libraryAdapter: LibraryAdapter by lazy {
     LibraryAdapter(
-      LibraryDelegate.BookDelegate(bookUtils, ::onBookItemClick),
+      LibraryDelegate.BookDelegate(bookUtils, ::onBookItemClick, availableSpaceCalculator),
       LibraryDelegate.DownloadDelegate {
         if (it.currentDownloadState == Status.FAILED) {
           if (isNotConnected) {
@@ -329,7 +328,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun downloadFile() {
-    downloadBookItem?.let {
+    downloadBookItem?.book?.let {
       downloader.download(it)
       downloadBookItem = null
     }
@@ -344,7 +343,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
       )
       sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION)
-      downloadFile()
+      clickOnBookItem()
     } else {
       if (sharedPreferenceUtil.isPlayStoreBuild) {
         setExternalStoragePath(storageDevice)
@@ -364,7 +363,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private fun setExternalStoragePath(storageDevice: StorageDevice) {
     sharedPreferenceUtil.putPrefStorage(storageDevice.name)
     sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
-    downloadFile()
+    clickOnBookItem()
   }
 
   private fun selectFolder() {
@@ -388,7 +387,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       data?.let {
         getPathFromUri(requireActivity(), data)?.let(sharedPreferenceUtil::putPrefStorage)
         sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
-        downloadFile()
+        clickOnBookItem()
       } ?: run {
         activity.toast(
           resources
@@ -465,7 +464,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   private fun onBookItemClick(item: LibraryListItem.BookItem) {
     if (checkExternalStorageWritePermission()) {
-      downloadBookItem = item.book
+      downloadBookItem = item
       when {
         isNotConnected -> {
           noInternetSnackbar()
@@ -474,7 +473,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         noWifiWithWifiOnlyPreferenceSet -> {
           dialogShower.show(WifiOnly, {
             sharedPreferenceUtil.putPrefWifiOnly(false)
-            downloadFile()
+            clickOnBookItem()
           })
           return
         }
@@ -515,8 +514,12 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       },
       {
         sharedPreferenceUtil.showStorageOption = false
-        downloadFile()
+        clickOnBookItem()
       }
     )
+  }
+
+  private fun clickOnBookItem() {
+    downloadBookItem?.let(::onBookItemClick)
   }
 }

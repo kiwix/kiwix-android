@@ -30,7 +30,7 @@ import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.Unknown
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.DetectingFileSystem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.BookItem
 
 internal class LibraryListItemTest {
@@ -47,19 +47,19 @@ internal class LibraryListItemTest {
 
   @Test
   internal fun `Unknown file system state files under 4GB can be downloaded`() {
-    assertThat(canBeDownloaded(book, Unknown)).isTrue
+    assertThat(canBeDownloaded(book, DetectingFileSystem)).isTrue
   }
 
   @Test
   internal fun `Unknown file system state greater than 4GB can't be downloaded`() {
     every { book.size } returns (Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES + 1).toString()
-    assertThat(canBeDownloaded(book, Unknown)).isFalse
+    assertThat(canBeDownloaded(book, DetectingFileSystem)).isFalse
   }
 
   @Test
   internal fun `Unknown file system state empty size can be downloaded`() {
     every { book.size } returns ""
-    assertThat(canBeDownloaded(book, Unknown)).isTrue
+    assertThat(canBeDownloaded(book, DetectingFileSystem)).isTrue
   }
 
   @Test

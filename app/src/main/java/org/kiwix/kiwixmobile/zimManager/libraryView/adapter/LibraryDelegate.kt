@@ -24,6 +24,7 @@ import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.databinding.ItemDownloadBinding
 import org.kiwix.kiwixmobile.databinding.ItemLibraryBinding
 import org.kiwix.kiwixmobile.databinding.LibraryDividerBinding
+import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.DividerItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.LibraryDownloadItem
@@ -36,7 +37,8 @@ sealed class LibraryDelegate<I : LibraryListItem, out VH : LibraryViewHolder<I>>
 
   class BookDelegate(
     private val bookUtils: BookUtils,
-    private val clickAction: (BookItem) -> Unit
+    private val clickAction: (BookItem) -> Unit,
+    private val availableSpaceCalculator: AvailableSpaceCalculator
   ) : LibraryDelegate<BookItem, LibraryBookViewHolder>() {
     override val itemClass = BookItem::class.java
 
@@ -44,7 +46,8 @@ sealed class LibraryDelegate<I : LibraryListItem, out VH : LibraryViewHolder<I>>
       LibraryBookViewHolder(
         parent.viewBinding(ItemLibraryBinding::inflate, false),
         bookUtils,
-        clickAction
+        clickAction,
+        availableSpaceCalculator
       )
   }
 
