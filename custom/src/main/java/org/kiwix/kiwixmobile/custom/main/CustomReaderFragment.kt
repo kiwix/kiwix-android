@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.custom.main
 import android.Manifest
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.annotation.TargetApi
+import android.app.Dialog
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.PERMISSION_DENIED
 import android.os.Build
@@ -65,8 +66,10 @@ class CustomReaderFragment : CoreReaderFragment() {
   @Inject
   lateinit var customFileValidator: CustomFileValidator
 
+  @JvmField
   @Inject
-  lateinit var dialogShower: DialogShower
+  var dialogShower: DialogShower? = null
+  private var permissionRequiredDialog: Dialog? = null
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     if (enforcedLanguage()) {
@@ -179,10 +182,13 @@ class CustomReaderFragment : CoreReaderFragment() {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     if (permissions.isNotEmpty() && permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE) {
       if (readStorageHasBeenPermanentlyDenied(grantResults)) {
-        dialogShower.show(
-          KiwixDialog.ReadPermissionRequired,
-          requireActivity()::navigateToAppSettings
-        )
+        if (permissionRequiredDialog == null || permissionRequiredDialog?.isShowing == false) {
+          permissionRequiredDialog = dialogShower?.create(
+            KiwixDialog.ReadPermissionRequired,
+            requireActivity()::navigateToAppSettings
+          )
+          permissionRequiredDialog?.show()
+        }
       } else {
         openObbOrZim()
       }
@@ -249,5 +255,10 @@ class CustomReaderFragment : CoreReaderFragment() {
 
   override fun createNewTab() {
     newMainPageTab()
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
+    permissionRequiredDialog = null
   }
 }
