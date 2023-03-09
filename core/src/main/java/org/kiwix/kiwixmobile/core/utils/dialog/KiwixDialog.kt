@@ -191,6 +191,13 @@ sealed class KiwixDialog(
     negativeMessage = R.string.cancel
   )
 
+  object ClearAllNavigationHistory : KiwixDialog(
+    R.string.clear_all_history_dialog_title,
+    R.string.clear_all_navigation_history_message,
+    positiveMessage = R.string.delete,
+    negativeMessage = R.string.cancel
+  )
+
   object ClearAllNotes : KiwixDialog(
     R.string.delete_notes_confirmation_msg,
     message = null,

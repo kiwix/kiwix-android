@@ -49,6 +49,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
+import android.webkit.WebBackForwardList
 import android.webkit.WebView
 import android.widget.Button
 import android.widget.FrameLayout
@@ -107,11 +108,14 @@ import org.kiwix.kiwixmobile.core.main.MainMenu.MenuClickListener
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryClickListener
+import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudCallbacks
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_PAUSE_OR_RESUME_TTS
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_STOP_TTS
+import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate
@@ -150,7 +154,8 @@ abstract class CoreReaderFragment :
   MenuClickListener,
   FragmentActivityExtensions,
   WebViewProvider,
-  ReadAloudCallbacks {
+  ReadAloudCallbacks,
+  NavigationHistoryClickListener {
   protected val webViewList: MutableList<KiwixWebView> = ArrayList()
   private val webUrlsProcessor = BehaviorProcessor.create<String>()
 
@@ -311,6 +316,7 @@ abstract class CoreReaderFragment :
   private var unbinder: Unbinder? = null
   private lateinit var serviceConnection: ServiceConnection
   private var readAloudService: ReadAloudService? = null
+  private var navigationHistoryList: MutableList<NavigationHistoryListItem> = ArrayList()
   override fun onActionModeStarted(
     mode: ActionMode,
     appCompatActivity: AppCompatActivity
@@ -672,6 +678,81 @@ abstract class CoreReaderFragment :
     if (getCurrentWebView()?.canGoForward() == true) {
       getCurrentWebView()?.goForward()
     }
+  }
+
+  @OnLongClick(R2.id.bottom_toolbar_arrow_back)
+  fun showBackwardHistory() {
+    if (getCurrentWebView()?.canGoBack() == true) {
+      getCurrentWebView()?.copyBackForwardList()?.let { historyList ->
+        navigationHistoryList.clear()
+        (historyList.currentIndex downTo 0)
+          .asSequence()
+          .filter { it != historyList.currentIndex }
+          .forEach {
+            addItemToNavigationHistoryList(historyList, it)
+          }
+        showNavigationHistoryDialog(false)
+      }
+    }
+  }
+
+  @OnLongClick(R2.id.bottom_toolbar_arrow_forward)
+  fun showForwardHistory() {
+    if (getCurrentWebView()?.canGoForward() == true) {
+      getCurrentWebView()?.copyBackForwardList()?.let { historyList ->
+        navigationHistoryList.clear()
+        (historyList.currentIndex until historyList.size)
+          .asSequence()
+          .filter { it != historyList.currentIndex }
+          .forEach {
+            addItemToNavigationHistoryList(historyList, it)
+          }
+        showNavigationHistoryDialog(true)
+      }
+    }
+  }
+
+  private fun addItemToNavigationHistoryList(historyList: WebBackForwardList, index: Int) {
+    historyList.getItemAtIndex(index)?.let { webHistoryItem ->
+      navigationHistoryList.add(
+        NavigationHistoryListItem(
+          webHistoryItem.title,
+          webHistoryItem.url
+        )
+      )
+    }
+  }
+
+  /** Creates the full screen NavigationHistoryDialog, which is a DialogFragment  */
+  private fun showNavigationHistoryDialog(isForwardHistory: Boolean) {
+    val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
+    val previousInstance =
+      requireActivity().supportFragmentManager.findFragmentByTag(NavigationHistoryDialog.TAG)
+
+    // To prevent multiple instances of the DialogFragment
+    if (previousInstance == null) {
+      /* Since the DialogFragment is never added to the back-stack, so findFragmentByTag()
+       *  returning null means that the NavigationHistoryDialog is currently not on display (as doesn't exist)
+       **/
+      val dialogFragment = NavigationHistoryDialog(
+        if (isForwardHistory) getString(R.string.forward_history)
+        else getString(R.string.backward_history),
+        navigationHistoryList,
+        this
+      )
+      dialogFragment.show(fragmentTransaction, NavigationHistoryDialog.TAG)
+      // For DialogFragments, show() handles the fragment commit and display
+    }
+  }
+
+  override fun onItemClicked(navigationHistoryListItem: NavigationHistoryListItem) {
+    loadUrlWithCurrentWebview(navigationHistoryListItem.pageUrl)
+  }
+
+  override fun clearHistory() {
+    getCurrentWebView()?.clearHistory()
+    updateBottomToolbarArrowsAlpha()
+    toast(R.string.navigation_history_cleared)
   }
 
   @Suppress("MagicNumber")

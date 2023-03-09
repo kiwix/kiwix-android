@@ -28,6 +28,7 @@ import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
 import org.kiwix.kiwixmobile.core.page.history.HistoryFragment
+import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHistoryDialog
 import org.kiwix.kiwixmobile.core.page.notes.NotesFragment
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects.ShowDeleteNotesDialog
@@ -51,6 +52,7 @@ interface CoreActivityComponent {
   fun inject(addNoteDialog: AddNoteDialog)
   fun inject(helpFragment: HelpFragment)
   fun inject(notesFragment: NotesFragment)
+  fun inject(navigationHistoryDialog: NavigationHistoryDialog)
 
   @Subcomponent.Builder
   interface Builder {
