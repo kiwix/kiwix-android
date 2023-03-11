@@ -332,6 +332,6 @@
   <string name="read_aloud_running" tools:keep="@string/read_aloud_running">Running Read Aloud</string>
   <string name="backward_history">Backward history</string>
   <string name="forward_history">Forward history</string>
-  <string name="clear_all_navigation_history_message">Clears all (backward,forward) navigation history</string>
+  <string name="clear_all_navigation_history_message">Clears all (backward, forward) navigation history</string>
   <string name="navigation_history_cleared">Navigation History Cleared</string>
 </resources>
