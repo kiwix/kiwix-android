@@ -111,7 +111,9 @@ class AllProjectConfigurer {
           "IconDipSize",
           "UnusedResources",
           "NonConstantResourceId",
-          "NotifyDataSetChanged"
+          "NotifyDataSetChanged",
+          "NotificationPermission",
+          "MonochromeLauncherIcon"
         )
         lintConfig = target.rootProject.file("lintConfig.xml")
       }
