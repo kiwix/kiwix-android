@@ -191,6 +191,8 @@ class CustomReaderFragment : CoreReaderFragment() {
         }
       } else {
         openObbOrZim()
+        permissionRequiredDialog?.dismiss()
+        permissionRequiredDialog = null
       }
     }
   }
