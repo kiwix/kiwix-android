@@ -256,8 +256,8 @@
   <string name="nearby_devices" tools:keep="@string/nearby_devices">NEARBY DEVICES</string>
   <string name="no_devices_found" tools:keep="@string/no_devices_found">No devices detected. Tap on search button to try again.</string>
   <string name="files_for_transfer" tools:keep="@string/files_for_transfer">FILES FOR TRANSFER</string>
-  <string name="preparing_files" tools:keep="@string/preparing_files">Preparing files for transfer....</string>
-  <string name="performing_handshake" tools:keep="@string/performing_handshake">Performing handshake....</string>
+  <string name="preparing_files" tools:keep="@string/preparing_files">Preparing files for transfer…</string>
+  <string name="performing_handshake" tools:keep="@string/performing_handshake">Performing handshake…</string>
   <string name="status" tools:keep="@string/status">Status</string>
   <string name="pref_clear_all_notes_summary">Clears all notes on all articles</string>
   <string name="pref_clear_all_notes_title">Clear all notes</string>
