@@ -42,9 +42,6 @@ import javax.inject.Singleton
 class SharedPreferenceUtil @Inject constructor(val context: Context) {
   private val sharedPreferences: SharedPreferences =
     PreferenceManager.getDefaultSharedPreferences(context)
-  private val _prefStorages = PublishProcessor.create<String>()
-  val prefStorages
-    get() = _prefStorages.startWith(prefStorage)
   private val _textZooms = PublishProcessor.create<Int>()
   val textZooms
     get() = _textZooms.startWith(textZoom)
@@ -83,31 +80,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefDeviceDefaultLanguage: String
     get() = sharedPreferences.getString(PREF_DEVICE_DEFAULT_LANG, "") ?: ""
 
-  val prefStorage: String
-    get() {
-      val storage = sharedPreferences.getString(PREF_STORAGE, null)
-      return when {
-        storage == null -> getPublicDirectoryPath(defaultStorage()).also {
-          putPrefStorage(it)
-          putStoragePosition(0)
-        }
-        !File(storage).exists() -> getPublicDirectoryPath(defaultStorage()).also {
-          putStoragePosition(0)
-        }
-        else -> storage
-      }
-    }
-
-  val storagePosition: Int
-    get() = sharedPreferences.getInt(STORAGE_POSITION, 0)
-
-  private fun defaultStorage(): String =
-    getExternalFilesDirs(context, null)[0]?.path
-      ?: context.filesDir.path // a workaround for emulators
-
-  fun getPrefStorageTitle(defaultTitle: String): String =
-    sharedPreferences.getString(PREF_STORAGE_TITLE, defaultTitle) ?: defaultTitle
-
   fun putPrefLanguage(language: String) =
     sharedPreferences.edit { putString(PREF_LANG, language) }
 
@@ -120,18 +92,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   fun putPrefWifiOnly(wifiOnly: Boolean) {
     sharedPreferences.edit { putBoolean(PREF_WIFI_ONLY, wifiOnly) }
     _prefWifiOnlys.onNext(wifiOnly)
-  }
-
-  fun putPrefStorageTitle(storageTitle: String) =
-    sharedPreferences.edit { putString(PREF_STORAGE_TITLE, storageTitle) }
-
-  fun putPrefStorage(storage: String) {
-    sharedPreferences.edit { putString(PREF_STORAGE, storage) }
-    _prefStorages.onNext(storage)
-  }
-
-  fun putStoragePosition(pos: Int) {
-    sharedPreferences.edit { putInt(STORAGE_POSITION, pos) }
   }
 
   fun setIsPlayStoreBuildType(isPlayStoreBuildType: Boolean) {
@@ -160,12 +120,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
       putBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, prefShowBookmarksFromCurrentBook)
     }
 
-  var showStorageOption: Boolean
-    get() = sharedPreferences.getBoolean(PREF_SHOW_STORAGE_OPTION, true)
-    set(prefShowStorageOption) = sharedPreferences.edit {
-      putBoolean(PREF_SHOW_STORAGE_OPTION, prefShowStorageOption)
-    }
-
   var showNotesAllBooks: Boolean
     get() = sharedPreferences.getBoolean(PREF_SHOW_NOTES_ALL_BOOKS, true)
     set(prefShowBookmarksFromCurrentBook) = sharedPreferences.edit {
@@ -181,13 +135,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   fun nightModes(): Flowable<NightModeConfig.Mode> = nightModes.startWith(nightMode)
 
   fun updateNightMode() = nightModes.offer(nightMode)
-
-  var manageExternalFilesPermissionDialog: Boolean
-    get() = sharedPreferences.getBoolean(PREF_MANAGE_EXTERNAL_FILES, true)
-    set(prefManageExternalFilesPermissionDialog) =
-      sharedPreferences.edit {
-        putBoolean(PREF_MANAGE_EXTERNAL_FILES, prefManageExternalFilesPermissionDialog)
-      }
 
   var hostedBooks: Set<String>
     get() = sharedPreferences.getStringSet(PREF_HOSTED_BOOKS, null)?.toHashSet() ?: HashSet()
@@ -221,8 +168,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     // Prefs
     const val PREF_LANG = "pref_language_chooser"
     const val PREF_DEVICE_DEFAULT_LANG = "pref_device_default_language"
-    const val PREF_STORAGE = "pref_select_folder"
-    const val STORAGE_POSITION = "storage_position"
     const val PREF_WIFI_ONLY = "pref_wifi_only"
     const val PREF_KIWIX_MOBILE = "kiwix-mobile"
     const val PREF_SHOW_INTRO = "showIntro"
@@ -230,9 +175,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val PREF_BACK_TO_TOP = "pref_backtotop"
     private const val PREF_FULLSCREEN = "pref_fullscreen"
     private const val PREF_NEW_TAB_BACKGROUND = "pref_newtab_background"
-    private const val PREF_STORAGE_TITLE = "pref_selected_title"
     const val PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup"
-    const val PREF_SHOW_STORAGE_OPTION = "show_storgae_option"
     private const val PREF_IS_FIRST_RUN = "isFirstRun"
     private const val PREF_SHOW_BOOKMARKS_ALL_BOOKS = "show_bookmarks_current_book"
     private const val PREF_SHOW_HISTORY_ALL_BOOKS = "show_history_current_book"
@@ -241,7 +184,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_NIGHT_MODE = "pref_night_mode"
     private const val TEXT_ZOOM = "true_text_zoom"
     private const val DEFAULT_ZOOM = 100
-    private const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"
     const val IS_PLAY_STORE_BUILD = "is_play_store_build"
   }
 }

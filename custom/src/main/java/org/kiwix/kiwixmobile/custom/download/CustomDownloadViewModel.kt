@@ -35,20 +35,17 @@ import org.kiwix.kiwixmobile.custom.download.State.DownloadInProgress
 import org.kiwix.kiwixmobile.custom.download.State.DownloadRequired
 import org.kiwix.kiwixmobile.custom.download.effects.DownloadCustom
 import org.kiwix.kiwixmobile.custom.download.effects.NavigateToCustomReader
-import org.kiwix.kiwixmobile.custom.download.effects.SetPreferredStorageWithMostSpace
 import javax.inject.Inject
 
 class CustomDownloadViewModel @Inject constructor(
   downloadDao: FetchDownloadDao,
-  setPreferredStorageWithMostSpace: SetPreferredStorageWithMostSpace,
   private val downloadCustom: DownloadCustom,
   private val navigateToCustomReader: NavigateToCustomReader
 ) : ViewModel() {
 
   val state = MutableLiveData<State>().apply { value = DownloadRequired }
   val actions = PublishProcessor.create<Action>()
-  private val _effects = PublishProcessor.create<SideEffect<*>>()
-  val effects = _effects.startWith(setPreferredStorageWithMostSpace)
+  val effects = PublishProcessor.create<SideEffect<*>>()
 
   private val compositeDisposable = CompositeDisposable()
 
@@ -75,7 +72,7 @@ class CustomDownloadViewModel @Inject constructor(
     return when (action) {
       is DatabaseEmission -> reduceDatabaseEmission(state, action)
       ClickedRetry,
-      ClickedDownload -> state.also { _effects.offer(downloadCustom) }
+      ClickedDownload -> state.also { effects.offer(downloadCustom) }
     }
   }
 
@@ -91,7 +88,7 @@ class CustomDownloadViewModel @Inject constructor(
         else
           DownloadInProgress(action.downloads)
       else
-        DownloadComplete.also { _effects.offer(navigateToCustomReader) }
+        DownloadComplete.also { effects.offer(navigateToCustomReader) }
     DownloadComplete -> state
   }
 }

@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter
 
+import android.net.Uri
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
@@ -43,7 +44,7 @@ sealed class BooksOnDiskListItem {
   data class BookOnDisk constructor(
     val databaseId: Long = 0L,
     val book: Book,
-    val file: File,
+    val file: String,
     val tags: List<KiwixTag> = KiwixTag.from(book.tags),
     override val id: Long = databaseId
   ) : BooksOnDiskListItem() {
@@ -60,12 +61,7 @@ sealed class BooksOnDiskListItem {
 
     constructor(fetchDownloadEntity: FetchDownloadEntity) : this(
       book = fetchDownloadEntity.toBook(),
-      file = File(fetchDownloadEntity.file)
-    )
-
-    constructor(file: File, zimFileReader: ZimFileReader) : this(
-      book = zimFileReader.toBook(),
-      file = file
+      file = fetchDownloadEntity.file
     )
   }
 }

@@ -3,12 +3,6 @@
   package="org.kiwix.kiwixmobile.core"
   android:installLocation="auto">
 
-  <uses-permission
-    android:name="android.permission.READ_EXTERNAL_STORAGE"
-    android:maxSdkVersion="32" />
-  <uses-permission
-    android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-    tools:ignore="ScopedStorage" />
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -25,7 +19,6 @@
     android:fullBackupContent="@xml/backup_rules"
     android:dataExtractionRules = "@xml/data_extraction_rules"
     android:hardwareAccelerated="true"
-    android:requestLegacyExternalStorage="true"
     android:resizeableActivity="true"
     android:supportsRtl="true"
     android:theme="@style/KiwixTheme"

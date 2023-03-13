@@ -146,31 +146,6 @@ class CustomReaderFragment : CoreReaderFragment() {
 
   @TargetApi(Build.VERSION_CODES.M)
   private fun openObbOrZim() {
-    customFileValidator.validate(
-      onFilesFound = {
-        when (it) {
-          is ValidationState.HasFile -> openZimFile(it.file)
-          is ValidationState.HasBothFiles -> {
-            it.zimFile.delete()
-            openZimFile(it.obbFile)
-          }
-          else -> {}
-        }
-      },
-      onNoFilesFound = {
-        if (ContextCompat.checkSelfPermission(
-            requireActivity(),
-            READ_EXTERNAL_STORAGE
-          ) == PERMISSION_DENIED &&
-          sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
-          Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
-        ) {
-          requestPermissions(arrayOf(READ_EXTERNAL_STORAGE), REQUEST_READ_FOR_OBB)
-        } else {
-          findNavController().navigate(R.id.customDownloadFragment)
-        }
-      }
-    )
   }
 
   override fun onRequestPermissionsResult(

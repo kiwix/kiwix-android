@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile
 
-import android.Manifest
 import android.util.Log
 import androidx.test.InstrumentationRegistry
 import androidx.test.espresso.Espresso
@@ -27,7 +26,6 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
-import androidx.test.rule.GrantPermissionRule
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.clickMenu
@@ -62,14 +60,6 @@ class NetworkTest {
     KiwixMainActivity::class.java, false, false
   )
 
-  @Rule
-  var readPermissionRule: GrantPermissionRule =
-    GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE)
-
-  @Rule
-  var writePermissionRule: GrantPermissionRule =
-    GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-
   @Before fun setUp() {
     val component = DaggerTestComponent.builder().context(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
@@ -99,7 +89,6 @@ class NetworkTest {
     mActivityTestRule.launchActivity(null)
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     clickMenu(TestUtils.getResourceString(R.string.library))
-    TestUtils.allowStoragePermissionsIfNeeded()
     Espresso.onData(TestUtils.withContent("wikipedia_ab_all_2017-03"))
       .inAdapterView(ViewMatchers.withId(R.id.libraryList))
       .perform(ViewActions.click())

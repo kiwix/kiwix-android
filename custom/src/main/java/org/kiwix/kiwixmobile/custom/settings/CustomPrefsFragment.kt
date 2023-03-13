@@ -34,8 +34,4 @@ class CustomPrefsFragment : CorePrefsFragment() {
     }
     preferenceScreen.removePreferenceRecursively(PREF_WIFI_ONLY)
   }
-
-  override fun setStorage() {
-    preferenceScreen.removePreference(findPreference("pref_storage"))
-  }
 }

@@ -41,7 +41,6 @@ import org.kiwix.kiwixmobile.custom.download.State.DownloadInProgress
 import org.kiwix.kiwixmobile.custom.download.State.DownloadRequired
 import org.kiwix.kiwixmobile.custom.download.effects.DownloadCustom
 import org.kiwix.kiwixmobile.custom.download.effects.NavigateToCustomReader
-import org.kiwix.kiwixmobile.custom.download.effects.SetPreferredStorageWithMostSpace
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.downloadItem
 

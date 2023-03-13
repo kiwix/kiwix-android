@@ -26,12 +26,6 @@ import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.downloader.model.Seconds
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.DetectingFileSystem
 
 sealed class LibraryListItem {
   abstract val id: Long
@@ -43,22 +37,9 @@ sealed class LibraryListItem {
 
   data class BookItem constructor(
     val book: Book,
-    val fileSystemState: FileSystemState,
     val tags: List<KiwixTag> = KiwixTag.from(book.tags),
     override val id: Long = book.id.hashCode().toLong()
-  ) : LibraryListItem() {
-
-    val canBeDownloaded: Boolean = when (fileSystemState) {
-      DetectingFileSystem, CannotWrite4GbFile -> book.isLessThan4GB()
-      NotEnoughSpaceFor4GbFile, CanWrite4GbFile -> true
-    }
-
-    companion object {
-
-      private fun Book.isLessThan4GB() =
-        size.toLongOrNull() ?: 0L < Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES
-    }
-  }
+  ) : LibraryListItem()
 
   data class LibraryDownloadItem(
     val downloadId: Long,

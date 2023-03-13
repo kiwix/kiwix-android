@@ -48,7 +48,7 @@ class FetchDownloadRequester @Inject constructor(
 }
 
 private fun DownloadRequest.toFetchRequest(sharedPreferenceUtil: SharedPreferenceUtil) =
-  Request("$uri", getDestination(sharedPreferenceUtil)).apply {
+  Request("$uri", getDestination()).apply {
     networkType = if (sharedPreferenceUtil.prefWifiOnly) WIFI_ONLY else ALL
     autoRetryMaxAttempts = AUTO_RETRY_MAX_ATTEMPTS
   }

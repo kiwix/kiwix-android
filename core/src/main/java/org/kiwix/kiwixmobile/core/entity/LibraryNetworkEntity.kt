@@ -81,7 +81,7 @@ class LibraryNetworkEntity {
     var searchMatches = 0
 
     @Deprecated("")
-    var file: File? = null
+    var file: String? = null
 
     @Deprecated("")
     var remoteUrl: String? = null

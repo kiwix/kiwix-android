@@ -19,8 +19,6 @@ package org.kiwix.kiwixmobile.core.settings
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.pm.PackageManager
@@ -34,25 +32,18 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.material.snackbar.Snackbar
-import eu.mhutti1.utils.storage.StorageDevice
-import eu.mhutti1.utils.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
-import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
-import org.kiwix.kiwixmobile.core.utils.REQUEST_SELECT_FOLDER_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.OpenCredits
-import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.SelectFolder
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getPathFromUri
 import java.io.File
 import java.util.Locale
 import javax.inject.Inject
@@ -72,10 +63,6 @@ abstract class CorePrefsFragment :
 
   @JvmField
   @Inject
-  protected var storageCalculator: StorageCalculator? = null
-
-  @JvmField
-  @Inject
   protected var nightModeConfig: NightModeConfig? = null
 
   @JvmField
@@ -88,7 +75,6 @@ abstract class CorePrefsFragment :
       .build()
       .inject(this)
     addPreferencesFromResource(R.xml.preferences)
-    setStorage()
     setUpSettings()
     setupZoom()
     sharedPreferenceUtil?.let {
@@ -114,7 +100,6 @@ abstract class CorePrefsFragment :
     textZoom?.summary = getString(R.string.percentage, sharedPreferenceUtil?.textZoom)
   }
 
-  protected abstract fun setStorage()
   override fun onResume() {
     super.onResume()
     preferenceScreen.sharedPreferences
@@ -234,28 +219,26 @@ abstract class CorePrefsFragment :
   }
 
   private fun clearAllNotes() {
-    if (instance.isExternalStorageWritable) {
-      if (ContextCompat.checkSelfPermission(
-          requireActivity(),
-          Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
-        != PackageManager.PERMISSION_GRANTED &&
-        sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
-        Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
-      ) {
-        Snackbar.make(
-          requireView(),
-          R.string.ext_storage_permission_not_granted,
-          Snackbar.LENGTH_SHORT
-        )
-          .show()
-        return
-      }
-      if (File(AddNoteDialog.NOTES_DIRECTORY).deleteRecursively()) {
-        Snackbar.make(requireView(), R.string.notes_deletion_successful, Snackbar.LENGTH_SHORT)
-          .show()
-        return
-      }
+    if (ContextCompat.checkSelfPermission(
+        requireActivity(),
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
+      )
+      != PackageManager.PERMISSION_GRANTED &&
+      sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
+      Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+    ) {
+      Snackbar.make(
+        requireView(),
+        R.string.ext_storage_permission_not_granted,
+        Snackbar.LENGTH_SHORT
+      )
+        .show()
+      return
+    }
+    if (File(AddNoteDialog.NOTES_DIRECTORY).deleteRecursively()) {
+      Snackbar.make(requireView(), R.string.notes_deletion_successful, Snackbar.LENGTH_SHORT)
+        .show()
+      return
     }
     Snackbar.make(requireView(), R.string.notes_deletion_unsuccessful, Snackbar.LENGTH_SHORT).show()
   }
@@ -284,92 +267,7 @@ abstract class CorePrefsFragment :
     if (preference.key.equals(PREF_CREDITS, ignoreCase = true)) {
       openCredits()
     }
-    if (preference.key.equals(SharedPreferenceUtil.PREF_STORAGE, ignoreCase = true)) {
-      openFolderSelect()
-    }
     return true
-  }
-
-  private fun openFolderSelect() {
-    val dialogFragment = StorageSelectDialog()
-    dialogFragment.onSelectAction =
-      ::onStorageDeviceSelected
-    dialogFragment.show(
-      requireActivity().supportFragmentManager,
-      resources.getString(R.string.pref_storage)
-    )
-  }
-
-  @Suppress("NestedBlockDepth")
-  private fun onStorageDeviceSelected(storageDevice: StorageDevice) {
-    sharedPreferenceUtil?.let { sharedPreferenceUtil ->
-      findPreference<Preference>(SharedPreferenceUtil.PREF_STORAGE)?.summary =
-        storageCalculator?.calculateAvailableSpace(storageDevice.file)
-      if (storageDevice.isInternal) {
-        sharedPreferenceUtil.putPrefStorage(
-          sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
-        )
-        findPreference<Preference>(SharedPreferenceUtil.PREF_STORAGE)?.title =
-          getString(R.string.internal_storage)
-        sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION)
-      } else {
-        if (sharedPreferenceUtil.isPlayStoreBuild) {
-          setExternalStoragePath(storageDevice)
-        } else {
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-            Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
-          ) {
-            @SuppressLint("InflateParams") val view = LayoutInflater.from(
-              activity
-            ).inflate(R.layout.select_folder_dialog, null)
-            alertDialogShower?.show(SelectFolder { view }, ::selectFolder)
-          } else {
-            setExternalStoragePath(storageDevice)
-          }
-        }
-      }
-    }
-    return
-  }
-
-  private fun setExternalStoragePath(storageDevice: StorageDevice) {
-    sharedPreferenceUtil?.putPrefStorage(storageDevice.name)
-    findPreference<Preference>(SharedPreferenceUtil.PREF_STORAGE)?.title =
-      getString(R.string.external_storage)
-    sharedPreferenceUtil?.putStoragePosition(EXTERNAL_SELECT_POSITION)
-  }
-
-  private fun selectFolder() {
-    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-      addFlags(
-        Intent.FLAG_GRANT_READ_URI_PERMISSION
-          or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-          or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
-          or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
-      )
-    }
-    startActivityForResult(intent, REQUEST_SELECT_FOLDER_PERMISSION)
-  }
-
-  @SuppressLint("WrongConstant")
-  override fun onActivityResult(
-    requestCode: Int,
-    resultCode: Int,
-    data: Intent?
-  ) {
-    super.onActivityResult(requestCode, resultCode, data)
-    if (requestCode == REQUEST_SELECT_FOLDER_PERMISSION &&
-      resultCode == Activity.RESULT_OK
-    ) {
-      data?.let { intent ->
-        getPathFromUri(requireActivity(), intent)?.let { path ->
-          sharedPreferenceUtil?.putPrefStorage(path)
-          findPreference<Preference>(SharedPreferenceUtil.PREF_STORAGE)?.title =
-            getString(R.string.external_storage)
-          sharedPreferenceUtil?.putStoragePosition(EXTERNAL_SELECT_POSITION)
-        }
-      }
-    }
   }
 
   companion object {
@@ -377,7 +275,6 @@ abstract class CorePrefsFragment :
     const val PREF_CLEAR_ALL_HISTORY = "pref_clear_all_history"
     const val PREF_CLEAR_ALL_NOTES = "pref_clear_all_notes"
     const val PREF_CREDITS = "pref_credits"
-    const val PREF_PERMISSION = "pref_permissions"
     private const val ZOOM_OFFSET = 2
     private const val ZOOM_SCALE = 25
     private const val INTERNAL_TEXT_ZOOM = "text_zoom"

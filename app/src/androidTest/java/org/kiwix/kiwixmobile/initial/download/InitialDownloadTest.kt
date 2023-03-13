@@ -53,7 +53,6 @@ class InitialDownloadTest : BaseActivityTest() {
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
-      putBoolean(SharedPreferenceUtil.PREF_SHOW_STORAGE_OPTION, true)
       putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
     }
@@ -88,7 +87,6 @@ class InitialDownloadTest : BaseActivityTest() {
   @After
   fun setPrefStorageOption() {
     PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_SHOW_STORAGE_OPTION, false)
       putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, false)
     }

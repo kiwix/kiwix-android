@@ -17,28 +17,41 @@
  */
 package org.kiwix.kiwixmobile.core.reader
 
+import android.annotation.SuppressLint
+import android.content.ContentResolver
+import android.net.Uri
+import android.os.ParcelFileDescriptor
 import android.webkit.WebResourceResponse
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
 import java.io.File
+import java.io.FileDescriptor
 import java.net.HttpURLConnection
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: Factory) {
+  var contentResolver: ContentResolver? = null
+  var uri: String? = null
   var zimFileReader: ZimFileReader? = null
     set(value) {
       field?.dispose()
       field = value
     }
 
-  fun setZimFile(file: File?) {
-    if (file?.canonicalPath == zimFileReader?.zimFile?.canonicalPath) {
-      return
+  @SuppressLint("Recycle") fun setZimFile(contentResolver: ContentResolver, uri: String?) {
+    this.contentResolver = contentResolver
+    this.uri = uri
+    // TODO investigate the close() method
+    zimFileReader = uri?.let {
+      zimFileReaderFactory.create(
+        it,
+        contentResolver.openFileDescriptor(
+          Uri.parse(uri),
+          "r"
+        )!!
+      )
     }
-    zimFileReader =
-      if (file?.exists() == true) zimFileReaderFactory.create(file)
-      else null
   }
 
   fun getPageUrlFromTitle(title: String) = zimFileReader?.getPageUrlFrom(title)
@@ -71,11 +84,14 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
       }
   }
 
-  fun copyReader(): ZimFileReader? = zimFile?.let(zimFileReaderFactory::create)
+  fun copyReader(): ZimFileReader? {
+    val reader = zimFileReader ?: return null
+    return zimFileReaderFactory.create(reader.uri, reader.fd)
+  }
 
-  val zimFile get() = zimFileReader?.zimFile
+  val zimFile get() = uri
 
-  val zimCanonicalPath get() = zimFileReader?.zimFile?.canonicalPath
+  val zimCanonicalPath get() = uri
   val zimFileTitle get() = zimFileReader?.title
   val mainPage get() = zimFileReader?.mainPage
   val id get() = zimFileReader?.id

@@ -30,8 +30,6 @@ import javax.inject.Inject
 class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
 
   fun books() = box.asFlowable()
-    .doOnNext(::removeBooksThatDoNotExist)
-    .map { books -> books.filter { it.file.exists() } }
     .map { it.map(::BookOnDisk) }
 
   fun getBooks() = box.all.map(::BookOnDisk)
@@ -47,14 +45,14 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
   private fun uniqueBooksByFile(booksOnDisk: List<BookOnDisk>): List<BookOnDisk> {
     val booksWithSameFilePath = booksWithSameFilePath(booksOnDisk)
     return booksOnDisk.filter { bookOnDisk: BookOnDisk ->
-      booksWithSameFilePath.find { it.file.path == bookOnDisk.file.path } == null
+      booksWithSameFilePath.find { it.file == bookOnDisk.file } == null
     }
   }
 
   private fun booksWithSameFilePath(booksOnDisk: List<BookOnDisk>) =
     box.query {
       inValues(
-        BookOnDiskEntity_.file, booksOnDisk.map { it.file.path }.toTypedArray(),
+        BookOnDiskEntity_.file, booksOnDisk.map(BookOnDisk::file).toTypedArray(),
         QueryBuilder.StringOrder.CASE_INSENSITIVE
       )
     }.find()
@@ -77,14 +75,6 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
 
   fun migrationInsert(books: List<Book>) {
     insert(books.map { BookOnDisk(book = it, file = it.file!!) })
-  }
-
-  private fun removeBooksThatDoNotExist(books: MutableList<BookOnDiskEntity>) {
-    delete(books.filterNot { it.file.exists() })
-  }
-
-  private fun delete(books: List<BookOnDiskEntity>) {
-    box.remove(books)
   }
 
   fun bookMatching(downloadTitle: String) = box.query {

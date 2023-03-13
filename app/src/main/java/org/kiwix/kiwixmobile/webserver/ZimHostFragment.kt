@@ -87,9 +87,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       return booksAdapter.items
         .filter(BooksOnDiskListItem::isSelected)
         .filterIsInstance<BookOnDisk>()
-        .map {
-          it.file.absolutePath
-        }
+        .map(BookOnDisk::file)
         .also {
           if (BuildConfig.DEBUG) {
             it.forEach { path ->

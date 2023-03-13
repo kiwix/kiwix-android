@@ -18,15 +18,8 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library
 
-import android.Manifest
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.ConnectivityManager
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
@@ -39,16 +32,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tonyodev.fetch2.Status
-import eu.mhutti1.utils.storage.StorageDevice
-import eu.mhutti1.utils.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -64,24 +53,17 @@ import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.BookUtils
-import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
-import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
-import org.kiwix.kiwixmobile.core.utils.REQUEST_SELECT_FOLDER_PERMISSION
-import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
-import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.SelectFolder
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.YesNoDialog.WifiOnly
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getPathFromUri
 import org.kiwix.kiwixmobile.databinding.FragmentDestinationDownloadBinding
 import org.kiwix.kiwixmobile.zimManager.NetworkState
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
-import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryAdapter
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryDelegate
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
@@ -95,7 +77,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var bookUtils: BookUtils
-  @Inject lateinit var availableSpaceCalculator: AvailableSpaceCalculator
   @Inject lateinit var alertDialogShower: AlertDialogShower
   private var fragmentDestinationDownloadBinding: FragmentDestinationDownloadBinding? = null
 
@@ -106,7 +87,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   private val libraryAdapter: LibraryAdapter by lazy {
     LibraryAdapter(
-      LibraryDelegate.BookDelegate(bookUtils, ::onBookItemClick, availableSpaceCalculator),
+      LibraryDelegate.BookDelegate(bookUtils, ::onBookItemClick),
       LibraryDelegate.DownloadDelegate {
         if (it.currentDownloadState == Status.FAILED) {
           if (isNotConnected) {
@@ -231,8 +212,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     super<BaseFragment>.onCreateOptionsMenu(menu, inflater)
     inflater.inflate(R.menu.menu_zim_manager, menu)
     val searchItem = menu.findItem(R.id.action_search)
-    val getZimItem = menu.findItem(R.id.get_zim_nearby_device)
-    getZimItem?.isVisible = false
 
     (searchItem?.actionView as? SearchView)?.setOnQueryTextListener(
       SimpleTextListener(zimManageViewModel.requestFiltering::onNext)
@@ -252,7 +231,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   override fun onDestroyView() {
     super.onDestroyView()
-    availableSpaceCalculator.dispose()
     fragmentDestinationDownloadBinding?.libraryList?.adapter = null
     fragmentDestinationDownloadBinding = null
   }
@@ -334,189 +312,22 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
   }
 
-  @SuppressLint("InflateParams")
-  private fun storeDeviceInPreferences(
-    storageDevice: StorageDevice
-  ) {
-    if (storageDevice.isInternal) {
-      sharedPreferenceUtil.putPrefStorage(
-        sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
-      )
-      sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION)
-      clickOnBookItem()
-    } else {
-      if (sharedPreferenceUtil.isPlayStoreBuild) {
-        setExternalStoragePath(storageDevice)
-      } else {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-          Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
-        ) {
-          val view = LayoutInflater.from(activity).inflate(R.layout.select_folder_dialog, null)
-          dialogShower.show(SelectFolder { view }, ::selectFolder)
-        } else {
-          setExternalStoragePath(storageDevice)
-        }
-      }
-    }
-  }
-
-  private fun setExternalStoragePath(storageDevice: StorageDevice) {
-    sharedPreferenceUtil.putPrefStorage(storageDevice.name)
-    sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
-    clickOnBookItem()
-  }
-
-  private fun selectFolder() {
-    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-    intent.addFlags(
-      Intent.FLAG_GRANT_READ_URI_PERMISSION
-        or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-        or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
-        or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
-    )
-    startActivityForResult(intent, REQUEST_SELECT_FOLDER_PERMISSION)
-  }
-
-  @SuppressLint("WrongConstant") override fun onActivityResult(
-    requestCode: Int,
-    resultCode: Int,
-    data: Intent?
-  ) {
-    super.onActivityResult(requestCode, resultCode, data)
-    if (requestCode == REQUEST_SELECT_FOLDER_PERMISSION && resultCode == Activity.RESULT_OK) {
-      data?.let {
-        getPathFromUri(requireActivity(), data)?.let(sharedPreferenceUtil::putPrefStorage)
-        sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
-        clickOnBookItem()
-      } ?: run {
-        activity.toast(
-          resources
-            .getString(R.string.system_unable_to_grant_permission_message),
-          Toast.LENGTH_SHORT
-        )
-      }
-    }
-  }
-
-  private fun checkExternalStorageWritePermission(): Boolean {
-    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
-      return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        true
-      } else {
-        hasPermission(WRITE_EXTERNAL_STORAGE).also { permissionGranted ->
-          if (!permissionGranted) {
-            if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
-              alertDialogShower.show(
-                KiwixDialog.WriteStoragePermissionRationale,
-                ::requestExternalStoragePermission
-              )
-            } else {
-              alertDialogShower.show(
-                KiwixDialog.WriteStoragePermissionRationale,
-                ::openAppSettings
-              )
-            }
-          }
-        }
-      }
-    }
-    return true
-  }
-
-  private fun openAppSettings() {
-    val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
-    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-      flags = Intent.FLAG_ACTIVITY_NEW_TASK
-      data = uri
-    }
-    startActivity(intent)
-  }
-
-  private fun requestExternalStoragePermission() {
-    ActivityCompat.requestPermissions(
-      requireActivity(), arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-      REQUEST_STORAGE_PERMISSION
-    )
-  }
-
-  private fun shouldShowRationale(writeExternalStorage: String) =
-    ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), writeExternalStorage)
-
-  override fun onRequestPermissionsResult(
-    requestCode: Int,
-    permissions: Array<out String>,
-    grantResults: IntArray
-  ) {
-    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    if (requestCode == REQUEST_STORAGE_PERMISSION &&
-      permissions.isNotEmpty() &&
-      permissions[0] == Manifest.permission.WRITE_EXTERNAL_STORAGE
-    ) {
-      if (grantResults[0] != PERMISSION_GRANTED) {
-        if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove())
-          checkExternalStorageWritePermission()
-      }
-    }
-  }
-
-  private fun hasPermission(permission: String): Boolean =
-    ContextCompat.checkSelfPermission(requireActivity(), permission) == PERMISSION_GRANTED
-
   private fun onBookItemClick(item: LibraryListItem.BookItem) {
-    if (checkExternalStorageWritePermission()) {
-      downloadBookItem = item
-      when {
-        isNotConnected -> {
-          noInternetSnackbar()
-          return
-        }
-        noWifiWithWifiOnlyPreferenceSet -> {
-          dialogShower.show(WifiOnly, {
-            sharedPreferenceUtil.putPrefWifiOnly(false)
-            clickOnBookItem()
-          })
-          return
-        }
-        else -> if (sharedPreferenceUtil.showStorageOption) {
-          showStorageConfigureDialog()
-        } else {
-          availableSpaceCalculator.hasAvailableSpaceFor(
-            item,
-            { downloadFile() },
-            {
-              fragmentDestinationDownloadBinding?.libraryList?.snack(
-                """ 
-                ${getString(R.string.download_no_space)}
-                ${getString(R.string.space_available)} $it
-                """.trimIndent(),
-                R.string.download_change_storage,
-                ::showStorageSelectDialog
-              )
-            }
-          )
-        }
+    downloadBookItem = item
+    when {
+      isNotConnected -> {
+        noInternetSnackbar()
+        return
       }
-    }
-  }
-
-  private fun showStorageSelectDialog() = StorageSelectDialog()
-    .apply {
-      onSelectAction = ::storeDeviceInPreferences
-    }
-    .show(requireFragmentManager(), getString(R.string.pref_storage))
-
-  private fun showStorageConfigureDialog() {
-    alertDialogShower.show(
-      KiwixDialog.StorageConfigure,
-      {
-        showStorageSelectDialog()
-        sharedPreferenceUtil.showStorageOption = false
-      },
-      {
-        sharedPreferenceUtil.showStorageOption = false
-        clickOnBookItem()
+      noWifiWithWifiOnlyPreferenceSet -> {
+        dialogShower.show(WifiOnly, {
+          sharedPreferenceUtil.putPrefWifiOnly(false)
+          clickOnBookItem()
+        })
+        return
       }
-    )
+      else -> downloadFile()
+    }
   }
 
   private fun clickOnBookItem() {

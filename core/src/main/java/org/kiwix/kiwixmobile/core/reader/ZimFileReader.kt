@@ -50,18 +50,19 @@ import javax.inject.Inject
 private const val TAG = "ZimFileReader"
 
 class ZimFileReader constructor(
-  val zimFile: File,
-  private val jniKiwixReader: JNIKiwixReader = JNIKiwixReader(zimFile.canonicalPath),
+  val uri: String,
+  val fd: ParcelFileDescriptor,
+  private val jniKiwixReader: JNIKiwixReader = JNIKiwixReader(fd.fileDescriptor),
   private val nightModeConfig: NightModeConfig
 ) {
   interface Factory {
-    fun create(file: File): ZimFileReader?
+    fun create(uri: String, fd: ParcelFileDescriptor): ZimFileReader?
 
     class Impl @Inject constructor(private val nightModeConfig: NightModeConfig) :
       Factory {
-      override fun create(file: File) =
+      override fun create(uri: String, fd: ParcelFileDescriptor) =
         try {
-          ZimFileReader(file, nightModeConfig = nightModeConfig)
+          ZimFileReader(uri, fd, nightModeConfig = nightModeConfig)
         } catch (ignore: JNIKiwixException) {
           null
         }

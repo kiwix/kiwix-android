@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.dao.entities
 
+import android.net.Uri
 import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
@@ -30,7 +31,7 @@ import java.io.File
 data class BookOnDiskEntity(
   @Id var id: Long = 0,
   @Convert(converter = StringToFileConverter::class, dbType = String::class)
-  val file: File = File(""),
+  val file: String = "",
   val bookId: String,
   val title: String,
   val description: String?,
@@ -83,8 +84,8 @@ data class BookOnDiskEntity(
   }
 }
 
-class StringToFileConverter : PropertyConverter<File, String> {
-  override fun convertToDatabaseValue(entityProperty: File?) = entityProperty?.path ?: ""
+class StringToFileConverter : PropertyConverter<String, String> {
+  override fun convertToDatabaseValue(entityProperty: String?) = entityProperty
 
-  override fun convertToEntityProperty(databaseValue: String?) = File(databaseValue ?: "")
+  override fun convertToEntityProperty(databaseValue: String?) = databaseValue
 }

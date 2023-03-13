@@ -127,16 +127,8 @@ class KiwixReaderFragment : CoreReaderFragment() {
     requireArguments().clear()
   }
 
-  private fun tryOpeningZimFile(zimFileUri: String) {
-    val filePath = FileUtils.getLocalFilePathByUri(
-      requireActivity().applicationContext, Uri.parse(zimFileUri)
-    )
-
-    if (filePath == null || !File(filePath).exists()) {
-      activity.toast(R.string.error_file_not_found)
-      return
-    }
-    openZimFile(File(filePath))
+  private fun tryOpeningZimFile(uri: String) {
+    openZimFile(uri)
   }
 
   override fun loadDrawerViews() {
@@ -154,7 +146,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private fun closeZimBook() {
-    zimReaderContainer?.setZimFile(null)
+    zimReaderContainer?.setZimFile(requireActivity().contentResolver, null)
   }
 
   override fun openHomeScreen() {
@@ -241,9 +233,9 @@ class KiwixReaderFragment : CoreReaderFragment() {
     val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
     val zimFile = settings.getString(TAG_CURRENT_FILE, null)
 
-    if (zimFile != null && File(zimFile).exists()) {
+    if (zimFile != null) {
       if (zimReaderContainer?.zimFile == null) {
-        openZimFile(File(zimFile))
+        openZimFile(zimFile)
         Log.d(
           TAG_KIWIX,
           "Kiwix normal start, Opened last used zimFile: -> $zimFile"
@@ -304,8 +296,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   ): Super {
     super.onNewIntent(activity.intent, activity)
     intent.data?.let {
-      if ("file" == it.scheme) openZimFile(it.toFile())
-      else activity.toast(R.string.cannot_open_file)
+      openZimFile("$it")
     }
     return ShouldCall
   }

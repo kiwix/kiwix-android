@@ -60,6 +60,7 @@ import javax.inject.Inject
  * particular article (of a particular zim file/wiki/book) as a full-screen dialog fragment.
  *
  * Notes are saved as text files at location: "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
+ * TODO restore this behavior
  */
 
 // constant
@@ -288,49 +289,31 @@ class AddNoteDialog : DialogFragment() {
     /* String content of the EditText, given by noteText, is saved into the text file given by:
      *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
      * */
-    if (instance.isExternalStorageWritable) {
-      if (ContextCompat.checkSelfPermission(
-          requireContext(),
-          Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) != PackageManager.PERMISSION_GRANTED &&
-        !sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
-        Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
-      ) {
-        Log.d(
-          TAG,
-          "WRITE_EXTERNAL_STORAGE permission not granted"
-        )
-        context.toast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG)
-        return
-      }
-      val notesFolder = File(zimNotesDirectory)
-      var folderExists = true
-      if (!notesFolder.exists()) {
-        // Try creating folder if it doesn't exist
-        folderExists = notesFolder.mkdirs()
-      }
-      if (folderExists) {
-        val noteFile =
-          File(notesFolder.absolutePath, "$articleNoteFileName.txt")
+    val notesFolder = File(zimNotesDirectory)
+    var folderExists = true
+    if (!notesFolder.exists()) {
+      // Try creating folder if it doesn't exist
+      folderExists = notesFolder.mkdirs()
+    }
+    if (folderExists) {
+      val noteFile =
+        File(notesFolder.absolutePath, "$articleNoteFileName.txt")
 
-        // Save note text-file code:
-        try {
-          noteFile.writeText(noteText)
-          context.toast(R.string.note_save_successful, Toast.LENGTH_SHORT)
-          noteEdited = false // As no unsaved changes remain
-          enableDeleteNoteMenuItem()
-          // adding only if saving file is success
-          addNoteToDao(noteFile.canonicalPath, "${zimFileTitle.orEmpty()}: $articleTitle")
-        } catch (e: IOException) {
-          e.printStackTrace()
-            .also { context.toast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG) }
-        }
-      } else {
-        context.toast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG)
-        Log.d(TAG, "Required folder doesn't exist")
+      // Save note text-file code:
+      try {
+        noteFile.writeText(noteText)
+        context.toast(R.string.note_save_successful, Toast.LENGTH_SHORT)
+        noteEdited = false // As no unsaved changes remain
+        enableDeleteNoteMenuItem()
+        // adding only if saving file is success
+        addNoteToDao(noteFile.canonicalPath, "${zimFileTitle.orEmpty()}: $articleTitle")
+      } catch (e: IOException) {
+        e.printStackTrace()
+          .also { context.toast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG) }
       }
     } else {
-      context.toast(R.string.note_save_error_storage_not_writable, Toast.LENGTH_LONG)
+      context.toast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG)
+      Log.d(TAG, "Required folder doesn't exist")
     }
   }
 

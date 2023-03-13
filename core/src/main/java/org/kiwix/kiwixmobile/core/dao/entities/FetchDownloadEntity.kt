@@ -30,7 +30,7 @@ import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 data class FetchDownloadEntity(
   @Id var id: Long = 0,
   var downloadId: Long,
-  val file: String? = null,
+  val file: String = "",
   val etaInMilliSeconds: Long = -1L,
   val bytesDownloaded: Long = -1L,
   val totalSizeOfDownload: Long = -1L,

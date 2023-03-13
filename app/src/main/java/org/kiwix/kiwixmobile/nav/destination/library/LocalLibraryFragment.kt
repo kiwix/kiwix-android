@@ -18,28 +18,21 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library
 
-import android.Manifest
-import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -55,30 +48,22 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
-import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.navigateToSettings
-import org.kiwix.kiwixmobile.core.utils.FILE_SELECT_CODE
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
-import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener.Companion.SCROLL_DOWN
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener.Companion.SCROLL_UP
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.databinding.FragmentDestinationLibraryBinding
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
-import java.io.File
 import javax.inject.Inject
 
 private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
@@ -101,7 +86,6 @@ class LocalLibraryFragment : BaseFragment() {
     BookOnDiskDelegate.BookDelegate(
       sharedPreferenceUtil,
       { offerAction(RequestNavigateTo(it)) },
-      { offerAction(RequestMultiSelection(it)) },
       { offerAction(RequestSelect(it)) }
     )
   }
@@ -163,9 +147,6 @@ class LocalLibraryFragment : BaseFragment() {
     zimManageViewModel.deviceListIsRefreshing.observe(viewLifecycleOwner) {
       fragmentDestinationLibraryBinding?.zimSwiperefresh?.isRefreshing = it!!
     }
-    if (savedInstanceState != null && savedInstanceState.getBoolean(WAS_IN_ACTION_MODE)) {
-      zimManageViewModel.fileSelectActions.offer(FileSelectActions.RestartActionMode)
-    }
 
     fragmentDestinationLibraryBinding?.goToDownloadsButtonNoFiles?.setOnClickListener {
       offerAction(FileSelectActions.UserClickedDownloadBooksButton)
@@ -211,61 +192,31 @@ class LocalLibraryFragment : BaseFragment() {
     }
   }
 
-  private fun showFileChooser() {
-    val intent = Intent().apply {
-      action = Intent.ACTION_GET_CONTENT
-      type = "*/*"
-      addCategory(Intent.CATEGORY_OPENABLE)
-    }
-    try {
-      startActivityForResult(
-        Intent.createChooser(intent, "Select a zim file"),
-        FILE_SELECT_CODE
-      )
-    } catch (ex: ActivityNotFoundException) {
-      activity.toast(resources.getString(R.string.no_app_found_to_open), Toast.LENGTH_SHORT)
-    }
-  }
-
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    when (requestCode) {
-      FILE_SELECT_CODE -> {
-        data?.data?.let { uri ->
-          getZimFileFromUri(uri)?.let(::navigateToReaderFragment)
-        }
+  private val launcher = registerForActivityResult(object : ActivityResultContracts.OpenDocument() {
+    override fun createIntent(context: Context, input: Array<String>): Intent {
+      return super.createIntent(context, input).apply {
+        addCategory(Intent.CATEGORY_OPENABLE)
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
       }
-      else -> super.onActivityResult(requestCode, resultCode, data)
+    }
+  }) {
+    it ?: return@registerForActivityResult
+    requireActivity().contentResolver.run {
+      takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+      navigateToReaderFragment(it)
     }
   }
 
-  private fun getZimFileFromUri(
-    uri: Uri
-  ): File? {
-    val filePath = FileUtils.getLocalFilePathByUri(
-      requireActivity().applicationContext, uri
+  private fun showFileChooser() {
+    launcher.launch(arrayOf("*/*"))
+  }
+
+  private fun navigateToReaderFragment(uri: Uri) {
+    activity?.navigate(
+      LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
+        .apply { zimFileUri = uri.toString() }
     )
-    if (filePath == null || !File(filePath).exists()) {
-      activity.toast(R.string.error_file_not_found)
-      return null
-    }
-    val file = File(filePath)
-    return if (!FileUtils.isValidZimFile(file.path)) {
-      activity.toast(R.string.error_file_invalid)
-      null
-    } else {
-      file
-    }
-  }
-
-  private fun navigateToReaderFragment(file: File) {
-    if (!file.canRead()) {
-      activity.toast(R.string.unable_to_read_zim_file)
-    } else {
-      activity?.navigate(
-        LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
-          .apply { zimFileUri = file.toUri().toString() }
-      )
-    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -277,20 +228,8 @@ class LocalLibraryFragment : BaseFragment() {
     super.onCreateOptionsMenu(menu, inflater)
   }
 
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-      R.id.get_zim_nearby_device -> navigateToLocalFileTransferFragment()
-    }
-    return super.onOptionsItemSelected(item)
-  }
-
   override fun onResume() {
     super.onResume()
-    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
-      !sharedPreferenceUtil.prefIsTest
-    ) {
-      checkPermissions()
-    }
   }
 
   override fun onDestroyView() {
@@ -337,60 +276,11 @@ class LocalLibraryFragment : BaseFragment() {
     outState.putBoolean(WAS_IN_ACTION_MODE, actionMode != null)
   }
 
-  private fun checkPermissions() {
-    if (ContextCompat.checkSelfPermission(
-        requireActivity(),
-        Manifest.permission.READ_EXTERNAL_STORAGE
-      ) != PackageManager.PERMISSION_GRANTED
-    ) {
-      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-        context.toast(R.string.request_storage)
-        requestPermissions(
-          arrayOf(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-          ),
-          REQUEST_STORAGE_PERMISSION
-        )
-      }
-    } else {
-      if (sharedPreferenceUtil.isPlayStoreBuild) {
-        requestFileSystemCheck()
-      } else {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-          if (Environment.isExternalStorageManager()) {
-            // We already have permission!!
-            requestFileSystemCheck()
-          } else {
-            if (sharedPreferenceUtil.manageExternalFilesPermissionDialog) {
-              // We should only ask for first time, If the users wants to revoke settings
-              // then they can directly toggle this feature from settings screen
-              sharedPreferenceUtil.manageExternalFilesPermissionDialog = false
-              // Show Dialog and  Go to settings to give permission
-              dialogShower.show(
-                KiwixDialog.ManageExternalFilesPermissionDialog,
-                {
-                  this.activity?.let(FragmentActivity::navigateToSettings)
-                }
-              )
-            }
-          }
-        } else {
-          requestFileSystemCheck()
-        }
-      }
-    }
-  }
-
   private fun requestFileSystemCheck() {
     zimManageViewModel.requestFileSystemCheck.onNext(Unit)
   }
 
   private fun offerAction(action: FileSelectActions) {
     zimManageViewModel.fileSelectActions.offer(action)
-  }
-
-  private fun navigateToLocalFileTransferFragment() {
-    requireActivity().navigate(R.id.localFileTransferFragment)
   }
 }

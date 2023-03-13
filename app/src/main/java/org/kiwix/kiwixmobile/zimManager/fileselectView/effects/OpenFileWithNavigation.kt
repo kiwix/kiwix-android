@@ -32,12 +32,8 @@ data class OpenFileWithNavigation(private val bookOnDisk: BooksOnDiskListItem.Bo
 
   override fun invokeWith(activity: AppCompatActivity) {
     val file = bookOnDisk.file
-    if (!file.canRead()) {
-      activity.toast(R.string.error_file_not_found)
-    } else {
-      activity.navigate(
-        actionNavigationLibraryToNavigationReader().apply { zimFileUri = file.toUri().toString() }
-      )
-    }
+    activity.navigate(
+      actionNavigationLibraryToNavigationReader().apply { zimFileUri = file.toUri().toString() }
+    )
   }
 }

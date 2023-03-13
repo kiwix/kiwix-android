@@ -35,7 +35,7 @@ data class NoteListItem(
   ) : this(
     zimId = zimFileReader.id,
     title = title,
-    zimFilePath = zimFileReader.zimFile.canonicalPath,
+    zimFilePath = zimFileReader.uri,
     zimUrl = url,
     favicon = zimFileReader.favicon,
     noteFilePath = noteFilePath

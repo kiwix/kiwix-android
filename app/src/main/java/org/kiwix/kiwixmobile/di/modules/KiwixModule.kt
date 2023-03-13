@@ -24,12 +24,7 @@ import android.net.wifi.WifiManager
 import android.net.wifi.p2p.WifiP2pManager
 import dagger.Module
 import dagger.Provides
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.zim_manager.MountPointProducer
 import org.kiwix.kiwixmobile.di.KiwixScope
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker
-import org.kiwix.kiwixmobile.zimManager.FileWritingFileSystemChecker
-import org.kiwix.kiwixmobile.zimManager.MountFileSystemChecker
 
 @Module
 object KiwixModule {
@@ -42,17 +37,6 @@ object KiwixModule {
   @KiwixScope
   fun provideWifiManager(context: Context): WifiManager =
     context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-
-  @Provides
-  @KiwixScope
-  internal fun provideFat32Checker(
-    sharedPreferenceUtil: SharedPreferenceUtil,
-    mountPointProducer: MountPointProducer
-  ): Fat32Checker =
-    Fat32Checker(
-      sharedPreferenceUtil,
-      listOf(MountFileSystemChecker(mountPointProducer), FileWritingFileSystemChecker())
-    )
 
   @Provides
   @KiwixScope

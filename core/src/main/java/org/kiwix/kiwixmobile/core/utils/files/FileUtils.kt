@@ -33,7 +33,6 @@ import androidx.documentfile.provider.DocumentFile
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.get
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -104,43 +103,6 @@ object FileUtils {
     return false
   }
 
-  @JvmStatic
-  fun getLocalFilePathByUri(
-    context: Context,
-    uri: Uri
-  ): String? {
-    if (DocumentsContract.isDocumentUri(context, uri)) {
-      if ("com.android.externalstorage.documents" == uri.authority) {
-        val documentId = DocumentsContract.getDocumentId(uri)
-          .split(":")
-
-        if (documentId[0] == "primary") {
-          return "${Environment.getExternalStorageDirectory()}/${documentId[1]}"
-        }
-        return try {
-          "${getSdCardMainPath(context)}/${documentId[1]}"
-        } catch (ignore: Exception) {
-          null
-        }
-      } else if ("com.android.providers.downloads.documents" == uri.authority)
-        return try {
-          documentProviderContentQuery(context, uri)
-        } catch (ignore: IllegalArgumentException) {
-          null
-        }
-    } else if (uri.scheme != null) {
-      if ("content".equals(uri.scheme!!, ignoreCase = true)) {
-        return contentQuery(context, uri)
-      } else if ("file".equals(uri.scheme!!, ignoreCase = true)) {
-        return uri.path
-      }
-    } else {
-      return uri.path
-    }
-
-    return null
-  }
-
   private fun documentProviderContentQuery(context: Context, uri: Uri) =
     contentQuery(
       context,
@@ -190,66 +152,6 @@ object FileUtils {
     }
   }
 
-  @Suppress("NestedBlockDepth")
-  @JvmStatic fun getAllZimParts(book: Book): List<File> {
-    val files = ArrayList<File>()
-    book.file?.let {
-      if (it.path.endsWith(".zim") || it.path.endsWith(".zim.part")) {
-        if (it.exists()) {
-          files.add(it)
-        } else {
-          files.add(File("$it.part"))
-        }
-      } else {
-        var path = it.path
-        for (firstCharacter in 'a'..'z') {
-          for (secondCharacter in 'a'..'z') {
-            path = path.substring(0, path.length - 2) + firstCharacter + secondCharacter
-            when {
-              File(path).exists() -> files.add(File(path))
-              File("$path.part").exists() -> files.add(File("$path.part"))
-              else -> return@getAllZimParts files
-            }
-          }
-        }
-      }
-    }
-    return files
-  }
-
-  @JvmStatic
-  fun hasPart(file: File): Boolean {
-    var file = file
-    file = File(getFileName(file.path))
-    if (file.path.endsWith(".zim")) {
-      return false
-    }
-    if (file.path.endsWith(".part")) {
-      return true
-    }
-    val path = file.path
-    for (firstCharacter in 'a'..'z') {
-      for (secondCharacter in 'a'..'z') {
-        val chunkPath = path.substring(0, path.length - 2) + firstCharacter + secondCharacter
-        val fileChunk = File("$chunkPath.part")
-        if (fileChunk.exists()) {
-          return true
-        } else if (!File(chunkPath).exists()) {
-          return false
-        }
-      }
-    }
-    return false
-  }
-
-  @JvmStatic
-  fun getFileName(fileName: String) =
-    when {
-      File(fileName).exists() -> fileName
-      File("$fileName.part").exists() -> "$fileName.part"
-      else -> "${fileName}aa"
-    }
-
   @JvmStatic
   fun Context.readFile(filePath: String): String = try {
     assets.open(filePath)
@@ -258,10 +160,6 @@ object FileUtils {
   } catch (e: IOException) {
     "".also { e.printStackTrace() }
   }
-
-  @JvmStatic
-  fun isValidZimFile(filePath: String): Boolean =
-    filePath.endsWith(".zim") || filePath.endsWith(".zimaa")
 
   @JvmStatic
   fun getSdCardMainPath(context: Context): String =

@@ -18,12 +18,10 @@
 
 package org.kiwix.kiwixmobile
 
-import android.Manifest.permission
 import android.content.Context
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import androidx.test.rule.GrantPermissionRule
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.di.components.DaggerTestComponent
@@ -34,14 +32,6 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 abstract class BaseActivityTest {
   @get:Rule
   open var activityScenarioRule = ActivityScenarioRule(KiwixMainActivity::class.java)
-
-  @get:Rule
-  var readPermissionRule: GrantPermissionRule =
-    GrantPermissionRule.grant(permission.READ_EXTERNAL_STORAGE)
-
-  @get:Rule
-  var writePermissionRule: GrantPermissionRule =
-    GrantPermissionRule.grant(permission.WRITE_EXTERNAL_STORAGE)
 
   val context: Context by lazy {
     getInstrumentation().targetContext.applicationContext

@@ -18,72 +18,14 @@
 
 package org.kiwix.kiwixmobile.settings
 
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
-import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
-import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.PREF_STORAGE
 
 class KiwixPrefsFragment : CorePrefsFragment() {
 
   override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
     super.onCreatePreferences(savedInstanceState, rootKey)
     setUpLanguageChooser(SharedPreferenceUtil.PREF_LANG)
-    setMangeExternalStoragePermission()
-  }
-
-  override fun setStorage() {
-    sharedPreferenceUtil?.let {
-      findPreference<Preference>(PREF_STORAGE)?.title = getString(
-        if (it.prefStorage == internalStorage()?.let(
-            it::getPublicDirectoryPath
-          )
-        ) R.string.internal_storage
-        else R.string.external_storage
-      )
-    }
-    findPreference<Preference>(PREF_STORAGE)?.summary = storageCalculator?.calculateAvailableSpace()
-  }
-
-  private fun internalStorage(): String? =
-    ContextCompat.getExternalFilesDirs(requireContext(), null).firstOrNull()?.path
-
-  private fun setMangeExternalStoragePermission() {
-    val permissionPref = findPreference<Preference>(PREF_MANAGE_EXTERNAL_STORAGE_PERMISSION)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-      sharedPreferenceUtil?.isPlayStoreBuild == false
-    ) {
-      showPermissionPreference()
-      val externalStorageManager = Environment.isExternalStorageManager()
-      if (externalStorageManager) {
-        permissionPref!!.setSummary(org.kiwix.kiwixmobile.core.R.string.allowed)
-      } else {
-        permissionPref!!.setSummary(org.kiwix.kiwixmobile.core.R.string.not_allowed)
-      }
-      permissionPref.onPreferenceClickListener =
-        Preference.OnPreferenceClickListener {
-          activity?.let(FragmentActivity::navigateToSettings)
-          true
-        }
-    }
-  }
-
-  private fun showPermissionPreference() {
-    val preferenceCategory = findPreference<PreferenceCategory>(
-      PREF_PERMISSION
-    )
-    preferenceCategory!!.isVisible = true
-  }
-
-  companion object {
-    const val PREF_MANAGE_EXTERNAL_STORAGE_PERMISSION =
-      "pref_manage_external_storage"
   }
 }

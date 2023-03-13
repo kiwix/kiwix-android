@@ -61,18 +61,6 @@
   </PreferenceCategory>
 
   <PreferenceCategory
-    android:key="pref_storage"
-    app:iconSpaceReserved="false"
-    app:title="@string/pref_storage">
-
-    <Preference
-      android:key="pref_select_folder"
-      android:title="@string/pref_current_folder"
-      app:iconSpaceReserved="false" />
-
-  </PreferenceCategory>
-
-  <PreferenceCategory
     android:key="pref_history"
     android:title="@string/history"
     app:iconSpaceReserved="false">
@@ -93,18 +81,6 @@
       android:key="pref_clear_all_notes"
       android:summary="@string/pref_clear_all_notes_summary"
       android:title="@string/pref_clear_all_notes_title"
-      app:iconSpaceReserved="false" />
-
-  </PreferenceCategory>
-  <PreferenceCategory
-    android:key="pref_permissions"
-    android:title="@string/pref_permission"
-    app:isPreferenceVisible="false"
-    app:iconSpaceReserved="false">
-
-    <Preference
-      android:key="pref_manage_external_storage"
-      android:title="@string/pref_allow_to_read_or_write_zim_files_on_sd_card"
       app:iconSpaceReserved="false" />
 
   </PreferenceCategory>

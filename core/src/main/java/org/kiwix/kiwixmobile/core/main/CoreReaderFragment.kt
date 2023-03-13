@@ -63,7 +63,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.Group
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.widget.ContentLoadingProgressBar
@@ -92,7 +91,6 @@ import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R2
-import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
@@ -123,8 +121,6 @@ import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
-import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
-import org.kiwix.kiwixmobile.core.utils.REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.getAttributes
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_ARTICLES
@@ -282,10 +278,6 @@ abstract class CoreReaderFragment :
   @JvmField
   @BindView(R2.id.no_open_book_text)
   var noOpenBookText: TextView? = null
-
-  @JvmField
-  @Inject
-  var storageObserver: StorageObserver? = null
 
   @JvmField
   @Inject
@@ -1003,8 +995,6 @@ abstract class CoreReaderFragment :
   }
 
   private fun closeTab(index: Int) {
-    tempZimFileForUndo = zimReaderContainer?.zimFile
-    tempWebViewForUndo = webViewList[index]
     webViewList.removeAt(index)
     if (index <= currentWebViewIndex && currentWebViewIndex > 0) {
       currentWebViewIndex--
@@ -1016,7 +1006,6 @@ abstract class CoreReaderFragment :
     snackBarRoot?.let {
       it.bringToFront()
       Snackbar.make(it, R.string.tab_closed, Snackbar.LENGTH_LONG)
-        .setAction(R.string.undo) { restoreDeletedTab(index) }.show()
     }
     openHomeScreen()
   }
@@ -1025,23 +1014,6 @@ abstract class CoreReaderFragment :
     hideNoBookOpenViews()
     contentFrame?.visibility = View.VISIBLE
     mainMenu?.showBookSpecificMenuItems()
-  }
-
-  private fun restoreDeletedTab(index: Int) {
-    if (webViewList.isEmpty()) {
-      reopenBook()
-    }
-    tempWebViewForUndo?.let {
-      zimReaderContainer?.setZimFile(tempZimFileForUndo)
-      webViewList.add(index, it)
-      tabsAdapter?.notifyDataSetChanged()
-      snackBarRoot?.let { root ->
-        Snackbar.make(root, R.string.tab_restored, Snackbar.LENGTH_SHORT).show()
-      }
-      setUpWithTextToSpeech(it)
-      updateBottomToolbarVisibility()
-      contentFrame?.addView(it)
-    }
   }
 
   protected fun selectTab(position: Int) {
@@ -1119,9 +1091,7 @@ abstract class CoreReaderFragment :
   }
 
   override fun onAddNoteMenuClicked() {
-    if (requestExternalStorageWritePermissionForNotes()) {
-      showAddNoteDialog()
-    }
+    showAddNoteDialog()
   }
 
   override fun onHomeMenuClicked() {
@@ -1157,42 +1127,6 @@ abstract class CoreReaderFragment :
       dialogFragment.show(fragmentTransaction, AddNoteDialog.TAG)
       // For DialogFragments, show() handles the fragment commit and display
     }
-  }
-
-  @Suppress("NestedBlockDepth")
-  private fun requestExternalStorageWritePermissionForNotes(): Boolean {
-    var isPermissionGranted = false
-    if (sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
-      Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
-    ) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // For Marshmallow & higher API levels
-        if (requireActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-          == PackageManager.PERMISSION_GRANTED
-        ) {
-          isPermissionGranted = true
-        } else {
-          if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            /* shouldShowRequestPermissionRationale() returns false when:
-               *  1) User has previously checked on "Don't ask me again", and/or
-               *  2) Permission has been disabled on device
-               */
-            requireActivity().toast(
-              R.string.ext_storage_permission_rationale_add_note,
-              Toast.LENGTH_LONG
-            )
-          }
-          requestPermissions(
-            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-            REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE
-          )
-        }
-      } else { // For Android versions below Marshmallow 6.0 (API 23)
-        isPermissionGranted = true // As already requested at install time
-      }
-    } else {
-      isPermissionGranted = true
-    }
-    return isPermissionGranted
   }
 
   @OnLongClick(R2.id.bottom_toolbar_bookmark)
@@ -1239,19 +1173,9 @@ abstract class CoreReaderFragment :
     externalLinkOpener?.openExternalUrl(intent)
   }
 
-  protected fun openZimFile(file: File) {
-    if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-      if (file.exists()) {
-        openAndSetInContainer(file)
-        updateTitle()
-      } else {
-        Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.absolutePath)
-        requireActivity().toast(R.string.error_file_not_found, Toast.LENGTH_LONG)
-      }
-    } else {
-      this.file = file
-      requestExternalStoragePermission()
-    }
+  protected fun openZimFile(uri: String) {
+    openAndSetInContainer(uri)
+    updateTitle()
   }
 
   private fun hasPermission(permission: String): Boolean {
@@ -1265,23 +1189,16 @@ abstract class CoreReaderFragment :
     ) == PackageManager.PERMISSION_GRANTED
   }
 
-  private fun requestExternalStoragePermission() {
-    ActivityCompat.requestPermissions(
-      requireActivity(), arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-      REQUEST_STORAGE_PERMISSION
-    )
-  }
-
-  private fun openAndSetInContainer(file: File) {
+  private fun openAndSetInContainer(uri: String) {
     try {
-      if (isNotPreviouslyOpenZim(file.canonicalPath)) {
+      if (isNotPreviouslyOpenZim(uri)) {
         webViewList.clear()
       }
     } catch (e: IOException) {
       e.printStackTrace()
     }
     zimReaderContainer?.let { zimReaderContainer ->
-      zimReaderContainer.setZimFile(file)
+      zimReaderContainer.setZimFile(requireActivity().contentResolver, uri)
       val zimFileReader = zimReaderContainer.zimFileReader
       zimFileReader?.let { zimFileReader ->
         mainMenu?.onFileOpened(urlIsValid())
@@ -1312,42 +1229,6 @@ abstract class CoreReaderFragment :
 
   private fun isNotPreviouslyOpenZim(canonicalPath: String?): Boolean =
     canonicalPath != null && canonicalPath != zimReaderContainer?.zimCanonicalPath
-
-  override fun onRequestPermissionsResult(
-    requestCode: Int,
-    permissions: Array<String>,
-    grantResults: IntArray
-  ) {
-    when (requestCode) {
-      REQUEST_STORAGE_PERMISSION -> {
-        if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-          file?.let(::openZimFile)
-        } else {
-          snackBarRoot?.let { snackBarRoot ->
-            Snackbar.make(snackBarRoot, R.string.request_storage, Snackbar.LENGTH_LONG)
-              .setAction(R.string.menu_settings) {
-                val intent = Intent()
-                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                val uri = Uri.fromParts("package", requireActivity().packageName, null)
-                intent.data = uri
-                startActivity(intent)
-              }.show()
-          }
-        }
-      }
-      REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE -> {
-        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-          // Successfully granted permission, so opening the note keeper
-          showAddNoteDialog()
-        } else {
-          Toast.makeText(
-            requireActivity().applicationContext,
-            getString(R.string.ext_storage_write_permission_denied_add_note), Toast.LENGTH_LONG
-          ).show()
-        }
-      }
-    }
-  }
 
   @OnClick(R2.id.tab_switcher_close_all_tabs)
   fun closeAllTabs() {

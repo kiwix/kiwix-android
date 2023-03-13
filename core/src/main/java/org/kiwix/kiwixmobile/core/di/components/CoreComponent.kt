@@ -23,9 +23,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import dagger.BindsInstance
 import dagger.Component
-import eu.mhutti1.utils.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
@@ -78,7 +76,6 @@ interface CoreComponent {
   fun zimReaderContainer(): ZimReaderContainer
   fun sharedPrefUtil(): SharedPreferenceUtil
   fun zimFileReaderFactory(): ZimFileReader.Factory
-  fun storageObserver(): StorageObserver
   fun kiwixService(): KiwixService
   fun application(): Application
   fun bookUtils(): BookUtils
@@ -98,7 +95,6 @@ interface CoreComponent {
 
   fun inject(application: CoreApp)
   fun inject(kiwixWebView: KiwixWebView)
-  fun inject(storageSelectDialog: StorageSelectDialog)
 
   fun inject(errorActivity: ErrorActivity)
   fun inject(searchFragment: SearchFragment)

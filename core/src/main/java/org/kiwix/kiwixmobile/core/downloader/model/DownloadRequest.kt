@@ -25,6 +25,6 @@ data class DownloadRequest(val urlString: String) {
 
   val uri: Uri get() = Uri.parse(urlString)
 
-  fun getDestination(sharedPreferenceUtil: SharedPreferenceUtil): String =
-    "${sharedPreferenceUtil.prefStorage}/Kiwix/${StorageUtils.getFileNameFromUrl(urlString)}"
+  fun getDestination(): String =
+    TODO("$ {sharedPreferenceUtil.prefStorage}/Kiwix/$ {StorageUtils.getFileNameFromUrl(urlString)}")
 }
