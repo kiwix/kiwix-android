@@ -237,16 +237,6 @@ object Libs {
   const val objectbox_windows: String = "io.objectbox:objectbox-windows:" + Versions.io_objectbox
 
   /**
-   * http://jacoco.org
-   */
-  const val org_jacoco_agent: String = "org.jacoco:org.jacoco.agent:" + Versions.org_jacoco
-
-  /**
-   * http://jacoco.org
-   */
-  const val org_jacoco_ant: String = "org.jacoco:org.jacoco.ant:" + Versions.org_jacoco
-
-  /**
    * http://mockk.io
    */
   const val mockk: String = "io.mockk:mockk:" + Versions.io_mockk

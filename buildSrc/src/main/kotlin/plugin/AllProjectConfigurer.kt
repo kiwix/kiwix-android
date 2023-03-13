@@ -141,7 +141,7 @@ class AllProjectConfigurer {
       resolutionStrategy {
         eachDependency {
           if ("org.jacoco" == this.requested.group) {
-            useVersion("0.8.7")
+            useVersion("0.8.8")
           }
         }
       }
@@ -150,7 +150,7 @@ class AllProjectConfigurer {
 
   fun configurePlugins(target: Project) {
     target.run {
-      configureExtension<JacocoPluginExtension> { toolVersion = "0.8.7" }
+      configureExtension<JacocoPluginExtension> { toolVersion = "0.8.8" }
       configureExtension<KtlintExtension> { android.set(true) }
       configureExtension<DetektExtension> {
         buildUponDefaultConfig = true

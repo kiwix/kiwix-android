@@ -22,6 +22,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Build
 import android.util.Log
+import androidx.annotation.VisibleForTesting
 import org.kiwix.kiwixmobile.core.R
 import java.lang.Exception
 import java.util.UUID
@@ -41,6 +42,9 @@ object NetworkUtils {
   fun isNetworkConnectionOK(networkInfo: NetworkInfo): Boolean =
     networkInfo.state == NetworkInfo.State.CONNECTED
 
+  @VisibleForTesting
+  internal var sdkVersionForTesting = Build.VERSION.SDK_INT
+
   /**
    * check if network of type WIFI is connected
    *
@@ -52,7 +56,7 @@ object NetworkUtils {
   fun isWiFi(context: Context): Boolean {
     val connectivity = context
       .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    return if (sdkVersionForTesting >= Build.VERSION_CODES.M) {
       val networkInfo = connectivity.activeNetworkInfo ?: return false
       networkInfo.type == ConnectivityManager.TYPE_WIFI && networkInfo.isConnected
     } else {
