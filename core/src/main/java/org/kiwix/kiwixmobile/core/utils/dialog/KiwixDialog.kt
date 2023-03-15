@@ -95,7 +95,7 @@ sealed class KiwixDialog(
   object ReadPermissionRequired : KiwixDialog(
     R.string.storage_permission_denied,
     R.string.grant_read_storage_permission,
-    R.string.go_to_settings,
+    R.string.go_to_settings_label,
     null,
     cancelable = false
   )

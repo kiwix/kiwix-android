@@ -334,4 +334,5 @@
   <string name="forward_history">Forward history</string>
   <string name="clear_all_navigation_history_message">Clears all (backward, forward) navigation history</string>
   <string name="navigation_history_cleared">Navigation History Cleared</string>
+  <string name="go_to_settings_label">Go to Settings</string>
 </resources>
