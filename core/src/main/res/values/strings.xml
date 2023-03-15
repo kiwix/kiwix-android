@@ -268,7 +268,7 @@
   <string name="tag_text_only">Text Only</string>
   <string name="tag_short_text">Short Text</string>
   <string name="storage_permission_denied">Storage Permission Denied</string>
-  <string name="grant_read_storage_permission">This app requires the ability to read storage permission to function. Please grant the storage permission in your app setting</string>
+  <string name="grant_read_storage_permission">This app requires the ability to read storage to function. Please grant the permission in your settings</string>
   <string name="go_to_settings">Go to Hotspot Settings</string>
   <string name="no_results">No Results</string>
   <string name="no_bookmarks">No Bookmarks</string>
@@ -334,5 +334,5 @@
   <string name="forward_history">Forward history</string>
   <string name="clear_all_navigation_history_message">Clears all (backward, forward) navigation history</string>
   <string name="navigation_history_cleared">Navigation History Cleared</string>
-  <string name="go_to_settings_label">Go to Setting</string>
+  <string name="go_to_settings_label">Go to Settings</string>
 </resources>

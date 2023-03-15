@@ -70,6 +70,7 @@ class CustomReaderFragment : CoreReaderFragment() {
   @Inject
   var dialogShower: DialogShower? = null
   private var permissionRequiredDialog: Dialog? = null
+  private var appSettingsLaunched = false
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     if (enforcedLanguage()) {
@@ -182,10 +183,13 @@ class CustomReaderFragment : CoreReaderFragment() {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     if (permissions.isNotEmpty() && permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE) {
       if (readStorageHasBeenPermanentlyDenied(grantResults)) {
-        if (permissionRequiredDialog == null || permissionRequiredDialog?.isShowing == false) {
+        if (permissionRequiredDialog?.isShowing != true) {
           permissionRequiredDialog = dialogShower?.create(
             KiwixDialog.ReadPermissionRequired,
-            requireActivity()::navigateToAppSettings
+            {
+              requireActivity().navigateToAppSettings()
+              appSettingsLaunched = true
+            }
           )
           permissionRequiredDialog?.show()
         }
@@ -262,5 +266,13 @@ class CustomReaderFragment : CoreReaderFragment() {
   override fun onDestroyView() {
     super.onDestroyView()
     permissionRequiredDialog = null
+  }
+
+  override fun onResume() {
+    super.onResume()
+    if (appSettingsLaunched) {
+      appSettingsLaunched = false
+      openObbOrZim()
+    }
   }
 }
