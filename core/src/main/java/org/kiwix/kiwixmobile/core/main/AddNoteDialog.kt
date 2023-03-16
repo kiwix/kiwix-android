@@ -211,6 +211,15 @@ class AddNoteDialog : DialogFragment() {
     }
   }
 
+  private fun disableSaveNoteMenuItem() {
+    if (toolbar?.menu != null) {
+      saveItem?.isEnabled = false
+      saveItem?.icon?.alpha = DISABLE_ICON_ITEM_ALPHA
+    } else {
+      Log.d(TAG, "Toolbar without inflated menu")
+    }
+  }
+
   private fun enableSaveNoteMenuItem() {
     if (toolbar?.menu != null) {
       saveItem?.isEnabled = true
@@ -321,6 +330,7 @@ class AddNoteDialog : DialogFragment() {
           enableDeleteNoteMenuItem()
           // adding only if saving file is success
           addNoteToDao(noteFile.canonicalPath, "${zimFileTitle.orEmpty()}: $articleTitle")
+          disableSaveNoteMenuItem()
         } catch (e: IOException) {
           e.printStackTrace()
             .also { context.toast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG) }
