@@ -19,13 +19,13 @@
 package org.kiwix.kiwixmobile.nav.destination.library
 
 import android.Manifest
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.ConnectivityManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -63,10 +63,12 @@ import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerV
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
+import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_SELECT_FOLDER_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -398,6 +400,31 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
   }
 
+  private fun checkNotificationPermission(): Boolean {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      hasPermission(POST_NOTIFICATIONS).also { permissionGranted ->
+        if (!permissionGranted) {
+          if (shouldShowRationale(POST_NOTIFICATIONS)) {
+            alertDialogShower.show(
+              KiwixDialog.NotificationPermissionRationale,
+              {
+                requestPermission(
+                  Manifest.permission.POST_NOTIFICATIONS,
+                  REQUEST_POST_NOTIFICATION_PERMISSION
+                )
+              }
+            )
+          } else {
+            alertDialogShower.show(
+              KiwixDialog.NotificationPermissionRationale,
+              requireActivity()::navigateToAppSettings
+            )
+          }
+        }
+      }
+    } else true
+  }
+
   private fun checkExternalStorageWritePermission(): Boolean {
     if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
       return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -408,12 +435,17 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
             if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
               alertDialogShower.show(
                 KiwixDialog.WriteStoragePermissionRationale,
-                ::requestExternalStoragePermission
+                {
+                  requestPermission(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    REQUEST_STORAGE_PERMISSION
+                  )
+                }
               )
             } else {
               alertDialogShower.show(
                 KiwixDialog.WriteStoragePermissionRationale,
-                ::openAppSettings
+                requireActivity()::navigateToAppSettings
               )
             }
           }
@@ -423,24 +455,15 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     return true
   }
 
-  private fun openAppSettings() {
-    val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
-    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-      flags = Intent.FLAG_ACTIVITY_NEW_TASK
-      data = uri
-    }
-    startActivity(intent)
-  }
-
-  private fun requestExternalStoragePermission() {
+  private fun requestPermission(permission: String, requestCode: Int) {
     ActivityCompat.requestPermissions(
-      requireActivity(), arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-      REQUEST_STORAGE_PERMISSION
+      requireActivity(), arrayOf(permission),
+      requestCode
     )
   }
 
-  private fun shouldShowRationale(writeExternalStorage: String) =
-    ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), writeExternalStorage)
+  private fun shouldShowRationale(permission: String) =
+    ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), permission)
 
   override fun onRequestPermissionsResult(
     requestCode: Int,
@@ -456,6 +479,13 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove())
           checkExternalStorageWritePermission()
       }
+    } else if (requestCode == REQUEST_POST_NOTIFICATION_PERMISSION &&
+      permissions.isNotEmpty() &&
+      permissions[0] == Manifest.permission.POST_NOTIFICATIONS
+    ) {
+      if (grantResults[0] != PERMISSION_GRANTED) {
+        checkNotificationPermission()
+      }
     }
   }
 
@@ -463,7 +493,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     ContextCompat.checkSelfPermission(requireActivity(), permission) == PERMISSION_GRANTED
 
   private fun onBookItemClick(item: LibraryListItem.BookItem) {
-    if (checkExternalStorageWritePermission()) {
+    if (checkExternalStorageWritePermission() && checkNotificationPermission()) {
       downloadBookItem = item
       when {
         isNotConnected -> {

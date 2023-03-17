@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.webserver
 
 import android.Manifest
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.ProgressDialog
 import android.content.ComponentName
 import android.content.Context
@@ -44,7 +45,9 @@ import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
+import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -143,7 +146,9 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ||
         checkNearbyWifiDevicesPermission()
       ) {
-        startStopServer()
+        if (checkNotificationPermission()) {
+          startStopServer()
+        }
       } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P ||
         checkCoarseLocationAccessPermission()
       ) {
@@ -151,6 +156,44 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       }
     }
   }
+
+  @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+  private fun requestNotificationPermission() {
+    ActivityCompat.requestPermissions(
+      requireActivity(), arrayOf(POST_NOTIFICATIONS),
+      REQUEST_POST_NOTIFICATION_PERMISSION
+    )
+  }
+
+  private fun checkNotificationPermission(): Boolean {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      hasPermission(POST_NOTIFICATIONS).also { permissionGranted ->
+        if (!permissionGranted) {
+          if (ActivityCompat.shouldShowRequestPermissionRationale(
+              requireActivity(),
+              POST_NOTIFICATIONS
+            )
+          ) {
+            alertDialogShower.show(
+              KiwixDialog.NotificationPermissionRationale,
+              ::requestNotificationPermission
+            )
+          } else {
+            alertDialogShower.show(
+              KiwixDialog.NotificationPermissionRationale,
+              requireActivity()::navigateToAppSettings
+            )
+          }
+        }
+      }
+    } else true
+  }
+
+  private fun hasPermission(permission: String) =
+    ContextCompat.checkSelfPermission(
+      requireActivity(),
+      permission
+    ) == PackageManager.PERMISSION_GRANTED
 
   private fun checkCoarseLocationAccessPermission(): Boolean =
     if (ContextCompat.checkSelfPermission(
@@ -209,7 +252,9 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-      if (requestCode == PERMISSION_REQUEST_CODE_COARSE_LOCATION) {
+      if (requestCode == PERMISSION_REQUEST_CODE_COARSE_LOCATION ||
+        requestCode == REQUEST_POST_NOTIFICATION_PERMISSION
+      ) {
         startStopServer()
       }
     }

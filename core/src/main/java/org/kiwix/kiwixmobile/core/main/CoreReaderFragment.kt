@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.Manifest
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Context
@@ -58,6 +59,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.AnimRes
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -107,15 +109,16 @@ import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnSpeakingListener
 import org.kiwix.kiwixmobile.core.main.MainMenu.MenuClickListener
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener
+import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryClickListener
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudCallbacks
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_PAUSE_OR_RESUME_TTS
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_STOP_TTS
-import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate
@@ -123,6 +126,7 @@ import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
+import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -1094,22 +1098,25 @@ abstract class CoreReaderFragment :
     }
   }
 
+  @Suppress("NestedBlockDepth")
   override fun onReadAloudMenuClicked() {
-    ttsControls?.let { ttsControls ->
-      when (ttsControls.visibility) {
-        View.GONE -> {
-          if (isBackToTopEnabled) {
-            backToTopButton?.hide()
+    if (checkNotificationPermission()) {
+      ttsControls?.let { ttsControls ->
+        when (ttsControls.visibility) {
+          View.GONE -> {
+            if (isBackToTopEnabled) {
+              backToTopButton?.hide()
+            }
+            getCurrentWebView()?.let { tts?.readAloud(it) }
           }
-          getCurrentWebView()?.let { tts?.readAloud(it) }
-        }
-        View.VISIBLE -> {
-          if (isBackToTopEnabled) {
-            backToTopButton?.show()
+          View.VISIBLE -> {
+            if (isBackToTopEnabled) {
+              backToTopButton?.show()
+            }
+            tts?.stop()
           }
-          tts?.stop()
+          else -> {}
         }
-        else -> {}
       }
     }
   }
@@ -1346,7 +1353,51 @@ abstract class CoreReaderFragment :
           ).show()
         }
       }
+      REQUEST_POST_NOTIFICATION_PERMISSION -> {
+        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          onReadAloudMenuClicked()
+        }
+      }
     }
+  }
+
+  @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+  private fun hasNotificationPermission() =
+    ContextCompat.checkSelfPermission(
+      requireActivity(),
+      POST_NOTIFICATIONS
+    ) == PackageManager.PERMISSION_GRANTED
+
+  private fun checkNotificationPermission(): Boolean {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      hasNotificationPermission().also { permissionGranted ->
+        if (!permissionGranted) {
+          if (ActivityCompat.shouldShowRequestPermissionRationale(
+              requireActivity(),
+              POST_NOTIFICATIONS
+            )
+          ) {
+            alertDialogShower?.show(
+              KiwixDialog.NotificationPermissionRationale,
+              ::requestNotificationPermission
+            )
+          } else {
+            alertDialogShower?.show(
+              KiwixDialog.NotificationPermissionRationale,
+              requireActivity()::navigateToAppSettings
+            )
+          }
+        }
+      }
+    } else true
+  }
+
+  @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+  private fun requestNotificationPermission() {
+    ActivityCompat.requestPermissions(
+      requireActivity(), arrayOf(POST_NOTIFICATIONS),
+      REQUEST_POST_NOTIFICATION_PERMISSION
+    )
   }
 
   @OnClick(R2.id.tab_switcher_close_all_tabs)
