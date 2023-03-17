@@ -301,7 +301,7 @@ class LocalLibraryFragment : BaseFragment() {
       !sharedPreferenceUtil.prefIsTest && !permissionDeniedLayoutShowing
     ) {
       checkPermissions()
-    } else if (sharedPreferenceUtil.prefIsTest) {
+    } else {
       fragmentDestinationLibraryBinding?.zimfilelist?.visibility = VISIBLE
     }
   }
@@ -369,6 +369,9 @@ class LocalLibraryFragment : BaseFragment() {
           ),
           REQUEST_STORAGE_PERMISSION
         )
+      } else {
+        fragmentDestinationLibraryBinding?.zimfilelist?.visibility = VISIBLE
+        requestFileSystemCheck()
       }
     } else {
       if (sharedPreferenceUtil.isPlayStoreBuild) {
@@ -448,9 +451,7 @@ class LocalLibraryFragment : BaseFragment() {
       } else if (!isPermissionDenied(grantResults)) {
         fragmentDestinationLibraryBinding?.apply {
           permissionDeniedLayoutShowing = false
-          fileManagementNoFiles.visibility = GONE
-          goToDownloadsButtonNoFiles.visibility = GONE
-          zimfilelist.visibility = VISIBLE
+          requestFileSystemCheck()
         }
       }
     }
