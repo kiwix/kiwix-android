@@ -3,13 +3,15 @@ static def isLinuxOrMacOs() {
   return osName.contains('linux') || osName.contains('mac os') || osName.contains('macos')
 }
 
+def gitHooksDir = 'git rev-parse --path-format=absolute --git-path hooks'.execute().text.trim()
+
 task copyGitHooks(type: Copy) {
   description 'Copies the git hooks from team-props/git-hooks to the .git folder.'
   from("${rootDir}/team-props/git-hooks/") {
     include '**/*.sh'
     rename '(.*).sh', '$1'
   }
-  into "${rootDir}/.git/hooks"
+  into gitHooksDir
 }
 
 task installGitHooks(type: Exec) {
@@ -17,7 +19,7 @@ task installGitHooks(type: Exec) {
   group 'git hooks'
   workingDir rootDir
   commandLine 'chmod'
-  args '-R', '+x', '.git/hooks/'
+  args '-R', '+x', gitHooksDir
   onlyIf { isLinuxOrMacOs() }
   dependsOn copyGitHooks
   doLast {
