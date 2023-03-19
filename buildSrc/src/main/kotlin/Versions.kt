@@ -42,8 +42,6 @@ object Versions {
 
   const val io_objectbox: String = "3.5.0"
 
-  const val org_jacoco: String = "0.8.7"
-
   const val io_mockk: String = "1.12.0"
 
   const val android_arch_lifecycle_extensions: String = "1.1.1"
@@ -74,8 +72,6 @@ object Versions {
 
   const val fragment_ktx: String = "1.2.5"
 
-  const val lint_gradle: String = "27.1.1"
-
   const val testing_ktx: String = "1.2.0"
 
   const val threetenabp: String = "1.3.0"
@@ -102,24 +98,11 @@ object Versions {
 
   const val fetch: String = "3.1.6"
 
-  const val jsr305: String = "3.0.2"
-
-  const val ktlint: String = "0.39.0"
-
   const val rxjava: String = "2.2.20"
 
   const val webkit: String = "1.3.0"
 
-  const val aapt2: String = "4.1.1-6503028"
-
   const val junit: String = "1.1.4"
-
-  /**
-   * Current version: "6.2"
-   * See issue 19: How to update Gradle itself?
-   * https://github.com/jmfayard/buildSrcVersions/issues/19
-   */
-  const val gradleLatestVersion: String = "6.7.1"
 }
 
 /**

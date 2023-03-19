@@ -87,24 +87,6 @@ object Libs {
   /**
    * https://kotlinlang.org/
    */
-  const val kotlin_android_extensions: String = "org.jetbrains.kotlin:kotlin-android-extensions:" +
-    Versions.org_jetbrains_kotlin
-
-  /**
-   * https://kotlinlang.org/
-   */
-  const val kotlin_android_extensions_runtime: String =
-    "org.jetbrains.kotlin:kotlin-android-extensions-runtime:" + Versions.org_jetbrains_kotlin
-
-  /**
-   * https://kotlinlang.org/
-   */
-  const val kotlin_annotation_processing_gradle: String =
-    "org.jetbrains.kotlin:kotlin-annotation-processing-gradle:" + Versions.org_jetbrains_kotlin
-
-  /**
-   * https://kotlinlang.org/
-   */
   const val kotlin_gradle_plugin: String = "org.jetbrains.kotlin:kotlin-gradle-plugin:" +
     Versions.org_jetbrains_kotlin
 
@@ -202,18 +184,8 @@ object Libs {
   /**
    * https://objectbox.io
    */
-  const val objectbox_android: String = "io.objectbox:objectbox-android:" + Versions.io_objectbox
-
-  /**
-   * https://objectbox.io
-   */
   const val objectbox_gradle_plugin: String = "io.objectbox:objectbox-gradle-plugin:" +
     Versions.io_objectbox
-
-  /**
-   * https://objectbox.io
-   */
-  const val objectbox_java: String = "io.objectbox:objectbox-java:" + Versions.io_objectbox
 
   /**
    * https://objectbox.io
@@ -223,28 +195,7 @@ object Libs {
   /**
    * https://objectbox.io
    */
-  const val objectbox_processor: String = "io.objectbox:objectbox-processor:" +
-    Versions.io_objectbox
-
-  /**
-   * https://objectbox.io
-   */
   const val objectbox_rxjava: String = "io.objectbox:objectbox-rxjava:" + Versions.io_objectbox
-
-  /**
-   * https://objectbox.io
-   */
-  const val objectbox_windows: String = "io.objectbox:objectbox-windows:" + Versions.io_objectbox
-
-  /**
-   * http://jacoco.org
-   */
-  const val org_jacoco_agent: String = "org.jacoco:org.jacoco.agent:" + Versions.org_jacoco
-
-  /**
-   * http://jacoco.org
-   */
-  const val org_jacoco_ant: String = "org.jacoco:org.jacoco.ant:" + Versions.org_jacoco
 
   /**
    * http://mockk.io
@@ -267,14 +218,6 @@ object Libs {
    */
   const val com_android_tools_build_gradle: String = "com.android.tools.build:gradle:" +
     Versions.com_android_tools_build_gradle
-
-  const val de_fayard_buildsrcversions_gradle_plugin: String =
-    "de.fayard.buildSrcVersions:de.fayard.buildSrcVersions.gradle.plugin:" +
-      Versions.de_fayard_buildsrcversions_gradle_plugin
-
-  const val com_github_triplet_play_gradle_plugin: String =
-    "com.github.triplet.play:com.github.triplet.play.gradle.plugin:" +
-      Versions.com_github_triplet_play_gradle_plugin
 
   /**
    * http://jcp.org/en/jsr/detail?id=250
@@ -330,11 +273,6 @@ object Libs {
    * https://developer.android.com/jetpack/androidx
    */
   const val fragment_ktx: String = "androidx.fragment:fragment-ktx:" + Versions.fragment_ktx
-
-  /**
-   * https://developer.android.com/studio
-   */
-  const val lint_gradle: String = "com.android.tools.lint:lint-gradle:" + Versions.lint_gradle
 
   /**
    * https://github.com/jraska/livedata-testing
@@ -393,16 +331,6 @@ object Libs {
   const val fetch: String = "com.github.tonyofrancis:fetch:" + Versions.fetch
 
   /**
-   * http://findbugs.sourceforge.net/
-   */
-  const val jsr305: String = "com.google.code.findbugs:jsr305:" + Versions.jsr305
-
-  /**
-   * https://github.com/pinterest/ktlint
-   */
-  const val ktlint: String = "com.pinterest:ktlint:" + Versions.ktlint
-
-  /**
    * https://github.com/ReactiveX/RxJava
    */
   const val rxjava: String = "io.reactivex.rxjava2:rxjava:" + Versions.rxjava
@@ -411,11 +339,6 @@ object Libs {
    * https://developer.android.com/jetpack/androidx
    */
   const val webkit: String = "androidx.webkit:webkit:" + Versions.webkit
-
-  /**
-   * https://developer.android.com/studio
-   */
-  const val aapt2: String = "com.android.tools.build:aapt2:" + Versions.aapt2
 
   /**
    * https://developer.android.com/testing
