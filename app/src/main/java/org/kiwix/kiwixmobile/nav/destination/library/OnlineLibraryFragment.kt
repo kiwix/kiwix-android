@@ -55,7 +55,9 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.downloader.Downloader
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
@@ -400,29 +402,15 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
   }
 
-  private fun checkNotificationPermission(): Boolean {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      hasPermission(POST_NOTIFICATIONS).also { permissionGranted ->
-        if (!permissionGranted) {
-          if (shouldShowRationale(POST_NOTIFICATIONS)) {
-            alertDialogShower.show(
-              KiwixDialog.NotificationPermissionRationale,
-              {
-                requestPermission(
-                  Manifest.permission.POST_NOTIFICATIONS,
-                  REQUEST_POST_NOTIFICATION_PERMISSION
-                )
-              }
-            )
-          } else {
-            alertDialogShower.show(
-              KiwixDialog.NotificationPermissionRationale,
-              requireActivity()::navigateToAppSettings
-            )
-          }
-        }
-      }
-    } else true
+  private fun requestNotificationPermission() {
+    if (shouldShowRationale(POST_NOTIFICATIONS)) {
+      requireActivity().requestNotificationPermission()
+    } else {
+      alertDialogShower.show(
+        KiwixDialog.NotificationPermissionDialog,
+        requireActivity()::navigateToAppSettings
+      )
+    }
   }
 
   private fun checkExternalStorageWritePermission(): Boolean {
@@ -481,10 +469,10 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       }
     } else if (requestCode == REQUEST_POST_NOTIFICATION_PERMISSION &&
       permissions.isNotEmpty() &&
-      permissions[0] == Manifest.permission.POST_NOTIFICATIONS
+      permissions[0] == POST_NOTIFICATIONS
     ) {
       if (grantResults[0] != PERMISSION_GRANTED) {
-        checkNotificationPermission()
+        requestNotificationPermission()
       }
     }
   }
@@ -492,39 +480,44 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private fun hasPermission(permission: String): Boolean =
     ContextCompat.checkSelfPermission(requireActivity(), permission) == PERMISSION_GRANTED
 
+  @Suppress("NestedBlockDepth")
   private fun onBookItemClick(item: LibraryListItem.BookItem) {
-    if (checkExternalStorageWritePermission() && checkNotificationPermission()) {
-      downloadBookItem = item
-      when {
-        isNotConnected -> {
-          noInternetSnackbar()
-          return
-        }
-        noWifiWithWifiOnlyPreferenceSet -> {
-          dialogShower.show(WifiOnly, {
-            sharedPreferenceUtil.putPrefWifiOnly(false)
-            clickOnBookItem()
-          })
-          return
-        }
-        else -> if (sharedPreferenceUtil.showStorageOption) {
-          showStorageConfigureDialog()
-        } else {
-          availableSpaceCalculator.hasAvailableSpaceFor(
-            item,
-            { downloadFile() },
-            {
-              fragmentDestinationDownloadBinding?.libraryList?.snack(
-                """ 
+    if (checkExternalStorageWritePermission()) {
+      if (requireActivity().hasNotificationPermission()) {
+        downloadBookItem = item
+        when {
+          isNotConnected -> {
+            noInternetSnackbar()
+            return
+          }
+          noWifiWithWifiOnlyPreferenceSet -> {
+            dialogShower.show(WifiOnly, {
+              sharedPreferenceUtil.putPrefWifiOnly(false)
+              clickOnBookItem()
+            })
+            return
+          }
+          else -> if (sharedPreferenceUtil.showStorageOption) {
+            showStorageConfigureDialog()
+          } else {
+            availableSpaceCalculator.hasAvailableSpaceFor(
+              item,
+              { downloadFile() },
+              {
+                fragmentDestinationDownloadBinding?.libraryList?.snack(
+                  """ 
                 ${getString(R.string.download_no_space)}
                 ${getString(R.string.space_available)} $it
-                """.trimIndent(),
-                R.string.download_change_storage,
-                ::showStorageSelectDialog
-              )
-            }
-          )
+                  """.trimIndent(),
+                  R.string.download_change_storage,
+                  ::showStorageSelectDialog
+                )
+              }
+            )
+          }
         }
+      } else {
+        requireActivity().requestNotificationPermission()
       }
     }
   }

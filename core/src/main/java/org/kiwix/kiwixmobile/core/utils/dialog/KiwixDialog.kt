@@ -77,7 +77,7 @@ sealed class KiwixDialog(
     android.R.string.cancel
   )
 
-  object NotificationPermissionRationale : KiwixDialog(
+  object NotificationPermissionDialog : KiwixDialog(
     null,
     R.string.request_notification_permission_message,
     android.R.string.yes,

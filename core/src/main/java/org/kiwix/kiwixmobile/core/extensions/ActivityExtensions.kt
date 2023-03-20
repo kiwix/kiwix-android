@@ -18,14 +18,19 @@
 
 package org.kiwix.kiwixmobile.core.extensions
 
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -36,6 +41,7 @@ import androidx.lifecycle.observe
 import androidx.navigation.NavDirections
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 
 object ActivityExtensions {
 
@@ -136,5 +142,24 @@ object ActivityExtensions {
       key,
       result
     )
+  }
+
+  fun Activity.hasNotificationPermission() =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      ContextCompat.checkSelfPermission(
+        this,
+        POST_NOTIFICATIONS
+      ) == PackageManager.PERMISSION_GRANTED
+    } else {
+      true
+    }
+
+  fun Activity.requestNotificationPermission() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      ActivityCompat.requestPermissions(
+        this, arrayOf(POST_NOTIFICATIONS),
+        REQUEST_POST_NOTIFICATION_PERMISSION
+      )
+    }
   }
 }

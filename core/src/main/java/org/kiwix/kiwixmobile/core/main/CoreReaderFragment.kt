@@ -59,7 +59,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.AnimRes
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -100,6 +99,8 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.downloader.fetch.DOWNLOAD_NOTIFICATION_TITLE
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.findFirstTextView
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -1100,7 +1101,7 @@ abstract class CoreReaderFragment :
 
   @Suppress("NestedBlockDepth")
   override fun onReadAloudMenuClicked() {
-    if (checkNotificationPermission()) {
+    if (requireActivity().hasNotificationPermission()) {
       ttsControls?.let { ttsControls ->
         when (ttsControls.visibility) {
           View.GONE -> {
@@ -1118,6 +1119,26 @@ abstract class CoreReaderFragment :
           else -> {}
         }
       }
+    } else {
+      requireActivity().requestNotificationPermission()
+    }
+  }
+
+  private fun requestNotificationPermission() {
+    if (ActivityCompat.shouldShowRequestPermissionRationale(
+        requireActivity(),
+        POST_NOTIFICATIONS
+      )
+    ) {
+      alertDialogShower?.show(
+        KiwixDialog.NotificationPermissionDialog,
+        { requireActivity().requestNotificationPermission() }
+      )
+    } else {
+      alertDialogShower?.show(
+        KiwixDialog.NotificationPermissionDialog,
+        requireActivity()::navigateToAppSettings
+      )
     }
   }
 
@@ -1356,48 +1377,13 @@ abstract class CoreReaderFragment :
       REQUEST_POST_NOTIFICATION_PERMISSION -> {
         if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
           onReadAloudMenuClicked()
+        } else if (grantResults.isNotEmpty() &&
+          grantResults[0] == PackageManager.PERMISSION_DENIED
+        ) {
+          requestNotificationPermission()
         }
       }
     }
-  }
-
-  @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-  private fun hasNotificationPermission() =
-    ContextCompat.checkSelfPermission(
-      requireActivity(),
-      POST_NOTIFICATIONS
-    ) == PackageManager.PERMISSION_GRANTED
-
-  private fun checkNotificationPermission(): Boolean {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      hasNotificationPermission().also { permissionGranted ->
-        if (!permissionGranted) {
-          if (ActivityCompat.shouldShowRequestPermissionRationale(
-              requireActivity(),
-              POST_NOTIFICATIONS
-            )
-          ) {
-            alertDialogShower?.show(
-              KiwixDialog.NotificationPermissionRationale,
-              ::requestNotificationPermission
-            )
-          } else {
-            alertDialogShower?.show(
-              KiwixDialog.NotificationPermissionRationale,
-              requireActivity()::navigateToAppSettings
-            )
-          }
-        }
-      }
-    } else true
-  }
-
-  @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-  private fun requestNotificationPermission() {
-    ActivityCompat.requestPermissions(
-      requireActivity(), arrayOf(POST_NOTIFICATIONS),
-      REQUEST_POST_NOTIFICATION_PERMISSION
-    )
   }
 
   @OnClick(R2.id.tab_switcher_close_all_tabs)
