@@ -146,7 +146,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    setHasOptionsMenu(true)
     fragmentDestinationDownloadBinding =
       FragmentDestinationDownloadBinding.inflate(inflater, container, false)
     val toolbar = fragmentDestinationDownloadBinding?.root?.findViewById<Toolbar>(R.id.toolbar)
@@ -264,16 +263,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       libraryErrorText.visibility = View.VISIBLE
       libraryList.visibility = View.GONE
     }
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-      R.id.select_language -> {
-        requireActivity().navigate(R.id.languageFragment)
-        closeKeyboard()
-      }
-    }
-    return super.onOptionsItemSelected(item)
   }
 
   override fun onDestroyView() {

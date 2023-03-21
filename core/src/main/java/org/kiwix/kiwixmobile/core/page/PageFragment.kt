@@ -94,10 +94,6 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
       }
     }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-  }
-
   private fun setupMenu() {
     (requireActivity() as MenuHost).addMenuProvider(
       object : MenuProvider {
@@ -112,6 +108,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
           )
         }
 
+        @Suppress("ReturnCount")
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
           when (menuItem.itemId) {
             android.R.id.home -> {
