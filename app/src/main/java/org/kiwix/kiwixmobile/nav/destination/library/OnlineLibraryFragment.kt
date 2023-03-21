@@ -41,6 +41,9 @@ import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
@@ -183,6 +186,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         showInternetAccessViaMobileNetworkDialog()
       }
     }
+    setupMenu()
 
     // hides keyboard when scrolled
     fragmentDestinationDownloadBinding?.libraryList?.addOnScrollListener(
@@ -191,6 +195,37 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           fragmentDestinationDownloadBinding?.libraryList?.closeKeyboard()
         }
       }
+    )
+  }
+
+  private fun setupMenu() {
+    (requireActivity() as MenuHost).addMenuProvider(
+      object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+          menuInflater.inflate(R.menu.menu_zim_manager, menu)
+          val searchItem = menu.findItem(R.id.action_search)
+          val getZimItem = menu.findItem(R.id.get_zim_nearby_device)
+          getZimItem?.isVisible = false
+
+          (searchItem?.actionView as? SearchView)?.setOnQueryTextListener(
+            SimpleTextListener(zimManageViewModel.requestFiltering::onNext)
+          )
+          zimManageViewModel.requestFiltering.onNext("")
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+          when (menuItem.itemId) {
+            R.id.select_language -> {
+              requireActivity().navigate(R.id.languageFragment)
+              closeKeyboard()
+              return true
+            }
+          }
+          return false
+        }
+      },
+      viewLifecycleOwner,
+      Lifecycle.State.RESUMED
     )
   }
 
@@ -229,19 +264,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       libraryErrorText.visibility = View.VISIBLE
       libraryList.visibility = View.GONE
     }
-  }
-
-  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    super<BaseFragment>.onCreateOptionsMenu(menu, inflater)
-    inflater.inflate(R.menu.menu_zim_manager, menu)
-    val searchItem = menu.findItem(R.id.action_search)
-    val getZimItem = menu.findItem(R.id.get_zim_nearby_device)
-    getZimItem?.isVisible = false
-
-    (searchItem?.actionView as? SearchView)?.setOnQueryTextListener(
-      SimpleTextListener(zimManageViewModel.requestFiltering::onNext)
-    )
-    zimManageViewModel.requestFiltering.onNext("")
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
