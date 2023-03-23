@@ -151,7 +151,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
         if (requireActivity().hasNotificationPermission()) {
           startStopServer()
         } else {
-          requireActivity().requestNotificationPermission()
+          requestNotificationPermission()
         }
       } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P ||
         checkCoarseLocationAccessPermission()
@@ -162,7 +162,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun requestNotificationPermission() {
-    if (ActivityCompat.shouldShowRequestPermissionRationale(
+    if (!ActivityCompat.shouldShowRequestPermissionRationale(
         requireActivity(),
         POST_NOTIFICATIONS
       )
@@ -238,11 +238,6 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       ) {
         startStopServer()
       }
-    } else if (permissions.isNotEmpty() &&
-      grantResults[0] == PackageManager.PERMISSION_DENIED &&
-      requestCode == REQUEST_POST_NOTIFICATION_PERMISSION
-    ) {
-      requestNotificationPermission()
     }
   }
 

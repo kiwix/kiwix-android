@@ -1120,20 +1120,17 @@ abstract class CoreReaderFragment :
         }
       }
     } else {
-      requireActivity().requestNotificationPermission()
+      requestNotificationPermission()
     }
   }
 
   private fun requestNotificationPermission() {
-    if (ActivityCompat.shouldShowRequestPermissionRationale(
+    if (!ActivityCompat.shouldShowRequestPermissionRationale(
         requireActivity(),
         POST_NOTIFICATIONS
       )
     ) {
-      alertDialogShower?.show(
-        KiwixDialog.NotificationPermissionDialog,
-        { requireActivity().requestNotificationPermission() }
-      )
+      requireActivity().requestNotificationPermission()
     } else {
       alertDialogShower?.show(
         KiwixDialog.NotificationPermissionDialog,
@@ -1377,10 +1374,6 @@ abstract class CoreReaderFragment :
       REQUEST_POST_NOTIFICATION_PERMISSION -> {
         if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
           onReadAloudMenuClicked()
-        } else if (grantResults.isNotEmpty() &&
-          grantResults[0] == PackageManager.PERMISSION_DENIED
-        ) {
-          requestNotificationPermission()
         }
       }
     }

@@ -403,7 +403,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun requestNotificationPermission() {
-    if (shouldShowRationale(POST_NOTIFICATIONS)) {
+    if (!shouldShowRationale(POST_NOTIFICATIONS)) {
       requireActivity().requestNotificationPermission()
     } else {
       alertDialogShower.show(
@@ -471,8 +471,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       permissions.isNotEmpty() &&
       permissions[0] == POST_NOTIFICATIONS
     ) {
-      if (grantResults[0] != PERMISSION_GRANTED) {
-        requestNotificationPermission()
+      if (grantResults[0] == PERMISSION_GRANTED) {
+        downloadBookItem?.let(::onBookItemClick)
       }
     }
   }
@@ -483,8 +483,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   @Suppress("NestedBlockDepth")
   private fun onBookItemClick(item: LibraryListItem.BookItem) {
     if (checkExternalStorageWritePermission()) {
+      downloadBookItem = item
       if (requireActivity().hasNotificationPermission()) {
-        downloadBookItem = item
         when {
           isNotConnected -> {
             noInternetSnackbar()
@@ -517,7 +517,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           }
         }
       } else {
-        requireActivity().requestNotificationPermission()
+        requestNotificationPermission()
       }
     }
   }
