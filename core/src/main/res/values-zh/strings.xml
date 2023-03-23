@@ -81,7 +81,7 @@
   <string name="pref_language_chooser">选择语言</string>
   <string name="pref_credits">贡献者和授权</string>
   <string name="pref_credits_title">制作人员</string>
-  <string name="tts_lang_not_supported">此页面的语言不被支持，或未安装合适的语言数据。条目可能不能被正确朗读。</string>
+  <string name="tts_lang_not_supported">此页面的语言不被支持。条目可能不能被正确朗读。</string>
   <string name="no_reader_application_installed">找不到用于此种文件类型的已安装应用程序</string>
   <string name="no_section_info">未找到内容标题</string>
   <string name="request_storage">要访问离线内容，我们需要访问您的存储</string>
@@ -319,4 +319,5 @@
   <string name="open_article">打开条目</string>
   <string name="delete_note_dialog_message">备注：注释不会从您的存储中删除</string>
   <string name="delete_selected_notes">删除所选注释？</string>
+  <string name="go_to_settings_label">转到设置</string>
 </resources>

@@ -68,7 +68,7 @@
   <string name="pref_language_chooser">Välj ett språk</string>
   <string name="pref_credits">Bidragsgivare och licenser</string>
   <string name="pref_credits_title">Erkännanden</string>
-  <string name="tts_lang_not_supported">Språket på denna sida stöds inte, eller så har lämplig språkdata inte installerats. Artikeln kan kanske inte läsas på rätt sätt.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Språket på denna sida stöds inte, eller så har lämplig språkdata inte installerats. Artikeln kan kanske inte läsas på rätt sätt.</string>
   <string name="no_reader_application_installed">Kunde inte hitta ett installerat program för denna filtyp</string>
   <string name="no_section_info">Ingen innehållsrubrik hittades</string>
   <string name="request_storage">För att komma åt offlineinnehåll behöver vi tillgång till ditt lagringsutrymme</string>
@@ -250,8 +250,8 @@
   <string name="nearby_devices">ENHETER I NÄRHETEN</string>
   <string name="no_devices_found">Inga enheter hittades. Tryck på sökknappen för att söka igen.</string>
   <string name="files_for_transfer">FILER ATT ÖVERFÖRA</string>
-  <string name="preparing_files">Förbereder filer för överföring…</string>
-  <string name="performing_handshake">Utför handskakning…</string>
+  <string name="preparing_files" fuzzy="true">Förbereder filer för överföring…</string>
+  <string name="performing_handshake" fuzzy="true">Utför handskakning…</string>
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Rensar alla anteckningar på alla artiklar</string>
   <string name="pref_clear_all_notes_title">Rensa alla anteckningar</string>
@@ -306,4 +306,5 @@
   <string name="open_article">Öppna artikel</string>
   <string name="delete_note_dialog_message">Obs: Noter raderas inte från ditt utrymme</string>
   <string name="delete_selected_notes">Radera markerade anteckningar?</string>
+  <string name="go_to_settings_label">Gå till inställningar</string>
 </resources>

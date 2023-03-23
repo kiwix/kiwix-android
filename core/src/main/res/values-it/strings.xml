@@ -5,10 +5,12 @@
 * Beta16
 * CloeRiva
 * Einreiher
+* Eleassar
 * Fs00
 * G.garatti
 * Gianfranco
 * Matteocng
+* MohitMali
 * Mpayansilva
 * Nivit
 * Purodha
@@ -74,7 +76,7 @@
   <string name="pref_language_chooser">Scegli la lingua</string>
   <string name="pref_credits">Contributori e licenze</string>
   <string name="pref_credits_title">Riconoscimenti</string>
-  <string name="tts_lang_not_supported">La lingua di questa pagina non è supportata, o i dati della lingua non sono stati installati. La voce non può essere letta correttamente.</string>
+  <string name="tts_lang_not_supported">La lingua di questa pagina non è supportata. La voce potrebbe non essere letta correttamente.</string>
   <string name="no_reader_application_installed">Non è stata trovata alcuna applicazione installata per questo tipo di file</string>
   <string name="no_section_info">Nessuna intestazione di contenuto trovata</string>
   <string name="request_storage">Per accedere ai contenuti offline è necessario l\'accesso al tuo spazio di archiviazione</string>
@@ -142,7 +144,7 @@
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">riprendi</string>
   <string name="stop">interrompi</string>
-  <string name="configure_storage_option">ScaricaRE il libro nella memoria interna?</string>
+  <string name="configure_storage_option">Scaricare il libro nella memoria interna?</string>
   <string name="internal_storage">Interno</string>
   <string name="external_storage">Esterno</string>
   <string name="configure">Configura</string>
@@ -312,4 +314,7 @@
   <string name="open_article">Apri articolo</string>
   <string name="delete_note_dialog_message">Nota: le note non vengono eliminate dalla memoria</string>
   <string name="delete_selected_notes">Elimina le note selezionate?</string>
+  <string name="external_link_copied_message">Collegamento esterno copiato negli appunti</string>
+  <string name="navigation_history_cleared">Cronologia di navigazione cancellata</string>
+  <string name="go_to_settings_label">Vai alle impostazioni</string>
 </resources>

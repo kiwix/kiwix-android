@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Robby
+* Volvox
 -->
 <resources>
+  <string name="file_system_does_not_support_4gb">Ären Dateisystem ënnerstëtzt keng Fichiere mat méi wéi 4 GB</string>
   <string name="send_files_title">Fichiere schécken</string>
   <string name="receive_files_title">Fichiere kréien</string>
 </resources>

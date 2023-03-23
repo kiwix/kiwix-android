@@ -3,6 +3,7 @@
 * Edwingudfriend
 * Kipala
 * Mpmayenge
+* Wangombe
 * Yasen igra
 -->
 <resources>
@@ -16,12 +17,15 @@
   <string name="menu_exit_full_screen">Toka kwa modi ya Skrini nzima</string>
   <string name="menu_read_aloud">Soma kwa sauti</string>
   <string name="menu_read_aloud_stop">Simama kusoma kwa sauti</string>
+  <string name="menu_support_kiwix">Tuma ssaada kwa Kiwix</string>
   <string name="save_media">Hifadhi midia kama…</string>
   <string name="save_media_error" fuzzy="true">Kosa lilitokea wakati wa kuhifadhi midia!</string>
   <string name="save_media_saved" fuzzy="true">Midia imehifadhiwa kwa jina la %1$s katika kabrasha yako ya picha</string>
   <string name="search_label">Tafuta</string>
-  <string name="choose_file" fuzzy="true">Chagua Faili ya Makala ya ZIM (*.zim)</string>
+  <string name="choose_file">Chagua Faili ya Maudhui (*.zim)</string>
   <string name="open_in_new_tab">Fungua kiungo kwenye kivinjari kipya</string>
+  <string name="hotspot_failed_title">Imeshindwa kuwasha mtandaopepe</string>
+  <string name="connection_refused">Muunganisho umekataliwa.</string>
   <string name="error_file_not_found">Hitilafu: Faili ya ZIM iliyochaguliwa haija patikana.</string>
   <string name="error_file_invalid">Hitilafu:Faili iliyochaguliwa sio faili sahihi ya ZIM.</string>
   <string name="error_article_url_not_found">Hitilafu:Upakiaji wa makala umefeli (Url: %1$s)</string>

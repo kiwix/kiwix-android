@@ -74,7 +74,7 @@
   <string name="pref_language_chooser">Escolha um idioma</string>
   <string name="pref_credits">Contribuidores e Licenças</string>
   <string name="pref_credits_title">Créditos</string>
-  <string name="tts_lang_not_supported">O idioma desta página não é suportada, ou não foram instalados os dados de língua apropriados. O artigo pode não ser lido corretamente.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">O idioma desta página não é suportada, ou não foram instalados os dados de língua apropriados. O artigo pode não ser lido corretamente.</string>
   <string name="no_reader_application_installed">Não foi possível encontrar uma aplicação instalada para este tipo de ficheiro</string>
   <string name="no_section_info">Não foram encontrados cabeçalhos de conteúdo</string>
   <string name="request_storage">Para aceder ao conteúdo offline, precisamos de acesso ao seu armazenamento</string>

@@ -35,7 +35,7 @@
   <string name="pref_language_chooser">Causir una lenga</string>
   <string name="pref_credits">Contributors e Licéncias</string>
   <string name="pref_credits_title">Mercejaments</string>
-  <string name="tts_lang_not_supported">La lenga d\'aquesta pagina es pas presa en carga, o las donadas apropriadas de la lenga son pas installadas. L’article poirà pas èsser legit corrèctament.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">La lenga d\'aquesta pagina es pas presa en carga, o las donadas apropriadas de la lenga son pas installadas. L’article poirà pas èsser legit corrèctament.</string>
   <string name="no_reader_application_installed">Impossible de trobar una aplicacion d\'installada per aqueste tipe de fichièr</string>
   <string name="no_section_info">Cap d\'entèsta de contengut pas trobada</string>
   <string name="request_storage">Per accedir als fichièrs ZIM, avèm besonh d\'un accès a vòstre espaci d\'emmagazinatge</string>

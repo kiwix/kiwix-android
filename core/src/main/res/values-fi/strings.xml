@@ -2,6 +2,7 @@
 <!-- Authors:
 * MITO
 * Macofe
+* MohitMali
 * Nike
 * Pyscowicz
 * Silvonen
@@ -22,17 +23,19 @@
   <string name="menu_wifi_hotspot">Hostaa kirjoja</string>
   <string name="save_media">Tallenna media</string>
   <string name="save_media_error">Virhe mediaa tallennettaessa!</string>
-  <string name="save_media_saved" fuzzy="true">Tallennettu media %s muodossa hakemistoon Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Tallennettu media %s muodossa hakemistoon Downloads/org.kiwix…/</string>
   <string name="search_label">Hae</string>
   <string name="choose_file">Valitse sisältötiedosto (*.zim)</string>
   <string name="open_in_new_tab">Avaa linkki uudessa välilehdessä?</string>
   <string name="hotspot_failed_title">Virhe käynnistettäessä hotspottia</string>
   <string name="go_to_wifi_settings_label">Siirry WiFi-asetuksiin</string>
+  <string name="connection_refused">Yhteys evätty.</string>
   <string name="no_books_selected_toast_message">Valitse ensin kirjat</string>
   <string name="server_failed_toast_message">Ei voitu käynnistää palvelinta.</string>
   <string name="server_started_successfully_toast_message">Palvelin käynnistetty onnistuneesti.</string>
   <string name="server_stopped_successfully_toast_message">Palvelin pysäytetty onnistuneesti.</string>
   <string name="hotspot_turned_on">Hotspot kytketty päälle</string>
+  <string name="server_textview_default_message">Valitse tiedostot, joita haluat isännöidä palvelimella</string>
   <string name="progress_dialog_starting_server">Käynnistetään palvelinta</string>
   <string name="hotspot_dialog_title">Ohjeet kirjojen hostaamiseen</string>
   <string name="wifi_dialog_title">WiFi-yhteys tunnistettu</string>
@@ -41,6 +44,7 @@
   <string name="start_server_label">Käynnistä palvelin</string>
   <string name="stop_server_label">Pysäytä palvelin</string>
   <string name="error_file_not_found">Virhe: valittua ZIM-tiedostoa ei löytynyt.</string>
+  <string name="zim_not_opened">Zim-tiedostoa ei voi avata</string>
   <string name="error_file_invalid">Virhe: valittu tiedosto ei ole kelvollinen ZIM-tiedosto.</string>
   <string name="error_article_url_not_found">Virhe: Artikkelin (Url: %1$s) lataus epäonnistui.</string>
   <string name="pref_display_title">Näytä</string>
@@ -54,7 +58,7 @@
   <string name="pref_language_chooser">Valitse kieli</string>
   <string name="pref_credits">Avustajat ja lisenssit</string>
   <string name="pref_credits_title">Tekijät</string>
-  <string name="tts_lang_not_supported">Tämän sivun kieltä ei tueta, tai kielellistä tietoa ei ole asennettu. Artikkelia ei voida lukea kunnolla.</string>
+  <string name="tts_lang_not_supported">Tämän sivun kieltä ei tueta. Artikkelia ei voida lukea kunnolla.</string>
   <string name="no_reader_application_installed">Ei voitu löytää asennettua sovellusta tämän tyyppiselle tiedostolle</string>
   <string name="no_section_info">Sisältöotsikoita ei löydy</string>
   <string name="request_storage">Käyttääksemme offline-sisältöä, tarvitsemme pääsyn tallennuslaitteeseesi</string>
@@ -77,6 +81,7 @@
   <string name="tab_closed">Välilehti suljettu</string>
   <string name="bookmark_added">Kirjanmerkki lisätty</string>
   <string name="rate_dialog_title">Arvioi meitä</string>
+  <string name="rate_dialog_msg">Jos pidät %sin käyttämisestä, käytä hetki sen arvioimiseen. Kiitos tuestasi!</string>
   <string name="rate_dialog_positive">Arvioi!</string>
   <string name="no_thanks">Ei kiitos</string>
   <string name="rate_dialog_neutral">Myöhemmin</string>
@@ -187,13 +192,14 @@
   <string name="notes_deletion_unsuccessful">Joitakin tiedostoja ei poistettu</string>
   <string name="books_count">%d kirja(a)</string>
   <string name="connection_failed">Yhteys epäonnistui</string>
+  <string name="transfer_to">Siirretäänkö tiedostot kohteeseen %s?</string>
   <string name="file_transfer_complete">Tiedoston siirto valmis</string>
   <string name="error_during_transfer">Siirron aikana tapahtui virhe</string>
   <string name="error_transferring">Virhe siirrettäessä tiedostoa %s</string>
   <string name="get_content_from_nearby_device">Hanki sisältöä lähistöllä olevasta laitteesta</string>
   <string name="your_device">Laitteesi:</string>
   <string name="nearby_devices">LÄHELLÄ OLEVAT LAITTEET</string>
-  <string name="preparing_files">Valmistellaan tiedostoja siirtoon....</string>
+  <string name="preparing_files">Valmistellaan tiedostoja siirtoon…</string>
   <string name="status">Tila</string>
   <string name="pref_clear_all_notes_summary">Tyhjennä kaikki huomautukset kaikista artikkeleista</string>
   <string name="pref_clear_all_notes_title">Tyhjennä kaikki huomautukset</string>
@@ -216,10 +222,14 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Tekstin tarkennus</string>
   <string name="search_open_in_new_tab">Avaa uudessa välilehdessä</string>
+  <string name="reader">Lukija</string>
+  <string name="no_open_book">Ei avointa kirjaa</string>
   <string name="open_library">Avaa kirjasto</string>
   <string name="tab_restored">Välilehti palautettu</string>
   <string name="how_to_update_content">Kuinka päivittää sisältöä?</string>
   <string name="allowed">Sallittu</string>
   <string name="not_allowed">Ei sallittu</string>
   <string name="allow">Salli</string>
+  <string name="open_article">Avaa artikkeli</string>
+  <string name="go_to_settings_label">Siirry asetuksiin</string>
 </resources>

@@ -78,7 +78,7 @@
   <string name="pref_language_chooser">Elige un idioma</string>
   <string name="pref_credits">Colaboradores y licencias</string>
   <string name="pref_credits_title">Créditos</string>
-  <string name="tts_lang_not_supported">No se admite el idioma de esta página, o no se instalaron los datos de idioma apropiados. Puede que el artículo no se pueda leer correctamente.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">No se admite el idioma de esta página, o no se instalaron los datos de idioma apropiados. Puede que el artículo no se pueda leer correctamente.</string>
   <string name="no_reader_application_installed">No se pudo encontrar una aplicación instalada para este tipo de archivo</string>
   <string name="no_section_info">No se encontraron cabeceras de contenido</string>
   <string name="request_storage">Para acceder a contenido sin conexión necesitamos tener acceso a tu almacenamiento</string>
@@ -255,8 +255,8 @@
   <string name="nearby_devices">DISPOSITIVOS CERCANOS</string>
   <string name="no_devices_found">Dispositivos no detectados. Toca el botón de búsqueda para intentarlo de nuevo.</string>
   <string name="files_for_transfer">ARCHIVOS QUE TRANSFERIR</string>
-  <string name="preparing_files">Preparando archivos para su transferencia…</string>
-  <string name="performing_handshake">Realizando protocolo de enlace…</string>
+  <string name="preparing_files" fuzzy="true">Preparando archivos para su transferencia…</string>
+  <string name="performing_handshake" fuzzy="true">Realizando protocolo de enlace…</string>
   <string name="status">Estado</string>
   <string name="pref_clear_all_notes_summary">Elimina todas las notas de todos los artículos</string>
   <string name="pref_clear_all_notes_title">Borrar todas las notas</string>
@@ -289,4 +289,8 @@
   <string name="how_to_update_content">¿Cómo actualizar contenido?</string>
   <string name="system_unable_to_grant_permission_message">Sistema incapaz de conceder permiso!</string>
   <string name="allow">Permitir</string>
+  <string name="backward_history">Historial hacia atrás</string>
+  <string name="forward_history">Historial hacia delante</string>
+  <string name="clear_all_navigation_history_message">Vacía todo el historial de navegación (hacia atrás y hacia delante)</string>
+  <string name="go_to_settings_label">Ir a configuración</string>
 </resources>

@@ -54,7 +54,7 @@
   <string name="pref_back_to_top_summary">Zeig e Chnopf am End vo dr Syte zuem uffe rolle</string>
   <string name="pref_language_title">Sprach</string>
   <string name="pref_language_chooser">E Sprach uswähle</string>
-  <string name="tts_lang_not_supported">D\'Spraach vo dere Syte isch nid unterschtützt, oder diä passende Spraachdaate si nid inschtalliert. Dä Artikel cha müglercherwiis nid korräkt gläse wärde.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">D\'Spraach vo dere Syte isch nid unterschtützt, oder diä passende Spraachdaate si nid inschtalliert. Dä Artikel cha müglercherwiis nid korräkt gläse wärde.</string>
   <string name="no_reader_application_installed">Ke inschtallierti Aawändig gfunde für dä Dateitüüp.</string>
   <string name="request_storage">Um uf Offlineinhaute zuezgrifä, bruche mer Zuegang zum Speicher.</string>
   <string name="clear_recent_and_tabs_history_dialog">Sid Dir sicher dass der dä ganzi Suechverlouf weid löschä, und alli aktivä Tabs zrüggzsetze?</string>
@@ -168,7 +168,7 @@
   <string name="file_transfer_complete">Dateiübertragig abgschlossä</string>
   <string name="error_during_transfer">Es isch ä Fähler passiert während dr Übertragig</string>
   <string name="error_transferring">Fähler bim Übertrage vor Datei %s</string>
-  <string name="preparing_files">Dateiä am Vorbereitä für d\'Übertragig…</string>
+  <string name="preparing_files" fuzzy="true">Dateiä am Vorbereitä für d\'Übertragig…</string>
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_title">Alli Notizä lösche</string>
   <string name="tag_text_only">Numä Texscht</string>

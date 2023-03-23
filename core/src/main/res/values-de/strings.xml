@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * 1233qwer1234qwer4
+* Brettchenweber
 * Distel135
 * DraconicDark
 * Elliot
 * FF-11
 * FF11
 * Falwye
+* Justman10000
 * Killarnee
 * Lucas Werkmeister
 * Metalhead64
@@ -18,7 +20,7 @@
 * ThisCarthing
 * Umlaut
 -->
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="menu_help">Hilfe</string>
   <string name="menu_home">Start</string>
   <string name="menu_settings">Einstellungen</string>
@@ -79,7 +81,7 @@
   <string name="pref_language_chooser">Eine Sprache auswählen</string>
   <string name="pref_credits">Autoren und Lizenzen</string>
   <string name="pref_credits_title">Danksagungen</string>
-  <string name="tts_lang_not_supported">Die Sprache dieser Seite wird nicht unterstützt oder es sind keine passenden Sprachdaten installiert. Der Artikel kann eventuell nicht ordnungsgemäß gelesen werden.</string>
+  <string name="tts_lang_not_supported">Die Sprache dieser Seite wird nicht unterstützt. Der Artikel kann möglicherweise nicht richtig gelesen werden.</string>
   <string name="no_reader_application_installed">Es konnte keine installierte Anwendung für diesen Dateityp gefunden werden</string>
   <string name="no_section_info">Keine Inhaltsheader gefunden</string>
   <string name="request_storage">Um auf Offlineinhalt zuzugreifen, müssen wir auf Ihren Speicher zugreifen.</string>
@@ -106,7 +108,7 @@
   <string name="bookmark_added">Lesezeichen hinzugefügt</string>
   <string name="rate_dialog_title">Bitte bewerten Sie uns</string>
   <string name="rate_dialog_msg">Wenn Sie %s gerne verwenden, nehmen Sie sich bitte einen Moment Zeit, um es zu bewerten. Danke für Ihre Unterstützung!</string>
-  <string name="rate_dialog_positive">Bewerten Sie!</string>
+  <string name="rate_dialog_positive">Bewerten!</string>
   <string name="no_thanks">Nein danke</string>
   <string name="rate_dialog_neutral">Später</string>
   <string name="open">Öffnen</string>
@@ -261,13 +263,13 @@
   <string name="nearby_devices">GERÄTE IN DER NÄHE</string>
   <string name="no_devices_found">Keine Geräte erkannt. Tippen Sie auf die Schaltfläche Suchen, um es erneut zu versuchen.</string>
   <string name="files_for_transfer">DATEIEN ZUR ÜBERTRAGUNG</string>
-  <string name="preparing_files">Dateien für die Übertragung werden vorbereitet....</string>
-  <string name="performing_handshake">Führe Handshake durch....</string>
+  <string name="preparing_files" fuzzy="true">Dateien für die Übertragung werden vorbereitet....</string>
+  <string name="performing_handshake" fuzzy="true">Führe Handshake durch....</string>
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Löscht alle Notizen zu allen Artikeln</string>
   <string name="pref_clear_all_notes_title">Alle Notizen löschen</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Zulassen, dass ZIM-Dateien auf der SD-Karte gelesen und geschrieben werden</string>
-  <string name="pref_text_zoom_summary" tools:ignore="StringFormatCount">Schriftgröße in 25%-Schritten ändern.</string>
+  <string name="pref_text_zoom_summary">Ändern Sie die Textgröße mit Schritten von 25 %.</string>
   <string name="tag_pic">Bild</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Nur Text</string>
@@ -309,4 +311,16 @@
   <string name="select_folder">Bitte einen Ordner für externe Speicherung auswählen.</string>
   <string name="system_unable_to_grant_permission_message">System kann keine Berechtigung erteilen!</string>
   <string name="allow">Erlauben</string>
+  <string name="swipe_down_for_library">Nach unten wischen für Bibliothek</string>
+  <string name="no_notes">Keine Notizen</string>
+  <string name="notes_from_all_books">Notizen aus allen Büchern ansehen</string>
+  <string name="search_notes">Notizen suchen</string>
+  <string name="choose_your_action">Wähle deine Aktion</string>
+  <string name="open_note">Notiz öffnen</string>
+  <string name="open_article">Artikel öffnen</string>
+  <string name="delete_note_dialog_message">Hinweis: Notizen werden nicht aus deinem Speicher gelöscht</string>
+  <string name="delete_selected_notes">Ausgewählte Notizen löschen?</string>
+  <string name="download_tts_language_title">Diese Sprache für die Vorlesefunktion herunterladen</string>
+  <string name="download_tts_language_message">Bitte klicke auf die Schaltfläche Download. Es wird automatisch die gewünschte Sprache heruntergeladen.</string>
+  <string name="external_link_copied_message">Externer Link in die Zwischenablage kopiert</string>
 </resources>

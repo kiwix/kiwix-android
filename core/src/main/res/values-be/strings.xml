@@ -35,7 +35,7 @@
   <string name="pref_back_to_top_summary">Паказваць кнопку ў канцы старонкі для пракруткі ўверх</string>
   <string name="pref_language_title">Мова</string>
   <string name="pref_language_chooser">Абярыце мову</string>
-  <string name="tts_lang_not_supported">Мова гэтай старонкі не падтрымліваецца або адпаведныя звесткі мовы не былі ўсталяваныя. Артыкул можа быць няправільна прачытаны.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Мова гэтай старонкі не падтрымліваецца або адпаведныя звесткі мовы не былі ўсталяваныя. Артыкул можа быць няправільна прачытаны.</string>
   <string name="no_reader_application_installed">Не ўдалося знайсці ўсталяваную праграму для гэтага тыпу файлаў</string>
   <string name="no_section_info" fuzzy="true">Ня знойдзеныя загалоўкі кантэнту</string>
   <string name="request_storage" fuzzy="true">Каб атрымаць доступ да ZIM-файлаў, нам трэба мець доступ да вашага сховішча</string>

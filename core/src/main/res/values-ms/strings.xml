@@ -47,7 +47,7 @@
   <string name="pref_language_title">Bahasa</string>
   <string name="pref_language_chooser">Pilih bahasa</string>
   <string name="pref_credits">Penyumbang dan Lesen</string>
-  <string name="tts_lang_not_supported">Bahasa laman ini tidak disokong, ataupun data bahasa yang bersesuaian tidak dipasang. Rencana mungkin tidak dapat dibaca dengan betul.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Bahasa laman ini tidak disokong, ataupun data bahasa yang bersesuaian tidak dipasang. Rencana mungkin tidak dapat dibaca dengan betul.</string>
   <string name="no_reader_application_installed">Tidak terjumpa aplikasi yang dipasang untuk jenis fail ini</string>
   <string name="no_section_info" fuzzy="true">Tiada judul kandungan ditemui</string>
   <string name="request_storage" fuzzy="true">Untuk mencapai fail ZIM kami memerlukan akses kepada storan anda</string>

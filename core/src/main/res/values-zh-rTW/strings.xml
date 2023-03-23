@@ -8,6 +8,7 @@
 * Weather Top Wizard
 * Wehwei
 * Winston Sung
+* 捍粵者
 -->
 <resources>
   <string name="menu_help">說明</string>
@@ -32,7 +33,7 @@
   <string name="hotspot_failed_title">開啟熱點失敗</string>
   <string name="hotspot_failed_message">看起來似乎是您的熱點已開啟，請停用您的 WiFi 熱點來繼續。</string>
   <string name="go_to_wifi_settings_label">前往 WIFI 設定</string>
-  <string name="connection_refused">連線被拒絕。</string>
+  <string name="connection_refused">連線已拒絕</string>
   <string name="hotspot_running">運行熱點</string>
   <string name="no_books_selected_toast_message">請先選擇書籍</string>
   <string name="server_failed_message">無法開啟伺服器，請啟動您的熱點</string>
@@ -70,8 +71,9 @@
   <string name="pref_language_chooser">選擇語言</string>
   <string name="pref_credits">貢獻者和許可協議</string>
   <string name="pref_credits_title">參與名單</string>
-  <string name="tts_lang_not_supported">本頁面不支援這個語言，或是未安裝合適的語言數據。條目可能無法正確讀取。</string>
+  <string name="tts_lang_not_supported">本頁面不支援這個語言。條目可能無法正確讀取。</string>
   <string name="no_reader_application_installed">找不到開啟這類型檔案的應用程式</string>
+  <string name="no_email_application_installed">請安裝電子郵件服務提供方，或是在%1s發送電子郵件給我們</string>
   <string name="no_section_info">未找到內容標題</string>
   <string name="request_storage">我們需要進入你的儲存裝置以存取離線內容。</string>
   <string name="request_write_storage">要下載 zim 檔案，我們需要寫入您的儲存裝置權限</string>
@@ -206,7 +208,7 @@
   <string name="switch_tabs">切換分頁</string>
   <string name="close_all_tabs">關閉所有分頁</string>
   <string name="pending_state">待定</string>
-  <string name="running_state">進行中</string>
+  <string name="running_state">運行中</string>
   <string name="complete">完成</string>
   <string name="paused_state">暫停</string>
   <string name="failed_state">失敗：%s</string>
@@ -234,6 +236,7 @@
   <string name="connection_failed">連線失敗</string>
   <string name="permission_rationale_location">Android 需要位置權限來允許應用程式去偵測端點設備</string>
   <string name="permission_rationale_location_on_host_zim_file">Android 需要位置權限來允許應用程式去托管 Zim 檔案</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">Android 需要附近的 wifi 設備權限才能允許應用程式託管 zim 檔案</string>
   <string name="permission_refused_location">沒有位置權限無法定位端點設備</string>
   <string name="permission_refused_storage">沒有儲存權限無法存取 zim 檔案</string>
   <string name="request_enable_location">啟動位置來允許偵測端點</string>
@@ -252,7 +255,7 @@
   <string name="no_devices_found">偵測不到設備。請輕觸搜尋按鍵來重試。</string>
   <string name="files_for_transfer">用於傳輸的檔案</string>
   <string name="preparing_files">準備檔案傳送…</string>
-  <string name="performing_handshake">執行交握…</string>
+  <string name="performing_handshake">交握中…</string>
   <string name="status">狀態</string>
   <string name="pref_clear_all_notes_summary">清除在所有條目裡的所有註釋</string>
   <string name="pref_clear_all_notes_title">清除所有註釋</string>
@@ -299,6 +302,7 @@
   <string name="select_folder">請選取用於外部儲存的資料夾。</string>
   <string name="system_unable_to_grant_permission_message">系統無法授予權限！</string>
   <string name="allow">允許</string>
+  <string name="swipe_down_for_library">向下滑動圖書館</string>
   <string name="no_notes">沒有註釋</string>
   <string name="notes_from_all_books">檢視來自所有書籍的註釋</string>
   <string name="search_notes">搜尋註釋</string>
@@ -307,4 +311,15 @@
   <string name="open_article">開啟條目</string>
   <string name="delete_note_dialog_message">備註：註釋不會從您的儲存中刪除</string>
   <string name="delete_selected_notes">刪除所選註釋？</string>
+  <string name="download_tts_language_title">下載此語言以使用朗讀功能</string>
+  <string name="download_tts_language_message">請點擊下載按鈕。這將會自動下載所需要的語言。</string>
+  <string name="external_link_copied_message">外部連結已復製到剪貼簿</string>
+  <string name="read_aloud_service_channel_name">朗讀服務頻道</string>
+  <string name="read_aloud_channel_description">語音控制文字</string>
+  <string name="read_aloud_running">運行朗讀</string>
+  <string name="backward_history">歷史往後</string>
+  <string name="forward_history">歷史往前</string>
+  <string name="clear_all_navigation_history_message">清除所有導航歷史（往後，往前）</string>
+  <string name="navigation_history_cleared">已清除導航歷史記錄</string>
+  <string name="go_to_settings_label">前往設定</string>
 </resources>
