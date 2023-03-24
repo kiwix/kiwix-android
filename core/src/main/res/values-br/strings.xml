@@ -36,7 +36,7 @@
   <string name="pref_language_chooser">Dibabit ur yezh</string>
   <string name="pref_credits">Kendaolerien hag aotreoù-implijout</string>
   <string name="pref_credits_title">Kredoù</string>
-  <string name="tts_lang_not_supported">N\'eo ket kemeret yezh ar bajenn-mañ e karg, pe n\'eo ket staliet ar roadennoù azas ar yezh.\nNe c\'hallo ket ar pennad bezañ lennet.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">N\'eo ket kemeret yezh ar bajenn-mañ e karg, pe n\'eo ket staliet ar roadennoù azas ar yezh.\nNe c\'hallo ket ar pennad bezañ lennet.</string>
   <string name="no_reader_application_installed">Ne c\'haller kavout arload ebet staliet evit ar seurt restr</string>
   <string name="no_section_info">N\'eus bet kavet Talbenn endalc\'h ebet</string>
   <string name="request_storage">Evit tizhout an endalc\'h ezlinenn hon eus ezhomm da dizhout ho lec\'h stokañ</string>

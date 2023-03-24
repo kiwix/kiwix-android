@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Eleassar
+-->
+<resources>
+  <string name="retry">Poskusi znova</string>
+  <string name="invalid_installation">Neveljavna namestitev. Prenesite ZIM.\n Zagotovite, da je Wi-Fi vklopljen in da imate dovolj prostora za shranjevanje.</string>
+</resources>

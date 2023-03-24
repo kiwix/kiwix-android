@@ -39,7 +39,7 @@
   <string name="pref_language_chooser">Chọn ngôn ngữ</string>
   <string name="pref_credits">Những người đóng góp và Bản quyền</string>
   <string name="pref_credits_title">Ghi công</string>
-  <string name="tts_lang_not_supported">Ngôn ngữ của trang này không được hỗ trợ, hoặc dữ liệu ngôn ngữ thích hợp chưa được cài đặt. Có thể không có khả năng đọc bài.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Ngôn ngữ của trang này không được hỗ trợ, hoặc dữ liệu ngôn ngữ thích hợp chưa được cài đặt. Có thể không có khả năng đọc bài.</string>
   <string name="no_reader_application_installed">Không tìm thấy ứng dụng đã cài đặt ứng với kiểu tập tin này</string>
   <string name="no_section_info">Không tìm thấy Đầu đề Nội dung</string>
   <string name="request_storage">Để truy cập các nội dung ngoại tuyến, chúng tôi cần được phép truy cập thiết bị lưu trữ của bạn</string>

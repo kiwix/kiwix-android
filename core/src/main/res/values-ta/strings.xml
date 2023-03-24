@@ -66,7 +66,7 @@
   <string name="pref_language_chooser">மொழியைத் தேர்ந்தெடு</string>
   <string name="pref_credits">பங்களிப்பாளர்கள் மற்றும் உரிமங்கள்</string>
   <string name="pref_credits_title">அங்கீகாரங்கள்</string>
-  <string name="tts_lang_not_supported">இந்தப் பக்கத்தின் மொழி ஆதரிக்கப்படவில்லை, அல்லது பொருத்தமான மொழித் தரவு நிறுவப்படவில்லை. கட்டுரையை சரியாகப் படிக்காமல் இருக்கலாம்.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">இந்தப் பக்கத்தின் மொழி ஆதரிக்கப்படவில்லை, அல்லது பொருத்தமான மொழித் தரவு நிறுவப்படவில்லை. கட்டுரையை சரியாகப் படிக்காமல் இருக்கலாம்.</string>
   <string name="no_reader_application_installed">இந்த வகை கோப்பிற்கான நிறுவப்பட்ட செயலியைக் கண்டுபிடிக்க முடியவில்லை</string>
   <string name="no_section_info">உள்ளடக்க தலைப்புகள் எதுவும் கிடைக்கவில்லை</string>
   <string name="request_storage">அணைவரி உள்ளடக்கத்தை அணுக உங்கள் சேமிப்பகத்தை அணுக வேண்டும்</string>
@@ -248,8 +248,8 @@
   <string name="nearby_devices">அருகிலுள்ள சாதனங்கள்</string>
   <string name="no_devices_found">சாதனங்கள் எதுவும் கண்டறியப்படவில்லை. மீண்டும் முயற்சிக்க தேடல் பொத்தானைத் தட்டவும்.</string>
   <string name="files_for_transfer">பரிமாற்றத்திற்கான கோப்புகள்</string>
-  <string name="preparing_files">பரிமாற்றத்திற்கான கோப்புகளைத் தயாரிக்கிறது ....</string>
-  <string name="performing_handshake">கைகுலுக்கல் நிகழ்த்துகிறது....</string>
+  <string name="preparing_files" fuzzy="true">பரிமாற்றத்திற்கான கோப்புகளைத் தயாரிக்கிறது ....</string>
+  <string name="performing_handshake" fuzzy="true">கைகுலுக்கல் நிகழ்த்துகிறது....</string>
   <string name="status">நிலை</string>
   <string name="pref_clear_all_notes_summary">எல்லா கட்டுரைகளிலும் உள்ள அனைத்து குறிப்புகளையும் அழிக்கிறது</string>
   <string name="pref_clear_all_notes_title">எல்லா குறிப்புகளையும் அழிக்கவும்</string>

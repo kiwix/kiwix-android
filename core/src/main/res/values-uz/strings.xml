@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Macofe
+* Malikxan
 -->
 <resources>
   <string name="menu_help">Yordam</string>
@@ -16,4 +17,5 @@
   <string name="pref_info_title">Axborot</string>
   <string name="pref_info_version">Versiya</string>
   <string name="pref_language_title">Til</string>
+  <string name="no_results">Natijalar topilmadi</string>
 </resources>

@@ -9,4 +9,5 @@
   <string name="send_files_title">發送檔案</string>
   <string name="receive_files_title">接收檔案</string>
   <string name="no_app_found_to_open">沒有找到選擇 zim 檔案的應用程式！</string>
+  <string name="select_zim_file">選擇要讀取的 zim 檔案</string>
 </resources>

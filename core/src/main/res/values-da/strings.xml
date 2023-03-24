@@ -45,7 +45,7 @@
   <string name="pref_language_chooser">Vælg et sprog</string>
   <string name="pref_credits">Bidragydere og licenser</string>
   <string name="pref_credits_title">Tak til</string>
-  <string name="tts_lang_not_supported">Sproget på denne side er ikke understøttet, eller passende sprogdata blev ikke installeret. Artiklen kan måske ikke læses korrekt.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Sproget på denne side er ikke understøttet, eller passende sprogdata blev ikke installeret. Artiklen kan måske ikke læses korrekt.</string>
   <string name="no_reader_application_installed">Kunne ikke finde et installeret program for denne filtype</string>
   <string name="no_section_info">Ingen indholdsoverskrifter fundet</string>
   <string name="request_storage">For at tilgå indholdet lokalt skal vi bruge adgang til dit lager</string>
@@ -173,4 +173,5 @@
   <string name="allowed">Tilladt</string>
   <string name="not_allowed">Ikke tilladt</string>
   <string name="allow">Tillad</string>
+  <string name="go_to_settings_label">Gå til indstillinger</string>
 </resources>

@@ -47,7 +47,7 @@
   <string name="pref_language_chooser">একটি ভাষা নির্বাচন করুন</string>
   <string name="pref_credits">অবদানকারী এবং লাইসেন্স</string>
   <string name="pref_credits_title">কৃতিত্ব</string>
-  <string name="tts_lang_not_supported">এই পৃষ্ঠার ভাষা সমর্থিত নয়, অথবা যথাযথ ভাষার উপাত্ত ইনস্টল করা হয়নি। নিবন্ধটি সঠিকভাবে নাও পড়া যেতে পারে।</string>
+  <string name="tts_lang_not_supported" fuzzy="true">এই পৃষ্ঠার ভাষা সমর্থিত নয়, অথবা যথাযথ ভাষার উপাত্ত ইনস্টল করা হয়নি। নিবন্ধটি সঠিকভাবে নাও পড়া যেতে পারে।</string>
   <string name="no_reader_application_installed">এই ধরনের ফাইলের জন্য একটি ইনস্টল অ্যাপ্লিকেশন খুঁজে পাওয়া যায়নি</string>
   <string name="no_section_info">কোন বিষয়বস্তুর শিরোনাম পাওয়া যায়নি</string>
   <string name="request_storage">অফলাইন বিষয়বস্তুতে প্রবেশ করতে আমাদের আপনার সঞ্চয়স্থলে প্রবেশাধিকার প্রয়োজন</string>

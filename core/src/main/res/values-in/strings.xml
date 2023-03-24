@@ -61,7 +61,7 @@
   <string name="pref_language_chooser">Pilih bahasa</string>
   <string name="pref_credits">Kontributor dan Lisensi</string>
   <string name="pref_credits_title">Kredit</string>
-  <string name="tts_lang_not_supported">Bahasa halaman ini tidak didukung, atau data bahasa yang tepat tidak dipasang. Artikel mungkin tidak dapat dibaca dengan benar.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Bahasa halaman ini tidak didukung, atau data bahasa yang tepat tidak dipasang. Artikel mungkin tidak dapat dibaca dengan benar.</string>
   <string name="no_reader_application_installed">Tidak dapat menemukan aplikasi yang terpasang untuk jenis berkas ini</string>
   <string name="no_section_info">Tidak Ada Judul Konten yang Ditemukan</string>
   <string name="request_storage">Untuk mengakses konten luring, kami memerlukan akses ke penyimpanan Anda</string>
@@ -197,8 +197,8 @@
   <string name="books_count">%d buku</string>
   <string name="connection_failed">Koneksi gagal</string>
   <string name="files_for_transfer">FILE UNTUK DIPINDAHKAN</string>
-  <string name="preparing_files">Mempersiapkan file untuk dipindahkan....</string>
-  <string name="performing_handshake">Melakukan jabat tangan....</string>
+  <string name="preparing_files" fuzzy="true">Mempersiapkan file untuk dipindahkan....</string>
+  <string name="performing_handshake" fuzzy="true">Melakukan jabat tangan....</string>
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Bersihkan semua catatan dari semua artikel</string>
   <string name="pref_clear_all_notes_title">Bersihkan semua catatan</string>

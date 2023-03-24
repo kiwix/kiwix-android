@@ -37,7 +37,7 @@
   <string name="pref_language_chooser">Escolla unha lingua</string>
   <string name="pref_credits">Colaboradores e licenzas</string>
   <string name="pref_credits_title">Créditos</string>
-  <string name="tts_lang_not_supported">Non se admite a lingua desta páxina, ou non se instalaron os datos de lingua axeitados. Pode que o artigo non se poida ler correctamente.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Non se admite a lingua desta páxina, ou non se instalaron os datos de lingua axeitados. Pode que o artigo non se poida ler correctamente.</string>
   <string name="no_reader_application_installed">Non se puido atopar unha aplicación instalada para este tipo de ficheiro</string>
   <string name="no_section_info">Non se atoparon cabeceiras de contido.</string>
   <string name="request_storage">Para acceder a contido sen conexión necesitamos ter acceso ó seu almacenamento</string>

@@ -2,10 +2,12 @@
 <!-- Authors:
 * Chameleon222
 * E1d1eb90
+* Johshh
 * Jon Harald Søby
+* MohitMali
 * SuperPotato
 -->
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="menu_help">Hjelp</string>
   <string name="menu_home">Hjem</string>
   <string name="menu_settings">Innstillinger</string>
@@ -16,12 +18,15 @@
   <string name="menu_exit_full_screen">Avslutt fullskjerm</string>
   <string name="menu_read_aloud">Les høyt</string>
   <string name="menu_read_aloud_stop">Stopp høytlesning</string>
-  <string name="save_media" tools:ignore="Typos">Lagre media som…</string>
-  <string name="save_media_error" fuzzy="true">En feil oppstod under lagring av mediet!</string>
-  <string name="save_media_saved" fuzzy="true" tools:ignore="Typos">Lagret media som %1$s i din bildemappe.</string>
+  <string name="menu_support_kiwix">Støtt Kiwix</string>
+  <string name="save_media">Lagre medier som…</string>
+  <string name="save_media_error">En feil oppstod under lagring av mediet!</string>
+  <string name="save_media_saved">Lagret medier som %s i din bildemappe.</string>
   <string name="search_label">Søk</string>
-  <string name="choose_file" fuzzy="true">Velg en ZIM-innholdsfil (*.zim)</string>
+  <string name="choose_file">Velg en ZIM-innholdsfil (*.zim)</string>
   <string name="open_in_new_tab">Åpne lenke i ny fane?</string>
+  <string name="start_server_label">Start tjener</string>
+  <string name="stop_server_label">Stopp tjener</string>
   <string name="error_file_not_found">Feil: Den valgte ZIM-filen ble ikke funnet</string>
   <string name="error_file_invalid">Feil: Den valgte filen er ikke en gyldig ZIM-fil</string>
   <string name="error_article_url_not_found">Feil: Kunne ikke laste inn artikkelen (Url: %1$s).</string>
@@ -34,17 +39,125 @@
   <string name="pref_back_to_top_summary">Vis en knapp nederst på siden for å returnere til toppen</string>
   <string name="pref_language_title">Språk</string>
   <string name="pref_language_chooser">Velg et språk</string>
-  <string name="tts_lang_not_supported">Dette språket er ikke tilgjengelig for siden eller så er ikke dette språket installert. Denne artikkelen kan kanskje ikke bli riktig lest av.</string>
+  <string name="pref_credits_title">Takk til</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Dette språket er ikke tilgjengelig for siden eller så er ikke dette språket installert. Denne artikkelen kan kanskje ikke bli riktig lest av.</string>
   <string name="no_reader_application_installed">Kunne ikke finne en installert app for denne typen fil</string>
-  <string name="no_section_info" fuzzy="true">Ingen innholdstitteler funnet.</string>
+  <string name="no_section_info">Ingen innholdstitteler funnet.</string>
   <string name="request_storage" fuzzy="true">For å få åpnet ZIM-filer trenger vi tilgang til lagringsplassen din</string>
+  <string name="got_it">Skjønner</string>
+  <string name="did_you_know">Visste du at?</string>
+  <string name="undo">Angre</string>
+  <string name="tab_closed">Fanen ble lukket.</string>
   <string name="bookmark_added">Bokmerke lagt til</string>
   <string name="rate_dialog_title">Vennligst Ranger Oss</string>
+  <string name="rate_dialog_msg">Hvis du liker å bruke %s, vennligst ta deg tid til å rate det. Takk for støtten!</string>
   <string name="rate_dialog_positive">Ranger!</string>
   <string name="no_thanks">Nei takk</string>
   <string name="rate_dialog_neutral">Senere</string>
+  <string name="open">Åpne</string>
+  <string name="bookmark_removed">Bokmerke fjernet</string>
   <string name="pref_newtab_background_title">Åpne ny fane i bakgrunnen</string>
   <string name="pref_newtab_background_summary">Når en ny fane åpnes vil den åpnes i bakgrunnen</string>
+  <string name="pref_extras">Ekstra</string>
+  <string name="new_tab_snack_bar">Artikkel åpnet i ny fane</string>
+  <string name="search_widget_text">Søk i Kiwix</string>
+  <string name="speech_prompt_text">Snakk for å søke %s</string>
+  <string name="speech_not_supported">Unnskyld! Enheten din støtter ikke tekst til tale</string>
+  <string name="local_zims">Enhet</string>
+  <string name="remote_zims">Online</string>
   <string name="library">Bibliotek</string>
-  <string name="no_bookmarks" fuzzy="true">Ingen bokmerker!</string>
+  <string name="no_files_here">Ingen filer her</string>
+  <string name="download">laste ned</string>
+  <string name="space_available">Ledig plass:</string>
+  <string name="zim_simple">Enkelt</string>
+  <string name="zim_no_pic">Ingen bilder</string>
+  <string name="zim_no_vid">Ingen videoer</string>
+  <string name="no_network_connection">Ingen nettverkforbindelse</string>
+  <string name="help_2">Hva gjør Kiwix?</string>
+  <string name="help_5">Hvor er innholdet?</string>
+  <string name="help_6">Innholdet vårt ligger på Kiwix-nettstedet.</string>
+  <string name="help_7">De er tilgjengelige som ZIM-filer. Der er en masse av dem:</string>
+  <string name="help_8">• Wikipedia er tilgjengelig separat for hvert språk</string>
+  <string name="help_9">• Annet innhold som Wikileaks eller Wikisource er også tilgjengelig</string>
+  <string name="pref_storage">Lagring</string>
+  <string name="pref_current_folder">Nåværende mappe</string>
+  <string name="tts_pause">Pause</string>
+  <string name="tts_resume">Fortsett</string>
+  <string name="stop">Stopp</string>
+  <string name="yes">Ja</string>
+  <string name="confirm_stop_download_title">Vil du stoppe nedlastingen?</string>
+  <string name="confirm_stop_download_msg">Er du sikker på at du vil stoppe denne nedlastingen?</string>
+  <string name="tts_not_enabled">Tekst til tale er ikke aktivert for denne ZIM-filen</string>
+  <string name="next">Neste</string>
+  <string name="previous">Forrige</string>
+  <string name="wifi_only_title">Vil du tillate nedlasting av innhold via mobilnettverket?</string>
+  <string name="wifi_only_msg">Hvis du velger «Ja» vil du ikke bli advart i fremtiden. Du kan imidlertid alltid endre dette i Innstillinger</string>
+  <string name="pref_wifi_only">Last ned innhold kun via WiFi</string>
+  <string name="time_day">dag</string>
+  <string name="time_hour">t</string>
+  <string name="time_minute">min</string>
+  <string name="time_second">s</string>
+  <string name="time_left">igjen</string>
+  <string name="time_today">I dag</string>
+  <string name="time_yesterday">I går</string>
+  <string name="pref_external_link_popup_title">Varsle når du legger inn eksterne lenker</string>
+  <string name="other_languages">Andre språk:</string>
+  <string name="crash_title">Vel … Dette er pinlig</string>
+  <string name="crash_description">Det ser ut som vi krasjet.\n\nVil du hjelpe oss med å løse dette problemet ved å sende følgende informasjon?</string>
+  <string name="crash_checkbox_language">Dine språkinnstillinger</string>
+  <string name="crash_checkbox_zimfiles">En liste over Zim-filene dine</string>
+  <string name="crash_checkbox_logs">Applikasjonslogger</string>
+  <string name="crash_checkbox_device">Enhetsdetaljer</string>
+  <string name="crash_button_confirm">SEND DETALJER</string>
+  <string name="shortcut_disabled_message">Snarvei er ikke tilgjengelig</string>
+  <string name="new_tab_shortcut_label">Ny fane</string>
+  <string name="get_content_shortcut_label">Få innhold</string>
+  <string name="fav_icon">Favorittikon</string>
+  <string name="articleCount">%s artikler</string>
+  <string name="get_started">Kom i gang</string>
+  <string name="download_books">Last ned bøker</string>
+  <string name="humankind_knowledge">Menneskehetens kunnskap, på telefonen din.</string>
+  <string name="welcome_to_the_family">Velkommen til familien</string>
+  <string name="save_books_offline">Lagre bøker offline</string>
+  <string name="history">Historie</string>
+  <string name="history_from_current_book">Vis historikk fra alle bøker</string>
+  <string name="search_history">Søkehistorikk</string>
+  <string name="status">Status</string>
+  <string name="tag_pic">Bilde</string>
+  <string name="tag_vid">Video</string>
+  <string name="tag_text_only">Kun tekst</string>
+  <string name="tag_short_text">kort tekst</string>
+  <string name="storage_permission_denied">Lagringstillatelse nektet</string>
+  <string name="no_results">Ingen resultater</string>
+  <string name="no_bookmarks">Ingen bokmerker</string>
+  <string name="no_history">Ingen historikk</string>
+  <string name="device_default">Enhetsstandard</string>
+  <string name="delete_history">Vil du slette all historikk?</string>
+  <string name="delete_selected_history">Vil du slette valgt historikk?</string>
+  <string name="delete_bookmarks">Vil du slette alle bokmerker?</string>
+  <string name="delete_selected_bookmarks">Vil du slette valgte bokmerker?</string>
+  <string name="on">På</string>
+  <string name="off">Av</string>
+  <string name="auto">Auto</string>
+  <string name="send_report">Send diagnoserapport</string>
+  <string name="crash_checkbox_file_system">Filsystemdetaljer</string>
+  <string name="diagnostic_report">Diagnostisk rapport</string>
+  <string name="diagnostic_report_message">Vennligst send alle følgende detaljer slik at vi kan diagnostisere problemet</string>
+  <string name="percentage">%d%%</string>
+  <string name="search_open_in_new_tab">Åpne i ny fane</string>
+  <string name="reader">Leser</string>
+  <string name="open_library">Åpen bibliotek</string>
+  <string name="tab_restored">Fanen gjenopprettet</string>
+  <string name="allowed">Tillatt</string>
+  <string name="not_allowed">Ikke tillatt</string>
+  <string name="denied_internet_permission_message">Aktiver wifi for å laste ned innhold</string>
+  <string name="select_folder">Velg en mappe for ekstern lagring.</string>
+  <string name="system_unable_to_grant_permission_message">Systemet kan ikke gi tillatelse!</string>
+  <string name="allow">Tillat</string>
+  <string name="no_notes">Ingen merknader</string>
+  <string name="notes_from_all_books">Vis merknader fra alle bøker</string>
+  <string name="search_notes">Søk i notater</string>
+  <string name="choose_your_action">Velg din handling</string>
+  <string name="open_note">Åpne notat</string>
+  <string name="open_article">Åpne Artikkel</string>
 </resources>

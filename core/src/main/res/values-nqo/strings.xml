@@ -67,6 +67,7 @@
   <string name="pref_credits_title">ߞߏߢߌߡߊߟߐ߲</string>
   <string name="tts_lang_not_supported">ߞߊ߲ ߡߍ߲ ߦߋ߫ ߞߐߜߍ ߣߌ߲߬ ߞߊ߲߬߸ ߏ߬ ߘߊ߲ߞߎ߲ߣߍ߲߫ ߕߍ߫ ߥߟߊ߫ ߞߊ߲ ߡߍ߲ ߓߍ߲߬ߣߍ߲߫ ߦߋ߫ ߦߊ߲߬ ߡߊ߬߸ ߏ߬ ߡߊ߫ ߡߊߞߍ߫ ߊ߬ ߞߣߐ߫. ߕߎ߬ߡߊ߬ߘߐ߫ ߞߎߡߘߊ ߘߐߞߊ߬ߙߊ߲ ߕߍߣߊ߬ ߣߐ߰ߦߊ߬ ߟߊ߫.</string>
   <string name="no_reader_application_installed">ߟߥߊ߬ߟߌ߬ߟߊ߲߫ ߡߊߞߍߣߍ߲߫ ߕߍߣߊ߬ ߛߐ߬ߘߐ߲߬ ߠߴߌ ߞߎ߲߬ ߞߐߕߐ߯ ߛߎ߮ ߣߌ߲߬ ߢߍ߫</string>
+  <string name="no_email_application_installed">ߢߎߡߍߙߋ߲߫ ߞߏ߲ߘߏ ߗߋߘߊ ߡߊߛߐߟߊ߲ ߡߊߞߍ߫ ߌ ߞߎ߲߬ ߖߊ߰ߣߌ߲߫ ߥߟߊ߫ ߞߊ߬ ߢߎߡߍߙߋ߲ ߗߋ߫ ߊ߲ ߡߊ߬ %1s ߝߍ߬</string>
   <string name="no_section_info">ߞߣߐߘߐ ߞߎ߲߬ߕߐ߰ ߡߊ߫ ߛߐ߬ߘߐ߲߫</string>
   <string name="request_storage">ߖߐ߲߬ߛߊ߫ ߞߊ߬ ߜߊ߲߬ߞߎ߲߬ߠߌ߲߬ߓߊߟߌߦߊ ߞߣߐߘߐ ߟߎ߬ ߟߊߛߐ߬ߘߐ߲߬߸ ߊ߲ ߡߊ߬ߞߏ ߦߴߌ ߟߊ߫ ߟߊ߬ߡߙߊ߬ߟߌ߫ ߦߙߐ ߡߊߛߐ߬ߘߐ߲ ߠߊ߫</string>
   <string name="request_write_storage">ߖߐ߲߬ߛߊ߫ ߞߊ߬ zim ߞߐߕߐ߮ ߡߊߞߍ߫ ߌ ߞߎ߲߬߸ ߊ߲ ߡߊ߬ߞߏ ߦߋ߫ ߛߓߍߟߌ ߟߊߛߐ߬ߘߐ߲ ߣߴߌ ߟߊ߫ ߟߊ߬ߡߙߊ߬ߟߌ߫ ߞߣߍ ߞߊ߲߬</string>
@@ -247,8 +248,8 @@
   <string name="nearby_devices">ߞߙߍ߬ߝߍ߬ ߞߍߟߊ߲ ߠߎ߬</string>
   <string name="no_devices_found">ߞߍߟߊ߲߫ ߡߊ߫ ߟߊߞߏߟߐ߲߫. ߢߌߣߌ߲ߠߌ߲߫ ߞߎߘߊ ߕߐߘߐ߲߫ ߞߵߊ߬ ߡߊߝߍߣߍ߲߫ ߞߎߘߊ߫ ߘߌ߫.</string>
   <string name="files_for_transfer">ߞߐߕߐ߯ ߟߊߕߊ߬ߡߌ߲߬ߕߊ</string>
-  <string name="preparing_files">ߞߐߕߐ߮ ߘߐߓߍ߲߭ ߦߴߌ ߘߐ߫ ߟߕߊ߬ߡߌ߲߬ߠߌ߲ ߞߊ߲ߡߊ߬....</string>
-  <string name="performing_handshake">ߓߟߏߘߏ߲ߢߐ߲߯ߓߟߏ ߢߊߢߌߣߌ߲ ߦߴߌ ߘߐ߫....</string>
+  <string name="preparing_files" fuzzy="true">ߞߐߕߐ߮ ߘߐߓߍ߲߭ ߦߴߌ ߘߐ߫ ߟߕߊ߬ߡߌ߲߬ߠߌ߲ ߞߊ߲ߡߊ߬....</string>
+  <string name="performing_handshake" fuzzy="true">ߓߟߏߘߏ߲ߢߐ߲߯ߓߟߏ ߢߊߢߌߣߌ߲ ߦߴߌ ߘߐ߫....</string>
   <string name="status">ߡߊ߬ߘߎ߮</string>
   <string name="pref_clear_all_notes_summary">ߦߟߌߣߐ ߓߍ߯ ߖߏ߲߫ ߞߎߡߘߊ ߟߎ߬ ߓߍ߯ ߘߐ߫</string>
   <string name="pref_clear_all_notes_title">ߦߟߌߣߐ ߟߎ߬ ߓߍ߯ ߖߏ߰ߛߌ߫</string>
@@ -295,6 +296,7 @@
   <string name="select_folder">ߞߎ߲ߓߍ߲ ߘߏ߫ ߛߎߥߊ߲ߘߌ߫ ߖߊ߰ߣߌ߲߫ ߞߣߐߘߐ ߟߊ߬ߡߙߊ߬ߦߙߐ߬ ߞߏ ߘߐ߫.</string>
   <string name="system_unable_to_grant_permission_message">ߘߌ߬ߢߍ߬ ߞߍߣߍ߲߫ ߣߍ߫ ߞߊ߲ߞߋ ߢߍ߫ ߖߡߊ߬ߙߌ߬ߟߌ ߘߐ߫߹</string>
   <string name="allow">ߊ߬ ߟߊߘߌ߬ߢߍ߬</string>
+  <string name="swipe_down_for_library">ߊ߬ ߕߏ߬ߙߏ߲߬ߘߏ߫ ߘߎ߰ߟߊ ߘߐ߫ ߛߓߍߘߊ ߢߍ߫</string>
   <string name="no_notes">ߦߟߌߣߐ߫ ߕߴߦߋ߲߬</string>
   <string name="notes_from_all_books">ߦߟߌߣߐ ߘߐߜߍ߫ ߞߊ߬ ߝߘߊ߫ ߞߊ߬ߝߊ ߟߎ߬ ߓߍ߯ ߟߊ߫</string>
   <string name="search_notes">ߞߐߕߐ߮ ߟߎ߬ ߢߌߣߌ߲߫</string>
@@ -303,4 +305,7 @@
   <string name="open_article">ߞߎߡߘߊ ߟߊߞߊ߬</string>
   <string name="delete_note_dialog_message">ߦߟߌߣߐ: ߦߟߌߣߐ ߡߊ߫ ߖߏ߰ߛߌ߫ ߞߊ߬ ߝߘߊ߫ ߌ ߟߊ߫ ߟߊ߬ߡߙߊ߬ߟߌ߫ ߞߣߍ ߞߊ߲߬</string>
   <string name="delete_selected_notes">ߞߊ߬ ߦߟߌߣߐ߫ ߓߊߓߌ߬ߟߊ߬ߣߍ߲ ߖߏ߰ߛߌ߬؟</string>
+  <string name="download_tts_language_title">ߞߊ߲ ߣߌ߲߬ ߡߊߞߍ߫ ߌ ߞߎ߲߬ ߛߴߊ߬ ߘߌ߫ ߛߴߊ߬ ߘߐߞߊ߬ߙߊ߲߫ ߠߊ߫ ߞߊ߲߫ ߡߊߦߟߍߟߌ ߘߐ߫</string>
+  <string name="download_tts_language_message">ߟߊ߬ߖߌ߰ߒ߬ߞߎ߲߬ߠߌ߲ ߞߎ߬ߘߎ ߛߐ߲߬ߞߌ߲߫ ߖߊ߰ߣߌ߲߫. ߏ߬ ߘߌ߫ ߞߊ߲߫ ߡߊߢߌ߬ߣߌ߲߬ߞߊ߬ߣߍ߲ ߡߊߞߍ߫ ߌ ߞߎ߲߬ ߊ߬ ߖߍ߬ߘߍ߫ ߢߍ߫.</string>
+  <string name="navigation_history_cleared">ߛߏ߲߯ߓߊߟߌ ߘߐ߬ߝߐ ߓߘߊ߫ ߖߏ߰ߛߌ߬</string>
 </resources>

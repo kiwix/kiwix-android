@@ -74,7 +74,7 @@
   <string name="pref_language_chooser">Vyberte jazyk</string>
   <string name="pref_credits">Přispěvatelé a licence</string>
   <string name="pref_credits_title">O souboru</string>
-  <string name="tts_lang_not_supported">Jazyk této stránky není podporován nebo odpovídající jazyková data nejsou nainstalována. Článek nemusí být správně přečten.</string>
+  <string name="tts_lang_not_supported">Jazyk této stránky není podporován. Článek nemusí být správně přečten.</string>
   <string name="no_reader_application_installed">Pro tento typ souboru nebylo možné najít nainstalovanou aplikaci</string>
   <string name="no_section_info">Nebyly nalezeny žádné hlavičky obsahu.</string>
   <string name="request_storage">Pro přístup k obsahu offline potřebujeme přístup k vašemu úložišti.</string>
@@ -312,4 +312,5 @@
   <string name="open_article">Otevřít článek</string>
   <string name="delete_note_dialog_message">Poznámka: Poznámky se z vašeho úložiště neodstraní</string>
   <string name="delete_selected_notes">Smazat vybrané poznámky?</string>
+  <string name="go_to_settings_label">Přejít na nastavení</string>
 </resources>

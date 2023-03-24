@@ -64,7 +64,7 @@
   <string name="pref_language_chooser">Issèbera una limba</string>
   <string name="pref_credits">Contribuidores e Litzèntzias</string>
   <string name="pref_credits_title">Crèditos</string>
-  <string name="tts_lang_not_supported">Sa limba de custa pàgina no est suportada, o sos datos pro sa limba adeguada non sunt installados. S\'artìculu diat pòdere èssere letu in manera non adeguada.</string>
+  <string name="tts_lang_not_supported">Sa limba de custa pàgina no est suportada. S\'artìculu diat pòdere èssere letu in manera no adeguada.</string>
   <string name="no_reader_application_installed">Impossìbile agatare un\'aplicatzione installada pro custa casta de documentu</string>
   <string name="no_section_info">Peruna intestatzione de cuntenutu agatada</string>
   <string name="request_storage">Pro atzèdere a su documentu ZIM tenimus bisòngiu de pòdere atzèdere a sa memòria tua</string>
@@ -246,8 +246,8 @@
   <string name="nearby_devices">DISPOSITIVOS A CURTZU</string>
   <string name="no_devices_found">Perunu dispositivu agatadu. Toca su butone de chirca pro torrare a proare.</string>
   <string name="files_for_transfer">DOCUMENTOS DE TRAMUDARE</string>
-  <string name="preparing_files">Preparende sos documentos pro los tramudare…</string>
-  <string name="performing_handshake">Ammaniende su protocollu de ligàmene…</string>
+  <string name="preparing_files" fuzzy="true">Preparende sos documentos pro los tramudare…</string>
+  <string name="performing_handshake" fuzzy="true">Ammaniende su protocollu de ligàmene…</string>
   <string name="status">Istadu</string>
   <string name="pref_clear_all_notes_summary">Iscantzella totu sas notas in totu sos artìculos</string>
   <string name="pref_clear_all_notes_title">Iscantzella totu sas notas</string>
@@ -294,6 +294,7 @@
   <string name="select_folder">Pro praghere seletziona una cartella pro sa memòria esterna.</string>
   <string name="system_unable_to_grant_permission_message">Su sistema no est in gradu de frunire su permissu!</string>
   <string name="allow">Permite</string>
+  <string name="swipe_down_for_library">Iscurre cara a bassu pro sa biblioteca</string>
   <string name="no_notes">Peruna nota</string>
   <string name="notes_from_all_books">Pòmpia sas notas de totu sos libros</string>
   <string name="search_notes">Chirca notas</string>
@@ -302,4 +303,8 @@
   <string name="open_article">Aberi s\'artìculu</string>
   <string name="delete_note_dialog_message">Dae cara: sas notas non s\'iscantzellant dae sa memòria tua</string>
   <string name="delete_selected_notes">Iscantzellare sas notas seletzionadas?</string>
+  <string name="download_tts_language_title">Iscàrriga custa limba pro sa funtzionalidade de leghidura a boghe arta</string>
+  <string name="download_tts_language_message">Incarca su butone de iscarrigamentu. At a iscarrigare in automàticu sa limba netzessària.</string>
+  <string name="external_link_copied_message">Ligàmene esternu copiadu in punta de billete</string>
+  <string name="go_to_settings_label">Bae a sas impostatziones</string>
 </resources>

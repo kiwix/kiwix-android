@@ -71,8 +71,9 @@
   <string name="pref_language_chooser">בחירת שפה</string>
   <string name="pref_credits">תורמים ורשיונות</string>
   <string name="pref_credits_title">תודות</string>
-  <string name="tts_lang_not_supported">השפה של הדף הזה אינה נתמכת, או שלא הותקנו נתוני שפה מתאימים. ייתכן שהערך לא יהיה קריא.</string>
+  <string name="tts_lang_not_supported">השפה של הדף הזה אינה נתמכת. ייתכן שהערך לא יוקרא כמו שצריך.</string>
   <string name="no_reader_application_installed">לא נמצאה אפליקציה מותקנת עבור סוג הקובץ הזה</string>
+  <string name="no_email_application_installed">נא להתקין ספק שירות דוא״ל או לשלוח לנו הודעה אל %1s בדוא״ל</string>
   <string name="no_section_info">לא נמצאו כותרות תוכן</string>
   <string name="request_storage">כדי לגשת לתכנים לא־מקוונים אנחנו צריכים גישה לאחסון שלך</string>
   <string name="request_write_storage">כדי להוריד קובצי zim, אנחנו זקוקים להרשאת גישה לאחסון שלך.</string>
@@ -253,8 +254,8 @@
   <string name="nearby_devices">מכשירים בסביבה</string>
   <string name="no_devices_found">לא זוהו מכשירים. נא ללחוץ על כפתור החיפוש כדי לנסות שוב.</string>
   <string name="files_for_transfer">קבצים להעברה</string>
-  <string name="preparing_files">הכנת קבצים להעברה…</string>
-  <string name="performing_handshake">ביצוע לחיצת־יד…</string>
+  <string name="preparing_files">הכנת קבצים להעברה...</string>
+  <string name="performing_handshake">ביצוע לחיצת־יד...</string>
   <string name="status">מצב</string>
   <string name="pref_clear_all_notes_summary">ניקוי כל ההערות בכל הערכים</string>
   <string name="pref_clear_all_notes_title">ניקוי כל ההערות</string>
@@ -301,6 +302,7 @@
   <string name="select_folder">נא לבחור תיקייה לאחסון חיצוני.</string>
   <string name="system_unable_to_grant_permission_message">המערכת אינה יכולה לתת הרשאה!</string>
   <string name="allow">לאפשר</string>
+  <string name="swipe_down_for_library">יש להחליק למטה עבור ספרייה</string>
   <string name="no_notes">אין הערות</string>
   <string name="notes_from_all_books">הצגת הערות מכל הספרים</string>
   <string name="search_notes">חיפוש בהערות</string>
@@ -309,4 +311,15 @@
   <string name="open_article">פתיחת ערך</string>
   <string name="delete_note_dialog_message">הערה: הערות אינן נמחקות מהאחסון שלך</string>
   <string name="delete_selected_notes">למחוק את ההערות הנבחרות?</string>
+  <string name="download_tts_language_title">יש להוריד את השפה הזאת בשביל שימוש בתכונת ההקראה בקול</string>
+  <string name="download_tts_language_message">נא ללחוץ על כפתור ההורדה. זה יוריד אוטומטית את השפה הדרושה.</string>
+  <string name="external_link_copied_message">קישור חיצוני הועתק ללוח</string>
+  <string name="read_aloud_service_channel_name">ערוץ שירות של קריאה בקול</string>
+  <string name="read_aloud_channel_description">בקרת המרת טקסט לדיבור.</string>
+  <string name="read_aloud_running">הרצת קריאה בקול</string>
+  <string name="backward_history">אחורה בהיסטוריה</string>
+  <string name="forward_history">קדימה בהיסטוריה</string>
+  <string name="clear_all_navigation_history_message">מנקה את כל היסטוריית הניווט (אחורה, קדימה)</string>
+  <string name="navigation_history_cleared">היסטוריית הניווט נמחקה</string>
+  <string name="go_to_settings_label">לעבור להגדרות</string>
 </resources>

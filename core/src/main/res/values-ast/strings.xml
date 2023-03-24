@@ -59,7 +59,7 @@
   <string name="pref_language_chooser">Escueyi una llingua</string>
   <string name="pref_credits">Collaboradores y llicencies</string>
   <string name="pref_credits_title">Créditos</string>
-  <string name="tts_lang_not_supported">Nun s\'almite la llingua d\'esta páxina, o nun s\'instalaron los datos d\'idioma apropiaos. Seique l\'artículu nun pueda lleese correutamente.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Nun s\'almite la llingua d\'esta páxina, o nun s\'instalaron los datos d\'idioma apropiaos. Seique l\'artículu nun pueda lleese correutamente.</string>
   <string name="no_reader_application_installed">Nun s\'alcontró una aplicación instalada pa esti tipu de ficheru</string>
   <string name="no_section_info">Nun s\'atoparon cabeceres de conteníu</string>
   <string name="request_storage">P\'aportar a conteníu ensin conexón precisamos tener accesu al almacenamientu</string>
@@ -233,8 +233,8 @@
   <string name="nearby_devices">PRESEOS CERCANOS</string>
   <string name="no_devices_found">Nun se detectó nengún preséu. Toca nel botón de busca pa tentar nuevamente.</string>
   <string name="files_for_transfer">FICHEROS POR TRESFERIR</string>
-  <string name="preparing_files">Preparando los ficheros pa tresferir…</string>
-  <string name="performing_handshake">Realizando\'l protocolu d\'enllaz…</string>
+  <string name="preparing_files" fuzzy="true">Preparando los ficheros pa tresferir…</string>
+  <string name="performing_handshake" fuzzy="true">Realizando\'l protocolu d\'enllaz…</string>
   <string name="status">Estáu</string>
   <string name="pref_clear_all_notes_summary">Llimpia toles notes de tolos artículos</string>
   <string name="pref_clear_all_notes_title">Llimpiar toles notes</string>
@@ -254,4 +254,5 @@
   <string name="on">Activáu</string>
   <string name="off">Desactiváu</string>
   <string name="auto">Auto</string>
+  <string name="go_to_settings_label">Dir a configuración</string>
 </resources>

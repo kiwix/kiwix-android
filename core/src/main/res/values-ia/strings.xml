@@ -64,8 +64,9 @@
   <string name="pref_language_chooser">Selige un lingua</string>
   <string name="pref_credits">Contributores e licentias</string>
   <string name="pref_credits_title">Creditos</string>
-  <string name="tts_lang_not_supported">Le lingua de iste pagina non es supportate, o le datos linguistic correcte non ha essite installate. Pote esser que le pagina non appare correctemente.</string>
+  <string name="tts_lang_not_supported">Le lingua de iste pagina non es supportate. Pote esser que le pagina non appare correctemente.</string>
   <string name="no_reader_application_installed">Non poteva trovar un application installate pro iste typo de file</string>
+  <string name="no_email_application_installed">Per favor installa un fornitor de servicio e-mail o invia nos un message a %1s</string>
   <string name="no_section_info">Nulle capites de contento trovate</string>
   <string name="request_storage">Pro acceder a files ZIM, nos require accesso a tu immagazinage.</string>
   <string name="clear_recent_and_tabs_history_dialog">Es tu secur de voler deler tu historia de recerca e reinitialisar tote le schedas active?</string>
@@ -85,7 +86,7 @@
   <string name="delete_zim_body">Le sequente file(s) zim essera delite:\n\n%s</string>
   <string name="help_5">Ubi es le contento?</string>
   <string name="delete_zim_failed">Alcun files non ha potite esser delite. Tenta usar un gestor de files pro deler los.</string>
-  <string name="confirm_stop_download_title">Stoppar le discarga?</string>
+  <string name="confirm_stop_download_title">Stoppar le discargamento?</string>
   <string name="next">Sequente</string>
   <string name="previous">Precedente</string>
   <string name="time_today">Hodie</string>
@@ -93,10 +94,23 @@
   <string name="your_languages">Linguas eligite:</string>
   <string name="other_languages">Altere linguas:</string>
   <string name="no_items_msg">Nulle articulos disponibile</string>
-  <string name="crash_checkbox_language">Tu configurationes de lingua</string>
+  <string name="crash_checkbox_language">Tu parametros de lingua</string>
   <string name="crash_checkbox_zimfiles">Un lista de tu files Zim</string>
   <string name="new_tab_shortcut_label">Nove scheda</string>
+  <string name="preparing_files">Prepara files a transferer…</string>
+  <string name="performing_handshake">Negotia connexion…</string>
   <string name="on">Si</string>
   <string name="off">No</string>
   <string name="auto">Auto</string>
+  <string name="swipe_down_for_library">Glissa a basso pro le bibliotheca</string>
+  <string name="download_tts_language_title">Discargar iste lingua pro le functionalitate de lectura a alte voce</string>
+  <string name="download_tts_language_message">Per favor clicca sur le button Discargar pro discargar automaticamente le lingua necessari.</string>
+  <string name="external_link_copied_message">Ligamine externe copiate al area de transferentia</string>
+  <string name="read_aloud_service_channel_name">Canal de servicio de lectura in alte voce</string>
+  <string name="read_aloud_channel_description">Controlos de synthese vocal.</string>
+  <string name="read_aloud_running">Lectura in alte voce in curso</string>
+  <string name="backward_history">Historia a retro</string>
+  <string name="forward_history">Historia in avante</string>
+  <string name="clear_all_navigation_history_message">Rade tote le historia de navigation (a retro e in avante)</string>
+  <string name="navigation_history_cleared">Historia de navigation radite</string>
 </resources>

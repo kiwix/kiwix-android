@@ -67,7 +67,7 @@
   <string name="pref_language_chooser">Zimanekî hilbijêre</string>
   <string name="pref_credits">Kedkar û Lîsans</string>
   <string name="pref_credits_title">Kedyarên me</string>
-  <string name="tts_lang_not_supported">Zimanê vê rûpelê nayê piştgirîkirin, an jî daneya zimanê naehatiye sazkirin. Dibe ku ev gotar rast nê xwendin.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Zimanê vê rûpelê nayê piştgirîkirin, an jî daneya zimanê naehatiye sazkirin. Dibe ku ev gotar rast nê xwendin.</string>
   <string name="no_reader_application_installed">Ji bo cureya vê peldankê sepanekî sazkirî nehat dîtin</string>
   <string name="no_section_info">Sernavê Naverok Nehat Dîtin</string>
   <string name="request_storage">Ji bo ku em têkevin naveroka offline divê em têkevin depoya we</string>
@@ -249,8 +249,8 @@
   <string name="nearby_devices">CÎHAZÊN NÊZ</string>
   <string name="no_devices_found">Ti cîhazek nehate tesbîtkirin. Ji bo cardin biceribînî pêlî ser bûtona lêgerînê bike.</string>
   <string name="files_for_transfer">DOSYEYÊN JI BO TRANSFERKIRINÊ</string>
-  <string name="preparing_files">Dosyeyan hazir dike ji bo transferkirinê…</string>
-  <string name="performing_handshake">Destdanhev tê bicihanîn…</string>
+  <string name="preparing_files" fuzzy="true">Dosyeyan hazir dike ji bo transferkirinê…</string>
+  <string name="performing_handshake" fuzzy="true">Destdanhev tê bicihanîn…</string>
   <string name="status">Rewş</string>
   <string name="pref_clear_all_notes_summary">Hemû notan ji hemû gotaran bibe</string>
   <string name="pref_clear_all_notes_title">Temamiya notan paqij bike</string>

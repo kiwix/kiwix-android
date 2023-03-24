@@ -176,4 +176,5 @@
   <string name="open_article">گشودن مقاله</string>
   <string name="delete_note_dialog_message">نکته: یادداشت‌ها از مخزن شما حذف نشده‌اند</string>
   <string name="delete_selected_notes">حذف یادداشت‌های منتخب؟</string>
+  <string name="go_to_settings_label">برو به تنظیمات</string>
 </resources>

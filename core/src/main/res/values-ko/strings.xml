@@ -74,7 +74,7 @@
   <string name="pref_language_chooser">언어 선택</string>
   <string name="pref_credits">기여자 및 라이선스</string>
   <string name="pref_credits_title">제작진</string>
-  <string name="tts_lang_not_supported">이 문서의 언어가 지원되지 않거나 적절한 언어 데이터가 설치되지 않았습니다. 이 글을 올바르게 읽지 못할 수 있습니다.</string>
+  <string name="tts_lang_not_supported">이 문서의 언어는 지원되지 않습니다. 이 글을 올바르게 읽지 못할 수 있습니다.</string>
   <string name="no_reader_application_installed">이 파일 형식을 지원하는 응용 프로그램을 찾을 수 없습니다</string>
   <string name="no_section_info">콘텐츠 헤더를 찾을 수 없습니다</string>
   <string name="request_storage">오프라인 콘텐츠에 접근하려면 저장소 접근 권한이 필요합니다</string>
@@ -253,7 +253,7 @@
   <string name="nearby_devices">주변 장치</string>
   <string name="no_devices_found">발견된 장치가 없습니다. 다시 시도하려면 검색 버튼에 탭하십시오.</string>
   <string name="files_for_transfer">전송하려는 파일</string>
-  <string name="preparing_files">전송을 위해 파일을 준비중입니다.</string>
+  <string name="preparing_files">전송을 위해 파일을 준비 중입니다…</string>
   <string name="performing_handshake">핸드셰이크 수행 중…</string>
   <string name="status">상태</string>
   <string name="pref_clear_all_notes_summary">모든 문서의 모든 노트 지우기</string>
@@ -301,4 +301,6 @@
   <string name="select_folder">외부 저장을 위한 폴더를 선택해 주십시오.</string>
   <string name="system_unable_to_grant_permission_message">시스템이 권한을 부여할 수 없습니다!</string>
   <string name="allow">허용</string>
+  <string name="download_tts_language_message">다운로드 버튼을 클릭해 주십시오. 그러면 필요한 언어를 자동으로 다운로드하게 됩니다.</string>
+  <string name="go_to_settings_label">설정으로 이동</string>
 </resources>
