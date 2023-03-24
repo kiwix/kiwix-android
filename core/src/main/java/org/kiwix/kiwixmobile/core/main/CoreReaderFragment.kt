@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.Manifest
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Context
@@ -98,6 +99,8 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.downloader.fetch.DOWNLOAD_NOTIFICATION_TITLE
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.findFirstTextView
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -107,15 +110,16 @@ import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnSpeakingListener
 import org.kiwix.kiwixmobile.core.main.MainMenu.MenuClickListener
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener
+import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryClickListener
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudCallbacks
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_PAUSE_OR_RESUME_TTS
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_STOP_TTS
-import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate
@@ -123,6 +127,7 @@ import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
+import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -1094,23 +1099,43 @@ abstract class CoreReaderFragment :
     }
   }
 
+  @Suppress("NestedBlockDepth")
   override fun onReadAloudMenuClicked() {
-    ttsControls?.let { ttsControls ->
-      when (ttsControls.visibility) {
-        View.GONE -> {
-          if (isBackToTopEnabled) {
-            backToTopButton?.hide()
+    if (requireActivity().hasNotificationPermission()) {
+      ttsControls?.let { ttsControls ->
+        when (ttsControls.visibility) {
+          View.GONE -> {
+            if (isBackToTopEnabled) {
+              backToTopButton?.hide()
+            }
+            getCurrentWebView()?.let { tts?.readAloud(it) }
           }
-          getCurrentWebView()?.let { tts?.readAloud(it) }
-        }
-        View.VISIBLE -> {
-          if (isBackToTopEnabled) {
-            backToTopButton?.show()
+          View.VISIBLE -> {
+            if (isBackToTopEnabled) {
+              backToTopButton?.show()
+            }
+            tts?.stop()
           }
-          tts?.stop()
+          else -> {}
         }
-        else -> {}
       }
+    } else {
+      requestNotificationPermission()
+    }
+  }
+
+  private fun requestNotificationPermission() {
+    if (!ActivityCompat.shouldShowRequestPermissionRationale(
+        requireActivity(),
+        POST_NOTIFICATIONS
+      )
+    ) {
+      requireActivity().requestNotificationPermission()
+    } else {
+      alertDialogShower?.show(
+        KiwixDialog.NotificationPermissionDialog,
+        requireActivity()::navigateToAppSettings
+      )
     }
   }
 
@@ -1344,6 +1369,11 @@ abstract class CoreReaderFragment :
             requireActivity().applicationContext,
             getString(R.string.ext_storage_write_permission_denied_add_note), Toast.LENGTH_LONG
           ).show()
+        }
+      }
+      REQUEST_POST_NOTIFICATION_PERMISSION -> {
+        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          onReadAloudMenuClicked()
         }
       }
     }

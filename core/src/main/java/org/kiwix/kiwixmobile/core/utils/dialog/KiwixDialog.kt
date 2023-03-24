@@ -77,6 +77,13 @@ sealed class KiwixDialog(
     android.R.string.cancel
   )
 
+  object NotificationPermissionDialog : KiwixDialog(
+    null,
+    R.string.request_notification_permission_message,
+    android.R.string.yes,
+    android.R.string.cancel
+  )
+
   object EnableWifiP2pServices : KiwixDialog(
     null, R.string.request_enable_wifi, R.string.yes, android.R.string.no
   )

@@ -19,13 +19,13 @@
 package org.kiwix.kiwixmobile.nav.destination.library
 
 import android.Manifest
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.ConnectivityManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -55,7 +55,9 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.downloader.Downloader
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
@@ -63,10 +65,12 @@ import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerV
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
+import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_SELECT_FOLDER_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -398,6 +402,17 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
   }
 
+  private fun requestNotificationPermission() {
+    if (!shouldShowRationale(POST_NOTIFICATIONS)) {
+      requireActivity().requestNotificationPermission()
+    } else {
+      alertDialogShower.show(
+        KiwixDialog.NotificationPermissionDialog,
+        requireActivity()::navigateToAppSettings
+      )
+    }
+  }
+
   private fun checkExternalStorageWritePermission(): Boolean {
     if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
       return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -408,12 +423,17 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
             if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
               alertDialogShower.show(
                 KiwixDialog.WriteStoragePermissionRationale,
-                ::requestExternalStoragePermission
+                {
+                  requestPermission(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    REQUEST_STORAGE_PERMISSION
+                  )
+                }
               )
             } else {
               alertDialogShower.show(
                 KiwixDialog.WriteStoragePermissionRationale,
-                ::openAppSettings
+                requireActivity()::navigateToAppSettings
               )
             }
           }
@@ -423,24 +443,15 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     return true
   }
 
-  private fun openAppSettings() {
-    val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
-    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-      flags = Intent.FLAG_ACTIVITY_NEW_TASK
-      data = uri
-    }
-    startActivity(intent)
-  }
-
-  private fun requestExternalStoragePermission() {
+  private fun requestPermission(permission: String, requestCode: Int) {
     ActivityCompat.requestPermissions(
-      requireActivity(), arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-      REQUEST_STORAGE_PERMISSION
+      requireActivity(), arrayOf(permission),
+      requestCode
     )
   }
 
-  private fun shouldShowRationale(writeExternalStorage: String) =
-    ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), writeExternalStorage)
+  private fun shouldShowRationale(permission: String) =
+    ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), permission)
 
   override fun onRequestPermissionsResult(
     requestCode: Int,
@@ -456,45 +467,57 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove())
           checkExternalStorageWritePermission()
       }
+    } else if (requestCode == REQUEST_POST_NOTIFICATION_PERMISSION &&
+      permissions.isNotEmpty() &&
+      permissions[0] == POST_NOTIFICATIONS
+    ) {
+      if (grantResults[0] == PERMISSION_GRANTED) {
+        downloadBookItem?.let(::onBookItemClick)
+      }
     }
   }
 
   private fun hasPermission(permission: String): Boolean =
     ContextCompat.checkSelfPermission(requireActivity(), permission) == PERMISSION_GRANTED
 
+  @Suppress("NestedBlockDepth")
   private fun onBookItemClick(item: LibraryListItem.BookItem) {
     if (checkExternalStorageWritePermission()) {
       downloadBookItem = item
-      when {
-        isNotConnected -> {
-          noInternetSnackbar()
-          return
-        }
-        noWifiWithWifiOnlyPreferenceSet -> {
-          dialogShower.show(WifiOnly, {
-            sharedPreferenceUtil.putPrefWifiOnly(false)
-            clickOnBookItem()
-          })
-          return
-        }
-        else -> if (sharedPreferenceUtil.showStorageOption) {
-          showStorageConfigureDialog()
-        } else {
-          availableSpaceCalculator.hasAvailableSpaceFor(
-            item,
-            { downloadFile() },
-            {
-              fragmentDestinationDownloadBinding?.libraryList?.snack(
-                """ 
+      if (requireActivity().hasNotificationPermission()) {
+        when {
+          isNotConnected -> {
+            noInternetSnackbar()
+            return
+          }
+          noWifiWithWifiOnlyPreferenceSet -> {
+            dialogShower.show(WifiOnly, {
+              sharedPreferenceUtil.putPrefWifiOnly(false)
+              clickOnBookItem()
+            })
+            return
+          }
+          else -> if (sharedPreferenceUtil.showStorageOption) {
+            showStorageConfigureDialog()
+          } else {
+            availableSpaceCalculator.hasAvailableSpaceFor(
+              item,
+              { downloadFile() },
+              {
+                fragmentDestinationDownloadBinding?.libraryList?.snack(
+                  """ 
                 ${getString(R.string.download_no_space)}
                 ${getString(R.string.space_available)} $it
-                """.trimIndent(),
-                R.string.download_change_storage,
-                ::showStorageSelectDialog
-              )
-            }
-          )
+                  """.trimIndent(),
+                  R.string.download_change_storage,
+                  ::showStorageSelectDialog
+                )
+              }
+            )
+          }
         }
+      } else {
+        requestNotificationPermission()
       }
     }
   }

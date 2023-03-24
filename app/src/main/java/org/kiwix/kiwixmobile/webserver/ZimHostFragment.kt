@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.webserver
 
 import android.Manifest
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.ProgressDialog
 import android.content.ComponentName
 import android.content.Context
@@ -43,8 +44,12 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
+import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -143,12 +148,31 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ||
         checkNearbyWifiDevicesPermission()
       ) {
-        startStopServer()
+        if (requireActivity().hasNotificationPermission()) {
+          startStopServer()
+        } else {
+          requestNotificationPermission()
+        }
       } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P ||
         checkCoarseLocationAccessPermission()
       ) {
         startStopServer()
       }
+    }
+  }
+
+  private fun requestNotificationPermission() {
+    if (!ActivityCompat.shouldShowRequestPermissionRationale(
+        requireActivity(),
+        POST_NOTIFICATIONS
+      )
+    ) {
+      requireActivity().requestNotificationPermission()
+    } else {
+      alertDialogShower.show(
+        KiwixDialog.NotificationPermissionDialog,
+        requireActivity()::navigateToAppSettings
+      )
     }
   }
 
@@ -208,8 +232,10 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     grantResults: IntArray
   ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-      if (requestCode == PERMISSION_REQUEST_CODE_COARSE_LOCATION) {
+    if (permissions.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+      if (requestCode == PERMISSION_REQUEST_CODE_COARSE_LOCATION ||
+        requestCode == REQUEST_POST_NOTIFICATION_PERMISSION
+      ) {
         startStopServer()
       }
     }
