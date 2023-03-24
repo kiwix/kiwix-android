@@ -301,7 +301,7 @@ class LocalLibraryFragment : BaseFragment() {
       !sharedPreferenceUtil.prefIsTest && !permissionDeniedLayoutShowing
     ) {
       checkPermissions()
-    } else if (sharedPreferenceUtil.prefIsTest) {
+    } else {
       fragmentDestinationLibraryBinding?.zimfilelist?.visibility = VISIBLE
     }
   }
@@ -342,9 +342,11 @@ class LocalLibraryFragment : BaseFragment() {
 
         fileManagementNoFiles.visibility = View.VISIBLE
         goToDownloadsButtonNoFiles.visibility = View.VISIBLE
+        zimfilelist.visibility = View.GONE
       } else {
         fileManagementNoFiles.visibility = View.GONE
         goToDownloadsButtonNoFiles.visibility = View.GONE
+        zimfilelist.visibility = View.VISIBLE
       }
     }
   }
@@ -369,17 +371,17 @@ class LocalLibraryFragment : BaseFragment() {
           ),
           REQUEST_STORAGE_PERMISSION
         )
+      } else {
+        requestFileSystemCheck()
       }
     } else {
       if (sharedPreferenceUtil.isPlayStoreBuild) {
-        fragmentDestinationLibraryBinding?.zimfilelist?.visibility = VISIBLE
         requestFileSystemCheck()
       } else {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
           if (Environment.isExternalStorageManager()) {
             // We already have permission!!
             requestFileSystemCheck()
-            fragmentDestinationLibraryBinding?.zimfilelist?.visibility = VISIBLE
           } else {
             if (sharedPreferenceUtil.manageExternalFilesPermissionDialog) {
               // We should only ask for first time, If the users wants to revoke settings
@@ -396,7 +398,6 @@ class LocalLibraryFragment : BaseFragment() {
           }
         } else {
           requestFileSystemCheck()
-          fragmentDestinationLibraryBinding?.zimfilelist?.visibility = VISIBLE
         }
       }
     }
@@ -446,12 +447,7 @@ class LocalLibraryFragment : BaseFragment() {
           zimfilelist.visibility = GONE
         }
       } else if (!isPermissionDenied(grantResults)) {
-        fragmentDestinationLibraryBinding?.apply {
-          permissionDeniedLayoutShowing = false
-          fileManagementNoFiles.visibility = GONE
-          goToDownloadsButtonNoFiles.visibility = GONE
-          zimfilelist.visibility = VISIBLE
-        }
+        permissionDeniedLayoutShowing = false
       }
     }
   }

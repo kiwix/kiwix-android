@@ -241,7 +241,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_NIGHT_MODE = "pref_night_mode"
     private const val TEXT_ZOOM = "true_text_zoom"
     private const val DEFAULT_ZOOM = 100
-    private const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"
+    const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"
     const val IS_PLAY_STORE_BUILD = "is_play_store_build"
   }
 }
