@@ -65,6 +65,27 @@ internal class ExternalLinkOpenerTest {
   }
 
   @Test
+  internal fun alertDialogShowerOpensLinkIfGeoProtocolAdded() {
+    every { intent.resolveActivity(activity.packageManager) } returns mockk()
+    every { sharedPreferenceUtil.prefExternalLinkPopup } returns true
+    val uri = Uri.parse("geo:28.61388888888889,77.20833333333334")
+    every { intent.data } returns uri
+    val lambdaSlot = slot<() -> Unit>()
+    val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
+    externalLinkOpener.openExternalUrl(intent)
+    verify {
+      alertDialogShower.show(
+        KiwixDialog.ExternalLinkPopup,
+        capture(lambdaSlot),
+        any(),
+        any()
+      )
+    }
+    lambdaSlot.captured.invoke()
+    verify { activity.startActivity(intent) }
+  }
+
+  @Test
   internal fun alertDialogShowerDoesNoOpenLinkIfNegativeButtonIsClicked() {
     every { intent.resolveActivity(activity.packageManager) } returns mockk()
     every { sharedPreferenceUtil.prefExternalLinkPopup } returns true
