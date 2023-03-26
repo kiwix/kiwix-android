@@ -18,18 +18,18 @@
 package org.kiwix.kiwixmobile.core.utils.dialog
 
 import android.app.Dialog
-import java.net.URL
+import android.net.Uri
 
 interface DialogShower {
   fun show(
     dialog: KiwixDialog,
     vararg clickListeners: (() -> Unit),
-    url: URL? = null
+    uri: Uri? = null
   )
 
   fun create(
     dialog: KiwixDialog,
     vararg clickListeners: (() -> Unit),
-    url: URL? = null
+    uri: Uri? = null
   ): Dialog
 }
