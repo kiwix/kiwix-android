@@ -22,6 +22,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.net.Uri
 import android.text.Html
 import android.view.Gravity
 import android.view.ViewGroup.LayoutParams
@@ -32,7 +33,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.getAttribute
-import java.net.URL
 import javax.inject.Inject
 
 class AlertDialogShower @Inject constructor(private val activity: Activity) :
@@ -44,10 +44,10 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) :
     const val externalLinkBottomMargin = 0
   }
 
-  override fun show(dialog: KiwixDialog, vararg clickListeners: () -> Unit, url: URL?) =
-    create(dialog, *clickListeners, url = url).show()
+  override fun show(dialog: KiwixDialog, vararg clickListeners: () -> Unit, uri: Uri?) =
+    create(dialog, *clickListeners, uri = uri).show()
 
-  override fun create(dialog: KiwixDialog, vararg clickListeners: () -> Unit, url: URL?): Dialog {
+  override fun create(dialog: KiwixDialog, vararg clickListeners: () -> Unit, uri: Uri?): Dialog {
     return AlertDialog.Builder(activity)
       .apply {
         dialog.title?.let(this::setTitle)
@@ -70,7 +70,7 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) :
               ?.invoke()
           }
         }
-        url?.let {
+        uri?.let {
           val frameLayout = FrameLayout(activity.baseContext)
 
           val textView = TextView(activity.baseContext).apply {
@@ -80,7 +80,7 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) :
             setOnLongClickListener {
               val clipboard =
                 ContextCompat.getSystemService(activity.baseContext, ClipboardManager::class.java)
-              val clip = ClipData.newPlainText("External Url", "$url")
+              val clip = ClipData.newPlainText("External Url", "$uri")
               clipboard?.setPrimaryClip(clip)
               Toast.makeText(
                 activity.baseContext,
@@ -89,7 +89,7 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) :
               ).show()
               true
             }
-            text = Html.fromHtml("</br><a href=$url> <b>$url</b>")
+            text = Html.fromHtml("</br><a href=$uri> <b>$uri</b>")
           }
           frameLayout.addView(textView)
           setView(frameLayout)
