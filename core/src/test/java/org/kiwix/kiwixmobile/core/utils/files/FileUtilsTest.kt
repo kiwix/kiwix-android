@@ -16,41 +16,24 @@
  *
  */
 
-package org.kiwix.kiwixmobile.utils.files
+package org.kiwix.kiwixmobile.core.utils.files
 
-import androidx.core.content.edit
-import androidx.preference.PreferenceManager
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
 import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
-import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import java.io.File
 
-class FileUtilsTest : BaseActivityTest() {
+class FileUtilsTest {
 
   private val mockFile: File = mockk()
   private val testBook = Book().apply { file = mockFile }
   private val testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c"
   private val fileName = "/data/user/0/org.kiwix.kiwixmobile/files${File.separator}$testId"
-
-  @Before
-  override fun waitForIdle() {
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
-      putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
-    }
-  }
 
   @BeforeEach
   fun init() {
@@ -117,50 +100,4 @@ class FileUtilsTest : BaseActivityTest() {
     every { mockFile.path } returns "$fileName$extension"
     every { mockFile.exists() } returns fileExists
   }
-
-  @Test
-  fun testDecodeFileName() {
-    val dummyUrlArray = listOf(
-      DummyUrlData(
-        "https://kiwix.org/contributors/contributors_list.pdf",
-        "contributors_list.pdf"
-      ),
-      DummyUrlData(
-        "https://kiwix.org/contributors/",
-        null
-      ),
-      DummyUrlData(
-        "android_tutorials.pdf",
-        null
-      ),
-      DummyUrlData(
-        null,
-        null
-      ),
-      DummyUrlData(
-        "/html/images/test.png",
-        "test.png"
-      ),
-      DummyUrlData(
-        "/html/images/",
-        null
-      ),
-      DummyUrlData(
-        "https://kiwix.org/contributors/images/wikipedia.png",
-        "wikipedia.png"
-      ),
-      DummyUrlData(
-        "https://kiwix.org/contributors/images/wikipedia",
-        null
-      )
-    )
-    dummyUrlArray.forEach {
-      assertEquals(
-        FileUtils.getDecodedFileName(it.url),
-        it.expectedFileName
-      )
-    }
-  }
-
-  data class DummyUrlData(val url: String?, val expectedFileName: String?)
 }
