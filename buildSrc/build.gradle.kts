@@ -11,9 +11,9 @@ repositories {
 }
 
 dependencies {
-  implementation("com.android.tools.build:gradle:7.3.1")
+  implementation("com.android.tools.build:gradle:7.4.2")
   implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.0")
-  implementation("com.dicedmelon.gradle:jacoco-android:0.1.5")
+  implementation("org.jacoco:org.jacoco.core:0.8.8")
   implementation("org.jlleitschuh.gradle:ktlint-gradle:10.3.0")
   implementation("com.google.apis:google-api-services-androidpublisher:v3-rev129-1.25.0")
   implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.20.0")

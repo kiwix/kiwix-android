@@ -79,7 +79,7 @@ jobs:
 
       - name: create unit coverage
         if: ${{ matrix.api-level==21 }}
-        run: ./gradlew jacocoTestDebugUnitTestReport jacocoTestCustomExampleDebugUnitTestReport
+        run: ./gradlew testDebugUnitTest testCustomexampleDebugUnitTest
 
       - name: Upload coverage to Codecov
         if: ${{ matrix.api-level==21 }}
