@@ -21,8 +21,6 @@ package org.kiwix.kiwixmobile.core.utils
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import android.os.Build
-import android.util.Log
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -31,8 +29,6 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
-import java.lang.reflect.Field
-import java.lang.reflect.Modifier
 import java.util.regex.Pattern
 
 class NetworkUtilsTest {
@@ -79,11 +75,7 @@ class NetworkUtilsTest {
     every { (connectivity.activeNetworkInfo) } returns networkInfo
 
     // SDK >= 23
-    try {
-      setSDKVersion(Build.VERSION::class.java.getField("SDK_INT"), 23)
-    } catch (e: Exception) {
-      Log.d("NetworkUtilsTest", "Unable to set Build SDK Version")
-    }
+    NetworkUtils.sdkVersionForTesting = 23
 
     // on Mobile Data
     every { (networkInfo.type) } returns ConnectivityManager.TYPE_MOBILE
@@ -110,11 +102,7 @@ class NetworkUtilsTest {
     verify(exactly = 0) { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) }
 
     // SDK < 23
-    try {
-      setSDKVersion(Build.VERSION::class.java.getField("SDK_INT"), 22)
-    } catch (e: Exception) {
-      Log.d("NetworkUtilsTest", "Unable to set Build SDK Version")
-    }
+    NetworkUtils.sdkVersionForTesting = 22
 
     // WIFI connected
     every { (connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI)) } returns networkInfo
@@ -235,18 +223,5 @@ class NetworkUtilsTest {
         "http://mirror3.kiwix.org/zim/wikipedia/wikipedia_af_all_simple_2016-05.zim"
       )
     )
-  }
-
-  // Sets the Build SDK version
-  @Throws(Exception::class)
-  private fun setSDKVersion(
-    field: Field,
-    newValue: Any
-  ) {
-    field.isAccessible = true
-    val modifiersField = Field::class.java.getDeclaredField("modifiers")
-    modifiersField.isAccessible = true
-    modifiersField.setInt(field, field.modifiers and Modifier.FINAL.inv())
-    field.set(null, newValue)
   }
 }

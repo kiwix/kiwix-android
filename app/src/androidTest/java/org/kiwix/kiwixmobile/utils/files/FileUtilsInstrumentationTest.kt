@@ -23,9 +23,11 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.Assertions
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getAllZimParts
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.hasPart
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import java.io.File
 import java.io.IOException
 import java.util.Random
@@ -199,4 +201,50 @@ class FileUtilsInstrumentationTest {
       it.delete()
     }
   }
+
+  @Test
+  fun testDecodeFileName() {
+    val dummyUrlArray = listOf(
+      DummyUrlData(
+        "https://kiwix.org/contributors/contributors_list.pdf",
+        "contributors_list.pdf"
+      ),
+      DummyUrlData(
+        "https://kiwix.org/contributors/",
+        null
+      ),
+      DummyUrlData(
+        "android_tutorials.pdf",
+        null
+      ),
+      DummyUrlData(
+        null,
+        null
+      ),
+      DummyUrlData(
+        "/html/images/test.png",
+        "test.png"
+      ),
+      DummyUrlData(
+        "/html/images/",
+        null
+      ),
+      DummyUrlData(
+        "https://kiwix.org/contributors/images/wikipedia.png",
+        "wikipedia.png"
+      ),
+      DummyUrlData(
+        "https://kiwix.org/contributors/images/wikipedia",
+        null
+      )
+    )
+    dummyUrlArray.forEach {
+      Assertions.assertEquals(
+        FileUtils.getDecodedFileName(it.url),
+        it.expectedFileName
+      )
+    }
+  }
+
+  data class DummyUrlData(val url: String?, val expectedFileName: String?)
 }
