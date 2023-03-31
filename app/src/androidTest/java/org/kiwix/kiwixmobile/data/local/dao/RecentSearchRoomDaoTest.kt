@@ -48,8 +48,8 @@ class RecentSearchRoomDaoTest {
     recentSearchRoomDao = db.recentSearchRoomDao()
     val searchTerm = "title"
     val searchTerm2 = "title2"
-    val zimId = "zimId"
-    val zimId2 = "zimId2"
+    val zimId = "6862771806221961183L"
+    val zimId2 = "4312769031500860715L"
     recentSearchRoomDao.saveSearch(searchTerm, zimId)
     recentSearchRoomDao.saveSearch(searchTerm2, zimId2)
     recentSearchRoomDao.fullSearch().collect {
@@ -68,8 +68,8 @@ class RecentSearchRoomDaoTest {
     val searchTerm = "title"
     val searchTerm2 = "title2"
     val searchTerm3 = "title3"
-    val zimId = "zimId"
-    val zimId2 = "zimId2"
+    val zimId = "6862771806221961183L"
+    val zimId2 = "4312769031500860715L"
     recentSearchRoomDao.saveSearch(searchTerm, zimId)
     recentSearchRoomDao.saveSearch(searchTerm2, zimId2)
     Assertions.assertEquals(1, recentSearchRoomDao.search(zimId).count())
@@ -90,8 +90,8 @@ class RecentSearchRoomDaoTest {
     val searchTerm = "title"
     val searchTerm2 = "title2"
     val searchTerm3 = "title3"
-    val zimId = "zimId"
-    val zimId2 = "zimId2"
+    val zimId = "6862771806221961183L"
+    val zimId2 = "4312769031500860715L"
     recentSearchRoomDao.saveSearch(searchTerm, zimId)
     recentSearchRoomDao.saveSearch(searchTerm2, zimId2)
     recentSearchRoomDao.saveSearch(searchTerm3, zimId)
@@ -109,8 +109,8 @@ class RecentSearchRoomDaoTest {
     val searchTerm = "title"
     val searchTerm2 = "title2"
     val searchTerm3 = "title3"
-    val zimId = "zimId"
-    val zimId2 = "zimId2"
+    val zimId = "6862771806221961183L"
+    val zimId2 = "4312769031500860715L"
     recentSearchRoomDao.saveSearch(searchTerm, zimId)
     recentSearchRoomDao.saveSearch(searchTerm2, zimId2)
     recentSearchRoomDao.saveSearch(searchTerm3, zimId)
@@ -130,8 +130,8 @@ class RecentSearchRoomDaoTest {
     val searchTerm = "title"
     val searchTerm2 = "title2"
     val searchTerm3 = "title3"
-    val zimId = "zimId"
-    val zimId2 = "zimId2"
+    val zimId = "6862771806221961183L"
+    val zimId2 = "4312769031500860715L"
     recentSearchRoomDao.saveSearch(searchTerm, zimId)
     recentSearchRoomDao.saveSearch(searchTerm2, zimId2)
     recentSearchRoomDao.saveSearch(searchTerm3, zimId)
@@ -153,8 +153,8 @@ class RecentSearchRoomDaoTest {
     val searchTerm = "title"
     val searchTerm2 = "title2"
     val searchTerm3 = "title3"
-    val zimId = "zimId"
-    val zimId2 = "zimId2"
+    val zimId = "6862771806221961183L"
+    val zimId2 = "4312769031500860715L"
     recentSearchRoomDao.saveSearch(searchTerm, zimId)
     recentSearchRoomDao.saveSearch(searchTerm2, zimId2)
     recentSearchRoomDao.saveSearch(searchTerm3, zimId)
