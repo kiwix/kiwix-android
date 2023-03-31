@@ -61,6 +61,26 @@ class KiwixRoomDatabaseTest {
 
   @Test
   @Throws(IOException::class)
+  fun testIfTheZimIdIsCorrect() = runBlocking {
+    val context = ApplicationProvider.getApplicationContext<Context>()
+    db = Room.inMemoryDatabaseBuilder(
+      context, KiwixRoomDatabase::class.java
+    ).build()
+    recentSearchRoomDao = db.recentSearchRoomDao()
+    val searchTerm = "title"
+    val zimId = "8812214350305159407L"
+    box.put(RecentSearchEntity(searchTerm = searchTerm, zimId = zimId))
+    recentSearchRoomDao.migrationToRoomInsert(box)
+    recentSearchRoomDao.search("zimId").collect { recentSearchEntites ->
+      val entity = recentSearchEntites.find { it.zimId == zimId }
+      if (entity != null) {
+        Assertions.assertEquals(zimId, entity.zimId)
+      }
+    }
+  }
+
+  @Test
+  @Throws(IOException::class)
   fun testMigrationTest2() = runBlocking {
     val context = ApplicationProvider.getApplicationContext<Context>()
     db = Room.inMemoryDatabaseBuilder(
