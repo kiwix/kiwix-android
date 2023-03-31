@@ -79,7 +79,7 @@ android {
     }
     create("nightly") {
       initWith(getByName("debug"))
-      setMatchingFallbacks("debug")
+      matchingFallbacks += "debug"
     }
     create("fdroid") {
       initWith(getByName("baseRelease"))
