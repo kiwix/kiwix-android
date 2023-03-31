@@ -48,7 +48,7 @@ class KiwixRoomDatabaseTest {
     ).build()
     recentSearchRoomDao = db.recentSearchRoomDao()
     val searchTerm = "title"
-    val zimId = "zimId"
+    val zimId = "8812214350305159407L"
     box.put(RecentSearchEntity(searchTerm = searchTerm, zimId = zimId))
     recentSearchRoomDao.migrationToRoomInsert(box)
     recentSearchRoomDao.search("zimId").collect { recentSearchEntites ->
@@ -68,7 +68,7 @@ class KiwixRoomDatabaseTest {
     ).build()
     recentSearchRoomDao = db.recentSearchRoomDao()
     val searchTerm = "title"
-    val zimId = "zimId"
+    val zimId = "8812214350305159407L"
     val searchTerm2 = "title2"
     val searchTerm3 = "title3"
     box.put(RecentSearchEntity(searchTerm = searchTerm, zimId = zimId))
@@ -89,10 +89,10 @@ class KiwixRoomDatabaseTest {
     ).build()
     recentSearchRoomDao = db.recentSearchRoomDao()
     val searchTerm = "title"
-    val zimId = "zimId"
+    val zimId = "8812214350305159407L"
     val searchTerm2 = "title2"
-    val zimId2 = "zimId2"
-    val zimId3 = "zimId3"
+    val zimId2 = "4312769031500860715L"
+    val zimId3 = "6862771806221961183L"
     val searchTerm3 = "title3"
     box.put(RecentSearchEntity(searchTerm = searchTerm, zimId = zimId))
     box.put(RecentSearchEntity(searchTerm = searchTerm2, zimId = zimId2))
