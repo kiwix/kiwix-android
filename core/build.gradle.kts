@@ -16,7 +16,6 @@ plugins {
   `android-library`
 }
 plugins.apply(KiwixConfigurationPlugin::class)
-apply(plugin = "io.objectbox")
 apply(plugin = "com.jakewharton.butterknife")
 ext {
   set("versionMajor", 3)
