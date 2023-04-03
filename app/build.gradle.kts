@@ -111,22 +111,6 @@ play {
 
 dependencies {
   androidTestImplementation(Libs.leakcanary_android_instrumentation)
-
-  "fdroidImplementation"(
-    Libs.objectbox_kotlin,
-  ) {
-    exclude("io.objectbox")
-  }
-  "fdroidImplementation"(
-    Libs.objectbox_rxjava,
-  ) {
-    exclude("io.objectbox")
-  }
-  "fdroidImplementation"(
-    Libs.objectbox_gradle_plugin
-  ) {
-    exclude("io.objectbox")
-  }
 }
 task("generateVersionCodeAndName") {
   val file = File("VERSION_INFO")
