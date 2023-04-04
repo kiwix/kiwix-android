@@ -67,6 +67,8 @@ android {
         implementation(Libs.objectbox_rxjava)
       }
     }
+    create("fdroid") {
+    }
   }
 }
 
