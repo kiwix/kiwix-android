@@ -51,7 +51,7 @@ class KiwixRoomDatabaseTest {
     val zimId = "8812214350305159407L"
     box.put(RecentSearchEntity(searchTerm = searchTerm, zimId = zimId))
     recentSearchRoomDao.migrationToRoomInsert(box)
-    recentSearchRoomDao.search("zimId").collect { recentSearchEntites ->
+    recentSearchRoomDao.search(zimId).collect { recentSearchEntites ->
       val entity = recentSearchEntites.find { it.zimId == zimId }
       if (entity != null) {
         Assertions.assertEquals(searchTerm, entity.searchTerm)
@@ -71,7 +71,7 @@ class KiwixRoomDatabaseTest {
     val zimId = "8812214350305159407L"
     box.put(RecentSearchEntity(searchTerm = searchTerm, zimId = zimId))
     recentSearchRoomDao.migrationToRoomInsert(box)
-    recentSearchRoomDao.search("zimId").collect { recentSearchEntites ->
+    recentSearchRoomDao.search(zimId).collect { recentSearchEntites ->
       val entity = recentSearchEntites.find { it.zimId == zimId }
       if (entity != null) {
         Assertions.assertEquals(zimId, entity.zimId)
@@ -95,7 +95,7 @@ class KiwixRoomDatabaseTest {
     box.put(RecentSearchEntity(searchTerm = searchTerm2, zimId = zimId))
     box.put(RecentSearchEntity(searchTerm = searchTerm3, zimId = zimId))
     recentSearchRoomDao.migrationToRoomInsert(box)
-    recentSearchRoomDao.search("zimId").collect { recentSearchEntites ->
+    recentSearchRoomDao.search(zimId).collect { recentSearchEntites ->
       Assertions.assertEquals(3, recentSearchEntites.size)
     }
   }
