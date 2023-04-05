@@ -9,7 +9,7 @@ jobs:
 
   code_formatting_job:
     name: Code Formatting
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     continue-on-error: true
 
     steps:
@@ -47,7 +47,7 @@ jobs:
 
   detekt:
     name: Detekt
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     continue-on-error: true
 
     steps:
@@ -123,7 +123,7 @@ jobs:
 
   assemble_job:
     name: Assemble
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     continue-on-error: true
 
     steps:
