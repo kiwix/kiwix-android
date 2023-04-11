@@ -19,16 +19,24 @@
 package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
+import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 
 data class SaveSearchToRecents(
-  private val recentSearchDao: NewRecentSearchDao,
+  private val recentSearchRoomDao: RecentSearchRoomDao,
   private val searchListItem: SearchListItem,
-  private val id: String?
+  private val zimId: String?,
+  private val viewModelScope: CoroutineScope
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    id?.let { recentSearchDao.saveSearch(searchListItem.value, it) }
+    zimId?.let {
+      viewModelScope.launch(Dispatchers.IO) {
+        recentSearchRoomDao.saveSearch(searchListItem.value, it)
+      }
+    }
   }
 }

@@ -70,7 +70,7 @@ android {
       applicationIdSuffix = ".fdroid"
       versionNameSuffix = "-fdroid"
     }
-    create("playStore") {// Configuration for googlePlayStore flavor
+    create("playStore") { // Configuration for googlePlayStore flavor
       dimension = "default"
       manifestPlaceholders += mapOf()
       buildConfigField("boolean", "KIWIX_ERROR_ACTIVITY", "true")
