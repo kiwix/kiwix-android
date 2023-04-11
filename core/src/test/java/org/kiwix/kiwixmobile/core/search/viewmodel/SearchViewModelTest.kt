@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
 import android.os.Bundle
+import androidx.lifecycle.viewModelScope
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.every
@@ -46,7 +47,7 @@ import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
+import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
@@ -77,7 +78,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class SearchViewModelTest {
-  private val recentSearchDao: NewRecentSearchDao = mockk()
+  private val recentSearchRoomDao: RecentSearchRoomDao = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val searchResultGenerator: SearchResultGenerator = mockk()
   private val zimFileReader: ZimFileReader = mockk()
@@ -103,8 +104,8 @@ internal class SearchViewModelTest {
       searchResultGenerator.generateSearchResults("", zimFileReader)
     } returns emptyList()
     every { zimReaderContainer.id } returns "id"
-    every { recentSearchDao.recentSearches("id") } returns recentsFromDb.consumeAsFlow()
-    viewModel = SearchViewModel(recentSearchDao, zimReaderContainer, searchResultGenerator)
+    every { recentSearchRoomDao.recentSearches("id") } returns recentsFromDb.consumeAsFlow()
+    viewModel = SearchViewModel(recentSearchRoomDao, zimReaderContainer, searchResultGenerator)
   }
 
   @Nested
@@ -155,7 +156,10 @@ internal class SearchViewModelTest {
       val searchListItem = RecentSearchListItem("")
       actionResultsInEffects(
         OnItemClick(searchListItem),
-        SaveSearchToRecents(recentSearchDao, searchListItem, "id"),
+        SaveSearchToRecents(
+          recentSearchRoomDao, searchListItem, "id",
+          viewModel.viewModelScope
+        ),
         OpenSearchItem(searchListItem, false)
       )
     }
@@ -165,7 +169,10 @@ internal class SearchViewModelTest {
       val searchListItem = RecentSearchListItem("")
       actionResultsInEffects(
         OnOpenInNewTabClick(searchListItem),
-        SaveSearchToRecents(recentSearchDao, searchListItem, "id"),
+        SaveSearchToRecents(
+          recentSearchRoomDao, searchListItem, "id",
+          viewModel.viewModelScope
+        ),
         OpenSearchItem(searchListItem, true)
       )
     }
@@ -189,7 +196,7 @@ internal class SearchViewModelTest {
       val searchListItem = RecentSearchListItem("")
       actionResultsInEffects(
         ConfirmedDelete(searchListItem),
-        DeleteRecentSearch(searchListItem, recentSearchDao),
+        DeleteRecentSearch(searchListItem, recentSearchRoomDao, viewModel.viewModelScope),
         ShowToast(R.string.delete_specific_search_toast)
       )
     }
