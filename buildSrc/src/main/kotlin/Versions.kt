@@ -101,6 +101,7 @@ object Versions {
   const val webkit: String = "1.3.0"
 
   const val junit: String = "1.1.4"
+  const val roomVersion = "2.3.0"
 }
 
 /**
