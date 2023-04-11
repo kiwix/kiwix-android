@@ -1,4 +1,5 @@
 import plugin.KiwixConfigurationPlugin
+import plugin.fdroidImplementation
 
 plugins {
   android
@@ -57,23 +58,29 @@ android {
       buildConfigField("boolean", "IS_PLAYSTORE", "false")
     }
 
-    getByName("release") {
+    create("nightly") {
+      initWith(getByName("debug"))
+      setMatchingFallbacks("debug")
+    }
+  }
+  productFlavors {
+    flavorDimensions("default")
+    create("fdroid") { // Configuration for F-Droid flavor
+      dimension = "default"
+      applicationIdSuffix = ".fdroid"
+      versionNameSuffix = "-fdroid"
+    }
+    create("playStore") {// Configuration for googlePlayStore flavor
+      dimension = "default"
+      manifestPlaceholders += mapOf()
       buildConfigField("boolean", "KIWIX_ERROR_ACTIVITY", "true")
       buildConfigField("boolean", "IS_PLAYSTORE", "false")
       if (properties.containsKey("disableSigning")) {
         signingConfig = null
       }
-    }
-    create("playStore") {
-      manifestPlaceholders += mapOf()
-      initWith(getByName("release"))
       matchingFallbacks += "release"
       buildConfigField("boolean", "IS_PLAYSTORE", "true")
       manifestPlaceholders["permission"] = "android.permission.placeholder"
-    }
-    create("nightly") {
-      initWith(getByName("debug"))
-      matchingFallbacks += "debug"
     }
   }
   bundle {
@@ -100,6 +107,17 @@ play {
 
 dependencies {
   androidTestImplementation(Libs.leakcanary_android_instrumentation)
+
+  fdroidImplementation(Libs.objectbox_kotlin) {
+    // Exclude specific packages or classes from ObjectBox library
+    exclude(group = "io.objectbox", module = "objectbox-kotlin")
+  }
+  fdroidImplementation(Libs.objectbox_rxjava) {
+    exclude(group = "io.objectbox", module = "objectbox-rxjava")
+  }
+  fdroidImplementation(Libs.objectbox_gradle_plugin) {
+    exclude(group = "io.objectbox", module = "objectbox-gradle-plugin")
+  }
 }
 task("generateVersionCodeAndName") {
   val file = File("VERSION_INFO")
