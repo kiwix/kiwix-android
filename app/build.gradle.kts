@@ -92,7 +92,7 @@ android {
 
 play {
   enabled.set(true)
-  serviceAccountCredentials.set(file("../google.json"))
+  serviceAccountCredentials.set(file("../playstore.json"))
   track.set("alpha")
   releaseStatus.set(com.github.triplet.gradle.androidpublisher.ReleaseStatus.DRAFT)
   resolutionStrategy.set(com.github.triplet.gradle.androidpublisher.ResolutionStrategy.FAIL)

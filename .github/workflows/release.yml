@@ -26,10 +26,10 @@ jobs:
       - name: Decrypt files
         env:
           keystore: ${{ secrets.keystore }}
-          google_json: ${{ secrets.google_json }}
+          playstore_json: ${{ secrets.PLAYSTORE_JSON }}
           ssh_key: ${{ secrets.ssh_key }}
         run: |
-          echo "$google_json" | base64 -d > google.json
+          echo "$playstore_json" > playstore.json
           echo "$keystore" | base64 -d > kiwix-android.keystore
           echo "$ssh_key" | base64 -d > ssh_key
           chmod 600 ssh_key
