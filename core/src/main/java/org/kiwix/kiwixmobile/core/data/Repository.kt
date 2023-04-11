@@ -27,7 +27,7 @@ import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.dao.NewNoteDao
-import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
+import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
 import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
@@ -57,7 +57,7 @@ class Repository @Inject internal constructor(
   private val historyDao: HistoryDao,
   private val notesDao: NewNoteDao,
   private val languageDao: NewLanguagesDao,
-  private val recentSearchDao: NewRecentSearchDao,
+  private val recentSearchRoomDao: RecentSearchRoomDao,
   private val zimReaderContainer: ZimReaderContainer
 ) : DataSource {
 
@@ -101,8 +101,8 @@ class Repository @Inject internal constructor(
 
   override fun clearHistory() = Completable.fromAction {
     historyDao.deleteAllHistory()
-    recentSearchDao.deleteSearchHistory()
-  }
+    recentSearchRoomDao.deleteSearchHistory()
+  }.subscribeOn(io)
 
   override fun getBookmarks() =
     libkiwixBookmarks.bookmarks() as Flowable<List<LibkiwixBookmarkItem>>
