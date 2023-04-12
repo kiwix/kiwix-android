@@ -141,7 +141,9 @@ class ZimFileReader constructor(
     }
 
   private fun toRedirect(url: String) =
-    "$CONTENT_PREFIX${jniKiwixReader.checkUrl(url.toUri().filePath)}".toUri()
+    "$CONTENT_PREFIX${
+    jniKiwixReader.checkUrl(url.toUri().filePath).replaceWithEncodedString
+    }".toUri()
 
   private fun loadContent(uri: String) =
     try {
@@ -273,6 +275,11 @@ private val String.filePath: String
 // Truncate mime-type (everything after the first space and semi-colon(if exists)
 val String.truncateMimeType: String
   get() = replace("^([^ ]+).*$", "$1").substringBefore(";")
+
+// Encode question mark with %3F after getting url from checkUrl() method
+// for issue https://github.com/kiwix/kiwix-android/issues/2671
+val String.replaceWithEncodedString: String
+  get() = replace("?", "%3F")
 
 private val DirectAccessInfo.parcelFileDescriptor: ParcelFileDescriptor?
   get() = ParcelFileDescriptor.open(File(filename), ParcelFileDescriptor.MODE_READ_ONLY)
