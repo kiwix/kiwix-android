@@ -311,7 +311,7 @@ abstract class CoreReaderFragment :
   private var file: File? = null
   private var actionMode: ActionMode? = null
   private var tempWebViewForUndo: KiwixWebView? = null
-  private var tempWebViewListForUndo: MutableList<KiwixWebView>? = null
+  private var tempWebViewListForUndo: MutableList<KiwixWebView> = ArrayList()
   private var tempZimFileForUndo: File? = null
   private var isFirstRun = false
   private var tableDrawerAdapter: TableDrawerAdapter? = null
@@ -935,6 +935,7 @@ abstract class CoreReaderFragment :
     tableDrawerAdapter = null
     unbinder?.unbind()
     webViewList.clear()
+    tempWebViewListForUndo.clear()
     // create a base Activity class that class this.
     deleteCachedFiles(requireActivity())
     tts?.apply {
@@ -1384,7 +1385,10 @@ abstract class CoreReaderFragment :
   fun closeAllTabs() {
     closeAllTabsButton?.rotate()
     tempZimFileForUndo = zimReaderContainer?.zimFile
-    tempWebViewListForUndo = webViewList.toMutableList()
+    tempWebViewListForUndo.apply {
+      clear()
+      addAll(webViewList)
+    }
     webViewList.clear()
     tabsAdapter?.notifyDataSetChanged()
     openHomeScreen()
@@ -1400,18 +1404,18 @@ abstract class CoreReaderFragment :
   }
 
   private fun restoreDeletedTabs() {
-    tempWebViewListForUndo?.let {
+    if (tempWebViewListForUndo.isNotEmpty()) {
       zimReaderContainer?.setZimFile(tempZimFileForUndo)
-      webViewList.addAll(it)
+      webViewList.addAll(tempWebViewListForUndo)
       tabsAdapter?.notifyDataSetChanged()
       snackBarRoot?.let { root ->
         Snackbar.make(root, R.string.tabs_restored, Snackbar.LENGTH_SHORT).show()
       }
       reopenBook()
       showTabSwitcher()
-      setUpWithTextToSpeech(it.last())
+      setUpWithTextToSpeech(tempWebViewListForUndo.last())
       updateBottomToolbarVisibility()
-      contentFrame?.addView(it.last())
+      contentFrame?.addView(tempWebViewListForUndo.last())
     }
   }
 
