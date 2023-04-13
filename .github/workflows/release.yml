@@ -23,21 +23,19 @@ jobs:
           java-version: 11
           distribution: temurin
 
-      - name: Decrypt files
+      - name: Retrieve secrets to files
         env:
-          keystore: ${{ secrets.keystore }}
-          google_json: ${{ secrets.google_json }}
-          ssh_key: ${{ secrets.ssh_key }}
+          KEYSTORE: ${{ secrets.keystore }}
+          SSH_KEY: ${{ secrets.ssh_key }}
         run: |
-          echo "$google_json" | base64 -d > google.json
-          echo "$keystore" | base64 -d > kiwix-android.keystore
-          echo "$ssh_key" | base64 -d > ssh_key
+          echo "$KEYSTORE" | base64 -d > kiwix-android.keystore
+          echo "$SSH_KEY" | base64 -d > ssh_key
           chmod 600 ssh_key
 
       - name: Set tag variable
         run: echo "TAG=$(echo ${GITHUB_REF:10})" >> $GITHUB_ENV
 
-      - name: Publish app to download.kiwix.org
+      - name: Publish APK to download.kiwix.org
         env:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
@@ -48,12 +46,13 @@ jobs:
           cp $UNIVERSAL_RELEASE_APK kiwix-${TAG}.apk
           scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no kiwix-${TAG}.apk ci@master.download.kiwix.org:/data/download/release/kiwix-android/
 
-      - name: Publish  versionInfo to download.kiwix.org
+      # This is necessary for F-Droid
+      - name: Publish "versionInfo" to download.kiwix.org
         run: |
           ./gradlew generateVersionCodeAndName
           scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no VERSION_INFO ci@master.download.kiwix.org:/data/download/release/kiwix-android/
 
-      - name: Publish to github releases
+      - name: Publish to GitHub
         uses: ncipollo/release-action@v1
         with:
           artifacts: "app/build/outputs/apk/release/**"
@@ -61,10 +60,12 @@ jobs:
           draft: true
           prerelease: true
 
-
-      - name: Publish app to play store
+      - name: Publish bundle to Google Play
         env:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
-        run: ./gradlew publishPlayStoreBundle --scan
+          PLAYSTORE_JSON: ${{ secrets.PLAYSTORE_JSON }}
+        run: |
+          echo "$PLAYSTORE_JSON" > playstore.json
+          ./gradlew publishPlayStoreBundle --scan
