@@ -42,3 +42,10 @@
 -keepclassmembers class * {
     @org.simpleframework.xml.* *;
 }
+
+## keep everything in MetaLinkNetworkEntity.kt
+
+-keepnames class org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity$*
+-keepclassmembers class org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity$* {
+    <init>(...);
+}
