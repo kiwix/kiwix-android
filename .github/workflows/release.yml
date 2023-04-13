@@ -25,13 +25,11 @@ jobs:
 
       - name: Retrieve secrets to files
         env:
-          keystore: ${{ secrets.keystore }}
-          playstore_json: ${{ secrets.PLAYSTORE_JSON }}
-          ssh_key: ${{ secrets.ssh_key }}
+          KEYSTORE: ${{ secrets.keystore }}
+          SSH_KEY: ${{ secrets.ssh_key }}
         run: |
-          echo "$playstore_json" > playstore.json
-          echo "$keystore" | base64 -d > kiwix-android.keystore
-          echo "$ssh_key" | base64 -d > ssh_key
+          echo "$KEYSTORE" | base64 -d > kiwix-android.keystore
+          echo "$SSH_KEY" | base64 -d > ssh_key
           chmod 600 ssh_key
 
       - name: Set tag variable
@@ -67,4 +65,7 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
-        run: ./gradlew publishPlayStoreBundle --scan
+          PLAYSTORE_JSON: ${{ secrets.PLAYSTORE_JSON }}
+        run: |
+          echo "$PLAYSTORE_JSON" > playstore.json
+          ./gradlew publishPlayStoreBundle --scan
