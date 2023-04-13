@@ -85,6 +85,7 @@
   <string name="did_you_know">Did you know?</string>
   <string name="undo">Undo</string>
   <string name="tab_closed">Tab closed</string>
+  <string name="tabs_closed">Tabs closed</string>
   <string name="bookmark_added">Bookmark added</string>
   <string name="rate_dialog_title">Please Rate Us</string>
   <string name="rate_dialog_msg">If you enjoy using %s, please take a moment to rate it. Thanks for your support!</string>
@@ -292,6 +293,7 @@
   <string name="no_open_book">No open book</string>
   <string name="open_library">Open library</string>
   <string name="tab_restored">Tab restored</string>
+  <string name="tabs_restored">Tabs restored</string>
   <string name="open_drawer">Open Drawer</string>
   <string name="close_drawer">Close Drawer</string>
   <string name="how_to_update_content">How to update content?</string>
