@@ -25,7 +25,7 @@ android {
     all {
       File("$projectDir/src", "$name/$name.zim").let {
         createDownloadTask(it)
-        createPublishApkWithExpansionTask(it, applicationVariants)
+        createPublishBundleWithExpansionTask(it, applicationVariants)
       }
     }
   }
@@ -61,12 +61,12 @@ fun ProductFlavor.fetchUrl(): String {
     }
 }
 
-fun ProductFlavor.createPublishApkWithExpansionTask(
+fun ProductFlavor.createPublishBundleWithExpansionTask(
   file: File,
   applicationVariants: DomainObjectSet<ApplicationVariant>
 ): Task {
   val capitalizedName = name.capitalize()
-  return tasks.create("publish${capitalizedName}ReleaseApkWithExpansionFile") {
+  return tasks.create("publish${capitalizedName}ReleaseBundleWithExpansionFile") {
     group = "publishing"
     description = "Uploads $capitalizedName to the Play Console with an Expansion file"
     doLast {
@@ -75,8 +75,8 @@ fun ProductFlavor.createPublishApkWithExpansionTask(
       createPublisher(File(rootDir, "playstore.json"))
         .transactionWithCommit(packageName) {
           val variants =
-            applicationVariants.releaseVariantsFor(this@createPublishApkWithExpansionTask)
-          variants.forEach(::uploadApk)
+            applicationVariants.releaseVariantsFor(this@createPublishBundleWithExpansionTask)
+          variants.forEach(::uploadBundle)
           uploadExpansionTo(file, variants[0])
           variants.drop(1).forEach { attachExpansionTo(variants[0].versionCodeOverride, it) }
           addToTrackInDraft(variants)
@@ -90,10 +90,10 @@ fun DomainObjectSet<ApplicationVariant>.releaseVariantsFor(productFlavor: Produc
     .outputs.filterIsInstance<ApkVariantOutput>().sortedBy { it.versionCodeOverride }
 
 afterEvaluate {
-  tasks.filter { it.name.contains("ReleaseApkWithExpansionFile") }.forEach {
+  tasks.filter { it.name.contains("ReleaseBundleWithExpansionFile") }.forEach {
     val flavorName =
-      it.name.substringAfter("publish").substringBefore("ReleaseApkWithExpansionFile")
+      it.name.substringAfter("publish").substringBefore("ReleaseBundleWithExpansionFile")
     it.dependsOn.add(tasks.getByName("download${flavorName}Zim"))
-    it.dependsOn.add(tasks.getByName("assemble${flavorName}Release"))
+    it.dependsOn.add(tasks.getByName("bundle${flavorName.capitalize()}Release"))
   }
 }

@@ -89,7 +89,7 @@ class Transaction(
       ExpansionFile().apply { referencesVersion = expansionCode }
     ).execute().prettyPrint()
 
-  fun uploadApk(apkVariantOutput: ApkVariantOutput) {
+  fun uploadBundle(apkVariantOutput: ApkVariantOutput) {
     publisher.edits().apks().upload(
       packageName,
       editId,
