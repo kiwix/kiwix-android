@@ -80,11 +80,7 @@ class LibraryNetworkEntity {
     var tags: String? = null
     var searchMatches = 0
 
-    @Deprecated("")
     var file: File? = null
-
-    @Deprecated("")
-    var remoteUrl: String? = null
 
     // Two books are equal if their ids match
     override fun equals(other: Any?): Boolean {
