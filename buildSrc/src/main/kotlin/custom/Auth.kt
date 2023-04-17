@@ -16,7 +16,9 @@
 
 package custom
 
+import com.android.build.api.variant.VariantOutput
 import com.android.build.gradle.api.ApkVariantOutput
+import com.android.build.gradle.api.BaseVariantOutput
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.http.FileContent
@@ -70,39 +72,39 @@ class Transaction(
 ) {
   fun uploadExpansionTo(
     file: File,
-    apkVariantOutput: ApkVariantOutput
+    versionCode: Int
   ): ExpansionFilesUploadResponse = publisher.edits().expansionfiles()
     .upload(
       packageName,
       editId,
-      apkVariantOutput.versionCodeOverride,
+      versionCode,
       "main",
       FileContent("application/octet-stream", file)
     ).execute().prettyPrint()
 
-  fun attachExpansionTo(expansionCode: Int, apkVariantOutput: ApkVariantOutput): ExpansionFile =
+  fun attachExpansionTo(expansionCode: Int, versionCode: Int): ExpansionFile =
     publisher.edits().expansionfiles().update(
       packageName,
       editId,
-      apkVariantOutput.versionCodeOverride,
+      versionCode,
       "main",
       ExpansionFile().apply { referencesVersion = expansionCode }
     ).execute().prettyPrint()
 
-  fun uploadBundle(apkVariantOutput: ApkVariantOutput) {
+  fun uploadBundle(outputFile: File) {
     publisher.edits().apks().upload(
       packageName,
       editId,
-      FileContent("application/octet-stream", apkVariantOutput.outputFile)
+      FileContent("application/octet-stream", outputFile)
     ).execute().prettyPrint()
   }
 
-  fun addToTrackInDraft(apkVariants: List<ApkVariantOutput>): Track =
+  fun addToTrackInDraft(apkVariants: List<VariantOutput>): Track =
     publisher.edits().tracks().update(packageName, editId, "alpha", Track().apply {
       releases = listOf(TrackRelease().apply {
         status = "draft"
-        name = apkVariants[0].versionNameOverride
-        versionCodes = apkVariants.map { it.versionCodeOverride.toLong() }
+        name = apkVariants[0].versionName.toString()
+        versionCodes = apkVariants.map { it.versionCode.orNull?.toLong() ?: 0 }
       })
       track = "alpha"
     }).execute().prettyPrint()

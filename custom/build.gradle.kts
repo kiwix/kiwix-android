@@ -1,10 +1,11 @@
-import com.android.build.gradle.api.ApkVariantOutput
 import com.android.build.gradle.api.ApplicationVariant
+import com.android.build.gradle.api.ApkVariantOutput
 import com.android.build.gradle.internal.dsl.ProductFlavor
 import custom.CustomApps
 import custom.createPublisher
 import custom.transactionWithCommit
 import plugin.KiwixConfigurationPlugin
+import java.io.FileNotFoundException
 import java.net.URI
 import java.net.URL
 
@@ -31,7 +32,7 @@ android {
   }
   splits {
     abi {
-      isUniversalApk = false
+      isUniversalApk = true
     }
   }
 }
@@ -74,12 +75,20 @@ fun ProductFlavor.createPublishBundleWithExpansionTask(
       println("packageName $packageName")
       createPublisher(File(rootDir, "playstore.json"))
         .transactionWithCommit(packageName) {
-          val variants =
-            applicationVariants.releaseVariantsFor(this@createPublishBundleWithExpansionTask)
-          variants.forEach(::uploadBundle)
-          uploadExpansionTo(file, variants[0])
-          variants.drop(1).forEach { attachExpansionTo(variants[0].versionCodeOverride, it) }
-          addToTrackInDraft(variants)
+          val versionCode = (7 * 1_000_000) + versionCode!!
+          val generatedBundleFile =
+            File(
+              "$buildDir/outputs/bundle/${capitalizedName.toLowerCase()}Release" +
+                "/custom-/${capitalizedName.toLowerCase()}-/release.aab"
+            )
+          if (generatedBundleFile.exists()) {
+            uploadBundle(generatedBundleFile)
+            uploadExpansionTo(file, versionCode)
+            attachExpansionTo(versionCode, versionCode)
+            // addToTrackInDraft(versionCode)
+          } else {
+            throw FileNotFoundException("Unable to generate aab file")
+          }
         }
     }
   }
@@ -94,6 +103,6 @@ afterEvaluate {
     val flavorName =
       it.name.substringAfter("publish").substringBefore("ReleaseBundleWithExpansionFile")
     it.dependsOn.add(tasks.getByName("download${flavorName}Zim"))
-    it.dependsOn.add(tasks.getByName("bundle${flavorName.capitalize()}Release"))
+    it.dependsOn.add(tasks.getByName("bundle${flavorName}Release"))
   }
 }
