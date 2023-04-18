@@ -82,13 +82,13 @@ class Transaction(
       FileContent("application/octet-stream", file)
     ).execute().prettyPrint()
 
-  fun attachExpansionTo(expansionCode: Int, versionCode: Int): ExpansionFile =
+  fun attachExpansionTo(versionCode: Int): ExpansionFile =
     publisher.edits().expansionfiles().update(
       packageName,
       editId,
       versionCode,
       "main",
-      ExpansionFile().apply { referencesVersion = expansionCode }
+      ExpansionFile().apply { referencesVersion = versionCode }
     ).execute().prettyPrint()
 
   fun uploadBundle(outputFile: File) {
@@ -99,12 +99,12 @@ class Transaction(
     ).execute().prettyPrint()
   }
 
-  fun addToTrackInDraft(apkVariants: List<VariantOutput>): Track =
+  fun addToTrackInDraft(versionCode: Int, versionName: String?): Track =
     publisher.edits().tracks().update(packageName, editId, "alpha", Track().apply {
       releases = listOf(TrackRelease().apply {
         status = "draft"
-        name = apkVariants[0].versionName.toString()
-        versionCodes = apkVariants.map { it.versionCode.orNull?.toLong() ?: 0 }
+        name = versionName
+        versionCodes = listOf(versionCode.toLong())
       })
       track = "alpha"
     }).execute().prettyPrint()

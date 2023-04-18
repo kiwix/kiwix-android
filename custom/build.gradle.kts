@@ -75,19 +75,20 @@ fun ProductFlavor.createPublishBundleWithExpansionTask(
       println("packageName $packageName")
       createPublisher(File(rootDir, "playstore.json"))
         .transactionWithCommit(packageName) {
-          val versionCode = (7 * 1_000_000) + versionCode!!
+          val variants =
+            applicationVariants.releaseVariantsFor(this@createPublishBundleWithExpansionTask)
           val generatedBundleFile =
             File(
-              "$buildDir/outputs/bundle/${capitalizedName.toLowerCase()}Release" +
-                "/custom-/${capitalizedName.toLowerCase()}-/release.aab"
+              "$buildDir/outputs/bundle/${capitalizedName.toLowerCase()}" +
+                "Release/custom-${capitalizedName.toLowerCase()}-release.aab"
             )
           if (generatedBundleFile.exists()) {
             uploadBundle(generatedBundleFile)
-            uploadExpansionTo(file, versionCode)
-            attachExpansionTo(versionCode, versionCode)
-            // addToTrackInDraft(versionCode)
+            uploadExpansionTo(file, variants[0].versionCode)
+            attachExpansionTo(variants[0].versionCode)
+            addToTrackInDraft(variants[0].versionCode, versionName)
           } else {
-            throw FileNotFoundException("Unable to generate aab file")
+            throw FileNotFoundException("Unable to find generated aab file")
           }
         }
     }
@@ -96,7 +97,8 @@ fun ProductFlavor.createPublishBundleWithExpansionTask(
 
 fun DomainObjectSet<ApplicationVariant>.releaseVariantsFor(productFlavor: ProductFlavor) =
   find { it.name.equals("${productFlavor.name}Release", true) }!!
-    .outputs.filterIsInstance<ApkVariantOutput>().sortedBy { it.versionCodeOverride }
+    .outputs.filterIsInstance<ApkVariantOutput>()
+    .filter { it.baseName.contains("universal") }.sortedBy { it.versionCode }
 
 afterEvaluate {
   tasks.filter { it.name.contains("ReleaseBundleWithExpansionFile") }.forEach {
