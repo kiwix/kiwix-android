@@ -16,9 +16,6 @@
 
 package custom
 
-import com.android.build.api.variant.VariantOutput
-import com.android.build.gradle.api.ApkVariantOutput
-import com.android.build.gradle.api.BaseVariantOutput
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.http.FileContent
