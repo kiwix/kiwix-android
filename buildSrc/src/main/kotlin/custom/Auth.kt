@@ -89,7 +89,7 @@ class Transaction(
     ).execute().prettyPrint()
 
   fun uploadBundle(outputFile: File) {
-    publisher.edits().apks().upload(
+    publisher.edits().bundles().upload(
       packageName,
       editId,
       FileContent("application/octet-stream", outputFile)
