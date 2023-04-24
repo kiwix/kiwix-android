@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Jon Harald Søby
+-->
+<resources>
+  <string name="retry">Prv igjen</string>
+  <string name="invalid_installation">Ugyldig installering. Vennligst last ned Zim.\n Sørg for at wifi er aktivert og at du har nok lagringsplass</string>
+</resources>

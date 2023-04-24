@@ -95,6 +95,7 @@
   <string name="did_you_know">Ste vedeli?</string>
   <string name="undo">Razveljavi</string>
   <string name="tab_closed">Zavihek je zaprt</string>
+  <string name="tabs_closed">Zavihki zaprti</string>
   <string name="bookmark_added">Zaznamek je dodan</string>
   <string name="rate_dialog_title">Prosimo, ocenite nas</string>
   <string name="rate_dialog_msg">Če radi uporabljate %s, si vzemite trenutek in ga ocenite. Hvala za vašo podporo!</string>
@@ -289,6 +290,7 @@
   <string name="no_open_book">Ni odprte knjige</string>
   <string name="open_library">Odpri knjižnico</string>
   <string name="tab_restored">Zavihek obnovljen</string>
+  <string name="tabs_restored">Zavihki obnovljeni</string>
   <string name="open_drawer">Odpri predal</string>
   <string name="close_drawer">Zapri predal</string>
   <string name="how_to_update_content">Kako posodobiti vsebino?</string>
@@ -321,4 +323,5 @@
   <string name="clear_all_navigation_history_message">Počisti celotno zgodovino navigacije (nazaj, naprej).</string>
   <string name="navigation_history_cleared">Zgodovina navigacije izbrisana</string>
   <string name="go_to_settings_label">Pojdi v nastavitve</string>
+  <string name="request_notification_permission_message">Za izvedbo tega dejanja dovolite dostop do obvestil</string>
 </resources>

@@ -12,6 +12,7 @@
 * Killarnee
 * Lucas Werkmeister
 * Metalhead64
+* MohitMali
 * Pittigrilli
 * Sebastian Wallroth
 * Stephane
@@ -263,8 +264,8 @@
   <string name="nearby_devices">GERÄTE IN DER NÄHE</string>
   <string name="no_devices_found">Keine Geräte erkannt. Tippen Sie auf die Schaltfläche Suchen, um es erneut zu versuchen.</string>
   <string name="files_for_transfer">DATEIEN ZUR ÜBERTRAGUNG</string>
-  <string name="preparing_files" fuzzy="true">Dateien für die Übertragung werden vorbereitet....</string>
-  <string name="performing_handshake" fuzzy="true">Führe Handshake durch....</string>
+  <string name="preparing_files">Dateien für die Übertragung werden vorbereitet…</string>
+  <string name="performing_handshake">Führe Handshake durch…</string>
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Löscht alle Notizen zu allen Artikeln</string>
   <string name="pref_clear_all_notes_title">Alle Notizen löschen</string>

@@ -3,6 +3,7 @@
 * Gurulenin
 * Kanags
 * Kelson
+* MohitMali
 * Siddhan
 -->
 <resources>
@@ -248,8 +249,8 @@
   <string name="nearby_devices">அருகிலுள்ள சாதனங்கள்</string>
   <string name="no_devices_found">சாதனங்கள் எதுவும் கண்டறியப்படவில்லை. மீண்டும் முயற்சிக்க தேடல் பொத்தானைத் தட்டவும்.</string>
   <string name="files_for_transfer">பரிமாற்றத்திற்கான கோப்புகள்</string>
-  <string name="preparing_files" fuzzy="true">பரிமாற்றத்திற்கான கோப்புகளைத் தயாரிக்கிறது ....</string>
-  <string name="performing_handshake" fuzzy="true">கைகுலுக்கல் நிகழ்த்துகிறது....</string>
+  <string name="preparing_files">பரிமாற்றத்திற்கான கோப்புகளைத் தயாரிக்கிறது …</string>
+  <string name="performing_handshake">கைகுலுக்கல் நிகழ்த்துகிறது…</string>
   <string name="status">நிலை</string>
   <string name="pref_clear_all_notes_summary">எல்லா கட்டுரைகளிலும் உள்ள அனைத்து குறிப்புகளையும் அழிக்கிறது</string>
   <string name="pref_clear_all_notes_title">எல்லா குறிப்புகளையும் அழிக்கவும்</string>
