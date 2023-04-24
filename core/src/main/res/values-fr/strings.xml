@@ -105,6 +105,7 @@
   <string name="did_you_know">Le saviez-vous ?</string>
   <string name="undo">Annuler</string>
   <string name="tab_closed">Onglet fermé</string>
+  <string name="tabs_closed">Onglets fermés</string>
   <string name="bookmark_added">Marque-page ajouté</string>
   <string name="rate_dialog_title">Merci de nous évaluer</string>
   <string name="rate_dialog_msg">Si vous aimez utiliser %s, veuillez prendre un moment pour l’évaluer. Merci pour votre aide !</string>
@@ -181,7 +182,7 @@
   <string name="your_languages">Langues sélectionnées :</string>
   <string name="other_languages">Autres langues :</string>
   <string name="no_items_msg">Aucun élément disponible</string>
-  <string name="crash_title">Hé bien.... c’est embarrassant.</string>
+  <string name="crash_title">Eh bien, c’est embarrassant !</string>
   <string name="crash_description">Il semble que nous ayons planté.\n\nPourriez-vous nous aider à corriger ce problème en envoyant l’information suivante ?</string>
   <string name="crash_checkbox_language">Vos paramètres de langue</string>
   <string name="crash_checkbox_zimfiles">Une liste de vos fichiers ZIM</string>
@@ -299,6 +300,7 @@
   <string name="no_open_book">Aucun livre ouvert</string>
   <string name="open_library">Ouvrir la bibliothèque</string>
   <string name="tab_restored">Onglet restauré</string>
+  <string name="tabs_restored">Onglets restaurés</string>
   <string name="open_drawer">Ouvrir le tiroir</string>
   <string name="close_drawer">Fermer le tiroir</string>
   <string name="how_to_update_content">Comment actualiser le contenu ?</string>
@@ -331,4 +333,5 @@
   <string name="clear_all_navigation_history_message">Efface tout l’historique de navigation (en arrière et en avant)</string>
   <string name="navigation_history_cleared">Historique de navigation effacé</string>
   <string name="go_to_settings_label">Aller aux paramètres</string>
+  <string name="request_notification_permission_message">Pour effectuer cette action, veuillez accorder l’accès aux notifications</string>
 </resources>

@@ -96,6 +96,7 @@
   <string name="did_you_know">您知道嗎？</string>
   <string name="undo">還原</string>
   <string name="tab_closed">分頁已關閉</string>
+  <string name="tabs_closed">分頁已關閉</string>
   <string name="bookmark_added">書籤已增加</string>
   <string name="rate_dialog_title">請給予我們評價</string>
   <string name="rate_dialog_msg">如果您喜歡使用%s，請花點時間為它評分。感謝您的支持！</string>
@@ -290,6 +291,7 @@
   <string name="no_open_book">沒有開啟的書籍</string>
   <string name="open_library">開啟圖書館</string>
   <string name="tab_restored">分頁已恢復</string>
+  <string name="tabs_restored">分頁已恢復</string>
   <string name="open_drawer">開啟抽屜</string>
   <string name="close_drawer">關閉抽屜</string>
   <string name="how_to_update_content">如何更新內容？</string>
@@ -322,4 +324,5 @@
   <string name="clear_all_navigation_history_message">清除所有導航歷史（往後，往前）</string>
   <string name="navigation_history_cleared">已清除導航歷史記錄</string>
   <string name="go_to_settings_label">前往設定</string>
+  <string name="request_notification_permission_message">要執行此操作，請授予通知存取權限</string>
 </resources>

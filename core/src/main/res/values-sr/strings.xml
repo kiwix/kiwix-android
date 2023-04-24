@@ -55,6 +55,7 @@
   <string name="delete_specific_search_toast">Недавне претраге су уклоњене</string>
   <string name="got_it">Разумем</string>
   <string name="did_you_know">Јесте ли знали?</string>
+  <string name="tabs_closed">Картице затворене</string>
   <string name="bookmark_added">Обележивачи су додати</string>
   <string name="rate_dialog_title">Молимо Вас да нас оцените</string>
   <string name="rate_dialog_positive">Оцени!</string>

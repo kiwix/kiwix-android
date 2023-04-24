@@ -98,6 +98,7 @@
   <string name="did_you_know">Você sabia?</string>
   <string name="undo">Desfazer</string>
   <string name="tab_closed">Guia fechada</string>
+  <string name="tabs_closed">Guias fechadas</string>
   <string name="bookmark_added">Favorito adicionado</string>
   <string name="rate_dialog_title">Por favor nos avalie</string>
   <string name="rate_dialog_positive">Avalie!</string>
@@ -287,6 +288,7 @@
   <string name="no_open_book">Sem livro aberto</string>
   <string name="open_library" fuzzy="true">Biblioteca aberta</string>
   <string name="tab_restored">Guia restaurada</string>
+  <string name="tabs_restored">Guias restauradas</string>
   <string name="open_drawer">Abrir gaveta</string>
   <string name="close_drawer">Fechar gaveta</string>
   <string name="how_to_update_content">Como atualizar o conteúdo?</string>

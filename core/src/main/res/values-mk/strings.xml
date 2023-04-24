@@ -88,6 +88,7 @@
   <string name="did_you_know">Дали сте знаеле?</string>
   <string name="undo">Врати</string>
   <string name="tab_closed">Јазичето е затворено</string>
+  <string name="tabs_closed">Јазичињата се затворени</string>
   <string name="bookmark_added">Обележувачот е додаден</string>
   <string name="rate_dialog_title">Дајте ни оценка</string>
   <string name="rate_dialog_msg">Ако ви се допаѓа %s, би ве змолиле да му дадете оценка. Ви благодариме на поддршката!</string>
@@ -282,6 +283,7 @@
   <string name="no_open_book">Нема отворена книга</string>
   <string name="open_library">Отвори библиотека</string>
   <string name="tab_restored">Јазичето е повратено</string>
+  <string name="tabs_restored">Јазичињата се повратени</string>
   <string name="open_drawer">Отвори фиока</string>
   <string name="close_drawer">Затвори фиока</string>
   <string name="how_to_update_content">Како се подновува содржината?</string>
@@ -314,4 +316,5 @@
   <string name="clear_all_navigation_history_message">Ја чисти сета (наназад, нанапред) историја на прегледувачки преоди</string>
   <string name="navigation_history_cleared">Историја на прегледувачки преоди</string>
   <string name="go_to_settings_label">Оди во поставките</string>
+  <string name="request_notification_permission_message">За да го извршите ова дејство, дајте им пристап на известувањата</string>
 </resources>
