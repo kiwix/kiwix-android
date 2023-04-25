@@ -308,7 +308,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun noInternetSnackbar() {
-    view?.snack(
+    fragmentDestinationDownloadBinding?.onlineLibraryFragmentSnackbarRoot?.snack(
       R.string.no_network_connection,
       R.string.menu_settings,
       ::openNetworkSettings
@@ -515,7 +515,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
               item,
               { downloadFile() },
               {
-                fragmentDestinationDownloadBinding?.libraryList?.snack(
+                fragmentDestinationDownloadBinding?.onlineLibraryFragmentSnackbarRoot?.snack(
                   """ 
                 ${getString(R.string.download_no_space)}
                 ${getString(R.string.space_available)} $it
