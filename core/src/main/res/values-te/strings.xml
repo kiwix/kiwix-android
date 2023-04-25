@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* V Bhavya
 * Veeven
 * WP MANIKHANTA
 * రహ్మానుద్దీన్
@@ -48,4 +49,7 @@
   <string name="no_bookmarks" fuzzy="true">పుస్తకగుర్తులు లేవు!</string>
   <string name="percentage">%d%%</string>
   <string name="search_open_in_new_tab">కొత్త ట్యాబులో తెరువు</string>
+  <string name="backward_history">వెనుకబడిన చరిత్ర</string>
+  <string name="navigation_history_cleared">నావిగేషన్ చరిత్ర క్లియర్ చేయబడింది</string>
+  <string name="go_to_settings_label">సెట్టింగ్‌లకు వెళ్లండి</string>
 </resources>

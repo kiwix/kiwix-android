@@ -4,6 +4,7 @@
 * Eyas
 * Meno25
 * Mohanad Kh
+* MohitMali
 * Ravan
 * Tala Ali
 * Ulhvulgv
@@ -255,8 +256,8 @@
   <string name="nearby_devices">الأجهزة القريبة</string>
   <string name="no_devices_found">لم يتم اكتشاف أية أجهزة. اضغط على زر البحث للمحاولة مرة أخرى.</string>
   <string name="files_for_transfer">ملفات للنقل</string>
-  <string name="preparing_files" fuzzy="true">جارٍ تحضير الملفات للنقل....</string>
-  <string name="performing_handshake" fuzzy="true">جار الاقتران....</string>
+  <string name="preparing_files">جارٍ تحضير الملفات للنقل…</string>
+  <string name="performing_handshake">جار الاقتران…</string>
   <string name="status">الحالة</string>
   <string name="pref_clear_all_notes_summary">مسح جميع الملاحظات على جميع المقالات</string>
   <string name="pref_clear_all_notes_title">مسح جميع الملاحظات</string>

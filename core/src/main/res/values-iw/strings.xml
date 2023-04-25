@@ -96,6 +96,7 @@
   <string name="did_you_know">הידעת?</string>
   <string name="undo">ביטול</string>
   <string name="tab_closed">לשונית נסגרה</string>
+  <string name="tabs_closed">לשוניות שנסגרו</string>
   <string name="bookmark_added">הסימנייה נוספה</string>
   <string name="rate_dialog_title">אנא דרגו אותנו</string>
   <string name="rate_dialog_msg">אם כיף לך להשתמש ב־%s, אולי אפשר לבקש להקדיש רגע כדי לדרג אותו? תודה על תמיכתך!</string>
@@ -290,6 +291,7 @@
   <string name="no_open_book">אין ספר פתוח</string>
   <string name="open_library">פתיחת ספרייה</string>
   <string name="tab_restored">הלשונית שוחזרה</string>
+  <string name="tabs_restored">לשוניות ששוחזרו</string>
   <string name="open_drawer">פתיחת מגירה</string>
   <string name="close_drawer">סגירת מגירה</string>
   <string name="how_to_update_content">איך לעדכן תוכן?</string>
@@ -322,4 +324,5 @@
   <string name="clear_all_navigation_history_message">מנקה את כל היסטוריית הניווט (אחורה, קדימה)</string>
   <string name="navigation_history_cleared">היסטוריית הניווט נמחקה</string>
   <string name="go_to_settings_label">לעבור להגדרות</string>
+  <string name="request_notification_permission_message">כדי לבצע את הפעולה הזאת, יש להעניק גישה להתראות</string>
 </resources>

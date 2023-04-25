@@ -10,6 +10,7 @@
 * Joseph
 * Kumkumuk
 * McAang
+* MohitMali
 * MuratTheTurkish
 * Rapsar
 * Sayginer
@@ -259,8 +260,8 @@
   <string name="nearby_devices">YAKINDAKİ CİHAZLAR</string>
   <string name="no_devices_found">Cihaz algılanmadı. Tekrar denemek için arama düğmesine dokunun.</string>
   <string name="files_for_transfer">TRANSFER İÇİN DOSYALAR</string>
-  <string name="preparing_files" fuzzy="true">Dosyaları aktarıma hazırlanıyor....</string>
-  <string name="performing_handshake" fuzzy="true">El sıkışma gerçekleştiriliyor....</string>
+  <string name="preparing_files">Dosyaları aktarıma hazırlanıyor…</string>
+  <string name="performing_handshake">El sıkışılıyor…</string>
   <string name="status">Durum</string>
   <string name="pref_clear_all_notes_summary">Tüm makalelerdeki tüm notları temizler</string>
   <string name="pref_clear_all_notes_title">Tüm notları temizle</string>

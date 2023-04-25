@@ -39,12 +39,14 @@
   <string name="tts_lang_not_supported">このページの言語は不正確な翻訳です。記事が正しく読めない可能性があります。</string>
   <string name="all_history_cleared">全履歴を削除しました</string>
   <string name="delete">削除</string>
+  <string name="tabs_closed">タブを閉じました</string>
   <string name="library">ライブラリ</string>
   <string name="configure">設定</string>
   <string name="do_not_ask_anymore">これ以上聞かないでください</string>
   <string name="other_languages">その他の言語:</string>
   <string name="pref_text_zoom_summary">テキストサイズを 25% 増やす</string>
   <string name="search_open_in_new_tab">新しいタブで開く</string>
+  <string name="tabs_restored">タブが復元されました</string>
   <string name="allow">許可</string>
   <string name="no_notes">ノートはありません</string>
   <string name="search_notes">ノートを検索する</string>

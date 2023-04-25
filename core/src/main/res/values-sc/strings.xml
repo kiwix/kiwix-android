@@ -66,6 +66,7 @@
   <string name="pref_credits_title">Crèditos</string>
   <string name="tts_lang_not_supported">Sa limba de custa pàgina no est suportada. S\'artìculu diat pòdere èssere letu in manera no adeguada.</string>
   <string name="no_reader_application_installed">Impossìbile agatare un\'aplicatzione installada pro custa casta de documentu</string>
+  <string name="no_email_application_installed">Pro praghere installa unu servìtziu de posta eletrònica o imbia·nos una lìtera a %1s</string>
   <string name="no_section_info">Peruna intestatzione de cuntenutu agatada</string>
   <string name="request_storage">Pro atzèdere a su documentu ZIM tenimus bisòngiu de pòdere atzèdere a sa memòria tua</string>
   <string name="request_write_storage">Pro iscarrigare archìvios zim bisongiamus de s\'atzessu a sa memòria tua</string>
@@ -88,6 +89,7 @@
   <string name="did_you_know">L\'ischias?</string>
   <string name="undo">Annulla</string>
   <string name="tab_closed">Ischeda serrada</string>
+  <string name="tabs_closed">Ischedas serradas</string>
   <string name="bookmark_added">Sinnalibros annantos</string>
   <string name="rate_dialog_title">Pro praghere avalora·nos</string>
   <string name="rate_dialog_msg">Si t\'agradat a impreare %s piga·ti unu momentu pro li dare unu votu. Ti torramus gràtzias pro su suportu tuo!</string>
@@ -246,8 +248,8 @@
   <string name="nearby_devices">DISPOSITIVOS A CURTZU</string>
   <string name="no_devices_found">Perunu dispositivu agatadu. Toca su butone de chirca pro torrare a proare.</string>
   <string name="files_for_transfer">DOCUMENTOS DE TRAMUDARE</string>
-  <string name="preparing_files" fuzzy="true">Preparende sos documentos pro los tramudare…</string>
-  <string name="performing_handshake" fuzzy="true">Ammaniende su protocollu de ligàmene…</string>
+  <string name="preparing_files">Preparende sos documentos pro los tramudare…</string>
+  <string name="performing_handshake">Ammaniende su protocollu de ligàmene…</string>
   <string name="status">Istadu</string>
   <string name="pref_clear_all_notes_summary">Iscantzella totu sas notas in totu sos artìculos</string>
   <string name="pref_clear_all_notes_title">Iscantzella totu sas notas</string>
@@ -282,6 +284,7 @@
   <string name="no_open_book">Perunu libru abertu</string>
   <string name="open_library">Aberi sa biblioteca</string>
   <string name="tab_restored">Ischeda ripristinada</string>
+  <string name="tabs_restored">Ischedas ripristinadas</string>
   <string name="open_drawer">Aberi su pannellu</string>
   <string name="close_drawer">Serra su pannellu</string>
   <string name="how_to_update_content">Comente agiornare su cuntenutu?</string>
@@ -306,5 +309,13 @@
   <string name="download_tts_language_title">Iscàrriga custa limba pro sa funtzionalidade de leghidura a boghe arta</string>
   <string name="download_tts_language_message">Incarca su butone de iscarrigamentu. At a iscarrigare in automàticu sa limba netzessària.</string>
   <string name="external_link_copied_message">Ligàmene esternu copiadu in punta de billete</string>
+  <string name="read_aloud_service_channel_name">Canale de servìtziu de leghidura a boghe arta</string>
+  <string name="read_aloud_channel_description">Controllos de sa sìntesi vocale.</string>
+  <string name="read_aloud_running">Leghidura a boghe arta in cursu</string>
+  <string name="backward_history">Cronologia cara a segus</string>
+  <string name="forward_history">Cronologia cara a in antis</string>
+  <string name="clear_all_navigation_history_message">Isbòidat totu sa cronologia de navigatzione (cara a segus e a in antis)</string>
+  <string name="navigation_history_cleared">Cronologia de navigatzione isboidada</string>
   <string name="go_to_settings_label">Bae a sas impostatziones</string>
+  <string name="request_notification_permission_message">Pro fàghere custa atzione fruni s\'atzessu a sas notìficas</string>
 </resources>

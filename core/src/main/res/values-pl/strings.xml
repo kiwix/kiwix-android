@@ -7,6 +7,7 @@
 * Kelson
 * Krzyz23
 * Macofe
+* MohitMali
 * Rail
 * Rzuwig
 * Stojex
@@ -252,8 +253,8 @@
   <string name="nearby_devices">URZĄDZENIA W POBLIŻU</string>
   <string name="no_devices_found">Nie wykryto urządzeń. Naciśnij przycisk wyszukiwania, aby spróbować ponownie.</string>
   <string name="files_for_transfer">PLIKI DO PRZESŁANIA</string>
-  <string name="preparing_files" fuzzy="true">Przygotowywanie plików do przesłania....</string>
-  <string name="performing_handshake" fuzzy="true">Wykonywanie uzgadniania....</string>
+  <string name="preparing_files">Przygotowywanie plików do przesłania…</string>
+  <string name="performing_handshake">Wykonywanie uzgadniania…</string>
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Usuwa wszystkie notatki ze wszystkich artykułów</string>
   <string name="pref_clear_all_notes_title">Wyczyść wszystkie notatki</string>

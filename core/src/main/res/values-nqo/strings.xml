@@ -2,6 +2,7 @@
 <!-- Authors:
 * Aboubacar.banamoridou.toure
 * Lancine.kounfantoh.fofana
+* MohitMali
 * ߒߓߋ߫ ߝߏߝߣߊ߫
 -->
 <resources>
@@ -90,6 +91,7 @@
   <string name="did_you_know">ߌ ߞߵߊ߬ ߟߐ߲߫ ߓߊ߬؟</string>
   <string name="undo">ߊ߬ ߘߐߛߊ߬</string>
   <string name="tab_closed">ߘߎ߲ߛߓߍ ߓߘߊ߫ ߕߎ߲߯</string>
+  <string name="tabs_closed">ߘߎ߲ߛߓߍ ߓߘߊ߫ ߕߎ߲߯</string>
   <string name="bookmark_added">ߟߊ߬ߡߊ ߝߊ߬ߙߊ߫</string>
   <string name="rate_dialog_title">ߡߐ߬ߟߐ߲߬ ߘߌ߫ ߒ߬ ߡߊ߫ ߖߊ߰ߣߌ߲߫</string>
   <string name="rate_dialog_msg">ߣߴߌ ߛߍߥߊߣߍ߲߫ ߞߍ߫ ߘߊ߫ %s ߟߊߓߊ߯ߙߊ ߟߊ߫߸ ߥߊ߯ߕߌ ߘߏ߫ ߕߊ߬ ߏ߬ ߘߐ߫ ߖߊ߰ߣߌ߲߫ ߞߊ߬ ߡߐ߬ߟߐ߲߬ ߘߴߊ߬ ߡߊ߬. ߌ ߣߌ߫ ߗߋ߫ ߌ ߟߊ߫ ߘߍ߬ߡߍ߲ ߠߊ߫߹</string>
@@ -248,8 +250,8 @@
   <string name="nearby_devices">ߞߙߍ߬ߝߍ߬ ߞߍߟߊ߲ ߠߎ߬</string>
   <string name="no_devices_found">ߞߍߟߊ߲߫ ߡߊ߫ ߟߊߞߏߟߐ߲߫. ߢߌߣߌ߲ߠߌ߲߫ ߞߎߘߊ ߕߐߘߐ߲߫ ߞߵߊ߬ ߡߊߝߍߣߍ߲߫ ߞߎߘߊ߫ ߘߌ߫.</string>
   <string name="files_for_transfer">ߞߐߕߐ߯ ߟߊߕߊ߬ߡߌ߲߬ߕߊ</string>
-  <string name="preparing_files" fuzzy="true">ߞߐߕߐ߮ ߘߐߓߍ߲߭ ߦߴߌ ߘߐ߫ ߟߕߊ߬ߡߌ߲߬ߠߌ߲ ߞߊ߲ߡߊ߬....</string>
-  <string name="performing_handshake" fuzzy="true">ߓߟߏߘߏ߲ߢߐ߲߯ߓߟߏ ߢߊߢߌߣߌ߲ ߦߴߌ ߘߐ߫....</string>
+  <string name="preparing_files">ߞߐߕߐ߮ ߘߐߓߍ߲߭ ߦߴߌ ߘߐ߫ ߟߕߊ߬ߡߌ߲߬ߠߌ߲ ߞߊ߲ߡߊ߬…</string>
+  <string name="performing_handshake">ߓߟߏߘߏ߲ߢߐ߲߯ߓߟߏ ߢߊߢߌߣߌ߲ ߦߴߌ ߘߐ߫…</string>
   <string name="status">ߡߊ߬ߘߎ߮</string>
   <string name="pref_clear_all_notes_summary">ߦߟߌߣߐ ߓߍ߯ ߖߏ߲߫ ߞߎߡߘߊ ߟߎ߬ ߓߍ߯ ߘߐ߫</string>
   <string name="pref_clear_all_notes_title">ߦߟߌߣߐ ߟߎ߬ ߓߍ߯ ߖߏ߰ߛߌ߫</string>
@@ -308,4 +310,5 @@
   <string name="download_tts_language_title">ߞߊ߲ ߣߌ߲߬ ߡߊߞߍ߫ ߌ ߞߎ߲߬ ߛߴߊ߬ ߘߌ߫ ߛߴߊ߬ ߘߐߞߊ߬ߙߊ߲߫ ߠߊ߫ ߞߊ߲߫ ߡߊߦߟߍߟߌ ߘߐ߫</string>
   <string name="download_tts_language_message">ߟߊ߬ߖߌ߰ߒ߬ߞߎ߲߬ߠߌ߲ ߞߎ߬ߘߎ ߛߐ߲߬ߞߌ߲߫ ߖߊ߰ߣߌ߲߫. ߏ߬ ߘߌ߫ ߞߊ߲߫ ߡߊߢߌ߬ߣߌ߲߬ߞߊ߬ߣߍ߲ ߡߊߞߍ߫ ߌ ߞߎ߲߬ ߊ߬ ߖߍ߬ߘߍ߫ ߢߍ߫.</string>
   <string name="navigation_history_cleared">ߛߏ߲߯ߓߊߟߌ ߘߐ߬ߝߐ ߓߘߊ߫ ߖߏ߰ߛߌ߬</string>
+  <string name="go_to_settings_label">ߕߊ߯ ߢߊߓߐߟߌ ߞߊ߲߬</string>
 </resources>
