@@ -65,13 +65,4 @@
     app:layout_constraintVertical_bias="0.45"
     tools:ignore="RequiredSize" />
 
-  <androidx.coordinatorlayout.widget.CoordinatorLayout
-    android:id="@+id/online_library_fragment_snackbar_root"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/material_design_bottom_bar_size"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toStartOf="parent"
-    app:layout_constraintStart_toStartOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

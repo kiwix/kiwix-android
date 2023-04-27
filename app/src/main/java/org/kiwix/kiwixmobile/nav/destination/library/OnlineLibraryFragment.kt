@@ -308,8 +308,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun noInternetSnackbar() {
-    fragmentDestinationDownloadBinding?.onlineLibraryFragmentSnackbarRoot?.snack(
+    fragmentDestinationDownloadBinding?.libraryList?.snack(
       R.string.no_network_connection,
+      requireActivity().findViewById(R.id.bottom_nav_view),
       R.string.menu_settings,
       ::openNetworkSettings
     )
@@ -515,11 +516,12 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
               item,
               { downloadFile() },
               {
-                fragmentDestinationDownloadBinding?.onlineLibraryFragmentSnackbarRoot?.snack(
+                fragmentDestinationDownloadBinding?.libraryList?.snack(
                   """ 
                 ${getString(R.string.download_no_space)}
                 ${getString(R.string.space_available)} $it
                   """.trimIndent(),
+                  requireActivity().findViewById(R.id.bottom_nav_view),
                   R.string.download_change_storage,
                   ::showStorageSelectDialog
                 )
