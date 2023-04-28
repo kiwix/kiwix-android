@@ -20,5 +20,4 @@
   <dimen name="fab_vertical_offset">25dp</dimen>
 
   <dimen name="material_design_appbar_size">48dp</dimen>
-
 </resources>
