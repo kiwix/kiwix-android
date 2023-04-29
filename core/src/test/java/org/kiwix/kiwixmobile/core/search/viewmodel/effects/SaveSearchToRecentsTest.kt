@@ -22,27 +22,41 @@ import androidx.appcompat.app.AppCompatActivity
 import io.mockk.Called
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.CoroutineScope
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
+import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 
 internal class SaveSearchToRecentsTest {
 
-  private val newRecentSearchDao: NewRecentSearchDao = mockk()
+  private val recentSearchRoomDao: RecentSearchRoomDao = mockk()
   private val searchListItem = RecentSearchListItem("")
 
   private val activity: AppCompatActivity = mockk()
+  private val viewModelScope: CoroutineScope = mockk()
 
   @Test
   fun `invoke with null Id does nothing`() {
-    SaveSearchToRecents(newRecentSearchDao, searchListItem, null).invokeWith(activity)
-    verify { newRecentSearchDao wasNot Called }
+    SaveSearchToRecents(
+      recentSearchRoomDao = recentSearchRoomDao,
+      searchListItem = searchListItem,
+      zimId = null,
+      viewModelScope = viewModelScope
+    ).invokeWith(
+      activity
+    )
+    verify { recentSearchRoomDao wasNot Called }
   }
 
   @Test
   fun `invoke with non null Id saves search`() {
-    val id = "id"
-    SaveSearchToRecents(newRecentSearchDao, searchListItem, id).invokeWith(activity)
-    verify { newRecentSearchDao.saveSearch(searchListItem.value, id) }
+    val id = "8812214350305159407L"
+    SaveSearchToRecents(
+      recentSearchRoomDao = recentSearchRoomDao,
+      searchListItem = searchListItem,
+      zimId = id,
+      viewModelScope = viewModelScope
+    ).invokeWith(activity)
+    verify { recentSearchRoomDao.saveSearch(searchListItem.value, id) }
   }
 }

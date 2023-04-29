@@ -21,8 +21,9 @@ package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 import androidx.appcompat.app.AppCompatActivity
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.CoroutineScope
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
+import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 
@@ -31,9 +32,14 @@ internal class DeleteRecentSearchTest {
   @Test
   fun `invoke with deletes a search`() {
     val searchListItem: SearchListItem = RecentSearchListItem("")
-    val recentSearchDao: NewRecentSearchDao = mockk()
+    val recentSearchDao: RecentSearchRoomDao = mockk()
     val activity: AppCompatActivity = mockk()
-    DeleteRecentSearch(searchListItem, recentSearchDao).invokeWith(activity)
+    val viewModelScope: CoroutineScope = mockk()
+    DeleteRecentSearch(
+      searchListItem = searchListItem,
+      recentSearchRoomDao = recentSearchDao,
+      viewModelScope = viewModelScope
+    ).invokeWith(activity)
     verify { recentSearchDao.deleteSearchString(searchListItem.value) }
   }
 }
