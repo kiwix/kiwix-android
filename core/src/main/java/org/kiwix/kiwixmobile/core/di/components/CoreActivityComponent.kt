@@ -50,6 +50,7 @@ interface CoreActivityComponent {
   fun inject(historyFragment: HistoryFragment)
   fun inject(bookmarksFragment: BookmarksFragment)
   fun inject(addNoteDialog: AddNoteDialog)
+  // fun inject(roomDatabaseCallback: RoomDatabaseCallback)
   fun inject(helpFragment: HelpFragment)
   fun inject(notesFragment: NotesFragment)
   fun inject(navigationHistoryDialog: NavigationHistoryDialog)
