@@ -19,26 +19,42 @@
 package org.kiwix.kiwixmobile.core.data.remote
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
-import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
-import org.kiwix.kiwixmobile.core.data.CoreRoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
+import io.objectbox.Box
+import io.objectbox.BoxStore
+import io.objectbox.kotlin.boxFor
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
+import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
+import javax.inject.Inject
 
-@Suppress("UnnecessaryAbstractClass")
-@Database(entities = [RecentSearchRoomEntity::class], version = 1)
-abstract class FdroidDatabase : RoomDatabase(), CoreRoomDatabase {
+class RoomDatabaseCallback(val context: Context) :
+  RoomDatabase.Callback() {
+  @Inject lateinit var kiwixRoomDatabase: KiwixRoomDatabase
+  @Inject lateinit var boxStore: BoxStore
+  override fun onCreate(db: SupportSQLiteDatabase) {
+    super.onCreate(db)
+    CoreApp.coreComponent.inject(this)
+    boxStore.let(::migrateRecentSearch)
+  }
 
-  companion object {
-    private var db: CoreRoomDatabase? = null
-    fun getInstance(context: Context): CoreRoomDatabase {
-      return db ?: synchronized(CoreRoomDatabase::class) {
-        return@getInstance db
-          ?: Room.databaseBuilder(context, GooglePlayStoreDatabase::class.java, "KiwixRoom.db")
-            // We have already database name called kiwix.db in order to avoid complexity we named as
-            // kiwixRoom.db
-            // .addCallback(RoomDatabaseCallback())
-            .build()
+  fun migrateRecentSearch(boxStore: BoxStore) {
+    migrationToRoomInsert(boxStore.boxFor())
+  }
+
+  fun migrationToRoomInsert(
+    box: Box<RecentSearchEntity>
+  ) {
+    val searchRoomEntityList = box.all
+    searchRoomEntityList.forEachIndexed { _, recentSearchEntity ->
+      CoroutineScope(Dispatchers.IO).launch {
+        kiwixRoomDatabase.recentSearchRoomDao()
+          .saveSearch(recentSearchEntity.searchTerm, recentSearchEntity.zimId)
+        // Todo Should we remove object store data now?
       }
     }
   }

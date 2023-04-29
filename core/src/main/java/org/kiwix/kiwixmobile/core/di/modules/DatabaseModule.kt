@@ -74,18 +74,16 @@ open class DatabaseModule {
   ): FetchDownloadDao =
     FetchDownloadDao(boxStore.boxFor(), newBookDao)
 
-  @Singleton
   @Provides
+  @Singleton
   fun provideYourDatabase(
-    context: Context,
-    boxStore: BoxStore
+    context: Context
   ) =
     KiwixRoomDatabase.getInstance(
-      context = context,
-      boxStore
+      context
     ) // The reason we can construct a database for the repo
 
-  @Singleton
   @Provides
+  @Singleton
   fun provideNewRecentSearchRoomDao(db: KiwixRoomDatabase) = db.recentSearchRoomDao()
 }
