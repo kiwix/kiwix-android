@@ -57,32 +57,33 @@ android {
       buildConfigField("boolean", "KIWIX_ERROR_ACTIVITY", "false")
       buildConfigField("boolean", "IS_PLAYSTORE", "false")
     }
-
-    create("nightly") {
-      initWith(getByName("debug"))
-      setMatchingFallbacks("debug")
-    }
-  }
-  productFlavors {
-    flavorDimensions("default")
-    create("fdroid") { // Configuration for F-Droid flavor
-      dimension = "default"
-      applicationIdSuffix = ".fdroid"
-      versionNameSuffix = "-fdroid"
-    }
-    create("playStore") { // Configuration for googlePlayStore flavor
-      dimension = "default"
-      manifestPlaceholders += mapOf()
+    getByName("release") {
       buildConfigField("boolean", "KIWIX_ERROR_ACTIVITY", "true")
       buildConfigField("boolean", "IS_PLAYSTORE", "false")
       if (properties.containsKey("disableSigning")) {
         signingConfig = null
       }
+    }
+    create("playStore") {
+      manifestPlaceholders += mapOf()
+      initWith(getByName("release"))
       matchingFallbacks += "release"
       buildConfigField("boolean", "IS_PLAYSTORE", "true")
       manifestPlaceholders["permission"] = "android.permission.placeholder"
     }
+    create("nightly") {
+      initWith(getByName("debug"))
+      setMatchingFallbacks("debug")
+    }
+    create("fdroid") { // Configuration for F-Droid flavor
+      // dimension = "default"
+      initWith(getByName("release"))
+      matchingFallbacks += "release"
+      applicationIdSuffix = ".fdroid"
+      versionNameSuffix = "-fdroid"
+    }
   }
+
   bundle {
     language {
       // This is disabled so that the App Bundle does NOT split the APK for each language.

@@ -34,9 +34,11 @@ import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
 @Database(entities = [RecentSearchRoomEntity::class], version = 1)
 abstract class KiwixRoomDatabase : RoomDatabase() {
   abstract fun recentSearchRoomDao(): RecentSearchRoomDao
+  abstract fun foo(): KiwixRoomDatabase
 
   companion object {
     private var db: KiwixRoomDatabase? = null
+    abstract fun foo()
     fun getInstance(context: Context, boxStore: BoxStore): KiwixRoomDatabase {
       return db ?: synchronized(KiwixRoomDatabase::class) {
         return@getInstance db
