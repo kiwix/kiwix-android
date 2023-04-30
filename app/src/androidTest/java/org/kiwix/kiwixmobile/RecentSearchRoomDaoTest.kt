@@ -56,7 +56,7 @@ class RecentSearchRoomDaoTest {
     // Verify that the result contains the saved entity
     assertThat(result.size, equalTo(1))
     assertThat(result[0].searchTerm, equalTo("query 1"))
-    assertThat(result[0].zimId, equalTo("zimId"))
+    assertThat(result[0].zimId, equalTo(zimId))
   }
 
   @Test
