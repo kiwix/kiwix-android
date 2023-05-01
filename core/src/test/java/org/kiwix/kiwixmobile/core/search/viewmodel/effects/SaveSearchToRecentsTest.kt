@@ -23,6 +23,7 @@ import io.mockk.Called
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
@@ -33,7 +34,7 @@ internal class SaveSearchToRecentsTest {
   private val searchListItem = RecentSearchListItem("")
 
   private val activity: AppCompatActivity = mockk()
-  private val viewModelScope: CoroutineScope = mockk()
+  private val viewModelScope = CoroutineScope(Dispatchers.IO)
 
   @Test
   fun `invoke with null Id does nothing`() {
