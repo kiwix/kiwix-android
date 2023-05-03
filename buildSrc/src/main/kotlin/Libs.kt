@@ -30,7 +30,7 @@ object Libs {
    * https://developer.android.com/testing
    */
   const val espresso_contrib: String = "androidx.test.espresso:espresso-contrib:" +
-    Versions.androidx_test_espresso_contrib
+    Versions.androidx_test_espresso
 
   /**
    * https://developer.android.com/testing

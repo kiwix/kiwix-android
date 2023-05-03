@@ -16,9 +16,7 @@ object Versions {
 
   const val org_jetbrains_kotlinx_kotlinx_coroutines: String = "1.4.1"
 
-  const val androidx_test_espresso: String = "3.5.0"
-
-  const val androidx_test_espresso_contrib: String = "3.3.0"
+  const val androidx_test_espresso: String = "3.5.1"
 
   const val com_squareup_retrofit2: String = "2.9.0"
 
@@ -42,7 +40,7 @@ object Versions {
 
   const val io_objectbox: String = "3.5.0"
 
-  const val io_mockk: String = "1.13.4"
+  const val io_mockk: String = "1.13.5"
 
   const val android_arch_lifecycle_extensions: String = "1.1.1"
 
@@ -76,7 +74,7 @@ object Versions {
 
   const val threetenabp: String = "1.3.0"
 
-  const val uiautomator: String = "2.2.0"
+  const val uiautomator: String = "2.3.0-alpha03"
 
   const val annotation: String = "1.1.0"
 
@@ -94,7 +92,7 @@ object Versions {
 
   const val multidex: String = "2.0.1"
 
-  const val barista: String = "4.0.0"
+  const val barista: String = "4.3.0"
 
   const val fetch: String = "3.1.6"
 
