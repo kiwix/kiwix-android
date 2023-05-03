@@ -496,7 +496,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private fun onBookItemClick(item: LibraryListItem.BookItem) {
     if (checkExternalStorageWritePermission()) {
       downloadBookItem = item
-      if (requireActivity().hasNotificationPermission()) {
+      if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
         when {
           isNotConnected -> {
             noInternetSnackbar()

@@ -148,7 +148,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ||
         checkNearbyWifiDevicesPermission()
       ) {
-        if (requireActivity().hasNotificationPermission()) {
+        if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
           startStopServer()
         } else {
           requestNotificationPermission()
