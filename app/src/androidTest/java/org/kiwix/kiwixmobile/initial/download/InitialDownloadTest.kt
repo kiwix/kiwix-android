@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.initial.download
 
-import android.os.Build
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
@@ -61,28 +60,26 @@ class InitialDownloadTest : BaseActivityTest() {
 
   @Test
   fun initialDownloadTest() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      ActivityScenario.launch(KiwixMainActivity::class.java)
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
-      initialDownload {
-        clickLibraryOnBottomNav()
-        // This is for if download test fails for some reason after downloading the zim file
-        deleteZimIfExists()
-        clickDownloadOnBottomNav()
-        assertLibraryListDisplayed()
-        refreshList()
-        waitForDataToLoad()
-        downloadZimFile()
-        assertStorageConfigureDialogDisplayed()
-        clickOnYesToConfirm()
-        assertDownloadStart()
-        stopDownload()
-        assertStopDownloadDialogDisplayed()
-        clickOnYesToConfirm()
-        assertDownloadStop()
-      }
-      LeakAssertions.assertNoLeaks()
+    ActivityScenario.launch(KiwixMainActivity::class.java)
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
+    initialDownload {
+      clickLibraryOnBottomNav()
+      // This is for if download test fails for some reason after downloading the zim file
+      deleteZimIfExists()
+      clickDownloadOnBottomNav()
+      assertLibraryListDisplayed()
+      refreshList()
+      waitForDataToLoad()
+      downloadZimFile()
+      assertStorageConfigureDialogDisplayed()
+      clickOnYesToConfirm()
+      assertDownloadStart()
+      stopDownload()
+      assertStopDownloadDialogDisplayed()
+      clickOnYesToConfirm()
+      assertDownloadStop()
     }
+    LeakAssertions.assertNoLeaks()
   }
 
   @After

@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.language
 
 import android.Manifest
 import android.app.Instrumentation
-import android.os.Build
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -72,55 +71,52 @@ class LanguageFragmentTest {
 
   @Test
   fun testLanguageFragment() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+    language {
+      clickDownloadOnBottomNav()
+      waitForDataToLoad()
 
-      language {
-        clickDownloadOnBottomNav()
-        waitForDataToLoad()
+      // search and de-select if german language already selected
+      clickOnLanguageIcon()
+      clickOnLanguageSearchIcon()
+      searchLanguage("german")
+      deSelectLanguageIfAlreadySelected()
+      clickOnSaveLanguageIcon()
 
-        // search and de-select if german language already selected
-        clickOnLanguageIcon()
-        clickOnLanguageSearchIcon()
-        searchLanguage("german")
-        deSelectLanguageIfAlreadySelected()
-        clickOnSaveLanguageIcon()
+      // search and de-select if italian language already selected
+      clickOnLanguageIcon()
+      clickOnLanguageSearchIcon()
+      searchLanguage("italiano")
+      deSelectLanguageIfAlreadySelected()
+      clickOnSaveLanguageIcon()
 
-        // search and de-select if italian language already selected
-        clickOnLanguageIcon()
-        clickOnLanguageSearchIcon()
-        searchLanguage("italiano")
-        deSelectLanguageIfAlreadySelected()
-        clickOnSaveLanguageIcon()
+      // Search and save language for german
+      clickOnLanguageIcon()
+      clickOnLanguageSearchIcon()
+      searchLanguage("german")
+      selectLanguage("German")
+      clickOnSaveLanguageIcon()
 
-        // Search and save language for german
-        clickOnLanguageIcon()
-        clickOnLanguageSearchIcon()
-        searchLanguage("german")
-        selectLanguage("German")
-        clickOnSaveLanguageIcon()
+      // Search and save language for italian
+      clickOnLanguageIcon()
+      clickOnLanguageSearchIcon()
+      searchLanguage("italiano")
+      selectLanguage("Italian")
+      clickOnSaveLanguageIcon()
 
-        // Search and save language for italian
-        clickOnLanguageIcon()
-        clickOnLanguageSearchIcon()
-        searchLanguage("italiano")
-        selectLanguage("Italian")
-        clickOnSaveLanguageIcon()
+      // verify is german language selected
+      clickOnLanguageIcon()
+      clickOnLanguageSearchIcon()
+      searchLanguage("german")
+      checkIsLanguageSelected()
+      clickOnSaveLanguageIcon()
 
-        // verify is german language selected
-        clickOnLanguageIcon()
-        clickOnLanguageSearchIcon()
-        searchLanguage("german")
-        checkIsLanguageSelected()
-        clickOnSaveLanguageIcon()
-
-        // verify is italian language selected
-        clickOnLanguageIcon()
-        clickOnLanguageSearchIcon()
-        searchLanguage("italiano")
-        checkIsLanguageSelected()
-        clickOnSaveLanguageIcon()
-      }
-      LeakAssertions.assertNoLeaks()
+      // verify is italian language selected
+      clickOnLanguageIcon()
+      clickOnLanguageSearchIcon()
+      searchLanguage("italiano")
+      checkIsLanguageSelected()
+      clickOnSaveLanguageIcon()
     }
+    LeakAssertions.assertNoLeaks()
   }
 }

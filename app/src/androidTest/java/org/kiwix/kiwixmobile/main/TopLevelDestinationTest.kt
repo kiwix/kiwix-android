@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.main
 
-import android.os.Build
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
@@ -57,36 +56,34 @@ class TopLevelDestinationTest : BaseActivityTest() {
 
   @Test
   fun testTopLevelDestination() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      ActivityScenario.launch(KiwixMainActivity::class.java)
-      topLevel {
-        clickReaderOnBottomNav {
-        }
-        clickLibraryOnBottomNav {
-          assertGetZimNearbyDeviceDisplayed()
-          clickFileTransferIcon {
-          }
-        }
-        clickDownloadOnBottomNav(OnlineLibraryRobot::assertLibraryListDisplayed)
-        clickBookmarksOnNavDrawer {
-          assertBookMarksDisplayed()
-          clickOnTrashIcon()
-          assertDeleteBookmarksDialogDisplayed()
-        }
-        clickHistoryOnSideNav {
-          assertHistoryDisplayed()
-          clickOnTrashIcon()
-          assertDeleteHistoryDialogDisplayed()
-        }
-        clickHostBooksOnSideNav(ZimHostRobot::assertMenuWifiHotspotDiplayed)
-        clickSettingsOnSideNav(SettingsRobot::assertMenuSettingsDisplayed)
-        clickHelpOnSideNav(HelpRobot::assertToolbarDisplayed)
-        clickSupportKiwixOnSideNav()
-        assertExternalLinkDialogDisplayed()
-        pressBack()
+    ActivityScenario.launch(KiwixMainActivity::class.java)
+    topLevel {
+      clickReaderOnBottomNav {
       }
-      LeakAssertions.assertNoLeaks()
+      clickLibraryOnBottomNav {
+        assertGetZimNearbyDeviceDisplayed()
+        clickFileTransferIcon {
+        }
+      }
+      clickDownloadOnBottomNav(OnlineLibraryRobot::assertLibraryListDisplayed)
+      clickBookmarksOnNavDrawer {
+        assertBookMarksDisplayed()
+        clickOnTrashIcon()
+        assertDeleteBookmarksDialogDisplayed()
+      }
+      clickHistoryOnSideNav {
+        assertHistoryDisplayed()
+        clickOnTrashIcon()
+        assertDeleteHistoryDialogDisplayed()
+      }
+      clickHostBooksOnSideNav(ZimHostRobot::assertMenuWifiHotspotDiplayed)
+      clickSettingsOnSideNav(SettingsRobot::assertMenuSettingsDisplayed)
+      clickHelpOnSideNav(HelpRobot::assertToolbarDisplayed)
+      clickSupportKiwixOnSideNav()
+      assertExternalLinkDialogDisplayed()
+      pressBack()
     }
+    LeakAssertions.assertNoLeaks()
   }
 
   @After

@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library
 
-import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
@@ -61,36 +60,34 @@ class LocalLibraryTest : BaseActivityTest() {
 
   @Test
   fun testLocalLibrary() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
-        it.navigate(R.id.libraryFragment)
-      }
-      library {
-        deleteZimIfExists()
-        assertNoFilesTextDisplayed()
-      }
-      // load a zim file to test, After downloading zim file library list is visible or not
-      val loadFileStream =
-        SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-      val zimFile =
-        File(
-          ContextCompat.getExternalFilesDirs(context, null)[0],
-          "testzim.zim"
-        )
-      if (zimFile.exists()) zimFile.delete()
-      zimFile.createNewFile()
-      loadFileStream.use { inputStream ->
-        val outputStream: OutputStream = FileOutputStream(zimFile)
-        outputStream.use { it ->
-          val buffer = ByteArray(inputStream.available())
-          var length: Int
-          while (inputStream.read(buffer).also { length = it } > 0) {
-            it.write(buffer, 0, length)
-          }
+    ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
+      it.navigate(R.id.libraryFragment)
+    }
+    library {
+      deleteZimIfExists()
+      assertNoFilesTextDisplayed()
+    }
+    // load a zim file to test, After downloading zim file library list is visible or not
+    val loadFileStream =
+      SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
+    val zimFile =
+      File(
+        ContextCompat.getExternalFilesDirs(context, null)[0],
+        "testzim.zim"
+      )
+    if (zimFile.exists()) zimFile.delete()
+    zimFile.createNewFile()
+    loadFileStream.use { inputStream ->
+      val outputStream: OutputStream = FileOutputStream(zimFile)
+      outputStream.use { it ->
+        val buffer = ByteArray(inputStream.available())
+        var length: Int
+        while (inputStream.read(buffer).also { length = it } > 0) {
+          it.write(buffer, 0, length)
         }
       }
-      refresh(R.id.zim_swiperefresh)
-      library(LibraryRobot::assertLibraryListDisplayed)
     }
+    refresh(R.id.zim_swiperefresh)
+    library(LibraryRobot::assertLibraryListDisplayed)
   }
 }

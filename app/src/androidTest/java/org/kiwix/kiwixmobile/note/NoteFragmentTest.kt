@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.note
 
-import android.os.Build
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import leakcanary.LeakAssertions
@@ -42,16 +41,14 @@ class NoteFragmentTest : BaseActivityTest() {
 
   @Test
   fun verifyNoteFragment() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      activityScenarioRule.scenario.onActivity {
-        it.navigate(R.id.notesFragment)
-      }
-      note {
-        assertToolbarExist()
-        assertNoteRecyclerViewExist()
-        assertSwitchWidgetExist()
-      }
-      LeakAssertions.assertNoLeaks()
+    activityScenarioRule.scenario.onActivity {
+      it.navigate(R.id.notesFragment)
     }
+    note {
+      assertToolbarExist()
+      assertNoteRecyclerViewExist()
+      assertSwitchWidgetExist()
+    }
+    LeakAssertions.assertNoLeaks()
   }
 }

@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.download
 
-import android.os.Build
 import android.util.Log
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
@@ -71,34 +70,32 @@ class DownloadTest : BaseActivityTest() {
 
   @Test
   fun downloadTest() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      ActivityScenario.launch(KiwixMainActivity::class.java)
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-      try {
-        downloadRobot {
-          clickLibraryOnBottomNav()
-          deleteZimIfExists(false)
-          clickDownloadOnBottomNav()
-          waitForDataToLoad()
-          downloadZimFile()
-          assertDownloadStart()
-          waitUntilDownloadComplete()
-          clickLibraryOnBottomNav()
-          checkIfZimFileDownloaded()
-          deleteZimIfExists(true)
-        }
-      } catch (e: Exception) {
-        Assert.fail(
-          "Couldn't find downloaded file ' Off the Grid ' Original Exception: ${e.message}"
-        )
+    ActivityScenario.launch(KiwixMainActivity::class.java)
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    try {
+      downloadRobot {
+        clickLibraryOnBottomNav()
+        deleteZimIfExists(false)
+        clickDownloadOnBottomNav()
+        waitForDataToLoad()
+        downloadZimFile()
+        assertDownloadStart()
+        waitUntilDownloadComplete()
+        clickLibraryOnBottomNav()
+        checkIfZimFileDownloaded()
+        deleteZimIfExists(true)
       }
-      try {
-        refresh(R.id.zim_swiperefresh)
-      } catch (e: RuntimeException) {
-        Log.w(KIWIX_DOWNLOAD_TEST, "Failed to refresh ZIM list: " + e.localizedMessage)
-      }
-      LeakAssertions.assertNoLeaks()
+    } catch (e: Exception) {
+      Assert.fail(
+        "Couldn't find downloaded file ' Off the Grid ' Original Exception: ${e.message}"
+      )
     }
+    try {
+      refresh(R.id.zim_swiperefresh)
+    } catch (e: RuntimeException) {
+      Log.w(KIWIX_DOWNLOAD_TEST, "Failed to refresh ZIM list: " + e.localizedMessage)
+    }
+    LeakAssertions.assertNoLeaks()
   }
 
   @After

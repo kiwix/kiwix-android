@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.reader
 
-import android.os.Build
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.PreferenceManager
@@ -60,41 +59,39 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
 
   @Test
   fun testTabClosedDialog() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
-        kiwixMainActivity = it
-        kiwixMainActivity.navigate(R.id.libraryFragment)
-      }
-      val loadFileStream =
-        KiwixReaderFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-      val zimFile = File(context.cacheDir, "testzim.zim")
-      if (zimFile.exists()) zimFile.delete()
-      zimFile.createNewFile()
-      loadFileStream.use { inputStream ->
-        val outputStream: OutputStream = FileOutputStream(zimFile)
-        outputStream.use { it ->
-          val buffer = ByteArray(inputStream.available())
-          var length: Int
-          while (inputStream.read(buffer).also { length = it } > 0) {
-            it.write(buffer, 0, length)
-          }
+    ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
+      kiwixMainActivity = it
+      kiwixMainActivity.navigate(R.id.libraryFragment)
+    }
+    val loadFileStream =
+      KiwixReaderFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
+    val zimFile = File(context.cacheDir, "testzim.zim")
+    if (zimFile.exists()) zimFile.delete()
+    zimFile.createNewFile()
+    loadFileStream.use { inputStream ->
+      val outputStream: OutputStream = FileOutputStream(zimFile)
+      outputStream.use { it ->
+        val buffer = ByteArray(inputStream.available())
+        var length: Int
+        while (inputStream.read(buffer).also { length = it } > 0) {
+          it.write(buffer, 0, length)
         }
       }
-      UiThreadStatement.runOnUiThread {
-        kiwixMainActivity.navigate(
-          LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
-            .apply { zimFileUri = zimFile.toUri().toString() }
-        )
-      }
-      reader {
-        checkZimFileLoadedSuccessful(R.id.readerFragment)
-        clickOnTabIcon()
-        clickOnClosedAllTabsButton()
-        clickOnUndoButton()
-        assertTabRestored()
-      }
-      LeakAssertions.assertNoLeaks()
     }
+    UiThreadStatement.runOnUiThread {
+      kiwixMainActivity.navigate(
+        LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
+          .apply { zimFileUri = zimFile.toUri().toString() }
+      )
+    }
+    reader {
+      checkZimFileLoadedSuccessful(R.id.readerFragment)
+      clickOnTabIcon()
+      clickOnClosedAllTabsButton()
+      clickOnUndoButton()
+      assertTabRestored()
+    }
+    LeakAssertions.assertNoLeaks()
   }
 
   @After

@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.intro
 
-import android.os.Build
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import androidx.test.platform.app.InstrumentationRegistry
@@ -39,13 +38,11 @@ class IntroFragmentTest : BaseActivityTest() {
 
   @Test
   fun viewIsSwipeableAndNavigatesToMain() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      activityScenarioRule.scenario.onActivity {
-        it.navigate(R.id.introFragment)
-      }
-      intro(IntroRobot::swipeLeft) clickGetStarted {}
-      LeakAssertions.assertNoLeaks()
+    activityScenarioRule.scenario.onActivity {
+      it.navigate(R.id.introFragment)
     }
+    intro(IntroRobot::swipeLeft) clickGetStarted {}
+    LeakAssertions.assertNoLeaks()
   }
 
   @Before

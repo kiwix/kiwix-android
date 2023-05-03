@@ -68,31 +68,29 @@ class KiwixSettingsFragmentTest {
 
   @Test
   fun testSettingsActivity() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      settingsRobo {
-        assertZoomTextViewPresent()
-        assertVersionTextViewPresent()
-        clickLanguagePreference()
-        assertLanguagePrefDialogDisplayed()
-        dismissDialog()
-        toggleBackToTopPref()
-        toggleOpenNewTabInBackground()
-        toggleExternalLinkWarningPref()
-        toggleWifiDownloadsOnlyPref()
-        clickStoragePreference()
-        assertStorageDialogDisplayed()
-        dismissDialog()
-        clickClearHistoryPreference()
-        assertHistoryDialogDisplayed()
-        dismissDialog()
-        clickNightModePreference()
-        assertNightModeDialogDisplayed()
-        dismissDialog()
-        clickCredits()
-        assertContributorsDialogDisplayed()
-        dismissDialog()
-      }
-      LeakAssertions.assertNoLeaks()
+    settingsRobo {
+      assertZoomTextViewPresent()
+      assertVersionTextViewPresent()
+      clickLanguagePreference()
+      assertLanguagePrefDialogDisplayed()
+      dismissDialog()
+      toggleBackToTopPref()
+      toggleOpenNewTabInBackground()
+      toggleExternalLinkWarningPref()
+      toggleWifiDownloadsOnlyPref()
+      clickStoragePreference()
+      assertStorageDialogDisplayed()
+      dismissDialog()
+      clickClearHistoryPreference()
+      assertHistoryDialogDisplayed()
+      dismissDialog()
+      clickNightModePreference()
+      assertNightModeDialogDisplayed()
+      dismissDialog()
+      clickCredits()
+      assertContributorsDialogDisplayed()
+      dismissDialog()
     }
+    LeakAssertions.assertNoLeaks()
   }
 }
