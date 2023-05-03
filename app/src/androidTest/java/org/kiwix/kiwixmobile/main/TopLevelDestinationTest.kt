@@ -33,6 +33,8 @@ import org.kiwix.kiwixmobile.help.HelpRobot
 import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryRobot
 import org.kiwix.kiwixmobile.settings.SettingsRobot
 import org.kiwix.kiwixmobile.testutils.RetryRule
+import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
+import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import org.kiwix.kiwixmobile.webserver.ZimHostRobot
 
 class TopLevelDestinationTest : BaseActivityTest() {
@@ -43,7 +45,12 @@ class TopLevelDestinationTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+      if (isSystemUINotRespondingDialogVisible(this)) {
+        closeSystemDialogs(context)
+      }
+      waitForIdle()
+    }
     PreferenceManager.getDefaultSharedPreferences(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
     ).edit {

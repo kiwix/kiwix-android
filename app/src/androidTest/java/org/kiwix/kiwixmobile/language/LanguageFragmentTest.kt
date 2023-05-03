@@ -35,6 +35,8 @@ import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
+import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
+import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -61,7 +63,12 @@ class LanguageFragmentTest {
 
   @Before
   fun setUp() {
-    UiDevice.getInstance(instrumentation).waitForIdle()
+    UiDevice.getInstance(instrumentation).apply {
+      if (isSystemUINotRespondingDialogVisible(this)) {
+        closeSystemDialogs(instrumentation.targetContext.applicationContext)
+      }
+      waitForIdle()
+    }
     PreferenceManager.getDefaultSharedPreferences(instrumentation.targetContext.applicationContext)
       .edit {
         putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)

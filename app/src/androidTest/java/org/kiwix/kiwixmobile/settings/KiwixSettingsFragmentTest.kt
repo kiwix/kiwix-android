@@ -18,7 +18,6 @@
 package org.kiwix.kiwixmobile.settings
 
 import android.Manifest
-import android.os.Build
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
@@ -33,6 +32,8 @@ import org.kiwix.kiwixmobile.intro.IntroRobot
 import org.kiwix.kiwixmobile.intro.intro
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
+import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
+import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import org.kiwix.kiwixmobile.utils.StandardActions
 
 class KiwixSettingsFragmentTest {
@@ -53,17 +54,22 @@ class KiwixSettingsFragmentTest {
   @Before
   fun setup() {
     // Go to IntroFragment
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
-      UiThreadStatement.runOnUiThread {
-        activityScenarioRule.scenario.onActivity {
-          it.navigate(R.id.introFragment)
-        }
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+      if (isSystemUINotRespondingDialogVisible(this)) {
+        closeSystemDialogs(
+          InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
+        )
       }
-      intro(IntroRobot::swipeLeft) clickGetStarted { }
-      StandardActions.openDrawer()
-      StandardActions.enterSettings()
+      waitForIdle()
     }
+    UiThreadStatement.runOnUiThread {
+      activityScenarioRule.scenario.onActivity {
+        it.navigate(R.id.introFragment)
+      }
+    }
+    intro(IntroRobot::swipeLeft) clickGetStarted { }
+    StandardActions.openDrawer()
+    StandardActions.enterSettings()
   }
 
   @Test
