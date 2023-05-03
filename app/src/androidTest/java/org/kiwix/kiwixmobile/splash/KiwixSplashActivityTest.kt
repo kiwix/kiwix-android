@@ -108,8 +108,7 @@ class KiwixSplashActivityTest {
   @Test
   fun testNormalRun() {
     shouldShowIntro(false)
-    activityScenario.recreate()
-    activityScenario.onActivity {
+    ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
     }
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     Intents.intended(

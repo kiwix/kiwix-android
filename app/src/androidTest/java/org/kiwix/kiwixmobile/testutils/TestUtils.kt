@@ -30,7 +30,7 @@ import androidx.core.content.ContextCompat
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.screenshot.Screenshot
-import androidx.test.uiautomator.By
+import androidx.test.uiautomator.By.textContains
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObjectNotFoundException
 import androidx.test.uiautomator.UiSelector
@@ -155,7 +155,9 @@ object TestUtils {
 
   @JvmStatic
   fun isSystemUINotRespondingDialogVisible(uiDevice: UiDevice) =
-    uiDevice.findObject(By.textContains("System UI isn't responding")) != null
+    uiDevice.findObject(textContains("System UI isn't responding")) != null ||
+      uiDevice.findObject(textContains("Process system isn't responding")) != null ||
+      uiDevice.findObject(textContains("Launcher isn't responding")) != null
 
   @JvmStatic
   fun closeSystemDialogs(context: Context?) {
