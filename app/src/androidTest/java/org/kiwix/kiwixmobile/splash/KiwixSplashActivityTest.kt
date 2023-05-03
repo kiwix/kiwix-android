@@ -86,22 +86,22 @@ class KiwixSplashActivityTest {
     shouldShowIntro(true)
     activityScenario.recreate()
     activityScenario.onActivity {
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-      Espresso.onView(ViewMatchers.withId(R.id.get_started))
-        .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-
-      // Verify that the value of the "intro shown" boolean inside
-      // the SharedPreferences Database is not changed until
-      // the "Get started" button is pressed
-      val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-      Assert.assertEquals(
-        true,
-        preferences.getBoolean(
-          SharedPreferenceUtil.PREF_SHOW_INTRO,
-          true
-        )
-      )
     }
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    Espresso.onView(ViewMatchers.withId(R.id.get_started))
+      .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+
+    // Verify that the value of the "intro shown" boolean inside
+    // the SharedPreferences Database is not changed until
+    // the "Get started" button is pressed
+    val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+    Assert.assertEquals(
+      true,
+      preferences.getBoolean(
+        SharedPreferenceUtil.PREF_SHOW_INTRO,
+        true
+      )
+    )
     LeakAssertions.assertNoLeaks()
   }
 
@@ -110,13 +110,13 @@ class KiwixSplashActivityTest {
     shouldShowIntro(false)
     activityScenario.recreate()
     activityScenario.onActivity {
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-      Intents.intended(
-        IntentMatchers.hasComponent(
-          KiwixMainActivity::class.java.canonicalName
-        )
-      )
     }
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    Intents.intended(
+      IntentMatchers.hasComponent(
+        KiwixMainActivity::class.java.canonicalName
+      )
+    )
     LeakAssertions.assertNoLeaks()
   }
 
