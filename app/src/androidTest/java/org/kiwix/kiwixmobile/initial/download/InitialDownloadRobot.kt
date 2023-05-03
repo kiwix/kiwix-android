@@ -78,9 +78,9 @@ class InitialDownloadRobot : BaseRobot() {
       longClickOnZimFile()
       clickOnFileDeleteIcon()
       assertDeleteDialogDisplayed()
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_ESPRESSO.toLong())
+      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
       clickOnDeleteZimFile()
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_ESPRESSO.toLong())
+      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     } catch (e: Exception) {
       Log.i(
         "TEST_DELETE_ZIM",
