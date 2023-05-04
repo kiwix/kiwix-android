@@ -1454,13 +1454,13 @@ abstract class CoreReaderFragment :
               BookmarkItem(it, articleUrl, zimFileReader)
             )
             snackBarRoot?.snack(
-              R.string.bookmark_added,
-              R.string.open,
-              {
+              stringId = R.string.bookmark_added,
+              actionStringId = R.string.open,
+              actionClick = {
                 goToBookmarks()
                 Unit
               },
-              resources.getColor(R.color.alabaster_white)
+              actionTextColor = resources.getColor(R.color.alabaster_white)
             )
           }
         } ?: kotlin.run {

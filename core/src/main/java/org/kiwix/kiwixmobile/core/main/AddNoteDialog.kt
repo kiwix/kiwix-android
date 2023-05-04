@@ -376,8 +376,8 @@ class AddNoteDialog : DialogFragment() {
       mainRepositoryActions.deleteNote(articleNoteFileName)
       disableMenuItems()
       view?.snack(
-        R.string.note_delete_successful,
-        R.string.undo,
+        stringId = R.string.note_delete_successful,
+        actionStringId = R.string.undo,
         actionClick = { restoreDeletedNote(noteText) }
       )
     } else {

@@ -22,11 +22,13 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.View
 import androidx.annotation.ColorInt
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 
 @SuppressLint("ShowToast")
 fun View.snack(
   stringId: Int,
+  anchor: View? = null,
   actionStringId: Int? = null,
   actionClick: (() -> Unit)? = null,
   @ColorInt actionTextColor: Int = Color.WHITE
@@ -36,12 +38,21 @@ fun View.snack(
   ).apply {
     actionStringId?.let { setAction(it) { actionClick?.invoke() } }
     setActionTextColor(actionTextColor)
+    anchor?.let {
+      anchorView = anchor
+      addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+          transientBottomBar?.anchorView = null
+        }
+      })
+    }
   }.show()
 }
 
 @SuppressLint("ShowToast")
 fun View.snack(
   message: String,
+  anchor: View,
   actionStringId: Int? = null,
   actionClick: (() -> Unit)? = null,
   @ColorInt actionTextColor: Int = Color.WHITE
@@ -51,6 +62,12 @@ fun View.snack(
   ).apply {
     actionStringId?.let { setAction(it) { actionClick?.invoke() } }
     setActionTextColor(actionTextColor)
+    anchorView = anchor
+    addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+      override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+        transientBottomBar?.anchorView = null
+      }
+    })
   }.show()
 }
 
