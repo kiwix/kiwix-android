@@ -18,6 +18,8 @@
 package org.kiwix.kiwixmobile.testutils
 
 import android.Manifest
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
@@ -28,6 +30,7 @@ import androidx.core.content.ContextCompat
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.screenshot.Screenshot
+import androidx.test.uiautomator.By.textContains
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObjectNotFoundException
 import androidx.test.uiautomator.UiSelector
@@ -46,9 +49,8 @@ import java.util.Date
  */
 object TestUtils {
   private const val TAG = "TESTUTILS"
-  @JvmField var TEST_PAUSE_MS = 250
+  @JvmField var TEST_PAUSE_MS = 3000
   var TEST_PAUSE_MS_FOR_SEARCH_TEST = 1000
-  var TEST_PAUSE_MS_FOR_ESPRESSO = 3000
   var TEST_PAUSE_MS_FOR_DOWNLOAD_TEST = 10000
   const val RETRY_COUNT_FOR_FLAKY_TEST = 3
 
@@ -149,5 +151,16 @@ object TestUtils {
   @JvmStatic fun getResourceString(id: Int): String {
     val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
     return targetContext.resources.getString(id)
+  }
+
+  @JvmStatic
+  fun isSystemUINotRespondingDialogVisible(uiDevice: UiDevice) =
+    uiDevice.findObject(textContains("System UI isn't responding")) != null ||
+      uiDevice.findObject(textContains("Process system isn't responding")) != null ||
+      uiDevice.findObject(textContains("Launcher isn't responding")) != null
+
+  @JvmStatic
+  fun closeSystemDialogs(context: Context?) {
+    context?.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
   }
 }

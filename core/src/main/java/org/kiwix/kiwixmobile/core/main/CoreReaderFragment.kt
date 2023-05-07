@@ -1103,7 +1103,7 @@ abstract class CoreReaderFragment :
 
   @Suppress("NestedBlockDepth")
   override fun onReadAloudMenuClicked() {
-    if (requireActivity().hasNotificationPermission()) {
+    if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
       ttsControls?.let { ttsControls ->
         when (ttsControls.visibility) {
           View.GONE -> {

@@ -58,15 +58,18 @@ class NetworkTest {
   // MockWebServer mockWebServer
 
   @Rule
+  @JvmField
   var mActivityTestRule = ActivityTestRule(
     KiwixMainActivity::class.java, false, false
   )
 
   @Rule
+  @JvmField
   var readPermissionRule: GrantPermissionRule =
     GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE)
 
   @Rule
+  @JvmField
   var writePermissionRule: GrantPermissionRule =
     GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 

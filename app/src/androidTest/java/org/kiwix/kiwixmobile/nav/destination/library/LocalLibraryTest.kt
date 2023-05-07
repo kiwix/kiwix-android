@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library
 
-import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
@@ -26,6 +25,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
@@ -34,6 +34,8 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.search.SearchFragmentTest
 import org.kiwix.kiwixmobile.testutils.RetryRule
+import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
+import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -44,8 +46,14 @@ class LocalLibraryTest : BaseActivityTest() {
   @JvmField
   var retryRule = RetryRule()
 
+  @Before
   override fun waitForIdle() {
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+      if (isSystemUINotRespondingDialogVisible(this)) {
+        closeSystemDialogs(context)
+      }
+      waitForIdle()
+    }
     PreferenceManager.getDefaultSharedPreferences(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
     ).edit {
@@ -61,36 +69,34 @@ class LocalLibraryTest : BaseActivityTest() {
 
   @Test
   fun testLocalLibrary() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
-        it.navigate(R.id.libraryFragment)
-      }
-      library {
-        deleteZimIfExists()
-        assertNoFilesTextDisplayed()
-      }
-      // load a zim file to test, After downloading zim file library list is visible or not
-      val loadFileStream =
-        SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-      val zimFile =
-        File(
-          ContextCompat.getExternalFilesDirs(context, null)[0],
-          "testzim.zim"
-        )
-      if (zimFile.exists()) zimFile.delete()
-      zimFile.createNewFile()
-      loadFileStream.use { inputStream ->
-        val outputStream: OutputStream = FileOutputStream(zimFile)
-        outputStream.use { it ->
-          val buffer = ByteArray(inputStream.available())
-          var length: Int
-          while (inputStream.read(buffer).also { length = it } > 0) {
-            it.write(buffer, 0, length)
-          }
+    ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
+      it.navigate(R.id.libraryFragment)
+    }
+    library {
+      deleteZimIfExists()
+      assertNoFilesTextDisplayed()
+    }
+    // load a zim file to test, After downloading zim file library list is visible or not
+    val loadFileStream =
+      SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
+    val zimFile =
+      File(
+        ContextCompat.getExternalFilesDirs(context, null)[0],
+        "testzim.zim"
+      )
+    if (zimFile.exists()) zimFile.delete()
+    zimFile.createNewFile()
+    loadFileStream.use { inputStream ->
+      val outputStream: OutputStream = FileOutputStream(zimFile)
+      outputStream.use { it ->
+        val buffer = ByteArray(inputStream.available())
+        var length: Int
+        while (inputStream.read(buffer).also { length = it } > 0) {
+          it.write(buffer, 0, length)
         }
       }
-      refresh(R.id.zim_swiperefresh)
-      library(LibraryRobot::assertLibraryListDisplayed)
     }
+    refresh(R.id.zim_swiperefresh)
+    library(LibraryRobot::assertLibraryListDisplayed)
   }
 }

@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.download
 
-import android.os.Build
 import android.util.Log
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
@@ -44,6 +43,8 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
+import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource.Companion.getInstance
 import java.util.concurrent.TimeUnit
 
@@ -57,7 +58,12 @@ class DownloadTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+      if (isSystemUINotRespondingDialogVisible(this)) {
+        closeSystemDialogs(context)
+      }
+      waitForIdle()
+    }
     PreferenceManager.getDefaultSharedPreferences(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
     ).edit {
@@ -71,34 +77,32 @@ class DownloadTest : BaseActivityTest() {
 
   @Test
   fun downloadTest() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      ActivityScenario.launch(KiwixMainActivity::class.java)
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-      try {
-        downloadRobot {
-          clickLibraryOnBottomNav()
-          deleteZimIfExists(false)
-          clickDownloadOnBottomNav()
-          waitForDataToLoad()
-          downloadZimFile()
-          assertDownloadStart()
-          waitUntilDownloadComplete()
-          clickLibraryOnBottomNav()
-          checkIfZimFileDownloaded()
-          deleteZimIfExists(true)
-        }
-      } catch (e: Exception) {
-        Assert.fail(
-          "Couldn't find downloaded file ' Off the Grid ' Original Exception: ${e.message}"
-        )
+    ActivityScenario.launch(KiwixMainActivity::class.java)
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    try {
+      downloadRobot {
+        clickLibraryOnBottomNav()
+        deleteZimIfExists(false)
+        clickDownloadOnBottomNav()
+        waitForDataToLoad()
+        downloadZimFile()
+        assertDownloadStart()
+        waitUntilDownloadComplete()
+        clickLibraryOnBottomNav()
+        checkIfZimFileDownloaded()
+        deleteZimIfExists(true)
       }
-      try {
-        refresh(R.id.zim_swiperefresh)
-      } catch (e: RuntimeException) {
-        Log.w(KIWIX_DOWNLOAD_TEST, "Failed to refresh ZIM list: " + e.localizedMessage)
-      }
-      LeakAssertions.assertNoLeaks()
+    } catch (e: Exception) {
+      Assert.fail(
+        "Couldn't find downloaded file ' Off the Grid ' Original Exception: ${e.message}"
+      )
     }
+    try {
+      refresh(R.id.zim_swiperefresh)
+    } catch (e: RuntimeException) {
+      Log.w(KIWIX_DOWNLOAD_TEST, "Failed to refresh ZIM list: " + e.localizedMessage)
+    }
+    LeakAssertions.assertNoLeaks()
   }
 
   @After

@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.language
 
 import android.Manifest
 import android.app.Instrumentation
-import android.os.Build
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -36,6 +35,8 @@ import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
+import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
+import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -62,7 +63,12 @@ class LanguageFragmentTest {
 
   @Before
   fun setUp() {
-    UiDevice.getInstance(instrumentation).waitForIdle()
+    UiDevice.getInstance(instrumentation).apply {
+      if (isSystemUINotRespondingDialogVisible(this)) {
+        closeSystemDialogs(instrumentation.targetContext.applicationContext)
+      }
+      waitForIdle()
+    }
     PreferenceManager.getDefaultSharedPreferences(instrumentation.targetContext.applicationContext)
       .edit {
         putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
@@ -72,55 +78,52 @@ class LanguageFragmentTest {
 
   @Test
   fun testLanguageFragment() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+    language {
+      clickDownloadOnBottomNav()
+      waitForDataToLoad()
 
-      language {
-        clickDownloadOnBottomNav()
-        waitForDataToLoad()
+      // search and de-select if german language already selected
+      clickOnLanguageIcon()
+      clickOnLanguageSearchIcon()
+      searchLanguage("german")
+      deSelectLanguageIfAlreadySelected()
+      clickOnSaveLanguageIcon()
 
-        // search and de-select if german language already selected
-        clickOnLanguageIcon()
-        clickOnLanguageSearchIcon()
-        searchLanguage("german")
-        deSelectLanguageIfAlreadySelected()
-        clickOnSaveLanguageIcon()
+      // search and de-select if italian language already selected
+      clickOnLanguageIcon()
+      clickOnLanguageSearchIcon()
+      searchLanguage("italiano")
+      deSelectLanguageIfAlreadySelected()
+      clickOnSaveLanguageIcon()
 
-        // search and de-select if italian language already selected
-        clickOnLanguageIcon()
-        clickOnLanguageSearchIcon()
-        searchLanguage("italiano")
-        deSelectLanguageIfAlreadySelected()
-        clickOnSaveLanguageIcon()
+      // Search and save language for german
+      clickOnLanguageIcon()
+      clickOnLanguageSearchIcon()
+      searchLanguage("german")
+      selectLanguage("German")
+      clickOnSaveLanguageIcon()
 
-        // Search and save language for german
-        clickOnLanguageIcon()
-        clickOnLanguageSearchIcon()
-        searchLanguage("german")
-        selectLanguage("German")
-        clickOnSaveLanguageIcon()
+      // Search and save language for italian
+      clickOnLanguageIcon()
+      clickOnLanguageSearchIcon()
+      searchLanguage("italiano")
+      selectLanguage("Italian")
+      clickOnSaveLanguageIcon()
 
-        // Search and save language for italian
-        clickOnLanguageIcon()
-        clickOnLanguageSearchIcon()
-        searchLanguage("italiano")
-        selectLanguage("Italian")
-        clickOnSaveLanguageIcon()
+      // verify is german language selected
+      clickOnLanguageIcon()
+      clickOnLanguageSearchIcon()
+      searchLanguage("german")
+      checkIsLanguageSelected()
+      clickOnSaveLanguageIcon()
 
-        // verify is german language selected
-        clickOnLanguageIcon()
-        clickOnLanguageSearchIcon()
-        searchLanguage("german")
-        checkIsLanguageSelected()
-        clickOnSaveLanguageIcon()
-
-        // verify is italian language selected
-        clickOnLanguageIcon()
-        clickOnLanguageSearchIcon()
-        searchLanguage("italiano")
-        checkIsLanguageSelected()
-        clickOnSaveLanguageIcon()
-      }
-      LeakAssertions.assertNoLeaks()
+      // verify is italian language selected
+      clickOnLanguageIcon()
+      clickOnLanguageSearchIcon()
+      searchLanguage("italiano")
+      checkIsLanguageSelected()
+      clickOnSaveLanguageIcon()
     }
+    LeakAssertions.assertNoLeaks()
   }
 }

@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.help
 
-import android.os.Build
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import leakcanary.LeakAssertions
@@ -27,12 +26,19 @@ import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.testutils.RetryRule
+import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
+import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 
 class HelpFragmentTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+      if (isSystemUINotRespondingDialogVisible(this)) {
+        closeSystemDialogs(context)
+      }
+      waitForIdle()
+    }
   }
 
   @Rule
@@ -41,23 +47,21 @@ class HelpFragmentTest : BaseActivityTest() {
 
   @Test
   fun verifyHelpActivity() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      activityScenarioRule.scenario.onActivity {
-        it.navigate(R.id.helpFragment)
-      }
-      help {
-        clickOnWhatDoesKiwixDo()
-        assertWhatDoesKiwixDoIsExpanded()
-        clickOnWhatDoesKiwixDo()
-        clickOnWhereIsContent()
-        assertWhereIsContentIsExpanded()
-        clickOnWhereIsContent()
-        clickOnHowToUpdateContent()
-        assertHowToUpdateContentIsExpanded()
-        clickOnHowToUpdateContent()
-        clickOnSendFeedback()
-      }
-      LeakAssertions.assertNoLeaks()
+    activityScenarioRule.scenario.onActivity {
+      it.navigate(R.id.helpFragment)
     }
+    help {
+      clickOnWhatDoesKiwixDo()
+      assertWhatDoesKiwixDoIsExpanded()
+      clickOnWhatDoesKiwixDo()
+      clickOnWhereIsContent()
+      assertWhereIsContentIsExpanded()
+      clickOnWhereIsContent()
+      clickOnHowToUpdateContent()
+      assertHowToUpdateContentIsExpanded()
+      clickOnHowToUpdateContent()
+      clickOnSendFeedback()
+    }
+    LeakAssertions.assertNoLeaks()
   }
 }

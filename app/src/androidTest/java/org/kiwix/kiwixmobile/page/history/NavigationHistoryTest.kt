@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.page.history
 
-import android.os.Build
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.PreferenceManager
@@ -37,6 +36,8 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections
 import org.kiwix.kiwixmobile.testutils.RetryRule
+import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
+import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -51,7 +52,12 @@ class NavigationHistoryTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+      if (isSystemUINotRespondingDialogVisible(this)) {
+        closeSystemDialogs(context)
+      }
+      waitForIdle()
+    }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
@@ -61,48 +67,46 @@ class NavigationHistoryTest : BaseActivityTest() {
 
   @Test
   fun navigationHistoryDialogTest() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
-        kiwixMainActivity = it
-        kiwixMainActivity.navigate(R.id.libraryFragment)
-      }
-      val loadFileStream =
-        NavigationHistoryTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-      val zimFile = File(context.cacheDir, "testzim.zim")
-      if (zimFile.exists()) zimFile.delete()
-      zimFile.createNewFile()
-      loadFileStream.use { inputStream ->
-        val outputStream: OutputStream = FileOutputStream(zimFile)
-        outputStream.use { it ->
-          val buffer = ByteArray(inputStream.available())
-          var length: Int
-          while (inputStream.read(buffer).also { length = it } > 0) {
-            it.write(buffer, 0, length)
-          }
+    ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
+      kiwixMainActivity = it
+      kiwixMainActivity.navigate(R.id.libraryFragment)
+    }
+    val loadFileStream =
+      NavigationHistoryTest::class.java.classLoader.getResourceAsStream("testzim.zim")
+    val zimFile = File(context.cacheDir, "testzim.zim")
+    if (zimFile.exists()) zimFile.delete()
+    zimFile.createNewFile()
+    loadFileStream.use { inputStream ->
+      val outputStream: OutputStream = FileOutputStream(zimFile)
+      outputStream.use { it ->
+        val buffer = ByteArray(inputStream.available())
+        var length: Int
+        while (inputStream.read(buffer).also { length = it } > 0) {
+          it.write(buffer, 0, length)
         }
       }
-      UiThreadStatement.runOnUiThread {
-        kiwixMainActivity.navigate(
-          LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
-            .apply { zimFileUri = zimFile.toUri().toString() }
-        )
-      }
-      navigationHistory {
-        checkZimFileLoadedSuccessful(R.id.readerFragment)
-        clickOnAndroidArticle()
-        longClickOnBackwardButton()
-        assertBackwardNavigationHistoryDialogDisplayed()
-        pressBack()
-        clickOnBackwardButton()
-        longClickOnForwardButton()
-        assertForwardNavigationHistoryDialogDisplayed()
-        clickOnDeleteHistory()
-        assertDeleteDialogDisplayed()
-        pressBack()
-        pressBack()
-      }
-      LeakAssertions.assertNoLeaks()
     }
+    UiThreadStatement.runOnUiThread {
+      kiwixMainActivity.navigate(
+        LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
+          .apply { zimFileUri = zimFile.toUri().toString() }
+      )
+    }
+    navigationHistory {
+      checkZimFileLoadedSuccessful(R.id.readerFragment)
+      clickOnAndroidArticle()
+      longClickOnBackwardButton()
+      assertBackwardNavigationHistoryDialogDisplayed()
+      pressBack()
+      clickOnBackwardButton()
+      longClickOnForwardButton()
+      assertForwardNavigationHistoryDialogDisplayed()
+      clickOnDeleteHistory()
+      assertDeleteDialogDisplayed()
+      pressBack()
+      pressBack()
+    }
+    LeakAssertions.assertNoLeaks()
   }
 
   @After

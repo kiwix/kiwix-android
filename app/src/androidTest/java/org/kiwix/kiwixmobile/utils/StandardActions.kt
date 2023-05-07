@@ -39,6 +39,7 @@ object StandardActions {
   }
 
   fun openDrawer() {
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     openDrawerWithGravity(R.id.navigation_container, GravityCompat.START)
   }
 

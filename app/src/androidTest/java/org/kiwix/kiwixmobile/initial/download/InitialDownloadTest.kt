@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.initial.download
 
-import android.os.Build
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
@@ -38,6 +37,8 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
+import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -49,7 +50,12 @@ class InitialDownloadTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+      if (isSystemUINotRespondingDialogVisible(this)) {
+        closeSystemDialogs(context)
+      }
+      waitForIdle()
+    }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
@@ -61,28 +67,26 @@ class InitialDownloadTest : BaseActivityTest() {
 
   @Test
   fun initialDownloadTest() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      ActivityScenario.launch(KiwixMainActivity::class.java)
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
-      initialDownload {
-        clickLibraryOnBottomNav()
-        // This is for if download test fails for some reason after downloading the zim file
-        deleteZimIfExists()
-        clickDownloadOnBottomNav()
-        assertLibraryListDisplayed()
-        refreshList()
-        waitForDataToLoad()
-        downloadZimFile()
-        assertStorageConfigureDialogDisplayed()
-        clickOnYesToConfirm()
-        assertDownloadStart()
-        stopDownload()
-        assertStopDownloadDialogDisplayed()
-        clickOnYesToConfirm()
-        assertDownloadStop()
-      }
-      LeakAssertions.assertNoLeaks()
+    ActivityScenario.launch(KiwixMainActivity::class.java)
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
+    initialDownload {
+      clickLibraryOnBottomNav()
+      // This is for if download test fails for some reason after downloading the zim file
+      deleteZimIfExists()
+      clickDownloadOnBottomNav()
+      assertLibraryListDisplayed()
+      refreshList()
+      waitForDataToLoad()
+      downloadZimFile()
+      assertStorageConfigureDialogDisplayed()
+      clickOnYesToConfirm()
+      assertDownloadStart()
+      stopDownload()
+      assertStopDownloadDialogDisplayed()
+      clickOnYesToConfirm()
+      assertDownloadStop()
     }
+    LeakAssertions.assertNoLeaks()
   }
 
   @After

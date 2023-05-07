@@ -42,6 +42,7 @@ import androidx.navigation.NavDirections
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 object ActivityExtensions {
 
@@ -144,8 +145,10 @@ object ActivityExtensions {
     )
   }
 
-  fun Activity.hasNotificationPermission() =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+  fun Activity.hasNotificationPermission(sharedPreferenceUtil: SharedPreferenceUtil?) =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+      sharedPreferenceUtil?.prefIsTest == false
+    ) {
       ContextCompat.checkSelfPermission(
         this,
         POST_NOTIFICATIONS
