@@ -48,7 +48,11 @@
 
     <action
       android:id="@+id/action_navigation_reader_to_navigation_library"
-      app:destination="@id/libraryFragment" />
+      app:destination="@id/libraryFragment"
+      app:popUpTo="@id/readerFragment"
+      app:popUpToSaveState="true"
+      app:restoreState="true" />
+
     <action
       android:id="@+id/action_readerFragment_to_searchFragment"
       app:destination="@id/searchFragment" />
@@ -70,7 +74,10 @@
       app:popUpTo="@id/readerFragment" />
     <action
       android:id="@+id/action_navigation_library_to_navigation_downloads"
-      app:destination="@id/downloadsFragment" />
+      app:destination="@id/downloadsFragment"
+      app:popUpTo="@id/libraryFragment"
+      app:popUpToInclusive="true"
+      app:restoreState="true" />
     <action
       android:id="@+id/action_libraryFragment_to_localFileTransferFragment"
       app:destination="@id/localFileTransferFragment" />
