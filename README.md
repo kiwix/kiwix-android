@@ -72,6 +72,13 @@ For writing commit messages please read the
 [COMMITSTYLE](docs/commitstyle.md) carefully. Kindly adhere to the
 guidelines. Pull requests not matching the style will be rejected.
 
+## Localization
+
+Kiwix Android is available in multiple languages and managed by Translatewiki.
+When adding new string resources, contributors are required to provide additional context on how and where the new string will be used.
+This helps translators to understand the context and translate accurately.
+Before adding new string resources, please read the [STRING_RESOURCES](https://github.com/kiwix/kiwix-android/blob/develop/STRING_RESOURCES.md) carefully.
+
 ## Communication
 
 Available communication channels:
