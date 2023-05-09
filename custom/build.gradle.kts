@@ -77,15 +77,14 @@ fun ProductFlavor.createPublishBundleWithExpansionTask(
         .transactionWithCommit(packageName) {
           val variants =
             applicationVariants.releaseVariantsFor(this@createPublishBundleWithExpansionTask)
+          // val generatedBundleFile =
+          //   File(
+          //     "$buildDir/outputs/bundle/${capitalizedName.toLowerCase()}" +
+          //       "debug/custom-${capitalizedName.toLowerCase()}-release.aab"
+          //   )
           val generatedBundleFile =
             File(
-              "$buildDir/outputs/bundle/${capitalizedName.toLowerCase()}" +
-                "debug/custom-${capitalizedName.toLowerCase()}-release.aab"
-            )
-          val generatedBundleFile2 =
-            File(
-              "$rootDir/custom/${capitalizedName.toLowerCase()}/" +
-                "release/custom-${capitalizedName.toLowerCase()}-release.aab"
+              "custom/tunisie/release/custom-tunisie-release.aab"
             )
           if (generatedBundleFile.exists()) {
             uploadBundle(generatedBundleFile)
