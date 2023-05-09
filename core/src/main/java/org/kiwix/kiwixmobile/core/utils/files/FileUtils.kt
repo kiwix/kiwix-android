@@ -30,6 +30,9 @@ import android.util.Log
 import android.webkit.URLUtil
 import android.widget.Toast
 import androidx.documentfile.provider.DocumentFile
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
@@ -55,7 +58,9 @@ object FileUtils {
   @JvmStatic
   @Synchronized
   fun deleteCachedFiles(context: Context) {
-    getFileCacheDir(context)?.deleteRecursively()
+    CoroutineScope(Dispatchers.IO).launch {
+      getFileCacheDir(context)?.deleteRecursively()
+    }
   }
 
   @JvmStatic
