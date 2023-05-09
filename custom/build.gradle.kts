@@ -79,7 +79,7 @@ fun ProductFlavor.createPublishBundleWithExpansionTask(
             applicationVariants.releaseVariantsFor(this@createPublishBundleWithExpansionTask)
           val generatedBundleFile =
             File(
-              "$projectDir/custom/tunisie/" +
+              "$projectDir/tunisie/" +
                 "release/"
             )
           val generatedBundleFile2 =
