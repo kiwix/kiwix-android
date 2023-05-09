@@ -92,7 +92,7 @@ fun ProductFlavor.createPublishBundleWithExpansionTask(
             attachExpansionTo(variants[0].versionCode)
             addToTrackInDraft(variants[0].versionCode, versionName)
           } else {
-            throw FileNotFoundException("Unable to find generated aab file generatedFile ${generatedBundleFile.path} & generatedBundleFile2 ${generatedBundleFile2.path}")
+            throw FileNotFoundException("Unable to find generated aab file generatedFile ${generatedBundleFile.path} & generatedBundleFile2 generatedBundleFile2.path")
           }
         }
     }
