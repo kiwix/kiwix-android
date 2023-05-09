@@ -79,7 +79,7 @@ fun ProductFlavor.createPublishBundleWithExpansionTask(
             applicationVariants.releaseVariantsFor(this@createPublishBundleWithExpansionTask)
           val generatedBundleFile =
             File(
-              "/custom/${capitalizedName.toLowerCase()}/" +
+              "$rootDir/custom/${capitalizedName.toLowerCase()}/" +
                 "release/custom-${capitalizedName.toLowerCase()}-release.aab"
             )
           if (generatedBundleFile.exists()) {
