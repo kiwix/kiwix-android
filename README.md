@@ -61,17 +61,6 @@ We currently have a series of automated Unit and Integration
 tests. These can be run locally and are also run when submitting a
 pull request.
 
-## Code Style
-
-For contributions please read the [CODESTYLE](docs/codestyle.md)
-carefully. Pull requests that do not match the style will be rejected.
-
-## Commit Style
-
-For writing commit messages please read the
-[COMMITSTYLE](docs/commitstyle.md) carefully. Kindly adhere to the
-guidelines. Pull requests not matching the style will be rejected.
-
 ## Communication
 
 Available communication channels:
