@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.settings
 
 import eu.mhutti1.utils.storage.Bytes
 import org.kiwix.kiwixmobile.core.extensions.freeSpace
+import org.kiwix.kiwixmobile.core.extensions.totalSpace
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import java.io.File
@@ -39,5 +40,5 @@ class StorageCalculator @Inject constructor(
     if (file.isFileExist()) file.freeSpace()
     else 0L
 
-  private fun totalBytes(file: File) = if (file.exists()) file.totalSpace else 0L
+  private fun totalBytes(file: File) = if (file.isFileExist()) file.totalSpace() else 0L
 }

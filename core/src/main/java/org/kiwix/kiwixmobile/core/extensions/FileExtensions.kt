@@ -34,3 +34,9 @@ fun File.freeSpace(): Long = runBlocking {
     freeSpace
   }
 }
+
+fun File.totalSpace(): Long = runBlocking {
+  withContext(Dispatchers.IO) {
+    totalSpace
+  }
+}
