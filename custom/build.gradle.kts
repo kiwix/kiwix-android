@@ -80,7 +80,7 @@ fun ProductFlavor.createPublishBundleWithExpansionTask(
           val generatedBundleFile =
             File(
               "$projectDir/custom/tunisie/" +
-                "release/custom-tunisie-release.aab"
+                "release/"
             )
           val generatedBundleFile2 =
             File(
