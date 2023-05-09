@@ -79,8 +79,8 @@ fun ProductFlavor.createPublishBundleWithExpansionTask(
             applicationVariants.releaseVariantsFor(this@createPublishBundleWithExpansionTask)
           val generatedBundleFile =
             File(
-              "$projectDir/tunisie/" +
-                "release/"
+              "$buildDir/outputs/bundle/${capitalizedName.toLowerCase()}" +
+                "debug/custom-${capitalizedName.toLowerCase()}-release.aab"
             )
           val generatedBundleFile2 =
             File(
