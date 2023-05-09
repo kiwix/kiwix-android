@@ -82,13 +82,18 @@ fun ProductFlavor.createPublishBundleWithExpansionTask(
               "$rootDir/custom/tunisie/" +
                 "release/custom-tunisie-release.aab"
             )
+          val generatedBundleFile2 =
+            File(
+              "$rootDir/custom/${capitalizedName.toLowerCase()}/" +
+                "release/custom-${capitalizedName.toLowerCase()}-release.aab"
+            )
           if (generatedBundleFile.exists()) {
             uploadBundle(generatedBundleFile)
             uploadExpansionTo(file, variants[0].versionCode)
             attachExpansionTo(variants[0].versionCode)
             addToTrackInDraft(variants[0].versionCode, versionName)
           } else {
-            throw FileNotFoundException("Unable to find generated aab file")
+            throw FileNotFoundException("Unable to find generated aab file generatedFile ${generatedBundleFile.path} & generatedBundleFile2 ${generatedBundleFile2.path}")
           }
         }
     }
