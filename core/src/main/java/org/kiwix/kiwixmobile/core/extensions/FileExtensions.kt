@@ -40,3 +40,9 @@ fun File.totalSpace(): Long = runBlocking {
     totalSpace
   }
 }
+
+fun File.canReadFile(): Boolean = runBlocking {
+  withContext(Dispatchers.IO) {
+    canRead()
+  }
+}

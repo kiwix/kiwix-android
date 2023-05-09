@@ -133,7 +133,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       requireActivity().applicationContext, Uri.parse(zimFileUri)
     )
 
-    if (filePath == null || !File(filePath).exists()) {
+    if (filePath == null || !File(filePath).isFileExist()) {
       activity.toast(R.string.error_file_not_found)
       return
     }

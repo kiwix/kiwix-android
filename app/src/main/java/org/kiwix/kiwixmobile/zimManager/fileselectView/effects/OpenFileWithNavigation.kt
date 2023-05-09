@@ -23,6 +23,7 @@ import androidx.core.net.toUri
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
+import org.kiwix.kiwixmobile.core.extensions.canReadFile
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader
@@ -32,7 +33,7 @@ data class OpenFileWithNavigation(private val bookOnDisk: BooksOnDiskListItem.Bo
 
   override fun invokeWith(activity: AppCompatActivity) {
     val file = bookOnDisk.file
-    if (!file.canRead()) {
+    if (!file.canReadFile()) {
       activity.toast(R.string.error_file_not_found)
     } else {
       activity.navigate(
