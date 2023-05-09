@@ -54,6 +54,12 @@ All branches should have distinct history and should be visually easy to follow,
 
 If you wish to rebase you should be following the [Golden Rule](https://www.atlassian.com/git/tutorials/merging-vs-rebasing#the-golden-rule-of-rebasing) and adhere to the advice in the heading [Aside: Rebase as cleanup is awesome in the coding lifecycle](https://www.atlassian.com/git/articles/git-team-workflows-merge-or-rebase).
 
+### Committing
+
+For writing commit messages please read the
+[COMMITSTYLE](docs/commitstyle.md) carefully. Kindly adhere to the
+guidelines. Pull requests not matching the style will be rejected.
+
 ### Design and style
 
 For an overview of how to make design changes to Kiwix Android, check out [DESIGN.md](https://github.com/kiwix/kiwix-android/blob/develop/DESIGN.md).
@@ -119,3 +125,69 @@ learn more about the commands run on the CI please refer to [.github/workflows](
 
 
 _These guidelines are based on [Tools for Government Data Archiving](https://github.com/edgi-govdata-archiving/overview/blob/master/CONTRIBUTING.md)'s._
+
+## Code Style
+
+For contributions please read the [CODESTYLE](docs/codestyle.md)
+carefully. Pull requests that do not match the style will be rejected.
+
+### Localization
+
+Kiwix Android is available in multiple languages. Translations of
+string resources are managed by
+[Translatewiki.net](https://translatewiki.net).
+
+When adding new strings to the code base (menu entries, warnings,
+dialog, ...), developers are required to do it using a string
+resource.
+
+When adding a string resource to the code base, developers
+are required to provide additional context on how and where the new
+string will be used. This helps translators to understand the context
+and translate accurately.
+
+[More information about the Kiwix project in
+Translatewiki.net](https://translatewiki.net/wiki/Translating:Kiwix).
+
+#### String resources
+
+Each user-visible string in Kiwix Android should be listed in
+`strings.xml ` files to allow proper translation, replacement and
+modification.
+
+Newly added string resources are imported by Translatewiki.net every
+few days and and then manually translated by a community of
+volunteers.
+
+Every few days, Translatewiki.net pushes automatically the new
+translations in Kiwix Android git repository via a PR.
+
+##### Howto by example
+
+Start by adding your new string resource `new_string` to
+`values/strings.xml` in English. That is:
+```
+...
+<string name="new_string">New String</string>
+...
+
+```
+
+You will now have to describe the string in `values-qq/strings.xml`
+with where and how the new string is used. E.x. for the string
+`<string name="on">On</string>`: `values-qq/strings.xml:`
+
+```
+...
+<string name="on">This is used in the settings screen to turn on the night mode.</string>
+...
+```
+
+It's important to notice that:
+
+- The values in `values/strings.xml` are the strings that are going to
+  be displayed in the Kiwix application to the user.
+
+- The values in `values-qq/strings.xml` are only visible to the
+  translator and are only there to help them make a correct
+  translation.
