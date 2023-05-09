@@ -28,3 +28,9 @@ fun File.isFileExist(): Boolean = runBlocking {
     exists()
   }
 }
+
+fun File.freeSpace(): Long = runBlocking {
+  withContext(Dispatchers.IO) {
+    freeSpace
+  }
+}
