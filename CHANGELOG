@@ -1,3 +1,62 @@
+3.7.0
+
+New Features:
+* Added support for Android 13.
+* Added scrollbar indicator in the download screen.
+* Books now appear grey when the device does not have enough space.
+* Display the URL in the External Link dialog.
+* Display Navigation History Zim file.
+* Added snackbar to restore all tabs after clicking on the close all tab button.
+* The Continuous Integration (CI) now fails if a memory leak is detected in the application.
+
+Bug Fixes:
+* Fixed CheckResult lint issue.
+* Fixed linting issue in translate wiki PRs.
+* Fixed visibility issue with snackbar in download screen.
+* Fixed issue with Read Aloud feature not starting in some ZIM files.
+* Fixed white line between bottom nav and Android bottom nav in reader screen.
+* Fixed memory leak in the application.
+* Display default logo if no illustration is available for the ZIM file.
+* Fixed Wi-Fi detection on Android 11 and above for local hosting.
+* Removed Jcenter from the project.
+* Replaced com.dicedmelon.gradle:jacoco-android:0.1.5 with org.jacoco:org.jacoco.core:0.8.8 since the former contains deprecated code that is not compatible with Gradle 8.0.
+* Fixed articles that contain "?" cannot be opened.
+* Fixed unable to jump to sections in table of contents which contain single quotes.
+* Fix Misalignment of FloatingActionButton and BottomNavBar is Blank.
+* Fixed publish Play Store build failure.
+* UI is now immediately updated to the newly chosen language.
+* Fixed APK crashes when changing the git branch.
+* Fixed resizing issue of widget.
+* Fixed the issue of white space showing when scrolling up in LocalLibraryFragment.
+* Fixed endless media access permission request.
+* Fixed the error of showing "allow download content via mobile network" dialog when connected to Wi-Fi.
+* Fixed wrong TTS message if language is not available.
+* Fixed the issue of the last book not properly visible on the library screen.
+* Properly checked availability of email app while sending an email.
+ Fixed the issue of unable to navigate between the fragments.
+
+Improvements:
+* In nightly workflow have used for compile and upload APK.
+* Upgraded Gradle to version 8.0.
+* Added a guide for new contributors on what is necessary to do regarding the localization of the software.
+* Migrated the whole project to Kotlin.
+* Removed explicit NDK version as Gradle 8.0 already has a default NDK.
+* Removed JCenter from the project.
+* Updated KiwixLib from 9.4.1 to 10.1.1
+* Removed Squidb code.
+* Removed deprecated ActivityTestRule from test cases.
+* Upgraded androidx.test:rules from 1.4.0 to 1.5.0
+* Upgraded androidx.test:runner from 1.4.0 to 1.5.1
+* Upgraded androidx.test:core from 1.4.0 to 1.5.0
+* Upgraded androidx.test.espresso:espresso-web from 3.4.0 to 3.5.1
+* Upgraded androidx.test.espresso:espresso-intents from 3.4.0 to 3.5.1
+* Upgraded androidx.test.espresso:espresso-core from 3.4.0 to 3.5.1
+* Upgraded androidx.test.espresso:espresso-contrib from 3.4.0 to 3.5.1
+* Upgraded org.junit.jupiter:junit-jupiter from 5.7.0 to 5.9.1
+* Upgraded androidx.test.ext:junit from 1.1.2 to 1.1.4
+* Stabilise the CI for android 30, 33.
+
+
 3.6.0
 * FIX: Upgrade to Kotlin 1.7.0.
 * FIX: Introduce google play build variant.
