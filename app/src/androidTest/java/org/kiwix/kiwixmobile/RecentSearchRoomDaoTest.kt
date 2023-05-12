@@ -53,7 +53,7 @@ class RecentSearchRoomDaoTest {
     val query = "query 1"
     recentSearchRoomDao.saveSearch(query, zimId)
     // Search for recent search entities with a matching zimId
-    val result = getSavedRecentHistory(zimId)
+    val result = getRecentSearchByZimId(zimId)
     // Verify that the result contains the saved entity
     assertThat(result.size, equalTo(1))
     assertThat(result[0].searchTerm, equalTo(query))
@@ -62,7 +62,7 @@ class RecentSearchRoomDaoTest {
     // Delete the saved entity by search term
     recentSearchRoomDao.deleteSearchString(query)
     // Verify that the result does not contain the deleted entity
-    assertThat(getSavedRecentHistory(zimId).size, equalTo(0))
+    assertThat(getRecentSearchByZimId(zimId).size, equalTo(0))
 
     // Testing deleting all recent searched history
     // Save two recent search entities
@@ -71,8 +71,9 @@ class RecentSearchRoomDaoTest {
     // Delete all recent search entities
     recentSearchRoomDao.deleteSearchHistory()
     // Verify that the result is empty
-    assertThat(getSavedRecentHistory(zimId).size, equalTo(0))
+    assertThat(getRecentSearchByZimId(zimId).size, equalTo(0))
   }
 
-  private fun getSavedRecentHistory(zimId: String) = recentSearchRoomDao.search(zimId).first()
+  private suspend fun getRecentSearchByZimId(zimId: String) =
+    recentSearchRoomDao.search(zimId).first()
 }
