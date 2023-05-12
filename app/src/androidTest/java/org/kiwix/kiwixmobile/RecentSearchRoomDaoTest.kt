@@ -35,27 +35,28 @@ import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 @RunWith(AndroidJUnit4::class)
 class RecentSearchRoomDaoTest {
 
-  private lateinit var database: KiwixRoomDatabase
-  private lateinit var dao: RecentSearchRoomDao
+  private lateinit var kiwixRoomDatabase: KiwixRoomDatabase
+  private lateinit var recentSearchRoomDao: RecentSearchRoomDao
 
   @After
   fun tearDown() {
-    database.close()
+    kiwixRoomDatabase.close()
   }
 
   @Test
   fun testSaveAndSearch() = runBlocking {
     val zimId = "8812214350305159407L"
     val context = ApplicationProvider.getApplicationContext<Context>()
-    database = Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java).build()
-    dao = database.recentSearchRoomDao()
+    kiwixRoomDatabase = Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java).build()
+    recentSearchRoomDao = kiwixRoomDatabase.recentSearchRoomDao()
     // Save a recent search entity
-    dao.saveSearch("query 1", zimId)
+    val query = "query 1"
+    recentSearchRoomDao.saveSearch(query, zimId)
     // Search for recent search entities with a matching zimId
-    val result = dao.search(zimId).first()
+    val result = recentSearchRoomDao.search(zimId).first()
     // Verify that the result contains the saved entity
     assertThat(result.size, equalTo(1))
-    assertThat(result[0].searchTerm, equalTo("query 1"))
+    assertThat(result[0].searchTerm, equalTo(query))
     assertThat(result[0].zimId, equalTo(zimId))
   }
 
@@ -63,14 +64,15 @@ class RecentSearchRoomDaoTest {
   fun testDeleteSearchString() = runBlocking {
     val zimId = "8812214350305159407L"
     val context = ApplicationProvider.getApplicationContext<Context>()
-    database = Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java).build()
-    dao = database.recentSearchRoomDao()
+    kiwixRoomDatabase = Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java).build()
+    recentSearchRoomDao = kiwixRoomDatabase.recentSearchRoomDao()
     // Save a recent search entity
-    dao.saveSearch("query 1", zimId)
+    val query = "query 1"
+    recentSearchRoomDao.saveSearch(query, zimId)
     // Delete the saved entity by search term
-    dao.deleteSearchString("query 1")
+    recentSearchRoomDao.deleteSearchString(query)
     // Search for recent search entities with a matching zimId
-    val result = dao.search(zimId).first()
+    val result = recentSearchRoomDao.search(zimId).first()
     // Verify that the result does not contain the deleted entity
     assertThat(result.size, equalTo(0))
   }
@@ -79,15 +81,15 @@ class RecentSearchRoomDaoTest {
   fun testDeleteSearchHistory() = runBlocking {
     val zimId = "8812214350305159407L"
     val context = ApplicationProvider.getApplicationContext<Context>()
-    database = Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java).build()
-    dao = database.recentSearchRoomDao()
+    kiwixRoomDatabase = Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java).build()
+    recentSearchRoomDao = kiwixRoomDatabase.recentSearchRoomDao()
     // Save two recent search entities
-    dao.saveSearch("query 1", zimId)
-    dao.saveSearch("query 2", zimId)
+    recentSearchRoomDao.saveSearch("query 1", zimId)
+    recentSearchRoomDao.saveSearch("query 2", zimId)
     // Delete all recent search entities
-    dao.deleteSearchHistory()
+    recentSearchRoomDao.deleteSearchHistory()
     // Search for recent search entities with a matching zimId
-    val result = dao.search(zimId).first()
+    val result = recentSearchRoomDao.search(zimId).first()
     // Verify that the result is empty
     assertThat(result.size, equalTo(0))
   }
