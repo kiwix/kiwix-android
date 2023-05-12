@@ -46,7 +46,7 @@ class RoomDatabaseCallback(val context: Context) :
     migrationToRoomInsert(boxStore.boxFor())
   }
 
-  fun migrationToRoomInsert(
+  private fun migrationToRoomInsert(
     box: Box<RecentSearchEntity>
   ) {
     val searchRoomEntityList = box.all
