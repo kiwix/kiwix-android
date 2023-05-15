@@ -37,7 +37,7 @@ import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.data.DataModule
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.data.remote.RoomDatabaseCallback
+import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.core.di.modules.JNIModule
@@ -94,6 +94,7 @@ interface CoreComponent {
   fun newBookmarksDao(): NewBookmarksDao
   fun connectivityManager(): ConnectivityManager
   fun recentSearchRoomDao(): RecentSearchRoomDao
+  fun objectBoxToRoomMigrator(): ObjectBoxToRoomMigrator
 
   fun context(): Context
   fun downloader(): Downloader
@@ -106,7 +107,7 @@ interface CoreComponent {
 
   fun inject(errorActivity: ErrorActivity)
   fun inject(searchFragment: SearchFragment)
-  fun inject(roomDatabaseCallback: RoomDatabaseCallback)
+  fun inject(objectBoxToRoomMigrator: ObjectBoxToRoomMigrator)
 
   fun inject(settingsFragment: CoreSettingsFragment)
   fun coreServiceComponent(): CoreServiceComponent.Builder

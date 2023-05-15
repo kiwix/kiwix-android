@@ -22,11 +22,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
-import org.kiwix.kiwixmobile.core.data.remote.FdroidDatabaseCallback
-import org.kiwix.kiwixmobile.core.data.remote.RoomDatabaseCallback
 
 @Suppress("UnnecessaryAbstractClass")
 @Database(entities = [RecentSearchRoomEntity::class], version = 1)
@@ -36,16 +33,11 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
   companion object {
     private var db: KiwixRoomDatabase? = null
     fun getInstance(context: Context): KiwixRoomDatabase {
-      val callback =
-        if (BuildConfig.BUILD_TYPE != "fdroid")
-          RoomDatabaseCallback(context)
-        else FdroidDatabaseCallback()
       return db ?: synchronized(KiwixRoomDatabase::class) {
         return@getInstance db
           ?: Room.databaseBuilder(context, KiwixRoomDatabase::class.java, "KiwixRoom.db")
             // We have already database name called kiwix.db in order to avoid complexity we named as
             // kiwixRoom.db
-            .addCallback(callback)
             .build()
       }
     }
