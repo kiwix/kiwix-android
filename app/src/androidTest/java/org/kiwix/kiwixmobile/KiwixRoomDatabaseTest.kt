@@ -43,41 +43,7 @@ class KiwixRoomDatabaseTest {
   }
 
   @Test
-  fun insertAndGetRecentSearches() = runBlocking {
-    val context = ApplicationProvider.getApplicationContext<Context>()
-    db = Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java)
-      .allowMainThreadQueries()
-      .build()
-    val zimId = "34388L"
-    val searchTerm = "title 1"
-    recentSearchRoomDao = db.recentSearchRoomDao()
-    val recentSearch = RecentSearchRoomEntity(zimId = zimId, searchTerm = searchTerm)
-    recentSearchRoomDao.saveSearch(recentSearch.searchTerm, recentSearch.zimId)
-    val recentSearches = recentSearchRoomDao.search(zimId).first()
-    assertEquals(recentSearches.size, 1)
-    assertEquals(recentSearch.searchTerm, recentSearches.first().searchTerm)
-    assertEquals(recentSearch.zimId, recentSearches.first().zimId)
-  }
-
-  @Test
-  fun deleteSearchString() = runBlocking {
-    val context = ApplicationProvider.getApplicationContext<Context>()
-    db = Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java)
-      .allowMainThreadQueries()
-      .build()
-    val zimId = "34388L"
-    val searchTerm = "title 1"
-    val recentSearch = RecentSearchRoomEntity(zimId = zimId, searchTerm = searchTerm)
-    recentSearchRoomDao.saveSearch(recentSearch.searchTerm, recentSearch.zimId)
-    var recentSearches = recentSearchRoomDao.search(searchTerm).first()
-    assertEquals(recentSearches.size, 1)
-    recentSearchRoomDao.deleteSearchString(searchTerm)
-    recentSearches = recentSearchRoomDao.search(searchTerm).first()
-    assertEquals(recentSearches.size, 0)
-  }
-
-  @Test
-  fun deleteSearchHistory() = runBlocking {
+  fun testRecentSearchRoomDao() = runBlocking {
     val context = ApplicationProvider.getApplicationContext<Context>()
     db = Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java)
       .allowMainThreadQueries()
@@ -85,11 +51,26 @@ class KiwixRoomDatabaseTest {
     val zimId = "34388L"
     val searchTerm = "title 1"
     val searchTerm2 = "title 2"
-    val recentSearch1 = RecentSearchRoomEntity(zimId = zimId, searchTerm = searchTerm)
-    val recentSearch2 = RecentSearchRoomEntity(zimId = zimId, searchTerm = searchTerm2)
-    recentSearchRoomDao.saveSearch(recentSearch1.searchTerm, recentSearch1.zimId)
-    recentSearchRoomDao.saveSearch(recentSearch2.searchTerm, recentSearch2.zimId)
+    recentSearchRoomDao = db.recentSearchRoomDao()
+    val recentSearch = RecentSearchRoomEntity(zimId = zimId, searchTerm = searchTerm)
+    val recentSearch1 = RecentSearchRoomEntity(zimId = zimId, searchTerm = searchTerm2)
+
+    // test inserting into recent search database
+    recentSearchRoomDao.saveSearch(recentSearch.searchTerm, recentSearch.zimId)
     var recentSearches = recentSearchRoomDao.search(zimId).first()
+    assertEquals(recentSearches.size, 1)
+    assertEquals(recentSearch.searchTerm, recentSearches.first().searchTerm)
+    assertEquals(recentSearch.zimId, recentSearches.first().zimId)
+
+    // test deleting recent search
+    recentSearchRoomDao.deleteSearchString(searchTerm)
+    recentSearches = recentSearchRoomDao.search(searchTerm).first()
+    assertEquals(recentSearches.size, 0)
+
+    // test deleting all recent search history
+    recentSearchRoomDao.saveSearch(recentSearch.searchTerm, recentSearch.zimId)
+    recentSearchRoomDao.saveSearch(recentSearch1.searchTerm, recentSearch1.zimId)
+    recentSearches = recentSearchRoomDao.search(zimId).first()
     assertEquals(recentSearches.size, 2)
     recentSearchRoomDao.deleteSearchHistory()
     recentSearches = recentSearchRoomDao.search(searchTerm).first()
