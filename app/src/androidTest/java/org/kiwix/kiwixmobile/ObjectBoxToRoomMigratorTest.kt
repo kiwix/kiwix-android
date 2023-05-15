@@ -33,15 +33,15 @@ import org.junit.jupiter.api.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
-import org.kiwix.kiwixmobile.core.data.remote.RoomDatabaseCallback
+import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
 
 @RunWith(AndroidJUnit4::class)
-class RoomDatabaseCallbackTest {
+class ObjectBoxToRoomMigratorTest {
 
   private lateinit var context: Context
   private lateinit var kiwixRoomDatabase: KiwixRoomDatabase
   private var boxStore: BoxStore = mockk()
-  private lateinit var callback: RoomDatabaseCallback
+  private lateinit var objectBoxToRoomMigrator: ObjectBoxToRoomMigrator
 
   @Before
   fun setup() {
@@ -49,9 +49,9 @@ class RoomDatabaseCallbackTest {
     kiwixRoomDatabase = Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java)
       .allowMainThreadQueries()
       .build()
-    callback = RoomDatabaseCallback(context)
-    callback.kiwixRoomDatabase = kiwixRoomDatabase
-    callback.boxStore = boxStore
+    objectBoxToRoomMigrator = ObjectBoxToRoomMigrator()
+    objectBoxToRoomMigrator.kiwixRoomDatabase = kiwixRoomDatabase
+    objectBoxToRoomMigrator.boxStore = boxStore
   }
 
   @After
@@ -62,18 +62,18 @@ class RoomDatabaseCallbackTest {
 
   @Test
   fun migrateRecentSearch_shouldInsertDataIntoRoomDatabase() = runBlocking {
-    // Given
     val box = boxStore.boxFor(RecentSearchEntity::class.java)
     val expectedSearchTerm = "test search"
     val expectedZimId = "8812214350305159407L"
     val recentSearchEntity =
       RecentSearchEntity(searchTerm = expectedSearchTerm, zimId = expectedZimId)
+    // insert into object box
     box.put(recentSearchEntity)
 
-    // When
-    callback.migrateRecentSearch(boxStore)
+    // migrate data into room database
+    objectBoxToRoomMigrator.migrateRecentSearch(box)
 
-    // Then
+    // check if data successfully migrated to room
     val actual = kiwixRoomDatabase.recentSearchRoomDao().search(expectedZimId).first()
     assertEquals(actual.size, 1)
     assertEquals(actual[0].searchTerm, expectedSearchTerm)

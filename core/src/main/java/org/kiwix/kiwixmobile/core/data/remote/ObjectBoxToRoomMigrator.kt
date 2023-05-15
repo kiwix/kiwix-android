@@ -34,7 +34,7 @@ class ObjectBoxToRoomMigrator {
   @Inject lateinit var kiwixRoomDatabase: KiwixRoomDatabase
   @Inject lateinit var boxStore: BoxStore
 
-  init {
+  fun migrateObjectBoxDataToRoom() {
     // Migrate data for non-fdroid variant
     if (BuildConfig.BUILD_TYPE != "fdroid") {
       CoreApp.coreComponent.inject(this)
@@ -43,7 +43,7 @@ class ObjectBoxToRoomMigrator {
     }
   }
 
-  private fun migrateRecentSearch(box: Box<RecentSearchEntity>) {
+  fun migrateRecentSearch(box: Box<RecentSearchEntity>) {
     val searchRoomEntityList = box.all
     searchRoomEntityList.forEachIndexed { _, recentSearchEntity ->
       CoroutineScope(Dispatchers.IO).launch {

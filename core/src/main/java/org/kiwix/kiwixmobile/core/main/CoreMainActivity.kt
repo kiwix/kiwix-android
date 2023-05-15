@@ -98,6 +98,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
         exitProcess(KIWIX_INTERNAL_ERROR)
       }
     }
+    objectBoxToRoomMigrator.migrateObjectBoxDataToRoom()
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
