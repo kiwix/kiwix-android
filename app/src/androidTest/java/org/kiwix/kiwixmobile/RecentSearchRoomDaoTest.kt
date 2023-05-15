@@ -72,6 +72,33 @@ class RecentSearchRoomDaoTest {
     recentSearchRoomDao.deleteSearchHistory()
     // Verify that the result is empty
     assertThat(getRecentSearchByZimId(zimId).size, equalTo(0))
+
+    // test to save empty values for recent search
+    val emptyQuery = ""
+    recentSearchRoomDao.saveSearch(emptyQuery, zimId)
+    // verify that the result is not empty
+    assertThat(getRecentSearchByZimId(zimId).size, equalTo(1))
+
+    // we are not saving undefined or null values into database.
+    // test to save undefined value for recent search.
+    lateinit var undefinedQuery: String
+    try {
+      recentSearchRoomDao.saveSearch(undefinedQuery, zimId)
+      assertThat(
+        "Undefined value was saved into database",
+        false
+      )
+    } catch (e: Exception) {
+      assertThat("Undefined value was not saved, as expected.", true)
+    }
+
+    // Delete all recent search entities for testing unicodes values
+    recentSearchRoomDao.deleteSearchHistory()
+
+    // save unicode values into database
+    val unicodeQuery = "title \u03A3" // Unicode character for Greek capital letter Sigma
+    recentSearchRoomDao.saveSearch(unicodeQuery, zimId)
+    assertThat(getRecentSearchByZimId(zimId)[0].searchTerm, equalTo("title Σ"))
   }
 
   private suspend fun getRecentSearchByZimId(zimId: String) =
