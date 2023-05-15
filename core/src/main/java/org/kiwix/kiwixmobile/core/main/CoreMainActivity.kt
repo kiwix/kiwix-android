@@ -40,6 +40,7 @@ import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
@@ -78,6 +79,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val cachedComponent: CoreActivityComponent
   abstract val topLevelDestinations: Set<Int>
   abstract val navHostContainer: FragmentContainerView
+  @Inject lateinit var objectBoxToRoomMigrator: ObjectBoxToRoomMigrator
 
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.KiwixTheme)
