@@ -50,7 +50,8 @@ class RecentSearchRoomDaoTest {
     kiwixRoomDatabase = Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java).build()
     recentSearchRoomDao = kiwixRoomDatabase.recentSearchRoomDao()
     // Save a recent search entity
-    val query = "query 1"
+    val query =
+      "This is a long search term to test whether it will be saved into the room database."
     recentSearchRoomDao.saveSearch(query, zimId)
     // Search for recent search entities with a matching zimId
     val result = getRecentSearchByZimId(zimId)
