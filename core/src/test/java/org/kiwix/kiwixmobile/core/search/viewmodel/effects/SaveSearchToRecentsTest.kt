@@ -24,6 +24,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
@@ -37,7 +38,7 @@ internal class SaveSearchToRecentsTest {
   private val viewModelScope = CoroutineScope(Dispatchers.IO)
 
   @Test
-  fun `invoke with null Id does nothing`() {
+  fun `invoke with null Id does nothing`() = runBlocking {
     SaveSearchToRecents(
       recentSearchRoomDao = recentSearchRoomDao,
       searchListItem = searchListItem,
@@ -50,7 +51,7 @@ internal class SaveSearchToRecentsTest {
   }
 
   @Test
-  fun `invoke with non null Id saves search`() {
+  fun `invoke with non null Id saves search`() = runBlocking {
     val id = "8812214350305159407L"
     SaveSearchToRecents(
       recentSearchRoomDao = recentSearchRoomDao,

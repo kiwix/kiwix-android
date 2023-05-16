@@ -23,6 +23,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
@@ -31,7 +32,7 @@ import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchList
 internal class DeleteRecentSearchTest {
 
   @Test
-  fun `invoke with deletes a search`() {
+  fun `invoke with deletes a search`() = runBlocking {
     val searchListItem: SearchListItem = RecentSearchListItem("")
     val recentSearchDao: RecentSearchRoomDao = mockk()
     val activity: AppCompatActivity = mockk()
