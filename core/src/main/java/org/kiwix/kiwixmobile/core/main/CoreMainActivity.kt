@@ -98,7 +98,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
         exitProcess(KIWIX_INTERNAL_ERROR)
       }
     }
-    objectBoxToRoomMigrator.migrateObjectBoxDataToRoom()
+    if (!sharedPreferenceUtil.prefIsRecentSearchMigrated) {
+      objectBoxToRoomMigrator.migrateObjectBoxDataToRoom()
+    }
   }
 
   @Suppress("DEPRECATION")
