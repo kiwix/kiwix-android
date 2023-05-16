@@ -28,11 +28,13 @@ import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
 class ObjectBoxToRoomMigrator {
   @Inject lateinit var kiwixRoomDatabase: KiwixRoomDatabase
   @Inject lateinit var boxStore: BoxStore
+  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
   fun migrateObjectBoxDataToRoom() {
     // Migrate data for non-fdroid variant
@@ -53,5 +55,6 @@ class ObjectBoxToRoomMigrator {
         box.remove(recentSearchEntity.id)
       }
     }
+    sharedPreferenceUtil.putPrefRecentSearchMigrated(true)
   }
 }
