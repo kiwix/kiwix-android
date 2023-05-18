@@ -2,6 +2,7 @@
 <!-- Authors:
 * MITO
 * Macofe
+* McDutchie
 * MohitMali
 * Nike
 * Pyscowicz
@@ -168,7 +169,7 @@
   <string name="expand">Laajenna</string>
   <string name="history">Historia</string>
   <string name="history_from_current_book">Näytä historia kaikista kirjoista</string>
-  <string name="search_history">Hakuhistoria</string>
+  <string name="search_history" fuzzy="true">Hakuhistoria</string>
   <string name="selected_items">%1$d valittu</string>
   <string name="bookmarks_from_current_book">Näytä kirjanmerkit kaikista kirjoista</string>
   <string name="search_bookmarks">Hae kirjanmerkkejä</string>

@@ -4,6 +4,7 @@
 * E1d1eb90
 * Johshh
 * Jon Harald Søby
+* McDutchie
 * MohitMali
 * SuperPotato
 -->
@@ -121,7 +122,7 @@
   <string name="save_books_offline">Lagre bøker offline</string>
   <string name="history">Historie</string>
   <string name="history_from_current_book">Vis historikk fra alle bøker</string>
-  <string name="search_history">Søkehistorikk</string>
+  <string name="search_history" fuzzy="true">Søkehistorikk</string>
   <string name="status">Status</string>
   <string name="tag_pic">Bilde</string>
   <string name="tag_vid">Video</string>

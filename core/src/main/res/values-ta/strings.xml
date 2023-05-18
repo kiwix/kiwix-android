@@ -3,6 +3,7 @@
 * Gurulenin
 * Kanags
 * Kelson
+* McDutchie
 * MohitMali
 * Siddhan
 -->
@@ -196,7 +197,7 @@
   <string name="expand">விரிவாக்கு</string>
   <string name="history">வரலாறு</string>
   <string name="history_from_current_book">எல்லா புத்தகங்களிலிருந்தும் வரலாற்றைக் காண்க</string>
-  <string name="search_history">தேடல் வரலாறு</string>
+  <string name="search_history" fuzzy="true">தேடல் வரலாறு</string>
   <string name="selected_items">%1$d தேர்ந்தெடுக்கப்பட்டது</string>
   <string name="bookmarks_from_current_book">எல்லா புத்தகங்களிலிருந்தும் புத்தகக்குறிகளைக் காண்க</string>
   <string name="search_bookmarks">புத்தகக்குறிகளைத் தேடுங்கள்</string>

@@ -10,6 +10,7 @@
 * Joseph
 * Kumkumuk
 * McAang
+* McDutchie
 * MohitMali
 * MuratTheTurkish
 * Rapsar
@@ -207,7 +208,7 @@
   <string name="expand">Genişlet</string>
   <string name="history">Geçmiş</string>
   <string name="history_from_current_book">Tüm Kitaplardan Geçmişi Görüntüle</string>
-  <string name="search_history">Geçmişi ara</string>
+  <string name="search_history" fuzzy="true">Geçmişi ara</string>
   <string name="selected_items">%1$d seçili</string>
   <string name="bookmarks_from_current_book">Tüm Kitaplardaki Yer İşaretlerini Görüntüle</string>
   <string name="search_bookmarks">Yer imlerini ara</string>

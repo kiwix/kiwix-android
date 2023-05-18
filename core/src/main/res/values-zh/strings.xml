@@ -9,6 +9,7 @@
 * Lanyun1103
 * Liuxinyu970226
 * Lynzrand
+* McDutchie
 * Shuiwater
 * SomeyaMako
 * StarrySky
@@ -210,7 +211,7 @@
   <string name="expand">展开</string>
   <string name="history">历史</string>
   <string name="history_from_current_book">查看所有书籍的历史记录</string>
-  <string name="search_history">搜索历史</string>
+  <string name="search_history" fuzzy="true">搜索历史</string>
   <string name="selected_items">%1$d已选择</string>
   <string name="bookmarks_from_current_book">查看所有书籍中的标签</string>
   <string name="search_bookmarks">搜索书签</string>

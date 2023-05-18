@@ -9,6 +9,7 @@
 * Gomoko
 * I'm mender
 * Kelson
+* McDutchie
 * MohitMali
 * Stephane
 * The RedBurn
@@ -101,7 +102,7 @@
   <string name="cancel">Annuler</string>
   <string name="delete_specific_search_toast">Recherche récente supprimée</string>
   <string name="hint_contents_drawer_message">Vous pouvez cliquer à gauche pour voir le contenu de cet article</string>
-  <string name="got_it">C’est bon !</string>
+  <string name="got_it">Compris !</string>
   <string name="did_you_know">Le saviez-vous ?</string>
   <string name="undo">Annuler</string>
   <string name="tab_closed">Onglet fermé</string>
@@ -219,7 +220,7 @@
   <string name="close_all_tabs">Fermer tous les onglets</string>
   <string name="pending_state">En attente</string>
   <string name="running_state">En cours</string>
-  <string name="complete">Terminer</string>
+  <string name="complete">Terminé</string>
   <string name="paused_state">En pause</string>
   <string name="failed_state">Échec : %s</string>
   <string name="save">Enregistrer</string>

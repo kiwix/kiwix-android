@@ -9,6 +9,7 @@
 * Matěj Suchánek
 * Meliganai
 * Mininis11
+* Mormegil
 * Spotter
 * Tchoř
 * Walter Klosse
@@ -203,7 +204,7 @@
   <string name="expand">Rozšířit</string>
   <string name="history">Historie</string>
   <string name="history_from_current_book">Zobrazit historii ze všech knih</string>
-  <string name="search_history">Historie vyhledávání</string>
+  <string name="search_history">Hledat v historii</string>
   <string name="selected_items">%1$d vybráno</string>
   <string name="bookmarks_from_current_book">Zobrazit záložky ze všech knih</string>
   <string name="search_bookmarks">Prohledat záložky</string>

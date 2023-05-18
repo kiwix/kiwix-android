@@ -6,6 +6,7 @@
 * DDPAT
 * Ice bulldog
 * Lxlalexlxl
+* McDutchie
 * Movses
 * Piramidion
 * Vlad5250
@@ -201,7 +202,7 @@
   <string name="expand">Розгорнути</string>
   <string name="history">Історія</string>
   <string name="history_from_current_book">Подивитися історію з усіх книг</string>
-  <string name="search_history">Історія пошуку</string>
+  <string name="search_history" fuzzy="true">Історія пошуку</string>
   <string name="selected_items">%1$d вибрано</string>
   <string name="bookmarks_from_current_book">Перегляд закладок із усіх книг</string>
   <string name="search_bookmarks">Шукати у закладках</string>

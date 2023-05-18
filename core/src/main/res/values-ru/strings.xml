@@ -13,6 +13,7 @@
 * Ice bulldog
 * Kareyac
 * Link2xt
+* McDutchie
 * Movses
 * Okras
 * Pacha Tchernof
@@ -213,7 +214,7 @@
   <string name="expand">Развернуть</string>
   <string name="history">История</string>
   <string name="history_from_current_book">Посмотреть историю из всех книг</string>
-  <string name="search_history">Поиск в истории</string>
+  <string name="search_history" fuzzy="true">Поиск в истории</string>
   <string name="selected_items">%1$d выбрано</string>
   <string name="bookmarks_from_current_book">Показать Закладки Во Всех Книгах</string>
   <string name="search_bookmarks">Искать в закладках</string>

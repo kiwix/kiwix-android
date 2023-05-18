@@ -2,6 +2,7 @@
 <!-- Authors:
 * Fitoschido
 * MSClaudiu
+* McDutchie
 * Minisarm
 * MohitMali
 * Turbojet
@@ -190,7 +191,7 @@
   <string name="expand">Extinde</string>
   <string name="history">Istorie</string>
   <string name="history_from_current_book">Vedeți Istoria De Pe Toate Cărțile</string>
-  <string name="search_history">Istoricul căutării</string>
+  <string name="search_history" fuzzy="true">Istoricul căutării</string>
   <string name="selected_items">%1$d selectat</string>
   <string name="bookmarks_from_current_book">Vezi Semne De Carte Din Toate Cărțile</string>
   <string name="search_bookmarks">Caută semnele de carte</string>

@@ -5,6 +5,7 @@
 * Esiahaan
 * Iwan Novirion
 * Kenrick95
+* McDutchie
 * Polos
 * Relly Komaruzaman
 * Rizkiahmadz
@@ -172,7 +173,7 @@
   <string name="send_feedback">Kirim masukan</string>
   <string name="history">Riwayat</string>
   <string name="history_from_current_book">Lihat riwayat semua buku</string>
-  <string name="search_history">Riwayat pencarian</string>
+  <string name="search_history" fuzzy="true">Riwayat pencarian</string>
   <string name="selected_items">%1$d dipilih</string>
   <string name="close_all_tabs">Tutup semua tab</string>
   <string name="running_state">Dalam proses</string>

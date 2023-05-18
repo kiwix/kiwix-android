@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* McDutchie
 * Rschlegel
 * 80686
 -->
@@ -144,7 +145,7 @@
   <string name="expand">Ufklappe</string>
   <string name="history">Verlouf</string>
   <string name="history_from_current_book">Verlouf vo allne Büecher aazeigä</string>
-  <string name="search_history">Suechverläuf</string>
+  <string name="search_history" fuzzy="true">Suechverläuf</string>
   <string name="selected_items">%1$d usgwählt</string>
   <string name="bookmarks_from_current_book">Läsezeichä vo allne Büecher aaluege</string>
   <string name="search_bookmarks">Läsezeichä dürsuechä</string>

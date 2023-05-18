@@ -8,6 +8,7 @@
 * Gongsoonyee
 * Jerrykim306
 * Macofe
+* McDutchie
 * Priviet
 * Ykhwong
 * 그냥기여자
@@ -201,7 +202,7 @@
   <string name="expand">펼치기</string>
   <string name="history">역사</string>
   <string name="history_from_current_book">모든 책의 역사 보기</string>
-  <string name="search_history">기록 검색하기</string>
+  <string name="search_history" fuzzy="true">기록 검색하기</string>
   <string name="selected_items">%1$d개 선택됨</string>
   <string name="bookmarks_from_current_book">모든 책의 책갈피 보기</string>
   <string name="search_bookmarks">북마크 검색</string>

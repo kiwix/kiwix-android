@@ -194,7 +194,7 @@
   <string name="expand">Прикажи</string>
   <string name="history">Историја</string>
   <string name="history_from_current_book">Историја од сите книги</string>
-  <string name="search_history">Историја на пребарувањето</string>
+  <string name="search_history">Историја на пребарувања</string>
   <string name="selected_items">Избрани %1$d</string>
   <string name="bookmarks_from_current_book">Погл. обележувачи од сите книги</string>
   <string name="search_bookmarks">Пребарај по обележувачите</string>

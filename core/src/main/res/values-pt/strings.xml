@@ -10,6 +10,7 @@
 * Kelson
 * Macofe
 * Mansil alfalb
+* McDutchie
 * Rukasuoribera
 * Unamane
 * Vitorvicentevalente
@@ -163,8 +164,8 @@
   <string name="time_yesterday">Ontem</string>
   <string name="pref_external_link_popup_title">Avisar quando introduzir hiperligações externas</string>
   <string name="pref_external_link_popup_summary">Mostrar os cartões flutuantes para avisar sobre os custos adicionais ou quando não funcionar nas hiperligações quando desligadas.</string>
-  <string name="external_link_popup_dialog_title">Introduzindo ligação externa!</string>
-  <string name="external_link_popup_dialog_message">Está a introduzir uma hiperligação externa. Isto pode acarretar custos adicionais para a transferência de dados ou simplesmente não funcionará quando estiver desligado. Deseja realmente continuar?</string>
+  <string name="external_link_popup_dialog_title">Acesso a uma ligação externa!</string>
+  <string name="external_link_popup_dialog_message">Está a aceder a uma hiperligação externa. Isto pode acarretar custos adicionais para a transferência de dados ou simplesmente não funcionará quando estiver desligado. Deseja realmente continuar?</string>
   <string name="do_not_ask_anymore">Não perguntar mais</string>
   <string name="your_languages">Línguas selecionadas:</string>
   <string name="other_languages">Outras línguas:</string>
@@ -198,7 +199,7 @@
   <string name="expand">Expandir</string>
   <string name="history">Histórico</string>
   <string name="history_from_current_book">Ver histórico de todos os livros</string>
-  <string name="search_history">Histórico de pesquisas</string>
+  <string name="search_history">Pesquisar no histórico</string>
   <string name="selected_items">%1$d selecionado</string>
   <string name="bookmarks_from_current_book">Ver marcadores de todos os livros</string>
   <string name="search_bookmarks">Procurar em marcadores</string>

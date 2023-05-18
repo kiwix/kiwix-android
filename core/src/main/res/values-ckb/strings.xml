@@ -5,6 +5,7 @@
 * Cwtiyar
 * Hzr115
 * Kurd
+* McDutchie
 * Sarchia
 * Épine
 * ئارام بکر
@@ -124,7 +125,7 @@
   <string name="expand">فراوان بکەوە</string>
   <string name="history">مێژوو</string>
   <string name="history_from_current_book">بینینی مێژووی ھەموو کتێبەکان</string>
-  <string name="search_history">گەڕان بە مێژوو</string>
+  <string name="search_history" fuzzy="true">گەڕان بە مێژوو</string>
   <string name="selected_items">%1$d دیاریکراو</string>
   <string name="bookmarks_from_current_book">بینینی نیشانکراوەکانی ھەموو کتێبەکان</string>
   <string name="search_bookmarks">گەڕان لە نیشانکراوەکان</string>

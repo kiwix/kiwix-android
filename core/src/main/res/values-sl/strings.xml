@@ -201,7 +201,7 @@
   <string name="expand">Razširi</string>
   <string name="history">Zgodovina</string>
   <string name="history_from_current_book">Ogled zgodovinr iz vseh knjig</string>
-  <string name="search_history">Zgodovina iskanja</string>
+  <string name="search_history">Poišči v zgodovini</string>
   <string name="selected_items">%1$d izbranih</string>
   <string name="bookmarks_from_current_book">Ogled zaznamkov iz vseh knjig</string>
   <string name="search_bookmarks">Iskanje zaznamkov</string>

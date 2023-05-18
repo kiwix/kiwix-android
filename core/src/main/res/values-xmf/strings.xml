@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * David1010
+* McDutchie
 * Narazeni
 -->
 <resources>
@@ -126,7 +127,7 @@
   <string name="save_languages">ნინეფიშ ჩუალა</string>
   <string name="expand">გოფაჩუა</string>
   <string name="history">ისტორია</string>
-  <string name="search_history">გორუაშ ისტორია</string>
+  <string name="search_history" fuzzy="true">გორუაშ ისტორია</string>
   <string name="failed_state">ჩილათა: %s</string>
   <string name="save">ჩუალა</string>
   <string name="note">ხვილაფა</string>
