@@ -30,9 +30,12 @@ android {
       }
     }
   }
-  splits {
-    abi {
-      isUniversalApk = true
+
+  bundle {
+    language {
+      // This is disabled so that the App Bundle does NOT split the APK for each language.
+      // We're gonna use the same APK for all languages.
+      enableSplit = false
     }
   }
 }
