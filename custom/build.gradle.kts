@@ -1,5 +1,3 @@
-import com.android.build.gradle.api.ApplicationVariant
-import com.android.build.gradle.api.ApkVariantOutput
 import com.android.build.gradle.internal.dsl.ProductFlavor
 import custom.CustomApps
 import custom.createPublisher
@@ -26,7 +24,7 @@ android {
     all {
       File("$projectDir/src", "$name/$name.zim").let {
         createDownloadTask(it)
-        createPublishBundleWithExpansionTask(it, applicationVariants)
+        createPublishBundleWithExpansionTask(it)
       }
     }
   }
@@ -66,8 +64,7 @@ fun ProductFlavor.fetchUrl(): String {
 }
 
 fun ProductFlavor.createPublishBundleWithExpansionTask(
-  file: File,
-  applicationVariants: DomainObjectSet<ApplicationVariant>
+  file: File
 ): Task {
   val capitalizedName = name.capitalize()
   return tasks.create("publish${capitalizedName}ReleaseBundleWithExpansionFile") {
@@ -78,18 +75,16 @@ fun ProductFlavor.createPublishBundleWithExpansionTask(
       println("packageName $packageName")
       createPublisher(File(rootDir, "playstore.json"))
         .transactionWithCommit(packageName) {
-          val variants =
-            applicationVariants.releaseVariantsFor(this@createPublishBundleWithExpansionTask)
           val generatedBundleFile =
             File(
               "$buildDir/outputs/bundle/${capitalizedName.toLowerCase()}" +
                 "Release/custom-${capitalizedName.toLowerCase()}-release.aab"
             )
           if (generatedBundleFile.exists()) {
-            uploadBundle(generatedBundleFile)
-            uploadExpansionTo(file, variants[0].versionCode)
-            attachExpansionTo(variants[0].versionCode)
-            addToTrackInDraft(variants[0].versionCode, versionName)
+            val versionCode = uploadBundleAndReturnVersionCode(generatedBundleFile)
+            uploadExpansionTo(file, versionCode)
+            attachExpansionTo(versionCode)
+            addToTrackInDraft(versionCode, versionName)
           } else {
             throw FileNotFoundException("Unable to find generated aab file")
           }
@@ -97,11 +92,6 @@ fun ProductFlavor.createPublishBundleWithExpansionTask(
     }
   }
 }
-
-fun DomainObjectSet<ApplicationVariant>.releaseVariantsFor(productFlavor: ProductFlavor) =
-  find { it.name.equals("${productFlavor.name}Release", true) }!!
-    .outputs.filterIsInstance<ApkVariantOutput>()
-    .filter { it.baseName.contains("universal") }.sortedBy { it.versionCode }
 
 afterEvaluate {
   tasks.filter { it.name.contains("ReleaseBundleWithExpansionFile") }.forEach {

@@ -88,12 +88,13 @@ class Transaction(
       ExpansionFile().apply { referencesVersion = versionCode }
     ).execute().prettyPrint()
 
-  fun uploadBundle(outputFile: File) {
-    publisher.edits().bundles().upload(
+  fun uploadBundleAndReturnVersionCode(outputFile: File): Int {
+    val bundle = publisher.edits().bundles().upload(
       packageName,
       editId,
       FileContent("application/octet-stream", outputFile)
     ).execute().prettyPrint()
+    return bundle.versionCode
   }
 
   fun addToTrackInDraft(versionCode: Int, versionName: String?): Track =
