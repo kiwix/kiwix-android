@@ -10,7 +10,7 @@ apply(from = rootProject.file("jacoco.gradle"))
 
 ext {
   set("versionMajor", 3)
-  set("versionMinor", 6)
+  set("versionMinor", 7)
   set("versionPatch", 0)
 }
 
