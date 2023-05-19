@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* McDutchie
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">Tu systema de files non supporta files plus grande de 4GB</string>
+  <string name="detecting_file_system">Detegente si le systema de files pote crear files de 4GB</string>
+  <string name="cannot_open_file">Non poteva aperir le file.\nPer favor tenta cercar iste file in le scheda Apparatos de tu Bibliotheca.</string>
+  <string name="send_files_title">Inviar files</string>
+  <string name="receive_files_title">Reciper files</string>
+  <string name="no_app_found_to_open">Necun application trovate pro seliger file zim!</string>
+  <string name="select_zim_file">Selige file zim a leger</string>
+</resources>

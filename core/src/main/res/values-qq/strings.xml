@@ -6,6 +6,7 @@
 * Fs00
 * Kelson
 * Liuxinyu970226
+* McDutchie
 * MohitMali
 * Robby
 * Shirayuki
@@ -170,8 +171,8 @@
   <string name="time_yesterday">{{Identical|Yesterday}}</string>
   <string name="pref_external_link_popup_title">This message appears in preference settings as a setting title which informs the user when he clicks on the external then it will display a popup.</string>
   <string name="pref_external_link_popup_summary">This message appears in preference settings as a setting description which informs the user when he clicks on the external then it will display a popup which URLs are not working in the offline mode.</string>
-  <string name="external_link_popup_dialog_title">This message appears in the \"Android Dialog\" as a dialog title. When a user clicks on the external link so it informs the user this URL is an external link.</string>
-  <string name="external_link_popup_dialog_message">This message appears in the \"Android Dialog\" as a dialog description when he tries to open external links. It informs the user, by opening this URL you will be charged for additional data or if the device has no internet connection then this URL will not work.</string>
+  <string name="external_link_popup_dialog_title">This message appears in the \"Android Dialog\" as a dialog title. When a user clicks on an external link, it informs the user this URL is an external link.\n\n\'\'\'\"Entering\" should be translated in the sense of \"opening\"/\"accessing\", not \"adding\"/\"inserting\".\'\'\'</string>
+  <string name="external_link_popup_dialog_message">This message appears in the \"Android Dialog\" as a dialog description when the user tries to open an external link. It informs the user that they will be charged for additional data by opening this URL, or that this URL will not work if the device has no internet connection.\n\n\'\'\'\"Entering\" should be translated in the sense of \"opening\"/\"accessing\", not \"adding\"/\"inserting\".\'\'\'</string>
   <string name="do_not_ask_anymore">This message appears in the \"Android Dialog of External Links\" as a dialog button message. by clicking this button it will not show the \"External Links\" dialog in the future whenever he clicks on the external links.</string>
   <string name="your_languages">A label for language codes field of selected languages, to notify the user which languages he selected.</string>
   <string name="other_languages">{{Identical|Otherlanguages}}</string>
@@ -205,7 +206,7 @@
   <string name="expand">{{Identical|Expand}}</string>
   <string name="history">{{Identical|History}}</string>
   <string name="history_from_current_book">* This is used in the switch as a title text, which can be found on the History screen.\n* By enabling this, the user sees the list of all of the books\' history instead of just the last accessed book.</string>
-  <string name="search_history">TODO: Unclear, must be documented. See https://github.com/kiwix/overview/issues/31</string>
+  <string name="search_history">This means \"search in the history of previously visited pages\", \'\'\'so \"search\" is a verb\'\'\'. See https://github.com/kiwix/kiwix-android/issues/1704#issuecomment-576225715</string>
   <string name="selected_items">Toolbar title shown when the user is selecting multiple items in a list. The \"%d\" symbol is replaced with the number of items currently selected.</string>
   <string name="bookmarks_from_current_book">This is used in the switch as a title text, which can be found on the Bookmark screen.\nBy enabling this, the user sees the list of all of the books\' bookmarks instead of just the last accessed book.</string>
   <string name="search_bookmarks">This is a hint shown in the search text field on the bookmark screen.</string>

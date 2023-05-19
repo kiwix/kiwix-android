@@ -2,6 +2,7 @@
 <!-- Authors:
 * Aboubacar.banamoridou.toure
 * Lancine.kounfantoh.fofana
+* McDutchie
 * MohitMali
 * ߒߓߋ߫ ߝߏߝߣߊ߫
 -->
@@ -197,7 +198,7 @@
   <string name="expand">ߊ߬ ߟߊߛߓߊ߬ߕߌ߫</string>
   <string name="history">ߘߐ߬ߝߐ</string>
   <string name="history_from_current_book">ߞߊ߬ߝߊ ߟߎ߬ ߓߍ߯ ߘߐ߬ߝߐ ߦߋ߫</string>
-  <string name="search_history">ߢߌߣߌ߲ߠߌ߲ ߞߍ߫ ߘߐ߬ߝߐ ߘߐ߫</string>
+  <string name="search_history" fuzzy="true">ߢߌߣߌ߲ߠߌ߲ ߞߍ߫ ߘߐ߬ߝߐ ߘߐ߫</string>
   <string name="selected_items">%1$d ߓߘߊ߫ ߓߊߕߐ߬ߡߐ߲߫</string>
   <string name="bookmarks_from_current_book">ߞߊ߬ߝߊ ߟߎ߬ ߓߍ߯ ߟߊ߬ߡߊ ߟߎ߬ ߦߋ߫</string>
   <string name="search_bookmarks">ߟߊ߬ߡߊ ߟߎ߬ ߢߌߣߌ߲߫</string>

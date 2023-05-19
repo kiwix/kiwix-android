@@ -13,6 +13,7 @@
 * Macofe
 * Macondo
 * MarcoAurelio
+* McDutchie
 * Mpayansilva
 * Ncr
 * Rodney Araujo
@@ -203,7 +204,7 @@
   <string name="expand">Desplegar</string>
   <string name="history">Historial</string>
   <string name="history_from_current_book">Ver historial de todos los libros</string>
-  <string name="search_history">Historial de búsquedas</string>
+  <string name="search_history">Buscar en el historial</string>
   <string name="selected_items">%1$d seleccionado</string>
   <string name="bookmarks_from_current_book">Ver marcadores de todos los libros</string>
   <string name="search_bookmarks">Buscar en marcadores</string>

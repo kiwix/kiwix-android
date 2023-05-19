@@ -2,6 +2,7 @@
 <!-- Authors:
 * Kusavica
 * Lexected
+* McDutchie
 * Mikulas1
 * Yardom78
 -->
@@ -192,7 +193,7 @@
   <string name="expand">Rozbaliť</string>
   <string name="history">História</string>
   <string name="history_from_current_book">Zobraziť históriu zo všetkých kníh</string>
-  <string name="search_history">Hľadať v histórii</string>
+  <string name="search_history" fuzzy="true">Hľadať v histórii</string>
   <string name="selected_items">%1$d vybrané</string>
   <string name="bookmarks_from_current_book">Zobraziť záložky zo všetkých kníh</string>
   <string name="search_bookmarks">Hľadať záložky</string>

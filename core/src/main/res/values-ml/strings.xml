@@ -4,6 +4,7 @@
 * Akhilan
 * Jameela P.
 * Macofe
+* McDutchie
 * Praveenp
 -->
 <resources>
@@ -110,7 +111,7 @@
   <string name="expand">വികസിപ്പിക്കുക</string>
   <string name="history">നാൾവഴി</string>
   <string name="history_from_current_book">എല്ലാ പുസ്തകങ്ങളുടെയും നാൾവഴി കാണിക്കുക</string>
-  <string name="search_history">നാൾവഴി തിരയുക</string>
+  <string name="search_history" fuzzy="true">നാൾവഴി തിരയുക</string>
   <string name="selected_items">%1$d തിരഞ്ഞെടുത്തു</string>
   <string name="close_all_tabs">എല്ലാ ടാബുകളും അടയ്ക്കുക</string>
   <string name="pending_state">അവശേഷിക്കുന്നു</string>

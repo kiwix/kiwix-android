@@ -5,6 +5,7 @@
 * FarsiNevis
 * Fatemi127
 * Jeeputer
+* McDutchie
 * Reza1615
 * Sunfyre
 -->
@@ -129,7 +130,7 @@
   <string name="send_feedback">ارسال بازخورد</string>
   <string name="expand">گسترش</string>
   <string name="history">تاریخچه</string>
-  <string name="search_history">تاریخچهٔ جستجو</string>
+  <string name="search_history" fuzzy="true">تاریخچهٔ جستجو</string>
   <string name="selected_items">%1$d انتخاب شد</string>
   <string name="search_bookmarks">جستجوی نشانک‌ها</string>
   <string name="close_all_tabs">بستن همهٔ زبانه‌ها</string>

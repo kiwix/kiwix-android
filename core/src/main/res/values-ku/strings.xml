@@ -5,6 +5,7 @@
 * George Animal
 * Ghybu
 * Kur
+* McDutchie
 -->
 <resources>
   <string name="menu_help">Alîkarî</string>
@@ -196,7 +197,7 @@
   <string name="expand">Berfireh bike</string>
   <string name="history">Dîrok</string>
   <string name="history_from_current_book">Dîrokê Bibîne Ji Hemû Kitêban</string>
-  <string name="search_history">Dîroka lêgerînê</string>
+  <string name="search_history" fuzzy="true">Dîroka lêgerînê</string>
   <string name="selected_items">%1$d bîjartî ye</string>
   <string name="bookmarks_from_current_book">Bijareyan Bibîne Ji Hemû Kitêban</string>
   <string name="search_bookmarks">Li bijareyan bigere</string>

@@ -11,6 +11,7 @@
 * Justman10000
 * Killarnee
 * Lucas Werkmeister
+* McDutchie
 * Metalhead64
 * MohitMali
 * Pittigrilli
@@ -176,7 +177,7 @@
   <string name="time_yesterday">Gestern</string>
   <string name="pref_external_link_popup_title">Beim Einfügen von externen Links warnen</string>
   <string name="pref_external_link_popup_summary">Popups für Warnungen über zusätzliche Kosten oder das Nichtfunktionieren von Offlinelinks anzeigen.</string>
-  <string name="external_link_popup_dialog_title">Externen Link einfügen!</string>
+  <string name="external_link_popup_dialog_title">Zugriff auf externen Link!</string>
   <string name="external_link_popup_dialog_message">Du fügst einen externen Link ein. Dies könnte zu zusätzlichen Kosten für die Datenübermittlung führen oder wird nicht funktionieren, wenn du offline bist. Möchtest du fortfahren?</string>
   <string name="do_not_ask_anymore">Nicht mehr fragen</string>
   <string name="your_languages">Ausgewählte Sprachen:</string>
@@ -211,7 +212,7 @@
   <string name="expand">Ausklappen</string>
   <string name="history">Verlauf</string>
   <string name="history_from_current_book">Zeige die Verlaufsgeschichte aller Bücher</string>
-  <string name="search_history">Suchverlauf</string>
+  <string name="search_history" fuzzy="true">Suchverlauf</string>
   <string name="selected_items">%1$d ausgewählt</string>
   <string name="bookmarks_from_current_book">Zeige die Lesezeichen aller Bücher</string>
   <string name="search_bookmarks">Lesezeichen durchsuchen</string>

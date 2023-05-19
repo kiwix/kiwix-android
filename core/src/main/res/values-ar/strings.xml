@@ -2,6 +2,7 @@
 <!-- Authors:
 * Dyolf77
 * Eyas
+* McDutchie
 * Meno25
 * Mohanad Kh
 * MohitMali
@@ -203,7 +204,7 @@
   <string name="expand">وسع</string>
   <string name="history">التاريخ</string>
   <string name="history_from_current_book">اعرض التاريخ من جميع الكتب</string>
-  <string name="search_history">سجل البحث</string>
+  <string name="search_history" fuzzy="true">سجل البحث</string>
   <string name="selected_items">تم تحديد %1$d</string>
   <string name="bookmarks_from_current_book">اعرض الإشارات المرجعية من جميع الكتب</string>
   <string name="search_bookmarks">البحث في الإشارات المرجعية</string>

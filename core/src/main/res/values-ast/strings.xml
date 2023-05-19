@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Macofe
+* McDutchie
 * Tokvo
 * Xuacu
 -->
@@ -182,7 +183,7 @@
   <string name="expand">Espander</string>
   <string name="history">Historial</string>
   <string name="history_from_current_book">Ver l\'Historial de Tolos Llibros</string>
-  <string name="search_history">Historial de busques</string>
+  <string name="search_history" fuzzy="true">Historial de busques</string>
   <string name="selected_items">%1$d seleicionáu</string>
   <string name="bookmarks_from_current_book">Ver Marcadores de Tolos Llibros</string>
   <string name="search_bookmarks">Buscar nos marcadores</string>

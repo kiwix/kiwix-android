@@ -7,6 +7,7 @@
 * Kelson
 * Krzyz23
 * Macofe
+* McDutchie
 * MohitMali
 * Rail
 * Rzuwig
@@ -201,7 +202,7 @@
   <string name="expand">Rozwiń</string>
   <string name="history">Historia</string>
   <string name="history_from_current_book">Wyświetl historię ze wszystkich książek</string>
-  <string name="search_history">Historia wyszukiwania</string>
+  <string name="search_history" fuzzy="true">Historia wyszukiwania</string>
   <string name="selected_items">%1$d wybrane</string>
   <string name="bookmarks_from_current_book">Wyświetl zakładki ze wszystkich książek</string>
   <string name="search_bookmarks">Szukaj zakładek</string>
