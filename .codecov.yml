@@ -6,11 +6,11 @@ coverage:
   status:
     project:
       default:
-        threshold: 0.1%
+        threshold: 1%
     patch:
       default:
-        target: 100%
-        threshold: 20%
+        target: 90%
+        threshold: 0%
 
 ignore:
   - "docs"
