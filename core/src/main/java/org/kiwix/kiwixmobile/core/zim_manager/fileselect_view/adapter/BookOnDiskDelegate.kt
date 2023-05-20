@@ -48,7 +48,7 @@ sealed class BookOnDiskDelegate<I : BooksOnDiskListItem, out VH : BookOnDiskView
       viewHolder: ViewHolder,
       itemToBind: BooksOnDiskListItem
     ) {
-      (viewHolder as BookViewHolder).bind((itemToBind as BookOnDisk), selectionMode)
+      (viewHolder as BookViewHolder).bind(itemToBind as BookOnDisk, selectionMode)
     }
 
     override fun createViewHolder(parent: ViewGroup) =

@@ -75,7 +75,7 @@ class AppConfigurer {
       applicationVariants.all {
         outputs.filterIsInstance<ApkVariantOutput>().forEach { output: ApkVariantOutput ->
           val abiVersionCode = abiCodes[output.getFilter(VariantOutput.FilterType.ABI)] ?: 7
-          output.versionCodeOverride = (abiVersionCode * 1_000_000) + output.versionCode
+          output.versionCodeOverride = abiVersionCode * 1_000_000 + output.versionCode
           if (output.outputFileName.contains("universal-nightly")) {
             // this is for issue https://github.com/kiwix/kiwix-android/issues/3103
             output.outputFileName = setNameForNightlyUniversalApk()

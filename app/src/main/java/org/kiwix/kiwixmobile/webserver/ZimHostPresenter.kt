@@ -39,9 +39,8 @@ class ZimHostPresenter @Inject internal constructor(private val dataSource: Data
         books
           .filterIsInstance<BooksOnDiskListItem.BookOnDisk>()
           .forEach {
-            it.isSelected = (
+            it.isSelected =
               previouslyHostedBooks.contains(it.book.title) || previouslyHostedBooks.isEmpty()
-              )
           }
         books
       }.subscribe(object : SingleObserver<List<BooksOnDiskListItem>> {
