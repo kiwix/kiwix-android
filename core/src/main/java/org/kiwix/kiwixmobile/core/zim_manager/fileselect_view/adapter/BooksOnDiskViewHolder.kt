@@ -53,7 +53,7 @@ sealed class BookOnDiskViewHolder<in T : BooksOnDiskListItem>(containerView: Vie
       itemBookBinding.itemBookTitle.text = book.title
       itemBookBinding.itemBookDate.text = book.date
       itemBookBinding.itemBookDescription.text = book.description
-      itemBookBinding.itemBookSize.text = (KiloByte(book.size).humanReadable)
+      itemBookBinding.itemBookSize.text = KiloByte(book.size).humanReadable
       book.articleCount?.let {
         itemBookBinding.itemBookArticleCount.text =
           ArticleCount(it).toHumanReadable(containerView.context)

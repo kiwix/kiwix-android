@@ -38,5 +38,5 @@ data class HistoryState(
       )
 
   override fun copyWithNewItems(newItems: List<HistoryItem>): PageState<HistoryItem> =
-    copy(pageItems = (newItems))
+    copy(pageItems = newItems)
 }

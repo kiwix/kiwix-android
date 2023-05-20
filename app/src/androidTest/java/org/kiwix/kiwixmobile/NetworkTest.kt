@@ -109,6 +109,7 @@ class NetworkTest {
     try {
       Espresso.onView(ViewMatchers.withId(android.R.id.button1)).perform(ViewActions.click())
     } catch (e: RuntimeException) {
+      e.printStackTrace()
     }
     clickOn(R.string.local_zims)
     try {

@@ -46,39 +46,39 @@ class NetworkUtilsTest {
     every { connectivity.allNetworkInfo } returns networkInfos
 
     // one network is connected
-    every { (networkInfo1.state) } returns NetworkInfo.State.CONNECTED
-    every { (networkInfo2.state) } returns NetworkInfo.State.DISCONNECTING
+    every { networkInfo1.state } returns NetworkInfo.State.CONNECTED
+    every { networkInfo2.state } returns NetworkInfo.State.DISCONNECTING
     assertEquals(true, NetworkUtils.isNetworkAvailable(context))
 
-    every { (networkInfo1.state) } returns NetworkInfo.State.DISCONNECTING
-    every { (networkInfo2.state) } returns NetworkInfo.State.CONNECTING
+    every { networkInfo1.state } returns NetworkInfo.State.DISCONNECTING
+    every { networkInfo2.state } returns NetworkInfo.State.CONNECTING
     assertEquals(false, NetworkUtils.isNetworkAvailable(context))
 
     // no network is available
-    every { (networkInfo1.state) } returns NetworkInfo.State.DISCONNECTED
-    every { (networkInfo2.state) } returns NetworkInfo.State.DISCONNECTED
+    every { networkInfo1.state } returns NetworkInfo.State.DISCONNECTED
+    every { networkInfo2.state } returns NetworkInfo.State.DISCONNECTED
     assertEquals(false, NetworkUtils.isNetworkAvailable(context))
   }
 
   @Test
   fun test_isNetworkConnectionOK() {
-    every { (networkInfo2.state) } returns NetworkInfo.State.CONNECTING
+    every { networkInfo2.state } returns NetworkInfo.State.CONNECTING
     assertFalse(NetworkUtils.isNetworkConnectionOK(networkInfo2))
 
-    every { (networkInfo2.state) } returns NetworkInfo.State.CONNECTED
+    every { networkInfo2.state } returns NetworkInfo.State.CONNECTED
     assertTrue(NetworkUtils.isNetworkConnectionOK(networkInfo2))
   }
 
   @Test
   fun testWifiAvailability() {
-    every { (context.getSystemService(Context.CONNECTIVITY_SERVICE)) } returns connectivity
-    every { (connectivity.activeNetworkInfo) } returns networkInfo
+    every { context.getSystemService(Context.CONNECTIVITY_SERVICE) } returns connectivity
+    every { connectivity.activeNetworkInfo } returns networkInfo
 
     // SDK >= 23
     NetworkUtils.sdkVersionForTesting = 23
 
     // on Mobile Data
-    every { (networkInfo.type) } returns ConnectivityManager.TYPE_MOBILE
+    every { networkInfo.type } returns ConnectivityManager.TYPE_MOBILE
     assertEquals(false, NetworkUtils.isWiFi(context))
     // verify that the correct methods are used according to the build SDK version
     verify {
@@ -88,15 +88,15 @@ class NetworkUtilsTest {
     verify(exactly = 0) { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) }
 
     // on WIFI connected
-    every { (networkInfo.type) } returns ConnectivityManager.TYPE_WIFI
-    every { (networkInfo.isConnected) } returns java.lang.Boolean.TRUE
+    every { networkInfo.type } returns ConnectivityManager.TYPE_WIFI
+    every { networkInfo.isConnected } returns java.lang.Boolean.TRUE
     assertEquals(true, NetworkUtils.isWiFi(context))
     verify(exactly = 2) { connectivity.activeNetworkInfo }
     verify(exactly = 0) { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) }
 
     // on WIFI disconnected
-    every { (networkInfo.type) } returns ConnectivityManager.TYPE_WIFI
-    every { (networkInfo.isConnected) } returns java.lang.Boolean.FALSE
+    every { networkInfo.type } returns ConnectivityManager.TYPE_WIFI
+    every { networkInfo.isConnected } returns java.lang.Boolean.FALSE
     assertEquals(false, NetworkUtils.isWiFi(context))
     verify(exactly = 3) { connectivity.activeNetworkInfo }
     verify(exactly = 0) { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) }
@@ -105,14 +105,14 @@ class NetworkUtilsTest {
     NetworkUtils.sdkVersionForTesting = 22
 
     // WIFI connected
-    every { (connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI)) } returns networkInfo
-    every { (networkInfo.isConnected) } returns true
+    every { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) } returns networkInfo
+    every { networkInfo.isConnected } returns true
     assertEquals(true, NetworkUtils.isWiFi(context))
     verify { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) }
 
     // WIFI disconnected
-    every { (connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI)) } returns networkInfo
-    every { (networkInfo.isConnected) } returns false
+    every { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) } returns networkInfo
+    every { networkInfo.isConnected } returns false
     assertEquals(false, NetworkUtils.isWiFi(context))
     verify(exactly = 2) { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) }
   }
@@ -177,9 +177,9 @@ class NetworkUtilsTest {
 
   @Test
   fun testParsedURL() {
-    every { (context.getString(R.string.zim_no_pic)) } returns "No Pictures"
-    every { (context.getString(R.string.zim_no_vid)) } returns "No Videos"
-    every { (context.getString(R.string.zim_simple)) } returns "Simple"
+    every { context.getString(R.string.zim_no_pic) } returns "No Pictures"
+    every { context.getString(R.string.zim_no_vid) } returns "No Videos"
+    every { context.getString(R.string.zim_simple) } returns "Simple"
 
     assertEquals(
       "URL Parsing on empty string", "",

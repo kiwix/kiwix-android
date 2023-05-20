@@ -72,8 +72,6 @@ open class OnSwipeTouchListener constructor(context: Context) : OnTouchListener 
         } else if (abs(diffY) > swipeThreshold && abs(velocityY) > swipeVelocityThreshold) {
           if (diffY > 0) {
             onSwipeBottom()
-          } else {
-            onSwipeTop()
           }
           return true
         }
@@ -86,7 +84,6 @@ open class OnSwipeTouchListener constructor(context: Context) : OnTouchListener 
 
   open fun onSwipeRight() {}
   open fun onSwipeLeft() {}
-  fun onSwipeTop() {}
   open fun onSwipeBottom() {}
   open fun onTap(e: MotionEvent?) {}
 }
