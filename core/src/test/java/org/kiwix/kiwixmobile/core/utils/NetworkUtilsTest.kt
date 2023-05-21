@@ -119,7 +119,7 @@ class NetworkUtilsTest {
 
   @Test
   fun testFilenameFromUrl() {
-    // TODO: find a way to assert regex matching via JUnit and rewrite the test
+    // TODO find a way to assert regex matching via JUnit and rewrite the test
 
     val defaultUUIDRegex = "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
     val pattern = Pattern.compile(defaultUUIDRegex)

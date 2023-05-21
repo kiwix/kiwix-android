@@ -97,7 +97,7 @@ class NetworkTest {
     // }
   }
 
-  @Test @Ignore("Broken in 2.5") // TODO: Fix in 3.0
+  @Test @Ignore("Broken in 2.5") // TODO Fix in 3.0
   fun networkTest() {
     mActivityTestRule.launchActivity(null)
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
