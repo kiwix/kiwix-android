@@ -84,8 +84,8 @@ fun ProductFlavor.createPublishBundleWithExpansionTask(
             )
           if (generatedBundleFile.exists()) {
             uploadBundle(generatedBundleFile)
-            uploadExpansionTo(file, variants[0].versionCode)
-            attachExpansionTo(variants[0].versionCode)
+            // uploadExpansionTo(file, variants[0].versionCode)
+            // attachExpansionTo(variants[0].versionCode)
             addToTrackInDraft(variants[0].versionCode, versionName)
           } else {
             throw FileNotFoundException("Unable to find generated aab file")
