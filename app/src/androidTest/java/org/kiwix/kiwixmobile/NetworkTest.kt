@@ -109,7 +109,7 @@ class NetworkTest {
     try {
       Espresso.onView(ViewMatchers.withId(android.R.id.button1)).perform(ViewActions.click())
     } catch (e: RuntimeException) {
-      e.printStackTrace()
+      Log.w(NETWORK_TEST_TAG, "failed to perform click action on the view : ${e.localizedMessage} ")
     }
     clickOn(R.string.local_zims)
     try {
