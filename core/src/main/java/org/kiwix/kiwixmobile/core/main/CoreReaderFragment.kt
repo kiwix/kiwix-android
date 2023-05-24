@@ -1459,7 +1459,10 @@ abstract class CoreReaderFragment :
                 goToBookmarks()
                 Unit
               },
-              actionTextColor = resources.getColor(R.color.alabaster_white)
+              actionTextColor = ContextCompat.getColor(
+                requireActivity(),
+                R.color.alabaster_white
+              )
             )
           }
         } ?: kotlin.run {
@@ -1856,7 +1859,12 @@ abstract class CoreReaderFragment :
                   webViewList.size - 1
                 )
               }
-              .setActionTextColor(resources.getColor(R.color.alabaster_white))
+              .setActionTextColor(
+                ContextCompat.getColor(
+                  requireActivity(),
+                  R.color.alabaster_white
+                )
+              )
               .show()
           }
         } else {

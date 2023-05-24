@@ -344,7 +344,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     configureUrlSharingIcon()
     activityZimHostBinding?.startServerButton?.text = getString(R.string.stop_server_label)
     activityZimHostBinding?.startServerButton?.setBackgroundColor(
-      resources.getColor(R.color.stopServerRed)
+      ContextCompat.getColor(requireActivity(), R.color.stopServerRed)
     )
     bookDelegate.selectionMode = SelectionMode.NORMAL
     booksAdapter.notifyDataSetChanged()
@@ -370,7 +370,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     activityZimHostBinding?.shareServerUrlIcon?.visibility = View.GONE
     activityZimHostBinding?.startServerButton?.text = getString(R.string.start_server_label)
     activityZimHostBinding?.startServerButton?.setBackgroundColor(
-      resources.getColor(R.color.startServerGreen)
+      ContextCompat.getColor(requireActivity(), R.color.startServerGreen)
     )
     bookDelegate.selectionMode = SelectionMode.MULTI
     booksAdapter.notifyDataSetChanged()
