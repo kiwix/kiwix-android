@@ -50,7 +50,7 @@ internal class JNIInitialiser @Inject constructor(context: Context, jniKiwix: JN
       icuDir.absolutePath
     } catch (e: Exception) {
       Log.w(TAG_KIWIX, "Error copying icu data file", e)
-      // TODO: Consider surfacing to user
+      // TODO Consider surfacing to user
       null
     }
   }

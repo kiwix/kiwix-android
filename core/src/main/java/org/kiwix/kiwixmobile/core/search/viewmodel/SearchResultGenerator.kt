@@ -60,7 +60,9 @@ class ZimSearchResultGenerator @Inject constructor() : SearchResultGenerator {
 
   private suspend fun <T> createList(readSearchResult: suspend () -> T?): List<T> {
     return mutableListOf<T>().apply {
-      while (true) readSearchResult()?.let(::add) ?: break
+      while (true) {
+        readSearchResult()?.let(::add) ?: break
+      }
     }
   }
 }

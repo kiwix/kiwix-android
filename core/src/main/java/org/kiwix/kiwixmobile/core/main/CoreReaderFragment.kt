@@ -500,10 +500,9 @@ abstract class CoreReaderFragment :
 
   private fun handleIntentExtras(intent: Intent) {
     if (intent.hasExtra(TAG_FILE_SEARCHED)) {
-      val openInNewTab = (
+      val openInNewTab =
         isInTabSwitcher ||
           intent.getBooleanExtra(TAG_FILE_SEARCHED_NEW_TAB, false)
-        )
       searchForTitle(
         intent.getStringExtra(TAG_FILE_SEARCHED),
         openInNewTab

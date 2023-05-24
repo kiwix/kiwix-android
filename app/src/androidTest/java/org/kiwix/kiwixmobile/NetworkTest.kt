@@ -97,7 +97,7 @@ class NetworkTest {
     // }
   }
 
-  @Test @Ignore("Broken in 2.5") // TODO: Fix in 3.0
+  @Test @Ignore("Broken in 2.5") // TODO Fix in 3.0
   fun networkTest() {
     mActivityTestRule.launchActivity(null)
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
@@ -109,6 +109,7 @@ class NetworkTest {
     try {
       Espresso.onView(ViewMatchers.withId(android.R.id.button1)).perform(ViewActions.click())
     } catch (e: RuntimeException) {
+      Log.w(NETWORK_TEST_TAG, "failed to perform click action on the view : ${e.localizedMessage} ")
     }
     clickOn(R.string.local_zims)
     try {
