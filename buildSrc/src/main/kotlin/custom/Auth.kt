@@ -16,6 +16,8 @@
 
 package custom
 
+import com.android.build.api.variant.VariantOutput
+import com.android.build.gradle.api.ApkVariantOutput
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.http.FileContent
@@ -79,29 +81,29 @@ class Transaction(
       FileContent("application/octet-stream", file)
     ).execute().prettyPrint()
 
-  fun attachExpansionTo(versionCode: Int): ExpansionFile =
+  fun attachExpansionTo(expansionCode: Int, apkVariantOutput: ApkVariantOutput): ExpansionFile =
     publisher.edits().expansionfiles().update(
       packageName,
       editId,
-      versionCode,
+      apkVariantOutput.versionCodeOverride,
       "main",
-      ExpansionFile().apply { referencesVersion = versionCode }
+      ExpansionFile().apply { referencesVersion = expansionCode }
     ).execute().prettyPrint()
 
-  fun uploadBundle(outputFile: File) {
-    publisher.edits().bundles().upload(
+  fun uploadApk(apkVariantOutput: ApkVariantOutput) {
+    publisher.edits().apks().upload(
       packageName,
       editId,
-      FileContent("application/octet-stream", outputFile)
+      FileContent("application/octet-stream", apkVariantOutput.outputFile)
     ).execute().prettyPrint()
   }
 
-  fun addToTrackInDraft(versionCode: Int, versionName: String?): Track =
+  fun addToTrackInDraft(apkVariants: List<ApkVariantOutput>): Track =
     publisher.edits().tracks().update(packageName, editId, "alpha", Track().apply {
       releases = listOf(TrackRelease().apply {
         status = "draft"
-        name = versionName
-        versionCodes = listOf(versionCode.toLong())
+        name = apkVariants[0].versionNameOverride
+        versionCodes =  apkVariants.map { it.versionCodeOverride.toLong() }
       })
       track = "alpha"
     }).execute().prettyPrint()
