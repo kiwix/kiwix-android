@@ -116,16 +116,18 @@ class AllProjectConfigurer {
         lintConfig = target.rootProject.file("lintConfig.xml")
       }
       packagingOptions {
-        exclude("META-INF/DEPENDENCIES")
-        exclude("META-INF/LICENSE")
-        exclude("META-INF/LICENSE.txt")
-        exclude("META-INF/LICENSE.md")
-        exclude("META-INF/LICENSE-notice.md")
-        exclude("META-INF/license.txt")
-        exclude("META-INF/NOTICE")
-        exclude("META-INF/NOTICE.txt")
-        exclude("META-INF/notice.txt")
-        exclude("META-INF/ASL2.0")
+        resources.excludes.apply {
+          add("META-INF/DEPENDENCIES")
+          add("META-INF/LICENSE")
+          add("META-INF/LICENSE.txt")
+          add("META-INF/LICENSE.md")
+          add("META-INF/LICENSE-notice.md")
+          add("META-INF/license.txt")
+          add("META-INF/NOTICE")
+          add("META-INF/NOTICE.txt")
+          add("META-INF/notice.txt")
+          add("META-INF/ASL2.0")
+        }
       }
       sourceSets {
         getByName("test") {
