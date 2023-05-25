@@ -1,11 +1,10 @@
-import com.android.build.gradle.api.ApplicationVariant
 import com.android.build.gradle.api.ApkVariantOutput
+import com.android.build.gradle.api.ApplicationVariant
 import com.android.build.gradle.internal.dsl.ProductFlavor
 import custom.CustomApps
 import custom.createPublisher
 import custom.transactionWithCommit
 import plugin.KiwixConfigurationPlugin
-import java.io.FileNotFoundException
 import java.net.URI
 import java.net.URL
 
@@ -26,16 +25,13 @@ android {
     all {
       File("$projectDir/src", "$name/$name.zim").let {
         createDownloadTask(it)
-        createPublishBundleWithExpansionTask(it, applicationVariants)
+        createPublishApkWithExpansionTask(it, applicationVariants)
       }
     }
   }
-
-  bundle {
-    language {
-      // This is disabled so that the App Bundle does NOT split the APK for each language.
-      // We're gonna use the same APK for all languages.
-      enableSplit = false
+  splits {
+    abi {
+      isUniversalApk = false
     }
   }
 }
@@ -65,12 +61,12 @@ fun ProductFlavor.fetchUrl(): String {
     }
 }
 
-fun ProductFlavor.createPublishBundleWithExpansionTask(
+fun ProductFlavor.createPublishApkWithExpansionTask(
   file: File,
   applicationVariants: DomainObjectSet<ApplicationVariant>
 ): Task {
   val capitalizedName = name.capitalize()
-  return tasks.create("publish${capitalizedName}ReleaseBundleWithExpansionFile") {
+  return tasks.create("publish${capitalizedName}ReleaseApkWithExpansionFile") {
     group = "publishing"
     description = "Uploads $capitalizedName to the Play Console with an Expansion file"
     doLast {
@@ -79,20 +75,11 @@ fun ProductFlavor.createPublishBundleWithExpansionTask(
       createPublisher(File(rootDir, "playstore.json"))
         .transactionWithCommit(packageName) {
           val variants =
-            applicationVariants.releaseVariantsFor(this@createPublishBundleWithExpansionTask)
-          val generatedBundleFile =
-            File(
-              "$buildDir/outputs/bundle/${capitalizedName.toLowerCase()}" +
-                "Release/custom-${capitalizedName.toLowerCase()}-release.aab"
-            )
-          if (generatedBundleFile.exists()) {
-            uploadBundle(generatedBundleFile)
-            uploadExpansionTo(file, variants[0].versionCode)
-            attachExpansionTo(variants[0].versionCode)
-            addToTrackInDraft(variants[0].versionCode, versionName)
-          } else {
-            throw FileNotFoundException("Unable to find generated aab file")
-          }
+            applicationVariants.releaseVariantsFor(this@createPublishApkWithExpansionTask)
+          variants.forEach(::uploadApk)
+          uploadExpansionTo(file, variants[0].versionCodeOverride)
+          variants.drop(1).forEach { attachExpansionTo(variants[0].versionCodeOverride, it) }
+          addToTrackInDraft(variants)
         }
     }
   }
@@ -100,14 +87,13 @@ fun ProductFlavor.createPublishBundleWithExpansionTask(
 
 fun DomainObjectSet<ApplicationVariant>.releaseVariantsFor(productFlavor: ProductFlavor) =
   find { it.name.equals("${productFlavor.name}Release", true) }!!
-    .outputs.filterIsInstance<ApkVariantOutput>()
-    .filter { it.baseName.contains("universal") }.sortedBy { it.versionCode }
+    .outputs.filterIsInstance<ApkVariantOutput>().sortedBy { it.versionCodeOverride }
 
 afterEvaluate {
-  tasks.filter { it.name.contains("ReleaseBundleWithExpansionFile") }.forEach {
+  tasks.filter { it.name.contains("ReleaseApkWithExpansionFile") }.forEach {
     val flavorName =
-      it.name.substringAfter("publish").substringBefore("ReleaseBundleWithExpansionFile")
+      it.name.substringAfter("publish").substringBefore("ReleaseApkWithExpansionFile")
     it.dependsOn.add(tasks.getByName("download${flavorName}Zim"))
-    it.dependsOn.add(tasks.getByName("bundle${flavorName}Release"))
+    it.dependsOn.add(tasks.getByName("assemble${flavorName}Release"))
   }
 }
