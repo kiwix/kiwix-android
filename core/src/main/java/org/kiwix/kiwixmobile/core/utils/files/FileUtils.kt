@@ -118,7 +118,7 @@ object FileUtils {
           return "${Environment.getExternalStorageDirectory()}/${documentId[1]}"
         }
         return try {
-          "${getSdCardMainPath(context)}/${documentId[1]}"
+          "${getSdCardMainPath(context, documentId[0])}/${documentId[1]}"
         } catch (ignore: Exception) {
           null
         }
@@ -264,9 +264,10 @@ object FileUtils {
     filePath.endsWith(".zim") || filePath.endsWith(".zimaa")
 
   @JvmStatic
-  fun getSdCardMainPath(context: Context): String =
-    "${context.getExternalFilesDirs("")[1]}"
-      .substringBefore(context.getString(R.string.android_directory_seperator))
+  fun getSdCardMainPath(context: Context, storageName: String) =
+    context.getExternalFilesDirs("")
+      .first { it.path.contains(storageName) }
+      .path.substringBefore(context.getString(R.string.android_directory_seperator))
 
   @SuppressLint("WrongConstant")
   @JvmStatic
