@@ -102,6 +102,7 @@ import org.kiwix.kiwixmobile.core.downloader.fetch.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.findFirstTextView
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.DocumentParser.SectionsListener
@@ -1267,7 +1268,7 @@ abstract class CoreReaderFragment :
 
   protected fun openZimFile(file: File) {
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-      if (file.exists()) {
+      if (file.isFileExist()) {
         openAndSetInContainer(file)
         updateTitle()
       } else {

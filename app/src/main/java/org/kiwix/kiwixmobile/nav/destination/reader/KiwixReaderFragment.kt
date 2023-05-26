@@ -45,6 +45,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservabl
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.snack
@@ -132,7 +133,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       requireActivity().applicationContext, Uri.parse(zimFileUri)
     )
 
-    if (filePath == null || !File(filePath).exists()) {
+    if (filePath == null || !File(filePath).isFileExist()) {
       activity.toast(R.string.error_file_not_found)
       return
     }
@@ -241,7 +242,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
     val zimFile = settings.getString(TAG_CURRENT_FILE, null)
 
-    if (zimFile != null && File(zimFile).exists()) {
+    if (zimFile != null && File(zimFile).isFileExist()) {
       if (zimReaderContainer?.zimFile == null) {
         openZimFile(File(zimFile))
         Log.d(

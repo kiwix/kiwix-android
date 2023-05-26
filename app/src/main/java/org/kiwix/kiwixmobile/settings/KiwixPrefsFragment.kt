@@ -25,6 +25,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
@@ -41,8 +44,9 @@ class KiwixPrefsFragment : CorePrefsFragment() {
 
   override fun setStorage() {
     sharedPreferenceUtil?.let {
+      val internalStorage = runBlocking { internalStorage() }
       findPreference<Preference>(PREF_STORAGE)?.title = getString(
-        if (it.prefStorage == internalStorage()?.let(
+        if (it.prefStorage == internalStorage?.let(
             it::getPublicDirectoryPath
           )
         ) R.string.internal_storage
@@ -52,8 +56,9 @@ class KiwixPrefsFragment : CorePrefsFragment() {
     findPreference<Preference>(PREF_STORAGE)?.summary = storageCalculator?.calculateAvailableSpace()
   }
 
-  private fun internalStorage(): String? =
+  private suspend fun internalStorage(): String? = withContext(Dispatchers.IO) {
     ContextCompat.getExternalFilesDirs(requireContext(), null).firstOrNull()?.path
+  }
 
   private fun setMangeExternalStoragePermission() {
     val permissionPref = findPreference<Preference>(PREF_MANAGE_EXTERNAL_STORAGE_PERMISSION)

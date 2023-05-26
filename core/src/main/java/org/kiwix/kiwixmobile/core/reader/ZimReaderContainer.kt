@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.reader
 
 import android.webkit.WebResourceResponse
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
 import java.io.File
 import java.net.HttpURLConnection
@@ -37,7 +38,7 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
       return
     }
     zimFileReader =
-      if (file?.exists() == true) zimFileReaderFactory.create(file)
+      if (file?.isFileExist() == true) zimFileReaderFactory.create(file)
       else null
   }
 

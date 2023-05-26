@@ -30,11 +30,16 @@ import android.util.Log
 import android.webkit.URLUtil
 import android.widget.Toast
 import androidx.documentfile.provider.DocumentFile
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.get
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -55,7 +60,9 @@ object FileUtils {
   @JvmStatic
   @Synchronized
   fun deleteCachedFiles(context: Context) {
-    getFileCacheDir(context)?.deleteRecursively()
+    CoroutineScope(Dispatchers.IO).launch {
+      getFileCacheDir(context)?.deleteRecursively()
+    }
   }
 
   @JvmStatic
@@ -74,8 +81,8 @@ object FileUtils {
         while (alphabetSecond <= 'z') {
           val chunkPath = path.substring(0, path.length - 2) + alphabetFirst + alphabetSecond
           val fileChunk = File(chunkPath)
-          if (fileChunk.exists()) {
-            fileChunk.delete()
+          if (fileChunk.isFileExist()) {
+            fileChunk.deleteFile()
           } else if (!deleteZimFileParts(chunkPath)) {
             break@fileloop
           }
@@ -84,7 +91,7 @@ object FileUtils {
         alphabetFirst++
       }
     } else {
-      file.delete()
+      file.deleteFile()
       deleteZimFileParts(path)
     }
   }
@@ -92,13 +99,13 @@ object FileUtils {
   @Synchronized
   private fun deleteZimFileParts(path: String): Boolean {
     val file = File(path + ChunkUtils.PART)
-    if (file.exists()) {
-      file.delete()
+    if (file.isFileExist()) {
+      file.deleteFile()
       return true
     }
     val singlePart = File("$path.part")
-    if (singlePart.exists()) {
-      singlePart.delete()
+    if (singlePart.isFileExist()) {
+      singlePart.deleteFile()
       return true
     }
     return false
@@ -195,7 +202,7 @@ object FileUtils {
     val files = ArrayList<File>()
     book.file?.let {
       if (it.path.endsWith(".zim") || it.path.endsWith(".zim.part")) {
-        if (it.exists()) {
+        if (it.isFileExist()) {
           files.add(it)
         } else {
           files.add(File("$it.part"))
@@ -206,8 +213,8 @@ object FileUtils {
           for (secondCharacter in 'a'..'z') {
             path = path.substring(0, path.length - 2) + firstCharacter + secondCharacter
             when {
-              File(path).exists() -> files.add(File(path))
-              File("$path.part").exists() -> files.add(File("$path.part"))
+              File(path).isFileExist() -> files.add(File(path))
+              File("$path.part").isFileExist() -> files.add(File("$path.part"))
               else -> return@getAllZimParts files
             }
           }
@@ -232,9 +239,9 @@ object FileUtils {
       for (secondCharacter in 'a'..'z') {
         val chunkPath = path.substring(0, path.length - 2) + firstCharacter + secondCharacter
         val fileChunk = File("$chunkPath.part")
-        if (fileChunk.exists()) {
+        if (fileChunk.isFileExist()) {
           return true
-        } else if (!File(chunkPath).exists()) {
+        } else if (!File(chunkPath).isFileExist()) {
           return false
         }
       }
@@ -245,8 +252,8 @@ object FileUtils {
   @JvmStatic
   fun getFileName(fileName: String) =
     when {
-      File(fileName).exists() -> fileName
-      File("$fileName.part").exists() -> "$fileName.part"
+      File(fileName).isFileExist() -> fileName
+      File("$fileName.part").isFileExist() -> "$fileName.part"
       else -> "${fileName}aa"
     }
 
@@ -357,9 +364,9 @@ object FileUtils {
           "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}" +
             "/org.kiwix"
         )
-      if (!root.exists()) root.mkdir()
+      if (!root.isFileExist()) root.mkdir()
     }
-    if (File(root, fileName).exists()) return File(root, fileName)
+    if (File(root, fileName).isFileExist()) return File(root, fileName)
     val fileToSave = sequence {
       yield(File(root, fileName))
       yieldAll(
@@ -369,7 +376,7 @@ object FileUtils {
           )
         }
       )
-    }.first { !it.exists() }
+    }.first { !it.isFileExist() }
     val source = if (url == null) Uri.parse(src) else Uri.parse(url)
     return try {
       zimReaderContainer.load("$source", emptyMap()).data.use { inputStream ->
