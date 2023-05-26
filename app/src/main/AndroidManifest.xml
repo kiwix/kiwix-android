@@ -12,9 +12,6 @@
     android:usesPermissionFlags="neverForLocation"
     tools:targetApi="s" />
   <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-  <uses-permission
-    android:name="android.permission.QUERY_ALL_PACKAGES"
-    tools:ignore="QueryAllPackagesPermission" />
   <uses-permission android:name="${permission}" />
 
   <queries>
