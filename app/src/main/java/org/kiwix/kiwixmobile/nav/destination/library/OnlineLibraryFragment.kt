@@ -26,6 +26,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -135,7 +136,20 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private val noWifiWithWifiOnlyPreferenceSet
     get() = sharedPreferenceUtil.prefWifiOnly && !NetworkUtils.isWiFi(requireContext())
 
-  private val isNotConnected get() = conMan.activeNetworkInfo?.isConnected == false
+  private val isNotConnected: Boolean
+    get() {
+      return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val network = conMan.activeNetwork
+        if (network != null) {
+          val networkCapabilities = conMan.getNetworkCapabilities(network)
+          networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == false
+        } else {
+          true
+        }
+      } else {
+        conMan.activeNetworkInfo?.isConnected == false
+      }
+    }
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
@@ -293,18 +307,22 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         }
       }
       NetworkState.NOT_CONNECTED -> {
-        if (libraryAdapter.itemCount > 0) {
-          noInternetSnackbar()
-        } else {
-          fragmentDestinationDownloadBinding?.libraryErrorText?.setText(
-            R.string.no_network_connection
-          )
-          fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.VISIBLE
-        }
-        fragmentDestinationDownloadBinding?.librarySwipeRefresh?.isRefreshing = false
+        showNoInternetConnectionError()
       }
       else -> {}
     }
+  }
+
+  private fun showNoInternetConnectionError() {
+    if (libraryAdapter.itemCount > 0) {
+      noInternetSnackbar()
+    } else {
+      fragmentDestinationDownloadBinding?.libraryErrorText?.setText(
+        R.string.no_network_connection
+      )
+      fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.VISIBLE
+    }
+    fragmentDestinationDownloadBinding?.librarySwipeRefresh?.isRefreshing = false
   }
 
   private fun noInternetSnackbar() {
@@ -335,12 +353,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   private fun refreshFragment() {
     if (isNotConnected) {
-      noInternetSnackbar()
+      showNoInternetConnectionError()
     } else {
       zimManageViewModel.requestDownloadLibrary.onNext(Unit)
+      showRecyclerviewAndHideSwipeDownForLibraryErrorText()
     }
-    fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.GONE
-    fragmentDestinationDownloadBinding?.libraryList?.visibility = View.VISIBLE
   }
 
   private fun downloadFile() {
