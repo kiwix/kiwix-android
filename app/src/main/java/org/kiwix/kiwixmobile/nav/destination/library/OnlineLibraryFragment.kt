@@ -551,7 +551,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     .apply {
       onSelectAction = ::storeDeviceInPreferences
     }
-    .show(requireFragmentManager(), getString(R.string.pref_storage))
+    .show(parentFragmentManager, getString(R.string.pref_storage))
 
   private fun showStorageConfigureDialog() {
     alertDialogShower.show(
