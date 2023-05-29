@@ -46,11 +46,12 @@ jobs:
           cp $UNIVERSAL_RELEASE_APK kiwix-${TAG}.apk
           scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no kiwix-${TAG}.apk ci@master.download.kiwix.org:/data/download/release/kiwix-android/
 
-      # This is necessary for F-Droid
-      - name: Publish "versionInfo" to download.kiwix.org
-        run: |
-          ./gradlew generateVersionCodeAndName
-          scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no VERSION_INFO ci@master.download.kiwix.org:/data/download/release/kiwix-android/
+#      This is temporary, once we will publish 3.7.0 then we will uncommented this code.
+#      # This is necessary for F-Droid
+#      - name: Publish "versionInfo" to download.kiwix.org
+#        run: |
+#          ./gradlew generateVersionCodeAndName
+#          scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no VERSION_INFO ci@master.download.kiwix.org:/data/download/release/kiwix-android/
 
       - name: Publish to GitHub
         uses: ncipollo/release-action@v1
