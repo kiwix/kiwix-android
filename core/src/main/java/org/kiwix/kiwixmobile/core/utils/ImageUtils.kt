@@ -97,7 +97,8 @@ object ImageUtils {
   }
 }
 
-inline class MeasuredView(private val view: View) {
+@JvmInline
+value class MeasuredView(private val view: View) {
   val width: Int
     get() = view.measuredWidth
   val height: Int

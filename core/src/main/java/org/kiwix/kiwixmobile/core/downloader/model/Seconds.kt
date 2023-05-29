@@ -23,7 +23,8 @@ import org.kiwix.kiwixmobile.core.R
 import java.util.Locale
 import kotlin.math.roundToLong
 
-inline class Seconds(val seconds: Long) {
+@JvmInline
+value class Seconds(val seconds: Long) {
   fun toHumanReadableTime(): String {
     val minutes = 60.0
     val hours = 60 * minutes
