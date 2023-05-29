@@ -27,9 +27,10 @@ import android.os.Environment
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.test.core.app.canTakeScreenshot
+import androidx.test.core.app.takeScreenshot
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.runner.screenshot.Screenshot
 import androidx.test.uiautomator.By.textContains
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObjectNotFoundException
@@ -117,7 +118,8 @@ object TestUtils {
     val timestamp = SimpleDateFormat("ddMMyyyy_HHmm").format(Date())
     val fileName = "TEST_${timestamp}_$name.png"
     val outFile = File(screenshotDir.path + File.separator + fileName)
-    val screenshot = Screenshot.capture().bitmap ?: return
+    if (!canTakeScreenshot()) return
+    val screenshot = takeScreenshot()
     var fos: OutputStream? = null
     try {
       fos = FileOutputStream(outFile)
