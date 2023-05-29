@@ -19,11 +19,11 @@ package org.kiwix.kiwixmobile.core.dao
 
 import io.objectbox.Box
 import io.objectbox.kotlin.query
+import io.objectbox.query.QueryBuilder
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity_
-import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -41,9 +41,15 @@ class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) : PageDa
     deleteBookmarks(pagesToDelete as List<BookmarkItem>)
 
   fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?) = box.query {
-    equal(BookmarkEntity_.zimId, zimFileReader?.id ?: "")
+    equal(
+      BookmarkEntity_.zimId, zimFileReader?.id ?: "",
+      QueryBuilder.StringOrder.CASE_INSENSITIVE
+    )
       .or()
-      .equal(BookmarkEntity_.zimName, zimFileReader?.name ?: "")
+      .equal(
+        BookmarkEntity_.zimName, zimFileReader?.name ?: "",
+        QueryBuilder.StringOrder.CASE_INSENSITIVE
+      )
     order(BookmarkEntity_.bookmarkTitle)
   }.property(BookmarkEntity_.bookmarkUrl)
     .findStrings()
@@ -53,9 +59,15 @@ class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) : PageDa
   fun bookmarkUrlsForCurrentBook(zimFileReader: ZimFileReader?): Flowable<List<String>> =
     box.asFlowable(
       box.query {
-        equal(BookmarkEntity_.zimId, zimFileReader?.id ?: "")
+        equal(
+          BookmarkEntity_.zimId, zimFileReader?.id ?: "",
+          QueryBuilder.StringOrder.CASE_INSENSITIVE
+        )
           .or()
-          .equal(BookmarkEntity_.zimName, zimFileReader?.name ?: "")
+          .equal(
+            BookmarkEntity_.zimName, zimFileReader?.name ?: "",
+            QueryBuilder.StringOrder.CASE_INSENSITIVE
+          )
         order(BookmarkEntity_.bookmarkTitle)
       }
     ).map { it.map(BookmarkEntity::bookmarkUrl) }
@@ -71,14 +83,11 @@ class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) : PageDa
 
   fun deleteBookmark(bookmarkUrl: String) {
     box.query {
-      equal(BookmarkEntity_.bookmarkUrl, bookmarkUrl)
+      equal(
+        BookmarkEntity_.bookmarkUrl,
+        bookmarkUrl,
+        QueryBuilder.StringOrder.CASE_INSENSITIVE
+      )
     }.remove()
-  }
-
-  fun migrationInsert(
-    bookmarks: MutableList<Bookmark>,
-    bookDao: NewBookDao
-  ) {
-    box.put(bookmarks.zip(bookmarks.map(bookDao::getFavIconAndZimFile)).map(::BookmarkEntity))
   }
 }

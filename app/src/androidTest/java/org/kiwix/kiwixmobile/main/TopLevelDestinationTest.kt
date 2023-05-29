@@ -19,50 +19,84 @@ package org.kiwix.kiwixmobile.main
 
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import androidx.test.rule.ActivityTestRule
+import androidx.test.core.app.ActivityScenario
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
+import leakcanary.LeakAssertions
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.help.HelpRobot
+import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryRobot
+import org.kiwix.kiwixmobile.settings.SettingsRobot
+import org.kiwix.kiwixmobile.testutils.RetryRule
+import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
+import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.webserver.ZimHostRobot
 
 class TopLevelDestinationTest : BaseActivityTest() {
 
-  override var activityRule: ActivityTestRule<KiwixMainActivity> = activityTestRule {
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
+  @Rule
+  @JvmField
+  var retryRule = RetryRule()
+
+  @Before
+  override fun waitForIdle() {
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+      if (isSystemUINotRespondingDialogVisible(this)) {
+        closeSystemDialogs(context)
+      }
+      waitForIdle()
+    }
+    PreferenceManager.getDefaultSharedPreferences(
+      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
+    ).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
+      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
+      putBoolean(SharedPreferenceUtil.PREF_EXTERNAL_LINK_POPUP, true)
     }
   }
 
   @Test
   fun testTopLevelDestination() {
+    ActivityScenario.launch(KiwixMainActivity::class.java)
     topLevel {
       clickReaderOnBottomNav {
       }
       clickLibraryOnBottomNav {
+        assertGetZimNearbyDeviceDisplayed()
         clickFileTransferIcon {
         }
       }
-      clickDownloadOnBottomNav {
-        clickOnGlobeIcon {
-        }
-      }
+      clickDownloadOnBottomNav(OnlineLibraryRobot::assertLibraryListDisplayed)
       clickBookmarksOnNavDrawer {
+        assertBookMarksDisplayed()
         clickOnTrashIcon()
         assertDeleteBookmarksDialogDisplayed()
       }
       clickHistoryOnSideNav {
+        assertHistoryDisplayed()
         clickOnTrashIcon()
         assertDeleteHistoryDialogDisplayed()
       }
-      clickHostBooksOnSideNav {
-      }
-      clickSettingsOnSideNav {
-      }
-      clickHelpOnSideNav {
-      }
+      clickHostBooksOnSideNav(ZimHostRobot::assertMenuWifiHotspotDiplayed)
+      clickSettingsOnSideNav(SettingsRobot::assertMenuSettingsDisplayed)
+      clickHelpOnSideNav(HelpRobot::assertToolbarDisplayed)
       clickSupportKiwixOnSideNav()
       assertExternalLinkDialogDisplayed()
       pressBack()
+    }
+    LeakAssertions.assertNoLeaks()
+  }
+
+  @After
+  fun setIsTestPreference() {
+    PreferenceManager.getDefaultSharedPreferences(context).edit {
+      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, false)
     }
   }
 }

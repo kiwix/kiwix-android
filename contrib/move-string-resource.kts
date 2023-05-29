@@ -36,7 +36,7 @@
  * https://github.com/holgerbrandl/kscript
  * https://github.com/holgerbrandl/kscript#deploy-scripts-as-standalone-binaries
  */
- 
+
 import java.io.File
 import java.lang.StringBuilder
 import kotlin.system.exitProcess

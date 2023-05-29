@@ -26,50 +26,59 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_destination_library.file_management_no_files
-import kotlinx.android.synthetic.main.fragment_destination_library.go_to_downloads_button_no_files
-import kotlinx.android.synthetic.main.fragment_destination_library.select_file
-import kotlinx.android.synthetic.main.fragment_destination_library.zim_swiperefresh
-import kotlinx.android.synthetic.main.fragment_destination_library.zimfilelist
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
+import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
+import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.utils.FILE_SELECT_CODE
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
+import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener.Companion.SCROLL_DOWN
+import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener.Companion.SCROLL_UP
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
+import org.kiwix.kiwixmobile.databinding.FragmentDestinationLibraryBinding
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
@@ -89,6 +98,8 @@ class LocalLibraryFragment : BaseFragment() {
 
   private var actionMode: ActionMode? = null
   private val disposable = CompositeDisposable()
+  private var fragmentDestinationLibraryBinding: FragmentDestinationLibraryBinding? = null
+  private var permissionDeniedLayoutShowing = false
 
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
@@ -116,52 +127,126 @@ class LocalLibraryFragment : BaseFragment() {
     savedInstanceState: Bundle?
   ): View? {
     LanguageUtils(requireActivity())
-      .changeFont(requireActivity().layoutInflater, sharedPreferenceUtil)
-    val root = inflater.inflate(R.layout.fragment_destination_library, container, false)
-    val toolbar = root.findViewById<Toolbar>(R.id.toolbar)
+      .changeFont(requireActivity(), sharedPreferenceUtil)
+    fragmentDestinationLibraryBinding = FragmentDestinationLibraryBinding.inflate(
+      inflater,
+      container,
+      false
+    )
+    val toolbar = fragmentDestinationLibraryBinding?.root?.findViewById<Toolbar>(R.id.toolbar)
     val activity = activity as CoreMainActivity
     activity.setSupportActionBar(toolbar)
     activity.supportActionBar?.apply {
       setDisplayHomeAsUpEnabled(true)
       setTitle(R.string.library)
     }
-    activity.setupDrawerToggle(toolbar)
-    setHasOptionsMenu(true)
+    if (toolbar != null) {
+      activity.setupDrawerToggle(toolbar)
+    }
+    setupMenu()
 
-    return root
+    return fragmentDestinationLibraryBinding?.root
+  }
+
+  private fun setupMenu() {
+    (requireActivity() as MenuHost).addMenuProvider(
+      object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+          menuInflater.inflate(R.menu.menu_zim_manager, menu)
+          val searchItem = menu.findItem(R.id.action_search)
+          val languageItem = menu.findItem(R.id.select_language)
+          languageItem.isVisible = false
+          searchItem.isVisible = false
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+          when (menuItem.itemId) {
+            R.id.get_zim_nearby_device -> {
+              navigateToLocalFileTransferFragment()
+              return true
+            }
+          }
+          return false
+        }
+      },
+      viewLifecycleOwner,
+      Lifecycle.State.RESUMED
+    )
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    zim_swiperefresh.setOnRefreshListener(::requestFileSystemCheck)
-    zimfilelist.run {
+    fragmentDestinationLibraryBinding?.zimSwiperefresh?.setOnRefreshListener(
+      ::requestFileSystemCheck
+    )
+    fragmentDestinationLibraryBinding?.zimfilelist?.run {
       adapter = booksOnDiskAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
+      visibility = GONE
     }
     zimManageViewModel.fileSelectListStates.observe(viewLifecycleOwner, Observer(::render))
+      .also {
+        coreMainActivity.navHostContainer
+          .setBottomMarginToFragmentContainerView(0)
+
+        getBottomNavigationView()?.let {
+          setBottomMarginToSwipeRefreshLayout(it.measuredHeight)
+        }
+      }
     disposable.add(sideEffects())
     zimManageViewModel.deviceListIsRefreshing.observe(viewLifecycleOwner) {
-      zim_swiperefresh.isRefreshing = it!!
+      fragmentDestinationLibraryBinding?.zimSwiperefresh?.isRefreshing = it!!
     }
     if (savedInstanceState != null && savedInstanceState.getBoolean(WAS_IN_ACTION_MODE)) {
       zimManageViewModel.fileSelectActions.offer(FileSelectActions.RestartActionMode)
     }
 
-    go_to_downloads_button_no_files.setOnClickListener {
-      offerAction(FileSelectActions.UserClickedDownloadBooksButton)
+    fragmentDestinationLibraryBinding?.goToDownloadsButtonNoFiles?.setOnClickListener {
+      if (permissionDeniedLayoutShowing) {
+        permissionDeniedLayoutShowing = false
+        requireActivity().navigateToAppSettings()
+      } else {
+        offerAction(FileSelectActions.UserClickedDownloadBooksButton)
+      }
     }
     hideFilePickerButton()
+
+    fragmentDestinationLibraryBinding?.zimfilelist?.addOnScrollListener(
+      SimpleRecyclerViewScrollListener { _, newState ->
+        when (newState) {
+          SCROLL_DOWN -> {
+            setBottomMarginToSwipeRefreshLayout(0)
+          }
+          SCROLL_UP -> {
+            getBottomNavigationView()?.let {
+              setBottomMarginToSwipeRefreshLayout(it.measuredHeight)
+            }
+          }
+        }
+      }
+    )
+  }
+
+  private fun getBottomNavigationView() =
+    requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view)
+
+  private fun setBottomMarginToSwipeRefreshLayout(marginBottom: Int) {
+    fragmentDestinationLibraryBinding?.zimSwiperefresh?.apply {
+      val params = layoutParams as CoordinatorLayout.LayoutParams?
+      params?.bottomMargin = marginBottom
+      requestLayout()
+    }
   }
 
   private fun hideFilePickerButton() {
     if (sharedPreferenceUtil.isPlayStoreBuild) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        select_file.visibility = View.GONE
+        fragmentDestinationLibraryBinding?.selectFile?.visibility = View.GONE
       }
     }
 
-    select_file.setOnClickListener {
+    fragmentDestinationLibraryBinding?.selectFile?.setOnClickListener {
       showFileChooser()
     }
   }
@@ -223,32 +308,22 @@ class LocalLibraryFragment : BaseFragment() {
     }
   }
 
-  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    inflater.inflate(R.menu.menu_zim_manager, menu)
-    val searchItem = menu.findItem(R.id.action_search)
-    val languageItem = menu.findItem(R.id.select_language)
-    languageItem.isVisible = false
-    searchItem.isVisible = false
-    super.onCreateOptionsMenu(menu, inflater)
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-      R.id.get_zim_nearby_device -> navigateToLocalFileTransferFragment()
-    }
-    return super.onOptionsItemSelected(item)
-  }
-
   override fun onResume() {
     super.onResume()
-    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove())
+    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
+      !sharedPreferenceUtil.prefIsTest && !permissionDeniedLayoutShowing
+    ) {
       checkPermissions()
+    } else {
+      fragmentDestinationLibraryBinding?.zimfilelist?.visibility = VISIBLE
+    }
   }
 
   override fun onDestroyView() {
     super.onDestroyView()
     actionMode = null
-    zimfilelist.adapter = null
+    fragmentDestinationLibraryBinding?.zimfilelist?.adapter = null
+    fragmentDestinationLibraryBinding = null
     disposable.clear()
   }
 
@@ -269,10 +344,24 @@ class LocalLibraryFragment : BaseFragment() {
     booksOnDiskAdapter.items = items
     if (items.none(BooksOnDiskListItem::isSelected)) {
       actionMode?.finish()
+      actionMode = null
     }
     actionMode?.title = String.format("%d", state.selectedBooks.size)
-    file_management_no_files.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
-    go_to_downloads_button_no_files.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
+    fragmentDestinationLibraryBinding?.apply {
+      if (items.isEmpty()) {
+        fileManagementNoFiles.text = requireActivity().resources.getString(R.string.no_files_here)
+        goToDownloadsButtonNoFiles.text =
+          requireActivity().resources.getString(R.string.download_books)
+
+        fileManagementNoFiles.visibility = View.VISIBLE
+        goToDownloadsButtonNoFiles.visibility = View.VISIBLE
+        zimfilelist.visibility = View.GONE
+      } else {
+        fileManagementNoFiles.visibility = View.GONE
+        goToDownloadsButtonNoFiles.visibility = View.GONE
+        zimfilelist.visibility = View.VISIBLE
+      }
+    }
   }
 
   override fun onSaveInstanceState(outState: Bundle) {
@@ -286,12 +375,7 @@ class LocalLibraryFragment : BaseFragment() {
         Manifest.permission.READ_EXTERNAL_STORAGE
       ) != PackageManager.PERMISSION_GRANTED
     ) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        dialogShower.show(
-          KiwixDialog.StoragePermissionRationale,
-          ::openAppSettings
-        )
-      } else {
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
         context.toast(R.string.request_storage)
         requestPermissions(
           arrayOf(
@@ -300,6 +384,8 @@ class LocalLibraryFragment : BaseFragment() {
           ),
           REQUEST_STORAGE_PERMISSION
         )
+      } else {
+        requestFileSystemCheck()
       }
     } else {
       if (sharedPreferenceUtil.isPlayStoreBuild) {
@@ -330,15 +416,6 @@ class LocalLibraryFragment : BaseFragment() {
     }
   }
 
-  private fun openAppSettings() {
-    val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
-    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-      flags = Intent.FLAG_ACTIVITY_NEW_TASK
-      data = uri
-    }
-    startActivity(intent)
-  }
-
   private fun requestFileSystemCheck() {
     zimManageViewModel.requestFileSystemCheck.onNext(Unit)
   }
@@ -349,5 +426,42 @@ class LocalLibraryFragment : BaseFragment() {
 
   private fun navigateToLocalFileTransferFragment() {
     requireActivity().navigate(R.id.localFileTransferFragment)
+  }
+
+  private fun shouldShowRationalePermission() =
+    ActivityCompat.shouldShowRequestPermissionRationale(
+      requireActivity(),
+      Manifest.permission.READ_EXTERNAL_STORAGE
+    )
+
+  private fun isPermissionDenied(grantResults: IntArray) =
+    grantResults[0] == PackageManager.PERMISSION_DENIED
+
+  private fun readStorageHasBeenPermanentlyDenied(grantResults: IntArray) =
+    isPermissionDenied(grantResults) &&
+      !shouldShowRationalePermission()
+
+  override fun onRequestPermissionsResult(
+    requestCode: Int,
+    permissions: Array<out String>,
+    grantResults: IntArray
+  ) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    if (permissions.isNotEmpty() && requestCode == REQUEST_STORAGE_PERMISSION) {
+      if (readStorageHasBeenPermanentlyDenied(grantResults)) {
+        fragmentDestinationLibraryBinding?.apply {
+          permissionDeniedLayoutShowing = true
+          fileManagementNoFiles.visibility = VISIBLE
+          goToDownloadsButtonNoFiles.visibility = VISIBLE
+          fileManagementNoFiles.text =
+            requireActivity().resources.getString(R.string.grant_read_storage_permission)
+          goToDownloadsButtonNoFiles.text =
+            requireActivity().resources.getString(R.string.go_to_settings_label)
+          zimfilelist.visibility = GONE
+        }
+      } else if (!isPermissionDenied(grantResults)) {
+        permissionDeniedLayoutShowing = false
+      }
+    }
   }
 }

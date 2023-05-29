@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Anakmalaysia
+* McDutchie
 * Tofeiku
 -->
 <resources>
@@ -47,7 +48,7 @@
   <string name="pref_language_title">Bahasa</string>
   <string name="pref_language_chooser">Pilih bahasa</string>
   <string name="pref_credits">Penyumbang dan Lesen</string>
-  <string name="tts_lang_not_supported">Bahasa laman ini tidak disokong, ataupun data bahasa yang bersesuaian tidak dipasang. Rencana mungkin tidak dapat dibaca dengan betul.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Bahasa laman ini tidak disokong, ataupun data bahasa yang bersesuaian tidak dipasang. Rencana mungkin tidak dapat dibaca dengan betul.</string>
   <string name="no_reader_application_installed">Tidak terjumpa aplikasi yang dipasang untuk jenis fail ini</string>
   <string name="no_section_info" fuzzy="true">Tiada judul kandungan ditemui</string>
   <string name="request_storage" fuzzy="true">Untuk mencapai fail ZIM kami memerlukan akses kepada storan anda</string>
@@ -94,7 +95,7 @@
   <string name="expand">Kembangkan</string>
   <string name="history">Sejarah</string>
   <string name="history_from_current_book">Lihat Sejarah Dari Semua Buku</string>
-  <string name="search_history">Sejarah carian</string>
+  <string name="search_history" fuzzy="true">Sejarah carian</string>
   <string name="selected_items">%1$d dipilih</string>
   <string name="complete">Selesai</string>
   <string name="save">Simpan</string>

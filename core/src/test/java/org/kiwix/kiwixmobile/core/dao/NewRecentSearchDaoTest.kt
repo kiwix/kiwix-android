@@ -30,7 +30,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity_
-import org.kiwix.kiwixmobile.core.data.local.entity.RecentSearch
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.test
 import org.kiwix.sharedFunctions.recentSearchEntity
@@ -94,7 +93,13 @@ internal class NewRecentSearchDaoTest {
     private fun expectFromRecentSearches(queryResult: List<RecentSearchEntity>, zimId: String) {
       val queryBuilder = mockk<QueryBuilder<RecentSearchEntity>>()
       every { box.query() } returns queryBuilder
-      every { queryBuilder.equal(RecentSearchEntity_.zimId, zimId) } returns queryBuilder
+      every {
+        queryBuilder.equal(
+          RecentSearchEntity_.zimId,
+          zimId,
+          QueryBuilder.StringOrder.CASE_INSENSITIVE
+        )
+      } returns queryBuilder
       every { queryBuilder.orderDesc(RecentSearchEntity_.id) } returns queryBuilder
       val query = mockk<Query<RecentSearchEntity>>()
       every { queryBuilder.build() } returns query
@@ -113,7 +118,13 @@ internal class NewRecentSearchDaoTest {
     val searchTerm = "searchTerm"
     val queryBuilder: QueryBuilder<RecentSearchEntity> = mockk()
     every { box.query() } returns queryBuilder
-    every { queryBuilder.equal(RecentSearchEntity_.searchTerm, searchTerm) } returns queryBuilder
+    every {
+      queryBuilder.equal(
+        RecentSearchEntity_.searchTerm,
+        searchTerm,
+        QueryBuilder.StringOrder.CASE_INSENSITIVE
+      )
+    } returns queryBuilder
     val query: Query<RecentSearchEntity> = mockk(relaxed = true)
     every { queryBuilder.build() } returns query
     newRecentSearchDao.deleteSearchString(searchTerm)
@@ -124,16 +135,5 @@ internal class NewRecentSearchDaoTest {
   fun `deleteSearchHistory deletes everything`() {
     newRecentSearchDao.deleteSearchHistory()
     verify { box.removeAll() }
-  }
-
-  @Test
-  fun `migrationInsert adds old items to box`() {
-    val id = "zimId"
-    val term = "searchString"
-    val recentSearch: RecentSearch = mockk()
-    every { recentSearch.searchString } returns term
-    every { recentSearch.zimID } returns id
-    newRecentSearchDao.migrationInsert(mutableListOf(recentSearch))
-    verify { box.put(listOf(recentSearchEntity(searchTerm = term, zimId = id))) }
   }
 }

@@ -23,16 +23,23 @@ import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.util.Log
+import android.webkit.URLUtil
 import android.widget.Toast
 import androidx.documentfile.provider.DocumentFile
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.get
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -42,18 +49,25 @@ import java.io.IOException
 
 object FileUtils {
 
-  @JvmStatic fun getFileCacheDir(context: Context): File? =
+  @JvmStatic
+  fun getFileCacheDir(context: Context): File? =
     if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
       context.externalCacheDir
     } else {
       context.cacheDir
     }
 
-  @JvmStatic @Synchronized fun deleteCachedFiles(context: Context) {
-    getFileCacheDir(context)?.deleteRecursively()
+  @JvmStatic
+  @Synchronized
+  fun deleteCachedFiles(context: Context) {
+    CoroutineScope(Dispatchers.IO).launch {
+      getFileCacheDir(context)?.deleteRecursively()
+    }
   }
 
-  @JvmStatic @Synchronized fun deleteZimFile(path: String) {
+  @JvmStatic
+  @Synchronized
+  fun deleteZimFile(path: String) {
     var path = path
     if (path.substring(path.length - ChunkUtils.PART.length) == ChunkUtils.PART) {
       path = path.substring(0, path.length - ChunkUtils.PART.length)
@@ -67,8 +81,8 @@ object FileUtils {
         while (alphabetSecond <= 'z') {
           val chunkPath = path.substring(0, path.length - 2) + alphabetFirst + alphabetSecond
           val fileChunk = File(chunkPath)
-          if (fileChunk.exists()) {
-            fileChunk.delete()
+          if (fileChunk.isFileExist()) {
+            fileChunk.deleteFile()
           } else if (!deleteZimFileParts(chunkPath)) {
             break@fileloop
           }
@@ -77,26 +91,28 @@ object FileUtils {
         alphabetFirst++
       }
     } else {
-      file.delete()
+      file.deleteFile()
       deleteZimFileParts(path)
     }
   }
 
-  @Synchronized private fun deleteZimFileParts(path: String): Boolean {
+  @Synchronized
+  private fun deleteZimFileParts(path: String): Boolean {
     val file = File(path + ChunkUtils.PART)
-    if (file.exists()) {
-      file.delete()
+    if (file.isFileExist()) {
+      file.deleteFile()
       return true
     }
     val singlePart = File("$path.part")
-    if (singlePart.exists()) {
-      singlePart.delete()
+    if (singlePart.isFileExist()) {
+      singlePart.deleteFile()
       return true
     }
     return false
   }
 
-  @JvmStatic fun getLocalFilePathByUri(
+  @JvmStatic
+  fun getLocalFilePathByUri(
     context: Context,
     uri: Uri
   ): String? {
@@ -109,7 +125,7 @@ object FileUtils {
           return "${Environment.getExternalStorageDirectory()}/${documentId[1]}"
         }
         return try {
-          "${getSdCardMainPath(context)}/${documentId[1]}"
+          "${getSdCardMainPath(context, documentId[0])}/${documentId[1]}"
         } catch (ignore: Exception) {
           null
         }
@@ -164,7 +180,8 @@ object FileUtils {
     }
   }
 
-  @JvmStatic fun readLocalesFromAssets(context: Context) =
+  @JvmStatic
+  fun readLocalesFromAssets(context: Context) =
     readContentFromLocales(context).split(',')
 
   private fun readContentFromLocales(context: Context): String {
@@ -180,31 +197,35 @@ object FileUtils {
     }
   }
 
+  @Suppress("NestedBlockDepth")
   @JvmStatic fun getAllZimParts(book: Book): List<File> {
     val files = ArrayList<File>()
-    if (book.file.path.endsWith(".zim") || book.file.path.endsWith(".zim.part")) {
-      if (book.file.exists()) {
-        files.add(book.file)
+    book.file?.let {
+      if (it.path.endsWith(".zim") || it.path.endsWith(".zim.part")) {
+        if (it.isFileExist()) {
+          files.add(it)
+        } else {
+          files.add(File("$it.part"))
+        }
       } else {
-        files.add(File(book.file.toString() + ".part"))
-      }
-      return files
-    }
-    var path = book.file.path
-    for (firstCharacter in 'a'..'z') {
-      for (secondCharacter in 'a'..'z') {
-        path = path.substring(0, path.length - 2) + firstCharacter + secondCharacter
-        when {
-          File(path).exists() -> files.add(File(path))
-          File("$path.part").exists() -> files.add(File("$path.part"))
-          else -> return files
+        var path = it.path
+        for (firstCharacter in 'a'..'z') {
+          for (secondCharacter in 'a'..'z') {
+            path = path.substring(0, path.length - 2) + firstCharacter + secondCharacter
+            when {
+              File(path).isFileExist() -> files.add(File(path))
+              File("$path.part").isFileExist() -> files.add(File("$path.part"))
+              else -> return@getAllZimParts files
+            }
+          }
         }
       }
     }
     return files
   }
 
-  @JvmStatic fun hasPart(file: File): Boolean {
+  @JvmStatic
+  fun hasPart(file: File): Boolean {
     var file = file
     file = File(getFileName(file.path))
     if (file.path.endsWith(".zim")) {
@@ -218,9 +239,9 @@ object FileUtils {
       for (secondCharacter in 'a'..'z') {
         val chunkPath = path.substring(0, path.length - 2) + firstCharacter + secondCharacter
         val fileChunk = File("$chunkPath.part")
-        if (fileChunk.exists()) {
+        if (fileChunk.isFileExist()) {
           return true
-        } else if (!File(chunkPath).exists()) {
+        } else if (!File(chunkPath).isFileExist()) {
           return false
         }
       }
@@ -228,14 +249,16 @@ object FileUtils {
     return false
   }
 
-  @JvmStatic fun getFileName(fileName: String) =
+  @JvmStatic
+  fun getFileName(fileName: String) =
     when {
-      File(fileName).exists() -> fileName
-      File("$fileName.part").exists() -> "$fileName.part"
+      File(fileName).isFileExist() -> fileName
+      File("$fileName.part").isFileExist() -> "$fileName.part"
       else -> "${fileName}aa"
     }
 
-  @JvmStatic fun Context.readFile(filePath: String): String = try {
+  @JvmStatic
+  fun Context.readFile(filePath: String): String = try {
     assets.open(filePath)
       .bufferedReader()
       .use(BufferedReader::readText)
@@ -243,15 +266,19 @@ object FileUtils {
     "".also { e.printStackTrace() }
   }
 
-  @JvmStatic fun isValidZimFile(filePath: String): Boolean =
+  @JvmStatic
+  fun isValidZimFile(filePath: String): Boolean =
     filePath.endsWith(".zim") || filePath.endsWith(".zimaa")
 
-  @JvmStatic fun getSdCardMainPath(context: Context): String =
-    "${context.getExternalFilesDirs("")[1]}"
-      .substringBefore(context.getString(R.string.android_directory_seperator))
+  @JvmStatic
+  fun getSdCardMainPath(context: Context, storageName: String) =
+    context.getExternalFilesDirs("")
+      .first { it.path.contains(storageName) }
+      .path.substringBefore(context.getString(R.string.android_directory_seperator))
 
   @SuppressLint("WrongConstant")
-  @JvmStatic fun getPathFromUri(activity: Activity, data: Intent): String? {
+  @JvmStatic
+  fun getPathFromUri(activity: Activity, data: Intent): String? {
     val uri: Uri? = data.data
     val takeFlags: Int = data.flags and (
       Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -292,26 +319,42 @@ object FileUtils {
     return null
   }
 
-  /**
-   * Returns the file name from the url or src. In url it gets the file name from the last '/' and
-   * if it contains '.'. If the url is null then it'll get the file name from the last '/'.
-   * If the url and src doesn't exist it returns the empty string.
-   */
-  fun getDecodedFileName(url: String?, src: String?): String =
-    url?.substringAfterLast("/", "")
-      ?.takeIf { it.contains(".") }
-      ?: src?.substringAfterLast("/", "")
-        ?.substringAfterLast("%3A") ?: ""
+  /*
+   * This method returns a file name guess from the url using URLUtils.guessFileName()
+     method of android.webkit. which is using Uri.decode method to extract the filename
+     from url. After that it splits filename between base and extension
+     (e.g for DemoFile.png, DemoFile is base and png is extension).
+     if there is no extension in url then it will automatically add the .bin extension to filename.
 
-  @JvmStatic fun downloadFileFromUrl(
+   * If it's failed to guess the file name then it will return default filename downloadfile.bin.
+     If it returns this default value or containing the .bin in file name,
+     then we are returning null from this function which is handled in downloadFileFromUrl method.
+
+   * We are placing a condition here for if the file name does not have a .bin extension,
+     then it returns the original file name.
+   */
+  fun getDecodedFileName(url: String?): String? {
+    var fileName: String? = null
+    val decodedFileName = URLUtil.guessFileName(url, null, null)
+    if (!decodedFileName.endsWith(".bin")) {
+      fileName = decodedFileName
+    }
+    return fileName
+  }
+
+  @Suppress("ReturnCount")
+  @JvmStatic
+  fun downloadFileFromUrl(
     url: String?,
     src: String?,
     zimReaderContainer: ZimReaderContainer,
     sharedPreferenceUtil: SharedPreferenceUtil
   ): File? {
-    val fileName = getDecodedFileName(url, src)
+    val fileName = getDecodedFileName(url ?: src) ?: return null
     var root: File? = null
-    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() ||
+      Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+    ) {
       if (CoreApp.instance.externalMediaDirs.isNotEmpty()) {
         root = CoreApp.instance.externalMediaDirs[0]
       }
@@ -321,9 +364,9 @@ object FileUtils {
           "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}" +
             "/org.kiwix"
         )
-      if (!root.exists()) root.mkdir()
+      if (!root.isFileExist()) root.mkdir()
     }
-    if (File(root, fileName).exists()) return File(root, fileName)
+    if (File(root, fileName).isFileExist()) return File(root, fileName)
     val fileToSave = sequence {
       yield(File(root, fileName))
       yieldAll(
@@ -333,7 +376,7 @@ object FileUtils {
           )
         }
       )
-    }.first { !it.exists() }
+    }.first { !it.isFileExist() }
     val source = if (url == null) Uri.parse(src) else Uri.parse(url)
     return try {
       zimReaderContainer.load("$source", emptyMap()).data.use { inputStream ->

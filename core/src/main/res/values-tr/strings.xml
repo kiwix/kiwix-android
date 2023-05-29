@@ -10,6 +10,8 @@
 * Joseph
 * Kumkumuk
 * McAang
+* McDutchie
+* MohitMali
 * MuratTheTurkish
 * Rapsar
 * Sayginer
@@ -77,7 +79,7 @@
   <string name="pref_language_chooser">Bir dil seçin</string>
   <string name="pref_credits">Katkıda bulunanlar ve lisanslar</string>
   <string name="pref_credits_title">Katkıda bulunanlar</string>
-  <string name="tts_lang_not_supported">Bu sayfanın dili desteklenmiyor veya uygun dil verileri yüklenmemiş. Madde düzgün okunmamış olabilir.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Bu sayfanın dili desteklenmiyor veya uygun dil verileri yüklenmemiş. Madde düzgün okunmamış olabilir.</string>
   <string name="no_reader_application_installed">Bu dosya türü için yüklü bir uygulama bulunamadı</string>
   <string name="no_section_info">İçerik başlığı bulunamadı</string>
   <string name="request_storage">Çevrimdışı içeriğe erişmek için belleğinize erişmemiz gerekmektedir.</string>
@@ -103,6 +105,7 @@
   <string name="tab_closed">Sekme kapatıldı</string>
   <string name="bookmark_added">Yer imi eklendi</string>
   <string name="rate_dialog_title">Lütfen bizi değerlendirin</string>
+  <string name="rate_dialog_msg">%s kullanmayı sevdiyseniz lütfen bir dakikanızı ayırın ve değerlendirin. Desteğiniz için teşekkürler!</string>
   <string name="rate_dialog_positive">Değerlendirin!</string>
   <string name="no_thanks">Hayır, teşekkürler</string>
   <string name="rate_dialog_neutral">Sonra</string>
@@ -144,8 +147,10 @@
   <string name="tts_pause">duraklat</string>
   <string name="tts_resume">devam et</string>
   <string name="stop">durdur</string>
+  <string name="configure_storage_option">Kitap, dahili depolama birimine indirilsin mi?</string>
   <string name="internal_storage">Dahili</string>
   <string name="external_storage">Harici</string>
+  <string name="configure">Yapılandır</string>
   <string name="yes">Evet</string>
   <string name="no">Hayır</string>
   <string name="confirm_stop_download_title">İndirme durdurulsun mu?</string>
@@ -203,7 +208,7 @@
   <string name="expand">Genişlet</string>
   <string name="history">Geçmiş</string>
   <string name="history_from_current_book">Tüm Kitaplardan Geçmişi Görüntüle</string>
-  <string name="search_history">Geçmişi ara</string>
+  <string name="search_history" fuzzy="true">Geçmişi ara</string>
   <string name="selected_items">%1$d seçili</string>
   <string name="bookmarks_from_current_book">Tüm Kitaplardaki Yer İşaretlerini Görüntüle</string>
   <string name="search_bookmarks">Yer imlerini ara</string>
@@ -238,6 +243,7 @@
   <string name="connection_failed">Bağlantı kurulamadı</string>
   <string name="permission_rationale_location">Uygulamanın eş aygıtları algılamasına izin vermek için Android tarafından konum izni gerekir</string>
   <string name="permission_rationale_location_on_host_zim_file">Uygulamanın Zim dosyalarını barındırmasına izin vermek için Android tarafından konum izni gereklidir</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">Uygulamanın Zim dosyalarını barındırmasına izin vermek için Android tarafından yakındaki wifi cihazları izni gerekir</string>
   <string name="permission_refused_location">Konum izinleri olmadan eş aygıtlar bulunamıyor</string>
   <string name="permission_refused_storage">Depolama izni olmadan zim dosyalarına erişilemiyor</string>
   <string name="request_enable_location">Eşlerin algılanmasına izin vermek için konumu etkinleştir</string>
@@ -255,8 +261,8 @@
   <string name="nearby_devices">YAKINDAKİ CİHAZLAR</string>
   <string name="no_devices_found">Cihaz algılanmadı. Tekrar denemek için arama düğmesine dokunun.</string>
   <string name="files_for_transfer">TRANSFER İÇİN DOSYALAR</string>
-  <string name="preparing_files">Dosyaları aktarıma hazırlanıyor....</string>
-  <string name="performing_handshake">El sıkışma gerçekleştiriliyor....</string>
+  <string name="preparing_files">Dosyaları aktarıma hazırlanıyor…</string>
+  <string name="performing_handshake">El sıkışılıyor…</string>
   <string name="status">Durum</string>
   <string name="pref_clear_all_notes_summary">Tüm makalelerdeki tüm notları temizler</string>
   <string name="pref_clear_all_notes_title">Tüm notları temizle</string>
@@ -303,7 +309,6 @@
   <string name="select_folder">Lütfen harici depolama için bir klasör seçin.</string>
   <string name="system_unable_to_grant_permission_message">Sistem izin veremiyor!</string>
   <string name="allow">İzin ver</string>
-  <string name="allow_internet_permission_message">Lütfen içeriği indirmek için internet iznine izin verin</string>
   <string name="no_notes">Not Yok</string>
   <string name="notes_from_all_books">Tüm Kitaplardan Notları Görüntüle</string>
   <string name="search_notes">Notları Ara</string>
@@ -312,4 +317,5 @@
   <string name="open_article">Makaleyi Aç</string>
   <string name="delete_note_dialog_message">Not: Notlar, depolama alanınızdan silinmez</string>
   <string name="delete_selected_notes">Seçili Notlar Silinsin mi?</string>
+  <string name="go_to_settings_label">Ayarlara gidin</string>
 </resources>

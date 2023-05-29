@@ -29,6 +29,7 @@ import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.NightModeConfig.Mode.Companion.from
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import java.io.File
 import java.util.Locale
 import javax.inject.Inject
@@ -59,6 +60,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefIsFirstRun: Boolean
     get() = sharedPreferences.getBoolean(PREF_IS_FIRST_RUN, true)
 
+  val prefIsTest: Boolean
+    get() = sharedPreferences.getBoolean(PREF_IS_TEST, false)
+
   val prefFullScreen: Boolean
     get() = sharedPreferences.getBoolean(PREF_FULLSCREEN, false)
 
@@ -77,6 +81,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefLanguage: String
     get() = sharedPreferences.getString(PREF_LANG, "") ?: Locale.ROOT.toString()
 
+  val prefDeviceDefaultLanguage: String
+    get() = sharedPreferences.getString(PREF_DEVICE_DEFAULT_LANG, "") ?: ""
+
   val prefStorage: String
     get() {
       val storage = sharedPreferences.getString(PREF_STORAGE, null)
@@ -85,7 +92,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
           putPrefStorage(it)
           putStoragePosition(0)
         }
-        !File(storage).exists() -> getPublicDirectoryPath(defaultStorage()).also {
+        !File(storage).isFileExist() -> getPublicDirectoryPath(defaultStorage()).also {
           putStoragePosition(0)
         }
         else -> storage
@@ -104,6 +111,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   fun putPrefLanguage(language: String) =
     sharedPreferences.edit { putString(PREF_LANG, language) }
+
+  fun putPrefDeviceDefaultLanguage(language: String) =
+    sharedPreferences.edit { putString(PREF_DEVICE_DEFAULT_LANG, language) }
 
   fun putPrefIsFirstRun(isFirstRun: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_IS_FIRST_RUN, isFirstRun) }
@@ -194,13 +204,16 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     }
 
   fun getPublicDirectoryPath(path: String): String =
-    if (isPlayStoreBuild)
+    if (isPlayStoreBuild) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
         path
       else
         path.substringBefore(context.getString(R.string.android_directory_seperator))
-    else
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      path
+    } else {
       path.substringBefore(context.getString(R.string.android_directory_seperator))
+    }
 
   fun isPlayStoreBuildWithAndroid11OrAbove(): Boolean =
     isPlayStoreBuild && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
@@ -208,17 +221,19 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   companion object {
     // Prefs
     const val PREF_LANG = "pref_language_chooser"
+    const val PREF_DEVICE_DEFAULT_LANG = "pref_device_default_language"
     const val PREF_STORAGE = "pref_select_folder"
     const val STORAGE_POSITION = "storage_position"
     const val PREF_WIFI_ONLY = "pref_wifi_only"
     const val PREF_KIWIX_MOBILE = "kiwix-mobile"
     const val PREF_SHOW_INTRO = "showIntro"
+    const val PREF_IS_TEST = "is_test"
     private const val PREF_BACK_TO_TOP = "pref_backtotop"
     private const val PREF_FULLSCREEN = "pref_fullscreen"
     private const val PREF_NEW_TAB_BACKGROUND = "pref_newtab_background"
     private const val PREF_STORAGE_TITLE = "pref_selected_title"
-    private const val PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup"
-    private const val PREF_SHOW_STORAGE_OPTION = "show_storgae_option"
+    const val PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup"
+    const val PREF_SHOW_STORAGE_OPTION = "show_storgae_option"
     private const val PREF_IS_FIRST_RUN = "isFirstRun"
     private const val PREF_SHOW_BOOKMARKS_ALL_BOOKS = "show_bookmarks_current_book"
     private const val PREF_SHOW_HISTORY_ALL_BOOKS = "show_history_current_book"
@@ -227,7 +242,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_NIGHT_MODE = "pref_night_mode"
     private const val TEXT_ZOOM = "true_text_zoom"
     private const val DEFAULT_ZOOM = 100
-    private const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"
-    private const val IS_PLAY_STORE_BUILD = "is_play_store_build"
+    const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"
+    const val IS_PLAY_STORE_BUILD = "is_play_store_build"
   }
 }

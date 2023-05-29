@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* McDutchie
+-->
+<resources>
+  <string name="retry">Reprobar</string>
+  <string name="invalid_installation">Installation non valide. Per favor discarga Zim.\n Assecura te que Wi-Fi es active e que tu ha bastante immagazinage.</string>
+</resources>

@@ -52,13 +52,13 @@ internal class NewBookmarksDaoTest {
     every { box.query() } returns queryBuilder
     every {
       queryBuilder.equal(
-        BookmarkEntity_.zimId, ""
+        BookmarkEntity_.zimId, "", QueryBuilder.StringOrder.CASE_INSENSITIVE
       )
     } returns queryBuilder
     every { queryBuilder.or() } returns queryBuilder
     every {
       queryBuilder.equal(
-        BookmarkEntity_.zimName, ""
+        BookmarkEntity_.zimName, "", QueryBuilder.StringOrder.CASE_INSENSITIVE
       )
     } returns queryBuilder
     every { queryBuilder.order(BookmarkEntity_.bookmarkTitle) } returns queryBuilder
@@ -84,14 +84,14 @@ internal class NewBookmarksDaoTest {
     every {
       queryBuilder.equal(
         BookmarkEntity_.zimId,
-        zimFileReader?.id ?: ""
+        zimFileReader?.id ?: "", QueryBuilder.StringOrder.CASE_INSENSITIVE
       )
     } returns queryBuilder
     every { queryBuilder.or() } returns queryBuilder
     every {
       queryBuilder.equal(
         BookmarkEntity_.zimName,
-        zimFileReader?.name ?: ""
+        zimFileReader?.name ?: "", QueryBuilder.StringOrder.CASE_INSENSITIVE
       )
     } returns queryBuilder
     every { queryBuilder.order(BookmarkEntity_.bookmarkTitle) } returns queryBuilder
@@ -116,7 +116,13 @@ internal class NewBookmarksDaoTest {
     val bookmarkUrl = "bookmarkUrl"
     val queryBuilder: QueryBuilder<BookmarkEntity> = mockk(relaxed = true)
     every { box.query() } returns queryBuilder
-    every { queryBuilder.equal(BookmarkEntity_.bookmarkUrl, bookmarkUrl) } returns queryBuilder
+    every {
+      queryBuilder.equal(
+        BookmarkEntity_.bookmarkUrl,
+        bookmarkUrl,
+        QueryBuilder.StringOrder.CASE_INSENSITIVE
+      )
+    } returns queryBuilder
     val query: Query<BookmarkEntity> = mockk(relaxed = true)
     every { queryBuilder.build() } returns query
     newBookmarksDao.deleteBookmark(bookmarkUrl)

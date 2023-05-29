@@ -7,6 +7,8 @@
 * Kelson
 * Krzyz23
 * Macofe
+* McDutchie
+* MohitMali
 * Rail
 * Rzuwig
 * Stojex
@@ -75,7 +77,7 @@
   <string name="pref_language_chooser">Wybierz język</string>
   <string name="pref_credits">Współtwórcy i licencje</string>
   <string name="pref_credits_title">Twórcy</string>
-  <string name="tts_lang_not_supported">Język tej strony nie jest obsługiwany lub nie zostały zainstalowane odpowiednie dane języka. Ten artykuł może nie być poprawnie odczytywany.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Język tej strony nie jest obsługiwany lub nie zostały zainstalowane odpowiednie dane języka. Ten artykuł może nie być poprawnie odczytywany.</string>
   <string name="no_reader_application_installed">Nie udało się znaleźć zainstalowanego programu dla tego typu plików</string>
   <string name="no_section_info">Nie znaleziono nagłówków treści</string>
   <string name="request_storage">Aby uzyskać dostęp do plików ZIM, musimy mieć dostęp do twojego nośnika</string>
@@ -200,7 +202,7 @@
   <string name="expand">Rozwiń</string>
   <string name="history">Historia</string>
   <string name="history_from_current_book">Wyświetl historię ze wszystkich książek</string>
-  <string name="search_history">Historia wyszukiwania</string>
+  <string name="search_history" fuzzy="true">Historia wyszukiwania</string>
   <string name="selected_items">%1$d wybrane</string>
   <string name="bookmarks_from_current_book">Wyświetl zakładki ze wszystkich książek</string>
   <string name="search_bookmarks">Szukaj zakładek</string>
@@ -252,8 +254,8 @@
   <string name="nearby_devices">URZĄDZENIA W POBLIŻU</string>
   <string name="no_devices_found">Nie wykryto urządzeń. Naciśnij przycisk wyszukiwania, aby spróbować ponownie.</string>
   <string name="files_for_transfer">PLIKI DO PRZESŁANIA</string>
-  <string name="preparing_files">Przygotowywanie plików do przesłania....</string>
-  <string name="performing_handshake">Wykonywanie uzgadniania....</string>
+  <string name="preparing_files">Przygotowywanie plików do przesłania…</string>
+  <string name="performing_handshake">Wykonywanie uzgadniania…</string>
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Usuwa wszystkie notatki ze wszystkich artykułów</string>
   <string name="pref_clear_all_notes_title">Wyczyść wszystkie notatki</string>
@@ -298,4 +300,5 @@
   <string name="not_allowed">Niedozwolony</string>
   <string name="select_folder">Wybierz katalog do przechowywania zewnętrznego.</string>
   <string name="system_unable_to_grant_permission_message">System nie może udzielić pozwolenia!</string>
+  <string name="go_to_settings_label">Przejdź do ustawień</string>
 </resources>

@@ -55,5 +55,5 @@ class NetworkModule {
   }
 
   @Provides @Singleton fun provideKiwixService(okHttpClient: OkHttpClient): KiwixService =
-    ServiceCreator.newHacklistService(okHttpClient, KIWIX_DOWNLOAD_URL)
+    ServiceCreator.newHackListService(okHttpClient, KIWIX_DOWNLOAD_URL)
 }

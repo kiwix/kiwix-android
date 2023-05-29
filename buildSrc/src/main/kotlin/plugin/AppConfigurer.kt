@@ -27,6 +27,9 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.exclude
 import org.gradle.kotlin.dsl.project
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class AppConfigurer {
   fun configure(target: Project) {
@@ -50,9 +53,7 @@ class AppConfigurer {
           )
         }
       }
-      dexOptions {
-        javaMaxHeapSize = "4g"
-      }
+
       val abiCodes = mapOf("arm64-v8a" to 6, "x86" to 3, "x86_64" to 4, "armeabi-v7a" to 5)
       splits {
         abi {
@@ -74,7 +75,11 @@ class AppConfigurer {
       applicationVariants.all {
         outputs.filterIsInstance<ApkVariantOutput>().forEach { output: ApkVariantOutput ->
           val abiVersionCode = abiCodes[output.getFilter(VariantOutput.FilterType.ABI)] ?: 7
-          output.versionCodeOverride = (abiVersionCode * 1_000_000) + output.versionCode
+          output.versionCodeOverride = abiVersionCode * 1_000_000 + output.versionCode
+          if (output.outputFileName.contains("universal-nightly")) {
+            // this is for issue https://github.com/kiwix/kiwix-android/issues/3103
+            output.outputFileName = setNameForNightlyUniversalApk()
+          }
         }
       }
 
@@ -84,6 +89,12 @@ class AppConfigurer {
     }
     configureDependencies(target)
   }
+
+  private fun setNameForNightlyUniversalApk(): String =
+    "kiwix-universal-${getCurrentDate()}.apk"
+
+  private fun getCurrentDate() =
+    Date().let(SimpleDateFormat("yyyy-MM-dd", Locale.ROOT)::format)
 
   private fun configureDependencies(target: Project) {
     target.dependencies {

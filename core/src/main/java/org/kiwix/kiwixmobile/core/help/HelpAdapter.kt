@@ -18,17 +18,14 @@
 package org.kiwix.kiwixmobile.core.help
 
 import android.animation.ObjectAnimator
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_help.item_help_description
-import kotlinx.android.synthetic.main.item_help.item_help_title
-import kotlinx.android.synthetic.main.item_help.item_help_toggle_expand
-import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
+import org.kiwix.kiwixmobile.core.databinding.ItemHelpBinding
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.collapse
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.expand
-import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
-import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
 
 internal class HelpAdapter(titleDescriptionMap: Map<String, String>) :
   RecyclerView.Adapter<HelpAdapter.Item>() {
@@ -37,7 +34,7 @@ internal class HelpAdapter(titleDescriptionMap: Map<String, String>) :
   override fun onCreateViewHolder(
     parent: ViewGroup,
     viewType: Int
-  ): Item = Item(parent.inflate(R.layout.item_help, false))
+  ): Item = Item(ItemHelpBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
   override fun onBindViewHolder(
     holder: Item,
@@ -48,26 +45,27 @@ internal class HelpAdapter(titleDescriptionMap: Map<String, String>) :
 
   override fun getItemCount(): Int = helpItems.size
 
-  internal inner class Item(itemView: View) :
-    BaseViewHolder<HelpItem>(itemView) {
+  internal inner class Item(private val itemHelpBinding: ItemHelpBinding) :
+    BaseViewHolder<HelpItem>(itemHelpBinding.root) {
 
     @SuppressWarnings("MagicNumber")
     fun toggleDescriptionVisibility() {
-      if (item_help_description.visibility == View.GONE) {
-        ObjectAnimator.ofFloat(item_help_toggle_expand, "rotation", 0f, 180f).start()
-        item_help_description.expand()
+      if (itemHelpBinding.itemHelpDescription.visibility == View.GONE) {
+        ObjectAnimator.ofFloat(itemHelpBinding.itemHelpToggleExpand, "rotation", 0f, 180f).start()
+        itemHelpBinding.itemHelpDescription.expand()
       } else {
-        ObjectAnimator.ofFloat(item_help_toggle_expand, "rotation", 180f, 360f).start()
-        item_help_description.collapse()
+        ObjectAnimator.ofFloat(itemHelpBinding.itemHelpToggleExpand, "rotation", 180f, 360f).start()
+        itemHelpBinding.itemHelpDescription.collapse()
       }
     }
 
     override fun bind(item: HelpItem) {
-      item_help_title.setOnClickListener { toggleDescriptionVisibility() }
-      item_help_toggle_expand.setOnClickListener { toggleDescriptionVisibility() }
-      item_help_description.text = item.description
-      item_help_title.text = item.title
+      itemHelpBinding.itemHelpTitle.setOnClickListener { toggleDescriptionVisibility() }
+      itemHelpBinding.itemHelpToggleExpand.setOnClickListener { toggleDescriptionVisibility() }
+      itemHelpBinding.itemHelpDescription.text = item.description
+      itemHelpBinding.itemHelpTitle.text = item.title
     }
   }
 }
+
 class HelpItem(val title: String, val description: String)

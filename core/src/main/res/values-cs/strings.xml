@@ -9,6 +9,7 @@
 * Matěj Suchánek
 * Meliganai
 * Mininis11
+* Mormegil
 * Spotter
 * Tchoř
 * Walter Klosse
@@ -28,7 +29,7 @@
   <string name="menu_wifi_hotspot">Hostujte Knihy</string>
   <string name="save_media">Uložit médium jako…</string>
   <string name="save_media_error">Došlo k chybě při pokusu o uložení média!</string>
-  <string name="save_media_saved" fuzzy="true">Multimediální soubory uložené jako %s ve složce Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Média byla uložena jako %s do Downloads/org.kiwix…/</string>
   <string name="search_label">Hledat</string>
   <string name="choose_file">Vyberte obsahový soubor (*.zim)</string>
   <string name="open_in_new_tab">Otevřít odkaz v nové záložce?</string>
@@ -59,6 +60,7 @@
   <string name="server_started_message">Vložte tuto IP adresu do svého prohlížeče pro přístup na server %s</string>
   <string name="share_host_address">Sdílet URL přes jiné aplikace</string>
   <string name="error_file_not_found">Chyba: Nelze najít vybraný soubor ZIM.</string>
+  <string name="unable_to_read_zim_file">Tento soubor zim nelze přečíst!</string>
   <string name="zim_not_opened">Nelze otevřít soubor zim</string>
   <string name="error_file_invalid">Chyba: Vybraný soubor není platným souborem ZIM.</string>
   <string name="error_article_url_not_found">Chyba: Načtení článku (Url: %1$s ) se nezdařilo.</string>
@@ -73,10 +75,11 @@
   <string name="pref_language_chooser">Vyberte jazyk</string>
   <string name="pref_credits">Přispěvatelé a licence</string>
   <string name="pref_credits_title">O souboru</string>
-  <string name="tts_lang_not_supported">Jazyk této stránky není podporován nebo odpovídající jazyková data nejsou nainstalována. Článek nemusí být správně přečten.</string>
+  <string name="tts_lang_not_supported">Jazyk této stránky není podporován. Článek nemusí být správně přečten.</string>
   <string name="no_reader_application_installed">Pro tento typ souboru nebylo možné najít nainstalovanou aplikaci</string>
   <string name="no_section_info">Nebyly nalezeny žádné hlavičky obsahu.</string>
   <string name="request_storage">Pro přístup k obsahu offline potřebujeme přístup k vašemu úložišti.</string>
+  <string name="request_write_storage">Ke stažení zim souborů potřebujeme přístup pro zápis do vašeho úložiště</string>
   <string name="clear_recent_and_tabs_history_dialog">Jste si jistí, že chcete smazat svou historii vyhledávání a resetovat všechny aktivní záložky?</string>
   <string name="delete_recent_search_item">Smazat tuto položku?</string>
   <string name="pref_clear_all_history_title">Smazat historii</string>
@@ -98,6 +101,7 @@
   <string name="tab_closed">Karta zavřena</string>
   <string name="bookmark_added">Záložka přidána</string>
   <string name="rate_dialog_title">Prosím ohodnoťte nás</string>
+  <string name="rate_dialog_msg">Pokud rádi používáte %s, věnujte prosím chvilku hodnocení. Děkujeme za vaši podporu!</string>
   <string name="rate_dialog_positive">Ohodnotit!</string>
   <string name="no_thanks">Ne, děkuji</string>
   <string name="rate_dialog_neutral">Později</string>
@@ -139,8 +143,10 @@
   <string name="tts_pause">Pozastavit</string>
   <string name="tts_resume">Obnovit</string>
   <string name="stop">stop</string>
+  <string name="configure_storage_option">Stáhnout knihu do interního úložiště?</string>
   <string name="internal_storage">Interní</string>
   <string name="external_storage">Externí</string>
+  <string name="configure">Konfigurovat</string>
   <string name="yes">Ano</string>
   <string name="no">Ne</string>
   <string name="confirm_stop_download_title">Zastavit stahování?</string>
@@ -198,7 +204,7 @@
   <string name="expand">Rozšířit</string>
   <string name="history">Historie</string>
   <string name="history_from_current_book">Zobrazit historii ze všech knih</string>
-  <string name="search_history">Historie vyhledávání</string>
+  <string name="search_history">Hledat v historii</string>
   <string name="selected_items">%1$d vybráno</string>
   <string name="bookmarks_from_current_book">Zobrazit záložky ze všech knih</string>
   <string name="search_bookmarks">Prohledat záložky</string>
@@ -233,6 +239,7 @@
   <string name="connection_failed">Spojení selhalo</string>
   <string name="permission_rationale_location">Systém Android vyžaduje povolení polohy, aby aplikace mohla detekovat zařízení v okolí</string>
   <string name="permission_rationale_location_on_host_zim_file">Android vyžaduje povolení umístění, aby aplikace mohla hostovat soubory Zim</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">Android vyžaduje povolení zařízení Wi-Fi v okolí, aby mohla aplikace hostovat soubory Zim</string>
   <string name="permission_refused_location">Nelze nalézt zařízení v okolí bez přístupu k poloze</string>
   <string name="permission_refused_storage">Nelze získat přístup k souborům zim bez povolení přístupu do úložiště</string>
   <string name="request_enable_location">Povolit přístup k poloze a umožnit vyhledávání zařízení</string>
@@ -294,4 +301,17 @@
   <string name="all_files_permission_needed_message">Pro přístup k souborům ZIM musíme mít povolenou funkci Povolení pro všechny soubory</string>
   <string name="allowed">Povoleno</string>
   <string name="not_allowed">Není povoleno</string>
+  <string name="denied_internet_permission_message">Pro stahování obsahu prosím povolte wifi</string>
+  <string name="select_folder">Vyberte složku pro externí úložiště.</string>
+  <string name="system_unable_to_grant_permission_message">Systém nemůže udělit oprávnění!</string>
+  <string name="allow">Povolit</string>
+  <string name="no_notes">Žádné poznámky</string>
+  <string name="notes_from_all_books">Zobrazit poznámky ze všech knih</string>
+  <string name="search_notes">Hledat poznámky</string>
+  <string name="choose_your_action">Vyberte svou akci</string>
+  <string name="open_note">Otevřít poznámku</string>
+  <string name="open_article">Otevřít článek</string>
+  <string name="delete_note_dialog_message">Poznámka: Poznámky se z vašeho úložiště neodstraní</string>
+  <string name="delete_selected_notes">Smazat vybrané poznámky?</string>
+  <string name="go_to_settings_label">Přejít na nastavení</string>
 </resources>

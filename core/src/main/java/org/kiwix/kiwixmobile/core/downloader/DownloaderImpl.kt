@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.downloader
 
+import android.annotation.SuppressLint
 import io.reactivex.Observable
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
@@ -31,6 +32,7 @@ class DownloaderImpl @Inject constructor(
   private val kiwixService: KiwixService
 ) : Downloader {
 
+  @SuppressLint("CheckResult")
   override fun download(book: LibraryNetworkEntity.Book) {
     urlProvider(book)
       .take(1)
@@ -43,7 +45,8 @@ class DownloaderImpl @Inject constructor(
   }
 
   private fun urlProvider(book: Book): Observable<String> =
-    if (book.url.endsWith("meta4")) kiwixService.getMetaLinks(book.url).map { it.relevantUrl.value }
+    if (book.url?.endsWith("meta4") == true) kiwixService.getMetaLinks(book.url!!)
+      .map { it.relevantUrl.value }
     else Observable.just(book.url)
 
   override fun cancelDownload(downloadId: Long) {

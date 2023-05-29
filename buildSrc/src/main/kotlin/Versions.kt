@@ -16,9 +16,7 @@ object Versions {
 
   const val org_jetbrains_kotlinx_kotlinx_coroutines: String = "1.4.1"
 
-  const val androidx_test_espresso: String = "3.4.0"
-
-  const val androidx_test_espresso_contrib: String = "3.3.0"
+  const val androidx_test_espresso: String = "3.5.1"
 
   const val com_squareup_retrofit2: String = "2.9.0"
 
@@ -26,27 +24,27 @@ object Versions {
 
   const val org_jetbrains_kotlin: String = "1.7.0"
 
-  const val androidx_navigation: String = "2.3.1"
+  const val androidx_navigation: String = "2.5.3"
 
   const val navigation_ui_ktx: String = "2.4.1"
 
   const val com_google_dagger: String = "2.42"
 
-  const val com_yahoo_squidb: String = "4.0.0-beta.2" // available: "3.2.3"
-
   const val com_jakewharton: String = "10.2.3"
 
-  const val androidx_test: String = "1.3.0"
+  const val androidx_test: String = "1.5.1"
 
-  const val io_objectbox: String = "2.9.1"
+  const val androidx_test_core: String = "1.5.0"
 
-  const val org_jacoco: String = "0.8.7"
+  const val androidx_test_orchestrator: String = "1.4.1"
 
-  const val io_mockk: String = "1.12.0"
+  const val io_objectbox: String = "3.5.0"
+
+  const val io_mockk: String = "1.13.5"
 
   const val android_arch_lifecycle_extensions: String = "1.1.1"
 
-  const val com_android_tools_build_gradle: String = "7.1.0"
+  const val com_android_tools_build_gradle: String = "7.4.2"
 
   const val de_fayard_buildsrcversions_gradle_plugin: String = "0.7.0"
 
@@ -58,11 +56,13 @@ object Versions {
 
   const val constraintlayout: String = "2.0.4"
 
+  const val swipe_refresh_layout: String = "1.1.0"
+
   const val collection_ktx: String = "1.1.0"
 
   const val preference_ktx: String = "1.1.1"
 
-  const val junit_jupiter: String = "5.7.0"
+  const val junit_jupiter: String = "5.9.1"
 
   const val assertj_core: String = "3.18.1"
 
@@ -70,13 +70,11 @@ object Versions {
 
   const val fragment_ktx: String = "1.2.5"
 
-  const val lint_gradle: String = "27.1.1"
-
-  const val testing_ktx: String = "1.1.2"
+  const val testing_ktx: String = "1.2.0"
 
   const val threetenabp: String = "1.3.0"
 
-  const val uiautomator: String = "2.2.0"
+  const val uiautomator: String = "2.3.0-alpha03"
 
   const val annotation: String = "1.1.0"
 
@@ -88,34 +86,21 @@ object Versions {
 
   const val core_ktx: String = "1.3.2"
 
-  const val kiwixlib: String = "9.4.1"
+  const val kiwixlib: String = "10.1.1"
 
   const val material: String = "1.2.1"
 
   const val multidex: String = "2.0.1"
 
-  const val barista: String = "4.0.0"
+  const val barista: String = "4.3.0"
 
   const val fetch: String = "3.1.6"
-
-  const val jsr305: String = "3.0.2"
-
-  const val ktlint: String = "0.39.0"
 
   const val rxjava: String = "2.2.20"
 
   const val webkit: String = "1.3.0"
 
-  const val aapt2: String = "4.1.1-6503028"
-
-  const val junit: String = "1.1.2"
-
-  /**
-   * Current version: "6.2"
-   * See issue 19: How to update Gradle itself?
-   * https://github.com/jmfayard/buildSrcVersions/issues/19
-   */
-  const val gradleLatestVersion: String = "6.7.1"
+  const val junit: String = "1.1.4"
 }
 
 /**

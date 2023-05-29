@@ -31,6 +31,7 @@
   <string name="did_you_know">بھلا تساں ڄاݨدے ہو؟</string>
   <string name="undo">واپس</string>
   <string name="tab_closed">ٹیب بند تھی ڳئی</string>
+  <string name="tabs_closed">ٹیباں بند تھی ڳیاں</string>
   <string name="bookmark_added">بک مارک شامل تھی ڳیا</string>
   <string name="no_thanks">کو، شکریہ</string>
   <string name="rate_dialog_neutral">بعد وچ</string>
@@ -52,7 +53,7 @@
   <string name="stop">اختتام</string>
   <string name="internal_storage">اندرونی</string>
   <string name="external_storage">ٻاہر آلا</string>
-  <string name="yes">ڄیا</string>
+  <string name="yes">جیا</string>
   <string name="no">کو</string>
   <string name="confirm_stop_download_title">ڈاؤن لوڈ روکوں؟</string>
   <string name="next">اڳلا</string>
@@ -85,6 +86,8 @@
   <string name="off">بند</string>
   <string name="auto">خود بخود</string>
   <string name="open_library">مفت لائبریری</string>
+  <string name="tabs_restored">ٹیباں بحال تھی ڳیاں</string>
   <string name="open_drawer">دراز کھولو</string>
   <string name="close_drawer">دراز بند کرو</string>
+  <string name="go_to_settings_label">ترتباں تے ون٘ڄو</string>
 </resources>

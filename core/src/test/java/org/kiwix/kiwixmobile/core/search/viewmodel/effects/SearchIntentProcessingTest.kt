@@ -64,8 +64,8 @@ internal class SearchIntentProcessingTest {
     every { bundle?.getString(NAV_ARG_SEARCH_STRING) } returns extra
     SearchArgumentProcessing(bundle, actions).invokeWith(activity)
     verifySequence {
-      actions.offer(any<ScreenWasStartedFrom>())
-      actions.offer(Filter(extra))
+      actions.trySend(any<ScreenWasStartedFrom>()).isSuccess
+      actions.trySend(Filter(extra)).isSuccess
     }
   }
 
@@ -75,8 +75,8 @@ internal class SearchIntentProcessingTest {
     every { bundle?.getString(NAV_ARG_SEARCH_STRING) } returns extra
     SearchArgumentProcessing(bundle, actions).invokeWith(activity)
     verifySequence {
-      actions.offer(any<ScreenWasStartedFrom>())
-      actions.offer(Filter(extra))
+      actions.trySend(any<ScreenWasStartedFrom>()).isSuccess
+      actions.trySend(Filter(extra)).isSuccess
     }
   }
 
@@ -85,8 +85,8 @@ internal class SearchIntentProcessingTest {
     every { bundle?.getBoolean(EXTRA_IS_WIDGET_VOICE, false) } returns true
     SearchArgumentProcessing(bundle, actions).invokeWith(activity)
     verify {
-      actions.offer(any<ScreenWasStartedFrom>())
-      actions.offer(ReceivedPromptForSpeechInput)
+      actions.trySend(any<ScreenWasStartedFrom>()).isSuccess
+      actions.trySend(ReceivedPromptForSpeechInput).isSuccess
     }
   }
 
@@ -95,7 +95,7 @@ internal class SearchIntentProcessingTest {
     every { bundle?.getBoolean(TAG_FROM_TAB_SWITCHER, false) } returns true
     SearchArgumentProcessing(bundle, actions).invokeWith(activity)
     verify {
-      actions.offer(ScreenWasStartedFrom(FromTabView))
+      actions.trySend(ScreenWasStartedFrom(FromTabView)).isSuccess
     }
   }
 
@@ -104,7 +104,7 @@ internal class SearchIntentProcessingTest {
     every { bundle?.getBoolean(TAG_FROM_TAB_SWITCHER, false) } returns false
     SearchArgumentProcessing(bundle, actions).invokeWith(activity)
     verify {
-      actions.offer(ScreenWasStartedFrom(FromWebView))
+      actions.trySend(ScreenWasStartedFrom(FromWebView)).isSuccess
     }
   }
 }

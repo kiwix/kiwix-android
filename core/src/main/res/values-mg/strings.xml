@@ -31,7 +31,7 @@
   <string name="pref_back_to_top_summary">Haneho bokotra amin\'ny faran\'ny pejy mba hiverenana any am-pihatombohana</string>
   <string name="pref_language_title">Tenim-pirenena</string>
   <string name="pref_language_chooser">Hifidy tenim-pirenena</string>
-  <string name="tts_lang_not_supported">Tsy zaka ny fiteny ampiasaina ato amin\'ity pejy ity, na tsy napetraka ny angona mety aminy. Mety tsy ho voavaky tsara ny lahatsoratra.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Tsy zaka ny fiteny ampiasaina ato amin\'ity pejy ity, na tsy napetraka ny angona mety aminy. Mety tsy ho voavaky tsara ny lahatsoratra.</string>
   <string name="no_reader_application_installed">Tsy nahita fampiaharana napetraka ho an\'ity karazan-drakitra ity</string>
   <string name="no_section_info" fuzzy="true">Tsy misy loham-botoatiny hita</string>
   <string name="request_storage" fuzzy="true">Mila ny toeram-pitahirizanao izahay raha hamaky rakitra ZIM</string>

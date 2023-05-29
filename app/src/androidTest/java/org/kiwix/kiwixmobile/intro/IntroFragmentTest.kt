@@ -17,16 +17,46 @@
  */
 package org.kiwix.kiwixmobile.intro
 
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
+import androidx.core.content.edit
+import androidx.preference.PreferenceManager
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
+import leakcanary.LeakAssertions
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.testutils.RetryRule
+import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
+import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 
 class IntroFragmentTest : BaseActivityTest() {
 
+  @Rule
+  @JvmField
+  var retryRule = RetryRule()
+
   @Test
   fun viewIsSwipeableAndNavigatesToMain() {
-    runOnUiThread { activityRule.activity.navigate(R.id.introFragment) }
-    intro(IntroRobot::swipeLeft) clickGetStarted { }
+    activityScenarioRule.scenario.onActivity {
+      it.navigate(R.id.introFragment)
+    }
+    intro(IntroRobot::swipeLeft) clickGetStarted {}
+    LeakAssertions.assertNoLeaks()
+  }
+
+  @Before
+  override fun waitForIdle() {
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+      if (isSystemUINotRespondingDialogVisible(this)) {
+        closeSystemDialogs(context)
+      }
+      waitForIdle()
+    }
+    PreferenceManager.getDefaultSharedPreferences(context).edit {
+      putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, true)
+    }
   }
 }

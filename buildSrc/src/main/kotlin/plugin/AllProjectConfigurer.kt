@@ -27,7 +27,6 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
-import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
@@ -35,9 +34,9 @@ class AllProjectConfigurer {
 
   fun applyPlugins(target: Project) {
     target.plugins.apply("kotlin-android")
-    target.plugins.apply("kotlin-android-extensions")
     target.plugins.apply("kotlin-kapt")
-    target.plugins.apply("com.dicedmelon.gradle.jacoco-android")
+    target.plugins.apply("kotlin-parcelize")
+    target.plugins.apply("jacoco")
     target.plugins.apply("org.jlleitschuh.gradle.ktlint")
     target.plugins.apply("io.gitlab.arturbosch.detekt")
     target.plugins.apply("androidx.navigation.safeargs")
@@ -46,9 +45,8 @@ class AllProjectConfigurer {
   fun configureBaseExtension(target: Project, path: String) {
     target.configureExtension<BaseExtension> {
       setCompileSdkVersion(Config.compileSdk)
-      ndkVersion = "21.4.7075529"
       defaultConfig {
-        setMinSdkVersion(Config.minSdk)
+        minSdk = Config.minSdk
         setTargetSdkVersion(Config.targetSdk)
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
       }
@@ -68,6 +66,7 @@ class AllProjectConfigurer {
       target.tasks.withType(KotlinCompile::class.java) {
         kotlinOptions.jvmTarget = "1.8"
       }
+      buildFeatures.viewBinding = true
 
       testOptions {
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
@@ -101,12 +100,9 @@ class AllProjectConfigurer {
           "GoogleAppIndexingApiWarning",
           "LockedOrientationActivity",
           //TODO stop ignoring below this
-          "CheckResult",
           "LabelFor",
           "LogConditional",
           "ConvertToWebp",
-          //TODO remove this when we remove jcenter from gradle
-          "JcenterRepositoryObsolete",
           "UnknownNullness",
           "SelectableText",
           "MissingTranslation",
@@ -120,16 +116,18 @@ class AllProjectConfigurer {
         lintConfig = target.rootProject.file("lintConfig.xml")
       }
       packagingOptions {
-        exclude("META-INF/DEPENDENCIES")
-        exclude("META-INF/LICENSE")
-        exclude("META-INF/LICENSE.txt")
-        exclude("META-INF/LICENSE.md")
-        exclude("META-INF/LICENSE-notice.md")
-        exclude("META-INF/license.txt")
-        exclude("META-INF/NOTICE")
-        exclude("META-INF/NOTICE.txt")
-        exclude("META-INF/notice.txt")
-        exclude("META-INF/ASL2.0")
+        resources.excludes.apply {
+          add("META-INF/DEPENDENCIES")
+          add("META-INF/LICENSE")
+          add("META-INF/LICENSE.txt")
+          add("META-INF/LICENSE.md")
+          add("META-INF/LICENSE-notice.md")
+          add("META-INF/license.txt")
+          add("META-INF/NOTICE")
+          add("META-INF/NOTICE.txt")
+          add("META-INF/notice.txt")
+          add("META-INF/ASL2.0")
+        }
       }
       sourceSets {
         getByName("test") {
@@ -145,7 +143,7 @@ class AllProjectConfigurer {
       resolutionStrategy {
         eachDependency {
           if ("org.jacoco" == this.requested.group) {
-            useVersion("0.8.7")
+            useVersion("0.8.8")
           }
         }
       }
@@ -154,8 +152,7 @@ class AllProjectConfigurer {
 
   fun configurePlugins(target: Project) {
     target.run {
-      configureExtension<AndroidExtensionsExtension> { isExperimental = true }
-      configureExtension<JacocoPluginExtension> { toolVersion = "0.8.7" }
+      configureExtension<JacocoPluginExtension> { toolVersion = "0.8.8" }
       configureExtension<KtlintExtension> { android.set(true) }
       configureExtension<DetektExtension> {
         buildUponDefaultConfig = true
@@ -176,6 +173,7 @@ class AllProjectConfigurer {
       implementation(Libs.appcompat)
       implementation(Libs.material)
       implementation(Libs.constraintlayout)
+      implementation(Libs.swipe_refresh_layout)
       implementation(Libs.multidex)
       // navigation
       implementation(Libs.navigation_fragment_ktx)

@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.settings
 
 import android.util.Log
+import io.reactivex.disposables.Disposable
 import org.kiwix.kiwixmobile.core.base.BasePresenter
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.settings.SettingsContract.Presenter
@@ -26,12 +27,17 @@ import javax.inject.Inject
 
 internal class SettingsPresenter @Inject constructor(private val dataSource: DataSource) :
   BasePresenter<View?>(), Presenter {
+  private var dataSourceDisposable: Disposable? = null
   override fun clearHistory() {
-    dataSource.clearHistory()
+    dataSourceDisposable = dataSource.clearHistory()
       .subscribe({
         // TODO
       }, { e ->
         Log.e("SettingsPresenter", e.message, e)
       })
+  }
+
+  fun dispose() {
+    dataSourceDisposable?.dispose()
   }
 }

@@ -1,58 +1,149 @@
 name: Pull requests
 
-on: [pull_request]
+on:
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
 
-  staticAnalysis:
-
-    runs-on: ubuntu-18.04
+  code_formatting_job:
+    name: Code Formatting
+    runs-on: ubuntu-22.04
+    continue-on-error: true
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
       - name: Set up JDK 11
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: 11
+          distribution: temurin
+
+      - name: Restore Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Static Analysis
-        run: ./gradlew ktlintCheck detekt app:lintDebug custom:lintCustomexampleDebug
+        run: ./gradlew ktlintCheck
 
-      - name: Upload Static Analysis Report
-        uses: actions/upload-artifact@v2.2.0
+      - name: Upload ktlint Reports
         if: ${{ always() }}
+        uses: actions/upload-artifact@v3
         with:
-          name: Static Analysis Report
-          path: |
-            **/reports/
+         name: ktlint-report
+         path: '**/build/reports/ktlint'
 
 
-  build:
 
-    runs-on: ubuntu-18.04
+  detekt:
+    name: Detekt
+    runs-on: ubuntu-22.04
+    continue-on-error: true
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
       - name: Set up JDK 11
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: 11
+          distribution: temurin
 
-      - name: Install NDK
-        run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;22.0.7026061" --sdk_root=${ANDROID_SDK_ROOT}
+      - name: Restore Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Static Analysis
+        run: ./gradlew detekt
+      - name: Upload Lint Reports
+        uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: detekt-report
+          path: '**/build/reports/detekt'
+
+
+
+  lint_job:
+    name: Lint
+    runs-on: ubuntu-22.04
+    continue-on-error: true
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: 11
+          distribution: temurin
+
+      - name: Restore Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Run Debug Lint
+        run: ./gradlew app:lintDebug custom:lintCustomexampleDebug
+
+      - name: Upload Lint Reports
+        uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: lint-report
+          path: '**/build/reports/lint-results-*'
+
+
+
+
+  assemble_job:
+    name: Assemble
+    runs-on: ubuntu-22.04
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: 11
+          distribution: temurin
 
       - name: Build all configurations
         run: ./gradlew assemble
 
       - name: Upload APK as Artifacts
-        uses: actions/upload-artifact@v2.2.0
+        uses: actions/upload-artifact@v3
+        if: ${{ always() }}
         with:
-          name: kiwix-android
-          path: |
-            **/*.apk
+            name: kiwix-android
+            path: |
+              **/*.apk

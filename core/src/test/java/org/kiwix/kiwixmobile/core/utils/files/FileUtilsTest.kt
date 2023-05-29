@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2022 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -21,9 +21,9 @@ package org.kiwix.kiwixmobile.core.utils.files
 import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import java.io.File
@@ -41,30 +41,33 @@ class FileUtilsTest {
   }
 
   @Test
-  fun `Filename ends with zim and file does not exist at the location`() {
+  fun fileNameEndsWithZimAndFileDoesNotExistAtTheLocation() {
     testWith(".zim", false)
   }
 
   @Test
-  fun `Filename ends with zim and file exists at the location`() {
+  fun fileNameEndsWithZimAndFileExistsAtTheLocation() {
     testWith(".zim", true)
   }
 
   @Test
-  fun `Filename ends with zim part and file does not exist at the location`() {
+  fun fileNameEndsWithZimPartAndFileDoesNotExistAtTheLocation() {
     testWith(".zim.part", false)
   }
 
   @Test
-  fun `Filename ends with zim part and file exists at the location`() {
+  fun fileNameEndsWithZimPartAndFileExistsAtTheLocation() {
     testWith(".zim.part", true)
   }
 
   @Test
-  fun `Filename ends with zimXX and no such file exists at any such location`() {
+  fun fileNameEndsWithZimAndNoSuchFileExistsAtAnySuchLocation() {
     expect("zimab", false)
-    assertThat(FileUtils.getAllZimParts(testBook).size).isEqualTo(0)
-      .withFailMessage("Nothing is returned in this case")
+    assertEquals(
+      FileUtils.getAllZimParts(testBook).size,
+      0,
+      "Nothing is returned in this case"
+    )
   }
 
   private fun testWith(extension: String, fileExists: Boolean) {
@@ -73,59 +76,28 @@ class FileUtilsTest {
     CoreApp.instance = coreApp
     every { coreApp.packageName } returns "mock_package"
     val files = FileUtils.getAllZimParts(testBook)
-    assertThat(files.size).isEqualTo(1)
-      .withFailMessage("Only a single book is returned in case the file has extension $extension")
+    assertEquals(
+      files.size,
+      1,
+      "Only a single book is returned in case the file has extension $extension"
+    )
     if (fileExists) {
-      assertThat(testBook.file).isEqualTo(files[0])
-        .withFailMessage("The filename retained as such")
+      assertEquals(
+        testBook.file,
+        files[0],
+        "The filename retained as such"
+      )
     } else {
-      assertThat(testBook.file.toString() + ".part").isEqualTo(files[0].path)
-        .withFailMessage("The filename is appended with .part")
+      assertEquals(
+        testBook.file.toString() + ".part",
+        files[0].path,
+        "The filename is appended with .part"
+      )
     }
   }
 
   private fun expect(extension: String, fileExists: Boolean) {
     every { mockFile.path } returns "$fileName$extension"
     every { mockFile.exists() } returns fileExists
-  }
-
-  @Test
-  fun `test decode file name`() {
-    val fileName =
-      FileUtils.getDecodedFileName(
-        url = "https://kiwix.org/contributors/contributors_list.pdf",
-        src = null
-      )
-    assertThat(fileName).isEqualTo("contributors_list.pdf")
-  }
-
-  @Test
-  fun `test file name if extension doesn't exist`() {
-    val fileName = FileUtils.getDecodedFileName(url = "https://kiwix.org/contributors/", src = null)
-    assertThat(fileName).isEqualTo("")
-  }
-
-  @Test
-  fun `test file name if the url and src doesn't exist`() {
-    val fileName = FileUtils.getDecodedFileName(url = null, src = null)
-    assertThat(fileName).isEqualTo("")
-  }
-
-  @Test
-  fun `test file name if only file name exist`() {
-    val fileName = FileUtils.getDecodedFileName(src = "android_tutorials.pdf", url = null)
-    assertThat(fileName).isEqualTo("")
-  }
-
-  @Test
-  fun `test file name if url doesn't exist`() {
-    val fileName = FileUtils.getDecodedFileName(url = null, src = "/html/images/test.png")
-    assertThat(fileName).isEqualTo("test.png")
-  }
-
-  @Test
-  fun `test file name if url and src's extension doesn't exist`() {
-    val fileName = FileUtils.getDecodedFileName(url = null, src = "/html/images/")
-    assertThat(fileName).isEqualTo("")
   }
 }

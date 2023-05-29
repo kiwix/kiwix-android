@@ -30,18 +30,19 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_page.no_page
-import kotlinx.android.synthetic.main.fragment_page.page_switch
-import kotlinx.android.synthetic.main.fragment_page.recycler_view
-import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.databinding.FragmentPageBinding
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
@@ -67,6 +68,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   abstract val searchQueryHint: String
   abstract val pageAdapter: PageAdapter
   abstract val switchIsChecked: Boolean
+  private var fragmentPageBinding: FragmentPageBinding? = null
 
   private val actionModeCallback: ActionMode.Callback =
     object : ActionMode.Callback {
@@ -92,59 +94,71 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
       }
     }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setHasOptionsMenu(true)
-  }
+  private fun setupMenu() {
+    (requireActivity() as MenuHost).addMenuProvider(
+      object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+          menuInflater.inflate(R.menu.menu_page, menu)
+          val search = menu.findItem(R.id.menu_page_search).actionView as SearchView
+          search.queryHint = searchQueryHint
+          search.setOnQueryTextListener(
+            SimpleTextListener {
+              pageViewModel.actions.offer(Action.Filter(it))
+            }
+          )
+        }
 
-  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    super<BaseFragment>.onCreateOptionsMenu(menu, inflater)
-    inflater.inflate(R.menu.menu_page, menu)
-    val search = menu.findItem(R.id.menu_page_search).actionView as SearchView
-    search.queryHint = searchQueryHint
-    search.setOnQueryTextListener(
-      SimpleTextListener {
-        pageViewModel.actions.offer(Action.Filter(it))
-      }
+        @Suppress("ReturnCount")
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+          when (menuItem.itemId) {
+            android.R.id.home -> {
+              pageViewModel.actions.offer(Action.Exit)
+              return true
+            }
+            R.id.menu_pages_clear -> {
+              pageViewModel.actions.offer(Action.UserClickedDeleteButton)
+              return true
+            }
+          }
+          return false
+        }
+      },
+      viewLifecycleOwner,
+      Lifecycle.State.RESUMED
     )
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    if (item.itemId == android.R.id.home) {
-      pageViewModel.actions.offer(Action.Exit)
-    }
-    if (item.itemId == R.id.menu_pages_clear) {
-      pageViewModel.actions.offer(Action.UserClickedDeleteButton)
-    }
-    return super.onOptionsItemSelected(item)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    setupMenu()
     val activity = requireActivity() as CoreMainActivity
-    recycler_view.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-    recycler_view.adapter = pageAdapter
-    activity.setSupportActionBar(toolbar)
-    toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
+    fragmentPageBinding?.recyclerView?.layoutManager =
+      LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+    fragmentPageBinding?.recyclerView?.adapter = pageAdapter
+    val toolbar = fragmentPageBinding?.root?.findViewById<Toolbar>(R.id.toolbar)
+    toolbar?.apply {
+      activity.setSupportActionBar(this)
+      setNavigationOnClickListener { requireActivity().onBackPressed() }
+    }
     activity.supportActionBar?.apply {
       setDisplayHomeAsUpEnabled(true)
       title = screenTitle
     }
-    no_page.text = noItemsString
+    fragmentPageBinding?.noPage?.text = noItemsString
 
-    page_switch.text = switchString
-    page_switch.isChecked = switchIsChecked
+    fragmentPageBinding?.pageSwitch?.text = switchString
+    fragmentPageBinding?.pageSwitch?.isChecked = switchIsChecked
     compositeDisposable.add(pageViewModel.effects.subscribe { it.invokeWith(activity) })
-    page_switch.setOnCheckedChangeListener { _, isChecked ->
+    fragmentPageBinding?.pageSwitch?.setOnCheckedChangeListener { _, isChecked ->
       pageViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
     }
     pageViewModel.state.observe(viewLifecycleOwner, Observer(::render))
 
     // hides keyboard when scrolled
-    recycler_view.addOnScrollListener(
+    fragmentPageBinding?.recyclerView?.addOnScrollListener(
       SimpleRecyclerViewScrollListener { _, newState ->
         if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-          recycler_view.closeKeyboard()
+          fragmentPageBinding?.recyclerView?.closeKeyboard()
         }
       }
     )
@@ -154,18 +168,22 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? = inflater.inflate(R.layout.fragment_page, container, false)
+  ): View? {
+    fragmentPageBinding = FragmentPageBinding.inflate(inflater, container, false)
+    return fragmentPageBinding?.root
+  }
 
   override fun onDestroyView() {
     super.onDestroyView()
     compositeDisposable.clear()
-    recycler_view.adapter = null
+    fragmentPageBinding?.recyclerView?.adapter = null
+    fragmentPageBinding = null
   }
 
   private fun render(state: PageState<*>) {
     pageAdapter.items = state.visiblePageItems
-    page_switch.isEnabled = !state.isInSelectionState
-    no_page.visibility = if (state.pageItems.isEmpty()) VISIBLE else GONE
+    fragmentPageBinding?.pageSwitch?.isEnabled = !state.isInSelectionState
+    fragmentPageBinding?.noPage?.visibility = if (state.pageItems.isEmpty()) VISIBLE else GONE
     if (state.isInSelectionState) {
       if (actionMode == null) {
         actionMode =

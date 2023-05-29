@@ -23,7 +23,7 @@
   <string name="menu_read_aloud_stop">Stoppen met voorlezen</string>
   <string name="save_media">Media opslaan als…</string>
   <string name="save_media_error">Er is een fout opgetreden bij het opslaan van de media!</string>
-  <string name="save_media_saved" fuzzy="true">Het bestand is opgeslagen als %s in Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Het bestand is opgeslagen als %s in Downloads/org.kiwix…/</string>
   <string name="search_label">Zoeken</string>
   <string name="choose_file">Selecteer een inhoudsbestand (*.zim)</string>
   <string name="open_in_new_tab">Koppeling openen in nieuw tabblad?</string>
@@ -39,8 +39,9 @@
   <string name="pref_back_to_top_summary">Aan het einde van de pagina een knop weergeven om terug te gaan naar boven</string>
   <string name="pref_language_title">Taal</string>
   <string name="pref_language_chooser">Taal kiezen</string>
-  <string name="tts_lang_not_supported">De taak van deze pagina wordt niet ondersteund, of de juiste taalgegevens zijn niet geïnstalleerd. De pagina kan niet correct gelezen worden.</string>
+  <string name="tts_lang_not_supported">De taal van deze pagina wordt niet ondersteund. Het artikel is mogelijk niet goed leesbaar.</string>
   <string name="no_reader_application_installed">Kon geen geïnstalleerde applicatie vinden voor dit type bestand</string>
+  <string name="no_email_application_installed">Installeer een e-mailserviceprovider of stuur ons een e-mail op %1s</string>
   <string name="no_section_info">Geen inhoudskoppen gevonden</string>
   <string name="request_storage">Om offline inhoud aan te spreken is toegang tot uw opslag nodig</string>
   <string name="delete_recent_search_item">Dit item verwijderen?</string>
@@ -61,7 +62,7 @@
   <string name="zim_simple">Eenvoudig</string>
   <string name="zim_no_pic">Geen afbeeldingen</string>
   <string name="zim_no_vid">Geen video\'s</string>
-  <string name="help_6">Onze inhoud is ondergebracht op de Kiwix website</string>
+  <string name="help_6">Onze inhoud is ondergebracht op de website van Kiwix.</string>
   <string name="pref_storage">Opslag</string>
   <string name="pref_current_folder">Huidige map</string>
   <string name="tts_pause">pauzeren</string>
@@ -105,4 +106,12 @@
   <string name="on">Aan</string>
   <string name="off">Uit</string>
   <string name="auto">Automatisch</string>
+  <string name="swipe_down_for_library">Veeg omlaag voor bibliotheek</string>
+  <string name="download_tts_language_title">Download deze taal voor de voorleesfunctie</string>
+  <string name="download_tts_language_message">Klik op de knop Downloaden. Zo wordt automatisch de vereiste taal gedownload.</string>
+  <string name="external_link_copied_message">Externe koppeling gekopieerd naar klembord</string>
+  <string name="read_aloud_service_channel_name">Dienstkanaal hardop voorlezen</string>
+  <string name="read_aloud_channel_description">Regelaars voor tekst-naar-spraak.</string>
+  <string name="read_aloud_running">Bezig met hardop voorlezen</string>
+  <string name="clear_all_navigation_history_message">Wist alle (achterwaartse, voorwaartse) navigatiegeschiedenis</string>
 </resources>

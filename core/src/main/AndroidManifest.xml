@@ -15,9 +15,8 @@
 
   <!-- Device with versions >= Pie need this permission -->
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-  <uses-permission
-    android:name="android.permission.QUERY_ALL_PACKAGES"
-    tools:ignore="QueryAllPackagesPermission" />
+
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
   <application
     android:allowBackup="true"
@@ -50,6 +49,8 @@
       android:name="androidx.core.content.FileProvider"
       android:authorities="${applicationId}.fileprovider"
       android:exported="false"
+      tools:node="merge"
+      tools:overrideLibrary="com.squareup.picasso.picasso"
       android:grantUriPermissions="true">
       <meta-data
         android:name="android.support.FILE_PROVIDER_PATHS"
@@ -59,6 +60,6 @@
     <activity
       android:name=".error.DiagnosticReportActivity"
       android:exported="false" />
-
+    <service android:name=".read_aloud.ReadAloudService" />
   </application>
 </manifest>

@@ -72,12 +72,12 @@ fun ProductFlavor.createPublishApkWithExpansionTask(
     doLast {
       val packageName = "org.kiwix$applicationIdSuffix"
       println("packageName $packageName")
-      createPublisher(File(rootDir, "google.json"))
+      createPublisher(File(rootDir, "playstore.json"))
         .transactionWithCommit(packageName) {
           val variants =
             applicationVariants.releaseVariantsFor(this@createPublishApkWithExpansionTask)
           variants.forEach(::uploadApk)
-          uploadExpansionTo(file, variants[0])
+          uploadExpansionTo(file, variants[0].versionCodeOverride)
           variants.drop(1).forEach { attachExpansionTo(variants[0].versionCodeOverride, it) }
           addToTrackInDraft(variants)
         }

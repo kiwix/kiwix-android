@@ -45,13 +45,11 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_local_file_transfer.list_peer_devices
-import kotlinx.android.synthetic.main.fragment_local_file_transfer.progress_bar_searching_peers
-import kotlinx.android.synthetic.main.fragment_local_file_transfer.recycler_view_transfer_files
-import kotlinx.android.synthetic.main.fragment_local_file_transfer.text_view_device_name
-import kotlinx.android.synthetic.main.fragment_local_file_transfer.text_view_empty_peer_list
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -62,6 +60,7 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.databinding.FragmentLocalFileTransferBinding
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getDeviceStatus
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiP2pDelegate
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiPeerListAdapter
@@ -102,21 +101,21 @@ class LocalFileTransferFragment :
 
   private var fileListAdapter: FileListAdapter? = null
   private var wifiPeerListAdapter: WifiPeerListAdapter? = null
+  private var fragmentLocalFileTransferBinding: FragmentLocalFileTransferBinding? = null
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View = inflater.inflate(R.layout.fragment_local_file_transfer, container, false)
-
-  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    inflater.inflate(R.menu.wifi_file_share_items, menu)
-    super.onCreateOptionsMenu(menu, inflater)
+  ): View? {
+    fragmentLocalFileTransferBinding =
+      FragmentLocalFileTransferBinding.inflate(inflater, container, false)
+    return fragmentLocalFileTransferBinding?.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    setHasOptionsMenu(true)
+    setupMenu()
     val activity = requireActivity() as CoreMainActivity
     val filesForTransfer = getFilesForTransfer()
     val isReceiver = filesForTransfer.isEmpty()
@@ -133,10 +132,51 @@ class LocalFileTransferFragment :
     wifiDirectManager.startWifiDirectManager(filesForTransfer)
   }
 
+  private fun setupMenu() {
+    (requireActivity() as MenuHost).addMenuProvider(
+      object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+          menuInflater.inflate(R.menu.wifi_file_share_items, menu)
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+          if (menuItem.itemId == R.id.menu_item_search_devices) {
+            /* Permissions essential for this module */
+            return when {
+              !checkFineLocationAccessPermission() ->
+                true
+              !checkExternalStorageWritePermission() ->
+                true
+              /* Initiate discovery */
+              !wifiDirectManager.isWifiP2pEnabled -> {
+                requestEnableWifiP2pServices()
+                true
+              }
+              Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServiceEnabled -> {
+                requestEnableLocationServices()
+                true
+              }
+              else -> {
+                showPeerDiscoveryProgressBar()
+                wifiDirectManager.discoverPeerDevices()
+                true
+              }
+            }
+          }
+          return false
+        }
+      },
+      viewLifecycleOwner,
+      Lifecycle.State.RESUMED
+    )
+  }
+
   private fun setupPeerDevicesList(activity: CoreMainActivity) {
-    list_peer_devices.adapter = wifiPeerListAdapter
-    list_peer_devices.layoutManager = LinearLayoutManager(activity)
-    list_peer_devices.setHasFixedSize(true)
+    fragmentLocalFileTransferBinding?.listPeerDevices?.apply {
+      adapter = wifiPeerListAdapter
+      layoutManager = LinearLayoutManager(activity)
+      setHasFixedSize(true)
+    }
   }
 
   private fun setupToolbar(view: View, activity: CoreMainActivity, isReceiver: Boolean) {
@@ -153,44 +193,17 @@ class LocalFileTransferFragment :
     LocalFileTransferFragmentArgs.fromBundle(requireArguments()).uris?.map(::FileItem)
       ?: emptyList()
 
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    if (item.itemId == R.id.menu_item_search_devices) {
-      /* Permissions essential for this module */
-      return when {
-        !checkFineLocationAccessPermission() ->
-          true
-        !checkExternalStorageWritePermission() ->
-          true
-        /* Initiate discovery */
-        !wifiDirectManager.isWifiP2pEnabled -> {
-          requestEnableWifiP2pServices()
-          true
-        }
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServiceEnabled -> {
-          requestEnableLocationServices()
-          true
-        }
-        else -> {
-          showPeerDiscoveryProgressBar()
-          wifiDirectManager.discoverPeerDevices()
-          true
-        }
-      }
-    }
-    return super.onOptionsItemSelected(item)
-  }
-
   private fun showPeerDiscoveryProgressBar() { // Setup UI for searching peers
-    progress_bar_searching_peers.visibility = View.VISIBLE
-    list_peer_devices.visibility = View.INVISIBLE
-    text_view_empty_peer_list.visibility = View.INVISIBLE
+    fragmentLocalFileTransferBinding?.progressBarSearchingPeers?.visibility = View.VISIBLE
+    fragmentLocalFileTransferBinding?.listPeerDevices?.visibility = View.INVISIBLE
+    fragmentLocalFileTransferBinding?.textViewEmptyPeerList?.visibility = View.INVISIBLE
   }
 
   /* From WifiDirectManager.Callbacks interface */
   override fun onUserDeviceDetailsAvailable(userDevice: WifiP2pDevice?) {
     // Update UI with user device's details
     if (userDevice != null) {
-      text_view_device_name.text = userDevice.deviceName
+      fragmentLocalFileTransferBinding?.textViewDeviceName?.text = userDevice.deviceName
       Log.d(TAG, getDeviceStatus(userDevice.status))
     }
   }
@@ -205,8 +218,11 @@ class LocalFileTransferFragment :
 
   private fun displayFileTransferProgress(filesToSend: List<FileItem>) {
     fileListAdapter = FileListAdapter(filesToSend)
-    recycler_view_transfer_files.adapter = fileListAdapter
-    recycler_view_transfer_files.layoutManager = LinearLayoutManager(requireActivity())
+    fragmentLocalFileTransferBinding?.recyclerViewTransferFiles?.apply {
+      adapter = fileListAdapter
+      layoutManager =
+        LinearLayoutManager(requireActivity())
+    }
   }
 
   override fun onFileStatusChanged(itemIndex: Int) {
@@ -215,8 +231,8 @@ class LocalFileTransferFragment :
 
   override fun updateListOfAvailablePeers(peers: WifiP2pDeviceList) {
     val deviceList: List<WifiP2pDevice> = ArrayList<WifiP2pDevice>(peers.deviceList)
-    progress_bar_searching_peers.visibility = View.GONE
-    list_peer_devices.visibility = View.VISIBLE
+    fragmentLocalFileTransferBinding?.progressBarSearchingPeers?.visibility = View.GONE
+    fragmentLocalFileTransferBinding?.listPeerDevices?.visibility = View.VISIBLE
     wifiPeerListAdapter?.items = deviceList
     if (deviceList.isEmpty()) {
       Log.d(TAG, "No devices found")
@@ -385,6 +401,7 @@ class LocalFileTransferFragment :
   override fun onDestroyView() {
     wifiDirectManager.stopWifiDirectManager()
     wifiDirectManager.callbacks = null
+    fragmentLocalFileTransferBinding = null
     super.onDestroyView()
   }
 

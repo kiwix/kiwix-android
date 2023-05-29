@@ -23,18 +23,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.databinding.SettingsBinding
 
 abstract class CoreSettingsFragment : BaseFragment() {
   private lateinit var prefsFragment: Fragment
+  private var settingsBinding: SettingsBinding? = null
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     prefsFragment = createPreferenceFragment()
-    requireActivity().supportFragmentManager
-      .beginTransaction().replace(R.id.content_frame, prefsFragment)
-      .commit()
+    requireActivity().supportFragmentManager.beginTransaction()
+      .replace(R.id.content_frame, prefsFragment).commit()
     setUpToolbar()
   }
 
@@ -42,23 +42,25 @@ abstract class CoreSettingsFragment : BaseFragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View = inflater.inflate(R.layout.settings, container, false)
+  ): View? {
+    settingsBinding = SettingsBinding.inflate(inflater, container, false)
+    return settingsBinding?.root
+  }
 
   protected abstract fun createPreferenceFragment(): Fragment
 
   private fun setUpToolbar() {
     val activity = requireActivity() as AppCompatActivity
-    activity.setSupportActionBar(toolbar)
+    activity.setSupportActionBar(settingsBinding?.root?.findViewById(R.id.toolbar))
     activity.supportActionBar!!.title = getString(R.string.menu_settings)
     activity.supportActionBar!!.setHomeButtonEnabled(true)
     activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
   }
 
   override fun onDestroyView() {
-    requireActivity().supportFragmentManager
-      .beginTransaction()
-      .remove(prefsFragment)
+    requireActivity().supportFragmentManager.beginTransaction().remove(prefsFragment)
       .commitNowAllowingStateLoss()
     super.onDestroyView()
+    settingsBinding = null
   }
 }

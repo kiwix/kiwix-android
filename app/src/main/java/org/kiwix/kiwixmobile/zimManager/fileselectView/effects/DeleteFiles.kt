@@ -24,6 +24,7 @@ import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
@@ -68,7 +69,7 @@ data class DeleteFiles(private val booksOnDiskListItems: List<BookOnDisk>) :
   private fun deleteSpecificZimFile(book: BookOnDisk): Boolean {
     val file = book.file
     FileUtils.deleteZimFile(file.path)
-    if (file.exists()) {
+    if (file.isFileExist()) {
       return false
     }
     newBookDao.delete(book.databaseId)

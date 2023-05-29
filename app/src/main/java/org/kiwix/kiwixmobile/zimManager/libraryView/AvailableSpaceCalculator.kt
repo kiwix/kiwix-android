@@ -21,9 +21,11 @@ package org.kiwix.kiwixmobile.zimManager.libraryView
 import eu.mhutti1.utils.storage.Bytes
 import eu.mhutti1.utils.storage.Kb
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import javax.inject.Inject
@@ -32,12 +34,13 @@ class AvailableSpaceCalculator @Inject constructor(
   private val downloadDao: FetchDownloadDao,
   private val storageCalculator: StorageCalculator
 ) {
+  private var availableSpaceCalculatorDisposable: Disposable? = null
   fun hasAvailableSpaceFor(
     bookItem: LibraryListItem.BookItem,
     successAction: (LibraryListItem.BookItem) -> Unit,
     failureAction: (String) -> Unit
   ) {
-    downloadDao.allDownloads()
+    availableSpaceCalculatorDisposable = downloadDao.allDownloads()
       .map { it.map(DownloadModel::bytesRemaining).sum() }
       .map { bytesToBeDownloaded -> storageCalculator.availableBytes() - bytesToBeDownloaded }
       .subscribeOn(Schedulers.io())
@@ -49,5 +52,12 @@ class AvailableSpaceCalculator @Inject constructor(
           failureAction.invoke(Bytes(trueAvailableBytes).humanReadable)
         }
       }
+  }
+
+  fun hasAvailableSpaceForBook(book: Book) =
+    book.size.toLong() * Kb < storageCalculator.availableBytes()
+
+  fun dispose() {
+    availableSpaceCalculatorDisposable?.dispose()
   }
 }

@@ -16,6 +16,7 @@
 
 package custom
 
+import com.android.build.api.variant.VariantOutput
 import com.android.build.gradle.api.ApkVariantOutput
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
@@ -70,12 +71,12 @@ class Transaction(
 ) {
   fun uploadExpansionTo(
     file: File,
-    apkVariantOutput: ApkVariantOutput
+    versionCode: Int
   ): ExpansionFilesUploadResponse = publisher.edits().expansionfiles()
     .upload(
       packageName,
       editId,
-      apkVariantOutput.versionCodeOverride,
+      versionCode,
       "main",
       FileContent("application/octet-stream", file)
     ).execute().prettyPrint()
@@ -102,7 +103,7 @@ class Transaction(
       releases = listOf(TrackRelease().apply {
         status = "draft"
         name = apkVariants[0].versionNameOverride
-        versionCodes = apkVariants.map { it.versionCodeOverride.toLong() }
+        versionCodes =  apkVariants.map { it.versionCodeOverride.toLong() }
       })
       track = "alpha"
     }).execute().prettyPrint()

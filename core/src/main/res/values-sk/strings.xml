@@ -2,6 +2,7 @@
 <!-- Authors:
 * Kusavica
 * Lexected
+* McDutchie
 * Mikulas1
 * Yardom78
 -->
@@ -66,7 +67,7 @@
   <string name="pref_language_chooser">Zvoliť jazyk</string>
   <string name="pref_credits">Prispievatelia a licencie</string>
   <string name="pref_credits_title">Zásluhy</string>
-  <string name="tts_lang_not_supported">Jazyk tejto stránky buď nie je podporovaný, alebo neboli nainštalované príslušné jazykové balíčky. Článok nemusí byť správne prečítaný.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Jazyk tejto stránky buď nie je podporovaný, alebo neboli nainštalované príslušné jazykové balíčky. Článok nemusí byť správne prečítaný.</string>
   <string name="no_reader_application_installed">Nebola nájdená nainštalovaná aplikácia pre tento typ súboru</string>
   <string name="no_section_info">Neboli nájdené hlavičky obsahu</string>
   <string name="request_storage">Na prístup k offline obsahu potrebujeme prístup k vášmu úložisku</string>
@@ -192,7 +193,7 @@
   <string name="expand">Rozbaliť</string>
   <string name="history">História</string>
   <string name="history_from_current_book">Zobraziť históriu zo všetkých kníh</string>
-  <string name="search_history">Hľadať v histórii</string>
+  <string name="search_history" fuzzy="true">Hľadať v histórii</string>
   <string name="selected_items">%1$d vybrané</string>
   <string name="bookmarks_from_current_book">Zobraziť záložky zo všetkých kníh</string>
   <string name="search_bookmarks">Hľadať záložky</string>
@@ -245,8 +246,8 @@
   <string name="nearby_devices">BLÍZKE ZARIADENIA</string>
   <string name="no_devices_found">Nenašli sa žiadne zariadenia. Kliknite na tlačítko hľadania a skúste znova.</string>
   <string name="files_for_transfer">SÚBORY NA PRENOS</string>
-  <string name="preparing_files">Pripravovanie súborov na prenos…</string>
-  <string name="performing_handshake">Prebieha párovanie…</string>
+  <string name="preparing_files" fuzzy="true">Pripravovanie súborov na prenos…</string>
+  <string name="performing_handshake" fuzzy="true">Prebieha párovanie…</string>
   <string name="status">Stav</string>
   <string name="pref_clear_all_notes_summary">Vymazať všetky poznámky na všetkých článkoch</string>
   <string name="pref_clear_all_notes_title">Vymazať všetky poznámky</string>
@@ -293,7 +294,6 @@
   <string name="select_folder">Prosím vyberte priečinok pre externé úložisko.</string>
   <string name="system_unable_to_grant_permission_message">Systému sa nedarí udeliť povolenie!</string>
   <string name="allow">Povoliť</string>
-  <string name="allow_internet_permission_message">Povoľte internetové povolenie na sťahovanie obsahu</string>
   <string name="no_notes">Žiadne poznámky</string>
   <string name="notes_from_all_books">Zobraziť poznámky zo všetkých kníh</string>
   <string name="search_notes">Hľadať v poznámkach</string>

@@ -21,8 +21,6 @@ package org.kiwix.kiwixmobile.core.utils
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import android.os.Build
-import android.util.Log
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -31,8 +29,6 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
-import java.lang.reflect.Field
-import java.lang.reflect.Modifier
 import java.util.regex.Pattern
 
 class NetworkUtilsTest {
@@ -50,43 +46,39 @@ class NetworkUtilsTest {
     every { connectivity.allNetworkInfo } returns networkInfos
 
     // one network is connected
-    every { (networkInfo1.state) } returns NetworkInfo.State.CONNECTED
-    every { (networkInfo2.state) } returns NetworkInfo.State.DISCONNECTING
+    every { networkInfo1.state } returns NetworkInfo.State.CONNECTED
+    every { networkInfo2.state } returns NetworkInfo.State.DISCONNECTING
     assertEquals(true, NetworkUtils.isNetworkAvailable(context))
 
-    every { (networkInfo1.state) } returns NetworkInfo.State.DISCONNECTING
-    every { (networkInfo2.state) } returns NetworkInfo.State.CONNECTING
+    every { networkInfo1.state } returns NetworkInfo.State.DISCONNECTING
+    every { networkInfo2.state } returns NetworkInfo.State.CONNECTING
     assertEquals(false, NetworkUtils.isNetworkAvailable(context))
 
     // no network is available
-    every { (networkInfo1.state) } returns NetworkInfo.State.DISCONNECTED
-    every { (networkInfo2.state) } returns NetworkInfo.State.DISCONNECTED
+    every { networkInfo1.state } returns NetworkInfo.State.DISCONNECTED
+    every { networkInfo2.state } returns NetworkInfo.State.DISCONNECTED
     assertEquals(false, NetworkUtils.isNetworkAvailable(context))
   }
 
   @Test
   fun test_isNetworkConnectionOK() {
-    every { (networkInfo2.state) } returns NetworkInfo.State.CONNECTING
+    every { networkInfo2.state } returns NetworkInfo.State.CONNECTING
     assertFalse(NetworkUtils.isNetworkConnectionOK(networkInfo2))
 
-    every { (networkInfo2.state) } returns NetworkInfo.State.CONNECTED
+    every { networkInfo2.state } returns NetworkInfo.State.CONNECTED
     assertTrue(NetworkUtils.isNetworkConnectionOK(networkInfo2))
   }
 
   @Test
   fun testWifiAvailability() {
-    every { (context.getSystemService(Context.CONNECTIVITY_SERVICE)) } returns connectivity
-    every { (connectivity.activeNetworkInfo) } returns networkInfo
+    every { context.getSystemService(Context.CONNECTIVITY_SERVICE) } returns connectivity
+    every { connectivity.activeNetworkInfo } returns networkInfo
 
     // SDK >= 23
-    try {
-      setSDKVersion(Build.VERSION::class.java.getField("SDK_INT"), 23)
-    } catch (e: Exception) {
-      Log.d("NetworkUtilsTest", "Unable to set Build SDK Version")
-    }
+    NetworkUtils.sdkVersionForTesting = 23
 
     // on Mobile Data
-    every { (networkInfo.type) } returns ConnectivityManager.TYPE_MOBILE
+    every { networkInfo.type } returns ConnectivityManager.TYPE_MOBILE
     assertEquals(false, NetworkUtils.isWiFi(context))
     // verify that the correct methods are used according to the build SDK version
     verify {
@@ -96,42 +88,38 @@ class NetworkUtilsTest {
     verify(exactly = 0) { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) }
 
     // on WIFI connected
-    every { (networkInfo.type) } returns ConnectivityManager.TYPE_WIFI
-    every { (networkInfo.isConnected) } returns java.lang.Boolean.TRUE
+    every { networkInfo.type } returns ConnectivityManager.TYPE_WIFI
+    every { networkInfo.isConnected } returns java.lang.Boolean.TRUE
     assertEquals(true, NetworkUtils.isWiFi(context))
     verify(exactly = 2) { connectivity.activeNetworkInfo }
     verify(exactly = 0) { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) }
 
     // on WIFI disconnected
-    every { (networkInfo.type) } returns ConnectivityManager.TYPE_WIFI
-    every { (networkInfo.isConnected) } returns java.lang.Boolean.FALSE
+    every { networkInfo.type } returns ConnectivityManager.TYPE_WIFI
+    every { networkInfo.isConnected } returns java.lang.Boolean.FALSE
     assertEquals(false, NetworkUtils.isWiFi(context))
     verify(exactly = 3) { connectivity.activeNetworkInfo }
     verify(exactly = 0) { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) }
 
     // SDK < 23
-    try {
-      setSDKVersion(Build.VERSION::class.java.getField("SDK_INT"), 22)
-    } catch (e: Exception) {
-      Log.d("NetworkUtilsTest", "Unable to set Build SDK Version")
-    }
+    NetworkUtils.sdkVersionForTesting = 22
 
     // WIFI connected
-    every { (connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI)) } returns networkInfo
-    every { (networkInfo.isConnected) } returns true
+    every { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) } returns networkInfo
+    every { networkInfo.isConnected } returns true
     assertEquals(true, NetworkUtils.isWiFi(context))
     verify { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) }
 
     // WIFI disconnected
-    every { (connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI)) } returns networkInfo
-    every { (networkInfo.isConnected) } returns false
+    every { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) } returns networkInfo
+    every { networkInfo.isConnected } returns false
     assertEquals(false, NetworkUtils.isWiFi(context))
     verify(exactly = 2) { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) }
   }
 
   @Test
   fun testFilenameFromUrl() {
-    // TODO: find a way to assert regex matching via JUnit and rewrite the test
+    // TODO find a way to assert regex matching via JUnit and rewrite the test
 
     val defaultUUIDRegex = "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
     val pattern = Pattern.compile(defaultUUIDRegex)
@@ -189,9 +177,9 @@ class NetworkUtilsTest {
 
   @Test
   fun testParsedURL() {
-    every { (context.getString(R.string.zim_no_pic)) } returns "No Pictures"
-    every { (context.getString(R.string.zim_no_vid)) } returns "No Videos"
-    every { (context.getString(R.string.zim_simple)) } returns "Simple"
+    every { context.getString(R.string.zim_no_pic) } returns "No Pictures"
+    every { context.getString(R.string.zim_no_vid) } returns "No Videos"
+    every { context.getString(R.string.zim_simple) } returns "Simple"
 
     assertEquals(
       "URL Parsing on empty string", "",
@@ -235,18 +223,5 @@ class NetworkUtilsTest {
         "http://mirror3.kiwix.org/zim/wikipedia/wikipedia_af_all_simple_2016-05.zim"
       )
     )
-  }
-
-  // Sets the Build SDK version
-  @Throws(Exception::class)
-  private fun setSDKVersion(
-    field: Field,
-    newValue: Any
-  ) {
-    field.isAccessible = true
-    val modifiersField = Field::class.java.getDeclaredField("modifiers")
-    modifiersField.isAccessible = true
-    modifiersField.setInt(field, field.modifiers and Modifier.FINAL.inv())
-    field.set(null, newValue)
   }
 }

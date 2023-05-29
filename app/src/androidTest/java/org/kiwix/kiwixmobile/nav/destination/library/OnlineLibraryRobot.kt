@@ -22,19 +22,17 @@ import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.language.LanguageRobot
-import org.kiwix.kiwixmobile.language.language
 
 fun onlineLibrary(func: OnlineLibraryRobot.() -> Unit) =
   OnlineLibraryRobot().applyWithViewHierarchyPrinting(func)
 
 class OnlineLibraryRobot : BaseRobot() {
-  init {
+
+  fun assertLibraryListDisplayed() {
     isVisible(ViewId(R.id.libraryList))
   }
 
-  fun clickOnGlobeIcon(func: LanguageRobot.() -> Unit) {
+  fun clickOnGlobeIcon() {
     clickOn(ViewId(R.id.select_language))
-    language(func)
   }
 }

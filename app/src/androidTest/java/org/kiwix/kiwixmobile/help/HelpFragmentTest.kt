@@ -17,16 +17,39 @@
  */
 package org.kiwix.kiwixmobile.help
 
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
+import leakcanary.LeakAssertions
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.testutils.RetryRule
+import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
+import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 
 class HelpFragmentTest : BaseActivityTest() {
 
+  @Before
+  override fun waitForIdle() {
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+      if (isSystemUINotRespondingDialogVisible(this)) {
+        closeSystemDialogs(context)
+      }
+      waitForIdle()
+    }
+  }
+
+  @Rule
+  @JvmField
+  var retryRule = RetryRule()
+
   @Test
   fun verifyHelpActivity() {
-    runOnUiThread { activityRule.activity.navigate(R.id.helpFragment) }
+    activityScenarioRule.scenario.onActivity {
+      it.navigate(R.id.helpFragment)
+    }
     help {
       clickOnWhatDoesKiwixDo()
       assertWhatDoesKiwixDoIsExpanded()
@@ -39,5 +62,6 @@ class HelpFragmentTest : BaseActivityTest() {
       clickOnHowToUpdateContent()
       clickOnSendFeedback()
     }
+    LeakAssertions.assertNoLeaks()
   }
 }

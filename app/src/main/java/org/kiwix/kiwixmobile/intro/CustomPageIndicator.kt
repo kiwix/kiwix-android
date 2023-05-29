@@ -276,8 +276,7 @@ class CustomPageIndicator @JvmOverloads constructor(
     dotRevealFraction: Float
   ): Path {
     unselectedDotPath.rewind()
-    if ((joiningFraction == selectedFactor || joiningFraction == INVALID_FRACTION)
-    ) {
+    if (joiningFraction == selectedFactor || joiningFraction == INVALID_FRACTION) {
       if (dotRevealFraction == selectedFactor && !(page == currentPage && selectedDotInPosition)) {
         // case #1 – At rest
         unselectedDotPath.addCircle(dotCenterX!![page], dotCenterY, dotRadius, Path.Direction.CW)

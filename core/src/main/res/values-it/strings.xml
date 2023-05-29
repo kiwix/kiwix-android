@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Ajeje Brazorf
+* Albano
 * Beta16
 * CloeRiva
 * Einreiher
+* Eleassar
 * Fs00
 * G.garatti
 * Gianfranco
 * Matteocng
+* MohitMali
 * Mpayansilva
 * Nivit
 * Purodha
 -->
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="menu_help">Aiuto</string>
   <string name="menu_home">Pagina principale</string>
   <string name="menu_settings">Impostazioni</string>
@@ -58,10 +61,11 @@
   <string name="server_started_message">Inserisci questo indirizzo IP nel tuo browser per accedere al server: %s</string>
   <string name="share_host_address">Condividi URL con altre applicazioni</string>
   <string name="error_file_not_found">Errore: il file ZIM selezionato non è stato trovato.</string>
+  <string name="unable_to_read_zim_file">Impossibile leggere questo file zim!</string>
   <string name="zim_not_opened">Impossibile aprire il file ZIM</string>
   <string name="error_file_invalid">Errore: il file selezionato non è un file ZIM valido.</string>
   <string name="error_article_url_not_found">Errore: caricamento della voce (URL: %1$s) non riuscito.</string>
-  <string name="pref_display_title">Visualizzazione</string>
+  <string name="pref_display_title">Aspetto</string>
   <string name="pref_info_title">Informazioni</string>
   <string name="pref_info_version">Versione</string>
   <string name="pref_night_mode">Modalità notte</string>
@@ -72,10 +76,11 @@
   <string name="pref_language_chooser">Scegli la lingua</string>
   <string name="pref_credits">Contributori e licenze</string>
   <string name="pref_credits_title">Riconoscimenti</string>
-  <string name="tts_lang_not_supported">La lingua di questa pagina non è supportata, o i dati della lingua non sono stati installati. La voce non può essere letta correttamente.</string>
+  <string name="tts_lang_not_supported">La lingua di questa pagina non è supportata. La voce potrebbe non essere letta correttamente.</string>
   <string name="no_reader_application_installed">Non è stata trovata alcuna applicazione installata per questo tipo di file</string>
   <string name="no_section_info">Nessuna intestazione di contenuto trovata</string>
   <string name="request_storage">Per accedere ai contenuti offline è necessario l\'accesso al tuo spazio di archiviazione</string>
+  <string name="request_write_storage">Per scaricare i file zim abbiamo bisogno dell\'accesso in scrittura al tuo spazio di archiviazione</string>
   <string name="clear_recent_and_tabs_history_dialog">Sei sicuro di voler cancellare la tua cronologia di ricerca e reimpostare tutte le schede attive?</string>
   <string name="delete_recent_search_item">Vuoi eliminare questo elemento?</string>
   <string name="pref_clear_all_history_title">Cancella la cronologia</string>
@@ -97,6 +102,7 @@
   <string name="tab_closed">Scheda chiusa</string>
   <string name="bookmark_added">Segnalibro aggiunto</string>
   <string name="rate_dialog_title">Valutaci</string>
+  <string name="rate_dialog_msg">Se ti piace usare %s, prenditi un momento per valutarlo. Grazie per il vostro sostegno!</string>
   <string name="rate_dialog_positive">Valuta!</string>
   <string name="no_thanks">No, grazie</string>
   <string name="rate_dialog_neutral">Più tardi</string>
@@ -138,8 +144,10 @@
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">riprendi</string>
   <string name="stop">interrompi</string>
+  <string name="configure_storage_option">Scaricare il libro nella memoria interna?</string>
   <string name="internal_storage">Interno</string>
   <string name="external_storage">Esterno</string>
+  <string name="configure">Configura</string>
   <string name="yes">Sì</string>
   <string name="no">No</string>
   <string name="confirm_stop_download_title">Vuoi interrompere il download?</string>
@@ -232,6 +240,7 @@
   <string name="connection_failed">Connessione fallita</string>
   <string name="permission_rationale_location">L\'accesso alla posizione è richiesto da Android per consentire all\'app di rilevare i dispositivi nelle vicinanze</string>
   <string name="permission_rationale_location_on_host_zim_file">L\'accesso alla posizione è richiesto da Android per consentire all\'app di ospitare file ZIM</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">L\'autorizzazione dei dispositivi Wi-Fi nelle vicinanze è richiesta da Android per consentire all\'app di ospitare file Zim</string>
   <string name="permission_refused_location">Impossibile cercare i dispositivi nelle vicinanze senza l\'accesso alla posizione</string>
   <string name="permission_refused_storage">Impossibile accedere ai file ZIM senza l\'accesso allo spazio di archiviazione</string>
   <string name="request_enable_location">Abilita la geolocalizzazione per poter cercare i dispositivi nelle vicinanze</string>
@@ -255,7 +264,7 @@
   <string name="pref_clear_all_notes_summary">Cancella le note su tutte le voci</string>
   <string name="pref_clear_all_notes_title">Cancella tutte le note</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Autorizzazione a leggere e scrivere i file ZIM sulla scheda SD</string>
-  <string name="pref_text_zoom_summary" tools:ignore="StringFormatInvalid">Aumenta o diminuisci la dimensione del testo del 25% alla volta.</string>
+  <string name="pref_text_zoom_summary">Aumenta o diminuisci la dimensione del testo del 25%% alla volta.</string>
   <string name="tag_pic">Immagini</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Solo testo</string>
@@ -293,5 +302,19 @@
   <string name="all_files_permission_needed_message">Per poter accedere ai file ZIM sul dispositivo, è necessario fornire all\'applicazione l\'accesso a tutti i file</string>
   <string name="allowed">Consentita</string>
   <string name="not_allowed">Non consentita</string>
+  <string name="denied_internet_permission_message">Abilita il Wi-Fi per scaricare i contenuti</string>
+  <string name="select_folder">Seleziona una cartella per l\'archiviazione esterna.</string>
+  <string name="system_unable_to_grant_permission_message">Il sistema non è in grado di concedere l\'autorizzazione!</string>
   <string name="allow">Consenti</string>
+  <string name="no_notes">Nessuna nota</string>
+  <string name="notes_from_all_books">Visualizza le note di tutti i libri</string>
+  <string name="search_notes">Cerca note</string>
+  <string name="choose_your_action">Scegli la tua azione</string>
+  <string name="open_note">Apri nota</string>
+  <string name="open_article">Apri articolo</string>
+  <string name="delete_note_dialog_message">Nota: le note non vengono eliminate dalla memoria</string>
+  <string name="delete_selected_notes">Elimina le note selezionate?</string>
+  <string name="external_link_copied_message">Collegamento esterno copiato negli appunti</string>
+  <string name="navigation_history_cleared">Cronologia di navigazione cancellata</string>
+  <string name="go_to_settings_label">Vai alle impostazioni</string>
 </resources>

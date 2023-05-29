@@ -1,3 +1,44 @@
+3.7.0
+
+New Features:
+* Support for Android 13.
+* Scrollbar indicator in the download screen
+* Greyed books if insufficient space
+* Visible URL in the external link dialog
+* Navigation History
+* "Undo" snackbar for "Close all tabs"
+* Properly checked availability of email app if needed
+
+Bug Fixes:
+* Snackbar visibility issue in download screen
+* Read Aloud feature not always starting
+* Ugly white line between around bottom navigation bar
+* Display default logo if no illustration is available for the ZIM file
+* WiFi detection on Android 11+ (local hosting)
+* Broken article loading (if containing special character)
+* Broken table of content "jump to section" (if containing special character)
+* Misalignment of FloatingActionButton and BottomNavBar
+* Lagging UI update after language change
+* Widget resizing problem
+* Ugly white space at the bottom in the loca library
+* Endless media access permission request
+* Inappropriate "Allow download content via mobile network" when usiong WiFI
+* Wrong TTS message if language is not available
+* Cut last book in library screen.
+* Multiple memory leaks
+
+Compilation/CI/CD:
+* Complated java to Kotlin migration
+* Memory leak detection introduction
+* Multiple Linting improvements
+* Jcenter/libkiwix JNI removal (now handled separatly with Maven Central)
+* Upgrade many dependencies
+* Play Store publishing process update
+* Multiple CI/CD workflows improvements
+* Gradle 8.0.0 introduction
+* New localisation help for translators
+* Stabilised CI, in particular for Android 30+
+
 3.6.0
 * FIX: Upgrade to Kotlin 1.7.0.
 * FIX: Introduce google play build variant.

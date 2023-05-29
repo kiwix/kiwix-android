@@ -100,7 +100,7 @@ class FetchDownloadNotificationManager(private val context: Context) :
         notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
           .addAction(
             R.drawable.fetch_notification_cancel,
-            context.getString(R.string.fetch_notification_download_cancel),
+            context.getString(R.string.cancel),
             getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.CANCEL)
           )
       downloadNotification.isPaused ->
@@ -112,7 +112,7 @@ class FetchDownloadNotificationManager(private val context: Context) :
           )
           .addAction(
             R.drawable.fetch_notification_cancel,
-            context.getString(R.string.fetch_notification_download_cancel),
+            context.getString(R.string.cancel),
             getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.CANCEL)
           )
       downloadNotification.isQueued ->

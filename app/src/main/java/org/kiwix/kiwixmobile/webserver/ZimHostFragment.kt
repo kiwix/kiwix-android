@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.webserver
 
 import android.Manifest
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.ProgressDialog
 import android.content.ComponentName
 import android.content.Context
@@ -39,16 +40,16 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import kotlinx.android.synthetic.main.activity_zim_host.recyclerViewZimHost
-import kotlinx.android.synthetic.main.activity_zim_host.serverTextView
-import kotlinx.android.synthetic.main.activity_zim_host.shareServerUrlIcon
-import kotlinx.android.synthetic.main.activity_zim_host.startServerButton
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
+import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -58,11 +59,12 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.databinding.ActivityZimHostBinding
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService
-import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_CHECK_IP_ADDRESS
-import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_START_SERVER
-import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.ACTION_STOP_SERVER
+import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.Companion.ACTION_CHECK_IP_ADDRESS
+import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.Companion.ACTION_START_SERVER
+import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.Companion.ACTION_STOP_SERVER
 import javax.inject.Inject
 
 class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
@@ -84,7 +86,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private var ip: String? = null
   private lateinit var serviceConnection: ServiceConnection
   private var progressDialog: ProgressDialog? = null
-
+  private var activityZimHostBinding: ActivityZimHostBinding? = null
   private val selectedBooksPath: ArrayList<String>
     get() {
       return booksAdapter.items
@@ -107,7 +109,10 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View = inflater.inflate(R.layout.activity_zim_host, container, false)
+  ): View? {
+    activityZimHostBinding = ActivityZimHostBinding.inflate(inflater, container, false)
+    return activityZimHostBinding?.root
+  }
 
   override fun inject(baseActivity: BaseActivity) {
     (baseActivity as KiwixMainActivity).cachedComponent.inject(this)
@@ -125,7 +130,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       BookOnDiskDelegate.LanguageDelegate
     )
 
-    recyclerViewZimHost.adapter = booksAdapter
+    activityZimHostBinding?.recyclerViewZimHost?.adapter = booksAdapter
     presenter.attachView(this)
 
     serviceConnection = object : ServiceConnection {
@@ -134,21 +139,40 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       }
 
       override fun onServiceConnected(className: ComponentName, service: IBinder) {
-        hotspotService = (service as HotspotService.HotspotBinder).service
-        hotspotService!!.registerCallBack(this@ZimHostFragment)
+        hotspotService = (service as HotspotService.HotspotBinder).service.get()
+        hotspotService?.registerCallBack(this@ZimHostFragment)
       }
     }
 
-    startServerButton.setOnClickListener {
+    activityZimHostBinding?.startServerButton?.setOnClickListener {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ||
         checkNearbyWifiDevicesPermission()
       ) {
-        startStopServer()
+        if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
+          startStopServer()
+        } else {
+          requestNotificationPermission()
+        }
       } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P ||
         checkCoarseLocationAccessPermission()
       ) {
         startStopServer()
       }
+    }
+  }
+
+  private fun requestNotificationPermission() {
+    if (!ActivityCompat.shouldShowRequestPermissionRationale(
+        requireActivity(),
+        POST_NOTIFICATIONS
+      )
+    ) {
+      requireActivity().requestNotificationPermission()
+    } else {
+      alertDialogShower.show(
+        KiwixDialog.NotificationPermissionDialog,
+        requireActivity()::navigateToAppSettings
+      )
     }
   }
 
@@ -208,8 +232,10 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     grantResults: IntArray
   ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-      if (requestCode == PERMISSION_REQUEST_CODE_COARSE_LOCATION) {
+    if (permissions.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+      if (requestCode == PERMISSION_REQUEST_CODE_COARSE_LOCATION ||
+        requestCode == REQUEST_POST_NOTIFICATION_PERMISSION
+      ) {
         startStopServer()
       }
     }
@@ -311,19 +337,21 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun layoutServerStarted() {
-    serverTextView.apply {
+    activityZimHostBinding?.serverTextView?.apply {
       text = getString(R.string.server_started_message, ip)
       movementMethod = LinkMovementMethod.getInstance()
     }
     configureUrlSharingIcon()
-    startServerButton.text = getString(R.string.stop_server_label)
-    startServerButton.setBackgroundColor(resources.getColor(R.color.stopServerRed))
+    activityZimHostBinding?.startServerButton?.text = getString(R.string.stop_server_label)
+    activityZimHostBinding?.startServerButton?.setBackgroundColor(
+      ContextCompat.getColor(requireActivity(), R.color.stopServerRed)
+    )
     bookDelegate.selectionMode = SelectionMode.NORMAL
     booksAdapter.notifyDataSetChanged()
   }
 
   private fun configureUrlSharingIcon() {
-    shareServerUrlIcon.apply {
+    activityZimHostBinding?.shareServerUrlIcon?.apply {
       visibility = View.VISIBLE
       setOnClickListener {
         val urlSharingIntent = Intent(Intent.ACTION_SEND)
@@ -337,19 +365,23 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun layoutServerStopped() {
-    serverTextView.text = getString(R.string.server_textview_default_message)
-    shareServerUrlIcon.visibility = View.GONE
-    startServerButton.text = getString(R.string.start_server_label)
-    startServerButton.setBackgroundColor(resources.getColor(R.color.startServerGreen))
+    activityZimHostBinding?.serverTextView?.text =
+      getString(R.string.server_textview_default_message)
+    activityZimHostBinding?.shareServerUrlIcon?.visibility = View.GONE
+    activityZimHostBinding?.startServerButton?.text = getString(R.string.start_server_label)
+    activityZimHostBinding?.startServerButton?.setBackgroundColor(
+      ContextCompat.getColor(requireActivity(), R.color.startServerGreen)
+    )
     bookDelegate.selectionMode = SelectionMode.MULTI
     booksAdapter.notifyDataSetChanged()
   }
 
   override fun onDestroyView() {
     super.onDestroyView()
-    recyclerViewZimHost.adapter = null
+    activityZimHostBinding?.recyclerViewZimHost?.adapter = null
     hotspotService?.registerCallBack(null)
     presenter.detachView()
+    activityZimHostBinding = null
   }
 
   private fun setUpToolbar(view: View) {
@@ -417,7 +449,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   override fun onIpAddressValid() {
-    progressDialog!!.dismiss()
+    progressDialog?.dismiss()
     requireActivity().startService(
       createHotspotIntent(ACTION_START_SERVER).putStringArrayListExtra(
         SELECTED_ZIM_PATHS_KEY, selectedBooksPath
@@ -426,7 +458,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   override fun onIpAddressInvalid() {
-    progressDialog!!.dismiss()
+    progressDialog?.dismiss()
     toast(R.string.server_failed_message, Toast.LENGTH_SHORT)
   }
 

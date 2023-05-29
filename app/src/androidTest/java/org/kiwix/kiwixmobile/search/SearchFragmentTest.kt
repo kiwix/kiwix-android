@@ -20,36 +20,56 @@ package org.kiwix.kiwixmobile.search
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.PreferenceManager
+import androidx.test.core.app.ActivityScenario
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
 import androidx.test.uiautomator.UiDevice
+import leakcanary.LeakAssertions
+import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader
+import org.kiwix.kiwixmobile.testutils.RetryRule
+import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
+import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 
 class SearchFragmentTest : BaseActivityTest() {
-  override var activityRule: ActivityTestRule<KiwixMainActivity> = activityTestRule {
+
+  @Rule
+  @JvmField
+  var retryRule = RetryRule()
+
+  private lateinit var kiwixMainActivity: KiwixMainActivity
+
+  @Before
+  override fun waitForIdle() {
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+      if (isSystemUINotRespondingDialogVisible(this)) {
+        closeSystemDialogs(context)
+      }
+      waitForIdle()
+    }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
+      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
     }
   }
 
-  @Before
-  fun waitForIdle() {
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
-  }
-
-  @Test fun searchFragmentSimple() {
-    UiThreadStatement.runOnUiThread { activityRule.activity.navigate(R.id.libraryFragment) }
+  @Test
+  fun searchFragmentSimple() {
+    ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
+      kiwixMainActivity = it
+      kiwixMainActivity.navigate(R.id.libraryFragment)
+    }
     val loadFileStream =
       SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
     val zimFile = File(context.cacheDir, "testzim.zim")
@@ -66,7 +86,7 @@ class SearchFragmentTest : BaseActivityTest() {
       }
     }
     UiThreadStatement.runOnUiThread {
-      activityRule.activity.navigate(
+      kiwixMainActivity.navigate(
         actionNavigationLibraryToNavigationReader()
           .apply { zimFileUri = zimFile.toUri().toString() }
       )
@@ -74,7 +94,7 @@ class SearchFragmentTest : BaseActivityTest() {
     search { checkZimFileSearchSuccessful(R.id.readerFragment) }
     UiThreadStatement.runOnUiThread {
       if (zimFile.canRead()) {
-        activityRule.activity.openSearch(searchString = "Android")
+        kiwixMainActivity.openSearch(searchString = "Android")
       } else {
         throw RuntimeException(
           "File $zimFile is not readable." +
@@ -86,6 +106,14 @@ class SearchFragmentTest : BaseActivityTest() {
     search {
       clickOnSearchItemInSearchList()
       checkZimFileSearchSuccessful(R.id.readerFragment)
+    }
+    LeakAssertions.assertNoLeaks()
+  }
+
+  @After
+  fun setIsTestPreference() {
+    PreferenceManager.getDefaultSharedPreferences(context).edit {
+      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, false)
     }
   }
 }

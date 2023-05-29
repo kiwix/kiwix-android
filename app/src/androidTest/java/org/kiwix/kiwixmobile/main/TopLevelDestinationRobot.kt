@@ -63,7 +63,6 @@ class TopLevelDestinationRobot : BaseRobot() {
   fun clickDownloadOnBottomNav(func: OnlineLibraryRobot.() -> Unit) {
     clickOn(ViewId(R.id.downloadsFragment))
     onlineLibrary(func)
-    pressBack()
   }
 
   private fun inNavDrawer(navDrawerAction: () -> Unit) {

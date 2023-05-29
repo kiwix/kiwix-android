@@ -20,9 +20,9 @@ package org.kiwix.kiwixmobile.core.dao
 import io.objectbox.Box
 import io.objectbox.kotlin.inValues
 import io.objectbox.kotlin.query
+import io.objectbox.query.QueryBuilder
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity_
-import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
@@ -53,12 +53,21 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
 
   private fun booksWithSameFilePath(booksOnDisk: List<BookOnDisk>) =
     box.query {
-      inValues(BookOnDiskEntity_.file, booksOnDisk.map { it.file.path }.toTypedArray())
+      inValues(
+        BookOnDiskEntity_.file, booksOnDisk.map { it.file.path }.toTypedArray(),
+        QueryBuilder.StringOrder.CASE_INSENSITIVE
+      )
     }.find()
       .map(::BookOnDisk)
 
   private fun removeEntriesWithMatchingIds(uniqueBooks: List<BookOnDisk>) {
-    box.query { inValues(BookOnDiskEntity_.bookId, uniqueBooks.map { it.book.id }.toTypedArray()) }
+    box.query {
+      inValues(
+        BookOnDiskEntity_.bookId,
+        uniqueBooks.map { it.book.id }.toTypedArray(),
+        QueryBuilder.StringOrder.CASE_INSENSITIVE
+      )
+    }
       .remove()
   }
 
@@ -67,7 +76,7 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
   }
 
   fun migrationInsert(books: List<Book>) {
-    insert(books.map { BookOnDisk(book = it, file = it.file) })
+    insert(books.map { BookOnDisk(book = it, file = it.file!!) })
   }
 
   private fun removeBooksThatDoNotExist(books: MutableList<BookOnDiskEntity>) {
@@ -78,14 +87,10 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
     box.remove(books)
   }
 
-  fun getFavIconAndZimFile(it: Bookmark): Pair<String?, String?> {
-    val bookOnDiskEntity = box.query {
-      equal(BookOnDiskEntity_.bookId, it.zimId)
-    }.find().getOrNull(0)
-    return bookOnDiskEntity?.let { Pair(it.favIcon, it.file.path) } ?: Pair(null, null)
-  }
-
   fun bookMatching(downloadTitle: String) = box.query {
-    endsWith(BookOnDiskEntity_.file, downloadTitle)
+    endsWith(
+      BookOnDiskEntity_.file, downloadTitle,
+      QueryBuilder.StringOrder.CASE_INSENSITIVE
+    )
   }.findFirst()
 }

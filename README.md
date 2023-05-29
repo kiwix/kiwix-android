@@ -1,4 +1,4 @@
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Kiwix_logo_v3.svg/512px-Kiwix_logo_v3.svg.png" align="right" height='250' />
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Kiwix_logo_v3_glow.png/512px-Kiwix_logo_v3_glow.png" align="right" height='250' />
 <a href="https://play.google.com/store/apps/details?id=org.kiwix.kiwixmobile" target="_blank" align="left">
   <img src="https://play.google.com/intl/en/badges/images/badge_new.png" alt="Get it on Google Play" height="30" />
 </a>
@@ -13,10 +13,9 @@ is to make Wikipedia available offline. This is done by reading the
 content of a file in the ZIM format, a highly compressed open format
 with additional metadata. This is the version for Android.
 
-Kiwix Android is written in [Kotlin](https://kotlinlang.org/) (with a few old
-pieces in Java).
+Kiwix Android is written in [Kotlin](https://kotlinlang.org/)
 
-[![Build Status](https://github.com/kiwix/kiwix-android/workflows/CI/badge.svg?query=branch%3Adevelop+workflow%3ANightly)](https://github.com/kiwix/kiwix-android/actions?query=workflow%3ANightly+branch%3Adevelop)
+[![Build Status](https://github.com/kiwix/kiwix-android/workflows/CI/badge.svg?query=branch%3Adevelop+workflow%3ANightly)](https://github.com/kiwix/kiwix-android/actions?query=workflow%3ACI+branch%3Adevelop)
 [![Nightly](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml/badge.svg)](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml)
 [![codecov](https://codecov.io/gh/kiwix/kiwix-android/branch/develop/graph/badge.svg)](https://codecov.io/gh/kiwix/kiwix-android)
 [![CodeFactor](https://www.codefactor.io/repository/github/kiwix/kiwix-android/badge)](https://www.codefactor.io/repository/github/kiwix/kiwix-android)
@@ -61,17 +60,6 @@ guidelines.
 We currently have a series of automated Unit and Integration
 tests. These can be run locally and are also run when submitting a
 pull request.
-
-## Code Style
-
-For contributions please read the [CODESTYLE](docs/codestyle.md)
-carefully. Pull requests that do not match the style will be rejected.
-
-## Commit Style
-
-For writing commit messages please read the
-[COMMITSTYLE](docs/commitstyle.md) carefully. Kindly adhere to the
-guidelines. Pull requests not matching the style will be rejected.
 
 ## Communication
 

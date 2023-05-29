@@ -42,7 +42,7 @@
   <string name="pref_language_chooser">Elektu lingvon</string>
   <string name="pref_credits">Kontribuintoj kaj Permesiloj</string>
   <string name="pref_credits_title">Agnoskoj</string>
-  <string name="tts_lang_not_supported">La lingvo de ĉi tiu paĝo ne estas subtenata, aŭ la lingva dateno ne estis instalita. Ĉi tiu artikolo ne povas esti ĝuste legata.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">La lingvo de ĉi tiu paĝo ne estas subtenata, aŭ la lingva dateno ne estis instalita. Ĉi tiu artikolo ne povas esti ĝuste legata.</string>
   <string name="no_reader_application_installed">Ne povis trovi instalitan aplikaĵon por ĉi tiu dosiertipo</string>
   <string name="no_section_info">Ne Trovis Enhavajn Ĉapojn</string>
   <string name="request_storage">Por atingi konservitan enhavon ni bezonas atingon al via konservejo</string>

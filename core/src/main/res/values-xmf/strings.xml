@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * David1010
+* McDutchie
 * Narazeni
 -->
 <resources>
@@ -42,7 +43,7 @@
   <string name="pref_language_chooser">გეგშაგორით ნინა</string>
   <string name="pref_credits">მახვარებუეფი დო ლიცენზიეფი</string>
   <string name="pref_credits_title">ავტორეფი</string>
-  <string name="tts_lang_not_supported">თე ხასჷლაშ ნინა ვა რე აზარელი ვარ-და ნინაშ ომანგური მუნაჩემეფი დიო ვარე გერინაფილი. თე სტატიაშ თინას კითხირი უშულებუ რე.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">თე ხასჷლაშ ნინა ვა რე აზარელი ვარ-და ნინაშ ომანგური მუნაჩემეფი დიო ვარე გერინაფილი. თე სტატიაშ თინას კითხირი უშულებუ რე.</string>
   <string name="no_reader_application_installed">თე ტიპიშ ფაილშო გერინაფილი აპლიკაციაქ ვეგორუ</string>
   <string name="no_section_info">დინოხიშ დუდჯოხოქ ვეგორინუ</string>
   <string name="request_storage">ოფლაინ დინოხიშა მეჭირინაფაშო ჩქი ვოხვილუათ თქვანი ნებაშ მეჩამას თქვანი ფაილიშ ოჩუაშეშა</string>
@@ -126,8 +127,9 @@
   <string name="save_languages">ნინეფიშ ჩუალა</string>
   <string name="expand">გოფაჩუა</string>
   <string name="history">ისტორია</string>
-  <string name="search_history">გორუაშ ისტორია</string>
+  <string name="search_history" fuzzy="true">გორუაშ ისტორია</string>
   <string name="failed_state">ჩილათა: %s</string>
   <string name="save">ჩუალა</string>
   <string name="note">ხვილაფა</string>
+  <string name="go_to_settings_label">პარამეტრეფშა გინულა</string>
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Af420
 * Ahmed-Najib-Biabani-Ibrahimkhel
 * Amjad Khan
 -->
@@ -32,10 +33,12 @@
   <string name="pref_back_to_top_summary">د مخ په پای کې د مخ سر ته ورتللو لپاره يوه تڼۍ ښکاره کول</string>
   <string name="pref_language_title">ژبه</string>
   <string name="pref_language_chooser">يوه ژبه وټاکئ</string>
-  <string name="tts_lang_not_supported">د همدې مخ د ژبې ملاتړ نه کېږي، يا کېدای شي د کاروړ ژب اومتوک نه وي نصب شوی. دا ليکنه به په سمه توگه د لوستلو وړ نه وي.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">د همدې مخ د ژبې ملاتړ نه کېږي، يا کېدای شي د کاروړ ژب اومتوک نه وي نصب شوی. دا ليکنه به په سمه توگه د لوستلو وړ نه وي.</string>
   <string name="no_reader_application_installed">د دې ډول دوتنې لپاره يو نصب شوی کاريال و نه موندل شو</string>
   <string name="no_section_info" fuzzy="true">هېڅ نيوليک سرليکونه نشته</string>
   <string name="request_storage" fuzzy="true">ZIM دوتنو ته د لاسرسي لپاره موږ بايد ستاسې زېرمتون ته لاسرسی ومومو</string>
+  <string name="delete">ړنگول</string>
+  <string name="cancel">ناگارل</string>
   <string name="undo">پريښودل</string>
   <string name="tab_closed">ټب تړل شوی</string>
   <string name="bookmark_added">کتاب نښه ورگډه شوه</string>
@@ -48,7 +51,9 @@
   <string name="search_widget_text">کيويس پلټل</string>
   <string name="speech_prompt_text">خبري د لټون لپاره %s</string>
   <string name="speech_not_supported">وبخښي! ستاسو وسیله د بیان انډول ملاتړ نه کوي</string>
+  <string name="remote_zims">پر ليکه</string>
   <string name="library">د منځپانګې مدیریت</string>
+  <string name="download">ښکته کول</string>
   <string name="space_available">ځای شتون لري:</string>
   <string name="zim_simple">اسان</string>
   <string name="zim_no_pic">هيڅ دوتنه نشته</string>
@@ -65,5 +70,9 @@
   <string name="time_minute">مين</string>
   <string name="time_second">س</string>
   <string name="time_left">کيڼ</string>
+  <string name="time_today">نن</string>
+  <string name="time_yesterday">پرون</string>
+  <string name="other_languages">نورې ژبې:</string>
   <string name="no_bookmarks" fuzzy="true">بې کتاب نښو!</string>
+  <string name="reader">لوستونکی</string>
 </resources>

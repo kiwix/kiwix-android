@@ -24,24 +24,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.DividerItemDecoration
-import kotlinx.android.synthetic.main.fragment_help.activity_help_feedback_image_view
-import kotlinx.android.synthetic.main.fragment_help.activity_help_feedback_text_view
-import kotlinx.android.synthetic.main.fragment_help.activity_help_recycler_view
-import kotlinx.android.synthetic.main.fragment_help.diagnostic_clickable_area
-import kotlinx.android.synthetic.main.layout_toolbar.toolbar
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.queryIntentActivitiesCompat
+import org.kiwix.kiwixmobile.core.compat.ResolveInfoFlagsCompat
+import org.kiwix.kiwixmobile.core.databinding.FragmentHelpBinding
 import org.kiwix.kiwixmobile.core.error.DiagnosticReportActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.CONTACT_EMAIL_ADDRESS
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 
 abstract class HelpFragment : BaseFragment() {
-
+  private var fragmentHelpBinding: FragmentHelpBinding? = null
   protected open fun rawTitleDescriptionMap(): List<Pair<Int, Int>> = emptyList()
 
   private val titleDescriptionMap by lazy {
@@ -58,41 +58,58 @@ abstract class HelpFragment : BaseFragment() {
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     val activity = requireActivity() as AppCompatActivity
-    activity_help_feedback_text_view.setOnClickListener { sendFeedback() }
-    activity_help_feedback_image_view.setOnClickListener { sendFeedback() }
-    diagnostic_clickable_area.setOnClickListener { sendDiagnosticReport() }
-    activity.setSupportActionBar(toolbar)
-    toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
+    fragmentHelpBinding?.activityHelpFeedbackTextView?.setOnClickListener { sendFeedback() }
+    fragmentHelpBinding?.activityHelpFeedbackImageView?.setOnClickListener { sendFeedback() }
+    fragmentHelpBinding?.diagnosticClickableArea?.setOnClickListener { sendDiagnosticReport() }
+    val toolbar: Toolbar? = fragmentHelpBinding?.root?.findViewById(R.id.toolbar)
+    toolbar?.apply {
+      activity.setSupportActionBar(this)
+      setNavigationOnClickListener { requireActivity().onBackPressed() }
+    }
     activity.supportActionBar?.let {
       it.setDisplayHomeAsUpEnabled(true)
       it.setTitle(R.string.menu_help)
     }
-    activity_help_recycler_view.addItemDecoration(
+    fragmentHelpBinding?.activityHelpRecyclerView?.addItemDecoration(
       DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
     )
-    activity_help_recycler_view.adapter = HelpAdapter(titleDescriptionMap)
+    fragmentHelpBinding?.activityHelpRecyclerView?.adapter = HelpAdapter(titleDescriptionMap)
   }
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View = inflater.inflate(R.layout.fragment_help, container, false)
+  ): View? {
+    fragmentHelpBinding =
+      FragmentHelpBinding.inflate(inflater, container, false)
+    return fragmentHelpBinding?.root
+  }
 
   private fun sendDiagnosticReport() {
     requireActivity().start<DiagnosticReportActivity>()
   }
 
   private fun sendFeedback() {
-    val intent = Intent(Intent.ACTION_SENDTO)
-    intent.data = (
-      "mailto:${Uri.encode(CONTACT_EMAIL_ADDRESS)}" +
-        "?subject=" +
-        Uri.encode(
-          "Feedback in " +
-            getCurrentLocale(requireActivity()).displayLanguage
-        )
-      ).toUri()
-    startActivity(Intent.createChooser(intent, "Send Feedback via Email"))
+    val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+      data = (
+        "mailto:${Uri.encode(CONTACT_EMAIL_ADDRESS)}" +
+          "?subject=" +
+          Uri.encode("Feedback in ${getCurrentLocale(requireActivity()).displayLanguage}")
+        ).toUri()
+    }
+    val packageManager = requireActivity().packageManager
+    val activities =
+      packageManager.queryIntentActivitiesCompat(emailIntent, ResolveInfoFlagsCompat.EMPTY)
+    if (activities.isNotEmpty()) {
+      startActivity(Intent.createChooser(emailIntent, "Send Feedback via Email"))
+    } else {
+      activity.toast(getString(R.string.no_email_application_installed, CONTACT_EMAIL_ADDRESS))
+    }
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
+    fragmentHelpBinding = null
   }
 }

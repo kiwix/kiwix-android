@@ -22,6 +22,7 @@ import com.tonyodev.fetch2.Status.COMPLETED
 import io.objectbox.Box
 import io.objectbox.kotlin.equal
 import io.objectbox.kotlin.query
+import io.objectbox.query.QueryBuilder
 import io.reactivex.Flowable
 import io.reactivex.Single
 import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadEntity
@@ -97,6 +98,6 @@ class FetchDownloadDao @Inject constructor(
 
   private fun doesNotAlreadyExist(book: Book) =
     box.query {
-      equal(FetchDownloadEntity_.bookId, book.id)
+      equal(FetchDownloadEntity_.bookId, book.id, QueryBuilder.StringOrder.CASE_INSENSITIVE)
     }.count() == 0L
 }

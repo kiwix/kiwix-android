@@ -19,15 +19,14 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.graphics.Typeface
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import kotlinx.android.synthetic.main.section_list.titleText
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
-import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
-import java.lang.IllegalStateException
+import org.kiwix.kiwixmobile.core.databinding.SectionListBinding
 
 class TableDrawerAdapter constructor(private val listener: TableClickListener) :
   Adapter<ViewHolder>() {
@@ -53,11 +52,11 @@ class TableDrawerAdapter constructor(private val listener: TableClickListener) :
     parent: ViewGroup,
     viewType: Int
   ): ViewHolder {
-    val view = parent.inflate(R.layout.section_list, false)
+    val binding = SectionListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     return if (viewType == 0) {
-      HeaderTableDrawerViewHolder(view)
+      HeaderTableDrawerViewHolder(binding)
     } else {
-      SectionTableDrawerViewHolder(view)
+      SectionTableDrawerViewHolder(binding)
     }
   }
 
@@ -87,13 +86,13 @@ class TableDrawerAdapter constructor(private val listener: TableClickListener) :
     fun onSectionClick(view: View?, position: Int)
   }
 
-  class HeaderTableDrawerViewHolder(view: View) :
-    BaseViewHolder<String>(view) {
+  class HeaderTableDrawerViewHolder(private val sectionListBinding: SectionListBinding) :
+    BaseViewHolder<String>(sectionListBinding.root) {
 
     override fun bind(item: String) {
       val context = itemView.context
-      titleText.typeface = Typeface.DEFAULT_BOLD
-      titleText.text = when {
+      sectionListBinding.titleText.typeface = Typeface.DEFAULT_BOLD
+      sectionListBinding.titleText.text = when {
         item.isNotEmpty() -> item
         context is WebViewProvider -> context.getCurrentWebView()?.title
           ?: context.getString(R.string.no_section_info)
@@ -102,16 +101,16 @@ class TableDrawerAdapter constructor(private val listener: TableClickListener) :
     }
   }
 
-  class SectionTableDrawerViewHolder(view: View) :
-    BaseViewHolder<TableDrawerAdapter.DocumentSection>(view) {
+  class SectionTableDrawerViewHolder(private val sectionListBinding: SectionListBinding) :
+    BaseViewHolder<TableDrawerAdapter.DocumentSection>(sectionListBinding.root) {
     override fun bind(
       item: TableDrawerAdapter.DocumentSection
     ) {
       val context = itemView.context
       val padding =
         ((item.level - 1) * context.resources.getDimension(R.dimen.title_text_padding)).toInt()
-      titleText.setPadding(padding, 0, 0, 0)
-      titleText.text = item.title
+      sectionListBinding.titleText.setPadding(padding, 0, 0, 0)
+      sectionListBinding.titleText.text = item.title
     }
   }
 

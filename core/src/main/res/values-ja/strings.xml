@@ -6,7 +6,10 @@
 * S2KTS
 * Shirayuki
 * SkyDaisy9
+* Sou0012
 * Tmv
+* もなー(偽物)
+* 背番号4のエース
 -->
 <resources>
   <string name="menu_help">ヘルプ</string>
@@ -33,16 +36,28 @@
   <string name="pref_back_to_top">トップに戻る</string>
   <string name="pref_language_title">言語</string>
   <string name="pref_language_chooser">言語を選択</string>
+  <string name="tts_lang_not_supported">このページの言語は不正確な翻訳です。記事が正しく読めない可能性があります。</string>
   <string name="all_history_cleared">全履歴を削除しました</string>
   <string name="delete">削除</string>
+  <string name="tabs_closed">タブを閉じました</string>
   <string name="library">ライブラリ</string>
+  <string name="configure">設定</string>
   <string name="do_not_ask_anymore">これ以上聞かないでください</string>
   <string name="other_languages">その他の言語:</string>
   <string name="pref_text_zoom_summary">テキストサイズを 25% 増やす</string>
   <string name="search_open_in_new_tab">新しいタブで開く</string>
+  <string name="tabs_restored">タブが復元されました</string>
   <string name="allow">許可</string>
   <string name="no_notes">ノートはありません</string>
   <string name="search_notes">ノートを検索する</string>
   <string name="open_note">ノートを開く</string>
   <string name="open_article">記事を開く</string>
+  <string name="download_tts_language_title">読み上げ機能のためにこの言語をダウンロードします。</string>
+  <string name="download_tts_language_message">ダウンロードボタンをクリックしてください。必要な言語が自動的にダウンロードされます。</string>
+  <string name="read_aloud_service_channel_name">読み上げサービスチャンネル</string>
+  <string name="read_aloud_channel_description">テキスト読み上げ設定。</string>
+  <string name="read_aloud_running">読み上げ中</string>
+  <string name="backward_history">過去の履歴</string>
+  <string name="forward_history">転送履歴</string>
+  <string name="clear_all_navigation_history_message">すべての (戻る、進む) ナビゲーション履歴を消去します</string>
 </resources>

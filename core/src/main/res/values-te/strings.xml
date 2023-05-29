@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* V Bhavya
 * Veeven
 * WP MANIKHANTA
 * రహ్మానుద్దీన్
@@ -33,7 +34,7 @@
   <string name="pref_back_to_top_summary">పేజీ చివర్లో పేజీ మొదటికి చేరుకునే బొత్తమును చూపండి</string>
   <string name="pref_language_title">భాష</string>
   <string name="pref_language_chooser">భాషను ఎంచుకోండి</string>
-  <string name="tts_lang_not_supported">ఈ పేజి నందు ఈ భాష సహకరించదు లేదా తగిన భాష ఇన్స్టాల్ చేయలేదు.బహుస ఈ పేజి ని చదువలేరు.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">ఈ పేజి నందు ఈ భాష సహకరించదు లేదా తగిన భాష ఇన్స్టాల్ చేయలేదు.బహుస ఈ పేజి ని చదువలేరు.</string>
   <string name="no_reader_application_installed">ఈ దస్త్రం చూపడానికి సహకరించే ఎప్ప్ ఇన్స్టాల్ చేయలేదు.</string>
   <string name="no_section_info" fuzzy="true">వ్యాస శీరిక్ష కనుగోనలేదు</string>
   <string name="request_storage" fuzzy="true">ZIM Filesలో పోందుపరచడానికి మేము మీ నిల్వ లను పోందుపరచాలి</string>
@@ -48,4 +49,7 @@
   <string name="no_bookmarks" fuzzy="true">పుస్తకగుర్తులు లేవు!</string>
   <string name="percentage">%d%%</string>
   <string name="search_open_in_new_tab">కొత్త ట్యాబులో తెరువు</string>
+  <string name="backward_history">వెనుకబడిన చరిత్ర</string>
+  <string name="navigation_history_cleared">నావిగేషన్ చరిత్ర క్లియర్ చేయబడింది</string>
+  <string name="go_to_settings_label">సెట్టింగ్‌లకు వెళ్లండి</string>
 </resources>

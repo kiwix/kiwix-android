@@ -20,14 +20,10 @@ package org.kiwix.kiwixmobile.core.zim_manager
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import kotlinx.android.synthetic.main.tag_content.view.tag_picture
-import kotlinx.android.synthetic.main.tag_content.view.tag_short_text
-import kotlinx.android.synthetic.main.tag_content.view.tag_text_only
-import kotlinx.android.synthetic.main.tag_content.view.tag_video
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
+import org.kiwix.kiwixmobile.core.databinding.TagContentBinding
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.Companion.YesNoValueTag
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.Companion.YesNoValueTag.DetailsTag
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.Companion.YesNoValueTag.PicturesTag
@@ -35,21 +31,27 @@ import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.Companion.YesNoValueTag.V
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.TagValue.YES
 
 class TagsView(context: Context, attrs: AttributeSet) : ChipGroup(context, attrs) {
+  private var tagContentBinding: TagContentBinding? = null
 
   init {
-    inflate(R.layout.tag_content, true)
+    tagContentBinding = TagContentBinding.inflate(LayoutInflater.from(context), this)
+  }
+
+  override fun onDetachedFromWindow() {
+    super.onDetachedFromWindow()
+    tagContentBinding = null
   }
 
   fun render(tags: List<KiwixTag>) {
-    tag_picture.selectBy(tags.isYesOrNotDefined<PicturesTag>())
-    tag_video.selectBy(tags.isYesOrNotDefined<VideoTag>())
+    tagContentBinding?.tagPicture?.selectBy(tags.isYesOrNotDefined<PicturesTag>())
+    tagContentBinding?.tagVideo?.selectBy(tags.isYesOrNotDefined<VideoTag>())
     val shortTextIsSelected = tags.isDefinedAndNo<DetailsTag>()
-    tag_text_only.selectBy(
+    tagContentBinding?.tagTextOnly?.selectBy(
       tags.isDefinedAndNo<PicturesTag>() &&
         tags.isDefinedAndNo<VideoTag>() &&
         !shortTextIsSelected
     )
-    tag_short_text.selectBy(shortTextIsSelected)
+    tagContentBinding?.tagShortText?.selectBy(shortTextIsSelected)
   }
 
   private inline fun <reified T : YesNoValueTag> List<KiwixTag>.isYesOrNotDefined() =

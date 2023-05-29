@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.dao
 
 import io.objectbox.Box
 import io.objectbox.kotlin.query
+import io.objectbox.query.QueryBuilder
 import io.reactivex.Flowable
 import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity_
@@ -40,7 +41,11 @@ class NewNoteDao @Inject constructor(val box: Box<NotesEntity>) : PageDao {
     deleteNotes(pagesToDelete as List<NoteListItem>)
 
   fun saveNote(noteItem: NoteListItem) {
-    box.put(NotesEntity(noteItem))
+    box.store.callInTx {
+      if (doesNotAlreadyExist(noteItem)) {
+        box.put(NotesEntity(noteItem))
+      }
+    }
   }
 
   fun deleteNotes(noteList: List<NoteListItem>) {
@@ -49,7 +54,16 @@ class NewNoteDao @Inject constructor(val box: Box<NotesEntity>) : PageDao {
 
   fun deleteNote(noteUniqueKey: String) {
     box.query {
-      equal(NotesEntity_.noteTitle, noteUniqueKey)
+      equal(
+        NotesEntity_.noteTitle,
+        noteUniqueKey,
+        QueryBuilder.StringOrder.CASE_INSENSITIVE
+      )
     }.remove()
   }
+
+  private fun doesNotAlreadyExist(noteItem: NoteListItem) =
+    box.query {
+      equal(NotesEntity_.noteTitle, noteItem.title, QueryBuilder.StringOrder.CASE_INSENSITIVE)
+    }.count() == 0L
 }

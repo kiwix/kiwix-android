@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.reader
 
+import android.annotation.SuppressLint
 import android.content.res.AssetFileDescriptor
 import android.net.Uri
 import android.os.ParcelFileDescriptor
@@ -24,11 +25,11 @@ import android.util.Log
 import androidx.core.net.toUri
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
+import org.kiwix.kiwixlib.DirectAccessInfo
 import org.kiwix.kiwixlib.JNIKiwixException
 import org.kiwix.kiwixlib.JNIKiwixInt
 import org.kiwix.kiwixlib.JNIKiwixReader
 import org.kiwix.kiwixlib.JNIKiwixString
-import org.kiwix.kiwixlib.Pair
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
@@ -140,7 +141,9 @@ class ZimFileReader constructor(
     }
 
   private fun toRedirect(url: String) =
-    "$CONTENT_PREFIX${jniKiwixReader.checkUrl(url.toUri().filePath)}".toUri()
+    "$CONTENT_PREFIX${
+    jniKiwixReader.checkUrl(url.toUri().filePath).replaceWithEncodedString
+    }".toUri()
 
   private fun loadContent(uri: String) =
     try {
@@ -173,6 +176,7 @@ class ZimFileReader constructor(
 
   private fun getContent(url: String) = getContentAndMimeType(url).let { (content, _) -> content }
 
+  @SuppressLint("CheckResult")
   private fun streamZimContentToPipe(uri: String, outputStream: OutputStream) {
     Completable.fromAction {
       try {
@@ -217,7 +221,7 @@ class ZimFileReader constructor(
     title = this@ZimFileReader.title
     id = this@ZimFileReader.id
     size = "$fileSize"
-    favicon = this@ZimFileReader.favicon
+    favicon = this@ZimFileReader.favicon.toString()
     creator = this@ZimFileReader.creator
     publisher = this@ZimFileReader.publisher
     date = this@ZimFileReader.date
@@ -245,7 +249,7 @@ class ZimFileReader constructor(
 
     private val INVERT_IMAGES_VIDEO =
       """
-        img, video, div[poster], div#header { 
+        img, video, div[poster] { 
            -webkit-filter: invert(1); 
            filter: invert(1); 
         }
@@ -272,5 +276,10 @@ private val String.filePath: String
 val String.truncateMimeType: String
   get() = replace("^([^ ]+).*$", "$1").substringBefore(";")
 
-private val Pair.parcelFileDescriptor: ParcelFileDescriptor?
+// Encode question mark with %3F after getting url from checkUrl() method
+// for issue https://github.com/kiwix/kiwix-android/issues/2671
+val String.replaceWithEncodedString: String
+  get() = replace("?", "%3F")
+
+private val DirectAccessInfo.parcelFileDescriptor: ParcelFileDescriptor?
   get() = ParcelFileDescriptor.open(File(filename), ParcelFileDescriptor.MODE_READ_ONLY)

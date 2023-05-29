@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
@@ -24,6 +25,7 @@ import org.kiwix.kiwixmobile.core.NightModeConfig.Mode.SYSTEM
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
+@SuppressLint("CheckResult")
 class NightModeConfig @Inject constructor(
   val sharedPreferenceUtil: SharedPreferenceUtil,
   val context: Context

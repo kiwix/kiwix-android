@@ -21,9 +21,9 @@ package eu.mhutti1.utils.storage.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import eu.mhutti1.utils.storage.StorageDevice
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.AdapterDelegate
-import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
+import org.kiwix.kiwixmobile.core.databinding.DeviceItemBinding
+import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.viewBinding
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
@@ -32,13 +32,14 @@ class StorageDelegate(
   private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val onClickAction: (StorageDevice) -> Unit
 ) : AdapterDelegate<StorageDevice> {
-  override fun createViewHolder(parent: ViewGroup): ViewHolder =
-    StorageViewHolder(
-      parent.inflate(R.layout.device_item, false),
+  override fun createViewHolder(parent: ViewGroup): ViewHolder {
+    return StorageViewHolder(
+      parent.viewBinding(DeviceItemBinding::inflate, false),
       storageCalculator,
       sharedPreferenceUtil,
       onClickAction
     )
+  }
 
   override fun bind(viewHolder: ViewHolder, itemToBind: StorageDevice) {
     (viewHolder as StorageViewHolder).bind(itemToBind)

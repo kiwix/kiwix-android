@@ -61,13 +61,13 @@
   <string name="pref_info_version">Versiyon</string>
   <string name="pref_night_mode">Moda şewer</string>
   <string name="pref_night_mode_summary">Meqaleya dimlaşt bıyaye rengana bımocne</string>
-  <string name="pref_back_to_top">Şo Serni</string>
+  <string name="pref_back_to_top">Peyser şo serêniye</string>
   <string name="pref_back_to_top_summary">Seba ameyışê seri peyniya pele de yew gocege mocneno</string>
   <string name="pref_language_title">Zıwan</string>
   <string name="pref_language_chooser">Yew zıwan weçine</string>
   <string name="pref_credits">İştirakwani u Lisansi</string>
   <string name="pref_credits_title">İştirakwani</string>
-  <string name="tts_lang_not_supported">Ena pela de zıwan desteg nêvineno,  yana qebul biyayê datay zıwani bar nêbiya. Tercihê wesiqi wanayê niyo qay.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Ena pela de zıwan desteg nêvineno,  yana qebul biyayê datay zıwani bar nêbiya. Tercihê wesiqi wanayê niyo qay.</string>
   <string name="no_reader_application_installed">Seba ena dosya barbiyayi applikasyon nêvineyê</string>
   <string name="no_section_info">Sernameyê zerreki nêvêniya</string>
   <string name="request_storage">Offline depoyê şıma reştışi rê şıma ra icazet wazenê</string>
@@ -82,7 +82,7 @@
   <string name="clear_all_history_dialog_title">Verori pêro wa pak kerê?</string>
   <string name="share">Vıla ke</string>
   <string name="selected_file_cab_app_chooser_title">Dosyayanê ZIM\'i pê :</string>
-  <string name="delete">Bıesternê</string>
+  <string name="delete">Bestere</string>
   <string name="cancel">Bıtexelne</string>
   <string name="delete_specific_search_toast">Cıgeyrayışo peyên wedariya</string>
   <string name="hint_contents_drawer_message">Zerrey nê meqaley vinayışi rê peta hetê çepiya xuz kerê</string>
@@ -183,7 +183,7 @@
   <string name="save_books_offline">Kıtaba offline qeyd kerê</string>
   <string name="download_books_message">Kıtaban ronê u koti dê benê se bıbê bıwanê</string>
   <string name="unable_to_add_to_bookmarks">Tewrê bookmarka nêbeno</string>
-  <string name="go_to_previous_page">Şo pela verên</string>
+  <string name="go_to_previous_page">Şo pela verêne</string>
   <string name="go_to_next_page">Şo pela peyên</string>
   <string name="table_of_contents">Tabloy zerreki</string>
   <string name="select_languages">Zıwan weçine</string>
@@ -192,7 +192,7 @@
   <string name="expand">Hera kerê</string>
   <string name="history">Veror</string>
   <string name="history_from_current_book">Kıtaba pêroyın ra verori bımocne</string>
-  <string name="search_history">Verori cıgeyrayış</string>
+  <string name="search_history">Tarixi cı geyre</string>
   <string name="selected_items">%1$d weçineya</string>
   <string name="bookmarks_from_current_book">Kıtaba pêroyın ra Bookmarki bımocne</string>
   <string name="search_bookmarks">Bookmark cıgeyrayış</string>
@@ -244,8 +244,8 @@
   <string name="nearby_devices">NEZDI CİHAZİ</string>
   <string name="no_devices_found">Cihaz nêvineya. Reyna cerbnayışi rê maka cıgeyrayışi bıploğne</string>
   <string name="files_for_transfer">TRANSFERÊ DOSYAYAN</string>
-  <string name="preparing_files">Keno ke dosyaya transfer kero…</string>
-  <string name="performing_handshake">Dest dano destan…</string>
+  <string name="preparing_files" fuzzy="true">Keno ke dosyaya transfer kero…</string>
+  <string name="performing_handshake" fuzzy="true">Dest dano destan…</string>
   <string name="status">Weziyet</string>
   <string name="pref_clear_all_notes_summary">Meqaleya pêroyın de nota pêroyın pak ke</string>
   <string name="pref_clear_all_notes_title">Nota pêroyın pak ke</string>

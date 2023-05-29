@@ -66,3 +66,6 @@ captures/
 !/.idea/copyright/
 !/.idea/kotlinCodeInsightSettings.xml
 app/jacoco.exec
+
+# F-Droid auto-publish file
+VERSION_INFO

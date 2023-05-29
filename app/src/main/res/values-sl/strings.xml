@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Eleassar
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">Vaš datotečni sistem ne podpira datotek, večjih od 4 GB</string>
+  <string name="detecting_file_system">Zaznavanje, ali lahko datotečni sistem ustvarja datoteke velikosti 4 GB</string>
+  <string name="cannot_open_file">Datoteke ni bilo mogoče odpreti\nPoskusite to datoteko poiskati na zavihku Naprava v vaši knjižnici</string>
+  <string name="send_files_title">Pošlji datoteke</string>
+  <string name="receive_files_title">Prejmi datoteke</string>
+  <string name="no_app_found_to_open">Ni najdene aplikacije za izbiro datoteke ZIM!</string>
+  <string name="select_zim_file">Izberite datoteko ZIM za branje</string>
+</resources>

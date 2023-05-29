@@ -104,12 +104,13 @@
   <string name="your_device">El vostre dispositiu:</string>
   <string name="nearby_devices">DISPOSITIUS A PROP</string>
   <string name="files_for_transfer">FITXERS PENDENTS DE TRANSFERIR</string>
-  <string name="preparing_files">S’estan preparant els fitxers a transferir…</string>
-  <string name="performing_handshake">S’està realitzant el protocol d’enllaç…</string>
+  <string name="preparing_files" fuzzy="true">S’estan preparant els fitxers a transferir…</string>
+  <string name="performing_handshake" fuzzy="true">S’està realitzant el protocol d’enllaç…</string>
   <string name="status">Estat</string>
   <string name="tag_text_only">Només text</string>
   <string name="tag_short_text">Text breu</string>
   <string name="no_bookmarks">No hi ha marcadors</string>
   <string name="send_report">Envia informe de diagnòstic</string>
   <string name="diagnostic_report">Informe de diagnòstic</string>
+  <string name="go_to_settings_label">Vés a Configuració</string>
 </resources>

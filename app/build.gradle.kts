@@ -10,7 +10,7 @@ apply(from = rootProject.file("jacoco.gradle"))
 
 ext {
   set("versionMajor", 3)
-  set("versionMinor", 6)
+  set("versionMinor", 7)
   set("versionPatch", 0)
 }
 
@@ -34,20 +34,20 @@ fun generateVersionCode() =
     ext["versionMinor"] as Int * 100 +
     ext["versionPatch"] as Int
 
-val apkPrefix get() = System.getenv("TAG") ?: "dev"
+val apkPrefix get() = System.getenv("TAG") ?: "kiwix"
 
 android {
 
   defaultConfig {
-    base.archivesBaseName = apkPrefix
+    base.archivesName.set(apkPrefix)
     resValue("string", "app_name", "Kiwix")
     resValue("string", "app_search_string", "Search Kiwix")
     versionCode = generateVersionCode()
     versionName = generateVersionName()
     manifestPlaceholders["permission"] = "android.permission.MANAGE_EXTERNAL_STORAGE"
   }
-  lintOptions {
-    isCheckDependencies = true
+  lint {
+    checkDependencies = true
   }
 
   buildTypes {
@@ -65,10 +65,15 @@ android {
       }
     }
     create("playStore") {
+      manifestPlaceholders += mapOf()
       initWith(getByName("release"))
-      setMatchingFallbacks("release")
+      matchingFallbacks += "release"
       buildConfigField("boolean", "IS_PLAYSTORE", "true")
       manifestPlaceholders["permission"] = "android.permission.placeholder"
+    }
+    create("nightly") {
+      initWith(getByName("debug"))
+      setMatchingFallbacks("debug")
     }
   }
   bundle {
@@ -87,14 +92,14 @@ android {
 
 play {
   enabled.set(true)
-  serviceAccountCredentials.set(file("../google.json"))
+  serviceAccountCredentials.set(file("../playstore.json"))
   track.set("alpha")
   releaseStatus.set(com.github.triplet.gradle.androidpublisher.ReleaseStatus.DRAFT)
   resolutionStrategy.set(com.github.triplet.gradle.androidpublisher.ResolutionStrategy.FAIL)
 }
 
 dependencies {
-  implementation(Libs.squidb)
+  androidTestImplementation(Libs.leakcanary_android_instrumentation)
 }
 task("generateVersionCodeAndName") {
   val file = File("VERSION_INFO")
@@ -105,4 +110,20 @@ task("generateVersionCodeAndName") {
         "7${generateVersionCode()}"
     )
   }
+}
+
+task("renameTarakFile") {
+  val taraskFile = File("core/src/main/res/values-b+be+tarask/strings.xml")
+  if (taraskFile.exists()) {
+    val taraskOldFile = File("core/src/main/res/values-b+be+tarask+old/strings.xml")
+    if (!taraskOldFile.exists()) taraskOldFile.createNewFile()
+    taraskOldFile.printWriter().use {
+      it.print(taraskFile.readText())
+    }
+    taraskFile.delete()
+  }
+}
+
+tasks.build {
+  dependsOn("renameTarakFile")
 }

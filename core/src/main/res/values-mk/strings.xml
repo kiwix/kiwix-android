@@ -63,8 +63,9 @@
   <string name="pref_language_chooser">Изберете јазик</string>
   <string name="pref_credits">Учесници и лиценци</string>
   <string name="pref_credits_title">Признанија</string>
-  <string name="tts_lang_not_supported">Јазикот на оваа страница не е поддржан, или пак немате воспоставено соодветни јазични податоци. Статијата може да биде неправилно испишана.</string>
+  <string name="tts_lang_not_supported">Јазикот на оваа страница не е поддржан. Статијата може да биде неправилно испишана.</string>
   <string name="no_reader_application_installed">Не можев да најдам воспоставен приложник за овој вид податотека</string>
+  <string name="no_email_application_installed">Воспоставете услужник за е-пошта или пишете ни на %1s</string>
   <string name="no_section_info">Не пронајдов содржински заглавија</string>
   <string name="request_storage">Ќе треба пристап до вашиот склад за да дојдам до вонмрежната содржина</string>
   <string name="request_write_storage">За да преземете ZIM-податотеки ќе ни треба запишувачки пристап до вашиот склад</string>
@@ -87,8 +88,10 @@
   <string name="did_you_know">Дали сте знаеле?</string>
   <string name="undo">Врати</string>
   <string name="tab_closed">Јазичето е затворено</string>
+  <string name="tabs_closed">Јазичињата се затворени</string>
   <string name="bookmark_added">Обележувачот е додаден</string>
   <string name="rate_dialog_title">Дајте ни оценка</string>
+  <string name="rate_dialog_msg">Ако ви се допаѓа %s, би ве змолиле да му дадете оценка. Ви благодариме на поддршката!</string>
   <string name="rate_dialog_positive">Оцени!</string>
   <string name="no_thanks">Не, благодарам</string>
   <string name="rate_dialog_neutral">Подоцна</string>
@@ -130,8 +133,10 @@
   <string name="tts_pause">паузирај</string>
   <string name="tts_resume">продолжи</string>
   <string name="stop">запри</string>
+  <string name="configure_storage_option">Да ја преземам книгата во внатрешен склад?</string>
   <string name="internal_storage">Внатрешен</string>
   <string name="external_storage">Надворешен</string>
+  <string name="configure">Нагоди</string>
   <string name="yes">Да</string>
   <string name="no">Не</string>
   <string name="confirm_stop_download_title">Да го прекинам преземањето?</string>
@@ -189,7 +194,7 @@
   <string name="expand">Прикажи</string>
   <string name="history">Историја</string>
   <string name="history_from_current_book">Историја од сите книги</string>
-  <string name="search_history">Историја на пребарувањето</string>
+  <string name="search_history">Историја на пребарувања</string>
   <string name="selected_items">Избрани %1$d</string>
   <string name="bookmarks_from_current_book">Погл. обележувачи од сите книги</string>
   <string name="search_bookmarks">Пребарај по обележувачите</string>
@@ -276,8 +281,9 @@
   <string name="search_open_in_new_tab">Отвори во ново јазиче</string>
   <string name="reader">Читач</string>
   <string name="no_open_book">Нема отворена книга</string>
-  <string name="open_library">Отворена библиотека</string>
+  <string name="open_library">Отвори библиотека</string>
   <string name="tab_restored">Јазичето е повратено</string>
+  <string name="tabs_restored">Јазичињата се повратени</string>
   <string name="open_drawer">Отвори фиока</string>
   <string name="close_drawer">Затвори фиока</string>
   <string name="how_to_update_content">Како се подновува содржината?</string>
@@ -290,7 +296,7 @@
   <string name="select_folder">Изберете ја папката за надворешно складирање.</string>
   <string name="system_unable_to_grant_permission_message">Системот не може да ја даде дозволата!</string>
   <string name="allow">Дозволи</string>
-  <string name="allow_internet_permission_message">Дајте дозвола за семрежен пристап за преземање на содржините</string>
+  <string name="swipe_down_for_library">Повлечете надолу за Библиотеката</string>
   <string name="no_notes">Нема белешки</string>
   <string name="notes_from_all_books">Погл. белешки од сите книги</string>
   <string name="search_notes">Пребарај белешки</string>
@@ -299,4 +305,16 @@
   <string name="open_article">Отвори статија</string>
   <string name="delete_note_dialog_message">Напомена: Белешките не се избришани од вашиот склад</string>
   <string name="delete_selected_notes">Да ги избришам избраните белешки?</string>
+  <string name="download_tts_language_title">Преземи го јазиков за читање на глас.</string>
+  <string name="download_tts_language_message">Стиснете на копчето „Преземи“. Со тоа автоматски ќе запчне преземањето на саканиот јазик.</string>
+  <string name="external_link_copied_message">Надворешната врска е прекопирана во меѓускладот</string>
+  <string name="read_aloud_service_channel_name">Канал за читање на глас</string>
+  <string name="read_aloud_channel_description">Управување за текст во говор</string>
+  <string name="read_aloud_running">Во тек е читањето на глас</string>
+  <string name="backward_history">Историја нанапред</string>
+  <string name="forward_history">Историја наназад</string>
+  <string name="clear_all_navigation_history_message">Ја чисти сета (наназад, нанапред) историја на прегледувачки преоди</string>
+  <string name="navigation_history_cleared">Историја на прегледувачки преоди</string>
+  <string name="go_to_settings_label">Оди во поставките</string>
+  <string name="request_notification_permission_message">За да го извршите ова дејство, дајте им пристап на известувањата</string>
 </resources>

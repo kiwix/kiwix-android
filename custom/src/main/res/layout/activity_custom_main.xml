@@ -25,14 +25,13 @@
   android:fitsSystemWindows="true"
   tools:ignore="UnusedIds">
 
-  <fragment
+  <androidx.fragment.app.FragmentContainerView
     android:id="@+id/custom_nav_controller"
     android:name="org.kiwix.kiwixmobile.core.main.NavigationHostFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:defaultNavHost="true"
-    app:navGraph="@navigation/custom_nav_graph"
-    tools:ignore="FragmentTagUsage" />
+    app:navGraph="@navigation/custom_nav_graph" />
 
   <com.google.android.material.navigation.NavigationView
     android:id="@+id/drawer_nav_view"

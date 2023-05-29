@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Amire80
 * Duke of Wikipädia
 * Eduardo Addad de Oliveira
 * Eduardoaddad
 * Felipe L. Ewald
 * Freeedusoft
 * HenriqueCrang
+* McDutchie
+* Mello25
+* MohitMali
 * Mordecaista
+* Re demz
+* Robertpontes
 * Rodrigo codignoli
 * Webysther
 -->
@@ -69,8 +75,9 @@
   <string name="pref_language_chooser">Escolha um idioma</string>
   <string name="pref_credits">Contribuintes e Licenças</string>
   <string name="pref_credits_title">Créditos</string>
-  <string name="tts_lang_not_supported">O idioma desta página não é suportado, ou dados do idioma apropriado não estão instalados. O artigo pode não ser lido propriamente.</string>
+  <string name="tts_lang_not_supported">O idioma desta página não é suportado. O artigo pode não ser lido propriamente.</string>
   <string name="no_reader_application_installed">Não foi possível encontrar uma aplicação instalada para esse tipo de arquivo</string>
+  <string name="no_email_application_installed">Por favor instale um serviço de email ou nos envie um email no endereço %1s</string>
   <string name="no_section_info">Nenhum cabeçalho de conteúdo encontrado</string>
   <string name="request_storage">Para acessar conteúdo off-line precisamos de acesso ao seu armazenamento</string>
   <string name="clear_recent_and_tabs_history_dialog">Tem certeza de que deseja excluir o histórico de pesquisa e redefinir todas as guias ativas?</string>
@@ -92,6 +99,7 @@
   <string name="did_you_know">Você sabia?</string>
   <string name="undo">Desfazer</string>
   <string name="tab_closed">Guia fechada</string>
+  <string name="tabs_closed">Guias fechadas</string>
   <string name="bookmark_added">Favorito adicionado</string>
   <string name="rate_dialog_title">Por favor nos avalie</string>
   <string name="rate_dialog_positive">Avalie!</string>
@@ -160,7 +168,7 @@
   <string name="pref_external_link_popup_title">Avisar ao inserir links externos</string>
   <string name="pref_external_link_popup_summary">Exibir pop-up para avisar sobre custos adicionais ou não trabalhar em links off-line.</string>
   <string name="external_link_popup_dialog_title">Entrar no link externo!</string>
-  <string name="external_link_popup_dialog_message">Você está inserindo um link externo. Isso pode levar a custos adicionais para transferência de dados ou não funcionará quando você estiver desconectado. Você quer continuar?</string>
+  <string name="external_link_popup_dialog_message">Você está acessando um link externo. Isso pode levar a custos adicionais para transferência de dados ou não funcionará quando você estiver desconectado. Você quer continuar?</string>
   <string name="do_not_ask_anymore">Não perguntar mais</string>
   <string name="your_languages">Idiomas selecionados:</string>
   <string name="other_languages">Outros idiomas:</string>
@@ -194,7 +202,7 @@
   <string name="expand">Expandir</string>
   <string name="history">Histórico</string>
   <string name="history_from_current_book">Ver histórico de todos os livros</string>
-  <string name="search_history">Histórico de pesquisa</string>
+  <string name="search_history">Pesquisar no histórico</string>
   <string name="selected_items">%1$d selecionado</string>
   <string name="bookmarks_from_current_book">Ver favoritos de todos os livros</string>
   <string name="search_bookmarks">Pesquisar marcadores</string>
@@ -246,8 +254,8 @@
   <string name="nearby_devices">DISPOSITIVOS PRÓXIMOS</string>
   <string name="no_devices_found">Nenhum dispositivo detectado. Toque no botão de pesquisa para tentar novamente.</string>
   <string name="files_for_transfer">ARQUIVOS PARA TRANSFERIR</string>
-  <string name="preparing_files">Preparando arquivos para transferência....</string>
-  <string name="performing_handshake">Realizando protocolo de link....</string>
+  <string name="preparing_files">Preparando fícheiros para transferência…</string>
+  <string name="performing_handshake">Realizando protocolo de link…</string>
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Limpar todas as notas em todos os artigos</string>
   <string name="pref_clear_all_notes_title">Limpar todas as notas</string>
@@ -279,12 +287,18 @@
   <string name="search_open_in_new_tab">Abrir em uma nova guia</string>
   <string name="reader">Leitor</string>
   <string name="no_open_book">Sem livro aberto</string>
-  <string name="open_library">Biblioteca aberta</string>
+  <string name="open_library" fuzzy="true">Biblioteca aberta</string>
   <string name="tab_restored">Guia restaurada</string>
+  <string name="tabs_restored">Guias restauradas</string>
   <string name="open_drawer">Abrir gaveta</string>
   <string name="close_drawer">Fechar gaveta</string>
   <string name="how_to_update_content">Como atualizar o conteúdo?</string>
   <string name="update_content_description">Para atualizar o conteúdo (um arquivo zim), você precisa baixar a versão completa mais recente desse mesmo conteúdo. Você pode fazer isso através da seção de download.</string>
   <string name="allowed">Permitido</string>
   <string name="not_allowed">Não permitido</string>
+  <string name="swipe_down_for_library">Deslize para baixo para exibir a Biblioteca</string>
+  <string name="download_tts_language_title">Baixe este idioma para o recurso de leitura em voz alta</string>
+  <string name="download_tts_language_message">Favor clicar no botão de Download. Ele baixará automaticamente o idioma necessário.</string>
+  <string name="external_link_copied_message">Link externo copiado para a área de transferência</string>
+  <string name="go_to_settings_label">Ir para configurações</string>
 </resources>

@@ -2,8 +2,10 @@
 <!-- Authors:
 * Ganesh Paudel
 * Macofe
+* McDutchie
 * Nirajan pant
 * पर्वत सुबेदी
+* बडा काजी
 * राम प्रसाद जोशी
 * सरोज कुमार ढकाल
 * हिमाल सुबेदी
@@ -11,7 +13,7 @@
 <resources>
   <string name="menu_help">सहायता</string>
   <string name="menu_home">गृह</string>
-  <string name="menu_settings">सेटिङहरू</string>
+  <string name="menu_settings">मेरो अभिरुचिहरू</string>
   <string name="menu_search_in_text">पृष्ठमा खोज्नुहोस्</string>
   <string name="bookmarks">पुस्तक चिनोहरू</string>
   <string name="menu_random_article">कुनै लेख</string>
@@ -79,7 +81,7 @@
   <string name="yes">हो</string>
   <string name="no">होइन</string>
   <string name="confirm_stop_download_title">डाउनलोड रोक्ने हो?</string>
-  <string name="confirm_stop_download_msg">तपाईँ डाउनलोड रद्द गर्न निश्चित हुनुहुन्छ??</string>
+  <string name="confirm_stop_download_msg">तपाईं डाउनलोड रद्द गर्न निश्चित हुनुहुन्छ?</string>
   <string name="download_change_storage">भण्डारण यन्त्र छनौटकर्ता</string>
   <string name="next">अर्को</string>
   <string name="previous">पहिलेको</string>
@@ -91,7 +93,7 @@
   <string name="time_left">बाँकी</string>
   <string name="time_today">आज</string>
   <string name="external_link_popup_dialog_title" fuzzy="true">वाह्य लिङ्कमा जाँदै</string>
-  <string name="external_link_popup_dialog_message">You are entering an external link. This could lead to additional costs for data transfer or will just not work when you are offline. जारी राख्न चाहनुहुन्छ?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">You are entering an external link. This could lead to additional costs for data transfer or will just not work when you are offline. जारी राख्न चाहनुहुन्छ?</string>
   <string name="do_not_ask_anymore">फेरि नसोध्नुहोस्</string>
   <string name="your_languages">छानिएको भाष:</string>
   <string name="other_languages">अन्य भाषाहरू:</string>
@@ -105,4 +107,7 @@
   <string name="delete_selected_history">रोजिएको इतिहास मेटाउने?</string>
   <string name="delete_bookmarks">सबै बुकमार्कहरू मेटाउने?</string>
   <string name="delete_selected_bookmarks">रोजिएका बुकमार्कहरू मेटाउने?</string>
+  <string name="no_notes">त्यहाँ कुनै टिप्पणीहरू छैनन्</string>
+  <string name="search_notes">टिप्पणीहरू खोज्नुहोस्</string>
+  <string name="open_note">टिप्पणी खोल्नुहोस्</string>
 </resources>

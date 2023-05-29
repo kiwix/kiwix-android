@@ -6,11 +6,13 @@
 * DDPAT
 * Ice bulldog
 * Lxlalexlxl
+* McDutchie
 * Movses
 * Piramidion
 * Vlad5250
 * Ypryima
 * Ата
+* Пан Хаунд
 -->
 <resources>
   <string name="menu_help">Довідка</string>
@@ -27,7 +29,7 @@
   <string name="menu_wifi_hotspot">Розташувати книги</string>
   <string name="save_media">Зберегти медіафайл</string>
   <string name="save_media_error">Сталася помилка при спробі зберегти медіафайл!</string>
-  <string name="save_media_saved" fuzzy="true">Медіафайл збережено як %s до Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Медіафайл збережено як %s до Downloads/media/org.kiwix…/</string>
   <string name="search_label">Пошук</string>
   <string name="choose_file">Виберіть файл вмісту (*.zim)</string>
   <string name="open_in_new_tab">Відкрити посилання в новій вкладці?</string>
@@ -58,6 +60,7 @@
   <string name="server_started_message">Уведіть цю IP адресу у ваш браузер, аби отримати доступ до серверу %s</string>
   <string name="share_host_address">Поділіться URL-адресою за допомогою інших програм</string>
   <string name="error_file_not_found">Помилка: вибраний ZIM файл неможливо знайти.</string>
+  <string name="unable_to_read_zim_file">Неможливо прочитати цей файл zim!</string>
   <string name="zim_not_opened">Неможливо відкрити файл zim</string>
   <string name="error_file_invalid">Помилка: вибраний файл не є вірним файлом ZIM.</string>
   <string name="error_article_url_not_found">Помилка: завантаження статті (Url: %1$s) не вдалося.</string>
@@ -72,10 +75,11 @@
   <string name="pref_language_chooser">Оберіть мову</string>
   <string name="pref_credits">Дописувачі й ліцензії</string>
   <string name="pref_credits_title">Автори</string>
-  <string name="tts_lang_not_supported">Мова цієї сторінки не підтримується, або не було встановлено відповідні дані мови. Стаття може не читатись правильним чином.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Мова цієї сторінки не підтримується, або не було встановлено відповідні дані мови. Стаття може не читатись правильним чином.</string>
   <string name="no_reader_application_installed">Не вдалось знайти встановлений застосунок для файлу цього типу</string>
   <string name="no_section_info">Не знайдено заголовків вмісту</string>
   <string name="request_storage">Для доступу до офлайнового контенту нам потрібен доступ до Вашого зберігання даних</string>
+  <string name="request_write_storage">Щоб завантажити файли zim, нам потрібен доступ для запису до вашого сховища</string>
   <string name="clear_recent_and_tabs_history_dialog">Ви впевнені, що хочете вилучити свою історію пошуку і скинути всі активні вкладки?</string>
   <string name="delete_recent_search_item">Вилучити цей елемент?</string>
   <string name="pref_clear_all_history_title">Очистити історію</string>
@@ -140,6 +144,7 @@
   <string name="stop">зупинити</string>
   <string name="internal_storage">Внутрішнє</string>
   <string name="external_storage">Зовнішні</string>
+  <string name="configure">Налаштувати</string>
   <string name="yes">Так</string>
   <string name="no">Ні</string>
   <string name="confirm_stop_download_title">Зупинити завантаження?</string>
@@ -197,7 +202,7 @@
   <string name="expand">Розгорнути</string>
   <string name="history">Історія</string>
   <string name="history_from_current_book">Подивитися історію з усіх книг</string>
-  <string name="search_history">Історія пошуку</string>
+  <string name="search_history" fuzzy="true">Історія пошуку</string>
   <string name="selected_items">%1$d вибрано</string>
   <string name="bookmarks_from_current_book">Перегляд закладок із усіх книг</string>
   <string name="search_bookmarks">Шукати у закладках</string>
@@ -249,8 +254,8 @@
   <string name="nearby_devices">ПРИСТРОЇ ПОРУЧ</string>
   <string name="no_devices_found">Пристрої не знайдено. Натисніть кнопку Пошук, щоб спробувати ще раз.</string>
   <string name="files_for_transfer">ФАЙЛИ ДЛЯ ПЕРЕДАЧІ</string>
-  <string name="preparing_files">Підготовка файлів для передачі….</string>
-  <string name="performing_handshake">Відбувається «рукостискання»…</string>
+  <string name="preparing_files" fuzzy="true">Підготовка файлів для передачі….</string>
+  <string name="performing_handshake" fuzzy="true">Відбувається «рукостискання»…</string>
   <string name="status">Статус</string>
   <string name="pref_clear_all_notes_summary">Очистити всі нотатки в усіх статтях</string>
   <string name="pref_clear_all_notes_title">Очистити всі нотатки</string>
@@ -293,4 +298,5 @@
   <string name="all_files_permission_needed_message">Щоб отримати доступ до всіх файлів zim на пристрої, нам потрібно мати дозвіл на всі файли</string>
   <string name="allowed">Дозволено</string>
   <string name="not_allowed">Не дозволено</string>
+  <string name="allow">Дозволити</string>
 </resources>

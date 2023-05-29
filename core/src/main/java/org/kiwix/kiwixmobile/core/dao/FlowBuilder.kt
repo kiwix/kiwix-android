@@ -21,7 +21,7 @@ package org.kiwix.kiwixmobile.core.dao
 import io.objectbox.query.Query
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
@@ -30,7 +30,7 @@ class FlowBuilder @Inject constructor() {
   fun <T> buildCallbackFlow(query: Query<T>) =
     callbackFlow<List<T>> {
       val subscription = query.subscribe()
-        .observer { sendBlocking(it) }
+        .observer { trySendBlocking(it) }
       awaitClose(subscription::cancel)
     }
 }

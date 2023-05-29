@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Pacha Tchernof
 * פוילישער
 -->
 <resources>
@@ -28,6 +29,7 @@
   <string name="pref_language_chooser">קלויבט א שפראך</string>
   <string name="pref_credits_title">קרעדיטן</string>
   <string name="delete">אויסמעקן</string>
+  <string name="cancel">אַנולירן</string>
   <string name="did_you_know">צי האט איר געוואוסט?</string>
   <string name="undo">אַנולירן</string>
   <string name="library">ביבליאטעק</string>

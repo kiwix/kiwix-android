@@ -24,10 +24,13 @@ import android.os.Handler
 import android.os.Message
 import android.util.AttributeSet
 import android.view.ContextMenu
-import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN
+import android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
 import android.webkit.WebView
-import com.cprcrack.videowebview.VideoEnabledWebView
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import io.reactivex.disposables.CompositeDisposable
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
@@ -38,6 +41,8 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
+import org.kiwix.videowebview.VideoEnabledWebChromeClient.ToggledFullscreenCallback
+import org.kiwix.videowebview.VideoEnabledWebView
 import javax.inject.Inject
 
 private const val INITIAL_SCALE = 100
@@ -59,8 +64,23 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
 
   private val compositeDisposable = CompositeDisposable()
 
-  private fun setWindowVisibility(systemUiVisibility: Int) {
-    (context as Activity).window.decorView.systemUiVisibility = systemUiVisibility
+  private fun setWindowVisibility(isFullScreen: Boolean) {
+    val window = (context as Activity).window
+    WindowCompat.setDecorFitsSystemWindows(window, !isFullScreen)
+    WindowInsetsControllerCompat(window, window.decorView.rootView).apply {
+      if (isFullScreen) {
+        hide(WindowInsetsCompat.Type.systemBars())
+        systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        window.clearFlags(FLAG_FULLSCREEN)
+        window.addFlags(FLAG_FULLSCREEN)
+        window.decorView.rootView.requestLayout()
+      } else {
+        show(WindowInsetsCompat.Type.systemBars())
+        window.clearFlags(FLAG_FULLSCREEN)
+        window.addFlags(FLAG_FORCE_NOT_FULLSCREEN)
+        window.decorView.rootView.requestLayout()
+      }
+    }
   }
 
   init {
@@ -83,19 +103,19 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
     clearCache(true)
     setWebViewClient(webViewClient)
     webChromeClient = KiwixWebChromeClient(callback, nonVideoView, videoView, this).apply {
-      setOnToggledFullscreen { fullscreen ->
-        setWindowVisibility(
-          if (fullscreen) View.SYSTEM_UI_FLAG_LOW_PROFILE else View.SYSTEM_UI_FLAG_VISIBLE
-        )
-        callback.onFullscreenVideoToggled(fullscreen)
-      }
+      setOnToggledFullscreen(object : ToggledFullscreenCallback {
+        override fun toggledFullscreen(fullscreen: Boolean) {
+          setWindowVisibility(fullscreen)
+          callback.onFullscreenVideoToggled(fullscreen)
+        }
+      })
     }
   }
 
   override fun performLongClick(): Boolean {
     val result = hitTestResult
     if (result.type == HitTestResult.SRC_ANCHOR_TYPE) {
-      callback.webViewLongClick(result.extra)
+      result.extra?.let(callback::webViewLongClick)
       return true
     }
     return super.performLongClick()

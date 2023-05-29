@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Meno25
 * ديفيد
 -->
 <resources>
   <string name="file_system_does_not_support_4gb">نظام الملفات الخاص بك لا يدعم الملفات التي تزيد عن 4 جيجابايت</string>
   <string name="detecting_file_system">اكتشاف ما إذا كان نظام الملفات يمكنه إنشاء ملفات 4 جيجابايت</string>
   <string name="cannot_open_file">فشل فتح الملف؛\nتُرجَى محاولة البحث عن هذا الملف في علامة تبويب الجهاز في مكتبتك</string>
+  <string name="send_files_title">أرسال الملفات</string>
+  <string name="receive_files_title">تلقي الملفات</string>
+  <string name="no_app_found_to_open">لم يتم العثور على تطبيق لتحديد ملف zim!</string>
+  <string name="select_zim_file">حدد ملف zim لقراءته</string>
 </resources>

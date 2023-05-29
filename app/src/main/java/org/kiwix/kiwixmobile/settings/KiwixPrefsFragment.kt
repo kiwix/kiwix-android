@@ -25,6 +25,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
@@ -40,22 +43,28 @@ class KiwixPrefsFragment : CorePrefsFragment() {
   }
 
   override fun setStorage() {
-    findPreference<Preference>(PREF_STORAGE)?.title = getString(
-      if (sharedPreferenceUtil.prefStorage == internalStorage()?.let(
-          sharedPreferenceUtil::getPublicDirectoryPath
-        )
-      ) R.string.internal_storage
-      else R.string.external_storage
-    )
-    findPreference<Preference>(PREF_STORAGE)?.summary = storageCalculator.calculateAvailableSpace()
+    sharedPreferenceUtil?.let {
+      val internalStorage = runBlocking { internalStorage() }
+      findPreference<Preference>(PREF_STORAGE)?.title = getString(
+        if (it.prefStorage == internalStorage?.let(
+            it::getPublicDirectoryPath
+          )
+        ) R.string.internal_storage
+        else R.string.external_storage
+      )
+    }
+    findPreference<Preference>(PREF_STORAGE)?.summary = storageCalculator?.calculateAvailableSpace()
   }
 
-  private fun internalStorage(): String? =
+  private suspend fun internalStorage(): String? = withContext(Dispatchers.IO) {
     ContextCompat.getExternalFilesDirs(requireContext(), null).firstOrNull()?.path
+  }
 
   private fun setMangeExternalStoragePermission() {
     val permissionPref = findPreference<Preference>(PREF_MANAGE_EXTERNAL_STORAGE_PERMISSION)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !sharedPreferenceUtil.isPlayStoreBuild) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+      sharedPreferenceUtil?.isPlayStoreBuild == false
+    ) {
       showPermissionPreference()
       val externalStorageManager = Environment.isExternalStorageManager()
       if (externalStorageManager) {

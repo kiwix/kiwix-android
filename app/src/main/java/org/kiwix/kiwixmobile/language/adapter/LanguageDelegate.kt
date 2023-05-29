@@ -19,9 +19,10 @@
 package org.kiwix.kiwixmobile.language.adapter
 
 import android.view.ViewGroup
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.adapter.AbsDelegateAdapter
-import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.inflate
+import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.viewBinding
+import org.kiwix.kiwixmobile.databinding.HeaderDateBinding
+import org.kiwix.kiwixmobile.databinding.ItemLanguageBinding
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.HeaderItem
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.language.adapter.LanguageListViewHolder.HeaderViewHolder
@@ -34,7 +35,9 @@ sealed class LanguageDelegate<I : LanguageListItem, out VH : LanguageListViewHol
     override val itemClass = HeaderItem::class.java
 
     override fun createViewHolder(parent: ViewGroup) =
-      HeaderViewHolder(parent.inflate(R.layout.header_date, false))
+      HeaderViewHolder(
+        parent.viewBinding(HeaderDateBinding::inflate, false)
+      )
   }
 
   class LanguageItemDelegate(private val clickAction: (LanguageItem) -> Unit) :
@@ -42,6 +45,9 @@ sealed class LanguageDelegate<I : LanguageListItem, out VH : LanguageListViewHol
     override val itemClass = LanguageItem::class.java
 
     override fun createViewHolder(parent: ViewGroup) =
-      LanguageViewHolder(parent.inflate(R.layout.item_language, false), clickAction)
+      LanguageViewHolder(
+        parent.viewBinding(ItemLanguageBinding::inflate, false),
+        clickAction
+      )
   }
 }

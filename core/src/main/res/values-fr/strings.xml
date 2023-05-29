@@ -9,6 +9,8 @@
 * Gomoko
 * I'm mender
 * Kelson
+* McDutchie
+* MohitMali
 * Stephane
 * The RedBurn
 * Thibaut120094
@@ -79,8 +81,9 @@
   <string name="pref_language_chooser">Choisissez une langue</string>
   <string name="pref_credits">Contributeurs et licences</string>
   <string name="pref_credits_title">Remerciements</string>
-  <string name="tts_lang_not_supported">La langue de cette page n’est pas prise en charge ou les données linguistiques appropriées n’ont pas été installées. L’article risque d’être difficile à lire.</string>
+  <string name="tts_lang_not_supported">La langue de cette page n’est pas prise en charge. L’article peut ne pas être lu correctement.</string>
   <string name="no_reader_application_installed">Impossible de trouver une application installée pour ce type de fichier</string>
+  <string name="no_email_application_installed">Veuillez installer un fournisseur de service de messagerie ou envoyez-nous un courriel à %1s</string>
   <string name="no_section_info">Aucun entête de contenu trouvé</string>
   <string name="request_storage">Pour accéder au contenu hors connexion, nous avons besoin d’un accès à votre espace de stockage</string>
   <string name="request_write_storage">Télécharger des fichiers ZIM nécessite l’accès en écriture à votre stockage local.</string>
@@ -99,12 +102,14 @@
   <string name="cancel">Annuler</string>
   <string name="delete_specific_search_toast">Recherche récente supprimée</string>
   <string name="hint_contents_drawer_message">Vous pouvez cliquer à gauche pour voir le contenu de cet article</string>
-  <string name="got_it">C’est bon !</string>
+  <string name="got_it">Compris !</string>
   <string name="did_you_know">Le saviez-vous ?</string>
   <string name="undo">Annuler</string>
   <string name="tab_closed">Onglet fermé</string>
+  <string name="tabs_closed">Onglets fermés</string>
   <string name="bookmark_added">Marque-page ajouté</string>
   <string name="rate_dialog_title">Merci de nous évaluer</string>
+  <string name="rate_dialog_msg">Si vous aimez utiliser %s, veuillez prendre un moment pour l’évaluer. Merci pour votre aide !</string>
   <string name="rate_dialog_positive">Donnez nous une note !</string>
   <string name="no_thanks">Non merci</string>
   <string name="rate_dialog_neutral">Plus tard</string>
@@ -146,12 +151,14 @@
   <string name="tts_pause">pause</string>
   <string name="tts_resume">reprendre</string>
   <string name="stop">arrêter</string>
+  <string name="configure_storage_option">Télécharger le livre sur la mémoire de stockage interne ?</string>
   <string name="internal_storage">Interne</string>
   <string name="external_storage">Externe</string>
+  <string name="configure">Configurer</string>
   <string name="yes">Oui</string>
   <string name="no">Non</string>
   <string name="confirm_stop_download_title">Arrêter le téléchargement ?</string>
-  <string name="confirm_stop_download_msg">Êtes-vous sûr de vouloir arrêter ce téléchargement ?</string>
+  <string name="confirm_stop_download_msg">Êtes-vous sûr(e) de vouloir arrêter ce téléchargement ?</string>
   <string name="download_change_storage">Sélecteur de périphérique de stockage</string>
   <string name="tts_not_enabled">La synthèse vocale n’est pas activée pour ce fichier ZIM</string>
   <string name="texttospeech_initialization_failed">L’initialisation de Texte en Paroles a échoué. Veuillez réessayer.</string>
@@ -176,7 +183,7 @@
   <string name="your_languages">Langues sélectionnées :</string>
   <string name="other_languages">Autres langues :</string>
   <string name="no_items_msg">Aucun élément disponible</string>
-  <string name="crash_title">Hé bien… c’est embarrassant.</string>
+  <string name="crash_title">Eh bien, c’est embarrassant !</string>
   <string name="crash_description">Il semble que nous ayons planté.\n\nPourriez-vous nous aider à corriger ce problème en envoyant l’information suivante ?</string>
   <string name="crash_checkbox_language">Vos paramètres de langue</string>
   <string name="crash_checkbox_zimfiles">Une liste de vos fichiers ZIM</string>
@@ -200,7 +207,7 @@
   <string name="go_to_next_page">Aller à la page suivante</string>
   <string name="table_of_contents">Table des matières</string>
   <string name="select_languages">Sélectionner les langues</string>
-  <string name="save_languages">Sauvegarder les langues</string>
+  <string name="save_languages">Enregistrer les langues</string>
   <string name="send_feedback">Envoyer un avis</string>
   <string name="expand">Développer</string>
   <string name="history">Historique</string>
@@ -213,7 +220,7 @@
   <string name="close_all_tabs">Fermer tous les onglets</string>
   <string name="pending_state">En attente</string>
   <string name="running_state">En cours</string>
-  <string name="complete">Terminer</string>
+  <string name="complete">Terminé</string>
   <string name="paused_state">En pause</string>
   <string name="failed_state">Échec : %s</string>
   <string name="save">Enregistrer</string>
@@ -294,6 +301,7 @@
   <string name="no_open_book">Aucun livre ouvert</string>
   <string name="open_library">Ouvrir la bibliothèque</string>
   <string name="tab_restored">Onglet restauré</string>
+  <string name="tabs_restored">Onglets restaurés</string>
   <string name="open_drawer">Ouvrir le tiroir</string>
   <string name="close_drawer">Fermer le tiroir</string>
   <string name="how_to_update_content">Comment actualiser le contenu ?</string>
@@ -306,7 +314,7 @@
   <string name="select_folder">Veuillez sélectionner un dossier pour le stockage externe.</string>
   <string name="system_unable_to_grant_permission_message">Le système n’a pas pu accorder le droit d’accès !</string>
   <string name="allow">Autoriser</string>
-  <string name="allow_internet_permission_message">Veuillez autoriser le droit sur Internet de télécharger le contenu.</string>
+  <string name="swipe_down_for_library">Balayez vers le bas pour la bibliothèque</string>
   <string name="no_notes">Aucune note</string>
   <string name="notes_from_all_books">Afficher les notes de tous les livres</string>
   <string name="search_notes">Rechercher des notes</string>
@@ -315,4 +323,16 @@
   <string name="open_article">Ouvrir l’article</string>
   <string name="delete_note_dialog_message">Remarque : les notes ne sont pas supprimées de votre espace de stockage</string>
   <string name="delete_selected_notes">Supprimer les notes sélectionnées ?</string>
+  <string name="download_tts_language_title">Télécharger cette langue pour la fonctionnalité de lecture à haute voix</string>
+  <string name="download_tts_language_message">Veuillez cliquer sur le bouton « Télécharger » pour télécharger automatiquement les données dans la langue requise.</string>
+  <string name="external_link_copied_message">Lien externe copié dans le presse-papiers</string>
+  <string name="read_aloud_service_channel_name">Canal de lecture à voix haute</string>
+  <string name="read_aloud_channel_description">Contrôles de synthèse vocale.</string>
+  <string name="read_aloud_running">Exécution de la la lecture à voix haute</string>
+  <string name="backward_history">Reculer dans l’historique plus ancien</string>
+  <string name="forward_history">Avancer dans l’historique plus récent</string>
+  <string name="clear_all_navigation_history_message">Efface tout l’historique de navigation (en arrière et en avant)</string>
+  <string name="navigation_history_cleared">Historique de navigation effacé</string>
+  <string name="go_to_settings_label">Aller aux paramètres</string>
+  <string name="request_notification_permission_message">Pour effectuer cette action, veuillez accorder l’accès aux notifications</string>
 </resources>

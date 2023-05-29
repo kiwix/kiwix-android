@@ -4,7 +4,6 @@ buildscript {
   repositories {
     google()
     mavenCentral()
-    jcenter()
     maven { setUrl("https://jitpack.io") }
   }
 
@@ -21,7 +20,7 @@ apply(plugin = "io.objectbox")
 apply(plugin = "com.jakewharton.butterknife")
 ext {
   set("versionMajor", 3)
-  set("versionMinor", 6)
+  set("versionMinor", 7)
   set("versionPatch", 0)
 }
 
@@ -64,12 +63,9 @@ dependencies {
   if (!shouldUseLocalVersion()) {
     api(Libs.kiwixlib)
   } else {
-    implementation("com.getkeepsafe.relinker:relinker:1.3.1")
+    implementation("com.getkeepsafe.relinker:relinker:1.4.5")
     api(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))
   }
-
-  // SquiDB
-  implementation(Libs.squidb)
 
   // Document File
   implementation(Libs.select_folder_document_file)

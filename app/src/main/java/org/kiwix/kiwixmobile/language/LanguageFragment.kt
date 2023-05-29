@@ -26,13 +26,14 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.activity_language.language_progressbar
-import kotlinx.android.synthetic.main.activity_language.language_recycler_view
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -41,6 +42,7 @@ import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
+import org.kiwix.kiwixmobile.databinding.ActivityLanguageBinding
 import org.kiwix.kiwixmobile.language.adapter.LanguageAdapter
 import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.HeaderDelegate
 import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.LanguageItemDelegate
@@ -61,6 +63,7 @@ class LanguageFragment : BaseFragment() {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
   private val compositeDisposable = CompositeDisposable()
+  private var activityLanguageBinding: ActivityLanguageBinding? = null
 
   private val languageAdapter =
     LanguageAdapter(
@@ -82,7 +85,7 @@ class LanguageFragment : BaseFragment() {
       it.setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp)
       it.setTitle(R.string.select_languages)
     }
-    language_recycler_view.run {
+    activityLanguageBinding?.languageRecyclerView?.run {
       adapter = languageAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
@@ -103,8 +106,38 @@ class LanguageFragment : BaseFragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    setHasOptionsMenu(true)
-    return inflater.inflate(R.layout.activity_language, container, false)
+    setupMenu()
+    activityLanguageBinding = ActivityLanguageBinding.inflate(inflater, container, false)
+    return activityLanguageBinding?.root
+  }
+
+  private fun setupMenu() {
+    (requireActivity() as MenuHost).addMenuProvider(
+      object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+          menuInflater.inflate(R.menu.menu_language, menu)
+          val search = menu.findItem(R.id.menu_language_search)
+          (search.actionView as SearchView).setOnQueryTextListener(
+            SimpleTextListener {
+              languageViewModel.actions.offer(Filter(it))
+            }
+          )
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+          return when (menuItem.itemId) {
+            R.id.menu_language_save -> {
+              languageViewModel.actions.offer(Action.SaveAll)
+              closeKeyboard()
+              true
+            }
+            else -> false
+          }
+        }
+      },
+      viewLifecycleOwner,
+      Lifecycle.State.RESUMED
+    )
   }
 
   override fun onDestroy() {
@@ -113,33 +146,16 @@ class LanguageFragment : BaseFragment() {
   }
 
   private fun render(state: State) = when (state) {
-    Loading -> language_progressbar.show()
+    Loading -> activityLanguageBinding?.languageProgressbar?.show()
     is Content -> {
-      language_progressbar.hide()
+      activityLanguageBinding?.languageProgressbar?.hide()
       languageAdapter.items = state.viewItems
     }
     Saving -> Unit
   }
 
-  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    super.onCreateOptionsMenu(menu, inflater)
-    inflater.inflate(R.menu.menu_language, menu)
-    val search = menu.findItem(R.id.menu_language_search)
-    (search.actionView as SearchView).setOnQueryTextListener(
-      SimpleTextListener {
-        languageViewModel.actions.offer(Filter(it))
-      }
-    )
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    return when (item.itemId) {
-      R.id.menu_language_save -> {
-        languageViewModel.actions.offer(Action.SaveAll)
-        closeKeyboard()
-        true
-      }
-      else -> super.onOptionsItemSelected(item)
-    }
+  override fun onDestroyView() {
+    super.onDestroyView()
+    activityLanguageBinding = null
   }
 }

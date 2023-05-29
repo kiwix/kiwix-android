@@ -24,6 +24,7 @@ const val CONTACT_EMAIL_ADDRESS = "android@kiwix.org"
 const val REQUEST_STORAGE_PERMISSION = 1
 const val REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE = 3
 const val REQUEST_SELECT_FOLDER_PERMISSION = 4
+const val REQUEST_POST_NOTIFICATION_PERMISSION = 4
 
 // Tags
 const val TAG_FILE_SEARCHED = "searchedarticle"
@@ -38,6 +39,7 @@ const val TAG_FROM_TAB_SWITCHER = "fromtabswitcher"
 const val EXTRA_IS_WIDGET_VOICE = "isWidgetVoice"
 const val HOTSPOT_SERVICE_CHANNEL_ID = "hotspotService"
 const val OLD_PROVIDER_DOMAIN = "org.kiwix.zim.base"
+const val READ_ALOUD_SERVICE_CHANNEL_ID = "readAloudService"
 
 // For Storage select dialog
 const val INTERNAL_SELECT_POSITION = 0
@@ -51,3 +53,6 @@ const val CONNECT_TIME_OUT = 1L
 
 // For autoRetryMaxAttempts in download zim file
 const val AUTO_RETRY_MAX_ATTEMPTS = 20
+
+// Default port for http request
+const val DEFAULT_PORT = 8080

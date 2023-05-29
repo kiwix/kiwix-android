@@ -45,44 +45,51 @@ sealed class KiwixDialog(
   object LocationPermissionRationale : KiwixDialog(
     null,
     R.string.permission_rationale_location,
-    android.R.string.yes,
+    android.R.string.ok,
     android.R.string.cancel
   )
 
   object LocationPermissionRationaleOnHostZimFile : KiwixDialog(
     null,
     R.string.permission_rationale_location_on_host_zim_file,
-    android.R.string.yes,
+    android.R.string.ok,
     android.R.string.cancel
   )
 
   object NearbyWifiPermissionRationaleOnHostZimFile : KiwixDialog(
     null,
     R.string.permission_rationale_location_on_host_zim_file,
-    android.R.string.yes,
+    android.R.string.ok,
     android.R.string.cancel
   )
 
   object StoragePermissionRationale : KiwixDialog(
     null,
     R.string.request_storage,
-    android.R.string.yes,
+    android.R.string.ok,
     android.R.string.cancel
   )
 
   object WriteStoragePermissionRationale : KiwixDialog(
     null,
     R.string.request_write_storage,
-    android.R.string.yes,
+    android.R.string.ok,
+    android.R.string.cancel
+  )
+
+  object NotificationPermissionDialog : KiwixDialog(
+    null,
+    R.string.request_notification_permission_message,
+    android.R.string.ok,
     android.R.string.cancel
   )
 
   object EnableWifiP2pServices : KiwixDialog(
-    null, R.string.request_enable_wifi, R.string.yes, android.R.string.no
+    null, R.string.request_enable_wifi, R.string.yes, android.R.string.cancel
   )
 
   object EnableLocationServices : KiwixDialog(
-    null, R.string.request_enable_location, R.string.yes, android.R.string.no
+    null, R.string.request_enable_location, R.string.yes, android.R.string.cancel
   )
 
   object TurnOffHotspotManually : KiwixDialog(
@@ -95,7 +102,7 @@ sealed class KiwixDialog(
   object ReadPermissionRequired : KiwixDialog(
     R.string.storage_permission_denied,
     R.string.grant_read_storage_permission,
-    R.string.go_to_settings,
+    R.string.go_to_settings_label,
     null,
     cancelable = false
   )
@@ -191,6 +198,13 @@ sealed class KiwixDialog(
     negativeMessage = R.string.cancel
   )
 
+  object ClearAllNavigationHistory : KiwixDialog(
+    R.string.clear_all_history_dialog_title,
+    R.string.clear_all_navigation_history_message,
+    positiveMessage = R.string.delete,
+    negativeMessage = R.string.cancel
+  )
+
   object ClearAllNotes : KiwixDialog(
     R.string.delete_notes_confirmation_msg,
     message = null,
@@ -218,6 +232,13 @@ sealed class KiwixDialog(
     null,
     R.string.confirmation_alert_dialog_message,
     R.string.yes,
+    android.R.string.cancel
+  )
+
+  object DownloadTTSLanguage : KiwixDialog(
+    R.string.download_tts_language_title,
+    R.string.download_tts_language_message,
+    R.string.download,
     android.R.string.cancel
   )
 

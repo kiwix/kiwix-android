@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.dao
 
+import android.annotation.SuppressLint
 import io.mockk.CapturingSlot
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -36,7 +37,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity_
-import org.kiwix.kiwixmobile.core.data.local.entity.Bookmark
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.sharedFunctions.book
@@ -63,6 +63,7 @@ internal class NewBookDaoTest {
       newBookDao.books().test().assertValues(listOf(BookOnDisk(expectedEntity)))
     }
 
+    @SuppressLint("CheckResult")
     @Test
     fun `books deletes entities whose file does not exist`() {
       val (_, deletedEntity) = expectEmissionOfExistingAndNotExistingBook()
@@ -108,7 +109,11 @@ internal class NewBookDaoTest {
       val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk(relaxed = true)
       every { box.query() } returns queryBuilder
       every {
-        queryBuilder.`in`(BookOnDiskEntity_.file, arrayOf(distinctBook.file.path))
+        queryBuilder.`in`(
+          BookOnDiskEntity_.file,
+          arrayOf(distinctBook.file.path),
+          QueryBuilder.StringOrder.CASE_INSENSITIVE
+        )
       } returns queryBuilder
       val query: Query<BookOnDiskEntity> = mockk(relaxed = true)
       every { queryBuilder.build() } returns query
@@ -126,7 +131,11 @@ internal class NewBookDaoTest {
       val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk(relaxed = true)
       every { box.query() } returns queryBuilder
       every {
-        queryBuilder.`in`(BookOnDiskEntity_.file, arrayOf(distinctBook.file.path))
+        queryBuilder.`in`(
+          BookOnDiskEntity_.file,
+          arrayOf(distinctBook.file.path),
+          QueryBuilder.StringOrder.CASE_INSENSITIVE
+        )
       } returns queryBuilder
       val query: Query<BookOnDiskEntity> = mockk(relaxed = true)
       every { queryBuilder.build() } returns query
@@ -144,13 +153,21 @@ internal class NewBookDaoTest {
       val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk()
       every { box.query() } returns queryBuilder
       every {
-        queryBuilder.`in`(BookOnDiskEntity_.file, arrayOf(distinctBook.file.path))
+        queryBuilder.`in`(
+          BookOnDiskEntity_.file,
+          arrayOf(distinctBook.file.path),
+          QueryBuilder.StringOrder.CASE_INSENSITIVE
+        )
       } returns queryBuilder
       val query: Query<BookOnDiskEntity> = mockk()
       every { queryBuilder.build() } returns query
       every { query.find() } returns listOf()
       every {
-        queryBuilder.`in`(BookOnDiskEntity_.bookId, arrayOf(distinctBook.book.id))
+        queryBuilder.`in`(
+          BookOnDiskEntity_.bookId,
+          arrayOf(distinctBook.book.id),
+          QueryBuilder.StringOrder.CASE_INSENSITIVE
+        )
       } returns queryBuilder
       every { query.remove() } returns 0L
       slot.captured.call()
@@ -171,37 +188,7 @@ internal class NewBookDaoTest {
     every { box.store.callInTx(capture(slot)) } returns Unit
     newBookDao.migrationInsert(listOf(book))
     slot.captured.call()
-    verify { box.put(listOf(BookOnDiskEntity(BookOnDisk(book = book, file = book.file)))) }
-  }
-
-  @Test
-  fun `getFavIconAndZimFile with no result returns pair with null values`() {
-    val bookmark: Bookmark = mockk()
-    expectGetFavIconAndZimFileWith(bookmark, listOf())
-    assertThat(newBookDao.getFavIconAndZimFile(bookmark)).isEqualTo(Pair(null, null))
-  }
-
-  @Test
-  fun `getFavIconAndZimFile with result returns valid pair`() {
-    val bookmark: Bookmark = mockk()
-    val bookOnDiskEntity: BookOnDiskEntity = bookOnDiskEntity()
-    expectGetFavIconAndZimFileWith(bookmark, listOf(bookOnDiskEntity))
-    assertThat(newBookDao.getFavIconAndZimFile(bookmark))
-      .isEqualTo(Pair(bookOnDiskEntity.favIcon, bookOnDiskEntity.file.path))
-  }
-
-  private fun expectGetFavIconAndZimFileWith(
-    bookmark: Bookmark,
-    queryResult: List<BookOnDiskEntity>
-  ) {
-    val expectedZimId = "zimId"
-    every { bookmark.zimId } returns expectedZimId
-    val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk()
-    every { box.query() } returns queryBuilder
-    every { queryBuilder.equal(BookOnDiskEntity_.bookId, expectedZimId) } returns queryBuilder
-    val query: Query<BookOnDiskEntity> = mockk()
-    every { queryBuilder.build() } returns query
-    every { query.find() } returns queryResult
+    verify { box.put(listOf(BookOnDiskEntity(BookOnDisk(book = book, file = book.file!!)))) }
   }
 
   @Test
@@ -209,7 +196,13 @@ internal class NewBookDaoTest {
     val downloadTitle = "title"
     val queryBuilder: QueryBuilder<BookOnDiskEntity> = mockk()
     every { box.query() } returns queryBuilder
-    every { queryBuilder.endsWith(BookOnDiskEntity_.file, downloadTitle) } returns queryBuilder
+    every {
+      queryBuilder.endsWith(
+        BookOnDiskEntity_.file,
+        downloadTitle,
+        QueryBuilder.StringOrder.CASE_INSENSITIVE
+      )
+    } returns queryBuilder
     val query: Query<BookOnDiskEntity> = mockk()
     every { queryBuilder.build() } returns query
     val bookOnDiskEntity: BookOnDiskEntity = bookOnDiskEntity()

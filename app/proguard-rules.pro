@@ -25,7 +25,7 @@
 ########################
 -dontobfuscate
 
--keepclassmembers class com.cprcrack.videowebview.VideoEnabledWebView$JavascriptInterface { public *; }
+-keepclassmembers class org.kiwix.videowebview.VideoEnabledWebView$JavascriptInterface { public *; }
 
 #keep everything in kiwixlib
 -keep class org.kiwix.kiwixlib.** { *; }
@@ -41,4 +41,11 @@
 
 -keepclassmembers class * {
     @org.simpleframework.xml.* *;
+}
+
+## keep everything in MetaLinkNetworkEntity.kt
+
+-keepnames class org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity$*
+-keepclassmembers class org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity$* {
+    <init>(...);
 }

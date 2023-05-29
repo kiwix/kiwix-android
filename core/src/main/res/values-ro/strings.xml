@@ -2,7 +2,9 @@
 <!-- Authors:
 * Fitoschido
 * MSClaudiu
+* McDutchie
 * Minisarm
+* MohitMali
 * Turbojet
 -->
 <resources>
@@ -65,7 +67,7 @@
   <string name="pref_language_chooser">Alegeți o limbă</string>
   <string name="pref_credits">Contribuitori și Licențe</string>
   <string name="pref_credits_title">Credite</string>
-  <string name="tts_lang_not_supported">Fie limba acestei pagini nu este acceptată, fie nu s-au instalat datele corespunzătoare limbii. Este posibil ca articolul să nu fie corect afișat.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Fie limba acestei pagini nu este acceptată, fie nu s-au instalat datele corespunzătoare limbii. Este posibil ca articolul să nu fie corect afișat.</string>
   <string name="no_reader_application_installed">Nu s-a găsit nicio aplicație instalată pentru acest tip de fișier</string>
   <string name="no_section_info">Nu s-a găsit niciun antet de conținut</string>
   <string name="request_storage">Pentru a accesa conținut off-line trebuie să vă accesăm spațiul de stocare</string>
@@ -189,7 +191,7 @@
   <string name="expand">Extinde</string>
   <string name="history">Istorie</string>
   <string name="history_from_current_book">Vedeți Istoria De Pe Toate Cărțile</string>
-  <string name="search_history">Istoricul căutării</string>
+  <string name="search_history" fuzzy="true">Istoricul căutării</string>
   <string name="selected_items">%1$d selectat</string>
   <string name="bookmarks_from_current_book">Vezi Semne De Carte Din Toate Cărțile</string>
   <string name="search_bookmarks">Caută semnele de carte</string>
@@ -241,8 +243,8 @@
   <string name="nearby_devices">DISPOZITIVE DIN APROPIERE</string>
   <string name="no_devices_found">Nu au fost detectate dispozitive. Atingeți butonul de căutare pentru a încerca din nou.</string>
   <string name="files_for_transfer">FIȘIERE PENTRU TRANSFER</string>
-  <string name="preparing_files">Pregătirea fișierelor pentru transfer ....</string>
-  <string name="performing_handshake">Stabilirea legăturii în curs …</string>
+  <string name="preparing_files">Pregătirea fișierelor pentru transfer …</string>
+  <string name="performing_handshake" fuzzy="true">Stabilirea legăturii în curs …</string>
   <string name="status">Starea</string>
   <string name="pref_clear_all_notes_summary">Șterge toate notele la toate articolele</string>
   <string name="pref_clear_all_notes_title">Ștergeți toate notele</string>

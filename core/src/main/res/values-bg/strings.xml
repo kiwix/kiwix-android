@@ -23,7 +23,7 @@
   <string name="menu_read_aloud_stop">Спиране четенето на глас</string>
   <string name="save_media">Запази медията</string>
   <string name="save_media_error">Възникна грешка при опита за съхранение на медийния файл!</string>
-  <string name="save_media_saved" fuzzy="true">Медийният файл е съхранен под името %s в Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Медийният файл е съхранен под името %s в Downloads/org.kiwix…/</string>
   <string name="search_label">Търсене</string>
   <string name="choose_file">Изберете файл със съдържание (*.zim)</string>
   <string name="open_in_new_tab">Отваряне на препратката в нов раздел?</string>
@@ -41,7 +41,7 @@
   <string name="pref_language_chooser">Избиране на език</string>
   <string name="pref_credits">Сътрудници и лицензи</string>
   <string name="pref_credits_title">За участниците в проекта</string>
-  <string name="tts_lang_not_supported">Езикът на тази страница не се поддържа, или не е инсталиран подходящ език за данни. Статията не може да бъде разчетена правилно.</string>
+  <string name="tts_lang_not_supported">Езикът на тази страница не се поддържа. Статията може да не бъде правилно разчетена.</string>
   <string name="no_reader_application_installed">Не бе намерено инсталирано приложение за този тип файлове</string>
   <string name="no_section_info">Не са открити заглавки на съдържанието</string>
   <string name="request_storage">За достъп до офлайн съдържание, ни е нужен достъп до файловото Ви хранилище</string>

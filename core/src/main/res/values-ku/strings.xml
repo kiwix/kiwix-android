@@ -5,8 +5,9 @@
 * George Animal
 * Ghybu
 * Kur
+* McDutchie
 -->
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="menu_help">Alîkarî</string>
   <string name="menu_home">Mal</string>
   <string name="menu_settings">Mîheng</string>
@@ -21,7 +22,7 @@
   <string name="menu_wifi_hotspot">Kitêban Bihewîne</string>
   <string name="save_media">Medyayê Tomar Bike</string>
   <string name="save_media_error">Gava ku medya dihat tomarkirin çewtiyek derket holêǃ</string>
-  <string name="save_media_saved" fuzzy="true">Medya wek %s ji Android/media/org.kiwix…/ re hate qeydkirin</string>
+  <string name="save_media_saved">Medya wek %s ji Downloads/org.kiwix…/ re hate qeydkirin</string>
   <string name="search_label">Lê bigere</string>
   <string name="choose_file">Peldankeke Naverokê Hilbijêre (*.zim)</string>
   <string name="open_in_new_tab">Bila lînk di hilpekîneke nû de were vekirin?</string>
@@ -67,7 +68,7 @@
   <string name="pref_language_chooser">Zimanekî hilbijêre</string>
   <string name="pref_credits">Kedkar û Lîsans</string>
   <string name="pref_credits_title">Kedyarên me</string>
-  <string name="tts_lang_not_supported">Zimanê vê rûpelê nayê piştgirîkirin, an jî daneya zimanê naehatiye sazkirin. Dibe ku ev gotar rast nê xwendin.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Zimanê vê rûpelê nayê piştgirîkirin, an jî daneya zimanê naehatiye sazkirin. Dibe ku ev gotar rast nê xwendin.</string>
   <string name="no_reader_application_installed">Ji bo cureya vê peldankê sepanekî sazkirî nehat dîtin</string>
   <string name="no_section_info">Sernavê Naverok Nehat Dîtin</string>
   <string name="request_storage">Ji bo ku em têkevin naveroka offline divê em têkevin depoya we</string>
@@ -93,6 +94,7 @@
   <string name="tab_closed">Hilpekîn hat girtin</string>
   <string name="bookmark_added">Bijare hat tevlîkirin</string>
   <string name="rate_dialog_title">Ji kerema xwe Deng Bide Me</string>
+  <string name="rate_dialog_msg">Ger tu bi emilandina %s kêfxweş bî, xêra xwe ji bo nirxandina wê deqeyekê veqetîne. Spas ji bo desteka te!</string>
   <string name="rate_dialog_positive">Deng Bide!</string>
   <string name="no_thanks">Na, spas</string>
   <string name="rate_dialog_neutral">Paşê</string>
@@ -104,7 +106,7 @@
   <string name="new_tab_snack_bar">Gotar li hilpekînekî nû vebû</string>
   <string name="search_widget_text">Li Kiwixê bigere</string>
   <string name="speech_prompt_text">Ji bo ku li %s bigerî xeber bide</string>
-  <string name="speech_not_supported">Bibore! Amûra te piştgirî nade alava axaftinê</string>
+  <string name="speech_not_supported">Bibore! Amûra te piştgirî nade alava xeberdanê</string>
   <string name="local_zims">Amûr</string>
   <string name="remote_zims">Online</string>
   <string name="library">Pirtûkxane</string>
@@ -134,8 +136,10 @@
   <string name="tts_pause">rawestîne</string>
   <string name="tts_resume">dewam bike</string>
   <string name="stop">rawestîne</string>
+  <string name="configure_storage_option">Bila kitêbê daxîne depoya daxilî?</string>
   <string name="internal_storage">xwemalî</string>
   <string name="external_storage">Derveyî</string>
+  <string name="configure">Eyar bike</string>
   <string name="yes">Erê</string>
   <string name="no">Na</string>
   <string name="confirm_stop_download_title">Daxistinê rabiwestîne?</string>
@@ -193,7 +197,7 @@
   <string name="expand">Berfireh bike</string>
   <string name="history">Dîrok</string>
   <string name="history_from_current_book">Dîrokê Bibîne Ji Hemû Kitêban</string>
-  <string name="search_history">Dîroka lêgerînê</string>
+  <string name="search_history" fuzzy="true">Dîroka lêgerînê</string>
   <string name="selected_items">%1$d bîjartî ye</string>
   <string name="bookmarks_from_current_book">Bijareyan Bibîne Ji Hemû Kitêban</string>
   <string name="search_bookmarks">Li bijareyan bigere</string>
@@ -228,6 +232,7 @@
   <string name="connection_failed">Girêdan têk çû</string>
   <string name="permission_rationale_location">Destûra lokasyonê lazim e ji aliyê Androîdê ve ji bo destûr bidin sepanê ku karibe cîhazên din ên wekhev tesbît bike.</string>
   <string name="permission_rationale_location_on_host_zim_file">Ji bo sepan karibe dosyeyên Zim-ê bihewîne destûra lokasyonê ji aliyê Androîdê ve lazim e.</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">Ji bo destûr bide sepanê ku dosyeyên Zi-ê bihewîne, destûra cîhazên wîfiyê yên li nêzîkê lazim e ji aliyê Androîdê ve.</string>
   <string name="permission_refused_location">Nikare cîhazên wekhev tesbît bike bêyî destûrên lokasyonê</string>
   <string name="permission_refused_storage">Nikare bigihe pelên zim-ê bêyî destûra depoyê</string>
   <string name="request_enable_location">Lokasyonê aktîv bike ji bo destûr vidî tesbîtkirina hevcinsan</string>
@@ -245,13 +250,13 @@
   <string name="nearby_devices">CÎHAZÊN NÊZ</string>
   <string name="no_devices_found">Ti cîhazek nehate tesbîtkirin. Ji bo cardin biceribînî pêlî ser bûtona lêgerînê bike.</string>
   <string name="files_for_transfer">DOSYEYÊN JI BO TRANSFERKIRINÊ</string>
-  <string name="preparing_files">Dosyeyan hazir dike ji bo transferkirinê…</string>
-  <string name="performing_handshake">Destdanhev tê bicihanîn…</string>
+  <string name="preparing_files" fuzzy="true">Dosyeyan hazir dike ji bo transferkirinê…</string>
+  <string name="performing_handshake" fuzzy="true">Destdanhev tê bicihanîn…</string>
   <string name="status">Rewş</string>
   <string name="pref_clear_all_notes_summary">Hemû notan ji hemû gotaran bibe</string>
   <string name="pref_clear_all_notes_title">Temamiya notan paqij bike</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Destûr bide ku dosyeyên ZIMê yên li ser SD karta te bixwîne û binivîse</string>
-  <string name="pref_text_zoom_summary" tools:ignore="StringFormatInvalid">Mezinahiya nivîsê bi bilindkirinên 25% biguherîne.</string>
+  <string name="pref_text_zoom_summary">Mezinahiya nivîsê bi bilindkirinên 25%% biguherîne.</string>
   <string name="tag_pic">Wêne</string>
   <string name="tag_vid">Vîdeo</string>
   <string name="tag_text_only">Tenê Nivîs</string>
@@ -292,4 +297,13 @@
   <string name="denied_internet_permission_message">Ji bo daxistina naverokê ji kerema xwe wîfiyê aktîv bike</string>
   <string name="select_folder">Ji kerema xwe peldankekê bibijêre ji bo depokirina xaricî.</string>
   <string name="system_unable_to_grant_permission_message">Sîstem nikare destûrê werbigire!</string>
+  <string name="allow">Destûr bide</string>
+  <string name="no_notes">Not tine</string>
+  <string name="notes_from_all_books">Notan Bibîne Ji Hemû Kitêban</string>
+  <string name="search_notes">Li notan bigere</string>
+  <string name="choose_your_action">Kiryara xwe bibijêre</string>
+  <string name="open_note">Notê Veke</string>
+  <string name="open_article">Gotarê Veke</string>
+  <string name="delete_note_dialog_message">Not: Not ji depoya te nayên birin</string>
+  <string name="delete_selected_notes">Bila notên bijartî jê bibe?</string>
 </resources>

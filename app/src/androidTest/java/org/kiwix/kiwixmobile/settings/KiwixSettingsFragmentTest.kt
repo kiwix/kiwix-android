@@ -18,10 +18,12 @@
 package org.kiwix.kiwixmobile.settings
 
 import android.Manifest
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
-import androidx.test.rule.ActivityTestRule
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions
+import androidx.test.uiautomator.UiDevice
+import leakcanary.LeakAssertions
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -29,13 +31,19 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.intro.IntroRobot
 import org.kiwix.kiwixmobile.intro.intro
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS
+import org.kiwix.kiwixmobile.testutils.RetryRule
+import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
+import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import org.kiwix.kiwixmobile.utils.StandardActions
 
 class KiwixSettingsFragmentTest {
-  @Rule @JvmField var activityTestRule = ActivityTestRule(
-    KiwixMainActivity::class.java
-  )
+
+  @Rule
+  @JvmField
+  var retryRule = RetryRule()
+
+  @get:Rule
+  var activityScenarioRule = ActivityScenarioRule(KiwixMainActivity::class.java)
 
   @Rule @JvmField var readPermissionRule: GrantPermissionRule =
     GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -43,9 +51,22 @@ class KiwixSettingsFragmentTest {
   @Rule @JvmField var writePermissionRule: GrantPermissionRule =
     GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
-  @Before fun setup() {
+  @Before
+  fun setup() {
     // Go to IntroFragment
-    UiThreadStatement.runOnUiThread { activityTestRule.activity.navigate(R.id.introFragment) }
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+      if (isSystemUINotRespondingDialogVisible(this)) {
+        closeSystemDialogs(
+          InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
+        )
+      }
+      waitForIdle()
+    }
+    UiThreadStatement.runOnUiThread {
+      activityScenarioRule.scenario.onActivity {
+        it.navigate(R.id.introFragment)
+      }
+    }
     intro(IntroRobot::swipeLeft) clickGetStarted { }
     StandardActions.openDrawer()
     StandardActions.enterSettings()
@@ -64,8 +85,6 @@ class KiwixSettingsFragmentTest {
       toggleExternalLinkWarningPref()
       toggleWifiDownloadsOnlyPref()
       clickStoragePreference()
-      // Let's pause here for a moment because calculating storage takes some time
-      BaristaSleepInteractions.sleep(TEST_PAUSE_MS.toLong())
       assertStorageDialogDisplayed()
       dismissDialog()
       clickClearHistoryPreference()
@@ -78,5 +97,6 @@ class KiwixSettingsFragmentTest {
       assertContributorsDialogDisplayed()
       dismissDialog()
     }
+    LeakAssertions.assertNoLeaks()
   }
 }

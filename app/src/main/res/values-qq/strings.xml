@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* MohitMali
+-->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="all">
+  <string name="file_system_does_not_support_4gb">It is a toast message shown on the download screen when the user is trying to download a zim file over 4GB as their device\'s file system doesn\'t support it.</string>
+  <string name="detecting_file_system">It is a toast message shown on the download screen when the user tries to download files over 4GB but the application is currently busy checking if the file system can support creating files over 4GB.</string>
+  <string name="cannot_open_file">It is a toast message shown on the main screen when the user opens an invalid/unsupported file with the Kiwix app.</string>
   <string name="send_files_title">The title of an activity used for sending files.</string>
   <string name="receive_files_title">The titles of an activity used for receiving files.</string>
+  <string name="no_app_found_to_open">It is a toast message shown on the library screen when the user is selecting a file from the file chooser but there is no app available to handle the selected file/intent.</string>
+  <string name="select_zim_file">* It is a content description of a floating action button on the library screen.\n* This button opens a file chooser for the user to select a zim file to read.</string>
 </resources>

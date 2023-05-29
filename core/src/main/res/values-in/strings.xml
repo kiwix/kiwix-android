@@ -5,9 +5,11 @@
 * Esiahaan
 * Iwan Novirion
 * Kenrick95
+* McDutchie
 * Polos
 * Relly Komaruzaman
 * Rizkiahmadz
+* Veracious
 -->
 <resources>
   <string name="menu_help">Bantuan</string>
@@ -60,7 +62,7 @@
   <string name="pref_language_chooser">Pilih bahasa</string>
   <string name="pref_credits">Kontributor dan Lisensi</string>
   <string name="pref_credits_title">Kredit</string>
-  <string name="tts_lang_not_supported">Bahasa halaman ini tidak didukung, atau data bahasa yang tepat tidak dipasang. Artikel mungkin tidak dapat dibaca dengan benar.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Bahasa halaman ini tidak didukung, atau data bahasa yang tepat tidak dipasang. Artikel mungkin tidak dapat dibaca dengan benar.</string>
   <string name="no_reader_application_installed">Tidak dapat menemukan aplikasi yang terpasang untuk jenis berkas ini</string>
   <string name="no_section_info">Tidak Ada Judul Konten yang Ditemukan</string>
   <string name="request_storage">Untuk mengakses konten luring, kami memerlukan akses ke penyimpanan Anda</string>
@@ -123,8 +125,10 @@
   <string name="tts_pause">jeda</string>
   <string name="tts_resume">lanjut</string>
   <string name="stop">berhenti</string>
+  <string name="configure_storage_option">Unduh buku ke penyimpanan internal?</string>
   <string name="internal_storage">Internal</string>
   <string name="external_storage">Eksternal</string>
+  <string name="configure">Konfigurasikan</string>
   <string name="yes">Ya</string>
   <string name="no">Tidak</string>
   <string name="confirm_stop_download_title">Hentikan unduhan?</string>
@@ -169,7 +173,7 @@
   <string name="send_feedback">Kirim masukan</string>
   <string name="history">Riwayat</string>
   <string name="history_from_current_book">Lihat riwayat semua buku</string>
-  <string name="search_history">Riwayat pencarian</string>
+  <string name="search_history" fuzzy="true">Riwayat pencarian</string>
   <string name="selected_items">%1$d dipilih</string>
   <string name="close_all_tabs">Tutup semua tab</string>
   <string name="running_state">Dalam proses</string>
@@ -194,8 +198,8 @@
   <string name="books_count">%d buku</string>
   <string name="connection_failed">Koneksi gagal</string>
   <string name="files_for_transfer">FILE UNTUK DIPINDAHKAN</string>
-  <string name="preparing_files">Mempersiapkan file untuk dipindahkan....</string>
-  <string name="performing_handshake">Melakukan jabat tangan....</string>
+  <string name="preparing_files" fuzzy="true">Mempersiapkan file untuk dipindahkan....</string>
+  <string name="performing_handshake" fuzzy="true">Melakukan jabat tangan....</string>
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Bersihkan semua catatan dari semua artikel</string>
   <string name="pref_clear_all_notes_title">Bersihkan semua catatan</string>

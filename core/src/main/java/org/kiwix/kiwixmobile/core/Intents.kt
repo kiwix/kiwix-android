@@ -29,6 +29,7 @@ object Intents {
   @JvmStatic fun <T : Activity> internal(clazz: Class<T>): Intent =
     Intent(clazz.canonicalName).setPackage(CoreApp.instance.packageName)
 }
+
 @RequiresApi(Build.VERSION_CODES.R)
 fun Activity.navigateToSettings() {
   val intent = Intent().apply {
@@ -36,4 +37,12 @@ fun Activity.navigateToSettings() {
     data = Uri.fromParts("package", packageName, null)
   }
   startActivity(intent)
+}
+
+fun Activity.navigateToAppSettings() {
+  startActivity(
+    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+      data = Uri.fromParts("package", packageName, null)
+    }
+  )
 }

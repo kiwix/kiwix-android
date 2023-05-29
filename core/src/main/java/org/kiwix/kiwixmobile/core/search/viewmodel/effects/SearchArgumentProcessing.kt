@@ -41,15 +41,15 @@ data class SearchArgumentProcessing(
   @TargetApi(VERSION_CODES.M)
   override fun invokeWith(activity: AppCompatActivity) {
     bundle?.let {
-      actions.offer(
+      actions.trySend(
         ScreenWasStartedFrom(
           if (it.getBoolean(TAG_FROM_TAB_SWITCHER, false)) FromTabView
           else FromWebView
         )
-      )
-      actions.offer(Filter(it.getString(NAV_ARG_SEARCH_STRING, "")))
+      ).isSuccess
+      actions.trySend(Filter(it.getString(NAV_ARG_SEARCH_STRING, ""))).isSuccess
       if (it.getBoolean(EXTRA_IS_WIDGET_VOICE, false)) {
-        actions.offer(ReceivedPromptForSpeechInput)
+        actions.trySend(ReceivedPromptForSpeechInput).isSuccess
       }
     }
   }

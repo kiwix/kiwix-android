@@ -18,6 +18,8 @@
     <ignore regexp=".*TopLevelDestinationRobot.kt.*"/>
     <ignore regexp=".*ZimHostRobot.kt.*"/>
     <ignore regexp=".*SearchRobot.kt.*"/>
+    <ignore regexp=".*InitialDownloadRobot.kt.*"/>
+    <ignore regexp=".*DownloadRobot.kt.*"/>
   </issue>
   <issue id="TypographyEllipsis">
     <ignore path="**-iw/**.xml" />
@@ -32,7 +34,8 @@
   <issue id="InvalidPackage">
     <ignore path="**simple-xml-2.7.1.jar" />
     <ignore path="**javapoet-1.8.0.jar" />
-    <ignore path="**/org.jacoco.agent-0.8.7-runtime.jar" />
+    <ignore path="**/org.jacoco.agent-0.8.8-runtime.jar" />
+    <ignore regexp="kotlinx.coroutines.debug.AgentPremain" />
   </issue>
   <issue id="IconLocation">
     <ignore path="src/main/res/drawable/kiwix_icon_with_title.png" />
@@ -41,4 +44,6 @@
   <issue id="ConvertToWebp">
     <ignore path="src/main/res/drawable/search_widget_preview.png" />
   </issue>
+  <issue id="UnusedIds" severity="warning" />
+  <issue id="DataExtractionRules" severity="warning" />
 </lint>

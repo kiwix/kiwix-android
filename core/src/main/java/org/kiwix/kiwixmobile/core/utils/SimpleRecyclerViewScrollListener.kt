@@ -31,4 +31,30 @@ class SimpleRecyclerViewScrollListener(
       newState
     )
   }
+
+  override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+    super.onScrolled(recyclerView, dx, dy)
+    val currentScrollPosition = recyclerView.computeVerticalScrollOffset()
+
+    if (currentScrollPosition > previousScrollPosition) {
+      onLayoutScrollListener(
+        recyclerView,
+        SCROLL_DOWN
+      )
+    } else if (currentScrollPosition < previousScrollPosition) {
+      onLayoutScrollListener(
+        recyclerView,
+        SCROLL_UP
+      )
+    }
+
+    previousScrollPosition = currentScrollPosition
+  }
+
+  private var previousScrollPosition = 0
+
+  companion object {
+    const val SCROLL_DOWN = 2000
+    const val SCROLL_UP = 2001
+  }
 }

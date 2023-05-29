@@ -19,11 +19,10 @@
 package org.kiwix.kiwixmobile.core.page.adapter
 
 import android.view.View
-import kotlinx.android.synthetic.main.header_date.header_date
-import kotlinx.android.synthetic.main.item_bookmark_history.favicon
-import kotlinx.android.synthetic.main.item_bookmark_history.title
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
+import org.kiwix.kiwixmobile.core.databinding.HeaderDateBinding
+import org.kiwix.kiwixmobile.core.databinding.ItemBookmarkHistoryBinding
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
@@ -36,23 +35,25 @@ sealed class PageRelatedListItemViewHolder<in T : PageRelated>(containerView: Vi
   BaseViewHolder<T>(containerView) {
 
   class PageListItemViewHolder(
-    override val containerView: View,
+    private val itemBookmarkHistoryBinding: ItemBookmarkHistoryBinding,
     private val itemClickListener: OnItemClickListener
-  ) : PageRelatedListItemViewHolder<Page>(containerView) {
+  ) : PageRelatedListItemViewHolder<Page>(itemBookmarkHistoryBinding.root) {
     override fun bind(item: Page) {
-      title.text = item.title
+      itemBookmarkHistoryBinding.title.text = item.title
       if (item.isSelected) {
-        favicon.setImageDrawableCompat(R.drawable.ic_check_circle_blue_24dp)
+        itemBookmarkHistoryBinding.favicon.setImageDrawableCompat(
+          R.drawable.ic_check_circle_blue_24dp
+        )
       } else {
-        favicon.setBitmap(Base64String(item.favicon))
+        itemBookmarkHistoryBinding.favicon.setBitmap(Base64String(item.favicon))
       }
       itemView.setOnClickListener { itemClickListener.onItemClick(item) }
       itemView.setOnLongClickListener { itemClickListener.onItemLongClick(item) }
     }
   }
 
-  class DateItemViewHolder(override val containerView: View) :
-    PageRelatedListItemViewHolder<DateItem>(containerView) {
+  class DateItemViewHolder(private val headerDateBinding: HeaderDateBinding) :
+    PageRelatedListItemViewHolder<DateItem>(headerDateBinding.root) {
 
     override fun bind(item: DateItem) {
       val todaysDate = LocalDate.now()
@@ -64,9 +65,9 @@ sealed class PageRelatedListItemViewHolder<in T : PageRelated>(containerView: Vi
       }
 
       when (givenDate) {
-        todaysDate -> header_date.setText(R.string.time_today)
-        yesterdayDate -> header_date.setText(R.string.time_yesterday)
-        else -> header_date.text = item.dateString
+        todaysDate -> headerDateBinding.headerDate.setText(R.string.time_today)
+        yesterdayDate -> headerDateBinding.headerDate.setText(R.string.time_yesterday)
+        else -> headerDateBinding.headerDate.text = item.dateString
       }
     }
   }

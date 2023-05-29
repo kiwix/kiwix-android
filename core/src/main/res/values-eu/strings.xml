@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* A mento
 * An13sa
 * EukeneFL
 * Fitoschido
@@ -41,7 +42,7 @@
   <string name="pref_language_chooser">Hizkuntza aukeratu</string>
   <string name="pref_credits">Ekarpen eta lizentziak</string>
   <string name="pref_credits_title">Kredituak</string>
-  <string name="tts_lang_not_supported">Orrialde honetako hizkuntza ez dago babestuta, edo hizkuntza-egokitasun data ez dago instalatuta. Artikulua beharbada ez da ondo irakurriko.</string>
+  <string name="tts_lang_not_supported" fuzzy="true">Orrialde honetako hizkuntza ez dago babestuta, edo hizkuntza-egokitasun data ez dago instalatuta. Artikulua beharbada ez da ondo irakurriko.</string>
   <string name="no_reader_application_installed">Ezin izan da aurkitu mota honetako artxiborako instalatutako aplikazioa</string>
   <string name="no_section_info">Ez da edukiaren goibururik aurkitu</string>
   <string name="request_storage">Konexiorik gabeko edukian sartzeko zure biltegira sartu behar gara.</string>
@@ -80,8 +81,8 @@
   <string name="library">Liburutegia</string>
   <string name="delete_zims_toast">Fitxategi ezabatua</string>
   <string name="no_files_here">Artxiborik ez hemen</string>
-  <string name="download_no_space">Ez dago espaziorik jaisteko.</string>
-  <string name="download">Jaitsi</string>
+  <string name="download_no_space">Ez dago nahikoa lekurik deskargatzeko.</string>
+  <string name="download">Deskargatu</string>
   <string name="space_available">Libre dagoen espazioa:</string>
   <string name="zim_simple">Arrunta</string>
   <string name="zim_no_pic">Ez dago argazkirik</string>
@@ -95,7 +96,7 @@
   <string name="help_7">ZIM artxibo gisa prest daude. Asko daude:</string>
   <string name="help_8">• Wikipedia hizkuntza bakoitzean erabili daiteke.</string>
   <string name="help_9">• Beste edukiak Wikileaks edo Wikisource gisa baliogarriak dira ere.</string>
-  <string name="help_10">ZIM artxiboak in-app-aren bidez jaitsi ditzakezu edo aukeratu deskargatu nahi dituzunak eta ordenagailuan egin, ZIM artxiboak SD txartelera aldatu baino lehen.</string>
+  <string name="help_10">Aukeratutako ZIM fitxategiak aplikazioan bertan deskarga ditzakezu; edo, bestela, kontu handiz hauta itzazu nahi dituzunak eta mahaigaineko ordenagailu batetik deskarga ditzakezu, ZIM fitxategiak SD txartelera transferitu aurretik.</string>
   <string name="help_11">In-app-eko jaitsitako ZIM artxiboak kanpoko memorian daude, Kiwix deritzon karpeta batean.</string>
   <string name="pref_storage">Biltegia</string>
   <string name="pref_current_folder">Oraingo Artxiboa</string>
@@ -143,4 +144,6 @@
   <string name="off">Itzalita</string>
   <string name="auto">Auto</string>
   <string name="reader">Irakurgailua</string>
+  <string name="download_tts_language_title">Hizkuntza hau deskargatu ozen irakurri ahal izateko.</string>
+  <string name="download_tts_language_message">Mesedez, Deskargatu botoian klik egin. Beharrezko hizkuntzak automatikoki deskargatuko ditu.</string>
 </resources>

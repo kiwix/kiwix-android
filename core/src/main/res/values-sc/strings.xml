@@ -64,8 +64,9 @@
   <string name="pref_language_chooser">Issèbera una limba</string>
   <string name="pref_credits">Contribuidores e Litzèntzias</string>
   <string name="pref_credits_title">Crèditos</string>
-  <string name="tts_lang_not_supported">Sa limba de custa pàgina no est suportada, o sos datos pro sa limba adeguada non sunt installados. S\'artìculu diat pòdere èssere letu in manera non adeguada.</string>
+  <string name="tts_lang_not_supported">Sa limba de custa pàgina no est suportada. S\'artìculu diat pòdere èssere letu in manera no adeguada.</string>
   <string name="no_reader_application_installed">Impossìbile agatare un\'aplicatzione installada pro custa casta de documentu</string>
+  <string name="no_email_application_installed">Pro praghere installa unu servìtziu de posta eletrònica o imbia·nos una lìtera a %1s</string>
   <string name="no_section_info">Peruna intestatzione de cuntenutu agatada</string>
   <string name="request_storage">Pro atzèdere a su documentu ZIM tenimus bisòngiu de pòdere atzèdere a sa memòria tua</string>
   <string name="request_write_storage">Pro iscarrigare archìvios zim bisongiamus de s\'atzessu a sa memòria tua</string>
@@ -88,8 +89,10 @@
   <string name="did_you_know">L\'ischias?</string>
   <string name="undo">Annulla</string>
   <string name="tab_closed">Ischeda serrada</string>
+  <string name="tabs_closed">Ischedas serradas</string>
   <string name="bookmark_added">Sinnalibros annantos</string>
   <string name="rate_dialog_title">Pro praghere avalora·nos</string>
+  <string name="rate_dialog_msg">Si t\'agradat a impreare %s piga·ti unu momentu pro li dare unu votu. Ti torramus gràtzias pro su suportu tuo!</string>
   <string name="rate_dialog_positive">Vota!</string>
   <string name="no_thanks">Nono, gràtzias</string>
   <string name="rate_dialog_neutral">Prus a tardu</string>
@@ -131,8 +134,10 @@
   <string name="tts_pause">pàusa</string>
   <string name="tts_resume">sighi</string>
   <string name="stop">firma</string>
+  <string name="configure_storage_option">Iscarrigare su libru in sa memòria interna?</string>
   <string name="internal_storage">Interna</string>
   <string name="external_storage">Esterna</string>
+  <string name="configure">Cunfigura</string>
   <string name="yes">Eja</string>
   <string name="no">Nono</string>
   <string name="confirm_stop_download_title">Firmare s\'iscarrigamentu?</string>
@@ -225,6 +230,7 @@
   <string name="connection_failed">Connessione fallida</string>
   <string name="permission_rationale_location">Android tenet bisòngiu de su permissu de localizatzione pro rilevare dispositivos pares (peers)</string>
   <string name="permission_rationale_location_on_host_zim_file">Android tenet bisòngiu de su permissu de localizatzione pro permìtere a s\'aplicatzione de istrangiare documentos Zim</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">Android tenet bisòngiu de su permissu de localizatzione de sos dispositivos wifi a curtzu pro permìtere a s\'aplicatzione de istrangiare archìvios Zim</string>
   <string name="permission_refused_location">Impossìbile localizare dispositivos pares (peers) chene sos permissos de localizatzione</string>
   <string name="permission_refused_storage">Impossìbile tènnere atzessu a sos documentos zim chene su permissu de archiviatzione</string>
   <string name="request_enable_location">Abìlita sa localizatzione pro permìtere su rilevamentu de pares (peers)</string>
@@ -278,6 +284,7 @@
   <string name="no_open_book">Perunu libru abertu</string>
   <string name="open_library">Aberi sa biblioteca</string>
   <string name="tab_restored">Ischeda ripristinada</string>
+  <string name="tabs_restored">Ischedas ripristinadas</string>
   <string name="open_drawer">Aberi su pannellu</string>
   <string name="close_drawer">Serra su pannellu</string>
   <string name="how_to_update_content">Comente agiornare su cuntenutu?</string>
@@ -290,7 +297,7 @@
   <string name="select_folder">Pro praghere seletziona una cartella pro sa memòria esterna.</string>
   <string name="system_unable_to_grant_permission_message">Su sistema no est in gradu de frunire su permissu!</string>
   <string name="allow">Permite</string>
-  <string name="allow_internet_permission_message">Pro praghere fruni su permissu pro sa retze ìnternet pro iscarrigare cuntenutos</string>
+  <string name="swipe_down_for_library">Iscurre cara a bassu pro sa biblioteca</string>
   <string name="no_notes">Peruna nota</string>
   <string name="notes_from_all_books">Pòmpia sas notas de totu sos libros</string>
   <string name="search_notes">Chirca notas</string>
@@ -299,4 +306,16 @@
   <string name="open_article">Aberi s\'artìculu</string>
   <string name="delete_note_dialog_message">Dae cara: sas notas non s\'iscantzellant dae sa memòria tua</string>
   <string name="delete_selected_notes">Iscantzellare sas notas seletzionadas?</string>
+  <string name="download_tts_language_title">Iscàrriga custa limba pro sa funtzionalidade de leghidura a boghe arta</string>
+  <string name="download_tts_language_message">Incarca su butone de iscarrigamentu. At a iscarrigare in automàticu sa limba netzessària.</string>
+  <string name="external_link_copied_message">Ligàmene esternu copiadu in punta de billete</string>
+  <string name="read_aloud_service_channel_name">Canale de servìtziu de leghidura a boghe arta</string>
+  <string name="read_aloud_channel_description">Controllos de sa sìntesi vocale.</string>
+  <string name="read_aloud_running">Leghidura a boghe arta in cursu</string>
+  <string name="backward_history">Cronologia cara a segus</string>
+  <string name="forward_history">Cronologia cara a in antis</string>
+  <string name="clear_all_navigation_history_message">Isbòidat totu sa cronologia de navigatzione (cara a segus e a in antis)</string>
+  <string name="navigation_history_cleared">Cronologia de navigatzione isboidada</string>
+  <string name="go_to_settings_label">Bae a sas impostatziones</string>
+  <string name="request_notification_permission_message">Pro fàghere custa atzione fruni s\'atzessu a sas notìficas</string>
 </resources>

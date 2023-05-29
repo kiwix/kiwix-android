@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Jopparn
+* McDutchie
 * Sabelöga
 * Skalman
 * Susann Schweden
@@ -22,7 +23,7 @@
   <string name="menu_wifi_hotspot">Värdböcker</string>
   <string name="save_media">Spara media</string>
   <string name="save_media_error">Ett fel uppstod när media skulle sparas!</string>
-  <string name="save_media_saved" fuzzy="true">Sparade media som %s i Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Sparade media som %s i Downloads/org.kiwix…/</string>
   <string name="search_label">Sök</string>
   <string name="choose_file">Välj en innehållsfil (*.zim)</string>
   <string name="open_in_new_tab">Öppna länk i ny flik?</string>
@@ -53,6 +54,7 @@
   <string name="server_started_message">Ange denna IP-adress i din webbläsare för att komma åt servern %s</string>
   <string name="share_host_address">Dela webbadress med andra appar</string>
   <string name="error_file_not_found">Fel: Den valda ZIM-filen kunde inte hittas.</string>
+  <string name="unable_to_read_zim_file">Kunde inte läsa denna zim-fil!</string>
   <string name="zim_not_opened">Kunde inte öppna zip-fil</string>
   <string name="error_file_invalid">Fel: Den valda filen är inte en giltig ZIM-fil.</string>
   <string name="error_article_url_not_found">Fel: Inläsning av artikel (url: %1$s) misslyckades.</string>
@@ -66,11 +68,13 @@
   <string name="pref_language_title">Språk</string>
   <string name="pref_language_chooser">Välj ett språk</string>
   <string name="pref_credits">Bidragsgivare och licenser</string>
-  <string name="pref_credits_title">Tacka till</string>
-  <string name="tts_lang_not_supported">Språket på denna sida stöds inte, eller så har lämplig språkdata inte installerats. Artikeln kan kanske inte läsas på rätt sätt.</string>
+  <string name="pref_credits_title">Erkännanden</string>
+  <string name="tts_lang_not_supported">Språket på denna sida stöds inte. Artikeln kan kanske inte läsas på rätt sätt.</string>
   <string name="no_reader_application_installed">Kunde inte hitta ett installerat program för denna filtyp</string>
+  <string name="no_email_application_installed">Installera en e-postleverantör eller skicka e-post till oss på %1s</string>
   <string name="no_section_info">Ingen innehållsrubrik hittades</string>
   <string name="request_storage">För att komma åt offlineinnehåll behöver vi tillgång till ditt lagringsutrymme</string>
+  <string name="request_write_storage">För att ladda ned zim-filer behöver vi skrivåtkomst till din lagring</string>
   <string name="clear_recent_and_tabs_history_dialog">Är du säker på att du vill radera din sökhistorik och återställa alla aktiva flikar?</string>
   <string name="delete_recent_search_item">Radera detta objekt?</string>
   <string name="pref_clear_all_history_title">Rensa historik</string>
@@ -90,8 +94,10 @@
   <string name="did_you_know">Visste du att?</string>
   <string name="undo">Ångra</string>
   <string name="tab_closed">Flik stängdes</string>
+  <string name="tabs_closed">Flikar stängdes</string>
   <string name="bookmark_added">Bokmärke lades till</string>
   <string name="rate_dialog_title">Sätt betyg på oss</string>
+  <string name="rate_dialog_msg">Om du gillar %s kan du ta en stund och betygsätta det. Tack för ditt stöd!</string>
   <string name="rate_dialog_positive">Betygsätt!</string>
   <string name="no_thanks">Nej, tack</string>
   <string name="rate_dialog_neutral">Senare</string>
@@ -133,8 +139,10 @@
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">återuppta</string>
   <string name="stop">stoppa</string>
+  <string name="configure_storage_option">Ladda ned bok till intern lagring?</string>
   <string name="internal_storage">Internt</string>
   <string name="external_storage">Extern</string>
+  <string name="configure">Konfigurera</string>
   <string name="yes">Ja</string>
   <string name="no">Nej</string>
   <string name="confirm_stop_download_title">Stoppa nedladdning?</string>
@@ -192,7 +200,7 @@
   <string name="expand">Utvidga</string>
   <string name="history">Historik</string>
   <string name="history_from_current_book">Visa historik från alla böcker</string>
-  <string name="search_history">Sökhistorik</string>
+  <string name="search_history">Söka i historiken</string>
   <string name="selected_items">%1$d markerade</string>
   <string name="bookmarks_from_current_book">Visa bokmärken från alla böcker</string>
   <string name="search_bookmarks">Sök bokmärken</string>
@@ -227,6 +235,7 @@
   <string name="connection_failed">Anslutning misslyckades</string>
   <string name="permission_rationale_location">Platsåtkomst krävs från Android för att låta appen söka efter närliggande enheter.</string>
   <string name="permission_rationale_location_on_host_zim_file">Platsåtkomst krävs från Android för att låta appen hantera Host Zim-filer.</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">Android kräver behörighet till närliggande wifi-enheter för att låta appen hantera Zim-filer</string>
   <string name="permission_refused_location">Kan inte hitta närliggande enheter utan platsåtkomst.</string>
   <string name="permission_refused_storage">Kan inte komma åt zim-filer utan lagringsbehörighet</string>
   <string name="request_enable_location">Aktivera plats för att tillåta sökning efter närliggande enheter</string>
@@ -244,7 +253,7 @@
   <string name="nearby_devices">ENHETER I NÄRHETEN</string>
   <string name="no_devices_found">Inga enheter hittades. Tryck på sökknappen för att söka igen.</string>
   <string name="files_for_transfer">FILER ATT ÖVERFÖRA</string>
-  <string name="preparing_files">Förbereder filer för överföring…</string>
+  <string name="preparing_files">Förbereder filer för att överföras…</string>
   <string name="performing_handshake">Utför handskakning…</string>
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Rensar alla anteckningar på alla artiklar</string>
@@ -280,6 +289,7 @@
   <string name="no_open_book">Inga öppnade böcker</string>
   <string name="open_library">Öppna bibliotek</string>
   <string name="tab_restored">Fliken återställdes</string>
+  <string name="tabs_restored">Flikar återställdes</string>
   <string name="open_drawer">Öppna sidomeny</string>
   <string name="close_drawer">Stäng sidomeny</string>
   <string name="how_to_update_content">Hur uppdaterar man innehåll?</string>
@@ -288,4 +298,29 @@
   <string name="all_files_permission_needed_message">För att kunna komma åt alla ZIM-filer på enheten behöver vi behörighet för alla filer</string>
   <string name="allowed">Tillåten</string>
   <string name="not_allowed">Inte tillåtet</string>
+  <string name="denied_internet_permission_message">Aktivera wifi för att ladda ner innehåll</string>
+  <string name="select_folder">Välj mapp för extern lagring.</string>
+  <string name="system_unable_to_grant_permission_message">Systemet kunde inte ge tillstånd!</string>
+  <string name="allow">Tillåt</string>
+  <string name="swipe_down_for_library">Svep nedåt för bibliotek</string>
+  <string name="no_notes">Inga anteckningar</string>
+  <string name="notes_from_all_books">Visa anteckningar från alla böcker</string>
+  <string name="search_notes">Sök i anteckningar</string>
+  <string name="choose_your_action">Välj din åtgärd</string>
+  <string name="open_note">Öppna anteckning</string>
+  <string name="open_article">Öppna artikel</string>
+  <string name="delete_note_dialog_message">Obs: Noter raderas inte från ditt utrymme</string>
+  <string name="delete_selected_notes">Radera markerade anteckningar?</string>
+  <string name="download_tts_language_title">Ladda ned detta språk för uppläsningsfunktionalitet</string>
+  <string name="download_tts_language_message">Klicka på nedladdningsknappen. Det kommer automatiskt att ladda ned det önskade språket.</string>
+  <string name="external_link_copied_message">Extern länk kopierades till urklipp</string>
+  <string name="read_aloud_service_channel_name">Läs upp tjänstkanal</string>
+  <string name="read_aloud_channel_description">Text till tal-kontroller.</string>
+  <string name="read_aloud_running">Uppläsning körs</string>
+  <string name="backward_history">Bakåthistorik</string>
+  <string name="forward_history">Framåthistorik</string>
+  <string name="clear_all_navigation_history_message">Rensar all navigeringshistorik (framåt och bakåt)</string>
+  <string name="navigation_history_cleared">Navigationshistorik rensades</string>
+  <string name="go_to_settings_label">Gå till inställningar</string>
+  <string name="request_notification_permission_message">Bevilja meddelandeåtkomst för att utföra denna åtgärd</string>
 </resources>

@@ -18,22 +18,76 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library
 
+import android.util.Log
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import applyWithViewHierarchyPrinting
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
 import org.kiwix.kiwixmobile.localFileTransfer.localFileTransfer
+import org.kiwix.kiwixmobile.testutils.TestUtils
 
 fun library(func: LibraryRobot.() -> Unit) = LibraryRobot().applyWithViewHierarchyPrinting(func)
 
 class LibraryRobot : BaseRobot() {
-  init {
+
+  private val zimFileTitle = "Test_Zim"
+
+  fun assertGetZimNearbyDeviceDisplayed() {
     isVisible(ViewId(R.id.get_zim_nearby_device))
   }
 
   fun clickFileTransferIcon(func: LocalFileTransferRobot.() -> Unit) {
     clickOn(ViewId(R.id.get_zim_nearby_device))
     localFileTransfer(func)
+  }
+
+  fun assertLibraryListDisplayed() {
+    isVisible(ViewId(R.id.zimfilelist))
+  }
+
+  fun assertNoFilesTextDisplayed() {
+    isVisible(ViewId(R.id.file_management_no_files))
+  }
+
+  fun deleteZimIfExists() {
+    try {
+      longClickOnZimFile()
+      clickOnFileDeleteIcon()
+      assertDeleteDialogDisplayed()
+      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+      clickOnDeleteZimFile()
+      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    } catch (e: Exception) {
+      Log.i(
+        "TEST_DELETE_ZIM",
+        "Failed to delete ZIM file with title [" + zimFileTitle + "]... " +
+          "Probably because it doesn't exist"
+      )
+    }
+  }
+
+  private fun clickOnFileDeleteIcon() {
+    clickOn(ViewId(R.id.zim_file_delete_item))
+  }
+
+  private fun assertDeleteDialogDisplayed() {
+    onView(withText("DELETE"))
+      .check(ViewAssertions.matches(isDisplayed()))
+  }
+
+  private fun longClickOnZimFile() {
+    longClickOn(Text(zimFileTitle))
+  }
+
+  private fun clickOnDeleteZimFile() {
+    onView(withText("DELETE")).perform(click())
   }
 }

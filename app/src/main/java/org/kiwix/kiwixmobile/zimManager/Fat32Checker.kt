@@ -17,6 +17,8 @@
  */
 package org.kiwix.kiwixmobile.zimManager
 
+import android.annotation.SuppressLint
+import android.os.Build
 import android.os.FileObserver
 import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
@@ -25,13 +27,14 @@ import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.DetectingFileSystem
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.Unknown
 import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.CANNOT_WRITE_4GB
 import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.CAN_WRITE_4GB
 import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.INCONCLUSIVE
 import java.io.File
 
+@SuppressLint("CheckResult")
 class Fat32Checker constructor(
   sharedPreferenceUtil: SharedPreferenceUtil,
   private val fileSystemCheckers: List<FileSystemChecker>
@@ -44,7 +47,7 @@ class Fat32Checker constructor(
     Flowable.combineLatest(
       sharedPreferenceUtil.prefStorages
         .distinctUntilChanged()
-        .doOnNext { fileSystemStates.offer(Unknown) },
+        .doOnNext { fileSystemStates.offer(DetectingFileSystem) },
       requestCheckSystemFileType,
       BiFunction { storage: String, _: Unit -> storage }
     )
@@ -60,12 +63,20 @@ class Fat32Checker constructor(
       )
   }
 
-  private fun fileObserver(it: String?): FileObserver {
-    return object : FileObserver(it, MOVED_FROM or DELETE) {
-      override fun onEvent(event: Int, path: String?) {
-        requestCheckSystemFileType.onNext(Unit)
-      }
-    }.apply { startWatching() }
+  private fun fileObserver(it: String): FileObserver {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+      return object : FileObserver(File(it), MOVED_FROM or DELETE) {
+        override fun onEvent(event: Int, path: String?) {
+          requestCheckSystemFileType.onNext(Unit)
+        }
+      }.apply { startWatching() }
+    } else {
+      object : FileObserver(it, FileObserver.MOVED_FROM or FileObserver.DELETE) {
+        override fun onEvent(event: Int, path: String?) {
+          requestCheckSystemFileType.onNext(Unit)
+        }
+      }.apply { startWatching() }
+    }
   }
 
   private fun toFileSystemState(it: String) =
@@ -98,6 +109,6 @@ class Fat32Checker constructor(
     object NotEnoughSpaceFor4GbFile : FileSystemState()
     object CanWrite4GbFile : FileSystemState()
     object CannotWrite4GbFile : FileSystemState()
-    object Unknown : FileSystemState()
+    object DetectingFileSystem : FileSystemState()
   }
 }
