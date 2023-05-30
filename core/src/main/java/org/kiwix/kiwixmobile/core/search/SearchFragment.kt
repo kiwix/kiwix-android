@@ -28,8 +28,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.core.widget.ContentLoadingProgressBar
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -84,7 +87,7 @@ class SearchFragment : BaseFragment() {
     savedInstanceState: Bundle?
   ): View? {
     fragmentSearchBinding = FragmentSearchBinding.inflate(inflater, container, false)
-    setHasOptionsMenu(true)
+    setupMenu()
     return fragmentSearchBinding?.root
   }
 
@@ -120,11 +123,13 @@ class SearchFragment : BaseFragment() {
   }
 
   private fun setupToolbar(view: View) {
-    with(requireActivity() as CoreMainActivity) {
-      setSupportActionBar(view.findViewById(R.id.toolbar))
-      supportActionBar?.apply {
-        setHomeButtonEnabled(true)
-        title = getString(R.string.menu_search_in_text)
+    view.post {
+      with(requireActivity() as CoreMainActivity) {
+        setSupportActionBar(view.findViewById(R.id.toolbar))
+        supportActionBar?.apply {
+          setHomeButtonEnabled(true)
+          title = getString(R.string.menu_search_in_text)
+        }
       }
     }
   }
@@ -143,40 +148,49 @@ class SearchFragment : BaseFragment() {
     findNavController().popBackStack(readerFragmentResId, false)
   }
 
-  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    super.onCreateOptionsMenu(menu, inflater)
-    inflater.inflate(R.menu.menu_search, menu)
-    val searchMenuItem = menu.findItem(R.id.menu_search)
-    searchMenuItem.expandActionView()
-    searchView = searchMenuItem.actionView as SearchView
-    searchView?.setOnQueryTextListener(
-      SimpleTextListener {
-        if (it.isNotEmpty()) {
-          searchViewModel.actions.trySend(Filter(it)).isSuccess
-        }
-      }
-    )
-    searchMenuItem.setOnActionExpandListener(object : OnActionExpandListener {
-      override fun onMenuItemActionExpand(item: MenuItem) = false
+  private fun setupMenu() {
+    (requireActivity() as MenuHost).addMenuProvider(
+      object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+          menuInflater.inflate(R.menu.menu_search, menu)
+          val searchMenuItem = menu.findItem(R.id.menu_search)
+          searchMenuItem.expandActionView()
+          searchView = searchMenuItem.actionView as SearchView
+          searchView?.setOnQueryTextListener(
+            SimpleTextListener {
+              if (it.isNotEmpty()) {
+                searchViewModel.actions.trySend(Filter(it)).isSuccess
+              }
+            }
+          )
+          searchMenuItem.setOnActionExpandListener(object : OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem) = false
 
-      override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-        searchViewModel.actions.trySend(ExitedSearch).isSuccess
-        return false
-      }
-    })
-    searchInTextMenuItem = menu.findItem(R.id.menu_searchintext)
-    searchInTextMenuItem?.setOnMenuItemClickListener {
-      searchViewModel.actions.trySend(ClickedSearchInText).isSuccess
-      true
-    }
-    lifecycleScope.launchWhenCreated {
-      searchViewModel.state.collect { render(it) }
-    }
-    val searchStringFromArguments = arguments?.getString(NAV_ARG_SEARCH_STRING)
-    if (searchStringFromArguments != null) {
-      searchView?.setQuery(searchStringFromArguments, false)
-    }
-    searchViewModel.actions.trySend(Action.CreatedWithArguments(arguments)).isSuccess
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+              searchViewModel.actions.trySend(ExitedSearch).isSuccess
+              return false
+            }
+          })
+          searchInTextMenuItem = menu.findItem(R.id.menu_searchintext)
+          searchInTextMenuItem?.setOnMenuItemClickListener {
+            searchViewModel.actions.trySend(ClickedSearchInText).isSuccess
+            true
+          }
+          lifecycleScope.launchWhenCreated {
+            searchViewModel.state.collect { render(it) }
+          }
+          val searchStringFromArguments = arguments?.getString(NAV_ARG_SEARCH_STRING)
+          if (searchStringFromArguments != null) {
+            searchView?.setQuery(searchStringFromArguments, false)
+          }
+          searchViewModel.actions.trySend(Action.CreatedWithArguments(arguments)).isSuccess
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem) = true
+      },
+      viewLifecycleOwner,
+      Lifecycle.State.RESUMED
+    )
   }
 
   private fun render(state: SearchState) {
