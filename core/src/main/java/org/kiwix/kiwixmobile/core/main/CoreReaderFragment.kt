@@ -1243,7 +1243,10 @@ abstract class CoreReaderFragment :
     val classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN
     requireActivity().window.addFlags(fullScreenFlag)
     requireActivity().window.clearFlags(classicScreenFlag)
-    getCurrentWebView()?.requestLayout()
+    getCurrentWebView()?.apply {
+      requestLayout()
+      translationY = 0f
+    }
     sharedPreferenceUtil?.putPrefFullScreen(true)
   }
 
