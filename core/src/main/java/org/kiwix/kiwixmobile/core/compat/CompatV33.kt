@@ -20,7 +20,9 @@ package org.kiwix.kiwixmobile.core.compat
 
 import android.annotation.TargetApi
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PackageInfoFlags
 import android.content.pm.ResolveInfo
 
 const val API_33 = 33
@@ -35,4 +37,11 @@ open class CompatV33 : Compat {
     intent,
     PackageManager.ResolveInfoFlags.of(flags.value)
   )
+
+  override fun getPackageInformation(
+    packageName: String,
+    packageManager: PackageManager,
+    flag: Int
+  ): PackageInfo =
+    packageManager.getPackageInfo(packageName, PackageInfoFlags.of(flag.toLong()))
 }

@@ -26,6 +26,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.databinding.ActivityKiwixErrorBinding
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -198,12 +200,12 @@ open class ErrorActivity : BaseActivity() {
   private val versionCode: Int
     @SuppressLint("WrongConstant")
     get() = packageManager
-      .getPackageInfo(packageName, ZERO).versionCode
+      .getPackageInformation(packageName, ZERO).getVersionCode()
 
   private val versionName: String
     @SuppressLint("WrongConstant")
     get() = packageManager
-      .getPackageInfo(packageName, ZERO).versionName
+      .getPackageInformation(packageName, ZERO).versionName
 
   private fun toStackTraceString(exception: Throwable): String =
     StringWriter().apply {

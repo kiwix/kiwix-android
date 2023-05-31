@@ -41,6 +41,8 @@ import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
@@ -203,7 +205,7 @@ abstract class CorePrefsFragment :
     @Suppress("TooGenericExceptionThrown")
     get() = try {
       requireActivity().packageManager
-        .getPackageInfo(requireActivity().packageName, 0).versionCode
+        .getPackageInformation(requireActivity().packageName, 0).getVersionCode()
     } catch (e: PackageManager.NameNotFoundException) {
       throw RuntimeException(e)
     }
@@ -211,7 +213,7 @@ abstract class CorePrefsFragment :
     @Suppress("TooGenericExceptionThrown")
     get() = try {
       requireActivity().packageManager
-        .getPackageInfo(requireActivity().packageName, 0).versionName
+        .getPackageInformation(requireActivity().packageName, 0).versionName
     } catch (e: PackageManager.NameNotFoundException) {
       throw RuntimeException(e)
     }
