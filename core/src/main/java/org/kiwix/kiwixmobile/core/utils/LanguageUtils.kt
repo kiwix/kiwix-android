@@ -124,9 +124,9 @@ class LanguageUtils(private val context: Context) {
     private var isO3LanguageToLocaleMap: Map<String, Locale> =
       Locale.getAvailableLocales().associateBy {
         try {
-          it.isO3Language.toUpperCase(Locale.ROOT)
+          it.isO3Language.uppercase(Locale.ROOT)
         } catch (ignore: MissingResourceException) {
-          it.language.toUpperCase(Locale.ROOT)
+          it.language.uppercase(Locale.ROOT)
         }
       }
 
@@ -186,7 +186,7 @@ class LanguageUtils(private val context: Context) {
      */
     @JvmStatic
     fun iSO3ToLocale(iso3: String?): Locale? =
-      iso3?.let { isO3LanguageToLocaleMap[it.toUpperCase(Locale.ROOT)] }
+      iso3?.let { isO3LanguageToLocaleMap[it.uppercase(Locale.ROOT)] }
 
     @JvmStatic
     fun getCurrentLocale(context: Context) = context.locale
