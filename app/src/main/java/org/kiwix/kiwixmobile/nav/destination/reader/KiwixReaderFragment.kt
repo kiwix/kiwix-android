@@ -288,7 +288,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
   private fun hideNavBar() {
     requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view).visibility = GONE
     setBottomMarginToNavHostContainer(0)
-    getCurrentWebView()?.translationY = 0f
   }
 
   private fun showNavBar() {
