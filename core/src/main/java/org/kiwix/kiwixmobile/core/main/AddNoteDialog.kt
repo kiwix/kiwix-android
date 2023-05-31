@@ -25,6 +25,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -407,7 +408,10 @@ class AddNoteDialog : DialogFragment() {
     val contents = noteFile.readText()
     dialogNoteAddNoteBinding?.addNoteEditText?.apply {
       setText(contents) // Display the note content
-      text?.length?.minus(1)?.let(::setSelection)
+      text?.takeIf(Editable::isNotEmpty)?.let { text ->
+        val selection = text.length - 1
+        setSelection(selection.coerceAtLeast(0))
+      }
     }
     enableShareNoteMenuItem() // As note content exists which can be shared
     enableDeleteNoteMenuItem()
