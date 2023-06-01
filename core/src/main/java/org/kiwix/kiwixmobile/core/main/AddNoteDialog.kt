@@ -32,6 +32,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
@@ -289,15 +290,22 @@ class AddNoteDialog : DialogFragment() {
     )
     if (!noteFileExists) {
       // Prepare for input in case of empty/new note
-      dialogNoteAddNoteBinding?.addNoteEditText?.requestFocus()
-      showKeyboard()
+      dialogNoteAddNoteBinding?.addNoteEditText?.apply {
+        requestFocus()
+        showKeyboard(this)
+      }
     }
   }
 
-  private fun showKeyboard() {
+  @Suppress("MagicNumber")
+  private fun showKeyboard(editText: EditText) {
     val inputMethodManager =
       requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+    editText.postDelayed(
+      {
+        inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+      }, 100
+    )
   }
 
   private fun saveNote(noteText: String) {
