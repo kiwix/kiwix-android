@@ -179,7 +179,7 @@ class AddNoteDialog : DialogFragment() {
    * For null input or on being unable to find required text, returns null
     */
   private fun getTextAfterLastSlashWithoutExtension(path: String): String =
-    path.substringAfterLast('/', "").substringBeforeLast('.', "")
+    path.substringAfterLast('/', "").substringBeforeLast('.')
 
   // Override onBackPressed() to respond to user pressing 'Back' button on navigation bar
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
