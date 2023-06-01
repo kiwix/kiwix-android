@@ -19,8 +19,12 @@
 import org.gradle.api.JavaVersion
 
 object Config {
-  const val compileSdk = 33
-  const val minSdk = 21
-  const val targetSdk = 33
+
+  // Here is a list of all Android versions with their corresponding API
+  // levels: https://apilevels.com/
+  const val compileSdk = 33 // SDK version used by Gradle to compile our app.
+  const val minSdk = 21 // Minimum SDK (Minimum Support Device) is 21 (Android 5.0 Lollipop).
+  const val targetSdk = 33 // Target SDK (Maximum Support Device) is 33 (Android 13).
+
   val javaVersion = JavaVersion.VERSION_1_8
 }
