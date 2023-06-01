@@ -11,7 +11,11 @@
 Kiwix is an offline reader for Web content. One of its main purposes
 is to make Wikipedia available offline. This is done by reading the
 content of a file in the ZIM format, a highly compressed open format
-with additional metadata. This is the version for Android.
+with additional metadata.
+
+This is the version for Android, with support versions ranging from 5
+to 13 (like [mentioned
+here](https://github.com/kiwix/kiwix-android/blob/develop/buildSrc/src/main/kotlin/Config.kt)).
 
 Kiwix Android is written in [Kotlin](https://kotlinlang.org/)
 
