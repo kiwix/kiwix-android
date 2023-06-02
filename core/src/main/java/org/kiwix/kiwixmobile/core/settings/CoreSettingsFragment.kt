@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseFragment
@@ -51,10 +52,17 @@ abstract class CoreSettingsFragment : BaseFragment() {
 
   private fun setUpToolbar() {
     val activity = requireActivity() as AppCompatActivity
-    activity.setSupportActionBar(settingsBinding?.root?.findViewById(R.id.toolbar))
-    activity.supportActionBar!!.title = getString(R.string.menu_settings)
-    activity.supportActionBar!!.setHomeButtonEnabled(true)
-    activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+    settingsBinding?.root?.findViewById<Toolbar>(R.id.toolbar)?.apply {
+      activity.setSupportActionBar(this)
+      setNavigationOnClickListener {
+        requireActivity().onBackPressedDispatcher.onBackPressed()
+      }
+    }
+    activity.supportActionBar?.apply {
+      title = getString(R.string.menu_settings)
+      setHomeButtonEnabled(true)
+      setDisplayHomeAsUpEnabled(true)
+    }
   }
 
   override fun onDestroyView() {
