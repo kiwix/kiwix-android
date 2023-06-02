@@ -99,13 +99,13 @@ class Transaction(
   }
 
   fun addToTrackInDraft(apkVariants: List<ApkVariantOutput>): Track =
-    publisher.edits().tracks().update(packageName, editId, "alpha", Track().apply {
+    publisher.edits().tracks().update(packageName, editId, "internal", Track().apply {
       releases = listOf(TrackRelease().apply {
         status = "draft"
         name = apkVariants[0].versionNameOverride
         versionCodes =  apkVariants.map { it.versionCodeOverride.toLong() }
       })
-      track = "alpha"
+      track = "internal"
     }).execute().prettyPrint()
 }
 
