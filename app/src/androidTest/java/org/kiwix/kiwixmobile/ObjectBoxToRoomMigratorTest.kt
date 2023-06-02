@@ -23,11 +23,14 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.mockk
+import io.objectbox.Box
 import io.objectbox.BoxStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.jupiter.api.Test
 import org.junit.runner.RunWith
@@ -69,14 +72,85 @@ class ObjectBoxToRoomMigratorTest {
       RecentSearchEntity(searchTerm = expectedSearchTerm, zimId = expectedZimId)
     // insert into object box
     box.put(recentSearchEntity)
-
     // migrate data into room database
     objectBoxToRoomMigrator.migrateRecentSearch(box)
-
     // check if data successfully migrated to room
     val actual = kiwixRoomDatabase.recentSearchRoomDao().search(expectedZimId).first()
     assertEquals(actual.size, 1)
     assertEquals(actual[0].searchTerm, expectedSearchTerm)
     assertEquals(actual[0].zimId, expectedZimId)
+
+    // clear both databases for recent searches to test more edge cases
+    clearRecentSearchDatabases(box)
+
+    // Migrate data from empty ObjectBox database
+    objectBoxToRoomMigrator.migrateRecentSearch(box)
+    val actualData = kiwixRoomDatabase.recentSearchRoomDao().fullSearch().first()
+    assertTrue(actualData.isEmpty())
+
+    // Test if data successfully migrated to Room and existing data is preserved
+    val existingSearchTerm = "existing search"
+    val existingZimId = "8812214350305159407L"
+    kiwixRoomDatabase.recentSearchRoomDao().saveSearch(existingSearchTerm, existingZimId)
+    box.put(recentSearchEntity)
+    // Migrate data into Room database
+    objectBoxToRoomMigrator.migrateRecentSearch(box)
+    val actualDataAfterMigration = kiwixRoomDatabase.recentSearchRoomDao().fullSearch().first()
+    assertEquals(2, actual.size)
+    val existingItem =
+      actualDataAfterMigration.find {
+        it.searchTerm == existingSearchTerm && it.zimId == existingZimId
+      }
+    assertNotNull(existingItem)
+    val newItem =
+      actualDataAfterMigration.find {
+        it.searchTerm == expectedSearchTerm && it.zimId == expectedZimId
+      }
+    assertNotNull(newItem)
+
+    clearRecentSearchDatabases(box)
+
+    // Test migration if ObjectBox has null values
+    lateinit var undefinedSearchTerm: String
+    lateinit var undefinedZimId: String
+    try {
+      val invalidSearchEntity =
+        RecentSearchEntity(searchTerm = undefinedSearchTerm, zimId = undefinedZimId)
+      box.put(invalidSearchEntity)
+      // Migrate data into Room database
+      objectBoxToRoomMigrator.migrateRecentSearch(box)
+    } catch (_: Exception) {
+    }
+    // Ensure Room database remains empty or unaffected by the invalid data
+    val actualDataAfterInvalidMigration =
+      kiwixRoomDatabase.recentSearchRoomDao().fullSearch().first()
+    assertTrue(actualDataAfterInvalidMigration.isEmpty())
+
+    // Test large data migration for recent searches
+    val numEntities = 10000
+    // Insert a large number of recent search entities into ObjectBox
+    for (i in 1..numEntities) {
+      val searchTerm = "search_$i"
+      val zimId = "$i"
+      val recentSearchEntity = RecentSearchEntity(searchTerm = searchTerm, zimId = zimId)
+      box.put(recentSearchEntity)
+    }
+    val startTime = System.currentTimeMillis()
+    // Migrate data into Room database
+    objectBoxToRoomMigrator.migrateRecentSearch(box)
+    val endTime = System.currentTimeMillis()
+    val migrationTime = endTime - startTime
+    // Check if data successfully migrated to Room
+    val actualDataAfterLargeMigration =
+      kiwixRoomDatabase.recentSearchRoomDao().fullSearch().first()
+    assertEquals(numEntities, actualDataAfterLargeMigration.size)
+    // Assert that the migration completes within a reasonable time frame
+    assertTrue("Migration took too long: $migrationTime ms", migrationTime < 5000)
+  }
+
+  private fun clearRecentSearchDatabases(box: Box<RecentSearchEntity>) {
+    // delete history for testing other edge cases
+    kiwixRoomDatabase.recentSearchRoomDao().deleteSearchHistory()
+    box.removeAll()
   }
 }
