@@ -26,7 +26,8 @@ const val Tb = Gb * 1024
 const val Pb = Tb * 1024
 const val Eb = Pb * 1024
 
-inline class Bytes(val size: Long) {
+@JvmInline
+value class Bytes(val size: Long) {
   val humanReadable
     get() = when {
       size < Kb -> "$size Bytes"

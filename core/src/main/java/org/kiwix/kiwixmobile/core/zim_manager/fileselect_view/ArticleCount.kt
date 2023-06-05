@@ -25,7 +25,8 @@ import java.text.DecimalFormat
 import kotlin.math.log10
 import kotlin.math.pow
 
-inline class ArticleCount(val articleCount: String) {
+@JvmInline
+value class ArticleCount(val articleCount: String) {
   fun toHumanReadable(context: Context): String = try {
     val size = Integer.parseInt(articleCount)
     if (size <= 0) {
