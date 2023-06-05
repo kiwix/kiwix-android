@@ -42,14 +42,6 @@ internal fun DependencyHandlerScope.androidTestImplementation(
     (it as ModuleDependency?)?.let { moduleDependency -> dependencyFunc?.invoke(moduleDependency) }
   }
 
-fun DependencyHandlerScope.fdroidImplementation(
-  dependency: String,
-  dependencyFunc: (ModuleDependency.() -> Unit)? = null
-) =
-  addDependency("fdroidImplementation", dependency).also {
-    (it as ModuleDependency?)?.let { moduleDependency -> dependencyFunc?.invoke(moduleDependency) }
-  }
-
 internal fun DependencyHandlerScope.compileOnly(dependency: String) =
   addDependency("compileOnly", dependency)
 
