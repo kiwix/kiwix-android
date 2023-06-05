@@ -50,9 +50,6 @@ android {
     getByName("release") {
       isMinifyEnabled = false
     }
-    create("fdroid") {
-      initWith(getByName("release"))
-    }
   }
 }
 

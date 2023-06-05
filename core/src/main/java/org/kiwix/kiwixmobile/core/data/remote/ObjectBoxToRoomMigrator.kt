@@ -24,7 +24,6 @@ import io.objectbox.kotlin.boxFor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
@@ -37,12 +36,9 @@ class ObjectBoxToRoomMigrator {
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
   fun migrateObjectBoxDataToRoom() {
-    // Migrate data for non-fdroid variant
-    if (BuildConfig.BUILD_TYPE != "fdroid") {
-      CoreApp.coreComponent.inject(this)
-      migrateRecentSearch(boxStore.boxFor())
-      // TODO we will migrate here for other entities
-    }
+    CoreApp.coreComponent.inject(this)
+    migrateRecentSearch(boxStore.boxFor())
+    // TODO we will migrate here for other entities
   }
 
   fun migrateRecentSearch(box: Box<RecentSearchEntity>) {

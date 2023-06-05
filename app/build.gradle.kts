@@ -1,5 +1,4 @@
 import plugin.KiwixConfigurationPlugin
-import plugin.fdroidImplementation
 
 plugins {
   android
@@ -75,13 +74,6 @@ android {
       initWith(getByName("debug"))
       setMatchingFallbacks("debug")
     }
-    create("fdroid") { // Configuration for F-Droid flavor
-      // dimension = "default"
-      initWith(getByName("release"))
-      matchingFallbacks += "release"
-      applicationIdSuffix = ".fdroid"
-      versionNameSuffix = "-fdroid"
-    }
   }
 
   bundle {
@@ -108,17 +100,6 @@ play {
 
 dependencies {
   androidTestImplementation(Libs.leakcanary_android_instrumentation)
-
-  fdroidImplementation(Libs.objectbox_kotlin) {
-    // Exclude specific packages or classes from ObjectBox library
-    exclude(group = "io.objectbox", module = "objectbox-kotlin")
-  }
-  fdroidImplementation(Libs.objectbox_rxjava) {
-    exclude(group = "io.objectbox", module = "objectbox-rxjava")
-  }
-  fdroidImplementation(Libs.objectbox_gradle_plugin) {
-    exclude(group = "io.objectbox", module = "objectbox-gradle-plugin")
-  }
 }
 task("generateVersionCodeAndName") {
   val file = File("VERSION_INFO")
