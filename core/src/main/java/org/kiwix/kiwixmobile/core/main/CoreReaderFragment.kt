@@ -1199,6 +1199,10 @@ abstract class CoreReaderFragment :
           isPermissionGranted = true
         } else {
           if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            requestPermissions(
+              arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+              REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE
+            )
             /* shouldShowRequestPermissionRationale() returns false when:
                *  1) User has previously checked on "Don't ask me again", and/or
                *  2) Permission has been disabled on device
@@ -1207,11 +1211,12 @@ abstract class CoreReaderFragment :
               R.string.ext_storage_permission_rationale_add_note,
               Toast.LENGTH_LONG
             )
+          } else {
+            alertDialogShower?.show(
+              KiwixDialog.ReadPermissionRequired,
+              requireActivity()::navigateToAppSettings
+            )
           }
-          requestPermissions(
-            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-            REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE
-          )
         }
       } else { // For Android versions below Marshmallow 6.0 (API 23)
         isPermissionGranted = true // As already requested at install time
@@ -1269,8 +1274,8 @@ abstract class CoreReaderFragment :
     externalLinkOpener?.openExternalUrl(intent)
   }
 
-  protected fun openZimFile(file: File) {
-    if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+  protected fun openZimFile(file: File, isCustomApp: Boolean = false) {
+    if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || isCustomApp) {
       if (file.isFileExist()) {
         openAndSetInContainer(file)
         updateTitle()

@@ -30,8 +30,6 @@ import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.databinding.ActivityCustomMainBinding
 
-const val REQUEST_READ_FOR_OBB = 5002
-
 class CustomMainActivity : CoreMainActivity() {
 
   override val navController: NavController by lazy {
