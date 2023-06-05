@@ -49,8 +49,28 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
 
   private fun obbFiles() = scanDirs(ContextCompat.getObbDirs(context), "obb")
 
-  private fun zimFiles() =
-    scanDirs(ContextCompat.getExternalFilesDirs(context, null), "zim")
+  private fun zimFiles(): List<File> {
+    // Create a list to store the parent directories
+    val directoryList = mutableListOf<File>()
+
+    // Get the external files directories for the app
+    ContextCompat.getExternalFilesDirs(context, null).forEach { dir ->
+      // Check if the directory's parent is not null
+      dir?.parent?.let { parentPath ->
+        // Add the parent directory to the list, so we can scan all the files contained in the folder.
+        // We are doing this because ContextCompat.getExternalFilesDirs(context, null) method returns the path to the
+        // "files" folder, which is specific to the app's package name, both for internal and SD card storage.
+        // By obtaining the parent directory, we can scan files from the app-specific directory itself.
+        directoryList.add(File(parentPath))
+      } ?: kotlin.run {
+        // If the parent directory is null, it means the current directory is the target folder itself.
+        // Add the current directory to the list, as it represents the app-specific directory for both internal
+        // and SD card storage. This allows us to scan files directly from this directory.
+        directoryList.add(dir)
+      }
+    }
+    return scanDirs(directoryList.toTypedArray(), "zim")
+  }
 
   private fun scanDirs(dirs: Array<out File?>?, extensionToMatch: String): List<File> =
     dirs?.filterNotNull()?.fold(listOf()) { acc, dir ->

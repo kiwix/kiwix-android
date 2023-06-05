@@ -18,12 +18,8 @@
 
 package org.kiwix.kiwixmobile.custom.main
 
-import android.Manifest
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.annotation.TargetApi
 import android.app.Dialog
-import android.content.pm.PackageManager
-import android.content.pm.PackageManager.PERMISSION_DENIED
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -31,8 +27,6 @@ import android.view.MenuInflater
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -43,12 +37,10 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggl
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.main.MainMenu
-import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import org.kiwix.kiwixmobile.custom.BuildConfig
@@ -160,53 +152,10 @@ class CustomReaderFragment : CoreReaderFragment() {
         }
       },
       onNoFilesFound = {
-        if (ContextCompat.checkSelfPermission(
-            requireActivity(),
-            READ_EXTERNAL_STORAGE
-          ) == PERMISSION_DENIED &&
-          sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
-          Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
-        ) {
-          requestPermissions(arrayOf(READ_EXTERNAL_STORAGE), REQUEST_READ_FOR_OBB)
-        } else {
-          findNavController().navigate(R.id.customDownloadFragment)
-        }
+        findNavController().navigate(R.id.customDownloadFragment)
       }
     )
   }
-
-  override fun onRequestPermissionsResult(
-    requestCode: Int,
-    permissions: Array<String>,
-    grantResults: IntArray
-  ) {
-    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    if (permissions.isNotEmpty() && permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE) {
-      if (readStorageHasBeenPermanentlyDenied(grantResults)) {
-        if (permissionRequiredDialog?.isShowing != true) {
-          permissionRequiredDialog = dialogShower?.create(
-            KiwixDialog.ReadPermissionRequired,
-            {
-              requireActivity().navigateToAppSettings()
-              appSettingsLaunched = true
-            }
-          )
-          permissionRequiredDialog?.show()
-        }
-      } else {
-        openObbOrZim()
-        permissionRequiredDialog?.dismiss()
-        permissionRequiredDialog = null
-      }
-    }
-  }
-
-  private fun readStorageHasBeenPermanentlyDenied(grantResults: IntArray) =
-    grantResults[0] == PackageManager.PERMISSION_DENIED &&
-      !ActivityCompat.shouldShowRequestPermissionRationale(
-        requireActivity(),
-        Manifest.permission.READ_EXTERNAL_STORAGE
-      )
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, inflater)
