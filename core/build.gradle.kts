@@ -21,7 +21,7 @@ apply(plugin = "com.jakewharton.butterknife")
 ext {
   set("versionMajor", 3)
   set("versionMinor", 7)
-  set("versionPatch", 0)
+  set("versionPatch", 1)
 }
 
 /*
