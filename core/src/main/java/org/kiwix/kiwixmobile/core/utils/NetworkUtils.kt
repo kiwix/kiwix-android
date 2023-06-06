@@ -19,12 +19,12 @@ package org.kiwix.kiwixmobile.core.utils
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.NetworkInfo
 import android.os.Build
 import android.util.Log
 import androidx.annotation.VisibleForTesting
 import org.kiwix.kiwixmobile.core.R
-import java.lang.Exception
 import java.util.UUID
 
 object NetworkUtils {
@@ -36,7 +36,17 @@ object NetworkUtils {
   fun isNetworkAvailable(context: Context): Boolean {
     val connectivity: ConnectivityManager = context
       .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    return connectivity.allNetworkInfo.any(::isNetworkConnectionOK)
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      val network = connectivity.activeNetwork
+      if (network != null) {
+        val networkCapabilities = connectivity.getNetworkCapabilities(network)
+        networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
+      } else {
+        false
+      }
+    } else {
+      connectivity.allNetworkInfo.any(::isNetworkConnectionOK)
+    }
   }
 
   fun isNetworkConnectionOK(networkInfo: NetworkInfo): Boolean =
@@ -57,8 +67,9 @@ object NetworkUtils {
     val connectivity = context
       .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     return if (sdkVersionForTesting >= Build.VERSION_CODES.M) {
-      val networkInfo = connectivity.activeNetworkInfo ?: return false
-      networkInfo.type == ConnectivityManager.TYPE_WIFI && networkInfo.isConnected
+      val network = connectivity.activeNetwork ?: return false
+      val networkCapabilities = connectivity.getNetworkCapabilities(network)
+      networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true
     } else {
       val wifi = connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
       wifi != null && wifi.isConnected
