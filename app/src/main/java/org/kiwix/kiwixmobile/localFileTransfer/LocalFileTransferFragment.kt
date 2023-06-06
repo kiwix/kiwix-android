@@ -22,6 +22,7 @@ import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.Manifest.permission.NEARBY_WIFI_DEVICES
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_DENIED
 import android.content.pm.PackageManager.PERMISSION_GRANTED
@@ -41,6 +42,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -365,10 +367,7 @@ class LocalFileTransferFragment :
   private fun requestEnableLocationServices() {
     alertDialogShower.show(
       KiwixDialog.EnableLocationServices, {
-        startActivityForResult(
-          Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),
-          REQUEST_ENABLE_LOCATION_SERVICES
-        )
+        enableLocationServicesLauncher.launch(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
       },
       { toast(R.string.discovery_needs_location, Toast.LENGTH_SHORT) }
     )
@@ -387,16 +386,14 @@ class LocalFileTransferFragment :
     baseActivity.cachedComponent.inject(this)
   }
 
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    when (requestCode) {
-      REQUEST_ENABLE_LOCATION_SERVICES -> {
+  private val enableLocationServicesLauncher =
+    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+      if (result.resultCode != Activity.RESULT_OK) {
         if (!isLocationServiceEnabled) {
           toast(R.string.permission_refused_location, Toast.LENGTH_SHORT)
         }
       }
-      else -> super.onActivityResult(requestCode, resultCode, data)
     }
-  }
 
   override fun onDestroyView() {
     wifiDirectManager.stopWifiDirectManager()
@@ -408,7 +405,6 @@ class LocalFileTransferFragment :
   companion object {
     // Not a typo, 'Log' tags have a length upper limit of 25 characters
     const val TAG = "LocalFileTransferActvty"
-    const val REQUEST_ENABLE_LOCATION_SERVICES = 1
     private const val PERMISSION_REQUEST_FINE_LOCATION = 2
     private const val PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS = 3
   }
