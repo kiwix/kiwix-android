@@ -19,7 +19,7 @@ package org.kiwix.kiwixmobile.core.settings
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
@@ -28,6 +28,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.webkit.WebView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
@@ -46,7 +47,6 @@ import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
-import org.kiwix.kiwixmobile.core.utils.REQUEST_SELECT_FOLDER_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -348,29 +348,22 @@ abstract class CorePrefsFragment :
           or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
       )
     }
-    startActivityForResult(intent, REQUEST_SELECT_FOLDER_PERMISSION)
+    selectFolderLauncher.launch(intent)
   }
 
-  @SuppressLint("WrongConstant")
-  override fun onActivityResult(
-    requestCode: Int,
-    resultCode: Int,
-    data: Intent?
-  ) {
-    super.onActivityResult(requestCode, resultCode, data)
-    if (requestCode == REQUEST_SELECT_FOLDER_PERMISSION &&
-      resultCode == Activity.RESULT_OK
-    ) {
-      data?.let { intent ->
-        getPathFromUri(requireActivity(), intent)?.let { path ->
-          sharedPreferenceUtil?.putPrefStorage(path)
-          findPreference<Preference>(SharedPreferenceUtil.PREF_STORAGE)?.title =
-            getString(R.string.external_storage)
-          sharedPreferenceUtil?.putStoragePosition(EXTERNAL_SELECT_POSITION)
+  private val selectFolderLauncher =
+    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+      if (result.resultCode == RESULT_OK) {
+        result.data?.let { intent ->
+          getPathFromUri(requireActivity(), intent)?.let { path ->
+            sharedPreferenceUtil?.putPrefStorage(path)
+            findPreference<Preference>(SharedPreferenceUtil.PREF_STORAGE)?.title =
+              getString(R.string.external_storage)
+            sharedPreferenceUtil?.putStoragePosition(EXTERNAL_SELECT_POSITION)
+          }
         }
       }
     }
-  }
 
   companion object {
     const val PREF_VERSION = "pref_version"
