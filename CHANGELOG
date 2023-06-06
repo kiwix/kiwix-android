@@ -1,5 +1,13 @@
-3.7.0
+3.7.1
+* FIX: Useless permission request at start for custom apps
+* FIX: Few code deprecations
+* FIX: Broken back button in custom apps
+* FIX: Broken not saving notes in custom apps
+* FIX: Application crashing while adding notes
+* FIX: Partly broken fullscreen feature
+* FIX: Invisible suggestion box in custom apps
 
+3.7.0
 New Features:
 * Support for Android 13.
 * Scrollbar indicator in the download screen
