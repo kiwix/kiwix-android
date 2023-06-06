@@ -23,6 +23,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -128,14 +129,21 @@ class NavigationHistoryDialog(
     navigationHistoryClickListener.clearHistory()
   }
 
-  // Override onBackPressed() to respond to user pressing 'Back' button on navigation bar
+  // Add onBackPressedCallBack to respond to user pressing 'Back' button on navigation bar
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    return object : Dialog(requireContext(), theme) {
-      override fun onBackPressed() {
+    val dialog = Dialog(requireContext(), theme)
+    requireActivity().onBackPressedDispatcher.addCallback(
+      viewLifecycleOwner, onBackPressedCallBack
+    )
+    return dialog
+  }
+
+  private val onBackPressedCallBack =
+    object : OnBackPressedCallback(true) {
+      override fun handleOnBackPressed() {
         dismissNavigationHistoryDialog()
       }
     }
-  }
 
   private fun dismissNavigationHistoryDialog() {
     dialog?.dismiss()
@@ -145,6 +153,7 @@ class NavigationHistoryDialog(
     super.onDestroyView()
     navigationHistoryAdapter = null
     dialogNavigationHistoryBinding = null
+    onBackPressedCallBack.remove()
   }
 
   private fun onItemClick(item: NavigationHistoryListItem) {

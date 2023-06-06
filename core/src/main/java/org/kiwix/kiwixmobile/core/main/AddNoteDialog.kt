@@ -33,6 +33,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -181,14 +182,21 @@ class AddNoteDialog : DialogFragment() {
   private fun getTextAfterLastSlashWithoutExtension(path: String): String =
     path.substringAfterLast('/', "").substringBeforeLast('.')
 
-  // Override onBackPressed() to respond to user pressing 'Back' button on navigation bar
+  // Add onBackPressedCallBack to respond to user pressing 'Back' button on navigation bar
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    return object : Dialog(requireContext(), theme) {
-      override fun onBackPressed() {
+    val dialog = Dialog(requireContext(), theme)
+    requireActivity().onBackPressedDispatcher.addCallback(
+      viewLifecycleOwner, onBackPressedCallBack
+    )
+    return dialog
+  }
+
+  private val onBackPressedCallBack =
+    object : OnBackPressedCallback(true) {
+      override fun handleOnBackPressed() {
         exitAddNoteDialog()
       }
     }
-  }
 
   private fun exitAddNoteDialog() {
     if (noteEdited) {
@@ -465,6 +473,7 @@ class AddNoteDialog : DialogFragment() {
     super.onDestroyView()
     mainRepositoryActions.dispose()
     dialogNoteAddNoteBinding = null
+    onBackPressedCallBack.remove()
   }
 
   override fun onStart() {
