@@ -22,6 +22,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Process
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -78,11 +79,14 @@ open class ErrorActivity : BaseActivity() {
 
   private fun setupReportButton() {
     activityKiwixErrorBinding?.reportButton?.setOnClickListener {
-      startActivityForResult(
-        Intent.createChooser(emailIntent(), "Send email..."), 1
-      )
+      sendEmailLauncher.launch(Intent.createChooser(emailIntent(), "Send email..."))
     }
   }
+
+  private val sendEmailLauncher =
+    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+      restartApp()
+    }
 
   private fun emailIntent(): Intent {
     val emailBody = buildBody()
@@ -206,15 +210,6 @@ open class ErrorActivity : BaseActivity() {
     startActivity(packageManager.getLaunchIntentForPackage(packageName))
     finish()
     killCurrentProcess()
-  }
-
-  public override fun onActivityResult(
-    requestCode: Int,
-    resultCode: Int,
-    data: Intent?
-  ) {
-    super.onActivityResult(requestCode, resultCode, data)
-    restartApp()
   }
 
   override fun injection(coreComponent: CoreComponent) {
