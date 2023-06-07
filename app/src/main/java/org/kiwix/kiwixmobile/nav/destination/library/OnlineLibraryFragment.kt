@@ -135,7 +135,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     get() = sharedPreferenceUtil.prefWifiOnly && !NetworkUtils.isWiFi(requireContext())
 
   private val isNotConnected: Boolean
-    get() = NetworkUtils.isNetworkAvailable(requireActivity())
+    get() = !NetworkUtils.isNetworkAvailable(requireActivity())
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)

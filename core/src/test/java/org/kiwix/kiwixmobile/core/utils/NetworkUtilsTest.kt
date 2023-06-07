@@ -20,101 +20,112 @@ package org.kiwix.kiwixmobile.core.utils
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.ConnectivityManager.TYPE_WIFI
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET
+import android.net.NetworkCapabilities.TRANSPORT_WIFI
 import android.net.NetworkInfo
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.compat.CompatV21
+import org.kiwix.kiwixmobile.core.compat.CompatV23
 import java.util.regex.Pattern
 
 class NetworkUtilsTest {
 
   private val context: Context = mockk()
   private val connectivity: ConnectivityManager = mockk()
-  private val networkInfo: NetworkInfo = mockk()
-  private val networkInfo1: NetworkInfo = mockk()
-  private val networkInfo2: NetworkInfo = mockk()
+  private val networkCapabilities: NetworkCapabilities = mockk()
 
+  @Suppress("Deprecation")
   @Test
-  fun testNetworkAvailability() {
-    val networkInfos = arrayOf(networkInfo1, networkInfo2)
+  fun testNetworkAvailability_CompatV21() {
     every { context.getSystemService(Context.CONNECTIVITY_SERVICE) } returns connectivity
-    every { connectivity.allNetworkInfo } returns networkInfos
+    val compatV21 = CompatV21()
+    val networkInfo: NetworkInfo = mockk()
 
-    // one network is connected
-    every { networkInfo1.state } returns NetworkInfo.State.CONNECTED
-    every { networkInfo2.state } returns NetworkInfo.State.DISCONNECTING
-    assertEquals(true, NetworkUtils.isNetworkAvailable(context))
+    every { connectivity.allNetworkInfo } returns arrayOf(networkInfo)
+    every { networkInfo.state } returns NetworkInfo.State.CONNECTED
 
-    every { networkInfo1.state } returns NetworkInfo.State.DISCONNECTING
-    every { networkInfo2.state } returns NetworkInfo.State.CONNECTING
-    assertEquals(false, NetworkUtils.isNetworkAvailable(context))
+    assertTrue(compatV21.isNetworkAvailable(connectivity))
 
-    // no network is available
-    every { networkInfo1.state } returns NetworkInfo.State.DISCONNECTED
-    every { networkInfo2.state } returns NetworkInfo.State.DISCONNECTED
-    assertEquals(false, NetworkUtils.isNetworkAvailable(context))
+    every { networkInfo.state } returns NetworkInfo.State.DISCONNECTED
+    assertFalse(compatV21.isNetworkAvailable(connectivity))
   }
 
   @Test
-  fun test_isNetworkConnectionOK() {
-    every { networkInfo2.state } returns NetworkInfo.State.CONNECTING
-    assertFalse(NetworkUtils.isNetworkConnectionOK(networkInfo2))
+  fun testNetworkAvailability_CompatV23() {
+    every { context.getSystemService(Context.CONNECTIVITY_SERVICE) } returns connectivity
+    val compatV23 = CompatV23()
+    val network: Network = mockk()
 
-    every { networkInfo2.state } returns NetworkInfo.State.CONNECTED
-    assertTrue(NetworkUtils.isNetworkConnectionOK(networkInfo2))
+    every { connectivity.activeNetwork } returns network
+    every { connectivity.getNetworkCapabilities(network) } returns networkCapabilities
+    every { networkCapabilities.hasCapability(NET_CAPABILITY_INTERNET) } returns true
+
+    assertTrue(compatV23.isNetworkAvailable(connectivity))
+    every { networkCapabilities.hasCapability(NET_CAPABILITY_INTERNET) } returns false
+    assertFalse(compatV23.isNetworkAvailable(connectivity))
   }
 
+  @Suppress("Deprecation")
   @Test
-  fun testWifiAvailability() {
-    every { context.getSystemService(Context.CONNECTIVITY_SERVICE) } returns connectivity
-    every { connectivity.activeNetworkInfo } returns networkInfo
+  fun test_isWifi_CompatV21() {
+    val compatV21 = CompatV21()
+    val networkInfo: NetworkInfo = mockk()
 
-    // SDK >= 23
-    NetworkUtils.sdkVersionForTesting = 23
-
-    // on Mobile Data
-    every { networkInfo.type } returns ConnectivityManager.TYPE_MOBILE
-    assertEquals(false, NetworkUtils.isWiFi(context))
-    // verify that the correct methods are used according to the build SDK version
-    verify {
-      connectivity.activeNetworkInfo
-      networkInfo.type
-    }
-    verify(exactly = 0) { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) }
-
-    // on WIFI connected
+    every { connectivity.getNetworkInfo(TYPE_WIFI) } returns networkInfo
     every { networkInfo.type } returns ConnectivityManager.TYPE_WIFI
-    every { networkInfo.isConnected } returns java.lang.Boolean.TRUE
-    assertEquals(true, NetworkUtils.isWiFi(context))
-    verify(exactly = 2) { connectivity.activeNetworkInfo }
-    verify(exactly = 0) { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) }
-
-    // on WIFI disconnected
-    every { networkInfo.type } returns ConnectivityManager.TYPE_WIFI
-    every { networkInfo.isConnected } returns java.lang.Boolean.FALSE
-    assertEquals(false, NetworkUtils.isWiFi(context))
-    verify(exactly = 3) { connectivity.activeNetworkInfo }
-    verify(exactly = 0) { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) }
-
-    // SDK < 23
-    NetworkUtils.sdkVersionForTesting = 22
-
-    // WIFI connected
-    every { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) } returns networkInfo
     every { networkInfo.isConnected } returns true
-    assertEquals(true, NetworkUtils.isWiFi(context))
-    verify { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) }
 
-    // WIFI disconnected
-    every { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) } returns networkInfo
+    assertTrue(compatV21.isWifi(connectivity))
+
     every { networkInfo.isConnected } returns false
-    assertEquals(false, NetworkUtils.isWiFi(context))
-    verify(exactly = 2) { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) }
+    assertFalse(compatV21.isWifi(connectivity))
+  }
+
+  @Test
+  fun test_isWifi_CompatV23() {
+    val compatV23 = CompatV23()
+    val network: Network = mockk()
+
+    every { connectivity.activeNetwork } returns network
+    every { connectivity.getNetworkCapabilities(network) } returns networkCapabilities
+    every { networkCapabilities.hasTransport(TRANSPORT_WIFI) } returns true
+
+    assertTrue(compatV23.isWifi(connectivity))
+    every { networkCapabilities.hasTransport(TRANSPORT_WIFI) } returns false
+    assertFalse(compatV23.isWifi(connectivity))
+  }
+
+  @Suppress("Deprecation")
+  @Test
+  fun testNetworkAvailability_NoNetwork_CompatV21() {
+    every { context.getSystemService(Context.CONNECTIVITY_SERVICE) } returns connectivity
+    val compatV21 = CompatV21()
+
+    every { connectivity.allNetworkInfo } returns arrayOf()
+
+    assertFalse(compatV21.isNetworkAvailable(connectivity))
+  }
+
+  @Test
+  fun testNetworkAvailability_NoNetwork_CompatV23() {
+    every { context.getSystemService(Context.CONNECTIVITY_SERVICE) } returns connectivity
+    val compatV23 = CompatV23()
+    val network: Network = mockk()
+
+    every { connectivity.activeNetwork } returns network
+    every { connectivity.getNetworkCapabilities(network) } returns networkCapabilities
+    every { networkCapabilities.hasCapability(NET_CAPABILITY_INTERNET) } returns false
+
+    assertFalse(compatV23.isNetworkAvailable(connectivity))
   }
 
   @Test

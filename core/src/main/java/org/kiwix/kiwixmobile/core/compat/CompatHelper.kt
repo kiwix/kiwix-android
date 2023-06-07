@@ -22,12 +22,14 @@ import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.net.ConnectivityManager
 import android.os.Build
 
 class CompatHelper private constructor() {
   // Note: Needs ": Compat" or the type system assumes `Compat21`
   private val compatValue: Compat = when {
     sdkVersion >= Build.VERSION_CODES.TIRAMISU -> CompatV33()
+    sdkVersion >= Build.VERSION_CODES.M -> CompatV23()
     else -> CompatV21()
   }
 
@@ -69,7 +71,14 @@ class CompatHelper private constructor() {
     fun PackageInfo.getVersionCode() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
       longVersionCode.toInt()
     } else {
+      @Suppress("DEPRECATION")
       versionCode
     }
+
+    fun ConnectivityManager.isNetworkAvailable(): Boolean =
+      compat.isNetworkAvailable(this)
+
+    fun ConnectivityManager.isWifi(): Boolean =
+      compat.isWifi(this)
   }
 }

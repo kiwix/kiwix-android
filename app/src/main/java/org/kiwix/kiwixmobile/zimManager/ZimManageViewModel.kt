@@ -34,6 +34,7 @@ import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
@@ -229,7 +230,7 @@ class ZimManageViewModel @Inject constructor(
       )
     ) { _, _ -> }
       .switchMap {
-        if (connectivityManager.activeNetworkInfo?.type == ConnectivityManager.TYPE_WIFI) {
+        if (connectivityManager.isWifi()) {
           Flowable.just(Unit)
         } else {
           sharedPreferenceUtil.prefWifiOnlys

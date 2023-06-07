@@ -18,27 +18,33 @@
 
 package org.kiwix.kiwixmobile.core.compat
 
+import android.annotation.TargetApi
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.ConnectivityManager
-import android.net.ConnectivityManager.TYPE_WIFI
-import android.net.NetworkInfo.State.CONNECTED
+import android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET
+import android.net.NetworkCapabilities.TRANSPORT_WIFI
 
-@Suppress("Deprecation")
-open class CompatV21 : Compat {
+const val API_23 = 23
+
+@TargetApi(API_23)
+open class CompatV23 : Compat {
+  private val compatV21 = CompatV21()
+
   override fun queryIntentActivities(
     packageManager: PackageManager,
     intent: Intent,
     flags: ResolveInfoFlagsCompat
-  ): List<ResolveInfo> = packageManager.queryIntentActivities(intent, flags.value.toInt())
+  ): List<ResolveInfo> =
+    compatV21.queryIntentActivities(packageManager, intent, flags)
 
   override fun getPackageInformation(
     packageName: String,
     packageManager: PackageManager,
     flag: Int
-  ): PackageInfo = packageManager.getPackageInfo(packageName, 0)
+  ): PackageInfo = compatV21.getPackageInformation(packageName, packageManager, flag)
 
   /**
    * Checks if the device has a network connection with internet access.
@@ -46,8 +52,10 @@ open class CompatV21 : Compat {
    * @param connectivity The ConnectivityManager instance.
    * @return True if a network connection with internet access is available, false otherwise.
    */
-  override fun isNetworkAvailable(connectivity: ConnectivityManager): Boolean =
-    connectivity.allNetworkInfo.any { it.state == CONNECTED }
+  override fun isNetworkAvailable(connectivity: ConnectivityManager): Boolean {
+    return connectivity.getNetworkCapabilities(connectivity.activeNetwork)
+      ?.hasCapability(NET_CAPABILITY_INTERNET) == true
+  }
 
   /**
    * Checks if the device is connected to a Wi-Fi network.
@@ -55,6 +63,8 @@ open class CompatV21 : Compat {
    * @param connectivity The ConnectivityManager instance.
    * @return True if connected to a Wi-Fi network, false otherwise.
    */
-  override fun isWifi(connectivity: ConnectivityManager): Boolean =
-    connectivity.getNetworkInfo(TYPE_WIFI)?.isConnected == true
+  override fun isWifi(connectivity: ConnectivityManager): Boolean {
+    return connectivity.getNetworkCapabilities(connectivity.activeNetwork)
+      ?.hasTransport(TRANSPORT_WIFI) == true
+  }
 }
