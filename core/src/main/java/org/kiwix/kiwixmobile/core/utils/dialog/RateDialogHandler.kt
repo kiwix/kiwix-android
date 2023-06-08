@@ -81,7 +81,7 @@ class RateDialogHandler @Inject constructor(
     val goToMarket = Intent(Intent.ACTION_VIEW, kiwixLocalMarketUri)
     goToMarket.addFlags(
       Intent.FLAG_ACTIVITY_NO_HISTORY or
-        Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET or
+        Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
         Intent.FLAG_ACTIVITY_MULTIPLE_TASK
     )
     try {
