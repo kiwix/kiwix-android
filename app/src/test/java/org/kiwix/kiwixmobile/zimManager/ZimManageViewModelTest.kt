@@ -20,6 +20,8 @@ package org.kiwix.kiwixmobile.zimManager
 
 import android.app.Application
 import android.net.ConnectivityManager
+import android.net.ConnectivityManager.TYPE_WIFI
+import android.net.NetworkInfo
 import com.jraska.livedata.test
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -93,6 +95,7 @@ class ZimManageViewModelTest {
   private val defaultLanguageProvider: DefaultLanguageProvider = mockk()
   private val dataSource: DataSource = mockk()
   private val connectivityManager: ConnectivityManager = mockk()
+  private val networkInfo: NetworkInfo = mockk()
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
   lateinit var viewModel: ZimManageViewModel
 
@@ -128,7 +131,8 @@ class ZimManageViewModelTest {
     every { connectivityBroadcastReceiver.networkStates } returns networkStates
     every { application.registerReceiver(any(), any()) } returns mockk()
     every { dataSource.booksOnDiskAsListItems() } returns booksOnDiskListItems
-    every { connectivityManager.activeNetworkInfo?.type } returns ConnectivityManager.TYPE_WIFI
+    every { connectivityManager.getNetworkInfo(TYPE_WIFI) } returns networkInfo
+    every { networkInfo.isConnected } returns true
     viewModel = ZimManageViewModel(
       downloadDao,
       newBookDao,
