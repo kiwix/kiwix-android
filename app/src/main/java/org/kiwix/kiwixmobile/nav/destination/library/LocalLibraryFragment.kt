@@ -90,6 +90,7 @@ import java.io.File
 import javax.inject.Inject
 
 private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
+private const val MATERIAL_BOTTOM_VIEW_ENTER_ANIMATION_DURATION = 225L
 
 class LocalLibraryFragment : BaseFragment() {
 
@@ -196,6 +197,7 @@ class LocalLibraryFragment : BaseFragment() {
         }
       }
     disposable.add(sideEffects())
+    disposable.add(fileSelectActions())
     zimManageViewModel.deviceListIsRefreshing.observe(viewLifecycleOwner) {
       fragmentDestinationLibraryBinding?.zimSwiperefresh?.isRefreshing = it!!
     }
@@ -333,6 +335,23 @@ class LocalLibraryFragment : BaseFragment() {
         }
       }, Throwable::printStackTrace
     )
+
+  private fun fileSelectActions() = zimManageViewModel.fileSelectActions
+    .observeOn(AndroidSchedulers.mainThread())
+    .filter { it === FileSelectActions.RequestDeleteMultiSelection }
+    .subscribe(
+      {
+        animateBottomViewToOrigin()
+      },
+      Throwable::printStackTrace
+    )
+
+  private fun animateBottomViewToOrigin() {
+    getBottomNavigationView().animate()
+      .translationY(0F)
+      .setDuration(MATERIAL_BOTTOM_VIEW_ENTER_ANIMATION_DURATION)
+      .start()
+  }
 
   private fun render(state: FileSelectListState) {
     val items: List<BooksOnDiskListItem> = state.bookOnDiskListItems
