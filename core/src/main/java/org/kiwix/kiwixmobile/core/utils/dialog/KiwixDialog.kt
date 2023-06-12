@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.utils.dialog
 
 import android.app.Activity
-import android.net.wifi.WifiConfiguration
 import android.view.View
 import org.kiwix.kiwixmobile.core.R
 
@@ -123,8 +122,8 @@ sealed class KiwixDialog(
       null
     ),
     HasBodyFormatArgs {
-    constructor(wifiConfiguration: WifiConfiguration) : this(
-      listOf(wifiConfiguration.SSID, wifiConfiguration.preSharedKey)
+    constructor(ssid: String, preSharedKey: String) : this(
+      listOf(ssid, preSharedKey)
     )
   }
 
