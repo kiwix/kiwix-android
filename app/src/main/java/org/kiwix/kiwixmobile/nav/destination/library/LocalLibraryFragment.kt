@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.nav.destination.library
 
 import android.Manifest
+import android.app.Activity.RESULT_OK
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -35,6 +36,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
@@ -65,7 +67,6 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.navigateToSettings
-import org.kiwix.kiwixmobile.core.utils.FILE_SELECT_CODE
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -258,25 +259,20 @@ class LocalLibraryFragment : BaseFragment() {
       addCategory(Intent.CATEGORY_OPENABLE)
     }
     try {
-      startActivityForResult(
-        Intent.createChooser(intent, "Select a zim file"),
-        FILE_SELECT_CODE
-      )
+      fileSelectLauncher.launch(Intent.createChooser(intent, "Select a zim file"))
     } catch (ex: ActivityNotFoundException) {
       activity.toast(resources.getString(R.string.no_app_found_to_open), Toast.LENGTH_SHORT)
     }
   }
 
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    when (requestCode) {
-      FILE_SELECT_CODE -> {
-        data?.data?.let { uri ->
+  private val fileSelectLauncher =
+    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+      if (result.resultCode == RESULT_OK) {
+        result.data?.data?.let { uri ->
           getZimFileFromUri(uri)?.let(::navigateToReaderFragment)
         }
       }
-      else -> super.onActivityResult(requestCode, resultCode, data)
     }
-  }
 
   private fun getZimFileFromUri(
     uri: Uri

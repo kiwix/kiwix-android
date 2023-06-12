@@ -22,7 +22,7 @@ import android.Manifest
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
-import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.ConnectivityManager
@@ -37,6 +37,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -75,7 +76,6 @@ import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
-import org.kiwix.kiwixmobile.core.utils.REQUEST_SELECT_FOLDER_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
@@ -407,29 +407,25 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
         or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
     )
-    startActivityForResult(intent, REQUEST_SELECT_FOLDER_PERMISSION)
+    selectFolderLauncher.launch(intent)
   }
 
-  @SuppressLint("WrongConstant") override fun onActivityResult(
-    requestCode: Int,
-    resultCode: Int,
-    data: Intent?
-  ) {
-    super.onActivityResult(requestCode, resultCode, data)
-    if (requestCode == REQUEST_SELECT_FOLDER_PERMISSION && resultCode == Activity.RESULT_OK) {
-      data?.let {
-        getPathFromUri(requireActivity(), data)?.let(sharedPreferenceUtil::putPrefStorage)
-        sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
-        clickOnBookItem()
-      } ?: run {
-        activity.toast(
-          resources
-            .getString(R.string.system_unable_to_grant_permission_message),
-          Toast.LENGTH_SHORT
-        )
+  private val selectFolderLauncher =
+    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+      if (result.resultCode == RESULT_OK) {
+        result.data?.let { intent ->
+          getPathFromUri(requireActivity(), intent)?.let(sharedPreferenceUtil::putPrefStorage)
+          sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
+          clickOnBookItem()
+        } ?: run {
+          activity.toast(
+            resources
+              .getString(R.string.system_unable_to_grant_permission_message),
+            Toast.LENGTH_SHORT
+          )
+        }
       }
     }
-  }
 
   private fun requestNotificationPermission() {
     if (!shouldShowRationale(POST_NOTIFICATIONS)) {
