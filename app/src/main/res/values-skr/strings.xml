@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Saraiki
+-->
+<resources>
+  <string name="send_files_title">فائلاں بھیڄو</string>
+  <string name="receive_files_title">فائلاں وصول کرو</string>
+</resources>
