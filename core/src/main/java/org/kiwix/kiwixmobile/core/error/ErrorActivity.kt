@@ -64,7 +64,11 @@ open class ErrorActivity : BaseActivity() {
     setContentView(activityKiwixErrorBinding!!.root)
     val extras = intent.extras
     exception = if (extras != null && safeContains(extras)) {
-      extras.getSerializable(EXCEPTION_KEY) as Throwable
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        extras.getSerializable(EXCEPTION_KEY, Throwable::class.java)
+      } else {
+        extras.getSerializable(EXCEPTION_KEY) as Throwable
+      }
     } else {
       null
     }
