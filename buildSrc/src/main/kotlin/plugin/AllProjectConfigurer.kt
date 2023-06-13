@@ -128,6 +128,7 @@ class AllProjectConfigurer {
           add("META-INF/notice.txt")
           add("META-INF/ASL2.0")
         }
+        jniLibs.useLegacyPackaging = false
       }
       sourceSets {
         getByName("test") {
