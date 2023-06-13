@@ -85,6 +85,7 @@ import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import java.io.File
 import javax.inject.Inject
@@ -338,7 +339,7 @@ class LocalLibraryFragment : BaseFragment() {
 
   private fun fileSelectActions() = zimManageViewModel.fileSelectActions
     .observeOn(AndroidSchedulers.mainThread())
-    .filter { it === FileSelectActions.RequestDeleteMultiSelection }
+    .filter { it === RequestDeleteMultiSelection }
     .subscribe(
       {
         animateBottomViewToOrigin()
