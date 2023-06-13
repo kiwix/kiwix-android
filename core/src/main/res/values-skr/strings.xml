@@ -23,6 +23,9 @@
   <string name="pref_language_chooser">زبان چݨو</string>
   <string name="delete_recent_search_item">ایہ ائٹم مٹاؤں؟</string>
   <string name="pref_clear_all_history_title">تاریخچہ مٹاؤ</string>
+  <string name="pref_notes">نوٹ</string>
+  <string name="pref_permission">اجازتاں</string>
+  <string name="pref_clear_all_bookmarks_title">نشانیاں صاف کرو</string>
   <string name="clear_all_history_dialog_title">ساری تاریخ صاف کروں؟</string>
   <string name="share">شیئر</string>
   <string name="delete">مٹاؤ</string>
@@ -89,5 +92,8 @@
   <string name="tabs_restored">ٹیباں بحال تھی ڳیاں</string>
   <string name="open_drawer">دراز کھولو</string>
   <string name="close_drawer">دراز بند کرو</string>
+  <string name="allowed">مجاز</string>
+  <string name="not_allowed">اجازت کائنی</string>
+  <string name="allow">اجازت</string>
   <string name="go_to_settings_label">ترتباں تے ون٘ڄو</string>
 </resources>
