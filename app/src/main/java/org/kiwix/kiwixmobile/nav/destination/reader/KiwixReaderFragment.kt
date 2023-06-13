@@ -22,6 +22,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
 import android.util.Log
 import android.view.Menu
@@ -159,7 +160,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   override fun openHomeScreen() {
-    Handler().postDelayed({
+    Handler(Looper.getMainLooper()).postDelayed({
       if (webViewList.size == 0) {
         hideTabSwitcher()
       }

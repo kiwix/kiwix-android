@@ -24,6 +24,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Handler
+import android.os.Looper
 import android.util.TypedValue
 import android.view.ViewGroup
 import android.widget.TextView
@@ -105,7 +106,7 @@ class LanguageUtils(private val context: Context) {
   }
 
   private fun setTyfaceToTextView(child: TextView, activity: Activity) {
-    Handler().post {
+    Handler(Looper.getMainLooper()).post {
       child.apply {
         setTypeface(
           Typeface.createFromAsset(

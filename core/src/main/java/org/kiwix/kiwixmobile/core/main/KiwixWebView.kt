@@ -21,6 +21,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.util.AttributeSet
 import android.view.ContextMenu
@@ -165,7 +166,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
     private val zimReaderContainer: ZimReaderContainer,
     private val sharedPreferenceUtil: SharedPreferenceUtil
   ) :
-    Handler() {
+    Handler(Looper.getMainLooper()) {
 
     @SuppressWarnings("NestedBlockDepth")
     override fun handleMessage(msg: Message) {

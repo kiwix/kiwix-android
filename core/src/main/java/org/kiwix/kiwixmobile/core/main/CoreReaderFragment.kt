@@ -37,6 +37,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.provider.Settings
 import android.util.AttributeSet
 import android.util.Log
@@ -519,7 +520,7 @@ abstract class CoreReaderFragment :
   @Suppress("MagicNumber")
   private fun handleNotificationIntent(intent: Intent) {
     if (intent.hasExtra(DOWNLOAD_NOTIFICATION_TITLE)) {
-      Handler().postDelayed(
+      Handler(Looper.getMainLooper()).postDelayed(
         {
           intent.getStringExtra(DOWNLOAD_NOTIFICATION_TITLE)?.let {
             newBookDao?.bookMatching(it)?.let { bookOnDiskEntity ->
@@ -1440,7 +1441,7 @@ abstract class CoreReaderFragment :
 
   @Suppress("MagicNumber")
   protected open fun openHomeScreen() {
-    Handler().postDelayed({
+    Handler(Looper.getMainLooper()).postDelayed({
       if (webViewList.size == 0) {
         createNewTab()
         hideTabSwitcher()
