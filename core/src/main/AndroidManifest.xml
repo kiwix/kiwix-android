@@ -20,7 +20,6 @@
 
   <application
     android:allowBackup="true"
-    android:extractNativeLibs="false"
     android:fullBackupContent="@xml/backup_rules"
     android:dataExtractionRules = "@xml/data_extraction_rules"
     android:hardwareAccelerated="true"
