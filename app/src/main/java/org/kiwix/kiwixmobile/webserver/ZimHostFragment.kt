@@ -20,7 +20,8 @@ package org.kiwix.kiwixmobile.webserver
 
 import android.Manifest
 import android.Manifest.permission.POST_NOTIFICATIONS
-import android.app.ProgressDialog
+import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -54,6 +55,7 @@ import org.kiwix.kiwixmobile.core.utils.ServerUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.StartServer
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
@@ -85,7 +87,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private var hotspotService: HotspotService? = null
   private var ip: String? = null
   private lateinit var serviceConnection: ServiceConnection
-  private var progressDialog: ProgressDialog? = null
+  private var dialog: Dialog? = null
   private var activityZimHostBinding: ActivityZimHostBinding? = null
   private val selectedBooksPath: ArrayList<String>
     get() {
@@ -271,12 +273,14 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     }
   }
 
+  @SuppressLint("InflateParams")
   private fun startKiwixHotspot() {
-    progressDialog = ProgressDialog.show(
-      requireActivity(),
-      getString(R.string.progress_dialog_starting_server), "",
-      true
-    )
+    if (dialog == null) {
+      val dialogView: View =
+        layoutInflater.inflate(R.layout.item_progressbar, null)
+      dialog = alertDialogShower.create(StartServer { dialogView })
+    }
+    dialog?.show()
     requireActivity().startService(createHotspotIntent(ACTION_CHECK_IP_ADDRESS))
   }
 
@@ -450,7 +454,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   override fun onIpAddressValid() {
-    progressDialog?.dismiss()
+    dialog?.dismiss()
     requireActivity().startService(
       createHotspotIntent(ACTION_START_SERVER).putStringArrayListExtra(
         SELECTED_ZIM_PATHS_KEY, selectedBooksPath
@@ -459,7 +463,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   override fun onIpAddressInvalid() {
-    progressDialog?.dismiss()
+    dialog?.dismiss()
     toast(R.string.server_failed_message, Toast.LENGTH_SHORT)
   }
 
