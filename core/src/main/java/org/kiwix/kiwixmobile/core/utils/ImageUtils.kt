@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.utils
 
 import android.graphics.Bitmap
 import android.graphics.Bitmap.createBitmap
-import android.media.ThumbnailUtils
+import android.graphics.Canvas
 import android.view.View
 import android.view.View.MeasureSpec
 
@@ -31,14 +31,11 @@ object ImageUtils {
     width: Int,
     height: Int
   ): Bitmap? {
-    val previousDrawingCacheState = viewToDrawFrom.isDrawingCacheEnabled
-    viewToDrawFrom.isDrawingCacheEnabled = true
     return getBitmapFromView(
       width,
       height,
       viewToDrawFrom
     )
-      .also { viewToDrawFrom.isDrawingCacheEnabled = previousDrawingCacheState }
   }
 
   private fun getBitmapFromView(width: Int, height: Int, viewToDrawFrom: View): Bitmap? {
@@ -47,8 +44,6 @@ object ImageUtils {
         return viewToDrawFrom.measure(0, 0, MeasureSpec.UNSPECIFIED).let {
           if (it.width <= 0 || it.height <= 0) viewToDrawFrom.createBitmap()
           else layoutAndCreateBitmap(
-            it.width,
-            it.height,
             viewToDrawFrom,
             it
           )
@@ -57,31 +52,26 @@ object ImageUtils {
       return viewToDrawFrom.createBitmap()
     }
     return layoutAndCreateBitmap(
-      width,
-      height,
       viewToDrawFrom,
       viewToDrawFrom.measure(width, height, MeasureSpec.EXACTLY)
     )
   }
 
   private fun layoutAndCreateBitmap(
-    width: Int,
-    height: Int,
     viewToDrawFrom: View,
     measuredView: MeasuredView
-  ): Bitmap? {
-    viewToDrawFrom.layout(0, 0, measuredView.width, measuredView.height)
-    return viewToDrawFrom.createBitmap(width, height)
+  ): Bitmap? = viewToDrawFrom.createBitmap(measuredView.height, measuredView.width)
+
+  private fun View.createBitmap(): Bitmap? {
+    val bitmap = createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    draw(Canvas(bitmap))
+    return bitmap
   }
 
-  private fun View.createBitmap(): Bitmap? = drawingCache?.let(::createBitmap)
-
-  private fun View.createBitmap(
-    width: Int,
-    height: Int
-  ): Bitmap? = ThumbnailUtils.extractThumbnail(drawingCache, width, height).let {
-    if (it == null || it != drawingCache) it
-    else createBitmap(it)
+  private fun View.createBitmap(height: Int, width: Int): Bitmap? {
+    val bitmap = createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    draw(Canvas(bitmap))
+    return bitmap
   }
 
   private fun View.measure(
