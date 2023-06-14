@@ -85,11 +85,13 @@ import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import java.io.File
 import javax.inject.Inject
 
 private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
+private const val MATERIAL_BOTTOM_VIEW_ENTER_ANIMATION_DURATION = 225L
 
 class LocalLibraryFragment : BaseFragment() {
 
@@ -196,6 +198,7 @@ class LocalLibraryFragment : BaseFragment() {
         }
       }
     disposable.add(sideEffects())
+    disposable.add(fileSelectActions())
     zimManageViewModel.deviceListIsRefreshing.observe(viewLifecycleOwner) {
       fragmentDestinationLibraryBinding?.zimSwiperefresh?.isRefreshing = it!!
     }
@@ -333,6 +336,23 @@ class LocalLibraryFragment : BaseFragment() {
         }
       }, Throwable::printStackTrace
     )
+
+  private fun fileSelectActions() = zimManageViewModel.fileSelectActions
+    .observeOn(AndroidSchedulers.mainThread())
+    .filter { it === RequestDeleteMultiSelection }
+    .subscribe(
+      {
+        animateBottomViewToOrigin()
+      },
+      Throwable::printStackTrace
+    )
+
+  private fun animateBottomViewToOrigin() {
+    getBottomNavigationView().animate()
+      .translationY(0F)
+      .setDuration(MATERIAL_BOTTOM_VIEW_ENTER_ANIMATION_DURATION)
+      .start()
+  }
 
   private fun render(state: FileSelectListState) {
     val items: List<BooksOnDiskListItem> = state.bookOnDiskListItems
