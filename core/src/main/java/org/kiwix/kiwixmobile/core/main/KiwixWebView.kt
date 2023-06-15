@@ -125,8 +125,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   override fun onCreateContextMenu(menu: ContextMenu) {
     super.onCreateContextMenu(menu)
     val result = hitTestResult
-    if (result.type == HitTestResult.IMAGE_ANCHOR_TYPE ||
-      result.type == HitTestResult.IMAGE_TYPE ||
+    if (result.type == HitTestResult.IMAGE_TYPE ||
       result.type == HitTestResult.SRC_IMAGE_ANCHOR_TYPE
     ) {
       val saveMenu =
