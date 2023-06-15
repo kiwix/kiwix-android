@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.utils
 
 import android.app.Activity
 import android.content.Context
+import android.os.Build
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import androidx.appcompat.R
@@ -39,5 +40,14 @@ object DimenUtils {
     computedDisplayMetric.widthPixels
 
   private val Activity.computedDisplayMetric
-    get() = DisplayMetrics().apply { windowManager.defaultDisplay.getMetrics(this) }
+    get() = DisplayMetrics().apply {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        val displayRect = windowManager.currentWindowMetrics.bounds
+        widthPixels = displayRect.width()
+        heightPixels = displayRect.height()
+      } else {
+        @Suppress("Deprecation")
+        windowManager.defaultDisplay.getMetrics(this)
+      }
+    }
 }
