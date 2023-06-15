@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.utils
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat.getExternalFilesDirs
 import androidx.core.content.edit
