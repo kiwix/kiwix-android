@@ -55,8 +55,8 @@ abstract class HelpFragment : BaseFragment() {
     (baseActivity as CoreMainActivity).cachedComponent.inject(this)
   }
 
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
     val activity = requireActivity() as AppCompatActivity
     fragmentHelpBinding?.activityHelpFeedbackTextView?.setOnClickListener { sendFeedback() }
     fragmentHelpBinding?.activityHelpFeedbackImageView?.setOnClickListener { sendFeedback() }
