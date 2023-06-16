@@ -39,6 +39,7 @@ class NavigationHostFragment : NavHostFragment(), WebViewProvider, FragmentActiv
       ?.getCurrentWebView()
   }
 
+  @Suppress("DEPRECATION")
   override fun onRequestPermissionsResult(
     requestCode: Int,
     permissions: Array<out String>,

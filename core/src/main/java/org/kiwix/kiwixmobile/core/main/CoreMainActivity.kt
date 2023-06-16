@@ -125,6 +125,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     drawerContainerLayout.setDrawerLockMode(lockMode, this)
   }
 
+  @Suppress("DEPRECATION")
   override fun onRequestPermissionsResult(
     requestCode: Int,
     permissions: Array<out String>,
