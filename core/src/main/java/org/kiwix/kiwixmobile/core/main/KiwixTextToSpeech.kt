@@ -18,8 +18,12 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.content.Context
+import android.media.AudioAttributes
+import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.AudioManager.OnAudioFocusChangeListener
+import android.os.Build
+import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.Engine
 import android.speech.tts.TextToSpeech.LANG_MISSING_DATA
@@ -55,6 +59,7 @@ class KiwixTextToSpeech internal constructor(
   private var onAudioFocusChangeListener: OnAudioFocusChangeListener? = null,
   private val zimReaderContainer: ZimReaderContainer
 ) {
+  private var focusRequest: AudioFocusRequest? = null
   private val focusLock: Any = Any()
   private val am: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
   @JvmField var currentTTSTask: TTSTask? = null
@@ -157,6 +162,26 @@ class KiwixTextToSpeech internal constructor(
   }
 
   private fun requestAudioFocus(): Boolean {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      if (focusRequest == null) {
+        focusRequest = onAudioFocusChangeListener?.let {
+          AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+            .setAudioAttributes(
+              AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).build()
+            )
+            .setAcceptsDelayedFocusGain(true)
+            .setOnAudioFocusChangeListener(it)
+            .setWillPauseWhenDucked(true)
+            .build()
+        }
+      }
+      Log.d(TAG_KIWIX, "Audio Focus Requested")
+      val focusGain = focusRequest?.let(am::requestAudioFocus)
+      synchronized(focusLock) {
+        return@requestAudioFocus focusGain == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+      }
+    }
+    @Suppress("DEPRECATION")
     val audioFocusRequest = am.requestAudioFocus(
       onAudioFocusChangeListener, AudioManager.STREAM_MUSIC,
       AudioManager.AUDIOFOCUS_GAIN
@@ -190,7 +215,13 @@ class KiwixTextToSpeech internal constructor(
    */
   fun shutdown() {
     tts.shutdown()
-    am.abandonAudioFocus(onAudioFocusChangeListener)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      focusRequest?.let(am::abandonAudioFocusRequest)
+      focusRequest = null
+    } else {
+      @Suppress("DEPRECATION")
+      am.abandonAudioFocus(onAudioFocusChangeListener)
+    }
   }
 
   /**
@@ -231,11 +262,15 @@ class KiwixTextToSpeech internal constructor(
       paused = false
       // The utterance ID isn't actually used anywhere, the param is passed only to force
       // the utterance listener to be notified
-      val params = hashMapOf(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID to "kiwixLastMessage")
+      val bundle = Bundle().apply {
+        putString(Engine.KEY_PARAM_UTTERANCE_ID, "kiwixLastMessage")
+      }
       if (currentPiece.get() < pieces.size) {
         tts.speak(
-          pieces[currentPiece.getAndIncrement()], QUEUE_ADD,
-          params
+          pieces[currentPiece.getAndIncrement()],
+          QUEUE_ADD,
+          bundle,
+          bundle.getString(Engine.KEY_PARAM_UTTERANCE_ID)
         )
       } else {
         stop()
@@ -250,7 +285,12 @@ class KiwixTextToSpeech internal constructor(
           if (line >= pieces.size && !paused) {
             stop()
           } else {
-            tts.speak(pieces[line], QUEUE_ADD, params)
+            tts.speak(
+              pieces[currentPiece.getAndIncrement()],
+              TextToSpeech.QUEUE_ADD,
+              bundle,
+              bundle.getString(Engine.KEY_PARAM_UTTERANCE_ID)
+            )
             currentPiece.getAndIncrement()
           }
         }
