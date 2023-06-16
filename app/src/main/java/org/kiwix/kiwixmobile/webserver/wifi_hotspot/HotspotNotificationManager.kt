@@ -73,7 +73,7 @@ class HotspotNotificationManager @Inject constructor(
     } else {
       PendingIntent.getService(context, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
-    return NotificationCompat.Builder(context)
+    return NotificationCompat.Builder(context, HOTSPOT_SERVICE_CHANNEL_ID)
       .setContentTitle(context.getString(R.string.hotspot_notification_content_title))
       .setContentText(context.getString(R.string.hotspot_running))
       .setContentIntent(contentIntent)
@@ -84,7 +84,6 @@ class HotspotNotificationManager @Inject constructor(
         context.getString(R.string.stop),
         stopHotspot
       )
-      .setChannelId(HOTSPOT_SERVICE_CHANNEL_ID)
       .build()
   }
 
