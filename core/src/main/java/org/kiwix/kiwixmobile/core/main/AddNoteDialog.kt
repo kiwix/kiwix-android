@@ -139,7 +139,7 @@ class AddNoteDialog : DialogFragment() {
   private fun onFailureToCreateAddNoteDialog() {
     context.toast(R.string.error_file_not_found, Toast.LENGTH_LONG)
     closeKeyboard()
-    requireFragmentManager().beginTransaction().remove(this).commit()
+    parentFragmentManager.beginTransaction().remove(this).commit()
   }
 
   override fun onCreateView(
