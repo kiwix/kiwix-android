@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.compat
 
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 
@@ -64,4 +65,10 @@ interface Compat {
     intent: Intent,
     flags: ResolveInfoFlagsCompat
   ): List<ResolveInfo>
+
+  fun getPackageInformation(
+    packageName: String,
+    packageManager: PackageManager,
+    flag: Int
+  ): PackageInfo
 }
