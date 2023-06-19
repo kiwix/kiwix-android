@@ -132,9 +132,7 @@ class NavigationHistoryDialog(
   // Add onBackPressedCallBack to respond to user pressing 'Back' button on navigation bar
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     val dialog = Dialog(requireContext(), theme)
-    requireActivity().onBackPressedDispatcher.addCallback(
-      viewLifecycleOwner, onBackPressedCallBack
-    )
+    requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallBack)
     return dialog
   }
 
