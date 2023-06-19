@@ -326,6 +326,7 @@ abstract class CoreReaderFragment :
   private lateinit var serviceConnection: ServiceConnection
   private var readAloudService: ReadAloudService? = null
   private var navigationHistoryList: MutableList<NavigationHistoryListItem> = ArrayList()
+  private var isReadSelection = false
 
   private var storagePermissionForNotesLauncher: ActivityResultLauncher<String>? =
     registerForActivityResult(
@@ -366,7 +367,12 @@ abstract class CoreReaderFragment :
 
   protected open fun configureWebViewSelectionHandler(menu: Menu?) {
     menu?.findItem(R.id.menu_speak_text)?.setOnMenuItemClickListener {
-      getCurrentWebView()?.let { currentWebView -> tts?.readSelection(currentWebView) }
+      if (tts?.isInitialized == false) {
+        isReadSelection = true
+        tts?.initializeTTS()
+      } else {
+        startReadSelection()
+      }
       actionMode?.finish()
       true
     }
@@ -853,7 +859,11 @@ abstract class CoreReaderFragment :
           requireActivity(),
           object : OnInitSucceedListener {
             override fun onInitSucceed() {
-              // do nothing it's default override method
+              if (isReadSelection) {
+                startReadSelection()
+              } else {
+                startReadAloud()
+              }
             }
           },
           object : OnSpeakingListener {
@@ -897,6 +907,18 @@ abstract class CoreReaderFragment :
           },
           it
         )
+    }
+  }
+
+  private fun startReadAloud() {
+    getCurrentWebView()?.let {
+      tts?.readAloud(it)
+    }
+  }
+
+  private fun startReadSelection() {
+    getCurrentWebView()?.let {
+      tts?.readSelection(it)
     }
   }
 
@@ -1130,7 +1152,12 @@ abstract class CoreReaderFragment :
             if (isBackToTopEnabled) {
               backToTopButton?.hide()
             }
-            getCurrentWebView()?.let { tts?.readAloud(it) }
+            if (tts?.isInitialized == false) {
+              isReadSelection = false
+              tts?.initializeTTS()
+            } else {
+              startReadAloud()
+            }
           }
           View.VISIBLE -> {
             if (isBackToTopEnabled) {
