@@ -26,7 +26,6 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -136,19 +135,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     get() = sharedPreferenceUtil.prefWifiOnly && !NetworkUtils.isWiFi(requireContext())
 
   private val isNotConnected: Boolean
-    get() {
-      return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val network = conMan.activeNetwork
-        if (network != null) {
-          val networkCapabilities = conMan.getNetworkCapabilities(network)
-          networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == false
-        } else {
-          true
-        }
-      } else {
-        conMan.activeNetworkInfo?.isConnected == false
-      }
-    }
+    get() = !NetworkUtils.isNetworkAvailable(requireActivity())
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)

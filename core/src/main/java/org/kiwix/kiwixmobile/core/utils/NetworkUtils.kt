@@ -19,12 +19,10 @@ package org.kiwix.kiwixmobile.core.utils
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
-import android.os.Build
 import android.util.Log
-import androidx.annotation.VisibleForTesting
 import org.kiwix.kiwixmobile.core.R
-import java.lang.Exception
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import java.util.UUID
 
 object NetworkUtils {
@@ -36,14 +34,8 @@ object NetworkUtils {
   fun isNetworkAvailable(context: Context): Boolean {
     val connectivity: ConnectivityManager = context
       .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    return connectivity.allNetworkInfo.any(::isNetworkConnectionOK)
+    return connectivity.isNetworkAvailable()
   }
-
-  fun isNetworkConnectionOK(networkInfo: NetworkInfo): Boolean =
-    networkInfo.state == NetworkInfo.State.CONNECTED
-
-  @VisibleForTesting
-  internal var sdkVersionForTesting = Build.VERSION.SDK_INT
 
   /**
    * check if network of type WIFI is connected
@@ -56,13 +48,7 @@ object NetworkUtils {
   fun isWiFi(context: Context): Boolean {
     val connectivity = context
       .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    return if (sdkVersionForTesting >= Build.VERSION_CODES.M) {
-      val networkInfo = connectivity.activeNetworkInfo ?: return false
-      networkInfo.type == ConnectivityManager.TYPE_WIFI && networkInfo.isConnected
-    } else {
-      val wifi = connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-      wifi != null && wifi.isConnected
-    }
+    return connectivity.isWifi()
   }
 
   fun getFileNameFromUrl(url: String?): String {
