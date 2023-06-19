@@ -204,6 +204,9 @@ class AddNoteDialog : DialogFragment() {
       // Closing unedited note dialog straightaway
       dismissAddNoteDialog()
     }
+    if (dialogNoteAddNoteBinding?.addNoteEditText?.isFocused == true) {
+      dialogNoteAddNoteBinding?.addNoteEditText?.clearFocus()
+    }
   }
 
   private fun disableMenuItems() {
