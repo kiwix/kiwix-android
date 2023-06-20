@@ -338,4 +338,5 @@
   <string name="navigation_history_cleared">Navigation History Cleared</string>
   <string name="go_to_settings_label">Go to Settings</string>
   <string name="request_notification_permission_message">To perform this action, please grant notification access</string>
+  <string name="empty_string" />
 </resources>

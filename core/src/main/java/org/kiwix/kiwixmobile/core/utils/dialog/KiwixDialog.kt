@@ -26,7 +26,7 @@ import org.kiwix.kiwixmobile.core.R
 sealed class KiwixDialog(
   val title: Int?,
   val message: Int?,
-  val positiveMessage: Int?,
+  val positiveMessage: Int,
   val negativeMessage: Int?,
   val cancelable: Boolean = true,
   val icon: Int? = null,
@@ -231,7 +231,7 @@ sealed class KiwixDialog(
   data class StartServer(val customGetView: (() -> View)?) : KiwixDialog(
     R.string.progress_dialog_starting_server,
     null,
-    null,
+    R.string.empty_string,
     null,
     getView = customGetView
   )
