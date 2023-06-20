@@ -23,9 +23,8 @@ package org.kiwix.kiwixmobile.localFileTransfer
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.net.NetworkInfo
+import android.net.ConnectivityManager
 import android.net.wifi.p2p.WifiP2pDevice
-import android.net.wifi.p2p.WifiP2pManager.EXTRA_NETWORK_INFO
 import android.net.wifi.p2p.WifiP2pManager.EXTRA_WIFI_P2P_DEVICE
 import android.net.wifi.p2p.WifiP2pManager.EXTRA_WIFI_STATE
 import android.net.wifi.p2p.WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION
@@ -33,6 +32,8 @@ import android.net.wifi.p2p.WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION
 import android.net.wifi.p2p.WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION
 import android.net.wifi.p2p.WifiP2pManager.WIFI_P2P_STATE_ENABLED
 import android.net.wifi.p2p.WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION
+import android.os.Build
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 
 /**
  * Helper class for the local file sharing module.
@@ -41,7 +42,10 @@ import android.net.wifi.p2p.WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION
  * the wifi p2p manager in [WifiDirectManager].
  */
 
-class KiwixWifiP2pBroadcastReceiver(private val p2pEventListener: P2pEventListener) :
+class KiwixWifiP2pBroadcastReceiver(
+  private val p2pEventListener: P2pEventListener,
+  private val connectivityManager: ConnectivityManager
+) :
   BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     when (intent.action) {
@@ -51,15 +55,18 @@ class KiwixWifiP2pBroadcastReceiver(private val p2pEventListener: P2pEventListen
       }
       WIFI_P2P_PEERS_CHANGED_ACTION -> p2pEventListener.onPeersChanged()
       WIFI_P2P_CONNECTION_CHANGED_ACTION -> {
-        val networkInfo =
-          intent.getParcelableExtra<NetworkInfo>(EXTRA_NETWORK_INFO)
-        networkInfo?.let {
-          p2pEventListener.onConnectionChanged(it.isConnected)
-        }
+        p2pEventListener.onConnectionChanged(connectivityManager.isNetworkAvailable())
       }
       WIFI_P2P_THIS_DEVICE_CHANGED_ACTION -> {
-        val userDevice =
-          intent.getParcelableExtra<WifiP2pDevice>(EXTRA_WIFI_P2P_DEVICE)
+        val userDevice = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+          intent.getParcelableArrayExtra(
+            EXTRA_WIFI_P2P_DEVICE,
+            WifiP2pDevice::class.java
+          )?.get(0)
+        } else {
+          @Suppress("DEPRECATION")
+          intent.getParcelableExtra(EXTRA_WIFI_P2P_DEVICE)
+        }
         p2pEventListener.onDeviceChanged(userDevice)
       }
     }
