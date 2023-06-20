@@ -36,6 +36,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
@@ -68,7 +69,6 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
-import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener.Companion.SCROLL_DOWN
@@ -82,10 +82,10 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
 import org.kiwix.kiwixmobile.databinding.FragmentDestinationLibraryBinding
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions
+import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
-import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import java.io.File
 import javax.inject.Inject
@@ -107,6 +107,30 @@ class LocalLibraryFragment : BaseFragment() {
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
   }
+
+  private var storagePermissionLauncher: ActivityResultLauncher<Array<String>>? =
+    registerForActivityResult(
+      ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissionResult ->
+      val isGranted =
+        permissionResult.entries.all(
+          Map.Entry<String, @kotlin.jvm.JvmSuppressWildcards Boolean>::value
+        )
+      if (readStorageHasBeenPermanentlyDenied(isGranted)) {
+        fragmentDestinationLibraryBinding?.apply {
+          permissionDeniedLayoutShowing = true
+          fileManagementNoFiles.visibility = VISIBLE
+          goToDownloadsButtonNoFiles.visibility = VISIBLE
+          fileManagementNoFiles.text =
+            requireActivity().resources.getString(R.string.grant_read_storage_permission)
+          goToDownloadsButtonNoFiles.text =
+            requireActivity().resources.getString(R.string.go_to_settings_label)
+          zimfilelist.visibility = GONE
+        }
+      } else if (isGranted) {
+        permissionDeniedLayoutShowing = false
+      }
+    }
 
   private val bookDelegate: BookOnDiskDelegate.BookDelegate by lazy {
     BookOnDiskDelegate.BookDelegate(
@@ -179,9 +203,13 @@ class LocalLibraryFragment : BaseFragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    fragmentDestinationLibraryBinding?.zimSwiperefresh?.setOnRefreshListener(
-      ::requestFileSystemCheck
-    )
+    fragmentDestinationLibraryBinding?.zimSwiperefresh?.setOnRefreshListener {
+      if (permissionDeniedLayoutShowing) {
+        fragmentDestinationLibraryBinding?.zimSwiperefresh?.isRefreshing = false
+      } else {
+        requestFileSystemCheck()
+      }
+    }
     fragmentDestinationLibraryBinding?.zimfilelist?.run {
       adapter = booksOnDiskAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -313,7 +341,7 @@ class LocalLibraryFragment : BaseFragment() {
       !sharedPreferenceUtil.prefIsTest && !permissionDeniedLayoutShowing
     ) {
       checkPermissions()
-    } else {
+    } else if (!permissionDeniedLayoutShowing) {
       fragmentDestinationLibraryBinding?.zimfilelist?.visibility = VISIBLE
     }
   }
@@ -324,6 +352,8 @@ class LocalLibraryFragment : BaseFragment() {
     fragmentDestinationLibraryBinding?.zimfilelist?.adapter = null
     fragmentDestinationLibraryBinding = null
     disposable.clear()
+    storagePermissionLauncher?.unregister()
+    storagePermissionLauncher = null
   }
 
   private fun sideEffects() = zimManageViewModel.sideEffects
@@ -393,12 +423,11 @@ class LocalLibraryFragment : BaseFragment() {
     ) {
       if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
         context.toast(R.string.request_storage)
-        requestPermissions(
+        storagePermissionLauncher?.launch(
           arrayOf(
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
-          ),
-          REQUEST_STORAGE_PERMISSION
+          )
         )
       } else {
         requestFileSystemCheck()
@@ -450,34 +479,7 @@ class LocalLibraryFragment : BaseFragment() {
       Manifest.permission.READ_EXTERNAL_STORAGE
     )
 
-  private fun isPermissionDenied(grantResults: IntArray) =
-    grantResults[0] == PackageManager.PERMISSION_DENIED
-
-  private fun readStorageHasBeenPermanentlyDenied(grantResults: IntArray) =
-    isPermissionDenied(grantResults) &&
+  private fun readStorageHasBeenPermanentlyDenied(isPermissionGranted: Boolean) =
+    !isPermissionGranted &&
       !shouldShowRationalePermission()
-
-  override fun onRequestPermissionsResult(
-    requestCode: Int,
-    permissions: Array<out String>,
-    grantResults: IntArray
-  ) {
-    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    if (permissions.isNotEmpty() && requestCode == REQUEST_STORAGE_PERMISSION) {
-      if (readStorageHasBeenPermanentlyDenied(grantResults)) {
-        fragmentDestinationLibraryBinding?.apply {
-          permissionDeniedLayoutShowing = true
-          fileManagementNoFiles.visibility = VISIBLE
-          goToDownloadsButtonNoFiles.visibility = VISIBLE
-          fileManagementNoFiles.text =
-            requireActivity().resources.getString(R.string.grant_read_storage_permission)
-          goToDownloadsButtonNoFiles.text =
-            requireActivity().resources.getString(R.string.go_to_settings_label)
-          zimfilelist.visibility = GONE
-        }
-      } else if (!isPermissionDenied(grantResults)) {
-        permissionDeniedLayoutShowing = false
-      }
-    }
-  }
 }

@@ -59,6 +59,8 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.AnimRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
@@ -131,7 +133,6 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
-import org.kiwix.kiwixmobile.core.utils.REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.getAttributes
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_ARTICLES
@@ -325,6 +326,22 @@ abstract class CoreReaderFragment :
   private lateinit var serviceConnection: ServiceConnection
   private var readAloudService: ReadAloudService? = null
   private var navigationHistoryList: MutableList<NavigationHistoryListItem> = ArrayList()
+
+  private var storagePermissionForNotesLauncher: ActivityResultLauncher<String>? =
+    registerForActivityResult(
+      ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+      if (isGranted) {
+        // Successfully granted permission, so opening the note keeper
+        showAddNoteDialog()
+      } else {
+        Toast.makeText(
+          requireActivity().applicationContext,
+          getString(R.string.ext_storage_write_permission_denied_add_note), Toast.LENGTH_LONG
+        ).show()
+      }
+    }
+
   override fun onActionModeStarted(
     mode: ActionMode,
     appCompatActivity: AppCompatActivity
@@ -947,6 +964,8 @@ abstract class CoreReaderFragment :
     tempWebViewForUndo = null
     readAloudService?.registerCallBack(null)
     readAloudService = null
+    storagePermissionForNotesLauncher?.unregister()
+    storagePermissionForNotesLauncher = null
   }
 
   private fun updateTableOfContents() {
@@ -1200,10 +1219,7 @@ abstract class CoreReaderFragment :
           isPermissionGranted = true
         } else {
           if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            requestPermissions(
-              arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-              REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE
-            )
+            storagePermissionForNotesLauncher?.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             /* shouldShowRequestPermissionRationale() returns false when:
                *  1) User has previously checked on "Don't ask me again", and/or
                *  2) Permission has been disabled on device
@@ -1369,17 +1385,6 @@ abstract class CoreReaderFragment :
                 startActivity(intent)
               }.show()
           }
-        }
-      }
-      REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE -> {
-        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-          // Successfully granted permission, so opening the note keeper
-          showAddNoteDialog()
-        } else {
-          Toast.makeText(
-            requireActivity().applicationContext,
-            getString(R.string.ext_storage_write_permission_denied_add_note), Toast.LENGTH_LONG
-          ).show()
         }
       }
       REQUEST_POST_NOTIFICATION_PERMISSION -> {

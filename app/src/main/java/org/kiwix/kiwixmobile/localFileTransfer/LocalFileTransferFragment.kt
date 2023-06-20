@@ -322,6 +322,7 @@ class LocalFileTransferFragment :
     ActivityCompat.requestPermissions(requireActivity(), arrayOf(permission), requestCode)
   }
 
+  @Suppress("DEPRECATION")
   override fun onRequestPermissionsResult(
     requestCode: Int,
     permissions: Array<String>,
