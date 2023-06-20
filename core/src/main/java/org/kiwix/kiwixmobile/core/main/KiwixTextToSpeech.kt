@@ -28,7 +28,6 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.Engine
 import android.speech.tts.TextToSpeech.LANG_MISSING_DATA
 import android.speech.tts.TextToSpeech.LANG_NOT_SUPPORTED
-import android.speech.tts.TextToSpeech.OnInitListener
 import android.speech.tts.TextToSpeech.QUEUE_ADD
 import android.speech.tts.TextToSpeech.SUCCESS
 import android.speech.tts.UtteranceProgressListener
@@ -36,7 +35,6 @@ import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.widget.Toast
-import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -54,7 +52,7 @@ import java.util.concurrent.atomic.AtomicInteger
  */
 class KiwixTextToSpeech internal constructor(
   val context: Context,
-  onInitSucceedListener: OnInitSucceedListener,
+  private val onInitSucceedListener: OnInitSucceedListener,
   val onSpeakingListener: OnSpeakingListener,
   private var onAudioFocusChangeListener: OnAudioFocusChangeListener? = null,
   private val zimReaderContainer: ZimReaderContainer
@@ -63,26 +61,35 @@ class KiwixTextToSpeech internal constructor(
   private val focusLock: Any = Any()
   private val am: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
   @JvmField var currentTTSTask: TTSTask? = null
-  private val tts: TextToSpeech = TextToSpeech(
-    instance,
-    OnInitListener { status: Int ->
-      if (status == SUCCESS) {
+  private lateinit var tts: TextToSpeech
+
+  /**
+   * Initializes the TextToSpeech object.
+   */
+  fun initializeTTS() {
+    tts = TextToSpeech(
+      context
+    ) { status: Int ->
+      if (status == TextToSpeech.SUCCESS) {
         Log.d(TAG_KIWIX, "TextToSpeech was initialized successfully.")
         this.isInitialized = true
         onInitSucceedListener.onInitSucceed()
       } else {
         Log.e(TAG_KIWIX, "Initialization of TextToSpeech Failed!")
-        context.toast(R.string.texttospeech_initialization_failed, Toast.LENGTH_SHORT)
+        context.toast(
+          R.string.texttospeech_initialization_failed,
+          Toast.LENGTH_SHORT
+        )
       }
     }
-  )
+  }
 
   /**
    * Returns whether the TTS is initialized.
    *
    * @return `true` if TTS is initialized; `false` otherwise
    */
-  private var isInitialized = false
+  var isInitialized = false
 
   init {
     Log.d(TAG_KIWIX, "Initializing TextToSpeech")
@@ -214,7 +221,9 @@ class KiwixTextToSpeech internal constructor(
    * {@link https://developer.android.com/guide/topics/media-apps/audio-focus#audio-focus-change }
    */
   fun shutdown() {
-    tts.shutdown()
+    if (::tts.isInitialized) {
+      tts.shutdown()
+    }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       focusRequest?.let(am::abandonAudioFocusRequest)
       focusRequest = null
