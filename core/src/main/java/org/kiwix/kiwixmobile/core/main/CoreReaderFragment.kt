@@ -49,7 +49,6 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.webkit.WebBackForwardList
 import android.webkit.WebView
@@ -70,6 +69,9 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -1288,10 +1290,13 @@ abstract class CoreReaderFragment :
     bottomToolbar?.visibility = View.GONE
     exitFullscreenButton?.visibility = View.VISIBLE
     exitFullscreenButton?.background?.alpha = 153
-    val fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN
-    val classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN
-    requireActivity().window.addFlags(fullScreenFlag)
-    requireActivity().window.clearFlags(classicScreenFlag)
+    val window = requireActivity().window
+    WindowCompat.setDecorFitsSystemWindows(window, true)
+    WindowInsetsControllerCompat(window, window.decorView.rootView).apply {
+      hide(WindowInsetsCompat.Type.systemBars())
+      systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+      window.decorView.rootView.requestLayout()
+    }
     getCurrentWebView()?.apply {
       requestLayout()
       translationY = 0f
@@ -1306,10 +1311,12 @@ abstract class CoreReaderFragment :
     updateBottomToolbarVisibility()
     exitFullscreenButton?.visibility = View.GONE
     exitFullscreenButton?.background?.alpha = 255
-    val fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN
-    val classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN
-    requireActivity().window.clearFlags(fullScreenFlag)
-    requireActivity().window.addFlags(classicScreenFlag)
+    val window = requireActivity().window
+    WindowCompat.setDecorFitsSystemWindows(window, false)
+    WindowInsetsControllerCompat(window, window.decorView.rootView).apply {
+      show(WindowInsetsCompat.Type.systemBars())
+      window.decorView.rootView.requestLayout()
+    }
     getCurrentWebView()?.requestLayout()
     sharedPreferenceUtil?.putPrefFullScreen(false)
   }

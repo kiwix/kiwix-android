@@ -27,8 +27,6 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.ContextMenu
 import android.view.ViewGroup
-import android.view.WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN
-import android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
 import android.webkit.WebView
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -73,13 +71,9 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       if (isFullScreen) {
         hide(WindowInsetsCompat.Type.systemBars())
         systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        window.clearFlags(FLAG_FULLSCREEN)
-        window.addFlags(FLAG_FULLSCREEN)
         window.decorView.rootView.requestLayout()
       } else {
         show(WindowInsetsCompat.Type.systemBars())
-        window.clearFlags(FLAG_FULLSCREEN)
-        window.addFlags(FLAG_FORCE_NOT_FULLSCREEN)
         window.decorView.rootView.requestLayout()
       }
     }
@@ -99,6 +93,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       useWideViewPort = true
       builtInZoomControls = true
       displayZoomControls = false
+      @Suppress("DEPRECATION")
       allowUniversalAccessFromFileURLs = true
     }
     setInitialScale(INITIAL_SCALE)
