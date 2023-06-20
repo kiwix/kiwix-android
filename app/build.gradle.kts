@@ -73,7 +73,7 @@ android {
     }
     create("nightly") {
       initWith(getByName("debug"))
-      setMatchingFallbacks("debug")
+      matchingFallbacks += "debug"
     }
   }
   bundle {
