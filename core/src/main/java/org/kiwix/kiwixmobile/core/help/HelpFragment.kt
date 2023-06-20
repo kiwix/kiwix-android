@@ -64,7 +64,7 @@ abstract class HelpFragment : BaseFragment() {
     val toolbar: Toolbar? = fragmentHelpBinding?.root?.findViewById(R.id.toolbar)
     toolbar?.apply {
       activity.setSupportActionBar(this)
-      setNavigationOnClickListener { requireActivity().onBackPressed() }
+      setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
     }
     activity.supportActionBar?.let {
       it.setDisplayHomeAsUpEnabled(true)

@@ -138,7 +138,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     val toolbar = fragmentPageBinding?.root?.findViewById<Toolbar>(R.id.toolbar)
     toolbar?.apply {
       activity.setSupportActionBar(this)
-      setNavigationOnClickListener { requireActivity().onBackPressed() }
+      setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
     }
     activity.supportActionBar?.apply {
       setDisplayHomeAsUpEnabled(true)

@@ -37,7 +37,7 @@ data class SaveLanguagesAndFinish(
       .subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread())
       .subscribe({
-        activity.onBackPressed()
+        activity.onBackPressedDispatcher.onBackPressed()
       }, Throwable::printStackTrace)
   }
 }
