@@ -24,6 +24,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.util.AttributeSet
+import android.util.Log
 import android.view.ContextMenu
 import android.view.ViewGroup
 import android.view.WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN
@@ -169,13 +170,15 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
 
     @SuppressWarnings("NestedBlockDepth")
     override fun handleMessage(msg: Message) {
-      val url = msg.data["url"] as? String
-      val src = msg.data["src"] as? String
+      val url = msg.data.getString("url", null)
+      val src = msg.data.getString("src", null)
       if (url != null || src != null) {
         val savedFile =
           FileUtils.downloadFileFromUrl(url, src, zimReaderContainer, sharedPreferenceUtil)
         savedFile?.let {
-          instance.toast(instance.getString(R.string.save_media_saved, it.name))
+          instance.toast(instance.getString(R.string.save_media_saved, it.name)).also {
+            Log.e("savedFile", "handleMessage: ${savedFile.isFile} ${savedFile.path}")
+          }
         } ?: run {
           instance.toast(R.string.save_media_error)
         }
