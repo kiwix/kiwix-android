@@ -125,7 +125,7 @@ class TabsAdapter internal constructor(
         connect(textView.id, END, close.id, START)
         applyTo(constraintLayout)
       }
-    return ViewHolder(constraintLayout, contentImage, textView, close)
+    return ViewHolder(constraintLayout, contentImage, textView, close, cardView)
   }
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -135,9 +135,28 @@ class TabsAdapter internal constructor(
     holder.apply {
       title.text = webViewTitle
       close.setOnClickListener { v: View -> listener?.onCloseTab(v, adapterPosition) }
+      materialCardView.apply {
+        // clear previously added views
+        removeView(webView)
+        removeView(content)
+        addView(
+          webView,
+          FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+          )
+        )
+        materialCardView.addView(
+          content,
+          FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+          )
+        )
+      }
       content.apply {
         setImageBitmap(
-          getBitmapFromView(webView, activity.getWindowWidth(), activity.getWindowHeight())
+          getBitmapFromView(materialCardView, activity.getWindowWidth(), activity.getWindowHeight())
         )
         setOnClickListener { v: View ->
           selected = adapterPosition
@@ -164,6 +183,12 @@ class TabsAdapter internal constructor(
     fun onCloseTab(view: View, position: Int)
   }
 
-  class ViewHolder(view: View, val content: ImageView, val title: TextView, val close: ImageView) :
+  class ViewHolder(
+    view: View,
+    val content: ImageView,
+    val title: TextView,
+    val close: ImageView,
+    val materialCardView: MaterialCardView
+  ) :
     RecyclerView.ViewHolder(view)
 }

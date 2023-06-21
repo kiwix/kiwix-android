@@ -1091,8 +1091,13 @@ abstract class CoreReaderFragment :
       }
       setUpWithTextToSpeech(it)
       updateBottomToolbarVisibility()
-      contentFrame?.addView(it)
+      safelyAddWebView(it)
     }
+  }
+
+  private fun safelyAddWebView(webView: KiwixWebView) {
+    webView.parent?.let { (it as ViewGroup).removeView(webView) }
+    contentFrame?.addView(webView)
   }
 
   protected fun selectTab(position: Int) {
@@ -1463,7 +1468,7 @@ abstract class CoreReaderFragment :
       showTabSwitcher()
       setUpWithTextToSpeech(tempWebViewListForUndo.last())
       updateBottomToolbarVisibility()
-      contentFrame?.addView(tempWebViewListForUndo.last())
+      safelyAddWebView(tempWebViewListForUndo.last())
     }
   }
 
