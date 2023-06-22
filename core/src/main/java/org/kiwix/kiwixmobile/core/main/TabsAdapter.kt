@@ -19,10 +19,12 @@ package org.kiwix.kiwixmobile.core.main
 
 import android.annotation.SuppressLint
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -41,7 +43,6 @@ import org.kiwix.kiwixmobile.core.extensions.tint
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getToolbarHeight
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowHeight
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowWidth
-import org.kiwix.kiwixmobile.core.utils.ImageUtils.getBitmapFromView
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 
 class TabsAdapter internal constructor(
@@ -125,6 +126,7 @@ class TabsAdapter internal constructor(
         connect(textView.id, END, close.id, START)
         applyTo(constraintLayout)
       }
+    Log.e("CONTENT", "onBindViewHolder: create view hodler ${cardView.width}")
     return ViewHolder(constraintLayout, contentImage, textView, close, cardView)
   }
 
@@ -135,19 +137,17 @@ class TabsAdapter internal constructor(
     holder.apply {
       title.text = webViewTitle
       close.setOnClickListener { v: View -> listener?.onCloseTab(v, adapterPosition) }
+      val linearLayout = LinearLayout(itemView.context).also { linearLayout ->
+        val layoutParams = linearLayout.layoutParams as ViewGroup.MarginLayoutParams?
+        layoutParams?.apply {
+          topMargin = -linearLayout.context.getToolbarHeight()
+          linearLayout.layoutParams = layoutParams
+        }
+        linearLayout.addView(webView)
+      }
       materialCardView.apply {
-        // clear previously added views
-        removeView(webView)
-        removeView(content)
         addView(
-          webView,
-          FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.MATCH_PARENT
-          )
-        )
-        materialCardView.addView(
-          content,
+          linearLayout,
           FrameLayout.LayoutParams(
             FrameLayout.LayoutParams.MATCH_PARENT,
             FrameLayout.LayoutParams.MATCH_PARENT
@@ -155,9 +155,23 @@ class TabsAdapter internal constructor(
         )
       }
       content.apply {
-        setImageBitmap(
-          getBitmapFromView(materialCardView, activity.getWindowWidth(), activity.getWindowHeight())
-        )
+        /*layoutParams = if (materialCardView.width == 0) {
+          FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+          )
+        } else {
+          FrameLayout.LayoutParams(
+            materialCardView.width,
+            FrameLayout.LayoutParams.MATCH_PARENT
+          )
+        }*/
+        // val bitmap = getBitmapFromView(
+        //   webView,
+        //   activity.getWindowWidth(),
+        //   activity.getWindowHeight()
+        // )
+        // setImageBitmap(bitmap)
         setOnClickListener { v: View ->
           selected = adapterPosition
           listener?.onSelectTab(v, selected)
@@ -167,6 +181,7 @@ class TabsAdapter internal constructor(
     }
     if (webViewTitle != activity.getString(R.string.menu_home)) {
       painter.update(holder.content)
+      painter.update(webView) // if the webview is not opened yet
     }
   }
 
