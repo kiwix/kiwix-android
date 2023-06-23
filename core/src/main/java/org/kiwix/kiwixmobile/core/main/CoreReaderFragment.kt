@@ -129,6 +129,7 @@ import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_S
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate
+import org.kiwix.kiwixmobile.core.utils.DimenUtils.getToolbarHeight
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
@@ -651,6 +652,9 @@ abstract class CoreReaderFragment :
       )
       setDisplayShowTitleEnabled(false)
     }
+    // Set a negative top margin to the web views to remove
+    // the unwanted blank space caused by the toolbar.
+    setTopMarginToWebViews(-requireActivity().getToolbarHeight())
     setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     bottomToolbar?.visibility = View.GONE
     contentFrame?.visibility = View.GONE
@@ -666,8 +670,32 @@ abstract class CoreReaderFragment :
           recyclerView.layoutManager!!.scrollToPosition(tabsAdapter.selected)
         }
       }
+      // Notify the tabs adapter to update the UI when the tab switcher is shown
+      // This ensures that any changes made to the adapter's data or views are
+      // reflected correctly.
+      tabsAdapter.notifyDataSetChanged()
     }
     mainMenu?.showTabSwitcherOptions()
+  }
+
+  /**
+   * Sets a top margin to the web views.
+   *
+   * @param topMargin The top margin to be applied to the web views.
+   *                  Use 0 to remove the margin.
+   */
+  protected open fun setTopMarginToWebViews(topMargin: Int) {
+    for (webView in webViewList) {
+      webView.parent?.let {
+        // Ensure that the web view has a parent before modifying its layout parameters
+        // This check is necessary to prevent adding the margin when the web view is not attached to a layout
+        // Adding the margin without a parent can cause unintended layout issues or empty
+        // space on top of the webView in the tabs adapter.
+        val layoutParams = webView.layoutParams as FrameLayout.LayoutParams?
+        layoutParams?.topMargin = topMargin
+        webView.requestLayout()
+      }
+    }
   }
 
   protected fun startAnimation(view: View?, @AnimRes anim: Int) {
@@ -694,6 +722,9 @@ abstract class CoreReaderFragment :
     progressBar?.hide()
     selectTab(currentWebViewIndex)
     mainMenu?.showWebViewOptions(urlIsValid())
+    // Reset the top margin of web views to 0 to remove any previously set margin
+    // This ensures that the web views are displayed without any additional top margin for kiwix custom apps.
+    setTopMarginToWebViews(0)
   }
 
   protected open fun setDrawerLockMode(lockMode: Int) {

@@ -19,12 +19,10 @@ package org.kiwix.kiwixmobile.core.main
 
 import android.annotation.SuppressLint
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -63,11 +61,6 @@ class TabsAdapter internal constructor(
   ): ViewHolder {
     val context = parent.context
     val margin16 = context.resources.getDimensionPixelSize(R.dimen.activity_horizontal_margin)
-    val contentImage = ImageView(context)
-      .apply {
-        id = R.id.tabsAdapterContentImageView
-        scaleType = ImageView.ScaleType.FIT_XY
-      }
     val close = ImageView(context)
       .apply {
         id = R.id.tabsAdapterCloseImageView
@@ -78,13 +71,6 @@ class TabsAdapter internal constructor(
       .apply {
         id = R.id.tabsAdapterCardView
         useCompatPadding = true
-        addView(
-          contentImage,
-          FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.MATCH_PARENT
-          )
-        )
       }
     val textView = TextView(context)
       .apply {
@@ -126,8 +112,7 @@ class TabsAdapter internal constructor(
         connect(textView.id, END, close.id, START)
         applyTo(constraintLayout)
       }
-    Log.e("CONTENT", "onBindViewHolder: create view hodler ${cardView.width}")
-    return ViewHolder(constraintLayout, contentImage, textView, close, cardView)
+    return ViewHolder(constraintLayout, textView, close, cardView)
   }
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -137,51 +122,39 @@ class TabsAdapter internal constructor(
     holder.apply {
       title.text = webViewTitle
       close.setOnClickListener { v: View -> listener?.onCloseTab(v, adapterPosition) }
-      val linearLayout = LinearLayout(itemView.context).also { linearLayout ->
-        val layoutParams = linearLayout.layoutParams as ViewGroup.MarginLayoutParams?
-        layoutParams?.apply {
-          topMargin = -linearLayout.context.getToolbarHeight()
-          linearLayout.layoutParams = layoutParams
-        }
-        linearLayout.addView(webView)
-      }
       materialCardView.apply {
+        removeAllViews()
+        // Create a new FrameLayout to hold the web view and custom view
+        val frameLayout = FrameLayout(context)
+        // Add the web view to the frame layout
+        frameLayout.addView(webView)
+        // Create a custom view that covers the entire
+        // webView(which prevent to clicks inside the webView) and handles tab selection
+        val view = View(context).apply {
+          layoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+          )
+          setOnClickListener { v: View ->
+            selected = adapterPosition
+            listener?.onSelectTab(v, selected)
+            notifyDataSetChanged()
+          }
+        }
+        // Add the custom view to the frame layout
+        frameLayout.addView(view)
+        // Add the frame layout to the material card view
         addView(
-          linearLayout,
+          frameLayout,
           FrameLayout.LayoutParams(
             FrameLayout.LayoutParams.MATCH_PARENT,
             FrameLayout.LayoutParams.MATCH_PARENT
           )
         )
       }
-      content.apply {
-        /*layoutParams = if (materialCardView.width == 0) {
-          FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.MATCH_PARENT
-          )
-        } else {
-          FrameLayout.LayoutParams(
-            materialCardView.width,
-            FrameLayout.LayoutParams.MATCH_PARENT
-          )
-        }*/
-        // val bitmap = getBitmapFromView(
-        //   webView,
-        //   activity.getWindowWidth(),
-        //   activity.getWindowHeight()
-        // )
-        // setImageBitmap(bitmap)
-        setOnClickListener { v: View ->
-          selected = adapterPosition
-          listener?.onSelectTab(v, selected)
-          notifyDataSetChanged()
-        }
-      }
     }
     if (webViewTitle != activity.getString(R.string.menu_home)) {
-      painter.update(holder.content)
-      painter.update(webView) // if the webview is not opened yet
+      painter.update(webView) // if the webView is not opened yet
     }
   }
 
@@ -200,7 +173,6 @@ class TabsAdapter internal constructor(
 
   class ViewHolder(
     view: View,
-    val content: ImageView,
     val title: TextView,
     val close: ImageView,
     val materialCardView: MaterialCardView

@@ -186,6 +186,10 @@ class KiwixReaderFragment : CoreReaderFragment() {
       if (webViewList.isEmpty()) {
         exitBook()
       } else {
+        // Reset the top margin of web views to 0 to remove any previously set margin
+        // This ensures that the web views are displayed without any additional
+        // top margin for kiwix main app.
+        setTopMarginToWebViews(0)
         selectTab(currentWebViewIndex)
       }
     }
