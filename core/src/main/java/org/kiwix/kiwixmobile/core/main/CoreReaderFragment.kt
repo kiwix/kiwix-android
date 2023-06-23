@@ -686,15 +686,18 @@ abstract class CoreReaderFragment :
    */
   protected open fun setTopMarginToWebViews(topMargin: Int) {
     for (webView in webViewList) {
-      webView.parent?.let {
+      if (webView.parent == null) {
         // Ensure that the web view has a parent before modifying its layout parameters
         // This check is necessary to prevent adding the margin when the web view is not attached to a layout
         // Adding the margin without a parent can cause unintended layout issues or empty
         // space on top of the webView in the tabs adapter.
-        val layoutParams = webView.layoutParams as FrameLayout.LayoutParams?
-        layoutParams?.topMargin = topMargin
-        webView.requestLayout()
+        val frameLayout = FrameLayout(requireActivity())
+        // Add the web view to the frame layout
+        frameLayout.addView(webView)
       }
+      val layoutParams = webView.layoutParams as FrameLayout.LayoutParams?
+      layoutParams?.topMargin = topMargin
+      webView.requestLayout()
     }
   }
 
