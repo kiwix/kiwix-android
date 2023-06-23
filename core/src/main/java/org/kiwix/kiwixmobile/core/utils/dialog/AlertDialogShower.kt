@@ -18,12 +18,12 @@
 
 package org.kiwix.kiwixmobile.core.utils.dialog
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.net.Uri
-import android.text.Html
 import android.view.Gravity
 import android.view.ViewGroup.LayoutParams
 import android.widget.FrameLayout
@@ -33,6 +33,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.getAttribute
+import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 import javax.inject.Inject
 
 class AlertDialogShower @Inject constructor(private val activity: Activity) :
@@ -89,7 +90,8 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) :
               ).show()
               true
             }
-            text = Html.fromHtml("</br><a href=$uri> <b>$uri</b>")
+            @SuppressLint("SetTextI18n")
+            text = "</br><a href=$uri> <b>$uri</b>".fromHtml()
           }
           frameLayout.addView(textView)
           setView(frameLayout)
