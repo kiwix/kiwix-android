@@ -73,6 +73,7 @@ class AppConfigurer {
        * for APKs).
       */
       applicationVariants.all {
+        @Suppress("DEPRECATION")
         outputs.filterIsInstance<ApkVariantOutput>().forEach { output: ApkVariantOutput ->
           val abiVersionCode = abiCodes[output.getFilter(VariantOutput.FilterType.ABI)] ?: 7
           output.versionCodeOverride = abiVersionCode * 1_000_000 + output.versionCode

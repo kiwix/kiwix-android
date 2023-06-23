@@ -7,6 +7,7 @@ import custom.transactionWithCommit
 import plugin.KiwixConfigurationPlugin
 import java.net.URI
 import java.net.URL
+import java.util.Locale
 
 plugins {
   android
@@ -37,7 +38,13 @@ android {
 }
 
 fun ProductFlavor.createDownloadTask(file: File): Task {
-  return tasks.create("download${name.capitalize()}Zim") {
+  return tasks.create(
+    "download${
+    name.replaceFirstChar {
+      if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it"
+    }
+    }Zim"
+  ) {
     group = "Downloading"
     doLast {
       if (!file.exists()) {
@@ -65,7 +72,8 @@ fun ProductFlavor.createPublishApkWithExpansionTask(
   file: File,
   applicationVariants: DomainObjectSet<ApplicationVariant>
 ): Task {
-  val capitalizedName = name.capitalize()
+  val capitalizedName =
+    name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it" }
   return tasks.create("publish${capitalizedName}ReleaseApkWithExpansionFile") {
     group = "publishing"
     description = "Uploads $capitalizedName to the Play Console with an Expansion file"
@@ -85,6 +93,7 @@ fun ProductFlavor.createPublishApkWithExpansionTask(
   }
 }
 
+@Suppress("DEPRECATION")
 fun DomainObjectSet<ApplicationVariant>.releaseVariantsFor(productFlavor: ProductFlavor) =
   find { it.name.equals("${productFlavor.name}Release", true) }!!
     .outputs.filterIsInstance<ApkVariantOutput>().sortedBy { it.versionCodeOverride }
