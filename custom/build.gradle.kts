@@ -19,7 +19,7 @@ android {
     applicationId = "org.kiwix"
   }
 
-  flavorDimensions("default")
+  flavorDimensions += "default"
   productFlavors.apply {
     CustomApps.createDynamically(project.file("src"), this)
     all {
