@@ -24,10 +24,9 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.util.AttributeSet
+import android.util.Log
 import android.view.ContextMenu
 import android.view.ViewGroup
-import android.view.WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN
-import android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
 import android.webkit.WebView
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -72,13 +71,9 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       if (isFullScreen) {
         hide(WindowInsetsCompat.Type.systemBars())
         systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        window.clearFlags(FLAG_FULLSCREEN)
-        window.addFlags(FLAG_FULLSCREEN)
         window.decorView.rootView.requestLayout()
       } else {
         show(WindowInsetsCompat.Type.systemBars())
-        window.clearFlags(FLAG_FULLSCREEN)
-        window.addFlags(FLAG_FORCE_NOT_FULLSCREEN)
         window.decorView.rootView.requestLayout()
       }
     }
@@ -98,6 +93,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       useWideViewPort = true
       builtInZoomControls = true
       displayZoomControls = false
+      @Suppress("DEPRECATION")
       allowUniversalAccessFromFileURLs = true
     }
     setInitialScale(INITIAL_SCALE)
@@ -125,8 +121,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   override fun onCreateContextMenu(menu: ContextMenu) {
     super.onCreateContextMenu(menu)
     val result = hitTestResult
-    if (result.type == HitTestResult.IMAGE_ANCHOR_TYPE ||
-      result.type == HitTestResult.IMAGE_TYPE ||
+    if (result.type == HitTestResult.IMAGE_TYPE ||
       result.type == HitTestResult.SRC_IMAGE_ANCHOR_TYPE
     ) {
       val saveMenu =
@@ -170,13 +165,15 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
 
     @SuppressWarnings("NestedBlockDepth")
     override fun handleMessage(msg: Message) {
-      val url = msg.data["url"] as? String
-      val src = msg.data["src"] as? String
+      val url = msg.data.getString("url", null)
+      val src = msg.data.getString("src", null)
       if (url != null || src != null) {
         val savedFile =
           FileUtils.downloadFileFromUrl(url, src, zimReaderContainer, sharedPreferenceUtil)
         savedFile?.let {
-          instance.toast(instance.getString(R.string.save_media_saved, it.name))
+          instance.toast(instance.getString(R.string.save_media_saved, it.name)).also {
+            Log.e("savedFile", "handleMessage: ${savedFile.isFile} ${savedFile.path}")
+          }
         } ?: run {
           instance.toast(R.string.save_media_error)
         }
