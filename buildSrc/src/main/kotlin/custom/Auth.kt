@@ -16,7 +16,6 @@
 
 package custom
 
-import com.android.build.api.variant.VariantOutput
 import com.android.build.gradle.api.ApkVariantOutput
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
@@ -34,6 +33,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.security.KeyStore
 
+@Suppress("DEPRECATION")
 fun createPublisher(auth: File): AndroidPublisher {
   val transport = buildTransport()
   val factory = JacksonFactory.getDefaultInstance()
@@ -81,6 +81,7 @@ class Transaction(
       FileContent("application/octet-stream", file)
     ).execute().prettyPrint()
 
+  @Suppress("DEPRECATION")
   fun attachExpansionTo(expansionCode: Int, apkVariantOutput: ApkVariantOutput): ExpansionFile =
     publisher.edits().expansionfiles().update(
       packageName,
@@ -90,6 +91,7 @@ class Transaction(
       ExpansionFile().apply { referencesVersion = expansionCode }
     ).execute().prettyPrint()
 
+  @Suppress("DEPRECATION")
   fun uploadApk(apkVariantOutput: ApkVariantOutput) {
     publisher.edits().apks().upload(
       packageName,
@@ -98,12 +100,13 @@ class Transaction(
     ).execute().prettyPrint()
   }
 
+  @Suppress("DEPRECATION")
   fun addToTrackInDraft(apkVariants: List<ApkVariantOutput>): Track =
     publisher.edits().tracks().update(packageName, editId, "internal", Track().apply {
       releases = listOf(TrackRelease().apply {
         status = "draft"
         name = apkVariants[0].versionNameOverride
-        versionCodes =  apkVariants.map { it.versionCodeOverride.toLong() }
+        versionCodes = apkVariants.map { it.versionCodeOverride.toLong() }
       })
       track = "internal"
     }).execute().prettyPrint()
