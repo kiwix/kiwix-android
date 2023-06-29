@@ -49,13 +49,13 @@ abstract class NotesRoomDao : PageDao {
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   abstract fun saveNote(notesRoomEntity: NotesRoomEntity)
 
-  @Query("DELETE FROM NotesRoomEntity WHERE noteTitle=:noteUniqueKey")
-  abstract fun deleteNote(noteUniqueKey: String)
+  @Query("DELETE FROM NotesRoomEntity WHERE noteTitle=:noteTitle")
+  abstract fun deleteNote(noteTitle: String)
 
   fun deleteNotes(notesList: List<NoteListItem>) {
     notesList.forEachIndexed { _, note ->
       val notesRoomEntity = NotesRoomEntity(note)
-      deleteNote(noteUniqueKey = notesRoomEntity.noteTitle)
+      deleteNote(noteTitle = notesRoomEntity.noteTitle)
     }
   }
 

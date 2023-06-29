@@ -86,7 +86,6 @@ class NoteRoomDaoTest {
   fun saveNote() = runBlocking {
     val context = ApplicationProvider.getApplicationContext<Context>()
     val notesItem: NoteListItem = mockk(relaxed = true)
-    val notesItemList: List<NoteListItem> = listOf(notesItem)
     db = Room.inMemoryDatabaseBuilder(
       context, KiwixRoomDatabase::class.java
     ).build()
