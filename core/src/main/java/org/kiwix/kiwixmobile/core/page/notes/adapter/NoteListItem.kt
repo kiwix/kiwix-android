@@ -8,7 +8,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 data class NoteListItem(
   val databaseId: Long = 0L,
   override val zimId: String,
-  override val title: String,
+  override var title: String,
   override val zimFilePath: String?,
   val zimUrl: String,
   val noteFilePath: String,
