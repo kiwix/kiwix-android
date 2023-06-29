@@ -22,6 +22,7 @@ import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 
+@Deprecated("Replaced with the Room")
 @Entity
 data class NotesEntity(
   @Id var id: Long = 0L,

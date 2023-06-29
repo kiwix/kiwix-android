@@ -24,6 +24,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.mockk
 import io.objectbox.Box
+import kotlinx.coroutines.flow.subscribe
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -57,7 +58,7 @@ class NoteRoomDaoTest {
     noteRoomDao = db.noteRoomDao()
     noteRoomDao.deletePages(pagesToDelete)
     noteRoomDao.deleteNotes(notesItemList)
-    noteRoomDao.pages().collect {
+    noteRoomDao.pages().subscribe {
       Assertions.assertEquals(0, it.size)
     }
   }
@@ -75,7 +76,7 @@ class NoteRoomDaoTest {
     notesItem.title = noteTitle
     noteRoomDao.saveNote(NotesRoomEntity(notesItem))
     noteRoomDao.deleteNote(noteTitle)
-    noteRoomDao.notesAsEntity().collect {
+    noteRoomDao.notesAsEntity().subscribe {
       Assertions.assertEquals(0, it.size)
     }
   }
@@ -93,7 +94,7 @@ class NoteRoomDaoTest {
     val noteTitle = "abNotesTitle"
     notesItem.title = noteTitle
     noteRoomDao.saveNote(NotesRoomEntity(notesItem))
-    noteRoomDao.notesAsEntity().collect {
+    noteRoomDao.notesAsEntity().subscribe {
       Assertions.assertEquals(1, it.size)
       Assertions.assertEquals(noteTitle, it.first().noteTitle)
     }
@@ -117,7 +118,7 @@ class NoteRoomDaoTest {
     noteRoomDao.saveNote(NotesRoomEntity(notesItem3))
     noteRoomDao.saveNote(NotesRoomEntity(notesItem4))
     noteRoomDao.saveNote(NotesRoomEntity(notesItem5))
-    noteRoomDao.notesAsEntity().collect {
+    noteRoomDao.notesAsEntity().subscribe {
       Assertions.assertEquals(5, it.size)
     }
   }
@@ -134,7 +135,7 @@ class NoteRoomDaoTest {
     newNotesDao.saveNote(newNote)
     notesBox.put(NotesEntity(newNote))
     noteRoomDao.migrationToRoomInsert(notesBox)
-    noteRoomDao.pages().collect {
+    noteRoomDao.pages().subscribe {
       Assertions.assertEquals(1, it.size)
     }
   }
@@ -156,7 +157,7 @@ class NoteRoomDaoTest {
     notesBox.put(NotesEntity(newNote))
     notesBox.put(NotesEntity(newNote))
     noteRoomDao.migrationToRoomInsert(notesBox)
-    noteRoomDao.pages().collect {
+    noteRoomDao.pages().subscribe {
       Assertions.assertEquals(6, it.size)
     }
   }

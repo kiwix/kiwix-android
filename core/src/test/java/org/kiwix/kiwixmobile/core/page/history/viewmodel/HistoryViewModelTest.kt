@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.core.page.history.viewmodel
 
+import androidx.lifecycle.viewModelScope
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -101,7 +102,12 @@ internal class HistoryViewModelTest {
   @Test
   fun `createDeletePageDialogEffect returns ShowDeleteHistoryDialog`() {
     assertThat(viewModel.createDeletePageDialogEffect(historyState())).isEqualTo(
-      ShowDeleteHistoryDialog(viewModel.effects, historyState(), historyDao)
+      ShowDeleteHistoryDialog(
+        viewModel.effects,
+        historyState(),
+        historyDao,
+        viewModel.viewModelScope
+      )
     )
   }
 

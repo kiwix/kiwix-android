@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
+import androidx.lifecycle.viewModelScope
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -132,7 +133,12 @@ internal class BookmarkViewModelTest {
     assertThat(
       viewModel.createDeletePageDialogEffect(bookmarkState())
     ).isEqualTo(
-      ShowDeleteBookmarksDialog(viewModel.effects, bookmarkState(), bookmarksDao)
+      ShowDeleteBookmarksDialog(
+        viewModel.effects,
+        bookmarkState(),
+        bookmarksDao,
+        viewModel.viewModelScope
+      )
     )
   }
 

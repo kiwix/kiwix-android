@@ -35,14 +35,20 @@ internal class DeletePageItemsTest {
   @Test
   fun `delete with selected items only deletes the selected items`() {
     item1.isSelected = true
-    DeletePageItems(historyState(listOf(item1, item2)), pageDao).invokeWith(activity)
+    DeletePageItems(
+      historyState(listOf(item1, item2)),
+      pageDao
+    ).invokeWith(activity)
     verify { pageDao.deletePages(listOf(item1)) }
   }
 
   @Test
   fun `delete with no selected items deletes all items`() {
     item1.isSelected = false
-    DeletePageItems(historyState(listOf(item1, item2)), pageDao).invokeWith(activity)
+    DeletePageItems(
+      historyState(listOf(item1, item2)),
+      pageDao
+    ).invokeWith(activity)
     verify { pageDao.deletePages(listOf(item1, item2)) }
   }
 }

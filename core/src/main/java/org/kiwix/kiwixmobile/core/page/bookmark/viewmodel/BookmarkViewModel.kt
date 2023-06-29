@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
+import androidx.lifecycle.viewModelScope
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
@@ -61,7 +62,7 @@ class BookmarkViewModel @Inject constructor(
     state.copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
 
   override fun createDeletePageDialogEffect(state: BookmarkState) =
-    ShowDeleteBookmarksDialog(effects, state, basePageDao)
+    ShowDeleteBookmarksDialog(effects, state, pageDao, viewModelScope)
 
   override fun copyWithNewItems(state: BookmarkState, newItems: List<BookmarkItem>): BookmarkState =
     state.copy(pageItems = newItems)
