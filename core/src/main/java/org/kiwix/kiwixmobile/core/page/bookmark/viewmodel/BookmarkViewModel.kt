@@ -61,7 +61,7 @@ class BookmarkViewModel @Inject constructor(
     state.copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
 
   override fun createDeletePageDialogEffect(state: BookmarkState) =
-    ShowDeleteBookmarksDialog(effects, state, pageDao)
+    ShowDeleteBookmarksDialog(effects, state, basePageDao)
 
   override fun copyWithNewItems(state: BookmarkState, newItems: List<BookmarkItem>): BookmarkState =
     state.copy(pageItems = newItems)

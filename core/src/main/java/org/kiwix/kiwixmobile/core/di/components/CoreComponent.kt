@@ -33,6 +33,7 @@ import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.dao.NewNoteDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
+import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.data.DataModule
 import org.kiwix.kiwixmobile.core.data.DataSource
@@ -95,6 +96,7 @@ interface CoreComponent {
   fun connectivityManager(): ConnectivityManager
   fun recentSearchRoomDao(): RecentSearchRoomDao
   fun objectBoxToRoomMigrator(): ObjectBoxToRoomMigrator
+  fun noteRoomDao(): NotesRoomDao
 
   fun context(): Context
   fun downloader(): Downloader
