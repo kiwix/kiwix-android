@@ -25,8 +25,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
+import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
@@ -38,6 +40,7 @@ class ObjectBoxToRoomMigrator {
   fun migrateObjectBoxDataToRoom() {
     CoreApp.coreComponent.inject(this)
     migrateRecentSearch(boxStore.boxFor())
+    migrateNotes(boxStore.boxFor())
     // TODO we will migrate here for other entities
   }
 
@@ -52,5 +55,18 @@ class ObjectBoxToRoomMigrator {
       }
     }
     sharedPreferenceUtil.putPrefRecentSearchMigrated(true)
+  }
+
+  fun migrateNotes(box: Box<NotesEntity>) {
+    val notesEntityList = box.all
+    notesEntityList.forEachIndexed { _, notesEntity ->
+      CoroutineScope(Dispatchers.IO).launch {
+        kiwixRoomDatabase.noteRoomDao()
+          .saveNote(NoteListItem(notesEntity))
+        // removing the single entity from the object box after migration.
+        box.remove(notesEntity.id)
+      }
+    }
+    sharedPreferenceUtil.putPrefNotesMigrated(true)
   }
 }
