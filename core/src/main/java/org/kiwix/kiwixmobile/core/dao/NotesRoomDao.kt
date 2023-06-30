@@ -22,12 +22,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import io.objectbox.Box
 import io.reactivex.Flowable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
@@ -56,17 +51,6 @@ abstract class NotesRoomDao : PageDao {
     notesList.forEachIndexed { _, note ->
       val notesRoomEntity = NotesRoomEntity(note)
       deleteNote(noteTitle = notesRoomEntity.noteTitle)
-    }
-  }
-
-  fun migrationToRoomInsert(
-    box: Box<NotesEntity>
-  ) {
-    val notesEntities = box.all
-    notesEntities.forEachIndexed { _, notesEntity ->
-      CoroutineScope(Dispatchers.IO).launch {
-        saveNote(NoteListItem(notesEntity))
-      }
     }
   }
 }
