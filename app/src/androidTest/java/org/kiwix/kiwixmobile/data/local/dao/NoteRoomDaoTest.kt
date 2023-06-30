@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.data.local.dao
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
@@ -42,6 +43,7 @@ class NoteRoomDaoTest {
 
   @Test
   @Throws(IOException::class)
+  @SuppressLint("CheckResult")
   fun testNotesRoomDao() = runBlocking {
     val zimId = "8812214350305159407L"
     val noteTitle = "abNotesTitle"
@@ -86,7 +88,7 @@ class NoteRoomDaoTest {
       assertThat(it[0].zimFilePath, equalTo(zimFilePath))
       assertThat(it[0].zimUrl, equalTo(zimUrl))
       assertThat(it[0].noteFilePath, equalTo(noteFilePath))
-    }
+    }.dispose()
 
     // Delete all entities saved in the database
     noteRoomDao.deletePages(notesItemList)
@@ -94,19 +96,19 @@ class NoteRoomDaoTest {
     // Verify that the result does not contain the deleted entity
     noteRoomDao.pages().subscribe {
       assertThat(0, equalTo(it.size))
-    }
+    }.dispose()
 
     // Save a note entity
     noteRoomDao.saveNote(NotesRoomEntity(notesItem))
     noteRoomDao.notesAsEntity().subscribe {
       assertThat(1, equalTo(it.size))
-    }
+    }.dispose()
     // Delete the saved entity by title
     noteRoomDao.deleteNote(noteTitle)
     // Verify that the result does not contain the deleted entity
     noteRoomDao.notesAsEntity().subscribe {
       assertThat(0, equalTo(it.size))
-    }
+    }.dispose()
 
     // Save a note entity
     noteRoomDao.saveNote(NotesRoomEntity(notesItem))
@@ -114,14 +116,14 @@ class NoteRoomDaoTest {
     noteRoomDao.notesAsEntity().subscribe {
       assertThat(1, equalTo(it.size))
       assertThat(noteTitle, equalTo(it.first().noteTitle))
-    }
+    }.dispose()
 
     // Test deleting a note that does not exist
     val nonExistentNoteTitle = "NonExistentNoteTitle"
     noteRoomDao.deleteNote(nonExistentNoteTitle)
     noteRoomDao.notesAsEntity().subscribe {
       assertThat(1, equalTo(it.size))
-    }
+    }.dispose()
 
     // Test querying notes with different filter conditions
     noteRoomDao.notesAsEntity().subscribe { notesList ->
@@ -130,7 +132,7 @@ class NoteRoomDaoTest {
       assertThat(notesList.size, equalTo(1))
       assertThat(filteredNotes!!.noteTitle, equalTo(noteTitle))
       assertThat(filteredNotes.zimId, equalTo(zimId))
-    }
+    }.dispose()
 
     // Test updating a note
     val updatedNoteTitle = "UpdatedNoteTitle"
@@ -148,7 +150,7 @@ class NoteRoomDaoTest {
         assertThat(updatedNoteFromDb, notNullValue())
         assertThat(updatedNoteFromDb!!.noteTitle, equalTo(updatedNoteTitle))
         assertThat(updatedNoteFromDb.noteFilePath, equalTo(updatedNoteFilePath))
-      }
-    }
+      }.dispose()
+    }.dispose()
   }
 }
