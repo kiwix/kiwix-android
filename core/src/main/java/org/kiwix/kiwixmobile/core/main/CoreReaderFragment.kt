@@ -387,6 +387,7 @@ abstract class CoreReaderFragment :
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
+    @Suppress("DEPRECATION")
     setHasOptionsMenu(true)
     val activity = requireActivity() as AppCompatActivity?
     activity?.let {
@@ -1173,6 +1174,7 @@ abstract class CoreReaderFragment :
     }
   }
 
+  @Suppress("DEPRECATION")
   override fun onOptionsItemSelected(item: MenuItem): Boolean =
     mainMenu?.onOptionsItemSelected(item) == true || super.onOptionsItemSelected(item)
 
@@ -1747,6 +1749,7 @@ abstract class CoreReaderFragment :
     }
   }
 
+  @Suppress("DEPRECATION")
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     super<BaseFragment>.onCreateOptionsMenu(menu, inflater)
     menu.clear()

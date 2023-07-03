@@ -95,6 +95,8 @@ class ZimManageViewModelTest {
   private val defaultLanguageProvider: DefaultLanguageProvider = mockk()
   private val dataSource: DataSource = mockk()
   private val connectivityManager: ConnectivityManager = mockk()
+
+  @Suppress("DEPRECATION")
   private val networkInfo: NetworkInfo = mockk()
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
   lateinit var viewModel: ZimManageViewModel
@@ -119,6 +121,7 @@ class ZimManageViewModelTest {
     resetSchedulers()
   }
 
+  @Suppress("DEPRECATION")
   @BeforeEach
   fun init() {
     clearAllMocks()

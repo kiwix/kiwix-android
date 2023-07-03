@@ -63,6 +63,7 @@ class Fat32Checker constructor(
       )
   }
 
+  @Suppress("DEPRECATION")
   private fun fileObserver(it: String): FileObserver {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
       return object : FileObserver(File(it), MOVED_FROM or DELETE) {
