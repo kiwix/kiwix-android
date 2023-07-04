@@ -560,6 +560,7 @@ class CustomPageIndicator @JvmOverloads constructor(
   /**
    * A [ValueAnimator] that starts once a given predicate returns true.
    */
+  @Suppress("UnnecessaryAbstractClass")
   abstract inner class PendingStartAnimator(private var predicate: StartPredicate) :
     ValueAnimator() {
     private var hasStarted = false

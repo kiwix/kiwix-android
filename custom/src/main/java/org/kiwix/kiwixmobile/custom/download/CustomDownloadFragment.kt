@@ -100,25 +100,28 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
     activity?.finish()
   }
 
-  private fun render(state: State) {
+  private fun render(state: State): Unit? {
     return when (state) {
       DownloadRequired ->
         fragmentCustomDownloadBinding?.cdViewAnimator?.setDistinctDisplayedChild(0)
+
       is DownloadInProgress -> {
         fragmentCustomDownloadBinding?.cdViewAnimator?.setDistinctDisplayedChild(1)
-        render(state.downloads[0])
+        showDownloadingProgress(state.downloads[0])
       }
+
       is DownloadFailed -> {
         fragmentCustomDownloadBinding?.cdViewAnimator?.setDistinctDisplayedChild(2)
         fragmentCustomDownloadBinding?.customDownloadError?.cdErrorText?.text =
           context?.let(state.downloadState::toReadableState)
       }
+
       DownloadComplete ->
         fragmentCustomDownloadBinding?.cdViewAnimator?.setDistinctDisplayedChild(3)
-    }!!
+    }
   }
 
-  private fun render(downloadItem: DownloadItem) {
+  private fun showDownloadingProgress(downloadItem: DownloadItem) {
     fragmentCustomDownloadBinding?.customDownloadInProgress?.apply {
       cdDownloadState.text = downloadItem.readableEta
       cdEta.text = context?.let(downloadItem.downloadState::toReadableState)

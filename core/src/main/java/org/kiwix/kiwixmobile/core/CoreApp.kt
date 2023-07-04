@@ -32,6 +32,7 @@ import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
 import javax.inject.Inject
 
+@Suppress("UnnecessaryAbstractClass")
 abstract class CoreApp : Application() {
   companion object {
     @JvmStatic

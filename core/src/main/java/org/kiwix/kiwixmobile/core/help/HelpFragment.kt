@@ -40,6 +40,7 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.CONTACT_EMAIL_ADDRESS
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 
+@Suppress("UnnecessaryAbstractClass")
 abstract class HelpFragment : BaseFragment() {
   private var fragmentHelpBinding: FragmentHelpBinding? = null
   protected open fun rawTitleDescriptionMap(): List<Pair<Int, Int>> = emptyList()
