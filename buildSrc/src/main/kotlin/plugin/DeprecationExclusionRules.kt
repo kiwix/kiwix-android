@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
 
 class DeprecationExclusionRule : Rule() {
   override val issue = Issue(
-    id = "DeprecationExclusion",
+    id = javaClass.simpleName,
     severity = Severity.CodeSmell,
     description = "Deprecated imports should be excluded",
     debt = Debt.FIVE_MINS
