@@ -69,11 +69,14 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -387,8 +390,7 @@ abstract class CoreReaderFragment :
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    @Suppress("DEPRECATION")
-    setHasOptionsMenu(true)
+    setupMenu()
     val activity = requireActivity() as AppCompatActivity?
     activity?.let {
       WebView(it).destroy() // Workaround for buggy webViews see #710
@@ -1174,9 +1176,21 @@ abstract class CoreReaderFragment :
     }
   }
 
-  @Suppress("DEPRECATION")
-  override fun onOptionsItemSelected(item: MenuItem): Boolean =
-    mainMenu?.onOptionsItemSelected(item) == true || super.onOptionsItemSelected(item)
+  private fun setupMenu() {
+    (requireActivity() as MenuHost).addMenuProvider(
+      object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+          menu.clear()
+          mainMenu = createMainMenu(menu)
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
+          mainMenu?.onOptionsItemSelected(menuItem) == true
+      },
+      viewLifecycleOwner,
+      Lifecycle.State.RESUMED
+    )
+  }
 
   override fun onFullscreenMenuClicked() {
     if (isInFullScreenMode()) {
@@ -1747,13 +1761,6 @@ abstract class CoreReaderFragment :
       findAll()
       showSoftInput()
     }
-  }
-
-  @Suppress("DEPRECATION")
-  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    super<BaseFragment>.onCreateOptionsMenu(menu, inflater)
-    menu.clear()
-    mainMenu = createMainMenu(menu)
   }
 
   protected open fun createMainMenu(menu: Menu?): MainMenu? =
