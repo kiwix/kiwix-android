@@ -60,7 +60,7 @@ class RateDialogHandler @Inject constructor(
   fun checkForRateDialog(@IdRes iconResId: Int) {
     isFirstRun = sharedPreferenceUtil.prefIsFirstRun
     visitCounterPref = RateAppCounter(activity)
-    tempVisitCount = visitCounterPref?.count!!
+    tempVisitCount = visitCounterPref?.count ?: 0
     ++tempVisitCount
     visitCounterPref?.count = tempVisitCount
     if (shouldShowRateDialog() && NetworkUtils.isNetworkAvailable(activity)) {

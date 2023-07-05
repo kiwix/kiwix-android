@@ -59,7 +59,9 @@ class CustomDownloadViewModel @Inject constructor(
     )
   }
 
-  private fun reducer() = actions.map { reduce(it, state.value!!) }
+  private fun reducer() = actions.map {
+    state.value?.let { value -> reduce(it, value) }
+  }
     .distinctUntilChanged()
     .subscribe(state::postValue, Throwable::printStackTrace)
 

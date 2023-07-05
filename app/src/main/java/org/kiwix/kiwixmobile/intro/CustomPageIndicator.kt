@@ -49,6 +49,7 @@ import kotlin.math.min
  * We refactor this java file to kotlin file
  */
 
+@Suppress("UnsafeCallOnNullableType")
 class CustomPageIndicator @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
@@ -114,10 +115,10 @@ class CustomPageIndicator @JvmOverloads constructor(
   fun setViewPager(viewPager: ViewPager) {
     this.viewPager = viewPager
     viewPager.addOnPageChangeListener(this)
-    setPageCount(viewPager.adapter!!.count)
-    viewPager.adapter!!.registerDataSetObserver(object : DataSetObserver() {
+    viewPager.adapter?.count?.let(::setPageCount)
+    viewPager.adapter?.registerDataSetObserver(object : DataSetObserver() {
       override fun onChanged() {
-        setPageCount(this@CustomPageIndicator.viewPager!!.adapter!!.count)
+        this@CustomPageIndicator.viewPager?.adapter?.count?.let(::setPageCount)
       }
     })
     setCurrentPageImmediate()

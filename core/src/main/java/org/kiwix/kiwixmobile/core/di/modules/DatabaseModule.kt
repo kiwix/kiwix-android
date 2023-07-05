@@ -39,6 +39,7 @@ open class DatabaseModule {
     var boxStore: BoxStore? = null
   }
 
+  @Suppress("UnsafeCallOnNullableType")
   // NOT RECOMMENDED TODO use custom runner to load TestApplication
   @Provides @Singleton fun providesBoxStore(context: Context): BoxStore {
     if (boxStore == null) {

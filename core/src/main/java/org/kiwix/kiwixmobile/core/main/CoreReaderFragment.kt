@@ -610,16 +610,18 @@ abstract class CoreReaderFragment :
   }
 
   private fun setupTabsAdapter() {
-    tabsAdapter = TabsAdapter(
-      requireActivity() as AppCompatActivity,
-      webViewList,
-      painter!!
-    ).apply {
-      registerAdapterDataObserver(object : AdapterDataObserver() {
-        override fun onChanged() {
-          mainMenu?.updateTabIcon(itemCount)
-        }
-      })
+    tabsAdapter = painter?.let {
+      TabsAdapter(
+        requireActivity() as AppCompatActivity,
+        webViewList,
+        it
+      ).apply {
+        registerAdapterDataObserver(object : AdapterDataObserver() {
+          override fun onChanged() {
+            mainMenu?.updateTabIcon(itemCount)
+          }
+        })
+      }
     }
   }
 
@@ -638,7 +640,7 @@ abstract class CoreReaderFragment :
       override fun onSectionClick(view: View?, position: Int) {
         loadUrlWithCurrentWebview(
           "javascript:document.getElementById('" +
-            documentSections!![position].id.replace("'", "\\'") +
+            documentSections?.get(position)?.id?.replace("'", "\\'") +
             "').scrollIntoView();"
         )
         drawerLayout?.closeDrawers()
@@ -670,7 +672,7 @@ abstract class CoreReaderFragment :
         if (tabsAdapter.selected < webViewList.size &&
           recyclerView.layoutManager != null
         ) {
-          recyclerView.layoutManager!!.scrollToPosition(tabsAdapter.selected)
+          recyclerView.layoutManager?.scrollToPosition(tabsAdapter.selected)
         }
       }
       // Notify the tabs adapter to update the UI when the tab switcher is shown
@@ -886,7 +888,8 @@ abstract class CoreReaderFragment :
   }
 
   private fun getValidTitle(zimFileTitle: String?): String =
-    if (isAdded && isInvalidTitle(zimFileTitle)) getString(R.string.app_name) else zimFileTitle!!
+    if (isAdded && isInvalidTitle(zimFileTitle)) getString(R.string.app_name)
+    else zimFileTitle.toString()
 
   private fun isInvalidTitle(zimFileTitle: String?): Boolean =
     zimFileTitle == null || zimFileTitle.trim { it <= ' ' }.isEmpty()
@@ -1058,6 +1061,7 @@ abstract class CoreReaderFragment :
     return null
   }
 
+  @Suppress("UnsafeCallOnNullableType")
   protected open fun createWebView(attrs: AttributeSet?): ToolbarScrollingKiwixWebView? {
     return if (activityMainRoot != null) {
       ToolbarScrollingKiwixWebView(
@@ -1739,10 +1743,10 @@ abstract class CoreReaderFragment :
   }
 
   private fun searchForTitle(title: String?, openInNewTab: Boolean) {
-    val articleUrl: String? = if (title!!.startsWith("A/")) {
+    val articleUrl: String? = if (title?.startsWith("A/") == true) {
       title
     } else {
-      zimReaderContainer?.getPageUrlFromTitle(title)
+      title?.let { zimReaderContainer?.getPageUrlFromTitle(it) }
     }
     if (openInNewTab) {
       openArticleInNewTab(articleUrl)
@@ -1764,14 +1768,16 @@ abstract class CoreReaderFragment :
   }
 
   protected open fun createMainMenu(menu: Menu?): MainMenu? =
-    menuFactory?.create(
-      menu!!,
-      webViewList,
-      urlIsValid(),
-      menuClickListener = this,
-      disableReadAloud = false,
-      disableTabs = false
-    )
+    menu?.let {
+      menuFactory?.create(
+        it,
+        webViewList,
+        urlIsValid(),
+        menuClickListener = this,
+        disableReadAloud = false,
+        disableTabs = false
+      )
+    }
 
   protected fun urlIsValid(): Boolean = getCurrentWebView()?.url != null
 
@@ -1851,6 +1857,7 @@ abstract class CoreReaderFragment :
             requireActivity()
           )
         )
+        @Suppress("UnsafeCallOnNullableType")
         getCurrentWebView()?.let {
           val history = HistoryItem(
             it.url!!,

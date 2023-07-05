@@ -76,7 +76,7 @@ class CustomReaderFragment : CoreReaderFragment() {
         toolbarToc?.isEnabled = false
       }
       with(activity as AppCompatActivity) {
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar?.let { setupDrawerToggle(it) }
       }
       loadPageFromNavigationArguments()
@@ -187,14 +187,16 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   override fun createMainMenu(menu: Menu?): MainMenu? {
-    return menuFactory?.create(
-      menu!!,
-      webViewList,
-      urlIsValid(),
-      this,
-      BuildConfig.DISABLE_READ_ALOUD,
-      BuildConfig.DISABLE_TABS
-    )
+    return menu?.let {
+      menuFactory?.create(
+        it,
+        webViewList,
+        urlIsValid(),
+        this,
+        BuildConfig.DISABLE_READ_ALOUD,
+        BuildConfig.DISABLE_TABS
+      )
+    }
   }
 
   override fun showOpenInNewTabDialog(url: String) {

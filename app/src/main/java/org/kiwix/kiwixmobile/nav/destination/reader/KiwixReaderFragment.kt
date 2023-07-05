@@ -262,6 +262,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     restoreTabs(zimArticles, zimPositions, currentTab)
   }
 
+  @Suppress("UnsafeCallOnNullableType")
   override fun createWebView(attrs: AttributeSet?): ToolbarScrollingKiwixWebView {
     return ToolbarScrollingKiwixWebView(
       requireContext(), this, attrs!!, activityMainRoot as ViewGroup, videoView!!,

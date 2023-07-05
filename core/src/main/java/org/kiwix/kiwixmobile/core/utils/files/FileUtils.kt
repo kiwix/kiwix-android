@@ -136,9 +136,9 @@ object FileUtils {
           null
         }
     } else if (uri.scheme != null) {
-      if ("content".equals(uri.scheme!!, ignoreCase = true)) {
+      if ("content".equals(uri.scheme, ignoreCase = true)) {
         return contentQuery(context, uri)
-      } else if ("file".equals(uri.scheme!!, ignoreCase = true)) {
+      } else if ("file".equals(uri.scheme, ignoreCase = true)) {
         return uri.path
       }
     } else {

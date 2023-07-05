@@ -75,6 +75,7 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
     box.remove(databaseId)
   }
 
+  @Suppress("UnsafeCallOnNullableType")
   fun migrationInsert(books: List<Book>) {
     insert(books.map { BookOnDisk(book = it, file = it.file!!) })
   }
