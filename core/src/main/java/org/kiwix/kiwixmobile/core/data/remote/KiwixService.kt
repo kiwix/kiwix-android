@@ -15,6 +15,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+@file:Suppress("DEPRECATION")
+
 package org.kiwix.kiwixmobile.core.data.remote
 
 import io.reactivex.Observable

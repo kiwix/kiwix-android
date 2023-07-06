@@ -22,8 +22,6 @@ import Config
 import Libs
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.gradle.BaseExtension
-import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -68,12 +66,6 @@ class AllProjectConfigurer {
       }
       target.tasks.withType(KotlinCompile::class.java) {
         kotlinOptions.jvmTarget = "1.8"
-      }
-      target.tasks.withType(Detekt::class.java).configureEach {
-        jvmTarget = "1.8"
-      }
-      target.tasks.withType(DetektCreateBaselineTask::class.java).configureEach {
-        jvmTarget = "1.8"
       }
       buildFeatures.viewBinding = true
 

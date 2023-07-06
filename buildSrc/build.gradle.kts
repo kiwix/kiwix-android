@@ -22,8 +22,6 @@ dependencies {
     exclude(group = "com.google.guava", module = "guava")
   }
   implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.20.0")
-  // For defining custom rules in detekt
-  implementation("io.gitlab.arturbosch.detekt:detekt-api:1.20.0")
   implementation("com.googlecode.json-simple:json-simple:1.1")
 
   implementation(gradleApi())
