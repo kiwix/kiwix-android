@@ -69,6 +69,10 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   abstract val pageAdapter: PageAdapter
   abstract val switchIsChecked: Boolean
   private var fragmentPageBinding: FragmentPageBinding? = null
+  override val fragmentToolbar: Toolbar? by lazy {
+    fragmentPageBinding?.root?.findViewById(R.id.toolbar)
+  }
+  override val fragmentTitle: String? by lazy { screenTitle }
 
   private val actionModeCallback: ActionMode.Callback =
     object : ActionMode.Callback {
@@ -135,15 +139,6 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     fragmentPageBinding?.recyclerView?.layoutManager =
       LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
     fragmentPageBinding?.recyclerView?.adapter = pageAdapter
-    val toolbar = fragmentPageBinding?.root?.findViewById<Toolbar>(R.id.toolbar)
-    toolbar?.apply {
-      activity.setSupportActionBar(this)
-      setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
-    }
-    activity.supportActionBar?.apply {
-      setDisplayHomeAsUpEnabled(true)
-      title = screenTitle
-    }
     fragmentPageBinding?.noPage?.text = noItemsString
 
     fragmentPageBinding?.pageSwitch?.text = switchString

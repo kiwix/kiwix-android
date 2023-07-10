@@ -43,6 +43,10 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 abstract class HelpFragment : BaseFragment() {
   private var fragmentHelpBinding: FragmentHelpBinding? = null
   protected open fun rawTitleDescriptionMap(): List<Pair<Int, Int>> = emptyList()
+  override val fragmentToolbar: Toolbar? by lazy {
+    fragmentHelpBinding?.root?.findViewById(R.id.toolbar)
+  }
+  override val fragmentTitle: String? by lazy { getString(R.string.menu_help) }
 
   private val titleDescriptionMap by lazy {
     rawTitleDescriptionMap().associate { (title, description) ->
@@ -61,15 +65,6 @@ abstract class HelpFragment : BaseFragment() {
     fragmentHelpBinding?.activityHelpFeedbackTextView?.setOnClickListener { sendFeedback() }
     fragmentHelpBinding?.activityHelpFeedbackImageView?.setOnClickListener { sendFeedback() }
     fragmentHelpBinding?.diagnosticClickableArea?.setOnClickListener { sendDiagnosticReport() }
-    val toolbar: Toolbar? = fragmentHelpBinding?.root?.findViewById(R.id.toolbar)
-    toolbar?.apply {
-      activity.setSupportActionBar(this)
-      setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
-    }
-    activity.supportActionBar?.let {
-      it.setDisplayHomeAsUpEnabled(true)
-      it.setTitle(R.string.menu_help)
-    }
     fragmentHelpBinding?.activityHelpRecyclerView?.addItemDecoration(
       DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
     )

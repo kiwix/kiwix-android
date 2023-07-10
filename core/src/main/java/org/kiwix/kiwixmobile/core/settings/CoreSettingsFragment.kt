@@ -21,7 +21,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import org.kiwix.kiwixmobile.core.R
@@ -31,12 +30,18 @@ import org.kiwix.kiwixmobile.core.databinding.SettingsBinding
 abstract class CoreSettingsFragment : BaseFragment() {
   private lateinit var prefsFragment: Fragment
   private var settingsBinding: SettingsBinding? = null
+  override val fragmentToolbar: Toolbar? by lazy {
+    settingsBinding?.root?.findViewById(R.id.toolbar)
+  }
+  override val fragmentTitle: String? by lazy {
+    getString(R.string.menu_settings)
+  }
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     prefsFragment = createPreferenceFragment()
     requireActivity().supportFragmentManager.beginTransaction()
       .replace(R.id.content_frame, prefsFragment).commit()
-    setUpToolbar()
   }
 
   override fun onCreateView(
@@ -49,21 +54,6 @@ abstract class CoreSettingsFragment : BaseFragment() {
   }
 
   protected abstract fun createPreferenceFragment(): Fragment
-
-  private fun setUpToolbar() {
-    val activity = requireActivity() as AppCompatActivity
-    settingsBinding?.root?.findViewById<Toolbar>(R.id.toolbar)?.apply {
-      activity.setSupportActionBar(this)
-      setNavigationOnClickListener {
-        requireActivity().onBackPressedDispatcher.onBackPressed()
-      }
-    }
-    activity.supportActionBar?.apply {
-      title = getString(R.string.menu_settings)
-      setHomeButtonEnabled(true)
-      setDisplayHomeAsUpEnabled(true)
-    }
-  }
 
   override fun onDestroyView() {
     requireActivity().supportFragmentManager.beginTransaction().remove(prefsFragment)
