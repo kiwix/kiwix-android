@@ -46,19 +46,19 @@ abstract class BaseFragment : Fragment() {
     setupToolbar()
   }
 
-  // Setup toolbar to handle back pressed event
+  // Setup toolbar to handle common back pressed event
   private fun setupToolbar() {
     val activity = activity as AppCompatActivity?
     fragmentToolbar?.apply {
-      activity?.setSupportActionBar(this)
-      setNavigationOnClickListener {
-        activity?.apply {
-          onBackPressedDispatcher.onBackPressed()
-          supportActionBar?.let { actionBar ->
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            fragmentTitle?.let { title = it }
-          }
+      activity?.let {
+        it.setSupportActionBar(this)
+        it.supportActionBar?.let { actionBar ->
+          actionBar.setDisplayHomeAsUpEnabled(true)
+          title = fragmentTitle
         }
+      }
+      setNavigationOnClickListener {
+        activity?.onBackPressedDispatcher?.onBackPressed()
       }
     }
   }
