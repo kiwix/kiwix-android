@@ -31,12 +31,14 @@ import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
 
 class FetchDownloadDao @Inject constructor(
   private val box: Box<FetchDownloadEntity>,
-  private val newBookDao: NewBookDao
+  private val newBookDao: NewBookDao,
+  private val sharedPreferenceUtil: SharedPreferenceUtil
 ) {
 
   fun downloads(): Flowable<List<DownloadModel>> =
@@ -52,6 +54,8 @@ class FetchDownloadDao @Inject constructor(
       box.store.callInTx {
         box.remove(it)
         newBookDao.insert(it.map(::BookOnDisk))
+        // remove the canceled id from shared preference if exist
+        it.map { sharedPreferenceUtil.removeCanceledDownload(it.downloadId) }
       }
     }
   }
@@ -75,7 +79,10 @@ class FetchDownloadDao @Inject constructor(
     box.put(FetchDownloadEntity(downloadId, book))
   }
 
-  fun delete(download: Download) {
+  fun delete(download: Download, isDownloadCanceled: Boolean) {
+    if (isDownloadCanceled) {
+      sharedPreferenceUtil.addCanceledDownloadIfNotExist(download)
+    }
     box.query {
       equal(FetchDownloadEntity_.downloadId, download.id)
     }.remove()

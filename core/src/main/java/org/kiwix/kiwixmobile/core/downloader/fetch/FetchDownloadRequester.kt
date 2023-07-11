@@ -33,13 +33,18 @@ class FetchDownloadRequester @Inject constructor(
 ) : DownloadRequester {
 
   override fun enqueue(downloadRequest: DownloadRequest): Long {
+    val canceledDownloadId = sharedPreferenceUtil.getDownloadIdIfExist("${downloadRequest.uri}")
+    if (canceledDownloadId != 0L) {
+      fetch.retry(canceledDownloadId.toInt())
+      return canceledDownloadId
+    }
     val request = downloadRequest.toFetchRequest(sharedPreferenceUtil)
     fetch.enqueue(request)
     return request.id.toLong()
   }
 
   override fun cancel(downloadId: Long) {
-    fetch.delete(downloadId.toInt())
+    fetch.cancel(downloadId.toInt())
   }
 
   override fun retryDownload(downloadId: Long) {
