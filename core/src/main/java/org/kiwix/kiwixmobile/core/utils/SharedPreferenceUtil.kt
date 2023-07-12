@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.utils
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat.getExternalFilesDirs
 import androidx.core.content.edit
@@ -239,8 +238,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   private fun saveCanceledDownloads(canceledJsonArray: JSONArray) {
     sharedPreferences.edit {
       putString(DOWNLOAD_LIST, "$canceledJsonArray")
-    }.also {
-      Log.e("ITEMS", "canceledDownloadList: $it url")
     }
   }
 
@@ -251,16 +248,17 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
     if (!savedCanceledDownloads.isNullOrEmpty()) {
       val jsonArray = JSONArray(savedCanceledDownloads)
-      for (i in 0 until jsonArray.length()) {
-        val jsonObject = jsonArray.getJSONObject(i)
-        val id = jsonObject.getInt(DOWNLOAD_ID)
-        val url = jsonObject.getString(DOWNLOAD_URL)
-        canceledDownloadList.add(CanceledDownloadModel(id.toLong(), url))
-      }
+      (0 until jsonArray.length())
+        .asSequence()
+        .map(jsonArray::getJSONObject)
+        .mapTo(canceledDownloadList) {
+          CanceledDownloadModel(
+            it.getInt(DOWNLOAD_ID).toLong(),
+            it.getString(DOWNLOAD_URL)
+          )
+        }
     }
-    return canceledDownloadList.also {
-      Log.e("ITEMS", "canceledDownloadList: $it url")
-    }
+    return canceledDownloadList
   }
 
   fun removeCanceledDownload(downloadId: Long) {
@@ -273,22 +271,18 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     // Save the updated list back to SharedPreferences
     val jsonArray = JSONArray()
     for (item in canceledList) {
-      Log.e("ITEMS", "removeCanceledDownload: ${item.downloadId} url ${item.url}")
       jsonArray.put(JSONObject().put(DOWNLOAD_ID, item.downloadId).put(DOWNLOAD_URL, item.url))
     }
     saveCanceledDownloads(jsonArray)
   }
 
   fun getDownloadIdIfExist(url: String): Long {
-    var downloadId = 0L
-    for (item in getCanceledDownloadItems()) {
-      if (item.url == url) {
-        downloadId = item.downloadId
-        break
+    return getCanceledDownloadItems()
+      .firstOrNull {
+        it.url.substringAfterLast("/") == url.substringAfterLast("/")
       }
-      Log.e("ITEMS", "getDownloadIdIfExist: ${item.url} url $url")
-    }
-    return downloadId
+      ?.downloadId
+      ?: 0L
   }
 
   companion object {
