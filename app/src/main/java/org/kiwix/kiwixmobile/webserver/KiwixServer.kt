@@ -19,26 +19,31 @@
 package org.kiwix.kiwixmobile.webserver
 
 import android.util.Log
-import org.kiwix.kiwixlib.JNIKiwixException
-import org.kiwix.kiwixlib.JNIKiwixServer
-import org.kiwix.kiwixlib.Library
+import org.kiwix.libkiwix.Book
+import org.kiwix.libkiwix.JNIKiwixException
+import org.kiwix.libkiwix.Library
+import org.kiwix.libkiwix.Server
+import org.kiwix.libzim.Archive
 import javax.inject.Inject
 
 private const val TAG = "KiwixServer"
 
-class KiwixServer @Inject constructor(private val jniKiwixServer: JNIKiwixServer) {
+class KiwixServer @Inject constructor(private val jniKiwixServer: Server) {
 
   class Factory @Inject constructor() {
     fun createKiwixServer(selectedBooksPath: ArrayList<String>): KiwixServer {
       val kiwixLibrary = Library()
       selectedBooksPath.forEach { path ->
         try {
-          kiwixLibrary.addBook(path)
+          val book = Book().apply {
+            update(Archive(path))
+          }
+          kiwixLibrary.addBook(book)
         } catch (e: JNIKiwixException) {
           Log.v(TAG, "Couldn't add book with path:{ $path }")
         }
       }
-      return KiwixServer(JNIKiwixServer(kiwixLibrary))
+      return KiwixServer(Server(kiwixLibrary))
     }
   }
 

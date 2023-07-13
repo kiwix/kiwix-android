@@ -48,14 +48,14 @@ internal class ZimSearchResultGeneratorTest {
     val validTitle = "title"
     val searchTerm = " "
     val item = mockk<SearchSuggestion>()
-    every { zimFileReader.searchSuggestions(" ", 200) } returns true
-    every { zimFileReader.getNextSuggestion() } returnsMany listOf(item, item, null)
+    every { zimFileReader.searchSuggestions(" ") } returns true
+    every { zimFileReader.getNextSuggestion(suggestionSearch) } returnsMany listOf(item, item, null)
     every { item.title } returns validTitle
     runBlocking {
       assertThat(zimSearchResultGenerator.generateSearchResults(searchTerm, zimFileReader))
         .isEqualTo(listOf(ZimSearchResultListItem(validTitle)))
       verify {
-        zimFileReader.searchSuggestions(searchTerm, 200)
+        zimFileReader.searchSuggestions(searchTerm)
       }
     }
   }

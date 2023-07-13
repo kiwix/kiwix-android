@@ -24,6 +24,7 @@ import kotlinx.coroutines.yield
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultListItem
+import org.kiwix.libzim.SuggestionSearch
 import javax.inject.Inject
 
 interface SearchResultGenerator {
@@ -46,13 +47,16 @@ class ZimSearchResultGenerator @Inject constructor() : SearchResultGenerator {
     reader: ZimFileReader?
   ) =
     reader.also { yield() }
-      ?.searchSuggestions(searchTerm, 200)
+      ?.searchSuggestions(searchTerm)
       .also { yield() }
-      .run { suggestionResults(reader) }
+      .run { suggestionResults(reader, this) }
 
-  private suspend fun suggestionResults(reader: ZimFileReader?) = createList {
+  private suspend fun suggestionResults(
+    reader: ZimFileReader?,
+    suggestionSearch: SuggestionSearch?
+  ) = createList {
     yield()
-    reader?.getNextSuggestion()
+    reader?.getNextSuggestion(suggestionSearch)
       ?.let { ZimSearchResultListItem(it.title) }
   }
     .distinct()

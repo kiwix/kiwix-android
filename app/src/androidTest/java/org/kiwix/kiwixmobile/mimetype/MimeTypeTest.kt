@@ -25,7 +25,7 @@ import androidx.test.uiautomator.UiDevice
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.kiwix.kiwixlib.JNIKiwixReader
+import org.kiwix.libzim.Archive
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -70,12 +70,12 @@ class MimeTypeTest : BaseActivityTest() {
     }
     val zimFileReader = ZimFileReader(
       zimFile,
-      JNIKiwixReader(zimFile.canonicalPath),
+      Archive(zimFile.canonicalPath),
       NightModeConfig(SharedPreferenceUtil(context), context)
     )
     zimFileReader.getRandomArticleUrl()?.let {
-      val mimeType = zimFileReader.readContentAndMimeType(it)
-      if (mimeType.contains("^([^ ]+).*$") || mimeType.contains(";")) {
+      val mimeType = zimFileReader.getMimeTypeFromUrl(it)
+      if (mimeType?.contains("^([^ ]+).*$") == true || mimeType?.contains(";") == true) {
         Assert.fail(
           "Unable to get mime type from zim file. File = " +
             " $zimFile and url of article = $it"
