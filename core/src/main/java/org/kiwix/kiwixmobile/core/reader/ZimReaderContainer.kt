@@ -50,7 +50,7 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
   fun load(url: String, requestHeaders: Map<String, String>): WebResourceResponse {
     val data = zimFileReader?.load(url)
     return WebResourceResponse(
-      zimFileReader?.readContentAndMimeType(url),
+      zimFileReader?.getMimeTypeFromUrl(url),
       Charsets.UTF_8.name(),
       data
     )
@@ -80,7 +80,7 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
   val zimFileTitle get() = zimFileReader?.title
   val mainPage get() = zimFileReader?.mainPage
   val id get() = zimFileReader?.id
-  val fileSize get() = zimFileReader?.fileSize ?: 0
+  val fileSize get() = zimFileReader?.fileSize ?: 0L
   val creator get() = zimFileReader?.creator
   val publisher get() = zimFileReader?.publisher
   val name get() = zimFileReader?.name

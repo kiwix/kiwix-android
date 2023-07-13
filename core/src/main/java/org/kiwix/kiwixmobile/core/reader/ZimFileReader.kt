@@ -21,15 +21,11 @@ import android.annotation.SuppressLint
 import android.content.res.AssetFileDescriptor
 import android.net.Uri
 import android.os.ParcelFileDescriptor
+import android.util.Base64
 import android.util.Log
 import androidx.core.net.toUri
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
-import org.kiwix.kiwixlib.DirectAccessInfo
-import org.kiwix.kiwixlib.JNIKiwixException
-import org.kiwix.kiwixlib.JNIKiwixInt
-import org.kiwix.kiwixlib.JNIKiwixReader
-import org.kiwix.kiwixlib.JNIKiwixString
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
@@ -38,6 +34,13 @@ import org.kiwix.kiwixmobile.core.main.UNINITIALISE_HTML
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.search.SearchSuggestion
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
+import org.kiwix.libkiwix.JNIKiwixException
+import org.kiwix.libzim.Archive
+import org.kiwix.libzim.DirectAccessInfo
+import org.kiwix.libzim.EntryNotFoundException
+import org.kiwix.libzim.Item
+import org.kiwix.libzim.SuggestionSearch
+import org.kiwix.libzim.SuggestionSearcher
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -51,8 +54,9 @@ private const val TAG = "ZimFileReader"
 
 class ZimFileReader constructor(
   val zimFile: File,
-  private val jniKiwixReader: JNIKiwixReader = JNIKiwixReader(zimFile.canonicalPath),
-  private val nightModeConfig: NightModeConfig
+  private val jniKiwixReader: Archive = Archive(zimFile.canonicalPath),
+  private val nightModeConfig: NightModeConfig,
+  private val suggestionSearcher: SuggestionSearcher = SuggestionSearcher(jniKiwixReader)
 ) {
   interface Factory {
     fun create(file: File): ZimFileReader?
@@ -61,7 +65,9 @@ class ZimFileReader constructor(
       Factory {
       override fun create(file: File) =
         try {
-          ZimFileReader(file, nightModeConfig = nightModeConfig)
+          ZimFileReader(file, nightModeConfig = nightModeConfig).also {
+            Log.e(TAG, "create: ${file.path}")
+          }
         } catch (ignore: JNIKiwixException) {
           null
         }
@@ -72,17 +78,42 @@ class ZimFileReader constructor(
    * Note that the value returned is NOT unique for each zim file. Versions of the same wiki
    * (complete, nopic, novid, etc) may return the same title.
    */
-  val title: String get() = jniKiwixReader.title ?: "No Title Found"
-  val mainPage: String get() = jniKiwixReader.mainPage
-  val id: String get() = jniKiwixReader.id
-  val fileSize: Int get() = jniKiwixReader.fileSize
-  val creator: String get() = jniKiwixReader.creator
-  val publisher: String get() = jniKiwixReader.publisher
-  val name: String get() = jniKiwixReader.name?.takeIf(String::isNotEmpty) ?: id
-  val date: String get() = jniKiwixReader.date
-  val description: String get() = jniKiwixReader.description
-  val favicon: String? get() = jniKiwixReader.favicon
-  val language: String get() = jniKiwixReader.language
+  val title: String
+    get() =
+      try {
+        if (jniKiwixReader.mainEntry.isRedirect)
+          jniKiwixReader.mainEntry.getItem(true).title
+        else
+          jniKiwixReader.mainEntry.title
+      } catch (entryNotFound: EntryNotFoundException) {
+        "No Title Found"
+      }
+  val mainPage: String?
+    get() =
+      try {
+        if (jniKiwixReader.mainEntry.isRedirect)
+          jniKiwixReader.mainEntry.getItem(true).path
+        else
+          jniKiwixReader.mainEntry.path
+      } catch (entryNotFound: EntryNotFoundException) {
+        null
+      }
+  val id: String get() = jniKiwixReader.uuid
+  val fileSize: Long get() = jniKiwixReader.filesize
+  val creator: String get() = jniKiwixReader.getMetadata("Creator")
+  val publisher: String get() = jniKiwixReader.getMetadata("Publisher")
+  val name: String get() = jniKiwixReader.getMetadata("Name")?.takeIf(String::isNotEmpty) ?: id
+  val date: String get() = jniKiwixReader.getMetadata("Date")
+  val description: String get() = jniKiwixReader.getMetadata("Description")
+  val favicon: String?
+    get() = if (jniKiwixReader.hasIllustration(48))
+      Base64.encodeToString(
+        jniKiwixReader.getIllustrationItem(48).data.data,
+        Base64.DEFAULT
+      )
+    else
+      null
+  val language: String get() = jniKiwixReader.getMetadata("Language")
   val tags: String get() = "${getContent("M/Tags")}"
   private val mediaCount: Int?
     get() = try {
@@ -97,23 +128,28 @@ class ZimFileReader constructor(
       null
     }
 
-  fun searchSuggestions(prefix: String, count: Int) =
-    jniKiwixReader.searchSuggestions(prefix, count)
+  fun searchSuggestions(prefix: String): SuggestionSearch =
+    suggestionSearcher.suggest(prefix)
 
-  fun getNextSuggestion(): SearchSuggestion? {
-    val title = JNIKiwixString()
-    val url = JNIKiwixString()
-
-    return if (jniKiwixReader.getNextSuggestion(title, url))
-      SearchSuggestion(title.value, url.value)
-    else null
+  fun getNextSuggestion(suggestionSearch: SuggestionSearch?): SearchSuggestion? {
+    val suggestionIterator =
+      suggestionSearch?.getResults(0, suggestionSearch.estimatedMatches.toInt())
+    if (suggestionIterator != null) {
+      while (suggestionIterator.hasNext()) {
+        val suggestionItem = suggestionIterator.next()
+        return SearchSuggestion(suggestionItem.title, suggestionItem.path)
+      }
+    }
+    return null
   }
 
   fun getPageUrlFrom(title: String): String? =
-    valueOfJniStringAfter { jniKiwixReader.getPageUrlFromTitle(title, it) }
+    if (jniKiwixReader.hasEntryByTitle(title))
+      jniKiwixReader.getEntryByTitle(title).path
+    else
+      null
 
-  fun getRandomArticleUrl(): String? =
-    valueOfJniStringAfter(jniKiwixReader::getRandomPage)
+  fun getRandomArticleUrl(): String? = jniKiwixReader.randomEntry.path
 
   fun load(uri: String): InputStream? {
     val extension = uri.substringAfterLast(".")
@@ -127,8 +163,8 @@ class ZimFileReader constructor(
     return loadContent(uri)
   }
 
-  fun readContentAndMimeType(uri: String): String = getContentAndMimeType(uri)
-    .second.truncateMimeType.also {
+  fun getMimeTypeFromUrl(uri: String): String? = getItem(uri)?.mimetype
+    ?.truncateMimeType.also {
       Log.d(TAG, "getting mimetype for $uri = $it")
     }
 
@@ -141,9 +177,20 @@ class ZimFileReader constructor(
     }
 
   private fun toRedirect(url: String) =
-    "$CONTENT_PREFIX${
-    jniKiwixReader.checkUrl(url.toUri().filePath).replaceWithEncodedString
-    }".toUri()
+    "$CONTENT_PREFIX${getActualUrl(url)}".toUri()
+
+  private fun getActualUrl(url: String): String {
+    val actualPath = url.toUri().filePath
+    val redirectPath = if (jniKiwixReader.hasEntryByPath(actualPath)) {
+      jniKiwixReader.getEntryByPath(actualPath)
+        .getItem(true)
+        .path
+        .replaceWithEncodedString
+    } else {
+      ""
+    }
+    return redirectPath
+  }
 
   private fun loadContent(uri: String) =
     try {
@@ -154,14 +201,19 @@ class ZimFileReader constructor(
     }
 
   private fun loadAsset(uri: String): InputStream? {
-    val infoPair = jniKiwixReader.getDirectAccessInformation(uri.filePath)
+    val article = if (jniKiwixReader.hasEntryByPath(uri.filePath)) {
+      jniKiwixReader.getEntryByPath(uri.filePath).getItem(true)
+    } else {
+      null
+    }
+    val infoPair = article?.directAccessInformation
     if (infoPair == null || !File(infoPair.filename).exists()) {
       return loadAssetFromCache(uri)
     }
     return AssetFileDescriptor(
       infoPair.parcelFileDescriptor,
       infoPair.offset,
-      jniKiwixReader.getArticleSize(uri.filePath)
+      article.size
     ).createInputStream()
   }
 
@@ -170,11 +222,11 @@ class ZimFileReader constructor(
     return File(
       FileUtils.getFileCacheDir(CoreApp.instance),
       uri.substringAfterLast("/")
-    ).apply { writeBytes(getContent(uri)) }
+    ).apply { getContent(uri)?.let(::writeBytes) }
       .inputStream()
   }
 
-  private fun getContent(url: String) = getContentAndMimeType(url).let { (content, _) -> content }
+  private fun getContent(url: String) = getItem(url)?.data?.data
 
   @SuppressLint("CheckResult")
   private fun streamZimContentToPipe(uri: String, outputStream: OutputStream) {
@@ -184,11 +236,11 @@ class ZimFileReader constructor(
           if (uri.endsWith(UNINITIALISER_ADDRESS)) {
             it.write(UNINITIALISE_HTML.toByteArray())
           } else {
-            getContentAndMimeType(uri).let { (content: ByteArray, mimeType: String) ->
-              if ("text/css" == mimeType && nightModeConfig.isNightModeActive()) {
+            getItem(uri)?.let { item ->
+              if ("text/css" == item.mimetype && nightModeConfig.isNightModeActive()) {
                 it.write(INVERT_IMAGES_VIDEO.toByteArray())
               }
-              it.write(content)
+              it.write(item.data.data)
             }
           }
         }
@@ -200,21 +252,15 @@ class ZimFileReader constructor(
       .subscribe({ }, Throwable::printStackTrace)
   }
 
-  private fun getContentAndMimeType(uri: String) = with(JNIKiwixString()) {
-    getContent(url = JNIKiwixString(uri.filePath), mime = this) to value
-  }
-
-  private fun getContent(
-    url: JNIKiwixString = JNIKiwixString(),
-    jniKiwixString: JNIKiwixString = JNIKiwixString(),
-    mime: JNIKiwixString = JNIKiwixString(),
-    size: JNIKiwixInt = JNIKiwixInt()
-  ) = jniKiwixReader.getContent(url, jniKiwixString, mime, size).also {
-    Log.d(TAG, "reading  ${url.value}(mime: ${mime.value}, size: ${size.value}) finished.")
-  }
-
-  private fun valueOfJniStringAfter(jniStringFunction: (JNIKiwixString) -> Boolean) =
-    JNIKiwixString().takeIf { jniStringFunction(it) }?.value
+  private fun getItem(url: String): Item? =
+    if (jniKiwixReader.hasEntryByPath(getActualUrl(url))) {
+      jniKiwixReader.getEntryByPath(getActualUrl(url)).getItem(true).also {
+        Log.e(TAG, "getItem: $url")
+      }
+    } else {
+      Log.e(TAG, "getItem else: $url")
+      null
+    }
 
   @Suppress("ExplicitThis") // this@ZimFileReader.name is required
   fun toBook() = Book().apply {
