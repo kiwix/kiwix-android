@@ -49,7 +49,18 @@ class ZimSearchResultGenerator @Inject constructor() : SearchResultGenerator {
     reader.also { yield() }
       ?.searchSuggestions(searchTerm)
       .also { yield() }
-      .run { suggestionResults(reader, this) }
+      .run {
+        val suggestionList = mutableListOf<ZimSearchResultListItem>()
+        val suggestionIterator =
+          this?.getResults(0, this.estimatedMatches.toInt())
+        if (suggestionIterator != null) {
+          while (suggestionIterator.hasNext()) {
+            val suggestionItem = suggestionIterator.next()
+            suggestionList.add(ZimSearchResultListItem(suggestionItem.title))
+          }
+        }
+        return@run suggestionList
+      }
 
   private suspend fun suggestionResults(
     reader: ZimFileReader?,
@@ -57,7 +68,9 @@ class ZimSearchResultGenerator @Inject constructor() : SearchResultGenerator {
   ) = createList {
     yield()
     reader?.getNextSuggestion(suggestionSearch)
-      ?.let { ZimSearchResultListItem(it.title) }
+      ?.let {
+        ZimSearchResultListItem(it[0].title)
+      }
   }
     .distinct()
     .toList()

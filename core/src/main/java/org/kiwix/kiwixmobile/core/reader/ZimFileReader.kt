@@ -107,6 +107,7 @@ class ZimFileReader constructor(
     else
       null
   val language: String get() = jniKiwixReader.getMetadata("Language")
+
   @Suppress("TooGenericExceptionCaught")
   val tags: String
     get() = try {
@@ -130,16 +131,17 @@ class ZimFileReader constructor(
   fun searchSuggestions(prefix: String): SuggestionSearch =
     suggestionSearcher.suggest(prefix)
 
-  fun getNextSuggestion(suggestionSearch: SuggestionSearch?): SearchSuggestion? {
+  fun getNextSuggestion(suggestionSearch: SuggestionSearch?): List<SearchSuggestion> {
+    val suggestionList = mutableListOf<SearchSuggestion>()
     val suggestionIterator =
       suggestionSearch?.getResults(0, suggestionSearch.estimatedMatches.toInt())
     if (suggestionIterator != null) {
       while (suggestionIterator.hasNext()) {
         val suggestionItem = suggestionIterator.next()
-        return SearchSuggestion(suggestionItem.title, suggestionItem.path)
+        suggestionList.add(SearchSuggestion(suggestionItem.title, suggestionItem.path))
       }
     }
-    return null
+    return suggestionList
   }
 
   fun getPageUrlFrom(title: String): String? =
@@ -277,6 +279,7 @@ class ZimFileReader constructor(
 
   fun dispose() {
     jniKiwixReader.dispose()
+    suggestionSearcher.dispose()
   }
 
   companion object {
