@@ -48,6 +48,7 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.io.PipedInputStream
 import java.io.PipedOutputStream
+import java.net.URLDecoder
 import javax.inject.Inject
 
 private const val TAG = "ZimFileReader"
@@ -79,15 +80,7 @@ class ZimFileReader constructor(
    * (complete, nopic, novid, etc) may return the same title.
    */
   val title: String
-    get() =
-      try {
-        if (jniKiwixReader.mainEntry.isRedirect)
-          jniKiwixReader.mainEntry.getItem(true).title
-        else
-          jniKiwixReader.mainEntry.title
-      } catch (entryNotFound: EntryNotFoundException) {
-        "No Title Found"
-      }
+    get() = jniKiwixReader.getMetadata("Title") ?: "No Title Found"
   val mainPage: String?
     get() =
       try {
@@ -106,15 +99,21 @@ class ZimFileReader constructor(
   val date: String get() = jniKiwixReader.getMetadata("Date")
   val description: String get() = jniKiwixReader.getMetadata("Description")
   val favicon: String?
-    get() = if (jniKiwixReader.hasIllustration(48))
+    get() = if (jniKiwixReader.hasIllustration(ILLUSTRATION_SIZE))
       Base64.encodeToString(
-        jniKiwixReader.getIllustrationItem(48).data.data,
+        jniKiwixReader.getIllustrationItem(ILLUSTRATION_SIZE).data.data,
         Base64.DEFAULT
       )
     else
       null
   val language: String get() = jniKiwixReader.getMetadata("Language")
-  val tags: String get() = "${getContent("M/Tags")}"
+  @Suppress("TooGenericExceptionCaught")
+  val tags: String
+    get() = try {
+      jniKiwixReader.getMetadata("Tags")
+    } catch (ex: Exception) {
+      ""
+    }
   private val mediaCount: Int?
     get() = try {
       jniKiwixReader.mediaCount
@@ -180,14 +179,14 @@ class ZimFileReader constructor(
     "$CONTENT_PREFIX${getActualUrl(url)}".toUri()
 
   private fun getActualUrl(url: String): String {
-    val actualPath = url.toUri().filePath
+    val actualPath = url.toUri().filePath.decodeUrl
     val redirectPath = if (jniKiwixReader.hasEntryByPath(actualPath)) {
       jniKiwixReader.getEntryByPath(actualPath)
         .getItem(true)
         .path
         .replaceWithEncodedString
     } else {
-      ""
+      actualPath.replaceWithEncodedString
     }
     return redirectPath
   }
@@ -254,11 +253,8 @@ class ZimFileReader constructor(
 
   private fun getItem(url: String): Item? =
     if (jniKiwixReader.hasEntryByPath(getActualUrl(url))) {
-      jniKiwixReader.getEntryByPath(getActualUrl(url)).getItem(true).also {
-        Log.e(TAG, "getItem: $url")
-      }
+      jniKiwixReader.getEntryByPath(getActualUrl(url)).getItem(true)
     } else {
-      Log.e(TAG, "getItem else: $url")
       null
     }
 
@@ -318,6 +314,10 @@ private val Uri.filePath: String
 private val String.filePath: String
   get() = substringAfter(CONTENT_PREFIX).substringBefore("#").substringBefore("?")
 
+// Decode the URL if it is encoded because libkiwix does not return the path for encoded paths.
+private val String.decodeUrl: String
+  get() = URLDecoder.decode(this, "UTF-8")
+
 // Truncate mime-type (everything after the first space and semi-colon(if exists)
 val String.truncateMimeType: String
   get() = replace("^([^ ]+).*$", "$1").substringBefore(";")
@@ -329,3 +329,6 @@ val String.replaceWithEncodedString: String
 
 private val DirectAccessInfo.parcelFileDescriptor: ParcelFileDescriptor?
   get() = ParcelFileDescriptor.open(File(filename), ParcelFileDescriptor.MODE_READ_ONLY)
+
+// Default illustration size for ZIM file favicons
+const val ILLUSTRATION_SIZE = 48
