@@ -39,8 +39,10 @@ import org.kiwix.libzim.Archive
 import org.kiwix.libzim.DirectAccessInfo
 import org.kiwix.libzim.EntryNotFoundException
 import org.kiwix.libzim.Item
+import org.kiwix.libzim.Query
+import org.kiwix.libzim.Search
+import org.kiwix.libzim.Searcher
 import org.kiwix.libzim.SuggestionSearch
-import org.kiwix.libzim.SuggestionSearcher
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -55,9 +57,9 @@ private const val TAG = "ZimFileReader"
 
 class ZimFileReader constructor(
   val zimFile: File,
-  private val jniKiwixReader: Archive = Archive(zimFile.canonicalPath),
+  private val jniKiwixReader: Archive,
   private val nightModeConfig: NightModeConfig,
-  private val suggestionSearcher: SuggestionSearcher = SuggestionSearcher(jniKiwixReader)
+  private val searcher: Searcher = Searcher(jniKiwixReader)
 ) {
   interface Factory {
     fun create(file: File): ZimFileReader?
@@ -66,10 +68,16 @@ class ZimFileReader constructor(
       Factory {
       override fun create(file: File) =
         try {
-          ZimFileReader(file, nightModeConfig = nightModeConfig).also {
+          ZimFileReader(
+            file,
+            nightModeConfig = nightModeConfig,
+            jniKiwixReader = Archive(file.canonicalPath)
+          ).also {
             Log.e(TAG, "create: ${file.path}")
           }
         } catch (ignore: JNIKiwixException) {
+          null
+        } catch (ignore: Exception) { // for handing the error, if any zim file is corrupted
           null
         }
     }
@@ -80,7 +88,7 @@ class ZimFileReader constructor(
    * (complete, nopic, novid, etc) may return the same title.
    */
   val title: String
-    get() = jniKiwixReader.getMetadata("Title") ?: "No Title Found"
+    get() = getSafeMetaData("Title", "No Title Found")
   val mainPage: String?
     get() =
       try {
@@ -92,16 +100,17 @@ class ZimFileReader constructor(
         null
       }
   val id: String get() = jniKiwixReader.uuid
+
   /*
      libzim returns file size in kib so we need to convert it into bytes.
      More information here https://github.com/kiwix/java-libkiwix/issues/41
    */
   val fileSize: Long get() = jniKiwixReader.filesize / 1024
-  val creator: String get() = jniKiwixReader.getMetadata("Creator")
-  val publisher: String get() = jniKiwixReader.getMetadata("Publisher")
-  val name: String get() = jniKiwixReader.getMetadata("Name")?.takeIf(String::isNotEmpty) ?: id
-  val date: String get() = jniKiwixReader.getMetadata("Date")
-  val description: String get() = jniKiwixReader.getMetadata("Description")
+  val creator: String get() = getSafeMetaData("Creator", "")
+  val publisher: String get() = getSafeMetaData("Publisher", "")
+  val name: String get() = getSafeMetaData("Name", id)
+  val date: String get() = getSafeMetaData("Date", "")
+  val description: String get() = getSafeMetaData("Description", "")
   val favicon: String?
     get() = if (jniKiwixReader.hasIllustration(ILLUSTRATION_SIZE))
       Base64.encodeToString(
@@ -110,15 +119,10 @@ class ZimFileReader constructor(
       )
     else
       null
-  val language: String get() = jniKiwixReader.getMetadata("Language")
+  val language: String get() = getSafeMetaData("Language", "")
 
-  @Suppress("TooGenericExceptionCaught")
   val tags: String
-    get() = try {
-      jniKiwixReader.getMetadata("Tags")
-    } catch (ex: Exception) {
-      ""
-    }
+    get() = getSafeMetaData("Tags", "")
   private val mediaCount: Int?
     get() = try {
       jniKiwixReader.mediaCount
@@ -132,8 +136,8 @@ class ZimFileReader constructor(
       null
     }
 
-  fun searchSuggestions(prefix: String): SuggestionSearch =
-    suggestionSearcher.suggest(prefix)
+  fun searchSuggestions(prefix: String): Search =
+    searcher.search(Query(prefix).setQuery(prefix))
 
   fun getNextSuggestion(suggestionSearch: SuggestionSearch?): List<SearchSuggestion> {
     val suggestionList = mutableListOf<SearchSuggestion>()
@@ -283,8 +287,16 @@ class ZimFileReader constructor(
 
   fun dispose() {
     jniKiwixReader.dispose()
-    suggestionSearcher.dispose()
+    searcher.dispose()
   }
+
+  @Suppress("TooGenericExceptionCaught")
+  private fun getSafeMetaData(name: String, missingDelimiterValue: String) =
+    try {
+      jniKiwixReader.getMetadata(name)
+    } catch (ignore: Exception) {
+      missingDelimiterValue
+    }
 
   companion object {
     /*

@@ -55,8 +55,7 @@ class ZimSearchResultGenerator @Inject constructor() : SearchResultGenerator {
           this?.getResults(0, this.estimatedMatches.toInt())
         if (suggestionIterator != null) {
           while (suggestionIterator.hasNext()) {
-            val suggestionItem = suggestionIterator.next()
-            suggestionList.add(ZimSearchResultListItem(suggestionItem.title))
+            suggestionList.add(ZimSearchResultListItem(suggestionIterator.title))
           }
         }
         return@run suggestionList
