@@ -344,4 +344,9 @@ object Libs {
    * https://developer.android.com/testing
    */
   const val junit: String = "androidx.test.ext:junit:" + Versions.junit
+
+  /**
+   * https://github.com/KeepSafe/ReLinker
+   */
+  const val relinker: String = "com.getkeepsafe.relinker:relinker:" + Versions.relinker
 }

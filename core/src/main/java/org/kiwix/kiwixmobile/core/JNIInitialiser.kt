@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core
 
 import android.content.Context
 import android.util.Log
+import com.getkeepsafe.relinker.ReLinker
 import org.kiwix.libkiwix.JNIKiwix
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import java.io.File
@@ -27,6 +28,11 @@ import javax.inject.Inject
 
 internal class JNIInitialiser @Inject constructor(context: Context, jniKiwix: JNIKiwix) {
   init {
+    /* Load wrapper's .so files which we have missed to load in libkiwix
+       More information here https://github.com/kiwix/java-libkiwix/issues/39
+    */
+    ReLinker.loadLibrary(context, "kiwix_wrapper")
+    ReLinker.loadLibrary(context, "zim_wrapper")
     // loadICUData(context)?.let(jniKiwix::setDataDirectory)
   }
 
