@@ -31,6 +31,7 @@
     <ID>MagicNumber:Seconds.kt$Seconds$60</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$60.0</ID>
     <ID>MagicNumber:TabsAdapter.kt$TabsAdapter$8</ID>
+    <ID>MagicNumber:ZimFileReader.kt$ZimFileReader$1024</ID>
     <ID>MatchingDeclarationName:PageTestHelpers.kt$PageImpl : Page</ID>
     <ID>MaxLineLength:BookUtilsTest.kt$BookUtilsTest$// this case uses the result from the container nested class inside LanguageUtils. It will be tested in LanguageUtilsTest</ID>
     <ID>MaxLineLength:MetaLinkNetworkEntityTest.kt$MetaLinkNetworkEntityTest$"http://www.mirrorservice.org/sites/download.kiwix.org/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"</ID>

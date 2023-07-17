@@ -86,7 +86,7 @@ object Versions {
 
   const val core_ktx: String = "1.3.2"
 
-  const val kiwixlib: String = "10.1.1"
+  const val kiwixlib: String = "11.0.0"
 
   const val material: String = "1.2.1"
 
@@ -101,6 +101,8 @@ object Versions {
   const val webkit: String = "1.3.0"
 
   const val junit: String = "1.1.4"
+
+  const val relinker: String = "1.4.5"
 }
 
 /**
