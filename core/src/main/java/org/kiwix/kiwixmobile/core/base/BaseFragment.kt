@@ -19,6 +19,10 @@
 package org.kiwix.kiwixmobile.core.base
 
 import android.content.Context
+import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 
 /**
@@ -27,10 +31,35 @@ import androidx.fragment.app.Fragment
 
 abstract class BaseFragment : Fragment() {
 
+  open val fragmentToolbar: Toolbar? = null
+  open val fragmentTitle: String? = null
+
   override fun onAttach(context: Context) {
     super.onAttach(context)
     inject(activity as BaseActivity)
   }
 
   abstract fun inject(baseActivity: BaseActivity)
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    setupToolbar()
+  }
+
+  // Setup toolbar to handle common back pressed event
+  private fun setupToolbar() {
+    val activity = activity as AppCompatActivity?
+    fragmentToolbar?.apply {
+      activity?.let {
+        it.setSupportActionBar(this)
+        it.supportActionBar?.let { actionBar ->
+          actionBar.setDisplayHomeAsUpEnabled(true)
+          title = fragmentTitle
+        }
+      }
+      setNavigationOnClickListener {
+        activity?.onBackPressedDispatcher?.onBackPressed()
+      }
+    }
+  }
 }

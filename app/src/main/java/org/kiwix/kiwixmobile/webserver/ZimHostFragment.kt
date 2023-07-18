@@ -38,7 +38,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.R
@@ -89,6 +89,12 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private lateinit var serviceConnection: ServiceConnection
   private var dialog: Dialog? = null
   private var activityZimHostBinding: ActivityZimHostBinding? = null
+  override val fragmentTitle: String? by lazy {
+    getString(R.string.menu_wifi_hotspot)
+  }
+  override val fragmentToolbar: Toolbar? by lazy {
+    activityZimHostBinding?.root?.findViewById(R.id.toolbar)
+  }
   private val selectedBooksPath: ArrayList<String>
     get() {
       return booksAdapter.items
@@ -122,7 +128,6 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    setUpToolbar(view)
 
     bookDelegate =
       BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil, multiSelectAction = ::select)
@@ -387,16 +392,6 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     hotspotService?.registerCallBack(null)
     presenter.detachView()
     activityZimHostBinding = null
-  }
-
-  private fun setUpToolbar(view: View) {
-    val activity = requireActivity() as AppCompatActivity
-    activity.setSupportActionBar(view.findViewById(R.id.toolbar))
-    activity.supportActionBar?.apply {
-      title = getString(R.string.menu_wifi_hotspot)
-      setHomeButtonEnabled(true)
-      setDisplayHomeAsUpEnabled(true)
-    }
   }
 
   // Advice user to turn on hotspot manually for API<26
