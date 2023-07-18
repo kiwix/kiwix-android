@@ -28,6 +28,7 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCa
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldNotCall
 
 class NavigationHostFragment : NavHostFragment(), WebViewProvider, FragmentActivityExtensions {
+  @Suppress("DEPRECATION")
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     childFragmentManager.fragments.iterator()

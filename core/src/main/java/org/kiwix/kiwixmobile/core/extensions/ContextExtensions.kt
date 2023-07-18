@@ -55,7 +55,9 @@ fun Context.registerReceiver(baseBroadcastReceiver: BaseBroadcastReceiver): Inte
 val Context.locale: Locale
   get() =
     if (VERSION.SDK_INT >= VERSION_CODES.N) resources.configuration.locales.get(0)
-    else resources.configuration.locale
+    else
+      @Suppress("DEPRECATION")
+      resources.configuration.locale
 
 fun Context.getAttribute(@AttrRes attributeRes: Int) = with(TypedValue()) {
   if (theme.resolveAttribute(attributeRes, this, true))

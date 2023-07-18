@@ -156,6 +156,7 @@ class LanguageUtils(private val context: Context) {
     }
 
     @SuppressLint("AppBundleLocaleChanges")
+    @Suppress("DEPRECATION")
     @JvmStatic
     fun handleLocaleChange(
       activity: Activity,

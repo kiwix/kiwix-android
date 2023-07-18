@@ -98,6 +98,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
   }
 
+  @Suppress("DEPRECATION")
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     activeFragments().iterator().forEach { it.onActivityResult(requestCode, resultCode, data) }

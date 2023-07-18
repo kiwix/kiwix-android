@@ -157,6 +157,7 @@ class CustomReaderFragment : CoreReaderFragment() {
     )
   }
 
+  @Suppress("DEPRECATION")
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, inflater)
     menu.findItem(R.id.menu_help)?.isVisible = false

@@ -35,6 +35,7 @@ interface KiwixService {
 
   /******** Helper class that sets up new services  */
   object ServiceCreator {
+    @Suppress("DEPRECATION")
     fun newHackListService(okHttpClient: OkHttpClient, baseUrl: String): KiwixService {
       val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)

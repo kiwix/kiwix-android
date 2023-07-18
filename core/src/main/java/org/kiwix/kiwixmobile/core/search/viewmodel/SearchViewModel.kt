@@ -82,6 +82,7 @@ class SearchViewModel @Inject constructor(
     viewModelScope.launch { actionMapper() }
   }
 
+  @Suppress("DEPRECATION")
   private suspend fun reducer() {
     combine(
       filter.asFlow(),
@@ -97,6 +98,7 @@ class SearchViewModel @Inject constructor(
       .collect { state.value = it }
   }
 
+  @Suppress("DEPRECATION")
   private fun searchResults() = filter.asFlow()
     .mapLatest {
       val zimFileReader = zimReaderContainer.copyReader()
@@ -122,6 +124,7 @@ class SearchViewModel @Inject constructor(
           actions
         )
       ).isSuccess
+
       ReceivedPromptForSpeechInput -> _effects.trySend(StartSpeechInput(actions)).isSuccess
       StartSpeechInputFailed -> _effects.trySend(ShowToast(R.string.speech_not_supported)).isSuccess
       is ActivityResultReceived ->
@@ -133,6 +136,7 @@ class SearchViewModel @Inject constructor(
             actions
           )
         ).isSuccess
+
       is ScreenWasStartedFrom -> searchOrigin.trySendBlocking(it.searchOrigin)
     }
   }

@@ -212,6 +212,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     setBottomMarginToNavHostContainer(0)
   }
 
+  @Suppress("DEPRECATION")
   override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, menuInflater)
     if (zimReaderContainer?.zimFileReader == null) {

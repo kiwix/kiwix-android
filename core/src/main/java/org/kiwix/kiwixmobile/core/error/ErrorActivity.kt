@@ -69,6 +69,7 @@ open class ErrorActivity : BaseActivity() {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         extras.getSerializable(EXCEPTION_KEY, Throwable::class.java)
       } else {
+        @Suppress("DEPRECATION")
         extras.getSerializable(EXCEPTION_KEY) as Throwable
       }
     } else {

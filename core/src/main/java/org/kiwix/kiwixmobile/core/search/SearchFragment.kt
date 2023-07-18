@@ -209,6 +209,7 @@ class SearchFragment : BaseFragment() {
     searchViewModel.actions.trySend(OnOpenInNewTabClick(it)).isSuccess
   }
 
+  @Suppress("DEPRECATION")
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     searchViewModel.actions.trySend(ActivityResultReceived(requestCode, resultCode, data)).isSuccess
