@@ -1,4 +1,3 @@
-import com.android.build.gradle.api.ApkVariantOutput
 import com.android.build.gradle.api.ApplicationVariant
 import com.android.build.gradle.internal.dsl.ProductFlavor
 import custom.CustomApps
@@ -40,9 +39,9 @@ android {
 fun ProductFlavor.createDownloadTask(file: File): Task {
   return tasks.create(
     "download${
-    name.replaceFirstChar {
-      if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it"
-    }
+      name.replaceFirstChar {
+        if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it"
+      }
     }Zim"
   ) {
     group = "Downloading"
@@ -84,9 +83,9 @@ fun ProductFlavor.createPublishApkWithExpansionTask(
         .transactionWithCommit(packageName) {
           val variants =
             applicationVariants.releaseVariantsFor(this@createPublishApkWithExpansionTask)
-          variants.forEach(::uploadApk)
-          uploadExpansionTo(file, variants[0].versionCodeOverride)
-          variants.drop(1).forEach { attachExpansionTo(variants[0].versionCodeOverride, it) }
+          variants.forEach { _ -> uploadApk() }
+          uploadExpansionTo(file, variants[0].versionCode.get())
+          variants.drop(1).forEach { attachExpansionTo(variants[0].versionCode.get(), it) }
           addToTrackInDraft(variants)
         }
     }
@@ -96,7 +95,10 @@ fun ProductFlavor.createPublishApkWithExpansionTask(
 @Suppress("DEPRECATION")
 fun DomainObjectSet<ApplicationVariant>.releaseVariantsFor(productFlavor: ProductFlavor) =
   find { it.name.equals("${productFlavor.name}Release", true) }!!
-    .outputs.filterIsInstance<ApkVariantOutput>().sortedBy { it.versionCodeOverride }
+    .outputs.filterIsInstance<com.android.build.api.variant.VariantOutput>()
+    .sortedBy { it.versionCode.get() }
+
+
 
 afterEvaluate {
   tasks.filter { it.name.contains("ReleaseApkWithExpansionFile") }.forEach {

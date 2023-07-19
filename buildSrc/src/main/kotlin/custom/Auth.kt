@@ -16,7 +16,7 @@
 
 package custom
 
-import com.android.build.gradle.api.ApkVariantOutput
+import com.android.build.api.variant.VariantOutput
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.http.FileContent
@@ -71,7 +71,7 @@ class Transaction(
 ) {
   fun uploadExpansionTo(
     file: File,
-    versionCode: Int
+    versionCode: Int?
   ): ExpansionFilesUploadResponse = publisher.edits().expansionfiles()
     .upload(
       packageName,
@@ -82,31 +82,29 @@ class Transaction(
     ).execute().prettyPrint()
 
   @Suppress("DEPRECATION")
-  fun attachExpansionTo(expansionCode: Int, apkVariantOutput: ApkVariantOutput): ExpansionFile =
+  fun attachExpansionTo(expansionCode: Int?, variantOutput: VariantOutput): ExpansionFile =
     publisher.edits().expansionfiles().update(
       packageName,
       editId,
-      apkVariantOutput.versionCodeOverride,
+      variantOutput.versionCode.get(),
       "main",
       ExpansionFile().apply { referencesVersion = expansionCode }
     ).execute().prettyPrint()
 
-  @Suppress("DEPRECATION")
-  fun uploadApk(apkVariantOutput: ApkVariantOutput) {
+  fun uploadApk() {
     publisher.edits().apks().upload(
       packageName,
       editId,
-      FileContent("application/octet-stream", apkVariantOutput.outputFile)
+      null
     ).execute().prettyPrint()
   }
 
-  @Suppress("DEPRECATION")
-  fun addToTrackInDraft(apkVariants: List<ApkVariantOutput>): Track =
+  fun addToTrackInDraft(variantOutputs: List<VariantOutput>): Track =
     publisher.edits().tracks().update(packageName, editId, "internal", Track().apply {
       releases = listOf(TrackRelease().apply {
         status = "draft"
-        name = apkVariants[0].versionNameOverride
-        versionCodes = apkVariants.map { it.versionCodeOverride.toLong() }
+        name = variantOutputs[0].versionName.get()
+        versionCodes = variantOutputs.map { it.versionCode.get().toLong() }
       })
       track = "internal"
     }).execute().prettyPrint()
