@@ -46,7 +46,7 @@ class LanguageViewModel @Inject constructor(
 
   init {
     compositeDisposable.addAll(
-      actions.map { reduce(it, state.value!!) }
+      actions.map { state.value?.let { value -> reduce(it, value) } }
         .distinctUntilChanged()
         .subscribe(state::postValue, Throwable::printStackTrace),
       languageDao.languages().filter { it.isNotEmpty() }

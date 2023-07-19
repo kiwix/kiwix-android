@@ -278,7 +278,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun onRefreshStateChange(isRefreshing: Boolean?) {
-    fragmentDestinationDownloadBinding?.librarySwipeRefresh?.isRefreshing = isRefreshing!!
+    fragmentDestinationDownloadBinding?.librarySwipeRefresh?.isRefreshing = isRefreshing == true
   }
 
   private fun onNetworkStateChange(networkState: NetworkState?) {
@@ -325,8 +325,10 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun onLibraryItemsChange(it: List<LibraryListItem>?) {
-    libraryAdapter.items = it!!
-    if (it.isEmpty()) {
+    if (it != null) {
+      libraryAdapter.items = it
+    }
+    if (it?.isEmpty() == true) {
       fragmentDestinationDownloadBinding?.libraryErrorText?.setText(
         if (isNotConnected) R.string.no_network_connection
         else R.string.no_items_msg

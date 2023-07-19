@@ -27,6 +27,7 @@ class AdapterDelegateManager<T> {
     delegates.put(delegates.size(), delegate)
   }
 
+  @Suppress("UnsafeCallOnNullableType")
   fun createViewHolder(
     parent: ViewGroup,
     viewType: Int
@@ -36,7 +37,7 @@ class AdapterDelegateManager<T> {
     libraryListItem: T,
     holder: RecyclerView.ViewHolder
   ) {
-    delegates[holder.itemViewType]!!.bind(holder, libraryListItem)
+    delegates[holder.itemViewType]?.bind(holder, libraryListItem)
   }
 
   fun getViewTypeFor(item: T) = delegates.keyAt(getDelegateIndexFor(item))

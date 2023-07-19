@@ -358,6 +358,7 @@ class ZimManageViewModel @Inject constructor(
     locale: Locale
   ) = allLanguages.firstOrNull { it.languageCode == locale.isO3Language }?.active == true
 
+  @Suppress("UnsafeCallOnNullableType")
   private fun combineLibrarySources(
     booksOnFileSystem: List<BookOnDisk>,
     activeDownloads: List<DownloadModel>,

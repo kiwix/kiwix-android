@@ -59,18 +59,21 @@ internal class SenderDevice(
       .forEachIndexed { fileIndex, fileItem ->
         try {
           Socket().use { socket ->
-            context.contentResolver.openInputStream(fileItem?.fileUri!!).use { fileInputStream ->
-              socket.bind(null)
-              socket.connect(
-                InetSocketAddress(hostAddress, WifiDirectManager.FILE_TRANSFER_PORT),
-                TIME_OUT
-              )
-              Log.d(TAG, "Sender socket connected to server - " + socket.isConnected)
-              publishProgress(fileIndex, FileItem.FileStatus.SENDING)
-              val socketOutputStream = socket.getOutputStream()
-              copyToOutputStream(fileInputStream!!, socketOutputStream)
-              if (BuildConfig.DEBUG) Log.d(TAG, "Sender: Data written")
-              publishProgress(fileIndex, FileItem.FileStatus.SENT)
+            fileItem?.fileUri?.let {
+              context.contentResolver.openInputStream(it).use { fileInputStream ->
+                socket.bind(null)
+                socket.connect(
+                  InetSocketAddress(hostAddress, WifiDirectManager.FILE_TRANSFER_PORT),
+                  TIME_OUT
+                )
+                Log.d(TAG, "Sender socket connected to server - " + socket.isConnected)
+                publishProgress(fileIndex, FileItem.FileStatus.SENDING)
+                val socketOutputStream = socket.getOutputStream()
+                @Suppress("UnsafeCallOnNullableType")
+                copyToOutputStream(fileInputStream!!, socketOutputStream)
+                if (BuildConfig.DEBUG) Log.d(TAG, "Sender: Data written")
+                publishProgress(fileIndex, FileItem.FileStatus.SENT)
+              }
             }
           }
         } catch (e: IOException) {

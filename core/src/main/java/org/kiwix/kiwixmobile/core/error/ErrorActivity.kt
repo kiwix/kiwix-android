@@ -63,7 +63,7 @@ open class ErrorActivity : BaseActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     activityKiwixErrorBinding = ActivityKiwixErrorBinding.inflate(layoutInflater)
-    setContentView(activityKiwixErrorBinding!!.root)
+    setContentView(activityKiwixErrorBinding?.root)
     val extras = intent.extras
     exception = if (extras != null && safeContains(extras)) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -134,7 +134,7 @@ open class ErrorActivity : BaseActivity() {
   private fun exceptionDetails(): String =
     """
     Exception Details:
-    ${toStackTraceString(exception!!)}
+    ${exception?.let(::toStackTraceString)}
     """.trimIndent()
 
   private fun zimFiles(): String {
