@@ -15,6 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+@file:Suppress("DEPRECATION")
 
 package org.kiwix.kiwixmobile.core.compat
 
@@ -26,7 +27,6 @@ import android.net.ConnectivityManager
 import android.net.ConnectivityManager.TYPE_WIFI
 import android.net.NetworkInfo.State.CONNECTED
 
-@Suppress("Deprecation")
 open class CompatV21 : Compat {
   override fun queryIntentActivities(
     packageManager: PackageManager,

@@ -72,7 +72,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Static Analysis
-        run: ./gradlew detekt
+        run: ./gradlew detektDebug detektCustomExampleDebug
       - name: Upload Lint Reports
         uses: actions/upload-artifact@v3
         if: ${{ always() }}
