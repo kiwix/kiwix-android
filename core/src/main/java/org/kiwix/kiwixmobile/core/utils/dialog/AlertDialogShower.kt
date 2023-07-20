@@ -72,34 +72,45 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) :
           }
         }
         uri?.let {
-          val frameLayout = FrameLayout(activity.baseContext)
-
-          val textView = TextView(activity.baseContext).apply {
-            layoutParams = getFrameLayoutParams()
-            gravity = Gravity.CENTER
-            setLinkTextColor(activity.getAttribute(R.attr.colorPrimary))
-            setOnLongClickListener {
-              val clipboard =
-                ContextCompat.getSystemService(activity.baseContext, ClipboardManager::class.java)
-              val clip = ClipData.newPlainText("External Url", "$uri")
-              clipboard?.setPrimaryClip(clip)
-              Toast.makeText(
-                activity.baseContext,
-                R.string.external_link_copied_message,
-                Toast.LENGTH_SHORT
-              ).show()
-              true
-            }
-            @SuppressLint("SetTextI18n")
-            text = "</br><a href=$uri> <b>$uri</b>".fromHtml()
+          /*
+          Check if it is valid url then show it to the user
+          otherwise don't show uri to the user as they are not directly openable in the external app.
+          We place this condition to improve the user experience see https://github.com/kiwix/kiwix-android/pull/3455
+           */
+          if (!"$it".startsWith("content://")) {
+            showUrlInDialog(this, it)
           }
-          frameLayout.addView(textView)
-          setView(frameLayout)
+          dialog.getView?.let { setView(it()) }
+          setCancelable(dialog.cancelable)
         }
-        dialog.getView?.let { setView(it()) }
-        setCancelable(dialog.cancelable)
       }
       .create()
+  }
+
+  private fun showUrlInDialog(builder: AlertDialog.Builder, uri: Uri) {
+    val frameLayout = FrameLayout(activity.baseContext)
+
+    val textView = TextView(activity.baseContext).apply {
+      layoutParams = getFrameLayoutParams()
+      gravity = Gravity.CENTER
+      setLinkTextColor(activity.getAttribute(R.attr.colorPrimary))
+      setOnLongClickListener {
+        val clipboard =
+          ContextCompat.getSystemService(activity.baseContext, ClipboardManager::class.java)
+        val clip = ClipData.newPlainText("External Url", "$uri")
+        clipboard?.setPrimaryClip(clip)
+        Toast.makeText(
+          activity.baseContext,
+          R.string.external_link_copied_message,
+          Toast.LENGTH_SHORT
+        ).show()
+        true
+      }
+      @SuppressLint("SetTextI18n")
+      text = "</br><a href=$uri> <b>$uri</b>".fromHtml()
+    }
+    frameLayout.addView(textView)
+    builder.setView(frameLayout)
   }
 
   private fun getFrameLayoutParams() = FrameLayout.LayoutParams(
