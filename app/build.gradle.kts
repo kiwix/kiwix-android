@@ -100,6 +100,9 @@ play {
 
 dependencies {
   androidTestImplementation(Libs.leakcanary_android_instrumentation)
+  api(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))
+  implementation("com.getkeepsafe.relinker:relinker:1.4.5")
+  implementation(files("C:\\Users\\aades\\OneDrive\\Documents/lib-debug.aar"))
 }
 task("generateVersionCodeAndName") {
   val file = File("VERSION_INFO")

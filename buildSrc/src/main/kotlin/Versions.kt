@@ -101,8 +101,6 @@ object Versions {
   const val webkit: String = "1.3.0"
 
   const val junit: String = "1.1.4"
-
-  const val relinker: String = "1.4.5"
 }
 
 /**
