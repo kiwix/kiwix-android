@@ -60,14 +60,15 @@ dependencies {
   implementation(Libs.threetenabp)
 
   // Get kiwixlib online if it is not populated locally
-  if (!shouldUseLocalVersion()) {
-    api(Libs.kiwixlib)
-  } else {
-    api(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))
-  }
+  // if (!shouldUseLocalVersion()) {
+  //   api(Libs.kiwixlib)
+  // } else {
+  //   api(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))
+  // }
 
-  // Relinker to load libkiwix
-  implementation(Libs.relinker)
+  api(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))
+  implementation("com.getkeepsafe.relinker:relinker:1.4.5")
+  implementation(files("C:\\Users\\aades\\OneDrive\\Documents/lib-debug.aar"))
 
   // Document File
   implementation(Libs.select_folder_document_file)
