@@ -24,7 +24,6 @@ import kotlinx.coroutines.yield
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultListItem
-import org.kiwix.libzim.SuggestionSearch
 import javax.inject.Inject
 
 interface SearchResultGenerator {
@@ -53,32 +52,12 @@ class ZimSearchResultGenerator @Inject constructor() : SearchResultGenerator {
         val suggestionList = mutableListOf<ZimSearchResultListItem>()
         val suggestionIterator =
           this?.getResults(0, this.estimatedMatches.toInt())
-        if (suggestionIterator != null) {
-          while (suggestionIterator.hasNext()) {
-            suggestionList.add(ZimSearchResultListItem(suggestionIterator.title))
+        suggestionIterator?.let {
+          while (it.hasNext()) {
+            val entry = it.next()
+            suggestionList.add(ZimSearchResultListItem(entry.title))
           }
         }
         return@run suggestionList
       }
-
-  private suspend fun suggestionResults(
-    reader: ZimFileReader?,
-    suggestionSearch: SuggestionSearch?
-  ) = createList {
-    yield()
-    reader?.getNextSuggestion(suggestionSearch)
-      ?.let {
-        ZimSearchResultListItem(it[0].title)
-      }
-  }
-    .distinct()
-    .toList()
-
-  private suspend fun <T> createList(readSearchResult: suspend () -> T?): List<T> {
-    return mutableListOf<T>().apply {
-      while (true) {
-        readSearchResult()?.let(::add) ?: break
-      }
-    }
-  }
 }

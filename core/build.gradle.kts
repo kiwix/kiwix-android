@@ -65,10 +65,9 @@ dependencies {
   // } else {
   //   api(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))
   // }
-
-  api(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))
+  implementation(files("/home/hp-pc03/Desktop/lib-debug.aar"))
   implementation("com.getkeepsafe.relinker:relinker:1.4.5")
-  implementation(files("C:\\Users\\aades\\OneDrive\\Documents/lib-debug.aar"))
+  api(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))
 
   // Document File
   implementation(Libs.select_folder_document_file)

@@ -137,7 +137,7 @@ class ZimFileReader constructor(
     }
 
   fun searchSuggestions(prefix: String): Search =
-    searcher.search(Query(prefix).setQuery(prefix))
+    searcher.search(Query(prefix))
 
   fun getNextSuggestion(suggestionSearch: SuggestionSearch?): List<SearchSuggestion> {
     val suggestionList = mutableListOf<SearchSuggestion>()
