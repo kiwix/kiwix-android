@@ -100,8 +100,6 @@ play {
 
 dependencies {
   androidTestImplementation(Libs.leakcanary_android_instrumentation)
-  implementation(files("/home/hp-pc03/Desktop/lib-debug.aar"))
-  api(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))
 }
 task("generateVersionCodeAndName") {
   val file = File("VERSION_INFO")

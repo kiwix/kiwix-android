@@ -60,14 +60,12 @@ dependencies {
   implementation(Libs.threetenabp)
 
   // Get kiwixlib online if it is not populated locally
-  // if (!shouldUseLocalVersion()) {
-  //   api(Libs.kiwixlib)
-  // } else {
-  //   api(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))
-  // }
-  implementation(files("/home/hp-pc03/Desktop/lib-debug.aar"))
-  implementation("com.getkeepsafe.relinker:relinker:1.4.5")
-  api(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))
+  if (!shouldUseLocalVersion()) {
+    api(Libs.libkiwix)
+  } else {
+    implementation("com.getkeepsafe.relinker:relinker:1.4.5")
+    api(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))
+  }
 
   // Document File
   implementation(Libs.select_folder_document_file)
