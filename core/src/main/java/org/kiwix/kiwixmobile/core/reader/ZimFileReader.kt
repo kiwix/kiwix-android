@@ -186,11 +186,11 @@ class ZimFileReader constructor(
     }
 
   private fun toRedirect(url: String) =
-    "$CONTENT_PREFIX${getActualUrl(url)}".toUri()
+    "$CONTENT_PREFIX${getActualUrl(url, true)}".toUri()
 
-  private fun getActualUrl(url: String): String {
+  private fun getActualUrl(url: String, actualUrl: Boolean = false): String {
     val actualPath = url.toUri().filePath.decodeUrl
-    val redirectPath = if (jniKiwixReader.hasEntryByPath(actualPath)) {
+    var redirectPath = if (jniKiwixReader.hasEntryByPath(actualPath)) {
       jniKiwixReader.getEntryByPath(actualPath)
         .getItem(true)
         .path
@@ -198,8 +198,16 @@ class ZimFileReader constructor(
     } else {
       actualPath.replaceWithEncodedString
     }
+    if (actualUrl && url.decodeUrl.contains("?")) {
+      redirectPath += extractQueryParam(url)
+    }
     return redirectPath
   }
+
+  // For fixing the issue with new created zim files,
+  // see https://github.com/kiwix/kiwix-android/issues/3098#issuecomment-1642083152 to know more about the this.
+  private fun extractQueryParam(url: String): String =
+    "?" + url.substringAfterLast("?", "")
 
   private fun loadContent(uri: String) =
     try {
