@@ -38,10 +38,9 @@ android {
 
 fun ProductFlavor.createDownloadTask(file: File): Task {
   return tasks.create(
-    "download${
-      name.replaceFirstChar {
-        if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it"
-      }
+    "download${name.replaceFirstChar {
+      if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it"
+    }
     }Zim"
   ) {
     group = "Downloading"
@@ -97,8 +96,6 @@ fun DomainObjectSet<ApplicationVariant>.releaseVariantsFor(productFlavor: Produc
   find { it.name.equals("${productFlavor.name}Release", true) }!!
     .outputs.filterIsInstance<com.android.build.api.variant.VariantOutput>()
     .sortedBy { it.versionCode.get() }
-
-
 
 afterEvaluate {
   tasks.filter { it.name.contains("ReleaseApkWithExpansionFile") }.forEach {
