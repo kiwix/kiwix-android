@@ -136,8 +136,13 @@ class ZimFileReader constructor(
       null
     }
 
-  fun searchSuggestions(prefix: String): Search =
-    searcher.search(Query(prefix))
+  fun searchSuggestions(prefix: String): Search? =
+    try {
+      searcher.search(Query(prefix))
+    } catch (ignore: Exception) {
+      // to handled the exception if there is no FT Xapian index found in the current zim file
+      null
+    }
 
   fun getNextSuggestion(suggestionSearch: SuggestionSearch?): List<SearchSuggestion> {
     val suggestionList = mutableListOf<SearchSuggestion>()
