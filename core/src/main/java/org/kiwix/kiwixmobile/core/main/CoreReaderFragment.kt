@@ -342,10 +342,25 @@ abstract class CoreReaderFragment :
         // Successfully granted permission, so opening the note keeper
         showAddNoteDialog()
       } else {
-        Toast.makeText(
-          requireActivity().applicationContext,
-          getString(R.string.ext_storage_write_permission_denied_add_note), Toast.LENGTH_LONG
-        ).show()
+        if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+          /* shouldShowRequestPermissionRationale() returns false when:
+             *  1) User has previously checked on "Don't ask me again", and/or
+             *  2) Permission has been disabled on device
+             */
+          requireActivity().toast(
+            R.string.ext_storage_permission_rationale_add_note,
+            Toast.LENGTH_LONG
+          )
+        } else {
+          requireActivity().toast(
+            R.string.ext_storage_write_permission_denied_add_note,
+            Toast.LENGTH_LONG
+          )
+          alertDialogShower?.show(
+            KiwixDialog.ReadPermissionRequired,
+            requireActivity()::navigateToAppSettings
+          )
+        }
       }
     }
 
@@ -1306,22 +1321,7 @@ abstract class CoreReaderFragment :
         ) {
           isPermissionGranted = true
         } else {
-          if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            storagePermissionForNotesLauncher?.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            /* shouldShowRequestPermissionRationale() returns false when:
-               *  1) User has previously checked on "Don't ask me again", and/or
-               *  2) Permission has been disabled on device
-               */
-            requireActivity().toast(
-              R.string.ext_storage_permission_rationale_add_note,
-              Toast.LENGTH_LONG
-            )
-          } else {
-            alertDialogShower?.show(
-              KiwixDialog.ReadPermissionRequired,
-              requireActivity()::navigateToAppSettings
-            )
-          }
+          storagePermissionForNotesLauncher?.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
       } else { // For Android versions below Marshmallow 6.0 (API 23)
         isPermissionGranted = true // As already requested at install time
