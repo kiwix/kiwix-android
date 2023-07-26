@@ -18,28 +18,27 @@
 package org.kiwix.kiwixmobile.search
 
 import androidx.core.content.edit
-import androidx.core.net.toUri
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import leakcanary.LeakAssertions
 import org.junit.After
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.download.downloadRobot
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader
 import org.kiwix.kiwixmobile.testutils.RetryRule
+import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 
 class SearchFragmentTest : BaseActivityTest() {
 
@@ -68,40 +67,29 @@ class SearchFragmentTest : BaseActivityTest() {
   fun searchFragmentSimple() {
     ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
       kiwixMainActivity = it
-      kiwixMainActivity.navigate(R.id.libraryFragment)
     }
-    val loadFileStream =
-      SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(context.cacheDir, "testzim.zim")
-    if (zimFile.exists()) zimFile.delete()
-    zimFile.createNewFile()
-    loadFileStream.use { inputStream ->
-      val outputStream: OutputStream = FileOutputStream(zimFile)
-      outputStream.use { it ->
-        val buffer = ByteArray(inputStream.available())
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-          it.write(buffer, 0, length)
-        }
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    try {
+      downloadRobot {
+        clickLibraryOnBottomNav()
+        deleteZimIfExists(false)
+        clickDownloadOnBottomNav()
+        waitForDataToLoad()
+        downloadZimFile()
+        assertDownloadStart()
+        waitUntilDownloadComplete()
+        clickLibraryOnBottomNav()
+        checkIfZimFileDownloaded()
+        downloadZimFile()
       }
-    }
-    UiThreadStatement.runOnUiThread {
-      kiwixMainActivity.navigate(
-        actionNavigationLibraryToNavigationReader()
-          .apply { zimFileUri = zimFile.toUri().toString() }
+    } catch (e: Exception) {
+      Assert.fail(
+        "Couldn't find downloaded file ' Off the Grid ' Original Exception: ${e.message}"
       )
     }
     search { checkZimFileSearchSuccessful(R.id.readerFragment) }
     UiThreadStatement.runOnUiThread {
-      if (zimFile.canRead()) {
-        kiwixMainActivity.openSearch(searchString = "Android")
-      } else {
-        throw RuntimeException(
-          "File $zimFile is not readable." +
-            " Original File $zimFile is readable = ${zimFile.canRead()}" +
-            " Size ${zimFile.length()}"
-        )
-      }
+      kiwixMainActivity.openSearch(searchString = "100R")
     }
     search {
       clickOnSearchItemInSearchList()
