@@ -57,29 +57,21 @@ class ReadAloudNotificationManger @Inject constructor(
     val stopIntent = Intent(context, ReadAloudService::class.java).setAction(
       ReadAloudService.ACTION_STOP_TTS
     )
-    val stopReadAloud = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      PendingIntent.getService(
-        context,
-        0,
-        stopIntent,
-        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-      )
-    } else {
-      PendingIntent.getService(context, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-    }
+    val stopReadAloud = PendingIntent.getService(
+      context,
+      0,
+      stopIntent,
+      PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
     val pauseOrResumeIntent = Intent(context, ReadAloudService::class.java).setAction(
       ReadAloudService.ACTION_PAUSE_OR_RESUME_TTS
     ).putExtra(IS_TTS_PAUSE_OR_RESUME, !isPauseTTS)
-    val pauseOrResumeReadAloud = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      PendingIntent.getService(
-        context,
-        0,
-        pauseOrResumeIntent,
-        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-      )
-    } else {
-      PendingIntent.getService(context, 0, pauseOrResumeIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-    }
+    val pauseOrResumeReadAloud = PendingIntent.getService(
+      context,
+      0,
+      pauseOrResumeIntent,
+      PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
     return NotificationCompat.Builder(context, READ_ALOUD_SERVICE_CHANNEL_ID)
       .setContentTitle(context.getString(R.string.menu_read_aloud))
       .setContentText(context.getString(R.string.read_aloud_running))

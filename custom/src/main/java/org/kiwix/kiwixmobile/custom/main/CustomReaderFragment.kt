@@ -18,9 +18,7 @@
 
 package org.kiwix.kiwixmobile.custom.main
 
-import android.annotation.TargetApi
 import android.app.Dialog
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -138,7 +136,6 @@ class CustomReaderFragment : CoreReaderFragment() {
     )
   }
 
-  @TargetApi(Build.VERSION_CODES.M)
   private fun openObbOrZim() {
     customFileValidator.validate(
       onFilesFound = {

@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.webserver.wifi_hotspot
 import android.app.Service
 import android.content.Intent
 import android.os.Binder
-import android.os.Build
 import android.os.IBinder
 import android.widget.Toast
 import org.kiwix.kiwixmobile.KiwixApp
@@ -84,6 +83,7 @@ class HotspotService :
             onServerFailedToStart()
           }
         } ?: kotlin.run(::onServerFailedToStart)
+
       ACTION_STOP_SERVER -> {
         Toast.makeText(
           this, R.string.server_stopped_successfully_toast_message,
@@ -91,6 +91,7 @@ class HotspotService :
         ).show()
         stopHotspotAndDismissNotification()
       }
+
       ACTION_CHECK_IP_ADDRESS -> webServerHelper?.pollForValidIpAddress()
       else -> {}
     }
@@ -103,9 +104,7 @@ class HotspotService :
   private fun stopHotspotAndDismissNotification() {
     webServerHelper?.stopAndroidWebServer()
     zimHostCallbacks?.onServerStopped()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-      stopForeground(STOP_FOREGROUND_REMOVE)
-    }
+    stopForeground(STOP_FOREGROUND_REMOVE)
     stopSelf()
     hotspotStateReceiver = null
     hotspotNotificationManager?.dismissNotification()

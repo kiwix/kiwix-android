@@ -63,16 +63,12 @@ class HotspotNotificationManager @Inject constructor(
     val stopIntent = Intent(context, HotspotService::class.java).setAction(
       HotspotService.ACTION_STOP_SERVER
     )
-    val stopHotspot = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      PendingIntent.getService(
-        context,
-        0,
-        stopIntent,
-        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-      )
-    } else {
-      PendingIntent.getService(context, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-    }
+    val stopHotspot = PendingIntent.getService(
+      context,
+      0,
+      stopIntent,
+      PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
     return NotificationCompat.Builder(context, HOTSPOT_SERVICE_CHANNEL_ID)
       .setContentTitle(context.getString(R.string.hotspot_notification_content_title))
       .setContentText(context.getString(R.string.hotspot_running))
