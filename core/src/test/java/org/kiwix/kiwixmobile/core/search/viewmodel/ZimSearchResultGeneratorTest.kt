@@ -25,8 +25,8 @@ import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
-import org.kiwix.kiwixmobile.core.search.SearchSuggestion
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultListItem
+import org.kiwix.libzim.Search
 
 internal class ZimSearchResultGeneratorTest {
 
@@ -47,10 +47,10 @@ internal class ZimSearchResultGeneratorTest {
   internal fun `suggestion results are distinct`() {
     val validTitle = "title"
     val searchTerm = " "
-    val item = mockk<SearchSuggestion>()
-    every { zimFileReader.searchSuggestions(" ") } returns true
-    every { zimFileReader.getNextSuggestion(suggestionSearch) } returnsMany listOf(item, item, null)
-    every { item.title } returns validTitle
+    val item = ZimSearchResultListItem(validTitle)
+    val search: Search = mockk()
+    every { zimFileReader.searchSuggestions(searchTerm) } returns search
+    every { zimFileReader.getSearchResultList(search) } returns listOf(item)
     runBlocking {
       assertThat(zimSearchResultGenerator.generateSearchResults(searchTerm, zimFileReader))
         .isEqualTo(listOf(ZimSearchResultListItem(validTitle)))
