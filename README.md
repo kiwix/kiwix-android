@@ -13,7 +13,7 @@ is to make Wikipedia available offline. This is done by reading the
 content of a file in the ZIM format, a highly compressed open format
 with additional metadata.
 
-This is the version for Android, with support versions ranging from 5
+This is the version for Android, with support versions ranging from 7
 to 13 (like [mentioned
 here](https://github.com/kiwix/kiwix-android/blob/develop/buildSrc/src/main/kotlin/Config.kt)).
 

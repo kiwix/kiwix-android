@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.core.read_aloud
 import android.app.Service
 import android.content.Intent
 import android.os.Binder
-import android.os.Build
 import android.os.IBinder
 import org.kiwix.kiwixmobile.core.CoreApp
 import java.lang.ref.WeakReference
@@ -49,6 +48,7 @@ class ReadAloudService : Service() {
         startForegroundNotificationHelper(isPauseTTS)
         readAloudCallbacks?.onReadAloudPauseOrResume(isPauseTTS)
       }
+
       ACTION_STOP_TTS -> {
         stopReadAloudAndDismissNotification()
       }
@@ -58,9 +58,7 @@ class ReadAloudService : Service() {
 
   private fun stopReadAloudAndDismissNotification() {
     readAloudCallbacks?.onReadAloudStop()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-      stopForeground(STOP_FOREGROUND_REMOVE)
-    }
+    stopForeground(STOP_FOREGROUND_REMOVE)
     stopSelf()
     readAloudNotificationManager?.dismissNotification()
   }

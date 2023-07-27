@@ -22,7 +22,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -446,16 +445,12 @@ class AddNoteDialog : DialogFragment() {
     }
     val noteFile = File("$zimNotesDirectory$articleNoteFileName.txt")
     if (noteFile.exists()) {
-      val noteFileUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        // From Nougat 7 (API 24) access to files is shared temporarily with other apps
-        // Need to use FileProvider for the same
-        FileProvider.getUriForFile(
-          requireContext(), requireContext().packageName + ".fileprovider",
-          noteFile
-        )
-      } else {
-        Uri.fromFile(noteFile)
-      }
+      // From Nougat 7 (API 24) access to files is shared temporarily with other apps
+      // Need to use FileProvider for the same
+      val noteFileUri = FileProvider.getUriForFile(
+        requireContext(), requireContext().packageName + ".fileprovider",
+        noteFile
+      )
       val noteFileShareIntent = Intent(Intent.ACTION_SEND).apply {
         type = "application/octet-stream"
         putExtra(Intent.EXTRA_STREAM, noteFileUri)
