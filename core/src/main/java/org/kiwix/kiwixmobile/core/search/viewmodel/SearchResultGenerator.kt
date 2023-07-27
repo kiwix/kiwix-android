@@ -23,7 +23,6 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultListItem
 import javax.inject.Inject
 
 interface SearchResultGenerator {
@@ -49,15 +48,6 @@ class ZimSearchResultGenerator @Inject constructor() : SearchResultGenerator {
       ?.searchSuggestions(searchTerm)
       .also { yield() }
       .run {
-        val suggestionList = mutableListOf<ZimSearchResultListItem>()
-        val suggestionIterator =
-          this?.getResults(0, this.estimatedMatches.toInt())
-        suggestionIterator?.let {
-          while (it.hasNext()) {
-            val entry = it.next()
-            suggestionList.add(ZimSearchResultListItem(entry.title))
-          }
-        }
-        return@run suggestionList
+        reader?.getSearchResultList(this) ?: emptyList()
       }
 }
