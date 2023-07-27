@@ -13,7 +13,7 @@ jobs:
     name: Automated tests
     strategy:
       matrix:
-        api-level: [ 21, 30, 33 ]
+        api-level: [ 24, 30, 33 ]
       fail-fast: false
     runs-on: macos-11
     steps:
@@ -79,16 +79,16 @@ jobs:
           path: screencap.png
 
       - name: create unit coverage
-        if: ${{ matrix.api-level==21 }}
+        if: ${{ matrix.api-level==24 }}
         run: ./gradlew testDebugUnitTest testCustomexampleDebugUnitTest
 
       - name: Upload coverage to Codecov
-        if: ${{ matrix.api-level==21 }}
+        if: ${{ matrix.api-level==24 }}
         uses: codecov/codecov-action@v3
 
       - name: Upload Coverage to GH-Actions
         uses: actions/upload-artifact@v3
-        if: ${{ matrix.api-level==21 }}
+        if: ${{ matrix.api-level==24 }}
         with:
           name: Tests Coverage Report
           path: |
