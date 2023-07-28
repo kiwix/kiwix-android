@@ -37,7 +37,7 @@ class FetchDownloadMonitor @Inject constructor(fetch: Fetch, fetchDownloadDao: F
     override fun onAdded(download: Download) {}
 
     override fun onCancelled(download: Download) {
-      delete(download, true)
+      delete(download)
     }
 
     override fun onCompleted(download: Download) {
@@ -100,8 +100,8 @@ class FetchDownloadMonitor @Inject constructor(fetch: Fetch, fetchDownloadDao: F
       updater.onNext { fetchDownloadDao.update(download) }
     }
 
-    private fun delete(download: Download, isDownloadCanceled: Boolean = false) {
-      updater.onNext { fetchDownloadDao.delete(download, isDownloadCanceled) }
+    private fun delete(download: Download) {
+      updater.onNext { fetchDownloadDao.delete(download) }
     }
   }
 

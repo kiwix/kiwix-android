@@ -23,4 +23,5 @@ interface DownloadRequester {
   fun enqueue(downloadRequest: DownloadRequest): Long
   fun cancel(downloadId: Long)
   fun retryDownload(downloadId: Long)
+  fun pauseResumeDownload(downloadId: Long, isPause: Boolean)
 }

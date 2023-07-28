@@ -24,15 +24,11 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat.getExternalFilesDirs
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import com.tonyodev.fetch2.Download
 import io.reactivex.Flowable
 import io.reactivex.processors.PublishProcessor
-import org.json.JSONArray
-import org.json.JSONObject
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.NightModeConfig.Mode.Companion.from
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.downloader.model.CanceledDownloadModel
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import java.io.File
 import java.util.Locale
@@ -96,11 +92,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
           putPrefStorage(it)
           putStoragePosition(0)
         }
-
         !File(storage).isFileExist() -> getPublicDirectoryPath(defaultStorage()).also {
           putStoragePosition(0)
         }
-
         else -> storage
       }
     }
@@ -224,67 +218,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   fun isPlayStoreBuildWithAndroid11OrAbove(): Boolean =
     isPlayStoreBuild && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
 
-  fun addCanceledDownloadIfNotExist(download: Download) {
-    if (getDownloadIdIfExist(download.url) == 0L) {
-      val jsonArray = JSONArray()
-      for (item in getCanceledDownloadItems()) {
-        jsonArray.put(JSONObject().put(DOWNLOAD_ID, item.downloadId).put(DOWNLOAD_URL, item.url))
-      }
-      jsonArray.put(JSONObject().put(DOWNLOAD_ID, download.id).put(DOWNLOAD_URL, download.url))
-      saveCanceledDownloads(jsonArray)
-    }
-  }
-
-  private fun saveCanceledDownloads(canceledJsonArray: JSONArray) {
-    sharedPreferences.edit {
-      putString(DOWNLOAD_LIST, "$canceledJsonArray")
-    }
-  }
-
-  private fun getCanceledDownloadItems(): MutableList<CanceledDownloadModel> {
-    val savedCanceledDownloads = sharedPreferences.getString(DOWNLOAD_LIST, "")
-
-    val canceledDownloadList = mutableListOf<CanceledDownloadModel>()
-
-    if (!savedCanceledDownloads.isNullOrEmpty()) {
-      val jsonArray = JSONArray(savedCanceledDownloads)
-      (0 until jsonArray.length())
-        .asSequence()
-        .map(jsonArray::getJSONObject)
-        .mapTo(canceledDownloadList) {
-          CanceledDownloadModel(
-            it.getInt(DOWNLOAD_ID).toLong(),
-            it.getString(DOWNLOAD_URL)
-          )
-        }
-    }
-    return canceledDownloadList
-  }
-
-  fun removeCanceledDownload(downloadId: Long) {
-    val canceledList = getCanceledDownloadItems().apply {
-      asSequence()
-        .filter { it.downloadId == downloadId }
-        .forEach(this::remove)
-    }
-
-    // Save the updated list back to SharedPreferences
-    val jsonArray = JSONArray()
-    for (item in canceledList) {
-      jsonArray.put(JSONObject().put(DOWNLOAD_ID, item.downloadId).put(DOWNLOAD_URL, item.url))
-    }
-    saveCanceledDownloads(jsonArray)
-  }
-
-  fun getDownloadIdIfExist(url: String): Long {
-    return getCanceledDownloadItems()
-      .firstOrNull {
-        it.url.substringAfterLast("/") == url.substringAfterLast("/")
-      }
-      ?.downloadId
-      ?: 0L
-  }
-
   companion object {
     // Prefs
     const val PREF_LANG = "pref_language_chooser"
@@ -311,8 +244,5 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val DEFAULT_ZOOM = 100
     const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"
     const val IS_PLAY_STORE_BUILD = "is_play_store_build"
-    const val DOWNLOAD_ID = "download_id"
-    const val DOWNLOAD_URL = "download_url"
-    const val DOWNLOAD_LIST = "download_list"
   }
 }
