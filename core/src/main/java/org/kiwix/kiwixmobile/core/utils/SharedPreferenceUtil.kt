@@ -20,10 +20,10 @@ package org.kiwix.kiwixmobile.core.utils
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
+import androidx.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat.getExternalFilesDirs
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
 import io.reactivex.Flowable
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.NightModeConfig
