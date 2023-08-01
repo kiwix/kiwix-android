@@ -59,6 +59,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScree
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
+import org.kiwix.libzim.Search
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -69,7 +70,15 @@ class SearchViewModel @Inject constructor(
 ) : ViewModel() {
 
   private val initialState: SearchState =
-    SearchState("", SearchResultsWithTerm("", emptyList()), emptyList(), FromWebView)
+    SearchState(
+      "",
+      SearchResultsWithTerm(
+        "",
+        null
+      ),
+      emptyList(),
+      FromWebView
+    )
   val state: MutableStateFlow<SearchState> = MutableStateFlow(initialState)
   private val _effects = Channel<SideEffect<*>>()
   val effects = _effects.receiveAsFlow()
@@ -165,4 +174,4 @@ class SearchViewModel @Inject constructor(
   }
 }
 
-data class SearchResultsWithTerm(val searchTerm: String, val results: List<SearchListItem>)
+data class SearchResultsWithTerm(val searchTerm: String, val search: Search?)

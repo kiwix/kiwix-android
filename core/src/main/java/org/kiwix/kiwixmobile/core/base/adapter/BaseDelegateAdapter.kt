@@ -37,6 +37,13 @@ abstract class BaseDelegateAdapter<ITEM>(
       notifyDataSetChanged()
     }
 
+  // Function to add new data to the adapter
+  fun addData(newData: List<ITEM>) {
+    val startPosition = items.size
+    items = items.toMutableList().apply { addAll(newData) }
+    notifyItemRangeInserted(startPosition, newData.size)
+  }
+
   override fun onCreateViewHolder(
     parent: ViewGroup,
     viewType: Int
