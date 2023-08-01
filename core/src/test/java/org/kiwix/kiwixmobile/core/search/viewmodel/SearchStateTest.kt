@@ -18,25 +18,43 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
+import io.mockk.every
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultListItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 
 internal class SearchStateTest {
 
   @Test
   internal fun `visibleResults use searchResults when searchTerm is not empty`() {
-    val results = listOf(ZimSearchResultListItem(""))
+    val searchTerm = "notEmpty"
+    val searchWrapper: SearchWrapper = mockk()
+    val searchIteratorWrapper: SearchIteratorWrapper = mockk()
+    val entryWrapper: EntryWrapper = mockk()
+    val estimatedMatches = 1
+    every { searchWrapper.estimatedMatches } returns estimatedMatches.toLong()
+    // Settings list to hasNext() to ensure it returns true only for the first call.
+    // Otherwise, if we do not set this, the method will always return true when checking if the iterator has a next value,
+    // causing our test case to get stuck in an infinite loop due to this explicit setting.
+    every { searchIteratorWrapper.hasNext() } returnsMany listOf(true, false)
+    every { searchIteratorWrapper.next() } returns entryWrapper
+    every { entryWrapper.title } returns searchTerm
+    every {
+      searchWrapper.getResults(
+        0,
+        estimatedMatches
+      )
+    } returns searchIteratorWrapper
     assertThat(
       SearchState(
-        "notEmpty",
-        SearchResultsWithTerm("", results),
+        searchTerm,
+        SearchResultsWithTerm("", searchWrapper),
         emptyList(),
         FromWebView
       ).getVisibleResults(0)
-    ).isEqualTo(results)
+    ).isEqualTo(listOf(RecentSearchListItem(searchTerm)))
   }
 
   @Test
@@ -45,7 +63,7 @@ internal class SearchStateTest {
     assertThat(
       SearchState(
         "",
-        SearchResultsWithTerm("", emptyList()),
+        SearchResultsWithTerm("", null),
         results,
         FromWebView
       ).getVisibleResults(0)
@@ -57,11 +75,11 @@ internal class SearchStateTest {
     assertThat(
       SearchState(
         "",
-        SearchResultsWithTerm("notEqual", emptyList()),
+        SearchResultsWithTerm("notEqual", null),
         emptyList(),
         FromWebView
       ).isLoading
-    ).isTrue()
+    ).isTrue
   }
 
   @Test
@@ -70,10 +88,10 @@ internal class SearchStateTest {
     assertThat(
       SearchState(
         searchTerm,
-        SearchResultsWithTerm(searchTerm, emptyList()),
+        SearchResultsWithTerm(searchTerm, null),
         emptyList(),
         FromWebView
       ).isLoading
-    ).isFalse()
+    ).isFalse
   }
 }
