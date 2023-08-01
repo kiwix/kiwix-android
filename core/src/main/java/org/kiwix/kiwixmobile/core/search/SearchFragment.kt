@@ -141,7 +141,7 @@ class SearchFragment : BaseFragment() {
     if (fetchMoreSearchResults?.isNotEmpty() == true) {
       // Check if there is no duplicate entry, this is specially added for searched history items.
       val nonDuplicateResults = fetchMoreSearchResults.filter { newItem ->
-        searchAdapter?.items?.any { it != newItem } == true
+        searchAdapter?.items?.none { it == newItem } ?: true
       }
 
       // Append new data (non-duplicate items) to the existing dataset
