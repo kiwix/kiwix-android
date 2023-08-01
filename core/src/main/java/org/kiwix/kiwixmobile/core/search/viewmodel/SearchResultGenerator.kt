@@ -22,14 +22,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
+import org.kiwix.libzim.Search
 import javax.inject.Inject
 
 interface SearchResultGenerator {
   suspend fun generateSearchResults(
     searchTerm: String,
     zimFileReader: ZimFileReader?
-  ): List<SearchListItem>
+  ): Search?
 }
 
 class ZimSearchResultGenerator @Inject constructor() : SearchResultGenerator {
@@ -37,7 +37,7 @@ class ZimSearchResultGenerator @Inject constructor() : SearchResultGenerator {
   override suspend fun generateSearchResults(searchTerm: String, zimFileReader: ZimFileReader?) =
     withContext(Dispatchers.IO) {
       if (searchTerm.isNotEmpty()) readResultsFromZim(searchTerm, zimFileReader)
-      else emptyList()
+      else null
     }
 
   private suspend fun readResultsFromZim(
@@ -46,8 +46,4 @@ class ZimSearchResultGenerator @Inject constructor() : SearchResultGenerator {
   ) =
     reader.also { yield() }
       ?.searchSuggestions(searchTerm)
-      .also { yield() }
-      .run {
-        reader?.getSearchResultList(this) ?: emptyList()
-      }
 }

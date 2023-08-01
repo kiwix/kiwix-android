@@ -26,10 +26,26 @@ data class SearchState(
   val recentResults: List<SearchListItem.RecentSearchListItem>,
   val searchOrigin: SearchOrigin
 ) {
-  val visibleResults = when {
-    searchTerm.isNotEmpty() -> searchResultsWithTerm.results
-    else -> recentResults
-  }
+  fun getVisibleResults(startIndex: Int): List<SearchListItem.RecentSearchListItem> =
+    if (searchTerm.isEmpty()) {
+      recentResults
+    } else {
+      searchResultsWithTerm.search?.let {
+        val maximumResults = it.estimatedMatches
+        val safeEndIndex =
+          if ((startIndex + 100) < maximumResults) startIndex + 100 else maximumResults
+        val searchIterator =
+          it.getResults(startIndex, safeEndIndex.toInt())
+        val searchResults = mutableListOf<SearchListItem.RecentSearchListItem>()
+        while (searchIterator.hasNext()) {
+          val entry = searchIterator.next()
+          searchResults.add(SearchListItem.RecentSearchListItem(entry.title))
+        }
+        searchResults
+      } ?: kotlin.run {
+        recentResults
+      }
+    }
 
   val isLoading = searchTerm != searchResultsWithTerm.searchTerm
 }

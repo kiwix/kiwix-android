@@ -65,6 +65,7 @@ import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
 
 const val NAV_ARG_SEARCH_STRING = "searchString"
+const val LAST_VISIBLE_ITEM = 5
 
 class SearchFragment : BaseFragment() {
 
@@ -76,6 +77,8 @@ class SearchFragment : BaseFragment() {
 
   private val searchViewModel by lazy { viewModel<SearchViewModel>(viewModelFactory) }
   private var searchAdapter: SearchAdapter? = null
+  private var isLoading = false
+  private var searchState: SearchState? = null
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
@@ -104,11 +107,48 @@ class SearchFragment : BaseFragment() {
       adapter = searchAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
+      // Add scroll listener to detect when the last item is reached
+      addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+          super.onScrolled(recyclerView, dx, dy)
+
+          val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+          val totalItemCount = layoutManager.itemCount
+          val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+
+          // Check if the user is about to reach the last item
+          if (!isLoading && totalItemCount <= (lastVisibleItem + LAST_VISIBLE_ITEM)) {
+            // Load more data when the last item is almost visible
+            loadMoreSearchResult()
+          }
+        }
+      })
     }
     lifecycleScope.launchWhenCreated {
       searchViewModel.effects.collect { it.invokeWith(this@SearchFragment.coreMainActivity) }
     }
     handleBackPress()
+  }
+
+  private fun loadMoreSearchResult() {
+    if (isLoading) {
+      return
+    }
+    val startIndex = searchAdapter?.itemCount ?: 0
+    // Set isLoading flag to true to prevent multiple load requests at once
+    isLoading = true
+    val fetchMoreSearchResults = searchState?.getVisibleResults(startIndex)
+    if (fetchMoreSearchResults?.isNotEmpty() == true) {
+      // Check if there is no duplicate entry, this is specially added for searched history items.
+      val nonDuplicateResults = fetchMoreSearchResults.filter { newItem ->
+        searchAdapter?.items?.any { it != newItem } == true
+      }
+
+      // Append new data (non-duplicate items) to the existing dataset
+      searchAdapter?.addData(nonDuplicateResults)
+
+      isLoading = false // Set isLoading to false when data is loaded successfully
+    }
   }
 
   private fun handleBackPress() {
@@ -136,6 +176,7 @@ class SearchFragment : BaseFragment() {
 
   override fun onDestroyView() {
     super.onDestroyView()
+    searchState = null
     activity?.intent?.action = null
     searchView = null
     searchInTextMenuItem = null
@@ -194,11 +235,13 @@ class SearchFragment : BaseFragment() {
   }
 
   private fun render(state: SearchState) {
+    searchState = state
     searchInTextMenuItem?.isVisible = state.searchOrigin == FromWebView
     searchInTextMenuItem?.isEnabled = state.searchTerm.isNotBlank()
     fragmentSearchBinding?.searchLoadingIndicator?.isShowing(state.isLoading)
-    fragmentSearchBinding?.searchNoResults?.isVisible = state.visibleResults.isEmpty()
-    searchAdapter?.items = state.visibleResults
+    fragmentSearchBinding?.searchNoResults?.isVisible =
+      state.getVisibleResults(0).isEmpty()
+    searchAdapter?.items = state.getVisibleResults(0)
   }
 
   private fun onItemClick(it: SearchListItem) {

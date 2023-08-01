@@ -35,7 +35,7 @@ internal class SearchStateTest {
         SearchResultsWithTerm("", results),
         emptyList(),
         FromWebView
-      ).visibleResults
+      ).getVisibleResults(0)
     ).isEqualTo(results)
   }
 
@@ -48,7 +48,7 @@ internal class SearchStateTest {
         SearchResultsWithTerm("", emptyList()),
         results,
         FromWebView
-      ).visibleResults
+      ).getVisibleResults(0)
     ).isEqualTo(results)
   }
 

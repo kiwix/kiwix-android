@@ -32,7 +32,6 @@ import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.main.UNINITIALISER_ADDRESS
 import org.kiwix.kiwixmobile.core.main.UNINITIALISE_HTML
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultListItem
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.libkiwix.JNIKiwixException
 import org.kiwix.libzim.Archive
@@ -142,19 +141,6 @@ class ZimFileReader constructor(
       // to handled the exception if there is no FT Xapian index found in the current zim file
       null
     }
-
-  fun getSearchResultList(search: Search?): List<ZimSearchResultListItem> {
-    val suggestionList = mutableListOf<ZimSearchResultListItem>()
-    val suggestionIterator =
-      search?.getResults(0, search.estimatedMatches.toInt())
-    suggestionIterator?.let {
-      while (it.hasNext()) {
-        val entry = it.next()
-        suggestionList.add(ZimSearchResultListItem(entry.title))
-      }
-    }
-    return suggestionList
-  }
 
   fun getPageUrlFrom(title: String): String? =
     if (jniKiwixReader.hasEntryByTitle(title))
