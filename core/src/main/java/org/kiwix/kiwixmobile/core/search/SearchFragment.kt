@@ -116,7 +116,7 @@ class SearchFragment : BaseFragment() {
           val totalItemCount = layoutManager.itemCount
           val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
           // Check if the user is about to reach the last item
-          if (!isDataLoading && totalItemCount <= (lastVisibleItem + VISIBLE_ITEMS_THRESHOLD)) {
+          if (!isDataLoading && totalItemCount <= lastVisibleItem + VISIBLE_ITEMS_THRESHOLD) {
             // Load more data when the last item is almost visible
             loadMoreSearchResult()
           }
