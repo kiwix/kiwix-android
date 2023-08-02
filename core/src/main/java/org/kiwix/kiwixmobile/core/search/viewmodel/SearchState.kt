@@ -26,7 +26,7 @@ data class SearchState(
   val recentResults: List<SearchListItem.RecentSearchListItem>,
   val searchOrigin: SearchOrigin
 ) {
-  fun getVisibleResults(startIndex: Int): List<SearchListItem.RecentSearchListItem> =
+  fun getVisibleResults(startIndex: Int): List<SearchListItem.RecentSearchListItem>? =
     if (searchTerm.isEmpty()) {
       recentResults
     } else {
@@ -41,7 +41,12 @@ data class SearchState(
           val entry = searchIterator.next()
           searchResults.add(SearchListItem.RecentSearchListItem(entry.title))
         }
-        searchResults
+        /**
+         * Returns null if there are no suggestions left in the iterator.
+         * We check this in SearchFragment to avoid unnecessary data loading
+         * while scrolling to the end of the list when there are no items available.
+         */
+        searchResults.ifEmpty { null }
       } ?: kotlin.run {
         recentResults
       }

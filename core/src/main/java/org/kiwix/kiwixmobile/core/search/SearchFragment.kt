@@ -65,7 +65,7 @@ import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
 
 const val NAV_ARG_SEARCH_STRING = "searchString"
-const val LAST_VISIBLE_ITEM = 5
+const val VISIBLE_ITEMS_THRESHOLD = 5
 
 class SearchFragment : BaseFragment() {
 
@@ -77,7 +77,7 @@ class SearchFragment : BaseFragment() {
 
   private val searchViewModel by lazy { viewModel<SearchViewModel>(viewModelFactory) }
   private var searchAdapter: SearchAdapter? = null
-  private var isLoading = false
+  private var isDataLoading = false
   private var searchState: SearchState? = null
 
   override fun inject(baseActivity: BaseActivity) {
@@ -115,9 +115,8 @@ class SearchFragment : BaseFragment() {
           val layoutManager = recyclerView.layoutManager as LinearLayoutManager
           val totalItemCount = layoutManager.itemCount
           val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
-
           // Check if the user is about to reach the last item
-          if (!isLoading && totalItemCount <= (lastVisibleItem + LAST_VISIBLE_ITEM)) {
+          if (!isDataLoading && totalItemCount <= (lastVisibleItem + VISIBLE_ITEMS_THRESHOLD)) {
             // Load more data when the last item is almost visible
             loadMoreSearchResult()
           }
@@ -130,24 +129,39 @@ class SearchFragment : BaseFragment() {
     handleBackPress()
   }
 
+  /**
+   * Loads more search results if available.
+   * If data is currently being loaded, the method returns early and does not initiate another load request.
+   * The loading process sets the `isDataLoading` flag to true to prevent multiple load requests at once.
+   * The method fetches more search results based on the current `searchState` and the `safeStartIndex`,
+   * which represents the current item count in the `searchAdapter`.
+   * If there are no more results to fetch, the method sets `isDataLoading` to true to avoid unnecessary data loading.
+   * If there are new results available, it checks for duplicate entries, especially for search history items.
+   * Non-duplicate results are appended to the existing dataset in the `searchAdapter`.
+   * If new data (non-duplicate items) is loaded successfully, the method sets `isDataLoading` to false.
+   * If there are no new non-duplicate results, the method sets `isDataLoading` to true
+   * to avoid unnecessary data loading, as there are no more items available.
+   */
   private fun loadMoreSearchResult() {
-    if (isLoading) {
-      return
-    }
-    val startIndex = searchAdapter?.itemCount ?: 0
-    // Set isLoading flag to true to prevent multiple load requests at once
-    isLoading = true
-    val fetchMoreSearchResults = searchState?.getVisibleResults(startIndex)
-    if (fetchMoreSearchResults?.isNotEmpty() == true) {
-      // Check if there is no duplicate entry, this is specially added for searched history items.
-      val nonDuplicateResults = fetchMoreSearchResults.filter { newItem ->
-        searchAdapter?.items?.none { it == newItem } ?: true
+    if (isDataLoading) return
+    val safeStartIndex = searchAdapter?.itemCount ?: 0
+    isDataLoading = true
+    val fetchMoreSearchResults = searchState?.getVisibleResults(safeStartIndex)
+    isDataLoading = when {
+      fetchMoreSearchResults == null -> true
+      fetchMoreSearchResults.isEmpty() -> false
+      else -> {
+        val nonDuplicateResults = fetchMoreSearchResults.filter { newItem ->
+          searchAdapter?.items?.none { it == newItem } ?: true
+        }
+
+        if (nonDuplicateResults.isNotEmpty()) {
+          searchAdapter?.addData(nonDuplicateResults)
+          false
+        } else {
+          true
+        }
       }
-
-      // Append new data (non-duplicate items) to the existing dataset
-      searchAdapter?.addData(nonDuplicateResults)
-
-      isLoading = false // Set isLoading to false when data is loaded successfully
     }
   }
 
@@ -235,13 +249,16 @@ class SearchFragment : BaseFragment() {
   }
 
   private fun render(state: SearchState) {
+    isDataLoading = false
     searchState = state
     searchInTextMenuItem?.isVisible = state.searchOrigin == FromWebView
     searchInTextMenuItem?.isEnabled = state.searchTerm.isNotBlank()
     fragmentSearchBinding?.searchLoadingIndicator?.isShowing(state.isLoading)
     fragmentSearchBinding?.searchNoResults?.isVisible =
-      state.getVisibleResults(0).isEmpty()
-    searchAdapter?.items = state.getVisibleResults(0)
+      state.getVisibleResults(0)?.isEmpty() == true
+    state.getVisibleResults(0)?.let {
+      searchAdapter?.items = it
+    }
   }
 
   private fun onItemClick(it: SearchListItem) {
