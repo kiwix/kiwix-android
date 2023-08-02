@@ -33,7 +33,7 @@ data class SearchState(
       searchResultsWithTerm.search?.let {
         val maximumResults = it.estimatedMatches
         val safeEndIndex =
-          if ((startIndex + 100) < maximumResults) startIndex + 100 else maximumResults
+          if (startIndex + 100 < maximumResults) startIndex + 100 else maximumResults
         val searchIterator =
           it.getResults(startIndex, safeEndIndex.toInt())
         val searchResults = mutableListOf<SearchListItem.RecentSearchListItem>()
