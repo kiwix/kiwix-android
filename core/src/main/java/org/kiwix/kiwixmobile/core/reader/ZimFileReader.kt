@@ -36,7 +36,6 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.libkiwix.JNIKiwixException
 import org.kiwix.libzim.Archive
 import org.kiwix.libzim.DirectAccessInfo
-import org.kiwix.libzim.EntryNotFoundException
 import org.kiwix.libzim.Item
 import org.kiwix.libzim.Query
 import org.kiwix.libzim.Search
@@ -90,11 +89,8 @@ class ZimFileReader constructor(
   val mainPage: String?
     get() =
       try {
-        if (jniKiwixReader.mainEntry.isRedirect)
-          jniKiwixReader.mainEntry.getItem(true).path
-        else
-          jniKiwixReader.mainEntry.path
-      } catch (entryNotFound: EntryNotFoundException) {
+        jniKiwixReader.mainEntry.getItem(true).path
+      } catch (ignore: Exception) {
         null
       }
   val id: String get() = jniKiwixReader.uuid
@@ -143,10 +139,11 @@ class ZimFileReader constructor(
     }
 
   fun getPageUrlFrom(title: String): String? =
-    if (jniKiwixReader.hasEntryByTitle(title))
+    try {
       jniKiwixReader.getEntryByTitle(title).path
-    else
+    } catch (ignore: Exception) {
       null
+    }
 
   fun getRandomArticleUrl(): String? = jniKiwixReader.randomEntry.path
 
@@ -180,12 +177,12 @@ class ZimFileReader constructor(
 
   private fun getActualUrl(url: String, actualUrl: Boolean = false): String {
     val actualPath = url.toUri().filePath.decodeUrl
-    var redirectPath = if (jniKiwixReader.hasEntryByPath(actualPath)) {
+    var redirectPath = try {
       jniKiwixReader.getEntryByPath(actualPath)
         .getItem(true)
         .path
         .replaceWithEncodedString
-    } else {
+    } catch (ignore: Exception) {
       actualPath.replaceWithEncodedString
     }
     if (actualUrl && url.decodeUrl.contains("?")) {
@@ -208,9 +205,9 @@ class ZimFileReader constructor(
     }
 
   private fun loadAsset(uri: String): InputStream? {
-    val article = if (jniKiwixReader.hasEntryByPath(uri.filePath)) {
+    val article = try {
       jniKiwixReader.getEntryByPath(uri.filePath).getItem(true)
-    } else {
+    } catch (ignore: Exception) {
       null
     }
     val infoPair = article?.directAccessInformation
@@ -260,9 +257,9 @@ class ZimFileReader constructor(
   }
 
   private fun getItem(url: String): Item? =
-    if (jniKiwixReader.hasEntryByPath(getActualUrl(url))) {
+    try {
       jniKiwixReader.getEntryByPath(getActualUrl(url)).getItem(true)
-    } else {
+    } catch (ignore: Exception) {
       null
     }
 
