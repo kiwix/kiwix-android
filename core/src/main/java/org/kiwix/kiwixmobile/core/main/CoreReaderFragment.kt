@@ -1315,16 +1315,12 @@ abstract class CoreReaderFragment :
     if (sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
       Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
     ) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // For Marshmallow & higher API levels
-        if (requireActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-          == PackageManager.PERMISSION_GRANTED
-        ) {
-          isPermissionGranted = true
-        } else {
-          storagePermissionForNotesLauncher?.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        }
-      } else { // For Android versions below Marshmallow 6.0 (API 23)
-        isPermissionGranted = true // As already requested at install time
+      if (requireActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        == PackageManager.PERMISSION_GRANTED
+      ) {
+        isPermissionGranted = true
+      } else {
+        storagePermissionForNotesLauncher?.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
       }
     } else {
       isPermissionGranted = true
@@ -1661,10 +1657,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun goToSearchWithText(intent: Intent) {
-    val searchString =
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-        intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT)
-      else ""
+    val searchString = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT)
     openSearch(
       searchString,
       isOpenedFromTabView = false,
