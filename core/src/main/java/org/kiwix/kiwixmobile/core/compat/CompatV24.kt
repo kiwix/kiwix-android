@@ -24,10 +24,11 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.ConnectivityManager
-import android.net.ConnectivityManager.TYPE_WIFI
-import android.net.NetworkInfo.State.CONNECTED
+import android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET
+import android.net.NetworkCapabilities.TRANSPORT_WIFI
 
-open class CompatV21 : Compat {
+open class CompatV24 : Compat {
+
   override fun queryIntentActivities(
     packageManager: PackageManager,
     intent: Intent,
@@ -46,8 +47,10 @@ open class CompatV21 : Compat {
    * @param connectivity The ConnectivityManager instance.
    * @return True if a network connection with internet access is available, false otherwise.
    */
-  override fun isNetworkAvailable(connectivity: ConnectivityManager): Boolean =
-    connectivity.allNetworkInfo.any { it.state == CONNECTED }
+  override fun isNetworkAvailable(connectivity: ConnectivityManager): Boolean {
+    return connectivity.getNetworkCapabilities(connectivity.activeNetwork)
+      ?.hasCapability(NET_CAPABILITY_INTERNET) == true
+  }
 
   /**
    * Checks if the device is connected to a Wi-Fi network.
@@ -55,6 +58,8 @@ open class CompatV21 : Compat {
    * @param connectivity The ConnectivityManager instance.
    * @return True if connected to a Wi-Fi network, false otherwise.
    */
-  override fun isWifi(connectivity: ConnectivityManager): Boolean =
-    connectivity.getNetworkInfo(TYPE_WIFI)?.isConnected == true
+  override fun isWifi(connectivity: ConnectivityManager): Boolean {
+    return connectivity.getNetworkCapabilities(connectivity.activeNetwork)
+      ?.hasTransport(TRANSPORT_WIFI) == true
+  }
 }
