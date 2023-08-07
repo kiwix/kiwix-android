@@ -27,8 +27,11 @@
 
 -keepclassmembers class org.kiwix.videowebview.VideoEnabledWebView$JavascriptInterface { public *; }
 
-#keep everything in kiwixlib
--keep class org.kiwix.kiwixlib.** { *; }
+#keep everything in libkiwix
+-keep class org.kiwix.libkiwix.** { *; }
+
+#keep everything in libzim
+-keep class org.kiwix.libzim.** { *; }
 
 ## SimpleXml
 
