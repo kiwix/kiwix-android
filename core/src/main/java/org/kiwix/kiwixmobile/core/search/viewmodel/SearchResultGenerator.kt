@@ -22,14 +22,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
-import org.kiwix.libzim.Search
+import org.kiwix.libzim.SuggestionSearch
 import javax.inject.Inject
 
 interface SearchResultGenerator {
   suspend fun generateSearchResults(
     searchTerm: String,
     zimFileReader: ZimFileReader?
-  ): Search?
+  ): SuggestionSearch?
 }
 
 class ZimSearchResultGenerator @Inject constructor() : SearchResultGenerator {

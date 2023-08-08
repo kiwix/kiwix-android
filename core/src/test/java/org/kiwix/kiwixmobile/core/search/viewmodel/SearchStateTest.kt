@@ -30,11 +30,11 @@ internal class SearchStateTest {
   @Test
   internal fun `visibleResults use searchResults when searchTerm is not empty`() {
     val searchTerm = "notEmpty"
-    val searchWrapper: SearchWrapper = mockk()
-    val searchIteratorWrapper: SearchIteratorWrapper = mockk()
-    val entryWrapper: EntryWrapper = mockk()
+    val suggestionSearchWrapper: SuggestionSearchWrapper = mockk()
+    val searchIteratorWrapper: SuggestionIteratorWrapper = mockk()
+    val entryWrapper: SuggestionItemWrapper = mockk()
     val estimatedMatches = 1
-    every { searchWrapper.estimatedMatches } returns estimatedMatches.toLong()
+    every { suggestionSearchWrapper.estimatedMatches } returns estimatedMatches.toLong()
     // Settings list to hasNext() to ensure it returns true only for the first call.
     // Otherwise, if we do not set this, the method will always return true when checking if the iterator has a next value,
     // causing our test case to get stuck in an infinite loop due to this explicit setting.
@@ -42,7 +42,7 @@ internal class SearchStateTest {
     every { searchIteratorWrapper.next() } returns entryWrapper
     every { entryWrapper.title } returns searchTerm
     every {
-      searchWrapper.getResults(
+      suggestionSearchWrapper.getResults(
         0,
         estimatedMatches
       )
@@ -50,7 +50,7 @@ internal class SearchStateTest {
     assertThat(
       SearchState(
         searchTerm,
-        SearchResultsWithTerm("", searchWrapper),
+        SearchResultsWithTerm("", suggestionSearchWrapper),
         emptyList(),
         FromWebView
       ).getVisibleResults(0)
