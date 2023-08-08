@@ -30,7 +30,7 @@ data class SearchState(
     if (searchTerm.isEmpty()) {
       recentResults
     } else {
-      searchResultsWithTerm.search?.let {
+      searchResultsWithTerm.suggestionSearch?.let {
         val maximumResults = it.estimatedMatches
         val safeEndIndex =
           if (startIndex + 100 < maximumResults) startIndex + 100 else maximumResults

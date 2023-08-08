@@ -18,12 +18,11 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
-import org.kiwix.libzim.SearchIterator
+import org.kiwix.libzim.SuggestionIterator
 
-// Create this as a helper class, as we can not directly use libkiwix/libzim functions in testing
-internal class SearchIteratorWrapper : SearchIterator() {
+class SuggestionIteratorWrapper : SuggestionIterator() {
   override fun remove() {}
 
   override fun hasNext(): Boolean = super.hasNext()
-  override fun next(): EntryWrapper = super.next() as EntryWrapper
+  override fun next(): SuggestionItemWrapper = super.next() as SuggestionItemWrapper
 }

@@ -59,7 +59,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScree
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
-import org.kiwix.libzim.Search
+import org.kiwix.libzim.SuggestionSearch
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -174,4 +174,4 @@ class SearchViewModel @Inject constructor(
   }
 }
 
-data class SearchResultsWithTerm(val searchTerm: String, val search: Search?)
+data class SearchResultsWithTerm(val searchTerm: String, val suggestionSearch: SuggestionSearch?)

@@ -18,8 +18,11 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
-import org.kiwix.libzim.Entry
+import org.kiwix.libzim.SuggestionSearch
 
-internal class EntryWrapper : Entry() {
-  override fun getTitle(): String = super.getTitle()
+class SuggestionSearchWrapper : SuggestionSearch() {
+  override fun getEstimatedMatches(): Long = super.getEstimatedMatches()
+
+  override fun getResults(start: Int, maxResults: Int): SuggestionIteratorWrapper =
+    super.getResults(start, maxResults) as SuggestionIteratorWrapper
 }

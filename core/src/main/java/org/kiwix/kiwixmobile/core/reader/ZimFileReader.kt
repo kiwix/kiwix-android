@@ -37,9 +37,8 @@ import org.kiwix.libkiwix.JNIKiwixException
 import org.kiwix.libzim.Archive
 import org.kiwix.libzim.DirectAccessInfo
 import org.kiwix.libzim.Item
-import org.kiwix.libzim.Query
-import org.kiwix.libzim.Search
-import org.kiwix.libzim.Searcher
+import org.kiwix.libzim.SuggestionSearch
+import org.kiwix.libzim.SuggestionSearcher
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -56,7 +55,7 @@ class ZimFileReader constructor(
   val zimFile: File,
   private val jniKiwixReader: Archive,
   private val nightModeConfig: NightModeConfig,
-  private val searcher: Searcher = Searcher(jniKiwixReader)
+  private val searcher: SuggestionSearcher = SuggestionSearcher(jniKiwixReader)
 ) {
   interface Factory {
     fun create(file: File): ZimFileReader?
@@ -130,9 +129,9 @@ class ZimFileReader constructor(
       null
     }
 
-  fun searchSuggestions(prefix: String): Search? =
+  fun searchSuggestions(prefix: String): SuggestionSearch? =
     try {
-      searcher.search(Query(prefix))
+      searcher.suggest(prefix)
     } catch (ignore: Exception) {
       // to handled the exception if there is no FT Xapian index found in the current zim file
       null

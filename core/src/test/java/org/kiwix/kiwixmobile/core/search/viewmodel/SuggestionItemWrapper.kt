@@ -18,12 +18,8 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
-import org.kiwix.libzim.Search
+import org.kiwix.libzim.SuggestionItem
 
-// Create this as a helper class, as we can not directly use libkiwix/libzim functions in testing
-internal class SearchWrapper : Search() {
-  override fun getEstimatedMatches(): Long = super.getEstimatedMatches()
-
-  override fun getResults(start: Int, maxResults: Int): SearchIteratorWrapper =
-    super.getResults(start, maxResults) as SearchIteratorWrapper
+class SuggestionItemWrapper : SuggestionItem() {
+  override fun getTitle(): String = super.getTitle()
 }

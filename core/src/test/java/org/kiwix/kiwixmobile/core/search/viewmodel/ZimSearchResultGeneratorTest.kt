@@ -44,11 +44,11 @@ internal class ZimSearchResultGeneratorTest {
   @Test
   internal fun `suggestion results are distinct`() {
     val searchTerm = " "
-    val searchWrapper: SearchWrapper = mockk()
-    every { zimFileReader.searchSuggestions(searchTerm) } returns searchWrapper
+    val suggestionSearchWrapper: SuggestionSearchWrapper = mockk()
+    every { zimFileReader.searchSuggestions(searchTerm) } returns suggestionSearchWrapper
     runBlocking {
       assertThat(zimSearchResultGenerator.generateSearchResults(searchTerm, zimFileReader))
-        .isEqualTo(searchWrapper)
+        .isEqualTo(suggestionSearchWrapper)
       verify {
         zimFileReader.searchSuggestions(searchTerm)
       }
