@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.search.viewmodel
 
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
@@ -28,7 +29,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 internal class SearchStateTest {
 
   @Test
-  internal fun `visibleResults use searchResults when searchTerm is not empty`() {
+  internal fun `visibleResults use searchResults when searchTerm is not empty`() = runTest {
     val searchTerm = "notEmpty"
     val suggestionSearchWrapper: SuggestionSearchWrapper = mockk()
     val searchIteratorWrapper: SuggestionIteratorWrapper = mockk()
@@ -58,7 +59,7 @@ internal class SearchStateTest {
   }
 
   @Test
-  internal fun `visibleResults use recentResults when searchTerm is empty`() {
+  internal fun `visibleResults use recentResults when searchTerm is empty`() = runTest {
     val results = listOf(RecentSearchListItem(""))
     assertThat(
       SearchState(
