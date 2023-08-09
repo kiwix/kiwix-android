@@ -38,6 +38,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
@@ -146,20 +149,27 @@ class SearchFragment : BaseFragment() {
     if (isDataLoading) return
     val safeStartIndex = searchAdapter?.itemCount ?: 0
     isDataLoading = true
-    val fetchMoreSearchResults = searchState?.getVisibleResults(safeStartIndex)
-    isDataLoading = when {
-      fetchMoreSearchResults == null -> true
-      fetchMoreSearchResults.isEmpty() -> false
-      else -> {
-        val nonDuplicateResults = fetchMoreSearchResults.filter { newItem ->
-          searchAdapter?.items?.none { it == newItem } ?: true
-        }
+    fragmentSearchBinding?.loadingMoreDataIndicator?.isShowing(true)
 
-        if (nonDuplicateResults.isNotEmpty()) {
-          searchAdapter?.addData(nonDuplicateResults)
-          false
-        } else {
-          true
+    CoroutineScope(Dispatchers.IO).launch {
+      val fetchMoreSearchResults = searchState?.getVisibleResults(safeStartIndex)
+      CoroutineScope(Dispatchers.Main).launch {
+        fragmentSearchBinding?.loadingMoreDataIndicator?.isShowing(false)
+        isDataLoading = when {
+          fetchMoreSearchResults == null -> true
+          fetchMoreSearchResults.isEmpty() -> false
+          else -> {
+            val nonDuplicateResults = fetchMoreSearchResults.filter { newItem ->
+              searchAdapter?.items?.none { it == newItem } ?: true
+            }
+
+            if (nonDuplicateResults.isNotEmpty()) {
+              searchAdapter?.addData(nonDuplicateResults)
+              false
+            } else {
+              true
+            }
+          }
         }
       }
     }
@@ -248,15 +258,16 @@ class SearchFragment : BaseFragment() {
     )
   }
 
-  private fun render(state: SearchState) {
+  private suspend fun render(state: SearchState) {
     isDataLoading = false
     searchState = state
     searchInTextMenuItem?.isVisible = state.searchOrigin == FromWebView
     searchInTextMenuItem?.isEnabled = state.searchTerm.isNotBlank()
     fragmentSearchBinding?.searchLoadingIndicator?.isShowing(state.isLoading)
+    val searchResult = state.getVisibleResults(0)
     fragmentSearchBinding?.searchNoResults?.isVisible =
-      state.getVisibleResults(0)?.isEmpty() == true
-    state.getVisibleResults(0)?.let {
+      searchResult?.isEmpty() == true
+    searchResult?.let {
       searchAdapter?.items = it
     }
   }

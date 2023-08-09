@@ -1,4 +1,5 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
@@ -6,7 +7,7 @@
   android:fitsSystemWindows="true"
   android:orientation="vertical">
 
-  <LinearLayout
+  <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -15,11 +16,27 @@
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/search_list"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      app:layout_constraintBottom_toTopOf="@+id/loadingMoreDataIndicator"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      android:layout_marginTop="?actionBarSize"
       tools:listitem="@layout/list_item_search" />
 
-  </LinearLayout>
+    <androidx.core.widget.ContentLoadingProgressBar
+      android:id="@+id/loadingMoreDataIndicator"
+      style="?android:attr/progressBarStyleLarge"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      android:layout_gravity="center"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      android:visibility="gone" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
   <TextView
     android:id="@+id/searchNoResults"
