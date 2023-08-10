@@ -26,13 +26,10 @@ data class SearchState(
   val recentResults: List<SearchListItem.RecentSearchListItem>,
   val searchOrigin: SearchOrigin
 ) {
-  private var isDataLoading = false
-  suspend fun getVisibleResults(startIndex: Int): List<SearchListItem.RecentSearchListItem>? =
+  fun getVisibleResults(startIndex: Int): List<SearchListItem.RecentSearchListItem>? =
     if (searchTerm.isEmpty()) {
-      isDataLoading = false
       recentResults
     } else {
-      isDataLoading = true
       searchResultsWithTerm.suggestionSearch?.let {
         val maximumResults = it.estimatedMatches
         val safeEndIndex =
@@ -49,15 +46,13 @@ data class SearchState(
          * We check this in SearchFragment to avoid unnecessary data loading
          * while scrolling to the end of the list when there are no items available.
          */
-        isDataLoading = false
         searchResults.ifEmpty { null }
       } ?: kotlin.run {
-        isDataLoading = false
         recentResults
       }
     }
 
-  val isLoading get() = searchTerm != searchResultsWithTerm.searchTerm || isDataLoading
+  val isLoading = searchTerm != searchResultsWithTerm.searchTerm
 }
 
 enum class SearchOrigin {
