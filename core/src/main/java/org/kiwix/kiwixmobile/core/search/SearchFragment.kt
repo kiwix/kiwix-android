@@ -40,7 +40,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
@@ -82,6 +84,7 @@ class SearchFragment : BaseFragment() {
   private var searchAdapter: SearchAdapter? = null
   private var isDataLoading = false
   private var searchState: SearchState? = null
+  private var renderingJob: Job? = null
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
@@ -200,6 +203,8 @@ class SearchFragment : BaseFragment() {
 
   override fun onDestroyView() {
     super.onDestroyView()
+    renderingJob?.cancel()
+    renderingJob = null
     searchState = null
     activity?.intent?.action = null
     searchView = null
@@ -258,17 +263,24 @@ class SearchFragment : BaseFragment() {
     )
   }
 
-  private suspend fun render(state: SearchState) {
+  private fun render(state: SearchState) {
+    renderingJob?.cancel()
     isDataLoading = false
     searchState = state
     searchInTextMenuItem?.isVisible = state.searchOrigin == FromWebView
     searchInTextMenuItem?.isEnabled = state.searchTerm.isNotBlank()
-    fragmentSearchBinding?.searchLoadingIndicator?.isShowing(state.isLoading)
-    val searchResult = state.getVisibleResults(0)
-    fragmentSearchBinding?.searchNoResults?.isVisible =
-      searchResult?.isEmpty() == true
-    searchResult?.let {
-      searchAdapter?.items = it
+    fragmentSearchBinding?.searchLoadingIndicator?.isShowing(true)
+    renderingJob = CoroutineScope(Dispatchers.Main).launch {
+      val searchResult = withContext(Dispatchers.IO) {
+        state.getVisibleResults(0)
+      }
+
+      fragmentSearchBinding?.searchLoadingIndicator?.isShowing(false)
+
+      searchResult?.let {
+        fragmentSearchBinding?.searchNoResults?.isVisible = it.isEmpty()
+        searchAdapter?.items = it
+      }
     }
   }
 
