@@ -28,7 +28,13 @@ import javax.inject.Inject
 
 private const val TAG = "KiwixServer"
 
-class KiwixServer @Inject constructor(private val jniKiwixServer: Server) {
+// jniKiwixServer is a server running on a existing library.
+// We must keep the library alive (keep a reference to it) to not delete the library the server
+// is working on.
+class KiwixServer @Inject constructor(
+  private val library: Library,
+  private val jniKiwixServer: Server
+) {
 
   class Factory @Inject constructor() {
     fun createKiwixServer(selectedBooksPath: ArrayList<String>): KiwixServer {
@@ -43,7 +49,7 @@ class KiwixServer @Inject constructor(private val jniKiwixServer: Server) {
           Log.v(TAG, "Couldn't add book with path:{ $path }")
         }
       }
-      return KiwixServer(Server(kiwixLibrary))
+      return KiwixServer(kiwixLibrary, Server(kiwixLibrary))
     }
   }
 
