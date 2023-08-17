@@ -314,6 +314,7 @@ abstract class CorePrefsFragment :
         findPreference<Preference>(SharedPreferenceUtil.PREF_STORAGE)?.title =
           getString(R.string.internal_storage)
         sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION)
+        setShowStorageOption()
       } else {
         if (sharedPreferenceUtil.isPlayStoreBuild) {
           setExternalStoragePath(storageDevice)
@@ -339,6 +340,7 @@ abstract class CorePrefsFragment :
     findPreference<Preference>(SharedPreferenceUtil.PREF_STORAGE)?.title =
       getString(R.string.external_storage)
     sharedPreferenceUtil?.putStoragePosition(EXTERNAL_SELECT_POSITION)
+    setShowStorageOption()
   }
 
   private fun selectFolder() {
@@ -362,10 +364,15 @@ abstract class CorePrefsFragment :
             findPreference<Preference>(SharedPreferenceUtil.PREF_STORAGE)?.title =
               getString(R.string.external_storage)
             sharedPreferenceUtil?.putStoragePosition(EXTERNAL_SELECT_POSITION)
+            setShowStorageOption()
           }
         }
       }
     }
+
+  private fun setShowStorageOption() {
+    sharedPreferenceUtil?.showStorageOption = false
+  }
 
   companion object {
     const val PREF_VERSION = "pref_version"
