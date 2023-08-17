@@ -17,20 +17,25 @@ This is the version for Android, with support versions ranging from 5
 to 13 (like [mentioned
 here](https://github.com/kiwix/kiwix-android/blob/develop/buildSrc/src/main/kotlin/Config.kt)).
 
-**Important Note**: Starting from Android 11, the zim file picker feature
-has been restricted in the Play Store variant due to Play Store policies.
-This means that users running Android 11 and above will not be able to load
-zim files from internal/external storage directly within the app.
-This restriction is in place to comply with the Play Store policies.
-The Play Store variant of the Kiwix app does not have the 
-`MANAGE_EXTERNAL_STORAGE` permission, which is required for scanning storage
-and accessing zim files from arbitrary locations.
-Therefore, the storage scanning functionality is not available in this variant.
-To use the full version of the Kiwix app and access the zim file picker feature,
-you can download it directly from the [official page](https://download.kiwix.org/release/kiwix-android/). The website allows you to download the full version of the app, which includes the unrestricted file picker feature.
-We understand that this restriction may cause inconvenience,
-but it is necessary to comply with the Play Store policies and ensure a smooth user experience.
-We recommend using the official version of the app available on our website to access the complete set of features.
+**Important Note**: Starting from Android 11, the ZIM file picker
+feature has been restricted in the Play Store variant due to Play
+Store policies.  This means that users running Android 11 and above
+will not be able to load ZIM files from internal/external storage
+directly within the app if they have downloaded Kiwix from the Google
+Play Store.  This restriction is in place to comply with the Play
+Store policies.  The Play Store variant of Kiwix does not require the
+`MANAGE_EXTERNAL_STORAGE` permission anymore, which is necessary to
+scan storage and access ZIM files at arbitrary locations.  Therefore,
+the storage scanning & file picking functionalities are not available
+in this variant anymore.  To use the full version of Kiwix and benefit
+of the ZIM file picker feature, you can download it directly from the
+[official
+repository](https://download.kiwix.org/release/kiwix-android/) or use
+[F-Droid](https://fdroid.kiwix.org). We understand that this
+restriction may cause inconvenience, but it is necessary to comply
+with the Play Store policies and ensure a smooth user experience.  We
+recommend using the official version of the app available on our
+website to access the complete set of features.
 
 Kiwix Android is written in [Kotlin](https://kotlinlang.org/)
 
