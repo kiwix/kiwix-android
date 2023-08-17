@@ -88,6 +88,18 @@
       android:orientation="horizontal">
 
       <ImageView
+        android:id="@+id/pauseResume"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/stop_horizontal_margin"
+        android:layout_marginEnd="@dimen/stop_horizontal_margin"
+        android:layout_weight="0.5"
+        android:minWidth="@dimen/stop_min_width"
+        android:minHeight="@dimen/stop_min_height"
+        android:src="@drawable/ic_pause_24dp" />
+
+      <ImageView
         android:id="@+id/stop"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

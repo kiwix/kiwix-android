@@ -45,6 +45,13 @@ class FetchDownloadRequester @Inject constructor(
   override fun retryDownload(downloadId: Long) {
     fetch.retry(downloadId.toInt())
   }
+
+  override fun pauseResumeDownload(downloadId: Long, isPause: Boolean) {
+    if (isPause)
+      fetch.resume(downloadId.toInt())
+    else
+      fetch.pause(downloadId.toInt())
+  }
 }
 
 private fun DownloadRequest.toFetchRequest(sharedPreferenceUtil: SharedPreferenceUtil) =

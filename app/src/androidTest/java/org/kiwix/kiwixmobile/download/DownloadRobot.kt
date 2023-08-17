@@ -122,6 +122,24 @@ class DownloadRobot : BaseRobot() {
     }
   }
 
+  fun pauseDownload() {
+    clickOn(ViewId(R.id.pauseResume))
+  }
+
+  fun assertDownloadPaused() {
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    onView(withText(org.kiwix.kiwixmobile.core.R.string.paused_state)).check(matches(isDisplayed()))
+  }
+
+  fun resumeDownload() {
+    pauseDownload()
+  }
+
+  fun assertDownloadResumed() {
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    onView(withText(org.kiwix.kiwixmobile.core.R.string.paused_state)).check(doesNotExist())
+  }
+
   fun waitUntilDownloadComplete() {
     try {
       onView(withId(R.id.stop)).check(doesNotExist())

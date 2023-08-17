@@ -57,4 +57,8 @@ class DownloaderImpl @Inject constructor(
   override fun retryDownload(downloadId: Long) {
     downloadRequester.retryDownload(downloadId)
   }
+
+  override fun pauseResumeDownload(downloadId: Long, isPause: Boolean) {
+    downloadRequester.pauseResumeDownload(downloadId, isPause)
+  }
 }

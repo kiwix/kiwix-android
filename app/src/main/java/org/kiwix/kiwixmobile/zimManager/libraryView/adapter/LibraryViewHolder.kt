@@ -24,6 +24,7 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.setBitmap
+import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.setTextAndVisibility
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.BookUtils
@@ -90,7 +91,8 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
 
   class DownloadViewHolder(
     private val itemDownloadBinding: ItemDownloadBinding,
-    private val clickAction: (LibraryDownloadItem) -> Unit
+    private val clickAction: (LibraryDownloadItem) -> Unit,
+    private val pauseResumeClickAction: (LibraryDownloadItem) -> Unit
   ) :
     LibraryViewHolder<LibraryDownloadItem>(itemDownloadBinding.root) {
 
@@ -100,8 +102,18 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
       itemDownloadBinding.libraryDownloadDescription.text = item.description
       itemDownloadBinding.downloadProgress.progress = item.progress
       itemDownloadBinding.stop.setOnClickListener { clickAction.invoke(item) }
+      itemDownloadBinding.pauseResume.setOnClickListener {
+        pauseResumeClickAction.invoke(item)
+      }
       itemDownloadBinding.downloadState.text =
-        item.downloadState.toReadableState(containerView.context)
+        item.downloadState.toReadableState(containerView.context).also {
+          val pauseResumeIconId = if (it == "Paused") {
+            R.drawable.ic_play_24dp
+          } else {
+            R.drawable.ic_pause_24dp
+          }
+          itemDownloadBinding.pauseResume.setImageDrawableCompat(pauseResumeIconId)
+        }
       if (item.currentDownloadState == Status.FAILED) {
         clickAction.invoke(item)
       }

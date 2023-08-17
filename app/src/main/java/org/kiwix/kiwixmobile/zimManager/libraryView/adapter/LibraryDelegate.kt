@@ -51,14 +51,18 @@ sealed class LibraryDelegate<I : LibraryListItem, out VH : LibraryViewHolder<I>>
       )
   }
 
-  class DownloadDelegate(private val clickAction: (LibraryDownloadItem) -> Unit) :
+  class DownloadDelegate(
+    private val clickAction: (LibraryDownloadItem) -> Unit,
+    private val pauseResumeClickAction: (LibraryDownloadItem) -> Unit
+  ) :
     LibraryDelegate<LibraryDownloadItem, DownloadViewHolder>() {
     override val itemClass = LibraryDownloadItem::class.java
 
     override fun createViewHolder(parent: ViewGroup) =
       DownloadViewHolder(
         parent.viewBinding(ItemDownloadBinding::inflate, false),
-        clickAction
+        clickAction,
+        pauseResumeClickAction
       )
   }
 

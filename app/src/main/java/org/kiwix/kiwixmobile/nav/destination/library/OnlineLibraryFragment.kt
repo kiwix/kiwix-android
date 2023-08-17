@@ -113,20 +113,30 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private val libraryAdapter: LibraryAdapter by lazy {
     LibraryAdapter(
       LibraryDelegate.BookDelegate(bookUtils, ::onBookItemClick, availableSpaceCalculator),
-      LibraryDelegate.DownloadDelegate {
-        if (it.currentDownloadState == Status.FAILED) {
-          if (isNotConnected) {
-            noInternetSnackbar()
+      LibraryDelegate.DownloadDelegate(
+        {
+          if (it.currentDownloadState == Status.FAILED) {
+            if (isNotConnected) {
+              noInternetSnackbar()
+            } else {
+              downloader.retryDownload(it.downloadId)
+            }
           } else {
-            downloader.retryDownload(it.downloadId)
+            dialogShower.show(
+              KiwixDialog.YesNoDialog.StopDownload,
+              { downloader.cancelDownload(it.downloadId) }
+            )
           }
-        } else {
-          dialogShower.show(
-            KiwixDialog.YesNoDialog.StopDownload,
-            { downloader.cancelDownload(it.downloadId) }
-          )
+        },
+        {
+          context?.let { context ->
+            downloader.pauseResumeDownload(
+              it.downloadId,
+              it.downloadState.toReadableState(context) == "Paused"
+            )
+          }
         }
-      },
+      ),
       LibraryDelegate.DividerDelegate
     )
   }
