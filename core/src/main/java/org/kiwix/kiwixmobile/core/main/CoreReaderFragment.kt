@@ -1886,7 +1886,7 @@ abstract class CoreReaderFragment :
   }
 
   @Suppress("MagicNumber")
-  override fun webViewProgressChanged(progress: Int) {
+  override fun webViewProgressChanged(progress: Int, webView: WebView) {
     if (isAdded) {
       progressBar?.apply {
         visibility = View.VISIBLE
@@ -1897,6 +1897,7 @@ abstract class CoreReaderFragment :
           Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView()?.url)
         }
       }
+      (webView.context as AppCompatActivity).invalidateOptionsMenu()
     }
   }
 

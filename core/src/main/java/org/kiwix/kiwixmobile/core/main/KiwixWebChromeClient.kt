@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.core.main
 
 import android.view.ViewGroup
 import android.webkit.WebView
-import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.videowebview.VideoEnabledWebChromeClient
 
 class KiwixWebChromeClient(
@@ -29,8 +28,7 @@ class KiwixWebChromeClient(
   webView: KiwixWebView?
 ) : VideoEnabledWebChromeClient(nonVideoView, videoView, null, webView) {
   override fun onProgressChanged(view: WebView, progress: Int) {
-    callback.webViewProgressChanged(progress)
-    (view.context as AppCompatActivity).invalidateOptionsMenu()
+    callback.webViewProgressChanged(progress, view)
   }
 
   override fun onReceivedTitle(view: WebView, title: String) {
