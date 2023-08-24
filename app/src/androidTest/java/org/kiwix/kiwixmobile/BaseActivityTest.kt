@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile
 
 import android.Manifest.permission
 import android.content.Context
+import android.os.Build
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
@@ -35,13 +36,22 @@ abstract class BaseActivityTest {
   @get:Rule
   open var activityScenarioRule = ActivityScenarioRule(KiwixMainActivity::class.java)
 
-  @get:Rule
-  var readPermissionRule: GrantPermissionRule =
-    GrantPermissionRule.grant(permission.READ_EXTERNAL_STORAGE)
+  private val permissions = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+    arrayOf(
+      permission.READ_EXTERNAL_STORAGE,
+      permission.WRITE_EXTERNAL_STORAGE,
+      permission.SYSTEM_ALERT_WINDOW
+    )
+  } else {
+    arrayOf(
+      permission.READ_EXTERNAL_STORAGE,
+      permission.WRITE_EXTERNAL_STORAGE
+    )
+  }
 
   @get:Rule
-  var writePermissionRule: GrantPermissionRule =
-    GrantPermissionRule.grant(permission.WRITE_EXTERNAL_STORAGE)
+  var permissionRules: GrantPermissionRule =
+    GrantPermissionRule.grant(*permissions)
 
   val context: Context by lazy {
     getInstrumentation().targetContext.applicationContext

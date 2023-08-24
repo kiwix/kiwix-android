@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile
 
 import android.Manifest
+import android.os.Build
 import android.util.Log
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
@@ -57,15 +58,23 @@ class NetworkTest {
   // @Inject
   // MockWebServer mockWebServer
 
-  @Rule
-  @JvmField
-  var readPermissionRule: GrantPermissionRule =
-    GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE)
+  private val permissions = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+    arrayOf(
+      Manifest.permission.READ_EXTERNAL_STORAGE,
+      Manifest.permission.WRITE_EXTERNAL_STORAGE,
+      Manifest.permission.SYSTEM_ALERT_WINDOW
+    )
+  } else {
+    arrayOf(
+      Manifest.permission.READ_EXTERNAL_STORAGE,
+      Manifest.permission.WRITE_EXTERNAL_STORAGE
+    )
+  }
 
   @Rule
   @JvmField
-  var writePermissionRule: GrantPermissionRule =
-    GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+  var permissionRules: GrantPermissionRule =
+    GrantPermissionRule.grant(*permissions)
 
   @Before fun setUp() {
     val component = DaggerTestComponent.builder().context(
