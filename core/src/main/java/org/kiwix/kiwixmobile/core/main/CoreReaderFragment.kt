@@ -1431,24 +1431,28 @@ abstract class CoreReaderFragment :
       zimFileReader?.let { zimFileReader ->
         mainMenu?.onFileOpened(urlIsValid())
         openArticle(zimFileReader.mainPage)
-        safeDispose()
-        bookmarkingDisposable = Flowable.combineLatest(
-          newBookmarksDao?.bookmarkUrlsForCurrentBook(zimFileReader),
-          webUrlsProcessor,
-          List<String?>::contains
-        )
-          .observeOn(AndroidSchedulers.mainThread())
-          .subscribe({ isBookmarked: Boolean ->
-            this.isBookmarked = isBookmarked
-            bottomToolbarBookmark?.setImageResource(
-              if (isBookmarked) R.drawable.ic_bookmark_24dp else R.drawable.ic_bookmark_border_24dp
-            )
-          }, Throwable::printStackTrace)
-        updateUrlProcessor()
+        setUpBookmarks(zimFileReader)
       } ?: kotlin.run {
         requireActivity().toast(R.string.error_file_invalid, Toast.LENGTH_LONG)
       }
     }
+  }
+
+  protected fun setUpBookmarks(zimFileReader: ZimFileReader) {
+    safeDispose()
+    bookmarkingDisposable = Flowable.combineLatest(
+      newBookmarksDao?.bookmarkUrlsForCurrentBook(zimFileReader),
+      webUrlsProcessor,
+      List<String?>::contains
+    )
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe({ isBookmarked: Boolean ->
+        this.isBookmarked = isBookmarked
+        bottomToolbarBookmark?.setImageResource(
+          if (isBookmarked) R.drawable.ic_bookmark_24dp else R.drawable.ic_bookmark_border_24dp
+        )
+      }, Throwable::printStackTrace)
+    updateUrlProcessor()
   }
 
   private fun safeDispose() {
