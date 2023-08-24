@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Dr-Taher
 * Dyolf77
 * Eyas
 * McDutchie
@@ -75,8 +76,9 @@
   <string name="pref_language_chooser">اختر اللغة</string>
   <string name="pref_credits">المساهمون والتراخيص</string>
   <string name="pref_credits_title">الإحالات</string>
-  <string name="tts_lang_not_supported" fuzzy="true">لغة هذه الصفحة غير مدعومة، أو لم تُثبت البيانات المناسبة للغة. قد لا تتم قراءة المقالة بشكل صحيح.</string>
+  <string name="tts_lang_not_supported">لغة هذه الصفحة غير مدعومة، أو لم تُثبت البيانات المناسبة للغة. قد لا تتم قراءة المقالة بشكل صحيح.</string>
   <string name="no_reader_application_installed">تعذر العثور على تطبيق مثبت لهذا النوع من الملفات</string>
+  <string name="no_email_application_installed">الرجاء تثبيت موفر خدمة البريد الإلكتروني أو مراسلتنا عبر البريد الإلكتروني على %1s</string>
   <string name="no_section_info">لم يتم العثور على عناوين محتوى</string>
   <string name="request_storage">للوصول إلى المحتوى بلا اتصال، نحتاج إلى الوصول إلى وحدة التخزين</string>
   <string name="request_write_storage">لتنزيل ملفات zim، نحتاج إلى وصول للكتابة إلى مساحة التخزين الخاصة بك</string>
@@ -99,6 +101,7 @@
   <string name="did_you_know">هل تعلم؟</string>
   <string name="undo">رجوع</string>
   <string name="tab_closed">تم إغلاق علامة التبويب</string>
+  <string name="tabs_closed">أُغلقت علامات التبويب</string>
   <string name="bookmark_added">أضيفت الإشارة المرجعية</string>
   <string name="rate_dialog_title">يرجى تقييمنا</string>
   <string name="rate_dialog_msg">إذا كنت تستمتع باستخدام %s، فالرجاء تخصيص بعض الوقت لتقييمه. شكرا لدعمك!</string>
@@ -204,7 +207,7 @@
   <string name="expand">وسع</string>
   <string name="history">التاريخ</string>
   <string name="history_from_current_book">اعرض التاريخ من جميع الكتب</string>
-  <string name="search_history" fuzzy="true">سجل البحث</string>
+  <string name="search_history">سجل البحث</string>
   <string name="selected_items">تم تحديد %1$d</string>
   <string name="bookmarks_from_current_book">اعرض الإشارات المرجعية من جميع الكتب</string>
   <string name="search_bookmarks">البحث في الإشارات المرجعية</string>
@@ -293,6 +296,7 @@
   <string name="no_open_book">لا كتب مفتوحة</string>
   <string name="open_library">افتح المكتبة</string>
   <string name="tab_restored">استُعيدت علامة التبويب</string>
+  <string name="tabs_restored">استُعيدت علامات التبويب</string>
   <string name="open_drawer">افتح الدرج</string>
   <string name="close_drawer">أغلق الدرج</string>
   <string name="how_to_update_content">كيفية تحديث المحتوى؟</string>
@@ -313,5 +317,7 @@
   <string name="open_article">افتح المادة</string>
   <string name="delete_note_dialog_message">ملاحظة: لا يتم حذف الملاحظات من التخزين الخاص بك</string>
   <string name="delete_selected_notes">هل تريد حذف الملاحظات المحددة؟</string>
+  <string name="download_tts_language_message">الرجاء النقر فوق الزر ”تنزيل”. سيجري تلقائيًا تنزيل اللغة المطلوبة.</string>
+  <string name="external_link_copied_message">نُسخ الرابط الخارجي إلى الحافظة</string>
   <string name="go_to_settings_label">انتقل للإعدادات</string>
 </resources>

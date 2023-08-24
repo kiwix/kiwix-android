@@ -3,6 +3,7 @@
 * Carlespera
 * Fitoschido
 * Ihojose
+* Vis4valentine
 -->
 <resources>
   <string name="file_system_does_not_support_4gb">Tu sistema de archivos no soporta archivos por encima de 4GB</string>
@@ -10,4 +11,6 @@
   <string name="cannot_open_file">Fallo al abrir el archivo\nPrueba a buscar el archivo en la pestaña Dispositivo de tu biblioteca</string>
   <string name="send_files_title">Enviar archivos</string>
   <string name="receive_files_title">Recibir archivos</string>
+  <string name="no_app_found_to_open">¡No se encontró ninguna aplicación para seleccionar el archivo zim!</string>
+  <string name="select_zim_file">Seleccione el archivo zim para leer</string>
 </resources>

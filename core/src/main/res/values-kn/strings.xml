@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Macofe
+* Vkashyap
 * ಮಲ್ನಾಡಾಚ್ ಕೊಂಕ್ಣೊ
 -->
 <resources>
   <string name="menu_help">ಸಹಾಯ</string>
   <string name="menu_home">ಮುಖ್ಯಪುಟ</string>
-  <string name="menu_settings">ಪ್ರಾಶಸ್ತ್ಯಗಳು</string>
-  <string name="menu_search_in_text">ಪಠ್ಯದಲ್ಲಿ ಹುಡುಕಿ</string>
+  <string name="menu_settings">ವ್ಯವಸ್ಥೆಗಳು</string>
+  <string name="menu_search_in_text">ಪುಟದಲ್ಲಿ ಹುಡುಕಿ</string>
   <string name="bookmarks">ಓದುಗುರುತುಗಳು</string>
   <string name="menu_random_article">ಯಾವುದಾದರೊಂದು ಲೇಖನ</string>
-  <string name="menu_full_screen">ಪೂರ್ಣಪರದೆ</string>
-  <string name="menu_exit_full_screen">ಪೂರ್ಣ ತೆರೆಯನ್ನು ನಿರ್ಗಮಿಸಿ</string>
+  <string name="menu_full_screen">ಸಂಪೂರ್ಣ ಪರದೆ</string>
+  <string name="menu_exit_full_screen">ಸಂಪೂರ್ಣ ಪರದೆಯಿಂದ ನಿರ್ಗಮಿಸಿ</string>
+  <string name="menu_read_aloud">ಜೋರಾಗಿ ಓದು</string>
+  <string name="menu_read_aloud_stop">ಜೋರಾಗಿ ಓದುವುದನ್ನು ನಿಲ್ಲಿಸು</string>
+  <string name="menu_support_kiwix">ಕಿವಿಕ್ಸಿಗೆ ಬೆಂಬಲ ನೀಡಿ</string>
   <string name="menu_wifi_hotspot">ವೈಫೈ ಹಾಟ್‌ಸ್ಪಾಟ್</string>
-  <string name="search_label">ಅನ್ವೇಷಿಸಿ</string>
+  <string name="save_media">ಮಾಧ್ಯಮವನ್ನು ಉಳಿಸಿ</string>
+  <string name="save_media_error">ಮಾಧ್ಯಮವನ್ನು ಉಳಿಸಲು ಪ್ರಯತ್ನಿಸುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ!</string>
+  <string name="save_media_saved">ಮಾಧ್ಯಮವನ್ನು %s ನಂತೆ Downloads/org.kiwix…/ ಗೆ ಉಳಿಸಲಾಗಿದೆ</string>
+  <string name="search_label">ಹುಡುಕು</string>
+  <string name="error_file_invalid">ದೋಷ: ಆರಿಸಿದ ಫೈಲು ಸರಿಯಾದ ZIM ಫೈಲು ಅಲ್ಲ</string>
+  <string name="error_article_url_not_found">ದೋಷ: ಲೇಖನ (Url: %1$s) ತರುವುದು ವಿಫಲವಾಗಿದೆ.</string>
   <string name="pref_display_title">ಪ್ರದರ್ಶಿಸು</string>
   <string name="pref_info_title">ಮಾಹಿತಿ</string>
   <string name="pref_info_version">ಆವೃತ್ತಿ</string>
   <string name="pref_language_title">ಭಾಷೆ</string>
   <string name="pref_language_chooser">ಭಾಷೆ ಆಯ್ದುಕೊಳ್ಳಿ</string>
+  <string name="pref_clear_all_history_title">ಇತಿಹಾಸ ಅಳಿಸಿ</string>
+  <string name="all_history_cleared">ಎಲ್ಲಾ ಇತಿಹಾಸ ಅಳಿಸಿ</string>
   <string name="delete">ಅಳಿಸು</string>
   <string name="library">ಗ್ರಂಥಾಲಯ</string>
+  <string name="stop">ನಿಲ್ಲಿಸು</string>
 </resources>

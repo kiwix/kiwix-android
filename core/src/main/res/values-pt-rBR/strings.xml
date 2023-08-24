@@ -6,6 +6,7 @@
 * Eduardoaddad
 * Felipe L. Ewald
 * Freeedusoft
+* Harrymacdougat
 * HenriqueCrang
 * McDutchie
 * Mello25
@@ -14,6 +15,7 @@
 * Re demz
 * Robertpontes
 * Rodrigo codignoli
+* Saturnow
 * Webysther
 -->
 <resources>
@@ -60,7 +62,9 @@
   <string name="start_server_label">Iniciar servidor</string>
   <string name="stop_server_label">Parar servidor</string>
   <string name="server_started_message">Digite este endereço IP no seu navegador para acessar o servidor %s</string>
+  <string name="share_host_address">Compartir URL a través de outras aplicações</string>
   <string name="error_file_not_found">Erro: O arquivo ZIM selecionado não pode ser encontrado.</string>
+  <string name="unable_to_read_zim_file">\nNão é possível ler este arquivo zim!</string>
   <string name="zim_not_opened">Não foi possível abrir o arquivo zim</string>
   <string name="error_file_invalid">Erro: O arquivo selecionado não é um arquivo ZIM válido.</string>
   <string name="error_article_url_not_found">Erro: Falha no carregamento do artigo (Url: %1$s).</string>
@@ -80,6 +84,7 @@
   <string name="no_email_application_installed">Por favor instale um serviço de email ou nos envie um email no endereço %1s</string>
   <string name="no_section_info">Nenhum cabeçalho de conteúdo encontrado</string>
   <string name="request_storage">Para acessar conteúdo off-line precisamos de acesso ao seu armazenamento</string>
+  <string name="request_write_storage">Para baixar arquivos zim, precisamos de acesso de gravação ao seu armazenamento</string>
   <string name="clear_recent_and_tabs_history_dialog">Tem certeza de que deseja excluir o histórico de pesquisa e redefinir todas as guias ativas?</string>
   <string name="delete_recent_search_item">Eliminar este item?</string>
   <string name="pref_clear_all_history_title">Apagar histórico</string>
@@ -102,6 +107,7 @@
   <string name="tabs_closed">Guias fechadas</string>
   <string name="bookmark_added">Favorito adicionado</string>
   <string name="rate_dialog_title">Por favor nos avalie</string>
+  <string name="rate_dialog_msg">Se você gosta de usar %s, reserve um momento para avaliá-lo. Obrigado por seu apoio!</string>
   <string name="rate_dialog_positive">Avalie!</string>
   <string name="no_thanks">Não, obrigado</string>
   <string name="rate_dialog_neutral">Mais tarde</string>
@@ -143,8 +149,10 @@
   <string name="tts_pause">pausar</string>
   <string name="tts_resume">continuar</string>
   <string name="stop">parar</string>
+  <string name="configure_storage_option">Transferir livro para armazenamento interno?</string>
   <string name="internal_storage">Interna</string>
   <string name="external_storage">Externo</string>
+  <string name="configure">Configurar</string>
   <string name="yes">Sim</string>
   <string name="no">Não</string>
   <string name="confirm_stop_download_title">Parar o download?</string>
@@ -237,6 +245,7 @@
   <string name="connection_failed">Falha na conexão</string>
   <string name="permission_rationale_location">A permissão de localização é necessária pelo Android para permitir que o aplicativo detecte dispositivos de mesmo nível</string>
   <string name="permission_rationale_location_on_host_zim_file">A permissão de localização é exigida pelo Android para permitir que o aplicativo hospede arquivos Zim</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">A permissão de localização é exigida pelo Android para permitir que o aplicativo hospede arquivos Zim</string>
   <string name="permission_refused_location">Não é possível localizar dispositivos pares sem permissões de localização</string>
   <string name="permission_refused_storage">Não é possível acessar arquivos zim sem permissão de armazenamento</string>
   <string name="request_enable_location">Ativar local para permitir a detecção de pares</string>
@@ -259,6 +268,7 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Limpar todas as notas em todos os artigos</string>
   <string name="pref_clear_all_notes_title">Limpar todas as notas</string>
+  <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Permite ler e escrever arquivos ZIM no cartão SD.</string>
   <string name="pref_text_zoom_summary">Altere o tamanho do texto com incrementos de 25%.</string>
   <string name="tag_pic">Pic</string>
   <string name="tag_vid">Vid</string>
@@ -287,18 +297,36 @@
   <string name="search_open_in_new_tab">Abrir em uma nova guia</string>
   <string name="reader">Leitor</string>
   <string name="no_open_book">Sem livro aberto</string>
-  <string name="open_library" fuzzy="true">Biblioteca aberta</string>
+  <string name="open_library" fuzzy="true">Abrir biblioteca</string>
   <string name="tab_restored">Guia restaurada</string>
   <string name="tabs_restored">Guias restauradas</string>
   <string name="open_drawer">Abrir gaveta</string>
   <string name="close_drawer">Fechar gaveta</string>
   <string name="how_to_update_content">Como atualizar o conteúdo?</string>
   <string name="update_content_description">Para atualizar o conteúdo (um arquivo zim), você precisa baixar a versão completa mais recente desse mesmo conteúdo. Você pode fazer isso através da seção de download.</string>
+  <string name="all_files_permission_needed">Permissão necessária para todos os arquivos</string>
+  <string name="all_files_permission_needed_message">Para que os arquivos zim sejam acessados através do dispositivo, precisamos que TODOS os arquivos estejam com permissão de acesso.</string>
   <string name="allowed">Permitido</string>
   <string name="not_allowed">Não permitido</string>
+  <string name="denied_internet_permission_message">Por favor, habilite o wi-fi para o download de conteúdo</string>
+  <string name="select_folder">Por favor selecione uma pasta para o armazenamento externo.</string>
+  <string name="system_unable_to_grant_permission_message">O sistema foi incapaz de garantir a permissão!</string>
+  <string name="allow">Permitir</string>
   <string name="swipe_down_for_library">Deslize para baixo para exibir a Biblioteca</string>
+  <string name="no_notes">Sem notas</string>
+  <string name="notes_from_all_books">Ver histórico de todos os livros</string>
+  <string name="search_notes">Pesquisar datas</string>
+  <string name="choose_your_action">Escolha sua ação</string>
+  <string name="open_note">Data de abertura</string>
+  <string name="open_article">Ver artigo</string>
+  <string name="delete_note_dialog_message">Nota: as notas não são excluídas do seu armazenamento</string>
+  <string name="delete_selected_notes">Excluir itens selecionados?</string>
   <string name="download_tts_language_title">Baixe este idioma para o recurso de leitura em voz alta</string>
   <string name="download_tts_language_message">Favor clicar no botão de Download. Ele baixará automaticamente o idioma necessário.</string>
   <string name="external_link_copied_message">Link externo copiado para a área de transferência</string>
+  <string name="read_aloud_service_channel_name">\nLeia em voz alta o canal de atendimento</string>
+  <string name="read_aloud_channel_description">Controle de texto para fala.</string>
+  <string name="read_aloud_running">Rodando o recurso Leitura Permitida</string>
+  <string name="backward_history">Histórico de pendências</string>
   <string name="go_to_settings_label">Ir para configurações</string>
 </resources>
