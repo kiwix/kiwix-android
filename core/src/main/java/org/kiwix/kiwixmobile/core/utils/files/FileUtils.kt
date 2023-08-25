@@ -125,7 +125,12 @@ object FileUtils {
           return "${Environment.getExternalStorageDirectory()}/${documentId[1]}"
         }
         return try {
-          "${getSdCardMainPath(context, documentId[0])}/${documentId[1]}"
+          var sdCardOrUsbMainPath = getSdCardOrUSBMainPath(context, documentId[0])
+          if (sdCardOrUsbMainPath == null) {
+            // USB sticks are mounted under the `/mnt/media_rw` directory.
+            sdCardOrUsbMainPath = "/mnt/media_rw/${documentId[0]}"
+          }
+          "$sdCardOrUsbMainPath/${documentId[1]}"
         } catch (ignore: Exception) {
           null
         }
@@ -270,11 +275,20 @@ object FileUtils {
   fun isValidZimFile(filePath: String): Boolean =
     filePath.endsWith(".zim") || filePath.endsWith(".zimaa")
 
+  /**
+   * Get the main storage path for a given storage name (SD card or USB stick).
+   *
+   * @param context The application context.
+   * @param storageName The name of the storage (e.g., "sdcard" or "usbstick").
+   * @return The main storage path for the given storage name,
+   *         or null if the path is a USB path on Android 10 and above
+   *         (due to limitations in `context.getExternalFilesDirs("")` behavior).
+   */
   @JvmStatic
-  fun getSdCardMainPath(context: Context, storageName: String) =
+  fun getSdCardOrUSBMainPath(context: Context, storageName: String) =
     context.getExternalFilesDirs("")
-      .first { it.path.contains(storageName) }
-      .path.substringBefore(context.getString(R.string.android_directory_seperator))
+      .firstOrNull { it.path.contains(storageName) }
+      ?.path?.substringBefore(context.getString(R.string.android_directory_seperator))
 
   @SuppressLint("WrongConstant")
   @JvmStatic
