@@ -90,6 +90,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefDeviceDefaultLanguage: String
     get() = sharedPreferences.getString(PREF_DEVICE_DEFAULT_LANG, "") ?: ""
 
+  val prefIsBookmarksMigrated: Boolean
+    get() = sharedPreferences.getBoolean(PREF_BOOKMARKS_MIGRATED, false)
+
   val prefStorage: String
     get() {
       val storage = sharedPreferences.getString(PREF_STORAGE, null)
@@ -115,6 +118,8 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   fun getPrefStorageTitle(defaultTitle: String): String =
     sharedPreferences.getString(PREF_STORAGE_TITLE, defaultTitle) ?: defaultTitle
 
+  fun putPrefBookMarkMigrated(isMigrated: Boolean) =
+    sharedPreferences.edit { putBoolean(PREF_BOOKMARKS_MIGRATED, isMigrated) }
   fun putPrefLanguage(language: String) =
     sharedPreferences.edit { putString(PREF_LANG, language) }
 
@@ -251,5 +256,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val DEFAULT_ZOOM = 100
     const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"
     const val IS_PLAY_STORE_BUILD = "is_play_store_build"
+    const val PREF_BOOKMARKS_MIGRATED = "pref_bookmarks_migrated"
   }
 }

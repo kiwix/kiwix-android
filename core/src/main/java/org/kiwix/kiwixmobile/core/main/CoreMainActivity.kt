@@ -42,6 +42,7 @@ import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
@@ -83,6 +84,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val topLevelDestinations: Set<Int>
   abstract val navHostContainer: FragmentContainerView
   abstract val mainActivity: AppCompatActivity
+  @Inject lateinit var objectBoxToLibkiwixMigrator: ObjectBoxToLibkiwixMigrator
 
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.KiwixTheme)
@@ -101,7 +103,13 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
         exitProcess(KIWIX_INTERNAL_ERROR)
       }
     }
+<<<<<<< HEAD
     setMainActivityToCoreApp()
+=======
+    if (!sharedPreferenceUtil.prefIsBookmarksMigrated) {
+      objectBoxToLibkiwixMigrator.migrateBookmarksToLibkiwix()
+    }
+>>>>>>> 371eb5c2d (Created ObjectBox to libkiwix migrator for Bookmarks)
   }
 
   @Suppress("DEPRECATION")
