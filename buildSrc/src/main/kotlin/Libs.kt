@@ -317,7 +317,7 @@ object Libs {
   /**
    * https://github.com/kiwix/java-libkiwix
    */
-  const val libkiwix: String = "org.kiwix.libkiwix:libkiwix:" + Versions.libkiwix
+  const val libkiwix: String = "org.kiwix:libkiwix:" + Versions.libkiwix
 
   /**
    * https://github.com/material-components/material-components-android
