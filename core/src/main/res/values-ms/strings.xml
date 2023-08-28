@@ -16,11 +16,12 @@
   <string name="menu_read_aloud">Bacakan</string>
   <string name="menu_read_aloud_stop">Berhenti bacakan</string>
   <string name="menu_support_kiwix">Sokong Kiwix</string>
+  <string name="menu_wifi_hotspot">Kawasan Khas WiFi</string>
   <string name="save_media">Simpan media sebagai…</string>
-  <string name="save_media_error" fuzzy="true">Ralat berlaku ketika cubaan menyimpan media!</string>
-  <string name="save_media_saved" fuzzy="true">Menyimpan media sebagai %1$s dalam folder Gambar (Pictures) anda</string>
+  <string name="save_media_error">Ralat berlaku ketika cubaan menyimpan media!</string>
+  <string name="save_media_saved">Menyimpan media sebagai %s ke Downloads/org.kiwix…/</string>
   <string name="search_label">Cari</string>
-  <string name="choose_file" fuzzy="true">Pilih Fail Kandungan ZIM (*.zim)</string>
+  <string name="choose_file">Pilih Fail Kandungan (*.zim)</string>
   <string name="open_in_new_tab">Buka pautan dalam tab baru?</string>
   <string name="hotspot_service_channel_name">Saluran Perkhidmatan Kawasan Khas</string>
   <string name="hotspot_failed_title">Kawasan khas gagal dihidupkan</string>
@@ -33,6 +34,7 @@
   <string name="progress_dialog_starting_server">Memulakan pelayan</string>
   <string name="wifi_dialog_title">Sambungan WIFI dikesan</string>
   <string name="hotspot_dialog_neutral_button">TERUSKAN</string>
+  <string name="hotspot_notification_content_title">Kawasan Khas Kiwix</string>
   <string name="start_server_label">Mula pelayan</string>
   <string name="stop_server_label">Hentikan pelayan</string>
   <string name="error_file_not_found">Ralat: Fail ZIM yang terpilih tidak dapat ditemui.</string>
@@ -48,17 +50,19 @@
   <string name="pref_language_title">Bahasa</string>
   <string name="pref_language_chooser">Pilih bahasa</string>
   <string name="pref_credits">Penyumbang dan Lesen</string>
-  <string name="tts_lang_not_supported" fuzzy="true">Bahasa laman ini tidak disokong, ataupun data bahasa yang bersesuaian tidak dipasang. Rencana mungkin tidak dapat dibaca dengan betul.</string>
+  <string name="tts_lang_not_supported">Bahasa laman ini tidak disokong. Rencana mungkin tidak dapat dibaca dengan betul.</string>
   <string name="no_reader_application_installed">Tidak terjumpa aplikasi yang dipasang untuk jenis fail ini</string>
-  <string name="no_section_info" fuzzy="true">Tiada judul kandungan ditemui</string>
-  <string name="request_storage" fuzzy="true">Untuk mencapai fail ZIM kami memerlukan akses kepada storan anda</string>
+  <string name="no_section_info">Tiada Pengepala Kandungan Dijumpai</string>
+  <string name="request_storage">Untuk mencapai kandungan luar taliam kami memerlukan akses kepada storan anda</string>
   <string name="pref_notes">Catatan</string>
+  <string name="pref_permission">Kebenaran</string>
   <string name="share">Kongsi</string>
   <string name="delete">Hapuskan</string>
   <string name="cancel">Batalkan</string>
   <string name="got_it">Faham</string>
   <string name="did_you_know">Tahukah anda?</string>
   <string name="undo">Nyahbuat</string>
+  <string name="no_thanks">Tidak apalah</string>
   <string name="rate_dialog_neutral">Nanti</string>
   <string name="open">Buka</string>
   <string name="pref_extras">Tambahan</string>
@@ -67,6 +71,7 @@
   <string name="library">Perpustakaan</string>
   <string name="no_files_here">Tiada fail di sini</string>
   <string name="download">Muat turun</string>
+  <string name="zim_simple">Mudah</string>
   <string name="zim_no_pic">Tiada Gambar</string>
   <string name="zim_no_vid">Tiada Video</string>
   <string name="help_5">Di mana kandungan tersebut?</string>

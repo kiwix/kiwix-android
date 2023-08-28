@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Narazeni
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">თქვანი ფაილიშ სისტემა ვაუხუჯანს 4გბ-შე უმოს ფაილეფს</string>
+  <string name="detecting_file_system">გჷნომორსება, ფაილიშ სისტემა 4გბ-შე უმოსიან ფაილეფს ქუხუჯანს დო ვარი</string>
+  <string name="cannot_open_file">ფაილიშ გონწყუმაქ ვემიხუჯინჷ.\nქორთხინთ, ათე ფაილი დოგორათ თქვან მონწყილიბაშ ფაილეფიშ ბიბლიოთეკას</string>
+  <string name="send_files_title">ფაილეფიშ ჯღონუა</string>
+  <string name="receive_files_title">ფაილეფიშ მეღება</string>
+  <string name="no_app_found_to_open">ვეგორჷ აპლიკაციაქ ZIM-ფაილიშ გიშაგორალო!</string>
+  <string name="select_zim_file">ოკითხირალო გეგშაგორიათ ZIM-ფაილი</string>
+</resources>

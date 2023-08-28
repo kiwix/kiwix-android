@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Bosogo
 * Chorobek
 * Janatkg
 * Macofe
@@ -25,5 +26,6 @@
   <string name="pref_back_to_top">Жогоруга кайтуу</string>
   <string name="pref_language_title">Тил</string>
   <string name="pref_language_chooser">Тилин тандаңыз</string>
+  <string name="cancel">Жокко чыгаруу</string>
   <string name="library">Китепкана</string>
 </resources>

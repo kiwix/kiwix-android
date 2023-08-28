@@ -330,4 +330,5 @@
   <string name="navigation_history_cleared">This message appears in the \"Android Toast\" as a confirmation message. When navigation history is cleared successfully.</string>
   <string name="go_to_settings_label">This is a text label, by clicking on this text user navigates to the app settings on their device.</string>
   <string name="request_notification_permission_message">This message appears in the \"Android Dialog\" as an information message. When the user tries to run any functionality which requires notification access but the app does not have that access, then this message shows to the user to give notification access.</string>
+  <string name="empty_string">{{Ignored}}</string>
 </resources>

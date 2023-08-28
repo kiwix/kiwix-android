@@ -8,6 +8,7 @@
 * FF-11
 * FF11
 * Falwye
+* IMayBeABitShy
 * Justman10000
 * Killarnee
 * Lucas Werkmeister
@@ -34,7 +35,7 @@
   <string name="menu_read_aloud">Vorlesen</string>
   <string name="menu_read_aloud_stop">Mit dem Vorlesen aufhören</string>
   <string name="menu_support_kiwix">Kiwix unterstützen</string>
-  <string name="menu_wifi_hotspot">WLAN Hotspot</string>
+  <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Medium speichern</string>
   <string name="save_media_error">Beim Versuch, das Medium zu speichern, ist ein Fehler aufgetreten!</string>
   <string name="save_media_saved">Medium als %s nach Downloads/org.kiwix…/ gespeichert</string>
@@ -48,18 +49,18 @@
   <string name="connection_refused">Verbindung abgelehnt.</string>
   <string name="hotspot_running">Aktiver Hotspot</string>
   <string name="no_books_selected_toast_message">Bitte zuerst Bücher aussuchen</string>
-  <string name="server_failed_message">Konnte den Server nicht starten. Bitte aktivieren Sie Ihren Hotspot</string>
-  <string name="server_failed_toast_message">Konnte den Server nicht starten.</string>
+  <string name="server_failed_message">Der Server konnte nicht gestartet werden. Bitte aktivieren Sie Ihren Hotspot</string>
+  <string name="server_failed_toast_message">Der Server konnte nicht gestartet werden.</string>
   <string name="server_started_successfully_toast_message">Server erfolgreich gestartet.</string>
   <string name="server_stopped_successfully_toast_message">Server erfolgreich gestoppt.</string>
   <string name="hotspot_turned_on">Hotspot aktiviert</string>
-  <string name="hotspot_details_message">Angaben zu Ihrem lokalen Hotspot.\nSSID : %1$s \nPass : %2$s</string>
+  <string name="hotspot_details_message">Nachfolgend finden Sie die Details Ihres lokalen Hotspot.\nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">Wählen Sie die Dateien aus, die Sie auf dem Server hosten möchten</string>
-  <string name="progress_dialog_starting_server">Starte den Server</string>
+  <string name="progress_dialog_starting_server">Server wird gestartet</string>
   <string name="hotspot_dialog_title">Anleitung zum Hosten von Büchern</string>
   <string name="wifi_dialog_title">Wi-Fi-Verbindung festgestellt</string>
-  <string name="wifi_dialog_body">Um Bücher auf anderen Einheiten anzusehen, stellen Sie bitte sicher, dass alle Einheiten mit dem gleichen WiFi-Netzwerk verbunden sind.</string>
-  <string name="hotspot_dialog_message">Damit diese Funktion läuft, müssen Sie zuerst den Hotspot manuell aktivieren oder sicherstellen, dass Host und Empfangsgerät im gleichen Wi-Fi-Netzwerk angemeldet sind</string>
+  <string name="wifi_dialog_body">Um Bücher auf anderen Geräten anzusehen, stellen Sie bitte sicher, dass alle Geräte mit demselben WiFi-Netzwerk verbunden sind.</string>
+  <string name="hotspot_dialog_message">Damit diese Funktionalität funktioniert, müssen Sie zuerst den WiFi-Hotspot manuell aktivieren oder sicherstellen, dass Host und Empfangsgerät im selben WiFi-Netzwerk angemeldet sind</string>
   <string name="hotspot_dialog_neutral_button">WEITER</string>
   <string name="hotspot_channel_description">Updates zum Status Ihres Hotspots/Servers.</string>
   <string name="hotspot_notification_content_title">Kiwix-Hotspot</string>
@@ -68,7 +69,7 @@
   <string name="server_started_message">Geben Sie diese IP-Adresse in Ihren Browser ein, um auf den Server %s zuzugreifen</string>
   <string name="share_host_address">URL mit anderen Applikationen teilen</string>
   <string name="error_file_not_found">Fehler: Die ausgewählte ZIM-Datei konnte nicht gefunden werden.</string>
-  <string name="unable_to_read_zim_file">Diese Zim-Datei kann nicht gelesen werden!</string>
+  <string name="unable_to_read_zim_file">Diese Zim-Datei konnte nicht gelesen werden!</string>
   <string name="zim_not_opened">Konnte die ZIM-Datei nicht öffnen</string>
   <string name="error_file_invalid">Fehler: Die ausgewählte Datei ist keine gültige ZIM-Datei.</string>
   <string name="error_article_url_not_found">Fehler: Das Laden des Artikels (URL: %1$s) ist fehlgeschlagen.</string>
@@ -78,13 +79,14 @@
   <string name="pref_night_mode">Nachtmodus</string>
   <string name="pref_night_mode_summary">Artikel mit umgekehrten Farben anzeigen</string>
   <string name="pref_back_to_top">Zurück nach oben</string>
-  <string name="pref_back_to_top_summary">Zeigt einen Button am Seitenende an, um zum Anfang hochzuscrollen.</string>
+  <string name="pref_back_to_top_summary">Zeige eine Schaltfläche am Seitenende an, um zum Anfang hochzuscrollen</string>
   <string name="pref_language_title">Sprache</string>
   <string name="pref_language_chooser">Eine Sprache auswählen</string>
   <string name="pref_credits">Autoren und Lizenzen</string>
   <string name="pref_credits_title">Danksagungen</string>
-  <string name="tts_lang_not_supported">Die Sprache dieser Seite wird nicht unterstützt. Der Artikel kann möglicherweise nicht richtig gelesen werden.</string>
+  <string name="tts_lang_not_supported">Die Sprache dieser Seite wird nicht unterstützt. Der Artikel kann möglicherweise nicht richtig vorgelesen werden.</string>
   <string name="no_reader_application_installed">Es konnte keine installierte Anwendung für diesen Dateityp gefunden werden</string>
+  <string name="no_email_application_installed">Bitten installieren Sie eine Mailanwendung oder schreiben Sie uns eine E-Mail an %1s</string>
   <string name="no_section_info">Keine Inhaltsheader gefunden</string>
   <string name="request_storage">Um auf Offlineinhalt zuzugreifen, müssen wir auf Ihren Speicher zugreifen.</string>
   <string name="request_write_storage">Um zim-Dateien herunterzuladen, benötigen wir Schreibzugriff auf Ihren Speicher</string>
@@ -107,6 +109,7 @@
   <string name="did_you_know">Schon gewusst?</string>
   <string name="undo">Rückgängig machen</string>
   <string name="tab_closed">Registerkarte geschlossen</string>
+  <string name="tabs_closed">Alle Registerkarten geschlossen</string>
   <string name="bookmark_added">Lesezeichen hinzugefügt</string>
   <string name="rate_dialog_title">Bitte bewerten Sie uns</string>
   <string name="rate_dialog_msg">Wenn Sie %s gerne verwenden, nehmen Sie sich bitte einen Moment Zeit, um es zu bewerten. Danke für Ihre Unterstützung!</string>
@@ -147,7 +150,7 @@
   <string name="help_11">Heruntergeladene ZIM-Dateien in der App befinden sich im Verzeichnis des externen Speichers in einem Ordner namens Kiwix.</string>
   <string name="pref_storage">Speicher</string>
   <string name="pref_current_folder">Aktueller Ordner</string>
-  <string name="delete_zim_failed">Leider können wir diese Datei nicht löschen. Sie sollten versuchen, stattdessen einen Dateimanager zu verwenden.</string>
+  <string name="delete_zim_failed">Leider konnten wir einige Dateien nicht löschen. Sie sollten versuchen, stattdessen einen Dateimanager zu verwenden.</string>
   <string name="tts_pause">pausieren</string>
   <string name="tts_resume">fortfahren</string>
   <string name="stop">abbrechen</string>
@@ -160,14 +163,14 @@
   <string name="confirm_stop_download_title">Herunterladen beenden?</string>
   <string name="confirm_stop_download_msg">Sind Sie sicher, dass Sie diesen Download abbrechen möchten?</string>
   <string name="download_change_storage">Speichergeräteauswahl</string>
-  <string name="tts_not_enabled">Text-to-Speech ist für diese ZIM-Datei nicht aktiviert</string>
-  <string name="texttospeech_initialization_failed">Die Initialisierung von Text-to-Speech ist fehlgeschlagen. Bitte versuchen Sie es noch einmal</string>
-  <string name="texttospeech_error">Unerwarteter Fehler bei Text-to-Speech. Bitte versuchen Sie es noch einmal</string>
+  <string name="tts_not_enabled">Die Vorlesefunktion ist für diese ZIM-Datei nicht aktiviert</string>
+  <string name="texttospeech_initialization_failed">Die Initialisierung er Vorlesefunktion ist fehlgeschlagen. Bitte versuchen Sie es noch einmal</string>
+  <string name="texttospeech_error">Unerwarteter Fehler in der Vorlesefunktion. Bitte versuchen Sie es noch einmal</string>
   <string name="next">Nächste</string>
   <string name="previous">Vorherige</string>
   <string name="wifi_only_title">Herunterladen des Inhalts über das mobile Netzwerk erlauben?</string>
-  <string name="wifi_only_msg">Falls Sie „Ja“ auswählen, werden Sie in Zukunft nicht mehr hingewiesen. Sie können dies jedoch immer in den Einstellungen ändern.</string>
-  <string name="pref_wifi_only">Inhalt nur über WLAN herunterladen</string>
+  <string name="wifi_only_msg">Falls Sie „Ja“ auswählen, werden Sie in Zukunft nicht mehr gewarnt. Sie können dies jedoch immer in den Einstellungen ändern</string>
+  <string name="pref_wifi_only">Inhalt nur über WiFi herunterladen</string>
   <string name="time_day">Tage</string>
   <string name="time_hour">Stunden</string>
   <string name="time_minute">Minuten</string>
@@ -175,11 +178,11 @@
   <string name="time_left">verbleibend</string>
   <string name="time_today">Heute</string>
   <string name="time_yesterday">Gestern</string>
-  <string name="pref_external_link_popup_title">Beim Einfügen von externen Links warnen</string>
+  <string name="pref_external_link_popup_title">Beim Öffnen externer Links warnen</string>
   <string name="pref_external_link_popup_summary">Popups für Warnungen über zusätzliche Kosten oder das Nichtfunktionieren von Offlinelinks anzeigen.</string>
   <string name="external_link_popup_dialog_title">Zugriff auf externen Link!</string>
-  <string name="external_link_popup_dialog_message">Du fügst einen externen Link ein. Dies könnte zu zusätzlichen Kosten für die Datenübermittlung führen oder wird nicht funktionieren, wenn du offline bist. Möchtest du fortfahren?</string>
-  <string name="do_not_ask_anymore">Nicht mehr fragen</string>
+  <string name="external_link_popup_dialog_message">Sie öffnen gerade einen externen Link. Dies könnte zu zusätzlichen Kosten für die Datenübermittlung führen oder wird nicht funktionieren, wenn Sie offline sind. Möchten Sie fortfahren?</string>
+  <string name="do_not_ask_anymore">Nicht mehr nachfragen</string>
   <string name="your_languages">Ausgewählte Sprachen:</string>
   <string name="other_languages">Weitere Sprachen:</string>
   <string name="no_items_msg">Keine Objekte verfügbar</string>
@@ -190,7 +193,7 @@
   <string name="crash_checkbox_exception">Einzelheiten zum Absturz</string>
   <string name="crash_checkbox_logs">Anwendungsprotokolle</string>
   <string name="crash_checkbox_device">Geräte-Details</string>
-  <string name="crash_button_confirm">DETAILS SCHICKEN</string>
+  <string name="crash_button_confirm">DETAILS SENDEN</string>
   <string name="shortcut_disabled_message">Abkürzung nicht verfügbar</string>
   <string name="new_tab_shortcut_label">Neue Registerkarte</string>
   <string name="get_content_shortcut_label">Inhalte abrufen</string>
@@ -212,7 +215,7 @@
   <string name="expand">Ausklappen</string>
   <string name="history">Verlauf</string>
   <string name="history_from_current_book">Zeige die Verlaufsgeschichte aller Bücher</string>
-  <string name="search_history" fuzzy="true">Suchverlauf</string>
+  <string name="search_history">Suchverlauf</string>
   <string name="selected_items">%1$d ausgewählt</string>
   <string name="bookmarks_from_current_book">Zeige die Lesezeichen aller Bücher</string>
   <string name="search_bookmarks">Lesezeichen durchsuchen</string>
@@ -220,7 +223,7 @@
   <string name="close_all_tabs">Alle Registerkarten schließen</string>
   <string name="pending_state">Ausstehend</string>
   <string name="running_state">In Bearbeitung</string>
-  <string name="complete">Vervollständigt</string>
+  <string name="complete">Abgeschlossen</string>
   <string name="paused_state">Pausiert</string>
   <string name="failed_state">Fehlgeschlagen: %s</string>
   <string name="save">Speichern</string>
@@ -239,10 +242,10 @@
   <string name="delete_notes_confirmation_msg">Alle Notizen löschen?</string>
   <string name="ext_storage_permission_not_granted">Fehler: Speicherberechtigungen nicht gewährt</string>
   <string name="notes_deletion_successful">Gesamter Notizen-Ordner gelöscht</string>
-  <string name="notes_deletion_unsuccessful">Einige Dateien nicht gelöscht</string>
+  <string name="notes_deletion_unsuccessful">Einige Dateien konnten nicht gelöscht werden</string>
   <string name="books_count">%d Buch/Bücher</string>
-  <string name="discovery_initiated">Erkennung eingeleitet</string>
-  <string name="discovery_failed">Erkennung fehlgeschlagen</string>
+  <string name="discovery_initiated">Suche eingeleitet</string>
+  <string name="discovery_failed">Suche fehlgeschlagen</string>
   <string name="severe_loss_error">Schwerer Fehler! Versuchen Sie, Wi-Fi P2P auszuschalten und wieder einzuschalten</string>
   <string name="connection_failed">Verbindung fehlgeschlagen</string>
   <string name="permission_rationale_location">Android benötigt eine Standorterlaubnis, damit die App Peer-Geräte erkennen kann.</string>
@@ -257,15 +260,15 @@
   <string name="transfer_to">Dateien an %s übertragen?</string>
   <string name="device_not_cooperating">Das gewählte Gerät kooperiert nicht bei der Übertragung</string>
   <string name="file_transfer_complete">Dateiübertragung abgeschlossen</string>
-  <string name="error_during_transfer">Bei der Übertragung wurde ein Fehler festgestellt</string>
+  <string name="error_during_transfer">Bei der Übertragung trat ein Fehler auf</string>
   <string name="error_transferring">Fehler beim Übertragen der Datei %s</string>
-  <string name="get_content_from_nearby_device">Inhalte von einem Gerät in der Nähe abrufen</string>
+  <string name="get_content_from_nearby_device">Inhalte von einem Gerät in der Nähe erhalten</string>
   <string name="search_for_peers">Nach Peer-Geräten suchen</string>
   <string name="your_device">Ihr Gerät:</string>
   <string name="nearby_devices">GERÄTE IN DER NÄHE</string>
   <string name="no_devices_found">Keine Geräte erkannt. Tippen Sie auf die Schaltfläche Suchen, um es erneut zu versuchen.</string>
   <string name="files_for_transfer">DATEIEN ZUR ÜBERTRAGUNG</string>
-  <string name="preparing_files">Dateien für die Übertragung werden vorbereitet…</string>
+  <string name="preparing_files">Dateien werden für die Übertragung vorbereitet…</string>
   <string name="performing_handshake">Führe Handshake durch…</string>
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Löscht alle Notizen zu allen Artikeln</string>
@@ -276,8 +279,8 @@
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Nur Text</string>
   <string name="tag_short_text">Kurzer Text</string>
-  <string name="storage_permission_denied">Speichergenehmigung verweigert</string>
-  <string name="grant_read_storage_permission">Diese Anwendung erfordert die Fähigkeit, Speicher zu lesen, um zu funktionieren. Bitte erteilen Sie die Erlaubnis in Ihren Einstellungen</string>
+  <string name="storage_permission_denied">Speicherberechtigungen verweigert</string>
+  <string name="grant_read_storage_permission">Diese Anwendung benötigt die Berechtigung, Speicher zu lesen, um zu funktionieren. Bitte erteilen Sie die Erlaubnis in Ihren Einstellungen</string>
   <string name="go_to_settings">Gehen Sie zu den Hotspot-Einstellungen</string>
   <string name="no_results">Keine Ergebnisse</string>
   <string name="no_bookmarks">Keine Lesezeichen</string>
@@ -291,7 +294,7 @@
   <string name="off">Aus</string>
   <string name="auto">Automatisch</string>
   <string name="send_report">Übermittle das Untersuchungsergebnis</string>
-  <string name="crash_checkbox_file_system">Speichere System Details</string>
+  <string name="crash_checkbox_file_system">Dateisystem Details</string>
   <string name="diagnostic_report">Untersuchungsergebnis</string>
   <string name="diagnostic_report_message">Bitte übermittle alle nachfolgend aufgeführte Details, damit wir das Problem feststellen können</string>
   <string name="percentage">%d%%</string>
@@ -301,10 +304,11 @@
   <string name="no_open_book">Kein geöffnetes Buch</string>
   <string name="open_library">Bibliothek öffnen</string>
   <string name="tab_restored">Registerkarte wiederhergestellt</string>
+  <string name="tabs_restored">Registerkarten wiederhergestellt</string>
   <string name="open_drawer">Schublade öffnen</string>
   <string name="close_drawer">Schublade schließen</string>
-  <string name="how_to_update_content">Wie erneuert man Inhalte?</string>
-  <string name="update_content_description">Um Inhalte (eine Zim-Datei) zu aktualisieren, musst du die vollständige neueste Version genau derselben Inhalte herunterladen. Das kannst du über den Download-Bereich tun.</string>
+  <string name="how_to_update_content">Wie aktualisiert man Inhalte?</string>
+  <string name="update_content_description">Um Inhalte (eine Zim-Datei) zu aktualisieren, musst du die neueste Version genau derselben Inhalte vollständig herunterladen. Das kannst du über den Download-Bereich tun.</string>
   <string name="all_files_permission_needed">Berechtigung für alle Dateien erforderlich</string>
   <string name="all_files_permission_needed_message">Um geräteübergreifend auf alle Zim-Dateien zugreifen zu können, benötigen wir die Berechtigung für alle Dateien</string>
   <string name="allowed">Erlaubt</string>
@@ -325,4 +329,13 @@
   <string name="download_tts_language_title">Diese Sprache für die Vorlesefunktion herunterladen</string>
   <string name="download_tts_language_message">Bitte klicke auf die Schaltfläche Download. Es wird automatisch die gewünschte Sprache heruntergeladen.</string>
   <string name="external_link_copied_message">Externer Link in die Zwischenablage kopiert</string>
+  <string name="read_aloud_service_channel_name">Servicekanal für das Vorlesen</string>
+  <string name="read_aloud_channel_description">Steuerung für das Vorlesen.</string>
+  <string name="read_aloud_running">Lese vor</string>
+  <string name="backward_history">Vorangeganener Verlauf</string>
+  <string name="forward_history">Nachfolgender Verlauf</string>
+  <string name="clear_all_navigation_history_message">Dies löscht den gesamten (vorherigen und nachfolgenden) Navigationsverlauf.</string>
+  <string name="navigation_history_cleared">Navigationsverlauf gelöscht</string>
+  <string name="go_to_settings_label">Einstellungen öffnen</string>
+  <string name="request_notification_permission_message">Bitte erlauben Sie der App, auf Ihre Benachrichtigungen zuzugreifen, damit diese Aktion durchführt werden kann</string>
 </resources>

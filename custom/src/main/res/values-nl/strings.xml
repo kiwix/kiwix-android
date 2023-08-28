@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* HanV
 * Mainframe98
 -->
 <resources>
   <string name="retry">Opnieuw proberen</string>
+  <string name="invalid_installation">Ongeldige installatie. Download Zim.\n Zorg ervoor dat de wifi werkt en dat u voldoende opslagruimte heeft</string>
 </resources>

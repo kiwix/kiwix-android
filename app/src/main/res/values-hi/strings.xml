@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Juuz0
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">आपका फ़ाइल सिस्टम 4GB से अधिक की फ़ाइलों का समर्थन नहीं करता है</string>
+  <string name="detecting_file_system">पता लगा रहा है कि क्या फ़ाइल सिस्टम 4GB फ़ाइल बना सकता है</string>
+  <string name="cannot_open_file">फ़ाइल खोलने में विफल\nकृपया अपनी लाइब्रेरी के डिवाइस टैब में इस फ़ाइल को खोजने का प्रयास करें</string>
+  <string name="send_files_title">फाइल भेजें</string>
+  <string name="receive_files_title">फ़ाइलें प्राप्त करें</string>
+  <string name="no_app_found_to_open">ZIM फ़ाइल चुनने के लिए कोई ऐप नहीं मिला</string>
+  <string name="select_zim_file">पढ़ने के लिए ज़िम फ़ाइल का चयन करें</string>
+</resources>
