@@ -23,6 +23,7 @@ import io.reactivex.Flowable
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
@@ -53,7 +54,7 @@ class Repository @Inject internal constructor(
   @param:IO private val io: Scheduler,
   @param:MainThread private val mainThread: Scheduler,
   private val bookDao: NewBookDao,
-  private val bookmarksDao: NewBookmarksDao,
+  private val libkiwixBookmarks: LibkiwixBookmarks,
   private val historyDao: HistoryDao,
   private val notesDao: NewNoteDao,
   private val languageDao: NewLanguagesDao,
