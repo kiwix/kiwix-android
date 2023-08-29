@@ -27,7 +27,7 @@ import java.io.RandomAccessFile
 
 class FileWritingFileSystemChecker : FileSystemChecker {
   override fun checkFilesystemSupports4GbFiles(path: String): FileSystemCapability {
-    val resultFile = File("$path/.file_writing_result")
+    val resultFile = File("$path/.kiwix_4gb_writing_test_result")
     if (resultFile.exists()) {
       when (val capability = readCapability(resultFile)) {
         CAN_WRITE_4GB,
