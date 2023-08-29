@@ -18,7 +18,9 @@
 package org.kiwix.kiwixmobile.intro
 
 import androidx.core.content.edit
+import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
+import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import leakcanary.LeakAssertions
@@ -28,6 +30,7 @@ import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
@@ -40,7 +43,7 @@ class IntroFragmentTest : BaseActivityTest() {
 
   @Test
   fun viewIsSwipeableAndNavigatesToMain() {
-    activityScenarioRule.scenario.onActivity {
+    activityScenario.onActivity {
       it.navigate(R.id.introFragment)
     }
     intro(IntroRobot::swipeLeft) clickGetStarted {}
@@ -57,6 +60,9 @@ class IntroFragmentTest : BaseActivityTest() {
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, true)
+    }
+    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+      moveToState(Lifecycle.State.RESUMED)
     }
   }
 }

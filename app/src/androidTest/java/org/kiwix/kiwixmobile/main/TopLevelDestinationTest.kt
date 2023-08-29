@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.main
 
 import androidx.core.content.edit
+import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
@@ -59,11 +60,13 @@ class TopLevelDestinationTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.PREF_EXTERNAL_LINK_POPUP, true)
     }
+    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+      moveToState(Lifecycle.State.RESUMED)
+    }
   }
 
   @Test
   fun testTopLevelDestination() {
-    ActivityScenario.launch(KiwixMainActivity::class.java)
     topLevel {
       clickReaderOnBottomNav {
       }

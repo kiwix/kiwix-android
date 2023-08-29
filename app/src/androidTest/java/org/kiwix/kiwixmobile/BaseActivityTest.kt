@@ -21,7 +21,7 @@ package org.kiwix.kiwixmobile
 import android.Manifest.permission
 import android.content.Context
 import android.os.Build
-import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
@@ -33,8 +33,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 
 @RunWith(AndroidJUnit4::class)
 abstract class BaseActivityTest {
-  @get:Rule
-  open var activityScenarioRule = ActivityScenarioRule(KiwixMainActivity::class.java)
+  open lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
 
   private val permissions = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
     arrayOf(

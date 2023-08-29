@@ -1041,6 +1041,12 @@ abstract class CoreReaderFragment :
       tts = null
     }
     tempWebViewForUndo = null
+    // to fix IntroFragmentTest see https://github.com/kiwix/kiwix-android/pull/3217
+    try {
+      requireActivity().unbindService(serviceConnection)
+    } catch (ignore: IllegalArgumentException) {
+      // to handle if service is already unbounded
+    }
     readAloudService?.registerCallBack(null)
     readAloudService = null
     storagePermissionForNotesLauncher?.unregister()
