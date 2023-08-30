@@ -111,7 +111,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val storagePosition: Int
     get() = sharedPreferences.getInt(STORAGE_POSITION, 0)
 
-  private fun defaultStorage(): String =
+  fun defaultStorage(): String =
     getExternalFilesDirs(context, null)[0]?.path
       ?: context.filesDir.path // a workaround for emulators
 
