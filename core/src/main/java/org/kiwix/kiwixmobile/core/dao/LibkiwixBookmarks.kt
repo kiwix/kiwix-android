@@ -21,18 +21,51 @@ package org.kiwix.kiwixmobile.core.dao
 import io.objectbox.kotlin.query
 import io.reactivex.Flowable
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity_
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.page.adapter.Page
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.libkiwix.Bookmark
+import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
+import java.io.File
 import javax.inject.Inject
 
-class LibkiwixBookmarks @Inject constructor(val manager: Manager) : PageDao {
-  fun bookmarks(): Flowable<List<Page>> = box.asFlowable(
+class LibkiwixBookmarks @Inject constructor(
+  val library: Library,
+  val manager: Manager,
+  val sharedPreferenceUtil: SharedPreferenceUtil
+) : PageDao {
+
+  private val bookmarksPath: String by lazy {
+    sharedPreferenceUtil.getPublicDirectoryPath(sharedPreferenceUtil.defaultStorage()) + "/kiwix/Bookmarks.txt"
+  }
+
+  private val bookMarksFile: File by lazy { File(bookmarksPath) }
+
+  init {
+    if (!File(bookmarksPath).isFileExist()) File(bookmarksPath).createNewFile()
+  }
+
+  fun bookmarks(): Flowable<List<Page>> {
+    manager.readBookmarkFile(bookmarksPath)
+    val bookMarksArray: Array<out Bookmark>? = library.getBookmarks(true)
+   return bookMarksArray?.let {
+        it.map(::BookmarkItem)
+    } ?: emptyList<BookmarkItem>()
+  }
+    box.asFlowable(
     box.query {
       order(BookmarkEntity_.bookmarkTitle)
     }
   ).map { it.map(org.kiwix.kiwixmobile.core.page.bookmark.adapter::BookmarkItem) }
+
   override fun pages(): Flowable<List<Page>> = bookmarks()
 
   override fun deletePages(pagesToDelete: List<Page>) {
+  }
+
+  fun saveBookmark(bookmark: Bookmark) {
+
   }
 }
