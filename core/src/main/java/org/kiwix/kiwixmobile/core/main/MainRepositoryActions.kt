@@ -21,7 +21,7 @@ import android.util.Log
 import io.reactivex.disposables.Disposable
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
@@ -42,13 +42,13 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
       .subscribe({}, { e -> Log.e(TAG, "Unable to save history", e) })
   }
 
-  fun saveBookmark(bookmark: BookmarkItem) {
+  fun saveBookmark(bookmark: LibkiwixBookmarkItem) {
     saveBookmarkDisposable = dataSource.saveBookmark(bookmark)
       .subscribe({}, { e -> Log.e(TAG, "Unable to save bookmark", e) })
   }
 
-  fun deleteBookmark(bookmarkUrl: String) {
-    dataSource.deleteBookmark(bookmarkUrl)
+  fun deleteBookmark(bookId: String, bookmarkUrl: String) {
+    dataSource.deleteBookmark(bookId, bookmarkUrl)
       ?.subscribe({}, { e -> Log.e(TAG, "Unable to delete bookmark", e) })
       ?: Log.e(TAG, "Unable to delete bookmark")
   }

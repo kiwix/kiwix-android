@@ -121,7 +121,7 @@ import org.kiwix.kiwixmobile.core.main.MainMenu.MenuClickListener
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryClickListener
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
@@ -154,6 +154,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.deleteCachedFiles
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
+import org.kiwix.libkiwix.Book
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -335,6 +336,7 @@ abstract class CoreReaderFragment :
   private var navigationHistoryList: MutableList<NavigationHistoryListItem> = ArrayList()
   private var isReadSelection = false
   private var isReadAloudServiceRunning = false
+  private var libKiwixBook: Book? = null
 
   private var storagePermissionForNotesLauncher: ActivityResultLauncher<String>? =
     registerForActivityResult(
@@ -1052,6 +1054,7 @@ abstract class CoreReaderFragment :
     unRegisterReadAloudService()
     storagePermissionForNotesLauncher?.unregister()
     storagePermissionForNotesLauncher = null
+    libKiwixBook = null
   }
 
   private fun updateTableOfContents() {
@@ -1575,14 +1578,17 @@ abstract class CoreReaderFragment :
   @OnClick(R2.id.bottom_toolbar_bookmark)
   fun toggleBookmark() {
     getCurrentWebView()?.url?.let { articleUrl ->
-      if (isBookmarked) {
-        repositoryActions?.deleteBookmark(articleUrl)
-        snackBarRoot?.snack(R.string.bookmark_removed)
-      } else {
-        zimReaderContainer?.zimFileReader?.let { zimFileReader ->
+      zimReaderContainer?.zimFileReader?.let { zimFileReader ->
+        libKiwixBook = Book().apply {
+          update(zimFileReader.jniKiwixReader)
+        }
+        if (isBookmarked) {
+          repositoryActions?.deleteBookmark(libKiwixBook!!.id, articleUrl)
+          snackBarRoot?.snack(R.string.bookmark_removed)
+        } else {
           getCurrentWebView()?.title?.let {
             repositoryActions?.saveBookmark(
-              BookmarkItem(it, articleUrl, zimFileReader)
+              LibkiwixBookmarkItem(it, articleUrl, zimFileReader, libKiwixBook!!)
             )
             snackBarRoot?.snack(
               stringId = R.string.bookmark_added,
@@ -1597,9 +1603,9 @@ abstract class CoreReaderFragment :
               )
             )
           }
-        } ?: kotlin.run {
-          requireActivity().toast(R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
         }
+      } ?: kotlin.run {
+        requireActivity().toast(R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
       }
     }
   }

@@ -21,13 +21,13 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.libkiwix.Bookmark
 
 /**
  * Defines the set of methods which are required to provide the presenter with the requisite data.
@@ -44,9 +44,9 @@ interface DataSource {
   fun getBookmarks(): Flowable<List<BookmarkItem>>
   fun getCurrentZimBookmarksUrl(): Single<List<String>>
 
-  fun saveBookmark(bookmark: Bookmark): Completable
-  fun deleteBookmarks(bookmarks: List<BookmarkItem>): Completable
-  fun deleteBookmark(bookmarkUrl: String): Completable?
+  fun saveBookmark(libkiwixBookmarkItem: LibkiwixBookmarkItem): Completable
+  fun deleteBookmarks(bookmarks: List<LibkiwixBookmarkItem>): Completable
+  fun deleteBookmark(bookId: String, bookmarkUrl: String): Completable?
   fun booksOnDiskAsListItems(): Flowable<List<BooksOnDiskListItem>>
 
   fun saveNote(noteListItem: NoteListItem): Completable
