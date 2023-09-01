@@ -20,34 +20,42 @@ package org.kiwix.kiwixmobile.core.page.bookmark.adapter
 
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
-import org.kiwix.libkiwix.Bookmark
+import org.kiwix.libkiwix.Book
 
-data class LibkiwixBookarkItem(
-  override val id: Long = 0L,
-  override val zimFilePath: String?,
+data class LibkiwixBookmarkItem(
+  val databaseId: Long = 0L,
   override val zimId: String,
   val zimName: String,
-  val bookMarkUrl: String,
-  override val url: String = bookMarkUrl,
+  override val zimFilePath: String?,
+  val bookmarkUrl: String,
   override val title: String,
+  override val favicon: String?,
   override var isSelected: Boolean = false,
-  override val favicon: String?
+  override val url: String = bookmarkUrl,
+  override val id: Long = databaseId,
+  val libKiwixBook: Book?,
 ) : Page {
-  constructor(libkiwixBookmark: Bookmark) : this(
+  /*constructor(libkiwixBookmark: Bookmark, libkiwixBook: Book) : this(
+    id = 0L,
     zimId = libkiwixBookmark.bookId,
-    libkiwixBookmark.url
-  )
+    zimFilePath = libkiwixBook.url,
+    zimName = libkiwixBookmark.bookTitle,
+    bookMarkUrl = libkiwixBookmark.url,
+    title = libkiwixBookmark.title,
+  )*/
 
   constructor(
     title: String,
-    url: String,
-    zimFileReader: ZimFileReader
+    articleUrl: String,
+    zimFileReader: ZimFileReader,
+    libKiwixBook: Book
   ) : this(
-    zimId = zimFileReader.id,
-    zimName = zimFileReader.name,
-    zimFilePath = zimFileReader.zimFile.canonicalPath,
-    bookmarkUrl = url,
+    zimFilePath = libKiwixBook.path,
+    zimId = libKiwixBook.id,
+    zimName = libKiwixBook.name,
+    bookmarkUrl = articleUrl,
     title = title,
-    favicon = zimFileReader.favicon
+    favicon = zimFileReader.favicon,
+    libKiwixBook = libKiwixBook
   )
 }

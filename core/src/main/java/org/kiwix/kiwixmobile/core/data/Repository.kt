@@ -32,6 +32,7 @@ import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
 import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
@@ -40,7 +41,6 @@ import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.LanguageItem
-import org.kiwix.libkiwix.Bookmark
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -112,16 +112,16 @@ class Repository @Inject internal constructor(
       .subscribeOn(io)
       .observeOn(mainThread)
 
-  override fun saveBookmark(bookmark: Bookmark) =
-    Completable.fromAction { libkiwixBookmarks.saveBookmark(bookmark) }
+  override fun saveBookmark(libkiwixBookmarkItem: LibkiwixBookmarkItem) =
+    Completable.fromAction { libkiwixBookmarks.saveBookmark(libkiwixBookmarkItem) }
       .subscribeOn(io)
 
-  override fun deleteBookmarks(bookmarks: List<BookmarkItem>) =
+  override fun deleteBookmarks(bookmarks: List<LibkiwixBookmarkItem>) =
     Completable.fromAction { libkiwixBookmarks.deleteBookmarks(bookmarks) }
       .subscribeOn(io)
 
-  override fun deleteBookmark(bookmarkUrl: String): Completable? =
-    Completable.fromAction { libkiwixBookmarks.deleteBookmark(bookmarkUrl) }
+  override fun deleteBookmark(bookId: String, bookmarkUrl: String): Completable? =
+    Completable.fromAction { libkiwixBookmarks.deleteBookmark(bookId, bookmarkUrl) }
       .subscribeOn(io)
 
   override fun saveNote(noteListItem: NoteListItem): Completable =

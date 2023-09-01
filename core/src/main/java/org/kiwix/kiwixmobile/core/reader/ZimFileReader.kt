@@ -56,7 +56,7 @@ class ZimFileReader constructor(
   val zimFile: File?,
   val assetFileDescriptor: AssetFileDescriptor? = null,
   val assetDescriptorFilePath: String? = null,
-  private val jniKiwixReader: Archive,
+  val jniKiwixReader: Archive,
   private val nightModeConfig: NightModeConfig,
   private val searcher: SuggestionSearcher = SuggestionSearcher(jniKiwixReader)
 ) {
