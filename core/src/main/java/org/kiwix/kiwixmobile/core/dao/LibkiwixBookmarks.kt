@@ -56,15 +56,11 @@ class LibkiwixBookmarks @Inject constructor(
     manager.readBookmarkFile(bookmarkFile.canonicalPath)
   }
 
-  fun bookmarks(): Flowable<List<Page>> {
-    val bookMarksArray: Array<out Bookmark>? = library.getBookmarks(true)
-    val bookmarkList = bookMarksArray?.toList() ?: emptyList()
-
-    return Flowable.fromIterable(bookmarkList)
+  fun bookmarks(): Flowable<List<Page>> =
+    Flowable.fromIterable(getBookmarksList())
       .map(::LibkiwixBookmarkItem)
       .toList()
       .toFlowable() as Flowable<List<Page>>
-  }
 
   override fun pages(): Flowable<List<Page>> = bookmarks()
 
@@ -86,12 +82,7 @@ class LibkiwixBookmarks @Inject constructor(
         update(zimFileReader.jniKiwixReader)
       }
       addBookToLibrary(book)
-
-      // Retrieve bookmarks from the library
-      val bookmarks = library.getBookmarks(true)
-
-      // Extract URLs from bookmarks
-      val urls = bookmarks.map { it.url }
+      val urls = getBookmarksList().map { it.url }
 
       // Emit the list of URLs
       emitter.onNext(urls)
@@ -101,15 +92,17 @@ class LibkiwixBookmarks @Inject constructor(
   }
 
   fun saveBookmark(libkiwixBookmarkItem: LibkiwixBookmarkItem) {
-    addBookToLibrary(libkiwixBookmarkItem.libKiwixBook)
-    val bookmark = Bookmark().apply {
-      bookId = libkiwixBookmarkItem.zimId
-      title = libkiwixBookmarkItem.title
-      url = libkiwixBookmarkItem.url
-      bookTitle = libkiwixBookmarkItem.libKiwixBook?.title ?: libkiwixBookmarkItem.zimId
-    }
-    library.addBookmark(bookmark).also {
-      writeBookMarksToFile()
+    if (!isBookMarkExist(libkiwixBookmarkItem)) {
+      addBookToLibrary(libkiwixBookmarkItem.libKiwixBook)
+      val bookmark = Bookmark().apply {
+        bookId = libkiwixBookmarkItem.zimId
+        title = libkiwixBookmarkItem.title
+        url = libkiwixBookmarkItem.url
+        bookTitle = libkiwixBookmarkItem.libKiwixBook?.title ?: libkiwixBookmarkItem.zimId
+      }
+      library.addBookmark(bookmark).also {
+        writeBookMarksToFile()
+      }
     }
   }
 
@@ -130,4 +123,11 @@ class LibkiwixBookmarks @Inject constructor(
   private fun writeBookMarksToFile() {
     library.writeBookmarksToFile(bookmarkFile.canonicalPath)
   }
+
+  private fun getBookmarksList() =
+    library.getBookmarks(true)?.toList() ?: emptyList()
+
+  private fun isBookMarkExist(libkiwixBookmarkItem: LibkiwixBookmarkItem): Boolean =
+    getBookmarksList()
+      .any { it.url == libkiwixBookmarkItem.bookmarkUrl && it.bookId == libkiwixBookmarkItem.zimId }
 }
