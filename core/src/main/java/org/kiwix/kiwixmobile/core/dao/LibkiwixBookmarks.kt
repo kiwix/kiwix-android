@@ -71,6 +71,7 @@ class LibkiwixBookmarks @Inject constructor(
     return zimFileReader?.let { reader ->
       library
         .getBookmarks(true)
+        .filter { it.bookId == reader.id }
         .map { it.url }
     } ?: emptyList()
   }
@@ -82,7 +83,9 @@ class LibkiwixBookmarks @Inject constructor(
         update(zimFileReader.jniKiwixReader)
       }
       addBookToLibrary(book)
-      val urls = getBookmarksList().map { it.url }
+      val urls = getBookmarksList()
+        .filter { it.bookId == zimFileReader.id }
+        .map { it.url }
 
       // Emit the list of URLs
       emitter.onNext(urls)
