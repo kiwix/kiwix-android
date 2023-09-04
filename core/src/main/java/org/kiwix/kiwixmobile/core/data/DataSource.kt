@@ -41,7 +41,7 @@ interface DataSource {
   fun saveHistory(history: HistoryItem): Completable
   fun deleteHistory(historyList: List<HistoryListItem>): Completable
   fun clearHistory(): Completable
-  fun getBookmarks(): Flowable<List<BookmarkItem>>
+  fun getBookmarks(): Flowable<List<LibkiwixBookmarkItem>>
   fun getCurrentZimBookmarksUrl(): Single<List<String>>
 
   fun saveBookmark(libkiwixBookmarkItem: LibkiwixBookmarkItem): Completable

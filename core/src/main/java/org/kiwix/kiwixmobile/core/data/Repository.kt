@@ -31,7 +31,6 @@ import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
 import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
@@ -105,7 +104,8 @@ class Repository @Inject internal constructor(
     recentSearchDao.deleteSearchHistory()
   }
 
-  override fun getBookmarks() = libkiwixBookmarks.bookmarks() as Flowable<List<BookmarkItem>>
+  override fun getBookmarks() =
+    libkiwixBookmarks.bookmarks() as Flowable<List<LibkiwixBookmarkItem>>
 
   override fun getCurrentZimBookmarksUrl() =
     Single.just(libkiwixBookmarks.getCurrentZimBookmarksUrl(zimReaderContainer.zimFileReader))

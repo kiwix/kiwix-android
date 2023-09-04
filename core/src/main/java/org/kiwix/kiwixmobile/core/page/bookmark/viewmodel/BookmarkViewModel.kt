@@ -19,7 +19,7 @@
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.UpdateAllBookmarksPreference
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
@@ -32,7 +32,11 @@ class BookmarkViewModel @Inject constructor(
   libkiwixBookmarks: LibkiwixBookmarks,
   zimReaderContainer: ZimReaderContainer,
   sharedPrefs: SharedPreferenceUtil
-) : PageViewModel<BookmarkItem, BookmarkState>(libkiwixBookmarks, sharedPrefs, zimReaderContainer) {
+) : PageViewModel<LibkiwixBookmarkItem, BookmarkState>(
+  libkiwixBookmarks,
+  sharedPrefs,
+  zimReaderContainer
+) {
 
   override fun initialState(): BookmarkState =
     BookmarkState(emptyList(), sharedPreferenceUtil.showBookmarksAllBooks, zimReaderContainer.id)
@@ -47,7 +51,7 @@ class BookmarkViewModel @Inject constructor(
     state: BookmarkState,
     action: Action.UpdatePages
   ): BookmarkState =
-    state.copy(pageItems = action.pages.filterIsInstance<BookmarkItem>())
+    state.copy(pageItems = action.pages.filterIsInstance<LibkiwixBookmarkItem>())
 
   override fun offerUpdateToShowAllToggle(
     action: Action.UserClickedShowAllToggle,
@@ -63,6 +67,9 @@ class BookmarkViewModel @Inject constructor(
   override fun createDeletePageDialogEffect(state: BookmarkState) =
     ShowDeleteBookmarksDialog(effects, state, pageDao)
 
-  override fun copyWithNewItems(state: BookmarkState, newItems: List<BookmarkItem>): BookmarkState =
+  override fun copyWithNewItems(
+    state: BookmarkState,
+    newItems: List<LibkiwixBookmarkItem>
+  ): BookmarkState =
     state.copy(pageItems = newItems)
 }
