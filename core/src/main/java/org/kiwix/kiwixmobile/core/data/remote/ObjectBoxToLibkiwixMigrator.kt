@@ -47,13 +47,13 @@ class ObjectBoxToLibkiwixMigrator {
     bookMarksList.forEachIndexed { _, bookmarkEntity ->
       CoroutineScope(Dispatchers.IO).launch {
         // removing the single entity from the object box after migration.
-        box.query {
-          equal(
-            BookmarkEntity_.bookmarkUrl,
-            bookmarkEntity.bookmarkUrl,
-            QueryBuilder.StringOrder.CASE_INSENSITIVE
-          )
-        }.remove()
+        // box.query {
+        //   equal(
+        //     BookmarkEntity_.bookmarkUrl,
+        //     bookmarkEntity.bookmarkUrl,
+        //     QueryBuilder.StringOrder.CASE_INSENSITIVE
+        //   )
+        // }.remove()
       }
     }
     sharedPreferenceUtil.putPrefBookMarkMigrated(true)

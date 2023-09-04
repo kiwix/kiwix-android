@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.page.bookmark.adapter
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.libkiwix.Book
+import org.kiwix.libkiwix.Bookmark
 
 data class LibkiwixBookmarkItem(
   val databaseId: Long = 0L,
@@ -35,14 +36,14 @@ data class LibkiwixBookmarkItem(
   override val id: Long = databaseId,
   val libKiwixBook: Book?,
 ) : Page {
-  /*constructor(libkiwixBookmark: Bookmark, libkiwixBook: Book) : this(
-    id = 0L,
-    zimId = libkiwixBookmark.bookId,
-    zimFilePath = libkiwixBook.url,
-    zimName = libkiwixBookmark.bookTitle,
-    bookMarkUrl = libkiwixBookmark.url,
-    title = libkiwixBookmark.title,
-  )*/
+  // constructor(libkiwixBookmark: Bookmark, libkiwixBook: Book) : this(
+  //   id = 0L,
+  //   zimId = libkiwixBookmark.bookId,
+  //   zimFilePath = libkiwixBook.url,
+  //   zimName = libkiwixBookmark.bookTitle,
+  //   bookMarkUrl = libkiwixBookmark.url,
+  //   title = libkiwixBookmark.title,
+  // )
 
   constructor(
     title: String,
@@ -50,7 +51,7 @@ data class LibkiwixBookmarkItem(
     zimFileReader: ZimFileReader,
     libKiwixBook: Book
   ) : this(
-    zimFilePath = libKiwixBook.path,
+    zimFilePath = zimFileReader.zimFile.canonicalPath,
     zimId = libKiwixBook.id,
     zimName = libKiwixBook.name,
     bookmarkUrl = articleUrl,

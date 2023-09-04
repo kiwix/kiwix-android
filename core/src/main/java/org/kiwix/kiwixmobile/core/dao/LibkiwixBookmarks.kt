@@ -18,13 +18,11 @@
 
 package org.kiwix.kiwixmobile.core.dao
 
-import io.objectbox.kotlin.query
-import io.objectbox.query.QueryBuilder
+import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity_
+import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.page.adapter.Page
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -45,11 +43,17 @@ class LibkiwixBookmarks @Inject constructor(
     sharedPreferenceUtil.getPublicDirectoryPath(sharedPreferenceUtil.defaultStorage()) + "/kiwix/Bookmarks/"
   }
 
-  private val bookMarksFile: File by lazy { File(bookmarksFolderPath) }
+  private val bookmarkFile: File by lazy {
+    File("$bookmarksFolderPath/bookmark.txt")
+  }
 
   init {
+    // Check if bookmark folder exist if not then create the folder first.
     if (!File(bookmarksFolderPath).isFileExist()) File(bookmarksFolderPath).mkdir()
-    manager.readBookmarkFile(bookmarksFolderPath)
+    // Check if bookmark file exist if not then create the file to save the bookmarks.
+    if (!bookmarkFile.isFileExist()) bookmarkFile.createNewFile()
+    // set up manager to read the bookmarks from this file
+    manager.readBookmarkFile(bookmarkFile.canonicalPath)
   }
 
   fun bookmarks(): Flowable<List<Page>> {
@@ -64,36 +68,37 @@ class LibkiwixBookmarks @Inject constructor(
   override fun deletePages(pagesToDelete: List<Page>) =
     deleteBookmarks(pagesToDelete as List<LibkiwixBookmarkItem>)
 
-  fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?) = box.query {
-    equal(
-      BookmarkEntity_.zimId, zimFileReader?.id ?: "",
-      QueryBuilder.StringOrder.CASE_INSENSITIVE
-    )
-      .or()
-      .equal(
-        BookmarkEntity_.zimName, zimFileReader?.name ?: "",
-        QueryBuilder.StringOrder.CASE_INSENSITIVE
-      )
-    order(BookmarkEntity_.bookmarkTitle)
-  }.property(BookmarkEntity_.bookmarkUrl)
-    .findStrings()
-    .toList()
-    .distinct()
+  fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?): List<String> {
+    return zimFileReader?.let { reader ->
+      library
+        .getBookmarks(true)
+        .map { it.url }
+    } ?: emptyList()
+  }
 
   fun bookmarkUrlsForCurrentBook(zimFileReader: ZimFileReader): Flowable<List<String>> {
-    val book = Book().apply {
-      update(zimFileReader.jniKiwixReader)
-    }
-    library.addBook(book)
-    val bookMarksList: Flowable<List<String>> = arrayListOf<String>()
-    library.getBookmarks(true)
-      .map {
+    return Flowable.create({ emitter ->
+      // Create a Book object and add it to the library
+      val book = Book().apply {
+        update(zimFileReader.jniKiwixReader)
       }
-    return bookMarksList
+      addBookToLibrary(book)
+
+      // Retrieve bookmarks from the library
+      val bookmarks = library.getBookmarks(true)
+
+      // Extract URLs from bookmarks
+      val urls = bookmarks.map { it.url }
+
+      // Emit the list of URLs
+      emitter.onNext(urls)
+      emitter.onComplete()
+    }, BackpressureStrategy.LATEST)
+      .subscribeOn(Schedulers.io())
   }
 
   fun saveBookmark(libkiwixBookmarkItem: LibkiwixBookmarkItem) {
-    library.addBook(libkiwixBookmarkItem.libKiwixBook)
+    addBookToLibrary(libkiwixBookmarkItem.libKiwixBook)
     val bookmark = Bookmark().apply {
       bookId = libkiwixBookmarkItem.zimId
       title = libkiwixBookmarkItem.title
@@ -101,10 +106,12 @@ class LibkiwixBookmarks @Inject constructor(
       bookTitle = libkiwixBookmarkItem.libKiwixBook?.title ?: libkiwixBookmarkItem.zimId
     }
     library.addBookmark(bookmark).also {
-      // if the book name is not found then takes zim id as file name
-      val bookMarkFileName = libkiwixBookmarkItem.libKiwixBook?.name ?: libkiwixBookmarkItem.id
-      library.writeBookmarksToFile("$bookmarksFolderPath/$bookMarkFileName")
+      writeBookMarksToFile()
     }
+  }
+
+  private fun addBookToLibrary(libKiwixBook: Book?) {
+    library.addBook(libKiwixBook)
   }
 
   fun deleteBookmarks(bookmarks: List<LibkiwixBookmarkItem>) {
@@ -112,6 +119,12 @@ class LibkiwixBookmarks @Inject constructor(
   }
 
   fun deleteBookmark(bookId: String, bookmarkUrl: String) {
-    library.removeBookmark(bookId, bookmarkUrl)
+    library.removeBookmark(bookId, bookmarkUrl).also {
+      writeBookMarksToFile()
+    }
+  }
+
+  private fun writeBookMarksToFile() {
+    library.writeBookmarksToFile(bookmarkFile.canonicalPath)
   }
 }

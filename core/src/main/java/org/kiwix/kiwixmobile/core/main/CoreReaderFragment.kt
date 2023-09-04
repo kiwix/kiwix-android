@@ -105,6 +105,7 @@ import org.kiwix.kiwixmobile.core.R2
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.downloader.fetch.DOWNLOAD_NOTIFICATION_TITLE
@@ -239,6 +240,10 @@ abstract class CoreReaderFragment :
   @JvmField
   @Inject
   var newBookmarksDao: NewBookmarksDao? = null
+
+  @JvmField
+  @Inject
+  var libkiwixBookmarks: LibkiwixBookmarks? = null
 
   @JvmField
   @Inject
