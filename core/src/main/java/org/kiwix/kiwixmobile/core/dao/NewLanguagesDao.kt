@@ -23,10 +23,8 @@ import io.objectbox.query.Query
 import io.objectbox.rx.RxQuery
 import io.reactivex.BackpressureStrategy
 import io.reactivex.BackpressureStrategy.LATEST
-import io.reactivex.Flowable
 import org.kiwix.kiwixmobile.core.dao.entities.LanguageEntity
 import org.kiwix.kiwixmobile.core.zim_manager.Language
-import org.kiwix.libkiwix.Library
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -48,19 +46,3 @@ internal fun <T> Box<T>.asFlowable(
   backpressureStrategy: BackpressureStrategy = LATEST
 ) =
   RxQuery.observable(query).toFlowable(backpressureStrategy)
-
-fun <T> Library.asFlowable(
-  queryFunction: () -> List<T>,
-  backpressureStrategy: BackpressureStrategy = BackpressureStrategy.LATEST
-): Flowable<List<T>> {
-  return Flowable.create({ emitter ->
-    val subscription = this.subscribe {
-      val results = queryFunction()
-      emitter.onNext(results)
-    }
-
-    emitter.setCancellable {
-      subscription.dispose()
-    }
-  }, backpressureStrategy)
-}

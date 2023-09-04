@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
-import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.UpdateAllBookmarksPreference
@@ -29,10 +29,10 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
 class BookmarkViewModel @Inject constructor(
-  bookmarksDao: NewBookmarksDao,
+  libkiwixBookmarks: LibkiwixBookmarks,
   zimReaderContainer: ZimReaderContainer,
   sharedPrefs: SharedPreferenceUtil
-) : PageViewModel<BookmarkItem, BookmarkState>(bookmarksDao, sharedPrefs, zimReaderContainer) {
+) : PageViewModel<BookmarkItem, BookmarkState>(libkiwixBookmarks, sharedPrefs, zimReaderContainer) {
 
   override fun initialState(): BookmarkState =
     BookmarkState(emptyList(), sharedPreferenceUtil.showBookmarksAllBooks, zimReaderContainer.id)
