@@ -58,9 +58,12 @@ class LibkiwixBookmarks @Inject constructor(
 
   fun bookmarks(): Flowable<List<Page>> {
     val bookMarksArray: Array<out Bookmark>? = library.getBookmarks(true)
-    return bookMarksArray?.let {
-      it.map(::BookmarkItem)
-    }
+    val bookmarkList = bookMarksArray?.toList() ?: emptyList()
+
+    return Flowable.fromIterable(bookmarkList)
+      .map(::LibkiwixBookmarkItem)
+      .toList()
+      .toFlowable() as Flowable<List<Page>>
   }
 
   override fun pages(): Flowable<List<Page>> = bookmarks()
