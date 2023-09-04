@@ -255,6 +255,8 @@ class KiwixReaderFragment : CoreReaderFragment() {
           TAG_KIWIX,
           "Kiwix normal start, Opened last used zimFile: -> $zimFile"
         )
+      } else {
+        zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
       }
     } else {
       getCurrentWebView()?.snack(R.string.zim_not_opened)

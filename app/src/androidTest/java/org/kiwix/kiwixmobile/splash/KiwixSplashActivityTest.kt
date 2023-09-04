@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.splash
 
 import android.Manifest
 import android.content.Context
+import android.os.Build
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
@@ -58,15 +59,23 @@ class KiwixSplashActivityTest {
   private val activityScenario: ActivityScenario<KiwixMainActivity> =
     ActivityScenario.launch(KiwixMainActivity::class.java)
 
-  @Rule
-  @JvmField
-  var readPermissionRule: GrantPermissionRule =
-    GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE)
+  private val permissions = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+    arrayOf(
+      Manifest.permission.READ_EXTERNAL_STORAGE,
+      Manifest.permission.WRITE_EXTERNAL_STORAGE,
+      Manifest.permission.SYSTEM_ALERT_WINDOW
+    )
+  } else {
+    arrayOf(
+      Manifest.permission.READ_EXTERNAL_STORAGE,
+      Manifest.permission.WRITE_EXTERNAL_STORAGE
+    )
+  }
 
   @Rule
   @JvmField
-  var writePermissionRule: GrantPermissionRule =
-    GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+  var permissionRules: GrantPermissionRule =
+    GrantPermissionRule.grant(*permissions)
   private var context: Context? = null
 
   @Before
