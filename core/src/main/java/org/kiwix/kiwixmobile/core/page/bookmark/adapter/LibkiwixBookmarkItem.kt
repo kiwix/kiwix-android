@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.page.bookmark.adapter
 
+import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.libkiwix.Book
@@ -59,5 +60,17 @@ data class LibkiwixBookmarkItem(
     title = title,
     favicon = zimFileReader.favicon,
     libKiwixBook = libKiwixBook
+  )
+
+  constructor(
+    bookmarkEntity: BookmarkEntity
+  ) : this(
+    zimId = bookmarkEntity.zimId,
+    zimFilePath = bookmarkEntity.zimFilePath,
+    zimName = bookmarkEntity.zimName,
+    bookmarkUrl = bookmarkEntity.bookmarkUrl,
+    title = bookmarkEntity.bookmarkTitle,
+    favicon = bookmarkEntity.favicon,
+    libKiwixBook = null
   )
 }

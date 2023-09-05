@@ -109,8 +109,10 @@ class LibkiwixBookmarks @Inject constructor(
   }
 
   private fun addBookToLibraryIfNotExist(libKiwixBook: Book?) {
-    if (!library.booksIds.any { it == libKiwixBook?.id }) {
-      library.addBook(libKiwixBook)
+    libKiwixBook?.let { book ->
+      if (!library.booksIds.any { it == book.id }) {
+        library.addBook(libKiwixBook)
+      }
     }
   }
 
