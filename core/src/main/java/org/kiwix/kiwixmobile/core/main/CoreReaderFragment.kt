@@ -248,10 +248,6 @@ abstract class CoreReaderFragment :
 
   @JvmField
   @Inject
-  var newBookmarksDao: NewBookmarksDao? = null
-
-  @JvmField
-  @Inject
   var libkiwixBookmarks: LibkiwixBookmarks? = null
 
   @JvmField
@@ -1542,7 +1538,7 @@ abstract class CoreReaderFragment :
   protected fun setUpBookmarks(zimFileReader: ZimFileReader) {
     safeDispose()
     bookmarkingDisposable = Flowable.combineLatest(
-      newBookmarksDao?.bookmarkUrlsForCurrentBook(zimFileReader),
+      libkiwixBookmarks?.bookmarkUrlsForCurrentBook(zimFileReader),
       webUrlsProcessor,
       List<String?>::contains
     )
