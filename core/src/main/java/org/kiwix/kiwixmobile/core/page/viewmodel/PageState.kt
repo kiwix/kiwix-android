@@ -39,16 +39,12 @@ abstract class PageState<T : Page> {
     return pageItems.map {
       // check if the current item is `LibkiwixBookmarkItem` because we have not saving
       // the bookmarks in database so it does not have any unique value so to get the
-      // selected items we check for uri since url is unique for every bookmark.
-      if (it is LibkiwixBookmarkItem) {
-        if (it.url == page.url) it.apply {
-          isSelected = !isSelected
-        } else it
-      } else {
-        if (it.id == page.id) it.apply {
-          isSelected = !isSelected
-        } else it
-      }
+      // selected items we check for url since url is unique for every bookmark.
+      val currentItemIdentifier = if (it is LibkiwixBookmarkItem) it.url else it.id
+      val pageIdentifier = if (it is LibkiwixBookmarkItem) page.url else page.id
+      if (currentItemIdentifier == pageIdentifier) it.apply {
+        isSelected = !isSelected
+      } else it
     }
   }
 
