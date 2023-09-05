@@ -27,14 +27,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity_
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
 class ObjectBoxToLibkiwixMigrator {
   @Inject lateinit var boxStore: BoxStore
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  @Inject lateinit var libkiwixBookmarks: LibkiwixBookmarks
 
   fun migrateBookmarksToLibkiwix() {
     CoreApp.coreComponent.inject(this)
@@ -46,14 +49,15 @@ class ObjectBoxToLibkiwixMigrator {
     val bookMarksList = box.all
     bookMarksList.forEachIndexed { _, bookmarkEntity ->
       CoroutineScope(Dispatchers.IO).launch {
+        libkiwixBookmarks.saveBookmark(LibkiwixBookmarkItem(bookmarkEntity))
         // removing the single entity from the object box after migration.
-        // box.query {
-        //   equal(
-        //     BookmarkEntity_.bookmarkUrl,
-        //     bookmarkEntity.bookmarkUrl,
-        //     QueryBuilder.StringOrder.CASE_INSENSITIVE
-        //   )
-        // }.remove()
+        box.query {
+          equal(
+            BookmarkEntity_.bookmarkUrl,
+            bookmarkEntity.bookmarkUrl,
+            QueryBuilder.StringOrder.CASE_INSENSITIVE
+          )
+        }.remove()
       }
     }
     sharedPreferenceUtil.putPrefBookMarkMigrated(true)
