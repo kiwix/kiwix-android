@@ -40,7 +40,9 @@ class LibkiwixBookmarks @Inject constructor(
 ) : PageDao {
 
   private val bookmarksFolderPath: String by lazy {
-    sharedPreferenceUtil.getPublicDirectoryPath(sharedPreferenceUtil.defaultStorage()) + "/kiwix/Bookmarks/"
+    sharedPreferenceUtil.getPublicDirectoryPath(
+      sharedPreferenceUtil.defaultStorage()
+    ) + "/kiwix/Bookmarks/"
   }
 
   private val bookmarkFile: File by lazy {
