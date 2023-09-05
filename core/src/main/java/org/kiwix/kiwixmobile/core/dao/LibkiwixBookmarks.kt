@@ -69,8 +69,7 @@ class LibkiwixBookmarks @Inject constructor(
 
   fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?): List<String> {
     return zimFileReader?.let { reader ->
-      library
-        .getBookmarks(true)
+      getBookmarksList()
         .filter { it.bookId == reader.id }
         .map { it.url }
     } ?: emptyList()
@@ -128,7 +127,7 @@ class LibkiwixBookmarks @Inject constructor(
   }
 
   private fun getBookmarksList() =
-    library.getBookmarks(true)?.toList() ?: emptyList()
+    library.getBookmarks(false)?.toList() ?: emptyList()
 
   private fun isBookMarkExist(libkiwixBookmarkItem: LibkiwixBookmarkItem): Boolean =
     getBookmarksList()
