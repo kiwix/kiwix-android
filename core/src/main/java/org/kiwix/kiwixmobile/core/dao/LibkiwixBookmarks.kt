@@ -81,7 +81,7 @@ class LibkiwixBookmarks @Inject constructor(
       val book = Book().apply {
         update(zimFileReader.jniKiwixReader)
       }
-      addBookToLibrary(book)
+      addBookToLibraryIfNotExist(book)
       val urls = getBookmarksList()
         .filter { it.bookId == zimFileReader.id }
         .map { it.url }
@@ -95,7 +95,7 @@ class LibkiwixBookmarks @Inject constructor(
 
   fun saveBookmark(libkiwixBookmarkItem: LibkiwixBookmarkItem) {
     if (!isBookMarkExist(libkiwixBookmarkItem)) {
-      addBookToLibrary(libkiwixBookmarkItem.libKiwixBook)
+      addBookToLibraryIfNotExist(libkiwixBookmarkItem.libKiwixBook)
       val bookmark = Bookmark().apply {
         bookId = libkiwixBookmarkItem.zimId
         title = libkiwixBookmarkItem.title
@@ -108,8 +108,10 @@ class LibkiwixBookmarks @Inject constructor(
     }
   }
 
-  private fun addBookToLibrary(libKiwixBook: Book?) {
-    library.addBook(libKiwixBook)
+  private fun addBookToLibraryIfNotExist(libKiwixBook: Book?) {
+    if (!library.booksIds.any { it == libKiwixBook?.id }) {
+      library.addBook(libKiwixBook)
+    }
   }
 
   fun deleteBookmarks(bookmarks: List<LibkiwixBookmarkItem>) {
