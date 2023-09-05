@@ -23,7 +23,6 @@ import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.DeletePageItems
