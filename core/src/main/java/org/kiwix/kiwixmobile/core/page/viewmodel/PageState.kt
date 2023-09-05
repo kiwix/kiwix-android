@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.page.viewmodel
 
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 
 abstract class PageState<T : Page> {
   abstract val pageItems: List<T>
@@ -36,9 +37,18 @@ abstract class PageState<T : Page> {
 
   fun getItemsAfterToggleSelectionOfItem(page: Page): List<T> {
     return pageItems.map {
-      if (it.id == page.id) it.apply {
-        isSelected = !isSelected
-      } else it
+      // check if the current item is `LibkiwixBookmarkItem` because we have not saving
+      // the bookmarks in database so it does not have any unique value so to get the
+      // selected items we check for uri since url is unique for every bookmark.
+      if (it is LibkiwixBookmarkItem) {
+        if (it.url == page.url) it.apply {
+          isSelected = !isSelected
+        } else it
+      } else {
+        if (it.id == page.id) it.apply {
+          isSelected = !isSelected
+        } else it
+      }
     }
   }
 
