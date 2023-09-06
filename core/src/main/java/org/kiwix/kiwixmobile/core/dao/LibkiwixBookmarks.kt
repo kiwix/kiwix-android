@@ -19,8 +19,10 @@
 package org.kiwix.kiwixmobile.core.dao
 
 import io.reactivex.BackpressureStrategy
+import io.reactivex.BackpressureStrategy.LATEST
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
@@ -38,6 +40,10 @@ class LibkiwixBookmarks @Inject constructor(
   val manager: Manager,
   val sharedPreferenceUtil: SharedPreferenceUtil
 ) : PageDao {
+
+  private val bookmarkListBehaviour: BehaviorSubject<List<Bookmark>>? by lazy {
+    BehaviorSubject.createDefault(getBookmarksList())
+  }
 
   private val bookmarksFolderPath: String by lazy {
     sharedPreferenceUtil.getPublicDirectoryPath(
@@ -59,10 +65,8 @@ class LibkiwixBookmarks @Inject constructor(
   }
 
   fun bookmarks(): Flowable<List<Page>> =
-    Flowable.fromIterable(getBookmarksList())
-      .map(::LibkiwixBookmarkItem)
-      .toList()
-      .toFlowable() as Flowable<List<Page>>
+    flowableBookmarkList()
+      .map { it.map(::LibkiwixBookmarkItem) }
 
   override fun pages(): Flowable<List<Page>> = bookmarks()
 
@@ -77,23 +81,18 @@ class LibkiwixBookmarks @Inject constructor(
     } ?: emptyList()
   }
 
-  fun bookmarkUrlsForCurrentBook(zimFileReader: ZimFileReader): Flowable<List<String>> {
-    return Flowable.create({ emitter ->
-      // Create a Book object and add it to the library
-      val book = Book().apply {
-        update(zimFileReader.jniKiwixReader)
+  fun bookmarkUrlsForCurrentBook(zimFileReader: ZimFileReader): Flowable<List<String>> =
+    flowableBookmarkList()
+      .map { bookmarksList ->
+        bookmarksList.filter { it.bookId == zimFileReader.id }
+          .map(Bookmark::getUrl)
       }
-      addBookToLibraryIfNotExist(book)
-      val urls = getBookmarksList()
-        .filter { it.bookId == zimFileReader.id }
-        .map { it.url }
-
-      // Emit the list of URLs
-      emitter.onNext(urls)
-      emitter.onComplete()
-    }, BackpressureStrategy.LATEST)
-      .subscribeOn(Schedulers.io())
-  }
+      .subscribeOn(Schedulers.io()).also {
+        val book = Book().apply {
+          update(zimFileReader.jniKiwixReader)
+        }
+        addBookToLibraryIfNotExist(book)
+      }
 
   fun saveBookmark(libkiwixBookmarkItem: LibkiwixBookmarkItem) {
     if (!isBookMarkExist(libkiwixBookmarkItem)) {
@@ -106,6 +105,7 @@ class LibkiwixBookmarks @Inject constructor(
       }
       library.addBookmark(bookmark).also {
         writeBookMarksToFile()
+        updateFlowableBookmarkList()
       }
     }
   }
@@ -125,6 +125,7 @@ class LibkiwixBookmarks @Inject constructor(
   fun deleteBookmark(bookId: String, bookmarkUrl: String) {
     library.removeBookmark(bookId, bookmarkUrl).also {
       writeBookMarksToFile()
+      updateFlowableBookmarkList()
     }
   }
 
@@ -138,4 +139,26 @@ class LibkiwixBookmarks @Inject constructor(
   private fun isBookMarkExist(libkiwixBookmarkItem: LibkiwixBookmarkItem): Boolean =
     getBookmarksList()
       .any { it.url == libkiwixBookmarkItem.bookmarkUrl && it.bookId == libkiwixBookmarkItem.zimId }
+
+  private fun flowableBookmarkList(
+    backpressureStrategy: BackpressureStrategy = LATEST
+  ): Flowable<List<Bookmark>> {
+    return Flowable.create({ emitter ->
+      val disposable = bookmarkListBehaviour?.subscribe(
+        { list ->
+          if (!emitter.isCancelled) {
+            emitter.onNext(list.toList())
+          }
+        },
+        emitter::onError,
+        emitter::onComplete
+      )
+
+      emitter.setDisposable(disposable)
+    }, backpressureStrategy)
+  }
+
+  private fun updateFlowableBookmarkList() {
+    bookmarkListBehaviour?.onNext(getBookmarksList())
+  }
 }
