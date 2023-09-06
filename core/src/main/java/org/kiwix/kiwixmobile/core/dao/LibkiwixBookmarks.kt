@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.dao
 
+import android.os.Build
 import io.reactivex.BackpressureStrategy
 import io.reactivex.BackpressureStrategy.LATEST
 import io.reactivex.Flowable
@@ -46,9 +47,16 @@ class LibkiwixBookmarks @Inject constructor(
   }
 
   private val bookmarksFolderPath: String by lazy {
-    sharedPreferenceUtil.getPublicDirectoryPath(
-      sharedPreferenceUtil.defaultStorage()
-    ) + "/kiwix/Bookmarks/"
+    if (Build.DEVICE.contains("generic")) {
+      // Workaround for emulators: Emulators have limited memory and
+      // restrictions on creating folders, so we will use the default
+      // path for saving the bookmark file.
+      sharedPreferenceUtil.context.filesDir.path
+    } else {
+      sharedPreferenceUtil.getPublicDirectoryPath(
+        sharedPreferenceUtil.defaultStorage()
+      ) + "/kiwix/Bookmarks/"
+    }
   }
 
   private val bookmarkFile: File by lazy {
