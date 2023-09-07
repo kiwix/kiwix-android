@@ -16,26 +16,27 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.dao
+package org.kiwix.kiwixmobile.page.bookmarks
 
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.libkiwix_wrapper.BookmarkWrapper
-import org.kiwix.kiwixmobile.core.libkiwix_wrapper.LibraryWrapper
-import org.kiwix.kiwixmobile.core.libkiwix_wrapper.ManagerWrapper
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.libkiwix.Bookmark
+import org.kiwix.libkiwix.Library
+import org.kiwix.libkiwix.Manager
 
 internal class LibkiwixBookmarkTest {
-  private val library: LibraryWrapper = mockk(relaxed = true)
-  private val manager = ManagerWrapper(library)
+  private val library: Library = mockk(relaxed = true)
+  private val manager = Manager(library)
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk(relaxed = true)
   private val libkiwixBookmarks = LibkiwixBookmarks(library, manager, sharedPreferenceUtil)
 
   @Test
-  fun saveBookmark() {
-    val bookmark: BookmarkWrapper = mockk(relaxed = true)
+  internal fun saveBookmark() {
+    val bookmark: Bookmark = mockk(relaxed = true)
     libkiwixBookmarks.saveBookmark(LibkiwixBookmarkItem(bookmark))
     verify { library.addBookmark(bookmark) }
   }
