@@ -87,12 +87,21 @@ class MimeTypeTest : BaseActivityTest() {
             " $zimFile and url of article = $it"
         )
       }
-    }.also {
-      zimFileReader.dispose()
     } ?: kotlin.run {
       Assert.fail("Unable to get article from zim file $zimFile")
-    }.also {
-      zimFileReader.dispose()
     }
+    // test mimetypes for some actual url
+    Assert.assertEquals(
+      "text/html",
+      zimFileReader.getMimeTypeFromUrl("https://kiwix.app/A/index.html")
+    )
+    Assert.assertEquals(
+      "text/css",
+      zimFileReader.getMimeTypeFromUrl("https://kiwix.app/-/assets/style1.css")
+    )
+    // test mimetype for invalid url
+    Assert.assertEquals(null, zimFileReader.getMimeTypeFromUrl("https://kiwix.app/A/test.html"))
+    // dispose the ZimFileReader
+    zimFileReader.dispose()
   }
 }

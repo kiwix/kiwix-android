@@ -64,6 +64,7 @@
     <ID>TooGenericExceptionCaught:CompatFindActionModeCallback.kt$CompatFindActionModeCallback$exception: Exception</ID>
     <ID>TooGenericExceptionCaught:JNIInitialiser.kt$JNIInitialiser$e: Exception</ID>
     <ID>TooGenericExceptionCaught:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$exception: Exception</ID>
+    <ID>TooGenericExceptionCaught:ZimFileReader.kt$ZimFileReader$exception: Exception</ID>
     <ID>TooGenericExceptionThrown:AdapterDelegateManager.kt$AdapterDelegateManager$throw RuntimeException("No delegate registered for $item")</ID>
     <ID>TooGenericExceptionThrown:Bytes.kt$Bytes$throw RuntimeException("impossible value $size")</ID>
     <ID>TooGenericExceptionThrown:ContextExtensions.kt$throw RuntimeException("invalid attribute $attributeRes")</ID>

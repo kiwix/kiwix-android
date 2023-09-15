@@ -30,7 +30,7 @@ private const val TAG = "KiwixServer"
 
 // jniKiwixServer is a server running on a existing library.
 // We must keep the library alive (keep a reference to it) to not delete the library the server
-// is working on.
+// is working on. See https://github.com/kiwix/java-libkiwix/issues/51
 class KiwixServer @Inject constructor(
   private val library: Library,
   private val jniKiwixServer: Server

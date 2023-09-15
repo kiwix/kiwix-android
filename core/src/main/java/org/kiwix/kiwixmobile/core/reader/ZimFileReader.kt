@@ -89,7 +89,8 @@ class ZimFileReader constructor(
     get() =
       try {
         jniKiwixReader.mainEntry.getItem(true).path
-      } catch (ignore: Exception) {
+      } catch (exception: Exception) {
+        Log.e(TAG, "Unable to find the main page, original exception $exception")
         null
       }
   val id: String get() = jniKiwixReader.uuid
@@ -119,28 +120,32 @@ class ZimFileReader constructor(
   private val mediaCount: Int?
     get() = try {
       jniKiwixReader.mediaCount
-    } catch (ignore: UnsatisfiedLinkError) {
+    } catch (unsatisfiedLinkError: UnsatisfiedLinkError) {
+      Log.e(TAG, "Unable to find the media count $unsatisfiedLinkError")
       null
     }
   private val articleCount: Int?
     get() = try {
       jniKiwixReader.articleCount
-    } catch (ignore: UnsatisfiedLinkError) {
+    } catch (unsatisfiedLinkError: UnsatisfiedLinkError) {
+      Log.e(TAG, "Unable to find the article count $unsatisfiedLinkError")
       null
     }
 
   fun searchSuggestions(prefix: String): SuggestionSearch? =
     try {
       searcher.suggest(prefix)
-    } catch (ignore: Exception) {
+    } catch (exception: Exception) {
       // to handled the exception if there is no FT Xapian index found in the current zim file
+      Log.e(TAG, "Unable to search in this file as it does not have FT Xapian index. $exception")
       null
     }
 
   fun getPageUrlFrom(title: String): String? =
     try {
       jniKiwixReader.getEntryByTitle(title).path
-    } catch (ignore: Exception) {
+    } catch (exception: Exception) {
+      Log.e(TAG, "Could not get path for title = $title \n original exception = $exception")
       null
     }
 
@@ -206,7 +211,8 @@ class ZimFileReader constructor(
   private fun loadAsset(uri: String): InputStream? {
     val article = try {
       jniKiwixReader.getEntryByPath(uri.filePath).getItem(true)
-    } catch (ignore: Exception) {
+    } catch (exception: Exception) {
+      Log.e(TAG, "Could not get Item for uri = $uri \n original exception = $exception")
       null
     }
     val infoPair = article?.directAccessInformation
@@ -258,7 +264,8 @@ class ZimFileReader constructor(
   private fun getItem(url: String): Item? =
     try {
       jniKiwixReader.getEntryByPath(getActualUrl(url)).getItem(true)
-    } catch (ignore: Exception) {
+    } catch (exception: Exception) {
+      Log.e(TAG, "Could not get Item for url = $url \n original exception = $exception")
       null
     }
 

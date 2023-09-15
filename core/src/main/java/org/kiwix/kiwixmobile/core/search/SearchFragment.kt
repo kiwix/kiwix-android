@@ -35,10 +35,10 @@ import androidx.core.widget.ContentLoadingProgressBar
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -71,6 +71,7 @@ import javax.inject.Inject
 
 const val NAV_ARG_SEARCH_STRING = "searchString"
 const val VISIBLE_ITEMS_THRESHOLD = 5
+const val LOADING_ITEMS_BEFORE = 3
 
 class SearchFragment : BaseFragment() {
 
@@ -122,7 +123,9 @@ class SearchFragment : BaseFragment() {
           val totalItemCount = layoutManager.itemCount
           val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
           // Check if the user is about to reach the last item
-          if (!isDataLoading && totalItemCount <= lastVisibleItem + VISIBLE_ITEMS_THRESHOLD) {
+          if (!isDataLoading &&
+            totalItemCount <= lastVisibleItem + VISIBLE_ITEMS_THRESHOLD - LOADING_ITEMS_BEFORE
+          ) {
             // Load more data when the last item is almost visible
             loadMoreSearchResult()
           }
@@ -153,10 +156,9 @@ class SearchFragment : BaseFragment() {
     val safeStartIndex = searchAdapter?.itemCount ?: 0
     isDataLoading = true
     fragmentSearchBinding?.loadingMoreDataIndicator?.isShowing(true)
-
-    CoroutineScope(Dispatchers.IO).launch {
+    searchViewModel.viewModelScope.launch(Dispatchers.IO) {
       val fetchMoreSearchResults = searchState?.getVisibleResults(safeStartIndex)
-      CoroutineScope(Dispatchers.Main).launch {
+      withContext(Dispatchers.Main) {
         fragmentSearchBinding?.loadingMoreDataIndicator?.isShowing(false)
         isDataLoading = when {
           fetchMoreSearchResults == null -> true
@@ -270,7 +272,7 @@ class SearchFragment : BaseFragment() {
     searchInTextMenuItem?.isVisible = state.searchOrigin == FromWebView
     searchInTextMenuItem?.isEnabled = state.searchTerm.isNotBlank()
     fragmentSearchBinding?.searchLoadingIndicator?.isShowing(true)
-    renderingJob = CoroutineScope(Dispatchers.Main).launch {
+    renderingJob = searchViewModel.viewModelScope.launch(Dispatchers.Main) {
       val searchResult = withContext(Dispatchers.IO) {
         state.getVisibleResults(0)
       }
