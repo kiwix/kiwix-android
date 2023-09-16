@@ -19,20 +19,26 @@
 package org.kiwix.kiwixmobile.core.dao
 
 import android.os.Build
+import android.util.Base64
 import io.reactivex.BackpressureStrategy
 import io.reactivex.BackpressureStrategy.LATEST
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
+import org.kiwix.kiwixmobile.core.reader.ILLUSTRATION_SIZE
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Bookmark
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
+import org.kiwix.libzim.Archive
 import java.io.File
 import javax.inject.Inject
 
@@ -42,7 +48,7 @@ class LibkiwixBookmarks @Inject constructor(
   val sharedPreferenceUtil: SharedPreferenceUtil
 ) : PageDao {
 
-  private val bookmarkListBehaviour: BehaviorSubject<List<Bookmark>>? by lazy {
+  private val bookmarkListBehaviour: BehaviorSubject<List<LibkiwixBookmarkItem>>? by lazy {
     BehaviorSubject.createDefault(getBookmarksList())
   }
 
@@ -63,9 +69,17 @@ class LibkiwixBookmarks @Inject constructor(
     File("$bookmarksFolderPath/bookmark.txt")
   }
 
+  private val libraryFile: File by lazy {
+    File("$bookmarksFolderPath/library.txt")
+  }
+
   init {
     // Check if bookmark folder exist if not then create the folder first.
     if (!File(bookmarksFolderPath).isFileExist()) File(bookmarksFolderPath).mkdir()
+    // Check if library file exist if not then create the file to save the library with book information.
+    if (!libraryFile.isFileExist()) libraryFile.createNewFile()
+    // set up manager to read the library from this file
+    manager.readFile(libraryFile.canonicalPath)
     // Check if bookmark file exist if not then create the file to save the bookmarks.
     if (!bookmarkFile.isFileExist()) bookmarkFile.createNewFile()
     // set up manager to read the bookmarks from this file
@@ -74,7 +88,7 @@ class LibkiwixBookmarks @Inject constructor(
 
   fun bookmarks(): Flowable<List<Page>> =
     flowableBookmarkList()
-      .map { it.map(::LibkiwixBookmarkItem) }
+      .map { it }
 
   override fun pages(): Flowable<List<Page>> = bookmarks()
 
@@ -84,16 +98,16 @@ class LibkiwixBookmarks @Inject constructor(
   fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?): List<String> {
     return zimFileReader?.let { reader ->
       getBookmarksList()
-        .filter { it.bookId == reader.id }
-        .map { it.url }
+        .filter { it.zimId == reader.id }
+        .map(LibkiwixBookmarkItem::bookmarkUrl)
     } ?: emptyList()
   }
 
   fun bookmarkUrlsForCurrentBook(zimFileReader: ZimFileReader): Flowable<List<String>> =
     flowableBookmarkList()
       .map { bookmarksList ->
-        bookmarksList.filter { it.bookId == zimFileReader.id }
-          .map(Bookmark::getUrl)
+        bookmarksList.filter { it.zimId == zimFileReader.id }
+          .map(LibkiwixBookmarkItem::bookmarkUrl)
       }
       .subscribeOn(Schedulers.io()).also {
         val book = Book().apply {
@@ -112,7 +126,7 @@ class LibkiwixBookmarks @Inject constructor(
         bookTitle = libkiwixBookmarkItem.libKiwixBook?.title ?: libkiwixBookmarkItem.zimId
       }
       library.addBookmark(bookmark).also {
-        writeBookMarksToFile()
+        writeBookMarksAndSaveLibraryToFile()
         updateFlowableBookmarkList()
       }
     }
@@ -132,25 +146,68 @@ class LibkiwixBookmarks @Inject constructor(
 
   fun deleteBookmark(bookId: String, bookmarkUrl: String) {
     library.removeBookmark(bookId, bookmarkUrl).also {
-      writeBookMarksToFile()
+      writeBookMarksAndSaveLibraryToFile()
       updateFlowableBookmarkList()
     }
   }
 
-  private fun writeBookMarksToFile() {
-    library.writeBookmarksToFile(bookmarkFile.canonicalPath)
+  /**
+   * Asynchronously writes the library and bookmarks data to their respective files in a background thread
+   * to prevent potential data loss and ensures that the library holds the updated ZIM file paths and favicons.
+   */
+  private fun writeBookMarksAndSaveLibraryToFile() {
+    CoroutineScope(Dispatchers.IO).launch {
+      // Save the library, which contains ZIM file paths and favicons, to a file.
+      library.writeToFile(libraryFile.canonicalPath)
+
+      // Save the bookmarks data to a separate file.
+      library.writeBookmarksToFile(bookmarkFile.canonicalPath)
+    }
   }
 
-  private fun getBookmarksList() =
-    library.getBookmarks(false)?.toList() ?: emptyList()
+  private fun getBookmarksList(): List<LibkiwixBookmarkItem> {
+    // Retrieve the list of bookmarks from the library, or return an empty list if it's null.
+    val bookmarkList = library.getBookmarks(false)?.toList() ?: return emptyList()
+
+    // Create a list to store LibkiwixBookmarkItem objects.
+    return bookmarkList.mapNotNull { bookmark ->
+      // Check if the library contains the book associated with the bookmark.
+      val book = if (library.booksIds.contains(bookmark.bookId)) {
+        library.getBookById(bookmark.bookId)
+      } else {
+        null
+      }
+
+      // Create an Archive object for the book's path, if it exists.
+      val archive: Archive? = book?.let { Archive(it.path) }
+
+      // Check if the Archive has an illustration of the specified size and encode it to Base64.
+      val favicon = archive?.takeIf { it.hasIllustration(ILLUSTRATION_SIZE) }?.let {
+        Base64.encodeToString(it.getIllustrationItem(ILLUSTRATION_SIZE).data.data, Base64.DEFAULT)
+      }
+
+      // Create a LibkiwixBookmarkItem object with bookmark, favicon, and book path.
+      val libkiwixBookmarkItem = LibkiwixBookmarkItem(
+        bookmark,
+        favicon,
+        book?.path
+      )
+
+      // Dispose of the Archive object to release resources.
+      archive?.dispose()
+
+      // Return the LibkiwixBookmarkItem, filtering out null results.
+      return@mapNotNull libkiwixBookmarkItem
+    }
+  }
 
   private fun isBookMarkExist(libkiwixBookmarkItem: LibkiwixBookmarkItem): Boolean =
     getBookmarksList()
-      .any { it.url == libkiwixBookmarkItem.bookmarkUrl && it.bookId == libkiwixBookmarkItem.zimId }
+      .any { it.url == libkiwixBookmarkItem.bookmarkUrl && it.zimId == libkiwixBookmarkItem.zimId }
 
   private fun flowableBookmarkList(
     backpressureStrategy: BackpressureStrategy = LATEST
-  ): Flowable<List<Bookmark>> {
+  ): Flowable<List<LibkiwixBookmarkItem>> {
     return Flowable.create({ emitter ->
       val disposable = bookmarkListBehaviour?.subscribe(
         { list ->

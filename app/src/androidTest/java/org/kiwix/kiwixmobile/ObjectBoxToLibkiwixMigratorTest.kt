@@ -33,6 +33,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.libkiwix.Book
 
 @RunWith(AndroidJUnit4::class)
 class ObjectBoxToLibkiwixMigratorTest {
@@ -94,7 +95,8 @@ class ObjectBoxToLibkiwixMigratorTest {
       existingTitle,
       expectedFavicon
     )
-    libkiwixBookmarks.saveBookmark(LibkiwixBookmarkItem(secondBookmarkEntity))
+    val libkiwixBook: Book = mockk(relaxed = true)
+    libkiwixBookmarks.saveBookmark(LibkiwixBookmarkItem(secondBookmarkEntity, libkiwixBook))
     box.put(bookmarkEntity)
     // Migrate data into Room database
     objectBoxToLibkiwixMigrator.migrateBookMarks(box)
