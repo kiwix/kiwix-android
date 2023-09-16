@@ -32,6 +32,8 @@ import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity_
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.libkiwix.Book
+import org.kiwix.libzim.Archive
 import javax.inject.Inject
 
 class ObjectBoxToLibkiwixMigrator {
@@ -49,7 +51,11 @@ class ObjectBoxToLibkiwixMigrator {
     val bookMarksList = box.all
     bookMarksList.forEachIndexed { _, bookmarkEntity ->
       CoroutineScope(Dispatchers.IO).launch {
-        libkiwixBookmarks.saveBookmark(LibkiwixBookmarkItem(bookmarkEntity))
+        // for saving book to library, otherwise it does not save the favicon and zimFilePath in library.
+        val libkiwixBook = Book().apply {
+          update(Archive(bookmarkEntity.zimFilePath))
+        }
+        libkiwixBookmarks.saveBookmark(LibkiwixBookmarkItem(bookmarkEntity, libkiwixBook))
         // removing the single entity from the object box after migration.
         box.query {
           equal(

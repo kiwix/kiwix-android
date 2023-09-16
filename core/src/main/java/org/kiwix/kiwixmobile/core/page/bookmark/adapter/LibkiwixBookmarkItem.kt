@@ -37,13 +37,17 @@ data class LibkiwixBookmarkItem(
   override val id: Long = databaseId,
   val libKiwixBook: Book?,
 ) : Page {
-  constructor(libkiwixBookmark: Bookmark) : this(
+  constructor(
+    libkiwixBookmark: Bookmark,
+    favicon: String?,
+    zimFilePath: String?
+  ) : this(
     zimId = libkiwixBookmark.bookId,
     zimName = libkiwixBookmark.bookTitle,
-    zimFilePath = libkiwixBookmark.url,
+    zimFilePath = zimFilePath,
     bookmarkUrl = libkiwixBookmark.url,
     title = libkiwixBookmark.title,
-    favicon = null,
+    favicon = favicon,
     libKiwixBook = null
   )
 
@@ -63,7 +67,8 @@ data class LibkiwixBookmarkItem(
   )
 
   constructor(
-    bookmarkEntity: BookmarkEntity
+    bookmarkEntity: BookmarkEntity,
+    libkiwixBook: Book
   ) : this(
     zimId = bookmarkEntity.zimId,
     zimFilePath = bookmarkEntity.zimFilePath,
@@ -71,6 +76,6 @@ data class LibkiwixBookmarkItem(
     bookmarkUrl = bookmarkEntity.bookmarkUrl,
     title = bookmarkEntity.bookmarkTitle,
     favicon = bookmarkEntity.favicon,
-    libKiwixBook = null
+    libKiwixBook = libkiwixBook
   )
 }

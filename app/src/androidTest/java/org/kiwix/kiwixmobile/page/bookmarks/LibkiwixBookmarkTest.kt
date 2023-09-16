@@ -37,7 +37,7 @@ internal class LibkiwixBookmarkTest {
   @Test
   internal fun saveBookmark() {
     val bookmark: Bookmark = mockk(relaxed = true)
-    libkiwixBookmarks.saveBookmark(LibkiwixBookmarkItem(bookmark))
+    libkiwixBookmarks.saveBookmark(LibkiwixBookmarkItem(bookmark, null, null))
     verify { library.addBookmark(bookmark) }
   }
 }
