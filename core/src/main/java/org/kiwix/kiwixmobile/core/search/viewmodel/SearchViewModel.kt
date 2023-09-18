@@ -20,6 +20,9 @@ package org.kiwix.kiwixmobile.core.search.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.reactivex.BackpressureStrategy.LATEST
+import io.reactivex.Flowable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
@@ -171,6 +174,33 @@ class SearchViewModel @Inject constructor(
       )
     ).isSuccess
     _effects.trySendBlocking(OpenSearchItem(searchListItem, openInNewTab))
+  }
+
+  /**
+   * Loads more search results starting from a specified index.
+   *
+   * @param startIndex The index from which to start loading more results.
+   * @param searchState The current search state containing search term and results.
+   * @param existingSearchList The existing list of search results, if any, to check for duplicates.
+   *
+   * @return A Flowable emitting a list of non-duplicate search results or null if there are no more results.
+   */
+  fun loadMoreSearchResults(
+    startIndex: Int,
+    searchState: SearchState,
+    existingSearchList: List<SearchListItem>?
+  ): Flowable<List<SearchListItem.RecentSearchListItem>?> {
+    return Flowable.create({ emitter ->
+      val searchResults = searchState.getVisibleResults(startIndex)
+
+      val nonDuplicateResults = searchResults?.filter { newItem ->
+        existingSearchList?.none { it == newItem } ?: true
+      }
+      // Emit the non duplicate data to the Flowable's subscribers
+      emitter.onNext(nonDuplicateResults)
+      emitter.onComplete()
+    }, LATEST)
+      .subscribeOn(Schedulers.io())
   }
 }
 

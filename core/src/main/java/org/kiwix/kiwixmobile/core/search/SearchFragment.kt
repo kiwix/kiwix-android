@@ -39,6 +39,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -139,44 +140,33 @@ class SearchFragment : BaseFragment() {
   }
 
   /**
-   * Loads more search results if available.
-   * If data is currently being loaded, the method returns early and does not initiate another load request.
-   * The loading process sets the `isDataLoading` flag to true to prevent multiple load requests at once.
-   * The method fetches more search results based on the current `searchState` and the `safeStartIndex`,
-   * which represents the current item count in the `searchAdapter`.
-   * If there are no more results to fetch, the method sets `isDataLoading` to true to avoid unnecessary data loading.
-   * If there are new results available, it checks for duplicate entries, especially for search history items.
-   * Non-duplicate results are appended to the existing dataset in the `searchAdapter`.
-   * If new data (non-duplicate items) is loaded successfully, the method sets `isDataLoading` to false.
-   * If there are no new non-duplicate results, the method sets `isDataLoading` to true
-   * to avoid unnecessary data loading, as there are no more items available.
+   * Loads more search results and appends them to the existing search results list in the RecyclerView.
+   * This function is typically triggered when the RecyclerView is near about its last item.
    */
   private fun loadMoreSearchResult() {
     if (isDataLoading) return
     val safeStartIndex = searchAdapter?.itemCount ?: 0
     isDataLoading = true
+    // Show a loading indicator while data is being loaded
     fragmentSearchBinding?.loadingMoreDataIndicator?.isShowing(true)
-    searchViewModel.viewModelScope.launch(Dispatchers.IO) {
-      val fetchMoreSearchResults = searchState?.getVisibleResults(safeStartIndex)
-      withContext(Dispatchers.Main) {
-        fragmentSearchBinding?.loadingMoreDataIndicator?.isShowing(false)
-        isDataLoading = when {
-          fetchMoreSearchResults == null -> true
-          fetchMoreSearchResults.isEmpty() -> false
-          else -> {
-            val nonDuplicateResults = fetchMoreSearchResults.filter { newItem ->
-              searchAdapter?.items?.none { it == newItem } ?: true
-            }
-
-            if (nonDuplicateResults.isNotEmpty()) {
-              searchAdapter?.addData(nonDuplicateResults)
+    searchState?.let {
+      // Request more search results from the ViewModel, providing the start index and existing results
+      searchViewModel.loadMoreSearchResults(safeStartIndex, it, searchAdapter?.items)
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe { searchResults ->
+          // Hide the loading indicator when data loading is complete
+          fragmentSearchBinding?.loadingMoreDataIndicator?.isShowing(false)
+          // Update data loading status based on the received search results
+          isDataLoading = when {
+            searchResults == null -> true
+            searchResults.isEmpty() -> false
+            else -> {
+              // Append the new search results to the existing list
+              searchAdapter?.addData(searchResults)
               false
-            } else {
-              true
             }
           }
         }
-      }
     }
   }
 
