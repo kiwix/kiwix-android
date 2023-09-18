@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.search
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -35,9 +36,15 @@ import androidx.core.widget.ContentLoadingProgressBar
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
@@ -65,6 +72,8 @@ import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
 
 const val NAV_ARG_SEARCH_STRING = "searchString"
+const val VISIBLE_ITEMS_THRESHOLD = 5
+const val LOADING_ITEMS_BEFORE = 3
 
 class SearchFragment : BaseFragment() {
 
@@ -76,6 +85,8 @@ class SearchFragment : BaseFragment() {
 
   private val searchViewModel by lazy { viewModel<SearchViewModel>(viewModelFactory) }
   private var searchAdapter: SearchAdapter? = null
+  private var isDataLoading = false
+  private var renderingJob: Job? = null
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
@@ -104,11 +115,58 @@ class SearchFragment : BaseFragment() {
       adapter = searchAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
+      // Add scroll listener to detect when the last item is reached
+      addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+          super.onScrolled(recyclerView, dx, dy)
+
+          val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+          val totalItemCount = layoutManager.itemCount
+          val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+          // Check if the user is about to reach the last item
+          if (!isDataLoading &&
+            totalItemCount <= lastVisibleItem + VISIBLE_ITEMS_THRESHOLD - LOADING_ITEMS_BEFORE
+          ) {
+            // Load more data when the last item is almost visible
+            loadMoreSearchResult()
+          }
+        }
+      })
     }
     lifecycleScope.launchWhenCreated {
       searchViewModel.effects.collect { it.invokeWith(this@SearchFragment.coreMainActivity) }
     }
     handleBackPress()
+  }
+
+  /**
+   * Loads more search results and appends them to the existing search results list in the RecyclerView.
+   * This function is typically triggered when the RecyclerView is near about its last item.
+   */
+  @SuppressLint("CheckResult")
+  private fun loadMoreSearchResult() {
+    if (isDataLoading) return
+    val safeStartIndex = searchAdapter?.itemCount ?: 0
+    isDataLoading = true
+    // Show a loading indicator while data is being loaded
+    fragmentSearchBinding?.loadingMoreDataIndicator?.isShowing(true)
+    // Request more search results from the ViewModel, providing the start index and existing results
+    searchViewModel.loadMoreSearchResults(safeStartIndex, searchAdapter?.items)
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe { searchResults ->
+        // Hide the loading indicator when data loading is complete
+        fragmentSearchBinding?.loadingMoreDataIndicator?.isShowing(false)
+        // Update data loading status based on the received search results
+        isDataLoading = when {
+          searchResults == null -> true
+          searchResults.isEmpty() -> false
+          else -> {
+            // Append the new search results to the existing list
+            searchAdapter?.addData(searchResults)
+            false
+          }
+        }
+      }
   }
 
   private fun handleBackPress() {
@@ -136,6 +194,8 @@ class SearchFragment : BaseFragment() {
 
   override fun onDestroyView() {
     super.onDestroyView()
+    renderingJob?.cancel()
+    renderingJob = null
     activity?.intent?.action = null
     searchView = null
     searchInTextMenuItem = null
@@ -194,11 +254,23 @@ class SearchFragment : BaseFragment() {
   }
 
   private fun render(state: SearchState) {
+    renderingJob?.cancel()
+    isDataLoading = false
     searchInTextMenuItem?.isVisible = state.searchOrigin == FromWebView
     searchInTextMenuItem?.isEnabled = state.searchTerm.isNotBlank()
-    fragmentSearchBinding?.searchLoadingIndicator?.isShowing(state.isLoading)
-    fragmentSearchBinding?.searchNoResults?.isVisible = state.visibleResults.isEmpty()
-    searchAdapter?.items = state.visibleResults
+    fragmentSearchBinding?.searchLoadingIndicator?.isShowing(true)
+    renderingJob = searchViewModel.viewModelScope.launch(Dispatchers.Main) {
+      val searchResult = withContext(Dispatchers.IO) {
+        state.getVisibleResults(0)
+      }
+
+      fragmentSearchBinding?.searchLoadingIndicator?.isShowing(false)
+
+      searchResult?.let {
+        fragmentSearchBinding?.searchNoResults?.isVisible = it.isEmpty()
+        searchAdapter?.items = it
+      }
+    }
   }
 
   private fun onItemClick(it: SearchListItem) {

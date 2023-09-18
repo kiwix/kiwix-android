@@ -315,9 +315,9 @@ object Libs {
   const val core_ktx: String = "androidx.core:core-ktx:" + Versions.core_ktx
 
   /**
-   * https://github.com/kiwix/kiwix-lib
+   * https://github.com/kiwix/java-libkiwix
    */
-  const val kiwixlib: String = "org.kiwix.kiwixlib:kiwixlib:" + Versions.kiwixlib
+  const val libkiwix: String = "org.kiwix:libkiwix:" + Versions.libkiwix
 
   /**
    * https://github.com/material-components/material-components-android

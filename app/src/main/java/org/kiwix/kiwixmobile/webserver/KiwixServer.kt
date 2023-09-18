@@ -19,26 +19,37 @@
 package org.kiwix.kiwixmobile.webserver
 
 import android.util.Log
-import org.kiwix.kiwixlib.JNIKiwixException
-import org.kiwix.kiwixlib.JNIKiwixServer
-import org.kiwix.kiwixlib.Library
+import org.kiwix.libkiwix.Book
+import org.kiwix.libkiwix.JNIKiwixException
+import org.kiwix.libkiwix.Library
+import org.kiwix.libkiwix.Server
+import org.kiwix.libzim.Archive
 import javax.inject.Inject
 
 private const val TAG = "KiwixServer"
 
-class KiwixServer @Inject constructor(private val jniKiwixServer: JNIKiwixServer) {
+// jniKiwixServer is a server running on a existing library.
+// We must keep the library alive (keep a reference to it) to not delete the library the server
+// is working on. See https://github.com/kiwix/java-libkiwix/issues/51
+class KiwixServer @Inject constructor(
+  private val library: Library,
+  private val jniKiwixServer: Server
+) {
 
   class Factory @Inject constructor() {
     fun createKiwixServer(selectedBooksPath: ArrayList<String>): KiwixServer {
       val kiwixLibrary = Library()
       selectedBooksPath.forEach { path ->
         try {
-          kiwixLibrary.addBook(path)
+          val book = Book().apply {
+            update(Archive(path))
+          }
+          kiwixLibrary.addBook(book)
         } catch (e: JNIKiwixException) {
           Log.v(TAG, "Couldn't add book with path:{ $path }")
         }
       }
-      return KiwixServer(JNIKiwixServer(kiwixLibrary))
+      return KiwixServer(kiwixLibrary, Server(kiwixLibrary))
     }
   }
 

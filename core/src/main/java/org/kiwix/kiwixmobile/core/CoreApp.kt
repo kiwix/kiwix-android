@@ -90,9 +90,7 @@ abstract class CoreApp : Application() {
     if (BuildConfig.DEBUG) {
       StrictMode.setThreadPolicy(
         StrictMode.ThreadPolicy.Builder().apply {
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            detectResourceMismatches()
-          }
+          detectResourceMismatches()
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             detectUnbufferedIo()
           }
@@ -106,9 +104,7 @@ abstract class CoreApp : Application() {
       )
       StrictMode.setVmPolicy(
         VmPolicy.Builder().apply {
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            detectCleartextNetwork()
-          }
+          detectCleartextNetwork()
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             detectContentUriWithoutPermission()
           }

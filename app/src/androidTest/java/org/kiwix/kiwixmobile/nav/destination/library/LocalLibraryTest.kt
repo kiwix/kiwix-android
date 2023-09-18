@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.nav.destination.library
 
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
+import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
@@ -65,11 +66,14 @@ class LocalLibraryTest : BaseActivityTest() {
       // manage external storage permission dialog on android 11 and above
       putBoolean(SharedPreferenceUtil.PREF_MANAGE_EXTERNAL_FILES, false)
     }
+    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+      moveToState(Lifecycle.State.RESUMED)
+    }
   }
 
   @Test
   fun testLocalLibrary() {
-    ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
+    activityScenario.onActivity {
       it.navigate(R.id.libraryFragment)
     }
     library {

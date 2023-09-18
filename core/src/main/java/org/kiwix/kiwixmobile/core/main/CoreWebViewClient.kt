@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.main
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.util.Log
 import android.webkit.MimeTypeMap
 import android.webkit.WebResourceError
@@ -94,17 +93,14 @@ open class CoreWebViewClient(
       )?.let {
         if (it.exists()) {
           val context: Context = instance
-          val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            FileProvider.getUriForFile(
-              context,
-              context.packageName + ".fileprovider", it
-            ) else Uri.fromFile(it)
+          val uri = FileProvider.getUriForFile(
+            context,
+            context.packageName + ".fileprovider", it
+          )
           val intent = Intent(Intent.ACTION_VIEW).apply {
             setDataAndType(uri, DOCUMENT_TYPES[extension])
             flags = Intent.FLAG_ACTIVITY_NO_HISTORY
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-              addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            }
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
           }
           callback.openExternalUrl(intent)
         }

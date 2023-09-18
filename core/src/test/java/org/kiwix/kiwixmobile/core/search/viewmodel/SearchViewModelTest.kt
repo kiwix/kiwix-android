@@ -74,6 +74,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScree
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
+import org.kiwix.libzim.SuggestionSearch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class SearchViewModelTest {
@@ -101,7 +102,7 @@ internal class SearchViewModelTest {
     every { zimReaderContainer.copyReader() } returns zimFileReader
     coEvery {
       searchResultGenerator.generateSearchResults("", zimFileReader)
-    } returns emptyList()
+    } returns null
     every { zimReaderContainer.id } returns "id"
     every { recentSearchDao.recentSearches("id") } returns recentsFromDb.consumeAsFlow()
     viewModel = SearchViewModel(recentSearchDao, zimReaderContainer, searchResultGenerator)
@@ -112,7 +113,7 @@ internal class SearchViewModelTest {
     @Test
     fun `initial state is Initialising`() = runBlockingTest {
       viewModel.state.test(this).assertValue(
-        SearchState("", SearchResultsWithTerm("", emptyList()), emptyList(), FromWebView)
+        SearchState("", SearchResultsWithTerm("", null), emptyList(), FromWebView)
       ).finish()
     }
 
@@ -121,11 +122,12 @@ internal class SearchViewModelTest {
       val item = ZimSearchResultListItem("")
       val searchTerm = "searchTerm"
       val searchOrigin = FromWebView
+      val suggestionSearch: SuggestionSearch = mockk()
       viewModel.state.test(this)
         .also {
           emissionOf(
             searchTerm = searchTerm,
-            searchResults = listOf(item),
+            suggestionSearch = suggestionSearch,
             databaseResults = listOf(RecentSearchListItem("")),
             searchOrigin = searchOrigin
           )
@@ -133,7 +135,7 @@ internal class SearchViewModelTest {
         .assertValue(
           SearchState(
             searchTerm,
-            SearchResultsWithTerm(searchTerm, listOf(item)),
+            SearchResultsWithTerm(searchTerm, suggestionSearch),
             listOf(RecentSearchListItem("")),
             searchOrigin
           )
@@ -241,14 +243,14 @@ internal class SearchViewModelTest {
 
   private fun TestScope.emissionOf(
     searchTerm: String,
-    searchResults: List<ZimSearchResultListItem>,
+    suggestionSearch: SuggestionSearch,
     databaseResults: List<RecentSearchListItem>,
     searchOrigin: SearchOrigin
   ) {
 
     coEvery {
       searchResultGenerator.generateSearchResults(searchTerm, zimFileReader)
-    } returns searchResults
+    } returns suggestionSearch
     viewModel.actions.trySend(Filter(searchTerm)).isSuccess
     recentsFromDb.trySend(databaseResults).isSuccess
     viewModel.actions.trySend(ScreenWasStartedFrom(searchOrigin)).isSuccess

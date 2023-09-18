@@ -61,7 +61,7 @@ dependencies {
 
   // Get kiwixlib online if it is not populated locally
   if (!shouldUseLocalVersion()) {
-    api(Libs.kiwixlib)
+    api(Libs.libkiwix)
   } else {
     implementation("com.getkeepsafe.relinker:relinker:1.4.5")
     api(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))
