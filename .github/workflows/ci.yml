@@ -13,7 +13,7 @@ jobs:
     name: Automated tests
     strategy:
       matrix:
-        api-level: [ 24, 30, 33 ]
+        api-level: [ 24, 30, 33 , 34]
       fail-fast: false
     runs-on: macos-11
     steps:

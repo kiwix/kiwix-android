@@ -51,6 +51,9 @@ open class OnSwipeTouchListener constructor(context: Context) : OnTouchListener 
       return super.onSingleTapUp(event)
     }
 
+    // See:- https://stackoverflow.com/questions/73463685/gesturedetector-ongesturelistener-overridden-methods-are-not-working-in-android
+    @Suppress("NOTHING_TO_OVERRIDE", "ACCIDENTAL_OVERRIDE")
+    @SuppressLint("NestedBlockDepth, ReturnCount")
     override fun onFling(
       e1: MotionEvent,
       e2: MotionEvent,
