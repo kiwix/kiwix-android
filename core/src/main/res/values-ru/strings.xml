@@ -21,6 +21,7 @@
 * Razno0
 * Rivka Silinsky
 * Smavrina
+* Stjn
 * Teretalexev
 * UniCollab
 * Артём 13327
@@ -114,7 +115,7 @@
   <string name="tabs_closed">Вкладки закрыты</string>
   <string name="bookmark_added">Закладка добавлена</string>
   <string name="rate_dialog_title">Пожалуйста, оцените нас</string>
-  <string name="rate_dialog_msg">Если вам нравится использовать %s , пожалуйста, найдите минутку, чтобы оценить его. Спасибо за поддержку!</string>
+  <string name="rate_dialog_msg">Если вам нравится использовать %s, пожалуйста, найдите минутку, чтобы оценить его. Спасибо за поддержку!</string>
   <string name="rate_dialog_positive">Оценить!</string>
   <string name="no_thanks">Нет, спасибо</string>
   <string name="rate_dialog_neutral">Позже</string>
@@ -217,7 +218,7 @@
   <string name="expand">Развернуть</string>
   <string name="history">История</string>
   <string name="history_from_current_book">Посмотреть историю из всех книг</string>
-  <string name="search_history">Поиск в истории</string>
+  <string name="search_history">Искать в истории</string>
   <string name="selected_items">%1$d выбрано</string>
   <string name="bookmarks_from_current_book">Показать Закладки Во Всех Книгах</string>
   <string name="search_bookmarks">Искать в закладках</string>
@@ -326,11 +327,12 @@
   <string name="choose_your_action">Выберите действие</string>
   <string name="open_note">Открыть заметку</string>
   <string name="open_article">Открыть статью</string>
-  <string name="delete_note_dialog_message">Примечание: Заметки не удаляются из вашего хранилища</string>
+  <string name="delete_note_dialog_message">Примечание: Заметки не удалятся из вашего хранилища</string>
   <string name="delete_selected_notes">Удалить выбранные заметки?</string>
   <string name="download_tts_language_title">Загрузите этот язык для функции чтения вслух</string>
   <string name="download_tts_language_message">Пожалуйста, нажмите кнопку «Загрузить». Это автоматически загрузит необходимый язык.</string>
   <string name="external_link_copied_message">Внешняя ссылка скопирована в буфер обмена</string>
+  <string name="read_aloud_service_channel_name">Сервисный канал чтения вслух</string>
   <string name="clear_all_navigation_history_message">Очищает всю (назад, вперед) историю навигации</string>
   <string name="navigation_history_cleared">История навигации очищена</string>
   <string name="go_to_settings_label">Перейти в настройки</string>

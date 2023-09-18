@@ -13,6 +13,7 @@
 * Shuiwater
 * SomeyaMako
 * StarrySky
+* Sunai
 * VulpesVulpes825
 * Wzl19371
 * Yfdyh000
@@ -84,6 +85,7 @@
   <string name="pref_credits_title">制作人员</string>
   <string name="tts_lang_not_supported">此页面的语言不被支持。条目可能不能被正确朗读。</string>
   <string name="no_reader_application_installed">找不到用于此种文件类型的已安装应用程序</string>
+  <string name="no_email_application_installed">请安装电子邮件服务提供商，或是在%1s发送电子邮件给我们</string>
   <string name="no_section_info">未找到内容标题</string>
   <string name="request_storage">要访问离线内容，我们需要访问您的存储</string>
   <string name="request_write_storage">要下载 ZIM 文件，我们需要获取写入您的存储空间的权限</string>
@@ -106,6 +108,7 @@
   <string name="did_you_know">您知道吗？</string>
   <string name="undo">撤销</string>
   <string name="tab_closed">标签页已关闭</string>
+  <string name="tabs_closed">标签已关闭</string>
   <string name="bookmark_added">书签已添加</string>
   <string name="rate_dialog_title">请评价我们</string>
   <string name="rate_dialog_msg">如果您喜欢使用%s，请花点时间为它评分，谢谢您的支持！</string>
@@ -211,7 +214,7 @@
   <string name="expand">展开</string>
   <string name="history">历史</string>
   <string name="history_from_current_book">查看所有书籍的历史记录</string>
-  <string name="search_history" fuzzy="true">搜索历史</string>
+  <string name="search_history">搜索历史</string>
   <string name="selected_items">%1$d已选择</string>
   <string name="bookmarks_from_current_book">查看所有书籍中的标签</string>
   <string name="search_bookmarks">搜索书签</string>
@@ -300,6 +303,7 @@
   <string name="no_open_book">没有打开的书</string>
   <string name="open_library">打开图书馆</string>
   <string name="tab_restored">标签已恢复</string>
+  <string name="tabs_restored">标签已恢复</string>
   <string name="open_drawer">打开绘画器</string>
   <string name="close_drawer">关闭绘画器</string>
   <string name="how_to_update_content">如何更新内容？</string>
@@ -312,6 +316,7 @@
   <string name="select_folder">请选择用于外部存储的文件夹。</string>
   <string name="system_unable_to_grant_permission_message">系统无法授予权限！</string>
   <string name="allow">允许</string>
+  <string name="swipe_down_for_library">下滑查看图书馆</string>
   <string name="no_notes">没有注释</string>
   <string name="notes_from_all_books">查看来自所有书籍的注释</string>
   <string name="search_notes">搜索注释</string>
@@ -320,5 +325,13 @@
   <string name="open_article">打开条目</string>
   <string name="delete_note_dialog_message">备注：注释不会从您的存储中删除</string>
   <string name="delete_selected_notes">删除所选注释？</string>
+  <string name="download_tts_language_title">下载此语言以使用朗读功能</string>
+  <string name="download_tts_language_message">请点击下载按钮。这将会自动下载所需要的语言。</string>
+  <string name="external_link_copied_message">外部链接已复制到剪贴板</string>
+  <string name="read_aloud_service_channel_name">朗读服务频道</string>
+  <string name="read_aloud_channel_description">文本转语音控制。</string>
+  <string name="read_aloud_running">正在朗读</string>
+  <string name="navigation_history_cleared">已清楚导航历史记录</string>
   <string name="go_to_settings_label">转到设置</string>
+  <string name="request_notification_permission_message">要执行此操作，请授予通知访问权限</string>
 </resources>
