@@ -18,26 +18,91 @@
 
 package org.kiwix.kiwixmobile.page.bookmarks
 
-import io.mockk.mockk
-import io.mockk.verify
-import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
+import androidx.core.content.edit
+import androidx.core.net.toUri
+import androidx.lifecycle.Lifecycle
+import androidx.preference.PreferenceManager
+import androidx.test.core.app.ActivityScenario
+import androidx.test.internal.runner.junit4.statement.UiThreadStatement
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.libkiwix.Bookmark
-import org.kiwix.libkiwix.Library
-import org.kiwix.libkiwix.Manager
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections
+import org.kiwix.kiwixmobile.search.SearchFragmentTest
+import org.kiwix.kiwixmobile.testutils.RetryRule
+import org.kiwix.kiwixmobile.testutils.TestUtils
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 
-internal class LibkiwixBookmarkTest {
-  private val library: Library = mockk(relaxed = true)
-  private val manager = Manager(library)
-  private val sharedPreferenceUtil: SharedPreferenceUtil = mockk(relaxed = true)
-  private val libkiwixBookmarks = LibkiwixBookmarks(library, manager, sharedPreferenceUtil)
+class LibkiwixBookmarkTest : BaseActivityTest() {
+
+  @Rule
+  @JvmField
+  var retryRule = RetryRule()
+
+  private lateinit var kiwixMainActivity: KiwixMainActivity
+
+  @Before
+  override fun waitForIdle() {
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+      if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
+        TestUtils.closeSystemDialogs(context)
+      }
+      waitForIdle()
+    }
+    PreferenceManager.getDefaultSharedPreferences(context).edit {
+      putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
+      putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
+      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
+    }
+    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+      moveToState(Lifecycle.State.RESUMED)
+    }
+  }
 
   @Test
-  internal fun saveBookmark() {
-    val bookmark: Bookmark = mockk(relaxed = true)
-    libkiwixBookmarks.saveBookmark(LibkiwixBookmarkItem(bookmark, null, null))
-    verify { library.addBookmark(bookmark) }
+  fun testBookmarks() {
+    activityScenario.onActivity {
+      kiwixMainActivity = it
+      kiwixMainActivity.navigate(R.id.libraryFragment)
+    }
+    val loadFileStream =
+      SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
+    val zimFile = File(context.cacheDir, "testzim.zim")
+    if (zimFile.exists()) zimFile.delete()
+    zimFile.createNewFile()
+    loadFileStream.use { inputStream ->
+      val outputStream: OutputStream = FileOutputStream(zimFile)
+      outputStream.use { it ->
+        val buffer = ByteArray(inputStream.available())
+        var length: Int
+        while (inputStream.read(buffer).also { length = it } > 0) {
+          it.write(buffer, 0, length)
+        }
+      }
+    }
+
+    UiThreadStatement.runOnUiThread {
+      kiwixMainActivity.navigate(
+        LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
+          .apply { zimFileUri = zimFile.toUri().toString() }
+      )
+    }
+    bookmarks {
+      clickOnSaveBookmarkImage()
+      clickOnOpenSavedBookmarkButton()
+      assertBookmarkSaved()
+      pressBack()
+      clickOnSaveBookmarkImage()
+      longClickOnSaveBookmarkImage()
+      assertBookmarkRemoved()
+    }
   }
 }
