@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.search
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -85,7 +86,6 @@ class SearchFragment : BaseFragment() {
   private val searchViewModel by lazy { viewModel<SearchViewModel>(viewModelFactory) }
   private var searchAdapter: SearchAdapter? = null
   private var isDataLoading = false
-  private var searchState: SearchState? = null
   private var renderingJob: Job? = null
 
   override fun inject(baseActivity: BaseActivity) {
@@ -143,31 +143,30 @@ class SearchFragment : BaseFragment() {
    * Loads more search results and appends them to the existing search results list in the RecyclerView.
    * This function is typically triggered when the RecyclerView is near about its last item.
    */
+  @SuppressLint("CheckResult")
   private fun loadMoreSearchResult() {
     if (isDataLoading) return
     val safeStartIndex = searchAdapter?.itemCount ?: 0
     isDataLoading = true
     // Show a loading indicator while data is being loaded
     fragmentSearchBinding?.loadingMoreDataIndicator?.isShowing(true)
-    searchState?.let {
-      // Request more search results from the ViewModel, providing the start index and existing results
-      searchViewModel.loadMoreSearchResults(safeStartIndex, it, searchAdapter?.items)
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe { searchResults ->
-          // Hide the loading indicator when data loading is complete
-          fragmentSearchBinding?.loadingMoreDataIndicator?.isShowing(false)
-          // Update data loading status based on the received search results
-          isDataLoading = when {
-            searchResults == null -> true
-            searchResults.isEmpty() -> false
-            else -> {
-              // Append the new search results to the existing list
-              searchAdapter?.addData(searchResults)
-              false
-            }
+    // Request more search results from the ViewModel, providing the start index and existing results
+    searchViewModel.loadMoreSearchResults(safeStartIndex, searchAdapter?.items)
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe { searchResults ->
+        // Hide the loading indicator when data loading is complete
+        fragmentSearchBinding?.loadingMoreDataIndicator?.isShowing(false)
+        // Update data loading status based on the received search results
+        isDataLoading = when {
+          searchResults == null -> true
+          searchResults.isEmpty() -> false
+          else -> {
+            // Append the new search results to the existing list
+            searchAdapter?.addData(searchResults)
+            false
           }
         }
-    }
+      }
   }
 
   private fun handleBackPress() {
@@ -197,7 +196,6 @@ class SearchFragment : BaseFragment() {
     super.onDestroyView()
     renderingJob?.cancel()
     renderingJob = null
-    searchState = null
     activity?.intent?.action = null
     searchView = null
     searchInTextMenuItem = null
@@ -258,7 +256,6 @@ class SearchFragment : BaseFragment() {
   private fun render(state: SearchState) {
     renderingJob?.cancel()
     isDataLoading = false
-    searchState = state
     searchInTextMenuItem?.isVisible = state.searchOrigin == FromWebView
     searchInTextMenuItem?.isEnabled = state.searchTerm.isNotBlank()
     fragmentSearchBinding?.searchLoadingIndicator?.isShowing(true)

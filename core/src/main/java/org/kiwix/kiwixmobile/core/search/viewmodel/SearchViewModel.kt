@@ -180,18 +180,16 @@ class SearchViewModel @Inject constructor(
    * Loads more search results starting from a specified index.
    *
    * @param startIndex The index from which to start loading more results.
-   * @param searchState The current search state containing search term and results.
    * @param existingSearchList The existing list of search results, if any, to check for duplicates.
    *
    * @return A Flowable emitting a list of non-duplicate search results or null if there are no more results.
    */
   fun loadMoreSearchResults(
     startIndex: Int,
-    searchState: SearchState,
     existingSearchList: List<SearchListItem>?
   ): Flowable<List<SearchListItem.RecentSearchListItem>?> {
     return Flowable.create({ emitter ->
-      val searchResults = searchState.getVisibleResults(startIndex)
+      val searchResults = state.value.getVisibleResults(startIndex)
 
       val nonDuplicateResults = searchResults?.filter { newItem ->
         existingSearchList?.none { it == newItem } ?: true
