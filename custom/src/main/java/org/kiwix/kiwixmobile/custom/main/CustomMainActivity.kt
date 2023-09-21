@@ -59,6 +59,7 @@ class CustomMainActivity : CoreMainActivity() {
   override val historyFragmentResId: Int = R.id.historyFragment
   override val notesFragmentResId: Int = R.id.notesFragment
   override val helpFragmentResId: Int = R.id.helpFragment
+  override val zimHostFragmentResId: Int = R.id.zimHostFragment
   override val cachedComponent by lazy { customActivityComponent }
   override val topLevelDestinations =
     setOf(R.id.customReaderFragment)
@@ -94,8 +95,6 @@ class CustomMainActivity : CoreMainActivity() {
         closeNavigationDrawer()
         onNavigationItemSelected(item)
       }
-      menu.findItem(R.id.menu_host_books)
-        .isVisible = false
     }
   }
 

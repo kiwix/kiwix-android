@@ -15,12 +15,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.webserver
+package org.kiwix.kiwixmobile.core.webserver.wifi_hotspot
 
-interface ZimHostCallbacks {
-  fun onServerStarted(ip: String)
-  fun onServerStopped()
-  fun onServerFailedToStart()
+interface IpAddressCallbacks {
   fun onIpAddressValid()
   fun onIpAddressInvalid()
 }

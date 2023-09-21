@@ -3,14 +3,9 @@
   xmlns:tools="http://schemas.android.com/tools"
   package="org.kiwix.kiwixmobile">
 
-  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
   <uses-permission
     android:name="android.permission.ACCESS_FINE_LOCATION"
     android:maxSdkVersion="32" />
-  <uses-permission
-    android:name="android.permission.NEARBY_WIFI_DEVICES"
-    android:usesPermissionFlags="neverForLocation"
-    tools:targetApi="s" />
   <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
   <uses-permission android:name="${permission}" />
 
@@ -138,8 +133,6 @@
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
     </activity>
-
-    <service android:name=".webserver.wifi_hotspot.HotspotService" />
 
     <receiver
       android:name=".main.KiwixSearchWidget"

@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.di.components
 import dagger.Component
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.di.KiwixScope
-import org.kiwix.kiwixmobile.di.components.ServiceComponent.Builder
 import org.kiwix.kiwixmobile.di.modules.KiwixModule
 import org.kiwix.kiwixmobile.di.modules.KiwixViewModelModule
 
@@ -32,5 +31,4 @@ import org.kiwix.kiwixmobile.di.modules.KiwixViewModelModule
 )
 interface KiwixComponent {
   fun activityComponentBuilder(): KiwixActivityComponent.Builder
-  fun serviceComponent(): Builder
 }

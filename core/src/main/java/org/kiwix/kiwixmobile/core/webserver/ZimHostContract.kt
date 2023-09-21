@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2023 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,26 +15,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.kiwix.kiwixmobile.core.webserver
 
-package org.kiwix.kiwixmobile.di.components
+import org.kiwix.kiwixmobile.core.base.BaseContract
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 
-import android.app.Service
-import dagger.BindsInstance
-import dagger.Subcomponent
-import org.kiwix.kiwixmobile.di.ServiceScope
-import org.kiwix.kiwixmobile.di.modules.ServiceModule
-import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService
+class ZimHostContract {
+  interface View : BaseContract.View<Presenter> {
+    fun addBooks(books: List<BooksOnDiskListItem>)
+  }
 
-@Subcomponent(modules = [ServiceModule::class])
-@ServiceScope
-interface ServiceComponent {
-  fun inject(hotspotService: HotspotService)
-
-  @Subcomponent.Builder
-  interface Builder {
-
-    @BindsInstance fun service(service: Service): Builder
-
-    fun build(): ServiceComponent
+  interface Presenter : BaseContract.Presenter<View> {
+    fun loadBooks(previouslyHostedBooks: Set<String>)
   }
 }

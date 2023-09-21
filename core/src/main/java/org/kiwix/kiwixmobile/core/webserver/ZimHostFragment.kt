@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2023 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.webserver
+package org.kiwix.kiwixmobile.core.webserver
 
 import android.Manifest
 import android.Manifest.permission.POST_NOTIFICATIONS
@@ -41,10 +41,13 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.BuildConfig
+import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.databinding.ActivityZimHostBinding
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -61,12 +64,10 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.kiwixmobile.databinding.ActivityZimHostBinding
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService
-import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.Companion.ACTION_CHECK_IP_ADDRESS
-import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.Companion.ACTION_START_SERVER
-import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.Companion.ACTION_STOP_SERVER
+import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService
+import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService.Companion.ACTION_CHECK_IP_ADDRESS
+import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService.Companion.ACTION_START_SERVER
+import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService.Companion.ACTION_STOP_SERVER
 import javax.inject.Inject
 
 class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
@@ -123,7 +124,16 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   override fun inject(baseActivity: BaseActivity) {
-    (baseActivity as KiwixMainActivity).cachedComponent.inject(this)
+    baseActivity.cachedComponent.inject(this)
+  }
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    coreComponent
+      .activityComponentBuilder()
+      .activity(requireActivity())
+      .build()
+      .inject(this)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

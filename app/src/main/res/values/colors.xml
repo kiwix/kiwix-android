@@ -19,6 +19,4 @@
 <resources>
   <color name="pure_gray">#808080</color>
   <color name="blueTransparent">#962e7ac4</color>
-  <color name="startServerGreen">#2e7d31</color>
-  <color name="stopServerRed">#c62728</color>
 </resources>

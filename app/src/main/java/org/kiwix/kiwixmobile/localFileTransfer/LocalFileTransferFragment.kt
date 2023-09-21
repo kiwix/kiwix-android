@@ -66,7 +66,7 @@ import org.kiwix.kiwixmobile.databinding.FragmentLocalFileTransferBinding
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getDeviceStatus
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiP2pDelegate
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiPeerListAdapter
-import org.kiwix.kiwixmobile.webserver.ZimHostFragment.Companion.PERMISSION_REQUEST_CODE_COARSE_LOCATION
+import org.kiwix.kiwixmobile.core.webserver.ZimHostFragment.Companion.PERMISSION_REQUEST_CODE_COARSE_LOCATION
 import javax.inject.Inject
 
 /**

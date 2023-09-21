@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.main
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.appcompat.view.ActionMode
 import androidx.core.os.ConfigurationCompat
 import androidx.core.view.isVisible
@@ -76,6 +75,7 @@ class KiwixMainActivity : CoreMainActivity() {
   override val notesFragmentResId: Int = R.id.notesFragment
   override val readerFragmentResId: Int = R.id.readerFragment
   override val helpFragmentResId: Int = R.id.helpFragment
+  override val zimHostFragmentResId: Int = R.id.zimHostFragment
   override val topLevelDestinations =
     setOf(R.id.downloadsFragment, R.id.libraryFragment, R.id.readerFragment)
 
@@ -178,19 +178,6 @@ class KiwixMainActivity : CoreMainActivity() {
     supportFragmentManager.fragments.filterIsInstance<FragmentActivityExtensions>().forEach {
       it.onNewIntent(intent, this)
     }
-  }
-
-  override fun onNavigationItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-      R.id.menu_host_books -> openZimHostFragment()
-      else -> return super.onNavigationItemSelected(item)
-    }
-    return true
-  }
-
-  private fun openZimHostFragment() {
-    disableDrawer()
-    navigate(R.id.zimHostFragment)
   }
 
   override fun getIconResId() = R.mipmap.ic_launcher

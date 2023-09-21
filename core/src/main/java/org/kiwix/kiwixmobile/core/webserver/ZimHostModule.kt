@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.webserver
+package org.kiwix.kiwixmobile.core.webserver
 
 import dagger.Binds
 import dagger.Module
