@@ -52,6 +52,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationP
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
 import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
@@ -82,6 +83,9 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   @Inject
   lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+
+  @Inject
+  lateinit var zimReaderFactory: ZimFileReader.Factory
 
   private lateinit var booksAdapter: BooksOnDiskAdapter
   private lateinit var bookDelegate: BookOnDiskDelegate.BookDelegate
@@ -454,8 +458,26 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     )
   }
 
+  @Suppress("NestedBlockDepth")
   override fun addBooks(books: List<BooksOnDiskListItem>) {
-    booksAdapter.items = books
+    // Check if this is the app module, as custom apps may have multiple package names
+    if (requireActivity().packageName == "org.kiwix.kiwixmobile") {
+      booksAdapter.items = books
+    } else {
+      val updatedBooksList: MutableList<BooksOnDiskListItem> = arrayListOf()
+      books.forEach {
+        if (it is BookOnDisk) {
+          zimReaderFactory.create(it.file)?.let { zimFileReader ->
+            updatedBooksList.add(BookOnDisk(zimFileReader.zimFile, zimFileReader)).also {
+              zimFileReader.dispose()
+            }
+          }
+        } else {
+          updatedBooksList.add(it)
+        }
+      }
+      booksAdapter.items = updatedBooksList
+    }
   }
 
   override fun onIpAddressValid() {
