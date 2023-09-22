@@ -29,6 +29,7 @@ import com.jakewharton.threetenabp.AndroidThreeTen
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.di.components.DaggerCoreComponent
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
 import javax.inject.Inject
 
@@ -64,6 +65,8 @@ abstract class CoreApp : Application() {
    */
   @Inject
   lateinit var serviceWorkerInitialiser: ServiceWorkerInitialiser
+
+  private lateinit var coreMainActivity: CoreMainActivity
 
   override fun attachBaseContext(base: Context) {
     super.attachBaseContext(base)
@@ -121,6 +124,12 @@ abstract class CoreApp : Application() {
       )
     }
   }
+
+  fun setMainActivity(coreMainActivity: CoreMainActivity) {
+    this.coreMainActivity = coreMainActivity
+  }
+
+  fun getMainActivity() = coreMainActivity
 
   /* Checks if external storage is available for read and write */
   val isExternalStorageWritable: Boolean

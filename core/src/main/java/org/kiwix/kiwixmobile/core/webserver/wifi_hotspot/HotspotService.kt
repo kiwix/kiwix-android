@@ -119,11 +119,6 @@ class HotspotService :
   }
 
   private fun startForegroundNotificationHelper() {
-    val module = if (packageName == "org.kiwix.kiwixmobile") {
-      "appModule"
-    } else {
-      "customModule"
-    }
     startForeground(
       HotspotNotificationManager.HOTSPOT_NOTIFICATION_ID,
       hotspotNotificationManager?.buildForegroundNotification()

@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.main
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.os.ConfigurationCompat
 import androidx.core.view.isVisible
@@ -69,6 +70,8 @@ class KiwixMainActivity : CoreMainActivity() {
     activityKiwixMainBinding.navHostFragment
   }
 
+  override val mainActivity: AppCompatActivity by lazy { this }
+
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val settingsFragmentResId: Int = R.id.kiwixSettingsFragment
   override val historyFragmentResId: Int = R.id.historyFragment
@@ -76,6 +79,7 @@ class KiwixMainActivity : CoreMainActivity() {
   override val readerFragmentResId: Int = R.id.readerFragment
   override val helpFragmentResId: Int = R.id.helpFragment
   override val zimHostFragmentResId: Int = R.id.zimHostFragment
+  override val navGraphId: Int = R.navigation.kiwix_nav_graph
   override val topLevelDestinations =
     setOf(R.id.downloadsFragment, R.id.libraryFragment, R.id.readerFragment)
 

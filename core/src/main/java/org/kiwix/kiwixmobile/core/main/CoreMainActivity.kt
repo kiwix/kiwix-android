@@ -24,6 +24,7 @@ import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
@@ -37,6 +38,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDirections
 import com.google.android.material.navigation.NavigationView
 import org.kiwix.kiwixmobile.core.BuildConfig
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
@@ -76,9 +78,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val notesFragmentResId: Int
   abstract val helpFragmentResId: Int
   abstract val zimHostFragmentResId: Int
+  abstract val navGraphId: Int
   abstract val cachedComponent: CoreActivityComponent
   abstract val topLevelDestinations: Set<Int>
   abstract val navHostContainer: FragmentContainerView
+  abstract val mainActivity: AppCompatActivity
 
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.KiwixTheme)
@@ -97,6 +101,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
         exitProcess(KIWIX_INTERNAL_ERROR)
       }
     }
+    setMainActivityToCoreApp()
   }
 
   @Suppress("DEPRECATION")
@@ -332,6 +337,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   protected fun handleDrawerOnNavigation() {
     closeNavigationDrawer()
     disableDrawer()
+  }
+
+  private fun setMainActivityToCoreApp() {
+    (applicationContext as CoreApp).setMainActivity(this)
   }
 
   fun findInPage(searchString: String) {
