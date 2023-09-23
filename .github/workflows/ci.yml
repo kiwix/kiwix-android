@@ -13,6 +13,8 @@ jobs:
     strategy:
       matrix:
         api-level: [ 25, 30, 33, 34 ]
+        system-image:
+          - { api: 34, image: "default" }
       fail-fast: true
     runs-on: ubuntu-22.04
     steps:
