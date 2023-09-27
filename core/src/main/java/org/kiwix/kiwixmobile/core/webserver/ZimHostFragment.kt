@@ -444,8 +444,10 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     layoutServerStopped()
   }
 
-  override fun onServerFailedToStart() {
-    toast(R.string.server_failed_toast_message)
+  override fun onServerFailedToStart(errorMessage: Int?) {
+    errorMessage?.let {
+      toast(errorMessage)
+    }
   }
 
   private fun launchTetheringSettingsScreen() {

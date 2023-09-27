@@ -21,12 +21,14 @@ import android.util.Log
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.DEFAULT_PORT
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
 import org.kiwix.kiwixmobile.core.utils.ServerUtils.INVALID_IP
 import org.kiwix.kiwixmobile.core.utils.ServerUtils.getIp
 import org.kiwix.kiwixmobile.core.utils.ServerUtils.getIpAddress
 import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.IpAddressCallbacks
+import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.ServerStatus
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -43,14 +45,12 @@ class WebServerHelper @Inject constructor(
   private var isServerStarted = false
   private var validIpAddressDisposable: Disposable? = null
 
-  fun startServerHelper(selectedBooksPath: ArrayList<String>): Boolean {
+  fun startServerHelper(selectedBooksPath: ArrayList<String>): ServerStatus {
     val ip = getIpAddress()
     return if (ip.isNullOrEmpty()) {
-      false
-    } else if (startAndroidWebServer(selectedBooksPath)) {
-      true
+      ServerStatus(false, R.string.error_ip_address_not_found)
     } else {
-      isServerStarted
+      startAndroidWebServer(selectedBooksPath)
     }
   }
 
@@ -61,15 +61,20 @@ class WebServerHelper @Inject constructor(
     }
   }
 
-  private fun startAndroidWebServer(selectedBooksPath: ArrayList<String>): Boolean {
+  private fun startAndroidWebServer(selectedBooksPath: ArrayList<String>): ServerStatus {
+    var errorMessage: Int? = null
     if (!isServerStarted) {
       ServerUtils.port = DEFAULT_PORT
       kiwixServer = kiwixServerFactory.createKiwixServer(selectedBooksPath).also {
         updateServerState(it.startServer(ServerUtils.port))
-        Log.d(TAG, "Server status$isServerStarted")
+        Log.d(TAG, "Server status$isServerStarted").also {
+          if (!isServerStarted) {
+            errorMessage = R.string.error_server_already_running
+          }
+        }
       }
     }
-    return isServerStarted
+    return ServerStatus(isServerStarted, errorMessage)
   }
 
   private fun updateServerState(isStarted: Boolean) {

@@ -58,6 +58,7 @@
     <ID>PackageNaming:HotspotStateReceiver.kt$package org.kiwix.kiwixmobile.core.webserver.wifi_hotspot</ID>
     <ID>PackageNaming:IpAddressCallbacks.kt$package org.kiwix.kiwixmobile.core.webserver.wifi_hotspot</ID>
     <ID>PackageNaming:HotspotService.kt$package org.kiwix.kiwixmobile.core.webserver.wifi_hotspot</ID>
+    <ID>PackageNaming:ServerStatus.kt$package org.kiwix.kiwixmobile.core.webserver.wifi_hotspot</ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun getAllZimParts(book: Book): List&lt;File></ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun getLocalFilePathByUri( context: Context, uri: Uri ): String?</ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun hasPart(file: File): Boolean</ID>

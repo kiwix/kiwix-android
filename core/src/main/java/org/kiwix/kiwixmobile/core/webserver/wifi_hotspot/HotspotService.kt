@@ -72,7 +72,8 @@ class HotspotService :
     when (intent.action) {
       ACTION_START_SERVER ->
         intent.getStringArrayListExtra(ZimHostFragment.SELECTED_ZIM_PATHS_KEY)?.let {
-          if (webServerHelper?.startServerHelper(it) == true) {
+          val serverStatus = webServerHelper?.startServerHelper(it)
+          if (serverStatus?.isServerStarted == true) {
             zimHostCallbacks?.onServerStarted(getSocketAddress())
             startForegroundNotificationHelper()
             Toast.makeText(
@@ -80,9 +81,9 @@ class HotspotService :
               Toast.LENGTH_SHORT
             ).show()
           } else {
-            onServerFailedToStart()
+            onServerFailedToStart(serverStatus?.errorMessage)
           }
-        } ?: kotlin.run(::onServerFailedToStart)
+        } ?: kotlin.run { onServerFailedToStart(R.string.no_books_selected_toast_message) }
 
       ACTION_STOP_SERVER -> {
         Toast.makeText(
@@ -110,8 +111,8 @@ class HotspotService :
     hotspotNotificationManager?.dismissNotification()
   }
 
-  private fun onServerFailedToStart() {
-    zimHostCallbacks?.onServerFailedToStart()
+  private fun onServerFailedToStart(errorMessage: Int?) {
+    zimHostCallbacks?.onServerFailedToStart(errorMessage)
   }
 
   fun registerCallBack(myCallback: ZimHostCallbacks?) {
