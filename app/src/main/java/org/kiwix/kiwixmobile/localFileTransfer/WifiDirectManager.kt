@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.localFileTransfer
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
-import android.net.ConnectivityManager
 import android.net.Uri
 import android.net.wifi.WpsInfo
 import android.net.wifi.p2p.WifiP2pConfig
@@ -62,8 +61,7 @@ class WifiDirectManager @Inject constructor(
   private val context: Context,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val alertDialogShower: AlertDialogShower,
-  private val manager: WifiP2pManager?,
-  private val connectivityManager: ConnectivityManager
+  private val manager: WifiP2pManager?
 ) : ChannelListener, PeerListListener, ConnectionInfoListener, P2pEventListener {
   var callbacks: Callbacks? = null
 
@@ -98,7 +96,7 @@ class WifiDirectManager @Inject constructor(
   }
 
   private fun registerWifiDirectBroadcastReceiver() {
-    receiver = KiwixWifiP2pBroadcastReceiver(this, connectivityManager)
+    receiver = KiwixWifiP2pBroadcastReceiver(this)
 
     // For specifying broadcasts (of the P2P API) that the module needs to respond to
     val intentFilter = IntentFilter()
