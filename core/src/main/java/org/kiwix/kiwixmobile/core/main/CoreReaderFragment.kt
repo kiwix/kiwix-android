@@ -1431,6 +1431,8 @@ abstract class CoreReaderFragment :
       zimReaderContainer.setZimFile(file)
       val zimFileReader = zimReaderContainer.zimFileReader
       zimFileReader?.let { zimFileReader ->
+        // uninitialized the service worker to fix https://github.com/kiwix/kiwix-android/issues/2561
+        openArticle(UNINITIALISER_ADDRESS)
         mainMenu?.onFileOpened(urlIsValid())
         openArticle(zimFileReader.mainPage)
         setUpBookmarks(zimFileReader)
