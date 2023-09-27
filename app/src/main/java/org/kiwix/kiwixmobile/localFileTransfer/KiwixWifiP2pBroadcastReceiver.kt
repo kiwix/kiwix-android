@@ -25,7 +25,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.NetworkInfo
 import android.net.wifi.p2p.WifiP2pDevice
-import android.net.wifi.p2p.WifiP2pManager
+import android.net.wifi.p2p.WifiP2pManager.EXTRA_NETWORK_INFO
 import android.net.wifi.p2p.WifiP2pManager.EXTRA_WIFI_P2P_DEVICE
 import android.net.wifi.p2p.WifiP2pManager.EXTRA_WIFI_STATE
 import android.net.wifi.p2p.WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION
@@ -54,10 +54,14 @@ class KiwixWifiP2pBroadcastReceiver(
       }
       WIFI_P2P_PEERS_CHANGED_ACTION -> p2pEventListener.onPeersChanged()
       WIFI_P2P_CONNECTION_CHANGED_ACTION -> {
-        val networkInfo =
-          intent.getParcelableExtra<NetworkInfo>(
-            WifiP2pManager.EXTRA_NETWORK_INFO
+        val networkInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+          intent.getParcelableExtra(
+            EXTRA_NETWORK_INFO,
+            NetworkInfo::class.java
           )
+        } else {
+          intent.getParcelableExtra(EXTRA_NETWORK_INFO)
+        }
         networkInfo?.let {
           p2pEventListener.onConnectionChanged(networkInfo.isConnected)
         }
