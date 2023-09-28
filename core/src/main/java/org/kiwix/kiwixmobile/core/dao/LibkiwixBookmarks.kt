@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.dao
 
 import android.os.Build
 import android.util.Base64
+import android.util.Log
 import io.reactivex.BackpressureStrategy
 import io.reactivex.BackpressureStrategy.LATEST
 import io.reactivex.Flowable
@@ -28,6 +29,7 @@ import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
@@ -44,7 +46,7 @@ import javax.inject.Inject
 
 class LibkiwixBookmarks @Inject constructor(
   val library: Library,
-  val manager: Manager,
+  manager: Manager,
   val sharedPreferenceUtil: SharedPreferenceUtil
 ) : PageDao {
 
@@ -135,7 +137,17 @@ class LibkiwixBookmarks @Inject constructor(
   private fun addBookToLibraryIfNotExist(libKiwixBook: Book?) {
     libKiwixBook?.let { book ->
       if (!library.booksIds.any { it == book.id }) {
-        library.addBook(libKiwixBook)
+        library.addBook(libKiwixBook).also {
+          if (BuildConfig.DEBUG) {
+            Log.d(
+              TAG,
+              "Added Book to Library:\n" +
+                "ZIM File Path: ${book.path}\n" +
+                "Book ID: ${book.id}\n" +
+                "Book Title: ${book.title}"
+            )
+          }
+        }
       }
     }
   }
@@ -175,17 +187,40 @@ class LibkiwixBookmarks @Inject constructor(
       val book = if (library.booksIds.contains(bookmark.bookId)) {
         library.getBookById(bookmark.bookId)
       } else {
+        if (BuildConfig.DEBUG) {
+          Log.d(
+            TAG,
+            "Library does not contain the book for this bookmark:\n" +
+              "Book Title: ${bookmark.bookTitle}\n" +
+              "Bookmark URL: ${bookmark.url}"
+          )
+        }
         null
       }
 
       // Create an Archive object for the book's path, if it exists.
-      val archive: Archive? = book?.let { Archive(it.path) }
+      val archive: Archive? = book?.run {
+        try {
+          Archive(this.path)
+        } catch (exception: Exception) {
+          // to handle if zim file not found
+          // TODO should we delete bookmark if zim file not found?
+          // deleteBookmark(book.id, bookmark.url)
+          if (BuildConfig.DEBUG) {
+            Log.e(
+              TAG,
+              "Failed to create an archive for path: ${book.path}\n" +
+                "Exception: $exception"
+            )
+          }
+          null
+        }
+      }
 
       // Check if the Archive has an illustration of the specified size and encode it to Base64.
       val favicon = archive?.takeIf { it.hasIllustration(ILLUSTRATION_SIZE) }?.let {
         Base64.encodeToString(it.getIllustrationItem(ILLUSTRATION_SIZE).data.data, Base64.DEFAULT)
       }
-
       // Create a LibkiwixBookmarkItem object with bookmark, favicon, and book path.
       val libkiwixBookmarkItem = LibkiwixBookmarkItem(
         bookmark,
@@ -203,7 +238,10 @@ class LibkiwixBookmarks @Inject constructor(
 
   private fun isBookMarkExist(libkiwixBookmarkItem: LibkiwixBookmarkItem): Boolean =
     getBookmarksList()
-      .any { it.url == libkiwixBookmarkItem.bookmarkUrl && it.zimId == libkiwixBookmarkItem.zimId }
+      .any {
+        it.url == libkiwixBookmarkItem.bookmarkUrl &&
+          it.zimFilePath == libkiwixBookmarkItem.zimFilePath
+      }
 
   private fun flowableBookmarkList(
     backpressureStrategy: BackpressureStrategy = LATEST
@@ -225,5 +263,9 @@ class LibkiwixBookmarks @Inject constructor(
 
   private fun updateFlowableBookmarkList() {
     bookmarkListBehaviour?.onNext(getBookmarksList())
+  }
+
+  companion object {
+    const val TAG = "LibkiwixBookmark"
   }
 }
