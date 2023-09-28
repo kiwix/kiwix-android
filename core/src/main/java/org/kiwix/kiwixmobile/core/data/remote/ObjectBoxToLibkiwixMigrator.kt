@@ -21,15 +21,12 @@ package org.kiwix.kiwixmobile.core.data.remote
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
-import io.objectbox.kotlin.query
-import io.objectbox.query.QueryBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
-import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity_
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.libkiwix.Book
@@ -56,14 +53,15 @@ class ObjectBoxToLibkiwixMigrator {
           update(Archive(bookmarkEntity.zimFilePath))
         }
         libkiwixBookmarks.saveBookmark(LibkiwixBookmarkItem(bookmarkEntity, libkiwixBook))
+        // TODO should we remove data from objectBox?
         // removing the single entity from the object box after migration.
-        box.query {
-          equal(
-            BookmarkEntity_.bookmarkUrl,
-            bookmarkEntity.bookmarkUrl,
-            QueryBuilder.StringOrder.CASE_INSENSITIVE
-          )
-        }.remove()
+        // box.query {
+        //   equal(
+        //     BookmarkEntity_.bookmarkUrl,
+        //     bookmarkEntity.bookmarkUrl,
+        //     QueryBuilder.StringOrder.CASE_INSENSITIVE
+        //   )
+        // }.remove()
       }
     }
     sharedPreferenceUtil.putPrefBookMarkMigrated(true)
