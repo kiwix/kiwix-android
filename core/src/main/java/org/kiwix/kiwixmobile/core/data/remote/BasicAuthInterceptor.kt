@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.data.remote
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
+import org.kiwix.kiwixmobile.core.reader.decodeUrl
 import java.io.IOException
 
 class BasicAuthInterceptor : Interceptor {
@@ -30,8 +31,12 @@ class BasicAuthInterceptor : Interceptor {
     val request: Request = chain.request()
     val url = request.url.toString()
     if (url.contains("dwds")) {
-      val userName = System.getenv("DWDS_HTTP_BASIC_ACCESS_AUTHENTICATION_USER_NAME") ?: ""
-      val password = System.getenv("DWDS_HTTP_BASIC_ACCESS_AUTHENTICATION_PASSWORD") ?: ""
+      val secretKey = url.decodeUrl
+        .substringAfterLast("{")
+        .substringBefore("}")
+      val userNameAndPassword = System.getenv(secretKey) ?: ""
+      val userName = userNameAndPassword.substringBefore(":", "")
+      val password = userNameAndPassword.substringAfter(":", "")
       val credentials = okhttp3.Credentials.basic(userName, password)
       val authenticatedRequest: Request = request.newBuilder()
         .header("Authorization", credentials).build()
