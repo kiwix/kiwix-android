@@ -335,7 +335,7 @@ private val String.filePath: String
   get() = substringAfter(CONTENT_PREFIX).substringBefore("#").substringBefore("?")
 
 // Decode the URL if it is encoded because libkiwix does not return the path for encoded paths.
-private val String.decodeUrl: String
+val String.decodeUrl: String
   get() = URLDecoder.decode(this, "UTF-8")
 
 // Truncate mime-type (everything after the first space and semi-colon(if exists)
