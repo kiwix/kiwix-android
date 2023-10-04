@@ -29,9 +29,17 @@
  * in ../app/src/main/res/ and paste them into
  * their corresponding files within ../core/src/main/res/values*.
  *
+ * Example usage #2:
+ * kotlinc -script move-string-resource.kts -- ../app ../core file_with_line_separated_keys.txt
+ *
+ * This will cut all strings with the name that matches any line in file_with_line_separated_keys.txt from
+ * all strings.xml files within directories with a prefix of values*
+ * in ../app/src/main/res/ and paste them into
+ * their corresponding files within ../core/src/main/res/values*.
+ *
  */
 
- /**
+/**
  * To recompile script to binary use kscript:
  * https://github.com/holgerbrandl/kscript
  * https://github.com/holgerbrandl/kscript#deploy-scripts-as-standalone-binaries
@@ -41,7 +49,6 @@ import java.io.File
 import java.lang.StringBuilder
 import kotlin.system.exitProcess
 
-
 if (args.size < 3) {
   printCorrectUsageAndExit()
 }
@@ -50,31 +57,45 @@ val pathToValues = "/src/main/res/"
 val source = args[0]
 val destination = args[1]
 
-val key = """name="${args[2]}""""
-
 val sourceDir = File(source + pathToValues)
 if (!sourceDir.exists()) {
   printModuleIsNotValidDir(source, pathToValues)
 }
 
+val keyIds = if (args[2] == "--keys") {
+  if (args.size != 4) {
+    printCorrectUsageAndExit()
+  }
+  val keysFileName = args[3]
+  val keysFile = File(keysFileName)
+  if (!keysFile.exists()) {
+    System.err.println("File $keysFileName doesn't exist")
+    printCorrectUsageAndExit()
+  }
+
+  keysFile.readLines()
+} else {
+  listOf(args[2])
+}
+
+val keys = keyIds.map { keyId -> """name="${keyId}"""" }
+
 println("\nRunning transfer of string resources...\n")
-val numberOfCutLines = sourceDir.cutStringResourcesAndPasteToDestination(key, source, destination)
-println("\nTransfer of string resources complete. Moved $numberOfCutLines strings.")
+val numberOfFilesAffected = sourceDir.cutStringResourcesAndPasteToDestination(keys, source, destination)
+println("\nTransfer of string resources complete. Moved strings from $numberOfFilesAffected files.")
 
-
-
-fun File.cutStringResourcesAndPasteToDestination(key: String, source: String, destination: String) : Int {
-  var numberOfCutLines = 0
+fun File.cutStringResourcesAndPasteToDestination(keys: List<String>, source: String, destination: String): Int {
+  var numberOfFilesAffected = 0
   this.walk().filter { it.name.equals("strings.xml") }.forEach { resourceFile ->
-    cutLineFromResourceFile(resourceFile, key).takeIf{ it.isNotEmpty() }?.let{ cutLine ->
-      pasteLineToDestination(
+    cutLinesFromResourceFile(resourceFile, keys).takeIf { it.isNotEmpty() }?.let { cutLine ->
+      pasteLinesToDestination(
         openOrCreateDestinationResourceFile(resourceFile, source, destination),
         cutLine
       )
-      numberOfCutLines++
+      numberOfFilesAffected++
     }
   }
-  return numberOfCutLines
+  return numberOfFilesAffected
 }
 
 fun openOrCreateDestinationResourceFile(resourceFile: File, source: String, destination: String): File {
@@ -98,46 +119,60 @@ fun createDestinationDirectoryAndFile(destinationDirectory: File, destinationFil
   }
 
   destinationFile.writeText(
-  """
-    <?xml version=\"1.0\" encoding=\"UTF-8\"?>
-    <resources>
+    """
+    <?xml version="1.0" encoding="UTF-8"?>
+    <resources xmlns:tools="http://schemas.android.com/tools">
     </resources>
   """.trimIndent()
   )
   println("Created directory ${destinationDirectory.path} and resource file ${destinationFile.path}")
 }
 
-fun pasteLineToDestination(destinationFile: File, cutLine: String) {
+fun pasteLinesToDestination(destinationFile: File, cutLines: String) {
   var resourceDataWithPastedLine = StringBuilder()
   destinationFile.forEachLine { line ->
-    resourceDataWithPastedLine.appendln(line)
-    if (line.contains("<resources")) {
-      printPastedValue(cutLine, destinationFile)
-      resourceDataWithPastedLine.appendln(cutLine)
+    if (line.contains("</resources")) {
+      printPastedValue(cutLines, destinationFile)
+      resourceDataWithPastedLine.appendln(cutLines)
     }
+    resourceDataWithPastedLine.appendln(line)
   }
   destinationFile.writeText(resourceDataWithPastedLine.toString())
 }
 
-fun cutLineFromResourceFile(resourceFile: File, key: String): String {
+fun cutLinesFromResourceFile(resourceFile: File, keys: List<String>): String {
   var resourceDataWithoutCutLine = StringBuilder()
-  var cutLine: String = ""
+  var cutLine = StringBuilder()
+
+  var waitUntilPluralsEnd = false
 
   resourceFile.forEachLine { line ->
-    if (line.contains(key)) {
-      cutLine = line
-      printCutValueAndPath(cutLine, resourceFile)
+    if (waitUntilPluralsEnd || keys.any { line.contains(it) }) {
+      cutLine.appendln(line)
+      printCutValueAndPath(line, resourceFile)
+      if (waitUntilPluralsEnd && line.contains("</plurals>")) {
+        waitUntilPluralsEnd = false
+      } else if (line.contains("<plurals")) {
+        waitUntilPluralsEnd = true
+      }
     } else {
       resourceDataWithoutCutLine.appendln(line)
     }
   }
 
   resourceFile.writeText(resourceDataWithoutCutLine.toString())
-  return cutLine
+  return cutLine.trimEnd().toString()
 }
 
 fun printCorrectUsageAndExit() {
-  System.err.println("Usage:\nmove-string-resource.kts [source module] [destination module] [string key]")
+  System.err.println(
+    """
+    Usage:
+    move-string-resource.kts [source module] [destination module] [string key]
+    OR
+    move-string-resource.kts [source module] [destination module] --keys [file containing line separated string keys]
+    """.trimIndent()
+  )
   printExample()
   exitProcess(-1)
 }
