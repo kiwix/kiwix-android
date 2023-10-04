@@ -85,7 +85,7 @@ sealed class LibraryListItem {
       downloadModel.totalSizeOfDownload,
       downloadModel.progress,
       Seconds(downloadModel.etaInMilliSeconds / 1000L),
-      DownloadState.from(downloadModel.state, downloadModel.error),
+      DownloadState.from(downloadModel.state, downloadModel.error, downloadModel.book.url),
       downloadModel.book.id.hashCode().toLong(),
       downloadModel.state
     )

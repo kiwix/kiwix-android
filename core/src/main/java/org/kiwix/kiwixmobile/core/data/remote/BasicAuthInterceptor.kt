@@ -29,7 +29,7 @@ class BasicAuthInterceptor : Interceptor {
   @Throws(IOException::class)
   override fun intercept(chain: Interceptor.Chain): Response {
     val request: Request = chain.request()
-    val url = request.url.toString().decodeUrl
+    val url = request.url.toString()
     if (url.isAuthenticationUrl) {
       val userNameAndPassword = System.getenv(url.secretKey) ?: ""
       val userName = userNameAndPassword.substringBefore(":", "")
@@ -43,7 +43,8 @@ class BasicAuthInterceptor : Interceptor {
   }
 }
 
-val String.isAuthenticationUrl: Boolean get() = trim().matches(Regex("https://[^@]+@.*\\.zim"))
+val String.isAuthenticationUrl: Boolean
+  get() = decodeUrl.trim().matches(Regex("https://[^@]+@.*\\.zim"))
 
 val String.secretKey: String
   get() = substringAfter("{{", "")
