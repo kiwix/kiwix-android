@@ -48,5 +48,5 @@ val String.isAuthenticationUrl: Boolean
 
 val String.secretKey: String
   get() = substringAfter("{{", "")
-    .substringBefore("}", "")
+    .substringBefore("}}", "")
     .trim()
