@@ -50,7 +50,7 @@
   <View
     android:id="@+id/view_device_list_boundary"
     android:layout_width="match_parent"
-    android:layout_height="2dp"
+    android:layout_height="1dp"
     android:layout_marginStart="5dp"
     android:layout_marginEnd="5dp"
     android:background="@color/dodger_blue"
@@ -112,7 +112,7 @@
     android:layout_width="match_parent"
     android:layout_height="1dp"
     android:layout_marginStart="5dp"
-    android:layout_marginTop="200dp"
+    android:layout_marginTop="201dp"
     android:layout_marginEnd="5dp"
     android:background="@color/dodger_blue"
     app:layout_constraintBottom_toTopOf="@+id/text_view_files_for_transfer"

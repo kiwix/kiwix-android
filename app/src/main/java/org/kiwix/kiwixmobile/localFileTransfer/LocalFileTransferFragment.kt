@@ -144,26 +144,7 @@ class LocalFileTransferFragment :
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
           if (menuItem.itemId == R.id.menu_item_search_devices) {
             /* Permissions essential for this module */
-            return when {
-              !checkFineLocationAccessPermission() ->
-                true
-              !checkExternalStorageWritePermission() ->
-                true
-              /* Initiate discovery */
-              !wifiDirectManager.isWifiP2pEnabled -> {
-                requestEnableWifiP2pServices()
-                true
-              }
-              Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServiceEnabled -> {
-                requestEnableLocationServices()
-                true
-              }
-              else -> {
-                showPeerDiscoveryProgressBar()
-                wifiDirectManager.discoverPeerDevices()
-                true
-              }
-            }
+            return onSearchMenuClicked()
           }
           return false
         }
@@ -171,6 +152,29 @@ class LocalFileTransferFragment :
       viewLifecycleOwner,
       Lifecycle.State.RESUMED
     )
+  }
+
+  private fun onSearchMenuClicked(): Boolean {
+    return when {
+      !checkFineLocationAccessPermission() ->
+        true
+      !checkExternalStorageWritePermission() ->
+        true
+      /* Initiate discovery */
+      !wifiDirectManager.isWifiP2pEnabled -> {
+        requestEnableWifiP2pServices()
+        true
+      }
+      Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServiceEnabled -> {
+        requestEnableLocationServices()
+        true
+      }
+      else -> {
+        showPeerDiscoveryProgressBar()
+        wifiDirectManager.discoverPeerDevices()
+        true
+      }
+    }
   }
 
   private fun setupPeerDevicesList(activity: CoreMainActivity) {
@@ -339,6 +343,15 @@ class LocalFileTransferFragment :
           Log.e(TAG, "Storage write permission not granted")
           toast(R.string.permission_refused_storage, Toast.LENGTH_SHORT)
           requireActivity().popNavigationBackstack()
+        }
+        else ->
+          super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+      }
+    } else if (grantResults[0] == PERMISSION_GRANTED) {
+      when (requestCode) {
+        PERMISSION_REQUEST_FINE_LOCATION,
+        PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS -> {
+          onSearchMenuClicked()
         }
         else ->
           super.onRequestPermissionsResult(requestCode, permissions, grantResults)
