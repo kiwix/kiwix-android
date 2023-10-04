@@ -70,7 +70,7 @@ If you are interested in our custom apps they have their own repo [kiwix-android
 - [Butterknife](https://jakewharton.github.io/butterknife/) - View "injection" library for Android
 - [Mockito](https://github.com/mockito/mockito) - Most popular Mocking framework for unit tests written in Java
 - [RxJava](https://github.com/ReactiveX/RxJava) - Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.
-- [ObjectBox](https://github.com/objectbox/objectbox-java) - Reactive NoSQL Databse
+- [ObjectBox](https://github.com/objectbox/objectbox-java) - Reactive NoSQL Database
 - [MockK](https://github.com/mockk/mockk) - Kotlin mocking library that allows mocking of final classes by default.
 - [JUnit5](https://github.com/junit-team/junit5/) - The next generation of JUnit
 - [AssertJ](https://github.com/joel-costigliola/assertj-core) - Fluent assertions for test code
