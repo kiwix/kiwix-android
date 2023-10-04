@@ -29,12 +29,9 @@ class BasicAuthInterceptor : Interceptor {
   @Throws(IOException::class)
   override fun intercept(chain: Interceptor.Chain): Response {
     val request: Request = chain.request()
-    val url = request.url.toString()
-    if (url.contains("dwds")) {
-      val secretKey = url.decodeUrl
-        .substringAfterLast("{")
-        .substringBefore("}")
-      val userNameAndPassword = System.getenv(secretKey) ?: ""
+    val url = request.url.toString().decodeUrl
+    if (url.isAuthenticationUrl) {
+      val userNameAndPassword = System.getenv(url.secretKey) ?: ""
       val userName = userNameAndPassword.substringBefore(":", "")
       val password = userNameAndPassword.substringAfter(":", "")
       val credentials = okhttp3.Credentials.basic(userName, password)
@@ -45,3 +42,10 @@ class BasicAuthInterceptor : Interceptor {
     return chain.proceed(request)
   }
 }
+
+val String.isAuthenticationUrl: Boolean get() = trim().matches(Regex("https://[^@]+@.*\\.zim"))
+
+val String.secretKey: String
+  get() = substringAfter("{{", "")
+    .substringBefore("}", "")
+    .trim()
