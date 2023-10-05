@@ -215,7 +215,7 @@
   <string name="complete">Complete</string>
   <string name="paused_state">Paused</string>
   <string name="failed_state">Failed: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed">The zim file could not be downloaded, please try reinstalling the application from the play store.</string>
+  <string name="custom_download_error_message_for_authentication_failed">The zim file could not be downloaded. Please try reinstalling the application from the Play store.</string>
   <string name="save">Save</string>
   <string name="note">Note</string>
   <string name="wiki_article_title">Wiki Article Title</string>
