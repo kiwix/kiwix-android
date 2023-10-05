@@ -31,6 +31,7 @@ import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.help.HelpRobot
+import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
 import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryRobot
 import org.kiwix.kiwixmobile.settings.SettingsRobot
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -72,8 +73,7 @@ class TopLevelDestinationTest : BaseActivityTest() {
       }
       clickLibraryOnBottomNav {
         assertGetZimNearbyDeviceDisplayed()
-        clickFileTransferIcon {
-        }
+        clickFileTransferIcon(LocalFileTransferRobot::assertReceiveFileTitleVisible)
       }
       clickDownloadOnBottomNav(OnlineLibraryRobot::assertLibraryListDisplayed)
       clickBookmarksOnNavDrawer {

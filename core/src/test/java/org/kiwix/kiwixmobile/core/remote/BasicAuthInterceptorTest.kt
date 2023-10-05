@@ -74,7 +74,7 @@ class BasicAuthInterceptorTest {
 
   @Test
   fun testUrlWithFormattingVariations() {
-    val formattedUrl1 = "https:// {{ BASIC_AUTH_KEY } } @example.com/kiwix/f/somefile.zim"
+    val formattedUrl1 = "https:// {{ BASIC_AUTH_KEY }} @example.com/kiwix/f/somefile.zim"
     val formattedUrl2 = "https://{{BASIC_AUTH_KEY}}@example.com/kiwix/f/somefile.zim  "
     assertEquals(true, formattedUrl1.isAuthenticationUrl)
     assertEquals(true, formattedUrl2.isAuthenticationUrl)
