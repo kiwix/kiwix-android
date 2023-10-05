@@ -80,18 +80,14 @@ class LocalFileTransferTest {
       }
       waitForIdle()
     }
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
-      putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-    }
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-    }
   }
 
   @Test
   fun localFileTransfer() {
+    shouldShowShowCaseFeatureToUser(false)
+    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+      moveToState(Lifecycle.State.RESUMED)
+    }
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       activityScenario.onActivity {
         it.navigate(R.id.libraryFragment)
@@ -111,10 +107,49 @@ class LocalFileTransferTest {
     }
   }
 
+  @Test
+  fun testShowCaseFeature() {
+    shouldShowShowCaseFeatureToUser(true)
+    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+      moveToState(Lifecycle.State.RESUMED)
+      onActivity {
+        it.navigate(R.id.libraryFragment)
+      }
+    }
+    library {
+      assertGetZimNearbyDeviceDisplayed()
+      clickFileTransferIcon {
+        assertClickNearbyDeviceMessageVisible()
+        clickOnGotItButton()
+        assertDeviceNameMessageVisible()
+        clickOnGotItButton()
+        assertNearbyDeviceListMessageVisible()
+        clickOnGotItButton()
+        assertTransferZimFilesListMessageVisible()
+        clickOnGotItButton()
+        pressBack()
+        assertGetZimNearbyDeviceDisplayed()
+        // test show case view show once.
+        clickFileTransferIcon(LocalFileTransferRobot::assertClickNearbyDeviceMessageNotVisible)
+      }
+    }
+    LeakAssertions.assertNoLeaks()
+  }
+
   @After
   fun setIsTestPreference() {
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, false)
+      putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, true)
+    }
+  }
+
+  private fun shouldShowShowCaseFeatureToUser(value: Boolean) {
+    PreferenceManager.getDefaultSharedPreferences(context).edit {
+      putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
+      putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
+      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
+      putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, value)
     }
   }
 }

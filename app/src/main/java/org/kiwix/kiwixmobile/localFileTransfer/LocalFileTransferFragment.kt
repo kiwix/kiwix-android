@@ -109,8 +109,8 @@ class LocalFileTransferFragment :
   private var fileListAdapter: FileListAdapter? = null
   private var wifiPeerListAdapter: WifiPeerListAdapter? = null
   private var fragmentLocalFileTransferBinding: FragmentLocalFileTransferBinding? = null
-  private var materialShowcaseSequence: MaterialShowcaseSequence? = null
-  private var searchView: View? = null
+  private var materialShowCaseSequence: MaterialShowcaseSequence? = null
+  private var searchIconView: View? = null
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -146,9 +146,9 @@ class LocalFileTransferFragment :
       object : MenuProvider {
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
           menuInflater.inflate(R.menu.wifi_file_share_items, menu)
-          if (!sharedPreferenceUtil.prefIsTest) {
+          if (sharedPreferenceUtil.prefShowShowCaseToUser) {
             Handler(Looper.getMainLooper()).post {
-              searchView =
+              searchIconView =
                 fragmentLocalFileTransferBinding?.root?.findViewById(R.id.menu_item_search_devices)
               showCaseFeatureToUsers()
             }
@@ -169,8 +169,8 @@ class LocalFileTransferFragment :
   }
 
   private fun showCaseFeatureToUsers() {
-    searchView?.let {
-      materialShowcaseSequence = MaterialShowcaseSequence(activity, SHOWCASE_ID).apply {
+    searchIconView?.let {
+      materialShowCaseSequence = MaterialShowcaseSequence(activity, SHOWCASE_ID).apply {
         val config = ShowcaseConfig().apply {
           delay = 500 // half second between each showcase view
         }
@@ -458,8 +458,8 @@ class LocalFileTransferFragment :
     wifiDirectManager.stopWifiDirectManager()
     wifiDirectManager.callbacks = null
     fragmentLocalFileTransferBinding = null
-    searchView = null
-    materialShowcaseSequence = null
+    searchIconView = null
+    materialShowCaseSequence = null
     super.onDestroyView()
   }
 

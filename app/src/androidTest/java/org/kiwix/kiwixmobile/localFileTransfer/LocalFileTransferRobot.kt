@@ -18,11 +18,14 @@
 
 package org.kiwix.kiwixmobile.localFileTransfer
 
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
+import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.testutils.TestUtils
 
@@ -54,5 +57,39 @@ class LocalFileTransferRobot : BaseRobot() {
 
   fun assertLocalLibraryVisible() {
     isVisible(TextId(R.string.library))
+  }
+
+  fun assertClickNearbyDeviceMessageVisible() {
+    pauseForBetterTestPerformance()
+    isVisible(TextId(R.string.click_nearby_devices_message))
+  }
+
+  fun clickOnGotItButton() {
+    pauseForBetterTestPerformance()
+    clickOn(TextId(R.string.got_it))
+  }
+
+  fun assertDeviceNameMessageVisible() {
+    pauseForBetterTestPerformance()
+    isVisible(TextId(R.string.your_device_name_message))
+  }
+
+  fun assertNearbyDeviceListMessageVisible() {
+    pauseForBetterTestPerformance()
+    isVisible(TextId(R.string.nearby_devices_list_message))
+  }
+
+  fun assertTransferZimFilesListMessageVisible() {
+    pauseForBetterTestPerformance()
+    isVisible(TextId(R.string.transfer_zim_files_list_message))
+  }
+
+  fun assertClickNearbyDeviceMessageNotVisible() {
+    pauseForBetterTestPerformance()
+    onView(withText(R.string.click_nearby_devices_message)).check(doesNotExist())
+  }
+
+  private fun pauseForBetterTestPerformance() {
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
   }
 }
