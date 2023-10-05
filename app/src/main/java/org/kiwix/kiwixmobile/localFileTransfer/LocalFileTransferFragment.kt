@@ -146,10 +146,12 @@ class LocalFileTransferFragment :
       object : MenuProvider {
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
           menuInflater.inflate(R.menu.wifi_file_share_items, menu)
-          Handler(Looper.getMainLooper()).post {
-            searchView =
-              fragmentLocalFileTransferBinding?.root?.findViewById(R.id.menu_item_search_devices)
-            showCaseFeatureToUsers()
+          if (!sharedPreferenceUtil.prefIsTest) {
+            Handler(Looper.getMainLooper()).post {
+              searchView =
+                fragmentLocalFileTransferBinding?.root?.findViewById(R.id.menu_item_search_devices)
+              showCaseFeatureToUsers()
+            }
           }
         }
 
