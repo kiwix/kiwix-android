@@ -11,6 +11,7 @@
     <ID>MagicNumber:ShareFiles.kt$ShareFiles$24</ID>
     <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$5</ID>
     <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$500</ID>
+    <ID>MagicNumber:LocalFileTransferFragment.kt$LocalFileTransferFragment$500</ID>
     <ID>NestedBlockDepth:LocalLibraryFragment.kt$LocalLibraryFragment$private fun checkPermissions()</ID>
     <ID>NestedBlockDepth:PeerGroupHandshake.kt$PeerGroupHandshake$private fun readHandshakeAndExchangeMetaData(): InetAddress?</ID>
     <ID>NestedBlockDepth:ReceiverHandShake.kt$ReceiverHandShake$override fun exchangeFileTransferMetadata(inputStream: InputStream, outputStream: OutputStream)</ID>

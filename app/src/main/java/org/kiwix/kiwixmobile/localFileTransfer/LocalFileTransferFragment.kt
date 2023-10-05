@@ -33,6 +33,8 @@ import android.net.wifi.p2p.WifiP2pDevice
 import android.net.wifi.p2p.WifiP2pDeviceList
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
@@ -67,6 +69,8 @@ import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getDe
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiP2pDelegate
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiPeerListAdapter
 import org.kiwix.kiwixmobile.core.webserver.ZimHostFragment.Companion.PERMISSION_REQUEST_CODE_COARSE_LOCATION
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
 import javax.inject.Inject
 
 /**
@@ -84,6 +88,7 @@ import javax.inject.Inject
  */
 
 const val URIS_KEY = "uris"
+const val SHOWCASE_ID = "MaterialShowcaseId"
 
 @SuppressLint("GoogleAppIndexingApiWarning", "Registered")
 class LocalFileTransferFragment :
@@ -104,6 +109,8 @@ class LocalFileTransferFragment :
   private var fileListAdapter: FileListAdapter? = null
   private var wifiPeerListAdapter: WifiPeerListAdapter? = null
   private var fragmentLocalFileTransferBinding: FragmentLocalFileTransferBinding? = null
+  private var materialShowcaseSequence: MaterialShowcaseSequence? = null
+  private var searchView: View? = null
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -139,6 +146,11 @@ class LocalFileTransferFragment :
       object : MenuProvider {
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
           menuInflater.inflate(R.menu.wifi_file_share_items, menu)
+          Handler(Looper.getMainLooper()).post {
+            searchView =
+              fragmentLocalFileTransferBinding?.root?.findViewById(R.id.menu_item_search_devices)
+            showCaseFeatureToUsers()
+          }
         }
 
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -154,8 +166,40 @@ class LocalFileTransferFragment :
     )
   }
 
-  private fun onSearchMenuClicked(): Boolean {
-    return when {
+  private fun showCaseFeatureToUsers() {
+    searchView?.let {
+      materialShowcaseSequence = MaterialShowcaseSequence(activity, SHOWCASE_ID).apply {
+        val config = ShowcaseConfig().apply {
+          delay = 500 // half second between each showcase view
+        }
+        setConfig(config)
+        addSequenceItem(
+          it,
+          getString(R.string.click_nearby_devices_message),
+          getString(R.string.got_it)
+        )
+        addSequenceItem(
+          fragmentLocalFileTransferBinding?.textViewDeviceName,
+          getString(R.string.your_device_name_message),
+          getString(R.string.got_it)
+        )
+        addSequenceItem(
+          fragmentLocalFileTransferBinding?.listPeerDevices,
+          getString(R.string.nearby_devices_list_message),
+          getString(R.string.got_it)
+        )
+        addSequenceItem(
+          fragmentLocalFileTransferBinding?.recyclerViewTransferFiles,
+          getString(R.string.transfer_zim_files_list_message),
+          getString(R.string.got_it)
+        )
+        start()
+      }
+    }
+  }
+
+  private fun onSearchMenuClicked(): Boolean =
+    when {
       !checkFineLocationAccessPermission() ->
         true
       !checkExternalStorageWritePermission() ->
@@ -175,7 +219,6 @@ class LocalFileTransferFragment :
         true
       }
     }
-  }
 
   private fun setupPeerDevicesList(activity: CoreMainActivity) {
     fragmentLocalFileTransferBinding?.listPeerDevices?.apply {
@@ -413,6 +456,8 @@ class LocalFileTransferFragment :
     wifiDirectManager.stopWifiDirectManager()
     wifiDirectManager.callbacks = null
     fragmentLocalFileTransferBinding = null
+    searchView = null
+    materialShowcaseSequence = null
     super.onDestroyView()
   }
 
