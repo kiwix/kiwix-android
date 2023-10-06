@@ -36,6 +36,7 @@ class BasicAuthInterceptor : Interceptor {
       val password = userNameAndPassword.substringAfter(":", "")
       val credentials = okhttp3.Credentials.basic(userName, password)
       val authenticatedRequest: Request = request.newBuilder()
+        .url(url.removeAuthenticationFromUrl)
         .header("Authorization", credentials).build()
       return chain.proceed(authenticatedRequest)
     }
@@ -47,6 +48,10 @@ val String.isAuthenticationUrl: Boolean
   get() = decodeUrl.trim().matches(Regex("https://[^@]+@.*\\.zim"))
 
 val String.secretKey: String
-  get() = substringAfter("{{", "")
+  get() = decodeUrl.substringAfter("{{", "")
     .substringBefore("}}", "")
     .trim()
+
+val String.removeAuthenticationFromUrl: String
+  get() = decodeUrl.trim()
+    .replace(Regex("\\{\\{\\s*[^}]+\\s*\\}\\}@"), "")
