@@ -195,6 +195,15 @@ class LocalFileTransferFragment :
           getString(R.string.transfer_zim_files_list_message),
           getString(R.string.got_it)
         )
+        setOnItemDismissedListener { showcaseView, _ ->
+          // To fix the memory leak by setting setTarget to null
+          // because the memory leak occurred inside the library.
+          // They had forgotten to detach the view after its successful use,
+          // so it holds the reference of these views in memory.
+          // By setting these views as null we remove the reference from
+          // the memory after they are successfully shown.
+          showcaseView.setTarget(null)
+        }
         start()
       }
     }
