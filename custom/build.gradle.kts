@@ -71,13 +71,13 @@ fun ProductFlavor.fetchUrl(): String {
   return url
     .openConnection()
     .apply {
-      connect()
       if (urlString.isAuthenticationUrl){
         setRequestProperty(
           "Authorization",
           "Basic ${Base64.getEncoder().encodeToString(System.getenv(secretKey).toByteArray())}"
         )
       }
+      connect()
       getInputStream()
     }.let {
       it.getHeaderField("Location")?.replace("https", "http") ?: it.url.toString()
