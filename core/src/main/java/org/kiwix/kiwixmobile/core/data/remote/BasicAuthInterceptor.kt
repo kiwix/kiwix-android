@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.data.remote
 
+import android.util.Log
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -55,3 +56,6 @@ val String.secretKey: String
 val String.removeAuthenticationFromUrl: String
   get() = decodeUrl.trim()
     .replace(Regex("\\{\\{\\s*[^}]+\\s*\\}\\}@"), "")
+    .also {
+      Log.d("BasicAuthInterceptor", "URL is $it")
+    }
