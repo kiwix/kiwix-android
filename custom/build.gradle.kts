@@ -71,11 +71,11 @@ fun ProductFlavor.fetchUrl(): String {
   return url
     .openConnection()
     .apply {
-      if (urlString.isAuthenticationUrl){
-        setRequestProperty(
-          "Authorization",
-          "Basic ${Base64.getEncoder().encodeToString(System.getenv(secretKey).toByteArray())}"
-        )
+      if (urlString.isAuthenticationUrl) {
+        // setRequestProperty(
+        //   "Authorization",
+        //   "Basic ${Base64.getEncoder().encodeToString(System.getenv(secretKey).toByteArray())}"
+        // )
       }
       connect()
       getInputStream()
