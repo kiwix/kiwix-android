@@ -18,9 +18,10 @@
 
 package org.kiwix.kiwixmobile.core.remote
 
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.data.remote.isAuthenticationUrl
+import org.kiwix.kiwixmobile.core.data.remote.removeAuthenticationFromUrl
 import org.kiwix.kiwixmobile.core.data.remote.secretKey
 
 class BasicAuthInterceptorTest {
@@ -62,6 +63,10 @@ class BasicAuthInterceptorTest {
     val urlWithoutAuth = "https://example.com/kiwix/f/somefile.zim"
     assertEquals(false, urlWithoutAuth.isAuthenticationUrl)
     assertEquals("", urlWithoutAuth.secretKey)
+    assertEquals(
+      urlWithoutAuth,
+      urlWithoutAuth.removeAuthenticationFromUrl
+    )
   }
 
   @Test
@@ -90,6 +95,10 @@ class BasicAuthInterceptorTest {
     assertEquals(false, urlWithHtmlExtension.isAuthenticationUrl)
     assertEquals("BASIC_AUTH_KEY", urlWithTxtExtension.secretKey)
     assertEquals("BASIC_AUTH_KEY", urlWithHtmlExtension.secretKey)
+    assertEquals(
+      "https://example.com/kiwix/f/somefile.txt",
+      urlWithTxtExtension.removeAuthenticationFromUrl
+    )
   }
 
   @Test
@@ -98,5 +107,26 @@ class BasicAuthInterceptorTest {
       "https://{{BASIC_AUTH_KEY}}@example.com/kiwix/f/{{ANOTHER_KEY}}.zim"
     assertEquals(true, urlWithMultiplePlaceholders.isAuthenticationUrl)
     assertEquals("BASIC_AUTH_KEY", urlWithMultiplePlaceholders.secretKey)
+    assertEquals(
+      "https://example.com/kiwix/f/{{ANOTHER_KEY}}.zim",
+      urlWithMultiplePlaceholders.removeAuthenticationFromUrl
+    )
+  }
+
+  @Test
+  fun testGetUrlWithoutAuthentication() {
+    assertEquals(
+      "https://www.dwds.de/kiwix/f/dwds_de_dictionary_nopic_2023-09-12.zim",
+      authenticationUrl.removeAuthenticationFromUrl
+    )
+  }
+
+  @Test
+  fun extractSecretKeyFromEncodedUrl() {
+    assertEquals(
+      "BASIC_AUTH_KEY",
+      "https%3A%2F%2F%7B%7BBASIC_AUTH_KEY%7D%7D%40www.dwds.de/kiwix/dwds_de_dictionary_nopic.zim"
+        .secretKey
+    )
   }
 }

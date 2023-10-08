@@ -7,7 +7,9 @@ import custom.transactionWithCommit
 import plugin.KiwixConfigurationPlugin
 import java.net.URI
 import java.net.URL
+import java.net.URLDecoder
 import java.util.Locale
+import java.util.Base64
 
 plugins {
   android
@@ -58,15 +60,43 @@ fun ProductFlavor.createDownloadTask(file: File): Task {
 }
 
 fun ProductFlavor.fetchUrl(): String {
-  return URI.create(buildConfigFields["ZIM_URL"]!!.value.replace("\"", "")).toURL()
+  val urlString = buildConfigFields["ZIM_URL"]!!.value.replace("\"", "")
+  var secretKey = ""
+  val url = if (urlString.isAuthenticationUrl) {
+    secretKey = urlString.secretKey
+    URI.create(urlString.removeAuthenticationFromUrl).toURL()
+  } else {
+    URI.create(urlString).toURL()
+  }
+  return url
     .openConnection()
     .apply {
+      if (urlString.isAuthenticationUrl) {
+        setRequestProperty(
+          "Authorization",
+          "Basic ${Base64.getEncoder().encodeToString(System.getenv(secretKey).toByteArray())}"
+        )
+      }
       connect()
       getInputStream()
     }.let {
       it.getHeaderField("Location")?.replace("https", "http") ?: it.url.toString()
     }
 }
+
+val String.decodeUrl: String
+  get() = URLDecoder.decode(this, "UTF-8")
+val String.isAuthenticationUrl: Boolean
+  get() = decodeUrl.trim().matches(Regex("https://[^@]+@.*\\.zim"))
+
+val String.secretKey: String
+  get() = decodeUrl.substringAfter("{{", "")
+    .substringBefore("}}", "")
+    .trim()
+
+val String.removeAuthenticationFromUrl: String
+  get() = decodeUrl.trim()
+    .replace(Regex("\\{\\{\\s*[^}]+\\s*\\}\\}@"), "")
 
 fun ProductFlavor.createPublishApkWithExpansionTask(
   file: File,
