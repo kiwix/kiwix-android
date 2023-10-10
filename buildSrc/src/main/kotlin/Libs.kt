@@ -80,11 +80,6 @@ object Libs {
     Versions.com_squareup_okhttp3
 
   /**
-   * https://square.github.io/okhttp/
-   */
-  const val okhttp: String = "com.squareup.okhttp3:okhttp:" + Versions.com_squareup_okhttp3
-
-  /**
    * https://kotlinlang.org/
    */
   const val kotlin_gradle_plugin: String = "org.jetbrains.kotlin:kotlin-gradle-plugin:" +
