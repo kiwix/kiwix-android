@@ -185,7 +185,6 @@ class AllProjectConfigurer {
       implementation(Libs.navigation_fragment_ktx)
       implementation(Libs.navigation_ui_ktx)
       androidTestImplementation(Libs.navigation_testing)
-      implementation(Libs.okhttp)
       implementation(Libs.logging_interceptor)
       implementation(Libs.retrofit)
       implementation(Libs.adapter_rxjava2)
