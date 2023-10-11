@@ -221,7 +221,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   private fun openSupportKiwixExternalLink() {
-    externalLinkOpener.openExternalUrl(KIWIX_SUPPORT_URL.toUri().browserIntent())
+    externalLinkOpener.openExternalUrl(
+      KIWIX_SUPPORT_URL.toUri().browserIntent(),
+      R.string.no_browser_application_installed
+    )
   }
 
   override fun onBackPressed() {

@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.core.utils
 import android.app.Activity
 import android.content.Intent
 import android.speech.tts.TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -33,7 +32,7 @@ class ExternalLinkOpener @Inject constructor(
   private val alertDialogShower: AlertDialogShower
 ) {
 
-  fun openExternalUrl(intent: Intent) {
+  fun openExternalUrl(intent: Intent, errorMessageId: Int) {
     if (intent.resolveActivity(activity.packageManager) != null) {
       // Show popup with warning that this url is external and could lead to additional costs
       // or may event not work when the user is offline.
@@ -43,7 +42,7 @@ class ExternalLinkOpener @Inject constructor(
         openLink(intent)
       }
     } else {
-      activity.toast(R.string.no_reader_application_installed)
+      activity.toast(errorMessageId)
     }
   }
 

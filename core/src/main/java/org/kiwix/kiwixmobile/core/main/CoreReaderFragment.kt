@@ -1382,8 +1382,8 @@ abstract class CoreReaderFragment :
     sharedPreferenceUtil?.putPrefFullScreen(false)
   }
 
-  override fun openExternalUrl(intent: Intent) {
-    externalLinkOpener?.openExternalUrl(intent)
+  override fun openExternalUrl(intent: Intent, errorMessageId: Int) {
+    externalLinkOpener?.openExternalUrl(intent, errorMessageId)
   }
 
   protected fun openZimFile(file: File, isCustomApp: Boolean = false) {

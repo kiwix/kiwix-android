@@ -24,7 +24,7 @@ interface WebViewCallback {
   fun webViewUrlLoading()
   fun webViewUrlFinishedLoading()
   fun webViewFailedLoading(failingUrl: String)
-  fun openExternalUrl(intent: Intent)
+  fun openExternalUrl(intent: Intent, errorMessageId: Int)
   fun webViewProgressChanged(progress: Int, webView: WebView)
   fun webViewTitleUpdated(title: String)
   fun webViewPageChanged(page: Int, maxPages: Int)

@@ -73,11 +73,11 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) :
         }
         uri?.let {
           /*
-          Check if it is valid url then show it to the user
-          otherwise don't show uri to the user as they are not directly openable in the external app.
+          Check if it is external browser url then show it to the user
+          otherwise don't show uri to the user as they are not directly openable in the external browser.
           We place this condition to improve the user experience see https://github.com/kiwix/kiwix-android/pull/3455
            */
-          if (!"$it".startsWith("content://")) {
+          if ("$it".startsWith("http://") || "$it".startsWith("https://")) {
             showUrlInDialog(this, it)
           }
           dialog.getView?.let { setView(it()) }

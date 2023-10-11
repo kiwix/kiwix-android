@@ -29,6 +29,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.content.FileProvider
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -70,7 +71,7 @@ open class CoreWebViewClient(
 
     // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-    callback.openExternalUrl(intent)
+    callback.openExternalUrl(intent, R.string.no_browser_application_installed)
     return true
   }
 
@@ -102,7 +103,11 @@ open class CoreWebViewClient(
             flags = Intent.FLAG_ACTIVITY_NO_HISTORY
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
           }
-          callback.openExternalUrl(intent)
+          val errorMessage = if (extension == "application/pdf")
+            R.string.no_pdf_application_installed
+          else
+            R.string.no_epub_application_installed
+          callback.openExternalUrl(intent, errorMessage)
         }
       }
       return true

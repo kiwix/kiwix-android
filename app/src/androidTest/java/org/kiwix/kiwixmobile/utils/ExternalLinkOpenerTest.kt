@@ -51,7 +51,7 @@ internal class ExternalLinkOpenerTest {
     every { intent.data } returns Uri.parse(url.toString())
     val lambdaSlot = slot<() -> Unit>()
     val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
-    externalLinkOpener.openExternalUrl(intent)
+    externalLinkOpener.openExternalUrl(intent, R.string.no_browser_application_installed)
     verify {
       alertDialogShower.show(
         KiwixDialog.ExternalLinkPopup,
@@ -72,7 +72,7 @@ internal class ExternalLinkOpenerTest {
     every { intent.data } returns uri
     val lambdaSlot = slot<() -> Unit>()
     val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
-    externalLinkOpener.openExternalUrl(intent)
+    externalLinkOpener.openExternalUrl(intent, R.string.no_browser_application_installed)
     verify {
       alertDialogShower.show(
         KiwixDialog.ExternalLinkPopup,
@@ -92,7 +92,7 @@ internal class ExternalLinkOpenerTest {
     every { intent.data } returns Uri.parse("https://github.com/")
     val lambdaSlot = slot<() -> Unit>()
     val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
-    externalLinkOpener.openExternalUrl(intent)
+    externalLinkOpener.openExternalUrl(intent, R.string.no_browser_application_installed)
     verify {
       alertDialogShower.show(
         KiwixDialog.ExternalLinkPopup,
@@ -112,7 +112,7 @@ internal class ExternalLinkOpenerTest {
     every { intent.data } returns Uri.parse("https://github.com/")
     val lambdaSlot = slot<() -> Unit>()
     val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
-    externalLinkOpener.openExternalUrl(intent)
+    externalLinkOpener.openExternalUrl(intent, R.string.no_browser_application_installed)
     verify {
       alertDialogShower.show(
         KiwixDialog.ExternalLinkPopup,
@@ -133,7 +133,7 @@ internal class ExternalLinkOpenerTest {
     every { intent.resolveActivity(activity.packageManager) } returns mockk()
     every { sharedPreferenceUtil.prefExternalLinkPopup } returns false
     val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
-    externalLinkOpener.openExternalUrl(intent)
+    externalLinkOpener.openExternalUrl(intent, R.string.no_browser_application_installed)
     verify { activity.startActivity(intent) }
   }
 
@@ -143,9 +143,19 @@ internal class ExternalLinkOpenerTest {
     val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
     mockkStatic(Toast::class)
     justRun {
-      Toast.makeText(activity, R.string.no_reader_application_installed, Toast.LENGTH_LONG).show()
+      Toast.makeText(activity, R.string.no_browser_application_installed, Toast.LENGTH_LONG).show()
     }
-    externalLinkOpener.openExternalUrl(intent)
-    verify { activity.toast(R.string.no_reader_application_installed) }
+    externalLinkOpener.openExternalUrl(intent, R.string.no_browser_application_installed)
+    verify { activity.toast(R.string.no_browser_application_installed) }
+    justRun {
+      Toast.makeText(activity, R.string.no_pdf_application_installed, Toast.LENGTH_LONG).show()
+    }
+    externalLinkOpener.openExternalUrl(intent, R.string.no_pdf_application_installed)
+    verify { activity.toast(R.string.no_pdf_application_installed) }
+    justRun {
+      Toast.makeText(activity, R.string.no_epub_application_installed, Toast.LENGTH_LONG).show()
+    }
+    externalLinkOpener.openExternalUrl(intent, R.string.no_epub_application_installed)
+    verify { activity.toast(R.string.no_epub_application_installed) }
   }
 }
