@@ -108,8 +108,8 @@ class LocalFileTransferTest {
   }
 
   @Test
-  fun testShowCaseFeature() {
-    shouldShowShowCaseFeatureToUser(true)
+  fun showCaseFeature() {
+    shouldShowShowCaseFeatureToUser(true, isResetShowCaseId = true)
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
       onActivity {
@@ -129,11 +129,24 @@ class LocalFileTransferTest {
         clickOnGotItButton()
         pressBack()
         assertGetZimNearbyDeviceDisplayed()
-        // test show case view show once.
-        clickFileTransferIcon(LocalFileTransferRobot::assertClickNearbyDeviceMessageNotVisible)
       }
     }
     LeakAssertions.assertNoLeaks()
+  }
+
+  @Test
+  fun testShowCaseFeatureShowOnce() {
+    shouldShowShowCaseFeatureToUser(true)
+    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+      moveToState(Lifecycle.State.RESUMED)
+      onActivity {
+        it.navigate(R.id.libraryFragment)
+      }
+    }
+    library {
+      // test show case view show once.
+      clickFileTransferIcon(LocalFileTransferRobot::assertClickNearbyDeviceMessageNotVisible)
+    }
   }
 
   @After
@@ -144,12 +157,19 @@ class LocalFileTransferTest {
     }
   }
 
-  private fun shouldShowShowCaseFeatureToUser(value: Boolean) {
+  private fun shouldShowShowCaseFeatureToUser(
+    shouldShowShowCase: Boolean,
+    isResetShowCaseId: Boolean = false
+  ) {
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, value)
+      putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, shouldShowShowCase)
+    }
+    if (isResetShowCaseId) {
+      // To clear showCaseID to ensure the showcase view will show.
+      uk.co.deanwild.materialshowcaseview.PrefsManager.resetAll(context)
     }
   }
 }

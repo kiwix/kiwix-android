@@ -66,10 +66,12 @@ class InitialDownloadRobot : BaseRobot() {
   }
 
   private fun assertDeleteDialogDisplayed() {
+    pauseForBetterTestPerformance()
     onView(withText("DELETE")).check(matches(isDisplayed()))
   }
 
   private fun clickOnDeleteZimFile() {
+    pauseForBetterTestPerformance()
     onView(withText("DELETE")).perform(click())
   }
 
@@ -78,9 +80,8 @@ class InitialDownloadRobot : BaseRobot() {
       longClickOnZimFile()
       clickOnFileDeleteIcon()
       assertDeleteDialogDisplayed()
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
       clickOnDeleteZimFile()
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+      pauseForBetterTestPerformance()
     } catch (e: Exception) {
       Log.i(
         "TEST_DELETE_ZIM",
@@ -142,6 +143,27 @@ class InitialDownloadRobot : BaseRobot() {
     } catch (e: AssertionFailedError) {
       BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
       assertDownloadStop()
+    }
+  }
+
+  private fun pauseForBetterTestPerformance() {
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+  }
+
+  fun stopDownloadIfAlreadyStarted() {
+    try {
+      pauseForBetterTestPerformance()
+      onView(withId(R.id.stop)).check(matches(isDisplayed()))
+      stopDownload()
+      assertStopDownloadDialogDisplayed()
+      clickOnYesToConfirm()
+      pauseForBetterTestPerformance()
+    } catch (e: Exception) {
+      Log.i(
+        "INITIAL_DOWNLOAD_TEST",
+        "Failed to stop download with title [" + zimFileTitle + "]... " +
+          "Probably because it doesn't download the zim file"
+      )
     }
   }
 }
