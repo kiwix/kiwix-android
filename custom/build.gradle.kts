@@ -37,7 +37,7 @@ android {
   }
   splits {
     abi {
-      isUniversalApk = false
+      isUniversalApk = true
     }
   }
 }
