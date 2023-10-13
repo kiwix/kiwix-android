@@ -35,11 +35,9 @@ android {
       }
     }
   }
-  bundle {
-    language {
-      // This is for testing the bundle file for the play store
-      //Context: #3503
-      enableSplit = false
+  splits {
+    abi {
+      isUniversalApk = false
     }
   }
 }
