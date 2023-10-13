@@ -14,14 +14,6 @@
   <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
   <uses-permission android:name="${permission}" />
 
-  <queries>
-    <intent>
-      <action android:name="android.intent.action.VIEW" />
-      <category android:name="android.intent.category.BROWSABLE" />
-      <data android:scheme="https" />
-    </intent>
-  </queries>
-
   <application
     android:name=".KiwixApp"
     android:allowBackup="true"
