@@ -16,7 +16,6 @@
 
 package custom
 
-import com.android.build.gradle.api.ApkVariantOutput
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.http.FileContent
@@ -33,7 +32,6 @@ import java.io.File
 import java.io.FileInputStream
 import java.security.KeyStore
 
-@Suppress("DEPRECATION")
 fun createPublisher(auth: File): AndroidPublisher {
   val transport = buildTransport()
   val factory = JacksonFactory.getDefaultInstance()
@@ -81,34 +79,31 @@ class Transaction(
       FileContent("application/octet-stream", file)
     ).execute().prettyPrint()
 
-  @Suppress("DEPRECATION")
-  fun attachExpansionTo(expansionCode: Int, apkVariantOutput: ApkVariantOutput): ExpansionFile =
+  fun attachExpansionTo(versionCode: Int): ExpansionFile =
     publisher.edits().expansionfiles().update(
       packageName,
       editId,
-      apkVariantOutput.versionCodeOverride,
+      versionCode,
       "main",
-      ExpansionFile().apply { referencesVersion = expansionCode }
+      ExpansionFile().apply { referencesVersion = versionCode }
     ).execute().prettyPrint()
 
-  @Suppress("DEPRECATION")
-  fun uploadApk(apkVariantOutput: ApkVariantOutput) {
-    publisher.edits().apks().upload(
+  fun uploadBundle(outputFile: File) {
+    publisher.edits().bundles().upload(
       packageName,
       editId,
-      FileContent("application/octet-stream", apkVariantOutput.outputFile)
+      FileContent("application/octet-stream", outputFile)
     ).execute().prettyPrint()
   }
 
-  @Suppress("DEPRECATION")
-  fun addToTrackInDraft(apkVariants: List<ApkVariantOutput>): Track =
-    publisher.edits().tracks().update(packageName, editId, "internal", Track().apply {
+  fun addToTrackInDraft(versionCode: Int, versionName: String?): Track =
+    publisher.edits().tracks().update(packageName, editId, "alpha", Track().apply {
       releases = listOf(TrackRelease().apply {
         status = "draft"
-        name = apkVariants[0].versionNameOverride
-        versionCodes = apkVariants.map { it.versionCodeOverride.toLong() }
+        name = versionName
+        versionCodes = listOf(versionCode.toLong())
       })
-      track = "internal"
+      track = "alpha"
     }).execute().prettyPrint()
 }
 
