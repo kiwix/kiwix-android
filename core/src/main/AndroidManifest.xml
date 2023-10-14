@@ -17,7 +17,11 @@
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
   <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
+  <uses-permission
+    android:name="android.permission.NEARBY_WIFI_DEVICES"
+    android:usesPermissionFlags="neverForLocation"
+    tools:targetApi="s" />
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
   <queries>
     <intent>
       <action android:name="android.intent.action.TTS_SERVICE" />
@@ -85,5 +89,6 @@
       android:name=".error.DiagnosticReportActivity"
       android:exported="false" />
     <service android:name=".read_aloud.ReadAloudService" />
+    <service android:name=".webserver.wifi_hotspot.HotspotService" />
   </application>
 </manifest>

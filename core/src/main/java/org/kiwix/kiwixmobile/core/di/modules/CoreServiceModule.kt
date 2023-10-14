@@ -19,11 +19,17 @@
 package org.kiwix.kiwixmobile.core.di.modules
 
 import android.app.NotificationManager
+import android.app.Service
 import android.content.Context
 import dagger.Module
 import dagger.Provides
 import org.kiwix.kiwixmobile.core.di.CoreServiceScope
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudNotificationManger
+import org.kiwix.kiwixmobile.core.webserver.KiwixServer
+import org.kiwix.kiwixmobile.core.webserver.WebServerHelper
+import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotNotificationManager
+import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotStateReceiver
+import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.IpAddressCallbacks
 
 @Module
 class CoreServiceModule {
@@ -33,4 +39,33 @@ class CoreServiceModule {
     notificationManager: NotificationManager,
     context: Context
   ): ReadAloudNotificationManger = ReadAloudNotificationManger(notificationManager, context)
+
+  @Provides
+  @CoreServiceScope
+  fun providesWebServerHelper(
+    kiwixServerFactory: KiwixServer.Factory,
+    ipAddressCallbacks: IpAddressCallbacks
+  ): WebServerHelper = WebServerHelper(kiwixServerFactory, ipAddressCallbacks)
+
+  @Provides
+  @CoreServiceScope
+  fun providesIpAddressCallbacks(service: Service): IpAddressCallbacks =
+    service as IpAddressCallbacks
+
+  @Provides
+  @CoreServiceScope
+  fun providesHotspotNotificationManager(
+    notificationManager: NotificationManager,
+    context: Context
+  ): HotspotNotificationManager = HotspotNotificationManager(notificationManager, context)
+
+  @Provides
+  @CoreServiceScope
+  fun providesHotspotStateReceiver(callback: HotspotStateReceiver.Callback): HotspotStateReceiver =
+    HotspotStateReceiver(callback)
+
+  @Provides
+  @CoreServiceScope
+  fun providesHotspotStateReceiverCallback(service: Service): HotspotStateReceiver.Callback =
+    service as HotspotStateReceiver.Callback
 }

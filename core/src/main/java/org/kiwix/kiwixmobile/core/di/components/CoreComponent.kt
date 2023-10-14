@@ -21,6 +21,7 @@ import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.wifi.WifiManager
 import dagger.BindsInstance
 import dagger.Component
 import eu.mhutti1.utils.storage.StorageSelectDialog
@@ -91,6 +92,7 @@ interface CoreComponent {
   fun recentSearchDao(): NewRecentSearchDao
   fun newBookmarksDao(): NewBookmarksDao
   fun connectivityManager(): ConnectivityManager
+  fun wifiManager(): WifiManager
   fun context(): Context
   fun downloader(): Downloader
   fun notificationManager(): NotificationManager

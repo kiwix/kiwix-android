@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.webserver.wifi_hotspot
+package org.kiwix.kiwixmobile.core.webserver.wifi_hotspot
 
 interface IpAddressCallbacks {
   fun onIpAddressValid()

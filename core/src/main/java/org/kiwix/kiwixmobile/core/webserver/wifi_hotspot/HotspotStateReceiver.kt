@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2023 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,12 +15,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.webserver.wifi_hotspot
+package org.kiwix.kiwixmobile.core.webserver.wifi_hotspot
 
 import android.content.Context
 import android.content.Intent
 import org.kiwix.kiwixmobile.core.base.BaseBroadcastReceiver
-import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotStateReceiver.HotspotState.DISABLED
+import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotStateReceiver.HotspotState.DISABLED
 import javax.inject.Inject
 
 const val EXTRA_WIFI_AP_STATE = "wifi_state"

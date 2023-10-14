@@ -25,10 +25,6 @@
       org.kiwix.kiwixmobile.zimManager.fileselectView</ID>
     <ID>PackageNaming:FileSystemChecker.kt$package org.kiwix.kiwixmobile.zimManager</ID>
     <ID>PackageNaming:FileWritingFileSystemChecker.kt$package org.kiwix.kiwixmobile.zimManager</ID>
-    <ID>PackageNaming:HotspotNotificationManager.kt$package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
-    <ID>PackageNaming:HotspotStateReceiver.kt$package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
-    <ID>PackageNaming:IpAddressCallbacks.kt$package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
-    <ID>PackageNaming:HotspotService.kt$package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
     <ID>PackageNaming:LibraryAdapter.kt$package
       org.kiwix.kiwixmobile.zimManager.libraryView.adapter</ID>
     <ID>PackageNaming:LibraryDelegate.kt$package

@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2023 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,20 +15,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.webserver.wifi_hotspot
+package org.kiwix.kiwixmobile.core.webserver.wifi_hotspot
 
 import android.app.Service
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import android.widget.Toast
-import org.kiwix.kiwixmobile.KiwixApp
+import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.utils.ServerUtils.getSocketAddress
-import org.kiwix.kiwixmobile.webserver.WebServerHelper
-import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks
-import org.kiwix.kiwixmobile.webserver.ZimHostFragment
+import org.kiwix.kiwixmobile.core.webserver.WebServerHelper
+import org.kiwix.kiwixmobile.core.webserver.ZimHostCallbacks
+import org.kiwix.kiwixmobile.core.webserver.ZimHostFragment
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
@@ -53,8 +53,8 @@ class HotspotService :
   private val serviceBinder: IBinder = HotspotBinder(this)
 
   override fun onCreate() {
-    (this.application as KiwixApp).kiwixComponent
-      .serviceComponent()
+    coreComponent
+      .coreServiceComponent()
       .service(this)
       .build()
       .inject(this)
@@ -72,7 +72,8 @@ class HotspotService :
     when (intent.action) {
       ACTION_START_SERVER ->
         intent.getStringArrayListExtra(ZimHostFragment.SELECTED_ZIM_PATHS_KEY)?.let {
-          if (webServerHelper?.startServerHelper(it) == true) {
+          val serverStatus = webServerHelper?.startServerHelper(it)
+          if (serverStatus?.isServerStarted == true) {
             zimHostCallbacks?.onServerStarted(getSocketAddress())
             startForegroundNotificationHelper()
             Toast.makeText(
@@ -80,9 +81,9 @@ class HotspotService :
               Toast.LENGTH_SHORT
             ).show()
           } else {
-            onServerFailedToStart()
+            onServerFailedToStart(serverStatus?.errorMessage)
           }
-        } ?: kotlin.run(::onServerFailedToStart)
+        } ?: kotlin.run { onServerFailedToStart(R.string.no_books_selected_toast_message) }
 
       ACTION_STOP_SERVER -> {
         Toast.makeText(
@@ -110,8 +111,8 @@ class HotspotService :
     hotspotNotificationManager?.dismissNotification()
   }
 
-  private fun onServerFailedToStart() {
-    zimHostCallbacks?.onServerFailedToStart()
+  private fun onServerFailedToStart(errorMessage: Int?) {
+    zimHostCallbacks?.onServerFailedToStart(errorMessage)
   }
 
   fun registerCallBack(myCallback: ZimHostCallbacks?) {

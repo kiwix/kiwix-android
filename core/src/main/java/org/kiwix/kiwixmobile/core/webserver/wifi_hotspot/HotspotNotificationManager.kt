@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2023 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.webserver.wifi_hotspot
+package org.kiwix.kiwixmobile.core.webserver.wifi_hotspot
 
 import android.annotation.SuppressLint
 import android.app.Notification
@@ -27,9 +27,9 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.navigation.NavDeepLinkBuilder
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.HOTSPOT_SERVICE_CHANNEL_ID
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import javax.inject.Inject
 
 class HotspotNotificationManager @Inject constructor(
@@ -52,12 +52,14 @@ class HotspotNotificationManager @Inject constructor(
     }
   }
 
-  @SuppressLint("UnspecifiedImmutableFlag") fun buildForegroundNotification(): Notification {
+  @SuppressLint("UnspecifiedImmutableFlag")
+  fun buildForegroundNotification(): Notification {
+    val coreMainActivity = (context as CoreApp).getMainActivity()
     val contentIntent = NavDeepLinkBuilder(context).setComponentName(
-      KiwixMainActivity::class.java
+      coreMainActivity.mainActivity::class.java
     )
-      .setGraph(R.navigation.kiwix_nav_graph)
-      .setDestination(R.id.zimHostFragment)
+      .setGraph(coreMainActivity.navGraphId)
+      .setDestination(coreMainActivity.zimHostFragmentResId)
       .createPendingIntent()
     hotspotNotificationChannel()
     val stopIntent = Intent(context, HotspotService::class.java).setAction(
