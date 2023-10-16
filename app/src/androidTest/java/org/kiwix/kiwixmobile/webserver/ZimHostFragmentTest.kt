@@ -18,19 +18,19 @@
 
 package org.kiwix.kiwixmobile.webserver
 
-import androidx.core.content.edit
+import android.Manifest
+import android.content.Context
+import android.os.Build
 import androidx.lifecycle.Lifecycle
-import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
 import leakcanary.LeakAssertions
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
@@ -40,28 +40,52 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 
-class ZimHostFragmentTest : BaseActivityTest() {
+class ZimHostFragmentTest {
   @Rule
   @JvmField
   var retryRule = RetryRule()
 
-  private lateinit var kiwixMainActivity: KiwixMainActivity
   private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
+  private lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
+
+  private val permissions = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+    arrayOf(
+      Manifest.permission.READ_EXTERNAL_STORAGE,
+      Manifest.permission.WRITE_EXTERNAL_STORAGE,
+      Manifest.permission.SYSTEM_ALERT_WINDOW,
+      Manifest.permission.NEARBY_WIFI_DEVICES
+    )
+  } else {
+    arrayOf(
+      Manifest.permission.READ_EXTERNAL_STORAGE,
+      Manifest.permission.WRITE_EXTERNAL_STORAGE,
+      Manifest.permission.ACCESS_COARSE_LOCATION
+    )
+  }
+
+  @Rule
+  @JvmField
+  var permissionRules: GrantPermissionRule =
+    GrantPermissionRule.grant(*permissions)
+  private var context: Context? = null
+
   @Before
-  override fun waitForIdle() {
+  fun waitForIdle() {
+    context = InstrumentationRegistry.getInstrumentation().targetContext
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
       if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
         TestUtils.closeSystemDialogs(context)
       }
       waitForIdle()
     }
-    sharedPreferenceUtil = SharedPreferenceUtil(context)
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
-      putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
-      putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
+    context?.let {
+      sharedPreferenceUtil = SharedPreferenceUtil(it).apply {
+        setIntroShown()
+        putPrefWifiOnly(false)
+        setIsPlayStoreBuildType(true)
+        prefIsTest = true
+      }
     }
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
@@ -70,20 +94,50 @@ class ZimHostFragmentTest : BaseActivityTest() {
 
   @Test
   fun testZimHostFragment() {
-    activityScenario.onActivity {
-      kiwixMainActivity = it
-      kiwixMainActivity.navigate(R.id.libraryFragment)
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+      activityScenario.onActivity {
+        it.navigate(R.id.libraryFragment)
+      }
+      loadZimFileInApplication("testzim.zim")
+      loadZimFileInApplication("small.zim")
+      zimHost {
+        refreshLibraryList()
+        assertZimFilesLoaded()
+        openZimHostFragment()
+        clickOnTestZim()
+
+        // Start the server with one ZIM file
+        startServer()
+        assertServerStarted()
+
+        // Check that only one ZIM file is hosted on the server
+        assertItemHostedOnServer(1)
+
+        // Stop the server
+        stopServer()
+        assertServerStopped()
+
+        // Select the test ZIM file to host on the server
+        clickOnTestZim()
+
+        // Start the server with two ZIM files
+        startServer()
+        assertServerStarted()
+
+        // Check that both ZIM files are hosted on the server
+        assertItemHostedOnServer(2)
+
+        // Unselect the test ZIM to test restarting server functionality
+        clickOnTestZim()
+
+        // Check if the server is running
+        assertServerStarted()
+
+        // Check that only one ZIM file is hosted on the server after unselecting
+        assertItemHostedOnServer(1)
+      }
+      LeakAssertions.assertNoLeaks()
     }
-    loadZimFileInApplication("testzim.zim")
-    loadZimFileInApplication("small.zim")
-    zimHost {
-      refreshLibraryList()
-      assertZimFilesLoaded()
-    }
-    UiThreadStatement.runOnUiThread {
-      kiwixMainActivity.navigate(R.id.zimHostFragment)
-    }
-    LeakAssertions.assertNoLeaks()
   }
 
   private fun loadZimFileInApplication(zimFileName: String) {
@@ -106,9 +160,9 @@ class ZimHostFragmentTest : BaseActivityTest() {
 
   @After
   fun setIsTestPreference() {
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, false)
-      putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, false)
+    sharedPreferenceUtil.apply {
+      setIsPlayStoreBuildType(false)
+      prefIsTest = false
     }
   }
 }

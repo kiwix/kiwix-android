@@ -18,12 +18,19 @@
 
 package org.kiwix.kiwixmobile.webserver
 
+import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import applyWithViewHierarchyPrinting
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
+import org.hamcrest.CoreMatchers
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
+import org.kiwix.kiwixmobile.Findable.Text
+import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.utils.RecyclerViewSelectedCheckBoxCountAssertion
+import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 
 fun zimHost(func: ZimHostRobot.() -> Unit) = ZimHostRobot().applyWithViewHierarchyPrinting(func)
 
@@ -34,10 +41,55 @@ class ZimHostRobot : BaseRobot() {
   }
 
   fun refreshLibraryList() {
+    pauseForBetterTestPerformance()
     refresh(R.id.zim_swiperefresh)
   }
 
   fun assertZimFilesLoaded() {
+    pauseForBetterTestPerformance()
     isVisible(Text("Test_Zim"))
+  }
+
+  fun openZimHostFragment() {
+    openDrawer()
+    clickOn(TextId(R.string.menu_wifi_hotspot))
+  }
+
+  fun clickOnTestZim() {
+    clickOn(Text("Test_Zim"))
+  }
+
+  fun startServer() {
+    clickOn(ViewId(R.id.startServerButton))
+    pauseForBetterTestPerformance()
+    isVisible(TextId(R.string.wifi_dialog_title))
+    clickOn(TextId(R.string.hotspot_dialog_neutral_button))
+  }
+
+  fun assertServerStarted() {
+    pauseForBetterTestPerformance()
+    isVisible(Text("STOP SERVER"))
+  }
+
+  fun assertItemHostedOnServer(itemCount: Int) {
+    val checkedCheckboxCount =
+      RecyclerViewSelectedCheckBoxCountAssertion(
+        R.id.recyclerViewZimHost,
+        R.id.itemBookCheckbox
+      ).countCheckedCheckboxes()
+    assertThat(checkedCheckboxCount, CoreMatchers.`is`(itemCount))
+  }
+
+  fun stopServer() {
+    clickOn(ViewId(R.id.startServerButton))
+  }
+
+  fun assertServerStopped() {
+    pauseForBetterTestPerformance()
+    isVisible(Text("START SERVER"))
+  }
+
+  private fun pauseForBetterTestPerformance() {
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
   }
 }
