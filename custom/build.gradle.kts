@@ -6,10 +6,13 @@ import custom.createPublisher
 import custom.transactionWithCommit
 import plugin.KiwixConfigurationPlugin
 import java.net.URI
-import java.net.URL
 import java.net.URLDecoder
 import java.util.Locale
 import java.util.Base64
+import java.io.FileOutputStream
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.ResponseBody
 
 plugins {
   android
@@ -32,9 +35,11 @@ android {
       }
     }
   }
-  splits {
-    abi {
-      isUniversalApk = false
+  bundle {
+    language {
+      // This is for testing the bundle file for the play store
+      // Context: #3503
+      enableSplit = false
     }
   }
 }
@@ -51,37 +56,53 @@ fun ProductFlavor.createDownloadTask(file: File): Task {
     doLast {
       if (!file.exists()) {
         file.createNewFile()
-        URL(fetchUrl()).openStream().use {
-          it.copyTo(file.outputStream())
+
+        OkHttpClient().newCall(fetchRequest()).execute().use { response ->
+          if (response.isSuccessful) {
+            response.body?.let { responseBody ->
+              writeZimFileData(responseBody, file)
+            }
+          } else {
+            throw RuntimeException(
+              "Download Failed. Error: ${response.message}\n" +
+                " Status Code: ${response.code}"
+            )
+          }
         }
       }
     }
   }
 }
 
-fun ProductFlavor.fetchUrl(): String {
+fun ProductFlavor.fetchRequest(): Request {
   val urlString = buildConfigFields["ZIM_URL"]!!.value.replace("\"", "")
-  var secretKey = ""
-  val url = if (urlString.isAuthenticationUrl) {
-    secretKey = urlString.secretKey
-    URI.create(urlString.removeAuthenticationFromUrl).toURL()
+  return if (urlString.isAuthenticationUrl) {
+    Request.Builder()
+      .url(URI.create(urlString.removeAuthenticationFromUrl).toURL())
+      .header(
+        "Authorization",
+        "Basic " +
+          Base64.getEncoder().encodeToString(System.getenv(urlString.secretKey).toByteArray())
+      )
+      .build()
   } else {
-    URI.create(urlString).toURL()
+    Request.Builder()
+      .url(URI.create(urlString).toURL())
+      .build()
   }
-  return url
-    .openConnection()
-    .apply {
-      if (urlString.isAuthenticationUrl) {
-        setRequestProperty(
-          "Authorization",
-          "Basic ${Base64.getEncoder().encodeToString(System.getenv(secretKey).toByteArray())}"
-        )
+}
+
+fun writeZimFileData(responseBody: ResponseBody, file: File) {
+  FileOutputStream(file).use { outputStream ->
+    responseBody.byteStream().use { inputStream ->
+      val buffer = ByteArray(4096)
+      var bytesRead: Int
+      while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+        outputStream.write(buffer, 0, bytesRead)
       }
-      connect()
-      getInputStream()
-    }.let {
-      it.getHeaderField("Location")?.replace("https", "http") ?: it.url.toString()
+      outputStream.flush()
     }
+  }
 }
 
 val String.decodeUrl: String
