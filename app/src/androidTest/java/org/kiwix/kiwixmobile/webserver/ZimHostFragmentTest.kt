@@ -49,7 +49,7 @@ class ZimHostFragmentTest {
 
   private lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
 
-  private val permissions = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+  private val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
     arrayOf(
       Manifest.permission.READ_EXTERNAL_STORAGE,
       Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -60,7 +60,8 @@ class ZimHostFragmentTest {
     arrayOf(
       Manifest.permission.READ_EXTERNAL_STORAGE,
       Manifest.permission.WRITE_EXTERNAL_STORAGE,
-      Manifest.permission.ACCESS_COARSE_LOCATION
+      Manifest.permission.ACCESS_COARSE_LOCATION,
+      Manifest.permission.ACCESS_FINE_LOCATION
     )
   }
 
