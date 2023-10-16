@@ -19,11 +19,15 @@
 package org.kiwix.kiwixmobile.custom.main
 
 import android.content.Context
+import android.content.pm.PackageManager
+import android.util.Log
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasBothFiles
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasFile
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasNothing
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import javax.inject.Inject
 
 class CustomFileValidator @Inject constructor(private val context: Context) {
@@ -37,14 +41,46 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
 
   private fun detectInstallationState(
     obbFiles: List<File> = obbFiles(),
-    zimFiles: List<File> = zimFiles()
+    zimFiles: List<File> = zimFiles(),
+    assetFile: File? = getFileFromPlayAssetDelivery()
   ): ValidationState {
     return when {
       obbFiles.isNotEmpty() && zimFiles().isNotEmpty() -> HasBothFiles(obbFiles[0], zimFiles[0])
       obbFiles.isNotEmpty() -> HasFile(obbFiles[0])
       zimFiles.isNotEmpty() -> HasFile(zimFiles[0])
+      assetFile != null -> HasFile(assetFile)
       else -> HasNothing
     }
+  }
+
+  @Suppress("NestedBlockDepth", "MagicNumber")
+  private fun getFileFromPlayAssetDelivery(): File? {
+    var zimFile: File? = null
+    try {
+      val context = context.createPackageContext(context.packageName, 0)
+      val assetManager = context.assets
+      val inputStream = assetManager.open("dwds_de_dictionary_nopic_2023-09-12.zim")
+      val filePath = ContextCompat.getExternalFilesDirs(context, null)[0]
+      zimFile = File(filePath, "dwds_de_dictionary_nopic_2023-09-12.zim")
+      FileOutputStream(zimFile).use { outputSteam ->
+        inputStream.use { inputStream ->
+          val buffer = ByteArray(1024)
+          var length: Int
+          while (inputStream.read(buffer).also { length = it } > 0) {
+            outputSteam.write(buffer, 0, length)
+          }
+          outputSteam.flush()
+        }
+      }
+    } catch (packageNameNotFoundException: PackageManager.NameNotFoundException) {
+      Log.w(
+        "ASSET_PACKAGE_DELIVERY",
+        "Asset package is not found ${packageNameNotFoundException.message}"
+      )
+    } catch (ioException: IOException) {
+      Log.w("ASSET_PACKAGE_DELIVERY", "Unable to copy the content of asset ${ioException.message}")
+    }
+    return zimFile
   }
 
   private fun obbFiles() = scanDirs(ContextCompat.getObbDirs(context), "obb")

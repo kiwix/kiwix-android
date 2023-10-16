@@ -100,6 +100,14 @@ class Transaction(
     ).execute().prettyPrint()
   }
 
+  fun uploadBundle(file: File) {
+    publisher.edits().apks().upload(
+      packageName,
+      editId,
+      FileContent("application/octet-stream", file)
+    ).execute().prettyPrint()
+  }
+
   @Suppress("DEPRECATION")
   fun addToTrackInDraft(apkVariants: List<ApkVariantOutput>): Track =
     publisher.edits().tracks().update(packageName, editId, "internal", Track().apply {
@@ -107,6 +115,17 @@ class Transaction(
         status = "draft"
         name = apkVariants[0].versionNameOverride
         versionCodes = apkVariants.map { it.versionCodeOverride.toLong() }
+      })
+      track = "internal"
+    }).execute().prettyPrint()
+
+  @Suppress("DEPRECATION")
+  fun addBundleToTrackInDraft(versionCode: Int, versionName: String?): Track =
+    publisher.edits().tracks().update(packageName, editId, "internal", Track().apply {
+      releases = listOf(TrackRelease().apply {
+        status = "draft"
+        name = versionName
+        versionCodes = listOf(versionCode.toLong())
       })
       track = "internal"
     }).execute().prettyPrint()
