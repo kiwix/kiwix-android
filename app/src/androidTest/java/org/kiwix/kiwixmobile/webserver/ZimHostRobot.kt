@@ -19,7 +19,9 @@
 package org.kiwix.kiwixmobile.webserver
 
 import applyWithViewHierarchyPrinting
+import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.R
 
@@ -29,5 +31,13 @@ class ZimHostRobot : BaseRobot() {
 
   fun assertMenuWifiHotspotDiplayed() {
     isVisible(TextId(R.string.menu_wifi_hotspot))
+  }
+
+  fun refreshLibraryList() {
+    refresh(R.id.zim_swiperefresh)
+  }
+
+  fun assertZimFilesLoaded() {
+    isVisible(Text("Test_Zim"))
   }
 }
