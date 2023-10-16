@@ -45,12 +45,15 @@ class WebServerHelper @Inject constructor(
   private var isServerStarted = false
   private var validIpAddressDisposable: Disposable? = null
 
-  fun startServerHelper(selectedBooksPath: ArrayList<String>): ServerStatus {
+  fun startServerHelper(
+    selectedBooksPath: ArrayList<String>,
+    restartServer: Boolean
+  ): ServerStatus? {
     val ip = getIpAddress()
     return if (ip.isNullOrEmpty()) {
       ServerStatus(false, R.string.error_ip_address_not_found)
     } else {
-      startAndroidWebServer(selectedBooksPath)
+      startAndroidWebServer(selectedBooksPath, restartServer)
     }
   }
 
@@ -61,16 +64,28 @@ class WebServerHelper @Inject constructor(
     }
   }
 
-  private fun startAndroidWebServer(selectedBooksPath: ArrayList<String>): ServerStatus {
-    var errorMessage: Int? = null
+  private fun startAndroidWebServer(
+    selectedBooksPath: ArrayList<String>,
+    restartServer: Boolean
+  ): ServerStatus? {
+    var serverStatus: ServerStatus? = null
     if (!isServerStarted) {
-      ServerUtils.port = DEFAULT_PORT
-      kiwixServer = kiwixServerFactory.createKiwixServer(selectedBooksPath).also {
-        updateServerState(it.startServer(ServerUtils.port))
-        Log.d(TAG, "Server status$isServerStarted").also {
-          if (!isServerStarted) {
-            errorMessage = R.string.error_server_already_running
-          }
+      serverStatus = startKiwixServer(selectedBooksPath)
+    } else if (restartServer) {
+      kiwixServer?.stopServer()
+      serverStatus = startKiwixServer(selectedBooksPath)
+    }
+    return serverStatus
+  }
+
+  private fun startKiwixServer(selectedBooksPath: ArrayList<String>): ServerStatus {
+    var errorMessage: Int? = null
+    ServerUtils.port = DEFAULT_PORT
+    kiwixServer = kiwixServerFactory.createKiwixServer(selectedBooksPath).also {
+      updateServerState(it.startServer(ServerUtils.port))
+      Log.d(TAG, "Server status$isServerStarted").also {
+        if (!isServerStarted) {
+          errorMessage = R.string.error_server_already_running
         }
       }
     }
