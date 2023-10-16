@@ -94,6 +94,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private lateinit var serviceConnection: ServiceConnection
   private var dialog: Dialog? = null
   private var activityZimHostBinding: ActivityZimHostBinding? = null
+  private var allBooks: List<BooksOnDiskListItem>? = null
   override val fragmentTitle: String? by lazy {
     getString(R.string.menu_wifi_hotspot)
   }
@@ -116,6 +117,16 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
           }
         }
         as ArrayList<String>
+    }
+
+  private val selectedBooks: List<BooksOnDiskListItem>
+    get() {
+      return booksAdapter.items
+        .filter(BooksOnDiskListItem::isSelected)
+        .filterIsInstance<BookOnDisk>()
+        .map {
+          it
+        }
     }
 
   override fun onCreateView(
@@ -370,6 +381,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     activityZimHostBinding?.startServerButton?.setBackgroundColor(
       ContextCompat.getColor(requireActivity(), R.color.stopServerRed)
     )
+    booksAdapter.items = selectedBooks
     bookDelegate.selectionMode = SelectionMode.NORMAL
     booksAdapter.notifyDataSetChanged()
   }
@@ -396,6 +408,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     activityZimHostBinding?.startServerButton?.setBackgroundColor(
       ContextCompat.getColor(requireActivity(), R.color.startServerGreen)
     )
+    allBooks?.let { booksAdapter.items = it }
     bookDelegate.selectionMode = SelectionMode.MULTI
     booksAdapter.notifyDataSetChanged()
   }
@@ -484,6 +497,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
         }
       }
       booksAdapter.items = updatedBooksList
+      allBooks = books
     }
   }
 
