@@ -21,7 +21,7 @@ apply(plugin = "com.jakewharton.butterknife")
 ext {
   set("versionMajor", 3)
   set("versionMinor", 7)
-  set("versionPatch", 1)
+  set("versionPatch", 2)
 }
 
 /*
@@ -84,6 +84,7 @@ dependencies {
   implementation(Libs.objectbox_kotlin)
   implementation(Libs.objectbox_rxjava)
   implementation(Libs.webkit)
+  implementation(Libs.playcore)
   testImplementation(Libs.kotlinx_coroutines_test)
   implementation(Libs.kotlinx_coroutines_android)
 }

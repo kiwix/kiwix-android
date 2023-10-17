@@ -334,6 +334,7 @@ object Libs {
    * https://developer.android.com/jetpack/androidx
    */
   const val webkit: String = "androidx.webkit:webkit:" + Versions.webkit
+  const val playcore: String = "com.google.android.play:core:1.10.0"
 
   /**
    * https://developer.android.com/testing
