@@ -101,7 +101,7 @@ class Transaction(
   }
 
   fun uploadBundle(file: File) {
-    publisher.edits().apks().upload(
+    publisher.edits().bundles().upload(
       packageName,
       editId,
       FileContent("application/octet-stream", file)
