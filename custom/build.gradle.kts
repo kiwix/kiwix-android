@@ -36,7 +36,7 @@ android {
       }
       File("$projectDir/../install_time_asset_for_dwds/src/main/assets", "$name.zim").let {
         createDownloadTaskForPlayAssetDelivery(it)
-        createPublishBundleWithAssetPlayDelivery(applicationVariants)
+        createPublishBundleWithAssetPlayDelivery()
       }
     }
   }
@@ -46,11 +46,6 @@ android {
       // This is for testing the bundle file for the play store
       // Context: #3503
       enableSplit = false
-    }
-  }
-  splits {
-    abi {
-      isUniversalApk = true
     }
   }
   assetPacks += ":install_time_asset_for_dwds"
@@ -192,9 +187,7 @@ fun DomainObjectSet<ApplicationVariant>.releaseVariantsFor(productFlavor: Produc
   find { it.name.equals("${productFlavor.name}Release", true) }!!
     .outputs.filterIsInstance<ApkVariantOutput>().sortedBy { it.versionCodeOverride }
 
-fun ProductFlavor.createPublishBundleWithAssetPlayDelivery(
-  applicationVariants: DomainObjectSet<ApplicationVariant>
-): Task {
+fun ProductFlavor.createPublishBundleWithAssetPlayDelivery(): Task {
   val capitalizedName =
     name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it" }
   return tasks.create("publish${capitalizedName}ReleaseBundleWithPlayAssetDelivery") {
@@ -205,8 +198,6 @@ fun ProductFlavor.createPublishBundleWithAssetPlayDelivery(
       println("packageName $packageName")
       createPublisher(File(rootDir, "playstore.json"))
         .transactionWithCommit(packageName) {
-          val variants =
-            applicationVariants.releaseVariantsFor(this@createPublishBundleWithAssetPlayDelivery)
           val generatedBundleFile =
             File(
               "$buildDir/outputs/bundle/${capitalizedName.lowercase(Locale.getDefault())}" +
@@ -214,7 +205,7 @@ fun ProductFlavor.createPublishBundleWithAssetPlayDelivery(
             )
           if (generatedBundleFile.exists()) {
             uploadBundle(generatedBundleFile)
-            addBundleToTrackInDraft(variants[0].versionCode, versionName)
+            addBundleToTrackInDraft(versionCode, versionName)
           } else {
             throw FileNotFoundException("Unable to find generated aab file")
           }

@@ -120,12 +120,12 @@ class Transaction(
     }).execute().prettyPrint()
 
   @Suppress("DEPRECATION")
-  fun addBundleToTrackInDraft(versionCode: Int, versionName: String?): Track =
+  fun addBundleToTrackInDraft(versionCode: Int?, versionName: String?): Track =
     publisher.edits().tracks().update(packageName, editId, "internal", Track().apply {
       releases = listOf(TrackRelease().apply {
         status = "draft"
         name = versionName
-        versionCodes = listOf(versionCode.toLong())
+        versionCodes = listOf(versionCode?.toLong())
       })
       track = "internal"
     }).execute().prettyPrint()
