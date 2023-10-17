@@ -129,20 +129,19 @@ fun ProductFlavor.createDownloadTaskForPlayAssetDelivery(
   ) {
     group = "Downloading"
     doLast {
-      if (!file.exists()) {
-        file.createNewFile()
+      if (file.exists()) file.delete()
+      file.createNewFile()
 
-        OkHttpClient().newCall(fetchRequest()).execute().use { response ->
-          if (response.isSuccessful) {
-            response.body?.let { responseBody ->
-              writeZimFileData(responseBody, file)
-            }
-          } else {
-            throw RuntimeException(
-              "Download Failed. Error: ${response.message}\n" +
-                " Status Code: ${response.code}"
-            )
+      OkHttpClient().newCall(fetchRequest()).execute().use { response ->
+        if (response.isSuccessful) {
+          response.body?.let { responseBody ->
+            writeZimFileData(responseBody, file)
           }
+        } else {
+          throw RuntimeException(
+            "Download Failed. Error: ${response.message}\n" +
+              " Status Code: ${response.code}"
+          )
         }
       }
     }
@@ -200,7 +199,7 @@ fun ProductFlavor.createPublishBundleWithAssetPlayDelivery(
     name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it" }
   return tasks.create("publish${capitalizedName}ReleaseBundleWithPlayAssetDelivery") {
     group = "publishing"
-    description = "Uploads $capitalizedName to the Play Console with an Expansion file"
+    description = "Uploads $capitalizedName to the Play Console with an Play Asset delivery mode"
     doLast {
       val packageName = "org.kiwix$applicationIdSuffix"
       println("packageName $packageName")

@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.util.Log
 import androidx.core.content.ContextCompat
+import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasBothFiles
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasFile
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasNothing
@@ -59,9 +60,9 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
     try {
       val context = context.createPackageContext(context.packageName, 0)
       val assetManager = context.assets
-      val inputStream = assetManager.open("dwds_de_dictionary_nopic_2023-09-12.zim")
+      val inputStream = assetManager.open(BuildConfig.PLAY_ASSET_FILE)
       val filePath = ContextCompat.getExternalFilesDirs(context, null)[0]
-      zimFile = File(filePath, "dwds_de_dictionary_nopic_2023-09-12.zim")
+      zimFile = File(filePath, BuildConfig.PLAY_ASSET_FILE)
       FileOutputStream(zimFile).use { outputSteam ->
         inputStream.use { inputStream ->
           val buffer = ByteArray(1024)
