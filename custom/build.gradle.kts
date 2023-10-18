@@ -4,7 +4,6 @@ import com.android.build.gradle.internal.dsl.ProductFlavor
 import custom.CustomApps
 import custom.createPublisher
 import custom.transactionWithCommit
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.runBlocking
 import plugin.KiwixConfigurationPlugin
 import java.net.URI
@@ -16,9 +15,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.ResponseBody
 import java.io.FileNotFoundException
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.withContext
+
 
 plugins {
   android
@@ -45,8 +42,9 @@ android {
       // }
       runBlocking {
         File("$projectDir/../install_time_asset_for_dwds/src/main/assets", "$name.zim").let {
-          createDownloadTaskForPlayAssetDelivery(it)
-          createPublishBundleWithAssetPlayDelivery()
+          createDownloadTaskForPlayAssetDelivery(it).also {
+            createPublishBundleWithAssetPlayDelivery()
+          }
         }
       }
     }
