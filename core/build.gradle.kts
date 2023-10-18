@@ -84,7 +84,7 @@ dependencies {
   implementation(Libs.objectbox_kotlin)
   implementation(Libs.objectbox_rxjava)
   implementation(Libs.webkit)
-  implementation(Libs.playcore)
+  // implementation(Libs.playcore)
   testImplementation(Libs.kotlinx_coroutines_test)
   implementation(Libs.kotlinx_coroutines_android)
 }
