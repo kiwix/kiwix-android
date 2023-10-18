@@ -36,8 +36,8 @@ android {
     CustomApps.createDynamically(project.file("src"), this)
     all {
       File("$projectDir/src", "$name/$name.zim").let {
-        // createDownloadTask(it)
-        // createPublishApkWithExpansionTask(it, applicationVariants)
+        createDownloadTask(it)
+        createPublishApkWithExpansionTask(it, applicationVariants)
       }
       // File("$projectDir/../install_time_asset_for_dwds/src/main/assets", "$name.zim").let {
       //   createDownloadTaskForPlayAssetDelivery(it)
