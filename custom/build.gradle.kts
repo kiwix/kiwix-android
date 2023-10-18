@@ -51,6 +51,7 @@ android {
             createDownloadTaskForPlayAssetDelivery(file)
           }
         }
+        downloadTaskDeferred.await()
 
         val bundleTaskDeferred = async {
           withContext(Dispatchers.Default) {
@@ -58,7 +59,6 @@ android {
           }
         }
 
-        downloadTaskDeferred.await()
         bundleTaskDeferred.await()
 
       }
@@ -229,7 +229,7 @@ fun ProductFlavor.createPublishBundleWithAssetPlayDelivery(): Task {
             )
           if (generatedBundleFile.exists()) {
             uploadBundle(generatedBundleFile)
-            addBundleToTrackInDraft(7233100, versionName)
+            addBundleToTrackInDraft("8$versionCode".toInt(), versionName)
           } else {
             throw FileNotFoundException("Unable to find generated aab file")
           }
