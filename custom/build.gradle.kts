@@ -229,7 +229,7 @@ fun ProductFlavor.createPublishBundleWithAssetPlayDelivery(): Task {
             )
           if (generatedBundleFile.exists()) {
             uploadBundle(generatedBundleFile)
-            addBundleToTrackInDraft("8$versionCode".toInt(), versionName)
+            addBundleToTrackInDraft("7$versionCode".toInt(), versionName)
           } else {
             throw FileNotFoundException("Unable to find generated aab file")
           }
