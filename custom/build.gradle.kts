@@ -4,6 +4,8 @@ import com.android.build.gradle.internal.dsl.ProductFlavor
 import custom.CustomApps
 import custom.createPublisher
 import custom.transactionWithCommit
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.runBlocking
 import plugin.KiwixConfigurationPlugin
 import java.net.URI
 import java.net.URLDecoder
@@ -14,6 +16,9 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.ResponseBody
 import java.io.FileNotFoundException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 
 plugins {
   android
@@ -37,6 +42,25 @@ android {
       File("$projectDir/../install_time_asset_for_dwds/src/main/assets", "$name.zim").let {
         createDownloadTaskForPlayAssetDelivery(it)
         createPublishBundleWithAssetPlayDelivery()
+      }
+      runBlocking {
+        val downloadTaskDeferred = async {
+          withContext(Dispatchers.IO) {
+            val file =
+              File("$projectDir/../install_time_asset_for_dwds/src/main/assets", "$name.zim")
+            createDownloadTaskForPlayAssetDelivery(file)
+          }
+        }
+
+        val bundleTaskDeferred = async {
+          withContext(Dispatchers.Default) {
+            createPublishBundleWithAssetPlayDelivery()
+          }
+        }
+
+        downloadTaskDeferred.await()
+        bundleTaskDeferred.await()
+
       }
     }
   }
