@@ -44,23 +44,10 @@ android {
       //   createPublishBundleWithAssetPlayDelivery()
       // }
       runBlocking {
-        val downloadTaskDeferred = async {
-          withContext(Dispatchers.IO) {
-            val file =
-              File("$projectDir/../install_time_asset_for_dwds/src/main/assets", "$name.zim")
-            createDownloadTaskForPlayAssetDelivery(file)
-          }
+        File("$projectDir/../install_time_asset_for_dwds/src/main/assets", "$name.zim").let {
+          createDownloadTaskForPlayAssetDelivery(it)
+          createPublishBundleWithAssetPlayDelivery()
         }
-        downloadTaskDeferred.await()
-
-        val bundleTaskDeferred = async {
-          withContext(Dispatchers.Default) {
-            createPublishBundleWithAssetPlayDelivery()
-          }
-        }
-
-        bundleTaskDeferred.await()
-
       }
     }
   }
