@@ -20,8 +20,8 @@ apply(plugin = "io.objectbox")
 apply(plugin = "com.jakewharton.butterknife")
 ext {
   set("versionMajor", 3)
-  set("versionMinor", 7)
-  set("versionPatch", 3)
+  set("versionMinor", 8)
+  set("versionPatch", 0)
 }
 
 /*
