@@ -1,10 +1,10 @@
 import com.android.build.gradle.api.ApkVariantOutput
 import com.android.build.gradle.api.ApplicationVariant
 import com.android.build.gradle.internal.dsl.ProductFlavor
+import com.android.tools.build.bundletool.model.Bundle
 import custom.CustomApps
 import custom.createPublisher
 import custom.transactionWithCommit
-import kotlinx.coroutines.runBlocking
 import plugin.KiwixConfigurationPlugin
 import java.net.URI
 import java.net.URLDecoder
@@ -36,17 +36,17 @@ android {
         createDownloadTask(it)
         createPublishApkWithExpansionTask(it, applicationVariants)
       }
-      // File("$projectDir/../install_time_asset_for_dwds/src/main/assets", "$name.zim").let {
-      //   createDownloadTaskForPlayAssetDelivery(it)
-      //   createPublishBundleWithAssetPlayDelivery()
-      // }
-      runBlocking {
-        File("$projectDir/../install_time_asset_for_dwds/src/main/assets", "$name.zim").let {
-          createDownloadTaskForPlayAssetDelivery(it).also {
-            createPublishBundleWithAssetPlayDelivery()
-          }
-        }
+      File("$projectDir/../install_time_asset_for_dwds/src/main/assets", "$name.zim").let {
+        createDownloadTaskForPlayAssetDelivery(it)
+        createPublishBundleWithAssetPlayDelivery()
       }
+      // runBlocking {
+      //   File("$projectDir/../install_time_asset_for_dwds/src/main/assets", "$name.zim").let {
+      //     createDownloadTaskForPlayAssetDelivery(it).also {
+      //       createPublishBundleWithAssetPlayDelivery()
+      //     }
+      //   }
+      // }
     }
   }
 
@@ -233,7 +233,9 @@ afterEvaluate {
   tasks.filter { it.name.contains("ReleaseBundleWithPlayAssetDelivery") }.forEach {
     val flavorName =
       it.name.substringAfter("publish").substringBefore("ReleaseBundleWithPlayAssetDelivery")
-    it.dependsOn.add(tasks.getByName("download${flavorName}ZimAndPutInAssetFolder"))
-    it.dependsOn.add(tasks.getByName("bundle${flavorName}Release"))
+    val downloadAndPutAssetTask = tasks.getByName("download${flavorName}ZimAndPutInAssetFolder")
+    val bundleReleaseTask = tasks.getByName("bundle${flavorName}Release")
+    it.dependsOn(bundleReleaseTask)
+    bundleReleaseTask.dependsOn(downloadAndPutAssetTask)
   }
 }
