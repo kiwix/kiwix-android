@@ -225,6 +225,7 @@ afterEvaluate {
     val flavorName =
       it.name.substringAfter("publish").substringBefore("ReleaseBundleWithPlayAssetDelivery")
     it.dependsOn.add(tasks.getByName("download${flavorName}ZimAndPutInAssetFolder"))
+    it.dependsOn.add(tasks.getByName("build"))
     it.dependsOn.add(tasks.getByName("bundle${flavorName}Release"))
   }
 }
