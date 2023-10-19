@@ -221,11 +221,14 @@ afterEvaluate {
     it.dependsOn.add(tasks.getByName("download${flavorName}Zim"))
     it.dependsOn.add(tasks.getByName("assemble${flavorName}Release"))
   }
-  tasks.filter { it.name.contains("ReleaseBundleWithPlayAssetDelivery") }.forEach {
-    val flavorName =
-      it.name.substringAfter("publish").substringBefore("ReleaseBundleWithPlayAssetDelivery")
-    it.dependsOn.add(tasks.getByName("download${flavorName}ZimAndPutInAssetFolder"))
-    it.dependsOn.add(tasks.getByName("build"))
-    it.dependsOn.add(tasks.getByName("bundle${flavorName}Release"))
-  }
+  tasks.filter { it.name.contains("ReleaseBundleWithPlayAssetDelivery") }
+    .forEach { releaseBundleWithPlayAssetDeliveryTask ->
+      val flavorName =
+        releaseBundleWithPlayAssetDeliveryTask.name.substringAfter("publish")
+          .substringBefore("ReleaseBundleWithPlayAssetDelivery")
+      val downloadAndPutAssetTask = tasks.getByName("download${flavorName}ZimAndPutInAssetFolder")
+      val bundleReleaseTask = tasks.getByName("bundle${flavorName}Release")
+      releaseBundleWithPlayAssetDeliveryTask.dependsOn(bundleReleaseTask)
+      bundleReleaseTask.dependsOn(downloadAndPutAssetTask)
+    }
 }
