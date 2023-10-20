@@ -47,10 +47,10 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
     assetFile: File? = getFileFromPlayAssetDelivery()
   ): ValidationState {
     return when {
+      assetFile != null -> HasFile(assetFile)
       obbFiles.isNotEmpty() && zimFiles().isNotEmpty() -> HasBothFiles(obbFiles[0], zimFiles[0])
       obbFiles.isNotEmpty() -> HasFile(obbFiles[0])
       zimFiles.isNotEmpty() -> HasFile(zimFiles[0])
-      assetFile != null -> HasFile(assetFile)
       else -> HasNothing
     }
   }
