@@ -13,6 +13,7 @@ import java.io.FileOutputStream
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.ResponseBody
+import java.io.FileNotFoundException
 
 plugins {
   android
@@ -33,8 +34,13 @@ android {
         createDownloadTask(it)
         createPublishApkWithExpansionTask(it, applicationVariants)
       }
+      File("$projectDir/../install_time_asset_for_dwds/src/main/assets", "$name.zim").let {
+        createDownloadTaskForPlayAssetDelivery(it)
+        createPublishBundleWithAssetPlayDelivery()
+      }
     }
   }
+
   bundle {
     language {
       // This is for testing the bundle file for the play store
@@ -42,6 +48,7 @@ android {
       enableSplit = false
     }
   }
+  assetPacks += ":install_time_asset"
 }
 
 fun ProductFlavor.createDownloadTask(file: File): Task {
@@ -105,6 +112,37 @@ fun writeZimFileData(responseBody: ResponseBody, file: File) {
   }
 }
 
+fun ProductFlavor.createDownloadTaskForPlayAssetDelivery(
+  file: File
+): Task {
+  return tasks.create(
+    "download${
+    name.replaceFirstChar {
+      if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it"
+    }
+    }ZimAndPutInAssetFolder"
+  ) {
+    group = "Downloading"
+    doLast {
+      if (file.exists()) file.delete()
+      file.createNewFile()
+
+      OkHttpClient().newCall(fetchRequest()).execute().use { response ->
+        if (response.isSuccessful) {
+          response.body?.let { responseBody ->
+            writeZimFileData(responseBody, file)
+          }
+        } else {
+          throw RuntimeException(
+            "Download Failed. Error: ${response.message}\n" +
+              " Status Code: ${response.code}"
+          )
+        }
+      }
+    }
+  }
+}
+
 val String.decodeUrl: String
   get() = URLDecoder.decode(this, "UTF-8")
 val String.isAuthenticationUrl: Boolean
@@ -149,6 +187,33 @@ fun DomainObjectSet<ApplicationVariant>.releaseVariantsFor(productFlavor: Produc
   find { it.name.equals("${productFlavor.name}Release", true) }!!
     .outputs.filterIsInstance<ApkVariantOutput>().sortedBy { it.versionCodeOverride }
 
+fun ProductFlavor.createPublishBundleWithAssetPlayDelivery(): Task {
+  val capitalizedName =
+    name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it" }
+  return tasks.create("publish${capitalizedName}ReleaseBundleWithPlayAssetDelivery") {
+    group = "publishing"
+    description = "Uploads $capitalizedName to the Play Console with an Play Asset delivery mode"
+    doLast {
+      val packageName = "org.kiwix$applicationIdSuffix"
+      println("packageName $packageName")
+      createPublisher(File(rootDir, "playstore.json"))
+        .transactionWithCommit(packageName) {
+          val generatedBundleFile =
+            File(
+              "$buildDir/outputs/bundle/${capitalizedName.lowercase(Locale.getDefault())}" +
+                "Release/custom-${capitalizedName.lowercase(Locale.getDefault())}-release.aab"
+            )
+          if (generatedBundleFile.exists()) {
+            uploadBundle(generatedBundleFile)
+            addBundleToTrackInDraft("7$versionCode".toInt(), versionName)
+          } else {
+            throw FileNotFoundException("Unable to find generated aab file")
+          }
+        }
+    }
+  }
+}
+
 afterEvaluate {
   tasks.filter { it.name.contains("ReleaseApkWithExpansionFile") }.forEach {
     val flavorName =
@@ -156,4 +221,14 @@ afterEvaluate {
     it.dependsOn.add(tasks.getByName("download${flavorName}Zim"))
     it.dependsOn.add(tasks.getByName("assemble${flavorName}Release"))
   }
+  tasks.filter { it.name.contains("ReleaseBundleWithPlayAssetDelivery") }
+    .forEach { releaseBundleWithPlayAssetDeliveryTask ->
+      val flavorName =
+        releaseBundleWithPlayAssetDeliveryTask.name.substringAfter("publish")
+          .substringBefore("ReleaseBundleWithPlayAssetDelivery")
+      val downloadAndPutAssetTask = tasks.getByName("download${flavorName}ZimAndPutInAssetFolder")
+      val bundleReleaseTask = tasks.getByName("bundle${flavorName}Release")
+      releaseBundleWithPlayAssetDeliveryTask.dependsOn(bundleReleaseTask)
+      bundleReleaseTask.dependsOn(downloadAndPutAssetTask)
+    }
 }
