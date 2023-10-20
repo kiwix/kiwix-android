@@ -48,7 +48,7 @@ android {
       enableSplit = false
     }
   }
-  assetPacks += ":install_time_asset_for_dwds"
+  assetPacks += ":install_time_asset"
 }
 
 fun ProductFlavor.createDownloadTask(file: File): Task {

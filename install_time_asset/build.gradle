@@ -1,7 +1,7 @@
 apply plugin: 'com.android.asset-pack'
 
 assetPack {
-  packName = "install_time_asset_for_dwds" // Directory name for the asset pack
+  packName = "install_time_asset" // Directory name for the asset pack
   dynamicDelivery {
     deliveryType = "install-time" // delivery mode
   }
