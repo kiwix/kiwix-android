@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.util.Log
 import androidx.core.content.ContextCompat
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasBothFiles
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasFile
@@ -63,14 +64,20 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
       val inputStream = assetManager.open(BuildConfig.PLAY_ASSET_FILE)
       val filePath = ContextCompat.getExternalFilesDirs(context, null)[0]
       zimFile = File(filePath, BuildConfig.PLAY_ASSET_FILE)
-      FileOutputStream(zimFile).use { outputSteam ->
-        inputStream.use { inputStream ->
-          val buffer = ByteArray(1024)
-          var length: Int
-          while (inputStream.read(buffer).also { length = it } > 0) {
-            outputSteam.write(buffer, 0, length)
+      // Write zim file data if file does not exist or corrupted
+      if (!zimFile.isFileExist() || zimFile.length() == 0L) {
+        // Delete previously corrupted file
+        if (zimFile.isFileExist()) zimFile.delete()
+        zimFile.createNewFile()
+        FileOutputStream(zimFile).use { outputSteam ->
+          inputStream.use { inputStream ->
+            val buffer = ByteArray(1024)
+            var length: Int
+            while (inputStream.read(buffer).also { length = it } > 0) {
+              outputSteam.write(buffer, 0, length)
+            }
+            outputSteam.flush()
           }
-          outputSteam.flush()
         }
       }
     } catch (packageNameNotFoundException: PackageManager.NameNotFoundException) {
@@ -79,7 +86,7 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
         "Asset package is not found ${packageNameNotFoundException.message}"
       )
     } catch (ioException: IOException) {
-      Log.w("ASSET_PACKAGE_DELIVERY", "Unable to copy the content of asset ${ioException.message}")
+      Log.w("ASSET_PACKAGE_DELIVERY", "Unable to copy the content of asset $ioException")
     }
     return zimFile
   }
