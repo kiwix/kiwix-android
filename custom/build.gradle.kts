@@ -34,7 +34,7 @@ android {
         createDownloadTask(it)
         createPublishApkWithExpansionTask(it, applicationVariants)
       }
-      File("$projectDir/../install_time_asset_for_dwds/src/main/assets", "$name.zim").let {
+      File("$projectDir/../install_time_asset/src/main/assets", "$name.zim").let {
         createDownloadTaskForPlayAssetDelivery(it)
         createPublishBundleWithAssetPlayDelivery()
       }
