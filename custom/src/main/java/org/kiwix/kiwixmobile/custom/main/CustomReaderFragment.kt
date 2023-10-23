@@ -29,7 +29,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
@@ -95,9 +94,6 @@ class CustomReaderFragment : CoreReaderFragment() {
       )
     }
   }
-
-  override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super =
-    super.onBackPressed(activity)
 
   private fun openSearchItem(item: SearchItemToOpen) {
     item.pageUrl?.let(::loadUrlWithCurrentWebview) ?: kotlin.run {
