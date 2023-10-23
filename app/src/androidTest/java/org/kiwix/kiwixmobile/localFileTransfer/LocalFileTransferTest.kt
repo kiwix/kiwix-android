@@ -80,18 +80,14 @@ class LocalFileTransferTest {
       }
       waitForIdle()
     }
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
-      putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-    }
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-    }
   }
 
   @Test
   fun localFileTransfer() {
+    shouldShowShowCaseFeatureToUser(false)
+    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+      moveToState(Lifecycle.State.RESUMED)
+    }
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       activityScenario.onActivity {
         it.navigate(R.id.libraryFragment)
@@ -111,10 +107,69 @@ class LocalFileTransferTest {
     }
   }
 
+  @Test
+  fun showCaseFeature() {
+    shouldShowShowCaseFeatureToUser(true, isResetShowCaseId = true)
+    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+      moveToState(Lifecycle.State.RESUMED)
+      onActivity {
+        it.navigate(R.id.libraryFragment)
+      }
+    }
+    library {
+      assertGetZimNearbyDeviceDisplayed()
+      clickFileTransferIcon {
+        assertClickNearbyDeviceMessageVisible()
+        clickOnGotItButton()
+        assertDeviceNameMessageVisible()
+        clickOnGotItButton()
+        assertNearbyDeviceListMessageVisible()
+        clickOnGotItButton()
+        assertTransferZimFilesListMessageVisible()
+        clickOnGotItButton()
+        pressBack()
+        assertGetZimNearbyDeviceDisplayed()
+      }
+    }
+    LeakAssertions.assertNoLeaks()
+  }
+
+  @Test
+  fun testShowCaseFeatureShowOnce() {
+    shouldShowShowCaseFeatureToUser(true)
+    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+      moveToState(Lifecycle.State.RESUMED)
+      onActivity {
+        it.navigate(R.id.libraryFragment)
+      }
+    }
+    library {
+      // test show case view show once.
+      clickFileTransferIcon(LocalFileTransferRobot::assertClickNearbyDeviceMessageNotVisible)
+    }
+  }
+
   @After
   fun setIsTestPreference() {
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, false)
+      putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, true)
+    }
+  }
+
+  private fun shouldShowShowCaseFeatureToUser(
+    shouldShowShowCase: Boolean,
+    isResetShowCaseId: Boolean = false
+  ) {
+    PreferenceManager.getDefaultSharedPreferences(context).edit {
+      putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
+      putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
+      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
+      putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, shouldShowShowCase)
+    }
+    if (isResetShowCaseId) {
+      // To clear showCaseID to ensure the showcase view will show.
+      uk.co.deanwild.materialshowcaseview.PrefsManager.resetAll(context)
     }
   }
 }

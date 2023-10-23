@@ -88,6 +88,7 @@ class DownloadTest : BaseActivityTest() {
         deleteZimIfExists(false)
         clickDownloadOnBottomNav()
         waitForDataToLoad()
+        stopDownloadIfAlreadyStarted()
         downloadZimFile()
         assertDownloadStart()
         pauseDownload()

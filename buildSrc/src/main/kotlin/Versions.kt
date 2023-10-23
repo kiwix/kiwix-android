@@ -101,6 +101,8 @@ object Versions {
   const val webkit: String = "1.3.0"
 
   const val junit: String = "1.1.4"
+
+  const val material_show_case_view: String = "1.3.7"
 }
 
 /**

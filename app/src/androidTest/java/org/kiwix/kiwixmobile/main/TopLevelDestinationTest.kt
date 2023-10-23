@@ -60,6 +60,7 @@ class TopLevelDestinationTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.PREF_EXTERNAL_LINK_POPUP, true)
+      putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, false)
     }
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
@@ -100,6 +101,7 @@ class TopLevelDestinationTest : BaseActivityTest() {
   fun setIsTestPreference() {
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, false)
+      putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, true)
     }
   }
 }

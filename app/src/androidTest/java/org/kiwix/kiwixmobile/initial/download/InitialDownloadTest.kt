@@ -80,6 +80,7 @@ class InitialDownloadTest : BaseActivityTest() {
       assertLibraryListDisplayed()
       refreshList()
       waitForDataToLoad()
+      stopDownloadIfAlreadyStarted()
       downloadZimFile()
       assertStorageConfigureDialogDisplayed()
       clickOnYesToConfirm()

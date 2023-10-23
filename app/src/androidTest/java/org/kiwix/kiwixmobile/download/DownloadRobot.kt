@@ -61,10 +61,12 @@ class DownloadRobot : BaseRobot() {
   }
 
   private fun assertDeleteDialogDisplayed() {
+    pauseForBetterTestPerformance()
     onView(withText("DELETE")).check(matches(isDisplayed()))
   }
 
   private fun clickOnDeleteZimFile() {
+    pauseForBetterTestPerformance()
     onView(withText("DELETE")).perform(click())
   }
 
@@ -73,9 +75,8 @@ class DownloadRobot : BaseRobot() {
       longClickOnZimFile()
       clickOnFileDeleteIcon()
       assertDeleteDialogDisplayed()
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
       clickOnDeleteZimFile()
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+      pauseForBetterTestPerformance()
     } catch (e: Exception) {
       if (shouldDeleteZimFile) {
         throw Exception(
@@ -122,12 +123,16 @@ class DownloadRobot : BaseRobot() {
     }
   }
 
+  private fun stopDownload() {
+    clickOn(ViewId(R.id.stop))
+  }
+
   fun pauseDownload() {
     clickOn(ViewId(R.id.pauseResume))
   }
 
   fun assertDownloadPaused() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    pauseForBetterTestPerformance()
     onView(withText(org.kiwix.kiwixmobile.core.R.string.paused_state)).check(matches(isDisplayed()))
   }
 
@@ -136,7 +141,7 @@ class DownloadRobot : BaseRobot() {
   }
 
   fun assertDownloadResumed() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    pauseForBetterTestPerformance()
     onView(withText(org.kiwix.kiwixmobile.core.R.string.paused_state)).check(doesNotExist())
   }
 
@@ -148,6 +153,36 @@ class DownloadRobot : BaseRobot() {
       BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
       Log.i("kiwixDownloadTest", "Downloading in progress")
       waitUntilDownloadComplete()
+    }
+  }
+
+  private fun pauseForBetterTestPerformance() {
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+  }
+
+  private fun assertStopDownloadDialogDisplayed() {
+    pauseForBetterTestPerformance()
+    isVisible(Text("Stop download?"))
+  }
+
+  private fun clickOnYesButton() {
+    onView(withText("YES")).perform(click())
+  }
+
+  fun stopDownloadIfAlreadyStarted() {
+    try {
+      pauseForBetterTestPerformance()
+      onView(withId(R.id.stop)).check(matches(isDisplayed()))
+      stopDownload()
+      assertStopDownloadDialogDisplayed()
+      clickOnYesButton()
+      pauseForBetterTestPerformance()
+    } catch (e: Exception) {
+      Log.i(
+        "DOWNLOAD_TEST",
+        "Failed to stop download with title [" + zimFileTitle + "]... " +
+          "Probably because it doesn't download the zim file"
+      )
     }
   }
 }

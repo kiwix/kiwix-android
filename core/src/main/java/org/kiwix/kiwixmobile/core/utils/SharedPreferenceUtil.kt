@@ -63,6 +63,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefIsTest: Boolean
     get() = sharedPreferences.getBoolean(PREF_IS_TEST, false)
 
+  val prefShowShowCaseToUser: Boolean
+    get() = sharedPreferences.getBoolean(PREF_SHOW_SHOWCASE, true)
+
   val prefFullScreen: Boolean
     get() = sharedPreferences.getBoolean(PREF_FULLSCREEN, false)
 
@@ -228,6 +231,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_KIWIX_MOBILE = "kiwix-mobile"
     const val PREF_SHOW_INTRO = "showIntro"
     const val PREF_IS_TEST = "is_test"
+    const val PREF_SHOW_SHOWCASE = "showShowCase"
     private const val PREF_BACK_TO_TOP = "pref_backtotop"
     private const val PREF_FULLSCREEN = "pref_fullscreen"
     private const val PREF_NEW_TAB_BACKGROUND = "pref_newtab_background"

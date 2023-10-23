@@ -54,6 +54,7 @@ class LibraryRobot : BaseRobot() {
   }
 
   fun assertNoFilesTextDisplayed() {
+    pauseForBetterTestPerformance()
     isVisible(ViewId(R.id.file_management_no_files))
   }
 
@@ -62,9 +63,8 @@ class LibraryRobot : BaseRobot() {
       longClickOnZimFile()
       clickOnFileDeleteIcon()
       assertDeleteDialogDisplayed()
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
       clickOnDeleteZimFile()
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+      pauseForBetterTestPerformance()
     } catch (e: Exception) {
       Log.i(
         "TEST_DELETE_ZIM",
@@ -79,6 +79,7 @@ class LibraryRobot : BaseRobot() {
   }
 
   private fun assertDeleteDialogDisplayed() {
+    pauseForBetterTestPerformance()
     onView(withText("DELETE"))
       .check(ViewAssertions.matches(isDisplayed()))
   }
@@ -88,6 +89,11 @@ class LibraryRobot : BaseRobot() {
   }
 
   private fun clickOnDeleteZimFile() {
+    pauseForBetterTestPerformance()
     onView(withText("DELETE")).perform(click())
+  }
+
+  private fun pauseForBetterTestPerformance() {
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
   }
 }
