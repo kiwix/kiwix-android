@@ -96,10 +96,8 @@ class CustomReaderFragment : CoreReaderFragment() {
     }
   }
 
-  override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
-    requireActivity().finish()
-    return super.onBackPressed(activity)
-  }
+  override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super =
+    super.onBackPressed(activity)
 
   private fun openSearchItem(item: SearchItemToOpen) {
     item.pageUrl?.let(::loadUrlWithCurrentWebview) ?: kotlin.run {
