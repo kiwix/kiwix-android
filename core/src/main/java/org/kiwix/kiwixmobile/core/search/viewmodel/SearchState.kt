@@ -39,7 +39,7 @@ data class SearchState(
         val searchResults = mutableListOf<SearchListItem.RecentSearchListItem>()
         while (searchIterator.hasNext()) {
           val entry = searchIterator.next()
-          searchResults.add(SearchListItem.RecentSearchListItem(entry.title))
+          searchResults.add(SearchListItem.RecentSearchListItem(entry.title, entry.path))
         }
         /**
          * Returns null if there are no suggestions left in the iterator.

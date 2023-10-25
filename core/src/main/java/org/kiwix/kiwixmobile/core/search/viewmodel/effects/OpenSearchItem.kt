@@ -24,6 +24,7 @@ import kotlinx.parcelize.Parcelize
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.reader.addContentPrefix
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 
@@ -35,7 +36,11 @@ data class OpenSearchItem(
     val readerFragmentResId = (activity as CoreMainActivity).readerFragmentResId
     activity.navigate(readerFragmentResId)
     activity.setNavigationResultOnCurrent(
-      SearchItemToOpen(searchListItem.value, openInNewTab),
+      SearchItemToOpen(
+        searchListItem.value,
+        openInNewTab,
+        searchListItem.url?.addContentPrefix
+      ),
       TAG_FILE_SEARCHED
     )
   }
@@ -44,5 +49,6 @@ data class OpenSearchItem(
 @Parcelize
 data class SearchItemToOpen(
   val pageTitle: String,
-  val shouldOpenInNewTab: Boolean
+  val shouldOpenInNewTab: Boolean,
+  val pageUrl: String?
 ) : Parcelable

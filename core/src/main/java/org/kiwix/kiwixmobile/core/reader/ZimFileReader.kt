@@ -352,3 +352,7 @@ private val DirectAccessInfo.parcelFileDescriptor: ParcelFileDescriptor?
 
 // Default illustration size for ZIM file favicons
 const val ILLUSTRATION_SIZE = 48
+
+// add content prefix to url since searched items return the url inside of zim without content prefix.
+val String.addContentPrefix: String
+  get() = if (startsWith(CONTENT_PREFIX)) this else CONTENT_PREFIX + this

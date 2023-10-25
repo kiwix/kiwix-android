@@ -102,11 +102,14 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private fun openSearchItem(item: SearchItemToOpen) {
-    zimReaderContainer?.titleToUrl(item.pageTitle)?.let {
-      if (item.shouldOpenInNewTab) {
-        createNewTab()
+    item.pageUrl?.let(::loadUrlWithCurrentWebview) ?: kotlin.run {
+      // For handling the previously saved recent searches
+      zimReaderContainer?.titleToUrl(item.pageTitle)?.let {
+        if (item.shouldOpenInNewTab) {
+          createNewTab()
+        }
+        loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(it))
       }
-      loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(it))
     }
     requireActivity().consumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)
   }

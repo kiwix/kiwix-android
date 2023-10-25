@@ -20,7 +20,13 @@ package org.kiwix.kiwixmobile.core.search.adapter
 
 sealed class SearchListItem {
   abstract val value: String
+  abstract val url: String?
 
-  data class RecentSearchListItem(override val value: String) : SearchListItem()
-  data class ZimSearchResultListItem constructor(override val value: String) : SearchListItem()
+  data class RecentSearchListItem(override val value: String, override val url: String?) :
+    SearchListItem()
+
+  data class ZimSearchResultListItem constructor(
+    override val value: String,
+    override val url: String?
+  ) : SearchListItem()
 }
