@@ -24,12 +24,13 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 
 internal class SaveSearchToRecentsTest {
 
   private val newRecentSearchDao: NewRecentSearchDao = mockk()
-  private val searchListItem = RecentSearchListItem("")
+  private val searchListItem = RecentSearchListItem("", ZimFileReader.CONTENT_PREFIX)
 
   private val activity: AppCompatActivity = mockk()
 
@@ -43,6 +44,6 @@ internal class SaveSearchToRecentsTest {
   fun `invoke with non null Id saves search`() {
     val id = "id"
     SaveSearchToRecents(newRecentSearchDao, searchListItem, id).invokeWith(activity)
-    verify { newRecentSearchDao.saveSearch(searchListItem.value, id) }
+    verify { newRecentSearchDao.saveSearch(searchListItem.value, id, ZimFileReader.CONTENT_PREFIX) }
   }
 }

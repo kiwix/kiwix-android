@@ -30,7 +30,7 @@ internal class DeleteRecentSearchTest {
 
   @Test
   fun `invoke with deletes a search`() {
-    val searchListItem: SearchListItem = RecentSearchListItem("")
+    val searchListItem: SearchListItem = RecentSearchListItem("", "")
     val recentSearchDao: NewRecentSearchDao = mockk()
     val activity: AppCompatActivity = mockk()
     DeleteRecentSearch(searchListItem, recentSearchDao).invokeWith(activity)

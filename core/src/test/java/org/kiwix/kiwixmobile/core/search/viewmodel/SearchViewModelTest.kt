@@ -119,7 +119,7 @@ internal class SearchViewModelTest {
 
     @Test
     fun `SearchState combines sources from inputs`() = runTest {
-      val item = ZimSearchResultListItem("")
+      val item = ZimSearchResultListItem("", "")
       val searchTerm = "searchTerm"
       val searchOrigin = FromWebView
       val suggestionSearch: SuggestionSearch = mockk()
@@ -128,7 +128,7 @@ internal class SearchViewModelTest {
           emissionOf(
             searchTerm = searchTerm,
             suggestionSearch = suggestionSearch,
-            databaseResults = listOf(RecentSearchListItem("")),
+            databaseResults = listOf(RecentSearchListItem("", "")),
             searchOrigin = searchOrigin
           )
         }
@@ -136,7 +136,7 @@ internal class SearchViewModelTest {
           SearchState(
             searchTerm,
             SearchResultsWithTerm(searchTerm, suggestionSearch),
-            listOf(RecentSearchListItem("")),
+            listOf(RecentSearchListItem("", "")),
             searchOrigin
           )
         )
@@ -154,7 +154,7 @@ internal class SearchViewModelTest {
 
     @Test
     fun `OnItemClick offers Saves and Opens`() = runBlockingTest {
-      val searchListItem = RecentSearchListItem("")
+      val searchListItem = RecentSearchListItem("", "")
       actionResultsInEffects(
         OnItemClick(searchListItem),
         SaveSearchToRecents(recentSearchDao, searchListItem, "id"),
@@ -164,7 +164,7 @@ internal class SearchViewModelTest {
 
     @Test
     fun `OnOpenInNewTabClick offers Saves and Opens in new tab`() = runBlockingTest {
-      val searchListItem = RecentSearchListItem("")
+      val searchListItem = RecentSearchListItem("", "")
       actionResultsInEffects(
         OnOpenInNewTabClick(searchListItem),
         SaveSearchToRecents(recentSearchDao, searchListItem, "id"),
@@ -174,7 +174,7 @@ internal class SearchViewModelTest {
 
     @Test
     fun `OnItemLongClick offers Saves and Opens`() = runBlockingTest {
-      val searchListItem = RecentSearchListItem("")
+      val searchListItem = RecentSearchListItem("", "")
       actionResultsInEffects(
         OnItemLongClick(searchListItem),
         ShowDeleteSearchDialog(searchListItem, viewModel.actions)
@@ -188,7 +188,7 @@ internal class SearchViewModelTest {
 
     @Test
     fun `ConfirmedDelete offers Delete and Toast`() = runBlockingTest {
-      val searchListItem = RecentSearchListItem("")
+      val searchListItem = RecentSearchListItem("", "")
       actionResultsInEffects(
         ConfirmedDelete(searchListItem),
         DeleteRecentSearch(searchListItem, recentSearchDao),

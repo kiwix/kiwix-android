@@ -50,7 +50,7 @@ internal class NewRecentSearchDaoTest {
       newRecentSearchDao.recentSearches(zimId)
         .test(this)
         .assertValues(
-          queryResult.map { RecentSearchListItem(it.searchTerm) }
+          queryResult.map { RecentSearchListItem(it.searchTerm, it.url) }
         )
         .finish()
     }
@@ -62,7 +62,7 @@ internal class NewRecentSearchDaoTest {
       newRecentSearchDao.recentSearches(null)
         .test(this)
         .assertValues(
-          queryResult.map { RecentSearchListItem(it.searchTerm) }
+          queryResult.map { RecentSearchListItem(it.searchTerm, it.url) }
         )
         .finish()
     }
@@ -74,7 +74,7 @@ internal class NewRecentSearchDaoTest {
       newRecentSearchDao.recentSearches("")
         .test(this)
         .assertValues(
-          queryResult.take(1).map { RecentSearchListItem(it.searchTerm) }
+          queryResult.take(1).map { RecentSearchListItem(it.searchTerm, it.url) }
         )
         .finish()
     }
@@ -109,8 +109,16 @@ internal class NewRecentSearchDaoTest {
 
   @Test
   fun `saveSearch puts RecentSearchEntity into box`() {
-    newRecentSearchDao.saveSearch("title", "id")
-    verify { box.put(recentSearchEntity(searchTerm = "title", zimId = "id")) }
+    newRecentSearchDao.saveSearch("title", "id", "https://kiwix.app/mainPage")
+    verify {
+      box.put(
+        recentSearchEntity(
+          searchTerm = "title",
+          zimId = "id",
+          url = "https://kiwix.app/mainPage"
+        )
+      )
+    }
   }
 
   @Test

@@ -22,4 +22,5 @@ import org.kiwix.libzim.SuggestionItem
 
 class SuggestionItemWrapper : SuggestionItem() {
   override fun getTitle(): String = super.getTitle()
+  override fun getPath(): String = super.getPath()
 }

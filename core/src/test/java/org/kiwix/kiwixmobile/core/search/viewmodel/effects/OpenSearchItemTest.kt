@@ -26,6 +26,7 @@ import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED_NEW_TAB
@@ -34,7 +35,7 @@ internal class OpenSearchItemTest {
 
   @Test
   fun `invoke with returns an Ok Result with list item value`() {
-    val searchListItem = RecentSearchListItem("")
+    val searchListItem = RecentSearchListItem("", ZimFileReader.CONTENT_PREFIX)
     val activity: CoreMainActivity = mockk(relaxed = true)
     mockkConstructor(Intent::class)
     val intent = mockk<Intent>()
@@ -46,7 +47,7 @@ internal class OpenSearchItemTest {
     verify {
       activity.navigate(activity.readerFragmentResId)
       activity.setNavigationResultOnCurrent(
-        SearchItemToOpen(searchListItem.value, false),
+        SearchItemToOpen(searchListItem.value, false, ZimFileReader.CONTENT_PREFIX),
         TAG_FILE_SEARCHED
       )
     }
@@ -54,7 +55,7 @@ internal class OpenSearchItemTest {
 
   @Test
   fun `invoke with returns an Ok Result with list item value for new tab`() {
-    val searchListItem = RecentSearchListItem("")
+    val searchListItem = RecentSearchListItem("", ZimFileReader.CONTENT_PREFIX)
     val activity: CoreMainActivity = mockk(relaxed = true)
     mockkConstructor(Intent::class)
     val intent = mockk<Intent>()
@@ -66,7 +67,7 @@ internal class OpenSearchItemTest {
     verify {
       activity.navigate(activity.readerFragmentResId)
       activity.setNavigationResultOnCurrent(
-        SearchItemToOpen(searchListItem.value, true),
+        SearchItemToOpen(searchListItem.value, true, ZimFileReader.CONTENT_PREFIX),
         TAG_FILE_SEARCHED
       )
     }

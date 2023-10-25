@@ -165,8 +165,13 @@ fun libraryNetworkEntity(books: List<Book> = emptyList()) = LibraryNetworkEntity
   book = LinkedList(books)
 }
 
-fun recentSearchEntity(id: Long = 0L, searchTerm: String = "", zimId: String = "") =
-  RecentSearchEntity(id, searchTerm, zimId)
+fun recentSearchEntity(
+  id: Long = 0L,
+  searchTerm: String = "",
+  zimId: String = "",
+  url: String = ""
+) =
+  RecentSearchEntity(id, searchTerm, zimId, url)
 
 fun bookOnDiskEntity(
   id: Long = 0,
