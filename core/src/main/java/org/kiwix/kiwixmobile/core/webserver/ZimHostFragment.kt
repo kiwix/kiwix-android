@@ -487,13 +487,16 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
         if (it is BookOnDisk) {
           zimReaderFactory.create(it.file)?.let { zimFileReader ->
             val booksOnDiskListItem =
-              (BookOnDisk(zimFileReader.zimFile, zimFileReader) as BooksOnDiskListItem)
-                .apply {
-                  isSelected = true
-                }
-            updatedBooksList.add(booksOnDiskListItem).also {
-              zimFileReader.dispose()
+              zimFileReader.zimFile?.let { file ->
+                (BookOnDisk(file, zimFileReader) as BooksOnDiskListItem)
+                  .apply {
+                    isSelected = true
+                  }
+              }
+            if (booksOnDiskListItem != null) {
+              updatedBooksList.add(booksOnDiskListItem)
             }
+            zimFileReader.dispose()
           }
         } else {
           updatedBooksList.add(it)
