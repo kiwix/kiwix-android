@@ -143,7 +143,13 @@ class CustomReaderFragment : CoreReaderFragment() {
     customFileValidator.validate(
       onFilesFound = {
         when (it) {
-          is ValidationState.HasFile -> openZimFile(it.file, true)
+          is ValidationState.HasFile -> {
+            if (it.fileDescriptor != null) {
+              openZimFile(null, true, it.fileDescriptor)
+            } else {
+              openZimFile(it.file, true)
+            }
+          }
           is ValidationState.HasBothFiles -> {
             it.zimFile.delete()
             openZimFile(it.obbFile, true)
