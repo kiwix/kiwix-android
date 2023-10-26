@@ -53,7 +53,6 @@ class ZimHostFragmentTest {
     arrayOf(
       Manifest.permission.READ_EXTERNAL_STORAGE,
       Manifest.permission.WRITE_EXTERNAL_STORAGE,
-      Manifest.permission.SYSTEM_ALERT_WINDOW,
       Manifest.permission.NEARBY_WIFI_DEVICES
     )
   } else {

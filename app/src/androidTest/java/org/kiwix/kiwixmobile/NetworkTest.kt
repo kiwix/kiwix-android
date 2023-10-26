@@ -18,16 +18,15 @@
 package org.kiwix.kiwixmobile
 
 import android.Manifest
-import android.os.Build
 import android.util.Log
 import androidx.test.core.app.ActivityScenario
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions
@@ -58,18 +57,10 @@ class NetworkTest {
   // @Inject
   // MockWebServer mockWebServer
 
-  private val permissions = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
-    arrayOf(
-      Manifest.permission.READ_EXTERNAL_STORAGE,
-      Manifest.permission.WRITE_EXTERNAL_STORAGE,
-      Manifest.permission.SYSTEM_ALERT_WINDOW
-    )
-  } else {
-    arrayOf(
-      Manifest.permission.READ_EXTERNAL_STORAGE,
-      Manifest.permission.WRITE_EXTERNAL_STORAGE
-    )
-  }
+  private val permissions = arrayOf(
+    Manifest.permission.READ_EXTERNAL_STORAGE,
+    Manifest.permission.WRITE_EXTERNAL_STORAGE
+  )
 
   @Rule
   @JvmField

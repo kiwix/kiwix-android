@@ -18,7 +18,6 @@
 package org.kiwix.kiwixmobile.settings
 
 import android.Manifest
-import android.os.Build
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
@@ -46,18 +45,10 @@ class KiwixSettingsFragmentTest {
   @get:Rule
   var activityScenarioRule = ActivityScenarioRule(KiwixMainActivity::class.java)
 
-  private val permissions = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
-    arrayOf(
-      Manifest.permission.READ_EXTERNAL_STORAGE,
-      Manifest.permission.WRITE_EXTERNAL_STORAGE,
-      Manifest.permission.SYSTEM_ALERT_WINDOW
-    )
-  } else {
-    arrayOf(
-      Manifest.permission.READ_EXTERNAL_STORAGE,
-      Manifest.permission.WRITE_EXTERNAL_STORAGE
-    )
-  }
+  private val permissions = arrayOf(
+    Manifest.permission.READ_EXTERNAL_STORAGE,
+    Manifest.permission.WRITE_EXTERNAL_STORAGE
+  )
 
   @Rule
   @JvmField
