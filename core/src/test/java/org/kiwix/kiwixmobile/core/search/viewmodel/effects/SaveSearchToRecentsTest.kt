@@ -22,6 +22,8 @@ import androidx.appcompat.app.AppCompatActivity
 import io.mockk.Called
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -33,17 +35,30 @@ internal class SaveSearchToRecentsTest {
   private val searchListItem = RecentSearchListItem("", ZimFileReader.CONTENT_PREFIX)
 
   private val activity: AppCompatActivity = mockk()
+  private val viewModelScope = CoroutineScope(Dispatchers.IO)
 
   @Test
   fun `invoke with null Id does nothing`() {
-    SaveSearchToRecents(newRecentSearchDao, searchListItem, null).invokeWith(activity)
+    SaveSearchToRecents(
+      newRecentSearchDao,
+      searchListItem,
+      null,
+      viewModelScope
+    ).invokeWith(
+      activity
+    )
     verify { newRecentSearchDao wasNot Called }
   }
 
   @Test
   fun `invoke with non null Id saves search`() {
     val id = "id"
-    SaveSearchToRecents(newRecentSearchDao, searchListItem, id).invokeWith(activity)
+    SaveSearchToRecents(
+      newRecentSearchDao,
+      searchListItem,
+      id,
+      viewModelScope
+    ).invokeWith(activity)
     verify { newRecentSearchDao.saveSearch(searchListItem.value, id, ZimFileReader.CONTENT_PREFIX) }
   }
 }

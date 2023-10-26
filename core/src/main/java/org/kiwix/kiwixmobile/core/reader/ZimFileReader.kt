@@ -336,7 +336,18 @@ private val String.filePath: String
 
 // Decode the URL if it is encoded because libkiwix does not return the path for encoded paths.
 val String.decodeUrl: String
-  get() = URLDecoder.decode(this, "UTF-8")
+  get() = try {
+    URLDecoder.decode(this, "UTF-8")
+  } catch (illegalArgumentException: IllegalArgumentException) {
+    // Searched item already has the decoded URL,
+    // and if any URL contains % in it, then it will fail to decode that URL and will not load the page.
+    // e.g. https://kiwix.app/A/FT%, More info https://github.com/kiwix/kiwix-android/pull/3514
+    Log.e(
+      "ZimFileReader",
+      "Could not decode url $this \n original exception = $illegalArgumentException"
+    )
+    this
+  }
 
 // Truncate mime-type (everything after the first space and semi-colon(if exists)
 val String.truncateMimeType: String

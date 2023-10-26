@@ -19,6 +19,9 @@
 package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.reader.addContentPrefix
@@ -27,15 +30,18 @@ import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 data class SaveSearchToRecents(
   private val recentSearchDao: NewRecentSearchDao,
   private val searchListItem: SearchListItem,
-  private val id: String?
+  private val id: String?,
+  private val viewModelScope: CoroutineScope
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     id?.let {
-      recentSearchDao.saveSearch(
-        searchListItem.value,
-        it,
-        searchListItem.url?.addContentPrefix
-      )
+      viewModelScope.launch(Dispatchers.IO) {
+        recentSearchDao.saveSearch(
+          searchListItem.value,
+          it,
+          searchListItem.url?.addContentPrefix
+        )
+      }
     }
   }
 }

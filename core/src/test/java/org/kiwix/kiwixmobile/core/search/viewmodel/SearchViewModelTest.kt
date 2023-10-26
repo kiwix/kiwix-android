@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
 import android.os.Bundle
+import androidx.lifecycle.viewModelScope
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.every
@@ -157,7 +158,7 @@ internal class SearchViewModelTest {
       val searchListItem = RecentSearchListItem("", "")
       actionResultsInEffects(
         OnItemClick(searchListItem),
-        SaveSearchToRecents(recentSearchDao, searchListItem, "id"),
+        SaveSearchToRecents(recentSearchDao, searchListItem, "id", viewModel.viewModelScope),
         OpenSearchItem(searchListItem, false)
       )
     }
@@ -167,7 +168,7 @@ internal class SearchViewModelTest {
       val searchListItem = RecentSearchListItem("", "")
       actionResultsInEffects(
         OnOpenInNewTabClick(searchListItem),
-        SaveSearchToRecents(recentSearchDao, searchListItem, "id"),
+        SaveSearchToRecents(recentSearchDao, searchListItem, "id", viewModel.viewModelScope),
         OpenSearchItem(searchListItem, true)
       )
     }
