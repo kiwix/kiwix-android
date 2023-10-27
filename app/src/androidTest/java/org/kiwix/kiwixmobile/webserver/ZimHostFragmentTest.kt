@@ -104,6 +104,13 @@ class ZimHostFragmentTest {
         refreshLibraryList()
         assertZimFilesLoaded()
         openZimHostFragment()
+
+        // Check if server is already started
+        stopServerIfAlreadyStarted()
+
+        // Check if both zim file are selected or not to properly run our test case
+        selectZimFileIfNotAlreadySelected()
+
         clickOnTestZim()
 
         // Start the server with one ZIM file

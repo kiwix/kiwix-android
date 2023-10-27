@@ -18,10 +18,16 @@
 
 package org.kiwix.kiwixmobile.webserver
 
+import android.util.Log
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
+import junit.framework.AssertionFailedError
 import org.hamcrest.CoreMatchers
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
@@ -29,6 +35,8 @@ import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.utils.RecyclerViewItemCount
+import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
 import org.kiwix.kiwixmobile.utils.RecyclerViewSelectedCheckBoxCountAssertion
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 
@@ -69,6 +77,54 @@ class ZimHostRobot : BaseRobot() {
   fun assertServerStarted() {
     pauseForBetterTestPerformance()
     isVisible(Text("STOP SERVER"))
+  }
+
+  fun stopServerIfAlreadyStarted() {
+    try {
+      assertServerStarted()
+      stopServer()
+    } catch (exception: Exception) {
+      Log.i(
+        "ZIM_HOST_FRAGMENT",
+        "Failed to stop the server, Probably because server is not running"
+      )
+    }
+  }
+
+  fun selectZimFileIfNotAlreadySelected() {
+    try {
+      // check both files are selected.
+      assertItemHostedOnServer(2)
+    } catch (assertionFailedError: AssertionFailedError) {
+      try {
+        val recyclerViewItemsCount =
+          RecyclerViewItemCount(R.id.recyclerViewZimHost).checkRecyclerViewCount()
+        (0 until recyclerViewItemsCount)
+          .asSequence()
+          .filter { it != 0 }
+          .forEach(::selectZimFile)
+      } catch (assertionFailedError: AssertionFailedError) {
+        Log.i("ZIM_HOST_FRAGMENT", "Failed to select the zim file, probably it is already selected")
+      }
+    }
+  }
+
+  private fun selectZimFile(position: Int) {
+    try {
+      onView(
+        RecyclerViewMatcher(R.id.recyclerViewZimHost).atPositionOnView(
+          position,
+          R.id.itemBookCheckbox
+        )
+      ).check(matches(ViewMatchers.isChecked()))
+    } catch (assertionError: AssertionFailedError) {
+      onView(
+        RecyclerViewMatcher(R.id.recyclerViewZimHost).atPositionOnView(
+          position,
+          R.id.itemBookCheckbox
+        )
+      ).perform(click())
+    }
   }
 
   fun assertItemHostedOnServer(itemCount: Int) {

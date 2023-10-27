@@ -19,20 +19,25 @@
 package org.kiwix.kiwixmobile.nav.destination.library
 
 import android.util.Log
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
 import org.kiwix.kiwixmobile.localFileTransfer.localFileTransfer
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.utils.RecyclerViewItemCount
 
 fun library(func: LibraryRobot.() -> Unit) = LibraryRobot().applyWithViewHierarchyPrinting(func)
 
@@ -60,7 +65,17 @@ class LibraryRobot : BaseRobot() {
 
   fun deleteZimIfExists() {
     try {
-      longClickOnZimFile()
+      val recyclerViewId: Int = R.id.zimfilelist
+      val recyclerViewItemsCount = RecyclerViewItemCount(recyclerViewId).checkRecyclerViewCount()
+      // Scroll to the end of the RecyclerView to ensure all items are visible
+      onView(withId(recyclerViewId))
+        .perform(scrollToPosition<ViewHolder>(recyclerViewItemsCount - 1))
+
+      for (position in 0 until recyclerViewItemsCount) {
+        // Long-click the item to select it
+        onView(withId(recyclerViewId))
+          .perform(actionOnItemAtPosition<ViewHolder>(position, longClick()))
+      }
       clickOnFileDeleteIcon()
       assertDeleteDialogDisplayed()
       clickOnDeleteZimFile()
@@ -75,6 +90,7 @@ class LibraryRobot : BaseRobot() {
   }
 
   private fun clickOnFileDeleteIcon() {
+    pauseForBetterTestPerformance()
     clickOn(ViewId(R.id.zim_file_delete_item))
   }
 
@@ -82,10 +98,6 @@ class LibraryRobot : BaseRobot() {
     pauseForBetterTestPerformance()
     onView(withText("DELETE"))
       .check(ViewAssertions.matches(isDisplayed()))
-  }
-
-  private fun longClickOnZimFile() {
-    longClickOn(Text(zimFileTitle))
   }
 
   private fun clickOnDeleteZimFile() {
