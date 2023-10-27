@@ -110,6 +110,7 @@ class ZimHostRobot : BaseRobot() {
   }
 
   private fun selectZimFile(position: Int) {
+    pauseForBetterTestPerformance()
     try {
       onView(
         RecyclerViewMatcher(R.id.recyclerViewZimHost).atPositionOnView(
@@ -118,6 +119,7 @@ class ZimHostRobot : BaseRobot() {
         )
       ).check(matches(ViewMatchers.isChecked()))
     } catch (assertionError: AssertionFailedError) {
+      pauseForBetterTestPerformance()
       onView(
         RecyclerViewMatcher(R.id.recyclerViewZimHost).atPositionOnView(
           position,
@@ -146,6 +148,6 @@ class ZimHostRobot : BaseRobot() {
   }
 
   private fun pauseForBetterTestPerformance() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
   }
 }
