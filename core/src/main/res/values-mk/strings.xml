@@ -45,6 +45,8 @@
   <string name="hotspot_notification_content_title">Пристапна точка на Кивикс</string>
   <string name="start_server_label">Покрени го опслужувачот</string>
   <string name="stop_server_label">Запри го опслужувачот</string>
+  <string name="error_server_already_running">Опслужувачот веќе работи. Исклучете го и пробајте повторно.</string>
+  <string name="error_ip_address_not_found">Не можев да најдам IP-адреса.</string>
   <string name="server_started_message">Внесете ја оваа IP-адреса во прелистувачот за да пристапите на опслужувачот %s</string>
   <string name="share_host_address">Сподели URL преку други прилози</string>
   <string name="error_file_not_found">Грешка: Не ја најдов избраната ZIM-податотека.</string>
@@ -205,6 +207,7 @@
   <string name="complete">Завршено</string>
   <string name="paused_state">Паузирано</string>
   <string name="failed_state">Не успеа: %s</string>
+  <string name="custom_download_error_message_for_authentication_failed">Не можев да ја преземам zim-податотеката. Превоспоставете го прилогот од Play store.</string>
   <string name="save">Зачувај</string>
   <string name="note">Белешка</string>
   <string name="wiki_article_title">Наслов на викистатијата</string>
@@ -317,4 +320,8 @@
   <string name="navigation_history_cleared">Историја на прегледувачки преоди</string>
   <string name="go_to_settings_label">Оди во поставките</string>
   <string name="request_notification_permission_message">За да го извршите ова дејство, дајте им пристап на известувањата</string>
+  <string name="click_nearby_devices_message">Стиснете тука за побарате уреди во близина.</string>
+  <string name="your_device_name_message">Тука ќе се појави името на вашиот уред.</string>
+  <string name="nearby_devices_list_message">Тука ќе најдете список на уреди во близина. Допрете на име на уред за да отпочне преносот на податотеки.</string>
+  <string name="transfer_zim_files_list_message">Тука ќе најдете список на расположиви ZIM-податотеки за пренесување.</string>
 </resources>

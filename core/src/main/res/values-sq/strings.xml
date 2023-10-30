@@ -18,7 +18,7 @@
   <string name="menu_wifi_hotspot">Hotspot WiFi</string>
   <string name="save_media">Ruajë Median</string>
   <string name="save_media_error">Ndodhi një gabim teksa provohej të ruhej media!</string>
-  <string name="save_media_saved" fuzzy="true">U ruajt media si %s te Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Media u ruajt te Android/media/org.kiwix…/ si %s</string>
   <string name="search_label">Kērko</string>
   <string name="choose_file">Përzgjidhni një Kartelë Lënde  (*.zim)</string>
   <string name="open_in_new_tab">Të hapet lidhja në skedë të re?</string>
@@ -49,6 +49,7 @@
   <string name="server_started_message">Që të hyni te shërbyesi %s, jepni këtë adresë IP te shfletuesi juaj</string>
   <string name="share_host_address">Jepeni URL-në përmes aplikacionesh të tjera</string>
   <string name="error_file_not_found">Gabim: S’u gjet dot kartela ZIM e përzgjedhur.</string>
+  <string name="unable_to_read_zim_file">S’arrihet të lexohet kjo kartelë zim!</string>
   <string name="zim_not_opened">S’arrihet të hapet kartelë zim</string>
   <string name="error_file_invalid">Gabim: Kartela e përzgjedhur s’është kartelë ZIM e vlefshme.</string>
   <string name="error_article_url_not_found">Gabim: Dështoi ngarkimi i artikullit (Url: %1$s).</string>
@@ -63,10 +64,12 @@
   <string name="pref_language_chooser">Zgjidhni një gjuhë</string>
   <string name="pref_credits">Ndihmëtarë dhe Licenca</string>
   <string name="pref_credits_title">Falënderime</string>
-  <string name="tts_lang_not_supported" fuzzy="true">Gjuha e kësaj faqeje nuk mbulohet, ose s’janë instaluar të dhëna të gjuhës përkatëse. Artikulli mund të mos lexohet si duhet.</string>
+  <string name="tts_lang_not_supported">Gjuha e kësaj faqeje nuk mbulohet. Artikulli mund të mos lexohet si duhet.</string>
   <string name="no_reader_application_installed">S’u gjet dot ndonjë aplikacion i instaluar për këtë lloj kartele</string>
+  <string name="no_email_application_installed">Ju lutemi, instaloni një shërbim email-esh, ose dërgonani një email te %1s</string>
   <string name="no_section_info">S’u gjetën Krye Lënde</string>
   <string name="request_storage">Që të përdorni lëndë jashtë interneti, na duhet hyrje te depoja juaj</string>
+  <string name="request_write_storage">Që të shkarkohen kartela zim, na duhen leje shkrimi te depozita juaj</string>
   <string name="clear_recent_and_tabs_history_dialog">Jeni i sigurt se doni të fshihet historiku juaj i kërkimeve dhe të rikthehen krejt skedat aktive?</string>
   <string name="delete_recent_search_item">Të fshihet ky objekt?</string>
   <string name="pref_clear_all_history_title">Spastro historikun</string>
@@ -86,8 +89,10 @@
   <string name="did_you_know">E dinit se?</string>
   <string name="undo">Zhbëje</string>
   <string name="tab_closed">Skeda u mbyll</string>
+  <string name="tabs_closed">Skedat u mbyllën</string>
   <string name="bookmark_added">U shtua faqerojtës</string>
   <string name="rate_dialog_title">Ju Lutemi, Vlerësonani</string>
+  <string name="rate_dialog_msg">Nëse ju pëlqen përdorimi i %s, ju lutemi, ndaluni një çast e jepni një vlerësim për të. Faleminderit për përkrahjen tuaj!</string>
   <string name="rate_dialog_positive">Vlerësojeni!</string>
   <string name="no_thanks">Jo, faleminderit</string>
   <string name="rate_dialog_neutral">Më vonë</string>
@@ -129,8 +134,10 @@
   <string name="tts_pause">ndalesë</string>
   <string name="tts_resume">rimerre</string>
   <string name="stop">ndale</string>
+  <string name="configure_storage_option">Të shkarkohet libri te depozita e brendshme?</string>
   <string name="internal_storage">I brendshëm</string>
   <string name="external_storage">I jashtëm</string>
+  <string name="configure">Formësojeni</string>
   <string name="yes">Po</string>
   <string name="no">Jo</string>
   <string name="confirm_stop_download_title">Të ndalet shkarkim?</string>
@@ -199,6 +206,7 @@
   <string name="complete">I plotësuar</string>
   <string name="paused_state">Pushuar</string>
   <string name="failed_state">Dështoi: %s</string>
+  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">S’u shkarkua dot kartela zim, ju lutemi, provoni të riinstaloni aplikacionin që prej shitores.</string>
   <string name="save">Ruaje</string>
   <string name="note">Shënim</string>
   <string name="wiki_article_title">Titull Artikulli Wiki</string>
@@ -223,6 +231,7 @@
   <string name="connection_failed">Lidhja dështoi</string>
   <string name="permission_rationale_location">Leja mbi vendndodhjen është e domosdoshme për Android-in që të lejojë aplikacionin të pikasë pajisje ortake</string>
   <string name="permission_rationale_location_on_host_zim_file">Leja mbi vendndodhjen është e domosdoshme për Android-in që të lejojë aplikacionin të strehojë kartela Zim</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">Që të lejohet aplikacioni të strehojë kartela Zim, nga Android-i lypsen leje mbi pajisje wifi atypari</string>
   <string name="permission_refused_location">Pa leje mbi vendndodhjen s’mund të lokalizohen pajisje ortake</string>
   <string name="permission_refused_storage">S’mund të përdoren kartela ZIM pa leje depozite</string>
   <string name="request_enable_location">Që të lejoni pikasje ortakësh, aktivizoni vendndodhje</string>
@@ -240,8 +249,8 @@
   <string name="nearby_devices">PAJISJE ATYPARI</string>
   <string name="no_devices_found">S’u pikasën pajisje. Prekni butonin e kërkimit, që të rikërkohet.</string>
   <string name="files_for_transfer">KARTELA PËR SHËPRNGULJE</string>
-  <string name="preparing_files" fuzzy="true">Po përgatiten kartela për shpërngulje…</string>
-  <string name="performing_handshake" fuzzy="true">Po kryhet duarshtrëngim…</string>
+  <string name="preparing_files">Po përgatiten kartela për shpërngulje…</string>
+  <string name="performing_handshake">Po kryhet duarshtrëngim…</string>
   <string name="status">Gjendje</string>
   <string name="pref_clear_all_notes_summary">Spastron krejt shënimet në krejt artikujt</string>
   <string name="pref_clear_all_notes_title">Spastro krejt shënimet</string>
@@ -276,6 +285,7 @@
   <string name="no_open_book">S’ka libër hapur</string>
   <string name="open_library">Hap bibliotekën</string>
   <string name="tab_restored">Skeda u rikthye</string>
+  <string name="tabs_restored">Skedat u rikthyen</string>
   <string name="open_drawer">Hap Sirtar</string>
   <string name="close_drawer">Mbylle Sirtarin</string>
   <string name="how_to_update_content">Si të përditësohet lënda?</string>
@@ -284,4 +294,29 @@
   <string name="all_files_permission_needed_message">Që të mund të përdorim krejt kartelat zim nëpër pajisje, na duhet Leje mbi Krejt Kartelat</string>
   <string name="allowed">Të lejuar</string>
   <string name="not_allowed">Jo të lejuar</string>
+  <string name="denied_internet_permission_message">Që të shkarkohet lënda, ju lutemi, aktivizoni wifi-n</string>
+  <string name="select_folder">Ju lutemi, përzgjidhni një dosje për depozitim të jashtëm.</string>
+  <string name="system_unable_to_grant_permission_message">Sistemi s’është në gjendje të akordojë leje!</string>
+  <string name="allow">Lejoje</string>
+  <string name="swipe_down_for_library">Për Bibliotekën, Fërkojeni Për Poshtë</string>
+  <string name="no_notes">S’ka Shënime</string>
+  <string name="notes_from_all_books">Shihni Shënime Prej Krejt Librave</string>
+  <string name="search_notes">Kërko Te Shënimet</string>
+  <string name="choose_your_action">Zgjidhni Veprimin tuaj</string>
+  <string name="open_note">Hape Shënimin</string>
+  <string name="open_article">Hape Artikullin</string>
+  <string name="delete_note_dialog_message">Shënim: Shënimet nuk fshihen prej depozitës tuaj</string>
+  <string name="delete_selected_notes">Të Fshihen Shënimet e Përzgjedhura?</string>
+  <string name="download_tts_language_title">Shkarkojeni këtë gjuhë për veçorinë e leximit me zë</string>
+  <string name="download_tts_language_message">Ju lutemi, klikoni butonin “Shkarkoje”. Do të shkarkojë automatikisht gjuhën e duhur.</string>
+  <string name="external_link_copied_message">Lidhja e Jashtme u Kopjua në të Papastër</string>
+  <string name="read_aloud_service_channel_name">Kanal Shërbimi Leximi Me Zë</string>
+  <string name="read_aloud_channel_description">Kontrolle për shndërrim teksti në të folur.</string>
+  <string name="read_aloud_running">Me “Lexim Me Zë” të Aktivizuar</string>
+  <string name="backward_history">Historik së prapthi</string>
+  <string name="forward_history">Historik së mbari</string>
+  <string name="clear_all_navigation_history_message">Spastron krejt historikun e lëvizjeve (së prapthi, së mbari)</string>
+  <string name="navigation_history_cleared">U Spastrua Historiku i Lëvizjeve</string>
+  <string name="go_to_settings_label">Kalo te Rregullimet</string>
+  <string name="request_notification_permission_message">Që të kryhet ky veprim, akordoni leje për njoftime</string>
 </resources>

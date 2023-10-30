@@ -6,6 +6,7 @@
 * Macofe
 * Overlaet
 * Saederup92
+* SiGNOUT
 * Tinamalmgren
 -->
 <resources>
@@ -20,6 +21,7 @@
   <string name="menu_read_aloud">Læs højt</string>
   <string name="menu_read_aloud_stop">Stop med at læse højt</string>
   <string name="menu_support_kiwix">Støt Kiwix</string>
+  <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Gem medie</string>
   <string name="save_media_error">Der opstod en fejl under forsøg på at gemme mediet!</string>
   <string name="save_media_saved">Gemte medie som %s til Downloads/org.kiwix…/</string>
@@ -32,6 +34,8 @@
   <string name="start_server_label">Start server</string>
   <string name="stop_server_label">Stop server</string>
   <string name="error_file_not_found">Fejl: Den valgte ZIM fil blev ikke fundet.</string>
+  <string name="unable_to_read_zim_file">Kan ikke åbne den zim fil!</string>
+  <string name="zim_not_opened">Kan ikke åbne zim fil</string>
   <string name="error_file_invalid">Fejl: Den valgte fil er ikke en gyldig ZIM fil.</string>
   <string name="error_article_url_not_found">Fejl: Indlæsning af artikel (Url: %1$s) mislykkedes.</string>
   <string name="pref_display_title">Visning</string>

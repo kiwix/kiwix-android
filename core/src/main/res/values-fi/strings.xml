@@ -233,4 +233,5 @@
   <string name="allow">Salli</string>
   <string name="open_article">Avaa artikkeli</string>
   <string name="go_to_settings_label">Siirry asetuksiin</string>
+  <string name="your_device_name_message">Laitteesi nimi näkyy tässä.</string>
 </resources>

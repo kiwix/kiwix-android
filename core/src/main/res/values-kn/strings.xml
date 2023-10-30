@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Macofe
+* Swathi
 * Vkashyap
 * ~aanzx
 * ಮಲ್ನಾಡಾಚ್ ಕೊಂಕ್ಣೊ
@@ -43,7 +44,13 @@
   <string name="pref_clear_all_history_title">ಇತಿಹಾಸ ಅಳಿಸಿ</string>
   <string name="all_history_cleared">ಎಲ್ಲಾ ಇತಿಹಾಸ ಅಳಿಸಿ</string>
   <string name="delete">ಅಳಿಸು</string>
+  <string name="got_it">ಗೊತ್ತಾಯಿತು</string>
+  <string name="no_thanks">ಬೇಡ, ಧನ್ಯವಾದಗಳು</string>
+  <string name="rate_dialog_neutral">ನಂತರ</string>
+  <string name="open">ತೆಗೆ</string>
   <string name="library">ಗ್ರಂಥಾಲಯ</string>
+  <string name="zim_simple">ಸರಳ</string>
+  <string name="help_2">ಕಿವಿಕ್ಸ್ ಏನು ಮಾಡುತ್ತದೆ?</string>
   <string name="tts_pause">ಸ್ವಲ್ಪ ನಿಲ್ಲಿಸು</string>
   <string name="tts_resume">ಮತ್ತೆ ಶುರುಮಾಡು</string>
   <string name="stop">ನಿಲ್ಲಿಸು</string>
@@ -60,7 +67,9 @@
   <string name="time_left">ಉಳಿದಿದೆ</string>
   <string name="time_today">ಇವತ್ತು</string>
   <string name="time_yesterday">ನಿನ್ನೆ</string>
+  <string name="new_tab_shortcut_label">ಹೊಸ ಟ್ಯಾಬ್</string>
   <string name="select_languages">ಭಾಷೆ ಆಯ್ಕೆ ಮಾಡಿ</string>
+  <string name="save">ಉಳಿಸಿ</string>
   <string name="tag_pic">ಚಿತ್ರ</string>
   <string name="tag_vid">ವೀಡಿಯೊ</string>
   <string name="tag_text_only">ಪಠ್ಯ ಮಾತ್ರ</string>

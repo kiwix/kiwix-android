@@ -229,6 +229,7 @@
   <string name="complete">Завершено</string>
   <string name="paused_state">Приостановлено</string>
   <string name="failed_state">Ошибка: %s</string>
+  <string name="custom_download_error_message_for_authentication_failed">Не удалось загрузить файл ZIM. Пожалуйста, попробуйте переустановить приложение из магазина Play.</string>
   <string name="save">Сохранить</string>
   <string name="note">Заметка</string>
   <string name="wiki_article_title">Заголовок вики-статьи</string>
