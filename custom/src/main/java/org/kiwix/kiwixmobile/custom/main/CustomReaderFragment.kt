@@ -26,22 +26,15 @@ import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
-import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.main.MainMenu
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
-import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForCustomApp
-import org.kiwix.kiwixmobile.core.utils.titleToUrl
-import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
@@ -81,29 +74,6 @@ class CustomReaderFragment : CoreReaderFragment() {
         toolbar?.let { setupDrawerToggle(it) }
       }
       loadPageFromNavigationArguments()
-
-      requireActivity().observeNavigationResult<String>(
-        FIND_IN_PAGE_SEARCH_STRING,
-        viewLifecycleOwner,
-        Observer(::findInPage)
-      )
-      requireActivity().observeNavigationResult<SearchItemToOpen>(
-        TAG_FILE_SEARCHED,
-        viewLifecycleOwner,
-        Observer(::openSearchItem)
-      )
-    }
-  }
-
-  private fun openSearchItem(item: SearchItemToOpen) {
-    item.pageUrl?.let(::loadUrlWithCurrentWebview) ?: kotlin.run {
-      // For handling the previously saved recent searches
-      zimReaderContainer?.titleToUrl(item.pageTitle)?.apply {
-        if (item.shouldOpenInNewTab) {
-          createNewTab()
-        }
-        loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(this))
-      }
     }
   }
 

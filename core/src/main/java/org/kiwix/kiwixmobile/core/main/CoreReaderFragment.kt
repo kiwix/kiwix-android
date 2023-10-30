@@ -78,6 +78,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -108,7 +109,9 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.downloader.fetch.DOWNLOAD_NOTIFICATION_TITLE
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.findFirstTextView
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
@@ -132,6 +135,7 @@ import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_P
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_STOP_TTS
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getToolbarHeight
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
@@ -154,6 +158,8 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.deleteCachedFiles
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
+import org.kiwix.kiwixmobile.core.utils.titleToUrl
+import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -488,6 +494,16 @@ abstract class CoreReaderFragment :
         readAloudService?.registerCallBack(this@CoreReaderFragment)
       }
     }
+    requireActivity().observeNavigationResult<String>(
+      FIND_IN_PAGE_SEARCH_STRING,
+      viewLifecycleOwner,
+      Observer(::findInPage)
+    )
+    requireActivity().observeNavigationResult<SearchItemToOpen>(
+      TAG_FILE_SEARCHED,
+      viewLifecycleOwner,
+      Observer(::openSearchItem)
+    )
   }
 
   private fun initTabCallback() {
@@ -1645,6 +1661,16 @@ abstract class CoreReaderFragment :
     openSearch("", isOpenedFromTabView = false, isVoice)
   }
 
+  private fun openSearchItem(item: SearchItemToOpen) {
+    zimReaderContainer?.titleToUrl(item.pageTitle)?.let {
+      if (item.shouldOpenInNewTab) {
+        createNewTab()
+      }
+      loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(it))
+    }
+    requireActivity().consumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)
+  }
+
   private fun handleIntentActions(intent: Intent) {
     Log.d(TAG_KIWIX, "action" + requireActivity().intent?.action)
     startIntentBasedOnAction(intent)
@@ -1784,7 +1810,7 @@ abstract class CoreReaderFragment :
     }
   }
 
-  protected fun findInPage(title: String?) {
+  private fun findInPage(title: String?) {
     // if the search is localized trigger find in page UI.
     compatCallback?.apply {
       setActive()
