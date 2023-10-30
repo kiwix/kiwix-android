@@ -114,7 +114,7 @@
   <string name="pref_extras">This is the label on the preference settings page. which shows as the extra settings list label.</string>
   <string name="new_tab_snack_bar">This message appears in the \"Android Snackbar\" as an information message, it informs the user article is opened in a new tab.</string>
   <string name="search_widget_text">This message appears in the \"Android Widget\" on the home screen of the user\'s device as a title, by clicking on this widget title user will be redirected to the search screen of the application.</string>
-  <string name="speech_prompt_text">The placeholder refers to the app name %s</string>
+  <string name="speech_prompt_text">The placeholder %s refers to the app name.</string>
   <string name="speech_not_supported">This message appears in the \"Android Toast\" as an error message, it tells the user the device does not support the speech inputs.</string>
   <string name="local_zims">{{Identical|Device}}</string>
   <string name="remote_zims">{{Identical|Online}}</string>
@@ -166,10 +166,10 @@
   <string name="time_hour">This message appears while downloading online content to inform the user how much time is left in hours.</string>
   <string name="time_minute">This message appears while downloading online content to inform the user how much time is left in minutes.</string>
   <string name="time_second">This message appears while downloading online content to inform the user how much time is left in seconds.</string>
-  <string name="time_left">This is the past participle of the verb “to leave” (meaning “quitted” or “exited”). This is used in a context of “X minutes left” to finish a download.</string>
+  <string name="time_left">This is used in a context of “X minutes left” to finish a download.</string>
   <string name="time_today">{{Identical|Today}}</string>
   <string name="time_yesterday">{{Identical|Yesterday}}</string>
-  <string name="pref_external_link_popup_title">This message appears in preference settings as a setting title which informs the user when he clicks on the external then it will display a popup.</string>
+  <string name="pref_external_link_popup_title">This message appears in preference settings as a setting title which informs the user when he clicks on the external then it will display a popup.\n\n\'\'\'\"Entering\" should be translated in the sense of \"opening\"/\"accessing\", not \"adding\"/\"inserting\".\'\'\'</string>
   <string name="pref_external_link_popup_summary">This message appears in preference settings as a setting description which informs the user when he clicks on the external then it will display a popup which URLs are not working in the offline mode.</string>
   <string name="external_link_popup_dialog_title">This message appears in the \"Android Dialog\" as a dialog title. When a user clicks on an external link, it informs the user this URL is an external link.\n\n\'\'\'\"Entering\" should be translated in the sense of \"opening\"/\"accessing\", not \"adding\"/\"inserting\".\'\'\'</string>
   <string name="external_link_popup_dialog_message">This message appears in the \"Android Dialog\" as a dialog description when the user tries to open an external link. It informs the user that they will be charged for additional data by opening this URL, or that this URL will not work if the device has no internet connection.\n\n\'\'\'\"Entering\" should be translated in the sense of \"opening\"/\"accessing\", not \"adding\"/\"inserting\".\'\'\'</string>

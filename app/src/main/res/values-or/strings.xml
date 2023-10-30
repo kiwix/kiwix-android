@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Gouri
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">ଆପଣଙ୍କ ଫାଇଲତନ୍ତ୍ର 4GB ରୁ ଅଧିକ ଫାଇଲଗୁଡ଼ିକୁ ସମର୍ଥନ କରେନାହିଁ |</string>
+  <string name="detecting_file_system">ଫାଇଲ ତନ୍ତ୍ର 4GB ଫାଇଲ ସୃଷ୍ଟି କରିପାରିବ କି ନାହିଁ ତାହା ଚିହ୍ନଟ କରାଯାଉଛି</string>
+  <string name="cannot_open_file">ଫାଇଲ ଖୋଲିବାରେ ବିଫଳ ଦଯ଼ାକରି ଆପଣଙ୍କ ଲାଇବ୍ରେରୀର ଡିଭାଇସ୍ ଟ୍ଯ଼ାବରେ ଏହି ଫାଇଲକୁ ଖୋଜିବାକୁ ଚେଷ୍ଟା କରନ୍ତୁ</string>
+  <string name="send_files_title">ଫାଇଲ ପଠାନ୍ତୁ |</string>
+  <string name="receive_files_title">ଫାଇଲଗୁଡ଼ିକୁ ଗ୍ରହଣ କରନ୍ତୁ</string>
+  <string name="no_app_found_to_open">Zim ଫାଇଲ ଚଯ଼ନ କରିବା ପାଇଁ କୌଣସି ଆପ ମିଳୁନାହିଁ</string>
+  <string name="select_zim_file">ପଢ଼ିବା ପାଇଁ zim ଫାଇଲକୁ ବାଛନ୍ତୁ</string>
+</resources>

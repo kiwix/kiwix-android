@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Умар
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">Хьан файлийн системо ловш йац 4GB сов йолу файлаш</string>
+  <string name="detecting_file_system">Файлийн системо 4GB сов йолу файлаш ловш йуй хьажар</string>
+  <string name="send_files_title">ДӀайахьийта файлаш</string>
+  <string name="receive_files_title">Схьаэца файлаш</string>
+  <string name="no_app_found_to_open">ZIM-файл харжа тӀетохар цакарий!</string>
+  <string name="select_zim_file">Харжа zim-файл йешархьама</string>
+</resources>

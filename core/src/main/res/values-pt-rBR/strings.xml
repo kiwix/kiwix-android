@@ -173,7 +173,7 @@
   <string name="time_left">esquerda</string>
   <string name="time_today">Hoje</string>
   <string name="time_yesterday">Ontem</string>
-  <string name="pref_external_link_popup_title">Avisar ao inserir links externos</string>
+  <string name="pref_external_link_popup_title">Avisar ao seguir links externos</string>
   <string name="pref_external_link_popup_summary">Exibir pop-up para avisar sobre custos adicionais ou não trabalhar em links off-line.</string>
   <string name="external_link_popup_dialog_title">Entrar no link externo!</string>
   <string name="external_link_popup_dialog_message">Você está acessando um link externo. Isso pode levar a custos adicionais para transferência de dados ou não funcionará quando você estiver desconectado. Você quer continuar?</string>

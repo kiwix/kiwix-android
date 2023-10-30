@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Rishitha 1238
+-->
+<resources>
+  <string name="retry">మళ్లీ ప్రయత్నించండి</string>
+  <string name="invalid_installation">ఇన్‌స్టాల్ చెల్లదు. దయచేసి Zimని డౌన్‌లోడ్ చేయండి.\n WiFi ఆన్‌లో ఉందని మరియు మీకు తగినంత నిల్వ ఉందని నిర్ధారించుకోండి</string>
+</resources>

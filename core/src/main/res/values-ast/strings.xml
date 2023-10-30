@@ -4,6 +4,7 @@
 * McDutchie
 * Tokvo
 * Xuacu
+* YoaR
 -->
 <resources>
   <string name="menu_help">Ayuda</string>
@@ -74,7 +75,7 @@
   <string name="share">Compartir</string>
   <string name="selected_file_cab_app_chooser_title">Compartir los ficheros ZIM con:</string>
   <string name="delete">Desaniciar</string>
-  <string name="cancel">Encaboxar</string>
+  <string name="cancel">Zarrar</string>
   <string name="delete_specific_search_toast">Desanicióse la gueta recién</string>
   <string name="hint_contents_drawer_message">Puedes esmucir a la izquierda pa ver el conteníu d\'esti artículu</string>
   <string name="got_it">Entendílo</string>

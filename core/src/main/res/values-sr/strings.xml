@@ -128,4 +128,5 @@
   <string name="allowed">Дозвољено</string>
   <string name="not_allowed">Није дозвољено</string>
   <string name="no_notes">Нема белешки</string>
+  <string name="your_device_name_message">Име Вашег уређаја приказаће се овде.</string>
 </resources>

@@ -16,6 +16,7 @@
 * Sunai
 * VulpesVulpes825
 * Wzl19371
+* XtexChooser
 * Yfdyh000
 * Ywang
 * Zjzengdongyang
@@ -225,6 +226,7 @@
   <string name="complete">完成</string>
   <string name="paused_state">暂停</string>
   <string name="failed_state">失败：%s</string>
+  <string name="custom_download_error_message_for_authentication_failed">无法下载此 zim 文件。请尝试从 Play 商店重新安装此应用程序。</string>
   <string name="save">保存</string>
   <string name="note">请注意</string>
   <string name="wiki_article_title">Wiki文章标题</string>

@@ -3,6 +3,7 @@
 * Edwingudfriend
 * Kipala
 * Mpmayenge
+* Stacy Lavuha
 * Stephane
 * Wangombe
 * Yasen igra
@@ -55,4 +56,8 @@
   <string name="no_bookmarks">Hakuna maalamisho</string>
   <string name="on">Wazi</string>
   <string name="off">Zima</string>
+  <string name="click_nearby_devices_message">Bofya hapa ili kutafuta vifaa vya karibu.</string>
+  <string name="your_device_name_message">Jina la kifaa chako litaonekana hapa.</string>
+  <string name="nearby_devices_list_message">Hapa, utapata orodha ya vifaa vilivyo karibu. Bonyeza kwenye jina la kifaa ili kuanzisha uhamishaji wa faili.</string>
+  <string name="transfer_zim_files_list_message">Hapa, utapata orodha ya faili za ZIM zilizopo kwa ajili ya uhamishaji.</string>
 </resources>
