@@ -76,6 +76,7 @@ class MimeTypeTest : BaseActivityTest() {
     }
     val zimFileReader = ZimFileReader(
       zimFile,
+      null,
       Archive(zimFile.canonicalPath),
       NightModeConfig(SharedPreferenceUtil(context), context)
     )
