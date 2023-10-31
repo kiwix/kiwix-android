@@ -26,6 +26,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.AssetFileDescriptor
 import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Rect
@@ -38,7 +39,6 @@ import android.os.CountDownTimer
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
-import android.os.ParcelFileDescriptor
 import android.provider.Settings
 import android.util.AttributeSet
 import android.util.Log
@@ -1390,14 +1390,14 @@ abstract class CoreReaderFragment :
   protected fun openZimFile(
     file: File?,
     isCustomApp: Boolean = false,
-    parcelFileDescriptor: ParcelFileDescriptor? = null
+    assetFileDescriptor: AssetFileDescriptor? = null
   ) {
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || isCustomApp) {
       if (file?.isFileExist() == true) {
         openAndSetInContainer(file = file)
         updateTitle()
-      } else if (parcelFileDescriptor != null) {
-        openAndSetInContainer(parcelFileDescriptor = parcelFileDescriptor)
+      } else if (assetFileDescriptor != null) {
+        openAndSetInContainer(assetFileDescriptor = assetFileDescriptor)
         updateTitle()
       } else {
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file?.absolutePath)
@@ -1429,7 +1429,7 @@ abstract class CoreReaderFragment :
 
   private fun openAndSetInContainer(
     file: File? = null,
-    parcelFileDescriptor: ParcelFileDescriptor? = null
+    assetFileDescriptor: AssetFileDescriptor? = null
   ) {
     try {
       if (isNotPreviouslyOpenZim(file?.canonicalPath)) {
@@ -1439,8 +1439,8 @@ abstract class CoreReaderFragment :
       e.printStackTrace()
     }
     zimReaderContainer?.let { zimReaderContainer ->
-      if (parcelFileDescriptor != null) {
-        zimReaderContainer.setZimFileDescriptor(parcelFileDescriptor)
+      if (assetFileDescriptor != null) {
+        zimReaderContainer.setZimFileDescriptor(assetFileDescriptor)
       } else {
         zimReaderContainer.setZimFile(file)
       }
