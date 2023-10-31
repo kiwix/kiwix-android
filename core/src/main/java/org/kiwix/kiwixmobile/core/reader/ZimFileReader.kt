@@ -53,14 +53,14 @@ private const val TAG = "ZimFileReader"
 
 class ZimFileReader constructor(
   val zimFile: File?,
-  val parcelFileDescriptor: ParcelFileDescriptor? = null,
+  private val assetFileDescriptor: AssetFileDescriptor? = null,
   private val jniKiwixReader: Archive,
   private val nightModeConfig: NightModeConfig,
   private val searcher: SuggestionSearcher = SuggestionSearcher(jniKiwixReader)
 ) {
   interface Factory {
     fun create(file: File): ZimFileReader?
-    fun create(parcelFileDescriptor: ParcelFileDescriptor): ZimFileReader?
+    fun create(assetFileDescriptor: AssetFileDescriptor): ZimFileReader?
 
     class Impl @Inject constructor(private val nightModeConfig: NightModeConfig) :
       Factory {
@@ -79,13 +79,17 @@ class ZimFileReader constructor(
           null
         }
 
-      override fun create(parcelFileDescriptor: ParcelFileDescriptor): ZimFileReader? =
+      override fun create(assetFileDescriptor: AssetFileDescriptor): ZimFileReader? =
         try {
           ZimFileReader(
             null,
-            parcelFileDescriptor,
+            assetFileDescriptor,
             nightModeConfig = nightModeConfig,
-            jniKiwixReader = Archive(parcelFileDescriptor.fileDescriptor)
+            jniKiwixReader = Archive(
+              assetFileDescriptor.parcelFileDescriptor.dup().fileDescriptor,
+              assetFileDescriptor.startOffset,
+              assetFileDescriptor.length
+            )
           ).also {
             Log.e(TAG, "create: with fileDescriptor")
           }
@@ -307,6 +311,7 @@ class ZimFileReader constructor(
   fun dispose() {
     jniKiwixReader.dispose()
     searcher.dispose()
+    assetFileDescriptor?.parcelFileDescriptor?.detachFd()
   }
 
   @Suppress("TooGenericExceptionCaught")

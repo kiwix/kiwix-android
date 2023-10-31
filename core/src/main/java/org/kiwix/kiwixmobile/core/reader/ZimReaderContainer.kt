@@ -17,7 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.reader
 
-import android.os.ParcelFileDescriptor
+import android.content.res.AssetFileDescriptor
 import android.webkit.WebResourceResponse
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
@@ -43,10 +43,10 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
       else null
   }
 
-  fun setZimFileDescriptor(parcelFileDescriptor: ParcelFileDescriptor) {
+  fun setZimFileDescriptor(assetFileDescriptor: AssetFileDescriptor) {
     zimFileReader =
-      if (parcelFileDescriptor.fileDescriptor.valid())
-        zimFileReaderFactory.create(parcelFileDescriptor)
+      if (assetFileDescriptor.parcelFileDescriptor.dup().fileDescriptor.valid())
+        zimFileReaderFactory.create(assetFileDescriptor)
       else null
   }
 
