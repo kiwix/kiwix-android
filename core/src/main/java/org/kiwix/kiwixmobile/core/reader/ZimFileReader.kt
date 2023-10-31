@@ -40,7 +40,6 @@ import org.kiwix.libzim.Item
 import org.kiwix.libzim.SuggestionSearch
 import org.kiwix.libzim.SuggestionSearcher
 import java.io.File
-import java.io.FileDescriptor
 import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
@@ -54,13 +53,14 @@ private const val TAG = "ZimFileReader"
 
 class ZimFileReader constructor(
   val zimFile: File?,
+  val parcelFileDescriptor: ParcelFileDescriptor? = null,
   private val jniKiwixReader: Archive,
   private val nightModeConfig: NightModeConfig,
   private val searcher: SuggestionSearcher = SuggestionSearcher(jniKiwixReader)
 ) {
   interface Factory {
     fun create(file: File): ZimFileReader?
-    fun create(fileDescriptor: FileDescriptor): ZimFileReader?
+    fun create(parcelFileDescriptor: ParcelFileDescriptor): ZimFileReader?
 
     class Impl @Inject constructor(private val nightModeConfig: NightModeConfig) :
       Factory {
@@ -79,12 +79,13 @@ class ZimFileReader constructor(
           null
         }
 
-      override fun create(fileDescriptor: FileDescriptor): ZimFileReader? =
+      override fun create(parcelFileDescriptor: ParcelFileDescriptor): ZimFileReader? =
         try {
           ZimFileReader(
             null,
+            parcelFileDescriptor,
             nightModeConfig = nightModeConfig,
-            jniKiwixReader = Archive(fileDescriptor)
+            jniKiwixReader = Archive(parcelFileDescriptor.fileDescriptor)
           ).also {
             Log.e(TAG, "create: with fileDescriptor")
           }

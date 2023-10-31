@@ -49,6 +49,10 @@ android {
     }
   }
   assetPacks += ":install_time_asset"
+  androidResources {
+    // to not compress zim file in asset folder
+    noCompress.add("zim")
+  }
 }
 
 fun ProductFlavor.createDownloadTask(file: File): Task {

@@ -38,6 +38,7 @@ import android.os.CountDownTimer
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.os.ParcelFileDescriptor
 import android.provider.Settings
 import android.util.AttributeSet
 import android.util.Log
@@ -154,7 +155,6 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.deleteCachedFiles
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 import java.io.File
-import java.io.FileDescriptor
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -1390,14 +1390,14 @@ abstract class CoreReaderFragment :
   protected fun openZimFile(
     file: File?,
     isCustomApp: Boolean = false,
-    fileDescriptor: FileDescriptor? = null
+    parcelFileDescriptor: ParcelFileDescriptor? = null
   ) {
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || isCustomApp) {
       if (file?.isFileExist() == true) {
         openAndSetInContainer(file = file)
         updateTitle()
-      } else if (fileDescriptor != null) {
-        openAndSetInContainer(fileDescriptor = fileDescriptor)
+      } else if (parcelFileDescriptor != null) {
+        openAndSetInContainer(parcelFileDescriptor = parcelFileDescriptor)
         updateTitle()
       } else {
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file?.absolutePath)
@@ -1427,7 +1427,10 @@ abstract class CoreReaderFragment :
     )
   }
 
-  private fun openAndSetInContainer(file: File? = null, fileDescriptor: FileDescriptor? = null) {
+  private fun openAndSetInContainer(
+    file: File? = null,
+    parcelFileDescriptor: ParcelFileDescriptor? = null
+  ) {
     try {
       if (isNotPreviouslyOpenZim(file?.canonicalPath)) {
         webViewList.clear()
@@ -1436,8 +1439,8 @@ abstract class CoreReaderFragment :
       e.printStackTrace()
     }
     zimReaderContainer?.let { zimReaderContainer ->
-      if (fileDescriptor != null) {
-        zimReaderContainer.setZimFileDescriptor(fileDescriptor)
+      if (parcelFileDescriptor != null) {
+        zimReaderContainer.setZimFileDescriptor(parcelFileDescriptor)
       } else {
         zimReaderContainer.setZimFile(file)
       }
