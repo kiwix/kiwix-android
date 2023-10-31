@@ -170,7 +170,8 @@ class SearchViewModel @Inject constructor(
       SaveSearchToRecents(
         recentSearchDao,
         searchListItem,
-        zimReaderContainer.id
+        zimReaderContainer.id,
+        viewModelScope
       )
     ).isSuccess
     _effects.trySendBlocking(OpenSearchItem(searchListItem, openInNewTab))

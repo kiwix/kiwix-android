@@ -31,6 +31,7 @@ internal class SearchStateTest {
   @Test
   internal fun `visibleResults use searchResults when searchTerm is not empty`() = runTest {
     val searchTerm = "notEmpty"
+    val pageUrl = ""
     val suggestionSearchWrapper: SuggestionSearchWrapper = mockk()
     val searchIteratorWrapper: SuggestionIteratorWrapper = mockk()
     val entryWrapper: SuggestionItemWrapper = mockk()
@@ -42,6 +43,7 @@ internal class SearchStateTest {
     every { searchIteratorWrapper.hasNext() } returnsMany listOf(true, false)
     every { searchIteratorWrapper.next() } returns entryWrapper
     every { entryWrapper.title } returns searchTerm
+    every { entryWrapper.path } returns pageUrl
     every {
       suggestionSearchWrapper.getResults(
         0,
@@ -55,12 +57,12 @@ internal class SearchStateTest {
         emptyList(),
         FromWebView
       ).getVisibleResults(0)
-    ).isEqualTo(listOf(RecentSearchListItem(searchTerm)))
+    ).isEqualTo(listOf(RecentSearchListItem(searchTerm, "")))
   }
 
   @Test
   internal fun `visibleResults use recentResults when searchTerm is empty`() = runTest {
-    val results = listOf(RecentSearchListItem(""))
+    val results = listOf(RecentSearchListItem("", ""))
     assertThat(
       SearchState(
         "",
