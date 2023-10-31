@@ -144,8 +144,8 @@ class CustomReaderFragment : CoreReaderFragment() {
       onFilesFound = {
         when (it) {
           is ValidationState.HasFile -> {
-            if (it.fileDescriptor != null) {
-              openZimFile(null, true, it.fileDescriptor)
+            if (it.parcelFileDescriptor != null) {
+              openZimFile(null, true, it.parcelFileDescriptor)
             } else {
               openZimFile(it.file, true)
             }

@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.custom.main
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.ParcelFileDescriptor
 import android.util.Log
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.custom.BuildConfig
@@ -27,7 +28,6 @@ import org.kiwix.kiwixmobile.custom.main.ValidationState.HasBothFiles
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasFile
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasNothing
 import java.io.File
-import java.io.FileDescriptor
 import java.io.IOException
 import javax.inject.Inject
 
@@ -43,24 +43,24 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
   private fun detectInstallationState(
     obbFiles: List<File> = obbFiles(),
     zimFiles: List<File> = zimFiles(),
-    assetFileDescriptor: FileDescriptor? = getFileFromPlayAssetDelivery()
+    assetFileDescriptor: ParcelFileDescriptor? = getParcelFileDescriptorFromPlayAssetDelivery()
   ): ValidationState {
     return when {
       assetFileDescriptor != null -> HasFile(null, assetFileDescriptor)
-      obbFiles.isNotEmpty() && zimFiles().isNotEmpty() -> HasBothFiles(obbFiles[0], zimFiles[0])
-      obbFiles.isNotEmpty() -> HasFile(obbFiles[0])
-      zimFiles.isNotEmpty() -> HasFile(zimFiles[0])
+      // obbFiles.isNotEmpty() && zimFiles().isNotEmpty() -> HasBothFiles(obbFiles[0], zimFiles[0])
+      // obbFiles.isNotEmpty() -> HasFile(obbFiles[0])
+      // zimFiles.isNotEmpty() -> HasFile(zimFiles[0])
       else -> HasNothing
     }
   }
 
   @Suppress("NestedBlockDepth", "MagicNumber")
-  private fun getFileFromPlayAssetDelivery(): FileDescriptor? {
+  private fun getParcelFileDescriptorFromPlayAssetDelivery(): ParcelFileDescriptor? {
     try {
       val context = context.createPackageContext(context.packageName, 0)
       val assetManager = context.assets
-      val inputStream = assetManager.openFd(BuildConfig.PLAY_ASSET_FILE)
-      return inputStream.fileDescriptor
+      val assetFileDescriptor = assetManager.openFd(BuildConfig.PLAY_ASSET_FILE)
+      return assetFileDescriptor.parcelFileDescriptor
     } catch (packageNameNotFoundException: PackageManager.NameNotFoundException) {
       Log.w(
         "ASSET_PACKAGE_DELIVERY",
@@ -105,7 +105,7 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
 
 sealed class ValidationState {
   data class HasBothFiles(val obbFile: File, val zimFile: File) : ValidationState()
-  data class HasFile(val file: File?, val fileDescriptor: FileDescriptor? = null) :
+  data class HasFile(val file: File?, val parcelFileDescriptor: ParcelFileDescriptor? = null) :
     ValidationState()
 
   object HasNothing : ValidationState()

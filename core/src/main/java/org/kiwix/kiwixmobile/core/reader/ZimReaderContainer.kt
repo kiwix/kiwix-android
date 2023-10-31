@@ -17,11 +17,11 @@
  */
 package org.kiwix.kiwixmobile.core.reader
 
+import android.os.ParcelFileDescriptor
 import android.webkit.WebResourceResponse
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
 import java.io.File
-import java.io.FileDescriptor
 import java.net.HttpURLConnection
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -43,9 +43,10 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
       else null
   }
 
-  fun setZimFileDescriptor(fileDescriptor: FileDescriptor) {
+  fun setZimFileDescriptor(parcelFileDescriptor: ParcelFileDescriptor) {
     zimFileReader =
-      if (fileDescriptor.valid()) zimFileReaderFactory.create(fileDescriptor)
+      if (parcelFileDescriptor.fileDescriptor.valid())
+        zimFileReaderFactory.create(parcelFileDescriptor)
       else null
   }
 
