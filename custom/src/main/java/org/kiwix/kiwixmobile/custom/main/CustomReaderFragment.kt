@@ -88,10 +88,19 @@ class CustomReaderFragment : CoreReaderFragment() {
     requireArguments().clear()
   }
 
+  /**
+   * Restores the view state when the attempt to read JSON from shared preferences fails
+   * due to invalid or corrupted data. In this case, it opens the homepage of the zim file,
+   * as custom apps always have the zim file available.
+   */
   override fun restoreViewStateOnInvalidJSON() {
     openHomeScreen()
   }
 
+  /**
+   * Restores the view state when the JSON data is valid. This method restores the tabs
+   * and loads the last opened article in the specified tab.
+   */
   override fun restoreViewStateOnValidJSON(
     zimArticles: String?,
     zimPositions: String?,
@@ -100,6 +109,11 @@ class CustomReaderFragment : CoreReaderFragment() {
     restoreTabs(zimArticles, zimPositions, currentTab)
   }
 
+  /**
+   * Sets the locking mode for the sidebar in a custom app. If the app is configured not to show the sidebar,
+   * this function disables the sidebar by locking it in the closed position through the parent class.
+   * https://developer.android.com/reference/kotlin/androidx/drawerlayout/widget/DrawerLayout#LOCK_MODE_LOCKED_CLOSED()
+   */
   override fun setDrawerLockMode(lockMode: Int) {
     super.setDrawerLockMode(
       if (BuildConfig.DISABLE_SIDEBAR) DrawerLayout.LOCK_MODE_LOCKED_CLOSED
@@ -169,11 +183,23 @@ class CustomReaderFragment : CoreReaderFragment() {
     return false
   }
 
+  /**
+   * This method is overridden to set the IDs of the `drawerLayout` and `tableDrawerRightContainer`
+   * specific to the custom module in the `CoreReaderFragment`. Since we have an app and a custom module,
+   * and `CoreReaderFragment` is a common class for both modules, we set the IDs of the custom module
+   * in the parent class to ensure proper integration.
+   */
   override fun loadDrawerViews() {
     drawerLayout = requireActivity().findViewById(R.id.custom_drawer_container)
     tableDrawerRightContainer = requireActivity().findViewById(R.id.activity_main_nav_view)
   }
 
+  /**
+   * Overrides the method to create the main menu for the app. The custom app can be configured to disable
+   * features like "read aloud" and "tabs," and this method dynamically generates the menu based on the
+   * provided configuration. It takes into account whether read aloud and tabs are enabled or disabled
+   * and creates the menu accordingly.
+   */
   override fun createMainMenu(menu: Menu?): MainMenu? {
     return menu?.let {
       menuFactory?.create(
@@ -187,11 +213,22 @@ class CustomReaderFragment : CoreReaderFragment() {
     }
   }
 
+  /**
+   * Overrides the method to control the functionality of showing the "Open In New Tab" dialog.
+   * When a user long-clicks on an article, the app typically prompts the "ShowOpenInNewTabDialog."
+   * However, if a custom app is configured to disable the use of tabs, this function restricts
+   * the dialog from appearing.
+   */
   override fun showOpenInNewTabDialog(url: String) {
     if (BuildConfig.DISABLE_TABS) return
     super.showOpenInNewTabDialog(url)
   }
 
+  /**
+   * Overrides the method to configure the WebView selection handler. When the "read aloud" feature is disabled
+   * in a custom app, this function hides the corresponding option from the menu that appears when the user selects
+   * text in the WebView. This prevents the "read aloud" option from being displayed in the menu when it's disabled.
+   */
   override fun configureWebViewSelectionHandler(menu: Menu?) {
     if (BuildConfig.DISABLE_READ_ALOUD) {
       menu?.findItem(org.kiwix.kiwixmobile.core.R.id.menu_speak_text)?.isVisible = false
