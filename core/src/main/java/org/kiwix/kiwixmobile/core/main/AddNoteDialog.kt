@@ -123,7 +123,7 @@ class AddNoteDialog : DialogFragment() {
       zimId = zimReaderContainer.id.orEmpty()
 
       if (arguments != null) {
-        articleTitle = arguments?.getString(NOTES_TITLE)
+        articleTitle = arguments?.getString(NOTES_TITLE)?.substringAfter(": ")
         zimFileUrl = arguments?.getString(ARTICLE_URL).orEmpty()
       } else {
         val webView = (activity as WebViewProvider?)?.getCurrentWebView()
