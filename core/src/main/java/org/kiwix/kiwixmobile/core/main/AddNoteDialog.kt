@@ -117,7 +117,7 @@ class AddNoteDialog : DialogFragment() {
       .inject(this)
 
     // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
-    zimFileName = zimReaderContainer.zimCanonicalPath
+    zimFileName = zimReaderContainer.zimCanonicalPath ?: zimReaderContainer.name
     if (zimFileName != null) { // No zim file currently opened
       zimFileTitle = zimReaderContainer.zimFileTitle
       zimId = zimReaderContainer.id.orEmpty()
