@@ -53,6 +53,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificat
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
 import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
@@ -60,15 +61,15 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.StartServer
+import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService
+import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService.Companion.ACTION_CHECK_IP_ADDRESS
+import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService.Companion.ACTION_START_SERVER
+import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService.Companion.ACTION_STOP_SERVER
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService
-import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService.Companion.ACTION_CHECK_IP_ADDRESS
-import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService.Companion.ACTION_START_SERVER
-import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService.Companion.ACTION_STOP_SERVER
 import javax.inject.Inject
 
 class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
@@ -86,6 +87,9 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   @Inject
   lateinit var zimReaderFactory: ZimFileReader.Factory
+
+  @Inject
+  lateinit var zimReaderContainer: ZimReaderContainer
 
   private lateinit var booksAdapter: BooksOnDiskAdapter
   private lateinit var bookDelegate: BookOnDiskDelegate.BookDelegate
@@ -469,18 +473,13 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       val updatedBooksList: MutableList<BooksOnDiskListItem> = arrayListOf()
       books.forEach {
         if (it is BookOnDisk) {
-          zimReaderFactory.create(it.file)?.let { zimFileReader ->
+          zimReaderContainer.zimFileReader?.let { zimFileReader ->
             val booksOnDiskListItem =
-              zimFileReader.zimFile?.let { file ->
-                (BookOnDisk(file, zimFileReader) as BooksOnDiskListItem)
-                  .apply {
-                    isSelected = true
-                  }
-              }
-            if (booksOnDiskListItem != null) {
-              updatedBooksList.add(booksOnDiskListItem)
-            }
-            zimFileReader.dispose()
+              (BookOnDisk(it.file, zimFileReader) as BooksOnDiskListItem)
+                .apply {
+                  isSelected = true
+                }
+            updatedBooksList.add(booksOnDiskListItem)
           }
         } else {
           updatedBooksList.add(it)
