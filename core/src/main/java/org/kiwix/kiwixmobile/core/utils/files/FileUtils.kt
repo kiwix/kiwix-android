@@ -29,6 +29,7 @@ import android.provider.DocumentsContract
 import android.util.Log
 import android.webkit.URLUtil
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.documentfile.provider.DocumentFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -402,4 +403,8 @@ object FileUtils {
       null
     }
   }
+
+  @JvmStatic
+  fun getDemoFilePathForCustomApp(context: Context) =
+    "${ContextCompat.getExternalFilesDirs(context, null)[0]}/demo.zim"
 }
