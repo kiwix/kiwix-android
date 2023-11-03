@@ -103,13 +103,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
         exitProcess(KIWIX_INTERNAL_ERROR)
       }
     }
-<<<<<<< HEAD
+
     setMainActivityToCoreApp()
-=======
     if (!sharedPreferenceUtil.prefIsBookmarksMigrated) {
       objectBoxToLibkiwixMigrator.migrateBookmarksToLibkiwix()
     }
->>>>>>> 371eb5c2d (Created ObjectBox to libkiwix migrator for Bookmarks)
   }
 
   @Suppress("DEPRECATION")
