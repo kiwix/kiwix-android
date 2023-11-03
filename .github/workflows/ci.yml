@@ -14,8 +14,6 @@ jobs:
     strategy:
       matrix:
         api-level: [ 24, 30, 33 , 34]
-        system-image:
-          - { api: 34, image: "default" }
       fail-fast: false
     runs-on: macos-11
     steps:
@@ -44,7 +42,7 @@ jobs:
         uses: ReactiveCircus/android-emulator-runner@v2
         env:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
-        if: ${{ matrix.api-level != 33 }}
+        if: ${{ matrix.api-level != 33 && matrix.api-level != 34 }}
         with:
           api-level: ${{ matrix.api-level }}
           target: default
@@ -60,7 +58,7 @@ jobs:
         uses: ReactiveCircus/android-emulator-runner@v2
         env:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
-        if: ${{ matrix.api-level == 33 }}
+        if: ${{ matrix.api-level == 33 || matrix.api-level == 34 }}
         with:
           api-level: ${{ matrix.api-level }}
           target: google_apis
