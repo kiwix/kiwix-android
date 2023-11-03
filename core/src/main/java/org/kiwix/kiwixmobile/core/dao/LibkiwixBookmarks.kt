@@ -26,9 +26,6 @@ import io.reactivex.BackpressureStrategy.LATEST
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -111,12 +108,7 @@ class LibkiwixBookmarks @Inject constructor(
         bookmarksList.filter { it.zimId == zimFileReader.id }
           .map(LibkiwixBookmarkItem::bookmarkUrl)
       }
-      .subscribeOn(Schedulers.io()).also {
-        val book = Book().apply {
-          update(zimFileReader.jniKiwixReader)
-        }
-        addBookToLibraryIfNotExist(book)
-      }
+      .subscribeOn(Schedulers.io())
 
   fun saveBookmark(libkiwixBookmarkItem: LibkiwixBookmarkItem) {
     if (!isBookMarkExist(libkiwixBookmarkItem)) {
@@ -168,13 +160,11 @@ class LibkiwixBookmarks @Inject constructor(
    * to prevent potential data loss and ensures that the library holds the updated ZIM file paths and favicons.
    */
   private fun writeBookMarksAndSaveLibraryToFile() {
-    CoroutineScope(Dispatchers.IO).launch {
-      // Save the library, which contains ZIM file paths and favicons, to a file.
-      library.writeToFile(libraryFile.canonicalPath)
+    // Save the library, which contains ZIM file paths and favicons, to a file.
+    library.writeToFile(libraryFile.canonicalPath)
 
-      // Save the bookmarks data to a separate file.
-      library.writeBookmarksToFile(bookmarkFile.canonicalPath)
-    }
+    // Save the bookmarks data to a separate file.
+    library.writeBookmarksToFile(bookmarkFile.canonicalPath)
   }
 
   private fun getBookmarksList(): List<LibkiwixBookmarkItem> {
