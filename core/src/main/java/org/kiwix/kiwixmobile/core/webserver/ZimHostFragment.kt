@@ -49,6 +49,7 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.databinding.ActivityZimHostBinding
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
@@ -467,7 +468,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   @Suppress("NestedBlockDepth")
   override fun addBooks(books: List<BooksOnDiskListItem>) {
     // Check if this is the app module, as custom apps may have multiple package names
-    if (requireActivity().packageName == "org.kiwix.kiwixmobile") {
+    if (!requireActivity().isCustomApp()) {
       booksAdapter.items = books
     } else {
       val updatedBooksList: MutableList<BooksOnDiskListItem> = arrayListOf()
