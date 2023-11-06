@@ -95,6 +95,16 @@ class CustomMainActivity : CoreMainActivity() {
   override fun setupDrawerToggle(toolbar: Toolbar) {
     super.setupDrawerToggle(toolbar)
     activityCustomMainBinding.drawerNavView.apply {
+      /**
+       * Hide the 'ZimHostFragment' option from the navigation menu
+       * because we are now using fd (FileDescriptor)
+       * to read the zim file from the asset folder. Currently,
+       * 'KiwixServer' is unable to host zim files via fd.
+       * This feature is temporarily hidden for custom apps.
+       * We will re-enable it for custom apps once the issue is resolved.
+       * For more info see https://github.com/kiwix/kiwix-android/pull/3516
+       */
+      menu.findItem(R.id.menu_host_books)?.isVisible = false
       setNavigationItemSelectedListener { item ->
         closeNavigationDrawer()
         onNavigationItemSelected(item)
