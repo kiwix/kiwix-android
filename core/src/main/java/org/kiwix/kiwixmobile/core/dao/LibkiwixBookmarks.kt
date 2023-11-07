@@ -60,7 +60,7 @@ class LibkiwixBookmarks @Inject constructor(
     } else {
       sharedPreferenceUtil.getPublicDirectoryPath(
         sharedPreferenceUtil.defaultStorage()
-      ) + "/kiwix/Bookmarks/"
+      ) + "/Kiwix/Bookmarks/"
     }
   }
 
@@ -95,7 +95,7 @@ class LibkiwixBookmarks @Inject constructor(
             " current books size in the library is = ${library.booksIds.size}\n" +
             "book path = ${it.path}\n" +
             "book title = ${it.title}\n" +
-            "book id = ${it.name}\n",
+            "book id = ${it.id}\n",
         )
       }
   }
@@ -186,7 +186,7 @@ class LibkiwixBookmarks @Inject constructor(
             " current books size in the library is = ${library.booksIds.size}\n" +
             "book path = ${it.path}\n" +
             "book title = ${it.title}\n" +
-            "book id = ${it.name}\n",
+            "book id = ${it.id}\n",
         )
       }
     // Save the library, which contains ZIM file paths and favicons, to a file.
