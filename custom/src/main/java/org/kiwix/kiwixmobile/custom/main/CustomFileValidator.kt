@@ -22,8 +22,11 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.AssetFileDescriptor
 import android.content.res.AssetManager
+import android.os.ParcelFileDescriptor
 import android.util.Log
 import androidx.core.content.ContextCompat
+import org.kiwix.kiwixmobile.core.extensions.deleteFile
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasBothFiles
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasFile
@@ -66,6 +69,9 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
         assetFileDescriptorList.add(assetManager.openFd(it))
       }
       val combinedFilePath = FileUtils.getDemoFilePathForCustomApp(context)
+      val demoFile = File(combinedFilePath)
+      if (demoFile.isFileExist()) demoFile.deleteFile()
+      demoFile.createNewFile()
       val combinedFileOutputStream = FileOutputStream(combinedFilePath)
       val chunkSize = 100 * 1024 * 1024
 
@@ -87,8 +93,14 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
 
         chunkFileInputStream.close()
       }
-
-      return assetFileDescriptorList[0]
+      return AssetFileDescriptor(
+        ParcelFileDescriptor.open(
+          demoFile,
+          ParcelFileDescriptor.MODE_READ_ONLY
+        ),
+        0L,
+        demoFile.length()
+      )
     } catch (packageNameNotFoundException: PackageManager.NameNotFoundException) {
       Log.w(
         "ASSET_PACKAGE_DELIVERY",

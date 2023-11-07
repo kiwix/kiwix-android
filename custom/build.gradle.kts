@@ -34,7 +34,7 @@ android {
         createDownloadTask(it)
         createPublishApkWithExpansionTask(it, applicationVariants)
       }
-      File("$projectDir/../install_time_asset/src/main/assets", "$name.zim").let {
+      File("$projectDir/../install_time_asset/src/main/assets").let {
         createDownloadTaskForPlayAssetDelivery(it)
         createPublishBundleWithAssetPlayDelivery()
       }
@@ -114,7 +114,7 @@ fun writeZimFileData(responseBody: ResponseBody, file: File, chunkSize: Long = 1
     while (inputStream.read(buffer).also { bytesRead = it } != -1) {
       if (outputStream == null) {
         // Create a new chunk file
-        val nextChunkFile = File(file.parent, "chunk$chunkNumber.zim")
+        val nextChunkFile = File(file.path, "chunk$chunkNumber.zim")
         nextChunkFile.createNewFile()
         outputStream = FileOutputStream(nextChunkFile)
       }
@@ -151,8 +151,6 @@ fun ProductFlavor.createDownloadTaskForPlayAssetDelivery(
   ) {
     group = "Downloading"
     doLast {
-      if (file.exists()) file.delete()
-      file.createNewFile()
 
       OkHttpClient().newCall(fetchRequest()).execute().use { response ->
         if (response.isSuccessful) {
