@@ -21,13 +21,15 @@ package org.kiwix.kiwixmobile.custom.main
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.AssetFileDescriptor
+import android.content.res.AssetManager
 import android.util.Log
 import androidx.core.content.ContextCompat
-import org.kiwix.kiwixmobile.custom.BuildConfig
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasBothFiles
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasFile
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasNothing
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import javax.inject.Inject
 
@@ -59,7 +61,34 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
     try {
       val context = context.createPackageContext(context.packageName, 0)
       val assetManager = context.assets
-      return assetManager.openFd(BuildConfig.PLAY_ASSET_FILE)
+      val assetFileDescriptorList: ArrayList<AssetFileDescriptor> = arrayListOf()
+      getChunksList(assetManager).forEach {
+        assetFileDescriptorList.add(assetManager.openFd(it))
+      }
+      val combinedFilePath = FileUtils.getDemoFilePathForCustomApp(context)
+      val combinedFileOutputStream = FileOutputStream(combinedFilePath)
+      val chunkSize = 100 * 1024 * 1024
+
+      for (chunkNumber in 0 until assetFileDescriptorList.size) {
+        val chunkFileName = "chunk$chunkNumber.zim"
+        val chunkFileInputStream =
+          context.assets.open(chunkFileName)
+
+        val buffer = ByteArray(4096)
+        var bytesRead: Int
+
+        while (chunkFileInputStream.read(buffer).also { bytesRead = it } != -1) {
+          combinedFileOutputStream.write(
+            buffer,
+            0,
+            bytesRead
+          )
+        }
+
+        chunkFileInputStream.close()
+      }
+
+      return assetFileDescriptorList[0]
     } catch (packageNameNotFoundException: PackageManager.NameNotFoundException) {
       Log.w(
         "ASSET_PACKAGE_DELIVERY",
@@ -69,6 +98,22 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
       Log.w("ASSET_PACKAGE_DELIVERY", "Unable to copy the content of asset $ioException")
     }
     return null
+  }
+
+  private fun getChunksList(assetManager: AssetManager): MutableList<String> {
+    val chunkFiles = mutableListOf<String>()
+
+    try {
+      // List all files in the asset directory
+      val assets = assetManager.list("") ?: emptyArray()
+
+      // Filter and count chunk files based on your naming convention
+      assets.filterTo(chunkFiles) { it.startsWith("chunk") && it.endsWith(".zim") }
+    } catch (ioException: IOException) {
+      ioException.printStackTrace()
+    }
+
+    return chunkFiles
   }
 
   private fun obbFiles() = scanDirs(ContextCompat.getObbDirs(context), "obb")
