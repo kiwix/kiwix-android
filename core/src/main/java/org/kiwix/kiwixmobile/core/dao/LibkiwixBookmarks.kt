@@ -37,7 +37,6 @@ import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Bookmark
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
-import org.kiwix.libzim.Archive
 import java.io.File
 import javax.inject.Inject
 
@@ -217,41 +216,17 @@ class LibkiwixBookmarks @Inject constructor(
         null
       }
 
-      // Create an Archive object for the book's path, if it exists.
-      val archive: Archive? = book?.run {
-        try {
-          Archive(this.path)
-        } catch (exception: Exception) {
-          // to handle if zim file not found
-          // TODO should we delete bookmark if zim file not found?
-          // deleteBookmark(book.id, bookmark.url)
-          if (BuildConfig.DEBUG) {
-            Log.e(
-              TAG,
-              "Failed to create an archive for path: ${book.path}\n" +
-                "Exception: $exception"
-            )
-          }
-          null
-        }
+      // Check if the book has an illustration of the specified size and encode it to Base64.
+      val favicon = book?.getIllustration(ILLUSTRATION_SIZE)?.data?.let {
+        Base64.encodeToString(it, Base64.DEFAULT)
       }
 
-      // Check if the Archive has an illustration of the specified size and encode it to Base64.
-      val favicon = archive?.takeIf { it.hasIllustration(ILLUSTRATION_SIZE) }?.let {
-        Base64.encodeToString(it.getIllustrationItem(ILLUSTRATION_SIZE).data.data, Base64.DEFAULT)
-      }
-      // Create a LibkiwixBookmarkItem object with bookmark, favicon, and book path.
-      val libkiwixBookmarkItem = LibkiwixBookmarkItem(
+      // Return the LibkiwixBookmarkItem, filtering out null results.
+      return@mapNotNull LibkiwixBookmarkItem(
         bookmark,
         favicon,
         book?.path
       )
-
-      // Dispose of the Archive object to release resources.
-      archive?.dispose()
-
-      // Return the LibkiwixBookmarkItem, filtering out null results.
-      return@mapNotNull libkiwixBookmarkItem
     }
   }
 
