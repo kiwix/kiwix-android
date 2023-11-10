@@ -82,21 +82,6 @@ class LibkiwixBookmarks @Inject constructor(
     if (!bookmarkFile.isFileExist()) bookmarkFile.createNewFile()
     // set up manager to read the bookmarks from this file
     manager.readBookmarkFile(bookmarkFile.canonicalPath)
-
-    library.booksIds
-      .asSequence()
-      .map(library::getBookById)
-      .forEach {
-        Log.e(
-          TAG,
-          "readLibraryFromFile: " +
-            "reading books from a file via the manager.readFile() method current books size" +
-            " current books size in the library is = ${library.booksIds.size}\n" +
-            "book path = ${it.path}\n" +
-            "book title = ${it.title}\n" +
-            "book id = ${it.id}\n",
-        )
-      }
   }
 
   fun bookmarks(): Flowable<List<Page>> =
@@ -174,20 +159,6 @@ class LibkiwixBookmarks @Inject constructor(
    * to prevent potential data loss and ensures that the library holds the updated ZIM file paths and favicons.
    */
   private fun writeBookMarksAndSaveLibraryToFile() {
-    library.booksIds
-      .asSequence()
-      .map(library::getBookById)
-      .forEach {
-        Log.e(
-          TAG,
-          "writeBookMarksAndSaveLibraryToFile:" +
-            " Trying to write a file with the library.writeFile() method." +
-            " current books size in the library is = ${library.booksIds.size}\n" +
-            "book path = ${it.path}\n" +
-            "book title = ${it.title}\n" +
-            "book id = ${it.id}\n",
-        )
-      }
     // Save the library, which contains ZIM file paths and favicons, to a file.
     library.writeToFile(libraryFile.canonicalPath)
 
