@@ -57,9 +57,7 @@ class LibkiwixBookmarks @Inject constructor(
       // path for saving the bookmark file.
       sharedPreferenceUtil.context.filesDir.path
     } else {
-      sharedPreferenceUtil.getPublicDirectoryPath(
-        sharedPreferenceUtil.defaultStorage()
-      ) + "/Kiwix/Bookmarks/"
+      "${sharedPreferenceUtil.defaultStorage()}/Bookmarks/"
     }
   }
 
