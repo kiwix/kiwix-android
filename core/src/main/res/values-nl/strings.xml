@@ -327,7 +327,7 @@
   <string name="clear_all_navigation_history_message">Wist alle (achterwaartse, voorwaartse) navigatiegeschiedenis</string>
   <string name="navigation_history_cleared">Navigatiegeschiedenis gewist</string>
   <string name="go_to_settings_label">Naar de instellingen</string>
-  <string name="request_notification_permission_message">Om deze handeling uit te voeren moet u toegang tot meldingen verlenen</string>
+  <string name="request_notification_permission_message">Om deze handeling te verrichten moet u toegang tot meldingen verlenen</string>
   <string name="click_nearby_devices_message">Klik hier om naar apparaten in de buurt te zoeken.</string>
   <string name="your_device_name_message">De naam van uw apparaat verschijnt hier.</string>
   <string name="nearby_devices_list_message">Hier vindt u een lijst met apparaten in de buurt. Tik op de naam van een apparaat om de bestandsoverdracht te starten.</string>

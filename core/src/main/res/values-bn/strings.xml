@@ -2,6 +2,7 @@
 <!-- Authors:
 * Bellayet
 * Bodhisattwa
+* Borhan
 * Greatder
 * Sohom Datta
 * Titodutta
@@ -33,6 +34,8 @@
   <string name="hotspot_failed_message">মনে হচ্ছে হটস্পট আগে থেকেই চালু করা। চালিয়ে যেতে দয়া করে ওয়াইফাই হটস্পট বন্ধ করুন।</string>
   <string name="go_to_wifi_settings_label">ওয়াইফাই সেটিংসে যান</string>
   <string name="connection_refused">সংযোগ প্রত্যাখান করা হয়েছে।</string>
+  <string name="error_server_already_running">সার্ভার ইতিমধ্যেই চলছে। দয়া করে এটি বন্ধ করে আবার চেষ্টা করুন।</string>
+  <string name="error_ip_address_not_found">আইপি ঠিকানা খুঁজে পাওয়া যায়নি।</string>
   <string name="error_file_not_found">ত্রুটি: নির্বাচিত ZIM ফাইলটি খুঁজে পাওয়া যায় নি।</string>
   <string name="error_file_invalid">ত্রুটি: নির্বাচিত ফাইলটি বৈধ ZIM ফাইল নয়।</string>
   <string name="error_article_url_not_found">ত্রুটি: নিবন্ধ লোডে (Url: %1$s) ব্যর্থ।</string>

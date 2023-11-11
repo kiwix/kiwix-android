@@ -36,6 +36,7 @@
   <string name="start_server_label">Server starten</string>
   <string name="stop_server_label">Server stoppen</string>
   <string name="error_server_already_running">De Server leeft schonn. Maacht e wgl. aus a probéiert nach eng Kéier.</string>
+  <string name="error_ip_address_not_found">IP-Adress konnt net fonnt ginn.</string>
   <string name="server_started_message">Gitt dës IP-Adress an Äre Browser a fir op de Server %s zouzegräifen</string>
   <string name="share_host_address">URL mat aneren Applikatiounen deelen</string>
   <string name="error_file_not_found">Feeler: Déi ausgewielten ZIM-Datei konnt net fonnt ginn.</string>
