@@ -49,10 +49,12 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.databinding.ActivityZimHostBinding
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
 import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
@@ -60,15 +62,15 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.StartServer
+import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService
+import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService.Companion.ACTION_CHECK_IP_ADDRESS
+import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService.Companion.ACTION_START_SERVER
+import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService.Companion.ACTION_STOP_SERVER
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService
-import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService.Companion.ACTION_CHECK_IP_ADDRESS
-import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService.Companion.ACTION_START_SERVER
-import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService.Companion.ACTION_STOP_SERVER
 import javax.inject.Inject
 
 class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
@@ -86,6 +88,9 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   @Inject
   lateinit var zimReaderFactory: ZimFileReader.Factory
+
+  @Inject
+  lateinit var zimReaderContainer: ZimReaderContainer
 
   private lateinit var booksAdapter: BooksOnDiskAdapter
   private lateinit var bookDelegate: BookOnDiskDelegate.BookDelegate
@@ -479,21 +484,19 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   @Suppress("NestedBlockDepth")
   override fun addBooks(books: List<BooksOnDiskListItem>) {
     // Check if this is the app module, as custom apps may have multiple package names
-    if (requireActivity().packageName == "org.kiwix.kiwixmobile") {
+    if (!requireActivity().isCustomApp()) {
       booksAdapter.items = books
     } else {
       val updatedBooksList: MutableList<BooksOnDiskListItem> = arrayListOf()
       books.forEach {
         if (it is BookOnDisk) {
-          zimReaderFactory.create(it.file)?.let { zimFileReader ->
+          zimReaderContainer.zimFileReader?.let { zimFileReader ->
             val booksOnDiskListItem =
-              (BookOnDisk(zimFileReader.zimFile, zimFileReader) as BooksOnDiskListItem)
+              (BookOnDisk(it.file, zimFileReader) as BooksOnDiskListItem)
                 .apply {
                   isSelected = true
                 }
-            updatedBooksList.add(booksOnDiskListItem).also {
-              zimFileReader.dispose()
-            }
+            updatedBooksList.add(booksOnDiskListItem)
           }
         } else {
           updatedBooksList.add(it)

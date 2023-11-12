@@ -18,7 +18,10 @@
 
 package org.kiwix.kiwixmobile.core.webserver
 
+import android.content.Context
 import android.util.Log
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForCustomApp
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.JNIKiwixException
 import org.kiwix.libkiwix.Library
@@ -36,13 +39,32 @@ class KiwixServer @Inject constructor(
   private val jniKiwixServer: Server
 ) {
 
-  class Factory @Inject constructor() {
+  class Factory @Inject constructor(
+    private val context: Context,
+    private val zimReaderContainer: ZimReaderContainer
+  ) {
+    @Suppress("NestedBlockDepth")
     fun createKiwixServer(selectedBooksPath: ArrayList<String>): KiwixServer {
       val kiwixLibrary = Library()
       selectedBooksPath.forEach { path ->
         try {
           val book = Book().apply {
-            update(Archive(path))
+            // Determine whether to create an Archive from an asset or a file path
+            val archive = if (path == getDemoFilePathForCustomApp(context)) {
+              // For custom apps using a demo file, create an Archive with FileDescriptor
+              val assetFileDescriptor = zimReaderContainer.zimFileReader?.assetFileDescriptor
+              val startOffset = assetFileDescriptor?.startOffset ?: 0L
+              val size = assetFileDescriptor?.length ?: 0L
+              Archive(
+                assetFileDescriptor?.parcelFileDescriptor?.dup()?.fileDescriptor,
+                startOffset,
+                size
+              )
+            } else {
+              // For regular files, create an Archive from the file path
+              Archive(path)
+            }
+            update(archive)
           }
           kiwixLibrary.addBook(book)
         } catch (e: JNIKiwixException) {

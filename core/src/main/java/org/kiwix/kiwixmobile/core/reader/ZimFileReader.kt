@@ -52,13 +52,15 @@ import javax.inject.Inject
 private const val TAG = "ZimFileReader"
 
 class ZimFileReader constructor(
-  val zimFile: File,
+  val zimFile: File?,
+  val assetFileDescriptor: AssetFileDescriptor? = null,
   private val jniKiwixReader: Archive,
   private val nightModeConfig: NightModeConfig,
   private val searcher: SuggestionSearcher = SuggestionSearcher(jniKiwixReader)
 ) {
   interface Factory {
     fun create(file: File): ZimFileReader?
+    fun create(assetFileDescriptor: AssetFileDescriptor): ZimFileReader?
 
     class Impl @Inject constructor(private val nightModeConfig: NightModeConfig) :
       Factory {
@@ -70,6 +72,26 @@ class ZimFileReader constructor(
             jniKiwixReader = Archive(file.canonicalPath)
           ).also {
             Log.e(TAG, "create: ${file.path}")
+          }
+        } catch (ignore: JNIKiwixException) {
+          null
+        } catch (ignore: Exception) { // for handing the error, if any zim file is corrupted
+          null
+        }
+
+      override fun create(assetFileDescriptor: AssetFileDescriptor): ZimFileReader? =
+        try {
+          ZimFileReader(
+            null,
+            assetFileDescriptor,
+            nightModeConfig = nightModeConfig,
+            jniKiwixReader = Archive(
+              assetFileDescriptor.parcelFileDescriptor.dup().fileDescriptor,
+              assetFileDescriptor.startOffset,
+              assetFileDescriptor.length
+            )
+          ).also {
+            Log.e(TAG, "create: with fileDescriptor")
           }
         } catch (ignore: JNIKiwixException) {
           null
@@ -289,6 +311,7 @@ class ZimFileReader constructor(
   fun dispose() {
     jniKiwixReader.dispose()
     searcher.dispose()
+    assetFileDescriptor?.parcelFileDescriptor?.detachFd()
   }
 
   @Suppress("TooGenericExceptionCaught")

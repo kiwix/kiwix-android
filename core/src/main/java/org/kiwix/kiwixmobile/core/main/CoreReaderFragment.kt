@@ -26,6 +26,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.AssetFileDescriptor
 import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Rect
@@ -1386,13 +1387,20 @@ abstract class CoreReaderFragment :
     externalLinkOpener?.openExternalUrl(intent)
   }
 
-  protected fun openZimFile(file: File, isCustomApp: Boolean = false) {
+  protected fun openZimFile(
+    file: File?,
+    isCustomApp: Boolean = false,
+    assetFileDescriptor: AssetFileDescriptor? = null
+  ) {
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || isCustomApp) {
-      if (file.isFileExist()) {
-        openAndSetInContainer(file)
+      if (file?.isFileExist() == true) {
+        openAndSetInContainer(file = file)
+        updateTitle()
+      } else if (assetFileDescriptor != null) {
+        openAndSetInContainer(assetFileDescriptor = assetFileDescriptor)
         updateTitle()
       } else {
-        Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.absolutePath)
+        Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file?.absolutePath)
         requireActivity().toast(R.string.error_file_not_found, Toast.LENGTH_LONG)
       }
     } else {
@@ -1419,16 +1427,24 @@ abstract class CoreReaderFragment :
     )
   }
 
-  private fun openAndSetInContainer(file: File) {
+  private fun openAndSetInContainer(
+    file: File? = null,
+    assetFileDescriptor: AssetFileDescriptor? = null
+  ) {
     try {
-      if (isNotPreviouslyOpenZim(file.canonicalPath)) {
+      if (isNotPreviouslyOpenZim(file?.canonicalPath)) {
         webViewList.clear()
       }
     } catch (e: IOException) {
       e.printStackTrace()
     }
     zimReaderContainer?.let { zimReaderContainer ->
-      zimReaderContainer.setZimFile(file)
+      if (assetFileDescriptor != null) {
+        zimReaderContainer.setZimFileDescriptor(assetFileDescriptor)
+      } else {
+        zimReaderContainer.setZimFile(file)
+      }
+
       val zimFileReader = zimReaderContainer.zimFileReader
       zimFileReader?.let { zimFileReader ->
         // uninitialized the service worker to fix https://github.com/kiwix/kiwix-android/issues/2561

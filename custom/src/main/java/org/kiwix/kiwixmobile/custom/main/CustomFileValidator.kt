@@ -20,15 +20,14 @@ package org.kiwix.kiwixmobile.custom.main
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.AssetFileDescriptor
 import android.util.Log
 import androidx.core.content.ContextCompat
-import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasBothFiles
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasFile
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasNothing
 import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
 import javax.inject.Inject
 
@@ -44,10 +43,10 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
   private fun detectInstallationState(
     obbFiles: List<File> = obbFiles(),
     zimFiles: List<File> = zimFiles(),
-    assetFile: File? = getFileFromPlayAssetDelivery()
+    assetFileDescriptor: AssetFileDescriptor? = getAssetFileDescriptorFromPlayAssetDelivery()
   ): ValidationState {
     return when {
-      assetFile != null -> HasFile(assetFile)
+      assetFileDescriptor != null -> HasFile(null, assetFileDescriptor)
       obbFiles.isNotEmpty() && zimFiles().isNotEmpty() -> HasBothFiles(obbFiles[0], zimFiles[0])
       obbFiles.isNotEmpty() -> HasFile(obbFiles[0])
       zimFiles.isNotEmpty() -> HasFile(zimFiles[0])
@@ -55,31 +54,12 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
     }
   }
 
-  @Suppress("NestedBlockDepth", "MagicNumber")
-  private fun getFileFromPlayAssetDelivery(): File? {
-    var zimFile: File? = null
+  @Suppress("MagicNumber")
+  private fun getAssetFileDescriptorFromPlayAssetDelivery(): AssetFileDescriptor? {
     try {
       val context = context.createPackageContext(context.packageName, 0)
       val assetManager = context.assets
-      val inputStream = assetManager.open(BuildConfig.PLAY_ASSET_FILE)
-      val filePath = ContextCompat.getExternalFilesDirs(context, null)[0]
-      zimFile = File(filePath, BuildConfig.PLAY_ASSET_FILE)
-      // Write zim file data if file does not exist or corrupted
-      if (!zimFile.isFileExist() || zimFile.length() == 0L) {
-        // Delete previously corrupted file
-        if (zimFile.isFileExist()) zimFile.delete()
-        zimFile.createNewFile()
-        FileOutputStream(zimFile).use { outputSteam ->
-          inputStream.use { inputStream ->
-            val buffer = ByteArray(1024)
-            var length: Int
-            while (inputStream.read(buffer).also { length = it } > 0) {
-              outputSteam.write(buffer, 0, length)
-            }
-            outputSteam.flush()
-          }
-        }
-      }
+      return assetManager.openFd(BuildConfig.PLAY_ASSET_FILE)
     } catch (packageNameNotFoundException: PackageManager.NameNotFoundException) {
       Log.w(
         "ASSET_PACKAGE_DELIVERY",
@@ -88,7 +68,7 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
     } catch (ioException: IOException) {
       Log.w("ASSET_PACKAGE_DELIVERY", "Unable to copy the content of asset $ioException")
     }
-    return zimFile
+    return null
   }
 
   private fun obbFiles() = scanDirs(ContextCompat.getObbDirs(context), "obb")
@@ -124,6 +104,8 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
 
 sealed class ValidationState {
   data class HasBothFiles(val obbFile: File, val zimFile: File) : ValidationState()
-  data class HasFile(val file: File) : ValidationState()
+  data class HasFile(val file: File?, val assetFileDescriptor: AssetFileDescriptor? = null) :
+    ValidationState()
+
   object HasNothing : ValidationState()
 }
