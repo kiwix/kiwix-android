@@ -164,4 +164,10 @@ object ActivityExtensions {
       )
     }
   }
+
+  /**
+   * Checks if the package name of the current activity's application is not equal to 'org.kiwix.kiwixmobile',
+   * indicating that it is a custom application.
+   */
+  fun Activity.isCustomApp(): Boolean = packageName != "org.kiwix.kiwixmobile"
 }
