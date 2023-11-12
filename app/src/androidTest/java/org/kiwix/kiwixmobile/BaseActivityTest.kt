@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile
 
 import android.Manifest.permission
 import android.content.Context
-import android.os.Build
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
@@ -35,18 +34,10 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 abstract class BaseActivityTest {
   open lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
 
-  private val permissions = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
-    arrayOf(
-      permission.READ_EXTERNAL_STORAGE,
-      permission.WRITE_EXTERNAL_STORAGE,
-      permission.SYSTEM_ALERT_WINDOW
-    )
-  } else {
-    arrayOf(
-      permission.READ_EXTERNAL_STORAGE,
-      permission.WRITE_EXTERNAL_STORAGE
-    )
-  }
+  private val permissions = arrayOf(
+    permission.READ_EXTERNAL_STORAGE,
+    permission.WRITE_EXTERNAL_STORAGE
+  )
 
   @get:Rule
   var permissionRules: GrantPermissionRule =

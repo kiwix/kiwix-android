@@ -94,6 +94,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private lateinit var serviceConnection: ServiceConnection
   private var dialog: Dialog? = null
   private var activityZimHostBinding: ActivityZimHostBinding? = null
+  private var isHotspotServiceRunning = false
   override val fragmentTitle: String? by lazy {
     getString(R.string.menu_wifi_hotspot)
   }
@@ -304,7 +305,11 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun stopServer() {
-    requireActivity().startService(createHotspotIntent(ACTION_STOP_SERVER))
+    requireActivity().startService(
+      createHotspotIntent(ACTION_STOP_SERVER)
+    ).also {
+      isHotspotServiceRunning = false
+    }
   }
 
   private fun select(bookOnDisk: BooksOnDiskListItem.BookOnDisk) {
@@ -316,6 +321,9 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     }
     booksAdapter.items = booksList
     saveHostedBooks(booksList)
+    if (ServerUtils.isServerStarted) {
+      startWifiHotspot(true)
+    }
   }
 
   override fun onStart() {
@@ -338,6 +346,9 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private fun unbindService() {
     hotspotService?.let {
       requireActivity().unbindService(serviceConnection)
+      if (!isHotspotServiceRunning) {
+        unRegisterHotspotService()
+      }
     }
   }
 
@@ -370,7 +381,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     activityZimHostBinding?.startServerButton?.setBackgroundColor(
       ContextCompat.getColor(requireActivity(), R.color.stopServerRed)
     )
-    bookDelegate.selectionMode = SelectionMode.NORMAL
+    bookDelegate.selectionMode = SelectionMode.MULTI
     booksAdapter.notifyDataSetChanged()
   }
 
@@ -403,9 +414,14 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   override fun onDestroyView() {
     super.onDestroyView()
     activityZimHostBinding?.recyclerViewZimHost?.adapter = null
-    hotspotService?.registerCallBack(null)
+    unRegisterHotspotService()
     presenter.detachView()
     activityZimHostBinding = null
+  }
+
+  private fun unRegisterHotspotService() {
+    hotspotService?.registerCallBack(null)
+    hotspotService = null
   }
 
   // Advice user to turn on hotspot manually for API<26
@@ -487,13 +503,19 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     }
   }
 
-  override fun onIpAddressValid() {
-    dialog?.dismiss()
+  private fun startWifiHotspot(restartServer: Boolean) {
     requireActivity().startService(
       createHotspotIntent(ACTION_START_SERVER).putStringArrayListExtra(
         SELECTED_ZIM_PATHS_KEY, selectedBooksPath
-      )
-    )
+      ).putExtra(RESTART_SERVER, restartServer)
+    ).also {
+      isHotspotServiceRunning = true
+    }
+  }
+
+  override fun onIpAddressValid() {
+    dialog?.dismiss()
+    startWifiHotspot(false)
   }
 
   override fun onIpAddressInvalid() {
@@ -503,6 +525,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   companion object {
     const val SELECTED_ZIM_PATHS_KEY = "selected_zim_paths"
+    const val RESTART_SERVER = "restart_server"
     const val PERMISSION_REQUEST_CODE_COARSE_LOCATION = 10
   }
 }

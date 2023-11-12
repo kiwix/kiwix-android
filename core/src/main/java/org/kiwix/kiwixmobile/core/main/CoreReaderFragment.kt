@@ -333,6 +333,7 @@ abstract class CoreReaderFragment :
   private var readAloudService: ReadAloudService? = null
   private var navigationHistoryList: MutableList<NavigationHistoryListItem> = ArrayList()
   private var isReadSelection = false
+  private var isReadAloudServiceRunning = false
 
   private var storagePermissionForNotesLauncher: ActivityResultLauncher<String>? =
     registerForActivityResult(
@@ -1047,8 +1048,7 @@ abstract class CoreReaderFragment :
     } catch (ignore: IllegalArgumentException) {
       // to handle if service is already unbounded
     }
-    readAloudService?.registerCallBack(null)
-    readAloudService = null
+    unRegisterReadAloudService()
     storagePermissionForNotesLauncher?.unregister()
     storagePermissionForNotesLauncher = null
   }
@@ -2074,7 +2074,15 @@ abstract class CoreReaderFragment :
   private fun unbindService() {
     readAloudService?.let {
       requireActivity().unbindService(serviceConnection)
+      if (!isReadAloudServiceRunning) {
+        unRegisterReadAloudService()
+      }
     }
+  }
+
+  private fun unRegisterReadAloudService() {
+    readAloudService?.registerCallBack(null)
+    readAloudService = null
   }
 
   private fun createReadAloudIntent(action: String, isPauseTTS: Boolean): Intent =
@@ -2086,7 +2094,11 @@ abstract class CoreReaderFragment :
     }
 
   private fun setActionAndStartTTSService(action: String, isPauseTTS: Boolean = false) {
-    requireActivity().startService(createReadAloudIntent(action, isPauseTTS))
+    requireActivity().startService(
+      createReadAloudIntent(action, isPauseTTS)
+    ).also {
+      isReadAloudServiceRunning = action == ACTION_PAUSE_OR_RESUME_TTS
+    }
   }
 
   protected abstract fun restoreViewStateOnValidJSON(

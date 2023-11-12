@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.language
 
 import android.Manifest
 import android.app.Instrumentation
-import android.os.Build
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -50,18 +49,10 @@ class LanguageFragmentTest {
   @get:Rule
   var activityScenarioRule = ActivityScenarioRule(KiwixMainActivity::class.java)
 
-  private val permissions = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
-    arrayOf(
-      Manifest.permission.READ_EXTERNAL_STORAGE,
-      Manifest.permission.WRITE_EXTERNAL_STORAGE,
-      Manifest.permission.SYSTEM_ALERT_WINDOW
-    )
-  } else {
-    arrayOf(
-      Manifest.permission.READ_EXTERNAL_STORAGE,
-      Manifest.permission.WRITE_EXTERNAL_STORAGE
-    )
-  }
+  private val permissions = arrayOf(
+    Manifest.permission.READ_EXTERNAL_STORAGE,
+    Manifest.permission.WRITE_EXTERNAL_STORAGE
+  )
 
   @Rule
   @JvmField
