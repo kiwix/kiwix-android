@@ -22,6 +22,7 @@ import android.app.Activity
 import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
+import android.content.res.AssetFileDescriptor
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -46,6 +47,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import java.io.BufferedReader
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.IOException
 
 object FileUtils {
@@ -407,4 +409,16 @@ object FileUtils {
   @JvmStatic
   fun getDemoFilePathForCustomApp(context: Context) =
     "${ContextCompat.getExternalFilesDirs(context, null)[0]}/demo.zim"
+
+  @JvmStatic
+  fun getAssetFileDescriptorFromUri(
+    context: Context,
+    uri: Uri
+  ): AssetFileDescriptor? {
+    return try {
+      context.contentResolver.openAssetFileDescriptor(uri, "r")
+    } catch (ignore: FileNotFoundException) {
+      null
+    }
+  }
 }

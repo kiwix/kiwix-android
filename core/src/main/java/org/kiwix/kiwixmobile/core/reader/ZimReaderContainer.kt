@@ -43,10 +43,13 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
       else null
   }
 
-  fun setZimFileDescriptor(assetFileDescriptor: AssetFileDescriptor) {
+  fun setZimFileDescriptor(
+    assetFileDescriptor: AssetFileDescriptor,
+    filePath: String? = null
+  ) {
     zimFileReader =
       if (assetFileDescriptor.parcelFileDescriptor.dup().fileDescriptor.valid())
-        zimFileReaderFactory.create(assetFileDescriptor)
+        zimFileReaderFactory.create(assetFileDescriptor, filePath)
       else null
   }
 
@@ -84,7 +87,11 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
 
   val zimFile get() = zimFileReader?.zimFile
 
-  val zimCanonicalPath get() = zimFileReader?.zimFile?.canonicalPath
+  /**
+   * Return the zimFile path if opened from file else return the filePath of assetFileDescriptor
+   */
+  val zimCanonicalPath
+    get() = zimFileReader?.zimFile?.canonicalPath ?: zimFileReader?.assetDescriptorFilePath
   val zimFileTitle get() = zimFileReader?.title
   val mainPage get() = zimFileReader?.mainPage
   val id get() = zimFileReader?.id
