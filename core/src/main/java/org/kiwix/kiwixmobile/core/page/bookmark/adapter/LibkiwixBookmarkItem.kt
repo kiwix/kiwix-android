@@ -57,7 +57,7 @@ data class LibkiwixBookmarkItem(
     zimFileReader: ZimFileReader,
     libKiwixBook: Book
   ) : this(
-    zimFilePath = zimFileReader.zimFile.canonicalPath,
+    zimFilePath = zimFileReader.zimFile?.canonicalPath,
     zimId = libKiwixBook.id,
     zimName = libKiwixBook.name,
     bookmarkUrl = articleUrl,
