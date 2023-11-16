@@ -78,6 +78,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -108,7 +109,9 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.downloader.fetch.DOWNLOAD_NOTIFICATION_TITLE
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.findFirstTextView
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
@@ -132,6 +135,7 @@ import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_P
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_STOP_TTS
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getToolbarHeight
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
@@ -154,6 +158,8 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.deleteCachedFiles
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
+import org.kiwix.kiwixmobile.core.utils.titleToUrl
+import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -388,6 +394,18 @@ abstract class CoreReaderFragment :
     return FragmentActivityExtensions.Super.ShouldCall
   }
 
+  /**
+   * Configures the selection handler for the WebView.
+   * Subclasses like CustomReaderFragment override this method to customize
+   * the behavior of the selection handler menu. In this specific implementation,
+   * it sets up a menu item for reading aloud selected text.
+   * If the custom app is set to disable the read-aloud feature,
+   * the menu item will be hidden by CustomReaderFragment.
+   * it provides additional customization for custom apps.
+   *
+   * WARNING: If modifying this method, ensure thorough testing with custom apps
+   * to verify proper functionality.
+   */
   protected open fun configureWebViewSelectionHandler(menu: Menu?) {
     menu?.findItem(R.id.menu_speak_text)?.setOnMenuItemClickListener {
       if (tts?.isInitialized == false) {
@@ -488,6 +506,16 @@ abstract class CoreReaderFragment :
         readAloudService?.registerCallBack(this@CoreReaderFragment)
       }
     }
+    requireActivity().observeNavigationResult<String>(
+      FIND_IN_PAGE_SEARCH_STRING,
+      viewLifecycleOwner,
+      Observer(::findInPage)
+    )
+    requireActivity().observeNavigationResult<SearchItemToOpen>(
+      TAG_FILE_SEARCHED,
+      viewLifecycleOwner,
+      Observer(::openSearchItem)
+    )
   }
 
   private fun initTabCallback() {
@@ -535,6 +563,12 @@ abstract class CoreReaderFragment :
     }
   }
 
+  /**
+   * Abstract method to be implemented by subclasses for loading drawer-related views.
+   * Subclasses like CustomReaderFragment and KiwixReaderFragment should override this method
+   * to set up specific views for both the left and right drawers, such as custom containers
+   * or navigation views.
+   */
   protected abstract fun loadDrawerViews()
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -752,6 +786,14 @@ abstract class CoreReaderFragment :
     setTopMarginToWebViews(0)
   }
 
+  /**
+   * Sets the lock mode for the drawer, controlling whether the drawer can be opened or closed.
+   * Subclasses like CustomReaderFragment override this method to provide custom
+   * behavior, such as disabling the sidebar when configured not to show it.
+   *
+   * WARNING: If modifying this method, ensure thorough testing with custom apps
+   * to verify proper functionality.
+   */
   protected open fun setDrawerLockMode(lockMode: Int) {
     drawerLayout?.setDrawerLockMode(lockMode)
   }
@@ -1297,6 +1339,12 @@ abstract class CoreReaderFragment :
     }
   }
 
+  /**
+   * Abstract method to be implemented by (KiwixReaderFragment, CustomReaderFragment)
+   * for creating a new tab.
+   * Subclasses like CustomReaderFragment, KiwixReaderFragment override this method
+   * to define the specific behavior for creating a new tab.
+   */
   protected abstract fun createNewTab()
 
   /** Creates the full screen AddNoteDialog, which is a DialogFragment  */
@@ -1645,6 +1693,16 @@ abstract class CoreReaderFragment :
     openSearch("", isOpenedFromTabView = false, isVoice)
   }
 
+  private fun openSearchItem(item: SearchItemToOpen) {
+    zimReaderContainer?.titleToUrl(item.pageTitle)?.let {
+      if (item.shouldOpenInNewTab) {
+        createNewTab()
+      }
+      loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(it))
+    }
+    requireActivity().consumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)
+  }
+
   private fun handleIntentActions(intent: Intent) {
     Log.d(TAG_KIWIX, "action" + requireActivity().intent?.action)
     startIntentBasedOnAction(intent)
@@ -1784,7 +1842,7 @@ abstract class CoreReaderFragment :
     }
   }
 
-  protected fun findInPage(title: String?) {
+  private fun findInPage(title: String?) {
     // if the search is localized trigger find in page UI.
     compatCallback?.apply {
       setActive()
@@ -1796,6 +1854,15 @@ abstract class CoreReaderFragment :
     }
   }
 
+  /**
+   * Creates the main menu for the reader.
+   * Subclasses may override this method to customize the main menu creation process.
+   * For custom apps like CustomReaderFragment, this method dynamically generates the menu
+   * based on the app's configuration, considering features like "read aloud" and "tabs."
+   *
+   * WARNING: If modifying this method, ensure thorough testing with custom apps
+   * to verify proper functionality.
+   */
   protected open fun createMainMenu(menu: Menu?): MainMenu? =
     menu?.let {
       menuFactory?.create(
@@ -1981,6 +2048,17 @@ abstract class CoreReaderFragment :
     }
   }
 
+  /**
+   * Displays a dialog prompting the user to open the provided URL in a new tab.
+   * CustomReaderFragment override this method to customize the
+   * behavior of the "Open in New Tab" dialog. In this specific implementation,
+   * If the custom app is set to disable the tabs feature,
+   * it will not show the dialog with the ability to open the URL in a new tab,
+   * it provide additional customization for custom apps.
+   *
+   * WARNING: If modifying this method, ensure thorough testing with custom apps
+   * to verify proper functionality.
+   */
   protected open fun showOpenInNewTabDialog(url: String) {
     alertDialogShower?.show(
       KiwixDialog.YesNoDialog.OpenInNewTab,
@@ -2125,11 +2203,27 @@ abstract class CoreReaderFragment :
     }
   }
 
+  /**
+   * Restores the view state after successfully reading valid JSON from shared preferences.
+   * Developers modifying this method in subclasses, such as CustomReaderFragment and
+   * KiwixReaderFragment, should review and consider the implementations in those subclasses
+   * (e.g., CustomReaderFragment.restoreViewStateOnValidJSON,
+   * KiwixReaderFragment.restoreViewStateOnValidJSON) to ensure consistent behavior
+   * when handling valid JSON scenarios.
+   */
   protected abstract fun restoreViewStateOnValidJSON(
     zimArticles: String?,
     zimPositions: String?,
     currentTab: Int
   )
 
+  /**
+   * Restores the view state when the attempt to read JSON from shared preferences fails
+   * due to invalid or corrupted data. Developers modifying this method in subclasses, such as
+   * CustomReaderFragment and KiwixReaderFragment, should review and consider the implementations
+   * in those subclasses (e.g., CustomReaderFragment.restoreViewStateOnInvalidJSON,
+   * KiwixReaderFragment.restoreViewStateOnInvalidJSON) to ensure consistent behavior
+   * when handling invalid JSON scenarios.
+   */
   abstract fun restoreViewStateOnInvalidJSON()
 }
