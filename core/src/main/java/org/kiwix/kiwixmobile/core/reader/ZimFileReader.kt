@@ -51,16 +51,21 @@ import javax.inject.Inject
 
 private const val TAG = "ZimFileReader"
 
+@Suppress("LongParameterList")
 class ZimFileReader constructor(
   val zimFile: File?,
   val assetFileDescriptor: AssetFileDescriptor? = null,
+  val assetDescriptorFilePath: String? = null,
   private val jniKiwixReader: Archive,
   private val nightModeConfig: NightModeConfig,
   private val searcher: SuggestionSearcher = SuggestionSearcher(jniKiwixReader)
 ) {
   interface Factory {
     fun create(file: File): ZimFileReader?
-    fun create(assetFileDescriptor: AssetFileDescriptor): ZimFileReader?
+    fun create(
+      assetFileDescriptor: AssetFileDescriptor,
+      filePath: String? = null
+    ): ZimFileReader?
 
     class Impl @Inject constructor(private val nightModeConfig: NightModeConfig) :
       Factory {
@@ -79,11 +84,15 @@ class ZimFileReader constructor(
           null
         }
 
-      override fun create(assetFileDescriptor: AssetFileDescriptor): ZimFileReader? =
+      override fun create(
+        assetFileDescriptor: AssetFileDescriptor,
+        filePath: String?
+      ): ZimFileReader? =
         try {
           ZimFileReader(
             null,
             assetFileDescriptor,
+            assetDescriptorFilePath = filePath,
             nightModeConfig = nightModeConfig,
             jniKiwixReader = Archive(
               assetFileDescriptor.parcelFileDescriptor.dup().fileDescriptor,

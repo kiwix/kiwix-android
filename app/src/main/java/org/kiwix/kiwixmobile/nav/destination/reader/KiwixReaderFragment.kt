@@ -62,6 +62,7 @@ import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getAssetFileDescriptorFromUri
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import java.io.File
@@ -230,7 +231,9 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun onResume() {
     super.onResume()
-    if (zimReaderContainer?.zimFile == null) {
+    if (zimReaderContainer?.zimFile == null &&
+      zimReaderContainer?.zimFileReader?.assetFileDescriptor == null
+    ) {
       exitBook()
     }
     if (isFullScreenVideo) {
@@ -316,8 +319,20 @@ class KiwixReaderFragment : CoreReaderFragment() {
   ): Super {
     super.onNewIntent(activity.intent, activity)
     intent.data?.let {
-      if ("file" == it.scheme) openZimFile(it.toFile())
-      else activity.toast(R.string.cannot_open_file)
+      when (it.scheme) {
+        "file" -> openZimFile(it.toFile())
+        "content" -> {
+          // pass this uri to zimFileReader, which is necessary for saving
+          // notes, bookmarks, history, and reopening the same ZIM file after the app closes.
+          getAssetFileDescriptorFromUri(activity, it)?.let { assetFileDescriptor ->
+            openZimFile(null, assetFileDescriptor = assetFileDescriptor, filePath = "$it")
+          } ?: kotlin.run {
+            activity.toast(R.string.cannot_open_file)
+          }
+        }
+
+        else -> activity.toast(R.string.cannot_open_file)
+      }
     }
     return ShouldCall
   }

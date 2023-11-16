@@ -1390,14 +1390,18 @@ abstract class CoreReaderFragment :
   protected fun openZimFile(
     file: File?,
     isCustomApp: Boolean = false,
-    assetFileDescriptor: AssetFileDescriptor? = null
+    assetFileDescriptor: AssetFileDescriptor? = null,
+    filePath: String? = null
   ) {
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || isCustomApp) {
       if (file?.isFileExist() == true) {
         openAndSetInContainer(file = file)
         updateTitle()
       } else if (assetFileDescriptor != null) {
-        openAndSetInContainer(assetFileDescriptor = assetFileDescriptor)
+        openAndSetInContainer(
+          assetFileDescriptor = assetFileDescriptor,
+          filePath = filePath
+        )
         updateTitle()
       } else {
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file?.absolutePath)
@@ -1429,7 +1433,8 @@ abstract class CoreReaderFragment :
 
   private fun openAndSetInContainer(
     file: File? = null,
-    assetFileDescriptor: AssetFileDescriptor? = null
+    assetFileDescriptor: AssetFileDescriptor? = null,
+    filePath: String? = null
   ) {
     try {
       if (isNotPreviouslyOpenZim(file?.canonicalPath)) {
@@ -1440,7 +1445,10 @@ abstract class CoreReaderFragment :
     }
     zimReaderContainer?.let { zimReaderContainer ->
       if (assetFileDescriptor != null) {
-        zimReaderContainer.setZimFileDescriptor(assetFileDescriptor)
+        zimReaderContainer.setZimFileDescriptor(
+          assetFileDescriptor,
+          filePath = filePath
+        )
       } else {
         zimReaderContainer.setZimFile(file)
       }
