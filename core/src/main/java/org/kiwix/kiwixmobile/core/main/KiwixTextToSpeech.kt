@@ -300,7 +300,6 @@ class KiwixTextToSpeech internal constructor(
               bundle,
               bundle.getString(Engine.KEY_PARAM_UTTERANCE_ID)
             )
-            currentPiece.getAndIncrement()
           }
         }
 
