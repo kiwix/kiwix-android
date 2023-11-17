@@ -151,7 +151,7 @@ class KiwixTextToSpeech internal constructor(
       """
         javascript:
         body = document.getElementsByTagName('body')[0].cloneNode(true);
-        toRemove = body.querySelectorAll('sup.reference, #toc, .thumbcaption,     title, .navbox');
+        toRemove = body.querySelectorAll('sup.reference, #toc, .thumbcaption, title, .navbox, style');
         Array.prototype.forEach.call(toRemove, function(elem) {    
           elem.parentElement.removeChild(elem);});
         tts.speakAloud(body.innerText);
