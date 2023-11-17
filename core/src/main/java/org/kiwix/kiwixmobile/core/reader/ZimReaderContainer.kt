@@ -84,8 +84,11 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
   }
 
   fun copyReader(): ZimFileReader? = zimFile?.let(zimFileReaderFactory::create)
+    ?: assetFileDescriptor?.let(zimFileReaderFactory::create)
 
   val zimFile get() = zimFileReader?.zimFile
+
+  val assetFileDescriptor get() = zimFileReader?.assetFileDescriptor
 
   /**
    * Return the zimFile path if opened from file else return the filePath of assetFileDescriptor

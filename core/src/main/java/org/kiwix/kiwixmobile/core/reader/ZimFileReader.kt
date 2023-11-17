@@ -320,7 +320,6 @@ class ZimFileReader constructor(
   fun dispose() {
     jniKiwixReader.dispose()
     searcher.dispose()
-    assetFileDescriptor?.parcelFileDescriptor?.detachFd()
   }
 
   @Suppress("TooGenericExceptionCaught")
