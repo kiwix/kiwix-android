@@ -1,3 +1,37 @@
+3.8.0
+New Features:
+* Download pause/resume feature. (https://github.com/kiwix/kiwix-android/pull/3459)
+* Added support to read ZIM files from USB-OTG stick. (https://github.com/kiwix/kiwix-android/pull/3471)
+* Endless suggestion list while searching articles. (https://github.com/kiwix/kiwix-android/pull/3217)
+* Refactored LocalFileTransfer UI to educate users on how to use this feature. (https://github.com/kiwix/kiwix-android/pull/3497)
+
+Bug Fixes:
+* All books notes switch is always enabled. (https://github.com/kiwix/kiwix-android/pull/3449)
+* Download remained pending indefinitely if we canceled it from the notification. (https://github.com/kiwix/kiwix-android/pull/3451)
+* Enhanced permission asking scenario for custom apps. (https://github.com/kiwix/kiwix-android/pull/3439)
+* If the storage is already configured, it was again showing while downloading. (https://github.com/kiwix/kiwix-android/pull/3464)
+* The keyboard repeatedly disappears and reappears while searching articles. (https://github.com/kiwix/kiwix-android/pull/3469)
+* Bookmark toggle is not ON for saved bookmarks. (https://github.com/kiwix/kiwix-android/pull/3473)
+* Article opening after search page result leads to a blank page. (https://github.com/kiwix/kiwix-android/pull/3217)
+* Random article function not working. (https://github.com/kiwix/kiwix-android/pull/3217)
+* 500 Error happens on the server. (https://github.com/kiwix/kiwix-android/pull/3217)
+* Unable to open the support link with the default browser. (https://github.com/kiwix/kiwix-android/pull/3504)
+* Unable to upload APK on the play store. (https://github.com/kiwix/kiwix-android/pull/3506)
+* Hosted Books don't update on Application. (https://github.com/kiwix/kiwix-android/pull/3218)
+* Cannot open ZIM files from phone storage via the file picker in Android 13. (https://github.com/kiwix/kiwix-android/pull/3518)
+* The redundancy of the 'All-Books-Mode' option for Bookmarks, Notes, and History in custom apps. (https://github.com/kiwix/kiwix-android/pull/3525)
+* The same Note saves multiple times while we are updating existing notes. (https://github.com/kiwix/kiwix-android/issues/3519)
+* Reduced mass-storage consumption with Android custom apps with embedded ZIM. (https://github.com/kiwix/kiwix-android/pull/3516)
+* Hitting back in the custom apps exits it. (https://github.com/kiwix/kiwix-android/pull/3512)
+* Multiple memory leaks
+* Updated README file to show file picker restriction. (https://github.com/kiwix/kiwix-android/pull/3414)
++ More
+
+Compilation/CI/CD:
+* Adapted libkiwix `1.0.0`. (https://github.com/kiwix/kiwix-android/pull/3217)
+* Deprecated code check in CI. (https://github.com/kiwix/kiwix-android/pull/3440)
+* Added/improved test cases.
+
 3.7.1
 * FIX: Useless permission request at start for custom apps
 * FIX: Few code deprecations
