@@ -45,6 +45,7 @@ class AllProjectConfigurer {
 
   fun configureBaseExtension(target: Project) {
     target.configureExtension<BaseExtension> {
+      namespace = ""
       setCompileSdkVersion(Config.compileSdk)
       defaultConfig {
         minSdk = Config.minSdk
@@ -115,7 +116,7 @@ class AllProjectConfigurer {
   }
 
   fun configureCommonExtension(target: Project) {
-    target.configureExtension<CommonExtension<*, *, *, *>> {
+    target.configureExtension<CommonExtension<*, *, *, *, *>> {
       lint {
         abortOnError = true
         checkAllWarnings = true

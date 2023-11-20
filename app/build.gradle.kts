@@ -31,7 +31,7 @@ fun generateVersionCode() =
 val apkPrefix get() = System.getenv("TAG") ?: "kiwix"
 
 android {
-
+  namespace = "org.kiwix.kiwixmobile"
   defaultConfig {
     base.archivesName.set(apkPrefix)
     resValue("string", "app_name", "Kiwix")
