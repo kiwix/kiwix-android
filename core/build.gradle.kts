@@ -18,11 +18,6 @@ plugins {
 plugins.apply(KiwixConfigurationPlugin::class)
 apply(plugin = "io.objectbox")
 apply(plugin = "com.jakewharton.butterknife")
-ext {
-  set("versionMajor", 3)
-  set("versionMinor", 8)
-  set("versionPatch", 0)
-}
 
 /*
 * max version code: 21-0-0-00-00-00
@@ -38,9 +33,9 @@ ext {
 
 fun generateVersionCode() =
   20 * 10000 +
-    ext["versionMajor"] as Int * 10000 +
-    ext["versionMinor"] as Int * 100 +
-    ext["versionPatch"] as Int
+    Config.versionMajor * 10000 +
+    Config.versionMinor * 100 +
+    Config.versionPatch
 
 android {
   defaultConfig {
