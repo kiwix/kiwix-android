@@ -27,4 +27,9 @@ object Config {
   const val targetSdk = 33 // Target SDK (Maximum Support Device) is 33 (Android 13).
 
   val javaVersion = JavaVersion.VERSION_1_8
+
+  // Version Information
+  const val versionMajor = 3 // Major version component of the app's version name and version code.
+  const val versionMinor = 8 // Minor version component of the app's version name and version code.
+  const val versionPatch = 0 // Patch version component of the app's version name and version code.
 }
