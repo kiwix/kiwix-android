@@ -1422,7 +1422,7 @@ abstract class CoreReaderFragment :
     exitFullscreenButton?.visibility = View.GONE
     exitFullscreenButton?.background?.alpha = 255
     val window = requireActivity().window
-    WindowCompat.setDecorFitsSystemWindows(window, false)
+    WindowCompat.setDecorFitsSystemWindows(window, true)
     WindowInsetsControllerCompat(window, window.decorView.rootView).apply {
       show(WindowInsetsCompat.Type.systemBars())
       window.decorView.rootView.requestLayout()
