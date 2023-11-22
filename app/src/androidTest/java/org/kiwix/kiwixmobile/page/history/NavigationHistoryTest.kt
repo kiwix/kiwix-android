@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.page.history
 
 import androidx.core.content.edit
 import androidx.core.net.toUri
+import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
@@ -63,11 +64,14 @@ class NavigationHistoryTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
     }
+    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+      moveToState(Lifecycle.State.RESUMED)
+    }
   }
 
   @Test
   fun navigationHistoryDialogTest() {
-    ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
+    activityScenario.onActivity {
       kiwixMainActivity = it
       kiwixMainActivity.navigate(R.id.libraryFragment)
     }

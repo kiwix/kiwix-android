@@ -19,11 +19,16 @@
 package org.kiwix.kiwixmobile.custom.main
 
 import android.content.Context
+import android.content.pm.PackageManager
+import android.content.res.AssetFileDescriptor
+import android.util.Log
 import androidx.core.content.ContextCompat
+import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasBothFiles
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasFile
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasNothing
 import java.io.File
+import java.io.IOException
 import javax.inject.Inject
 
 class CustomFileValidator @Inject constructor(private val context: Context) {
@@ -37,14 +42,33 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
 
   private fun detectInstallationState(
     obbFiles: List<File> = obbFiles(),
-    zimFiles: List<File> = zimFiles()
+    zimFiles: List<File> = zimFiles(),
+    assetFileDescriptor: AssetFileDescriptor? = getAssetFileDescriptorFromPlayAssetDelivery()
   ): ValidationState {
     return when {
+      assetFileDescriptor != null -> HasFile(null, assetFileDescriptor)
       obbFiles.isNotEmpty() && zimFiles().isNotEmpty() -> HasBothFiles(obbFiles[0], zimFiles[0])
       obbFiles.isNotEmpty() -> HasFile(obbFiles[0])
       zimFiles.isNotEmpty() -> HasFile(zimFiles[0])
       else -> HasNothing
     }
+  }
+
+  @Suppress("MagicNumber")
+  private fun getAssetFileDescriptorFromPlayAssetDelivery(): AssetFileDescriptor? {
+    try {
+      val context = context.createPackageContext(context.packageName, 0)
+      val assetManager = context.assets
+      return assetManager.openFd(BuildConfig.PLAY_ASSET_FILE)
+    } catch (packageNameNotFoundException: PackageManager.NameNotFoundException) {
+      Log.w(
+        "ASSET_PACKAGE_DELIVERY",
+        "Asset package is not found ${packageNameNotFoundException.message}"
+      )
+    } catch (ioException: IOException) {
+      Log.w("ASSET_PACKAGE_DELIVERY", "Unable to copy the content of asset $ioException")
+    }
+    return null
   }
 
   private fun obbFiles() = scanDirs(ContextCompat.getObbDirs(context), "obb")
@@ -80,6 +104,8 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
 
 sealed class ValidationState {
   data class HasBothFiles(val obbFile: File, val zimFile: File) : ValidationState()
-  data class HasFile(val file: File) : ValidationState()
+  data class HasFile(val file: File?, val assetFileDescriptor: AssetFileDescriptor? = null) :
+    ValidationState()
+
   object HasNothing : ValidationState()
 }

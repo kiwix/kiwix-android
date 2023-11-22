@@ -18,8 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 
-import android.annotation.TargetApi
-import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.channels.Channel
@@ -38,7 +36,6 @@ data class SearchArgumentProcessing(
   private val bundle: Bundle?,
   private val actions: Channel<Action>
 ) : SideEffect<Unit> {
-  @TargetApi(VERSION_CODES.M)
   override fun invokeWith(activity: AppCompatActivity) {
     bundle?.let {
       actions.trySend(

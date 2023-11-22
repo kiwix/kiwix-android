@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Kiwix Android
+  ~ Copyright (c) 2023 Kiwix <android.kiwix.org>
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:fitsSystemWindows="true"
+  tools:context=".webserver.ZimHostFragment">
+
+  <include layout="@layout/layout_toolbar" />
+
+  <TextView
+    android:id="@+id/serverTextView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginEnd="50dp"
+    android:autoLink="web"
+    android:text="@string/server_textview_default_message"
+    app:layout_constraintEnd_toStartOf="@id/shareServerUrlIcon"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+  <ImageView
+    android:id="@+id/shareServerUrlIcon"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="3dp"
+    android:layout_marginEnd="16dp"
+    android:contentDescription="@string/share_host_address"
+    android:src="@drawable/ic_share_35dp"
+    android:visibility="gone"
+    app:layout_constraintBottom_toBottomOf="@id/serverTextView"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="@id/serverTextView"
+    tools:visibility="visible" />
+
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/recyclerViewZimHost"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="8dp"
+    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+    app:layout_constraintBottom_toTopOf="@+id/startServerButton"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/serverTextView"
+    tools:listitem="@layout/item_book" />
+
+  <Button
+    android:id="@+id/startServerButton"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginBottom="8dp"
+    android:backgroundTint="@color/startServerGreen"
+    android:text="@string/start_server_label"
+    android:textColor="@color/white"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

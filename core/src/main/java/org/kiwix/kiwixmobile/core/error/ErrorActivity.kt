@@ -22,9 +22,12 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Process
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.databinding.ActivityKiwixErrorBinding
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
@@ -60,10 +63,15 @@ open class ErrorActivity : BaseActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     activityKiwixErrorBinding = ActivityKiwixErrorBinding.inflate(layoutInflater)
-    setContentView(activityKiwixErrorBinding!!.root)
+    setContentView(activityKiwixErrorBinding?.root)
     val extras = intent.extras
     exception = if (extras != null && safeContains(extras)) {
-      extras.getSerializable(EXCEPTION_KEY) as Throwable
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        extras.getSerializable(EXCEPTION_KEY, Throwable::class.java)
+      } else {
+        @Suppress("DEPRECATION")
+        extras.getSerializable(EXCEPTION_KEY) as Throwable
+      }
     } else {
       null
     }
@@ -78,11 +86,14 @@ open class ErrorActivity : BaseActivity() {
 
   private fun setupReportButton() {
     activityKiwixErrorBinding?.reportButton?.setOnClickListener {
-      startActivityForResult(
-        Intent.createChooser(emailIntent(), "Send email..."), 1
-      )
+      sendEmailLauncher.launch(Intent.createChooser(emailIntent(), "Send email..."))
     }
   }
+
+  private val sendEmailLauncher =
+    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+      restartApp()
+    }
 
   private fun emailIntent(): Intent {
     val emailBody = buildBody()
@@ -123,7 +134,7 @@ open class ErrorActivity : BaseActivity() {
   private fun exceptionDetails(): String =
     """
     Exception Details:
-    ${toStackTraceString(exception!!)}
+    ${exception?.let(::toStackTraceString)}
     """.trimIndent()
 
   private fun zimFiles(): String {
@@ -190,12 +201,12 @@ open class ErrorActivity : BaseActivity() {
   private val versionCode: Int
     @SuppressLint("WrongConstant")
     get() = packageManager
-      .getPackageInfo(packageName, ZERO).versionCode
+      .getPackageInformation(packageName, ZERO).getVersionCode()
 
   private val versionName: String
     @SuppressLint("WrongConstant")
     get() = packageManager
-      .getPackageInfo(packageName, ZERO).versionName
+      .getPackageInformation(packageName, ZERO).versionName
 
   private fun toStackTraceString(exception: Throwable): String =
     StringWriter().apply {
@@ -206,15 +217,6 @@ open class ErrorActivity : BaseActivity() {
     startActivity(packageManager.getLaunchIntentForPackage(packageName))
     finish()
     killCurrentProcess()
-  }
-
-  public override fun onActivityResult(
-    requestCode: Int,
-    resultCode: Int,
-    data: Intent?
-  ) {
-    super.onActivityResult(requestCode, resultCode, data)
-    restartApp()
   }
 
   override fun injection(coreComponent: CoreComponent) {

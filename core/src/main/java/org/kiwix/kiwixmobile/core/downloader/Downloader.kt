@@ -23,4 +23,5 @@ interface Downloader {
   fun download(book: LibraryNetworkEntity.Book)
   fun cancelDownload(downloadId: Long)
   fun retryDownload(downloadId: Long)
+  fun pauseResumeDownload(downloadId: Long, isPause: Boolean)
 }

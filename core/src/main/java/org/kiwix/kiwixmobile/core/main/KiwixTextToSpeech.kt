@@ -18,13 +18,16 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.content.Context
+import android.media.AudioAttributes
+import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.AudioManager.OnAudioFocusChangeListener
+import android.os.Build
+import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.Engine
 import android.speech.tts.TextToSpeech.LANG_MISSING_DATA
 import android.speech.tts.TextToSpeech.LANG_NOT_SUPPORTED
-import android.speech.tts.TextToSpeech.OnInitListener
 import android.speech.tts.TextToSpeech.QUEUE_ADD
 import android.speech.tts.TextToSpeech.SUCCESS
 import android.speech.tts.UtteranceProgressListener
@@ -32,7 +35,6 @@ import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.widget.Toast
-import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -50,34 +52,44 @@ import java.util.concurrent.atomic.AtomicInteger
  */
 class KiwixTextToSpeech internal constructor(
   val context: Context,
-  onInitSucceedListener: OnInitSucceedListener,
+  private val onInitSucceedListener: OnInitSucceedListener,
   val onSpeakingListener: OnSpeakingListener,
   private var onAudioFocusChangeListener: OnAudioFocusChangeListener? = null,
   private val zimReaderContainer: ZimReaderContainer
 ) {
+  private var focusRequest: AudioFocusRequest? = null
   private val focusLock: Any = Any()
   private val am: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
   @JvmField var currentTTSTask: TTSTask? = null
-  private val tts: TextToSpeech = TextToSpeech(
-    instance,
-    OnInitListener { status: Int ->
-      if (status == SUCCESS) {
+  private lateinit var tts: TextToSpeech
+
+  /**
+   * Initializes the TextToSpeech object.
+   */
+  fun initializeTTS() {
+    tts = TextToSpeech(
+      context
+    ) { status: Int ->
+      if (status == TextToSpeech.SUCCESS) {
         Log.d(TAG_KIWIX, "TextToSpeech was initialized successfully.")
         this.isInitialized = true
         onInitSucceedListener.onInitSucceed()
       } else {
         Log.e(TAG_KIWIX, "Initialization of TextToSpeech Failed!")
-        context.toast(R.string.texttospeech_initialization_failed, Toast.LENGTH_SHORT)
+        context.toast(
+          R.string.texttospeech_initialization_failed,
+          Toast.LENGTH_SHORT
+        )
       }
     }
-  )
+  }
 
   /**
    * Returns whether the TTS is initialized.
    *
    * @return `true` if TTS is initialized; `false` otherwise
    */
-  private var isInitialized = false
+  var isInitialized = false
 
   init {
     Log.d(TAG_KIWIX, "Initializing TextToSpeech")
@@ -139,7 +151,7 @@ class KiwixTextToSpeech internal constructor(
       """
         javascript:
         body = document.getElementsByTagName('body')[0].cloneNode(true);
-        toRemove = body.querySelectorAll('sup.reference, #toc, .thumbcaption,     title, .navbox');
+        toRemove = body.querySelectorAll('sup.reference, #toc, .thumbcaption, title, .navbox, style');
         Array.prototype.forEach.call(toRemove, function(elem) {    
           elem.parentElement.removeChild(elem);});
         tts.speakAloud(body.innerText);
@@ -157,6 +169,26 @@ class KiwixTextToSpeech internal constructor(
   }
 
   private fun requestAudioFocus(): Boolean {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      if (focusRequest == null) {
+        focusRequest = onAudioFocusChangeListener?.let {
+          AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+            .setAudioAttributes(
+              AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).build()
+            )
+            .setAcceptsDelayedFocusGain(true)
+            .setOnAudioFocusChangeListener(it)
+            .setWillPauseWhenDucked(true)
+            .build()
+        }
+      }
+      Log.d(TAG_KIWIX, "Audio Focus Requested")
+      val focusGain = focusRequest?.let(am::requestAudioFocus)
+      synchronized(focusLock) {
+        return@requestAudioFocus focusGain == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+      }
+    }
+    @Suppress("DEPRECATION")
     val audioFocusRequest = am.requestAudioFocus(
       onAudioFocusChangeListener, AudioManager.STREAM_MUSIC,
       AudioManager.AUDIOFOCUS_GAIN
@@ -189,8 +221,16 @@ class KiwixTextToSpeech internal constructor(
    * {@link https://developer.android.com/guide/topics/media-apps/audio-focus#audio-focus-change }
    */
   fun shutdown() {
-    tts.shutdown()
-    am.abandonAudioFocus(onAudioFocusChangeListener)
+    if (::tts.isInitialized) {
+      tts.shutdown()
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      focusRequest?.let(am::abandonAudioFocusRequest)
+      focusRequest = null
+    } else {
+      @Suppress("DEPRECATION")
+      am.abandonAudioFocus(onAudioFocusChangeListener)
+    }
   }
 
   /**
@@ -231,11 +271,15 @@ class KiwixTextToSpeech internal constructor(
       paused = false
       // The utterance ID isn't actually used anywhere, the param is passed only to force
       // the utterance listener to be notified
-      val params = hashMapOf(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID to "kiwixLastMessage")
+      val bundle = Bundle().apply {
+        putString(Engine.KEY_PARAM_UTTERANCE_ID, "kiwixLastMessage")
+      }
       if (currentPiece.get() < pieces.size) {
         tts.speak(
-          pieces[currentPiece.getAndIncrement()], QUEUE_ADD,
-          params
+          pieces[currentPiece.getAndIncrement()],
+          QUEUE_ADD,
+          bundle,
+          bundle.getString(Engine.KEY_PARAM_UTTERANCE_ID)
         )
       } else {
         stop()
@@ -250,8 +294,12 @@ class KiwixTextToSpeech internal constructor(
           if (line >= pieces.size && !paused) {
             stop()
           } else {
-            tts.speak(pieces[line], QUEUE_ADD, params)
-            currentPiece.getAndIncrement()
+            tts.speak(
+              pieces[currentPiece.getAndIncrement()],
+              TextToSpeech.QUEUE_ADD,
+              bundle,
+              bundle.getString(Engine.KEY_PARAM_UTTERANCE_ID)
+            )
           }
         }
 

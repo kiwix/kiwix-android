@@ -19,14 +19,14 @@ package org.kiwix.kiwixmobile
 
 import android.Manifest
 import android.util.Log
-import androidx.test.InstrumentationRegistry
+import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.ActivityTestRule
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions
@@ -57,21 +57,15 @@ class NetworkTest {
   // @Inject
   // MockWebServer mockWebServer
 
-  @Rule
-  @JvmField
-  var mActivityTestRule = ActivityTestRule(
-    KiwixMainActivity::class.java, false, false
+  private val permissions = arrayOf(
+    Manifest.permission.READ_EXTERNAL_STORAGE,
+    Manifest.permission.WRITE_EXTERNAL_STORAGE
   )
 
   @Rule
   @JvmField
-  var readPermissionRule: GrantPermissionRule =
-    GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE)
-
-  @Rule
-  @JvmField
-  var writePermissionRule: GrantPermissionRule =
-    GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+  var permissionRules: GrantPermissionRule =
+    GrantPermissionRule.grant(*permissions)
 
   @Before fun setUp() {
     val component = DaggerTestComponent.builder().context(
@@ -99,7 +93,7 @@ class NetworkTest {
 
   @Test @Ignore("Broken in 2.5") // TODO Fix in 3.0
   fun networkTest() {
-    mActivityTestRule.launchActivity(null)
+    ActivityScenario.launch(KiwixMainActivity::class.java)
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     clickMenu(TestUtils.getResourceString(R.string.library))
     TestUtils.allowStoragePermissionsIfNeeded()

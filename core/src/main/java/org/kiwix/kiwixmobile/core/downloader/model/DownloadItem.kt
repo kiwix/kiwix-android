@@ -57,15 +57,19 @@ data class DownloadItem(
     Seconds(downloadModel.etaInMilliSeconds / 1000L),
     DownloadState.from(
       downloadModel.state,
-      downloadModel.error
+      downloadModel.error,
+      downloadModel.book.url
     )
   )
 }
 
-sealed class DownloadState(private val stringId: Int) {
+sealed class DownloadState(
+  private val stringId: Int,
+  open val zimUrl: String? = null
+) {
 
   companion object {
-    fun from(state: Status, error: Error): DownloadState =
+    fun from(state: Status, error: Error, zimUrl: String?): DownloadState =
       when (state) {
         NONE,
         ADDED,
@@ -76,7 +80,7 @@ sealed class DownloadState(private val stringId: Int) {
         CANCELLED,
         FAILED,
         REMOVED,
-        DELETED -> Failed(error)
+        DELETED -> Failed(error, zimUrl)
       }
   }
 
@@ -84,7 +88,8 @@ sealed class DownloadState(private val stringId: Int) {
   object Running : DownloadState(R.string.running_state)
   object Successful : DownloadState(R.string.complete)
   object Paused : DownloadState(R.string.paused_state)
-  data class Failed(val reason: Error) : DownloadState(R.string.failed_state)
+  data class Failed(val reason: Error, override val zimUrl: String?) :
+    DownloadState(R.string.failed_state, zimUrl)
 
   override fun toString(): String = javaClass.simpleName
 

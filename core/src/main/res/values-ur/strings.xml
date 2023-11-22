@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Jameel Kaisar
 * Macofe
 * Obaid Raza
 -->
@@ -12,6 +13,11 @@
   <string name="menu_random_article">تصادفی مقالہ</string>
   <string name="menu_full_screen">مکمل تظاہرہ</string>
   <string name="menu_exit_full_screen">مکمل اسکرین ختم کریں</string>
+  <string name="menu_read_aloud">بلند آواز سے پڑھیں</string>
+  <string name="menu_read_aloud_stop">بلند آواز سے پڑھنا بند کریں</string>
+  <string name="menu_support_kiwix">کیوکس کی حمایت کریں</string>
+  <string name="menu_wifi_hotspot">وائی فائی ہاٹ سپاٹ</string>
+  <string name="save_media">میڈیا کو محفوظ کریں۔</string>
   <string name="search_label">تلاش</string>
   <string name="pref_display_title">تظاہرہ</string>
   <string name="pref_info_title">معلومات</string>

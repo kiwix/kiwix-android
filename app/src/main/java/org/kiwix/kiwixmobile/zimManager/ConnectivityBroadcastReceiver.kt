@@ -32,6 +32,7 @@ class ConnectivityBroadcastReceiver @Inject constructor(
 ) :
   BaseBroadcastReceiver() {
 
+  @Suppress("DEPRECATION")
   override val action: String = ConnectivityManager.CONNECTIVITY_ACTION
 
   private val _networkStates = BehaviorProcessor.createDefault(connectivityManager.networkState)

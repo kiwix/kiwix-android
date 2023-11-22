@@ -115,8 +115,8 @@ internal class CustomDownloadViewModelTest {
     internal fun `Emission with data+failure moves state from InProgress to Failed`() {
       assertStateTransition(
         DownloadInProgress(listOf()),
-        DatabaseEmission(listOf(downloadItem(state = Failed(NONE)))),
-        DownloadFailed(Failed(NONE))
+        DatabaseEmission(listOf(downloadItem(state = Failed(NONE, null)))),
+        DownloadFailed(Failed(NONE, null))
       )
     }
 

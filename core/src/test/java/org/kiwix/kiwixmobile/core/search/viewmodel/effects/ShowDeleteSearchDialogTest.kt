@@ -36,7 +36,7 @@ internal class ShowDeleteSearchDialogTest {
   @Test
   fun `invoke with shows dialog that offers ConfirmedDelete action`() {
     val actions = mockk<Channel<Action>>(relaxed = true)
-    val searchListItem = RecentSearchListItem("")
+    val searchListItem = RecentSearchListItem("", "")
     val activity = mockk<CoreMainActivity>()
     val showDeleteSearchDialog = ShowDeleteSearchDialog(searchListItem, actions)
     val dialogShower = mockk<DialogShower>()

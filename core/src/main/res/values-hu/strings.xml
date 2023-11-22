@@ -133,6 +133,7 @@
   <string name="crash_button_confirm">RÉSZLETEK KÜLDÉSE</string>
   <string name="download_books">Könyvek letöltése</string>
   <string name="close_all_tabs">Az összes lap bezárása</string>
+  <string name="custom_download_error_message_for_authentication_failed">A zim fájlt nem sikerült letölteni. Próbáld meg újratelepíteni az alkalmazást a play store-ból!</string>
   <string name="delete_notes_confirmation_msg">Törölsz minden jegyzetet?</string>
   <string name="pref_clear_all_notes_title" fuzzy="true">Minden megjegyzés törlése</string>
   <string name="no_bookmarks">Nincsenek könyvjelzők!</string>

@@ -8,4 +8,6 @@
   <string name="cannot_open_file">S’u arrit të hapej kartela\nJu lutemi, provoni të shihni për këtë kartelë te Skeda Pajisje e Bibliotekës tuaj</string>
   <string name="send_files_title">Dërgoni Kartela</string>
   <string name="receive_files_title">Merrni Kartela</string>
+  <string name="no_app_found_to_open">S’u gjet aplikacion për përzgjedhje kartele .zim!</string>
+  <string name="select_zim_file">Përzgjidhni kartelë zim për lexim</string>
 </resources>

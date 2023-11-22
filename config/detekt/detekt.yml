@@ -79,7 +79,8 @@ complexity:
     threshold: 60
   LongParameterList:
     active: true
-    threshold: 6
+    functionThreshold: 6
+    constructorThreshold: 6
     ignoreDefaultParameters: false
   MethodOverloading:
     active: false
@@ -294,7 +295,7 @@ performance:
 potential-bugs:
   active: true
   Deprecation:
-    active: false
+    active: true
   DuplicateCaseInWhenExpression:
     active: true
   EqualsAlwaysReturnsTrueOrFalse:
@@ -316,7 +317,7 @@ potential-bugs:
   LateinitUsage:
     active: false
     excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
-    excludeAnnotatedProperties: ""
+    ignoreAnnotated: []
     ignoreOnClassesPattern: ""
   MapGetWithNotNullAssertionOperator:
     active: false
@@ -379,7 +380,7 @@ style:
     active: true
     ignoreOverridableFunction: true
     excludedFunctions: 'describeContents'
-    excludeAnnotatedFunction: "dagger.Provides"
+    ignoreAnnotated: ["dagger.Provides"]
   LibraryCodeMustSpecifyReturnType:
     active: true
   LoopWithTooManyJumpStatements:
@@ -450,10 +451,10 @@ style:
     active: false
   UnderscoresInNumericLiterals:
     active: false
-    acceptableDecimalLength: 5
+    acceptableLength: 5
   UnnecessaryAbstractClass:
     active: true
-    excludeAnnotatedClasses: "dagger.Module"
+    ignoreAnnotated: ["dagger.Module"]
   UnnecessaryAnnotationUseSiteTarget:
     active: false
   UnnecessaryApply:
@@ -479,7 +480,7 @@ style:
     active: false
   UseDataClass:
     active: false
-    excludeAnnotatedClasses: ""
+    ignoreAnnotated: []
     allowVars: false
   UseIfInsteadOfWhen:
     active: false

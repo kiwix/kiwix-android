@@ -178,4 +178,6 @@
   <string name="delete_note_dialog_message">نکته: یادداشت‌ها از مخزن شما حذف نشده‌اند</string>
   <string name="delete_selected_notes">حذف یادداشت‌های منتخب؟</string>
   <string name="go_to_settings_label">برو به تنظیمات</string>
+  <string name="click_nearby_devices_message">برای جستجوی دستگاه‌های نزدیک اینجا کلیک کنید.</string>
+  <string name="your_device_name_message">نام دستگاه شما در اینجا نمایش خواهد یافت.</string>
 </resources>

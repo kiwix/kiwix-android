@@ -22,7 +22,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -32,7 +31,9 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -116,13 +117,13 @@ class AddNoteDialog : DialogFragment() {
       .inject(this)
 
     // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
-    zimFileName = zimReaderContainer.zimCanonicalPath
+    zimFileName = zimReaderContainer.zimCanonicalPath ?: zimReaderContainer.name
     if (zimFileName != null) { // No zim file currently opened
       zimFileTitle = zimReaderContainer.zimFileTitle
       zimId = zimReaderContainer.id.orEmpty()
 
       if (arguments != null) {
-        articleTitle = arguments?.getString(NOTES_TITLE)
+        articleTitle = arguments?.getString(NOTES_TITLE)?.substringAfter(": ")
         zimFileUrl = arguments?.getString(ARTICLE_URL).orEmpty()
       } else {
         val webView = (activity as WebViewProvider?)?.getCurrentWebView()
@@ -139,7 +140,7 @@ class AddNoteDialog : DialogFragment() {
   private fun onFailureToCreateAddNoteDialog() {
     context.toast(R.string.error_file_not_found, Toast.LENGTH_LONG)
     closeKeyboard()
-    requireFragmentManager().beginTransaction().remove(this).commit()
+    parentFragmentManager.beginTransaction().remove(this).commit()
   }
 
   override fun onCreateView(
@@ -181,14 +182,19 @@ class AddNoteDialog : DialogFragment() {
   private fun getTextAfterLastSlashWithoutExtension(path: String): String =
     path.substringAfterLast('/', "").substringBeforeLast('.')
 
-  // Override onBackPressed() to respond to user pressing 'Back' button on navigation bar
+  // Add onBackPressedCallBack to respond to user pressing 'Back' button on navigation bar
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    return object : Dialog(requireContext(), theme) {
-      override fun onBackPressed() {
+    val dialog = Dialog(requireContext(), theme)
+    requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallBack)
+    return dialog
+  }
+
+  private val onBackPressedCallBack =
+    object : OnBackPressedCallback(true) {
+      override fun handleOnBackPressed() {
         exitAddNoteDialog()
       }
     }
-  }
 
   private fun exitAddNoteDialog() {
     if (noteEdited) {
@@ -196,6 +202,9 @@ class AddNoteDialog : DialogFragment() {
     } else {
       // Closing unedited note dialog straightaway
       dismissAddNoteDialog()
+    }
+    if (dialogNoteAddNoteBinding?.addNoteEditText?.isFocused == true) {
+      dialogNoteAddNoteBinding?.addNoteEditText?.clearFocus()
     }
   }
 
@@ -283,15 +292,22 @@ class AddNoteDialog : DialogFragment() {
     )
     if (!noteFileExists) {
       // Prepare for input in case of empty/new note
-      dialogNoteAddNoteBinding?.addNoteEditText?.requestFocus()
-      showKeyboard()
+      dialogNoteAddNoteBinding?.addNoteEditText?.apply {
+        requestFocus()
+        showKeyboard(this)
+      }
     }
   }
 
-  private fun showKeyboard() {
+  @Suppress("MagicNumber")
+  private fun showKeyboard(editText: EditText) {
     val inputMethodManager =
       requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+    editText.postDelayed(
+      {
+        inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+      }, 100
+    )
   }
 
   private fun saveNote(noteText: String) {
@@ -429,16 +445,12 @@ class AddNoteDialog : DialogFragment() {
     }
     val noteFile = File("$zimNotesDirectory$articleNoteFileName.txt")
     if (noteFile.exists()) {
-      val noteFileUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        // From Nougat 7 (API 24) access to files is shared temporarily with other apps
-        // Need to use FileProvider for the same
-        FileProvider.getUriForFile(
-          requireContext(), requireContext().packageName + ".fileprovider",
-          noteFile
-        )
-      } else {
-        Uri.fromFile(noteFile)
-      }
+      // From Nougat 7 (API 24) access to files is shared temporarily with other apps
+      // Need to use FileProvider for the same
+      val noteFileUri = FileProvider.getUriForFile(
+        requireContext(), requireContext().packageName + ".fileprovider",
+        noteFile
+      )
       val noteFileShareIntent = Intent(Intent.ACTION_SEND).apply {
         type = "application/octet-stream"
         putExtra(Intent.EXTRA_STREAM, noteFileUri)
@@ -465,6 +477,7 @@ class AddNoteDialog : DialogFragment() {
     super.onDestroyView()
     mainRepositoryActions.dispose()
     dialogNoteAddNoteBinding = null
+    onBackPressedCallBack.remove()
   }
 
   override fun onStart() {

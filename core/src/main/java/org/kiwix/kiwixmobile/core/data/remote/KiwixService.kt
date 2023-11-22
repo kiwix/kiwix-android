@@ -15,6 +15,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+@file:Suppress("DEPRECATION")
+
 package org.kiwix.kiwixmobile.core.data.remote
 
 import io.reactivex.Observable
@@ -35,6 +37,7 @@ interface KiwixService {
 
   /******** Helper class that sets up new services  */
   object ServiceCreator {
+    @Suppress("DEPRECATION")
     fun newHackListService(okHttpClient: OkHttpClient, baseUrl: String): KiwixService {
       val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)

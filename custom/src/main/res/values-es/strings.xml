@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Fitoschido
+* Vis4valentine
 -->
 <resources>
   <string name="retry">Reintentar</string>
+  <string name="invalid_installation">Instalación no válida. ¡Descargue Zim.\n Asegúrese de que WiFi esté activado y tenga suficiente almacenamiento</string>
 </resources>

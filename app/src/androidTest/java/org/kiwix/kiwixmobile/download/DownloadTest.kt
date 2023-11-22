@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.download
 
 import android.util.Log
 import androidx.core.content.edit
+import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.IdlingPolicies
@@ -73,11 +74,13 @@ class DownloadTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
     }
+    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+      moveToState(Lifecycle.State.RESUMED)
+    }
   }
 
   @Test
   fun downloadTest() {
-    ActivityScenario.launch(KiwixMainActivity::class.java)
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     try {
       downloadRobot {
@@ -85,8 +88,13 @@ class DownloadTest : BaseActivityTest() {
         deleteZimIfExists(false)
         clickDownloadOnBottomNav()
         waitForDataToLoad()
+        stopDownloadIfAlreadyStarted()
         downloadZimFile()
         assertDownloadStart()
+        pauseDownload()
+        assertDownloadPaused()
+        resumeDownload()
+        assertDownloadResumed()
         waitUntilDownloadComplete()
         clickLibraryOnBottomNav()
         checkIfZimFileDownloaded()

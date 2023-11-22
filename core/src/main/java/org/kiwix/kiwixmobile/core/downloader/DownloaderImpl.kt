@@ -44,6 +44,7 @@ class DownloaderImpl @Inject constructor(
       )
   }
 
+  @Suppress("UnsafeCallOnNullableType")
   private fun urlProvider(book: Book): Observable<String> =
     if (book.url?.endsWith("meta4") == true) kiwixService.getMetaLinks(book.url!!)
       .map { it.relevantUrl.value }
@@ -55,5 +56,9 @@ class DownloaderImpl @Inject constructor(
 
   override fun retryDownload(downloadId: Long) {
     downloadRequester.retryDownload(downloadId)
+  }
+
+  override fun pauseResumeDownload(downloadId: Long, isPause: Boolean) {
+    downloadRequester.pauseResumeDownload(downloadId, isPause)
   }
 }

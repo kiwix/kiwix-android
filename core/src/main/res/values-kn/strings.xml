@@ -1,24 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Macofe
+* Swathi
+* Vkashyap
+* ~aanzx
 * ಮಲ್ನಾಡಾಚ್ ಕೊಂಕ್ಣೊ
 -->
 <resources>
   <string name="menu_help">ಸಹಾಯ</string>
   <string name="menu_home">ಮುಖ್ಯಪುಟ</string>
-  <string name="menu_settings">ಪ್ರಾಶಸ್ತ್ಯಗಳು</string>
-  <string name="menu_search_in_text">ಪಠ್ಯದಲ್ಲಿ ಹುಡುಕಿ</string>
+  <string name="menu_settings">ಸಂಯೋಜನೆಗಳು</string>
+  <string name="menu_search_in_text">ಪುಟದಲ್ಲಿ ಹುಡುಕಿ</string>
   <string name="bookmarks">ಓದುಗುರುತುಗಳು</string>
-  <string name="menu_random_article">ಯಾವುದಾದರೊಂದು ಲೇಖನ</string>
-  <string name="menu_full_screen">ಪೂರ್ಣಪರದೆ</string>
-  <string name="menu_exit_full_screen">ಪೂರ್ಣ ತೆರೆಯನ್ನು ನಿರ್ಗಮಿಸಿ</string>
+  <string name="menu_random_article">ಯಾವುದೋ ಒಂದು ಲೇಖನ</string>
+  <string name="menu_full_screen">ಸಂಪೂರ್ಣ ಪರದೆ</string>
+  <string name="menu_exit_full_screen">ಸಂಪೂರ್ಣ ಪರದೆಯಿಂದ ನಿರ್ಗಮಿಸಿ</string>
+  <string name="menu_read_aloud">ಜೋರಾಗಿ ಓದು</string>
+  <string name="menu_read_aloud_stop">ಜೋರಾಗಿ ಓದುವುದನ್ನು ನಿಲ್ಲಿಸು</string>
+  <string name="menu_support_kiwix">ಕಿವಿಕ್ಸಿಗೆ ಬೆಂಬಲ ನೀಡಿ</string>
   <string name="menu_wifi_hotspot">ವೈಫೈ ಹಾಟ್‌ಸ್ಪಾಟ್</string>
-  <string name="search_label">ಅನ್ವೇಷಿಸಿ</string>
+  <string name="save_media">ಮಾಧ್ಯಮವನ್ನು ಉಳಿಸಿ</string>
+  <string name="save_media_error">ಮಾಧ್ಯಮವನ್ನು ಉಳಿಸಲು ಪ್ರಯತ್ನಿಸುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ!</string>
+  <string name="save_media_saved">ಮಾಧ್ಯಮವನ್ನು %s ನಂತೆ Downloads/org.kiwix…/ ಗೆ ಉಳಿಸಲಾಗಿದೆ</string>
+  <string name="search_label">ಹುಡುಕು</string>
+  <string name="choose_file">ವಿಷಯದ ಕಡತವನ್ನು ಆಯ್ಕೆ ಮಾಡಿ (′. zim′)</string>
+  <string name="open_in_new_tab">ಹೊಸ ಟ್ಯಾಬ್‌ನಲ್ಲಿ ಕೊಂಡಿಯನ್ನು ತೆರೆಯಿರಿ?</string>
+  <string name="hotspot_service_channel_name">ಹಾಟ್‌ಸ್ಪಾಟ್ ಸೇವಾ ಚಾನೆಲ್</string>
+  <string name="hotspot_failed_title">ಹಾಟ್‌ಸ್ಪಾಟ್ ಪ್ರಾರಂಭಿಸಲು ವಿಫಲವಾಗಿದೆ</string>
+  <string name="hotspot_failed_message">ನಿಮ್ಮ ಹಾಟ್‌ಸ್ಪಾಟ್ ಈಗಾಗಲೇ ಆನ್ ಆಗಿರುವಂತೆ ತೋರುತ್ತಿದೆ. ಮುಂದುವರಿಯಲು ದಯವಿಟ್ಟು ನಿಮ್ಮ ವೈಫೈ ಹಾಟ್‌ಸ್ಪಾಟ್ಅನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ.</string>
+  <string name="go_to_wifi_settings_label">ವೈಫೈ ಸೆಟ್ಟಿಂಗ್‌ಗಳಿಗೆ ಹೋಗಿ</string>
+  <string name="connection_refused">ಸಂಪರ್ಕ ತಿರಸ್ಕರಿಸಲಾಗಿದೆ.</string>
+  <string name="hotspot_running">ಹಾಟ್‌ಸ್ಪಾಟ್ ರನ್ ಆಗುತ್ತಿದೆ</string>
+  <string name="no_books_selected_toast_message">ದಯವಿಟ್ಟು ಮೊದಲು ಪುಸ್ತಕಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
+  <string name="hotspot_dialog_neutral_button">ಮುಂದುವರಿಸಿ</string>
+  <string name="error_file_invalid">ದೋಷ: ಆರಿಸಿದ ಫೈಲು ಸರಿಯಾದ ZIM ಫೈಲು ಅಲ್ಲ</string>
+  <string name="error_article_url_not_found">ದೋಷ: ಲೇಖನ (Url: %1$s) ತರುವುದು ವಿಫಲವಾಗಿದೆ.</string>
   <string name="pref_display_title">ಪ್ರದರ್ಶಿಸು</string>
   <string name="pref_info_title">ಮಾಹಿತಿ</string>
   <string name="pref_info_version">ಆವೃತ್ತಿ</string>
   <string name="pref_language_title">ಭಾಷೆ</string>
   <string name="pref_language_chooser">ಭಾಷೆ ಆಯ್ದುಕೊಳ್ಳಿ</string>
+  <string name="pref_credits_title">ಮನ್ನಣೆಗಳು</string>
+  <string name="pref_clear_all_history_title">ಇತಿಹಾಸ ಅಳಿಸಿ</string>
+  <string name="all_history_cleared">ಎಲ್ಲಾ ಇತಿಹಾಸ ಅಳಿಸಿ</string>
   <string name="delete">ಅಳಿಸು</string>
+  <string name="got_it">ಗೊತ್ತಾಯಿತು</string>
+  <string name="no_thanks">ಬೇಡ, ಧನ್ಯವಾದಗಳು</string>
+  <string name="rate_dialog_neutral">ನಂತರ</string>
+  <string name="open">ತೆಗೆ</string>
   <string name="library">ಗ್ರಂಥಾಲಯ</string>
+  <string name="zim_simple">ಸರಳ</string>
+  <string name="help_2">ಕಿವಿಕ್ಸ್ ಏನು ಮಾಡುತ್ತದೆ?</string>
+  <string name="tts_pause">ಸ್ವಲ್ಪ ನಿಲ್ಲಿಸು</string>
+  <string name="tts_resume">ಮತ್ತೆ ಶುರುಮಾಡು</string>
+  <string name="stop">ನಿಲ್ಲಿಸು</string>
+  <string name="internal_storage">ಒಳಗಿನ</string>
+  <string name="external_storage">ಹೊರಗಿನ</string>
+  <string name="yes">ಹೌದು</string>
+  <string name="no">ಇಲ್ಲ</string>
+  <string name="next">ಮುಂದಿನದು</string>
+  <string name="previous">ಹಿಂದಿನದು</string>
+  <string name="time_day">ದಿನ</string>
+  <string name="time_hour">ಘಂಟೆ</string>
+  <string name="time_minute">ನಿಮಿಷ</string>
+  <string name="time_second">ಸೆಕೆಂಡುಗಳು</string>
+  <string name="time_left">ಉಳಿದಿದೆ</string>
+  <string name="time_today">ಇವತ್ತು</string>
+  <string name="time_yesterday">ನಿನ್ನೆ</string>
+  <string name="new_tab_shortcut_label">ಹೊಸ ಟ್ಯಾಬ್</string>
+  <string name="select_languages">ಭಾಷೆ ಆಯ್ಕೆ ಮಾಡಿ</string>
+  <string name="save">ಉಳಿಸಿ</string>
+  <string name="tag_pic">ಚಿತ್ರ</string>
+  <string name="tag_vid">ವೀಡಿಯೊ</string>
+  <string name="tag_text_only">ಪಠ್ಯ ಮಾತ್ರ</string>
+  <string name="on">ಮಾಡಿ</string>
+  <string name="off">ನಿಲ್ಲಿಸಿ</string>
+  <string name="auto">ಸ್ವಯಂಚಲನ</string>
+  <string name="allowed">ಮಾಡಬಹುದು</string>
+  <string name="not_allowed">ಮಾಡಲಾಗುವುದಿಲ್ಲ</string>
+  <string name="allow">ಅನುಮತಿಸಿ</string>
 </resources>

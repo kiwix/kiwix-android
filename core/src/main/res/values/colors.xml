@@ -16,4 +16,6 @@
   <color name="denim_blue800">#1565c0</color>
   <color name="froly_pink300">#f06292</color>
   <color name="monza_red">#b00020</color>
+  <color name="startServerGreen">#2e7d31</color>
+  <color name="stopServerRed">#c62728</color>
 </resources>

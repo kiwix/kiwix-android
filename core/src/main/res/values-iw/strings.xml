@@ -53,6 +53,8 @@
   <string name="hotspot_notification_content_title">נקודת חיבור של קיוויקס</string>
   <string name="start_server_label">הרצת השרת</string>
   <string name="stop_server_label">כיבוי השרת</string>
+  <string name="error_server_already_running">השרת כבר פעיל. נא לכבות אותו ולנסות שוב.</string>
+  <string name="error_ip_address_not_found">לא ניתן למצוא כתובת IP.</string>
   <string name="server_started_message">יש להזין את כתובת ה־IP הזאת לדפדפן שלך כדי לגשת לשרת %s</string>
   <string name="share_host_address">שיתוף URL דרך יישומים אחרים</string>
   <string name="error_file_not_found">שגיאה: קובץ ה־ZIM שנבחר לא נמצא.</string>
@@ -213,6 +215,7 @@
   <string name="complete">הושלם</string>
   <string name="paused_state">מושהה</string>
   <string name="failed_state">נכשל: %s</string>
+  <string name="custom_download_error_message_for_authentication_failed">לא היה אפשר להוריד את קובץ ה־zim. נא לנסות להתקין את היישום מחדש מחנות ה־Play.</string>
   <string name="save">שמירה</string>
   <string name="note">הערה</string>
   <string name="wiki_article_title">כותרת ערך בוויקי</string>
@@ -262,7 +265,7 @@
   <string name="pref_clear_all_notes_title">ניקוי כל ההערות</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">לאפשר לקרוא ולכתוב קובצי ZIM על כרטיס SD</string>
   <string name="pref_text_zoom_summary">לשנות את גודל הטקסט בקפיצות של 25%.</string>
-  <string name="tag_pic">תמונה</string>
+  <string name="tag_pic">עם תמונות</string>
   <string name="tag_vid">סרטון</string>
   <string name="tag_text_only">רק טקסט</string>
   <string name="tag_short_text">טקסט קצר</string>
@@ -325,4 +328,8 @@
   <string name="navigation_history_cleared">היסטוריית הניווט נמחקה</string>
   <string name="go_to_settings_label">לעבור להגדרות</string>
   <string name="request_notification_permission_message">כדי לבצע את הפעולה הזאת, יש להעניק גישה להתראות</string>
+  <string name="click_nearby_devices_message">נא ללחוץ כאן כדי לחפש מכשירים קרובים.</string>
+  <string name="your_device_name_message">שם המכשיר שלך יופיע כאן.</string>
+  <string name="nearby_devices_list_message">כאן אפשר למצוא רשימה של מכשירים קרובים. יש לגעת בשם המכשיר כדי להתחיל העברת קבצים.</string>
+  <string name="transfer_zim_files_list_message">כאן אפשר למצוא את רשימת קובצי ה־ZIM הזמינים להעברה.</string>
 </resources>

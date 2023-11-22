@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Gouri
+-->
+<resources>
+  <string name="retry">ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ</string>
+  <string name="invalid_installation">ଅବୈଧ ସ୍ଥାପନ. ଦଯ଼ାକରି ଜିମ୍ ଡାଉନଲୋଡ୍ କରନ୍ତୁ । ନିଶ୍ଚିତ କରନ୍ତୁ ଯେ ୱାଇଫାଇ ଚାଲୁ ଅଛି ଏବଂ ଆପଣଙ୍କ ପାଖରେ ପର୍ଯ୍ଯ଼ାପ୍ତ ଷ୍ଟୋରେଜ୍ ଅଛି</string>
+</resources>

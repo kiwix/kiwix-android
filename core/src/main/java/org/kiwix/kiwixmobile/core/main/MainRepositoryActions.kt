@@ -24,6 +24,7 @@ import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
 
 private const val TAG = "MainPresenter"
@@ -33,6 +34,7 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
   private var saveHistoryDisposable: Disposable? = null
   private var saveBookmarkDisposable: Disposable? = null
   private var saveNoteDisposable: Disposable? = null
+  private var saveBookDisposable: Disposable? = null
   private var deleteNoteDisposable: Disposable? = null
 
   fun saveHistory(history: HistoryItem) {
@@ -61,10 +63,16 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
       .subscribe({}, { e -> Log.e(TAG, "Unable to delete note", e) })
   }
 
+  fun saveBook(book: BookOnDisk) {
+    saveBookDisposable = dataSource.saveBook(book)
+      .subscribe({}, { e -> Log.e(TAG, "Unable to save book", e) })
+  }
+
   fun dispose() {
     saveHistoryDisposable?.dispose()
     saveBookmarkDisposable?.dispose()
     saveNoteDisposable?.dispose()
     deleteNoteDisposable?.dispose()
+    saveBookDisposable?.dispose()
   }
 }

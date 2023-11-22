@@ -42,6 +42,8 @@
   <string name="hotspot_notification_content_title" tools:keep="@string/hotspot_notification_content_title">Kiwix Hotspot</string>
   <string name="start_server_label" tools:keep="@string/start_server_label">Start server</string>
   <string name="stop_server_label" tools:keep="@string/stop_server_label">Stop server</string>
+  <string name="error_server_already_running" tools:keep="@string/error_server_already_running">The server is already running. Please turn it off and try again.</string>
+  <string name="error_ip_address_not_found">Couldn’t find ip address.</string>
   <string name="server_started_message" tools:keep="@string/server_started_message">Enter this ip address into your browser to access the server %s</string>
   <string name="share_host_address">Share URL via other applications</string>
   <string name="error_file_not_found">Error: The selected ZIM file could not be found.</string>
@@ -215,6 +217,7 @@
   <string name="complete">Complete</string>
   <string name="paused_state">Paused</string>
   <string name="failed_state">Failed: %s</string>
+  <string name="custom_download_error_message_for_authentication_failed">The zim file could not be downloaded. Please try reinstalling the application from the Play store.</string>
   <string name="save">Save</string>
   <string name="note">Note</string>
   <string name="wiki_article_title">Wiki Article Title</string>
@@ -338,4 +341,9 @@
   <string name="navigation_history_cleared">Navigation History Cleared</string>
   <string name="go_to_settings_label">Go to Settings</string>
   <string name="request_notification_permission_message">To perform this action, please grant notification access</string>
+  <string name="empty_string" />
+  <string name="click_nearby_devices_message">Click here to search for nearby devices.</string>
+  <string name="your_device_name_message">Your device name will appear here.</string>
+  <string name="nearby_devices_list_message">Here, you\'ll find a list of nearby devices. Tap on a device\'s name to initiate file transfer.</string>
+  <string name="transfer_zim_files_list_message">Here, you\'ll find the list of available ZIM files for transfer.</string>
 </resources>

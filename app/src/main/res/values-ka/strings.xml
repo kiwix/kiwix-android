@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* MohitMali
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">თქვენი ფაილის სისტემა 4GB-ზე მეტი ფაილების მხარდაჭერას არ უშვებს.</string>
+  <string name="detecting_file_system">ფაილის სისტემის განსაზღვრა თუ შეიძლება 4GB ზომის ფაილების შექმნა.</string>
+  <string name="cannot_open_file">ფაილის გახსნა ვერ მოხერხდა\\n გთხოვთ, სცადოთ ამ ფაილის ძიება თქვენი ბიბლიოთეკის მოწყობილობის ჩანართში</string>
+  <string name="send_files_title">ფაილების გაგზავნა</string>
+  <string name="receive_files_title">ფაილების მიღება</string>
+  <string name="no_app_found_to_open">zim ფაილის ასარჩევად აპლიკაცია ვერ მოიძებნა!</string>
+  <string name="select_zim_file">აირჩიეთ zim ფაილი წასაკითხისთვის</string>
+</resources>

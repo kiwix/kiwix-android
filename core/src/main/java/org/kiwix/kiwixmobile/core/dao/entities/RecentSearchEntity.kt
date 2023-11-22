@@ -24,5 +24,6 @@ import io.objectbox.annotation.Id
 data class RecentSearchEntity(
   @Id var id: Long = 0L,
   val searchTerm: String,
-  val zimId: String
+  val zimId: String,
+  val url: String?
 )

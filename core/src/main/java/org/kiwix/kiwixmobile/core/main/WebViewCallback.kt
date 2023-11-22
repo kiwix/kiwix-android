@@ -18,13 +18,14 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.content.Intent
+import android.webkit.WebView
 
 interface WebViewCallback {
   fun webViewUrlLoading()
   fun webViewUrlFinishedLoading()
   fun webViewFailedLoading(failingUrl: String)
   fun openExternalUrl(intent: Intent)
-  fun webViewProgressChanged(progress: Int)
+  fun webViewProgressChanged(progress: Int, webView: WebView)
   fun webViewTitleUpdated(title: String)
   fun webViewPageChanged(page: Int, maxPages: Int)
   fun webViewLongClick(url: String)

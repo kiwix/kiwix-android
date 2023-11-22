@@ -24,6 +24,7 @@ import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
@@ -37,6 +38,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDirections
 import com.google.android.material.navigation.NavigationView
 import org.kiwix.kiwixmobile.core.BuildConfig
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
@@ -75,9 +77,12 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val historyFragmentResId: Int
   abstract val notesFragmentResId: Int
   abstract val helpFragmentResId: Int
+  abstract val zimHostFragmentResId: Int
+  abstract val navGraphId: Int
   abstract val cachedComponent: CoreActivityComponent
   abstract val topLevelDestinations: Set<Int>
   abstract val navHostContainer: FragmentContainerView
+  abstract val mainActivity: AppCompatActivity
 
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.KiwixTheme)
@@ -96,8 +101,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
         exitProcess(KIWIX_INTERNAL_ERROR)
       }
     }
+    setMainActivityToCoreApp()
   }
 
+  @Suppress("DEPRECATION")
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     activeFragments().iterator().forEach { it.onActivityResult(requestCode, resultCode, data) }
@@ -125,6 +132,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     drawerContainerLayout.setDrawerLockMode(lockMode, this)
   }
 
+  @Suppress("DEPRECATION")
   override fun onRequestPermissionsResult(
     requestCode: Int,
     permissions: Array<out String>,
@@ -201,9 +209,15 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       R.id.menu_notes -> openNotes()
       R.id.menu_history -> openHistory()
       R.id.menu_bookmarks_list -> openBookmarks()
+      R.id.menu_host_books -> openZimHostFragment()
       else -> return false
     }
     return true
+  }
+
+  private fun openZimHostFragment() {
+    navigate(zimHostFragmentResId)
+    handleDrawerOnNavigation()
   }
 
   private fun openHelpFragment() {
@@ -228,7 +242,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       return
     }
     if (activeFragments().filterIsInstance<FragmentActivityExtensions>().isEmpty()) {
-      return super.onBackPressed()
+      return super.getOnBackPressedDispatcher().onBackPressed()
     }
     activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
       if (it.onBackPressed(this) == FragmentActivityExtensions.Super.ShouldCall) {
@@ -239,7 +253,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
           drawerToggle = null
           finish()
         } else {
-          super.onBackPressed()
+          super.getOnBackPressedDispatcher().onBackPressed()
         }
       }
     }
@@ -323,6 +337,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   protected fun handleDrawerOnNavigation() {
     closeNavigationDrawer()
     disableDrawer()
+  }
+
+  private fun setMainActivityToCoreApp() {
+    (applicationContext as CoreApp).setMainActivity(this)
   }
 
   fun findInPage(searchString: String) {

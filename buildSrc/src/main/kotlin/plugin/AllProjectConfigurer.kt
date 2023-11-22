@@ -20,6 +20,7 @@ package plugin
 
 import Config
 import Libs
+import com.android.build.api.dsl.CommonExtension
 import com.android.build.gradle.BaseExtension
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
@@ -42,7 +43,7 @@ class AllProjectConfigurer {
     target.plugins.apply("androidx.navigation.safeargs")
   }
 
-  fun configureBaseExtension(target: Project, path: String) {
+  fun configureBaseExtension(target: Project) {
     target.configureExtension<BaseExtension> {
       setCompileSdkVersion(Config.compileSdk)
       defaultConfig {
@@ -89,32 +90,6 @@ class AllProjectConfigurer {
           }
         }
       }
-
-      lintOptions {
-        isAbortOnError = true
-        isCheckAllWarnings = true
-        isWarningsAsErrors = true
-
-        ignore(
-          "SyntheticAccessor",
-          "GoogleAppIndexingApiWarning",
-          "LockedOrientationActivity",
-          //TODO stop ignoring below this
-          "LabelFor",
-          "LogConditional",
-          "ConvertToWebp",
-          "UnknownNullness",
-          "SelectableText",
-          "MissingTranslation",
-          "IconDensities",
-          "ContentDescription",
-          "IconDipSize",
-          "UnusedResources",
-          "NonConstantResourceId",
-          "NotifyDataSetChanged"
-        )
-        lintConfig = target.rootProject.file("lintConfig.xml")
-      }
       packagingOptions {
         resources.excludes.apply {
           add("META-INF/DEPENDENCIES")
@@ -128,12 +103,43 @@ class AllProjectConfigurer {
           add("META-INF/notice.txt")
           add("META-INF/ASL2.0")
         }
+        jniLibs.useLegacyPackaging = false
       }
       sourceSets {
         getByName("test") {
           java.srcDir("${target.rootDir}/core/src/sharedTestFunctions/java")
           resources.srcDir("${target.rootDir}/core/src/test/resources")
         }
+      }
+    }
+  }
+
+  fun configureCommonExtension(target: Project) {
+    target.configureExtension<CommonExtension<*, *, *, *>> {
+      lint {
+        abortOnError = true
+        checkAllWarnings = true
+        warningsAsErrors = true
+
+        disable.apply {
+          add("SyntheticAccessor")
+          add("GoogleAppIndexingApiWarning")
+          add("LockedOrientationActivity")
+          // TODO stop ignoring below this
+          add("LabelFor")
+          add("LogConditional")
+          add("ConvertToWebp")
+          add("UnknownNullness")
+          add("SelectableText")
+          add("MissingTranslation")
+          add("IconDensities")
+          add("ContentDescription")
+          add("IconDipSize")
+          add("UnusedResources")
+          add("NonConstantResourceId")
+          add("NotifyDataSetChanged")
+        }
+        lintConfig = target.rootProject.file("lintConfig.xml")
       }
     }
   }
@@ -179,7 +185,6 @@ class AllProjectConfigurer {
       implementation(Libs.navigation_fragment_ktx)
       implementation(Libs.navigation_ui_ktx)
       androidTestImplementation(Libs.navigation_testing)
-      implementation(Libs.okhttp)
       implementation(Libs.logging_interceptor)
       implementation(Libs.retrofit)
       implementation(Libs.adapter_rxjava2)
@@ -202,6 +207,7 @@ class AllProjectConfigurer {
       implementation(Libs.rxandroid)
       implementation(Libs.rxjava)
       implementation(Libs.preference_ktx)
+      implementation(Libs.material_show_case_view)
     }
   }
 }

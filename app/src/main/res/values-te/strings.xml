@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Rishitha 1238
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">మీ ఫైల్ సిస్టమ్ 4GB కంటే ఎక్కువ ఉన్న ఫైల్‌లకు మద్దతు ఇవ్వదు</string>
+  <string name="detecting_file_system">ఫైల్ సిస్టమ్ 4GB ఫైల్‌లను సృష్టించగలదా అని గుర్తించడం</string>
+  <string name="cannot_open_file">ఫైల్‌ను తెరవడంలో విఫలమైంది\nదయచేసి మీ లైబ్రరీ యొక్క పరికరం ట్యాబ్‌లో ఈ ఫైల్ కోసం వెతకడానికి ప్రయత్నించండి</string>
+  <string name="send_files_title">ఫైల్‌లను పంపండి</string>
+  <string name="receive_files_title">ఫైల్‌లను స్వీకరించండి</string>
+  <string name="no_app_found_to_open">జిమ్ ఫైల్‌ని ఎంచుకోవడానికి యాప్ ఏదీ కనుగొనబడలేదు!</string>
+  <string name="select_zim_file">చదవడానికి జిమ్ ఫైల్‌ని ఎంచుకోండి</string>
+</resources>

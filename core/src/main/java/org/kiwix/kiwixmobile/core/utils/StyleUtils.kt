@@ -18,8 +18,6 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.content.Context
-import android.os.Build.VERSION
-import android.os.Build.VERSION_CODES
 import android.text.Html
 import android.text.Spanned
 import android.util.AttributeSet
@@ -43,14 +41,12 @@ object StyleUtils {
     return Xml.asAttributeSet(parser)
   }
 
-  @Suppress("DEPRECATION")
   @JvmStatic fun String?.fromHtml(): Spanned {
     return (this ?: "").let {
-      if (VERSION.SDK_INT >= VERSION_CODES.N) Html.fromHtml(
+      Html.fromHtml(
         this,
         Html.FROM_HTML_MODE_LEGACY
       )
-      else Html.fromHtml(this)
     }
   }
 }

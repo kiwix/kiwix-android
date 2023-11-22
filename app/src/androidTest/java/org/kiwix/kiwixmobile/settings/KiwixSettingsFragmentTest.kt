@@ -45,11 +45,15 @@ class KiwixSettingsFragmentTest {
   @get:Rule
   var activityScenarioRule = ActivityScenarioRule(KiwixMainActivity::class.java)
 
-  @Rule @JvmField var readPermissionRule: GrantPermissionRule =
-    GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE)
+  private val permissions = arrayOf(
+    Manifest.permission.READ_EXTERNAL_STORAGE,
+    Manifest.permission.WRITE_EXTERNAL_STORAGE
+  )
 
-  @Rule @JvmField var writePermissionRule: GrantPermissionRule =
-    GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+  @Rule
+  @JvmField
+  var permissionRules: GrantPermissionRule =
+    GrantPermissionRule.grant(*permissions)
 
   @Before
   fun setup() {

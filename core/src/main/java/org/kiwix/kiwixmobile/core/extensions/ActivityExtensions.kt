@@ -37,7 +37,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.observe
 import androidx.navigation.NavDirections
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -165,4 +164,10 @@ object ActivityExtensions {
       )
     }
   }
+
+  /**
+   * Checks if the package name of the current activity's application is not equal to 'org.kiwix.kiwixmobile',
+   * indicating that it is a custom application.
+   */
+  fun Activity.isCustomApp(): Boolean = packageName != "org.kiwix.kiwixmobile"
 }

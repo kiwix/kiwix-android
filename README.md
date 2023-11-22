@@ -13,9 +13,29 @@ is to make Wikipedia available offline. This is done by reading the
 content of a file in the ZIM format, a highly compressed open format
 with additional metadata.
 
-This is the version for Android, with support versions ranging from 5
+This is the version for Android, with support versions ranging from 7
 to 13 (like [mentioned
 here](https://github.com/kiwix/kiwix-android/blob/develop/buildSrc/src/main/kotlin/Config.kt)).
+
+**Important Note**: Starting from Android 11, the ZIM file picker
+feature has been restricted in the Play Store variant due to Play
+Store policies.  This means that users running Android 11 and above
+will not be able to load ZIM files from internal/external storage
+directly within the app if they have downloaded Kiwix from the Google
+Play Store.  This restriction is in place to comply with the Play
+Store policies.  The Play Store variant of Kiwix does not require the
+`MANAGE_EXTERNAL_STORAGE` permission anymore, which is necessary to
+scan storage and access ZIM files at arbitrary locations.  Therefore,
+the storage scanning & file picking functionalities are not available
+in this variant anymore.  To use the full version of Kiwix and benefit
+of the ZIM file picker feature, you can download it directly from the
+[official
+repository](https://download.kiwix.org/release/kiwix-android/) or use
+[F-Droid](https://fdroid.kiwix.org). We understand that this
+restriction may cause inconvenience, but it is necessary to comply
+with the Play Store policies and ensure a smooth user experience.  We
+recommend using the official version of the app available on our
+website to access the complete set of features.
 
 Kiwix Android is written in [Kotlin](https://kotlinlang.org/)
 
@@ -43,13 +63,14 @@ If you are interested in our custom apps they have their own repo [kiwix-android
 
 ## Libraries Used
 
+- [Libkiwix](https://github.com/kiwix/java-libkiwix) - Kotlin/Java binding for the core Kiwix library
 - [Dagger 2](https://github.com/google/dagger) - A fast dependency injector for Android and Java
 - [Retrofit](https://square.github.io/retrofit/) - Retrofit turns your REST API into a Java interface
 - [OkHttp](https://github.com/square/okhttp) - An HTTP+SPDY client for Android and Java applications
 - [Butterknife](https://jakewharton.github.io/butterknife/) - View "injection" library for Android
 - [Mockito](https://github.com/mockito/mockito) - Most popular Mocking framework for unit tests written in Java
 - [RxJava](https://github.com/ReactiveX/RxJava) - Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.
-- [ObjectBox](https://github.com/objectbox/objectbox-java) - Reactive NoSQL Databse
+- [ObjectBox](https://github.com/objectbox/objectbox-java) - Reactive NoSQL Database
 - [MockK](https://github.com/mockk/mockk) - Kotlin mocking library that allows mocking of final classes by default.
 - [JUnit5](https://github.com/junit-team/junit5/) - The next generation of JUnit
 - [AssertJ](https://github.com/joel-costigliola/assertj-core) - Fluent assertions for test code

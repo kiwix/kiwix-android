@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.custom.main
 
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -52,6 +53,8 @@ class CustomMainActivity : CoreMainActivity() {
     activityCustomMainBinding.customNavController
   }
 
+  override val mainActivity: AppCompatActivity by lazy { this }
+
   override val searchFragmentResId: Int = R.id.searchFragment
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val settingsFragmentResId: Int = R.id.customSettingsFragment
@@ -59,6 +62,8 @@ class CustomMainActivity : CoreMainActivity() {
   override val historyFragmentResId: Int = R.id.historyFragment
   override val notesFragmentResId: Int = R.id.notesFragment
   override val helpFragmentResId: Int = R.id.helpFragment
+  override val zimHostFragmentResId: Int = R.id.zimHostFragment
+  override val navGraphId: Int = R.navigation.custom_nav_graph
   override val cachedComponent by lazy { customActivityComponent }
   override val topLevelDestinations =
     setOf(R.id.customReaderFragment)
@@ -90,12 +95,20 @@ class CustomMainActivity : CoreMainActivity() {
   override fun setupDrawerToggle(toolbar: Toolbar) {
     super.setupDrawerToggle(toolbar)
     activityCustomMainBinding.drawerNavView.apply {
+      /**
+       * Hide the 'ZimHostFragment' option from the navigation menu
+       * because we are now using fd (FileDescriptor)
+       * to read the zim file from the asset folder. Currently,
+       * 'KiwixServer' is unable to host zim files via fd.
+       * This feature is temporarily hidden for custom apps.
+       * We will re-enable it for custom apps once the issue is resolved.
+       * For more info see https://github.com/kiwix/kiwix-android/pull/3516
+       */
+      menu.findItem(R.id.menu_host_books)?.isVisible = false
       setNavigationItemSelectedListener { item ->
         closeNavigationDrawer()
         onNavigationItemSelected(item)
       }
-      menu.findItem(R.id.menu_host_books)
-        .isVisible = false
     }
   }
 

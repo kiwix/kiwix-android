@@ -37,6 +37,7 @@ internal class StartSpeechInputTest {
 
   private val actions = mockk<Channel<Action>>(relaxed = true)
 
+  @Suppress("DEPRECATION")
   @Test
   fun `when invoke with throws exception offer StartSpeechInputFailed action`() {
     val activity = mockk<AppCompatActivity>(relaxed = true)
@@ -45,6 +46,7 @@ internal class StartSpeechInputTest {
     verify { actions.trySend(StartSpeechInputFailed).isSuccess }
   }
 
+  @Suppress("DEPRECATION")
   @Test
   fun `invoke with starts an activity for speech recognition`() {
     val activity = mockk<AppCompatActivity>()

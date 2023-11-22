@@ -80,11 +80,6 @@ object Libs {
     Versions.com_squareup_okhttp3
 
   /**
-   * https://square.github.io/okhttp/
-   */
-  const val okhttp: String = "com.squareup.okhttp3:okhttp:" + Versions.com_squareup_okhttp3
-
-  /**
    * https://kotlinlang.org/
    */
   const val kotlin_gradle_plugin: String = "org.jetbrains.kotlin:kotlin-gradle-plugin:" +
@@ -315,9 +310,9 @@ object Libs {
   const val core_ktx: String = "androidx.core:core-ktx:" + Versions.core_ktx
 
   /**
-   * https://github.com/kiwix/kiwix-lib
+   * https://github.com/kiwix/java-libkiwix
    */
-  const val kiwixlib: String = "org.kiwix.kiwixlib:kiwixlib:" + Versions.kiwixlib
+  const val libkiwix: String = "org.kiwix:libkiwix:" + Versions.libkiwix
 
   /**
    * https://github.com/material-components/material-components-android
@@ -344,4 +339,9 @@ object Libs {
    * https://developer.android.com/testing
    */
   const val junit: String = "androidx.test.ext:junit:" + Versions.junit
+
+  /**
+   * https://github.com/deano2390/MaterialShowcaseView
+   */
+  const val material_show_case_view: String = "com.github.deano2390:MaterialShowcaseView:" + Versions.material_show_case_view
 }

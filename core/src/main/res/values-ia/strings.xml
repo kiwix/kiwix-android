@@ -47,6 +47,8 @@
   <string name="hotspot_notification_content_title">Puncto de accesso a Kiwix</string>
   <string name="start_server_label">Initiar servitor</string>
   <string name="stop_server_label">Stoppar servitor</string>
+  <string name="error_server_already_running">Le servitor es ja in execution. Per favor disactiva lo e re-tenta.</string>
+  <string name="error_ip_address_not_found">Non poteva trovar le adresse IP.</string>
   <string name="server_started_message">Entra iste adresse IP in tu navigator pro acceder al servitor %s</string>
   <string name="share_host_address">Condivider le URL via altere applicationes</string>
   <string name="error_file_not_found">Error: Le file ZIM seligite non poteva esser trovate.</string>
@@ -207,6 +209,7 @@
   <string name="complete">Complete</string>
   <string name="paused_state">Pausate</string>
   <string name="failed_state">Fallite: %s</string>
+  <string name="custom_download_error_message_for_authentication_failed">Le file ZIM non poteva esser discargate. Per favor tenta reinstallar le application a partir del Play Store.</string>
   <string name="save">Salveguardar</string>
   <string name="note">Nota</string>
   <string name="wiki_article_title">Titulo del articulo wiki</string>
@@ -319,4 +322,8 @@
   <string name="navigation_history_cleared">Historia de navigation radite</string>
   <string name="go_to_settings_label">Ir al parametros</string>
   <string name="request_notification_permission_message">Pro exequer iste action, per favor concede accesso de notification</string>
+  <string name="click_nearby_devices_message">Clicca hic pro cercar apparatos a proximitate.</string>
+  <string name="your_device_name_message">Le nomine de tu apparato apparera hic.</string>
+  <string name="nearby_devices_list_message">Hic apparera un lista de apparatos a proximitate. Tocca le nomine de un apparato pro transferer un file.</string>
+  <string name="transfer_zim_files_list_message">Hic apparera le lista de files ZIM disponibile a transferer.</string>
 </resources>

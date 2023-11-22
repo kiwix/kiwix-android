@@ -19,10 +19,10 @@
 package org.kiwix.kiwixmobile.core.utils.dialog
 
 import android.app.Activity
-import android.net.wifi.WifiConfiguration
 import android.view.View
 import org.kiwix.kiwixmobile.core.R
 
+@Suppress("LongParameterList")
 sealed class KiwixDialog(
   val title: Int?,
   val message: Int?,
@@ -123,8 +123,8 @@ sealed class KiwixDialog(
       null
     ),
     HasBodyFormatArgs {
-    constructor(wifiConfiguration: WifiConfiguration) : this(
-      listOf(wifiConfiguration.SSID, wifiConfiguration.preSharedKey)
+    constructor(ssid: String, preSharedKey: String) : this(
+      listOf(ssid, preSharedKey)
     )
   }
 
@@ -224,6 +224,14 @@ sealed class KiwixDialog(
     R.string.select_folder,
     null,
     android.R.string.ok,
+    null,
+    getView = customGetView
+  )
+
+  data class StartServer(val customGetView: (() -> View)?) : KiwixDialog(
+    R.string.progress_dialog_starting_server,
+    null,
+    R.string.empty_string,
     null,
     getView = customGetView
   )

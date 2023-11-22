@@ -18,11 +18,6 @@ plugins {
 plugins.apply(KiwixConfigurationPlugin::class)
 apply(plugin = "io.objectbox")
 apply(plugin = "com.jakewharton.butterknife")
-ext {
-  set("versionMajor", 3)
-  set("versionMinor", 7)
-  set("versionPatch", 1)
-}
 
 /*
 * max version code: 21-0-0-00-00-00
@@ -38,9 +33,9 @@ ext {
 
 fun generateVersionCode() =
   20 * 10000 +
-    ext["versionMajor"] as Int * 10000 +
-    ext["versionMinor"] as Int * 100 +
-    ext["versionPatch"] as Int
+    Config.versionMajor * 10000 +
+    Config.versionMinor * 100 +
+    Config.versionPatch
 
 android {
   defaultConfig {
@@ -61,7 +56,7 @@ dependencies {
 
   // Get kiwixlib online if it is not populated locally
   if (!shouldUseLocalVersion()) {
-    api(Libs.kiwixlib)
+    api(Libs.libkiwix)
   } else {
     implementation("com.getkeepsafe.relinker:relinker:1.4.5")
     api(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))

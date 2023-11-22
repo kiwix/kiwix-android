@@ -20,6 +20,9 @@ package org.kiwix.kiwixmobile.core.search.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.reactivex.BackpressureStrategy.LATEST
+import io.reactivex.Flowable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
@@ -59,6 +62,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScree
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
+import org.kiwix.libzim.SuggestionSearch
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -69,7 +73,15 @@ class SearchViewModel @Inject constructor(
 ) : ViewModel() {
 
   private val initialState: SearchState =
-    SearchState("", SearchResultsWithTerm("", emptyList()), emptyList(), FromWebView)
+    SearchState(
+      "",
+      SearchResultsWithTerm(
+        "",
+        null
+      ),
+      emptyList(),
+      FromWebView
+    )
   val state: MutableStateFlow<SearchState> = MutableStateFlow(initialState)
   private val _effects = Channel<SideEffect<*>>()
   val effects = _effects.receiveAsFlow()
@@ -82,6 +94,7 @@ class SearchViewModel @Inject constructor(
     viewModelScope.launch { actionMapper() }
   }
 
+  @Suppress("DEPRECATION")
   private suspend fun reducer() {
     combine(
       filter.asFlow(),
@@ -97,6 +110,7 @@ class SearchViewModel @Inject constructor(
       .collect { state.value = it }
   }
 
+  @Suppress("DEPRECATION")
   private fun searchResults() = filter.asFlow()
     .mapLatest {
       val zimFileReader = zimReaderContainer.copyReader()
@@ -122,6 +136,7 @@ class SearchViewModel @Inject constructor(
           actions
         )
       ).isSuccess
+
       ReceivedPromptForSpeechInput -> _effects.trySend(StartSpeechInput(actions)).isSuccess
       StartSpeechInputFailed -> _effects.trySend(ShowToast(R.string.speech_not_supported)).isSuccess
       is ActivityResultReceived ->
@@ -133,6 +148,7 @@ class SearchViewModel @Inject constructor(
             actions
           )
         ).isSuccess
+
       is ScreenWasStartedFrom -> searchOrigin.trySendBlocking(it.searchOrigin)
     }
   }
@@ -154,11 +170,37 @@ class SearchViewModel @Inject constructor(
       SaveSearchToRecents(
         recentSearchDao,
         searchListItem,
-        zimReaderContainer.id
+        zimReaderContainer.id,
+        viewModelScope
       )
     ).isSuccess
     _effects.trySendBlocking(OpenSearchItem(searchListItem, openInNewTab))
   }
+
+  /**
+   * Loads more search results starting from a specified index.
+   *
+   * @param startIndex The index from which to start loading more results.
+   * @param existingSearchList The existing list of search results, if any, to check for duplicates.
+   *
+   * @return A Flowable emitting a list of non-duplicate search results or null if there are no more results.
+   */
+  fun loadMoreSearchResults(
+    startIndex: Int,
+    existingSearchList: List<SearchListItem>?
+  ): Flowable<List<SearchListItem.RecentSearchListItem>?> {
+    return Flowable.create({ emitter ->
+      val searchResults = state.value.getVisibleResults(startIndex)
+
+      val nonDuplicateResults = searchResults?.filter { newItem ->
+        existingSearchList?.none { it == newItem } ?: true
+      }
+      // Emit the non duplicate data to the Flowable's subscribers
+      emitter.onNext(nonDuplicateResults)
+      emitter.onComplete()
+    }, LATEST)
+      .subscribeOn(Schedulers.io())
+  }
 }
 
-data class SearchResultsWithTerm(val searchTerm: String, val results: List<SearchListItem>)
+data class SearchResultsWithTerm(val searchTerm: String, val suggestionSearch: SuggestionSearch?)

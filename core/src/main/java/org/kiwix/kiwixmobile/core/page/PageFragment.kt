@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.databinding.FragmentPageBinding
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
@@ -69,6 +70,10 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   abstract val pageAdapter: PageAdapter
   abstract val switchIsChecked: Boolean
   private var fragmentPageBinding: FragmentPageBinding? = null
+  override val fragmentToolbar: Toolbar? by lazy {
+    fragmentPageBinding?.root?.findViewById(R.id.toolbar)
+  }
+  override val fragmentTitle: String? by lazy { screenTitle }
 
   private val actionModeCallback: ActionMode.Callback =
     object : ActionMode.Callback {
@@ -135,19 +140,14 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     fragmentPageBinding?.recyclerView?.layoutManager =
       LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
     fragmentPageBinding?.recyclerView?.adapter = pageAdapter
-    val toolbar = fragmentPageBinding?.root?.findViewById<Toolbar>(R.id.toolbar)
-    toolbar?.apply {
-      activity.setSupportActionBar(this)
-      setNavigationOnClickListener { requireActivity().onBackPressed() }
-    }
-    activity.supportActionBar?.apply {
-      setDisplayHomeAsUpEnabled(true)
-      title = screenTitle
-    }
     fragmentPageBinding?.noPage?.text = noItemsString
 
-    fragmentPageBinding?.pageSwitch?.text = switchString
-    fragmentPageBinding?.pageSwitch?.isChecked = switchIsChecked
+    fragmentPageBinding?.pageSwitch?.apply {
+      text = switchString
+      isChecked = switchIsChecked
+      // hide switches for custom apps, see more info here https://github.com/kiwix/kiwix-android/issues/3523
+      visibility = if (requireActivity().isCustomApp()) GONE else VISIBLE
+    }
     compositeDisposable.add(pageViewModel.effects.subscribe { it.invokeWith(activity) })
     fragmentPageBinding?.pageSwitch?.setOnCheckedChangeListener { _, isChecked ->
       pageViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))

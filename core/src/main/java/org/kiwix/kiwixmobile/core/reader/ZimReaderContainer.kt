@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.reader
 
+import android.content.res.AssetFileDescriptor
 import android.webkit.WebResourceResponse
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
@@ -42,6 +43,16 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
       else null
   }
 
+  fun setZimFileDescriptor(
+    assetFileDescriptor: AssetFileDescriptor,
+    filePath: String? = null
+  ) {
+    zimFileReader =
+      if (assetFileDescriptor.parcelFileDescriptor.dup().fileDescriptor.valid())
+        zimFileReaderFactory.create(assetFileDescriptor, filePath)
+      else null
+  }
+
   fun getPageUrlFromTitle(title: String) = zimFileReader?.getPageUrlFrom(title)
 
   fun getRandomArticleUrl() = zimFileReader?.getRandomArticleUrl()
@@ -50,7 +61,7 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
   fun load(url: String, requestHeaders: Map<String, String>): WebResourceResponse {
     val data = zimFileReader?.load(url)
     return WebResourceResponse(
-      zimFileReader?.readContentAndMimeType(url),
+      zimFileReader?.getMimeTypeFromUrl(url),
       Charsets.UTF_8.name(),
       data
     )
@@ -73,14 +84,21 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
   }
 
   fun copyReader(): ZimFileReader? = zimFile?.let(zimFileReaderFactory::create)
+    ?: assetFileDescriptor?.let(zimFileReaderFactory::create)
 
   val zimFile get() = zimFileReader?.zimFile
 
-  val zimCanonicalPath get() = zimFileReader?.zimFile?.canonicalPath
+  val assetFileDescriptor get() = zimFileReader?.assetFileDescriptor
+
+  /**
+   * Return the zimFile path if opened from file else return the filePath of assetFileDescriptor
+   */
+  val zimCanonicalPath
+    get() = zimFileReader?.zimFile?.canonicalPath ?: zimFileReader?.assetDescriptorFilePath
   val zimFileTitle get() = zimFileReader?.title
   val mainPage get() = zimFileReader?.mainPage
   val id get() = zimFileReader?.id
-  val fileSize get() = zimFileReader?.fileSize ?: 0
+  val fileSize get() = zimFileReader?.fileSize ?: 0L
   val creator get() = zimFileReader?.creator
   val publisher get() = zimFileReader?.publisher
   val name get() = zimFileReader?.name

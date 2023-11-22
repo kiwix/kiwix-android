@@ -68,11 +68,11 @@ class KiwixPrefsFragment : CorePrefsFragment() {
       showPermissionPreference()
       val externalStorageManager = Environment.isExternalStorageManager()
       if (externalStorageManager) {
-        permissionPref!!.setSummary(org.kiwix.kiwixmobile.core.R.string.allowed)
+        permissionPref?.setSummary(org.kiwix.kiwixmobile.core.R.string.allowed)
       } else {
-        permissionPref!!.setSummary(org.kiwix.kiwixmobile.core.R.string.not_allowed)
+        permissionPref?.setSummary(org.kiwix.kiwixmobile.core.R.string.not_allowed)
       }
-      permissionPref.onPreferenceClickListener =
+      permissionPref?.onPreferenceClickListener =
         Preference.OnPreferenceClickListener {
           activity?.let(FragmentActivity::navigateToSettings)
           true
@@ -84,7 +84,7 @@ class KiwixPrefsFragment : CorePrefsFragment() {
     val preferenceCategory = findPreference<PreferenceCategory>(
       PREF_PERMISSION
     )
-    preferenceCategory!!.isVisible = true
+    preferenceCategory?.isVisible = true
   }
 
   companion object {

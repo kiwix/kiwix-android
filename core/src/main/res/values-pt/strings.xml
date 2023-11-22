@@ -162,7 +162,7 @@
   <string name="time_left">esquerda</string>
   <string name="time_today">Hoje</string>
   <string name="time_yesterday">Ontem</string>
-  <string name="pref_external_link_popup_title">Avisar quando introduzir hiperligações externas</string>
+  <string name="pref_external_link_popup_title">Avisar quando seguir hiperligações externas</string>
   <string name="pref_external_link_popup_summary">Mostrar os cartões flutuantes para avisar sobre os custos adicionais ou quando não funcionar nas hiperligações quando desligadas.</string>
   <string name="external_link_popup_dialog_title">Acesso a uma ligação externa!</string>
   <string name="external_link_popup_dialog_message">Está a aceder a uma hiperligação externa. Isto pode acarretar custos adicionais para a transferência de dados ou simplesmente não funcionará quando estiver desligado. Deseja realmente continuar?</string>

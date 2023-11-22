@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.main
 
 import androidx.core.content.edit
+import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
@@ -30,6 +31,7 @@ import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.help.HelpRobot
+import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
 import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryRobot
 import org.kiwix.kiwixmobile.settings.SettingsRobot
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -58,19 +60,21 @@ class TopLevelDestinationTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.PREF_EXTERNAL_LINK_POPUP, true)
+      putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, false)
+    }
+    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+      moveToState(Lifecycle.State.RESUMED)
     }
   }
 
   @Test
   fun testTopLevelDestination() {
-    ActivityScenario.launch(KiwixMainActivity::class.java)
     topLevel {
       clickReaderOnBottomNav {
       }
       clickLibraryOnBottomNav {
         assertGetZimNearbyDeviceDisplayed()
-        clickFileTransferIcon {
-        }
+        clickFileTransferIcon(LocalFileTransferRobot::assertReceiveFileTitleVisible)
       }
       clickDownloadOnBottomNav(OnlineLibraryRobot::assertLibraryListDisplayed)
       clickBookmarksOnNavDrawer {
@@ -97,6 +101,7 @@ class TopLevelDestinationTest : BaseActivityTest() {
   fun setIsTestPreference() {
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, false)
+      putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, true)
     }
   }
 }

@@ -66,7 +66,7 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
   }
 
   private fun viewStateReducer(): Disposable =
-    actions.map { reduce(it, state.value!!) }
+    actions.map { state.value?.let { value -> reduce(it, value) } }
       .subscribe(state::postValue, Throwable::printStackTrace)
 
   protected fun addDisposablesToCompositeDisposable() {

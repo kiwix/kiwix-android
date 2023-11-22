@@ -101,19 +101,23 @@ class FetchDownloadNotificationManager(private val context: Context) :
           .addAction(
             R.drawable.fetch_notification_cancel,
             context.getString(R.string.cancel),
-            getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.CANCEL)
+            getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.DELETE)
+          ).addAction(
+            R.drawable.fetch_notification_pause,
+            context.getString(R.string.tts_pause),
+            getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.PAUSE)
           )
       downloadNotification.isPaused ->
         notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
           .addAction(
             R.drawable.fetch_notification_resume,
-            context.getString(R.string.fetch_notification_download_resume),
+            context.getString(R.string.tts_resume),
             getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.RESUME)
           )
           .addAction(
             R.drawable.fetch_notification_cancel,
             context.getString(R.string.cancel),
-            getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.CANCEL)
+            getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.DELETE)
           )
       downloadNotification.isQueued ->
         notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
@@ -142,11 +146,7 @@ class FetchDownloadNotificationManager(private val context: Context) :
       else -> ACTION_TYPE_INVALID
     }
     intent.putExtra(EXTRA_ACTION_TYPE, action)
-    val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-    } else {
-      PendingIntent.FLAG_UPDATE_CURRENT
-    }
+    val flags = PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     return PendingIntent.getBroadcast(
       context,
       downloadNotification.notificationId + action,
@@ -166,11 +166,8 @@ class FetchDownloadNotificationManager(private val context: Context) :
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         putExtra(DOWNLOAD_NOTIFICATION_TITLE, downloadNotification.title)
       }
-      val pendingIntent = if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
+      val pendingIntent =
         getActivity(context, 0, internal, FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT)
-      } else {
-        getActivity(context, 0, internal, FLAG_UPDATE_CURRENT)
-      }
       notificationBuilder.setContentIntent(pendingIntent)
       notificationBuilder.setAutoCancel(true)
     }

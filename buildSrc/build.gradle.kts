@@ -23,6 +23,7 @@ dependencies {
   }
   implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.20.0")
   implementation("com.googlecode.json-simple:json-simple:1.1")
+  implementation("com.squareup.okhttp3:okhttp:4.9.0")
 
   implementation(gradleApi())
   implementation(localGroovy())

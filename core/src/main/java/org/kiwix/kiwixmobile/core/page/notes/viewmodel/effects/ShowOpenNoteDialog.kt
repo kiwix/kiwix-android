@@ -45,8 +45,13 @@ data class ShowOpenNoteDialog(
       { effects.offer(OpenPage(page, zimReaderContainer)) },
       {
         val item = page as NoteListItem
-        val file = File(item.zimFilePath.orEmpty())
-        zimReaderContainer.setZimFile(file)
+        // Check if zimFilePath is not null, and then set it in zimReaderContainer.
+        // For custom apps, we are currently using fileDescriptor, and they only have a single file in them,
+        // which is already set in zimReaderContainer, so there's no need to set it again.
+        item.zimFilePath?.let {
+          val file = File(it)
+          zimReaderContainer.setZimFile(file)
+        }
         effects.offer(OpenNote(item.noteFilePath, item.zimUrl, item.title))
       }
     )

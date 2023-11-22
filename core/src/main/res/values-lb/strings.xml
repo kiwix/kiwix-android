@@ -35,6 +35,8 @@
   <string name="hotspot_notification_content_title">Kiwix-Hotspot</string>
   <string name="start_server_label">Server starten</string>
   <string name="stop_server_label">Server stoppen</string>
+  <string name="error_server_already_running">De Server leeft schonn. Maacht e wgl. aus a probéiert nach eng Kéier.</string>
+  <string name="error_ip_address_not_found">IP-Adress konnt net fonnt ginn.</string>
   <string name="server_started_message">Gitt dës IP-Adress an Äre Browser a fir op de Server %s zouzegräifen</string>
   <string name="share_host_address">URL mat aneren Applikatiounen deelen</string>
   <string name="error_file_not_found">Feeler: Déi ausgewielten ZIM-Datei konnt net fonnt ginn.</string>
@@ -52,6 +54,7 @@
   <string name="pref_credits">Auteuren a Lizenzen</string>
   <string name="tts_lang_not_supported">D\'Sprooch vun dëser Säit gëtt net ënnerstëtzt. Et ass méiglech, datt den Artikel net richteg gelies ka ginn.</string>
   <string name="delete_recent_search_item">Dëst Element läschen?</string>
+  <string name="pref_clear_all_history_title">Historique läschen</string>
   <string name="pref_notes">Notizen</string>
   <string name="pref_permission">Autorisatiounen</string>
   <string name="pref_clear_all_bookmarks_title">Lieszeechen ewechhuelen</string>
@@ -94,6 +97,8 @@
   <string name="help_4">Wärend Kiwix ursprénglech entwéckelt gouf fir d\'Wikipedia offline unzebidden, kann et awer och aner Inhalter liesen.</string>
   <string name="help_5">Wou ass den Inhalt\'</string>
   <string name="help_6">Eisen Inhalt ass um Kiwix Internetsite gehost.</string>
+  <string name="help_8">• Wikipedia ass fir all Sprooch separat verfügbar</string>
+  <string name="help_9">• Aner Inhalter wéi Wikileaks oder Wikisource sinn och verfügbar</string>
   <string name="pref_current_folder">Aktuelle Repertoire</string>
   <string name="tts_resume">virufueren</string>
   <string name="stop">stopp</string>

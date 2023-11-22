@@ -18,18 +18,15 @@
 
 package org.kiwix.kiwixmobile.zimManager.libraryView.adapter
 
-import android.annotation.SuppressLint
-import android.view.Gravity
 import android.view.View
-import android.view.View.MeasureSpec
-import android.widget.Toast
-import androidx.annotation.StringRes
 import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.setBitmap
+import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.setTextAndVisibility
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.zim_manager.KiloByte
 import org.kiwix.kiwixmobile.databinding.ItemDownloadBinding
@@ -75,9 +72,10 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
         else
           View.VISIBLE
       itemLibraryBinding.unableToDownload.setOnLongClickListener {
+        val context = itemLibraryBinding.root.context
         when (item.fileSystemState) {
-          CannotWrite4GbFile -> it.centreToast(R.string.file_system_does_not_support_4gb)
-          DetectingFileSystem -> it.centreToast(R.string.detecting_file_system)
+          CannotWrite4GbFile -> context.toast(R.string.file_system_does_not_support_4gb)
+          DetectingFileSystem -> context.toast(R.string.detecting_file_system)
           else -> {
             if (item.canBeDownloaded && !hasAvailableSpaceInStorage) {
               clickAction.invoke(item)
@@ -93,7 +91,8 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
 
   class DownloadViewHolder(
     private val itemDownloadBinding: ItemDownloadBinding,
-    private val clickAction: (LibraryDownloadItem) -> Unit
+    private val clickAction: (LibraryDownloadItem) -> Unit,
+    private val pauseResumeClickAction: (LibraryDownloadItem) -> Unit
   ) :
     LibraryViewHolder<LibraryDownloadItem>(itemDownloadBinding.root) {
 
@@ -103,8 +102,18 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
       itemDownloadBinding.libraryDownloadDescription.text = item.description
       itemDownloadBinding.downloadProgress.progress = item.progress
       itemDownloadBinding.stop.setOnClickListener { clickAction.invoke(item) }
+      itemDownloadBinding.pauseResume.setOnClickListener {
+        pauseResumeClickAction.invoke(item)
+      }
       itemDownloadBinding.downloadState.text =
-        item.downloadState.toReadableState(containerView.context)
+        item.downloadState.toReadableState(containerView.context).also {
+          val pauseResumeIconId = if (it == "Paused") {
+            R.drawable.ic_play_24dp
+          } else {
+            R.drawable.ic_pause_24dp
+          }
+          itemDownloadBinding.pauseResume.setImageDrawableCompat(pauseResumeIconId)
+        }
       if (item.currentDownloadState == Status.FAILED) {
         clickAction.invoke(item)
       }
@@ -118,22 +127,4 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
       libraryDividerBinding.dividerText.setText(item.stringId)
     }
   }
-}
-
-@SuppressLint("ShowToast")
-private fun View.centreToast(@StringRes id: Int) {
-  val locationXAndY = intArrayOf(0, 0)
-  getLocationOnScreen(locationXAndY)
-  val midX = locationXAndY[0] + width / 2
-  val midY = locationXAndY[1] + height / 2
-  Toast.makeText(context, id, Toast.LENGTH_LONG).apply {
-    view?.let { view ->
-      view.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED)
-      setGravity(
-        Gravity.TOP or Gravity.START,
-        midX - view.measuredWidth / 2,
-        midY - view.measuredHeight
-      )
-    }
-  }.show()
 }

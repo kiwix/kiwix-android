@@ -19,8 +19,10 @@
 package org.kiwix.kiwixmobile.core.compat
 
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.net.ConnectivityManager
 
 /**
  * This interface defines a set of functions that are not available on all platforms.
@@ -30,7 +32,7 @@ import android.content.pm.ResolveInfo
  *
  *
  * Each implementation ends with a `V<n>` suffix, identifying the minimum API version on which this implementation
- * can be used. For example, see [CompatV21].
+ * can be used. For example, see [CompatV24].
  *
  *
  * Each implementation `CompatVn` should extend the implementation `CompatVm` for the greatest m<n such that `CompatVm`
@@ -64,4 +66,14 @@ interface Compat {
     intent: Intent,
     flags: ResolveInfoFlagsCompat
   ): List<ResolveInfo>
+
+  fun getPackageInformation(
+    packageName: String,
+    packageManager: PackageManager,
+    flag: Int
+  ): PackageInfo
+
+  fun isNetworkAvailable(connectivity: ConnectivityManager): Boolean
+
+  fun isWifi(connectivity: ConnectivityManager): Boolean
 }

@@ -18,7 +18,9 @@
 
 package org.kiwix.kiwixmobile.language.viewmodel
 
+import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.app.AppCompatActivity
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.schedulers.Schedulers
@@ -35,11 +37,14 @@ class SaveLanguagesAndFinishTest {
     setScheduler(Schedulers.trampoline())
     val languageDao = mockk<NewLanguagesDao>()
     val activity = mockk<AppCompatActivity>()
+    val onBackPressedDispatcher = mockk<OnBackPressedDispatcher>()
+    every { activity.onBackPressedDispatcher } returns onBackPressedDispatcher
+    every { onBackPressedDispatcher.onBackPressed() } answers { }
     val languages = listOf<Language>()
     SaveLanguagesAndFinish(languages, languageDao).invokeWith(activity)
     verify {
       languageDao.insert(languages)
-      activity.onBackPressed()
+      onBackPressedDispatcher.onBackPressed()
     }
     resetSchedulers()
   }

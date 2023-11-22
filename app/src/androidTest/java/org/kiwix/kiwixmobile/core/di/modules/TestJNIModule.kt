@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.di.modules
 import dagger.Module
 import dagger.Provides
 import io.mockk.mockk
-import org.kiwix.kiwixlib.JNIKiwix
+import org.kiwix.libkiwix.JNIKiwix
 import javax.inject.Singleton
 
 /**

@@ -18,6 +18,7 @@
     <ID>MagicNumber:ArticleCount.kt$ArticleCount$3</ID>
     <ID>MagicNumber:CompatFindActionModeCallback.kt$CompatFindActionModeCallback$100</ID>
     <ID>MagicNumber:DownloadItem.kt$DownloadItem$1000L</ID>
+    <ID>MagicNumber:SearchState.kt$SearchState$100</ID>
     <ID>MagicNumber:DownloaderModule.kt$DownloaderModule$5</ID>
     <ID>MagicNumber:FetchDownloadNotificationManager.kt$FetchDownloadNotificationManager$100</ID>
     <ID>MagicNumber:FetchDownloadRequester.kt$10</ID>
@@ -31,11 +32,13 @@
     <ID>MagicNumber:Seconds.kt$Seconds$60</ID>
     <ID>MagicNumber:Seconds.kt$Seconds$60.0</ID>
     <ID>MagicNumber:TabsAdapter.kt$TabsAdapter$8</ID>
+    <ID>MagicNumber:ZimFileReader.kt$ZimFileReader$1024</ID>
     <ID>MatchingDeclarationName:PageTestHelpers.kt$PageImpl : Page</ID>
     <ID>MaxLineLength:BookUtilsTest.kt$BookUtilsTest$// this case uses the result from the container nested class inside LanguageUtils. It will be tested in LanguageUtilsTest</ID>
     <ID>MaxLineLength:MetaLinkNetworkEntityTest.kt$MetaLinkNetworkEntityTest$"http://www.mirrorservice.org/sites/download.kiwix.org/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"</ID>
     <ID>MaxLineLength:NetworkUtilsTest.kt$NetworkUtilsTest$// Here the Method should return the substring between the first '?' character and the nearest '/' character preceeding it</ID>
     <ID>NestedBlockDepth:FileUtils.kt$FileUtils$@JvmStatic @Synchronized fun deleteZimFile(path: String)</ID>
+    <ID>NestedBlockDepth:FileUtils.kt$FileUtils$@JvmStatic fun getLocalFilePathByUri( context: Context, uri: Uri ): String?</ID>
     <ID>NestedBlockDepth:ImageUtils.kt$ImageUtils$private fun getBitmapFromView(width: Int, height: Int, viewToDrawFrom: View): Bitmap?</ID>
     <ID>NestedBlockDepth:JNIInitialiser.kt$JNIInitialiser$private fun loadICUData(context: Context): String?</ID>
     <ID>NestedBlockDepth:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$override fun onFling( e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float ): Boolean</ID>
@@ -51,6 +54,11 @@
     <ID>PackageNaming:MountPointProducer.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>PackageNaming:SelectionMode.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
     <ID>PackageNaming:TagsView.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
+    <ID>PackageNaming:HotspotNotificationManager.kt$package org.kiwix.kiwixmobile.core.webserver.wifi_hotspot</ID>
+    <ID>PackageNaming:HotspotStateReceiver.kt$package org.kiwix.kiwixmobile.core.webserver.wifi_hotspot</ID>
+    <ID>PackageNaming:IpAddressCallbacks.kt$package org.kiwix.kiwixmobile.core.webserver.wifi_hotspot</ID>
+    <ID>PackageNaming:HotspotService.kt$package org.kiwix.kiwixmobile.core.webserver.wifi_hotspot</ID>
+    <ID>PackageNaming:ServerStatus.kt$package org.kiwix.kiwixmobile.core.webserver.wifi_hotspot</ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun getAllZimParts(book: Book): List&lt;File></ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun getLocalFilePathByUri( context: Context, uri: Uri ): String?</ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun hasPart(file: File): Boolean</ID>
@@ -61,6 +69,7 @@
     <ID>TooGenericExceptionCaught:CompatFindActionModeCallback.kt$CompatFindActionModeCallback$exception: Exception</ID>
     <ID>TooGenericExceptionCaught:JNIInitialiser.kt$JNIInitialiser$e: Exception</ID>
     <ID>TooGenericExceptionCaught:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$exception: Exception</ID>
+    <ID>TooGenericExceptionCaught:ZimFileReader.kt$ZimFileReader$exception: Exception</ID>
     <ID>TooGenericExceptionThrown:AdapterDelegateManager.kt$AdapterDelegateManager$throw RuntimeException("No delegate registered for $item")</ID>
     <ID>TooGenericExceptionThrown:Bytes.kt$Bytes$throw RuntimeException("impossible value $size")</ID>
     <ID>TooGenericExceptionThrown:ContextExtensions.kt$throw RuntimeException("invalid attribute $attributeRes")</ID>

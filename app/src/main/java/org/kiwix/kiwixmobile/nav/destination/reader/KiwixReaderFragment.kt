@@ -22,6 +22,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
 import android.util.Log
 import android.view.Menu
@@ -33,7 +34,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
@@ -41,8 +41,6 @@ import org.kiwix.kiwixmobile.core.R.anim
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
@@ -53,16 +51,12 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
-import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
-import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
-import org.kiwix.kiwixmobile.core.utils.titleToUrl
-import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getAssetFileDescriptorFromUri
 import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
@@ -87,27 +81,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
     toolbar?.let(activity::setupDrawerToggle)
     setFragmentContainerBottomMarginToSizeOfNavBar()
     openPageInBookFromNavigationArguments()
-
-    requireActivity().observeNavigationResult<String>(
-      FIND_IN_PAGE_SEARCH_STRING,
-      viewLifecycleOwner,
-      Observer(::findInPage)
-    )
-    requireActivity().observeNavigationResult<SearchItemToOpen>(
-      TAG_FILE_SEARCHED,
-      viewLifecycleOwner,
-      Observer(::openSearchItem)
-    )
-  }
-
-  private fun openSearchItem(item: SearchItemToOpen) {
-    zimReaderContainer?.titleToUrl(item.pageTitle)?.let {
-      if (item.shouldOpenInNewTab) {
-        createNewTab()
-      }
-      loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(it))
-    }
-    requireActivity().consumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)
   }
 
   private fun openPageInBookFromNavigationArguments() {
@@ -116,6 +89,12 @@ class KiwixReaderFragment : CoreReaderFragment() {
     if (args.pageUrl.isNotEmpty()) {
       if (args.zimFileUri.isNotEmpty()) {
         tryOpeningZimFile(args.zimFileUri)
+      } else {
+        // Set up bookmarks for the current book when opening bookmarks from the Bookmark screen.
+        // This is necessary because we are not opening the ZIM file again; the bookmark is
+        // inside the currently opened book. Bookmarks are set up when opening the ZIM file.
+        // See https://github.com/kiwix/kiwix-android/issues/3541
+        zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
       }
       loadUrlWithCurrentWebview(args.pageUrl)
     } else {
@@ -159,7 +138,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   override fun openHomeScreen() {
-    Handler().postDelayed({
+    Handler(Looper.getMainLooper()).postDelayed({
       if (webViewList.size == 0) {
         hideTabSwitcher()
       }
@@ -185,6 +164,10 @@ class KiwixReaderFragment : CoreReaderFragment() {
       if (webViewList.isEmpty()) {
         exitBook()
       } else {
+        // Reset the top margin of web views to 0 to remove any previously set margin
+        // This ensures that the web views are displayed without any additional
+        // top margin for kiwix main app.
+        setTopMarginToWebViews(0)
         selectTab(currentWebViewIndex)
       }
     }
@@ -207,6 +190,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     setBottomMarginToNavHostContainer(0)
   }
 
+  @Suppress("DEPRECATION")
   override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, menuInflater)
     if (zimReaderContainer?.zimFileReader == null) {
@@ -221,7 +205,9 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun onResume() {
     super.onResume()
-    if (zimReaderContainer?.zimFile == null) {
+    if (zimReaderContainer?.zimFile == null &&
+      zimReaderContainer?.zimFileReader?.assetFileDescriptor == null
+    ) {
       exitBook()
     }
     if (isFullScreenVideo) {
@@ -249,6 +235,8 @@ class KiwixReaderFragment : CoreReaderFragment() {
           TAG_KIWIX,
           "Kiwix normal start, Opened last used zimFile: -> $zimFile"
         )
+      } else {
+        zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
       }
     } else {
       getCurrentWebView()?.snack(R.string.zim_not_opened)
@@ -256,6 +244,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     restoreTabs(zimArticles, zimPositions, currentTab)
   }
 
+  @Suppress("UnsafeCallOnNullableType")
   override fun createWebView(attrs: AttributeSet?): ToolbarScrollingKiwixWebView {
     return ToolbarScrollingKiwixWebView(
       requireContext(), this, attrs!!, activityMainRoot as ViewGroup, videoView!!,
@@ -304,8 +293,20 @@ class KiwixReaderFragment : CoreReaderFragment() {
   ): Super {
     super.onNewIntent(activity.intent, activity)
     intent.data?.let {
-      if ("file" == it.scheme) openZimFile(it.toFile())
-      else activity.toast(R.string.cannot_open_file)
+      when (it.scheme) {
+        "file" -> openZimFile(it.toFile())
+        "content" -> {
+          // pass this uri to zimFileReader, which is necessary for saving
+          // notes, bookmarks, history, and reopening the same ZIM file after the app closes.
+          getAssetFileDescriptorFromUri(activity, it)?.let { assetFileDescriptor ->
+            openZimFile(null, assetFileDescriptor = assetFileDescriptor, filePath = "$it")
+          } ?: kotlin.run {
+            activity.toast(R.string.cannot_open_file)
+          }
+        }
+
+        else -> activity.toast(R.string.cannot_open_file)
+      }
     }
     return ShouldCall
   }

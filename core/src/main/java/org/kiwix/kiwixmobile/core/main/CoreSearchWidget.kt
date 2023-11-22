@@ -23,7 +23,6 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.widget.RemoteViews
 import org.kiwix.kiwixmobile.core.R
 import kotlin.reflect.KClass
@@ -50,21 +49,12 @@ abstract class CoreSearchWidget : AppWidgetProvider() {
 
   @SuppressLint("UnspecifiedImmutableFlag")
   private fun pendingIntent(context: Context, action: String) =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      PendingIntent.getActivity(
-        context,
-        (System.currentTimeMillis() % Int.MAX_VALUE).toInt(),
-        Intent(context, activityKClass.java).setAction(action),
-        0 or PendingIntent.FLAG_IMMUTABLE
-      )
-    } else {
-      PendingIntent.getActivity(
-        context,
-        (System.currentTimeMillis() % Int.MAX_VALUE).toInt(),
-        Intent(context, activityKClass.java).setAction(action),
-        0
-      )
-    }
+    PendingIntent.getActivity(
+      context,
+      (System.currentTimeMillis() % Int.MAX_VALUE).toInt(),
+      Intent(context, activityKClass.java).setAction(action),
+      0 or PendingIntent.FLAG_IMMUTABLE
+    )
 
   companion object {
     const val TEXT_CLICKED = "KiwixSearchWidget.TEXT_CLICKED"

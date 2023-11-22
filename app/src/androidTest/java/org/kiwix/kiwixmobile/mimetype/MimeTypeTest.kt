@@ -19,17 +19,20 @@
 package org.kiwix.kiwixmobile.mimetype
 
 import androidx.core.content.edit
+import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
+import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.kiwix.kiwixlib.JNIKiwixReader
+import org.kiwix.libzim.Archive
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import java.io.File
@@ -49,6 +52,9 @@ class MimeTypeTest : BaseActivityTest() {
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
+    }
+    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+      moveToState(Lifecycle.State.RESUMED)
     }
   }
 
@@ -70,23 +76,34 @@ class MimeTypeTest : BaseActivityTest() {
     }
     val zimFileReader = ZimFileReader(
       zimFile,
-      JNIKiwixReader(zimFile.canonicalPath),
+      null,
+      null,
+      Archive(zimFile.canonicalPath),
       NightModeConfig(SharedPreferenceUtil(context), context)
     )
     zimFileReader.getRandomArticleUrl()?.let {
-      val mimeType = zimFileReader.readContentAndMimeType(it)
-      if (mimeType.contains("^([^ ]+).*$") || mimeType.contains(";")) {
+      val mimeType = zimFileReader.getMimeTypeFromUrl(it)
+      if (mimeType?.contains("^([^ ]+).*$") == true || mimeType?.contains(";") == true) {
         Assert.fail(
           "Unable to get mime type from zim file. File = " +
             " $zimFile and url of article = $it"
         )
       }
-    }.also {
-      zimFileReader.dispose()
     } ?: kotlin.run {
       Assert.fail("Unable to get article from zim file $zimFile")
-    }.also {
-      zimFileReader.dispose()
     }
+    // test mimetypes for some actual url
+    Assert.assertEquals(
+      "text/html",
+      zimFileReader.getMimeTypeFromUrl("https://kiwix.app/A/index.html")
+    )
+    Assert.assertEquals(
+      "text/css",
+      zimFileReader.getMimeTypeFromUrl("https://kiwix.app/-/assets/style1.css")
+    )
+    // test mimetype for invalid url
+    Assert.assertEquals(null, zimFileReader.getMimeTypeFromUrl("https://kiwix.app/A/test.html"))
+    // dispose the ZimFileReader
+    zimFileReader.dispose()
   }
 }

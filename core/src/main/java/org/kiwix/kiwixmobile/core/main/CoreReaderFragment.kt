@@ -26,6 +26,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.AssetFileDescriptor
 import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Rect
@@ -37,6 +38,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.provider.Settings
 import android.util.AttributeSet
 import android.util.Log
@@ -48,7 +50,6 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.webkit.WebBackForwardList
 import android.webkit.WebView
@@ -58,6 +59,8 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.AnimRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
@@ -67,8 +70,15 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -99,7 +109,9 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.downloader.fetch.DOWNLOAD_NOTIFICATION_TITLE
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.findFirstTextView
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
@@ -123,14 +135,15 @@ import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_P
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_STOP_TTS
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate
+import org.kiwix.kiwixmobile.core.utils.DimenUtils.getToolbarHeight
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
-import org.kiwix.kiwixmobile.core.utils.REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.getAttributes
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_ARTICLES
@@ -145,6 +158,8 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.deleteCachedFiles
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
+import org.kiwix.kiwixmobile.core.utils.titleToUrl
+import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -324,6 +339,39 @@ abstract class CoreReaderFragment :
   private lateinit var serviceConnection: ServiceConnection
   private var readAloudService: ReadAloudService? = null
   private var navigationHistoryList: MutableList<NavigationHistoryListItem> = ArrayList()
+  private var isReadSelection = false
+  private var isReadAloudServiceRunning = false
+
+  private var storagePermissionForNotesLauncher: ActivityResultLauncher<String>? =
+    registerForActivityResult(
+      ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+      if (isGranted) {
+        // Successfully granted permission, so opening the note keeper
+        showAddNoteDialog()
+      } else {
+        if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+          /* shouldShowRequestPermissionRationale() returns false when:
+             *  1) User has previously checked on "Don't ask me again", and/or
+             *  2) Permission has been disabled on device
+             */
+          requireActivity().toast(
+            R.string.ext_storage_permission_rationale_add_note,
+            Toast.LENGTH_LONG
+          )
+        } else {
+          requireActivity().toast(
+            R.string.ext_storage_write_permission_denied_add_note,
+            Toast.LENGTH_LONG
+          )
+          alertDialogShower?.show(
+            KiwixDialog.ReadPermissionRequired,
+            requireActivity()::navigateToAppSettings
+          )
+        }
+      }
+    }
+
   override fun onActionModeStarted(
     mode: ActionMode,
     appCompatActivity: AppCompatActivity
@@ -346,9 +394,26 @@ abstract class CoreReaderFragment :
     return FragmentActivityExtensions.Super.ShouldCall
   }
 
+  /**
+   * Configures the selection handler for the WebView.
+   * Subclasses like CustomReaderFragment override this method to customize
+   * the behavior of the selection handler menu. In this specific implementation,
+   * it sets up a menu item for reading aloud selected text.
+   * If the custom app is set to disable the read-aloud feature,
+   * the menu item will be hidden by CustomReaderFragment.
+   * it provides additional customization for custom apps.
+   *
+   * WARNING: If modifying this method, ensure thorough testing with custom apps
+   * to verify proper functionality.
+   */
   protected open fun configureWebViewSelectionHandler(menu: Menu?) {
     menu?.findItem(R.id.menu_speak_text)?.setOnMenuItemClickListener {
-      getCurrentWebView()?.let { currentWebView -> tts?.readSelection(currentWebView) }
+      if (tts?.isInitialized == false) {
+        isReadSelection = true
+        tts?.initializeTTS()
+      } else {
+        startReadSelection()
+      }
       actionMode?.finish()
       true
     }
@@ -360,7 +425,7 @@ abstract class CoreReaderFragment :
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    setHasOptionsMenu(true)
+    setupMenu()
     val activity = requireActivity() as AppCompatActivity?
     activity?.let {
       WebView(it).destroy() // Workaround for buggy webViews see #710
@@ -441,6 +506,16 @@ abstract class CoreReaderFragment :
         readAloudService?.registerCallBack(this@CoreReaderFragment)
       }
     }
+    requireActivity().observeNavigationResult<String>(
+      FIND_IN_PAGE_SEARCH_STRING,
+      viewLifecycleOwner,
+      Observer(::findInPage)
+    )
+    requireActivity().observeNavigationResult<SearchItemToOpen>(
+      TAG_FILE_SEARCHED,
+      viewLifecycleOwner,
+      Observer(::openSearchItem)
+    )
   }
 
   private fun initTabCallback() {
@@ -488,6 +563,12 @@ abstract class CoreReaderFragment :
     }
   }
 
+  /**
+   * Abstract method to be implemented by subclasses for loading drawer-related views.
+   * Subclasses like CustomReaderFragment and KiwixReaderFragment should override this method
+   * to set up specific views for both the left and right drawers, such as custom containers
+   * or navigation views.
+   */
   protected abstract fun loadDrawerViews()
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -519,7 +600,7 @@ abstract class CoreReaderFragment :
   @Suppress("MagicNumber")
   private fun handleNotificationIntent(intent: Intent) {
     if (intent.hasExtra(DOWNLOAD_NOTIFICATION_TITLE)) {
-      Handler().postDelayed(
+      Handler(Looper.getMainLooper()).postDelayed(
         {
           intent.getStringExtra(DOWNLOAD_NOTIFICATION_TITLE)?.let {
             newBookDao?.bookMatching(it)?.let { bookOnDiskEntity ->
@@ -580,16 +661,18 @@ abstract class CoreReaderFragment :
   }
 
   private fun setupTabsAdapter() {
-    tabsAdapter = TabsAdapter(
-      requireActivity() as AppCompatActivity,
-      webViewList,
-      painter!!
-    ).apply {
-      registerAdapterDataObserver(object : AdapterDataObserver() {
-        override fun onChanged() {
-          mainMenu?.updateTabIcon(itemCount)
-        }
-      })
+    tabsAdapter = painter?.let {
+      TabsAdapter(
+        requireActivity() as AppCompatActivity,
+        webViewList,
+        it
+      ).apply {
+        registerAdapterDataObserver(object : AdapterDataObserver() {
+          override fun onChanged() {
+            mainMenu?.updateTabIcon(itemCount)
+          }
+        })
+      }
     }
   }
 
@@ -608,7 +691,7 @@ abstract class CoreReaderFragment :
       override fun onSectionClick(view: View?, position: Int) {
         loadUrlWithCurrentWebview(
           "javascript:document.getElementById('" +
-            documentSections!![position].id.replace("'", "\\'") +
+            documentSections?.get(position)?.id?.replace("'", "\\'") +
             "').scrollIntoView();"
         )
         drawerLayout?.closeDrawers()
@@ -625,6 +708,9 @@ abstract class CoreReaderFragment :
       )
       setDisplayShowTitleEnabled(false)
     }
+    // Set a negative top margin to the web views to remove
+    // the unwanted blank space caused by the toolbar.
+    setTopMarginToWebViews(-requireActivity().getToolbarHeight())
     setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     bottomToolbar?.visibility = View.GONE
     contentFrame?.visibility = View.GONE
@@ -637,11 +723,38 @@ abstract class CoreReaderFragment :
         if (tabsAdapter.selected < webViewList.size &&
           recyclerView.layoutManager != null
         ) {
-          recyclerView.layoutManager!!.scrollToPosition(tabsAdapter.selected)
+          recyclerView.layoutManager?.scrollToPosition(tabsAdapter.selected)
         }
       }
+      // Notify the tabs adapter to update the UI when the tab switcher is shown
+      // This ensures that any changes made to the adapter's data or views are
+      // reflected correctly.
+      tabsAdapter.notifyDataSetChanged()
     }
     mainMenu?.showTabSwitcherOptions()
+  }
+
+  /**
+   * Sets a top margin to the web views.
+   *
+   * @param topMargin The top margin to be applied to the web views.
+   *                  Use 0 to remove the margin.
+   */
+  protected open fun setTopMarginToWebViews(topMargin: Int) {
+    for (webView in webViewList) {
+      if (webView.parent == null) {
+        // Ensure that the web view has a parent before modifying its layout parameters
+        // This check is necessary to prevent adding the margin when the web view is not attached to a layout
+        // Adding the margin without a parent can cause unintended layout issues or empty
+        // space on top of the webView in the tabs adapter.
+        val frameLayout = FrameLayout(requireActivity())
+        // Add the web view to the frame layout
+        frameLayout.addView(webView)
+      }
+      val layoutParams = webView.layoutParams as FrameLayout.LayoutParams?
+      layoutParams?.topMargin = topMargin
+      webView.requestLayout()
+    }
   }
 
   protected fun startAnimation(view: View?, @AnimRes anim: Int) {
@@ -668,8 +781,19 @@ abstract class CoreReaderFragment :
     progressBar?.hide()
     selectTab(currentWebViewIndex)
     mainMenu?.showWebViewOptions(urlIsValid())
+    // Reset the top margin of web views to 0 to remove any previously set margin
+    // This ensures that the web views are displayed without any additional top margin for kiwix custom apps.
+    setTopMarginToWebViews(0)
   }
 
+  /**
+   * Sets the lock mode for the drawer, controlling whether the drawer can be opened or closed.
+   * Subclasses like CustomReaderFragment override this method to provide custom
+   * behavior, such as disabling the sidebar when configured not to show it.
+   *
+   * WARNING: If modifying this method, ensure thorough testing with custom apps
+   * to verify proper functionality.
+   */
   protected open fun setDrawerLockMode(lockMode: Int) {
     drawerLayout?.setDrawerLockMode(lockMode)
   }
@@ -823,7 +947,8 @@ abstract class CoreReaderFragment :
   }
 
   private fun getValidTitle(zimFileTitle: String?): String =
-    if (isAdded && isInvalidTitle(zimFileTitle)) getString(R.string.app_name) else zimFileTitle!!
+    if (isAdded && isInvalidTitle(zimFileTitle)) getString(R.string.app_name)
+    else zimFileTitle.toString()
 
   private fun isInvalidTitle(zimFileTitle: String?): Boolean =
     zimFileTitle == null || zimFileTitle.trim { it <= ' ' }.isEmpty()
@@ -835,7 +960,11 @@ abstract class CoreReaderFragment :
           requireActivity(),
           object : OnInitSucceedListener {
             override fun onInitSucceed() {
-              // do nothing it's default override method
+              if (isReadSelection) {
+                startReadSelection()
+              } else {
+                startReadAloud()
+              }
             }
           },
           object : OnSpeakingListener {
@@ -879,6 +1008,18 @@ abstract class CoreReaderFragment :
           },
           it
         )
+    }
+  }
+
+  private fun startReadAloud() {
+    getCurrentWebView()?.let {
+      tts?.readAloud(it)
+    }
+  }
+
+  private fun startReadSelection() {
+    getCurrentWebView()?.let {
+      tts?.readSelection(it)
     }
   }
 
@@ -944,8 +1085,15 @@ abstract class CoreReaderFragment :
       tts = null
     }
     tempWebViewForUndo = null
-    readAloudService?.registerCallBack(null)
-    readAloudService = null
+    // to fix IntroFragmentTest see https://github.com/kiwix/kiwix-android/pull/3217
+    try {
+      requireActivity().unbindService(serviceConnection)
+    } catch (ignore: IllegalArgumentException) {
+      // to handle if service is already unbounded
+    }
+    unRegisterReadAloudService()
+    storagePermissionForNotesLauncher?.unregister()
+    storagePermissionForNotesLauncher = null
   }
 
   private fun updateTableOfContents() {
@@ -977,6 +1125,7 @@ abstract class CoreReaderFragment :
     return null
   }
 
+  @Suppress("UnsafeCallOnNullableType")
   protected open fun createWebView(attrs: AttributeSet?): ToolbarScrollingKiwixWebView? {
     return if (activityMainRoot != null) {
       ToolbarScrollingKiwixWebView(
@@ -1047,8 +1196,13 @@ abstract class CoreReaderFragment :
       }
       setUpWithTextToSpeech(it)
       updateBottomToolbarVisibility()
-      contentFrame?.addView(it)
+      safelyAddWebView(it)
     }
+  }
+
+  private fun safelyAddWebView(webView: KiwixWebView) {
+    webView.parent?.let { (it as ViewGroup).removeView(webView) }
+    contentFrame?.addView(webView)
   }
 
   protected fun selectTab(position: Int) {
@@ -1090,8 +1244,21 @@ abstract class CoreReaderFragment :
     }
   }
 
-  override fun onOptionsItemSelected(item: MenuItem): Boolean =
-    mainMenu?.onOptionsItemSelected(item) == true || super.onOptionsItemSelected(item)
+  private fun setupMenu() {
+    (requireActivity() as MenuHost).addMenuProvider(
+      object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+          menu.clear()
+          mainMenu = createMainMenu(menu)
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
+          mainMenu?.onOptionsItemSelected(menuItem) == true
+      },
+      viewLifecycleOwner,
+      Lifecycle.State.RESUMED
+    )
+  }
 
   override fun onFullscreenMenuClicked() {
     if (isInFullScreenMode()) {
@@ -1110,7 +1277,12 @@ abstract class CoreReaderFragment :
             if (isBackToTopEnabled) {
               backToTopButton?.hide()
             }
-            getCurrentWebView()?.let { tts?.readAloud(it) }
+            if (tts?.isInitialized == false) {
+              isReadSelection = false
+              tts?.initializeTTS()
+            } else {
+              startReadAloud()
+            }
           }
           View.VISIBLE -> {
             if (isBackToTopEnabled) {
@@ -1167,6 +1339,12 @@ abstract class CoreReaderFragment :
     }
   }
 
+  /**
+   * Abstract method to be implemented by (KiwixReaderFragment, CustomReaderFragment)
+   * for creating a new tab.
+   * Subclasses like CustomReaderFragment, KiwixReaderFragment override this method
+   * to define the specific behavior for creating a new tab.
+   */
   protected abstract fun createNewTab()
 
   /** Creates the full screen AddNoteDialog, which is a DialogFragment  */
@@ -1192,34 +1370,12 @@ abstract class CoreReaderFragment :
     if (sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
       Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
     ) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // For Marshmallow & higher API levels
-        if (requireActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-          == PackageManager.PERMISSION_GRANTED
-        ) {
-          isPermissionGranted = true
-        } else {
-          if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            requestPermissions(
-              arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-              REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE
-            )
-            /* shouldShowRequestPermissionRationale() returns false when:
-               *  1) User has previously checked on "Don't ask me again", and/or
-               *  2) Permission has been disabled on device
-               */
-            requireActivity().toast(
-              R.string.ext_storage_permission_rationale_add_note,
-              Toast.LENGTH_LONG
-            )
-          } else {
-            alertDialogShower?.show(
-              KiwixDialog.ReadPermissionRequired,
-              requireActivity()::navigateToAppSettings
-            )
-          }
-        }
-      } else { // For Android versions below Marshmallow 6.0 (API 23)
-        isPermissionGranted = true // As already requested at install time
+      if (requireActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        == PackageManager.PERMISSION_GRANTED
+      ) {
+        isPermissionGranted = true
+      } else {
+        storagePermissionForNotesLauncher?.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
       }
     } else {
       isPermissionGranted = true
@@ -1244,10 +1400,13 @@ abstract class CoreReaderFragment :
     bottomToolbar?.visibility = View.GONE
     exitFullscreenButton?.visibility = View.VISIBLE
     exitFullscreenButton?.background?.alpha = 153
-    val fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN
-    val classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN
-    requireActivity().window.addFlags(fullScreenFlag)
-    requireActivity().window.clearFlags(classicScreenFlag)
+    val window = requireActivity().window
+    WindowCompat.setDecorFitsSystemWindows(window, true)
+    WindowInsetsControllerCompat(window, window.decorView.rootView).apply {
+      hide(WindowInsetsCompat.Type.systemBars())
+      systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+      window.decorView.rootView.requestLayout()
+    }
     getCurrentWebView()?.apply {
       requestLayout()
       translationY = 0f
@@ -1262,10 +1421,12 @@ abstract class CoreReaderFragment :
     updateBottomToolbarVisibility()
     exitFullscreenButton?.visibility = View.GONE
     exitFullscreenButton?.background?.alpha = 255
-    val fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN
-    val classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN
-    requireActivity().window.clearFlags(fullScreenFlag)
-    requireActivity().window.addFlags(classicScreenFlag)
+    val window = requireActivity().window
+    WindowCompat.setDecorFitsSystemWindows(window, true)
+    WindowInsetsControllerCompat(window, window.decorView.rootView).apply {
+      show(WindowInsetsCompat.Type.systemBars())
+      window.decorView.rootView.requestLayout()
+    }
     getCurrentWebView()?.requestLayout()
     sharedPreferenceUtil?.putPrefFullScreen(false)
   }
@@ -1274,13 +1435,24 @@ abstract class CoreReaderFragment :
     externalLinkOpener?.openExternalUrl(intent)
   }
 
-  protected fun openZimFile(file: File, isCustomApp: Boolean = false) {
+  protected fun openZimFile(
+    file: File?,
+    isCustomApp: Boolean = false,
+    assetFileDescriptor: AssetFileDescriptor? = null,
+    filePath: String? = null
+  ) {
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || isCustomApp) {
-      if (file.isFileExist()) {
-        openAndSetInContainer(file)
+      if (file?.isFileExist() == true) {
+        openAndSetInContainer(file = file)
+        updateTitle()
+      } else if (assetFileDescriptor != null) {
+        openAndSetInContainer(
+          assetFileDescriptor = assetFileDescriptor,
+          filePath = filePath
+        )
         updateTitle()
       } else {
-        Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.absolutePath)
+        Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file?.absolutePath)
         requireActivity().toast(R.string.error_file_not_found, Toast.LENGTH_LONG)
       }
     } else {
@@ -1307,38 +1479,56 @@ abstract class CoreReaderFragment :
     )
   }
 
-  private fun openAndSetInContainer(file: File) {
+  private fun openAndSetInContainer(
+    file: File? = null,
+    assetFileDescriptor: AssetFileDescriptor? = null,
+    filePath: String? = null
+  ) {
     try {
-      if (isNotPreviouslyOpenZim(file.canonicalPath)) {
+      if (isNotPreviouslyOpenZim(file?.canonicalPath)) {
         webViewList.clear()
       }
     } catch (e: IOException) {
       e.printStackTrace()
     }
     zimReaderContainer?.let { zimReaderContainer ->
-      zimReaderContainer.setZimFile(file)
+      if (assetFileDescriptor != null) {
+        zimReaderContainer.setZimFileDescriptor(
+          assetFileDescriptor,
+          filePath = filePath
+        )
+      } else {
+        zimReaderContainer.setZimFile(file)
+      }
+
       val zimFileReader = zimReaderContainer.zimFileReader
       zimFileReader?.let { zimFileReader ->
+        // uninitialized the service worker to fix https://github.com/kiwix/kiwix-android/issues/2561
+        openArticle(UNINITIALISER_ADDRESS)
         mainMenu?.onFileOpened(urlIsValid())
         openArticle(zimFileReader.mainPage)
-        safeDispose()
-        bookmarkingDisposable = Flowable.combineLatest(
-          newBookmarksDao?.bookmarkUrlsForCurrentBook(zimFileReader),
-          webUrlsProcessor,
-          List<String?>::contains
-        )
-          .observeOn(AndroidSchedulers.mainThread())
-          .subscribe({ isBookmarked: Boolean ->
-            this.isBookmarked = isBookmarked
-            bottomToolbarBookmark?.setImageResource(
-              if (isBookmarked) R.drawable.ic_bookmark_24dp else R.drawable.ic_bookmark_border_24dp
-            )
-          }, Throwable::printStackTrace)
-        updateUrlProcessor()
+        setUpBookmarks(zimFileReader)
       } ?: kotlin.run {
         requireActivity().toast(R.string.error_file_invalid, Toast.LENGTH_LONG)
       }
     }
+  }
+
+  protected fun setUpBookmarks(zimFileReader: ZimFileReader) {
+    safeDispose()
+    bookmarkingDisposable = Flowable.combineLatest(
+      newBookmarksDao?.bookmarkUrlsForCurrentBook(zimFileReader),
+      webUrlsProcessor,
+      List<String?>::contains
+    )
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe({ isBookmarked: Boolean ->
+        this.isBookmarked = isBookmarked
+        bottomToolbarBookmark?.setImageResource(
+          if (isBookmarked) R.drawable.ic_bookmark_24dp else R.drawable.ic_bookmark_border_24dp
+        )
+      }, Throwable::printStackTrace)
+    updateUrlProcessor()
   }
 
   private fun safeDispose() {
@@ -1368,17 +1558,6 @@ abstract class CoreReaderFragment :
                 startActivity(intent)
               }.show()
           }
-        }
-      }
-      REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE -> {
-        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-          // Successfully granted permission, so opening the note keeper
-          showAddNoteDialog()
-        } else {
-          Toast.makeText(
-            requireActivity().applicationContext,
-            getString(R.string.ext_storage_write_permission_denied_add_note), Toast.LENGTH_LONG
-          ).show()
         }
       }
       REQUEST_POST_NOTIFICATION_PERMISSION -> {
@@ -1423,7 +1602,7 @@ abstract class CoreReaderFragment :
       showTabSwitcher()
       setUpWithTextToSpeech(tempWebViewListForUndo.last())
       updateBottomToolbarVisibility()
-      contentFrame?.addView(tempWebViewListForUndo.last())
+      safelyAddWebView(tempWebViewListForUndo.last())
     }
   }
 
@@ -1440,7 +1619,7 @@ abstract class CoreReaderFragment :
 
   @Suppress("MagicNumber")
   protected open fun openHomeScreen() {
-    Handler().postDelayed({
+    Handler(Looper.getMainLooper()).postDelayed({
       if (webViewList.size == 0) {
         createNewTab()
         hideTabSwitcher()
@@ -1514,6 +1693,16 @@ abstract class CoreReaderFragment :
     openSearch("", isOpenedFromTabView = false, isVoice)
   }
 
+  private fun openSearchItem(item: SearchItemToOpen) {
+    zimReaderContainer?.titleToUrl(item.pageTitle)?.let {
+      if (item.shouldOpenInNewTab) {
+        createNewTab()
+      }
+      loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(it))
+    }
+    requireActivity().consumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)
+  }
+
   private fun handleIntentActions(intent: Intent) {
     Log.d(TAG_KIWIX, "action" + requireActivity().intent?.action)
     startIntentBasedOnAction(intent)
@@ -1562,10 +1751,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun goToSearchWithText(intent: Intent) {
-    val searchString =
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-        intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT)
-      else ""
+    val searchString = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT)
     openSearch(
       searchString,
       isOpenedFromTabView = false,
@@ -1644,10 +1830,10 @@ abstract class CoreReaderFragment :
   }
 
   private fun searchForTitle(title: String?, openInNewTab: Boolean) {
-    val articleUrl: String? = if (title!!.startsWith("A/")) {
+    val articleUrl: String? = if (title?.startsWith("A/") == true) {
       title
     } else {
-      zimReaderContainer?.getPageUrlFromTitle(title)
+      title?.let { zimReaderContainer?.getPageUrlFromTitle(it) }
     }
     if (openInNewTab) {
       openArticleInNewTab(articleUrl)
@@ -1656,7 +1842,7 @@ abstract class CoreReaderFragment :
     }
   }
 
-  protected fun findInPage(title: String?) {
+  private fun findInPage(title: String?) {
     // if the search is localized trigger find in page UI.
     compatCallback?.apply {
       setActive()
@@ -1668,21 +1854,26 @@ abstract class CoreReaderFragment :
     }
   }
 
-  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    super<BaseFragment>.onCreateOptionsMenu(menu, inflater)
-    menu.clear()
-    mainMenu = createMainMenu(menu)
-  }
-
+  /**
+   * Creates the main menu for the reader.
+   * Subclasses may override this method to customize the main menu creation process.
+   * For custom apps like CustomReaderFragment, this method dynamically generates the menu
+   * based on the app's configuration, considering features like "read aloud" and "tabs."
+   *
+   * WARNING: If modifying this method, ensure thorough testing with custom apps
+   * to verify proper functionality.
+   */
   protected open fun createMainMenu(menu: Menu?): MainMenu? =
-    menuFactory?.create(
-      menu!!,
-      webViewList,
-      urlIsValid(),
-      menuClickListener = this,
-      disableReadAloud = false,
-      disableTabs = false
-    )
+    menu?.let {
+      menuFactory?.create(
+        it,
+        webViewList,
+        urlIsValid(),
+        menuClickListener = this,
+        disableReadAloud = false,
+        disableTabs = false
+      )
+    }
 
   protected fun urlIsValid(): Boolean = getCurrentWebView()?.url != null
 
@@ -1762,6 +1953,7 @@ abstract class CoreReaderFragment :
             requireActivity()
           )
         )
+        @Suppress("UnsafeCallOnNullableType")
         getCurrentWebView()?.let {
           val history = HistoryItem(
             it.url!!,
@@ -1790,7 +1982,7 @@ abstract class CoreReaderFragment :
   }
 
   @Suppress("MagicNumber")
-  override fun webViewProgressChanged(progress: Int) {
+  override fun webViewProgressChanged(progress: Int, webView: WebView) {
     if (isAdded) {
       progressBar?.apply {
         visibility = View.VISIBLE
@@ -1801,6 +1993,7 @@ abstract class CoreReaderFragment :
           Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView()?.url)
         }
       }
+      (webView.context as AppCompatActivity).invalidateOptionsMenu()
     }
   }
 
@@ -1855,6 +2048,17 @@ abstract class CoreReaderFragment :
     }
   }
 
+  /**
+   * Displays a dialog prompting the user to open the provided URL in a new tab.
+   * CustomReaderFragment override this method to customize the
+   * behavior of the "Open in New Tab" dialog. In this specific implementation,
+   * If the custom app is set to disable the tabs feature,
+   * it will not show the dialog with the ability to open the URL in a new tab,
+   * it provide additional customization for custom apps.
+   *
+   * WARNING: If modifying this method, ensure thorough testing with custom apps
+   * to verify proper functionality.
+   */
   protected open fun showOpenInNewTabDialog(url: String) {
     alertDialogShower?.show(
       KiwixDialog.YesNoDialog.OpenInNewTab,
@@ -1972,7 +2176,15 @@ abstract class CoreReaderFragment :
   private fun unbindService() {
     readAloudService?.let {
       requireActivity().unbindService(serviceConnection)
+      if (!isReadAloudServiceRunning) {
+        unRegisterReadAloudService()
+      }
     }
+  }
+
+  private fun unRegisterReadAloudService() {
+    readAloudService?.registerCallBack(null)
+    readAloudService = null
   }
 
   private fun createReadAloudIntent(action: String, isPauseTTS: Boolean): Intent =
@@ -1984,14 +2196,34 @@ abstract class CoreReaderFragment :
     }
 
   private fun setActionAndStartTTSService(action: String, isPauseTTS: Boolean = false) {
-    requireActivity().startService(createReadAloudIntent(action, isPauseTTS))
+    requireActivity().startService(
+      createReadAloudIntent(action, isPauseTTS)
+    ).also {
+      isReadAloudServiceRunning = action == ACTION_PAUSE_OR_RESUME_TTS
+    }
   }
 
+  /**
+   * Restores the view state after successfully reading valid JSON from shared preferences.
+   * Developers modifying this method in subclasses, such as CustomReaderFragment and
+   * KiwixReaderFragment, should review and consider the implementations in those subclasses
+   * (e.g., CustomReaderFragment.restoreViewStateOnValidJSON,
+   * KiwixReaderFragment.restoreViewStateOnValidJSON) to ensure consistent behavior
+   * when handling valid JSON scenarios.
+   */
   protected abstract fun restoreViewStateOnValidJSON(
     zimArticles: String?,
     zimPositions: String?,
     currentTab: Int
   )
 
+  /**
+   * Restores the view state when the attempt to read JSON from shared preferences fails
+   * due to invalid or corrupted data. Developers modifying this method in subclasses, such as
+   * CustomReaderFragment and KiwixReaderFragment, should review and consider the implementations
+   * in those subclasses (e.g., CustomReaderFragment.restoreViewStateOnInvalidJSON,
+   * KiwixReaderFragment.restoreViewStateOnInvalidJSON) to ensure consistent behavior
+   * when handling invalid JSON scenarios.
+   */
   abstract fun restoreViewStateOnInvalidJSON()
 }

@@ -22,11 +22,10 @@ import android.Manifest
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
-import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -37,6 +36,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -47,7 +47,6 @@ import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tonyodev.fetch2.Status
@@ -75,7 +74,6 @@ import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
-import org.kiwix.kiwixmobile.core.utils.REQUEST_SELECT_FOLDER_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
@@ -115,20 +113,30 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private val libraryAdapter: LibraryAdapter by lazy {
     LibraryAdapter(
       LibraryDelegate.BookDelegate(bookUtils, ::onBookItemClick, availableSpaceCalculator),
-      LibraryDelegate.DownloadDelegate {
-        if (it.currentDownloadState == Status.FAILED) {
-          if (isNotConnected) {
-            noInternetSnackbar()
+      LibraryDelegate.DownloadDelegate(
+        {
+          if (it.currentDownloadState == Status.FAILED) {
+            if (isNotConnected) {
+              noInternetSnackbar()
+            } else {
+              downloader.retryDownload(it.downloadId)
+            }
           } else {
-            downloader.retryDownload(it.downloadId)
+            dialogShower.show(
+              KiwixDialog.YesNoDialog.StopDownload,
+              { downloader.cancelDownload(it.downloadId) }
+            )
           }
-        } else {
-          dialogShower.show(
-            KiwixDialog.YesNoDialog.StopDownload,
-            { downloader.cancelDownload(it.downloadId) }
-          )
+        },
+        {
+          context?.let { context ->
+            downloader.pauseResumeDownload(
+              it.downloadId,
+              it.downloadState.toReadableState(context) == "Paused"
+            )
+          }
         }
-      },
+      ),
       LibraryDelegate.DividerDelegate
     )
   }
@@ -137,19 +145,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     get() = sharedPreferenceUtil.prefWifiOnly && !NetworkUtils.isWiFi(requireContext())
 
   private val isNotConnected: Boolean
-    get() {
-      return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val network = conMan.activeNetwork
-        if (network != null) {
-          val networkCapabilities = conMan.getNetworkCapabilities(network)
-          networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == false
-        } else {
-          true
-        }
-      } else {
-        conMan.activeNetworkInfo?.isConnected == false
-      }
-    }
+    get() = !NetworkUtils.isNetworkAvailable(requireActivity())
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
@@ -292,7 +288,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun onRefreshStateChange(isRefreshing: Boolean?) {
-    fragmentDestinationDownloadBinding?.librarySwipeRefresh?.isRefreshing = isRefreshing!!
+    fragmentDestinationDownloadBinding?.librarySwipeRefresh?.isRefreshing = isRefreshing == true
   }
 
   private fun onNetworkStateChange(networkState: NetworkState?) {
@@ -339,8 +335,10 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun onLibraryItemsChange(it: List<LibraryListItem>?) {
-    libraryAdapter.items = it!!
-    if (it.isEmpty()) {
+    if (it != null) {
+      libraryAdapter.items = it
+    }
+    if (it?.isEmpty() == true) {
       fragmentDestinationDownloadBinding?.libraryErrorText?.setText(
         if (isNotConnected) R.string.no_network_connection
         else R.string.no_items_msg
@@ -407,29 +405,25 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
         or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
     )
-    startActivityForResult(intent, REQUEST_SELECT_FOLDER_PERMISSION)
+    selectFolderLauncher.launch(intent)
   }
 
-  @SuppressLint("WrongConstant") override fun onActivityResult(
-    requestCode: Int,
-    resultCode: Int,
-    data: Intent?
-  ) {
-    super.onActivityResult(requestCode, resultCode, data)
-    if (requestCode == REQUEST_SELECT_FOLDER_PERMISSION && resultCode == Activity.RESULT_OK) {
-      data?.let {
-        getPathFromUri(requireActivity(), data)?.let(sharedPreferenceUtil::putPrefStorage)
-        sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
-        clickOnBookItem()
-      } ?: run {
-        activity.toast(
-          resources
-            .getString(R.string.system_unable_to_grant_permission_message),
-          Toast.LENGTH_SHORT
-        )
+  private val selectFolderLauncher =
+    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+      if (result.resultCode == RESULT_OK) {
+        result.data?.let { intent ->
+          getPathFromUri(requireActivity(), intent)?.let(sharedPreferenceUtil::putPrefStorage)
+          sharedPreferenceUtil.putStoragePosition(EXTERNAL_SELECT_POSITION)
+          clickOnBookItem()
+        } ?: run {
+          activity.toast(
+            resources
+              .getString(R.string.system_unable_to_grant_permission_message),
+            Toast.LENGTH_SHORT
+          )
+        }
       }
     }
-  }
 
   private fun requestNotificationPermission() {
     if (!shouldShowRationale(POST_NOTIFICATIONS)) {
@@ -482,6 +476,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private fun shouldShowRationale(permission: String) =
     ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), permission)
 
+  @Suppress("DEPRECATION")
   override fun onRequestPermissionsResult(
     requestCode: Int,
     permissions: Array<out String>,
@@ -556,7 +551,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     .apply {
       onSelectAction = ::storeDeviceInPreferences
     }
-    .show(requireFragmentManager(), getString(R.string.pref_storage))
+    .show(parentFragmentManager, getString(R.string.pref_storage))
 
   private fun showStorageConfigureDialog() {
     alertDialogShower.show(

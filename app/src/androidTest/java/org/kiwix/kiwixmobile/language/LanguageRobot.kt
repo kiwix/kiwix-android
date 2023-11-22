@@ -24,12 +24,14 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isNotChecked
 import applyWithViewHierarchyPrinting
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
 
 fun language(func: LanguageRobot.() -> Unit) = LanguageRobot().applyWithViewHierarchyPrinting(func)
@@ -54,6 +56,8 @@ class LanguageRobot : BaseRobot() {
   }
 
   fun clickOnLanguageIcon() {
+    // Wait for a few seconds to properly saved selected language.
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     clickOn(ViewId(R.id.select_language))
   }
 

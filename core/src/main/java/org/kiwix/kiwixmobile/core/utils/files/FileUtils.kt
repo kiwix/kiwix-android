@@ -22,6 +22,7 @@ import android.app.Activity
 import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
+import android.content.res.AssetFileDescriptor
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -29,6 +30,7 @@ import android.provider.DocumentsContract
 import android.util.Log
 import android.webkit.URLUtil
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.documentfile.provider.DocumentFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -45,6 +47,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import java.io.BufferedReader
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.IOException
 
 object FileUtils {
@@ -125,7 +128,12 @@ object FileUtils {
           return "${Environment.getExternalStorageDirectory()}/${documentId[1]}"
         }
         return try {
-          "${getSdCardMainPath(context, documentId[0])}/${documentId[1]}"
+          var sdCardOrUsbMainPath = getSdCardOrUSBMainPath(context, documentId[0])
+          if (sdCardOrUsbMainPath == null) {
+            // USB sticks are mounted under the `/mnt/media_rw` directory.
+            sdCardOrUsbMainPath = "/mnt/media_rw/${documentId[0]}"
+          }
+          "$sdCardOrUsbMainPath/${documentId[1]}"
         } catch (ignore: Exception) {
           null
         }
@@ -136,9 +144,9 @@ object FileUtils {
           null
         }
     } else if (uri.scheme != null) {
-      if ("content".equals(uri.scheme!!, ignoreCase = true)) {
+      if ("content".equals(uri.scheme, ignoreCase = true)) {
         return contentQuery(context, uri)
-      } else if ("file".equals(uri.scheme!!, ignoreCase = true)) {
+      } else if ("file".equals(uri.scheme, ignoreCase = true)) {
         return uri.path
       }
     } else {
@@ -270,11 +278,20 @@ object FileUtils {
   fun isValidZimFile(filePath: String): Boolean =
     filePath.endsWith(".zim") || filePath.endsWith(".zimaa")
 
+  /**
+   * Get the main storage path for a given storage name (SD card or USB stick).
+   *
+   * @param context The application context.
+   * @param storageName The name of the storage (e.g., "sdcard" or "usbstick").
+   * @return The main storage path for the given storage name,
+   *         or null if the path is a USB path on Android 10 and above
+   *         (due to limitations in `context.getExternalFilesDirs("")` behavior).
+   */
   @JvmStatic
-  fun getSdCardMainPath(context: Context, storageName: String) =
+  fun getSdCardOrUSBMainPath(context: Context, storageName: String) =
     context.getExternalFilesDirs("")
-      .first { it.path.contains(storageName) }
-      .path.substringBefore(context.getString(R.string.android_directory_seperator))
+      .firstOrNull { it.path.contains(storageName) }
+      ?.path?.substringBefore(context.getString(R.string.android_directory_seperator))
 
   @SuppressLint("WrongConstant")
   @JvmStatic
@@ -385,6 +402,22 @@ object FileUtils {
       fileToSave
     } catch (e: IOException) {
       Log.w("kiwix", "Couldn't save file", e)
+      null
+    }
+  }
+
+  @JvmStatic
+  fun getDemoFilePathForCustomApp(context: Context) =
+    "${ContextCompat.getExternalFilesDirs(context, null)[0]}/demo.zim"
+
+  @JvmStatic
+  fun getAssetFileDescriptorFromUri(
+    context: Context,
+    uri: Uri
+  ): AssetFileDescriptor? {
+    return try {
+      context.contentResolver.openAssetFileDescriptor(uri, "r")
+    } catch (ignore: FileNotFoundException) {
       null
     }
   }

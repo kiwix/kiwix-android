@@ -39,7 +39,7 @@ class NotesFragment : PageFragment() {
 
   override val noItemsString: String by lazy { getString(R.string.no_notes) }
   override val switchString: String by lazy { getString(R.string.notes_from_all_books) }
-  override val switchIsChecked: Boolean = true
+  override val switchIsChecked: Boolean by lazy { sharedPreferenceUtil.showNotesAllBooks }
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)

@@ -19,12 +19,13 @@
 package org.kiwix.kiwixmobile.zimManager
 
 import android.content.Context
+import org.kiwix.kiwixmobile.core.extensions.locale
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import javax.inject.Inject
 
 class DefaultLanguageProvider @Inject constructor(private val context: Context) {
   fun provide() = Language(
-    context.resources.configuration.locale.isO3Language,
+    context.locale.isO3Language,
     true,
     1
   )

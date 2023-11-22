@@ -22,6 +22,7 @@ import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.Manifest.permission.NEARBY_WIFI_DEVICES
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_DENIED
 import android.content.pm.PackageManager.PERMISSION_GRANTED
@@ -32,6 +33,8 @@ import android.net.wifi.p2p.WifiP2pDevice
 import android.net.wifi.p2p.WifiP2pDeviceList
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
@@ -41,6 +44,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -64,7 +68,9 @@ import org.kiwix.kiwixmobile.databinding.FragmentLocalFileTransferBinding
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getDeviceStatus
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiP2pDelegate
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiPeerListAdapter
-import org.kiwix.kiwixmobile.webserver.ZimHostFragment.Companion.PERMISSION_REQUEST_CODE_COARSE_LOCATION
+import org.kiwix.kiwixmobile.core.webserver.ZimHostFragment.Companion.PERMISSION_REQUEST_CODE_COARSE_LOCATION
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
 import javax.inject.Inject
 
 /**
@@ -82,6 +88,7 @@ import javax.inject.Inject
  */
 
 const val URIS_KEY = "uris"
+const val SHOWCASE_ID = "MaterialShowcaseId"
 
 @SuppressLint("GoogleAppIndexingApiWarning", "Registered")
 class LocalFileTransferFragment :
@@ -102,6 +109,8 @@ class LocalFileTransferFragment :
   private var fileListAdapter: FileListAdapter? = null
   private var wifiPeerListAdapter: WifiPeerListAdapter? = null
   private var fragmentLocalFileTransferBinding: FragmentLocalFileTransferBinding? = null
+  private var materialShowCaseSequence: MaterialShowcaseSequence? = null
+  private var searchIconView: View? = null
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -137,31 +146,19 @@ class LocalFileTransferFragment :
       object : MenuProvider {
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
           menuInflater.inflate(R.menu.wifi_file_share_items, menu)
+          if (sharedPreferenceUtil.prefShowShowCaseToUser) {
+            Handler(Looper.getMainLooper()).post {
+              searchIconView =
+                fragmentLocalFileTransferBinding?.root?.findViewById(R.id.menu_item_search_devices)
+              showCaseFeatureToUsers()
+            }
+          }
         }
 
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
           if (menuItem.itemId == R.id.menu_item_search_devices) {
             /* Permissions essential for this module */
-            return when {
-              !checkFineLocationAccessPermission() ->
-                true
-              !checkExternalStorageWritePermission() ->
-                true
-              /* Initiate discovery */
-              !wifiDirectManager.isWifiP2pEnabled -> {
-                requestEnableWifiP2pServices()
-                true
-              }
-              Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServiceEnabled -> {
-                requestEnableLocationServices()
-                true
-              }
-              else -> {
-                showPeerDiscoveryProgressBar()
-                wifiDirectManager.discoverPeerDevices()
-                true
-              }
-            }
+            return onSearchMenuClicked()
           }
           return false
         }
@@ -170,6 +167,69 @@ class LocalFileTransferFragment :
       Lifecycle.State.RESUMED
     )
   }
+
+  private fun showCaseFeatureToUsers() {
+    searchIconView?.let {
+      materialShowCaseSequence = MaterialShowcaseSequence(activity, SHOWCASE_ID).apply {
+        val config = ShowcaseConfig().apply {
+          delay = 500 // half second between each showcase view
+        }
+        setConfig(config)
+        addSequenceItem(
+          it,
+          getString(R.string.click_nearby_devices_message),
+          getString(R.string.got_it)
+        )
+        addSequenceItem(
+          fragmentLocalFileTransferBinding?.textViewDeviceName,
+          getString(R.string.your_device_name_message),
+          getString(R.string.got_it)
+        )
+        addSequenceItem(
+          fragmentLocalFileTransferBinding?.listPeerDevices,
+          getString(R.string.nearby_devices_list_message),
+          getString(R.string.got_it)
+        )
+        addSequenceItem(
+          fragmentLocalFileTransferBinding?.recyclerViewTransferFiles,
+          getString(R.string.transfer_zim_files_list_message),
+          getString(R.string.got_it)
+        )
+        setOnItemDismissedListener { showcaseView, _ ->
+          // To fix the memory leak by setting setTarget to null
+          // because the memory leak occurred inside the library.
+          // They had forgotten to detach the view after its successful use,
+          // so it holds the reference of these views in memory.
+          // By setting these views as null we remove the reference from
+          // the memory after they are successfully shown.
+          showcaseView.setTarget(null)
+        }
+        start()
+      }
+    }
+  }
+
+  private fun onSearchMenuClicked(): Boolean =
+    when {
+      !checkFineLocationAccessPermission() ->
+        true
+      !checkExternalStorageWritePermission() ->
+        true
+      /* Initiate discovery */
+      !wifiDirectManager.isWifiP2pEnabled -> {
+        requestEnableWifiP2pServices()
+        true
+      }
+      Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServiceEnabled -> {
+        requestEnableLocationServices()
+        true
+      }
+      else -> {
+        showPeerDiscoveryProgressBar()
+        wifiDirectManager.discoverPeerDevices()
+        true
+      }
+    }
 
   private fun setupPeerDevicesList(activity: CoreMainActivity) {
     fragmentLocalFileTransferBinding?.listPeerDevices?.apply {
@@ -320,6 +380,7 @@ class LocalFileTransferFragment :
     ActivityCompat.requestPermissions(requireActivity(), arrayOf(permission), requestCode)
   }
 
+  @Suppress("DEPRECATION")
   override fun onRequestPermissionsResult(
     requestCode: Int,
     permissions: Array<String>,
@@ -336,6 +397,15 @@ class LocalFileTransferFragment :
           Log.e(TAG, "Storage write permission not granted")
           toast(R.string.permission_refused_storage, Toast.LENGTH_SHORT)
           requireActivity().popNavigationBackstack()
+        }
+        else ->
+          super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+      }
+    } else if (grantResults[0] == PERMISSION_GRANTED) {
+      when (requestCode) {
+        PERMISSION_REQUEST_FINE_LOCATION,
+        PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS -> {
+          onSearchMenuClicked()
         }
         else ->
           super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -365,10 +435,7 @@ class LocalFileTransferFragment :
   private fun requestEnableLocationServices() {
     alertDialogShower.show(
       KiwixDialog.EnableLocationServices, {
-        startActivityForResult(
-          Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),
-          REQUEST_ENABLE_LOCATION_SERVICES
-        )
+        enableLocationServicesLauncher.launch(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
       },
       { toast(R.string.discovery_needs_location, Toast.LENGTH_SHORT) }
     )
@@ -387,28 +454,27 @@ class LocalFileTransferFragment :
     baseActivity.cachedComponent.inject(this)
   }
 
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    when (requestCode) {
-      REQUEST_ENABLE_LOCATION_SERVICES -> {
+  private val enableLocationServicesLauncher =
+    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+      if (result.resultCode != Activity.RESULT_OK) {
         if (!isLocationServiceEnabled) {
           toast(R.string.permission_refused_location, Toast.LENGTH_SHORT)
         }
       }
-      else -> super.onActivityResult(requestCode, resultCode, data)
     }
-  }
 
   override fun onDestroyView() {
     wifiDirectManager.stopWifiDirectManager()
     wifiDirectManager.callbacks = null
     fragmentLocalFileTransferBinding = null
+    searchIconView = null
+    materialShowCaseSequence = null
     super.onDestroyView()
   }
 
   companion object {
     // Not a typo, 'Log' tags have a length upper limit of 25 characters
     const val TAG = "LocalFileTransferActvty"
-    const val REQUEST_ENABLE_LOCATION_SERVICES = 1
     private const val PERMISSION_REQUEST_FINE_LOCATION = 2
     private const val PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS = 3
   }

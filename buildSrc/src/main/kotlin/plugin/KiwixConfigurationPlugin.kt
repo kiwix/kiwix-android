@@ -48,6 +48,7 @@ class KiwixConfigurationPlugin : Plugin<Project> {
   }
 
   private fun doDefaultConfiguration(target: Project) {
-    allProjectConfigurer.configureBaseExtension(target, "${target.projectDir}")
+    allProjectConfigurer.configureBaseExtension(target)
+    allProjectConfigurer.configureCommonExtension(target)
   }
 }

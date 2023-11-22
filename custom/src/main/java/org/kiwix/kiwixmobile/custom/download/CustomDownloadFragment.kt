@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.custom.download
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,10 +29,13 @@ import io.reactivex.disposables.CompositeDisposable
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.data.remote.isAuthenticationUrl
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.extensions.setDistinctDisplayedChild
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.databinding.FragmentCustomDownloadBinding
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedDownload
@@ -100,25 +104,53 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
     activity?.finish()
   }
 
-  private fun render(state: State) {
+  private fun render(state: State): Unit? {
     return when (state) {
       DownloadRequired ->
         fragmentCustomDownloadBinding?.cdViewAnimator?.setDistinctDisplayedChild(0)
+
       is DownloadInProgress -> {
         fragmentCustomDownloadBinding?.cdViewAnimator?.setDistinctDisplayedChild(1)
-        render(state.downloads[0])
+        showDownloadingProgress(state.downloads[0])
       }
+
       is DownloadFailed -> {
         fragmentCustomDownloadBinding?.cdViewAnimator?.setDistinctDisplayedChild(2)
-        fragmentCustomDownloadBinding?.customDownloadError?.cdErrorText?.text =
-          context?.let(state.downloadState::toReadableState)
+        val errorMessage = context?.let { context ->
+          if (state.downloadState.zimUrl?.isAuthenticationUrl == false) {
+            return@let getErrorMessageFromDownloadState(state.downloadState, context)
+          }
+
+          val defaultErrorMessage = getErrorMessageFromDownloadState(state.downloadState, context)
+          // Check if `REQUEST_NOT_SUCCESSFUL` indicates an unsuccessful response from the server.
+          // If the server does not respond to the URL, we will display a custom message to the user.
+          if (defaultErrorMessage == context.getString(
+              R.string.failed_state,
+              "REQUEST_NOT_SUCCESSFUL"
+            )
+          ) {
+            context.getString(
+              R.string.failed_state,
+              context.getString(R.string.custom_download_error_message_for_authentication_failed)
+            )
+          } else {
+            defaultErrorMessage
+          }
+        }
+        fragmentCustomDownloadBinding?.customDownloadError?.cdErrorText?.text = errorMessage
       }
+
       DownloadComplete ->
         fragmentCustomDownloadBinding?.cdViewAnimator?.setDistinctDisplayedChild(3)
-    }!!
+    }
   }
 
-  private fun render(downloadItem: DownloadItem) {
+  private fun getErrorMessageFromDownloadState(
+    downloadState: DownloadState,
+    context: Context
+  ): String = "${downloadState.toReadableState(context)}"
+
+  private fun showDownloadingProgress(downloadItem: DownloadItem) {
     fragmentCustomDownloadBinding?.customDownloadInProgress?.apply {
       cdDownloadState.text = downloadItem.readableEta
       cdEta.text = context?.let(downloadItem.downloadState::toReadableState)

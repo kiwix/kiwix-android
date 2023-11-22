@@ -52,6 +52,8 @@
   <string name="hotspot_notification_content_title">Dostopna točka Kiwix</string>
   <string name="start_server_label">Zaženi strežnik</string>
   <string name="stop_server_label">Ustavi strežnik</string>
+  <string name="error_server_already_running">Strežnik že deluje. Izklopite ga in poskusite znova.</string>
+  <string name="error_ip_address_not_found">IP-naslova ni bilo mogoče najti.</string>
   <string name="server_started_message">Za dostop do strežnika %s vnesite v brskalnik ta lP-naslov</string>
   <string name="share_host_address">Delite URL z drugimi aplikacijami</string>
   <string name="error_file_not_found">Napaka: izbrane datoteke ZIM ni bilo mogoče najti.</string>
@@ -128,7 +130,7 @@
   <string name="help_3">Kivi je bralnik vsebine brez povezave. Deluje podobno kot brskalnik, vendar namesto dostopanja do strani v spletu bere vsebino iz datoteke v formatu ZIM.</string>
   <string name="help_4">Čeprav je bil Kiwix prvotno zasnovan za zagotavljanje Wikipedije brez povezave, bere pa tudi drugo vsebino.</string>
   <string name="help_5">Kje je vsebina?</string>
-  <string name="help_6">Naša vsebina gostuje na spletnem mestu Kiwix.</string>
+  <string name="help_6">Naša vsebina gostuje v spletišču Kiwix.</string>
   <string name="help_7">Na voljo so kot datoteke ZIM. Veliko jih je:</string>
   <string name="help_8">• Wikipedija je na voljo za vsak jezik posebej</string>
   <string name="help_9">• Na voljo so tudi druge vsebine, npr. WikiLeaks ali WikiSource</string>

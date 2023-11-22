@@ -41,7 +41,6 @@ import org.kiwix.kiwixmobile.core.extensions.tint
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getToolbarHeight
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowHeight
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowWidth
-import org.kiwix.kiwixmobile.core.utils.ImageUtils.getBitmapFromView
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 
 class TabsAdapter internal constructor(
@@ -62,11 +61,6 @@ class TabsAdapter internal constructor(
   ): ViewHolder {
     val context = parent.context
     val margin16 = context.resources.getDimensionPixelSize(R.dimen.activity_horizontal_margin)
-    val contentImage = ImageView(context)
-      .apply {
-        id = R.id.tabsAdapterContentImageView
-        scaleType = ImageView.ScaleType.FIT_XY
-      }
     val close = ImageView(context)
       .apply {
         id = R.id.tabsAdapterCloseImageView
@@ -77,13 +71,6 @@ class TabsAdapter internal constructor(
       .apply {
         id = R.id.tabsAdapterCardView
         useCompatPadding = true
-        addView(
-          contentImage,
-          FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.MATCH_PARENT
-          )
-        )
       }
     val textView = TextView(context)
       .apply {
@@ -125,7 +112,7 @@ class TabsAdapter internal constructor(
         connect(textView.id, END, close.id, START)
         applyTo(constraintLayout)
       }
-    return ViewHolder(constraintLayout, contentImage, textView, close)
+    return ViewHolder(constraintLayout, textView, close, cardView)
   }
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -135,19 +122,39 @@ class TabsAdapter internal constructor(
     holder.apply {
       title.text = webViewTitle
       close.setOnClickListener { v: View -> listener?.onCloseTab(v, adapterPosition) }
-      content.apply {
-        setImageBitmap(
-          getBitmapFromView(webView, activity.getWindowWidth(), activity.getWindowHeight())
-        )
-        setOnClickListener { v: View ->
-          selected = adapterPosition
-          listener?.onSelectTab(v, selected)
-          notifyDataSetChanged()
+      materialCardView.apply {
+        removeAllViews()
+        // Create a new FrameLayout to hold the web view and custom view
+        val frameLayout = FrameLayout(context)
+        // Add the web view to the frame layout
+        frameLayout.addView(webView)
+        // Create a custom view that covers the entire
+        // webView(which prevent to clicks inside the webView) and handles tab selection
+        val view = View(context).apply {
+          layoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+          )
+          setOnClickListener { v: View ->
+            selected = adapterPosition
+            listener?.onSelectTab(v, selected)
+            notifyDataSetChanged()
+          }
         }
+        // Add the custom view to the frame layout
+        frameLayout.addView(view)
+        // Add the frame layout to the material card view
+        addView(
+          frameLayout,
+          FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+          )
+        )
       }
     }
     if (webViewTitle != activity.getString(R.string.menu_home)) {
-      painter.update(holder.content)
+      painter.update(webView) // if the webView is not opened yet
     }
   }
 
@@ -164,6 +171,11 @@ class TabsAdapter internal constructor(
     fun onCloseTab(view: View, position: Int)
   }
 
-  class ViewHolder(view: View, val content: ImageView, val title: TextView, val close: ImageView) :
+  class ViewHolder(
+    view: View,
+    val title: TextView,
+    val close: ImageView,
+    val materialCardView: MaterialCardView
+  ) :
     RecyclerView.ViewHolder(view)
 }

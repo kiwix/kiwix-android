@@ -22,15 +22,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultListItem
+import org.kiwix.libzim.SuggestionSearch
 import javax.inject.Inject
 
 interface SearchResultGenerator {
   suspend fun generateSearchResults(
     searchTerm: String,
     zimFileReader: ZimFileReader?
-  ): List<SearchListItem>
+  ): SuggestionSearch?
 }
 
 class ZimSearchResultGenerator @Inject constructor() : SearchResultGenerator {
@@ -38,7 +37,7 @@ class ZimSearchResultGenerator @Inject constructor() : SearchResultGenerator {
   override suspend fun generateSearchResults(searchTerm: String, zimFileReader: ZimFileReader?) =
     withContext(Dispatchers.IO) {
       if (searchTerm.isNotEmpty()) readResultsFromZim(searchTerm, zimFileReader)
-      else emptyList()
+      else null
     }
 
   private suspend fun readResultsFromZim(
@@ -46,23 +45,5 @@ class ZimSearchResultGenerator @Inject constructor() : SearchResultGenerator {
     reader: ZimFileReader?
   ) =
     reader.also { yield() }
-      ?.searchSuggestions(searchTerm, 200)
-      .also { yield() }
-      .run { suggestionResults(reader) }
-
-  private suspend fun suggestionResults(reader: ZimFileReader?) = createList {
-    yield()
-    reader?.getNextSuggestion()
-      ?.let { ZimSearchResultListItem(it.title) }
-  }
-    .distinct()
-    .toList()
-
-  private suspend fun <T> createList(readSearchResult: suspend () -> T?): List<T> {
-    return mutableListOf<T>().apply {
-      while (true) {
-        readSearchResult()?.let(::add) ?: break
-      }
-    }
-  }
+      ?.searchSuggestions(searchTerm)
 }

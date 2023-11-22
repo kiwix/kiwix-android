@@ -11,7 +11,8 @@
     <ID>MagicNumber:ShareFiles.kt$ShareFiles$24</ID>
     <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$5</ID>
     <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$500</ID>
-    <ID>NestedBlockDepth:LocalLibraryFragment.kt$LocalLibraryFragment$private fun checkPermissions()</ID>
+    <ID>MagicNumber:LocalFileTransferFragment.kt$LocalFileTransferFragment$500</ID>
+    <ID>NestedBlockDepth:LocalLibraryFragment.kt$LocalLibraryFragment$private fun checkManageExternalStoragePermission()</ID>
     <ID>NestedBlockDepth:PeerGroupHandshake.kt$PeerGroupHandshake$private fun readHandshakeAndExchangeMetaData(): InetAddress?</ID>
     <ID>NestedBlockDepth:ReceiverHandShake.kt$ReceiverHandShake$override fun exchangeFileTransferMetadata(inputStream: InputStream, outputStream: OutputStream)</ID>
     <ID>PackageNaming:AvailableSpaceCalculator.kt$package
@@ -25,10 +26,6 @@
       org.kiwix.kiwixmobile.zimManager.fileselectView</ID>
     <ID>PackageNaming:FileSystemChecker.kt$package org.kiwix.kiwixmobile.zimManager</ID>
     <ID>PackageNaming:FileWritingFileSystemChecker.kt$package org.kiwix.kiwixmobile.zimManager</ID>
-    <ID>PackageNaming:HotspotNotificationManager.kt$package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
-    <ID>PackageNaming:HotspotStateReceiver.kt$package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
-    <ID>PackageNaming:IpAddressCallbacks.kt$package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
-    <ID>PackageNaming:HotspotService.kt$package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
     <ID>PackageNaming:LibraryAdapter.kt$package
       org.kiwix.kiwixmobile.zimManager.libraryView.adapter</ID>
     <ID>PackageNaming:LibraryDelegate.kt$package

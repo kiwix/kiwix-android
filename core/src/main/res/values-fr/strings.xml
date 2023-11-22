@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Alno
+* BlueCamille
 * Derugon
 * Djiboun
 * Eneelk
@@ -32,7 +33,7 @@
   <string name="menu_read_aloud">Lire à haute voix</string>
   <string name="menu_read_aloud_stop">Arrêter de lire à haute voix</string>
   <string name="menu_support_kiwix">Soutenir Kiwix</string>
-  <string name="menu_wifi_hotspot">Diffuser des contenus</string>
+  <string name="menu_wifi_hotspot">Hotspot Wi-Fi</string>
   <string name="save_media">Enregistrer le média</string>
   <string name="save_media_error">Une erreur s’est produite en essayant d’enregistrer le média !</string>
   <string name="save_media_saved">Média enregistré sous %s dans le dossier Downloads/org.kiwix…/</string>
@@ -58,11 +59,13 @@
   <string name="wifi_dialog_title">Connexion WiFi détectée</string>
   <string name="wifi_dialog_body">Afin de pouvoir lire les livres sur d’autres appareils, veuillez vous assurer que tous ceux-ci sont connectés au même réseau WiFi.</string>
   <string name="hotspot_dialog_message">Pour que cette fonctionnalité fonctionne, vous devez d’abord activer manuellement votre point d’accès WiFi ou vous assurer que l’appareil hôte et l’appareil récepteur appartiennent au même réseau WiFi.</string>
-  <string name="hotspot_dialog_neutral_button">PROCÉDER</string>
+  <string name="hotspot_dialog_neutral_button">CONTINUER</string>
   <string name="hotspot_channel_description">Mises à jour concernant l’état de votre point d’accès/serveur.</string>
   <string name="hotspot_notification_content_title">Point d’accès Kiwix</string>
   <string name="start_server_label">Démarrer le serveur</string>
   <string name="stop_server_label">Arrêter le serveur</string>
+  <string name="error_server_already_running">Le serveur est déjà en cours d\'exécution. Veuillez l\'arrêter et réessayer.</string>
+  <string name="error_ip_address_not_found">Impossible de trouver l\'adresse IP.</string>
   <string name="server_started_message">Entrez cette adresse IP dans votre navigateur pour accéder au serveur %s</string>
   <string name="share_host_address">Partager l’URL avec d’autres applications</string>
   <string name="error_file_not_found">Erreur : le fichier ZIM sélectionné est introuvable.</string>
@@ -151,7 +154,7 @@
   <string name="tts_pause">pause</string>
   <string name="tts_resume">reprendre</string>
   <string name="stop">arrêter</string>
-  <string name="configure_storage_option">Télécharger le livre sur la mémoire de stockage interne ?</string>
+  <string name="configure_storage_option">Télécharger le livre vers la mémoire interne ?</string>
   <string name="internal_storage">Interne</string>
   <string name="external_storage">Externe</string>
   <string name="configure">Configurer</string>
@@ -166,7 +169,7 @@
   <string name="next">Suivant</string>
   <string name="previous">Précédent</string>
   <string name="wifi_only_title">Permettre le téléchargement de contenu via le réseau mobile ?</string>
-  <string name="wifi_only_msg">Si vous choisissez « Oui », vous ne serez plus averti à l’avenir. Cependant, vous pouvez toujours modifier cela dans les paramètres.</string>
+  <string name="wifi_only_msg">Si vous choisissez « Oui », vous ne serez plus averti à l’avenir. Cependant, vous pouvez toujours revenir sur ce choix dans les paramètres.</string>
   <string name="pref_wifi_only">Télécharger le contenu uniquement via WiFi</string>
   <string name="time_day">jour</string>
   <string name="time_hour"> h</string>
@@ -177,13 +180,13 @@
   <string name="time_yesterday">Hier</string>
   <string name="pref_external_link_popup_title">Avertir lors de l’accès à des liens externes</string>
   <string name="pref_external_link_popup_summary">Afficher un dialogue pour avertir à propos de coûts supplémentaires ou de liens ne fonctionnant pas hors connexion.</string>
-  <string name="external_link_popup_dialog_title">Accès au lien externe !</string>
+  <string name="external_link_popup_dialog_title">Vous accédez à un lien externe !</string>
   <string name="external_link_popup_dialog_message">Vous accédez à un lien externe. Cela peut engendrer des coûts supplémentaires pour le transfert de données ou ne fonctionnera tout simplement pas lorsque vous serez hors ligne. Voulez-vous continuer ?</string>
   <string name="do_not_ask_anymore">Ne plus demander</string>
   <string name="your_languages">Langues sélectionnées :</string>
   <string name="other_languages">Autres langues :</string>
   <string name="no_items_msg">Aucun élément disponible</string>
-  <string name="crash_title">Eh bien, c’est embarrassant !</string>
+  <string name="crash_title">Oulala, c’est gênant</string>
   <string name="crash_description">Il semble que nous ayons planté.\n\nPourriez-vous nous aider à corriger ce problème en envoyant l’information suivante ?</string>
   <string name="crash_checkbox_language">Vos paramètres de langue</string>
   <string name="crash_checkbox_zimfiles">Une liste de vos fichiers ZIM</string>
@@ -198,7 +201,7 @@
   <string name="articleCount">%s articles</string>
   <string name="get_started">Commencer</string>
   <string name="download_books">Télécharger des livres</string>
-  <string name="humankind_knowledge">La connaissance de l’humanité, sur votre téléphone.</string>
+  <string name="humankind_knowledge">Les connaissances de l\'humanité, sur votre téléphone.</string>
   <string name="welcome_to_the_family">Bienvenue dans la famille</string>
   <string name="save_books_offline">Enregistrer des livres hors connexion</string>
   <string name="download_books_message">Téléchargez et lisez des livres où que vous soyez.</string>
@@ -207,7 +210,7 @@
   <string name="go_to_next_page">Aller à la page suivante</string>
   <string name="table_of_contents">Table des matières</string>
   <string name="select_languages">Sélectionner les langues</string>
-  <string name="save_languages">Enregistrer les langues</string>
+  <string name="save_languages">Sauvegarder les langues</string>
   <string name="send_feedback">Envoyer un avis</string>
   <string name="expand">Développer</string>
   <string name="history">Historique</string>
@@ -223,6 +226,7 @@
   <string name="complete">Terminé</string>
   <string name="paused_state">En pause</string>
   <string name="failed_state">Échec : %s</string>
+  <string name="custom_download_error_message_for_authentication_failed">Le fichier zim n’a pas pu être téléchargé, veuillez essayer de réinstaller l’application depuis le Play Store.</string>
   <string name="save">Enregistrer</string>
   <string name="note">Note</string>
   <string name="wiki_article_title">Titre de l’article du Wiki</string>
@@ -243,17 +247,17 @@
   <string name="books_count">%d livre(s)</string>
   <string name="discovery_initiated">Découverte lancée</string>
   <string name="discovery_failed">La découverte a échoué</string>
-  <string name="severe_loss_error">Erreur sévère ! Essayez de désactiver/réactiver le pair-à-pair en WiFi</string>
+  <string name="severe_loss_error">Erreur grave! Essayez de désactiver/réactiver l\'appairage WiFi</string>
   <string name="connection_failed">La connexion a échoué</string>
   <string name="permission_rationale_location">L’autorisation de géolocalisation est requise par Android pour permettre à l’application de détecter des appareils à proximité.</string>
-  <string name="permission_rationale_location_on_host_zim_file">La permission d’emplacement est nécessaire sur Android pour autoriser l’appli à héberger des fichiers Zim.</string>
+  <string name="permission_rationale_location_on_host_zim_file">La permission locale est demandée par Android pour autoriser l’application à héberger des fichiers Zim.</string>
   <string name="permission_rationale_nearby_device_on_host_zim_file">Une autorisation des appareils Wi-Fi à proximité est requise par Android pour permettre à l’application d’héberger des fichiers Zim.</string>
   <string name="permission_refused_location">Impossible de trouver des appareils proches sans les autorisations de géolocalisation</string>
   <string name="permission_refused_storage">Impossible d’accéder aux fichiers ZIM sans autorisation d’accès au stockage</string>
   <string name="request_enable_location">Activer la géolocalisation pour permettre la détection d’appareils proches</string>
   <string name="discovery_needs_location">Impossible de découvrir des pairs sans service de géolocalisation</string>
   <string name="request_enable_wifi">Activer le pair-à-pair WiFi dans les paramètres système</string>
-  <string name="discovery_needs_wifi">Impossible de découvrir des pairs sans WiFi activé</string>
+  <string name="discovery_needs_wifi">Impossible de découvrir les pairs si le WiFi n\'est pas activé</string>
   <string name="transfer_to">Transférer les fichiers vers %s ?</string>
   <string name="device_not_cooperating">L’appareil sélectionné ne coopère pas pour le transfert</string>
   <string name="file_transfer_complete">Transfert de fichier bien terminé</string>
@@ -298,7 +302,7 @@
   <string name="pref_text_zoom_title">Zoomer le texte</string>
   <string name="search_open_in_new_tab">Ouvrir dans un nouvel onglet</string>
   <string name="reader">Lecteur</string>
-  <string name="no_open_book">Aucun livre ouvert</string>
+  <string name="no_open_book">Aucun contenu ouvert</string>
   <string name="open_library">Ouvrir la bibliothèque</string>
   <string name="tab_restored">Onglet restauré</string>
   <string name="tabs_restored">Onglets restaurés</string>
@@ -329,10 +333,14 @@
   <string name="read_aloud_service_channel_name">Canal de lecture à voix haute</string>
   <string name="read_aloud_channel_description">Contrôles de synthèse vocale.</string>
   <string name="read_aloud_running">Exécution de la la lecture à voix haute</string>
-  <string name="backward_history">Reculer dans l’historique plus ancien</string>
-  <string name="forward_history">Avancer dans l’historique plus récent</string>
+  <string name="backward_history">Reculer dans l’historique</string>
+  <string name="forward_history">Avancer dans l’historique</string>
   <string name="clear_all_navigation_history_message">Efface tout l’historique de navigation (en arrière et en avant)</string>
   <string name="navigation_history_cleared">Historique de navigation effacé</string>
   <string name="go_to_settings_label">Aller aux paramètres</string>
   <string name="request_notification_permission_message">Pour effectuer cette action, veuillez accorder l’accès aux notifications</string>
+  <string name="click_nearby_devices_message">Cliquez ici pour rechercher des appareils à proximité</string>
+  <string name="your_device_name_message">Le nom de votre appareil apparaîtra ici.</string>
+  <string name="nearby_devices_list_message">Vous trouverez ici une liste des appareils à proximité. Appuyez sur le nom d\'un appareil pour lancer le transfert de fichiers.</string>
+  <string name="transfer_zim_files_list_message">Vous trouverez ici la liste des fichiers ZIM disponibles pour le transfert.</string>
 </resources>

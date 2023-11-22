@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Juuz0
+-->
+<resources>
+  <string name="retry">पुनः प्रयास करें</string>
+  <string name="invalid_installation">अमान्य इंस्टाल. कृपया जिम डाउनलोड करें। \nसुनिश्चित करें कि वाईफाई चालू है और आपके पास पर्याप्त भंडारण है</string>
+</resources>

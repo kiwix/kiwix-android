@@ -58,15 +58,15 @@ class KiwixSplashActivityTest {
   private val activityScenario: ActivityScenario<KiwixMainActivity> =
     ActivityScenario.launch(KiwixMainActivity::class.java)
 
-  @Rule
-  @JvmField
-  var readPermissionRule: GrantPermissionRule =
-    GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE)
+  private val permissions = arrayOf(
+    Manifest.permission.READ_EXTERNAL_STORAGE,
+    Manifest.permission.WRITE_EXTERNAL_STORAGE
+  )
 
   @Rule
   @JvmField
-  var writePermissionRule: GrantPermissionRule =
-    GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+  var permissionRules: GrantPermissionRule =
+    GrantPermissionRule.grant(*permissions)
   private var context: Context? = null
 
   @Before

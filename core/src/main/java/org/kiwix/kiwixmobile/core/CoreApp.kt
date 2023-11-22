@@ -29,9 +29,11 @@ import com.jakewharton.threetenabp.AndroidThreeTen
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.di.components.DaggerCoreComponent
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
 import javax.inject.Inject
 
+@Suppress("UnnecessaryAbstractClass")
 abstract class CoreApp : Application() {
   companion object {
     @JvmStatic
@@ -64,6 +66,8 @@ abstract class CoreApp : Application() {
   @Inject
   lateinit var serviceWorkerInitialiser: ServiceWorkerInitialiser
 
+  private lateinit var coreMainActivity: CoreMainActivity
+
   override fun attachBaseContext(base: Context) {
     super.attachBaseContext(base)
     if (BuildConfig.DEBUG) {
@@ -89,9 +93,7 @@ abstract class CoreApp : Application() {
     if (BuildConfig.DEBUG) {
       StrictMode.setThreadPolicy(
         StrictMode.ThreadPolicy.Builder().apply {
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            detectResourceMismatches()
-          }
+          detectResourceMismatches()
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             detectUnbufferedIo()
           }
@@ -105,9 +107,7 @@ abstract class CoreApp : Application() {
       )
       StrictMode.setVmPolicy(
         VmPolicy.Builder().apply {
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            detectCleartextNetwork()
-          }
+          detectCleartextNetwork()
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             detectContentUriWithoutPermission()
           }
@@ -124,6 +124,12 @@ abstract class CoreApp : Application() {
       )
     }
   }
+
+  fun setMainActivity(coreMainActivity: CoreMainActivity) {
+    this.coreMainActivity = coreMainActivity
+  }
+
+  fun getMainActivity() = coreMainActivity
 
   /* Checks if external storage is available for read and write */
   val isExternalStorageWritable: Boolean

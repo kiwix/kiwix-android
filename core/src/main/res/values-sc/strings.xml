@@ -206,6 +206,7 @@
   <string name="complete">Acabadu</string>
   <string name="paused_state">In pàusa</string>
   <string name="failed_state">Fallidu: %s</string>
+  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">Su documentu zim non s\'est pòdidu iscarrigare, proa a torrare a installare s\'aplicatzione dae sa butega de aplicatziones</string>
   <string name="save">Sarva</string>
   <string name="note">Nota</string>
   <string name="wiki_article_title">Tìtulu de s\'artìculu de sa Wiki</string>

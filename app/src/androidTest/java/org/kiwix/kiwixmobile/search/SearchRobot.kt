@@ -18,6 +18,11 @@
 
 package org.kiwix.kiwixmobile.search
 
+import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
@@ -32,7 +37,12 @@ class SearchRobot : BaseRobot() {
   fun clickOnSearchItemInSearchList() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
     isVisible(ViewId(R.id.search_list))
-    clickOn(ViewId(R.id.list_item_search_text))
+    onView(withId(R.id.search_list)).perform(
+      actionOnItemAtPosition<RecyclerView.ViewHolder>(
+        0,
+        click()
+      )
+    )
   }
 
   fun checkZimFileSearchSuccessful(readerFragment: Int) {

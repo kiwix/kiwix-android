@@ -40,9 +40,14 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.CONTACT_EMAIL_ADDRESS
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 
+@Suppress("UnnecessaryAbstractClass")
 abstract class HelpFragment : BaseFragment() {
   private var fragmentHelpBinding: FragmentHelpBinding? = null
   protected open fun rawTitleDescriptionMap(): List<Pair<Int, Int>> = emptyList()
+  override val fragmentToolbar: Toolbar? by lazy {
+    fragmentHelpBinding?.root?.findViewById(R.id.toolbar)
+  }
+  override val fragmentTitle: String? by lazy { getString(R.string.menu_help) }
 
   private val titleDescriptionMap by lazy {
     rawTitleDescriptionMap().associate { (title, description) ->
@@ -55,21 +60,12 @@ abstract class HelpFragment : BaseFragment() {
     (baseActivity as CoreMainActivity).cachedComponent.inject(this)
   }
 
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
     val activity = requireActivity() as AppCompatActivity
     fragmentHelpBinding?.activityHelpFeedbackTextView?.setOnClickListener { sendFeedback() }
     fragmentHelpBinding?.activityHelpFeedbackImageView?.setOnClickListener { sendFeedback() }
     fragmentHelpBinding?.diagnosticClickableArea?.setOnClickListener { sendDiagnosticReport() }
-    val toolbar: Toolbar? = fragmentHelpBinding?.root?.findViewById(R.id.toolbar)
-    toolbar?.apply {
-      activity.setSupportActionBar(this)
-      setNavigationOnClickListener { requireActivity().onBackPressed() }
-    }
-    activity.supportActionBar?.let {
-      it.setDisplayHomeAsUpEnabled(true)
-      it.setTitle(R.string.menu_help)
-    }
     fragmentHelpBinding?.activityHelpRecyclerView?.addItemDecoration(
       DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
     )

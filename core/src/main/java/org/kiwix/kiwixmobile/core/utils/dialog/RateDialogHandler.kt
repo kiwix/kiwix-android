@@ -60,7 +60,7 @@ class RateDialogHandler @Inject constructor(
   fun checkForRateDialog(@IdRes iconResId: Int) {
     isFirstRun = sharedPreferenceUtil.prefIsFirstRun
     visitCounterPref = RateAppCounter(activity)
-    tempVisitCount = visitCounterPref?.count!!
+    tempVisitCount = visitCounterPref?.count ?: 0
     ++tempVisitCount
     visitCounterPref?.count = tempVisitCount
     if (shouldShowRateDialog() && NetworkUtils.isNetworkAvailable(activity)) {
@@ -81,7 +81,7 @@ class RateDialogHandler @Inject constructor(
     val goToMarket = Intent(Intent.ACTION_VIEW, kiwixLocalMarketUri)
     goToMarket.addFlags(
       Intent.FLAG_ACTIVITY_NO_HISTORY or
-        Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET or
+        Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
         Intent.FLAG_ACTIVITY_MULTIPLE_TASK
     )
     try {

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Умар
+-->
+<resources>
+  <string name="retry">Йухадан</string>
+  <string name="invalid_installation">ДӀахӀоттош гӀалат ду. Дехар до Zim схьаэца.\n Хьажа WiFi латина а, лармин чохь тоъал меттиг йуй а</string>
+</resources>
