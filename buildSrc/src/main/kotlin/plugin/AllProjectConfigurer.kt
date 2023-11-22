@@ -68,7 +68,15 @@ class AllProjectConfigurer {
       target.tasks.withType(KotlinCompile::class.java) {
         kotlinOptions.jvmTarget = "1.8"
       }
-      buildFeatures.viewBinding = true
+      buildFeatures.apply {
+        viewBinding = true
+        /*
+         * By default, the generation of the `BuildConfig` class is turned off in Gradle `8.1.3`.
+         * Since we are setting and using `buildConfig` properties in our project,
+         * enabling this attribute will generate the `BuildConfig` file.
+         */
+        buildConfig = true
+      }
 
       testOptions {
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
