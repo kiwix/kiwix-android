@@ -81,6 +81,9 @@ class CustomReaderFragment : CoreReaderFragment() {
     val args = CustomReaderFragmentArgs.fromBundle(requireArguments())
     if (args.pageUrl.isNotEmpty()) {
       loadUrlWithCurrentWebview(args.pageUrl)
+      // Setup bookmark for current book
+      // See https://github.com/kiwix/kiwix-android/issues/3541
+      zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
     } else {
       openObbOrZim()
       manageExternalLaunchAndRestoringViewState()
