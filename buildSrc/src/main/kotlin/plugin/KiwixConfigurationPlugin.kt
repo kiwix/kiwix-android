@@ -33,10 +33,10 @@ class KiwixConfigurationPlugin : Plugin<Project> {
     target.plugins.all {
       when (this) {
         is LibraryPlugin -> {
-          doDefaultConfiguration(target)
+          doDefaultConfiguration(target, true)
         }
         is AppPlugin -> {
-          doDefaultConfiguration(target)
+          doDefaultConfiguration(target, false)
           appConfigurer.configure(target)
         }
       }
@@ -47,8 +47,8 @@ class KiwixConfigurationPlugin : Plugin<Project> {
     allProjectConfigurer.configureJacoco(target)
   }
 
-  private fun doDefaultConfiguration(target: Project) {
-    allProjectConfigurer.configureBaseExtension(target)
+  private fun doDefaultConfiguration(target: Project, isLibrary: Boolean) {
+    allProjectConfigurer.configureBaseExtension(target, isLibrary)
     allProjectConfigurer.configureCommonExtension(target)
   }
 }

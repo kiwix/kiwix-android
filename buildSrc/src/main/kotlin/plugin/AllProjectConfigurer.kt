@@ -43,9 +43,18 @@ class AllProjectConfigurer {
     target.plugins.apply("androidx.navigation.safeargs")
   }
 
-  fun configureBaseExtension(target: Project) {
+  fun configureBaseExtension(target: Project, isLibrary: Boolean) {
     target.configureExtension<BaseExtension> {
-      namespace = ""
+      // The namespace cannot be directly set in `LibraryExtension`.
+      // The core module is configured as a library for both Kiwix and custom apps.
+      // Therefore, we set the namespace in `BaseExtension` for the core module,
+      // based on the boolean value of `isLibrary`. This value is passed from the
+      // `KiwixConfigurationPlugin`. If the current plugin is `LibraryPlugin`,
+      // indicating it is the core module, then this value will be true,
+      // and we set the namespace accordingly.
+      if (isLibrary) {
+        namespace = "org.kiwix.kiwixmobile.core"
+      }
       setCompileSdkVersion(Config.compileSdk)
       defaultConfig {
         minSdk = Config.minSdk
