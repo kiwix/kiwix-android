@@ -25,6 +25,7 @@ import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
 import org.kiwix.kiwixmobile.core.R
+import com.tonyodev.fetch2.R.string
 import kotlin.reflect.KClass
 
 abstract class CoreSearchWidget : AppWidgetProvider() {
@@ -36,7 +37,7 @@ abstract class CoreSearchWidget : AppWidgetProvider() {
     appWidgetManager: AppWidgetManager,
     appWidgetIds: IntArray
   ) {
-    val appName = context.getString(R.string.app_name)
+    val appName = context.getString(string.app_name)
     appWidgetIds.forEach { appWidgetId ->
       val views = RemoteViews(context.packageName, R.layout.kiwix_search_widget)
       views.setTextViewText(R.id.search_widget_text, "Search $appName")

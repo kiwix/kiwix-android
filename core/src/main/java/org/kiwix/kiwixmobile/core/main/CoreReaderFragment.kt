@@ -97,6 +97,7 @@ import org.json.JSONException
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.R
+import com.tonyodev.fetch2.R.string
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
@@ -993,7 +994,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun getValidTitle(zimFileTitle: String?): String =
-    if (isAdded && isInvalidTitle(zimFileTitle)) getString(R.string.app_name)
+    if (isAdded && isInvalidTitle(zimFileTitle)) getString(string.app_name)
     else zimFileTitle.toString()
 
   private fun isInvalidTitle(zimFileTitle: String?): Boolean =
