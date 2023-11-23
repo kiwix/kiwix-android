@@ -22,13 +22,13 @@ object Versions {
 
   const val com_squareup_okhttp3: String = "4.9.0"
 
-  const val org_jetbrains_kotlin: String = "1.7.0"
+  const val org_jetbrains_kotlin: String = "1.9.20"
 
   const val androidx_navigation: String = "2.5.3"
 
   const val navigation_ui_ktx: String = "2.4.1"
 
-  const val com_google_dagger: String = "2.42"
+  const val com_google_dagger: String = "2.48.1"
 
   const val com_jakewharton: String = "10.2.3"
 

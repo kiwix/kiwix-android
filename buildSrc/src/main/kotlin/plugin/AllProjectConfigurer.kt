@@ -219,8 +219,6 @@ class AllProjectConfigurer {
       implementation(Libs.core_ktx)
       implementation(Libs.fragment_ktx)
       implementation(Libs.collection_ktx)
-      implementation(Libs.butterknife)
-      kapt(Libs.butterknife_compiler)
       implementation(Libs.fetch)
       implementation(Libs.rxandroid)
       implementation(Libs.rxjava)

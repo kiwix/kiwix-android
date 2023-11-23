@@ -139,23 +139,6 @@ object Libs {
     Versions.com_google_dagger
 
   /**
-   * https://github.com/JakeWharton/butterknife/
-   */
-  const val butterknife: String = "com.jakewharton:butterknife:" + Versions.com_jakewharton
-
-  /**
-   * https://github.com/JakeWharton/butterknife/
-   */
-  const val butterknife_compiler: String = "com.jakewharton:butterknife-compiler:" +
-    Versions.com_jakewharton
-
-  /**
-   * https://github.com/JakeWharton/butterknife/
-   */
-  const val butterknife_gradle_plugin: String = "com.jakewharton:butterknife-gradle-plugin:" +
-    Versions.com_jakewharton
-
-  /**
    * https://developer.android.com/testing
    */
   const val androidx_test_core: String = "androidx.test:core:" + Versions.androidx_test_core
