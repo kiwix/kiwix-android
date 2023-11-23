@@ -81,11 +81,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
-import butterknife.OnLongClick
-import butterknife.Unbinder
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -100,11 +95,11 @@ import org.json.JSONException
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R2
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
+import org.kiwix.kiwixmobile.core.databinding.FragmentReaderBinding
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
@@ -183,55 +178,50 @@ abstract class CoreReaderFragment :
   NavigationHistoryClickListener {
   protected val webViewList: MutableList<KiwixWebView> = ArrayList()
   private val webUrlsProcessor = BehaviorProcessor.create<String>()
+  private var fragmentReaderBinding: FragmentReaderBinding? = null
 
-  @JvmField
-  @BindView(R2.id.toolbar)
-  var toolbar: Toolbar? = null
+  val toolbar: Toolbar? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.toolbar)
+  }
+  val toolbarContainer: AppBarLayout? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.fragment_main_app_bar)
+  }
+  val progressBar: ContentLoadingProgressBar? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.main_fragment_progress_view)
+  }
 
-  @JvmField
-  @BindView(R2.id.toolbarWithSearchPlaceholder)
-  var toolbarWithSearchPlaceholder: ConstraintLayout? = null
-
-  @JvmField
-  @BindView(R2.id.fragment_main_app_bar)
-  var toolbarContainer: AppBarLayout? = null
-
-  @JvmField
-  @BindView(R2.id.main_fragment_progress_view)
-  var progressBar: ContentLoadingProgressBar? = null
-
-  @JvmField
-  @BindView(R2.id.navigation_fragment_main_drawer_layout)
-  var drawerLayout: DrawerLayout? = null
+  val drawerLayout: DrawerLayout? by lazy {
+    fragmentReaderBinding?.navigationFragmentMainDrawerLayout
+  }
   protected var tableDrawerRightContainer: NavigationView? = null
 
-  @JvmField
-  @BindView(R2.id.activity_main_content_frame)
-  var contentFrame: FrameLayout? = null
+  val contentFrame: FrameLayout? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.activity_main_content_frame)
+  }
 
-  @JvmField
-  @BindView(R2.id.bottom_toolbar)
-  var bottomToolbar: BottomAppBar? = null
+  val bottomToolbar: BottomAppBar? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.bottom_toolbar)
+  }
 
-  @JvmField
-  @BindView(R2.id.activity_main_tab_switcher)
-  var tabSwitcherRoot: View? = null
+  val tabSwitcherRoot: View? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.activity_main_tab_switcher)
+  }
 
-  @JvmField
-  @BindView(R2.id.tab_switcher_close_all_tabs)
-  var closeAllTabsButton: FloatingActionButton? = null
+  val closeAllTabsButton: FloatingActionButton? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.tab_switcher_close_all_tabs)
+  }
 
-  @JvmField
-  @BindView(R2.id.fullscreen_video_container)
-  var videoView: ViewGroup? = null
+  val videoView: ViewGroup? by lazy {
+    fragmentReaderBinding?.fullscreenVideoContainer
+  }
 
-  @JvmField
-  @BindView(R2.id.go_to_library_button_no_open_book)
-  var noOpenBookButton: Button? = null
+  val noOpenBookButton: Button? by lazy {
+    fragmentReaderBinding?.goToLibraryButtonNoOpenBook
+  }
 
-  @JvmField
-  @BindView(R2.id.activity_main_root)
-  var activityMainRoot: View? = null
+  val activityMainRoot: View? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.activity_main_root)
+  }
 
   @JvmField
   @Inject
@@ -265,49 +255,61 @@ abstract class CoreReaderFragment :
   protected var actionBar: ActionBar? = null
   protected var mainMenu: MainMenu? = null
 
-  @JvmField
-  @BindView(R2.id.activity_main_back_to_top_fab)
-  var backToTopButton: FloatingActionButton? = null
+  val toolbarWithSearchPlaceholder: ConstraintLayout? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.toolbarWithSearchPlaceholder)
+  }
 
-  @JvmField
-  @BindView(R2.id.activity_main_button_stop_tts)
-  var stopTTSButton: Button? = null
+  val backToTopButton: FloatingActionButton? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.activity_main_back_to_top_fab)
+  }
 
-  @JvmField
-  @BindView(R2.id.activity_main_button_pause_tts)
-  var pauseTTSButton: Button? = null
+  private val stopTTSButton: Button? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.activity_main_button_stop_tts)
+  }
 
-  @JvmField
-  @BindView(R2.id.activity_main_tts_controls)
-  var ttsControls: Group? = null
+  val pauseTTSButton: Button? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.activity_main_button_pause_tts)
+  }
 
-  @JvmField
-  @BindView(R2.id.activity_main_fullscreen_button)
-  var exitFullscreenButton: ImageButton? = null
+  val ttsControls: Group? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.activity_main_tts_controls)
+  }
 
-  @JvmField
-  @BindView(R2.id.bottom_toolbar_bookmark)
-  var bottomToolbarBookmark: ImageView? = null
+  private val exitFullscreenButton: ImageButton? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.activity_main_fullscreen_button)
+  }
 
-  @JvmField
-  @BindView(R2.id.bottom_toolbar_arrow_back)
-  var bottomToolbarArrowBack: ImageView? = null
+  private val bottomToolbarBookmark: ImageView? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.bottom_toolbar_bookmark)
+  }
 
-  @JvmField
-  @BindView(R2.id.bottom_toolbar_arrow_forward)
-  var bottomToolbarArrowForward: ImageView? = null
+  private val bottomToolbarArrowBack: ImageView? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.bottom_toolbar_arrow_back)
+  }
 
-  @JvmField
-  @BindView(R2.id.tab_switcher_recycler_view)
-  var tabRecyclerView: RecyclerView? = null
+  private val bottomToolbarArrowForward: ImageView? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.bottom_toolbar_arrow_forward)
+  }
 
-  @JvmField
-  @BindView(R2.id.snackbar_root)
-  var snackBarRoot: CoordinatorLayout? = null
+  private val bottomToolbarHome: ImageView? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.bottom_toolbar_home)
+  }
 
-  @JvmField
-  @BindView(R2.id.no_open_book_text)
-  var noOpenBookText: TextView? = null
+  private val tabRecyclerView: RecyclerView? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.tab_switcher_recycler_view)
+  }
+
+  private val snackBarRoot: CoordinatorLayout? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.snackbar_root)
+  }
+
+  private val noOpenBookText: TextView? by lazy {
+    fragmentReaderBinding?.noOpenBookText
+  }
+
+  private val bottomToolbarToc: ImageView? by lazy {
+    fragmentReaderBinding?.root?.findViewById(R.id.bottom_toolbar_toc)
+  }
 
   private var isFirstTimeMainPageLoaded = true
 
@@ -346,7 +348,6 @@ abstract class CoreReaderFragment :
   private var tabCallback: ItemTouchHelper.Callback? = null
   private var bookmarkingDisposable: Disposable? = null
   private var isBookmarked = false
-  private var unbinder: Unbinder? = null
   private lateinit var serviceConnection: ServiceConnection
   private var readAloudService: ReadAloudService? = null
   private var navigationHistoryList: MutableList<NavigationHistoryListItem> = ArrayList()
@@ -531,6 +532,53 @@ abstract class CoreReaderFragment :
     toolbarWithSearchPlaceholder?.setOnClickListener {
       openSearch(searchString = "", isOpenedFromTabView = false, false)
     }
+    backToTopButton?.setOnClickListener {
+      backToTop()
+    }
+    stopTTSButton?.setOnClickListener {
+      stopTts()
+    }
+    pauseTTSButton?.setOnClickListener {
+      pauseTts()
+    }
+    exitFullscreenButton?.setOnClickListener {
+      closeFullScreen()
+    }
+    bottomToolbarBookmark?.apply {
+      setOnClickListener {
+        toggleBookmark()
+      }
+      setOnLongClickListener {
+        goToBookmarks()
+      }
+    }
+    bottomToolbarArrowBack?.apply {
+      setOnClickListener {
+        goBack()
+      }
+      setOnLongClickListener {
+        showBackwardHistory()
+        true
+      }
+    }
+    bottomToolbarArrowForward?.apply {
+      setOnClickListener {
+        goForward()
+      }
+      setOnLongClickListener {
+        showForwardHistory()
+        true
+      }
+    }
+    bottomToolbarToc?.setOnClickListener {
+      openToc()
+    }
+    closeAllTabsButton?.setOnClickListener {
+      closeAllTabs()
+    }
+    bottomToolbarHome?.setOnClickListener {
+      openMainPage()
+    }
   }
 
   private fun initTabCallback() {
@@ -590,9 +638,8 @@ abstract class CoreReaderFragment :
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    val root = inflater.inflate(R.layout.fragment_reader, container, false)
-    unbinder = ButterKnife.bind(this, root)
-    return root
+    fragmentReaderBinding = FragmentReaderBinding.inflate(inflater, container, false)
+    return fragmentReaderBinding?.root
   }
 
   private fun handleIntentExtras(intent: Intent) {
@@ -840,19 +887,18 @@ abstract class CoreReaderFragment :
     drawerLayout?.setDrawerLockMode(lockMode)
   }
 
-  @OnClick(R2.id.bottom_toolbar_arrow_back) fun goBack() {
+  fun goBack() {
     if (getCurrentWebView()?.canGoBack() == true) {
       getCurrentWebView()?.goBack()
     }
   }
 
-  @OnClick(R2.id.bottom_toolbar_arrow_forward) fun goForward() {
+  fun goForward() {
     if (getCurrentWebView()?.canGoForward() == true) {
       getCurrentWebView()?.goForward()
     }
   }
 
-  @OnLongClick(R2.id.bottom_toolbar_arrow_back)
   fun showBackwardHistory() {
     if (getCurrentWebView()?.canGoBack() == true) {
       getCurrentWebView()?.copyBackForwardList()?.let { historyList ->
@@ -868,7 +914,6 @@ abstract class CoreReaderFragment :
     }
   }
 
-  @OnLongClick(R2.id.bottom_toolbar_arrow_forward)
   fun showForwardHistory() {
     if (getCurrentWebView()?.canGoForward() == true) {
       getCurrentWebView()?.copyBackForwardList()?.let { historyList ->
@@ -945,7 +990,6 @@ abstract class CoreReaderFragment :
     }
   }
 
-  @OnClick(R2.id.bottom_toolbar_toc)
   fun openToc() {
     drawerLayout?.openDrawer(GravityCompat.END)
   }
@@ -1112,7 +1156,6 @@ abstract class CoreReaderFragment :
     }
   }
 
-  @OnClick(R2.id.activity_main_button_pause_tts)
   fun pauseTts() {
     if (tts?.currentTTSTask == null) {
       tts?.stop()
@@ -1132,7 +1175,6 @@ abstract class CoreReaderFragment :
     }
   }
 
-  @OnClick(R2.id.activity_main_button_stop_tts)
   fun stopTts() {
     tts?.stop()
     setActionAndStartTTSService(ACTION_STOP_TTS)
@@ -1163,7 +1205,6 @@ abstract class CoreReaderFragment :
     tabRecyclerView?.adapter = null
     tableDrawerRight?.adapter = null
     tableDrawerAdapter = null
-    unbinder?.unbind()
     webViewList.clear()
     tempWebViewListForUndo.clear()
     // create a base Activity class that class this.
@@ -1514,7 +1555,6 @@ abstract class CoreReaderFragment :
     return isPermissionGranted
   }
 
-  @OnLongClick(R2.id.bottom_toolbar_bookmark)
   fun goToBookmarks(): Boolean {
     val parentActivity = requireActivity() as CoreMainActivity
     parentActivity.navigate(parentActivity.bookmarksFragmentResId)
@@ -1541,7 +1581,6 @@ abstract class CoreReaderFragment :
   }
 
   @Suppress("MagicNumber")
-  @OnClick(R2.id.activity_main_fullscreen_button)
   open fun closeFullScreen() {
     sharedPreferenceUtil?.putPrefFullScreen(false)
     toolbarContainer?.visibility = View.VISIBLE
@@ -1699,7 +1738,6 @@ abstract class CoreReaderFragment :
     }
   }
 
-  @OnClick(R2.id.tab_switcher_close_all_tabs)
   fun closeAllTabs() {
     onReadAloudStop()
     closeAllTabsButton?.apply {
@@ -1769,7 +1807,6 @@ abstract class CoreReaderFragment :
   }
 
   @Suppress("NestedBlockDepth")
-  @OnClick(R2.id.bottom_toolbar_bookmark)
   fun toggleBookmark() {
     try {
       getCurrentWebView()?.url?.let { articleUrl ->
@@ -1971,7 +2008,6 @@ abstract class CoreReaderFragment :
     openArticle(articleUrl)
   }
 
-  @OnClick(R2.id.bottom_toolbar_home)
   fun openMainPage() {
     val articleUrl = zimReaderContainer?.mainPage
     openArticle(articleUrl)
@@ -1983,7 +2019,6 @@ abstract class CoreReaderFragment :
     }
   }
 
-  @OnClick(R2.id.activity_main_back_to_top_fab)
   fun backToTop() {
     getCurrentWebView()?.pageUp(true)
   }

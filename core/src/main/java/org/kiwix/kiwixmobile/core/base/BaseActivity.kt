@@ -18,10 +18,7 @@
 package org.kiwix.kiwixmobile.core.base
 
 import android.os.Bundle
-import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
-import butterknife.ButterKnife
-import butterknife.Unbinder
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
@@ -31,20 +28,8 @@ open class BaseActivity : AppCompatActivity() {
   @Inject
   lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
-  private var unbinder: Unbinder? = null
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil)
-  }
-
-  override fun setContentView(@LayoutRes layoutResID: Int) {
-    super.setContentView(layoutResID)
-    unbinder = ButterKnife.bind(this)
-  }
-
-  override fun onDestroy() {
-    super.onDestroy()
-    unbinder?.unbind()
   }
 }
