@@ -48,7 +48,8 @@ import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.R.string
+import com.tonyodev.fetch2.R.string
+import com.tonyodev.fetch2.R.drawable
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
 const val DOWNLOAD_NOTIFICATION_TITLE = "OPEN_ZIM_FILE"
@@ -62,7 +63,7 @@ class FetchDownloadNotificationManager(private val context: Context) :
     notificationManager: NotificationManager
   ) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      val channelId = context.getString(R.string.fetch_notification_default_channel_id)
+      val channelId = context.getString(string.fetch_notification_default_channel_id)
       if (notificationManager.getNotificationChannel(channelId) == null) {
         notificationManager.createNotificationChannel(createChannel(channelId, context))
       }
@@ -99,23 +100,23 @@ class FetchDownloadNotificationManager(private val context: Context) :
       downloadNotification.isDownloading ->
         notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
           .addAction(
-            R.drawable.fetch_notification_cancel,
+            drawable.fetch_notification_cancel,
             context.getString(R.string.cancel),
             getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.DELETE)
           ).addAction(
-            R.drawable.fetch_notification_pause,
+            drawable.fetch_notification_pause,
             context.getString(R.string.tts_pause),
             getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.PAUSE)
           )
       downloadNotification.isPaused ->
         notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
           .addAction(
-            R.drawable.fetch_notification_resume,
+            drawable.fetch_notification_resume,
             context.getString(R.string.tts_resume),
             getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.RESUME)
           )
           .addAction(
-            R.drawable.fetch_notification_cancel,
+            drawable.fetch_notification_cancel,
             context.getString(R.string.cancel),
             getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.DELETE)
           )
