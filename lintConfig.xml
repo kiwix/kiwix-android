@@ -47,4 +47,5 @@
   <issue id="UnusedIds" severity="warning" />
   <issue id="DataExtractionRules" severity="warning" />
   <issue id="ObsoleteSdkInt" severity="warning" />
+  <issue id="AppLinksAutoVerify" severity="warning" />
 </lint>
