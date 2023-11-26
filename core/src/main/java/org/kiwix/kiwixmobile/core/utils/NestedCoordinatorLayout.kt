@@ -26,7 +26,7 @@ import androidx.annotation.AttrRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.NestedScrollingChild3
 import androidx.core.view.NestedScrollingChildHelper
-import org.kiwix.kiwixmobile.core.R
+import androidx.coordinatorlayout.R.attr
 
 /**
  * Taken from
@@ -39,7 +39,7 @@ class NestedCoordinatorLayout @JvmOverloads constructor(
   attrs: AttributeSet? = null,
   @AttrRes
   @SuppressLint("PrivateResource")
-  defStyleAttr: Int = R.attr.coordinatorLayoutStyle
+  defStyleAttr: Int = attr.coordinatorLayoutStyle
 ) : CoordinatorLayout(context, attrs, defStyleAttr), NestedScrollingChild3 {
 
   private val helper = NestedScrollingChildHelper(this)

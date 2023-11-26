@@ -29,6 +29,7 @@ import android.view.ViewGroup.LayoutParams
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.R.attr
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.R
@@ -78,7 +79,7 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) :
             layoutParams = getFrameLayoutParams()
             gravity = Gravity.CENTER
             minHeight = resources.getDimensionPixelSize(R.dimen.material_minimum_height_and_width)
-            setLinkTextColor(activity.getAttribute(R.attr.colorPrimary))
+            setLinkTextColor(activity.getAttribute(attr.colorPrimary))
             setOnLongClickListener {
               val clipboard =
                 ContextCompat.getSystemService(activity.baseContext, ClipboardManager::class.java)

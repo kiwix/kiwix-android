@@ -36,6 +36,7 @@ import androidx.constraintlayout.widget.ConstraintSet.TOP
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import org.kiwix.kiwixmobile.core.R
+import com.google.android.material.R.attr
 import org.kiwix.kiwixmobile.core.extensions.getAttribute
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
@@ -73,7 +74,7 @@ class TabsAdapter internal constructor(
         val outValue = TypedValue()
         context.theme.resolveAttribute(android.R.attr.actionBarItemBackground, outValue, true)
         setBackgroundResource(outValue.resourceId)
-        tint(context.getAttribute(R.attr.colorOnSurface))
+        tint(context.getAttribute(attr.colorOnSurface))
       }
     val cardView = MaterialCardView(context)
       .apply {
