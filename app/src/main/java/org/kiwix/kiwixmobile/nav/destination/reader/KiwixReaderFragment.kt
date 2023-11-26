@@ -37,6 +37,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.anim
+import org.kiwix.kiwixmobile.core.R.drawable
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
@@ -58,7 +60,6 @@ import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.File
-import kotlin.Throws
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
 
@@ -120,7 +121,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       // it will attempt to open the last opened ZIM file with the last loaded URL,
       // which is inside the non-existing ZIM file. This leads to unexpected behavior.
       exitBook()
-      activity.toast(R.string.error_file_not_found)
+      activity.toast(string.error_file_not_found)
       return
     }
     openZimFile(File(filePath))
@@ -146,7 +147,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
 
-      closeAllTabsButton?.setImageDrawableCompat(R.drawable.ic_close_black_24dp)
+      closeAllTabsButton?.setImageDrawableCompat(drawable.ic_close_black_24dp)
       if (tabSwitcherRoot?.visibility == View.VISIBLE) {
         tabSwitcherRoot?.visibility = GONE
         startAnimation(tabSwitcherRoot, anim.slide_up)
@@ -233,7 +234,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
         zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
       }
     } else {
-      getCurrentWebView()?.snack(R.string.zim_not_opened)
+      getCurrentWebView()?.snack(string.zim_not_opened)
       exitBook() // hide the options for zim file to avoid unexpected UI behavior
       return // book not found so don't need to restore the tabs for this file
     }

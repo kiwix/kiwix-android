@@ -190,9 +190,7 @@ abstract class CoreReaderFragment :
     fragmentReaderBinding?.root?.findViewById(R.id.main_fragment_progress_view)
   }
 
-  val drawerLayout: DrawerLayout? by lazy {
-    fragmentReaderBinding?.navigationFragmentMainDrawerLayout
-  }
+  var drawerLayout: DrawerLayout? = null
   protected var tableDrawerRightContainer: NavigationView? = null
 
   val contentFrame: FrameLayout? by lazy {

@@ -104,7 +104,7 @@ class CustomMainActivity : CoreMainActivity() {
        * We will re-enable it for custom apps once the issue is resolved.
        * For more info see https://github.com/kiwix/kiwix-android/pull/3516
        */
-      menu.findItem(R.id.menu_host_books)?.isVisible = false
+      menu.findItem(org.kiwix.kiwixmobile.core.R.id.menu_host_books)?.isVisible = false
       /**
        * Hide the `HelpFragment` from custom apps.
        * We have not removed the relevant code for `HelpFragment` from custom apps.
@@ -112,15 +112,18 @@ class CustomMainActivity : CoreMainActivity() {
        * we can either remove the line below or configure it according to the requirements.
        * For more information, see https://github.com/kiwix/kiwix-android/issues/3584
        */
-      menu.findItem(R.id.menu_help)?.isVisible = false
+      menu.findItem(org.kiwix.kiwixmobile.core.R.id.menu_help)?.isVisible = false
 
       /**
        * If custom app is configured to show the "About app_name app" in navigation
        * then show it navigation. "app_name" will be replaced with custom app name.
        */
       if (BuildConfig.ABOUT_APP_URL.isNotEmpty()) {
-        menu.findItem(R.id.menu_about_app)?.apply {
-          title = getString(R.string.menu_about_app, getString(R.string.app_name))
+        menu.findItem(org.kiwix.kiwixmobile.core.R.id.menu_about_app)?.apply {
+          title = getString(
+            org.kiwix.kiwixmobile.core.R.string.menu_about_app,
+            getString(R.string.app_name)
+          )
           isVisible = true
         }
       }
@@ -130,9 +133,12 @@ class CustomMainActivity : CoreMainActivity() {
        * then show it navigation. "app_name" will be replaced with custom app name.
        */
       if (BuildConfig.SUPPORT_URL.isNotEmpty()) {
-        menu.findItem(R.id.menu_support_kiwix)?.apply {
+        menu.findItem(org.kiwix.kiwixmobile.core.R.id.menu_support_kiwix)?.apply {
           title =
-            getString(R.string.menu_support_kiwix_for_custom_apps, getString(R.string.app_name))
+            getString(
+              org.kiwix.kiwixmobile.core.R.string.menu_support_kiwix_for_custom_apps,
+              getString(R.string.app_name)
+            )
           isVisible = true
         }
       } else {
@@ -140,7 +146,7 @@ class CustomMainActivity : CoreMainActivity() {
          * If custom app is not configured to show the "Support app_name" in navigation
          * then hide it from navigation.
          */
-        menu.findItem(R.id.menu_support_kiwix)?.isVisible = false
+        menu.findItem(org.kiwix.kiwixmobile.core.R.id.menu_support_kiwix)?.isVisible = false
       }
       setNavigationItemSelectedListener { item ->
         closeNavigationDrawer()
