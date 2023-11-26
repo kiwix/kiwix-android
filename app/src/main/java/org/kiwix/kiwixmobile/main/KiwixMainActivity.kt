@@ -33,6 +33,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.R.mipmap
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -116,18 +118,25 @@ class KiwixMainActivity : CoreMainActivity() {
     super.onConfigurationChanged(newConfig)
     if (::activityKiwixMainBinding.isInitialized) {
       activityKiwixMainBinding.bottomNavView.menu.apply {
-        findItem(R.id.readerFragment)?.title = resources.getString(R.string.reader)
-        findItem(R.id.libraryFragment)?.title = resources.getString(R.string.library)
-        findItem(R.id.downloadsFragment)?.title = resources.getString(R.string.download)
+        findItem(R.id.readerFragment)?.title = resources.getString(string.reader)
+        findItem(R.id.libraryFragment)?.title = resources.getString(string.library)
+        findItem(R.id.downloadsFragment)?.title = resources.getString(string.download)
       }
       activityKiwixMainBinding.drawerNavView.menu.apply {
-        findItem(R.id.menu_bookmarks_list)?.title = resources.getString(R.string.bookmarks)
-        findItem(R.id.menu_history)?.title = resources.getString(R.string.history)
-        findItem(R.id.menu_notes)?.title = resources.getString(R.string.pref_notes)
-        findItem(R.id.menu_host_books)?.title = resources.getString(R.string.menu_wifi_hotspot)
-        findItem(R.id.menu_settings)?.title = resources.getString(R.string.menu_settings)
-        findItem(R.id.menu_help)?.title = resources.getString(R.string.menu_help)
-        findItem(R.id.menu_support_kiwix)?.title = resources.getString(R.string.menu_support_kiwix)
+        findItem(org.kiwix.kiwixmobile.core.R.id.menu_bookmarks_list)?.title =
+          resources.getString(string.bookmarks)
+        findItem(org.kiwix.kiwixmobile.core.R.id.menu_history)?.title =
+          resources.getString(string.history)
+        findItem(org.kiwix.kiwixmobile.core.R.id.menu_notes)?.title =
+          resources.getString(string.pref_notes)
+        findItem(org.kiwix.kiwixmobile.core.R.id.menu_host_books)?.title =
+          resources.getString(string.menu_wifi_hotspot)
+        findItem(org.kiwix.kiwixmobile.core.R.id.menu_settings)?.title =
+          resources.getString(string.menu_settings)
+        findItem(org.kiwix.kiwixmobile.core.R.id.menu_help)?.title =
+          resources.getString(string.menu_help)
+        findItem(org.kiwix.kiwixmobile.core.R.id.menu_support_kiwix)?.title =
+          resources.getString(string.menu_support_kiwix)
       }
     }
   }
@@ -184,5 +193,5 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
-  override fun getIconResId() = R.mipmap.ic_launcher
+  override fun getIconResId() = mipmap.ic_launcher
 }

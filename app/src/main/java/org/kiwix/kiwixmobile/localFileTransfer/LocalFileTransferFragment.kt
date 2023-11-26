@@ -55,6 +55,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
@@ -177,23 +179,23 @@ class LocalFileTransferFragment :
         setConfig(config)
         addSequenceItem(
           it,
-          getString(R.string.click_nearby_devices_message),
-          getString(R.string.got_it)
+          getString(string.click_nearby_devices_message),
+          getString(string.got_it)
         )
         addSequenceItem(
           fragmentLocalFileTransferBinding?.textViewDeviceName,
-          getString(R.string.your_device_name_message),
-          getString(R.string.got_it)
+          getString(string.your_device_name_message),
+          getString(string.got_it)
         )
         addSequenceItem(
           fragmentLocalFileTransferBinding?.listPeerDevices,
-          getString(R.string.nearby_devices_list_message),
-          getString(R.string.got_it)
+          getString(string.nearby_devices_list_message),
+          getString(string.got_it)
         )
         addSequenceItem(
           fragmentLocalFileTransferBinding?.recyclerViewTransferFiles,
-          getString(R.string.transfer_zim_files_list_message),
-          getString(R.string.got_it)
+          getString(string.transfer_zim_files_list_message),
+          getString(string.got_it)
         )
         setOnItemDismissedListener { showcaseView, _ ->
           // To fix the memory leak by setting setTarget to null
@@ -245,7 +247,7 @@ class LocalFileTransferFragment :
     toolbar.title =
       if (isReceiver) getString(R.string.receive_files_title)
       else getString(R.string.send_files_title)
-    toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
+    toolbar.setNavigationIcon(drawable.ic_close_white_24dp)
     toolbar.setNavigationOnClickListener { activity.popNavigationBackstack() }
   }
 
@@ -390,12 +392,12 @@ class LocalFileTransferFragment :
       when (requestCode) {
         PERMISSION_REQUEST_FINE_LOCATION -> {
           Log.e(TAG, "Location permission not granted")
-          toast(R.string.permission_refused_location, Toast.LENGTH_SHORT)
+          toast(string.permission_refused_location, Toast.LENGTH_SHORT)
           requireActivity().popNavigationBackstack()
         }
         PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS -> {
           Log.e(TAG, "Storage write permission not granted")
-          toast(R.string.permission_refused_storage, Toast.LENGTH_SHORT)
+          toast(string.permission_refused_storage, Toast.LENGTH_SHORT)
           requireActivity().popNavigationBackstack()
         }
         else ->
@@ -437,7 +439,7 @@ class LocalFileTransferFragment :
       KiwixDialog.EnableLocationServices, {
         enableLocationServicesLauncher.launch(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
       },
-      { toast(R.string.discovery_needs_location, Toast.LENGTH_SHORT) }
+      { toast(string.discovery_needs_location, Toast.LENGTH_SHORT) }
     )
   }
 
@@ -446,7 +448,7 @@ class LocalFileTransferFragment :
       KiwixDialog.EnableWifiP2pServices, {
         startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
       },
-      { toast(R.string.discovery_needs_wifi, Toast.LENGTH_SHORT) }
+      { toast(string.discovery_needs_wifi, Toast.LENGTH_SHORT) }
     )
   }
 
@@ -458,7 +460,7 @@ class LocalFileTransferFragment :
     registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
       if (result.resultCode != Activity.RESULT_OK) {
         if (!isLocationServiceEnabled) {
-          toast(R.string.permission_refused_location, Toast.LENGTH_SHORT)
+          toast(string.permission_refused_location, Toast.LENGTH_SHORT)
         }
       }
     }

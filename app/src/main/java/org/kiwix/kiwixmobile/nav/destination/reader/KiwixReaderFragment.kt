@@ -36,6 +36,8 @@ import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.anim
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -107,7 +109,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     )
 
     if (filePath == null || !File(filePath).isFileExist()) {
-      activity.toast(R.string.error_file_not_found)
+      activity.toast(string.error_file_not_found)
       return
     }
     openZimFile(File(filePath))
@@ -121,7 +123,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   private fun exitBook() {
     showNoBookOpenViews()
     bottomToolbar?.visibility = GONE
-    actionBar?.title = getString(R.string.reader)
+    actionBar?.title = getString(string.reader)
     contentFrame?.visibility = GONE
     mainMenu?.hideBookSpecificMenuItems()
     closeZimBook()
@@ -146,7 +148,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
 
-      closeAllTabsButton?.setImageDrawableCompat(R.drawable.ic_close_black_24dp)
+      closeAllTabsButton?.setImageDrawableCompat(drawable.ic_close_black_24dp)
       if (tabSwitcherRoot?.visibility == View.VISIBLE) {
         tabSwitcherRoot?.visibility = GONE
         startAnimation(tabSwitcherRoot, anim.slide_up)
@@ -233,7 +235,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
         zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
       }
     } else {
-      getCurrentWebView()?.snack(R.string.zim_not_opened)
+      getCurrentWebView()?.snack(string.zim_not_opened)
     }
     restoreTabs(zimArticles, zimPositions, currentTab)
   }

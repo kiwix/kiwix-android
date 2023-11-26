@@ -66,7 +66,8 @@ class CustomReaderFragment : CoreReaderFragment() {
     if (isAdded) {
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
       if (BuildConfig.DISABLE_SIDEBAR) {
-        val toolbarToc = activity?.findViewById<ImageView>(R.id.bottom_toolbar_toc)
+        val toolbarToc =
+          activity?.findViewById<ImageView>(org.kiwix.kiwixmobile.core.R.id.bottom_toolbar_toc)
         toolbarToc?.isEnabled = false
       }
       with(activity as AppCompatActivity) {
@@ -162,8 +163,8 @@ class CustomReaderFragment : CoreReaderFragment() {
   @Suppress("DEPRECATION")
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, inflater)
-    menu.findItem(R.id.menu_help)?.isVisible = false
-    menu.findItem(R.id.menu_host_books)?.isVisible = false
+    menu.findItem(org.kiwix.kiwixmobile.core.R.id.menu_help)?.isVisible = false
+    menu.findItem(org.kiwix.kiwixmobile.core.R.id.menu_host_books)?.isVisible = false
   }
 
   private fun enforcedLanguage(): Boolean {

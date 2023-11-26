@@ -62,7 +62,8 @@ class ScrollingViewWithBottomNavigationBehavior(context: Context, attrs: Attribu
     navigationBar: BottomNavigationView,
     coordinatorLayout: CoordinatorLayout
   ): Boolean {
-    val readerBottomAppBar: BottomAppBar? = fragmentContainer.findViewById(R.id.bottom_toolbar)
+    val readerBottomAppBar: BottomAppBar? =
+      fragmentContainer.findViewById(org.kiwix.kiwixmobile.core.R.id.bottom_toolbar)
     if (readerBottomAppBar != null) {
       val newBottomMargin = calculateNewBottomMargin(navigationBar, coordinatorLayout)
       if (newBottomMargin != bottomMargin) {

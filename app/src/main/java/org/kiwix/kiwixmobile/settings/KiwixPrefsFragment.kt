@@ -28,7 +28,7 @@ import androidx.preference.PreferenceCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -68,9 +68,9 @@ class KiwixPrefsFragment : CorePrefsFragment() {
       showPermissionPreference()
       val externalStorageManager = Environment.isExternalStorageManager()
       if (externalStorageManager) {
-        permissionPref?.setSummary(org.kiwix.kiwixmobile.core.R.string.allowed)
+        permissionPref?.setSummary(R.string.allowed)
       } else {
-        permissionPref?.setSummary(org.kiwix.kiwixmobile.core.R.string.not_allowed)
+        permissionPref?.setSummary(R.string.not_allowed)
       }
       permissionPref?.onPreferenceClickListener =
         Preference.OnPreferenceClickListener {

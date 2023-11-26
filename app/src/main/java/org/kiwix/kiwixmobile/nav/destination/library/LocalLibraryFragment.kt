@@ -57,6 +57,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
@@ -122,9 +123,9 @@ class LocalLibraryFragment : BaseFragment() {
           fileManagementNoFiles.visibility = VISIBLE
           goToDownloadsButtonNoFiles.visibility = VISIBLE
           fileManagementNoFiles.text =
-            requireActivity().resources.getString(R.string.grant_read_storage_permission)
+            requireActivity().resources.getString(string.grant_read_storage_permission)
           goToDownloadsButtonNoFiles.text =
-            requireActivity().resources.getString(R.string.go_to_settings_label)
+            requireActivity().resources.getString(string.go_to_settings_label)
           zimfilelist.visibility = GONE
         }
       } else if (isGranted) {
@@ -165,7 +166,7 @@ class LocalLibraryFragment : BaseFragment() {
     activity.setSupportActionBar(toolbar)
     activity.supportActionBar?.apply {
       setDisplayHomeAsUpEnabled(true)
-      setTitle(R.string.library)
+      setTitle(string.library)
     }
     if (toolbar != null) {
       activity.setupDrawerToggle(toolbar)
@@ -312,12 +313,12 @@ class LocalLibraryFragment : BaseFragment() {
       requireActivity().applicationContext, uri
     )
     if (filePath == null || !File(filePath).exists()) {
-      activity.toast(R.string.error_file_not_found)
+      activity.toast(string.error_file_not_found)
       return null
     }
     val file = File(filePath)
     return if (!FileUtils.isValidZimFile(file.path)) {
-      activity.toast(R.string.error_file_invalid)
+      activity.toast(string.error_file_invalid)
       null
     } else {
       file
@@ -326,7 +327,7 @@ class LocalLibraryFragment : BaseFragment() {
 
   private fun navigateToReaderFragment(file: File) {
     if (!file.canRead()) {
-      activity.toast(R.string.unable_to_read_zim_file)
+      activity.toast(string.unable_to_read_zim_file)
     } else {
       activity?.navigate(
         LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
@@ -395,9 +396,9 @@ class LocalLibraryFragment : BaseFragment() {
     actionMode?.title = String.format("%d", state.selectedBooks.size)
     fragmentDestinationLibraryBinding?.apply {
       if (items.isEmpty()) {
-        fileManagementNoFiles.text = requireActivity().resources.getString(R.string.no_files_here)
+        fileManagementNoFiles.text = requireActivity().resources.getString(string.no_files_here)
         goToDownloadsButtonNoFiles.text =
-          requireActivity().resources.getString(R.string.download_books)
+          requireActivity().resources.getString(string.download_books)
 
         fileManagementNoFiles.visibility = View.VISIBLE
         goToDownloadsButtonNoFiles.visibility = View.VISIBLE
@@ -422,7 +423,7 @@ class LocalLibraryFragment : BaseFragment() {
       ) != PackageManager.PERMISSION_GRANTED
     ) {
       if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-        context.toast(R.string.request_storage)
+        context.toast(string.request_storage)
         storagePermissionLauncher?.launch(
           arrayOf(
             Manifest.permission.READ_EXTERNAL_STORAGE,

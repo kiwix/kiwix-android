@@ -35,7 +35,7 @@ import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.extensions.setDistinctDisplayedChild
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.custom.R
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.databinding.FragmentCustomDownloadBinding
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedDownload

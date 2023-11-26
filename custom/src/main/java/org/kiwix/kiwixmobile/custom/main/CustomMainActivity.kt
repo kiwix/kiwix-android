@@ -104,7 +104,7 @@ class CustomMainActivity : CoreMainActivity() {
        * We will re-enable it for custom apps once the issue is resolved.
        * For more info see https://github.com/kiwix/kiwix-android/pull/3516
        */
-      menu.findItem(R.id.menu_host_books)?.isVisible = false
+      menu.findItem(org.kiwix.kiwixmobile.core.R.id.menu_host_books)?.isVisible = false
       setNavigationItemSelectedListener { item ->
         closeNavigationDrawer()
         onNavigationItemSelected(item)
