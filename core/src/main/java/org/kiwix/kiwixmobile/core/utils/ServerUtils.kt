@@ -58,8 +58,7 @@ object ServerUtils {
     val ipRegex =
       "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
         .toRegex()
-    val ipMatch = ipRegex.find(ip, 0) ?: throw IllegalArgumentException()
-    return ipMatch.value
+    return ipRegex.find(ip, 0)?.value ?: throw IllegalArgumentException()
   }
 
   @JvmStatic fun getSocketAddress(): String =

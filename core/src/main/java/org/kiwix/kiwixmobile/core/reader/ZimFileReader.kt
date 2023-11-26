@@ -182,6 +182,7 @@ class ZimFileReader constructor(
 
   fun getRandomArticleUrl(): String? = jniKiwixReader.randomEntry.path
 
+  @Suppress("UnreachableCode")
   fun load(uri: String): InputStream? {
     val extension = uri.substringAfterLast(".")
     if (assetExtensions.any { it == extension }) {

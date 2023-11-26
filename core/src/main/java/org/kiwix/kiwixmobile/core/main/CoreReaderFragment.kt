@@ -520,6 +520,10 @@ abstract class CoreReaderFragment :
       viewLifecycleOwner,
       Observer(::openSearchItem)
     )
+    handleClicks()
+  }
+
+  private fun handleClicks() {
     backToTopButton?.setOnClickListener {
       backToTop()
     }
