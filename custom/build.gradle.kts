@@ -33,7 +33,7 @@ android {
       // Added namespace for every custom app to make it compatible with gradle 8.0 and above.
       // This is now specified in the Gradle configuration instead of declaring
       // it directly in the AndroidManifest file.
-      namespace = "org.kiwix.kiwixcustom$name"
+      namespace = "org.kiwix.kiwixmobile.custom"
       File("$projectDir/src", "$name/$name.zim").let {
         createDownloadTask(it)
         createPublishApkWithExpansionTask(it, applicationVariants)
