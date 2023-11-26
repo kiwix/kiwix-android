@@ -529,6 +529,10 @@ abstract class CoreReaderFragment :
       viewLifecycleOwner,
       Observer(::openSearchItem)
     )
+    handleClicks()
+  }
+
+  private fun handleClicks() {
     toolbarWithSearchPlaceholder?.setOnClickListener {
       openSearch(searchString = "", isOpenedFromTabView = false, false)
     }
