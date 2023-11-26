@@ -35,6 +35,7 @@ import androidx.constraintlayout.widget.ConstraintSet.TOP
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import org.kiwix.kiwixmobile.core.R
+import com.google.android.material.R.attr
 import org.kiwix.kiwixmobile.core.extensions.getAttribute
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.tint
@@ -65,7 +66,7 @@ class TabsAdapter internal constructor(
       .apply {
         id = R.id.tabsAdapterCloseImageView
         setImageDrawableCompat(R.drawable.ic_clear_white_24dp)
-        tint(context.getAttribute(R.attr.colorOnSurface))
+        tint(context.getAttribute(attr.colorOnSurface))
       }
     val cardView = MaterialCardView(context)
       .apply {

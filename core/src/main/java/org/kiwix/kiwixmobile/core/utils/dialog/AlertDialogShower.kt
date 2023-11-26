@@ -32,6 +32,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.R
+import androidx.appcompat.R.attr
 import org.kiwix.kiwixmobile.core.extensions.getAttribute
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 import javax.inject.Inject
@@ -77,7 +78,7 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) :
           val textView = TextView(activity.baseContext).apply {
             layoutParams = getFrameLayoutParams()
             gravity = Gravity.CENTER
-            setLinkTextColor(activity.getAttribute(R.attr.colorPrimary))
+            setLinkTextColor(activity.getAttribute(attr.colorPrimary))
             setOnLongClickListener {
               val clipboard =
                 ContextCompat.getSystemService(activity.baseContext, ClipboardManager::class.java)
