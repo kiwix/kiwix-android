@@ -189,9 +189,7 @@ abstract class CoreReaderFragment :
     fragmentReaderBinding?.root?.findViewById(R.id.main_fragment_progress_view)
   }
 
-  val drawerLayout: DrawerLayout? by lazy {
-    fragmentReaderBinding?.navigationFragmentMainDrawerLayout
-  }
+  var drawerLayout: DrawerLayout? = null
   protected var tableDrawerRightContainer: NavigationView? = null
 
   val contentFrame: FrameLayout? by lazy {
@@ -261,7 +259,7 @@ abstract class CoreReaderFragment :
     fragmentReaderBinding?.root?.findViewById(R.id.activity_main_back_to_top_fab)
   }
 
-  val stopTTSButton: Button? by lazy {
+  private val stopTTSButton: Button? by lazy {
     fragmentReaderBinding?.root?.findViewById(R.id.activity_main_button_stop_tts)
   }
 
@@ -273,39 +271,39 @@ abstract class CoreReaderFragment :
     fragmentReaderBinding?.root?.findViewById(R.id.activity_main_tts_controls)
   }
 
-  val exitFullscreenButton: ImageButton? by lazy {
+  private val exitFullscreenButton: ImageButton? by lazy {
     fragmentReaderBinding?.root?.findViewById(R.id.activity_main_fullscreen_button)
   }
 
-  val bottomToolbarBookmark: ImageView? by lazy {
+  private val bottomToolbarBookmark: ImageView? by lazy {
     fragmentReaderBinding?.root?.findViewById(R.id.bottom_toolbar_bookmark)
   }
 
-  val bottomToolbarArrowBack: ImageView? by lazy {
+  private val bottomToolbarArrowBack: ImageView? by lazy {
     fragmentReaderBinding?.root?.findViewById(R.id.bottom_toolbar_arrow_back)
   }
 
-  val bottomToolbarArrowForward: ImageView? by lazy {
+  private val bottomToolbarArrowForward: ImageView? by lazy {
     fragmentReaderBinding?.root?.findViewById(R.id.bottom_toolbar_arrow_forward)
   }
 
-  val bottomToolbarHome: ImageView? by lazy {
+  private val bottomToolbarHome: ImageView? by lazy {
     fragmentReaderBinding?.root?.findViewById(R.id.bottom_toolbar_home)
   }
 
-  val tabRecyclerView: RecyclerView? by lazy {
+  private val tabRecyclerView: RecyclerView? by lazy {
     fragmentReaderBinding?.root?.findViewById(R.id.tab_switcher_recycler_view)
   }
 
-  val snackBarRoot: CoordinatorLayout? by lazy {
+  private val snackBarRoot: CoordinatorLayout? by lazy {
     fragmentReaderBinding?.root?.findViewById(R.id.snackbar_root)
   }
 
-  val noOpenBookText: TextView? by lazy {
+  private val noOpenBookText: TextView? by lazy {
     fragmentReaderBinding?.noOpenBookText
   }
 
-  val bottomToolbarToc: ImageView? by lazy {
+  private val bottomToolbarToc: ImageView? by lazy {
     fragmentReaderBinding?.root?.findViewById(R.id.bottom_toolbar_toc)
   }
 
@@ -852,19 +850,19 @@ abstract class CoreReaderFragment :
     drawerLayout?.setDrawerLockMode(lockMode)
   }
 
-  fun goBack() {
+  private fun goBack() {
     if (getCurrentWebView()?.canGoBack() == true) {
       getCurrentWebView()?.goBack()
     }
   }
 
-  fun goForward() {
+  private fun goForward() {
     if (getCurrentWebView()?.canGoForward() == true) {
       getCurrentWebView()?.goForward()
     }
   }
 
-  fun showBackwardHistory() {
+  private fun showBackwardHistory() {
     if (getCurrentWebView()?.canGoBack() == true) {
       getCurrentWebView()?.copyBackForwardList()?.let { historyList ->
         navigationHistoryList.clear()
@@ -879,7 +877,7 @@ abstract class CoreReaderFragment :
     }
   }
 
-  fun showForwardHistory() {
+  private fun showForwardHistory() {
     if (getCurrentWebView()?.canGoForward() == true) {
       getCurrentWebView()?.copyBackForwardList()?.let { historyList ->
         navigationHistoryList.clear()
@@ -955,7 +953,7 @@ abstract class CoreReaderFragment :
     }
   }
 
-  fun openToc() {
+  private fun openToc() {
     drawerLayout?.openDrawer(GravityCompat.END)
   }
 
@@ -1074,7 +1072,7 @@ abstract class CoreReaderFragment :
     }
   }
 
-  fun pauseTts() {
+  private fun pauseTts() {
     if (tts?.currentTTSTask == null) {
       tts?.stop()
       setActionAndStartTTSService(ACTION_STOP_TTS)
@@ -1093,7 +1091,7 @@ abstract class CoreReaderFragment :
     }
   }
 
-  fun stopTts() {
+  private fun stopTts() {
     tts?.stop()
     setActionAndStartTTSService(ACTION_STOP_TTS)
   }
@@ -1142,6 +1140,7 @@ abstract class CoreReaderFragment :
     unRegisterReadAloudService()
     storagePermissionForNotesLauncher?.unregister()
     storagePermissionForNotesLauncher = null
+    fragmentReaderBinding = null
   }
 
   private fun updateTableOfContents() {
@@ -1431,7 +1430,7 @@ abstract class CoreReaderFragment :
     return isPermissionGranted
   }
 
-  fun goToBookmarks(): Boolean {
+  private fun goToBookmarks(): Boolean {
     val parentActivity = requireActivity() as CoreMainActivity
     parentActivity.navigate(parentActivity.bookmarksFragmentResId)
     return true
@@ -1614,7 +1613,7 @@ abstract class CoreReaderFragment :
     }
   }
 
-  fun closeAllTabs() {
+  private fun closeAllTabs() {
     closeAllTabsButton?.rotate()
     tempZimFileForUndo = zimReaderContainer?.zimFile
     tempWebViewListForUndo.apply {
@@ -1673,7 +1672,7 @@ abstract class CoreReaderFragment :
   }
 
   @Suppress("NestedBlockDepth")
-  fun toggleBookmark() {
+  private fun toggleBookmark() {
     getCurrentWebView()?.url?.let { articleUrl ->
       if (isBookmarked) {
         repositoryActions?.deleteBookmark(articleUrl)
@@ -1850,7 +1849,7 @@ abstract class CoreReaderFragment :
     openArticle(articleUrl)
   }
 
-  fun openMainPage() {
+  private fun openMainPage() {
     val articleUrl = zimReaderContainer?.mainPage
     openArticle(articleUrl)
   }
@@ -1861,7 +1860,7 @@ abstract class CoreReaderFragment :
     }
   }
 
-  fun backToTop() {
+  private fun backToTop() {
     getCurrentWebView()?.pageUp(true)
   }
 
