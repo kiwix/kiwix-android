@@ -889,19 +889,19 @@ abstract class CoreReaderFragment :
     drawerLayout?.setDrawerLockMode(lockMode)
   }
 
-  fun goBack() {
+  private fun goBack() {
     if (getCurrentWebView()?.canGoBack() == true) {
       getCurrentWebView()?.goBack()
     }
   }
 
-  fun goForward() {
+  private fun goForward() {
     if (getCurrentWebView()?.canGoForward() == true) {
       getCurrentWebView()?.goForward()
     }
   }
 
-  fun showBackwardHistory() {
+  private fun showBackwardHistory() {
     if (getCurrentWebView()?.canGoBack() == true) {
       getCurrentWebView()?.copyBackForwardList()?.let { historyList ->
         navigationHistoryList.clear()
@@ -916,7 +916,7 @@ abstract class CoreReaderFragment :
     }
   }
 
-  fun showForwardHistory() {
+  private fun showForwardHistory() {
     if (getCurrentWebView()?.canGoForward() == true) {
       getCurrentWebView()?.copyBackForwardList()?.let { historyList ->
         navigationHistoryList.clear()
@@ -992,7 +992,7 @@ abstract class CoreReaderFragment :
     }
   }
 
-  fun openToc() {
+  private fun openToc() {
     drawerLayout?.openDrawer(GravityCompat.END)
   }
 
@@ -1158,7 +1158,7 @@ abstract class CoreReaderFragment :
     }
   }
 
-  fun pauseTts() {
+  private fun pauseTts() {
     if (tts?.currentTTSTask == null) {
       tts?.stop()
       setActionAndStartTTSService(ACTION_STOP_TTS)
@@ -1177,7 +1177,7 @@ abstract class CoreReaderFragment :
     }
   }
 
-  fun stopTts() {
+  private fun stopTts() {
     tts?.stop()
     setActionAndStartTTSService(ACTION_STOP_TTS)
   }
@@ -1226,6 +1226,7 @@ abstract class CoreReaderFragment :
     unRegisterReadAloudService()
     storagePermissionForNotesLauncher?.unregister()
     storagePermissionForNotesLauncher = null
+    fragmentReaderBinding = null
   }
 
   private fun updateTableOfContents() {
@@ -1557,7 +1558,7 @@ abstract class CoreReaderFragment :
     return isPermissionGranted
   }
 
-  fun goToBookmarks(): Boolean {
+  private fun goToBookmarks(): Boolean {
     val parentActivity = requireActivity() as CoreMainActivity
     parentActivity.navigate(parentActivity.bookmarksFragmentResId)
     return true
@@ -1809,7 +1810,7 @@ abstract class CoreReaderFragment :
   }
 
   @Suppress("NestedBlockDepth")
-  fun toggleBookmark() {
+  private fun toggleBookmark() {
     try {
       getCurrentWebView()?.url?.let { articleUrl ->
         zimReaderContainer?.zimFileReader?.let { zimFileReader ->
@@ -2010,7 +2011,7 @@ abstract class CoreReaderFragment :
     openArticle(articleUrl)
   }
 
-  fun openMainPage() {
+  private fun openMainPage() {
     val articleUrl = zimReaderContainer?.mainPage
     openArticle(articleUrl)
   }
@@ -2021,7 +2022,7 @@ abstract class CoreReaderFragment :
     }
   }
 
-  fun backToTop() {
+  private fun backToTop() {
     getCurrentWebView()?.pageUp(true)
   }
 
