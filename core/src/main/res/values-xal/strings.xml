@@ -23,7 +23,7 @@
   <string name="open_in_new_tab">Холвасыг оңгдан хавчурһд неетн</string>
   <string name="hotspot_service_channel_name">Цацх цегин үүлчллһнә цувг</string>
   <string name="hotspot_failed_title">Цацх цегиг асаҗ чадсн уга.</string>
-  <string name="hotspot_failed_message">Цацх цегтн асаһата кевтә. Үрглҗлүлхин төләд цацх цегән унтрахнтн.</string>
+  <string name="hotspot_failed_message">Цацх цегтн асалһата кевтә. Үрглҗлүлхин төләд цацх цегән унтрахнтн.</string>
   <string name="server_failed_message">Сервериг аҗллулх болмҗ уга</string>
   <string name="server_failed_toast_message">Сервериг аҗллулх болмҗ уга.</string>
   <string name="server_started_successfully_toast_message">Сервериг амҗлтта аҗллулв.</string>
@@ -59,7 +59,7 @@
   <string name="no_thanks">Уга, байрлҗанав.</string>
   <string name="rate_dialog_neutral">Хөөннь</string>
   <string name="open">Неех</string>
-  <string name="local_zims">Токармҗ</string>
+  <string name="local_zims">Төкәрмҗ</string>
   <string name="library">Саң</string>
   <string name="delete_zims_toast">Файлнь амҗлтта уга кегдв</string>
   <string name="zim_simple">Эңгин</string>

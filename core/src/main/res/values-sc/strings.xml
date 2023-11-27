@@ -46,6 +46,8 @@
   <string name="hotspot_notification_content_title">Hotspot Kiwix</string>
   <string name="start_server_label">Avia su servidore</string>
   <string name="stop_server_label">Firma su servidore</string>
+  <string name="error_server_already_running">Custu serbidore est giai in esecutzione. Pro praghere istuda·lu e torra·lu a allùghere.</string>
+  <string name="error_ip_address_not_found">Non potzo agatare s\'indiritzu IP.</string>
   <string name="server_started_message">Inserta custu indiritzu ip in su navigadore tuo pro intrare in su servidore %s</string>
   <string name="share_host_address">Cumpartzi s\'URL cun àteras aplicatziones</string>
   <string name="error_file_not_found">Errore: su documentu ZIM ischertadu no est istadu agatadu.</string>
@@ -206,7 +208,7 @@
   <string name="complete">Acabadu</string>
   <string name="paused_state">In pàusa</string>
   <string name="failed_state">Fallidu: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">Su documentu zim non s\'est pòdidu iscarrigare, proa a torrare a installare s\'aplicatzione dae sa butega de aplicatziones</string>
+  <string name="custom_download_error_message_for_authentication_failed">Su documentu zim non s\'est pòdidu iscarrigare. Proa a torrare a installare s\'aplicatzione dae sa butega de aplicatziones</string>
   <string name="save">Sarva</string>
   <string name="note">Nota</string>
   <string name="wiki_article_title">Tìtulu de s\'artìculu de sa Wiki</string>
@@ -319,4 +321,8 @@
   <string name="navigation_history_cleared">Cronologia de navigatzione isboidada</string>
   <string name="go_to_settings_label">Bae a sas impostatziones</string>
   <string name="request_notification_permission_message">Pro fàghere custa atzione fruni s\'atzessu a sas notìficas</string>
+  <string name="click_nearby_devices_message">Incarca inoghe pro chircare dispositivos a curtzu.</string>
+  <string name="your_device_name_message">Su nùmene de su dispositivu tuo at a apàrrere inoghe.</string>
+  <string name="nearby_devices_list_message">Inoghe, as a atzapare una lista de dispositivos a curtzu. Toca subra de su nùmene de unu dispositivu pro incumintzare cun sa tràmuda de archìvios.</string>
+  <string name="transfer_zim_files_list_message">Inoghe as a atzapare sa lista de archìvios ZIM a disponimentu pro sa tràmuda.</string>
 </resources>

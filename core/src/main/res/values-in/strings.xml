@@ -46,6 +46,7 @@
   <string name="hotspot_dialog_neutral_button">LANJUT</string>
   <string name="start_server_label">Nyalakan server</string>
   <string name="stop_server_label">Matikan server</string>
+  <string name="error_ip_address_not_found">Tak dapat menemukan alamat IP.</string>
   <string name="server_started_message">Masukkan alamat IP ini ke browser Anda untuk mengakses server %s</string>
   <string name="error_file_not_found">Galat: Berkas ZIM yang dipilih tidak ditemukan.</string>
   <string name="zim_not_opened">Zim file tidak dapat dibuka</string>
@@ -70,7 +71,9 @@
   <string name="delete_recent_search_item">Hapus item ini?</string>
   <string name="pref_clear_all_history_title">Hapus riwayat</string>
   <string name="pref_clear_all_history_summary">Hapus riwayat penelusuran dan tab terakhir</string>
+  <string name="pref_permission">Izin</string>
   <string name="all_history_cleared">Semua Markah Telah Dibersihkan</string>
+  <string name="pref_clear_all_bookmarks_title">Hapus markah buku</string>
   <string name="clear_all_history_dialog_title">Bersihkan Semua Riwayat?</string>
   <string name="share">Bagikan</string>
   <string name="selected_file_cab_app_chooser_title">Bagikan ZIM file dengan:</string>
@@ -82,6 +85,7 @@
   <string name="did_you_know">Tahukah Anda?</string>
   <string name="undo">Urungkan</string>
   <string name="tab_closed">Tab ditutup</string>
+  <string name="tabs_closed">Tab ditutup</string>
   <string name="bookmark_added">Markah ditambahkan</string>
   <string name="rate_dialog_title">Silakan Nilai Kami</string>
   <string name="rate_dialog_positive">Nilai!</string>
@@ -154,7 +158,11 @@
   <string name="do_not_ask_anymore">Jangan tanya lagi</string>
   <string name="your_languages">Bahasa terpilih:</string>
   <string name="other_languages">Bahasa lain:</string>
+  <string name="crash_title">Yah… Ini memalukan</string>
   <string name="crash_checkbox_zimfiles">Daftar file Zim Anda</string>
+  <string name="crash_checkbox_logs">Log Aplikasi</string>
+  <string name="crash_checkbox_device">Rincian Perangkat</string>
+  <string name="crash_button_confirm">KIRIM RINCIAN</string>
   <string name="new_tab_shortcut_label">Tab baru</string>
   <string name="get_content_shortcut_label">Ambil konten</string>
   <string name="fav_icon">Favicon</string>
@@ -175,6 +183,7 @@
   <string name="history_from_current_book">Lihat riwayat semua buku</string>
   <string name="search_history" fuzzy="true">Riwayat pencarian</string>
   <string name="selected_items">%1$d dipilih</string>
+  <string name="switch_tabs">Beralih tab</string>
   <string name="close_all_tabs">Tutup semua tab</string>
   <string name="running_state">Dalam proses</string>
   <string name="complete">Selesai</string>
@@ -197,6 +206,8 @@
   <string name="notes_deletion_unsuccessful">Beberapa file tidak terhapus</string>
   <string name="books_count">%d buku</string>
   <string name="connection_failed">Koneksi gagal</string>
+  <string name="your_device">Perangkat Anda:</string>
+  <string name="nearby_devices">PERANGKAT SEKITAR</string>
   <string name="files_for_transfer">FILE UNTUK DIPINDAHKAN</string>
   <string name="preparing_files" fuzzy="true">Mempersiapkan file untuk dipindahkan....</string>
   <string name="performing_handshake" fuzzy="true">Melakukan jabat tangan....</string>
@@ -214,7 +225,19 @@
   <string name="no_results">Tidak ada Hasil</string>
   <string name="no_bookmarks">Tidak Ada Markah</string>
   <string name="no_history">Tidak ada Riwayat</string>
+  <string name="delete_history">Hapus Semua Riwayat?</string>
+  <string name="delete_selected_history">Hapus Riwayat Terpilih?</string>
+  <string name="delete_bookmarks">Hapus Semua Markah Buku?</string>
+  <string name="delete_selected_bookmarks">Hapus Markah Buku Terpilih?</string>
+  <string name="on">Nyala</string>
+  <string name="off">Mati</string>
+  <string name="auto">Otomatis</string>
   <string name="diagnostic_report_message">Kirimkan semua detil berikut agar kami dapat menelaah masalahnya</string>
   <string name="percentage">%d%%</string>
   <string name="search_open_in_new_tab">Buka di tab baru</string>
+  <string name="tab_restored">Tab dipulihkan</string>
+  <string name="tabs_restored">Tab-tab dipulihkan</string>
+  <string name="allowed">Izinkan</string>
+  <string name="not_allowed">Jangan izinkan</string>
+  <string name="go_to_settings_label">Pergi ke Pengaturan</string>
 </resources>
