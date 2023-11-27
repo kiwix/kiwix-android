@@ -47,6 +47,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource.Companion.getInstance
 import java.util.concurrent.TimeUnit
+import org.kiwix.kiwixmobile.core.R.string
 
 /**
  * Created by mhutti1 on 14/04/17.
@@ -95,7 +96,7 @@ class NetworkTest {
   fun networkTest() {
     ActivityScenario.launch(KiwixMainActivity::class.java)
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    clickMenu(TestUtils.getResourceString(R.string.library))
+    clickMenu(TestUtils.getResourceString(string.library))
     TestUtils.allowStoragePermissionsIfNeeded()
     Espresso.onData(TestUtils.withContent("wikipedia_ab_all_2017-03"))
       .inAdapterView(ViewMatchers.withId(R.id.libraryList))
@@ -105,7 +106,7 @@ class NetworkTest {
     } catch (e: RuntimeException) {
       Log.w(NETWORK_TEST_TAG, "failed to perform click action on the view : ${e.localizedMessage} ")
     }
-    clickOn(R.string.local_zims)
+    clickOn(string.local_zims)
     try {
       Espresso.onData(CoreMatchers.allOf(ViewMatchers.withId(R.id.zim_swiperefresh)))
       refresh(R.id.zim_swiperefresh)
@@ -124,7 +125,7 @@ class NetworkTest {
         .inAdapterView(ViewMatchers.withId(R.id.zimfilelist))
       // TODO how can we get a count of the items matching the dataInteraction?
       dataInteraction.atPosition(0).perform(ViewActions.click())
-      clickMenu(R.string.library)
+      clickMenu(string.library)
       val dataInteraction1 = Espresso.onData(TestUtils.withContent("wikipedia_ab_all_2017-03"))
         .inAdapterView(ViewMatchers.withId(R.id.zimfilelist))
       dataInteraction1.atPosition(0).perform(ViewActions.longClick()) // to delete the zim file

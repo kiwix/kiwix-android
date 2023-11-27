@@ -27,6 +27,7 @@ import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.help.HelpRobot
 import org.kiwix.kiwixmobile.help.help
 import org.kiwix.kiwixmobile.nav.destination.library.LibraryRobot
@@ -78,7 +79,7 @@ class TopLevelDestinationRobot : BaseRobot() {
 
   fun clickBookmarksOnNavDrawer(func: BookmarksRobot.() -> Unit) {
     inNavDrawer {
-      testFlakyView({ onView(withText(R.string.bookmarks)).perform(click()) })
+      testFlakyView({ onView(withText(string.bookmarks)).perform(click()) })
       bookmarks(func)
       pressBack()
     }
@@ -86,7 +87,7 @@ class TopLevelDestinationRobot : BaseRobot() {
 
   fun clickHistoryOnSideNav(func: HistoryRobot.() -> Unit) {
     inNavDrawer {
-      clickOn(TextId(R.string.history))
+      clickOn(TextId(string.history))
       history(func)
       pressBack()
     }
@@ -94,32 +95,32 @@ class TopLevelDestinationRobot : BaseRobot() {
 
   fun clickHostBooksOnSideNav(func: ZimHostRobot.() -> Unit) {
     inNavDrawer {
-      clickOn(TextId(R.string.menu_wifi_hotspot))
+      clickOn(TextId(string.menu_wifi_hotspot))
       zimHost(func)
     }
   }
 
   fun clickSettingsOnSideNav(func: SettingsRobot.() -> Unit) {
     inNavDrawer {
-      clickOn(TextId(R.string.menu_settings))
+      clickOn(TextId(string.menu_settings))
       settingsRobo(func)
     }
   }
 
   fun clickHelpOnSideNav(func: HelpRobot.() -> Unit) {
     inNavDrawer {
-      clickOn(TextId(R.string.menu_help))
+      clickOn(TextId(string.menu_help))
       help(func)
     }
   }
 
   fun clickSupportKiwixOnSideNav() {
     inNavDrawer {
-      clickOn(TextId(R.string.menu_support_kiwix))
+      clickOn(TextId(string.menu_support_kiwix))
     }
   }
 
   fun assertExternalLinkDialogDisplayed() {
-    testFlakyView({ isVisible(TextId(R.string.external_link_popup_dialog_title)) })
+    testFlakyView({ isVisible(TextId(string.external_link_popup_dialog_title)) })
   }
 }
