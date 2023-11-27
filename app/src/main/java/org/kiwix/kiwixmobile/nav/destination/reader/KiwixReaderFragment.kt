@@ -336,12 +336,12 @@ class KiwixReaderFragment : CoreReaderFragment() {
       requireActivity().applicationContext, uri
     )
     if (filePath == null || !File(filePath).isFileExist()) {
-      activity.toast(R.string.error_file_not_found)
+      activity.toast(string.error_file_not_found)
       return null
     }
     val file = File(filePath)
     return if (!FileUtils.isValidZimFile(file.path)) {
-      activity.toast(R.string.error_file_invalid)
+      activity.toast(string.error_file_invalid)
       null
     } else if (!file.canReadFile()) {
       activity.toast(R.string.cannot_open_file)

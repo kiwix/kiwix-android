@@ -34,12 +34,12 @@ fun SearchView.setUpSearchView(context: Context) {
     R.dimen.material_minimum_height_and_width
   )
   val searchViewEditText =
-    findViewById<SearchView.SearchAutoComplete>(R.id.search_src_text) as EditText
-  val closeImageButton = findViewById<ImageView>(R.id.search_close_btn)
+    findViewById<SearchView.SearchAutoComplete>(androidx.appcompat.R.id.search_src_text) as EditText
+  val closeImageButton = findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
   // set the tooltip on close button to show the description if user long clicks on it.
   TooltipCompat.setTooltipText(
     closeImageButton,
-    context.getString(R.string.abc_searchview_description_clear)
+    context.getString(androidx.appcompat.R.string.abc_searchview_description_clear)
   )
   // override the default width of close image button.
   // by default it is 40dp, and the default accessibility width is 48dp

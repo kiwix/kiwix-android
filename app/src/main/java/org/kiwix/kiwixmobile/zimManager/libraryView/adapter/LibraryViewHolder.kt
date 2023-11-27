@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.zimManager.libraryView.adapter
 
 import android.view.View
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.Error
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status
@@ -106,13 +107,13 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
       itemDownloadBinding.libraryDownloadDescription.text = item.description
       itemDownloadBinding.downloadProgress.progress = item.progress
       itemDownloadBinding.stop.apply {
-        setToolTipWithContentDescription(itemDownloadBinding.root.context.getString(R.string.stop))
+        setToolTipWithContentDescription(itemDownloadBinding.root.context.getString(string.stop))
         setOnClickListener { clickAction.invoke(item) }
       }
       itemDownloadBinding.pauseResume.apply {
         val context = itemDownloadBinding.root.context
         val description =
-          "${context.getString(R.string.tts_pause)}/${context.getString(R.string.tts_resume)}"
+          "${context.getString(string.tts_pause)}/${context.getString(string.tts_resume)}"
         setToolTipWithContentDescription(description)
         setOnClickListener {
           pauseResumeClickAction.invoke(item)
@@ -121,7 +122,7 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
       itemDownloadBinding.downloadState.text =
         item.downloadState.toReadableState(containerView.context).also {
           val pauseResumeIconId =
-            if (it.contains(itemDownloadBinding.root.context.getString(R.string.paused_state))) {
+            if (it.contains(itemDownloadBinding.root.context.getString(string.paused_state))) {
               R.drawable.ic_play_24dp
             } else {
               R.drawable.ic_pause_24dp

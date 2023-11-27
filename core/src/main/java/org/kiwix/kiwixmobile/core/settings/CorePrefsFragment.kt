@@ -230,7 +230,7 @@ abstract class CorePrefsFragment :
       throw RuntimeException(e)
     }
 
-  override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+  override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
     if (key == SharedPreferenceUtil.PREF_DARK_MODE) {
       sharedPreferenceUtil?.updateDarkMode()
     }

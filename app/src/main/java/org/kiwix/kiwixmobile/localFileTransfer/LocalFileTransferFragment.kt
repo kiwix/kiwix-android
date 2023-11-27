@@ -145,7 +145,7 @@ class LocalFileTransferFragment :
     wifiDirectManager.startWifiDirectManager(filesForTransfer)
     fragmentLocalFileTransferBinding
       ?.textViewDeviceName
-      ?.setToolTipWithContentDescription(getString(R.string.your_device))
+      ?.setToolTipWithContentDescription(getString(string.your_device))
   }
 
   private fun setupMenu() {

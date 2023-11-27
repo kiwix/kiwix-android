@@ -1080,7 +1080,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun getValidTitle(zimFileTitle: String?): String =
-    if (isAdded && isInvalidTitle(zimFileTitle)) getString(R.string.app_name)
+    if (isAdded && isInvalidTitle(zimFileTitle)) (requireActivity() as CoreMainActivity).appName
     else zimFileTitle.toString()
 
   private fun isInvalidTitle(zimFileTitle: String?): Boolean =

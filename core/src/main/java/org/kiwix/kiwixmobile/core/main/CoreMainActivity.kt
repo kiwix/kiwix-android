@@ -95,6 +95,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val topLevelDestinations: Set<Int>
   abstract val navHostContainer: FragmentContainerView
   abstract val mainActivity: AppCompatActivity
+  abstract val appName: String
   @Inject lateinit var objectBoxToLibkiwixMigrator: ObjectBoxToLibkiwixMigrator
   @Inject lateinit var objectBoxToRoomMigrator: ObjectBoxToRoomMigrator
 

@@ -57,6 +57,7 @@ class CustomMainActivity : CoreMainActivity() {
   }
 
   override val mainActivity: AppCompatActivity by lazy { this }
+  override val appName: String by lazy { getString(R.string.app_name) }
 
   override val searchFragmentResId: Int = R.id.searchFragment
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
@@ -162,12 +163,12 @@ class CustomMainActivity : CoreMainActivity() {
    */
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     return when (item.itemId) {
-      R.id.menu_about_app -> {
+      org.kiwix.kiwixmobile.core.R.id.menu_about_app -> {
         openExternalUrl(BuildConfig.ABOUT_APP_URL)
         true
       }
 
-      R.id.menu_support_kiwix -> {
+      org.kiwix.kiwixmobile.core.R.id.menu_support_kiwix -> {
         openExternalUrl(BuildConfig.SUPPORT_URL)
         true
       }

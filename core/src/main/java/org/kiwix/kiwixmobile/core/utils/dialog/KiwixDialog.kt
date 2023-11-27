@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.utils.dialog
 import android.app.Activity
 import android.view.View
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
 @Suppress("LongParameterList")
 sealed class KiwixDialog(
@@ -199,7 +200,7 @@ sealed class KiwixDialog(
       listOf(
         String.format(
           activity.getString(R.string.rate_dialog_msg),
-          activity.getString(R.string.app_name)
+          (activity as CoreMainActivity).appName
         )
       ),
       icon

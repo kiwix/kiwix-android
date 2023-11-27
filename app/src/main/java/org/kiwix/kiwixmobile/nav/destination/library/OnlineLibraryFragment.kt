@@ -133,7 +133,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           context?.let { context ->
             downloader.pauseResumeDownload(
               it.downloadId,
-              it.downloadState.toReadableState(context).contains(getString(R.string.paused_state))
+              it.downloadState.toReadableState(context).contains(getString(string.paused_state))
             )
           }
         }

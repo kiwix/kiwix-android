@@ -80,6 +80,7 @@ class KiwixMainActivity : CoreMainActivity() {
   @Inject lateinit var newBookDao: NewBookDao
 
   override val mainActivity: AppCompatActivity by lazy { this }
+  override val appName: String by lazy { getString(R.string.app_name) }
 
   override val bookmarksFragmentResId: Int = R.id.bookmarksFragment
   override val settingsFragmentResId: Int = R.id.kiwixSettingsFragment
