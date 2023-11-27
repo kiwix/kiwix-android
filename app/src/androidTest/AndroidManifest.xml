@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:tools="http://schemas.android.com/tools"
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  package="org.kiwix.kiwixmobile">
+  xmlns:android="http://schemas.android.com/apk/res/android">
 
   <!-- support for androidx.test.orchestrator clearPackageData for android 33
        see more information here https://github.com/kiwix/kiwix-android/issues/3172
