@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
-  <issue id="TypographyQuotes">
+  <!-- TODO After upgrading to Android 14 this attribute will be removed and we will fix these errors on the upstream. -->
+  <issue id="TypographyQuotes" severity="warning">
     <ignore path="**-qq/**.xml" />
     <ignore path="**-iw/**.xml" />
   </issue>
