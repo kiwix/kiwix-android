@@ -23,7 +23,7 @@ import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assert
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.ContentDesc
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 
 fun history(func: HistoryRobot.() -> Unit) = HistoryRobot().applyWithViewHierarchyPrinting(func)
 

@@ -27,6 +27,7 @@ import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.testutils.TestUtils
 
 /**
@@ -56,37 +57,37 @@ class LocalFileTransferRobot : BaseRobot() {
   }
 
   fun assertLocalLibraryVisible() {
-    isVisible(TextId(R.string.library))
+    isVisible(TextId(string.library))
   }
 
   fun assertClickNearbyDeviceMessageVisible() {
     pauseForBetterTestPerformance()
-    isVisible(TextId(R.string.click_nearby_devices_message))
+    isVisible(TextId(string.click_nearby_devices_message))
   }
 
   fun clickOnGotItButton() {
     pauseForBetterTestPerformance()
-    clickOn(TextId(R.string.got_it))
+    clickOn(TextId(string.got_it))
   }
 
   fun assertDeviceNameMessageVisible() {
     pauseForBetterTestPerformance()
-    isVisible(TextId(R.string.your_device_name_message))
+    isVisible(TextId(string.your_device_name_message))
   }
 
   fun assertNearbyDeviceListMessageVisible() {
     pauseForBetterTestPerformance()
-    isVisible(TextId(R.string.nearby_devices_list_message))
+    isVisible(TextId(string.nearby_devices_list_message))
   }
 
   fun assertTransferZimFilesListMessageVisible() {
     pauseForBetterTestPerformance()
-    isVisible(TextId(R.string.transfer_zim_files_list_message))
+    isVisible(TextId(string.transfer_zim_files_list_message))
   }
 
   fun assertClickNearbyDeviceMessageNotVisible() {
     pauseForBetterTestPerformance()
-    onView(withText(R.string.click_nearby_devices_message)).check(doesNotExist())
+    onView(withText(string.click_nearby_devices_message)).check(doesNotExist())
   }
 
   private fun pauseForBetterTestPerformance() {

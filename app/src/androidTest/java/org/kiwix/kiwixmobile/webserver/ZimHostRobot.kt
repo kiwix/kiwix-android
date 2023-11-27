@@ -33,7 +33,7 @@ import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.utils.RecyclerViewItemCount
 import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
@@ -50,7 +50,7 @@ class ZimHostRobot : BaseRobot() {
 
   fun refreshLibraryList() {
     pauseForBetterTestPerformance()
-    refresh(R.id.zim_swiperefresh)
+    refresh(org.kiwix.kiwixmobile.R.id.zim_swiperefresh)
   }
 
   fun assertZimFilesLoaded() {

@@ -27,6 +27,7 @@ import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDrawerWithGravity
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.testutils.TestUtils
 
 /**
@@ -35,7 +36,7 @@ import org.kiwix.kiwixmobile.testutils.TestUtils
 object StandardActions {
   fun enterSettings() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    clickOn(TestUtils.getResourceString(R.string.menu_settings))
+    clickOn(TestUtils.getResourceString(string.menu_settings))
   }
 
   fun openDrawer() {
