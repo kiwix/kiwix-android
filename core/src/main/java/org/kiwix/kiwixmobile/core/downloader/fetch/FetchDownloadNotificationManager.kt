@@ -25,7 +25,9 @@ import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.app.PendingIntent.getActivity
 import android.content.Context
+import android.content.Context.RECEIVER_EXPORTED
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Build.VERSION_CODES
 import androidx.annotation.RequiresApi
@@ -184,4 +186,16 @@ class FetchDownloadNotificationManager(private val context: Context) :
       setSound(null, null)
       enableVibration(false)
     }
+
+  override fun registerBroadcastReceiver() {
+    if (Build.VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
+      context.registerReceiver(
+        broadcastReceiver,
+        IntentFilter(notificationManagerAction),
+        RECEIVER_EXPORTED
+      )
+    } else {
+      super.registerBroadcastReceiver()
+    }
+  }
 }
