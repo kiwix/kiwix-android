@@ -1,3 +1,8 @@
+3.8.1
+Bug Fixes:
+* Application crash occurring when users rapidly typed during a search for an entry. (https://github.com/kiwix/kiwix-android/pull/3558)
+* Play Store deep linking issue on Android 12 and above. (https://github.com/kiwix/kiwix-android/pull/3550)
+
 3.8.0
 New Features:
 * Download pause/resume feature. (https://github.com/kiwix/kiwix-android/pull/3459)
