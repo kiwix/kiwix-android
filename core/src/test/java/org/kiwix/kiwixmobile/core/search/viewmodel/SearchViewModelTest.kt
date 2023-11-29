@@ -29,10 +29,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.resetMain
@@ -107,6 +109,93 @@ internal class SearchViewModelTest {
     every { zimReaderContainer.id } returns "id"
     every { recentSearchDao.recentSearches("id") } returns recentsFromDb.consumeAsFlow()
     viewModel = SearchViewModel(recentSearchDao, zimReaderContainer, searchResultGenerator)
+  }
+
+  @Nested
+  inner class DebouncedTest {
+    @Test
+    fun `Search action is debounced`() = runTest {
+      val searchTerm1 = "query1"
+      val searchTerm2 = "query2"
+      val searchTerm3 = "query3"
+      val searchOrigin = FromWebView
+      val suggestionSearch: SuggestionSearch = mockk()
+
+      viewModel.state
+        .test(this)
+        .also {
+          searchResult(searchTerm1, suggestionSearch, testScheduler)
+          delay(100)
+          searchResult(searchTerm2, suggestionSearch, testScheduler)
+          delay(100)
+          searchResult(searchTerm3, suggestionSearch, testScheduler)
+          it.assertValue(
+            SearchState(
+              searchTerm3,
+              SearchResultsWithTerm(searchTerm3, suggestionSearch),
+              emptyList(),
+              searchOrigin
+            )
+          )
+        }
+        .finish()
+    }
+
+    @Test
+    fun `Search action is not debounced if time hasn't passed`() = runTest {
+      val searchTerm1 = "query1"
+      val searchTerm2 = "query2"
+      val searchTerm3 = "query3"
+      val searchOrigin = FromWebView
+      val suggestionSearch: SuggestionSearch = mockk()
+
+      viewModel.state
+        .test(this)
+        .also {
+          searchResult(searchTerm1, suggestionSearch, testScheduler)
+          delay(50) // assume user rapidly typing
+          searchResult(searchTerm2, suggestionSearch, testScheduler)
+          delay(50)
+          // test value is not passed to searchResult as time has not passed and user still typing
+          // Match if it is initial `SearchState`
+          it.assertValue(
+            SearchState(
+              "",
+              SearchResultsWithTerm("", null),
+              emptyList(),
+              searchOrigin
+            )
+          )
+          searchResult(searchTerm3, suggestionSearch, testScheduler)
+          delay(DEBOUNCE_DELAY)
+          it.assertValue(
+            SearchState(
+              searchTerm3,
+              SearchResultsWithTerm(searchTerm3, suggestionSearch),
+              emptyList(),
+              searchOrigin
+            )
+          )
+        }
+        .finish()
+    }
+
+    private fun searchResult(
+      searchTerm: String,
+      suggestionSearch: SuggestionSearch,
+      testScheduler: TestCoroutineScheduler
+    ) {
+      coEvery {
+        searchResultGenerator.generateSearchResults(searchTerm, zimFileReader)
+      } returns suggestionSearch
+      viewModel.searchResults(searchTerm)
+      recentsFromDb.trySend(emptyList()).isSuccess
+      viewModel.actions.trySend(ScreenWasStartedFrom(FromWebView)).isSuccess
+      testScheduler.apply {
+        advanceTimeBy(400)
+        runCurrent()
+      }
+    }
   }
 
   @Nested
