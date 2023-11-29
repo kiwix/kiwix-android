@@ -59,7 +59,6 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ClickedSearchInText
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ConfirmedDelete
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.CreatedWithArguments
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ExitedSearch
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnOpenInNewTabClick
@@ -129,6 +128,7 @@ internal class SearchViewModelTest {
           searchResult(searchTerm2, suggestionSearch, testScheduler)
           delay(100)
           searchResult(searchTerm3, suggestionSearch, testScheduler)
+          delay(DEBOUNCE_DELAY)
           it.assertValue(
             SearchState(
               searchTerm3,
@@ -341,7 +341,7 @@ internal class SearchViewModelTest {
     coEvery {
       searchResultGenerator.generateSearchResults(searchTerm, zimFileReader)
     } returns suggestionSearch
-    viewModel.actions.trySend(Filter(searchTerm)).isSuccess
+    viewModel.searchResults(searchTerm)
     recentsFromDb.trySend(databaseResults).isSuccess
     viewModel.actions.trySend(ScreenWasStartedFrom(searchOrigin)).isSuccess
     testScheduler.apply {
