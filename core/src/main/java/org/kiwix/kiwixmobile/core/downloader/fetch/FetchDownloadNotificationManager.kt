@@ -25,7 +25,7 @@ import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.app.PendingIntent.getActivity
 import android.content.Context
-import android.content.Context.RECEIVER_EXPORTED
+import android.content.Context.RECEIVER_NOT_EXPORTED
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
@@ -47,11 +47,12 @@ import com.tonyodev.fetch2.EXTRA_NAMESPACE
 import com.tonyodev.fetch2.EXTRA_NOTIFICATION_GROUP_ID
 import com.tonyodev.fetch2.EXTRA_NOTIFICATION_ID
 import com.tonyodev.fetch2.Fetch
+import com.tonyodev.fetch2.R.drawable
+import com.tonyodev.fetch2.R.string
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
-import com.tonyodev.fetch2.R.string
-import com.tonyodev.fetch2.R.drawable
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
 const val DOWNLOAD_NOTIFICATION_TITLE = "OPEN_ZIM_FILE"
@@ -189,10 +190,10 @@ class FetchDownloadNotificationManager(private val context: Context) :
 
   override fun registerBroadcastReceiver() {
     if (Build.VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
-      context.registerReceiver(
+      CoreApp.instance.applicationContext.registerReceiver(
         broadcastReceiver,
         IntentFilter(notificationManagerAction),
-        RECEIVER_EXPORTED
+        RECEIVER_NOT_EXPORTED
       )
     } else {
       super.registerBroadcastReceiver()
