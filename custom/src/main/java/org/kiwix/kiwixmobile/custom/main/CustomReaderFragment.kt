@@ -29,6 +29,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
+import org.kiwix.kiwixmobile.core.extensions.getResizedDrawable
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.MainMenu
@@ -57,6 +58,7 @@ class CustomReaderFragment : CoreReaderFragment() {
   var dialogShower: DialogShower? = null
   private var permissionRequiredDialog: Dialog? = null
   private var appSettingsLaunched = false
+
   @Suppress("NestedBlockDepth")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
@@ -77,7 +79,11 @@ class CustomReaderFragment : CoreReaderFragment() {
           if (BuildConfig.DISABLE_TITLE) {
             // if the title is disable then set the app logo to hamburger icon,
             // see https://github.com/kiwix/kiwix-android/issues/3528#issuecomment-1814905330
-            it.setNavigationIcon(R.mipmap.ic_launcher)
+            val iconSize =
+              resources.getDimensionPixelSize(org.kiwix.kiwixmobile.core.R.dimen.hamburger_icon_size)
+            getResizedDrawable(R.mipmap.ic_launcher, iconSize, iconSize)?.let { drawable ->
+              it.navigationIcon = drawable
+            }
           }
         }
       }
