@@ -29,7 +29,6 @@ import android.content.pm.PackageManager
 import android.content.res.AssetFileDescriptor
 import android.content.res.Configuration
 import android.graphics.Canvas
-import android.graphics.Rect
 import android.media.AudioManager
 import android.media.AudioManager.OnAudioFocusChangeListener
 import android.net.Uri
@@ -460,9 +459,8 @@ abstract class CoreReaderFragment :
       override fun onTap(e: MotionEvent?) {
         e?.let {
           val titleTextView = toolbar?.findFirstTextView() ?: return@onTap
-          val hitRect = Rect()
-          titleTextView.getHitRect(hitRect)
-          if (hitRect.contains(it.x.toInt(), it.y.toInt())) {
+          titleTextView.let {
+            // only initiate search if it is on the reader screen
             mainMenu?.tryExpandSearch(zimReaderContainer?.zimFileReader)
           }
         }
