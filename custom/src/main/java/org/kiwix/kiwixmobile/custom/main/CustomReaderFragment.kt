@@ -57,6 +57,7 @@ class CustomReaderFragment : CoreReaderFragment() {
   var dialogShower: DialogShower? = null
   private var permissionRequiredDialog: Dialog? = null
   private var appSettingsLaunched = false
+  @Suppress("NestedBlockDepth")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     if (enforcedLanguage()) {
@@ -71,7 +72,14 @@ class CustomReaderFragment : CoreReaderFragment() {
       }
       with(activity as AppCompatActivity) {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar?.let { setupDrawerToggle(it) }
+        toolbar?.let {
+          setupDrawerToggle(it)
+          if (BuildConfig.DISABLE_TITLE) {
+            // if the title is disable then set the app logo to hamburger icon,
+            // see https://github.com/kiwix/kiwix-android/issues/3528#issuecomment-1814905330
+            it.setNavigationIcon(R.mipmap.ic_launcher)
+          }
+        }
       }
       loadPageFromNavigationArguments()
     }
@@ -237,6 +245,23 @@ class CustomReaderFragment : CoreReaderFragment() {
       menu?.findItem(org.kiwix.kiwixmobile.core.R.id.menu_speak_text)?.isVisible = false
     }
     super.configureWebViewSelectionHandler(menu)
+  }
+
+  /**
+   * Overrides the method to configure the title of toolbar. When the "setting title" is disabled
+   * in a custom app, this function set the empty toolbar title.
+   */
+  override fun updateTitle() {
+    if (BuildConfig.DISABLE_TITLE) {
+      // Set an empty title for the toolbar because we are handling the toolbar click on behalf of this title.
+      // Since we have increased the zone for triggering search suggestions (see https://github.com/kiwix/kiwix-android/pull/3566),
+      // we need to set this title for handling the toolbar click,
+      // even if it is empty. If we do not set up this title,
+      // the search screen will open if the user clicks on the toolbar from the tabs screen.
+      actionBar?.title = " "
+    } else {
+      super.updateTitle()
+    }
   }
 
   override fun createNewTab() {

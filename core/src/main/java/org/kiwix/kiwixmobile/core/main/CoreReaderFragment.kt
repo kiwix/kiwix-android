@@ -938,7 +938,15 @@ abstract class CoreReaderFragment :
     }
   }
 
-  private fun updateTitle() {
+  /**
+   * Sets the title for toolbar, controlling the title of toolbar.
+   * Subclasses like CustomReaderFragment override this method to provide custom
+   * behavior, such as hiding the title when configured not to show it.
+   *
+   * WARNING: If modifying this method, ensure thorough testing with custom apps
+   * to verify proper functionality.
+   */
+  open fun updateTitle() {
     if (isAdded) {
       actionBar?.title = getValidTitle(zimReaderContainer?.zimFileTitle)
     }
