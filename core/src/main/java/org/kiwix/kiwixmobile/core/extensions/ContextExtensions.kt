@@ -100,4 +100,3 @@ fun Context.getBitmapFromDrawable(drawable: Drawable): Bitmap {
 
   return bitmap
 }
-

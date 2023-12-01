@@ -39,6 +39,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForCustom
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
+import org.kiwix.kiwixmobile.core.R.dimen
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import java.io.File
 import java.util.Locale
@@ -80,7 +81,7 @@ class CustomReaderFragment : CoreReaderFragment() {
             // if the title is disable then set the app logo to hamburger icon,
             // see https://github.com/kiwix/kiwix-android/issues/3528#issuecomment-1814905330
             val iconSize =
-              resources.getDimensionPixelSize(org.kiwix.kiwixmobile.core.R.dimen.hamburger_icon_size)
+              resources.getDimensionPixelSize(dimen.hamburger_icon_size)
             getResizedDrawable(R.mipmap.ic_launcher, iconSize, iconSize)?.let { drawable ->
               it.navigationIcon = drawable
             }
