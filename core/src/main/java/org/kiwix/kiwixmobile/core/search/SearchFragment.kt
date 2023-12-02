@@ -61,7 +61,6 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ActivityResultReceived
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ClickedSearchInText
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ExitedSearch
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnOpenInNewTabClick
@@ -219,7 +218,7 @@ class SearchFragment : BaseFragment() {
           searchView?.setOnQueryTextListener(
             SimpleTextListener {
               if (it.isNotEmpty()) {
-                searchViewModel.actions.trySend(Filter(it)).isSuccess
+                searchViewModel.searchResults(it)
               }
             }
           )
