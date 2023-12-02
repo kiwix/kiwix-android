@@ -36,7 +36,7 @@ jobs:
           ARCHIVE_NAME: kiwix-${{ github.event.release.tag_name }}.apk
         run: |
           ./gradlew assembleRelease
-          cp "$UNIVERSAL_RELEASE_APK" "$ARCHIVE_NAME"
+          cp "${UNIVERSAL_RELEASE_APK}" "${ARCHIVE_NAME}"
           scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no "$ARCHIVE_NAME" ci@master.download.kiwix.org:/data/download/release/kiwix-android/
 
 #      This is temporary, once we will publish 3.7.0 then we will uncommented this code.
