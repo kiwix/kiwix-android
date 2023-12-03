@@ -1,8 +1,9 @@
 name: Publish App
 
 on:
-  release:
-    types: [published]
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
   publish:
@@ -33,10 +34,10 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
           UNIVERSAL_RELEASE_APK: app/build/outputs/apk/release/*universal*.apk
-          ARCHIVE_NAME: kiwix-${{ github.event.release.tag_name }}.apk
+          ARCHIVE_NAME: kiwix-test.apk
         run: |
           ./gradlew assembleRelease
-          cp "${UNIVERSAL_RELEASE_APK}" "${ARCHIVE_NAME}"
+          cp $UNIVERSAL_RELEASE_APK" $ARCHIVE_NAME"
           scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no "$ARCHIVE_NAME" ci@master.download.kiwix.org:/data/download/release/kiwix-android/
 
 #      This is temporary, once we will publish 3.7.0 then we will uncommented this code.
@@ -46,20 +47,4 @@ jobs:
 #          ./gradlew generateVersionCodeAndName
 #          scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no VERSION_INFO ci@master.download.kiwix.org:/data/download/release/kiwix-android/
 
-      - name: Publish to GitHub
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "app/build/outputs/apk/release/**"
-          token: ${{ secrets.GITHUB_TOKEN }}
-          draft: true
-          prerelease: true
-
-      - name: Publish bundle to Google Play
-        env:
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
-          PLAYSTORE_JSON: ${{ secrets.PLAYSTORE_JSON }}
-        run: |
-          echo "$PLAYSTORE_JSON" > playstore.json
-          ./gradlew publishPlayStoreBundle --scan
+     
