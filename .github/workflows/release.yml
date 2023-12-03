@@ -34,7 +34,7 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
           UNIVERSAL_RELEASE_APK: app/build/outputs/apk/release/*universal*.apk
-          ARCHIVE_NAME: kiwix-test.apk
+          ARCHIVE_NAME: kiwix-3.8.1.apk
         run: |
           ./gradlew assembleRelease
           cp $UNIVERSAL_RELEASE_APK" $ARCHIVE_NAME"
