@@ -64,6 +64,7 @@ import androidx.annotation.AnimRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Group
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
@@ -182,6 +183,10 @@ abstract class CoreReaderFragment :
   @JvmField
   @BindView(R2.id.toolbar)
   var toolbar: Toolbar? = null
+
+  @JvmField
+  @BindView(R2.id.toolbarWithSearchPlaceholder)
+  var toolbarWithSearchPlaceholder: ConstraintLayout? = null
 
   @JvmField
   @BindView(R2.id.fragment_main_app_bar)
@@ -763,7 +768,7 @@ abstract class CoreReaderFragment :
     actionBar?.apply {
       setDisplayShowTitleEnabled(true)
     }
-    toolbar?.let((requireActivity() as CoreMainActivity)::setupDrawerToggle)
+    toolbar?.let(::setUpDrawerToggle)
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     closeAllTabsButton?.setImageDrawable(
       ContextCompat.getDrawable(requireActivity(), R.drawable.ic_close_black_24dp)
@@ -782,6 +787,18 @@ abstract class CoreReaderFragment :
     // Reset the top margin of web views to 0 to remove any previously set margin
     // This ensures that the web views are displayed without any additional top margin for kiwix custom apps.
     setTopMarginToWebViews(0)
+  }
+
+  /**
+   * Sets the drawer toggle, controlling the toolbar.
+   * Subclasses like CustomReaderFragment override this method to provide custom
+   * behavior, such as set the app icon on hamburger when configure to not show the title.
+   *
+   * WARNING: If modifying this method, ensure thorough testing with custom apps
+   * to verify proper functionality.
+   */
+  open fun setUpDrawerToggle(toolbar: Toolbar) {
+    toolbar.let((requireActivity() as CoreMainActivity)::setupDrawerToggle)
   }
 
   /**

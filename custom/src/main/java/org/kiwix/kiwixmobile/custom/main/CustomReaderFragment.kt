@@ -23,12 +23,14 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.getResizedDrawable
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
@@ -75,20 +77,28 @@ class CustomReaderFragment : CoreReaderFragment() {
       }
       with(activity as AppCompatActivity) {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar?.let {
-          setupDrawerToggle(it)
-          if (BuildConfig.DISABLE_TITLE) {
-            // if the title is disable then set the app logo to hamburger icon,
-            // see https://github.com/kiwix/kiwix-android/issues/3528#issuecomment-1814905330
-            val iconSize =
-              resources.getDimensionPixelSize(dimen.hamburger_icon_size)
-            getResizedDrawable(R.mipmap.ic_launcher, iconSize, iconSize)?.let { drawable ->
-              it.navigationIcon = drawable
-            }
-          }
-        }
+        toolbar?.let(::setUpDrawerToggle)
       }
       loadPageFromNavigationArguments()
+    }
+  }
+
+  /**
+   * Overrides the method to configure the hamburger icon. When the "setting title" is disabled
+   * in a custom app, this function set the app logo on hamburger.
+   */
+  override fun setUpDrawerToggle(toolbar: Toolbar) {
+    if (BuildConfig.DISABLE_TITLE) {
+      // if the title is disable then set the app logo to hamburger icon,
+      // see https://github.com/kiwix/kiwix-android/issues/3528#issuecomment-1814905330
+      val iconSize =
+        resources.getDimensionPixelSize(dimen.hamburger_icon_size)
+      requireActivity().getResizedDrawable(R.mipmap.ic_launcher, iconSize, iconSize)
+        ?.let { drawable ->
+          toolbar.navigationIcon = drawable
+        }
+    } else {
+      super.setUpDrawerToggle(toolbar)
     }
   }
 
@@ -226,7 +236,8 @@ class CustomReaderFragment : CoreReaderFragment() {
         urlIsValid(),
         this,
         BuildConfig.DISABLE_READ_ALOUD,
-        BuildConfig.DISABLE_TABS
+        BuildConfig.DISABLE_TABS,
+        BuildConfig.DISABLE_TITLE
       )
     }
   }
@@ -266,7 +277,9 @@ class CustomReaderFragment : CoreReaderFragment() {
       // even if it is empty. If we do not set up this title,
       // the search screen will open if the user clicks on the toolbar from the tabs screen.
       actionBar?.title = " "
+      toolbarWithSearchPlaceholder?.visibility = VISIBLE
     } else {
+      toolbarWithSearchPlaceholder?.visibility = GONE
       super.updateTitle()
     }
   }
