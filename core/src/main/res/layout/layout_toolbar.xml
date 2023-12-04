@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge>
+<merge xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:popupTheme="@style/KiwixTheme"
     app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
-    tools:showIn="@layout/fragment_search" />
+    tools:showIn="@layout/fragment_search">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/toolbarWithSearchPlaceholder"
+      android:layout_width="match_parent"
+      android:visibility="gone"
+      android:background="@drawable/search_placeholder_background"
+      android:layout_height="wrap_content">
+
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/search_label"
+        android:padding="5dip"
+        android:layout_marginStart="5dip"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:drawableRightCompat="@drawable/action_search"
+        android:drawablePadding="10dip" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+  </androidx.appcompat.widget.Toolbar>
 </merge>

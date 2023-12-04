@@ -88,6 +88,7 @@ class CustomReaderFragment : CoreReaderFragment() {
    * in a custom app, this function set the app logo on hamburger.
    */
   override fun setUpDrawerToggle(toolbar: Toolbar) {
+    super.setUpDrawerToggle(toolbar)
     if (BuildConfig.DISABLE_TITLE) {
       // if the title is disable then set the app logo to hamburger icon,
       // see https://github.com/kiwix/kiwix-android/issues/3528#issuecomment-1814905330
@@ -95,11 +96,27 @@ class CustomReaderFragment : CoreReaderFragment() {
         resources.getDimensionPixelSize(dimen.hamburger_icon_size)
       requireActivity().getResizedDrawable(R.mipmap.ic_launcher, iconSize, iconSize)
         ?.let { drawable ->
-          toolbar.navigationIcon = drawable
+          super.toolbar?.navigationIcon = drawable
         }
-    } else {
-      super.setUpDrawerToggle(toolbar)
     }
+  }
+
+  /**
+   * Overrides the method to hide/show the placeholder from toolbar.
+   * When the "setting title" is disabled/enabled in a custom app,
+   * this function set the visibility of placeholder in toolbar when showing the tabs.
+   */
+  override fun setTabSwitcherVisibility(visibility: Int) {
+    if (BuildConfig.DISABLE_TITLE) {
+      // If custom apps are configured to show the placeholder,
+      // and if tabs are visible, hide the placeholder.
+      // If tabs are hidden, show the placeholder.
+      updateToolbarSearchPlaceholderVisibility(if (visibility == VISIBLE) GONE else VISIBLE)
+    } else {
+      // Permanently hide the placeholder if the custom app is not configured to show it.
+      updateToolbarSearchPlaceholderVisibility(GONE)
+    }
+    super.setTabSwitcherVisibility(visibility)
   }
 
   private fun loadPageFromNavigationArguments() {
@@ -277,11 +294,15 @@ class CustomReaderFragment : CoreReaderFragment() {
       // even if it is empty. If we do not set up this title,
       // the search screen will open if the user clicks on the toolbar from the tabs screen.
       actionBar?.title = " "
-      toolbarWithSearchPlaceholder?.visibility = VISIBLE
+      updateToolbarSearchPlaceholderVisibility(VISIBLE)
     } else {
-      toolbarWithSearchPlaceholder?.visibility = GONE
+      updateToolbarSearchPlaceholderVisibility(GONE)
       super.updateTitle()
     }
+  }
+
+  private fun updateToolbarSearchPlaceholderVisibility(visibility: Int) {
+    toolbarWithSearchPlaceholder?.visibility = visibility
   }
 
   override fun createNewTab() {

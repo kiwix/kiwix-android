@@ -48,6 +48,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.webkit.WebBackForwardList
@@ -519,6 +520,9 @@ abstract class CoreReaderFragment :
       viewLifecycleOwner,
       Observer(::openSearchItem)
     )
+    toolbarWithSearchPlaceholder?.setOnClickListener {
+      openSearch(searchString = "", isOpenedFromTabView = false, false)
+    }
   }
 
   private fun initTabCallback() {
@@ -719,7 +723,7 @@ abstract class CoreReaderFragment :
     contentFrame?.visibility = View.GONE
     progressBar?.visibility = View.GONE
     backToTopButton?.hide()
-    tabSwitcherRoot?.visibility = View.VISIBLE
+    setTabSwitcherVisibility(VISIBLE)
     startAnimation(tabSwitcherRoot, R.anim.slide_down)
     tabsAdapter?.let { tabsAdapter ->
       tabRecyclerView?.let { recyclerView ->
@@ -735,6 +739,19 @@ abstract class CoreReaderFragment :
       tabsAdapter.notifyDataSetChanged()
     }
     mainMenu?.showTabSwitcherOptions()
+  }
+
+  /**
+   * Sets the tabs switcher visibility, controlling the visibility of the tab.
+   * Subclasses, like CustomReaderFragment, override this method to provide custom
+   * behavior, such as hiding the placeholder in the toolbar when a custom app is configured
+   * not to show the title. This is necessary because the same toolbar is used for displaying tabs.
+   *
+   * WARNING: If modifying this method, ensure thorough testing with custom apps
+   * to verify proper functionality.
+   */
+  open fun setTabSwitcherVisibility(visibility: Int) {
+    tabSwitcherRoot?.visibility = visibility
   }
 
   /**
@@ -775,7 +792,7 @@ abstract class CoreReaderFragment :
     )
     tabSwitcherRoot?.let {
       if (it.visibility == View.VISIBLE) {
-        it.visibility = View.GONE
+        setTabSwitcherVisibility(View.GONE)
         startAnimation(it, R.anim.slide_up)
         progressBar?.visibility = View.VISIBLE
         contentFrame?.visibility = View.VISIBLE

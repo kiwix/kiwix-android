@@ -28,6 +28,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 
 const val REQUEST_FILE_SEARCH = 1236
 
+@Suppress("LongParameterList")
 class MainMenu(
   private val activity: Activity,
   zimFileReader: ZimFileReader?,
@@ -36,6 +37,7 @@ class MainMenu(
   urlIsValid: Boolean,
   disableReadAloud: Boolean = false,
   disableTabs: Boolean = false,
+  private val disableSearch: Boolean = false,
   private val menuClickListener: MenuClickListener
 ) {
 
@@ -46,7 +48,8 @@ class MainMenu(
       urlIsValid: Boolean,
       menuClickListener: MenuClickListener,
       disableReadAloud: Boolean,
-      disableTabs: Boolean
+      disableTabs: Boolean,
+      disableSearch: Boolean = false
     ): MainMenu
   }
 
@@ -83,6 +86,10 @@ class MainMenu(
       tabSwitcherTextView?.isVisible = false
       tabSwitcher = null
       tabSwitcherTextView = null
+    }
+
+    if (disableSearch) {
+      search?.isVisible = false
     }
 
     randomArticle.setShowAsAction(
@@ -155,7 +162,13 @@ class MainMenu(
   }
 
   private fun setVisibility(visibility: Boolean, vararg menuItems: MenuItem?) {
-    menuItems.forEach { it?.isVisible = visibility }
+    menuItems.forEach {
+      if (it == search && disableSearch) {
+        it?.isVisible = false
+      } else {
+        it?.isVisible = visibility
+      }
+    }
   }
 
   fun tryExpandSearch(zimFileReader: ZimFileReader?) {
