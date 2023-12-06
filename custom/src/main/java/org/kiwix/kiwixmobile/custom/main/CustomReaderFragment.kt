@@ -96,7 +96,11 @@ class CustomReaderFragment : CoreReaderFragment() {
         resources.getDimensionPixelSize(dimen.hamburger_icon_size)
       requireActivity().getResizedDrawable(R.mipmap.ic_launcher, iconSize, iconSize)
         ?.let { drawable ->
-          super.toolbar?.navigationIcon = drawable
+          super.toolbar?.apply {
+            navigationIcon = drawable
+            // remove the default margin between hamburger and placeholder
+            contentInsetStartWithNavigation = 0
+          }
         }
     }
   }
