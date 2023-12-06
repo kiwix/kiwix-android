@@ -23,12 +23,15 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
 import org.kiwix.kiwixmobile.core.base.BaseActivity
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
+import org.kiwix.kiwixmobile.core.extensions.getResizedDrawable
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.MainMenu
@@ -38,6 +41,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForCustom
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
+import org.kiwix.kiwixmobile.core.R.dimen
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import java.io.File
 import java.util.Locale
@@ -57,6 +61,8 @@ class CustomReaderFragment : CoreReaderFragment() {
   var dialogShower: DialogShower? = null
   private var permissionRequiredDialog: Dialog? = null
   private var appSettingsLaunched = false
+
+  @Suppress("NestedBlockDepth")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     if (enforcedLanguage()) {
@@ -71,10 +77,50 @@ class CustomReaderFragment : CoreReaderFragment() {
       }
       with(activity as AppCompatActivity) {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar?.let { setupDrawerToggle(it) }
+        toolbar?.let(::setUpDrawerToggle)
       }
       loadPageFromNavigationArguments()
     }
+  }
+
+  /**
+   * Overrides the method to configure the hamburger icon. When the "setting title" is disabled
+   * in a custom app, this function set the app logo on hamburger.
+   */
+  override fun setUpDrawerToggle(toolbar: Toolbar) {
+    super.setUpDrawerToggle(toolbar)
+    if (BuildConfig.DISABLE_TITLE) {
+      // if the title is disable then set the app logo to hamburger icon,
+      // see https://github.com/kiwix/kiwix-android/issues/3528#issuecomment-1814905330
+      val iconSize =
+        resources.getDimensionPixelSize(dimen.hamburger_icon_size)
+      requireActivity().getResizedDrawable(R.mipmap.ic_launcher, iconSize, iconSize)
+        ?.let { drawable ->
+          super.toolbar?.apply {
+            navigationIcon = drawable
+            // remove the default margin between hamburger and placeholder
+            contentInsetStartWithNavigation = 0
+          }
+        }
+    }
+  }
+
+  /**
+   * Overrides the method to hide/show the placeholder from toolbar.
+   * When the "setting title" is disabled/enabled in a custom app,
+   * this function set the visibility of placeholder in toolbar when showing the tabs.
+   */
+  override fun setTabSwitcherVisibility(visibility: Int) {
+    if (BuildConfig.DISABLE_TITLE) {
+      // If custom apps are configured to show the placeholder,
+      // and if tabs are visible, hide the placeholder.
+      // If tabs are hidden, show the placeholder.
+      updateToolbarSearchPlaceholderVisibility(if (visibility == VISIBLE) GONE else VISIBLE)
+    } else {
+      // Permanently hide the placeholder if the custom app is not configured to show it.
+      updateToolbarSearchPlaceholderVisibility(GONE)
+    }
+    super.setTabSwitcherVisibility(visibility)
   }
 
   private fun loadPageFromNavigationArguments() {
@@ -211,7 +257,8 @@ class CustomReaderFragment : CoreReaderFragment() {
         urlIsValid(),
         this,
         BuildConfig.DISABLE_READ_ALOUD,
-        BuildConfig.DISABLE_TABS
+        BuildConfig.DISABLE_TABS,
+        BuildConfig.DISABLE_TITLE
       )
     }
   }
@@ -237,6 +284,29 @@ class CustomReaderFragment : CoreReaderFragment() {
       menu?.findItem(org.kiwix.kiwixmobile.core.R.id.menu_speak_text)?.isVisible = false
     }
     super.configureWebViewSelectionHandler(menu)
+  }
+
+  /**
+   * Overrides the method to configure the title of toolbar. When the "setting title" is disabled
+   * in a custom app, this function set the empty toolbar title.
+   */
+  override fun updateTitle() {
+    if (BuildConfig.DISABLE_TITLE) {
+      // Set an empty title for the toolbar because we are handling the toolbar click on behalf of this title.
+      // Since we have increased the zone for triggering search suggestions (see https://github.com/kiwix/kiwix-android/pull/3566),
+      // we need to set this title for handling the toolbar click,
+      // even if it is empty. If we do not set up this title,
+      // the search screen will open if the user clicks on the toolbar from the tabs screen.
+      actionBar?.title = " "
+      updateToolbarSearchPlaceholderVisibility(VISIBLE)
+    } else {
+      updateToolbarSearchPlaceholderVisibility(GONE)
+      super.updateTitle()
+    }
+  }
+
+  private fun updateToolbarSearchPlaceholderVisibility(visibility: Int) {
+    toolbarWithSearchPlaceholder?.visibility = visibility
   }
 
   override fun createNewTab() {

@@ -55,7 +55,8 @@ abstract class ActivityModule {
         urlIsValid: Boolean,
         menuClickListener: MenuClickListener,
         disableReadAloud: Boolean,
-        disableTabs: Boolean
+        disableTabs: Boolean,
+        disableSearch: Boolean
       ): MainMenu = MainMenu(
         activity,
         zimReaderContainer.zimFileReader,
@@ -64,6 +65,7 @@ abstract class ActivityModule {
         urlIsValid,
         disableReadAloud,
         disableTabs,
+        disableSearch,
         menuClickListener
       )
     }

@@ -8,7 +8,8 @@
     android:title="@string/search_label"
     android:visible="false"
     app:showAsAction="always"
-    tools:visible="true" />
+    tools:visible="true"
+    tools:ignore="AlwaysShowAction" />
 
   <item
     android:id="@+id/menu_tab_switcher"
@@ -21,7 +22,7 @@
     android:icon="@drawable/ic_add_note"
     android:title="@string/note"
     android:visible="false"
-    app:showAsAction="ifRoom" />
+    app:showAsAction="never" />
 
 
   <item
