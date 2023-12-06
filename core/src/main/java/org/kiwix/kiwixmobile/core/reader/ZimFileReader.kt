@@ -208,9 +208,9 @@ class ZimFileReader constructor(
     }
 
   private fun toRedirect(url: String) =
-    "$CONTENT_PREFIX${getActualUrl(url, true)}".toUri()
+    "$CONTENT_PREFIX${getActualUrl(url)}".toUri()
 
-  private fun getActualUrl(url: String, actualUrl: Boolean = false): String {
+  private fun getActualUrl(url: String): String {
     val actualPath = url.toUri().filePath.decodeUrl
     var redirectPath = try {
       jniKiwixReader.getEntryByPath(actualPath)
@@ -220,7 +220,7 @@ class ZimFileReader constructor(
     } catch (ignore: Exception) {
       actualPath.replaceWithEncodedString
     }
-    if (actualUrl && url.decodeUrl.contains("?")) {
+    if (url.decodeUrl.contains("?")) {
       redirectPath += extractQueryParam(url)
     }
     return redirectPath
@@ -294,7 +294,9 @@ class ZimFileReader constructor(
 
   private fun getItem(url: String): Item? =
     try {
-      jniKiwixReader.getEntryByPath(getActualUrl(url)).getItem(true)
+      val actualPath = url.toUri().filePath.decodeUrl
+      jniKiwixReader.getEntryByPath(actualPath)
+        .getItem(true)
     } catch (exception: Exception) {
       Log.e(TAG, "Could not get Item for url = $url \n original exception = $exception")
       null
