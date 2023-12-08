@@ -18,13 +18,25 @@
 
 package org.kiwix.kiwixmobile.help
 
+import android.os.Build
+import org.kiwix.kiwixmobile.BuildConfig.IS_PLAYSTORE
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.help.HelpFragment
 
 class KiwixHelpFragment : HelpFragment() {
-  override fun rawTitleDescriptionMap() = listOf(
-    R.string.help_2 to R.array.description_help_2,
-    R.string.help_5 to R.array.description_help_5,
-    R.string.how_to_update_content to R.array.update_content_description
-  )
+  override fun rawTitleDescriptionMap() =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && IS_PLAYSTORE) {
+      listOf(
+        R.string.help_2 to R.array.description_help_2,
+        R.string.help_5 to R.array.description_help_5,
+        R.string.how_to_update_content to R.array.update_content_description,
+        R.string.zim_files_not_showing to R.array.description_help_6
+      )
+    } else {
+      listOf(
+        R.string.help_2 to R.array.description_help_2,
+        R.string.help_5 to R.array.description_help_5,
+        R.string.how_to_update_content to R.array.update_content_description
+      )
+    }
 }
