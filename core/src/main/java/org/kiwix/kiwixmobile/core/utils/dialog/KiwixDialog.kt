@@ -170,6 +170,13 @@ sealed class KiwixDialog(
     neutralMessage = R.string.do_not_ask_anymore
   )
 
+  object PlayStoreRestrictionPopup : KiwixDialog(
+    null,
+    R.string.zim_files_not_showing_description,
+    R.string.understood,
+    null
+  )
+
   data class ShowRate(override val args: List<Any>, val customIcon: Int?) :
     KiwixDialog(
       R.string.rate_dialog_title,
