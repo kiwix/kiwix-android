@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.help
 
 import android.animation.ObjectAnimator
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,7 +63,10 @@ internal class HelpAdapter(titleDescriptionMap: Map<String, String>) :
     override fun bind(item: HelpItem) {
       itemHelpBinding.itemHelpTitle.setOnClickListener { toggleDescriptionVisibility() }
       itemHelpBinding.itemHelpToggleExpand.setOnClickListener { toggleDescriptionVisibility() }
-      itemHelpBinding.itemHelpDescription.text = item.description
+      itemHelpBinding.itemHelpDescription.apply {
+        text = item.description
+        movementMethod = LinkMovementMethod.getInstance()
+      }
       itemHelpBinding.itemHelpTitle.text = item.title
     }
   }

@@ -304,7 +304,7 @@
   <string name="open_drawer">Open Drawer</string>
   <string name="close_drawer">Close Drawer</string>
   <string name="zim_files_not_showing">Zim files not showing?</string>
-  <string name="zim_files_not_showing_description">Due to Google Play policies on Android 11 and above, this Google Store app can\’t open sideloaded ZIM files. You can either download them through the app or, instead, install the full version of kiwix from <a href="https://download.kiwix.org/release/kiwix-android/">our official website</a></string>
+  <string name="zim_files_not_showing_description">Due to Google Play policies on Android 11 and above, this Google Store app can\’t open sideloaded ZIM files. You can either download them through the app or, instead, install the full version of kiwix app from our official website <a href="https://download.kiwix.org/release/kiwix-android/">https://download.kiwix.org/release/kiwix-android/</a></string>
   <string name="how_to_update_content">How to update content?</string>
   <string name="update_content_description">To update content (a zim file) you need to download the full latest version of this very same content. You can do that via the download section.</string>
   <string name="all_files_permission_needed">All Files Permission Needed</string>
