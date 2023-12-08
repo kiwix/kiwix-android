@@ -36,6 +36,14 @@ object StorageDeviceUtils {
       add(environmentDevices(context))
       addAll(externalMountPointDevices())
       addAll(externalFilesDirsDevices(context, false))
+      // Scan the app-specific directory as well because we have limitations in scanning
+      // all directories on Android 11 and above in the Play Store variant.
+      // If a user copies the ZIM file to the app-specific directory on the SD card,
+      // the scanning of the app-specific directory on the SD card has not been added,
+      // resulting in the copied files not being displayed on the library screen.
+      // Therefore, we need to explicitly include the app-specific directory for scanning.
+      // See https://github.com/kiwix/kiwix-android/issues/3579
+      addAll(externalFilesDirsDevices(context, true))
     }
     return validate(storageDevices, false)
   }
