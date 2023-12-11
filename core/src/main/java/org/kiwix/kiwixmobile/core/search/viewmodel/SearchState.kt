@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
+import kotlinx.coroutines.Job
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 
 data class SearchState(
@@ -26,18 +27,29 @@ data class SearchState(
   val recentResults: List<SearchListItem.RecentSearchListItem>,
   val searchOrigin: SearchOrigin
 ) {
-  fun getVisibleResults(startIndex: Int): List<SearchListItem.RecentSearchListItem>? =
+  @Suppress("NestedBlockDepth")
+  fun getVisibleResults(
+    startIndex: Int,
+    job: Job? = null
+  ): List<SearchListItem.RecentSearchListItem>? =
     if (searchTerm.isEmpty()) {
       recentResults
     } else {
       searchResultsWithTerm.suggestionSearch?.let {
-        val maximumResults = it.estimatedMatches
-        val safeEndIndex =
-          if (startIndex + 100 < maximumResults) startIndex + 100 else maximumResults
-        val searchIterator =
-          it.getResults(startIndex, safeEndIndex.toInt())
         val searchResults = mutableListOf<SearchListItem.RecentSearchListItem>()
+        if (job?.isActive == false) {
+          // if the previous job is cancel then do not execute the code
+          return@getVisibleResults searchResults
+        }
+        val safeEndIndex = startIndex + 100
+        val searchIterator =
+          it.getResults(startIndex, safeEndIndex)
         while (searchIterator.hasNext()) {
+          if (job?.isActive == false) {
+            // check if the previous job is cancel while retrieving the data for previous searched item
+            // then break the execution of code.
+            break
+          }
           val entry = searchIterator.next()
           searchResults.add(SearchListItem.RecentSearchListItem(entry.title, entry.path))
         }

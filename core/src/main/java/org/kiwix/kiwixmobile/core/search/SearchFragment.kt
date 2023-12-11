@@ -260,7 +260,7 @@ class SearchFragment : BaseFragment() {
     fragmentSearchBinding?.searchLoadingIndicator?.isShowing(true)
     renderingJob = searchViewModel.viewModelScope.launch(Dispatchers.Main) {
       val searchResult = withContext(Dispatchers.IO) {
-        state.getVisibleResults(0)
+        state.getVisibleResults(0, renderingJob)
       }
 
       fragmentSearchBinding?.searchLoadingIndicator?.isShowing(false)
