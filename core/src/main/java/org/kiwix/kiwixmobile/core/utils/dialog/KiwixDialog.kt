@@ -174,7 +174,7 @@ sealed class KiwixDialog(
     null,
     R.string.zim_files_not_showing_description,
     R.string.understood,
-    null
+    R.string.download
   )
 
   data class ShowRate(override val args: List<Any>, val customIcon: Int?) :
