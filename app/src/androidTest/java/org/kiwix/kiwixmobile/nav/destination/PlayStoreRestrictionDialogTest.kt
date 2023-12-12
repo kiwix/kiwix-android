@@ -78,29 +78,33 @@ class PlayStoreRestrictionDialogTest {
 
   @Test
   fun showPlayStoreRestrictionDialog() {
-    setShowPlayStoreRestrictionDialog(true)
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      setShowPlayStoreRestrictionDialog(true)
+      activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+      }
+      playStoreRestriction {
+        clickLibraryOnBottomNav()
+        assertPlayStoreRestrictionDialogDisplayed()
+        clickOnUnderstood()
+      }
+      LeakAssertions.assertNoLeaks()
     }
-    playStoreRestriction {
-      clickLibraryOnBottomNav()
-      assertPlayStoreRestrictionDialogDisplayed()
-      clickOnUnderstood()
-    }
-    LeakAssertions.assertNoLeaks()
   }
 
   @Test
   fun testPlayStoreDialogShowOnlyOnce() {
-    setShowPlayStoreRestrictionDialog(false)
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      setShowPlayStoreRestrictionDialog(false)
+      activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+      }
+      playStoreRestriction {
+        clickLibraryOnBottomNav()
+        assetPlayStoreRestrictionDialogNotDisplayed()
+      }
+      LeakAssertions.assertNoLeaks()
     }
-    playStoreRestriction {
-      clickLibraryOnBottomNav()
-      assetPlayStoreRestrictionDialogNotDisplayed()
-    }
-    LeakAssertions.assertNoLeaks()
   }
 
   private fun setShowPlayStoreRestrictionDialog(showDialog: Boolean) {

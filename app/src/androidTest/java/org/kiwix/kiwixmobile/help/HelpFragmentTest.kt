@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.help
 
+import android.os.Build
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -83,26 +84,28 @@ class HelpFragmentTest : BaseActivityTest() {
 
   @Test
   fun verifyHelpActivityWithPlayStoreRestriction() {
-    setShowPlayStoreRestriction(true)
-    activityScenario.onActivity {
-      it.navigate(R.id.helpFragment)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      setShowPlayStoreRestriction(true)
+      activityScenario.onActivity {
+        it.navigate(R.id.helpFragment)
+      }
+      help {
+        clickOnWhatDoesKiwixDo()
+        assertWhatDoesKiwixDoIsExpanded()
+        clickOnWhatDoesKiwixDo()
+        clickOnWhereIsContent()
+        assertWhereIsContentIsExpanded()
+        clickOnWhereIsContent()
+        clickOnHowToUpdateContent()
+        assertHowToUpdateContentIsExpanded()
+        clickOnHowToUpdateContent()
+        clickOnZimFileNotShowing()
+        assertZimFileNotShowingIsExpanded()
+        clickOnZimFileNotShowing()
+        clickOnSendFeedback()
+      }
+      LeakAssertions.assertNoLeaks()
     }
-    help {
-      clickOnWhatDoesKiwixDo()
-      assertWhatDoesKiwixDoIsExpanded()
-      clickOnWhatDoesKiwixDo()
-      clickOnWhereIsContent()
-      assertWhereIsContentIsExpanded()
-      clickOnWhereIsContent()
-      clickOnHowToUpdateContent()
-      assertHowToUpdateContentIsExpanded()
-      clickOnHowToUpdateContent()
-      clickOnZimFileNotShowing()
-      assertZimFileNotShowingIsExpanded()
-      clickOnZimFileNotShowing()
-      clickOnSendFeedback()
-    }
-    LeakAssertions.assertNoLeaks()
   }
 
   private fun setShowPlayStoreRestriction(showRestriction: Boolean) {
