@@ -85,6 +85,7 @@ class ZimHostFragmentTest {
         putPrefWifiOnly(false)
         setIsPlayStoreBuildType(true)
         prefIsTest = true
+        playStoreRestrictionPermissionDialog = false
       }
     }
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {

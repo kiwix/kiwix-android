@@ -17,6 +17,9 @@
  */
 package org.kiwix.kiwixmobile.help
 
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
@@ -76,6 +79,19 @@ class HelpRobot : BaseRobot() {
 
   fun clickOnSendFeedback() {
     clickOn(ViewId(id.activity_help_feedback_text_view))
+  }
+
+  fun clickOnZimFileNotShowing() {
+    clickOn(TextId(string.zim_files_not_showing))
+  }
+
+  fun assertZimFileNotShowingIsExpanded() {
+    isVisible(TextId(string.zim_files_not_showing_description))
+  }
+
+  fun assertZimFileNotShowingIsNotVisible() {
+    onView(withText("Zim files not showing?"))
+      .check(doesNotExist())
   }
 
   private fun helpTextFormat(vararg stringIds: Int) =

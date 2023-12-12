@@ -39,9 +39,13 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.CONTACT_EMAIL_ADDRESS
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import javax.inject.Inject
 
 @Suppress("UnnecessaryAbstractClass")
 abstract class HelpFragment : BaseFragment() {
+  @Inject
+  lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private var fragmentHelpBinding: FragmentHelpBinding? = null
   protected open fun rawTitleDescriptionMap(): List<Pair<Int, Int>> = emptyList()
   override val fragmentToolbar: Toolbar? by lazy {
