@@ -38,6 +38,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
@@ -60,6 +61,7 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isManageExternalStoragePermissionGranted
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
@@ -203,13 +205,7 @@ class LocalLibraryFragment : BaseFragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    fragmentDestinationLibraryBinding?.zimSwiperefresh?.setOnRefreshListener {
-      if (permissionDeniedLayoutShowing) {
-        fragmentDestinationLibraryBinding?.zimSwiperefresh?.isRefreshing = false
-      } else {
-        requestFileSystemCheck()
-      }
-    }
+    setUpSwipeRefreshLayout()
     fragmentDestinationLibraryBinding?.zimfilelist?.run {
       adapter = booksOnDiskAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -260,6 +256,31 @@ class LocalLibraryFragment : BaseFragment() {
     )
   }
 
+  private fun setUpSwipeRefreshLayout() {
+    fragmentDestinationLibraryBinding?.zimSwiperefresh?.setOnRefreshListener {
+      if (permissionDeniedLayoutShowing) {
+        fragmentDestinationLibraryBinding?.zimSwiperefresh?.isRefreshing = false
+      } else {
+        if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
+          @Suppress("NewApi")
+          showManageExternalStoragePermissionDialog()
+        } else {
+          requestFileSystemCheck()
+        }
+      }
+    }
+  }
+
+  @RequiresApi(Build.VERSION_CODES.R)
+  private fun showManageExternalStoragePermissionDialog() {
+    dialogShower.show(
+      KiwixDialog.ManageExternalFilesPermissionDialog,
+      {
+        this.activity?.let(FragmentActivity::navigateToSettings)
+      }
+    )
+  }
+
   private fun getBottomNavigationView() =
     requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view)
 
@@ -279,7 +300,12 @@ class LocalLibraryFragment : BaseFragment() {
     }
 
     fragmentDestinationLibraryBinding?.selectFile?.setOnClickListener {
-      showFileChooser()
+      if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
+        @Suppress("NewApi")
+        showManageExternalStoragePermissionDialog()
+      } else {
+        showFileChooser()
+      }
     }
   }
 
@@ -451,12 +477,7 @@ class LocalLibraryFragment : BaseFragment() {
             // then they can directly toggle this feature from settings screen
             sharedPreferenceUtil.manageExternalFilesPermissionDialog = false
             // Show Dialog and  Go to settings to give permission
-            dialogShower.show(
-              KiwixDialog.ManageExternalFilesPermissionDialog,
-              {
-                this.activity?.let(FragmentActivity::navigateToSettings)
-              }
-            )
+            showManageExternalStoragePermissionDialog()
           }
         }
       } else {

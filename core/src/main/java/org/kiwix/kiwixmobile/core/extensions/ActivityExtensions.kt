@@ -19,11 +19,13 @@
 package org.kiwix.kiwixmobile.core.extensions
 
 import android.Manifest.permission.POST_NOTIFICATIONS
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -170,4 +172,16 @@ object ActivityExtensions {
    * indicating that it is a custom application.
    */
   fun Activity.isCustomApp(): Boolean = packageName != "org.kiwix.kiwixmobile"
+
+  @SuppressLint("NewApi")
+  fun Activity.isManageExternalStoragePermissionGranted(
+    sharedPreferenceUtil: SharedPreferenceUtil?
+  ): Boolean =
+    if (sharedPreferenceUtil?.isNotPlayStoreBuildWithAndroid11OrAbove() == true &&
+      !sharedPreferenceUtil.prefIsTest
+    ) {
+      Environment.isExternalStorageManager()
+    } else {
+      true
+    }
 }

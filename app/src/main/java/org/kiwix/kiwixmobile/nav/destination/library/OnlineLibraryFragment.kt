@@ -37,6 +37,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -44,6 +45,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -59,6 +61,7 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isManageExternalStoragePermissionGranted
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
@@ -69,6 +72,7 @@ import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
+import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
@@ -523,6 +527,12 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           }
           else -> if (sharedPreferenceUtil.showStorageOption) {
             showStorageConfigureDialog()
+          } else if (!requireActivity().isManageExternalStoragePermissionGranted(
+              sharedPreferenceUtil
+            )
+          ) {
+            @Suppress("NewApi")
+            showManageExternalStoragePermissionDialog()
           } else {
             availableSpaceCalculator.hasAvailableSpaceFor(
               item,
@@ -568,6 +578,21 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun clickOnBookItem() {
-    downloadBookItem?.let(::onBookItemClick)
+    if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
+      @Suppress("NewApi")
+      showManageExternalStoragePermissionDialog()
+    } else {
+      downloadBookItem?.let(::onBookItemClick)
+    }
+  }
+
+  @RequiresApi(Build.VERSION_CODES.R)
+  private fun showManageExternalStoragePermissionDialog() {
+    dialogShower.show(
+      KiwixDialog.ManageExternalFilesPermissionDialog,
+      {
+        this.activity?.let(FragmentActivity::navigateToSettings)
+      }
+    )
   }
 }
