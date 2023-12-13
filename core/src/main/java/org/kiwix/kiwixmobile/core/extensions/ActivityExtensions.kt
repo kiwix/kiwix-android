@@ -178,7 +178,8 @@ object ActivityExtensions {
     sharedPreferenceUtil: SharedPreferenceUtil?
   ): Boolean =
     if (sharedPreferenceUtil?.isNotPlayStoreBuildWithAndroid11OrAbove() == true &&
-      !sharedPreferenceUtil.prefIsTest
+      !sharedPreferenceUtil.prefIsTest &&
+      sharedPreferenceUtil.manageExternalFilesPermissionDialogOnRefresh
     ) {
       Environment.isExternalStorageManager()
     } else {

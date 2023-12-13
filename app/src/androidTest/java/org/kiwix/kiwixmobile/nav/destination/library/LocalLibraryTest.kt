@@ -26,6 +26,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -65,6 +66,10 @@ class LocalLibraryTest : BaseActivityTest() {
       // set PREF_MANAGE_EXTERNAL_FILES false for hiding
       // manage external storage permission dialog on android 11 and above
       putBoolean(SharedPreferenceUtil.PREF_MANAGE_EXTERNAL_FILES, false)
+      // Set PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH to false to hide
+      // the manage external storage permission dialog on Android 11 and above
+      // while refreshing the content in LocalLibraryFragment.
+      putBoolean(SharedPreferenceUtil.PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH, false)
     }
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
@@ -102,5 +107,14 @@ class LocalLibraryTest : BaseActivityTest() {
     }
     refresh(R.id.zim_swiperefresh)
     library(LibraryRobot::assertLibraryListDisplayed)
+  }
+
+  @After
+  fun finish() {
+    PreferenceManager.getDefaultSharedPreferences(
+      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
+    ).edit {
+      putBoolean(SharedPreferenceUtil.PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH, true)
+    }
   }
 }
