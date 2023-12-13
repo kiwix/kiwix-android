@@ -27,12 +27,26 @@ import org.kiwix.kiwixmobile.custom.BuildConfig
 class CustomPrefsFragment : CorePrefsFragment() {
   override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
     super.onCreatePreferences(savedInstanceState, rootKey)
+    if (BuildConfig.DISABLE_EXTERNAL_LINK) {
+      hideExternalLinksPreference()
+    }
     if (BuildConfig.ENFORCED_LANG.isEmpty()) {
       setUpLanguageChooser(PREF_LANG)
     } else {
       preferenceScreen.removePreference(findPreference("pref_language"))
     }
     preferenceScreen.removePreferenceRecursively(PREF_WIFI_ONLY)
+  }
+
+  /**
+   * If "external links" are disabled in a custom app,
+   * this function hides the external links preference from settings
+   * and sets the shared preference to not show the external link popup
+   * when opening external links.
+   */
+  private fun hideExternalLinksPreference() {
+    preferenceScreen.removePreferenceRecursively("pref_external_link_popup")
+    sharedPreferenceUtil?.putPrefExternalLinkPopup(false)
   }
 
   override fun setStorage() {

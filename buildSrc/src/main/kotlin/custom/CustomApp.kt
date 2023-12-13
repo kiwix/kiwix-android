@@ -35,7 +35,8 @@ data class CustomApp(
   val disableSideBar: Boolean = false,
   val disableTabs: Boolean = false,
   val disableReadAloud: Boolean = false,
-  val disableTitle: Boolean = false
+  val disableTitle: Boolean = false,
+  val disableExternalLinks: Boolean = false
 ) {
   constructor(name: String, parsedJson: JSONObject) : this(
     name,
@@ -46,7 +47,8 @@ data class CustomApp(
     parsedJson.getAndCast("disable_sidebar") ?: false,
     parsedJson.getAndCast("disable_tabs") ?: false,
     parsedJson.getAndCast("disable_read_aloud") ?: false,
-    parsedJson.getAndCast("disable_title") ?: false
+    parsedJson.getAndCast("disable_title") ?: false,
+    parsedJson.getAndCast("disable_external_links") ?: false
   )
 
   val versionCode: Int = formatCurrentDate("YYDDD0").toInt()
