@@ -55,6 +55,7 @@ import javax.inject.Inject
 import kotlin.system.exitProcess
 
 const val KIWIX_SUPPORT_URL = "https://www.kiwix.org/support"
+const val KIWIX_APK_WEBSITE_URL = "https://download.kiwix.org/release/kiwix-android/"
 const val PAGE_URL_KEY = "pageUrl"
 const val SHOULD_OPEN_IN_NEW_TAB = "shouldOpenInNewTab"
 const val FIND_IN_PAGE_SEARCH_STRING = "findInPageSearchString"

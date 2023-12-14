@@ -70,6 +70,7 @@ class LocalLibraryTest : BaseActivityTest() {
       // the manage external storage permission dialog on Android 11 and above
       // while refreshing the content in LocalLibraryFragment.
       putBoolean(SharedPreferenceUtil.PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH, false)
+      putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, false)
     }
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
