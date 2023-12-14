@@ -196,6 +196,17 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
         putBoolean(PREF_MANAGE_EXTERNAL_FILES, prefManageExternalFilesPermissionDialog)
       }
 
+  // this is only used for test cases
+  var manageExternalFilesPermissionDialogOnRefresh: Boolean
+    get() = sharedPreferences.getBoolean(PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH, true)
+    set(manageExternalFilesPermissionDialogOnRefresh) =
+      sharedPreferences.edit {
+        putBoolean(
+          PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH,
+          manageExternalFilesPermissionDialogOnRefresh
+        )
+      }
+
   var hostedBooks: Set<String>
     get() = sharedPreferences.getStringSet(PREF_HOSTED_BOOKS, null)?.toHashSet() ?: HashSet()
     set(hostedBooks) {
@@ -224,6 +235,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   fun isPlayStoreBuildWithAndroid11OrAbove(): Boolean =
     isPlayStoreBuild && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
 
+  fun isNotPlayStoreBuildWithAndroid11OrAbove(): Boolean =
+    !isPlayStoreBuild && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+
   companion object {
     // Prefs
     const val PREF_LANG = "pref_language_chooser"
@@ -250,6 +264,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val TEXT_ZOOM = "true_text_zoom"
     private const val DEFAULT_ZOOM = 100
     const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"
+    const val PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH = "pref_show_manage_external_files"
     const val IS_PLAY_STORE_BUILD = "is_play_store_build"
   }
 }
