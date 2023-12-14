@@ -105,6 +105,14 @@ class CustomMainActivity : CoreMainActivity() {
        * For more info see https://github.com/kiwix/kiwix-android/pull/3516
        */
       menu.findItem(R.id.menu_host_books)?.isVisible = false
+      /**
+       * Hide the `HelpFragment` from custom apps.
+       * We have not removed the relevant code for `HelpFragment` from custom apps.
+       * If, in the future, we need to display this for all/some custom apps,
+       * we can either remove the line below or configure it according to the requirements.
+       * For more information, see https://github.com/kiwix/kiwix-android/issues/3584
+       */
+      menu.findItem(R.id.menu_help)?.isVisible = false
       setNavigationItemSelectedListener { item ->
         closeNavigationDrawer()
         onNavigationItemSelected(item)
