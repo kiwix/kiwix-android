@@ -1,3 +1,18 @@
+3.9.0
+New Features:
+* Added a start-up message to inform users about restrictions on sideloading ZIM files in the Google Store app. (https://github.com/kiwix/kiwix-android/pull/3583)
+* Introduced the "Disable title" feature for custom apps. (https://github.com/kiwix/kiwix-android/pull/3566)
+* Introduced the "Disable external links" feature for custom apps. (https://github.com/kiwix/kiwix-android/pull/3595)
+* Added the show/hide "About the app" option in the navigation for custom apps. (https://github.com/kiwix/kiwix-android/pull/3597)
+
+Bug Fixes:
+* Application crash occurring when deleting letters in a search. (https://github.com/kiwix/kiwix-android/pull/3592)
+* Enhanced the permission-asking scenario for the Kiwix app. (https://github.com/kiwix/kiwix-android/pull/3593)
+* Zimit archives were not displaying correctly. (https://github.com/kiwix/kiwix-android/pull/3580)
+* Addressed the issue of not being able to find ZIM files on the SD card that are copied to the app-specific directory in the Play Store variant. (https://github.com/kiwix/kiwix-android/pull/3582)
+* Removed the "Help" menu from the sidebar for custom apps. (https://github.com/kiwix/kiwix-android/pull/3594)
+* Updated the "Support Kiwix" icon in sidebar. (https://github.com/kiwix/kiwix-android/pull/3588)
+
 3.8.1
 Bug Fixes:
 * Application crash occurring when users rapidly typed during a search for an entry. (https://github.com/kiwix/kiwix-android/pull/3558)
