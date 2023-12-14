@@ -43,7 +43,10 @@ import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -86,6 +89,7 @@ class SearchFragment : BaseFragment() {
   private var searchAdapter: SearchAdapter? = null
   private var isDataLoading = false
   private var renderingJob: Job? = null
+  private val searchMutex = Mutex()
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
@@ -252,22 +256,25 @@ class SearchFragment : BaseFragment() {
     )
   }
 
-  private fun render(state: SearchState) {
-    renderingJob?.cancel()
-    isDataLoading = false
-    searchInTextMenuItem?.isVisible = state.searchOrigin == FromWebView
-    searchInTextMenuItem?.isEnabled = state.searchTerm.isNotBlank()
-    fragmentSearchBinding?.searchLoadingIndicator?.isShowing(true)
-    renderingJob = searchViewModel.viewModelScope.launch(Dispatchers.Main) {
-      val searchResult = withContext(Dispatchers.IO) {
-        state.getVisibleResults(0)
-      }
+  private suspend fun render(state: SearchState) {
+    searchMutex.withLock {
+      // `cancelAndJoin` cancels the previous running job and waits for it to completely cancel.
+      renderingJob?.cancelAndJoin()
+      isDataLoading = false
+      searchInTextMenuItem?.isVisible = state.searchOrigin == FromWebView
+      searchInTextMenuItem?.isEnabled = state.searchTerm.isNotBlank()
+      fragmentSearchBinding?.searchLoadingIndicator?.isShowing(true)
+      renderingJob = searchViewModel.viewModelScope.launch(Dispatchers.Main) {
+        val searchResult = withContext(Dispatchers.IO) {
+          state.getVisibleResults(0, renderingJob)
+        }
 
-      fragmentSearchBinding?.searchLoadingIndicator?.isShowing(false)
+        fragmentSearchBinding?.searchLoadingIndicator?.isShowing(false)
 
-      searchResult?.let {
-        fragmentSearchBinding?.searchNoResults?.isVisible = it.isEmpty()
-        searchAdapter?.items = it
+        searchResult?.let {
+          fragmentSearchBinding?.searchNoResults?.isVisible = it.isEmpty()
+          searchAdapter?.items = it
+        }
       }
     }
   }
