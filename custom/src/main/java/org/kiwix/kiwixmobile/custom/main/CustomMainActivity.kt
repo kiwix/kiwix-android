@@ -19,14 +19,18 @@
 package org.kiwix.kiwixmobile.custom.main
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.navigation.NavigationView
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.databinding.ActivityCustomMainBinding
@@ -113,11 +117,31 @@ class CustomMainActivity : CoreMainActivity() {
        * For more information, see https://github.com/kiwix/kiwix-android/issues/3584
        */
       menu.findItem(R.id.menu_help)?.isVisible = false
+
+      /**
+       * If custom app is configured to show the "About the app" in navigation
+       * then show it navigation.
+       */
+      if (BuildConfig.ABOUT_APP_URL.isNotEmpty()) {
+        menu.findItem(R.id.menu_about_app)?.isVisible = true
+      }
       setNavigationItemSelectedListener { item ->
         closeNavigationDrawer()
         onNavigationItemSelected(item)
       }
     }
+  }
+
+  /**
+   * Overrides the method to configure the click of `About the app`
+   * When the "About the app" is enabled
+   * in a custom app, this function handled that click.
+   */
+  override fun onNavigationItemSelected(item: MenuItem): Boolean {
+    if (item.itemId == R.id.menu_about_app) {
+      externalLinkOpener.openExternalUrl(BuildConfig.ABOUT_APP_URL.toUri().browserIntent())
+    }
+    return super.onNavigationItemSelected(item)
   }
 
   override fun getIconResId() = R.mipmap.ic_launcher
