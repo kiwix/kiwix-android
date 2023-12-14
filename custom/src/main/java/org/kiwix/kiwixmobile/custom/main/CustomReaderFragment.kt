@@ -80,6 +80,12 @@ class CustomReaderFragment : CoreReaderFragment() {
         toolbar?.let(::setUpDrawerToggle)
       }
       loadPageFromNavigationArguments()
+      if (BuildConfig.DISABLE_EXTERNAL_LINK) {
+        // If "external links" are disabled in a custom app,
+        // this sets the shared preference to not show the external link popup
+        // when opening external links.
+        sharedPreferenceUtil?.putPrefExternalLinkPopup(false)
+      }
     }
   }
 
