@@ -11,7 +11,8 @@
   <string name="menu_read_aloud">Read aloud</string>
   <string name="menu_read_aloud_stop">Stop reading aloud</string>
   <string name="menu_support_kiwix">Support Kiwix</string>
-  <string name="menu_about_app">About the app</string>
+  <string name="menu_support_kiwix_for_custom_apps">Support %s</string>
+  <string name="menu_about_app">About %s app</string>
   <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Save Media</string>
   <string name="save_media_error">An error occurred when trying to save the media!</string>
