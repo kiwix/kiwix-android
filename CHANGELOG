@@ -4,6 +4,7 @@ New Features:
 * Introduced the "Disable title" feature for custom apps. (https://github.com/kiwix/kiwix-android/pull/3566)
 * Introduced the "Disable external links" feature for custom apps. (https://github.com/kiwix/kiwix-android/pull/3595)
 * Added the show/hide "About the app" option in the navigation for custom apps. (https://github.com/kiwix/kiwix-android/pull/3597)
+* "Support Kiwix", "About the app" are configurable for custom apps. (https://github.com/kiwix/kiwix-android/pull/3602)
 
 Bug Fixes:
 * Application crash occurring when deleting letters in a search. (https://github.com/kiwix/kiwix-android/pull/3592)
