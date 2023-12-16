@@ -67,7 +67,6 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
 import org.kiwix.libzim.SuggestionSearch
 import javax.inject.Inject
 
-const val DEBOUNCE_DELAY = 500L
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SearchViewModel @Inject constructor(
@@ -103,10 +102,6 @@ class SearchViewModel @Inject constructor(
   private suspend fun debouncedSearchQuery() {
     // Observe and collect the debounced search query
     debouncedSearchQuery
-      // Applying debouncing to delay the emission of consecutive search queries
-      .debounce(DEBOUNCE_DELAY)
-      // Ensuring that only distinct search queries are processed
-      .distinctUntilChanged()
       .collect { query ->
         actions.trySend(Filter(query)).isSuccess
       }
