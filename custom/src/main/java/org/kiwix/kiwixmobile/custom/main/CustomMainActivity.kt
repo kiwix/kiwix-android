@@ -119,11 +119,32 @@ class CustomMainActivity : CoreMainActivity() {
       menu.findItem(R.id.menu_help)?.isVisible = false
 
       /**
-       * If custom app is configured to show the "About the app" in navigation
-       * then show it navigation.
+       * If custom app is configured to show the "About app_name app" in navigation
+       * then show it navigation. "app_name" will be replaced with custom app name.
        */
       if (BuildConfig.ABOUT_APP_URL.isNotEmpty()) {
-        menu.findItem(R.id.menu_about_app)?.isVisible = true
+        menu.findItem(R.id.menu_about_app)?.apply {
+          title = getString(R.string.menu_about_app, getString(R.string.app_name))
+          isVisible = true
+        }
+      }
+
+      /**
+       * If custom app is configured to show the "Support app_name" in navigation
+       * then show it navigation. "app_name" will be replaced with custom app name.
+       */
+      if (BuildConfig.SUPPORT_URL.isNotEmpty()) {
+        menu.findItem(R.id.menu_support_kiwix)?.apply {
+          title =
+            getString(R.string.menu_support_kiwix_for_custom_apps, getString(R.string.app_name))
+          isVisible = true
+        }
+      } else {
+        /**
+         * If custom app is not configured to show the "Support app_name" in navigation
+         * then hide it from navigation.
+         */
+        menu.findItem(R.id.menu_support_kiwix)?.isVisible = false
       }
       setNavigationItemSelectedListener { item ->
         closeNavigationDrawer()
@@ -133,15 +154,31 @@ class CustomMainActivity : CoreMainActivity() {
   }
 
   /**
-   * Overrides the method to configure the click of `About the app`
-   * When the "About the app" is enabled
-   * in a custom app, this function handled that click.
+   * Overrides the method to configure the click behavior of the "About the app"
+   * and "Support URL" features. When the "About the app" and "Support URL"
+   * are enabled in a custom app, this function handles those clicks.
    */
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
-    if (item.itemId == R.id.menu_about_app) {
-      externalLinkOpener.openExternalUrl(BuildConfig.ABOUT_APP_URL.toUri().browserIntent())
+    return when (item.itemId) {
+      R.id.menu_about_app -> {
+        openExternalUrl(BuildConfig.ABOUT_APP_URL)
+        true
+      }
+
+      R.id.menu_support_kiwix -> {
+        openExternalUrl(BuildConfig.SUPPORT_URL)
+        true
+      }
+
+      else -> super.onNavigationItemSelected(item)
     }
-    return super.onNavigationItemSelected(item)
+  }
+
+  private fun openExternalUrl(url: String) {
+    // check if the provided url is not empty.
+    if (url.isNotEmpty()) {
+      externalLinkOpener.openExternalUrl(url.toUri().browserIntent())
+    }
   }
 
   override fun getIconResId() = R.mipmap.ic_launcher
