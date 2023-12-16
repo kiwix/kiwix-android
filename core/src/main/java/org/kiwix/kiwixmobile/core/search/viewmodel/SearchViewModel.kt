@@ -31,8 +31,6 @@ import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -66,8 +64,6 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
 import org.kiwix.libzim.SuggestionSearch
 import javax.inject.Inject
-
-const val DEBOUNCE_DELAY = 500L
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SearchViewModel @Inject constructor(
@@ -103,10 +99,6 @@ class SearchViewModel @Inject constructor(
   private suspend fun debouncedSearchQuery() {
     // Observe and collect the debounced search query
     debouncedSearchQuery
-      // Applying debouncing to delay the emission of consecutive search queries
-      .debounce(DEBOUNCE_DELAY)
-      // Ensuring that only distinct search queries are processed
-      .distinctUntilChanged()
       .collect { query ->
         actions.trySend(Filter(query)).isSuccess
       }
