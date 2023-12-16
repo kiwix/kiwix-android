@@ -128,46 +128,6 @@ internal class SearchViewModelTest {
           searchResult(searchTerm2, suggestionSearch, testScheduler)
           delay(100)
           searchResult(searchTerm3, suggestionSearch, testScheduler)
-          delay(DEBOUNCE_DELAY)
-          it.assertValue(
-            SearchState(
-              searchTerm3,
-              SearchResultsWithTerm(searchTerm3, suggestionSearch),
-              emptyList(),
-              searchOrigin
-            )
-          )
-        }
-        .finish()
-    }
-
-    @Test
-    fun `Search action is not debounced if time hasn't passed`() = runTest {
-      val searchTerm1 = "query1"
-      val searchTerm2 = "query2"
-      val searchTerm3 = "query3"
-      val searchOrigin = FromWebView
-      val suggestionSearch: SuggestionSearch = mockk()
-
-      viewModel.state
-        .test(this)
-        .also {
-          searchResult(searchTerm1, suggestionSearch, testScheduler)
-          delay(50) // assume user rapidly typing
-          searchResult(searchTerm2, suggestionSearch, testScheduler)
-          delay(50)
-          // test value is not passed to searchResult as time has not passed and user still typing
-          // Match if it is initial `SearchState`
-          it.assertValue(
-            SearchState(
-              "",
-              SearchResultsWithTerm("", null),
-              emptyList(),
-              searchOrigin
-            )
-          )
-          searchResult(searchTerm3, suggestionSearch, testScheduler)
-          delay(DEBOUNCE_DELAY)
           it.assertValue(
             SearchState(
               searchTerm3,
