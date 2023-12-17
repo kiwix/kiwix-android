@@ -41,35 +41,19 @@ jobs:
       - name: create instrumentation coverage
         uses: ReactiveCircus/android-emulator-runner@v2
         env:
-          GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
-        if: ${{ matrix.api-level != 33 }}
+         GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
-          api-level: ${{ matrix.api-level }}
-          target: default
-          arch: x86_64
-          profile: pixel_2
-          ram-size: '4096M'
-          disk-size: '14G'
-          sdcard-path-or-size: '1000M'
-          disable-animations: false
-          script: bash contrib/instrumentation.sh
+         api-level: ${{ matrix.api-level }}
+         target: ${{ matrix.api-level != 33 && 'default' || 'google_apis' }}
+         arch: x86_64
+         profile: pixel_2
+         ram-size: ${{ matrix.api-level != 33 && '4096M' || '4096M' }}
+         disk-size: '14G'
+         sdcard-path-or-size: ${{ matrix.api-level != 33 && '1000M' || '4096M' }}
+         disable-animations: false
+         heap-size: ${{ matrix.api-level == 33 && '512M' || '' }}
+         script: bash contrib/instrumentation.sh
 
-      - name: create instrumentation coverage on google_apis for android 33
-        uses: ReactiveCircus/android-emulator-runner@v2
-        env:
-          GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
-        if: ${{ matrix.api-level == 33 }}
-        with:
-          api-level: ${{ matrix.api-level }}
-          target: google_apis
-          arch: x86_64
-          profile: pixel_2
-          heap-size: '512M'
-          ram-size: '4096M'
-          disk-size: '14G'
-          sdcard-path-or-size: '4096M'
-          disable-animations: false
-          script: bash contrib/instrumentation.sh
 
       - name: Upload screenshot result
         uses: actions/upload-artifact@v3
