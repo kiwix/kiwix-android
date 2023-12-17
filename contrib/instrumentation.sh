@@ -15,7 +15,7 @@ do
     adb logcat ./*:E -v color &
     ./gradlew clean
     retry=$(( $retry + 1 ))
-    if [ $retry == 3 ]; then
+    if [ $retry -eq 3 ]; then
       adb exec-out screencap -p >screencap.png
       exit 1
     fi
