@@ -47,7 +47,7 @@ jobs:
          target: ${{ matrix.api-level != 33 && 'default' || 'google_apis' }}
          arch: x86_64
          profile: pixel_2
-         ram-size: ${{ matrix.api-level != 33 && '4096M' || '4096M' }}
+         ram-size: '4096M'
          disk-size: '14G'
          sdcard-path-or-size: ${{ matrix.api-level != 33 && '1000M' || '4096M' }}
          disable-animations: false
