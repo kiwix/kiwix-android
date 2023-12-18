@@ -139,7 +139,14 @@ class LocalLibraryFragment : BaseFragment() {
   private val bookDelegate: BookOnDiskDelegate.BookDelegate by lazy {
     BookOnDiskDelegate.BookDelegate(
       sharedPreferenceUtil,
-      { offerAction(RequestNavigateTo(it)) },
+      {
+        if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
+          @Suppress("NewApi")
+          showManageExternalStoragePermissionDialog()
+        } else {
+          offerAction(RequestNavigateTo(it))
+        }
+      },
       { offerAction(RequestMultiSelection(it)) },
       { offerAction(RequestSelect(it)) }
     )
@@ -266,6 +273,10 @@ class LocalLibraryFragment : BaseFragment() {
         if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
           @Suppress("NewApi")
           showManageExternalStoragePermissionDialog()
+          // Set loading to false since the dialog is currently being displayed.
+          // If the user clicks on "No" in the permission dialog,
+          // the loading icon remains visible infinitely.
+          fragmentDestinationLibraryBinding?.zimSwiperefresh?.isRefreshing = false
         } else {
           requestFileSystemCheck()
         }
