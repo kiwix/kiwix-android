@@ -37,7 +37,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -531,7 +530,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
               sharedPreferenceUtil
             )
           ) {
-            @Suppress("NewApi")
             showManageExternalStoragePermissionDialog()
           } else {
             availableSpaceCalculator.hasAvailableSpaceFor(
@@ -579,20 +577,20 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   private fun clickOnBookItem() {
     if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
-      @Suppress("NewApi")
       showManageExternalStoragePermissionDialog()
     } else {
       downloadBookItem?.let(::onBookItemClick)
     }
   }
 
-  @RequiresApi(Build.VERSION_CODES.R)
   private fun showManageExternalStoragePermissionDialog() {
-    dialogShower.show(
-      KiwixDialog.ManageExternalFilesPermissionDialog,
-      {
-        this.activity?.let(FragmentActivity::navigateToSettings)
-      }
-    )
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      dialogShower.show(
+        KiwixDialog.ManageExternalFilesPermissionDialog,
+        {
+          this.activity?.let(FragmentActivity::navigateToSettings)
+        }
+      )
+    }
   }
 }
