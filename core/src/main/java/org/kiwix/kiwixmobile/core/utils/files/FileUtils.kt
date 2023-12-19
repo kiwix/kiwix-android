@@ -31,6 +31,7 @@ import android.util.Log
 import android.webkit.URLUtil
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -292,6 +293,27 @@ object FileUtils {
     context.getExternalFilesDirs("")
       .firstOrNull { it.path.contains(storageName) }
       ?.path?.substringBefore(context.getString(R.string.android_directory_seperator))
+
+  @JvmStatic
+  fun getSdCardUri(context: Context): Uri? {
+    // Get the external SD card path
+    val externalSdCardPath = context.getExternalFilesDirs("")[1]
+      ?.path?.substringBefore(context.getString(R.string.android_directory_seperator))
+
+    // Extract the SD card name from the path
+    val sdCardName = externalSdCardPath?.substringAfterLast("/storage/")
+
+    // If SD card name is null or empty, return null
+    return if (sdCardName.isNullOrEmpty()) {
+      null
+    } else {
+      // Build and return the URI for the SD card
+      val sdCardPath =
+        "content://com.android.externalstorage.documents/tree/" +
+          "$sdCardName%3A/document/$sdCardName%3A/"
+      sdCardPath.toUri()
+    }
+  }
 
   @SuppressLint("WrongConstant")
   @JvmStatic

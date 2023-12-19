@@ -26,6 +26,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.DocumentsContract
 import android.view.LayoutInflater
 import android.webkit.WebView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -55,6 +56,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.OpenCredits
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.SelectFolder
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getPathFromUri
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getSdCardUri
 import java.io.File
 import java.util.Locale
 import javax.inject.Inject
@@ -345,6 +347,11 @@ abstract class CorePrefsFragment :
 
   private fun selectFolder() {
     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        getSdCardUri(requireActivity())?.let {
+          putExtra(DocumentsContract.EXTRA_INITIAL_URI, it)
+        }
+      }
       addFlags(
         Intent.FLAG_GRANT_READ_URI_PERMISSION
           or Intent.FLAG_GRANT_WRITE_URI_PERMISSION

@@ -28,6 +28,7 @@ import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.DocumentsContract
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.Menu
@@ -88,6 +89,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.SelectFolder
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getPathFromUri
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getSdCardUri
 import org.kiwix.kiwixmobile.databinding.FragmentDestinationDownloadBinding
 import org.kiwix.kiwixmobile.zimManager.NetworkState
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
@@ -402,13 +404,19 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun selectFolder() {
-    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-    intent.addFlags(
-      Intent.FLAG_GRANT_READ_URI_PERMISSION
-        or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-        or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
-        or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
-    )
+    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        getSdCardUri(requireActivity())?.let {
+          putExtra(DocumentsContract.EXTRA_INITIAL_URI, it)
+        }
+      }
+      addFlags(
+        Intent.FLAG_GRANT_READ_URI_PERMISSION
+          or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+          or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+          or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
+      )
+    }
     selectFolderLauncher.launch(intent)
   }
 
