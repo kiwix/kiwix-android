@@ -88,20 +88,10 @@ class SearchViewModel @Inject constructor(
   val actions = Channel<Action>(Channel.UNLIMITED)
   private val filter = ConflatedBroadcastChannel("")
   private val searchOrigin = ConflatedBroadcastChannel(FromWebView)
-  private val debouncedSearchQuery = MutableStateFlow("")
 
   init {
     viewModelScope.launch { reducer() }
     viewModelScope.launch { actionMapper() }
-    viewModelScope.launch { debouncedSearchQuery() }
-  }
-
-  private suspend fun debouncedSearchQuery() {
-    // Observe and collect the debounced search query
-    debouncedSearchQuery
-      .collect { query ->
-        actions.trySend(Filter(query)).isSuccess
-      }
   }
 
   @Suppress("DEPRECATION")
@@ -210,10 +200,6 @@ class SearchViewModel @Inject constructor(
       emitter.onComplete()
     }, LATEST)
       .subscribeOn(Schedulers.io())
-  }
-
-  fun searchResults(query: String) {
-    debouncedSearchQuery.value = query
   }
 }
 
