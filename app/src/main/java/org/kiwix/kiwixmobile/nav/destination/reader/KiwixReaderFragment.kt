@@ -134,7 +134,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private fun closeZimBook() {
-    zimReaderContainer?.setZimFile(null)
+    zimReaderContainer?.setZimFileOrFileDescriptor(null, null, null)
   }
 
   override fun openHomeScreen() {
@@ -205,9 +205,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun onResume() {
     super.onResume()
-    if (zimReaderContainer?.zimFile == null &&
-      zimReaderContainer?.zimFileReader?.assetFileDescriptor == null
-    ) {
+    if (zimReaderContainer?.isValidZimFileReader == false) {
       exitBook()
     }
     if (isFullScreenVideo) {
@@ -299,7 +297,11 @@ class KiwixReaderFragment : CoreReaderFragment() {
           // pass this uri to zimFileReader, which is necessary for saving
           // notes, bookmarks, history, and reopening the same ZIM file after the app closes.
           getAssetFileDescriptorFromUri(activity, it)?.let { assetFileDescriptor ->
-            openZimFile(null, assetFileDescriptor = assetFileDescriptor, filePath = "$it")
+            openZimFile(
+              null,
+              assetFileDescriptor = assetFileDescriptor,
+              assetFileDescriptorPath = "$it"
+            )
           } ?: kotlin.run {
             activity.toast(R.string.cannot_open_file)
           }

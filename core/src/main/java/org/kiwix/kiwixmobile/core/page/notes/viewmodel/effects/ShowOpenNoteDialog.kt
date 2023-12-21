@@ -50,7 +50,7 @@ data class ShowOpenNoteDialog(
         // which is already set in zimReaderContainer, so there's no need to set it again.
         item.zimFilePath?.let {
           val file = File(it)
-          zimReaderContainer.setZimFile(file)
+          zimReaderContainer.setZimFileOrFileDescriptor(file)
         }
         effects.offer(OpenNote(item.noteFilePath, item.zimUrl, item.title))
       }

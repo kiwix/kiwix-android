@@ -1228,7 +1228,7 @@ abstract class CoreReaderFragment :
       reopenBook()
     }
     tempWebViewForUndo?.let {
-      zimReaderContainer?.setZimFile(tempZimFileForUndo)
+      zimReaderContainer?.setZimFileOrFileDescriptor(tempZimFileForUndo)
       webViewList.add(index, it)
       tabsAdapter?.notifyDataSetChanged()
       snackBarRoot?.let { root ->
@@ -1479,17 +1479,11 @@ abstract class CoreReaderFragment :
     file: File?,
     isCustomApp: Boolean = false,
     assetFileDescriptor: AssetFileDescriptor? = null,
-    filePath: String? = null
+    assetFileDescriptorPath: String? = null
   ) {
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || isCustomApp) {
-      if (file?.isFileExist() == true) {
-        openAndSetInContainer(file = file)
-        updateTitle()
-      } else if (assetFileDescriptor != null) {
-        openAndSetInContainer(
-          assetFileDescriptor = assetFileDescriptor,
-          filePath = filePath
-        )
+      if (file?.isFileExist() == true || assetFileDescriptor != null) {
+        openAndSetInContainer(file = file, assetFileDescriptor, assetFileDescriptorPath)
         updateTitle()
       } else {
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file?.absolutePath)
@@ -1522,24 +1516,23 @@ abstract class CoreReaderFragment :
   private fun openAndSetInContainer(
     file: File? = null,
     assetFileDescriptor: AssetFileDescriptor? = null,
-    filePath: String? = null
+    assetFileDescriptorPath: String? = null
   ) {
     try {
-      if (isNotPreviouslyOpenZim(file?.canonicalPath)) {
+      if (isNotPreviouslyOpenZim(file?.canonicalPath) &&
+        isNotPreviouslyOpenZim(assetFileDescriptorPath)
+      ) {
         webViewList.clear()
       }
     } catch (e: IOException) {
       e.printStackTrace()
     }
     zimReaderContainer?.let { zimReaderContainer ->
-      if (assetFileDescriptor != null) {
-        zimReaderContainer.setZimFileDescriptor(
-          assetFileDescriptor,
-          filePath = filePath
-        )
-      } else {
-        zimReaderContainer.setZimFile(file)
-      }
+      zimReaderContainer.setZimFileOrFileDescriptor(
+        file,
+        assetFileDescriptor,
+        assetFileDescriptorPath
+      )
 
       val zimFileReader = zimReaderContainer.zimFileReader
       zimFileReader?.let { zimFileReader ->
@@ -1632,7 +1625,7 @@ abstract class CoreReaderFragment :
 
   private fun restoreDeletedTabs() {
     if (tempWebViewListForUndo.isNotEmpty()) {
-      zimReaderContainer?.setZimFile(tempZimFileForUndo)
+      zimReaderContainer?.setZimFileOrFileDescriptor(tempZimFileForUndo)
       webViewList.addAll(tempWebViewListForUndo)
       tabsAdapter?.notifyDataSetChanged()
       snackBarRoot?.let { root ->

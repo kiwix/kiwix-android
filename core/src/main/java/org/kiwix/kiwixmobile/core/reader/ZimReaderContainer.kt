@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.core.reader
 
 import android.content.res.AssetFileDescriptor
 import android.webkit.WebResourceResponse
-import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
 import java.io.File
 import java.net.HttpURLConnection
@@ -34,23 +33,18 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
       field = value
     }
 
-  fun setZimFile(file: File?) {
-    if (file?.canonicalPath == zimFileReader?.zimFile?.canonicalPath) {
+  fun setZimFileOrFileDescriptor(
+    file: File? = null,
+    assetFileDescriptor: AssetFileDescriptor? = null,
+    filePath: String? = null
+  ) {
+    if (isValidZimFileReader == true &&
+      file?.canonicalPath == zimFileReader?.zimFile?.canonicalPath
+    ) {
       return
     }
     zimFileReader =
-      if (file?.isFileExist() == true) zimFileReaderFactory.create(file)
-      else null
-  }
-
-  fun setZimFileDescriptor(
-    assetFileDescriptor: AssetFileDescriptor,
-    filePath: String? = null
-  ) {
-    zimFileReader =
-      if (assetFileDescriptor.parcelFileDescriptor.dup().fileDescriptor.valid())
-        zimFileReaderFactory.create(assetFileDescriptor, filePath)
-      else null
+      zimFileReaderFactory.create(file, assetFileDescriptor, filePath)
   }
 
   fun getPageUrlFromTitle(title: String) = zimFileReader?.getPageUrlFrom(title)
@@ -83,18 +77,23 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
       }
   }
 
-  fun copyReader(): ZimFileReader? = zimFile?.let(zimFileReaderFactory::create)
-    ?: assetFileDescriptor?.let(zimFileReaderFactory::create)
+  fun copyReader(): ZimFileReader? =
+    zimFileReaderFactory.create(
+      file = zimFile,
+      assetFileDescriptor = assetFileDescriptor,
+      filePath = assetDescriptorPath
+    )
 
   val zimFile get() = zimFileReader?.zimFile
 
   val assetFileDescriptor get() = zimFileReader?.assetFileDescriptor
 
-  /**
-   * Return the zimFile path if opened from file else return the filePath of assetFileDescriptor
-   */
+  val assetDescriptorPath get() = zimFileReader?.assetDescriptorFilePath
+
+  val isValidZimFileReader get() = zimFileReader?.isValidZimFileReader
+
   val zimCanonicalPath
-    get() = zimFileReader?.zimFile?.canonicalPath ?: zimFileReader?.assetDescriptorFilePath
+    get() = zimFileReader?.zimCanonicalPath
   val zimFileTitle get() = zimFileReader?.title
   val mainPage get() = zimFileReader?.mainPage
   val id get() = zimFileReader?.id
