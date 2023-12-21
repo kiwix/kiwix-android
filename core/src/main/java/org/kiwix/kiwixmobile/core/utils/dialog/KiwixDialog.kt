@@ -170,13 +170,19 @@ sealed class KiwixDialog(
     neutralMessage = R.string.do_not_ask_anymore
   )
 
-  object PlayStoreRestrictionPopup : KiwixDialog(
-    null,
-    R.string.zim_files_not_showing_description,
-    R.string.understood,
-    R.string.download,
-    cancelable = false
-  )
+  data class PlayStoreRestrictionPopup(override val args: List<Any>) :
+    KiwixDialog(
+      null,
+      R.string.zim_files_not_showing_description,
+      R.string.understood,
+      R.string.download,
+      cancelable = false
+    ),
+    HasBodyFormatArgs {
+    constructor(websiteUrl: String) : this(
+      listOf(websiteUrl)
+    )
+  }
 
   data class ShowRate(override val args: List<Any>, val customIcon: Int?) :
     KiwixDialog(
