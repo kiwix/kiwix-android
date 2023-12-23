@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Bundle
 import android.os.Process
 import android.view.ActionMode
@@ -96,6 +97,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
         val extras = Bundle()
         extras.putSerializable(ErrorActivity.EXCEPTION_KEY, paramThrowable)
         intent.putExtras(extras)
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
         appContext.startActivity(intent)
         finish()
         Process.killProcess(Process.myPid())
