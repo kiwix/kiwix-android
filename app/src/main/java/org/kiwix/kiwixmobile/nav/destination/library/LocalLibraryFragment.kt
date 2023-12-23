@@ -38,7 +38,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
@@ -139,7 +138,13 @@ class LocalLibraryFragment : BaseFragment() {
   private val bookDelegate: BookOnDiskDelegate.BookDelegate by lazy {
     BookOnDiskDelegate.BookDelegate(
       sharedPreferenceUtil,
-      { offerAction(RequestNavigateTo(it)) },
+      {
+        if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
+          showManageExternalStoragePermissionDialog()
+        } else {
+          offerAction(RequestNavigateTo(it))
+        }
+      },
       { offerAction(RequestMultiSelection(it)) },
       { offerAction(RequestSelect(it)) }
     )
@@ -264,8 +269,11 @@ class LocalLibraryFragment : BaseFragment() {
         fragmentDestinationLibraryBinding?.zimSwiperefresh?.isRefreshing = false
       } else {
         if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
-          @Suppress("NewApi")
           showManageExternalStoragePermissionDialog()
+          // Set loading to false since the dialog is currently being displayed.
+          // If the user clicks on "No" in the permission dialog,
+          // the loading icon remains visible infinitely.
+          fragmentDestinationLibraryBinding?.zimSwiperefresh?.isRefreshing = false
         } else {
           requestFileSystemCheck()
         }
@@ -273,14 +281,15 @@ class LocalLibraryFragment : BaseFragment() {
     }
   }
 
-  @RequiresApi(Build.VERSION_CODES.R)
   private fun showManageExternalStoragePermissionDialog() {
-    dialogShower.show(
-      KiwixDialog.ManageExternalFilesPermissionDialog,
-      {
-        this.activity?.let(FragmentActivity::navigateToSettings)
-      }
-    )
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      dialogShower.show(
+        KiwixDialog.ManageExternalFilesPermissionDialog,
+        {
+          this.activity?.let(FragmentActivity::navigateToSettings)
+        }
+      )
+    }
   }
 
   private fun getBottomNavigationView() =
@@ -303,7 +312,6 @@ class LocalLibraryFragment : BaseFragment() {
 
     fragmentDestinationLibraryBinding?.selectFile?.setOnClickListener {
       if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
-        @Suppress("NewApi")
         showManageExternalStoragePermissionDialog()
       } else {
         showFileChooser()
