@@ -1,3 +1,10 @@
+3.9.1
+Bug Fixes:
+* Better permission requesting (https://github.com/kiwix/kiwix-android/pull/3618)
+* Better trigger Error reporting activity by crash (https://github.com/kiwix/kiwix-android/pull/3621)
+* Slightly improved (to avoid redundancies) CI GitHub Action (https://github.com/kiwix/kiwix-android/pull/3616)
+* Remove latencies while typing to get article suggestions (https://github.com/kiwix/kiwix-android/pull/3612)
+
 3.9.0
 New Features:
 * Added a start-up message to inform users about restrictions on sideloading ZIM files in the Google Store app. (https://github.com/kiwix/kiwix-android/pull/3583)
