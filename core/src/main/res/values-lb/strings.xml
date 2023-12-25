@@ -18,6 +18,8 @@
   <string name="menu_read_aloud">Virliesen</string>
   <string name="menu_read_aloud_stop">Ophale mat Virliesen</string>
   <string name="menu_support_kiwix">Kiwix ënnerstëtzen</string>
+  <string name="menu_support_kiwix_for_custom_apps">Ënnerstëtzt %s</string>
+  <string name="menu_about_app">Iwwer d\'App %s</string>
   <string name="save_media">Medium späicheren</string>
   <string name="save_media_error">Et ass e Feeler geschitt wéi probéiert gouf d\'Medium ze späicheren!</string>
   <string name="save_media_saved">Medium als %s op Downloads/org.kiwix…/ gespäichert</string>
@@ -176,6 +178,7 @@
   <string name="open_library">Bibliothéik opmaachen</string>
   <string name="open_drawer">Tirang opmaachen</string>
   <string name="close_drawer">Tirang zoumaachen</string>
+  <string name="understood">Verstanen</string>
   <string name="allowed">Erlaabt</string>
   <string name="not_allowed">Net erlaabt</string>
   <string name="allow">Erlaben</string>

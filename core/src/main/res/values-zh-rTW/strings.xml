@@ -22,6 +22,8 @@
   <string name="menu_read_aloud">朗讀</string>
   <string name="menu_read_aloud_stop">停止朗讀</string>
   <string name="menu_support_kiwix">支持 Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">支援%s</string>
+  <string name="menu_about_app">關於%s應用程式</string>
   <string name="menu_wifi_hotspot">託管書籍</string>
   <string name="save_media">儲存媒體</string>
   <string name="save_media_error">嘗試儲存該媒體時出錯！</string>
@@ -297,6 +299,9 @@
   <string name="tabs_restored">分頁已恢復</string>
   <string name="open_drawer">開啟抽屜</string>
   <string name="close_drawer">關閉抽屜</string>
+  <string name="zim_files_not_showing">沒有看到 zim 檔案？</string>
+  <string name="zim_files_not_showing_description">出自於 Android 11（或更高階版本）的 Google Play 政策，此款 Google 商店應用程式無法開啟側載的 zim 檔案。您可以改由應用程式來下載，或是從我們的官方網站安裝完整版的 kiwix 應用程式</string>
+  <string name="understood">明白了</string>
   <string name="how_to_update_content">如何更新內容？</string>
   <string name="update_content_description">要更新內容（zim 檔案）的話，您需要下載這個相似內容的完整最新版本。您可以透過下載段落來進行。</string>
   <string name="all_files_permission_needed">所有檔案需要允許權限</string>

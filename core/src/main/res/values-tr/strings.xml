@@ -30,6 +30,7 @@
   <string name="menu_read_aloud">Yüksek sesle oku</string>
   <string name="menu_read_aloud_stop">Yüksek sesle okumayı sonlandır</string>
   <string name="menu_support_kiwix">Kiwix\'i destekle</string>
+  <string name="menu_about_app">%s uygulaması hakkında</string>
   <string name="menu_wifi_hotspot">WiFi erişim paylaşımı alanı</string>
   <string name="save_media">Ortam dosyasını kaydet</string>
   <string name="save_media_error">Medya kaydedilmeye çalışılırken bir hata oluştu!</string>
@@ -61,6 +62,8 @@
   <string name="hotspot_notification_content_title">Kiwix Hotspot</string>
   <string name="start_server_label">Sunucuyu Başlat</string>
   <string name="stop_server_label">Sunucuyu durdur</string>
+  <string name="error_server_already_running">Sunucu zaten çalışıyor. Lütfen kapatıp tekrar deneyin.</string>
+  <string name="error_ip_address_not_found">IP adresi bulunamadı.</string>
   <string name="server_started_message">%s sunucusuna erişmek için tarayıcınıza bu ip adresini girin.</string>
   <string name="share_host_address">URL\'yi diğer uygulamalar aracılığıyla paylaşın</string>
   <string name="error_file_not_found">Hata: Seçili ZIM dosyası bulunamadı.</string>
@@ -79,7 +82,7 @@
   <string name="pref_language_chooser">Bir dil seçin</string>
   <string name="pref_credits">Katkıda bulunanlar ve lisanslar</string>
   <string name="pref_credits_title">Katkıda bulunanlar</string>
-  <string name="tts_lang_not_supported" fuzzy="true">Bu sayfanın dili desteklenmiyor veya uygun dil verileri yüklenmemiş. Madde düzgün okunmamış olabilir.</string>
+  <string name="tts_lang_not_supported">Bu sayfanın dili desteklenmiyor. Makale düzgün okunamayabilir.</string>
   <string name="no_reader_application_installed">Bu dosya türü için yüklü bir uygulama bulunamadı</string>
   <string name="no_section_info">İçerik başlığı bulunamadı</string>
   <string name="request_storage">Çevrimdışı içeriğe erişmek için belleğinize erişmemiz gerekmektedir.</string>
@@ -103,6 +106,7 @@
   <string name="did_you_know">Bunları biliyor muydunuz?</string>
   <string name="undo">Geri al</string>
   <string name="tab_closed">Sekme kapatıldı</string>
+  <string name="tabs_closed">Sekmeler kapatıldı</string>
   <string name="bookmark_added">Yer imi eklendi</string>
   <string name="rate_dialog_title">Lütfen bizi değerlendirin</string>
   <string name="rate_dialog_msg">%s kullanmayı sevdiyseniz lütfen bir dakikanızı ayırın ve değerlendirin. Desteğiniz için teşekkürler!</string>
@@ -208,7 +212,7 @@
   <string name="expand">Genişlet</string>
   <string name="history">Geçmiş</string>
   <string name="history_from_current_book">Tüm Kitaplardan Geçmişi Görüntüle</string>
-  <string name="search_history" fuzzy="true">Geçmişi ara</string>
+  <string name="search_history">Geçmişi ara</string>
   <string name="selected_items">%1$d seçili</string>
   <string name="bookmarks_from_current_book">Tüm Kitaplardaki Yer İşaretlerini Görüntüle</string>
   <string name="search_bookmarks">Yer imlerini ara</string>
@@ -219,6 +223,7 @@
   <string name="complete">Tamamlandı</string>
   <string name="paused_state">Durduruldu</string>
   <string name="failed_state">Başarısız: %s</string>
+  <string name="custom_download_error_message_for_authentication_failed">Zim dosyası indirilemedi. Lütfen uygulamayı Play Store\'dan yeniden yüklemeyi deneyin.</string>
   <string name="save">Kaydet</string>
   <string name="note">Not</string>
   <string name="wiki_article_title">Viki Madde Başlığı</string>
@@ -297,8 +302,11 @@
   <string name="no_open_book">Açık kitap yok</string>
   <string name="open_library">Kütüphaneyi aç</string>
   <string name="tab_restored">Sekme geri getirildi</string>
+  <string name="tabs_restored">Sekmeler geri yüklendi</string>
   <string name="open_drawer">Çekmeceyi Aç</string>
   <string name="close_drawer">Çekmeceyi Kapat</string>
+  <string name="zim_files_not_showing">Zim dosyaları gösterilmiyor mu?</string>
+  <string name="understood">Anlaşıldı</string>
   <string name="how_to_update_content">İçerik nasıl güncellenir?</string>
   <string name="update_content_description">İçeriği (bir zim dosyası) güncellemek için, aynı içeriğin en son sürümünü indirmeniz gerekir. Bunu indirme bölümünden yapabilirsiniz.</string>
   <string name="all_files_permission_needed">Tüm Dosyalar İzni Gereklidir</string>

@@ -14,6 +14,8 @@
   <string name="menu_read_aloud">Прочитај на глас</string>
   <string name="menu_read_aloud_stop">Запри читање на глас</string>
   <string name="menu_support_kiwix">Поддржете го Кивикс</string>
+  <string name="menu_support_kiwix_for_custom_apps">Поддржете го %s</string>
+  <string name="menu_about_app">За %s</string>
   <string name="menu_wifi_hotspot">Безжично жариште</string>
   <string name="save_media">Зачувај медиум</string>
   <string name="save_media_error">Настана грешка при зачувувањето на податотеката!</string>
@@ -289,6 +291,9 @@
   <string name="tabs_restored">Јазичињата се повратени</string>
   <string name="open_drawer">Отвори фиока</string>
   <string name="close_drawer">Затвори фиока</string>
+  <string name="zim_files_not_showing">ZIM-податотеките не се прикажуваат?</string>
+  <string name="zim_files_not_showing_description">Поради правилата на Google Play за Андроид 11 и подоцнежни, овој прилог од Google Store не може да отвора настрана преземени ZIM-податотеки. Мора да ги преземете преку прилогот или пак да ја воспоставите целосната верзија на прилогот Кивикс од нашата официјална страница</string>
+  <string name="understood">Јасно</string>
   <string name="how_to_update_content">Како се подновува содржината?</string>
   <string name="update_content_description">За да ја подновите содржината (ZIM-поатотека) ќе треба да ја преземете последната полна верзија на истава содржина. Ова се прави во одделот за преземање.</string>
   <string name="all_files_permission_needed">Дозвола за сите податотеки</string>

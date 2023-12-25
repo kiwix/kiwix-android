@@ -17,6 +17,7 @@
 * Thibaut120094
 * Urhixidur
 * Verdy p
+* Vikoula5
 * WikiLucas00
 * Wladek92
 * Yasten
@@ -33,6 +34,8 @@
   <string name="menu_read_aloud">Lire à haute voix</string>
   <string name="menu_read_aloud_stop">Arrêter de lire à haute voix</string>
   <string name="menu_support_kiwix">Soutenir Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">Soutenez %s</string>
+  <string name="menu_about_app">À propos de l\'application %s</string>
   <string name="menu_wifi_hotspot">Hotspot Wi-Fi</string>
   <string name="save_media">Enregistrer le média</string>
   <string name="save_media_error">Une erreur s’est produite en essayant d’enregistrer le média !</string>
@@ -308,6 +311,9 @@
   <string name="tabs_restored">Onglets restaurés</string>
   <string name="open_drawer">Ouvrir le tiroir</string>
   <string name="close_drawer">Fermer le tiroir</string>
+  <string name="zim_files_not_showing">Les fichiers Zim ne s\'affichent pas ?</string>
+  <string name="zim_files_not_showing_description">En raison des politiques de Google Play sur Android 11 et versions ultérieures, cette application Google Store ne peut pas ouvrir les fichiers ZIM téléchargés. Vous pouvez soit les télécharger via l\'application, soit installer la version complète de l\'application kiwix depuis notre site officiel.</string>
+  <string name="understood">Compris</string>
   <string name="how_to_update_content">Comment actualiser le contenu ?</string>
   <string name="update_content_description">Pour mettre à jour un contenu (un fichier zim), vous devez télécharger la dernière version complète de ce même contenu. Vous pouvez le faire via la section de téléchargement.</string>
   <string name="all_files_permission_needed">Tous les droits sur les fichiers sont nécessaires</string>

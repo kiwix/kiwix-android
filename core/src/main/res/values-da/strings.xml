@@ -8,6 +8,7 @@
 * Saederup92
 * SiGNOUT
 * Tinamalmgren
+* Zakawer2
 -->
 <resources>
   <string name="menu_help">Hjælp</string>
@@ -21,6 +22,8 @@
   <string name="menu_read_aloud">Læs højt</string>
   <string name="menu_read_aloud_stop">Stop med at læse højt</string>
   <string name="menu_support_kiwix">Støt Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">Støt %s</string>
+  <string name="menu_about_app">Om %s-appen</string>
   <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Gem medie</string>
   <string name="save_media_error">Der opstod en fejl under forsøg på at gemme mediet!</string>
@@ -174,6 +177,9 @@
   <string name="open_library">Åbn bibliotek</string>
   <string name="open_drawer">Åbn skuffe</string>
   <string name="close_drawer">Luk skuffe</string>
+  <string name="zim_files_not_showing">ZIM-filer viser ikke?</string>
+  <string name="zim_files_not_showing_description">På grund af Google Play-politikker på Android 11 og nyere, kan denne Google Store-app ikke åbne sideindlæste ZIM-filer. Du kan enten downloade dem gennem appen, eller i stedet installere den fulde version af Kiwix-appen fra vores officielle hjemmeside.</string>
+  <string name="understood">Forstået</string>
   <string name="allowed">Tilladt</string>
   <string name="not_allowed">Ikke tilladt</string>
   <string name="allow">Tillad</string>
