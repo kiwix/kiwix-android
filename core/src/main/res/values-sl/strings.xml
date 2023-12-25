@@ -21,6 +21,8 @@
   <string name="menu_read_aloud">Beri naglas</string>
   <string name="menu_read_aloud_stop">Prenehaj z branjem naglas</string>
   <string name="menu_support_kiwix">Podprite Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">Podprite %s</string>
+  <string name="menu_about_app">O aplikaciji %s</string>
   <string name="menu_wifi_hotspot">Dostopna točka Wi-Fi</string>
   <string name="save_media">Shrani predstavnost kot …</string>
   <string name="save_media_error">Pri poskusu shranjevanja predstavnosti je prišlo do napake!</string>
@@ -296,6 +298,9 @@
   <string name="tabs_restored">Zavihki obnovljeni</string>
   <string name="open_drawer">Odpri predal</string>
   <string name="close_drawer">Zapri predal</string>
+  <string name="zim_files_not_showing">Se datoteke Zim ne prikažejo?</string>
+  <string name="zim_files_not_showing_description">Zaradi pravilnikov storitve Google Play v sistemu Android 11 in novejših ta aplikacija Google Store ne more odpreti stransko naloženih datotek ZIM. Lahko jih prenesete prek aplikacije ali namesto tega namestite polno različico aplikacije Kiwix z našega uradnega spletnega mesta</string>
+  <string name="understood">Razumem</string>
   <string name="how_to_update_content">Kako posodobiti vsebino?</string>
   <string name="update_content_description">Če želite posodobiti vsebino (datoteko ZIM), morate prenesti celotno najnovejšo različico te iste vsebine. To lahko storite v razdelku za prenos.</string>
   <string name="all_files_permission_needed">Potrebno je dovoljenje za vse datoteke</string>

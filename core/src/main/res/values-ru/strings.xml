@@ -38,6 +38,7 @@
   <string name="menu_read_aloud">Читать вслух</string>
   <string name="menu_read_aloud_stop">Остановить чтение вслух</string>
   <string name="menu_support_kiwix">Поддержать Kiwix</string>
+  <string name="menu_about_app">О приложении %s</string>
   <string name="menu_wifi_hotspot">Точка доступа WIFI</string>
   <string name="save_media">Сохранить Медиа-файлы</string>
   <string name="save_media_error">Произошла ошибка при сохранении медиафайла!</string>
@@ -311,6 +312,7 @@
   <string name="tabs_restored">Вкладки восстановлены</string>
   <string name="open_drawer">Открыть редактор</string>
   <string name="close_drawer">Закрыть редактор</string>
+  <string name="understood">Понятно</string>
   <string name="how_to_update_content">Как обновить содержимое?</string>
   <string name="update_content_description">Чтобы обновить содержимое (файл zim), вам нужно скачать последнюю версию того же содержимого. Вы можете это сделать в разделе загрузок.</string>
   <string name="all_files_permission_needed">Требуются разрешения для всех файлов</string>

@@ -21,6 +21,7 @@
   <string name="menu_read_aloud">Läs upp</string>
   <string name="menu_read_aloud_stop">Sluta läsa upp</string>
   <string name="menu_support_kiwix">Stöd Kiwix</string>
+  <string name="menu_about_app">Om appen %s</string>
   <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Spara media</string>
   <string name="save_media_error">Ett fel uppstod när media skulle sparas!</string>
@@ -52,6 +53,8 @@
   <string name="hotspot_notification_content_title">Kiwix-Hotspot</string>
   <string name="start_server_label">Starta server</string>
   <string name="stop_server_label">Stoppa server</string>
+  <string name="error_server_already_running">Servern körs redan. Stäng av den och försök igen.</string>
+  <string name="error_ip_address_not_found">Kunde inte hitta ip-adressen.</string>
   <string name="server_started_message">Ange denna IP-adress i din webbläsare för att komma åt servern %s</string>
   <string name="share_host_address">Dela webbadress med andra appar</string>
   <string name="error_file_not_found">Fel: Den valda ZIM-filen kunde inte hittas.</string>
@@ -293,6 +296,8 @@
   <string name="tabs_restored">Flikar återställdes</string>
   <string name="open_drawer">Öppna sidomeny</string>
   <string name="close_drawer">Stäng sidomeny</string>
+  <string name="zim_files_not_showing">Visas inte Zim-filer?</string>
+  <string name="understood">Uppfattat</string>
   <string name="how_to_update_content">Hur uppdaterar man innehåll?</string>
   <string name="update_content_description">För att uppdatera innehåll (en zim-fil) behöver du ladda ned den fullständig senaste versionen samma innehåll. Du kan göra det via nedladdningsavsnittet.</string>
   <string name="all_files_permission_needed">Behörighet för alla filer behövs</string>
@@ -324,4 +329,6 @@
   <string name="navigation_history_cleared">Navigationshistorik rensades</string>
   <string name="go_to_settings_label">Gå till inställningar</string>
   <string name="request_notification_permission_message">Bevilja meddelandeåtkomst för att utföra denna åtgärd</string>
+  <string name="click_nearby_devices_message">Klicka här för att söka efter enheter i närheten.</string>
+  <string name="your_device_name_message">Ditt enhetsnamn kommer att visas här.</string>
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Fahimrazick
 * Gurulenin
 * Kanags
 * Kelson
@@ -11,29 +12,29 @@
   <string name="menu_help">உதவி</string>
   <string name="menu_home">முகப்பு</string>
   <string name="menu_settings">விருப்பங்கள்</string>
-  <string name="menu_search_in_text">உரையில் கண்டுபிடி</string>
-  <string name="bookmarks">புத்தகக்குறிகள்</string>
-  <string name="menu_random_article">தொடர்பற்ற கட்டுரை</string>
-  <string name="menu_full_screen">முழு திரை</string>
-  <string name="menu_exit_full_screen">முழு திரையிலிருந்து வெளியேறுக</string>
-  <string name="menu_read_aloud">உரக்கப்படி</string>
-  <string name="menu_read_aloud_stop">சத்தமாக வாசிப்பதை நிறுத்து</string>
-  <string name="menu_support_kiwix">கிவிக்ஸ் ஆதரவு</string>
-  <string name="menu_wifi_hotspot">WiFi பகிரலை</string>
-  <string name="save_media">ஊடகத்தை சேமிக்கவும்</string>
-  <string name="save_media_error">ஊடகப்பொருளை சேமிக்கும் முயற்சியில் ஒரு பிழை நேர்ந்துவிட்டது!</string>
-  <string name="save_media_saved">தங்களுடைய ஊடகப்பொருளை %s to Android/media/org.kiwix…/ ல் சேமிக்கவும்</string>
+  <string name="menu_search_in_text">பக்கத்தில் தேடிப் பெறு</string>
+  <string name="bookmarks">நூற்குறிகள்</string>
+  <string name="menu_random_article">ஏதோவொரு கட்டுரை</string>
+  <string name="menu_full_screen">முழுத்திரை</string>
+  <string name="menu_exit_full_screen">முழுத் திரையிலிருந்து வெளியேறு</string>
+  <string name="menu_read_aloud">உரத்து வாசி</string>
+  <string name="menu_read_aloud_stop">உரத்து வாசிப்பதை நிறுத்து</string>
+  <string name="menu_support_kiwix">கிவிக்ஸை ஆதரி</string>
+  <string name="menu_wifi_hotspot">வைபை பகிரலை</string>
+  <string name="save_media">ஊடகத்தைச் சேமி</string>
+  <string name="save_media_error">ஊடகத்தைச் சேமிக்க முயலும் போது ஒரு பிழை நேர்ந்தது!</string>
+  <string name="save_media_saved">ஊடகம் %s என Downloads/org.kiwix…/ இற் சேமிக்கப்பட்டது</string>
   <string name="search_label">தேடு</string>
-  <string name="choose_file">கோப்பை தேர்வு செய் (*.zim)</string>
-  <string name="open_in_new_tab">புதிய தாவலில் இணைப்பைத் திறக்கவா?</string>
-  <string name="hotspot_service_channel_name">பகிரலை சேவை நிலையம்</string>
-  <string name="hotspot_failed_title">பகிரலையைத் தொடங்க முடியவில்லை</string>
-  <string name="hotspot_failed_message">உங்கள் பகிரலை ஏற்கனவே இயக்கப்பட்டிருப்பது போல் தெரிகிறது. தயவுசெய்து உங்கள் வைஃபை பகிரலையை முடக்கவும்.</string>
-  <string name="go_to_wifi_settings_label">வைஃபை அமைப்புகளுக்குச் செல்லவும்</string>
+  <string name="choose_file">ஓர் உள்ளடக்கக் கோப்பைத் தெரிவு செய் (*.zim)</string>
+  <string name="open_in_new_tab">தொடுப்பைப் புதிய தாவலில் திறக்கவா?</string>
+  <string name="hotspot_service_channel_name">பகிரலைச் சேவை நிலையம்</string>
+  <string name="hotspot_failed_title">பகிரலையைத் தொடங்குவது தோற்றது</string>
+  <string name="hotspot_failed_message">உமது பகிரலை ஏற்கனவே இயக்கப்பட்டிருப்பது போல் தெரிகிறது. உமது வைபை பகிரலையை முடக்குக.</string>
+  <string name="go_to_wifi_settings_label">வைபை அமைப்புகளுக்குச் செல்</string>
   <string name="connection_refused">இணைப்பு மறுக்கப்பட்டது.</string>
-  <string name="hotspot_running">பகிரலையை இயக்குகிறது</string>
-  <string name="no_books_selected_toast_message">முதலில் புத்தகங்களைத் தேர்ந்தெடுக்கவும்</string>
-  <string name="server_failed_message">சேவையகத்தைத் தொடங்க முடியவில்லை. தயவுசெய்து உங்கள் பகிரலையை இயக்கவும்</string>
+  <string name="hotspot_running">பகிரலை இயங்குகிறது</string>
+  <string name="no_books_selected_toast_message">முதலில் நூல்களைத் தெரிவு செய்க</string>
+  <string name="server_failed_message">சேவையகத்தைத் தொடங்க முடியவில்லை. உமது பகிரலையை இயக்குக</string>
   <string name="server_failed_toast_message">சேவையகத்தைத் தொடங்க முடியவில்லை.</string>
   <string name="server_started_successfully_toast_message">சேவையகம் வெற்றிகரமாக தொடங்கியது.</string>
   <string name="server_stopped_successfully_toast_message">சேவையகம் வெற்றிகரமாக நிறுத்தப்பட்டது.</string>
@@ -62,7 +63,7 @@
   <string name="pref_info_version">பதிப்பு</string>
   <string name="pref_night_mode">இரவுத்தோற்றம்</string>
   <string name="pref_night_mode_summary">கட்டுரைகளை தலைகீழ் நிறங்களில் காண்பி</string>
-  <string name="pref_back_to_top">மேலே செல்லவும்</string>
+  <string name="pref_back_to_top">மீண்டும் மேலே</string>
   <string name="pref_back_to_top_summary">மேற்பகுதிக்குச் செல்ல, பக்கத்‌தின் அடியில் ஒரு பொத்தானை காண்பி</string>
   <string name="pref_language_title">மொழி</string>
   <string name="pref_language_chooser">மொழியைத் தேர்ந்தெடு</string>
@@ -75,8 +76,8 @@
   <string name="request_write_storage">ஜிம் கோப்புகளைப் பதிவிறக்க, உங்கள் சேமிப்பகத்திற்கான எழுத்து அணுகல் எங்களுக்குத் தேவை</string>
   <string name="clear_recent_and_tabs_history_dialog">உங்கள் தேடல் வரலாற்றை நீக்க மற்றும் அனைத்து செயலில் உள்ள தாவல்களையும் மீட்டமைக்க விரும்புகிறீர்களா?</string>
   <string name="delete_recent_search_item">இந்த உருப்படியை நீக்கவா?</string>
-  <string name="pref_clear_all_history_title">வரலாற்றை நீக்கவும்</string>
-  <string name="pref_clear_all_history_summary">சமீபத்திய தேடல்கள் மற்றும் தாவல்களின் வரலாற்றை அழிக்கவும்</string>
+  <string name="pref_clear_all_history_title">வரலாற்றை நீக்கு</string>
+  <string name="pref_clear_all_history_summary">அண்மைய தேடல்களையும் தாவல் வரலாற்றையும் அழி</string>
   <string name="pref_notes">குறிப்புகள்</string>
   <string name="pref_permission">அனுமதிகள்</string>
   <string name="all_history_cleared">அனைத்து வரலாறும் அழிக்கப்பட்டது</string>
@@ -84,8 +85,8 @@
   <string name="clear_all_history_dialog_title">எல்லா வரலாற்றையும் அழிக்கவா?</string>
   <string name="share">பகிர்க</string>
   <string name="selected_file_cab_app_chooser_title">இதனுடன் ZIM கோப்புகளைப் பகிரவும்:</string>
-  <string name="delete">நீக்கவும்</string>
-  <string name="cancel">ரத்து செய்</string>
+  <string name="delete">நீக்கு</string>
+  <string name="cancel">கைவிடு</string>
   <string name="delete_specific_search_toast">சமீபத்திய தேடல் அகற்றப்பட்டது</string>
   <string name="hint_contents_drawer_message">இந்த கட்டுரையின் உள்ளடக்கங்களைக் காண நீங்கள் இடதுபுறமாக தேய்க்கவும்</string>
   <string name="got_it">புரிந்துகொண்டேன்</string>
@@ -185,14 +186,14 @@
   <string name="download_books">புத்தகங்களைப் பதிவிறக்குங்கள்</string>
   <string name="humankind_knowledge">உங்கள் தொலைபேசியில் மனிதகுலத்தின் அறிவு.</string>
   <string name="welcome_to_the_family">வரவேற்கிறோம்</string>
-  <string name="save_books_offline">புத்தகங்களை அணைவரியில் சேமிக்கவும்</string>
+  <string name="save_books_offline">நூல்களை இணையமின்றிச் சேமி</string>
   <string name="download_books_message">புத்தகங்களை பதிவிறக்கம் செய்து நீங்கள் எங்கிருந்தாலும் படிக்கலாம்.</string>
   <string name="unable_to_add_to_bookmarks">புத்தகக்குறியில் சேர்க்க முடியவில்லை</string>
   <string name="go_to_previous_page">முந்தைய பக்கத்திற்குச் செல்லவும்</string>
   <string name="go_to_next_page">அடுத்த பக்கத்திற்குச் செல்லவும்</string>
   <string name="table_of_contents">உள்ளடக்க அட்டவணை</string>
   <string name="select_languages">மொழிகளைத் தேர்ந்தெடுக்கவும்</string>
-  <string name="save_languages">மொழிகளைச் சேமிக்கவும்</string>
+  <string name="save_languages">மொழிகளைச் சேமி</string>
   <string name="send_feedback">பின்னூட்டம் அனுப்புக</string>
   <string name="expand">விரிவாக்கு</string>
   <string name="history">வரலாறு</string>
@@ -200,7 +201,7 @@
   <string name="search_history" fuzzy="true">தேடல் வரலாறு</string>
   <string name="selected_items">%1$d தேர்ந்தெடுக்கப்பட்டது</string>
   <string name="bookmarks_from_current_book">எல்லா புத்தகங்களிலிருந்தும் புத்தகக்குறிகளைக் காண்க</string>
-  <string name="search_bookmarks">புத்தகக்குறிகளைத் தேடுங்கள்</string>
+  <string name="search_bookmarks">நூற்குறிகளில் தேடு</string>
   <string name="switch_tabs">தாவல்களை மாற்றவும்</string>
   <string name="close_all_tabs">அனைத்து தாவல்களையும் மூடு</string>
   <string name="pending_state">நிலுவையிலுள்ளது</string>
@@ -254,7 +255,7 @@
   <string name="performing_handshake">கைகுலுக்கல் நிகழ்த்துகிறது…</string>
   <string name="status">நிலை</string>
   <string name="pref_clear_all_notes_summary">எல்லா கட்டுரைகளிலும் உள்ள அனைத்து குறிப்புகளையும் அழிக்கிறது</string>
-  <string name="pref_clear_all_notes_title">எல்லா குறிப்புகளையும் அழிக்கவும்</string>
+  <string name="pref_clear_all_notes_title">எல்லாக் குறிப்புகளையும் அழி</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">SD கார்டில் ZIM கோப்புகளைப் படிக்கவும் எழுதவும் அனுமதிக்கவும்</string>
   <string name="pref_text_zoom_summary">உரை அளவை 25% அதிகரிப்புகளுடன் மாற்றவும்.</string>
   <string name="tag_pic">படம்</string>

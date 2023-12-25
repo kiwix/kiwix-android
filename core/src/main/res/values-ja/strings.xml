@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Ajeje Brazorf
+* Great ones
 * MathXplore
 * Omotecho
 * S2KTS
@@ -24,6 +25,7 @@
   <string name="menu_read_aloud">読み上げる</string>
   <string name="menu_read_aloud_stop">読み上げをやめる</string>
   <string name="menu_support_kiwix">Kiwix をサポートする</string>
+  <string name="menu_about_app">この%sアプリについて</string>
   <string name="menu_wifi_hotspot">Wi-Fi ホットスポット</string>
   <string name="save_media">メディアに名前を付けて保存…</string>
   <string name="save_media_error">メディアを保存しようとした際にエラーが発生しました!</string>
@@ -55,6 +57,8 @@
   <string name="hotspot_notification_content_title">Kiwix ホットスポット</string>
   <string name="start_server_label">サーバーを起動する</string>
   <string name="stop_server_label">サーバーを停止する</string>
+  <string name="error_server_already_running">サーバーはすでに実行されています。オフにしてもう一度お試しください。</string>
+  <string name="error_ip_address_not_found">IPアドレスが見つかりませんでした。</string>
   <string name="server_started_message">サーバー %s にアクセスするには、この IP アドレスをブラウザに入力してください</string>
   <string name="share_host_address">他のアプリケーション経由で URL を共有する</string>
   <string name="error_file_not_found">エラー: 選択した ZIM ファイルが見つかりませんでした。</string>
@@ -110,6 +114,9 @@
   <string name="pref_newtab_background_title">バックグラウンドで新しいタブを開く</string>
   <string name="pref_newtab_background_summary">新しいタブはバックグラウンドで開かれます</string>
   <string name="pref_extras">その他</string>
+  <string name="new_tab_snack_bar">新しいタブで記事が開かれました</string>
+  <string name="search_widget_text">ウィキ内を検索</string>
+  <string name="speech_not_supported">申し訳ありません！お使いのデバイスは音声入力に対応していません</string>
   <string name="local_zims">デバイス</string>
   <string name="remote_zims">オンライン</string>
   <string name="library">ライブラリ</string>
@@ -122,6 +129,16 @@
   <string name="zim_no_pic">写真はありません</string>
   <string name="zim_no_vid">動画はありません</string>
   <string name="no_network_connection">ネットワーク接続がありません</string>
+  <string name="help_2">キウィックスは何をするのですか？</string>
+  <string name="help_3">Kiwixはオフライン・コンテンツ・リーダーです。ブラウザのように動作しますが、オンラインのウェブページにアクセスするのではなく、ZIM形式のファイルからコンテンツを読み取ります。</string>
+  <string name="help_4">Kiwixはもともとウィキペディアをオフラインで提供するために設計されているが、他のコンテンツも読み込むことができます。</string>
+  <string name="help_5">コンテンツはどこにありますか?</string>
+  <string name="help_6">私たちのコンテンツは Kiwix Web サイトでホストされています。</string>
+  <string name="help_7">これらは ZIM ファイルとして入手できます。それらはたくさんあります:</string>
+  <string name="help_8">• ウィキペディアは言語ごとに個別に利用できます</string>
+  <string name="help_9">• Wikileaks や Wikisource などの他のコンテンツも利用可能</string>
+  <string name="help_10">ZIMファイルをSDカードに転送する前に、アプリ内でZIMファイルをダウンロードするか、デスクトップコンピュータからダウンロードすることができます。</string>
+  <string name="help_11">アプリ内でダウンロードされるZIMファイルは、外部ストレージ・ディレクトリのKiwixというフォルダにあります。</string>
   <string name="pref_storage">ストレージ</string>
   <string name="pref_current_folder">現在のフォルダー</string>
   <string name="delete_zim_failed">申し訳ありませんが、一部のファイルを削除できませんでした。代わりにファイルマネージャーを使用してみてください。</string>
@@ -154,7 +171,25 @@
   <string name="time_yesterday">昨日</string>
   <string name="pref_external_link_popup_title">外部リンクを入力したときに警告する</string>
   <string name="do_not_ask_anymore">これ以上聞かないでください</string>
+  <string name="your_languages">選択されている言語</string>
   <string name="other_languages">その他の言語:</string>
+  <string name="crash_checkbox_language">言語設定</string>
+  <string name="crash_checkbox_zimfiles">Zim ファイルのリスト</string>
+  <string name="crash_checkbox_exception">クラッシュの詳細</string>
+  <string name="crash_checkbox_device">デバイスの詳細</string>
+  <string name="crash_button_confirm">詳細を送信する</string>
+  <string name="shortcut_disabled_message">ショートカットは使用できません</string>
+  <string name="new_tab_shortcut_label">新規タブ</string>
+  <string name="fav_icon">ファビコン</string>
+  <string name="get_started">始める</string>
+  <string name="download_books">書籍をダウンロードする</string>
+  <string name="download_books_message">本をダウンロードすれば、どこにいても読むことができます。</string>
+  <string name="unable_to_add_to_bookmarks">ブックマークに追加できません</string>
+  <string name="go_to_previous_page">前のページへ</string>
+  <string name="go_to_next_page">次のページへ</string>
+  <string name="table_of_contents">目次</string>
+  <string name="select_languages">言語を選択</string>
+  <string name="send_feedback">フィードバックを送信</string>
   <string name="history">履歴</string>
   <string name="history_from_current_book">すべての書籍の履歴を表示する</string>
   <string name="search_history">検索履歴</string>
@@ -168,6 +203,7 @@
   <string name="complete">完了</string>
   <string name="paused_state">一時停止</string>
   <string name="failed_state">失敗: %s</string>
+  <string name="custom_download_error_message_for_authentication_failed">zim ファイルをダウンロードできませんでした。 Play ストアからアプリケーションを再インストールしてみてください。</string>
   <string name="save">保存</string>
   <string name="note">メモ</string>
   <string name="wiki_article_title">Wiki 記事のタイトル</string>
@@ -186,7 +222,19 @@
   <string name="notes_deletion_successful">メモフォルダー全体が削除されました</string>
   <string name="notes_deletion_unsuccessful">一部のファイルが削除されませんでした</string>
   <string name="books_count">%d 冊の本</string>
+  <string name="discovery_failed">検出に失敗しました</string>
+  <string name="severe_loss_error">重大なエラーです! WiFi P2P を無効にして再度有効にしてみてください</string>
+  <string name="connection_failed">接続に失敗しました</string>
+  <string name="permission_rationale_location">アプリがピアデバイスを検出できるようにするには、Android の設定で位置情報の許可を行う必要があります</string>
+  <string name="your_device">あなたのデバイス:</string>
+  <string name="nearby_devices">近くのデバイス</string>
+  <string name="no_devices_found">デバイスが検出されませんでした。検索ボタンをタップして再試行してください。</string>
+  <string name="files_for_transfer">転送用ファイル</string>
+  <string name="preparing_files">ファイルを転送する準備をしています…</string>
+  <string name="status">状態</string>
+  <string name="pref_clear_all_notes_summary">すべての記事のすべてのメモをクリアします</string>
   <string name="pref_text_zoom_summary">テキストサイズを 25% 増やす</string>
+  <string name="grant_read_storage_permission">このアプリが機能するには、ストレージへのアクセス許可が必要です。設定で許可を与えてください</string>
   <string name="search_open_in_new_tab">新しいタブで開く</string>
   <string name="tabs_restored">タブが復元されました</string>
   <string name="allow">許可</string>
