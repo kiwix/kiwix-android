@@ -15,7 +15,7 @@ with additional metadata.
 
 This is the version for Android, with support versions ranging from 7
 to 13 (like [mentioned
-here](https://github.com/kiwix/kiwix-android/blob/develop/buildSrc/src/main/kotlin/Config.kt)).
+here](https://github.com/kiwix/kiwix-android/blob/main/buildSrc/src/main/kotlin/Config.kt)).
 
 **Important Note**: Starting from Android 11, the ZIM file picker
 feature has been restricted in the Play Store variant due to Play
@@ -39,7 +39,7 @@ website to access the complete set of features.
 
 Kiwix Android is written in [Kotlin](https://kotlinlang.org/)
 
-[![Build Status](https://github.com/kiwix/kiwix-android/workflows/CI/badge.svg?query=branch%3Adevelop+workflow%3ANightly)](https://github.com/kiwix/kiwix-android/actions?query=workflow%3ACI+branch%3Adevelop)
+[![Build Status](https://github.com/kiwix/kiwix-android/workflows/CI/badge.svg?query=branch%3Adevelop+workflow%3ANightly)](https://github.com/kiwix/kiwix-android/actions?query=workflow%3ACI+branch%3Amain)
 [![Nightly](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml/badge.svg)](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml)
 [![codecov](https://codecov.io/gh/kiwix/kiwix-android/branch/develop/graph/badge.svg)](https://codecov.io/gh/kiwix/kiwix-android)
 [![CodeFactor](https://www.codefactor.io/repository/github/kiwix/kiwix-android/badge)](https://www.codefactor.io/repository/github/kiwix/kiwix-android)
@@ -79,7 +79,7 @@ If you are interested in our custom apps they have their own repo [kiwix-android
 ## Contributing
 
 Before contributing be sure to check out the
-[CONTRIBUTION](https://github.com/kiwix/kiwix-android/blob/develop/CONTRIBUTING.md)
+[CONTRIBUTION](https://github.com/kiwix/kiwix-android/blob/main/CONTRIBUTING.md)
 guidelines.
 
 We currently have a series of automated Unit and Integration
