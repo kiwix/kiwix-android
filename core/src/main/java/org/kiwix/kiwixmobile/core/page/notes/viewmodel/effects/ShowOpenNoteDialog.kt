@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
@@ -29,7 +30,7 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.ShowNoteDialog
-import java.io.File
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getAssetFileDescriptorFromUri
 import javax.inject.Inject
 
 data class ShowOpenNoteDialog(
@@ -49,8 +50,19 @@ data class ShowOpenNoteDialog(
         // For custom apps, we are currently using fileDescriptor, and they only have a single file in them,
         // which is already set in zimReaderContainer, so there's no need to set it again.
         item.zimFilePath?.let {
-          val file = File(it)
-          zimReaderContainer.setZimFileOrFileDescriptor(file)
+          // Obtain the asset file descriptor for the provided URI.
+          // Given that we now exclusively use the fileDescriptor for all our functionalities,
+          // we have modified this method to assign the fileDescriptor instead of the file
+          // to address the crash triggered when clicking the 'OPEN NOTE' button.
+          getAssetFileDescriptorFromUri(
+            activity,
+            it.toUri()
+          )?.let { assetFileDescriptor ->
+            zimReaderContainer.setZimFileOrFileDescriptor(
+              assetFileDescriptor = assetFileDescriptor,
+              filePath = it
+            )
+          }
         }
         effects.offer(OpenNote(item.noteFilePath, item.zimUrl, item.title))
       }
