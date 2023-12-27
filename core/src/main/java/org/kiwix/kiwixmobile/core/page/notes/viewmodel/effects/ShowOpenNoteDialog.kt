@@ -60,7 +60,7 @@ data class ShowOpenNoteDialog(
           )?.let { assetFileDescriptor ->
             zimReaderContainer.setZimFileOrFileDescriptor(
               assetFileDescriptor = assetFileDescriptor,
-              filePath = it
+              assetDescriptorFilePath = it
             )
           }
         }

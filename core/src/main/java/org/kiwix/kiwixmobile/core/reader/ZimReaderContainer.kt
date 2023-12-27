@@ -36,16 +36,30 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
   fun setZimFileOrFileDescriptor(
     file: File? = null,
     assetFileDescriptor: AssetFileDescriptor? = null,
-    filePath: String? = null
+    assetDescriptorFilePath: String? = null
   ) {
-    if (isValidZimFileReader == true &&
-      file?.canonicalPath == zimFileReader?.zimFile?.canonicalPath
-    ) {
+    if (shouldNotCreateZimFileReader(file, assetDescriptorFilePath)) {
       return
     }
     zimFileReader =
-      zimFileReaderFactory.create(file, assetFileDescriptor, filePath)
+      zimFileReaderFactory.create(file, assetFileDescriptor, assetDescriptorFilePath)
   }
+
+  private fun shouldNotCreateZimFileReader(
+    file: File?,
+    assetDescriptorFilePath: String?
+  ) =
+    when {
+      file != null -> {
+        file.canonicalPath == zimCanonicalPath
+      }
+
+      assetDescriptorFilePath != null -> {
+        assetDescriptorFilePath == zimCanonicalPath
+      }
+
+      else -> false
+    }
 
   fun getPageUrlFromTitle(title: String) = zimFileReader?.getPageUrlFrom(title)
 
@@ -81,7 +95,7 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
     zimFileReaderFactory.create(
       file = zimFile,
       assetFileDescriptor = assetFileDescriptor,
-      filePath = assetDescriptorPath
+      assetDescriptorFilePath = assetDescriptorPath
     )
 
   val zimFile get() = zimFileReader?.zimFile

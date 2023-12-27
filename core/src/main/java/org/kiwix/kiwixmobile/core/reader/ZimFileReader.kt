@@ -65,7 +65,7 @@ class ZimFileReader constructor(
     fun create(
       file: File? = null,
       assetFileDescriptor: AssetFileDescriptor? = null,
-      filePath: String? = null
+      assetDescriptorFilePath: String? = null
     ): ZimFileReader?
 
     class Impl @Inject constructor(private val nightModeConfig: NightModeConfig) :
@@ -73,13 +73,13 @@ class ZimFileReader constructor(
       override fun create(
         file: File?,
         assetFileDescriptor: AssetFileDescriptor?,
-        filePath: String?
+        assetDescriptorFilePath: String?
       ) =
         try {
           when {
             file != null -> createArchiveWithFile(file)
             assetFileDescriptor != null -> {
-              createArchiveWithAssetFileDescriptor(assetFileDescriptor, filePath)
+              createArchiveWithAssetFileDescriptor(assetFileDescriptor, assetDescriptorFilePath)
             }
 
             else -> null
@@ -110,13 +110,13 @@ class ZimFileReader constructor(
 
       private fun createArchiveWithAssetFileDescriptor(
         assetFileDescriptor: AssetFileDescriptor,
-        filePath: String?
+        assetFileDescriptorPath: String?
       ): ZimFileReader? =
         if (assetFileDescriptor.parcelFileDescriptor.dup().fileDescriptor.valid()) {
           ZimFileReader(
             null,
             assetFileDescriptor,
-            assetDescriptorFilePath = filePath,
+            assetDescriptorFilePath = assetFileDescriptorPath,
             nightModeConfig = nightModeConfig,
             jniKiwixReader = Archive(
               assetFileDescriptor.parcelFileDescriptor.dup().fileDescriptor,
