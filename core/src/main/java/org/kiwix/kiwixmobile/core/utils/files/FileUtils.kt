@@ -26,6 +26,7 @@ import android.content.res.AssetFileDescriptor
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.os.ParcelFileDescriptor
 import android.provider.DocumentsContract
 import android.util.Log
 import android.webkit.URLUtil
@@ -416,7 +417,16 @@ object FileUtils {
     uri: Uri
   ): AssetFileDescriptor? {
     return try {
-      context.contentResolver.openAssetFileDescriptor(uri, "r")
+      context.contentResolver.takePersistableUriPermission(
+        uri,
+        Intent.FLAG_GRANT_READ_URI_PERMISSION
+      )
+      context.contentResolver.openFileDescriptor(uri, "r").use {
+        AssetFileDescriptor(
+          ParcelFileDescriptor.dup(it?.fileDescriptor),
+          0, AssetFileDescriptor.UNKNOWN_LENGTH
+        )
+      }
     } catch (ignore: FileNotFoundException) {
       null
     }
