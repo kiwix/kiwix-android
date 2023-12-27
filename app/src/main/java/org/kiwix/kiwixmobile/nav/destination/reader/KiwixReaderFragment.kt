@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.nav.destination.reader
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -33,6 +32,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
+import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.kiwix.kiwixmobile.R
@@ -55,7 +55,6 @@ import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getAssetFileDescriptorFromUri
 import java.io.File
 
@@ -108,15 +107,18 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private fun tryOpeningZimFile(zimFileUri: String) {
-    val filePath = FileUtils.getLocalFilePathByUri(
-      requireActivity().applicationContext, Uri.parse(zimFileUri)
-    )
-
-    if (filePath == null || !File(filePath).isFileExist()) {
-      activity.toast(R.string.error_file_not_found)
-      return
+    getAssetFileDescriptorFromUri(
+      requireActivity(),
+      zimFileUri.toUri()
+    )?.let { assetFileDescriptor ->
+      openZimFile(
+        null,
+        assetFileDescriptor = assetFileDescriptor,
+        assetFileDescriptorPath = zimFileUri
+      )
+    } ?: kotlin.run {
+      activity.toast(R.string.cannot_open_file)
     }
-    openZimFile(File(filePath))
   }
 
   override fun loadDrawerViews() {
