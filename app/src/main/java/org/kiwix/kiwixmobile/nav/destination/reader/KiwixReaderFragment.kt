@@ -115,6 +115,8 @@ class KiwixReaderFragment : CoreReaderFragment() {
         assetFileDescriptorPath = zimFileUri
       )
     } ?: kotlin.run {
+      // exit the previous if any loaded
+      exitBook()
       activity.toast(R.string.cannot_open_file)
     }
   }

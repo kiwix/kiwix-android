@@ -323,7 +323,16 @@ class LocalLibraryFragment : BaseFragment() {
   private val fileSelectLauncher =
     registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
       if (result.resultCode == RESULT_OK) {
-        result.data?.data?.let(::navigateToReaderFragment)
+        result.data?.data?.let {
+          // Taking `takePersistableUriPermission` for uris that user try to open via file picker.
+          // Since we need access of this uri to open the same file again,
+          // if user tries to open notes, history etc.
+          requireActivity().contentResolver.takePersistableUriPermission(
+            it,
+            Intent.FLAG_GRANT_READ_URI_PERMISSION
+          )
+          navigateToReaderFragment(it)
+        }
       }
     }
 

@@ -416,10 +416,6 @@ object FileUtils {
     uri: Uri
   ): AssetFileDescriptor? {
     return try {
-      context.contentResolver.takePersistableUriPermission(
-        uri,
-        Intent.FLAG_GRANT_READ_URI_PERMISSION
-      )
       context.contentResolver.openFileDescriptor(uri, "r").use {
         AssetFileDescriptor(
           ParcelFileDescriptor.dup(it?.fileDescriptor),
