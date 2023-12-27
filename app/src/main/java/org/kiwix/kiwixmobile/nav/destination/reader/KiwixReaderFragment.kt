@@ -43,7 +43,6 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
-import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.snack
@@ -56,7 +55,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getAssetFileDescriptorFromUri
-import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
 
@@ -226,15 +224,28 @@ class KiwixReaderFragment : CoreReaderFragment() {
     currentTab: Int
   ) {
     val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
-    val zimFile = settings.getString(TAG_CURRENT_FILE, null)
+    val zimFileUri = settings.getString(TAG_CURRENT_FILE, null)
 
-    if (zimFile != null && File(zimFile).isFileExist()) {
-      if (zimReaderContainer?.zimFile == null) {
-        openZimFile(File(zimFile))
-        Log.d(
-          TAG_KIWIX,
-          "Kiwix normal start, Opened last used zimFile: -> $zimFile"
-        )
+    if (zimFileUri != null &&
+      getAssetFileDescriptorFromUri(requireActivity(), zimFileUri.toUri()) != null
+    ) {
+      if (zimReaderContainer?.assetFileDescriptor == null) {
+        getAssetFileDescriptorFromUri(
+          requireActivity(),
+          zimFileUri.toUri()
+        )?.let { assetFileDescriptor ->
+          openZimFile(
+            null,
+            assetFileDescriptor = assetFileDescriptor,
+            assetFileDescriptorPath = zimFileUri
+          )
+          Log.d(
+            TAG_KIWIX,
+            "Kiwix normal start, Opened last used zimFile: -> $zimFileUri"
+          )
+        } ?: kotlin.run {
+          activity.toast(R.string.cannot_open_file)
+        }
       } else {
         zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
       }

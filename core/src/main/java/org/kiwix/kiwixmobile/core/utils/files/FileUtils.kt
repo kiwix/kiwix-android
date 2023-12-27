@@ -48,7 +48,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import java.io.BufferedReader
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.IOException
 
 object FileUtils {
@@ -427,7 +426,11 @@ object FileUtils {
           0, AssetFileDescriptor.UNKNOWN_LENGTH
         )
       }
-    } catch (ignore: FileNotFoundException) {
+    } catch (ignore: Exception) {
+      Log.e(
+        "GET_FILE_DESCRIPTOR",
+        "Unable to get the file descriptor for uri = $uri\n original exception = $ignore"
+      )
       null
     }
   }
