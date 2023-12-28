@@ -176,7 +176,9 @@ fun ProductFlavor.createPublishApkWithExpansionTask(
       createPublisher(File(rootDir, "playstore.json"))
         .transactionWithCommit(packageName) {
           val variants =
-            applicationVariants.releaseVariantsFor(this@createPublishApkWithExpansionTask)
+            applicationVariants.releaseVariantsFor(this@createPublishApkWithExpansionTask).also {
+              print("createPublishApkWithExpansionTask: $it")
+            }
           variants.forEach(::uploadApk)
           uploadExpansionTo(file, variants[0].versionCodeOverride)
           variants.drop(1).forEach { attachExpansionTo(variants[0].versionCodeOverride, it) }
@@ -189,7 +191,9 @@ fun ProductFlavor.createPublishApkWithExpansionTask(
 @Suppress("DEPRECATION")
 fun DomainObjectSet<ApplicationVariant>.releaseVariantsFor(productFlavor: ProductFlavor) =
   find { it.name.equals("${productFlavor.name}Release", true) }!!
-    .outputs.filterIsInstance<ApkVariantOutput>().sortedBy { it.versionCodeOverride }
+    .outputs.filterIsInstance<ApkVariantOutput>()
+    .filter { !it.outputFileName.contains("universal") }
+    .sortedBy { it.versionCodeOverride }
 
 fun ProductFlavor.createPublishBundleWithAssetPlayDelivery(): Task {
   val capitalizedName =
