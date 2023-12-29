@@ -391,7 +391,7 @@ class LocalLibraryFragment : BaseFragment() {
     sharedPreferenceUtil.playStoreRestrictionPermissionDialog = false
     // Show Dialog to the user to inform about the play store restriction
     dialogShower.show(
-      KiwixDialog.PlayStoreRestrictionPopup,
+      KiwixDialog.PlayStoreRestrictionPopup(KIWIX_APK_WEBSITE_URL),
       {},
       ::openKiwixWebsiteForDownloadingApk
     )

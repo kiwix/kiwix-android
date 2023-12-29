@@ -47,7 +47,7 @@ abstract class HelpFragment : BaseFragment() {
   @Inject
   lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private var fragmentHelpBinding: FragmentHelpBinding? = null
-  protected open fun rawTitleDescriptionMap(): List<Pair<Int, Int>> = emptyList()
+  protected open fun rawTitleDescriptionMap(): List<Pair<Int, Any>> = emptyList()
   override val fragmentToolbar: Toolbar? by lazy {
     fragmentHelpBinding?.root?.findViewById(R.id.toolbar)
   }
@@ -55,8 +55,15 @@ abstract class HelpFragment : BaseFragment() {
 
   private val titleDescriptionMap by lazy {
     rawTitleDescriptionMap().associate { (title, description) ->
-      getString(title) to resources.getStringArray(description)
-        .joinToString(separator = "\n")
+      val descriptionValue = when (description) {
+        is String -> description
+        is Int -> resources.getStringArray(description).joinToString(separator = "\n")
+        else -> {
+          throw IllegalArgumentException("Invalid description resource type for title: $title")
+        }
+      }
+
+      getString(title) to descriptionValue
     }
   }
 

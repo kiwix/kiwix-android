@@ -26,6 +26,7 @@ import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.main.KIWIX_APK_WEBSITE_URL
 
 fun help(func: HelpRobot.() -> Unit) = HelpRobot().apply(func)
 
@@ -86,7 +87,14 @@ class HelpRobot : BaseRobot() {
   }
 
   fun assertZimFileNotShowingIsExpanded() {
-    isVisible(TextId(string.zim_files_not_showing_description))
+    isVisible(
+      Text(
+        context.getString(
+          string.zim_files_not_showing_description,
+          KIWIX_APK_WEBSITE_URL
+        )
+      )
+    )
   }
 
   fun assertZimFileNotShowingIsNotVisible() {
