@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.zimManager
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.FileObserver
 import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
@@ -63,11 +64,20 @@ class Fat32Checker constructor(
   }
 
   private fun fileObserver(it: String): FileObserver =
-    object : FileObserver(File(it), MOVED_FROM or DELETE) {
-      override fun onEvent(event: Int, path: String?) {
-        requestCheckSystemFileType.onNext(Unit)
-      }
-    }.apply { startWatching() }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      object : FileObserver(File(it), MOVED_FROM or DELETE) {
+        override fun onEvent(event: Int, path: String?) {
+          requestCheckSystemFileType.onNext(Unit)
+        }
+      }.apply { startWatching() }
+    } else {
+      @Suppress("DEPRECATION")
+      object : FileObserver(it, MOVED_FROM or DELETE) {
+        override fun onEvent(event: Int, path: String?) {
+          requestCheckSystemFileType.onNext(Unit)
+        }
+      }.apply { startWatching() }
+    }
 
   private fun toFileSystemState(it: String) =
     when {
