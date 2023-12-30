@@ -309,8 +309,8 @@ class LocalLibraryFragment : BaseFragment() {
 
   private fun showFileChooser() {
     val intent = Intent().apply {
-      action = Intent.ACTION_OPEN_DOCUMENT
-      type = "application/octet-stream"
+      action = Intent.ACTION_GET_CONTENT
+      type = "*/*"
       addCategory(Intent.CATEGORY_OPENABLE)
     }
     try {

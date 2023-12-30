@@ -48,7 +48,10 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import java.io.BufferedReader
 import java.io.File
+import java.io.FileDescriptor
+import java.io.FileInputStream
 import java.io.IOException
+import java.nio.ByteBuffer
 
 object FileUtils {
 
@@ -416,7 +419,21 @@ object FileUtils {
     uri: Uri
   ): AssetFileDescriptor? {
     return try {
-      context.contentResolver.openFileDescriptor(uri, "r").use {
+      val documentFile = DocumentFile.fromSingleUri(context, uri)
+      if (documentFile?.uri == null) {
+        return null
+      }
+      Log.e(
+        "PERMISSION",
+        "getAssetFileDescriptorFromUri: can Read file =  ${documentFile.canRead()}\n" +
+          " can right file = ${documentFile.canWrite()}"
+      )
+      context.contentResolver.openFileDescriptor(documentFile.uri, "r", null).use {
+        Log.e(
+          "PERMISSION",
+          "getAssetFileDescriptorFromUri: check file descriptor permission = " +
+            "${checkReadFileDescriptorPermission(it?.fileDescriptor)}"
+        )
         AssetFileDescriptor(
           ParcelFileDescriptor.dup(it?.fileDescriptor),
           0, AssetFileDescriptor.UNKNOWN_LENGTH
@@ -428,6 +445,24 @@ object FileUtils {
         "Unable to get the file descriptor for uri = $uri\n original exception = $ignore"
       )
       null
+    }
+  }
+
+  private fun checkReadFileDescriptorPermission(fileDescriptor: FileDescriptor?): Boolean {
+    if (fileDescriptor?.valid() == false) {
+      // The FileDescriptor is not valid
+      return false
+    }
+
+    return try {
+      val channel = FileInputStream(fileDescriptor).channel
+      // Try to check read access
+      channel.position(0)
+      channel.read(ByteBuffer.allocate(1))
+      true
+    } catch (ignore: Exception) {
+      // An exception occurred, indicating a lack of read permission
+      false
     }
   }
 }
