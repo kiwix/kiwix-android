@@ -76,7 +76,7 @@ object Versions {
 
   const val uiautomator: String = "2.3.0-alpha03"
 
-  const val annotation: String = "1.1.0"
+  const val annotation: String = "1.2.0"
 
   const val simple_xml: String = "2.7.1"
 
@@ -98,7 +98,7 @@ object Versions {
 
   const val rxjava: String = "2.2.20"
 
-  const val webkit: String = "1.3.0"
+  const val webkit: String = "1.7.0"
 
   const val junit: String = "1.1.4"
 
