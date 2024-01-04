@@ -311,7 +311,7 @@
   <string name="open_drawer">Schublade öffnen</string>
   <string name="close_drawer">Schublade schließen</string>
   <string name="zim_files_not_showing">Werden die Zim-Dateien nicht angezeigt?</string>
-  <string name="zim_files_not_showing_description">Aufgrund der Google-Play-Richtlinien für Android 11 und höher kann diese Google-Store-App keine seitlich geladenen ZIM-Dateien öffnen. Sie können sie entweder über die App herunterladen oder stattdessen die Vollversion der Kiwix-App von unserer offiziellen Website installieren</string>
+  <string name="zim_files_not_showing_description">Aufgrund der Google-Play-Richtlinien für Android 11 und höher kann diese Google-Store-App keine seitlich geladenen ZIM-Dateien öffnen. Sie können sie entweder über die App herunterladen oder stattdessen die Vollversion der Kiwix-App von unserer offiziellen Website installieren %s</string>
   <string name="understood">Verstanden</string>
   <string name="how_to_update_content">Wie aktualisiert man Inhalte?</string>
   <string name="update_content_description">Um Inhalte (eine Zim-Datei) zu aktualisieren, musst du die neueste Version genau derselben Inhalte vollständig herunterladen. Das kannst du über den Download-Bereich tun.</string>

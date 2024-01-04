@@ -300,7 +300,7 @@
   <string name="open_drawer">פתיחת מגירה</string>
   <string name="close_drawer">סגירת מגירה</string>
   <string name="zim_files_not_showing">קובצי ה־zim אינם מוצגים?</string>
-  <string name="zim_files_not_showing_description">בשל מדיניות Google Play ב־Android 11 ומעלה, יישום ה־Google Store הזה לא יכול לפתוח קובצי ZIM עם טעינת צד. באפשרותך להוריד אותם דרך היישום או להתקין את הגרסה המלאה של אפליקציית kiwix מהאתר הרשמי שלנו</string>
+  <string name="zim_files_not_showing_description">בשל מדיניות Google Play ב־Android 11 ומעלה, יישום ה־Google Store הזה לא יכול לפתוח קובצי ZIM עם טעינת צד. באפשרותך להוריד אותם דרך היישום או להתקין את הגרסה המלאה של אפליקציית kiwix מהאתר הרשמי שלנו %s</string>
   <string name="understood">הבנתי</string>
   <string name="how_to_update_content">איך לעדכן תוכן?</string>
   <string name="update_content_description">כדי לעדכן תוכן (קובץ zim) עליך להוריד את הגרסה המלאה העדכנית ביותר של אותו התוכן בדיוק. ניתן לעשות זאת דרך סעיף ההורדה.</string>

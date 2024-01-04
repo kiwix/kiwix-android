@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Amire80
 * Ark74
 * Carlespera
 * DDPAT
@@ -299,7 +300,7 @@
   <string name="search_open_in_new_tab">Abrir en una pestaña nueva</string>
   <string name="reader">Lector</string>
   <string name="no_open_book">Ningún libro abierto</string>
-  <string name="open_library">Abrir librería.</string>
+  <string name="open_library" fuzzy="true">Abrir librería</string>
   <string name="tab_restored">Pestaña restaurada</string>
   <string name="tabs_restored">Pestañas restauradas</string>
   <string name="open_drawer">Abrir cajón</string>

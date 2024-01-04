@@ -8,6 +8,7 @@
 * LClightcat
 * Lanyun1103
 * Liuxinyu970226
+* LowensteinYang
 * Lynzrand
 * McDutchie
 * Shuiwater
@@ -20,6 +21,7 @@
 * Yfdyh000
 * Ywang
 * Zjzengdongyang
+* 列维劳德
 * 沈澄心
 * 铁桶
 -->
@@ -35,6 +37,8 @@
   <string name="menu_read_aloud">朗读</string>
   <string name="menu_read_aloud_stop">停止朗读</string>
   <string name="menu_support_kiwix">支持Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">支持%s</string>
+  <string name="menu_about_app">关于%s应用程序</string>
   <string name="menu_wifi_hotspot">成为服务器共享书籍</string>
   <string name="save_media">保存媒体</string>
   <string name="save_media_error">尝试保存该媒体时出错！</string>
@@ -303,7 +307,7 @@
   <string name="search_open_in_new_tab">在新标签页打开</string>
   <string name="reader">读者</string>
   <string name="no_open_book">没有打开的书</string>
-  <string name="open_library">打开图书馆</string>
+  <string name="open_library">打开文库</string>
   <string name="tab_restored">标签已恢复</string>
   <string name="tabs_restored">标签已恢复</string>
   <string name="open_drawer">打开绘画器</string>
