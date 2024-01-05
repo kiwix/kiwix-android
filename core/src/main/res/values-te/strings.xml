@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Nskjnv
 * Rishitha 1238
 * V Bhavya
 * Veeven
@@ -18,6 +19,8 @@
   <string name="menu_read_aloud">బయటకి చదువు</string>
   <string name="menu_read_aloud_stop">బయటకి చదవడం ఆపివేయి</string>
   <string name="menu_support_kiwix">కివిక్స్కు మద్దతు ఇవ్వండి</string>
+  <string name="menu_support_kiwix_for_custom_apps">మాకు తోడ్పడండి %s</string>
+  <string name="menu_about_app">%s యాప్ గురించి</string>
   <string name="menu_wifi_hotspot">WiFi హాట్‌స్పాట్</string>
   <string name="save_media">మీడియాని ఇలా భద్రపరచండి…</string>
   <string name="save_media_error">మీడియాను భద్రపరచడంలో తప్పు జరిగింది.</string>
@@ -293,6 +296,7 @@
   <string name="tabs_restored">ట్యాబ్‌లు పునరుద్ధరించబడ్డాయి</string>
   <string name="open_drawer">డ్రాయర్ తెరవండి</string>
   <string name="close_drawer">డ్రాయర్‌ని మూసివేయండి</string>
+  <string name="zim_files_not_showing">జిమ్ ఫైళ్లు కనబడటం లేదా?</string>
   <string name="how_to_update_content">కంటెంట్‌ని ఎలా అప్‌డేట్ చేయాలి?</string>
   <string name="update_content_description">కంటెంట్‌ని (జిమ్ ఫైల్) అప్‌డేట్ చేయడానికి మీరు ఇదే కంటెంట్ యొక్క పూర్తి తాజా వెర్షన్‌ను డౌన్‌లోడ్ చేసుకోవాలి. మీరు డౌన్‌లోడ్ విభాగం ద్వారా దీన్ని చేయవచ్చు.</string>
   <string name="all_files_permission_needed">అన్ని ఫైల్‌ల అనుమతి అవసరం</string>

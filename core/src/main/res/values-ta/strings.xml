@@ -176,7 +176,7 @@
   <string name="crash_checkbox_exception">செயலி செயலிழந்ததற்கான விவரங்கள்</string>
   <string name="crash_checkbox_logs">பயன்பாட்டு பதிவுகள்</string>
   <string name="crash_checkbox_device">சாதன விவரங்கள்</string>
-  <string name="crash_button_confirm">விவரங்களை அனுப்பவும்</string>
+  <string name="crash_button_confirm">விபரங்களை அனுப்பு</string>
   <string name="shortcut_disabled_message">குறுக்குவழி கிடைக்கவில்லை</string>
   <string name="new_tab_shortcut_label">புதிய தாவல்</string>
   <string name="get_content_shortcut_label">உள்ளடக்கத்தைப் பெறுங்கள்</string>
@@ -197,10 +197,10 @@
   <string name="send_feedback">பின்னூட்டம் அனுப்புக</string>
   <string name="expand">விரிவாக்கு</string>
   <string name="history">வரலாறு</string>
-  <string name="history_from_current_book">எல்லா புத்தகங்களிலிருந்தும் வரலாற்றைக் காண்க</string>
+  <string name="history_from_current_book">எல்லா நூல்களிலிருந்தும் வரலாற்றைப் பார்</string>
   <string name="search_history" fuzzy="true">தேடல் வரலாறு</string>
   <string name="selected_items">%1$d தேர்ந்தெடுக்கப்பட்டது</string>
-  <string name="bookmarks_from_current_book">எல்லா புத்தகங்களிலிருந்தும் புத்தகக்குறிகளைக் காண்க</string>
+  <string name="bookmarks_from_current_book">எல்லா நூல்களிலிருந்தும் நூற்குறிகளைப் பார்</string>
   <string name="search_bookmarks">நூற்குறிகளில் தேடு</string>
   <string name="switch_tabs">தாவல்களை மாற்றவும்</string>
   <string name="close_all_tabs">அனைத்து தாவல்களையும் மூடு</string>
@@ -276,7 +276,7 @@
   <string name="on">இயக்கு</string>
   <string name="off">முடக்கு</string>
   <string name="auto">தானியக்கம்</string>
-  <string name="send_report">கண்டறியும் அறிக்கையை அனுப்பவும்</string>
+  <string name="send_report">பிழையறிதல் அறிக்கையை அனுப்பு</string>
   <string name="crash_checkbox_file_system">கோப்பு முறை விவரங்கள்</string>
   <string name="diagnostic_report">கண்டறியும் அறிக்கை</string>
   <string name="diagnostic_report_message">தயவுசெய்து பின்வரும் அனைத்து விவரங்களையும் அனுப்புங்கள், இதனால் சிக்கலைக் கண்டறிய முடியும்</string>
@@ -289,6 +289,7 @@
   <string name="tab_restored">தாவல் மீட்டமைக்கப்பட்டது</string>
   <string name="open_drawer">இழுப்பறையைத் திற</string>
   <string name="close_drawer">இழுப்பறையை மூடு</string>
+  <string name="understood">விளங்கியது</string>
   <string name="how_to_update_content">உள்ளடக்கத்தை எவ்வாறு புதுப்பிப்பது?</string>
   <string name="update_content_description">உள்ளடக்கத்தைப் புதுப்பிக்க (ஒரு zim கோப்பு) இதே உள்ளடக்கத்தின் முழு சமீபத்திய பதிப்பை நீங்கள் பதிவிறக்க வேண்டும். பதிவிறக்கப் பிரிவு வழியாக நீங்கள் அதைச் செய்யலாம்.</string>
   <string name="all_files_permission_needed">அனைத்து கோப்புகளுக்கும் அனுமதி தேவை</string>

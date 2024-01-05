@@ -293,7 +293,7 @@
   <string name="search_open_in_new_tab">* It is a dialog message shown on the reader screen when the user long presses a link.\n* It asks if the user wants to open that specific link in a new tab.</string>
   <string name="reader">The title of the fragment/place where books are read.</string>
   <string name="no_open_book">Tell the user that they have not opened a book.</string>
-  <string name="open_library">The action of opening the library destination, used on a button.</string>
+  <string name="open_library">{{Doc-important|This means \"Open the library\". \"Open\" is a verb. This doesn\'t mean \"An open library\".}}\nThe action of opening the library destination, used on a button.</string>
   <string name="tab_restored">Tell the user that a tab has been restored.</string>
   <string name="tabs_restored">This is used in the snack bar, to inform users all tabs are restored.</string>
   <string name="open_drawer">This is a label text for opening the \"Navigation Drawer\".</string>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Aboubacar.banamoridou.toure
+* Amire80
 * Lancine.kounfantoh.fofana
 * McDutchie
 * MohitMali
@@ -285,7 +286,7 @@
   <string name="search_open_in_new_tab">ߊ߬ ߟߊߞߊ߬ ߝߢߐߘߊ߫ ߞߎߘߊ ߞߊ߲߬</string>
   <string name="reader">ߞߊ߬ߙߊ߲߬ߠߊ</string>
   <string name="no_open_book">ߞߝߊ߬ ߘߊߟߊߞߊ߬ߣߍ߲߫ ߕߍ߫</string>
-  <string name="open_library">ߟߍߙߊߓߏ߲ ߟߊߞߊ߬ߣߍ߲</string>
+  <string name="open_library" fuzzy="true">ߟߍߙߊߓߏ߲ ߟߊߞߊ߬ߣߍ߲</string>
   <string name="tab_restored">ߘߊߞߎ߲ ߟߊߞߎߣߎ߲߫</string>
   <string name="open_drawer">ߛߊߥߎߙߊߟߊ߲ ߘߊߦߟߍ߬</string>
   <string name="close_drawer">ߛߊ߬ߥߎߙߊߟߊ߲ ߘߊߕߎ߲߯</string>
