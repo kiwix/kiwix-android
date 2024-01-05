@@ -69,8 +69,10 @@ import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerV
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.KIWIX_APK_WEBSITE_URL
+import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.navigateToSettings
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
@@ -82,6 +84,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.databinding.FragmentDestinationLibraryBinding
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions
@@ -101,6 +104,8 @@ class LocalLibraryFragment : BaseFragment() {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   @Inject lateinit var dialogShower: DialogShower
+  @Inject lateinit var mainRepositoryActions: MainRepositoryActions
+  @Inject lateinit var zimReaderFactory: ZimFileReader.Factory
 
   private var actionMode: ActionMode? = null
   private val disposable = CompositeDisposable()
@@ -364,6 +369,19 @@ class LocalLibraryFragment : BaseFragment() {
     if (!file.canRead()) {
       activity.toast(R.string.unable_to_read_zim_file)
     } else {
+      // Save the ZIM file to the database to display it on the local library screen.
+      // This is particularly useful when storage is slow or contains a large number of files.
+      // In such cases, scanning may take some time to show all the files on the
+      // local library screen. Since our application is already aware of this opened ZIM file,
+      // we can directly add it to the database.
+      // See https://github.com/kiwix/kiwix-android/issues/3650
+      zimReaderFactory.create(file)
+        ?.let { zimFileReader ->
+          BookOnDisk(file, zimFileReader).also {
+            mainRepositoryActions.saveBook(it)
+            zimFileReader.dispose()
+          }
+        }
       activity?.navigate(
         LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
           .apply { zimFileUri = file.toUri().toString() }
@@ -403,6 +421,7 @@ class LocalLibraryFragment : BaseFragment() {
 
   override fun onDestroyView() {
     super.onDestroyView()
+    mainRepositoryActions.dispose()
     actionMode = null
     fragmentDestinationLibraryBinding?.zimfilelist?.adapter = null
     fragmentDestinationLibraryBinding = null
