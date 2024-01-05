@@ -62,7 +62,7 @@ guidelines. Pull requests not matching the style will be rejected.
 
 ### Design and style
 
-For an overview of how to make design changes to Kiwix Android, check out [DESIGN.md](https://github.com/kiwix/kiwix-android/blob/develop/DESIGN.md).
+For an overview of how to make design changes to Kiwix Android, check out [DESIGN.md](https://github.com/kiwix/kiwix-android/blob/main/DESIGN.md).
 
 ### Building
 
