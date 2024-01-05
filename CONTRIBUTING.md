@@ -62,7 +62,7 @@ guidelines. Pull requests not matching the style will be rejected.
 
 ### Design and style
 
-For an overview of how to make design changes to Kiwix Android, check out [DESIGN.md](https://github.com/kiwix/kiwix-android/blob/develop/DESIGN.md).
+For an overview of how to make design changes to Kiwix Android, check out [DESIGN.md](https://github.com/kiwix/kiwix-android/blob/main/DESIGN.md).
 
 ### Building
 
@@ -121,7 +121,7 @@ Code coverage results can be seen under `[module]/build/reports/`
 ### Continuous Integration
 
 All PRs will have all these tests run and a combined coverage report will be attached, if coverage is to go down the PR will be marked failed. On Travis CI the automated tests are run on an emulator. To
-learn more about the commands run on the CI please refer to [.github/workflows](https://github.com/kiwix/kiwix-android/tree/develop/.github/workflows).
+learn more about the commands run on the CI please refer to [.github/workflows](https://github.com/kiwix/kiwix-android/tree/main/.github/workflows).
 
 
 _These guidelines are based on [Tools for Government Data Archiving](https://github.com/edgi-govdata-archiving/overview/blob/master/CONTRIBUTING.md)'s._
