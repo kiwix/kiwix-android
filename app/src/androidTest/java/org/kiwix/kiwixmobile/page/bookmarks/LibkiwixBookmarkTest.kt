@@ -96,13 +96,26 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
       )
     }
     bookmarks {
+      // Test saving bookmark
       clickOnSaveBookmarkImage()
       clickOnOpenSavedBookmarkButton()
       assertBookmarkSaved()
       pressBack()
+      // Test removing bookmark
       clickOnSaveBookmarkImage()
       longClickOnSaveBookmarkImage()
       assertBookmarkRemoved()
+      pressBack()
+      // Save the bookmark to test whether it remains saved after the application restarts or not.
+      clickOnSaveBookmarkImage()
+    }
+  }
+
+  @Test
+  fun testBookmarkRemainsSavedOrNot() {
+    bookmarks {
+      longClickOnSaveBookmarkImage()
+      assertBookmarkSaved()
     }
   }
 }
