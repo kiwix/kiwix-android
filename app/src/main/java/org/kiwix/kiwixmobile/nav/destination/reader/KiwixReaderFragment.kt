@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.nav.destination.reader
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -33,6 +32,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
+import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.kiwix.kiwixmobile.R
@@ -43,7 +43,6 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
-import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.snack
@@ -55,9 +54,7 @@ import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getAssetFileDescriptorFromUri
-import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
 
@@ -108,15 +105,20 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private fun tryOpeningZimFile(zimFileUri: String) {
-    val filePath = FileUtils.getLocalFilePathByUri(
-      requireActivity().applicationContext, Uri.parse(zimFileUri)
-    )
-
-    if (filePath == null || !File(filePath).isFileExist()) {
-      activity.toast(R.string.error_file_not_found)
-      return
+    getAssetFileDescriptorFromUri(
+      requireActivity(),
+      zimFileUri.toUri()
+    )?.let { assetFileDescriptor ->
+      openZimFile(
+        null,
+        assetFileDescriptor = assetFileDescriptor,
+        assetFileDescriptorPath = zimFileUri
+      )
+    } ?: kotlin.run {
+      // exit the previous if any loaded
+      exitBook()
+      activity.toast(R.string.cannot_open_file)
     }
-    openZimFile(File(filePath))
   }
 
   override fun loadDrawerViews() {
@@ -134,7 +136,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private fun closeZimBook() {
-    zimReaderContainer?.setZimFile(null)
+    zimReaderContainer?.setZimFileOrFileDescriptor(null, null, null)
   }
 
   override fun openHomeScreen() {
@@ -205,9 +207,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun onResume() {
     super.onResume()
-    if (zimReaderContainer?.zimFile == null &&
-      zimReaderContainer?.zimFileReader?.assetFileDescriptor == null
-    ) {
+    if (zimReaderContainer?.isValidZimFileReader == false) {
       exitBook()
     }
     if (isFullScreenVideo) {
@@ -226,15 +226,28 @@ class KiwixReaderFragment : CoreReaderFragment() {
     currentTab: Int
   ) {
     val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
-    val zimFile = settings.getString(TAG_CURRENT_FILE, null)
+    val zimFileUri = settings.getString(TAG_CURRENT_FILE, null)
 
-    if (zimFile != null && File(zimFile).isFileExist()) {
-      if (zimReaderContainer?.zimFile == null) {
-        openZimFile(File(zimFile))
-        Log.d(
-          TAG_KIWIX,
-          "Kiwix normal start, Opened last used zimFile: -> $zimFile"
-        )
+    if (zimFileUri != null &&
+      getAssetFileDescriptorFromUri(requireActivity(), zimFileUri.toUri()) != null
+    ) {
+      if (zimReaderContainer?.assetFileDescriptor == null) {
+        getAssetFileDescriptorFromUri(
+          requireActivity(),
+          zimFileUri.toUri()
+        )?.let { assetFileDescriptor ->
+          openZimFile(
+            null,
+            assetFileDescriptor = assetFileDescriptor,
+            assetFileDescriptorPath = zimFileUri
+          )
+          Log.d(
+            TAG_KIWIX,
+            "Kiwix normal start, Opened last used zimFile: -> $zimFileUri"
+          )
+        } ?: kotlin.run {
+          activity.toast(R.string.cannot_open_file)
+        }
       } else {
         zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
       }
@@ -299,7 +312,11 @@ class KiwixReaderFragment : CoreReaderFragment() {
           // pass this uri to zimFileReader, which is necessary for saving
           // notes, bookmarks, history, and reopening the same ZIM file after the app closes.
           getAssetFileDescriptorFromUri(activity, it)?.let { assetFileDescriptor ->
-            openZimFile(null, assetFileDescriptor = assetFileDescriptor, filePath = "$it")
+            openZimFile(
+              null,
+              assetFileDescriptor = assetFileDescriptor,
+              assetFileDescriptorPath = "$it"
+            )
           } ?: kotlin.run {
             activity.toast(R.string.cannot_open_file)
           }

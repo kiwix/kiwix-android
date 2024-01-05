@@ -48,9 +48,7 @@ sealed class HistoryListItem : PageRelated {
     ) : this(
       zimId = zimFileReader.id,
       zimName = zimFileReader.name,
-      zimFilePath = zimFileReader.zimFile?.canonicalPath
-        ?: zimFileReader.assetDescriptorFilePath
-        ?: "",
+      zimFilePath = zimFileReader.zimCanonicalPath ?: "",
       favicon = zimFileReader.favicon,
       historyUrl = url,
       title = title,

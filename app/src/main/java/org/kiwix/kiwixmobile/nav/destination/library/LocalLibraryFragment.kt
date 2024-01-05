@@ -78,7 +78,6 @@ import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener.Compani
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener.Companion.SCROLL_UP
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
@@ -90,7 +89,6 @@ import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.Req
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestNavigateTo
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
-import java.io.File
 import javax.inject.Inject
 
 private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
@@ -245,7 +243,7 @@ class LocalLibraryFragment : BaseFragment() {
         offerAction(FileSelectActions.UserClickedDownloadBooksButton)
       }
     }
-    hideFilePickerButton()
+    setUpFilePickerButton()
 
     fragmentDestinationLibraryBinding?.zimfilelist?.addOnScrollListener(
       SimpleRecyclerViewScrollListener { _, newState ->
@@ -303,19 +301,9 @@ class LocalLibraryFragment : BaseFragment() {
     }
   }
 
-  private fun hideFilePickerButton() {
-    if (sharedPreferenceUtil.isPlayStoreBuild) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        fragmentDestinationLibraryBinding?.selectFile?.visibility = View.GONE
-      }
-    }
-
+  private fun setUpFilePickerButton() {
     fragmentDestinationLibraryBinding?.selectFile?.setOnClickListener {
-      if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
-        showManageExternalStoragePermissionDialog()
-      } else {
-        showFileChooser()
-      }
+      showFileChooser()
     }
   }
 
@@ -335,40 +323,24 @@ class LocalLibraryFragment : BaseFragment() {
   private val fileSelectLauncher =
     registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
       if (result.resultCode == RESULT_OK) {
-        result.data?.data?.let { uri ->
-          getZimFileFromUri(uri)?.let(::navigateToReaderFragment)
+        result.data?.data?.let {
+          // Taking `takePersistableUriPermission` for uris that user try to open via file picker.
+          // Since we need access of this uri to open the same file again,
+          // if user tries to open notes, history etc.
+          requireActivity().contentResolver.takePersistableUriPermission(
+            it,
+            Intent.FLAG_GRANT_READ_URI_PERMISSION
+          )
+          navigateToReaderFragment(it)
         }
       }
     }
 
-  private fun getZimFileFromUri(
-    uri: Uri
-  ): File? {
-    val filePath = FileUtils.getLocalFilePathByUri(
-      requireActivity().applicationContext, uri
+  private fun navigateToReaderFragment(uri: Uri) {
+    activity?.navigate(
+      LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
+        .apply { zimFileUri = "$uri" }
     )
-    if (filePath == null || !File(filePath).exists()) {
-      activity.toast(R.string.error_file_not_found)
-      return null
-    }
-    val file = File(filePath)
-    return if (!FileUtils.isValidZimFile(file.path)) {
-      activity.toast(R.string.error_file_invalid)
-      null
-    } else {
-      file
-    }
-  }
-
-  private fun navigateToReaderFragment(file: File) {
-    if (!file.canRead()) {
-      activity.toast(R.string.unable_to_read_zim_file)
-    } else {
-      activity?.navigate(
-        LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
-          .apply { zimFileUri = file.toUri().toString() }
-      )
-    }
   }
 
   override fun onResume() {

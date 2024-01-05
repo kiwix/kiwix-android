@@ -29,6 +29,7 @@ import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.main.UNINITIALISER_ADDRESS
 import org.kiwix.kiwixmobile.core.main.UNINITIALISE_HTML
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
@@ -61,22 +62,27 @@ class ZimFileReader constructor(
   private val searcher: SuggestionSearcher = SuggestionSearcher(jniKiwixReader)
 ) {
   interface Factory {
-    fun create(file: File): ZimFileReader?
     fun create(
-      assetFileDescriptor: AssetFileDescriptor,
-      filePath: String? = null
+      file: File? = null,
+      assetFileDescriptor: AssetFileDescriptor? = null,
+      assetDescriptorFilePath: String? = null
     ): ZimFileReader?
 
     class Impl @Inject constructor(private val nightModeConfig: NightModeConfig) :
       Factory {
-      override fun create(file: File) =
+      override fun create(
+        file: File?,
+        assetFileDescriptor: AssetFileDescriptor?,
+        assetDescriptorFilePath: String?
+      ) =
         try {
-          ZimFileReader(
-            file,
-            nightModeConfig = nightModeConfig,
-            jniKiwixReader = Archive(file.canonicalPath)
-          ).also {
-            Log.e(TAG, "create: ${file.path}")
+          when {
+            file != null -> createArchiveWithFile(file)
+            assetFileDescriptor != null -> {
+              createArchiveWithAssetFileDescriptor(assetFileDescriptor, assetDescriptorFilePath)
+            }
+
+            else -> null
           }
         } catch (ignore: JNIKiwixException) {
           null
@@ -84,15 +90,33 @@ class ZimFileReader constructor(
           null
         }
 
-      override fun create(
+      private fun createArchiveWithFile(file: File): ZimFileReader? =
+        if (file.isFileExist()) {
+          ZimFileReader(
+            zimFile = file,
+            nightModeConfig = nightModeConfig,
+            jniKiwixReader = Archive(file.canonicalPath)
+          ).also {
+            Log.e(TAG, "create: ${file.path}")
+          }
+        } else {
+          Log.e(
+            TAG,
+            "Error in creating ZimFileReader," +
+              " because file does not exist on path: ${file.path}"
+          )
+          null
+        }
+
+      private fun createArchiveWithAssetFileDescriptor(
         assetFileDescriptor: AssetFileDescriptor,
-        filePath: String?
+        assetFileDescriptorPath: String?
       ): ZimFileReader? =
-        try {
+        if (assetFileDescriptor.parcelFileDescriptor.dup().fileDescriptor.valid()) {
           ZimFileReader(
             null,
             assetFileDescriptor,
-            assetDescriptorFilePath = filePath,
+            assetDescriptorFilePath = assetFileDescriptorPath,
             nightModeConfig = nightModeConfig,
             jniKiwixReader = Archive(
               assetFileDescriptor.parcelFileDescriptor.dup().fileDescriptor,
@@ -100,11 +124,14 @@ class ZimFileReader constructor(
               assetFileDescriptor.length
             )
           ).also {
-            Log.e(TAG, "create: with fileDescriptor")
+            Log.e(TAG, "created: with assetFileDescriptor $assetFileDescriptor}")
           }
-        } catch (ignore: JNIKiwixException) {
-          null
-        } catch (ignore: Exception) { // for handing the error, if any zim file is corrupted
+        } else {
+          Log.e(
+            TAG,
+            "Error in creating ZimFileReader," +
+              " because provided assetFileDescriptor is not valid"
+          )
           null
         }
     }
@@ -162,6 +189,15 @@ class ZimFileReader constructor(
       Log.e(TAG, "Unable to find the article count $unsatisfiedLinkError")
       null
     }
+
+  /**
+   * Return the zimFile path if opened from file else return the filePath of assetFileDescriptor
+   */
+  val zimCanonicalPath
+    get() = zimFile?.canonicalPath ?: assetDescriptorFilePath
+
+  val isValidZimFileReader
+    get() = zimFile != null || assetFileDescriptor != null
 
   fun searchSuggestions(prefix: String): SuggestionSearch? =
     try {

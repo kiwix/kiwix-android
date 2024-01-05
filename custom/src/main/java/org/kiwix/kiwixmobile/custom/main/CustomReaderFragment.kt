@@ -181,11 +181,7 @@ class CustomReaderFragment : CoreReaderFragment() {
       onFilesFound = {
         when (it) {
           is ValidationState.HasFile -> {
-            if (it.assetFileDescriptor != null) {
-              openZimFile(null, true, it.assetFileDescriptor)
-            } else {
-              openZimFile(it.file, true)
-            }
+            openZimFile(it.file, true, it.assetFileDescriptor)
             // Save book in the database to display it in `ZimHostFragment`.
             zimReaderContainer?.zimFileReader?.let { zimFileReader ->
               // Check if the file is not null. If the file is null,

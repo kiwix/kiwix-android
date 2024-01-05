@@ -60,7 +60,7 @@ data class DeleteFiles(private val booksOnDiskListItems: List<BookOnDisk>) :
     return fold(true) { acc, book ->
       acc && deleteSpecificZimFile(book).also {
         if (it && book.file.canonicalPath == zimReaderContainer.zimCanonicalPath) {
-          zimReaderContainer.setZimFile(null)
+          zimReaderContainer.setZimFileOrFileDescriptor(null)
         }
       }
     }

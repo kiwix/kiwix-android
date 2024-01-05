@@ -51,7 +51,7 @@ data class BookmarkItem(
   ) : this(
     zimId = zimFileReader.id,
     zimName = zimFileReader.name,
-    zimFilePath = zimFileReader.zimFile?.canonicalPath ?: zimFileReader.assetDescriptorFilePath,
+    zimFilePath = zimFileReader.zimCanonicalPath,
     bookmarkUrl = url,
     title = title,
     favicon = zimFileReader.favicon
