@@ -24,6 +24,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
@@ -64,14 +65,21 @@ class ZimHostRobot : BaseRobot() {
   }
 
   fun clickOnTestZim() {
+    pauseForBetterTestPerformance()
     clickOn(Text("Test_Zim"))
   }
 
   fun startServer() {
+    // stop the server if it is already running.
+    stopServerIfAlreadyStarted()
     clickOn(ViewId(R.id.startServerButton))
+    assetWifiDialogDisplayed()
+    onView(withText("PROCEED")).perform(click())
+  }
+
+  private fun assetWifiDialogDisplayed() {
     pauseForBetterTestPerformance()
-    isVisible(TextId(R.string.wifi_dialog_title))
-    clickOn(TextId(R.string.hotspot_dialog_neutral_button))
+    isVisible(Text("WiFi connection detected"))
   }
 
   fun assertServerStarted() {
@@ -110,7 +118,6 @@ class ZimHostRobot : BaseRobot() {
   }
 
   private fun selectZimFile(position: Int) {
-    pauseForBetterTestPerformance()
     try {
       onView(
         RecyclerViewMatcher(R.id.recyclerViewZimHost).atPositionOnView(
@@ -119,7 +126,6 @@ class ZimHostRobot : BaseRobot() {
         )
       ).check(matches(ViewMatchers.isChecked()))
     } catch (assertionError: AssertionFailedError) {
-      pauseForBetterTestPerformance()
       onView(
         RecyclerViewMatcher(R.id.recyclerViewZimHost).atPositionOnView(
           position,
@@ -148,6 +154,6 @@ class ZimHostRobot : BaseRobot() {
   }
 
   private fun pauseForBetterTestPerformance() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
   }
 }

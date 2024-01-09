@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Enable Wi-Fi on the emulator
+adb shell svc wifi enable
 adb logcat -c
 adb logcat ./*:E -v color &
 retry=0
@@ -11,6 +13,8 @@ do
   else
     adb kill-server
     adb start-server
+    # Enable Wi-Fi on the emulator
+    adb shell svc wifi enable
     adb logcat -c
     adb logcat ./*:E -v color &
     ./gradlew clean
