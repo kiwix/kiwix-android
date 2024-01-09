@@ -174,7 +174,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     BaristaSleepInteractions.sleep(2000L)
     val actualDataAfterMigration =
       objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
-    assertEquals(1, actual.size)
+    assertEquals(2, actualDataAfterMigration.size)
     val existingItem =
       actualDataAfterMigration.find {
         it.url == existingBookmarkUrl && it.title == existingTitle

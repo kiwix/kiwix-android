@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.data.remote
 
+import android.util.Log
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
@@ -48,20 +49,32 @@ class ObjectBoxToLibkiwixMigrator {
     val bookMarksList = box.all
     bookMarksList.forEachIndexed { _, bookmarkEntity ->
       CoroutineScope(Dispatchers.IO).launch {
-        // for saving book to library, otherwise it does not save the favicon and zimFilePath in library.
-        val libkiwixBook = Book().apply {
-          update(Archive(bookmarkEntity.zimFilePath))
+        // moving this to handle the exceptions thrown by the libkiwix if any occur,
+        // like if path is not validate due to user move the ZIM file to another location etc.
+        try {
+          // for saving book to library, otherwise it does not save the
+          // favicon and zimFilePath in library.
+          val libkiwixBook = Book().apply {
+            update(Archive(bookmarkEntity.zimFilePath))
+          }
+          libkiwixBookmarks.saveBookmark(LibkiwixBookmarkItem(bookmarkEntity, libkiwixBook))
+          // TODO should we remove data from objectBox?
+          // removing the single entity from the object box after migration.
+          // box.query {
+          //   equal(
+          //     BookmarkEntity_.bookmarkUrl,
+          //     bookmarkEntity.bookmarkUrl,
+          //     QueryBuilder.StringOrder.CASE_INSENSITIVE
+          //   )
+          // }.remove()
+        } catch (ignore: Exception) {
+          Log.e(
+            "MIGRATING_BOOKMARKS",
+            "there is an error while migrating the bookmark for\n" +
+              " ZIM file = ${bookmarkEntity.zimFilePath} \n" +
+              "Bookmark Title = ${bookmarkEntity.bookmarkTitle}"
+          )
         }
-        libkiwixBookmarks.saveBookmark(LibkiwixBookmarkItem(bookmarkEntity, libkiwixBook))
-        // TODO should we remove data from objectBox?
-        // removing the single entity from the object box after migration.
-        // box.query {
-        //   equal(
-        //     BookmarkEntity_.bookmarkUrl,
-        //     bookmarkEntity.bookmarkUrl,
-        //     QueryBuilder.StringOrder.CASE_INSENSITIVE
-        //   )
-        // }.remove()
       }
     }
     sharedPreferenceUtil.putPrefBookMarkMigrated(true)
