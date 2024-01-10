@@ -22,9 +22,8 @@ import android.util.Log
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
@@ -38,17 +37,19 @@ class ObjectBoxToLibkiwixMigrator {
   @Inject lateinit var boxStore: BoxStore
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   @Inject lateinit var libkiwixBookmarks: LibkiwixBookmarks
+  private val migrationMutex = Mutex()
 
-  fun migrateBookmarksToLibkiwix() {
+  suspend fun migrateBookmarksToLibkiwix() {
     CoreApp.coreComponent.inject(this)
     migrateBookMarks(boxStore.boxFor())
     // TODO we will migrate here for other entities
   }
 
-  fun migrateBookMarks(box: Box<BookmarkEntity>) {
+  suspend fun migrateBookMarks(box: Box<BookmarkEntity>) {
     val bookMarksList = box.all
-    bookMarksList.forEachIndexed { _, bookmarkEntity ->
-      CoroutineScope(Dispatchers.IO).launch {
+    // run migration with mutex to do the migration one by one.
+    migrationMutex.withLock {
+      bookMarksList.forEachIndexed { index, bookmarkEntity ->
         // moving this to handle the exceptions thrown by the libkiwix if any occur,
         // like if path is not validate due to user move the ZIM file to another location etc.
         try {
@@ -57,7 +58,10 @@ class ObjectBoxToLibkiwixMigrator {
           val libkiwixBook = Book().apply {
             update(Archive(bookmarkEntity.zimFilePath))
           }
-          libkiwixBookmarks.saveBookmark(LibkiwixBookmarkItem(bookmarkEntity, libkiwixBook))
+          libkiwixBookmarks.saveBookmark(
+            LibkiwixBookmarkItem(bookmarkEntity, libkiwixBook),
+            shouldWriteBookmarkToFile = index == bookMarksList.size - 1
+          )
           // TODO should we remove data from objectBox?
           // removing the single entity from the object box after migration.
           // box.query {

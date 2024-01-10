@@ -38,6 +38,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDirections
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
@@ -109,7 +112,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
     setMainActivityToCoreApp()
     if (!sharedPreferenceUtil.prefIsBookmarksMigrated) {
-      objectBoxToLibkiwixMigrator.migrateBookmarksToLibkiwix()
+      // run the migration on background thread to avoid any UI related issues.
+      CoroutineScope(Dispatchers.IO).launch {
+        objectBoxToLibkiwixMigrator.migrateBookmarksToLibkiwix()
+      }
     }
   }
 

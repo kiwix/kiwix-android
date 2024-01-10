@@ -49,6 +49,14 @@ class LibkiwixBookmarks @Inject constructor(
   val sharedPreferenceUtil: SharedPreferenceUtil
 ) : PageDao {
 
+  /**
+   * Request new data from Libkiwix when changes occur inside it; otherwise,
+   * return the previous data to avoid unnecessary data load on Libkiwix.
+   */
+  private var bookmarksChanged: Boolean = false
+  private var bookmarkList: List<LibkiwixBookmarkItem> = arrayListOf()
+  private var libraryBooksList: List<String> = arrayListOf()
+
   private val bookmarkListBehaviour: BehaviorSubject<List<LibkiwixBookmarkItem>>? by lazy {
     BehaviorSubject.createDefault(getBookmarksList())
   }
@@ -110,7 +118,15 @@ class LibkiwixBookmarks @Inject constructor(
       }
       .subscribeOn(Schedulers.io())
 
-  fun saveBookmark(libkiwixBookmarkItem: LibkiwixBookmarkItem) {
+  /**
+   * Saves bookmarks in libkiwix. The use of `shouldWriteBookmarkToFile` is primarily
+   * during data migration, where data is written to the file only once after all bookmarks
+   * have been added to libkiwix to optimize the process.
+   */
+  fun saveBookmark(
+    libkiwixBookmarkItem: LibkiwixBookmarkItem,
+    shouldWriteBookmarkToFile: Boolean = true
+  ) {
     if (!isBookMarkExist(libkiwixBookmarkItem)) {
       addBookToLibraryIfNotExist(libkiwixBookmarkItem.libKiwixBook)
       val bookmark = Bookmark().apply {
@@ -120,16 +136,24 @@ class LibkiwixBookmarks @Inject constructor(
         bookTitle = libkiwixBookmarkItem.libKiwixBook?.title ?: libkiwixBookmarkItem.zimId
       }
       library.addBookmark(bookmark).also {
-        writeBookMarksAndSaveLibraryToFile()
-        updateFlowableBookmarkList()
+        if (shouldWriteBookmarkToFile) {
+          writeBookMarksAndSaveLibraryToFile()
+          updateFlowableBookmarkList()
+        }
       }
     }
   }
 
   private fun addBookToLibraryIfNotExist(libKiwixBook: Book?) {
     libKiwixBook?.let { book ->
-      if (!library.booksIds.any { it == book.id }) {
+      if (libraryBooksList.isEmpty()) {
+        // store booksIds in a list to avoid multiple data call on libkiwix
+        libraryBooksList = library.booksIds.toList()
+      }
+      if (!libraryBooksList.any { it == book.id }) {
         library.addBook(libKiwixBook).also {
+          // now library has changed so update our library list.
+          libraryBooksList = library.booksIds.toList()
           if (BuildConfig.DEBUG) {
             Log.d(
               TAG,
@@ -145,7 +169,11 @@ class LibkiwixBookmarks @Inject constructor(
   }
 
   fun deleteBookmarks(bookmarks: List<LibkiwixBookmarkItem>) {
-    bookmarks.map { deleteBookmark(it.zimId, it.bookmarkUrl) }
+    bookmarks.map { library.removeBookmark(it.zimId, it.bookmarkUrl) }
+      .also {
+        writeBookMarksAndSaveLibraryToFile()
+        updateFlowableBookmarkList()
+      }
   }
 
   fun deleteBookmark(bookId: String, bookmarkUrl: String) {
@@ -167,14 +195,21 @@ class LibkiwixBookmarks @Inject constructor(
       // Save the bookmarks data to a separate file.
       library.writeBookmarksToFile(bookmarkFile.canonicalPath)
     }
+    // set the bookmark change to true so that libkiwix will return the new data.
+    bookmarksChanged = true
   }
 
+  @Suppress("ReturnCount")
   private fun getBookmarksList(): List<LibkiwixBookmarkItem> {
+    if (!bookmarksChanged && bookmarkList.isNotEmpty()) {
+      // No changes, return the cached data
+      return bookmarkList
+    }
     // Retrieve the list of bookmarks from the library, or return an empty list if it's null.
-    val bookmarkList = library.getBookmarks(false)?.toList() ?: return emptyList()
+    val bookmarkArray = library.getBookmarks(false)?.toList() ?: return bookmarkList
 
     // Create a list to store LibkiwixBookmarkItem objects.
-    return bookmarkList.mapNotNull { bookmark ->
+    bookmarkList = bookmarkArray.mapNotNull { bookmark ->
       // Check if the library contains the book associated with the bookmark.
       val book = if (library.booksIds.contains(bookmark.bookId)) {
         library.getBookById(bookmark.bookId)
@@ -200,8 +235,12 @@ class LibkiwixBookmarks @Inject constructor(
         bookmark,
         favicon,
         book?.path
-      )
+      ).also {
+        // set the bookmark change to false to avoid reloading the data from libkiwix
+        bookmarksChanged = false
+      }
     }
+    return bookmarkList
   }
 
   private fun isBookMarkExist(libkiwixBookmarkItem: LibkiwixBookmarkItem): Boolean =

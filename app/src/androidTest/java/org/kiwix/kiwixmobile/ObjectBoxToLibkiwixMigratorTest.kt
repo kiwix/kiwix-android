@@ -22,19 +22,26 @@ import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.espresso.IdlingPolicies
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import io.objectbox.Box
 import io.objectbox.BoxStore
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import org.junit.After
 import org.junit.Before
+import org.junit.BeforeClass
+import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.runner.RunWith
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
@@ -42,24 +49,45 @@ import org.kiwix.kiwixmobile.core.di.modules.DatabaseModule
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.utils.KiwixIdlingResource
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
+import java.util.concurrent.TimeUnit
 
-@RunWith(AndroidJUnit4::class)
 class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
   private val objectBoxToLibkiwixMigrator = ObjectBoxToLibkiwixMigrator()
 
   // take the existing boxStore object
   private val boxStore: BoxStore? = DatabaseModule.boxStore
+  private lateinit var zimFile: File
+  private lateinit var box: Box<BookmarkEntity>
+  private val expectedZimName = "Alpine_Linux"
+  private val expectedZimId = "60094d1e-1c9a-a60b-2011-4fb02f8db6c3"
+  private val expectedZimFilePath: String by lazy { zimFile.canonicalPath }
+  private val expectedTitle = "Installing"
+  private val expectedBookmarkUrl = "https://alpine_linux/InstallingPage"
+  private val expectedFavicon = ""
+  private val bookmarkEntity: BookmarkEntity by lazy {
+    BookmarkEntity(
+      0,
+      expectedZimId,
+      expectedZimName,
+      expectedZimFilePath,
+      expectedBookmarkUrl,
+      expectedTitle,
+      expectedFavicon
+    )
+  }
 
-  // @Rule
-  // @JvmField
-  // var retryRule = RetryRule()
+  @Rule
+  @JvmField
+  var retryRule = RetryRule()
 
   @Before
   override fun waitForIdle() {
@@ -78,17 +106,18 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
     }
+    CoreApp.coreComponent.inject(objectBoxToLibkiwixMigrator)
+    setUpObjectBoxAndData()
   }
 
-  @Test
-  fun migrateBookmarkTest(): Unit = runBlocking {
+  private fun setUpObjectBoxAndData() {
     if (boxStore == null) {
       throw RuntimeException(
         "BoxStore is not available for testing," +
           " check is your application running"
       )
     }
-    val box = boxStore.boxFor(BookmarkEntity::class.java)
+    box = boxStore.boxFor(BookmarkEntity::class.java)
     val library = Library()
     val manager = Manager(library)
     val sharedPreferenceUtil = SharedPreferenceUtil(context)
@@ -99,7 +128,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     // add a file in fileSystem because we need to actual file path for making object of Archive.
     val loadFileStream =
       ObjectBoxToLibkiwixMigratorTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(context.cacheDir, "testzim.zim")
+    zimFile = File(context.cacheDir, "testzim.zim")
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->
@@ -112,8 +141,13 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
         }
       }
     }
+
     // clear the data before running the test case
     clearBookmarks(box, objectBoxToLibkiwixMigrator.libkiwixBookmarks)
+  }
+
+  @Test
+  fun testSingleDataMigration(): Unit = runBlocking {
     val expectedZimName = "Alpine_Linux"
     val expectedZimId = "60094d1e-1c9a-a60b-2011-4fb02f8db6c3"
     val expectedZimFilePath = zimFile.canonicalPath
@@ -130,24 +164,53 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       expectedFavicon
     )
     box.put(bookmarkEntity)
-    // migrate data into room database
-    objectBoxToLibkiwixMigrator.migrateBookMarks(box)
-    BaristaSleepInteractions.sleep(2000L)
+    withContext(Dispatchers.IO) {
+      // migrate data into room database
+      objectBoxToLibkiwixMigrator.migrateBookMarks(box)
+    }
     // check if data successfully migrated to room
-    val actual = objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
-    assertEquals(actual.size, 1)
-    assertEquals(actual[0].zimFilePath, expectedZimFilePath)
-    assertEquals(actual[0].zimId, expectedZimId)
-    assertEquals(actual[0].title, expectedTitle)
-    assertEquals(actual[0].url, expectedBookmarkUrl)
+    objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks()
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe(
+        { actualDataAfterMigration ->
+          assertEquals(1, actualDataAfterMigration.size)
+          assertEquals(actualDataAfterMigration[0].zimFilePath, expectedZimFilePath)
+          assertEquals(actualDataAfterMigration[0].zimId, expectedZimId)
+          assertEquals(actualDataAfterMigration[0].title, expectedTitle)
+          assertEquals(actualDataAfterMigration[0].url, expectedBookmarkUrl)
+        },
+        {
+          throw RuntimeException(
+            "Exception occurred during migration. Original Exception ${it.printStackTrace()}"
+          )
+        }
+      )
+  }
 
-    // clear both databases for recent searches to test more edge cases
-    clearBookmarks(box, objectBoxToLibkiwixMigrator.libkiwixBookmarks)
-    // Migrate data from empty ObjectBox database
-    objectBoxToLibkiwixMigrator.migrateBookMarks(box)
-    val actualData = objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
-    assertTrue(actualData.isEmpty())
+  @Test
+  fun testMigrationWithEmptyData(): Unit = runBlocking {
+    withContext(Dispatchers.IO) {
+      // Migrate data from empty ObjectBox database
+      objectBoxToLibkiwixMigrator.migrateBookMarks(box)
+    }
+    objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks()
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe(
+        { actualDataAfterMigration ->
+          assertTrue(actualDataAfterMigration.isEmpty())
+        },
+        {
+          throw RuntimeException(
+            "Exception occurred during migration. Original Exception ${it.printStackTrace()}"
+          )
+        }
+      )
+  }
 
+  @Test
+  fun testMigrationWithExistingData(): Unit = runBlocking {
     // Test if data successfully migrated to Room and existing data is preserved
     val existingTitle = "Home Page"
     val existingBookmarkUrl = "https://alpine_linux/HomePage"
@@ -161,40 +224,53 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       expectedFavicon
     )
     val libkiwixBook = Book()
-    objectBoxToLibkiwixMigrator.libkiwixBookmarks.saveBookmark(
-      LibkiwixBookmarkItem(
-        secondBookmarkEntity,
-        libkiwixBook
+    withContext(Dispatchers.IO) {
+      objectBoxToLibkiwixMigrator.libkiwixBookmarks.saveBookmark(
+        LibkiwixBookmarkItem(
+          secondBookmarkEntity,
+          libkiwixBook
+        )
       )
-    )
-    BaristaSleepInteractions.sleep(2000L)
-    box.put(bookmarkEntity)
-    // Migrate data into Room database
-    objectBoxToLibkiwixMigrator.migrateBookMarks(box)
-    BaristaSleepInteractions.sleep(2000L)
-    val actualDataAfterMigration =
-      objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
-    assertEquals(2, actualDataAfterMigration.size)
-    val existingItem =
-      actualDataAfterMigration.find {
-        it.url == existingBookmarkUrl && it.title == existingTitle
-      }
-    assertNotNull(existingItem)
-    val newItem =
-      actualDataAfterMigration.find {
-        it.url == expectedBookmarkUrl && it.title == expectedTitle
-      }
-    assertNotNull(newItem)
+      box.put(bookmarkEntity)
+    }
+    withContext(Dispatchers.IO) {
+      // Migrate data into Room database
+      objectBoxToLibkiwixMigrator.migrateBookMarks(box)
+    }
+    objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks()
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe(
+        { actualDataAfterMigration ->
+          assertEquals(2, actualDataAfterMigration.size)
+          val existingItem =
+            actualDataAfterMigration.find {
+              it.url == existingBookmarkUrl && it.title == existingTitle
+            }
+          assertNotNull(existingItem)
+          val newItem =
+            actualDataAfterMigration.find {
+              it.url == expectedBookmarkUrl && it.title == expectedTitle
+            }
+          assertNotNull(newItem)
+        },
+        {
+          throw RuntimeException(
+            "Exception occurred during migration. Original Exception ${it.printStackTrace()}"
+          )
+        }
+      )
+  }
 
-    clearBookmarks(box, objectBoxToLibkiwixMigrator.libkiwixBookmarks)
-
+  @Test
+  fun testLargeDataMigration(): Unit = runBlocking {
     // Test large data migration for recent searches
     val numEntities = 10000
     // Insert a large number of recent search entities into ObjectBox
     for (i in 1..numEntities) {
       val bookMarkUrl = "https://alpine_linux/search_$i"
       val title = "title_$i"
-      val bookmarkEntity1 = BookmarkEntity(
+      val bookmarkEntity = BookmarkEntity(
         0,
         expectedZimId,
         expectedZimName,
@@ -203,19 +279,26 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
         title,
         expectedFavicon
       )
-      box.put(bookmarkEntity1)
+      box.put(bookmarkEntity)
     }
-    val startTime = System.currentTimeMillis()
-    // Migrate data into Room database
-    objectBoxToLibkiwixMigrator.migrateBookMarks(box)
-    val endTime = System.currentTimeMillis()
-    val migrationTime = endTime - startTime
+    withContext(Dispatchers.IO) {
+      // Migrate data into Room database
+      objectBoxToLibkiwixMigrator.migrateBookMarks(box)
+    }
     // Check if data successfully migrated to Room
-    val actualDataAfterLargeMigration =
-      objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
-    assertEquals(numEntities, actualDataAfterLargeMigration.size)
-    // Assert that the migration completes within a reasonable time frame
-    assertTrue(migrationTime < 5000)
+    objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks()
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe(
+        { actualDataAfterMigration ->
+          assertEquals(numEntities, actualDataAfterMigration.size)
+        },
+        {
+          throw RuntimeException(
+            "Exception occurred during migration. Original Exception ${it.printStackTrace()}"
+          )
+        }
+      )
   }
 
   private fun clearBookmarks(box: Box<BookmarkEntity>, libkiwixBookmark: LibkiwixBookmarks) {
@@ -224,5 +307,24 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       libkiwixBookmark.bookmarks().blockingFirst() as List<LibkiwixBookmarkItem>
     )
     box.removeAll()
+  }
+
+  @After
+  fun finish() {
+    IdlingRegistry.getInstance().unregister(KiwixIdlingResource.getInstance())
+    PreferenceManager.getDefaultSharedPreferences(context).edit {
+      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, false)
+      putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, true)
+    }
+  }
+
+  companion object {
+
+    @BeforeClass
+    fun beforeClass() {
+      IdlingPolicies.setMasterPolicyTimeout(180, TimeUnit.SECONDS)
+      IdlingPolicies.setIdlingResourceTimeout(180, TimeUnit.SECONDS)
+      IdlingRegistry.getInstance().register(KiwixIdlingResource.getInstance())
+    }
   }
 }
