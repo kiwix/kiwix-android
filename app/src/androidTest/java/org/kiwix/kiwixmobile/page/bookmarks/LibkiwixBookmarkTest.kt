@@ -34,7 +34,6 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections
-import org.kiwix.kiwixmobile.search.SearchFragmentTest
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import java.io.File
@@ -74,7 +73,7 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
       kiwixMainActivity.navigate(R.id.libraryFragment)
     }
     val loadFileStream =
-      SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
+      LibkiwixBookmarkTest::class.java.classLoader.getResourceAsStream("testzim.zim")
     val zimFile = File(context.cacheDir, "testzim.zim")
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()

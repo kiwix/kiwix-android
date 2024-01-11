@@ -55,13 +55,15 @@ class ObjectBoxToLibkiwixMigrator {
         try {
           // for saving book to library, otherwise it does not save the
           // favicon and zimFilePath in library.
+          val archive = Archive(bookmarkEntity.zimFilePath)
           val libkiwixBook = Book().apply {
-            update(Archive(bookmarkEntity.zimFilePath))
+            update(archive)
           }
           libkiwixBookmarks.saveBookmark(
             LibkiwixBookmarkItem(bookmarkEntity, libkiwixBook),
             shouldWriteBookmarkToFile = index == bookMarksList.size - 1
           )
+          archive.dispose()
           // TODO should we remove data from objectBox?
           // removing the single entity from the object box after migration.
           // box.query {
@@ -76,7 +78,8 @@ class ObjectBoxToLibkiwixMigrator {
             "MIGRATING_BOOKMARKS",
             "there is an error while migrating the bookmark for\n" +
               " ZIM file = ${bookmarkEntity.zimFilePath} \n" +
-              "Bookmark Title = ${bookmarkEntity.bookmarkTitle}"
+              "Bookmark Title = ${bookmarkEntity.bookmarkTitle} \n" +
+              "Original exception is = $ignore"
           )
         }
       }

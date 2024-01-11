@@ -140,17 +140,15 @@ class LibkiwixBookmarks @Inject constructor(
           writeBookMarksAndSaveLibraryToFile()
           updateFlowableBookmarkList()
         }
+        // dispose the bookmark
+        bookmark.dispose()
       }
     }
   }
 
   private fun addBookToLibraryIfNotExist(libKiwixBook: Book?) {
     libKiwixBook?.let { book ->
-      if (libraryBooksList.isEmpty()) {
-        // store booksIds in a list to avoid multiple data call on libkiwix
-        libraryBooksList = library.booksIds.toList()
-      }
-      if (!libraryBooksList.any { it == book.id }) {
+      if (!isBookAlreadyExistInLibrary(book.id)) {
         library.addBook(libKiwixBook).also {
           // now library has changed so update our library list.
           libraryBooksList = library.booksIds.toList()
@@ -166,6 +164,14 @@ class LibkiwixBookmarks @Inject constructor(
         }
       }
     }
+  }
+
+  private fun isBookAlreadyExistInLibrary(bookId: String): Boolean {
+    if (libraryBooksList.isEmpty()) {
+      // store booksIds in a list to avoid multiple data call on libkiwix
+      libraryBooksList = library.booksIds.toList()
+    }
+    return libraryBooksList.any { it == bookId }
   }
 
   fun deleteBookmarks(bookmarks: List<LibkiwixBookmarkItem>) {

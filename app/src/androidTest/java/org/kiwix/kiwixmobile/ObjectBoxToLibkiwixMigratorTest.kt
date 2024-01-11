@@ -38,6 +38,7 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -105,6 +106,9 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     }
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
+      onActivity {
+        it.navigate(R.id.libraryFragment)
+      }
     }
     CoreApp.coreComponent.inject(objectBoxToLibkiwixMigrator)
     setUpObjectBoxAndData()
@@ -143,7 +147,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     }
 
     // clear the data before running the test case
-    clearBookmarks(box, objectBoxToLibkiwixMigrator.libkiwixBookmarks)
+    clearBookmarks()
   }
 
   @Test
@@ -301,10 +305,11 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       )
   }
 
-  private fun clearBookmarks(box: Box<BookmarkEntity>, libkiwixBookmark: LibkiwixBookmarks) {
+  private fun clearBookmarks() {
     // delete bookmarks for testing other edge cases
-    libkiwixBookmark.deleteBookmarks(
-      libkiwixBookmark.bookmarks().blockingFirst() as List<LibkiwixBookmarkItem>
+    objectBoxToLibkiwixMigrator.libkiwixBookmarks.deleteBookmarks(
+      objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks()
+        .blockingFirst() as List<LibkiwixBookmarkItem>
     )
     box.removeAll()
   }
@@ -316,6 +321,12 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, false)
       putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, true)
     }
+  }
+
+  @AfterAll
+  fun deleteBookmarks() {
+    // Clear the bookmarks list from device to not affect the other test cases.
+    clearBookmarks()
   }
 
   companion object {
