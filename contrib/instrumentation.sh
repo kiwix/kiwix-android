@@ -3,7 +3,8 @@
 # Enable Wi-Fi on the emulator
 adb shell svc wifi enable
 adb logcat -c
-adb logcat ./*:E -v color &
+# shellcheck disable=SC2035
+adb logcat *:E -v color &
 retry=0
 while [ $retry -le 3 ]
 do
@@ -16,7 +17,8 @@ do
     # Enable Wi-Fi on the emulator
     adb shell svc wifi enable
     adb logcat -c
-    adb logcat ./*:E -v color &
+    # shellcheck disable=SC2035
+    adb logcat *:E -v color &
     ./gradlew clean
     retry=$(( retry + 1 ))
     if [ $retry -eq 3 ]; then
