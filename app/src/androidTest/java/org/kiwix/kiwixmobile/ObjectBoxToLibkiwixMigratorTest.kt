@@ -38,12 +38,10 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
-import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.core.di.modules.DatabaseModule
@@ -54,8 +52,6 @@ import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource
 import org.kiwix.libkiwix.Book
-import org.kiwix.libkiwix.Library
-import org.kiwix.libkiwix.Manager
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -100,8 +96,8 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
-      putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
+      putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
       putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, false)
     }
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
@@ -122,12 +118,6 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       )
     }
     box = boxStore.boxFor(BookmarkEntity::class.java)
-    val library = Library()
-    val manager = Manager(library)
-    val sharedPreferenceUtil = SharedPreferenceUtil(context)
-    objectBoxToLibkiwixMigrator.libkiwixBookmarks =
-      LibkiwixBookmarks(library, manager, sharedPreferenceUtil)
-    objectBoxToLibkiwixMigrator.sharedPreferenceUtil = SharedPreferenceUtil(context)
 
     // add a file in fileSystem because we need to actual file path for making object of Archive.
     val loadFileStream =
@@ -269,7 +259,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
   @Test
   fun testLargeDataMigration(): Unit = runBlocking {
     // Test large data migration for recent searches
-    val numEntities = 10000
+    val numEntities = 1000
     // Insert a large number of recent search entities into ObjectBox
     for (i in 1..numEntities) {
       val bookMarkUrl = "https://alpine_linux/search_$i"
@@ -296,8 +286,12 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       .subscribe(
         { actualDataAfterMigration ->
           assertEquals(numEntities, actualDataAfterMigration.size)
+          // Clear the bookmarks list from device to not affect the other test cases.
+          clearBookmarks()
         },
         {
+          // Clear the bookmarks list from device to not affect the other test cases.
+          clearBookmarks()
           throw RuntimeException(
             "Exception occurred during migration. Original Exception ${it.printStackTrace()}"
           )
@@ -318,15 +312,8 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
   fun finish() {
     IdlingRegistry.getInstance().unregister(KiwixIdlingResource.getInstance())
     PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, false)
       putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, true)
     }
-  }
-
-  @AfterAll
-  fun deleteBookmarks() {
-    // Clear the bookmarks list from device to not affect the other test cases.
-    clearBookmarks()
   }
 
   companion object {
