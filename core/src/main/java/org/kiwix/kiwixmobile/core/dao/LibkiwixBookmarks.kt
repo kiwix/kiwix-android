@@ -217,7 +217,7 @@ class LibkiwixBookmarks @Inject constructor(
     // Create a list to store LibkiwixBookmarkItem objects.
     bookmarkList = bookmarkArray.mapNotNull { bookmark ->
       // Check if the library contains the book associated with the bookmark.
-      val book = if (library.booksIds.contains(bookmark.bookId)) {
+      val book = if (isBookAlreadyExistInLibrary(bookmark.bookId)) {
         library.getBookById(bookmark.bookId)
       } else {
         if (BuildConfig.DEBUG) {

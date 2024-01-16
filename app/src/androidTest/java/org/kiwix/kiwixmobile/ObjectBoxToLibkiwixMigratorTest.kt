@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile
 
+import android.os.Build
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -259,22 +260,22 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
   @Test
   fun testLargeDataMigration(): Unit = runBlocking {
     // Test large data migration for recent searches
-    val numEntities = 1000
+    val numEntities = getSafeMigrationDataCount()
     // Insert a large number of recent search entities into ObjectBox
-    for (i in 1..numEntities) {
-      val bookMarkUrl = "https://alpine_linux/search_$i"
-      val title = "title_$i"
-      val bookmarkEntity = BookmarkEntity(
-        0,
-        expectedZimId,
-        expectedZimName,
-        expectedZimFilePath,
-        bookMarkUrl,
-        title,
-        expectedFavicon
-      )
-      box.put(bookmarkEntity)
-    }
+    (1..numEntities)
+      .asSequence()
+      .map {
+        BookmarkEntity(
+          0,
+          expectedZimId,
+          expectedZimName,
+          expectedZimFilePath,
+          "https://alpine_linux/search_$it",
+          "title_$it",
+          expectedFavicon
+        )
+      }
+      .forEach(box::put)
     withContext(Dispatchers.IO) {
       // Migrate data into Room database
       objectBoxToLibkiwixMigrator.migrateBookMarks(box)
@@ -298,6 +299,18 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
         }
       )
   }
+
+  /**
+   * Retrieves the count of migration data, limiting the process on Android API level 24 due to its
+   * constrained `local reference table` size, which has a limit of 512 entries. The limitation is
+   * imposed because libkiwix returns all bookmarks at once, and there is no available method to
+   * retrieve a subset of bookmarks from the library.
+   *
+   * On Android versions newer than Nougat (API level 24), the count is set to 10,000. On older versions,
+   * it's set to 500 to avoid potential `local reference table` overflow issues.
+   */
+  private fun getSafeMigrationDataCount(): Int =
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) 10000 else 500
 
   private fun clearBookmarks() {
     // delete bookmarks for testing other edge cases
