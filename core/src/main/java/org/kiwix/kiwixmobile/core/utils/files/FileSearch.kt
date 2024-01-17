@@ -71,8 +71,25 @@ class FileSearch @Inject constructor(private val context: Context) {
   private fun directoryRoots() =
     StorageDeviceUtils.getReadableStorage(context).map(StorageDevice::name)
 
-  private fun scanDirectory(directory: String): List<File> =
-    File(directory).walk().filter { it.extension.isAny(*zimFileExtensions) }.toList()
+  private fun scanDirectory(directory: String): List<File> {
+    return File(directory).walk()
+      .onEnter { dir ->
+        // Excluding the "data," "obb," and "Trash" folders from scanning is justified for
+        // several reasons. The "Trash" folder contains deleted files,
+        // making it unnecessary for scanning. Additionally,
+        // the "data" and "obb" folders are specifically designed for the
+        // app's private directory, and users usually do not store ZIM files there.
+        // Most file managers prohibit direct copying of files into these directories.
+        // Therefore, scanning these folders is not essential. Moreover,
+        // such scans consume time, given the presence of numerous files written by other apps,
+        // which are irrelevant to our application.
+        !dir.name.equals(".Trash", ignoreCase = true) &&
+          !dir.name.equals("data", ignoreCase = true) &&
+          !dir.name.equals("obb", ignoreCase = true)
+      }.filter {
+        it.extension.isAny(*zimFileExtensions)
+      }.toList()
+  }
 }
 
 internal fun String.isAny(vararg suffixes: String) =
