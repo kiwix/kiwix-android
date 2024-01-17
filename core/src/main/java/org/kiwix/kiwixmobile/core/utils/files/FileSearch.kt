@@ -35,9 +35,10 @@ class FileSearch @Inject constructor(private val context: Context) {
 
   private val zimFileExtensions = arrayOf("zim", "zimaa")
 
-  fun scan(): Flowable<List<File>> =
+  fun scan(scanningProgressListener: ScanningProgressListener): Flowable<List<File>> =
     Flowable.combineLatest(
-      Flowable.fromCallable(::scanFileSystem).subscribeOn(Schedulers.io()),
+      Flowable.fromCallable { scanFileSystem(scanningProgressListener) }
+        .subscribeOn(Schedulers.io()),
       Flowable.fromCallable(::scanMediaStore).subscribeOn(Schedulers.io()),
       BiFunction<List<File>, List<File>, List<File>> { filesSystemFiles, mediaStoreFiles ->
         filesSystemFiles + mediaStoreFiles
@@ -61,12 +62,23 @@ class FileSearch @Inject constructor(private val context: Context) {
       null
     )
 
-  private fun scanFileSystem() =
-    directoryRoots()
-      .fold(mutableListOf<File>(), { acc, root ->
-        acc.apply { addAll(scanDirectory(root)) }
-      })
-      .distinctBy { it.canonicalPath }
+  private fun scanFileSystem(scanningProgressListener: ScanningProgressListener): List<File> {
+    val directoryRoots = directoryRoots()
+    val totalDirectories = directoryRoots.size
+    var processedDirectories = 0
+
+    return directoryRoots.fold(mutableListOf<File>()) { acc, root ->
+      acc.apply {
+        addAll(
+          scanDirectory(root).also {
+            // Increment the count of processed directories and notify the progress
+            processedDirectories++
+            scanningProgressListener.onProgressUpdate(processedDirectories, totalDirectories)
+          }
+        )
+      }
+    }.distinctBy { it.canonicalPath }
+  }
 
   private fun directoryRoots() =
     StorageDeviceUtils.getReadableStorage(context).map(StorageDevice::name)

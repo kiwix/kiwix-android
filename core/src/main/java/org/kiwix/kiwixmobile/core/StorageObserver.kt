@@ -25,6 +25,7 @@ import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.files.FileSearch
+import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import java.io.File
 import javax.inject.Inject
@@ -35,12 +36,16 @@ class StorageObserver @Inject constructor(
   private val zimReaderFactory: ZimFileReader.Factory
 ) {
 
-  val booksOnFileSystem: Flowable<List<BookOnDisk>>
-    get() = scanFiles()
+  fun getBooksOnFileSystem(
+    scanningProgressListener: ScanningProgressListener
+  ): Flowable<List<BookOnDisk>> {
+    return scanFiles(scanningProgressListener)
       .withLatestFrom(downloadDao.downloads(), BiFunction(::toFilesThatAreNotDownloading))
       .map { it.mapNotNull(::convertToBookOnDisk) }
+  }
 
-  private fun scanFiles() = fileSearch.scan().subscribeOn(Schedulers.io())
+  private fun scanFiles(scanningProgressListener: ScanningProgressListener) =
+    fileSearch.scan(scanningProgressListener).subscribeOn(Schedulers.io())
 
   private fun toFilesThatAreNotDownloading(files: List<File>, downloads: List<DownloadModel>) =
     files.filter { fileHasNoMatchingDownload(downloads, it) }
