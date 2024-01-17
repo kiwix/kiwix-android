@@ -33,6 +33,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.files.FileSearch
+import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
 import org.kiwix.sharedFunctions.book
 import org.kiwix.sharedFunctions.bookOnDisk
 import org.kiwix.sharedFunctions.resetSchedulers
@@ -48,6 +49,7 @@ class StorageObserverTest {
   private val file: File = mockk()
   private val readerFactory: Factory = mockk()
   private val zimFileReader: ZimFileReader = mockk()
+  private val scanningProgressListener: ScanningProgressListener = mockk()
 
   private val files: PublishProcessor<List<File>> = PublishProcessor.create()
   private val downloads: PublishProcessor<List<DownloadModel>> = PublishProcessor.create()
@@ -66,7 +68,7 @@ class StorageObserverTest {
   @BeforeEach fun init() {
     clearAllMocks()
     every { sharedPreferenceUtil.prefStorage } returns "a"
-    every { fileSearch.scan() } returns files
+    every { fileSearch.scan(scanningProgressListener) } returns files
     every { downloadDao.downloads() } returns downloads
     every { readerFactory.create(file) } returns zimFileReader
     storageObserver = StorageObserver(downloadDao, fileSearch, readerFactory)
@@ -92,7 +94,7 @@ class StorageObserverTest {
     verify { zimFileReader.dispose() }
   }
 
-  private fun booksOnFileSystem() = storageObserver.booksOnFileSystem
+  private fun booksOnFileSystem() = storageObserver.getBooksOnFileSystem(scanningProgressListener)
     .test()
     .also {
       downloads.offer(listOf(downloadModel))
