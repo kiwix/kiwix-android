@@ -2101,21 +2101,15 @@ abstract class CoreReaderFragment :
       {
         if (isOpenNewTabInBackground) {
           newTabInBackground(url)
-          snackBarRoot?.let {
-            Snackbar.make(it, R.string.new_tab_snack_bar, Snackbar.LENGTH_LONG)
-              .setAction(getString(R.string.open)) {
-                if (webViewList.size > 1) selectTab(
-                  webViewList.size - 1
-                )
-              }
-              .setActionTextColor(
-                ContextCompat.getColor(
-                  requireActivity(),
-                  R.color.alabaster_white
-                )
+          snackBarRoot?.snack(
+            stringId = R.string.new_tab_snack_bar,
+            actionStringId = R.string.open,
+            actionClick = {
+              if (webViewList.size > 1) selectTab(
+                webViewList.size - 1
               )
-              .show()
-          }
+            }
+          )
         } else {
           newTab(url)
         }
