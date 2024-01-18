@@ -28,6 +28,20 @@ import com.google.android.material.snackbar.Snackbar
 @SuppressLint("ShowToast")
 fun View.snack(
   stringId: Int,
+  actionStringId: Int? = null,
+  actionClick: (() -> Unit)? = null,
+) {
+  Snackbar.make(
+    this, stringId, Snackbar.LENGTH_LONG
+  ).apply {
+    actionStringId?.let { setAction(it) { actionClick?.invoke() } }
+    show()
+  }
+}
+
+@SuppressLint("ShowToast")
+fun View.snack(
+  stringId: Int,
   anchor: View? = null,
   actionStringId: Int? = null,
   actionClick: (() -> Unit)? = null,
@@ -69,8 +83,4 @@ fun View.snack(
       }
     })
   }.show()
-}
-
-fun View.snack(stringId: Int) {
-  snack(stringId, null, null)
 }

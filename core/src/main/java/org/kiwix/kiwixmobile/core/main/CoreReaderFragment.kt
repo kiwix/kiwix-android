@@ -1686,11 +1686,7 @@ abstract class CoreReaderFragment :
               actionClick = {
                 goToBookmarks()
                 Unit
-              },
-              actionTextColor = ContextCompat.getColor(
-                requireActivity(),
-                R.color.alabaster_white
-              )
+              }
             )
           }
         } ?: kotlin.run {
