@@ -28,30 +28,16 @@ import com.google.android.material.snackbar.Snackbar
 @SuppressLint("ShowToast")
 fun View.snack(
   stringId: Int,
-  actionStringId: Int? = null,
-  actionClick: (() -> Unit)? = null,
-) {
-  Snackbar.make(
-    this, stringId, Snackbar.LENGTH_LONG
-  ).apply {
-    actionStringId?.let { setAction(it) { actionClick?.invoke() } }
-    show()
-  }
-}
-
-@SuppressLint("ShowToast")
-fun View.snack(
-  stringId: Int,
   anchor: View? = null,
   actionStringId: Int? = null,
   actionClick: (() -> Unit)? = null,
-  @ColorInt actionTextColor: Int = Color.WHITE
+  @ColorInt actionTextColor: Int? = null
 ) {
   Snackbar.make(
     this, stringId, Snackbar.LENGTH_LONG
   ).apply {
     actionStringId?.let { setAction(it) { actionClick?.invoke() } }
-    setActionTextColor(actionTextColor)
+    actionTextColor?.let(::setActionTextColor)
     anchor?.let {
       anchorView = anchor
       addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
@@ -69,13 +55,13 @@ fun View.snack(
   anchor: View,
   actionStringId: Int? = null,
   actionClick: (() -> Unit)? = null,
-  @ColorInt actionTextColor: Int = Color.WHITE
+  @ColorInt actionTextColor: Int? = null
 ) {
   Snackbar.make(
     this, message, Snackbar.LENGTH_LONG
   ).apply {
     actionStringId?.let { setAction(it) { actionClick?.invoke() } }
-    setActionTextColor(actionTextColor)
+    actionTextColor?.let(::setActionTextColor)
     anchorView = anchor
     addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
       override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
