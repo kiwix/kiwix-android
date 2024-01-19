@@ -2236,7 +2236,7 @@ abstract class CoreReaderFragment :
     }
 
   private fun setActionAndStartTTSService(action: String, isPauseTTS: Boolean = false) {
-    requireActivity().startService(
+    activity?.startService(
       createReadAloudIntent(action, isPauseTTS)
     ).also {
       isReadAloudServiceRunning = action == ACTION_PAUSE_OR_RESUME_TTS
