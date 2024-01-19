@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.extensions
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.view.View
 import androidx.annotation.ColorInt
 import com.google.android.material.snackbar.BaseTransientBottomBar
