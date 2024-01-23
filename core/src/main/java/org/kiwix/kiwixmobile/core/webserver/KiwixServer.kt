@@ -51,15 +51,9 @@ class KiwixServer @Inject constructor(
           val book = Book().apply {
             // Determine whether to create an Archive from an asset or a file path
             val archive = if (path == getDemoFilePathForCustomApp(context)) {
-              // For custom apps using a demo file, create an Archive with FileDescriptor
-              val assetFileDescriptor = zimReaderContainer.zimFileReader?.assetFileDescriptor
-              val startOffset = assetFileDescriptor?.startOffset ?: 0L
-              val size = assetFileDescriptor?.length ?: 0L
-              Archive(
-                assetFileDescriptor?.parcelFileDescriptor?.dup()?.fileDescriptor,
-                startOffset,
-                size
-              )
+              // For custom apps using a demo file, so get the existing archive from there
+              val zimReaderSource = zimReaderContainer.zimFileReader?.zimReaderSource
+              zimReaderSource?.createArchive()
             } else {
               // For regular files, create an Archive from the file path
               Archive(path)

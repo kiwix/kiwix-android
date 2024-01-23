@@ -26,7 +26,6 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.content.res.AssetFileDescriptor
 import android.content.res.Configuration
 import android.graphics.Canvas
 import android.media.AudioManager
@@ -114,7 +113,6 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigatio
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.findFirstTextView
 import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
-import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -136,6 +134,7 @@ import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_P
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_STOP_TTS
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getToolbarHeight
@@ -162,7 +161,6 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import org.kiwix.libkiwix.Book
-import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -326,11 +324,11 @@ abstract class CoreReaderFragment :
   private var tts: KiwixTextToSpeech? = null
   private var compatCallback: CompatFindActionModeCallback? = null
   private var tabsAdapter: TabsAdapter? = null
-  private var file: File? = null
+  private var zimReaderSource: ZimReaderSource? = null
   private var actionMode: ActionMode? = null
   private var tempWebViewForUndo: KiwixWebView? = null
   private var tempWebViewListForUndo: MutableList<KiwixWebView> = ArrayList()
-  private var tempZimFileForUndo: File? = null
+  private var tempZimSourceForUndo: ZimReaderSource? = null
   private var isFirstRun = false
   private var tableDrawerAdapter: TableDrawerAdapter? = null
   private var tableDrawerRight: RecyclerView? = null
@@ -1192,7 +1190,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun closeTab(index: Int) {
-    tempZimFileForUndo = zimReaderContainer?.zimFile
+    tempZimSourceForUndo = zimReaderContainer?.zimReaderSource
     tempWebViewForUndo = webViewList[index]
     webViewList.removeAt(index)
     if (index <= currentWebViewIndex && currentWebViewIndex > 0) {
@@ -1221,7 +1219,7 @@ abstract class CoreReaderFragment :
       reopenBook()
     }
     tempWebViewForUndo?.let {
-      zimReaderContainer?.setZimFile(tempZimFileForUndo)
+      zimReaderContainer?.setZimReaderSource(tempZimSourceForUndo)
       webViewList.add(index, it)
       tabsAdapter?.notifyDataSetChanged()
       snackBarRoot?.let { root ->
@@ -1470,32 +1468,20 @@ abstract class CoreReaderFragment :
     externalLinkOpener?.openExternalUrl(intent)
   }
 
-  protected fun openZimFile(
-    file: File?,
-    isCustomApp: Boolean = false,
-    assetFileDescriptor: AssetFileDescriptor? = null,
-    filePath: String? = null
-  ) {
+  protected fun openZimFile(zimReaderSource: ZimReaderSource, isCustomApp: Boolean = false) {
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || isCustomApp) {
-      if (file?.isFileExist() == true) {
+      if (zimReaderSource.canOpenInLibkiwix()) {
         // Show content if there is `Open Library` button showing
         // and we are opening the ZIM file
         reopenBook()
-        openAndSetInContainer(file = file)
-        updateTitle()
-      } else if (assetFileDescriptor != null) {
-        reopenBook()
-        openAndSetInContainer(
-          assetFileDescriptor = assetFileDescriptor,
-          filePath = filePath
-        )
+        openAndSetInContainer(zimReaderSource)
         updateTitle()
       } else {
-        Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file?.absolutePath)
+        Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + zimReaderSource.toDatabase())
         requireActivity().toast(R.string.error_file_not_found, Toast.LENGTH_LONG)
       }
     } else {
-      this.file = file
+      this.zimReaderSource = zimReaderSource
       requestExternalStoragePermission()
     }
   }
@@ -1518,27 +1504,16 @@ abstract class CoreReaderFragment :
     )
   }
 
-  private fun openAndSetInContainer(
-    file: File? = null,
-    assetFileDescriptor: AssetFileDescriptor? = null,
-    filePath: String? = null
-  ) {
+  private fun openAndSetInContainer(zimReaderSource: ZimReaderSource) {
     try {
-      if (isNotPreviouslyOpenZim(file?.canonicalPath)) {
+      if (isNotPreviouslyOpenZim(zimReaderSource)) {
         webViewList.clear()
       }
     } catch (e: IOException) {
       e.printStackTrace()
     }
     zimReaderContainer?.let { zimReaderContainer ->
-      if (assetFileDescriptor != null) {
-        zimReaderContainer.setZimFileDescriptor(
-          assetFileDescriptor,
-          filePath = filePath
-        )
-      } else {
-        zimReaderContainer.setZimFile(file)
-      }
+      zimReaderContainer.setZimReaderSource(zimReaderSource)
 
       val zimFileReader = zimReaderContainer.zimFileReader
       zimFileReader?.let { zimFileReader ->
@@ -1574,8 +1549,8 @@ abstract class CoreReaderFragment :
     bookmarkingDisposable?.dispose()
   }
 
-  private fun isNotPreviouslyOpenZim(canonicalPath: String?): Boolean =
-    canonicalPath != null && canonicalPath != zimReaderContainer?.zimCanonicalPath
+  private fun isNotPreviouslyOpenZim(zimReaderSource: ZimReaderSource?): Boolean =
+    zimReaderSource != null && zimReaderSource != zimReaderContainer?.zimReaderSource
 
   override fun onRequestPermissionsResult(
     requestCode: Int,
@@ -1585,7 +1560,7 @@ abstract class CoreReaderFragment :
     when (requestCode) {
       REQUEST_STORAGE_PERMISSION -> {
         if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-          file?.let(::openZimFile)
+          zimReaderSource?.let(::openZimFile)
         } else {
           snackBarRoot?.let { snackBarRoot ->
             Snackbar.make(snackBarRoot, R.string.request_storage, Snackbar.LENGTH_LONG)
@@ -1611,7 +1586,7 @@ abstract class CoreReaderFragment :
   @OnClick(R2.id.tab_switcher_close_all_tabs)
   fun closeAllTabs() {
     closeAllTabsButton?.rotate()
-    tempZimFileForUndo = zimReaderContainer?.zimFile
+    tempZimSourceForUndo = zimReaderContainer?.zimReaderSource
     tempWebViewListForUndo.apply {
       clear()
       addAll(webViewList)
@@ -1632,7 +1607,7 @@ abstract class CoreReaderFragment :
 
   private fun restoreDeletedTabs() {
     if (tempWebViewListForUndo.isNotEmpty()) {
-      zimReaderContainer?.setZimFile(tempZimFileForUndo)
+      zimReaderContainer?.setZimReaderSource(tempZimSourceForUndo)
       webViewList.addAll(tempWebViewListForUndo)
       tabsAdapter?.notifyDataSetChanged()
       snackBarRoot?.let { root ->
@@ -1956,7 +1931,7 @@ abstract class CoreReaderFragment :
       urls.put(view.url)
       positions.put(view.scrollY)
     }
-    editor.putString(TAG_CURRENT_FILE, zimReaderContainer?.zimCanonicalPath)
+    editor.putString(TAG_CURRENT_FILE, zimReaderContainer?.zimReaderSource?.toDatabase())
     editor.putString(TAG_CURRENT_ARTICLES, "$urls")
     editor.putString(TAG_CURRENT_POSITIONS, "$positions")
     editor.putInt(TAG_CURRENT_TAB, currentWebViewIndex)
@@ -1968,7 +1943,8 @@ abstract class CoreReaderFragment :
     saveTabStates()
     Log.d(
       TAG_KIWIX,
-      "onPause Save current zim file to preferences: " + zimReaderContainer?.zimCanonicalPath
+      "onPause Save current zim file to preferences: " +
+        "${zimReaderContainer?.zimReaderSource?.toDatabase()}"
     )
   }
 

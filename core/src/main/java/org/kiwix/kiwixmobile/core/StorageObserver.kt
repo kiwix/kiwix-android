@@ -24,6 +24,7 @@ import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.ZimFile
 import org.kiwix.kiwixmobile.core.utils.files.FileSearch
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
@@ -54,6 +55,6 @@ class StorageObserver @Inject constructor(
     downloads.firstOrNull { file.absolutePath.endsWith(it.fileNameFromUrl) } == null
 
   private fun convertToBookOnDisk(file: File) =
-    zimReaderFactory.create(file)
-      ?.let { zimFileReader -> BookOnDisk(file, zimFileReader).also { zimFileReader.dispose() } }
+    zimReaderFactory.create(ZimFile(file))
+      ?.let { zimFileReader -> BookOnDisk(zimFileReader).also { zimFileReader.dispose() } }
 }

@@ -77,7 +77,7 @@ class ObjectBoxToLibkiwixMigrator {
           Log.e(
             "MIGRATING_BOOKMARKS",
             "there is an error while migrating the bookmark for\n" +
-              " ZIM file = ${bookmarkEntity.zimFilePath} \n" +
+              " ZIM file = ${bookmarkEntity.zimReaderSource.toDatabase()} \n" +
               "Bookmark Title = ${bookmarkEntity.bookmarkTitle} \n" +
               "Original exception is = $ignore"
           )
