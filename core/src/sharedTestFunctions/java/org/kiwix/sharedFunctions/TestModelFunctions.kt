@@ -34,6 +34,8 @@ import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.FileElement
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.Pieces
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.Url
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.ZimFile
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import java.io.File
@@ -42,8 +44,8 @@ import java.util.LinkedList
 fun bookOnDisk(
   databaseId: Long = 0L,
   book: Book = book(),
-  file: File = File("")
-) = BookOnDisk(databaseId, book, file)
+  zimReaderSource: ZimReaderSource = ZimFile(File(""))
+) = BookOnDisk(databaseId, book, zimReaderSource)
 
 fun downloadModel(
   databaseId: Long = 1L,
@@ -175,7 +177,7 @@ fun recentSearchEntity(
 
 fun bookOnDiskEntity(
   id: Long = 0,
-  file: File = File(""),
+  zimReaderSource: ZimReaderSource = ZimFile(File("")),
   bookId: String = "",
   title: String = "",
   description: String = "",
@@ -193,7 +195,7 @@ fun bookOnDiskEntity(
 ) =
   BookOnDiskEntity(
     id,
-    file,
+    zimReaderSource,
     bookId,
     title,
     description,

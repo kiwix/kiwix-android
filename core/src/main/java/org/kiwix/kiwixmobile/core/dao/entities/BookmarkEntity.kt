@@ -17,16 +17,19 @@
  */
 package org.kiwix.kiwixmobile.core.dao.entities
 
+import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 @Entity
 data class BookmarkEntity(
   @Id var id: Long = 0,
   val zimId: String,
   var zimName: String,
-  var zimFilePath: String?,
+  @Convert(converter = ZimSourceConverter::class, dbType = String::class)
+  val zimReaderSource: ZimReaderSource,
   var bookmarkUrl: String,
   var bookmarkTitle: String,
   var favicon: String?
@@ -35,7 +38,7 @@ data class BookmarkEntity(
     item.databaseId,
     item.zimId,
     item.zimName,
-    item.zimFilePath,
+    item.zimReaderSource,
     item.bookmarkUrl,
     item.title,
     item.favicon

@@ -27,6 +27,7 @@ import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteZims
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
@@ -59,17 +60,23 @@ data class DeleteFiles(private val booksOnDiskListItems: List<BookOnDisk>) :
   private fun List<BookOnDisk>.deleteAll(): Boolean {
     return fold(true) { acc, book ->
       acc && deleteSpecificZimFile(book).also {
-        if (it && book.file.canonicalPath == zimReaderContainer.zimCanonicalPath) {
-          zimReaderContainer.setZimFile(null)
+        if (it && book.zimReaderSource == zimReaderContainer.zimReaderSource) {
+          zimReaderContainer.setZimReaderSource(null)
         }
       }
     }
   }
 
   private fun deleteSpecificZimFile(book: BookOnDisk): Boolean {
-    val file = book.file
-    FileUtils.deleteZimFile(file.path)
-    if (file.isFileExist()) {
+    val file = when (val source = book.zimReaderSource) {
+      is ZimReaderSource.ZimFile -> source.file
+      else -> null
+    }
+    file?.let {
+      @Suppress("UnreachableCode")
+      FileUtils.deleteZimFile(it.path)
+    }
+    if (file?.isFileExist() == true) {
       return false
     }
     newBookDao.delete(book.databaseId)

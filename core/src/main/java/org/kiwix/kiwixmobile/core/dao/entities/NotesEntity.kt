@@ -18,15 +18,18 @@
 
 package org.kiwix.kiwixmobile.core.dao.entities
 
+import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 @Entity
 data class NotesEntity(
   @Id var id: Long = 0L,
   val zimId: String,
-  var zimFilePath: String?,
+  @Convert(converter = ZimSourceConverter::class, dbType = String::class)
+  var zimReaderSource: ZimReaderSource,
   val zimUrl: String,
   var noteTitle: String,
   var noteFilePath: String,
@@ -35,7 +38,7 @@ data class NotesEntity(
   constructor(item: NoteListItem) : this(
     id = item.databaseId,
     zimId = item.zimId,
-    zimFilePath = item.zimFilePath,
+    zimReaderSource = item.zimReaderSource,
     zimUrl = item.zimUrl,
     noteTitle = item.title,
     noteFilePath = item.noteFilePath,

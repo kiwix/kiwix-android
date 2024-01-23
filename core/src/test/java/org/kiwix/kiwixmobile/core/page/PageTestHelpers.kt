@@ -18,15 +18,17 @@
 
 package org.kiwix.kiwixmobile.core.page
 
+import io.mockk.mockk
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkState
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryState
 import org.kiwix.kiwixmobile.core.page.viewmodel.TestablePageState
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 data class PageImpl(
-  override val zimFilePath: String? = "zimFilePath",
+  override val zimReaderSource: ZimReaderSource? = mockk(),
   override val url: String = "url",
   override var isSelected: Boolean = false,
   override val id: Long = 0L,
@@ -46,7 +48,7 @@ fun historyItem(
     2,
     zimId,
     "zimName",
-    "zimFilePath",
+    mockk(),
     "favicon",
     "historyUrl",
     historyTitle,
@@ -76,7 +78,7 @@ fun bookmark(
   id: Long = 2,
   zimId: String = "zimId",
   zimName: String = "zimName",
-  zimFilePath: String = "zimFilePath",
+  zimReaderSource: ZimReaderSource = mockk(),
   bookmarkUrl: String = "bookmarkUrl",
   favicon: String = "favicon"
 ): LibkiwixBookmarkItem {
@@ -84,7 +86,8 @@ fun bookmark(
     id = id,
     zimId = zimId,
     zimName = zimName,
-    zimFilePath = zimFilePath,
+    zimFilePath = zimReaderSource.toDatabase(),
+    zimReaderSource = null,
     bookmarkUrl = bookmarkUrl,
     title = bookmarkTitle,
     isSelected = isSelected,
