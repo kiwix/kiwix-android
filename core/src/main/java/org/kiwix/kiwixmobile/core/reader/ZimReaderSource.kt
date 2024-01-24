@@ -25,6 +25,7 @@ import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.extensions.canReadFile
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getAssetFileDescriptorFromUri
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.isFileDescriptorCanOpenWithLibkiwix
 import org.kiwix.libzim.Archive
@@ -74,7 +75,7 @@ sealed class ZimReaderSource {
   }
 
   class ZimFile(val file: File) : ZimReaderSource() {
-    override fun exists() = file.exists()
+    override fun exists() = file.isFileExist()
     override fun canOpenInLibkiwix(): Boolean = file.canReadFile()
 
     override fun createArchive() = Archive(file.canonicalPath)
