@@ -64,7 +64,7 @@ internal class ShowDeleteBookmarksDialogTest {
     val showDeleteBookmarksDialog =
       ShowDeleteBookmarksDialog(
         effects,
-        bookmarkState(listOf(bookmark(isSelected = true))),
+        bookmarkState(listOf(bookmark(isSelected = true, zimReaderSource = mockk()))),
         newBookmarksDao
       )
     mockkActivityInjection(showDeleteBookmarksDialog)
@@ -77,7 +77,7 @@ internal class ShowDeleteBookmarksDialogTest {
     val showDeleteBookmarksDialog =
       ShowDeleteBookmarksDialog(
         effects,
-        bookmarkState(listOf(bookmark())),
+        bookmarkState(listOf(bookmark(zimReaderSource = mockk()))),
         newBookmarksDao
       )
     mockkActivityInjection(showDeleteBookmarksDialog)

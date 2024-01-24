@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.page
 
-import io.mockk.mockk
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkState
@@ -28,7 +27,7 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.TestablePageState
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 data class PageImpl(
-  override val zimReaderSource: ZimReaderSource? = mockk(),
+  override val zimReaderSource: ZimReaderSource?,
   override val url: String = "url",
   override var isSelected: Boolean = false,
   override val id: Long = 0L,
@@ -42,13 +41,14 @@ fun historyItem(
   dateString: String = "5 Jul 2020",
   isSelected: Boolean = false,
   id: Long = 2,
-  zimId: String = "zimId"
+  zimId: String = "zimId",
+  zimReaderSource: ZimReaderSource
 ): HistoryListItem.HistoryItem {
   return HistoryListItem.HistoryItem(
     2,
     zimId,
     "zimName",
-    mockk(),
+    zimReaderSource,
     "favicon",
     "historyUrl",
     historyTitle,
@@ -78,7 +78,7 @@ fun bookmark(
   id: Long = 2,
   zimId: String = "zimId",
   zimName: String = "zimName",
-  zimReaderSource: ZimReaderSource = mockk(),
+  zimReaderSource: ZimReaderSource,
   bookmarkUrl: String = "bookmarkUrl",
   favicon: String = "favicon"
 ): LibkiwixBookmarkItem {

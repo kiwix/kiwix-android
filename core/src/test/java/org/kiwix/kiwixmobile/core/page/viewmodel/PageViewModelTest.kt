@@ -45,6 +45,7 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteSelecte
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.PopFragmentBackstack
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.sharedFunctions.InstantExecutorExtension
@@ -116,26 +117,43 @@ internal class PageViewModelTest {
 
   @Test
   internal fun `OnItemClick selects item if one is selected`() {
-    val page = PageImpl(isSelected = true)
+    val zimReaderSource: ZimReaderSource = mockk()
+    val page = PageImpl(isSelected = true, zimReaderSource = zimReaderSource)
     viewModel.state.postValue(TestablePageState(listOf(page)))
     viewModel.actions.offer(OnItemClick(page))
-    viewModel.state.test().assertValue(TestablePageState(listOf(PageImpl())))
+    viewModel.state.test()
+      .assertValue(TestablePageState(listOf(PageImpl(zimReaderSource = zimReaderSource))))
   }
 
   @Test
   internal fun `OnItemClick offers OpenPage if none is selected`() {
-    viewModel.state.postValue(TestablePageState(listOf(PageImpl())))
-    viewModel.effects.test().also { viewModel.actions.offer(OnItemClick(PageImpl())) }
-      .assertValue(OpenPage(PageImpl(), zimReaderContainer))
-    viewModel.state.test().assertValue(TestablePageState(listOf(PageImpl())))
+    val zimReaderSource: ZimReaderSource = mockk()
+    viewModel.state.postValue(
+      TestablePageState(listOf(PageImpl(zimReaderSource = zimReaderSource)))
+    )
+    viewModel.effects.test()
+      .also { viewModel.actions.offer(OnItemClick(PageImpl(zimReaderSource = zimReaderSource))) }
+      .assertValue(OpenPage(PageImpl(zimReaderSource = zimReaderSource), zimReaderContainer))
+    viewModel.state.test()
+      .assertValue(TestablePageState(listOf(PageImpl(zimReaderSource = zimReaderSource))))
   }
 
   @Test
   internal fun `OnItemLongClick selects item if none is selected`() {
-    val page = PageImpl()
+    val zimReaderSource: ZimReaderSource = mockk()
+    val page = PageImpl(zimReaderSource = zimReaderSource)
     viewModel.state.postValue(TestablePageState(listOf(page)))
     viewModel.actions.offer(OnItemLongClick(page))
-    viewModel.state.test().assertValue(TestablePageState(listOf(PageImpl(isSelected = true))))
+    viewModel.state.test().assertValue(
+      TestablePageState(
+        listOf(
+          PageImpl(
+            isSelected = true,
+            zimReaderSource = zimReaderSource
+          )
+        )
+      )
+    )
   }
 
   @Test

@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.dao
 
+import android.util.Log
 import io.mockk.CapturingSlot
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -33,6 +34,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity_
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import java.util.concurrent.Callable
 
 internal class HistoryDaoTest {
@@ -48,6 +50,8 @@ internal class HistoryDaoTest {
   @Test
   fun deletePages() {
     val historyItem: HistoryListItem.HistoryItem = mockk(relaxed = true)
+    Log.e("HISTORY_ITEM", "deletePages: ${historyItem.zimReaderSource}")
+    print("HISTORY_ITEM = ${historyItem.zimReaderSource}")
     val historyItemList: List<HistoryListItem.HistoryItem> = listOf(historyItem)
     val pagesToDelete: List<Page> = historyItemList
     historyDao.deletePages(pagesToDelete)
@@ -76,6 +80,10 @@ internal class HistoryDaoTest {
     every { queryBuilder.build() } returns query
     every { historyItem.historyUrl } returns ""
     every { historyItem.dateString } returns ""
+    val zimReaderSource: ZimReaderSource = mockk(relaxed = true)
+    every { historyItem.zimReaderSource } returns zimReaderSource
+    print("HISTORY_ITEM = ${historyItem.zimReaderSource}")
+
     historyDao.saveHistory(historyItem)
     slot.captured.call()
     verify { query.remove() }
