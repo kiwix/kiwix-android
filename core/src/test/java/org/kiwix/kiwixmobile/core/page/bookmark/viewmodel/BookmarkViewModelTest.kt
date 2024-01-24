@@ -38,6 +38,7 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.setScheduler
@@ -85,8 +86,14 @@ internal class BookmarkViewModelTest {
 
   @Test
   fun `updatePages return state with bookmark items`() {
-    assertThat(viewModel.updatePages(bookmarkState(), UpdatePages(listOf(bookmark())))).isEqualTo(
-      bookmarkState(listOf(bookmark()))
+    val zimReaderSource: ZimReaderSource = mockk()
+    assertThat(
+      viewModel.updatePages(
+        bookmarkState(),
+        UpdatePages(listOf(bookmark(zimReaderSource = zimReaderSource)))
+      )
+    ).isEqualTo(
+      bookmarkState(listOf(bookmark(zimReaderSource = zimReaderSource)))
     )
   }
 
@@ -111,19 +118,40 @@ internal class BookmarkViewModelTest {
 
   @Test
   internal fun `updatePages returns state with updated items`() {
+    val zimReaderSource: ZimReaderSource = mockk()
     assertThat(
-      viewModel.updatePages(bookmarkState(), UpdatePages(listOf(bookmark())))
+      viewModel.updatePages(
+        bookmarkState(),
+        UpdatePages(listOf(bookmark(zimReaderSource = zimReaderSource)))
+      )
     ).isEqualTo(
-      bookmarkState(listOf(bookmark()))
+      bookmarkState(listOf(bookmark(zimReaderSource = zimReaderSource)))
     )
   }
 
   @Test
   internal fun `deselectAllPages deselects bookmarks items`() {
+    val zimReaderSource: ZimReaderSource = mockk()
     assertThat(
-      viewModel.deselectAllPages(bookmarkState(bookmarks = listOf(bookmark(isSelected = true))))
+      viewModel.deselectAllPages(
+        bookmarkState(
+          bookmarks = listOf(
+            bookmark(
+              isSelected = true,
+              zimReaderSource = zimReaderSource
+            )
+          )
+        )
+      )
     ).isEqualTo(
-      bookmarkState(bookmarks = listOf(bookmark(isSelected = false)))
+      bookmarkState(
+        bookmarks = listOf(
+          bookmark(
+            isSelected = false,
+            zimReaderSource = zimReaderSource
+          )
+        )
+      )
     )
   }
 
@@ -138,10 +166,14 @@ internal class BookmarkViewModelTest {
 
   @Test
   internal fun `copyWithNewItems returns state with copied items`() {
+    val zimReaderSource: ZimReaderSource = mockk()
     assertThat(
-      viewModel.copyWithNewItems(bookmarkState(), listOf(bookmark()))
+      viewModel.copyWithNewItems(
+        bookmarkState(),
+        listOf(bookmark(zimReaderSource = zimReaderSource))
+      )
     ).isEqualTo(
-      bookmarkState(listOf(bookmark()))
+      bookmarkState(listOf(bookmark(zimReaderSource = zimReaderSource)))
     )
   }
 }

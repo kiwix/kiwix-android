@@ -29,10 +29,10 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 internal class OpenPageTest {
-  private val page = PageImpl()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   val activity: CoreMainActivity = mockk()
   private val zimReaderSource: ZimReaderSource = mockk()
+  private val page = PageImpl(zimReaderSource = zimReaderSource)
 
   @BeforeEach
   internal fun setUp() {
