@@ -28,8 +28,9 @@ data class BookmarkEntity(
   @Id var id: Long = 0,
   val zimId: String,
   var zimName: String,
+  var zimFilePath: String?, // keep this to handle previously saved bookmarks
   @Convert(converter = ZimSourceConverter::class, dbType = String::class)
-  val zimReaderSource: ZimReaderSource,
+  var zimReaderSource: ZimReaderSource,
   var bookmarkUrl: String,
   var bookmarkTitle: String,
   var favicon: String?
@@ -38,6 +39,7 @@ data class BookmarkEntity(
     item.databaseId,
     item.zimId,
     item.zimName,
+    null, // pass null for new bookmarks
     item.zimReaderSource,
     item.bookmarkUrl,
     item.title,

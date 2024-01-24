@@ -25,6 +25,8 @@ import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity_
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import java.io.File
 import javax.inject.Inject
 
 class HistoryDao @Inject constructor(val box: Box<HistoryEntity>) : PageDao {
@@ -33,7 +35,15 @@ class HistoryDao @Inject constructor(val box: Box<HistoryEntity>) : PageDao {
     box.query {
       orderDesc(HistoryEntity_.timeStamp)
     }
-  ).map { it.map(::HistoryItem) }
+  ).map {
+    it.map { historyEntity ->
+      historyEntity.zimFilePath?.let { filePath ->
+        // set zimReaderSource for previously saved history items
+        historyEntity.zimReaderSource = ZimReaderSource.ZimFile(File(filePath))
+      }
+      HistoryItem(historyEntity)
+    }
+  }
 
   override fun pages(): Flowable<List<Page>> = history()
   override fun deletePages(pagesToDelete: List<Page>) =
