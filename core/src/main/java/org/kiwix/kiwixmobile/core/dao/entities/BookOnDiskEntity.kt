@@ -26,6 +26,7 @@ import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
+import java.io.File
 
 @Entity
 data class BookOnDiskEntity(
@@ -88,6 +89,6 @@ class ZimSourceConverter : PropertyConverter<ZimReaderSource, String> {
   override fun convertToDatabaseValue(entityProperty: ZimReaderSource?) =
     entityProperty?.toDatabase() ?: ""
 
-  override fun convertToEntityProperty(databaseValue: String?): ZimReaderSource? =
-    fromDatabaseValue(databaseValue)
+  override fun convertToEntityProperty(databaseValue: String?): ZimReaderSource =
+    fromDatabaseValue(databaseValue) ?: ZimReaderSource.ZimFile(File(""))
 }
