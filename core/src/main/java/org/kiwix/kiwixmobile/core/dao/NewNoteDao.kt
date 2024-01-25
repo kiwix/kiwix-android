@@ -26,8 +26,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity_
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
-import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
-import java.io.File
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
 import javax.inject.Inject
 
 class NewNoteDao @Inject constructor(val box: Box<NotesEntity>) : PageDao {
@@ -39,7 +38,9 @@ class NewNoteDao @Inject constructor(val box: Box<NotesEntity>) : PageDao {
     it.map { notesEntity ->
       notesEntity.zimFilePath?.let { filePath ->
         // set zimReaderSource for previously saved notes
-        notesEntity.zimReaderSource = ZimReaderSource.ZimFile(File(filePath))
+        fromDatabaseValue(filePath)?.let { zimReaderSource ->
+          notesEntity.zimReaderSource = zimReaderSource
+        }
       }
       NoteListItem(notesEntity)
     }
