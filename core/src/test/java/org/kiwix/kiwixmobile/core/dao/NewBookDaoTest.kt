@@ -192,7 +192,7 @@ internal class NewBookDaoTest {
 
   @Test
   fun migrationInsert() {
-    val book: LibraryNetworkEntity.Book = book(file = mockk<File>(relaxed = true))
+    val book: LibraryNetworkEntity.Book = book()
     val slot: CapturingSlot<Callable<Unit>> = slot()
     every { box.store.callInTx(capture(slot)) } returns Unit
     newBookDao.migrationInsert(listOf(book))

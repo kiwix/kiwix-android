@@ -23,6 +23,7 @@ import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkState
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryState
+import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.TestablePageState
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
@@ -42,6 +43,7 @@ fun historyItem(
   isSelected: Boolean = false,
   id: Long = 2,
   zimId: String = "zimId",
+  historyUrl: String = "historyUrl",
   zimReaderSource: ZimReaderSource
 ): HistoryListItem.HistoryItem {
   return HistoryListItem.HistoryItem(
@@ -50,7 +52,7 @@ fun historyItem(
     "zimName",
     zimReaderSource,
     "favicon",
-    "historyUrl",
+    historyUrl,
     historyTitle,
     dateString,
     100,
@@ -102,5 +104,25 @@ fun bookmarkState(
   zimId: String = "id",
   searchTerm: String = ""
 ): BookmarkState = BookmarkState(bookmarks, showAll, zimId, searchTerm)
+
+fun note(
+  zimId: String = "id",
+  title: String = "noteTitle",
+  zimUrl: String = "",
+  url: String = "",
+  noteFilePath: String = "",
+  zimReaderSource: ZimReaderSource,
+  favicon: String = ""
+): NoteListItem {
+  return NoteListItem(
+    zimId = zimId,
+    zimUrl = zimUrl,
+    title = title,
+    url = url,
+    noteFilePath = noteFilePath,
+    zimReaderSource = zimReaderSource,
+    favicon = favicon
+  )
+}
 
 fun pageState(): TestablePageState = TestablePageState()
