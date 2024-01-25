@@ -25,8 +25,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity_
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
-import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
-import java.io.File
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
 import javax.inject.Inject
 
 class HistoryDao @Inject constructor(val box: Box<HistoryEntity>) : PageDao {
@@ -39,7 +38,9 @@ class HistoryDao @Inject constructor(val box: Box<HistoryEntity>) : PageDao {
     it.map { historyEntity ->
       historyEntity.zimFilePath?.let { filePath ->
         // set zimReaderSource for previously saved history items
-        historyEntity.zimReaderSource = ZimReaderSource.ZimFile(File(filePath))
+        fromDatabaseValue(filePath)?.let { zimReaderSource ->
+          historyEntity.zimReaderSource = zimReaderSource
+        }
       }
       HistoryItem(historyEntity)
     }
