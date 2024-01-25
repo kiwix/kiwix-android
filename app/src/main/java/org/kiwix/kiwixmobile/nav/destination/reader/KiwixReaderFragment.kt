@@ -60,6 +60,7 @@ import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
@@ -294,6 +295,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     newMainPageTab()
   }
 
+  @SuppressWarnings("NestedBlockDepth")
   override fun onNewIntent(
     intent: Intent,
     activity: AppCompatActivity
@@ -305,6 +307,17 @@ class KiwixReaderFragment : CoreReaderFragment() {
         "content" -> {
           val zimReaderSource = ZimFileDescriptor(it)
           if (zimReaderSource.canOpenInLibkiwix()) {
+            zimReaderContainer?.let { zimReaderContainer ->
+              zimReaderContainer.setZimReaderSource(zimReaderSource)
+
+              zimReaderContainer.zimFileReader?.let { zimFileReader ->
+                BooksOnDiskListItem.BookOnDisk(zimFileReader).also { bookOnDisk ->
+                  // save the book in the library
+                  repositoryActions?.saveBook(bookOnDisk)
+                  zimFileReader.dispose()
+                }
+              }
+            }
             openZimFile(ZimFileDescriptor(it))
           } else {
             activity.toast(R.string.cannot_open_file)
