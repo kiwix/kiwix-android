@@ -38,17 +38,6 @@
 
       <include layout="@layout/layout_scrolling_toolbar" />
 
-      <androidx.core.widget.ContentLoadingProgressBar
-        android:id="@+id/scanning_progress_view"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/progress_view_height"
-        android:indeterminate="false"
-        android:max="100"
-        android:theme="@style/ThemeOverlay.KiwixTheme.ProgressBar"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        tools:progress="70" />
     </com.google.android.material.appbar.AppBarLayout>
 
 
@@ -58,12 +47,32 @@
       android:layout_height="match_parent"
       app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-      <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/zimfilelist"
+      <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/item_book" />
+        android:layout_height="match_parent">
 
+        <androidx.core.widget.ContentLoadingProgressBar
+          android:id="@+id/scanning_progress_view"
+          style="?android:attr/progressBarStyleHorizontal"
+          android:layout_width="match_parent"
+          android:layout_height="4dp"
+          android:indeterminate="false"
+          android:max="100"
+          android:theme="@style/ThemeOverlay.KiwixTheme.ProgressBar"
+          android:visibility="gone"
+          app:layout_constraintTop_toTopOf="parent"
+          tools:progress="0" />
+
+        <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/zimfilelist"
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/scanning_progress_view"
+          tools:listitem="@layout/item_book" />
+      </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
   </org.kiwix.kiwixmobile.core.utils.NestedCoordinatorLayout>
@@ -76,8 +85,8 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    tools:ignore="RequiredSize"
-    app:layout_constraintVertical_bias="0.45" />
+    app:layout_constraintVertical_bias="0.45"
+    tools:ignore="RequiredSize" />
 
   <Button
     android:id="@+id/go_to_downloads_button_no_files"
