@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.extensions
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.view.View
 import androidx.annotation.ColorInt
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -31,13 +30,13 @@ fun View.snack(
   anchor: View? = null,
   actionStringId: Int? = null,
   actionClick: (() -> Unit)? = null,
-  @ColorInt actionTextColor: Int = Color.WHITE
+  @ColorInt actionTextColor: Int? = null
 ) {
   Snackbar.make(
     this, stringId, Snackbar.LENGTH_LONG
   ).apply {
     actionStringId?.let { setAction(it) { actionClick?.invoke() } }
-    setActionTextColor(actionTextColor)
+    actionTextColor?.let(::setActionTextColor)
     anchor?.let {
       anchorView = anchor
       addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
@@ -55,13 +54,13 @@ fun View.snack(
   anchor: View,
   actionStringId: Int? = null,
   actionClick: (() -> Unit)? = null,
-  @ColorInt actionTextColor: Int = Color.WHITE
+  @ColorInt actionTextColor: Int? = null
 ) {
   Snackbar.make(
     this, message, Snackbar.LENGTH_LONG
   ).apply {
     actionStringId?.let { setAction(it) { actionClick?.invoke() } }
-    setActionTextColor(actionTextColor)
+    actionTextColor?.let(::setActionTextColor)
     anchorView = anchor
     addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
       override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
@@ -69,8 +68,4 @@ fun View.snack(
       }
     })
   }.show()
-}
-
-fun View.snack(stringId: Int) {
-  snack(stringId, null, null)
 }
