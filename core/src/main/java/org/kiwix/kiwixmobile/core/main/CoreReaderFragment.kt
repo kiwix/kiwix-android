@@ -107,9 +107,7 @@ import org.kiwix.kiwixmobile.core.R2
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
-import org.kiwix.kiwixmobile.core.downloader.fetch.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
@@ -249,10 +247,6 @@ abstract class CoreReaderFragment :
   @JvmField
   @Inject
   var newBookmarksDao: NewBookmarksDao? = null
-
-  @JvmField
-  @Inject
-  var newBookDao: NewBookDao? = null
 
   @JvmField
   @Inject
@@ -598,27 +592,10 @@ abstract class CoreReaderFragment :
       )
       selectTab(webViewList.size - 1)
     }
-    handleNotificationIntent(intent)
   }
 
   private val isInTabSwitcher: Boolean
     get() = mainMenu?.isInTabSwitcher() == true
-
-  @Suppress("MagicNumber")
-  private fun handleNotificationIntent(intent: Intent) {
-    if (intent.hasExtra(DOWNLOAD_NOTIFICATION_TITLE)) {
-      Handler(Looper.getMainLooper()).postDelayed(
-        {
-          intent.getStringExtra(DOWNLOAD_NOTIFICATION_TITLE)?.let {
-            newBookDao?.bookMatching(it)?.let { bookOnDiskEntity ->
-              openZimFile(bookOnDiskEntity.file)
-            }
-          }
-        },
-        300
-      )
-    }
-  }
 
   private fun setupDocumentParser() {
     documentParser = DocumentParser(object : SectionsListener {
@@ -1799,7 +1776,6 @@ abstract class CoreReaderFragment :
     intent: Intent,
     activity: AppCompatActivity
   ): FragmentActivityExtensions.Super {
-    handleNotificationIntent(intent)
     handleIntentActions(intent)
     return FragmentActivityExtensions.Super.ShouldCall
   }
