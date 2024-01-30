@@ -55,7 +55,7 @@ data class CustomApp(
     parsedJson.getAndCast("support_url") ?: ""
   )
 
-  val versionCode: Int = formatCurrentDate("YYDDD0").toInt()
+  val versionCode: Int = formatCurrentDate("yyDDD0").toInt()
 
   companion object {
     private fun readVersionOrInfer(parsedJson: JSONObject) =
