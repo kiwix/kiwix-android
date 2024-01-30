@@ -317,6 +317,15 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     )
   }
 
+  fun openZimFromFilePath(path: String) {
+    navigate(
+      readerFragmentResId,
+      bundleOf(
+        ZIM_FILE_URI_KEY to path,
+      )
+    )
+  }
+
   fun openPage(pageUrl: String, zimFilePath: String = "", shouldOpenInNewTab: Boolean = false) {
     navigate(
       readerFragmentResId,

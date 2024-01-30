@@ -26,7 +26,6 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.os.ConfigurationCompat
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -41,7 +40,6 @@ import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.downloader.fetch.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.databinding.ActivityKiwixMainBinding
 import org.kiwix.kiwixmobile.kiwixActivityComponent
@@ -201,12 +199,7 @@ class KiwixMainActivity : CoreMainActivity() {
         {
           intent.getStringExtra(DOWNLOAD_NOTIFICATION_TITLE)?.let {
             newBookDao.bookMatching(it)?.let { bookOnDiskEntity ->
-              navigate(
-                readerFragmentResId,
-                bundleOf(
-                  ZIM_FILE_URI_KEY to bookOnDiskEntity.file.path,
-                )
-              )
+              openZimFromFilePath(bookOnDiskEntity.file.path)
             }
           }
         },
