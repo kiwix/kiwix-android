@@ -123,8 +123,7 @@ class AddNoteDialog : DialogFragment() {
       zimId = zimReaderContainer.id.orEmpty()
 
       if (arguments != null) {
-        articleTitle = arguments?.getString(NOTES_TITLE)?.substringAfter(": ")
-        zimFileUrl = arguments?.getString(ARTICLE_URL).orEmpty()
+        getArticleTitleAndZimFileUrlFromArguments()
       } else {
         val webView = (activity as WebViewProvider?)?.getCurrentWebView()
         articleTitle = webView?.title
@@ -134,12 +133,24 @@ class AddNoteDialog : DialogFragment() {
       // Corresponds to "ZimFileName" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
       articleNoteFileName = getArticleNoteFileName()
       zimNotesDirectory = "$NOTES_DIRECTORY$zimNoteDirectoryName/"
+    } else {
+      articleNoteFileName = getArticleNoteFileName()
+      zimNotesDirectory = arguments?.getString(NOTE_FILE_PATH)
+        ?.substringBefore(articleNoteFileName)
+      getArticleTitleAndZimFileUrlFromArguments()
+      context.toast(R.string.error_file_not_found, Toast.LENGTH_LONG)
     }
   }
 
+  private fun getArticleTitleAndZimFileUrlFromArguments() {
+    articleTitle = arguments?.getString(NOTES_TITLE)?.substringAfter(": ")
+    zimFileUrl = arguments?.getString(ARTICLE_URL).orEmpty()
+  }
+
+  private fun isZimFileExist() = zimFileName != null
+
   private fun onFailureToCreateAddNoteDialog() {
     context.toast(R.string.error_file_not_found, Toast.LENGTH_LONG)
-    closeKeyboard()
     parentFragmentManager.beginTransaction().remove(this).commit()
   }
 
@@ -231,7 +242,7 @@ class AddNoteDialog : DialogFragment() {
   }
 
   private fun enableSaveNoteMenuItem() {
-    if (toolbar?.menu != null) {
+    if (toolbar?.menu != null && isZimFileExist()) {
       saveItem?.isEnabled = true
       saveItem?.icon?.alpha = ENABLE_ICON_ITEM_ALPHA
     } else {
@@ -431,6 +442,10 @@ class AddNoteDialog : DialogFragment() {
     }
     enableShareNoteMenuItem() // As note content exists which can be shared
     enableDeleteNoteMenuItem()
+    if (!isZimFileExist()) {
+      // hide the save button if the ZIM file is not exist.
+      disableSaveNoteMenuItem()
+    }
   }
 
   private fun shareNote() {
@@ -439,7 +454,7 @@ class AddNoteDialog : DialogFragment() {
      *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
      * is shared via an app-chooser intent
      * */
-    if (noteEdited) {
+    if (noteEdited && isZimFileExist()) {
       // Save edited note before sharing the text file
       saveNote(dialogNoteAddNoteBinding?.addNoteEditText?.text.toString())
     }
