@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 20 20 Kiwix <android.kiwix.org>
+ * Copyright (c) 2020 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -26,6 +26,7 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.os.ConfigurationCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -40,6 +41,7 @@ import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.downloader.fetch.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.databinding.ActivityKiwixMainBinding
 import org.kiwix.kiwixmobile.kiwixActivityComponent
@@ -75,9 +77,7 @@ class KiwixMainActivity : CoreMainActivity() {
     activityKiwixMainBinding.navHostFragment
   }
 
-  @JvmField
-  @Inject
-  var newBookDao: NewBookDao? = null
+  @Inject lateinit var newBookDao: NewBookDao
 
   override val mainActivity: AppCompatActivity by lazy { this }
 
@@ -200,10 +200,13 @@ class KiwixMainActivity : CoreMainActivity() {
       Handler(Looper.getMainLooper()).postDelayed(
         {
           intent.getStringExtra(DOWNLOAD_NOTIFICATION_TITLE)?.let {
-            newBookDao?.bookMatching(it)?.let { bookOnDiskEntity ->
-              bookOnDiskEntity.url?.let { pageUrl ->
-                openPage(pageUrl, bookOnDiskEntity.file.path)
-              }
+            newBookDao.bookMatching(it)?.let { bookOnDiskEntity ->
+              navigate(
+                readerFragmentResId,
+                bundleOf(
+                  ZIM_FILE_URI_KEY to bookOnDiskEntity.file.path,
+                )
+              )
             }
           }
         },
