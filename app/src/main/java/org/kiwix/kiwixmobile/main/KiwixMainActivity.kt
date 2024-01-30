@@ -21,6 +21,8 @@ package org.kiwix.kiwixmobile.main
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.os.ConfigurationCompat
@@ -34,12 +36,15 @@ import com.google.android.material.navigation.NavigationView
 import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
+import org.kiwix.kiwixmobile.core.downloader.fetch.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.databinding.ActivityKiwixMainBinding
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragmentDirections
+import javax.inject.Inject
 
 const val NAVIGATE_TO_ZIM_HOST_FRAGMENT = "navigate_to_zim_host_fragment"
 
@@ -69,6 +74,8 @@ class KiwixMainActivity : CoreMainActivity() {
   override val navHostContainer by lazy {
     activityKiwixMainBinding.navHostFragment
   }
+
+  @Inject lateinit var newBookDao: NewBookDao
 
   override val mainActivity: AppCompatActivity by lazy { this }
 
@@ -179,8 +186,25 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
+    handleNotificationIntent(intent)
     supportFragmentManager.fragments.filterIsInstance<FragmentActivityExtensions>().forEach {
       it.onNewIntent(intent, this)
+    }
+  }
+
+  @Suppress("MagicNumber")
+  private fun handleNotificationIntent(intent: Intent) {
+    if (intent.hasExtra(DOWNLOAD_NOTIFICATION_TITLE)) {
+      Handler(Looper.getMainLooper()).postDelayed(
+        {
+          intent.getStringExtra(DOWNLOAD_NOTIFICATION_TITLE)?.let {
+            newBookDao.bookMatching(it)?.let { bookOnDiskEntity ->
+              openZimFromFilePath(bookOnDiskEntity.file.path)
+            }
+          }
+        },
+        300
+      )
     }
   }
 
