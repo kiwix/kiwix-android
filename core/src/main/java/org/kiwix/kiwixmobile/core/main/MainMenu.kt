@@ -121,16 +121,16 @@ class MainMenu(
     }
 
   fun onFileOpened(urlIsValid: Boolean) {
-    setVisibility(urlIsValid, randomArticle, search, readAloud, addNote, fullscreen)
+    setVisibility(urlIsValid, randomArticle, search, readAloud, addNote, fullscreen, tabSwitcher)
     search.setOnMenuItemClickListener { navigateToSearch() }
   }
 
   fun hideBookSpecificMenuItems() {
-    setVisibility(false, search, tabSwitcher, randomArticle, addNote)
+    setVisibility(false, search, tabSwitcher, randomArticle, addNote, readAloud)
   }
 
   fun showBookSpecificMenuItems() {
-    setVisibility(true, search, tabSwitcher, randomArticle, addNote)
+    setVisibility(true, search, tabSwitcher, randomArticle, addNote, readAloud)
   }
 
   fun showTabSwitcherOptions() {
@@ -141,7 +141,7 @@ class MainMenu(
   fun showWebViewOptions(urlIsValid: Boolean) {
     isInTabSwitcher = false
     fullscreen.isVisible = true
-    setVisibility(urlIsValid, randomArticle, search, readAloud, addNote)
+    setVisibility(urlIsValid, randomArticle, search, readAloud, addNote, tabSwitcher)
   }
 
   fun updateTabIcon(tabs: Int) {
