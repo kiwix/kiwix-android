@@ -150,7 +150,7 @@
   <string name="next">Next</string>
   <string name="previous">Previous</string>
   <string name="wifi_only_title">Allow downloading content via mobile network?</string>
-  <string name="wifi_only_msg">If you choose “Yes” you won\'t be warned in future. However, you can always change this in Settings</string>
+  <string name="wifi_only_msg">If you choose “Yes” you won\’t be warned in future. However, you can always change this in Settings</string>
   <string name="pref_wifi_only">Download content only via WiFi</string>
   <string name="time_day" tools:keep="@string/time_day">day</string>
   <string name="time_hour" tools:keep="@string/time_hour">h</string>
@@ -182,7 +182,7 @@
   <string name="articleCount" tools:keep="@string/articleCount">%s articles</string>
   <string name="get_started" tools:keep="@string/get_started">Get started</string>
   <string name="download_books">Download books</string>
-  <string name="humankind_knowledge" tools:keep="@string/humankind_knowledge">Humankind\'s knowledge, on your phone.</string>
+  <string name="humankind_knowledge" tools:keep="@string/humankind_knowledge">Humankind\’s knowledge, on your phone.</string>
   <string name="welcome_to_the_family" tools:keep="@string/welcome_to_the_family">Welcome to the family</string>
   <string name="save_books_offline" tools:keep="@string/save_books_offline">Save books offline</string>
   <string name="download_books_message" tools:keep="@string/download_books_message">Download books and read wherever you are.</string>
@@ -224,13 +224,13 @@
   <string name="note">Note</string>
   <string name="wiki_article_title">Wiki Article Title</string>
   <string name="ext_storage_permission_rationale_add_note">Storage access is required for Notes</string>
-  <string name="ext_storage_write_permission_denied_add_note">Notes can\'t be used without access to storage</string>
+  <string name="ext_storage_write_permission_denied_add_note">Notes can\’t be used without access to storage</string>
   <string name="note_save_unsuccessful">Note save unsuccessful</string>
   <string name="note_delete_successful">Note deleted successfully</string>
   <string name="note_delete_unsuccessful">Note was not deleted</string>
   <string name="note_save_successful">Note saved</string>
   <string name="note_save_error_storage_not_writable">Error saving note: Storage not writable</string>
-  <string name="note_share_error_file_missing">Note file doesn\'t exist</string>
+  <string name="note_share_error_file_missing">Note file doesn\’t exist</string>
   <string name="note_share_app_chooser_title">Share note file with:</string>
   <string name="confirmation_alert_dialog_message">Discard unsaved changes?</string>
   <string name="delete_notes_confirmation_msg">Delete all notes?</string>
@@ -350,5 +350,5 @@
   <string name="click_nearby_devices_message">Click here to search for nearby devices.</string>
   <string name="your_device_name_message">Your device name will appear here.</string>
   <string name="nearby_devices_list_message">Here, you\'ll find a list of nearby devices. Tap on a device\'s name to initiate file transfer.</string>
-  <string name="transfer_zim_files_list_message">Here, you\'ll find the list of available ZIM files for transfer.</string>
+  <string name="transfer_zim_files_list_message">Here, you\’ll find the list of available ZIM files for transfer.</string>
 </resources>
