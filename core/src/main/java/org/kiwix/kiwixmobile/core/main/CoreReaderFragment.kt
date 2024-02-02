@@ -65,6 +65,7 @@ import androidx.annotation.AnimRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.widget.TooltipCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Group
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -765,9 +766,16 @@ abstract class CoreReaderFragment :
     }
     toolbar?.let(::setUpDrawerToggle)
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-    closeAllTabsButton?.setImageDrawable(
-      ContextCompat.getDrawable(requireActivity(), R.drawable.ic_close_black_24dp)
-    )
+    closeAllTabsButton?.apply {
+      setImageDrawable(
+        ContextCompat.getDrawable(requireActivity(), R.drawable.ic_close_black_24dp)
+      )
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        TooltipCompat.setTooltipText(this, resources.getString(R.string.close_all_tabs))
+      } else {
+        contentDescription = resources.getString(R.string.close_all_tabs)
+      }
+    }
     tabSwitcherRoot?.let {
       if (it.visibility == View.VISIBLE) {
         setTabSwitcherVisibility(View.GONE)

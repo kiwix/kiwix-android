@@ -19,9 +19,11 @@ package org.kiwix.kiwixmobile.core.main
 
 import android.app.Activity
 import android.content.res.Configuration
+import android.os.Build
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.isVisible
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -98,7 +100,14 @@ class MainMenu(
       else
         MenuItem.SHOW_AS_ACTION_NEVER
     )
-    tabSwitcher?.actionView?.setOnClickListener { menuClickListener.onTabMenuClicked() }
+    tabSwitcher?.actionView?.apply {
+      setOnClickListener { menuClickListener.onTabMenuClicked() }
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        TooltipCompat.setTooltipText(this, resources.getText(R.string.switch_tabs))
+      } else {
+        contentDescription = resources.getText(R.string.switch_tabs)
+      }
+    }
     addNote.menuItemClickListener { menuClickListener.onAddNoteMenuClicked() }
     randomArticle.menuItemClickListener { menuClickListener.onRandomArticleMenuClicked() }
     readAloud.menuItemClickListener { menuClickListener.onReadAloudMenuClicked() }
