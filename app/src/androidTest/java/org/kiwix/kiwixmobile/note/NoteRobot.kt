@@ -18,23 +18,93 @@
 
 package org.kiwix.kiwixmobile.note
 
+import android.content.Context
+import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso.closeSoftKeyboard
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
+import androidx.test.espresso.action.ViewActions.clearText
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions
+import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable
+import org.kiwix.kiwixmobile.Findable.StringId.TextId
+import org.kiwix.kiwixmobile.Findable.Text
+import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 
 fun note(func: NoteRobot.() -> Unit) = NoteRobot().apply(func)
 
 class NoteRobot : BaseRobot() {
 
+  private val noteText = "Test Note"
+  private val editTextId = R.id.add_note_edit_text
+
   fun assertToolbarExist() {
-    isVisible(Findable.ViewId(R.id.toolbar))
+    isVisible(ViewId(R.id.toolbar))
   }
 
   fun assertNoteRecyclerViewExist() {
-    isVisible(Findable.ViewId(R.id.recycler_view))
+    isVisible(ViewId(R.id.recycler_view))
   }
 
   fun assertSwitchWidgetExist() {
-    isVisible(Findable.ViewId(R.id.page_switch))
+    isVisible(ViewId(R.id.page_switch))
+  }
+
+  fun clickOnNoteMenuItem(context: Context) {
+    openActionBarOverflowOrOptionsMenu(context)
+    clickOn(Text("Note"))
+  }
+
+  fun assertBackwardNavigationHistoryDialogDisplayed() {
+    pauseForBetterTestPerformance()
+    isVisible(TextId(R.string.note))
+  }
+
+  fun writeDemoNote() {
+    onView(withId(editTextId)).perform(clearText(), typeText(noteText))
+    closeSoftKeyboard()
+  }
+
+  fun saveNote() {
+    pauseForBetterTestPerformance()
+    clickOn(ViewId(R.id.save_note))
+  }
+
+  fun openNoteFragment() {
+    openDrawer()
+    clickOn(TextId(R.string.pref_notes))
+  }
+
+  fun clickOnSavedNote() {
+    onView(withId(R.id.recycler_view)).perform(
+      actionOnItemAtPosition<RecyclerView.ViewHolder>(
+        0,
+        click()
+      )
+    )
+  }
+
+  fun clickOnOpenNote() {
+    pauseForBetterTestPerformance()
+    clickOn(Text("OPEN NOTE"))
+  }
+
+  fun assertNoteSaved() {
+    isVisible(Text(noteText))
+  }
+
+  fun refreshList() {
+    refresh(org.kiwix.kiwixmobile.R.id.zim_swiperefresh)
+  }
+
+  private fun pauseForBetterTestPerformance() {
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
   }
 }
