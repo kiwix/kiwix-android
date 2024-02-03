@@ -19,8 +19,10 @@
 package org.kiwix.kiwixmobile.core.extensions
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.view.View
 import androidx.annotation.ColorInt
+import androidx.appcompat.widget.TooltipCompat
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 
@@ -68,4 +70,12 @@ fun View.snack(
       }
     })
   }.show()
+}
+
+fun View.setToolTip(description: String) {
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    TooltipCompat.setTooltipText(this, description)
+  } else {
+    contentDescription = description
+  }
 }
