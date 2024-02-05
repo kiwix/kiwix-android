@@ -83,7 +83,7 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
       books.map {
         BookOnDisk(
           book = it,
-          zimReaderSource = ZimReaderSource.ZimFile(it.file!!)
+          zimReaderSource = ZimReaderSource(it.file!!)
         )
       }
     )

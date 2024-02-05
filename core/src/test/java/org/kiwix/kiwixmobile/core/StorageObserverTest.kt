@@ -113,6 +113,6 @@ class StorageObserverTest {
     every { downloadModel.fileNameFromUrl } returns "test"
     every { file.absolutePath } returns "This won't match"
     every { file.canonicalPath } returns "This won't match"
-    every { (zimReaderSource as ZimReaderSource.ZimFile).file } returns file
+    every { zimReaderSource.file } returns file
   }
 }

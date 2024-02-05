@@ -23,7 +23,6 @@ import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
-import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.ZimFile
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag
 import java.io.File
 import java.util.Locale
@@ -62,7 +61,7 @@ sealed class BooksOnDiskListItem {
 
     constructor(fetchDownloadEntity: FetchDownloadEntity) : this(
       book = fetchDownloadEntity.toBook(),
-      zimReaderSource = ZimFile(File(fetchDownloadEntity.file))
+      zimReaderSource = ZimReaderSource(File(fetchDownloadEntity.file))
     )
 
     constructor(zimFileReader: ZimFileReader) : this(

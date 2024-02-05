@@ -31,79 +31,83 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils.isFileDescriptorCanOpenW
 import org.kiwix.libzim.Archive
 import java.io.File
 
-sealed class ZimReaderSource {
-  abstract fun exists(): Boolean
-  abstract fun canOpenInLibkiwix(): Boolean
-  abstract fun createArchive(): Archive?
-  abstract fun toDatabase(): String
+class ZimReaderSource(
+  val file: File? = null,
+  val uri: Uri? = null,
+  private val assetFileDescriptor: AssetFileDescriptor? = null
+) {
+  constructor(uri: Uri) : this(
+    uri = uri,
+    assetFileDescriptor = getAssetFileDescriptorFromUri(CoreApp.instance, uri)
+  )
+
+  constructor(file: File) : this(file = file, uri = null)
 
   companion object {
     fun fromDatabaseValue(databaseValue: String?) =
-      databaseValue?.let {
-        if (it.startsWith("content://")) ZimFileDescriptor(it.toUri())
-        else ZimFile(File(it))
+      databaseValue?.run {
+        if (startsWith("content://")) ZimReaderSource(toUri())
+        else ZimReaderSource(File(this))
       }
   }
 
+  fun exists(): Boolean {
+    return when {
+      file != null -> file.isFileExist()
+      assetFileDescriptor != null ->
+        assetFileDescriptor.parcelFileDescriptor.fileDescriptor.valid()
+
+      else -> false
+    }
+  }
+
+  fun canOpenInLibkiwix(): Boolean {
+    return when {
+      file?.canReadFile() == true -> true
+      assetFileDescriptor?.parcelFileDescriptor?.fd
+        ?.let(::isFileDescriptorCanOpenWithLibkiwix) == true -> true
+
+      else -> false
+    }
+  }
+
+  fun createArchive(): Archive? {
+    return file?.let {
+      Archive(it.canonicalPath)
+    } ?: assetFileDescriptor?.let {
+      Archive(
+        it.parcelFileDescriptor.dup().fileDescriptor,
+        it.startOffset,
+        it.length
+      )
+    }
+  }
+
+  fun toDatabase(): String = file?.canonicalPath ?: uri.toString()
+
   override fun equals(other: Any?): Boolean {
     return when {
-      other is ZimFile && this is ZimFile -> file.canonicalPath == other.file.canonicalPath
-      other is ZimFileDescriptor && this is ZimFileDescriptor -> uri == other.uri
+      file != null && other is ZimReaderSource && other.file != null ->
+        file.canonicalPath == other.file.canonicalPath
+
+      uri != null && other is ZimReaderSource && other.uri != null -> uri == other.uri
       else -> false
     }
   }
 
   fun getUri(activity: AppCompatActivity): Uri? {
-    return when (this) {
-      is ZimFile -> {
+    return when {
+      file != null -> {
         FileProvider.getUriForFile(
           activity,
-          activity.packageName + ".fileprovider",
+          "${activity.packageName}.fileprovider",
           file
         )
       }
 
-      is ZimFileDescriptor -> uri
+      else -> uri
     }
   }
 
-  override fun hashCode(): Int {
-    return when (this) {
-      is ZimFile -> file.hashCode()
-      is ZimFileDescriptor -> assetFileDescriptor.hashCode()
-    }
-  }
-
-  class ZimFile(val file: File) : ZimReaderSource() {
-    override fun exists() = file.isFileExist()
-    override fun canOpenInLibkiwix(): Boolean = file.canReadFile()
-
-    override fun createArchive() = Archive(file.canonicalPath)
-    override fun toDatabase(): String = file.canonicalPath
-  }
-
-  class ZimFileDescriptor(val uri: Uri?, val assetFileDescriptor: AssetFileDescriptor?) :
-    ZimReaderSource() {
-
-    constructor(uri: Uri) : this(
-      uri,
-      getAssetFileDescriptorFromUri(CoreApp.instance, uri)
-    )
-
-    override fun exists(): Boolean =
-      assetFileDescriptor?.parcelFileDescriptor?.fileDescriptor?.valid() == true
-
-    override fun canOpenInLibkiwix(): Boolean =
-      isFileDescriptorCanOpenWithLibkiwix(assetFileDescriptor?.parcelFileDescriptor?.fd)
-
-    override fun createArchive() = assetFileDescriptor?.let {
-      Archive(
-        assetFileDescriptor.parcelFileDescriptor.dup().fileDescriptor,
-        assetFileDescriptor.startOffset,
-        assetFileDescriptor.length
-      )
-    }
-
-    override fun toDatabase(): String = uri.toString()
-  }
+  override fun hashCode(): Int = file?.hashCode() ?: assetFileDescriptor.hashCode()
 }

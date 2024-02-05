@@ -90,5 +90,5 @@ class ZimSourceConverter : PropertyConverter<ZimReaderSource, String> {
     entityProperty?.toDatabase()
 
   override fun convertToEntityProperty(databaseValue: String?): ZimReaderSource =
-    fromDatabaseValue(databaseValue) ?: ZimReaderSource.ZimFile(File(""))
+    fromDatabaseValue(databaseValue) ?: ZimReaderSource(File(""))
 }
