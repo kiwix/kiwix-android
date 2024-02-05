@@ -47,6 +47,7 @@ import org.kiwix.kiwixmobile.core.extensions.calculateSearchMatches
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULTI
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
@@ -78,6 +79,8 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
+const val DEFAULT_PROGRESS = 0
+const val MAX_PROGRESS = 100
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: FetchDownloadDao,
   private val bookDao: NewBookDao,
@@ -107,7 +110,7 @@ class ZimManageViewModel @Inject constructor(
   val sideEffects = PublishProcessor.create<SideEffect<Any?>>()
   val libraryItems: MutableLiveData<List<LibraryListItem>> = MutableLiveData()
   val fileSelectListStates: MutableLiveData<FileSelectListState> = MutableLiveData()
-  val deviceListIsRefreshing = MutableLiveData<Boolean>()
+  val deviceListScanningProgress = MutableLiveData<Int>()
   val libraryListIsRefreshing = MutableLiveData<Boolean>()
   val shouldShowWifiOnlyDialog = MutableLiveData<Boolean>()
   val networkStates = MutableLiveData<NetworkState>()
@@ -430,15 +433,32 @@ class ZimManageViewModel @Inject constructor(
       .subscribeOn(Schedulers.io())
       .observeOn(Schedulers.io())
       .onBackpressureDrop()
-      .doOnNext { deviceListIsRefreshing.postValue(true) }
+      .doOnNext { deviceListScanningProgress.postValue(DEFAULT_PROGRESS) }
       .switchMap(
         {
-          booksFromStorageNotIn(booksFromDao)
+          booksFromStorageNotIn(
+            booksFromDao,
+            object : ScanningProgressListener {
+              override fun onProgressUpdate(scannedDirectory: Int, totalDirectory: Int) {
+                // Calculate the overall progress based on the number of processed directories
+                val overallProgress =
+                  (scannedDirectory.toDouble() / totalDirectory.toDouble() * MAX_PROGRESS).toInt()
+                if (overallProgress != MAX_PROGRESS) {
+                  // Send the progress if it is not 100% because after scanning the entire storage,
+                  // it takes a bit of time to organize the ZIM files, filter them,
+                  // and remove any duplicate ZIM files. We send the 100% progress
+                  // in the doOnNext method to hide the progressBar from the UI
+                  // and display all the filtered ZIM files.
+                  deviceListScanningProgress.postValue(overallProgress)
+                }
+              }
+            }
+          )
         },
         1
       )
       .onBackpressureDrop()
-      .doOnNext { deviceListIsRefreshing.postValue(false) }
+      .doOnNext { deviceListScanningProgress.postValue(MAX_PROGRESS) }
       .filter(List<BookOnDisk>::isNotEmpty)
       .map { it.distinctBy { bookOnDisk -> bookOnDisk.book.id } }
       .subscribe(
@@ -450,8 +470,11 @@ class ZimManageViewModel @Inject constructor(
     .subscribeOn(Schedulers.io())
     .map { it.sortedBy { book -> book.book.title } }
 
-  private fun booksFromStorageNotIn(booksFromDao: Flowable<List<BookOnDisk>>) =
-    storageObserver.booksOnFileSystem
+  private fun booksFromStorageNotIn(
+    booksFromDao: Flowable<List<BookOnDisk>>,
+    scanningProgressListener: ScanningProgressListener
+  ) =
+    storageObserver.getBooksOnFileSystem(scanningProgressListener)
       .withLatestFrom(
         booksFromDao.map { it.map { bookOnDisk -> bookOnDisk.book.id } },
         BiFunction(::removeBooksAlreadyInDao)

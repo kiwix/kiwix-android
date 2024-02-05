@@ -47,6 +47,7 @@ class FileSearchTest {
   private val externalStorageDirectory: File = mockk()
   private val contentResolver: ContentResolver = mockk()
   private val storageDevice: StorageDevice = mockk()
+  private val scanningProgressListener: ScanningProgressListener = mockk()
 
   init {
     setScheduler(Schedulers.trampoline())
@@ -80,7 +81,7 @@ class FileSearchTest {
     @Test
     fun `scan of directory that doesn't exist returns nothing`() {
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
-      fileSearch.scan()
+      fileSearch.scan(scanningProgressListener)
         .test()
         .assertValue(listOf())
     }
@@ -92,7 +93,7 @@ class FileSearchTest {
       File.createTempFile("willNotFind", ".txt")
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
       every { storageDevice.name } returns zimFile.parent
-      val fileList = fileSearch.scan()
+      val fileList = fileSearch.scan(scanningProgressListener)
         .test()
         .values()[0]
       assertThat(fileList).containsExactlyInAnyOrder(zimFile, zimaaFile)
@@ -109,7 +110,7 @@ class FileSearchTest {
       )
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
       every { storageDevice.name } returns zimFile.parentFile.parent
-      val fileList = fileSearch.scan()
+      val fileList = fileSearch.scan(scanningProgressListener)
         .test()
         .values()[0]
       assertThat(fileList).containsExactlyInAnyOrder(zimFile)
@@ -123,7 +124,7 @@ class FileSearchTest {
     fun `scan media store, if files are readable they are returned`() {
       val fileToFind = File.createTempFile("fileToFind", ".zim")
       expectFromMediaStore(fileToFind)
-      fileSearch.scan()
+      fileSearch.scan(scanningProgressListener)
         .test()
         .assertValue(listOf(fileToFind))
     }
@@ -133,7 +134,7 @@ class FileSearchTest {
       val unreadableFile = File.createTempFile("fileToFind", ".zim")
       expectFromMediaStore(unreadableFile)
       unreadableFile.delete()
-      fileSearch.scan()
+      fileSearch.scan(scanningProgressListener)
         .test()
         .assertValue(listOf())
     }

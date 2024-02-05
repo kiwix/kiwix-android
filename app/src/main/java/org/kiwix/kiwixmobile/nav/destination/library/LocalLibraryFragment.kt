@@ -86,6 +86,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.databinding.FragmentDestinationLibraryBinding
+import org.kiwix.kiwixmobile.zimManager.MAX_PROGRESS
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
@@ -235,8 +236,14 @@ class LocalLibraryFragment : BaseFragment() {
       }
     disposable.add(sideEffects())
     disposable.add(fileSelectActions())
-    zimManageViewModel.deviceListIsRefreshing.observe(viewLifecycleOwner) {
-      fragmentDestinationLibraryBinding?.zimSwiperefresh?.isRefreshing = it!!
+    zimManageViewModel.deviceListScanningProgress.observe(viewLifecycleOwner) {
+      fragmentDestinationLibraryBinding?.scanningProgressView?.apply {
+        progress = it
+        // hide this progress bar when scanning is complete.
+        visibility = if (it == MAX_PROGRESS) GONE else VISIBLE
+        // enable if the previous scanning is completes.
+        fragmentDestinationLibraryBinding?.zimSwiperefresh?.isEnabled = it == MAX_PROGRESS
+      }
     }
     if (savedInstanceState != null && savedInstanceState.getBoolean(WAS_IN_ACTION_MODE)) {
       zimManageViewModel.fileSelectActions.offer(FileSelectActions.RestartActionMode)
@@ -258,6 +265,7 @@ class LocalLibraryFragment : BaseFragment() {
           SCROLL_DOWN -> {
             setBottomMarginToSwipeRefreshLayout(0)
           }
+
           SCROLL_UP -> {
             getBottomNavigationView()?.let {
               setBottomMarginToSwipeRefreshLayout(it.measuredHeight)
@@ -280,6 +288,18 @@ class LocalLibraryFragment : BaseFragment() {
           // the loading icon remains visible infinitely.
           fragmentDestinationLibraryBinding?.zimSwiperefresh?.isRefreshing = false
         } else {
+          fragmentDestinationLibraryBinding?.zimSwiperefresh?.apply {
+            // hide the swipe refreshing because now we are showing the ContentLoadingProgressBar
+            // to show the progress of how many files are scanned.
+            isRefreshing = false
+            // disable the swipe refresh layout until the ongoing scanning will not complete
+            // to avoid multiple scanning.
+            isEnabled = false
+          }
+          fragmentDestinationLibraryBinding?.scanningProgressView?.apply {
+            visibility = VISIBLE
+            progress = 0
+          }
           requestFileSystemCheck()
         }
       }
@@ -512,24 +532,16 @@ class LocalLibraryFragment : BaseFragment() {
   }
 
   private fun checkManageExternalStoragePermission() {
-    if (sharedPreferenceUtil.isPlayStoreBuild) {
-      requestFileSystemCheck()
-    } else {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        if (Environment.isExternalStorageManager()) {
-          // We already have permission!!
-          requestFileSystemCheck()
-        } else {
-          if (sharedPreferenceUtil.manageExternalFilesPermissionDialog) {
-            // We should only ask for first time, If the users wants to revoke settings
-            // then they can directly toggle this feature from settings screen
-            sharedPreferenceUtil.manageExternalFilesPermissionDialog = false
-            // Show Dialog and  Go to settings to give permission
-            showManageExternalStoragePermissionDialog()
-          }
+    if (!sharedPreferenceUtil.isPlayStoreBuild && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      if (!Environment.isExternalStorageManager()) {
+        // We do not have the permission!!
+        if (sharedPreferenceUtil.manageExternalFilesPermissionDialog) {
+          // We should only ask for first time, If the users wants to revoke settings
+          // then they can directly toggle this feature from settings screen
+          sharedPreferenceUtil.manageExternalFilesPermissionDialog = false
+          // Show Dialog and  Go to settings to give permission
+          showManageExternalStoragePermissionDialog()
         }
-      } else {
-        requestFileSystemCheck()
       }
     }
   }

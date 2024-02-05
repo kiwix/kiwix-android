@@ -47,6 +47,7 @@ import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULTI
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
@@ -128,7 +129,11 @@ class ZimManageViewModelTest {
     every { connectivityBroadcastReceiver.action } returns "test"
     every { downloadDao.downloads() } returns downloads
     every { newBookDao.books() } returns books
-    every { storageObserver.booksOnFileSystem } returns booksOnFileSystem
+    every {
+      storageObserver.getBooksOnFileSystem(
+        any<ScanningProgressListener>()
+      )
+    } returns booksOnFileSystem
     every { newLanguagesDao.languages() } returns languages
     every { fat32Checker.fileSystemStates } returns fileSystemStates
     every { connectivityBroadcastReceiver.networkStates } returns networkStates
