@@ -53,9 +53,8 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
 import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
-import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.ZimFile
-import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.ZimFileDescriptor
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
@@ -120,7 +119,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       activity.toast(R.string.error_file_not_found)
       return
     }
-    openZimFile(ZimFile(File(filePath)))
+    openZimFile(ZimReaderSource(File(filePath)))
   }
 
   override fun loadDrawerViews() {
@@ -297,9 +296,9 @@ class KiwixReaderFragment : CoreReaderFragment() {
     super.onNewIntent(activity.intent, activity)
     intent.data?.let {
       when (it.scheme) {
-        "file" -> openZimFile(ZimFile(it.toFile()))
+        "file" -> openZimFile(ZimReaderSource(it.toFile()))
         "content" -> {
-          val zimReaderSource = ZimFileDescriptor(it)
+          val zimReaderSource = ZimReaderSource(it)
           if (zimReaderSource.canOpenInLibkiwix()) {
             zimReaderContainer?.let { zimReaderContainer ->
               zimReaderContainer.setZimReaderSource(zimReaderSource)
@@ -312,7 +311,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
                 }
               }
             }
-            openZimFile(ZimFileDescriptor(it))
+            openZimFile(ZimReaderSource(it))
           } else {
             activity.toast(R.string.cannot_open_file)
           }

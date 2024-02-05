@@ -35,8 +35,7 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.getResizedDrawable
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.MainMenu
-import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.ZimFile
-import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.ZimFileDescriptor
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
@@ -180,13 +179,14 @@ class CustomReaderFragment : CoreReaderFragment() {
       onFilesFound = {
         when (it) {
           is ValidationState.HasFile -> {
-            it.assetFileDescriptor?.let { assetFileDescriptor ->
-              openZimFile(ZimFileDescriptor(null, assetFileDescriptor), true)
-            } ?: kotlin.run {
-              it.file?.let { file ->
-                openZimFile(ZimFile(file), true)
-              }
-            }
+            openZimFile(
+              ZimReaderSource(
+                file = it.file,
+                null,
+                it.assetFileDescriptor
+              ),
+              true
+            )
             // Save book in the database to display it in `ZimHostFragment`.
             zimReaderContainer?.zimFileReader?.let { zimFileReader ->
               // Check if the file is not null. If the file is null,
@@ -198,7 +198,7 @@ class CustomReaderFragment : CoreReaderFragment() {
           }
           is ValidationState.HasBothFiles -> {
             it.zimFile.delete()
-            openZimFile(ZimFile(it.obbFile), true)
+            openZimFile(ZimReaderSource(it.obbFile), true)
           }
           else -> {}
         }

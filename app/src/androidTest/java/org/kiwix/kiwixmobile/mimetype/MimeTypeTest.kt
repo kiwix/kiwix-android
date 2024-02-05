@@ -76,7 +76,7 @@ class MimeTypeTest : BaseActivityTest() {
         }
       }
     }
-    val zimSource = ZimReaderSource.ZimFile(zimFile)
+    val zimSource = ZimReaderSource(zimFile)
     val zimFileReader = ZimFileReader(
       zimSource,
       Archive(zimFile.canonicalPath),

@@ -39,7 +39,6 @@ import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity_
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
-import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.ZimFile
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.sharedFunctions.book
 import org.kiwix.sharedFunctions.bookOnDisk
@@ -123,7 +122,7 @@ internal class NewBookDaoTest {
       every {
         query.find()
       } returns listOf(
-        bookOnDiskEntity(zimReaderSource = ZimFile(File("matches_nothing")))
+        bookOnDiskEntity(zimReaderSource = ZimReaderSource(File("matches_nothing")))
       )
       slot.captured.call()
       verify { box.put(listOf(BookOnDiskEntity(distinctBook))) }
@@ -203,7 +202,7 @@ internal class NewBookDaoTest {
           BookOnDiskEntity(
             BookOnDisk(
               book = book,
-              zimReaderSource = ZimFile(book.file!!)
+              zimReaderSource = ZimReaderSource(book.file!!)
             )
           )
         )
