@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* MohitMali
 * Xuacu
 -->
 <resources>
   <string name="file_system_does_not_support_4gb">El to sistema de ficheros nun soporta ficheros mayores de 4GB</string>
-  <string name="detecting_file_system">Detectando si\'l sistema de ficheros pue crear ficheros de 4GB</string>
-  <string name="cannot_open_file">Nun pudo abrise\'l ficheru\nTenta buscar esti ficheru na llingüeta Preséu de la to Biblioteca</string>
+  <string name="detecting_file_system">Detectando si el sistema de ficheros pue crear ficheros de 4GB</string>
+  <string name="cannot_open_file">Nun pudo abrise el ficheru\nTenta buscar esti ficheru na llingüeta Preséu de la to Biblioteca</string>
 </resources>

@@ -8,4 +8,6 @@
   <string name="cannot_open_file">Aprture d‘u fail sciute a male\nPe piacere pruève arrete a cercà stu fail jndr’à Schede d\'u despositive d\'a libbreria  toje.</string>
   <string name="send_files_title">Manne le file</string>
   <string name="receive_files_title">Pigghie le file</string>
+  <string name="no_app_found_to_open">Nisciune app acchiate pe scacchià \'u fail zim!</string>
+  <string name="select_zim_file">Scacchie \'u fail zim da leggere</string>
 </resources>
