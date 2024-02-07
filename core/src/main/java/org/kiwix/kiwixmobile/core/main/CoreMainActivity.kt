@@ -38,11 +38,15 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDirections
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
@@ -85,6 +89,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val topLevelDestinations: Set<Int>
   abstract val navHostContainer: FragmentContainerView
   abstract val mainActivity: AppCompatActivity
+  @Inject lateinit var objectBoxToLibkiwixMigrator: ObjectBoxToLibkiwixMigrator
 
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.KiwixTheme)
@@ -104,7 +109,14 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
         exitProcess(KIWIX_INTERNAL_ERROR)
       }
     }
+
     setMainActivityToCoreApp()
+    if (!sharedPreferenceUtil.prefIsBookmarksMigrated) {
+      // run the migration on background thread to avoid any UI related issues.
+      CoroutineScope(Dispatchers.IO).launch {
+        objectBoxToLibkiwixMigrator.migrateBookmarksToLibkiwix()
+      }
+    }
   }
 
   @Suppress("DEPRECATION")

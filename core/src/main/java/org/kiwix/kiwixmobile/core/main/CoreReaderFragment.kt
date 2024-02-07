@@ -107,7 +107,7 @@ import org.kiwix.kiwixmobile.core.R2
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
@@ -123,7 +123,7 @@ import org.kiwix.kiwixmobile.core.main.MainMenu.MenuClickListener
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryClickListener
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
@@ -159,6 +159,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils.deleteCachedFiles
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
+import org.kiwix.libkiwix.Book
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -246,7 +247,7 @@ abstract class CoreReaderFragment :
 
   @JvmField
   @Inject
-  var newBookmarksDao: NewBookmarksDao? = null
+  var libkiwixBookmarks: LibkiwixBookmarks? = null
 
   @JvmField
   @Inject
@@ -1534,7 +1535,7 @@ abstract class CoreReaderFragment :
   protected fun setUpBookmarks(zimFileReader: ZimFileReader) {
     safeDispose()
     bookmarkingDisposable = Flowable.combineLatest(
-      newBookmarksDao?.bookmarkUrlsForCurrentBook(zimFileReader),
+      libkiwixBookmarks?.bookmarkUrlsForCurrentBook(zimFileReader),
       webUrlsProcessor,
       List<String?>::contains
     )
@@ -1648,14 +1649,17 @@ abstract class CoreReaderFragment :
   @OnClick(R2.id.bottom_toolbar_bookmark)
   fun toggleBookmark() {
     getCurrentWebView()?.url?.let { articleUrl ->
-      if (isBookmarked) {
-        repositoryActions?.deleteBookmark(articleUrl)
-        snackBarRoot?.snack(R.string.bookmark_removed)
-      } else {
-        zimReaderContainer?.zimFileReader?.let { zimFileReader ->
+      zimReaderContainer?.zimFileReader?.let { zimFileReader ->
+        val libKiwixBook = Book().apply {
+          update(zimFileReader.jniKiwixReader)
+        }
+        if (isBookmarked) {
+          repositoryActions?.deleteBookmark(libKiwixBook.id, articleUrl)
+          snackBarRoot?.snack(R.string.bookmark_removed)
+        } else {
           getCurrentWebView()?.title?.let {
             repositoryActions?.saveBookmark(
-              BookmarkItem(it, articleUrl, zimFileReader)
+              LibkiwixBookmarkItem(it, articleUrl, zimFileReader, libKiwixBook)
             )
             snackBarRoot?.snack(
               stringId = R.string.bookmark_added,
@@ -1666,9 +1670,9 @@ abstract class CoreReaderFragment :
               }
             )
           }
-        } ?: kotlin.run {
-          requireActivity().toast(R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
         }
+      } ?: kotlin.run {
+        requireActivity().toast(R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
       }
     }
   }

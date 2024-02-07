@@ -19,17 +19,17 @@
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 
 data class BookmarkState(
-  override val pageItems: List<BookmarkItem>,
+  override val pageItems: List<LibkiwixBookmarkItem>,
   override val showAll: Boolean,
   override val currentZimId: String?,
   override val searchTerm: String = ""
-) : PageState<BookmarkItem>() {
+) : PageState<LibkiwixBookmarkItem>() {
   override val visiblePageItems: List<PageRelated> = filteredPageItems
 
-  override fun copyWithNewItems(newItems: List<BookmarkItem>): PageState<BookmarkItem> =
-    copy(pageItems = newItems)
+  override fun copyWithNewItems(newItems: List<LibkiwixBookmarkItem>):
+    PageState<LibkiwixBookmarkItem> = copy(pageItems = newItems)
 }

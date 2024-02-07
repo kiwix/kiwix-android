@@ -23,15 +23,15 @@ import io.reactivex.Flowable
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
-import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.dao.NewNoteDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
 import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
-import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
@@ -53,7 +53,7 @@ class Repository @Inject internal constructor(
   @param:IO private val io: Scheduler,
   @param:MainThread private val mainThread: Scheduler,
   private val bookDao: NewBookDao,
-  private val bookmarksDao: NewBookmarksDao,
+  private val libkiwixBookmarks: LibkiwixBookmarks,
   private val historyDao: HistoryDao,
   private val notesDao: NewNoteDao,
   private val languageDao: NewLanguagesDao,
@@ -104,23 +104,24 @@ class Repository @Inject internal constructor(
     recentSearchDao.deleteSearchHistory()
   }
 
-  override fun getBookmarks() = bookmarksDao.bookmarks() as Flowable<List<BookmarkItem>>
+  override fun getBookmarks() =
+    libkiwixBookmarks.bookmarks() as Flowable<List<LibkiwixBookmarkItem>>
 
   override fun getCurrentZimBookmarksUrl() =
-    Single.just(bookmarksDao.getCurrentZimBookmarksUrl(zimReaderContainer.zimFileReader))
+    Single.just(libkiwixBookmarks.getCurrentZimBookmarksUrl(zimReaderContainer.zimFileReader))
       .subscribeOn(io)
       .observeOn(mainThread)
 
-  override fun saveBookmark(bookmark: BookmarkItem) =
-    Completable.fromAction { bookmarksDao.saveBookmark(bookmark) }
+  override fun saveBookmark(libkiwixBookmarkItem: LibkiwixBookmarkItem) =
+    Completable.fromAction { libkiwixBookmarks.saveBookmark(libkiwixBookmarkItem) }
       .subscribeOn(io)
 
-  override fun deleteBookmarks(bookmarks: List<BookmarkItem>) =
-    Completable.fromAction { bookmarksDao.deleteBookmarks(bookmarks) }
+  override fun deleteBookmarks(bookmarks: List<LibkiwixBookmarkItem>) =
+    Completable.fromAction { libkiwixBookmarks.deleteBookmarks(bookmarks) }
       .subscribeOn(io)
 
-  override fun deleteBookmark(bookmarkUrl: String): Completable? =
-    Completable.fromAction { bookmarksDao.deleteBookmark(bookmarkUrl) }
+  override fun deleteBookmark(bookId: String, bookmarkUrl: String): Completable? =
+    Completable.fromAction { libkiwixBookmarks.deleteBookmark(bookId, bookmarkUrl) }
       .subscribeOn(io)
 
   override fun saveNote(noteListItem: NoteListItem): Completable =

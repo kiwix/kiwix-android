@@ -29,6 +29,7 @@ import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
@@ -37,6 +38,7 @@ import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.data.DataModule
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.core.di.modules.JNIModule
@@ -93,6 +95,8 @@ interface CoreComponent {
   fun newBookmarksDao(): NewBookmarksDao
   fun connectivityManager(): ConnectivityManager
   fun wifiManager(): WifiManager
+  fun objectBoxToLibkiwixMigrator(): ObjectBoxToLibkiwixMigrator
+  fun libkiwixBookmarks(): LibkiwixBookmarks
   fun context(): Context
   fun downloader(): Downloader
   fun notificationManager(): NotificationManager
@@ -104,6 +108,7 @@ interface CoreComponent {
 
   fun inject(errorActivity: ErrorActivity)
   fun inject(searchFragment: SearchFragment)
+  fun inject(objectBoxToLibkiwixMigrator: ObjectBoxToLibkiwixMigrator)
 
   fun inject(settingsFragment: CoreSettingsFragment)
   fun coreServiceComponent(): CoreServiceComponent.Builder

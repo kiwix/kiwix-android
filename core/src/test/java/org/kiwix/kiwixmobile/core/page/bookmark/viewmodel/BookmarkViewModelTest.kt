@@ -28,7 +28,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
@@ -44,7 +44,7 @@ import org.kiwix.sharedFunctions.setScheduler
 
 @ExtendWith(InstantExecutorExtension::class)
 internal class BookmarkViewModelTest {
-  private val bookmarksDao: NewBookmarksDao = mockk()
+  private val libkiwixBookMarks: LibkiwixBookmarks = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
 
@@ -64,9 +64,9 @@ internal class BookmarkViewModelTest {
     every { zimReaderContainer.id } returns "id"
     every { zimReaderContainer.name } returns "zimName"
     every { sharedPreferenceUtil.showBookmarksAllBooks } returns true
-    every { bookmarksDao.bookmarks() } returns itemsFromDb.distinctUntilChanged()
-    every { bookmarksDao.pages() } returns bookmarksDao.bookmarks()
-    viewModel = BookmarkViewModel(bookmarksDao, zimReaderContainer, sharedPreferenceUtil)
+    every { libkiwixBookMarks.bookmarks() } returns itemsFromDb.distinctUntilChanged()
+    every { libkiwixBookMarks.pages() } returns libkiwixBookMarks.bookmarks()
+    viewModel = BookmarkViewModel(libkiwixBookMarks, zimReaderContainer, sharedPreferenceUtil)
   }
 
   @Test
@@ -132,7 +132,7 @@ internal class BookmarkViewModelTest {
     assertThat(
       viewModel.createDeletePageDialogEffect(bookmarkState())
     ).isEqualTo(
-      ShowDeleteBookmarksDialog(viewModel.effects, bookmarkState(), bookmarksDao)
+      ShowDeleteBookmarksDialog(viewModel.effects, bookmarkState(), libkiwixBookMarks)
     )
   }
 
