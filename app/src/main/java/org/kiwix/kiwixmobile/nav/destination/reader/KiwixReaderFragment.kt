@@ -42,6 +42,7 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
+import org.kiwix.kiwixmobile.core.extensions.canReadFile
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
@@ -56,7 +57,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getAssetFileDescriptorFromUri
 import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
@@ -296,12 +296,8 @@ class KiwixReaderFragment : CoreReaderFragment() {
       when (it.scheme) {
         "file" -> openZimFile(it.toFile())
         "content" -> {
-          // pass this uri to zimFileReader, which is necessary for saving
-          // notes, bookmarks, history, and reopening the same ZIM file after the app closes.
-          getAssetFileDescriptorFromUri(activity, it)?.let { assetFileDescriptor ->
-            openZimFile(null, assetFileDescriptor = assetFileDescriptor, filePath = "$it")
-          } ?: kotlin.run {
-            activity.toast(R.string.cannot_open_file)
+          getZimFileFromUri(it)?.let { zimFile ->
+            openZimFile(zimFile)
           }
         }
 
@@ -309,6 +305,28 @@ class KiwixReaderFragment : CoreReaderFragment() {
       }
     }
     return ShouldCall
+  }
+
+  private fun getZimFileFromUri(
+    uri: Uri
+  ): File? {
+    val filePath = FileUtils.getLocalFilePathByUri(
+      requireActivity().applicationContext, uri
+    )
+    if (filePath == null || !File(filePath).isFileExist()) {
+      activity.toast(R.string.error_file_not_found)
+      return null
+    }
+    val file = File(filePath)
+    return if (!FileUtils.isValidZimFile(file.path)) {
+      activity.toast(R.string.error_file_invalid)
+      null
+    } else if (!file.canReadFile()) {
+      activity.toast(R.string.cannot_open_file)
+      null
+    } else {
+      file
+    }
   }
 
   private fun setBottomMarginToNavHostContainer(margin: Int) {
