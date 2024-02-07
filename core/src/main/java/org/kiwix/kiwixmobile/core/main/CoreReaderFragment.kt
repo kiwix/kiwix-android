@@ -767,11 +767,9 @@ abstract class CoreReaderFragment :
     }
     toolbar?.let(::setUpDrawerToggle)
     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-    closeAllTabsButton?.apply {
-      setImageDrawable(
-        ContextCompat.getDrawable(requireActivity(), R.drawable.ic_close_black_24dp)
-      )
-    }
+    closeAllTabsButton?.setImageDrawable(
+      ContextCompat.getDrawable(requireActivity(), R.drawable.ic_close_black_24dp)
+    )
     tabSwitcherRoot?.let {
       if (it.visibility == View.VISIBLE) {
         setTabSwitcherVisibility(View.GONE)
