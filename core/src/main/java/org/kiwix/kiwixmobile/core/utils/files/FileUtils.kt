@@ -49,6 +49,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
+import java.lang.NumberFormatException
 
 object FileUtils {
 
@@ -156,18 +157,58 @@ object FileUtils {
     return null
   }
 
-  private fun documentProviderContentQuery(context: Context, uri: Uri) =
-    contentQuery(
-      context,
-      ContentUris.withAppendedId(
-        Uri.parse("content://downloads/public_downloads"),
-        try {
-          DocumentsContract.getDocumentId(uri).toLong()
-        } catch (ignore: NumberFormatException) {
-          0L
-        }
-      )
+  private fun documentProviderContentQuery(context: Context, uri: Uri): String? {
+    // Extracting the document ID from the URI.
+    val documentId = extractDocumentId(uri)
+
+    // Attempt to handle cases where the document ID is a direct path to a ZIM file.
+    if (isValidZimFile(documentId)) {
+      return documentId.substringAfter("raw:")
+    }
+
+    // Try different content URI prefixes in some case download content prefix is different.
+    val contentUriPrefixes = arrayOf(
+      "content://downloads/public_downloads",
+      "content://downloads/my_downloads",
+      "content://downloads/all_downloads"
     )
+    val actualDocumentId = try {
+      documentId.toLong()
+    } catch (ignore: NumberFormatException) {
+      0L
+    }
+    return queryForActualPath(context, actualDocumentId, contentUriPrefixes)
+  }
+
+  private fun queryForActualPath(
+    context: Context,
+    documentId: Long,
+    contentUriPrefixes: Array<String>
+  ): String? {
+    try {
+      for (prefix in contentUriPrefixes) {
+        val contentUri = ContentUris.withAppendedId(Uri.parse(prefix), documentId)
+        val path = contentQuery(context, contentUri)
+
+        if (path != null) {
+          return path
+        }
+      }
+    } catch (ignore: Exception) {
+      // do nothing
+    }
+
+    return null
+  }
+
+  private fun extractDocumentId(uri: Uri): String {
+    try {
+      return DocumentsContract.getDocumentId(uri)
+    } catch (ignore: Exception) {
+      // Log or handle the exception if needed
+    }
+    return ""
+  }
 
   private fun contentQuery(
     context: Context,
@@ -184,6 +225,8 @@ object FileUtils {
     } catch (ignore: SecurityException) {
       null
     } catch (ignore: NullPointerException) {
+      null
+    } catch (ignore: UnsupportedOperationException) {
       null
     }
   }
