@@ -30,10 +30,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.page.adapter.Page
-import org.kiwix.kiwixmobile.core.page.bookmark
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.UpdateAllBookmarksPreference
 import org.kiwix.kiwixmobile.core.page.bookmarkState
+import org.kiwix.kiwixmobile.core.page.libkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
@@ -90,10 +90,10 @@ internal class BookmarkViewModelTest {
     assertThat(
       viewModel.updatePages(
         bookmarkState(),
-        UpdatePages(listOf(bookmark(zimReaderSource = zimReaderSource)))
+        UpdatePages(listOf(libkiwixBookmarkItem(zimReaderSource = zimReaderSource)))
       )
     ).isEqualTo(
-      bookmarkState(listOf(bookmark(zimReaderSource = zimReaderSource)))
+      bookmarkState(listOf(libkiwixBookmarkItem(zimReaderSource = zimReaderSource)))
     )
   }
 
@@ -122,10 +122,10 @@ internal class BookmarkViewModelTest {
     assertThat(
       viewModel.updatePages(
         bookmarkState(),
-        UpdatePages(listOf(bookmark(zimReaderSource = zimReaderSource)))
+        UpdatePages(listOf(libkiwixBookmarkItem(zimReaderSource = zimReaderSource)))
       )
     ).isEqualTo(
-      bookmarkState(listOf(bookmark(zimReaderSource = zimReaderSource)))
+      bookmarkState(listOf(libkiwixBookmarkItem(zimReaderSource = zimReaderSource)))
     )
   }
 
@@ -136,7 +136,7 @@ internal class BookmarkViewModelTest {
       viewModel.deselectAllPages(
         bookmarkState(
           bookmarks = listOf(
-            bookmark(
+            libkiwixBookmarkItem(
               isSelected = true,
               zimReaderSource = zimReaderSource
             )
@@ -146,7 +146,7 @@ internal class BookmarkViewModelTest {
     ).isEqualTo(
       bookmarkState(
         bookmarks = listOf(
-          bookmark(
+          libkiwixBookmarkItem(
             isSelected = false,
             zimReaderSource = zimReaderSource
           )
@@ -170,10 +170,10 @@ internal class BookmarkViewModelTest {
     assertThat(
       viewModel.copyWithNewItems(
         bookmarkState(),
-        listOf(bookmark(zimReaderSource = zimReaderSource))
+        listOf(libkiwixBookmarkItem(zimReaderSource = zimReaderSource))
       )
     ).isEqualTo(
-      bookmarkState(listOf(bookmark(zimReaderSource = zimReaderSource)))
+      bookmarkState(listOf(libkiwixBookmarkItem(zimReaderSource = zimReaderSource)))
     )
   }
 }

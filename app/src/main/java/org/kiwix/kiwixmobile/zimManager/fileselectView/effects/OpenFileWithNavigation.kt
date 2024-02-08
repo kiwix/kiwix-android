@@ -31,7 +31,7 @@ data class OpenFileWithNavigation(private val bookOnDisk: BooksOnDiskListItem.Bo
 
   override fun invokeWith(activity: AppCompatActivity) {
     val zimReaderSource = bookOnDisk.zimReaderSource
-    if (!zimReaderSource.exists()) {
+    if (!zimReaderSource.canOpenInLibkiwix()) {
       activity.toast(R.string.error_file_not_found)
     } else {
       activity.navigate(

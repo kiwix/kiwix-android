@@ -36,7 +36,7 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
       return
     }
     zimFileReader =
-      if (zimReaderSource?.exists() == true && zimReaderSource.canOpenInLibkiwix())
+      if (zimReaderSource?.exists() == true)
         zimFileReaderFactory.create(zimReaderSource)
       else null
   }

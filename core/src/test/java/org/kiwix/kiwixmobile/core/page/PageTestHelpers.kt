@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.page
 
 import org.kiwix.kiwixmobile.core.page.adapter.Page
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkState
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
@@ -83,13 +84,34 @@ fun bookmark(
   zimReaderSource: ZimReaderSource,
   bookmarkUrl: String = "bookmarkUrl",
   favicon: String = "favicon"
+): BookmarkItem {
+  return BookmarkItem(
+    id = id,
+    zimId = zimId,
+    zimName = zimName,
+    zimReaderSource = zimReaderSource,
+    bookmarkUrl = bookmarkUrl,
+    title = bookmarkTitle,
+    isSelected = isSelected,
+    favicon = favicon
+  )
+}
+
+fun libkiwixBookmarkItem(
+  bookmarkTitle: String = "bookmarkTitle",
+  isSelected: Boolean = false,
+  id: Long = 2,
+  zimId: String = "zimId",
+  zimName: String = "zimName",
+  zimReaderSource: ZimReaderSource,
+  bookmarkUrl: String = "bookmarkUrl",
+  favicon: String = "favicon"
 ): LibkiwixBookmarkItem {
   return LibkiwixBookmarkItem(
     id = id,
     zimId = zimId,
     zimName = zimName,
-    zimFilePath = zimReaderSource.toDatabase(),
-    zimReaderSource = null,
+    zimReaderSource = zimReaderSource,
     bookmarkUrl = bookmarkUrl,
     title = bookmarkTitle,
     isSelected = isSelected,

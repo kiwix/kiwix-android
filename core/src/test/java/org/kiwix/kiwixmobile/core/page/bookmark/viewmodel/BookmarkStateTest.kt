@@ -21,8 +21,8 @@ package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.page.bookmark
 import org.kiwix.kiwixmobile.core.page.bookmarkState
+import org.kiwix.kiwixmobile.core.page.libkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 internal class BookmarkStateTest {
@@ -31,10 +31,10 @@ internal class BookmarkStateTest {
     val zimReaderSource: ZimReaderSource = mockk()
     assertThat(
       bookmarkState(emptyList()).copy(
-        listOf(bookmark(zimReaderSource = zimReaderSource))
+        listOf(libkiwixBookmarkItem(zimReaderSource = zimReaderSource))
       ).pageItems
     ).isEqualTo(
-      listOf(bookmark(zimReaderSource = zimReaderSource))
+      listOf(libkiwixBookmarkItem(zimReaderSource = zimReaderSource))
     )
   }
 }
