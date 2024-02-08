@@ -72,15 +72,19 @@ class ZimReaderSource(
   }
 
   fun createArchive(): Archive? {
-    return file?.let {
-      Archive(it.canonicalPath)
-    } ?: assetFileDescriptor?.let {
-      Archive(
-        it.parcelFileDescriptor.dup().fileDescriptor,
-        it.startOffset,
-        it.length
-      )
+    if (canOpenInLibkiwix()) {
+      return file?.let {
+        Archive(it.canonicalPath)
+      } ?: assetFileDescriptor?.let {
+        Archive(
+          it.parcelFileDescriptor.dup().fileDescriptor,
+          it.startOffset,
+          it.length
+        )
+      }
     }
+
+    return null
   }
 
   fun toDatabase(): String = file?.canonicalPath ?: uri.toString()
