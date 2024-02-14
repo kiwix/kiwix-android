@@ -220,7 +220,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           getZimItem?.isVisible = false
 
           (searchItem?.actionView as? SearchView)?.setOnQueryTextListener(
-            SimpleTextListener(zimManageViewModel.requestFiltering::onNext)
+            SimpleTextListener { query, _ ->
+              zimManageViewModel.requestFiltering.onNext(query)
+            }
           )
           zimManageViewModel.requestFiltering.onNext("")
         }

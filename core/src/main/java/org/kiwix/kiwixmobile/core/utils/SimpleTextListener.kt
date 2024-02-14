@@ -20,12 +20,15 @@ package org.kiwix.kiwixmobile.core.utils
 
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 
-class SimpleTextListener(private val onQueryTextChangeAction: (String) -> Unit) :
+class SimpleTextListener(private val onQueryTextChangeAction: (String, Boolean) -> Unit) :
   OnQueryTextListener {
-  override fun onQueryTextSubmit(s: String): Boolean = false
+  override fun onQueryTextSubmit(s: String): Boolean {
+    onQueryTextChangeAction.invoke(s, true)
+    return true
+  }
 
   override fun onQueryTextChange(s: String): Boolean {
-    onQueryTextChangeAction.invoke(s)
+    onQueryTextChangeAction.invoke(s, false)
     return true
   }
 }

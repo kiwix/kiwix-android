@@ -118,8 +118,8 @@ class LanguageFragment : BaseFragment() {
           menuInflater.inflate(R.menu.menu_language, menu)
           val search = menu.findItem(R.id.menu_language_search)
           (search.actionView as SearchView).setOnQueryTextListener(
-            SimpleTextListener {
-              languageViewModel.actions.offer(Filter(it))
+            SimpleTextListener { query, _ ->
+              languageViewModel.actions.offer(Filter(query))
             }
           )
         }
