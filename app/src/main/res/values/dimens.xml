@@ -20,11 +20,11 @@
 <resources>
   <dimen name="download_progress_padding">1dp</dimen>
   <dimen name="favicon_width">48dp</dimen>
-  <dimen name="stop_min_height">35dp</dimen>
-  <dimen name="stop_min_width">35dp</dimen>
+  <dimen name="stop_min_height">48dp</dimen>
+  <dimen name="stop_min_width">48dp</dimen>
   <dimen name="favicon_margin_right">8dp</dimen>
   <dimen name="item_library_margin_top">8dp</dimen>
-  <dimen name="stop_horizontal_margin">8dp</dimen>
+  <dimen name="stop_horizontal_margin">2dp</dimen>
   <dimen name="material_design_appbar_size">48dp</dimen>
 
 </resources>

@@ -95,6 +95,7 @@
         android:layout_marginStart="@dimen/stop_horizontal_margin"
         android:layout_marginEnd="@dimen/stop_horizontal_margin"
         android:layout_weight="0.5"
+        android:padding="7dp"
         android:minWidth="@dimen/stop_min_width"
         android:minHeight="@dimen/stop_min_height"
         android:src="@drawable/ic_pause_24dp" />
@@ -107,6 +108,7 @@
         android:layout_marginStart="@dimen/stop_horizontal_margin"
         android:layout_marginEnd="@dimen/stop_horizontal_margin"
         android:layout_weight="0.5"
+        android:padding="7dp"
         android:minWidth="@dimen/stop_min_width"
         android:minHeight="@dimen/stop_min_height"
         android:src="@drawable/ic_stop_24dp" />

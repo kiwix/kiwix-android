@@ -128,9 +128,10 @@
     android:src="@drawable/fullscreen_exit"
     android:tint="?colorSurface"
     android:visibility="gone"
+    android:minWidth="@dimen/material_minimum_height_and_width"
+    android:minHeight="@dimen/material_minimum_height_and_width"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    tools:visibility="visible" />
+    app:layout_constraintTop_toTopOf="parent" />
 
 
   <androidx.coordinatorlayout.widget.CoordinatorLayout
