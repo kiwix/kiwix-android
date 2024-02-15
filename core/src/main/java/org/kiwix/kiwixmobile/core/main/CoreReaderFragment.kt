@@ -65,7 +65,6 @@ import androidx.annotation.AnimRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.appcompat.widget.TooltipCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Group
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -115,6 +114,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigatio
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.findFirstTextView
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
+import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.DocumentParser.SectionsListener
@@ -694,13 +694,8 @@ abstract class CoreReaderFragment :
       )
       setDisplayShowTitleEnabled(false)
     }
-    // contentDescription is not working as expected, so use TooltipCompat.setTooltipText
-    // method instead of toolTipText, for backward compatibility
     closeAllTabsButton?.let {
-      TooltipCompat.setTooltipText(
-        it,
-        resources.getString(R.string.close_all_tabs)
-      )
+      it.setToolTipWithContentDescription(resources.getString(R.string.close_all_tabs))
     }
     // Set a negative top margin to the web views to remove
     // the unwanted blank space caused by the toolbar.
