@@ -22,6 +22,7 @@ import android.content.res.Configuration
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.isVisible
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -98,7 +99,15 @@ class MainMenu(
       else
         MenuItem.SHOW_AS_ACTION_NEVER
     )
-    tabSwitcher?.actionView?.setOnClickListener { menuClickListener.onTabMenuClicked() }
+    tabSwitcher?.actionView?.apply {
+      setOnClickListener { menuClickListener.onTabMenuClicked() }
+      // contentDescription is not working as expected, so use TooltipCompat.setTooltipText
+      // method instead of toolTipText, for backward compatibility
+      TooltipCompat.setTooltipText(
+        this,
+        resources.getString(R.string.switch_tabs)
+      )
+    }
     addNote.menuItemClickListener { menuClickListener.onAddNoteMenuClicked() }
     randomArticle.menuItemClickListener { menuClickListener.onRandomArticleMenuClicked() }
     readAloud.menuItemClickListener { menuClickListener.onReadAloudMenuClicked() }
@@ -117,6 +126,7 @@ class MainMenu(
         menuClickListener.onHomeMenuClicked()
         true
       }
+
       else -> false
     }
 

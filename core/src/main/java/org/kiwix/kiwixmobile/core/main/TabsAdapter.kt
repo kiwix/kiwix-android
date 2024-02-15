@@ -19,12 +19,14 @@ package org.kiwix.kiwixmobile.core.main
 
 import android.annotation.SuppressLint
 import android.text.TextUtils
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.TooltipCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.constraintlayout.widget.ConstraintSet.BOTTOM
@@ -65,6 +67,15 @@ class TabsAdapter internal constructor(
       .apply {
         id = R.id.tabsAdapterCloseImageView
         setImageDrawableCompat(R.drawable.ic_clear_white_24dp)
+        // contentDescription is not working as expected, so use TooltipCompat.setTooltipText
+        // method instead of toolTipText, for backward compatibility
+        TooltipCompat.setTooltipText(
+          this,
+          resources.getString(R.string.close_tab)
+        )
+        val outValue = TypedValue()
+        context.theme.resolveAttribute(android.R.attr.actionBarItemBackground, outValue, true)
+        setBackgroundResource(outValue.resourceId)
         tint(context.getAttribute(R.attr.colorOnSurface))
       }
     val cardView = MaterialCardView(context)

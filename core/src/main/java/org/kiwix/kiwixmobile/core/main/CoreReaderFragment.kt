@@ -65,6 +65,7 @@ import androidx.annotation.AnimRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.widget.TooltipCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Group
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -693,6 +694,14 @@ abstract class CoreReaderFragment :
       )
       setDisplayShowTitleEnabled(false)
     }
+    // contentDescription is not working as expected, so use TooltipCompat.setTooltipText
+    // method instead of toolTipText, for backward compatibility
+    closeAllTabsButton?.let {
+      TooltipCompat.setTooltipText(
+        it,
+        resources.getString(R.string.close_all_tabs)
+      )
+    }
     // Set a negative top margin to the web views to remove
     // the unwanted blank space caused by the toolbar.
     setTopMarginToWebViews(-requireActivity().getToolbarHeight())
@@ -930,22 +939,27 @@ abstract class CoreReaderFragment :
         hideTabSwitcher()
         return FragmentActivityExtensions.Super.ShouldNotCall
       }
+
       isInFullScreenMode() -> {
         closeFullScreen()
         return FragmentActivityExtensions.Super.ShouldNotCall
       }
+
       compatCallback?.isActive == true -> {
         compatCallback?.finish()
         return FragmentActivityExtensions.Super.ShouldNotCall
       }
+
       drawerLayout?.isDrawerOpen(GravityCompat.END) == true -> {
         drawerLayout?.closeDrawers()
         return FragmentActivityExtensions.Super.ShouldNotCall
       }
+
       getCurrentWebView()?.canGoBack() == true -> {
         getCurrentWebView()?.goBack()
         return FragmentActivityExtensions.Super.ShouldNotCall
       }
+
       else -> return FragmentActivityExtensions.Super.ShouldCall
     }
   }
@@ -1017,6 +1031,7 @@ abstract class CoreReaderFragment :
                   pauseTTSButton?.setText(R.string.tts_resume)
                   setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, true)
                 }
+
                 AudioManager.AUDIOFOCUS_GAIN -> {
                   pauseTTSButton?.setText(R.string.tts_pause)
                   setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, false)
@@ -1302,12 +1317,14 @@ abstract class CoreReaderFragment :
               startReadAloud()
             }
           }
+
           View.VISIBLE -> {
             if (isBackToTopEnabled) {
               backToTopButton?.show()
             }
             tts?.stop()
           }
+
           else -> {}
         }
       }
@@ -1578,6 +1595,7 @@ abstract class CoreReaderFragment :
           }
         }
       }
+
       REQUEST_POST_NOTIFICATION_PERMISSION -> {
         if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
           onReadAloudMenuClicked()
@@ -1732,18 +1750,22 @@ abstract class CoreReaderFragment :
         // see https://github.com/kiwix/kiwix-android/issues/2607
         intent.action = null
       }
+
       CoreSearchWidget.TEXT_CLICKED -> {
         goToSearch(false)
         intent.action = null
       }
+
       CoreSearchWidget.STAR_CLICKED -> {
         goToBookmarks()
         intent.action = null
       }
+
       CoreSearchWidget.MIC_CLICKED -> {
         goToSearch(true)
         intent.action = null
       }
+
       Intent.ACTION_VIEW -> if (intent.type == null ||
         intent.type != "application/octet-stream"
       ) {
@@ -2051,10 +2073,12 @@ abstract class CoreReaderFragment :
         // This is my web site, so do not override; let my WebView load the page
         handleEvent = true
       }
+
       url.startsWith("file://") -> {
         // To handle help page (loaded from resources)
         handleEvent = true
       }
+
       url.startsWith(ZimFileReader.UI_URI.toString()) -> {
         handleEvent = true
       }
