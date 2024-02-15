@@ -59,6 +59,7 @@ import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
+import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -139,6 +140,9 @@ class LocalFileTransferFragment :
     wifiDirectManager.callbacks = this
     wifiDirectManager.lifecycleCoroutineScope = lifecycleScope
     wifiDirectManager.startWifiDirectManager(filesForTransfer)
+    fragmentLocalFileTransferBinding
+      ?.textViewDeviceName
+      ?.setToolTipWithContentDescription(getString(R.string.your_device))
   }
 
   private fun setupMenu() {

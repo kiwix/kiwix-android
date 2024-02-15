@@ -23,6 +23,7 @@ import eu.mhutti1.utils.storage.StorageDevice
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.databinding.DeviceItemBinding
+import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
@@ -45,8 +46,15 @@ internal class StorageViewHolder(
     }
     deviceItemBinding.fileSize.text = storageCalculator.calculateAvailableSpace(item.file) + " / " +
       storageCalculator.calculateTotalSpace(item.file) + "  "
-    deviceItemBinding.clickOverlay.setOnClickListener {
-      onClickAction.invoke(item)
+    deviceItemBinding.clickOverlay.apply {
+      setToolTipWithContentDescription(
+        deviceItemBinding.root.context.getString(
+          R.string.storage_selection_dialog_accessibility_description
+        )
+      )
+      setOnClickListener {
+        onClickAction.invoke(item)
+      }
     }
   }
 }

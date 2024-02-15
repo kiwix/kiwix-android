@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.extensions
 import android.annotation.SuppressLint
 import android.view.View
 import androidx.annotation.ColorInt
+import androidx.appcompat.widget.TooltipCompat
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 
@@ -68,4 +69,15 @@ fun View.snack(
       }
     })
   }.show()
+}
+
+/**
+ * Sets the content description to address an accessibility issue reported by the Play Store.
+ * Additionally, sets a tooltip for displaying hints to the user when they long-click on the view.
+ *
+ * @param description The content description and tooltip text to be set.
+ */
+fun View.setToolTipWithContentDescription(description: String) {
+  contentDescription = description
+  TooltipCompat.setTooltipText(this, description)
 }

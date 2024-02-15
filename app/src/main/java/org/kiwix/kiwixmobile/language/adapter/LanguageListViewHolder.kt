@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.language.adapter
 import android.view.View
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
+import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.databinding.HeaderDateBinding
 import org.kiwix.kiwixmobile.databinding.ItemLanguageBinding
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.HeaderItem
@@ -48,8 +49,18 @@ sealed class LanguageListViewHolder<in T : LanguageListItem>(override val contai
       itemLanguageBinding.itemLanguageLocalizedName.text = language.languageLocalized
       itemLanguageBinding.itemLanguageBooksCount.text = containerView.context
         .getString(R.string.books_count, language.occurencesOfLanguage)
-      itemLanguageBinding.itemLanguageCheckbox.isChecked = language.active
-      itemLanguageBinding.itemLanguageClickableArea.setOnClickListener { clickAction(item) }
+      itemLanguageBinding.itemLanguageCheckbox.apply {
+        setToolTipWithContentDescription(
+          containerView.context.getString(R.string.select_language_content_description)
+        )
+        isChecked = language.active
+      }
+      itemLanguageBinding.itemLanguageClickableArea.apply {
+        setToolTipWithContentDescription(
+          containerView.context.getString(R.string.select_language_content_description)
+        )
+        setOnClickListener { clickAction(item) }
+      }
     }
   }
 }
