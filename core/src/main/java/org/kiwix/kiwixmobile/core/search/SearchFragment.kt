@@ -54,6 +54,7 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.databinding.FragmentSearchBinding
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
+import org.kiwix.kiwixmobile.core.extensions.setUpSearchView
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.search.adapter.SearchAdapter
@@ -220,21 +221,25 @@ class SearchFragment : BaseFragment() {
           val searchMenuItem = menu.findItem(R.id.menu_search)
           searchMenuItem.expandActionView()
           searchView = searchMenuItem.actionView as SearchView
-          searchView?.setOnQueryTextListener(
-            SimpleTextListener { query, isSubmit ->
-              if (query.isNotEmpty()) {
-                when {
-                  isSubmit -> {
-                    // if user press the search/enter button on keyboard,
-                    // try to open the article if present
-                    getSearchListItemForQuery(query)?.let(::onItemClick)
-                  }
+          searchView?.apply {
+            setUpSearchView(requireActivity())
+            searchView?.setOnQueryTextListener(
+              SimpleTextListener { query, isSubmit ->
+                if (query.isNotEmpty()) {
+                  when {
+                    isSubmit -> {
+                      // if user press the search/enter button on keyboard,
+                      // try to open the article if present
+                      getSearchListItemForQuery(query)?.let(::onItemClick)
+                    }
 
-                  else -> searchViewModel.actions.trySend(Filter(query)).isSuccess
+                    else -> searchViewModel.actions.trySend(Filter(query)).isSuccess
+                  }
                 }
               }
-            }
-          )
+            )
+          }
+
           searchMenuItem.setOnActionExpandListener(object : OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem) = false
 

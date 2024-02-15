@@ -46,6 +46,7 @@ import org.kiwix.kiwixmobile.core.databinding.FragmentPageBinding
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
+import org.kiwix.kiwixmobile.core.extensions.setUpSearchView
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -106,12 +107,15 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
           menuInflater.inflate(R.menu.menu_page, menu)
           val search = menu.findItem(R.id.menu_page_search).actionView as SearchView
-          search.queryHint = searchQueryHint
-          search.setOnQueryTextListener(
-            SimpleTextListener { query, _ ->
-              pageViewModel.actions.offer(Action.Filter(query))
-            }
-          )
+          search.apply {
+            setUpSearchView(requireActivity())
+            queryHint = searchQueryHint
+            setOnQueryTextListener(
+              SimpleTextListener { query, _ ->
+                pageViewModel.actions.offer(Action.Filter(query))
+              }
+            )
+          }
         }
 
         @Suppress("ReturnCount")
@@ -121,6 +125,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
               pageViewModel.actions.offer(Action.Exit)
               return true
             }
+
             R.id.menu_pages_clear -> {
               pageViewModel.actions.offer(Action.UserClickedDeleteButton)
               return true

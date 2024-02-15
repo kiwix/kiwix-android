@@ -64,7 +64,7 @@ class TabsAdapter internal constructor(
     val context = parent.context
     val margin16 = context.resources.getDimensionPixelSize(R.dimen.activity_horizontal_margin)
     val closeImageWidthAndHeight =
-      context.resources.getDimensionPixelSize(R.dimen.material_minimum_height_and_width)
+      context.resources.getDimensionPixelSize(R.dimen.close_tab_button_size)
     val close = ImageView(context)
       .apply {
         id = R.id.tabsAdapterCloseImageView
