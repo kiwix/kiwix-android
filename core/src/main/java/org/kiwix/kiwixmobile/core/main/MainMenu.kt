@@ -22,9 +22,9 @@ import android.content.res.Configuration
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.isVisible
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.extensions.setToolTip
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 
 const val REQUEST_FILE_SEARCH = 1236
@@ -101,7 +101,12 @@ class MainMenu(
     )
     tabSwitcher?.actionView?.apply {
       setOnClickListener { menuClickListener.onTabMenuClicked() }
-      setToolTip(resources.getString(R.string.switch_tabs))
+      // contentDescription is not working as expected, so use TooltipCompat.setTooltipText
+      // method instead of toolTipText, for backward compatibility
+      TooltipCompat.setTooltipText(
+        this,
+        resources.getString(R.string.switch_tabs)
+      )
     }
     addNote.menuItemClickListener { menuClickListener.onAddNoteMenuClicked() }
     randomArticle.menuItemClickListener { menuClickListener.onRandomArticleMenuClicked() }

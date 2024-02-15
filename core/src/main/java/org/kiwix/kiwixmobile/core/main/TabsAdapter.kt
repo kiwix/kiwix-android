@@ -26,6 +26,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.TooltipCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.constraintlayout.widget.ConstraintSet.BOTTOM
@@ -38,7 +39,6 @@ import com.google.android.material.card.MaterialCardView
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.getAttribute
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
-import org.kiwix.kiwixmobile.core.extensions.setToolTip
 import org.kiwix.kiwixmobile.core.extensions.tint
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getToolbarHeight
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowHeight
@@ -67,7 +67,12 @@ class TabsAdapter internal constructor(
       .apply {
         id = R.id.tabsAdapterCloseImageView
         setImageDrawableCompat(R.drawable.ic_clear_white_24dp)
-        setToolTip(resources.getString(R.string.close_tab))
+        // contentDescription is not working as expected, so use TooltipCompat.setTooltipText
+        // method instead of toolTipText, for backward compatibility
+        TooltipCompat.setTooltipText(
+          this,
+          resources.getString(R.string.close_tab)
+        )
         val outValue = TypedValue()
         context.theme.resolveAttribute(android.R.attr.actionBarItemBackground, outValue, true)
         setBackgroundResource(outValue.resourceId)
