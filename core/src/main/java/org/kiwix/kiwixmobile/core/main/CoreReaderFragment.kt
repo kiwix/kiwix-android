@@ -113,6 +113,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationP
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.findFirstTextView
+import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.extensions.snack
@@ -692,11 +693,15 @@ abstract class CoreReaderFragment :
       setHomeAsUpIndicator(
         ContextCompat.getDrawable(requireActivity(), R.drawable.ic_round_add_white_36dp)
       )
+      // set the contentDescription to UpIndicator icon.
+      toolbar?.getToolbarNavigationIcon()?.setToolTipWithContentDescription(
+        getString(R.string.search_open_in_new_tab)
+      )
       setDisplayShowTitleEnabled(false)
     }
-    closeAllTabsButton?.let {
-      it.setToolTipWithContentDescription(resources.getString(R.string.close_all_tabs))
-    }
+    closeAllTabsButton?.setToolTipWithContentDescription(
+      resources.getString(R.string.close_all_tabs)
+    )
     // Set a negative top margin to the web views to remove
     // the unwanted blank space caused by the toolbar.
     setTopMarginToWebViews(-requireActivity().getToolbarHeight())

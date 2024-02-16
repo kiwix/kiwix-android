@@ -50,6 +50,8 @@ import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
+import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
+import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
@@ -197,6 +199,14 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     navController.navigateUp() || super.onSupportNavigateUp()
 
   open fun setupDrawerToggle(toolbar: Toolbar) {
+    // Set the initial contentDescription to the hamburger icon.
+    // This method is called from various locations after modifying the navigationIcon.
+    // For example, we previously changed this icon/contentDescription to the "+" button
+    // when opening the tabSwitcher. After closing the tabSwitcher, we reset the
+    // contentDescription to the default hamburger icon.
+    toolbar.getToolbarNavigationIcon()?.setToolTipWithContentDescription(
+      getString(R.string.open_drawer)
+    )
     drawerToggle =
       ActionBarDrawerToggle(
         this,

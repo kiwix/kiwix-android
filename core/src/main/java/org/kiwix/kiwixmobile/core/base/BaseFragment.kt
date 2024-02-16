@@ -24,6 +24,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
+import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 
 /**
  * All fragments should inherit from this fragment.
@@ -55,6 +58,10 @@ abstract class BaseFragment : Fragment() {
         it.supportActionBar?.let { actionBar ->
           actionBar.setDisplayHomeAsUpEnabled(true)
           title = fragmentTitle
+          // set the navigation back button contentDescription
+          getToolbarNavigationIcon()?.setToolTipWithContentDescription(
+            getString(R.string.toolbar_back_button_content_description)
+          )
         }
       }
       setNavigationOnClickListener {
