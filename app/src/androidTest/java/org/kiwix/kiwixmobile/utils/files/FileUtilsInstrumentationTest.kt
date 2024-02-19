@@ -18,18 +18,22 @@
 package org.kiwix.kiwixmobile.utils.files
 
 import android.content.Context
+import android.net.Uri
+import android.os.Environment
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getAllZimParts
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils.hasPart
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getAllZimParts
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.hasPart
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
+import java.io.OutputStream
 import java.util.Random
 
 class FileUtilsInstrumentationTest {
@@ -246,5 +250,106 @@ class FileUtilsInstrumentationTest {
     }
   }
 
-  data class DummyUrlData(val url: String?, val expectedFileName: String?)
+  @Test
+  fun testGetLocalFilePathByUri() {
+    val loadFileStream =
+      FileUtilsInstrumentationTest::class.java.classLoader.getResourceAsStream("testzim.zim")
+    val zimFile = File(testDir, "testzim.zim")
+    if (zimFile.exists()) zimFile.delete()
+    zimFile.createNewFile()
+    loadFileStream.use { inputStream ->
+      val outputStream: OutputStream = FileOutputStream(zimFile)
+      outputStream.use { it ->
+        val buffer = ByteArray(inputStream.available())
+        var length: Int
+        while (inputStream.read(buffer).also { length = it } > 0) {
+          it.write(buffer, 0, length)
+        }
+      }
+    }
+    val commonUri = "Download/beer.stackexchange.com_en_all_2023-05.zim"
+    val sdCardPath = context!!.getExternalFilesDirs("")[1].path.substringBefore("/Android")
+    val dummyUriData = listOf(
+      // test the download uri on older devices
+      DummyUrlData(
+        null,
+        "${Environment.getExternalStorageDirectory()}/$commonUri",
+        Uri.parse(
+          "content://com.android.providers.downloads.documents/document/" +
+            "raw%3A%2Fstorage%2Femulated%2F0%2FDownload%2Fbeer.stackexchange.com_en_all_2023-05.zim"
+        )
+      ),
+      // test the download uri with new version of android
+      DummyUrlData(
+        null,
+        "${Environment.getExternalStorageDirectory()}/$commonUri",
+        Uri.parse(
+          "content://com.android.providers.downloads.documents/document/" +
+            "%2Fstorage%2Femulated%2F0%2FDownload%2Fbeer.stackexchange.com_en_all_2023-05.zim"
+        )
+      ),
+      // test with file scheme
+      DummyUrlData(
+        null,
+        zimFile.path,
+        Uri.fromFile(zimFile)
+      ),
+      // test with internal storage uri
+      DummyUrlData(
+        null,
+        "${Environment.getExternalStorageDirectory()}/$commonUri",
+        Uri.parse(
+          "content://com.android.externalstorage.documents/document/" +
+            "primary%3ADownload%2Fbeer.stackexchange.com_en_all_2023-05.zim"
+        )
+      ),
+      // test with SD card uri
+      DummyUrlData(
+        null,
+        "$sdCardPath/$commonUri",
+        Uri.parse(
+          "content://com.android.externalstorage.documents/document/" +
+            sdCardPath.substringAfter("storage/") +
+            "%3ADownload%2Fbeer.stackexchange.com_en_all_2023-05.zim"
+        )
+      ),
+      // test with USB stick uri
+      DummyUrlData(
+        null,
+        "/mnt/media_rw/USB/$commonUri",
+        Uri.parse(
+          "content://com.android.externalstorage.documents/document/" +
+            "USB%3ADownload%2Fbeer.stackexchange.com_en_all_2023-05.zim"
+        )
+      ),
+      // test with invalid uri
+      DummyUrlData(
+        null,
+        null,
+        Uri.parse(
+          "content://com.android.externalstorage.documents/document/"
+        )
+      ),
+      // test with invalid download uri
+      DummyUrlData(
+        null,
+        null,
+        Uri.parse(
+          "content://media/external/downloads/0"
+        )
+      )
+    )
+    context?.let { context ->
+      dummyUriData.forEach { dummyUrlData ->
+        dummyUrlData.uri?.let { uri ->
+          Assertions.assertEquals(
+            FileUtils.getLocalFilePathByUri(context, uri),
+            dummyUrlData.expectedFileName
+          )
+        }
+      }
+    }
+  }
+
+  data class DummyUrlData(val url: String?, val expectedFileName: String?, val uri: Uri? = null)
 }
