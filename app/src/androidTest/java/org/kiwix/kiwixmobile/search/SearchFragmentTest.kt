@@ -26,6 +26,9 @@ import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import leakcanary.LeakAssertions
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.ResponseBody
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -41,18 +44,25 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVi
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
+import java.net.URI
 
 class SearchFragmentTest : BaseActivityTest() {
+
+  private val stackExchangeZimFileUrl =
+    "https://download.kiwix.org/zim/stack_exchange/academia.stackexchange.com_en_all_2023-05.zim"
 
   @Rule
   @JvmField
   var retryRule = RetryRule()
 
   private lateinit var kiwixMainActivity: KiwixMainActivity
+  private lateinit var uiDevice: UiDevice
+  private lateinit var downloadingZimFile: File
+  private lateinit var testZimFile: File
 
   @Before
   override fun waitForIdle() {
-    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+    uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
       if (isSystemUINotRespondingDialogVisible(this)) {
         closeSystemDialogs(context)
       }
@@ -75,6 +85,135 @@ class SearchFragmentTest : BaseActivityTest() {
       kiwixMainActivity = it
       kiwixMainActivity.navigate(R.id.libraryFragment)
     }
+    testZimFile = getTestZimFile()
+    openKiwixReaderFragmentWithFile(testZimFile)
+    search { checkZimFileSearchSuccessful(R.id.readerFragment) }
+    openSearchWithQuery("Android", testZimFile)
+    search {
+      clickOnSearchItemInSearchList()
+      checkZimFileSearchSuccessful(R.id.readerFragment)
+    }
+
+    openSearchWithQuery(zimFile = testZimFile)
+    search {
+      // test with fast typing/deleting
+      searchWithFrequentlyTypedWords(searchUnitTestingQuery)
+      assertSearchSuccessful(searchUnitTestResult)
+      deleteSearchedQueryFrequently(searchUnitTestingQuery, uiDevice)
+      assertSearchSuccessful(searchUnitTestResult)
+
+      // test with a short delay typing/deleting to
+      // properly test the cancelling of previously searching task
+      searchWithFrequentlyTypedWords(searchUnitTestingQuery, 50)
+      assertSearchSuccessful(searchUnitTestResult)
+      deleteSearchedQueryFrequently(searchUnitTestingQuery, uiDevice, 50)
+      assertSearchSuccessful(searchUnitTestResult)
+
+      // test with a long delay typing/deleting to
+      // properly execute the search query letter by letter
+      searchWithFrequentlyTypedWords(searchUnitTestingQuery, 300)
+      assertSearchSuccessful(searchUnitTestResult)
+      deleteSearchedQueryFrequently(searchUnitTestingQuery, uiDevice, 300)
+      assertSearchSuccessful(searchUnitTestResult)
+      // to close the keyboard
+      pressBack()
+      // go to reader screen
+      pressBack()
+    }
+
+    // test with a large ZIM file to properly test the scenario
+    downloadingZimFile = getDownloadingZimFile()
+    OkHttpClient().newCall(downloadRequest()).execute().use { response ->
+      if (response.isSuccessful) {
+        response.body?.let { responseBody ->
+          writeZimFileData(responseBody, downloadingZimFile)
+        }
+      } else {
+        throw RuntimeException(
+          "Download Failed. Error: ${response.message}\n" +
+            " Status Code: ${response.code}"
+        )
+      }
+    }
+    UiThreadStatement.runOnUiThread { kiwixMainActivity.navigate(R.id.libraryFragment) }
+    openKiwixReaderFragmentWithFile(downloadingZimFile)
+    openSearchWithQuery(zimFile = downloadingZimFile)
+    search {
+      // test with fast typing/deleting
+      searchWithFrequentlyTypedWords(searchQueryForDownloadedZimFile)
+      assertSearchSuccessful(searchResultForDownloadedZimFile)
+      deleteSearchedQueryFrequently(searchQueryForDownloadedZimFile, uiDevice)
+      assertSearchSuccessful(searchResultForDownloadedZimFile)
+
+      // test with a short delay typing/deleting to
+      // properly test the cancelling of previously searching task
+      searchWithFrequentlyTypedWords(searchQueryForDownloadedZimFile, 50)
+      assertSearchSuccessful(searchResultForDownloadedZimFile)
+      deleteSearchedQueryFrequently(searchQueryForDownloadedZimFile, uiDevice, 50)
+      assertSearchSuccessful(searchResultForDownloadedZimFile)
+
+      // test with a long delay typing/deleting to
+      // properly execute the search query letter by letter
+      searchWithFrequentlyTypedWords(searchQueryForDownloadedZimFile, 300)
+      assertSearchSuccessful(searchResultForDownloadedZimFile)
+      deleteSearchedQueryFrequently(searchQueryForDownloadedZimFile, uiDevice, 300)
+      assertSearchSuccessful(searchResultForDownloadedZimFile)
+      // to close the keyboard
+      pressBack()
+      // go to reader screen
+      pressBack()
+    }
+    removeTemporaryZimFilesToFreeUpDeviceStorage()
+    LeakAssertions.assertNoLeaks()
+  }
+
+  private fun removeTemporaryZimFilesToFreeUpDeviceStorage() {
+    testZimFile.delete()
+    downloadingZimFile.delete()
+  }
+
+  private fun openKiwixReaderFragmentWithFile(zimFile: File) {
+    UiThreadStatement.runOnUiThread {
+      kiwixMainActivity.navigate(
+        actionNavigationLibraryToNavigationReader()
+          .apply { zimFileUri = zimFile.toUri().toString() }
+      )
+    }
+  }
+
+  private fun writeZimFileData(responseBody: ResponseBody, file: File) {
+    FileOutputStream(file).use { outputStream ->
+      responseBody.byteStream().use { inputStream ->
+        val buffer = ByteArray(4096)
+        var bytesRead: Int
+        while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+          outputStream.write(buffer, 0, bytesRead)
+        }
+        outputStream.flush()
+      }
+    }
+  }
+
+  private fun downloadRequest() =
+    Request.Builder()
+      .url(URI.create(stackExchangeZimFileUrl).toURL())
+      .build()
+
+  private fun openSearchWithQuery(query: String = "", zimFile: File) {
+    UiThreadStatement.runOnUiThread {
+      if (zimFile.canRead()) {
+        kiwixMainActivity.openSearch(searchString = query)
+      } else {
+        throw RuntimeException(
+          "File $zimFile is not readable." +
+            " Original File $zimFile is readable = ${zimFile.canRead()}" +
+            " Size ${zimFile.length()}"
+        )
+      }
+    }
+  }
+
+  private fun getTestZimFile(): File {
     val loadFileStream =
       SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
     val zimFile = File(context.cacheDir, "testzim.zim")
@@ -90,29 +229,14 @@ class SearchFragmentTest : BaseActivityTest() {
         }
       }
     }
-    UiThreadStatement.runOnUiThread {
-      kiwixMainActivity.navigate(
-        actionNavigationLibraryToNavigationReader()
-          .apply { zimFileUri = zimFile.toUri().toString() }
-      )
-    }
-    search { checkZimFileSearchSuccessful(R.id.readerFragment) }
-    UiThreadStatement.runOnUiThread {
-      if (zimFile.canRead()) {
-        kiwixMainActivity.openSearch(searchString = "Android")
-      } else {
-        throw RuntimeException(
-          "File $zimFile is not readable." +
-            " Original File $zimFile is readable = ${zimFile.canRead()}" +
-            " Size ${zimFile.length()}"
-        )
-      }
-    }
-    search {
-      clickOnSearchItemInSearchList()
-      checkZimFileSearchSuccessful(R.id.readerFragment)
-    }
-    LeakAssertions.assertNoLeaks()
+    return zimFile
+  }
+
+  private fun getDownloadingZimFile(): File {
+    val zimFile = File(context.cacheDir, "stack_exchange.zim")
+    if (zimFile.exists()) zimFile.delete()
+    zimFile.createNewFile()
+    return zimFile
   }
 
   @After
