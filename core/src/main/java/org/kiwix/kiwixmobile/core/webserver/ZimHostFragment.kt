@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.webserver
 
-import android.Manifest
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -26,7 +25,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
@@ -37,7 +35,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -56,7 +53,6 @@ import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
-import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -172,17 +168,14 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     }
 
     activityZimHostBinding?.startServerButton?.setOnClickListener {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ||
-        checkNearbyWifiDevicesPermission()
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
       ) {
         if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
           startStopServer()
         } else {
           requestNotificationPermission()
         }
-      } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P ||
-        checkCoarseLocationAccessPermission()
-      ) {
+      } else {
         startStopServer()
       }
     }
@@ -201,87 +194,6 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
         requireActivity()::navigateToAppSettings
       )
     }
-  }
-
-  private fun checkCoarseLocationAccessPermission(): Boolean =
-    if (ContextCompat.checkSelfPermission(
-        requireActivity(),
-        Manifest.permission.ACCESS_COARSE_LOCATION
-      ) == PackageManager.PERMISSION_DENIED
-    ) {
-      if (ActivityCompat.shouldShowRequestPermissionRationale(
-          requireActivity(),
-          Manifest.permission.ACCESS_COARSE_LOCATION
-        )
-      ) {
-        alertDialogShower.show(
-          KiwixDialog.LocationPermissionRationaleOnHostZimFile,
-          ::askCoarseLocationPermission
-        )
-      } else {
-        askCoarseLocationPermission()
-      }
-      false
-    } else {
-      true
-    }
-
-  private fun checkNearbyWifiDevicesPermission(): Boolean =
-    if (ContextCompat.checkSelfPermission(
-        requireActivity(),
-        Manifest.permission.NEARBY_WIFI_DEVICES
-      ) == PackageManager.PERMISSION_DENIED
-    ) {
-      if (ActivityCompat.shouldShowRequestPermissionRationale(
-          requireActivity(),
-          Manifest.permission.NEARBY_WIFI_DEVICES
-        )
-      ) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-          alertDialogShower.show(
-            KiwixDialog.NearbyWifiPermissionRationaleOnHostZimFile,
-            ::askNearbyWifiDevicesPermission
-          )
-        }
-      } else {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-          askNearbyWifiDevicesPermission()
-        }
-      }
-      false
-    } else {
-      true
-    }
-
-  @Suppress("DEPRECATION")
-  override fun onRequestPermissionsResult(
-    requestCode: Int,
-    permissions: Array<out String>,
-    grantResults: IntArray
-  ) {
-    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    if (permissions.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-      if (requestCode == PERMISSION_REQUEST_CODE_COARSE_LOCATION ||
-        requestCode == REQUEST_POST_NOTIFICATION_PERMISSION
-      ) {
-        startStopServer()
-      }
-    }
-  }
-
-  private fun askCoarseLocationPermission() {
-    ActivityCompat.requestPermissions(
-      requireActivity(), arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-      PERMISSION_REQUEST_CODE_COARSE_LOCATION
-    )
-  }
-
-  @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-  private fun askNearbyWifiDevicesPermission() {
-    ActivityCompat.requestPermissions(
-      requireActivity(), arrayOf(Manifest.permission.NEARBY_WIFI_DEVICES),
-      PERMISSION_REQUEST_CODE_COARSE_LOCATION
-    )
   }
 
   private fun startStopServer() {
@@ -529,6 +441,5 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   companion object {
     const val SELECTED_ZIM_PATHS_KEY = "selected_zim_paths"
     const val RESTART_SERVER = "restart_server"
-    const val PERMISSION_REQUEST_CODE_COARSE_LOCATION = 10
   }
 }

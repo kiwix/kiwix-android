@@ -71,7 +71,6 @@ import org.kiwix.kiwixmobile.databinding.FragmentLocalFileTransferBinding
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getDeviceStatus
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiP2pDelegate
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiPeerListAdapter
-import org.kiwix.kiwixmobile.core.webserver.ZimHostFragment.Companion.PERMISSION_REQUEST_CODE_COARSE_LOCATION
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
 import javax.inject.Inject
@@ -489,5 +488,6 @@ class LocalFileTransferFragment :
     const val TAG = "LocalFileTransferActvty"
     private const val PERMISSION_REQUEST_FINE_LOCATION = 2
     private const val PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS = 3
+    const val PERMISSION_REQUEST_CODE_COARSE_LOCATION = 10
   }
 }

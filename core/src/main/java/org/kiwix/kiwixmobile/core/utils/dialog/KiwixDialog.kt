@@ -49,13 +49,6 @@ sealed class KiwixDialog(
     android.R.string.cancel
   )
 
-  object LocationPermissionRationaleOnHostZimFile : KiwixDialog(
-    null,
-    R.string.permission_rationale_location_on_host_zim_file,
-    android.R.string.ok,
-    android.R.string.cancel
-  )
-
   object NearbyWifiPermissionRationaleOnHostZimFile : KiwixDialog(
     null,
     R.string.permission_rationale_location_on_host_zim_file,
