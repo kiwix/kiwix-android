@@ -228,6 +228,9 @@ object FileUtils {
       null
     } catch (ignore: UnsupportedOperationException) {
       null
+    } catch (ignore: IllegalStateException) {
+      // to handle the scenario if the given uri is UNKNOWN
+      null
     }
   }
 

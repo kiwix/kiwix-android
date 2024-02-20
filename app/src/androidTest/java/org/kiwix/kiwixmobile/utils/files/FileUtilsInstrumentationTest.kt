@@ -267,25 +267,28 @@ class FileUtilsInstrumentationTest {
         }
       }
     }
-    val commonUri = "Download/beer.stackexchange.com_en_all_2023-05.zim"
-    val sdCardPath = context!!.getExternalFilesDirs("")[1].path.substringBefore("/Android")
+    val commonPath = "Download/beer.stackexchange.com_en_all_2023-05.zim"
+    val commonUri = "Download%2Fbeer.stackexchange.com_en_all_2023-05.zim"
+    // get the SD card path
+    val sdCardPath = context?.getExternalFilesDirs("")
+      ?.get(1)?.path?.substringBefore("/Android")
     val dummyUriData = listOf(
       // test the download uri on older devices
       DummyUrlData(
         null,
-        "${Environment.getExternalStorageDirectory()}/$commonUri",
+        "${Environment.getExternalStorageDirectory()}/$commonPath",
         Uri.parse(
           "content://com.android.providers.downloads.documents/document/" +
-            "raw%3A%2Fstorage%2Femulated%2F0%2FDownload%2Fbeer.stackexchange.com_en_all_2023-05.zim"
+            "raw%3A%2Fstorage%2Femulated%2F0%2F$commonUri"
         )
       ),
       // test the download uri with new version of android
       DummyUrlData(
         null,
-        "${Environment.getExternalStorageDirectory()}/$commonUri",
+        "${Environment.getExternalStorageDirectory()}/$commonPath",
         Uri.parse(
           "content://com.android.providers.downloads.documents/document/" +
-            "%2Fstorage%2Femulated%2F0%2FDownload%2Fbeer.stackexchange.com_en_all_2023-05.zim"
+            "%2Fstorage%2Femulated%2F0%2F$commonUri"
         )
       ),
       // test with file scheme
@@ -297,29 +300,29 @@ class FileUtilsInstrumentationTest {
       // test with internal storage uri
       DummyUrlData(
         null,
-        "${Environment.getExternalStorageDirectory()}/$commonUri",
+        "${Environment.getExternalStorageDirectory()}/$commonPath",
         Uri.parse(
           "content://com.android.externalstorage.documents/document/" +
-            "primary%3ADownload%2Fbeer.stackexchange.com_en_all_2023-05.zim"
+            "primary%3A$commonUri"
         )
       ),
       // test with SD card uri
       DummyUrlData(
         null,
-        "$sdCardPath/$commonUri",
+        "$sdCardPath/$commonPath",
         Uri.parse(
           "content://com.android.externalstorage.documents/document/" +
-            sdCardPath.substringAfter("storage/") +
-            "%3ADownload%2Fbeer.stackexchange.com_en_all_2023-05.zim"
+            sdCardPath?.substringAfter("storage/") +
+            "%3A$commonUri"
         )
       ),
       // test with USB stick uri
       DummyUrlData(
         null,
-        "/mnt/media_rw/USB/$commonUri",
+        "/mnt/media_rw/USB/$commonPath",
         Uri.parse(
           "content://com.android.externalstorage.documents/document/" +
-            "USB%3ADownload%2Fbeer.stackexchange.com_en_all_2023-05.zim"
+            "USB%3A$commonUri"
         )
       ),
       // test with invalid uri
