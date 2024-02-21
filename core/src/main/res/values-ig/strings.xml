@@ -241,8 +241,6 @@
   <string name="severe_loss_error">siri ike\n mperi! Gbalịa gbanyụọ/nyegharịa WiFi P2P</string>
   <string name="connection_failed">Njikọ\n dara</string>
   <string name="permission_rationale_location">Ebe\n Android chọrọ ikike iji kwe ka ngwa ahụ chọpụta ngwaọrụ ndị ọgbọ</string>
-  <string name="permission_rationale_location_on_host_zim_file">Ebe\n Android chọrọ ikike iji kwe ka ngwa ahụ kwado faịlụ Zim</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">N’akụkụ\n Android chọrọ ikike wifi ngwaọrụ iji kwe ka ngwa ahụ kwado faịlụ Zim</string>
   <string name="permission_refused_location">Enweghị ike\n chọta ngwaọrụ ndị ọgbọ na-enweghị ikike ebe</string>
   <string name="permission_refused_storage">Enweghị ike\n nweta faịlụ zim na-enweghị ikike nchekwa</string>
   <string name="request_enable_location">Gbanye ngosi ebe iji nabata nchọpụta nke otu</string>

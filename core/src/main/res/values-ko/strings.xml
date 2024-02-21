@@ -242,7 +242,6 @@
   <string name="severe_loss_error">서버 오류! 와이파이 P2P를 비활성화/재활성화해 보십시오</string>
   <string name="connection_failed">연결 실패</string>
   <string name="permission_rationale_location">안드로이드에서 앱의 피어 장치 찾기를 허용하려면 위치 권한이 필요합니다</string>
-  <string name="permission_rationale_location_on_host_zim_file">안드로이드에서 앱의 Zim 파일 호스팅을 허용하려면 위치 권한이 필요합니다</string>
   <string name="permission_refused_location">위치 권한 없이 피어 장치를 찾을 수 없습니다</string>
   <string name="permission_refused_storage">스토리지 권한 없이 zim 파일에 접근할 수 없습니다</string>
   <string name="request_enable_location">친구를 찾기 위해 위치 접근을 활성화합니다</string>

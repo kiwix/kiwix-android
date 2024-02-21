@@ -247,8 +247,6 @@
   <string name="severe_loss_error">¡Error grave! Prueba inhabilitando / rehabilitando WiFi punto a punto</string>
   <string name="connection_failed">Falló la conexión</string>
   <string name="permission_rationale_location">Se requieren permisos de localización en Android para detectar dispositivos participantes</string>
-  <string name="permission_rationale_location_on_host_zim_file">Android requiere permiso de ubicación para permitir que la aplicación aloje archivos Zim</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">Android permiso de los dispositivos WiFi cercanos para permitir a la aplicación alojar archivos zim.</string>
   <string name="permission_refused_location">No se pueden ubicar dispositivos de pares sin permisos de ubicación</string>
   <string name="permission_refused_storage">No se puede acceder a archivos ZIM sin permisos de almacenamiento</string>
   <string name="request_enable_location">Habilite la ubicación para permitir la detección de compañeros</string>

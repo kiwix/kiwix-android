@@ -229,8 +229,6 @@
   <string name="severe_loss_error">Chiriŋ din mali yaa! Labi niŋ ŋmaabu labi\'niŋ WiFi P2P</string>
   <string name="connection_failed">Laɣimbu zaɣisiya</string>
   <string name="permission_rationale_location">Dooshee soli nyɛla binshɛli Android ni bora ni di tooi chɛ ka app ŋɔ tooi baŋ di taba</string>
-  <string name="permission_rationale_location_on_host_zim_file">Dooshee soli nyɛla binshɛli Android ni bora ni di tooi chɛ ka app ŋɔ gbubi Zim fasara nima</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">WiFi din miri na bimbuɣisira soli nyɛla Android ni bori shɛli ni di tooi chɛ ka app ŋɔ gbubi Zim fasara nima</string>
   <string name="permission_refused_location">Ku tooi m-bo gbaai di taba  shee di yi niŋ ka a bi ti dooshee soya</string>
   <string name="permission_refused_storage">Ku tooi nya zim fasara nima di yi niŋ ka a bi ti deei niŋ shee soli</string>
   <string name="request_enable_location">Tim dooshee soli di yɛn chɛ ka di gbaai di taba</string>

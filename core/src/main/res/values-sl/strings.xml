@@ -242,8 +242,6 @@
   <string name="severe_loss_error">Huda napaka! Poskusite izklopiti/znova vklopiti Wi-Fi P2P</string>
   <string name="connection_failed">Povezava ni uspela</string>
   <string name="permission_rationale_location">Android zahteva dovoljenje za lokacijo, da lahko aplikaciji omogoči zaznavanje enakovrednih naprav</string>
-  <string name="permission_rationale_location_on_host_zim_file">Android zahteva dovoljenje za lokacijo, da lahko aplikaciji omogoči gostitev datotek ZIM</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">Android zahteva dovoljenje za bložnje naprave Wi-Fi, da lahko aplikaciji omogoči gostovanje datotek ZIM</string>
   <string name="permission_refused_location">Enakovrednih naprav ni mogoče najti brez dovoljenj za lokacijo</string>
   <string name="permission_refused_storage">Do datotek ZIM ni mogoče dostopati brez dovoljenja za shranjevanje</string>
   <string name="request_enable_location">Omogočite lokacijo, da bo mogoče zaznavanje enakovrednih naprav</string>

@@ -240,8 +240,6 @@
   <string name="severe_loss_error">This is toast\'s message when a user\'s wifi P2P gets disconnected from another device.</string>
   <string name="connection_failed">This is toast\'s message when a user fails to connect to another device via wifi P2P.</string>
   <string name="permission_rationale_location">This is dialog\'s message when a user is trying to search nearby devices but the app does not have access to location permission.</string>
-  <string name="permission_rationale_location_on_host_zim_file">Tell the user Location permission required for hosting zim file.</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">It is a dialog\'s message that tells the user that nearby wifi permission is required for hosting zim file.</string>
   <string name="permission_refused_location">It is a toast\'s message shown when a user tries to share zim files but the app does not have access to location permission.</string>
   <string name="permission_refused_storage">It is a toast\'s message shown when a user tries to share zim files but the app does not have access to storage permission.</string>
   <string name="request_enable_location">It is a dialog\'s message shown when a user tries to share zim files but location service is not enabled.</string>

@@ -233,8 +233,6 @@
   <string name="severe_loss_error">ߝߎ߬ߕߎ߲߬ߕߌ߫ ߘߍ߰ߜߍ߹ ߊ߬ ߡߊߝߍߣߍ߲߫ ߞߵߊ߬ ߓߐ߫ ߊ߬ ߟߊ߫ \\ ߥߌߝߌ ߘߊߓߍ߲-ߘߊߓߍ߲ ߠߊߞߎߣߎ߲߫ ߞߎߘߊ߫ ߘߌ߫</string>
   <string name="connection_failed">ߜߊ߲߬ߞߎ߲߬ߠߌ߲ ߓߘߊ߫ ߗߌߙߏ߲߫</string>
   <string name="permission_rationale_location">ߘߌ߲߬ߞߌߙߊ ߟߊߘߤߊ߬ߟߌ ߞߊ߬ߣߌ߲߬ߣߍ߲߫ ߦߋ߫ ߊ߲ߘߙߏߦߌߘ ߓߟߏ߫ ߛߊ߫ ߞߊ߬ ߞߙߍ߬ߝߍ߬ ߞߍߟߊ߲ ߠߎ߬ ߡߊߟߐ߲߫</string>
-  <string name="permission_rationale_location_on_host_zim_file">ߘߌ߲߬ߞߌߙߊ ߟߊ߬ߘߤߊ߬ߟߌ ߞߊ߬ߣߌ߲߬ߣߍ߲߫ ߦߋ߫ ߊ߲ߘߙߏߦߌߘ ߓߟߏ߫ ߛߊ߫ ߞߵߊ߬ ߕߏ߫ ߟߥߊ߬ߟߌ߬ߟߊ߲ ߦߋ߫ ߛߋ߫ ߖ߭ߌߡ ߞߐߕߐ߮ ߟߎ߬ ߟߊߛߣߍ߫ ߟߊ߫</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">ߞߙߍ߬ߝߍ߬ ߥߌߝߌ ߞߍߟߊ߲ ߟߊ߫ ߘߌ߬ߢߍ ߞߊ߬ߣߌ߲߬ߣߍ߲߫ ߦߋ߫ ߊ߲ߘߙߏߦߌߘ ߓߟߏ߫ ߛߊ߫ ߞߵߊ߬ ߕߏ߫ ߟߥߊ߬ߟߌ߬ߟߊ߲ ߦߋ߫ ߛߋ߫ ߖ߭ߌߡ ߞߐߕߐ߮ ߟߎ߬ ߟߊߛߣߍ߫ ߟߊ߫</string>
   <string name="permission_refused_location">ߞߙߍ߬ߝߍ߬ ߞߍߟߊ߲ ߕߍ߫ ߛߐ߲߬ ߡߊߟߐ߲߫ ߠߊ߫ ߣߌ߫ ߘߌ߲߬ߞߌߙߊ ߡߊ߫ ߟߊߘߊ߬ߤߊ߫</string>
   <string name="permission_refused_storage">ߖ߭ߌߡ ߞߐߕߐ߮ ߟߎ߬ ߕߍߣߊ߬ ߟߊߛߐ߬ߘߐ߲߬ ߠߊ߫ ߣߌ߫ ߟߊ߬ߡߙߊ߬ߦߙߐ ߡߊ߫ ߟߊߘߤߊ߬</string>
   <string name="request_enable_location">ߘߌ߲߬ߞߌߙߊ ߟߊߘߤߊ߬ ߛߊ߫ ߞߊ߬ ߞߙߍ߬ߝߍ߬ߟߊ ߟߊߛߐ߬ߘߐ߲߬</string>

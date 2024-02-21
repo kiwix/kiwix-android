@@ -240,8 +240,6 @@
   <string name="severe_loss_error">Errore grave rilevato! Prova a disabilitare e a riabilitare Wi-Fi Direct</string>
   <string name="connection_failed">Connessione fallita</string>
   <string name="permission_rationale_location">L’accesso alla posizione è richiesto da Android per consentire all’app di rilevare i dispositivi nelle vicinanze</string>
-  <string name="permission_rationale_location_on_host_zim_file">L’accesso alla posizione è richiesto da Android per consentire all’app di ospitare file ZIM</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">L’autorizzazione dei dispositivi Wi-Fi nelle vicinanze è richiesta da Android per consentire all’app di ospitare file Zim</string>
   <string name="permission_refused_location">Impossibile cercare i dispositivi nelle vicinanze senza l’accesso alla posizione</string>
   <string name="permission_refused_storage">Impossibile accedere ai file ZIM senza l’accesso allo spazio di archiviazione</string>
   <string name="request_enable_location">Abilita la geolocalizzazione per poter cercare i dispositivi nelle vicinanze</string>

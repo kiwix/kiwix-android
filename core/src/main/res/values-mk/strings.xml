@@ -234,8 +234,6 @@
   <string name="severe_loss_error">Голема грешка! Исклучете го и пак вклучете го поврзувањето на уреди со безжичен пристап</string>
   <string name="connection_failed">Врската е прекината</string>
   <string name="permission_rationale_location">Андроид бара дозвола за местоположба за да му даде на прилогот да пронаоѓа уреди за сврзување</string>
-  <string name="permission_rationale_location_on_host_zim_file">Андроид бара дозвола за местоположба за да му даде на прилогот да вдомува ZIM-податотеки</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">Андроид бара дозвола од околните безжични уреди за да му даде на прилогот да вдомува ZIM-податотеки</string>
   <string name="permission_refused_location">Не можам да пронаоѓам уреди за сврзување без дозвола за местоположба</string>
   <string name="permission_refused_storage">Не можам да дојдам до ZIM-податотеките без дозвола за складирање</string>
   <string name="request_enable_location">Овозможете местоположба за да можам да пронаоѓам уреди за сврзување</string>

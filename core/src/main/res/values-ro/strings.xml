@@ -225,7 +225,6 @@
   <string name="severe_loss_error">Eroare majoră! Încercați Dezactivarea/Reactivarea WiFi P2P</string>
   <string name="connection_failed">Conexiune eșuată</string>
   <string name="permission_rationale_location">Android are nevoie de permisiunea de geolocalizare pentru a permite aplicației să detecteze dispozitivele din apropiere.</string>
-  <string name="permission_rationale_location_on_host_zim_file">Android necesită permisiunea de localizare pentru a permite aplicației să găzduiască fișiere Zim</string>
   <string name="permission_refused_location">Nu se pot găsi dispozitive din apropiere fără permisiuni de geolocalizare</string>
   <string name="permission_refused_storage">Nu puteți accesa fișiere zim fără permisiunea de stocare</string>
   <string name="request_enable_location">Activați geolocalizarea pentru a permite detectarea dispozitivelor din apropiere</string>

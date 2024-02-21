@@ -237,7 +237,6 @@
   <string name="severe_loss_error">Серйозна помилка! Попробуйте вимкнути і наново вмикнути WiFi P2P</string>
   <string name="connection_failed">З’єднання не вдалося</string>
   <string name="permission_rationale_location">Android-у потрібний дозвіл на отримання місцезнахождення для пошуку сусідніх пристроїв</string>
-  <string name="permission_rationale_location_on_host_zim_file">Android’у потрібен локальний дозвіл на отримання місцезнахождення для розміщення файлів Zim</string>
   <string name="permission_refused_location">Неможливо знайти сусідні пристрої без дозволу на доступ до місцезнаходження</string>
   <string name="permission_refused_storage">Неможливо отримати доступ до файлів zim без дозволу на доступ до сховища</string>
   <string name="request_enable_location">Вмикнути місцезнаходження для вможливлення пошуку сусідніх пристроїв</string>

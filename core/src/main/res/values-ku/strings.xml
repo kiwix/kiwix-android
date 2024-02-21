@@ -232,8 +232,6 @@
   <string name="severe_loss_error">Çewtiya dijwar! WiFi P2P-yê neçalak bike/dîsa aktîv bike</string>
   <string name="connection_failed">Girêdan têk çû</string>
   <string name="permission_rationale_location">Destûra lokasyonê lazim e ji aliyê Androîdê ve ji bo destûr bidin sepanê ku karibe cîhazên din ên wekhev tesbît bike.</string>
-  <string name="permission_rationale_location_on_host_zim_file">Ji bo sepan karibe dosyeyên Zim-ê bihewîne destûra lokasyonê ji aliyê Androîdê ve lazim e.</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">Ji bo destûr bide sepanê ku dosyeyên Zi-ê bihewîne, destûra cîhazên wîfiyê yên li nêzîkê lazim e ji aliyê Androîdê ve.</string>
   <string name="permission_refused_location">Nikare cîhazên wekhev tesbît bike bêyî destûrên lokasyonê</string>
   <string name="permission_refused_storage">Nikare bigihe pelên zim-ê bêyî destûra depoyê</string>
   <string name="request_enable_location">Lokasyonê aktîv bike ji bo destûr vidî tesbîtkirina hevcinsan</string>

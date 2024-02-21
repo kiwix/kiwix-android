@@ -64,6 +64,7 @@ import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -325,8 +326,8 @@ class LocalFileTransferFragment :
         if (!permissionGranted) {
           if (shouldShowRationale(NEARBY_WIFI_DEVICES)) {
             alertDialogShower.show(
-              KiwixDialog.NearbyWifiPermissionRationaleOnHostZimFile,
-              ::askNearbyWifiDevicesPermission
+              KiwixDialog.NearbyWifiPermissionRationale,
+              requireActivity()::navigateToAppSettings
             )
           } else {
             askNearbyWifiDevicesPermission()
@@ -339,7 +340,7 @@ class LocalFileTransferFragment :
         if (shouldShowRationale(ACCESS_FINE_LOCATION)) {
           alertDialogShower.show(
             KiwixDialog.LocationPermissionRationale,
-            ::requestLocationPermission
+            requireActivity()::navigateToAppSettings
           )
         } else {
           requestLocationPermission()
@@ -369,7 +370,7 @@ class LocalFileTransferFragment :
           if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
             alertDialogShower.show(
               KiwixDialog.StoragePermissionRationale,
-              ::requestStoragePermissionPermission
+              requireActivity()::navigateToAppSettings
             )
           } else {
             requestStoragePermissionPermission()

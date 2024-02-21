@@ -230,8 +230,6 @@
   <string name="severe_loss_error">Gabim shërbyesi! Provoni të Çaktivizoni/Riaktivizoni WiFi P2P</string>
   <string name="connection_failed">Lidhja dështoi</string>
   <string name="permission_rationale_location">Leja mbi vendndodhjen është e domosdoshme për Android-in që të lejojë aplikacionin të pikasë pajisje ortake</string>
-  <string name="permission_rationale_location_on_host_zim_file">Leja mbi vendndodhjen është e domosdoshme për Android-in që të lejojë aplikacionin të strehojë kartela Zim</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">Që të lejohet aplikacioni të strehojë kartela Zim, nga Android-i lypsen leje mbi pajisje wifi atypari</string>
   <string name="permission_refused_location">Pa leje mbi vendndodhjen s’mund të lokalizohen pajisje ortake</string>
   <string name="permission_refused_storage">S’mund të përdoren kartela ZIM pa leje depozite</string>
   <string name="request_enable_location">Që të lejoni pikasje ortakësh, aktivizoni vendndodhje</string>

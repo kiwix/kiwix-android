@@ -233,8 +233,6 @@
   <string name="severe_loss_error">ଗୁରୁତର ତ୍ରୁଟି! ୱାଇଫାଇ P2P ଅକ୍ଷମ / ପୁନ enable- ସକ୍ଷମ କରିବାକୁ ଚେଷ୍ଟା କରନ୍ତୁ |</string>
   <string name="connection_failed">ସଂଯୋଗ ବିଫଳ ହୋଇଛି</string>
   <string name="permission_rationale_location">ଆପକୁ ସାଥୀ ଉପକରଣଗୁଡ଼ିକୁ ଚିହ୍ନଟ କରିବାକୁ ଅନୁମତି ଦେବା ପାଇଁ ଆଣ୍ଡ୍ରଏଡ୍ ଦ୍ୱାରା ଅବସ୍ଥାନ ଅନୁମତି ଆବଶ୍ୟକ |</string>
-  <string name="permission_rationale_location_on_host_zim_file">ଆପକୁ ହୋଷ୍ଟ ଜିମ୍ ଫାଇଲଗୁଡିକୁ ଅନୁମତି ଦେବା ପାଇଁ ଆଣ୍ଡ୍ରଏଡ୍ ଦ୍ୱାରା ଅବସ୍ଥାନ ଅନୁମତି ଆବଶ୍ୟକ |</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">ଆପକୁ ହୋଷ୍ଟ ଜିମ୍ ଫାଇଲଗୁଡ଼ିକୁ ଅନୁମତି ଦେବା ପାଇଁ ଆଣ୍ଡ୍ରଏଡ୍ ଦ୍ୱାରା ନିକଟସ୍ଥ ୱାଇଫାଇ ଡିଭାଇସ୍ ଅନୁମତି ଆବଶ୍ୟକ |</string>
   <string name="permission_refused_location">ଅବସ୍ଥାନ ଅନୁମତି ବିନା ସାଥି ଉପକରଣଗୁଡ଼ିକୁ ଚିହ୍ନଟ କରିପାରିବ ନାହିଁ |</string>
   <string name="permission_refused_storage">ଷ୍ଟୋରେଜ୍ ଅନୁମତି ବିନା ଜିମ୍ ଫାଇଲଗୁଡିକ ପ୍ରବେଶ କରିପାରିବ ନାହିଁ |</string>
   <string name="request_enable_location">ସାଥୀମାନଙ୍କୁ ଚିହ୍ନଟ କରିବାକୁ ସ୍ଥାନ ସକ୍ଷମ କରନ୍ତୁ |</string>

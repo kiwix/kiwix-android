@@ -232,8 +232,6 @@
   <string name="severe_loss_error">கடுமையான பிழை! வைஃபை P2P ஐ முடக்க / மீண்டும் இயக்க முயற்சிக்கவும்</string>
   <string name="connection_failed">இணைப்பு தோல்வியடைந்தது</string>
   <string name="permission_rationale_location">சக சாதனங்களைக் கண்டறிவதற்கான செயலியை அனுமதிக்க ஆன்ட்ராய்டுக்கு இருப்பிட அனுமதி தேவை</string>
-  <string name="permission_rationale_location_on_host_zim_file">Zim கோப்புகளை ஹோஸ்ட் செய்வதற்கான செயலியை அனுமதிக்க ஆன்ட்ராய்டுக்கு இருப்பிட அனுமதி தேவை</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">Zim கோப்புகளை ஹோஸ்ட் செய்ய ஆப்ஸை அனுமதிக்க, அருகிலுள்ள வைஃபை சாதனங்களின் அனுமதி Androidக்கு தேவை</string>
   <string name="permission_refused_location">இருப்பிட அனுமதியின்றி சக சாதனங்களைக் கண்டுபிடிக்க முடியாது</string>
   <string name="permission_refused_storage">சேமிப்பக அனுமதியின்றி zim கோப்புகளை அணுக முடியாது</string>
   <string name="request_enable_location">சகாக்களைக் கண்டறிய அனுமதிக்க இருப்பிடத்தை இயக்கவும்</string>

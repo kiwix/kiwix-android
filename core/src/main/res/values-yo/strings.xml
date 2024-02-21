@@ -239,8 +239,6 @@
   <string name="severe_loss_error">Wrong operation, try and off or connect your WiFi p2p</string>
   <string name="connection_failed">No Lock.</string>
   <string name="permission_rationale_location">Igbanilaaye ipo ni Android nilo lati gba ohun elo laaye lati ṣawari awọn ẹrọ ẹlẹgbẹ</string>
-  <string name="permission_rationale_location_on_host_zim_file">Igbanilaaye ipo ni Android nilo lati gba ohun elo naa laaye lati gbalejo awọn faili Zim</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">Igbanilaaye awọn ẹrọ wifi ti o wa nitosi ni Android nilo lati gba ohun elo naa laaye lati gbalejo awọn faili Zim</string>
   <string name="permission_refused_location">Ko le wa awọn ẹrọ ẹlẹgbẹ laisi awọn igbanilaaye ipo</string>
   <string name="permission_refused_storage">Ko le wọle si awọn faili zim laisi igbanilaaye ibi ipamọ</string>
   <string name="request_enable_location">Mu ipo ṣiṣẹ lati gba wiwa awọn ẹlẹgbẹ laaye</string>

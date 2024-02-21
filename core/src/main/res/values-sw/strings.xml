@@ -215,8 +215,6 @@
   <string name="severe_loss_error">Hitilafu kubwa! Jaribu Zima/Wezesha tena WiFi P2P</string>
   <string name="connection_failed">Muunganisho haukufaulu</string>
   <string name="permission_rationale_location">Ruhusa ya eneo inahitajika na Android ili kuruhusu programu kutambua vifaa vingine</string>
-  <string name="permission_rationale_location_on_host_zim_file">Ruhusa ya mahali inahitajika na Android ili kuruhusu programu kupangisha faili za Zim</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">Ruhusa ya vifaa vya karibu vya wifi inahitajika na Android ili kuruhusu programu kupangisha faili za Zim</string>
   <string name="permission_refused_location">Haiwezi kupata vifaa vya programu zingine bila ruhusa za eneo</string>
   <string name="permission_refused_storage">Haiwezi kufikia faili za zim bila ruhusa ya kuhifadhi</string>
   <string name="request_enable_location">Wezesha eneo ili kuruhusu ugunduzi wa programu zingine</string>
