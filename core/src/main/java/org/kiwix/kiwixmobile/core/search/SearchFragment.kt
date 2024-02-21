@@ -221,9 +221,17 @@ class SearchFragment : BaseFragment() {
           searchMenuItem.expandActionView()
           searchView = searchMenuItem.actionView as SearchView
           searchView?.setOnQueryTextListener(
-            SimpleTextListener {
-              if (it.isNotEmpty()) {
-                searchViewModel.actions.trySend(Filter(it)).isSuccess
+            SimpleTextListener { query, isSubmit ->
+              if (query.isNotEmpty()) {
+                when {
+                  isSubmit -> {
+                    // if user press the search/enter button on keyboard,
+                    // try to open the article if present
+                    getSearchListItemForQuery(query)?.let(::onItemClick)
+                  }
+
+                  else -> searchViewModel.actions.trySend(Filter(query)).isSuccess
+                }
               }
             }
           )
@@ -256,6 +264,11 @@ class SearchFragment : BaseFragment() {
       Lifecycle.State.RESUMED
     )
   }
+
+  private fun getSearchListItemForQuery(query: String): SearchListItem? =
+    searchAdapter?.items?.firstOrNull {
+      it.value.equals(query, ignoreCase = true)
+    }
 
   private suspend fun render(state: SearchState) {
     searchMutex.withLock {

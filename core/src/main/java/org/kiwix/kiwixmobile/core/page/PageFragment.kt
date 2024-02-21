@@ -107,8 +107,8 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
           val search = menu.findItem(R.id.menu_page_search).actionView as SearchView
           search.queryHint = searchQueryHint
           search.setOnQueryTextListener(
-            SimpleTextListener {
-              pageViewModel.actions.offer(Action.Filter(it))
+            SimpleTextListener { query, _ ->
+              pageViewModel.actions.offer(Action.Filter(query))
             }
           )
         }
