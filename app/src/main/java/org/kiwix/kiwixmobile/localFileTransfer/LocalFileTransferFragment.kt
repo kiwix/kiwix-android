@@ -55,10 +55,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
+import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
+import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -139,6 +142,9 @@ class LocalFileTransferFragment :
     wifiDirectManager.callbacks = this
     wifiDirectManager.lifecycleCoroutineScope = lifecycleScope
     wifiDirectManager.startWifiDirectManager(filesForTransfer)
+    fragmentLocalFileTransferBinding
+      ?.textViewDeviceName
+      ?.setToolTipWithContentDescription(getString(R.string.your_device))
   }
 
   private fun setupMenu() {
@@ -241,12 +247,18 @@ class LocalFileTransferFragment :
 
   private fun setupToolbar(view: View, activity: CoreMainActivity, isReceiver: Boolean) {
     val toolbar: Toolbar = view.findViewById(R.id.toolbar)
-    activity.setSupportActionBar(toolbar)
-    toolbar.title =
-      if (isReceiver) getString(R.string.receive_files_title)
-      else getString(R.string.send_files_title)
-    toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
-    toolbar.setNavigationOnClickListener { activity.popNavigationBackstack() }
+    toolbar.apply {
+      activity.setSupportActionBar(this)
+      title =
+        if (isReceiver) getString(R.string.receive_files_title)
+        else getString(R.string.send_files_title)
+      setNavigationIcon(R.drawable.ic_close_white_24dp)
+      // set the contentDescription to navigation back button
+      getToolbarNavigationIcon()?.setToolTipWithContentDescription(
+        getString(string.toolbar_back_button_content_description)
+      )
+      setNavigationOnClickListener { activity.popNavigationBackstack() }
+    }
   }
 
   private fun getFilesForTransfer() =

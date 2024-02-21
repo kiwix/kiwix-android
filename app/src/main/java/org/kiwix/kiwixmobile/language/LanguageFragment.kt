@@ -26,6 +26,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
@@ -35,10 +36,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
+import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
+import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
@@ -78,13 +82,18 @@ class LanguageFragment : BaseFragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     val activity = requireActivity() as CoreMainActivity
-    activity.setSupportActionBar(view.findViewById(R.id.toolbar))
+    val toolbar: Toolbar = view.findViewById(R.id.toolbar)
+    activity.setSupportActionBar(toolbar)
 
     activity.supportActionBar?.let {
       it.setDisplayHomeAsUpEnabled(true)
       it.setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp)
       it.setTitle(R.string.select_languages)
     }
+    // set the contentDescription to navigation back button
+    toolbar.getToolbarNavigationIcon()?.setToolTipWithContentDescription(
+      getString(string.toolbar_back_button_content_description)
+    )
     activityLanguageBinding?.languageRecyclerView?.run {
       adapter = languageAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)

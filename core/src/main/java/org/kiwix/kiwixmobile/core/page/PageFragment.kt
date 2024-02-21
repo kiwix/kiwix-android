@@ -45,6 +45,7 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.databinding.FragmentPageBinding
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
+import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -137,9 +138,12 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     super.onViewCreated(view, savedInstanceState)
     setupMenu()
     val activity = requireActivity() as CoreMainActivity
-    fragmentPageBinding?.recyclerView?.layoutManager =
-      LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-    fragmentPageBinding?.recyclerView?.adapter = pageAdapter
+    fragmentPageBinding?.recyclerView?.apply {
+      layoutManager =
+        LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+      adapter = pageAdapter
+      fragmentTitle?.let(::setToolTipWithContentDescription)
+    }
     fragmentPageBinding?.noPage?.text = noItemsString
 
     fragmentPageBinding?.pageSwitch?.apply {

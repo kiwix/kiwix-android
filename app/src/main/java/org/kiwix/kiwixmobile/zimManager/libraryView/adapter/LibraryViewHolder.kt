@@ -26,6 +26,7 @@ import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.setTextAndVisibility
+import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.zim_manager.KiloByte
@@ -101,9 +102,18 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
       itemDownloadBinding.libraryDownloadTitle.text = item.title
       itemDownloadBinding.libraryDownloadDescription.text = item.description
       itemDownloadBinding.downloadProgress.progress = item.progress
-      itemDownloadBinding.stop.setOnClickListener { clickAction.invoke(item) }
-      itemDownloadBinding.pauseResume.setOnClickListener {
-        pauseResumeClickAction.invoke(item)
+      itemDownloadBinding.stop.apply {
+        setToolTipWithContentDescription(itemDownloadBinding.root.context.getString(R.string.stop))
+        setOnClickListener { clickAction.invoke(item) }
+      }
+      itemDownloadBinding.pauseResume.apply {
+        val context = itemDownloadBinding.root.context
+        val description =
+          "${context.getString(R.string.tts_pause)}/${context.getString(R.string.tts_resume)}"
+        setToolTipWithContentDescription(description)
+        setOnClickListener {
+          pauseResumeClickAction.invoke(item)
+        }
       }
       itemDownloadBinding.downloadState.text =
         item.downloadState.toReadableState(containerView.context).also {

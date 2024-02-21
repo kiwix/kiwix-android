@@ -113,6 +113,7 @@
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:alpha=".5"
+      android:contentDescription="@string/detecting_file_system"
       android:background="@color/pure_gray"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"

@@ -60,6 +60,7 @@
     android:layout_height="0dp"
     android:layout_marginTop="16dp"
     android:layout_marginBottom="8dp"
+    android:contentDescription="@string/menu_wifi_hotspot"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
     app:layout_constraintBottom_toTopOf="@+id/startServerButton"
     app:layout_constraintEnd_toEndOf="parent"
