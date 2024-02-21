@@ -44,6 +44,7 @@
     android:text="@string/humankind_knowledge"
     android:textAlignment="center"
     android:textSize="15sp"
+    android:textColor="?textTertiary"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/guideline" />
