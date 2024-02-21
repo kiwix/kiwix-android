@@ -63,6 +63,8 @@ class TabsAdapter internal constructor(
   ): ViewHolder {
     val context = parent.context
     val margin16 = context.resources.getDimensionPixelSize(R.dimen.activity_horizontal_margin)
+    val closeImageWidthAndHeight =
+      context.resources.getDimensionPixelSize(R.dimen.close_tab_button_size)
     val close = ImageView(context)
       .apply {
         id = R.id.tabsAdapterCloseImageView
@@ -94,7 +96,10 @@ class TabsAdapter internal constructor(
             -activity.getToolbarHeight() / 2 + activity.getWindowHeight() / 2
           )
         )
-        addView(close, ConstraintLayout.LayoutParams(margin16, margin16))
+        addView(
+          close,
+          ConstraintLayout.LayoutParams(closeImageWidthAndHeight, closeImageWidthAndHeight)
+        )
         layoutParams = RecyclerView.LayoutParams(
           RecyclerView.LayoutParams.WRAP_CONTENT,
           RecyclerView.LayoutParams.MATCH_PARENT

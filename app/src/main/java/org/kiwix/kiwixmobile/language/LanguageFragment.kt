@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
+import org.kiwix.kiwixmobile.core.extensions.setUpSearchView
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
@@ -125,12 +126,15 @@ class LanguageFragment : BaseFragment() {
       object : MenuProvider {
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
           menuInflater.inflate(R.menu.menu_language, menu)
-          val search = menu.findItem(R.id.menu_language_search)
-          (search.actionView as SearchView).setOnQueryTextListener(
-            SimpleTextListener { query, _ ->
-              languageViewModel.actions.offer(Filter(query))
-            }
-          )
+          val search = menu.findItem(R.id.menu_language_search).actionView as SearchView
+          search.apply {
+            setUpSearchView(requireActivity())
+            setOnQueryTextListener(
+              SimpleTextListener { query, _ ->
+                languageViewModel.actions.offer(Filter(query))
+              }
+            )
+          }
         }
 
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -140,6 +144,7 @@ class LanguageFragment : BaseFragment() {
               closeKeyboard()
               true
             }
+
             else -> false
           }
         }
@@ -160,6 +165,7 @@ class LanguageFragment : BaseFragment() {
       activityLanguageBinding?.languageProgressbar?.hide()
       languageAdapter.items = state.viewItems
     }
+
     Saving -> Unit
   }
 

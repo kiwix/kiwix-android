@@ -67,6 +67,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
+import org.kiwix.kiwixmobile.core.extensions.setUpSearchView
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -219,11 +220,14 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           val getZimItem = menu.findItem(R.id.get_zim_nearby_device)
           getZimItem?.isVisible = false
 
-          (searchItem?.actionView as? SearchView)?.setOnQueryTextListener(
-            SimpleTextListener { query, _ ->
-              zimManageViewModel.requestFiltering.onNext(query)
-            }
-          )
+          (searchItem?.actionView as? SearchView)?.apply {
+            setUpSearchView(requireActivity())
+            setOnQueryTextListener(
+              SimpleTextListener { query, _ ->
+                zimManageViewModel.requestFiltering.onNext(query)
+              }
+            )
+          }
           zimManageViewModel.requestFiltering.onNext("")
         }
 
@@ -307,9 +311,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           hideRecyclerviewAndShowSwipeDownForLibraryErrorText()
         }
       }
+
       NetworkState.NOT_CONNECTED -> {
         showNoInternetConnectionError()
       }
+
       else -> {}
     }
   }
@@ -519,6 +525,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
             noInternetSnackbar()
             return
           }
+
           noWifiWithWifiOnlyPreferenceSet -> {
             dialogShower.show(WifiOnly, {
               sharedPreferenceUtil.putPrefWifiOnly(false)
@@ -526,6 +533,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
             })
             return
           }
+
           else -> if (sharedPreferenceUtil.showStorageOption) {
             showStorageConfigureDialog()
           } else if (!requireActivity().isManageExternalStoragePermissionGranted(
