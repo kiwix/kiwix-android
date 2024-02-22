@@ -4,6 +4,7 @@
 * Geraki
 * Giorgos456
 * Glavkos
+* MohitMali
 * NikosLikomitros
 * Nikosgranturismogt
 * Norhorn
@@ -113,7 +114,7 @@
   <string name="help_9">• Άλλα περιεχόμενα όπως το Wikileaks ή η Βικιθήκη είναι επίσης διαθέσιμα</string>
   <string name="pref_storage">Αποθηκευτικός χώρος</string>
   <string name="pref_current_folder">Τρέχων φάκελος</string>
-  <string name="delete_zim_failed" fuzzy="true">Λυπούμαστε, δεν μπορέσαμε να διαγράψουμε αυτό το αρχείο. Αντί γι\'αυτού θα έπρεπε να χρησιμοποιήσετε ένα διαχειριστή αρχείων.</string>
+  <string name="delete_zim_failed">Λυπούμαστε, δεν ήταν δυνατή η διαγραφή ορισμένων αρχείων. Θα πρέπει να χρησιμοποιήσετε έναν διαχειριστή αρχείων.</string>
   <string name="tts_pause">παύση</string>
   <string name="tts_resume">συνέχεια</string>
   <string name="stop">Διακοπή</string>

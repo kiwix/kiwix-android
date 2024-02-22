@@ -2,6 +2,7 @@
 <!-- Authors:
 * Gromper
 * Les Meloures
+* MohitMali
 * Robby
 * Soued031
 * Volvox
@@ -21,7 +22,7 @@
   <string name="menu_support_kiwix_for_custom_apps">Ënnerstëtzt %s</string>
   <string name="menu_about_app">Iwwer d\'App %s</string>
   <string name="save_media">Medium späicheren</string>
-  <string name="save_media_error">Et ass e Feeler geschitt wéi probéiert gouf d\'Medium ze späicheren!</string>
+  <string name="save_media_error">Et ass e Feeler geschitt wéi probéiert gouf d’Medium ze späicheren!</string>
   <string name="save_media_saved">Medium als %s op Downloads/org.kiwix…/ gespäichert</string>
   <string name="search_label">Sichen</string>
   <string name="choose_file">Wielt eng Inhaltsdatei aus (*.zim)</string>
@@ -31,7 +32,7 @@
   <string name="server_started_successfully_toast_message">De Server gouf erfollegräich gestart.</string>
   <string name="server_stopped_successfully_toast_message">De Server gouf erfollegräich gestoppt.</string>
   <string name="hotspot_turned_on">Hotspot aktivéiert</string>
-  <string name="hotspot_details_message">Hei sinn d\'Detailer vun Ärem lokalen Hotspot.\nSSID : %1$s\nPass : %2$s</string>
+  <string name="hotspot_details_message">Hei sinn d’Detailer vun Ärem lokalen Hotspot.\nSSID : %1$s\nPass : %2$s</string>
   <string name="wifi_dialog_title">WiFi Verbindung entdeckt</string>
   <string name="hotspot_dialog_neutral_button">VIRUFUEREN</string>
   <string name="hotspot_notification_content_title">Kiwix-Hotspot</string>
@@ -43,7 +44,7 @@
   <string name="share_host_address">URL mat aneren Applikatiounen deelen</string>
   <string name="error_file_not_found">Feeler: Déi ausgewielten ZIM-Datei konnt net fonnt ginn.</string>
   <string name="error_file_invalid">Feeler: Déi ausgewielten Datei ass keng gülteg ZIM-Datei.</string>
-  <string name="error_article_url_not_found">Feeler: D\'Luede vum Artikel (URL: %1$s) huet net funktionéiert.</string>
+  <string name="error_article_url_not_found">Feeler: D’Luede vum Artikel (URL: %1$s) huet net funktionéiert.</string>
   <string name="pref_display_title">Weisen</string>
   <string name="pref_info_title">Informatioun</string>
   <string name="pref_info_version">Versioun</string>
@@ -54,7 +55,7 @@
   <string name="pref_language_title">Sprooch</string>
   <string name="pref_language_chooser">Sicht eng Sprooch eraus</string>
   <string name="pref_credits">Auteuren a Lizenzen</string>
-  <string name="tts_lang_not_supported">D\'Sprooch vun dëser Säit gëtt net ënnerstëtzt. Et ass méiglech, datt den Artikel net richteg gelies ka ginn.</string>
+  <string name="tts_lang_not_supported">D’Sprooch vun dëser Säit gëtt net ënnerstëtzt. Et ass méiglech, datt den Artikel net richteg gelies ka ginn.</string>
   <string name="delete_recent_search_item">Dëst Element läschen?</string>
   <string name="pref_clear_all_history_title">Historique läschen</string>
   <string name="pref_notes">Notizen</string>
@@ -96,8 +97,8 @@
   <string name="zim_no_vid">Keng Videoen</string>
   <string name="no_network_connection">Keng Verbindung mam Reseau</string>
   <string name="help_2">Wat mécht Kiwix?</string>
-  <string name="help_4">Wärend Kiwix ursprénglech entwéckelt gouf fir d\'Wikipedia offline unzebidden, kann et awer och aner Inhalter liesen.</string>
-  <string name="help_5">Wou ass den Inhalt\'</string>
+  <string name="help_4">Wärend Kiwix ursprénglech entwéckelt gouf fir d’Wikipedia offline unzebidden, kann et awer och aner Inhalter liesen.</string>
+  <string name="help_5">Wou ass den Inhalt’</string>
   <string name="help_6">Eisen Inhalt ass um Kiwix Internetsite gehost.</string>
   <string name="help_8">• Wikipedia ass fir all Sprooch separat verfügbar</string>
   <string name="help_9">• Aner Inhalter wéi Wikileaks oder Wikisource sinn och verfügbar</string>
@@ -130,7 +131,7 @@
   <string name="articleCount">%s Artikelen</string>
   <string name="get_started">Ufänken</string>
   <string name="download_books">Bicher eroflueden</string>
-  <string name="humankind_knowledge">D\'Wësse vun der Mënschheet, op Ärem Handy.</string>
+  <string name="humankind_knowledge">D’Wësse vun der Mënschheet, op Ärem Handy.</string>
   <string name="welcome_to_the_family">Wëllkomm an der Famill</string>
   <string name="save_books_offline">Bicher offline späicheren</string>
   <string name="download_books_message">Bicher eroflueden a liesen, egal wou Dir grad sidd.</string>
@@ -142,25 +143,26 @@
   <string name="selected_items">%1$d ausgewielt</string>
   <string name="switch_tabs">Tabs wiesselen</string>
   <string name="close_all_tabs">All Tabs zoumaachen</string>
+  <string name="close_tab">Tab zoumaachen</string>
   <string name="complete">Komplettéieren</string>
   <string name="save">Späicheren</string>
   <string name="wiki_article_title">Wiki-Artikel-Titel</string>
-  <string name="note_delete_successful">D\'Notiz gouf geläscht</string>
-  <string name="note_delete_unsuccessful">D\'Notiz gouf net geläscht</string>
+  <string name="note_delete_successful">D’Notiz gouf geläscht</string>
+  <string name="note_delete_unsuccessful">D’Notiz gouf net geläscht</string>
   <string name="note_share_error_file_missing">De Fichier mat den Notize gëtt et net</string>
   <string name="note_share_app_chooser_title">De Fichier mat den Notizen deele mat:</string>
-  <string name="delete_notes_confirmation_msg">All d\'Notize läschen?</string>
+  <string name="delete_notes_confirmation_msg">All d’Notize läschen?</string>
   <string name="notes_deletion_unsuccessful">E puer Fichiere goufen net geläscht</string>
   <string name="books_count">%d Buch/Bicher</string>
   <string name="your_device">Ären Apparat:</string>
   <string name="status">Status</string>
-  <string name="pref_clear_all_notes_summary">Läscht all d\'Notizen bei all den Artikelen</string>
-  <string name="pref_clear_all_notes_title">All d\'Notize läschen</string>
+  <string name="pref_clear_all_notes_summary">Läscht all d’Notizen bei all den Artikelen</string>
+  <string name="pref_clear_all_notes_title">All d’Notize läschen</string>
   <string name="tag_pic">Bild</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Nëmmen Text</string>
   <string name="tag_short_text">Kuerzen Text</string>
-  <string name="go_to_settings">Op d\'Astellunge vum Hotspot goen</string>
+  <string name="go_to_settings">Op d’Astellunge vum Hotspot goen</string>
   <string name="no_results">Keng Resultater</string>
   <string name="no_bookmarks">Keng Lieszeechen!</string>
   <string name="no_history">Keen Historique</string>
@@ -190,5 +192,5 @@
   <string name="open_article">Artikel opmaachen</string>
   <string name="delete_selected_notes">Déi ausgewielten Notize läschen?</string>
   <string name="external_link_copied_message">Externe Link an den Tëschespäicher kopéiert</string>
-  <string name="go_to_settings_label">Op d\'Astellunge goen</string>
+  <string name="go_to_settings_label">Op d’Astellunge goen</string>
 </resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Accuratecy051
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">Sistemu faịlụ gị anaghị akwado faịlụ karịrị 4GB</string>
+  <string name="detecting_file_system">Ịchọpụta ma sistemụ faịlụ nwere ike ịmepụta faịlụ 4GB</string>
+  <string name="cannot_open_file">Emepeghị faịlụ\nBiko nwaa ịchọ faịlụ a na taabụ ngwaọrụ nke ọba akwụkwọ gị</string>
+  <string name="send_files_title">Zipu faịlụ</string>
+  <string name="receive_files_title">Nata faịlụ</string>
+  <string name="no_app_found_to_open">Ọ nweghị ngwa ahụrụ iji họrọ faịlụ zim!</string>
+  <string name="select_zim_file">Họrọ faịlụ zim ka ị gụọ</string>
+</resources>

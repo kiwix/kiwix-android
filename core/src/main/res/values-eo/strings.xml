@@ -2,6 +2,7 @@
 <!-- Authors:
 * Blahma
 * Fitoschido
+* Iketsi
 * Jakub Fabijan
 * Javiero
 * Kelson
@@ -21,6 +22,7 @@
   <string name="menu_read_aloud">Laŭtlegi</string>
   <string name="menu_read_aloud_stop">Ĉesi laŭtlegadon</string>
   <string name="menu_support_kiwix">Subteni Kiwix</string>
+  <string name="menu_about_app">Pri la aplikaĵo %s</string>
   <string name="save_media">Konservi Aŭdvidaĵon</string>
   <string name="save_media_error">Eraro okazis dum provo konservi la plurmediaĵon!</string>
   <string name="save_media_saved" fuzzy="true">Aŭdvidaĵoj konservitaj kiel %1$s en dosierujo Android/media/org.kiwix…/</string>
@@ -198,4 +200,7 @@
   <string name="on">Ŝaltita</string>
   <string name="off">Malŝaltita</string>
   <string name="pref_text_zoom_title">Teksta Zomo</string>
+  <string name="search_open_in_new_tab">Malfermi en nova langeto</string>
+  <string name="understood">Komprenita</string>
+  <string name="allow">Permesi</string>
 </resources>

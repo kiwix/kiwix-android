@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Kalakpagh
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">A fasara ŋɔ puuni bi saɣi n-ti fasara shɛŋa din gari 4GB</string>
+  <string name="detecting_file_system">Nyabu di yi niŋ ka fasara ŋɔ puuni ni tooi nam 4GB fasara nima</string>
+  <string name="cannot_open_file">Di zaɣisiya ni di ku yoogi fasara pahimi suɣilo labi lihi m- bo fasara ŋɔ bimbuɣisirigu ni a karimbu shee</string>
+  <string name="send_files_title">Tahimi fasara nima</string>
+  <string name="receive_files_title">Deemi fasara nima</string>
+  <string name="no_app_found_to_open">App kani din yɛn piigi Zim fasara!</string>
+  <string name="select_zim_file">Piimi zim fasara karim</string>
+</resources>

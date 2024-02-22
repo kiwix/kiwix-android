@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Sekhomba
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">Tsamaiso ya gago ya difaele ga e tshegetse difaele tse di fetang 4GB</string>
+  <string name="detecting_file_system">Go lemoga gore a tsamaiso ya difaele e ka tlhama difaele tsa 4GB</string>
+  <string name="cannot_open_file">Go bula faele go retetse\nTsweetswee leka go batla faele eno mo Tab ya Sedirisiwa ya motlobo wa gago wa dibuka</string>
+  <string name="send_files_title">Romela difaele</string>
+  <string name="receive_files_title">Amogela Difaele</string>
+  <string name="no_app_found_to_open">Ga go na app e e fitlhetsweng go tlhopha faele ya zim!</string>
+  <string name="select_zim_file">Tlhopha faele ya zim go e bala</string>
+</resources>

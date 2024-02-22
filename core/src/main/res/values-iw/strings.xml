@@ -212,6 +212,7 @@
   <string name="search_bookmarks">חיפוש סימניות</string>
   <string name="switch_tabs">החלפת כרטיסיות</string>
   <string name="close_all_tabs">סגירת כל הכרטיסיות</string>
+  <string name="close_tab">סגירת לשונית</string>
   <string name="pending_state">ממתין</string>
   <string name="running_state">בעבודה</string>
   <string name="complete">הושלם</string>
@@ -337,4 +338,8 @@
   <string name="your_device_name_message">שם המכשיר שלך יופיע כאן.</string>
   <string name="nearby_devices_list_message">כאן אפשר למצוא רשימה של מכשירים קרובים. יש לגעת בשם המכשיר כדי להתחיל העברת קבצים.</string>
   <string name="transfer_zim_files_list_message">כאן אפשר למצוא את רשימת קובצי ה־ZIM הזמינים להעברה.</string>
+  <string name="storage_selection_dialog_accessibility_description">נא לבחור מקום אחסון להורדת קובצי ZIM.</string>
+  <string name="zim_file_content_description">קובץ ZIM שבו יש את תוכן הקריאה</string>
+  <string name="select_language_content_description">בחירה בשפה הזאת תתעדף הצגת ספרים שניתן להוריד בשפה הזאת לראש הרשימה.</string>
+  <string name="toolbar_back_button_content_description">מעבר למסך הקודם</string>
 </resources>

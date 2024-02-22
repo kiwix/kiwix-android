@@ -7,6 +7,7 @@
 * Ice bulldog
 * Lxlalexlxl
 * McDutchie
+* MohitMali
 * Movses
 * Piramidion
 * Vlad5250
@@ -37,7 +38,7 @@
   <string name="hotspot_failed_title">Не вдалося запустити точку доступу</string>
   <string name="hotspot_failed_message">Здається, вашу точка доступу вже ввімкнено. Будь ласка, вимкніть точку доступу, аби продовжити.</string>
   <string name="go_to_wifi_settings_label">Перейти до налаштувань WIFI</string>
-  <string name="connection_refused">У з\'єднанні відмовлено.</string>
+  <string name="connection_refused">У з’єднанні відмовлено.</string>
   <string name="hotspot_running">Точка доступу працює</string>
   <string name="no_books_selected_toast_message">Будь ласка, спершу виберіть книги</string>
   <string name="server_failed_message">Неможливо запустити сервер. Будь ласка, ввімкніть вашу точку доступу</string>
@@ -49,9 +50,9 @@
   <string name="server_textview_default_message">Виберіть файли, які ви хочете розмістити на сервері</string>
   <string name="progress_dialog_starting_server">Запуск сервера</string>
   <string name="hotspot_dialog_title">Інструкції з розміщення книг</string>
-  <string name="wifi_dialog_title">Виявлено WiFi під\'єднання</string>
+  <string name="wifi_dialog_title">Виявлено WiFi під’єднання</string>
   <string name="wifi_dialog_body">Аби мати змогу переглядати книги на інших пристроях, будь ласка, пересвідчиться, що всі пристрої підімкнено до одної й тої самої WiFi мережі.</string>
-  <string name="hotspot_dialog_message">Аби дана функція запрацювала, вам потрібно вмикнути точку доступу WiFi або пересвідчитися, що пристрої розміщення та отримувача під\'єднані до одної й тої ж самої WiFi мережі.</string>
+  <string name="hotspot_dialog_message">Аби дана функція запрацювала, вам потрібно вмикнути точку доступу WiFi або пересвідчитися, що пристрої розміщення та отримувача під’єднані до одної й тої ж самої WiFi мережі.</string>
   <string name="hotspot_dialog_neutral_button">ПРОДОВЖИТИ</string>
   <string name="hotspot_channel_description">Оновлення про стан вашої точки доступу/сервера.</string>
   <string name="hotspot_notification_content_title">Точка Доступу Kiwix</string>
@@ -125,7 +126,7 @@
   <string name="zim_simple">Простий</string>
   <string name="zim_no_pic">Без зображень</string>
   <string name="zim_no_vid">Немає відео</string>
-  <string name="no_network_connection">Відсутнє з\'єднання з мережею</string>
+  <string name="no_network_connection">Відсутнє з’єднання з мережею</string>
   <string name="help_2">Що робить Kiwix?</string>
   <string name="help_3">Kiwix — це офлайновий читач контенту. Він багато в чому поводиться як браузер, але замість доступу до онлайнових веб-сторінок, він зчитує контент із файлу у форматі ZIM.</string>
   <string name="help_4">Тоді як початково Kiwix було розроблено для забезпечення доступу до Вікіпедії в режимі офлайн, він також зчитує інші типи контенту.</string>
@@ -134,7 +135,7 @@
   <string name="help_7">Він доступний у формі ZIM-файлів. Їх є чимало:</string>
   <string name="help_8">• Вікіпедія доступна окремо для кожної мови</string>
   <string name="help_9">• Доступний також інший контент, такий як Вікілікс чи Вікіджерела</string>
-  <string name="help_10">Ви можете або завантажити свої обрані ZIM-файли в межах застосунка, або обережно вибрати ті, які Ви хочете, й завантажити їх зі стаціонарного комп\'ютера, перед тим як переносити ZIM-файли на свою SD-карту.</string>
+  <string name="help_10">Ви можете або завантажити свої обрані ZIM-файли в межах застосунка, або обережно вибрати ті, які Ви хочете, й завантажити їх зі стаціонарного комп’ютера, перед тим як переносити ZIM-файли на свою SD-карту.</string>
   <string name="help_11">ZIM-файли, завантажені із застосунка, розташовані в каталозі зовнішнього зберігання даних у папці під назвою Kiwix.</string>
   <string name="pref_storage">Зберігання даних</string>
   <string name="pref_current_folder">Поточна папка</string>
@@ -168,7 +169,7 @@
   <string name="pref_external_link_popup_title">Попереджувати, коли введено зовнішнє посилання</string>
   <string name="pref_external_link_popup_summary">Відображати попередження щодо проблем із зовнішніми посиланнями, як от зняття додаткових грошей або неспрацювання посилань в офлайні.</string>
   <string name="external_link_popup_dialog_title">Введіть зовнішнє посилання!</string>
-  <string name="external_link_popup_dialog_message">Ви вказали зовнішнє посилання. Будь ласка пам\'ятайте, що якщо ви офлайн, то воно не буде відкрито. Також зауважте, що відкриття цього посилання може призвести до зняття грошей мобільним оператором. Дійсно бажаєте відкрити зовнішнє посилання?</string>
+  <string name="external_link_popup_dialog_message">Ви вказали зовнішнє посилання. Будь ласка пам’ятайте, що якщо ви офлайн, то воно не буде відкрито. Також зауважте, що відкриття цього посилання може призвести до зняття грошей мобільним оператором. Дійсно бажаєте відкрити зовнішнє посилання?</string>
   <string name="do_not_ask_anymore">Більш не питати</string>
   <string name="your_languages">Вибір мови:</string>
   <string name="other_languages">Інші мови:</string>
@@ -189,7 +190,7 @@
   <string name="get_started">Розпочати</string>
   <string name="download_books">Завантажити книги</string>
   <string name="humankind_knowledge">Знання людства, на вашому телефоні.</string>
-  <string name="welcome_to_the_family">Ласкаво просимо до сім\'ї</string>
+  <string name="welcome_to_the_family">Ласкаво просимо до сім’ї</string>
   <string name="save_books_offline">Зберегти книги для автономного режиму</string>
   <string name="download_books_message">Завантажити книги й читати, де б ви не були</string>
   <string name="unable_to_add_to_bookmarks">Неможливо додати до закладок</string>
@@ -234,9 +235,9 @@
   <string name="discovery_initiated">Сканування почато</string>
   <string name="discovery_failed">Сканування не вдалося</string>
   <string name="severe_loss_error">Серйозна помилка! Попробуйте вимкнути і наново вмикнути WiFi P2P</string>
-  <string name="connection_failed">З\'єднання не вдалося</string>
+  <string name="connection_failed">З’єднання не вдалося</string>
   <string name="permission_rationale_location">Android-у потрібний дозвіл на отримання місцезнахождення для пошуку сусідніх пристроїв</string>
-  <string name="permission_rationale_location_on_host_zim_file">Android\'у потрібен локальний дозвіл на отримання місцезнахождення для розміщення файлів Zim</string>
+  <string name="permission_rationale_location_on_host_zim_file">Android’у потрібен локальний дозвіл на отримання місцезнахождення для розміщення файлів Zim</string>
   <string name="permission_refused_location">Неможливо знайти сусідні пристрої без дозволу на доступ до місцезнаходження</string>
   <string name="permission_refused_storage">Неможливо отримати доступ до файлів zim без дозволу на доступ до сховища</string>
   <string name="request_enable_location">Вмикнути місцезнаходження для вможливлення пошуку сусідніх пристроїв</string>

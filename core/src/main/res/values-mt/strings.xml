@@ -2,6 +2,7 @@
 <!-- Authors:
 * Leli Forte
 * Macofe
+* MohitMali
 -->
 <resources>
   <string name="menu_help">Għajnuna</string>
@@ -11,7 +12,7 @@
   <string name="bookmarks">Werrejja</string>
   <string name="menu_random_article">Artiklu kwalunkwe</string>
   <string name="menu_full_screen">Skrin sħiħ</string>
-  <string name="menu_exit_full_screen">Oħroġ mill-modalità ta\' skrin sħiħ</string>
+  <string name="menu_exit_full_screen">Oħroġ mill skrin sħiħ</string>
   <string name="save_media_error" fuzzy="true">Sar żball meta kont qed tipprova tissejvja l-fajl multimedjali!</string>
   <string name="search_label">Fittex</string>
   <string name="pref_display_title">Viżwal</string>

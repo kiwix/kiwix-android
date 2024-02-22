@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Jagwar
+* MohitMali
 -->
 <resources>
   <string name="menu_help">Fanoroana</string>
@@ -10,7 +11,7 @@
   <string name="bookmarks">Marika pejy</string>
   <string name="menu_random_article">Takelaka kisendra</string>
   <string name="menu_full_screen">Fisehoana mameno ekrà</string>
-  <string name="menu_exit_full_screen">Hiala amin\'ny fisehoana mameno fikandra</string>
+  <string name="menu_exit_full_screen">Hiala amin ny fisehoana mameno fikandra</string>
   <string name="menu_read_aloud">Vakiana ho heno</string>
   <string name="menu_read_aloud_stop">Hijanona tsy hamaky ho heno</string>
   <string name="save_media">Hitahiry ny media ho…</string>
@@ -25,14 +26,14 @@
   <string name="pref_display_title">Fiseho</string>
   <string name="pref_info_title">Fampahalalana</string>
   <string name="pref_info_version">Versiona</string>
-  <string name="pref_night_mode">Fiseho amin\'ny alina</string>
-  <string name="pref_night_mode_summary">Haneho lahatsoratra amin\'ny loko mivadika</string>
+  <string name="pref_night_mode">Fiseho amin ny alina</string>
+  <string name="pref_night_mode_summary">Haneho lahatsoratra amin ny loko mivadika</string>
   <string name="pref_back_to_top">Hiverina any an-tampony</string>
   <string name="pref_back_to_top_summary">Haneho bokotra amin\'ny faran\'ny pejy mba hiverenana any am-pihatombohana</string>
   <string name="pref_language_title">Tenim-pirenena</string>
   <string name="pref_language_chooser">Hifidy tenim-pirenena</string>
-  <string name="tts_lang_not_supported" fuzzy="true">Tsy zaka ny fiteny ampiasaina ato amin\'ity pejy ity, na tsy napetraka ny angona mety aminy. Mety tsy ho voavaky tsara ny lahatsoratra.</string>
-  <string name="no_reader_application_installed">Tsy nahita fampiaharana napetraka ho an\'ity karazan-drakitra ity</string>
+  <string name="tts_lang_not_supported">Tsy tohana ny fitenin ity pejy ity. Mety tsy hovakiana tsara ilay lahatsoratra.</string>
+  <string name="no_reader_application_installed">Tsy nahita fampiaharana napetraka ho an ity karazan-drakitra ity</string>
   <string name="no_section_info" fuzzy="true">Tsy misy loham-botoatiny hita</string>
   <string name="request_storage" fuzzy="true">Mila ny toeram-pitahirizanao izahay raha hamaky rakitra ZIM</string>
   <string name="pref_permission">Alalana</string>
@@ -40,7 +41,7 @@
   <string name="rate_dialog_title">Omeo naoty izahay azafady</string>
   <string name="rate_dialog_positive">Naoteo!</string>
   <string name="no_thanks">Aoka fa misaotra</string>
-  <string name="rate_dialog_neutral">Amin\'ny manaraka</string>
+  <string name="rate_dialog_neutral">Amin manaraka</string>
   <string name="pref_newtab_background_title">Hanokatra vakizoro any aoriana</string>
   <string name="pref_newtab_background_summary">Rehefa manokatra vakizoro dia hosokafany any aoriana</string>
   <string name="library">Tahirim-boky</string>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Rofiatmustapha12
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">Eto faili rẹ ko ṣe atilẹyin awọn faili ju 4GB lọ</string>
+  <string name="detecting_file_system">Wiwa boya eto faili le ṣẹda awọn faili 4GB</string>
+  <string name="cannot_open_file">Kuna lati ṣii faili! N! Jọwọ gbiyanju wiwa faili yii ni Taabu Ẹrọ ti Ile-ikawe rẹ</string>
+  <string name="send_files_title">Firanṣẹ Awọn faili</string>
+  <string name="receive_files_title">Gba Awọn faili</string>
+  <string name="no_app_found_to_open">Ko si ohun elo ti a rii lati yan faili zim!</string>
+  <string name="select_zim_file">Yan faili zim lati ka</string>
+</resources>

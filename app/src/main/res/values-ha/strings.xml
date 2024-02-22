@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* 787IYO
+* MohitMali
+* Rofiatmustapha12
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">Tsarin fayil ɗin ku ba ya tallafawa fayiloli sama da 4GB</string>
+  <string name="detecting_file_system">Binciken idan tsarin fayil zai iya ƙirƙirar fayilolin 4GB</string>
+  <string name="cannot_open_file">Rashin buɗe fayil Don Allah yi ƙoƙari ya nemi wannan fayil a cikin Na’urar Tab na Laburarenka</string>
+  <string name="send_files_title">Aika Fayiloli</string>
+  <string name="receive_files_title">Karɓi Fayiloli</string>
+  <string name="no_app_found_to_open">Babu app da aka samo don zaɓar fayil ɗin zim!</string>
+  <string name="select_zim_file">Zaɓi fayil ɗin zim don karantawa</string>
+</resources>

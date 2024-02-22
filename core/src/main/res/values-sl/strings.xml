@@ -8,6 +8,7 @@
 * Macofe
 * MohitMali
 * P̲̳l̳eo
+* Rofiatmustapha12
 -->
 <resources>
   <string name="menu_help">Pomoč</string>
@@ -211,6 +212,7 @@
   <string name="search_bookmarks">Iskanje zaznamkov</string>
   <string name="switch_tabs">Preklopi zavihke</string>
   <string name="close_all_tabs">Zapri vse zavihke</string>
+  <string name="close_tab">Zapri zavihek</string>
   <string name="pending_state">V delu</string>
   <string name="running_state">V teku</string>
   <string name="complete">Končano</string>
@@ -331,7 +333,7 @@
   <string name="clear_all_navigation_history_message">Počisti celotno zgodovino navigacije (nazaj, naprej).</string>
   <string name="navigation_history_cleared">Zgodovina navigacije izbrisana</string>
   <string name="go_to_settings_label">Pojdi v nastavitve</string>
-  <string name="request_notification_permission_message">Za izvedbo tega dejanja dovolite dostop do obvestil</string>
+  <string name="request_notification_permission_message">Za izvedbo tega dejanja podelite dostop do obvestil</string>
   <string name="click_nearby_devices_message">Kliknite tukaj, da poiščete bližnje naprave.</string>
   <string name="your_device_name_message">Tukaj se bo prikazalo ime vaše naprave.</string>
   <string name="nearby_devices_list_message">Tukaj boste našli seznam bližnjih naprav. Dotaknite se imena naprave, da začnete prenos datoteke.</string>

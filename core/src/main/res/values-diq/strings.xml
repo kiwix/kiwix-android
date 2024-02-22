@@ -5,6 +5,7 @@
 * Kumkumuk
 * Marmase
 * Mirzali
+* MohitMali
 * Orbot707
 -->
 <resources>
@@ -18,11 +19,11 @@
   <string name="menu_exit_full_screen">Tam asenge ra bıvıciye</string>
   <string name="menu_read_aloud">Be veng ra bıwane</string>
   <string name="menu_read_aloud_stop">Bevengrawendış caverde</string>
-  <string name="menu_support_kiwix">Kiwix\'i desteg</string>
+  <string name="menu_support_kiwix">Peşti bıdê be Kiwix’i</string>
   <string name="menu_wifi_hotspot">Kıtabê esasi</string>
   <string name="save_media">Medyay bışevekne</string>
   <string name="save_media_error">Medya qeyd kerdış de yew xeta ameyê meydan!</string>
-  <string name="save_media_saved" fuzzy="true">Medyay gorey %s\'i  tiya dı qeyd kerê Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Medya goreyê %s’i ra tiya de qeyd kerê Downloads/org.kiwix…/</string>
   <string name="search_label">Cı geyre</string>
   <string name="choose_file">Yew dosyay zerreki weçine (*.zim)</string>
   <string name="open_in_new_tab">Gıre xıldayışo newe de abo?</string>
@@ -51,7 +52,7 @@
   <string name="start_server_label">Serveri serkewtış</string>
   <string name="stop_server_label">Serveri vındardış</string>
   <string name="server_started_message">Seba resayışê serverê %s re browseri rê ena adresê ip cı kerê</string>
-  <string name="share_host_address">URL\'yi be aplikasyonanê binan ra bare ke</string>
+  <string name="share_host_address">URL’yi be aplikasyonanê binan ra bare ke</string>
   <string name="error_file_not_found">Xeta: Dosyaya ZIMia weçinıtiye nêvêniye.</string>
   <string name="zim_not_opened">Dosyay Zimi nêabiyena</string>
   <string name="error_file_invalid">Xeta: Dosyaya weçinıtiye yew dosyaya ZIMia vêrdiye niya.</string>
@@ -81,7 +82,7 @@
   <string name="pref_clear_all_bookmarks_title">Bookmarka pak kerê</string>
   <string name="clear_all_history_dialog_title">Verori pêro wa pak kerê?</string>
   <string name="share">Vıla ke</string>
-  <string name="selected_file_cab_app_chooser_title">Dosyayanê ZIM\'i pê :</string>
+  <string name="selected_file_cab_app_chooser_title">Dosyayanê ZIM’i pê bare ke:</string>
   <string name="delete">Bestere</string>
   <string name="cancel">Bıtexelne</string>
   <string name="delete_specific_search_toast">Cıgeyrayışo peyên wedariya</string>
@@ -101,13 +102,13 @@
   <string name="pref_newtab_background_summary">Peyreng akerdış çıwext tabbi da newi de abena</string>
   <string name="pref_extras">Ekstray</string>
   <string name="new_tab_snack_bar">Meqale tabê neweyi de bi a</string>
-  <string name="search_widget_text">Kiwix\'i cıgeyre</string>
+  <string name="search_widget_text">Kiwix’i cıgeyre</string>
   <string name="speech_prompt_text">Serva cıgeyrayışi %s vacê</string>
   <string name="speech_not_supported">Malesef, cihazê şımayo dekerderê qısekerdışi rê desteg nêdano</string>
   <string name="local_zims">Cihaz</string>
   <string name="remote_zims">Online</string>
   <string name="library">Kıtıbxane</string>
-  <string name="delete_zim_body">Dosyay zim\'ê cêrêni do bıesteriyê:\n\n%s</string>
+  <string name="delete_zim_body">Dosyaya zim’iya cêrêne do bıesteriyo:\n\n%s</string>
   <string name="delete_zims_toast">Dosyay hewl esteriyayê</string>
   <string name="no_files_here">Tiya dosyeyi çıniyê</string>
   <string name="download_no_space">Serba ronayışi rê ca bes niyo.</string>
@@ -223,7 +224,7 @@
   <string name="books_count">%d book(s)</string>
   <string name="discovery_initiated">Kaşır serneyayo</string>
   <string name="discovery_failed">Kaşır nêşayo</string>
-  <string name="severe_loss_error">Xetaya gıran! WiFi P2P\'yi Dewre ra vec/Retnanaltiv kerê bıcerrebnê</string>
+  <string name="severe_loss_error">Xetaya gırane! Bıcerebnê ke WiFi P2P’yi dewre ra vecê/reyêna aktif kerê</string>
   <string name="connection_failed">Gıreyin nêbiya</string>
   <string name="permission_rationale_location">Cihazê takêşan ra ferq bıyayışi rê terefê Androidi ra mısadey mehali ganiyo.</string>
   <string name="permission_rationale_location_on_host_zim_file">Dosyayanê ZIMi darênayışê aplikasyoni rê terefê Androidi ra mısadey mehali ganiyo.</string>
@@ -231,7 +232,7 @@
   <string name="permission_refused_storage">Bêmısadey depo kerdışi nêresiyeno dosyayanê ZIMi</string>
   <string name="request_enable_location">Taypêyan his kerdışi rê seba mısade dayışi mehali aktiv kerê</string>
   <string name="discovery_needs_location">Servisê mehali taypêyi nêvineyênê</string>
-  <string name="request_enable_wifi">WiFi P2P\'yi eyaranê sistemi ra aktiv ke</string>
+  <string name="request_enable_wifi">WiFi P2P’yi eyaranê sistemi ra aktif ke</string>
   <string name="discovery_needs_wifi">WiFi AKERDE nêbo se tekê cı keşf nêbeno</string>
   <string name="transfer_to">%s ya wa dosya transfer vo?</string>
   <string name="device_not_cooperating">Weçineyaye cihazo seba transferi piya nêguriyeno</string>

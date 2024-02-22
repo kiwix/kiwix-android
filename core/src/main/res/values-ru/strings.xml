@@ -20,6 +20,7 @@
 * Putnik
 * Razno0
 * Rivka Silinsky
+* Rofiatmustapha12
 * Smavrina
 * Stjn
 * Teretalexev
@@ -38,6 +39,7 @@
   <string name="menu_read_aloud">Читать вслух</string>
   <string name="menu_read_aloud_stop">Остановить чтение вслух</string>
   <string name="menu_support_kiwix">Поддержать Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">Поддержка %s</string>
   <string name="menu_about_app">О приложении %s</string>
   <string name="menu_wifi_hotspot">Точка доступа WIFI</string>
   <string name="save_media">Сохранить Медиа-файлы</string>
@@ -70,6 +72,8 @@
   <string name="hotspot_notification_content_title">Точка Доступа Kiwix</string>
   <string name="start_server_label">Запустить сервер</string>
   <string name="stop_server_label">Остановить сервер</string>
+  <string name="error_server_already_running">Сервер уже работает. Пожалуйста, выключите его и повторите попытку.</string>
+  <string name="error_ip_address_not_found">Не удалось найти IP-адрес.</string>
   <string name="server_started_message">Введите этот IP адрес в ваш браузер чтобы получить доступ к серверу %s</string>
   <string name="share_host_address">Поделиться URL через другие приложения</string>
   <string name="error_file_not_found">Ошибка: выбранный ZIM-файл не найден.</string>
@@ -225,6 +229,7 @@
   <string name="search_bookmarks">Искать в закладках</string>
   <string name="switch_tabs">Переключить вкладки</string>
   <string name="close_all_tabs">Закрыть все вкладки</string>
+  <string name="close_tab">Закрыть вкладку</string>
   <string name="pending_state">В ожидании</string>
   <string name="running_state">В процессе</string>
   <string name="complete">Завершено</string>
@@ -312,6 +317,8 @@
   <string name="tabs_restored">Вкладки восстановлены</string>
   <string name="open_drawer">Открыть редактор</string>
   <string name="close_drawer">Закрыть редактор</string>
+  <string name="zim_files_not_showing">Файлы Zim не отображаются?</string>
+  <string name="zim_files_not_showing_description">В соответствии с правилами Google Play для Android 11 и более поздних версий это приложение Google Store не может открывать загруженные неопубликованными файлы ZIM. Вы можете либо скачать их через приложение, либо установить полную версию приложения kiwix с нашего официального сайта %s</string>
   <string name="understood">Понятно</string>
   <string name="how_to_update_content">Как обновить содержимое?</string>
   <string name="update_content_description">Чтобы обновить содержимое (файл zim), вам нужно скачать последнюю версию того же содержимого. Вы можете это сделать в разделе загрузок.</string>
@@ -336,8 +343,16 @@
   <string name="download_tts_language_message">Пожалуйста, нажмите кнопку «Загрузить». Это автоматически загрузит необходимый язык.</string>
   <string name="external_link_copied_message">Внешняя ссылка скопирована в буфер обмена</string>
   <string name="read_aloud_service_channel_name">Сервисный канал чтения вслух</string>
+  <string name="read_aloud_channel_description">Текст на контрольный аппарат.</string>
+  <string name="read_aloud_running">Бег Чтение вслух</string>
+  <string name="backward_history">Обратная история</string>
+  <string name="forward_history">Форвардная история</string>
   <string name="clear_all_navigation_history_message">Очищает всю (назад, вперед) историю навигации</string>
   <string name="navigation_history_cleared">История навигации очищена</string>
   <string name="go_to_settings_label">Перейти в настройки</string>
   <string name="request_notification_permission_message">Чтобы выполнить это действие, предоставьте доступ к уведомлениям.</string>
+  <string name="click_nearby_devices_message">Нажмите здесь, чтобы найти устройства поблизости.</string>
+  <string name="your_device_name_message">Здесь появится имя вашего устройства.</string>
+  <string name="nearby_devices_list_message">Здесь вы найдете список ближайших устройств. Нажмите на имя устройства, чтобы начать передачу файлов.</string>
+  <string name="transfer_zim_files_list_message">Здесь вы найдете список доступных ZIM-файлов для передачи.</string>
 </resources>

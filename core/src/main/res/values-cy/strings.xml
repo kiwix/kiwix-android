@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* MohitMali
 * Robin Owain
 -->
 <resources>
   <string name="menu_help">Cymorth</string>
   <string name="menu_home">Hafan</string>
   <string name="menu_settings">Dewisiadau</string>
-  <string name="menu_search_in_text">Chwilio\'r testun</string>
+  <string name="menu_search_in_text">Chwilio yn y dudalen</string>
   <string name="bookmarks">Llyfrnodau</string>
   <string name="menu_random_article">Erthygl ar hap</string>
   <string name="menu_full_screen">Sgrin lawn</string>
   <string name="menu_exit_full_screen">Gadael modd sgrin-llawn</string>
   <string name="menu_read_aloud">Darllenwch yn uchel</string>
   <string name="menu_read_aloud_stop">Stopiwch ddarllen yn uchel</string>
-  <string name="save_media">Cadw\'r cyfrwng fel…</string>
-  <string name="save_media_error">Gwall wrth geisio cadw\'r cyfrwng!</string>
+  <string name="save_media">Cadw yr cyfrwng fel…</string>
+  <string name="save_media_error">Gwall wrth geisio cadw yr cyfrwng!</string>
   <string name="save_media_saved" fuzzy="true">Arbedwyd cyfryngau fel  %1$s  yn Android/media/org.kiwix…/</string>
   <string name="search_label">Chwilio</string>
   <string name="choose_file">Dewisiwch Ffeil Gynnwys (*.zim)</string>
   <string name="open_in_new_tab">Agor y ddolen mewn tab newydd?</string>
   <string name="error_file_not_found">Gwall: Doedd dim modd canfod y ffeil ZIM dan sylw.</string>
-  <string name="error_file_invalid">Gwall: Dydy\'r ffeil dan sylw ddim yn ffeil ZIM dilys.</string>
-  <string name="error_article_url_not_found">Gwall: Methwyd a llwytho\'r erthygl: (Url: %1$s).</string>
+  <string name="error_file_invalid">Gwall: Dydy yr ffeil dan sylw ddim yn ffeil ZIM dilys.</string>
+  <string name="error_article_url_not_found">Gwall: Methwyd a llwytho yr erthygl: (Url: %1$s).</string>
   <string name="pref_display_title">Golwg</string>
   <string name="pref_info_title">Gwybodaeth</string>
   <string name="pref_info_version">Fersiwn</string>
   <string name="pref_night_mode">Modd nos</string>
   <string name="pref_night_mode_summary">Dangos erthyglau gyda lliwiau croes</string>
-  <string name="pref_back_to_top">Nôl i\'r brig</string>
+  <string name="pref_back_to_top">Nôl i yr brig</string>
   <string name="pref_back_to_top_summary">Arddangos botwm ar waelod y dudalen i sgrolio hyd at y brig</string>
   <string name="pref_language_title">Iaith</string>
   <string name="pref_language_chooser">Dewis iaith</string>

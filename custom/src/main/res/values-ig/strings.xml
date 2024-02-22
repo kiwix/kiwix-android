@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Accuratecy051
+-->
+<resources>
+  <string name="retry">Gbalịa ọzọ</string>
+  <string name="invalid_installation">Wụnye na ezighi ezi. Biko budata Zim.\n Gbaa mbọ hụ na WiFi dị na ị nwere nchekwa zuru oke</string>
+</resources>

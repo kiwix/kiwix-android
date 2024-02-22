@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* AgnesAbah
+* Beracy
+-->
+<resources>
+  <string name="send_files_title">Sendí failu</string>
+  <string name="receive_files_title">Fa mewn le gba</string>
+</resources>

@@ -68,7 +68,7 @@
   <string name="start_server_label">Démarrer le serveur</string>
   <string name="stop_server_label">Arrêter le serveur</string>
   <string name="error_server_already_running">Le serveur est déjà en cours d\'exécution. Veuillez l\'arrêter et réessayer.</string>
-  <string name="error_ip_address_not_found">Impossible de trouver l\'adresse IP.</string>
+  <string name="error_ip_address_not_found">Impossible de trouver l’adresse IP.</string>
   <string name="server_started_message">Entrez cette adresse IP dans votre navigateur pour accéder au serveur %s</string>
   <string name="share_host_address">Partager l’URL avec d’autres applications</string>
   <string name="error_file_not_found">Erreur : le fichier ZIM sélectionné est introuvable.</string>
@@ -204,7 +204,7 @@
   <string name="articleCount">%s articles</string>
   <string name="get_started">Commencer</string>
   <string name="download_books">Télécharger des livres</string>
-  <string name="humankind_knowledge">Les connaissances de l\'humanité, sur votre téléphone.</string>
+  <string name="humankind_knowledge">Les connaissances de l’humanité, sur votre téléphone.</string>
   <string name="welcome_to_the_family">Bienvenue dans la famille</string>
   <string name="save_books_offline">Enregistrer des livres hors connexion</string>
   <string name="download_books_message">Téléchargez et lisez des livres où que vous soyez.</string>
@@ -224,6 +224,7 @@
   <string name="search_bookmarks">Rechercher des marque-pages</string>
   <string name="switch_tabs">Changer d’onglet</string>
   <string name="close_all_tabs">Fermer tous les onglets</string>
+  <string name="close_tab">Fermer l’onglet</string>
   <string name="pending_state">En attente</string>
   <string name="running_state">En cours</string>
   <string name="complete">Terminé</string>
@@ -250,7 +251,7 @@
   <string name="books_count">%d livre(s)</string>
   <string name="discovery_initiated">Découverte lancée</string>
   <string name="discovery_failed">La découverte a échoué</string>
-  <string name="severe_loss_error">Erreur grave! Essayez de désactiver/réactiver l\'appairage WiFi</string>
+  <string name="severe_loss_error">Erreur grave! Essayez de désactiver/réactiver l’appairage WiFi</string>
   <string name="connection_failed">La connexion a échoué</string>
   <string name="permission_rationale_location">L’autorisation de géolocalisation est requise par Android pour permettre à l’application de détecter des appareils à proximité.</string>
   <string name="permission_rationale_location_on_host_zim_file">La permission locale est demandée par Android pour autoriser l’application à héberger des fichiers Zim.</string>
@@ -260,7 +261,7 @@
   <string name="request_enable_location">Activer la géolocalisation pour permettre la détection d’appareils proches</string>
   <string name="discovery_needs_location">Impossible de découvrir des pairs sans service de géolocalisation</string>
   <string name="request_enable_wifi">Activer le pair-à-pair WiFi dans les paramètres système</string>
-  <string name="discovery_needs_wifi">Impossible de découvrir les pairs si le WiFi n\'est pas activé</string>
+  <string name="discovery_needs_wifi">Impossible de découvrir les pairs si le WiFi n’est pas activé</string>
   <string name="transfer_to">Transférer les fichiers vers %s ?</string>
   <string name="device_not_cooperating">L’appareil sélectionné ne coopère pas pour le transfert</string>
   <string name="file_transfer_complete">Transfert de fichier bien terminé</string>
@@ -347,6 +348,6 @@
   <string name="request_notification_permission_message">Pour effectuer cette action, veuillez accorder l’accès aux notifications</string>
   <string name="click_nearby_devices_message">Cliquez ici pour rechercher des appareils à proximité</string>
   <string name="your_device_name_message">Le nom de votre appareil apparaîtra ici.</string>
-  <string name="nearby_devices_list_message">Vous trouverez ici une liste des appareils à proximité. Appuyez sur le nom d\'un appareil pour lancer le transfert de fichiers.</string>
+  <string name="nearby_devices_list_message">Vous trouverez ici une liste des appareils à proximité. Appuyez sur le nom d’un appareil pour lancer le transfert de fichiers.</string>
   <string name="transfer_zim_files_list_message">Vous trouverez ici la liste des fichiers ZIM disponibles pour le transfert.</string>
 </resources>

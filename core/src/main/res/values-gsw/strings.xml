@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * McDutchie
+* MohitMali
 * Rschlegel
 * 80686
 -->
@@ -33,10 +34,10 @@
   <string name="hotspot_details_message">Aagabä zum lokalä Hotspot.\nSSID: %1$s\nPass: %2$s</string>
   <string name="server_textview_default_message">Dateiä uswähle wo sölle uf em Server bereitgstellt wärde</string>
   <string name="progress_dialog_starting_server">Server am Schtartä</string>
-  <string name="hotspot_dialog_title">Inschtruktionä um Büecher bereit z\'stellä</string>
+  <string name="hotspot_dialog_title">Inschtruktionä um Büecher bereit z’stellä</string>
   <string name="wifi_dialog_title">WiFi Verbindig gfundä</string>
   <string name="wifi_dialog_body">Um Büecher uf andere Grät chöne aazluegä, bitte sicherstellä dass alli Grät mit em gliiche WiFi Netzwärch verbunde sind.</string>
-  <string name="hotspot_dialog_message">Damit diä Funktion cha funktionierä, müesst Dir zersch vo Hand dr WiFi Hotspot aktivierä, oder sicherstellä dass dises Grät und s\'Empfängergrät im gliiche WiFi Netzwärch sind.</string>
+  <string name="hotspot_dialog_message">Damit diä Funktion cha funktionierä, müesst Dir zersch vo Hand dr WiFi Hotspot aktivierä, oder sicherstellä dass dises Grät und s’Empfängergrät im gliiche WiFi Netzwärch sind.</string>
   <string name="hotspot_dialog_neutral_button">WIITERMACHE</string>
   <string name="hotspot_notification_content_title">Kiwix Hotspot</string>
   <string name="start_server_label">Server schtartä</string>
@@ -45,17 +46,17 @@
   <string name="error_file_not_found">Fehler: Di usgwählti ZIM-Datei isch nit gfunde worde.</string>
   <string name="zim_not_opened">Cha zim Datei nid uftue</string>
   <string name="error_file_invalid">Fehler: Di usgwählti Datei isch chei gültigi ZIM-Datei.</string>
-  <string name="error_article_url_not_found">Fehler: S\' Lade vom Artikel (URL: %1$s) het nit gchlappt.</string>
+  <string name="error_article_url_not_found">Fehler: S’ Lade vom Artikel (URL: %1$s) het nit gchlappt.</string>
   <string name="pref_display_title">Azeig</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
   <string name="pref_night_mode">Nachtmodus</string>
-  <string name="pref_night_mode_summary">Zeig d\'Artikel mit umcherte Farbe</string>
+  <string name="pref_night_mode_summary">Zeig d’Artikel mit umcherte Farbe</string>
   <string name="pref_back_to_top">Zruck nach obe</string>
   <string name="pref_back_to_top_summary">Zeig e Chnopf am End vo dr Syte zuem uffe rolle</string>
   <string name="pref_language_title">Sprach</string>
   <string name="pref_language_chooser">E Sprach uswähle</string>
-  <string name="tts_lang_not_supported" fuzzy="true">D\'Spraach vo dere Syte isch nid unterschtützt, oder diä passende Spraachdaate si nid inschtalliert. Dä Artikel cha müglercherwiis nid korräkt gläse wärde.</string>
+  <string name="tts_lang_not_supported">Die Systemsprache wird nicht unterstützt. Der Artikel würde nicht als korrekt angesehen werden.</string>
   <string name="no_reader_application_installed">Ke inschtallierti Aawändig gfunde für dä Dateitüüp.</string>
   <string name="request_storage">Um uf Offlineinhaute zuezgrifä, bruche mer Zuegang zum Speicher.</string>
   <string name="clear_recent_and_tabs_history_dialog">Sid Dir sicher dass der dä ganzi Suechverlouf weid löschä, und alli aktivä Tabs zrüggzsetze?</string>
@@ -87,7 +88,7 @@
   <string name="pref_extras">Äxtras</string>
   <string name="new_tab_snack_bar">Syte imänä nöiä Tab ufgmacht</string>
   <string name="search_widget_text">Kiwix dürsuechä</string>
-  <string name="speech_prompt_text">Redä, um %s z\'suechä</string>
+  <string name="speech_prompt_text">Redä, um %s z’suechä</string>
   <string name="speech_not_supported">Exgüse, öies Grät unterstützt ke Spraachiigaab!</string>
   <string name="local_zims">Grät</string>
   <string name="library">Bibliothek</string>
@@ -169,7 +170,7 @@
   <string name="file_transfer_complete">Dateiübertragig abgschlossä</string>
   <string name="error_during_transfer">Es isch ä Fähler passiert während dr Übertragig</string>
   <string name="error_transferring">Fähler bim Übertrage vor Datei %s</string>
-  <string name="preparing_files" fuzzy="true">Dateiä am Vorbereitä für d\'Übertragig…</string>
+  <string name="preparing_files">Dateiä am Vorbereitä für d’Übertragig…</string>
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_title">Alli Notizä lösche</string>
   <string name="tag_text_only">Numä Texscht</string>

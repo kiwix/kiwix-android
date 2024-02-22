@@ -4,6 +4,7 @@
 * Akagisoy
 * Arthur2e5
 * GuoPC
+* IceButBin
 * Josephine W.
 * LClightcat
 * Lanyun1103
@@ -70,6 +71,8 @@
   <string name="hotspot_notification_content_title">Kiwix 热点</string>
   <string name="start_server_label">启动服务器</string>
   <string name="stop_server_label">中止服务器</string>
+  <string name="error_server_already_running">服务器已在运行。请关闭后再重试。</string>
+  <string name="error_ip_address_not_found">找不到IP地址。</string>
   <string name="server_started_message">将这个 IP 地址输入到你的浏览器中来连接服务器 %s</string>
   <string name="share_host_address">通过其他应用程序分享 URL</string>
   <string name="error_file_not_found">错误：找不到选定的 ZIM 文件。</string>
@@ -232,7 +235,7 @@
   <string name="failed_state">失败：%s</string>
   <string name="custom_download_error_message_for_authentication_failed">无法下载此 zim 文件。请尝试从 Play 商店重新安装此应用程序。</string>
   <string name="save">保存</string>
-  <string name="note">请注意</string>
+  <string name="note">笔记</string>
   <string name="wiki_article_title">Wiki文章标题</string>
   <string name="ext_storage_permission_rationale_add_note">要使用笔记功能，我们需要存储权限</string>
   <string name="ext_storage_write_permission_denied_add_note">我们无法访问存储，因此无法使用笔记功能</string>
@@ -312,6 +315,9 @@
   <string name="tabs_restored">标签已恢复</string>
   <string name="open_drawer">打开绘画器</string>
   <string name="close_drawer">关闭绘画器</string>
+  <string name="zim_files_not_showing">没看到Zim文件？</string>
+  <string name="zim_files_not_showing_description">根据Android11及以上版本的Google Play政策，您现在使用的版本无法侧载ZIM文件。但您可以在程序内下载ZIM文件，或者在我们的官网（%s）下载完整版的Kiwix。</string>
+  <string name="understood">明白了</string>
   <string name="how_to_update_content">如何更新内容？</string>
   <string name="update_content_description">要更新内容（ZIM 文件），您需要下载此相似内容的完整最新版本。您可以通过下载章节进行。</string>
   <string name="all_files_permission_needed">需要全部文件权限</string>
@@ -337,7 +343,14 @@
   <string name="read_aloud_service_channel_name">朗读服务频道</string>
   <string name="read_aloud_channel_description">文本转语音控制。</string>
   <string name="read_aloud_running">正在朗读</string>
+  <string name="backward_history">历史向后</string>
+  <string name="forward_history">历史向前</string>
+  <string name="clear_all_navigation_history_message">清除所有（向前、向后）的导航历史</string>
   <string name="navigation_history_cleared">已清楚导航历史记录</string>
   <string name="go_to_settings_label">转到设置</string>
   <string name="request_notification_permission_message">要执行此操作，请授予通知访问权限</string>
+  <string name="click_nearby_devices_message">点击这里来查找附近的设备</string>
+  <string name="your_device_name_message">您的设备名将出现在这里</string>
+  <string name="nearby_devices_list_message">您可以在这里看到所有的附近的设备。点击设备名即可进行文件传输。</string>
+  <string name="transfer_zim_files_list_message">您可以在这里看到所有的可用于文件传输的ZIM文件。</string>
 </resources>
