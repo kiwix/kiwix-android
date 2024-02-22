@@ -3,6 +3,9 @@
 * Adriendelucca
 -->
 <resources>
+  <string name="file_system_does_not_support_4gb">N’eo ket skoret ar restroù pounneroc’h eget 4GB gant ho sistem restroù</string>
   <string name="send_files_title">Kas restroù</string>
   <string name="receive_files_title">Resev restroù</string>
+  <string name="no_app_found_to_open">N’eus bet kavet arload ebet evit diuzañ ar restr ZIM!</string>
+  <string name="select_zim_file">Diuzit ar restr ZIM da lenn</string>
 </resources>

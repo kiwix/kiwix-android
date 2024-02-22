@@ -204,6 +204,7 @@
   <string name="search_bookmarks">Пребарај по обележувачите</string>
   <string name="switch_tabs">Смени јазичиња</string>
   <string name="close_all_tabs">Затвори ги сите јазичиња</string>
+  <string name="close_tab">Затвори јазиче</string>
   <string name="pending_state">Во исчекување</string>
   <string name="running_state">Во тек</string>
   <string name="complete">Завршено</string>
@@ -329,4 +330,8 @@
   <string name="your_device_name_message">Тука ќе се појави името на вашиот уред.</string>
   <string name="nearby_devices_list_message">Тука ќе најдете список на уреди во близина. Допрете на име на уред за да отпочне преносот на податотеки.</string>
   <string name="transfer_zim_files_list_message">Тука ќе најдете список на расположиви ZIM-податотеки за пренесување.</string>
+  <string name="storage_selection_dialog_accessibility_description">Изберете склад за преземање на ZIM-податотеки.</string>
+  <string name="zim_file_content_description">ZIM-податотека која ја има содржината за читање</string>
+  <string name="select_language_content_description">Ако го изберете овој јазик, тогаш најгоре предност ќе имаат преземливите книги на тој јазик.</string>
+  <string name="toolbar_back_button_content_description">Оди на претходниот екран</string>
 </resources>

@@ -212,6 +212,7 @@
   <string name="search_bookmarks">बुकमार्क खोजें</string>
   <string name="switch_tabs">टैब स्विच करें</string>
   <string name="close_all_tabs">सभी टैब्स बंद करें</string>
+  <string name="close_tab">टैब बंद करें</string>
   <string name="pending_state">लंबित</string>
   <string name="running_state">चालू</string>
   <string name="complete">पूर्ण</string>

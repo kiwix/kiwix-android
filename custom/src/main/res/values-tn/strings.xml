@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Sekhomba
+-->
+<resources>
+  <string name="retry">Leka gape</string>
+  <string name="invalid_installation">Didirisiwa tse di sa kgoneng go dira. Tsweetswee kopa Zim. Tlhomamisa gore WiFi e teng mme o na le bobolokelo jo bo lekaneng</string>
+</resources>

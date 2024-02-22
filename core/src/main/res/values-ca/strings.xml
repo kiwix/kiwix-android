@@ -6,6 +6,7 @@
 * Joan manel
 * Macondo
 * Mguix
+* MohitMali
 -->
 <resources>
   <string name="menu_help">Ajuda</string>
@@ -19,18 +20,18 @@
   <string name="menu_read_aloud">Llegir en veu alta</string>
   <string name="menu_read_aloud_stop">Deixar de llegir en veu alta</string>
   <string name="save_media">Anomena i desa el fitxer…</string>
-  <string name="save_media_error">S\'ha produït un error en mirar de desar el fitxer!</string>
+  <string name="save_media_error">S’ha produït un error en mirar de desar el fitxer!</string>
   <string name="save_media_saved" fuzzy="true">Multimèdia desat com %s en Android/media/org.kiwix…/</string>
   <string name="search_label">Cercar</string>
   <string name="choose_file">Seleccioneu un fitxer de contingut ZIM (*.zim)</string>
-  <string name="open_in_new_tab">Obrir l\'enllaç en una pestanya nova?</string>
+  <string name="open_in_new_tab">Obrir l’enllaç en una pestanya nova?</string>
   <string name="no_books_selected_toast_message">Seleccioneu llibres primer</string>
   <string name="server_failed_toast_message">No s’ha pogut iniciar el servidor.</string>
   <string name="progress_dialog_starting_server">S’està iniciant el servidor</string>
   <string name="hotspot_dialog_neutral_button">CONTINUA</string>
   <string name="start_server_label">Inicia el servidor</string>
   <string name="stop_server_label">Atura el servidor</string>
-  <string name="error_file_not_found">Error: no s\'ha trobat el fitxer ZIM.</string>
+  <string name="error_file_not_found">Error: no s’ha trobat el fitxer ZIM.</string>
   <string name="error_file_invalid">Error: el fitxer seleccionat no és un fitxer ZIM vàlid.</string>
   <string name="error_article_url_not_found">Error: no s\'ha pogut carregar l\'article (Url: %1$s).</string>
   <string name="pref_display_title">Visualitzar</string>
@@ -42,11 +43,11 @@
   <string name="pref_back_to_top_summary">Mostrar un botó al final de la pàgina per a desplaçar-se cap a la part superior</string>
   <string name="pref_language_title">Idioma</string>
   <string name="pref_language_chooser">Trieu un idioma</string>
-  <string name="no_reader_application_installed">No s\'ha pogut trobar una aplicació instal·lada per a aquest tipus de fitxer</string>
+  <string name="no_reader_application_installed">No s’ha pogut trobar una aplicació instal·lada per a aquest tipus de fitxer</string>
   <string name="no_section_info">No es van trobar capçaleres de contingut</string>
-  <string name="clear_recent_and_tabs_history_dialog">Segur que vols esborrar l\'historial de cerques i restablir totes les pestanyes actives?</string>
+  <string name="clear_recent_and_tabs_history_dialog">Segur que vols esborrar l’historial de cerques i restablir totes les pestanyes actives?</string>
   <string name="delete_recent_search_item">Esborrar aquest element?</string>
-  <string name="all_history_cleared">Esborrat tot l\'historial</string>
+  <string name="all_history_cleared">Esborrat tot l’historial</string>
   <string name="clear_all_history_dialog_title">Voleu netejar tot l’historial?</string>
   <string name="delete">Esborrar</string>
   <string name="cancel">Cancel·la</string>
@@ -71,19 +72,19 @@
   <string name="help_4">Si bé Kiwix es va dissenyar originalment per a proporcionar una Wikipedia sense connexió, també pot llegir altres continguts.</string>
   <string name="help_5">On està el contingut?</string>
   <string name="help_6">El nostre contingut està allotjat en el lloc web de Kiwix</string>
-  <string name="help_7">Estan disponibles com a fitxers ZIM. Hi ha molts d\'ells:</string>
+  <string name="help_7">Estan disponibles com a fitxers ZIM. Hi ha molts d’ells:</string>
   <string name="help_8">• La Viquipèdia està disponible per separat per a cada idioma</string>
   <string name="help_9">• Altres continguts com Wikileaks o Wikisource també estan disponibles</string>
   <string name="help_10">Podeu descarregar els arxius ZIM triats a l\'aplicació, o bé seleccionar acuradament els que vulgueu, descarregar-los des d\'un ordinador i transferir-los a la vostra targeta SD.</string>
   <string name="help_11">Els fitxers ZIM descarregats en l\'aplicació es troben al directori d\'emmagatzematge extern, en una carpeta anomenada Kiwix.</string>
-  <string name="delete_zim_failed">No podem eliminar alguns arxius. Hauries de provar amb un administrador d\'arxius</string>
+  <string name="delete_zim_failed">No podem eliminar alguns arxius. Hauries de provar amb un administrador d’arxius</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Extern</string>
   <string name="yes">Sí</string>
   <string name="no">No</string>
   <string name="confirm_stop_download_title">Aturar la descàrrega?</string>
   <string name="confirm_stop_download_msg">Segur que vols aturar aquesta descàrrega?</string>
-  <string name="download_change_storage">Selector de dispositiu d\'emmagatzematge</string>
+  <string name="download_change_storage">Selector de dispositiu d’emmagatzematge</string>
   <string name="next">Següent</string>
   <string name="external_link_popup_dialog_title">Accés a enllaç extern!</string>
   <string name="external_link_popup_dialog_message">Estàs entrant a un enllaç extern. Això podria ocasionar-te costos addicionals per transferència de dades o, senzillament, no funcionarà si no tens connexió. Vols continuar?</string>

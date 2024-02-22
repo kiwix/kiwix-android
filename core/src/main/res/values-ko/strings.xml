@@ -9,7 +9,9 @@
 * Jerrykim306
 * Macofe
 * McDutchie
+* MohitMali
 * Priviet
+* Rosalyn
 * Ykhwong
 * 그냥기여자
 * 아라
@@ -26,10 +28,12 @@
   <string name="menu_read_aloud">소리내어 읽기</string>
   <string name="menu_read_aloud_stop">소리내어 읽기 중단하기</string>
   <string name="menu_support_kiwix">Kiwix 지원하기</string>
+  <string name="menu_support_kiwix_for_custom_apps">%s 지원하기</string>
+  <string name="menu_about_app">%s 앱 정보</string>
   <string name="menu_wifi_hotspot">와이파이 핫스팟</string>
   <string name="save_media">미디어 저장</string>
   <string name="save_media_error">미디어 저장 중, 오류가 발생하였습니다!</string>
-  <string name="save_media_saved" fuzzy="true">미디어(%s)를 Android/media/org.kiwix…/에 저장했습니다</string>
+  <string name="save_media_saved">미디어를 %s(으)로 Downloads/org.kiwix…/에 저장했습니다</string>
   <string name="search_label">검색</string>
   <string name="choose_file">내용 파일 (*.zim) 선택</string>
   <string name="open_in_new_tab">새 탭에서 링크를 여시겠습니까?</string>
@@ -57,6 +61,8 @@
   <string name="hotspot_notification_content_title">Kiwix 핫스팟</string>
   <string name="start_server_label">서버 시작</string>
   <string name="stop_server_label">서버 정지</string>
+  <string name="error_server_already_running">서버가 이미 실행 중입니다. 서버를 끄고 다시 시도해 주세요.</string>
+  <string name="error_ip_address_not_found">IP 주소를 찾을 수 없습니다.</string>
   <string name="server_started_message">%s 서버에 접속하려면 브라우저에 이 IP 주소를 입력하십시오</string>
   <string name="share_host_address">다른 애플리케이션을 통해 URL 공유</string>
   <string name="error_file_not_found">오류: 선택된 ZIM 파일을 찾을 수 없습니다.</string>

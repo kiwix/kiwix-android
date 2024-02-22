@@ -19,6 +19,7 @@
 * Metalhead64
 * MohitMali
 * Pittigrilli
+* Rofiatmustapha12
 * Sebastian Wallroth
 * Stephane
 * Susann Schweden
@@ -38,6 +39,8 @@
   <string name="menu_read_aloud">Vorlesen</string>
   <string name="menu_read_aloud_stop">Mit dem Vorlesen aufhören</string>
   <string name="menu_support_kiwix">Kiwix unterstützen</string>
+  <string name="menu_support_kiwix_for_custom_apps">Unterstützen Sie %s</string>
+  <string name="menu_about_app">Über %s App</string>
   <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Medium speichern</string>
   <string name="save_media_error">Beim Versuch, das Medium zu speichern, ist ein Fehler aufgetreten!</string>
@@ -69,6 +72,8 @@
   <string name="hotspot_notification_content_title">Kiwix-Hotspot</string>
   <string name="start_server_label">Server starten</string>
   <string name="stop_server_label">Server anhalten</string>
+  <string name="error_server_already_running">Der Server läuft bereits. Bitte schalten Sie es aus und versuchen Sie es erneut.</string>
+  <string name="error_ip_address_not_found">IP-Adresse konnte nicht gefunden werden.</string>
   <string name="server_started_message">Geben Sie diese IP-Adresse in Ihren Browser ein, um auf den Server %s zuzugreifen</string>
   <string name="share_host_address">URL mit anderen Applikationen teilen</string>
   <string name="error_file_not_found">Fehler: Die ausgewählte ZIM-Datei konnte nicht gefunden werden.</string>
@@ -224,11 +229,13 @@
   <string name="search_bookmarks">Lesezeichen durchsuchen</string>
   <string name="switch_tabs">Registerkarten wechseln</string>
   <string name="close_all_tabs">Alle Registerkarten schließen</string>
+  <string name="close_tab">Tab schließen</string>
   <string name="pending_state">Ausstehend</string>
   <string name="running_state">In Bearbeitung</string>
   <string name="complete">Abgeschlossen</string>
   <string name="paused_state">Pausiert</string>
   <string name="failed_state">Fehlgeschlagen: %s</string>
+  <string name="custom_download_error_message_for_authentication_failed">Die ZIM-Datei konnte nicht heruntergeladen werden. Versuchen Sie bitte, die Anwendung aus dem Play Store neu zu installieren.</string>
   <string name="save">Speichern</string>
   <string name="note">Notiz</string>
   <string name="wiki_article_title">Wiki-Artikel-Titel</string>
@@ -344,4 +351,8 @@
   <string name="navigation_history_cleared">Navigationsverlauf gelöscht</string>
   <string name="go_to_settings_label">Einstellungen öffnen</string>
   <string name="request_notification_permission_message">Bitte erlauben Sie der App, auf Ihre Benachrichtigungen zuzugreifen, damit diese Aktion durchführt werden kann</string>
+  <string name="click_nearby_devices_message">Klicken Sie hier, um nach Geräten in der Nähe zu suchen.</string>
+  <string name="your_device_name_message">Hier erscheint Ihr Gerätename.</string>
+  <string name="nearby_devices_list_message">Hier finden Sie eine Liste der Geräte in der Nähe. Tippen Sie auf den Namen eines Geräts, um die Dateiübertragung zu starten.</string>
+  <string name="transfer_zim_files_list_message">Hier finden Sie die Liste der zur Übertragung verfügbaren ZIM-Dateien.</string>
 </resources>

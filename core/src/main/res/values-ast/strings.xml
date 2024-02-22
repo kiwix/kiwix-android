@@ -2,6 +2,7 @@
 <!-- Authors:
 * Macofe
 * McDutchie
+* MohitMali
 * Tokvo
 * Xuacu
 * YoaR
@@ -23,31 +24,31 @@
   <string name="save_media_saved" fuzzy="true">Mediu guardáu como %s en Android/media/org.kiwix…/</string>
   <string name="search_label">Buscar</string>
   <string name="choose_file">Seleiciona un ficheru de conteníu (*.zim)</string>
-  <string name="open_in_new_tab">¿Abrir l\'enllaz nuna llingüeta nueva?</string>
+  <string name="open_in_new_tab">¿Abrir l enllaz nuna llingüeta nueva?</string>
   <string name="hotspot_service_channel_name">Canal del serviciu de Puntu WiFi</string>
-  <string name="hotspot_failed_title">Nun pudo aniciase\'l puntu WiFi</string>
+  <string name="hotspot_failed_title">Nun pudo aniciase l puntu WiFi</string>
   <string name="hotspot_failed_message">Paez que\'l to puntu WiFi yá ta activáu. Desactiva\'l puntu WiFi pa siguir.</string>
   <string name="go_to_wifi_settings_label">Dir a config. de WIFI</string>
   <string name="hotspot_running">Executando puntu WiFi</string>
   <string name="no_books_selected_toast_message">Primero esbilla llibros</string>
   <string name="server_failed_message">Nun pudo arrancase\'l sirvidor. Activa\'l puntu WiFi</string>
-  <string name="server_failed_toast_message">Nun pudo arrancase\'l sirvidor.</string>
-  <string name="server_started_successfully_toast_message">Arrancóse\'l sirvidor correutamente.</string>
-  <string name="server_stopped_successfully_toast_message">Paróse\'l sirvidor correutamente.</string>
+  <string name="server_failed_toast_message">Nun pudo arrancase’l sirvidor.</string>
+  <string name="server_started_successfully_toast_message">Arrancóse’l sirvidor correutamente.</string>
+  <string name="server_stopped_successfully_toast_message">Paróse’l sirvidor correutamente.</string>
   <string name="hotspot_turned_on">Puntu WiFi activáu</string>
   <string name="hotspot_details_message">Los siguientes son los detalles del to puntu WiFi llocal. \nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">Seleiciona los ficheros que quieras agospiar nel sirvidor</string>
-  <string name="progress_dialog_starting_server">Aniciando\'l sirvidor</string>
-  <string name="hotspot_dialog_title" fuzzy="true">Activa\'l to puntu WiFi</string>
-  <string name="hotspot_dialog_message" fuzzy="true">Pa que funcione esta carauterística primero precises arrancar manualmente\'l to puntu WiFi.</string>
+  <string name="progress_dialog_starting_server">Aniciando’l sirvidor</string>
+  <string name="hotspot_dialog_title">Instrucciones para alojar libros.</string>
+  <string name="hotspot_dialog_message">Para que esta función funcione, primero debe iniciar manualmente el punto WiFi o asegurarse de que el dispositivo host y el dispositivo receptor estén en la misma red WiFi.</string>
   <string name="hotspot_dialog_neutral_button" fuzzy="true">SÍ, ACTIVÉLU</string>
-  <string name="hotspot_channel_description">Noticies sobro l\'estáu del to puntu WiFi/sirvidor.</string>
+  <string name="hotspot_channel_description">Noticies sobro l estáu del to puntu WiFi/sirvidor.</string>
   <string name="hotspot_notification_content_title">Puntu WiFi de Kiwix</string>
   <string name="start_server_label">Aniciar el sirvidor</string>
   <string name="stop_server_label">Parar el sirvidor</string>
   <string name="server_started_message">Escribi esta direición ip nel restolador pa tener accesu al sirvidor %s</string>
-  <string name="error_file_not_found">Error: Nun pudo alcontrase\'l ficheru ZIM seleicionáu.</string>
-  <string name="zim_not_opened">Nun pudo abrise\'l ficheru zim</string>
+  <string name="error_file_not_found">Error: Nun pudo alcontrase ficheru ZIM seleicionáu.</string>
+  <string name="zim_not_opened">Nun pudo abrise l ficheru zim</string>
   <string name="error_file_invalid">Error: El ficheru seleicionáu nun ye un ficheru ZIM válidu.</string>
   <string name="error_article_url_not_found">Error: Falló la carga del artículu (Url: %1$s).</string>
   <string name="pref_display_title">Amosar</string>
@@ -62,13 +63,13 @@
   <string name="pref_credits">Collaboradores y llicencies</string>
   <string name="pref_credits_title">Créditos</string>
   <string name="tts_lang_not_supported" fuzzy="true">Nun s\'almite la llingua d\'esta páxina, o nun s\'instalaron los datos d\'idioma apropiaos. Seique l\'artículu nun pueda lleese correutamente.</string>
-  <string name="no_reader_application_installed">Nun s\'alcontró una aplicación instalada pa esti tipu de ficheru</string>
-  <string name="no_section_info">Nun s\'atoparon cabeceres de conteníu</string>
-  <string name="request_storage">P\'aportar a conteníu ensin conexón precisamos tener accesu al almacenamientu</string>
-  <string name="clear_recent_and_tabs_history_dialog">¿Tas seguru de que quies desaniciar l\'historial de gueta y reaniciar toles llingüetes actives?</string>
+  <string name="no_reader_application_installed">Nun s alcontró una aplicación instalada pa esti tipu de ficheru</string>
+  <string name="no_section_info">Nun atoparon cabeceres de conteníu</string>
+  <string name="request_storage">Paportar a conteníu ensin conexón precisamos tener accesu al almacenamientu</string>
+  <string name="clear_recent_and_tabs_history_dialog">¿Tas seguru de que quies desaniciar l’historial de gueta y reaniciar toles llingüetes actives?</string>
   <string name="delete_recent_search_item">¿Desaniciar esti elementu?</string>
   <string name="pref_clear_all_history_title">Llimpiar historial</string>
-  <string name="pref_clear_all_history_summary">Llimpiar les busques recién y l\'historial de llingüetes</string>
+  <string name="pref_clear_all_history_summary">Llimpiar les busques recién y l’historial de llingüetes</string>
   <string name="all_history_cleared">Llimpióse tol historial</string>
   <string name="pref_clear_all_bookmarks_title">Llimpiar los marcadores</string>
   <string name="clear_all_history_dialog_title">¿Llimpiar tol historial?</string>
@@ -77,7 +78,7 @@
   <string name="delete">Desaniciar</string>
   <string name="cancel">Zarrar</string>
   <string name="delete_specific_search_toast">Desanicióse la gueta recién</string>
-  <string name="hint_contents_drawer_message">Puedes esmucir a la izquierda pa ver el conteníu d\'esti artículu</string>
+  <string name="hint_contents_drawer_message">Puedes esmucir a la izquierda pa ver el conteníu d’esti artículu</string>
   <string name="got_it">Entendílo</string>
   <string name="did_you_know">¿Sabíes que…?</string>
   <string name="undo">Desfacer</string>
@@ -88,9 +89,9 @@
   <string name="no_thanks">Non, gracies</string>
   <string name="rate_dialog_neutral">Sero</string>
   <string name="open">Abrir</string>
-  <string name="bookmark_removed">Desanicióse\'l marcador</string>
+  <string name="bookmark_removed">Desanicióse’l marcador</string>
   <string name="pref_newtab_background_title">Abrir una llingüeta nueva en segundu planu</string>
-  <string name="pref_newtab_background_summary">Al abrir una llingüeta nueva, abriráse\'n segundu planu</string>
+  <string name="pref_newtab_background_summary">Al abrir una llingüeta nueva, abriráse’n segundu planu</string>
   <string name="pref_extras">Estres</string>
   <string name="new_tab_snack_bar">Artículu abiertu nuna llingüeta nueva</string>
   <string name="search_widget_text">Guetar en Kiwix</string>
@@ -111,14 +112,14 @@
   <string name="no_network_connection">Nun hai conexón a la rede</string>
   <string name="help_2">¿Qué fai Kiwix?</string>
   <string name="help_3">Kiwix ye un llector de conteníu ensin conexón. Actúa de mou asemeyáu a un navegador pero en cuenta d\'aportar a páxines web en llinia, llee\'l conteníu d\'un ficheru en formatu ZIM.</string>
-  <string name="help_4">Magar Kiwix diseñóse orixinalmente p\'apurrir Wikipedia ensin conexón, tamién puede lleer otros conteníos.</string>
+  <string name="help_4">Magar Kiwix diseñóse orixinalmente p’apurrir Wikipedia ensin conexón, tamién puede lleer otros conteníos.</string>
   <string name="help_5">¿Ú ta el conteníu?</string>
   <string name="help_6">El conteníu ta agospiáu nel sitiu web de Kiwix.</string>
-  <string name="help_7">Tán disponibles como ficheros ZIM. Hai una bayura d\'ellos:</string>
+  <string name="help_7">Tán disponibles como ficheros ZIM. Hai una bayura d’ellos:</string>
   <string name="help_8">• Wikipedia ta disponible aparte pa cada idioma</string>
   <string name="help_9">• Tamién ta disponible otru conteníu, como Wikileaks o Wikisource</string>
   <string name="help_10">Puedes descargar los ficheros ZIM escoyíos na aplicación, o bien escoyer con procuru los que quies y descargalos dende un ordenador pa llueu tresferilos a una tarxeta SD.</string>
-  <string name="help_11">Los ficheros ZIM descargaos na aplicación alcuéntrense nel direutoriu d\'almacenamientu esternu, nuna carpeta llamada Kiwix.</string>
+  <string name="help_11">Los ficheros ZIM descargaos na aplicación alcuéntrense nel direutoriu d’almacenamientu esternu, nuna carpeta llamada Kiwix.</string>
   <string name="pref_storage">Almacenamientu</string>
   <string name="pref_current_folder">Carpeta actual</string>
   <string name="delete_zim_failed">Nun pudimos desaniciar dellos ficheros. Tendríes de tentalo usando un alministrador de ficheros.</string>
@@ -131,7 +132,7 @@
   <string name="no">Non</string>
   <string name="confirm_stop_download_title">¿Parar la descarga?</string>
   <string name="confirm_stop_download_msg">¿Tas seguru de que quies parar esta descarga?</string>
-  <string name="download_change_storage">Selector de preséu d\'almacenamientu</string>
+  <string name="download_change_storage">Selector de preséu d’almacenamientu</string>
   <string name="tts_not_enabled">El testu a voz nun ta activáu pa esti ficheru ZIM</string>
   <string name="texttospeech_initialization_failed">Falló aniciar el Testu a Charra. Tenta nuevamente</string>
   <string name="texttospeech_error">Fallu inesperáu nel Testu a Charra. Tenta nuevamente</string>
@@ -144,12 +145,12 @@
   <string name="time_hour">h</string>
   <string name="time_minute">min</string>
   <string name="time_second">s</string>
-  <string name="time_left">p\'acabar</string>
+  <string name="time_left">p’acabar</string>
   <string name="time_today">Güei</string>
   <string name="time_yesterday">Ayeri</string>
   <string name="pref_external_link_popup_title">Alvertir al siguir enllaces esternos</string>
   <string name="pref_external_link_popup_summary">Amuesa un cuadru emerxente p\'avisar sobre posibles gastos por consumu de datos o nun funcionamientu d\'enllaces ensin conexón.</string>
-  <string name="external_link_popup_dialog_title">¡Entrando n\'enllaz esternu!</string>
+  <string name="external_link_popup_dialog_title">¡Entrando n’enllaz esternu!</string>
   <string name="external_link_popup_dialog_message">Tas por siguir un enllaz esternu. Ello podría xenerar gastos por tresferencia de datos o cenciellamente nun va funcionar si nun tienes conexón. ¿Quies siguir?</string>
   <string name="do_not_ask_anymore">Nun preguntar más</string>
   <string name="your_languages">Llingües seleicionaes:</string>
@@ -160,7 +161,7 @@
   <string name="crash_checkbox_language">La to configuración de llingua</string>
   <string name="crash_checkbox_zimfiles">Una llista de los tos ficheros Zim</string>
   <string name="crash_checkbox_exception">Detalles del cuelgue</string>
-  <string name="crash_checkbox_logs">Rexistros de l\'aplicación</string>
+  <string name="crash_checkbox_logs">Rexistros de l’aplicación</string>
   <string name="crash_checkbox_device">Detalles del preséu</string>
   <string name="crash_button_confirm">UNVIAR LOS DATOS</string>
   <string name="shortcut_disabled_message">Atayu non disponible</string>
@@ -183,7 +184,7 @@
   <string name="send_feedback">Unviar opiniones</string>
   <string name="expand">Espander</string>
   <string name="history">Historial</string>
-  <string name="history_from_current_book">Ver l\'Historial de Tolos Llibros</string>
+  <string name="history_from_current_book">Ver l’Historial de Tolos Llibros</string>
   <string name="search_history" fuzzy="true">Historial de busques</string>
   <string name="selected_items">%1$d seleicionáu</string>
   <string name="bookmarks_from_current_book">Ver Marcadores de Tolos Llibros</string>
@@ -217,11 +218,11 @@
   <string name="discovery_failed">Discovery falló</string>
   <string name="severe_loss_error">¡Fallu importante! Tenta desactivar/volver a activar el P2P de la WiFi</string>
   <string name="connection_failed">Falló la conexón</string>
-  <string name="permission_rationale_location">Android rique\'l permisu Allugamientu pa permitir que la app detecte preseos pares</string>
+  <string name="permission_rationale_location">Android rique’l permisu Allugamientu pa permitir que la app detecte preseos pares</string>
   <string name="permission_refused_location">Nun pueden llocalizase preseos pares ensin el permisu Allugamientu</string>
-  <string name="permission_refused_storage">Nun hai accesu a ficheros zim ensin permisu d\'almacenamientu</string>
+  <string name="permission_refused_storage">Nun hai accesu a ficheros zim ensin permisu d’almacenamientu</string>
   <string name="request_enable_location">Activa Allugamientu pa permitir la detección de pares</string>
-  <string name="discovery_needs_location">Nun puen descubrise pares ensin servicios d\'allugamientu</string>
+  <string name="discovery_needs_location">Nun puen descubrise pares ensin servicios d’allugamientu</string>
   <string name="request_enable_wifi">Activa los servicios ente pares (P2P) de la WiFi na configuración del sistema</string>
   <string name="discovery_needs_wifi">Nun puen descubrise pares ensin la WiFi ACTIVADA</string>
   <string name="transfer_to">¿Tresferir ficheros a %s?</string>
@@ -229,7 +230,7 @@
   <string name="file_transfer_complete">Tresferencia del ficheru completada</string>
   <string name="error_during_transfer">Alcontróse un error demientres la tresferencia</string>
   <string name="error_transferring">Error al tresferir el ficheru %s</string>
-  <string name="get_content_from_nearby_device">Recibir conteníu d\'un preséu cercanu</string>
+  <string name="get_content_from_nearby_device">Recibir conteníu d’un preséu cercanu</string>
   <string name="search_for_peers">Buscar Pares</string>
   <string name="your_device">El to Preséu:</string>
   <string name="nearby_devices">PRESEOS CERCANOS</string>

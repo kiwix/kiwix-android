@@ -5,6 +5,7 @@
 * Liuxinyu970226
 * Macofe
 * Reke
+* Rofiatmustapha12
 * Weather Top Wizard
 * Wehwei
 * Winston Sung
@@ -213,6 +214,7 @@
   <string name="search_bookmarks">搜尋書籤</string>
   <string name="switch_tabs">切換分頁</string>
   <string name="close_all_tabs">關閉所有分頁</string>
+  <string name="close_tab">關閉分頁</string>
   <string name="pending_state">待定</string>
   <string name="running_state">運行中</string>
   <string name="complete">完成</string>
@@ -221,7 +223,7 @@
   <string name="custom_download_error_message_for_authentication_failed">無法下載 zim 檔案。請嘗試從 Play 商店重新安裝應用程式。</string>
   <string name="save">儲存</string>
   <string name="note">註釋</string>
-  <string name="wiki_article_title">Wiki 條目標題</string>
+  <string name="wiki_article_title">wiki 條目標題</string>
   <string name="ext_storage_permission_rationale_add_note">註釋需要儲存裝置存取權限</string>
   <string name="ext_storage_write_permission_denied_add_note">沒有儲存裝置存取權限註釋會無法使用</string>
   <string name="note_save_unsuccessful">註釋儲存失敗</string>
@@ -338,4 +340,8 @@
   <string name="your_device_name_message">您的設備名稱會出現在這裡。</string>
   <string name="nearby_devices_list_message">您會在這裡找到附近設備的清單。輕觸設備名稱即可啟動檔案傳輸。</string>
   <string name="transfer_zim_files_list_message">您會在這裡找到可用於傳輸的 ZIM 檔案清單。</string>
+  <string name="storage_selection_dialog_accessibility_description">選擇用於下載 ZIM 檔案的儲存裝置。</string>
+  <string name="zim_file_content_description">包含閱讀內容的 ZIM 檔案</string>
+  <string name="select_language_content_description">選擇此語言將會在頂部優先顯示該語言的可下載書籍。</string>
+  <string name="toolbar_back_button_content_description">前往上一個畫面</string>
 </resources>

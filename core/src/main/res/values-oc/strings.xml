@@ -3,6 +3,7 @@
 * COMISSIONTOPOC
 * Cedric31
 * Fitoschido
+* MohitMali
 -->
 <resources>
   <string name="menu_help">Ajuda</string>
@@ -10,14 +11,14 @@
   <string name="menu_settings">Opcions</string>
   <string name="menu_search_in_text">Trobar dins la pagina</string>
   <string name="bookmarks">Favorits</string>
-  <string name="menu_random_article">Article a l\'azard</string>
+  <string name="menu_random_article">Article a l’azard</string>
   <string name="menu_full_screen">Ecran complet</string>
-  <string name="menu_exit_full_screen">Quitar l\'ecran complet</string>
+  <string name="menu_exit_full_screen">Quitar l’ecran complet</string>
   <string name="menu_read_aloud">Legir a votz nauta</string>
   <string name="menu_read_aloud_stop">Arrestar de legir a votz nauta</string>
   <string name="save_media">Enregistrar lo mèdia</string>
-  <string name="save_media_error">Una error s\'es produita al moment de la temptativa d\'enregistrar lo mèdia !</string>
-  <string name="save_media_saved" fuzzy="true">Mèdia enregistrat jos %1$s dins vòstre dorsièr Imatges</string>
+  <string name="save_media_error">Una error s’es produita al moment de la temptativa d’enregistrar lo mèdia !</string>
+  <string name="save_media_saved">Mèdia enregistrat jos %s dins vòstre dorsièr Downloads/org.kiwix…/</string>
   <string name="search_label">Recercar</string>
   <string name="choose_file">Seleccionar un fichièr de contengut (*.zim)</string>
   <string name="open_in_new_tab">Dobrir lo ligam dins un onglet novèl ?</string>
@@ -35,14 +36,14 @@
   <string name="pref_language_chooser">Causir una lenga</string>
   <string name="pref_credits">Contributors e Licéncias</string>
   <string name="pref_credits_title">Mercejaments</string>
-  <string name="tts_lang_not_supported" fuzzy="true">La lenga d\'aquesta pagina es pas presa en carga, o las donadas apropriadas de la lenga son pas installadas. L’article poirà pas èsser legit corrèctament.</string>
-  <string name="no_reader_application_installed">Impossible de trobar una aplicacion d\'installada per aqueste tipe de fichièr</string>
-  <string name="no_section_info">Cap d\'entèsta de contengut pas trobada</string>
-  <string name="request_storage">Per accedir als fichièrs ZIM, avèm besonh d\'un accès a vòstre espaci d\'emmagazinatge</string>
+  <string name="tts_lang_not_supported">La lenga d’aquesta pagina es pas presa en carga. L’article poirà pas èsser legit corrèctament.</string>
+  <string name="no_reader_application_installed">Impossible de trobar una aplicacion d’installada per aqueste tipe de fichièr</string>
+  <string name="no_section_info">Cap d’entèsta de contengut pas trobada</string>
+  <string name="request_storage">Per accedir als fichièrs ZIM, avèm besonh d’un accès a vòstre espaci d’emmagazinatge</string>
   <string name="delete_recent_search_item">Suprimir aqueste element ?</string>
-  <string name="pref_clear_all_history_title">Escafar l\'istoric</string>
+  <string name="pref_clear_all_history_title">Escafar l’istoric</string>
   <string name="all_history_cleared">Tot l’istoric es escafat</string>
-  <string name="clear_all_history_dialog_title" fuzzy="true">Escafar tot l’istoric</string>
+  <string name="clear_all_history_dialog_title">Escafar tot l’istoric?</string>
   <string name="delete">Suprimir</string>
   <string name="delete_specific_search_toast">Recèrca recenta suprimida</string>
   <string name="got_it">Es bon</string>
@@ -57,7 +58,7 @@
   <string name="open">Dobrir</string>
   <string name="bookmark_removed">Favorit suprimit</string>
   <string name="pref_newtab_background_title">Dobrir un onglet novèl en rèireplan</string>
-  <string name="pref_newtab_background_summary">Al moment de la dobertura d\'un onglet novèl, se dobrirà en rèireplan</string>
+  <string name="pref_newtab_background_summary">Al moment de la dobertura d’un onglet novèl, se dobrirà en rèireplan</string>
   <string name="pref_extras">Extras</string>
   <string name="search_widget_text">Recercar dins Kiwix</string>
   <string name="speech_prompt_text">Parlar per recercar %s</string>

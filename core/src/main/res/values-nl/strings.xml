@@ -9,6 +9,7 @@
 * PonkoSasuke
 * Romaine
 * Siebrand
+* Stephane
 -->
 <resources>
   <string name="menu_help">Hulp</string>
@@ -22,6 +23,8 @@
   <string name="menu_read_aloud">Voorlezen</string>
   <string name="menu_read_aloud_stop">Stoppen met voorlezen</string>
   <string name="menu_support_kiwix">Steun Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">Ondersteun %s!</string>
+  <string name="menu_about_app">Over de app %s</string>
   <string name="menu_wifi_hotspot">WiFi-hotspot</string>
   <string name="save_media">Media opslaan</string>
   <string name="save_media_error">Er is een fout opgetreden bij het opslaan van de media!</string>
@@ -210,6 +213,7 @@
   <string name="search_bookmarks">Bladwijzers doorzoeken</string>
   <string name="switch_tabs">Van tabblad wisselen</string>
   <string name="close_all_tabs">Alle tabbladen sluiten</string>
+  <string name="close_tab">Sluit Tab</string>
   <string name="pending_state">In afwachting</string>
   <string name="running_state">In behandeling</string>
   <string name="complete">Afgerond</string>

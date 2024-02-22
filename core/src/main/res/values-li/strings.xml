@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* MohitMali
 * Ooswesthoesbes
 -->
 <resources>
@@ -60,8 +61,8 @@
   <string name="no_files_here">Gein bestenj hie</string>
   <string name="download_no_space" fuzzy="true">Neet zat ruumdje veur dit bestandj te downloade.</string>
   <string name="no_network_connection">Gein netwerkverbinjing</string>
-  <string name="help_2">Waat doon v\'r bie Kiwix?</string>
-  <string name="help_5">Wo is d\'n inhawd?</string>
+  <string name="help_2">Waat doon v’r bie Kiwix?</string>
+  <string name="help_5">Wo is d’n inhawd?</string>
   <string name="help_6">Ozen inhawd is óngergebrach oppe Kiwix-website.</string>
   <string name="help_7">ZIM-bestenj zint te kriege. Väöl daovan bestaon:</string>
   <string name="help_8">• Wikipedia is apaart besjikbaar veur eder spraok</string>

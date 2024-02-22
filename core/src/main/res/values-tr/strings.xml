@@ -14,6 +14,7 @@
 * MohitMali
 * MuratTheTurkish
 * Rapsar
+* Rofiatmustapha12
 * Sayginer
 * Stonecy
 * Trockya
@@ -29,7 +30,8 @@
   <string name="menu_exit_full_screen">Tam ekrandan çık</string>
   <string name="menu_read_aloud">Yüksek sesle oku</string>
   <string name="menu_read_aloud_stop">Yüksek sesle okumayı sonlandır</string>
-  <string name="menu_support_kiwix">Kiwix\'i destekle</string>
+  <string name="menu_support_kiwix">Kiwix’i destekle</string>
+  <string name="menu_support_kiwix_for_custom_apps">%s destek</string>
   <string name="menu_about_app">%s uygulaması hakkında</string>
   <string name="menu_wifi_hotspot">WiFi erişim paylaşımı alanı</string>
   <string name="save_media">Ortam dosyasını kaydet</string>
@@ -65,7 +67,7 @@
   <string name="error_server_already_running">Sunucu zaten çalışıyor. Lütfen kapatıp tekrar deneyin.</string>
   <string name="error_ip_address_not_found">IP adresi bulunamadı.</string>
   <string name="server_started_message">%s sunucusuna erişmek için tarayıcınıza bu ip adresini girin.</string>
-  <string name="share_host_address">URL\'yi diğer uygulamalar aracılığıyla paylaşın</string>
+  <string name="share_host_address">URL’yi diğer uygulamalar aracılığıyla paylaşın</string>
   <string name="error_file_not_found">Hata: Seçili ZIM dosyası bulunamadı.</string>
   <string name="unable_to_read_zim_file">Bu zim dosyası okunamıyor!</string>
   <string name="zim_not_opened">Zim dosyası açılamıyor</string>
@@ -84,6 +86,7 @@
   <string name="pref_credits_title">Katkıda bulunanlar</string>
   <string name="tts_lang_not_supported">Bu sayfanın dili desteklenmiyor. Makale düzgün okunamayabilir.</string>
   <string name="no_reader_application_installed">Bu dosya türü için yüklü bir uygulama bulunamadı</string>
+  <string name="no_email_application_installed">Lütfen bir e-posta servis sağlayıcısı kurun veya %1s adresinden bize e-posta gönderin</string>
   <string name="no_section_info">İçerik başlığı bulunamadı</string>
   <string name="request_storage">Çevrimdışı içeriğe erişmek için belleğinize erişmemiz gerekmektedir.</string>
   <string name="request_write_storage">Zim dosyalarını indirmek için depolama alanınıza yazma erişimine ihtiyacımız var</string>
@@ -119,7 +122,7 @@
   <string name="pref_newtab_background_summary">Yeni bir sekme açtığınızda sekme arka planda açılacak</string>
   <string name="pref_extras">Ekstralar</string>
   <string name="new_tab_snack_bar">Madde yeni bir sekmede açıldı</string>
-  <string name="search_widget_text">Kiwix\'i ara</string>
+  <string name="search_widget_text">Kiwix’i ara</string>
   <string name="speech_prompt_text">%s aramak için konuşun</string>
   <string name="speech_not_supported">Üzgünüz! Cihazınız konuşma girdisini desteklemiyor</string>
   <string name="local_zims">Cihaz</string>
@@ -137,7 +140,7 @@
   <string name="no_network_connection">Ağ bağlantısı yok</string>
   <string name="help_2">Kiwix ne yapar?</string>
   <string name="help_3">Kiwix bir çevrimdışı içerik okuyucusudur. Bir tarayıcı gibi davranır, ancak çevrimiçi web sayfalarına erişmek yerine, içeriği ZIM formatında bir dosyadan okur.</string>
-  <string name="help_4">Kiwix orijinalde Vikipedi\'yi çevrimdışı olarak okuması için tasarlanmış olsa da diğer içerikleri de okuyabilir.</string>
+  <string name="help_4">Kiwix orijinalde Vikipedi’yi çevrimdışı olarak okuması için tasarlanmış olsa da diğer içerikleri de okuyabilir.</string>
   <string name="help_5">İçerik nerededir?</string>
   <string name="help_6">İçeriğimiz Kiwix web sayfasındadır.</string>
   <string name="help_7">ZIM dosyaları olarak kullanılabilir durumdadırlar. Onlardan çok sayıda vardır:</string>
@@ -218,6 +221,7 @@
   <string name="search_bookmarks">Yer imlerini ara</string>
   <string name="switch_tabs">Sekmeleri değiştir</string>
   <string name="close_all_tabs">Tüm sekmeleri kapat</string>
+  <string name="close_tab">Sekmeyi kapat</string>
   <string name="pending_state">Beklemede</string>
   <string name="running_state">Devam Ediyor</string>
   <string name="complete">Tamamlandı</string>
@@ -253,7 +257,7 @@
   <string name="permission_refused_storage">Depolama izni olmadan zim dosyalarına erişilemiyor</string>
   <string name="request_enable_location">Eşlerin algılanmasına izin vermek için konumu etkinleştir</string>
   <string name="discovery_needs_location">Konum servisleri olmadan eşleri bulamıyor</string>
-  <string name="request_enable_wifi">WiFi P2P\'yi sistem ayarlarından etkinleştir</string>
+  <string name="request_enable_wifi">WiFi P2P’yi sistem ayarlarından etkinleştir</string>
   <string name="discovery_needs_wifi">WiFi AÇIK olmadan eş keşfedemiyor</string>
   <string name="transfer_to">%s dosyasına aktarılsın mı?</string>
   <string name="device_not_cooperating">Seçilen cihaz aktarım için işbirliği yapmıyor</string>
@@ -272,7 +276,7 @@
   <string name="pref_clear_all_notes_summary">Tüm makalelerdeki tüm notları temizler</string>
   <string name="pref_clear_all_notes_title">Tüm notları temizle</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">SD karttaki ZIM dosyalarını okumaya ve yazmaya izin ver</string>
-  <string name="pref_text_zoom_summary">Metin boyutunu %25\'lik artışlarla değiştirin.</string>
+  <string name="pref_text_zoom_summary">Metin boyutunu %25’lik artışlarla değiştirin.</string>
   <string name="tag_pic">Resim</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Yalnızca Metin</string>
@@ -306,17 +310,19 @@
   <string name="open_drawer">Çekmeceyi Aç</string>
   <string name="close_drawer">Çekmeceyi Kapat</string>
   <string name="zim_files_not_showing">Zim dosyaları gösterilmiyor mu?</string>
+  <string name="zim_files_not_showing_description">Android 11 ve sonraki sürümlerdeki Google Play politikaları nedeniyle bu Google Store uygulaması, dışarıdan yüklenen ZIM dosyalarını açamaz. Bunları uygulama aracılığıyla indirebilir veya bunun yerine kiwix uygulamasının tam sürümünü resmi web sitemiz %s yükleyebilirsiniz.</string>
   <string name="understood">Anlaşıldı</string>
   <string name="how_to_update_content">İçerik nasıl güncellenir?</string>
   <string name="update_content_description">İçeriği (bir zim dosyası) güncellemek için, aynı içeriğin en son sürümünü indirmeniz gerekir. Bunu indirme bölümünden yapabilirsiniz.</string>
   <string name="all_files_permission_needed">Tüm Dosyalar İzni Gereklidir</string>
-  <string name="all_files_permission_needed_message">Cihaz içindeki tüm zim dosyalara erişmek için Tüm Dosyalar İzni\'ne ihtiyacımız var</string>
+  <string name="all_files_permission_needed_message">Cihaz içindeki tüm zim dosyalara erişmek için Tüm Dosyalar İzni’ne ihtiyacımız var</string>
   <string name="allowed">İzin verildi</string>
   <string name="not_allowed">İzin verilmedi</string>
   <string name="denied_internet_permission_message">Lütfen içeriği indirmek için wifi özelliğini etkinleştirin</string>
   <string name="select_folder">Lütfen harici depolama için bir klasör seçin.</string>
   <string name="system_unable_to_grant_permission_message">Sistem izin veremiyor!</string>
   <string name="allow">İzin ver</string>
+  <string name="swipe_down_for_library">Kitaplık için Aşağı Kaydırın</string>
   <string name="no_notes">Not Yok</string>
   <string name="notes_from_all_books">Tüm Kitaplardan Notları Görüntüle</string>
   <string name="search_notes">Notları Ara</string>
@@ -325,5 +331,20 @@
   <string name="open_article">Makaleyi Aç</string>
   <string name="delete_note_dialog_message">Not: Notlar, depolama alanınızdan silinmez</string>
   <string name="delete_selected_notes">Seçili Notlar Silinsin mi?</string>
+  <string name="download_tts_language_title">Yüksek sesle okuma özelliği için bu dili indirin</string>
+  <string name="download_tts_language_message">Lütfen İndir düğmesine tıklayın. Gerekli dili otomatik olarak indirecektir.</string>
+  <string name="external_link_copied_message">Kalıcı bağlantısı panoya kopyalandı</string>
+  <string name="read_aloud_service_channel_name">Yüksek Sesle Okuma Servis Kanalı</string>
+  <string name="read_aloud_channel_description">Metinden konuşmaya kontroller.</string>
+  <string name="read_aloud_running">Sesli Okumayı Çalıştırma</string>
+  <string name="backward_history">Birikmiş iş geçmişi</string>
+  <string name="forward_history">İleri tarih</string>
+  <string name="clear_all_navigation_history_message">Tüm (geri, ileri) gezinme geçmişini temizler</string>
+  <string name="navigation_history_cleared">Gezinme Geçmişi Temizlendi</string>
   <string name="go_to_settings_label">Ayarlara gidin</string>
+  <string name="request_notification_permission_message">Bu işlemi gerçekleştirmek için lütfen bildirim erişimine izin verin</string>
+  <string name="click_nearby_devices_message">Yakınlık cihazları bulmak için buraya tıklayın.</string>
+  <string name="your_device_name_message">Cihazınızın adı burada görünecektir.</string>
+  <string name="nearby_devices_list_message">Burada yakındaki cihazların bir listesini bulacaksınız. Dosya aktarımını başlatmak için bir cihazın adına dokunun.</string>
+  <string name="transfer_zim_files_list_message">Burada aktarım için mevcut ZIM dosyalarının listesini bulacaksınız.</string>
 </resources>

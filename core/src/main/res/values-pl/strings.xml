@@ -28,10 +28,12 @@
   <string name="menu_read_aloud">Czytaj na głos</string>
   <string name="menu_read_aloud_stop">Zatrzymaj czytanie na głos</string>
   <string name="menu_support_kiwix">Wspieraj Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">Wsparcie %s</string>
+  <string name="menu_about_app">O aplikacji %s</string>
   <string name="menu_wifi_hotspot">Host Książek</string>
   <string name="save_media">Zapisz plik multimedialny jako…</string>
   <string name="save_media_error">Wystąpił błąd podczas próby zapisania multimediów!</string>
-  <string name="save_media_saved" fuzzy="true">Zapisano plik multimedialny jako %s w folderze Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Zapisano multimedia jako %s w Downloads/org.kiwix…/</string>
   <string name="search_label">Szukaj</string>
   <string name="choose_file">Wybierz plik zawartości ZIM (*.zim)</string>
   <string name="open_in_new_tab">Otwórz odnośnik na nowej karcie</string>
@@ -59,6 +61,8 @@
   <string name="hotspot_notification_content_title">Hotspot Kiwix</string>
   <string name="start_server_label">Uruchom serwer</string>
   <string name="stop_server_label">Zatrzymaj serwer</string>
+  <string name="error_server_already_running">Serwer już działa. Wyłącz go i spróbuj ponownie.</string>
+  <string name="error_ip_address_not_found">Nie udało się znaleźć adresu IP.</string>
   <string name="server_started_message">Wpisz ten adres IP w przeglądarce, aby uzyskać dostęp do serwera %s</string>
   <string name="share_host_address">Udostępnij adres URL za pośrednictwem innych aplikacji</string>
   <string name="error_file_not_found">Błąd: Wybrany plik ZIM nie został znaleziony.</string>
@@ -77,10 +81,12 @@
   <string name="pref_language_chooser">Wybierz język</string>
   <string name="pref_credits">Współtwórcy i licencje</string>
   <string name="pref_credits_title">Twórcy</string>
-  <string name="tts_lang_not_supported" fuzzy="true">Język tej strony nie jest obsługiwany lub nie zostały zainstalowane odpowiednie dane języka. Ten artykuł może nie być poprawnie odczytywany.</string>
+  <string name="tts_lang_not_supported">Język tej strony nie jest obsługiwany. Artykuł może nie zostać poprawnie przeczytany.</string>
   <string name="no_reader_application_installed">Nie udało się znaleźć zainstalowanego programu dla tego typu plików</string>
+  <string name="no_email_application_installed">Zainstaluj dostawcę usług e-mail lub napisz do nas na adres %1s</string>
   <string name="no_section_info">Nie znaleziono nagłówków treści</string>
   <string name="request_storage">Aby uzyskać dostęp do plików ZIM, musimy mieć dostęp do twojego nośnika</string>
+  <string name="request_write_storage">Aby pobrać pliki zim, potrzebujemy dostępu do zapisu w Twojej pamięci</string>
   <string name="clear_recent_and_tabs_history_dialog">Czy na pewno chcesz usunąć historię wyszukiwania i zresetować wszystkie aktywne karty?</string>
   <string name="delete_recent_search_item">Usunąć ten obiekt?</string>
   <string name="pref_clear_all_history_title">Wyczyść historię</string>
@@ -100,8 +106,10 @@
   <string name="did_you_know">Czy wiesz, że?</string>
   <string name="undo">Cofnij</string>
   <string name="tab_closed">Zakładka zamknięta</string>
+  <string name="tabs_closed">Zakładka zamknięta</string>
   <string name="bookmark_added">Dodano zakładkę</string>
   <string name="rate_dialog_title">Prosimy nas ocenić</string>
+  <string name="rate_dialog_msg">Jeśli lubisz używać %s , poświęć chwilę, aby go ocenić. Dziękuję za wsparcie!</string>
   <string name="rate_dialog_positive">Oceń!</string>
   <string name="no_thanks">Nie, dziękuję</string>
   <string name="rate_dialog_neutral">Później</string>
@@ -143,8 +151,10 @@
   <string name="tts_pause">pauza</string>
   <string name="tts_resume">Podsumuj</string>
   <string name="stop">stop</string>
+  <string name="configure_storage_option">Pobrać książkę do pamięci wewnętrznej?</string>
   <string name="internal_storage">Wewnętrzny</string>
   <string name="external_storage">Zewnętrzny</string>
+  <string name="configure">Konfiguruj</string>
   <string name="yes">Tak</string>
   <string name="no">Nie</string>
   <string name="confirm_stop_download_title">Zatrzymać pobieranie?</string>
@@ -202,17 +212,19 @@
   <string name="expand">Rozwiń</string>
   <string name="history">Historia</string>
   <string name="history_from_current_book">Wyświetl historię ze wszystkich książek</string>
-  <string name="search_history" fuzzy="true">Historia wyszukiwania</string>
+  <string name="search_history">Historia wyszukiwania</string>
   <string name="selected_items">%1$d wybrane</string>
   <string name="bookmarks_from_current_book">Wyświetl zakładki ze wszystkich książek</string>
   <string name="search_bookmarks">Szukaj zakładek</string>
   <string name="switch_tabs">Przełącz zakładki</string>
   <string name="close_all_tabs">Zamknij wszystkie zakładki</string>
+  <string name="close_tab">Zamknij kartę</string>
   <string name="pending_state">Oczekujące</string>
   <string name="running_state">W trakcie</string>
   <string name="complete">Zakończono</string>
   <string name="paused_state">Wstrzymano</string>
   <string name="failed_state">Błąd: %s</string>
+  <string name="custom_download_error_message_for_authentication_failed">Nie można pobrać pliku zim. Spróbuj ponownie zainstalować aplikację ze sklepu Play.</string>
   <string name="save">Zapisz</string>
   <string name="note">Uwaga</string>
   <string name="wiki_article_title">Tytuł Artykułu Wiki</string>
@@ -237,6 +249,7 @@
   <string name="connection_failed">Połączenie nie powiodło się</string>
   <string name="permission_rationale_location">Uprawnienie lokalizacja jest wymagane przez system Android, aby umożliwić aplikacji do wykrywania urządzeń</string>
   <string name="permission_rationale_location_on_host_zim_file">Aby aplikacja mogła hostować pliki Zim, wymagana jest zgoda na lokalizację</string>
+  <string name="permission_rationale_nearby_device_on_host_zim_file">Aby aplikacja mogła hostować pliki Zim, system Android wymaga pozwolenia na korzystanie z pobliskich urządzeń Wi-Fi</string>
   <string name="permission_refused_location">Nie można zlokalizować urządzeń bez uprawnień do lokalizacji</string>
   <string name="permission_refused_storage">Nie można uzyskać dostępu do plików zim bez uprawnień do przechowywania</string>
   <string name="request_enable_location">Włączyć lokalizację, aby umożliwić wykrywanie równorzędnych elementów</string>
@@ -290,8 +303,10 @@
   <string name="no_open_book">Brak otwartych książek</string>
   <string name="open_library">Otwórz bibliotekę</string>
   <string name="tab_restored">Odtworzono zakładkę</string>
+  <string name="tabs_restored">Zakładki przywrócone</string>
   <string name="open_drawer">Otwórz szufladę</string>
   <string name="close_drawer">Zamknij szufladę</string>
+  <string name="zim_files_not_showing">Pliki ZIM nie wyświetlają się?</string>
   <string name="how_to_update_content">Jak zaktualizować zawartość?</string>
   <string name="update_content_description">Aby zaktualizować zawartość (plik zim), musisz pobrać pełną najnowszą wersję tej samej zawartości. Możesz to zrobić w sekcji pobierania.</string>
   <string name="all_files_permission_needed">Wymagane uprawnienia do wszystkich plików</string>

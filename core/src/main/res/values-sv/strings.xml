@@ -3,6 +3,7 @@
 * Jopparn
 * Marcusjehrlander
 * McDutchie
+* Rofiatmustapha12
 * Sabelöga
 * Skalman
 * Susann Schweden
@@ -21,6 +22,7 @@
   <string name="menu_read_aloud">Läs upp</string>
   <string name="menu_read_aloud_stop">Sluta läsa upp</string>
   <string name="menu_support_kiwix">Stöd Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">Stöd %s</string>
   <string name="menu_about_app">Om appen %s</string>
   <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Spara media</string>
@@ -210,11 +212,13 @@
   <string name="search_bookmarks">Sök bokmärken</string>
   <string name="switch_tabs">Byt flikar</string>
   <string name="close_all_tabs">Stäng alla flikar</string>
+  <string name="close_tab">Stäng flik</string>
   <string name="pending_state">Väntande</string>
   <string name="running_state">Pågående</string>
   <string name="complete">Färdig</string>
   <string name="paused_state">Pausad</string>
   <string name="failed_state">Misslyckades: %s</string>
+  <string name="custom_download_error_message_for_authentication_failed">zim-filen kunde inte laddas ner. Testa att ominstallera applikationen från Play Store.</string>
   <string name="save">Spara</string>
   <string name="note">Anteckning</string>
   <string name="wiki_article_title">Wikiartikelns titel</string>
@@ -297,6 +301,7 @@
   <string name="open_drawer">Öppna sidomeny</string>
   <string name="close_drawer">Stäng sidomeny</string>
   <string name="zim_files_not_showing">Visas inte Zim-filer?</string>
+  <string name="zim_files_not_showing_description">På grund av Google Play-policyer på Android 11 och senare kan inte Google Store-appen öppna sidoladdade ZIM-filer. Du kan antingen ladda ner dem via appen eller, istället, installera den fullständiga versionen av kiwix app från vår officiella hemsida %s</string>
   <string name="understood">Uppfattat</string>
   <string name="how_to_update_content">Hur uppdaterar man innehåll?</string>
   <string name="update_content_description">För att uppdatera innehåll (en zim-fil) behöver du ladda ned den fullständig senaste versionen samma innehåll. Du kan göra det via nedladdningsavsnittet.</string>
@@ -331,4 +336,6 @@
   <string name="request_notification_permission_message">Bevilja meddelandeåtkomst för att utföra denna åtgärd</string>
   <string name="click_nearby_devices_message">Klicka här för att söka efter enheter i närheten.</string>
   <string name="your_device_name_message">Ditt enhetsnamn kommer att visas här.</string>
+  <string name="nearby_devices_list_message">Här hittar du en lista över enheter i närheten. Tryck på en enhets namn för att påbörja filöverföring.</string>
+  <string name="transfer_zim_files_list_message">Här hittar du en lista över tillgängliga ZIM-filer för överföring.</string>
 </resources>

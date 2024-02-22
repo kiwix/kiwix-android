@@ -6,6 +6,7 @@
 * Iwan Novirion
 * Kenrick95
 * McDutchie
+* MohitMali
 * Polos
 * Relly Komaruzaman
 * Rizkiahmadz
@@ -142,7 +143,7 @@
   <string name="next">Berikutnya</string>
   <string name="previous">Sebelumnya</string>
   <string name="wifi_only_title">Izinkan mengunduh konten via jaringan seluler?</string>
-  <string name="wifi_only_msg">If you choose “Yes” you won\'t be warned in future. However, you can always change this in Settings</string>
+  <string name="wifi_only_msg">If you choose “Yes” you won’t be warned in future. However, you can always change this in Settings</string>
   <string name="pref_wifi_only">Unduh konten hanya via WiFi</string>
   <string name="time_day">hari</string>
   <string name="time_hour">jam</string>
@@ -169,7 +170,7 @@
   <string name="articleCount">%s artikel</string>
   <string name="get_started">Mulai</string>
   <string name="download_books">Unduh buku-buku</string>
-  <string name="humankind_knowledge">Humankind\'s knowledge, on your phone.</string>
+  <string name="humankind_knowledge">Humankind’s knowledge, on your phone.</string>
   <string name="welcome_to_the_family">Selamat datang di keluarga</string>
   <string name="save_books_offline">Simpan buku-buku offline</string>
   <string name="download_books_message">Unduh buku dan baca di mana pun Anda berada.</string>
@@ -192,13 +193,13 @@
   <string name="note">Catatan</string>
   <string name="wiki_article_title">Judul Artikel Wiki</string>
   <string name="ext_storage_permission_rationale_add_note">Akses tempat penyimpanan data dibutuhkan untuk Catatan</string>
-  <string name="ext_storage_write_permission_denied_add_note">Notes can\'t be used without access to storage</string>
+  <string name="ext_storage_write_permission_denied_add_note">Notes can’t be used without access to storage</string>
   <string name="note_save_unsuccessful">Penyimpanan Catatan tidak berhasil</string>
   <string name="note_delete_successful">Catatan telah berhasil dihapus</string>
   <string name="note_delete_unsuccessful">Catatan tidak terhapus</string>
   <string name="note_save_successful">Catatan telah tersimpan</string>
   <string name="note_save_error_storage_not_writable">Gagal menyimpan Catatan: tempat penyimpanan data tidak dapat ditulisi</string>
-  <string name="note_share_error_file_missing">Note file doesn\'t exist</string>
+  <string name="note_share_error_file_missing">Note file doesn’t exist</string>
   <string name="note_share_app_chooser_title">Bagi file catatan dengan:</string>
   <string name="delete_notes_confirmation_msg">Hapus semua catatan?</string>
   <string name="ext_storage_permission_not_granted">Gagal: Akses ke tempat penyimpanan data tidak ada</string>
