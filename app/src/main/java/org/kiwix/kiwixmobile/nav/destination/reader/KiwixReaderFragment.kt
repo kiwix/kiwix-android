@@ -298,7 +298,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       when (it.scheme) {
         "file" -> openZimFile(ZimReaderSource(it.toFile()))
         "content" -> {
-          val zimReaderSource = ZimReaderSource(it)
+          val zimReaderSource = ZimReaderSource(getZimFileFromUri(it))
           if (zimReaderSource.canOpenInLibkiwix()) {
             zimReaderContainer?.let { zimReaderContainer ->
               zimReaderContainer.setZimReaderSource(zimReaderSource)
