@@ -355,5 +355,5 @@
   <string name="storage_selection_dialog_accessibility_description">Select storage for downloading ZIM files.</string>
   <string name="zim_file_content_description">ZIM file which has the reading content</string>
   <string name="select_language_content_description">Selecting this language will prioritize displaying downloadable books in that language at the top.</string>
-  <string name="toolbar_back_button_content_description">Goto previous screen</string>
+  <string name="toolbar_back_button_content_description">Go to previous screen</string>
 </resources>
