@@ -57,7 +57,7 @@ abstract class BaseFragment : Fragment() {
         it.setSupportActionBar(this)
         it.supportActionBar?.let { actionBar ->
           actionBar.setDisplayHomeAsUpEnabled(true)
-          title = fragmentTitle
+          actionBar.title = fragmentTitle
           // set the navigation back button contentDescription
           getToolbarNavigationIcon()?.setToolTipWithContentDescription(
             getString(R.string.toolbar_back_button_content_description)
