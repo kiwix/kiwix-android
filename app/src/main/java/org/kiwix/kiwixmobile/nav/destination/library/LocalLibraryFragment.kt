@@ -112,6 +112,7 @@ class LocalLibraryFragment : BaseFragment() {
   private val disposable = CompositeDisposable()
   private var fragmentDestinationLibraryBinding: FragmentDestinationLibraryBinding? = null
   private var permissionDeniedLayoutShowing = false
+  private var fileSelectListState: FileSelectListState? = null
 
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
@@ -457,6 +458,7 @@ class LocalLibraryFragment : BaseFragment() {
         val effectResult = it.invokeWith(requireActivity() as AppCompatActivity)
         if (effectResult is ActionMode) {
           actionMode = effectResult
+          fileSelectListState?.selectedBooks?.size?.let(::setActionModeTitle)
         }
       }, Throwable::printStackTrace
     )
@@ -479,6 +481,7 @@ class LocalLibraryFragment : BaseFragment() {
   }
 
   private fun render(state: FileSelectListState) {
+    fileSelectListState = state
     val items: List<BooksOnDiskListItem> = state.bookOnDiskListItems
     bookDelegate.selectionMode = state.selectionMode
     booksOnDiskAdapter.items = items
@@ -486,7 +489,7 @@ class LocalLibraryFragment : BaseFragment() {
       actionMode?.finish()
       actionMode = null
     }
-    actionMode?.title = String.format("%d", state.selectedBooks.size)
+    setActionModeTitle(state.selectedBooks.size)
     fragmentDestinationLibraryBinding?.apply {
       if (items.isEmpty()) {
         fileManagementNoFiles.text = requireActivity().resources.getString(R.string.no_files_here)
@@ -502,6 +505,10 @@ class LocalLibraryFragment : BaseFragment() {
         zimfilelist.visibility = View.VISIBLE
       }
     }
+  }
+
+  private fun setActionModeTitle(selectedBookCount: Int) {
+    actionMode?.title = String.format("%d", selectedBookCount)
   }
 
   override fun onSaveInstanceState(outState: Bundle) {
