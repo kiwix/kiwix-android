@@ -205,8 +205,8 @@ object FileUtils {
       }
     } catch (ignore: Exception) {
       Log.e(
-        "kiwix", "Error in getting path for documentId = $documentId \n" +
-          "Exception = $ignore"
+        "kiwix",
+        "Error in getting path for documentId = $documentId \nException = $ignore"
       )
     }
 
@@ -221,8 +221,8 @@ object FileUtils {
       return documentsContractWrapper.getDocumentId(uri)
     } catch (ignore: Exception) {
       Log.e(
-        "kiwix", "Unable to get documentId for uri = $uri \n" +
-          "Exception = $ignore"
+        "kiwix",
+        "Unable to get documentId for uri = $uri \nException = $ignore"
       )
     }
     return ""
@@ -245,8 +245,8 @@ object FileUtils {
       )
     } catch (ignore: Exception) {
       Log.e(
-        "kiwix", "Could not get path for uri = $uri \n" +
-          "Exception = $ignore"
+        "kiwix",
+        "Could not get path for uri = $uri \nException = $ignore"
       )
       null
     }
