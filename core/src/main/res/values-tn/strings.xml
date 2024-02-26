@@ -235,8 +235,6 @@
   <string name="severe_loss_error">Phoso e e masisi! Leka go tima/go tshuba Wfi P2P</string>
   <string name="connection_failed">Go ikgolaganya go ne ga se ka ga atlega</string>
   <string name="permission_rationale_location">Tumelelo ya lefelo e tlhokiwa ke Android go letlelela app go lemoga didirisiwa tsa balekane</string>
-  <string name="permission_rationale_location_on_host_zim_file">Tumelelo ya lefelo e tlhokiwa ke Android go letlelela app go amogela difaele tsa Zim</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">Tumelelo ya didirisiwa tsa wifi tse di fa gaufi e a tlhokiwa ke Android go letlelela app go amogela difaele tsa Zim</string>
   <string name="permission_refused_location">Ga o kgone go bona didirisiwa tsa balekane ntle le go fa tetla ya lefelo</string>
   <string name="permission_refused_storage">Ga o kgone go fitlhelela difaele tsa zim ntle le tetla ya go boloka</string>
   <string name="request_enable_location">Fa tetla ya lefelo gore go kgonege go lemoga balekane</string>

@@ -243,8 +243,6 @@
   <string name="severe_loss_error">Ernstige fout! Probeer WiFi P2P uit te schakelen en opnieuw in te schakelen</string>
   <string name="connection_failed">Verbinding mislukt</string>
   <string name="permission_rationale_location">Android vereist locatietoestemming zodat de app nabije apparaten kan detecteren</string>
-  <string name="permission_rationale_location_on_host_zim_file">Android vereist locatietoestemming zodat de app ZIM-bestanden kan aanbieden</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">Android vereist toestemming voor nabije WiFi-apparaten zodat de app ZIM-bestanden kan aanbieden</string>
   <string name="permission_refused_location">Kan geen nabije apparaten vinden zonder locatierechten</string>
   <string name="permission_refused_storage">Geen toegang tot ZIM-bestanden zonder opslagrechten</string>
   <string name="request_enable_location">Schakel locatie in om detectie van nabije apparaten mogelijk te maken</string>

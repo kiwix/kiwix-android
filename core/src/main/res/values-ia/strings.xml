@@ -233,8 +233,6 @@
   <string name="severe_loss_error">Error grave! Tenta disactivar/reactivar WiFi P2P</string>
   <string name="connection_failed">Connexion fallite</string>
   <string name="permission_rationale_location">Android require accesso al position geographic pro permitter al application deteger apparatos a proximitate.</string>
-  <string name="permission_rationale_location_on_host_zim_file">Android require accesso al position geographic pro permitter al application albergar files Zim.</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">Android require un autorisation de apparatos Wi-Fi a proximitate pro permitter al application albergar files Zim.</string>
   <string name="permission_refused_location">Non pote localisar apparatos a proximitate sin accesso al position geographic</string>
   <string name="permission_refused_storage">Non pote acceder a files Zim sin accesso al immagazinage</string>
   <string name="request_enable_location">Activa position geographic pro permitter detection de apparatos proxime</string>

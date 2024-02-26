@@ -238,8 +238,6 @@
   <string name="severe_loss_error">తీవ్ర లోపం! WiFi P2Pని డిసేబుల్/రీ-ఎనేబుల్ చేయడానికి ప్రయత్నించండి</string>
   <string name="connection_failed">సంధానము విఫలమైనది</string>
   <string name="permission_rationale_location">పీర్ పరికరాలను గుర్తించడానికి యాప్‌ను అనుమతించడానికి Androidకి స్థాన అనుమతి అవసరం</string>
-  <string name="permission_rationale_location_on_host_zim_file">Zim ఫైల్‌లను హోస్ట్ చేయడానికి యాప్‌ను అనుమతించడానికి Androidకి స్థాన అనుమతి అవసరం</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">Zim ఫైల్‌లను హోస్ట్ చేయడానికి యాప్‌ని అనుమతించడానికి Androidకి సమీపంలోని wifi పరికరాల అనుమతి అవసరం</string>
   <string name="permission_refused_location">స్థాన అనుమతులు లేకుండా పీర్ పరికరాలను గుర్తించడం సాధ్యం కాదు</string>
   <string name="permission_refused_storage">నిల్వ అనుమతి లేకుండా జిమ్ ఫైల్‌లను యాక్సెస్ చేయలేరు</string>
   <string name="request_enable_location">సహచరులను గుర్తించడాన్ని అనుమతించడానికి స్థానాన్ని ప్రారంభించండి</string>

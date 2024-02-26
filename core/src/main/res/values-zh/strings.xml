@@ -257,8 +257,6 @@
   <string name="severe_loss_error">严重错误！请尝试禁用/重新启用 WiFi P2P</string>
   <string name="connection_failed">连接失败</string>
   <string name="permission_rationale_location">为了寻找对等设备，我们需要定位权限（这是 Android 系统的要求）</string>
-  <string name="permission_rationale_location_on_host_zim_file">要成为 ZIM 文件主机，我们需要定位权限（这是 Android 系统的要求）</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">Android 需要附近的 wifi 设备权限才能允许应用托管 ZIM 文件。</string>
   <string name="permission_refused_location">在没有定位权限的情况下无法找到对等设备</string>
   <string name="permission_refused_storage">在没有存储权限的情况下无法读取 ZIM 文件</string>
   <string name="request_enable_location">开启定位服务以寻找对等设备</string>

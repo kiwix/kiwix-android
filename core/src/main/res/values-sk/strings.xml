@@ -227,8 +227,6 @@
   <string name="severe_loss_error">Závažná chyba! Skúste vypnúť/zapnúť WiFi P2P</string>
   <string name="connection_failed">Spojenie zlyhalo</string>
   <string name="permission_rationale_location">Aby aplikácia mohla objavovať zariadenia v okolí, systém Android vyžaduje povolenie k polohe</string>
-  <string name="permission_rationale_location_on_host_zim_file">Aby aplikácia mohla hosťovať súbory Zim, systém Android vyžaduje povolenie k polohe</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">Android vyžaduje povolenie pre zariadenia Wi-Fi v okolí, aby mohla aplikácia hostiť súbory Zim</string>
   <string name="permission_refused_location">Bez prístupu k polohe nie je možné lokalizovať zariadenia v okolí</string>
   <string name="permission_refused_storage">Bez prístupu na úložisko nie je možný prístup k súborom zim</string>
   <string name="request_enable_location">Pre zistenie zariadení v okolí povoľte prístup k polohe</string>

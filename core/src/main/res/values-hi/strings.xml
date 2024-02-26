@@ -242,8 +242,6 @@
   <string name="severe_loss_error">गंभीर त्रुटि! वाईफ़ाई पी2पी को अक्षम/पुन: सक्षम करने का प्रयास करें</string>
   <string name="connection_failed">कनेक्शन विफल</string>
   <string name="permission_rationale_location">ऐप को सहकर्मी उपकरणों का पता लगाने की अनुमति देने के लिए एंड्रॉइड द्वारा स्थान अनुमति की आवश्यकता होती है</string>
-  <string name="permission_rationale_location_on_host_zim_file">ऐप को ZIM फ़ाइलों को होस्ट करने की अनुमति देने के लिए एंड्रॉइड द्वारा स्थान अनुमति की आवश्यकता होती है</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">ऐप को Zim फ़ाइलों को होस्ट करने की अनुमति देने के लिए एंड्रॉइड द्वारा आस-पास के वाईफाई डिवाइस की अनुमति आवश्यक है</string>
   <string name="permission_refused_location">स्थान अनुमतियों के बिना सहकर्मी उपकरणों का पता नहीं लगाया जा सकता</string>
   <string name="permission_refused_storage">भंडारण अनुमति के बिना ZIM फ़ाइलों तक नहीं पहुंच सकते</string>
   <string name="request_enable_location">साथियों का पता लगाने की अनुमति देने के लिए स्थान सक्षम करें</string>

@@ -227,7 +227,6 @@
   <string name="severe_loss_error">Xetaya gırane! Bıcerebnê ke WiFi P2P’yi dewre ra vecê/reyêna aktif kerê</string>
   <string name="connection_failed">Gıreyin nêbiya</string>
   <string name="permission_rationale_location">Cihazê takêşan ra ferq bıyayışi rê terefê Androidi ra mısadey mehali ganiyo.</string>
-  <string name="permission_rationale_location_on_host_zim_file">Dosyayanê ZIMi darênayışê aplikasyoni rê terefê Androidi ra mısadey mehali ganiyo.</string>
   <string name="permission_refused_location">Bêmısadey mehali cihazanê takêşi nêvineyênê</string>
   <string name="permission_refused_storage">Bêmısadey depo kerdışi nêresiyeno dosyayanê ZIMi</string>
   <string name="request_enable_location">Taypêyan his kerdışi rê seba mısade dayışi mehali aktiv kerê</string>

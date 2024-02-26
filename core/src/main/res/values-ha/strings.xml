@@ -238,8 +238,6 @@
   <string name="severe_loss_error">Kuskure mai tsanani! Gwada Kashe/Sake kunna WiFi P2P</string>
   <string name="connection_failed">Haɗin ya gaza</string>
   <string name="permission_rationale_location">Android na buƙatar izinin wuri don ba da damar ƙa’idar ta gano na’urorin tsara</string>
-  <string name="permission_rationale_location_on_host_zim_file">Ana buƙatar izinin wuri ta Android don ba da damar ƙa’idar ta dauki nauyin fayilolin Zim</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">Ana buƙatar izinin na’urorin wifi kusa da Android don ba da damar ƙa’idar ta dauki nauyin fayilolin Zim</string>
   <string name="permission_refused_location">Ba za a iya gano na’urorin takwarorinsu ba tare da izinin wuri ba</string>
   <string name="permission_refused_storage">Ba za a iya samun damar yin amfani da fayilolin zim ba tare da izinin ajiya ba</string>
   <string name="request_enable_location">Kunna wurin don ba da damar gano takwarorinsu</string>

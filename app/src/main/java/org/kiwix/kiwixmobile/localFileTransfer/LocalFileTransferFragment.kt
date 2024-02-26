@@ -55,8 +55,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.cachedComponent
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
@@ -64,6 +64,7 @@ import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -71,7 +72,6 @@ import org.kiwix.kiwixmobile.databinding.FragmentLocalFileTransferBinding
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getDeviceStatus
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiP2pDelegate
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiPeerListAdapter
-import org.kiwix.kiwixmobile.core.webserver.ZimHostFragment.Companion.PERMISSION_REQUEST_CODE_COARSE_LOCATION
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
 import javax.inject.Inject
@@ -219,6 +219,7 @@ class LocalFileTransferFragment :
     when {
       !checkFineLocationAccessPermission() ->
         true
+
       !checkExternalStorageWritePermission() ->
         true
       /* Initiate discovery */
@@ -226,10 +227,12 @@ class LocalFileTransferFragment :
         requestEnableWifiP2pServices()
         true
       }
+
       Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServiceEnabled -> {
         requestEnableLocationServices()
         true
       }
+
       else -> {
         showPeerDiscoveryProgressBar()
         wifiDirectManager.discoverPeerDevices()
@@ -323,8 +326,8 @@ class LocalFileTransferFragment :
         if (!permissionGranted) {
           if (shouldShowRationale(NEARBY_WIFI_DEVICES)) {
             alertDialogShower.show(
-              KiwixDialog.NearbyWifiPermissionRationaleOnHostZimFile,
-              ::askNearbyWifiDevicesPermission
+              KiwixDialog.NearbyWifiPermissionRationale,
+              requireActivity()::navigateToAppSettings
             )
           } else {
             askNearbyWifiDevicesPermission()
@@ -337,7 +340,7 @@ class LocalFileTransferFragment :
         if (shouldShowRationale(ACCESS_FINE_LOCATION)) {
           alertDialogShower.show(
             KiwixDialog.LocationPermissionRationale,
-            ::requestLocationPermission
+            requireActivity()::navigateToAppSettings
           )
         } else {
           requestLocationPermission()
@@ -350,7 +353,7 @@ class LocalFileTransferFragment :
   private fun askNearbyWifiDevicesPermission() {
     ActivityCompat.requestPermissions(
       requireActivity(), arrayOf(Manifest.permission.NEARBY_WIFI_DEVICES),
-      PERMISSION_REQUEST_CODE_COARSE_LOCATION
+      PERMISSION_REQUEST_CODE_NEARBY_WIFI_DEVICES
     )
   }
 
@@ -367,7 +370,7 @@ class LocalFileTransferFragment :
           if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
             alertDialogShower.show(
               KiwixDialog.StoragePermissionRationale,
-              ::requestStoragePermissionPermission
+              requireActivity()::navigateToAppSettings
             )
           } else {
             requestStoragePermissionPermission()
@@ -400,25 +403,30 @@ class LocalFileTransferFragment :
   ) {
     if (grantResults[0] == PERMISSION_DENIED) {
       when (requestCode) {
-        PERMISSION_REQUEST_FINE_LOCATION -> {
+        PERMISSION_REQUEST_FINE_LOCATION,
+        PERMISSION_REQUEST_CODE_NEARBY_WIFI_DEVICES -> {
           Log.e(TAG, "Location permission not granted")
           toast(R.string.permission_refused_location, Toast.LENGTH_SHORT)
           requireActivity().popNavigationBackstack()
         }
+
         PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS -> {
           Log.e(TAG, "Storage write permission not granted")
           toast(R.string.permission_refused_storage, Toast.LENGTH_SHORT)
           requireActivity().popNavigationBackstack()
         }
+
         else ->
           super.onRequestPermissionsResult(requestCode, permissions, grantResults)
       }
     } else if (grantResults[0] == PERMISSION_GRANTED) {
       when (requestCode) {
         PERMISSION_REQUEST_FINE_LOCATION,
-        PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS -> {
+        PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS,
+        PERMISSION_REQUEST_CODE_NEARBY_WIFI_DEVICES -> {
           onSearchMenuClicked()
         }
+
         else ->
           super.onRequestPermissionsResult(requestCode, permissions, grantResults)
       }
@@ -489,5 +497,6 @@ class LocalFileTransferFragment :
     const val TAG = "LocalFileTransferActvty"
     private const val PERMISSION_REQUEST_FINE_LOCATION = 2
     private const val PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS = 3
+    const val PERMISSION_REQUEST_CODE_NEARBY_WIFI_DEVICES = 10
   }
 }

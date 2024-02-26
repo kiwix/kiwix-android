@@ -259,8 +259,6 @@
   <string name="severe_loss_error">Серьёзная ошибка! Попробуйте выключить и снова включить WiFi P2P</string>
   <string name="connection_failed">Не удалось установить соединение</string>
   <string name="permission_rationale_location">Доступ к местонахождению требуется Android для поиска близлежащих устройств</string>
-  <string name="permission_rationale_location_on_host_zim_file">Доступ к местонахождению требуется Android для размещения файлов Zim</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">Разрешение на использование устройств Wi-Fi поблизости требуется системой Android, чтобы приложение могло размещать файлы Zim</string>
   <string name="permission_refused_location">Невозможно обнаружить устройства без доступа к местоположению</string>
   <string name="permission_refused_storage">Невозможно получить доступ к файлам zim без разрешения на доступ к хранилищу</string>
   <string name="request_enable_location">Разрешите доступ к местоположению, чтобы позволить поиск устройств</string>

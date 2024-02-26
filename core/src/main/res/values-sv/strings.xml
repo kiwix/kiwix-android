@@ -242,8 +242,6 @@
   <string name="severe_loss_error">Allvarligt fel! Testa att starta om WiFi P2P</string>
   <string name="connection_failed">Anslutning misslyckades</string>
   <string name="permission_rationale_location">Platsåtkomst krävs från Android för att låta appen söka efter närliggande enheter.</string>
-  <string name="permission_rationale_location_on_host_zim_file">Platsåtkomst krävs från Android för att låta appen hantera Host Zim-filer.</string>
-  <string name="permission_rationale_nearby_device_on_host_zim_file">Android kräver behörighet till närliggande wifi-enheter för att låta appen hantera Zim-filer</string>
   <string name="permission_refused_location">Kan inte hitta närliggande enheter utan platsåtkomst.</string>
   <string name="permission_refused_storage">Kan inte komma åt zim-filer utan lagringsbehörighet</string>
   <string name="request_enable_location">Aktivera plats för att tillåta sökning efter närliggande enheter</string>

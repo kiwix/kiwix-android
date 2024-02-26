@@ -21,7 +21,6 @@
     android:name="android.permission.NEARBY_WIFI_DEVICES"
     android:usesPermissionFlags="neverForLocation"
     tools:targetApi="s" />
-  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
   <queries>
     <intent>
       <action android:name="android.intent.action.TTS_SERVICE" />
