@@ -19,15 +19,21 @@ package org.kiwix.kiwixmobile.utils.files
 
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import androidx.test.platform.app.InstrumentationRegistry
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.utils.files.DocumentResolverWrapper
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.documentProviderContentQuery
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getAllZimParts
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.hasPart
 import java.io.File
@@ -39,6 +45,14 @@ import java.util.Random
 class FileUtilsInstrumentationTest {
   private var context: Context? = null
   private var testDir: File? = null
+  private val commonPath = "Download/beer.stackexchange.com_en_all_2023-05.zim"
+  private val commonUri = "Download%2Fbeer.stackexchange.com_en_all_2023-05.zim"
+  private val downloadDocumentUriPrefix =
+    "content://com.android.providers.downloads.documents/document/"
+  private val primaryStorageUriPrefix =
+    "content://com.android.externalstorage.documents/document/"
+  private val downloadUriPrefix = "content://media/external/downloads/"
+  private val expectedFilePath = "${Environment.getExternalStorageDirectory()}/$commonPath"
 
   @Before
   fun executeBefore() {
@@ -267,8 +281,6 @@ class FileUtilsInstrumentationTest {
         }
       }
     }
-    val commonPath = "Download/beer.stackexchange.com_en_all_2023-05.zim"
-    val commonUri = "Download%2Fbeer.stackexchange.com_en_all_2023-05.zim"
     // get the SD card path
     val sdCardPath = context?.getExternalFilesDirs("")
       ?.get(1)?.path?.substringBefore("/Android")
@@ -276,20 +288,14 @@ class FileUtilsInstrumentationTest {
       // test the download uri on older devices
       DummyUrlData(
         null,
-        "${Environment.getExternalStorageDirectory()}/$commonPath",
-        Uri.parse(
-          "content://com.android.providers.downloads.documents/document/" +
-            "raw%3A%2Fstorage%2Femulated%2F0%2F$commonUri"
-        )
+        expectedFilePath,
+        Uri.parse("${downloadDocumentUriPrefix}raw%3A%2Fstorage%2Femulated%2F0%2F$commonUri")
       ),
       // test the download uri with new version of android
       DummyUrlData(
         null,
-        "${Environment.getExternalStorageDirectory()}/$commonPath",
-        Uri.parse(
-          "content://com.android.providers.downloads.documents/document/" +
-            "%2Fstorage%2Femulated%2F0%2F$commonUri"
-        )
+        expectedFilePath,
+        Uri.parse("$downloadDocumentUriPrefix%2Fstorage%2Femulated%2F0%2F$commonUri")
       ),
       // test with file scheme
       DummyUrlData(
@@ -300,18 +306,15 @@ class FileUtilsInstrumentationTest {
       // test with internal storage uri
       DummyUrlData(
         null,
-        "${Environment.getExternalStorageDirectory()}/$commonPath",
-        Uri.parse(
-          "content://com.android.externalstorage.documents/document/" +
-            "primary%3A$commonUri"
-        )
+        expectedFilePath,
+        Uri.parse("${primaryStorageUriPrefix}primary%3A$commonUri")
       ),
-      // test with SD card uri
+      // // test with SD card uri
       DummyUrlData(
         null,
         "$sdCardPath/$commonPath",
         Uri.parse(
-          "content://com.android.externalstorage.documents/document/" +
+          primaryStorageUriPrefix +
             sdCardPath?.substringAfter("storage/") +
             "%3A$commonUri"
         )
@@ -320,25 +323,20 @@ class FileUtilsInstrumentationTest {
       DummyUrlData(
         null,
         "/mnt/media_rw/USB/$commonPath",
-        Uri.parse(
-          "content://com.android.externalstorage.documents/document/" +
-            "USB%3A$commonUri"
-        )
+        Uri.parse("${primaryStorageUriPrefix}USB%3A$commonUri")
       ),
       // test with invalid uri
       DummyUrlData(
         null,
         null,
-        Uri.parse(
-          "content://com.android.externalstorage.documents/document/"
-        )
+        Uri.parse(primaryStorageUriPrefix)
       ),
       // test with invalid download uri
       DummyUrlData(
         null,
         null,
         Uri.parse(
-          "content://media/external/downloads/0"
+          "${downloadUriPrefix}0"
         )
       )
     )
@@ -351,6 +349,108 @@ class FileUtilsInstrumentationTest {
           )
         }
       }
+    }
+  }
+
+  @Test
+  fun testExtractDocumentId() {
+    val dummyDownloadUriData = arrayOf(
+      DummyUrlData(
+        null,
+        "raw:$expectedFilePath",
+        Uri.parse("${downloadDocumentUriPrefix}raw%3A%2Fstorage%2Femulated%2F0%2F$commonUri")
+      ),
+      DummyUrlData(
+        null,
+        expectedFilePath,
+        Uri.parse("$downloadDocumentUriPrefix%2Fstorage%2Femulated%2F0%2F$commonUri")
+      ),
+      DummyUrlData(
+        null,
+        "",
+        Uri.parse(downloadUriPrefix)
+      )
+    )
+
+    dummyDownloadUriData.forEach { dummyUrlData ->
+      dummyUrlData.uri?.let { uri ->
+        Assertions.assertEquals(
+          FileUtils.extractDocumentId(uri, DocumentResolverWrapper()),
+          dummyUrlData.expectedFileName
+        )
+      }
+    }
+
+    // Testing with a dynamically generated URI. This URI creates at runtime,
+    // and passing it statically would result in an `IllegalArgumentException` exception.
+    // Therefore, we simulate this scenario using the `DocumentsContractWrapper`
+    // to conduct the test.
+    val mockDocumentsContractWrapper: DocumentResolverWrapper = mockk()
+    val expectedDocumentId = "1000020403"
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      val mockedUri = Uri.parse("$downloadUriPrefix$expectedDocumentId")
+      every { mockDocumentsContractWrapper.getDocumentId(mockedUri) } returns expectedDocumentId
+      val actualDocumentId = FileUtils.extractDocumentId(mockedUri, mockDocumentsContractWrapper)
+      assertEquals(expectedDocumentId, actualDocumentId)
+    }
+  }
+
+  @Test
+  fun testDocumentProviderContentQuery() {
+    // test to get the download uri on old device
+    testWithDownloadUri(
+      Uri.parse("${downloadDocumentUriPrefix}raw%3A%2Fstorage%2Femulated%2F0%2F$commonUri"),
+      expectedFilePath
+    )
+
+    // test to get the download uri on new device
+    testWithDownloadUri(
+      Uri.parse("$downloadDocumentUriPrefix%2Fstorage%2Femulated%2F0%2F$commonUri"),
+      expectedFilePath
+    )
+
+    // test with all possible download uris
+    val contentUriPrefixes = arrayOf(
+      "content://downloads/public_downloads",
+      "content://downloads/my_downloads",
+      "content://downloads/all_downloads"
+    )
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      contentUriPrefixes.forEach {
+        val mockDocumentsContractWrapper: DocumentResolverWrapper = mockk()
+        val expectedDocumentId = "1000020403"
+        val mockedUri = Uri.parse("$it/$expectedDocumentId")
+        every { mockDocumentsContractWrapper.getDocumentId(mockedUri) } returns expectedDocumentId
+        every {
+          mockDocumentsContractWrapper.query(
+            context!!,
+            mockedUri,
+            "_data",
+            null,
+            null,
+            null
+          )
+        } returns expectedFilePath
+        testWithDownloadUri(
+          mockedUri,
+          expectedFilePath,
+          mockDocumentsContractWrapper
+        )
+      }
+    }
+  }
+
+  private fun testWithDownloadUri(
+    uri: Uri,
+    expectedPath: String,
+    documentsContractWrapper: DocumentResolverWrapper = DocumentResolverWrapper()
+  ) {
+    context?.let { context ->
+      assertEquals(
+        expectedPath,
+        documentProviderContentQuery(context, uri, documentsContractWrapper)
+      )
     }
   }
 
