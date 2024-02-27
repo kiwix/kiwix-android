@@ -46,7 +46,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
-import java.lang.NumberFormatException
 
 object FileUtils {
 
@@ -117,7 +116,6 @@ object FileUtils {
     context: Context,
     uri: Uri
   ): String? {
-    Log.e("DOWNLOAD_URI", "getLocalFilePathByUri: $uri")
     if (DocumentsContract.isDocumentUri(context, uri)) {
       if ("com.android.externalstorage.documents" == uri.authority) {
         val documentId = DocumentsContract.getDocumentId(uri)

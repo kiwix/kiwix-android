@@ -388,6 +388,10 @@ class FileUtilsInstrumentationTest {
     val mockDocumentsContractWrapper: DocumentResolverWrapper = mockk()
     val expectedDocumentId = "1000020403"
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      // Below Android 10, download URI schemes are of the content type, such as:
+      // content://com.android.chrome.FileProvider/downloads/alpinelinux_en_all_nopic_2022-12.zim
+      // As a result, this method will not be called during that time. We are not testing it on
+      // Android versions below 10, as it would result in an "IllegalArgumentException" exception.
       val mockedUri = Uri.parse("$downloadUriPrefix$expectedDocumentId")
       every { mockDocumentsContractWrapper.getDocumentId(mockedUri) } returns expectedDocumentId
       val actualDocumentId = FileUtils.extractDocumentId(mockedUri, mockDocumentsContractWrapper)
@@ -417,6 +421,10 @@ class FileUtilsInstrumentationTest {
     )
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      // Below Android 10, download URI schemes are of the content type, such as:
+      // content://com.android.chrome.FileProvider/downloads/alpinelinux_en_all_nopic_2022-12.zim
+      // As a result, this method will not be called during that time. We are not testing it on
+      // Android versions below 10, as it would result in an "IllegalArgumentException" exception.
       contentUriPrefixes.forEach {
         val mockDocumentsContractWrapper: DocumentResolverWrapper = mockk()
         val expectedDocumentId = "1000020403"
