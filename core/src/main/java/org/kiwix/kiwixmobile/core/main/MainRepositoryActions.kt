@@ -17,7 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.main
 
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import io.reactivex.disposables.Disposable
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope

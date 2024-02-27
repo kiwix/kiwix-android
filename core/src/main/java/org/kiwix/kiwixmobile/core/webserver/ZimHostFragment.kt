@@ -30,7 +30,6 @@ import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,7 +38,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -58,6 +56,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.StartServer
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService
 import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService.Companion.ACTION_CHECK_IP_ADDRESS
 import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService.Companion.ACTION_START_SERVER
@@ -110,12 +109,8 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
         .map {
           it.file.absolutePath
         }
-        .also {
-          if (BuildConfig.DEBUG) {
-            it.forEach { path ->
-              Log.v(tag, "ZIM PATH : $path")
-            }
-          }
+        .onEach { path ->
+          Log.v(tag, "ZIM PATH : $path")
         }
         as ArrayList<String>
     }

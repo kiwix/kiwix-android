@@ -19,8 +19,7 @@
 package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.net.wifi.p2p.WifiP2pInfo
-import android.util.Log
-import org.kiwix.kiwixmobile.core.BuildConfig
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.InputStream
 import java.io.ObjectInputStream
 import java.io.OutputStream
@@ -37,11 +36,11 @@ class ReceiverHandShake(private val wifiDirectManager: WifiDirectManager, groupI
       ObjectInputStream(inputStream).use { objectInputStream ->
         // Read the number of files
         (objectInputStream.readObject() as? Int)?.let { total ->
-          if (BuildConfig.DEBUG) Log.d(TAG, "Metadata: $total files")
+          Log.d(TAG, "Metadata: $total files")
           // Read names of each of those files, in order
           val fileItems = (0 until total).mapNotNull {
             (objectInputStream.readObject() as? String)?.let { fileName ->
-              if (BuildConfig.DEBUG) Log.d(TAG, "Expecting $fileName")
+              Log.d(TAG, "Expecting $fileName")
               FileItem(fileName = fileName)
             }
           }

@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.webserver
 
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches

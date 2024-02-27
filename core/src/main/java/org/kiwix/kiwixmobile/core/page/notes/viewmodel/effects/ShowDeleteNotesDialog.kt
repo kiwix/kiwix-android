@@ -18,7 +18,7 @@ package org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects
  *
  */
 
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect

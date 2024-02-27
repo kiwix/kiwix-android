@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.main
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import android.webkit.MimeTypeMap
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest

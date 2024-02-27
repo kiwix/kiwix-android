@@ -24,7 +24,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Environment
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.test.core.app.canTakeScreenshot

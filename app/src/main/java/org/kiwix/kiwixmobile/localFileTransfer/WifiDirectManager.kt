@@ -35,12 +35,11 @@ import android.net.wifi.p2p.WifiP2pManager.PeerListListener
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Looper.getMainLooper
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import android.widget.Toast
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -219,9 +218,7 @@ class WifiDirectManager @Inject constructor(
   }
 
   private fun performHandshakeWith(groupInfo: WifiP2pInfo) {
-    if (BuildConfig.DEBUG) {
-      Log.d(TAG, "Starting handshake")
-    }
+    Log.d(TAG, "Starting handshake")
     lifecycleCoroutineScope.launch {
       val peerGroupHandshake = if (isFileSender)
         SenderHandShake(this@WifiDirectManager, groupInfo)
@@ -232,9 +229,7 @@ class WifiDirectManager @Inject constructor(
       if (inetAddress != null) {
         startFileTransfer(groupInfo, inetAddress)
       } else {
-        if (BuildConfig.DEBUG) {
-          Log.d(TAG, "InetAddress is null")
-        }
+        Log.d(TAG, "InetAddress is null")
         onFileTransferAsyncTaskComplete(false)
         context.toast(R.string.connection_refused)
       }
@@ -262,17 +257,13 @@ class WifiDirectManager @Inject constructor(
         val senderDevice = SenderDevice(context, this, fileReceiverDeviceAddress)
         val isFileSendSuccessfully = senderDevice.send(filesForTransfer)
         onFileTransferAsyncTaskComplete(isFileSendSuccessfully)
-        if (BuildConfig.DEBUG) {
-          Log.d(TAG, "SenderDevice completed $isFileSendSuccessfully")
-        }
+        Log.d(TAG, "SenderDevice completed $isFileSendSuccessfully")
       } else {
         callbacks?.onFilesForTransferAvailable(filesForTransfer)
         val receiverDevice = ReceiverDevice(this)
         val isReceivedFileSuccessFully = receiverDevice.receive()
         onFileTransferAsyncTaskComplete(isReceivedFileSuccessFully)
-        if (BuildConfig.DEBUG) {
-          Log.d(TAG, "ReceiverDevice completed $isReceivedFileSuccessFully")
-        }
+        Log.d(TAG, "ReceiverDevice completed $isReceivedFileSuccessFully")
       }
     }
   }
@@ -360,7 +351,7 @@ class WifiDirectManager @Inject constructor(
     }
 
     @JvmStatic fun getDeviceStatus(status: Int): String {
-      if (BuildConfig.DEBUG) Log.d(TAG, "Peer Status: $status")
+      Log.d(TAG, "Peer Status: $status")
       return when (status) {
         WifiP2pDevice.AVAILABLE -> "Available"
         WifiP2pDevice.INVITED -> "Invited"

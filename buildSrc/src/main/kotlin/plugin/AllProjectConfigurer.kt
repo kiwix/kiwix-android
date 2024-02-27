@@ -127,7 +127,6 @@ class AllProjectConfigurer {
           add("LockedOrientationActivity")
           // TODO stop ignoring below this
           add("LabelFor")
-          add("LogConditional")
           add("ConvertToWebp")
           add("UnknownNullness")
           add("SelectableText")

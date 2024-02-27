@@ -19,7 +19,7 @@ package org.kiwix.kiwixmobile.core.main
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent

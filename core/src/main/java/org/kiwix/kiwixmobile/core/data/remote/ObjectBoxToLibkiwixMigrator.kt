@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.data.remote
 
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor

@@ -22,7 +22,7 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 
