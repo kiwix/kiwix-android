@@ -28,6 +28,8 @@ import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.webkit.WebView
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.preference.EditTextPreference
@@ -43,8 +45,11 @@ import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
@@ -83,6 +88,10 @@ abstract class CorePrefsFragment :
   @JvmField
   @Inject
   protected var alertDialogShower: DialogShower? = null
+
+  @JvmField
+  @Inject
+  internal var libkiwixBookmarks: LibkiwixBookmarks? = null
   override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
     coreComponent
       .activityComponentBuilder()
@@ -131,6 +140,8 @@ abstract class CorePrefsFragment :
 
   override fun onDestroyView() {
     presenter?.dispose()
+    storagePermissionForNotesLauncher?.unregister()
+    storagePermissionForNotesLauncher = null
     super.onDestroyView()
   }
 
@@ -289,7 +300,68 @@ abstract class CorePrefsFragment :
     if (preference.key.equals(SharedPreferenceUtil.PREF_STORAGE, ignoreCase = true)) {
       openFolderSelect()
     }
+    if (preference.key.equals(PREF_EXPORT_BOOKMARK, ignoreCase = true) &&
+      requestExternalStorageWritePermissionForExportBookmark()
+    ) {
+      showExportBookmarkDialog()
+    }
     return true
+  }
+
+  @Suppress("NestedBlockDepth")
+  private fun requestExternalStorageWritePermissionForExportBookmark(): Boolean {
+    var isPermissionGranted = false
+    if (sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
+      Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+    ) {
+      if (requireActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        == PackageManager.PERMISSION_GRANTED
+      ) {
+        isPermissionGranted = true
+      } else {
+        storagePermissionForNotesLauncher?.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+      }
+    } else {
+      isPermissionGranted = true
+    }
+    return isPermissionGranted
+  }
+
+  private var storagePermissionForNotesLauncher: ActivityResultLauncher<String>? =
+    registerForActivityResult(
+      ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+      if (isGranted) {
+        // Successfully granted permission, so opening the export bookmark Dialog
+        showExportBookmarkDialog()
+      } else {
+        if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+          /* shouldShowRequestPermissionRationale() returns false when:
+             *  1) User has previously checked on "Don't ask me again", and/or
+             *  2) Permission has been disabled on device
+             */
+          requireActivity().toast(
+            R.string.ext_storage_permission_rationale_export_bookmark,
+            Toast.LENGTH_LONG
+          )
+        } else {
+          requireActivity().toast(
+            R.string.ext_storage_write_permission_denied_export_bookmark,
+            Toast.LENGTH_LONG
+          )
+          alertDialogShower?.show(
+            KiwixDialog.ReadPermissionRequired,
+            requireActivity()::navigateToAppSettings
+          )
+        }
+      }
+    }
+
+  private fun showExportBookmarkDialog() {
+    alertDialogShower?.show(
+      KiwixDialog.YesNoDialog.ExportBookmarks,
+      { libkiwixBookmarks?.exportBookmark() }
+    )
   }
 
   private fun openFolderSelect() {
@@ -383,5 +455,6 @@ abstract class CorePrefsFragment :
     private const val ZOOM_OFFSET = 2
     private const val ZOOM_SCALE = 25
     private const val INTERNAL_TEXT_ZOOM = "text_zoom"
+    private const val PREF_EXPORT_BOOKMARK = "pref_export_bookmark"
   }
 }

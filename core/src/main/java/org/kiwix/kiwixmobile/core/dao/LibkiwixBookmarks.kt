@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.dao
 
 import android.os.Build
 import android.util.Base64
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import io.reactivex.BackpressureStrategy
 import io.reactivex.BackpressureStrategy.LATEST
 import io.reactivex.Flowable
@@ -29,12 +28,17 @@ import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ILLUSTRATION_SIZE
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Bookmark
 import org.kiwix.libkiwix.Library
@@ -271,6 +275,34 @@ class LibkiwixBookmarks @Inject constructor(
 
   private fun updateFlowableBookmarkList() {
     bookmarkListBehaviour?.onNext(getBookmarksList())
+  }
+
+  // Export the `bookmark.xml` file to the `Android/media/` directory of internal storage.
+  fun exportBookmark() {
+    try {
+      val bookmarkDestinationFile = exportedFile("bookmark.xml")
+      bookmarkFile.inputStream().use { inputStream ->
+        bookmarkDestinationFile.outputStream().use(inputStream::copyTo)
+      }
+      sharedPreferenceUtil.context.toast(
+        sharedPreferenceUtil.context.getString(
+          R.string.export_bookmark_saved,
+          "${bookmarkDestinationFile.parent}/"
+        )
+      )
+    } catch (ignore: Exception) {
+      Log.e(TAG, "Error: bookmark couldn't export.\n Original exception = $ignore")
+      sharedPreferenceUtil.context.toast(R.string.export_bookmark_error)
+    }
+  }
+
+  private fun exportedFile(fileName: String): File {
+    val rootFolder = CoreApp.instance.externalMediaDirs[0]
+    if (!rootFolder.isFileExist()) rootFolder.mkdir()
+    val file = File(rootFolder, fileName)
+    if (file.isFileExist()) file.deleteFile()
+    file.createNewFile()
+    return file
   }
 
   companion object {
