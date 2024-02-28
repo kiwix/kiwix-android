@@ -283,9 +283,10 @@ class LibkiwixBookmarks @Inject constructor(
   }
 
   /**
-   * Export the library file to the Download directory of internal storage.
-   * The library file contains all bookmarks and books,
-   * including the favicon and path of the zim file.
+   * Export the library and bookmark files to the Android/media/ directory in internal storage.
+   * The library file contains information about books, such as filePath and favicon,
+   * while the bookmark.xml file contains all the saved bookmarks.
+   * Therefore, both files need to be exported.
    */
   fun exportBookmark() {
     try {
@@ -311,7 +312,7 @@ class LibkiwixBookmarks @Inject constructor(
 
   private fun exportedFile(fileName: String): File {
     val rootFolder = CoreApp.instance.externalMediaDirs[0]
-    // if (!rootFolder.isFileExist()) rootFolder.mkdir()
+    if (!rootFolder.isFileExist()) rootFolder.mkdir()
     val file = File(rootFolder, fileName)
     if (file.isFileExist()) file.deleteFile()
     file.createNewFile()
