@@ -30,7 +30,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.BuildConfig
+import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ILLUSTRATION_SIZE
@@ -276,6 +280,42 @@ class LibkiwixBookmarks @Inject constructor(
 
   private fun updateFlowableBookmarkList() {
     bookmarkListBehaviour?.onNext(getBookmarksList())
+  }
+
+  /**
+   * Export the library file to the Download directory of internal storage.
+   * The library file contains all bookmarks and books,
+   * including the favicon and path of the zim file.
+   */
+  fun exportBookmark() {
+    try {
+      val bookmarkDestinationFile = exportedFile("bookmark.xml")
+      val libraryDestinationFile = exportedFile("library.xml")
+      bookmarkFile.inputStream().use { inputStream ->
+        bookmarkDestinationFile.outputStream().use(inputStream::copyTo)
+      }
+      libraryFile.inputStream().use { inputStream ->
+        libraryDestinationFile.outputStream().use(inputStream::copyTo)
+      }
+      sharedPreferenceUtil.context.toast(
+        sharedPreferenceUtil.context.getString(
+          R.string.export_bookmark_saved,
+          "${bookmarkDestinationFile.parent}/"
+        )
+      )
+    } catch (ignore: Exception) {
+      Log.e(TAG, "Error: bookmark couldn't export.\n Original exception = $ignore")
+      sharedPreferenceUtil.context.toast(R.string.export_bookmark_error)
+    }
+  }
+
+  private fun exportedFile(fileName: String): File {
+    val rootFolder = CoreApp.instance.externalMediaDirs[0]
+    // if (!rootFolder.isFileExist()) rootFolder.mkdir()
+    val file = File(rootFolder, fileName)
+    if (file.isFileExist()) file.deleteFile()
+    file.createNewFile()
+    return file
   }
 
   companion object {
