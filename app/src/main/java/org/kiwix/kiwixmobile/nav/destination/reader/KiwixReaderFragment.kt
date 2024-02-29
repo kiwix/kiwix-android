@@ -291,7 +291,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     intent: Intent,
     activity: AppCompatActivity
   ): Super {
-    super.onNewIntent(activity.intent, activity)
+    super.onNewIntent(intent, activity)
     intent.data?.let {
       when (it.scheme) {
         "file" -> openZimFile(it.toFile())
