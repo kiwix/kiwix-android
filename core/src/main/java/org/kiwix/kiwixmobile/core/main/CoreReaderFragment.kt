@@ -1478,9 +1478,13 @@ abstract class CoreReaderFragment :
   ) {
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || isCustomApp) {
       if (file?.isFileExist() == true) {
+        // Show content if there is `Open Library` button showing
+        // and we are opening the ZIM file
+        reopenBook()
         openAndSetInContainer(file = file)
         updateTitle()
       } else if (assetFileDescriptor != null) {
+        reopenBook()
         openAndSetInContainer(
           assetFileDescriptor = assetFileDescriptor,
           filePath = filePath
