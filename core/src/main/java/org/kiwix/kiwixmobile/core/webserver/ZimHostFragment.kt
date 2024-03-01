@@ -35,6 +35,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -47,7 +48,6 @@ import org.kiwix.kiwixmobile.core.databinding.ActivityZimHostBinding
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -120,6 +120,25 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
         as ArrayList<String>
     }
 
+  private val notificationPermissionListener = registerForActivityResult(
+    ActivityResultContracts.RequestPermission()
+  ) { isGranted ->
+    if (isGranted) {
+      startStopServer()
+    } else {
+      if (!ActivityCompat.shouldShowRequestPermissionRationale(
+          requireActivity(),
+          POST_NOTIFICATIONS
+        )
+      ) {
+        alertDialogShower.show(
+          KiwixDialog.NotificationPermissionDialog,
+          requireActivity()::navigateToAppSettings
+        )
+      }
+    }
+  }
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -173,26 +192,11 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
         if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
           startStopServer()
         } else {
-          requestNotificationPermission()
+          notificationPermissionListener.launch(POST_NOTIFICATIONS)
         }
       } else {
         startStopServer()
       }
-    }
-  }
-
-  private fun requestNotificationPermission() {
-    if (!ActivityCompat.shouldShowRequestPermissionRationale(
-        requireActivity(),
-        POST_NOTIFICATIONS
-      )
-    ) {
-      requireActivity().requestNotificationPermission()
-    } else {
-      alertDialogShower.show(
-        KiwixDialog.NotificationPermissionDialog,
-        requireActivity()::navigateToAppSettings
-      )
     }
   }
 
@@ -206,6 +210,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
           else -> startHotspotManuallyDialog()
         }
       }
+
       else -> toast(R.string.no_books_selected_toast_message, Toast.LENGTH_SHORT)
     }
   }
