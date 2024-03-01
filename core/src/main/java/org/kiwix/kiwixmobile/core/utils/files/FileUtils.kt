@@ -22,7 +22,6 @@ import android.app.Activity
 import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
-import android.content.res.AssetFileDescriptor
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -40,14 +39,12 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
-import org.kiwix.kiwixmobile.core.extensions.get
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import java.io.BufferedReader
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.IOException
 
 object FileUtils {
@@ -156,34 +153,99 @@ object FileUtils {
     return null
   }
 
-  private fun documentProviderContentQuery(context: Context, uri: Uri) =
-    contentQuery(
-      context,
-      ContentUris.withAppendedId(
-        Uri.parse("content://downloads/public_downloads"),
-        try {
-          DocumentsContract.getDocumentId(uri).toLong()
-        } catch (ignore: NumberFormatException) {
-          0L
-        }
-      )
+  fun documentProviderContentQuery(
+    context: Context,
+    uri: Uri,
+    documentsContractWrapper: DocumentResolverWrapper = DocumentResolverWrapper()
+  ): String? {
+    // Extracting the document ID from the URI.
+    val documentId = extractDocumentId(uri, documentsContractWrapper)
+
+    // Attempt to handle cases where the document ID is a direct path to a ZIM file.
+    if (isValidZimFile(documentId)) {
+      return documentId.substringAfter("raw:")
+    }
+
+    // Try different content URI prefixes in some case download content prefix is different.
+    val contentUriPrefixes = arrayOf(
+      "content://downloads/public_downloads",
+      "content://downloads/my_downloads",
+      "content://downloads/all_downloads"
     )
+    val actualDocumentId = try {
+      documentId.toLong()
+    } catch (ignore: NumberFormatException) {
+      0L
+    }
+    return queryForActualPath(
+      context,
+      actualDocumentId,
+      contentUriPrefixes,
+      documentsContractWrapper
+    )
+  }
+
+  private fun queryForActualPath(
+    context: Context,
+    documentId: Long,
+    contentUriPrefixes: Array<String>,
+    documentsContractWrapper: DocumentResolverWrapper
+  ): String? {
+    try {
+      for (prefix in contentUriPrefixes) {
+        contentQuery(
+          context,
+          ContentUris.withAppendedId(Uri.parse(prefix), documentId),
+          documentsContractWrapper
+        )?.let {
+          return@queryForActualPath it
+        }
+      }
+    } catch (ignore: Exception) {
+      Log.e(
+        "kiwix",
+        "Error in getting path for documentId = $documentId \nException = $ignore"
+      )
+    }
+
+    return null
+  }
+
+  fun extractDocumentId(
+    uri: Uri,
+    documentsContractWrapper: DocumentResolverWrapper
+  ): String {
+    try {
+      return documentsContractWrapper.getDocumentId(uri)
+    } catch (ignore: Exception) {
+      Log.e(
+        "kiwix",
+        "Unable to get documentId for uri = $uri \nException = $ignore"
+      )
+    }
+    return ""
+  }
 
   private fun contentQuery(
     context: Context,
-    uri: Uri
+    uri: Uri,
+    documentsContractWrapper: DocumentResolverWrapper = DocumentResolverWrapper()
   ): String? {
     val columnName = "_data"
     return try {
-      context.contentResolver.query(uri, arrayOf(columnName), null, null, null)
-        ?.use {
-          if (it.moveToFirst() && it.getColumnIndex(columnName) != -1) {
-            it[columnName]
-          } else null
-        }
-    } catch (ignore: SecurityException) {
-      null
-    } catch (ignore: NullPointerException) {
+      documentsContractWrapper.query(
+        context,
+        uri,
+        columnName,
+        null,
+        null,
+        null
+      )
+    } catch (ignore: Exception) {
+      Log.e(
+        "kiwix",
+        "Could not get path for uri = $uri \nException = $ignore"
+      )
       null
     }
   }
@@ -409,16 +471,4 @@ object FileUtils {
   @JvmStatic
   fun getDemoFilePathForCustomApp(context: Context) =
     "${ContextCompat.getExternalFilesDirs(context, null)[0]}/demo.zim"
-
-  @JvmStatic
-  fun getAssetFileDescriptorFromUri(
-    context: Context,
-    uri: Uri
-  ): AssetFileDescriptor? {
-    return try {
-      context.contentResolver.openAssetFileDescriptor(uri, "r")
-    } catch (ignore: FileNotFoundException) {
-      null
-    }
-  }
 }
