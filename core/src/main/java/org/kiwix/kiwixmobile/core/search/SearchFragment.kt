@@ -272,7 +272,7 @@ class SearchFragment : BaseFragment() {
 
   private fun getSearchListItemForQuery(query: String): SearchListItem? =
     searchAdapter?.items?.firstOrNull {
-      it.value.equals(query, ignoreCase = true)
+      it.value == query
     }
 
   private suspend fun render(state: SearchState) {
