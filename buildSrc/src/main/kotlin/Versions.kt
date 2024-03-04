@@ -20,7 +20,7 @@ object Versions {
 
   const val com_squareup_retrofit2: String = "2.9.0"
 
-  const val com_squareup_okhttp3: String = "4.9.0"
+  const val com_squareup_okhttp3: String = "4.10.0"
 
   const val org_jetbrains_kotlin: String = "1.7.0"
 
@@ -32,7 +32,7 @@ object Versions {
 
   const val com_jakewharton: String = "10.2.3"
 
-  const val androidx_test: String = "1.5.1"
+  const val androidx_test: String = "1.5.2"
 
   const val androidx_test_core: String = "1.5.0"
 
@@ -40,7 +40,7 @@ object Versions {
 
   const val io_objectbox: String = "3.5.0"
 
-  const val io_mockk: String = "1.13.5"
+  const val io_mockk: String = "1.13.7"
 
   const val android_arch_lifecycle_extensions: String = "1.1.1"
 
@@ -52,25 +52,25 @@ object Versions {
 
   const val javax_annotation_api: String = "1.3.2"
 
-  const val leakcanary_android: String = "2.9.1"
+  const val leakcanary_android: String = "2.13"
 
-  const val constraintlayout: String = "2.0.4"
+  const val constraintlayout: String = "2.1.4"
 
   const val swipe_refresh_layout: String = "1.1.0"
 
   const val collection_ktx: String = "1.1.0"
 
-  const val preference_ktx: String = "1.1.1"
+  const val preference_ktx: String = "1.2.0"
 
-  const val junit_jupiter: String = "5.9.1"
+  const val junit_jupiter: String = "5.10.2"
 
-  const val assertj_core: String = "3.18.1"
+  const val assertj_core: String = "3.25.3"
 
-  const val core_testing: String = "2.1.0"
+  const val core_testing: String = "2.2.0"
 
   const val fragment_ktx: String = "1.2.5"
 
-  const val testing_ktx: String = "1.2.0"
+  const val testing_ktx: String = "1.3.0"
 
   const val threetenabp: String = "1.3.0"
 
@@ -80,15 +80,15 @@ object Versions {
 
   const val simple_xml: String = "2.7.1"
 
-  const val appcompat: String = "1.2.0"
+  const val appcompat: String = "1.6.1"
 
   const val rxandroid: String = "2.1.1"
 
-  const val core_ktx: String = "1.3.2"
+  const val core_ktx: String = "1.9.0"
 
   const val libkiwix: String = "2.0.0"
 
-  const val material: String = "1.2.1"
+  const val material: String = "1.8.0"
 
   const val multidex: String = "2.0.1"
 
@@ -96,11 +96,11 @@ object Versions {
 
   const val fetch: String = "3.1.6"
 
-  const val rxjava: String = "2.2.20"
+  const val rxjava: String = "2.2.21"
 
   const val webkit: String = "1.7.0"
 
-  const val junit: String = "1.1.4"
+  const val junit: String = "1.1.5"
 
   const val material_show_case_view: String = "1.3.7"
 }

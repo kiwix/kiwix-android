@@ -46,7 +46,7 @@ class LocalFileTransferTest {
   @JvmField
   var retryRule = RetryRule()
 
-  private var context: Context? = null
+  private lateinit var context: Context
   private lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
 
   private val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

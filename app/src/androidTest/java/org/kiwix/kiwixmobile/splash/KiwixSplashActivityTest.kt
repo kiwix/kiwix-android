@@ -67,7 +67,7 @@ class KiwixSplashActivityTest {
   @JvmField
   var permissionRules: GrantPermissionRule =
     GrantPermissionRule.grant(*permissions)
-  private var context: Context? = null
+  private lateinit var context: Context
 
   @Before
   fun setUp() {
