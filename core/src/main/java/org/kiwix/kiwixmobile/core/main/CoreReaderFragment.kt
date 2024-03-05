@@ -1753,21 +1753,26 @@ abstract class CoreReaderFragment :
         goToSearchWithText(intent)
         // see https://github.com/kiwix/kiwix-android/issues/2607
         intent.action = null
+        // if used once then clear it to avoid affecting any other functionality of the application
+        requireActivity().intent.action = null
       }
 
       CoreSearchWidget.TEXT_CLICKED -> {
         goToSearch(false)
         intent.action = null
+        requireActivity().intent.action = null
       }
 
       CoreSearchWidget.STAR_CLICKED -> {
         goToBookmarks()
         intent.action = null
+        requireActivity().intent.action = null
       }
 
       CoreSearchWidget.MIC_CLICKED -> {
         goToSearch(true)
         intent.action = null
+        requireActivity().intent.action = null
       }
 
       Intent.ACTION_VIEW -> if (intent.type == null ||
