@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.download
 
-import android.util.Log
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -29,7 +28,6 @@ import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
-import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import leakcanary.LeakAssertions
 import org.junit.After
 import org.junit.Assert
@@ -39,7 +37,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -86,6 +83,7 @@ class DownloadTest : BaseActivityTest() {
     try {
       downloadRobot {
         clickLibraryOnBottomNav()
+        refreshLocalLibraryData()
         deleteZimIfExists(false)
         clickDownloadOnBottomNav()
         waitForDataToLoad()
@@ -98,18 +96,16 @@ class DownloadTest : BaseActivityTest() {
         assertDownloadResumed()
         waitUntilDownloadComplete()
         clickLibraryOnBottomNav()
+        // refresh the local library list to show the downloaded zim file
+        refreshLocalLibraryData()
         checkIfZimFileDownloaded()
         deleteZimIfExists(true)
+        refreshLocalLibraryData()
       }
     } catch (e: Exception) {
       Assert.fail(
         "Couldn't find downloaded file ' Off the Grid ' Original Exception: ${e.message}"
       )
-    }
-    try {
-      refresh(R.id.zim_swiperefresh)
-    } catch (e: RuntimeException) {
-      Log.w(KIWIX_DOWNLOAD_TEST, "Failed to refresh ZIM list: " + e.localizedMessage)
     }
     LeakAssertions.assertNoLeaks()
   }
@@ -124,7 +120,7 @@ class DownloadTest : BaseActivityTest() {
   }
 
   companion object {
-    private const val KIWIX_DOWNLOAD_TEST = "kiwixDownloadTest"
+    const val KIWIX_DOWNLOAD_TEST = "kiwixDownloadTest"
 
     @BeforeClass
     fun beforeClass() {

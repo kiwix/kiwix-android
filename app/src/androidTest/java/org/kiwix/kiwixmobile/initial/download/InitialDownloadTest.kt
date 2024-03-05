@@ -75,11 +75,12 @@ class InitialDownloadTest : BaseActivityTest() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
     initialDownload {
       clickLibraryOnBottomNav()
+      refreshLocalLibraryData()
       // This is for if download test fails for some reason after downloading the zim file
       deleteZimIfExists()
       clickDownloadOnBottomNav()
       assertLibraryListDisplayed()
-      refreshList()
+      refreshOnlineList()
       waitForDataToLoad()
       stopDownloadIfAlreadyStarted()
       downloadZimFile()

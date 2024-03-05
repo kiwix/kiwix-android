@@ -27,7 +27,6 @@ import androidx.test.uiautomator.UiDevice
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.kiwix.libzim.Archive
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -35,6 +34,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.libzim.Archive
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -52,6 +52,7 @@ class MimeTypeTest : BaseActivityTest() {
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
+      putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, false)
       putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, false)
     }
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
