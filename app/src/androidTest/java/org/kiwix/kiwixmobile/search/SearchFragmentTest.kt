@@ -48,8 +48,8 @@ import java.net.URI
 
 class SearchFragmentTest : BaseActivityTest() {
 
-  private val stackExchangeZimFileUrl =
-    "https://download.kiwix.org/zim/stack_exchange/academia.stackexchange.com_en_all_2023-05.zim"
+  private val rayCharlesZimFileUrl =
+    "https://dev.kiwix.org/kiwix-android/test/wikipedia_en_ray_charles_maxi_2023-12.zim"
 
   @Rule
   @JvmField
@@ -196,7 +196,7 @@ class SearchFragmentTest : BaseActivityTest() {
 
   private fun downloadRequest() =
     Request.Builder()
-      .url(URI.create(stackExchangeZimFileUrl).toURL())
+      .url(URI.create(rayCharlesZimFileUrl).toURL())
       .build()
 
   private fun openSearchWithQuery(query: String = "", zimFile: File) {

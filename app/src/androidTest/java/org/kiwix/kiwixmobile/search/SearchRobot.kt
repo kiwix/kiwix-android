@@ -46,8 +46,8 @@ class SearchRobot : BaseRobot() {
 
   val searchUnitTestingQuery = "Unit testing"
   val searchUnitTestResult = "Unit testing - Wikipedia"
-  val searchQueryForDownloadedZimFile = "A Statem"
-  val searchResultForDownloadedZimFile = "A Statement in a Thesis Proposal"
+  val searchQueryForDownloadedZimFile = "A Fool"
+  val searchResultForDownloadedZimFile = "A Fool for You"
 
   fun clickOnSearchItemInSearchList() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
