@@ -290,7 +290,7 @@ class TestObserver<T>(
   }
 
   fun assertValue(value: (T) -> Boolean): TestObserver<T> {
-    assertThat(values.last()).satisfies { value(it) }
+    assertThat(values.last()).satisfies({ value(it) })
     return this
   }
 }

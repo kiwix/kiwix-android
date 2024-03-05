@@ -120,13 +120,13 @@ abstract class CorePrefsFragment :
   override fun onResume() {
     super.onResume()
     preferenceScreen.sharedPreferences
-      .registerOnSharedPreferenceChangeListener(this)
+      ?.registerOnSharedPreferenceChangeListener(this)
   }
 
   override fun onPause() {
     super.onPause()
     preferenceScreen.sharedPreferences
-      .unregisterOnSharedPreferenceChangeListener(this)
+      ?.unregisterOnSharedPreferenceChangeListener(this)
   }
 
   override fun onDestroyView() {

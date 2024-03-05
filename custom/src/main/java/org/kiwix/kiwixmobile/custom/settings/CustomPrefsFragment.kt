@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.custom.settings
 
 import android.os.Bundle
+import androidx.preference.Preference
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.PREF_LANG
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.PREF_WIFI_ONLY
@@ -33,7 +34,7 @@ class CustomPrefsFragment : CorePrefsFragment() {
     if (BuildConfig.ENFORCED_LANG.isEmpty()) {
       setUpLanguageChooser(PREF_LANG)
     } else {
-      preferenceScreen.removePreference(findPreference("pref_language"))
+      findPreference<Preference>("pref_language")?.let(preferenceScreen::removePreference)
     }
     preferenceScreen.removePreferenceRecursively(PREF_WIFI_ONLY)
   }
@@ -50,6 +51,6 @@ class CustomPrefsFragment : CorePrefsFragment() {
   }
 
   override fun setStorage() {
-    preferenceScreen.removePreference(findPreference("pref_storage"))
+    findPreference<Preference>("pref_storage")?.let(preferenceScreen::removePreference)
   }
 }
