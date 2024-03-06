@@ -44,7 +44,7 @@ fun search(func: SearchRobot.() -> Unit) = SearchRobot().applyWithViewHierarchyP
 
 class SearchRobot : BaseRobot() {
 
-  val searchUnitTestingQuery = "Unit testing"
+  val searchUnitTestingQuery = "Unit testi"
   val searchUnitTestResult = "Unit testing - Wikipedia"
   val searchQueryForDownloadedZimFile = "A Fool"
   val searchResultForDownloadedZimFile = "A Fool for You"
