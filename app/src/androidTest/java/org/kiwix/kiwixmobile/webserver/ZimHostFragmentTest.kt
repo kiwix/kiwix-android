@@ -152,6 +152,9 @@ class ZimHostFragmentTest {
 
         // Check that only one ZIM file is hosted on the server after unselecting
         assertItemHostedOnServer(1)
+
+        // finally close the server at the end of test case
+        stopServer()
       }
       LeakAssertions.assertNoLeaks()
     }
