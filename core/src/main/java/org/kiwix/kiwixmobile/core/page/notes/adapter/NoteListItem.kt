@@ -3,12 +3,13 @@ package org.kiwix.kiwixmobile.core.page.notes.adapter
 import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 data class NoteListItem(
   val databaseId: Long = 0L,
   override val zimId: String,
   override val title: String,
-  override val zimFilePath: String?,
+  override val zimReaderSource: ZimReaderSource,
   val zimUrl: String,
   val noteFilePath: String,
   override val favicon: String?,
@@ -21,7 +22,7 @@ data class NoteListItem(
     notesEntity.id,
     notesEntity.zimId,
     notesEntity.noteTitle,
-    notesEntity.zimFilePath,
+    notesEntity.zimReaderSource,
     notesEntity.zimUrl,
     notesEntity.noteFilePath,
     notesEntity.favicon
@@ -35,7 +36,7 @@ data class NoteListItem(
   ) : this(
     zimId = zimFileReader.id,
     title = title,
-    zimFilePath = zimFileReader.zimFile?.canonicalPath ?: zimFileReader.assetDescriptorFilePath,
+    zimReaderSource = zimFileReader.zimReaderSource,
     zimUrl = url,
     favicon = zimFileReader.favicon,
     noteFilePath = noteFilePath

@@ -22,6 +22,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag
 import java.io.File
 import java.util.Locale
@@ -43,7 +44,7 @@ sealed class BooksOnDiskListItem {
   data class BookOnDisk constructor(
     val databaseId: Long = 0L,
     val book: Book,
-    val file: File,
+    val zimReaderSource: ZimReaderSource,
     val tags: List<KiwixTag> = KiwixTag.from(book.tags),
     override val id: Long = databaseId
   ) : BooksOnDiskListItem() {
@@ -55,17 +56,17 @@ sealed class BooksOnDiskListItem {
     constructor(bookOnDiskEntity: BookOnDiskEntity) : this(
       bookOnDiskEntity.id,
       bookOnDiskEntity.toBook(),
-      bookOnDiskEntity.file
+      bookOnDiskEntity.zimReaderSource
     )
 
     constructor(fetchDownloadEntity: FetchDownloadEntity) : this(
       book = fetchDownloadEntity.toBook(),
-      file = File(fetchDownloadEntity.file)
+      zimReaderSource = ZimReaderSource(File(fetchDownloadEntity.file))
     )
 
-    constructor(file: File, zimFileReader: ZimFileReader) : this(
+    constructor(zimFileReader: ZimFileReader) : this(
       book = zimFileReader.toBook(),
-      file = file
+      zimReaderSource = zimFileReader.zimReaderSource
     )
   }
 }

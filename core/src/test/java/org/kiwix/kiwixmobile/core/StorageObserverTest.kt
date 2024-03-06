@@ -31,6 +31,7 @@ import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.files.FileSearch
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
@@ -47,6 +48,7 @@ class StorageObserverTest {
   private val fileSearch: FileSearch = mockk()
   private val downloadModel: DownloadModel = mockk()
   private val file: File = mockk()
+  private val zimReaderSource: ZimReaderSource = mockk()
   private val readerFactory: Factory = mockk()
   private val zimFileReader: ZimFileReader = mockk()
   private val scanningProgressListener: ScanningProgressListener = mockk()
@@ -70,7 +72,7 @@ class StorageObserverTest {
     every { sharedPreferenceUtil.prefStorage } returns "a"
     every { fileSearch.scan(scanningProgressListener) } returns files
     every { downloadDao.downloads() } returns downloads
-    every { readerFactory.create(file) } returns zimFileReader
+    every { readerFactory.create(zimReaderSource) } returns zimFileReader
     storageObserver = StorageObserver(downloadDao, fileSearch, readerFactory)
   }
 
@@ -88,8 +90,9 @@ class StorageObserverTest {
     )
     withNoFiltering()
     every { zimFileReader.toBook() } returns expectedBook
+    every { zimFileReader.zimReaderSource } returns zimReaderSource
     booksOnFileSystem().assertValues(
-      listOf(bookOnDisk(book = expectedBook, file = file))
+      listOf(bookOnDisk(book = expectedBook, zimReaderSource = zimReaderSource))
     )
     verify { zimFileReader.dispose() }
   }
@@ -109,5 +112,7 @@ class StorageObserverTest {
   private fun withNoFiltering() {
     every { downloadModel.fileNameFromUrl } returns "test"
     every { file.absolutePath } returns "This won't match"
+    every { file.canonicalPath } returns "This won't match"
+    every { zimReaderSource.file } returns file
   }
 }

@@ -31,6 +31,7 @@ import org.kiwix.libzim.Archive
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
@@ -75,10 +76,9 @@ class MimeTypeTest : BaseActivityTest() {
         }
       }
     }
+    val zimSource = ZimReaderSource(zimFile)
     val zimFileReader = ZimFileReader(
-      zimFile,
-      null,
-      null,
+      zimSource,
       Archive(zimFile.canonicalPath),
       NightModeConfig(SharedPreferenceUtil(context), context)
     )

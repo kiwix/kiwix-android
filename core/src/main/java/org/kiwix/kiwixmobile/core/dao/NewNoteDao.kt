@@ -26,6 +26,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity_
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
 import javax.inject.Inject
 
 class NewNoteDao @Inject constructor(val box: Box<NotesEntity>) : PageDao {
@@ -33,7 +34,17 @@ class NewNoteDao @Inject constructor(val box: Box<NotesEntity>) : PageDao {
     box.query {
       order(NotesEntity_.noteTitle)
     }
-  ).map { it.map(::NoteListItem) }
+  ).map {
+    it.map { notesEntity ->
+      notesEntity.zimFilePath?.let { filePath ->
+        // set zimReaderSource for previously saved notes
+        fromDatabaseValue(filePath)?.let { zimReaderSource ->
+          notesEntity.zimReaderSource = zimReaderSource
+        }
+      }
+      NoteListItem(notesEntity)
+    }
+  }
 
   override fun pages(): Flowable<List<Page>> = notes()
 

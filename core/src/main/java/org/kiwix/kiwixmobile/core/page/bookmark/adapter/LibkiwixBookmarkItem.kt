@@ -21,6 +21,8 @@ package org.kiwix.kiwixmobile.core.page.bookmark.adapter
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Bookmark
 
@@ -28,7 +30,7 @@ data class LibkiwixBookmarkItem(
   val databaseId: Long = 0L,
   override val zimId: String,
   val zimName: String,
-  override val zimFilePath: String?,
+  override val zimReaderSource: ZimReaderSource?,
   val bookmarkUrl: String,
   override val title: String,
   override val favicon: String?,
@@ -44,7 +46,7 @@ data class LibkiwixBookmarkItem(
   ) : this(
     zimId = libkiwixBookmark.bookId,
     zimName = libkiwixBookmark.bookTitle,
-    zimFilePath = zimFilePath,
+    zimReaderSource = fromDatabaseValue(zimFilePath),
     bookmarkUrl = libkiwixBookmark.url,
     title = libkiwixBookmark.title,
     favicon = favicon,
@@ -57,7 +59,7 @@ data class LibkiwixBookmarkItem(
     zimFileReader: ZimFileReader,
     libKiwixBook: Book
   ) : this(
-    zimFilePath = zimFileReader.zimFile?.canonicalPath,
+    zimReaderSource = zimFileReader.zimReaderSource,
     zimId = libKiwixBook.id,
     zimName = libKiwixBook.name,
     bookmarkUrl = articleUrl,
@@ -71,7 +73,7 @@ data class LibkiwixBookmarkItem(
     libkiwixBook: Book
   ) : this(
     zimId = bookmarkEntity.zimId,
-    zimFilePath = bookmarkEntity.zimFilePath,
+    zimReaderSource = bookmarkEntity.zimReaderSource,
     zimName = bookmarkEntity.zimName,
     bookmarkUrl = bookmarkEntity.bookmarkUrl,
     title = bookmarkEntity.bookmarkTitle,

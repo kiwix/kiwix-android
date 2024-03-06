@@ -59,17 +59,20 @@ data class DeleteFiles(private val booksOnDiskListItems: List<BookOnDisk>) :
   private fun List<BookOnDisk>.deleteAll(): Boolean {
     return fold(true) { acc, book ->
       acc && deleteSpecificZimFile(book).also {
-        if (it && book.file.canonicalPath == zimReaderContainer.zimCanonicalPath) {
-          zimReaderContainer.setZimFile(null)
+        if (it && book.zimReaderSource == zimReaderContainer.zimReaderSource) {
+          zimReaderContainer.setZimReaderSource(null)
         }
       }
     }
   }
 
   private fun deleteSpecificZimFile(book: BookOnDisk): Boolean {
-    val file = book.file
-    FileUtils.deleteZimFile(file.path)
-    if (file.isFileExist()) {
+    val file = book.zimReaderSource.file
+    file?.let {
+      @Suppress("UnreachableCode")
+      FileUtils.deleteZimFile(it.path)
+    }
+    if (file?.isFileExist() == true) {
       return false
     }
     newBookDao.delete(book.databaseId)

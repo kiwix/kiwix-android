@@ -108,7 +108,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
         .filter(BooksOnDiskListItem::isSelected)
         .filterIsInstance<BookOnDisk>()
         .map {
-          it.file.absolutePath
+          it.zimReaderSource.toDatabase()
         }
         .also {
           if (BuildConfig.DEBUG) {
@@ -409,7 +409,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
         if (it is BookOnDisk) {
           zimReaderContainer.zimFileReader?.let { zimFileReader ->
             val booksOnDiskListItem =
-              (BookOnDisk(it.file, zimFileReader) as BooksOnDiskListItem)
+              (BookOnDisk(zimFileReader) as BooksOnDiskListItem)
                 .apply {
                   isSelected = true
                 }

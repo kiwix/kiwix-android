@@ -30,20 +30,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
+import org.kiwix.kiwixmobile.core.R.dimen
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.getResizedDrawable
-import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.MainMenu
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForCustomApp
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
-import org.kiwix.kiwixmobile.core.R.dimen
 import org.kiwix.kiwixmobile.custom.customActivityComponent
-import java.io.File
 import java.util.Locale
 import javax.inject.Inject
 
@@ -181,24 +179,26 @@ class CustomReaderFragment : CoreReaderFragment() {
       onFilesFound = {
         when (it) {
           is ValidationState.HasFile -> {
-            if (it.assetFileDescriptor != null) {
-              openZimFile(null, true, it.assetFileDescriptor)
-            } else {
-              openZimFile(it.file, true)
-            }
+            openZimFile(
+              ZimReaderSource(
+                file = it.file,
+                null,
+                it.assetFileDescriptor
+              ),
+              true
+            )
             // Save book in the database to display it in `ZimHostFragment`.
             zimReaderContainer?.zimFileReader?.let { zimFileReader ->
               // Check if the file is not null. If the file is null,
               // it means we have created zimFileReader with a fileDescriptor,
               // so we create a demo file to save it in the database for display on the `ZimHostFragment`.
-              val file = it.file ?: createDemoFile()
-              val bookOnDisk = BookOnDisk(file, zimFileReader)
+              val bookOnDisk = BookOnDisk(zimFileReader)
               repositoryActions?.saveBook(bookOnDisk)
             }
           }
           is ValidationState.HasBothFiles -> {
             it.zimFile.delete()
-            openZimFile(it.obbFile, true)
+            openZimFile(ZimReaderSource(it.obbFile), true)
           }
           else -> {}
         }
@@ -208,11 +208,6 @@ class CustomReaderFragment : CoreReaderFragment() {
       }
     )
   }
-
-  private fun createDemoFile() =
-    File(getDemoFilePathForCustomApp(requireActivity())).also {
-      if (!it.isFileExist()) it.createNewFile()
-    }
 
   @Suppress("DEPRECATION")
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

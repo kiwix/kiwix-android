@@ -147,7 +147,7 @@ open class ErrorActivity : BaseActivity() {
     }
     return """
         Current Zim File:
-        ${zimReaderContainer.zimCanonicalPath}
+        ${zimReaderContainer.zimReaderSource?.toDatabase()}
         All Zim Files in DB:
         $allZimFiles
         

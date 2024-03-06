@@ -17,16 +17,20 @@
  */
 package org.kiwix.kiwixmobile.core.dao.entities
 
+import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 @Entity
 data class HistoryEntity(
   @Id var id: Long = 0L,
   val zimId: String,
   val zimName: String,
-  val zimFilePath: String,
+  val zimFilePath: String?, // keep this to handle previously saved history
+  @Convert(converter = ZimSourceConverter::class, dbType = String::class)
+  var zimReaderSource: ZimReaderSource,
   val favicon: String?,
   val historyUrl: String,
   val historyTitle: String,
@@ -37,7 +41,8 @@ data class HistoryEntity(
     historyItem.databaseId,
     historyItem.zimId,
     historyItem.zimName,
-    historyItem.zimFilePath,
+    null, // pass null for new history items
+    historyItem.zimReaderSource,
     historyItem.favicon,
     historyItem.historyUrl,
     historyItem.title,
