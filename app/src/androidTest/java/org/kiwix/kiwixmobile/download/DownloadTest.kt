@@ -39,6 +39,7 @@ import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
@@ -84,7 +85,14 @@ class DownloadTest : BaseActivityTest() {
       downloadRobot {
         clickLibraryOnBottomNav()
         refreshLocalLibraryData()
-        deleteZimIfExists(false)
+      }
+      // delete all the ZIM files showing in the LocalLibrary
+      // screen to properly test the scenario.
+      library {
+        deleteZimIfExists()
+        assertNoFilesTextDisplayed()
+      }
+      downloadRobot {
         clickDownloadOnBottomNav()
         waitForDataToLoad()
         stopDownloadIfAlreadyStarted()
@@ -99,8 +107,6 @@ class DownloadTest : BaseActivityTest() {
         // refresh the local library list to show the downloaded zim file
         refreshLocalLibraryData()
         checkIfZimFileDownloaded()
-        deleteZimIfExists(true)
-        refreshLocalLibraryData()
       }
     } catch (e: Exception) {
       Assert.fail(

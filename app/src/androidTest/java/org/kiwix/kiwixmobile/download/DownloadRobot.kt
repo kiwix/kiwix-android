@@ -54,47 +54,6 @@ class DownloadRobot : BaseRobot() {
     clickOn(ViewId(R.id.downloadsFragment))
   }
 
-  private fun longClickOnZimFile() {
-    longClickOn(Text(zimFileTitle))
-  }
-
-  private fun clickOnFileDeleteIcon() {
-    clickOn(ViewId(R.id.zim_file_delete_item))
-  }
-
-  private fun assertDeleteDialogDisplayed() {
-    pauseForBetterTestPerformance()
-    onView(withText("DELETE")).check(matches(isDisplayed()))
-  }
-
-  private fun clickOnDeleteZimFile() {
-    pauseForBetterTestPerformance()
-    onView(withText("DELETE")).perform(click())
-  }
-
-  fun deleteZimIfExists(shouldDeleteZimFile: Boolean) {
-    try {
-      longClickOnZimFile()
-      clickOnFileDeleteIcon()
-      assertDeleteDialogDisplayed()
-      clickOnDeleteZimFile()
-      pauseForBetterTestPerformance()
-    } catch (e: Exception) {
-      if (shouldDeleteZimFile) {
-        throw Exception(
-          "$zimFileTitle downloaded successfully. " +
-            "But failed to delete $zimFileTitle file " +
-            "Actual exception ${e.localizedMessage}"
-        )
-      }
-      Log.i(
-        "TEST_DELETE_ZIM",
-        "Failed to delete ZIM file with title [" + zimFileTitle + "]... " +
-          "Probably because it doesn't exist"
-      )
-    }
-  }
-
   fun waitForDataToLoad() {
     try {
       isVisible(Text(zimFileTitle))

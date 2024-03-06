@@ -34,6 +34,7 @@ import org.junit.Test
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import java.io.File
@@ -99,6 +100,13 @@ class ZimHostFragmentTest {
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       activityScenario.onActivity {
         it.navigate(R.id.libraryFragment)
+      }
+      zimHost(ZimHostRobot::refreshLibraryList)
+      // delete all the ZIM files showing in the LocalLibrary
+      // screen to properly test the scenario.
+      library {
+        deleteZimIfExists()
+        assertNoFilesTextDisplayed()
       }
       loadZimFileInApplication("testzim.zim")
       loadZimFileInApplication("small.zim")

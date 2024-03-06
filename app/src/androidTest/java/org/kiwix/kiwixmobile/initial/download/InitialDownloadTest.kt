@@ -36,6 +36,7 @@ import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
@@ -76,8 +77,14 @@ class InitialDownloadTest : BaseActivityTest() {
     initialDownload {
       clickLibraryOnBottomNav()
       refreshLocalLibraryData()
-      // This is for if download test fails for some reason after downloading the zim file
+    }
+    // delete all the ZIM files showing in the LocalLibrary
+    // screen to properly test the scenario.
+    library {
       deleteZimIfExists()
+      assertNoFilesTextDisplayed()
+    }
+    initialDownload {
       clickDownloadOnBottomNav()
       assertLibraryListDisplayed()
       refreshOnlineList()
