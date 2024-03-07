@@ -58,6 +58,9 @@ class NoteRobot : BaseRobot() {
   }
 
   fun clickOnNoteMenuItem(context: Context) {
+    // wait a bit to properly load the readerFragment and setting up the
+    // overFlowOptionMenu so that we can easily click on it.
+    pauseForBetterTestPerformance()
     openActionBarOverflowOrOptionsMenu(context)
     clickOn(Text("Note"))
   }

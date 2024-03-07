@@ -34,6 +34,7 @@ import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.main.topLevel
 import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
@@ -124,9 +125,8 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
 
   @Test
   fun testBookmarkRemainsSavedOrNot() {
-    bookmarks {
-      longClickOnSaveBookmarkImage()
-      assertBookmarkSaved()
+    topLevel {
+      clickBookmarksOnNavDrawer(BookmarksRobot::assertBookmarkSaved)
     }
   }
 }

@@ -122,6 +122,7 @@ class SearchFragmentTest : BaseActivityTest() {
       pressBack()
     }
 
+    UiThreadStatement.runOnUiThread { kiwixMainActivity.navigate(R.id.libraryFragment) }
     // test with a large ZIM file to properly test the scenario
     downloadingZimFile = getDownloadingZimFile()
     OkHttpClient().newCall(downloadRequest()).execute().use { response ->
@@ -136,7 +137,6 @@ class SearchFragmentTest : BaseActivityTest() {
         )
       }
     }
-    UiThreadStatement.runOnUiThread { kiwixMainActivity.navigate(R.id.libraryFragment) }
     openKiwixReaderFragmentWithFile(downloadingZimFile)
     openSearchWithQuery(zimFile = downloadingZimFile)
     search {
