@@ -335,4 +335,8 @@
   <string name="your_device_name_message">Aha ngwaọrụ gị ga-apụta ebe a.</string>
   <string name="nearby_devices_list_message">Ebe a, ị ga-ahụ ndepụta nke ngwaọrụ dị nso. Kpatụ aha ngwaọrụ ka ịmalite nyefe faịlụ.</string>
   <string name="transfer_zim_files_list_message">Ebe a, ị ga-ahụ ndepụta nke faịlụ ZIM dị maka mbufe.</string>
+  <string name="storage_selection_dialog_accessibility_description">Họrọ nchekwa maka nbudata faịlụ ZIM.</string>
+  <string name="zim_file_content_description">faịlụ ZIM nke nwere ọdịnaya ọgụgụ</string>
+  <string name="select_language_content_description">Ịhọrọ asụsụ a ga-ebute ụzọ igosipụta akwụkwọ enwere ike ibudata n’asụsụ ahụ dị n’elu.</string>
+  <string name="toolbar_back_button_content_description" fuzzy="true">Gaa na ihuenyo gara aga</string>
 </resources>

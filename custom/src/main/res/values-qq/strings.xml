@@ -4,5 +4,5 @@
 -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="all">
   <string name="retry">{{Identical|Retry}}</string>
-  <string name="invalid_installation">* It is shown on the custom app\'s download screen when there is no zim file available to read.\n* It is telling the user that the installation is invalid and user must download zim file.\n* It is also telling user to ensure that Wifi is on and user has enough storage.</string>
+  <string name="invalid_installation">* It is shown on the custom app’s download screen when there is no zim file available to read.\n* It is telling the user that the installation is invalid and user must download zim file.\n* It is also telling user to ensure that Wifi is on and user has enough storage.</string>
 </resources>

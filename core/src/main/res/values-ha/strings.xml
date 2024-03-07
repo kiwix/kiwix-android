@@ -2,6 +2,7 @@
 <!-- Authors:
 * 787IYO
 * MohitMali
+* Muhammad Idriss Criteria
 * Rofiatmustapha12
 * Umar2z
 * Ummabruka
@@ -238,6 +239,7 @@
   <string name="severe_loss_error">Kuskure mai tsanani! Gwada Kashe/Sake kunna WiFi P2P</string>
   <string name="connection_failed">Haɗin ya gaza</string>
   <string name="permission_rationale_location">Android na buƙatar izinin wuri don ba da damar ƙa’idar ta gano na’urorin tsara</string>
+  <string name="permission_rationale_nearby">Android na buƙatar izinin na’urorin kusa don ba da damar ƙa’idar ta gano na’urorin tsara</string>
   <string name="permission_refused_location">Ba za a iya gano na’urorin takwarorinsu ba tare da izinin wuri ba</string>
   <string name="permission_refused_storage">Ba za a iya samun damar yin amfani da fayilolin zim ba tare da izinin ajiya ba</string>
   <string name="request_enable_location">Kunna wurin don ba da damar gano takwarorinsu</string>
@@ -332,4 +334,8 @@
   <string name="your_device_name_message">Sunan na’urar ku zai bayyana a nan.</string>
   <string name="nearby_devices_list_message">A nan, za ku sami jerin na’urorin da ke kusa. Sanya sunan na’urar don fara canja wurin fayil.</string>
   <string name="transfer_zim_files_list_message">Anan, zaku sami jerin samammun fayilolin ZIM don canja wuri.</string>
+  <string name="storage_selection_dialog_accessibility_description">Zaɓi maajiyar don zazzage fayilolin ZIM.</string>
+  <string name="zim_file_content_description">Fayil na ZIM wanda ke da abun cikin karantawa</string>
+  <string name="select_language_content_description">Zaɓin wannan yaren zai ba da fifikon nuna littattafan da za a iya saukewa a cikin yaren da ke saman.</string>
+  <string name="toolbar_back_button_content_description">Ku je zuwa allo na baya</string>
 </resources>

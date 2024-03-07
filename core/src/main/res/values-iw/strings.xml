@@ -241,7 +241,8 @@
   <string name="discovery_failed">תהליך הגילוי נכשל</string>
   <string name="severe_loss_error">שגיאה חמורה! נא לנסות לכבות ולהדליק מחדש את ה־P2P בווייפיי</string>
   <string name="connection_failed">החיבור נכשל</string>
-  <string name="permission_rationale_location">נדרשת הרשאת גישה באנדרואיד כדי לאפשר ליישום לזהות מכשירים עמיתים</string>
+  <string name="permission_rationale_location">נדרשת הרשאת מיקום באנדרואיד כדי לאפשר ליישום לזהות מכשירים עמיתים</string>
+  <string name="permission_rationale_nearby">נדרשת הרשאת מכשירים סמוכים באנדרואיד כדי לאפשר ליישום לזהות מכשירים עמיתים</string>
   <string name="permission_refused_location">לא ניתן לאתר מגשירים עמיתים ללא הרשאות מיקום</string>
   <string name="permission_refused_storage">לא ניתן לגשת לקובצי zim ללא הרשאות אחסון</string>
   <string name="request_enable_location">נא להפעיל מיקום כדי לאפשר זיהוי עמיתים</string>
@@ -337,7 +338,7 @@
   <string name="nearby_devices_list_message">כאן אפשר למצוא רשימה של מכשירים קרובים. יש לגעת בשם המכשיר כדי להתחיל העברת קבצים.</string>
   <string name="transfer_zim_files_list_message">כאן אפשר למצוא את רשימת קובצי ה־ZIM הזמינים להעברה.</string>
   <string name="storage_selection_dialog_accessibility_description">נא לבחור מקום אחסון להורדת קובצי ZIM.</string>
-  <string name="zim_file_content_description">קובץ ZIM שבו יש את תוכן הקריאה</string>
-  <string name="select_language_content_description">בחירה בשפה הזאת תתעדף הצגת ספרים שניתן להוריד בשפה הזאת לראש הרשימה.</string>
+  <string name="zim_file_content_description">קובץ ZIM שמכיל את התוכן לקריאה</string>
+  <string name="select_language_content_description">בחירה בשפה הזאת תתעדף הצגת ספרים שניתן להוריד בשפה הזאת בראש הרשימה.</string>
   <string name="toolbar_back_button_content_description">מעבר למסך הקודם</string>
 </resources>

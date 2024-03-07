@@ -33,7 +33,7 @@
   <string name="stop_server_label">Atura el servidor</string>
   <string name="error_file_not_found">Error: no s’ha trobat el fitxer ZIM.</string>
   <string name="error_file_invalid">Error: el fitxer seleccionat no és un fitxer ZIM vàlid.</string>
-  <string name="error_article_url_not_found">Error: no s\'ha pogut carregar l\'article (Url: %1$s).</string>
+  <string name="error_article_url_not_found">Error: no s’ha pogut carregar l’article (Url: %1$s).</string>
   <string name="pref_display_title">Visualitzar</string>
   <string name="pref_info_title">Informació</string>
   <string name="pref_info_version">Versió</string>
@@ -52,7 +52,7 @@
   <string name="delete">Esborrar</string>
   <string name="cancel">Cancel·la</string>
   <string name="delete_specific_search_toast">Les darreres cerques han estat suprimides</string>
-  <string name="hint_contents_drawer_message">Podeu lliscar el dit cap a l\'esquerra per veure el contingut d\'aquest article</string>
+  <string name="hint_contents_drawer_message">Podeu lliscar el dit cap a l’esquerra per veure el contingut d’aquest article</string>
   <string name="got_it">Entesos</string>
   <string name="did_you_know">Sabies que…?</string>
   <string name="undo">Desfer</string>
@@ -68,15 +68,15 @@
   <string name="download_no_space">L’espai és insuficient per a la baixada.</string>
   <string name="no_network_connection">Cap connexió de xarxa</string>
   <string name="help_2">Què fa Kiwix?</string>
-  <string name="help_3">Kiwix és un lector de contingut sense connexió. Actua molt semblant a un navegador però en comptes d\'accedir a pàgines web en línia, llegeix el contingut d\'un fitxer en format ZIM.</string>
+  <string name="help_3">Kiwix és un lector de contingut sense connexió. Actua molt semblant a un navegador però en comptes d’accedir a pàgines web en línia, llegeix el contingut d’un fitxer en format ZIM.</string>
   <string name="help_4">Si bé Kiwix es va dissenyar originalment per a proporcionar una Wikipedia sense connexió, també pot llegir altres continguts.</string>
   <string name="help_5">On està el contingut?</string>
   <string name="help_6">El nostre contingut està allotjat en el lloc web de Kiwix</string>
   <string name="help_7">Estan disponibles com a fitxers ZIM. Hi ha molts d’ells:</string>
   <string name="help_8">• La Viquipèdia està disponible per separat per a cada idioma</string>
   <string name="help_9">• Altres continguts com Wikileaks o Wikisource també estan disponibles</string>
-  <string name="help_10">Podeu descarregar els arxius ZIM triats a l\'aplicació, o bé seleccionar acuradament els que vulgueu, descarregar-los des d\'un ordinador i transferir-los a la vostra targeta SD.</string>
-  <string name="help_11">Els fitxers ZIM descarregats en l\'aplicació es troben al directori d\'emmagatzematge extern, en una carpeta anomenada Kiwix.</string>
+  <string name="help_10">Podeu descarregar els arxius ZIM triats a l’aplicació, o bé seleccionar acuradament els que vulgueu, descarregar-los des d’un ordinador i transferir-los a la vostra targeta SD.</string>
+  <string name="help_11">Els fitxers ZIM descarregats en l’aplicació es troben al directori d’emmagatzematge extern, en una carpeta anomenada Kiwix.</string>
   <string name="delete_zim_failed">No podem eliminar alguns arxius. Hauries de provar amb un administrador d’arxius</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Extern</string>

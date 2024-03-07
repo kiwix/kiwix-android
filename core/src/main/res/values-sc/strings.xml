@@ -48,7 +48,7 @@
   <string name="start_server_label">Avia su servidore</string>
   <string name="stop_server_label">Firma su servidore</string>
   <string name="error_server_already_running">Custu serbidore est giai in esecutzione. Pro praghere istuda·lu e torra·lu a allùghere.</string>
-  <string name="error_ip_address_not_found">Non potzo agatare s\'indiritzu IP.</string>
+  <string name="error_ip_address_not_found">Non potzo agatare s’indiritzu IP.</string>
   <string name="server_started_message">Inserta custu indiritzu ip in su navigadore tuo pro intrare in su servidore %s</string>
   <string name="share_host_address">Cumpartzi s’URL cun àteras aplicatziones</string>
   <string name="error_file_not_found">Errore: su documentu ZIM ischertadu no est istadu agatadu.</string>

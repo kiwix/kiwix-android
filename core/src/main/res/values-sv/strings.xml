@@ -242,6 +242,7 @@
   <string name="severe_loss_error">Allvarligt fel! Testa att starta om WiFi P2P</string>
   <string name="connection_failed">Anslutning misslyckades</string>
   <string name="permission_rationale_location">Platsåtkomst krävs från Android för att låta appen söka efter närliggande enheter.</string>
+  <string name="permission_rationale_nearby">Behörigheten för enheter i närheten krävs av Android för att låta appen upptäcka peer-enheter</string>
   <string name="permission_refused_location">Kan inte hitta närliggande enheter utan platsåtkomst.</string>
   <string name="permission_refused_storage">Kan inte komma åt zim-filer utan lagringsbehörighet</string>
   <string name="request_enable_location">Aktivera plats för att tillåta sökning efter närliggande enheter</string>
@@ -336,4 +337,8 @@
   <string name="your_device_name_message">Ditt enhetsnamn kommer att visas här.</string>
   <string name="nearby_devices_list_message">Här hittar du en lista över enheter i närheten. Tryck på en enhets namn för att påbörja filöverföring.</string>
   <string name="transfer_zim_files_list_message">Här hittar du en lista över tillgängliga ZIM-filer för överföring.</string>
+  <string name="storage_selection_dialog_accessibility_description">Välj lagring för att ladda ned ZIM-filer.</string>
+  <string name="zim_file_content_description">ZIM-filer som har läsningsinnehållet</string>
+  <string name="select_language_content_description">Välj detta språk för att prioritera att visa det längst upp bland nedladdningsbara böcker.</string>
+  <string name="toolbar_back_button_content_description">Gå till föregående vy</string>
 </resources>

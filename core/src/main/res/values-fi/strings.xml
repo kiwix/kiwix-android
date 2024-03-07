@@ -169,12 +169,13 @@
   <string name="expand">Laajenna</string>
   <string name="history">Historia</string>
   <string name="history_from_current_book">Näytä historia kaikista kirjoista</string>
-  <string name="search_history" fuzzy="true">Hakuhistoria</string>
+  <string name="search_history">Hakuhistoria</string>
   <string name="selected_items">%1$d valittu</string>
   <string name="bookmarks_from_current_book">Näytä kirjanmerkit kaikista kirjoista</string>
   <string name="search_bookmarks">Hae kirjanmerkkejä</string>
   <string name="switch_tabs">Vaihda välilehtiä</string>
   <string name="close_all_tabs">Sulje kaikki välilehdet</string>
+  <string name="close_tab">Sulje välilehti</string>
   <string name="pending_state">Avoin</string>
   <string name="running_state">Käynnissä</string>
   <string name="complete">Valmis</string>

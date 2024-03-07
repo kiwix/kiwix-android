@@ -3,6 +3,7 @@
 * Fwolff
 * Joris Darlington Quarshie
 * Macofe
+* MohitMali
 * Naudefj
 -->
 <resources>
@@ -21,10 +22,10 @@
   <string name="save_media_error">Kon nie die mediuma red nie!</string>
   <string name="save_media_saved" fuzzy="true">Medium gestoor as %s op Android/media/org.kiwix…/</string>
   <string name="search_label">Soek</string>
-  <string name="choose_file">Kies \'n inhoudslêer (*.zim)</string>
+  <string name="choose_file">Kies ’n inhoudslêer (*.zim)</string>
   <string name="open_in_new_tab">Open skakel in nuwe oortjie?</string>
   <string name="error_file_not_found">Fout: die geselekteerde ZIM-lêer kon nie gevind word nie.</string>
-  <string name="error_file_invalid">Fout: die geselekteerde lêer is nie \'n geldige ZIM-lêer nie.</string>
+  <string name="error_file_invalid">Fout: die geselekteerde lêer is nie ’n geldige ZIM-lêer nie.</string>
   <string name="error_article_url_not_found">Fout: Laai van bladsy (URL: %1$s) het gefaal.</string>
   <string name="pref_display_title">Wys</string>
   <string name="pref_info_title">Inligting</string>
@@ -32,9 +33,9 @@
   <string name="pref_night_mode">Nag-modus</string>
   <string name="pref_night_mode_summary">Wys artikels met omgekeerde kleure</string>
   <string name="pref_back_to_top">Terug na bo</string>
-  <string name="pref_back_to_top_summary">Wys \'n knop onder die bladsy om na bo terug te spring</string>
+  <string name="pref_back_to_top_summary">Wys ’n knop onder die bladsy om na bo terug te spring</string>
   <string name="pref_language_title">Taal</string>
-  <string name="pref_language_chooser">Kies \'n taal</string>
+  <string name="pref_language_chooser">Kies ’n taal</string>
   <string name="library">Biblioteek</string>
   <string name="wifi_only_msg">As u ‘Ja’ kies, sal u nie in die toekoms gewaarsku word nie. U kan dit egter altyd in Instellings verander</string>
   <string name="history_from_current_book">Kyk na geskiedenis uit alle boeke</string>
