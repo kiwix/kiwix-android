@@ -272,6 +272,11 @@ sealed class KiwixDialog(
     object OpenInNewTab : YesNoDialog(
       null, R.string.open_in_new_tab
     )
+
+    object ExportBookmarks : YesNoDialog(
+      R.string.export_all_bookmarks_dialog_title,
+      message = R.string.export_all_bookmarks_dialog_message,
+    )
   }
 
   object StorageConfigure : KiwixDialog(
