@@ -27,11 +27,11 @@
   <string name="open_in_new_tab">¿Abrir l enllaz nuna llingüeta nueva?</string>
   <string name="hotspot_service_channel_name">Canal del serviciu de Puntu WiFi</string>
   <string name="hotspot_failed_title">Nun pudo aniciase l puntu WiFi</string>
-  <string name="hotspot_failed_message">Paez que\'l to puntu WiFi yá ta activáu. Desactiva\'l puntu WiFi pa siguir.</string>
+  <string name="hotspot_failed_message">Paez que’l to puntu WiFi yá ta activáu. Desactiva’l puntu WiFi pa siguir.</string>
   <string name="go_to_wifi_settings_label">Dir a config. de WIFI</string>
   <string name="hotspot_running">Executando puntu WiFi</string>
   <string name="no_books_selected_toast_message">Primero esbilla llibros</string>
-  <string name="server_failed_message">Nun pudo arrancase\'l sirvidor. Activa\'l puntu WiFi</string>
+  <string name="server_failed_message">Nun pudo arrancase’l sirvidor. Activa’l puntu WiFi</string>
   <string name="server_failed_toast_message">Nun pudo arrancase’l sirvidor.</string>
   <string name="server_started_successfully_toast_message">Arrancóse’l sirvidor correutamente.</string>
   <string name="server_stopped_successfully_toast_message">Paróse’l sirvidor correutamente.</string>
@@ -62,7 +62,7 @@
   <string name="pref_language_chooser">Escueyi una llingua</string>
   <string name="pref_credits">Collaboradores y llicencies</string>
   <string name="pref_credits_title">Créditos</string>
-  <string name="tts_lang_not_supported" fuzzy="true">Nun s\'almite la llingua d\'esta páxina, o nun s\'instalaron los datos d\'idioma apropiaos. Seique l\'artículu nun pueda lleese correutamente.</string>
+  <string name="tts_lang_not_supported">Nun s’almite la llingua d’esta páxina, o nun s’instalaron los datos d’idioma apropiaos. Seique l’artículu nun pueda lleese correutamente.</string>
   <string name="no_reader_application_installed">Nun s alcontró una aplicación instalada pa esti tipu de ficheru</string>
   <string name="no_section_info">Nun atoparon cabeceres de conteníu</string>
   <string name="request_storage">Paportar a conteníu ensin conexón precisamos tener accesu al almacenamientu</string>
@@ -111,7 +111,7 @@
   <string name="zim_no_vid">Nun hai videos</string>
   <string name="no_network_connection">Nun hai conexón a la rede</string>
   <string name="help_2">¿Qué fai Kiwix?</string>
-  <string name="help_3">Kiwix ye un llector de conteníu ensin conexón. Actúa de mou asemeyáu a un navegador pero en cuenta d\'aportar a páxines web en llinia, llee\'l conteníu d\'un ficheru en formatu ZIM.</string>
+  <string name="help_3">Kiwix ye un llector de conteníu ensin conexón. Actúa de mou asemeyáu a un navegador pero en cuenta d’aportar a páxines web en llinia, llee’l conteníu d’un ficheru en formatu ZIM.</string>
   <string name="help_4">Magar Kiwix diseñóse orixinalmente p’apurrir Wikipedia ensin conexón, tamién puede lleer otros conteníos.</string>
   <string name="help_5">¿Ú ta el conteníu?</string>
   <string name="help_6">El conteníu ta agospiáu nel sitiu web de Kiwix.</string>
@@ -149,7 +149,7 @@
   <string name="time_today">Güei</string>
   <string name="time_yesterday">Ayeri</string>
   <string name="pref_external_link_popup_title">Alvertir al siguir enllaces esternos</string>
-  <string name="pref_external_link_popup_summary">Amuesa un cuadru emerxente p\'avisar sobre posibles gastos por consumu de datos o nun funcionamientu d\'enllaces ensin conexón.</string>
+  <string name="pref_external_link_popup_summary">Amuesa un cuadru emerxente p’avisar sobre posibles gastos por consumu de datos o nun funcionamientu d’enllaces ensin conexón.</string>
   <string name="external_link_popup_dialog_title">¡Entrando n’enllaz esternu!</string>
   <string name="external_link_popup_dialog_message">Tas por siguir un enllaz esternu. Ello podría xenerar gastos por tresferencia de datos o cenciellamente nun va funcionar si nun tienes conexón. ¿Quies siguir?</string>
   <string name="do_not_ask_anymore">Nun preguntar más</string>
@@ -210,7 +210,7 @@
   <string name="note_share_app_chooser_title">Compartir ficheru de nota con:</string>
   <string name="confirmation_alert_dialog_message">¿Refugar cambeos ensin guardar?</string>
   <string name="delete_notes_confirmation_msg">¿Desaniciar toles notes?</string>
-  <string name="ext_storage_permission_not_granted">Error: nun se concedió\'l permisu d\'almacenamientu</string>
+  <string name="ext_storage_permission_not_granted">Error: nun se concedió’l permisu d’almacenamientu</string>
   <string name="notes_deletion_successful">Desanicióse la carpeta de notes completa</string>
   <string name="notes_deletion_unsuccessful">Nun se desaniciaron dellos ficheros</string>
   <string name="books_count">%d llibros</string>
@@ -237,7 +237,7 @@
   <string name="no_devices_found">Nun se detectó nengún preséu. Toca nel botón de busca pa tentar nuevamente.</string>
   <string name="files_for_transfer">FICHEROS POR TRESFERIR</string>
   <string name="preparing_files" fuzzy="true">Preparando los ficheros pa tresferir…</string>
-  <string name="performing_handshake" fuzzy="true">Realizando\'l protocolu d\'enllaz…</string>
+  <string name="performing_handshake">Realizando’l protocolu d’enllaz…</string>
   <string name="status">Estáu</string>
   <string name="pref_clear_all_notes_summary">Llimpia toles notes de tolos artículos</string>
   <string name="pref_clear_all_notes_title">Llimpiar toles notes</string>
@@ -245,8 +245,8 @@
   <string name="tag_vid">Vid</string>
   <string name="tag_text_only">Solo testu</string>
   <string name="tag_short_text">Testu curtiu</string>
-  <string name="storage_permission_denied">Refugóse\'l permisu d\'almacenamientu</string>
-  <string name="grant_read_storage_permission">Esta app precisa ser capaz de lleer l\'almacenamientu pa funcionar. Concede\'l permisu na configuración</string>
+  <string name="storage_permission_denied">Refugóse’l permisu d’almacenamientu</string>
+  <string name="grant_read_storage_permission">Esta app precisa ser capaz de lleer l’almacenamientu pa funcionar. Concede’l permisu na configuración</string>
   <string name="go_to_settings" fuzzy="true">Dir a Configuración</string>
   <string name="no_results">Nun hai resultaos</string>
   <string name="no_bookmarks">Nun hai marcadores</string>

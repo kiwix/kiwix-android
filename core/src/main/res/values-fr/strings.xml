@@ -35,7 +35,7 @@
   <string name="menu_read_aloud_stop">Arrêter de lire à haute voix</string>
   <string name="menu_support_kiwix">Soutenir Kiwix</string>
   <string name="menu_support_kiwix_for_custom_apps">Soutenez %s</string>
-  <string name="menu_about_app">À propos de l\'application %s</string>
+  <string name="menu_about_app">À propos de l’application %s</string>
   <string name="menu_wifi_hotspot">Hotspot Wi-Fi</string>
   <string name="save_media">Enregistrer le média</string>
   <string name="save_media_error">Une erreur s’est produite en essayant d’enregistrer le média !</string>
@@ -67,7 +67,7 @@
   <string name="hotspot_notification_content_title">Point d’accès Kiwix</string>
   <string name="start_server_label">Démarrer le serveur</string>
   <string name="stop_server_label">Arrêter le serveur</string>
-  <string name="error_server_already_running">Le serveur est déjà en cours d\'exécution. Veuillez l\'arrêter et réessayer.</string>
+  <string name="error_server_already_running">Le serveur est déjà en cours d’exécution. Veuillez l’arrêter et réessayer.</string>
   <string name="error_ip_address_not_found">Impossible de trouver l’adresse IP.</string>
   <string name="server_started_message">Entrez cette adresse IP dans votre navigateur pour accéder au serveur %s</string>
   <string name="share_host_address">Partager l’URL avec d’autres applications</string>
@@ -254,6 +254,7 @@
   <string name="severe_loss_error">Erreur grave! Essayez de désactiver/réactiver l’appairage WiFi</string>
   <string name="connection_failed">La connexion a échoué</string>
   <string name="permission_rationale_location">L’autorisation de géolocalisation est requise par Android pour permettre à l’application de détecter des appareils à proximité.</string>
+  <string name="permission_rationale_nearby">L’autorisation des appareils à proximité est requise par Android pour permettre à l’application de détecter les appareils appairables.</string>
   <string name="permission_refused_location">Impossible de trouver des appareils proches sans les autorisations de géolocalisation</string>
   <string name="permission_refused_storage">Impossible d’accéder aux fichiers ZIM sans autorisation d’accès au stockage</string>
   <string name="request_enable_location">Activer la géolocalisation pour permettre la détection d’appareils proches</string>
@@ -310,8 +311,8 @@
   <string name="tabs_restored">Onglets restaurés</string>
   <string name="open_drawer">Ouvrir le tiroir</string>
   <string name="close_drawer">Fermer le tiroir</string>
-  <string name="zim_files_not_showing">Les fichiers Zim ne s\'affichent pas ?</string>
-  <string name="zim_files_not_showing_description">En raison des politiques de Google Play sur Android 11 et versions ultérieures, cette application Google Store ne peut pas ouvrir les fichiers ZIM téléchargés. Vous pouvez soit les télécharger via l\'application, soit installer la version complète de l\'application kiwix depuis notre site officiel %s.</string>
+  <string name="zim_files_not_showing">Les fichiers Zim ne s’affichent pas ?</string>
+  <string name="zim_files_not_showing_description">En raison des politiques de Google Play sur Android 11 et versions ultérieures, cette application Google Store ne peut pas ouvrir les fichiers ZIM téléchargés. Vous pouvez soit les télécharger via l’application, soit installer la version complète de l’application kiwix depuis notre site officiel %s.</string>
   <string name="understood">Compris</string>
   <string name="how_to_update_content">Comment actualiser le contenu ?</string>
   <string name="update_content_description">Pour mettre à jour un contenu (un fichier zim), vous devez télécharger la dernière version complète de ce même contenu. Vous pouvez le faire via la section de téléchargement.</string>
@@ -348,4 +349,8 @@
   <string name="your_device_name_message">Le nom de votre appareil apparaîtra ici.</string>
   <string name="nearby_devices_list_message">Vous trouverez ici une liste des appareils à proximité. Appuyez sur le nom d’un appareil pour lancer le transfert de fichiers.</string>
   <string name="transfer_zim_files_list_message">Vous trouverez ici la liste des fichiers ZIM disponibles pour le transfert.</string>
+  <string name="storage_selection_dialog_accessibility_description">Sélectionner le stockage pour le téléchargement des fichiers ZIM.</string>
+  <string name="zim_file_content_description">Fichier ZIM qui a le contenu de lecture</string>
+  <string name="select_language_content_description">Sélectionner cette langue affichera en priorité les livres téléchargeables dans cette langue, en haut.</string>
+  <string name="toolbar_back_button_content_description">Aller à l’écran précédent</string>
 </resources>

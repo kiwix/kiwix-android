@@ -184,6 +184,7 @@
   <string name="search_bookmarks">Klask sinedoù</string>
   <string name="switch_tabs">Cheñch ivinell</string>
   <string name="close_all_tabs">Serriñ an holl ivinoù</string>
+  <string name="close_tab">Serriñ ar steudenn</string>
   <string name="pending_state">O c’hortoz</string>
   <string name="running_state">O pellgargañ</string>
   <string name="complete">Echuiñ</string>

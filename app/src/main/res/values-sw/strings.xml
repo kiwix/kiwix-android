@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Peggy
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">Mfumo wako wa faili hauwezi kutumia faili zaidi ya 4GB</string>
+  <string name="detecting_file_system">Kugundua ikiwa mfumo wa faili unaweza kuunda faili za 4GB</string>
+  <string name="cannot_open_file">Imeshindwa kufungua faili\nTafadhali jaribu kutafuta faili hii katika Kichupo cha Kifaa cha Maktaba yako</string>
+  <string name="send_files_title">Tuma Faili</string>
+  <string name="receive_files_title">Pokea Faili</string>
+  <string name="no_app_found_to_open">Hakuna programu iliyopatikana ya kuchagua faili ya zim!</string>
+  <string name="select_zim_file">Chagua faili ya zim kusoma</string>
+</resources>

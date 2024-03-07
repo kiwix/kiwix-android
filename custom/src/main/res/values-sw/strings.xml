@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Peggy
+-->
+<resources>
+  <string name="retry">Jaribu tena</string>
+  <string name="invalid_installation">Sakinisha Batili. Tafadhali Pakua Zim.\n Hakikisha WiFi imewashwa na una hifadhi ya kutosha</string>
+</resources>

@@ -15,20 +15,20 @@
   <string name="menu_read_aloud">Laes veur</string>
   <string name="menu_read_aloud_stop">Sjei oet mit veurlaeze</string>
   <string name="search_label">Zeuk</string>
-  <string name="choose_file">Sillekteer \'n Inhawdsbestandj (*.zim)</string>
+  <string name="choose_file">Sillekteer ’n Inhawdsbestandj (*.zim)</string>
   <string name="open_in_new_tab">Äöpen link in nuuj tabblaad?</string>
-  <string name="error_file_not_found">Fout: \'t geselecteerd ZIM-bestandj kós neet waere gevónje.</string>
-  <string name="error_file_invalid">Fout: \'t geselecteerd bestandj is gei geldig ZIM-bestandj.</string>
-  <string name="error_article_url_not_found">Fout: \'t laje van de pagina (URL: %1$s) is mislök.</string>
+  <string name="error_file_not_found">Fout: ’t geselecteerd ZIM-bestandj kós neet waere gevónje.</string>
+  <string name="error_file_invalid">Fout: ’t geselecteerd bestandj is gei geldig ZIM-bestandj.</string>
+  <string name="error_article_url_not_found">Fout: ’t laje van de pagina (URL: %1$s) is mislök.</string>
   <string name="pref_display_title">Waergaaf</string>
   <string name="pref_info_title">Infermasie</string>
   <string name="pref_info_version">Versie</string>
   <string name="pref_night_mode">Nachmodus</string>
   <string name="pref_night_mode_summary">Tuin artikele mit ómgedrejde kluuere</string>
   <string name="pref_back_to_top">Trök nao baove</string>
-  <string name="pref_back_to_top_summary">Tuin \'ne knoep anen ènj vanne pagina veur trögk te gaon nao baove</string>
+  <string name="pref_back_to_top_summary">Tuin ’ne knoep anen ènj vanne pagina veur trögk te gaon nao baove</string>
   <string name="pref_language_title">Spraok</string>
-  <string name="pref_language_chooser">Kees \'n spraok</string>
+  <string name="pref_language_chooser">Kees ’n spraok</string>
   <string name="pref_credits">Mitwirkers en Licensies</string>
   <string name="pref_credits_title">Toesjrif</string>
   <string name="no_section_info">Gein inhawdsköpkes gevónje</string>
@@ -69,7 +69,7 @@
   <string name="help_9">• Angeren inhawd wie Wikileaks or Wikisource is ouch besjikbaar</string>
   <string name="pref_storage">Opslaag</string>
   <string name="pref_current_folder">Hujige Map</string>
-  <string name="delete_zim_failed" fuzzy="true">V\'r kóste dit bestandj neet ewegsjaffe. Doe mós dit noe perbere mit \'ne bestandjsbehieërder.</string>
+  <string name="delete_zim_failed">V’r kóste dit bestandj neet ewegsjaffe. Doe mós dit noe perbere mit ’ne bestandjsbehieërder.</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Exterm</string>
   <string name="no">Nein</string>
@@ -84,9 +84,9 @@
   <string name="time_minute">m</string>
   <string name="time_second">s</string>
   <string name="time_left">links</string>
-  <string name="pref_external_link_popup_title">Waorsjoewing mich wen ich nao \'nen externe link gaon</string>
-  <string name="external_link_popup_dialog_title" fuzzy="true">Externe link in \'nt tikke</string>
-  <string name="external_link_popup_dialog_message">Doe bös \'nen externe link in \'nt tikke. Det kan leie toet extra köste veur \'t euverbringe van gegaeves of wirk neet wen se offline bös. Wils se doorgaon?</string>
+  <string name="pref_external_link_popup_title">Waorsjoewing mich wen ich nao ’nen externe link gaon</string>
+  <string name="external_link_popup_dialog_title">Externe link in ’nt tikke!</string>
+  <string name="external_link_popup_dialog_message">Doe bös ’nen externe link in ’nt tikke. Det kan leie toet extra köste veur ’t euverbringe van gegaeves of wirk neet wen se offline bös. Wils se doorgaon?</string>
   <string name="do_not_ask_anymore">Vraog nimmieë</string>
   <string name="other_languages">Anger spraoke:</string>
   <string name="no_bookmarks">Gein blaadwiezers</string>

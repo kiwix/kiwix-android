@@ -227,7 +227,7 @@
   <string name="complete">Tamamlandı</string>
   <string name="paused_state">Durduruldu</string>
   <string name="failed_state">Başarısız: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed">Zim dosyası indirilemedi. Lütfen uygulamayı Play Store\'dan yeniden yüklemeyi deneyin.</string>
+  <string name="custom_download_error_message_for_authentication_failed">Zim dosyası indirilemedi. Lütfen uygulamayı Play Store’dan yeniden yüklemeyi deneyin.</string>
   <string name="save">Kaydet</string>
   <string name="note">Not</string>
   <string name="wiki_article_title">Viki Madde Başlığı</string>
