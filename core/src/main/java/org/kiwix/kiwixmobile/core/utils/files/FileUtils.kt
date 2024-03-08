@@ -410,12 +410,15 @@ object FileUtils {
 
    * We are placing a condition here for if the file name does not have a .bin extension,
      then it returns the original file name.
+   * Remove colon if any contains in the fileName since most of the fileSystem
+     will not allow to create file which contains colon in it.
+     see https://github.com/kiwix/kiwix-android/issues/3737
    */
   fun getDecodedFileName(url: String?): String? {
     var fileName: String? = null
     val decodedFileName = URLUtil.guessFileName(url, null, null)
     if (!decodedFileName.endsWith(".bin")) {
-      fileName = decodedFileName
+      fileName = decodedFileName.replace(":", "")
     }
     return fileName
   }
@@ -444,17 +447,8 @@ object FileUtils {
         )
       if (!root.isFileExist()) root.mkdir()
     }
-    if (File(root, fileName).isFileExist()) return File(root, fileName)
-    val fileToSave = sequence {
-      yield(File(root, fileName))
-      yieldAll(
-        generateSequence(1) { it + 1 }.map {
-          File(
-            root, fileName.replace(".", "_$it.")
-          )
-        }
-      )
-    }.first { !it.isFileExist() }
+    val fileToSave = File(root, fileName)
+    if (fileToSave.isFileExist()) return fileToSave
     val source = if (url == null) Uri.parse(src) else Uri.parse(url)
     return try {
       zimReaderContainer.load("$source", emptyMap()).data.use { inputStream ->

@@ -39,6 +39,12 @@
       <category android:name="android.intent.category.BROWSABLE" />
       <data android:scheme="http" />
     </intent>
+    <!-- To open PDF files in external application -->
+    <intent>
+      <action android:name="android.intent.action.VIEW" />
+      <data android:mimeType="application/pdf" />
+    </intent>
+    <!-- To open EPUB files in external application -->
     <intent>
       <action android:name="android.intent.action.VIEW" />
       <data android:mimeType="application/pdf" />
