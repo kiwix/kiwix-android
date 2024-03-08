@@ -156,6 +156,7 @@ import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED_NEW_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils.reformatProviderUrl
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DownloadOrOpenEpubAndPdfHandler
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.deleteCachedFiles
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
@@ -321,6 +322,10 @@ abstract class CoreReaderFragment :
   @JvmField
   @Inject
   var externalLinkOpener: ExternalLinkOpener? = null
+
+  @JvmField
+  @Inject
+  var downloadOrOpenEpubAndPdfHandler: DownloadOrOpenEpubAndPdfHandler? = null
   private var hideBackToTopTimer: CountDownTimer? = null
   private var documentSections: MutableList<DocumentSection>? = null
   private var isBackToTopEnabled = false
@@ -1214,7 +1219,7 @@ abstract class CoreReaderFragment :
     return if (activityMainRoot != null) {
       ToolbarScrollingKiwixWebView(
         requireActivity(), this, attrs!!, (activityMainRoot as ViewGroup?)!!, videoView!!,
-        CoreWebViewClient(this, zimReaderContainer!!, sharedPreferenceUtil!!),
+        CoreWebViewClient(this, zimReaderContainer!!),
         toolbarContainer!!, bottomToolbar!!,
         sharedPreferenceUtil!!
       )
@@ -1540,6 +1545,10 @@ abstract class CoreReaderFragment :
 
   override fun openExternalUrl(intent: Intent) {
     externalLinkOpener?.openExternalUrl(intent)
+  }
+
+  override fun showDownloadOrOpenEpubAndPdfDialog(url: String, documentType: String?) {
+    downloadOrOpenEpubAndPdfHandler?.showDownloadOrOpenEpubAndPdfDialog(url, documentType)
   }
 
   protected fun openZimFile(

@@ -108,6 +108,14 @@ sealed class KiwixDialog(
     cancelable = false
   )
 
+  object DownloadOrOpenEpubAndPdf : KiwixDialog(
+    R.string.download_or_open_pdf_and_epub_content_dialog_title,
+    R.string.download_or_open_pdf_and_epub_content_dialog_message,
+    R.string.open,
+    R.string.download,
+    neutralMessage = R.string.no_thanks
+  )
+
   data class ShowHotspotDetails(override val args: List<Any>) :
     KiwixDialog(
       R.string.hotspot_turned_on,
