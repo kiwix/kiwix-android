@@ -22,6 +22,7 @@ import android.view.KeyEvent
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.clearText
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -44,7 +45,7 @@ fun search(func: SearchRobot.() -> Unit) = SearchRobot().applyWithViewHierarchyP
 
 class SearchRobot : BaseRobot() {
 
-  val searchUnitTestingQuery = "Unit testing"
+  val searchUnitTestingQuery = "Unit testi"
   val searchUnitTestResult = "Unit testing - Wikipedia"
   val searchQueryForDownloadedZimFile = "A Fool"
   val searchResultForDownloadedZimFile = "A Fool for You"
@@ -100,5 +101,9 @@ class SearchRobot : BaseRobot() {
         BaristaSleepInteractions.sleep(wait)
       }
     }
+
+    // clear search query if any remains due to any condition not to affect any other test scenario
+    val searchView = onView(withId(R.id.search_src_text))
+    searchView.perform(clearText())
   }
 }

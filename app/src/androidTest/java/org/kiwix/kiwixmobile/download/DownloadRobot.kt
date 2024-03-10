@@ -28,11 +28,13 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
+import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.download.DownloadTest.Companion.KIWIX_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils
 
 fun downloadRobot(func: DownloadRobot.() -> Unit) =
@@ -50,47 +52,6 @@ class DownloadRobot : BaseRobot() {
 
   fun clickDownloadOnBottomNav() {
     clickOn(ViewId(R.id.downloadsFragment))
-  }
-
-  private fun longClickOnZimFile() {
-    longClickOn(Text(zimFileTitle))
-  }
-
-  private fun clickOnFileDeleteIcon() {
-    clickOn(ViewId(R.id.zim_file_delete_item))
-  }
-
-  private fun assertDeleteDialogDisplayed() {
-    pauseForBetterTestPerformance()
-    onView(withText("DELETE")).check(matches(isDisplayed()))
-  }
-
-  private fun clickOnDeleteZimFile() {
-    pauseForBetterTestPerformance()
-    onView(withText("DELETE")).perform(click())
-  }
-
-  fun deleteZimIfExists(shouldDeleteZimFile: Boolean) {
-    try {
-      longClickOnZimFile()
-      clickOnFileDeleteIcon()
-      assertDeleteDialogDisplayed()
-      clickOnDeleteZimFile()
-      pauseForBetterTestPerformance()
-    } catch (e: Exception) {
-      if (shouldDeleteZimFile) {
-        throw Exception(
-          "$zimFileTitle downloaded successfully. " +
-            "But failed to delete $zimFileTitle file " +
-            "Actual exception ${e.localizedMessage}"
-        )
-      }
-      Log.i(
-        "TEST_DELETE_ZIM",
-        "Failed to delete ZIM file with title [" + zimFileTitle + "]... " +
-          "Probably because it doesn't exist"
-      )
-    }
   }
 
   fun waitForDataToLoad() {
@@ -183,6 +144,15 @@ class DownloadRobot : BaseRobot() {
         "Failed to stop download with title [" + zimFileTitle + "]... " +
           "Probably because it doesn't download the zim file"
       )
+    }
+  }
+
+  fun refreshLocalLibraryData() {
+    try {
+      refresh(R.id.zim_swiperefresh)
+      pauseForBetterTestPerformance()
+    } catch (e: RuntimeException) {
+      Log.w(KIWIX_DOWNLOAD_TEST, "Failed to refresh ZIM list: " + e.localizedMessage)
     }
   }
 }

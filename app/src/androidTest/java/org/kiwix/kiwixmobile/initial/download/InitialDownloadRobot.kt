@@ -57,42 +57,17 @@ class InitialDownloadRobot : BaseRobot() {
     isVisible(ViewId(R.id.libraryList))
   }
 
-  private fun longClickOnZimFile() {
-    longClickOn(Text(zimFileTitle))
-  }
-
-  private fun clickOnFileDeleteIcon() {
-    clickOn(ViewId(R.id.zim_file_delete_item))
-  }
-
-  private fun assertDeleteDialogDisplayed() {
-    pauseForBetterTestPerformance()
-    onView(withText("DELETE")).check(matches(isDisplayed()))
-  }
-
-  private fun clickOnDeleteZimFile() {
-    pauseForBetterTestPerformance()
-    onView(withText("DELETE")).perform(click())
-  }
-
-  fun deleteZimIfExists() {
-    try {
-      longClickOnZimFile()
-      clickOnFileDeleteIcon()
-      assertDeleteDialogDisplayed()
-      clickOnDeleteZimFile()
-      pauseForBetterTestPerformance()
-    } catch (e: Exception) {
-      Log.i(
-        "TEST_DELETE_ZIM",
-        "Failed to delete ZIM file with title [" + zimFileTitle + "]... " +
-          "Probably because it doesn't exist"
-      )
-    }
-  }
-
-  fun refreshList() {
+  fun refreshOnlineList() {
     refresh(R.id.librarySwipeRefresh)
+  }
+
+  fun refreshLocalLibraryData() {
+    try {
+      refresh(R.id.zim_swiperefresh)
+      pauseForBetterTestPerformance()
+    } catch (e: RuntimeException) {
+      Log.w("InitialDownloadTest", "Failed to refresh ZIM list: " + e.localizedMessage)
+    }
   }
 
   fun waitForDataToLoad() {
