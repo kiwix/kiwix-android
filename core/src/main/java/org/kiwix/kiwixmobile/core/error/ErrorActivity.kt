@@ -214,7 +214,10 @@ open class ErrorActivity : BaseActivity() {
     }.toString()
 
   open fun restartApp() {
-    startActivity(packageManager.getLaunchIntentForPackage(packageName))
+    val restartAppIntent = packageManager.getLaunchIntentForPackage(packageName)?.apply {
+      addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+    }
+    startActivity(restartAppIntent)
     finish()
     killCurrentProcess()
   }
