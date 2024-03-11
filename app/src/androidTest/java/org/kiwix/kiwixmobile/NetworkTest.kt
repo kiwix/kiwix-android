@@ -18,7 +18,7 @@
 package org.kiwix.kiwixmobile
 
 import android.Manifest
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.IdlingPolicies

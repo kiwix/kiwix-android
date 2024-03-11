@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.dao
 
 import android.os.Build
 import android.util.Base64
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import io.reactivex.BackpressureStrategy
 import io.reactivex.BackpressureStrategy.LATEST
 import io.reactivex.Flowable
@@ -29,7 +29,6 @@ import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
@@ -152,15 +151,13 @@ class LibkiwixBookmarks @Inject constructor(
         library.addBook(libKiwixBook).also {
           // now library has changed so update our library list.
           libraryBooksList = library.booksIds.toList()
-          if (BuildConfig.DEBUG) {
-            Log.d(
-              TAG,
-              "Added Book to Library:\n" +
-                "ZIM File Path: ${book.path}\n" +
-                "Book ID: ${book.id}\n" +
-                "Book Title: ${book.title}"
-            )
-          }
+          Log.d(
+            TAG,
+            "Added Book to Library:\n" +
+              "ZIM File Path: ${book.path}\n" +
+              "Book ID: ${book.id}\n" +
+              "Book Title: ${book.title}"
+          )
         }
       }
     }
@@ -220,14 +217,12 @@ class LibkiwixBookmarks @Inject constructor(
       val book = if (isBookAlreadyExistInLibrary(bookmark.bookId)) {
         library.getBookById(bookmark.bookId)
       } else {
-        if (BuildConfig.DEBUG) {
-          Log.d(
-            TAG,
-            "Library does not contain the book for this bookmark:\n" +
-              "Book Title: ${bookmark.bookTitle}\n" +
-              "Bookmark URL: ${bookmark.url}"
-          )
-        }
+        Log.d(
+          TAG,
+          "Library does not contain the book for this bookmark:\n" +
+            "Book Title: ${bookmark.bookTitle}\n" +
+            "Bookmark URL: ${bookmark.url}"
+        )
         null
       }
 

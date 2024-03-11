@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.zimManager
 
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.CANNOT_WRITE_4GB
 import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.CAN_WRITE_4GB
 import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.INCONCLUSIVE

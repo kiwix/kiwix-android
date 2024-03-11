@@ -17,7 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.webserver
 
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.Disposable
 import org.kiwix.kiwixmobile.core.base.BasePresenter

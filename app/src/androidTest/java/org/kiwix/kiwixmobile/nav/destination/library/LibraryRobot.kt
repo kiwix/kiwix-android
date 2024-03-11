@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library
 
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click

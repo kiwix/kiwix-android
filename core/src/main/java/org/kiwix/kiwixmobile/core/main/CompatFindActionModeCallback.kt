@@ -23,7 +23,7 @@ import android.text.Editable
 import android.text.Selection
 import android.text.Spannable
 import android.text.TextWatcher
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem

@@ -19,7 +19,7 @@
 package org.kiwix.kiwixmobile.core.webserver
 
 import android.content.Context
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForCustomApp
 import org.kiwix.libkiwix.Book

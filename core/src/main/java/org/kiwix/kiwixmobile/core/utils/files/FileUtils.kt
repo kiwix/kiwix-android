@@ -26,7 +26,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
-import android.util.Log
 import android.webkit.URLUtil
 import android.widget.Toast
 import androidx.core.content.ContextCompat

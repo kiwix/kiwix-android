@@ -24,7 +24,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.util.AttributeSet
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import android.view.ContextMenu
 import android.view.ViewGroup
 import android.webkit.WebView

@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.data.remote
 
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response

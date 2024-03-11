@@ -21,8 +21,8 @@ package org.kiwix.kiwixmobile.custom.main
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.AssetFileDescriptor
-import android.util.Log
 import androidx.core.content.ContextCompat
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasBothFiles
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasFile

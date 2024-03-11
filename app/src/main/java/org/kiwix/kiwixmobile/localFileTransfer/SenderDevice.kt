@@ -18,12 +18,11 @@
 package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.content.Context
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
-import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.copyToOutputStream
 import java.io.IOException
 import java.net.InetAddress
@@ -71,7 +70,7 @@ internal class SenderDevice(
                 val socketOutputStream = socket.getOutputStream()
                 @Suppress("UnsafeCallOnNullableType")
                 copyToOutputStream(fileInputStream!!, socketOutputStream)
-                if (BuildConfig.DEBUG) Log.d(TAG, "Sender: Data written")
+                Log.d(TAG, "Sender: Data written")
                 publishProgress(fileIndex, FileItem.FileStatus.SENT)
               }
             }

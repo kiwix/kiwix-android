@@ -17,7 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.utils
 
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.net.InetAddress
 import java.net.NetworkInterface
 import java.net.SocketException

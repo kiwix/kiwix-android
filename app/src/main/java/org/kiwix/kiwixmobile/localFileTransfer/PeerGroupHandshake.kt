@@ -18,11 +18,10 @@
 package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.net.wifi.p2p.WifiP2pInfo
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
-import org.kiwix.kiwixmobile.core.BuildConfig
 import java.io.InputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
@@ -46,14 +45,14 @@ import java.net.Socket
 abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
   private val HANDSHAKE_MESSAGE = "Request Kiwix File Sharing"
   suspend fun handshake(): InetAddress? = withContext(Dispatchers.IO) {
-    if (BuildConfig.DEBUG) {
-      Log.d(TAG, "Handshake in progress")
-    }
+    Log.d(TAG, "Handshake in progress")
     when {
       groupInfo.groupFormed && groupInfo.isGroupOwner && isActive ->
         readHandshakeAndExchangeMetaData()
+
       groupInfo.groupFormed && isActive -> // && !groupInfo.isGroupOwner
         writeHandshakeAndExchangeMetaData()
+
       else -> null
     }
   }
@@ -92,9 +91,7 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
 
           // Verify that the peer trying to communicate is a kiwix app intending to transfer files
           if (isKiwixHandshake(kiwixHandShakeMessage)) {
-            if (BuildConfig.DEBUG) {
-              Log.d(TAG, "Client IP address: " + server.inetAddress)
-            }
+            Log.d(TAG, "Client IP address: " + server.inetAddress)
             exchangeFileTransferMetadata(server.getInputStream(), server.getOutputStream())
             server.inetAddress
           } else {

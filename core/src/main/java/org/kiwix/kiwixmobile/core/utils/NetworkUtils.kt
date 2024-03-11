@@ -19,7 +19,7 @@ package org.kiwix.kiwixmobile.core.utils
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
