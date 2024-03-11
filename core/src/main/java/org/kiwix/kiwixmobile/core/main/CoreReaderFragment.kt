@@ -40,7 +40,6 @@ import android.os.IBinder
 import android.os.Looper
 import android.provider.Settings
 import android.util.AttributeSet
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import android.view.ActionMode
 import android.view.LayoutInflater
 import android.view.Menu
@@ -57,6 +56,7 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -159,6 +159,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.deleteCachedFiles
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import org.kiwix.libkiwix.Book
@@ -1226,6 +1227,16 @@ abstract class CoreReaderFragment :
       reopenBook()
     }
     tempWebViewForUndo?.let {
+      if (tabSwitcherRoot?.visibility == View.GONE) {
+        // Remove the top margin from the webView when the tabSwitcher is not visible.
+        // We have added this margin in `TabsAdapter` to not show the top margin in tabs.
+        // `tempWebViewForUndo` saved with that margin so before showing it to the `contentFrame`
+        // We need to set full width and height for properly showing the content of webView.
+        it.layoutParams = LinearLayout.LayoutParams(
+          LinearLayout.LayoutParams.MATCH_PARENT,
+          LinearLayout.LayoutParams.MATCH_PARENT
+        )
+      }
       zimReaderContainer?.setZimFile(tempZimFileForUndo)
       webViewList.add(index, it)
       tabsAdapter?.notifyDataSetChanged()
@@ -1248,10 +1259,7 @@ abstract class CoreReaderFragment :
     contentFrame?.let {
       it.removeAllViews()
       val webView = safelyGetWebView(position) ?: return@selectTab
-      webView.parent?.let {
-        (webView.parent as ViewGroup).removeView(webView)
-      }
-      it.addView(webView)
+      safelyAddWebView(webView)
       tabsAdapter?.selected = currentWebViewIndex
       updateBottomToolbarVisibility()
       loadPrefs()
