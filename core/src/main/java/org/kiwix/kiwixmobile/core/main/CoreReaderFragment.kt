@@ -259,6 +259,7 @@ abstract class CoreReaderFragment :
   @Inject
   var painter: NightModeViewPainter? = null
   protected var currentWebViewIndex = 0
+  private var currentTtsWebViewIndex = 0
   protected var actionBar: ActionBar? = null
   protected var mainMenu: MainMenu? = null
 
@@ -1045,6 +1046,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun startReadAloud() {
+    currentTtsWebViewIndex = currentWebViewIndex
     getCurrentWebView()?.let {
       tts?.readAloud(it)
     }
@@ -1192,7 +1194,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun closeTab(index: Int) {
-    if (currentWebViewIndex == index) onReadAloudStop()
+    if (currentTtsWebViewIndex == index) onReadAloudStop()
     tempZimFileForUndo = zimReaderContainer?.zimFile
     tempWebViewForUndo = webViewList[index]
     webViewList.removeAt(index)
