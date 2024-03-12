@@ -37,6 +37,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Build APK for test cases
+        run: ./gradlew assembleDebug
+
       - name: create instrumentation coverage
         uses: ReactiveCircus/android-emulator-runner@v2
         env:
