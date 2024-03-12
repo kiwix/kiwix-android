@@ -22,7 +22,7 @@ import android.content.res.AssetFileDescriptor
 import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.util.Base64
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import androidx.core.net.toUri
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers

@@ -19,7 +19,7 @@
 package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.net.wifi.p2p.WifiP2pInfo
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.InputStream
 import java.io.ObjectOutputStream
 import java.io.OutputStream

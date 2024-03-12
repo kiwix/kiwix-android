@@ -40,7 +40,7 @@ import android.os.IBinder
 import android.os.Looper
 import android.provider.Settings
 import android.util.AttributeSet
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import android.view.ActionMode
 import android.view.LayoutInflater
 import android.view.Menu

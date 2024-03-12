@@ -17,11 +17,10 @@
  */
 package org.kiwix.kiwixmobile.localFileTransfer
 
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
-import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.copyToOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -47,15 +46,13 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
           val zimStorageRootPath = wifiDirectManager.zimStorageRootPath
           val fileItems = wifiDirectManager.getFilesForTransfer()
           var isTransferErrorFree = true
-          if (BuildConfig.DEBUG) Log.d(TAG, "Expecting " + fileItems.size + " files")
+          Log.d(TAG, "Expecting " + fileItems.size + " files")
           fileItems.asSequence()
             .takeWhile { isActive }
             .forEachIndexed { fileItemIndex, fileItem ->
               try {
                 serverSocket.accept().use { client ->
-                  if (BuildConfig.DEBUG) {
-                    Log.d(TAG, "Sender device connected for ${fileItem.fileName}")
-                  }
+                  Log.d(TAG, "Sender device connected for ${fileItem.fileName}")
                   publishProgress(fileItemIndex, FileItem.FileStatus.SENDING)
                   val clientNoteFileLocation = File(zimStorageRootPath + fileItem.fileName)
                   val dirs = File(clientNoteFileLocation.parent)
@@ -64,7 +61,7 @@ internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) 
                     isTransferErrorFree = false
                   }
                   val fileCreated = clientNoteFileLocation.createNewFile()
-                  if (BuildConfig.DEBUG) Log.d(TAG, "File creation: $fileCreated")
+                  Log.d(TAG, "File creation: $fileCreated")
                   copyToOutputStream(
                     client.getInputStream(),
                     FileOutputStream(clientNoteFileLocation)

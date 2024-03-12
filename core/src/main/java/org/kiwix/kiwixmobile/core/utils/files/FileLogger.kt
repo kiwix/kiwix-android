@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.utils.files
 
 import android.content.Context
-import android.util.Log
 import java.io.File
 import java.io.IOException
 import java.lang.System.currentTimeMillis

@@ -25,7 +25,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View

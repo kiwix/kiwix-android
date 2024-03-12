@@ -34,7 +34,6 @@ import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.search.SearchFragmentTest
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
@@ -88,7 +87,7 @@ class LocalLibraryTest : BaseActivityTest() {
     }
     // load a zim file to test, After downloading zim file library list is visible or not
     val loadFileStream =
-      SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
+      LocalLibraryTest::class.java.classLoader.getResourceAsStream("testzim.zim")
     val zimFile =
       File(
         ContextCompat.getExternalFilesDirs(context, null)[0],

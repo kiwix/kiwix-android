@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.mimetype
 
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -27,7 +28,6 @@ import androidx.test.uiautomator.UiDevice
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.kiwix.libzim.Archive
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -35,6 +35,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.libzim.Archive
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -53,6 +54,7 @@ class MimeTypeTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
       putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, false)
+      putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, false)
     }
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
@@ -62,7 +64,10 @@ class MimeTypeTest : BaseActivityTest() {
   @Test
   fun testMimeType() {
     val loadFileStream = MimeTypeTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(context.cacheDir, "testzim.zim")
+    val zimFile = File(
+      ContextCompat.getExternalFilesDirs(context, null)[0],
+      "testzim.zim"
+    )
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->

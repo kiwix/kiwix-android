@@ -19,8 +19,8 @@
 package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view
 
 import android.content.Context
-import android.util.Log
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.text.DecimalFormat
 import kotlin.math.log10
 import kotlin.math.pow

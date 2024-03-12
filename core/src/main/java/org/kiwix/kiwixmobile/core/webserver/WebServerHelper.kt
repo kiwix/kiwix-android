@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.core.webserver
 
-import android.util.Log
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -27,6 +26,7 @@ import org.kiwix.kiwixmobile.core.utils.ServerUtils
 import org.kiwix.kiwixmobile.core.utils.ServerUtils.INVALID_IP
 import org.kiwix.kiwixmobile.core.utils.ServerUtils.getIp
 import org.kiwix.kiwixmobile.core.utils.ServerUtils.getIpAddress
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.IpAddressCallbacks
 import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.ServerStatus
 import java.util.concurrent.TimeUnit

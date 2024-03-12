@@ -31,7 +31,7 @@ import android.speech.tts.TextToSpeech.LANG_NOT_SUPPORTED
 import android.speech.tts.TextToSpeech.QUEUE_ADD
 import android.speech.tts.TextToSpeech.SUCCESS
 import android.speech.tts.UtteranceProgressListener
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.widget.Toast

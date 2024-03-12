@@ -53,6 +53,15 @@ class BookmarksRobot : BaseRobot() {
     isVisible(TextId(R.string.delete_bookmarks))
   }
 
+  fun clickOnDeleteButton() {
+    pauseForBetterTestPerformance()
+    onView(withText("DELETE")).perform(click())
+  }
+
+  fun assertNoBookMarkTextDisplayed() {
+    isVisible(TextId(R.string.no_bookmarks))
+  }
+
   fun clickOnSaveBookmarkImage() {
     pauseForBetterTestPerformance()
     clickOn(ViewId(R.id.bottom_toolbar_bookmark))

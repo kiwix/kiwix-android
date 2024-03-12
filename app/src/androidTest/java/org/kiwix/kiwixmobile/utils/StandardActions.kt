@@ -17,7 +17,7 @@
  */
 package org.kiwix.kiwixmobile.utils
 
-import android.util.Log
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import androidx.core.view.GravityCompat
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions

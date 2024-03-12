@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.page.bookmarks
 
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
@@ -33,6 +34,7 @@ import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.main.topLevel
 import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
@@ -60,6 +62,7 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
+      putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, false)
     }
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
@@ -74,7 +77,10 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
     }
     val loadFileStream =
       LibkiwixBookmarkTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(context.cacheDir, "testzim.zim")
+    val zimFile = File(
+      ContextCompat.getExternalFilesDirs(context, null)[0],
+      "testzim.zim"
+    )
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->
@@ -95,6 +101,13 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
       )
     }
     bookmarks {
+      // delete any bookmark if already saved to properly perform this test case.
+      longClickOnSaveBookmarkImage()
+      clickOnTrashIcon()
+      assertDeleteBookmarksDialogDisplayed()
+      clickOnDeleteButton()
+      assertNoBookMarkTextDisplayed()
+      pressBack()
       // Test saving bookmark
       clickOnSaveBookmarkImage()
       clickOnOpenSavedBookmarkButton()
@@ -112,9 +125,8 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
 
   @Test
   fun testBookmarkRemainsSavedOrNot() {
-    bookmarks {
-      longClickOnSaveBookmarkImage()
-      assertBookmarkSaved()
+    topLevel {
+      clickBookmarksOnNavDrawer(BookmarksRobot::assertBookmarkSaved)
     }
   }
 }
