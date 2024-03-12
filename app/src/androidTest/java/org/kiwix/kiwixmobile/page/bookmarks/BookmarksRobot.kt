@@ -63,7 +63,6 @@ class BookmarksRobot : BaseRobot() {
   }
 
   fun clickOnSaveBookmarkImage() {
-    pauseForBetterTestPerformance()
     clickOn(ViewId(R.id.bottom_toolbar_bookmark))
   }
 
@@ -90,7 +89,6 @@ class BookmarksRobot : BaseRobot() {
   }
 
   fun assertBookmarkSaved() {
-    pauseForBetterTestPerformance()
     isVisible(Text("Test Zim"))
   }
 

@@ -26,7 +26,6 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import junit.framework.AssertionFailedError
 import org.hamcrest.CoreMatchers
@@ -35,7 +34,6 @@ import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.utils.RecyclerViewItemCount
 import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
 import org.kiwix.kiwixmobile.utils.RecyclerViewSelectedCheckBoxCountAssertion
@@ -50,12 +48,10 @@ class ZimHostRobot : BaseRobot() {
   }
 
   fun refreshLibraryList() {
-    pauseForBetterTestPerformance()
     refresh(R.id.zim_swiperefresh)
   }
 
   fun assertZimFilesLoaded() {
-    pauseForBetterTestPerformance()
     isVisible(Text("Test_Zim"))
   }
 
@@ -65,7 +61,6 @@ class ZimHostRobot : BaseRobot() {
   }
 
   fun clickOnTestZim() {
-    pauseForBetterTestPerformance()
     clickOn(Text("Test_Zim"))
   }
 
@@ -78,12 +73,10 @@ class ZimHostRobot : BaseRobot() {
   }
 
   private fun assetWifiDialogDisplayed() {
-    pauseForBetterTestPerformance()
     isVisible(Text("WiFi connection detected"))
   }
 
   fun assertServerStarted() {
-    pauseForBetterTestPerformance()
     isVisible(Text("STOP SERVER"))
   }
 
@@ -149,11 +142,6 @@ class ZimHostRobot : BaseRobot() {
   }
 
   fun assertServerStopped() {
-    pauseForBetterTestPerformance()
     isVisible(Text("START SERVER"))
-  }
-
-  private fun pauseForBetterTestPerformance() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
   }
 }

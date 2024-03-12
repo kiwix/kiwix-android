@@ -66,7 +66,6 @@ class NoteRobot : BaseRobot() {
   }
 
   fun assertBackwardNavigationHistoryDialogDisplayed() {
-    pauseForBetterTestPerformance()
     isVisible(TextId(R.string.note))
   }
 
@@ -76,7 +75,6 @@ class NoteRobot : BaseRobot() {
   }
 
   fun saveNote() {
-    pauseForBetterTestPerformance()
     clickOn(ViewId(R.id.save_note))
   }
 
@@ -95,7 +93,6 @@ class NoteRobot : BaseRobot() {
   }
 
   fun clickOnOpenNote() {
-    pauseForBetterTestPerformance()
     clickOn(Text("OPEN NOTE"))
   }
 

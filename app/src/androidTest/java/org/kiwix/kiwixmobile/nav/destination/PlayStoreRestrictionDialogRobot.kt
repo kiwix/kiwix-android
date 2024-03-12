@@ -37,7 +37,6 @@ fun playStoreRestriction(func: PlayStoreRestrictionDialogRobot.() -> Unit) =
 class PlayStoreRestrictionDialogRobot : BaseRobot() {
 
   fun clickLibraryOnBottomNav() {
-    pauseForBetterTestPerformance()
     clickOn(ViewId(R.id.libraryFragment))
   }
 
@@ -54,7 +53,6 @@ class PlayStoreRestrictionDialogRobot : BaseRobot() {
   }
 
   fun clickOnUnderstood() {
-    pauseForBetterTestPerformance()
     onView(withText("UNDERSTOOD"))
       .perform(click())
   }

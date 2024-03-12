@@ -36,17 +36,14 @@ class ReaderRobot : BaseRobot() {
   private var retryCountForClickOnUndoButton = 5
 
   fun checkZimFileLoadedSuccessful(readerFragment: Int) {
-    pauseForBetterTestPerformance()
     isVisible(ViewId(readerFragment))
   }
 
   fun clickOnTabIcon() {
-    pauseForBetterTestPerformance()
     clickOn(ViewId(R.id.ic_tab_switcher_text))
   }
 
   fun clickOnClosedAllTabsButton() {
-    pauseForBetterTestPerformance()
     clickOn(ViewId(R.id.tab_switcher_close_all_tabs))
   }
 

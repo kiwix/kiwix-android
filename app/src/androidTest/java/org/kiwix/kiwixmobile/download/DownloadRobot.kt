@@ -122,7 +122,6 @@ class DownloadRobot : BaseRobot() {
   }
 
   private fun assertStopDownloadDialogDisplayed() {
-    pauseForBetterTestPerformance()
     isVisible(Text("Stop download?"))
   }
 

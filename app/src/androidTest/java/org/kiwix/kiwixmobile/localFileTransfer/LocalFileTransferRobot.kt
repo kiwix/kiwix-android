@@ -60,27 +60,22 @@ class LocalFileTransferRobot : BaseRobot() {
   }
 
   fun assertClickNearbyDeviceMessageVisible() {
-    pauseForBetterTestPerformance()
     isVisible(TextId(R.string.click_nearby_devices_message))
   }
 
   fun clickOnGotItButton() {
-    pauseForBetterTestPerformance()
     clickOn(TextId(R.string.got_it))
   }
 
   fun assertDeviceNameMessageVisible() {
-    pauseForBetterTestPerformance()
     isVisible(TextId(R.string.your_device_name_message))
   }
 
   fun assertNearbyDeviceListMessageVisible() {
-    pauseForBetterTestPerformance()
     isVisible(TextId(R.string.nearby_devices_list_message))
   }
 
   fun assertTransferZimFilesListMessageVisible() {
-    pauseForBetterTestPerformance()
     isVisible(TextId(R.string.transfer_zim_files_list_message))
   }
 

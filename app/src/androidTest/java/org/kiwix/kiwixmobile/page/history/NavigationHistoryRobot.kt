@@ -35,7 +35,6 @@ fun navigationHistory(func: NavigationHistoryRobot.() -> Unit) =
 class NavigationHistoryRobot : BaseRobot() {
 
   fun checkZimFileLoadedSuccessful(readerFragment: Int) {
-    pauseForBetterTestPerformance()
     isVisible(ViewId(readerFragment))
   }
 
@@ -52,37 +51,30 @@ class NavigationHistoryRobot : BaseRobot() {
   }
 
   fun longClickOnBackwardButton() {
-    pauseForBetterTestPerformance()
     longClickOn(ViewId(R.id.bottom_toolbar_arrow_back))
   }
 
   fun longClickOnForwardButton() {
-    pauseForBetterTestPerformance()
     longClickOn(ViewId(R.id.bottom_toolbar_arrow_forward))
   }
 
   fun assertBackwardNavigationHistoryDialogDisplayed() {
-    pauseForBetterTestPerformance()
     isVisible(TextId(R.string.backward_history))
   }
 
   fun clickOnBackwardButton() {
-    pauseForBetterTestPerformance()
     clickOn(ViewId(R.id.bottom_toolbar_arrow_back))
   }
 
   fun assertForwardNavigationHistoryDialogDisplayed() {
-    pauseForBetterTestPerformance()
     isVisible(TextId(R.string.forward_history))
   }
 
   fun clickOnDeleteHistory() {
-    pauseForBetterTestPerformance()
     clickOn(ViewId(R.id.menu_pages_clear))
   }
 
   fun assertDeleteDialogDisplayed() {
-    pauseForBetterTestPerformance()
     isVisible(TextId(R.string.clear_all_history_dialog_title))
   }
 

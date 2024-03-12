@@ -18,22 +18,24 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library
 
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
+import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
 import org.kiwix.kiwixmobile.localFileTransfer.localFileTransfer
 import org.kiwix.kiwixmobile.testutils.TestUtils
@@ -59,12 +61,18 @@ class LibraryRobot : BaseRobot() {
   }
 
   fun assertNoFilesTextDisplayed() {
-    pauseForBetterTestPerformance()
     isVisible(ViewId(R.id.file_management_no_files))
   }
 
   fun deleteZimIfExists() {
     try {
+      try {
+        onView(withId(R.id.file_management_no_files)).check(matches(isDisplayed()))
+        // if this view is displaying then we do not need to run the further code.
+        return
+      } catch (e: AssertionFailedError) {
+        Log.e("DELETE_ZIM_FILE", "Zim files found in local library so we are deleting them")
+      }
       val recyclerViewId: Int = R.id.zimfilelist
       val recyclerViewItemsCount = RecyclerViewItemCount(recyclerViewId).checkRecyclerViewCount()
       // Scroll to the end of the RecyclerView to ensure all items are visible
@@ -79,7 +87,6 @@ class LibraryRobot : BaseRobot() {
       clickOnFileDeleteIcon()
       assertDeleteDialogDisplayed()
       clickOnDeleteZimFile()
-      pauseForBetterTestPerformance()
     } catch (e: Exception) {
       Log.i(
         "TEST_DELETE_ZIM",
@@ -90,7 +97,6 @@ class LibraryRobot : BaseRobot() {
   }
 
   private fun clickOnFileDeleteIcon() {
-    pauseForBetterTestPerformance()
     clickOn(ViewId(R.id.zim_file_delete_item))
   }
 
@@ -101,7 +107,6 @@ class LibraryRobot : BaseRobot() {
   }
 
   private fun clickOnDeleteZimFile() {
-    pauseForBetterTestPerformance()
     onView(withText("DELETE")).perform(click())
   }
 
