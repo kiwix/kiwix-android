@@ -51,6 +51,7 @@ class LocalFileTransferTest {
 
   private val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
     arrayOf(
+      Manifest.permission.POST_NOTIFICATIONS,
       Manifest.permission.NEARBY_WIFI_DEVICES
     )
   } else {

@@ -18,8 +18,9 @@
 
 package org.kiwix.kiwixmobile
 
-import android.Manifest.permission
+import android.Manifest
 import android.content.Context
+import android.os.Build
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
@@ -34,10 +35,22 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 abstract class BaseActivityTest {
   open lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
 
-  private val permissions = arrayOf(
-    permission.READ_EXTERNAL_STORAGE,
-    permission.WRITE_EXTERNAL_STORAGE
-  )
+  private val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    arrayOf(
+      Manifest.permission.POST_NOTIFICATIONS,
+      Manifest.permission.READ_EXTERNAL_STORAGE,
+      Manifest.permission.WRITE_EXTERNAL_STORAGE,
+      Manifest.permission.NEARBY_WIFI_DEVICES,
+      Manifest.permission.ACCESS_NETWORK_STATE
+    )
+  } else {
+    arrayOf(
+      Manifest.permission.READ_EXTERNAL_STORAGE,
+      Manifest.permission.WRITE_EXTERNAL_STORAGE,
+      Manifest.permission.ACCESS_FINE_LOCATION,
+      Manifest.permission.ACCESS_NETWORK_STATE
+    )
+  }
 
   @get:Rule
   var permissionRules: GrantPermissionRule =

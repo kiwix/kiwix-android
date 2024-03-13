@@ -82,12 +82,18 @@ class ZimHostRobot : BaseRobot() {
 
   fun stopServerIfAlreadyStarted() {
     try {
-      assertServerStarted()
-      stopServer()
+      // Check if the "START SERVER" button is visible because, in most scenarios,
+      // this button will appear when the server is already stopped.
+      // This will expedite our test case, as verifying the visibility of
+      // non-visible views takes more time due to the try mechanism needed
+      // to properly retrieve the view.
+      assertServerStopped()
     } catch (exception: Exception) {
+      // if "START SERVER" button is not visible it means server is started so close it.
+      stopServer()
       Log.i(
         "ZIM_HOST_FRAGMENT",
-        "Failed to stop the server, Probably because server is not running"
+        "Stopped the server to perform our test case since it was already running"
       )
     }
   }
