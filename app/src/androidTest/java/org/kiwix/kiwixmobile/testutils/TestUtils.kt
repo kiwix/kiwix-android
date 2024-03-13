@@ -54,7 +54,11 @@ object TestUtils {
   @JvmField var TEST_PAUSE_MS = 3000
   var TEST_PAUSE_MS_FOR_SEARCH_TEST = 1000
   var TEST_PAUSE_MS_FOR_DOWNLOAD_TEST = 10000
-  const val RETRY_COUNT_FOR_FLAKY_TEST = 3
+
+  // Increased retry count to 5 for flaky test cases on API level 33,
+  // where failures occurred multiple times due to the heavy `google_apis`.
+  // so to address this we have increased it to 5 to properly run the test cases.
+  const val RETRY_COUNT_FOR_FLAKY_TEST = 5
 
   /*
     TEST_PAUSE_MS is used as such:
