@@ -41,8 +41,8 @@ fun initialDownload(func: InitialDownloadRobot.() -> Unit) =
 
 class InitialDownloadRobot : BaseRobot() {
 
-  private var retryCountForCheckDownloadStart = 5
-  private var retryCountForCheckDataLoaded = 5
+  private var retryCountForCheckDownloadStart = 10
+  private var retryCountForCheckDataLoaded = 10
   private val zimFileTitle = "Off the Grid"
 
   fun clickLibraryOnBottomNav() {

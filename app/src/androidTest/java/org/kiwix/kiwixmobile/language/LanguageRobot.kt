@@ -38,7 +38,7 @@ fun language(func: LanguageRobot.() -> Unit) = LanguageRobot().applyWithViewHier
 
 class LanguageRobot : BaseRobot() {
 
-  private var retryCountForDataToLoad = 5
+  private var retryCountForDataToLoad = 10
 
   fun clickDownloadOnBottomNav() {
     clickOn(ViewId(R.id.downloadsFragment))
