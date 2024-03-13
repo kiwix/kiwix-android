@@ -1194,7 +1194,9 @@ abstract class CoreReaderFragment :
   }
 
   private fun closeTab(index: Int) {
-    if (currentTtsWebViewIndex == index) onReadAloudStop()
+    if (currentTtsWebViewIndex == index) {
+      onReadAloudStop()
+    }
     tempZimFileForUndo = zimReaderContainer?.zimFile
     tempWebViewForUndo = webViewList[index]
     webViewList.removeAt(index)
