@@ -152,7 +152,13 @@ class LocalLibraryFragment : BaseFragment() {
           offerAction(RequestNavigateTo(it))
         }
       },
-      { offerAction(RequestMultiSelection(it)) },
+      {
+        if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
+          showManageExternalStoragePermissionDialog()
+        } else {
+          offerAction(RequestMultiSelection(it))
+        }
+      },
       { offerAction(RequestSelect(it)) }
     )
   }
