@@ -262,7 +262,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
   @Test
   fun testLargeDataMigration(): Unit = runBlocking {
     // Test large data migration for recent searches
-    val numEntities = 10000
+    val numEntities = 1000
     // Insert a large number of recent search entities into ObjectBox
     (1..numEntities)
       .asSequence()

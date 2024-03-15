@@ -39,9 +39,6 @@ android {
     versionCode = generateVersionCode()
     versionName = generateVersionName()
     manifestPlaceholders["permission"] = "android.permission.MANAGE_EXTERNAL_STORAGE"
-    testInstrumentationRunnerArguments += mapOf(
-      "apk" to "$buildDir/outputs/apk/androidTest/debug/kiwix-debug-androidTest.apk"
-    )
   }
   lint {
     checkDependencies = true
