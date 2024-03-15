@@ -49,6 +49,7 @@ class AllProjectConfigurer {
       defaultConfig {
         minSdk = Config.minSdk
         setTargetSdkVersion(Config.targetSdk)
+        buildToolsVersion(Config.buildToolVersion)
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
       }
 
