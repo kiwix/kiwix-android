@@ -42,8 +42,8 @@ fun downloadRobot(func: DownloadRobot.() -> Unit) =
 
 class DownloadRobot : BaseRobot() {
 
-  private var retryCountForDataToLoad = 5
-  private var retryCountForCheckDownloadStart = 5
+  private var retryCountForDataToLoad = 10
+  private var retryCountForCheckDownloadStart = 10
   private val zimFileTitle = "Off the Grid"
 
   fun clickLibraryOnBottomNav() {
@@ -67,6 +67,10 @@ class DownloadRobot : BaseRobot() {
 
   fun checkIfZimFileDownloaded() {
     isVisible(Text(zimFileTitle))
+  }
+
+  fun refreshOnlineList() {
+    refresh(R.id.librarySwipeRefresh)
   }
 
   fun downloadZimFile() {

@@ -94,6 +94,7 @@ class DownloadTest : BaseActivityTest() {
       }
       downloadRobot {
         clickDownloadOnBottomNav()
+        refreshOnlineList()
         waitForDataToLoad()
         stopDownloadIfAlreadyStarted()
         downloadZimFile()

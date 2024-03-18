@@ -120,6 +120,9 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     }
     box = boxStore.boxFor(BookmarkEntity::class.java)
 
+    // clear the data before running the test case
+    clearBookmarks()
+
     // add a file in fileSystem because we need to actual file path for making object of Archive.
     val loadFileStream =
       ObjectBoxToLibkiwixMigratorTest::class.java.classLoader.getResourceAsStream("testzim.zim")
@@ -139,9 +142,6 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
         }
       }
     }
-
-    // clear the data before running the test case
-    clearBookmarks()
   }
 
   @Test
@@ -310,7 +310,9 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
         .blockingFirst() as List<LibkiwixBookmarkItem>
     )
     box.removeAll()
-    zimFile.delete() // delete the temp ZIM file to free up the memory
+    if (::zimFile.isInitialized) {
+      zimFile.delete() // delete the temp ZIM file to free up the memory
+    }
   }
 
   @After
