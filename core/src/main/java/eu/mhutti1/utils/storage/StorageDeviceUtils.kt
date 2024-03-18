@@ -44,6 +44,10 @@ object StorageDeviceUtils {
       // Therefore, we need to explicitly include the app-specific directory for scanning.
       // See https://github.com/kiwix/kiwix-android/issues/3579
       addAll(externalFilesDirsDevices(context, true))
+
+      // added test directory to show the ZIM files stored in the test directory
+      // so that we can view and delete zim files inside this directory.
+      add(testDirectory(context))
     }
     return validate(storageDevices, false)
   }
@@ -76,6 +80,9 @@ object StorageDeviceUtils {
       generalisePath(context.getExternalFilesDir("").toString(), true),
       Environment.isExternalStorageEmulated()
     )
+
+  private fun testDirectory(context: Context) =
+    StorageDevice(context.getDir("testDir", Context.MODE_PRIVATE), true)
 
   // Remove app specific path from directories so that we can search them from the top
   private fun generalisePath(path: String, writable: Boolean) =

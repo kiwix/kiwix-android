@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.mimetype
 
+import android.content.Context
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -61,7 +62,7 @@ class MimeTypeTest : BaseActivityTest() {
   @Test
   fun testMimeType() {
     val loadFileStream = MimeTypeTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(context.cacheDir, "testzim.zim")
+    val zimFile = File(context.getDir("testDir", Context.MODE_PRIVATE), "testzim.zim")
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->

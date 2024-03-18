@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.search
 
+import android.content.Context
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
@@ -214,7 +215,7 @@ class SearchFragmentTest : BaseActivityTest() {
   private fun getTestZimFile(): File {
     val loadFileStream =
       SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(context.cacheDir, "testzim.zim")
+    val zimFile = File(context.getDir("testDir", Context.MODE_PRIVATE), "testzim.zim")
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->

@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.reader
 
+import android.content.Context
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
@@ -75,7 +76,7 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
     }
     val loadFileStream =
       KiwixReaderFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(context.cacheDir, "testzim.zim")
+    val zimFile = File(context.getDir("testDir", Context.MODE_PRIVATE), "testzim.zim")
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->

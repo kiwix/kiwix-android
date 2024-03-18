@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile
 
+import android.content.Context
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -122,7 +123,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     // add a file in fileSystem because we need to actual file path for making object of Archive.
     val loadFileStream =
       ObjectBoxToLibkiwixMigratorTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    zimFile = File(context.cacheDir, "testzim.zim")
+    zimFile = File(context.getDir("testDir", Context.MODE_PRIVATE), "testzim.zim")
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->
