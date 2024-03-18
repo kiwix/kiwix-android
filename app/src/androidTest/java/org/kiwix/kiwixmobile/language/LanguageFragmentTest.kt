@@ -33,12 +33,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.VERY_LONG_WAIT
+import org.kiwix.kiwixmobile.LONG_WAIT
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
-import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -65,10 +64,8 @@ class LanguageFragmentTest {
   @Before
   fun setUp() {
     UiDevice.getInstance(instrumentation).apply {
-      if (isSystemUINotRespondingDialogVisible(this)) {
-        closeSystemDialogs(instrumentation.targetContext.applicationContext)
-      }
-      waitForIdle(VERY_LONG_WAIT)
+      closeSystemDialogs(instrumentation.targetContext.applicationContext)
+      waitForIdle(LONG_WAIT)
     }
     PreferenceManager.getDefaultSharedPreferences(instrumentation.targetContext.applicationContext)
       .edit {

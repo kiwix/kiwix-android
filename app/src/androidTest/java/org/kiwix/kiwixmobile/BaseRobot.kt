@@ -88,7 +88,7 @@ abstract class BaseRobot(
     var uiObject2: UiObject2? = null
     for (i in 0 until retryCount) {
       try {
-        uiDevice.waitForIdle(VERY_LONG_WAIT)
+        uiDevice.waitForIdle(LONG_WAIT)
         uiObject2 = uiDevice.wait(Until.findObject(findable.selector(this)), timeout)
         break
       } catch (noMatchingViewException: NoMatchingViewException) {

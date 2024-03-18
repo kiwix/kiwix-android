@@ -30,7 +30,7 @@ import leakcanary.LeakAssertions
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.kiwix.kiwixmobile.VERY_LONG_WAIT
+import org.kiwix.kiwixmobile.LONG_WAIT
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -70,10 +70,8 @@ class PlayStoreRestrictionDialogTest {
   fun waitForIdle() {
     context = InstrumentationRegistry.getInstrumentation().targetContext
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-      if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
-        TestUtils.closeSystemDialogs(context)
-      }
-      waitForIdle(VERY_LONG_WAIT)
+      TestUtils.closeSystemDialogs(context)
+      waitForIdle(LONG_WAIT)
     }
   }
 

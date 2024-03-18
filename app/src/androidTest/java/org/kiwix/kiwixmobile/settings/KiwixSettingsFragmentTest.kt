@@ -27,14 +27,13 @@ import leakcanary.LeakAssertions
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.kiwix.kiwixmobile.LONG_WAIT
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.VERY_LONG_WAIT
 import org.kiwix.kiwixmobile.intro.IntroRobot
 import org.kiwix.kiwixmobile.intro.intro
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
-import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import org.kiwix.kiwixmobile.utils.StandardActions
 
 class KiwixSettingsFragmentTest {
@@ -60,12 +59,10 @@ class KiwixSettingsFragmentTest {
   fun setup() {
     // Go to IntroFragment
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-      if (isSystemUINotRespondingDialogVisible(this)) {
-        closeSystemDialogs(
-          InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
-        )
-      }
-      waitForIdle(VERY_LONG_WAIT)
+      closeSystemDialogs(
+        InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
+      )
+      waitForIdle(LONG_WAIT)
     }
     UiThreadStatement.runOnUiThread {
       activityScenarioRule.scenario.onActivity {
