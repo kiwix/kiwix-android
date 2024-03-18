@@ -18,17 +18,30 @@
 
 package org.kiwix.kiwixmobile.core
 
+import android.app.Application.getProcessName
+import android.content.Context
+import android.os.Build
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
+import android.webkit.WebView
 import androidx.webkit.ServiceWorkerClientCompat
 import androidx.webkit.ServiceWorkerControllerCompat
 import androidx.webkit.WebViewFeature
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import javax.inject.Inject
 
-class ServiceWorkerInitialiser @Inject constructor(zimReaderContainer: ZimReaderContainer) {
+class ServiceWorkerInitialiser @Inject constructor(
+  zimReaderContainer: ZimReaderContainer,
+  context: Context
+) {
   init {
     if (WebViewFeature.isFeatureSupported(WebViewFeature.SERVICE_WORKER_BASIC_USAGE)) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        val process = getProcessName()
+        if (context.packageName != process) {
+          WebView.setDataDirectorySuffix(process)
+        }
+      }
       ServiceWorkerControllerCompat.getInstance()
         .setServiceWorkerClient(object : ServiceWorkerClientCompat() {
           override fun shouldInterceptRequest(request: WebResourceRequest): WebResourceResponse? =
