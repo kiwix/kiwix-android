@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.page.bookmarks
 
-import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
@@ -77,10 +76,7 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
     }
     val loadFileStream =
       LibkiwixBookmarkTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(
-      ContextCompat.getExternalFilesDirs(context, null)[0],
-      "testzim.zim"
-    )
+    val zimFile = File(context.cacheDir, "testzim.zim")
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->

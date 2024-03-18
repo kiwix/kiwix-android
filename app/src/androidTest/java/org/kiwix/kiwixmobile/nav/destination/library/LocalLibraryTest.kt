@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library
 
-import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -88,11 +87,7 @@ class LocalLibraryTest : BaseActivityTest() {
     // load a zim file to test, After downloading zim file library list is visible or not
     val loadFileStream =
       LocalLibraryTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile =
-      File(
-        ContextCompat.getExternalFilesDirs(context, null)[0],
-        "testzim.zim"
-      )
+    val zimFile = File(context.cacheDir, "testzim.zim")
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->
