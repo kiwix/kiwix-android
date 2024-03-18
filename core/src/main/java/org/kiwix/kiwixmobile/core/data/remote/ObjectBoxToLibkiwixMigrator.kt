@@ -55,15 +55,22 @@ class ObjectBoxToLibkiwixMigrator {
         try {
           // for saving book to library, otherwise it does not save the
           // favicon and zimFilePath in library.
-          val archive = Archive(bookmarkEntity.zimFilePath)
-          val libkiwixBook = Book().apply {
-            update(archive)
+          var archive: Archive? = null
+          val libkiwixBook = bookmarkEntity.zimFilePath?.let {
+            archive = Archive(bookmarkEntity.zimFilePath)
+            Book().apply {
+              update(archive)
+            }
+          } ?: kotlin.run {
+            // for migrating bookmarks for recent custom apps since in recent version of
+            // custom app we are using the `assetFileDescriptor` which does not have the filePath.
+            null
           }
           libkiwixBookmarks.saveBookmark(
             LibkiwixBookmarkItem(bookmarkEntity, libkiwixBook),
             shouldWriteBookmarkToFile = index == bookMarksList.size - 1
           )
-          archive.dispose()
+          archive?.dispose()
           // TODO should we remove data from objectBox?
           // removing the single entity from the object box after migration.
           // box.query {
