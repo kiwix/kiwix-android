@@ -29,6 +29,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.VERY_LONG_WAIT
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.help.HelpRobot
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
@@ -51,7 +52,7 @@ class TopLevelDestinationTest : BaseActivityTest() {
       if (isSystemUINotRespondingDialogVisible(this)) {
         closeSystemDialogs(context)
       }
-      waitForIdle()
+      waitForIdle(VERY_LONG_WAIT)
     }
     PreferenceManager.getDefaultSharedPreferences(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext

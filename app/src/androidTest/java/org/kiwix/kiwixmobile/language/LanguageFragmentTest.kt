@@ -33,6 +33,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.kiwix.kiwixmobile.VERY_LONG_WAIT
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -67,7 +68,7 @@ class LanguageFragmentTest {
       if (isSystemUINotRespondingDialogVisible(this)) {
         closeSystemDialogs(instrumentation.targetContext.applicationContext)
       }
-      waitForIdle()
+      waitForIdle(VERY_LONG_WAIT)
     }
     PreferenceManager.getDefaultSharedPreferences(instrumentation.targetContext.applicationContext)
       .edit {

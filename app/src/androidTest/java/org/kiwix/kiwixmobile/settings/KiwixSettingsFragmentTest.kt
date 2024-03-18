@@ -28,6 +28,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.VERY_LONG_WAIT
 import org.kiwix.kiwixmobile.intro.IntroRobot
 import org.kiwix.kiwixmobile.intro.intro
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
@@ -64,7 +65,7 @@ class KiwixSettingsFragmentTest {
           InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
         )
       }
-      waitForIdle()
+      waitForIdle(VERY_LONG_WAIT)
     }
     UiThreadStatement.runOnUiThread {
       activityScenarioRule.scenario.onActivity {

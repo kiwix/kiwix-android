@@ -28,6 +28,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.VERY_LONG_WAIT
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -47,7 +48,7 @@ class MimeTypeTest : BaseActivityTest() {
       if (isSystemUINotRespondingDialogVisible(this)) {
         closeSystemDialogs(context)
       }
-      waitForIdle()
+      waitForIdle(VERY_LONG_WAIT)
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)

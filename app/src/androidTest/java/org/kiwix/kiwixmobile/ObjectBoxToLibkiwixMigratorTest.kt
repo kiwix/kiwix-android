@@ -92,7 +92,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
         TestUtils.closeSystemDialogs(context)
       }
-      waitForIdle()
+      waitForIdle(VERY_LONG_WAIT)
     }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
