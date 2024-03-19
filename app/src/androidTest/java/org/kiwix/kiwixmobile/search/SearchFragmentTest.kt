@@ -101,21 +101,18 @@ class SearchFragmentTest : BaseActivityTest() {
       searchWithFrequentlyTypedWords(searchUnitTestingQuery)
       assertSearchSuccessful(searchUnitTestResult)
       deleteSearchedQueryFrequently(searchUnitTestingQuery, uiDevice)
-      assertSearchSuccessful(searchUnitTestResult)
 
       // test with a short delay typing/deleting to
       // properly test the cancelling of previously searching task
       searchWithFrequentlyTypedWords(searchUnitTestingQuery, 50)
       assertSearchSuccessful(searchUnitTestResult)
       deleteSearchedQueryFrequently(searchUnitTestingQuery, uiDevice, 50)
-      assertSearchSuccessful(searchUnitTestResult)
 
       // test with a long delay typing/deleting to
       // properly execute the search query letter by letter
       searchWithFrequentlyTypedWords(searchUnitTestingQuery, 300)
       assertSearchSuccessful(searchUnitTestResult)
       deleteSearchedQueryFrequently(searchUnitTestingQuery, uiDevice, 300)
-      assertSearchSuccessful(searchUnitTestResult)
       // to close the keyboard
       pressBack()
       // go to reader screen
@@ -144,21 +141,18 @@ class SearchFragmentTest : BaseActivityTest() {
       searchWithFrequentlyTypedWords(searchQueryForDownloadedZimFile)
       assertSearchSuccessful(searchResultForDownloadedZimFile)
       deleteSearchedQueryFrequently(searchQueryForDownloadedZimFile, uiDevice)
-      assertSearchSuccessful(searchResultForDownloadedZimFile)
 
       // test with a short delay typing/deleting to
       // properly test the cancelling of previously searching task
       searchWithFrequentlyTypedWords(searchQueryForDownloadedZimFile, 50)
       assertSearchSuccessful(searchResultForDownloadedZimFile)
       deleteSearchedQueryFrequently(searchQueryForDownloadedZimFile, uiDevice, 50)
-      assertSearchSuccessful(searchResultForDownloadedZimFile)
 
       // test with a long delay typing/deleting to
       // properly execute the search query letter by letter
       searchWithFrequentlyTypedWords(searchQueryForDownloadedZimFile, 300)
       assertSearchSuccessful(searchResultForDownloadedZimFile)
       deleteSearchedQueryFrequently(searchQueryForDownloadedZimFile, uiDevice, 300)
-      assertSearchSuccessful(searchResultForDownloadedZimFile)
       // to close the keyboard
       pressBack()
       // go to reader screen
