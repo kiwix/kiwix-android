@@ -37,6 +37,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.library
@@ -81,11 +82,11 @@ class DownloadTest : BaseActivityTest() {
   @Test
   fun downloadTest() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    activityScenario.onActivity {
+      it.navigate(R.id.libraryFragment)
+    }
     try {
-      downloadRobot {
-        clickLibraryOnBottomNav()
-        refreshLocalLibraryData()
-      }
+      downloadRobot(DownloadRobot::refreshLocalLibraryData)
       // delete all the ZIM files showing in the LocalLibrary
       // screen to properly test the scenario.
       library {

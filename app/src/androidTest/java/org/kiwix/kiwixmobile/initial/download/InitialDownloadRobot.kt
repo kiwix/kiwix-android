@@ -45,10 +45,6 @@ class InitialDownloadRobot : BaseRobot() {
   private var retryCountForCheckDataLoaded = 10
   private val zimFileTitle = "Off the Grid"
 
-  fun clickLibraryOnBottomNav() {
-    clickOn(ViewId(R.id.libraryFragment))
-  }
-
   fun clickDownloadOnBottomNav() {
     clickOn(ViewId(R.id.downloadsFragment))
   }

@@ -29,9 +29,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import io.objectbox.Box
 import io.objectbox.BoxStore
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
@@ -160,10 +158,8 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       expectedFavicon
     )
     box.put(bookmarkEntity)
-    withContext(Dispatchers.Main) {
-      // migrate data into room database
-      objectBoxToLibkiwixMigrator.migrateBookMarks(box)
-    }
+    // migrate data into room database
+    objectBoxToLibkiwixMigrator.migrateBookMarks(box)
     // check if data successfully migrated to room
     val actualDataAfterMigration =
       objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
@@ -176,10 +172,8 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
 
   @Test
   fun testMigrationWithEmptyData(): Unit = runBlocking {
-    withContext(Dispatchers.Main) {
-      // Migrate data from empty ObjectBox database
-      objectBoxToLibkiwixMigrator.migrateBookMarks(box)
-    }
+    // Migrate data from empty ObjectBox database
+    objectBoxToLibkiwixMigrator.migrateBookMarks(box)
     val actualDataAfterMigration =
       objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
     assertTrue(actualDataAfterMigration.isEmpty())
@@ -200,19 +194,15 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       expectedFavicon
     )
     val libkiwixBook = Book()
-    withContext(Dispatchers.Main) {
-      objectBoxToLibkiwixMigrator.libkiwixBookmarks.saveBookmark(
-        LibkiwixBookmarkItem(
-          secondBookmarkEntity,
-          libkiwixBook
-        )
+    objectBoxToLibkiwixMigrator.libkiwixBookmarks.saveBookmark(
+      LibkiwixBookmarkItem(
+        secondBookmarkEntity,
+        libkiwixBook
       )
-      box.put(bookmarkEntity)
-    }
-    withContext(Dispatchers.Main) {
-      // Migrate data into Room database
-      objectBoxToLibkiwixMigrator.migrateBookMarks(box)
-    }
+    )
+    box.put(bookmarkEntity)
+    // Migrate data into Room database
+    objectBoxToLibkiwixMigrator.migrateBookMarks(box)
     val actualDataAfterMigration =
       objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
     assertEquals(2, actualDataAfterMigration.size)
@@ -244,10 +234,8 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
         )
       )
     }
-    withContext(Dispatchers.Main) {
-      // Migrate data into Room database
-      objectBoxToLibkiwixMigrator.migrateBookMarks(box)
-    }
+    // Migrate data into Room database
+    objectBoxToLibkiwixMigrator.migrateBookMarks(box)
     // Check if data successfully migrated to Room
     val actualDataAfterMigration =
       objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
