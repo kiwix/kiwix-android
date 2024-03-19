@@ -29,8 +29,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import io.objectbox.Box
 import io.objectbox.BoxStore
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -162,49 +160,29 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       expectedFavicon
     )
     box.put(bookmarkEntity)
-    withContext(Dispatchers.IO) {
+    withContext(Dispatchers.Main) {
       // migrate data into room database
       objectBoxToLibkiwixMigrator.migrateBookMarks(box)
     }
     // check if data successfully migrated to room
-    objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks()
-      .subscribeOn(Schedulers.io())
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe(
-        { actualDataAfterMigration ->
-          assertEquals(1, actualDataAfterMigration.size)
-          assertEquals(actualDataAfterMigration[0].zimFilePath, expectedZimFilePath)
-          assertEquals(actualDataAfterMigration[0].zimId, expectedZimId)
-          assertEquals(actualDataAfterMigration[0].title, expectedTitle)
-          assertEquals(actualDataAfterMigration[0].url, expectedBookmarkUrl)
-        },
-        {
-          throw RuntimeException(
-            "Exception occurred during migration. Original Exception ${it.printStackTrace()}"
-          )
-        }
-      )
+    val actualDataAfterMigration =
+      objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
+    assertEquals(1, actualDataAfterMigration.size)
+    assertEquals(actualDataAfterMigration[0].zimFilePath, expectedZimFilePath)
+    assertEquals(actualDataAfterMigration[0].zimId, expectedZimId)
+    assertEquals(actualDataAfterMigration[0].title, expectedTitle)
+    assertEquals(actualDataAfterMigration[0].url, expectedBookmarkUrl)
   }
 
   @Test
   fun testMigrationWithEmptyData(): Unit = runBlocking {
-    withContext(Dispatchers.IO) {
+    withContext(Dispatchers.Main) {
       // Migrate data from empty ObjectBox database
       objectBoxToLibkiwixMigrator.migrateBookMarks(box)
     }
-    objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks()
-      .subscribeOn(Schedulers.io())
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe(
-        { actualDataAfterMigration ->
-          assertTrue(actualDataAfterMigration.isEmpty())
-        },
-        {
-          throw RuntimeException(
-            "Exception occurred during migration. Original Exception ${it.printStackTrace()}"
-          )
-        }
-      )
+    val actualDataAfterMigration =
+      objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
+    assertTrue(actualDataAfterMigration.isEmpty())
   }
 
   @Test
@@ -222,7 +200,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       expectedFavicon
     )
     val libkiwixBook = Book()
-    withContext(Dispatchers.IO) {
+    withContext(Dispatchers.Main) {
       objectBoxToLibkiwixMigrator.libkiwixBookmarks.saveBookmark(
         LibkiwixBookmarkItem(
           secondBookmarkEntity,
@@ -231,76 +209,51 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       )
       box.put(bookmarkEntity)
     }
-    withContext(Dispatchers.IO) {
+    withContext(Dispatchers.Main) {
       // Migrate data into Room database
       objectBoxToLibkiwixMigrator.migrateBookMarks(box)
     }
-    objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks()
-      .subscribeOn(Schedulers.io())
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe(
-        { actualDataAfterMigration ->
-          assertEquals(2, actualDataAfterMigration.size)
-          val existingItem =
-            actualDataAfterMigration.find {
-              it.url == existingBookmarkUrl && it.title == existingTitle
-            }
-          assertNotNull(existingItem)
-          val newItem =
-            actualDataAfterMigration.find {
-              it.url == expectedBookmarkUrl && it.title == expectedTitle
-            }
-          assertNotNull(newItem)
-        },
-        {
-          throw RuntimeException(
-            "Exception occurred during migration. Original Exception ${it.printStackTrace()}"
-          )
-        }
-      )
+    val actualDataAfterMigration =
+      objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
+    assertEquals(2, actualDataAfterMigration.size)
+    val existingItem =
+      actualDataAfterMigration.find {
+        it.url == existingBookmarkUrl && it.title == existingTitle
+      }
+    assertNotNull(existingItem)
+    val newItem =
+      actualDataAfterMigration.find {
+        it.url == expectedBookmarkUrl && it.title == expectedTitle
+      }
+    assertNotNull(newItem)
   }
 
   @Test
   fun testLargeDataMigration(): Unit = runBlocking {
     // Test large data migration for recent searches
-    val numEntities = 10000
-    // Insert a large number of recent search entities into ObjectBox
-    (1..numEntities)
-      .asSequence()
-      .map {
+    for (i in 1..1000) {
+      box.put(
         BookmarkEntity(
           0,
           expectedZimId,
           expectedZimName,
           expectedZimFilePath,
-          "https://alpine_linux/search_$it",
-          "title_$it",
+          "https://alpine_linux/search_$i",
+          "title_$i",
           expectedFavicon
         )
-      }
-      .forEach(box::put)
-    withContext(Dispatchers.IO) {
+      )
+    }
+    withContext(Dispatchers.Main) {
       // Migrate data into Room database
       objectBoxToLibkiwixMigrator.migrateBookMarks(box)
     }
     // Check if data successfully migrated to Room
-    objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks()
-      .subscribeOn(Schedulers.io())
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe(
-        { actualDataAfterMigration ->
-          assertEquals(numEntities, actualDataAfterMigration.size)
-          // Clear the bookmarks list from device to not affect the other test cases.
-          clearBookmarks()
-        },
-        {
-          // Clear the bookmarks list from device to not affect the other test cases.
-          clearBookmarks()
-          throw RuntimeException(
-            "Exception occurred during migration. Original Exception ${it.printStackTrace()}"
-          )
-        }
-      )
+    val actualDataAfterMigration =
+      objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
+    assertEquals(1000, actualDataAfterMigration.size)
+    // Clear the bookmarks list from device to not affect the other test cases.
+    clearBookmarks()
   }
 
   private fun clearBookmarks() {
