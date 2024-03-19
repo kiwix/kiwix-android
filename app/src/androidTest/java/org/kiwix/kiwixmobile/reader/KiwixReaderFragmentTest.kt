@@ -106,6 +106,8 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
       clickOnClosedAllTabsButton()
       clickOnUndoButton()
       assertTabRestored()
+      pressBack()
+      checkZimFileLoadedSuccessful(R.id.readerFragment)
     }
     LeakAssertions.assertNoLeaks()
   }
