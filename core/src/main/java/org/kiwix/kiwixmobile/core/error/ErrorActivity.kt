@@ -98,25 +98,26 @@ open class ErrorActivity : BaseActivity() {
   private fun emailIntent(): Intent {
     val emailBody = buildBody()
     return Intent(Intent.ACTION_SEND).apply {
-      type = "vnd.android.cursor.dir/email"
+      type = "text/plain"
       putExtra(
         Intent.EXTRA_EMAIL,
         arrayOf("android-crash-feedback@kiwix.org")
       )
       putExtra(Intent.EXTRA_SUBJECT, subject)
       putExtra(Intent.EXTRA_TEXT, emailBody)
-      if (activityKiwixErrorBinding?.allowLogs?.isChecked == true) {
-        val file = fileLogger.writeLogFile(this@ErrorActivity)
-        file.appendText(emailBody)
-        val path =
-          FileProvider.getUriForFile(
-            this@ErrorActivity,
-            applicationContext.packageName + ".fileprovider",
-            file
-          )
-        addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        putExtra(android.content.Intent.EXTRA_STREAM, path)
-      }
+      val file = fileLogger.writeLogFile(
+        this@ErrorActivity,
+        activityKiwixErrorBinding?.allowLogs?.isChecked == true
+      )
+      file.appendText(emailBody)
+      val path =
+        FileProvider.getUriForFile(
+          this@ErrorActivity,
+          applicationContext.packageName + ".fileprovider",
+          file
+        )
+      addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+      putExtra(android.content.Intent.EXTRA_STREAM, path)
     }
   }
 
