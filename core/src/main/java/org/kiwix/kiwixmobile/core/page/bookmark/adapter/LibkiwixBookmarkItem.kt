@@ -68,7 +68,7 @@ data class LibkiwixBookmarkItem(
 
   constructor(
     bookmarkEntity: BookmarkEntity,
-    libkiwixBook: Book
+    libkiwixBook: Book?
   ) : this(
     zimId = bookmarkEntity.zimId,
     zimFilePath = bookmarkEntity.zimFilePath,
