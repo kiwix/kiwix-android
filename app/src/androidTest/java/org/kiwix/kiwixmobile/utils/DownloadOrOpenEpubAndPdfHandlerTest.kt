@@ -28,7 +28,7 @@ import io.mockk.mockkStatic
 import io.mockk.slot
 import io.mockk.verify
 import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
