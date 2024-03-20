@@ -49,7 +49,7 @@ jobs:
           ram-size: '4096M'
           disk-size: '14G'
           sdcard-path-or-size: ${{ matrix.api-level != 33 && '1000M' || '4096M' }}
-          disable-animations: false
+          disable-animations: true
           heap-size: ${{ matrix.api-level == 33 && '512M' || '' }}
           script: bash contrib/instrumentation.sh
 

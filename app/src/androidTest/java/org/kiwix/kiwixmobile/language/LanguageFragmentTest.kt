@@ -21,7 +21,8 @@ import android.Manifest
 import android.app.Instrumentation
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.lifecycle.Lifecycle
+import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
@@ -45,9 +46,6 @@ class LanguageFragmentTest {
   @Rule
   @JvmField
   var retryRule = RetryRule()
-
-  @get:Rule
-  var activityScenarioRule = ActivityScenarioRule(KiwixMainActivity::class.java)
 
   private val permissions = arrayOf(
     Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -77,6 +75,9 @@ class LanguageFragmentTest {
         putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
         putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, false)
       }
+    ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+      moveToState(Lifecycle.State.RESUMED)
+    }
   }
 
   @Test

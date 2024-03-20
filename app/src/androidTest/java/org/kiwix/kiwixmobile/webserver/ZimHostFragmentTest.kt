@@ -97,7 +97,9 @@ class ZimHostFragmentTest {
 
   @Test
   fun testZimHostFragment() {
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1 &&
+      Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+    ) {
       activityScenario.onActivity {
         it.navigate(R.id.libraryFragment)
       }

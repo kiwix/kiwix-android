@@ -27,6 +27,7 @@ import io.mockk.mockk
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -36,6 +37,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.documentProviderContentQuery
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getAllZimParts
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.hasPart
+import org.kiwix.kiwixmobile.testutils.RetryRule
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -53,6 +55,10 @@ class FileUtilsInstrumentationTest {
     "content://com.android.externalstorage.documents/document/"
   private val downloadUriPrefix = "content://media/external/downloads/"
   private val expectedFilePath = "${Environment.getExternalStorageDirectory()}/$commonPath"
+
+  @Rule
+  @JvmField
+  var retryRule = RetryRule()
 
   @Before
   fun executeBefore() {
@@ -354,97 +360,109 @@ class FileUtilsInstrumentationTest {
 
   @Test
   fun testExtractDocumentId() {
-    val dummyDownloadUriData = arrayOf(
-      DummyUrlData(
-        null,
-        "raw:$expectedFilePath",
-        Uri.parse("${downloadDocumentUriPrefix}raw%3A%2Fstorage%2Femulated%2F0%2F$commonUri")
-      ),
-      DummyUrlData(
-        null,
-        expectedFilePath,
-        Uri.parse("$downloadDocumentUriPrefix%2Fstorage%2Femulated%2F0%2F$commonUri")
-      ),
-      DummyUrlData(
-        null,
-        "",
-        Uri.parse(downloadUriPrefix)
-      )
-    )
-
-    dummyDownloadUriData.forEach { dummyUrlData ->
-      dummyUrlData.uri?.let { uri ->
-        Assertions.assertEquals(
-          FileUtils.extractDocumentId(uri, DocumentResolverWrapper()),
-          dummyUrlData.expectedFileName
+    // We are not running this test case on Android 13 and above. In this version,
+    // numerous security updates have been included, preventing us from modifying the
+    // default behavior of ContentResolver.
+    // Therefore, we are restricting this test to API level 33 and below.
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      val dummyDownloadUriData = arrayOf(
+        DummyUrlData(
+          null,
+          "raw:$expectedFilePath",
+          Uri.parse("${downloadDocumentUriPrefix}raw%3A%2Fstorage%2Femulated%2F0%2F$commonUri")
+        ),
+        DummyUrlData(
+          null,
+          expectedFilePath,
+          Uri.parse("$downloadDocumentUriPrefix%2Fstorage%2Femulated%2F0%2F$commonUri")
+        ),
+        DummyUrlData(
+          null,
+          "",
+          Uri.parse(downloadUriPrefix)
         )
-      }
-    }
+      )
 
-    // Testing with a dynamically generated URI. This URI creates at runtime,
-    // and passing it statically would result in an `IllegalArgumentException` exception.
-    // Therefore, we simulate this scenario using the `DocumentsContractWrapper`
-    // to conduct the test.
-    val mockDocumentsContractWrapper: DocumentResolverWrapper = mockk()
-    val expectedDocumentId = "1000020403"
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-      // Below Android 10, download URI schemes are of the content type, such as:
-      // content://com.android.chrome.FileProvider/downloads/alpinelinux_en_all_nopic_2022-12.zim
-      // As a result, this method will not be called during that time. We are not testing it on
-      // Android versions below 10, as it would result in an "IllegalArgumentException" exception.
-      val mockedUri = Uri.parse("$downloadUriPrefix$expectedDocumentId")
-      every { mockDocumentsContractWrapper.getDocumentId(mockedUri) } returns expectedDocumentId
-      val actualDocumentId = FileUtils.extractDocumentId(mockedUri, mockDocumentsContractWrapper)
-      assertEquals(expectedDocumentId, actualDocumentId)
+      dummyDownloadUriData.forEach { dummyUrlData ->
+        dummyUrlData.uri?.let { uri ->
+          Assertions.assertEquals(
+            FileUtils.extractDocumentId(uri, DocumentResolverWrapper()),
+            dummyUrlData.expectedFileName
+          )
+        }
+      }
+
+      // Testing with a dynamically generated URI. This URI creates at runtime,
+      // and passing it statically would result in an `IllegalArgumentException` exception.
+      // Therefore, we simulate this scenario using the `DocumentsContractWrapper`
+      // to conduct the test.
+      val mockDocumentsContractWrapper: DocumentResolverWrapper = mockk()
+      val expectedDocumentId = "1000020403"
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        // Below Android 10, download URI schemes are of the content type, such as:
+        // content://com.android.chrome.FileProvider/downloads/alpinelinux_en_all_nopic_2022-12.zim
+        // As a result, this method will not be called during that time. We are not testing it on
+        // Android versions below 10, as it would result in an "IllegalArgumentException" exception.
+        val mockedUri = Uri.parse("$downloadUriPrefix$expectedDocumentId")
+        every { mockDocumentsContractWrapper.getDocumentId(mockedUri) } returns expectedDocumentId
+        val actualDocumentId = FileUtils.extractDocumentId(mockedUri, mockDocumentsContractWrapper)
+        assertEquals(expectedDocumentId, actualDocumentId)
+      }
     }
   }
 
   @Test
   fun testDocumentProviderContentQuery() {
-    // test to get the download uri on old device
-    testWithDownloadUri(
-      Uri.parse("${downloadDocumentUriPrefix}raw%3A%2Fstorage%2Femulated%2F0%2F$commonUri"),
-      expectedFilePath
-    )
+    // We are not running this test case on Android 13 and above. In this version,
+    // numerous security updates have been included, preventing us from modifying the
+    // default behavior of ContentResolver.
+    // Therefore, we are restricting this test to API level 33 and below.
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      // test to get the download uri on old device
+      testWithDownloadUri(
+        Uri.parse("${downloadDocumentUriPrefix}raw%3A%2Fstorage%2Femulated%2F0%2F$commonUri"),
+        expectedFilePath
+      )
 
-    // test to get the download uri on new device
-    testWithDownloadUri(
-      Uri.parse("$downloadDocumentUriPrefix%2Fstorage%2Femulated%2F0%2F$commonUri"),
-      expectedFilePath
-    )
+      // test to get the download uri on new device
+      testWithDownloadUri(
+        Uri.parse("$downloadDocumentUriPrefix%2Fstorage%2Femulated%2F0%2F$commonUri"),
+        expectedFilePath
+      )
 
-    // test with all possible download uris
-    val contentUriPrefixes = arrayOf(
-      "content://downloads/public_downloads",
-      "content://downloads/my_downloads",
-      "content://downloads/all_downloads"
-    )
+      // test with all possible download uris
+      val contentUriPrefixes = arrayOf(
+        "content://downloads/public_downloads",
+        "content://downloads/my_downloads",
+        "content://downloads/all_downloads"
+      )
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-      // Below Android 10, download URI schemes are of the content type, such as:
-      // content://com.android.chrome.FileProvider/downloads/alpinelinux_en_all_nopic_2022-12.zim
-      // As a result, this method will not be called during that time. We are not testing it on
-      // Android versions below 10, as it would result in an "IllegalArgumentException" exception.
-      contentUriPrefixes.forEach {
-        val mockDocumentsContractWrapper: DocumentResolverWrapper = mockk()
-        val expectedDocumentId = "1000020403"
-        val mockedUri = Uri.parse("$it/$expectedDocumentId")
-        every { mockDocumentsContractWrapper.getDocumentId(mockedUri) } returns expectedDocumentId
-        every {
-          mockDocumentsContractWrapper.query(
-            context!!,
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        // Below Android 10, download URI schemes are of the content type, such as:
+        // content://com.android.chrome.FileProvider/downloads/alpinelinux_en_all_nopic_2022-12.zim
+        // As a result, this method will not be called during that time. We are not testing it on
+        // Android versions below 10, as it would result in an "IllegalArgumentException" exception.
+        contentUriPrefixes.forEach {
+          val mockDocumentsContractWrapper: DocumentResolverWrapper = mockk()
+          val expectedDocumentId = "1000020403"
+          val mockedUri = Uri.parse("$it/$expectedDocumentId")
+          every { mockDocumentsContractWrapper.getDocumentId(mockedUri) } returns expectedDocumentId
+          every {
+            mockDocumentsContractWrapper.query(
+              context!!,
+              mockedUri,
+              "_data",
+              null,
+              null,
+              null
+            )
+          } returns expectedFilePath
+          testWithDownloadUri(
             mockedUri,
-            "_data",
-            null,
-            null,
-            null
+            expectedFilePath,
+            mockDocumentsContractWrapper
           )
-        } returns expectedFilePath
-        testWithDownloadUri(
-          mockedUri,
-          expectedFilePath,
-          mockDocumentsContractWrapper
-        )
+        }
       }
     }
   }

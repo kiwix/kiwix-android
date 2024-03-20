@@ -73,11 +73,11 @@ class TopLevelDestinationTest : BaseActivityTest() {
     topLevel {
       clickReaderOnBottomNav {
       }
+      clickDownloadOnBottomNav(OnlineLibraryRobot::assertLibraryListDisplayed)
       clickLibraryOnBottomNav {
         assertGetZimNearbyDeviceDisplayed()
         clickFileTransferIcon(LocalFileTransferRobot::assertReceiveFileTitleVisible)
       }
-      clickDownloadOnBottomNav(OnlineLibraryRobot::assertLibraryListDisplayed)
       clickBookmarksOnNavDrawer {
         assertBookMarksDisplayed()
         clickOnTrashIcon()

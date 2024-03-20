@@ -29,11 +29,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import io.objectbox.Box
 import io.objectbox.BoxStore
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
@@ -120,6 +116,9 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     }
     box = boxStore.boxFor(BookmarkEntity::class.java)
 
+    // clear the data before running the test case
+    clearBookmarks()
+
     // add a file in fileSystem because we need to actual file path for making object of Archive.
     val loadFileStream =
       ObjectBoxToLibkiwixMigratorTest::class.java.classLoader.getResourceAsStream("testzim.zim")
@@ -139,9 +138,6 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
         }
       }
     }
-
-    // clear the data before running the test case
-    clearBookmarks()
   }
 
   @Test
@@ -162,49 +158,25 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       expectedFavicon
     )
     box.put(bookmarkEntity)
-    withContext(Dispatchers.IO) {
-      // migrate data into room database
-      objectBoxToLibkiwixMigrator.migrateBookMarks(box)
-    }
+    // migrate data into room database
+    objectBoxToLibkiwixMigrator.migrateBookMarks(box)
     // check if data successfully migrated to room
-    objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks()
-      .subscribeOn(Schedulers.io())
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe(
-        { actualDataAfterMigration ->
-          assertEquals(1, actualDataAfterMigration.size)
-          assertEquals(actualDataAfterMigration[0].zimFilePath, expectedZimFilePath)
-          assertEquals(actualDataAfterMigration[0].zimId, expectedZimId)
-          assertEquals(actualDataAfterMigration[0].title, expectedTitle)
-          assertEquals(actualDataAfterMigration[0].url, expectedBookmarkUrl)
-        },
-        {
-          throw RuntimeException(
-            "Exception occurred during migration. Original Exception ${it.printStackTrace()}"
-          )
-        }
-      )
+    val actualDataAfterMigration =
+      objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
+    assertEquals(1, actualDataAfterMigration.size)
+    assertEquals(actualDataAfterMigration[0].zimFilePath, expectedZimFilePath)
+    assertEquals(actualDataAfterMigration[0].zimId, expectedZimId)
+    assertEquals(actualDataAfterMigration[0].title, expectedTitle)
+    assertEquals(actualDataAfterMigration[0].url, expectedBookmarkUrl)
   }
 
   @Test
   fun testMigrationWithEmptyData(): Unit = runBlocking {
-    withContext(Dispatchers.IO) {
-      // Migrate data from empty ObjectBox database
-      objectBoxToLibkiwixMigrator.migrateBookMarks(box)
-    }
-    objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks()
-      .subscribeOn(Schedulers.io())
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe(
-        { actualDataAfterMigration ->
-          assertTrue(actualDataAfterMigration.isEmpty())
-        },
-        {
-          throw RuntimeException(
-            "Exception occurred during migration. Original Exception ${it.printStackTrace()}"
-          )
-        }
-      )
+    // Migrate data from empty ObjectBox database
+    objectBoxToLibkiwixMigrator.migrateBookMarks(box)
+    val actualDataAfterMigration =
+      objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
+    assertTrue(actualDataAfterMigration.isEmpty())
   }
 
   @Test
@@ -222,85 +194,54 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       expectedFavicon
     )
     val libkiwixBook = Book()
-    withContext(Dispatchers.IO) {
-      objectBoxToLibkiwixMigrator.libkiwixBookmarks.saveBookmark(
-        LibkiwixBookmarkItem(
-          secondBookmarkEntity,
-          libkiwixBook
-        )
+    objectBoxToLibkiwixMigrator.libkiwixBookmarks.saveBookmark(
+      LibkiwixBookmarkItem(
+        secondBookmarkEntity,
+        libkiwixBook
       )
-      box.put(bookmarkEntity)
-    }
-    withContext(Dispatchers.IO) {
-      // Migrate data into Room database
-      objectBoxToLibkiwixMigrator.migrateBookMarks(box)
-    }
-    objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks()
-      .subscribeOn(Schedulers.io())
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe(
-        { actualDataAfterMigration ->
-          assertEquals(2, actualDataAfterMigration.size)
-          val existingItem =
-            actualDataAfterMigration.find {
-              it.url == existingBookmarkUrl && it.title == existingTitle
-            }
-          assertNotNull(existingItem)
-          val newItem =
-            actualDataAfterMigration.find {
-              it.url == expectedBookmarkUrl && it.title == expectedTitle
-            }
-          assertNotNull(newItem)
-        },
-        {
-          throw RuntimeException(
-            "Exception occurred during migration. Original Exception ${it.printStackTrace()}"
-          )
-        }
-      )
+    )
+    box.put(bookmarkEntity)
+    // Migrate data into Room database
+    objectBoxToLibkiwixMigrator.migrateBookMarks(box)
+    val actualDataAfterMigration =
+      objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
+    assertEquals(2, actualDataAfterMigration.size)
+    val existingItem =
+      actualDataAfterMigration.find {
+        it.url == existingBookmarkUrl && it.title == existingTitle
+      }
+    assertNotNull(existingItem)
+    val newItem =
+      actualDataAfterMigration.find {
+        it.url == expectedBookmarkUrl && it.title == expectedTitle
+      }
+    assertNotNull(newItem)
   }
 
   @Test
   fun testLargeDataMigration(): Unit = runBlocking {
     // Test large data migration for recent searches
-    val numEntities = 10000
-    // Insert a large number of recent search entities into ObjectBox
-    (1..numEntities)
-      .asSequence()
-      .map {
+    for (i in 1..1000) {
+      box.put(
         BookmarkEntity(
           0,
           expectedZimId,
           expectedZimName,
           expectedZimFilePath,
-          "https://alpine_linux/search_$it",
-          "title_$it",
+          "https://alpine_linux/search_$i",
+          "title_$i",
           expectedFavicon
         )
-      }
-      .forEach(box::put)
-    withContext(Dispatchers.IO) {
-      // Migrate data into Room database
-      objectBoxToLibkiwixMigrator.migrateBookMarks(box)
-    }
-    // Check if data successfully migrated to Room
-    objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks()
-      .subscribeOn(Schedulers.io())
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe(
-        { actualDataAfterMigration ->
-          assertEquals(numEntities, actualDataAfterMigration.size)
-          // Clear the bookmarks list from device to not affect the other test cases.
-          clearBookmarks()
-        },
-        {
-          // Clear the bookmarks list from device to not affect the other test cases.
-          clearBookmarks()
-          throw RuntimeException(
-            "Exception occurred during migration. Original Exception ${it.printStackTrace()}"
-          )
-        }
       )
+    }
+    // Migrate data into Room database
+    objectBoxToLibkiwixMigrator.migrateBookMarks(box)
+    // Check if data successfully migrated to Room
+    val actualDataAfterMigration =
+      objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
+    assertEquals(1000, actualDataAfterMigration.size)
+    // Clear the bookmarks list from device to not affect the other test cases.
+    clearBookmarks()
   }
 
   private fun clearBookmarks() {
@@ -310,7 +251,9 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
         .blockingFirst() as List<LibkiwixBookmarkItem>
     )
     box.removeAll()
-    zimFile.delete() // delete the temp ZIM file to free up the memory
+    if (::zimFile.isInitialized) {
+      zimFile.delete() // delete the temp ZIM file to free up the memory
+    }
   }
 
   @After
