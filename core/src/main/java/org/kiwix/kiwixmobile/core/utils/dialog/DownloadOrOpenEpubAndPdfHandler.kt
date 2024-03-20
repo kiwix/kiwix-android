@@ -36,8 +36,9 @@ class DownloadOrOpenEpubAndPdfHandler @Inject constructor(
   private val alertDialogShower: AlertDialogShower,
   private val zimReaderContainer: ZimReaderContainer
 ) {
+  var intent: Intent = Intent(Intent.ACTION_VIEW)
 
-  fun showDownloadOrOpenEpubAndPdfDialog(url: String, documentType: String?) {
+  fun showDownloadOrOpenEpubAndPdfDialog(url: String?, documentType: String?) {
     alertDialogShower.show(
       KiwixDialog.DownloadOrOpenEpubAndPdf,
       { openOrDownloadFile(url, documentType, true) },
@@ -46,7 +47,7 @@ class DownloadOrOpenEpubAndPdfHandler @Inject constructor(
     )
   }
 
-  private fun openOrDownloadFile(url: String, documentType: String?, openFile: Boolean) {
+  private fun openOrDownloadFile(url: String?, documentType: String?, openFile: Boolean) {
     downloadFileFromUrl(
       url,
       null,
@@ -72,7 +73,7 @@ class DownloadOrOpenEpubAndPdfHandler @Inject constructor(
         "${activity.packageName}.fileprovider",
         savedFile
       )
-      val intent = Intent(Intent.ACTION_VIEW).apply {
+      intent.apply {
         setDataAndType(uri, documentType)
         flags = Intent.FLAG_ACTIVITY_NO_HISTORY
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
