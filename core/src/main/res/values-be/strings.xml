@@ -4,6 +4,7 @@
 * Kareyac
 * Mechanizatar
 * No Sleep till Krupki
+* Plaga med
 * ZlyiLev
 -->
 <resources>
@@ -59,10 +60,12 @@
   <string name="pref_newtab_background_title">Адкрыць новае вакенца на фоне</string>
   <string name="pref_newtab_background_summary">Пры адкрыцці новага вакенца, яно будзе адкрытае ў фоне</string>
   <string name="library">Бібліятэка</string>
+  <string name="download">Спампаваць</string>
   <string name="tts_pause">паўза</string>
   <string name="tts_resume">аднавіць</string>
   <string name="yes">Так</string>
   <string name="no">Не</string>
+  <string name="confirm_stop_download_title">Спыніць спампоўванне?</string>
   <string name="next">Далей</string>
   <string name="time_day">дзень</string>
   <string name="time_hour">ч</string>
@@ -70,6 +73,7 @@
   <string name="time_second">с</string>
   <string name="time_today">Сёння</string>
   <string name="time_yesterday">Учора</string>
+  <string name="download_books">Спампаваць кнігі</string>
   <string name="history">Гісторыя</string>
   <string name="no_bookmarks" fuzzy="true">Няма закладак!</string>
 </resources>
