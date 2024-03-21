@@ -21,6 +21,7 @@
   <string name="menu_read_aloud">Lue ääneen</string>
   <string name="menu_read_aloud_stop">Lopeta ääneen lukeminen</string>
   <string name="menu_support_kiwix">Tue Kiwixiä</string>
+  <string name="menu_about_app">Tietoja sovelluksesta %s</string>
   <string name="menu_wifi_hotspot">Hostaa kirjoja</string>
   <string name="save_media">Tallenna media</string>
   <string name="save_media_error">Virhe mediaa tallennettaessa!</string>

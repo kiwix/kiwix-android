@@ -248,6 +248,7 @@
   <string name="severe_loss_error">Poważny błąd! Spróbuj wyłączyć/ponownie włączyć WiFi P2P</string>
   <string name="connection_failed">Połączenie nie powiodło się</string>
   <string name="permission_rationale_location">Uprawnienie lokalizacja jest wymagane przez system Android, aby umożliwić aplikacji do wykrywania urządzeń</string>
+  <string name="permission_rationale_nearby">Aby aplikacja mogła wykrywać urządzenia równorzędne, system Android wymaga pozwolenia na urządzenia w pobliżu</string>
   <string name="permission_refused_location">Nie można zlokalizować urządzeń bez uprawnień do lokalizacji</string>
   <string name="permission_refused_storage">Nie można uzyskać dostępu do plików zim bez uprawnień do przechowywania</string>
   <string name="request_enable_location">Włączyć lokalizację, aby umożliwić wykrywanie równorzędnych elementów</string>
