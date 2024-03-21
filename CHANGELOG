@@ -1,3 +1,35 @@
+3.10.0
+New Features:
+* When searching for any article if the user presses the search/enter button on the keyboard, and if any article is found with the searched query then it will open that article directly. (https://github.com/kiwix/kiwix-android/pull/3704)
+* Introduced the progress bar in the library screen to show how much storage has been scanned. (https://github.com/kiwix/kiwix-android/pull/3674)
+
+Bug Fixes:
+* Enhanced ZIM file scanning. (https://github.com/kiwix/kiwix-android/pull/3674)
+* Fixed pop-up(Search kiwix) function issue with Librera reader. (https://github.com/kiwix/kiwix-android/pull/3725)
+* Inconsistent visibility behavior when no ZIM file is opened. (https://github.com/kiwix/kiwix-android/pull/3688)
+* Application crashes below API level 29 when we select the external storage. (https://github.com/kiwix/kiwix-android/pull/3642)
+* Application crashes when opening saved notes if the ZIM file does not exist. (https://github.com/kiwix/kiwix-android/issues/3682)
+* Application crashes when opening ZIM files directly opening from storage using deep linking. (https://github.com/kiwix/kiwix-android/pull/3649)
+* A few Samsung devices are unable to download 4+ gb files. (https://github.com/kiwix/kiwix-android/pull/3695)
+* Content is not displaying after opening the ZIM file from Chrome. (https://github.com/kiwix/kiwix-android/pull/3727)
+* Read aloud does not stop for closed tabs. (https://github.com/kiwix/kiwix-android/pull/3745)
+* After restoring the tab it hides some top area of the article. (https://github.com/kiwix/kiwix-android/pull/3743)
+* Improved UI to show hints of view functionality when the user long clicks on any view. (https://github.com/kiwix/kiwix-android/pull/3689, https://github.com/kiwix/kiwix-android/pull/3707, https://github.com/kiwix/kiwix-android/pull/3706)
+* Application is not restarting from Error activity. (https://github.com/kiwix/kiwix-android/pull/3735)
+* Better permission requesting (https://github.com/kiwix/kiwix-android/pull/3729)
+* Few links are not working in README.md file. (https://github.com/kiwix/kiwix-android/pull/3637, https://github.com/kiwix/kiwix-android/pull/3655)
++ More
+
+Compilation/CI/CD:
+* Using libkiwix `2.0.0`. (https://github.com/kiwix/kiwix-android/issues/3693)
+* Using libkiwix to store the bookmarks instead of objectbox. (https://github.com/kiwix/kiwix-android/pull/3653)
+* Unconditional Logging lint issue. (https://github.com/kiwix/kiwix-android/issues/1270)
+* Improved our CI to smoothly run the test cases. (https://github.com/kiwix/kiwix-android/pull/3758)
+* Added/improved test cases.
+* Increased java heap memory to efficiently creating app bundle for custom apps. (https://github.com/kiwix/kiwix-android/pull/3665)
+* Upgraded project dependencies to fix errors reported by the play store. (https://github.com/kiwix/kiwix-android/pull/3648, https://github.com/kiwix/kiwix-android/pull/3731)
++ More
+
 3.9.1
 Bug Fixes:
 * Better permission requesting (https://github.com/kiwix/kiwix-android/pull/3618)
