@@ -113,6 +113,12 @@ class KiwixReaderFragment : CoreReaderFragment() {
     )
 
     if (filePath == null || !File(filePath).isFileExist()) {
+      // Close the previously opened book in the reader. Since this file is not found,
+      // it will not be set in the zimFileReader. The previously opened ZIM file
+      // will be saved when we move between fragments. If we return to the reader again,
+      // it will attempt to open the last opened ZIM file with the last loaded URL,
+      // which is inside the non-existing ZIM file. This leads to unexpected behavior.
+      exitBook()
       activity.toast(R.string.error_file_not_found)
       return
     }
