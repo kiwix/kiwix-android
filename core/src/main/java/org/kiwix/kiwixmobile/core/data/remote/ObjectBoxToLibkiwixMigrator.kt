@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.data.remote
 
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
@@ -29,8 +28,10 @@ import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.libkiwix.Book
 import org.kiwix.libzim.Archive
+import java.io.File
 import javax.inject.Inject
 
 class ObjectBoxToLibkiwixMigrator {
@@ -57,9 +58,15 @@ class ObjectBoxToLibkiwixMigrator {
           // favicon and zimFilePath in library.
           var archive: Archive? = null
           val libkiwixBook = bookmarkEntity.zimFilePath?.let {
-            archive = Archive(bookmarkEntity.zimFilePath)
-            Book().apply {
-              update(archive)
+            if (File(it).exists()) {
+              archive = Archive(bookmarkEntity.zimFilePath)
+              Book().apply {
+                update(archive)
+              }
+            } else {
+              // Migrate bookmarks even if the file does not exist in the file system,
+              // to display them on the bookmark screen.
+              null
             }
           } ?: kotlin.run {
             // for migrating bookmarks for recent custom apps since in recent version of

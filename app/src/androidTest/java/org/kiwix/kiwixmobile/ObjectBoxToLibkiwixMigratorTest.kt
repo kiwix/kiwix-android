@@ -142,21 +142,6 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
 
   @Test
   fun testSingleDataMigration(): Unit = runBlocking {
-    val expectedZimName = "Alpine_Linux"
-    val expectedZimId = "60094d1e-1c9a-a60b-2011-4fb02f8db6c3"
-    val expectedZimFilePath = zimFile.canonicalPath
-    val expectedTitle = "Installing"
-    val expectedBookmarkUrl = "https://alpine_linux/InstallingPage"
-    val expectedFavicon = ""
-    val bookmarkEntity = BookmarkEntity(
-      0,
-      expectedZimId,
-      expectedZimName,
-      expectedZimFilePath,
-      expectedBookmarkUrl,
-      expectedTitle,
-      expectedFavicon
-    )
     box.put(bookmarkEntity)
     // migrate data into room database
     objectBoxToLibkiwixMigrator.migrateBookMarks(box)
@@ -168,6 +153,8 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     assertEquals(actualDataAfterMigration[0].zimId, expectedZimId)
     assertEquals(actualDataAfterMigration[0].title, expectedTitle)
     assertEquals(actualDataAfterMigration[0].url, expectedBookmarkUrl)
+    // Clear the bookmarks list from device to not affect the other test cases.
+    clearBookmarks()
   }
 
   @Test
@@ -177,6 +164,8 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     val actualDataAfterMigration =
       objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
     assertTrue(actualDataAfterMigration.isEmpty())
+    // Clear the bookmarks list from device to not affect the other test cases.
+    clearBookmarks()
   }
 
   @Test
@@ -216,6 +205,8 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
         it.url == expectedBookmarkUrl && it.title == expectedTitle
       }
     assertNotNull(newItem)
+    // Clear the bookmarks list from device to not affect the other test cases.
+    clearBookmarks()
   }
 
   @Test
@@ -240,6 +231,61 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     val actualDataAfterMigration =
       objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
     assertEquals(1000, actualDataAfterMigration.size)
+    // Clear the bookmarks list from device to not affect the other test cases.
+    clearBookmarks()
+  }
+
+  @Test
+  fun testMigrationForNewCustomApps(): Unit = runBlocking {
+    val expectedZimId = "60094d1e-1c9a-a60b-2011"
+    val bookmarkEntity = BookmarkEntity(
+      0,
+      expectedZimId,
+      expectedZimName,
+      null,
+      expectedBookmarkUrl,
+      expectedTitle,
+      expectedFavicon
+    )
+    box.put(bookmarkEntity)
+    // migrate data into room database
+    objectBoxToLibkiwixMigrator.migrateBookMarks(box)
+    // check if data successfully migrated to room
+    val actualDataAfterMigration =
+      objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
+    assertEquals(1, actualDataAfterMigration.size)
+    assertEquals(actualDataAfterMigration[0].zimFilePath, null)
+    assertEquals(actualDataAfterMigration[0].zimId, expectedZimId)
+    assertEquals(actualDataAfterMigration[0].title, expectedTitle)
+    assertEquals(actualDataAfterMigration[0].url, expectedBookmarkUrl)
+    // Clear the bookmarks list from device to not affect the other test cases.
+    clearBookmarks()
+  }
+
+  @Test
+  fun testMigrationForNonExistingFiles(): Unit = runBlocking {
+    val expectedZimId = "60094d1e-1c9a-a60b-2011-a60b"
+    val nonExistingPath = "storage/Download/demo/demo.zim"
+    val bookmarkEntity = BookmarkEntity(
+      0,
+      expectedZimId,
+      expectedZimName,
+      nonExistingPath,
+      expectedBookmarkUrl,
+      expectedTitle,
+      expectedFavicon
+    )
+    box.put(bookmarkEntity)
+    // migrate data into room database
+    objectBoxToLibkiwixMigrator.migrateBookMarks(box)
+    // check if data successfully migrated to room
+    val actualDataAfterMigration =
+      objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
+    assertEquals(1, actualDataAfterMigration.size)
+    assertEquals(actualDataAfterMigration[0].zimFilePath, null)
+    assertEquals(actualDataAfterMigration[0].zimId, expectedZimId)
+    assertEquals(actualDataAfterMigration[0].title, expectedTitle)
+    assertEquals(actualDataAfterMigration[0].url, expectedBookmarkUrl)
     // Clear the bookmarks list from device to not affect the other test cases.
     clearBookmarks()
   }
