@@ -216,11 +216,10 @@ class ZimFileReader constructor(
       jniKiwixReader.getEntryByPath(actualPath)
         .getItem(true)
         .path
-        .replaceWithEncodedString
     } catch (ignore: Exception) {
-      actualPath.replaceWithEncodedString
+      actualPath
     }
-    if (url.decodeUrl.contains("?")) {
+    if (url.contains("?")) {
       redirectPath += extractQueryParam(url)
     }
     return redirectPath

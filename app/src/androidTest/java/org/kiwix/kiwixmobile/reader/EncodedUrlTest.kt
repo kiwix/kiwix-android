@@ -94,45 +94,50 @@ class EncodedUrlTest : BaseActivityTest() {
       ),
       EncodedUrl(
         "https://kiwix.app/foo/part%20with%20space/bar%3Fkey%3Dvalue",
-        "https://kiwix.app/foo/part%20with%20space/bar%3Fkey%3Dvalue?"
+        "https://kiwix.app/foo/part%20with%20space/bar%3Fkey%3Dvalue"
       ),
       EncodedUrl(
-        "https://kiwix.app/foo/part%20with%20space/bar%3Fkey%3Dvalue",
-        "https://kiwix.app/foo/part%20with%20space/bar%3Fkey%3Dvalue?"
-      ),
-      EncodedUrl(
-        "https://kiwix.app/foo/part%20with%20space%2Fbar%3Fkey%3Dvalue",
-        "https://kiwix.app/foo/part%20with%20space%2Fbar%3Fkey%3Dvalue?"
+        "https://kiwix.app/foo%2Fpart%20with%20space%2Fbar%3Fkey%3Dvalue",
+        "https://kiwix.app/foo%2Fpart%20with%20space%2Fbar%3Fkey%3Dvalue"
       ),
       EncodedUrl(
         "https://kiwix.app/foo/part%20with%20space/bar?key=value",
         "https://kiwix.app/foo/part%20with%20space/bar?key=value"
       ),
       EncodedUrl(
-        "https://kiwix.app/foo/part%20with%20space/bar?key=value",
-        "https://kiwix.app/foo/part%20with%20space/bar?key=value"
-      ),
-      EncodedUrl(
-        "https://kiwix.app/foo/part%20with%20space/bar?key=value",
-        "https://kiwix.app/foo/part%20with%20space/bar?key=value"
-      ),
-      EncodedUrl(
-        "https://kiwix.app/foo/part/file%20with%20%3F%20and%20+?who=Chip%26Dale&quer=Is" +
-          "%20there%20any%20%2B%20here%3F",
+        "https://kiwix.app/foo/part/file%20with%20%3F%20and%20+?who=Chip%26Dale&quer=Is%20" +
+          "there%20any%20%2B%20here%3F",
         "https://kiwix.app/foo/part/file%20with%20%3F%20and%20+?who=Chip%26Dale&quer" +
           "=Is%20there%20any%20%2B%20here%3F"
       ),
       EncodedUrl(
-        "https://kiwix.app/foo/part/file%20with%20%253F%20and%20%2B%3Fwho%3DChip%2526Dale" +
-          "%26quer%3DIs%2520there%2520any%2520%252B%2520here%253F",
+        "https://kiwix.app/foo/part/file%20with%20%253F%20and%20%2B%3Fwho%3DChip%2526Dale%26" +
+          "quer%3DIs%2520there%2520any%2520%252B%2520here%253F",
         "https://kiwix.app/foo/part/file%20with%20%253F%20and%20%2B%3Fwho%3DChip" +
-          "%2526Dale%26quer%3DIs%2520there%2520any%2520%252B%2520here%253F?"
+          "%2526Dale%26quer%3DIs%2520there%2520any%2520%252B%2520here%253F"
       ),
       EncodedUrl(
-        "https://kiwix.app/foo/part/file%20with%20%3F%20and%20%2B%3Fwho%3DChip%26Dale" +
-          "%26question%3DIt%20there%20any%20%2B%20here%3F",
+        "https://kiwix.app/foo/part/file%20with%20%3F%20and%20%2B%3Fwho%3DChip%26Dale%26" +
+          "question%3DIt%20there%20any%20%2B%20here%3F",
         "https://kiwix.app/foo/part/file%20with%20%3F%20and%20%2B%3Fwho%3DChip%26" +
-          "Dale%26question%3DIt%20there%20any%20%2B%20here%3F?"
+          "Dale%26question%3DIt%20there%20any%20%2B%20here%3F"
+      ),
+      EncodedUrl(
+        "https://kiwix.app/foo/part/file%3Fquestion%3DIs%2520there%2520any" +
+          "%2520%252B%2520here%253F",
+        "https://kiwix.app/foo/part/file%3Fquestion%3DIs%2520there%2520" +
+          "any%2520%252B%2520here%253F"
+      ),
+      EncodedUrl(
+        "https://kiwix.app/foo/part/file%3Fquestion%3DIs%2Bthere%2Bany%2B%252B%2Bhere%253F",
+        "https://kiwix.app/foo/part/file%3Fquestion%3DIs%2Bthere%2Bany%2B%252B%2B" +
+          "here%253F"
+      ),
+      EncodedUrl(
+        "https://kiwix.app/%F0%9F%A5%B3%F0%9F%A5%B0%F0%9F%98%98%F0%9F%A4%A9%F0%9F%98%8D%F0%9F" +
+          "%A4%8D%F0%9F%8E%80%F0%9F%A7%B8%F0%9F%8C%B7%F0%9F%8D%AD",
+        "https://kiwix.app/%F0%9F%A5%B3%F0%9F%A5%B0%F0%9F%98%98%F0%9F%A4%A9%F0%9F%98%8D" +
+          "%F0%9F%A4%8D%F0%9F%8E%80%F0%9F%A7%B8%F0%9F%8C%B7%F0%9F%8D%AD"
       )
     )
     encodedUrls.forEach {
