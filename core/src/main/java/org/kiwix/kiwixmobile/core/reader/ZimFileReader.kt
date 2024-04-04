@@ -22,7 +22,6 @@ import android.content.res.AssetFileDescriptor
 import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.util.Base64
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import androidx.core.net.toUri
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
@@ -33,6 +32,7 @@ import org.kiwix.kiwixmobile.core.main.UNINITIALISER_ADDRESS
 import org.kiwix.kiwixmobile.core.main.UNINITIALISE_HTML
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.libkiwix.JNIKiwixException
 import org.kiwix.libzim.Archive
 import org.kiwix.libzim.DirectAccessInfo
@@ -211,16 +211,15 @@ class ZimFileReader constructor(
     "$CONTENT_PREFIX${getActualUrl(url)}".toUri()
 
   private fun getActualUrl(url: String): String {
-    val actualPath = url.toUri().filePath.decodeUrl
+    val actualPath = url.toUri().filePath
     var redirectPath = try {
       jniKiwixReader.getEntryByPath(actualPath)
         .getItem(true)
         .path
-        .replaceWithEncodedString
     } catch (ignore: Exception) {
-      actualPath.replaceWithEncodedString
+      actualPath
     }
-    if (url.decodeUrl.contains("?")) {
+    if (url.contains("?")) {
       redirectPath += extractQueryParam(url)
     }
     return redirectPath
