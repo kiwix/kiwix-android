@@ -14,8 +14,8 @@ else
     echo 1>&2 "Static analysis found violations and attempted to autofix, please commit these autoformat changes"
     echo "
     ---------------------------IMPORTANT FOR KIWIX DEVELOPERS----------------------------------------------
-    If the build failed with '.../.gradle/daemon/5.6.1/custom/scr/customexample/info.json No File Found' then you do not have JAVA_HOME set to JDK8
-    Please make sure JAVA_HOME is set to JDK8
+    If the build failed with '.../.gradle/daemon/8.0/custom/scr/customexample/info.json No File Found' then you do not have JAVA_HOME set to JDK11
+    Please make sure JAVA_HOME is set to JDK11
     ---------------------------IMPORTANT FOR KIWIX DEVELOPERS----------------------------------------------"
 
     exit 1
