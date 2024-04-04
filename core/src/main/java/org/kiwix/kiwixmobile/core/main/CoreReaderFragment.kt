@@ -2194,7 +2194,7 @@ abstract class CoreReaderFragment :
       }
     } catch (e: JSONException) {
       Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e)
-      activity.toast("Could not restore tabs.", Toast.LENGTH_LONG)
+      activity.toast(R.string.could_not_restore_tabs, Toast.LENGTH_LONG)
     }
   }
 
