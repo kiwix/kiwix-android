@@ -55,7 +55,7 @@ To build this repository alone for development purposes you can simply
 **import** the project into Android Studio and the hard work will be done
 for you. Note here that instead of *opening* the project, you have to *import* it. If you prefer to build without Android Studio you must first
 set up the Android SDK and then run the command: `./gradlew build `
-from the root directory of the project.
+from the root directory of the project. The project requires `Java 11` to run, Therefore set the `Gradle JDK` to `Java 11`.
 
 Kiwix-Android is a multi-module project, in 99% of scenarios you will want to build the `app` module in the `debug` configuration.
 If you are interested in our custom apps they have their own repo [kiwix-android-custom](https://github.com/kiwix/kiwix-android-custom
