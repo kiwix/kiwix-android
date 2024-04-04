@@ -66,6 +66,9 @@ class LibraryRobot : BaseRobot() {
   }
 
   fun deleteZimIfExists() {
+    // pause for a second to load the ZIM files if any contains
+    // in the storage to not affect the test case.
+    pauseForBetterTestPerformance()
     try {
       try {
         onView(withId(R.id.file_management_no_files)).check(matches(isDisplayed()))

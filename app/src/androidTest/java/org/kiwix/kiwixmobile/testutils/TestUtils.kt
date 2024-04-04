@@ -24,7 +24,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Environment
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.test.core.app.canTakeScreenshot
@@ -34,11 +33,13 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.By.textContains
 import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiObject
 import androidx.test.uiautomator.UiObjectNotFoundException
 import androidx.test.uiautomator.UiSelector
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -164,7 +165,32 @@ object TestUtils {
       uiDevice.findObject(By.clazz("android.app.Dialog")) != null
 
   @JvmStatic
-  fun closeSystemDialogs(context: Context?) {
+  fun closeSystemDialogs(context: Context?, uiDevice: UiDevice) {
+    // Close any system dialogs visible on Android versions below 12 by broadcasting
     context?.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
+    // Press the back button as most dialogs can be closed by doing so
+    uiDevice.pressBack()
+    try {
+      // Click on the button of system dialog (Especially applicable to non-closable dialogs)
+      val waitButton = getSystemDialogButton(uiDevice)
+      if (waitButton?.exists() == true) {
+        uiDevice.click(waitButton.bounds.centerX(), waitButton.bounds.centerY())
+      }
+    } catch (ignore: Exception) {
+      Log.d(
+        TAG,
+        "Couldn't click on Wait/OK button, probably no system dialog is " +
+          "visible with Wait/OK button \n$ignore"
+      )
+    }
+  }
+
+  private fun getSystemDialogButton(uiDevice: UiDevice): UiObject? {
+    // All possible button text based on different Android versions.
+    val possibleButtonTextList = arrayOf("Wait", "WAIT", "OK", "Ok")
+    return possibleButtonTextList
+      .asSequence()
+      .map { uiDevice.findObject(UiSelector().textContains(it)) }
+      .firstOrNull(UiObject::exists)
   }
 }

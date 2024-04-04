@@ -66,7 +66,7 @@ class LanguageFragmentTest {
   fun setUp() {
     UiDevice.getInstance(instrumentation).apply {
       if (isSystemUINotRespondingDialogVisible(this)) {
-        closeSystemDialogs(instrumentation.targetContext.applicationContext)
+        closeSystemDialogs(instrumentation.targetContext.applicationContext, this)
       }
       waitForIdle()
     }

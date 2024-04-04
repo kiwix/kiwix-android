@@ -77,7 +77,7 @@ class ZimHostFragmentTest {
     context = InstrumentationRegistry.getInstrumentation().targetContext
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
       if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
-        TestUtils.closeSystemDialogs(context)
+        TestUtils.closeSystemDialogs(context, this)
       }
       waitForIdle()
     }

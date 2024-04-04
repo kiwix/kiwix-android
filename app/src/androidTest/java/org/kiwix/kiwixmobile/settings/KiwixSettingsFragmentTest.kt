@@ -61,7 +61,8 @@ class KiwixSettingsFragmentTest {
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
       if (isSystemUINotRespondingDialogVisible(this)) {
         closeSystemDialogs(
-          InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
+          InstrumentationRegistry.getInstrumentation().targetContext.applicationContext,
+          this
         )
       }
       waitForIdle()

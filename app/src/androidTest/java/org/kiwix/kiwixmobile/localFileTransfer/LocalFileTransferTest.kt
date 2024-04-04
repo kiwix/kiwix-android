@@ -76,7 +76,7 @@ class LocalFileTransferTest {
     context = instrumentation.targetContext.applicationContext
     UiDevice.getInstance(instrumentation).apply {
       if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
-        TestUtils.closeSystemDialogs(context)
+        TestUtils.closeSystemDialogs(context, this)
       }
       waitForIdle()
     }

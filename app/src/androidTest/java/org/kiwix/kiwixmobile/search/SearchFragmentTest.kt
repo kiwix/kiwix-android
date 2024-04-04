@@ -65,7 +65,7 @@ class SearchFragmentTest : BaseActivityTest() {
   override fun waitForIdle() {
     uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
       if (isSystemUINotRespondingDialogVisible(this)) {
-        closeSystemDialogs(context)
+        closeSystemDialogs(context, this)
       }
       waitForIdle()
     }

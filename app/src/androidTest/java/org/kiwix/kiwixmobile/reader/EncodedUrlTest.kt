@@ -45,7 +45,7 @@ class EncodedUrlTest : BaseActivityTest() {
   override fun waitForIdle() {
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
       if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
-        TestUtils.closeSystemDialogs(context)
+        TestUtils.closeSystemDialogs(context, this)
       }
       waitForIdle()
     }
