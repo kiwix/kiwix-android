@@ -31,7 +31,9 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
+import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import junit.framework.AssertionFailedError
+import org.hamcrest.Matchers.not
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
@@ -65,10 +67,21 @@ class LibraryRobot : BaseRobot() {
     isVisible(ViewId(R.id.file_management_no_files))
   }
 
+  fun refreshList() {
+    refresh(R.id.zim_swiperefresh)
+  }
+
+  fun waitUntilZimFilesRefreshing() {
+    try {
+      onView(withId(R.id.scanning_progress_view)).check(matches(not(isDisplayed())))
+    } catch (ignore: AssertionFailedError) {
+      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
+      Log.i("LOCAL_LIBRARY", "Scanning of storage to find ZIM files in progress")
+      waitUntilZimFilesRefreshing()
+    }
+  }
+
   fun deleteZimIfExists() {
-    // pause for a second to load the ZIM files if any contains
-    // in the storage to not affect the test case.
-    pauseForBetterTestPerformance()
     try {
       try {
         onView(withId(R.id.file_management_no_files)).check(matches(isDisplayed()))

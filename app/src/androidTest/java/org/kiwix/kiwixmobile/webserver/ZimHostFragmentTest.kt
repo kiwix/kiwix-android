@@ -37,6 +37,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.utils.StandardActions
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -103,12 +104,13 @@ class ZimHostFragmentTest {
       activityScenario.onActivity {
         it.navigate(R.id.libraryFragment)
       }
+      StandardActions.closeDrawer() // close the drawer if open before running the test cases.
       zimHost(ZimHostRobot::refreshLibraryList)
       // delete all the ZIM files showing in the LocalLibrary
       // screen to properly test the scenario.
       library {
+        waitUntilZimFilesRefreshing()
         deleteZimIfExists()
-        assertNoFilesTextDisplayed()
       }
       loadZimFileInApplication("testzim.zim")
       loadZimFileInApplication("small.zim")

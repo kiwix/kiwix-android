@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.page.history
 
+import android.util.Log
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
@@ -37,6 +38,19 @@ class NavigationHistoryRobot : BaseRobot() {
   fun checkZimFileLoadedSuccessful(readerFragment: Int) {
     pauseForBetterTestPerformance()
     isVisible(ViewId(readerFragment))
+  }
+
+  fun closeTabSwitcherIfVisible() {
+    try {
+      pauseForBetterTestPerformance()
+      isVisible(ViewId(R.id.tab_switcher_close_all_tabs))
+      pressBack()
+    } catch (ignore: Exception) {
+      Log.i(
+        "NAVIGATION_HISTORY_TEST",
+        "Couldn't found tab switcher, probably it is not visible"
+      )
+    }
   }
 
   fun clickOnAndroidArticle() {

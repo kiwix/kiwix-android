@@ -90,6 +90,7 @@ class DownloadTest : BaseActivityTest() {
       // delete all the ZIM files showing in the LocalLibrary
       // screen to properly test the scenario.
       library {
+        waitUntilZimFilesRefreshing()
         deleteZimIfExists()
         assertNoFilesTextDisplayed()
       }

@@ -26,6 +26,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
+import leakcanary.LeakAssertions
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -82,6 +83,8 @@ class LocalLibraryTest : BaseActivityTest() {
       it.navigate(R.id.libraryFragment)
     }
     library {
+      refreshList()
+      waitUntilZimFilesRefreshing()
       deleteZimIfExists()
       assertNoFilesTextDisplayed()
     }
@@ -107,6 +110,7 @@ class LocalLibraryTest : BaseActivityTest() {
     }
     refresh(R.id.zim_swiperefresh)
     library(LibraryRobot::assertLibraryListDisplayed)
+    LeakAssertions.assertNoLeaks()
   }
 
   @After

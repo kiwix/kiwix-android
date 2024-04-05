@@ -40,6 +40,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirecti
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.utils.StandardActions
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -101,8 +102,10 @@ class NavigationHistoryTest : BaseActivityTest() {
           .apply { zimFileUri = zimFile.toUri().toString() }
       )
     }
+    StandardActions.closeDrawer() // close the drawer if open before running the test cases.
     navigationHistory {
       checkZimFileLoadedSuccessful(R.id.readerFragment)
+      closeTabSwitcherIfVisible()
       clickOnAndroidArticle()
       longClickOnBackwardButton()
       assertBackwardNavigationHistoryDialogDisplayed()

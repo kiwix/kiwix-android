@@ -144,6 +144,7 @@ class NoteFragmentTest : BaseActivityTest() {
     note(NoteRobot::refreshList)
 
     library {
+      waitUntilZimFilesRefreshing()
       deleteZimIfExists()
       assertNoFilesTextDisplayed()
     }
