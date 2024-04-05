@@ -215,6 +215,7 @@
   <string name="switch_tabs">Switch tabs</string>
   <string name="close_all_tabs">Close all tabs</string>
   <string name="close_tab">Close tab</string>
+  <string name="could_not_restore_tabs">Could not restore tabs.</string>
   <string name="pending_state">Pending</string>
   <string name="running_state">In Progress</string>
   <string name="complete">Complete</string>

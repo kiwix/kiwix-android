@@ -2037,8 +2037,7 @@ abstract class CoreReaderFragment :
 
   override fun webViewFailedLoading(url: String) {
     if (isAdded) {
-      val error = String.format(getString(R.string.error_article_url_not_found), url)
-      Toast.makeText(requireActivity(), error, Toast.LENGTH_SHORT).show()
+      Log.d(TAG_KIWIX, String.format(getString(R.string.error_article_url_not_found), url))
     }
   }
 
@@ -2195,7 +2194,7 @@ abstract class CoreReaderFragment :
       }
     } catch (e: JSONException) {
       Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e)
-      activity.toast("Could not restore tabs.", Toast.LENGTH_LONG)
+      activity.toast(R.string.could_not_restore_tabs, Toast.LENGTH_LONG)
     }
   }
 

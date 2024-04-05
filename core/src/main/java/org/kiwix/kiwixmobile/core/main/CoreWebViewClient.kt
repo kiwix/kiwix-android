@@ -149,7 +149,13 @@ open class CoreWebViewClient(
     return if (url.startsWith(ZimFileReader.CONTENT_PREFIX)) {
       zimReaderContainer.load(url, request.requestHeaders)
     } else {
-      super.shouldInterceptRequest(view, request)
+      // Return an empty WebResourceResponse for the external resource to prevent
+      // it from being loaded. Passing null would trigger an attempt to load the resource.
+      WebResourceResponse(
+        "text/css",
+        Charsets.UTF_8.name(),
+        null
+      )
     }
   }
 

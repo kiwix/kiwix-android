@@ -34,15 +34,15 @@ class FileLogger @Inject constructor() {
   fun writeLogFile(context: Context, shouldWriteDeviceLogs: Boolean = true): File {
     // Create a new folder in private storage with name: logs
     val logDir = File(context.filesDir, "logs")
-    val logFile = File(logDir, fileName)
-
-    Log.d(TAG, "Writing all logs into [" + logDir.path + "]")
 
     if (logDir.exists()) {
       // delete the folder so the previous saved logs files will be deleted.
       logDir.delete()
-      logDir.mkdir()
     }
+    logDir.mkdir()
+
+    Log.d(TAG, "Writing all logs into [" + logDir.path + "]")
+    val logFile = File(logDir, fileName)
 
     try {
       logFile.createNewFile()
