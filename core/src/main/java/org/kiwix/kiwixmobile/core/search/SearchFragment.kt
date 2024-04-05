@@ -27,6 +27,7 @@ import android.view.MenuItem
 import android.view.MenuItem.OnActionExpandListener
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
@@ -85,6 +86,7 @@ class SearchFragment : BaseFragment() {
 
   private var searchView: SearchView? = null
   private var searchInTextMenuItem: MenuItem? = null
+  private var searchInTextTextView: TextView? = null
   private var fragmentSearchBinding: FragmentSearchBinding? = null
 
   private val searchViewModel by lazy { viewModel<SearchViewModel>(viewModelFactory) }
@@ -204,6 +206,7 @@ class SearchFragment : BaseFragment() {
     activity?.intent?.action = null
     searchView = null
     searchInTextMenuItem = null
+    searchInTextTextView = null
     searchAdapter = null
     fragmentSearchBinding = null
   }
@@ -235,6 +238,8 @@ class SearchFragment : BaseFragment() {
 
                     else -> searchViewModel.actions.trySend(Filter(query)).isSuccess
                   }
+                } else {
+                  searchInTextMenuItem?.actionView?.isEnabled = false
                 }
               }
             )
@@ -249,9 +254,10 @@ class SearchFragment : BaseFragment() {
             }
           })
           searchInTextMenuItem = menu.findItem(R.id.menu_searchintext)
-          searchInTextMenuItem?.setOnMenuItemClickListener {
+          searchInTextTextView =
+            searchInTextMenuItem?.actionView?.findViewById(R.id.search_in_text_text_view)
+          searchInTextMenuItem?.actionView?.setOnClickListener {
             searchViewModel.actions.trySend(ClickedSearchInText).isSuccess
-            true
           }
           lifecycleScope.launchWhenCreated {
             searchViewModel.state.collect { render(it) }
@@ -280,8 +286,9 @@ class SearchFragment : BaseFragment() {
       // `cancelAndJoin` cancels the previous running job and waits for it to completely cancel.
       renderingJob?.cancelAndJoin()
       isDataLoading = false
-      searchInTextMenuItem?.isVisible = state.searchOrigin == FromWebView
-      searchInTextMenuItem?.isEnabled = state.searchTerm.isNotBlank()
+      searchInTextMenuItem?.actionView?.isVisible = state.searchOrigin == FromWebView
+      searchInTextMenuItem?.actionView?.isEnabled = state.searchTerm.isNotBlank()
+
       fragmentSearchBinding?.searchLoadingIndicator?.isShowing(true)
       renderingJob = searchViewModel.viewModelScope.launch(Dispatchers.Main) {
         val searchResult = withContext(Dispatchers.IO) {

@@ -14,8 +14,7 @@
   <item
     android:id="@+id/menu_searchintext"
     android:title="@string/menu_search_in_text"
-    android:background="?android:attr/selectableItemBackground"
-    app:actionLayout = "@layout/ic_searchintext"
+    app:actionLayout = "@layout/action_searchintext"
     app:showAsAction="ifRoom|withText" />
 
 </menu>
