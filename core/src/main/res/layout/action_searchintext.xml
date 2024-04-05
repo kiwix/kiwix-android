@@ -16,15 +16,24 @@
   ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
   ~
   -->
-
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/search_in_text_text_view"
   android:layout_width="wrap_content"
-  android:layout_height="wrap_content"
-  android:background="?android:attr/selectableItemBackgroundBorderless"
-  android:textColor="@android:color/white"
-  android:text="@string/menu_search_in_text"
-  android:textAllCaps="true"
-  android:padding="@dimen/find_in_page_button_padding"
-  tools:textColor="@android:color/black" />
+  android:layout_height="wrap_content">
+
+  <TextView
+    android:id="@+id/search_in_text_text_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackgroundBorderless"
+    android:padding="@dimen/find_in_page_button_padding"
+    android:text="@string/menu_search_in_text"
+    android:textAllCaps="true"
+    android:textColor="@android:color/white"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:textColor="@android:color/black" />
+</androidx.constraintlayout.widget.ConstraintLayout>

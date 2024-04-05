@@ -79,6 +79,8 @@ import javax.inject.Inject
 const val NAV_ARG_SEARCH_STRING = "searchString"
 const val VISIBLE_ITEMS_THRESHOLD = 5
 const val LOADING_ITEMS_BEFORE = 3
+const val DISABLED_SEARCH_IN_TEXT_OPACITY = 0.6f
+const val ENABLED_SEARCH_IN_TEXT_OPACITY = 1f
 
 class SearchFragment : BaseFragment() {
 
@@ -229,6 +231,8 @@ class SearchFragment : BaseFragment() {
             searchView?.setOnQueryTextListener(
               SimpleTextListener { query, isSubmit ->
                 if (query.isNotEmpty()) {
+                  searchInTextMenuItem?.actionView?.isEnabled = true
+                  searchInTextTextView?.alpha = ENABLED_SEARCH_IN_TEXT_OPACITY
                   when {
                     isSubmit -> {
                       // if user press the search/enter button on keyboard,
@@ -240,6 +244,7 @@ class SearchFragment : BaseFragment() {
                   }
                 } else {
                   searchInTextMenuItem?.actionView?.isEnabled = false
+                  searchInTextTextView?.alpha = DISABLED_SEARCH_IN_TEXT_OPACITY
                 }
               }
             )
@@ -288,6 +293,11 @@ class SearchFragment : BaseFragment() {
       isDataLoading = false
       searchInTextMenuItem?.actionView?.isVisible = state.searchOrigin == FromWebView
       searchInTextMenuItem?.actionView?.isEnabled = state.searchTerm.isNotBlank()
+      searchInTextTextView?.alpha = if (state.searchTerm.isBlank()) {
+        DISABLED_SEARCH_IN_TEXT_OPACITY
+      } else {
+        ENABLED_SEARCH_IN_TEXT_OPACITY
+      }
 
       fragmentSearchBinding?.searchLoadingIndicator?.isShowing(true)
       renderingJob = searchViewModel.viewModelScope.launch(Dispatchers.Main) {
