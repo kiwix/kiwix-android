@@ -14,6 +14,7 @@
   <item
     android:id="@+id/menu_searchintext"
     android:title="@string/menu_search_in_text"
+    app:actionLayout = "@layout/action_searchintext"
     app:showAsAction="ifRoom|withText" />
 
 </menu>

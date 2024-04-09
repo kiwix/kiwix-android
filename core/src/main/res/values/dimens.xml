@@ -23,4 +23,5 @@
   <dimen name="hamburger_icon_size">36dp</dimen>
   <dimen name="material_minimum_height_and_width">48dp</dimen>
   <dimen name="close_tab_button_size">24dp</dimen>
+  <dimen name="find_in_page_button_padding">13dp</dimen>
 </resources>

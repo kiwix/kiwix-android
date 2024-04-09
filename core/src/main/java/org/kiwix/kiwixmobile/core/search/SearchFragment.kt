@@ -27,6 +27,7 @@ import android.view.MenuItem
 import android.view.MenuItem.OnActionExpandListener
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
@@ -78,6 +79,8 @@ import javax.inject.Inject
 const val NAV_ARG_SEARCH_STRING = "searchString"
 const val VISIBLE_ITEMS_THRESHOLD = 5
 const val LOADING_ITEMS_BEFORE = 3
+const val DISABLED_SEARCH_IN_TEXT_OPACITY = 0.6f
+const val ENABLED_SEARCH_IN_TEXT_OPACITY = 1f
 
 class SearchFragment : BaseFragment() {
 
@@ -85,6 +88,7 @@ class SearchFragment : BaseFragment() {
 
   private var searchView: SearchView? = null
   private var searchInTextMenuItem: MenuItem? = null
+  private var findInPageTextView: TextView? = null
   private var fragmentSearchBinding: FragmentSearchBinding? = null
 
   private val searchViewModel by lazy { viewModel<SearchViewModel>(viewModelFactory) }
@@ -204,6 +208,7 @@ class SearchFragment : BaseFragment() {
     activity?.intent?.action = null
     searchView = null
     searchInTextMenuItem = null
+    findInPageTextView = null
     searchAdapter = null
     fragmentSearchBinding = null
   }
@@ -226,6 +231,7 @@ class SearchFragment : BaseFragment() {
             searchView?.setOnQueryTextListener(
               SimpleTextListener { query, isSubmit ->
                 if (query.isNotEmpty()) {
+                  setIsPageSearchEnabled(true)
                   when {
                     isSubmit -> {
                       // if user press the search/enter button on keyboard,
@@ -235,6 +241,8 @@ class SearchFragment : BaseFragment() {
 
                     else -> searchViewModel.actions.trySend(Filter(query)).isSuccess
                   }
+                } else {
+                  setIsPageSearchEnabled(false)
                 }
               }
             )
@@ -249,9 +257,10 @@ class SearchFragment : BaseFragment() {
             }
           })
           searchInTextMenuItem = menu.findItem(R.id.menu_searchintext)
-          searchInTextMenuItem?.setOnMenuItemClickListener {
+          findInPageTextView =
+            searchInTextMenuItem?.actionView?.findViewById(R.id.find_in_page_text_view)
+          searchInTextMenuItem?.actionView?.setOnClickListener {
             searchViewModel.actions.trySend(ClickedSearchInText).isSuccess
-            true
           }
           lifecycleScope.launchWhenCreated {
             searchViewModel.state.collect { render(it) }
@@ -280,8 +289,9 @@ class SearchFragment : BaseFragment() {
       // `cancelAndJoin` cancels the previous running job and waits for it to completely cancel.
       renderingJob?.cancelAndJoin()
       isDataLoading = false
-      searchInTextMenuItem?.isVisible = state.searchOrigin == FromWebView
-      searchInTextMenuItem?.isEnabled = state.searchTerm.isNotBlank()
+      searchInTextMenuItem?.actionView?.isVisible = state.searchOrigin == FromWebView
+      setIsPageSearchEnabled(state.searchTerm.isNotBlank())
+
       fragmentSearchBinding?.searchLoadingIndicator?.isShowing(true)
       renderingJob = searchViewModel.viewModelScope.launch(Dispatchers.Main) {
         val searchResult = withContext(Dispatchers.IO) {
@@ -295,6 +305,15 @@ class SearchFragment : BaseFragment() {
           searchAdapter?.items = it
         }
       }
+    }
+  }
+
+  private fun setIsPageSearchEnabled(isEnabled: Boolean) {
+    searchInTextMenuItem?.actionView?.isEnabled = isEnabled
+    findInPageTextView?.alpha = if (isEnabled) {
+      ENABLED_SEARCH_IN_TEXT_OPACITY
+    } else {
+      DISABLED_SEARCH_IN_TEXT_OPACITY
     }
   }
 
