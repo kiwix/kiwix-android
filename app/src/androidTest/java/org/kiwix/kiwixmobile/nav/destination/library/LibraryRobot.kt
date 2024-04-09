@@ -48,6 +48,7 @@ fun library(func: LibraryRobot.() -> Unit) = LibraryRobot().applyWithViewHierarc
 class LibraryRobot : BaseRobot() {
 
   private val zimFileTitle = "Test_Zim"
+  private var retryCountForRefreshingZimFiles = 5
 
   fun assertGetZimNearbyDeviceDisplayed() {
     isVisible(ViewId(R.id.get_zim_nearby_device))
@@ -77,7 +78,10 @@ class LibraryRobot : BaseRobot() {
     } catch (ignore: AssertionFailedError) {
       BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
       Log.i("LOCAL_LIBRARY", "Scanning of storage to find ZIM files in progress")
-      waitUntilZimFilesRefreshing()
+      if (retryCountForRefreshingZimFiles > 0) {
+        retryCountForRefreshingZimFiles--
+        waitUntilZimFilesRefreshing()
+      }
     }
   }
 

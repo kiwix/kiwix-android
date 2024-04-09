@@ -43,14 +43,17 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ matrix.api-level != 33 && 'default' || 'google_apis' }}
+          target: ${{ matrix.api-level != 33 && 'default' || 'aosp_atd' }}
           arch: x86_64
           profile: pixel_2
-          ram-size: '4096M'
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
+          ram-size: ${{ matrix.api-level == 33 && '6144M' || '4096M' }}
+          cores: ${{ matrix.api-level == 33 && 4 || 2 }}
           disk-size: '14G'
           sdcard-path-or-size: ${{ matrix.api-level != 33 && '1000M' || '4096M' }}
           disable-animations: true
           heap-size: ${{ matrix.api-level == 33 && '512M' || '' }}
+          channel: canary
           script: bash contrib/instrumentation.sh
 
 
