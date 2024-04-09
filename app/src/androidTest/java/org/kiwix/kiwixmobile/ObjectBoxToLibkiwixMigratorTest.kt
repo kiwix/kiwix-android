@@ -305,9 +305,6 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
   @After
   fun finish() {
     IdlingRegistry.getInstance().unregister(KiwixIdlingResource.getInstance())
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, true)
-    }
   }
 
   companion object {
