@@ -130,6 +130,7 @@ class LibraryRobot : BaseRobot() {
   }
 
   private fun clickOnDeleteZimFile() {
+    pauseForBetterTestPerformance()
     onView(withText("DELETE")).perform(click())
   }
 

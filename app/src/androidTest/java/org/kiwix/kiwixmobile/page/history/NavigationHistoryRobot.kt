@@ -76,7 +76,7 @@ class NavigationHistoryRobot : BaseRobot() {
   }
 
   fun assertBackwardNavigationHistoryDialogDisplayed() {
-    pauseForBetterTestPerformance()
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     isVisible(TextId(R.string.backward_history))
   }
 
@@ -86,7 +86,7 @@ class NavigationHistoryRobot : BaseRobot() {
   }
 
   fun assertForwardNavigationHistoryDialogDisplayed() {
-    pauseForBetterTestPerformance()
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     isVisible(TextId(R.string.forward_history))
   }
 
