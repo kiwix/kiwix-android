@@ -47,7 +47,7 @@ class HelpFragmentTest : BaseActivityTest() {
   override fun waitForIdle() {
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
       if (isSystemUINotRespondingDialogVisible(this)) {
-        closeSystemDialogs(context)
+        closeSystemDialogs(context, this)
       }
       waitForIdle()
     }

@@ -75,7 +75,7 @@ class KiwixSplashActivityTest {
     context = InstrumentationRegistry.getInstrumentation().targetContext
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
       if (isSystemUINotRespondingDialogVisible(this)) {
-        closeSystemDialogs(context)
+        closeSystemDialogs(context, this)
       }
       waitForIdle()
     }

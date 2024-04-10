@@ -87,7 +87,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
   override fun waitForIdle() {
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
       if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
-        TestUtils.closeSystemDialogs(context)
+        TestUtils.closeSystemDialogs(context, this)
       }
       waitForIdle()
     }
@@ -305,9 +305,6 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
   @After
   fun finish() {
     IdlingRegistry.getInstance().unregister(KiwixIdlingResource.getInstance())
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, true)
-    }
   }
 
   companion object {

@@ -38,6 +38,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.utils.StandardActions
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -65,7 +66,7 @@ class LanguageFragmentTest {
   fun setUp() {
     UiDevice.getInstance(instrumentation).apply {
       if (isSystemUINotRespondingDialogVisible(this)) {
-        closeSystemDialogs(instrumentation.targetContext.applicationContext)
+        closeSystemDialogs(instrumentation.targetContext.applicationContext, this)
       }
       waitForIdle()
     }
@@ -82,6 +83,7 @@ class LanguageFragmentTest {
 
   @Test
   fun testLanguageFragment() {
+    StandardActions.closeDrawer() // close the drawer if open before running the test cases.
     language {
       clickDownloadOnBottomNav()
       waitForDataToLoad()

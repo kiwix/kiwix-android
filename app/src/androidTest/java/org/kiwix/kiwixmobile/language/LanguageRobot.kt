@@ -78,6 +78,8 @@ class LanguageRobot : BaseRobot() {
   }
 
   fun checkIsLanguageSelected() {
+    // Wait for a second to properly visible the searched language on top.
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     onView(
       RecyclerViewMatcher(R.id.language_recycler_view).atPositionOnView(
         1,
@@ -89,6 +91,8 @@ class LanguageRobot : BaseRobot() {
   }
 
   fun deSelectLanguageIfAlreadySelected() {
+    // Wait for a second to properly visible the searched language on top.
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     try {
       onView(
         RecyclerViewMatcher(R.id.language_recycler_view).atPositionOnView(

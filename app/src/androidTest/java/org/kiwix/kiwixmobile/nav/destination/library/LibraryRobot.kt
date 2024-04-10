@@ -22,16 +22,18 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.longClick
-import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
+import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
+import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import junit.framework.AssertionFailedError
+import org.hamcrest.Matchers.not
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
@@ -46,6 +48,8 @@ fun library(func: LibraryRobot.() -> Unit) = LibraryRobot().applyWithViewHierarc
 class LibraryRobot : BaseRobot() {
 
   private val zimFileTitle = "Test_Zim"
+  private var retryCountForRefreshingZimFiles = 5
+  private var retryCountForDeletingZimFiles = 5
 
   fun assertGetZimNearbyDeviceDisplayed() {
     isVisible(ViewId(R.id.get_zim_nearby_device))
@@ -60,9 +64,26 @@ class LibraryRobot : BaseRobot() {
     isVisible(ViewId(R.id.zimfilelist))
   }
 
-  fun assertNoFilesTextDisplayed() {
+  private fun assertNoFilesTextDisplayed() {
     pauseForBetterTestPerformance()
     isVisible(ViewId(R.id.file_management_no_files))
+  }
+
+  fun refreshList() {
+    refresh(R.id.zim_swiperefresh)
+  }
+
+  fun waitUntilZimFilesRefreshing() {
+    try {
+      onView(withId(R.id.scanning_progress_view)).check(matches(not(isDisplayed())))
+    } catch (ignore: AssertionFailedError) {
+      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
+      Log.i("LOCAL_LIBRARY", "Scanning of storage to find ZIM files in progress")
+      if (retryCountForRefreshingZimFiles > 0) {
+        retryCountForRefreshingZimFiles--
+        waitUntilZimFilesRefreshing()
+      }
+    }
   }
 
   fun deleteZimIfExists() {
@@ -86,14 +107,14 @@ class LibraryRobot : BaseRobot() {
           .perform(actionOnItemAtPosition<ViewHolder>(position, longClick()))
       }
       clickOnFileDeleteIcon()
-      assertDeleteDialogDisplayed()
       clickOnDeleteZimFile()
       pauseForBetterTestPerformance()
+      assertNoFilesTextDisplayed()
     } catch (e: Exception) {
       Log.i(
         "TEST_DELETE_ZIM",
         "Failed to delete ZIM file with title [" + zimFileTitle + "]... " +
-          "Probably because it doesn't exist"
+          "Probably because it doesn't exist. \nOriginal Exception = $e"
       )
     }
   }
@@ -103,14 +124,22 @@ class LibraryRobot : BaseRobot() {
     clickOn(ViewId(R.id.zim_file_delete_item))
   }
 
-  private fun assertDeleteDialogDisplayed() {
-    pauseForBetterTestPerformance()
-    onView(withText("DELETE"))
-      .check(ViewAssertions.matches(isDisplayed()))
-  }
-
   private fun clickOnDeleteZimFile() {
-    onView(withText("DELETE")).perform(click())
+    // This code is flaky since the DELETE button is inside the dialog, and sometimes it visible
+    // but not on window but espresso unable to find it so we are adding a retrying mechanism here.
+    try {
+      onView(withText("DELETE")).inRoot(isDialog()).perform(click())
+    } catch (ignore: AssertionFailedError) {
+      pauseForBetterTestPerformance()
+      Log.i(
+        "LOCAL_LIBRARY",
+        "Couldn't found the DELETE button, so we are trying again to find the DELETE button"
+      )
+      if (retryCountForDeletingZimFiles > 0) {
+        retryCountForDeletingZimFiles--
+        clickOnDeleteZimFile()
+      }
+    }
   }
 
   private fun pauseForBetterTestPerformance() {

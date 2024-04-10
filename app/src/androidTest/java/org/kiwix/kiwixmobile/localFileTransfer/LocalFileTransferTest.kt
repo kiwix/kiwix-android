@@ -40,6 +40,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.utils.StandardActions
 
 class LocalFileTransferTest {
   @Rule
@@ -75,7 +76,7 @@ class LocalFileTransferTest {
     context = instrumentation.targetContext.applicationContext
     UiDevice.getInstance(instrumentation).apply {
       if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
-        TestUtils.closeSystemDialogs(context)
+        TestUtils.closeSystemDialogs(context, this)
       }
       waitForIdle()
     }
@@ -87,6 +88,7 @@ class LocalFileTransferTest {
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
     }
+    StandardActions.closeDrawer()
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       activityScenario.onActivity {
         it.navigate(R.id.libraryFragment)
@@ -115,6 +117,7 @@ class LocalFileTransferTest {
         it.navigate(R.id.libraryFragment)
       }
     }
+    StandardActions.closeDrawer()
     library {
       assertGetZimNearbyDeviceDisplayed()
       clickFileTransferIcon {
@@ -142,6 +145,7 @@ class LocalFileTransferTest {
         it.navigate(R.id.libraryFragment)
       }
     }
+    StandardActions.closeDrawer()
     library {
       // test show case view show once.
       clickFileTransferIcon(LocalFileTransferRobot::assertClickNearbyDeviceMessageNotVisible)
@@ -170,6 +174,12 @@ class LocalFileTransferTest {
     if (isResetShowCaseId) {
       // To clear showCaseID to ensure the showcase view will show.
       uk.co.deanwild.materialshowcaseview.PrefsManager.resetAll(context)
+    } else {
+      // set that Show Case is showed, because sometimes its change the
+      // order of test case on API level 33 and our test case fails.
+      val internal =
+        context.getSharedPreferences("material_showcaseview_prefs", Context.MODE_PRIVATE)
+      internal.edit().putInt("status_$SHOWCASE_ID", -1).apply()
     }
   }
 }

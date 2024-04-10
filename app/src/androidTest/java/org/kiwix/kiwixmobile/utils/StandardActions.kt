@@ -24,6 +24,7 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions
+import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.closeDrawerWithGravity
 import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDrawerWithGravity
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.R
@@ -41,6 +42,11 @@ object StandardActions {
   fun openDrawer() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     openDrawerWithGravity(R.id.navigation_container, GravityCompat.START)
+  }
+
+  fun closeDrawer() {
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    closeDrawerWithGravity(R.id.navigation_container, GravityCompat.START)
   }
 
   @JvmStatic

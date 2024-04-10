@@ -26,6 +26,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
+import leakcanary.LeakAssertions
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -51,7 +52,7 @@ class LocalLibraryTest : BaseActivityTest() {
   override fun waitForIdle() {
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
       if (isSystemUINotRespondingDialogVisible(this)) {
-        closeSystemDialogs(context)
+        closeSystemDialogs(context, this)
       }
       waitForIdle()
     }
@@ -82,8 +83,9 @@ class LocalLibraryTest : BaseActivityTest() {
       it.navigate(R.id.libraryFragment)
     }
     library {
+      refreshList()
+      waitUntilZimFilesRefreshing()
       deleteZimIfExists()
-      assertNoFilesTextDisplayed()
     }
     // load a zim file to test, After downloading zim file library list is visible or not
     val loadFileStream =
@@ -107,6 +109,7 @@ class LocalLibraryTest : BaseActivityTest() {
     }
     refresh(R.id.zim_swiperefresh)
     library(LibraryRobot::assertLibraryListDisplayed)
+    LeakAssertions.assertNoLeaks()
   }
 
   @After

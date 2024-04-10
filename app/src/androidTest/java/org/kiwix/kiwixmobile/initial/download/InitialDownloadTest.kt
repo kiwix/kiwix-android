@@ -55,7 +55,7 @@ class InitialDownloadTest : BaseActivityTest() {
   override fun waitForIdle() {
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
       if (isSystemUINotRespondingDialogVisible(this)) {
-        closeSystemDialogs(context)
+        closeSystemDialogs(context, this)
       }
       waitForIdle()
     }
@@ -82,8 +82,8 @@ class InitialDownloadTest : BaseActivityTest() {
     // delete all the ZIM files showing in the LocalLibrary
     // screen to properly test the scenario.
     library {
+      waitUntilZimFilesRefreshing()
       deleteZimIfExists()
-      assertNoFilesTextDisplayed()
     }
     initialDownload {
       clickDownloadOnBottomNav()

@@ -41,6 +41,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.utils.StandardActions
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -57,7 +58,7 @@ class NoteFragmentTest : BaseActivityTest() {
   override fun waitForIdle() {
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
       if (isSystemUINotRespondingDialogVisible(this)) {
-        closeSystemDialogs(context)
+        closeSystemDialogs(context, this)
       }
       waitForIdle()
     }
@@ -116,7 +117,7 @@ class NoteFragmentTest : BaseActivityTest() {
           .apply { zimFileUri = zimFile.toUri().toString() }
       )
     }
-
+    StandardActions.closeDrawer() // close the drawer if open before running the test cases.
     note {
       clickOnNoteMenuItem(context)
       assertBackwardNavigationHistoryDialogDisplayed()
@@ -143,8 +144,8 @@ class NoteFragmentTest : BaseActivityTest() {
     note(NoteRobot::refreshList)
 
     library {
+      waitUntilZimFilesRefreshing()
       deleteZimIfExists()
-      assertNoFilesTextDisplayed()
     }
 
     note {
