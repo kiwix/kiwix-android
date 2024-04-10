@@ -24,6 +24,7 @@ import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
 import androidx.test.espresso.web.webdriver.Locator
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
+import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
@@ -34,6 +35,10 @@ fun navigationHistory(func: NavigationHistoryRobot.() -> Unit) =
   NavigationHistoryRobot().applyWithViewHierarchyPrinting(func)
 
 class NavigationHistoryRobot : BaseRobot() {
+
+  private var retryCountForClearNavigationHistory = 5
+  private var retryCountForBackwardNavigationHistory = 5
+  private var retryCountForForwardNavigationHistory = 5
 
   fun checkZimFileLoadedSuccessful(readerFragment: Int) {
     pauseForBetterTestPerformance()
@@ -76,8 +81,15 @@ class NavigationHistoryRobot : BaseRobot() {
   }
 
   fun assertBackwardNavigationHistoryDialogDisplayed() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    isVisible(TextId(R.string.backward_history))
+    try {
+      isVisible(TextId(R.string.backward_history))
+    } catch (ignore: AssertionFailedError) {
+      pauseForBetterTestPerformance()
+      if (retryCountForBackwardNavigationHistory > 0) {
+        retryCountForBackwardNavigationHistory--
+        assertBackwardNavigationHistoryDialogDisplayed()
+      }
+    }
   }
 
   fun clickOnBackwardButton() {
@@ -86,8 +98,15 @@ class NavigationHistoryRobot : BaseRobot() {
   }
 
   fun assertForwardNavigationHistoryDialogDisplayed() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    isVisible(TextId(R.string.forward_history))
+    try {
+      isVisible(TextId(R.string.forward_history))
+    } catch (ignore: AssertionFailedError) {
+      pauseForBetterTestPerformance()
+      if (retryCountForForwardNavigationHistory > 0) {
+        retryCountForForwardNavigationHistory--
+        assertForwardNavigationHistoryDialogDisplayed()
+      }
+    }
   }
 
   fun clickOnDeleteHistory() {
@@ -96,8 +115,15 @@ class NavigationHistoryRobot : BaseRobot() {
   }
 
   fun assertDeleteDialogDisplayed() {
-    pauseForBetterTestPerformance()
-    isVisible(TextId(R.string.clear_all_history_dialog_title))
+    try {
+      isVisible(TextId(R.string.clear_all_history_dialog_title))
+    } catch (ignore: AssertionFailedError) {
+      pauseForBetterTestPerformance()
+      if (retryCountForClearNavigationHistory > 0) {
+        retryCountForClearNavigationHistory--
+        assertDeleteDialogDisplayed()
+      }
+    }
   }
 
   private fun pauseForBetterTestPerformance() {

@@ -104,8 +104,8 @@ class NavigationHistoryTest : BaseActivityTest() {
     }
     StandardActions.closeDrawer() // close the drawer if open before running the test cases.
     navigationHistory {
-      checkZimFileLoadedSuccessful(R.id.readerFragment)
       closeTabSwitcherIfVisible()
+      checkZimFileLoadedSuccessful(R.id.readerFragment)
       clickOnAndroidArticle()
       longClickOnBackwardButton()
       assertBackwardNavigationHistoryDialogDisplayed()

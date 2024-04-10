@@ -146,7 +146,6 @@ class NoteFragmentTest : BaseActivityTest() {
     library {
       waitUntilZimFilesRefreshing()
       deleteZimIfExists()
-      assertNoFilesTextDisplayed()
     }
 
     note {

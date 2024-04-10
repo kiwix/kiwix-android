@@ -84,7 +84,6 @@ class InitialDownloadTest : BaseActivityTest() {
     library {
       waitUntilZimFilesRefreshing()
       deleteZimIfExists()
-      assertNoFilesTextDisplayed()
     }
     initialDownload {
       clickDownloadOnBottomNav()

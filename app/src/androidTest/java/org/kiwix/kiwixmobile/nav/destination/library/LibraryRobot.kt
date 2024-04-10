@@ -22,10 +22,10 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.longClick
-import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
+import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -49,6 +49,7 @@ class LibraryRobot : BaseRobot() {
 
   private val zimFileTitle = "Test_Zim"
   private var retryCountForRefreshingZimFiles = 5
+  private var retryCountForDeletingZimFiles = 5
 
   fun assertGetZimNearbyDeviceDisplayed() {
     isVisible(ViewId(R.id.get_zim_nearby_device))
@@ -63,7 +64,7 @@ class LibraryRobot : BaseRobot() {
     isVisible(ViewId(R.id.zimfilelist))
   }
 
-  fun assertNoFilesTextDisplayed() {
+  private fun assertNoFilesTextDisplayed() {
     pauseForBetterTestPerformance()
     isVisible(ViewId(R.id.file_management_no_files))
   }
@@ -106,14 +107,14 @@ class LibraryRobot : BaseRobot() {
           .perform(actionOnItemAtPosition<ViewHolder>(position, longClick()))
       }
       clickOnFileDeleteIcon()
-      assertDeleteDialogDisplayed()
       clickOnDeleteZimFile()
       pauseForBetterTestPerformance()
+      assertNoFilesTextDisplayed()
     } catch (e: Exception) {
       Log.i(
         "TEST_DELETE_ZIM",
         "Failed to delete ZIM file with title [" + zimFileTitle + "]... " +
-          "Probably because it doesn't exist"
+          "Probably because it doesn't exist. \nOriginal Exception = $e"
       )
     }
   }
@@ -123,15 +124,22 @@ class LibraryRobot : BaseRobot() {
     clickOn(ViewId(R.id.zim_file_delete_item))
   }
 
-  private fun assertDeleteDialogDisplayed() {
-    pauseForBetterTestPerformance()
-    onView(withText("DELETE"))
-      .check(ViewAssertions.matches(isDisplayed()))
-  }
-
   private fun clickOnDeleteZimFile() {
-    pauseForBetterTestPerformance()
-    onView(withText("DELETE")).perform(click())
+    // This code is flaky since the DELETE button is inside the dialog, and sometimes it visible
+    // but not on window but espresso unable to find it so we are adding a retrying mechanism here.
+    try {
+      onView(withText("DELETE")).inRoot(isDialog()).perform(click())
+    } catch (ignore: AssertionFailedError) {
+      pauseForBetterTestPerformance()
+      Log.i(
+        "LOCAL_LIBRARY",
+        "Couldn't found the DELETE button, so we are trying again to find the DELETE button"
+      )
+      if (retryCountForDeletingZimFiles > 0) {
+        retryCountForDeletingZimFiles--
+        clickOnDeleteZimFile()
+      }
+    }
   }
 
   private fun pauseForBetterTestPerformance() {

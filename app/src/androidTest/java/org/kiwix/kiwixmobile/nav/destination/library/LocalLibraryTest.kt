@@ -86,7 +86,6 @@ class LocalLibraryTest : BaseActivityTest() {
       refreshList()
       waitUntilZimFilesRefreshing()
       deleteZimIfExists()
-      assertNoFilesTextDisplayed()
     }
     // load a zim file to test, After downloading zim file library list is visible or not
     val loadFileStream =

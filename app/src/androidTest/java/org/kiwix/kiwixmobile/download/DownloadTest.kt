@@ -92,7 +92,6 @@ class DownloadTest : BaseActivityTest() {
       library {
         waitUntilZimFilesRefreshing()
         deleteZimIfExists()
-        assertNoFilesTextDisplayed()
       }
       downloadRobot {
         clickDownloadOnBottomNav()
