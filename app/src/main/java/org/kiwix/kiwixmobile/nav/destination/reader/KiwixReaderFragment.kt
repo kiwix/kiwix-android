@@ -52,11 +52,14 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
 import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
@@ -122,7 +125,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       activity.toast(R.string.error_file_not_found)
       return
     }
-    openZimFile(File(filePath))
+    openZimFile(ZimReaderSource(File(filePath)))
   }
 
   override fun loadDrawerViews() {
@@ -140,7 +143,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private fun closeZimBook() {
-    zimReaderContainer?.setZimFile(null)
+    zimReaderContainer?.setZimReaderSource(null)
   }
 
   override fun openHomeScreen() {
@@ -211,9 +214,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun onResume() {
     super.onResume()
-    if (zimReaderContainer?.zimFile == null &&
-      zimReaderContainer?.zimFileReader?.assetFileDescriptor == null
-    ) {
+    if (zimReaderContainer?.zimReaderSource == null) {
       exitBook()
     }
     if (isFullScreenVideo) {
@@ -232,14 +233,14 @@ class KiwixReaderFragment : CoreReaderFragment() {
     currentTab: Int
   ) {
     val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
-    val zimFile = settings.getString(TAG_CURRENT_FILE, null)
+    val zimReaderSource = fromDatabaseValue(settings.getString(TAG_CURRENT_FILE, null))
 
-    if (zimFile != null && File(zimFile).isFileExist()) {
-      if (zimReaderContainer?.zimFile == null) {
-        openZimFile(File(zimFile))
+    if (zimReaderSource != null && zimReaderSource.canOpenInLibkiwix()) {
+      if (zimReaderContainer?.zimReaderSource == null) {
+        openZimFile(zimReaderSource)
         Log.d(
           TAG_KIWIX,
-          "Kiwix normal start, Opened last used zimFile: -> $zimFile"
+          "Kiwix normal start, Opened last used zimFile: -> ${zimReaderSource.toDatabase()}"
         )
       } else {
         zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
@@ -293,6 +294,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     newMainPageTab()
   }
 
+  @SuppressWarnings("NestedBlockDepth")
   override fun onNewIntent(
     intent: Intent,
     activity: AppCompatActivity
@@ -300,10 +302,24 @@ class KiwixReaderFragment : CoreReaderFragment() {
     super.onNewIntent(intent, activity)
     intent.data?.let {
       when (it.scheme) {
-        "file" -> openZimFile(it.toFile())
+        "file" -> openZimFile(ZimReaderSource(it.toFile()))
         "content" -> {
-          getZimFileFromUri(it)?.let { zimFile ->
-            openZimFile(zimFile)
+          val zimReaderSource = ZimReaderSource(getZimFileFromUri(it))
+          if (zimReaderSource.canOpenInLibkiwix()) {
+            zimReaderContainer?.let { zimReaderContainer ->
+              zimReaderContainer.setZimReaderSource(zimReaderSource)
+
+              zimReaderContainer.zimFileReader?.let { zimFileReader ->
+                BooksOnDiskListItem.BookOnDisk(zimFileReader).also { bookOnDisk ->
+                  // save the book in the library
+                  repositoryActions?.saveBook(bookOnDisk)
+                  zimFileReader.dispose()
+                }
+              }
+            }
+            openZimFile(ZimReaderSource(it))
+          } else {
+            activity.toast(R.string.cannot_open_file)
           }
         }
 

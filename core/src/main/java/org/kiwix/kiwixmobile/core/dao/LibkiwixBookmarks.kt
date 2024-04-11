@@ -248,7 +248,7 @@ class LibkiwixBookmarks @Inject constructor(
     getBookmarksList()
       .any {
         it.url == libkiwixBookmarkItem.bookmarkUrl &&
-          it.zimFilePath == libkiwixBookmarkItem.zimFilePath
+          it.zimReaderSource?.toDatabase() == libkiwixBookmarkItem.zimReaderSource?.toDatabase()
       }
 
   private fun flowableBookmarkList(

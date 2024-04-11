@@ -31,6 +31,7 @@ import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils
@@ -80,9 +81,7 @@ class EncodedUrlTest : BaseActivityTest() {
       }
     }
     val zimFileReader = ZimFileReader(
-      zimFile,
-      null,
-      null,
+      ZimReaderSource(zimFile),
       Archive(zimFile.canonicalPath),
       NightModeConfig(SharedPreferenceUtil(context), context)
     )

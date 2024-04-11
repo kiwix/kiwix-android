@@ -53,58 +53,47 @@ private const val TAG = "ZimFileReader"
 
 @Suppress("LongParameterList")
 class ZimFileReader constructor(
-  val zimFile: File?,
-  val assetFileDescriptor: AssetFileDescriptor? = null,
-  val assetDescriptorFilePath: String? = null,
+  val zimReaderSource: ZimReaderSource,
   val jniKiwixReader: Archive,
   private val nightModeConfig: NightModeConfig,
   private val searcher: SuggestionSearcher = SuggestionSearcher(jniKiwixReader)
 ) {
   interface Factory {
-    fun create(file: File): ZimFileReader?
-    fun create(
-      assetFileDescriptor: AssetFileDescriptor,
-      filePath: String? = null
-    ): ZimFileReader?
+    fun create(zimReaderSource: ZimReaderSource): ZimFileReader?
 
     class Impl @Inject constructor(private val nightModeConfig: NightModeConfig) :
       Factory {
-      override fun create(file: File) =
+      override fun create(zimReaderSource: ZimReaderSource) =
         try {
-          ZimFileReader(
-            file,
-            nightModeConfig = nightModeConfig,
-            jniKiwixReader = Archive(file.canonicalPath)
-          ).also {
-            Log.e(TAG, "create: ${file.path}")
-          }
-        } catch (ignore: JNIKiwixException) {
-          null
-        } catch (ignore: Exception) { // for handing the error, if any zim file is corrupted
-          null
-        }
-
-      override fun create(
-        assetFileDescriptor: AssetFileDescriptor,
-        filePath: String?
-      ): ZimFileReader? =
-        try {
-          ZimFileReader(
-            null,
-            assetFileDescriptor,
-            assetDescriptorFilePath = filePath,
-            nightModeConfig = nightModeConfig,
-            jniKiwixReader = Archive(
-              assetFileDescriptor.parcelFileDescriptor.dup().fileDescriptor,
-              assetFileDescriptor.startOffset,
-              assetFileDescriptor.length
+          zimReaderSource.createArchive()?.let {
+            ZimFileReader(
+              zimReaderSource,
+              nightModeConfig = nightModeConfig,
+              jniKiwixReader = it
+            ).also {
+              Log.e(TAG, "create: ${zimReaderSource.toDatabase()}")
+            }
+          } ?: kotlin.run {
+            Log.e(
+              TAG,
+              "Error in creating ZimFileReader," +
+                " because file does not exist on path: ${zimReaderSource.toDatabase()}"
             )
-          ).also {
-            Log.e(TAG, "create: with fileDescriptor")
+            null
           }
         } catch (ignore: JNIKiwixException) {
+          Log.e(
+            TAG,
+            "Error in creating ZimFileReader," +
+              " original exception = $ignore"
+          )
           null
         } catch (ignore: Exception) { // for handing the error, if any zim file is corrupted
+          Log.e(
+            TAG,
+            "Error in creating ZimFileReader," +
+              " original exception = $ignore"
+          )
           null
         }
     }

@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "3:5536749840871435068",
-      "lastPropertyId": "17:2701677664876214591",
+      "lastPropertyId": "18:2191798561992393456",
       "name": "BookOnDiskEntity",
       "properties": [
         {
@@ -13,11 +13,6 @@
           "name": "id",
           "type": 6,
           "flags": 1
-        },
-        {
-          "id": "2:2644395282642821815",
-          "name": "file",
-          "type": 9
         },
         {
           "id": "4:3145196313443812205",
@@ -88,6 +83,11 @@
           "id": "17:2701677664876214591",
           "name": "tags",
           "type": 9
+        },
+        {
+          "id": "18:2191798561992393456",
+          "name": "zimReaderSource",
+          "type": 9
         }
       ],
       "relations": []
@@ -123,7 +123,7 @@
     },
     {
       "id": "5:3222423958972105425",
-      "lastPropertyId": "10:8395372122440621469",
+      "lastPropertyId": "11:2845117969784302805",
       "name": "HistoryEntity",
       "properties": [
         {
@@ -171,13 +171,18 @@
           "id": "10:8395372122440621469",
           "name": "dateString",
           "type": 9
+        },
+        {
+          "id": "11:2845117969784302805",
+          "name": "zimReaderSource",
+          "type": 9
         }
       ],
       "relations": []
     },
     {
       "id": "6:2737311997994502758",
-      "lastPropertyId": "7:3805929017981932900",
+      "lastPropertyId": "8:4353905178687064253",
       "name": "BookmarkEntity",
       "properties": [
         {
@@ -214,6 +219,11 @@
         {
           "id": "7:3805929017981932900",
           "name": "favicon",
+          "type": 9
+        },
+        {
+          "id": "8:4353905178687064253",
+          "name": "zimReaderSource",
           "type": 9
         }
       ],
@@ -374,7 +384,7 @@
     },
     {
       "id": "10:3205842982118792800",
-      "lastPropertyId": "9:5286545520416917562",
+      "lastPropertyId": "10:3621894807502496070",
       "name": "NotesEntity",
       "properties": [
         {
@@ -411,6 +421,11 @@
         {
           "id": "9:5286545520416917562",
           "name": "zimUrl",
+          "type": 9
+        },
+        {
+          "id": "10:3621894807502496070",
+          "name": "zimReaderSource",
           "type": 9
         }
       ],
@@ -478,7 +493,8 @@
     8819082642546094709,
     7233601933599801875,
     4335394620556092321,
-    1899740026144478138
+    1899740026144478138,
+    2644395282642821815
   ],
   "retiredRelationUids": [],
   "version": 1

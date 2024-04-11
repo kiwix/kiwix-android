@@ -27,8 +27,8 @@ import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.page.bookmark
 import org.kiwix.kiwixmobile.core.page.bookmarkState
+import org.kiwix.kiwixmobile.core.page.libkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.DeletePageItems
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteAllBookmarks
@@ -64,7 +64,7 @@ internal class ShowDeleteBookmarksDialogTest {
     val showDeleteBookmarksDialog =
       ShowDeleteBookmarksDialog(
         effects,
-        bookmarkState(listOf(bookmark(isSelected = true))),
+        bookmarkState(listOf(libkiwixBookmarkItem(isSelected = true, zimReaderSource = mockk()))),
         newBookmarksDao
       )
     mockkActivityInjection(showDeleteBookmarksDialog)
@@ -77,7 +77,7 @@ internal class ShowDeleteBookmarksDialogTest {
     val showDeleteBookmarksDialog =
       ShowDeleteBookmarksDialog(
         effects,
-        bookmarkState(listOf(bookmark())),
+        bookmarkState(listOf(libkiwixBookmarkItem(zimReaderSource = mockk()))),
         newBookmarksDao
       )
     mockkActivityInjection(showDeleteBookmarksDialog)
