@@ -41,6 +41,7 @@ import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
 import org.kiwix.kiwixmobile.localFileTransfer.localFileTransfer
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.utils.RecyclerViewItemCount
 
 fun library(func: LibraryRobot.() -> Unit) = LibraryRobot().applyWithViewHierarchyPrinting(func)
@@ -49,7 +50,6 @@ class LibraryRobot : BaseRobot() {
 
   private val zimFileTitle = "Test_Zim"
   private var retryCountForRefreshingZimFiles = 5
-  private var retryCountForDeletingZimFiles = 5
 
   fun assertGetZimNearbyDeviceDisplayed() {
     isVisible(ViewId(R.id.get_zim_nearby_device))
@@ -66,7 +66,7 @@ class LibraryRobot : BaseRobot() {
 
   private fun assertNoFilesTextDisplayed() {
     pauseForBetterTestPerformance()
-    isVisible(ViewId(R.id.file_management_no_files))
+    testFlakyView({ isVisible(ViewId(R.id.file_management_no_files)) })
   }
 
   fun refreshList() {
@@ -121,25 +121,13 @@ class LibraryRobot : BaseRobot() {
 
   private fun clickOnFileDeleteIcon() {
     pauseForBetterTestPerformance()
-    clickOn(ViewId(R.id.zim_file_delete_item))
+    testFlakyView({ clickOn(ViewId(R.id.zim_file_delete_item)) })
   }
 
   private fun clickOnDeleteZimFile() {
     // This code is flaky since the DELETE button is inside the dialog, and sometimes it visible
-    // but not on window but espresso unable to find it so we are adding a retrying mechanism here.
-    try {
-      onView(withText("DELETE")).inRoot(isDialog()).perform(click())
-    } catch (ignore: AssertionFailedError) {
-      pauseForBetterTestPerformance()
-      Log.i(
-        "LOCAL_LIBRARY",
-        "Couldn't found the DELETE button, so we are trying again to find the DELETE button"
-      )
-      if (retryCountForDeletingZimFiles > 0) {
-        retryCountForDeletingZimFiles--
-        clickOnDeleteZimFile()
-      }
-    }
+    // on window but espresso unable to find it so we are adding a retrying mechanism here.
+    testFlakyView({ onView(withText("DELETE")).inRoot(isDialog()).perform(click()) })
   }
 
   private fun pauseForBetterTestPerformance() {

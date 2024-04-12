@@ -27,7 +27,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
 import leakcanary.LeakAssertions
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -179,14 +178,6 @@ class ZimHostFragmentTest {
           it.write(buffer, 0, length)
         }
       }
-    }
-  }
-
-  @After
-  fun setIsTestPreference() {
-    sharedPreferenceUtil.apply {
-      setIsPlayStoreBuildType(false)
-      prefIsTest = false
     }
   }
 }

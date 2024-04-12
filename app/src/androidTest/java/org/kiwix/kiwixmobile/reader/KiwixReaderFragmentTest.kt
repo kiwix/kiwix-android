@@ -28,7 +28,6 @@ import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import leakcanary.LeakAssertions
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -110,12 +109,5 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
       checkZimFileLoadedSuccessful(R.id.readerFragment)
     }
     LeakAssertions.assertNoLeaks()
-  }
-
-  @After
-  fun setIsTestPreference() {
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, false)
-    }
   }
 }

@@ -20,8 +20,8 @@ package org.kiwix.kiwixmobile.language
 import android.Manifest
 import android.app.Instrumentation
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
 import androidx.lifecycle.Lifecycle
+import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest

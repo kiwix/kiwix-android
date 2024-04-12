@@ -46,6 +46,7 @@ import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -54,9 +55,6 @@ class KiwixSplashActivityTest {
   @Rule
   @JvmField
   var retryRule = RetryRule()
-
-  private val activityScenario: ActivityScenario<KiwixMainActivity> =
-    ActivityScenario.launch(KiwixMainActivity::class.java)
 
   private val permissions = arrayOf(
     Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -84,12 +82,13 @@ class KiwixSplashActivityTest {
   @Test
   fun testFirstRun() {
     shouldShowIntro(true)
-    activityScenario.recreate()
-    activityScenario.onActivity {
+    ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
     }
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    Espresso.onView(ViewMatchers.withId(R.id.get_started))
-      .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+    testFlakyView({
+      Espresso.onView(ViewMatchers.withId(R.id.get_started))
+        .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+    }, 10)
 
     // Verify that the value of the "intro shown" boolean inside
     // the SharedPreferences Database is not changed until

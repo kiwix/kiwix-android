@@ -24,6 +24,7 @@ import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.ContentDesc
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 fun history(func: HistoryRobot.() -> Unit) = HistoryRobot().applyWithViewHierarchyPrinting(func)
 
@@ -38,6 +39,6 @@ class HistoryRobot : BaseRobot() {
   }
 
   fun assertDeleteHistoryDialogDisplayed() {
-    isVisible(TextId(R.string.delete_history))
+    testFlakyView({ isVisible(TextId(R.string.delete_history)) })
   }
 }
