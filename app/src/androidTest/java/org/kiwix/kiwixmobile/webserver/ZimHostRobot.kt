@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.webserver
 
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -35,7 +34,9 @@ import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.utils.RecyclerViewItemCount
 import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
 import org.kiwix.kiwixmobile.utils.RecyclerViewSelectedCheckBoxCountAssertion
@@ -74,17 +75,18 @@ class ZimHostRobot : BaseRobot() {
     stopServerIfAlreadyStarted()
     clickOn(ViewId(R.id.startServerButton))
     assetWifiDialogDisplayed()
-    onView(withText("PROCEED")).perform(click())
+    testFlakyView({ onView(withText("PROCEED")).perform(click()) })
   }
 
   private fun assetWifiDialogDisplayed() {
-    pauseForBetterTestPerformance()
-    isVisible(Text("WiFi connection detected"))
+    testFlakyView({ isVisible(Text("WiFi connection detected")) })
   }
 
   fun assertServerStarted() {
     pauseForBetterTestPerformance()
-    isVisible(Text("STOP SERVER"))
+    // starting server takes a bit so sometimes it fails to find this view.
+    // which makes this view flaky so we are testing this with FlakyView.
+    testFlakyView({ isVisible(Text("STOP SERVER")) })
   }
 
   fun stopServerIfAlreadyStarted() {
