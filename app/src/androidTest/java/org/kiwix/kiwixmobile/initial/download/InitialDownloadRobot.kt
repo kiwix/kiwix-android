@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.initial.download
 
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
@@ -34,15 +33,14 @@ import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 fun initialDownload(func: InitialDownloadRobot.() -> Unit) =
   InitialDownloadRobot().applyWithViewHierarchyPrinting(func)
 
 class InitialDownloadRobot : BaseRobot() {
-
-  private var retryCountForCheckDownloadStart = 10
-  private var retryCountForCheckDataLoaded = 10
   private val zimFileTitle = "Off the Grid"
 
   fun clickDownloadOnBottomNav() {
@@ -67,14 +65,7 @@ class InitialDownloadRobot : BaseRobot() {
   }
 
   fun waitForDataToLoad() {
-    try {
-      isVisible(Text(zimFileTitle))
-    } catch (e: RuntimeException) {
-      if (retryCountForCheckDataLoaded > 0) {
-        retryCountForCheckDataLoaded--
-        waitForDataToLoad()
-      }
-    }
+    testFlakyView({ isVisible(Text(zimFileTitle)) }, 10)
   }
 
   fun downloadZimFile() {
@@ -82,26 +73,19 @@ class InitialDownloadRobot : BaseRobot() {
   }
 
   fun assertStorageConfigureDialogDisplayed() {
-    isVisible(Text("Download book to internal storage?"))
+    testFlakyView({ isVisible(Text("Download book to internal storage?")) })
   }
 
   fun assertStopDownloadDialogDisplayed() {
-    isVisible(Text("Stop download?"))
+    testFlakyView({ isVisible(Text("Stop download?")) })
   }
 
   fun clickOnYesToConfirm() {
-    onView(withText("YES")).perform(click())
+    testFlakyView({ onView(withText("YES")).perform(click()) })
   }
 
   fun assertDownloadStart() {
-    try {
-      isVisible(ViewId(R.id.stop))
-    } catch (e: RuntimeException) {
-      if (retryCountForCheckDownloadStart > 0) {
-        retryCountForCheckDownloadStart--
-        assertDownloadStart()
-      }
-    }
+    testFlakyView({ isVisible(ViewId(R.id.stop)) }, 10)
   }
 
   fun stopDownload() {

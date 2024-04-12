@@ -38,6 +38,7 @@ import org.kiwix.kiwixmobile.page.history.history
 import org.kiwix.kiwixmobile.settings.SettingsRobot
 import org.kiwix.kiwixmobile.settings.settingsRobo
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 import org.kiwix.kiwixmobile.webserver.ZimHostRobot
 import org.kiwix.kiwixmobile.webserver.zimHost
@@ -115,6 +116,6 @@ class TopLevelDestinationRobot : BaseRobot() {
   }
 
   fun assertExternalLinkDialogDisplayed() {
-    isVisible(TextId(R.string.external_link_popup_dialog_title))
+    testFlakyView({ isVisible(TextId(R.string.external_link_popup_dialog_title)) })
   }
 }

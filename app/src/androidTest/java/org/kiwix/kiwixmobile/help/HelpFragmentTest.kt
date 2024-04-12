@@ -18,9 +18,7 @@
 package org.kiwix.kiwixmobile.help
 
 import android.os.Build
-import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
-import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.platform.app.InstrumentationRegistry
@@ -122,9 +120,5 @@ class HelpFragmentTest : BaseActivityTest() {
   @After
   fun finish() {
     IdlingRegistry.getInstance().unregister(KiwixIdlingResource.getInstance())
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, false)
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, false)
-    }
   }
 }

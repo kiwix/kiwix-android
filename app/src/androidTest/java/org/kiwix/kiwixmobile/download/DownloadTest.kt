@@ -121,10 +121,6 @@ class DownloadTest : BaseActivityTest() {
   @After
   fun finish() {
     IdlingRegistry.getInstance().unregister(getInstance())
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, false)
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, false)
-    }
   }
 
   companion object {

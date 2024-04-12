@@ -27,7 +27,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import leakcanary.LeakAssertions
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -110,14 +109,5 @@ class LocalLibraryTest : BaseActivityTest() {
     refresh(R.id.zim_swiperefresh)
     library(LibraryRobot::assertLibraryListDisplayed)
     LeakAssertions.assertNoLeaks()
-  }
-
-  @After
-  fun finish() {
-    PreferenceManager.getDefaultSharedPreferences(
-      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
-    ).edit {
-      putBoolean(SharedPreferenceUtil.PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH, true)
-    }
   }
 }

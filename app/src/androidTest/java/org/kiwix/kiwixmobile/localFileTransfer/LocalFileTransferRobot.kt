@@ -18,8 +18,11 @@
 
 package org.kiwix.kiwixmobile.localFileTransfer
 
+import android.util.Log
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
@@ -28,6 +31,7 @@ import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 /**
  * Authored by Ayush Shrivastava on 29/10/20
@@ -52,7 +56,22 @@ class LocalFileTransferRobot : BaseRobot() {
 
   fun assertLocalFileTransferScreenVisible() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
+    closeEnableWifiP2PDialogIfVisible()
     assertReceiveFileTitleVisible()
+  }
+
+  private fun closeEnableWifiP2PDialogIfVisible() {
+    try {
+      testFlakyView({
+        onView(withText(R.string.request_enable_wifi)).check(matches(isDisplayed()))
+        pressBack()
+      })
+    } catch (ignore: Throwable) {
+      Log.i(
+        "LOCAL_FILE_TRANSFER_TEST",
+        "Couldn't found WIFI P2P dialog, probably this is not exist"
+      )
+    }
   }
 
   fun assertLocalLibraryVisible() {

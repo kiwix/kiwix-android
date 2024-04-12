@@ -32,6 +32,7 @@ import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
 
 fun language(func: LanguageRobot.() -> Unit) = LanguageRobot().applyWithViewHierarchyPrinting(func)
@@ -70,7 +71,7 @@ class LanguageRobot : BaseRobot() {
   }
 
   fun selectLanguage(matchLanguage: String) {
-    clickOn(Text(matchLanguage))
+    testFlakyView({ clickOn(Text(matchLanguage)) })
   }
 
   fun clickOnSaveLanguageIcon() {

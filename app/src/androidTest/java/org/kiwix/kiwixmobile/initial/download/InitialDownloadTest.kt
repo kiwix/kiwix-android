@@ -28,7 +28,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import leakcanary.LeakAssertions
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -101,14 +100,5 @@ class InitialDownloadTest : BaseActivityTest() {
       assertDownloadStop()
     }
     LeakAssertions.assertNoLeaks()
-  }
-
-  @After
-  fun setPrefStorageOption() {
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_SHOW_STORAGE_OPTION, false)
-      putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, false)
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, false)
-    }
   }
 }

@@ -36,12 +36,12 @@ import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 
 fun note(func: NoteRobot.() -> Unit) = NoteRobot().apply(func)
 
 class NoteRobot : BaseRobot() {
-
   private val noteText = "Test Note"
   private val editTextId = R.id.add_note_edit_text
 
@@ -95,12 +95,13 @@ class NoteRobot : BaseRobot() {
   }
 
   fun clickOnOpenNote() {
-    pauseForBetterTestPerformance()
-    clickOn(Text("OPEN NOTE"))
+    testFlakyView({ clickOn(Text("OPEN NOTE")) })
   }
 
   fun assertNoteSaved() {
-    isVisible(Text(noteText))
+    // This is flaky since it is shown in a dialog and sometimes
+    // UIDevice does not found the view immediately due to rendering process.
+    testFlakyView({ isVisible(Text(noteText)) })
   }
 
   fun refreshList() {

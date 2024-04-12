@@ -30,7 +30,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
 import leakcanary.LeakAssertions
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -149,14 +148,6 @@ class LocalFileTransferTest {
     library {
       // test show case view show once.
       clickFileTransferIcon(LocalFileTransferRobot::assertClickNearbyDeviceMessageNotVisible)
-    }
-  }
-
-  @After
-  fun setIsTestPreference() {
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, false)
-      putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, true)
     }
   }
 

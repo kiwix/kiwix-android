@@ -32,6 +32,7 @@ import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 /**
  * Authored by Ayush Shrivastava on 25/8/20
@@ -111,7 +112,8 @@ class SettingsRobot : BaseRobot() {
   }
 
   fun assertContributorsDialogDisplayed() {
-    isVisible(Text("OK"))
+    // this is inside the dialog and dialog takes a bit to show on the screen.
+    testFlakyView({ isVisible(Text("OK")) })
   }
 
   fun assertZoomTextViewPresent() {

@@ -32,6 +32,7 @@ import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import java.util.concurrent.TimeUnit
 
 fun bookmarks(func: BookmarksRobot.() -> Unit) =
@@ -50,16 +51,16 @@ class BookmarksRobot : BaseRobot() {
   }
 
   fun assertDeleteBookmarksDialogDisplayed() {
-    isVisible(TextId(R.string.delete_bookmarks))
+    testFlakyView({ isVisible(TextId(R.string.delete_bookmarks)) })
   }
 
   fun clickOnDeleteButton() {
     pauseForBetterTestPerformance()
-    onView(withText("DELETE")).perform(click())
+    testFlakyView({ onView(withText("DELETE")).perform(click()) })
   }
 
   fun assertNoBookMarkTextDisplayed() {
-    isVisible(TextId(R.string.no_bookmarks))
+    testFlakyView({ isVisible(TextId(R.string.no_bookmarks)) })
   }
 
   fun clickOnSaveBookmarkImage() {

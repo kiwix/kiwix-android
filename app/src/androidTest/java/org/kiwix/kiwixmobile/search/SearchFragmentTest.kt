@@ -30,7 +30,6 @@ import leakcanary.LeakAssertions
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.ResponseBody
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -235,12 +234,5 @@ class SearchFragmentTest : BaseActivityTest() {
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     return zimFile
-  }
-
-  @After
-  fun setIsTestPreference() {
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, false)
-    }
   }
 }
