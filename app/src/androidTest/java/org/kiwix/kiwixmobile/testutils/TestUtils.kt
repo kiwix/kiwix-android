@@ -162,6 +162,10 @@ object TestUtils {
     uiDevice.findObject(textContains("System UI isn't responding")) != null ||
       uiDevice.findObject(textContains("Process system isn't responding")) != null ||
       uiDevice.findObject(textContains("Launcher isn't responding")) != null ||
+      uiDevice.findObject(textContains("Wait")) != null ||
+      uiDevice.findObject(textContains("WAIT")) != null ||
+      uiDevice.findObject(textContains("OK")) != null ||
+      uiDevice.findObject(textContains("Ok")) != null ||
       uiDevice.findObject(By.clazz("android.app.Dialog")) != null
 
   @JvmStatic
