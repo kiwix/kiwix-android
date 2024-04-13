@@ -9,27 +9,28 @@
 # Kiwix Android
 
 Kiwix is an offline reader for Web content. One of its main purposes
-is to make Wikipedia available offline. This is done by reading the
-content of a file in the ZIM format, a highly compressed open format
+is to make [Wikipedia](https://www.wikipedia.org/) available
+offline. This is achieved by reading the content of a file in the
+[ZIM](https://openzim.org) format, a highly compressed open format
 with additional metadata.
 
-This is the version for Android, with support versions ranging from 7
-to 13 (like [mentioned
-here](https://github.com/kiwix/kiwix-android/blob/main/buildSrc/src/main/kotlin/Config.kt)).
+This is the version for Android, with [support versions ranging from 7
+to 13](https://github.com/kiwix/kiwix-android/blob/main/buildSrc/src/main/kotlin/Config.kt).
 
 **Important Note**: Starting from Android 11, the ZIM file picker
-feature has been restricted in the Play Store variant due to Play
-Store policies.  This means that users running Android 11 and above
-will not be able to load ZIM files from internal/external storage
-directly within the app if they have downloaded Kiwix from the Google
-Play Store.  This restriction is in place to comply with the Play
-Store policies.  The Play Store variant of Kiwix does not require the
-`MANAGE_EXTERNAL_STORAGE` permission anymore, which is necessary to
-scan storage and access ZIM files at arbitrary locations.  Therefore,
-the storage scanning & file picking functionalities are not available
-in this variant anymore.  To use the full version of Kiwix and benefit
-of the ZIM file picker feature, you can download it directly from the
-[official
+feature has been restricted in the [Play Store
+variant](https://play.google.com/store/apps/details?id=org.kiwix.kiwixmobile)
+due to Play Store policies.  This means that users running Android 11
+and above will not be able to load ZIM files from internal/external
+storage directly within the app if they have downloaded Kiwix from the
+Google Play Store.  This restriction is in place to comply with the
+Play Store policies.  The Play Store variant of Kiwix does not require
+the `MANAGE_EXTERNAL_STORAGE` permission anymore, which is necessary
+to scan storage and access ZIM files at arbitrary locations.
+Therefore, the storage scanning & file picking functionalities are not
+available in this variant anymore.  To use the full version of Kiwix
+and benefit of the ZIM file picker feature, you can download it
+directly from the [official
 repository](https://download.kiwix.org/release/kiwix-android/) or use
 [F-Droid](https://fdroid.kiwix.org). We understand that this
 restriction may cause inconvenience, but it is necessary to comply
@@ -47,19 +48,22 @@ Kiwix Android is written in [Kotlin](https://kotlinlang.org/)
 [![Public Chat](https://img.shields.io/badge/public-chat-green)](https://chat.kiwix.org)
 [![Slack](https://img.shields.io/badge/Slack-chat-E01E5A)](https://kiwixoffline.slack.com)
 
-## Build Instructions
+## Build instructions
 
-Production releases of the app are built on travis and released automatically
+To build Kiwix Android, clone [this
+repository](https://github.com/kiwix/kiwix-android) and import (not
+open) the project with [Android
+Studio](https://developer.android.com/studio).
 
-To build this repository alone for development purposes you can simply
-**import** the project into Android Studio and the hard work will be done
-for you. Note here that instead of *opening* the project, you have to *import* it. If you prefer to build without Android Studio you must first
-set up the Android SDK and then run the command: `./gradlew build `
-from the root directory of the project. The project requires `Java 11` to run, Therefore set the `Gradle JDK` to `Java 11`.
+If you prefer to build without Android Studio you must first set up
+the Android SDK and then run the command: `./gradlew build ` from the
+root directory of the project. The project requires `Java 11` to run,
+Therefore set the `Gradle JDK` to `Java 11`.
 
-Kiwix-Android is a multi-module project, in 99% of scenarios you will want to build the `app` module in the `debug` configuration.
-If you are interested in our custom apps they have their own repo [kiwix-android-custom](https://github.com/kiwix/kiwix-android-custom
-) that goes into further detail
+Kiwix Android is a multi-module project, in 99% of scenarios you will
+want to build the `app` module in the `debug` configuration.  If you
+are interested in our custom apps, they have their own repo
+[kiwix-android-custom](https://github.com/kiwix/kiwix-android-custom).
 
 ## Libraries Used
 
@@ -82,18 +86,15 @@ Before contributing be sure to check out the
 [CONTRIBUTION](https://github.com/kiwix/kiwix-android/blob/main/CONTRIBUTING.md)
 guidelines.
 
-We currently have a series of automated Unit and Integration
+We currently have a series of automated Unit & Integration
 tests. These can be run locally and are also run when submitting a
 pull request.
 
 ## Communication
 
 Available communication channels:
-* [Web Public Chat channel](https://chat.kiwix.org)
 * [Email](mailto:contact+android@kiwix.org)
-* [Mailing list](mailto:kiwix-developer@lists.sourceforge.net)
 * [Slack](https://kiwixoffline.slack.com): #android channel [Get an invite](https://join.slack.com/t/kiwixoffline/shared_invite/zt-19s7tsi68-xlgHdmDr5c6MJ7uFmJuBkg)
-* IRC: #kiwix on irc.freenode.net
 
 For more information, please refer to
 [https://wiki.kiwix.org/wiki/Communication](https://wiki.kiwix.org/wiki/Communication).
