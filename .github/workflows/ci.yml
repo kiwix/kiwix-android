@@ -53,7 +53,7 @@ jobs:
           key: avd-${{ matrix.api-level }}
 
       - name: Create AVD and generate snapshot for caching
-        if: steps.avd-cache.outputs.cache-hit != 'true'
+        # if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
@@ -82,6 +82,7 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           ram-size: 4096M
           cores: 4
+          force-avd-creation: false
           sdcard-path-or-size: 2048M
           disable-animations: true
           heap-size: ${{ matrix.api-level != 24 && '512M' || '' }}
