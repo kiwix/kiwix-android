@@ -14,7 +14,7 @@ jobs:
       matrix:
         api-level: [ 24, 30, 33 ]
       fail-fast: true
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: checkout
         uses: actions/checkout@v4
