@@ -13,16 +13,16 @@ jobs:
     strategy:
       matrix:
         api-level: [ 24, 30, 33 ]
-      fail-fast: false
-    runs-on: macos-11
+      fail-fast: true
+    runs-on: ubuntu-22.04
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 1
 
       - name: Set up JDK 11
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 11
@@ -37,8 +37,41 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: AVD cache
+        uses: actions/cache@v4
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ matrix.api-level }}
+
+      - name: Create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.api-level != 33 && 'default' || 'aosp_atd' }}
+          arch: x86_64
+          profile: pixel_2
+          ram-size: 4096M
+          force-avd-creation: false
+          sdcard-path-or-size: 2048M
+          cores: 4
+          disable-animations: false
+          heap-size: ${{ matrix.api-level != 24 && '512M' || '' }}
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          channel: canary
+          script: echo "Generated AVD snapshot for caching."
+
       - name: create instrumentation coverage
-        uses: ReactiveCircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@v2
         env:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
@@ -46,11 +79,11 @@ jobs:
           target: ${{ matrix.api-level != 33 && 'default' || 'aosp_atd' }}
           arch: x86_64
           profile: pixel_2
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
-          ram-size: ${{ matrix.api-level != 24 && '6144M' || '4096M' }}
-          cores: ${{ matrix.api-level != 24 && 4 || 2 }}
-          disk-size: ${{ matrix.api-level != 24 && '20G' || '14G' }}
-          sdcard-path-or-size: ${{ matrix.api-level != 33 && '1000M' || '4096M' }}
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          ram-size: 4096M
+          cores: 4
+          force-avd-creation: false
+          sdcard-path-or-size: 2048M
           disable-animations: true
           heap-size: ${{ matrix.api-level != 24 && '512M' || '' }}
           channel: canary
