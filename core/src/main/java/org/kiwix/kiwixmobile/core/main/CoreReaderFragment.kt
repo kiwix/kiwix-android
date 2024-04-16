@@ -704,6 +704,7 @@ abstract class CoreReaderFragment :
     closeAllTabsButton?.setToolTipWithContentDescription(
       resources.getString(R.string.close_all_tabs)
     )
+    setIsCloseAllTabButtonClickable(true)
     // Set a negative top margin to the web views to remove
     // the unwanted blank space caused by the toolbar.
     setTopMarginToWebViews(-requireActivity().getToolbarHeight())
@@ -1631,7 +1632,10 @@ abstract class CoreReaderFragment :
   @OnClick(R2.id.tab_switcher_close_all_tabs)
   fun closeAllTabs() {
     onReadAloudStop()
-    closeAllTabsButton?.rotate()
+    closeAllTabsButton?.apply {
+      rotate()
+      setIsCloseAllTabButtonClickable(false)
+    }
     tempZimFileForUndo = zimReaderContainer?.zimFile
     tempWebViewListForUndo.apply {
       clear()
@@ -1644,11 +1648,17 @@ abstract class CoreReaderFragment :
       root.bringToFront()
       Snackbar.make(root, R.string.tabs_closed, Snackbar.LENGTH_LONG).apply {
         setAction(R.string.undo) {
+          it.isEnabled = false // to prevent multiple clicks on this button
+          setIsCloseAllTabButtonClickable(true)
           restoreDeletedTabs()
         }
         show()
       }
     }
+  }
+
+  private fun setIsCloseAllTabButtonClickable(isClickable: Boolean) {
+    closeAllTabsButton?.isClickable = isClickable
   }
 
   private fun restoreDeletedTabs() {
