@@ -1215,7 +1215,10 @@ abstract class CoreReaderFragment :
     snackBarRoot?.let {
       it.bringToFront()
       Snackbar.make(it, R.string.tab_closed, Snackbar.LENGTH_LONG)
-        .setAction(R.string.undo) { restoreDeletedTab(index) }.show()
+        .setAction(R.string.undo) { undoButton ->
+          undoButton.isEnabled = false
+          restoreDeletedTab(index)
+        }.show()
     }
     openHomeScreen()
   }
