@@ -27,7 +27,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.navigation.NavigationView
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.custom.BuildConfig
@@ -74,11 +73,8 @@ class CustomMainActivity : CoreMainActivity() {
 
   private lateinit var activityCustomMainBinding: ActivityCustomMainBinding
 
-  override fun injection(coreComponent: CoreComponent) {
-    customActivityComponent.inject(this)
-  }
-
   override fun onCreate(savedInstanceState: Bundle?) {
+    customActivityComponent.inject(this)
     super.onCreate(savedInstanceState)
     activityCustomMainBinding = ActivityCustomMainBinding.inflate(layoutInflater)
     setContentView(activityCustomMainBinding.root)
