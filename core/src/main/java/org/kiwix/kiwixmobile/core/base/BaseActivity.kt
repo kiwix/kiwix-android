@@ -22,23 +22,18 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import butterknife.ButterKnife
 import butterknife.Unbinder
-import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
-abstract class BaseActivity : AppCompatActivity() {
+open class BaseActivity : AppCompatActivity() {
 
   @Inject
   lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
   private var unbinder: Unbinder? = null
 
-  protected abstract fun injection(coreComponent: CoreComponent)
-
   override fun onCreate(savedInstanceState: Bundle?) {
-    injection(CoreApp.coreComponent)
     super.onCreate(savedInstanceState)
     LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil)
   }

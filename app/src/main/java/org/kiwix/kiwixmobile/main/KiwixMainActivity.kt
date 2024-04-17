@@ -37,7 +37,6 @@ import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.downloader.fetch.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
@@ -93,9 +92,6 @@ class KiwixMainActivity : CoreMainActivity() {
   private lateinit var activityKiwixMainBinding: ActivityKiwixMainBinding
 
   private var isIntroScreenVisible: Boolean = false
-  override fun injection(coreComponent: CoreComponent) {
-    cachedComponent.inject(this)
-  }
 
   private val finishActionModeOnDestinationChange =
     NavController.OnDestinationChangedListener { _, _, _ ->
@@ -103,6 +99,7 @@ class KiwixMainActivity : CoreMainActivity() {
     }
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    cachedComponent.inject(this)
     super.onCreate(savedInstanceState)
     activityKiwixMainBinding = ActivityKiwixMainBinding.inflate(layoutInflater)
     setContentView(activityKiwixMainBinding.root)

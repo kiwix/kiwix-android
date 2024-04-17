@@ -25,12 +25,12 @@ import android.os.Process
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.databinding.ActivityKiwixErrorBinding
-import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
@@ -61,6 +61,7 @@ open class ErrorActivity : BaseActivity() {
   var activityKiwixErrorBinding: ActivityKiwixErrorBinding? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    coreComponent.inject(this)
     super.onCreate(savedInstanceState)
     activityKiwixErrorBinding = ActivityKiwixErrorBinding.inflate(layoutInflater)
     setContentView(activityKiwixErrorBinding?.root)
@@ -221,10 +222,6 @@ open class ErrorActivity : BaseActivity() {
     startActivity(restartAppIntent)
     finish()
     killCurrentProcess()
-  }
-
-  override fun injection(coreComponent: CoreComponent) {
-    coreComponent.inject(this)
   }
 
   companion object {
