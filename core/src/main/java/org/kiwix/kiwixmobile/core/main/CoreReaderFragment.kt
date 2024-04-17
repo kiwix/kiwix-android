@@ -1198,6 +1198,10 @@ abstract class CoreReaderFragment :
     if (currentTtsWebViewIndex == index) {
       onReadAloudStop()
     }
+    // Check if the index is valid; RecyclerView gives the index -1 for already removed views.
+    // Address those issues when the user frequently clicks on the close icon of the same tab.
+    // See https://github.com/kiwix/kiwix-android/issues/3790 for more details.
+    if (index == RecyclerView.NO_POSITION) return
     tempZimFileForUndo = zimReaderContainer?.zimFile
     tempWebViewForUndo = webViewList[index]
     webViewList.removeAt(index)
@@ -1211,7 +1215,10 @@ abstract class CoreReaderFragment :
     snackBarRoot?.let {
       it.bringToFront()
       Snackbar.make(it, R.string.tab_closed, Snackbar.LENGTH_LONG)
-        .setAction(R.string.undo) { restoreDeletedTab(index) }.show()
+        .setAction(R.string.undo) { undoButton ->
+          undoButton.isEnabled = false
+          restoreDeletedTab(index)
+        }.show()
     }
     openHomeScreen()
   }
