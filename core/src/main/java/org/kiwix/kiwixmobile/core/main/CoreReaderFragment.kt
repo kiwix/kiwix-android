@@ -678,14 +678,25 @@ abstract class CoreReaderFragment :
       }
 
       override fun onSectionClick(view: View?, position: Int) {
-        loadUrlWithCurrentWebview(
-          "javascript:document.getElementById('" +
-            documentSections?.get(position)?.id?.replace("'", "\\'") +
-            "').scrollIntoView();"
-        )
+        if (hasItemForPositionInDocumentSectionsList(position)) { // Bug Fix #3796
+          loadUrlWithCurrentWebview(
+            "javascript:document.getElementById('" +
+              documentSections?.get(position)?.id?.replace("'", "\\'") +
+              "').scrollIntoView();"
+          )
+        }
         drawerLayout?.closeDrawers()
       }
     })
+  }
+
+  private fun hasItemForPositionInDocumentSectionsList(position: Int): Boolean {
+    val documentListSize = documentSections?.size ?: return false
+    return when {
+      position < 0 -> false
+      position >= documentListSize -> false
+      else -> true
+    }
   }
 
   private fun showTabSwitcher() {
