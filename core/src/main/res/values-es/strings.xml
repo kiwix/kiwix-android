@@ -5,6 +5,7 @@
 * Carlespera
 * DDPAT
 * Ejegg
+* Eulalio
 * Fitoschido
 * Geryescalier
 * Ice bulldog
@@ -219,6 +220,7 @@
   <string name="search_bookmarks">Buscar en marcadores</string>
   <string name="switch_tabs">Cambiar de pestaña</string>
   <string name="close_all_tabs">Cerrar todas las pestañas</string>
+  <string name="could_not_restore_tabs">No se pudieron restaurar las pestañas.</string>
   <string name="pending_state">Pendiente</string>
   <string name="running_state">En proceso</string>
   <string name="complete">Completado</string>

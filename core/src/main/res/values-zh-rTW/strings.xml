@@ -215,6 +215,7 @@
   <string name="switch_tabs">切換分頁</string>
   <string name="close_all_tabs">關閉所有分頁</string>
   <string name="close_tab">關閉分頁</string>
+  <string name="could_not_restore_tabs">無法恢復分頁。</string>
   <string name="pending_state">待定</string>
   <string name="running_state">運行中</string>
   <string name="complete">完成</string>

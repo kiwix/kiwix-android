@@ -16,6 +16,8 @@
   <string name="menu_read_aloud">Leger a voce alte</string>
   <string name="menu_read_aloud_stop">Cessar de leger a voce alte</string>
   <string name="menu_support_kiwix">Supportar Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">Appoiar %s</string>
+  <string name="menu_about_app">A proposito del application %s</string>
   <string name="menu_wifi_hotspot">Puncto de accesso a WiFi</string>
   <string name="save_media">Salveguardar multimedia</string>
   <string name="save_media_error">Un error occurreva durante le salveguarda del file multimedial!</string>
@@ -204,9 +206,10 @@
   <string name="search_bookmarks">Cercar in marcapaginas</string>
   <string name="switch_tabs">Cambiar de scheda</string>
   <string name="close_all_tabs">Clauder tote le schedas</string>
+  <string name="close_tab">Clauder scheda</string>
   <string name="pending_state">Pendente</string>
   <string name="running_state">In progresso</string>
-  <string name="complete">Complete</string>
+  <string name="complete">Terminate</string>
   <string name="paused_state">Pausate</string>
   <string name="failed_state">Fallite: %s</string>
   <string name="custom_download_error_message_for_authentication_failed">Le file ZIM non poteva esser discargate. Per favor tenta reinstallar le application a partir del Play Store.</string>

@@ -353,4 +353,5 @@
   <string name="your_device_name_message">Здесь появится имя вашего устройства.</string>
   <string name="nearby_devices_list_message">Здесь вы найдете список ближайших устройств. Нажмите на имя устройства, чтобы начать передачу файлов.</string>
   <string name="transfer_zim_files_list_message">Здесь вы найдете список доступных ZIM-файлов для передачи.</string>
+  <string name="storage_selection_dialog_accessibility_description">Выберите хранилище для скачивания ZIM-файлов.</string>
 </resources>

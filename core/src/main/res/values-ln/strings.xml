@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* CapitainAfrika
 * Lingabo
 -->
 <resources>
@@ -122,9 +123,9 @@
   <string name="help_5">Makambo ezali wapi?</string>
   <string name="help_6">Makambo na biso ezali na site ya Kiwix.</string>
   <string name="complete">Mobimba</string>
-  <string name="failed_state">Elongi te: %s</string>
+  <string name="failed_state">Esimbi te: %s</string>
   <string name="save">Kobómbisa</string>
   <string name="note">Ntingá</string>
-  <string name="wiki_article_title">Motó ya likambo ya Wiki</string>
+  <string name="wiki_article_title">nkómbó ya lokasa o Wiki</string>
   <string name="note_delete_successful">Ba fisyé elongolamaki</string>
 </resources>
