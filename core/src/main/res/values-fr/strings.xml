@@ -8,6 +8,7 @@
 * Eneelktransfer_to
 * Fitoschido
 * Gomoko
+* Hecatonchire
 * I'm mender
 * Kelson
 * McDutchie
@@ -225,6 +226,7 @@
   <string name="switch_tabs">Changer d’onglet</string>
   <string name="close_all_tabs">Fermer tous les onglets</string>
   <string name="close_tab">Fermer l’onglet</string>
+  <string name="could_not_restore_tabs">Impossible de restaurer les onglets.</string>
   <string name="pending_state">En attente</string>
   <string name="running_state">En cours</string>
   <string name="complete">Terminé</string>

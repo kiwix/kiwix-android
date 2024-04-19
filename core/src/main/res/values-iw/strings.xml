@@ -213,6 +213,7 @@
   <string name="switch_tabs">החלפת כרטיסיות</string>
   <string name="close_all_tabs">סגירת כל הכרטיסיות</string>
   <string name="close_tab">סגירת לשונית</string>
+  <string name="could_not_restore_tabs">לא היה אפשר לשחזר את הלשוניות.</string>
   <string name="pending_state">ממתין</string>
   <string name="running_state">בעבודה</string>
   <string name="complete">הושלם</string>

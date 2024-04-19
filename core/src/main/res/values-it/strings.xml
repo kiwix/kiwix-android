@@ -212,6 +212,7 @@
   <string name="switch_tabs">Cambia scheda</string>
   <string name="close_all_tabs">Chiudi tutte le schede</string>
   <string name="close_tab">Chiudi scheda</string>
+  <string name="could_not_restore_tabs">Impossibile ripristinare le schede.</string>
   <string name="pending_state">In attesa</string>
   <string name="running_state">In corso</string>
   <string name="complete">Completato</string>

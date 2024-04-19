@@ -134,6 +134,7 @@
   <string name="selected_items">%1$d انتخاب شد</string>
   <string name="search_bookmarks">جستجوی نشانک‌ها</string>
   <string name="close_all_tabs">بستن همهٔ زبانه‌ها</string>
+  <string name="could_not_restore_tabs">ناتوان در بازیابی زبانه‌ها.</string>
   <string name="complete">کامل</string>
   <string name="failed_state">با شکست مواجه شد: %s</string>
   <string name="save">ذخیره</string>
