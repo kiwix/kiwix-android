@@ -181,8 +181,8 @@ class CustomReaderFragment : CoreReaderFragment() {
       onFilesFound = {
         when (it) {
           is ValidationState.HasFile -> {
-            if (it.assetFileDescriptor != null) {
-              openZimFile(null, true, it.assetFileDescriptor)
+            if (it.assetFileDescriptorList.isNotEmpty()) {
+              openZimFile(null, true, it.assetFileDescriptorList)
             } else {
               openZimFile(it.file, true)
             }

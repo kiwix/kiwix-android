@@ -103,17 +103,39 @@ fun ProductFlavor.fetchRequest(): Request {
   }
 }
 
-fun writeZimFileData(responseBody: ResponseBody, file: File) {
-  FileOutputStream(file).use { outputStream ->
-    responseBody.byteStream().use { inputStream ->
-      val buffer = ByteArray(4096)
-      var bytesRead: Int
-      while (inputStream.read(buffer).also { bytesRead = it } != -1) {
-        outputStream.write(buffer, 0, bytesRead)
+fun writeZimFileData(
+  responseBody: ResponseBody,
+  file: File,
+  chunkSize: Long = 500 * 1024 * 1024 // create a chunk of 500MB
+) {
+  var outputStream: FileOutputStream? = null
+  val buffer = ByteArray(4096)
+  var bytesRead: Int
+  var totalBytesWritten = 0L
+  var chunkNumber = 0
+
+  responseBody.byteStream().use { inputStream ->
+    while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+      if (outputStream == null || totalBytesWritten >= chunkSize) {
+        // Close the current chunk and open a new one
+        outputStream?.flush()
+        outputStream?.close()
+        chunkNumber++
+        val nextChunkFile = File(file.parent, "chunk$chunkNumber.zim")
+        nextChunkFile.createNewFile()
+        outputStream = FileOutputStream(nextChunkFile)
+        totalBytesWritten = 0 // Reset totalBytesWritten for the new chunk
       }
-      outputStream.flush()
+
+      // Write data to the output stream
+      outputStream?.write(buffer, 0, bytesRead)
+      totalBytesWritten += bytesRead
     }
   }
+
+  // Close the last chunk (if any)
+  outputStream?.flush()
+  outputStream?.close()
 }
 
 fun ProductFlavor.createDownloadTaskForPlayAssetDelivery(

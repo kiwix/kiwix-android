@@ -38,6 +38,7 @@ import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.libkiwix.JNIKiwixException
 import org.kiwix.libzim.Archive
 import org.kiwix.libzim.DirectAccessInfo
+import org.kiwix.libzim.FdInput
 import org.kiwix.libzim.Item
 import org.kiwix.libzim.SuggestionSearch
 import org.kiwix.libzim.SuggestionSearcher
@@ -56,7 +57,7 @@ private const val TAG = "ZimFileReader"
 @Suppress("LongParameterList")
 class ZimFileReader constructor(
   val zimFile: File?,
-  val assetFileDescriptor: AssetFileDescriptor? = null,
+  val assetFileDescriptorList: List<AssetFileDescriptor> = emptyList(),
   val assetDescriptorFilePath: String? = null,
   val jniKiwixReader: Archive,
   private val nightModeConfig: NightModeConfig,
@@ -65,7 +66,7 @@ class ZimFileReader constructor(
   interface Factory {
     suspend fun create(file: File): ZimFileReader?
     suspend fun create(
-      assetFileDescriptor: AssetFileDescriptor,
+      assetFileDescriptorList: List<AssetFileDescriptor>,
       filePath: String? = null
     ): ZimFileReader?
 
@@ -91,18 +92,19 @@ class ZimFileReader constructor(
         }
 
       override suspend fun create(
-        assetFileDescriptor: AssetFileDescriptor,
+        assetFileDescriptorList: List<AssetFileDescriptor>,
         filePath: String?
       ): ZimFileReader? = withContext(Dispatchers.IO) { // Bug Fix #3805
         try {
-          val archive = Archive(
-            assetFileDescriptor.parcelFileDescriptor.dup().fileDescriptor,
-            assetFileDescriptor.startOffset,
-            assetFileDescriptor.length
-          )
+          val fdInputArray = getFdInputArrayFromAssetFileDescriptorList(assetFileDescriptorList)
+          val archive = if (fdInputArray.size == 1) {
+            Archive(fdInputArray[0])
+          } else {
+            Archive(fdInputArray)
+          }
           ZimFileReader(
             null,
-            assetFileDescriptor,
+            assetFileDescriptorList,
             assetDescriptorFilePath = filePath,
             nightModeConfig = nightModeConfig,
             jniKiwixReader = archive,
@@ -116,6 +118,17 @@ class ZimFileReader constructor(
           null
         }
       }
+
+      private fun getFdInputArrayFromAssetFileDescriptorList(
+        assetFileDescriptorList: List<AssetFileDescriptor>
+      ): Array<FdInput> =
+        assetFileDescriptorList.map {
+          FdInput(
+            it.parcelFileDescriptor.dup().fileDescriptor,
+            it.startOffset,
+            it.length
+          )
+        }.toTypedArray()
     }
   }
 

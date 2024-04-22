@@ -199,7 +199,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   override fun onResume() {
     super.onResume()
     if (zimReaderContainer?.zimFile == null &&
-      zimReaderContainer?.zimFileReader?.assetFileDescriptor == null
+      zimReaderContainer?.zimFileReader?.assetFileDescriptorList?.isEmpty() == true
     ) {
       exitBook()
     }

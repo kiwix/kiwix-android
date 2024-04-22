@@ -48,8 +48,6 @@ fun ProductFlavors.create(customApps: List<CustomApp>) {
       buildConfigField("String", "ENFORCED_LANG", "\"${customApp.enforcedLanguage}\"")
       buildConfigField("String", "ABOUT_APP_URL", "\"${customApp.aboutAppUrl}\"")
       buildConfigField("String", "SUPPORT_URL", "\"${customApp.supportUrl}\"")
-      // Add asset file name in buildConfig file, we will use later to receive the zim file.
-      buildConfigField("String", "PLAY_ASSET_FILE", "\"${customApp.name}.zim\"")
       buildConfigField("Boolean", "DISABLE_SIDEBAR", "${customApp.disableSideBar}")
       buildConfigField("Boolean", "DISABLE_TABS", "${customApp.disableTabs}")
       buildConfigField("Boolean", "DISABLE_READ_ALOUD", "${customApp.disableReadAloud}")
