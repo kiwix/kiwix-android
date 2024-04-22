@@ -86,7 +86,7 @@ object Versions {
 
   const val core_ktx: String = "1.9.0"
 
-  const val libkiwix: String = "2.0.0"
+  const val libkiwix: String = "2.1.0"
 
   const val material: String = "1.8.0"
 
