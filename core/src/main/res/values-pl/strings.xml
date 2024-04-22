@@ -219,6 +219,7 @@
   <string name="switch_tabs">Przełącz zakładki</string>
   <string name="close_all_tabs">Zamknij wszystkie zakładki</string>
   <string name="close_tab">Zamknij kartę</string>
+  <string name="could_not_restore_tabs">Nie udało się przywrócić kart.</string>
   <string name="pending_state">Oczekujące</string>
   <string name="running_state">W trakcie</string>
   <string name="complete">Zakończono</string>
