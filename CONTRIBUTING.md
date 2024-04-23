@@ -74,6 +74,16 @@ The default build is `debug`, with this variant you can use a debugger while dev
 
 By default we fetch kiwix-lib, the key component for interacting with ZIM files from maven, but if you wish to use your own locally compiled version for testing purposes, then you can create the directory `app/libs` and place your .aar file inside it to have it used instead.
 
+### Git hooks
+
+We've implemented [Git hooks](https://www.atlassian.com/git/tutorials/git-hooks) to ensure code quality and minimize potential errors in the Kiwix project. The [pre-commit](https://github.com/kiwix/kiwix-android/blob/main/team-props/git-hooks/pre-commit.sh) Git hook, automatically runs `detekt`, `ktlint`, and `lint` with every commit.
+If this hook identifies any potential errors or code quality issues, it will fail the commit and provide the reason for the failure. You need to fix that error and recommit your code.
+
+However, if there's a valid reason to skip linting for a particular commit, you can use:
+```bash
+git commit --no-verify
+```
+
 ### Linting
 
 PR should be linted properly locally. The linter is a git hooks and always run automatically.
