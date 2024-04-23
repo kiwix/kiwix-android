@@ -21,6 +21,7 @@
   <string name="menu_read_aloud">Lue ääneen</string>
   <string name="menu_read_aloud_stop">Lopeta ääneen lukeminen</string>
   <string name="menu_support_kiwix">Tue Kiwixiä</string>
+  <string name="menu_support_kiwix_for_custom_apps">Tue %s</string>
   <string name="menu_about_app">Tietoja sovelluksesta %s</string>
   <string name="menu_wifi_hotspot">Hostaa kirjoja</string>
   <string name="save_media">Tallenna media</string>
@@ -47,6 +48,7 @@
   <string name="stop_server_label">Pysäytä palvelin</string>
   <string name="error_ip_address_not_found">IP-osoitetta ei löytynyt.</string>
   <string name="error_file_not_found">Virhe: valittua ZIM-tiedostoa ei löytynyt.</string>
+  <string name="unable_to_read_zim_file">Zim-tiedostoa ei voitu lukea!</string>
   <string name="zim_not_opened">Zim-tiedostoa ei voi avata</string>
   <string name="error_file_invalid">Virhe: valittu tiedosto ei ole kelvollinen ZIM-tiedosto.</string>
   <string name="error_article_url_not_found">Virhe: Artikkelin (Url: %1$s) lataus epäonnistui.</string>
@@ -238,4 +240,5 @@
   <string name="open_article">Avaa artikkeli</string>
   <string name="go_to_settings_label">Siirry asetuksiin</string>
   <string name="your_device_name_message">Laitteesi nimi näkyy tässä.</string>
+  <string name="toolbar_back_button_content_description">Siirry edelliseen ruutuun</string>
 </resources>

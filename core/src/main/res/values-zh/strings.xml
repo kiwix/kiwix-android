@@ -3,6 +3,7 @@
 * A Chinese Wikipedian
 * Akagisoy
 * Arthur2e5
+* Crocodoom
 * GuoPC
 * IceButBin
 * Josephine W.
@@ -40,7 +41,7 @@
   <string name="menu_support_kiwix">支持Kiwix</string>
   <string name="menu_support_kiwix_for_custom_apps">支持%s</string>
   <string name="menu_about_app">关于%s应用程序</string>
-  <string name="menu_wifi_hotspot">成为服务器共享书籍</string>
+  <string name="menu_wifi_hotspot">无线共享</string>
   <string name="save_media">保存媒体</string>
   <string name="save_media_error">尝试保存该媒体时出错！</string>
   <string name="save_media_saved">已将媒体作为%s保存至Downloads/org.kiwix…/</string>
@@ -64,7 +65,7 @@
   <string name="progress_dialog_starting_server">正在启动服务器</string>
   <string name="hotspot_dialog_title">书籍共享说明</string>
   <string name="wifi_dialog_title">检测到 WiFi 连接</string>
-  <string name="wifi_dialog_body">要在其他设备上看书，就先要确认所有设备都连接到同一个 WiFi 网络。</string>
+  <string name="wifi_dialog_body">为了在其他设备上查看书籍，请确认所有设备都连接到同一个 WiFi 网络。</string>
   <string name="hotspot_dialog_message">要让此功能运作，你需要先手动启动 WiFi 热点，或者确定主机和接受设备在同一个 WiFi 网络上。</string>
   <string name="hotspot_dialog_neutral_button">继续</string>
   <string name="hotspot_channel_description">关于你的无线网络热点/服务器的更新</string>
@@ -116,11 +117,11 @@
   <string name="did_you_know">您知道吗？</string>
   <string name="undo">撤销</string>
   <string name="tab_closed">标签页已关闭</string>
-  <string name="tabs_closed">标签已关闭</string>
+  <string name="tabs_closed">标签页已关闭</string>
   <string name="bookmark_added">书签已添加</string>
-  <string name="rate_dialog_title">请评价我们</string>
+  <string name="rate_dialog_title">请给予我们评价</string>
   <string name="rate_dialog_msg">如果您喜欢使用%s，请花点时间为它评分，谢谢您的支持！</string>
-  <string name="rate_dialog_positive">评价吧！</string>
+  <string name="rate_dialog_positive">评价！</string>
   <string name="no_thanks">不用了，谢谢</string>
   <string name="rate_dialog_neutral">以后再说</string>
   <string name="open">打开</string>
@@ -130,8 +131,8 @@
   <string name="pref_extras">附加功能</string>
   <string name="new_tab_snack_bar">条目已在新标签页中打开</string>
   <string name="search_widget_text">搜索 Kiwix</string>
-  <string name="speech_prompt_text">讲话来搜索 %s</string>
-  <string name="speech_not_supported">对不起！您的设备不支持语音输入</string>
+  <string name="speech_prompt_text">语音搜索 %s</string>
+  <string name="speech_not_supported">很抱歉！您的设备不支持语音输入</string>
   <string name="local_zims">设备</string>
   <string name="remote_zims">在线</string>
   <string name="library">图书馆</string>
@@ -146,13 +147,13 @@
   <string name="zim_no_vid">没有视频</string>
   <string name="no_network_connection">没有网络连接</string>
   <string name="help_2">Kiwix可以做什么？</string>
-  <string name="help_3">Kiwix是一个离线内容阅读器。它的功能就好像一个浏览器，但它不需要访问在线网页，而是从ZIM格式文件中读取内容。</string>
+  <string name="help_3">Kiwix是一个离线内容阅读器。它的功能类似于浏览器，但不需要访问在线网页，而是从ZIM格式文件中读取内容。</string>
   <string name="help_4">尽管Kiwix原本设计用于提供维基百科离线内容，但它也可以阅读其他内容。</string>
   <string name="help_5">内容在哪里？</string>
   <string name="help_6">我们的内容存储在Kiwix网站中。</string>
   <string name="help_7">它们以ZIM格式的文件存在。这里是其中一些：</string>
-  <string name="help_8">u2022维基百科分别提供每种语言版本</string>
-  <string name="help_9">u2022同样可用于例如维基解密或维基文库等其他内容</string>
+  <string name="help_8">• 维基百科分别提供每种语言版本</string>
+  <string name="help_9">• 同样可用于例如维基解密或维基文库等其他内容</string>
   <string name="help_10">您可以在应用中下载您选择的ZIM文件，也可以在电脑端下载您想要的文件，并在稍后将其转移至您的SD卡中。</string>
   <string name="help_11">在应用中下载的ZIM文件被存放于外部存储中一个名为Kiwix的文件夹内。</string>
   <string name="pref_storage">存储</string>
@@ -171,13 +172,13 @@
   <string name="confirm_stop_download_msg">您确定要停止此次下载么？</string>
   <string name="download_change_storage">存储设备选择器</string>
   <string name="tts_not_enabled">文字转换语音功能未对该ZIM文件启用</string>
-  <string name="texttospeech_initialization_failed">文字到语音的初始化失败。请再试一次</string>
-  <string name="texttospeech_error">文本到语音的转换过程中出现了未知错误。请再试一次</string>
+  <string name="texttospeech_initialization_failed">文字转语音的初始化失败。请重试</string>
+  <string name="texttospeech_error">文本转语音出现意外错误。请重试</string>
   <string name="next">下一页</string>
   <string name="previous">上一页</string>
   <string name="wifi_only_title">允许通过移动网络下载内容？</string>
   <string name="wifi_only_msg">如果您选择“是”，您今后就不会再被警告了。然而，您总是可以在设置中更改它</string>
-  <string name="pref_wifi_only">只通过WiFi下载内容</string>
+  <string name="pref_wifi_only">只通过 WiFi 下载内容</string>
   <string name="time_day">日</string>
   <string name="time_hour">时</string>
   <string name="time_minute">分</string>
@@ -187,8 +188,8 @@
   <string name="time_yesterday">昨天</string>
   <string name="pref_external_link_popup_title">访问外部链接时警告</string>
   <string name="pref_external_link_popup_summary">对额外费用或离线时链接不可用弹出警告</string>
-  <string name="external_link_popup_dialog_title">正在进入外部链接！</string>
-  <string name="external_link_popup_dialog_message">您正在输入外部链接。这可能导致额外数据转移费用，或当您离线时不能工作。您是否要继续？</string>
+  <string name="external_link_popup_dialog_title">正在访问外部链接！</string>
+  <string name="external_link_popup_dialog_message">您正在访问外部链接。这可能导致额外数据转移费用，或当您离线时不能工作。您是否要继续？</string>
   <string name="do_not_ask_anymore">不要再次询问</string>
   <string name="your_languages">选择的语言：</string>
   <string name="other_languages">其他语言：</string>
@@ -228,6 +229,8 @@
   <string name="search_bookmarks">搜索书签</string>
   <string name="switch_tabs">切换选项卡</string>
   <string name="close_all_tabs">关闭所有标签</string>
+  <string name="close_tab">关闭标签页</string>
+  <string name="could_not_restore_tabs">无法恢复标签页。</string>
   <string name="pending_state">待处理</string>
   <string name="running_state">进行中</string>
   <string name="complete">完成</string>
@@ -257,11 +260,12 @@
   <string name="severe_loss_error">严重错误！请尝试禁用/重新启用 WiFi P2P</string>
   <string name="connection_failed">连接失败</string>
   <string name="permission_rationale_location">为了寻找对等设备，我们需要定位权限（这是 Android 系统的要求）</string>
+  <string name="permission_rationale_nearby">Android 需要获得附近设备权限，以允许应用程序检测对等设备</string>
   <string name="permission_refused_location">在没有定位权限的情况下无法找到对等设备</string>
   <string name="permission_refused_storage">在没有存储权限的情况下无法读取 ZIM 文件</string>
   <string name="request_enable_location">开启定位服务以寻找对等设备</string>
   <string name="discovery_needs_location">在没有定位服务的情况下无法寻找对等设备</string>
-  <string name="request_enable_wifi">在系统设置中开启 WiFi 点对点功能</string>
+  <string name="request_enable_wifi">在系统设置中开启 WiFi P2P 功能</string>
   <string name="discovery_needs_wifi">在未开启 WiFi 时无法寻找对等设备</string>
   <string name="transfer_to">要向 %s 传输文件吗？</string>
   <string name="device_not_cooperating">所选设备不配合文件传输工作</string>
@@ -306,7 +310,7 @@
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">文字缩放</string>
   <string name="search_open_in_new_tab">在新标签页打开</string>
-  <string name="reader">读者</string>
+  <string name="reader">阅读器</string>
   <string name="no_open_book">没有打开的书</string>
   <string name="open_library">打开文库</string>
   <string name="tab_restored">标签已恢复</string>
@@ -319,10 +323,10 @@
   <string name="how_to_update_content">如何更新内容？</string>
   <string name="update_content_description">要更新内容（ZIM 文件），您需要下载此相似内容的完整最新版本。您可以通过下载章节进行。</string>
   <string name="all_files_permission_needed">需要全部文件权限</string>
-  <string name="all_files_permission_needed_message">为了跨设备访问所有 ZIM 文件，我们需要全部文件权限。</string>
+  <string name="all_files_permission_needed_message">为了访问设备上的所有 ZIM 文件，我们需要所有文件权限</string>
   <string name="allowed">允许</string>
   <string name="not_allowed">不允许</string>
-  <string name="denied_internet_permission_message">请启用 wifi 来下载内容</string>
+  <string name="denied_internet_permission_message">请启用 WiFi 来下载内容</string>
   <string name="select_folder">请选择用于外部存储的文件夹。</string>
   <string name="system_unable_to_grant_permission_message">系统无法授予权限！</string>
   <string name="allow">允许</string>
@@ -344,11 +348,15 @@
   <string name="backward_history">历史向后</string>
   <string name="forward_history">历史向前</string>
   <string name="clear_all_navigation_history_message">清除所有（向前、向后）的导航历史</string>
-  <string name="navigation_history_cleared">已清楚导航历史记录</string>
+  <string name="navigation_history_cleared">已清除导航历史记录</string>
   <string name="go_to_settings_label">转到设置</string>
   <string name="request_notification_permission_message">要执行此操作，请授予通知访问权限</string>
   <string name="click_nearby_devices_message">点击这里来查找附近的设备</string>
   <string name="your_device_name_message">您的设备名将出现在这里</string>
   <string name="nearby_devices_list_message">您可以在这里看到所有的附近的设备。点击设备名即可进行文件传输。</string>
   <string name="transfer_zim_files_list_message">您可以在这里看到所有的可用于文件传输的ZIM文件。</string>
+  <string name="storage_selection_dialog_accessibility_description">选择用于下载 ZIM 文件的存储位置。</string>
+  <string name="zim_file_content_description">包含阅读内容的 ZIM 文件</string>
+  <string name="select_language_content_description">选择此语言将优先在顶部显示该语言的可下载书籍。</string>
+  <string name="toolbar_back_button_content_description">转至上一画面</string>
 </resources>

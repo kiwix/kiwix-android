@@ -207,6 +207,7 @@
   <string name="switch_tabs">Cambiar de scheda</string>
   <string name="close_all_tabs">Clauder tote le schedas</string>
   <string name="close_tab">Clauder scheda</string>
+  <string name="could_not_restore_tabs">Non poteva restaurar schedas.</string>
   <string name="pending_state">Pendente</string>
   <string name="running_state">In progresso</string>
   <string name="complete">Terminate</string>
@@ -236,6 +237,7 @@
   <string name="severe_loss_error">Error grave! Tenta disactivar/reactivar WiFi P2P</string>
   <string name="connection_failed">Connexion fallite</string>
   <string name="permission_rationale_location">Android require accesso al position geographic pro permitter al application deteger apparatos a proximitate.</string>
+  <string name="permission_rationale_nearby">Android require le permission de apparatos a proximitate pro permitter al application deteger apparatos pares.</string>
   <string name="permission_refused_location">Non pote localisar apparatos a proximitate sin accesso al position geographic</string>
   <string name="permission_refused_storage">Non pote acceder a files Zim sin accesso al immagazinage</string>
   <string name="request_enable_location">Activa position geographic pro permitter detection de apparatos proxime</string>
@@ -292,6 +294,9 @@
   <string name="tabs_restored">Schedas restaurate</string>
   <string name="open_drawer">Aperir tiratorio</string>
   <string name="close_drawer">Clauder tiratorio</string>
+  <string name="zim_files_not_showing">Le file Zim non appare?</string>
+  <string name="zim_files_not_showing_description">A causa del politicas de Google Play sur Android 11 e plus recente, iste application Google Store non pote aperir le files ZIM transferite localmente. Tu pote discargar le files per medio del application, o installar le version complete del application Kiwix de nostre sito web official: %s</string>
+  <string name="understood">Comprendite</string>
   <string name="how_to_update_content">Como actualisar contento?</string>
   <string name="update_content_description">Pro actualisar le contento (un file zim) tu debe discargar le ultime version complete de iste mesme contento. Tu pote facer lo in le section de discargamento.</string>
   <string name="all_files_permission_needed">Permission pro tote le files es necessari</string>
@@ -327,4 +332,6 @@
   <string name="your_device_name_message">Le nomine de tu apparato apparera hic.</string>
   <string name="nearby_devices_list_message">Hic apparera un lista de apparatos a proximitate. Tocca le nomine de un apparato pro transferer un file.</string>
   <string name="transfer_zim_files_list_message">Hic apparera le lista de files ZIM disponibile a transferer.</string>
+  <string name="storage_selection_dialog_accessibility_description">Selige le immagazinage pro discargar le files ZIM.</string>
+  <string name="zim_file_content_description">Le file ZIM que ha le contento a leger</string>
 </resources>

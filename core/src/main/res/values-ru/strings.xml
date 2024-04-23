@@ -5,6 +5,7 @@
 * DDPAT
 * DevilishSkull
 * Diman Russkov
+* Dirruw'o
 * Facenapalm
 * Fenixs-ru
 * Fitoschido
@@ -230,6 +231,7 @@
   <string name="switch_tabs">Переключить вкладки</string>
   <string name="close_all_tabs">Закрыть все вкладки</string>
   <string name="close_tab">Закрыть вкладку</string>
+  <string name="could_not_restore_tabs">Не удалось восстановить вкладки.</string>
   <string name="pending_state">В ожидании</string>
   <string name="running_state">В процессе</string>
   <string name="complete">Завершено</string>
@@ -259,6 +261,7 @@
   <string name="severe_loss_error">Серьёзная ошибка! Попробуйте выключить и снова включить WiFi P2P</string>
   <string name="connection_failed">Не удалось установить соединение</string>
   <string name="permission_rationale_location">Доступ к местонахождению требуется Android для поиска близлежащих устройств</string>
+  <string name="permission_rationale_nearby">Доступ к местонахождению требуется Android для поиска близлежащих устройств</string>
   <string name="permission_refused_location">Невозможно обнаружить устройства без доступа к местоположению</string>
   <string name="permission_refused_storage">Невозможно получить доступ к файлам zim без разрешения на доступ к хранилищу</string>
   <string name="request_enable_location">Разрешите доступ к местоположению, чтобы позволить поиск устройств</string>
@@ -354,4 +357,7 @@
   <string name="nearby_devices_list_message">Здесь вы найдете список ближайших устройств. Нажмите на имя устройства, чтобы начать передачу файлов.</string>
   <string name="transfer_zim_files_list_message">Здесь вы найдете список доступных ZIM-файлов для передачи.</string>
   <string name="storage_selection_dialog_accessibility_description">Выберите хранилище для скачивания ZIM-файлов.</string>
+  <string name="zim_file_content_description">ZIM-файл, содержащий содержимое для чтения.</string>
+  <string name="select_language_content_description">При выборе этого языка приоритет отдается отображению загружаемых книг на этом языке вверху.</string>
+  <string name="toolbar_back_button_content_description">Перейти к предыдущей странице</string>
 </resources>
