@@ -10,6 +10,7 @@ Bug Fixes:
 * Application crashes below API level 29 when we select the external storage. (https://github.com/kiwix/kiwix-android/pull/3642)
 * Application crashes when opening saved notes if the ZIM file does not exist. (https://github.com/kiwix/kiwix-android/issues/3682)
 * Application crashes when opening ZIM files directly opening from storage using deep linking. (https://github.com/kiwix/kiwix-android/pull/3649)
+* Application crashes when closing the tab. (https://github.com/kiwix/kiwix-android/pull/3791)
 * A few Samsung devices are unable to download 4+ gb files. (https://github.com/kiwix/kiwix-android/pull/3695)
 * Content is not displaying after opening the ZIM file from Chrome. (https://github.com/kiwix/kiwix-android/pull/3727)
 * Read aloud does not stop for closed tabs. (https://github.com/kiwix/kiwix-android/pull/3745)
@@ -17,17 +18,21 @@ Bug Fixes:
 * Improved UI to show hints of view functionality when the user long clicks on any view. (https://github.com/kiwix/kiwix-android/pull/3689, https://github.com/kiwix/kiwix-android/pull/3707, https://github.com/kiwix/kiwix-android/pull/3706)
 * Application is not restarting from Error activity. (https://github.com/kiwix/kiwix-android/pull/3735)
 * Better permission requesting (https://github.com/kiwix/kiwix-android/pull/3729)
+* Improvement in restoring tabs. (https://github.com/kiwix/kiwix-android/pull/3793)
 * Few links are not working in README.md file. (https://github.com/kiwix/kiwix-android/pull/3637, https://github.com/kiwix/kiwix-android/pull/3655)
+* Added documentation for Git Hooks in the CONTRIBUTING file. (https://github.com/kiwix/kiwix-android/pull/3798)
+* Fixed some issues reported by the playStore. (https://github.com/kiwix/kiwix-android/pull/3795, https://github.com/kiwix/kiwix-android/pull/3797)
 + More
 
 Compilation/CI/CD:
-* Using libkiwix `2.0.0`. (https://github.com/kiwix/kiwix-android/issues/3693)
+* Using libkiwix `2.1.0`. (https://github.com/kiwix/kiwix-android/pull/3802)
 * Using libkiwix to store the bookmarks instead of objectbox. (https://github.com/kiwix/kiwix-android/pull/3653)
 * Unconditional Logging lint issue. (https://github.com/kiwix/kiwix-android/issues/1270)
 * Improved our CI to smoothly run the test cases. (https://github.com/kiwix/kiwix-android/pull/3758)
 * Added/improved test cases.
 * Increased java heap memory to efficiently creating app bundle for custom apps. (https://github.com/kiwix/kiwix-android/pull/3665)
 * Upgraded project dependencies to fix errors reported by the play store. (https://github.com/kiwix/kiwix-android/pull/3648, https://github.com/kiwix/kiwix-android/pull/3731)
+* Corrected the error message if the Lint/Static analysis fails. (https://github.com/kiwix/kiwix-android/pull/3780)
 + More
 
 3.9.1
