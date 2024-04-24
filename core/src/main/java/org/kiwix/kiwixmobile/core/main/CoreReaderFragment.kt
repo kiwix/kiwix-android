@@ -1624,10 +1624,12 @@ abstract class CoreReaderFragment :
 
       val zimFileReader = zimReaderContainer.zimFileReader
       zimFileReader?.let { zimFileReader ->
-        // uninitialized the service worker to fix https://github.com/kiwix/kiwix-android/issues/2561
-        openArticle(UNINITIALISER_ADDRESS)
-        mainMenu?.onFileOpened(urlIsValid())
-        setUpBookmarks(zimFileReader)
+        Handler(Looper.getMainLooper()).post {
+          // uninitialized the service worker to fix https://github.com/kiwix/kiwix-android/issues/2561
+          openArticle(UNINITIALISER_ADDRESS)
+          mainMenu?.onFileOpened(urlIsValid())
+          setUpBookmarks(zimFileReader)
+        }
       } ?: kotlin.run {
         requireActivity().toast(R.string.error_file_invalid, Toast.LENGTH_LONG)
       }
