@@ -334,4 +334,6 @@
   <string name="transfer_zim_files_list_message">Hic apparera le lista de files ZIM disponibile a transferer.</string>
   <string name="storage_selection_dialog_accessibility_description">Selige le immagazinage pro discargar le files ZIM.</string>
   <string name="zim_file_content_description">Le file ZIM que ha le contento a leger</string>
+  <string name="select_language_content_description">Si iste lingua es seligite, le libros discargabile in iste lingua essera monstrate primo.</string>
+  <string name="toolbar_back_button_content_description">Ir al schermo precedente</string>
 </resources>
