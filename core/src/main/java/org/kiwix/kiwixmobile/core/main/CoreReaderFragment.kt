@@ -1574,11 +1574,13 @@ abstract class CoreReaderFragment :
 
       val zimFileReader = zimReaderContainer.zimFileReader
       zimFileReader?.let { zimFileReader ->
-        // uninitialized the service worker to fix https://github.com/kiwix/kiwix-android/issues/2561
-        openArticle(UNINITIALISER_ADDRESS)
-        mainMenu?.onFileOpened(urlIsValid())
-        openArticle(zimFileReader.mainPage)
-        setUpBookmarks(zimFileReader)
+        Handler(Looper.getMainLooper()).post {
+          // uninitialized the service worker to fix https://github.com/kiwix/kiwix-android/issues/2561
+          openArticle(UNINITIALISER_ADDRESS)
+          mainMenu?.onFileOpened(urlIsValid())
+          openArticle(zimFileReader.mainPage)
+          setUpBookmarks(zimFileReader)
+        }
       } ?: kotlin.run {
         requireActivity().toast(R.string.error_file_invalid, Toast.LENGTH_LONG)
       }
@@ -1775,13 +1777,15 @@ abstract class CoreReaderFragment :
   }
 
   private fun openSearchItem(item: SearchItemToOpen) {
-    zimReaderContainer?.titleToUrl(item.pageTitle)?.let {
-      if (item.shouldOpenInNewTab) {
-        createNewTab()
+    Handler(Looper.getMainLooper()).post {
+      zimReaderContainer?.titleToUrl(item.pageTitle)?.let {
+        if (item.shouldOpenInNewTab) {
+          createNewTab()
+        }
+        loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(it))
       }
-      loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(it))
+      requireActivity().consumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)
     }
-    requireActivity().consumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)
   }
 
   private fun handleIntentActions(intent: Intent) {
@@ -2200,29 +2204,31 @@ abstract class CoreReaderFragment :
     zimPositions: String?,
     currentTab: Int
   ) {
-    try {
-      val urls = JSONArray(zimArticles)
-      val positions = JSONArray(zimPositions)
-      currentWebViewIndex = 0
-      tabsAdapter?.apply {
-        notifyItemRemoved(0)
-        notifyDataSetChanged()
-      }
-      var cursor = 0
-      getCurrentWebView()?.let { kiwixWebView ->
-        kiwixWebView.loadUrl(reformatProviderUrl(urls.getString(cursor)))
-        kiwixWebView.scrollY = positions.getInt(cursor)
-        cursor++
-        while (cursor < urls.length()) {
-          newTab(reformatProviderUrl(urls.getString(cursor)))
+    Handler(Looper.getMainLooper()).post {
+      try {
+        val urls = JSONArray(zimArticles)
+        val positions = JSONArray(zimPositions)
+        currentWebViewIndex = 0
+        tabsAdapter?.apply {
+          notifyItemRemoved(0)
+          notifyDataSetChanged()
+        }
+        var cursor = 0
+        getCurrentWebView()?.let { kiwixWebView ->
+          kiwixWebView.loadUrl(reformatProviderUrl(urls.getString(cursor)))
           kiwixWebView.scrollY = positions.getInt(cursor)
           cursor++
+          while (cursor < urls.length()) {
+            newTab(reformatProviderUrl(urls.getString(cursor)))
+            kiwixWebView.scrollY = positions.getInt(cursor)
+            cursor++
+          }
+          selectTab(currentTab)
         }
-        selectTab(currentTab)
+      } catch (e: JSONException) {
+        Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e)
+        activity.toast(R.string.could_not_restore_tabs, Toast.LENGTH_LONG)
       }
-    } catch (e: JSONException) {
-      Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e)
-      activity.toast(R.string.could_not_restore_tabs, Toast.LENGTH_LONG)
     }
   }
 

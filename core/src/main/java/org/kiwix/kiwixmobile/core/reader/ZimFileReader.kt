@@ -25,6 +25,8 @@ import android.util.Base64
 import androidx.core.net.toUri
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
@@ -58,47 +60,53 @@ class ZimFileReader constructor(
   val assetDescriptorFilePath: String? = null,
   val jniKiwixReader: Archive,
   private val nightModeConfig: NightModeConfig,
-  private val searcher: SuggestionSearcher = SuggestionSearcher(jniKiwixReader)
+  private val searcher: SuggestionSearcher
 ) {
   interface Factory {
-    fun create(file: File): ZimFileReader?
-    fun create(
+    suspend fun create(file: File): ZimFileReader?
+    suspend fun create(
       assetFileDescriptor: AssetFileDescriptor,
       filePath: String? = null
     ): ZimFileReader?
 
     class Impl @Inject constructor(private val nightModeConfig: NightModeConfig) :
       Factory {
-      override fun create(file: File) =
-        try {
-          ZimFileReader(
-            file,
-            nightModeConfig = nightModeConfig,
-            jniKiwixReader = Archive(file.canonicalPath)
-          ).also {
-            Log.e(TAG, "create: ${file.path}")
+      override suspend fun create(file: File): ZimFileReader? =
+        withContext(Dispatchers.IO) { // Bug Fix #3805
+          try {
+            val archive = Archive(file.canonicalPath)
+            ZimFileReader(
+              file,
+              nightModeConfig = nightModeConfig,
+              jniKiwixReader = archive,
+              searcher = SuggestionSearcher(archive)
+            ).also {
+              Log.e(TAG, "create: ${file.path}")
+            }
+          } catch (ignore: JNIKiwixException) {
+            null
+          } catch (ignore: Exception) { // for handing the error, if any zim file is corrupted
+            null
           }
-        } catch (ignore: JNIKiwixException) {
-          null
-        } catch (ignore: Exception) { // for handing the error, if any zim file is corrupted
-          null
         }
 
-      override fun create(
+      override suspend fun create(
         assetFileDescriptor: AssetFileDescriptor,
         filePath: String?
-      ): ZimFileReader? =
+      ): ZimFileReader? = withContext(Dispatchers.IO) { // Bug Fix #3805
         try {
+          val archive = Archive(
+            assetFileDescriptor.parcelFileDescriptor.dup().fileDescriptor,
+            assetFileDescriptor.startOffset,
+            assetFileDescriptor.length
+          )
           ZimFileReader(
             null,
             assetFileDescriptor,
             assetDescriptorFilePath = filePath,
             nightModeConfig = nightModeConfig,
-            jniKiwixReader = Archive(
-              assetFileDescriptor.parcelFileDescriptor.dup().fileDescriptor,
-              assetFileDescriptor.startOffset,
-              assetFileDescriptor.length
-            )
+            jniKiwixReader = archive,
+            searcher = SuggestionSearcher(archive)
           ).also {
             Log.e(TAG, "create: with fileDescriptor")
           }
@@ -107,6 +115,7 @@ class ZimFileReader constructor(
         } catch (ignore: Exception) { // for handing the error, if any zim file is corrupted
           null
         }
+      }
     }
   }
 

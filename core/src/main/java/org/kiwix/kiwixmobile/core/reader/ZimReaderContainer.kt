@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.reader
 
 import android.content.res.AssetFileDescriptor
 import android.webkit.WebResourceResponse
+import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
 import java.io.File
@@ -38,19 +39,21 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
     if (file?.canonicalPath == zimFileReader?.zimFile?.canonicalPath) {
       return
     }
-    zimFileReader =
+    zimFileReader = runBlocking {
       if (file?.isFileExist() == true) zimFileReaderFactory.create(file)
       else null
+    }
   }
 
   fun setZimFileDescriptor(
     assetFileDescriptor: AssetFileDescriptor,
     filePath: String? = null
   ) {
-    zimFileReader =
+    zimFileReader = runBlocking {
       if (assetFileDescriptor.parcelFileDescriptor.dup().fileDescriptor.valid())
         zimFileReaderFactory.create(assetFileDescriptor, filePath)
       else null
+    }
   }
 
   fun getPageUrlFromTitle(title: String) = zimFileReader?.getPageUrlFrom(title)
@@ -83,8 +86,10 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
       }
   }
 
-  fun copyReader(): ZimFileReader? = zimFile?.let(zimFileReaderFactory::create)
-    ?: assetFileDescriptor?.let(zimFileReaderFactory::create)
+  fun copyReader(): ZimFileReader? = runBlocking {
+    zimFile?.let { zimFileReaderFactory.create(it) }
+      ?: assetFileDescriptor?.let { zimFileReaderFactory.create(it) }
+  }
 
   val zimFile get() = zimFileReader?.zimFile
 

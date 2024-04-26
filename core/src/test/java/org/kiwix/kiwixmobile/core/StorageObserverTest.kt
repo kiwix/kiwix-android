@@ -24,6 +24,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -70,7 +71,7 @@ class StorageObserverTest {
     every { sharedPreferenceUtil.prefStorage } returns "a"
     every { fileSearch.scan(scanningProgressListener) } returns files
     every { downloadDao.downloads() } returns downloads
-    every { readerFactory.create(file) } returns zimFileReader
+    every { runBlocking { readerFactory.create(file) } } returns zimFileReader
     storageObserver = StorageObserver(downloadDao, fileSearch, readerFactory)
   }
 

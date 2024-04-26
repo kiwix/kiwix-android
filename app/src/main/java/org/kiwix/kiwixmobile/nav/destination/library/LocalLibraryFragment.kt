@@ -56,6 +56,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -402,13 +403,15 @@ class LocalLibraryFragment : BaseFragment() {
       // local library screen. Since our application is already aware of this opened ZIM file,
       // we can directly add it to the database.
       // See https://github.com/kiwix/kiwix-android/issues/3650
-      zimReaderFactory.create(file)
-        ?.let { zimFileReader ->
-          BookOnDisk(file, zimFileReader).also {
-            mainRepositoryActions.saveBook(it)
-            zimFileReader.dispose()
+      runBlocking {
+        zimReaderFactory.create(file)
+          ?.let { zimFileReader ->
+            BookOnDisk(file, zimFileReader).also {
+              mainRepositoryActions.saveBook(it)
+              zimFileReader.dispose()
+            }
           }
-        }
+      }
       activity?.navigate(
         LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
           .apply { zimFileUri = file.toUri().toString() }
