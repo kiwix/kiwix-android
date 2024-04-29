@@ -1241,6 +1241,19 @@ abstract class CoreReaderFragment :
     mainMenu?.showBookSpecificMenuItems()
   }
 
+  protected fun exitBook() {
+    showNoBookOpenViews()
+    bottomToolbar?.visibility = View.GONE
+    actionBar?.title = getString(R.string.reader)
+    contentFrame?.visibility = View.GONE
+    mainMenu?.hideBookSpecificMenuItems()
+    closeZimBook()
+  }
+
+  private fun closeZimBook() {
+    zimReaderContainer?.setZimFile(null)
+  }
+
   private fun restoreDeletedTab(index: Int) {
     if (webViewList.isEmpty()) {
       reopenBook()
@@ -1523,6 +1536,7 @@ abstract class CoreReaderFragment :
         )
         updateTitle()
       } else {
+        exitBook()
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file?.absolutePath)
         requireActivity().toast(R.string.error_file_not_found, Toast.LENGTH_LONG)
       }
@@ -1574,13 +1588,11 @@ abstract class CoreReaderFragment :
 
       val zimFileReader = zimReaderContainer.zimFileReader
       zimFileReader?.let { zimFileReader ->
-        Handler(Looper.getMainLooper()).post {
-          // uninitialized the service worker to fix https://github.com/kiwix/kiwix-android/issues/2561
-          openArticle(UNINITIALISER_ADDRESS)
-          mainMenu?.onFileOpened(urlIsValid())
-          openArticle(zimFileReader.mainPage)
-          setUpBookmarks(zimFileReader)
-        }
+        // uninitialized the service worker to fix https://github.com/kiwix/kiwix-android/issues/2561
+        openArticle(UNINITIALISER_ADDRESS)
+        mainMenu?.onFileOpened(urlIsValid())
+        openArticle(zimFileReader.mainPage)
+        setUpBookmarks(zimFileReader)
       } ?: kotlin.run {
         requireActivity().toast(R.string.error_file_invalid, Toast.LENGTH_LONG)
       }
@@ -1777,15 +1789,14 @@ abstract class CoreReaderFragment :
   }
 
   private fun openSearchItem(item: SearchItemToOpen) {
-    Handler(Looper.getMainLooper()).post {
-      zimReaderContainer?.titleToUrl(item.pageTitle)?.let {
-        if (item.shouldOpenInNewTab) {
-          createNewTab()
-        }
-        loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(it))
+    zimReaderContainer?.titleToUrl(item.pageTitle)?.let {
+      if (item.shouldOpenInNewTab) {
+        createNewTab()
       }
-      requireActivity().consumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)
+      android.util.Log.e("OPEN_OBB", "openSearchItem: ")
+      loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(it))
     }
+    requireActivity().consumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)
   }
 
   private fun handleIntentActions(intent: Intent) {
@@ -2204,31 +2215,29 @@ abstract class CoreReaderFragment :
     zimPositions: String?,
     currentTab: Int
   ) {
-    Handler(Looper.getMainLooper()).post {
-      try {
-        val urls = JSONArray(zimArticles)
-        val positions = JSONArray(zimPositions)
-        currentWebViewIndex = 0
-        tabsAdapter?.apply {
-          notifyItemRemoved(0)
-          notifyDataSetChanged()
-        }
-        var cursor = 0
-        getCurrentWebView()?.let { kiwixWebView ->
-          kiwixWebView.loadUrl(reformatProviderUrl(urls.getString(cursor)))
+    try {
+      val urls = JSONArray(zimArticles)
+      val positions = JSONArray(zimPositions)
+      currentWebViewIndex = 0
+      tabsAdapter?.apply {
+        notifyItemRemoved(0)
+        notifyDataSetChanged()
+      }
+      var cursor = 0
+      getCurrentWebView()?.let { kiwixWebView ->
+        kiwixWebView.loadUrl(reformatProviderUrl(urls.getString(cursor)))
+        kiwixWebView.scrollY = positions.getInt(cursor)
+        cursor++
+        while (cursor < urls.length()) {
+          newTab(reformatProviderUrl(urls.getString(cursor)))
           kiwixWebView.scrollY = positions.getInt(cursor)
           cursor++
-          while (cursor < urls.length()) {
-            newTab(reformatProviderUrl(urls.getString(cursor)))
-            kiwixWebView.scrollY = positions.getInt(cursor)
-            cursor++
-          }
-          selectTab(currentTab)
         }
-      } catch (e: JSONException) {
-        Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e)
-        activity.toast(R.string.could_not_restore_tabs, Toast.LENGTH_LONG)
+        selectTab(currentTab)
       }
+    } catch (e: JSONException) {
+      Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e)
+      activity.toast(R.string.could_not_restore_tabs, Toast.LENGTH_LONG)
     }
   }
 

@@ -30,6 +30,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
+import org.kiwix.kiwixmobile.core.R.dimen
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.getResizedDrawable
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
@@ -41,7 +42,6 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForCustom
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
-import org.kiwix.kiwixmobile.core.R.dimen
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import java.io.File
 import java.util.Locale
