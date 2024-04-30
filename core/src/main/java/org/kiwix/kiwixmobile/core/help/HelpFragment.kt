@@ -76,7 +76,12 @@ abstract class HelpFragment : BaseFragment() {
     val activity = requireActivity() as AppCompatActivity
     fragmentHelpBinding?.activityHelpFeedbackTextView?.setOnClickListener { sendFeedback() }
     fragmentHelpBinding?.activityHelpFeedbackImageView?.setOnClickListener { sendFeedback() }
-    fragmentHelpBinding?.diagnosticClickableArea?.setOnClickListener { sendDiagnosticReport() }
+    fragmentHelpBinding?.activityHelpDiagnosticImageView?.setOnClickListener {
+      sendDiagnosticReport()
+    }
+    fragmentHelpBinding?.activityHelpDiagnosticTextView?.setOnClickListener {
+      sendDiagnosticReport()
+    }
     fragmentHelpBinding?.activityHelpRecyclerView?.addItemDecoration(
       DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
     )
