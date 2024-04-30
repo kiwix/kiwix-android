@@ -27,10 +27,15 @@ import androidx.test.espresso.action.ViewActions.clearText
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.web.sugar.Web.onWebView
+import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
+import androidx.test.espresso.web.webdriver.Locator
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.Findable.StringId.ContentDesc
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
@@ -65,7 +70,7 @@ class NoteRobot : BaseRobot() {
     clickOn(Text("Note"))
   }
 
-  fun assertBackwardNavigationHistoryDialogDisplayed() {
+  fun assertNoteDialogDisplayed() {
     pauseForBetterTestPerformance()
     isVisible(TextId(R.string.note))
   }
@@ -106,6 +111,36 @@ class NoteRobot : BaseRobot() {
 
   fun refreshList() {
     refresh(org.kiwix.kiwixmobile.R.id.zim_swiperefresh)
+  }
+
+  fun clickOnTrashIcon() {
+    clickOn(ContentDesc(R.string.pref_clear_all_bookmarks_title))
+  }
+
+  fun assertDeleteNoteDialogDisplayed() {
+    testFlakyView({ isVisible(TextId(R.string.delete_notes_confirmation_msg)) })
+  }
+
+  fun clickOnDeleteButton() {
+    pauseForBetterTestPerformance()
+    testFlakyView({ onView(ViewMatchers.withText("DELETE")).perform(click()) })
+  }
+
+  fun assertNoNotesTextDisplayed() {
+    testFlakyView({ isVisible(TextId(R.string.no_notes)) })
+  }
+
+  fun assertHomePageIsLoadedOfTestZimFile() {
+    pauseForBetterTestPerformance()
+    testFlakyView({
+      onWebView()
+        .withElement(
+          findElement(
+            Locator.XPATH,
+            "//*[contains(text(), 'Android_(operating_system)')]"
+          )
+        )
+    })
   }
 
   private fun pauseForBetterTestPerformance() {

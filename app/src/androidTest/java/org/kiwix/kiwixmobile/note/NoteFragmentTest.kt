@@ -87,39 +87,22 @@ class NoteFragmentTest : BaseActivityTest() {
 
   @Test
   fun testUserCanSeeNotesForDeletedFiles() {
-    activityScenario.onActivity {
-      kiwixMainActivity = it
-      kiwixMainActivity.navigate(R.id.libraryFragment)
+    // delete the notes if any saved to properly run the test scenario
+    note {
+      openNoteFragment()
+      assertToolbarExist()
+      assertNoteRecyclerViewExist()
+      clickOnTrashIcon()
+      assertDeleteNoteDialogDisplayed()
+      clickOnDeleteButton()
+      assertNoNotesTextDisplayed()
+      pressBack()
     }
-
-    val loadFileStream =
-      NoteFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(
-      ContextCompat.getExternalFilesDirs(context, null)[0],
-      "testzim.zim"
-    )
-    if (zimFile.exists()) zimFile.delete()
-    zimFile.createNewFile()
-    loadFileStream.use { inputStream ->
-      val outputStream: OutputStream = FileOutputStream(zimFile)
-      outputStream.use { it ->
-        val buffer = ByteArray(inputStream.available())
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-          it.write(buffer, 0, length)
-        }
-      }
-    }
-    UiThreadStatement.runOnUiThread {
-      kiwixMainActivity.navigate(
-        LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
-          .apply { zimFileUri = zimFile.toUri().toString() }
-      )
-    }
+    loadZimFileInReader("testzim.zim")
     StandardActions.closeDrawer() // close the drawer if open before running the test cases.
     note {
       clickOnNoteMenuItem(context)
-      assertBackwardNavigationHistoryDialogDisplayed()
+      assertNoteDialogDisplayed()
       writeDemoNote()
       saveNote()
       pressBack()
@@ -157,5 +140,76 @@ class NoteFragmentTest : BaseActivityTest() {
       pressBack()
     }
     LeakAssertions.assertNoLeaks()
+  }
+
+  @Test
+  fun testZimFileOpenedAfterOpeningNoteOnNotesScreen() {
+    // delete the notes if any saved to properly run the test scenario
+    note {
+      openNoteFragment()
+      assertToolbarExist()
+      assertNoteRecyclerViewExist()
+      clickOnTrashIcon()
+      assertDeleteNoteDialogDisplayed()
+      clickOnDeleteButton()
+      assertNoNotesTextDisplayed()
+      pressBack()
+    }
+    loadZimFileInReader("testzim.zim")
+    note {
+      clickOnNoteMenuItem(context)
+      assertNoteDialogDisplayed()
+      writeDemoNote()
+      saveNote()
+      pressBack()
+    }
+
+    // switch the zim file so that we can test this scenario where opening
+    // the zim file properly open in the reader screen.
+    loadZimFileInReader("small.zim")
+    note {
+      openNoteFragment()
+      assertToolbarExist()
+      assertNoteRecyclerViewExist()
+      clickOnSavedNote()
+      clickOnOpenNote()
+      assertNoteSaved()
+      // to close the note dialog.
+      pressBack()
+      // to close the notes fragment.
+      pressBack()
+
+      // now test the testzim.zim file is successfully loaded in the ZimFileReader.
+      assertHomePageIsLoadedOfTestZimFile()
+    }
+  }
+
+  private fun loadZimFileInReader(zimFileName: String) {
+    activityScenario.onActivity {
+      kiwixMainActivity = it
+      kiwixMainActivity.navigate(R.id.libraryFragment)
+    }
+
+    val loadFileStream =
+      NoteFragmentTest::class.java.classLoader.getResourceAsStream(zimFileName)
+    val zimFile = File(ContextCompat.getExternalFilesDirs(context, null)[0], zimFileName)
+    if (zimFile.exists()) zimFile.delete()
+    zimFile.createNewFile()
+    loadFileStream.use { inputStream ->
+      val outputStream: OutputStream = FileOutputStream(zimFile)
+      outputStream.use { it ->
+        val buffer = ByteArray(inputStream.available())
+        var length: Int
+        while (inputStream.read(buffer).also { length = it } > 0) {
+          it.write(buffer, 0, length)
+        }
+      }
+    }
+    UiThreadStatement.runOnUiThread {
+      kiwixMainActivity.navigate(
+        LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
+          .apply { zimFileUri = zimFile.toUri().toString() }
+      )
+    }
   }
 }
