@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core
 import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -53,7 +54,8 @@ class StorageObserver @Inject constructor(
   private fun fileHasNoMatchingDownload(downloads: List<DownloadModel>, file: File) =
     downloads.firstOrNull { file.absolutePath.endsWith(it.fileNameFromUrl) } == null
 
-  private fun convertToBookOnDisk(file: File) =
+  private fun convertToBookOnDisk(file: File) = runBlocking {
     zimReaderFactory.create(file)
       ?.let { zimFileReader -> BookOnDisk(file, zimFileReader).also { zimFileReader.dispose() } }
+  }
 }

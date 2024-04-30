@@ -35,6 +35,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.libzim.Archive
+import org.kiwix.libzim.SuggestionSearcher
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -79,12 +80,14 @@ class EncodedUrlTest : BaseActivityTest() {
         }
       }
     }
+    val archive = Archive(zimFile.canonicalPath)
     val zimFileReader = ZimFileReader(
       zimFile,
       null,
       null,
-      Archive(zimFile.canonicalPath),
-      NightModeConfig(SharedPreferenceUtil(context), context)
+      archive,
+      NightModeConfig(SharedPreferenceUtil(context), context),
+      SuggestionSearcher(archive)
     )
     val encodedUrls = arrayOf(
       EncodedUrl(

@@ -1241,6 +1241,19 @@ abstract class CoreReaderFragment :
     mainMenu?.showBookSpecificMenuItems()
   }
 
+  protected fun exitBook() {
+    showNoBookOpenViews()
+    bottomToolbar?.visibility = View.GONE
+    actionBar?.title = getString(R.string.reader)
+    contentFrame?.visibility = View.GONE
+    mainMenu?.hideBookSpecificMenuItems()
+    closeZimBook()
+  }
+
+  private fun closeZimBook() {
+    zimReaderContainer?.setZimFile(null)
+  }
+
   private fun restoreDeletedTab(index: Int) {
     if (webViewList.isEmpty()) {
       reopenBook()
@@ -1523,6 +1536,7 @@ abstract class CoreReaderFragment :
         )
         updateTitle()
       } else {
+        exitBook()
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file?.absolutePath)
         requireActivity().toast(R.string.error_file_not_found, Toast.LENGTH_LONG)
       }
@@ -1779,6 +1793,7 @@ abstract class CoreReaderFragment :
       if (item.shouldOpenInNewTab) {
         createNewTab()
       }
+      android.util.Log.e("OPEN_OBB", "openSearchItem: ")
       loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(it))
     }
     requireActivity().consumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)

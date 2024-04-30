@@ -130,19 +130,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
     tableDrawerRightContainer = requireActivity().findViewById(R.id.reader_drawer_nav_view)
   }
 
-  private fun exitBook() {
-    showNoBookOpenViews()
-    bottomToolbar?.visibility = GONE
-    actionBar?.title = getString(R.string.reader)
-    contentFrame?.visibility = GONE
-    mainMenu?.hideBookSpecificMenuItems()
-    closeZimBook()
-  }
-
-  private fun closeZimBook() {
-    zimReaderContainer?.setZimFile(null)
-  }
-
   override fun openHomeScreen() {
     Handler(Looper.getMainLooper()).postDelayed({
       if (webViewList.size == 0) {
@@ -246,6 +233,8 @@ class KiwixReaderFragment : CoreReaderFragment() {
       }
     } else {
       getCurrentWebView()?.snack(R.string.zim_not_opened)
+      exitBook() // hide the options for zim file to avoid unexpected UI behavior
+      return // book not found so don't need to restore the tabs for this file
     }
     restoreTabs(zimArticles, zimPositions, currentTab)
   }
