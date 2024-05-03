@@ -13,8 +13,8 @@ is_app_installed() {
 }
 
 if is_app_installed; then
-  # Clear application data to properly run the test cases.
-  adb shell pm clear "${PACKAGE_NAME}"
+  # Delete the application to properly run the test cases.
+  adb uninstall "${PACKAGE_NAME}"
 fi
 retry=0
 while [ $retry -le 3 ]; do
@@ -31,8 +31,8 @@ while [ $retry -le 3 ]; do
     adb logcat *:E -v color &
 
     if is_app_installed; then
-      # Clear application data to properly run the test cases.
-      adb shell pm clear "${PACKAGE_NAME}"
+      # Delete the application to properly run the test cases.
+      adb uninstall "${PACKAGE_NAME}"
     fi
     ./gradlew clean
     retry=$(( retry + 1 ))
