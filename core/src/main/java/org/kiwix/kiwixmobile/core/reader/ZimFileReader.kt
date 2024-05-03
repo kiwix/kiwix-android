@@ -160,14 +160,18 @@ class ZimFileReader constructor(
   private val mediaCount: Int?
     get() = try {
       jniKiwixReader.mediaCount
-    } catch (ignore: Exception) {
+    }
+    // catch all exceptions to prevent the aborting of the rendering process of other zim files.
+    catch (ignore: Exception) {
       Log.e(TAG, "Unable to find the media count $ignore")
       null
     }
   private val articleCount: Int?
     get() = try {
       jniKiwixReader.articleCount
-    } catch (ignore: Exception) {
+    }
+    // catch all exceptions to prevent the aborting of the rendering process of other zim files.
+    catch (ignore: Exception) {
       Log.e(TAG, "Unable to find the article count $ignore")
       null
     }
