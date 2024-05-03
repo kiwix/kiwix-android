@@ -160,15 +160,15 @@ class ZimFileReader constructor(
   private val mediaCount: Int?
     get() = try {
       jniKiwixReader.mediaCount
-    } catch (unsatisfiedLinkError: UnsatisfiedLinkError) {
-      Log.e(TAG, "Unable to find the media count $unsatisfiedLinkError")
+    } catch (ignore: Exception) {
+      Log.e(TAG, "Unable to find the media count $ignore")
       null
     }
   private val articleCount: Int?
     get() = try {
       jniKiwixReader.articleCount
-    } catch (unsatisfiedLinkError: UnsatisfiedLinkError) {
-      Log.e(TAG, "Unable to find the article count $unsatisfiedLinkError")
+    } catch (ignore: Exception) {
+      Log.e(TAG, "Unable to find the article count $ignore")
       null
     }
 
