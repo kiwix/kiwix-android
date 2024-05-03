@@ -39,13 +39,16 @@
     android:paddingEnd="5dp"
     android:paddingBottom="5dp"
     android:textIsSelectable="true"
+    android:gravity="start|center"
+    android:minHeight="@dimen/material_minimum_height_and_width"
     android:textSize="17sp"
     android:textStyle="bold"
+    android:contentDescription="@string/device_name"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.0"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/text_view_your_device"
-    tools:hint="Device Name" />
+    tools:hint="@string/device_name" />
 
   <View
     android:id="@+id/view_device_list_boundary"

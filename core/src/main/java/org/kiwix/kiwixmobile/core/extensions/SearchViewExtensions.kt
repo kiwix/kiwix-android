@@ -19,6 +19,8 @@
 package org.kiwix.kiwixmobile.core.extensions
 
 import android.content.Context
+import android.view.ViewGroup.LayoutParams
+import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.TooltipCompat
@@ -31,6 +33,8 @@ fun SearchView.setUpSearchView(context: Context) {
   val heightAndWidth = context.resources.getDimensionPixelSize(
     R.dimen.material_minimum_height_and_width
   )
+  val searchViewEditText =
+    findViewById<SearchView.SearchAutoComplete>(R.id.search_src_text) as EditText
   val closeImageButton = findViewById<ImageView>(R.id.search_close_btn)
   // set the tooltip on close button to show the description if user long clicks on it.
   TooltipCompat.setTooltipText(
@@ -44,6 +48,7 @@ fun SearchView.setUpSearchView(context: Context) {
     heightAndWidth,
     CLOSE_ICON_PADDING
   )
+  setWrapContentHeightToSearchAutoCompleteEdiText(searchViewEditText)
 }
 
 fun setWidthWithPadding(imageView: ImageView, width: Int, padding: Int) {
@@ -51,6 +56,16 @@ fun setWidthWithPadding(imageView: ImageView, width: Int, padding: Int) {
     val params = layoutParams
     params?.width = width
     setPadding(padding)
+    requestLayout()
+  }
+}
+
+// Set the height to wrap content to this editText to allow expansion of this ediText if needed.
+// By default the size of this editText is 36dp which causes the `touch target issue`.
+fun setWrapContentHeightToSearchAutoCompleteEdiText(searchEditText: EditText) {
+  searchEditText.apply {
+    val params = layoutParams
+    params?.height = LayoutParams.WRAP_CONTENT
     requestLayout()
   }
 }

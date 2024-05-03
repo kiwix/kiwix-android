@@ -77,6 +77,7 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) :
           val textView = TextView(activity.baseContext).apply {
             layoutParams = getFrameLayoutParams()
             gravity = Gravity.CENTER
+            minHeight = resources.getDimensionPixelSize(R.dimen.material_minimum_height_and_width)
             setLinkTextColor(activity.getAttribute(R.attr.colorPrimary))
             setOnLongClickListener {
               val clipboard =

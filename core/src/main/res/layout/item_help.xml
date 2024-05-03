@@ -4,12 +4,17 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:padding="@dimen/activity_horizontal_margin">
+  android:paddingStart="@dimen/activity_horizontal_margin"
+  android:paddingTop="@dimen/dimen_medium_padding"
+  android:paddingEnd="@dimen/activity_horizontal_margin"
+  android:paddingBottom="@dimen/dimen_medium_padding">
 
   <TextView
     android:id="@+id/item_help_title"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
+    android:gravity="start|center"
+    android:minHeight="@dimen/material_minimum_height_and_width"
     android:textAppearance="?textAppearanceHeadline6"
     app:layout_constraintEnd_toStartOf="@id/item_help_toggle_expand"
     app:layout_constraintStart_toStartOf="parent"
@@ -21,6 +26,9 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:contentDescription="@string/expand"
+    android:minWidth="@dimen/material_minimum_height_and_width"
+    android:minHeight="@dimen/material_minimum_height_and_width"
+    android:scaleType="centerInside"
     android:src="@drawable/action_find_next"
     app:layout_constraintBottom_toBottomOf="@id/item_help_title"
     app:layout_constraintEnd_toEndOf="parent"
@@ -32,10 +40,10 @@
     style="@style/list_item_body"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:autoLink="web"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:textColor="?textSecondary"
     android:visibility="gone"
-    android:autoLink="web"
     app:layout_constraintTop_toBottomOf="@id/item_help_title"
     tools:text="@string/help_3"
     tools:visibility="visible" />
