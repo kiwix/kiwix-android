@@ -260,6 +260,7 @@
   <string name="get_content_from_nearby_device" tools:keep="@string/get_content_from_nearby_device">Get content from nearby device</string>
   <string name="search_for_peers" tools:keep="@string/search_for_peers">Search For Peers</string>
   <string name="your_device" tools:keep="@string/your_device">Your Device:</string>
+  <string name="device_name" tools:keep="@string/device_name">Device Name</string>
   <string name="nearby_devices" tools:keep="@string/nearby_devices">NEARBY DEVICES</string>
   <string name="no_devices_found" tools:keep="@string/no_devices_found">No devices detected. Tap on search button to try again.</string>
   <string name="files_for_transfer" tools:keep="@string/files_for_transfer">FILES FOR TRANSFER</string>

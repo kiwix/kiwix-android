@@ -5,8 +5,8 @@
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
   android:background="?attr/actionBarItemBackground"
-  android:minHeight="48dp"
-  android:minWidth="48dp"
+  android:minHeight="@dimen/material_minimum_height_and_width"
+  android:minWidth="@dimen/material_minimum_height_and_width"
   android:paddingStart="12dp"
   android:paddingEnd="12dp">
 
