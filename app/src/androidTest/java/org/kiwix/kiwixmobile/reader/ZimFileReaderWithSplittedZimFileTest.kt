@@ -117,30 +117,23 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
       var currentPartSize: Long = 0
       val buffer = ByteArray(1024)
       var length: Int
-      var outputStream: OutputStream
+      var outputStream: OutputStream? = null
 
       while (inputStream.read(buffer).also { length = it } > 0) {
-        // If current part size exceeds or equals partSize, move to the next part
         if (currentPartSize >= partSize || bytesRead == 0L) {
-          outputStream = FileOutputStream(
-            File(storageDir, "testzim.zima${('a' + partNumber - 1).toChar()}")
-          )
+          outputStream?.close() // Close the previous outputStream if any open.
+          val partFile = File(storageDir, "testzim.zima${('a' + partNumber - 1).toChar()}")
+          outputStream = FileOutputStream(partFile)
           partNumber++
           currentPartSize = 0
-        } else {
-          outputStream = FileOutputStream(
-            File(storageDir, "testzim.zima${('a' + partNumber - 2).toChar()}"),
-            true
-          )
         }
 
-        outputStream.use {
-          it.write(buffer, 0, length)
-        }
+        outputStream?.write(buffer, 0, length)
 
         bytesRead += length
         currentPartSize += length
       }
+      outputStream?.close()
     }
     val splittedZimFile = File(storageDir, "testzim.zimaa")
     return if (splittedZimFile.exists()) splittedZimFile else null
