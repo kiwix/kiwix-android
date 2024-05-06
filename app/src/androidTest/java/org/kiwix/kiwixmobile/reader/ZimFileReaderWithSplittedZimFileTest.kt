@@ -27,18 +27,23 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.fail
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.NightModeConfig
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections
 import org.kiwix.kiwixmobile.page.history.navigationHistory
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.libzim.Archive
+import org.kiwix.libzim.SuggestionSearcher
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -94,7 +99,28 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
     }
   }
 
-  private fun createAndGetSplitedZimFile(): File? {
+  @Test
+  fun testWithExtraZeroSizeFile() {
+    createAndGetSplitedZimFile(true)?.let { zimFile ->
+      // test the articleCount and mediaCount of this zim file.
+      val archive = Archive(zimFile.canonicalPath)
+      val zimFileReader = ZimFileReader(
+        zimFile,
+        null,
+        null,
+        archive,
+        NightModeConfig(SharedPreferenceUtil(context), context),
+        SuggestionSearcher(archive)
+      )
+      Assert.assertEquals(zimFileReader.mediaCount, 16)
+      Assert.assertEquals(zimFileReader.articleCount, 4)
+    } ?: kotlin.run {
+      // error in creating the zim file chunk
+      fail("Couldn't create the zim file chunk")
+    }
+  }
+
+  private fun createAndGetSplitedZimFile(shouldCreateExtraZeroSizeFile: Boolean = false): File? {
     val loadFileStream =
       EncodedUrlTest::class.java.classLoader.getResourceAsStream("testzim.zim")
     val storageDir = ContextCompat.getExternalFilesDirs(context, null)[0]
@@ -134,6 +160,12 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
         currentPartSize += length
       }
       outputStream?.close()
+    }
+    if (shouldCreateExtraZeroSizeFile) {
+      File(storageDir, "testzim.zimad").apply {
+        if (exists()) delete() // delete if already exist.
+        createNewFile() // create new zero size file.
+      }
     }
     val splittedZimFile = File(storageDir, "testzim.zimaa")
     return if (splittedZimFile.exists()) splittedZimFile else null

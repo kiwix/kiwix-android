@@ -157,7 +157,7 @@ class ZimFileReader constructor(
 
   val tags: String
     get() = getSafeMetaData("Tags", "")
-  private val mediaCount: Int?
+  val mediaCount: Int?
     get() = try {
       jniKiwixReader.mediaCount
     }
@@ -166,7 +166,7 @@ class ZimFileReader constructor(
       Log.e(TAG, "Unable to find the media count $ignore")
       null
     }
-  private val articleCount: Int?
+  val articleCount: Int?
     get() = try {
       jniKiwixReader.articleCount
     }
