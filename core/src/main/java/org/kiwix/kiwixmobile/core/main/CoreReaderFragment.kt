@@ -1591,7 +1591,6 @@ abstract class CoreReaderFragment :
         // uninitialized the service worker to fix https://github.com/kiwix/kiwix-android/issues/2561
         openArticle(UNINITIALISER_ADDRESS)
         mainMenu?.onFileOpened(urlIsValid())
-        openArticle(zimFileReader.mainPage)
         setUpBookmarks(zimFileReader)
       } ?: kotlin.run {
         requireActivity().toast(R.string.error_file_invalid, Toast.LENGTH_LONG)
@@ -1793,7 +1792,6 @@ abstract class CoreReaderFragment :
       if (item.shouldOpenInNewTab) {
         createNewTab()
       }
-      android.util.Log.e("OPEN_OBB", "openSearchItem: ")
       loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(it))
     }
     requireActivity().consumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)

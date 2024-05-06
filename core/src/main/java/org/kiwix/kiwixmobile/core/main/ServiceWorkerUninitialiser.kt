@@ -34,7 +34,7 @@ const val UNINITIALISE_HTML = """
               $UNINITIALISER_INTERFACE.onUninitialised();
               return;
             }
-            navigator.serviceWorker.getRegistrations().then(async function (registrations) {
+            navigator.serviceWorker.getRegistrations().then((registrations) => {
               if (registrations.length) {
                 console.debug('we do have ' + registrations.length + ' registration(s)');
                 var registration = registrations[0];
@@ -80,6 +80,6 @@ class ServiceWorkerUninitialiser(val onUninitialisedAction: () -> Unit) {
 
   @JavascriptInterface
   fun onUninitialised() {
-    Handler(Looper.getMainLooper()).post { onUninitialisedAction() }
+    Handler(Looper.getMainLooper()).post { onUninitialisedAction.invoke() }
   }
 }
