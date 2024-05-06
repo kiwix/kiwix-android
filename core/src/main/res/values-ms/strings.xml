@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Anakmalaysia
+* Hakimi97
 * McDutchie
 * Tofeiku
 -->
@@ -112,6 +113,7 @@
   <string name="notes_deletion_unsuccessful">Beberapa file tidak terhapus</string>
   <string name="books_count">%d buku</string>
   <string name="your_device">Peranti Anda:</string>
+  <string name="device_name">Nama Peranti</string>
   <string name="nearby_devices">PERANTI BERHAMPIRAN</string>
   <string name="status">Status</string>
   <string name="tag_pic">Gambar</string>

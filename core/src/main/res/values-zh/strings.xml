@@ -7,6 +7,7 @@
 * GuoPC
 * IceButBin
 * Josephine W.
+* Kichin
 * LClightcat
 * Lanyun1103
 * Liuxinyu970226
@@ -30,10 +31,10 @@
 <resources>
   <string name="menu_help">帮助</string>
   <string name="menu_home">主页</string>
-  <string name="menu_settings">首选项</string>
-  <string name="menu_search_in_text">在文本中查找</string>
+  <string name="menu_settings">设置</string>
+  <string name="menu_search_in_text">在页面中查找</string>
   <string name="bookmarks">书签</string>
-  <string name="menu_random_article">随机页面</string>
+  <string name="menu_random_article">随机条目</string>
   <string name="menu_full_screen">全屏</string>
   <string name="menu_exit_full_screen">退出全屏</string>
   <string name="menu_read_aloud">朗读</string>
@@ -41,38 +42,38 @@
   <string name="menu_support_kiwix">支持Kiwix</string>
   <string name="menu_support_kiwix_for_custom_apps">支持%s</string>
   <string name="menu_about_app">关于%s应用程序</string>
-  <string name="menu_wifi_hotspot">无线共享</string>
+  <string name="menu_wifi_hotspot">无线热点</string>
   <string name="save_media">保存媒体</string>
   <string name="save_media_error">尝试保存该媒体时出错！</string>
   <string name="save_media_saved">已将媒体作为%s保存至Downloads/org.kiwix…/</string>
   <string name="search_label">搜索</string>
   <string name="choose_file">选择一个内容文件（*.zim）</string>
   <string name="open_in_new_tab">在新标签页打开链接?</string>
-  <string name="hotspot_service_channel_name">热点服务频段</string>
-  <string name="hotspot_failed_title">未能启动热点</string>
-  <string name="hotspot_failed_message">你的热点好像已经打开了。请先关闭 WiFi 热点再继续。</string>
+  <string name="hotspot_service_channel_name">热点服务频道</string>
+  <string name="hotspot_failed_title">启动热点失败</string>
+  <string name="hotspot_failed_message">您的热点似乎已开启。请禁用您的 wifi 热点以继续。</string>
   <string name="go_to_wifi_settings_label">转到 WiFi 设置</string>
-  <string name="connection_refused">拒绝连接</string>
+  <string name="connection_refused">连接被拒绝。</string>
   <string name="hotspot_running">运行中的热点</string>
   <string name="no_books_selected_toast_message">请先选择书籍</string>
-  <string name="server_failed_message">未能启动服务器。请打开热点。</string>
+  <string name="server_failed_message">未能启动服务器。请先打开热点。</string>
   <string name="server_failed_toast_message">未能启动服务器。</string>
   <string name="server_started_successfully_toast_message">成功启动服务器。</string>
   <string name="server_stopped_successfully_toast_message">成功停止服务器。</string>
   <string name="hotspot_turned_on">热点已开启</string>
-  <string name="hotspot_details_message">以下为您的本地热点的信息。\nSSID：%1$s \n密码：%2$s</string>
-  <string name="server_textview_default_message">选择你想在服务器上共享的文件</string>
+  <string name="hotspot_details_message">以下是您本地热点的详细信息。\nSSID : %1$s \nPass : %2$s</string>
+  <string name="server_textview_default_message">选择您想要在服务器上托管的文件</string>
   <string name="progress_dialog_starting_server">正在启动服务器</string>
   <string name="hotspot_dialog_title">书籍共享说明</string>
   <string name="wifi_dialog_title">检测到 WiFi 连接</string>
-  <string name="wifi_dialog_body">为了在其他设备上查看书籍，请确认所有设备都连接到同一个 WiFi 网络。</string>
-  <string name="hotspot_dialog_message">要让此功能运作，你需要先手动启动 WiFi 热点，或者确定主机和接受设备在同一个 WiFi 网络上。</string>
+  <string name="wifi_dialog_body">为了在其他设备上查看书籍，请确认所有设备都连接到同一个局域网络。</string>
+  <string name="hotspot_dialog_message">要让此功能正常运作，你需要先手动启动 WiFi 热点，或者确定主机和接受设备在同一个 WiFi 网络上。</string>
   <string name="hotspot_dialog_neutral_button">继续</string>
   <string name="hotspot_channel_description">关于你的无线网络热点/服务器的更新</string>
   <string name="hotspot_notification_content_title">Kiwix 热点</string>
   <string name="start_server_label">启动服务器</string>
-  <string name="stop_server_label">中止服务器</string>
-  <string name="error_server_already_running">服务器已在运行。请关闭后再重试。</string>
+  <string name="stop_server_label">停止服务器</string>
+  <string name="error_server_already_running">服务器正在运行。请关闭后再重试。</string>
   <string name="error_ip_address_not_found">找不到IP地址。</string>
   <string name="server_started_message">将这个 IP 地址输入到你的浏览器中来连接服务器 %s</string>
   <string name="share_host_address">通过其他应用程序分享 URL</string>
@@ -86,18 +87,18 @@
   <string name="pref_info_version">版本</string>
   <string name="pref_night_mode">夜间模式</string>
   <string name="pref_night_mode_summary">以反色调显示文章</string>
-  <string name="pref_back_to_top">返回顶端</string>
+  <string name="pref_back_to_top">返回顶部</string>
   <string name="pref_back_to_top_summary">在页底显示一个按钮以供返回顶端</string>
   <string name="pref_language_title">语言</string>
   <string name="pref_language_chooser">选择语言</string>
-  <string name="pref_credits">贡献者和授权</string>
+  <string name="pref_credits">贡献者和许可证</string>
   <string name="pref_credits_title">制作人员</string>
-  <string name="tts_lang_not_supported">此页面的语言不被支持。条目可能不能被正确朗读。</string>
-  <string name="no_reader_application_installed">找不到用于此种文件类型的已安装应用程序</string>
+  <string name="tts_lang_not_supported">此页面不支持你的语言。文章可能无法正常阅读。</string>
+  <string name="no_reader_application_installed">找不到此类型文件的已安装应用程序</string>
   <string name="no_email_application_installed">请安装电子邮件服务提供商，或是在%1s发送电子邮件给我们</string>
   <string name="no_section_info">未找到内容标题</string>
-  <string name="request_storage">要访问离线内容，我们需要访问您的存储</string>
-  <string name="request_write_storage">要下载 ZIM 文件，我们需要获取写入您的存储空间的权限</string>
+  <string name="request_storage">要访问离线内容，我们需要获取您的存储权限</string>
+  <string name="request_write_storage">要下载 ZIM 文件，我们需要获取您的存储权限</string>
   <string name="clear_recent_and_tabs_history_dialog">您确定要删除您的搜索历史，并重置所有活跃标签么？</string>
   <string name="delete_recent_search_item">删除此项？</string>
   <string name="pref_clear_all_history_title">清空历史</string>
@@ -139,7 +140,7 @@
   <string name="delete_zim_body">以下 ZIM 文件会被删除：\n\n%s</string>
   <string name="delete_zims_toast">文件已删除</string>
   <string name="no_files_here">没有文件</string>
-  <string name="download_no_space">缺少下载所需的空间。</string>
+  <string name="download_no_space">空间不足，无法下载。</string>
   <string name="download">下载</string>
   <string name="space_available">可用空间：</string>
   <string name="zim_simple">简单</string>
@@ -155,7 +156,7 @@
   <string name="help_8">• 维基百科分别提供每种语言版本</string>
   <string name="help_9">• 同样可用于例如维基解密或维基文库等其他内容</string>
   <string name="help_10">您可以在应用中下载您选择的ZIM文件，也可以在电脑端下载您想要的文件，并在稍后将其转移至您的SD卡中。</string>
-  <string name="help_11">在应用中下载的ZIM文件被存放于外部存储中一个名为Kiwix的文件夹内。</string>
+  <string name="help_11">应用内下载的 ZIM 文件位于您的外部存储目录中名为 Kiwix 的文件夹中。</string>
   <string name="pref_storage">存储</string>
   <string name="pref_current_folder">当前文件夹</string>
   <string name="delete_zim_failed">对不起，我们无法删除一些文件。您应尝试改用文件管理器。</string>
@@ -189,18 +190,18 @@
   <string name="pref_external_link_popup_title">访问外部链接时警告</string>
   <string name="pref_external_link_popup_summary">对额外费用或离线时链接不可用弹出警告</string>
   <string name="external_link_popup_dialog_title">正在访问外部链接！</string>
-  <string name="external_link_popup_dialog_message">您正在访问外部链接。这可能导致额外数据转移费用，或当您离线时不能工作。您是否要继续？</string>
-  <string name="do_not_ask_anymore">不要再次询问</string>
+  <string name="external_link_popup_dialog_message">您正在输入外部链接。这可能会导致数据传输产生额外费用，或者在您离线时无法使用。要继续吗？</string>
+  <string name="do_not_ask_anymore">不再询问</string>
   <string name="your_languages">选择的语言：</string>
   <string name="other_languages">其他语言：</string>
   <string name="no_items_msg">没有可用的项目</string>
-  <string name="crash_title">这太尴尬了</string>
+  <string name="crash_title">额…这太尴尬了</string>
   <string name="crash_description">看起来我们崩溃了。\n\n您是否介意通过发送以下信息帮助我们解决此问题？</string>
   <string name="crash_checkbox_language">您的语言设置</string>
   <string name="crash_checkbox_zimfiles">Zim文件列表</string>
   <string name="crash_checkbox_exception">崩溃详情</string>
-  <string name="crash_checkbox_logs">应用程序日志</string>
-  <string name="crash_checkbox_device">设备细节</string>
+  <string name="crash_checkbox_logs">应用日志</string>
+  <string name="crash_checkbox_device">设备详情</string>
   <string name="crash_button_confirm">发送详情</string>
   <string name="shortcut_disabled_message">快捷方式不可用</string>
   <string name="new_tab_shortcut_label">新建标签页</string>
@@ -209,13 +210,13 @@
   <string name="articleCount">%s个条目</string>
   <string name="get_started">入门</string>
   <string name="download_books">下载书籍</string>
-  <string name="humankind_knowledge">人类的知识，在你的手机上。</string>
-  <string name="welcome_to_the_family">欢迎到来</string>
-  <string name="save_books_offline">保存供离线使用</string>
+  <string name="humankind_knowledge">人类所有的知识与智慧的精华，现在就在您的掌中。</string>
+  <string name="welcome_to_the_family">欢迎来到这个大家庭！</string>
+  <string name="save_books_offline">保存以供离线阅读</string>
   <string name="download_books_message">随时随地下载书籍并阅读。</string>
   <string name="unable_to_add_to_bookmarks">无法添加到书签</string>
-  <string name="go_to_previous_page">楼上</string>
-  <string name="go_to_next_page">下一楼</string>
+  <string name="go_to_previous_page">转到上一页</string>
+  <string name="go_to_next_page">转到下一页</string>
   <string name="table_of_contents">目录</string>
   <string name="select_languages">选择的语言</string>
   <string name="save_languages">保存语言</string>
@@ -231,17 +232,17 @@
   <string name="close_all_tabs">关闭所有标签</string>
   <string name="close_tab">关闭标签页</string>
   <string name="could_not_restore_tabs">无法恢复标签页。</string>
-  <string name="pending_state">待处理</string>
-  <string name="running_state">进行中</string>
+  <string name="pending_state">待定</string>
+  <string name="running_state">处理中</string>
   <string name="complete">完成</string>
   <string name="paused_state">暂停</string>
   <string name="failed_state">失败：%s</string>
   <string name="custom_download_error_message_for_authentication_failed">无法下载此 zim 文件。请尝试从 Play 商店重新安装此应用程序。</string>
   <string name="save">保存</string>
   <string name="note">笔记</string>
-  <string name="wiki_article_title">Wiki文章标题</string>
-  <string name="ext_storage_permission_rationale_add_note">要使用笔记功能，我们需要存储权限</string>
-  <string name="ext_storage_write_permission_denied_add_note">我们无法访问存储，因此无法使用笔记功能</string>
+  <string name="wiki_article_title">Wiki条目标题</string>
+  <string name="ext_storage_permission_rationale_add_note">要使用笔记功能，我们需要您的存储权限</string>
+  <string name="ext_storage_write_permission_denied_add_note">我们没有存储权限，因此您无法使用笔记功能</string>
   <string name="note_save_unsuccessful">笔记保存失败</string>
   <string name="note_delete_successful">成功删除了笔记</string>
   <string name="note_delete_unsuccessful">笔记没有被删除</string>
@@ -259,7 +260,7 @@
   <string name="discovery_failed">侦测失败</string>
   <string name="severe_loss_error">严重错误！请尝试禁用/重新启用 WiFi P2P</string>
   <string name="connection_failed">连接失败</string>
-  <string name="permission_rationale_location">为了寻找对等设备，我们需要定位权限（这是 Android 系统的要求）</string>
+  <string name="permission_rationale_location">我们需要定位权限来寻找对等设备（这是 Android 系统的要求）</string>
   <string name="permission_rationale_nearby">Android 需要获得附近设备权限，以允许应用程序检测对等设备</string>
   <string name="permission_refused_location">在没有定位权限的情况下无法找到对等设备</string>
   <string name="permission_refused_storage">在没有存储权限的情况下无法读取 ZIM 文件</string>
@@ -275,6 +276,7 @@
   <string name="get_content_from_nearby_device">从附近的设备获取内容</string>
   <string name="search_for_peers">寻找对等设备</string>
   <string name="your_device">你的设备：</string>
+  <string name="device_name">设备名称</string>
   <string name="nearby_devices">附近的设备</string>
   <string name="no_devices_found">没有找到设备，点击按钮重试。</string>
   <string name="files_for_transfer">要传输的文件</string>
@@ -290,7 +292,7 @@
   <string name="tag_text_only">纯文字</string>
   <string name="tag_short_text">短文字</string>
   <string name="storage_permission_denied">存储权限被拒绝</string>
-  <string name="grant_read_storage_permission">本应用需要读取存储空间的权限已正常运行。请在系统设置中授予此权限。</string>
+  <string name="grant_read_storage_permission">本应用需要存储权限才能正常运行。请在系统设置中授予此权限。</string>
   <string name="go_to_settings">转到热点设置</string>
   <string name="no_results">没有结果</string>
   <string name="no_bookmarks">没有书签</string>
@@ -304,7 +306,7 @@
   <string name="off">关</string>
   <string name="auto">自动</string>
   <string name="send_report">发送诊断报告</string>
-  <string name="crash_checkbox_file_system">文件系统细节</string>
+  <string name="crash_checkbox_file_system">文件系统详情</string>
   <string name="diagnostic_report">诊断报告</string>
   <string name="diagnostic_report_message">请发送以下所有细节以方便我们确定问题</string>
   <string name="percentage">%d%%</string>
@@ -322,7 +324,7 @@
   <string name="understood">明白了</string>
   <string name="how_to_update_content">如何更新内容？</string>
   <string name="update_content_description">要更新内容（ZIM 文件），您需要下载此相似内容的完整最新版本。您可以通过下载章节进行。</string>
-  <string name="all_files_permission_needed">需要全部文件权限</string>
+  <string name="all_files_permission_needed">需要全部文件的存储权限</string>
   <string name="all_files_permission_needed_message">为了访问设备上的所有 ZIM 文件，我们需要所有文件权限</string>
   <string name="allowed">允许</string>
   <string name="not_allowed">不允许</string>
@@ -350,7 +352,7 @@
   <string name="clear_all_navigation_history_message">清除所有（向前、向后）的导航历史</string>
   <string name="navigation_history_cleared">已清除导航历史记录</string>
   <string name="go_to_settings_label">转到设置</string>
-  <string name="request_notification_permission_message">要执行此操作，请授予通知访问权限</string>
+  <string name="request_notification_permission_message">要执行此操作，请授予通知权限</string>
   <string name="click_nearby_devices_message">点击这里来查找附近的设备</string>
   <string name="your_device_name_message">您的设备名将出现在这里</string>
   <string name="nearby_devices_list_message">您可以在这里看到所有的附近的设备。点击设备名即可进行文件传输。</string>

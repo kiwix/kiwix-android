@@ -260,6 +260,7 @@
   <string name="get_content_from_nearby_device">取得來自附近設備的內容</string>
   <string name="search_for_peers">搜尋端點</string>
   <string name="your_device">您的設備：</string>
+  <string name="device_name">設備名稱</string>
   <string name="nearby_devices">附近設備</string>
   <string name="no_devices_found">偵測不到設備。請輕觸搜尋按鍵來重試。</string>
   <string name="files_for_transfer">用於傳輸的檔案</string>
