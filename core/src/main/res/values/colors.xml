@@ -18,4 +18,5 @@
   <color name="monza_red">#b00020</color>
   <color name="startServerGreen">#2e7d31</color>
   <color name="stopServerRed">#c62728</color>
+  <color name="error_activity_background">#007EA8</color>
 </resources>
