@@ -2,6 +2,7 @@
 <!-- Authors:
 * Alno
 * BlueCamille
+* Boniface
 * Derugon
 * Djiboun
 * Eneelk
@@ -271,6 +272,7 @@
   <string name="get_content_from_nearby_device">Obtenir des contenus depuis un appareil à proximité</string>
   <string name="search_for_peers">Rechercher des appareils pairs</string>
   <string name="your_device">Votre appareil :</string>
+  <string name="device_name">Nom de l’appareil</string>
   <string name="nearby_devices">APPAREILS À PROXIMITÉ</string>
   <string name="no_devices_found">Aucun appareil détecté. Tapez le bouton Rechercher pour essayer à nouveau.</string>
   <string name="files_for_transfer">FICHIERS À TRANSFÉRER</string>

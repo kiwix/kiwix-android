@@ -208,6 +208,7 @@
   <string name="books_count">%d buku</string>
   <string name="connection_failed">Koneksi gagal</string>
   <string name="your_device">Perangkat Anda:</string>
+  <string name="device_name">Nama Perangkat</string>
   <string name="nearby_devices">PERANGKAT SEKITAR</string>
   <string name="files_for_transfer">FILE UNTUK DIPINDAHKAN</string>
   <string name="preparing_files" fuzzy="true">Mempersiapkan file untuk dipindahkan....</string>

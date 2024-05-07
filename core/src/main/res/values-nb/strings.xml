@@ -124,6 +124,7 @@
   <string name="history_from_current_book">Vis historikk fra alle bøker</string>
   <string name="search_history" fuzzy="true">Søkehistorikk</string>
   <string name="close_tab">Lukk fane</string>
+  <string name="device_name">Enhetsnavn</string>
   <string name="status">Status</string>
   <string name="tag_pic">Bilde</string>
   <string name="tag_vid">Video</string>

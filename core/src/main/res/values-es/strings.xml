@@ -263,6 +263,7 @@
   <string name="get_content_from_nearby_device">Obtener contenido de un dispositivo cercano</string>
   <string name="search_for_peers">Buscar compañeros</string>
   <string name="your_device">Tu dispositivo:</string>
+  <string name="device_name">Nombre de dispositivo</string>
   <string name="nearby_devices">DISPOSITIVOS CERCANOS</string>
   <string name="no_devices_found">Dispositivos no detectados. Toca el botón de búsqueda para intentarlo de nuevo.</string>
   <string name="files_for_transfer">ARCHIVOS QUE TRANSFERIR</string>

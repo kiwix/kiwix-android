@@ -250,6 +250,7 @@
   <string name="get_content_from_nearby_device">Земи содржини од уред во близина</string>
   <string name="search_for_peers">Пребарај уреди за сврзување</string>
   <string name="your_device">Вашиот уред:</string>
+  <string name="device_name">Име на уредот</string>
   <string name="nearby_devices">УРЕДИ ВО БЛИЗИНА</string>
   <string name="no_devices_found">Не пронајдов уред. Допрете на пребарувањето за да пробате повторно.</string>
   <string name="files_for_transfer">ПОДАТОТЕКИ ЗА ПРЕНЕСУВАЊЕ</string>

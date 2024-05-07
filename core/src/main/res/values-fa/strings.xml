@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Alireza Ivaz
+* Darafsh
 * Ebraminio
 * FarsiNevis
 * Fatemi127
@@ -150,6 +151,7 @@
   <string name="transfer_to">پرونده‌ها منتقل شوند به %s؟</string>
   <string name="file_transfer_complete">انتقال پرونده کامل شد</string>
   <string name="your_device">وسیلهٔ شما:</string>
+  <string name="device_name">نام دستگاه</string>
   <string name="nearby_devices">وسیله‌های نزدیک</string>
   <string name="status">وضعیت</string>
   <string name="tag_pic">عکس</string>

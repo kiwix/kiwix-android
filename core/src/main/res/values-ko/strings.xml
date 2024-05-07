@@ -256,6 +256,7 @@
   <string name="get_content_from_nearby_device">주변 장치로부터 콘텐츠 가져오기</string>
   <string name="search_for_peers">친구 찾기</string>
   <string name="your_device">내 장치:</string>
+  <string name="device_name">장치 이름</string>
   <string name="nearby_devices">주변 장치</string>
   <string name="no_devices_found">발견된 장치가 없습니다. 다시 시도하려면 검색 버튼에 탭하십시오.</string>
   <string name="files_for_transfer">전송하려는 파일</string>
