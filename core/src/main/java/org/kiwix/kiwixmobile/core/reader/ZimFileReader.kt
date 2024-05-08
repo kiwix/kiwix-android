@@ -157,18 +157,26 @@ class ZimFileReader constructor(
 
   val tags: String
     get() = getSafeMetaData("Tags", "")
-  private val mediaCount: Int?
+  val mediaCount: Int?
     get() = try {
       jniKiwixReader.mediaCount
-    } catch (unsatisfiedLinkError: UnsatisfiedLinkError) {
-      Log.e(TAG, "Unable to find the media count $unsatisfiedLinkError")
+    }
+    // Catch all exceptions to prevent the rendering process of other zim files from aborting.
+    // If the zim file is split with zim-tool,
+    // refer to https://github.com/kiwix/kiwix-android/issues/3827.
+    catch (ignore: Exception) {
+      Log.e(TAG, "Unable to find the media count $ignore")
       null
     }
-  private val articleCount: Int?
+  val articleCount: Int?
     get() = try {
       jniKiwixReader.articleCount
-    } catch (unsatisfiedLinkError: UnsatisfiedLinkError) {
-      Log.e(TAG, "Unable to find the article count $unsatisfiedLinkError")
+    }
+    // Catch all exceptions to prevent the rendering process of other zim files from aborting.
+    // If the zim file is split with zim-tool,
+    // refer to https://github.com/kiwix/kiwix-android/issues/3827.
+    catch (ignore: Exception) {
+      Log.e(TAG, "Unable to find the article count $ignore")
       null
     }
 

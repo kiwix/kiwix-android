@@ -70,6 +70,17 @@ class NavigationHistoryRobot : BaseRobot() {
       .perform(webClick())
   }
 
+  fun assertZimFileLoaded() {
+    pauseForBetterTestPerformance()
+    onWebView()
+      .withElement(
+        findElement(
+          Locator.XPATH,
+          "//*[contains(text(), 'Android_(operating_system)')]"
+        )
+      )
+  }
+
   fun longClickOnBackwardButton() {
     pauseForBetterTestPerformance()
     longClickOn(ViewId(R.id.bottom_toolbar_arrow_back))
