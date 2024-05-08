@@ -1,3 +1,15 @@
+3.10.1
+Bug Fixed:
+* Error on opening a split zim file. (https://github.com/kiwix/kiwix-android/pull/3803)
+* Sometimes setting the org.kiwix.libzim.Archive.setNativeArchive crashes the application. (https://github.com/kiwix/kiwix-android/pull/3807)
+* Main page is not loading for zim files. (https://github.com/kiwix/kiwix-android/pull/3817)
+* Fixed some issues reported by the playStore. (https://github.com/kiwix/kiwix-android/pull/3815, https://github.com/kiwix/kiwix-android/pull/3818, https://github.com/kiwix/kiwix-android/pull/3814, https://github.com/kiwix/kiwix-android/pull/3823)
+* The Delete icon is showing wrong content description on the notes and history screen. (https://github.com/kiwix/kiwix-android/pull/3826)
+
+Compilation/CI/CD:
+* Using libkiwix `2.1.1`. (https://github.com/kiwix/kiwix-android/pull/3821)
+* Sometimes CI fails due to `signatures do not match` error. (https://github.com/kiwix/kiwix-android/pull/3820)
+
 3.10.0
 New Features:
 * When searching for any article if the user presses the search/enter button on the keyboard, and if any article is found with the searched query then it will open that article directly. (https://github.com/kiwix/kiwix-android/pull/3704)
