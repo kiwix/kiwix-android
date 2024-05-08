@@ -91,12 +91,14 @@ class NoteRobot : BaseRobot() {
   }
 
   fun clickOnSavedNote() {
-    onView(withId(R.id.recycler_view)).perform(
-      actionOnItemAtPosition<RecyclerView.ViewHolder>(
-        0,
-        click()
+    testFlakyView({
+      onView(withId(R.id.recycler_view)).perform(
+        actionOnItemAtPosition<RecyclerView.ViewHolder>(
+          0,
+          click()
+        )
       )
-    )
+    })
   }
 
   fun clickOnOpenNote() {
@@ -114,7 +116,7 @@ class NoteRobot : BaseRobot() {
   }
 
   fun clickOnTrashIcon() {
-    clickOn(ContentDesc(R.string.pref_clear_all_bookmarks_title))
+    clickOn(ContentDesc(R.string.pref_clear_notes))
   }
 
   fun assertDeleteNoteDialogDisplayed() {
