@@ -161,7 +161,9 @@ class ZimFileReader constructor(
     get() = try {
       jniKiwixReader.mediaCount
     }
-    // catch all exceptions to prevent the aborting of the rendering process of other zim files.
+    // Catch all exceptions to prevent the rendering process of other zim files from aborting.
+    // If the zim file is split with zim-tool,
+    // refer to https://github.com/kiwix/kiwix-android/issues/3827.
     catch (ignore: Exception) {
       Log.e(TAG, "Unable to find the media count $ignore")
       null
@@ -170,7 +172,9 @@ class ZimFileReader constructor(
     get() = try {
       jniKiwixReader.articleCount
     }
-    // catch all exceptions to prevent the aborting of the rendering process of other zim files.
+    // Catch all exceptions to prevent the rendering process of other zim files from aborting.
+    // If the zim file is split with zim-tool,
+    // refer to https://github.com/kiwix/kiwix-android/issues/3827.
     catch (ignore: Exception) {
       Log.e(TAG, "Unable to find the article count $ignore")
       null
