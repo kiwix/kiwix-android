@@ -35,7 +35,7 @@ class HistoryRobot : BaseRobot() {
   }
 
   fun clickOnTrashIcon() {
-    clickOn(ContentDesc(R.string.pref_clear_all_bookmarks_title))
+    clickOn(ContentDesc(R.string.pref_clear_all_history_title))
   }
 
   fun assertDeleteHistoryDialogDisplayed() {

@@ -71,6 +71,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   abstract val searchQueryHint: String
   abstract val pageAdapter: PageAdapter
   abstract val switchIsChecked: Boolean
+  abstract val deleteIconTitle: String
   private var fragmentPageBinding: FragmentPageBinding? = null
   override val fragmentToolbar: Toolbar? by lazy {
     fragmentPageBinding?.root?.findViewById(R.id.toolbar)
@@ -116,6 +117,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
               }
             )
           }
+          menu.findItem(R.id.menu_pages_clear).title = deleteIconTitle // Bug fix #3825
         }
 
         @Suppress("ReturnCount")
