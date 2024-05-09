@@ -496,7 +496,9 @@ abstract class CoreReaderFragment :
     // Only check intent on first start of activity. Otherwise the intents will enter infinite loops
     // when "Don't keep activities" is on.
     if (savedInstanceState == null) {
-      handleIntentActions(requireActivity().intent)
+      // call the `onNewIntent` explicitly so that the overridden method in child class will
+      // also call, to properly handle the zim file opening when opening the zim file from storage.
+      onNewIntent(requireActivity().intent, requireActivity() as AppCompatActivity)
     }
 
     serviceConnection = object : ServiceConnection {
@@ -1830,8 +1832,12 @@ abstract class CoreReaderFragment :
         requireActivity().intent.action = null
       }
 
-      Intent.ACTION_VIEW -> if (intent.type == null ||
-        intent.type != "application/octet-stream"
+      Intent.ACTION_VIEW -> if (
+        (intent.type == null || intent.type != "application/octet-stream") &&
+        // Added condition to handle ZIM files. When opening from storage, the intent may
+        // return null for the type, triggering the search unintentionally. This condition
+        // prevents such occurrences.
+        intent.scheme !in listOf("file", "content")
       ) {
         val searchString = if (intent.data == null) "" else intent.data?.lastPathSegment
         openSearch(

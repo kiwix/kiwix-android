@@ -82,10 +82,25 @@
 
         <data android:scheme="content" />
         <data android:host="*" />
-        <data android:pathPattern="/.*\\.zim(aa|)" />
-        <data android:pathPattern="/.*\\..*\\.zim(aa|)" />
-        <data android:pathPattern="/.*\\..*\\..*\\.zim(aa|)" />
-        <data android:pathPattern="/.*\\..*\\..*\\..*\\.zim(aa|)" />
+        <data android:mimeType="*/*" />
+        <data android:pathPattern="/.*\\.zim" />
+        <data android:pathPattern="/.*\\..*\\.zim" />
+        <data android:pathPattern="/.*\\..*\\..*\\.zim" />
+        <data android:pathPattern="/.*\\..*\\..*\\..*\\.zim" />
+      </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+
+        <data android:scheme="content" />
+        <data android:host="*" />
+        <data android:mimeType="*/*" />
+        <data android:pathPattern="/.*\\.zimaa" />
+        <data android:pathPattern="/.*\\..*\\.zimaa" />
+        <data android:pathPattern="/.*\\..*\\..*\\.zimaa" />
+        <data android:pathPattern="/.*\\..*\\..*\\..*\\.zimaa" />
       </intent-filter>
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />

@@ -282,6 +282,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     newMainPageTab()
   }
 
+  @Suppress("MagicNumber")
   override fun onNewIntent(
     intent: Intent,
     activity: AppCompatActivity
@@ -289,10 +290,21 @@ class KiwixReaderFragment : CoreReaderFragment() {
     super.onNewIntent(intent, activity)
     intent.data?.let {
       when (it.scheme) {
-        "file" -> openZimFile(it.toFile())
+        "file" -> {
+          Handler(Looper.getMainLooper()).postDelayed({
+            openZimFile(it.toFile()).also {
+              // if used once then clear it to avoid affecting any other functionality
+              // of the application.
+              requireActivity().intent.action = null
+            }
+          }, 300)
+        }
+
         "content" -> {
           getZimFileFromUri(it)?.let { zimFile ->
-            openZimFile(zimFile)
+            Handler(Looper.getMainLooper()).postDelayed({ openZimFile(zimFile) }, 300)
+          }.also {
+            requireActivity().intent.action = null
           }
         }
 
