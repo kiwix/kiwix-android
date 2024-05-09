@@ -12,6 +12,7 @@
 * Mello25
 * MohitMali
 * Mordecaista
+* Obiru
 * Re demz
 * Robertpontes
 * Rodrigo codignoli
@@ -30,6 +31,8 @@
   <string name="menu_read_aloud">Ler em voz alta</string>
   <string name="menu_read_aloud_stop">Parar de ler em voz alta</string>
   <string name="menu_support_kiwix">Suporte Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">Apoie %s</string>
+  <string name="menu_about_app">Sobre %s aplicativo</string>
   <string name="menu_wifi_hotspot">Hotspot de Wi-Fi</string>
   <string name="save_media">Salvar mídia</string>
   <string name="save_media_error">Ocorreu um erro ao tentar salvar a mídia!</string>
@@ -61,6 +64,8 @@
   <string name="hotspot_notification_content_title">Wi-Fi Kiwix</string>
   <string name="start_server_label">Iniciar servidor</string>
   <string name="stop_server_label">Parar servidor</string>
+  <string name="error_server_already_running">O servidor já está sendo executado. Por favor desligue e tente novamente.</string>
+  <string name="error_ip_address_not_found">Não foi possível encontrar o endereço ip.</string>
   <string name="server_started_message">Digite este endereço IP no seu navegador para acessar o servidor %s</string>
   <string name="share_host_address">Compartir URL a través de outras aplicações</string>
   <string name="error_file_not_found">Erro: O arquivo ZIM selecionado não pode ser encontrado.</string>
@@ -216,11 +221,14 @@
   <string name="search_bookmarks">Pesquisar marcadores</string>
   <string name="switch_tabs">Trocar abas</string>
   <string name="close_all_tabs">Fechar todas as abas</string>
+  <string name="close_tab">Fechar aba</string>
+  <string name="could_not_restore_tabs">Não é possível restaurar as abas.</string>
   <string name="pending_state">Pendente</string>
   <string name="running_state">Em progresso</string>
   <string name="complete">Completo</string>
   <string name="paused_state">Pausado</string>
   <string name="failed_state">Falhou: %s</string>
+  <string name="custom_download_error_message_for_authentication_failed">O arquivo sim não pode ser baixado. Por favor tente reinstalar a aplicação da Play Store.</string>
   <string name="save">Salvar</string>
   <string name="note">Nota</string>
   <string name="wiki_article_title">Título do artigo da wiki</string>
@@ -244,6 +252,7 @@
   <string name="severe_loss_error">Erro grave! Tente desativar/reativar WiFi P2P</string>
   <string name="connection_failed">Falha na conexão</string>
   <string name="permission_rationale_location">A permissão de localização é necessária pelo Android para permitir que o aplicativo detecte dispositivos de mesmo nível</string>
+  <string name="permission_rationale_nearby">A permissão de dispositivos próximos é necessária pelo Android, para permitir o aplicativo detectar dispositivos próximos</string>
   <string name="permission_refused_location">Não é possível localizar dispositivos pares sem permissões de localização</string>
   <string name="permission_refused_storage">Não é possível acessar arquivos zim sem permissão de armazenamento</string>
   <string name="request_enable_location">Ativar local para permitir a detecção de pares</string>
@@ -258,6 +267,7 @@
   <string name="get_content_from_nearby_device">Obter conteúdo de um dispositivo próximo</string>
   <string name="search_for_peers">Pesquisar por pares</string>
   <string name="your_device">Seu dispositivo:</string>
+  <string name="device_name">Nome do Dispositivo</string>
   <string name="nearby_devices">DISPOSITIVOS PRÓXIMOS</string>
   <string name="no_devices_found">Nenhum dispositivo detectado. Toque no botão de pesquisa para tentar novamente.</string>
   <string name="files_for_transfer">ARQUIVOS PARA TRANSFERIR</string>
@@ -266,6 +276,7 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Limpar todas as notas em todos os artigos</string>
   <string name="pref_clear_all_notes_title">Limpar todas as notas</string>
+  <string name="pref_clear_notes">Apagar notas</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Permite ler e escrever arquivos ZIM no cartão SD.</string>
   <string name="pref_text_zoom_summary">Altere o tamanho do texto com incrementos de 25%.</string>
   <string name="tag_pic">Pic</string>
@@ -295,11 +306,13 @@
   <string name="search_open_in_new_tab">Abrir em uma nova guia</string>
   <string name="reader">Leitor</string>
   <string name="no_open_book">Sem livro aberto</string>
-  <string name="open_library" fuzzy="true">Abrir biblioteca</string>
+  <string name="open_library">Abrir biblioteca</string>
   <string name="tab_restored">Guia restaurada</string>
   <string name="tabs_restored">Guias restauradas</string>
   <string name="open_drawer">Abrir gaveta</string>
   <string name="close_drawer">Fechar gaveta</string>
+  <string name="zim_files_not_showing">Arquivos zim não estão aparecendo?</string>
+  <string name="understood">Entendido</string>
   <string name="how_to_update_content">Como atualizar o conteúdo?</string>
   <string name="update_content_description">Para atualizar o conteúdo (um arquivo zim), você precisa baixar a versão completa mais recente desse mesmo conteúdo. Você pode fazer isso através da seção de download.</string>
   <string name="all_files_permission_needed">Permissão necessária para todos os arquivos</string>
@@ -326,5 +339,6 @@
   <string name="read_aloud_channel_description">Controle de texto para fala.</string>
   <string name="read_aloud_running">Rodando o recurso Leitura Permitida</string>
   <string name="backward_history">Histórico de pendências</string>
+  <string name="navigation_history_cleared">Histórico de Navegação Apagado</string>
   <string name="go_to_settings_label">Ir para configurações</string>
 </resources>
