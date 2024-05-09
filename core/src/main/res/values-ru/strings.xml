@@ -276,6 +276,7 @@
   <string name="get_content_from_nearby_device">Получить контент с устройства рядом</string>
   <string name="search_for_peers">Поиск устройств</string>
   <string name="your_device">Ваше устройство:</string>
+  <string name="device_name">Название устройства</string>
   <string name="nearby_devices">УСТРОЙСТВА РЯДОМ</string>
   <string name="no_devices_found">Устройства не найдены. Нажмите кнопку Поиск чтобы попробовать ещё раз.</string>
   <string name="files_for_transfer">ФАЙЛЫ ДЛЯ ПЕРЕДАЧИ</string>
