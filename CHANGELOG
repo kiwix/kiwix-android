@@ -2,8 +2,9 @@
 Bug Fixed:
 * Error on opening a split zim file. (https://github.com/kiwix/kiwix-android/pull/3803)
 * Sometimes setting the org.kiwix.libzim.Archive.setNativeArchive crashes the application. (https://github.com/kiwix/kiwix-android/pull/3807)
+* Zim files are not opening with Kiwix when clicking on zim files in the storage. (https://github.com/kiwix/kiwix-android/pull/3834)
 * Main page is not loading for zim files. (https://github.com/kiwix/kiwix-android/pull/3817)
-* Fixed some issues reported by the playStore. (https://github.com/kiwix/kiwix-android/pull/3815, https://github.com/kiwix/kiwix-android/pull/3818, https://github.com/kiwix/kiwix-android/pull/3814, https://github.com/kiwix/kiwix-android/pull/3823)
+* Fixed some issues reported by the playStore. (https://github.com/kiwix/kiwix-android/pull/3815, https://github.com/kiwix/kiwix-android/pull/3818, https://github.com/kiwix/kiwix-android/pull/3814, https://github.com/kiwix/kiwix-android/pull/3823, https://github.com/kiwix/kiwix-android/pull/3824)
 * The Delete icon is showing wrong content description on the notes and history screen. (https://github.com/kiwix/kiwix-android/pull/3826)
 
 Compilation/CI/CD:
