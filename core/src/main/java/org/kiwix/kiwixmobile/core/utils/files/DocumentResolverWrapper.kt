@@ -48,6 +48,14 @@ class DocumentResolverWrapper {
   )?.use {
     return@query if (it.moveToFirst() && it.getColumnIndex(columnName) != -1) {
       it[columnName]
-    } else null
+    } else {
+      var path: String? = null
+      if ("$uri".contains("org.kiwix.kiwixmobile.fileprovider")) {
+        // For testing scenarios, as it's within the app-specific directory and the content resolver
+        // cannot provide the path for internal app paths, so we extract the path from the URI.
+        path = "/storage/" + "$uri".substringAfter("external_files/")
+      }
+      path
+    }
   }
 }

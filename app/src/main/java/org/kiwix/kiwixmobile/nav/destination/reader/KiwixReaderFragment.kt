@@ -301,11 +301,13 @@ class KiwixReaderFragment : CoreReaderFragment() {
         }
 
         "content" -> {
-          getZimFileFromUri(it)?.let { zimFile ->
-            Handler(Looper.getMainLooper()).postDelayed({ openZimFile(zimFile) }, 300)
-          }.also {
-            requireActivity().intent.action = null
-          }
+          Handler(Looper.getMainLooper()).postDelayed({
+            getZimFileFromUri(it)?.let { zimFile ->
+              openZimFile(zimFile)
+            }.also {
+              requireActivity().intent.action = null
+            }
+          }, 300)
         }
 
         else -> activity.toast(R.string.cannot_open_file)
