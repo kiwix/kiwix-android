@@ -132,7 +132,6 @@ class AllProjectConfigurer {
           add("SelectableText")
           add("MissingTranslation")
           add("IconDensities")
-          add("ContentDescription")
           add("IconDipSize")
           add("UnusedResources")
           add("NonConstantResourceId")
