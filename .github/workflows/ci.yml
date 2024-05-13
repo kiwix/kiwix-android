@@ -12,7 +12,7 @@ jobs:
     name: Automated tests
     strategy:
       matrix:
-        api-level: [ 24, 30, 33 ]
+        api-level: [ 25, 30, 33 ]
       fail-fast: true
     runs-on: ubuntu-22.04
     steps:
@@ -65,7 +65,7 @@ jobs:
           sdcard-path-or-size: 2048M
           cores: 4
           disable-animations: false
-          heap-size: ${{ matrix.api-level != 24 && '512M' || '' }}
+          heap-size: 512M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           channel: canary
           script: echo "Generated AVD snapshot for caching."
@@ -85,7 +85,7 @@ jobs:
           force-avd-creation: false
           sdcard-path-or-size: 2048M
           disable-animations: true
-          heap-size: ${{ matrix.api-level != 24 && '512M' || '' }}
+          heap-size: 512M
           channel: canary
           script: bash contrib/instrumentation.sh
 
@@ -98,18 +98,18 @@ jobs:
           path: screencap.png
 
       - name: create unit coverage
-        if: ${{ matrix.api-level==24 }}
+        if: ${{ matrix.api-level==25 }}
         run: ./gradlew testDebugUnitTest testCustomexampleDebugUnitTest
 
       - name: Upload coverage to Codecov
-        if: ${{ matrix.api-level==24 }}
+        if: ${{ matrix.api-level==25 }}
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload Coverage to GH-Actions
         uses: actions/upload-artifact@v3
-        if: ${{ matrix.api-level==24 }}
+        if: ${{ matrix.api-level==25 }}
         with:
           name: Tests Coverage Report
           path: |

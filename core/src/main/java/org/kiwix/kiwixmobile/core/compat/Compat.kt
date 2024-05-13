@@ -32,7 +32,7 @@ import android.net.ConnectivityManager
  *
  *
  * Each implementation ends with a `V<n>` suffix, identifying the minimum API version on which this implementation
- * can be used. For example, see [CompatV24].
+ * can be used. For example, see [CompatV25].
  *
  *
  * Each implementation `CompatVn` should extend the implementation `CompatVm` for the greatest m<n such that `CompatVm`
