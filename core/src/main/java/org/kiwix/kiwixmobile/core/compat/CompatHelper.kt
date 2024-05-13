@@ -29,7 +29,7 @@ class CompatHelper private constructor() {
   // Note: Needs ": Compat" or the type system assumes `Compat21`
   private val compatValue: Compat = when {
     sdkVersion >= Build.VERSION_CODES.TIRAMISU -> CompatV33()
-    else -> CompatV24()
+    else -> CompatV25()
   }
 
   companion object {

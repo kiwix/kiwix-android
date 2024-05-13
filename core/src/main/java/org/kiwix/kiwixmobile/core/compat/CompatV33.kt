@@ -30,7 +30,7 @@ const val API_33 = 33
 
 @TargetApi(API_33)
 open class CompatV33 : Compat {
-  private val compatV24 = CompatV24()
+  private val compatV25 = CompatV25()
   override fun queryIntentActivities(
     packageManager: PackageManager,
     intent: Intent,
@@ -48,8 +48,8 @@ open class CompatV33 : Compat {
     packageManager.getPackageInfo(packageName, PackageInfoFlags.of(flag.toLong()))
 
   override fun isNetworkAvailable(connectivity: ConnectivityManager): Boolean =
-    compatV24.isNetworkAvailable(connectivity)
+    compatV25.isNetworkAvailable(connectivity)
 
   override fun isWifi(connectivity: ConnectivityManager): Boolean =
-    compatV24.isWifi(connectivity)
+    compatV25.isWifi(connectivity)
 }

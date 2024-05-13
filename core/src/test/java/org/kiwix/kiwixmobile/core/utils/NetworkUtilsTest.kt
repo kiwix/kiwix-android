@@ -31,7 +31,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.compat.CompatV24
+import org.kiwix.kiwixmobile.core.compat.CompatV25
 import java.util.regex.Pattern
 
 class NetworkUtilsTest {
@@ -43,43 +43,43 @@ class NetworkUtilsTest {
   @Test
   fun testNetworkAvailability_CompatV24() {
     every { context.getSystemService(Context.CONNECTIVITY_SERVICE) } returns connectivity
-    val compatV23 = CompatV24()
+    val compatV25 = CompatV25()
     val network: Network = mockk()
 
     every { connectivity.activeNetwork } returns network
     every { connectivity.getNetworkCapabilities(network) } returns networkCapabilities
     every { networkCapabilities.hasCapability(NET_CAPABILITY_INTERNET) } returns true
 
-    assertTrue(compatV23.isNetworkAvailable(connectivity))
+    assertTrue(compatV25.isNetworkAvailable(connectivity))
     every { networkCapabilities.hasCapability(NET_CAPABILITY_INTERNET) } returns false
-    assertFalse(compatV23.isNetworkAvailable(connectivity))
+    assertFalse(compatV25.isNetworkAvailable(connectivity))
   }
 
   @Test
   fun test_isWifi_CompatV24() {
-    val compatV23 = CompatV24()
+    val compatV25 = CompatV25()
     val network: Network = mockk()
 
     every { connectivity.activeNetwork } returns network
     every { connectivity.getNetworkCapabilities(network) } returns networkCapabilities
     every { networkCapabilities.hasTransport(TRANSPORT_WIFI) } returns true
 
-    assertTrue(compatV23.isWifi(connectivity))
+    assertTrue(compatV25.isWifi(connectivity))
     every { networkCapabilities.hasTransport(TRANSPORT_WIFI) } returns false
-    assertFalse(compatV23.isWifi(connectivity))
+    assertFalse(compatV25.isWifi(connectivity))
   }
 
   @Test
   fun testNetworkAvailability_NoNetwork_CompatV24() {
     every { context.getSystemService(Context.CONNECTIVITY_SERVICE) } returns connectivity
-    val compatV23 = CompatV24()
+    val compatV25 = CompatV25()
     val network: Network = mockk()
 
     every { connectivity.activeNetwork } returns network
     every { connectivity.getNetworkCapabilities(network) } returns networkCapabilities
     every { networkCapabilities.hasCapability(NET_CAPABILITY_INTERNET) } returns false
 
-    assertFalse(compatV23.isNetworkAvailable(connectivity))
+    assertFalse(compatV25.isNetworkAvailable(connectivity))
   }
 
   @Test

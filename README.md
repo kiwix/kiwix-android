@@ -14,7 +14,7 @@ offline. This is achieved by reading the content of a file in the
 [ZIM](https://openzim.org) format, a highly compressed open format
 with additional metadata.
 
-This is the version for Android, with [support versions ranging from 7
+This is the version for Android, with [support versions ranging from 7.1
 to 13](https://github.com/kiwix/kiwix-android/blob/main/buildSrc/src/main/kotlin/Config.kt).
 
 **Important Note**: Starting from Android 11, the ZIM file picker
