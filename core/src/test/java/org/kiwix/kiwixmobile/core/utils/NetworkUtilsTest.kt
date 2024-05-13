@@ -41,7 +41,7 @@ class NetworkUtilsTest {
   private val networkCapabilities: NetworkCapabilities = mockk()
 
   @Test
-  fun testNetworkAvailability_CompatV24() {
+  fun testNetworkAvailability_CompatV25() {
     every { context.getSystemService(Context.CONNECTIVITY_SERVICE) } returns connectivity
     val compatV25 = CompatV25()
     val network: Network = mockk()
@@ -56,7 +56,7 @@ class NetworkUtilsTest {
   }
 
   @Test
-  fun test_isWifi_CompatV24() {
+  fun test_isWifi_CompatV25() {
     val compatV25 = CompatV25()
     val network: Network = mockk()
 
@@ -70,7 +70,7 @@ class NetworkUtilsTest {
   }
 
   @Test
-  fun testNetworkAvailability_NoNetwork_CompatV24() {
+  fun testNetworkAvailability_NoNetwork_CompatV25() {
     every { context.getSystemService(Context.CONNECTIVITY_SERVICE) } returns connectivity
     val compatV25 = CompatV25()
     val network: Network = mockk()
