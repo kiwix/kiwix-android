@@ -68,6 +68,8 @@ android {
     create("nightly") {
       initWith(getByName("debug"))
       matchingFallbacks += "debug"
+      // Build the nightly APK with the released keyStore to make the APK updatable. See #3838
+      signingConfig = signingConfigs.getByName("releaseSigningConfig")
     }
   }
   bundle {
