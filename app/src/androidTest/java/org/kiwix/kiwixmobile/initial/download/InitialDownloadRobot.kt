@@ -69,7 +69,7 @@ class InitialDownloadRobot : BaseRobot() {
   }
 
   fun downloadZimFile() {
-    clickOn(Text(zimFileTitle))
+    testFlakyView({ onView(withText(zimFileTitle)).perform(click()) })
   }
 
   fun assertStorageConfigureDialogDisplayed() {
@@ -89,7 +89,7 @@ class InitialDownloadRobot : BaseRobot() {
   }
 
   fun stopDownload() {
-    clickOn(ViewId(R.id.stop))
+    testFlakyView({ onView(withId(R.id.stop)).perform(click()) })
   }
 
   fun assertDownloadStop() {

@@ -22,6 +22,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
 import androidx.test.core.app.ActivityScenario
+import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import org.junit.Before
@@ -44,6 +45,10 @@ class DeepLinksTest : BaseActivityTest() {
   @JvmField
   var retryRule = RetryRule()
   private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+
+  init {
+    AccessibilityChecks.enable().setRunChecksFromRootView(true)
+  }
 
   @Before
   override fun waitForIdle() {

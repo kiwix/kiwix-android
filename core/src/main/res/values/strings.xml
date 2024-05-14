@@ -18,6 +18,7 @@
   <string name="save_media_error">An error occurred when trying to save the media!</string>
   <string name="save_media_saved">Saved media as %s to Downloads/org.kiwix…/</string>
   <string name="search_label">Search</string>
+  <string name="searched_list">Searched list</string>
   <string name="choose_file" tools:keep="@string/choose_file">Select a Content File (*.zim)</string>
   <string name="open_in_new_tab">Open link in new tab?</string>
   <string name="hotspot_service_channel_name" tools:keep="@string/hotspot_service_channel_name">Hotspot Service Channel</string>

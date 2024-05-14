@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.util.Log
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -85,7 +86,7 @@ class LocalFileTransferRobot : BaseRobot() {
 
   fun clickOnGotItButton() {
     pauseForBetterTestPerformance()
-    clickOn(TextId(R.string.got_it))
+    testFlakyView({ onView(withText(R.string.got_it)).perform(click()) })
   }
 
   fun assertDeviceNameMessageVisible() {

@@ -23,6 +23,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isNotChecked
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import junit.framework.AssertionFailedError
@@ -63,7 +64,7 @@ class LanguageRobot : BaseRobot() {
   }
 
   fun clickOnLanguageSearchIcon() {
-    clickOn(ViewId(R.id.menu_language_search))
+    testFlakyView({ onView(withId(R.id.menu_language_search)).perform(click()) })
   }
 
   fun searchLanguage(searchLanguage: String) {

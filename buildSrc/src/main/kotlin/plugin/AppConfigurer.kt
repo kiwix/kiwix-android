@@ -104,6 +104,7 @@ class AppConfigurer {
       androidTestImplementation(Libs.espresso_web)
       androidTestImplementation(Libs.espresso_intents)
       androidTestImplementation(Libs.espresso_contrib)
+      androidTestImplementation(Libs.espresso_accessibility)
       androidTestImplementation(Libs.annotation)
       androidTestImplementation(Libs.junit)
       androidTestImplementation(Libs.junit_jupiter)
