@@ -38,6 +38,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -46,8 +47,10 @@ import org.kiwix.kiwixmobile.core.databinding.ActivityZimHostBinding
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isManageExternalStoragePermissionGranted
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
+import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
@@ -119,7 +122,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     ActivityResultContracts.RequestPermission()
   ) { isGranted ->
     if (isGranted) {
-      startStopServer()
+      activityZimHostBinding?.startServerButton?.performClick()
     } else {
       if (!ActivityCompat.shouldShowRequestPermissionRationale(
           requireActivity(),
@@ -185,13 +188,21 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
       ) {
         if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
-          startStopServer()
+          handleStoragePermissionAndServer()
         } else {
           notificationPermissionListener.launch(POST_NOTIFICATIONS)
         }
       } else {
-        startStopServer()
+        handleStoragePermissionAndServer()
       }
+    }
+  }
+
+  private fun handleStoragePermissionAndServer() {
+    if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
+      showManageExternalStoragePermissionDialog()
+    } else {
+      startStopServer()
     }
   }
 
@@ -425,6 +436,17 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       ).putExtra(RESTART_SERVER, restartServer)
     ).also {
       isHotspotServiceRunning = true
+    }
+  }
+
+  private fun showManageExternalStoragePermissionDialog() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      alertDialogShower.show(
+        KiwixDialog.ManageExternalFilesPermissionDialog,
+        {
+          this.activity?.let(FragmentActivity::navigateToSettings)
+        }
+      )
     }
   }
 
