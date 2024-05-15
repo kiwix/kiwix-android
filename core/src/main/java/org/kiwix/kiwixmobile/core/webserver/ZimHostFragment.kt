@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.webserver
 
+import android.Manifest
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -25,6 +26,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
@@ -34,6 +36,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -137,6 +140,30 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     }
   }
 
+  private var storagePermissionLauncher: ActivityResultLauncher<Array<String>>? =
+    registerForActivityResult(
+      ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissionResult ->
+      val isGranted =
+        permissionResult.entries.all(
+          Map.Entry<String, @kotlin.jvm.JvmSuppressWildcards Boolean>::value
+        )
+      if (isGranted) {
+        activityZimHostBinding?.startServerButton?.performClick()
+      } else {
+        if (!ActivityCompat.shouldShowRequestPermissionRationale(
+            requireActivity(),
+            Manifest.permission.READ_EXTERNAL_STORAGE
+          )
+        ) {
+          alertDialogShower.show(
+            KiwixDialog.ReadPermissionRequired,
+            requireActivity()::navigateToAppSettings
+          )
+        }
+      }
+    }
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -199,6 +226,35 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun handleStoragePermissionAndServer() {
+    // we does not require any permission for playStore variant.
+    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+      startStopServer()
+      return
+    }
+
+    if (ContextCompat.checkSelfPermission(
+        requireActivity(),
+        Manifest.permission.READ_EXTERNAL_STORAGE
+      ) != PackageManager.PERMISSION_GRANTED
+    ) {
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        // ask the storage permission for below Android 13.
+        // Since there is no storage permission available in Android 13 and above.
+        storagePermissionLauncher?.launch(
+          arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+          )
+        )
+      } else {
+        handleManageExternalStoragePermissionAndServer()
+      }
+    } else {
+      handleManageExternalStoragePermissionAndServer()
+    }
+  }
+
+  private fun handleManageExternalStoragePermissionAndServer() {
     if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
       showManageExternalStoragePermissionDialog()
     } else {
