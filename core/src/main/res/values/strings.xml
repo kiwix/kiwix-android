@@ -353,7 +353,7 @@
   <string name="empty_string" />
   <string name="click_nearby_devices_message">Click here to search for nearby devices.</string>
   <string name="your_device_name_message">Your device name will appear here.</string>
-  <string name="nearby_devices_list_message">Here, you\'ll find a list of nearby devices. Tap on a device\'s name to initiate file transfer.</string>
+  <string name="nearby_devices_list_message">Here, you\’ll find a list of nearby devices. Tap on a device\’s name to initiate file transfer.</string>
   <string name="transfer_zim_files_list_message">Here, you\’ll find the list of available ZIM files for transfer.</string>
   <string name="storage_selection_dialog_accessibility_description">Select storage for downloading ZIM files.</string>
   <string name="zim_file_content_description">ZIM file which has the reading content</string>

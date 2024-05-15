@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.reader
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
@@ -28,6 +29,7 @@ import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 fun reader(func: ReaderRobot.() -> Unit) = ReaderRobot().applyWithViewHierarchyPrinting(func)
 
@@ -42,7 +44,7 @@ class ReaderRobot : BaseRobot() {
 
   fun clickOnTabIcon() {
     pauseForBetterTestPerformance()
-    clickOn(ViewId(R.id.ic_tab_switcher_text))
+    testFlakyView({ onView(withId(R.id.ic_tab_switcher_text)).perform(click()) })
   }
 
   fun clickOnClosedAllTabsButton() {

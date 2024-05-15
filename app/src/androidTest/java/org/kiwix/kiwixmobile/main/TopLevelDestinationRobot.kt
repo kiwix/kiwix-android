@@ -17,6 +17,10 @@
  */
 package org.kiwix.kiwixmobile.main
 
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
@@ -51,7 +55,7 @@ class TopLevelDestinationRobot : BaseRobot() {
   fun clickReaderOnBottomNav(func: ReaderRobot.() -> Unit) {
     isVisible(ViewId(R.id.navigation_container))
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    clickOn(ViewId(R.id.readerFragment))
+    testFlakyView({ onView(withId(R.id.readerFragment)).perform(click()) })
     reader(func)
   }
 
@@ -74,7 +78,7 @@ class TopLevelDestinationRobot : BaseRobot() {
 
   fun clickBookmarksOnNavDrawer(func: BookmarksRobot.() -> Unit) {
     inNavDrawer {
-      clickOn(TextId(R.string.bookmarks))
+      testFlakyView({ onView(withText(R.string.bookmarks)).perform(click()) })
       bookmarks(func)
       pressBack()
     }

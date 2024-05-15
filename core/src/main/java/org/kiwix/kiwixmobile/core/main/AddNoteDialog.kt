@@ -43,6 +43,8 @@ import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.databinding.DialogAddNoteBinding
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
+import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
+import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
@@ -273,21 +275,27 @@ class AddNoteDialog : DialogFragment() {
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    toolbar?.setTitle(R.string.note)
-    toolbar?.setNavigationIcon(R.drawable.ic_close_white_24dp)
-    toolbar?.setNavigationOnClickListener {
-      exitAddNoteDialog()
-      closeKeyboard()
-    }
-    toolbar?.setOnMenuItemClickListener { item: MenuItem ->
-      when (item.itemId) {
-        R.id.share_note -> shareNote()
-        R.id.save_note -> saveNote(dialogNoteAddNoteBinding?.addNoteEditText?.text.toString())
-        R.id.delete_note -> deleteNote()
+    toolbar?.apply {
+      setTitle(R.string.note)
+      setNavigationIcon(R.drawable.ic_close_white_24dp)
+      setNavigationOnClickListener {
+        exitAddNoteDialog()
+        closeKeyboard()
       }
-      true
+      // set the navigation close button contentDescription
+      getToolbarNavigationIcon()?.setToolTipWithContentDescription(
+        getString(R.string.toolbar_back_button_content_description)
+      )
+      setOnMenuItemClickListener { item: MenuItem ->
+        when (item.itemId) {
+          R.id.share_note -> shareNote()
+          R.id.save_note -> saveNote(dialogNoteAddNoteBinding?.addNoteEditText?.text.toString())
+          R.id.delete_note -> deleteNote()
+        }
+        true
+      }
+      inflateMenu(R.menu.menu_add_note_dialog)
     }
-    toolbar?.inflateMenu(R.menu.menu_add_note_dialog)
     // 'Share' disabled for empty notes, 'Save' disabled for unedited notes
     disableMenuItems()
     dialogNoteAddNoteBinding?.addNoteTextView?.text = articleTitle

@@ -22,14 +22,15 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 fun playStoreRestriction(func: PlayStoreRestrictionDialogRobot.() -> Unit) =
   PlayStoreRestrictionDialogRobot().applyWithViewHierarchyPrinting(func)
@@ -38,7 +39,7 @@ class PlayStoreRestrictionDialogRobot : BaseRobot() {
 
   fun clickLibraryOnBottomNav() {
     pauseForBetterTestPerformance()
-    clickOn(ViewId(R.id.libraryFragment))
+    testFlakyView({ onView(withId(R.id.libraryFragment)).perform(click()) })
   }
 
   fun assertPlayStoreRestrictionDialogDisplayed() {

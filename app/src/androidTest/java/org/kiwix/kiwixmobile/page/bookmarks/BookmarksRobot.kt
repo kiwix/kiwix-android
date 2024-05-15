@@ -20,7 +20,9 @@ package org.kiwix.kiwixmobile.page.bookmarks
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
@@ -71,7 +73,7 @@ class BookmarksRobot : BaseRobot() {
   fun longClickOnSaveBookmarkImage() {
     // wait for disappearing the snack-bar after removing the bookmark
     BaristaSleepInteractions.sleep(5L, TimeUnit.SECONDS)
-    longClickOn(ViewId(R.id.bottom_toolbar_bookmark))
+    testFlakyView({ onView(withId(R.id.bottom_toolbar_bookmark)).perform(longClick()) })
   }
 
   fun clickOnOpenSavedBookmarkButton() {
