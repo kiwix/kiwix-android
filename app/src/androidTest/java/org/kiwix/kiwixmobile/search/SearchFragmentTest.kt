@@ -274,7 +274,7 @@ class SearchFragmentTest : BaseActivityTest() {
   }
 
   private fun getDownloadingZimFile(): File {
-    val zimFile = File(context.cacheDir, "stack_exchange.zim")
+    val zimFile = File(context.cacheDir, "ray_charles.zim")
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     return zimFile
