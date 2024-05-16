@@ -23,7 +23,6 @@ import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForCustomApp
 import org.kiwix.libkiwix.Book
-import org.kiwix.libkiwix.JNIKiwixException
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Server
 import org.kiwix.libzim.Archive
@@ -67,8 +66,13 @@ class KiwixServer @Inject constructor(
             update(archive)
           }
           kiwixLibrary.addBook(book)
-        } catch (e: JNIKiwixException) {
-          Log.v(TAG, "Couldn't add book with path:{ $path }")
+        } catch (ignore: Exception) {
+          // Catch the other exceptions as well. e.g. while hosting the split zim files.
+          // we have an issue with split zim files, see #3827
+          Log.v(
+            TAG,
+            "Couldn't add book with path:{ $path }.\n Original Exception = $ignore"
+          )
         }
       }
       return KiwixServer(kiwixLibrary, Server(kiwixLibrary))
