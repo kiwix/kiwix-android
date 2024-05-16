@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.download
 
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
@@ -31,9 +30,11 @@ import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.download.DownloadTest.Companion.KIWIX_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils
 
@@ -127,11 +128,16 @@ class DownloadRobot : BaseRobot() {
 
   private fun assertStopDownloadDialogDisplayed() {
     pauseForBetterTestPerformance()
-    isVisible(Text("Stop download?"))
+    isVisible(TextId(R.string.confirm_stop_download_title))
   }
 
   private fun clickOnYesButton() {
-    onView(withText("YES")).perform(click())
+    try {
+      onView(withText("YES")).perform(click())
+    } catch (ignore: Exception) {
+      // stop the downloading for Albanian language
+      onView(withText("PO")).perform(click())
+    }
   }
 
   fun stopDownloadIfAlreadyStarted() {

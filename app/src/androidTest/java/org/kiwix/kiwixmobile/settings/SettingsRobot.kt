@@ -20,14 +20,18 @@ package org.kiwix.kiwixmobile.settings
 
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withResourceName
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import org.hamcrest.Matchers
+import org.hamcrest.Matchers.anything
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
@@ -122,6 +126,35 @@ class SettingsRobot : BaseRobot() {
 
   fun assertVersionTextViewPresent() {
     clickRecyclerViewItems(R.string.pref_info_version)
+  }
+
+  fun clickOnLanguagePreference() {
+    try {
+      clickRecyclerViewItems(R.string.device_default)
+    } catch (ignore: Exception) {
+      // if the device language Albanian
+      onView(
+        withResourceName("recycler_view")
+      ).perform(
+        actionOnItem<RecyclerView.ViewHolder>(
+          hasDescendant(Matchers.anyOf(withText("shqip"))), ViewActions.click()
+        )
+      )
+    }
+  }
+
+  fun selectAlbanianLanguage() {
+    testFlakyView({
+      onData(anything()).inAdapterView(withId(R.id.select_dialog_listview)).atPosition(2)
+        .perform(click())
+    })
+  }
+
+  fun selectDeviceDefaultLanguage() {
+    testFlakyView({
+      onData(anything()).inAdapterView(withId(R.id.select_dialog_listview)).atPosition(0)
+        .perform(click())
+    })
   }
 
   fun dismissDialog() {
