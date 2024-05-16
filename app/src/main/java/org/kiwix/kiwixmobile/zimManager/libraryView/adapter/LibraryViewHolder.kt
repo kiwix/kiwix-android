@@ -117,11 +117,12 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
       }
       itemDownloadBinding.downloadState.text =
         item.downloadState.toReadableState(containerView.context).also {
-          val pauseResumeIconId = if (it == "Paused") {
-            R.drawable.ic_play_24dp
-          } else {
-            R.drawable.ic_pause_24dp
-          }
+          val pauseResumeIconId =
+            if (it == itemDownloadBinding.root.context.getString(R.string.paused_state)) {
+              R.drawable.ic_play_24dp
+            } else {
+              R.drawable.ic_pause_24dp
+            }
           itemDownloadBinding.pauseResume.setImageDrawableCompat(pauseResumeIconId)
         }
       if (item.currentDownloadState == Status.FAILED) {

@@ -40,6 +40,7 @@ import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.main.topLevel
 import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
@@ -109,6 +110,64 @@ class DownloadTest : BaseActivityTest() {
         // refresh the local library list to show the downloaded zim file
         refreshLocalLibraryData()
         checkIfZimFileDownloaded()
+      }
+    } catch (e: Exception) {
+      Assert.fail(
+        "Couldn't find downloaded file ' Off the Grid ' Original Exception: ${e.message}"
+      )
+    }
+    LeakAssertions.assertNoLeaks()
+  }
+
+  @Test
+  fun testPauseAndResumeInOtherLanguage() {
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    activityScenario.onActivity {
+      it.navigate(R.id.libraryFragment)
+    }
+    try {
+      downloadRobot(DownloadRobot::refreshLocalLibraryData)
+      // delete all the ZIM files showing in the LocalLibrary
+      // screen to properly test the scenario.
+      library {
+        waitUntilZimFilesRefreshing()
+        deleteZimIfExists()
+      }
+      downloadRobot {
+        // change the application language
+        topLevel {
+          clickSettingsOnSideNav {
+            clickOnLanguagePreference()
+            assertLanguagePrefDialogDisplayed()
+            selectDeviceDefaultLanguage()
+            clickOnLanguagePreference()
+            assertLanguagePrefDialogDisplayed()
+            selectAlbanianLanguage()
+          }
+        }
+        clickDownloadOnBottomNav()
+        refreshOnlineList()
+        waitForDataToLoad()
+        stopDownloadIfAlreadyStarted()
+        downloadZimFile()
+        assertDownloadStart()
+        pauseDownload()
+        assertDownloadPaused()
+        resumeDownload()
+        assertDownloadResumed()
+        stopDownloadIfAlreadyStarted()
+        // select the default device language to perform other test cases.
+        topLevel {
+          clickSettingsOnSideNav {
+            clickOnLanguagePreference()
+            assertLanguagePrefDialogDisplayed()
+            selectDeviceDefaultLanguage()
+            // check if the device default language is selected or not.
+            clickLanguagePreference()
+            // close the language dialog.
+            pressBack()
+          }
+        }
       }
     } catch (e: Exception) {
       Assert.fail(
