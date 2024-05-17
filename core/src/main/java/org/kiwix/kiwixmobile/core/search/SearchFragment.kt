@@ -285,6 +285,15 @@ class SearchFragment : BaseFragment() {
     }
 
   private suspend fun render(state: SearchState) {
+    // Check if the fragment is visible on the screen. This method called multiple times
+    // (7-14 times) when an item in the search list is clicked, which leads to unnecessary
+    // data loading and also causes a crash.
+    // The issue arises because the searchViewModel takes a moment to detach from the window,
+    // and during this time, this method is called multiple times due to the rendering process.
+    // To avoid unnecessary data loading and prevent crashes, we check if the search screen is
+    // visible to the user before proceeding. If the screen is not visible,
+    // we skip the data loading process.
+    if (!isVisible) return
     searchMutex.withLock {
       // `cancelAndJoin` cancels the previous running job and waits for it to completely cancel.
       renderingJob?.cancelAndJoin()

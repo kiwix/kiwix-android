@@ -60,6 +60,7 @@ class DeepLinksTest : BaseActivityTest() {
         setIsPlayStoreBuildType(true)
         prefIsTest = true
         playStoreRestrictionPermissionDialog = false
+        putPrefLanguage("en")
       }
     }
   }

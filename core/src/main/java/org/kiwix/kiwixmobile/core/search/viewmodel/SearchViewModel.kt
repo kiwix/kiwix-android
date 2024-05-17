@@ -113,12 +113,10 @@ class SearchViewModel @Inject constructor(
   @Suppress("DEPRECATION")
   private fun searchResults() = filter.asFlow()
     .mapLatest {
-      val zimFileReader = zimReaderContainer.copyReader()
-      try {
-        SearchResultsWithTerm(it, searchResultGenerator.generateSearchResults(it, zimFileReader))
-      } finally {
-        zimFileReader?.dispose()
-      }
+      SearchResultsWithTerm(
+        it,
+        searchResultGenerator.generateSearchResults(it, zimReaderContainer.zimFileReader)
+      )
     }
 
   private suspend fun actionMapper() = actions.consumeEach {

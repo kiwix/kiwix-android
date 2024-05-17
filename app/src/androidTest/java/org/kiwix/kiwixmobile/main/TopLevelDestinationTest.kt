@@ -28,6 +28,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.help.HelpRobot
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
@@ -61,9 +62,17 @@ class TopLevelDestinationTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_EXTERNAL_LINK_POPUP, true)
       putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, false)
       putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, false)
+      putString(SharedPreferenceUtil.PREF_LANG, "en")
     }
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
+      onActivity {
+        handleLocaleChange(
+          it,
+          "en",
+          SharedPreferenceUtil(context)
+        )
+      }
     }
   }
 

@@ -34,6 +34,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.library
@@ -86,6 +87,13 @@ class LocalFileTransferTest {
     shouldShowShowCaseFeatureToUser(false)
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
+      onActivity {
+        handleLocaleChange(
+          it,
+          "en",
+          SharedPreferenceUtil(context)
+        )
+      }
     }
     StandardActions.closeDrawer()
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
@@ -113,6 +121,11 @@ class LocalFileTransferTest {
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
       onActivity {
+        handleLocaleChange(
+          it,
+          "en",
+          SharedPreferenceUtil(context)
+        )
         it.navigate(R.id.libraryFragment)
       }
     }
@@ -161,6 +174,7 @@ class LocalFileTransferTest {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, shouldShowShowCase)
       putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, false)
+      putString(SharedPreferenceUtil.PREF_LANG, "en")
     }
     if (isResetShowCaseId) {
       // To clear showCaseID to ensure the showcase view will show.

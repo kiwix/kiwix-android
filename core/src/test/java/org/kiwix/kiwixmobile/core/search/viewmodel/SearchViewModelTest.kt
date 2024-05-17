@@ -100,7 +100,7 @@ internal class SearchViewModelTest {
     Dispatchers.setMain(testDispatcher)
     clearAllMocks()
     recentsFromDb = Channel(kotlinx.coroutines.channels.Channel.UNLIMITED)
-    every { zimReaderContainer.copyReader() } returns zimFileReader
+    every { zimReaderContainer.zimFileReader } returns zimFileReader
     coEvery {
       searchResultGenerator.generateSearchResults("", zimFileReader)
     } returns null

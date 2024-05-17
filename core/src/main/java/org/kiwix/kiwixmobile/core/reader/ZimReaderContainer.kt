@@ -86,14 +86,7 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
       }
   }
 
-  fun copyReader(): ZimFileReader? = runBlocking {
-    zimFile?.let { zimFileReaderFactory.create(it) }
-      ?: assetFileDescriptor?.let { zimFileReaderFactory.create(it) }
-  }
-
   val zimFile get() = zimFileReader?.zimFile
-
-  val assetFileDescriptor get() = zimFileReader?.assetFileDescriptor
 
   /**
    * Return the zimFile path if opened from file else return the filePath of assetFileDescriptor
@@ -112,5 +105,3 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
   val favicon get() = zimFileReader?.favicon
   val language get() = zimFileReader?.language
 }
-
-data class SearchResult(val title: String?)
