@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.webserver
 
+import android.Manifest
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -25,6 +26,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
@@ -34,10 +36,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -46,8 +50,10 @@ import org.kiwix.kiwixmobile.core.databinding.ActivityZimHostBinding
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isManageExternalStoragePermissionGranted
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
+import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
@@ -119,7 +125,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     ActivityResultContracts.RequestPermission()
   ) { isGranted ->
     if (isGranted) {
-      startStopServer()
+      activityZimHostBinding?.startServerButton?.performClick()
     } else {
       if (!ActivityCompat.shouldShowRequestPermissionRationale(
           requireActivity(),
@@ -133,6 +139,30 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       }
     }
   }
+
+  private var storagePermissionLauncher: ActivityResultLauncher<Array<String>>? =
+    registerForActivityResult(
+      ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissionResult ->
+      val isGranted =
+        permissionResult.entries.all(
+          Map.Entry<String, @kotlin.jvm.JvmSuppressWildcards Boolean>::value
+        )
+      if (isGranted) {
+        activityZimHostBinding?.startServerButton?.performClick()
+      } else {
+        if (!ActivityCompat.shouldShowRequestPermissionRationale(
+            requireActivity(),
+            Manifest.permission.READ_EXTERNAL_STORAGE
+          )
+        ) {
+          alertDialogShower.show(
+            KiwixDialog.ReadPermissionRequired,
+            requireActivity()::navigateToAppSettings
+          )
+        }
+      }
+    }
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -185,13 +215,50 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
       ) {
         if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
-          startStopServer()
+          handleStoragePermissionAndServer()
         } else {
           notificationPermissionListener.launch(POST_NOTIFICATIONS)
         }
       } else {
-        startStopServer()
+        handleStoragePermissionAndServer()
       }
+    }
+  }
+
+  private fun handleStoragePermissionAndServer() {
+    // we does not require any permission for playStore variant.
+    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+      startStopServer()
+      return
+    }
+
+    if (ContextCompat.checkSelfPermission(
+        requireActivity(),
+        Manifest.permission.READ_EXTERNAL_STORAGE
+      ) != PackageManager.PERMISSION_GRANTED
+    ) {
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        // ask the storage permission for below Android 13.
+        // Since there is no storage permission available in Android 13 and above.
+        storagePermissionLauncher?.launch(
+          arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+          )
+        )
+      } else {
+        handleManageExternalStoragePermissionAndServer()
+      }
+    } else {
+      handleManageExternalStoragePermissionAndServer()
+    }
+  }
+
+  private fun handleManageExternalStoragePermissionAndServer() {
+    if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
+      showManageExternalStoragePermissionDialog()
+    } else {
+      startStopServer()
     }
   }
 
@@ -425,6 +492,17 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       ).putExtra(RESTART_SERVER, restartServer)
     ).also {
       isHotspotServiceRunning = true
+    }
+  }
+
+  private fun showManageExternalStoragePermissionDialog() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      alertDialogShower.show(
+        KiwixDialog.ManageExternalFilesPermissionDialog,
+        {
+          this.activity?.let(FragmentActivity::navigateToSettings)
+        }
+      )
     }
   }
 
