@@ -31,6 +31,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.library
@@ -88,10 +89,18 @@ class ZimHostFragmentTest {
         setIsPlayStoreBuildType(true)
         prefIsTest = true
         playStoreRestrictionPermissionDialog = false
+        putPrefLanguage("en")
       }
     }
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
+      onActivity {
+        handleLocaleChange(
+          it,
+          "en",
+          SharedPreferenceUtil(it)
+        )
+      }
     }
   }
 

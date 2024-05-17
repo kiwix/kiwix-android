@@ -78,7 +78,22 @@ class SettingsRobot : BaseRobot() {
   }
 
   fun clickLanguagePreference() {
-    clickRecyclerViewItems(R.string.device_default)
+    testFlakyView({
+      onView(
+        withResourceName("recycler_view")
+      ).perform(
+        actionOnItem<RecyclerView.ViewHolder>(
+          hasDescendant(
+            Matchers.anyOf(
+              withText("shqip"),
+              withText("English"),
+              withText(R.string.device_default)
+            )
+          ),
+          ViewActions.click()
+        )
+      )
+    })
   }
 
   fun assertLanguagePrefDialogDisplayed() {
@@ -126,21 +141,6 @@ class SettingsRobot : BaseRobot() {
 
   fun assertVersionTextViewPresent() {
     clickRecyclerViewItems(R.string.pref_info_version)
-  }
-
-  fun clickOnLanguagePreference() {
-    try {
-      clickRecyclerViewItems(R.string.device_default)
-    } catch (ignore: Exception) {
-      // if the device language Albanian
-      onView(
-        withResourceName("recycler_view")
-      ).perform(
-        actionOnItem<RecyclerView.ViewHolder>(
-          hasDescendant(Matchers.anyOf(withText("shqip"))), ViewActions.click()
-        )
-      )
-    }
   }
 
   fun selectAlbanianLanguage() {

@@ -32,6 +32,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -70,9 +71,17 @@ class LocalLibraryTest : BaseActivityTest() {
       // while refreshing the content in LocalLibraryFragment.
       putBoolean(SharedPreferenceUtil.PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH, false)
       putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, false)
+      putString(SharedPreferenceUtil.PREF_LANG, "en")
     }
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
+      onActivity {
+        handleLocaleChange(
+          it,
+          "en",
+          SharedPreferenceUtil(context)
+        )
+      }
     }
   }
 

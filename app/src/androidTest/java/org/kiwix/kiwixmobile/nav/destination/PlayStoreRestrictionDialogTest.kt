@@ -114,6 +114,7 @@ class PlayStoreRestrictionDialogTest {
         setIsPlayStoreBuildType(true)
         prefIsTest = true
         playStoreRestrictionPermissionDialog = showDialog
+        putPrefLanguage("en")
       }
     }
   }

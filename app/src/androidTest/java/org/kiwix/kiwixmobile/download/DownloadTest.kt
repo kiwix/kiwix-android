@@ -38,6 +38,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.topLevel
@@ -74,9 +75,17 @@ class DownloadTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, false)
+      putString(SharedPreferenceUtil.PREF_LANG, "en")
     }
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
+      onActivity {
+        handleLocaleChange(
+          it,
+          "en",
+          SharedPreferenceUtil(context)
+        )
+      }
     }
   }
 
@@ -137,10 +146,10 @@ class DownloadTest : BaseActivityTest() {
         // change the application language
         topLevel {
           clickSettingsOnSideNav {
-            clickOnLanguagePreference()
+            clickLanguagePreference()
             assertLanguagePrefDialogDisplayed()
             selectDeviceDefaultLanguage()
-            clickOnLanguagePreference()
+            clickLanguagePreference()
             assertLanguagePrefDialogDisplayed()
             selectAlbanianLanguage()
           }
@@ -159,7 +168,7 @@ class DownloadTest : BaseActivityTest() {
         // select the default device language to perform other test cases.
         topLevel {
           clickSettingsOnSideNav {
-            clickOnLanguagePreference()
+            clickLanguagePreference()
             assertLanguagePrefDialogDisplayed()
             selectDeviceDefaultLanguage()
             // check if the device default language is selected or not.

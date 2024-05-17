@@ -37,6 +37,8 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.download.DownloadTest.Companion.KIWIX_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
 
 fun downloadRobot(func: DownloadRobot.() -> Unit) =
   DownloadRobot().applyWithViewHierarchyPrinting(func)
@@ -57,12 +59,15 @@ class DownloadRobot : BaseRobot() {
 
   fun waitForDataToLoad() {
     try {
-      isVisible(Text(zimFileTitle))
+      isVisible(TextId(R.string.your_languages))
     } catch (e: RuntimeException) {
       if (retryCountForDataToLoad > 0) {
         retryCountForDataToLoad--
         waitForDataToLoad()
+        return
       }
+      // throw the exception when there is no more retry left.
+      throw RuntimeException("Couldn't load the online library list.\n Original exception = $e")
     }
   }
 
@@ -75,7 +80,14 @@ class DownloadRobot : BaseRobot() {
   }
 
   fun downloadZimFile() {
-    clickOn(Text(zimFileTitle))
+    pauseForBetterTestPerformance()
+    testFlakyView({
+      onView(
+        RecyclerViewMatcher(R.id.libraryList).atPosition(
+          1
+        )
+      ).perform(click())
+    })
   }
 
   fun assertDownloadStart() {
