@@ -166,6 +166,23 @@ class SearchFragmentTest : BaseActivityTest() {
       // go to reader screen
       pressBack()
     }
+
+    // Added test for checking the crash scenario where the application was crashing when we
+    // frequently searched for article, and clicked on the searched item.
+    search {
+      // test by searching 10 article and clicking on them
+      searchAndClickOnArticle(searchQueryForDownloadedZimFile)
+      searchAndClickOnArticle("A Song")
+      searchAndClickOnArticle("The Ra")
+      searchAndClickOnArticle("The Ge")
+      searchAndClickOnArticle("Wish")
+      searchAndClickOnArticle("WIFI")
+      searchAndClickOnArticle("Woman")
+      searchAndClickOnArticle("Big Ba")
+      searchAndClickOnArticle("My Wor")
+      searchAndClickOnArticle("100")
+      assertArticleLoaded()
+    }
     removeTemporaryZimFilesToFreeUpDeviceStorage()
     LeakAssertions.assertNoLeaks()
   }
