@@ -103,7 +103,7 @@
   <string name="delete_recent_search_item">Удалить этот элемент?</string>
   <string name="pref_clear_all_history_title">Очистить историю</string>
   <string name="pref_clear_all_history_summary">Очистить недавние поисковые запросы и историю вкладок</string>
-  <string name="pref_notes">Примечания</string>
+  <string name="pref_notes">Заметки</string>
   <string name="pref_permission">Разрешения</string>
   <string name="all_history_cleared">Вся история очищена</string>
   <string name="pref_clear_all_bookmarks_title">Очистить закладки</string>
@@ -285,6 +285,7 @@
   <string name="status">Статус</string>
   <string name="pref_clear_all_notes_summary">Очистить все заметки во всех статьях</string>
   <string name="pref_clear_all_notes_title">Очистить все заметки</string>
+  <string name="pref_clear_notes">Очистить заметки</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Разрешить читать и записывать файлы ZIM на SD-карту</string>
   <string name="pref_text_zoom_summary">Изменить размер текста с шагом 25%</string>
   <string name="tag_pic">Изображение</string>
@@ -345,10 +346,10 @@
   <string name="download_tts_language_message">Пожалуйста, нажмите кнопку «Загрузить». Это автоматически загрузит необходимый язык.</string>
   <string name="external_link_copied_message">Внешняя ссылка скопирована в буфер обмена</string>
   <string name="read_aloud_service_channel_name">Сервисный канал чтения вслух</string>
-  <string name="read_aloud_channel_description">Текст на контрольный аппарат.</string>
-  <string name="read_aloud_running">Бег Чтение вслух</string>
-  <string name="backward_history">Обратная история</string>
-  <string name="forward_history">Форвардная история</string>
+  <string name="read_aloud_channel_description">Настройки перевода текста в речь.</string>
+  <string name="read_aloud_running">Запуск Чтения вслух</string>
+  <string name="backward_history">История (назад)</string>
+  <string name="forward_history">История (вперёд)</string>
   <string name="clear_all_navigation_history_message">Очищает всю (назад, вперед) историю навигации</string>
   <string name="navigation_history_cleared">История навигации очищена</string>
   <string name="go_to_settings_label">Перейти в настройки</string>
@@ -359,6 +360,6 @@
   <string name="transfer_zim_files_list_message">Здесь вы найдете список доступных ZIM-файлов для передачи.</string>
   <string name="storage_selection_dialog_accessibility_description">Выберите хранилище для скачивания ZIM-файлов.</string>
   <string name="zim_file_content_description">ZIM-файл, содержащий содержимое для чтения.</string>
-  <string name="select_language_content_description">При выборе этого языка приоритет отдается отображению загружаемых книг на этом языке вверху.</string>
+  <string name="select_language_content_description">При выборе этого языка приоритет отдается отображению загружаемых книг на этом языке.</string>
   <string name="toolbar_back_button_content_description">Перейти к предыдущей странице</string>
 </resources>

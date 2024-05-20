@@ -258,6 +258,7 @@
   <string name="get_content_from_nearby_device">קבלת תוכן ממכשיר בסביבה</string>
   <string name="search_for_peers">חיפוש עמיתים</string>
   <string name="your_device">המכשיר שלך:</string>
+  <string name="device_name">שם המכשיר</string>
   <string name="nearby_devices">מכשירים בסביבה</string>
   <string name="no_devices_found">לא זוהו מכשירים. נא ללחוץ על כפתור החיפוש כדי לנסות שוב.</string>
   <string name="files_for_transfer">קבצים להעברה</string>

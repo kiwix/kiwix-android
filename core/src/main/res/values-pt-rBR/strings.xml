@@ -341,4 +341,11 @@
   <string name="backward_history">Histórico de pendências</string>
   <string name="navigation_history_cleared">Histórico de Navegação Apagado</string>
   <string name="go_to_settings_label">Ir para configurações</string>
+  <string name="request_notification_permission_message">Por favor dê o acesso de notificação, para poder realizar essa ação</string>
+  <string name="click_nearby_devices_message">Clique aqui para pesquisar por aparelhos próximos.</string>
+  <string name="your_device_name_message">O nome do seu dispositivo irá aparecer aqui.</string>
+  <string name="nearby_devices_list_message">Aqui você encontrará a lista de dispositivos próximos. Clique no nome do dispositivo para realizar a transferência.</string>
+  <string name="transfer_zim_files_list_message">Aqui você encontrará a lista de arquivos ZIM disponíveis para transferir.</string>
+  <string name="storage_selection_dialog_accessibility_description">Selecione o armazenamento para baixar o arquivos ZIM.</string>
+  <string name="toolbar_back_button_content_description">Ir para tela anterior</string>
 </resources>
