@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* AlexanderFF
 * Amire80
 * Ark74
 * Carlespera
@@ -34,6 +35,8 @@
   <string name="menu_read_aloud">Leer en voz alta</string>
   <string name="menu_read_aloud_stop">Dejar de leer en voz alta</string>
   <string name="menu_support_kiwix">Apoyar a Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">Soporte %s</string>
+  <string name="menu_about_app">Acerca de %s aplicación</string>
   <string name="menu_wifi_hotspot">Punto de acceso WiFi</string>
   <string name="save_media">Guardar multimedia</string>
   <string name="save_media_error">¡Se produjo un error al intentar guardar los medios!</string>
@@ -65,6 +68,8 @@
   <string name="hotspot_notification_content_title">Punto de acceso Kiwix</string>
   <string name="start_server_label">Iniciar servidor</string>
   <string name="stop_server_label">Detener servidor</string>
+  <string name="error_server_already_running">El servidor ya esta en funcionamiento. Por favor, apáguelo e inténtelo de nuevo.</string>
+  <string name="error_ip_address_not_found">No se pudo encontrar la dirección IP.</string>
   <string name="server_started_message">Introduce esta dirección IP en tu navegador para acceder al servidor %s</string>
   <string name="share_host_address">Compartir URL a través de otras aplicaciones</string>
   <string name="error_file_not_found">Error: no se encontró el archivo ZIM seleccionado.</string>
@@ -220,12 +225,14 @@
   <string name="search_bookmarks">Buscar en marcadores</string>
   <string name="switch_tabs">Cambiar de pestaña</string>
   <string name="close_all_tabs">Cerrar todas las pestañas</string>
+  <string name="close_tab">Cerrar pestaña</string>
   <string name="could_not_restore_tabs">No se pudieron restaurar las pestañas.</string>
   <string name="pending_state">Pendiente</string>
   <string name="running_state">En proceso</string>
   <string name="complete">Completado</string>
   <string name="paused_state">En pausa</string>
   <string name="failed_state">Error: %s</string>
+  <string name="custom_download_error_message_for_authentication_failed">No pudo ser descargado el archivo zim. Por favor, intente reinstalando la aplicación desde Google Play Store.</string>
   <string name="save">Guardar</string>
   <string name="note">Nota</string>
   <string name="wiki_article_title">Título del artículo de la wiki</string>
@@ -249,6 +256,7 @@
   <string name="severe_loss_error">¡Error grave! Prueba inhabilitando / rehabilitando WiFi punto a punto</string>
   <string name="connection_failed">Falló la conexión</string>
   <string name="permission_rationale_location">Se requieren permisos de localización en Android para detectar dispositivos participantes</string>
+  <string name="permission_rationale_nearby">Android requiere el permiso de los dispositivos cercanos para permitir a la aplicación que los detecte.</string>
   <string name="permission_refused_location">No se pueden ubicar dispositivos de pares sin permisos de ubicación</string>
   <string name="permission_refused_storage">No se puede acceder a archivos ZIM sin permisos de almacenamiento</string>
   <string name="request_enable_location">Habilite la ubicación para permitir la detección de compañeros</string>
@@ -272,6 +280,7 @@
   <string name="status">Estado</string>
   <string name="pref_clear_all_notes_summary">Elimina todas las notas de todos los artículos</string>
   <string name="pref_clear_all_notes_title">Borrar todas las notas</string>
+  <string name="pref_clear_notes">Limpiar las notas</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Permitir leer y escribir archivos ZIM en la tarjeta SD</string>
   <string name="pref_text_zoom_summary">Cambie el tamaño del texto con incrementos del 25%.</string>
   <string name="tag_pic">Foto</string>
@@ -301,11 +310,12 @@
   <string name="search_open_in_new_tab">Abrir en una pestaña nueva</string>
   <string name="reader">Lector</string>
   <string name="no_open_book">Ningún libro abierto</string>
-  <string name="open_library" fuzzy="true">Abrir librería</string>
+  <string name="open_library">Abrir la librería</string>
   <string name="tab_restored">Pestaña restaurada</string>
   <string name="tabs_restored">Pestañas restauradas</string>
   <string name="open_drawer">Abrir cajón</string>
   <string name="close_drawer">Cerrar cajón</string>
+  <string name="understood">Entendido</string>
   <string name="how_to_update_content">¿Cómo actualizar contenido?</string>
   <string name="update_content_description">Para actualizar el contenido (un archivo zim), debe descargar la última versión completa de este mismo contenido. Puede hacerlo a través de la sección de descargas.</string>
   <string name="all_files_permission_needed">Se necesita permiso para todos los archivos</string>
@@ -337,4 +347,8 @@
   <string name="navigation_history_cleared">Historial de navegación borrado</string>
   <string name="go_to_settings_label">Ir a configuración</string>
   <string name="request_notification_permission_message">Para realizar esta acción, conceda acceso a las notificaciones.</string>
+  <string name="click_nearby_devices_message">Haga clic aquí para buscar dispositivos cercanos.</string>
+  <string name="your_device_name_message">El nombre de su dispositivo aparecerá aquí.</string>
+  <string name="nearby_devices_list_message">Aquí encontrará una lista de dispositivos cercanos. Toque en el nombre de un dispositivo para iniciar la transferencia de archivos.</string>
+  <string name="toolbar_back_button_content_description">Ir a la pantalla anterior</string>
 </resources>
