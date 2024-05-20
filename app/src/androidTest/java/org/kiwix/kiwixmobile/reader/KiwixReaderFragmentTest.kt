@@ -24,6 +24,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
+import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -76,6 +77,10 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
         )
       }
     }
+  }
+
+  init {
+    AccessibilityChecks.enable().setRunChecksFromRootView(true)
   }
 
   @Test

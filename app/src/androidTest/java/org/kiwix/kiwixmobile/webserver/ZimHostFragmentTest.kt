@@ -23,10 +23,16 @@ import android.content.Context
 import android.os.Build
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
+import androidx.test.espresso.accessibility.AccessibilityChecks
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
+import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import leakcanary.LeakAssertions
+import org.hamcrest.Matchers.allOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -72,6 +78,18 @@ class ZimHostFragmentTest {
   var permissionRules: GrantPermissionRule =
     GrantPermissionRule.grant(*permissions)
   private var context: Context? = null
+
+  init {
+    AccessibilityChecks.enable().apply {
+      setRunChecksFromRootView(true)
+      setSuppressingResultMatcher(
+        allOf(
+          matchesCheck(DuplicateClickableBoundsCheck::class.java),
+          matchesViews(withId(R.id.get_zim_nearby_device))
+        )
+      )
+    }
+  }
 
   @Before
   fun waitForIdle() {

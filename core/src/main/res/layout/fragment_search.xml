@@ -21,6 +21,7 @@
       app:layout_constraintBottom_toTopOf="@+id/loadingMoreDataIndicator"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
+      android:contentDescription="@string/searched_list"
       app:layout_constraintTop_toTopOf="parent"
       android:layout_marginTop="?actionBarSize"
       tools:listitem="@layout/list_item_search" />

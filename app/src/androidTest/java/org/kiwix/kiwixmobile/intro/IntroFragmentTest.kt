@@ -21,6 +21,7 @@ import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
+import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import leakcanary.LeakAssertions
@@ -41,6 +42,10 @@ class IntroFragmentTest : BaseActivityTest() {
   @Rule
   @JvmField
   var retryRule = RetryRule()
+
+  init {
+    AccessibilityChecks.enable().setRunChecksFromRootView(true)
+  }
 
   @Test
   fun viewIsSwipeableAndNavigatesToMain() {

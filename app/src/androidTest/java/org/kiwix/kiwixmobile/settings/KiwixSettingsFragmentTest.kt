@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.settings
 
 import android.Manifest
+import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
@@ -56,6 +57,10 @@ class KiwixSettingsFragmentTest {
   @JvmField
   var permissionRules: GrantPermissionRule =
     GrantPermissionRule.grant(*permissions)
+
+  init {
+    AccessibilityChecks.enable().setRunChecksFromRootView(true)
+  }
 
   @Before
   fun setup() {

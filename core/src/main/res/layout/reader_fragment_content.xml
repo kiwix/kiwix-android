@@ -111,6 +111,7 @@
       android:src="@drawable/action_find_previous"
       android:visibility="gone"
       app:fabSize="mini"
+      android:contentDescription="@string/pref_back_to_top"
       app:layout_anchor="@id/bottom_toolbar"
       app:layout_dodgeInsetEdges="bottom"
       tools:visibility="visible" />

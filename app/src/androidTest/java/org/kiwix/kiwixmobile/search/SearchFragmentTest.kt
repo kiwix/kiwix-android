@@ -23,13 +23,19 @@ import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
+import androidx.test.espresso.accessibility.AccessibilityChecks
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
+import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
 import leakcanary.LeakAssertions
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.ResponseBody
+import org.hamcrest.Matchers.allOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -85,6 +91,18 @@ class SearchFragmentTest : BaseActivityTest() {
           SharedPreferenceUtil(context)
         )
       }
+    }
+  }
+
+  init {
+    AccessibilityChecks.enable().apply {
+      setRunChecksFromRootView(true)
+      setSuppressingResultMatcher(
+        allOf(
+          matchesCheck(TouchTargetSizeCheck::class.java),
+          matchesViews(ViewMatchers.withId(R.id.menu_searchintext))
+        )
+      )
     }
   }
 
@@ -256,7 +274,7 @@ class SearchFragmentTest : BaseActivityTest() {
   }
 
   private fun getDownloadingZimFile(): File {
-    val zimFile = File(context.cacheDir, "stack_exchange.zim")
+    val zimFile = File(context.cacheDir, "ray_charles.zim")
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     return zimFile

@@ -26,10 +26,18 @@ import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
+import androidx.test.espresso.accessibility.AccessibilityChecks
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
+import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
+import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
 import leakcanary.LeakAssertions
+import org.hamcrest.core.AllOf.allOf
+import org.hamcrest.core.AnyOf.anyOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -69,6 +77,28 @@ class LocalFileTransferTest {
 
   private val instrumentation: Instrumentation by lazy {
     InstrumentationRegistry.getInstrumentation()
+  }
+
+  init {
+    AccessibilityChecks.enable().apply {
+      setRunChecksFromRootView(true)
+      setSuppressingResultMatcher(
+        anyOf(
+          allOf(
+            matchesCheck(SpeakableTextPresentCheck::class.java),
+            matchesViews(withId(R.id.tv_skip))
+          ),
+          allOf(
+            matchesCheck(TouchTargetSizeCheck::class.java),
+            matchesViews(withId(R.id.tv_skip))
+          ),
+          allOf(
+            matchesCheck(TouchTargetSizeCheck::class.java),
+            matchesViews(withId(R.id.text_view_device_name))
+          )
+        )
+      )
+    }
   }
 
   @Before

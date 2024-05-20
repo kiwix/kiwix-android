@@ -22,6 +22,7 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
@@ -66,6 +67,10 @@ class KiwixSplashActivityTest {
   var permissionRules: GrantPermissionRule =
     GrantPermissionRule.grant(*permissions)
   private lateinit var context: Context
+
+  init {
+    AccessibilityChecks.enable().setRunChecksFromRootView(true)
+  }
 
   @Before
   fun setUp() {

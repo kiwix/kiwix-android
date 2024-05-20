@@ -18,6 +18,7 @@
   <string name="save_media_error">An error occurred when trying to save the media!</string>
   <string name="save_media_saved">Saved media as %s to Downloads/org.kiwix…/</string>
   <string name="search_label">Search</string>
+  <string name="searched_list">Searched list</string>
   <string name="choose_file" tools:keep="@string/choose_file">Select a Content File (*.zim)</string>
   <string name="open_in_new_tab">Open link in new tab?</string>
   <string name="hotspot_service_channel_name" tools:keep="@string/hotspot_service_channel_name">Hotspot Service Channel</string>
@@ -352,7 +353,7 @@
   <string name="empty_string" />
   <string name="click_nearby_devices_message">Click here to search for nearby devices.</string>
   <string name="your_device_name_message">Your device name will appear here.</string>
-  <string name="nearby_devices_list_message">Here, you\'ll find a list of nearby devices. Tap on a device\'s name to initiate file transfer.</string>
+  <string name="nearby_devices_list_message">Here, you\’ll find a list of nearby devices. Tap on a device\’s name to initiate file transfer.</string>
   <string name="transfer_zim_files_list_message">Here, you\’ll find the list of available ZIM files for transfer.</string>
   <string name="storage_selection_dialog_accessibility_description">Select storage for downloading ZIM files.</string>
   <string name="zim_file_content_description">ZIM file which has the reading content</string>

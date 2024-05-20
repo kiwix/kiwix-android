@@ -23,6 +23,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
@@ -153,7 +154,7 @@ class ZimHostRobot : BaseRobot() {
   }
 
   fun stopServer() {
-    clickOn(ViewId(R.id.startServerButton))
+    testFlakyView({ onView(withId(R.id.startServerButton)).perform(click()) })
   }
 
   fun assertServerStopped() {

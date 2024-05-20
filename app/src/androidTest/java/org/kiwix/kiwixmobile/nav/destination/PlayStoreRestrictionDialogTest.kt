@@ -23,6 +23,7 @@ import android.content.Context
 import android.os.Build
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
+import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
@@ -63,6 +64,10 @@ class PlayStoreRestrictionDialogTest {
   var permissionRules: GrantPermissionRule =
     GrantPermissionRule.grant(*permissions)
   private var context: Context? = null
+
+  init {
+    AccessibilityChecks.enable().setRunChecksFromRootView(true)
+  }
 
   @Before
   fun waitForIdle() {

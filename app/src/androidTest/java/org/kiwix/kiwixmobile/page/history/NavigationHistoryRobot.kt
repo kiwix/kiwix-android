@@ -18,6 +18,10 @@
 package org.kiwix.kiwixmobile.page.history
 
 import android.util.Log
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.longClick
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
@@ -30,6 +34,7 @@ import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 fun navigationHistory(func: NavigationHistoryRobot.() -> Unit) =
   NavigationHistoryRobot().applyWithViewHierarchyPrinting(func)
@@ -83,7 +88,7 @@ class NavigationHistoryRobot : BaseRobot() {
 
   fun longClickOnBackwardButton() {
     pauseForBetterTestPerformance()
-    longClickOn(ViewId(R.id.bottom_toolbar_arrow_back))
+    testFlakyView({ onView(withId(R.id.bottom_toolbar_arrow_back)).perform(longClick()) })
   }
 
   fun longClickOnForwardButton() {
@@ -139,5 +144,9 @@ class NavigationHistoryRobot : BaseRobot() {
 
   private fun pauseForBetterTestPerformance() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
+  }
+
+  fun clickOnReaderFragment() {
+    testFlakyView({ onView(withId(R.id.readerFragment)).perform(click()) })
   }
 }

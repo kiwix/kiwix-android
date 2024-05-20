@@ -51,6 +51,12 @@ object Libs {
     Versions.androidx_test_espresso
 
   /**
+   * https://developer.android.com/testing
+   */
+  const val espresso_accessibility: String = "androidx.test.espresso:espresso-accessibility:" +
+    Versions.androidx_test_espresso
+
+  /**
    * https://github.com/square/retrofit
    */
   const val adapter_rxjava2: String = "com.squareup.retrofit2:adapter-rxjava2:" +
@@ -343,5 +349,6 @@ object Libs {
   /**
    * https://github.com/deano2390/MaterialShowcaseView
    */
-  const val material_show_case_view: String = "com.github.deano2390:MaterialShowcaseView:" + Versions.material_show_case_view
+  const val material_show_case_view: String =
+    "com.github.deano2390:MaterialShowcaseView:" + Versions.material_show_case_view
 }

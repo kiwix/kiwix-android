@@ -28,14 +28,15 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.Locator
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.ContentDesc
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
@@ -87,7 +88,7 @@ class NoteRobot : BaseRobot() {
 
   fun openNoteFragment() {
     openDrawer()
-    clickOn(TextId(R.string.pref_notes))
+    testFlakyView({ onView(withText(R.string.pref_notes)).perform(click()) })
   }
 
   fun clickOnSavedNote() {
@@ -116,7 +117,7 @@ class NoteRobot : BaseRobot() {
   }
 
   fun clickOnTrashIcon() {
-    clickOn(ContentDesc(R.string.pref_clear_notes))
+    testFlakyView({ onView(withContentDescription(R.string.pref_clear_notes)).perform(click()) })
   }
 
   fun assertDeleteNoteDialogDisplayed() {

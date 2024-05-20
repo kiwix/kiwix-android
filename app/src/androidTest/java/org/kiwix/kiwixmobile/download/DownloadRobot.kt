@@ -102,7 +102,7 @@ class DownloadRobot : BaseRobot() {
   }
 
   private fun stopDownload() {
-    clickOn(ViewId(R.id.stop))
+    testFlakyView({ onView(withId(R.id.stop)).perform(click()) })
   }
 
   fun pauseDownload() {

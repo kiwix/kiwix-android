@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.help
 
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.kiwix.kiwixmobile.BaseRobot
@@ -27,6 +28,7 @@ import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.main.KIWIX_APK_WEBSITE_URL
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 fun help(func: HelpRobot.() -> Unit) = HelpRobot().apply(func)
 
@@ -37,7 +39,7 @@ class HelpRobot : BaseRobot() {
   }
 
   fun clickOnWhatDoesKiwixDo() {
-    clickOn(TextId(string.help_2))
+    testFlakyView({ onView(withText(string.help_2)).perform(click()) })
   }
 
   fun assertWhatDoesKiwixDoIsExpanded() {
