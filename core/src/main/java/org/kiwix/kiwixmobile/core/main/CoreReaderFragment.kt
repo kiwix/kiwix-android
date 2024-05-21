@@ -73,9 +73,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
@@ -113,9 +110,11 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationP
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.findFirstTextView
+import org.kiwix.kiwixmobile.core.extensions.closeFullScreenMode
 import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
+import org.kiwix.kiwixmobile.core.extensions.showFullScreenMode
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.DocumentParser.SectionsListener
@@ -1483,12 +1482,7 @@ abstract class CoreReaderFragment :
     exitFullscreenButton?.visibility = View.VISIBLE
     exitFullscreenButton?.background?.alpha = 153
     val window = requireActivity().window
-    WindowCompat.setDecorFitsSystemWindows(window, true)
-    WindowInsetsControllerCompat(window, window.decorView.rootView).apply {
-      hide(WindowInsetsCompat.Type.systemBars())
-      systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-      window.decorView.rootView.requestLayout()
-    }
+    window.decorView.showFullScreenMode(window)
     getCurrentWebView()?.apply {
       requestLayout()
       translationY = 0f
@@ -1499,18 +1493,14 @@ abstract class CoreReaderFragment :
   @Suppress("MagicNumber")
   @OnClick(R2.id.activity_main_fullscreen_button)
   open fun closeFullScreen() {
+    sharedPreferenceUtil?.putPrefFullScreen(false)
     toolbarContainer?.visibility = View.VISIBLE
     updateBottomToolbarVisibility()
     exitFullscreenButton?.visibility = View.GONE
     exitFullscreenButton?.background?.alpha = 255
     val window = requireActivity().window
-    WindowCompat.setDecorFitsSystemWindows(window, true)
-    WindowInsetsControllerCompat(window, window.decorView.rootView).apply {
-      show(WindowInsetsCompat.Type.systemBars())
-      window.decorView.rootView.requestLayout()
-    }
+    window.decorView.closeFullScreenMode(window)
     getCurrentWebView()?.requestLayout()
-    sharedPreferenceUtil?.putPrefFullScreen(false)
   }
 
   override fun openExternalUrl(intent: Intent) {
@@ -1771,12 +1761,12 @@ abstract class CoreReaderFragment :
     }
   }
 
-  private fun isInFullScreenMode(): Boolean = sharedPreferenceUtil?.prefFullScreen == true
+  protected fun isInFullScreenMode(): Boolean = sharedPreferenceUtil?.prefFullScreen == true
 
   private fun updateBottomToolbarVisibility() {
     bottomToolbar?.let {
       if (urlIsValid() &&
-        tabSwitcherRoot?.visibility != View.VISIBLE
+        tabSwitcherRoot?.visibility != View.VISIBLE && !isInFullScreenMode()
       ) {
         it.visibility = View.VISIBLE
       } else {

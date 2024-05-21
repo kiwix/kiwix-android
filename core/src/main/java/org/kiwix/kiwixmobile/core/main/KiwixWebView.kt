@@ -24,23 +24,22 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.util.AttributeSet
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import android.view.ContextMenu
 import android.view.ViewGroup
 import android.webkit.WebView
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import io.reactivex.disposables.CompositeDisposable
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.closeFullScreenMode
+import org.kiwix.kiwixmobile.core.extensions.showFullScreenMode
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.videowebview.VideoEnabledWebChromeClient.ToggledFullscreenCallback
 import org.kiwix.videowebview.VideoEnabledWebView
 import javax.inject.Inject
@@ -65,16 +64,11 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   private val compositeDisposable = CompositeDisposable()
 
   private fun setWindowVisibility(isFullScreen: Boolean) {
-    val window = (context as Activity).window
-    WindowCompat.setDecorFitsSystemWindows(window, !isFullScreen)
-    WindowInsetsControllerCompat(window, window.decorView.rootView).apply {
+    (context as Activity).window.apply {
       if (isFullScreen) {
-        hide(WindowInsetsCompat.Type.systemBars())
-        systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        window.decorView.rootView.requestLayout()
+        showFullScreenMode(this)
       } else {
-        show(WindowInsetsCompat.Type.systemBars())
-        window.decorView.rootView.requestLayout()
+        closeFullScreenMode(this)
       }
     }
   }

@@ -203,7 +203,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     ) {
       exitBook()
     }
-    if (isFullScreenVideo) {
+    if (isFullScreenVideo || isInFullScreenMode()) {
       hideNavBar()
     }
   }
@@ -275,7 +275,11 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private fun showNavBar() {
-    requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view).visibility = VISIBLE
+    // show the navBar if fullScreenMode is not active.
+    if (!isInFullScreenMode()) {
+      requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view).visibility =
+        VISIBLE
+    }
   }
 
   override fun createNewTab() {

@@ -19,9 +19,15 @@
 package org.kiwix.kiwixmobile.core.extensions
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.TooltipCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 
@@ -80,4 +86,36 @@ fun View.snack(
 fun View.setToolTipWithContentDescription(description: String) {
   contentDescription = description
   TooltipCompat.setTooltipText(this, description)
+}
+
+fun View.showFullScreenMode(window: Window) {
+  WindowCompat.setDecorFitsSystemWindows(window, false)
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+    WindowInsetsControllerCompat(window, window.decorView).apply {
+      hide(WindowInsetsCompat.Type.statusBars())
+      hide(WindowInsetsCompat.Type.displayCutout())
+      systemBarsBehavior =
+        WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    }
+  }
+  @Suppress("Deprecation")
+  window.apply {
+    addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+    clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
+  }
+}
+
+fun View.closeFullScreenMode(window: Window) {
+  WindowCompat.setDecorFitsSystemWindows(window, true)
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+    WindowInsetsControllerCompat(window, window.decorView).apply {
+      show(WindowInsetsCompat.Type.systemBars())
+      show(WindowInsetsCompat.Type.displayCutout())
+    }
+  }
+  @Suppress("DEPRECATION")
+  window.apply {
+    addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
+    clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+  }
 }
