@@ -109,7 +109,7 @@ fun View.closeFullScreenMode(window: Window) {
   WindowCompat.setDecorFitsSystemWindows(window, true)
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
     WindowInsetsControllerCompat(window, window.decorView).apply {
-      show(WindowInsetsCompat.Type.systemBars())
+      show(WindowInsetsCompat.Type.statusBars())
       show(WindowInsetsCompat.Type.displayCutout())
     }
   }
