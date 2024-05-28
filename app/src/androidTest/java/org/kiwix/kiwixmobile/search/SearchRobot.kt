@@ -108,6 +108,8 @@ class SearchRobot : BaseRobot() {
   }
 
   fun searchAndClickOnArticle(searchString: String) {
+    // wait a bit to properly load the ZIM file in the reader
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
     openSearchScreen()
     searchWithFrequentlyTypedWords(searchString)
     clickOnSearchItemInSearchList()
