@@ -134,6 +134,7 @@ import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_PAUSE_OR_RESUME_TTS
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_STOP_TTS
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate
@@ -944,7 +945,7 @@ abstract class CoreReaderFragment :
     drawerLayout?.openDrawer(GravityCompat.END)
   }
 
-  @Suppress("ReturnCount")
+  @Suppress("ReturnCount", "NestedBlockDepth")
   override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
     when {
       tabSwitcherRoot?.visibility == View.VISIBLE -> {
@@ -973,6 +974,30 @@ abstract class CoreReaderFragment :
       }
 
       getCurrentWebView()?.canGoBack() == true -> {
+        getCurrentWebView()?.apply {
+          val webViewBackWordHistoryList = mutableListOf<String>()
+          try {
+            // Get the webView's backward history
+            copyBackForwardList().let { webBackForwardList ->
+              (webBackForwardList.currentIndex downTo 0)
+                .map(webBackForwardList::getItemAtIndex)
+                .mapTo(webViewBackWordHistoryList) { it.url }
+                .reverse()
+            }
+          } catch (ignore: Exception) {
+            // Catch any exception thrown by the WebView since
+            // `copyBackForwardList` can throw an error.
+          }
+          // Check if the WebView has two items in backward history.
+          // Since here we need to handle the back button.
+          if (webViewBackWordHistoryList.size == 2 &&
+            isHomePageOfServiceWorkerZimFiles(url, webViewBackWordHistoryList)
+          ) {
+            // If it is the last page that is showing to the user, then exit the application.
+            return@onBackPressed FragmentActivityExtensions.Super.ShouldCall
+          }
+        }
+        // Otherwise, go to the previous page.
         getCurrentWebView()?.goBack()
         return FragmentActivityExtensions.Super.ShouldNotCall
       }
@@ -980,6 +1005,14 @@ abstract class CoreReaderFragment :
       else -> return FragmentActivityExtensions.Super.ShouldCall
     }
   }
+
+  private fun isHomePageOfServiceWorkerZimFiles(
+    currentUrl: String?,
+    backwardHistoryList: List<String>
+  ): Boolean =
+    currentUrl != null &&
+      backwardHistoryList[1] == currentUrl &&
+      backwardHistoryList[0] == "$CONTENT_PREFIX${zimReaderContainer?.mainPage}"
 
   /**
    * Sets the title for toolbar, controlling the title of toolbar.
@@ -1908,6 +1941,7 @@ abstract class CoreReaderFragment :
 
   @OnClick(R2.id.bottom_toolbar_home)
   fun openMainPage() {
+    Log.e("ZIMFILEREADER1", "openMainPage ")
     val articleUrl = zimReaderContainer?.mainPage
     openArticle(articleUrl)
   }
