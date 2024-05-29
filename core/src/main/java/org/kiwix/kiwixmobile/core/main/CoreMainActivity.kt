@@ -122,7 +122,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       }
     }
     if (!sharedPreferenceUtil.prefIsRecentSearchMigrated) {
-      objectBoxToRoomMigrator.migrateObjectBoxDataToRoom()
+      // run the migration on background thread to avoid any UI related issues.
+      CoroutineScope(Dispatchers.IO).launch {
+        objectBoxToRoomMigrator.migrateObjectBoxDataToRoom()
+      }
     }
   }
 

@@ -102,7 +102,7 @@ class ObjectBoxToRoomMigratorTest {
     // Migrate data into Room database
     objectBoxToRoomMigrator.migrateRecentSearch(box)
     val actualDataAfterMigration = kiwixRoomDatabase.recentSearchRoomDao().fullSearch().first()
-    assertEquals(1, actual.size)
+    assertEquals(2, actualDataAfterMigration.size)
     val existingItem =
       actualDataAfterMigration.find {
         it.searchTerm == existingSearchTerm && it.zimId == existingZimId
@@ -138,14 +138,12 @@ class ObjectBoxToRoomMigratorTest {
     assertTrue(actualDataAfterInvalidMigration.isEmpty())
 
     // Test large data migration for recent searches
-    val numEntities = 1000
+    val numEntities = 5000
     // Insert a large number of recent search entities into ObjectBox
     for (i in 1..numEntities) {
       val searchTerm = "search_$i"
       val zimId = "$i"
-      val recentSearchEntity =
-        RecentSearchEntity(searchTerm = searchTerm, zimId = zimId, url = "$expectedUrl$i")
-      box.put(recentSearchEntity)
+      box.put(RecentSearchEntity(searchTerm = searchTerm, zimId = zimId, url = "$expectedUrl$i"))
     }
     val startTime = System.currentTimeMillis()
     // Migrate data into Room database
@@ -157,7 +155,7 @@ class ObjectBoxToRoomMigratorTest {
       kiwixRoomDatabase.recentSearchRoomDao().fullSearch().first()
     assertEquals(numEntities, actualDataAfterLargeMigration.size)
     // Assert that the migration completes within a reasonable time frame
-    assertTrue("Migration took too long: $migrationTime ms", migrationTime < 5000)
+    assertTrue("Migration took too long: $migrationTime ms", migrationTime < 10000)
   }
 
   private fun clearRecentSearchDatabases(box: Box<RecentSearchEntity>) {

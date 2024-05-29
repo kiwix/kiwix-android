@@ -21,9 +21,6 @@ package org.kiwix.kiwixmobile.core.data.remote
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
@@ -35,25 +32,23 @@ class ObjectBoxToRoomMigrator {
   @Inject lateinit var boxStore: BoxStore
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
-  fun migrateObjectBoxDataToRoom() {
+  suspend fun migrateObjectBoxDataToRoom() {
     CoreApp.coreComponent.inject(this)
     migrateRecentSearch(boxStore.boxFor())
     // TODO we will migrate here for other entities
   }
 
-  fun migrateRecentSearch(box: Box<RecentSearchEntity>) {
+  suspend fun migrateRecentSearch(box: Box<RecentSearchEntity>) {
     val searchRoomEntityList = box.all
     searchRoomEntityList.forEachIndexed { _, recentSearchEntity ->
-      CoroutineScope(Dispatchers.IO).launch {
-        kiwixRoomDatabase.recentSearchRoomDao()
-          .saveSearch(
-            recentSearchEntity.searchTerm,
-            recentSearchEntity.zimId,
-            recentSearchEntity.url
-          )
-        // removing the single entity from the object box after migration.
-        box.remove(recentSearchEntity.id)
-      }
+      kiwixRoomDatabase.recentSearchRoomDao()
+        .saveSearch(
+          recentSearchEntity.searchTerm,
+          recentSearchEntity.zimId,
+          recentSearchEntity.url
+        )
+      // removing the single entity from the object box after migration.
+      box.remove(recentSearchEntity.id)
     }
     sharedPreferenceUtil.putPrefRecentSearchMigrated(true)
   }
