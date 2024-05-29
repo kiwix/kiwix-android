@@ -134,6 +134,7 @@ import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_PAUSE_OR_RESUME_TTS
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_STOP_TTS
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate
@@ -306,6 +307,8 @@ abstract class CoreReaderFragment :
   @JvmField
   @BindView(R2.id.no_open_book_text)
   var noOpenBookText: TextView? = null
+
+  private var isFirstTimeMainPageLoaded = true
 
   @JvmField
   @Inject
@@ -921,14 +924,14 @@ abstract class CoreReaderFragment :
 
   @Suppress("MagicNumber")
   private fun updateBottomToolbarArrowsAlpha() {
-    bottomToolbarArrowBack?.let {
+    bottomToolbarArrowForward?.let {
       if (getCurrentWebView()?.canGoForward() == true) {
         bottomToolbarArrowForward?.alpha = 1f
       } else {
         bottomToolbarArrowForward?.alpha = 0.6f
       }
     }
-    bottomToolbarArrowForward?.let {
+    bottomToolbarArrowBack?.let {
       if (getCurrentWebView()?.canGoBack() == true) {
         bottomToolbarArrowBack?.alpha = 1f
       } else {
@@ -942,7 +945,7 @@ abstract class CoreReaderFragment :
     drawerLayout?.openDrawer(GravityCompat.END)
   }
 
-  @Suppress("ReturnCount")
+  @Suppress("ReturnCount", "NestedBlockDepth")
   override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
     when {
       tabSwitcherRoot?.visibility == View.VISIBLE -> {
@@ -971,6 +974,30 @@ abstract class CoreReaderFragment :
       }
 
       getCurrentWebView()?.canGoBack() == true -> {
+        getCurrentWebView()?.apply {
+          val webViewBackWordHistoryList = mutableListOf<String>()
+          try {
+            // Get the webView's backward history
+            copyBackForwardList().let { webBackForwardList ->
+              (webBackForwardList.currentIndex downTo 0)
+                .map(webBackForwardList::getItemAtIndex)
+                .mapTo(webViewBackWordHistoryList) { it.url }
+                .reverse()
+            }
+          } catch (ignore: Exception) {
+            // Catch any exception thrown by the WebView since
+            // `copyBackForwardList` can throw an error.
+          }
+          // Check if the WebView has two items in backward history.
+          // Since here we need to handle the back button.
+          if (webViewBackWordHistoryList.size == 2 &&
+            isHomePageOfServiceWorkerZimFiles(url, webViewBackWordHistoryList)
+          ) {
+            // If it is the last page that is showing to the user, then exit the application.
+            return@onBackPressed FragmentActivityExtensions.Super.ShouldCall
+          }
+        }
+        // Otherwise, go to the previous page.
         getCurrentWebView()?.goBack()
         return FragmentActivityExtensions.Super.ShouldNotCall
       }
@@ -978,6 +1005,14 @@ abstract class CoreReaderFragment :
       else -> return FragmentActivityExtensions.Super.ShouldCall
     }
   }
+
+  private fun isHomePageOfServiceWorkerZimFiles(
+    currentUrl: String?,
+    backwardHistoryList: List<String>
+  ): Boolean =
+    currentUrl != null &&
+      backwardHistoryList[1] == currentUrl &&
+      backwardHistoryList[0] == "$CONTENT_PREFIX${zimReaderContainer?.mainPage}"
 
   /**
    * Sets the title for toolbar, controlling the title of toolbar.
@@ -1906,6 +1941,7 @@ abstract class CoreReaderFragment :
 
   @OnClick(R2.id.bottom_toolbar_home)
   fun openMainPage() {
+    Log.e("ZIMFILEREADER1", "openMainPage ")
     val articleUrl = zimReaderContainer?.mainPage
     openArticle(articleUrl)
   }
@@ -2036,8 +2072,34 @@ abstract class CoreReaderFragment :
     }
   }
 
+  @Suppress("MagicNumber")
   override fun webViewUrlFinishedLoading() {
     if (isAdded) {
+      // Check whether the current loaded URL is the main page URL.
+      // If the URL is the main page URL, then clear the WebView history
+      // because WebView cannot clear the history for the current page.
+      // If the current URL is a service worker URL and we clear the history,
+      // it will not remove the service worker from the history, so it will remain in the history.
+      // To clear this, we are clearing the history when the main page is loaded for the first time.
+      val mainPageUrl = zimReaderContainer?.mainPage
+      if (mainPageUrl != null &&
+        isFirstTimeMainPageLoaded &&
+        getCurrentWebView()?.url?.endsWith(mainPageUrl) == true
+      ) {
+        // Set isFirstTimeMainPageLoaded to false. This ensures that if the user clicks
+        // on the home menu after visiting multiple pages, the history will not be erased.
+        isFirstTimeMainPageLoaded = false
+        getCurrentWebView()?.clearHistory()
+        updateBottomToolbarArrowsAlpha()
+        // Open the main page after clearing the history because some service worker ZIM files
+        // sometimes do not load properly.
+        Handler(Looper.getMainLooper()).postDelayed({ openMainPage() }, 300)
+      }
+      if (getCurrentWebView()?.url?.endsWith(UNINITIALISER_ADDRESS) == true) {
+        // Do not save this item in history since it is only for uninitializing the service worker.
+        // Simply skip the next step.
+        return
+      }
       updateTableOfContents()
       tabsAdapter?.notifyDataSetChanged()
       updateUrlProcessor()
