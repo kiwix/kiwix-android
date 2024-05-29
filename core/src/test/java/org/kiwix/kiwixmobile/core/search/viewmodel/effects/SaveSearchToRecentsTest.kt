@@ -26,13 +26,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
+import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 
 internal class SaveSearchToRecentsTest {
 
-  private val newRecentSearchDao: NewRecentSearchDao = mockk()
+  private val newRecentSearchDao: RecentSearchRoomDao = mockk()
   private val searchListItem = RecentSearchListItem("", ZimFileReader.CONTENT_PREFIX)
 
   private val activity: AppCompatActivity = mockk()
