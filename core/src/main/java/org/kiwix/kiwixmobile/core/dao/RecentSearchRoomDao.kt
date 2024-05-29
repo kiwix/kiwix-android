@@ -20,13 +20,8 @@ package org.kiwix.kiwixmobile.core.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import io.objectbox.Box
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 
@@ -79,18 +74,6 @@ abstract class RecentSearchRoomDao {
 
   @Query("DELETE FROM RecentSearchRoomEntity")
   abstract fun deleteSearchHistory()
-
-  fun migrationToRoomInsert(
-    box: Box<RecentSearchEntity>
-  ) {
-    val searchRoomEntityList = box.all
-    searchRoomEntityList.forEachIndexed { _, recentSearchEntity ->
-      CoroutineScope(Dispatchers.IO).launch {
-        saveSearch(recentSearchEntity.searchTerm, recentSearchEntity.zimId, recentSearchEntity.url)
-        // Todo Should we remove object store data now?
-      }
-    }
-  }
 
   companion object {
     private const val NUM_RECENT_RESULTS = 100

@@ -53,7 +53,7 @@ internal class SaveSearchToRecentsTest {
 
   @Test
   fun `invoke with non null Id saves search`() = runBlocking {
-    val id = "id"
+    val id = "8812214350305159407L"
     SaveSearchToRecents(
       newRecentSearchDao,
       searchListItem,
