@@ -67,7 +67,7 @@ import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SearchViewModel @Inject constructor(
-  private val recentSearchDao: RecentSearchRoomDao,
+  private val recentSearchRoomDao: RecentSearchRoomDao,
   private val zimReaderContainer: ZimReaderContainer,
   private val searchResultGenerator: SearchResultGenerator
 ) : ViewModel() {
@@ -99,7 +99,7 @@ class SearchViewModel @Inject constructor(
     combine(
       filter.asFlow(),
       searchResults(),
-      recentSearchDao.recentSearches(zimReaderContainer.id),
+      recentSearchRoomDao.recentSearches(zimReaderContainer.id),
       searchOrigin.asFlow()
     ) { searchTerm, searchResultsWithTerm, recentResults, searchOrigin ->
       SearchState(
@@ -155,7 +155,7 @@ class SearchViewModel @Inject constructor(
     _effects.trySend(
       DeleteRecentSearch(
         it.searchListItem,
-        recentSearchDao,
+        recentSearchRoomDao,
         viewModelScope
       )
     ).isSuccess
@@ -172,7 +172,7 @@ class SearchViewModel @Inject constructor(
   private fun saveSearchAndOpenItem(searchListItem: SearchListItem, openInNewTab: Boolean) {
     _effects.trySend(
       SaveSearchToRecents(
-        recentSearchDao,
+        recentSearchRoomDao,
         searchListItem,
         zimReaderContainer.id,
         viewModelScope

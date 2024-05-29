@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.dao.entities
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 
-@Deprecated(message = "Replaced with Room")
 @Entity
 data class RecentSearchEntity(
   @Id var id: Long = 0L,

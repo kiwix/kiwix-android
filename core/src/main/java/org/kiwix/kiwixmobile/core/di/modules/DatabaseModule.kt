@@ -82,8 +82,7 @@ open class DatabaseModule {
     boxStore: BoxStore
   ) =
     KiwixRoomDatabase.getInstance(
-      context = context,
-      boxStore
+      context = context
     ) // The reason we can construct a database for the repo
 
   @Singleton

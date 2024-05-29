@@ -93,6 +93,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefIsBookmarksMigrated: Boolean
     get() = sharedPreferences.getBoolean(PREF_BOOKMARKS_MIGRATED, false)
 
+  val prefIsRecentSearchMigrated: Boolean
+    get() = sharedPreferences.getBoolean(PREF_RECENT_SEARCH_MIGRATED, false)
+
   val prefStorage: String
     get() {
       val storage = sharedPreferences.getString(PREF_STORAGE, null)
@@ -101,9 +104,11 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
           putPrefStorage(it)
           putStoragePosition(0)
         }
+
         !File(storage).isFileExist() -> getPublicDirectoryPath(defaultStorage()).also {
           putStoragePosition(0)
         }
+
         else -> storage
       }
     }
@@ -120,6 +125,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   fun putPrefBookMarkMigrated(isMigrated: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_BOOKMARKS_MIGRATED, isMigrated) }
+
+  fun putPrefRecentSearchMigrated(isMigrated: Boolean) =
+    sharedPreferences.edit { putBoolean(PREF_RECENT_SEARCH_MIGRATED, isMigrated) }
 
   fun putPrefLanguage(language: String) =
     sharedPreferences.edit { putString(PREF_LANG, language) }
@@ -280,5 +288,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val IS_PLAY_STORE_BUILD = "is_play_store_build"
     const val PREF_PLAY_STORE_RESTRICTION = "pref_play_store_restriction"
     const val PREF_BOOKMARKS_MIGRATED = "pref_bookmarks_migrated"
+    const val PREF_RECENT_SEARCH_MIGRATED = "pref_recent_search_migrated"
   }
 }

@@ -19,14 +19,9 @@
 package org.kiwix.kiwixmobile.core.data
 
 import android.content.Context
-import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
-import io.objectbox.BoxStore
-import io.objectbox.kotlin.boxFor
-import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
 
@@ -37,42 +32,18 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
 
   companion object {
     private var db: KiwixRoomDatabase? = null
-    fun getInstance(context: Context, boxStore: BoxStore): KiwixRoomDatabase {
+    fun getInstance(context: Context): KiwixRoomDatabase {
       return db ?: synchronized(KiwixRoomDatabase::class) {
         return@getInstance db
           ?: Room.databaseBuilder(context, KiwixRoomDatabase::class.java, "KiwixRoom.db")
-            // We have already database name called kiwix.db in order to avoid complexity we named as
-            // kiwixRoom.db
-            .addCallback(object : RoomDatabase.Callback() {
-              override fun onCreate(db: SupportSQLiteDatabase) {
-                super.onCreate(db)
-                Log.d("gouri", "onCreate")
-              }
-
-              override fun onOpen(db: SupportSQLiteDatabase) {
-                super.onOpen(db)
-                Log.d("gouri", "onOpen")
-              }
-
-              override fun onDestructiveMigration(db: SupportSQLiteDatabase) {
-                super.onDestructiveMigration(db)
-                Log.d("gouri", "onDestructiveMigration")
-              }
-            })
-            .build().also {
-              if (!BuildConfig.BUILD_TYPE.contentEquals("fdroid")) {
-                it.migrateRecentSearch(boxStore)
-              }
-            }
+            // We have already database name called kiwix.db in order to avoid complexity we named
+            // as kiwixRoom.db
+            .build()
       }
     }
 
     fun destroyInstance() {
       db = null
     }
-  }
-
-  fun migrateRecentSearch(boxStore: BoxStore) {
-    recentSearchRoomDao().migrationToRoomInsert(boxStore.boxFor())
   }
 }

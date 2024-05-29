@@ -47,6 +47,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
+import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
@@ -92,6 +93,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val navHostContainer: FragmentContainerView
   abstract val mainActivity: AppCompatActivity
   @Inject lateinit var objectBoxToLibkiwixMigrator: ObjectBoxToLibkiwixMigrator
+  @Inject lateinit var objectBoxToRoomMigrator: ObjectBoxToRoomMigrator
 
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.KiwixTheme)
@@ -118,6 +120,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       CoroutineScope(Dispatchers.IO).launch {
         objectBoxToLibkiwixMigrator.migrateBookmarksToLibkiwix()
       }
+    }
+    if (!sharedPreferenceUtil.prefIsRecentSearchMigrated) {
+      objectBoxToRoomMigrator.migrateObjectBoxDataToRoom()
     }
   }
 
