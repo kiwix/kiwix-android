@@ -22,11 +22,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import org.kiwix.kiwixmobile.core.dao.HistoryRoomDaoCoverts
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
+import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
 
 @Suppress("UnnecessaryAbstractClass")
-@Database(entities = [RecentSearchRoomEntity::class], version = 1)
+@Database(entities = [RecentSearchRoomEntity::class, HistoryRoomEntity::class], version = 2)
+@TypeConverters(HistoryRoomDaoCoverts::class)
 abstract class KiwixRoomDatabase : RoomDatabase() {
   abstract fun recentSearchRoomDao(): RecentSearchRoomDao
 
