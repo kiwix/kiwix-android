@@ -23,6 +23,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDaoCoverts
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
@@ -33,6 +36,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
 @TypeConverters(HistoryRoomDaoCoverts::class)
 abstract class KiwixRoomDatabase : RoomDatabase() {
   abstract fun recentSearchRoomDao(): RecentSearchRoomDao
+  abstract fun historyRoomDao(): HistoryRoomDao
 
   companion object {
     private var db: KiwixRoomDatabase? = null
@@ -42,7 +46,13 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
           ?: Room.databaseBuilder(context, KiwixRoomDatabase::class.java, "KiwixRoom.db")
             // We have already database name called kiwix.db in order to avoid complexity we named
             // as kiwixRoom.db
+            // .addMigrations(MIGRATION_1_2)
             .build()
+      }
+    }
+
+    private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
+      override fun migrate(database: SupportSQLiteDatabase) {
       }
     }
 

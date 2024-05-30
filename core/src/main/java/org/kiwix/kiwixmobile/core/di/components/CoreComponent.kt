@@ -29,6 +29,7 @@ import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
@@ -100,6 +101,7 @@ interface CoreComponent {
   fun objectBoxToLibkiwixMigrator(): ObjectBoxToLibkiwixMigrator
   fun libkiwixBookmarks(): LibkiwixBookmarks
   fun recentSearchRoomDao(): RecentSearchRoomDao
+  fun historyRoomDao(): HistoryRoomDao
   fun objectBoxToRoomMigrator(): ObjectBoxToRoomMigrator
   fun context(): Context
   fun downloader(): Downloader

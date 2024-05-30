@@ -20,19 +20,20 @@ package org.kiwix.kiwixmobile.core.page.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.dao.BasePageDao
 import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 
 data class DeletePageItems(
   private val state: PageState<*>,
-  private val pageDao: PageDao
+  private val basePageDao: BasePageDao
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     if (state.isInSelectionState) {
-      pageDao.deletePages(state.pageItems.filter(Page::isSelected))
+      basePageDao.deletePages(state.pageItems.filter(Page::isSelected))
     } else {
-      pageDao.deletePages(state.pageItems)
+      basePageDao.deletePages(state.pageItems)
     }
   }
 }
