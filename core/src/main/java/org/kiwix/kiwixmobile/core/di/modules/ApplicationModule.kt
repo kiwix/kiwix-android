@@ -31,6 +31,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
+import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.core.di.qualifiers.Computation
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
@@ -70,6 +71,10 @@ class ApplicationModule {
   @Provides
   @Singleton
   fun provideObjectBoxToLibkiwixMigrator() = ObjectBoxToLibkiwixMigrator()
+
+  @Provides
+  @Singleton
+  fun provideObjectBoxToRoomMigrator() = ObjectBoxToRoomMigrator()
 
   @IO
   @Provides

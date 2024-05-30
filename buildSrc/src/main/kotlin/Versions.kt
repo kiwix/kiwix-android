@@ -103,6 +103,8 @@ object Versions {
   const val junit: String = "1.1.5"
 
   const val material_show_case_view: String = "1.3.7"
+
+  const val roomVersion = "2.5.0"
 }
 
 /**

@@ -206,6 +206,8 @@ class AllProjectConfigurer {
       implementation(Libs.rxjava)
       implementation(Libs.preference_ktx)
       implementation(Libs.material_show_case_view)
+      implementation(Libs.roomKtx)
+      kapt(Libs.roomCompiler)
     }
   }
 }
