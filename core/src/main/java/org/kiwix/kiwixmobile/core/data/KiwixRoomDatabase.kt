@@ -46,13 +46,29 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
           ?: Room.databaseBuilder(context, KiwixRoomDatabase::class.java, "KiwixRoom.db")
             // We have already database name called kiwix.db in order to avoid complexity we named
             // as kiwixRoom.db
-            // .addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_1_2)
             .build()
       }
     }
 
     private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
       override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL(
+          """
+            CREATE TABLE IF NOT EXISTS `HistoryRoomEntity`(
+            `id` INTEGER NOT NULL,
+            `timeStamp` LONG NOT NULL,
+            `zimId` TEXT NOT NULL,
+            `historyUrl` TEXT NOT NULL,
+            `zimName` TEXT NOT NULL,
+            `favicon` TEXT,
+            `historyTitle` TEXT NOT NULL,
+            `dateString` TEXT NOT NULL,
+            `zimFilePath` TEXT NOT NULL,
+            PRIMARY KEY (`id`)
+          )
+          """
+        )
       }
     }
 

@@ -20,22 +20,18 @@ package org.kiwix.kiwixmobile.core.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.TypeConverter
 import androidx.room.Update
-import io.objectbox.Box
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 
 @Dao
-abstract class HistoryRoomDao : BasePageDao {
+abstract class HistoryRoomDao : PageRoomDao {
   @Query("SELECT * FROM HistoryRoomEntity ORDER BY HistoryRoomEntity.timeStamp DESC")
   abstract fun historyRoomEntity(): Flow<List<HistoryRoomEntity>>
 
@@ -48,36 +44,32 @@ abstract class HistoryRoomDao : BasePageDao {
     deleteHistory(pagesToDelete as List<HistoryListItem.HistoryItem>)
 
   @Query("SELECT * FROM HistoryRoomEntity WHERE historyUrl LIKE :url AND dateString LIKE :date")
-  abstract fun getHistoryItem(url: String, date: String): HistoryListItem.HistoryItem
-
-  fun getHistoryItem(historyItem: HistoryListItem.HistoryItem): HistoryListItem.HistoryItem =
-    getHistoryItem(historyItem.historyUrl, historyItem.dateString)
+  abstract fun getHistoryRoomEntity(url: String, date: String): HistoryRoomEntity?
 
   @Update
-  abstract fun updateHistoryItem(historyItem: HistoryListItem.HistoryItem)
+  abstract fun updateHistoryItem(historyRoomEntity: HistoryRoomEntity)
+
+  @Insert
+  abstract fun insertHistoryItem(historyRoomEntity: HistoryRoomEntity)
 
   fun saveHistory(historyItem: HistoryListItem.HistoryItem) {
-    val item = getHistoryItem(historyItem)
-    updateHistoryItem(item)
+    getHistoryRoomEntity(
+      historyItem.historyUrl,
+      historyItem.dateString
+    )?.let(::updateHistoryItem) ?: run {
+      insertHistoryItem(HistoryRoomEntity(historyItem))
+    }
+  }
+
+  fun deleteHistory(historyList: List<HistoryListItem.HistoryItem>) {
+    deleteHistoryList(historyList.map(::HistoryRoomEntity))
   }
 
   @Delete
-  abstract fun deleteHistory(historyList: List<HistoryListItem.HistoryItem>)
+  abstract fun deleteHistoryList(historyList: List<HistoryRoomEntity>)
 
   @Query("DELETE FROM HistoryRoomEntity")
   abstract fun deleteAllHistory()
-
-  fun migrationToRoomHistory(
-    box: Box<HistoryEntity>
-  ) {
-    val historyEntityList = box.all
-    historyEntityList.forEachIndexed { _, item ->
-      CoroutineScope(Dispatchers.IO).launch {
-        // saveHistory(HistoryListItem.HistoryItem(item))
-        // Todo Should we remove object store data now?
-      }
-    }
-  }
 }
 
 class HistoryRoomDaoCoverts {

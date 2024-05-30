@@ -18,18 +18,17 @@ package org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects
  *
  */
 
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.BasePageDao
-import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesState
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.DeletePageItems
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteAllNotes
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteSelectedNotes
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import javax.inject.Inject
 
 data class ShowDeleteNotesDialog(

@@ -1941,7 +1941,6 @@ abstract class CoreReaderFragment :
 
   @OnClick(R2.id.bottom_toolbar_home)
   fun openMainPage() {
-    Log.e("ZIMFILEREADER1", "openMainPage ")
     val articleUrl = zimReaderContainer?.mainPage
     openArticle(articleUrl)
   }

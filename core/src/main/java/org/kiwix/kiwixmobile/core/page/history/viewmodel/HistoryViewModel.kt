@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.page.history.viewmodel
 
-import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHistoryDialog

@@ -87,8 +87,8 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
         viewModelScope.launch {
           try {
             // basePageDao.pages().collect(::UpdatePages)
-          } catch (exception: Exception) {
-            exception.printStackTrace()
+          } catch (ignore: Exception) {
+            ignore.printStackTrace()
           }
         }
       }

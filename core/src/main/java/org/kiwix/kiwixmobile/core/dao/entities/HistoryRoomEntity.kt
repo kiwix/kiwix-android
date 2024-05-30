@@ -24,7 +24,7 @@ import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryIt
 
 @Entity
 data class HistoryRoomEntity(
-  @PrimaryKey var id: Long = 0L,
+  @PrimaryKey(autoGenerate = true) var id: Long = 0L,
   val zimId: String,
   val zimName: String,
   val zimFilePath: String,

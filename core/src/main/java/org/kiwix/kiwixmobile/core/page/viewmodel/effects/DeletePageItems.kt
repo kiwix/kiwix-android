@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.core.page.viewmodel.effects
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.BasePageDao
-import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 
