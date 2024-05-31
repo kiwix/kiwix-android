@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.page.history.viewmodel
 
+import kotlinx.coroutines.CoroutineScope
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHistoryDialog
@@ -57,8 +58,11 @@ class HistoryViewModel @Inject constructor(
     return state.copy(showAll = action.isChecked)
   }
 
-  override fun createDeletePageDialogEffect(state: HistoryState) =
-    ShowDeleteHistoryDialog(effects, state, basePageDao)
+  override fun createDeletePageDialogEffect(
+    state: HistoryState,
+    viewModelScope: CoroutineScope
+  ) =
+    ShowDeleteHistoryDialog(effects, state, basePageDao, viewModelScope)
 
   override fun deselectAllPages(state: HistoryState): HistoryState =
     state.copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })

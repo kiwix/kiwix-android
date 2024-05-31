@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.page.viewmodel
 
 import io.mockk.mockk
+import kotlinx.coroutines.CoroutineScope
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -61,7 +62,10 @@ class TestablePageViewModel(
   override fun deselectAllPages(state: TestablePageState): TestablePageState =
     state.copy(searchTerm = "deselectAllPagesCalled")
 
-  override fun createDeletePageDialogEffect(state: TestablePageState): SideEffect<*> {
+  override fun createDeletePageDialogEffect(
+    state: TestablePageState,
+    viewModelScope: CoroutineScope
+  ): SideEffect<*> {
     createDeletePageDialogEffectCalled = true
     return mockk()
   }

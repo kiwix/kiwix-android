@@ -20,10 +20,12 @@ package org.kiwix.kiwixmobile.core.page.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.rx2.asFlowable
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.BasePageDao
@@ -113,7 +115,7 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
   ): S
 
   private fun offerShowDeleteDialog(state: S): S {
-    effects.offer(createDeletePageDialogEffect(state))
+    effects.offer(createDeletePageDialogEffect(state, viewModelScope = viewModelScope))
     return state
   }
 
@@ -150,5 +152,5 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
     super.onCleared()
   }
 
-  abstract fun createDeletePageDialogEffect(state: S): SideEffect<*>
+  abstract fun createDeletePageDialogEffect(state: S, viewModelScope: CoroutineScope): SideEffect<*>
 }

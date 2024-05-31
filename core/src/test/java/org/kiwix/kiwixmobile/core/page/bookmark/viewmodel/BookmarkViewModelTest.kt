@@ -24,6 +24,9 @@ import io.mockk.mockk
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -47,6 +50,7 @@ internal class BookmarkViewModelTest {
   private val libkiwixBookMarks: LibkiwixBookmarks = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
+  private val viewModelScope = CoroutineScope(Dispatchers.IO)
 
   private lateinit var viewModel: BookmarkViewModel
 
@@ -128,11 +132,16 @@ internal class BookmarkViewModelTest {
   }
 
   @Test
-  internal fun `createDeletePageDialogEffect returns correct dialog`() {
+  internal fun `createDeletePageDialogEffect returns correct dialog`() = runTest {
     assertThat(
-      viewModel.createDeletePageDialogEffect(bookmarkState())
+      viewModel.createDeletePageDialogEffect(bookmarkState(), viewModelScope)
     ).isEqualTo(
-      ShowDeleteBookmarksDialog(viewModel.effects, bookmarkState(), libkiwixBookMarks)
+      ShowDeleteBookmarksDialog(
+        viewModel.effects,
+        bookmarkState(),
+        libkiwixBookMarks,
+        viewModelScope
+      )
     )
   }
 

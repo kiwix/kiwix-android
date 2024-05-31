@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.CoroutineScope
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.BasePageDao
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
@@ -34,14 +35,15 @@ import javax.inject.Inject
 data class ShowDeleteBookmarksDialog(
   private val effects: PublishProcessor<SideEffect<*>>,
   private val state: PageState<LibkiwixBookmarkItem>,
-  private val basePageDao: BasePageDao
+  private val basePageDao: BasePageDao,
+  private val viewModelScope: CoroutineScope
 ) : SideEffect<Unit> {
   @Inject lateinit var dialogShower: DialogShower
   override fun invokeWith(activity: AppCompatActivity) {
     activity.cachedComponent.inject(this)
     dialogShower.show(
       if (state.isInSelectionState) DeleteSelectedBookmarks else DeleteAllBookmarks,
-      { effects.offer(DeletePageItems(state, basePageDao)) }
+      { effects.offer(DeletePageItems(state, basePageDao, viewModelScope)) }
     )
   }
 }

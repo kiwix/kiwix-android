@@ -5,6 +5,9 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
@@ -21,30 +24,33 @@ internal class ShowDeleteHistoryDialogTest {
   private val historyDao = mockk<HistoryDao>()
   val activity = mockk<CoreMainActivity>()
   private val dialogShower = mockk<DialogShower>(relaxed = true)
+  private val viewModelScope = CoroutineScope(Dispatchers.IO)
 
   @Test
-  fun `invoke with shows dialog that offers ConfirmDelete action`() {
+  fun `invoke with shows dialog that offers ConfirmDelete action`() = runBlocking {
     val showDeleteHistoryDialog =
       ShowDeleteHistoryDialog(
         effects,
         historyState(),
-        historyDao
+        historyDao,
+        viewModelScope
       )
     mockkActivityInjection(showDeleteHistoryDialog)
     val lambdaSlot = slot<() -> Unit>()
     showDeleteHistoryDialog.invokeWith(activity)
     verify { dialogShower.show(any(), capture(lambdaSlot)) }
     lambdaSlot.captured.invoke()
-    verify { effects.offer(DeletePageItems(historyState(), historyDao)) }
+    verify { effects.offer(DeletePageItems(historyState(), historyDao, viewModelScope)) }
   }
 
   @Test
-  fun `invoke with selected item shows dialog with delete selected items title`() {
+  fun `invoke with selected item shows dialog with delete selected items title`() = runBlocking {
     val showDeleteHistoryDialog =
       ShowDeleteHistoryDialog(
         effects,
         historyState(listOf(historyItem(isSelected = true))),
-        historyDao
+        historyDao,
+        viewModelScope
       )
     mockkActivityInjection(showDeleteHistoryDialog)
     showDeleteHistoryDialog.invokeWith(activity)
@@ -52,12 +58,13 @@ internal class ShowDeleteHistoryDialogTest {
   }
 
   @Test
-  fun `invoke with no selected items shows dialog with delete all items title`() {
+  fun `invoke with no selected items shows dialog with delete all items title`() = runBlocking {
     val showDeleteHistoryDialog =
       ShowDeleteHistoryDialog(
         effects,
         historyState(),
-        historyDao
+        historyDao,
+        viewModelScope
       )
     mockkActivityInjection(showDeleteHistoryDialog)
     showDeleteHistoryDialog.invokeWith(activity)
