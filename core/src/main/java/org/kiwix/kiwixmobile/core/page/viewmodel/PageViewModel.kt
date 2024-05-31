@@ -20,12 +20,11 @@ package org.kiwix.kiwixmobile.core.page.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlowable
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.BasePageDao
 import org.kiwix.kiwixmobile.core.dao.PageDao
@@ -84,13 +83,11 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
       }
 
       is PageRoomDao -> {
-        viewModelScope.launch {
-          try {
-            // basePageDao.pages().collect(::UpdatePages)
-          } catch (ignore: Exception) {
-            ignore.printStackTrace()
-          }
-        }
+        compositeDisposable.addAll(
+          viewStateReducer(),
+          basePageDao.pages().asFlowable().subscribeOn(Schedulers.io())
+            .subscribe({ actions.offer(UpdatePages(it)) }, Throwable::printStackTrace)
+        )
       }
     }
   }
