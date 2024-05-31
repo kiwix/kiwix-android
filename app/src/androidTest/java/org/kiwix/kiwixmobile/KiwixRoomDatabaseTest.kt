@@ -24,6 +24,8 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.core.IsEqual.equalTo
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -94,24 +96,24 @@ class KiwixRoomDatabaseTest {
     // delete the previous saved data from history to run the test cases properly.
     historyRoomDao.deleteAllHistory()
     val historyItem = getHistoryItem(
-      "Main Page",
-      "https://kiwix.app/A/MainPage",
-      "30 May 2024",
-      1
+      title = "Main Page",
+      historyUrl = "https://kiwix.app/A/MainPage",
+      databaseId = 1
     )
 
     // test inserting into history database
     historyRoomDao.saveHistory(historyItem)
     var historyList = historyRoomDao.historyRoomEntity().first()
-    assertEquals(historyList.size, 1)
-    assertEquals(historyItem.title, historyList.first().historyTitle)
-    assertEquals(historyItem.zimId, historyList.first().zimId)
-    assertEquals(historyItem.zimName, historyList.first().zimName)
-    assertEquals(historyItem.historyUrl, historyList.first().historyUrl)
-    assertEquals(historyItem.zimFilePath, historyList.first().zimFilePath)
-    assertEquals(historyItem.favicon, historyList.first().favicon)
-    assertEquals(historyItem.dateString, historyList.first().dateString)
-    assertEquals(historyItem.timeStamp, historyList.first().timeStamp)
+    with(historyList.first()) {
+      assertThat(historyTitle, equalTo(historyItem.title))
+      assertThat(zimId, equalTo(historyItem.zimId))
+      assertThat(zimName, equalTo(historyItem.zimName))
+      assertThat(historyUrl, equalTo(historyItem.historyUrl))
+      assertThat(zimFilePath, equalTo(historyItem.zimFilePath))
+      assertThat(favicon, equalTo(historyItem.favicon))
+      assertThat(dateString, equalTo(historyItem.dateString))
+      assertThat(timeStamp, equalTo(historyItem.timeStamp))
+    }
 
     // test deleting the history
     historyRoomDao.deleteHistory(listOf(historyItem))
@@ -121,12 +123,7 @@ class KiwixRoomDatabaseTest {
     // test deleting all history
     historyRoomDao.saveHistory(historyItem)
     historyRoomDao.saveHistory(
-      getHistoryItem(
-        "Installation",
-        "https://kiwix.app/A/Installation",
-        "30 May 2024",
-        2
-      )
+      getHistoryItem(databaseId = 2)
     )
     historyList = historyRoomDao.historyRoomEntity().first()
     assertEquals(historyList.size, 2)
@@ -135,21 +132,27 @@ class KiwixRoomDatabaseTest {
     assertEquals(historyList.size, 0)
   }
 
-  private fun getHistoryItem(
-    title: String,
-    historyUrl: String,
-    dateString: String,
-    databaseId: Long
-  ): HistoryListItem.HistoryItem =
-    HistoryListItem.HistoryItem(
-      databaseId = databaseId,
-      zimId = "1f88ab6f-c265-b-3ff-8f49-b7f4429503800",
-      zimName = "alpinelinux_en_all",
-      historyUrl = historyUrl,
-      title = title,
-      zimFilePath = "/storage/emulated/0/Download/alpinelinux_en_all_maxi_2023-01.zim",
-      favicon = null,
-      dateString = dateString,
-      timeStamp = System.currentTimeMillis()
-    )
+  companion object {
+    fun getHistoryItem(
+      title: String = "Installation",
+      historyUrl: String = "https://kiwix.app/A/Installation",
+      dateString: String = "30 May 2024",
+      databaseId: Long,
+      zimId: String = "1f88ab6f-c265-b-3ff-8f49-b7f4429503800",
+      zimName: String = "alpinelinux_en_all",
+      zimFilePath: String = "/storage/emulated/0/Download/alpinelinux_en_all_maxi_2023-01.zim",
+      timeStamp: Long = System.currentTimeMillis()
+    ): HistoryListItem.HistoryItem =
+      HistoryListItem.HistoryItem(
+        databaseId = databaseId,
+        zimId = zimId,
+        zimName = zimName,
+        historyUrl = historyUrl,
+        title = title,
+        zimFilePath = zimFilePath,
+        favicon = null,
+        dateString = dateString,
+        timeStamp = timeStamp
+      )
+  }
 }
