@@ -29,10 +29,10 @@ data class HistoryRoomEntity(
   val zimName: String,
   val zimFilePath: String,
   val favicon: String?,
-  val historyUrl: String,
-  val historyTitle: String,
-  val dateString: String,
-  val timeStamp: Long
+  var historyUrl: String,
+  var historyTitle: String,
+  var dateString: String,
+  var timeStamp: Long
 ) {
   constructor(historyItem: HistoryItem) : this(
     historyItem.databaseId,

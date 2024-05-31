@@ -56,7 +56,16 @@ abstract class HistoryRoomDao : PageRoomDao {
     getHistoryRoomEntity(
       historyItem.historyUrl,
       historyItem.dateString
-    )?.let(::updateHistoryItem) ?: run {
+    )?.let {
+      it.apply {
+        // update the exiting entity
+        historyUrl = historyItem.historyUrl
+        historyTitle = historyItem.title
+        timeStamp = historyItem.timeStamp
+        dateString = historyItem.dateString
+      }
+      updateHistoryItem(it)
+    } ?: run {
       insertHistoryItem(HistoryRoomEntity(historyItem))
     }
   }
