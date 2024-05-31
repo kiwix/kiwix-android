@@ -121,11 +121,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
         objectBoxToLibkiwixMigrator.migrateBookmarksToLibkiwix()
       }
     }
-    if (!sharedPreferenceUtil.prefIsRecentSearchMigrated) {
-      // run the migration on background thread to avoid any UI related issues.
-      CoroutineScope(Dispatchers.IO).launch {
-        objectBoxToRoomMigrator.migrateObjectBoxDataToRoom()
-      }
+    // run the migration on background thread to avoid any UI related issues.
+    CoroutineScope(Dispatchers.IO).launch {
+      objectBoxToRoomMigrator.migrateObjectBoxDataToRoom()
     }
   }
 

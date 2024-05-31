@@ -96,6 +96,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefIsRecentSearchMigrated: Boolean
     get() = sharedPreferences.getBoolean(PREF_RECENT_SEARCH_MIGRATED, false)
 
+  val prefIsHistoryMigrated: Boolean
+    get() = sharedPreferences.getBoolean(PREF_HISTORY_MIGRATED, false)
+
   val prefStorage: String
     get() {
       val storage = sharedPreferences.getString(PREF_STORAGE, null)
@@ -128,6 +131,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   fun putPrefRecentSearchMigrated(isMigrated: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_RECENT_SEARCH_MIGRATED, isMigrated) }
+
+  fun putPrefHistoryMigrated(isMigrated: Boolean) =
+    sharedPreferences.edit { putBoolean(PREF_HISTORY_MIGRATED, isMigrated) }
 
   fun putPrefLanguage(language: String) =
     sharedPreferences.edit { putString(PREF_LANG, language) }
@@ -289,5 +295,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_PLAY_STORE_RESTRICTION = "pref_play_store_restriction"
     const val PREF_BOOKMARKS_MIGRATED = "pref_bookmarks_migrated"
     const val PREF_RECENT_SEARCH_MIGRATED = "pref_recent_search_migrated"
+    const val PREF_HISTORY_MIGRATED = "pref_history_migrated"
   }
 }
