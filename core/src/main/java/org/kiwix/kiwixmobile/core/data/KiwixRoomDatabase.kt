@@ -57,7 +57,7 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
           """
             CREATE TABLE IF NOT EXISTS `HistoryRoomEntity`(
             `id` INTEGER NOT NULL,
-            `timeStamp` LONG NOT NULL,
+            `timeStamp` INTEGER NOT NULL,
             `zimId` TEXT NOT NULL,
             `historyUrl` TEXT NOT NULL,
             `zimName` TEXT NOT NULL,
