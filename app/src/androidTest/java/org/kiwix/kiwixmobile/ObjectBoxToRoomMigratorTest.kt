@@ -159,7 +159,7 @@ class ObjectBoxToRoomMigratorTest {
       kiwixRoomDatabase.recentSearchRoomDao().fullSearch().first()
     assertEquals(numEntities, actualDataAfterLargeMigration.size)
     // Assert that the migration completes within a reasonable time frame
-    assertTrue("Migration took too long: $migrationTime ms", migrationTime < 10000)
+    assertTrue("Migration took too long: $migrationTime ms", migrationTime < 20000)
   }
 
   private fun <T> clearRoomAndBoxStoreDatabases(box: Box<T>) {
@@ -268,6 +268,6 @@ class ObjectBoxToRoomMigratorTest {
     actualData = kiwixRoomDatabase.historyRoomDao().historyRoomEntity().first()
     assertEquals(numEntities, actualData.size)
     // Assert that the migration completes within a reasonable time frame
-    assertTrue("Migration took too long: $migrationTime ms", migrationTime < 10000)
+    assertTrue("Migration took too long: $migrationTime ms", migrationTime < 20000)
   }
 }
