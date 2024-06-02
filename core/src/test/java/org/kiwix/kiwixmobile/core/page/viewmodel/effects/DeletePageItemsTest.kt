@@ -21,6 +21,9 @@ package org.kiwix.kiwixmobile.core.page.viewmodel.effects
 import androidx.appcompat.app.AppCompatActivity
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.page.historyItem
@@ -31,18 +34,27 @@ internal class DeletePageItemsTest {
   val activity: AppCompatActivity = mockk()
   private val item1 = historyItem()
   private val item2 = historyItem()
+  private val viewModelScope = CoroutineScope(Dispatchers.IO)
 
   @Test
-  fun `delete with selected items only deletes the selected items`() {
+  fun `delete with selected items only deletes the selected items`() = runBlocking {
     item1.isSelected = true
-    DeletePageItems(historyState(listOf(item1, item2)), pageDao).invokeWith(activity)
+    DeletePageItems(
+      historyState(listOf(item1, item2)),
+      pageDao,
+      viewModelScope
+    ).invokeWith(activity)
     verify { pageDao.deletePages(listOf(item1)) }
   }
 
   @Test
-  fun `delete with no selected items deletes all items`() {
+  fun `delete with no selected items deletes all items`() = runBlocking {
     item1.isSelected = false
-    DeletePageItems(historyState(listOf(item1, item2)), pageDao).invokeWith(activity)
+    DeletePageItems(
+      historyState(listOf(item1, item2)),
+      pageDao,
+      viewModelScope
+    ).invokeWith(activity)
     verify { pageDao.deletePages(listOf(item1, item2)) }
   }
 }

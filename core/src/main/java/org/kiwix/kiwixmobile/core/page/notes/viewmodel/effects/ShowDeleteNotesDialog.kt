@@ -18,23 +18,25 @@ package org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects
  *
  */
 
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.CoroutineScope
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.PageDao
+import org.kiwix.kiwixmobile.core.dao.BasePageDao
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesState
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.DeletePageItems
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteAllNotes
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteSelectedNotes
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import javax.inject.Inject
 
 data class ShowDeleteNotesDialog(
   private val effects: PublishProcessor<SideEffect<*>>,
   private val state: NotesState,
-  private val pageDao: PageDao
+  private val basePageDao: BasePageDao,
+  private val viewModelScope: CoroutineScope
 ) : SideEffect<Unit> {
   @Inject lateinit var dialogShower: DialogShower
   override fun invokeWith(activity: AppCompatActivity) {
@@ -43,7 +45,7 @@ data class ShowDeleteNotesDialog(
     dialogShower.show(
       if (state.isInSelectionState) DeleteSelectedNotes else DeleteAllNotes,
       {
-        effects.offer(DeletePageItems(state, pageDao))
+        effects.offer(DeletePageItems(state, basePageDao, viewModelScope))
       }
     )
   }

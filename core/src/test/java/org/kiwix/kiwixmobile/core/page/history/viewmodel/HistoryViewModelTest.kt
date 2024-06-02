@@ -4,14 +4,18 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHistoryDialog
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.UpdateAllHistoryPreference
@@ -27,9 +31,10 @@ import org.kiwix.sharedFunctions.setScheduler
 
 @ExtendWith(InstantExecutorExtension::class)
 internal class HistoryViewModelTest {
-  private val historyDao: HistoryDao = mockk()
+  private val historyRoomDao: HistoryRoomDao = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
+  private val viewModelScope = CoroutineScope(Dispatchers.IO)
 
   private lateinit var viewModel: HistoryViewModel
   private val testScheduler = TestScheduler()
@@ -39,8 +44,8 @@ internal class HistoryViewModelTest {
     RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
   }
 
-  private val itemsFromDb: PublishProcessor<List<Page>> =
-    PublishProcessor.create()
+  private val itemsFromDb: Flow<List<Page>> =
+    flow { }
 
   @BeforeEach
   fun init() {
@@ -48,9 +53,9 @@ internal class HistoryViewModelTest {
     every { zimReaderContainer.id } returns "id"
     every { zimReaderContainer.name } returns "zimName"
     every { sharedPreferenceUtil.showHistoryAllBooks } returns true
-    every { historyDao.history() } returns itemsFromDb
-    every { historyDao.pages() } returns historyDao.history()
-    viewModel = HistoryViewModel(historyDao, zimReaderContainer, sharedPreferenceUtil)
+    every { historyRoomDao.history() } returns itemsFromDb
+    every { historyRoomDao.pages() } returns historyRoomDao.history()
+    viewModel = HistoryViewModel(historyRoomDao, zimReaderContainer, sharedPreferenceUtil)
   }
 
   @Test
@@ -99,9 +104,14 @@ internal class HistoryViewModelTest {
   }
 
   @Test
-  fun `createDeletePageDialogEffect returns ShowDeleteHistoryDialog`() {
-    assertThat(viewModel.createDeletePageDialogEffect(historyState())).isEqualTo(
-      ShowDeleteHistoryDialog(viewModel.effects, historyState(), historyDao)
+  fun `createDeletePageDialogEffect returns ShowDeleteHistoryDialog`() = runTest {
+    assertThat(viewModel.createDeletePageDialogEffect(historyState(), viewModelScope)).isEqualTo(
+      ShowDeleteHistoryDialog(
+        viewModel.effects,
+        historyState(),
+        historyRoomDao,
+        viewModelScope
+      )
     )
   }
 

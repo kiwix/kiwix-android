@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile
+package org.kiwix.kiwixmobile.roomDao
 
 import android.content.Context
 import androidx.room.Room

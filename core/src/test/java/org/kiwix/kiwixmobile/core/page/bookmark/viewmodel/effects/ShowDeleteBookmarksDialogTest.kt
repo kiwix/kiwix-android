@@ -23,6 +23,9 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewBookmarksDao
@@ -39,17 +42,18 @@ internal class ShowDeleteBookmarksDialogTest {
   private val newBookmarksDao = mockk<NewBookmarksDao>()
   val activity = mockk<CoreMainActivity>()
   private val dialogShower = mockk<DialogShower>(relaxed = true)
+  private val viewModelScope = CoroutineScope(Dispatchers.IO)
 
   @Test
   fun `invoke with shows dialog that offers ConfirmDelete action`() {
     val showDeleteBookmarksDialog =
-      ShowDeleteBookmarksDialog(effects, bookmarkState(), newBookmarksDao)
+      ShowDeleteBookmarksDialog(effects, bookmarkState(), newBookmarksDao, viewModelScope)
     mockkActivityInjection(showDeleteBookmarksDialog)
     val lambdaSlot = slot<() -> Unit>()
     showDeleteBookmarksDialog.invokeWith(activity)
     verify { dialogShower.show(any(), capture(lambdaSlot)) }
     lambdaSlot.captured.invoke()
-    verify { effects.offer(DeletePageItems(bookmarkState(), newBookmarksDao)) }
+    verify { effects.offer(DeletePageItems(bookmarkState(), newBookmarksDao, viewModelScope)) }
   }
 
   private fun mockkActivityInjection(showDeleteBookmarksDialog: ShowDeleteBookmarksDialog) {
@@ -60,12 +64,13 @@ internal class ShowDeleteBookmarksDialogTest {
   }
 
   @Test
-  fun `invoke with selected items shows dialog with DeleteSelectedBookmarks title`() {
+  fun `invoke with selected items shows dialog with DeleteSelectedBookmarks title`() = runBlocking {
     val showDeleteBookmarksDialog =
       ShowDeleteBookmarksDialog(
         effects,
         bookmarkState(listOf(bookmark(isSelected = true))),
-        newBookmarksDao
+        newBookmarksDao,
+        viewModelScope
       )
     mockkActivityInjection(showDeleteBookmarksDialog)
     showDeleteBookmarksDialog.invokeWith(activity)
@@ -73,12 +78,13 @@ internal class ShowDeleteBookmarksDialogTest {
   }
 
   @Test
-  fun `invoke with no selected items shows dialog with DeleteAllBookmarks title`() {
+  fun `invoke with no selected items shows dialog with DeleteAllBookmarks title`() = runBlocking {
     val showDeleteBookmarksDialog =
       ShowDeleteBookmarksDialog(
         effects,
         bookmarkState(listOf(bookmark())),
-        newBookmarksDao
+        newBookmarksDao,
+        viewModelScope
       )
     mockkActivityInjection(showDeleteBookmarksDialog)
     showDeleteBookmarksDialog.invokeWith(activity)

@@ -22,7 +22,7 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
 import io.reactivex.Single
-import org.kiwix.kiwixmobile.core.dao.HistoryDao
+import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
@@ -54,7 +54,7 @@ class Repository @Inject internal constructor(
   @param:MainThread private val mainThread: Scheduler,
   private val bookDao: NewBookDao,
   private val libkiwixBookmarks: LibkiwixBookmarks,
-  private val historyDao: HistoryDao,
+  private val historyRoomDao: HistoryRoomDao,
   private val notesDao: NewNoteDao,
   private val languageDao: NewLanguagesDao,
   private val recentSearchRoomDao: RecentSearchRoomDao,
@@ -90,17 +90,17 @@ class Repository @Inject internal constructor(
       .subscribeOn(io)
 
   override fun saveHistory(history: HistoryItem) =
-    Completable.fromAction { historyDao.saveHistory(history) }
+    Completable.fromAction { historyRoomDao.saveHistory(history) }
       .subscribeOn(io)
 
   override fun deleteHistory(historyList: List<HistoryListItem>) =
     Completable.fromAction {
-      historyDao.deleteHistory(historyList.filterIsInstance(HistoryItem::class.java))
+      historyRoomDao.deleteHistory(historyList.filterIsInstance(HistoryItem::class.java))
     }
       .subscribeOn(io)
 
   override fun clearHistory() = Completable.fromAction {
-    historyDao.deleteAllHistory()
+    historyRoomDao.deleteAllHistory()
     recentSearchRoomDao.deleteSearchHistory()
   }.subscribeOn(io)
 

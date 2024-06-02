@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.page.history.adapter
 
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
+import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -68,6 +69,19 @@ sealed class HistoryListItem : PageRelated {
       historyEntity.historyTitle,
       historyEntity.dateString,
       historyEntity.timeStamp,
+      false
+    )
+
+    constructor(historyRoomEntity: HistoryRoomEntity) : this(
+      historyRoomEntity.id,
+      historyRoomEntity.zimId,
+      historyRoomEntity.zimName,
+      historyRoomEntity.zimFilePath,
+      historyRoomEntity.favicon,
+      historyRoomEntity.historyUrl,
+      historyRoomEntity.historyTitle,
+      historyRoomEntity.dateString,
+      historyRoomEntity.timeStamp,
       false
     )
   }

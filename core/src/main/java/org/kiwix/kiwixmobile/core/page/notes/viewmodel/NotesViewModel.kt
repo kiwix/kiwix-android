@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.page.notes.viewmodel
 
+import kotlinx.coroutines.CoroutineScope
 import org.kiwix.kiwixmobile.core.dao.NewNoteDao
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
@@ -65,8 +66,8 @@ class NotesViewModel @Inject constructor(
   override fun deselectAllPages(state: NotesState): NotesState =
     state.copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
 
-  override fun createDeletePageDialogEffect(state: NotesState) =
-    ShowDeleteNotesDialog(effects, state, pageDao)
+  override fun createDeletePageDialogEffect(state: NotesState, viewModelScope: CoroutineScope) =
+    ShowDeleteNotesDialog(effects, state, basePageDao, viewModelScope)
 
   override fun onItemClick(page: Page) =
     ShowOpenNoteDialog(effects, page, zimReaderContainer)

@@ -22,8 +22,10 @@ import io.objectbox.Box
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
+import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
@@ -34,7 +36,12 @@ class ObjectBoxToRoomMigrator {
 
   suspend fun migrateObjectBoxDataToRoom() {
     CoreApp.coreComponent.inject(this)
-    migrateRecentSearch(boxStore.boxFor())
+    if (!sharedPreferenceUtil.prefIsRecentSearchMigrated) {
+      migrateRecentSearch(boxStore.boxFor())
+    }
+    if (!sharedPreferenceUtil.prefIsHistoryMigrated) {
+      migrateHistory(boxStore.boxFor())
+    }
     // TODO we will migrate here for other entities
   }
 
@@ -51,5 +58,16 @@ class ObjectBoxToRoomMigrator {
       box.remove(recentSearchEntity.id)
     }
     sharedPreferenceUtil.putPrefRecentSearchMigrated(true)
+  }
+
+  suspend fun migrateHistory(box: Box<HistoryEntity>) {
+    val historyEntityList = box.all
+    historyEntityList.forEachIndexed { _, historyEntity ->
+      kiwixRoomDatabase.historyRoomDao()
+        .saveHistory(HistoryListItem.HistoryItem(historyEntity))
+      // removing the single entity from the object box after migration.
+      box.remove(historyEntity.id)
+    }
+    sharedPreferenceUtil.putPrefHistoryMigrated(true)
   }
 }

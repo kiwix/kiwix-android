@@ -20,12 +20,17 @@ package org.kiwix.kiwixmobile.core.page.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.rx2.asFlowable
 import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.dao.BasePageDao
 import org.kiwix.kiwixmobile.core.dao.PageDao
+import org.kiwix.kiwixmobile.core.dao.PageRoomDao
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Exit
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.ExitActionModeMenu
@@ -42,7 +47,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.PopFragmentBackstack
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 abstract class PageViewModel<T : Page, S : PageState<T>>(
-  protected val pageDao: PageDao,
+  protected val basePageDao: BasePageDao,
   val sharedPreferenceUtil: SharedPreferenceUtil,
   val zimReaderContainer: ZimReaderContainer
 ) : ViewModel() {
@@ -70,11 +75,23 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
       .subscribe(state::postValue, Throwable::printStackTrace)
 
   protected fun addDisposablesToCompositeDisposable() {
-    compositeDisposable.addAll(
-      viewStateReducer(),
-      pageDao.pages().subscribeOn(Schedulers.io())
-        .subscribe({ actions.offer(UpdatePages(it)) }, Throwable::printStackTrace)
-    )
+    when (basePageDao) {
+      is PageDao -> {
+        compositeDisposable.addAll(
+          viewStateReducer(),
+          basePageDao.pages().subscribeOn(Schedulers.io())
+            .subscribe({ actions.offer(UpdatePages(it)) }, Throwable::printStackTrace)
+        )
+      }
+
+      is PageRoomDao -> {
+        compositeDisposable.addAll(
+          viewStateReducer(),
+          basePageDao.pages().asFlowable().subscribeOn(Schedulers.io())
+            .subscribe({ actions.offer(UpdatePages(it)) }, Throwable::printStackTrace)
+        )
+      }
+    }
   }
 
   private fun reduce(action: Action, state: S): S = when (action) {
@@ -98,7 +115,7 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
   ): S
 
   private fun offerShowDeleteDialog(state: S): S {
-    effects.offer(createDeletePageDialogEffect(state))
+    effects.offer(createDeletePageDialogEffect(state, viewModelScope = viewModelScope))
     return state
   }
 
@@ -135,5 +152,5 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
     super.onCleared()
   }
 
-  abstract fun createDeletePageDialogEffect(state: S): SideEffect<*>
+  abstract fun createDeletePageDialogEffect(state: S, viewModelScope: CoroutineScope): SideEffect<*>
 }
