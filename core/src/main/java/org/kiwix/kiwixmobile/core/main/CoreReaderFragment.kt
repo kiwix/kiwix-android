@@ -1752,32 +1752,38 @@ abstract class CoreReaderFragment :
   @Suppress("NestedBlockDepth")
   @OnClick(R2.id.bottom_toolbar_bookmark)
   fun toggleBookmark() {
-    getCurrentWebView()?.url?.let { articleUrl ->
-      zimReaderContainer?.zimFileReader?.let { zimFileReader ->
-        val libKiwixBook = Book().apply {
-          update(zimFileReader.jniKiwixReader)
-        }
-        if (isBookmarked) {
-          repositoryActions?.deleteBookmark(libKiwixBook.id, articleUrl)
-          snackBarRoot?.snack(R.string.bookmark_removed)
-        } else {
-          getCurrentWebView()?.title?.let {
-            repositoryActions?.saveBookmark(
-              LibkiwixBookmarkItem(it, articleUrl, zimFileReader, libKiwixBook)
-            )
-            snackBarRoot?.snack(
-              stringId = R.string.bookmark_added,
-              actionStringId = R.string.open,
-              actionClick = {
-                goToBookmarks()
-                Unit
-              }
-            )
+    try {
+      getCurrentWebView()?.url?.let { articleUrl ->
+        zimReaderContainer?.zimFileReader?.let { zimFileReader ->
+          val libKiwixBook = Book().apply {
+            update(zimFileReader.jniKiwixReader)
+          }
+          if (isBookmarked) {
+            repositoryActions?.deleteBookmark(libKiwixBook.id, articleUrl)
+            snackBarRoot?.snack(R.string.bookmark_removed)
+          } else {
+            getCurrentWebView()?.title?.let {
+              repositoryActions?.saveBookmark(
+                LibkiwixBookmarkItem(it, articleUrl, zimFileReader, libKiwixBook)
+              )
+              snackBarRoot?.snack(
+                stringId = R.string.bookmark_added,
+                actionStringId = R.string.open,
+                actionClick = {
+                  goToBookmarks()
+                  Unit
+                }
+              )
+            }
           }
         }
       } ?: kotlin.run {
         requireActivity().toast(R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
       }
+    } catch (ignore: Exception) {
+      // Catch the exception while saving the bookmarks for splitted zim files.
+      // we have an issue with split zim files, see #3827
+      requireActivity().toast(R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
     }
   }
 
