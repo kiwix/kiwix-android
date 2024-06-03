@@ -19,6 +19,7 @@
 * McDutchie
 * Mpayansilva
 * Ncr
+* NikoNikoMocha
 * Rodney Araujo
 * VegaDark
 * Vis4valentine
@@ -42,6 +43,7 @@
   <string name="save_media_error">¡Se produjo un error al intentar guardar los medios!</string>
   <string name="save_media_saved">Medios guardados en %s en Descargas/org.kiwix…/</string>
   <string name="search_label">Buscar</string>
+  <string name="searched_list">Lista buscada</string>
   <string name="choose_file">Selecciona un archivo de contenido (*.zim)</string>
   <string name="open_in_new_tab">¿Abrir enlace en una nueva pestaña?</string>
   <string name="hotspot_service_channel_name">Canal de servicio de punto de acceso</string>
@@ -315,6 +317,7 @@
   <string name="tabs_restored">Pestañas restauradas</string>
   <string name="open_drawer">Abrir cajón</string>
   <string name="close_drawer">Cerrar cajón</string>
+  <string name="zim_files_not_showing">¿Los archivos de Zim no se muestran?</string>
   <string name="understood">Entendido</string>
   <string name="how_to_update_content">¿Cómo actualizar contenido?</string>
   <string name="update_content_description">Para actualizar el contenido (un archivo zim), debe descargar la última versión completa de este mismo contenido. Puede hacerlo a través de la sección de descargas.</string>

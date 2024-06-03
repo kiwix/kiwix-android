@@ -22,7 +22,7 @@
   <string name="menu_home">홈</string>
   <string name="menu_settings">설정</string>
   <string name="menu_search_in_text">문서에서 찾기</string>
-  <string name="bookmarks">북마크</string>
+  <string name="bookmarks">책갈피</string>
   <string name="menu_random_article">임의 문서</string>
   <string name="menu_full_screen">전체 화면</string>
   <string name="menu_exit_full_screen">전체 화면에서 나가기</string>
@@ -36,6 +36,7 @@
   <string name="save_media_error">미디어 저장 중, 오류가 발생하였습니다!</string>
   <string name="save_media_saved">미디어를 %s(으)로 Downloads/org.kiwix…/에 저장했습니다</string>
   <string name="search_label">검색</string>
+  <string name="searched_list">검색 목록</string>
   <string name="choose_file">내용 파일 (*.zim) 선택</string>
   <string name="open_in_new_tab">새 탭에서 링크를 여시겠습니까?</string>
   <string name="hotspot_service_channel_name">핫스팟 서비스 채널</string>
@@ -106,8 +107,10 @@
   <string name="did_you_know">알고 계십니까?</string>
   <string name="undo">실행 취소</string>
   <string name="tab_closed">탭 닫힘</string>
+  <string name="tabs_closed">탭 종료</string>
   <string name="bookmark_added">북마크가 추가됨</string>
   <string name="rate_dialog_title">평가해 주세요</string>
+  <string name="rate_dialog_msg">%s를 사용하는 것을 즐기시면, 잠시 평가해 보세요. 지원해주셔서 감사합니다!</string>
   <string name="rate_dialog_positive">평가해 주세요!</string>
   <string name="no_thanks">아니오, 괜찮습니다</string>
   <string name="rate_dialog_neutral">나중에</string>
@@ -210,12 +213,14 @@
   <string name="expand">펼치기</string>
   <string name="history">역사</string>
   <string name="history_from_current_book">모든 책의 역사 보기</string>
-  <string name="search_history" fuzzy="true">기록 검색하기</string>
+  <string name="search_history">검색 역사</string>
   <string name="selected_items">%1$d개 선택됨</string>
   <string name="bookmarks_from_current_book">모든 책의 책갈피 보기</string>
   <string name="search_bookmarks">북마크 검색</string>
   <string name="switch_tabs">탭 전환</string>
   <string name="close_all_tabs">모든 탭 닫기</string>
+  <string name="close_tab">탭 닫기</string>
+  <string name="could_not_restore_tabs">탭을 복구할 수 없었습니다.</string>
   <string name="pending_state">보류 중</string>
   <string name="running_state">진행 중</string>
   <string name="complete">완료</string>

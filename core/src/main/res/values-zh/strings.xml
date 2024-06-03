@@ -47,6 +47,7 @@
   <string name="save_media_error">尝试保存该媒体时出错！</string>
   <string name="save_media_saved">已将媒体作为%s保存至Downloads/org.kiwix…/</string>
   <string name="search_label">搜索</string>
+  <string name="searched_list">已搜索项目列表</string>
   <string name="choose_file">选择一个内容文件（*.zim）</string>
   <string name="open_in_new_tab">在新标签页打开链接?</string>
   <string name="hotspot_service_channel_name">热点服务频道</string>

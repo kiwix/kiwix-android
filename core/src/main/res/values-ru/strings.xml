@@ -47,6 +47,7 @@
   <string name="save_media_error">Произошла ошибка при сохранении медиафайла!</string>
   <string name="save_media_saved">Медиафайл сохранён как %s в Downloads/org.kiwix…/</string>
   <string name="search_label">Поиск</string>
+  <string name="searched_list">Список поиска</string>
   <string name="choose_file">Выберите файл содержимого (*.zim)</string>
   <string name="open_in_new_tab">Открыть ссылку в новой вкладке?</string>
   <string name="hotspot_service_channel_name">Сервисный канал Точки доступа</string>
