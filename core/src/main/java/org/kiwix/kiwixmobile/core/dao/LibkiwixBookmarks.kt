@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.dao
 
 import android.os.Build
+import android.os.Environment
 import android.util.Base64
 import io.reactivex.BackpressureStrategy
 import io.reactivex.BackpressureStrategy.LATEST
@@ -28,9 +29,7 @@ import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -287,7 +286,7 @@ class LibkiwixBookmarks @Inject constructor(
       sharedPreferenceUtil.context.toast(
         sharedPreferenceUtil.context.getString(
           R.string.export_bookmark_saved,
-          "${bookmarkDestinationFile.parent}/"
+          bookmarkDestinationFile.name
         )
       )
     } catch (ignore: Exception) {
@@ -297,12 +296,21 @@ class LibkiwixBookmarks @Inject constructor(
   }
 
   private fun exportedFile(fileName: String): File {
-    val rootFolder = CoreApp.instance.externalMediaDirs[0]
+    val rootFolder = File(
+      "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}" +
+        "/org.kiwix"
+    )
     if (!rootFolder.isFileExist()) rootFolder.mkdir()
-    val file = File(rootFolder, fileName)
-    if (file.isFileExist()) file.deleteFile()
-    file.createNewFile()
-    return file
+    return sequence {
+      yield(File(rootFolder, fileName))
+      yieldAll(
+        generateSequence(1) { it + 1 }.map {
+          File(
+            rootFolder, fileName.replace(".", "_$it.")
+          )
+        }
+      )
+    }.first { !it.isFileExist() }
   }
 
   companion object {

@@ -79,7 +79,7 @@
   <string name="pref_permission">Permissions</string>
   <string name="pref_export_bookmark_title">Export Bookmarks</string>
   <string name="pref_export_bookmark_summary">Export all saved bookmarks</string>
-  <string name="export_bookmark_saved">Bookmarks are exported in %s folder</string>
+  <string name="export_bookmark_saved">Bookmarks are exported in %s file</string>
   <string name="all_history_cleared">All History Cleared</string>
   <string name="pref_clear_all_bookmarks_title">Clear bookmarks</string>
   <string name="clear_all_history_dialog_title">Clear All History?</string>
@@ -295,7 +295,7 @@
   <string name="delete_bookmarks">Delete All Bookmarks?</string>
   <string name="delete_selected_bookmarks">Delete Selected Bookmarks?</string>
   <string name="export_all_bookmarks_dialog_title">Export All Bookmarks?</string>
-  <string name="export_all_bookmarks_dialog_message">Exporting will generate bookmark.xml file in the Android/media/org.kiwix…/ folder. To import bookmarks, simply copy this file into the Android/data/org.kiwix…/files/Bookmarks/ folder.</string>
+  <string name="export_all_bookmarks_dialog_message">Exporting will generate bookmark.xml file in the Download/org.kiwix…/ folder.</string>
   <string name="on">On</string>
   <string name="off">Off</string>
   <string name="auto">Auto</string>
