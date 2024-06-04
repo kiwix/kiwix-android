@@ -73,6 +73,7 @@ class StorageObserverTest {
     every { sharedPreferenceUtil.prefStorage } returns "a"
     every { fileSearch.scan(scanningProgressListener) } returns files
     every { downloadDao.downloads() } returns downloads
+    every { zimFileReader.jniKiwixReader } returns mockk()
     every { runBlocking { readerFactory.create(file) } } returns zimFileReader
     storageObserver = StorageObserver(downloadDao, fileSearch, readerFactory, libkiwixBookmarks)
   }
