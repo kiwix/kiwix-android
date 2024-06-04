@@ -124,6 +124,14 @@ class SettingsRobot : BaseRobot() {
     isVisible(TextId(R.string.export_all_bookmarks_dialog_title))
   }
 
+  fun clickOnImportBookmarkPreference() {
+    clickRecyclerViewItems(R.string.pref_import_bookmark_title)
+  }
+
+  fun assertImportBookmarkDialogDisplayed() {
+    isVisible(TextId(R.string.import_bookmarks_dialog_title))
+  }
+
   fun clickNightModePreference() {
     clickRecyclerViewItems(R.string.pref_night_mode)
   }
