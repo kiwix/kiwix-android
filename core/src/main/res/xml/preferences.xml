@@ -103,6 +103,12 @@
     app:iconSpaceReserved="false">
 
     <Preference
+      android:key="pref_import_bookmark"
+      android:summary="@string/pref_import_bookmark_summary"
+      android:title="@string/pref_import_bookmark_title"
+      app:iconSpaceReserved="false" />
+
+    <Preference
       android:key="pref_export_bookmark"
       android:summary="@string/pref_export_bookmark_summary"
       android:title="@string/pref_export_bookmark_title"

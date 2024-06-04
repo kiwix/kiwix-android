@@ -287,6 +287,13 @@ sealed class KiwixDialog(
     icon = R.drawable.ic_baseline_storage_24
   )
 
+  object ImportBookmarks : KiwixDialog(
+    R.string.import_bookmarks_dialog_title,
+    message = null,
+    positiveMessage = R.string.yes,
+    negativeMessage = R.string.no
+  )
+
   object DeleteSelectedHistory : KiwixDialog(
     R.string.delete_selected_history,
     null,

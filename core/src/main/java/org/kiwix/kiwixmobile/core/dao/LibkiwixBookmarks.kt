@@ -42,13 +42,15 @@ import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Bookmark
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
+import org.kiwix.libzim.Archive
 import java.io.File
 import javax.inject.Inject
 
 class LibkiwixBookmarks @Inject constructor(
   val library: Library,
   manager: Manager,
-  val sharedPreferenceUtil: SharedPreferenceUtil
+  val sharedPreferenceUtil: SharedPreferenceUtil,
+  private val bookDao: NewBookDao
 ) : PageDao {
 
   /**
@@ -135,7 +137,13 @@ class LibkiwixBookmarks @Inject constructor(
         bookId = libkiwixBookmarkItem.zimId
         title = libkiwixBookmarkItem.title
         url = libkiwixBookmarkItem.url
-        bookTitle = libkiwixBookmarkItem.libKiwixBook?.title ?: libkiwixBookmarkItem.zimId
+        bookTitle = when {
+          libkiwixBookmarkItem.libKiwixBook?.title != null ->
+            libkiwixBookmarkItem.libKiwixBook.title
+
+          libkiwixBookmarkItem.zimName.isNotBlank() -> libkiwixBookmarkItem.zimName
+          else -> libkiwixBookmarkItem.zimId
+        }
       }
       library.addBookmark(bookmark).also {
         if (shouldWriteBookmarkToFile) {
@@ -145,6 +153,26 @@ class LibkiwixBookmarks @Inject constructor(
         // dispose the bookmark
         bookmark.dispose()
       }
+    }
+  }
+
+  fun addBookToLibrary(file: File? = null, archive: Archive? = null) {
+    try {
+      bookmarksChanged = true
+      val book = Book().apply {
+        archive?.let {
+          update(archive)
+        } ?: run {
+          update(Archive(file?.canonicalPath))
+        }
+      }
+      addBookToLibraryIfNotExist(book)
+      updateFlowableBookmarkList()
+    } catch (ignore: Exception) {
+      Log.e(
+        TAG,
+        "Error: Couldn't add the book to library.\nOriginal exception = $ignore"
+      )
     }
   }
 
@@ -212,7 +240,9 @@ class LibkiwixBookmarks @Inject constructor(
       return bookmarkList
     }
     // Retrieve the list of bookmarks from the library, or return an empty list if it's null.
-    val bookmarkArray = library.getBookmarks(false)?.toList() ?: return bookmarkList
+    val bookmarkArray =
+      library.getBookmarks(false)?.toList()
+        ?: return bookmarkList.distinctBy(LibkiwixBookmarkItem::bookmarkUrl)
 
     // Create a list to store LibkiwixBookmarkItem objects.
     bookmarkList = bookmarkArray.mapNotNull { bookmark ->
@@ -244,7 +274,21 @@ class LibkiwixBookmarks @Inject constructor(
         bookmarksChanged = false
       }
     }
-    return bookmarkList
+
+    // Delete duplicates bookmarks if any exist
+    deleteDuplicateBookmarks()
+
+    return bookmarkList.distinctBy(LibkiwixBookmarkItem::bookmarkUrl)
+  }
+
+  private fun deleteDuplicateBookmarks() {
+    bookmarkList.groupBy { it.bookmarkUrl to it.zimFilePath }
+      .filter { it.value.size > 1 }
+      .forEach { (_, value) ->
+        value.drop(1).forEach { bookmarkItem ->
+          deleteBookmark(bookmarkItem.zimId, bookmarkItem.bookmarkUrl)
+        }
+      }
   }
 
   private fun isBookMarkExist(libkiwixBookmarkItem: LibkiwixBookmarkItem): Boolean =
@@ -276,7 +320,7 @@ class LibkiwixBookmarks @Inject constructor(
     bookmarkListBehaviour?.onNext(getBookmarksList())
   }
 
-  // Export the `bookmark.xml` file to the `Android/media/` directory of internal storage.
+  // Export the `bookmark.xml` file to the `Download/org.kiwix/` directory of internal storage.
   fun exportBookmark() {
     try {
       val bookmarkDestinationFile = exportedFile("bookmark.xml")
@@ -311,6 +355,28 @@ class LibkiwixBookmarks @Inject constructor(
         }
       )
     }.first { !it.isFileExist() }
+  }
+
+  fun importBookmarks(bookmarkFile: File) {
+    // Create a temporary library manager to import the bookmarks.
+    val tempLibrary = Library()
+    Manager(tempLibrary).apply {
+      // Read the bookmark file.
+      readBookmarkFile(bookmarkFile.canonicalPath)
+    }
+    // Add the ZIM files to the library for validating the bookmarks.
+    bookDao.getBooks().forEach {
+      addBookToLibrary(file = it.file)
+    }
+    // Save the imported bookmarks to the current library.
+    tempLibrary.getBookmarks(false)?.toList()?.forEach {
+      saveBookmark(LibkiwixBookmarkItem(it, null, null))
+    }
+    sharedPreferenceUtil.context.toast(R.string.bookmark_imported_message)
+
+    if (bookmarkFile.exists()) {
+      bookmarkFile.delete()
+    }
   }
 
   companion object {

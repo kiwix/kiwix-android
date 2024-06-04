@@ -23,6 +23,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.files.FileSearch
@@ -34,7 +35,8 @@ import javax.inject.Inject
 class StorageObserver @Inject constructor(
   private val downloadDao: FetchDownloadDao,
   private val fileSearch: FileSearch,
-  private val zimReaderFactory: ZimFileReader.Factory
+  private val zimReaderFactory: ZimFileReader.Factory,
+  private val libkiwixBookmarks: LibkiwixBookmarks
 ) {
 
   fun getBooksOnFileSystem(
@@ -56,6 +58,12 @@ class StorageObserver @Inject constructor(
 
   private fun convertToBookOnDisk(file: File) = runBlocking {
     zimReaderFactory.create(file)
-      ?.let { zimFileReader -> BookOnDisk(file, zimFileReader).also { zimFileReader.dispose() } }
+      ?.let { zimFileReader ->
+        BookOnDisk(file, zimFileReader).also {
+          // add the book to libkiwix library to validate the imported bookmarks
+          libkiwixBookmarks.addBookToLibrary(archive = zimFileReader.jniKiwixReader)
+          zimFileReader.dispose()
+        }
+      }
   }
 }

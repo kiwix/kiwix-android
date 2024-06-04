@@ -20,12 +20,14 @@ package org.kiwix.kiwixmobile.core.settings
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.webkit.WebView
 import android.widget.Toast
@@ -61,8 +63,10 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.OpenCredits
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.SelectFolder
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getPathFromUri
 import java.io.File
+import java.io.InputStream
 import java.util.Locale
 import javax.inject.Inject
+import javax.xml.parsers.DocumentBuilderFactory
 
 abstract class CorePrefsFragment :
   PreferenceFragmentCompat(),
@@ -305,6 +309,9 @@ abstract class CorePrefsFragment :
     ) {
       showExportBookmarkDialog()
     }
+    if (preference.key.equals(PREF_IMPORT_BOOKMARK, ignoreCase = true)) {
+      showImportBookmarkDialog()
+    }
     return true
   }
 
@@ -363,6 +370,73 @@ abstract class CorePrefsFragment :
       { libkiwixBookmarks?.exportBookmark() }
     )
   }
+
+  private fun showImportBookmarkDialog() {
+    alertDialogShower?.show(
+      KiwixDialog.ImportBookmarks,
+      ::showFileChooser
+    )
+  }
+
+  private fun showFileChooser() {
+    val intent = Intent().apply {
+      action = Intent.ACTION_GET_CONTENT
+      type = "*/*"
+      addCategory(Intent.CATEGORY_OPENABLE)
+    }
+    try {
+      fileSelectLauncher.launch(Intent.createChooser(intent, "Select a bookmark file"))
+    } catch (ex: ActivityNotFoundException) {
+      activity.toast(
+        resources.getString(R.string.no_app_found_to_select_bookmark_file),
+        Toast.LENGTH_SHORT
+      )
+    }
+  }
+
+  private val fileSelectLauncher =
+    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+      if (result.resultCode == RESULT_OK) {
+        result.data?.data?.let { uri ->
+          val contentResolver = requireActivity().contentResolver
+          if (!isValidBookmarkFile(contentResolver.getType(uri))) {
+            activity.toast(
+              resources.getString(R.string.error_invalid_bookmark_file),
+              Toast.LENGTH_SHORT
+            )
+            return@registerForActivityResult
+          }
+          val inputStream: InputStream? = contentResolver.openInputStream(uri)
+          // create a temp file for importing the saved bookmarks
+          val tempFile = File(requireActivity().externalCacheDir, "bookmark.xml")
+          if (tempFile.exists()) {
+            tempFile.delete()
+          }
+          tempFile.createNewFile()
+          inputStream?.let {
+            tempFile.outputStream().use(inputStream::copyTo)
+          }
+          try {
+            // check if the xml file is valid or not
+            DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(tempFile)
+            // import the bookmarks
+            libkiwixBookmarks?.importBookmarks(tempFile)
+          } catch (ignore: Exception) {
+            Log.e(
+              "IMPORT_BOOKMARKS",
+              "Error in importing the bookmarks\nOrignal exception = $ignore"
+            )
+            activity.toast(
+              resources.getString(R.string.error_invalid_bookmark_file),
+              Toast.LENGTH_SHORT
+            )
+          }
+        }
+      }
+    }
+
+  private fun isValidBookmarkFile(mimeType: String?) =
+    mimeType == "application/xml" || mimeType == "text/xml"
 
   private fun openFolderSelect() {
     val dialogFragment = StorageSelectDialog()
@@ -456,5 +530,6 @@ abstract class CorePrefsFragment :
     private const val ZOOM_SCALE = 25
     private const val INTERNAL_TEXT_ZOOM = "text_zoom"
     private const val PREF_EXPORT_BOOKMARK = "pref_export_bookmark"
+    private const val PREF_IMPORT_BOOKMARK = "pref_import_bookmark"
   }
 }
