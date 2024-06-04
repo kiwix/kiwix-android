@@ -406,34 +406,43 @@ abstract class CorePrefsFragment :
             )
             return@registerForActivityResult
           }
-          val inputStream: InputStream? = contentResolver.openInputStream(uri)
-          // create a temp file for importing the saved bookmarks
-          val tempFile = File(requireActivity().externalCacheDir, "bookmark.xml")
-          if (tempFile.exists()) {
-            tempFile.delete()
-          }
-          tempFile.createNewFile()
-          inputStream?.let {
-            tempFile.outputStream().use(inputStream::copyTo)
-          }
-          try {
-            // check if the xml file is valid or not
-            DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(tempFile)
-            // import the bookmarks
-            libkiwixBookmarks?.importBookmarks(tempFile)
-          } catch (ignore: Exception) {
-            Log.e(
-              "IMPORT_BOOKMARKS",
-              "Error in importing the bookmarks\nOrignal exception = $ignore"
-            )
-            activity.toast(
-              resources.getString(R.string.error_invalid_bookmark_file),
-              Toast.LENGTH_SHORT
-            )
+
+          createTempFile(contentResolver.openInputStream(uri)).apply {
+            if (isValidXmlFile(this)) {
+              libkiwixBookmarks?.importBookmarks(this)
+            } else {
+              activity.toast(
+                resources.getString(R.string.error_invalid_bookmark_file),
+                Toast.LENGTH_SHORT
+              )
+            }
           }
         }
       }
     }
+
+  private fun isValidXmlFile(file: File): Boolean {
+    return try {
+      DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file)
+      true
+    } catch (ignore: Exception) {
+      Log.e("IMPORT_BOOKMARKS", "Invalid XML file", ignore)
+      false
+    }
+  }
+
+  private fun createTempFile(inputStream: InputStream?): File {
+    // create a temp file for importing the saved bookmarks
+    val tempFile = File(requireActivity().externalCacheDir, "bookmark.xml")
+    if (tempFile.exists()) {
+      tempFile.delete()
+    }
+    tempFile.createNewFile()
+    inputStream?.let {
+      tempFile.outputStream().use(inputStream::copyTo)
+    }
+    return tempFile
+  }
 
   private fun isValidBookmarkFile(mimeType: String?) =
     mimeType == "application/xml" || mimeType == "text/xml"
