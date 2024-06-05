@@ -184,9 +184,6 @@ class KiwixMainActivity : CoreMainActivity() {
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
     handleNotificationIntent(intent)
-    // supportFragmentManager.fragments.filterIsInstance<FragmentActivityExtensions>().forEach {
-    //   it.onNewIntent(intent, this)
-    // }
   }
 
   @Suppress("MagicNumber")
