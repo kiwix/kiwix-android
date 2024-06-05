@@ -95,5 +95,5 @@ open class DatabaseModule {
 
   @Singleton
   @Provides
-  fun provideNoteRoomDao(db: KiwixRoomDatabase) = db.noteRoomDao()
+  fun provideNoteRoomDao(db: KiwixRoomDatabase) = db.notesRoomDao()
 }

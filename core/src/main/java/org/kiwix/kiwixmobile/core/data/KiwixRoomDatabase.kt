@@ -47,7 +47,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
 abstract class KiwixRoomDatabase : RoomDatabase() {
   abstract fun recentSearchRoomDao(): RecentSearchRoomDao
   abstract fun historyRoomDao(): HistoryRoomDao
-  abstract fun noteRoomDao(): NotesRoomDao
+  abstract fun notesRoomDao(): NotesRoomDao
 
   companion object {
     private var db: KiwixRoomDatabase? = null

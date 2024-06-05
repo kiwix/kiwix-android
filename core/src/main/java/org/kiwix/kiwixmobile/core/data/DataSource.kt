@@ -49,6 +49,6 @@ interface DataSource {
   fun booksOnDiskAsListItems(): Flowable<List<BooksOnDiskListItem>>
 
   fun saveNote(noteListItem: NoteListItem): Completable
-  fun deleteNote(noteUniqueKey: String): Completable
+  fun deleteNote(noteTitle: String): Completable
   fun deleteNotes(noteList: List<NoteListItem>): Completable
 }

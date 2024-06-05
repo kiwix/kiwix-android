@@ -36,6 +36,7 @@ import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
+import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 
 @RunWith(AndroidJUnit4::class)
 class KiwixRoomDatabaseTest {
@@ -154,5 +155,23 @@ class KiwixRoomDatabaseTest {
         dateString = dateString,
         timeStamp = timeStamp
       )
+
+    fun getNoteListItem(
+      databaseId: Long = 0L,
+      zimId: String = "1f88ab6f-c265-b-3ff-8f49-b7f4429503800",
+      title: String = "A",
+      zimFilePath: String = "/storage/emulated/0/Download/alpinelinux_en_all_maxi_2023-01.zim",
+      zimUrl: String,
+      noteFilePath: String = "/storage/emulated/0/Download/Notes/Alpine linux/AlpineNote.txt"
+    ): NoteListItem = NoteListItem(
+      databaseId = databaseId,
+      zimId = zimId,
+      title = title,
+      zimFilePath = zimFilePath,
+      zimUrl = zimUrl,
+      noteFilePath = noteFilePath,
+      null,
+      false
+    )
   }
 }

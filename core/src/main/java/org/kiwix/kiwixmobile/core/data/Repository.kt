@@ -132,7 +132,7 @@ class Repository @Inject internal constructor(
     Completable.fromAction { notesRoomDao.deleteNotes(noteList) }
       .subscribeOn(io)
 
-  override fun deleteNote(noteUniqueKey: String): Completable =
-    Completable.fromAction { notesRoomDao.deleteNote(noteUniqueKey) }
+  override fun deleteNote(noteTitle: String): Completable =
+    Completable.fromAction { notesRoomDao.deleteNote(noteTitle) }
       .subscribeOn(io)
 }
