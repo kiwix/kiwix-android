@@ -180,6 +180,7 @@ abstract class CoreReaderFragment :
   WebViewProvider,
   ReadAloudCallbacks,
   NavigationHistoryClickListener {
+  private var lastIntent: Intent? = null
   protected val webViewList: MutableList<KiwixWebView> = ArrayList()
   private val webUrlsProcessor = BehaviorProcessor.create<String>()
 
@@ -487,7 +488,10 @@ abstract class CoreReaderFragment :
     setupDocumentParser()
     loadPrefs()
     updateTitle()
-    handleIntentExtras(requireActivity().intent)
+    val intent = requireActivity().intent
+    if (intent != null) {
+      handleIntentExtras(intent)
+    }
     tabRecyclerView?.let {
       it.adapter = tabsAdapter
       tabCallback?.let { callBack ->
@@ -497,10 +501,13 @@ abstract class CoreReaderFragment :
 
     // Only check intent on first start of activity. Otherwise the intents will enter infinite loops
     // when "Don't keep activities" is on.
-    if (savedInstanceState == null) {
+    if (savedInstanceState == null && intent != null) {
       // call the `onNewIntent` explicitly so that the overridden method in child class will
       // also call, to properly handle the zim file opening when opening the zim file from storage.
-      onNewIntent(requireActivity().intent, requireActivity() as AppCompatActivity)
+      onNewIntent(intent, requireActivity() as AppCompatActivity)
+      // we clear the intent to ensure we don't use it again when a search is triggered from here
+      // it is not perfect but otherwise we end up with an endless search for intents like WEB_SEARCH
+      requireActivity().intent = null
     }
 
     serviceConnection = object : ServiceConnection {
@@ -1857,6 +1864,14 @@ abstract class CoreReaderFragment :
         requireActivity().intent.action = null
       }
 
+      "android.intent.action.WEB_SEARCH" -> {
+        openSearch(
+          searchString = intent.getStringExtra("query") ?: "",
+          isOpenedFromTabView = false,
+          isVoice = false
+        )
+      }
+
       Intent.ACTION_VIEW -> if (
         (intent.type == null || intent.type != "application/octet-stream") &&
         // Added condition to handle ZIM files. When opening from storage, the intent may
@@ -1864,9 +1879,19 @@ abstract class CoreReaderFragment :
         // prevents such occurrences.
         intent.scheme !in listOf("file", "content")
       ) {
-        val searchString = if (intent.data == null) "" else intent.data?.lastPathSegment
+        var searchString: String? = null
+        if (intent.data != null) {
+          val params = intent.data!!.queryParameterNames
+          searchString = if (params.contains("search")) {
+            intent.data!!.getQueryParameter("search")
+          } else if (params.contains("q")) {
+            intent.data!!.getQueryParameter("q")
+          } else {
+            intent.data!!.lastPathSegment
+          }
+        }
         openSearch(
-          searchString = searchString,
+          searchString = searchString ?: "",
           isOpenedFromTabView = false,
           isVoice = false
         )
@@ -1897,7 +1922,10 @@ abstract class CoreReaderFragment :
     intent: Intent,
     activity: AppCompatActivity
   ): FragmentActivityExtensions.Super {
-    handleIntentActions(intent)
+    if (intent != lastIntent) {
+      lastIntent = intent
+      handleIntentActions(intent)
+    }
     return FragmentActivityExtensions.Super.ShouldCall
   }
 
