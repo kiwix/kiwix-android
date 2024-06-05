@@ -4,12 +4,11 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.plugins.RxJavaPlugins
+import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -44,8 +43,8 @@ internal class HistoryViewModelTest {
     RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
   }
 
-  private val itemsFromDb: Flow<List<Page>> =
-    flow { }
+  private val itemsFromDb: PublishProcessor<List<Page>> =
+    PublishProcessor.create()
 
   @BeforeEach
   fun init() {

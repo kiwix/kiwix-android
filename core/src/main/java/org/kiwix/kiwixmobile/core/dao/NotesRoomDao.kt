@@ -22,19 +22,18 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import io.reactivex.Flowable
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 
 @Dao
-abstract class NotesRoomDao : PageRoomDao {
+abstract class NotesRoomDao : PageDao {
   @Query("SELECT * FROM NotesRoomEntity ORDER BY NotesRoomEntity.noteTitle")
-  abstract fun notesAsEntity(): Flow<List<NotesRoomEntity>>
+  abstract fun notesAsEntity(): Flowable<List<NotesRoomEntity>>
 
-  fun notes(): Flow<List<Page>> = notesAsEntity().map { it.map(::NoteListItem) }
-  override fun pages(): Flow<List<Page>> = notes()
+  fun notes(): Flowable<List<Page>> = notesAsEntity().map { it.map(::NoteListItem) }
+  override fun pages(): Flowable<List<Page>> = notes()
   override fun deletePages(pagesToDelete: List<Page>) =
     deleteNotes(pagesToDelete as List<NoteListItem>)
 

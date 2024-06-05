@@ -22,7 +22,6 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual.equalTo
@@ -65,7 +64,7 @@ class HistoryRoomDaoTest {
 
     // Save and retrieve a history item
     historyRoomDao.saveHistory(historyItem)
-    var historyList = historyRoomDao.historyRoomEntity().first()
+    var historyList = historyRoomDao.historyRoomEntity().blockingFirst()
     with(historyList.first()) {
       assertThat(historyTitle, equalTo(historyItem.title))
       assertThat(zimId, equalTo(historyItem.zimId))
@@ -79,26 +78,26 @@ class HistoryRoomDaoTest {
 
     // Test to update the same day history for url
     historyRoomDao.saveHistory(historyItem)
-    historyList = historyRoomDao.historyRoomEntity().first()
+    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
     assertEquals(historyList.size, 1)
 
     // Delete the saved history item
     historyRoomDao.deleteHistory(listOf(historyItem))
-    historyList = historyRoomDao.historyRoomEntity().first()
+    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
     assertEquals(historyList.size, 0)
 
     // Save and delete all history items
     historyRoomDao.saveHistory(historyItem)
     historyRoomDao.saveHistory(getHistoryItem(databaseId = 2, dateString = "31 May 2024"))
     historyRoomDao.deleteAllHistory()
-    historyList = historyRoomDao.historyRoomEntity().first()
+    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
     assertThat(historyList.size, equalTo(0))
 
     // Save history item with empty fields
     val emptyHistoryUrl = ""
     val emptyTitle = ""
     historyRoomDao.saveHistory(getHistoryItem(emptyTitle, emptyHistoryUrl, databaseId = 1))
-    historyList = historyRoomDao.historyRoomEntity().first()
+    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
     assertThat(historyList.size, equalTo(1))
     historyRoomDao.deleteAllHistory()
 
@@ -118,13 +117,13 @@ class HistoryRoomDaoTest {
     val unicodeTitle = "title \u03A3" // Unicode character for Greek capital letter Sigma
     val historyItem2 = getHistoryItem(title = unicodeTitle, databaseId = 2)
     historyRoomDao.saveHistory(historyItem2)
-    historyList = historyRoomDao.historyRoomEntity().first()
+    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
     assertThat(historyList.first().historyTitle, equalTo("title Σ"))
 
     // Test deletePages function
     historyRoomDao.saveHistory(historyItem)
     historyRoomDao.deletePages(listOf(historyItem, historyItem2))
-    historyList = historyRoomDao.historyRoomEntity().first()
+    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
     assertThat(historyList.size, equalTo(0))
   }
 }

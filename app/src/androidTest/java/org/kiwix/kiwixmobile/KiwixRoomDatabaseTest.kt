@@ -106,7 +106,7 @@ class KiwixRoomDatabaseTest {
 
     // test inserting into history database
     historyRoomDao.saveHistory(historyItem)
-    var historyList = historyRoomDao.historyRoomEntity().first()
+    var historyList = historyRoomDao.historyRoomEntity().blockingFirst()
     with(historyList.first()) {
       assertThat(historyTitle, equalTo(historyItem.title))
       assertThat(zimId, equalTo(historyItem.zimId))
@@ -120,7 +120,7 @@ class KiwixRoomDatabaseTest {
 
     // test deleting the history
     historyRoomDao.deleteHistory(listOf(historyItem))
-    historyList = historyRoomDao.historyRoomEntity().first()
+    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
     assertEquals(historyList.size, 0)
 
     // test deleting all history
@@ -128,10 +128,10 @@ class KiwixRoomDatabaseTest {
     historyRoomDao.saveHistory(
       getHistoryItem(databaseId = 2)
     )
-    historyList = historyRoomDao.historyRoomEntity().first()
+    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
     assertEquals(historyList.size, 2)
     historyRoomDao.deleteAllHistory()
-    historyList = historyRoomDao.historyRoomEntity().first()
+    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
     assertEquals(historyList.size, 0)
   }
 
@@ -139,7 +139,7 @@ class KiwixRoomDatabaseTest {
   fun testNoteRoomDao() = runBlocking {
     notesRoomDao = db.notesRoomDao()
     // delete all the notes from database to properly run the test cases.
-    notesRoomDao.deleteNotes(notesRoomDao.notes().first() as List<NoteListItem>)
+    notesRoomDao.deleteNotes(notesRoomDao.notes().blockingFirst() as List<NoteListItem>)
     val noteItem = getNoteListItem(
       zimUrl = "http://kiwix.app/MainPage",
       noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/MainPage.txt"
@@ -147,7 +147,7 @@ class KiwixRoomDatabaseTest {
 
     // Save and retrieve a notes item
     notesRoomDao.saveNote(noteItem)
-    var notesList = notesRoomDao.notes().first() as List<NoteListItem>
+    var notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
     with(notesList.first()) {
       assertThat(zimId, equalTo(noteItem.zimId))
       assertThat(zimUrl, equalTo(noteItem.zimUrl))
@@ -160,7 +160,7 @@ class KiwixRoomDatabaseTest {
 
     // test deleting the history
     notesRoomDao.deleteNotes(listOf(noteItem))
-    notesList = notesRoomDao.notes().first() as List<NoteListItem>
+    notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
     assertEquals(notesList.size, 0)
 
     // test deleting all notes
@@ -171,10 +171,10 @@ class KiwixRoomDatabaseTest {
         zimUrl = "http://kiwix.app/Installing"
       )
     )
-    notesList = notesRoomDao.notes().first() as List<NoteListItem>
+    notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
     assertEquals(notesList.size, 2)
-    notesRoomDao.deletePages(notesRoomDao.notes().first())
-    notesList = notesRoomDao.notes().first() as List<NoteListItem>
+    notesRoomDao.deletePages(notesRoomDao.notes().blockingFirst())
+    notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
     assertEquals(notesList.size, 0)
   }
 
