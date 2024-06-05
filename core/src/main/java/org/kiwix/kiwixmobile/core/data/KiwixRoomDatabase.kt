@@ -27,16 +27,27 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDaoCoverts
+import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
+import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
 
 @Suppress("UnnecessaryAbstractClass")
-@Database(entities = [RecentSearchRoomEntity::class, HistoryRoomEntity::class], version = 2)
+@Database(
+  entities = [
+    RecentSearchRoomEntity::class,
+    HistoryRoomEntity::class,
+    NotesRoomEntity::class
+  ],
+  version = 3,
+  exportSchema = false
+)
 @TypeConverters(HistoryRoomDaoCoverts::class)
 abstract class KiwixRoomDatabase : RoomDatabase() {
   abstract fun recentSearchRoomDao(): RecentSearchRoomDao
   abstract fun historyRoomDao(): HistoryRoomDao
+  abstract fun noteRoomDao(): NotesRoomDao
 
   companion object {
     private var db: KiwixRoomDatabase? = null
@@ -46,7 +57,7 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
           ?: Room.databaseBuilder(context, KiwixRoomDatabase::class.java, "KiwixRoom.db")
             // We have already database name called kiwix.db in order to avoid complexity we named
             // as kiwixRoom.db
-            .addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
             .build()
       }
     }
@@ -68,6 +79,31 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
             PRIMARY KEY (`id`)
           )
           """
+        )
+      }
+    }
+
+    @Suppress("MagicNumber")
+    private val MIGRATION_2_3 = object : Migration(2, 3) {
+      override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL(
+          """
+            CREATE TABLE IF NOT EXISTS `NotesRoomEntity`(
+              `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+              `zimId` TEXT NOT NULL,
+              `zimFilePath` TEXT,
+              `zimUrl` TEXT NOT NULL,
+              `noteTitle` TEXT NOT NULL,
+              `noteFilePath` TEXT NOT NULL,
+              `favicon` TEXT
+            )
+          """
+        )
+
+        database.execSQL(
+          """
+            CREATE UNIQUE INDEX IF NOT EXISTS `index_NotesRoomEntity_noteTitle` ON `NotesRoomEntity` (`noteTitle`)
+            """
         )
       }
     }
