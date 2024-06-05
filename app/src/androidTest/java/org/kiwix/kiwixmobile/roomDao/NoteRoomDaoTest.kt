@@ -75,7 +75,7 @@ class NoteRoomDaoTest {
     }
     assertEquals(notesList.size, 1)
 
-    // Test duplicate note can not be saved
+    // Test update the existing note
     notesRoomDao.saveNote(noteItem)
     notesList = notesRoomDao.notes().first() as List<NoteListItem>
     assertEquals(notesList.size, 1)

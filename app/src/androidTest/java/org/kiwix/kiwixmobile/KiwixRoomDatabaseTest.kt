@@ -32,6 +32,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
+import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
@@ -43,6 +44,7 @@ class KiwixRoomDatabaseTest {
   private lateinit var recentSearchRoomDao: RecentSearchRoomDao
   private lateinit var db: KiwixRoomDatabase
   private lateinit var historyRoomDao: HistoryRoomDao
+  private lateinit var notesRoomDao: NotesRoomDao
 
   @Before
   fun setUpDatabase() {
@@ -133,6 +135,49 @@ class KiwixRoomDatabaseTest {
     assertEquals(historyList.size, 0)
   }
 
+  @Test
+  fun testNoteRoomDao() = runBlocking {
+    notesRoomDao = db.notesRoomDao()
+    // delete all the notes from database to properly run the test cases.
+    notesRoomDao.deleteNotes(notesRoomDao.notes().first() as List<NoteListItem>)
+    val noteItem = getNoteListItem(
+      zimUrl = "http://kiwix.app/MainPage",
+      noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/MainPage.txt"
+    )
+
+    // Save and retrieve a notes item
+    notesRoomDao.saveNote(noteItem)
+    var notesList = notesRoomDao.notes().first() as List<NoteListItem>
+    with(notesList.first()) {
+      assertThat(zimId, equalTo(noteItem.zimId))
+      assertThat(zimUrl, equalTo(noteItem.zimUrl))
+      assertThat(title, equalTo(noteItem.title))
+      assertThat(zimFilePath, equalTo(noteItem.zimFilePath))
+      assertThat(noteFilePath, equalTo(noteItem.noteFilePath))
+      assertThat(favicon, equalTo(noteItem.favicon))
+    }
+    assertEquals(notesList.size, 1)
+
+    // test deleting the history
+    notesRoomDao.deleteNotes(listOf(noteItem))
+    notesList = notesRoomDao.notes().first() as List<NoteListItem>
+    assertEquals(notesList.size, 0)
+
+    // test deleting all notes
+    notesRoomDao.saveNote(noteItem)
+    notesRoomDao.saveNote(
+      getNoteListItem(
+        title = "Installing",
+        zimUrl = "http://kiwix.app/Installing"
+      )
+    )
+    notesList = notesRoomDao.notes().first() as List<NoteListItem>
+    assertEquals(notesList.size, 2)
+    notesRoomDao.deletePages(notesRoomDao.notes().first())
+    notesList = notesRoomDao.notes().first() as List<NoteListItem>
+    assertEquals(notesList.size, 0)
+  }
+
   companion object {
     fun getHistoryItem(
       title: String = "Installation",
@@ -159,7 +204,7 @@ class KiwixRoomDatabaseTest {
     fun getNoteListItem(
       databaseId: Long = 0L,
       zimId: String = "1f88ab6f-c265-b-3ff-8f49-b7f4429503800",
-      title: String = "A",
+      title: String = "Alpine Wiki",
       zimFilePath: String = "/storage/emulated/0/Download/alpinelinux_en_all_maxi_2023-01.zim",
       zimUrl: String,
       noteFilePath: String = "/storage/emulated/0/Download/Notes/Alpine linux/AlpineNote.txt"
