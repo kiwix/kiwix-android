@@ -26,6 +26,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.content.res.AssetFileDescriptor
 import android.content.res.Configuration
 import android.graphics.Canvas
@@ -180,7 +181,6 @@ abstract class CoreReaderFragment :
   WebViewProvider,
   ReadAloudCallbacks,
   NavigationHistoryClickListener {
-  private var lastIntent: Intent? = null
   protected val webViewList: MutableList<KiwixWebView> = ArrayList()
   private val webUrlsProcessor = BehaviorProcessor.create<String>()
 
@@ -501,13 +501,10 @@ abstract class CoreReaderFragment :
 
     // Only check intent on first start of activity. Otherwise the intents will enter infinite loops
     // when "Don't keep activities" is on.
-    if (savedInstanceState == null && intent != null) {
+    if (savedInstanceState == null) {
       // call the `onNewIntent` explicitly so that the overridden method in child class will
       // also call, to properly handle the zim file opening when opening the zim file from storage.
       onNewIntent(intent, requireActivity() as AppCompatActivity)
-      // we clear the intent to ensure we don't use it again when a search is triggered from here
-      // it is not perfect but otherwise we end up with an endless search for intents like WEB_SEARCH
-      requireActivity().intent = null
     }
 
     serviceConnection = object : ServiceConnection {
@@ -1545,8 +1542,29 @@ abstract class CoreReaderFragment :
     getCurrentWebView()?.requestLayout()
   }
 
+  private fun canOpenUrl(url: Uri): Boolean {
+    val intent = Intent(Intent.ACTION_VIEW, url)
+    val activities: List<ResolveInfo> =
+      requireActivity().packageManager.queryIntentActivities(
+        intent,
+        android.content.pm.PackageManager.MATCH_DEFAULT_ONLY
+      )
+    for (info in activities) {
+      if (info.activityInfo.packageName == requireActivity().packageName) {
+        return true
+        break
+      }
+    }
+    return false
+  }
+
   override fun openExternalUrl(intent: Intent) {
-    externalLinkOpener?.openExternalUrl(intent)
+    val shouldOpenInApp = sharedPreferenceUtil?.prefSupportedExternalLinksOpenInApp ?: false
+    if (intent.data != null && shouldOpenInApp && canOpenUrl(intent.data!!)) {
+      handleIntentActions(intent)
+    } else {
+      externalLinkOpener?.openExternalUrl(intent)
+    }
   }
 
   protected fun openZimFile(
@@ -1895,6 +1913,8 @@ abstract class CoreReaderFragment :
           isOpenedFromTabView = false,
           isVoice = false
         )
+        intent.action = null
+        requireActivity().intent.action = null
       }
     }
   }
@@ -1922,10 +1942,7 @@ abstract class CoreReaderFragment :
     intent: Intent,
     activity: AppCompatActivity
   ): FragmentActivityExtensions.Super {
-    if (intent != lastIntent) {
-      lastIntent = intent
-      handleIntentActions(intent)
-    }
+    handleIntentActions(intent)
     return FragmentActivityExtensions.Super.ShouldCall
   }
 

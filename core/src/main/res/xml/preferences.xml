@@ -53,6 +53,13 @@
       app:iconSpaceReserved="false" />
 
     <SwitchPreferenceCompat
+      android:defaultValue="false"
+      android:key="pref_supported_external_links_open_in_app"
+      android:summary="@string/pref_supported_external_links_open_in_app_summary"
+      android:title="@string/pref_supported_external_links_open_in_app_title"
+      app:iconSpaceReserved="false" />
+
+    <SwitchPreferenceCompat
       android:defaultValue="true"
       android:key="pref_wifi_only"
       android:summary="@string/pref_wifi_only"
