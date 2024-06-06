@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.settings
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
+import android.content.ComponentName
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
@@ -93,12 +94,28 @@ abstract class CorePrefsFragment :
     setStorage()
     setUpSettings()
     setupZoom()
+    setupWebSearchIntent()
     sharedPreferenceUtil?.let {
       LanguageUtils(requireActivity()).changeFont(
         requireActivity(),
         it
       )
     }
+  }
+
+  private fun setupWebSearchIntent() {
+    val pref = findPreference<Preference>(SharedPreferenceUtil.PREF_ENABLE_WEB_SEARCH_INTENT)
+    pref?.onPreferenceChangeListener =
+      Preference.OnPreferenceChangeListener { _, newValue ->
+        val boolValue = newValue as Boolean
+        val pm: PackageManager = requireActivity().packageManager
+        pm.setComponentEnabledSetting(
+          ComponentName(requireActivity(), "org.kiwix.kiwixmobile.main.KiwixMainActivityWebSearch"),
+          if (boolValue) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+          PackageManager.DONT_KILL_APP
+        )
+        true
+      }
   }
 
   private fun setupZoom() {

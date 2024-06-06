@@ -65,6 +65,14 @@
       android:summary="@string/pref_wifi_only"
       android:title="@string/pref_wifi_only"
       app:iconSpaceReserved="false" />
+
+
+    <SwitchPreferenceCompat
+      android:defaultValue="false"
+      android:key="pref_enable_web_search_intent"
+      android:summary="@string/pref_enable_web_search_intent_summary"
+      android:title="@string/pref_enable_web_search_intent_title"
+      app:iconSpaceReserved="false" />
   </PreferenceCategory>
 
   <PreferenceCategory

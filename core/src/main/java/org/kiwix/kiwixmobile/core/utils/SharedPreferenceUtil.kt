@@ -285,6 +285,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup"
     const val PREF_SUPPORTED_EXTERNAL_LINKS_OPEN_IN_APP =
       "pref_supported_external_links_open_in_app"
+    const val PREF_ENABLE_WEB_SEARCH_INTENT = "pref_enable_web_search_intent"
     const val PREF_SHOW_STORAGE_OPTION = "show_storgae_option"
     private const val PREF_IS_FIRST_RUN = "isFirstRun"
     private const val PREF_SHOW_BOOKMARKS_ALL_BOOKS = "show_bookmarks_current_book"
