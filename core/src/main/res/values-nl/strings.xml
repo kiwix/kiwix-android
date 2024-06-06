@@ -30,6 +30,7 @@
   <string name="save_media_error">Er is een fout opgetreden bij het opslaan van de media!</string>
   <string name="save_media_saved">Het bestand is opgeslagen als %s in Downloads/org.kiwix…/</string>
   <string name="search_label">Zoeken</string>
+  <string name="searched_list">Gezochte lijst</string>
   <string name="choose_file">Selecteer een inhoudsbestand (*.zim)</string>
   <string name="open_in_new_tab">Koppeling openen in nieuw tabblad?</string>
   <string name="hotspot_service_channel_name">Hotspot-dienstkanaal</string>
@@ -214,6 +215,7 @@
   <string name="switch_tabs">Van tabblad wisselen</string>
   <string name="close_all_tabs">Alle tabbladen sluiten</string>
   <string name="close_tab">Sluit Tab</string>
+  <string name="could_not_restore_tabs">Kan tabbladen niet herstellen.</string>
   <string name="pending_state">In afwachting</string>
   <string name="running_state">In behandeling</string>
   <string name="complete">Afgerond</string>
@@ -243,6 +245,7 @@
   <string name="severe_loss_error">Ernstige fout! Probeer WiFi P2P uit te schakelen en opnieuw in te schakelen</string>
   <string name="connection_failed">Verbinding mislukt</string>
   <string name="permission_rationale_location">Android vereist locatietoestemming zodat de app nabije apparaten kan detecteren</string>
+  <string name="permission_rationale_nearby">Android heeft toestemming voor apparaten in de buurt nodig om de app gelijkaardige apparaten te laten detecteren</string>
   <string name="permission_refused_location">Kan geen nabije apparaten vinden zonder locatierechten</string>
   <string name="permission_refused_storage">Geen toegang tot ZIM-bestanden zonder opslagrechten</string>
   <string name="request_enable_location">Schakel locatie in om detectie van nabije apparaten mogelijk te maken</string>
@@ -257,6 +260,7 @@
   <string name="get_content_from_nearby_device">Ontvang inhoud van een apparaat in de buurt</string>
   <string name="search_for_peers">Nabije apparaten zoeken</string>
   <string name="your_device">Uw apparaat:</string>
+  <string name="device_name">Naam van het apparaat</string>
   <string name="nearby_devices">NABIJE APPARATEN</string>
   <string name="no_devices_found">Geen apparaten gedetecteerd. Tik op de zoekknop om het opnieuw te proberen.</string>
   <string name="files_for_transfer">BESTANDEN VOOR OVERDRACHT</string>
@@ -265,6 +269,7 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Wist alle aantekeningen bij alle artikelen</string>
   <string name="pref_clear_all_notes_title">Alle aantekeningen wissen</string>
+  <string name="pref_clear_notes">Notities wissen</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Toestaan om ZIM-bestanden op de SD-kaart te lezen en te schrijven</string>
   <string name="pref_text_zoom_summary">Tekstgrootte wijzigen in stappen van 25%.</string>
   <string name="tag_pic">Afb</string>
@@ -299,6 +304,7 @@
   <string name="tabs_restored">Tabbladen hersteld</string>
   <string name="open_drawer">Lade openen</string>
   <string name="close_drawer">Lade sluiten</string>
+  <string name="zim_files_not_showing">Zim-bestanden niet te zien?</string>
   <string name="how_to_update_content">Hoe werk ik de inhoud bij?</string>
   <string name="update_content_description">Om inhoud (een ZIM-bestand) bij te werken moet u de volledige nieuwste versie van precies dezelfde inhoud downloaden. Dat kan via de downloadsectie.</string>
   <string name="all_files_permission_needed">Toestemming voor alle bestanden vereist</string>

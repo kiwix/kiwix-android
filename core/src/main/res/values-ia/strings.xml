@@ -23,6 +23,7 @@
   <string name="save_media_error">Un error occurreva durante le salveguarda del file multimedial!</string>
   <string name="save_media_saved">File multimedial salveguardate como %s in Downloads/org.kiwix…/</string>
   <string name="search_label">Cercar</string>
+  <string name="searched_list">Lista cercate</string>
   <string name="choose_file">Selige un file de contento ZIM (*.zim)</string>
   <string name="open_in_new_tab">Aperir ligamine in nove scheda?</string>
   <string name="hotspot_service_channel_name">Canal de servicio del puncto de accesso</string>

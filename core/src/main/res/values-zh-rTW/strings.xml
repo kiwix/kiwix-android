@@ -31,6 +31,7 @@
   <string name="save_media_error">嘗試儲存該媒體時出錯！</string>
   <string name="save_media_saved">已將媒體以 %s 儲存到 Downloads/org.kiwix…/</string>
   <string name="search_label">搜尋</string>
+  <string name="searched_list">搜尋清單</string>
   <string name="choose_file">請選擇一份內容檔案 (*.zim)</string>
   <string name="open_in_new_tab">在新分頁打開連結？</string>
   <string name="hotspot_service_channel_name">熱點服務頻道</string>
