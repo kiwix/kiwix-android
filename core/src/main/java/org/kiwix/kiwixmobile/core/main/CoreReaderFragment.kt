@@ -112,6 +112,8 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigatio
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.findFirstTextView
 import org.kiwix.kiwixmobile.core.extensions.closeFullScreenMode
+import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
+import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
@@ -1888,6 +1890,8 @@ abstract class CoreReaderFragment :
           isOpenedFromTabView = false,
           isVoice = false
         )
+        intent.action = null
+        requireActivity().intent.action = null
       }
 
       Intent.ACTION_VIEW -> if (
@@ -1897,8 +1901,18 @@ abstract class CoreReaderFragment :
         // prevents such occurrences.
         intent.scheme !in listOf("file", "content")
       ) {
+        intent.action = null
+        requireActivity().intent.action = null
         var searchString: String? = null
         if (intent.data != null) {
+          val book = coreComponent.newBookDao().bookMatchingUrl(intent.data!!)
+          if (book != null) {
+            (requireActivity() as CoreMainActivity).openPage(
+              pageUrl = "https://kiwix.app/A/" + intent.data!!.lastPathSegment,
+              zimFilePath = book.file.path
+            )
+            return
+          }
           val params = intent.data!!.queryParameterNames
           searchString = if (params.contains("search")) {
             intent.data!!.getQueryParameter("search")
@@ -1913,8 +1927,6 @@ abstract class CoreReaderFragment :
           isOpenedFromTabView = false,
           isVoice = false
         )
-        intent.action = null
-        requireActivity().intent.action = null
       }
     }
   }

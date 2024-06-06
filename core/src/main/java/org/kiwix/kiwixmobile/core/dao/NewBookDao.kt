@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.dao
 
+import android.net.Uri
 import io.objectbox.Box
 import io.objectbox.kotlin.inValues
 import io.objectbox.kotlin.query
@@ -94,4 +95,23 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
       QueryBuilder.StringOrder.CASE_INSENSITIVE
     )
   }.findFirst()
+
+  fun bookMatchingUrl(url: Uri): BookOnDiskEntity? {
+    url.host?.let {
+      it.split(".").let { splittedHost ->
+        val list = box.query {
+          contains(
+            BookOnDiskEntity_.name, if (splittedHost.size > 2) splittedHost[1] else splittedHost[0],
+            QueryBuilder.StringOrder.CASE_INSENSITIVE
+          )
+        }.find()
+        list.sortWith(Comparator { book1: BookOnDiskEntity, book2: BookOnDiskEntity ->
+          if (book1.language == splittedHost[0] || book1.language == splittedHost[splittedHost.size - 1]
+          ) 1 else 0
+        })
+        return@bookMatchingUrl list.first()
+      }
+    }
+    return null
+  }
 }
