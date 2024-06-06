@@ -156,7 +156,7 @@ import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED_NEW_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils.reformatProviderUrl
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.DownloadOrOpenEpubAndPdfHandler
+import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.deleteCachedFiles
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
@@ -325,7 +325,7 @@ abstract class CoreReaderFragment :
 
   @JvmField
   @Inject
-  var downloadOrOpenEpubAndPdfHandler: DownloadOrOpenEpubAndPdfHandler? = null
+  var unsupportedMimeTypeHandler: UnsupportedMimeTypeHandler? = null
   private var hideBackToTopTimer: CountDownTimer? = null
   private var documentSections: MutableList<DocumentSection>? = null
   private var isBackToTopEnabled = false
@@ -1547,8 +1547,8 @@ abstract class CoreReaderFragment :
     externalLinkOpener?.openExternalUrl(intent)
   }
 
-  override fun showDownloadOrOpenEpubAndPdfDialog(url: String, documentType: String?) {
-    downloadOrOpenEpubAndPdfHandler?.showDownloadOrOpenEpubAndPdfDialog(url, documentType)
+  override fun showSaveOrOpenUnsupportedFilesDialog(url: String, documentType: String?) {
+    unsupportedMimeTypeHandler?.showSaveOrOpenUnsupportedFilesDialog(url, documentType)
   }
 
   protected fun openZimFile(

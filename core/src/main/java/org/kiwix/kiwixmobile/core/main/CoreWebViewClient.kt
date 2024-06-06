@@ -44,14 +44,14 @@ open class CoreWebViewClient(
     url = convertLegacyUrl(url)
     urlWithAnchor = if (url.contains("#")) url else null
     if (zimReaderContainer.isRedirect(url)) {
-      if (handleEpubAndPdf(url)) {
+      if (handleUnsupportedFiles(url)) {
         return true
       }
       view.loadUrl(zimReaderContainer.getRedirect(url))
       return true
     }
     if (url.startsWith(ZimFileReader.CONTENT_PREFIX)) {
-      return handleEpubAndPdf(url)
+      return handleUnsupportedFiles(url)
     }
     if (url.startsWith("javascript:")) {
       // Allow javascript for HTML functions and code execution (EX: night mode)
@@ -77,10 +77,10 @@ open class CoreWebViewClient(
   }
 
   @Suppress("NestedBlockDepth")
-  private fun handleEpubAndPdf(url: String): Boolean {
+  private fun handleUnsupportedFiles(url: String): Boolean {
     val extension = MimeTypeMap.getFileExtensionFromUrl(url)
     if (DOCUMENT_TYPES.containsKey(extension)) {
-      callback.showDownloadOrOpenEpubAndPdfDialog(url, DOCUMENT_TYPES[extension])
+      callback.showSaveOrOpenUnsupportedFilesDialog(url, DOCUMENT_TYPES[extension])
       return true
     }
     return false

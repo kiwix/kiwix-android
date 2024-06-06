@@ -34,12 +34,12 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.DownloadOrOpenEpubAndPdfHandler
+import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import java.io.File
 import java.io.InputStream
 
-class DownloadOrOpenEpubAndPdfHandlerTest {
+class UnsupportedMimeTypeHandlerTest {
   private val demoUrl = "content://demoPdf.pdf"
   private val demoFileName = "demoPdf.pdf"
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
@@ -49,7 +49,7 @@ class DownloadOrOpenEpubAndPdfHandlerTest {
   private val activity: Activity = mockk()
   private val webResourceResponse: WebResourceResponse = mockk()
   private val inputStream: InputStream = mockk()
-  private val downloadOrOpenEpubAndPdfHandler = DownloadOrOpenEpubAndPdfHandler(
+  private val unsupportedMimeTypeHandler = UnsupportedMimeTypeHandler(
     activity,
     sharedPreferenceUtil,
     alertDialogShower,
@@ -78,23 +78,23 @@ class DownloadOrOpenEpubAndPdfHandlerTest {
     } returns "Saved media as $demoFileName to Downloads/org.kiwix…/"
     every { savedFile.path } returns "Emulated/0/Downloads/$demoFileName"
     every { savedFile.exists() } returns true
-    downloadOrOpenEpubAndPdfHandler.intent = mockk()
-    every { downloadOrOpenEpubAndPdfHandler.intent.setDataAndType(any(), any()) } returns mockk()
-    every { downloadOrOpenEpubAndPdfHandler.intent.setFlags(any()) } returns mockk()
-    every { downloadOrOpenEpubAndPdfHandler.intent.addFlags(any()) } returns mockk()
+    unsupportedMimeTypeHandler.intent = mockk()
+    every { unsupportedMimeTypeHandler.intent.setDataAndType(any(), any()) } returns mockk()
+    every { unsupportedMimeTypeHandler.intent.setFlags(any()) } returns mockk()
+    every { unsupportedMimeTypeHandler.intent.addFlags(any()) } returns mockk()
   }
 
   @Test
   fun testOpeningFileInExternalReaderApplication() {
     every {
-      downloadOrOpenEpubAndPdfHandler.intent.resolveActivity(activity.packageManager)
+      unsupportedMimeTypeHandler.intent.resolveActivity(activity.packageManager)
     } returns mockk()
-    every { activity.startActivity(downloadOrOpenEpubAndPdfHandler.intent) } returns mockk()
+    every { activity.startActivity(unsupportedMimeTypeHandler.intent) } returns mockk()
     val lambdaSlot = slot<() -> Unit>()
-    downloadOrOpenEpubAndPdfHandler.showDownloadOrOpenEpubAndPdfDialog(demoUrl, "application/pdf")
+    unsupportedMimeTypeHandler.showSaveOrOpenUnsupportedFilesDialog(demoUrl, "application/pdf")
     verify {
       alertDialogShower.show(
-        KiwixDialog.DownloadOrOpenEpubAndPdf,
+        KiwixDialog.SaveOrOpenUnsupportedFiles,
         capture(lambdaSlot),
         any(),
         any()
@@ -102,24 +102,24 @@ class DownloadOrOpenEpubAndPdfHandlerTest {
     }
     lambdaSlot.captured.invoke()
     verify {
-      activity.startActivity(downloadOrOpenEpubAndPdfHandler.intent)
+      activity.startActivity(unsupportedMimeTypeHandler.intent)
     }
   }
 
   @Test
   fun testOpeningFileWhenNoReaderApplicationInstalled() {
     every {
-      downloadOrOpenEpubAndPdfHandler.intent.resolveActivity(activity.packageManager)
+      unsupportedMimeTypeHandler.intent.resolveActivity(activity.packageManager)
     } returns null
     mockkStatic(Toast::class)
     justRun {
       Toast.makeText(activity, R.string.no_reader_application_installed, Toast.LENGTH_LONG).show()
     }
     val lambdaSlot = slot<() -> Unit>()
-    downloadOrOpenEpubAndPdfHandler.showDownloadOrOpenEpubAndPdfDialog(demoUrl, "application/pdf")
+    unsupportedMimeTypeHandler.showSaveOrOpenUnsupportedFilesDialog(demoUrl, "application/pdf")
     verify {
       alertDialogShower.show(
-        KiwixDialog.DownloadOrOpenEpubAndPdf,
+        KiwixDialog.SaveOrOpenUnsupportedFiles,
         capture(lambdaSlot),
         any(),
         any()
@@ -130,7 +130,7 @@ class DownloadOrOpenEpubAndPdfHandlerTest {
   }
 
   @Test
-  fun testFileDownloadingSuccessfull() {
+  fun testFileSavedSuccessfully() {
     val toastMessage = activity.getString(R.string.save_media_saved, savedFile.name)
     mockkStatic(Toast::class)
     justRun {
@@ -141,13 +141,13 @@ class DownloadOrOpenEpubAndPdfHandlerTest {
       ).show()
     }
     val lambdaSlot = slot<() -> Unit>()
-    downloadOrOpenEpubAndPdfHandler.showDownloadOrOpenEpubAndPdfDialog(
+    unsupportedMimeTypeHandler.showSaveOrOpenUnsupportedFilesDialog(
       demoUrl,
       "application/pdf"
     )
     verify {
       alertDialogShower.show(
-        KiwixDialog.DownloadOrOpenEpubAndPdf,
+        KiwixDialog.SaveOrOpenUnsupportedFiles,
         any(),
         capture(lambdaSlot),
         any()
@@ -160,10 +160,10 @@ class DownloadOrOpenEpubAndPdfHandlerTest {
   @Test
   fun testUserClicksOnNoThanksButton() {
     val lambdaSlot = slot<() -> Unit>()
-    downloadOrOpenEpubAndPdfHandler.showDownloadOrOpenEpubAndPdfDialog(demoUrl, "application/pdf")
+    unsupportedMimeTypeHandler.showSaveOrOpenUnsupportedFilesDialog(demoUrl, "application/pdf")
     verify {
       alertDialogShower.show(
-        KiwixDialog.DownloadOrOpenEpubAndPdf,
+        KiwixDialog.SaveOrOpenUnsupportedFiles,
         any(),
         any(),
         capture(lambdaSlot)
@@ -174,8 +174,8 @@ class DownloadOrOpenEpubAndPdfHandlerTest {
   }
 
   @Test
-  fun testIfDownloadFailed() {
-    val downloadOrOpenEpubAndPdfHandler = DownloadOrOpenEpubAndPdfHandler(
+  fun testIfSavingFailed() {
+    val downloadOrOpenEpubAndPdfHandler = UnsupportedMimeTypeHandler(
       activity,
       sharedPreferenceUtil,
       alertDialogShower,
@@ -186,10 +186,10 @@ class DownloadOrOpenEpubAndPdfHandlerTest {
       Toast.makeText(activity, R.string.save_media_error, Toast.LENGTH_LONG).show()
     }
     val lambdaSlot = slot<() -> Unit>()
-    downloadOrOpenEpubAndPdfHandler.showDownloadOrOpenEpubAndPdfDialog(null, "application/pdf")
+    downloadOrOpenEpubAndPdfHandler.showSaveOrOpenUnsupportedFilesDialog(null, "application/pdf")
     verify {
       alertDialogShower.show(
-        KiwixDialog.DownloadOrOpenEpubAndPdf,
+        KiwixDialog.SaveOrOpenUnsupportedFiles,
         any(),
         capture(lambdaSlot),
         any()

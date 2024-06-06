@@ -30,7 +30,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils.downloadFileFromUrl
 import java.io.File
 import javax.inject.Inject
 
-class DownloadOrOpenEpubAndPdfHandler @Inject constructor(
+class UnsupportedMimeTypeHandler @Inject constructor(
   private val activity: Activity,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val alertDialogShower: AlertDialogShower,
@@ -38,16 +38,16 @@ class DownloadOrOpenEpubAndPdfHandler @Inject constructor(
 ) {
   var intent: Intent = Intent(Intent.ACTION_VIEW)
 
-  fun showDownloadOrOpenEpubAndPdfDialog(url: String?, documentType: String?) {
+  fun showSaveOrOpenUnsupportedFilesDialog(url: String?, documentType: String?) {
     alertDialogShower.show(
-      KiwixDialog.DownloadOrOpenEpubAndPdf,
-      { openOrDownloadFile(url, documentType, true) },
-      { openOrDownloadFile(url, documentType, false) },
+      KiwixDialog.SaveOrOpenUnsupportedFiles,
+      { openOrSaveFile(url, documentType, true) },
+      { openOrSaveFile(url, documentType, false) },
       { }
     )
   }
 
-  private fun openOrDownloadFile(url: String?, documentType: String?, openFile: Boolean) {
+  private fun openOrSaveFile(url: String?, documentType: String?, openFile: Boolean) {
     downloadFileFromUrl(
       url,
       null,

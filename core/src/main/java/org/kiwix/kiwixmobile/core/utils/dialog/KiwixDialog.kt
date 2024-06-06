@@ -108,11 +108,11 @@ sealed class KiwixDialog(
     cancelable = false
   )
 
-  object DownloadOrOpenEpubAndPdf : KiwixDialog(
-    R.string.download_or_open_pdf_and_epub_content_dialog_title,
-    R.string.download_or_open_pdf_and_epub_content_dialog_message,
+  object SaveOrOpenUnsupportedFiles : KiwixDialog(
+    R.string.save_or_open_unsupported_files_dialog_title,
+    R.string.save_or_open_unsupported_files_dialog_message,
     R.string.open,
-    R.string.download,
+    R.string.save,
     neutralMessage = R.string.no_thanks
   )
 

@@ -25,7 +25,7 @@ interface WebViewCallback {
   fun webViewUrlFinishedLoading()
   fun webViewFailedLoading(failingUrl: String)
   fun openExternalUrl(intent: Intent)
-  fun showDownloadOrOpenEpubAndPdfDialog(url: String, documentType: String?)
+  fun showSaveOrOpenUnsupportedFilesDialog(url: String, documentType: String?)
   fun webViewProgressChanged(progress: Int, webView: WebView)
   fun webViewTitleUpdated(title: String)
   fun webViewPageChanged(page: Int, maxPages: Int)
