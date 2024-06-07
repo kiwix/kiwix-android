@@ -54,7 +54,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   attrs: AttributeSet,
   nonVideoView: ViewGroup,
   videoView: ViewGroup,
-  webViewClient: CoreWebViewClient,
+  private val webViewClient: CoreWebViewClient,
   val sharedPreferenceUtil: SharedPreferenceUtil
 ) : VideoEnabledWebView(context, attrs) {
 
@@ -108,7 +108,11 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   override fun performLongClick(): Boolean {
     val result = hitTestResult
     if (result.type == HitTestResult.SRC_ANCHOR_TYPE) {
-      result.extra?.let(callback::webViewLongClick)
+      result.extra?.let {
+        if (!webViewClient.handleUnsupportedFiles(it)) {
+          callback.webViewLongClick(it)
+        }
+      }
       return true
     }
     return super.performLongClick()
