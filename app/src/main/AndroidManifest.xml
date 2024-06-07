@@ -48,7 +48,6 @@
       </intent-filter>
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
-
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
 
@@ -58,7 +57,21 @@
         <data android:pathPattern="/.*\\..*\\.zim" />
         <data android:pathPattern="/.*\\..*\\..*\\.zim" />
         <data android:pathPattern="/.*\\..*\\..*\\..*\\.zim" />
-        <data android:host="*" />
+        <data android:host="*"/>
+      </intent-filter>
+
+      <intent-filter android:autoVerify="true">
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+
+        <data android:scheme="https"/>
+        <data android:scheme="http"/>
+        <data android:host="*.wikipedia.fr"/>
+        <data android:host="*.wikipedia.org"/>
+        <data android:host="*.wikipedia.com"/>
+        <data android:host="*.wikipedia.de"/>
+        <data android:pathPattern=".*"/>
       </intent-filter>
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
@@ -124,6 +137,16 @@
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
     </activity>
+    <activity-alias
+      android:name=".main.KiwixMainActivityWebSearch"
+      android:exported="true"
+      android:enabled="false"
+      android:targetActivity=".main.KiwixMainActivity" >
+      <intent-filter android:enabled="true">
+        <action android:name="android.intent.action.WEB_SEARCH" />
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
+    </activity-alias>
 
     <receiver
       android:name=".main.KiwixSearchWidget"

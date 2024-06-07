@@ -26,6 +26,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.content.res.AssetFileDescriptor
 import android.content.res.Configuration
 import android.graphics.Canvas
@@ -111,6 +112,8 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigatio
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.findFirstTextView
 import org.kiwix.kiwixmobile.core.extensions.closeFullScreenMode
+import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
+import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
@@ -487,7 +490,10 @@ abstract class CoreReaderFragment :
     setupDocumentParser()
     loadPrefs()
     updateTitle()
-    handleIntentExtras(requireActivity().intent)
+    val intent = requireActivity().intent
+    if (intent != null) {
+      handleIntentExtras(intent)
+    }
     tabRecyclerView?.let {
       it.adapter = tabsAdapter
       tabCallback?.let { callBack ->
@@ -500,7 +506,7 @@ abstract class CoreReaderFragment :
     if (savedInstanceState == null) {
       // call the `onNewIntent` explicitly so that the overridden method in child class will
       // also call, to properly handle the zim file opening when opening the zim file from storage.
-      onNewIntent(requireActivity().intent, requireActivity() as AppCompatActivity)
+      onNewIntent(intent, requireActivity() as AppCompatActivity)
     }
 
     serviceConnection = object : ServiceConnection {
@@ -1538,8 +1544,29 @@ abstract class CoreReaderFragment :
     getCurrentWebView()?.requestLayout()
   }
 
+  private fun canOpenUrl(url: Uri): Boolean {
+    val intent = Intent(Intent.ACTION_VIEW, url)
+    val activities: List<ResolveInfo> =
+      requireActivity().packageManager.queryIntentActivities(
+        intent,
+        android.content.pm.PackageManager.MATCH_DEFAULT_ONLY
+      )
+    for (info in activities) {
+      if (info.activityInfo.packageName == requireActivity().packageName) {
+        return true
+        break
+      }
+    }
+    return false
+  }
+
   override fun openExternalUrl(intent: Intent) {
-    externalLinkOpener?.openExternalUrl(intent)
+    val shouldOpenInApp = sharedPreferenceUtil?.prefSupportedExternalLinksOpenInApp ?: false
+    if (intent.data != null && shouldOpenInApp && canOpenUrl(intent.data!!)) {
+      handleIntentActions(intent)
+    } else {
+      externalLinkOpener?.openExternalUrl(intent)
+    }
   }
 
   protected fun openZimFile(
@@ -1863,6 +1890,16 @@ abstract class CoreReaderFragment :
         requireActivity().intent.action = null
       }
 
+      "android.intent.action.WEB_SEARCH" -> {
+        openSearch(
+          searchString = intent.getStringExtra("query") ?: "",
+          isOpenedFromTabView = false,
+          isVoice = false
+        )
+        intent.action = null
+        requireActivity().intent.action = null
+      }
+
       Intent.ACTION_VIEW -> if (
         (intent.type == null || intent.type != "application/octet-stream") &&
         // Added condition to handle ZIM files. When opening from storage, the intent may
@@ -1870,9 +1907,29 @@ abstract class CoreReaderFragment :
         // prevents such occurrences.
         intent.scheme !in listOf("file", "content")
       ) {
-        val searchString = if (intent.data == null) "" else intent.data?.lastPathSegment
+        intent.action = null
+        requireActivity().intent.action = null
+        var searchString: String? = null
+        if (intent.data != null) {
+          val book = coreComponent.newBookDao().bookMatchingUrl(intent.data!!)
+          if (book != null) {
+            (requireActivity() as CoreMainActivity).openPage(
+              pageUrl = "https://kiwix.app/A/" + intent.data!!.lastPathSegment,
+              zimFilePath = book.file.path
+            )
+            return
+          }
+          val params = intent.data!!.queryParameterNames
+          searchString = if (params.contains("search")) {
+            intent.data!!.getQueryParameter("search")
+          } else if (params.contains("q")) {
+            intent.data!!.getQueryParameter("q")
+          } else {
+            intent.data!!.lastPathSegment
+          }
+        }
         openSearch(
-          searchString = searchString,
+          searchString = searchString ?: "",
           isOpenedFromTabView = false,
           isVoice = false
         )

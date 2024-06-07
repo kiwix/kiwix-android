@@ -314,7 +314,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
           }, 300)
         }
 
-        else -> activity.toast(R.string.cannot_open_file)
+        else -> {}
       }
     }
     return ShouldCall

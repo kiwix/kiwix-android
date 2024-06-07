@@ -81,6 +81,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefExternalLinkPopup: Boolean
     get() = sharedPreferences.getBoolean(PREF_EXTERNAL_LINK_POPUP, true)
 
+  val prefSupportedExternalLinksOpenInApp: Boolean
+    get() = sharedPreferences.getBoolean(PREF_SUPPORTED_EXTERNAL_LINKS_OPEN_IN_APP, false)
+
   val isPlayStoreBuild: Boolean
     get() = sharedPreferences.getBoolean(IS_PLAY_STORE_BUILD, false)
 
@@ -286,6 +289,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val PREF_NEW_TAB_BACKGROUND = "pref_newtab_background"
     private const val PREF_STORAGE_TITLE = "pref_selected_title"
     const val PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup"
+    const val PREF_SUPPORTED_EXTERNAL_LINKS_OPEN_IN_APP =
+      "pref_supported_external_links_open_in_app"
+    const val PREF_ENABLE_WEB_SEARCH_INTENT = "pref_enable_web_search_intent"
     const val PREF_SHOW_STORAGE_OPTION = "show_storgae_option"
     private const val PREF_IS_FIRST_RUN = "isFirstRun"
     private const val PREF_SHOW_BOOKMARKS_ALL_BOOKS = "show_bookmarks_current_book"
