@@ -56,7 +56,10 @@ dependencies {
 
   // Get kiwixlib online if it is not populated locally
   if (!shouldUseLocalVersion()) {
-    api(Libs.libkiwix)
+    api(Libs.libkiwix) {
+      // TODO Should be removed after we upgrade to the SDK 34
+      exclude("org.jetbrains.kotlin", "kotlin-stdlib")
+    }
   } else {
     implementation("com.getkeepsafe.relinker:relinker:1.4.5")
     api(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))
