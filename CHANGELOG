@@ -1,3 +1,27 @@
+3.11.0
+New Features:
+* Export and import feature for bookmarks. (https://github.com/kiwix/kiwix-android/pull/3724)
+
+Bug Fixed:
+* Application crashing on ARM architecture. (https://github.com/kiwix/kiwix-android/issues/3661)
+* Application crashes when starting the kiwix server. (https://github.com/kiwix/kiwix-android/pull/3846)
+* Unable to restart download after pausing if application language is other than English. (https://github.com/kiwix/kiwix-android/pull/3847)
+* Can't open EPUB from Project Gutenberg in external app. (https://github.com/kiwix/kiwix-android/pull/3738)
+* Some EPUB files are not downloading. (https://github.com/kiwix/kiwix-android/pull/3738)
+* Saving bookmarks in the zim-split splitted ZIM files are crashing the application, when there is a 0 size extra zim chunk. (https://github.com/kiwix/kiwix-android/pull/3862)
+* Suspended the application from F-droid store. (https://github.com/kiwix/kiwix-android/issues/3672)
+* New nightly APK signatures prevent easy update. (https://github.com/kiwix/kiwix-android/pull/3844)
+* Improved the article search. (https://github.com/kiwix/kiwix-android/pull/3849)
+* Fullscreen mode is broken. (https://github.com/kiwix/kiwix-android/pull/3853)
+* Unable to exit the application when pressing the back button while reading the ZIM file. (https://github.com/kiwix/kiwix-android/issues/3854)
+* Saving Notes, History, and Recent searches in room database. (https://github.com/kiwix/kiwix-android/pull/3859, https://github.com/kiwix/kiwix-android/pull/3858, https://github.com/kiwix/kiwix-android/pull/3863)
+* Long clicking on Download button in epub ZIM files shows the "Open in new tab" dialog which leads to a blank page. (https://github.com/kiwix/kiwix-android/pull/3870)
+
+Compilation/CI/CD:
+* Using libkiwix `2.2.0`. (https://github.com/kiwix/kiwix-android/pull/3867)
+* Upgraded the minimum SDK version to 25. (https://github.com/kiwix/kiwix-android/pull/3840)
+* Detecting accessibility issues in CI. (https://github.com/kiwix/kiwix-android/pull/3842)
+
 3.10.1
 Bug Fixed:
 * Error on opening a split zim file. (https://github.com/kiwix/kiwix-android/pull/3803)
