@@ -15,6 +15,7 @@ Bug Fixed:
 * Fullscreen mode is broken. (https://github.com/kiwix/kiwix-android/pull/3853)
 * Unable to exit the application when pressing the back button while reading the ZIM file. (https://github.com/kiwix/kiwix-android/issues/3854)
 * Saving Notes, History, and Recent searches in room database. (https://github.com/kiwix/kiwix-android/pull/3859, https://github.com/kiwix/kiwix-android/pull/3858, https://github.com/kiwix/kiwix-android/pull/3863)
+* Long clicking on Download button in epub ZIM files shows the "Open in new tab" dialog which leads to a blank page. (https://github.com/kiwix/kiwix-android/pull/3870)
 
 Compilation/CI/CD:
 * Using libkiwix `2.2.0`. (https://github.com/kiwix/kiwix-android/pull/3867)
