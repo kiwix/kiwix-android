@@ -32,16 +32,19 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
+import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
+import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 
 @RunWith(AndroidJUnit4::class)
 class KiwixRoomDatabaseTest {
   private lateinit var recentSearchRoomDao: RecentSearchRoomDao
   private lateinit var db: KiwixRoomDatabase
   private lateinit var historyRoomDao: HistoryRoomDao
+  private lateinit var notesRoomDao: NotesRoomDao
 
   @Before
   fun setUpDatabase() {
@@ -103,7 +106,7 @@ class KiwixRoomDatabaseTest {
 
     // test inserting into history database
     historyRoomDao.saveHistory(historyItem)
-    var historyList = historyRoomDao.historyRoomEntity().first()
+    var historyList = historyRoomDao.historyRoomEntity().blockingFirst()
     with(historyList.first()) {
       assertThat(historyTitle, equalTo(historyItem.title))
       assertThat(zimId, equalTo(historyItem.zimId))
@@ -117,7 +120,7 @@ class KiwixRoomDatabaseTest {
 
     // test deleting the history
     historyRoomDao.deleteHistory(listOf(historyItem))
-    historyList = historyRoomDao.historyRoomEntity().first()
+    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
     assertEquals(historyList.size, 0)
 
     // test deleting all history
@@ -125,11 +128,54 @@ class KiwixRoomDatabaseTest {
     historyRoomDao.saveHistory(
       getHistoryItem(databaseId = 2)
     )
-    historyList = historyRoomDao.historyRoomEntity().first()
+    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
     assertEquals(historyList.size, 2)
     historyRoomDao.deleteAllHistory()
-    historyList = historyRoomDao.historyRoomEntity().first()
+    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
     assertEquals(historyList.size, 0)
+  }
+
+  @Test
+  fun testNoteRoomDao() = runBlocking {
+    notesRoomDao = db.notesRoomDao()
+    // delete all the notes from database to properly run the test cases.
+    notesRoomDao.deleteNotes(notesRoomDao.notes().blockingFirst() as List<NoteListItem>)
+    val noteItem = getNoteListItem(
+      zimUrl = "http://kiwix.app/MainPage",
+      noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/MainPage.txt"
+    )
+
+    // Save and retrieve a notes item
+    notesRoomDao.saveNote(noteItem)
+    var notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+    with(notesList.first()) {
+      assertThat(zimId, equalTo(noteItem.zimId))
+      assertThat(zimUrl, equalTo(noteItem.zimUrl))
+      assertThat(title, equalTo(noteItem.title))
+      assertThat(zimFilePath, equalTo(noteItem.zimFilePath))
+      assertThat(noteFilePath, equalTo(noteItem.noteFilePath))
+      assertThat(favicon, equalTo(noteItem.favicon))
+    }
+    assertEquals(notesList.size, 1)
+
+    // test deleting the history
+    notesRoomDao.deleteNotes(listOf(noteItem))
+    notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+    assertEquals(notesList.size, 0)
+
+    // test deleting all notes
+    notesRoomDao.saveNote(noteItem)
+    notesRoomDao.saveNote(
+      getNoteListItem(
+        title = "Installing",
+        zimUrl = "http://kiwix.app/Installing"
+      )
+    )
+    notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+    assertEquals(notesList.size, 2)
+    notesRoomDao.deletePages(notesRoomDao.notes().blockingFirst())
+    notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+    assertEquals(notesList.size, 0)
   }
 
   companion object {
@@ -154,5 +200,23 @@ class KiwixRoomDatabaseTest {
         dateString = dateString,
         timeStamp = timeStamp
       )
+
+    fun getNoteListItem(
+      databaseId: Long = 0L,
+      zimId: String = "1f88ab6f-c265-b-3ff-8f49-b7f4429503800",
+      title: String = "Alpine Wiki",
+      zimFilePath: String = "/storage/emulated/0/Download/alpinelinux_en_all_maxi_2023-01.zim",
+      zimUrl: String,
+      noteFilePath: String = "/storage/emulated/0/Download/Notes/Alpine linux/AlpineNote.txt"
+    ): NoteListItem = NoteListItem(
+      databaseId = databaseId,
+      zimId = zimId,
+      title = title,
+      zimFilePath = zimFilePath,
+      zimUrl = zimUrl,
+      noteFilePath = noteFilePath,
+      null,
+      false
+    )
   }
 }

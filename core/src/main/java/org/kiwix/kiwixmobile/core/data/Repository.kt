@@ -26,7 +26,7 @@ import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
-import org.kiwix.kiwixmobile.core.dao.NewNoteDao
+import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
@@ -55,7 +55,7 @@ class Repository @Inject internal constructor(
   private val bookDao: NewBookDao,
   private val libkiwixBookmarks: LibkiwixBookmarks,
   private val historyRoomDao: HistoryRoomDao,
-  private val notesDao: NewNoteDao,
+  private val notesRoomDao: NotesRoomDao,
   private val languageDao: NewLanguagesDao,
   private val recentSearchRoomDao: RecentSearchRoomDao,
   private val zimReaderContainer: ZimReaderContainer
@@ -125,14 +125,14 @@ class Repository @Inject internal constructor(
       .subscribeOn(io)
 
   override fun saveNote(noteListItem: NoteListItem): Completable =
-    Completable.fromAction { notesDao.saveNote(noteListItem) }
+    Completable.fromAction { notesRoomDao.saveNote(noteListItem) }
       .subscribeOn(io)
 
   override fun deleteNotes(noteList: List<NoteListItem>) =
-    Completable.fromAction { notesDao.deleteNotes(noteList) }
+    Completable.fromAction { notesRoomDao.deleteNotes(noteList) }
       .subscribeOn(io)
 
-  override fun deleteNote(noteUniqueKey: String): Completable =
-    Completable.fromAction { notesDao.deleteNote(noteUniqueKey) }
+  override fun deleteNote(noteTitle: String): Completable =
+    Completable.fromAction { notesRoomDao.deleteNote(noteTitle) }
       .subscribeOn(io)
 }

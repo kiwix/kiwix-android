@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.core.page.notes.adapter
 
 import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
+import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 
@@ -39,5 +40,15 @@ data class NoteListItem(
     zimUrl = url,
     favicon = zimFileReader.favicon,
     noteFilePath = noteFilePath
+  )
+
+  constructor(notesRoomEntity: NotesRoomEntity) : this(
+    notesRoomEntity.id,
+    notesRoomEntity.zimId,
+    notesRoomEntity.noteTitle,
+    notesRoomEntity.zimFilePath,
+    notesRoomEntity.zimUrl,
+    notesRoomEntity.noteFilePath,
+    notesRoomEntity.favicon
   )
 }

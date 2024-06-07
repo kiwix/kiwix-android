@@ -24,18 +24,17 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.TypeConverter
 import androidx.room.Update
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import io.reactivex.Flowable
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 
 @Dao
-abstract class HistoryRoomDao : PageRoomDao {
+abstract class HistoryRoomDao : PageDao {
   @Query("SELECT * FROM HistoryRoomEntity ORDER BY HistoryRoomEntity.timeStamp DESC")
-  abstract fun historyRoomEntity(): Flow<List<HistoryRoomEntity>>
+  abstract fun historyRoomEntity(): Flowable<List<HistoryRoomEntity>>
 
-  fun history(): Flow<List<Page>> = historyRoomEntity().map {
+  fun history(): Flowable<List<Page>> = historyRoomEntity().map {
     it.map(HistoryListItem::HistoryItem)
   }
 

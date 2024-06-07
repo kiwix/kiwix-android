@@ -23,21 +23,21 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.dao.BasePageDao
+import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 
 data class DeletePageItems(
   private val state: PageState<*>,
-  private val basePageDao: BasePageDao,
+  private val pageDao: PageDao,
   private val viewModelScope: CoroutineScope
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     viewModelScope.launch(Dispatchers.IO) {
       if (state.isInSelectionState) {
-        basePageDao.deletePages(state.pageItems.filter(Page::isSelected))
+        pageDao.deletePages(state.pageItems.filter(Page::isSelected))
       } else {
-        basePageDao.deletePages(state.pageItems)
+        pageDao.deletePages(state.pageItems)
       }
     }
   }

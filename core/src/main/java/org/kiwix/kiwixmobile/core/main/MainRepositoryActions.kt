@@ -58,8 +58,8 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
       .subscribe({}, { e -> Log.e(TAG, "Unable to save note", e) })
   }
 
-  fun deleteNote(noteUniqueKey: String) {
-    deleteNoteDisposable = dataSource.deleteNote(noteUniqueKey)
+  fun deleteNote(noteTitle: String) {
+    deleteNoteDisposable = dataSource.deleteNote(noteTitle)
       .subscribe({}, { e -> Log.e(TAG, "Unable to delete note", e) })
   }
 

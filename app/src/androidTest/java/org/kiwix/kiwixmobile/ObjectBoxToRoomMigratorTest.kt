@@ -36,11 +36,14 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.KiwixRoomDatabaseTest.Companion.getHistoryItem
+import org.kiwix.kiwixmobile.KiwixRoomDatabaseTest.Companion.getNoteListItem
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
+import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.core.di.modules.DatabaseModule
+import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 @RunWith(AndroidJUnit4::class)
@@ -162,10 +165,12 @@ class ObjectBoxToRoomMigratorTest {
     assertTrue("Migration took too long: $migrationTime ms", migrationTime < 20000)
   }
 
-  private fun <T> clearRoomAndBoxStoreDatabases(box: Box<T>) {
+  private suspend fun <T> clearRoomAndBoxStoreDatabases(box: Box<T>) {
     // delete history for testing other edge cases
     kiwixRoomDatabase.recentSearchRoomDao().deleteSearchHistory()
     kiwixRoomDatabase.historyRoomDao().deleteAllHistory()
+    kiwixRoomDatabase.notesRoomDao()
+      .deletePages(kiwixRoomDatabase.notesRoomDao().notes().blockingFirst())
     box.removeAll()
   }
 
@@ -186,7 +191,7 @@ class ObjectBoxToRoomMigratorTest {
     // migrate data into room database
     objectBoxToRoomMigrator.migrateHistory(box)
     // check if data successfully migrated to room
-    val actual = kiwixRoomDatabase.historyRoomDao().historyRoomEntity().first()
+    val actual = kiwixRoomDatabase.historyRoomDao().historyRoomEntity().blockingFirst()
     with(actual.first()) {
       assertThat(historyTitle, equalTo(historyItem.title))
       assertThat(zimId, equalTo(historyItem.zimId))
@@ -202,7 +207,7 @@ class ObjectBoxToRoomMigratorTest {
 
     // Migrate data from empty ObjectBox database
     objectBoxToRoomMigrator.migrateHistory(box)
-    var actualData = kiwixRoomDatabase.historyRoomDao().historyRoomEntity().first()
+    var actualData = kiwixRoomDatabase.historyRoomDao().historyRoomEntity().blockingFirst()
     assertTrue(actualData.isEmpty())
 
     // Test if data successfully migrated to Room and existing data is preserved
@@ -210,7 +215,7 @@ class ObjectBoxToRoomMigratorTest {
     box.put(HistoryEntity(historyItem2))
     // Migrate data into Room database
     objectBoxToRoomMigrator.migrateHistory(box)
-    actualData = kiwixRoomDatabase.historyRoomDao().historyRoomEntity().first()
+    actualData = kiwixRoomDatabase.historyRoomDao().historyRoomEntity().blockingFirst()
     assertEquals(2, actualData.size)
     val existingItem =
       actualData.find {
@@ -229,7 +234,7 @@ class ObjectBoxToRoomMigratorTest {
     kiwixRoomDatabase.historyRoomDao().saveHistory(historyItem)
     box.put(HistoryEntity(historyItem))
     objectBoxToRoomMigrator.migrateHistory(box)
-    actualData = kiwixRoomDatabase.historyRoomDao().historyRoomEntity().first()
+    actualData = kiwixRoomDatabase.historyRoomDao().historyRoomEntity().blockingFirst()
     assertEquals(1, actualData.size)
 
     clearRoomAndBoxStoreDatabases(box)
@@ -243,7 +248,7 @@ class ObjectBoxToRoomMigratorTest {
     } catch (_: Exception) {
     }
     // Ensure Room database remains empty or unaffected by the invalid data
-    actualData = kiwixRoomDatabase.historyRoomDao().historyRoomEntity().first()
+    actualData = kiwixRoomDatabase.historyRoomDao().historyRoomEntity().blockingFirst()
     assertTrue(actualData.isEmpty())
 
     // Test large data migration for recent searches
@@ -265,8 +270,117 @@ class ObjectBoxToRoomMigratorTest {
     val endTime = System.currentTimeMillis()
     val migrationTime = endTime - startTime
     // Check if data successfully migrated to Room
-    actualData = kiwixRoomDatabase.historyRoomDao().historyRoomEntity().first()
+    actualData = kiwixRoomDatabase.historyRoomDao().historyRoomEntity().blockingFirst()
     assertEquals(numEntities, actualData.size)
+    // Assert that the migration completes within a reasonable time frame
+    assertTrue("Migration took too long: $migrationTime ms", migrationTime < 20000)
+  }
+
+  @Test
+  fun migrateNotes_shouldInsertDataIntoRoomDatabase() = runBlocking {
+    val box = boxStore.boxFor(NotesEntity::class.java)
+    // clear both databases for history to test more edge cases
+    clearRoomAndBoxStoreDatabases(box)
+
+    val noteItem = getNoteListItem(
+      zimUrl = "http://kiwix.app/MainPage",
+      noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/MainPage.txt"
+    )
+
+    val noteItem1 = getNoteListItem(
+      databaseId = 1,
+      title = "Installing",
+      zimUrl = "http://kiwix.app/Installing",
+      noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/Installing.txt"
+    )
+
+    // insert into object box
+    box.put(NotesEntity(noteItem))
+    // migrate data into room database
+    objectBoxToRoomMigrator.migrateNotes(box)
+    // check if data successfully migrated to room
+    var notesList = kiwixRoomDatabase.notesRoomDao().notes().blockingFirst() as List<NoteListItem>
+    with(notesList.first()) {
+      assertThat(zimId, equalTo(noteItem.zimId))
+      assertThat(zimUrl, equalTo(noteItem.zimUrl))
+      assertThat(title, equalTo(noteItem.title))
+      assertThat(zimFilePath, equalTo(noteItem.zimFilePath))
+      assertThat(noteFilePath, equalTo(noteItem.noteFilePath))
+      assertThat(favicon, equalTo(noteItem.favicon))
+    }
+    assertEquals(notesList.size, 1)
+
+    clearRoomAndBoxStoreDatabases(box)
+
+    // Migrate data from empty ObjectBox database
+    objectBoxToRoomMigrator.migrateNotes(box)
+    notesList = kiwixRoomDatabase.notesRoomDao().notes().blockingFirst() as List<NoteListItem>
+    assertTrue(notesList.isEmpty())
+
+    // Test if data successfully migrated to Room and existing data is preserved
+    kiwixRoomDatabase.notesRoomDao().saveNote(noteItem1)
+    box.put(NotesEntity(noteItem))
+    // Migrate data into Room database
+    objectBoxToRoomMigrator.migrateNotes(box)
+    notesList = kiwixRoomDatabase.notesRoomDao().notes().blockingFirst() as List<NoteListItem>
+    assertEquals(noteItem.title, notesList.first().title)
+    assertEquals(2, notesList.size)
+    val existingItem =
+      notesList.find {
+        it.zimUrl == noteItem.zimUrl && it.title == noteItem.title
+      }
+    assertNotNull(existingItem)
+    val newItem =
+      notesList.find {
+        it.zimUrl == noteItem1.zimUrl && it.title == noteItem1.title
+      }
+    assertNotNull(newItem)
+
+    clearRoomAndBoxStoreDatabases(box)
+
+    // Test room will update the already exiting data in the database while migration.
+    kiwixRoomDatabase.notesRoomDao().saveNote(noteItem1)
+    box.put(NotesEntity(noteItem1))
+    // Migrate data into Room database
+    objectBoxToRoomMigrator.migrateNotes(box)
+    notesList = kiwixRoomDatabase.notesRoomDao().notes().blockingFirst() as List<NoteListItem>
+    assertEquals(1, notesList.size)
+
+    clearRoomAndBoxStoreDatabases(box)
+
+    // Test migration if ObjectBox has null values
+    try {
+      lateinit var invalidNotesEntity: NotesEntity
+      box.put(invalidNotesEntity)
+      // Migrate data into Room database
+      objectBoxToRoomMigrator.migrateNotes(box)
+    } catch (_: Exception) {
+    }
+    // Ensure Room database remains empty or unaffected by the invalid data
+    notesList = kiwixRoomDatabase.notesRoomDao().notes().blockingFirst() as List<NoteListItem>
+    assertTrue(notesList.isEmpty())
+
+    // Test large data migration for recent searches
+    val numEntities = 5000
+    // Insert a large number of recent search entities into ObjectBox
+    for (i in 1..numEntities) {
+      box.put(
+        NotesEntity(
+          getNoteListItem(
+            title = "Installation$i",
+            zimUrl = "https://kiwix.app/A/Installation$i"
+          )
+        )
+      )
+    }
+    val startTime = System.currentTimeMillis()
+    // Migrate data into Room database
+    objectBoxToRoomMigrator.migrateNotes(box)
+    val endTime = System.currentTimeMillis()
+    val migrationTime = endTime - startTime
+    // Check if data successfully migrated to Room
+    notesList = kiwixRoomDatabase.notesRoomDao().notes().blockingFirst() as List<NoteListItem>
+    assertEquals(numEntities, notesList.size)
     // Assert that the migration completes within a reasonable time frame
     assertTrue("Migration took too long: $migrationTime ms", migrationTime < 20000)
   }

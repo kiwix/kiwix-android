@@ -27,12 +27,6 @@ object Libs {
     Versions.org_jetbrains_kotlinx_kotlinx_coroutines
 
   /**
-   * https://github.com/Kotlin/kotlinx.coroutines
-   */
-  const val kotlinx_coroutines_rx2: String = "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:" +
-    Versions.org_jetbrains_kotlinx_kotlinx_coroutines
-
-  /**
    * https://developer.android.com/testing
    */
   const val espresso_contrib: String = "androidx.test.espresso:espresso-contrib:" +
@@ -363,4 +357,6 @@ object Libs {
   const val roomCompiler = "androidx.room:room-compiler:" + Versions.roomVersion
 
   const val roomRuntime = "androidx.room:room-runtime:" + Versions.roomVersion
+
+  const val roomRxjava2 = "androidx.room:room-rxjava2:" + Versions.roomVersion
 }

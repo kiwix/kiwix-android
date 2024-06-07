@@ -204,12 +204,12 @@ class AllProjectConfigurer {
       implementation(Libs.fetch)
       implementation(Libs.rxandroid)
       implementation(Libs.rxjava)
-      implementation(Libs.kotlinx_coroutines_rx2)
       implementation(Libs.preference_ktx)
       implementation(Libs.material_show_case_view)
       implementation(Libs.roomKtx)
       annotationProcessor(Libs.roomCompiler)
       implementation(Libs.roomRuntime)
+      implementation(Libs.roomRxjava2)
       kapt(Libs.roomCompiler)
     }
   }
