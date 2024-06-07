@@ -272,6 +272,11 @@ sealed class KiwixDialog(
     object OpenInNewTab : YesNoDialog(
       null, R.string.open_in_new_tab
     )
+
+    object ExportBookmarks : YesNoDialog(
+      R.string.export_all_bookmarks_dialog_title,
+      message = R.string.export_all_bookmarks_dialog_message,
+    )
   }
 
   object StorageConfigure : KiwixDialog(
@@ -280,6 +285,13 @@ sealed class KiwixDialog(
     positiveMessage = R.string.configure,
     negativeMessage = R.string.yes,
     icon = R.drawable.ic_baseline_storage_24
+  )
+
+  object ImportBookmarks : KiwixDialog(
+    R.string.import_bookmarks_dialog_title,
+    message = null,
+    positiveMessage = R.string.yes,
+    negativeMessage = R.string.no
   )
 
   object DeleteSelectedHistory : KiwixDialog(

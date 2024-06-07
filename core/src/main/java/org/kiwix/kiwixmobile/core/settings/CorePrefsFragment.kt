@@ -20,14 +20,18 @@ package org.kiwix.kiwixmobile.core.settings
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.webkit.WebView
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.preference.EditTextPreference
@@ -43,8 +47,11 @@ import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
@@ -56,8 +63,10 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.OpenCredits
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.SelectFolder
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getPathFromUri
 import java.io.File
+import java.io.InputStream
 import java.util.Locale
 import javax.inject.Inject
+import javax.xml.parsers.DocumentBuilderFactory
 
 abstract class CorePrefsFragment :
   PreferenceFragmentCompat(),
@@ -83,6 +92,10 @@ abstract class CorePrefsFragment :
   @JvmField
   @Inject
   protected var alertDialogShower: DialogShower? = null
+
+  @JvmField
+  @Inject
+  internal var libkiwixBookmarks: LibkiwixBookmarks? = null
   override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
     coreComponent
       .activityComponentBuilder()
@@ -131,6 +144,8 @@ abstract class CorePrefsFragment :
 
   override fun onDestroyView() {
     presenter?.dispose()
+    storagePermissionForNotesLauncher?.unregister()
+    storagePermissionForNotesLauncher = null
     super.onDestroyView()
   }
 
@@ -289,8 +304,148 @@ abstract class CorePrefsFragment :
     if (preference.key.equals(SharedPreferenceUtil.PREF_STORAGE, ignoreCase = true)) {
       openFolderSelect()
     }
+    if (preference.key.equals(PREF_EXPORT_BOOKMARK, ignoreCase = true) &&
+      requestExternalStorageWritePermissionForExportBookmark()
+    ) {
+      showExportBookmarkDialog()
+    }
+    if (preference.key.equals(PREF_IMPORT_BOOKMARK, ignoreCase = true)) {
+      showImportBookmarkDialog()
+    }
     return true
   }
+
+  @Suppress("NestedBlockDepth")
+  private fun requestExternalStorageWritePermissionForExportBookmark(): Boolean {
+    var isPermissionGranted = false
+    if (sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == false &&
+      Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+    ) {
+      if (requireActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        == PackageManager.PERMISSION_GRANTED
+      ) {
+        isPermissionGranted = true
+      } else {
+        storagePermissionForNotesLauncher?.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+      }
+    } else {
+      isPermissionGranted = true
+    }
+    return isPermissionGranted
+  }
+
+  private var storagePermissionForNotesLauncher: ActivityResultLauncher<String>? =
+    registerForActivityResult(
+      ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+      if (isGranted) {
+        // Successfully granted permission, so opening the export bookmark Dialog
+        showExportBookmarkDialog()
+      } else {
+        if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+          /* shouldShowRequestPermissionRationale() returns false when:
+             *  1) User has previously checked on "Don't ask me again", and/or
+             *  2) Permission has been disabled on device
+             */
+          requireActivity().toast(
+            R.string.ext_storage_permission_rationale_export_bookmark,
+            Toast.LENGTH_LONG
+          )
+        } else {
+          requireActivity().toast(
+            R.string.ext_storage_write_permission_denied_export_bookmark,
+            Toast.LENGTH_LONG
+          )
+          alertDialogShower?.show(
+            KiwixDialog.ReadPermissionRequired,
+            requireActivity()::navigateToAppSettings
+          )
+        }
+      }
+    }
+
+  private fun showExportBookmarkDialog() {
+    alertDialogShower?.show(
+      KiwixDialog.YesNoDialog.ExportBookmarks,
+      { libkiwixBookmarks?.exportBookmark() }
+    )
+  }
+
+  private fun showImportBookmarkDialog() {
+    alertDialogShower?.show(
+      KiwixDialog.ImportBookmarks,
+      ::showFileChooser
+    )
+  }
+
+  private fun showFileChooser() {
+    val intent = Intent().apply {
+      action = Intent.ACTION_GET_CONTENT
+      type = "*/*"
+      addCategory(Intent.CATEGORY_OPENABLE)
+    }
+    try {
+      fileSelectLauncher.launch(Intent.createChooser(intent, "Select a bookmark file"))
+    } catch (ex: ActivityNotFoundException) {
+      activity.toast(
+        resources.getString(R.string.no_app_found_to_select_bookmark_file),
+        Toast.LENGTH_SHORT
+      )
+    }
+  }
+
+  private val fileSelectLauncher =
+    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+      if (result.resultCode == RESULT_OK) {
+        result.data?.data?.let { uri ->
+          val contentResolver = requireActivity().contentResolver
+          if (!isValidBookmarkFile(contentResolver.getType(uri))) {
+            activity.toast(
+              resources.getString(R.string.error_invalid_bookmark_file),
+              Toast.LENGTH_SHORT
+            )
+            return@registerForActivityResult
+          }
+
+          createTempFile(contentResolver.openInputStream(uri)).apply {
+            if (isValidXmlFile(this)) {
+              libkiwixBookmarks?.importBookmarks(this)
+            } else {
+              activity.toast(
+                resources.getString(R.string.error_invalid_bookmark_file),
+                Toast.LENGTH_SHORT
+              )
+            }
+          }
+        }
+      }
+    }
+
+  private fun isValidXmlFile(file: File): Boolean {
+    return try {
+      DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file)
+      true
+    } catch (ignore: Exception) {
+      Log.e("IMPORT_BOOKMARKS", "Invalid XML file", ignore)
+      false
+    }
+  }
+
+  private fun createTempFile(inputStream: InputStream?): File {
+    // create a temp file for importing the saved bookmarks
+    val tempFile = File(requireActivity().externalCacheDir, "bookmark.xml")
+    if (tempFile.exists()) {
+      tempFile.delete()
+    }
+    tempFile.createNewFile()
+    inputStream?.let {
+      tempFile.outputStream().use(inputStream::copyTo)
+    }
+    return tempFile
+  }
+
+  private fun isValidBookmarkFile(mimeType: String?) =
+    mimeType == "application/xml" || mimeType == "text/xml"
 
   private fun openFolderSelect() {
     val dialogFragment = StorageSelectDialog()
@@ -383,5 +538,7 @@ abstract class CorePrefsFragment :
     private const val ZOOM_OFFSET = 2
     private const val ZOOM_SCALE = 25
     private const val INTERNAL_TEXT_ZOOM = "text_zoom"
+    private const val PREF_EXPORT_BOOKMARK = "pref_export_bookmark"
+    private const val PREF_IMPORT_BOOKMARK = "pref_import_bookmark"
   }
 }
