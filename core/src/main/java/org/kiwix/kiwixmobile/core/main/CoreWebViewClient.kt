@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.core.main
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import org.kiwix.kiwixmobile.core.utils.files.Log
@@ -27,18 +26,14 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.core.content.FileProvider
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils.downloadFileFromUrl
 
 open class CoreWebViewClient(
   protected val callback: WebViewCallback,
-  protected val zimReaderContainer: ZimReaderContainer,
-  private val sharedPreferenceUtil: SharedPreferenceUtil
+  protected val zimReaderContainer: ZimReaderContainer
 ) : WebViewClient() {
   private var urlWithAnchor: String? = null
 
@@ -49,14 +44,14 @@ open class CoreWebViewClient(
     url = convertLegacyUrl(url)
     urlWithAnchor = if (url.contains("#")) url else null
     if (zimReaderContainer.isRedirect(url)) {
-      if (handleEpubAndPdf(url)) {
+      if (handleUnsupportedFiles(url)) {
         return true
       }
       view.loadUrl(zimReaderContainer.getRedirect(url))
       return true
     }
     if (url.startsWith(ZimFileReader.CONTENT_PREFIX)) {
-      return handleEpubAndPdf(url)
+      return handleUnsupportedFiles(url)
     }
     if (url.startsWith("javascript:")) {
       // Allow javascript for HTML functions and code execution (EX: night mode)
@@ -82,29 +77,10 @@ open class CoreWebViewClient(
   }
 
   @Suppress("NestedBlockDepth")
-  private fun handleEpubAndPdf(url: String): Boolean {
+  private fun handleUnsupportedFiles(url: String): Boolean {
     val extension = MimeTypeMap.getFileExtensionFromUrl(url)
     if (DOCUMENT_TYPES.containsKey(extension)) {
-      downloadFileFromUrl(
-        url,
-        null,
-        zimReaderContainer,
-        sharedPreferenceUtil
-      )?.let {
-        if (it.exists()) {
-          val context: Context = instance
-          val uri = FileProvider.getUriForFile(
-            context,
-            context.packageName + ".fileprovider", it
-          )
-          val intent = Intent(Intent.ACTION_VIEW).apply {
-            setDataAndType(uri, DOCUMENT_TYPES[extension])
-            flags = Intent.FLAG_ACTIVITY_NO_HISTORY
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-          }
-          callback.openExternalUrl(intent)
-        }
-      }
+      callback.showSaveOrOpenUnsupportedFilesDialog(url, DOCUMENT_TYPES[extension])
       return true
     }
     return false

@@ -260,6 +260,14 @@ class FileUtilsInstrumentationTest {
       DummyUrlData(
         "https://kiwix.org/contributors/images/wikipedia",
         null
+      ),
+      DummyUrlData(
+        "https://kiwix.org/contributors/images/wikipedia:hello.epub",
+        "wikipediahello.epub"
+      ),
+      DummyUrlData(
+        "https://kiwix.org/contributors/Y Gododin: A Poem of the Battle: of Cattraeth.9842.epub",
+        "Y Gododin A Poem of the Battle of Cattraeth.9842.epub"
       )
     )
     dummyUrlArray.forEach {

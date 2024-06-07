@@ -108,6 +108,14 @@ sealed class KiwixDialog(
     cancelable = false
   )
 
+  object SaveOrOpenUnsupportedFiles : KiwixDialog(
+    R.string.save_or_open_unsupported_files_dialog_title,
+    R.string.save_or_open_unsupported_files_dialog_message,
+    R.string.open,
+    R.string.save,
+    neutralMessage = R.string.no_thanks
+  )
+
   data class ShowHotspotDetails(override val args: List<Any>) :
     KiwixDialog(
       R.string.hotspot_turned_on,
