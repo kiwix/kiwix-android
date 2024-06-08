@@ -20,15 +20,32 @@ package org.kiwix.kiwixmobile.qr
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.net.Uri
 import android.os.Bundle
+import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.fragment.navArgs
 import org.kiwix.kiwixmobile.core.databinding.DialogShareByQrCodeBinding
+import org.kiwix.kiwixmobile.core.qr.GenerateQR
 
 class ShareByQRCodeDialog : DialogFragment() {
+
+  private val args: ShareByQRCodeDialogArgs by navArgs()
+
+  private lateinit var binding: DialogShareByQrCodeBinding
+
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    val binding = DialogShareByQrCodeBinding.inflate(layoutInflater)
+    binding = DialogShareByQrCodeBinding.inflate(layoutInflater)
+
+    loadQrCode(args.uri.toUri())
+
     return AlertDialog.Builder(requireContext())
       .setView(binding.root)
       .create()
+  }
+
+  private fun loadQrCode(uri: Uri) {
+    val qrCode = GenerateQR().createQR(uri)
+    binding.qrCode.setImageBitmap(qrCode)
   }
 }

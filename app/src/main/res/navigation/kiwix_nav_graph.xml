@@ -160,7 +160,7 @@
     android:name="org.kiwix.kiwixmobile.qr.ShareByQRCodeDialog"
     android:label="ShareByQRCodeFragment"
     tools:layout="@layout/dialog_share_by_qr_code">
-    <deepLink
-      app:uri="kiwix://shareByQr" />
+    <deepLink app:uri="kiwix://shareByQr/{uri}" />
+    <argument android:name="uri" />
   </dialog>
 </navigation>

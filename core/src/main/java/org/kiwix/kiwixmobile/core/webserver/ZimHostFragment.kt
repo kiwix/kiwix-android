@@ -392,8 +392,9 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       visibility = View.VISIBLE
       setOnClickListener {
         // Navigate cross-module via deeplink
+        val authority = ip?.toUri()?.encodedAuthority // Need to exclude the scheme
         val request = NavDeepLinkRequest.Builder
-          .fromUri("kiwix://shareByQr".toUri())
+          .fromUri("kiwix://shareByQr/$authority".toUri())
           .build()
         findNavController().navigate(request)
       }
