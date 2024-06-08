@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.qr
 
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.net.Uri
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
@@ -30,17 +29,27 @@ import com.google.zxing.qrcode.QRCodeWriter
  */
 class GenerateQR {
   /**
-   * Create a QR code for the given [uri].
+   * Create a QR code for the given [code].
+   *
+   * @param code The code to encode in the QR code.
+   * @param size The size of the QR code.
+   * @param foregroundColor The color of the QR code.
+   * @param backgroundColor The background color of the QR code.
    */
-  fun createQR(uri: Uri, size: Int = 512): Bitmap {
+  fun createQR(
+    code: String,
+    size: Int = 512,
+    foregroundColor: Int = Color.BLACK,
+    backgroundColor: Int = Color.WHITE
+  ): Bitmap {
     val hints = hashMapOf<EncodeHintType, Int>().also {
       it[EncodeHintType.MARGIN] = 1
     }
-    val bits = QRCodeWriter().encode("$uri", BarcodeFormat.QR_CODE, size, size, hints)
+    val bits = QRCodeWriter().encode(code, BarcodeFormat.QR_CODE, size, size, hints)
     return Bitmap.createBitmap(size, size, Bitmap.Config.RGB_565).also {
       for (x in 0 until size) {
         for (y in 0 until size) {
-          it.setPixel(x, y, if (bits[x, y]) Color.BLACK else Color.WHITE)
+          it.setPixel(x, y, if (bits[x, y]) foregroundColor else backgroundColor)
         }
       }
     }

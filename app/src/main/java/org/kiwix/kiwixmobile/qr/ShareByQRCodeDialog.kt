@@ -20,9 +20,7 @@ package org.kiwix.kiwixmobile.qr
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.net.Uri
 import android.os.Bundle
-import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.navArgs
 import org.kiwix.kiwixmobile.R
@@ -38,21 +36,24 @@ class ShareByQRCodeDialog : DialogFragment() {
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     binding = DialogShareByQrCodeBinding.inflate(layoutInflater)
 
-    loadQrCode(args.uri.toUri())
+    loadQrCode(args.uri)
 
     return AlertDialog.Builder(requireContext(), R.style.ThemeOverlay_Material3_Dialog)
       .setView(binding.root)
       .create()
   }
 
-  private fun loadQrCode(uri: Uri) {
+  /**
+   * Load the QR code for the given [uri].
+   */
+  private fun loadQrCode(uri: String) {
     val qr = GenerateQR().createQR(uri)
 
     binding.apply {
       qrCode.setImageBitmap(qr)
       qrCodeDescription.text = getString(
         R.string.qr_code_description,
-        "$uri"
+        uri
       )
     }
   }
