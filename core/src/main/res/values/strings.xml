@@ -50,6 +50,7 @@
   <string name="server_started_message" tools:keep="@string/server_started_message">Enter this ip address into your browser to access the server %s</string>
   <string name="share_by_qr_code">Share server address by QR code</string>
   <string name="qr_code">Rendered QR Code</string>
+  <string name="qr_code_description">Scan the QR to open the server at \“%1$s\”</string>
   <string name="share_host_address">Share URL via other applications</string>
   <string name="error_file_not_found">Error: The selected ZIM file could not be found.</string>
   <string name="unable_to_read_zim_file">Unable to read this zim file!</string>

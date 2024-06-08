@@ -25,6 +25,7 @@ import android.os.Bundle
 import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.navArgs
+import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.databinding.DialogShareByQrCodeBinding
 import org.kiwix.kiwixmobile.core.qr.GenerateQR
 
@@ -39,13 +40,20 @@ class ShareByQRCodeDialog : DialogFragment() {
 
     loadQrCode(args.uri.toUri())
 
-    return AlertDialog.Builder(requireContext())
+    return AlertDialog.Builder(requireContext(), R.style.ThemeOverlay_Material3_Dialog)
       .setView(binding.root)
       .create()
   }
 
   private fun loadQrCode(uri: Uri) {
-    val qrCode = GenerateQR().createQR(uri)
-    binding.qrCode.setImageBitmap(qrCode)
+    val qr = GenerateQR().createQR(uri)
+
+    binding.apply {
+      qrCode.setImageBitmap(qr)
+      qrCodeDescription.text = getString(
+        R.string.qr_code_description,
+        "$uri"
+      )
+    }
   }
 }
