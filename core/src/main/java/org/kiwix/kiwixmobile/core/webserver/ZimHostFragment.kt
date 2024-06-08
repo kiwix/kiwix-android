@@ -41,7 +41,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.NavDeepLinkRequest
+import androidx.navigation.findNavController
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -361,6 +364,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       movementMethod = LinkMovementMethod.getInstance()
     }
     configureUrlSharingIcon()
+    configureQRSharingIcon()
     activityZimHostBinding?.startServerButton?.text = getString(R.string.stop_server_label)
     activityZimHostBinding?.startServerButton?.setBackgroundColor(
       ContextCompat.getColor(requireActivity(), R.color.stopServerRed)
@@ -383,10 +387,24 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     }
   }
 
+  private fun configureQRSharingIcon() {
+    activityZimHostBinding?.qrIcon?.apply {
+      visibility = View.VISIBLE
+      setOnClickListener {
+        // Navigate cross-module via deeplink
+        val request = NavDeepLinkRequest.Builder
+          .fromUri("kiwix://shareByQr".toUri())
+          .build()
+        findNavController().navigate(request)
+      }
+    }
+  }
+
   private fun layoutServerStopped() {
     activityZimHostBinding?.serverTextView?.text =
       getString(R.string.server_textview_default_message)
     activityZimHostBinding?.shareServerUrlIcon?.visibility = View.GONE
+    activityZimHostBinding?.qrIcon?.visibility = View.GONE
     activityZimHostBinding?.startServerButton?.text = getString(R.string.start_server_label)
     activityZimHostBinding?.startServerButton?.setBackgroundColor(
       ContextCompat.getColor(requireActivity(), R.color.startServerGreen)
