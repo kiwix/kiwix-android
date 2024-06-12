@@ -308,7 +308,7 @@ class ZimFileReader constructor(
       .subscribe({ }, Throwable::printStackTrace)
   }
 
-  private fun getItem(url: String): Item? =
+  fun getItem(url: String): Item? =
     try {
       val actualPath = url.toUri().filePath.decodeUrl
       jniKiwixReader.getEntryByPath(actualPath)
