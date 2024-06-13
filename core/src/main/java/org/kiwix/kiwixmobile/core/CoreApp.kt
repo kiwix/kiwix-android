@@ -83,6 +83,7 @@ abstract class CoreApp : Application() {
       .build()
     AndroidThreeTen.init(this)
     coreComponent.inject(this)
+    serviceWorkerInitialiser.init(this)
     downloadMonitor.init()
     nightModeConfig.init()
     fileLogger.writeLogFile(this)

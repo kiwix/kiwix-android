@@ -29,11 +29,8 @@ import androidx.webkit.WebViewFeature
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import javax.inject.Inject
 
-class ServiceWorkerInitialiser @Inject constructor(
-  context: Context,
-  zimReaderContainer: ZimReaderContainer
-) {
-  init {
+class ServiceWorkerInitialiser @Inject constructor(val zimReaderContainer: ZimReaderContainer) {
+  fun init(context: Context) {
     if (isMainProcess(context) &&
       WebViewFeature.isFeatureSupported(WebViewFeature.SERVICE_WORKER_BASIC_USAGE)
     ) {
