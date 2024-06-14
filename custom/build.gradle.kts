@@ -103,7 +103,20 @@ fun ProductFlavor.fetchRequest(): Request {
   }
 }
 
-fun writeZimFileData(
+fun writeZimFileData(responseBody: ResponseBody, file: File) {
+  FileOutputStream(file).use { outputStream ->
+    responseBody.byteStream().use { inputStream ->
+      val buffer = ByteArray(4096)
+      var bytesRead: Int
+      while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+        outputStream.write(buffer, 0, bytesRead)
+      }
+      outputStream.flush()
+    }
+  }
+}
+
+fun writeZimFileDataInChunk(
   responseBody: ResponseBody,
   file: File,
   chunkSize: Long = 500 * 1024 * 1024 // create a chunk of 500MB
@@ -156,7 +169,7 @@ fun ProductFlavor.createDownloadTaskForPlayAssetDelivery(
       OkHttpClient().newCall(fetchRequest()).execute().use { response ->
         if (response.isSuccessful) {
           response.body?.let { responseBody ->
-            writeZimFileData(responseBody, file)
+            writeZimFileDataInChunk(responseBody, file)
           }
         } else {
           throw RuntimeException(
