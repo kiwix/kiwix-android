@@ -156,8 +156,8 @@ import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED_NEW_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils.reformatProviderUrl
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.deleteCachedFiles
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 import org.kiwix.kiwixmobile.core.utils.files.Log
@@ -1624,12 +1624,10 @@ abstract class CoreReaderFragment :
 
       val zimFileReader = zimReaderContainer.zimFileReader
       zimFileReader?.let { zimFileReader ->
-        Handler(Looper.getMainLooper()).post {
-          // uninitialized the service worker to fix https://github.com/kiwix/kiwix-android/issues/2561
-          openArticle(UNINITIALISER_ADDRESS)
-          mainMenu?.onFileOpened(urlIsValid())
-          setUpBookmarks(zimFileReader)
-        }
+        // uninitialized the service worker to fix https://github.com/kiwix/kiwix-android/issues/2561
+        openArticle(UNINITIALISER_ADDRESS)
+        mainMenu?.onFileOpened(urlIsValid())
+        setUpBookmarks(zimFileReader)
       } ?: kotlin.run {
         requireActivity().toast(R.string.error_file_invalid, Toast.LENGTH_LONG)
       }
