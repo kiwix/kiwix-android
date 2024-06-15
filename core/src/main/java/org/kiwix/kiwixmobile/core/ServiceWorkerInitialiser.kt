@@ -18,6 +18,9 @@
 
 package org.kiwix.kiwixmobile.core
 
+import android.app.ActivityManager
+import android.content.Context
+import android.os.Process
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import androidx.webkit.ServiceWorkerClientCompat
@@ -26,14 +29,23 @@ import androidx.webkit.WebViewFeature
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import javax.inject.Inject
 
-class ServiceWorkerInitialiser @Inject constructor(zimReaderContainer: ZimReaderContainer) {
-  init {
-    if (WebViewFeature.isFeatureSupported(WebViewFeature.SERVICE_WORKER_BASIC_USAGE)) {
+class ServiceWorkerInitialiser @Inject constructor(val zimReaderContainer: ZimReaderContainer) {
+  fun init(context: Context) {
+    if (isMainProcess(context) &&
+      WebViewFeature.isFeatureSupported(WebViewFeature.SERVICE_WORKER_BASIC_USAGE)
+    ) {
       ServiceWorkerControllerCompat.getInstance()
         .setServiceWorkerClient(object : ServiceWorkerClientCompat() {
           override fun shouldInterceptRequest(request: WebResourceRequest): WebResourceResponse? =
             zimReaderContainer.load(request.url.toString(), request.requestHeaders)
         })
     }
+  }
+
+  private fun isMainProcess(context: Context): Boolean {
+    val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+    return activityManager.runningAppProcesses.find {
+      it.pid == Process.myPid()
+    }?.processName == context.packageName
   }
 }
