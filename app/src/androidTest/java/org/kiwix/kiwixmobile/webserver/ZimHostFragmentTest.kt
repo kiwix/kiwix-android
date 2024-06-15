@@ -163,6 +163,7 @@ class ZimHostFragmentTest {
         // Check Share by QR code
         tapShareByQr()
         assertQRDialogShown()
+        pressBack()
 
         // Stop the server
         stopServer()
