@@ -156,8 +156,8 @@ import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED_NEW_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.UpdateUtils.reformatProviderUrl
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.deleteCachedFiles
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 import org.kiwix.kiwixmobile.core.utils.files.Log
@@ -1554,7 +1554,7 @@ abstract class CoreReaderFragment :
   protected fun openZimFile(
     file: File?,
     isCustomApp: Boolean = false,
-    assetFileDescriptor: AssetFileDescriptor? = null,
+    assetFileDescriptorList: List<AssetFileDescriptor> = emptyList(),
     filePath: String? = null
   ) {
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || isCustomApp) {
@@ -1564,10 +1564,10 @@ abstract class CoreReaderFragment :
         reopenBook()
         openAndSetInContainer(file = file)
         updateTitle()
-      } else if (assetFileDescriptor != null) {
+      } else if (assetFileDescriptorList.isNotEmpty()) {
         reopenBook()
         openAndSetInContainer(
-          assetFileDescriptor = assetFileDescriptor,
+          assetFileDescriptorList = assetFileDescriptorList,
           filePath = filePath
         )
         updateTitle()
@@ -1602,7 +1602,7 @@ abstract class CoreReaderFragment :
 
   private fun openAndSetInContainer(
     file: File? = null,
-    assetFileDescriptor: AssetFileDescriptor? = null,
+    assetFileDescriptorList: List<AssetFileDescriptor> = emptyList(),
     filePath: String? = null
   ) {
     try {
@@ -1613,9 +1613,9 @@ abstract class CoreReaderFragment :
       e.printStackTrace()
     }
     zimReaderContainer?.let { zimReaderContainer ->
-      if (assetFileDescriptor != null) {
+      if (assetFileDescriptorList.isNotEmpty()) {
         zimReaderContainer.setZimFileDescriptor(
-          assetFileDescriptor,
+          assetFileDescriptorList,
           filePath = filePath
         )
       } else {

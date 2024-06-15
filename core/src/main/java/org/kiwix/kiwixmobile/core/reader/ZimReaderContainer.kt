@@ -46,12 +46,14 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
   }
 
   fun setZimFileDescriptor(
-    assetFileDescriptor: AssetFileDescriptor,
+    assetFileDescriptorList: List<AssetFileDescriptor>,
     filePath: String? = null
   ) {
     zimFileReader = runBlocking {
-      if (assetFileDescriptor.parcelFileDescriptor.dup().fileDescriptor.valid())
-        zimFileReaderFactory.create(assetFileDescriptor, filePath)
+      if (assetFileDescriptorList.isNotEmpty() &&
+        assetFileDescriptorList[0].parcelFileDescriptor.dup().fileDescriptor.valid()
+      )
+        zimFileReaderFactory.create(assetFileDescriptorList, filePath)
       else null
     }
   }

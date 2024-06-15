@@ -21,9 +21,9 @@ package org.kiwix.kiwixmobile.custom.main
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.AssetFileDescriptor
+import android.content.res.AssetManager
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.utils.files.Log
-import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasBothFiles
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasFile
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasNothing
@@ -37,16 +37,18 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
     when (val installationState = detectInstallationState()) {
       is HasBothFiles,
       is HasFile -> onFilesFound(installationState)
+
       HasNothing -> onNoFilesFound()
     }
 
   private fun detectInstallationState(
     obbFiles: List<File> = obbFiles(),
     zimFiles: List<File> = zimFiles(),
-    assetFileDescriptor: AssetFileDescriptor? = getAssetFileDescriptorFromPlayAssetDelivery()
+    assetFileDescriptorList: List<AssetFileDescriptor> =
+      getAssetFileDescriptorListFromPlayAssetDelivery()
   ): ValidationState {
     return when {
-      assetFileDescriptor != null -> HasFile(null, assetFileDescriptor)
+      assetFileDescriptorList.isNotEmpty() -> HasFile(null, assetFileDescriptorList)
       obbFiles.isNotEmpty() && zimFiles().isNotEmpty() -> HasBothFiles(obbFiles[0], zimFiles[0])
       obbFiles.isNotEmpty() -> HasFile(obbFiles[0])
       zimFiles.isNotEmpty() -> HasFile(zimFiles[0])
@@ -55,11 +57,15 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
   }
 
   @Suppress("MagicNumber")
-  private fun getAssetFileDescriptorFromPlayAssetDelivery(): AssetFileDescriptor? {
+  private fun getAssetFileDescriptorListFromPlayAssetDelivery(): List<AssetFileDescriptor> {
     try {
-      val context = context.createPackageContext(context.packageName, 0)
-      val assetManager = context.assets
-      return assetManager.openFd(BuildConfig.PLAY_ASSET_FILE)
+      val assetManager = context.createPackageContext(context.packageName, 0).assets
+      val assetFileDescriptorList: ArrayList<AssetFileDescriptor> = arrayListOf()
+      getChunksList(assetManager).forEach {
+        assetFileDescriptorList.add(assetManager.openFd(it))
+      }
+
+      return assetFileDescriptorList
     } catch (packageNameNotFoundException: PackageManager.NameNotFoundException) {
       Log.w(
         "ASSET_PACKAGE_DELIVERY",
@@ -68,7 +74,24 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
     } catch (ioException: IOException) {
       Log.w("ASSET_PACKAGE_DELIVERY", "Unable to copy the content of asset $ioException")
     }
-    return null
+    return emptyList()
+  }
+
+  private fun getChunksList(assetManager: AssetManager): List<String> {
+    val chunkFiles = mutableListOf<String>()
+
+    try {
+      // List of all files in the asset directory
+      val assets = assetManager.list("") ?: emptyArray()
+
+      // Filter and count chunk files.
+      assets.filterTo(chunkFiles) { it.startsWith("chunk") && it.endsWith(".zim") }
+      chunkFiles.sortBy { it.substringAfter("chunk").substringBefore(".zim").toInt() }
+    } catch (ioException: IOException) {
+      ioException.printStackTrace()
+    }
+
+    return chunkFiles
   }
 
   private fun obbFiles() = scanDirs(ContextCompat.getObbDirs(context), "obb")
@@ -104,7 +127,10 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
 
 sealed class ValidationState {
   data class HasBothFiles(val obbFile: File, val zimFile: File) : ValidationState()
-  data class HasFile(val file: File?, val assetFileDescriptor: AssetFileDescriptor? = null) :
+  data class HasFile(
+    val file: File?,
+    val assetFileDescriptorList: List<AssetFileDescriptor> = emptyList()
+  ) :
     ValidationState()
 
   object HasNothing : ValidationState()
