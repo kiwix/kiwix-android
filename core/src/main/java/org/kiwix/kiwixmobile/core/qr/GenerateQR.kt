@@ -23,11 +23,12 @@ import android.graphics.Color
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
+import javax.inject.Inject
 
 /**
  * Utility class to generate QR codes.
  */
-class GenerateQR {
+class GenerateQR @Inject constructor() {
   /**
    * Create a QR code for the given [code].
    *

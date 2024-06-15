@@ -24,6 +24,7 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import org.kiwix.kiwixmobile.core.di.CoreServiceScope
+import org.kiwix.kiwixmobile.core.qr.GenerateQR
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudNotificationManger
 import org.kiwix.kiwixmobile.core.webserver.KiwixServer
 import org.kiwix.kiwixmobile.core.webserver.WebServerHelper
@@ -68,4 +69,8 @@ class CoreServiceModule {
   @CoreServiceScope
   fun providesHotspotStateReceiverCallback(service: Service): HotspotStateReceiver.Callback =
     service as HotspotStateReceiver.Callback
+
+  @Provides
+  @CoreServiceScope
+  fun providesGenerateQr(): GenerateQR = GenerateQR()
 }

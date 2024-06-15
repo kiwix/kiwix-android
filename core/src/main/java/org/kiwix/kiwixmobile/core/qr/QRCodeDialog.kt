@@ -16,27 +16,39 @@
  *
  */
 
-package org.kiwix.kiwixmobile.qr
+package org.kiwix.kiwixmobile.core.qr
 
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import androidx.navigation.fragment.navArgs
-import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.databinding.DialogShareByQrCodeBinding
-import org.kiwix.kiwixmobile.core.qr.GenerateQR
+import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.databinding.DialogQrCodeBinding
+import javax.inject.Inject
 
-class ShareByQRCodeDialog : DialogFragment() {
+class QRCodeDialog : DialogFragment() {
 
-  private val args: ShareByQRCodeDialogArgs by navArgs()
+  private lateinit var binding: DialogQrCodeBinding
 
-  private lateinit var binding: DialogShareByQrCodeBinding
+  @Inject
+  lateinit var generateQR: GenerateQR
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    CoreApp.coreComponent
+      .activityComponentBuilder()
+      .activity(requireActivity())
+      .build()
+      .inject(this)
+  }
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    binding = DialogShareByQrCodeBinding.inflate(layoutInflater)
+    binding = DialogQrCodeBinding.inflate(layoutInflater)
 
-    loadQrCode(args.uri)
+    val uri = checkNotNull(arguments?.getString(ARG_URI)) { "URI must be provided as an argument" }
+
+    loadQrCode(uri)
 
     return AlertDialog.Builder(requireContext(), R.style.ThemeOverlay_Material3_Dialog)
       .setView(binding.root)
@@ -47,7 +59,7 @@ class ShareByQRCodeDialog : DialogFragment() {
    * Load the QR code for the given [uri].
    */
   private fun loadQrCode(uri: String) {
-    val qr = GenerateQR().createQR(uri)
+    val qr = generateQR.createQR(uri)
 
     binding.apply {
       qrCode.setImageBitmap(qr)
@@ -56,5 +68,12 @@ class ShareByQRCodeDialog : DialogFragment() {
         uri
       )
     }
+  }
+
+  companion object {
+    /**
+     * Argument key for the URI to display as a QR code.
+     */
+    const val ARG_URI: String = "uri"
   }
 }

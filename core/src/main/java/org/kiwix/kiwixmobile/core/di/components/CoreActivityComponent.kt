@@ -33,6 +33,7 @@ import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHisto
 import org.kiwix.kiwixmobile.core.page.notes.NotesFragment
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects.ShowDeleteNotesDialog
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects.ShowOpenNoteDialog
+import org.kiwix.kiwixmobile.core.qr.QRCodeDialog
 import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
@@ -61,6 +62,7 @@ interface CoreActivityComponent {
   fun inject(notesFragment: NotesFragment)
   fun inject(navigationHistoryDialog: NavigationHistoryDialog)
   fun inject(zimHostFragment: ZimHostFragment)
+  fun inject(qrCodeDialog: QRCodeDialog)
 
   @Subcomponent.Builder
   interface Builder {
