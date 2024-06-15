@@ -29,12 +29,14 @@ import androidx.core.app.NotificationCompat
 import androidx.navigation.NavDeepLinkBuilder
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.qr.GenerateQR
 import org.kiwix.kiwixmobile.core.utils.HOTSPOT_SERVICE_CHANNEL_ID
 import javax.inject.Inject
 
 class HotspotNotificationManager @Inject constructor(
   private val notificationManager: NotificationManager,
-  private val context: Context
+  private val context: Context,
+  private val generateQR: GenerateQR,
 ) {
 
   private fun hotspotNotificationChannel() {
@@ -53,7 +55,7 @@ class HotspotNotificationManager @Inject constructor(
   }
 
   @SuppressLint("UnspecifiedImmutableFlag")
-  fun buildForegroundNotification(): Notification {
+  fun buildForegroundNotification(uri: String? = null): Notification {
     val coreMainActivity = (context as CoreApp).getMainActivity()
     val contentIntent = NavDeepLinkBuilder(context).setComponentName(
       coreMainActivity.mainActivity::class.java
@@ -75,6 +77,9 @@ class HotspotNotificationManager @Inject constructor(
       .setContentTitle(context.getString(R.string.hotspot_notification_content_title))
       .setContentText(context.getString(R.string.hotspot_running))
       .setContentIntent(contentIntent)
+      .apply {
+        uri?.let { setLargeIcon(generateQR.createQR(it)) }
+      }
       .setSmallIcon(R.mipmap.ic_launcher)
       .setWhen(System.currentTimeMillis())
       .addAction(

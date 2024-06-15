@@ -57,8 +57,10 @@ class CoreServiceModule {
   @CoreServiceScope
   fun providesHotspotNotificationManager(
     notificationManager: NotificationManager,
-    context: Context
-  ): HotspotNotificationManager = HotspotNotificationManager(notificationManager, context)
+    context: Context,
+    generateQR: GenerateQR,
+  ): HotspotNotificationManager =
+    HotspotNotificationManager(notificationManager, context, generateQR)
 
   @Provides
   @CoreServiceScope
