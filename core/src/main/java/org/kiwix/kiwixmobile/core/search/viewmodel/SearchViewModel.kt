@@ -20,20 +20,21 @@ package org.kiwix.kiwixmobile.core.search.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.reactivex.BackpressureStrategy.LATEST
-import io.reactivex.Flowable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.channels.trySendBlocking
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
@@ -192,18 +193,16 @@ class SearchViewModel @Inject constructor(
   fun loadMoreSearchResults(
     startIndex: Int,
     existingSearchList: List<SearchListItem>?
-  ): Flowable<List<SearchListItem.RecentSearchListItem>?> {
-    return Flowable.create({ emitter ->
-      val searchResults = state.value.getVisibleResults(startIndex)
+  ): Flow<List<SearchListItem.RecentSearchListItem>?> = flow {
+    val searchResults = withContext(Dispatchers.IO) {
+      state.value.getVisibleResults(startIndex)
+    }
 
-      val nonDuplicateResults = searchResults?.filter { newItem ->
-        existingSearchList?.none { it == newItem } ?: true
-      }
-      // Emit the non duplicate data to the Flowable's subscribers
-      emitter.onNext(nonDuplicateResults)
-      emitter.onComplete()
-    }, LATEST)
-      .subscribeOn(Schedulers.io())
+    val nonDuplicateResults = searchResults?.filter { newItem ->
+      existingSearchList?.none { it == newItem } ?: true
+    }
+    // Emit the non-duplicate data to the Flow's subscribers
+    emit(nonDuplicateResults)
   }
 }
 

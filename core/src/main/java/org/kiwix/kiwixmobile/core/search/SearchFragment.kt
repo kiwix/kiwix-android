@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.search
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -37,11 +38,10 @@ import androidx.core.widget.ContentLoadingProgressBar
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
@@ -155,27 +155,28 @@ class SearchFragment : BaseFragment() {
   @SuppressLint("CheckResult")
   private fun loadMoreSearchResult() {
     if (isDataLoading) return
-    val safeStartIndex = searchAdapter?.itemCount ?: 0
     isDataLoading = true
+    val safeStartIndex = searchAdapter?.itemCount ?: 0
     // Show a loading indicator while data is being loaded
     fragmentSearchBinding?.loadingMoreDataIndicator?.isShowing(true)
-    // Request more search results from the ViewModel, providing the start index and existing results
-    searchViewModel.loadMoreSearchResults(safeStartIndex, searchAdapter?.items)
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe { searchResults ->
-        // Hide the loading indicator when data loading is complete
-        fragmentSearchBinding?.loadingMoreDataIndicator?.isShowing(false)
-        // Update data loading status based on the received search results
-        isDataLoading = when {
-          searchResults == null -> true
-          searchResults.isEmpty() -> false
-          else -> {
-            // Append the new search results to the existing list
-            searchAdapter?.addData(searchResults)
-            false
+    lifecycleScope.launch {
+      // Request more search results from the ViewModel, providing the start index and existing results
+      searchViewModel.loadMoreSearchResults(safeStartIndex, searchAdapter?.items)
+        .collect { searchResults ->
+          // Hide the loading indicator when data loading is complete
+          fragmentSearchBinding?.loadingMoreDataIndicator?.isShowing(false)
+          // Update data loading status based on the received search results
+          isDataLoading = when {
+            searchResults == null -> true
+            searchResults.isEmpty() -> false
+            else -> {
+              // Append the new search results to the existing list
+              searchAdapter?.addData(searchResults)
+              false
+            }
           }
         }
-      }
+    }
   }
 
   private fun handleBackPress() {
@@ -293,7 +294,10 @@ class SearchFragment : BaseFragment() {
     // To avoid unnecessary data loading and prevent crashes, we check if the search screen is
     // visible to the user before proceeding. If the screen is not visible,
     // we skip the data loading process.
-    if (!isVisible) return
+    if (!isVisible) {
+      renderingJob?.cancelAndJoin()
+      return
+    }
     searchMutex.withLock {
       // `cancelAndJoin` cancels the previous running job and waits for it to completely cancel.
       renderingJob?.cancelAndJoin()
@@ -302,16 +306,26 @@ class SearchFragment : BaseFragment() {
       setIsPageSearchEnabled(state.searchTerm.isNotBlank())
 
       fragmentSearchBinding?.searchLoadingIndicator?.isShowing(true)
-      renderingJob = searchViewModel.viewModelScope.launch(Dispatchers.Main) {
-        val searchResult = withContext(Dispatchers.IO) {
-          state.getVisibleResults(0, renderingJob)
-        }
+      renderingJob = lifecycleScope.launch {
+        try {
+          val searchResult = withContext(Dispatchers.IO) {
+            state.getVisibleResults(0, coroutineContext[Job])
+          }
 
-        fragmentSearchBinding?.searchLoadingIndicator?.isShowing(false)
-
-        searchResult?.let {
-          fragmentSearchBinding?.searchNoResults?.isVisible = it.isEmpty()
-          searchAdapter?.items = it
+          fragmentSearchBinding?.searchLoadingIndicator?.isShowing(false)
+          searchResult?.let {
+            fragmentSearchBinding?.searchNoResults?.isVisible = it.isEmpty()
+            searchAdapter?.items = it
+          }
+        } catch (ignore: CancellationException) {
+          Log.e("SEARCH_RESULT", "Cancelled the previous job ${ignore.message}")
+        } catch (ignore: Exception) {
+          Log.e(
+            "SEARCH_RESULT",
+            "Error in getting searched result\nOriginal exception ${ignore.message}"
+          )
+        } finally {
+          fragmentSearchBinding?.searchLoadingIndicator?.isShowing(false)
         }
       }
     }
