@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.yield
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 
@@ -36,34 +37,36 @@ data class SearchState(
     if (searchTerm.isEmpty()) {
       recentResults
     } else {
-      searchResultsWithTerm.suggestionSearch?.also { yield() }?.let {
-        val searchResults = mutableListOf<SearchListItem.RecentSearchListItem>()
-        if (job?.isActive == false) {
-          // if the previous job is cancel then do not execute the code
-          return@getVisibleResults searchResults
-        }
-        val safeEndIndex = startIndex + 100
-        yield()
-        val searchIterator =
-          it.getResults(startIndex, safeEndIndex)
-        while (searchIterator.hasNext()) {
+      searchResultsWithTerm.searchMutex.withLock {
+        searchResultsWithTerm.suggestionSearch?.also { yield() }?.let {
+          val searchResults = mutableListOf<SearchListItem.RecentSearchListItem>()
           if (job?.isActive == false) {
-            // check if the previous job is cancel while retrieving the data for
-            // previous searched item then break the execution of code.
-            break
+            // if the previous job is cancel then do not execute the code
+            return@getVisibleResults searchResults
           }
+          val safeEndIndex = startIndex + 100
           yield()
-          val entry = searchIterator.next()
-          searchResults.add(SearchListItem.RecentSearchListItem(entry.title, entry.path))
+          val searchIterator =
+            it.getResults(startIndex, safeEndIndex)
+          while (searchIterator.hasNext()) {
+            if (job?.isActive == false) {
+              // check if the previous job is cancel while retrieving the data for
+              // previous searched item then break the execution of code.
+              break
+            }
+            yield()
+            val entry = searchIterator.next()
+            searchResults.add(SearchListItem.RecentSearchListItem(entry.title, entry.path))
+          }
+          /**
+           * Returns null if there are no suggestions left in the iterator.
+           * We check this in SearchFragment to avoid unnecessary data loading
+           * while scrolling to the end of the list when there are no items available.
+           */
+          searchResults.ifEmpty { null }
+        } ?: kotlin.run {
+          recentResults
         }
-        /**
-         * Returns null if there are no suggestions left in the iterator.
-         * We check this in SearchFragment to avoid unnecessary data loading
-         * while scrolling to the end of the list when there are no items available.
-         */
-        searchResults.ifEmpty { null }
-      } ?: kotlin.run {
-        recentResults
       }
     }
 

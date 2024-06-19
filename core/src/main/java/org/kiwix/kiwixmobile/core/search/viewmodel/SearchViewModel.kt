@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
@@ -69,12 +70,14 @@ class SearchViewModel @Inject constructor(
   private val searchResultGenerator: SearchResultGenerator
 ) : ViewModel() {
 
+  private val searchMutex = Mutex()
   private val initialState: SearchState =
     SearchState(
       "",
       SearchResultsWithTerm(
         "",
-        null
+        null,
+        searchMutex
       ),
       emptyList(),
       FromWebView
@@ -112,7 +115,8 @@ class SearchViewModel @Inject constructor(
     .mapLatest {
       SearchResultsWithTerm(
         it,
-        searchResultGenerator.generateSearchResults(it, zimReaderContainer.zimFileReader)
+        searchResultGenerator.generateSearchResults(it, zimReaderContainer.zimFileReader),
+        searchMutex
       )
     }
 
@@ -198,4 +202,8 @@ class SearchViewModel @Inject constructor(
   }
 }
 
-data class SearchResultsWithTerm(val searchTerm: String, val suggestionSearch: SuggestionSearch?)
+data class SearchResultsWithTerm(
+  val searchTerm: String,
+  val suggestionSearch: SuggestionSearch?,
+  val searchMutex: Mutex
+)
