@@ -67,10 +67,10 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
   private val recentSearchRoomDao: RecentSearchRoomDao,
   private val zimReaderContainer: ZimReaderContainer,
-  private val searchResultGenerator: SearchResultGenerator
+  private val searchResultGenerator: SearchResultGenerator,
+  private val searchMutex: Mutex = Mutex()
 ) : ViewModel() {
 
-  private val searchMutex = Mutex()
   private val initialState: SearchState =
     SearchState(
       "",

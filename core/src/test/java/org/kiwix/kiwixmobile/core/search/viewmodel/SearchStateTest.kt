@@ -53,7 +53,7 @@ internal class SearchStateTest {
     assertThat(
       SearchState(
         searchTerm,
-        SearchResultsWithTerm("", suggestionSearchWrapper),
+        SearchResultsWithTerm("", suggestionSearchWrapper, mockk()),
         emptyList(),
         FromWebView
       ).getVisibleResults(0)
@@ -66,7 +66,7 @@ internal class SearchStateTest {
     assertThat(
       SearchState(
         "",
-        SearchResultsWithTerm("", null),
+        SearchResultsWithTerm("", null, mockk()),
         results,
         FromWebView
       ).getVisibleResults(0)
@@ -78,7 +78,7 @@ internal class SearchStateTest {
     assertThat(
       SearchState(
         "",
-        SearchResultsWithTerm("notEqual", null),
+        SearchResultsWithTerm("notEqual", null, mockk()),
         emptyList(),
         FromWebView
       ).isLoading
@@ -91,7 +91,7 @@ internal class SearchStateTest {
     assertThat(
       SearchState(
         searchTerm,
-        SearchResultsWithTerm(searchTerm, null),
+        SearchResultsWithTerm(searchTerm, null, mockk()),
         emptyList(),
         FromWebView
       ).isLoading
