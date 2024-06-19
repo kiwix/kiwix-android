@@ -90,7 +90,7 @@ class SearchFragment : BaseFragment() {
   private var findInPageTextView: TextView? = null
   private var fragmentSearchBinding: FragmentSearchBinding? = null
 
-  private val searchViewModel by lazy { viewModel<SearchViewModel>(viewModelFactory) }
+  val searchViewModel by lazy { viewModel<SearchViewModel>(viewModelFactory) }
   private var searchAdapter: SearchAdapter? = null
   private var isDataLoading = false
   private var renderingJob: Job? = null
@@ -284,7 +284,7 @@ class SearchFragment : BaseFragment() {
       it.value.equals(query, ignoreCase = true)
     }
 
-  private suspend fun render(state: SearchState) {
+  suspend fun render(state: SearchState) {
     renderingJob?.apply {
       // cancel the children job. Since we are getting the result on IO thread
       // with `withContext` that is child for this job
