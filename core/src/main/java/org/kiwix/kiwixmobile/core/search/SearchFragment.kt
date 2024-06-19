@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.search
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -45,6 +44,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -74,6 +74,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchState
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import javax.inject.Inject
 
 const val NAV_ARG_SEARCH_STRING = "searchString"
@@ -160,22 +161,25 @@ class SearchFragment : BaseFragment() {
     // Show a loading indicator while data is being loaded
     fragmentSearchBinding?.loadingMoreDataIndicator?.isShowing(true)
     lifecycleScope.launch {
-      // Request more search results from the ViewModel, providing the start index and existing results
-      searchViewModel.loadMoreSearchResults(safeStartIndex, searchAdapter?.items)
-        .collect { searchResults ->
-          // Hide the loading indicator when data loading is complete
-          fragmentSearchBinding?.loadingMoreDataIndicator?.isShowing(false)
-          // Update data loading status based on the received search results
-          isDataLoading = when {
-            searchResults == null -> true
-            searchResults.isEmpty() -> false
-            else -> {
-              // Append the new search results to the existing list
-              searchAdapter?.addData(searchResults)
-              false
+      searchMutex.withLock {
+        // Request more search results from the ViewModel, providing the start
+        // index and existing results
+        searchViewModel.loadMoreSearchResults(safeStartIndex, searchAdapter?.items)
+          .let { searchResults ->
+            // Hide the loading indicator when data loading is complete
+            fragmentSearchBinding?.loadingMoreDataIndicator?.isShowing(false)
+            // Update data loading status based on the received search results
+            isDataLoading = when {
+              searchResults == null -> true
+              searchResults.isEmpty() -> false
+              else -> {
+                // Append the new search results to the existing list
+                searchAdapter?.addData(searchResults)
+                false
+              }
             }
           }
-        }
+      }
     }
   }
 
@@ -286,21 +290,25 @@ class SearchFragment : BaseFragment() {
     }
 
   private suspend fun render(state: SearchState) {
-    // Check if the fragment is visible on the screen. This method called multiple times
-    // (7-14 times) when an item in the search list is clicked, which leads to unnecessary
-    // data loading and also causes a crash.
-    // The issue arises because the searchViewModel takes a moment to detach from the window,
-    // and during this time, this method is called multiple times due to the rendering process.
-    // To avoid unnecessary data loading and prevent crashes, we check if the search screen is
-    // visible to the user before proceeding. If the screen is not visible,
-    // we skip the data loading process.
-    if (!isVisible) {
-      renderingJob?.cancelAndJoin()
-      return
-    }
     searchMutex.withLock {
-      // `cancelAndJoin` cancels the previous running job and waits for it to completely cancel.
-      renderingJob?.cancelAndJoin()
+      renderingJob?.apply {
+        // cancel the children job. Since we are getting the result on IO thread
+        // with `withContext` that is child for this job
+        cancelChildren()
+        // `cancelAndJoin` cancels the previous running job and waits for it to completely cancel.
+        cancelAndJoin()
+      }
+      // Check if the fragment is visible on the screen. This method called multiple times
+      // (7-14 times) when an item in the search list is clicked, which leads to unnecessary
+      // data loading and also causes a crash.
+      // The issue arises because the searchViewModel takes a moment to detach from the window,
+      // and during this time, this method is called multiple times due to the rendering process.
+      // To avoid unnecessary data loading and prevent crashes, we check if the search screen is
+      // visible to the user before proceeding. If the screen is not visible,
+      // we skip the data loading process.
+      if (!isVisible) {
+        return@render
+      }
       isDataLoading = false
       searchInTextMenuItem?.actionView?.isVisible = state.searchOrigin == FromWebView
       setIsPageSearchEnabled(state.searchTerm.isNotBlank())
