@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
@@ -31,6 +32,8 @@ import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
 import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -41,6 +44,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.search.SearchFragment
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
@@ -205,9 +210,60 @@ class SearchFragmentTest : BaseActivityTest() {
     LeakAssertions.assertNoLeaks()
   }
 
+  @Test
+  fun testConcurrencyOfSearch() = runBlocking {
+    val searchTerms = listOf(
+      "A Song",
+      "The Ra",
+      "The Ge",
+      "Wish",
+      "WIFI",
+      "Woman",
+      "Big Ba",
+      "My Wor",
+      "100"
+    )
+    activityScenario.onActivity {
+      kiwixMainActivity = it
+      kiwixMainActivity.navigate(R.id.libraryFragment)
+    }
+    downloadingZimFile = getDownloadingZimFile(false)
+    openKiwixReaderFragmentWithFile(downloadingZimFile)
+    search { checkZimFileSearchSuccessful(R.id.readerFragment) }
+    openSearchWithQuery(searchTerms[0], downloadingZimFile)
+    // wait for searchFragment become visible on screen.
+    delay(2000)
+    val navHostFragment: NavHostFragment =
+      kiwixMainActivity.supportFragmentManager
+        .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+    val searchFragment = navHostFragment.childFragmentManager.fragments[0] as SearchFragment
+    for (i in 1..100) {
+      // This will execute the render method 100 times frequently.
+      val searchTerm = searchTerms[i % searchTerms.size]
+      searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
+    }
+    for (i in 1..100) {
+      // this will execute the render method 100 times with 100MS delay.
+      delay(100)
+      val searchTerm = searchTerms[i % searchTerms.size]
+      searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
+    }
+    for (i in 1..100) {
+      // this will execute the render method 100 times with 200MS delay.
+      delay(200)
+      val searchTerm = searchTerms[i % searchTerms.size]
+      searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
+    }
+    for (i in 1..100) {
+      // this will execute the render method 100 times with 200MS delay.
+      delay(300)
+      val searchTerm = searchTerms[i % searchTerms.size]
+      searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
+    }
+  }
+
   private fun removeTemporaryZimFilesToFreeUpDeviceStorage() {
     testZimFile.delete()
-    downloadingZimFile.delete()
   }
 
   private fun openKiwixReaderFragmentWithFile(zimFile: File) {
@@ -273,10 +329,12 @@ class SearchFragmentTest : BaseActivityTest() {
     return zimFile
   }
 
-  private fun getDownloadingZimFile(): File {
+  private fun getDownloadingZimFile(isDeletePreviousZimFile: Boolean = true): File {
     val zimFile = File(context.cacheDir, "ray_charles.zim")
-    if (zimFile.exists()) zimFile.delete()
-    zimFile.createNewFile()
+    if (isDeletePreviousZimFile) {
+      if (zimFile.exists()) zimFile.delete()
+      zimFile.createNewFile()
+    }
     return zimFile
   }
 }

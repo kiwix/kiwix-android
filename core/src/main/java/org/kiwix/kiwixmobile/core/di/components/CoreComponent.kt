@@ -25,6 +25,7 @@ import android.net.wifi.WifiManager
 import dagger.BindsInstance
 import dagger.Component
 import eu.mhutti1.utils.storage.StorageSelectDialog
+import kotlinx.coroutines.sync.Mutex
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
@@ -46,6 +47,7 @@ import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.core.di.modules.ApplicationModule
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
 import org.kiwix.kiwixmobile.core.di.modules.JNIModule
+import org.kiwix.kiwixmobile.core.di.modules.MutexModule
 import org.kiwix.kiwixmobile.core.di.modules.NetworkModule
 import org.kiwix.kiwixmobile.core.di.modules.SearchModule
 import org.kiwix.kiwixmobile.core.downloader.Downloader
@@ -68,7 +70,8 @@ import javax.inject.Singleton
     JNIModule::class,
     DataModule::class,
     CoreViewModelModule::class,
-    SearchModule::class
+    SearchModule::class,
+    MutexModule::class
   ]
 )
 interface CoreComponent {
@@ -109,6 +112,7 @@ interface CoreComponent {
   fun downloader(): Downloader
   fun notificationManager(): NotificationManager
   fun searchResultGenerator(): SearchResultGenerator
+  fun mutex(): Mutex
 
   fun inject(application: CoreApp)
   fun inject(kiwixWebView: KiwixWebView)

@@ -20,9 +20,6 @@ package org.kiwix.kiwixmobile.core.search.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.reactivex.BackpressureStrategy.LATEST
-import io.reactivex.Flowable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
@@ -34,6 +31,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
@@ -69,7 +67,8 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
   private val recentSearchRoomDao: RecentSearchRoomDao,
   private val zimReaderContainer: ZimReaderContainer,
-  private val searchResultGenerator: SearchResultGenerator
+  private val searchResultGenerator: SearchResultGenerator,
+  private val searchMutex: Mutex = Mutex()
 ) : ViewModel() {
 
   private val initialState: SearchState =
@@ -77,7 +76,8 @@ class SearchViewModel @Inject constructor(
       "",
       SearchResultsWithTerm(
         "",
-        null
+        null,
+        searchMutex
       ),
       emptyList(),
       FromWebView
@@ -115,7 +115,8 @@ class SearchViewModel @Inject constructor(
     .mapLatest {
       SearchResultsWithTerm(
         it,
-        searchResultGenerator.generateSearchResults(it, zimReaderContainer.zimFileReader)
+        searchResultGenerator.generateSearchResults(it, zimReaderContainer.zimFileReader),
+        searchMutex
       )
     }
 
@@ -187,24 +188,22 @@ class SearchViewModel @Inject constructor(
    * @param startIndex The index from which to start loading more results.
    * @param existingSearchList The existing list of search results, if any, to check for duplicates.
    *
-   * @return A Flowable emitting a list of non-duplicate search results or null if there are no more results.
+   * @return List of non-duplicate search results or null if there are no more results.
    */
-  fun loadMoreSearchResults(
+  suspend fun loadMoreSearchResults(
     startIndex: Int,
     existingSearchList: List<SearchListItem>?
-  ): Flowable<List<SearchListItem.RecentSearchListItem>?> {
-    return Flowable.create({ emitter ->
-      val searchResults = state.value.getVisibleResults(startIndex)
+  ): List<SearchListItem.RecentSearchListItem>? {
+    val searchResults = state.value.getVisibleResults(startIndex)
 
-      val nonDuplicateResults = searchResults?.filter { newItem ->
-        existingSearchList?.none { it == newItem } ?: true
-      }
-      // Emit the non duplicate data to the Flowable's subscribers
-      emitter.onNext(nonDuplicateResults)
-      emitter.onComplete()
-    }, LATEST)
-      .subscribeOn(Schedulers.io())
+    return searchResults?.filter { newItem ->
+      existingSearchList?.none { it == newItem } ?: true
+    }
   }
 }
 
-data class SearchResultsWithTerm(val searchTerm: String, val suggestionSearch: SuggestionSearch?)
+data class SearchResultsWithTerm(
+  val searchTerm: String,
+  val suggestionSearch: SuggestionSearch?,
+  val searchMutex: Mutex
+)

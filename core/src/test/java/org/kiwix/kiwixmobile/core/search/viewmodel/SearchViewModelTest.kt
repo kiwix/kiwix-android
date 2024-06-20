@@ -32,6 +32,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.TestScope
@@ -84,6 +85,7 @@ internal class SearchViewModelTest {
   private val searchResultGenerator: SearchResultGenerator = mockk()
   private val zimFileReader: ZimFileReader = mockk()
   private val testDispatcher = TestCoroutineDispatcher()
+  private val searchMutex: Mutex = mockk()
 
   lateinit var viewModel: SearchViewModel
 
@@ -106,7 +108,8 @@ internal class SearchViewModelTest {
     } returns null
     every { zimReaderContainer.id } returns "id"
     every { recentSearchRoomDao.recentSearches("id") } returns recentsFromDb.consumeAsFlow()
-    viewModel = SearchViewModel(recentSearchRoomDao, zimReaderContainer, searchResultGenerator)
+    viewModel =
+      SearchViewModel(recentSearchRoomDao, zimReaderContainer, searchResultGenerator, searchMutex)
   }
 
   @Nested
@@ -114,7 +117,7 @@ internal class SearchViewModelTest {
     @Test
     fun `initial state is Initialising`() = runBlockingTest {
       viewModel.state.test(this).assertValue(
-        SearchState("", SearchResultsWithTerm("", null), emptyList(), FromWebView)
+        SearchState("", SearchResultsWithTerm("", null, searchMutex), emptyList(), FromWebView)
       ).finish()
     }
 
@@ -136,7 +139,7 @@ internal class SearchViewModelTest {
         .assertValue(
           SearchState(
             searchTerm,
-            SearchResultsWithTerm(searchTerm, suggestionSearch),
+            SearchResultsWithTerm(searchTerm, suggestionSearch, searchMutex),
             listOf(RecentSearchListItem("", "")),
             searchOrigin
           )
