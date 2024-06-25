@@ -18,10 +18,14 @@
 
 package org.kiwix.kiwixmobile.page.bookmarks
 
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
@@ -33,8 +37,10 @@ import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 import java.util.concurrent.TimeUnit
 
 fun bookmarks(func: BookmarksRobot.() -> Unit) =
@@ -104,5 +110,22 @@ class BookmarksRobot : BaseRobot() {
 
   private fun pauseForBetterTestPerformance() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
+  }
+
+  fun openBookmarkScreen() {
+    testFlakyView({
+      openDrawer()
+      onView(withText(R.string.bookmarks)).perform(click())
+    })
+  }
+
+  fun testAllBookmarkShowing(bookmarkList: ArrayList<LibkiwixBookmarkItem>) {
+    bookmarkList.forEachIndexed { index, libkiwixBookmarkItem ->
+      testFlakyView({
+        onView(withId(R.id.recycler_view))
+          .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(index))
+          .check(matches(hasDescendant(withText(libkiwixBookmarkItem.title))))
+      })
+    }
   }
 }

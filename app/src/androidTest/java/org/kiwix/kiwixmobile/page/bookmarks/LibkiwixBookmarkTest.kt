@@ -22,10 +22,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import org.junit.Before
@@ -33,6 +33,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
@@ -40,6 +42,8 @@ import org.kiwix.kiwixmobile.main.topLevel
 import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.libkiwix.Book
+import org.kiwix.libkiwix.Bookmark
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -88,30 +92,9 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
     activityScenario.onActivity {
       kiwixMainActivity = it
       kiwixMainActivity.navigate(R.id.libraryFragment)
-    }
-    val loadFileStream =
-      LibkiwixBookmarkTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(
-      ContextCompat.getExternalFilesDirs(context, null)[0],
-      "testzim.zim"
-    )
-    if (zimFile.exists()) zimFile.delete()
-    zimFile.createNewFile()
-    loadFileStream.use { inputStream ->
-      val outputStream: OutputStream = FileOutputStream(zimFile)
-      outputStream.use { it ->
-        val buffer = ByteArray(inputStream.available())
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-          it.write(buffer, 0, length)
-        }
-      }
-    }
-
-    UiThreadStatement.runOnUiThread {
       kiwixMainActivity.navigate(
         LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
-          .apply { zimFileUri = zimFile.toUri().toString() }
+          .apply { zimFileUri = getZimFile().toUri().toString() }
       )
     }
     bookmarks {
@@ -142,5 +125,79 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
     topLevel {
       clickBookmarksOnNavDrawer(BookmarksRobot::assertBookmarkSaved)
     }
+  }
+
+  @Test
+  fun testSavedBookmarksShowingOnBookmarkScreen() {
+    val zimFile = getZimFile()
+    activityScenario.onActivity {
+      kiwixMainActivity = it
+      kiwixMainActivity.navigate(R.id.libraryFragment)
+      kiwixMainActivity.navigate(
+        LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
+          .apply { zimFileUri = zimFile.toUri().toString() }
+      )
+    }
+    bookmarks {
+      // delete any bookmark if already saved to properly perform this test case.
+      longClickOnSaveBookmarkImage()
+      clickOnTrashIcon()
+      assertDeleteBookmarksDialogDisplayed()
+      clickOnDeleteButton()
+      assertNoBookMarkTextDisplayed()
+      pressBack()
+    }
+    val navHostFragment: NavHostFragment =
+      kiwixMainActivity.supportFragmentManager
+        .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+    val coreReaderFragment = navHostFragment.childFragmentManager.fragments[0] as CoreReaderFragment
+    val libKiwixBook = Book().apply {
+      update(coreReaderFragment.zimReaderContainer?.zimFileReader?.jniKiwixReader)
+    }
+    val bookmarkList = arrayListOf<LibkiwixBookmarkItem>()
+    for (i in 1..500) {
+      val bookmark = Bookmark().apply {
+        bookId = coreReaderFragment.zimReaderContainer?.zimFileReader?.id
+        title = "bookmark$i"
+        url = "http://kiwix.org/demoBookmark$i"
+        bookTitle = libKiwixBook.title
+      }
+      val libkiwixItem =
+        LibkiwixBookmarkItem(
+          bookmark,
+          coreReaderFragment.zimReaderContainer?.zimFileReader?.favicon,
+          coreReaderFragment.zimReaderContainer?.zimFileReader?.zimFile?.canonicalPath
+        )
+      coreReaderFragment.libkiwixBookmarks?.saveBookmark(libkiwixItem).also {
+        bookmarkList.add(libkiwixItem)
+      }
+    }
+    bookmarks {
+      // test all the saved bookmarks are showing on the bookmarks screen
+      openBookmarkScreen()
+      testAllBookmarkShowing(bookmarkList)
+    }
+  }
+
+  private fun getZimFile(): File {
+    val loadFileStream =
+      LibkiwixBookmarkTest::class.java.classLoader.getResourceAsStream("testzim.zim")
+    val zimFile = File(
+      ContextCompat.getExternalFilesDirs(context, null)[0],
+      "testzim.zim"
+    )
+    if (zimFile.exists()) zimFile.delete()
+    zimFile.createNewFile()
+    loadFileStream.use { inputStream ->
+      val outputStream: OutputStream = FileOutputStream(zimFile)
+      outputStream.use { it ->
+        val buffer = ByteArray(inputStream.available())
+        var length: Int
+        while (inputStream.read(buffer).also { length = it } > 0) {
+          it.write(buffer, 0, length)
+        }
+      }
+    }
+    return zimFile
   }
 }
