@@ -30,18 +30,19 @@ import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
 
 fun initialDownload(func: InitialDownloadRobot.() -> Unit) =
   InitialDownloadRobot().applyWithViewHierarchyPrinting(func)
 
 class InitialDownloadRobot : BaseRobot() {
-  private val zimFileTitle = "Off the Grid"
 
   fun clickDownloadOnBottomNav() {
     clickOn(ViewId(R.id.downloadsFragment))
@@ -64,12 +65,28 @@ class InitialDownloadRobot : BaseRobot() {
     }
   }
 
-  fun waitForDataToLoad() {
-    testFlakyView({ isVisible(Text(zimFileTitle)) }, 10)
+  fun waitForDataToLoad(retryCountForDataToLoad: Int = 10) {
+    try {
+      isVisible(TextId(R.string.your_languages))
+    } catch (e: RuntimeException) {
+      if (retryCountForDataToLoad > 0) {
+        waitForDataToLoad(retryCountForDataToLoad - 1)
+        return
+      }
+      // throw the exception when there is no more retry left.
+      throw RuntimeException("Couldn't load the online library list.\n Original exception = $e")
+    }
   }
 
   fun downloadZimFile() {
-    testFlakyView({ onView(withText(zimFileTitle)).perform(click()) })
+    pauseForBetterTestPerformance()
+    testFlakyView({
+      onView(
+        RecyclerViewMatcher(R.id.libraryList).atPosition(
+          1
+        )
+      ).perform(click())
+    })
   }
 
   fun assertStorageConfigureDialogDisplayed() {
@@ -116,8 +133,7 @@ class InitialDownloadRobot : BaseRobot() {
     } catch (e: Exception) {
       Log.i(
         "INITIAL_DOWNLOAD_TEST",
-        "Failed to stop download with title [" + zimFileTitle + "]... " +
-          "Probably because it doesn't download the zim file"
+        "Failed to stop downloading. Probably because it is not downloading the zim file"
       )
     }
   }

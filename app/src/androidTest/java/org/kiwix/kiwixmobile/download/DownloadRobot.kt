@@ -29,9 +29,9 @@ import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import junit.framework.AssertionFailedError
+import org.junit.Assert
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
-import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.files.Log
@@ -47,7 +47,6 @@ class DownloadRobot : BaseRobot() {
 
   private var retryCountForDataToLoad = 10
   private var retryCountForCheckDownloadStart = 10
-  private val zimFileTitle = "Off the Grid"
 
   fun clickLibraryOnBottomNav() {
     clickOn(ViewId(R.id.libraryFragment))
@@ -72,7 +71,17 @@ class DownloadRobot : BaseRobot() {
   }
 
   fun checkIfZimFileDownloaded() {
-    isVisible(Text(zimFileTitle))
+    pauseForBetterTestPerformance()
+    try {
+      testFlakyView({
+        onView(withId(R.id.file_management_no_files)).check(matches(isDisplayed()))
+      })
+      // if the "No files here" text found that means it failed to download the ZIM file.
+      Assert.fail("Couldn't download the zim file. The [No files here] text is visible on screen")
+    } catch (e: AssertionFailedError) {
+      // check if "No files here" text is not visible on
+      // screen that means zim file is downloaded successfully.
+    }
   }
 
   fun refreshOnlineList() {
@@ -163,8 +172,7 @@ class DownloadRobot : BaseRobot() {
     } catch (e: Exception) {
       Log.i(
         "DOWNLOAD_TEST",
-        "Failed to stop download with title [" + zimFileTitle + "]... " +
-          "Probably because it doesn't download the zim file"
+        "Failed to stop downloading. Probably because it is not downloading the zim file"
       )
     }
   }

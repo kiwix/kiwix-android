@@ -140,7 +140,7 @@ class DownloadTest : BaseActivityTest() {
       }
     } catch (e: Exception) {
       Assert.fail(
-        "Couldn't find downloaded file ' Off the Grid ' Original Exception: ${e.message}"
+        "Couldn't find downloaded file\n Original Exception: ${e.message}"
       )
     }
     LeakAssertions.assertNoLeaks()

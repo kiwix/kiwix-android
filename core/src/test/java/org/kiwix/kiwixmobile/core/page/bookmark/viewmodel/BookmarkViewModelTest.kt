@@ -44,6 +44,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.setScheduler
+import java.util.UUID
 
 @ExtendWith(InstantExecutorExtension::class)
 internal class BookmarkViewModelTest {
@@ -89,8 +90,14 @@ internal class BookmarkViewModelTest {
 
   @Test
   fun `updatePages return state with bookmark items`() {
-    assertThat(viewModel.updatePages(bookmarkState(), UpdatePages(listOf(bookmark())))).isEqualTo(
-      bookmarkState(listOf(bookmark()))
+    val databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
+    assertThat(
+      viewModel.updatePages(
+        bookmarkState(),
+        UpdatePages(listOf(bookmark(databaseId)))
+      )
+    ).isEqualTo(
+      bookmarkState(listOf(bookmark(databaseId)))
     )
   }
 
@@ -115,19 +122,30 @@ internal class BookmarkViewModelTest {
 
   @Test
   internal fun `updatePages returns state with updated items`() {
+    val databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
     assertThat(
-      viewModel.updatePages(bookmarkState(), UpdatePages(listOf(bookmark())))
+      viewModel.updatePages(bookmarkState(), UpdatePages(listOf(bookmark(databaseId))))
     ).isEqualTo(
-      bookmarkState(listOf(bookmark()))
+      bookmarkState(listOf(bookmark(databaseId)))
     )
   }
 
   @Test
   internal fun `deselectAllPages deselects bookmarks items`() {
+    val databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
     assertThat(
-      viewModel.deselectAllPages(bookmarkState(bookmarks = listOf(bookmark(isSelected = true))))
+      viewModel.deselectAllPages(
+        bookmarkState(
+          bookmarks = listOf(
+            bookmark(
+              isSelected = true,
+              databaseId = databaseId
+            )
+          )
+        )
+      )
     ).isEqualTo(
-      bookmarkState(bookmarks = listOf(bookmark(isSelected = false)))
+      bookmarkState(bookmarks = listOf(bookmark(isSelected = false, databaseId = databaseId)))
     )
   }
 
@@ -147,10 +165,11 @@ internal class BookmarkViewModelTest {
 
   @Test
   internal fun `copyWithNewItems returns state with copied items`() {
+    val databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
     assertThat(
-      viewModel.copyWithNewItems(bookmarkState(), listOf(bookmark()))
+      viewModel.copyWithNewItems(bookmarkState(), listOf(bookmark(databaseId)))
     ).isEqualTo(
-      bookmarkState(listOf(bookmark()))
+      bookmarkState(listOf(bookmark(databaseId)))
     )
   }
 }

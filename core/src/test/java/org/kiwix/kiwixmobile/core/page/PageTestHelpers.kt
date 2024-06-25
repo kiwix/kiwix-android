@@ -71,6 +71,7 @@ fun historyState(
   )
 
 fun bookmark(
+  databaseId: Long,
   bookmarkTitle: String = "bookmarkTitle",
   isSelected: Boolean = false,
   id: Long = 2,
@@ -81,6 +82,7 @@ fun bookmark(
   favicon: String = "favicon"
 ): LibkiwixBookmarkItem {
   return LibkiwixBookmarkItem(
+    databaseId = databaseId,
     id = id,
     zimId = zimId,
     zimName = zimName,

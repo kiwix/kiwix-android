@@ -22,12 +22,14 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.page.bookmark
 import org.kiwix.kiwixmobile.core.page.bookmarkState
+import java.util.UUID
 
 internal class BookmarkStateTest {
   @Test
   internal fun `copyNewItems should set new items to pageItems`() {
-    assertThat(bookmarkState(emptyList()).copy(listOf(bookmark())).pageItems).isEqualTo(
-      listOf(bookmark())
+    val databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
+    assertThat(bookmarkState(emptyList()).copy(listOf(bookmark(databaseId))).pageItems).isEqualTo(
+      listOf(bookmark(databaseId))
     )
   }
 }

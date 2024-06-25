@@ -23,9 +23,10 @@ import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Bookmark
+import java.util.UUID
 
 data class LibkiwixBookmarkItem(
-  val databaseId: Long = 0L,
+  val databaseId: Long = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE,
   override val zimId: String,
   val zimName: String,
   override val zimFilePath: String?,
