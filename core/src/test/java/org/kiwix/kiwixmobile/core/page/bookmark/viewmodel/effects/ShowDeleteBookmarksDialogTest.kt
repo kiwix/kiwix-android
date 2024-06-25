@@ -36,6 +36,7 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.effects.DeletePageItems
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteAllBookmarks
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteSelectedBookmarks
+import java.util.UUID
 
 internal class ShowDeleteBookmarksDialogTest {
   val effects = mockk<PublishProcessor<SideEffect<*>>>(relaxed = true)
@@ -68,7 +69,14 @@ internal class ShowDeleteBookmarksDialogTest {
     val showDeleteBookmarksDialog =
       ShowDeleteBookmarksDialog(
         effects,
-        bookmarkState(listOf(bookmark(isSelected = true))),
+        bookmarkState(
+          listOf(
+            bookmark(
+              isSelected = true,
+              databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
+            )
+          )
+        ),
         newBookmarksDao,
         viewModelScope
       )
@@ -82,7 +90,13 @@ internal class ShowDeleteBookmarksDialogTest {
     val showDeleteBookmarksDialog =
       ShowDeleteBookmarksDialog(
         effects,
-        bookmarkState(listOf(bookmark())),
+        bookmarkState(
+          listOf(
+            bookmark(
+              databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
+            )
+          )
+        ),
         newBookmarksDao,
         viewModelScope
       )
