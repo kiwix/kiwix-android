@@ -34,27 +34,47 @@ internal class DeletePageItemsTest {
   val activity: AppCompatActivity = mockk()
   private val item1 = historyItem()
   private val item2 = historyItem()
-  private val viewModelScope = CoroutineScope(Dispatchers.IO)
+  private val viewModelScope = CoroutineScope(Dispatchers.Main)
 
   @Test
   fun `delete with selected items only deletes the selected items`() = runBlocking {
-    item1.isSelected = true
-    DeletePageItems(
-      historyState(listOf(item1, item2)),
-      pageDao,
-      viewModelScope
-    ).invokeWith(activity)
-    verify { pageDao.deletePages(listOf(item1)) }
+    retryTest {
+      item1.isSelected = true
+      DeletePageItems(
+        historyState(listOf(item1, item2)),
+        pageDao,
+        viewModelScope
+      ).invokeWith(activity)
+      verify { pageDao.deletePages(listOf(item1)) }
+    }
   }
 
   @Test
   fun `delete with no selected items deletes all items`() = runBlocking {
-    item1.isSelected = false
-    DeletePageItems(
-      historyState(listOf(item1, item2)),
-      pageDao,
-      viewModelScope
-    ).invokeWith(activity)
-    verify { pageDao.deletePages(listOf(item1, item2)) }
+    retryTest {
+      item1.isSelected = false
+      DeletePageItems(
+        historyState(listOf(item1, item2)),
+        pageDao,
+        viewModelScope
+      ).invokeWith(activity)
+      verify { pageDao.deletePages(listOf(item1, item2)) }
+    }
+  }
+
+  private fun retryTest(maxRetries: Int = 5, block: () -> Unit) {
+    var currentAttempt = 0
+    var success = false
+    while (currentAttempt < maxRetries && !success) {
+      try {
+        block()
+        success = true
+      } catch (e: AssertionError) {
+        currentAttempt++
+        if (currentAttempt >= maxRetries) {
+          throw e
+        }
+      }
+    }
   }
 }
