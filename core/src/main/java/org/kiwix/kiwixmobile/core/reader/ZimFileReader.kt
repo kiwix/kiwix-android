@@ -49,7 +49,6 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.io.PipedInputStream
 import java.io.PipedOutputStream
-import java.lang.reflect.InvocationTargetException
 import java.net.URLDecoder
 import javax.inject.Inject
 
@@ -278,7 +277,7 @@ class ZimFileReader constructor(
     }
     val infoPair = try {
       article?.directAccessInformation
-    } catch (ignore: InvocationTargetException) {
+    } catch (ignore: Exception) {
       Log.e(
         TAG,
         "Could not get directAccessInformation for uri = $uri \n" +
