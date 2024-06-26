@@ -275,15 +275,26 @@ class ZimFileReader constructor(
       Log.e(TAG, "Could not get Item for uri = $uri \n original exception = $exception")
       null
     }
-    val infoPair = article?.directAccessInformation
+    val infoPair = try {
+      article?.directAccessInformation
+    } catch (ignore: Exception) {
+      Log.e(
+        TAG,
+        "Could not get directAccessInformation for uri = $uri \n" +
+          "original exception = $ignore"
+      )
+      null
+    }
     if (infoPair == null || !File(infoPair.filename).exists()) {
       return loadAssetFromCache(uri)
     }
-    return AssetFileDescriptor(
-      infoPair.parcelFileDescriptor,
-      infoPair.offset,
-      article.size
-    ).createInputStream()
+    return article?.size?.let {
+      AssetFileDescriptor(
+        infoPair.parcelFileDescriptor,
+        infoPair.offset,
+        it
+      ).createInputStream()
+    }
   }
 
   @Throws(IOException::class)
