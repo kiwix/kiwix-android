@@ -51,6 +51,9 @@ abstract class HistoryRoomDao : PageDao {
   @Insert
   abstract fun insertHistoryItem(historyRoomEntity: HistoryRoomEntity)
 
+  @Query("SELECT COUNT() FROM HistoryRoomEntity WHERE id = :id")
+  abstract fun count(id: Int): Int
+
   fun saveHistory(historyItem: HistoryListItem.HistoryItem) {
     getHistoryRoomEntity(
       historyItem.historyUrl,
@@ -65,7 +68,12 @@ abstract class HistoryRoomDao : PageDao {
       }
       updateHistoryItem(it)
     } ?: run {
-      insertHistoryItem(HistoryRoomEntity(historyItem))
+      val historyEntity = HistoryRoomEntity(historyItem)
+      if (count(historyEntity.id.toInt()) > 0) {
+        // set the default id so that room will automatically generates the database id.
+        historyEntity.id = 0
+      }
+      insertHistoryItem(historyEntity)
     }
   }
 
