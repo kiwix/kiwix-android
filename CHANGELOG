@@ -1,3 +1,18 @@
+3.11.1
+Bug Fixed:
+* Not able to upload 512MB+ custom apps on playStore. (https://github.com/kiwix/kiwix-android/pull/3801)
+* Zimit2 Youtube video does not play in Android reader. (https://github.com/kiwix/kiwix-android/pull/3879)
+* Xapian crash scenarios(When searching for an article). (https://github.com/kiwix/kiwix-android/pull/3885)
+* ServiceWorker management seems unstable. (https://github.com/kiwix/kiwix-android/pull/3880)
+* Outdated text showing when a zim file could not open. (https://github.com/kiwix/kiwix-android/pull/3887)
+* Sometimes not all bookmarks are showing. (https://github.com/kiwix/kiwix-android/pull/3893)
+* Application crashes when loading the media in webView. (https://github.com/kiwix/kiwix-android/pull/3898)
+* Application crashes while migrating the history/notes. (https://github.com/kiwix/kiwix-android/pull/3900)
+* Attaching real exception in crash logs instead of NotSerializableException when a user trying to send the crash report. (https://github.com/kiwix/kiwix-android/pull/3904)
+
+Compilation/CI/CD:
+* Upgraded coroutine dependency to "1.7.3". (https://github.com/kiwix/kiwix-android/pull/3904)
+
 3.11.0
 New Features:
 * Export and import feature for bookmarks. (https://github.com/kiwix/kiwix-android/pull/3724)
