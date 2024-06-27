@@ -211,9 +211,17 @@ open class ErrorActivity : BaseActivity() {
       .getPackageInformation(packageName, ZERO).versionName
 
   private fun toStackTraceString(exception: Throwable): String =
-    StringWriter().apply {
-      exception.printStackTrace(PrintWriter(this))
-    }.toString()
+    try {
+      StringWriter().apply {
+        exception.printStackTrace(PrintWriter(this))
+      }.toString()
+    } catch (ignore: Exception) {
+      // Some exceptions thrown by coroutines do not have a stack trace.
+      // These exceptions contain the full error message in the exception object itself.
+      // To handle these cases, log the full exception message as it contains the
+      // main cause of the error.
+      StringWriter().append("$exception").toString()
+    }
 
   open fun restartApp() {
     val restartAppIntent = packageManager.getLaunchIntentForPackage(packageName)?.apply {
