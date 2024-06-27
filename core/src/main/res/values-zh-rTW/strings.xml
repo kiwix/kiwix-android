@@ -81,8 +81,9 @@
   <string name="tts_lang_not_supported">本頁面不支援這個語言。條目可能無法正確讀取。</string>
   <string name="no_reader_application_installed">找不到開啟這類型檔案的應用程式</string>
   <string name="no_email_application_installed">請安裝電子郵件服務提供方，或是在%1s發送電子郵件給我們</string>
+  <string name="no_app_found_to_select_bookmark_file">找不到所選書籤檔案的應用程式</string>
   <string name="no_section_info">未找到內容標題</string>
-  <string name="request_storage">我們需要進入你的儲存裝置以存取離線內容。</string>
+  <string name="request_storage">我們需要存取您的儲存裝置以存取離線內容。</string>
   <string name="request_write_storage">要下載 zim 檔案，我們需要寫入您的儲存裝置權限</string>
   <string name="clear_recent_and_tabs_history_dialog">您確定要刪除您的搜尋歷史記錄，並且重新設定所有啟用的分頁嗎？</string>
   <string name="delete_recent_search_item">刪除此項目？</string>
@@ -90,6 +91,11 @@
   <string name="pref_clear_all_history_summary">清除近期搜尋和分頁歷史記錄</string>
   <string name="pref_notes">註釋</string>
   <string name="pref_permission">權限</string>
+  <string name="pref_import_bookmark_title">匯入書籤</string>
+  <string name="pref_import_bookmark_summary">匯入已存的書籤</string>
+  <string name="pref_export_bookmark_title">匯出書籤</string>
+  <string name="pref_export_bookmark_summary">匯出所有已存的書籤</string>
+  <string name="export_bookmark_saved">書籤已匯出至%s檔案裡</string>
   <string name="all_history_cleared">所有歷史記錄已清除</string>
   <string name="pref_clear_all_bookmarks_title">清除書籤</string>
   <string name="clear_all_history_dialog_title">清除所有歷史記錄？</string>
@@ -226,6 +232,9 @@
   <string name="save">儲存</string>
   <string name="note">註釋</string>
   <string name="wiki_article_title">wiki 條目標題</string>
+  <string name="ext_storage_permission_rationale_export_bookmark">匯出書籤時需要儲存裝置的存取權限</string>
+  <string name="ext_storage_write_permission_denied_export_bookmark">若不可存取儲存裝置則無法匯出書籤</string>
+  <string name="export_bookmark_error">在嘗試匯出書籤時發生錯誤！</string>
   <string name="ext_storage_permission_rationale_add_note">註釋需要儲存裝置存取權限</string>
   <string name="ext_storage_write_permission_denied_add_note">沒有儲存裝置存取權限註釋會無法使用</string>
   <string name="note_save_unsuccessful">註釋儲存失敗</string>
@@ -288,6 +297,11 @@
   <string name="delete_selected_history">刪除所選的歷史？</string>
   <string name="delete_bookmarks">刪除所有書籤？</string>
   <string name="delete_selected_bookmarks">刪除所選的書籤？</string>
+  <string name="import_bookmarks_dialog_title">匯入書籤？</string>
+  <string name="export_all_bookmarks_dialog_title">匯出所有書籤？</string>
+  <string name="export_all_bookmarks_dialog_message">匯出時會在 Download/org.kiwix…/ 資料夾中產生 bookmark.xml 檔案。</string>
+  <string name="bookmark_imported_message">已匯入所有書籤。</string>
+  <string name="error_invalid_bookmark_file">錯誤：所選檔案不是有效的書籤檔案。</string>
   <string name="on">開啟</string>
   <string name="off">關閉</string>
   <string name="auto">自動</string>
@@ -347,4 +361,6 @@
   <string name="zim_file_content_description">包含閱讀內容的 ZIM 檔案</string>
   <string name="select_language_content_description">選擇此語言將會在頂部優先顯示該語言的可下載書籍。</string>
   <string name="toolbar_back_button_content_description">前往上一個畫面</string>
+  <string name="save_or_open_unsupported_files_dialog_title">儲存或開啟這個檔案？</string>
+  <string name="save_or_open_unsupported_files_dialog_message">選擇開啟將在外部閱讀器應用程式中開啟該檔案。</string>
 </resources>

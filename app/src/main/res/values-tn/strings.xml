@@ -5,7 +5,7 @@
 <resources>
   <string name="file_system_does_not_support_4gb">Tsamaiso ya gago ya difaele ga e tshegetse difaele tse di fetang 4GB</string>
   <string name="detecting_file_system">Go lemoga gore a tsamaiso ya difaele e ka tlhama difaele tsa 4GB</string>
-  <string name="cannot_open_file">Go bula faele go retetse\nTsweetswee leka go batla faele eno mo Tab ya Sedirisiwa ya motlobo wa gago wa dibuka</string>
+  <string name="cannot_open_file" fuzzy="true">Go bula faele go retetse\nTsweetswee leka go batla faele eno mo Tab ya Sedirisiwa ya motlobo wa gago wa dibuka</string>
   <string name="send_files_title">Romela difaele</string>
   <string name="receive_files_title">Amogela Difaele</string>
   <string name="no_app_found_to_open">Ga go na app e e fitlhetsweng go tlhopha faele ya zim!</string>

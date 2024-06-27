@@ -87,6 +87,7 @@
   <string name="pref_clear_all_history_summary">Cancella le ricerche recenti e la cronologia delle schede aperte</string>
   <string name="pref_notes">Note</string>
   <string name="pref_permission">Autorizzazioni</string>
+  <string name="pref_export_bookmark_title">Esporta segnalibri</string>
   <string name="all_history_cleared">Tutta la cronologia è stata cancellata</string>
   <string name="pref_clear_all_bookmarks_title">Cancella i segnalibri</string>
   <string name="clear_all_history_dialog_title">Vuoi cancellare tutta la cronologia?</string>
@@ -221,6 +222,8 @@
   <string name="save">Salva</string>
   <string name="note">Nota</string>
   <string name="wiki_article_title">Titolo della voce</string>
+  <string name="ext_storage_permission_rationale_export_bookmark">Per esportare i segnalibri è necessario l’accesso allo spazio di archiviazione</string>
+  <string name="ext_storage_write_permission_denied_export_bookmark">I segnalibri non possono essere esportati senza accesso allo spazio di archiviazione</string>
   <string name="ext_storage_permission_rationale_add_note">L’accesso allo spazio di archiviazione è richiesto per poter aggiungere note</string>
   <string name="ext_storage_write_permission_denied_add_note">Le note non possono essere salvate senza l’accesso allo spazio di archiviazione</string>
   <string name="note_save_unsuccessful">Salvataggio della nota fallito</string>
@@ -281,6 +284,9 @@
   <string name="delete_selected_history">Vuoi cancellare le voci della cronologia selezionate?</string>
   <string name="delete_bookmarks">Vuoi cancellare tutti i segnalibri?</string>
   <string name="delete_selected_bookmarks">Vuoi cancellare i segnalibri selezionati?</string>
+  <string name="import_bookmarks_dialog_title">Importare segnalibri?</string>
+  <string name="export_all_bookmarks_dialog_title">Esportare tutti i segnalibri?</string>
+  <string name="bookmark_imported_message">Tutti i segnalibri sono stati importati.</string>
   <string name="on">Attivata</string>
   <string name="off">Disattivata</string>
   <string name="auto">Automatica</string>

@@ -3,5 +3,5 @@
 * K Messaoudi
 -->
 <resources>
-  <string name="cannot_open_file">Afaylu Yugi ad yeldi\nTtxil ɛreḍ ad d-tnadiḍ afaylu-a deg yiccer n wallalen n temkerḍit-rk</string>
+  <string name="cannot_open_file" fuzzy="true">Afaylu Yugi ad yeldi\nTtxil ɛreḍ ad d-tnadiḍ afaylu-a deg yiccer n wallalen n temkerḍit-rk</string>
 </resources>

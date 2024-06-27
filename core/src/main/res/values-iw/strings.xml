@@ -79,6 +79,7 @@
   <string name="tts_lang_not_supported">השפה של הדף הזה אינה נתמכת. ייתכן שהערך לא יוקרא כמו שצריך.</string>
   <string name="no_reader_application_installed">לא נמצאה אפליקציה מותקנת עבור סוג הקובץ הזה</string>
   <string name="no_email_application_installed">נא להתקין ספק שירות דוא״ל או לשלוח לנו הודעה אל %1s בדוא״ל</string>
+  <string name="no_app_found_to_select_bookmark_file">לא נמצא יישום לבחירת קובץ סימניות</string>
   <string name="no_section_info">לא נמצאו כותרות תוכן</string>
   <string name="request_storage">כדי לגשת לתכנים לא־מקוונים אנחנו צריכים גישה לאחסון שלך</string>
   <string name="request_write_storage">כדי להוריד קובצי zim, אנחנו זקוקים להרשאת גישה לאחסון שלך.</string>
@@ -88,6 +89,11 @@
   <string name="pref_clear_all_history_summary">ניקוי מילות חיפוש קודמות והיסטוריית כרטיסיות</string>
   <string name="pref_notes">הערות</string>
   <string name="pref_permission">הרשאות</string>
+  <string name="pref_import_bookmark_title">יבוא סימניות</string>
+  <string name="pref_import_bookmark_summary">יבוא הסימניות השמורות</string>
+  <string name="pref_export_bookmark_title">יצוא סימניות</string>
+  <string name="pref_export_bookmark_summary">יבוא הסימניות השמורות</string>
+  <string name="export_bookmark_saved">הסימניות מיוצאות בקובץ %s</string>
   <string name="all_history_cleared">כל ההיסטוריה נמחקה</string>
   <string name="pref_clear_all_bookmarks_title">ניקוי סימניות</string>
   <string name="clear_all_history_dialog_title">לנקות את כל ההיסטוריה?</string>
@@ -224,6 +230,9 @@
   <string name="save">שמירה</string>
   <string name="note">הערה</string>
   <string name="wiki_article_title">כותרת ערך בוויקי</string>
+  <string name="ext_storage_permission_rationale_export_bookmark">נדרשת גישת אחסון ליצוא סימניות</string>
+  <string name="ext_storage_write_permission_denied_export_bookmark">לא ניתן לייצא סימניות ללא גישה לאחסון</string>
+  <string name="export_bookmark_error">אירעה שגיאה בעת ניסיון לייצא סימנייה!</string>
   <string name="ext_storage_permission_rationale_add_note">נדרשת גישה לאחסון בשביל הערות</string>
   <string name="ext_storage_write_permission_denied_add_note">Notes can\'t be used without access to storage</string>
   <string name="note_save_unsuccessful">שמירת ההערה לא הצליחה</string>
@@ -286,6 +295,11 @@
   <string name="delete_selected_history">למחוק את ההיסטוריה שנבחרה?</string>
   <string name="delete_bookmarks">למחוק את כל המועדפים?</string>
   <string name="delete_selected_bookmarks">למחוק את המועדפים שנבחרו?</string>
+  <string name="import_bookmarks_dialog_title">לייבא סימניות?</string>
+  <string name="export_all_bookmarks_dialog_title">לייצא את כל הסימניות?</string>
+  <string name="export_all_bookmarks_dialog_message">יצוא ייצור קובץ bookmark.xml בתיקייה Download/org.kiwix…/.</string>
+  <string name="bookmark_imported_message">כל הסימניות יובאו.</string>
+  <string name="error_invalid_bookmark_file">שגיאה: הקובץ שנבחר אינו קובץ סימניות תקין.</string>
   <string name="on">מופעל</string>
   <string name="off">כבוי</string>
   <string name="auto">אוטומטי</string>
@@ -345,4 +359,6 @@
   <string name="zim_file_content_description">קובץ ZIM שמכיל את התוכן לקריאה</string>
   <string name="select_language_content_description">בחירה בשפה הזאת תתעדף הצגת ספרים שניתן להוריד בשפה הזאת בראש הרשימה.</string>
   <string name="toolbar_back_button_content_description">מעבר למסך הקודם</string>
+  <string name="save_or_open_unsupported_files_dialog_title">האם לשמור או לפתוח את הקובץ הזה?</string>
+  <string name="save_or_open_unsupported_files_dialog_message">בחירה בפתיחה תפתח את הקובץ הזה ביישום קורא חיצוני.</string>
 </resources>

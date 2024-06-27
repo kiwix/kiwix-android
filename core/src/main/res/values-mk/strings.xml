@@ -71,6 +71,7 @@
   <string name="tts_lang_not_supported">Јазикот на оваа страница не е поддржан. Статијата може да биде неправилно испишана.</string>
   <string name="no_reader_application_installed">Не можев да најдам воспоставен приложник за овој вид податотека</string>
   <string name="no_email_application_installed">Воспоставете услужник за е-пошта или пишете ни на %1s</string>
+  <string name="no_app_found_to_select_bookmark_file">Не пронајдов прилог за избирање на податотека со обележани</string>
   <string name="no_section_info">Не пронајдов содржински заглавија</string>
   <string name="request_storage">Ќе треба пристап до вашиот склад за да дојдам до вонмрежната содржина</string>
   <string name="request_write_storage">За да преземете ZIM-податотеки ќе ни треба запишувачки пристап до вашиот склад</string>
@@ -80,6 +81,11 @@
   <string name="pref_clear_all_history_summary">Исчисти скорешни пребарувања и јазичиња</string>
   <string name="pref_notes">Белешки</string>
   <string name="pref_permission">Дозволи</string>
+  <string name="pref_import_bookmark_title">Увези обележувачи</string>
+  <string name="pref_import_bookmark_summary">Увезете ги зачуваните обележувачи</string>
+  <string name="pref_export_bookmark_title">Извези обележувачи</string>
+  <string name="pref_export_bookmark_summary">Извезете ги сите зачувани обележувачи</string>
+  <string name="export_bookmark_saved">Обележувачите се извезени во податотеката %s</string>
   <string name="all_history_cleared">Сета историја е исчистена</string>
   <string name="pref_clear_all_bookmarks_title">Исчисти обележувачи</string>
   <string name="clear_all_history_dialog_title">Да ја исчистам сета историја</string>
@@ -216,6 +222,9 @@
   <string name="save">Зачувај</string>
   <string name="note">Белешка</string>
   <string name="wiki_article_title">Наслов на викистатијата</string>
+  <string name="ext_storage_permission_rationale_export_bookmark">Се бара складиштен пристап за извезување на обележувачи</string>
+  <string name="ext_storage_write_permission_denied_export_bookmark">Обележувачите не можат да се извезат без складиштен пристап</string>
+  <string name="export_bookmark_error">Се појави грешка при обидот за извоз на обележувачи!</string>
   <string name="ext_storage_permission_rationale_add_note">Белешките бараат пристап до складот</string>
   <string name="ext_storage_write_permission_denied_add_note">Не можете да користите белешки без пристап до складот</string>
   <string name="note_save_unsuccessful">Не успеав да ја зачувам белешката</string>
@@ -278,6 +287,11 @@
   <string name="delete_selected_history">Да ја избришам избраната историја?</string>
   <string name="delete_bookmarks">Да ги избришам сите обележувачи?</string>
   <string name="delete_selected_bookmarks">Да ги избришам избраните обележувачи?</string>
+  <string name="import_bookmarks_dialog_title">Да увезам обележувачи?</string>
+  <string name="export_all_bookmarks_dialog_title">Да ги извезам сите обележувачи?</string>
+  <string name="export_all_bookmarks_dialog_message">Извозот ќе создаде податотека bookmark.xml во папката Download/org.kiwix…/.</string>
+  <string name="bookmark_imported_message">Сите обележувачи се увезени.</string>
+  <string name="error_invalid_bookmark_file">Грешка: Избраната податотека не е важечка податотека со обележувачи.</string>
   <string name="on">Вкл.</string>
   <string name="off">Искл.</string>
   <string name="auto">Авто</string>
@@ -337,4 +351,6 @@
   <string name="zim_file_content_description">ZIM-податотека која ја има содржината за читање</string>
   <string name="select_language_content_description">Ако го изберете овој јазик, тогаш најгоре предност ќе имаат преземливите книги на тој јазик.</string>
   <string name="toolbar_back_button_content_description">Оди на претходниот екран</string>
+  <string name="save_or_open_unsupported_files_dialog_title">Да ја зачувам или отворам податотекава?</string>
+  <string name="save_or_open_unsupported_files_dialog_message">Ако изберете Отвори, податотеката ќе ја отворите во надворешен читач.</string>
 </resources>
