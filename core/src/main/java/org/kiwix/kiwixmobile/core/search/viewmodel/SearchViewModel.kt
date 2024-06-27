@@ -22,11 +22,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -86,8 +85,8 @@ class SearchViewModel @Inject constructor(
   private val _effects = Channel<SideEffect<*>>()
   val effects = _effects.receiveAsFlow()
   val actions = Channel<Action>(Channel.UNLIMITED)
-  private val filter = ConflatedBroadcastChannel("")
-  private val searchOrigin = ConflatedBroadcastChannel(FromWebView)
+  private val filter = MutableStateFlow("")
+  private val searchOrigin = MutableStateFlow(FromWebView)
 
   init {
     viewModelScope.launch { reducer() }
@@ -97,10 +96,10 @@ class SearchViewModel @Inject constructor(
   @Suppress("DEPRECATION")
   private suspend fun reducer() {
     combine(
-      filter.asFlow(),
+      filter.asStateFlow(),
       searchResults(),
       recentSearchRoomDao.recentSearches(zimReaderContainer.id),
-      searchOrigin.asFlow()
+      searchOrigin.asStateFlow()
     ) { searchTerm, searchResultsWithTerm, recentResults, searchOrigin ->
       SearchState(
         searchTerm, searchResultsWithTerm,
@@ -111,7 +110,7 @@ class SearchViewModel @Inject constructor(
   }
 
   @Suppress("DEPRECATION")
-  private fun searchResults() = filter.asFlow()
+  private fun searchResults() = filter.asStateFlow()
     .mapLatest {
       SearchResultsWithTerm(
         it,
@@ -126,7 +125,7 @@ class SearchViewModel @Inject constructor(
       is OnItemClick -> saveSearchAndOpenItem(it.searchListItem, false)
       is OnOpenInNewTabClick -> saveSearchAndOpenItem(it.searchListItem, true)
       is OnItemLongClick -> showDeleteDialog(it)
-      is Filter -> filter.trySendBlocking(it.term)
+      is Filter -> filter.tryEmit(it.term)
       ClickedSearchInText -> searchPreviousScreenWhenStateIsValid()
       is ConfirmedDelete -> deleteItemAndShowToast(it)
       is CreatedWithArguments -> _effects.trySend(
@@ -148,7 +147,7 @@ class SearchViewModel @Inject constructor(
           )
         ).isSuccess
 
-      is ScreenWasStartedFrom -> searchOrigin.trySendBlocking(it.searchOrigin)
+      is ScreenWasStartedFrom -> searchOrigin.tryEmit(it.searchOrigin)
     }
   }
 
