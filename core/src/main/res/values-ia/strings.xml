@@ -73,6 +73,7 @@
   <string name="tts_lang_not_supported">Le lingua de iste pagina non es supportate. Pote esser que le pagina non appare correctemente.</string>
   <string name="no_reader_application_installed">Non poteva trovar un application installate pro iste typo de file</string>
   <string name="no_email_application_installed">Per favor installa un fornitor de servicio e-mail o invia nos un message a %1s</string>
+  <string name="no_app_found_to_select_bookmark_file">Necun app trovate pro seliger un file de marcapaginas</string>
   <string name="no_section_info">Nulle capites de contento trovate</string>
   <string name="request_storage">Pro acceder a files ZIM, nos require accesso a tu immagazinage.</string>
   <string name="request_write_storage">Discargar files zim necessita accesso de scriptura a tu immagazinage</string>
@@ -82,6 +83,11 @@
   <string name="pref_clear_all_history_summary">Rader le recercas recente e le historia de schedas</string>
   <string name="pref_notes">Notas</string>
   <string name="pref_permission">Permissiones</string>
+  <string name="pref_import_bookmark_title">Importar marcapaginas</string>
+  <string name="pref_import_bookmark_summary">Importar le marcapaginas salveguardate</string>
+  <string name="pref_export_bookmark_title">Exportar marcapaginas</string>
+  <string name="pref_export_bookmark_summary">Exportar tote le marcapaginas salveguardate</string>
+  <string name="export_bookmark_saved">Le marcapaginas es exportate in un file %s</string>
   <string name="all_history_cleared">Tote le historia ha essite radite</string>
   <string name="pref_clear_all_bookmarks_title">Rader marcapaginas</string>
   <string name="clear_all_history_dialog_title">Rader tote le historia?</string>
@@ -218,6 +224,9 @@
   <string name="save">Salveguardar</string>
   <string name="note">Nota</string>
   <string name="wiki_article_title">Titulo del articulo wiki</string>
+  <string name="ext_storage_permission_rationale_export_bookmark">Le accesso al immagazinage es necessari pro exportar marcapaginas</string>
+  <string name="ext_storage_write_permission_denied_export_bookmark">Le marcapaginas non pote esser exportate sin accesso al immagazinage</string>
+  <string name="export_bookmark_error">Un error ha occurrite durante le tentativa de exportar le marcapaginas!</string>
   <string name="ext_storage_permission_rationale_add_note">Accesso a immagazinage es necessari pro Notas</string>
   <string name="ext_storage_write_permission_denied_add_note">Notas non pote esser usate sin accesso a immagazinage</string>
   <string name="note_save_unsuccessful">Non poteva salveguardar nota</string>
@@ -280,6 +289,11 @@
   <string name="delete_selected_history">Deler historia seligite?</string>
   <string name="delete_bookmarks">Deler tote le marcapaginas?</string>
   <string name="delete_selected_bookmarks">Deler marcapaginas seligite?</string>
+  <string name="import_bookmarks_dialog_title">Importar marcapaginas?</string>
+  <string name="export_all_bookmarks_dialog_title">Exportar tote le marcapaginas?</string>
+  <string name="export_all_bookmarks_dialog_message">Le exportation generara un file bookmark.xml in le dossier Download/org.kiwix…/.</string>
+  <string name="bookmark_imported_message">Tote le marcapaginas ha essite importate.</string>
+  <string name="error_invalid_bookmark_file">Error: Le file seligite non es un file de marcapaginas valide.</string>
   <string name="on">Si</string>
   <string name="off">No</string>
   <string name="auto">Auto</string>
@@ -339,4 +353,6 @@
   <string name="zim_file_content_description">Le file ZIM que ha le contento a leger</string>
   <string name="select_language_content_description">Si iste lingua es seligite, le libros discargabile in iste lingua essera monstrate primo.</string>
   <string name="toolbar_back_button_content_description">Ir al schermo precedente</string>
+  <string name="save_or_open_unsupported_files_dialog_title">Salveguardar o aperir iste file?</string>
+  <string name="save_or_open_unsupported_files_dialog_message">Si tu elige Aperir, le file se aperira in un application lector externe.</string>
 </resources>

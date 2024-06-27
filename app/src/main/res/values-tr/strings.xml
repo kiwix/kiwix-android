@@ -7,7 +7,7 @@
 <resources>
   <string name="file_system_does_not_support_4gb">Dosya sisteminiz 4GB’ın üzerindeki dosyaları desteklemiyor</string>
   <string name="detecting_file_system">Dosya sisteminin 4GB dosyaları oluşturabildiğini algılanabilir</string>
-  <string name="cannot_open_file">Dosya açılamadı\nLütfen bu dosyayı Kitaplığınızın Cihaz Sekmesinde aramayı deneyin</string>
+  <string name="cannot_open_file" fuzzy="true">Dosya açılamadı\nLütfen bu dosyayı Kitaplığınızın Cihaz Sekmesinde aramayı deneyin</string>
   <string name="send_files_title">Dosya Yükle</string>
   <string name="receive_files_title">Dosya Al</string>
   <string name="no_app_found_to_open">zim dosyasını seçecek uygulama bulunamadı!</string>

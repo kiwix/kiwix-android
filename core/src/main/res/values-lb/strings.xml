@@ -27,12 +27,14 @@
   <string name="search_label">Sichen</string>
   <string name="choose_file">Wielt eng Inhaltsdatei aus (*.zim)</string>
   <string name="open_in_new_tab">Link an engem neien Tab opmaachen?</string>
+  <string name="connection_refused">Connectioun refuséiert.</string>
   <string name="server_failed_message">De Server konnt net gestart ginn. Wgl. aktivéiert Ären Hotspot</string>
   <string name="server_failed_toast_message">De Server konnt net gestart ginn.</string>
   <string name="server_started_successfully_toast_message">De Server gouf erfollegräich gestart.</string>
   <string name="server_stopped_successfully_toast_message">De Server gouf erfollegräich gestoppt.</string>
   <string name="hotspot_turned_on">Hotspot aktivéiert</string>
   <string name="hotspot_details_message">Hei sinn d’Detailer vun Ärem lokalen Hotspot.\nSSID : %1$s\nPass : %2$s</string>
+  <string name="progress_dialog_starting_server">Server starten</string>
   <string name="wifi_dialog_title">WiFi Verbindung entdeckt</string>
   <string name="hotspot_dialog_neutral_button">VIRUFUEREN</string>
   <string name="hotspot_notification_content_title">Kiwix-Hotspot</string>
@@ -60,6 +62,11 @@
   <string name="pref_clear_all_history_title">Historique läschen</string>
   <string name="pref_notes">Notizen</string>
   <string name="pref_permission">Autorisatiounen</string>
+  <string name="pref_import_bookmark_title">Lieszeechen importéieren</string>
+  <string name="pref_import_bookmark_summary">Gespäichert Lieszeechen importéieren</string>
+  <string name="pref_export_bookmark_title">Lieszeechen exportéieren</string>
+  <string name="pref_export_bookmark_summary">All gespäichert Lieszeechen exportéieren</string>
+  <string name="export_bookmark_saved">D’Lieszeeche goufen an de Fichier %s exportéiert</string>
   <string name="pref_clear_all_bookmarks_title">Lieszeechen ewechhuelen</string>
   <string name="share">Deelen</string>
   <string name="selected_file_cab_app_chooser_title">ZIM-Fichier deele mat:</string>
@@ -69,6 +76,7 @@
   <string name="did_you_know">Wousst Dir?</string>
   <string name="undo">Réckgängeg maachen</string>
   <string name="tab_closed">Tab zougemaach</string>
+  <string name="tabs_closed">Tabs zougemaach</string>
   <string name="bookmark_added">Lieszeechen derbäigesat</string>
   <string name="rate_dialog_title">Wgl. bewäert eis</string>
   <string name="rate_dialog_msg">Wann Dir %s gäre benotzt, huelt Iech wgl. ee Moment Zäit fir et ze bewäerten. Merci fir Är Ënnerstëtzung!</string>
@@ -103,10 +111,12 @@
   <string name="help_8">• Wikipedia ass fir all Sprooch separat verfügbar</string>
   <string name="help_9">• Aner Inhalter wéi Wikileaks oder Wikisource sinn och verfügbar</string>
   <string name="pref_current_folder">Aktuelle Repertoire</string>
+  <string name="tts_pause">pauséieren</string>
   <string name="tts_resume">virufueren</string>
   <string name="stop">stopp</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Extern</string>
+  <string name="configure">Configuréieren</string>
   <string name="yes">Jo</string>
   <string name="no">Neen</string>
   <string name="confirm_stop_download_title">Erofluede stoppen?</string>
@@ -140,13 +150,18 @@
   <string name="table_of_contents">Inhaltsverzeechnes</string>
   <string name="select_languages">Sproochen eraussichen</string>
   <string name="save_languages">Sprooche späicheren</string>
+  <string name="send_feedback">Feedback schécken</string>
   <string name="selected_items">%1$d ausgewielt</string>
+  <string name="search_bookmarks">Lieszeechen duerchsichen</string>
   <string name="switch_tabs">Tabs wiesselen</string>
   <string name="close_all_tabs">All Tabs zoumaachen</string>
   <string name="close_tab">Tab zoumaachen</string>
+  <string name="running_state">Amgaang</string>
   <string name="complete">Komplettéieren</string>
+  <string name="paused_state">Pauséiert</string>
   <string name="save">Späicheren</string>
   <string name="wiki_article_title">Wiki-Artikel-Titel</string>
+  <string name="export_bookmark_error">Beim Exportéiere vum Lieszeechen ass ee Feeler geschitt!</string>
   <string name="note_delete_successful">D’Notiz gouf geläscht</string>
   <string name="note_delete_unsuccessful">D’Notiz gouf net geläscht</string>
   <string name="note_share_error_file_missing">De Fichier mat den Notize gëtt et net</string>
@@ -155,6 +170,7 @@
   <string name="notes_deletion_unsuccessful">E puer Fichiere goufen net geläscht</string>
   <string name="books_count">%d Buch/Bicher</string>
   <string name="your_device">Ären Apparat:</string>
+  <string name="device_name">Numm vum Apparat</string>
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Läscht all d’Notizen bei all den Artikelen</string>
   <string name="pref_clear_all_notes_title">All d’Notize läschen</string>
@@ -168,6 +184,11 @@
   <string name="no_history">Keen Historique</string>
   <string name="delete_history">De kompletten Historique läschen?</string>
   <string name="delete_bookmarks">All Lieszeeche läschen?</string>
+  <string name="import_bookmarks_dialog_title">Lieszeechen importéieren?</string>
+  <string name="export_all_bookmarks_dialog_title">All Lieszeechen exportéieren?</string>
+  <string name="export_all_bookmarks_dialog_message">Beim Exportéiere gëtt ee Fichier „bookmark.xml“ am Dossier „Download/org.kiwix…/“ ugeluecht.</string>
+  <string name="bookmark_imported_message">All d’Lieszeeche goufen importéiert.</string>
+  <string name="error_invalid_bookmark_file">Feeler: Den ausgewielte Fichier ass kee valabele Lieszeechefichier.</string>
   <string name="on">Un</string>
   <string name="off">Aus</string>
   <string name="auto">Automatesch</string>
@@ -193,4 +214,6 @@
   <string name="delete_selected_notes">Déi ausgewielten Notize läschen?</string>
   <string name="external_link_copied_message">Externe Link an den Tëschespäicher kopéiert</string>
   <string name="go_to_settings_label">Op d’Astellunge goen</string>
+  <string name="save_or_open_unsupported_files_dialog_title">Dëse Fichier Späicheren oder Opmaachen?</string>
+  <string name="save_or_open_unsupported_files_dialog_message">Wann dir „Opmaachen“ wielt, gëtt de Fichier an enger externer Lies-Applikatioun opgemaach.</string>
 </resources>
