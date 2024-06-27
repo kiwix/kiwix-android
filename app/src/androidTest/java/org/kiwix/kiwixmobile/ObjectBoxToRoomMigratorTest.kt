@@ -239,6 +239,20 @@ class ObjectBoxToRoomMigratorTest {
 
     clearRoomAndBoxStoreDatabases(box)
 
+    // Test to insert the items with same id.
+    val historyItem4 = getHistoryItem(
+      databaseId = 2,
+      title = "Main Page",
+      historyUrl = "https://kiwix.app/A/MainPage"
+    )
+    kiwixRoomDatabase.historyRoomDao().saveHistory(historyItem4)
+    box.put(HistoryEntity(historyItem))
+    objectBoxToRoomMigrator.migrateHistory(box)
+    actualData = kiwixRoomDatabase.historyRoomDao().historyRoomEntity().blockingFirst()
+    assertEquals(2, actualData.size)
+
+    clearRoomAndBoxStoreDatabases(box)
+
     // Test migration if ObjectBox has null values
     try {
       lateinit var invalidHistoryEntity: HistoryEntity
@@ -345,6 +359,20 @@ class ObjectBoxToRoomMigratorTest {
     objectBoxToRoomMigrator.migrateNotes(box)
     notesList = kiwixRoomDatabase.notesRoomDao().notes().blockingFirst() as List<NoteListItem>
     assertEquals(1, notesList.size)
+
+    clearRoomAndBoxStoreDatabases(box)
+
+    // Test to insert the items with same id.
+    val noteItem2 = getNoteListItem(
+      databaseId = 1,
+      zimUrl = "http://kiwix.app/Installing",
+      noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/Installing.txt"
+    )
+    kiwixRoomDatabase.notesRoomDao().saveNote(noteItem1)
+    box.put(NotesEntity(noteItem2))
+    objectBoxToRoomMigrator.migrateNotes(box)
+    notesList = kiwixRoomDatabase.notesRoomDao().notes().blockingFirst() as List<NoteListItem>
+    assertEquals(2, notesList.size)
 
     clearRoomAndBoxStoreDatabases(box)
 

@@ -101,6 +101,26 @@ class HistoryRoomDaoTest {
     assertThat(historyList.size, equalTo(1))
     historyRoomDao.deleteAllHistory()
 
+    // Save two entity same data and database id but with different date
+    historyRoomDao.saveHistory(historyItem)
+    val historyItem1 = getHistoryItem(
+      title = "Main Page",
+      historyUrl = "https://kiwix.app/A/MainPage",
+      databaseId = 1,
+      dateString = "31 May 2024"
+    )
+    historyRoomDao.saveHistory(historyItem1)
+    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
+    assertThat(historyList.size, equalTo(2))
+    historyRoomDao.deleteAllHistory()
+
+    // Save two entity with same and database id with same date to see if it's updated or not.
+    historyRoomDao.saveHistory(historyItem)
+    historyRoomDao.saveHistory(historyItem)
+    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
+    assertThat(historyList.size, equalTo(1))
+    historyRoomDao.deleteAllHistory()
+
     // Attempt to save undefined history item
     lateinit var undefinedHistoryItem: HistoryListItem.HistoryItem
     try {

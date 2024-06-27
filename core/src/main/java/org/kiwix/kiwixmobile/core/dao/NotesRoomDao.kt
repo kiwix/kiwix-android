@@ -38,8 +38,16 @@ abstract class NotesRoomDao : PageDao {
     deleteNotes(pagesToDelete as List<NoteListItem>)
 
   fun saveNote(noteItem: NoteListItem) {
-    saveNote(NotesRoomEntity(noteItem))
+    val notesEntity = NotesRoomEntity(noteItem)
+    if (count(notesEntity.id.toInt()) > 0) {
+      // set the default id so that room will automatically generates the database id.
+      notesEntity.id = 0
+    }
+    saveNote(notesEntity)
   }
+
+  @Query("SELECT COUNT() FROM NotesRoomEntity WHERE id = :id")
+  abstract fun count(id: Int): Int
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   abstract fun saveNote(notesRoomEntity: NotesRoomEntity)

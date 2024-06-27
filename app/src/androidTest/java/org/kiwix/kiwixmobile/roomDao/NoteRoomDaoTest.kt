@@ -22,7 +22,6 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual.equalTo
@@ -108,6 +107,24 @@ class NoteRoomDaoTest {
     )
     notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
     assertEquals(notesList.size, 1)
+    clearNotes()
+
+    // Test to insert the items with same id.
+    val noteItem2 = getNoteListItem(
+      databaseId = 1,
+      zimUrl = "http://kiwix.app/Installing",
+      noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/Installing.txt"
+    )
+    val noteItem3 = getNoteListItem(
+      databaseId = 1,
+      title = "Installing",
+      zimUrl = "http://kiwix.app/Installing",
+      noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/Installing.txt"
+    )
+    kiwixRoomDatabase.notesRoomDao().saveNote(noteItem2)
+    kiwixRoomDatabase.notesRoomDao().saveNote(noteItem3)
+    notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+    assertEquals(2, notesList.size)
     clearNotes()
 
     // Attempt to save undefined history item
