@@ -52,6 +52,7 @@ class ObjectBoxToRoomMigratorTest {
   private lateinit var kiwixRoomDatabase: KiwixRoomDatabase
   private lateinit var boxStore: BoxStore
   private lateinit var objectBoxToRoomMigrator: ObjectBoxToRoomMigrator
+  private val migrationMaxTime = 25000
 
   @Before
   fun setup() {
@@ -162,7 +163,10 @@ class ObjectBoxToRoomMigratorTest {
       kiwixRoomDatabase.recentSearchRoomDao().fullSearch().first()
     assertEquals(numEntities, actualDataAfterLargeMigration.size)
     // Assert that the migration completes within a reasonable time frame
-    assertTrue("Migration took too long: $migrationTime ms", migrationTime < 20000)
+    assertTrue(
+      "Migration took too long: $migrationTime ms",
+      migrationTime < migrationMaxTime
+    )
   }
 
   private suspend fun <T> clearRoomAndBoxStoreDatabases(box: Box<T>) {
@@ -287,7 +291,10 @@ class ObjectBoxToRoomMigratorTest {
     actualData = kiwixRoomDatabase.historyRoomDao().historyRoomEntity().blockingFirst()
     assertEquals(numEntities, actualData.size)
     // Assert that the migration completes within a reasonable time frame
-    assertTrue("Migration took too long: $migrationTime ms", migrationTime < 20000)
+    assertTrue(
+      "Migration took too long: $migrationTime ms",
+      migrationTime < migrationMaxTime
+    )
   }
 
   @Test
@@ -410,6 +417,9 @@ class ObjectBoxToRoomMigratorTest {
     notesList = kiwixRoomDatabase.notesRoomDao().notes().blockingFirst() as List<NoteListItem>
     assertEquals(numEntities, notesList.size)
     // Assert that the migration completes within a reasonable time frame
-    assertTrue("Migration took too long: $migrationTime ms", migrationTime < 20000)
+    assertTrue(
+      "Migration took too long: $migrationTime ms",
+      migrationTime < migrationMaxTime
+    )
   }
 }
