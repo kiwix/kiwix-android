@@ -25,7 +25,6 @@ import android.widget.Toast
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
-import org.kiwix.kiwixmobile.core.utils.ServerUtils.getIp
 import org.kiwix.kiwixmobile.core.utils.ServerUtils.getSocketAddress
 import org.kiwix.kiwixmobile.core.webserver.WebServerHelper
 import org.kiwix.kiwixmobile.core.webserver.ZimHostCallbacks
@@ -129,7 +128,7 @@ class HotspotService :
   private fun startForegroundNotificationHelper() {
     startForeground(
       HotspotNotificationManager.HOTSPOT_NOTIFICATION_ID,
-      hotspotNotificationManager?.buildForegroundNotification(getIp())
+      hotspotNotificationManager?.buildForegroundNotification(getSocketAddress())
     )
   }
 
