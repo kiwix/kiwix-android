@@ -80,6 +80,7 @@
         android:contentDescription="@string/qr_code"
         android:maxHeight="128dp"
         android:minHeight="76dp"
+        android:visibility="gone"
         android:scaleType="fitCenter"
         tools:src="@tools:sample/avatars" />
 
