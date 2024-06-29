@@ -49,11 +49,15 @@ import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
 const val DOWNLOAD_NOTIFICATION_TITLE = "OPEN_ZIM_FILE"
 
-class FetchDownloadNotificationManager(private val context: Context) :
+class FetchDownloadNotificationManager(
+  private val context: Context,
+  private val fetchDownloadDao: FetchDownloadDao
+) :
   DefaultFetchNotificationManager(context) {
   override fun getFetchInstanceForNamespace(namespace: String) = Fetch.getDefaultInstance()
 
@@ -80,9 +84,12 @@ class FetchDownloadNotificationManager(private val context: Context) :
     } else {
       android.R.drawable.stat_sys_download_done
     }
+    val notificationTitle =
+      fetchDownloadDao.getEntityForFileName(downloadNotification.title)?.title
+        ?: downloadNotification.title
     notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
       .setSmallIcon(smallIcon)
-      .setContentTitle(downloadNotification.title)
+      .setContentTitle(notificationTitle)
       .setContentText(getSubtitleText(context, downloadNotification))
       .setOngoing(downloadNotification.isOnGoingNotification)
       .setGroup(downloadNotification.groupId.toString())
@@ -107,6 +114,7 @@ class FetchDownloadNotificationManager(private val context: Context) :
             context.getString(R.string.tts_pause),
             getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.PAUSE)
           )
+
       downloadNotification.isPaused ->
         notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
           .addAction(
@@ -119,8 +127,10 @@ class FetchDownloadNotificationManager(private val context: Context) :
             context.getString(R.string.cancel),
             getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.DELETE)
           )
+
       downloadNotification.isQueued ->
         notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
+
       else -> notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
     }
     notificationCustomisation(downloadNotification, notificationBuilder, context)
