@@ -160,12 +160,15 @@ class ZimHostFragmentTest {
         // Check that only one ZIM file is hosted on the server
         assertItemHostedOnServer(1)
 
-        // Check Share by QR code
+        // Check QR code shown
         assertQrShown()
 
         // Stop the server
         stopServer()
         assertServerStopped()
+
+        // Check QR code not shown after stopping the server
+        assertQrNotShown()
 
         // Select the test ZIM file to host on the server
         clickOnTestZim()
