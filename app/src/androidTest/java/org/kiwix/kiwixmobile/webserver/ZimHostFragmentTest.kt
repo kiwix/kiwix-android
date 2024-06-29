@@ -161,9 +161,7 @@ class ZimHostFragmentTest {
         assertItemHostedOnServer(1)
 
         // Check Share by QR code
-        tapShareByQr()
-        assertQRDialogShown()
-        pressBack()
+        assertQrShown()
 
         // Stop the server
         stopServer()
