@@ -68,8 +68,22 @@ class Repository @Inject internal constructor(
       .observeOn(mainThread)
 
   override fun booksOnDiskAsListItems(): Flowable<List<BooksOnDiskListItem>> = bookDao.books()
-    .map { it.sortedBy { bookOnDisk -> bookOnDisk.book.language + bookOnDisk.book.title } }
     .map {
+      it.map { bookOnDisk ->
+        // If the book contains more than one language, it comes in a single string with commas.
+        // e.g., "eng,fra,vie,ita,ara,por". Check if the language contains a comma,
+        // then move this book to the "Multiple languages" section.
+        if (bookOnDisk.book.language.contains(',')) {
+          bookOnDisk.copy().apply {
+            // Set the language to "mul" for the book so that it is shown
+            // in the "Multiple languages" section.
+            book.language = "mul"
+          }
+        } else {
+          bookOnDisk
+        }
+      }.sortedBy { bookOnDisk -> bookOnDisk.book.language + bookOnDisk.book.title }
+    }.map {
       HeaderizableList<BooksOnDiskListItem, BookOnDisk, LanguageItem>(it).foldOverAddingHeaders(
         { bookOnDisk -> LanguageItem(bookOnDisk.locale) },
         { current, next -> current.locale.displayName != next.locale.displayName }
