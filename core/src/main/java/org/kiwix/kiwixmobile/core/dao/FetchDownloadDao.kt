@@ -71,6 +71,14 @@ class FetchDownloadDao @Inject constructor(
       equal(FetchDownloadEntity_.downloadId, download.id)
     }.find().getOrNull(0)
 
+  fun getEntityForFileName(fileName: String) =
+    box.query {
+      endsWith(
+        FetchDownloadEntity_.file, fileName,
+        QueryBuilder.StringOrder.CASE_INSENSITIVE
+      )
+    }.findFirst()
+
   fun insert(downloadId: Long, book: Book) {
     box.put(FetchDownloadEntity(downloadId, book))
   }

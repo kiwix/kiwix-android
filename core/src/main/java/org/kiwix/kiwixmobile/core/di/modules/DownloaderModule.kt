@@ -91,6 +91,6 @@ object DownloaderModule {
 
   @Provides
   @Singleton
-  fun provideFetchDownloadNotificationManager(context: Context):
-    FetchNotificationManager = FetchDownloadNotificationManager(context)
+  fun provideFetchDownloadNotificationManager(context: Context, fetchDownloadDao: FetchDownloadDao):
+    FetchNotificationManager = FetchDownloadNotificationManager(context, fetchDownloadDao)
 }
