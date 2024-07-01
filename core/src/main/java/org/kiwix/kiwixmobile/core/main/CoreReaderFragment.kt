@@ -2116,7 +2116,6 @@ abstract class CoreReaderFragment :
       }
       updateTableOfContents()
       tabsAdapter?.notifyDataSetChanged()
-      updateUrlProcessor()
       updateBottomToolbarArrowsAlpha()
       val zimFileReader = zimReaderContainer?.zimFileReader
       if (hasValidFileAndUrl(getCurrentWebView()?.url, zimFileReader)) {
@@ -2150,6 +2149,10 @@ abstract class CoreReaderFragment :
 
   override fun webViewFailedLoading(url: String) {
     if (isAdded) {
+      // If a URL fails to load, update the bookmark toggle.
+      // This fixes the scenario where the previous page is bookmarked and the next
+      // page fails to load, ensuring the bookmark toggle is unset correctly.
+      updateUrlProcessor()
       Log.d(TAG_KIWIX, String.format(getString(R.string.error_article_url_not_found), url))
     }
   }
@@ -2157,6 +2160,7 @@ abstract class CoreReaderFragment :
   @Suppress("MagicNumber")
   override fun webViewProgressChanged(progress: Int, webView: WebView) {
     if (isAdded) {
+      updateUrlProcessor()
       progressBar?.apply {
         visibility = View.VISIBLE
         show()
