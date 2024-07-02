@@ -124,7 +124,7 @@ class ZimFileReader constructor(
       ): Array<FdInput> =
         assetFileDescriptorList.map {
           FdInput(
-            it.parcelFileDescriptor.dup().fileDescriptor,
+            it.parcelFileDescriptor.fileDescriptor,
             it.startOffset,
             it.length
           )
