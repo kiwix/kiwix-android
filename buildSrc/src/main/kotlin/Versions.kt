@@ -105,6 +105,8 @@ object Versions {
   const val material_show_case_view: String = "1.3.7"
 
   const val roomVersion = "2.5.0"
+
+  const val zxing = "3.5.3"
 }
 
 /**

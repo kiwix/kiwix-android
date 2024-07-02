@@ -31,6 +31,7 @@ import org.kiwix.kiwixmobile.Findable.StringId.ContentDesc
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 
+const val SHORT_WAIT = 3_000L
 const val DEFAULT_WAIT = 10_000L
 const val LONG_WAIT = 20_000L
 const val VERY_LONG_WAIT = 40_000L
@@ -55,6 +56,9 @@ abstract class BaseRobot(
 
   protected fun isVisible(findable: Findable, timeout: Long = VERY_LONG_WAIT) =
     waitFor(findable, timeout) ?: throw RuntimeException(findable.errorMessage(this))
+
+  protected fun isNotVisible(findable: Findable, timeout: Long = SHORT_WAIT) =
+    waitFor(findable, timeout, 1) == null
 
   protected fun UiObject2.swipeLeft() {
     customSwipe(Direction.LEFT)
