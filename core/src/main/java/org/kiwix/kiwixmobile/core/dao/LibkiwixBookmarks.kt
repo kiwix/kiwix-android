@@ -237,7 +237,7 @@ class LibkiwixBookmarks @Inject constructor(
   private fun getBookmarksList(): List<LibkiwixBookmarkItem> {
     if (!bookmarksChanged && bookmarkList.isNotEmpty()) {
       // No changes, return the cached data
-      return bookmarkList
+      return bookmarkList.distinctBy(LibkiwixBookmarkItem::bookmarkUrl)
     }
     // Retrieve the list of bookmarks from the library, or return an empty list if it's null.
     val bookmarkArray =
@@ -283,6 +283,14 @@ class LibkiwixBookmarks @Inject constructor(
 
   private fun deleteDuplicateBookmarks() {
     bookmarkList.groupBy { it.bookmarkUrl to it.zimFilePath }
+      .filter { it.value.size > 1 }
+      .forEach { (_, value) ->
+        value.drop(1).forEach { bookmarkItem ->
+          deleteBookmark(bookmarkItem.zimId, bookmarkItem.bookmarkUrl)
+        }
+      }
+    // Fixes #3890
+    bookmarkList.groupBy { it.title to it.zimFilePath }
       .filter { it.value.size > 1 }
       .forEach { (_, value) ->
         value.drop(1).forEach { bookmarkItem ->
