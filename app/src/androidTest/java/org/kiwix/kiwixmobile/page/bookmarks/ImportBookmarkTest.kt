@@ -56,7 +56,7 @@ class ImportBookmarkTest : BaseActivityTest() {
   private val library = Library()
   private val manager = Manager(library)
   private val newBookDao = NewBookDao(boxStore!!.boxFor(BookOnDiskEntity::class.java))
-  lateinit var libkiwixBookmarks: LibkiwixBookmarks
+  private lateinit var libkiwixBookmarks: LibkiwixBookmarks
 
   private val bookmarkXmlData = """
         <bookmarks>
@@ -125,7 +125,13 @@ class ImportBookmarkTest : BaseActivityTest() {
       }
     }
     libkiwixBookmarks =
-      LibkiwixBookmarks(library, manager, SharedPreferenceUtil(context), newBookDao)
+      LibkiwixBookmarks(
+        library,
+        manager,
+        SharedPreferenceUtil(context),
+        newBookDao,
+        null
+      )
   }
 
   init {

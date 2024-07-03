@@ -56,7 +56,7 @@ class LibkiwixBookmarks @Inject constructor(
   manager: Manager,
   val sharedPreferenceUtil: SharedPreferenceUtil,
   private val bookDao: NewBookDao,
-  private val zimReaderContainer: ZimReaderContainer
+  private val zimReaderContainer: ZimReaderContainer?
 ) : PageDao {
 
   /**
@@ -307,7 +307,7 @@ class LibkiwixBookmarks @Inject constructor(
             // in custom apps we are using the assetFileDescriptor so we do not have the filePath
             // and in custom apps there is only a single zim file so we are directly
             // getting the zimFileReader object.
-            zimReaderContainer.zimFileReader
+            zimReaderContainer?.zimFileReader
           } else {
             bookmarkItem.zimFilePath?.let {
               val archive = Archive(it)
