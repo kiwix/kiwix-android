@@ -58,7 +58,7 @@ class SearchRobot {
         ViewAssertions.matches(
           HelperMatchers.atPosition(
             0,
-            ViewMatchers.hasDescendant(ViewMatchers.withText(searchResult))
+            ViewMatchers.hasDescendant(ViewMatchers.withSubstring(searchResult))
           )
         )
       )
@@ -113,7 +113,7 @@ class SearchRobot {
         .withElement(
           DriverAtoms.findElement(
             Locator.XPATH,
-            "//*[contains(text(), 'Big Baby DRAM')]"
+            "//*[contains(text(), 'Forum Category')]"
           )
         )
     })

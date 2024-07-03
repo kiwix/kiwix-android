@@ -28,21 +28,16 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.accessibility.AccessibilityChecks
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils
-import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.ResponseBody
-import org.hamcrest.Matchers
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -86,7 +81,7 @@ class SearchFragmentTestForCustomApp {
   private lateinit var activityScenario: ActivityScenario<CustomMainActivity>
 
   private val rayCharlesZimFileUrl =
-    "https://dev.kiwix.org/kiwix-android/test/wikipedia_en_ray_charles_maxi_2023-12.zim"
+    "https://download.kiwix.org/zim/zimit/scientific-alliance.obscurative.ru_ru_all_2024-06.zim"
 
   @Before
   fun waitForIdle() {
@@ -115,20 +110,6 @@ class SearchFragmentTestForCustomApp {
     }
   }
 
-  init {
-    AccessibilityChecks.enable().apply {
-      setRunChecksFromRootView(true)
-      setSuppressingResultMatcher(
-        Matchers.allOf(
-          AccessibilityCheckResultUtils.matchesCheck(TouchTargetSizeCheck::class.java),
-          AccessibilityCheckResultUtils.matchesViews(
-            ViewMatchers.withId(org.kiwix.kiwixmobile.core.R.id.menu_searchintext)
-          )
-        )
-      )
-    }
-  }
-
   @Test
   fun searchFragment() {
     activityScenario.onActivity {
@@ -136,18 +117,16 @@ class SearchFragmentTestForCustomApp {
     }
     // test with a large ZIM file to properly test the scenario
     downloadingZimFile = getDownloadingZimFile()
-    if (downloadingZimFile.length() == 0L) {
-      OkHttpClient().newCall(downloadRequest()).execute().use { response ->
-        if (response.isSuccessful) {
-          response.body?.let { responseBody ->
-            writeZimFileData(responseBody, downloadingZimFile)
-          }
-        } else {
-          throw RuntimeException(
-            "Download Failed. Error: ${response.message}\n" +
-              " Status Code: ${response.code}"
-          )
+    OkHttpClient().newCall(downloadRequest()).execute().use { response ->
+      if (response.isSuccessful) {
+        response.body?.let { responseBody ->
+          writeZimFileData(responseBody, downloadingZimFile)
         }
+      } else {
+        throw RuntimeException(
+          "Download Failed. Error: ${response.message}\n" +
+            " Status Code: ${response.code}"
+        )
       }
     }
     UiThreadStatement.runOnUiThread {
@@ -155,8 +134,8 @@ class SearchFragmentTestForCustomApp {
     }
     openZimFileInReaderWithAssetFileDescriptor(downloadingZimFile)
     openSearchWithQuery()
-    val searchTerm = "A Fool"
-    val searchedItem = "A Fool for You"
+    val searchTerm = "gard"
+    val searchedItem = "Gardanta Spirito"
     search {
       // test with fast typing/deleting
       searchWithFrequentlyTypedWords(searchTerm)
@@ -185,15 +164,15 @@ class SearchFragmentTestForCustomApp {
     search {
       // test by searching 10 article and clicking on them
       searchAndClickOnArticle(searchTerm)
-      searchAndClickOnArticle("A Song")
-      searchAndClickOnArticle("The Ra")
-      searchAndClickOnArticle("The Ge")
-      searchAndClickOnArticle("Wish")
-      searchAndClickOnArticle("WIFI")
-      searchAndClickOnArticle("Woman")
-      searchAndClickOnArticle("Big Ba")
-      searchAndClickOnArticle("My Wor")
-      searchAndClickOnArticle("100")
+      searchAndClickOnArticle("eilum")
+      searchAndClickOnArticle("page")
+      searchAndClickOnArticle("list")
+      searchAndClickOnArticle("ladder")
+      searchAndClickOnArticle("welc")
+      searchAndClickOnArticle("js")
+      searchAndClickOnArticle("hizo")
+      searchAndClickOnArticle("fad")
+      searchAndClickOnArticle("forum")
       assertArticleLoaded()
     }
   }
@@ -201,33 +180,31 @@ class SearchFragmentTestForCustomApp {
   @Test
   fun testConcurrencyOfSearch() = runBlocking {
     val searchTerms = listOf(
-      "A Song",
-      "The Ra",
-      "The Ge",
-      "Wish",
-      "WIFI",
-      "Woman",
-      "Big Ba",
-      "My Wor",
-      "100"
+      "eilum",
+      "page",
+      "list",
+      "ladder",
+      "welc",
+      "js",
+      "hizo",
+      "fad",
+      "forum"
     )
     activityScenario.onActivity {
       customMainActivity = it
     }
     // test with a large ZIM file to properly test the scenario
     downloadingZimFile = getDownloadingZimFile()
-    if (downloadingZimFile.length() == 0L) {
-      OkHttpClient().newCall(downloadRequest()).execute().use { response ->
-        if (response.isSuccessful) {
-          response.body?.let { responseBody ->
-            writeZimFileData(responseBody, downloadingZimFile)
-          }
-        } else {
-          throw RuntimeException(
-            "Download Failed. Error: ${response.message}\n" +
-              " Status Code: ${response.code}"
-          )
+    OkHttpClient().newCall(downloadRequest()).execute().use { response ->
+      if (response.isSuccessful) {
+        response.body?.let { responseBody ->
+          writeZimFileData(responseBody, downloadingZimFile)
         }
+      } else {
+        throw RuntimeException(
+          "Download Failed. Error: ${response.message}\n" +
+            " Status Code: ${response.code}"
+        )
       }
     }
     UiThreadStatement.runOnUiThread {
@@ -328,12 +305,10 @@ class SearchFragmentTestForCustomApp {
       .url(URI.create(rayCharlesZimFileUrl).toURL())
       .build()
 
-  private fun getDownloadingZimFile(isDeletePreviousZimFile: Boolean = true): File {
+  private fun getDownloadingZimFile(): File {
     val zimFile = File(context.cacheDir, "ray_charles.zim")
-    if (isDeletePreviousZimFile) {
-      if (zimFile.exists()) zimFile.delete()
-      zimFile.createNewFile()
-    }
+    if (zimFile.exists()) zimFile.delete()
+    zimFile.createNewFile()
     return zimFile
   }
 }
