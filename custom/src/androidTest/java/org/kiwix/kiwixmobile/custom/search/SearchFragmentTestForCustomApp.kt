@@ -150,6 +150,9 @@ class SearchFragmentTestForCustomApp {
         }
       }
     }
+    UiThreadStatement.runOnUiThread {
+      customMainActivity.navigate(customMainActivity.readerFragmentResId)
+    }
     openZimFileInReaderWithAssetFileDescriptor(downloadingZimFile)
     openSearchWithQuery()
     val searchTerm = "A Fool"
@@ -226,6 +229,9 @@ class SearchFragmentTestForCustomApp {
           )
         }
       }
+    }
+    UiThreadStatement.runOnUiThread {
+      customMainActivity.navigate(customMainActivity.readerFragmentResId)
     }
     openZimFileInReaderWithAssetFileDescriptor(downloadingZimFile)
     openSearchWithQuery(searchTerms[0])

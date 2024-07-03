@@ -41,6 +41,7 @@ class SearchRobot {
   fun searchWithFrequentlyTypedWords(query: String, wait: Long = 0L) {
     testFlakyView({
       val searchView = Espresso.onView(ViewMatchers.withId(R.id.search_src_text))
+      searchView.perform(ViewActions.clearText())
       for (char in query) {
         searchView.perform(ViewActions.typeText(char.toString()))
         if (wait != 0L) {
@@ -51,30 +52,32 @@ class SearchRobot {
   }
 
   fun assertSearchSuccessful(searchResult: String) {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
-    val recyclerViewId = R.id.search_list
-
-    Espresso.onView(ViewMatchers.withId(recyclerViewId)).check(
-      ViewAssertions.matches(
-        HelperMatchers.atPosition(
-          0,
-          ViewMatchers.hasDescendant(ViewMatchers.withText(searchResult))
+    testFlakyView({
+      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
+      Espresso.onView(ViewMatchers.withId(R.id.search_list)).check(
+        ViewAssertions.matches(
+          HelperMatchers.atPosition(
+            0,
+            ViewMatchers.hasDescendant(ViewMatchers.withText(searchResult))
+          )
         )
       )
-    )
+    })
   }
 
   fun deleteSearchedQueryFrequently(textToDelete: String, uiDevice: UiDevice, wait: Long = 0L) {
-    for (i in textToDelete.indices) {
-      uiDevice.pressKeyCode(KeyEvent.KEYCODE_DEL)
-      if (wait != 0L) {
-        BaristaSleepInteractions.sleep(wait)
+    testFlakyView({
+      for (i in textToDelete.indices) {
+        uiDevice.pressKeyCode(KeyEvent.KEYCODE_DEL)
+        if (wait != 0L) {
+          BaristaSleepInteractions.sleep(wait)
+        }
       }
-    }
 
-    // clear search query if any remains due to any condition not to affect any other test scenario
-    val searchView = Espresso.onView(ViewMatchers.withId(R.id.search_src_text))
-    searchView.perform(ViewActions.clearText())
+      // clear search query if any remains due to any condition not to affect any other test scenario
+      val searchView = Espresso.onView(ViewMatchers.withId(R.id.search_src_text))
+      searchView.perform(ViewActions.clearText())
+    })
   }
 
   private fun openSearchScreen() {
@@ -93,13 +96,15 @@ class SearchRobot {
   }
 
   fun clickOnSearchItemInSearchList() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
-    Espresso.onView(ViewMatchers.withId(R.id.search_list)).perform(
-      RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-        0,
-        ViewActions.click()
+    testFlakyView({
+      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
+      Espresso.onView(ViewMatchers.withId(R.id.search_list)).perform(
+        RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+          0,
+          ViewActions.click()
+        )
       )
-    )
+    })
   }
 
   fun assertArticleLoaded() {
