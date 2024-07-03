@@ -71,7 +71,7 @@ class CustomMainActivity : CoreMainActivity() {
   override val topLevelDestinations =
     setOf(R.id.customReaderFragment)
 
-  private lateinit var activityCustomMainBinding: ActivityCustomMainBinding
+  lateinit var activityCustomMainBinding: ActivityCustomMainBinding
 
   override fun onCreate(savedInstanceState: Bundle?) {
     customActivityComponent.inject(this)

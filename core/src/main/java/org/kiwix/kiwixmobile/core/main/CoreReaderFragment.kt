@@ -1551,7 +1551,7 @@ abstract class CoreReaderFragment :
     unsupportedMimeTypeHandler?.showSaveOrOpenUnsupportedFilesDialog(url, documentType)
   }
 
-  protected fun openZimFile(
+  fun openZimFile(
     file: File?,
     isCustomApp: Boolean = false,
     assetFileDescriptorList: List<AssetFileDescriptor> = emptyList(),
