@@ -210,7 +210,13 @@ class ZimFileReader constructor(
       null
     }
 
-  fun getRandomArticleUrl(): String? = jniKiwixReader.randomEntry.path
+  fun getRandomArticleUrl(): String? =
+    try {
+      jniKiwixReader.randomEntry.path
+    } catch (exception: Exception) {
+      Log.e(TAG, "Could not get random entry \n original exception = $exception")
+      null
+    }
 
   @Suppress("UnreachableCode")
   fun load(uri: String): InputStream? {
