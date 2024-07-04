@@ -29,13 +29,17 @@ import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.NightModeConfig
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ILLUSTRATION_SIZE
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.libkiwix.Book
@@ -43,6 +47,7 @@ import org.kiwix.libkiwix.Bookmark
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
 import org.kiwix.libzim.Archive
+import org.kiwix.libzim.SuggestionSearcher
 import java.io.File
 import javax.inject.Inject
 
@@ -50,7 +55,8 @@ class LibkiwixBookmarks @Inject constructor(
   val library: Library,
   manager: Manager,
   val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val bookDao: NewBookDao
+  private val bookDao: NewBookDao,
+  private val zimReaderContainer: ZimReaderContainer?
 ) : PageDao {
 
   /**
@@ -237,7 +243,7 @@ class LibkiwixBookmarks @Inject constructor(
   private fun getBookmarksList(): List<LibkiwixBookmarkItem> {
     if (!bookmarksChanged && bookmarkList.isNotEmpty()) {
       // No changes, return the cached data
-      return bookmarkList
+      return bookmarkList.distinctBy(LibkiwixBookmarkItem::bookmarkUrl)
     }
     // Retrieve the list of bookmarks from the library, or return an empty list if it's null.
     val bookmarkArray =
@@ -281,12 +287,49 @@ class LibkiwixBookmarks @Inject constructor(
     return bookmarkList.distinctBy(LibkiwixBookmarkItem::bookmarkUrl)
   }
 
+  @Suppress("NestedBlockDepth")
   private fun deleteDuplicateBookmarks() {
     bookmarkList.groupBy { it.bookmarkUrl to it.zimFilePath }
       .filter { it.value.size > 1 }
       .forEach { (_, value) ->
         value.drop(1).forEach { bookmarkItem ->
           deleteBookmark(bookmarkItem.zimId, bookmarkItem.bookmarkUrl)
+        }
+      }
+    // Fixes #3890
+    bookmarkList.groupBy { it.title to it.zimFilePath }
+      .filter { it.value.size > 1 }
+      .forEach { (_, value) ->
+        value.forEach { bookmarkItem ->
+          // This is a special case where two urls have the same title in a zim file.
+          val coreApp = sharedPreferenceUtil.context as CoreApp
+          val zimFileReader = if (coreApp.getMainActivity().isCustomApp()) {
+            // in custom apps we are using the assetFileDescriptor so we do not have the filePath
+            // and in custom apps there is only a single zim file so we are directly
+            // getting the zimFileReader object.
+            zimReaderContainer?.zimFileReader
+          } else {
+            bookmarkItem.zimFilePath?.let {
+              val archive = Archive(it)
+              ZimFileReader(
+                File(it),
+                emptyList(),
+                null,
+                archive,
+                NightModeConfig(sharedPreferenceUtil, sharedPreferenceUtil.context),
+                SuggestionSearcher(archive)
+              )
+            }
+          }
+          // get the redirect entry so that we can delete the other bookmark.
+          zimFileReader?.getPageUrlFrom(bookmarkItem.title)?.let {
+            // check if the bookmark url is not equals to redirect entry,
+            // then delete the duplicate bookmark. It will keep the original bookmark.
+            if (it != bookmarkItem.bookmarkUrl) {
+              deleteBookmark(bookmarkItem.zimId, bookmarkItem.bookmarkUrl)
+            }
+          }
+          if (!coreApp.getMainActivity().isCustomApp()) zimFileReader?.dispose()
         }
       }
   }

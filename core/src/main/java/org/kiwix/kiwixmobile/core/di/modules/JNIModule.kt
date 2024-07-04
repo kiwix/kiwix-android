@@ -22,6 +22,7 @@ import dagger.Module
 import dagger.Provides
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.libkiwix.JNIKiwix
 import org.kiwix.libkiwix.Library
@@ -47,6 +48,8 @@ class JNIModule {
     library: Library,
     manager: Manager,
     sharedPreferenceUtil: SharedPreferenceUtil,
-    bookDao: NewBookDao
-  ): LibkiwixBookmarks = LibkiwixBookmarks(library, manager, sharedPreferenceUtil, bookDao)
+    bookDao: NewBookDao,
+    zimReaderContainer: ZimReaderContainer
+  ): LibkiwixBookmarks =
+    LibkiwixBookmarks(library, manager, sharedPreferenceUtil, bookDao, zimReaderContainer)
 }
