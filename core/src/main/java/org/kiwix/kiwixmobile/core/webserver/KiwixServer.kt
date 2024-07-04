@@ -56,7 +56,7 @@ class KiwixServer @Inject constructor(
               val startOffset = assetFileDescriptor?.startOffset ?: 0L
               val size = assetFileDescriptor?.length ?: 0L
               Archive(
-                assetFileDescriptor?.parcelFileDescriptor?.dup()?.fileDescriptor,
+                assetFileDescriptor?.parcelFileDescriptor?.fileDescriptor,
                 startOffset,
                 size
               )

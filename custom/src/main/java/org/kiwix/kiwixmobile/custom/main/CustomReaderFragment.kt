@@ -196,15 +196,19 @@ class CustomReaderFragment : CoreReaderFragment() {
               repositoryActions?.saveBook(bookOnDisk)
             }
           }
+
           is ValidationState.HasBothFiles -> {
             it.zimFile.delete()
             openZimFile(it.obbFile, true)
           }
+
           else -> {}
         }
       },
       onNoFilesFound = {
-        findNavController().navigate(R.id.customDownloadFragment)
+        if (sharedPreferenceUtil?.prefIsTest == false) {
+          findNavController().navigate(R.id.customDownloadFragment)
+        }
       }
     )
   }
