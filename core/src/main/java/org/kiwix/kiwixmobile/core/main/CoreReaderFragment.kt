@@ -1950,6 +1950,13 @@ abstract class CoreReaderFragment :
 
   private fun openRandomArticle() {
     val articleUrl = zimReaderContainer?.getRandomArticleUrl()
+    if (articleUrl == null) {
+      // Check if the random url is null due to some internal error in libzim(See #3926)
+      // then again try to get the random article. So that the user can see the random article
+      // instead of a (blank/same page) currently loaded in the webView.
+      openRandomArticle()
+      return
+    }
     Log.d(TAG_KIWIX, "openRandomArticle: $articleUrl")
     openArticle(articleUrl)
   }
