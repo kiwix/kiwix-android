@@ -345,8 +345,17 @@ class ZimFileReader constructor(
       jniKiwixReader.getEntryByPath(actualPath)
         .getItem(true)
     } catch (exception: Exception) {
-      Log.e(TAG, "Could not get Item for url = $url \n original exception = $exception")
-      null
+      try {
+        // check if we can get the article data when there are (#, ?, etc) any of these in the URL.
+        // See #3924 for more details.
+        jniKiwixReader.getEntryByPath(
+          url.toUri().toString().substringAfter(CONTENT_PREFIX).decodeUrl
+        )
+          .getItem(true)
+      } catch (exception: Exception) {
+        Log.e(TAG, "Could not get Item for url = $url \n original exception = $exception")
+        null
+      }
     }
 
   @Suppress("ExplicitThis") // this@ZimFileReader.name is required
