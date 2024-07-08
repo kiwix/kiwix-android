@@ -74,7 +74,19 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
         val headers = mutableMapOf("Accept-Ranges" to "bytes")
         if ("Range" in requestHeaders.keys) {
           setStatusCodeAndReasonPhrase(HttpURLConnection.HTTP_PARTIAL, "Partial Content")
-          val fullSize = zimFileReader?.getItem(url)?.size ?: 0L
+          val fullSize = when {
+            // check if the previously loaded data has the size then return it.
+            // It will prevent the again data loading for those videos that are already loaded.
+            // See #3909
+            data?.available() != null && data.available().toLong() != 0L ->
+              data.available().toLong()
+
+            else -> {
+              // if the loaded data does not have the size, especially for YT videos.
+              // Then get the content size from libzim and set it to the headers.
+              zimFileReader?.getItem(url)?.size ?: 0L
+            }
+          }
           val lastByte = fullSize - 1
           val byteRanges = requestHeaders.getValue("Range").substringAfter("=").split("-")
           headers["Content-Range"] = "bytes ${byteRanges[0]}-$lastByte/$fullSize"

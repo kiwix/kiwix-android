@@ -23,9 +23,9 @@ import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.util.Base64
 import androidx.core.net.toUri
-import io.reactivex.Completable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.NightModeConfig
@@ -276,14 +276,14 @@ class ZimFileReader constructor(
     }
 
   private fun loadAsset(uri: String): InputStream? {
-    val article = try {
+    val item = try {
       jniKiwixReader.getEntryByPath(uri.filePath).getItem(true)
     } catch (exception: Exception) {
       Log.e(TAG, "Could not get Item for uri = $uri \n original exception = $exception")
       null
     }
     val infoPair = try {
-      article?.directAccessInformation
+      item?.directAccessInformation
     } catch (ignore: Exception) {
       Log.e(
         TAG,
@@ -292,12 +292,13 @@ class ZimFileReader constructor(
       )
       null
     }
-    if (infoPair == null || !File(infoPair.filename).exists()) {
+    val file = infoPair?.filename?.let(::File)
+    if (infoPair == null || file == null || !file.exists()) {
       return loadAssetFromCache(uri)
     }
-    return article?.size?.let {
+    return item?.size?.let {
       AssetFileDescriptor(
-        infoPair.parcelFileDescriptor,
+        infoPair.parcelFileDescriptor(file),
         infoPair.offset,
         it
       ).createInputStream()
@@ -317,7 +318,7 @@ class ZimFileReader constructor(
 
   @SuppressLint("CheckResult")
   private fun streamZimContentToPipe(uri: String, outputStream: OutputStream) {
-    Completable.fromAction {
+    CoroutineScope(Dispatchers.IO).launch {
       try {
         outputStream.use {
           if (uri.endsWith(UNINITIALISER_ADDRESS)) {
@@ -335,8 +336,6 @@ class ZimFileReader constructor(
         Log.e(TAG, "error writing pipe for $uri", ioException)
       }
     }
-      .subscribeOn(Schedulers.io())
-      .subscribe({ }, Throwable::printStackTrace)
   }
 
   fun getItem(url: String): Item? =
@@ -447,8 +446,8 @@ val String.truncateMimeType: String
 val String.replaceWithEncodedString: String
   get() = replace("?", "%3F")
 
-private val DirectAccessInfo.parcelFileDescriptor: ParcelFileDescriptor?
-  get() = ParcelFileDescriptor.open(File(filename), ParcelFileDescriptor.MODE_READ_ONLY)
+private fun DirectAccessInfo.parcelFileDescriptor(file: File): ParcelFileDescriptor? =
+  ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
 
 // Default illustration size for ZIM file favicons
 const val ILLUSTRATION_SIZE = 48
