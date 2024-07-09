@@ -22,6 +22,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.yield
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
+import org.kiwix.kiwixmobile.core.utils.files.Log
 
 data class SearchState(
   val searchTerm: String,
@@ -40,23 +41,31 @@ data class SearchState(
       searchResultsWithTerm.searchMutex.withLock {
         searchResultsWithTerm.suggestionSearch?.also { yield() }?.let {
           val searchResults = mutableListOf<SearchListItem.RecentSearchListItem>()
-          if (job?.isActive == false) {
-            // if the previous job is cancel then do not execute the code
-            return@getVisibleResults searchResults
-          }
-          val safeEndIndex = startIndex + 100
-          yield()
-          val searchIterator =
-            it.getResults(startIndex, safeEndIndex)
-          while (searchIterator.hasNext()) {
+          try {
             if (job?.isActive == false) {
-              // check if the previous job is cancel while retrieving the data for
-              // previous searched item then break the execution of code.
-              break
+              // if the previous job is cancel then do not execute the code
+              return@getVisibleResults searchResults
             }
+            val safeEndIndex = startIndex + 100
             yield()
-            val entry = searchIterator.next()
-            searchResults.add(SearchListItem.RecentSearchListItem(entry.title, entry.path))
+            val searchIterator =
+              it.getResults(startIndex, safeEndIndex)
+            while (searchIterator.hasNext()) {
+              if (job?.isActive == false) {
+                // check if the previous job is cancel while retrieving the data for
+                // previous searched item then break the execution of code.
+                break
+              }
+              yield()
+              val entry = searchIterator.next()
+              searchResults.add(SearchListItem.RecentSearchListItem(entry.title, entry.path))
+            }
+          } catch (ignore: Exception) {
+            Log.e(
+              "SearchState",
+              "Could not get the searched result for searchTerm $searchTerm\n" +
+                "Original exception = $ignore"
+            )
           }
           /**
            * Returns null if there are no suggestions left in the iterator.
