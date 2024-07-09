@@ -66,7 +66,7 @@ object Versions {
 
   const val assertj_core: String = "3.25.3"
 
-  const val core_testing: String = "2.2.0"
+  const val core_testing: String = "2.2.1"
 
   const val fragment_ktx: String = "1.2.5"
 
