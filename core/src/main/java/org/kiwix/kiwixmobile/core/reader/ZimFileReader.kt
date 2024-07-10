@@ -219,16 +219,16 @@ class ZimFileReader constructor(
     }
 
   @Suppress("UnreachableCode")
-  fun load(uri: String): InputStream? {
+  suspend fun load(uri: String): InputStream? = withContext(Dispatchers.IO) {
     val extension = uri.substringAfterLast(".")
     if (assetExtensions.any { it == extension }) {
       try {
-        return loadAsset(uri)
+        return@withContext loadAsset(uri)
       } catch (ioException: IOException) {
         Log.e(TAG, "failed to write video for $uri", ioException)
       }
     }
-    return loadContent(uri)
+    return@withContext loadContent(uri)
   }
 
   fun getMimeTypeFromUrl(uri: String): String? = getItem(uri)?.mimetype
@@ -275,7 +275,7 @@ class ZimFileReader constructor(
       throw IOException("Could not open pipe for $uri", ioException)
     }
 
-  private fun loadAsset(uri: String): InputStream? {
+  private suspend fun loadAsset(uri: String): InputStream? = withContext(Dispatchers.IO) {
     val item = try {
       jniKiwixReader.getEntryByPath(uri.filePath).getItem(true)
     } catch (exception: Exception) {
@@ -294,9 +294,9 @@ class ZimFileReader constructor(
     }
     val file = infoPair?.filename?.let(::File)
     if (infoPair == null || file == null || !file.exists()) {
-      return loadAssetFromCache(uri)
+      return@withContext loadAssetFromCache(uri)
     }
-    return item?.size?.let {
+    return@withContext item?.size?.let {
       AssetFileDescriptor(
         infoPair.parcelFileDescriptor(file),
         infoPair.offset,
