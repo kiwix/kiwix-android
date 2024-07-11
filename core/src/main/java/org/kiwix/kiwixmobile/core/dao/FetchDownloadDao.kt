@@ -31,12 +31,16 @@ import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.extensions.deleteFile
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
+import java.io.File
 import javax.inject.Inject
 
 class FetchDownloadDao @Inject constructor(
   private val box: Box<FetchDownloadEntity>,
-  private val newBookDao: NewBookDao
+  private val newBookDao: NewBookDao,
+  private val sharedPreferenceUtil: SharedPreferenceUtil
 ) {
 
   fun downloads(): Flowable<List<DownloadModel>> =
@@ -58,7 +62,7 @@ class FetchDownloadDao @Inject constructor(
 
   fun update(download: Download) {
     box.store.callInTx {
-      getEntityFor(download)?.let { dbEntity ->
+      getEntityFor(download.id)?.let { dbEntity ->
         dbEntity.updateWith(download)
           .takeIf { updatedEntity -> updatedEntity != dbEntity }
           ?.let(box::put)
@@ -66,9 +70,9 @@ class FetchDownloadDao @Inject constructor(
     }
   }
 
-  private fun getEntityFor(download: Download) =
+  private fun getEntityFor(downloadId: Int) =
     box.query {
-      equal(FetchDownloadEntity_.downloadId, download.id)
+      equal(FetchDownloadEntity_.downloadId, downloadId)
     }.find().getOrNull(0)
 
   fun getEntityForFileName(fileName: String) =
@@ -79,13 +83,17 @@ class FetchDownloadDao @Inject constructor(
       )
     }.findFirst()
 
-  fun insert(downloadId: Long, book: Book) {
-    box.put(FetchDownloadEntity(downloadId, book))
+  fun insert(downloadId: Long, book: Book, filePath: String?) {
+    box.put(FetchDownloadEntity(downloadId, book, filePath))
   }
 
-  fun delete(download: Download) {
+  fun delete(downloadId: Long) {
+    // remove the previous file from storage since we have cancelled the download.
+    // getEntityFor(downloadId.toInt())?.file?.let {
+    //   File(it).deleteFile()
+    // }
     box.query {
-      equal(FetchDownloadEntity_.downloadId, download.id)
+      equal(FetchDownloadEntity_.downloadId, downloadId)
     }.remove()
   }
 
@@ -96,9 +104,11 @@ class FetchDownloadDao @Inject constructor(
   ) {
     box.store.callInTx {
       if (doesNotAlreadyExist(book)) {
+        val downloadRequest = DownloadRequest(url, book.title)
         insert(
-          downloadRequester.enqueue(DownloadRequest(url)),
-          book = book
+          downloadRequester.enqueue(downloadRequest),
+          book = book,
+          filePath = downloadRequest.getDestinationFile(sharedPreferenceUtil).path
         )
       }
     }
