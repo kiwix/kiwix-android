@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.core.di.modules
 
+import android.app.DownloadManager
 import android.content.Context
 import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.Fetch.Impl
@@ -33,8 +34,8 @@ import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.downloader.DownloaderImpl
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerRequester
 import org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManager
-import org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadRequester
 import org.kiwix.kiwixmobile.core.utils.CONNECT_TIME_OUT
 import org.kiwix.kiwixmobile.core.utils.READ_TIME_OUT
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -51,10 +52,10 @@ object DownloaderModule {
     kiwixService: KiwixService
   ): Downloader = DownloaderImpl(downloadRequester, downloadDao, kiwixService)
 
-  @Provides
-  @Singleton
-  fun providesDownloadRequester(fetch: Fetch, sharedPreferenceUtil: SharedPreferenceUtil):
-    DownloadRequester = FetchDownloadRequester(fetch, sharedPreferenceUtil)
+  // @Provides
+  // @Singleton
+  // fun providesDownloadRequester(fetch: Fetch, sharedPreferenceUtil: SharedPreferenceUtil):
+  //   DownloadRequester = FetchDownloadRequester(fetch, sharedPreferenceUtil)
 
   @Provides
   @Singleton
@@ -93,4 +94,16 @@ object DownloaderModule {
   @Singleton
   fun provideFetchDownloadNotificationManager(context: Context, fetchDownloadDao: FetchDownloadDao):
     FetchNotificationManager = FetchDownloadNotificationManager(context, fetchDownloadDao)
+
+  @Provides
+  @Singleton
+  fun providesDownloadRequester(
+    downloadManager: DownloadManager,
+    sharedPreferenceUtil: SharedPreferenceUtil,
+    fetchDownloadDao: FetchDownloadDao
+  ): DownloadRequester = DownloadManagerRequester(
+    downloadManager,
+    sharedPreferenceUtil,
+    fetchDownloadDao
+  )
 }

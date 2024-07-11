@@ -18,13 +18,18 @@
 package org.kiwix.kiwixmobile.core.downloader.model
 
 import android.net.Uri
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.StorageUtils
+import java.io.File
 
-data class DownloadRequest(val urlString: String) {
+data class DownloadRequest(val urlString: String, val notificationTitle: String) {
 
   val uri: Uri get() = Uri.parse(urlString)
 
-  fun getDestination(sharedPreferenceUtil: SharedPreferenceUtil): String =
-    "${sharedPreferenceUtil.prefStorage}/Kiwix/${StorageUtils.getFileNameFromUrl(urlString)}"
+  fun getDestinationFile(sharedPreferenceUtil: SharedPreferenceUtil): File {
+    val file =
+      File("${sharedPreferenceUtil.prefStorage}/Kiwix/${StorageUtils.getFileNameFromUrl(urlString)}")
+    return file
+  }
 }

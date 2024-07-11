@@ -59,6 +59,7 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.downloader.Downloader
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isManageExternalStoragePermissionGranted
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
@@ -89,6 +90,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.SelectFolder
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getPathFromUri
 import org.kiwix.kiwixmobile.databinding.FragmentDestinationDownloadBinding
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.NetworkState
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
@@ -209,6 +211,26 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         }
       }
     )
+    // <book  />
+    val libraryBookEntity = LibraryNetworkEntity.Book().apply {
+      id = "6a5413cd-0d96-7288-9c1b-5beda035e472"
+      size = "170628"
+      url = "https://download.kiwix.org/zim/zimit/100r.co_en_all_2024-06.zim.meta4"
+      mediaCount = "1433"
+      articleCount = "320"
+      favicon =
+        "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"
+      title = "100 Rabbits"
+      description = "Research and test low-tech solutions, and document findings"
+      language = "eng"
+      creator = "-"
+      publisher = "openZIM"
+      bookName = "100r.co_en_all"
+      tags = "_ftindex:yes;preppers;_category:other;_pictures:yes;_videos:yes;_details:yes"
+      date = "2024-06-24"
+      faviconMimeType = "image/png"
+    }
+    downloader.download(libraryBookEntity)
   }
 
   private fun setupMenu() {

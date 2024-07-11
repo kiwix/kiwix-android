@@ -54,7 +54,8 @@ data class FetchDownloadEntity(
   val favIcon: String,
   val tags: String? = null
 ) {
-  constructor(downloadId: Long, book: Book) : this(
+  constructor(downloadId: Long, book: Book, file: String?) : this(
+    file = file,
     downloadId = downloadId,
     bookId = book.id,
     title = book.title,

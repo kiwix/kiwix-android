@@ -32,6 +32,7 @@ import org.kiwix.kiwixmobile.core.dao.NewNoteDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.dao.entities.MyObjectBox
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Singleton
 
 @Module
@@ -71,9 +72,10 @@ open class DatabaseModule {
 
   @Provides @Singleton fun providesFetchDownloadDao(
     boxStore: BoxStore,
-    newBookDao: NewBookDao
+    newBookDao: NewBookDao,
+    sharedPreferenceUtil: SharedPreferenceUtil
   ): FetchDownloadDao =
-    FetchDownloadDao(boxStore.boxFor(), newBookDao)
+    FetchDownloadDao(boxStore.boxFor(), newBookDao, sharedPreferenceUtil)
 
   @Singleton
   @Provides

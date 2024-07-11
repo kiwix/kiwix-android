@@ -25,6 +25,8 @@ import dagger.Module
 import dagger.Provides
 import org.kiwix.kiwixmobile.core.di.CoreServiceScope
 import org.kiwix.kiwixmobile.core.qr.GenerateQR
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerBroadcastReceiver
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerMonitor
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudNotificationManger
 import org.kiwix.kiwixmobile.core.webserver.KiwixServer
 import org.kiwix.kiwixmobile.core.webserver.WebServerHelper
@@ -75,4 +77,11 @@ class CoreServiceModule {
   @Provides
   @CoreServiceScope
   fun providesGenerateQr(): GenerateQR = GenerateQR()
+  fun providesDownloadManagerBroadcastReceiver(callback: DownloadManagerBroadcastReceiver.Callback)
+    : DownloadManagerBroadcastReceiver = DownloadManagerBroadcastReceiver(callback)
+
+  @Provides
+  @CoreServiceScope
+  fun providesDownloadInformationCallback(downloadManagerMonitor: DownloadManagerMonitor)
+    : DownloadManagerBroadcastReceiver.Callback = downloadManagerMonitor
 }
