@@ -43,15 +43,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerBroadcastReceiver
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
+import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
@@ -95,6 +98,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   @Inject lateinit var objectBoxToLibkiwixMigrator: ObjectBoxToLibkiwixMigrator
   @Inject lateinit var objectBoxToRoomMigrator: ObjectBoxToRoomMigrator
 
+  @Inject
+  lateinit var downloadManagerBroadcastReceiver: DownloadManagerBroadcastReceiver
+
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.KiwixTheme)
     super.onCreate(savedInstanceState)
@@ -125,6 +131,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     CoroutineScope(Dispatchers.IO).launch {
       objectBoxToRoomMigrator.migrateObjectBoxDataToRoom()
     }
+    downloadManagerBroadcastReceiver.let(::registerReceiver)
   }
 
   @Suppress("DEPRECATION")
@@ -139,6 +146,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     navController.addOnDestinationChangedListener { _, destination, _ ->
       configureActivityBasedOn(destination)
     }
+  }
+
+  override fun onDestroy() {
+    downloadManagerBroadcastReceiver.let(::unregisterReceiver)
+    super.onDestroy()
   }
 
   open fun configureActivityBasedOn(destination: NavDestination) {
