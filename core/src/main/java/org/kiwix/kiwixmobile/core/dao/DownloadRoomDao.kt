@@ -16,25 +16,15 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.downloader.downloadManager
+package org.kiwix.kiwixmobile.core.dao
 
-import android.app.DownloadManager.ACTION_DOWNLOAD_COMPLETE
-import android.content.Context
-import android.content.Intent
-import android.util.Log
-import org.kiwix.kiwixmobile.core.base.BaseBroadcastReceiver
+import androidx.room.Dao
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
-class DownloadManagerBroadcastReceiver @Inject constructor(private val callback: Callback) :
-  BaseBroadcastReceiver() {
-  // This broadcast will trigger when a download is completed or cancelled.
-  override val action: String = ACTION_DOWNLOAD_COMPLETE
-
-  override fun onIntentWithActionReceived(context: Context, intent: Intent) {
-    callback.downloadInformation(intent)
-  }
-
-  interface Callback {
-    fun downloadInformation(intent: Intent)
-  }
-}
+// @Dao
+// abstract class DownloadRoomDao @Inject constructor(
+//   private val newBookDao: NewBookDao,
+//   private val sharedPreferenceUtil: SharedPreferenceUtil
+// ) {
+// }

@@ -24,9 +24,9 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import org.kiwix.kiwixmobile.core.di.CoreServiceScope
-import org.kiwix.kiwixmobile.core.qr.GenerateQR
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerBroadcastReceiver
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerMonitor
+import org.kiwix.kiwixmobile.core.qr.GenerateQR
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudNotificationManger
 import org.kiwix.kiwixmobile.core.webserver.KiwixServer
 import org.kiwix.kiwixmobile.core.webserver.WebServerHelper

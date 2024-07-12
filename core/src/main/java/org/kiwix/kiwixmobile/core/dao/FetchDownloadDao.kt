@@ -70,7 +70,7 @@ class FetchDownloadDao @Inject constructor(
     }
   }
 
-  private fun getEntityFor(downloadId: Int) =
+  fun getEntityFor(downloadId: Int) =
     box.query {
       equal(FetchDownloadEntity_.downloadId, downloadId)
     }.find().getOrNull(0)
@@ -89,9 +89,9 @@ class FetchDownloadDao @Inject constructor(
 
   fun delete(downloadId: Long) {
     // remove the previous file from storage since we have cancelled the download.
-    // getEntityFor(downloadId.toInt())?.file?.let {
-    //   File(it).deleteFile()
-    // }
+    getEntityFor(downloadId.toInt())?.file?.let {
+      File(it).deleteFile()
+    }
     box.query {
       equal(FetchDownloadEntity_.downloadId, downloadId)
     }.remove()

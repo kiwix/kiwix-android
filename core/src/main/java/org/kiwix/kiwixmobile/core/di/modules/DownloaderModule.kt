@@ -34,6 +34,8 @@ import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.downloader.DownloaderImpl
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerBroadcastReceiver
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerMonitor
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerRequester
 import org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManager
 import org.kiwix.kiwixmobile.core.utils.CONNECT_TIME_OUT
@@ -106,4 +108,14 @@ object DownloaderModule {
     sharedPreferenceUtil,
     fetchDownloadDao
   )
+
+  @Provides
+  @Singleton
+  fun provideDownloadManagerCallback(downloadManagerMonitor: DownloadManagerMonitor)
+    : DownloadManagerBroadcastReceiver.Callback = downloadManagerMonitor
+
+  @Provides
+  @Singleton
+  fun providesDownloadManagerBroadcastReceiver(callback: DownloadManagerBroadcastReceiver.Callback)
+    : DownloadManagerBroadcastReceiver = DownloadManagerBroadcastReceiver(callback)
 }

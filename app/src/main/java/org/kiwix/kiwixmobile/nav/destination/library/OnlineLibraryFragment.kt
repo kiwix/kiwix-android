@@ -230,7 +230,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       date = "2024-06-24"
       faviconMimeType = "image/png"
     }
-    downloader.download(libraryBookEntity)
+    // downloader.download(libraryBookEntity)
   }
 
   private fun setupMenu() {
