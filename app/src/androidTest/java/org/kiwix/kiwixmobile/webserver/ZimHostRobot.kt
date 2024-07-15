@@ -162,6 +162,14 @@ class ZimHostRobot : BaseRobot() {
     isVisible(Text("START SERVER"))
   }
 
+  fun assertQrShown() {
+    isVisible(ViewId(R.id.serverQrCode))
+  }
+
+  fun assertQrNotShown() {
+    isNotVisible(ViewId(R.id.serverQrCode))
+  }
+
   private fun pauseForBetterTestPerformance() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
   }

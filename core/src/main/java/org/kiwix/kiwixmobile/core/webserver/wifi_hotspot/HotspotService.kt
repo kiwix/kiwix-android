@@ -128,7 +128,7 @@ class HotspotService :
   private fun startForegroundNotificationHelper() {
     startForeground(
       HotspotNotificationManager.HOTSPOT_NOTIFICATION_ID,
-      hotspotNotificationManager?.buildForegroundNotification()
+      hotspotNotificationManager?.buildForegroundNotification(getSocketAddress())
     )
   }
 

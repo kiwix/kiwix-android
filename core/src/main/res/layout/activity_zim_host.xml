@@ -29,10 +29,10 @@
 
   <TextView
     android:id="@+id/serverTextView"
-    android:layout_width="match_parent"
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
-    android:layout_marginEnd="50dp"
+    android:layout_marginEnd="4dp"
     android:autoLink="web"
     android:gravity="center|start"
     android:minHeight="@dimen/material_minimum_height_and_width"
@@ -45,8 +45,7 @@
     android:id="@+id/shareServerUrlIcon"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="3dp"
-    android:layout_marginEnd="16dp"
+    android:layout_marginEnd="8dp"
     android:scaleType="centerInside"
     android:minHeight="@dimen/material_minimum_height_and_width"
     android:minWidth="@dimen/material_minimum_height_and_width"
@@ -58,19 +57,44 @@
     app:layout_constraintTop_toTopOf="@id/serverTextView"
     tools:visibility="visible" />
 
-  <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/recyclerViewZimHost"
-    android:layout_width="0dp"
+  <ScrollView
+    android:layout_width="match_parent"
     android:layout_height="0dp"
     android:layout_marginTop="16dp"
     android:layout_marginBottom="8dp"
-    android:contentDescription="@string/menu_wifi_hotspot"
-    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
     app:layout_constraintBottom_toTopOf="@+id/startServerButton"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/serverTextView"
-    tools:listitem="@layout/item_book" />
+    app:layout_constraintTop_toBottomOf="@+id/serverTextView">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+      <ImageView
+        android:id="@+id/serverQrCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/qr_code"
+        android:maxHeight="128dp"
+        android:minHeight="76dp"
+        android:visibility="gone"
+        android:scaleType="fitCenter"
+        tools:src="@tools:sample/avatars" />
+
+      <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewZimHost"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/menu_wifi_hotspot"
+        android:minHeight="256dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_book" />
+    </LinearLayout>
+
+  </ScrollView>
 
   <Button
     android:id="@+id/startServerButton"
