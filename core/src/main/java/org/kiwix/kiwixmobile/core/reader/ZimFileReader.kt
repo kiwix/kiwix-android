@@ -23,6 +23,7 @@ import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.util.Base64
 import androidx.core.net.toUri
+import eu.mhutti1.utils.storage.Kb
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,6 +43,7 @@ import org.kiwix.libzim.FdInput
 import org.kiwix.libzim.Item
 import org.kiwix.libzim.SuggestionSearch
 import org.kiwix.libzim.SuggestionSearcher
+import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -218,7 +220,6 @@ class ZimFileReader constructor(
       null
     }
 
-  @Suppress("UnreachableCode")
   suspend fun load(uri: String): InputStream? = withContext(Dispatchers.IO) {
     val extension = uri.substringAfterLast(".")
     if (assetExtensions.any { it == extension }) {
@@ -228,7 +229,29 @@ class ZimFileReader constructor(
         Log.e(TAG, "failed to write video for $uri", ioException)
       }
     }
-    return@withContext loadContent(uri)
+    return@withContext loadContent(uri, extension)
+  }
+
+  @Suppress("UnreachableCode", "NestedBlockDepth", "ReturnCount")
+  private fun loadContent(uri: String, extension: String): InputStream? {
+    val item = getItem(uri)
+    if (compressedExtensions.any { it != extension }) {
+      item?.size?.let {
+        // Check if the item size exceeds 1 MB
+        if (it / Kb > 1024) {
+          // Retrieve direct access information for the item
+          val infoPair = getDirectAccessInfoOfItem(item, uri)
+          val file = infoPair?.filename?.let(::File)
+          // If no file found or file does not exist, return input stream from item data
+          if (infoPair == null || file == null || !file.exists()) {
+            return@loadContent ByteArrayInputStream(item.data?.data)
+          }
+          // Return the input stream from the direct access information
+          return@loadContent getInputStreamFromDirectAccessInfo(item, file, infoPair)
+        }
+      }
+    }
+    return loadContent(item, uri)
   }
 
   fun getMimeTypeFromUrl(uri: String): String? = getItem(uri)?.mimetype
@@ -267,10 +290,10 @@ class ZimFileReader constructor(
   private fun extractQueryParam(url: String): String =
     "?" + url.substringAfterLast("?", "")
 
-  private fun loadContent(uri: String) =
+  private fun loadContent(item: Item?, uri: String) =
     try {
       val outputStream = PipedOutputStream()
-      PipedInputStream(outputStream).also { streamZimContentToPipe(uri, outputStream) }
+      PipedInputStream(outputStream).also { streamZimContentToPipe(item, uri, outputStream) }
     } catch (ioException: IOException) {
       throw IOException("Could not open pipe for $uri", ioException)
     }
@@ -282,7 +305,16 @@ class ZimFileReader constructor(
       Log.e(TAG, "Could not get Item for uri = $uri \n original exception = $exception")
       null
     }
-    val infoPair = try {
+    val infoPair = getDirectAccessInfoOfItem(item, uri)
+    val file = infoPair?.filename?.let(::File)
+    if (infoPair == null || file == null || !file.exists()) {
+      return@withContext loadAssetFromCache(uri)
+    }
+    return@withContext getInputStreamFromDirectAccessInfo(item, file, infoPair)
+  }
+
+  private fun getDirectAccessInfoOfItem(item: Item?, uri: String): DirectAccessInfo? =
+    try {
       item?.directAccessInformation
     } catch (ignore: Exception) {
       Log.e(
@@ -292,18 +324,19 @@ class ZimFileReader constructor(
       )
       null
     }
-    val file = infoPair?.filename?.let(::File)
-    if (infoPair == null || file == null || !file.exists()) {
-      return@withContext loadAssetFromCache(uri)
-    }
-    return@withContext item?.size?.let {
+
+  private fun getInputStreamFromDirectAccessInfo(
+    item: Item?,
+    file: File,
+    infoPair: DirectAccessInfo
+  ): InputStream? =
+    item?.size?.let {
       AssetFileDescriptor(
         infoPair.parcelFileDescriptor(file),
         infoPair.offset,
         it
       ).createInputStream()
     }
-  }
 
   @Throws(IOException::class)
   private fun loadAssetFromCache(uri: String): FileInputStream {
@@ -317,14 +350,14 @@ class ZimFileReader constructor(
   private fun getContent(url: String) = getItem(url)?.data?.data
 
   @SuppressLint("CheckResult")
-  private fun streamZimContentToPipe(uri: String, outputStream: OutputStream) {
+  private fun streamZimContentToPipe(item: Item?, uri: String, outputStream: OutputStream) {
     CoroutineScope(Dispatchers.IO).launch {
       try {
         outputStream.use {
           if (uri.endsWith(UNINITIALISER_ADDRESS)) {
             it.write(UNINITIALISE_HTML.toByteArray())
           } else {
-            getItem(uri)?.let { item ->
+            item?.let { item ->
               if ("text/css" == item.mimetype && nightModeConfig.isNightModeActive()) {
                 it.write(INVERT_IMAGES_VIDEO.toByteArray())
               }
@@ -414,6 +447,8 @@ class ZimFileReader constructor(
       """.trimIndent()
     private val assetExtensions =
       listOf("3gp", "mp4", "m4a", "webm", "mkv", "ogg", "ogv", "svg", "warc")
+    private val compressedExtensions =
+      listOf("zip", "7z", "gz", "rar", "sitx")
   }
 }
 
