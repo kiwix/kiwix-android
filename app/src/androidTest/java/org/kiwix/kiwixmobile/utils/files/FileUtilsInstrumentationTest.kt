@@ -231,49 +231,85 @@ class FileUtilsInstrumentationTest {
     val dummyUrlArray = listOf(
       DummyUrlData(
         "https://kiwix.org/contributors/contributors_list.pdf",
-        "contributors_list.pdf"
+        src = null,
+        "contributors_list.pdf",
+        "https://kiwix.org/contributors/contributors_list.pdf"
       ),
       DummyUrlData(
         "https://kiwix.org/contributors/",
-        null
+        src = null,
+        null,
+        "https://kiwix.org/contributors/"
       ),
       DummyUrlData(
         "android_tutorials.pdf",
-        null
+        src = null,
+        null,
+        "android_tutorials.pdf"
       ),
       DummyUrlData(
+        null,
+        src = null,
         null,
         null
       ),
       DummyUrlData(
         "/html/images/test.png",
-        "test.png"
+        src = null,
+        "test.png",
+        "/html/images/test.png"
       ),
       DummyUrlData(
         "/html/images/",
-        null
+        src = null,
+        null,
+        "/html/images/"
       ),
       DummyUrlData(
         "https://kiwix.org/contributors/images/wikipedia.png",
-        "wikipedia.png"
+        src = null,
+        "wikipedia.png",
+        "https://kiwix.org/contributors/images/wikipedia.png"
       ),
       DummyUrlData(
         "https://kiwix.org/contributors/images/wikipedia",
-        null
+        src = null,
+        null,
+        "https://kiwix.org/contributors/images/wikipedia"
       ),
       DummyUrlData(
         "https://kiwix.org/contributors/images/wikipedia:hello.epub",
-        "wikipediahello.epub"
+        src = null,
+        "wikipediahello.epub",
+        "https://kiwix.org/contributors/images/wikipedia:hello.epub",
       ),
       DummyUrlData(
         "https://kiwix.org/contributors/Y Gododin: A Poem of the Battle: of Cattraeth.9842.epub",
-        "Y Gododin A Poem of the Battle of Cattraeth.9842.epub"
+        src = null,
+        "Y Gododin A Poem of the Battle of Cattraeth.9842.epub",
+        "https://kiwix.org/contributors/Y Gododin: A Poem of the Battle: of Cattraeth.9842.epub",
+      ),
+      DummyUrlData(
+        "https://kiwix.org/contributors/images/",
+        "https://kiwix.org/contributors/images/wikipedia.png",
+        "wikipedia.png",
+        "https://kiwix.org/contributors/images/wikipedia.png"
+      ),
+      DummyUrlData(
+        "https://kiwix.app/a-virtual-choir-2000-voices-strong?lang=undefined",
+        "https://kiwix.app/videos/1110/thumbnail.webp",
+        "thumbnail.webp",
+        "https://kiwix.app/videos/1110/thumbnail.webp"
       )
     )
     dummyUrlArray.forEach {
       Assertions.assertEquals(
-        FileUtils.getDecodedFileName(it.url),
+        FileUtils.getSafeFileNameAndSourceFromUrlOrSrc(it.url, it.src)?.first,
         it.expectedFileName
+      )
+      Assertions.assertEquals(
+        FileUtils.getSafeFileNameAndSourceFromUrlOrSrc(it.url, it.src)?.second,
+        it.expectedUrl
       )
     }
   }
@@ -302,11 +338,15 @@ class FileUtilsInstrumentationTest {
       // test the download uri on older devices
       DummyUrlData(
         null,
+        null,
+        null,
         expectedFilePath,
         Uri.parse("${downloadDocumentUriPrefix}raw%3A%2Fstorage%2Femulated%2F0%2F$commonUri")
       ),
       // test the download uri with new version of android
       DummyUrlData(
+        null,
+        null,
         null,
         expectedFilePath,
         Uri.parse("$downloadDocumentUriPrefix%2Fstorage%2Femulated%2F0%2F$commonUri")
@@ -314,17 +354,23 @@ class FileUtilsInstrumentationTest {
       // test with file scheme
       DummyUrlData(
         null,
+        null,
+        null,
         zimFile.path,
         Uri.fromFile(zimFile)
       ),
       // test with internal storage uri
       DummyUrlData(
         null,
+        null,
+        null,
         expectedFilePath,
         Uri.parse("${primaryStorageUriPrefix}primary%3A$commonUri")
       ),
       // // test with SD card uri
       DummyUrlData(
+        null,
+        null,
         null,
         "$sdCardPath/$commonPath",
         Uri.parse(
@@ -336,6 +382,8 @@ class FileUtilsInstrumentationTest {
       // test with USB stick uri
       DummyUrlData(
         null,
+        null,
+        null,
         "/mnt/media_rw/USB/$commonPath",
         Uri.parse("${primaryStorageUriPrefix}USB%3A$commonUri")
       ),
@@ -343,10 +391,14 @@ class FileUtilsInstrumentationTest {
       DummyUrlData(
         null,
         null,
+        null,
+        null,
         Uri.parse(primaryStorageUriPrefix)
       ),
       // test with invalid download uri
       DummyUrlData(
+        null,
+        null,
         null,
         null,
         Uri.parse(
@@ -376,15 +428,21 @@ class FileUtilsInstrumentationTest {
       val dummyDownloadUriData = arrayOf(
         DummyUrlData(
           null,
+          null,
+          null,
           "raw:$expectedFilePath",
           Uri.parse("${downloadDocumentUriPrefix}raw%3A%2Fstorage%2Femulated%2F0%2F$commonUri")
         ),
         DummyUrlData(
           null,
+          null,
+          null,
           expectedFilePath,
           Uri.parse("$downloadDocumentUriPrefix%2Fstorage%2Femulated%2F0%2F$commonUri")
         ),
         DummyUrlData(
+          null,
+          null,
           null,
           "",
           Uri.parse(downloadUriPrefix)
@@ -488,5 +546,11 @@ class FileUtilsInstrumentationTest {
     }
   }
 
-  data class DummyUrlData(val url: String?, val expectedFileName: String?, val uri: Uri? = null)
+  data class DummyUrlData(
+    val url: String?,
+    val src: String?,
+    val expectedFileName: String?,
+    val expectedUrl: String?,
+    val uri: Uri? = null
+  )
 }

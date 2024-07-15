@@ -414,13 +414,24 @@ object FileUtils {
      will not allow to create file which contains colon in it.
      see https://github.com/kiwix/kiwix-android/issues/3737
    */
-  fun getDecodedFileName(url: String?): String? {
+  private fun getDecodedFileName(url: String?): String? {
     var fileName: String? = null
     val decodedFileName = URLUtil.guessFileName(url, null, null)
     if (!decodedFileName.endsWith(".bin")) {
       fileName = decodedFileName.replace(":", "")
     }
     return fileName
+  }
+
+  fun getSafeFileNameAndSourceFromUrlOrSrc(url: String?, src: String?): Pair<String?, String?>? {
+    var fileNameAndSource: Pair<String?, String?>? = null
+    if (url != null) {
+      fileNameAndSource = getDecodedFileName(url) to url
+    }
+    if (src != null && fileNameAndSource?.first.isNullOrEmpty()) {
+      fileNameAndSource = getDecodedFileName(src) to src
+    }
+    return fileNameAndSource
   }
 
   @Suppress("ReturnCount")
@@ -431,7 +442,7 @@ object FileUtils {
     zimReaderContainer: ZimReaderContainer,
     sharedPreferenceUtil: SharedPreferenceUtil
   ): File? {
-    val fileName = getDecodedFileName(url ?: src) ?: return null
+    val fileName = getSafeFileNameAndSourceFromUrlOrSrc(url, src) ?: return null
     var root: File? = null
     if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() ||
       Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
@@ -447,14 +458,15 @@ object FileUtils {
         )
       if (!root.isFileExist()) root.mkdir()
     }
-    val fileToSave = File(root, fileName)
+    val fileToSave = File(root, fileName.first)
     if (fileToSave.isFileExist()) return fileToSave
-    val source = if (url == null) Uri.parse(src) else Uri.parse(url)
     return try {
-      zimReaderContainer.load("$source", emptyMap()).data.use { inputStream ->
-        fileToSave.outputStream().use(inputStream::copyTo)
+      fileName.second?.let {
+        zimReaderContainer.load(it, emptyMap()).data.use { inputStream ->
+          fileToSave.outputStream().use(inputStream::copyTo)
+        }
+        fileToSave
       }
-      fileToSave
     } catch (e: IOException) {
       Log.w("kiwix", "Couldn't save file", e)
       null
