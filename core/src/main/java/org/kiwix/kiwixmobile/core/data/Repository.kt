@@ -68,9 +68,21 @@ class Repository @Inject internal constructor(
       .observeOn(mainThread)
 
   override fun booksOnDiskAsListItems(): Flowable<List<BooksOnDiskListItem>> = bookDao.books()
-    .map { it.sortedBy { bookOnDisk -> bookOnDisk.book.language + bookOnDisk.book.title } }
-    .map {
-      HeaderizableList<BooksOnDiskListItem, BookOnDisk, LanguageItem>(it).foldOverAddingHeaders(
+    .map { books ->
+      books.flatMap { bookOnDisk ->
+        // Split languages if there are multiple, otherwise return the single book. Bug fix #3892
+        if (bookOnDisk.book.language.contains(',')) {
+          bookOnDisk.book.language.split(',').map { lang ->
+            bookOnDisk.copy(book = bookOnDisk.book.copy(language = lang.trim()))
+          }
+        } else {
+          listOf(bookOnDisk)
+        }
+      }.distinctBy { it.book.language to it.book.title }
+        .sortedBy { it.book.language + it.book.title }
+    }
+    .map { items ->
+      HeaderizableList<BooksOnDiskListItem, BookOnDisk, LanguageItem>(items).foldOverAddingHeaders(
         { bookOnDisk -> LanguageItem(bookOnDisk.locale) },
         { current, next -> current.locale.displayName != next.locale.displayName }
       )
