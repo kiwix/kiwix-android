@@ -429,22 +429,22 @@ class FileUtilsInstrumentationTest {
         DummyUrlData(
           null,
           null,
-          null,
           "raw:$expectedFilePath",
+          null,
           Uri.parse("${downloadDocumentUriPrefix}raw%3A%2Fstorage%2Femulated%2F0%2F$commonUri")
         ),
         DummyUrlData(
           null,
           null,
-          null,
           expectedFilePath,
+          null,
           Uri.parse("$downloadDocumentUriPrefix%2Fstorage%2Femulated%2F0%2F$commonUri")
         ),
         DummyUrlData(
           null,
           null,
-          null,
           "",
+          null,
           Uri.parse(downloadUriPrefix)
         )
       )
