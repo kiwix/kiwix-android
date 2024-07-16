@@ -339,40 +339,40 @@ class FileUtilsInstrumentationTest {
       DummyUrlData(
         null,
         null,
-        null,
         expectedFilePath,
+        null,
         Uri.parse("${downloadDocumentUriPrefix}raw%3A%2Fstorage%2Femulated%2F0%2F$commonUri")
       ),
       // test the download uri with new version of android
       DummyUrlData(
         null,
         null,
-        null,
         expectedFilePath,
+        null,
         Uri.parse("$downloadDocumentUriPrefix%2Fstorage%2Femulated%2F0%2F$commonUri")
       ),
       // test with file scheme
       DummyUrlData(
         null,
         null,
-        null,
         zimFile.path,
+        null,
         Uri.fromFile(zimFile)
       ),
       // test with internal storage uri
       DummyUrlData(
         null,
         null,
-        null,
         expectedFilePath,
+        null,
         Uri.parse("${primaryStorageUriPrefix}primary%3A$commonUri")
       ),
       // // test with SD card uri
       DummyUrlData(
         null,
         null,
-        null,
         "$sdCardPath/$commonPath",
+        null,
         Uri.parse(
           primaryStorageUriPrefix +
             sdCardPath?.substringAfter("storage/") +
@@ -383,8 +383,8 @@ class FileUtilsInstrumentationTest {
       DummyUrlData(
         null,
         null,
-        null,
         "/mnt/media_rw/USB/$commonPath",
+        null,
         Uri.parse("${primaryStorageUriPrefix}USB%3A$commonUri")
       ),
       // test with invalid uri
