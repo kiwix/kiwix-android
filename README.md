@@ -28,7 +28,11 @@ Play Store policies.  The Play Store variant of Kiwix does not require
 the `MANAGE_EXTERNAL_STORAGE` permission anymore, which is necessary
 to scan storage and access ZIM files at arbitrary locations.
 Therefore, the storage scanning & file picking functionalities are not
-available in this variant anymore.  To use the full version of Kiwix
+available in this variant anymore. For already downloaded ZIM files, You can copy
+them to the `Android/media/org.kiwix.kiwixmobile/` folder, and the application will read them.
+Before uninstalling the application, please ensure that you move all your ZIM files
+from this folder, as they will be automatically deleted when the application is uninstalled
+or if the application data is cleared.  To use the full version of Kiwix
 and benefit of the ZIM file picker feature, you can download it
 directly from the [official
 repository](https://download.kiwix.org/release/kiwix-android/) or use
