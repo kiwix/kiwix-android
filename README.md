@@ -20,11 +20,11 @@ to 13](https://github.com/kiwix/kiwix-android/blob/main/buildSrc/src/main/kotlin
 **Important Note**: Starting from Android 11, the ZIM file picker
 feature has been restricted in the [Play Store
 variant](https://play.google.com/store/apps/details?id=org.kiwix.kiwixmobile)
-due to Play Store policies.  This means that users running Android 11
+due to Play Store policies. This means that users running Android 11
 and above will not be able to load ZIM files from internal/external
 storage directly within the app if they have downloaded Kiwix from the
-Google Play Store.  This restriction is in place to comply with the
-Play Store policies.  The Play Store variant of Kiwix does not require
+Google Play Store. This restriction is in place to comply with the
+Play Store policies. The Play Store variant of Kiwix does not require
 the `MANAGE_EXTERNAL_STORAGE` permission anymore, which is necessary
 to scan storage and access ZIM files at arbitrary locations.
 Therefore, the storage scanning & file picking functionalities are not
@@ -41,6 +41,15 @@ restriction may cause inconvenience, but it is necessary to comply
 with the Play Store policies and ensure a smooth user experience.  We
 recommend using the official version of the app available on our
 website to access the complete set of features.
+
+Possible paths for play store version which supports for the scanning/reading zim files.
+
+| Storage path                                            | Viewable outside kiwix(in File manager) | Could be scanned by Kiwix |
+|---------------------------------------------------------|-----------------------------------------|---------------------------|
+| storge/0/Android/media/org.kiwix.kiwixmobile/           | Yes                                     | Yes                       |
+| storge/0/Android/data/org.kiwix.kiwixmobile/            | No                                      | Yes                       |
+| storge/sdcard-name/Android/media/org.kiwix.kiwixmobile/ | Yes                                     | Yes                       |
+| storge/sdcard-name/Android/data/org.kiwix.kiwixmobile/  | No                                      | Yes                       |
 
 Kiwix Android is written in [Kotlin](https://kotlinlang.org/)
 
@@ -65,24 +74,30 @@ root directory of the project. The project requires `Java 11` to run,
 Therefore set the `Gradle JDK` to `Java 11`.
 
 Kiwix Android is a multi-module project, in 99% of scenarios you will
-want to build the `app` module in the `debug` configuration.  If you
+want to build the `app` module in the `debug` configuration. If you
 are interested in our custom apps, they have their own repo
 [kiwix-android-custom](https://github.com/kiwix/kiwix-android-custom).
 
 ## Libraries Used
 
-- [Libkiwix](https://github.com/kiwix/java-libkiwix) - Kotlin/Java binding for the core Kiwix library
+- [Libkiwix](https://github.com/kiwix/java-libkiwix) - Kotlin/Java binding for the core Kiwix
+  library
 - [Dagger 2](https://github.com/google/dagger) - A fast dependency injector for Android and Java
-- [Retrofit](https://square.github.io/retrofit/) - Retrofit turns your REST API into a Java interface
+- [Retrofit](https://square.github.io/retrofit/) - Retrofit turns your REST API into a Java
+  interface
 - [OkHttp](https://github.com/square/okhttp) - An HTTP+SPDY client for Android and Java applications
 - [Butterknife](https://jakewharton.github.io/butterknife/) - View "injection" library for Android
-- [Mockito](https://github.com/mockito/mockito) - Most popular Mocking framework for unit tests written in Java
-- [RxJava](https://github.com/ReactiveX/RxJava) - Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.
+- [Mockito](https://github.com/mockito/mockito) - Most popular Mocking framework for unit tests
+  written in Java
+- [RxJava](https://github.com/ReactiveX/RxJava) - Reactive Extensions for the JVM – a library for
+  composing asynchronous and event-based programs using observable sequences for the Java VM.
 - [ObjectBox](https://github.com/objectbox/objectbox-java) - Reactive NoSQL Database
-- [MockK](https://github.com/mockk/mockk) - Kotlin mocking library that allows mocking of final classes by default.
+- [MockK](https://github.com/mockk/mockk) - Kotlin mocking library that allows mocking of final
+  classes by default.
 - [JUnit5](https://github.com/junit-team/junit5/) - The next generation of JUnit
 - [AssertJ](https://github.com/joel-costigliola/assertj-core) - Fluent assertions for test code
-- [Fetch](https://github.com/tonyofrancis/Fetch) - A customizable file download manager library for Android
+- [Fetch](https://github.com/tonyofrancis/Fetch) - A customizable file download manager library for
+  Android
 - [ZXing](https://github.com/zxing/zxing) - Barcode scanning library for Java, Android
 
 ## Contributing
@@ -98,8 +113,10 @@ pull request.
 ## Communication
 
 Available communication channels:
+
 * [Email](mailto:contact+android@kiwix.org)
-* [Slack](https://kiwixoffline.slack.com): #android channel [Get an invite](https://join.slack.com/t/kiwixoffline/shared_invite/zt-19s7tsi68-xlgHdmDr5c6MJ7uFmJuBkg)
+* [Slack](https://kiwixoffline.slack.com): #android
+  channel [Get an invite](https://join.slack.com/t/kiwixoffline/shared_invite/zt-19s7tsi68-xlgHdmDr5c6MJ7uFmJuBkg)
 
 For more information, please refer to
 [https://wiki.kiwix.org/wiki/Communication](https://wiki.kiwix.org/wiki/Communication).
