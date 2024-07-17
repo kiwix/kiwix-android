@@ -1202,7 +1202,15 @@ abstract class CoreReaderFragment :
   private fun initalizeWebView(url: String): KiwixWebView? {
     if (isAdded) {
       val attrs = requireActivity().getAttributes(R.xml.webview)
-      val webView: KiwixWebView? = createWebView(attrs)
+      val webView: KiwixWebView? = try {
+        createWebView(attrs)
+      } catch (illegalArgumentException: IllegalArgumentException) {
+        Log.e(
+          TAG_KIWIX,
+          "Could not initialize webView. Original exception = $illegalArgumentException"
+        )
+        null
+      }
       webView?.let {
         loadUrl(url, it)
         setUpWithTextToSpeech(it)
@@ -1214,18 +1222,20 @@ abstract class CoreReaderFragment :
     return null
   }
 
-  @Suppress("UnsafeCallOnNullableType")
+  @Throws(IllegalArgumentException::class)
   protected open fun createWebView(attrs: AttributeSet?): ToolbarScrollingKiwixWebView? {
-    return if (activityMainRoot != null) {
-      ToolbarScrollingKiwixWebView(
-        requireActivity(), this, attrs!!, (activityMainRoot as ViewGroup?)!!, videoView!!,
-        CoreWebViewClient(this, zimReaderContainer!!),
-        toolbarContainer!!, bottomToolbar!!,
-        sharedPreferenceUtil!!
-      )
-    } else {
-      null
-    }
+    requireNotNull(activityMainRoot)
+    return ToolbarScrollingKiwixWebView(
+      requireActivity(),
+      this,
+      attrs ?: throw IllegalArgumentException("AttributeSet must not be null"),
+      activityMainRoot as ViewGroup,
+      requireNotNull(videoView),
+      CoreWebViewClient(this, requireNotNull(zimReaderContainer)),
+      requireNotNull(toolbarContainer),
+      requireNotNull(bottomToolbar),
+      requireNotNull(sharedPreferenceUtil)
+    )
   }
 
   protected fun newMainPageTab(): KiwixWebView? =
