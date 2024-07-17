@@ -58,6 +58,7 @@ import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.File
+import kotlin.Throws
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
 
@@ -239,12 +240,19 @@ class KiwixReaderFragment : CoreReaderFragment() {
     restoreTabs(zimArticles, zimPositions, currentTab)
   }
 
-  @Suppress("UnsafeCallOnNullableType")
-  override fun createWebView(attrs: AttributeSet?): ToolbarScrollingKiwixWebView {
+  @Throws(IllegalArgumentException::class)
+  override fun createWebView(attrs: AttributeSet?): ToolbarScrollingKiwixWebView? {
+    requireNotNull(activityMainRoot)
     return ToolbarScrollingKiwixWebView(
-      requireContext(), this, attrs!!, activityMainRoot as ViewGroup, videoView!!,
-      CoreWebViewClient(this, zimReaderContainer!!),
-      toolbarContainer!!, bottomToolbar!!, sharedPreferenceUtil = sharedPreferenceUtil!!,
+      requireContext(),
+      this,
+      attrs ?: throw IllegalArgumentException("AttributeSet must not be null"),
+      activityMainRoot as ViewGroup,
+      requireNotNull(videoView),
+      CoreWebViewClient(this, requireNotNull(zimReaderContainer)),
+      requireNotNull(toolbarContainer),
+      requireNotNull(bottomToolbar),
+      sharedPreferenceUtil = requireNotNull(sharedPreferenceUtil),
       parentNavigationBar = requireActivity().findViewById(R.id.bottom_nav_view)
     )
   }
