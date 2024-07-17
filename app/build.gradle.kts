@@ -10,24 +10,6 @@ apply(from = rootProject.file("jacoco.gradle"))
 
 fun generateVersionName() = "${Config.versionMajor}.${Config.versionMinor}.${Config.versionPatch}"
 
-/*
-* max version code: 21-0-0-00-00-00
-* our template    : UU-D-A-ZZ-YY-XX
-* where:
-* X = patch version
-* Y = minor version
-* Z = major version (+ 20 to distinguish from previous, non semantic, versions of the app)
-* A = number representing ABI split
-* D = number representing density split
-* U = unused
-*/
-
-fun generateVersionCode() =
-  20 * 10000 +
-    Config.versionMajor * 10000 +
-    Config.versionMinor * 100 +
-    Config.versionPatch
-
 val apkPrefix get() = System.getenv("TAG") ?: "kiwix"
 
 android {
@@ -36,7 +18,7 @@ android {
     base.archivesName.set(apkPrefix)
     resValue("string", "app_name", "Kiwix")
     resValue("string", "app_search_string", "Search Kiwix")
-    versionCode = generateVersionCode()
+    versionCode = GenerateVersionCode.getVersionCode()
     versionName = generateVersionName()
     manifestPlaceholders["permission"] = "android.permission.MANAGE_EXTERNAL_STORAGE"
   }
@@ -90,7 +72,7 @@ play {
   enabled.set(true)
   serviceAccountCredentials.set(file("../playstore.json"))
   track.set("internal")
-  releaseStatus.set(com.github.triplet.gradle.androidpublisher.ReleaseStatus.DRAFT)
+  releaseStatus.set(com.github.triplet.gradle.androidpublisher.ReleaseStatus.COMPLETED)
   resolutionStrategy.set(com.github.triplet.gradle.androidpublisher.ResolutionStrategy.FAIL)
 }
 
@@ -103,7 +85,7 @@ task("generateVersionCodeAndName") {
   file.printWriter().use {
     it.print(
       "${generateVersionName()}\n" +
-        "7${generateVersionCode()}"
+        "7${GenerateVersionCode.getVersionCode()}"
     )
   }
 }

@@ -19,27 +19,9 @@ plugins.apply(KiwixConfigurationPlugin::class)
 apply(plugin = "io.objectbox")
 apply(plugin = "com.jakewharton.butterknife")
 
-/*
-* max version code: 21-0-0-00-00-00
-* our template    : UU-D-A-ZZ-YY-XX
-* where:
-* X = patch version
-* Y = minor version
-* Z = major version (+ 20 to distinguish from previous, non semantic, versions of the app)
-* A = number representing ABI split
-* D = number representing density split
-* U = unused
-*/
-
-fun generateVersionCode() =
-  20 * 10000 +
-    Config.versionMajor * 10000 +
-    Config.versionMinor * 100 +
-    Config.versionPatch
-
 android {
   defaultConfig {
-    buildConfigField("long", "VERSION_CODE", "${generateVersionCode()}")
+    buildConfigField("long", "VERSION_CODE", "${GenerateVersionCode.getVersionCode()}")
   }
   buildTypes {
     getByName("release") {
