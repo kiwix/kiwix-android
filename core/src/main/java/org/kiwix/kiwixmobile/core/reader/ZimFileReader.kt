@@ -347,7 +347,12 @@ class ZimFileReader constructor(
       .inputStream()
   }
 
-  private fun getContent(url: String) = getItem(url)?.data?.data
+  private fun getContent(url: String) = try {
+    getItem(url)?.data?.data
+  } catch (ignore: Exception) {
+    Log.e(TAG, "Could not get content for url = $url original exception = $ignore")
+    null
+  }
 
   @SuppressLint("CheckResult")
   private fun streamZimContentToPipe(item: Item?, uri: String, outputStream: OutputStream) {
@@ -365,8 +370,8 @@ class ZimFileReader constructor(
             }
           }
         }
-      } catch (ioException: IOException) {
-        Log.e(TAG, "error writing pipe for $uri", ioException)
+      } catch (ignore: Exception) {
+        Log.e(TAG, "error writing pipe for $uri", ignore)
       }
     }
   }
