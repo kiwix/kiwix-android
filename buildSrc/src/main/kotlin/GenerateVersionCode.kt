@@ -22,7 +22,7 @@ import java.time.temporal.ChronoUnit
 object GenerateVersionCode {
   fun getVersionCode(): Int {
     // the date when the automatic version code generation started
-    val lastDate = LocalDate.of(2020, 7, 17)
+    val lastDate = LocalDate.of(2024, 7, 17)
 
     // Calculate the number of days between the lastDate and today's date.
     // This gives us the total number of days since the last version code was set.
