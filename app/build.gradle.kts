@@ -18,7 +18,7 @@ android {
     base.archivesName.set(apkPrefix)
     resValue("string", "app_name", "Kiwix")
     resValue("string", "app_search_string", "Search Kiwix")
-    versionCode = GenerateVersionCode.getVersionCode()
+    versionCode = "".getVersionCode()
     versionName = generateVersionName()
     manifestPlaceholders["permission"] = "android.permission.MANAGE_EXTERNAL_STORAGE"
   }
@@ -85,7 +85,7 @@ task("generateVersionCodeAndName") {
   file.printWriter().use {
     it.print(
       "${generateVersionName()}\n" +
-        "7${GenerateVersionCode.getVersionCode()}"
+        "7" + "".getVersionCode()
     )
   }
 }

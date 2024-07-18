@@ -21,7 +21,7 @@ apply(plugin = "com.jakewharton.butterknife")
 
 android {
   defaultConfig {
-    buildConfigField("long", "VERSION_CODE", "${GenerateVersionCode.getVersionCode()}")
+    buildConfigField("long", "VERSION_CODE", "".getVersionCode().toString())
   }
   buildTypes {
     getByName("release") {
