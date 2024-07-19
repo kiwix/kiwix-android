@@ -37,7 +37,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
-import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.data.DataSource
@@ -88,7 +88,7 @@ const val MAX_PROGRESS = 100
 private const val TAG_RX_JAVA_DEFAULT_ERROR_HANDLER = "RxJavaDefaultErrorHandler"
 
 class ZimManageViewModel @Inject constructor(
-  private val downloadDao: FetchDownloadDao,
+  private val downloadDao: DownloadRoomDao,
   private val bookDao: NewBookDao,
   private val languageDao: NewLanguagesDao,
   private val storageObserver: StorageObserver,
@@ -334,10 +334,12 @@ class ZimManageViewModel @Inject constructor(
       fromLocalesWithNetworkMatchesSetActiveBy(
         networkLanguageCounts(booksFromNetwork), defaultLanguage()
       )
+
     booksFromNetwork.isNotEmpty() && allLanguages.isNotEmpty() ->
       fromLocalesWithNetworkMatchesSetActiveBy(
         networkLanguageCounts(booksFromNetwork), allLanguages
       )
+
     else -> throw RuntimeException("Impossible state")
   }
 

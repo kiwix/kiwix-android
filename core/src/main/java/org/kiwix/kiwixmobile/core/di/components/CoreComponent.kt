@@ -28,6 +28,7 @@ import eu.mhutti1.utils.storage.StorageSelectDialog
 import kotlinx.coroutines.sync.Mutex
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.StorageObserver
+import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
@@ -100,6 +101,7 @@ interface CoreComponent {
   fun noteDao(): NewNoteDao
   fun newLanguagesDao(): NewLanguagesDao
   fun recentSearchDao(): NewRecentSearchDao
+  fun downloadRoomDao(): DownloadRoomDao
   fun newBookmarksDao(): NewBookmarksDao
   fun connectivityManager(): ConnectivityManager
   fun wifiManager(): WifiManager

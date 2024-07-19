@@ -97,11 +97,11 @@ class FetchDownloadMonitor @Inject constructor(fetch: Fetch, fetchDownloadDao: F
     }
 
     private fun update(download: Download) {
-      updater.onNext { fetchDownloadDao.update(download) }
+      //updater.onNext { fetchDownloadDao.update(download) }
     }
 
     private fun delete(download: Download) {
-      updater.onNext { fetchDownloadDao.delete(download.id.toLong()) }
+      // updater.onNext { download.delete(download.id.toLong()) }
     }
   }
 

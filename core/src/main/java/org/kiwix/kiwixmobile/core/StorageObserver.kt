@@ -22,6 +22,7 @@ import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.runBlocking
+import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
@@ -33,7 +34,7 @@ import java.io.File
 import javax.inject.Inject
 
 class StorageObserver @Inject constructor(
-  private val downloadDao: FetchDownloadDao,
+  private val downloadRoomDao: DownloadRoomDao,
   private val fileSearch: FileSearch,
   private val zimReaderFactory: ZimFileReader.Factory,
   private val libkiwixBookmarks: LibkiwixBookmarks
@@ -43,7 +44,7 @@ class StorageObserver @Inject constructor(
     scanningProgressListener: ScanningProgressListener
   ): Flowable<List<BookOnDisk>> {
     return scanFiles(scanningProgressListener)
-      .withLatestFrom(downloadDao.downloads(), BiFunction(::toFilesThatAreNotDownloading))
+      .withLatestFrom(downloadRoomDao.downloads(), BiFunction(::toFilesThatAreNotDownloading))
       .map { it.mapNotNull(::convertToBookOnDisk) }
   }
 

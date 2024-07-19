@@ -28,7 +28,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState.Failed
@@ -47,7 +47,7 @@ import org.kiwix.sharedFunctions.downloadItem
 
 @ExtendWith(InstantExecutorExtension::class)
 internal class CustomDownloadViewModelTest {
-  private val fetchDownloadDao: FetchDownloadDao = mockk()
+  private val downloadRoomDao: DownloadRoomDao = mockk()
   private val setPreferredStorageWithMostSpace: SetPreferredStorageWithMostSpace = mockk()
   private val downloadCustom: DownloadCustom = mockk()
   private val navigateToCustomReader: NavigateToCustomReader = mockk()
@@ -58,9 +58,9 @@ internal class CustomDownloadViewModelTest {
   @BeforeEach
   internal fun setUp() {
     clearAllMocks()
-    every { fetchDownloadDao.downloads() } returns downloads
+    every { downloadRoomDao.downloads() } returns downloads
     customDownloadViewModel = CustomDownloadViewModel(
-      fetchDownloadDao,
+      downloadRoomDao,
       setPreferredStorageWithMostSpace,
       downloadCustom,
       navigateToCustomReader

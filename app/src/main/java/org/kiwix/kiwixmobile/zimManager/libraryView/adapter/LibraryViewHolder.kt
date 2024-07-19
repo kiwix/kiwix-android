@@ -19,9 +19,9 @@
 package org.kiwix.kiwixmobile.zimManager.libraryView.adapter
 
 import android.view.View
-import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat

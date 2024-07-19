@@ -84,9 +84,7 @@ class FetchDownloadNotificationManager(
     } else {
       android.R.drawable.stat_sys_download_done
     }
-    val notificationTitle =
-      fetchDownloadDao.getEntityForFileName(downloadNotification.title)?.title
-        ?: downloadNotification.title
+    val notificationTitle = downloadNotification.title
     notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
       .setSmallIcon(smallIcon)
       .setContentTitle(notificationTitle)

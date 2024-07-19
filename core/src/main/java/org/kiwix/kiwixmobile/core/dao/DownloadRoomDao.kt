@@ -19,12 +19,100 @@
 package org.kiwix.kiwixmobile.core.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
+import io.reactivex.Flowable
+import io.reactivex.Single
+import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
+import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import javax.inject.Inject
+import java.io.File
 
-// @Dao
-// abstract class DownloadRoomDao @Inject constructor(
-//   private val newBookDao: NewBookDao,
-//   private val sharedPreferenceUtil: SharedPreferenceUtil
-// ) {
-// }
+@Dao
+abstract class DownloadRoomDao {
+
+  @Query("SELECT * FROM DownloadRoomEntity")
+  abstract fun downloadRoomEntity(): Flowable<List<DownloadRoomEntity>>
+
+  @Query("SELECT * FROM DownloadRoomEntity")
+  abstract fun getAllDownloads(): Single<List<DownloadRoomEntity>>
+
+  fun downloads(): Flowable<List<DownloadModel>> =
+    downloadRoomEntity()
+      .distinctUntilChanged()
+      .doOnNext(::moveCompletedToBooksOnDiskDao)
+      .map { it.map(::DownloadModel) }
+
+  fun allDownloads() = getAllDownloads().map { it.map(::DownloadModel) }
+
+  private fun moveCompletedToBooksOnDiskDao(downloadEntities: List<DownloadRoomEntity>) {
+    downloadEntities.filter { it.status == Status.COMPLETED }
+      .takeIf(List<DownloadRoomEntity>::isNotEmpty)
+      ?.let {
+        deleteDownloadsList(it)
+        // newBookDao.insert(it.map(BooksOnDiskListItem::BookOnDisk))
+      }
+  }
+
+  fun update(downloadModel: DownloadModel) {
+    getEntityForDownloadId(downloadModel.downloadId)?.let { downloadRoomEntity ->
+      downloadRoomEntity.updateWith(downloadModel)
+        .takeIf { updatedEntity -> updatedEntity != downloadRoomEntity }
+        ?.let(::updateDownloadItem)
+    }
+  }
+
+  @Update
+  abstract fun updateDownloadItem(downloadRoomEntity: DownloadRoomEntity)
+
+  @Delete
+  abstract fun deleteDownloadsList(downloadRoomEntityList: List<DownloadRoomEntity>)
+
+  @Query("DELETE FROM DownloadRoomEntity WHERE downloadId=:downloadId")
+  abstract fun deleteDownloadByDownloadId(downloadId: Long)
+
+  @Query("SELECT * FROM DownloadRoomEntity WHERE downloadId=:downloadId")
+  abstract fun getEntityForDownloadId(downloadId: Long): DownloadRoomEntity?
+
+  @Query("SELECT COUNT() FROM DownloadRoomEntity WHERE bookId = :bookId")
+  abstract fun count(bookId: String): Int
+
+  @Insert
+  abstract fun saveDownload(downloadRoomEntity: DownloadRoomEntity)
+
+  fun delete(downloadId: Long) {
+    // remove the previous file from storage since we have cancelled the download.
+    getEntityForDownloadId(downloadId)?.file?.let {
+      File(it).deleteFile()
+    }
+    deleteDownloadByDownloadId(downloadId)
+  }
+
+  fun addIfDoesNotExist(
+    url: String,
+    book: LibraryNetworkEntity.Book,
+    downloadRequester: DownloadRequester,
+    sharedPreferenceUtil: SharedPreferenceUtil
+  ) {
+    if (doesNotAlreadyExist(book)) {
+      val downloadRequest = DownloadRequest(url, book.title)
+      saveDownload(
+        DownloadRoomEntity(
+          downloadRequester.enqueue(downloadRequest),
+          book = book,
+          file = downloadRequest.getDestinationFile(sharedPreferenceUtil).path
+        )
+      )
+    }
+  }
+
+  private fun doesNotAlreadyExist(book: LibraryNetworkEntity.Book) =
+    count(book.id) == 0
+}
