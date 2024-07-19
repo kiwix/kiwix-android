@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2024 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,27 +15,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 package org.kiwix.kiwixmobile.core.dao.entities
 
-import com.tonyodev.fetch2.Download
-import com.tonyodev.fetch2.Error
-import com.tonyodev.fetch2.Status
-import io.objectbox.annotation.Entity
-import io.objectbox.annotation.Id
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import io.objectbox.annotation.Convert
+import io.objectbox.converter.PropertyConverter
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Error
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 
 @Entity
-data class FetchDownloadEntity(
-  @Id var id: Long = 0,
+data class DownloadRoomEntity(
+  @PrimaryKey(autoGenerate = true)
+  var id: Long = 0,
   var downloadId: Long,
   val file: String? = null,
   val etaInMilliSeconds: Long = -1L,
   val bytesDownloaded: Long = -1L,
   val totalSizeOfDownload: Long = -1L,
-  //@Convert(converter = StatusConverter::class, dbType = Int::class)
-  //val status: Status = Status.NONE,
-  //@Convert(converter = ErrorConverter::class, dbType = Int::class)
-  //val error: Error = Error.NONE,
+  @Convert(converter = StatusConverter::class, dbType = Int::class)
+  val status: Status = Status.NONE,
+  @Convert(converter = ErrorConverter::class, dbType = Int::class)
+  val error: Error = Error.NONE,
   val progress: Int = -1,
   val bookId: String,
   val title: String,
@@ -73,28 +77,40 @@ data class FetchDownloadEntity(
 
   fun toBook() = Book().apply {
     id = bookId
-    title = this@FetchDownloadEntity.title
-    description = this@FetchDownloadEntity.description
-    language = this@FetchDownloadEntity.language
-    creator = this@FetchDownloadEntity.creator
-    publisher = this@FetchDownloadEntity.publisher
-    date = this@FetchDownloadEntity.date
-    url = this@FetchDownloadEntity.url
-    articleCount = this@FetchDownloadEntity.articleCount
-    mediaCount = this@FetchDownloadEntity.mediaCount
-    size = this@FetchDownloadEntity.size
+    title = this@DownloadRoomEntity.title
+    description = this@DownloadRoomEntity.description
+    language = this@DownloadRoomEntity.language
+    creator = this@DownloadRoomEntity.creator
+    publisher = this@DownloadRoomEntity.publisher
+    date = this@DownloadRoomEntity.date
+    url = this@DownloadRoomEntity.url
+    articleCount = this@DownloadRoomEntity.articleCount
+    mediaCount = this@DownloadRoomEntity.mediaCount
+    size = this@DownloadRoomEntity.size
     bookName = name
     favicon = favIcon
-    tags = this@FetchDownloadEntity.tags
+    tags = this@DownloadRoomEntity.tags
   }
 
-  fun updateWith(download: Download) = copy(
+  fun updateWith(download: DownloadModel) = copy(
     file = download.file,
     etaInMilliSeconds = download.etaInMilliSeconds,
-    bytesDownloaded = download.downloaded,
-    totalSizeOfDownload = download.total,
-    // status = download.status,
-    // error = download.error,
+    bytesDownloaded = download.bytesDownloaded,
+    totalSizeOfDownload = download.totalSizeOfDownload,
+    status = download.state,
+    error = download.error,
     progress = download.progress
   )
+}
+
+class StatusConverter : EnumConverter<Status>() {
+  override fun convertToEntityProperty(databaseValue: Int) = Status.valueOf(databaseValue)
+}
+
+class ErrorConverter : EnumConverter<Error>() {
+  override fun convertToEntityProperty(databaseValue: Int) = Error.valueOf(databaseValue)
+}
+
+abstract class EnumConverter<E : Enum<E>> : PropertyConverter<E, Int> {
+  override fun convertToDatabaseValue(entityProperty: E): Int = entityProperty.ordinal
 }

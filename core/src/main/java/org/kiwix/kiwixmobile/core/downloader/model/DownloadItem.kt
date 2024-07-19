@@ -18,19 +18,19 @@
 package org.kiwix.kiwixmobile.core.downloader.model
 
 import android.content.Context
-import com.tonyodev.fetch2.Error
-import com.tonyodev.fetch2.Status
-import com.tonyodev.fetch2.Status.ADDED
-import com.tonyodev.fetch2.Status.CANCELLED
-import com.tonyodev.fetch2.Status.COMPLETED
-import com.tonyodev.fetch2.Status.DELETED
-import com.tonyodev.fetch2.Status.DOWNLOADING
-import com.tonyodev.fetch2.Status.FAILED
-import com.tonyodev.fetch2.Status.NONE
-import com.tonyodev.fetch2.Status.PAUSED
-import com.tonyodev.fetch2.Status.QUEUED
-import com.tonyodev.fetch2.Status.REMOVED
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.NONE
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.ADDED
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.QUEUED
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.DOWNLOADING
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.PAUSED
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.COMPLETED
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.CANCELLED
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.FAILED
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.REMOVED
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.DELETED
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Error
 
 data class DownloadItem(
   val downloadId: Long,
@@ -74,6 +74,7 @@ sealed class DownloadState(
         NONE,
         ADDED,
         QUEUED -> Pending
+
         DOWNLOADING -> Running
         PAUSED -> Paused
         COMPLETED -> Successful

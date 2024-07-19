@@ -17,24 +17,10 @@
  */
 package org.kiwix.kiwixmobile.core.dao
 
-import com.tonyodev.fetch2.Download
-import com.tonyodev.fetch2.Status.COMPLETED
 import io.objectbox.Box
-import io.objectbox.kotlin.equal
-import io.objectbox.kotlin.query
-import io.objectbox.query.QueryBuilder
-import io.reactivex.Flowable
-import io.reactivex.Single
 import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadEntity
-import org.kiwix.kiwixmobile.core.dao.entities.FetchDownloadEntity_
-import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
-import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
-import java.io.File
 import javax.inject.Inject
 
 class FetchDownloadDao @Inject constructor(
@@ -43,79 +29,79 @@ class FetchDownloadDao @Inject constructor(
   private val sharedPreferenceUtil: SharedPreferenceUtil
 ) {
 
-  fun downloads(): Flowable<List<DownloadModel>> =
-    box.asFlowable()
-      .distinctUntilChanged()
-      .doOnNext(::moveCompletedToBooksOnDiskDao)
-      .map { it.map(::DownloadModel) }
+  // fun downloads(): Flowable<List<DownloadModel>> =
+  //   box.asFlowable()
+  //     .distinctUntilChanged()
+  //     .doOnNext(::moveCompletedToBooksOnDiskDao)
+  //     .map { it.map(::DownloadModel) }
 
-  fun allDownloads() = Single.fromCallable { box.all.map(::DownloadModel) }
+  // fun allDownloads() = Single.fromCallable { box.all.map(::DownloadModel) }
 
-  private fun moveCompletedToBooksOnDiskDao(downloadEntities: List<FetchDownloadEntity>) {
-    downloadEntities.filter { it.status == COMPLETED }.takeIf { it.isNotEmpty() }?.let {
-      box.store.callInTx {
-        box.remove(it)
-        newBookDao.insert(it.map(::BookOnDisk))
-      }
-    }
-  }
+  // private fun moveCompletedToBooksOnDiskDao(downloadEntities: List<FetchDownloadEntity>) {
+  //   downloadEntities.filter { it.status == COMPLETED }.takeIf { it.isNotEmpty() }?.let {
+  //     box.store.callInTx {
+  //       box.remove(it)
+  //       newBookDao.insert(it.map(::BookOnDisk))
+  //     }
+  //   }
+  // }
 
-  fun update(download: Download) {
-    box.store.callInTx {
-      getEntityFor(download.id)?.let { dbEntity ->
-        dbEntity.updateWith(download)
-          .takeIf { updatedEntity -> updatedEntity != dbEntity }
-          ?.let(box::put)
-      }
-    }
-  }
+  // fun update(download: Download) {
+  //   box.store.callInTx {
+  //     getEntityFor(download.id)?.let { dbEntity ->
+  //       dbEntity.updateWith(download)
+  //         .takeIf { updatedEntity -> updatedEntity != dbEntity }
+  //         ?.let(box::put)
+  //     }
+  //   }
+  // }
 
-  fun getEntityFor(downloadId: Int) =
-    box.query {
-      equal(FetchDownloadEntity_.downloadId, downloadId)
-    }.find().getOrNull(0)
+  // fun getEntityFor(downloadId: Int) =
+  //   box.query {
+  //     equal(FetchDownloadEntity_.downloadId, downloadId)
+  //   }.find().getOrNull(0)
 
-  fun getEntityForFileName(fileName: String) =
-    box.query {
-      endsWith(
-        FetchDownloadEntity_.file, fileName,
-        QueryBuilder.StringOrder.CASE_INSENSITIVE
-      )
-    }.findFirst()
+  // fun getEntityForFileName(fileName: String) =
+  //   box.query {
+  //     endsWith(
+  //       FetchDownloadEntity_.file, fileName,
+  //       QueryBuilder.StringOrder.CASE_INSENSITIVE
+  //     )
+  //   }.findFirst()
 
   fun insert(downloadId: Long, book: Book, filePath: String?) {
     box.put(FetchDownloadEntity(downloadId, book, filePath))
   }
 
-  fun delete(downloadId: Long) {
-    // remove the previous file from storage since we have cancelled the download.
-    getEntityFor(downloadId.toInt())?.file?.let {
-      File(it).deleteFile()
-    }
-    box.query {
-      equal(FetchDownloadEntity_.downloadId, downloadId)
-    }.remove()
-  }
+  // fun delete(downloadId: Long) {
+  //   // remove the previous file from storage since we have cancelled the download.
+  //   getEntityFor(downloadId.toInt())?.file?.let {
+  //     File(it).deleteFile()
+  //   }
+  //   box.query {
+  //     equal(FetchDownloadEntity_.downloadId, downloadId)
+  //   }.remove()
+  // }
 
-  fun addIfDoesNotExist(
-    url: String,
-    book: Book,
-    downloadRequester: DownloadRequester
-  ) {
-    box.store.callInTx {
-      if (doesNotAlreadyExist(book)) {
-        val downloadRequest = DownloadRequest(url, book.title)
-        insert(
-          downloadRequester.enqueue(downloadRequest),
-          book = book,
-          filePath = downloadRequest.getDestinationFile(sharedPreferenceUtil).path
-        )
-      }
-    }
-  }
+  // fun addIfDoesNotExist(
+  //   url: String,
+  //   book: Book,
+  //   downloadRequester: DownloadRequester
+  // ) {
+  //   box.store.callInTx {
+  //     if (doesNotAlreadyExist(book)) {
+  //       val downloadRequest = DownloadRequest(url, book.title)
+  //       insert(
+  //         downloadRequester.enqueue(downloadRequest),
+  //         book = book,
+  //         filePath = downloadRequest.getDestinationFile(sharedPreferenceUtil).path
+  //       )
+  //     }
+  //   }
+  // }
 
-  private fun doesNotAlreadyExist(book: Book) =
-    box.query {
-      equal(FetchDownloadEntity_.bookId, book.id, QueryBuilder.StringOrder.CASE_INSENSITIVE)
-    }.count() == 0L
+  // private fun doesNotAlreadyExist(book: Book) =
+  //   box.query {
+  //     equal(FetchDownloadEntity_.bookId, book.id, QueryBuilder.StringOrder.CASE_INSENSITIVE)
+  //   }.count() == 0L
 }

@@ -20,16 +20,19 @@ package org.kiwix.kiwixmobile.core.downloader
 
 import android.annotation.SuppressLint
 import io.reactivex.Observable
+import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
 class DownloaderImpl @Inject constructor(
   private val downloadRequester: DownloadRequester,
-  private val downloadDao: FetchDownloadDao,
-  private val kiwixService: KiwixService
+  private val downloadRoomDao: DownloadRoomDao,
+  private val kiwixService: KiwixService,
+  private val sharedPreferenceUtil: SharedPreferenceUtil
 ) : Downloader {
 
   @SuppressLint("CheckResult")
@@ -38,7 +41,7 @@ class DownloaderImpl @Inject constructor(
       .take(1)
       .subscribe(
         {
-          downloadDao.addIfDoesNotExist(it, book, downloadRequester)
+          downloadRoomDao.addIfDoesNotExist(it, book, downloadRequester, sharedPreferenceUtil)
         },
         Throwable::printStackTrace
       )

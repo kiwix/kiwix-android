@@ -25,10 +25,12 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDaoCoverts
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
+import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
@@ -38,9 +40,10 @@ import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
   entities = [
     RecentSearchRoomEntity::class,
     HistoryRoomEntity::class,
-    NotesRoomEntity::class
+    NotesRoomEntity::class,
+    DownloadRoomEntity::class
   ],
-  version = 3,
+  version = 4,
   exportSchema = false
 )
 @TypeConverters(HistoryRoomDaoCoverts::class)
@@ -48,6 +51,7 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
   abstract fun recentSearchRoomDao(): RecentSearchRoomDao
   abstract fun historyRoomDao(): HistoryRoomDao
   abstract fun notesRoomDao(): NotesRoomDao
+  abstract fun downloadRoomDao(): DownloadRoomDao
 
   companion object {
     private var db: KiwixRoomDatabase? = null
@@ -57,7 +61,7 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
           ?: Room.databaseBuilder(context, KiwixRoomDatabase::class.java, "KiwixRoom.db")
             // We have already database name called kiwix.db in order to avoid complexity we named
             // as kiwixRoom.db
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
             .build()
       }
     }
@@ -103,6 +107,40 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
         database.execSQL(
           """
             CREATE UNIQUE INDEX IF NOT EXISTS `index_NotesRoomEntity_noteTitle` ON `NotesRoomEntity` (`noteTitle`)
+            """
+        )
+      }
+    }
+
+    private val MIGRATION_3_4 = object : Migration(3, 4) {
+      override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL(
+          """
+            CREATE TABLE IF NOT EXISTS `DownloadRoomEntity` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `downloadId` INTEGER NOT NULL,
+                `file` TEXT,
+                `etaInMilliSeconds` INTEGER NOT NULL DEFAULT -1,
+                `bytesDownloaded` INTEGER NOT NULL DEFAULT -1,
+                `totalSizeOfDownload` INTEGER NOT NULL DEFAULT -1,
+                `status` TEXT NOT NULL DEFAULT 'NONE',
+                `error` TEXT NOT NULL DEFAULT 'NONE',
+                `progress` INTEGER NOT NULL DEFAULT -1,
+                `bookId` TEXT NOT NULL,
+                `title` TEXT NOT NULL,
+                `description` TEXT,
+                `language` TEXT NOT NULL,
+                `creator` TEXT NOT NULL,
+                `publisher` TEXT NOT NULL,
+                `date` TEXT NOT NULL,
+                `url` TEXT,
+                `articleCount` TEXT,
+                `mediaCount` TEXT,
+                `size` TEXT NOT NULL,
+                `name` TEXT,
+                `favIcon` TEXT NOT NULL,
+                `tags` TEXT
+            )
             """
         )
       }

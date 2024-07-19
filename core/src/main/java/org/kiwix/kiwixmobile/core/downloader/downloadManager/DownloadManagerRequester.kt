@@ -21,7 +21,10 @@ package org.kiwix.kiwixmobile.core.downloader.downloadManager
 import android.app.DownloadManager
 import android.app.DownloadManager.Request
 import android.net.Uri
-import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -30,14 +33,16 @@ import javax.inject.Inject
 class DownloadManagerRequester @Inject constructor(
   private val downloadManager: DownloadManager,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val fetchDownloadDao: FetchDownloadDao
+  private val downloadRoomDao: DownloadRoomDao
 ) : DownloadRequester {
   override fun enqueue(downloadRequest: DownloadRequest): Long =
     downloadManager.enqueue(downloadRequest.toDownloadManagerRequest(sharedPreferenceUtil))
 
   override fun cancel(downloadId: Long) {
-    downloadManager.remove(downloadId).also {
-      fetchDownloadDao.delete(downloadId)
+    CoroutineScope(Dispatchers.IO).launch {
+      downloadManager.remove(downloadId).also {
+        downloadRoomDao.delete(downloadId)
+      }
     }
   }
 
