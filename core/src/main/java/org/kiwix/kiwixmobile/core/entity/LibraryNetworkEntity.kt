@@ -94,5 +94,41 @@ class LibraryNetworkEntity {
 
     // Only use the book's id to generate a hash code
     override fun hashCode(): Int = id.hashCode()
+
+    @Suppress("LongParameterList")
+    fun copy(
+      language: String = this.language,
+      title: String = this.title,
+      description: String? = this.description,
+      creator: String = this.creator,
+      publisher: String = this.publisher,
+      favicon: String = this.favicon,
+      faviconMimeType: String? = this.faviconMimeType,
+      date: String = this.date,
+      url: String? = this.url,
+      articleCount: String? = this.articleCount,
+      mediaCount: String? = this.mediaCount,
+      size: String = this.size,
+      bookName: String? = this.bookName,
+      tags: String? = this.tags
+    ): Book {
+      return Book().apply {
+        this.id = this@Book.id
+        this.title = title
+        this.description = description
+        this.language = language
+        this.creator = creator
+        this.publisher = publisher
+        this.favicon = favicon
+        this.faviconMimeType = faviconMimeType
+        this.date = date
+        this.url = url
+        this.articleCount = articleCount
+        this.mediaCount = mediaCount
+        this.size = size
+        this.bookName = bookName
+        this.tags = tags
+      }
+    }
   }
 }
