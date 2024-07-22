@@ -47,11 +47,18 @@ android {
       buildConfigField("boolean", "IS_PLAYSTORE", "true")
       manifestPlaceholders["permission"] = "android.permission.placeholder"
     }
+    create("standalone") {
+      initWith(getByName("release"))
+      matchingFallbacks += "release"
+      signingConfig = signingConfigs.getByName("releaseSigningConfig")
+      applicationIdSuffix = ".standalone" // Bug Fix #3933
+    }
     create("nightly") {
       initWith(getByName("debug"))
       matchingFallbacks += "debug"
       // Build the nightly APK with the released keyStore to make the APK updatable. See #3838
       signingConfig = signingConfigs.getByName("releaseSigningConfig")
+      applicationIdSuffix = ".standalone" // Bug Fix #3933
     }
   }
   bundle {

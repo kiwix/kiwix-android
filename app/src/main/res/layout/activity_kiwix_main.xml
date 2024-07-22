@@ -34,7 +34,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       app:defaultNavHost="true"
-      app:layout_behavior=".nav.helper.ScrollingViewWithBottomNavigationBehavior"
+      app:layout_behavior="org.kiwix.kiwixmobile.nav.helper.ScrollingViewWithBottomNavigationBehavior"
       app:navGraph="@navigation/kiwix_nav_graph" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
