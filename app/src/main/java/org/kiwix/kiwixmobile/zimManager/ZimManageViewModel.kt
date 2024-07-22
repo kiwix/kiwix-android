@@ -31,6 +31,7 @@ import io.reactivex.functions.Function6
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
+import org.kiwix.kiwixmobile.RxJavaUncaughtExceptionHandling
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.SideEffect
@@ -123,6 +124,7 @@ class ZimManageViewModel @Inject constructor(
   private var compositeDisposable: CompositeDisposable? = CompositeDisposable()
 
   init {
+    RxJavaUncaughtExceptionHandling.setUp()
     compositeDisposable?.addAll(*disposables())
     context.registerReceiver(connectivityBroadcastReceiver)
   }
