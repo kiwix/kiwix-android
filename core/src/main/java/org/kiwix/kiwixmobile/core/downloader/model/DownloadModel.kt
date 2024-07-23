@@ -27,12 +27,12 @@ data class DownloadModel(
   val databaseId: Long,
   val downloadId: Long,
   val file: String?,
-  val etaInMilliSeconds: Long,
+  var etaInMilliSeconds: Long,
   val bytesDownloaded: Long,
   val totalSizeOfDownload: Long,
   var state: Status,
   var error: Error,
-  val progress: Int,
+  var progress: Int,
   val book: Book
 ) {
   val bytesRemaining: Long by lazy { totalSizeOfDownload - bytesDownloaded }
