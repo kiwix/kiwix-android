@@ -1,4 +1,11 @@
+import org.w3c.dom.Element
 import plugin.KiwixConfigurationPlugin
+import java.io.StringWriter
+import javax.xml.parsers.DocumentBuilderFactory
+import javax.xml.transform.OutputKeys
+import javax.xml.transform.TransformerFactory
+import javax.xml.transform.dom.DOMSource
+import javax.xml.transform.stream.StreamResult
 
 plugins {
   android
@@ -98,15 +105,76 @@ task("generateVersionCodeAndName") {
 }
 
 task("renameTarakFile") {
-  val taraskFile = File("core/src/main/res/values-b+be+tarask/strings.xml")
-  if (taraskFile.exists()) {
+  val taraskFile = File("$rootDir/core/src/main/res/values-b+be+tarask/strings.xml")
+  val mainStringsFile = File("$rootDir/core/src/main/res/values/strings.xml")
+
+  if (taraskFile.exists() && mainStringsFile.exists()) {
     val taraskOldFile = File("core/src/main/res/values-b+be+tarask+old/strings.xml")
     if (!taraskOldFile.exists()) taraskOldFile.createNewFile()
-    taraskOldFile.printWriter().use {
-      it.print(taraskFile.readText())
+
+    // Parse the main strings.xml file and extract the string tags
+    val mainTags = getStringTags(mainStringsFile)
+
+    // Parse the tarask file and filter strings based on tags present in the main strings file
+    // This ensures that any string removed from the main strings file will not be
+    // added to the old file, and it prevents lint errors.
+    val filteredContent = filterStringsByTags(taraskFile, mainTags)
+
+    // Write the filtered content to the taraskOldFile
+    taraskOldFile.printWriter().use { writer ->
+      writer.println("""<?xml version="1.0" encoding="utf-8"?>""")
+      writer.println("<resources>")
+      filteredContent.forEach { string ->
+        writer.println("  $string")
+      }
+      writer.println("</resources>")
     }
+
     taraskFile.delete()
   }
+}
+
+fun getStringTags(file: File): Set<String> {
+  val tags = mutableSetOf<String>()
+  val factory = DocumentBuilderFactory.newInstance()
+  val builder = factory.newDocumentBuilder()
+  val doc = builder.parse(file)
+  val nodeList = doc.getElementsByTagName("string")
+
+  (0 until nodeList.length)
+    .asSequence()
+    .map { nodeList.item(it) as Element }
+    .mapTo(tags) { it.getAttribute("name") }
+
+  return tags
+}
+
+fun filterStringsByTags(file: File, tags: Set<String>): List<String> {
+  val filteredStrings = mutableListOf<String>()
+  val factory = DocumentBuilderFactory.newInstance()
+  val builder = factory.newDocumentBuilder()
+  val doc = builder.parse(file)
+  val nodeList = doc.getElementsByTagName("string")
+
+  for (i in 0 until nodeList.length) {
+    val element = nodeList.item(i) as Element
+    val name = element.getAttribute("name")
+    if (name in tags) {
+      filteredStrings.add(elementToString(element))
+    }
+  }
+
+  return filteredStrings
+}
+
+fun elementToString(element: Element): String {
+  val transformer = TransformerFactory.newInstance().newTransformer().apply {
+    setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes")
+  }
+  val result = StreamResult(StringWriter())
+  val source = DOMSource(element)
+  transformer.transform(source, result)
+  return result.writer.toString()
 }
 
 tasks.build {
