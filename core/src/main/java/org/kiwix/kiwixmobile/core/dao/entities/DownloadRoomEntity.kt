@@ -37,7 +37,7 @@ data class DownloadRoomEntity(
   val bytesDownloaded: Long = -1L,
   val totalSizeOfDownload: Long = -1L,
   @Convert(converter = StatusConverter::class, dbType = Int::class)
-  val status: Status = Status.NONE,
+  var status: Status = Status.NONE,
   @Convert(converter = ErrorConverter::class, dbType = Int::class)
   val error: Error = Error.NONE,
   val progress: Int = -1,
@@ -56,7 +56,7 @@ data class DownloadRoomEntity(
   val favIcon: String,
   val tags: String? = null
 ) {
-  constructor(downloadId: Long, book: Book, file: String?) : this(
+  constructor(downloadUrl: String, downloadId: Long, book: Book, file: String?) : this(
     file = file,
     downloadId = downloadId,
     bookId = book.id,
@@ -66,7 +66,7 @@ data class DownloadRoomEntity(
     creator = book.creator,
     publisher = book.publisher,
     date = book.date,
-    url = book.url,
+    url = downloadUrl,
     articleCount = book.articleCount,
     mediaCount = book.mediaCount,
     size = book.size,

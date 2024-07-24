@@ -38,6 +38,7 @@ import org.kiwix.kiwixmobile.core.downloader.DownloaderImpl
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerBroadcastReceiver
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerMonitor
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerRequester
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationActionsReceiver
 import org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManager
 import org.kiwix.kiwixmobile.core.utils.CONNECT_TIME_OUT
 import org.kiwix.kiwixmobile.core.utils.READ_TIME_OUT
@@ -105,11 +106,13 @@ object DownloaderModule {
   fun providesDownloadRequester(
     downloadManager: DownloadManager,
     sharedPreferenceUtil: SharedPreferenceUtil,
-    downloadRoomDao: DownloadRoomDao
+    downloadRoomDao: DownloadRoomDao,
+    downloadManagerMonitor: DownloadManagerMonitor
   ): DownloadRequester = DownloadManagerRequester(
     downloadManager,
     sharedPreferenceUtil,
-    downloadRoomDao
+    downloadRoomDao,
+    downloadManagerMonitor
   )
 
   @Provides
@@ -121,4 +124,10 @@ object DownloaderModule {
   @Singleton
   fun providesDownloadManagerBroadcastReceiver(callback: DownloadManagerBroadcastReceiver.Callback)
     : DownloadManagerBroadcastReceiver = DownloadManagerBroadcastReceiver(callback)
+
+  @Provides
+  @Singleton
+  fun providesDownloadNotificationActionsReceiver(downloadManagerMonitor: DownloadManagerMonitor)
+    : DownloadNotificationActionsReceiver =
+    DownloadNotificationActionsReceiver(downloadManagerMonitor)
 }

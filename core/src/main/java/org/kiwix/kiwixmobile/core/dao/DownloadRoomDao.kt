@@ -105,6 +105,7 @@ abstract class DownloadRoomDao {
       val downloadRequest = DownloadRequest(url, book.title)
       saveDownload(
         DownloadRoomEntity(
+          url,
           downloadRequester.enqueue(downloadRequest),
           book = book,
           file = downloadRequest.getDestinationFile(sharedPreferenceUtil).path

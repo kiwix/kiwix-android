@@ -25,11 +25,11 @@ import org.kiwix.kiwixmobile.core.utils.StorageUtils
 
 data class DownloadModel(
   val databaseId: Long,
-  val downloadId: Long,
+  var downloadId: Long,
   val file: String?,
   var etaInMilliSeconds: Long,
-  val bytesDownloaded: Long,
-  val totalSizeOfDownload: Long,
+  var bytesDownloaded: Long,
+  var totalSizeOfDownload: Long,
   var state: Status,
   var error: Error,
   var progress: Int,
