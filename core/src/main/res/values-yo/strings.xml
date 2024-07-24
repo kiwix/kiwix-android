@@ -64,8 +64,7 @@
   <string name="pref_display_title">Ìmúhàn</string>
   <string name="pref_info_title">Ìfitọ́nilétí</string>
   <string name="pref_info_version">Àtẹ̀jáde</string>
-  <string name="pref_night_mode">Ipo ale</string>
-  <string name="pref_night_mode_summary">Ṣafihan awọn nkan pẹlu awọn awọ ti o yipada</string>
+  <string name="pref_dark_mode_summary">Ṣafihan awọn nkan pẹlu awọn awọ ti o yipada</string>
   <string name="pref_back_to_top">A Lọ sí Òkè</string>
   <string name="pref_back_to_top_summary">Ṣe afihan bọtini kan ni opin oju-iwe lati yi lọ si oke</string>
   <string name="pref_language_title">Èdè</string>

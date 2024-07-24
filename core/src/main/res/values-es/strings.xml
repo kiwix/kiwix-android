@@ -82,8 +82,7 @@
   <string name="pref_display_title">Mostrar</string>
   <string name="pref_info_title">Información</string>
   <string name="pref_info_version">Versión</string>
-  <string name="pref_night_mode">Modo nocturno</string>
-  <string name="pref_night_mode_summary">Mostrar artículos con colores invertidos</string>
+  <string name="pref_dark_mode_summary">Mostrar artículos con colores invertidos</string>
   <string name="pref_back_to_top">Volver al principio</string>
   <string name="pref_back_to_top_summary">Mostrar un botón al final de la página para desplazarse al comienzo</string>
   <string name="pref_language_title">Idioma</string>

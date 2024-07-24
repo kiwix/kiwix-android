@@ -48,7 +48,7 @@ import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 class TabsAdapter internal constructor(
   private val activity: AppCompatActivity,
   private val webViews: List<KiwixWebView>,
-  private val painter: NightModeViewPainter
+  private val painter: DarkModeViewPainter
 ) : RecyclerView.Adapter<TabsAdapter.ViewHolder>() {
 
   init {

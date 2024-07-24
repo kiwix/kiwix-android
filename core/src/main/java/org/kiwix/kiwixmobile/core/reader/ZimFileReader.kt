@@ -29,7 +29,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.NightModeConfig
+import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.main.UNINITIALISER_ADDRESS
 import org.kiwix.kiwixmobile.core.main.UNINITIALISE_HTML
@@ -62,7 +62,7 @@ class ZimFileReader constructor(
   val assetFileDescriptorList: List<AssetFileDescriptor> = emptyList(),
   val assetDescriptorFilePath: String? = null,
   val jniKiwixReader: Archive,
-  private val nightModeConfig: NightModeConfig,
+  private val darkModeConfig: DarkModeConfig,
   private val searcher: SuggestionSearcher
 ) {
   interface Factory {
@@ -72,7 +72,7 @@ class ZimFileReader constructor(
       filePath: String? = null
     ): ZimFileReader?
 
-    class Impl @Inject constructor(private val nightModeConfig: NightModeConfig) :
+    class Impl @Inject constructor(private val darkModeConfig: DarkModeConfig) :
       Factory {
       override suspend fun create(file: File): ZimFileReader? =
         withContext(Dispatchers.IO) { // Bug Fix #3805
@@ -80,7 +80,7 @@ class ZimFileReader constructor(
             val archive = Archive(file.canonicalPath)
             ZimFileReader(
               file,
-              nightModeConfig = nightModeConfig,
+              darkModeConfig = darkModeConfig,
               jniKiwixReader = archive,
               searcher = SuggestionSearcher(archive)
             ).also {
@@ -108,7 +108,7 @@ class ZimFileReader constructor(
             null,
             assetFileDescriptorList,
             assetDescriptorFilePath = filePath,
-            nightModeConfig = nightModeConfig,
+            darkModeConfig = darkModeConfig,
             jniKiwixReader = archive,
             searcher = SuggestionSearcher(archive)
           ).also {
@@ -363,7 +363,7 @@ class ZimFileReader constructor(
             it.write(UNINITIALISE_HTML.toByteArray())
           } else {
             item?.let { item ->
-              if ("text/css" == item.mimetype && nightModeConfig.isNightModeActive()) {
+              if ("text/css" == item.mimetype && darkModeConfig.isDarkModeActive()) {
                 it.write(INVERT_IMAGES_VIDEO.toByteArray())
               }
               it.write(item.data.data)

@@ -133,7 +133,7 @@ class SettingsRobot : BaseRobot() {
   }
 
   fun clickNightModePreference() {
-    clickRecyclerViewItems(R.string.pref_night_mode)
+    clickRecyclerViewItems(R.string.pref_dark_mode)
   }
 
   fun assertNightModeDialogDisplayed() {
@@ -178,7 +178,7 @@ class SettingsRobot : BaseRobot() {
   }
 
   private fun nightModeStrings(): Array<String> =
-    context.resources.getStringArray(R.array.pref_night_modes_entries)
+    context.resources.getStringArray(R.array.pref_dark_modes_entries)
 
   private fun IntArray.matchers() = map(::withText).toTypedArray()
 }

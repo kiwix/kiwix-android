@@ -23,8 +23,7 @@
   <string name="pref_display_title">Waergaaf</string>
   <string name="pref_info_title">Infermasie</string>
   <string name="pref_info_version">Versie</string>
-  <string name="pref_night_mode">Nachmodus</string>
-  <string name="pref_night_mode_summary">Tuin artikele mit ómgedrejde kluuere</string>
+  <string name="pref_dark_mode_summary">Tuin artikele mit ómgedrejde kluuere</string>
   <string name="pref_back_to_top">Trök nao baove</string>
   <string name="pref_back_to_top_summary">Tuin ’ne knoep anen ènj vanne pagina veur trögk te gaon nao baove</string>
   <string name="pref_language_title">Spraok</string>

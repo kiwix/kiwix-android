@@ -35,7 +35,7 @@ import org.junit.Test
 import org.junit.jupiter.api.fail
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.NightModeConfig
+import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -124,7 +124,7 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
         emptyList(),
         null,
         archive,
-        NightModeConfig(SharedPreferenceUtil(context), context),
+        DarkModeConfig(SharedPreferenceUtil(context), context),
         SuggestionSearcher(archive)
       )
       Assert.assertEquals(zimFileReader.mediaCount, 16)

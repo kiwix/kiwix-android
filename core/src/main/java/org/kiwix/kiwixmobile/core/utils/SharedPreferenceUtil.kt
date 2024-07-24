@@ -20,14 +20,14 @@ package org.kiwix.kiwixmobile.core.utils
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
-import androidx.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat.getExternalFilesDirs
 import androidx.core.content.edit
+import androidx.preference.PreferenceManager
 import io.reactivex.Flowable
 import io.reactivex.processors.PublishProcessor
-import org.kiwix.kiwixmobile.core.NightModeConfig
-import org.kiwix.kiwixmobile.core.NightModeConfig.Mode.Companion.from
+import org.kiwix.kiwixmobile.core.DarkModeConfig
+import org.kiwix.kiwixmobile.core.DarkModeConfig.Mode.Companion.from
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import java.io.File
@@ -49,7 +49,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   private val _textZooms = PublishProcessor.create<Int>()
   val textZooms
     get() = _textZooms.startWith(textZoom)
-  private val nightModes = PublishProcessor.create<NightModeConfig.Mode>()
+  private val darkModes = PublishProcessor.create<DarkModeConfig.Mode>()
   private val _prefWifiOnlys = PublishProcessor.create<Boolean>()
   val prefWifiOnlys
     get() = _prefWifiOnlys.startWith(prefWifiOnly)
@@ -205,15 +205,15 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
       putBoolean(PREF_SHOW_NOTES_ALL_BOOKS, prefShowBookmarksFromCurrentBook)
     }
 
-  val nightMode: NightModeConfig.Mode
+  val darkMode: DarkModeConfig.Mode
     get() = from(
-      sharedPreferences.getString(PREF_NIGHT_MODE, null)?.toInt()
+      sharedPreferences.getString(PREF_DARK_MODE, null)?.toInt()
         ?: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
     )
 
-  fun nightModes(): Flowable<NightModeConfig.Mode> = nightModes.startWith(nightMode)
+  fun darkModes(): Flowable<DarkModeConfig.Mode> = darkModes.startWith(darkMode)
 
-  fun updateNightMode() = nightModes.offer(nightMode)
+  fun updateDarkMode() = darkModes.offer(darkMode)
 
   var manageExternalFilesPermissionDialog: Boolean
     get() = sharedPreferences.getBoolean(PREF_MANAGE_EXTERNAL_FILES, true)
@@ -292,7 +292,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val PREF_SHOW_HISTORY_ALL_BOOKS = "show_history_current_book"
     private const val PREF_SHOW_NOTES_ALL_BOOKS = "show_notes_current_book"
     private const val PREF_HOSTED_BOOKS = "hosted_books"
-    const val PREF_NIGHT_MODE = "pref_night_mode"
+    const val PREF_DARK_MODE = "pref_dark_mode"
     private const val TEXT_ZOOM = "true_text_zoom"
     private const val DEFAULT_ZOOM = 100
     const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"

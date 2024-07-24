@@ -60,8 +60,7 @@
   <string name="pref_display_title">Приказник</string>
   <string name="pref_info_title">Информации</string>
   <string name="pref_info_version">Верзија</string>
-  <string name="pref_night_mode">Ноќен режим</string>
-  <string name="pref_night_mode_summary">Прикажувај ги статиите во обратни бои</string>
+  <string name="pref_dark_mode_summary">Прикажувај ги статиите во обратни бои</string>
   <string name="pref_back_to_top">Најгоре</string>
   <string name="pref_back_to_top_summary">Прикажувај копче за враќање најгоре на крајот од страницата</string>
   <string name="pref_language_title">Јазик</string>

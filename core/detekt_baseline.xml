@@ -76,8 +76,8 @@
     <ID>TooGenericExceptionThrown:ContextExtensions.kt$throw RuntimeException("invalid attribute $attributeRes")</ID>
     <ID>TooGenericExceptionThrown:CursorExtensions.kt$throw RuntimeException("$columnName not found in $columnNames")</ID>
     <ID>TooGenericExceptionThrown:CursorExtensions.kt$throw RuntimeException("Unexpected return type ${T::class.java.simpleName}")</ID>
-    <ID>TooGenericExceptionThrown:NightModeConfig.kt$NightModeConfig.Mode.Companion$throw RuntimeException("Invalid night mode $nightMode")</ID>
-    <ID>TooGenericExceptionThrown:NightModeConfig.kt$NightModeConfig.UiMode.Companion$throw RuntimeException("Invalid night mode $uiMode")</ID>
+    <ID>TooGenericExceptionThrown:DarkModeConfig.kt$DarkModeConfig.Mode.Companion$throw RuntimeException("Invalid dark mode $darkMode")</ID>
+    <ID>TooGenericExceptionThrown:DarkModeConfig.kt$DarkModeConfig.UiMode.Companion$throw RuntimeException("Invalid dark mode $uiMode")</ID>
     <ID>TopLevelPropertyNaming:Bytes.kt$const val Eb = Pb * 1024</ID>
     <ID>TopLevelPropertyNaming:Bytes.kt$const val Gb = Mb * 1024</ID>
     <ID>TopLevelPropertyNaming:Bytes.kt$const val Kb = 1 * 1024L</ID>

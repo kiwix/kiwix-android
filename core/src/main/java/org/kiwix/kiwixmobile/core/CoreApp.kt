@@ -47,7 +47,7 @@ abstract class CoreApp : Application() {
   lateinit var downloadMonitor: DownloadMonitor
 
   @Inject
-  lateinit var nightModeConfig: NightModeConfig
+  lateinit var darkModeConfig: DarkModeConfig
 
   /**
    * The init of this class does the work of initializing,
@@ -85,7 +85,7 @@ abstract class CoreApp : Application() {
     coreComponent.inject(this)
     serviceWorkerInitialiser.init(this)
     downloadMonitor.init()
-    nightModeConfig.init()
+    darkModeConfig.init()
     fileLogger.writeLogFile(this)
     configureStrictMode()
   }
