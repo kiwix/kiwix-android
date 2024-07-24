@@ -33,7 +33,8 @@ import javax.inject.Inject
 class DownloadManagerRequester @Inject constructor(
   private val downloadManager: DownloadManager,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val downloadRoomDao: DownloadRoomDao
+  private val downloadRoomDao: DownloadRoomDao,
+  private val downloadManagerMonitor: DownloadManagerMonitor
 ) : DownloadRequester {
   override fun enqueue(downloadRequest: DownloadRequest): Long =
     downloadManager.enqueue(downloadRequest.toDownloadManagerRequest(sharedPreferenceUtil))
@@ -47,9 +48,26 @@ class DownloadManagerRequester @Inject constructor(
   }
 
   override fun retryDownload(downloadId: Long) {
+    // Retry the download by enqueuing it again with the same request
+    // CoroutineScope(Dispatchers.IO).launch {
+    //   val downloadEntity = downloadRoomDao.getEntityForDownloadId(downloadId)
+    //   downloadEntity?.let {
+    //     val downloadRequest = DownloadRequest(
+    //       uri = Uri.parse(it.uri),
+    //       notificationTitle = it.notificationTitle,
+    //       destinationFile = it.destinationFile
+    //     )
+    //     enqueue(downloadRequest)
+    //   }
+    // }
   }
 
   override fun pauseResumeDownload(downloadId: Long, isPause: Boolean) {
+    if (isPause) {
+      downloadManagerMonitor.pauseDownload(downloadId)
+    } else {
+      downloadManagerMonitor.resumeDownload(downloadId)
+    }
   }
 }
 
