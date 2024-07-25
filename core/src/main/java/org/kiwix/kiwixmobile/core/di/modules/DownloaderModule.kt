@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.di.modules
 
 import android.app.DownloadManager
+import android.app.NotificationManager
 import android.content.Context
 import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.Fetch.Impl
@@ -38,7 +39,8 @@ import org.kiwix.kiwixmobile.core.downloader.DownloaderImpl
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerBroadcastReceiver
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerMonitor
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerRequester
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationActionsReceiver
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationActionsBroadcastReceiver
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationManager
 import org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadNotificationManager
 import org.kiwix.kiwixmobile.core.utils.CONNECT_TIME_OUT
 import org.kiwix.kiwixmobile.core.utils.READ_TIME_OUT
@@ -127,7 +129,14 @@ object DownloaderModule {
 
   @Provides
   @Singleton
-  fun providesDownloadNotificationActionsReceiver(downloadManagerMonitor: DownloadManagerMonitor)
-    : DownloadNotificationActionsReceiver =
-    DownloadNotificationActionsReceiver(downloadManagerMonitor)
+  fun providesDownloadNotificationActionsBroadcastReceiver(downloadManagerMonitor: DownloadManagerMonitor)
+    : DownloadNotificationActionsBroadcastReceiver =
+    DownloadNotificationActionsBroadcastReceiver(downloadManagerMonitor)
+
+  @Provides
+  @Singleton
+  fun providesDownloadNotificationManager(
+    context: Context,
+    notificationManager: NotificationManager
+  ): DownloadNotificationManager = DownloadNotificationManager(context, notificationManager)
 }

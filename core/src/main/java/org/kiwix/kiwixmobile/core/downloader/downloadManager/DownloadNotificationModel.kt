@@ -18,18 +18,27 @@
 
 package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
-import android.content.Context
-import android.content.Intent
-import org.kiwix.kiwixmobile.core.base.BaseBroadcastReceiver
-import javax.inject.Inject
+data class DownloadNotificationModel(
+  val downloadId: Int,
+  val status: Status = Status.NONE,
+  val progress: Int,
+  val etaInMilliSeconds: Long,
+  val title: String,
+  val description: String?,
+  val error: String
+) {
+  val isPaused get() = status == Status.PAUSED
+  val isCompleted get() = status == Status.COMPLETED
+  val isFailed get() = status == Status.FAILED
+  val isQueued get() = status == Status.QUEUED
+  val isDownloading get() = status == Status.DOWNLOADING
+  val isOnGoingNotification: Boolean
+    get() {
+      return when (status) {
+        Status.QUEUED,
+        Status.DOWNLOADING -> true
 
-const val DOWNLOAD_NOTIFICATION_ACTION = "download_notification_action"
-
-class DownloadNotificationActionsReceiver @Inject constructor(
-  private val downloadManagerMonitor: DownloadManagerMonitor
-) : BaseBroadcastReceiver() {
-
-  override val action: String = DOWNLOAD_NOTIFICATION_ACTION
-  override fun onIntentWithActionReceived(context: Context, intent: Intent) {
-  }
+        else -> false
+      }
+    }
 }

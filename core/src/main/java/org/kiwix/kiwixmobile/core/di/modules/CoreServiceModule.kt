@@ -77,11 +77,4 @@ class CoreServiceModule {
   @Provides
   @CoreServiceScope
   fun providesGenerateQr(): GenerateQR = GenerateQR()
-  fun providesDownloadManagerBroadcastReceiver(callback: DownloadManagerBroadcastReceiver.Callback)
-    : DownloadManagerBroadcastReceiver = DownloadManagerBroadcastReceiver(callback)
-
-  @Provides
-  @CoreServiceScope
-  fun providesDownloadInformationCallback(downloadManagerMonitor: DownloadManagerMonitor)
-    : DownloadManagerBroadcastReceiver.Callback = downloadManagerMonitor
 }
