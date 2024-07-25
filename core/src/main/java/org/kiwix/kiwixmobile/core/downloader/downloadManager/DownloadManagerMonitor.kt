@@ -32,6 +32,7 @@ import io.reactivex.subjects.PublishSubject
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
+import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -269,9 +270,17 @@ class DownloadManagerMonitor @Inject constructor(
     }
 
     val elapsedTime = currentTime - downloadInfo.startTime
-    val downloadSpeed =
-      if (elapsedTime > 0) (bytesDownloaded - downloadInfo.initialBytesDownloaded) / (elapsedTime / 1000.0) else 0.0
-    return if (downloadSpeed > 0) ((totalBytes - bytesDownloaded) / downloadSpeed).toLong() * 1000 else 0L
+    val downloadSpeed = if (elapsedTime > 0) {
+      (bytesDownloaded - downloadInfo.initialBytesDownloaded) / (elapsedTime / 1000.0)
+    } else {
+      0.0
+    }
+
+    return if (downloadSpeed > 0) {
+      ((totalBytes - bytesDownloaded) / downloadSpeed).toLong() * 1000
+    } else {
+      0L
+    }
   }
 
   private fun mapDownloadError(reason: Int): Error {
@@ -352,7 +361,7 @@ class DownloadManagerMonitor @Inject constructor(
       val downloadEntity = downloadRoomDao.getEntityForDownloadId(downloadId)
       context.contentResolver
         .update(
-          Uri.parse(downloadEntity?.file),
+          Uri.fromFile(File(downloadEntity?.file)),
           pauseDownload,
           "title=?",
           arrayOf(downloadEntity?.title)
