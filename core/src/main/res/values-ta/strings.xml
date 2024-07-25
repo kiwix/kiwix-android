@@ -61,8 +61,7 @@
   <string name="pref_display_title">காண்பி</string>
   <string name="pref_info_title">தகவல்</string>
   <string name="pref_info_version">பதிப்பு</string>
-  <string name="pref_night_mode">இரவுத்தோற்றம்</string>
-  <string name="pref_night_mode_summary">கட்டுரைகளை தலைகீழ் நிறங்களில் காண்பி</string>
+  <string name="pref_dark_mode_summary">கட்டுரைகளை தலைகீழ் நிறங்களில் காண்பி</string>
   <string name="pref_back_to_top">மீண்டும் மேலே</string>
   <string name="pref_back_to_top_summary">மேற்பகுதிக்குச் செல்ல, பக்கத்‌தின் அடியில் ஒரு பொத்தானை காண்பி</string>
   <string name="pref_language_title">மொழி</string>

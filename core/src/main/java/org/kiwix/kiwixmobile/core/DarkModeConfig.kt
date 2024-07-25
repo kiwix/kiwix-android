@@ -21,29 +21,28 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
-import org.kiwix.kiwixmobile.core.NightModeConfig.Mode.SYSTEM
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
 @SuppressLint("CheckResult")
-class NightModeConfig @Inject constructor(
+class DarkModeConfig @Inject constructor(
   val sharedPreferenceUtil: SharedPreferenceUtil,
   val context: Context
 ) {
 
   fun init() {
-    sharedPreferenceUtil.nightModes().subscribe(::setMode, Throwable::printStackTrace)
+    sharedPreferenceUtil.darkModes().subscribe(::setMode, Throwable::printStackTrace)
   }
 
-  fun isNightModeActive() =
-    when (sharedPreferenceUtil.nightMode) {
+  fun isDarkModeActive() =
+    when (sharedPreferenceUtil.darkMode) {
       Mode.ON -> true
       Mode.OFF -> false
-      SYSTEM -> uiMode() == UiMode.ON
+      Mode.SYSTEM -> uiMode() == UiMode.ON
     }
 
-  private fun setMode(nightMode: Mode) {
-    AppCompatDelegate.setDefaultNightMode(nightMode.value)
+  private fun setMode(darkMode: Mode) {
+    AppCompatDelegate.setDefaultNightMode(darkMode.value)
   }
 
   private fun uiMode() = UiMode.from(context.uiMode)
@@ -54,9 +53,9 @@ class NightModeConfig @Inject constructor(
     SYSTEM(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
 
     companion object {
-      @JvmStatic fun from(nightMode: Int) =
-        values().firstOrNull { it.value == nightMode }
-          ?: throw RuntimeException("Invalid night mode $nightMode")
+      @JvmStatic fun from(darkMode: Int) =
+        values().firstOrNull { it.value == darkMode }
+          ?: throw RuntimeException("Invalid dark mode $darkMode")
     }
   }
 
@@ -69,7 +68,7 @@ class NightModeConfig @Inject constructor(
     companion object {
       @JvmStatic
       fun from(uiMode: Int) = values().firstOrNull { it.value == uiMode }
-        ?: throw RuntimeException("Invalid night mode $uiMode")
+        ?: throw RuntimeException("Invalid dark mode $uiMode")
     }
   }
 }

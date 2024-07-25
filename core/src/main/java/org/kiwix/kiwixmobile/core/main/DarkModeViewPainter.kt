@@ -20,21 +20,21 @@ package org.kiwix.kiwixmobile.core.main
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
 import android.view.View
-import org.kiwix.kiwixmobile.core.NightModeConfig
+import org.kiwix.kiwixmobile.core.DarkModeConfig
 import javax.inject.Inject
 
 /**
- * NightModeViewPainter class is used to apply respective filters to the views
+ * DarkModeViewPainter class is used to apply respective filters to the views
  * depending whether the app is in dark mode or not
  * Created by yashk2000 on 24/03/2020.
  */
 
-class NightModeViewPainter @Inject constructor(
-  private val nightModeConfig: NightModeConfig
+class DarkModeViewPainter @Inject constructor(
+  private val darkModeConfig: DarkModeConfig
 ) {
 
   private val invertedPaint =
-    Paint().apply { colorFilter = ColorMatrixColorFilter(KiwixWebView.NIGHT_MODE_COLORS) }
+    Paint().apply { colorFilter = ColorMatrixColorFilter(KiwixWebView.DARK_MODE_COLORS) }
 
   @JvmOverloads
   fun <T : View?> update(
@@ -42,21 +42,21 @@ class NightModeViewPainter @Inject constructor(
     shouldActivateCriteria: ((T) -> Boolean) = { true },
     vararg additionalViews: View? = emptyArray()
   ) {
-    if (nightModeConfig.isNightModeActive()) {
+    if (darkModeConfig.isDarkModeActive()) {
       if (shouldActivateCriteria(view)) {
-        activateNightMode(view, *additionalViews)
+        activateDarkMode(view, *additionalViews)
       }
     } else {
-      deactivateNightMode(view, *additionalViews)
+      deactivateDarkMode(view, *additionalViews)
     }
   }
 
-  fun deactivateNightMode(vararg additionalViews: View?) {
+  private fun deactivateDarkMode(vararg additionalViews: View?) {
     additionalViews.filterNotNull()
       .forEach { it.setLayerType(View.LAYER_TYPE_NONE, null) }
   }
 
-  private fun activateNightMode(vararg additionalViews: View?) {
+  private fun activateDarkMode(vararg additionalViews: View?) {
     additionalViews.filterNotNull()
       .forEach { it.setLayerType(View.LAYER_TYPE_HARDWARE, invertedPaint) }
   }

@@ -188,7 +188,7 @@ with where and how the new string is used. E.x. for the string
 
 ```
 ...
-<string name="on">This is used in the settings screen to turn on the night mode.</string>
+<string name="on">This is used in the settings screen to turn on the dark mode.</string>
 ...
 ```
 

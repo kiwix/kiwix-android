@@ -43,8 +43,7 @@
   <string name="pref_display_title">প্রদর্শন</string>
   <string name="pref_info_title">তথ্য</string>
   <string name="pref_info_version">সংস্করণ</string>
-  <string name="pref_night_mode">রাত্রি মোড</string>
-  <string name="pref_night_mode_summary">উল্টানো রঙসহ নিবন্ধ দেখান</string>
+  <string name="pref_dark_mode_summary">উল্টানো রঙসহ নিবন্ধ দেখান</string>
   <string name="pref_back_to_top">উপরে ফিরুন</string>
   <string name="pref_back_to_top_summary">উপরে স্ক্রল করতে পাতার শেষে একটি বোতাম প্রদর্শিত হবে</string>
   <string name="pref_language_title">ভাষা</string>

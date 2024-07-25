@@ -68,8 +68,7 @@
   <string name="pref_display_title">Aspetto</string>
   <string name="pref_info_title">Informazioni</string>
   <string name="pref_info_version">Versione</string>
-  <string name="pref_night_mode">Modalità notte</string>
-  <string name="pref_night_mode_summary">Visualizza le voci con colori invertiti</string>
+  <string name="pref_dark_mode_summary">Visualizza le voci con colori invertiti</string>
   <string name="pref_back_to_top">Torna all’inizio</string>
   <string name="pref_back_to_top_summary">Mostra un pulsante alla fine della pagina per scorrere fino all’inizio</string>
   <string name="pref_language_title">Lingua</string>

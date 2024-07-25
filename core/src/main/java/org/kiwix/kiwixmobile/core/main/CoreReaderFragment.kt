@@ -98,7 +98,7 @@ import io.reactivex.processors.BehaviorProcessor
 import org.json.JSONArray
 import org.json.JSONException
 import org.kiwix.kiwixmobile.core.BuildConfig
-import org.kiwix.kiwixmobile.core.NightModeConfig
+import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R2
 import org.kiwix.kiwixmobile.core.StorageObserver
@@ -243,7 +243,7 @@ abstract class CoreReaderFragment :
 
   @JvmField
   @Inject
-  var nightModeConfig: NightModeConfig? = null
+  var darkModeConfig: DarkModeConfig? = null
 
   @JvmField
   @Inject
@@ -259,7 +259,7 @@ abstract class CoreReaderFragment :
 
   @JvmField
   @Inject
-  var painter: NightModeViewPainter? = null
+  var painter: DarkModeViewPainter? = null
   protected var currentWebViewIndex = 0
   private var currentTtsWebViewIndex = 0
   protected var actionBar: ActionBar? = null

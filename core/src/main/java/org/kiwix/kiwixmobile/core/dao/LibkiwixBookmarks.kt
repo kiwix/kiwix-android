@@ -30,7 +30,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.NightModeConfig
+import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
@@ -316,7 +316,7 @@ class LibkiwixBookmarks @Inject constructor(
                 emptyList(),
                 null,
                 archive,
-                NightModeConfig(sharedPreferenceUtil, sharedPreferenceUtil.context),
+                DarkModeConfig(sharedPreferenceUtil, sharedPreferenceUtil.context),
                 SuggestionSearcher(archive)
               )
             }

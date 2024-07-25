@@ -29,7 +29,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.core.NightModeConfig
+import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
@@ -87,7 +87,7 @@ class MimeTypeTest : BaseActivityTest() {
       emptyList(),
       null,
       archive,
-      NightModeConfig(SharedPreferenceUtil(context), context),
+      DarkModeConfig(SharedPreferenceUtil(context), context),
       SuggestionSearcher(archive)
     )
     zimFileReader.getRandomArticleUrl()?.let {

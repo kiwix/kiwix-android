@@ -29,7 +29,7 @@ import dagger.Provides
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import org.kiwix.kiwixmobile.core.NightModeConfig
+import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.core.di.qualifiers.Computation
@@ -100,8 +100,8 @@ class ApplicationModule {
 
   @Provides
   @Singleton
-  internal fun providesZimFileReaderFactory(nightModeConfig: NightModeConfig):
-    ZimFileReader.Factory = ZimFileReader.Factory.Impl(nightModeConfig)
+  internal fun providesZimFileReaderFactory(darkModeConfig: DarkModeConfig):
+    ZimFileReader.Factory = ZimFileReader.Factory.Impl(darkModeConfig)
 
   @Provides
   @Singleton

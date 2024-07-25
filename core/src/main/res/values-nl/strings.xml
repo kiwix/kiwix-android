@@ -69,8 +69,7 @@
   <string name="pref_display_title">Weergave</string>
   <string name="pref_info_title">Informatie</string>
   <string name="pref_info_version">Versie</string>
-  <string name="pref_night_mode">Nachtmodus</string>
-  <string name="pref_night_mode_summary">Artikelen weergeven met omgekeerde kleuren</string>
+  <string name="pref_dark_mode_summary">Artikelen weergeven met omgekeerde kleuren</string>
   <string name="pref_back_to_top">Terug naar boven</string>
   <string name="pref_back_to_top_summary">Aan het einde van de pagina een knop weergeven om terug te gaan naar het begin</string>
   <string name="pref_language_title">Taal</string>

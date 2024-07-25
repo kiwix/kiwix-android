@@ -43,7 +43,7 @@ import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
-import org.kiwix.kiwixmobile.core.NightModeConfig
+import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
@@ -87,7 +87,7 @@ abstract class CorePrefsFragment :
 
   @JvmField
   @Inject
-  protected var nightModeConfig: NightModeConfig? = null
+  protected var darkModeConfig: DarkModeConfig? = null
 
   @JvmField
   @Inject
@@ -234,8 +234,8 @@ abstract class CorePrefsFragment :
     }
 
   override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-    if (key == SharedPreferenceUtil.PREF_NIGHT_MODE) {
-      sharedPreferenceUtil?.updateNightMode()
+    if (key == SharedPreferenceUtil.PREF_DARK_MODE) {
+      sharedPreferenceUtil?.updateDarkMode()
     }
   }
 
@@ -284,7 +284,7 @@ abstract class CorePrefsFragment :
         requireActivity()
       ).inflate(R.layout.credits_webview, null) as WebView
     view.loadUrl("file:///android_asset/credits.html")
-    if (nightModeConfig?.isNightModeActive() == true) {
+    if (darkModeConfig?.isDarkModeActive() == true) {
       view.settings.javaScriptEnabled = true
       view.setBackgroundColor(0)
     }

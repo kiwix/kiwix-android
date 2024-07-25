@@ -8,11 +8,11 @@
 
     <ListPreference
       android:defaultValue="-1"
-      android:entries="@array/pref_night_modes_entries"
-      android:entryValues="@array/pref_night_modes_values"
-      android:key="pref_night_mode"
-      android:summary="@string/pref_night_mode_summary"
-      android:title="@string/pref_night_mode"
+      android:entries="@array/pref_dark_modes_entries"
+      android:entryValues="@array/pref_dark_modes_values"
+      android:key="pref_dark_mode"
+      android:summary="@string/pref_dark_mode_summary"
+      android:title="@string/pref_dark_mode"
       app:iconSpaceReserved="false" />
 
     <SwitchPreferenceCompat

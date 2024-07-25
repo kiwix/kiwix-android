@@ -31,8 +31,7 @@
   <string name="pref_display_title">देखाउनुहोस्</string>
   <string name="pref_info_title">जानकारी</string>
   <string name="pref_info_version">संस्करण</string>
-  <string name="pref_night_mode">रात्री मूड</string>
-  <string name="pref_night_mode_summary">उल्ट्याइएको रङका लेखहरू देखाउनुहोस्</string>
+  <string name="pref_dark_mode_summary">उल्ट्याइएको रङका लेखहरू देखाउनुहोस्</string>
   <string name="pref_back_to_top">सुरुमा जानुहोस्</string>
   <string name="pref_back_to_top_summary">पृष्ठको अन्तमा सुरुमा जने बटन देखाउने</string>
   <string name="pref_language_title">भाषा</string>
