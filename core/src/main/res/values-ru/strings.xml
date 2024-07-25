@@ -86,6 +86,7 @@
   <string name="pref_display_title">Экран</string>
   <string name="pref_info_title">Информация</string>
   <string name="pref_info_version">Версия</string>
+  <string name="pref_dark_mode" fuzzy="true">Ночной режим</string>
   <string name="pref_dark_mode_summary">Показать статьи инвертированными цветами</string>
   <string name="pref_back_to_top">Вернуться наверх</string>
   <string name="pref_back_to_top_summary">Отобразить кнопку в конце страницы для прокрутки вверх</string>
@@ -105,6 +106,11 @@
   <string name="pref_clear_all_history_summary">Очистить недавние поисковые запросы и историю вкладок</string>
   <string name="pref_notes">Заметки</string>
   <string name="pref_permission">Разрешения</string>
+  <string name="pref_import_bookmark_title">Импортировать закладки</string>
+  <string name="pref_import_bookmark_summary">Импортировать сохраненные отметки</string>
+  <string name="pref_export_bookmark_title">Экспортировать закладки</string>
+  <string name="pref_export_bookmark_summary">Экспортировать все сохраненные закладки</string>
+  <string name="export_bookmark_saved">Закладки экспортированы в файл %s</string>
   <string name="all_history_cleared">Вся история очищена</string>
   <string name="pref_clear_all_bookmarks_title">Очистить закладки</string>
   <string name="clear_all_history_dialog_title">Очистить всю историю?</string>
@@ -241,6 +247,7 @@
   <string name="save">Сохранить</string>
   <string name="note">Заметка</string>
   <string name="wiki_article_title">Заголовок вики-статьи</string>
+  <string name="ext_storage_permission_rationale_export_bookmark">Для экспорта закладок необходим доступ к хранилищу.</string>
   <string name="ext_storage_permission_rationale_add_note">Разрешение на хранение необходимо для Заметок</string>
   <string name="ext_storage_write_permission_denied_add_note">Заметки не могут быть использованы без разрешения на хранение</string>
   <string name="note_save_unsuccessful">Заметка не сохранена</string>
@@ -303,6 +310,9 @@
   <string name="delete_selected_history">Очистить Выбранную историю?</string>
   <string name="delete_bookmarks">Удалить все закладки?</string>
   <string name="delete_selected_bookmarks">Удалить Выбранные Закладки?</string>
+  <string name="import_bookmarks_dialog_title">Импортировать закладки?</string>
+  <string name="export_all_bookmarks_dialog_title">Экспортировать все закладки?</string>
+  <string name="bookmark_imported_message">Все закладки импортированы.</string>
   <string name="on">Вкл</string>
   <string name="off">Выкл</string>
   <string name="auto">Авто</string>
@@ -362,4 +372,5 @@
   <string name="zim_file_content_description">ZIM-файл, содержащий содержимое для чтения.</string>
   <string name="select_language_content_description">При выборе этого языка приоритет отдается отображению загружаемых книг на этом языке.</string>
   <string name="toolbar_back_button_content_description">Перейти к предыдущей странице</string>
+  <string name="save_or_open_unsupported_files_dialog_title">Сохранить или открыть этот файл?</string>
 </resources>

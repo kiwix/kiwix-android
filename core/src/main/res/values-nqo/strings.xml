@@ -60,6 +60,7 @@
   <string name="pref_display_title">ߦߌ߬ߘߊ߬ߟߌ</string>
   <string name="pref_info_title">ߞߎ߲߬ߠߊ߬ߝߏߣߌ߲</string>
   <string name="pref_info_version">ߦߌߟߡߊ</string>
+  <string name="pref_dark_mode" fuzzy="true">ߛߎߘߐߟߊ ߦߋߗߏ߮</string>
   <string name="pref_dark_mode_summary">ߞߎߡߘߊ ߟߎ߬ ߦߌ߬ߘߊ߬ ߞߐ߬ߟߐ߫ ߞߐߥߟߏߣߍ߲ ߠߎ߬ ߘߐ߫</string>
   <string name="pref_back_to_top">ߌ ߞߐߛߊ߬ߦߌ߬ ߛߊ߲ߝߍ߬</string>
   <string name="pref_back_to_top_summary">ߞߎ߬ߘߎ ߘߏ߫ ߟߊߓߊ߯ߙߊ߫ ߞߐߜߍ ߘߎ߰ߟߊ ߘߐ߫ ߡߍ߲ ߘߴߌ ߟߊߛߋ߫ ߊ߬ ߘߊߡߌߣߊ ߟߊ߫</string>
