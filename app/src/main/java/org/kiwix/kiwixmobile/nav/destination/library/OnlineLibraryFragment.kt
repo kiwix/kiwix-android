@@ -29,6 +29,7 @@ import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -136,6 +137,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         },
         {
           context?.let { context ->
+            Log.e("STATUS", ": ${it.downloadState.toReadableState(context)}")
             downloader.pauseResumeDownload(
               it.downloadId,
               it.downloadState.toReadableState(context) == getString(R.string.paused_state)
@@ -230,7 +232,14 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       date = "2024-06-24"
       faviconMimeType = "image/png"
     }
-    // downloader.download(libraryBookEntity)
+    onLibraryItemsChange(
+      arrayListOf(
+        LibraryListItem.BookItem(
+          libraryBookEntity,
+          Fat32Checker.FileSystemState.CanWrite4GbFile
+        )
+      )
+    )
   }
 
   private fun setupMenu() {

@@ -64,9 +64,9 @@ class DownloadManagerRequester @Inject constructor(
 
   override fun pauseResumeDownload(downloadId: Long, isPause: Boolean) {
     if (isPause) {
-      downloadManagerMonitor.pauseDownload(downloadId)
-    } else {
       downloadManagerMonitor.resumeDownload(downloadId)
+    } else {
+      downloadManagerMonitor.pauseDownload(downloadId)
     }
   }
 }
@@ -82,5 +82,4 @@ private fun DownloadRequest.toDownloadManagerRequest(sharedPreferenceUtil: Share
     )
     setTitle(notificationTitle)
     setAllowedOverMetered(true)
-    setNotificationVisibility(Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
   }

@@ -20,6 +20,8 @@ package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
 import android.annotation.SuppressLint
 import android.app.DownloadManager
+import android.app.DownloadManager.STATUS_PAUSED
+import android.app.DownloadManager.STATUS_RUNNING
 import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
@@ -33,13 +35,15 @@ import io.reactivex.subjects.PublishSubject
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class DownloadManagerMonitor @Inject constructor(
   private val downloadManager: DownloadManager,
   private val downloadRoomDao: DownloadRoomDao,
-  private val context: Context
+  private val context: Context,
+  private val downloadNotificationManager: DownloadNotificationManager
 ) : DownloadMonitor, DownloadManagerBroadcastReceiver.Callback {
 
   private val updater = PublishSubject.create<() -> Unit>()
@@ -54,9 +58,9 @@ class DownloadManagerMonitor @Inject constructor(
   override fun downloadCompleteOrCancelled(intent: Intent) {
     synchronized(lock) {
       intent.extras?.let {
-        val downloadedFileId = it.getLong(DownloadManager.EXTRA_DOWNLOAD_ID, -1L)
-        if (downloadedFileId != -1L) {
-          queryDownloadStatus(downloadedFileId)
+        val downloadId = it.getLong(DownloadManager.EXTRA_DOWNLOAD_ID, -1L)
+        if (downloadId != -1L) {
+          queryDownloadStatus(downloadId)
         }
       }
     }
@@ -105,8 +109,8 @@ class DownloadManagerMonitor @Inject constructor(
       downloadManager.query(query).use { cursor ->
         if (cursor.moveToFirst()) {
           do {
-            val downloadedFileId = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_ID))
-            queryDownloadStatus(downloadedFileId)
+            val downloadId = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_ID))
+            queryDownloadStatus(downloadId)
           } while (cursor.moveToNext())
         }
       }
@@ -114,20 +118,20 @@ class DownloadManagerMonitor @Inject constructor(
   }
 
   @SuppressLint("Range")
-  private fun queryDownloadStatus(downloadedFileId: Long) {
+  private fun queryDownloadStatus(downloadId: Long) {
     synchronized(lock) {
-      downloadManager.query(DownloadManager.Query().setFilterById(downloadedFileId)).use { cursor ->
+      downloadManager.query(DownloadManager.Query().setFilterById(downloadId)).use { cursor ->
         if (cursor.moveToFirst()) {
-          handleDownloadStatus(cursor, downloadedFileId)
+          handleDownloadStatus(cursor, downloadId)
         } else {
-          handleCancelledDownload(downloadedFileId)
+          handleCancelledDownload(downloadId)
         }
       }
     }
   }
 
   @SuppressLint("Range")
-  private fun handleDownloadStatus(cursor: Cursor, downloadedFileId: Long) {
+  private fun handleDownloadStatus(cursor: Cursor, downloadId: Long) {
     val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
     val reason = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_REASON))
     val bytesDownloaded =
@@ -135,11 +139,11 @@ class DownloadManagerMonitor @Inject constructor(
     val totalBytes = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
     val progress = calculateProgress(bytesDownloaded, totalBytes)
 
-    val etaInMilliSeconds = calculateETA(downloadedFileId, bytesDownloaded, totalBytes)
+    val etaInMilliSeconds = calculateETA(downloadId, bytesDownloaded, totalBytes)
 
     when (status) {
       DownloadManager.STATUS_FAILED -> handleFailedDownload(
-        downloadedFileId,
+        downloadId,
         reason,
         progress,
         etaInMilliSeconds,
@@ -148,15 +152,15 @@ class DownloadManagerMonitor @Inject constructor(
       )
 
       DownloadManager.STATUS_PAUSED -> handlePausedDownload(
-        downloadedFileId,
+        downloadId,
         progress,
         bytesDownloaded,
         totalBytes
       )
 
-      DownloadManager.STATUS_PENDING -> handlePendingDownload(downloadedFileId)
+      DownloadManager.STATUS_PENDING -> handlePendingDownload(downloadId)
       DownloadManager.STATUS_RUNNING -> handleRunningDownload(
-        downloadedFileId,
+        downloadId,
         progress,
         etaInMilliSeconds,
         bytesDownloaded,
@@ -164,23 +168,23 @@ class DownloadManagerMonitor @Inject constructor(
       )
 
       DownloadManager.STATUS_SUCCESSFUL -> handleSuccessfulDownload(
-        downloadedFileId,
+        downloadId,
         progress,
         etaInMilliSeconds
       )
     }
   }
 
-  private fun handleCancelledDownload(downloadedFileId: Long) {
+  private fun handleCancelledDownload(downloadId: Long) {
     updater.onNext {
-      updateDownloadStatus(downloadedFileId, Status.CANCELLED, Error.CANCELLED)
-      downloadRoomDao.delete(downloadedFileId)
-      downloadInfoMap.remove(downloadedFileId)
+      updateDownloadStatus(downloadId, Status.CANCELLED, Error.CANCELLED)
+      downloadRoomDao.delete(downloadId)
+      downloadInfoMap.remove(downloadId)
     }
   }
 
   private fun handleFailedDownload(
-    downloadedFileId: Long,
+    downloadId: Long,
     reason: Int,
     progress: Int,
     etaInMilliSeconds: Long,
@@ -189,7 +193,7 @@ class DownloadManagerMonitor @Inject constructor(
   ) {
     val error = mapDownloadError(reason)
     updateDownloadStatus(
-      downloadedFileId,
+      downloadId,
       Status.FAILED,
       error,
       progress,
@@ -200,13 +204,13 @@ class DownloadManagerMonitor @Inject constructor(
   }
 
   private fun handlePausedDownload(
-    downloadedFileId: Long,
+    downloadId: Long,
     progress: Int,
     bytesDownloaded: Int,
     totalSizeOfDownload: Int
   ) {
     updateDownloadStatus(
-      downloadFileId = downloadedFileId,
+      downloadId = downloadId,
       status = Status.PAUSED,
       error = Error.NONE,
       progress = progress,
@@ -215,23 +219,23 @@ class DownloadManagerMonitor @Inject constructor(
     )
   }
 
-  private fun handlePendingDownload(downloadedFileId: Long) {
+  private fun handlePendingDownload(downloadId: Long) {
     updateDownloadStatus(
-      downloadedFileId,
+      downloadId,
       Status.QUEUED,
       Error.NONE
     )
   }
 
   private fun handleRunningDownload(
-    downloadedFileId: Long,
+    downloadId: Long,
     progress: Int,
     etaInMilliSeconds: Long,
     bytesDownloaded: Int,
     totalSizeOfDownload: Int
   ) {
     updateDownloadStatus(
-      downloadedFileId,
+      downloadId,
       Status.DOWNLOADING,
       Error.NONE,
       progress,
@@ -242,18 +246,18 @@ class DownloadManagerMonitor @Inject constructor(
   }
 
   private fun handleSuccessfulDownload(
-    downloadedFileId: Long,
+    downloadId: Long,
     progress: Int,
     etaInMilliSeconds: Long
   ) {
     updateDownloadStatus(
-      downloadedFileId,
+      downloadId,
       Status.COMPLETED,
       Error.NONE,
       progress,
       etaInMilliSeconds
     )
-    downloadInfoMap.remove(downloadedFileId)
+    downloadInfoMap.remove(downloadId)
   }
 
   private fun calculateProgress(bytesDownloaded: Int, totalBytes: Int): Int =
@@ -295,7 +299,7 @@ class DownloadManagerMonitor @Inject constructor(
   }
 
   private fun updateDownloadStatus(
-    downloadFileId: Long,
+    downloadId: Long,
     status: Status,
     error: Error,
     progress: Int = -1,
@@ -305,7 +309,7 @@ class DownloadManagerMonitor @Inject constructor(
   ) {
     synchronized(lock) {
       updater.onNext {
-        downloadRoomDao.getEntityForDownloadId(downloadFileId)?.let { downloadEntity ->
+        downloadRoomDao.getEntityForDownloadId(downloadId)?.let { downloadEntity ->
           val downloadModel = DownloadModel(downloadEntity).apply {
             state = status
             this.error = error
@@ -321,37 +325,65 @@ class DownloadManagerMonitor @Inject constructor(
             }
           }
           downloadRoomDao.update(downloadModel)
+          downloadNotificationManager.updateNotification(
+            DownloadNotificationModel(
+              downloadId = downloadId.toInt(),
+              status = status,
+              progress = progress,
+              etaInMilliSeconds = etaInMilliSeconds,
+              title = downloadEntity.title,
+              description = downloadEntity.description,
+              error = DownloadState.from(
+                downloadModel.state,
+                downloadModel.error,
+                downloadModel.book.url
+              ).toReadableState(context).toString()
+            )
+          )
         }
       }
     }
   }
 
-  fun pauseDownload(downloadedFileId: Long) {
-    synchronized(lock) {
-      if (pauseResumeDownloadInDownloadManagerContentResolver(downloadedFileId, 1)) {
-        updateDownloadStatus(downloadedFileId, Status.PAUSED, Error.NONE)
-      }
-    }
-  }
-
-  fun resumeDownload(downloadedFileId: Long) {
+  fun pauseDownload(downloadId: Long) {
     synchronized(lock) {
       updater.onNext {
-        if (pauseResumeDownloadInDownloadManagerContentResolver(downloadedFileId, 0)) {
-          updateDownloadStatus(downloadedFileId, Status.QUEUED, Error.NONE)
+        if (pauseResumeDownloadInDownloadManagerContentResolver(downloadId, STATUS_PAUSED)) {
+          updateDownloadStatus(downloadId, Status.PAUSED, Error.NONE)
         }
       }
     }
   }
 
+  fun resumeDownload(downloadId: Long) {
+    synchronized(lock) {
+      updater.onNext {
+        if (pauseResumeDownloadInDownloadManagerContentResolver(downloadId, STATUS_RUNNING)) {
+          updateDownloadStatus(downloadId, Status.QUEUED, Error.NONE)
+        }
+      }
+    }
+  }
+
+  fun cancelDownload(downloadId: Long) {
+    synchronized(lock) {
+      updater.onNext {
+        downloadManager.remove(downloadId)
+      }
+    }
+  }
+
+  @SuppressLint("Range")
   private fun pauseResumeDownloadInDownloadManagerContentResolver(
     downloadId: Long,
     control: Int
   ): Boolean {
+    Log.e("PAUSED", "pauseResumeDownloadInDownloadManagerContentResolver: $control")
     return try {
-      // Update the status to paused in the database
-      val contentValues = ContentValues()
-      contentValues.put("control", control)
+      // Update the status to paused/resumed in the database
+      val contentValues = ContentValues().apply {
+        put("control", control)
+      }
       val uri =
         ContentUris.withAppendedId(Uri.parse("content://downloads/my_downloads"), downloadId)
       val downloadEntity = downloadRoomDao.getEntityForDownloadId(downloadId)
