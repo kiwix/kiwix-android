@@ -29,7 +29,7 @@ import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificatio
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationManager.Companion.NOTIFICATION_ACTION
 import javax.inject.Inject
 
-const val DOWNLOAD_NOTIFICATION_ACTION = "download_notification_action"
+const val DOWNLOAD_NOTIFICATION_ACTION = "org.kiwix.kiwixmobile.download_notification_action"
 
 class DownloadNotificationActionsBroadcastReceiver @Inject constructor(
   private val downloadManagerMonitor: DownloadManagerMonitor
@@ -37,18 +37,14 @@ class DownloadNotificationActionsBroadcastReceiver @Inject constructor(
 
   override val action: String = DOWNLOAD_NOTIFICATION_ACTION
   override fun onIntentWithActionReceived(context: Context, intent: Intent) {
-    Log.e(
-      "UPDATED_NOTIFICATION",
-      "updateNotification: ${intent.getStringExtra(NOTIFICATION_ACTION)}\n" +
-        "${intent.getLongExtra(EXTRA_DOWNLOAD_ID, -1L)}"
-    )
-    val downloadId = intent.getLongExtra(EXTRA_DOWNLOAD_ID, -1L)
+    val downloadId = intent.getIntExtra(EXTRA_DOWNLOAD_ID, -1)
     val notificationAction = intent.getStringExtra(NOTIFICATION_ACTION)
-    if (downloadId != -1L) {
+    Log.e("UPDATE_NOTIFICATION", "onIntentWithActionReceived: $downloadId , $notificationAction")
+    if (downloadId != -1) {
       when (notificationAction) {
-        ACTION_PAUSE -> downloadManagerMonitor.pauseDownload(downloadId)
-        ACTION_RESUME -> downloadManagerMonitor.resumeDownload(downloadId)
-        ACTION_CANCEL -> downloadManagerMonitor.cancelDownload(downloadId)
+        ACTION_PAUSE -> downloadManagerMonitor.pauseDownload(downloadId.toLong())
+        ACTION_RESUME -> downloadManagerMonitor.resumeDownload(downloadId.toLong())
+        ACTION_CANCEL -> downloadManagerMonitor.cancelDownload(downloadId.toLong())
       }
     }
   }
