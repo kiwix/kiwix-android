@@ -30,7 +30,6 @@ import androidx.core.app.NotificationCompat
 import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.fetch.DOWNLOAD_NOTIFICATION_TITLE
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.Seconds
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.DEFAULT_NOTIFICATION_TIMEOUT_AFTER
@@ -41,7 +40,6 @@ class DownloadNotificationManager @Inject constructor(
   private val context: Context,
   private val notificationManager: NotificationManager
 ) {
-  private val downloadNotificationsMap = mutableMapOf<Int, DownloadModel>()
   private val downloadNotificationsBuilderMap = mutableMapOf<Int, NotificationCompat.Builder>()
   private fun createNotificationChannel() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -54,58 +52,71 @@ class DownloadNotificationManager @Inject constructor(
   fun updateNotification(
     downloadNotificationModel: DownloadNotificationModel
   ) {
-    createNotificationChannel()
-    val notificationBuilder = getNotificationBuilder(downloadNotificationModel.downloadId)
-    val smallIcon = if (downloadNotificationModel.progress != 100) {
-      android.R.drawable.stat_sys_download
-    } else {
-      android.R.drawable.stat_sys_download_done
+    synchronized(downloadNotificationsBuilderMap) {
+      if (shouldUpdateNotification(downloadNotificationModel)) {
+        createNotificationChannel()
+        val notificationBuilder = getNotificationBuilder(downloadNotificationModel.downloadId)
+        val smallIcon = if (downloadNotificationModel.progress != 100) {
+          android.R.drawable.stat_sys_download
+        } else {
+          android.R.drawable.stat_sys_download_done
+        }
+
+        notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+          .setSmallIcon(smallIcon)
+          .setContentTitle(downloadNotificationModel.title)
+          .setContentText(getSubtitleText(context, downloadNotificationModel))
+          .setOngoing(downloadNotificationModel.isOnGoingNotification)
+          .setGroupSummary(false)
+        if (downloadNotificationModel.isFailed || downloadNotificationModel.isCompleted) {
+          notificationBuilder.setProgress(0, 0, false)
+        } else {
+          notificationBuilder.setProgress(100, downloadNotificationModel.progress, false)
+        }
+        when {
+          downloadNotificationModel.isDownloading ->
+            notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER)
+              .addAction(
+                R.drawable.fetch_notification_pause,
+                context.getString(R.string.tts_pause),
+                getActionPendingIntent(ACTION_PAUSE, downloadNotificationModel.downloadId)
+              ).addAction(
+                R.drawable.fetch_notification_cancel,
+                context.getString(R.string.cancel),
+                getActionPendingIntent(ACTION_CANCEL, downloadNotificationModel.downloadId)
+              )
+
+          downloadNotificationModel.isPaused ->
+            notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER)
+              .addAction(
+                R.drawable.fetch_notification_resume,
+                context.getString(R.string.tts_resume),
+                getActionPendingIntent(ACTION_RESUME, downloadNotificationModel.downloadId)
+              ).addAction(
+                R.drawable.fetch_notification_cancel,
+                context.getString(R.string.cancel),
+                getActionPendingIntent(ACTION_CANCEL, downloadNotificationModel.downloadId)
+              )
+
+          downloadNotificationModel.isQueued ->
+            notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER)
+
+          else -> notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
+        }
+        notificationCustomisation(downloadNotificationModel, notificationBuilder, context)
+        notificationManager.notify(
+          downloadNotificationModel.downloadId,
+          notificationBuilder.build()
+        )
+      } else {
+        // the download is cancelled/paused so remove the notification.
+        cancelNotification(downloadNotificationModel.downloadId)
+      }
     }
-
-    notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
-      .setSmallIcon(smallIcon)
-      .setContentTitle(downloadNotificationModel.title)
-      .setContentText(getSubtitleText(context, downloadNotificationModel))
-      .setOngoing(downloadNotificationModel.isOnGoingNotification)
-      .setGroupSummary(false)
-    if (downloadNotificationModel.isFailed || downloadNotificationModel.isCompleted) {
-      notificationBuilder.setProgress(0, 0, false)
-    } else {
-      notificationBuilder.setProgress(100, downloadNotificationModel.progress, false)
-    }
-    when {
-      downloadNotificationModel.isDownloading ->
-        notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER)
-          .addAction(
-            R.drawable.fetch_notification_pause,
-            context.getString(R.string.tts_pause),
-            getActionPendingIntent(ACTION_PAUSE, downloadNotificationModel.downloadId)
-          ).addAction(
-            R.drawable.fetch_notification_cancel,
-            context.getString(R.string.cancel),
-            getActionPendingIntent(ACTION_CANCEL, downloadNotificationModel.downloadId)
-          )
-
-      downloadNotificationModel.isPaused ->
-        notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER)
-          .addAction(
-            R.drawable.fetch_notification_resume,
-            context.getString(R.string.tts_resume),
-            getActionPendingIntent(ACTION_RESUME, downloadNotificationModel.downloadId)
-          ).addAction(
-            R.drawable.fetch_notification_cancel,
-            context.getString(R.string.cancel),
-            getActionPendingIntent(ACTION_CANCEL, downloadNotificationModel.downloadId)
-          )
-
-      downloadNotificationModel.isQueued ->
-        notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER)
-
-      else -> notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
-    }
-    notificationCustomisation(downloadNotificationModel, notificationBuilder, context)
-    notificationManager.notify(downloadNotificationModel.downloadId, notificationBuilder.build())
   }
+
+  private fun shouldUpdateNotification(downloadNotificationModel: DownloadNotificationModel): Boolean =
+    !downloadNotificationModel.isCancelled && !downloadNotificationModel.isPaused
 
   @SuppressLint("UnspecifiedImmutableFlag")
   private fun notificationCustomisation(
@@ -132,7 +143,7 @@ class DownloadNotificationManager @Inject constructor(
 
   @SuppressLint("RestrictedApi")
   private fun getNotificationBuilder(notificationId: Int): NotificationCompat.Builder {
-    synchronized(downloadNotificationsMap) {
+    synchronized(downloadNotificationsBuilderMap) {
       val notificationBuilder = downloadNotificationsBuilderMap[notificationId]
         ?: NotificationCompat.Builder(context, CHANNEL_ID)
       downloadNotificationsBuilderMap[notificationId] = notificationBuilder
@@ -195,6 +206,13 @@ class DownloadNotificationManager @Inject constructor(
       else -> Seconds(
         downloadNotificationModel.etaInMilliSeconds / 1000L
       ).toHumanReadableTime()
+    }
+  }
+
+  private fun cancelNotification(notificationId: Int) {
+    synchronized(downloadNotificationsBuilderMap) {
+      notificationManager.cancel(notificationId)
+      downloadNotificationsBuilderMap.remove(notificationId)
     }
   }
 

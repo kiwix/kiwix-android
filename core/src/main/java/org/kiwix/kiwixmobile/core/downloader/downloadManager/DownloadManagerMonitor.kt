@@ -325,24 +325,32 @@ class DownloadManagerMonitor @Inject constructor(
             }
           }
           downloadRoomDao.update(downloadModel)
-          downloadNotificationManager.updateNotification(
-            DownloadNotificationModel(
-              downloadId = downloadId.toInt(),
-              status = status,
-              progress = progress,
-              etaInMilliSeconds = etaInMilliSeconds,
-              title = downloadEntity.title,
-              description = downloadEntity.description,
-              error = DownloadState.from(
-                downloadModel.state,
-                downloadModel.error,
-                downloadModel.book.url
-              ).toReadableState(context).toString()
-            )
-          )
+          updateNotification(downloadModel, downloadEntity.title, downloadEntity.description)
         }
       }
     }
+  }
+
+  private fun updateNotification(
+    downloadModel: DownloadModel,
+    title: String,
+    description: String?
+  ) {
+    downloadNotificationManager.updateNotification(
+      DownloadNotificationModel(
+        downloadId = downloadModel.downloadId.toInt(),
+        status = downloadModel.state,
+        progress = downloadModel.progress,
+        etaInMilliSeconds = downloadModel.etaInMilliSeconds,
+        title = title,
+        description = description,
+        error = DownloadState.from(
+          downloadModel.state,
+          downloadModel.error,
+          downloadModel.book.url
+        ).toReadableState(context).toString()
+      )
+    )
   }
 
   fun pauseDownload(downloadId: Long) {
@@ -367,9 +375,7 @@ class DownloadManagerMonitor @Inject constructor(
 
   fun cancelDownload(downloadId: Long) {
     synchronized(lock) {
-      updater.onNext {
-        downloadManager.remove(downloadId)
-      }
+      handleCancelledDownload(downloadId)
     }
   }
 

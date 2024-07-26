@@ -32,6 +32,7 @@ data class DownloadNotificationModel(
   val isFailed get() = status == Status.FAILED
   val isQueued get() = status == Status.QUEUED
   val isDownloading get() = status == Status.DOWNLOADING
+  val isCancelled get() = status == Status.CANCELLED
   val isOnGoingNotification: Boolean
     get() {
       return when (status) {

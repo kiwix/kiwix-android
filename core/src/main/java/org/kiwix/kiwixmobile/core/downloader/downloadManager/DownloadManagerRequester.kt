@@ -22,9 +22,6 @@ import android.app.DownloadManager
 import android.app.DownloadManager.Request
 import android.app.DownloadManager.Request.VISIBILITY_HIDDEN
 import android.net.Uri
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
@@ -41,11 +38,7 @@ class DownloadManagerRequester @Inject constructor(
     downloadManager.enqueue(downloadRequest.toDownloadManagerRequest(sharedPreferenceUtil))
 
   override fun cancel(downloadId: Long) {
-    CoroutineScope(Dispatchers.IO).launch {
-      downloadManager.remove(downloadId).also {
-        downloadRoomDao.delete(downloadId)
-      }
-    }
+    downloadManagerMonitor.cancelDownload(downloadId)
   }
 
   override fun retryDownload(downloadId: Long) {
