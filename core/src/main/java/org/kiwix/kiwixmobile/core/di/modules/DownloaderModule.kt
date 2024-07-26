@@ -108,12 +108,10 @@ object DownloaderModule {
   fun providesDownloadRequester(
     downloadManager: DownloadManager,
     sharedPreferenceUtil: SharedPreferenceUtil,
-    downloadRoomDao: DownloadRoomDao,
     downloadManagerMonitor: DownloadManagerMonitor
   ): DownloadRequester = DownloadManagerRequester(
     downloadManager,
     sharedPreferenceUtil,
-    downloadRoomDao,
     downloadManagerMonitor
   )
 

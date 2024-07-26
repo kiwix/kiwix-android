@@ -326,6 +326,9 @@ class DownloadManagerMonitor @Inject constructor(
           }
           downloadRoomDao.update(downloadModel)
           updateNotification(downloadModel, downloadEntity.title, downloadEntity.description)
+        } ?: run {
+          // already downloaded/cancelled so cancel the notification if any running.
+          downloadNotificationManager.cancelNotification(downloadId.toInt())
         }
       }
     }
@@ -375,6 +378,7 @@ class DownloadManagerMonitor @Inject constructor(
 
   fun cancelDownload(downloadId: Long) {
     synchronized(lock) {
+      downloadManager.remove(downloadId)
       handleCancelledDownload(downloadId)
     }
   }
