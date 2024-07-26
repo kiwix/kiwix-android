@@ -26,8 +26,10 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function6
+import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
@@ -47,6 +49,7 @@ import org.kiwix.kiwixmobile.core.extensions.calculateSearchMatches
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULTI
@@ -74,6 +77,7 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.DividerItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.LibraryDownloadItem
+import java.io.IOException
 import java.util.LinkedList
 import java.util.Locale
 import java.util.concurrent.TimeUnit.MILLISECONDS
@@ -81,6 +85,8 @@ import javax.inject.Inject
 
 const val DEFAULT_PROGRESS = 0
 const val MAX_PROGRESS = 100
+private const val TAG_RX_JAVA_DEFAULT_ERROR_HANDLER = "RxJavaDefaultErrorHandler"
+
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: FetchDownloadDao,
   private val bookDao: NewBookDao,
@@ -156,7 +162,9 @@ class ZimManageViewModel @Inject constructor(
       updateNetworkStates(),
       requestsAndConnectivtyChangesToLibraryRequests(networkLibrary),
       fileSelectActions()
-    )
+    ).also {
+      setUpUncaughtErrorHandlerForOnlineLibrary(networkLibrary)
+    }
   }
 
   private fun fileSelectActions() = fileSelectActions.subscribe({
@@ -288,6 +296,11 @@ class ZimManageViewModel @Inject constructor(
     Function6(::combineLibrarySources)
   )
     .doOnNext { libraryListIsRefreshing.postValue(false) }
+    .doOnError { throwable ->
+      if (throwable is OutOfMemoryError) {
+        Log.e("ZimManageViewModel", "Error----${throwable.printStackTrace()}")
+      }
+    }
     .subscribeOn(Schedulers.io())
     .subscribe(
       libraryItems::postValue,
@@ -511,5 +524,36 @@ class ZimManageViewModel @Inject constructor(
         newBookOnDisk.apply { isSelected = firstOrNull?.isSelected ?: false }
       }
     )
+  }
+
+  private fun setUpUncaughtErrorHandlerForOnlineLibrary(
+    library: PublishProcessor<LibraryNetworkEntity>
+  ) {
+    RxJavaPlugins.setErrorHandler { exception ->
+      if (exception is RuntimeException && exception.cause == IOException()) {
+        Log.i(
+          TAG_RX_JAVA_DEFAULT_ERROR_HANDLER,
+          "Caught undeliverable exception: ${exception.cause}"
+        )
+      }
+      when (exception) {
+        is UndeliverableException -> {
+          library.onNext(
+            LibraryNetworkEntity().apply { book = LinkedList() }
+          ).also {
+            Log.i(
+              TAG_RX_JAVA_DEFAULT_ERROR_HANDLER,
+              "Caught undeliverable exception: ${exception.cause}"
+            )
+          }
+        }
+
+        else -> {
+          Thread.currentThread().also { thread ->
+            thread.uncaughtExceptionHandler?.uncaughtException(thread, exception)
+          }
+        }
+      }
+    }
   }
 }
