@@ -22,7 +22,6 @@ import android.app.DownloadManager
 import android.app.DownloadManager.Request
 import android.app.DownloadManager.Request.VISIBILITY_HIDDEN
 import android.net.Uri
-import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -31,7 +30,6 @@ import javax.inject.Inject
 class DownloadManagerRequester @Inject constructor(
   private val downloadManager: DownloadManager,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val downloadRoomDao: DownloadRoomDao,
   private val downloadManagerMonitor: DownloadManagerMonitor
 ) : DownloadRequester {
   override fun enqueue(downloadRequest: DownloadRequest): Long =

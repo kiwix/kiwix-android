@@ -167,12 +167,13 @@ class DownloadNotificationManager @Inject constructor(
   private fun getActionPendingIntent(action: String, downloadId: Int): PendingIntent {
     val intent =
       Intent(context, DownloadNotificationActionsBroadcastReceiver::class.java).apply {
-        this.action = action
+        this.action = DOWNLOAD_NOTIFICATION_ACTION
+        putExtra(NOTIFICATION_ACTION, action)
         putExtra(EXTRA_DOWNLOAD_ID, downloadId)
       }
     return PendingIntent.getBroadcast(
       context,
-      0,
+      downloadId,
       intent,
       PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     )
@@ -209,7 +210,7 @@ class DownloadNotificationManager @Inject constructor(
     }
   }
 
-  private fun cancelNotification(notificationId: Int) {
+  fun cancelNotification(notificationId: Int) {
     synchronized(downloadNotificationsBuilderMap) {
       notificationManager.cancel(notificationId)
       downloadNotificationsBuilderMap.remove(notificationId)
@@ -218,6 +219,7 @@ class DownloadNotificationManager @Inject constructor(
 
   companion object {
     const val CHANNEL_ID = "kiwix_notification_channel_id"
+    const val NOTIFICATION_ACTION = "notification_action"
     const val ACTION_PAUSE = "action_pause"
     const val ACTION_RESUME = "action_resume"
     const val ACTION_CANCEL = "action_cancel"
