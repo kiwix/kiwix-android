@@ -18,8 +18,6 @@
 package org.kiwix.kiwixmobile.core.dao.entities
 
 import com.tonyodev.fetch2.Download
-import com.tonyodev.fetch2.Error
-import com.tonyodev.fetch2.Status
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
@@ -32,10 +30,10 @@ data class FetchDownloadEntity(
   val etaInMilliSeconds: Long = -1L,
   val bytesDownloaded: Long = -1L,
   val totalSizeOfDownload: Long = -1L,
-  //@Convert(converter = StatusConverter::class, dbType = Int::class)
-  //val status: Status = Status.NONE,
-  //@Convert(converter = ErrorConverter::class, dbType = Int::class)
-  //val error: Error = Error.NONE,
+  // @Convert(converter = StatusConverter::class, dbType = Int::class)
+  // val status: Status = Status.NONE,
+  // @Convert(converter = ErrorConverter::class, dbType = Int::class)
+  // val error: Error = Error.NONE,
   val progress: Int = -1,
   val bookId: String,
   val title: String,

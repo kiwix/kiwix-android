@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
+@Suppress("MagicNumber")
 enum class Status(val value: Int) {
   NONE(0),
   QUEUED(1),
@@ -32,6 +33,7 @@ enum class Status(val value: Int) {
 
   companion object {
 
+    @Suppress("MagicNumber")
     @JvmStatic
     fun valueOf(value: Int): Status {
       return when (value) {

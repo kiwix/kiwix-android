@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.core.downloader
 import android.annotation.SuppressLint
 import io.reactivex.Observable
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
-import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book

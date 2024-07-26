@@ -39,6 +39,11 @@ import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+const val ZERO = 0
+const val HUNDERED = 100
+const val THOUSAND = 1000
+const val DEFAULT_INT_VALUE = -1
+
 class DownloadManagerMonitor @Inject constructor(
   private val downloadManager: DownloadManager,
   private val downloadRoomDao: DownloadRoomDao,
@@ -66,6 +71,7 @@ class DownloadManagerMonitor @Inject constructor(
     }
   }
 
+  @Suppress("MagicNumber")
   private fun startMonitoringDownloads() {
     // we have to disable this when no downloads is ongoing
     // and should re-enable when download started.
@@ -183,6 +189,7 @@ class DownloadManagerMonitor @Inject constructor(
     }
   }
 
+  @Suppress("LongParameterList")
   private fun handleFailedDownload(
     downloadId: Long,
     reason: Int,
@@ -261,7 +268,11 @@ class DownloadManagerMonitor @Inject constructor(
   }
 
   private fun calculateProgress(bytesDownloaded: Int, totalBytes: Int): Int =
-    if (totalBytes > 0) ((bytesDownloaded / totalBytes.toDouble()) * 100).toInt() else 0
+    if (totalBytes > ZERO) {
+      (bytesDownloaded / totalBytes.toDouble()).times(HUNDERED).toInt()
+    } else {
+      ZERO
+    }
 
   private fun calculateETA(downloadedFileId: Long, bytesDownloaded: Int, totalBytes: Int): Long {
     val currentTime = System.currentTimeMillis()
@@ -270,16 +281,16 @@ class DownloadManagerMonitor @Inject constructor(
     }
 
     val elapsedTime = currentTime - downloadInfo.startTime
-    val downloadSpeed = if (elapsedTime > 0) {
-      (bytesDownloaded - downloadInfo.initialBytesDownloaded) / (elapsedTime / 1000.0)
+    val downloadSpeed = if (elapsedTime > ZERO) {
+      (bytesDownloaded - downloadInfo.initialBytesDownloaded) / (elapsedTime / THOUSAND.toFloat())
     } else {
-      0.0
+      ZERO.toFloat()
     }
 
-    return if (downloadSpeed > 0) {
-      ((totalBytes - bytesDownloaded) / downloadSpeed).toLong() * 1000
+    return if (downloadSpeed > ZERO) {
+      ((totalBytes - bytesDownloaded) / downloadSpeed).toLong() * THOUSAND
     } else {
-      0L
+      ZERO.toLong()
     }
   }
 
@@ -298,14 +309,15 @@ class DownloadManagerMonitor @Inject constructor(
     }
   }
 
+  @Suppress("LongParameterList")
   private fun updateDownloadStatus(
     downloadId: Long,
     status: Status,
     error: Error,
-    progress: Int = -1,
-    etaInMilliSeconds: Long = -1L,
-    bytesDownloaded: Int = -1,
-    totalSizeOfDownload: Int = -1
+    progress: Int = DEFAULT_INT_VALUE,
+    etaInMilliSeconds: Long = DEFAULT_INT_VALUE.toLong(),
+    bytesDownloaded: Int = DEFAULT_INT_VALUE,
+    totalSizeOfDownload: Int = DEFAULT_INT_VALUE
   ) {
     synchronized(lock) {
       updater.onNext {
@@ -313,14 +325,14 @@ class DownloadManagerMonitor @Inject constructor(
           val downloadModel = DownloadModel(downloadEntity).apply {
             state = status
             this.error = error
-            if (progress > 0) {
+            if (progress > ZERO) {
               this.progress = progress
             }
             this.etaInMilliSeconds = etaInMilliSeconds
-            if (bytesDownloaded != -1) {
+            if (bytesDownloaded != DEFAULT_INT_VALUE) {
               this.bytesDownloaded = bytesDownloaded.toLong()
             }
-            if (totalSizeOfDownload != -1) {
+            if (totalSizeOfDownload != DEFAULT_INT_VALUE) {
               this.totalSizeOfDownload = totalSizeOfDownload.toLong()
             }
           }

@@ -24,7 +24,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
-import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState.Failed
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedDownload
@@ -87,6 +86,7 @@ class CustomDownloadViewModel @Inject constructor(
     DownloadRequired ->
       if (action.downloads.isNotEmpty()) DownloadInProgress(action.downloads)
       else state
+
     is DownloadInProgress ->
       if (action.downloads.isNotEmpty())
         if (action.downloads[0].downloadState is Failed)
@@ -95,6 +95,7 @@ class CustomDownloadViewModel @Inject constructor(
           DownloadInProgress(action.downloads)
       else
         DownloadComplete.also { _effects.offer(navigateToCustomReader) }
+
     DownloadComplete -> state
   }
 }
