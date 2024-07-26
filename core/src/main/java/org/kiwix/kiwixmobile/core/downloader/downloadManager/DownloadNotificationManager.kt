@@ -166,8 +166,7 @@ class DownloadNotificationManager @Inject constructor(
 
   private fun getActionPendingIntent(action: String, downloadId: Int): PendingIntent {
     val intent =
-      Intent(context, DownloadNotificationActionsBroadcastReceiver::class.java).apply {
-        this.action = DOWNLOAD_NOTIFICATION_ACTION
+      Intent(DOWNLOAD_NOTIFICATION_ACTION).apply {
         putExtra(NOTIFICATION_ACTION, action)
         putExtra(EXTRA_DOWNLOAD_ID, downloadId)
       }

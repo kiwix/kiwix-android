@@ -357,6 +357,7 @@ class DownloadManagerMonitor @Inject constructor(
   }
 
   fun pauseDownload(downloadId: Long) {
+    Log.e("UPDATE_NOTIFICATION", "pauseDownload: $downloadId")
     synchronized(lock) {
       updater.onNext {
         if (pauseResumeDownloadInDownloadManagerContentResolver(downloadId, STATUS_PAUSED)) {
@@ -367,6 +368,7 @@ class DownloadManagerMonitor @Inject constructor(
   }
 
   fun resumeDownload(downloadId: Long) {
+    Log.e("UPDATE_NOTIFICATION", "resumeDownload: $downloadId")
     synchronized(lock) {
       updater.onNext {
         if (pauseResumeDownloadInDownloadManagerContentResolver(downloadId, STATUS_RUNNING)) {
@@ -377,6 +379,7 @@ class DownloadManagerMonitor @Inject constructor(
   }
 
   fun cancelDownload(downloadId: Long) {
+    Log.e("UPDATE_NOTIFICATION", "cancelDownload: $downloadId")
     synchronized(lock) {
       downloadManager.remove(downloadId)
       handleCancelledDownload(downloadId)
