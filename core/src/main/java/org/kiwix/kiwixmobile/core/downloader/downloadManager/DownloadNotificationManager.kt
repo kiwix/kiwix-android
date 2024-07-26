@@ -170,9 +170,10 @@ class DownloadNotificationManager @Inject constructor(
         putExtra(NOTIFICATION_ACTION, action)
         putExtra(EXTRA_DOWNLOAD_ID, downloadId)
       }
+    val requestCode = downloadId + action.hashCode()
     return PendingIntent.getBroadcast(
       context,
-      downloadId,
+      requestCode,
       intent,
       PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     )
