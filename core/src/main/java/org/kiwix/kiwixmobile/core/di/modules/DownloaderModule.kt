@@ -117,8 +117,9 @@ object DownloaderModule {
 
   @Provides
   @Singleton
-  fun provideDownloadManagerCallback(downloadManagerMonitor: DownloadManagerMonitor)
-    : DownloadManagerBroadcastReceiver.Callback = downloadManagerMonitor
+  fun provideDownloadManagerCallback(
+    downloadManagerMonitor: DownloadManagerMonitor
+  ): DownloadManagerBroadcastReceiver.Callback = downloadManagerMonitor
 
   @Provides
   @Singleton
@@ -127,8 +128,9 @@ object DownloaderModule {
 
   @Provides
   @Singleton
-  fun providesDownloadNotificationActionsBroadcastReceiver(downloadManagerMonitor: DownloadManagerMonitor)
-    : DownloadNotificationActionsBroadcastReceiver =
+  fun providesDownloadNotificationActionsBroadcastReceiver(
+    downloadManagerMonitor: DownloadManagerMonitor
+  ): DownloadNotificationActionsBroadcastReceiver =
     DownloadNotificationActionsBroadcastReceiver(downloadManagerMonitor)
 
   @Provides

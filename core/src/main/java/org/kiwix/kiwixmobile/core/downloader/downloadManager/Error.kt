@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
+@Suppress("MagicNumber")
 enum class Error(val value: Int) {
   UNKNOWN(-1),
   NONE(0),
@@ -35,6 +36,7 @@ enum class Error(val value: Int) {
   ERROR_UNHANDLED_HTTP_CODE(12);
 
   companion object {
+    @Suppress("ComplexMethod", "MagicNumber")
     @JvmStatic
     fun valueOf(value: Int): Error {
       return when (value) {

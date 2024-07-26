@@ -56,7 +56,7 @@ class DownloadNotificationManager @Inject constructor(
       if (shouldUpdateNotification(downloadNotificationModel)) {
         createNotificationChannel()
         val notificationBuilder = getNotificationBuilder(downloadNotificationModel.downloadId)
-        val smallIcon = if (downloadNotificationModel.progress != 100) {
+        val smallIcon = if (downloadNotificationModel.progress != HUNDERED) {
           android.R.drawable.stat_sys_download
         } else {
           android.R.drawable.stat_sys_download_done
@@ -69,9 +69,9 @@ class DownloadNotificationManager @Inject constructor(
           .setOngoing(downloadNotificationModel.isOnGoingNotification)
           .setGroupSummary(false)
         if (downloadNotificationModel.isFailed || downloadNotificationModel.isCompleted) {
-          notificationBuilder.setProgress(0, 0, false)
+          notificationBuilder.setProgress(ZERO, ZERO, false)
         } else {
-          notificationBuilder.setProgress(100, downloadNotificationModel.progress, false)
+          notificationBuilder.setProgress(HUNDERED, downloadNotificationModel.progress, false)
         }
         when {
           downloadNotificationModel.isDownloading ->
@@ -132,7 +132,7 @@ class DownloadNotificationManager @Inject constructor(
       val pendingIntent =
         PendingIntent.getActivity(
           context,
-          0,
+          ZERO,
           internal,
           PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
@@ -150,7 +150,7 @@ class DownloadNotificationManager @Inject constructor(
       notificationBuilder
         .setGroup("$notificationId")
         .setStyle(null)
-        .setProgress(0, 0, false)
+        .setProgress(ZERO, ZERO, false)
         .setContentTitle(null)
         .setContentText(null)
         .setContentIntent(null)
@@ -203,9 +203,11 @@ class DownloadNotificationManager @Inject constructor(
 
       downloadNotificationModel.isPaused -> context.getString(R.string.paused_state)
       downloadNotificationModel.isQueued -> context.getString(R.string.pending_state)
-      downloadNotificationModel.etaInMilliSeconds <= 0 -> context.getString(R.string.running_state)
+      downloadNotificationModel.etaInMilliSeconds <= ZERO ->
+        context.getString(R.string.running_state)
+
       else -> Seconds(
-        downloadNotificationModel.etaInMilliSeconds / 1000L
+        downloadNotificationModel.etaInMilliSeconds / THOUSAND.toLong()
       ).toHumanReadableTime()
     }
   }

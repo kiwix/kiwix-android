@@ -95,8 +95,9 @@ class ApplicationModule {
 
   @Provides
   @Singleton
-  internal fun provideDownloadMonitor(downloadManagerMonitor: DownloadManagerMonitor)
-    : DownloadMonitor = downloadManagerMonitor
+  internal fun provideDownloadMonitor(
+    downloadManagerMonitor: DownloadManagerMonitor
+  ): DownloadMonitor = downloadManagerMonitor
 
   @Provides
   @Singleton

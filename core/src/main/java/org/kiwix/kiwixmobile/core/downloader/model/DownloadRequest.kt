@@ -29,7 +29,9 @@ data class DownloadRequest(val urlString: String, val notificationTitle: String)
 
   fun getDestinationFile(sharedPreferenceUtil: SharedPreferenceUtil): File {
     val file =
-      File("${sharedPreferenceUtil.prefStorage}/Kiwix/${StorageUtils.getFileNameFromUrl(urlString)}")
+      File(
+        "${sharedPreferenceUtil.prefStorage}/Kiwix/${StorageUtils.getFileNameFromUrl(urlString)}"
+      )
     return file
   }
 }
