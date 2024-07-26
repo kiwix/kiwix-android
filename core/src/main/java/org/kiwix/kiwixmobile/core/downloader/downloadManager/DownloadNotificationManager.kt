@@ -35,6 +35,7 @@ import org.kiwix.kiwixmobile.core.downloader.model.Seconds
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.DEFAULT_NOTIFICATION_TIMEOUT_AFTER
 import org.kiwix.kiwixmobile.core.utils.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import javax.inject.Inject
 
 class DownloadNotificationManager @Inject constructor(
@@ -45,8 +46,11 @@ class DownloadNotificationManager @Inject constructor(
   private val downloadNotificationsBuilderMap = mutableMapOf<Int, NotificationCompat.Builder>()
   private fun createNotificationChannel() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      notificationManager.createNotificationChannel(createChannel(CHANNEL_ID, context))
       if (notificationManager.getNotificationChannel(CHANNEL_ID) == null) {
-        notificationManager.createNotificationChannel(createChannel(CHANNEL_ID, context))
+        Log.d("NOTIFICATION_MANAGER", "Notification channel created.")
+      } else {
+        Log.d("NOTIFICATION_MANAGER", "Notification channel already exists.")
       }
     }
   }
@@ -54,6 +58,10 @@ class DownloadNotificationManager @Inject constructor(
   fun updateNotification(
     downloadNotificationModel: DownloadNotificationModel
   ) {
+    Log.d(
+      "NOTIFICATION_MANAGER",
+      "Updating notification for download ID: $downloadNotificationModel"
+    )
     createNotificationChannel()
     val notificationBuilder = getNotificationBuilder(downloadNotificationModel.downloadId)
     val smallIcon = if (downloadNotificationModel.progress != 100) {
@@ -105,6 +113,10 @@ class DownloadNotificationManager @Inject constructor(
       else -> notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
     }
     notificationCustomisation(downloadNotificationModel, notificationBuilder, context)
+    Log.d(
+      "NOTIFICATION_MANAGER",
+      "Notification updated and shown for download ID: $downloadNotificationModel"
+    )
   }
 
   @SuppressLint("UnspecifiedImmutableFlag")

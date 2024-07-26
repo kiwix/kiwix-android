@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
 import android.app.DownloadManager
 import android.app.DownloadManager.Request
+import android.app.DownloadManager.Request.VISIBILITY_HIDDEN
 import android.net.Uri
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -82,4 +83,5 @@ private fun DownloadRequest.toDownloadManagerRequest(sharedPreferenceUtil: Share
     )
     setTitle(notificationTitle)
     setAllowedOverMetered(true)
+    setNotificationVisibility(VISIBILITY_HIDDEN) // hide the default notification.
   }
