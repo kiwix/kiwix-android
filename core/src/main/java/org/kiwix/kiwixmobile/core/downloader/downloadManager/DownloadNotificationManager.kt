@@ -35,7 +35,6 @@ import org.kiwix.kiwixmobile.core.downloader.model.Seconds
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.DEFAULT_NOTIFICATION_TIMEOUT_AFTER
 import org.kiwix.kiwixmobile.core.utils.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import javax.inject.Inject
 
 class DownloadNotificationManager @Inject constructor(
@@ -46,11 +45,8 @@ class DownloadNotificationManager @Inject constructor(
   private val downloadNotificationsBuilderMap = mutableMapOf<Int, NotificationCompat.Builder>()
   private fun createNotificationChannel() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      notificationManager.createNotificationChannel(createChannel(CHANNEL_ID, context))
       if (notificationManager.getNotificationChannel(CHANNEL_ID) == null) {
-        Log.d("NOTIFICATION_MANAGER", "Notification channel created.")
-      } else {
-        Log.d("NOTIFICATION_MANAGER", "Notification channel already exists.")
+        notificationManager.createNotificationChannel(createChannel(CHANNEL_ID, context))
       }
     }
   }
@@ -58,10 +54,6 @@ class DownloadNotificationManager @Inject constructor(
   fun updateNotification(
     downloadNotificationModel: DownloadNotificationModel
   ) {
-    Log.d(
-      "NOTIFICATION_MANAGER",
-      "Updating notification for download ID: $downloadNotificationModel"
-    )
     createNotificationChannel()
     val notificationBuilder = getNotificationBuilder(downloadNotificationModel.downloadId)
     val smallIcon = if (downloadNotificationModel.progress != 100) {
@@ -79,19 +71,19 @@ class DownloadNotificationManager @Inject constructor(
     if (downloadNotificationModel.isFailed || downloadNotificationModel.isCompleted) {
       notificationBuilder.setProgress(0, 0, false)
     } else {
-      notificationBuilder.setProgress(100, downloadNotificationModel.progress, true)
+      notificationBuilder.setProgress(100, downloadNotificationModel.progress, false)
     }
     when {
       downloadNotificationModel.isDownloading ->
         notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER)
           .addAction(
-            R.drawable.fetch_notification_cancel,
-            context.getString(R.string.cancel),
-            getActionPendingIntent(ACTION_CANCEL, downloadNotificationModel.downloadId)
-          ).addAction(
             R.drawable.fetch_notification_pause,
             context.getString(R.string.tts_pause),
             getActionPendingIntent(ACTION_PAUSE, downloadNotificationModel.downloadId)
+          ).addAction(
+            R.drawable.fetch_notification_cancel,
+            context.getString(R.string.cancel),
+            getActionPendingIntent(ACTION_CANCEL, downloadNotificationModel.downloadId)
           )
 
       downloadNotificationModel.isPaused ->
@@ -100,8 +92,7 @@ class DownloadNotificationManager @Inject constructor(
             R.drawable.fetch_notification_resume,
             context.getString(R.string.tts_resume),
             getActionPendingIntent(ACTION_RESUME, downloadNotificationModel.downloadId)
-          )
-          .addAction(
+          ).addAction(
             R.drawable.fetch_notification_cancel,
             context.getString(R.string.cancel),
             getActionPendingIntent(ACTION_CANCEL, downloadNotificationModel.downloadId)
@@ -113,10 +104,7 @@ class DownloadNotificationManager @Inject constructor(
       else -> notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
     }
     notificationCustomisation(downloadNotificationModel, notificationBuilder, context)
-    Log.d(
-      "NOTIFICATION_MANAGER",
-      "Notification updated and shown for download ID: $downloadNotificationModel"
-    )
+    notificationManager.notify(downloadNotificationModel.downloadId, notificationBuilder.build())
   }
 
   @SuppressLint("UnspecifiedImmutableFlag")
@@ -203,7 +191,7 @@ class DownloadNotificationManager @Inject constructor(
 
       downloadNotificationModel.isPaused -> context.getString(R.string.paused_state)
       downloadNotificationModel.isQueued -> context.getString(R.string.pending_state)
-      downloadNotificationModel.etaInMilliSeconds < 0 -> context.getString(R.string.running_state)
+      downloadNotificationModel.etaInMilliSeconds <= 0 -> context.getString(R.string.running_state)
       else -> Seconds(
         downloadNotificationModel.etaInMilliSeconds / 1000L
       ).toHumanReadableTime()
