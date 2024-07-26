@@ -57,6 +57,7 @@
     android:fullBackupContent="@xml/backup_rules"
     android:dataExtractionRules = "@xml/data_extraction_rules"
     android:hardwareAccelerated="true"
+    android:largeHeap="true"
     android:requestLegacyExternalStorage="true"
     android:resizeableActivity="true"
     android:supportsRtl="true"
