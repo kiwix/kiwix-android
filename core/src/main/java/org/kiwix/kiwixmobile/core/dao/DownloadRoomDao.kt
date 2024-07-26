@@ -33,10 +33,15 @@ import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import java.io.File
+import javax.inject.Inject
 
 @Dao
 abstract class DownloadRoomDao {
+
+  @Inject
+  lateinit var newBookDao: NewBookDao
 
   @Query("SELECT * FROM DownloadRoomEntity")
   abstract fun downloadRoomEntity(): Flowable<List<DownloadRoomEntity>>
@@ -57,7 +62,7 @@ abstract class DownloadRoomDao {
       .takeIf(List<DownloadRoomEntity>::isNotEmpty)
       ?.let {
         deleteDownloadsList(it)
-        // newBookDao.insert(it.map(BooksOnDiskListItem::BookOnDisk))
+        newBookDao.insert(it.map(BooksOnDiskListItem::BookOnDisk))
       }
   }
 

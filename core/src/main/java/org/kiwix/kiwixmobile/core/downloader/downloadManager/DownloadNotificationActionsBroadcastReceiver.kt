@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import org.kiwix.kiwixmobile.core.base.BaseBroadcastReceiver
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationManager.Companion.ACTION_CANCEL
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationManager.Companion.ACTION_PAUSE
@@ -39,7 +38,6 @@ class DownloadNotificationActionsBroadcastReceiver @Inject constructor(
   override fun onIntentWithActionReceived(context: Context, intent: Intent) {
     val downloadId = intent.getIntExtra(EXTRA_DOWNLOAD_ID, -1)
     val notificationAction = intent.getStringExtra(NOTIFICATION_ACTION)
-    Log.e("UPDATE_NOTIFICATION", "onIntentWithActionReceived: $downloadId , $notificationAction")
     if (downloadId != -1) {
       when (notificationAction) {
         ACTION_PAUSE -> downloadManagerMonitor.pauseDownload(downloadId.toLong())
