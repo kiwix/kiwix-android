@@ -22,7 +22,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.StorageUtils
 import java.io.File
 
-data class DownloadRequest(val urlString: String, val notificationTitle: String) {
+data class DownloadRequest(val urlString: String) {
 
   val uri: Uri get() = Uri.parse(urlString)
 

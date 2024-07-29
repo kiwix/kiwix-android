@@ -107,7 +107,7 @@ abstract class DownloadRoomDao {
     sharedPreferenceUtil: SharedPreferenceUtil
   ) {
     if (doesNotAlreadyExist(book)) {
-      val downloadRequest = DownloadRequest(url, book.title)
+      val downloadRequest = DownloadRequest(url)
       saveDownload(
         DownloadRoomEntity(
           url,
