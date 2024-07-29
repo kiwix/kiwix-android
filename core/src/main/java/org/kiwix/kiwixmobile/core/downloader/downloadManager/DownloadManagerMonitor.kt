@@ -28,7 +28,6 @@ import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
-import android.util.Log
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
@@ -36,6 +35,7 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -71,7 +71,7 @@ class DownloadManagerMonitor @Inject constructor(
     }
   }
 
-  @Suppress("MagicNumber")
+  @Suppress("MagicNumber", "CheckResult")
   private fun startMonitoringDownloads() {
     // we have to disable this when no downloads is ongoing
     // and should re-enable when download started.
@@ -95,6 +95,7 @@ class DownloadManagerMonitor @Inject constructor(
       )
   }
 
+  @Suppress("CheckResult")
   private fun setupUpdater() {
     updater.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
       {
