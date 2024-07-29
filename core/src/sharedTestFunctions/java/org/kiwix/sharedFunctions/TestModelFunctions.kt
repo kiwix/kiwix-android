@@ -17,11 +17,10 @@
  */
 package org.kiwix.sharedFunctions
 
-import com.tonyodev.fetch2.Error
-import com.tonyodev.fetch2.Status
-import com.tonyodev.fetch2.Status.NONE
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Error
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
@@ -52,7 +51,7 @@ fun downloadModel(
   etaInMilliSeconds: Long = 0L,
   bytesDownloaded: Long = 1L,
   totalSizeOfDownload: Long = 1L,
-  status: Status = NONE,
+  status: Status = Status.NONE,
   error: Error = Error.NONE,
   progress: Int = 1,
   book: Book = book()

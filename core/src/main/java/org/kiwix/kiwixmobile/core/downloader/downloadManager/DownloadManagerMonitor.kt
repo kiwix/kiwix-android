@@ -32,6 +32,7 @@ import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
+import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
@@ -323,28 +324,36 @@ class DownloadManagerMonitor @Inject constructor(
     synchronized(lock) {
       updater.onNext {
         downloadRoomDao.getEntityForDownloadId(downloadId)?.let { downloadEntity ->
-          val downloadModel = DownloadModel(downloadEntity).apply {
-            state = status
-            this.error = error
-            if (progress > ZERO) {
-              this.progress = progress
+          if (shouldUpdateStatus(downloadEntity)) {
+            val downloadModel = DownloadModel(downloadEntity).apply {
+              state = status
+              this.error = error
+              if (progress > ZERO) {
+                this.progress = progress
+              }
+              this.etaInMilliSeconds = etaInMilliSeconds
+              if (bytesDownloaded != DEFAULT_INT_VALUE) {
+                this.bytesDownloaded = bytesDownloaded.toLong()
+              }
+              if (totalSizeOfDownload != DEFAULT_INT_VALUE) {
+                this.totalSizeOfDownload = totalSizeOfDownload.toLong()
+              }
             }
-            this.etaInMilliSeconds = etaInMilliSeconds
-            if (bytesDownloaded != DEFAULT_INT_VALUE) {
-              this.bytesDownloaded = bytesDownloaded.toLong()
-            }
-            if (totalSizeOfDownload != DEFAULT_INT_VALUE) {
-              this.totalSizeOfDownload = totalSizeOfDownload.toLong()
-            }
+            downloadRoomDao.update(downloadModel)
+            updateNotification(downloadModel, downloadEntity.title, downloadEntity.description)
+            return@let
           }
-          downloadRoomDao.update(downloadModel)
-          updateNotification(downloadModel, downloadEntity.title, downloadEntity.description)
+          cancelNotification(downloadId)
         } ?: run {
           // already downloaded/cancelled so cancel the notification if any running.
-          downloadNotificationManager.cancelNotification(downloadId.toInt())
+          cancelNotification(downloadId)
         }
       }
     }
+  }
+
+  private fun cancelNotification(downloadId: Long) {
+    downloadNotificationManager.cancelNotification(downloadId.toInt())
   }
 
   private fun updateNotification(
@@ -423,6 +432,9 @@ class DownloadManagerMonitor @Inject constructor(
       false
     }
   }
+
+  private fun shouldUpdateStatus(downloadRoomEntity: DownloadRoomEntity) =
+    downloadRoomEntity.status != Status.COMPLETED
 
   override fun init() {
     // empty method to so class does not get reported unused
