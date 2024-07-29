@@ -101,5 +101,8 @@ open class DatabaseModule {
 
   @Singleton
   @Provides
-  fun provideDownloadRoomDao(db: KiwixRoomDatabase) = db.downloadRoomDao()
+  fun provideDownloadRoomDao(db: KiwixRoomDatabase, newBookDao: NewBookDao) =
+    db.downloadRoomDao().also {
+      it.newBookDao = newBookDao
+    }
 }
