@@ -29,12 +29,13 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.downloader.fetch.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.downloader.model.Seconds
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.DEFAULT_NOTIFICATION_TIMEOUT_AFTER
 import org.kiwix.kiwixmobile.core.utils.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import javax.inject.Inject
+
+const val DOWNLOAD_NOTIFICATION_TITLE = "OPEN_ZIM_FILE"
 
 class DownloadNotificationManager @Inject constructor(
   private val context: Context,

@@ -50,9 +50,8 @@ import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-
-const val DOWNLOAD_NOTIFICATION_TITLE = "OPEN_ZIM_FILE"
 
 class FetchDownloadNotificationManager(
   private val context: Context,
