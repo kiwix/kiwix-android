@@ -31,6 +31,7 @@
   <string name="pref_display_title">देखाउनुहोस्</string>
   <string name="pref_info_title">जानकारी</string>
   <string name="pref_info_version">संस्करण</string>
+  <string name="pref_dark_mode" fuzzy="true">रात्री मूड</string>
   <string name="pref_dark_mode_summary">उल्ट्याइएको रङका लेखहरू देखाउनुहोस्</string>
   <string name="pref_back_to_top">सुरुमा जानुहोस्</string>
   <string name="pref_back_to_top_summary">पृष्ठको अन्तमा सुरुमा जने बटन देखाउने</string>
@@ -45,6 +46,7 @@
   <string name="pref_clear_all_bookmarks_title">पुस्तक चिनाेहरू हटाउनुहाेस्</string>
   <string name="clear_all_history_dialog_title" fuzzy="true">सबै इतिहास हटाउनुहोस्</string>
   <string name="delete">मेटाउने</string>
+  <string name="cancel">रद्द गर्नुहोस्</string>
   <string name="delete_specific_search_toast">हालको खोज हटाइयो</string>
   <string name="got_it">मैले बुझेँ</string>
   <string name="did_you_know">के तपाईँलाई थाह छ?</string>
@@ -96,6 +98,7 @@
   <string name="do_not_ask_anymore">फेरि नसोध्नुहोस्</string>
   <string name="your_languages">छानिएको भाष:</string>
   <string name="other_languages">अन्य भाषाहरू:</string>
+  <string name="expand">फैलाउनुहोस्</string>
   <string name="history_from_current_book">सबै किताबहरूबाट इतिहास हेर्नुहोस्</string>
   <string name="complete">पूर्ण भयो</string>
   <string name="status">स्थिति</string>
@@ -106,6 +109,7 @@
   <string name="delete_selected_history">रोजिएको इतिहास मेटाउने?</string>
   <string name="delete_bookmarks">सबै बुकमार्कहरू मेटाउने?</string>
   <string name="delete_selected_bookmarks">रोजिएका बुकमार्कहरू मेटाउने?</string>
+  <string name="allow">अनुमति दिनुहोस्</string>
   <string name="no_notes">त्यहाँ कुनै टिप्पणीहरू छैनन्</string>
   <string name="search_notes">टिप्पणीहरू खोज्नुहोस्</string>
   <string name="open_note">टिप्पणी खोल्नुहोस्</string>

@@ -83,6 +83,7 @@
   <string name="pref_display_title">Affichage</string>
   <string name="pref_info_title">Informations</string>
   <string name="pref_info_version">Version</string>
+  <string name="pref_dark_mode" fuzzy="true">Mode nocturne</string>
   <string name="pref_dark_mode_summary">Afficher les articles en couleurs inversées</string>
   <string name="pref_back_to_top">Retour en haut</string>
   <string name="pref_back_to_top_summary">Afficher un bouton en bas de la page pour revenir au début</string>

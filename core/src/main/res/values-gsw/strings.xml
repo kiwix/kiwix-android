@@ -50,6 +50,7 @@
   <string name="pref_display_title">Azeig</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
+  <string name="pref_dark_mode" fuzzy="true">Nachtmodus</string>
   <string name="pref_dark_mode_summary">Zeig d’Artikel mit umcherte Farbe</string>
   <string name="pref_back_to_top">Zruck nach obe</string>
   <string name="pref_back_to_top_summary">Zeig e Chnopf am End vo dr Syte zuem uffe rolle</string>

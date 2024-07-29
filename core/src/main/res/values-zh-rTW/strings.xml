@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Huajing
 * Kly
 * LNDDYL
 * Liuxinyu970226
@@ -61,6 +62,7 @@
   <string name="error_server_already_running">伺服器已運作。請關閉後重試。</string>
   <string name="error_ip_address_not_found">找不到 IP 位址。</string>
   <string name="server_started_message">在您的瀏覽器輸入 IP 位址來存取伺服器%s</string>
+  <string name="qr_code">呈現 QR 碼</string>
   <string name="share_host_address">透過別種應用程式分享 URL</string>
   <string name="error_file_not_found">錯誤：找不到所選的 ZIM 檔案。</string>
   <string name="unable_to_read_zim_file">無法讀取這個 zim 檔案！</string>
@@ -70,6 +72,7 @@
   <string name="pref_display_title">顯示</string>
   <string name="pref_info_title">資訊</string>
   <string name="pref_info_version">版本</string>
+  <string name="pref_dark_mode" fuzzy="true">夜間模式</string>
   <string name="pref_dark_mode_summary">以反向色彩方式顯示條目</string>
   <string name="pref_back_to_top">回到頁首</string>
   <string name="pref_back_to_top_summary">在頁面底部顯示一個回到頁首的按鈕</string>
@@ -80,7 +83,7 @@
   <string name="tts_lang_not_supported">本頁面不支援這個語言。條目可能無法正確讀取。</string>
   <string name="no_reader_application_installed">找不到開啟這類型檔案的應用程式</string>
   <string name="no_email_application_installed">請安裝電子郵件服務提供方，或是在%1s發送電子郵件給我們</string>
-  <string name="no_app_found_to_select_bookmark_file">找不到所選書籤檔案的應用程式</string>
+  <string name="no_app_found_to_select_bookmark_file">找不到用於選擇書籤檔案的應用程式</string>
   <string name="no_section_info">未找到內容標題</string>
   <string name="request_storage">我們需要存取您的儲存裝置以存取離線內容。</string>
   <string name="request_write_storage">要下載 zim 檔案，我們需要寫入您的儲存裝置權限</string>
@@ -210,7 +213,7 @@
   <string name="table_of_contents">目次</string>
   <string name="select_languages">選擇語言</string>
   <string name="save_languages">儲存語言</string>
-  <string name="send_feedback">送出回饋意見</string>
+  <string name="send_feedback">傳送意見回饋</string>
   <string name="expand">展開</string>
   <string name="history">歷史</string>
   <string name="history_from_current_book">檢視來自目前書籍的歷史</string>

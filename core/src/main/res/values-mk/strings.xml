@@ -51,6 +51,7 @@
   <string name="error_server_already_running">Опслужувачот веќе работи. Исклучете го и пробајте повторно.</string>
   <string name="error_ip_address_not_found">Не можев да најдам IP-адреса.</string>
   <string name="server_started_message">Внесете ја оваа IP-адреса во прелистувачот за да пристапите на опслужувачот %s</string>
+  <string name="qr_code">Испишан QR-код</string>
   <string name="share_host_address">Сподели URL преку други прилози</string>
   <string name="error_file_not_found">Грешка: Не ја најдов избраната ZIM-податотека.</string>
   <string name="unable_to_read_zim_file">Не можам да ја прочитам оваа ZIM-податотека!</string>
@@ -60,7 +61,8 @@
   <string name="pref_display_title">Приказник</string>
   <string name="pref_info_title">Информации</string>
   <string name="pref_info_version">Верзија</string>
-  <string name="pref_dark_mode_summary">Прикажувај ги статиите во обратни бои</string>
+  <string name="pref_dark_mode">Темен режим</string>
+  <string name="pref_dark_mode_summary">Прикажувај ги статиите со обратни бои</string>
   <string name="pref_back_to_top">Најгоре</string>
   <string name="pref_back_to_top_summary">Прикажувај копче за враќање најгоре на крајот од страницата</string>
   <string name="pref_language_title">Јазик</string>
@@ -278,7 +280,7 @@
   <string name="storage_permission_denied">Дозволата за складирање е одбиена</string>
   <string name="grant_read_storage_permission">Прилогов бара пристап до складот за да работи. Дајте му ја таа дозвола во поставките</string>
   <string name="go_to_settings">Оди во поставките за пристапни точки</string>
-  <string name="no_results">Нема исход</string>
+  <string name="no_results">Не најдов ништо</string>
   <string name="no_bookmarks">Нема обележувачи</string>
   <string name="no_history">Нема историја</string>
   <string name="device_default">Основно на уредот</string>
