@@ -123,8 +123,9 @@ object DownloaderModule {
 
   @Provides
   @Singleton
-  fun providesDownloadManagerBroadcastReceiver(callback: DownloadManagerBroadcastReceiver.Callback)
-    : DownloadManagerBroadcastReceiver = DownloadManagerBroadcastReceiver(callback)
+  fun providesDownloadManagerBroadcastReceiver(
+    callback: DownloadManagerBroadcastReceiver.Callback
+  ): DownloadManagerBroadcastReceiver = DownloadManagerBroadcastReceiver(callback)
 
   @Provides
   @Singleton

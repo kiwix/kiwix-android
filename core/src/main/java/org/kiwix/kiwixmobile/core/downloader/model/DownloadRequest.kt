@@ -18,7 +18,6 @@
 package org.kiwix.kiwixmobile.core.downloader.model
 
 import android.net.Uri
-import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.StorageUtils
 import java.io.File

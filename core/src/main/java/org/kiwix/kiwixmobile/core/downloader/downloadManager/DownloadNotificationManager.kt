@@ -115,8 +115,9 @@ class DownloadNotificationManager @Inject constructor(
     }
   }
 
-  private fun shouldUpdateNotification(downloadNotificationModel: DownloadNotificationModel): Boolean =
-    !downloadNotificationModel.isCancelled && !downloadNotificationModel.isPaused
+  private fun shouldUpdateNotification(
+    downloadNotificationModel: DownloadNotificationModel
+  ): Boolean = !downloadNotificationModel.isCancelled && !downloadNotificationModel.isPaused
 
   @SuppressLint("UnspecifiedImmutableFlag")
   private fun notificationCustomisation(
