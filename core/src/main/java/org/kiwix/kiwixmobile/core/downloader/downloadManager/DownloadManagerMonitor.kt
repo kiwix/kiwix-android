@@ -47,7 +47,7 @@ const val DEFAULT_INT_VALUE = -1
 
 class DownloadManagerMonitor @Inject constructor(
   private val downloadManager: DownloadManager,
-  private val downloadRoomDao: DownloadRoomDao,
+  val downloadRoomDao: DownloadRoomDao,
   private val context: Context,
   private val downloadNotificationManager: DownloadNotificationManager
 ) : DownloadMonitor, DownloadManagerBroadcastReceiver.Callback {

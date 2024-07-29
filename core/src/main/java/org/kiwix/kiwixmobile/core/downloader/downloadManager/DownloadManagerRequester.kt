@@ -22,9 +22,13 @@ import android.app.DownloadManager
 import android.app.DownloadManager.Request
 import android.app.DownloadManager.Request.VISIBILITY_HIDDEN
 import android.net.Uri
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import javax.inject.Inject
 
 class DownloadManagerRequester @Inject constructor(
@@ -41,17 +45,28 @@ class DownloadManagerRequester @Inject constructor(
 
   override fun retryDownload(downloadId: Long) {
     // Retry the download by enqueuing it again with the same request
-    // CoroutineScope(Dispatchers.IO).launch {
-    //   val downloadEntity = downloadRoomDao.getEntityForDownloadId(downloadId)
-    //   downloadEntity?.let {
-    //     val downloadRequest = DownloadRequest(
-    //       uri = Uri.parse(it.uri),
-    //       notificationTitle = it.notificationTitle,
-    //       destinationFile = it.destinationFile
-    //     )
-    //     enqueue(downloadRequest)
-    //   }
-    // }
+    CoroutineScope(Dispatchers.IO).launch {
+      try {
+        downloadManagerMonitor
+          .downloadRoomDao
+          .getEntityForDownloadId(downloadId)?.let { downloadRoomEntity ->
+            downloadRoomEntity.file?.let {
+              val downloadRequest = DownloadRequest(urlString = it)
+              val newDownloadEntity = downloadRoomEntity.copy(downloadId = enqueue(downloadRequest))
+              // cancel the previous download and its data from database and fileSystem.
+              cancel(downloadId)
+              // save the new downloads into the database so that it will show
+              // this new downloads on the download screen.
+              downloadManagerMonitor.downloadRoomDao.saveDownload(newDownloadEntity)
+            }
+          }
+      } catch (ignore: Exception) {
+        Log.e(
+          "DOWNLOAD_MANAGER",
+          "Could not retry the download. Original exception = $ignore"
+        )
+      }
+    }
   }
 
   override fun pauseResumeDownload(downloadId: Long, isPause: Boolean) {
@@ -72,7 +87,6 @@ private fun DownloadRequest.toDownloadManagerRequest(sharedPreferenceUtil: Share
       else
         Request.NETWORK_MOBILE
     )
-    setTitle(notificationTitle)
     setAllowedOverMetered(true)
     setNotificationVisibility(VISIBILITY_HIDDEN) // hide the default notification.
   }
