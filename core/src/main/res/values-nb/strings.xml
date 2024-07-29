@@ -34,6 +34,7 @@
   <string name="pref_display_title">Skjerm</string>
   <string name="pref_info_title">Informasjon</string>
   <string name="pref_info_version">Versjon</string>
+  <string name="pref_dark_mode" fuzzy="true">Nattmodus</string>
   <string name="pref_dark_mode_summary">Vis artikler med inverterte farger</string>
   <string name="pref_back_to_top">Tilbake til toppen</string>
   <string name="pref_back_to_top_summary">Vis en knapp nederst på siden for å returnere til toppen</string>

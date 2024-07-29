@@ -69,6 +69,7 @@
   <string name="pref_display_title">表示</string>
   <string name="pref_info_title">情報</string>
   <string name="pref_info_version">バージョン</string>
+  <string name="pref_dark_mode" fuzzy="true">夜モード</string>
   <string name="pref_dark_mode_summary">記事を反転色で表示する</string>
   <string name="pref_back_to_top">トップに戻る</string>
   <string name="pref_back_to_top_summary">ページの最後に、ページの上部にスクロールするボタンを表示する</string>

@@ -42,6 +42,7 @@
   <string name="pref_display_title">Үзүлх</string>
   <string name="pref_info_title">Медәлл</string>
   <string name="pref_info_version">Хүвлвр</string>
+  <string name="pref_dark_mode" fuzzy="true">Сөөһин җурм</string>
   <string name="pref_dark_mode_summary">Ниитллин үзгин өңгиг эсргүһәр харулх</string>
   <string name="pref_back_to_top">Хамгин деер одтн</string>
   <string name="pref_back_to_top_summary">Товчиг халхин сүүлд бәәршүлҗ, деегшән одтн</string>

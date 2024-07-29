@@ -34,6 +34,7 @@
   <string name="pref_display_title">Erakutsi</string>
   <string name="pref_info_title">Informazioa</string>
   <string name="pref_info_version">Bertsioa</string>
+  <string name="pref_dark_mode" fuzzy="true">Gau modua</string>
   <string name="pref_dark_mode_summary">Artikuluak alderantzizko koloreekin erakutsi</string>
   <string name="pref_back_to_top">Gora itzuli</string>
   <string name="pref_back_to_top_summary">Bistaratu botoi bat orrialdearen amaieran goiko aldera mugitzeko</string>

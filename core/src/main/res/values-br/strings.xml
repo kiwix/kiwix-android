@@ -47,6 +47,7 @@
   <string name="pref_display_title">Diskwel</string>
   <string name="pref_info_title">Titouroù</string>
   <string name="pref_info_version">Stumm</string>
+  <string name="pref_dark_mode" fuzzy="true">Mod noz</string>
   <string name="pref_dark_mode_summary">Diskouez ar pennadoù gant livioù eilpennet</string>
   <string name="pref_back_to_top">Distreiñ da grec’h ar bajenn</string>
   <string name="pref_back_to_top_summary">Diskwel ur bouton e traoñ ar bajenn evit distreiñ d’an deroù</string>

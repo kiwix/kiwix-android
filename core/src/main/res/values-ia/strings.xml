@@ -62,6 +62,7 @@
   <string name="pref_display_title">Visualisation</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
+  <string name="pref_dark_mode" fuzzy="true">Modo nocturne</string>
   <string name="pref_dark_mode_summary">Monstrar articulos in colores invertite</string>
   <string name="pref_back_to_top">Initio del pagina</string>
   <string name="pref_back_to_top_summary">Monstrar un button al fin del pagina pro retornar al initio</string>

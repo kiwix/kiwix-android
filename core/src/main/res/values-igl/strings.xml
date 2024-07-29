@@ -62,6 +62,7 @@
   <string name="pref_display_title">Dutẹ</string>
   <string name="pref_info_title">Inabali</string>
   <string name="pref_info_version">Enwñ ojioji</string>
+  <string name="pref_dark_mode" fuzzy="true">Eju odu</string>
   <string name="pref_dark_mode_summary">Dẹńwú kúmákọ uwá kpài cọlọ èkpaíló</string>
   <string name="pref_back_to_top">Dabi tatẹ</string>
   <string name="pref_back_to_top_summary">Dí bọtíní oká cwá otîtálá ọgbá dü kẹ neke dúlotí átẹ</string>

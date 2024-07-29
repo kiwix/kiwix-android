@@ -33,8 +33,8 @@
   <string name="error_article_url_not_found">Памылка: загрузка артыкула (Url: %1$s) не атрымалася.</string>
   <string name="pref_info_title">Інфармацыя</string>
   <string name="pref_info_version">Вэрсія</string>
-  <string name="pref_night_mode">Начны рэжым</string>
-  <string name="pref_night_mode_summary">Паказваць артыкулы ў інвэртаваных колерах</string>
+  <string name="pref_dark_mode" fuzzy="true">Начны рэжым</string>
+  <string name="pref_dark_mode_summary">Паказваць артыкулы ў інвэртаваных колерах</string>
   <string name="pref_back_to_top">Вярнуцца ўгару</string>
   <string name="pref_back_to_top_summary">Паказваць кнопку ў канцы старонкі для пракручваньня ўверх</string>
   <string name="pref_language_title">Мова</string>

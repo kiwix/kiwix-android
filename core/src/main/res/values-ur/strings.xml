@@ -58,6 +58,7 @@
   <string name="pref_display_title">تظاہرہ</string>
   <string name="pref_info_title">معلومات</string>
   <string name="pref_info_version">ورژن</string>
+  <string name="pref_dark_mode" fuzzy="true">نائٹ موڈ</string>
   <string name="pref_dark_mode_summary">الٹے رنگوں کے ساتھ مضامین دکھائیں۔</string>
   <string name="pref_back_to_top">اوپر کی طرف واپس</string>
   <string name="pref_back_to_top_summary">اوپر تک سکرول کرنے کے لیے صفحہ کے آخر میں ایک بٹن دکھائیں۔</string>
