@@ -129,7 +129,7 @@ class DownloadNotificationManager @Inject constructor(
     if (downloadNotificationModel.isCompleted) {
       val internal = Intents.internal(CoreMainActivity::class.java).apply {
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        putExtra(DOWNLOAD_NOTIFICATION_TITLE, downloadNotificationModel.title)
+        putExtra(DOWNLOAD_NOTIFICATION_TITLE, downloadNotificationModel.filePath)
       }
       val pendingIntent =
         PendingIntent.getActivity(
