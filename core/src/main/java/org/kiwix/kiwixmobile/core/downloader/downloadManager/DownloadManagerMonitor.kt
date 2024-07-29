@@ -369,6 +369,7 @@ class DownloadManagerMonitor @Inject constructor(
         etaInMilliSeconds = downloadModel.etaInMilliSeconds,
         title = title,
         description = description,
+        filePath = downloadModel.file,
         error = DownloadState.from(
           downloadModel.state,
           downloadModel.error,

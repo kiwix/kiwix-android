@@ -25,6 +25,7 @@ data class DownloadNotificationModel(
   val etaInMilliSeconds: Long,
   val title: String,
   val description: String?,
+  val filePath: String?,
   val error: String
 ) {
   val isPaused get() = status == Status.PAUSED

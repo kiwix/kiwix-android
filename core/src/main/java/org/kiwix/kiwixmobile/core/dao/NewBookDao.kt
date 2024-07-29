@@ -90,7 +90,7 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
 
   fun bookMatching(downloadTitle: String) = box.query {
     endsWith(
-      BookOnDiskEntity_.title, downloadTitle,
+      BookOnDiskEntity_.file, downloadTitle,
       QueryBuilder.StringOrder.CASE_INSENSITIVE
     )
   }.findFirst()
