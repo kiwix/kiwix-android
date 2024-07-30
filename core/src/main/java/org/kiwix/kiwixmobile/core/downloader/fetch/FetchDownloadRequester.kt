@@ -52,6 +52,10 @@ class FetchDownloadRequester @Inject constructor(
     else
       fetch.pause(downloadId.toInt())
   }
+
+  override fun onDownloadAdded() {
+    // empty function
+  }
 }
 
 private fun DownloadRequest.toFetchRequest(sharedPreferenceUtil: SharedPreferenceUtil) =

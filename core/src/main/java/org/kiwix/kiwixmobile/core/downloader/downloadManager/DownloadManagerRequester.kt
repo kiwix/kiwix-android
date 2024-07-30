@@ -38,10 +38,11 @@ class DownloadManagerRequester @Inject constructor(
 ) : DownloadRequester {
   override fun enqueue(downloadRequest: DownloadRequest): Long =
     downloadManager.enqueue(downloadRequest.toDownloadManagerRequest(sharedPreferenceUtil))
-      .also {
-        // Start monitoring downloads after enqueuing a new download request.
-        downloadManagerMonitor.startMonitoringDownloads()
-      }
+
+  override fun onDownloadAdded() {
+    // Start monitoring downloads after enqueuing a new download request.
+    downloadManagerMonitor.startMonitoringDownloads()
+  }
 
   override fun cancel(downloadId: Long) {
     downloadManagerMonitor.cancelDownload(downloadId)
@@ -65,7 +66,7 @@ class DownloadManagerRequester @Inject constructor(
             }
           }.also {
             // Start monitoring downloads after retrying.
-            downloadManagerMonitor.startMonitoringDownloads()
+            onDownloadAdded()
           }
       } catch (ignore: Exception) {
         Log.e(
