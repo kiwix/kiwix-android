@@ -55,9 +55,10 @@ class DownloadManagerRequester @Inject constructor(
         downloadManagerMonitor
           .downloadRoomDao
           .getEntityForDownloadId(downloadId)?.let { downloadRoomEntity ->
-            downloadRoomEntity.file?.let {
+            downloadRoomEntity.url?.let {
               val downloadRequest = DownloadRequest(urlString = it)
-              val newDownloadEntity = downloadRoomEntity.copy(downloadId = enqueue(downloadRequest))
+              val newDownloadEntity =
+                downloadRoomEntity.copy(downloadId = enqueue(downloadRequest), id = 0)
               // cancel the previous download and its data from database and fileSystem.
               cancel(downloadId)
               // save the new downloads into the database so that it will show
