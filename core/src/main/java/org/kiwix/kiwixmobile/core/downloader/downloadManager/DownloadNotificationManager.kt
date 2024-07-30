@@ -33,6 +33,8 @@ import org.kiwix.kiwixmobile.core.downloader.model.Seconds
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.DEFAULT_NOTIFICATION_TIMEOUT_AFTER
 import org.kiwix.kiwixmobile.core.utils.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
+import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
+import java.util.Locale
 import javax.inject.Inject
 
 const val DOWNLOAD_NOTIFICATION_TITLE = "OPEN_ZIM_FILE"
@@ -44,8 +46,8 @@ class DownloadNotificationManager @Inject constructor(
   private val downloadNotificationsBuilderMap = mutableMapOf<Int, NotificationCompat.Builder>()
   private fun createNotificationChannel() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      if (notificationManager.getNotificationChannel(CHANNEL_ID) == null) {
-        notificationManager.createNotificationChannel(createChannel(CHANNEL_ID, context))
+      if (notificationManager.getNotificationChannel(DOWNLOAD_NOTIFICATION_CHANNEL_ID) == null) {
+        notificationManager.createNotificationChannel(createChannel(context))
       }
     }
   }
@@ -78,25 +80,25 @@ class DownloadNotificationManager @Inject constructor(
           downloadNotificationModel.isDownloading ->
             notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER)
               .addAction(
-                R.drawable.fetch_notification_pause,
-                context.getString(R.string.tts_pause),
-                getActionPendingIntent(ACTION_PAUSE, downloadNotificationModel.downloadId)
-              ).addAction(
-                R.drawable.fetch_notification_cancel,
+                R.drawable.ic_baseline_stop,
                 context.getString(R.string.cancel),
                 getActionPendingIntent(ACTION_CANCEL, downloadNotificationModel.downloadId)
+              ).addAction(
+                R.drawable.ic_baseline_pause,
+                getPauseOrResumeTitle(true),
+                getActionPendingIntent(ACTION_PAUSE, downloadNotificationModel.downloadId)
               )
 
           downloadNotificationModel.isPaused ->
             notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER)
               .addAction(
-                R.drawable.fetch_notification_resume,
-                context.getString(R.string.tts_resume),
-                getActionPendingIntent(ACTION_RESUME, downloadNotificationModel.downloadId)
-              ).addAction(
-                R.drawable.fetch_notification_cancel,
+                R.drawable.ic_baseline_stop,
                 context.getString(R.string.cancel),
                 getActionPendingIntent(ACTION_CANCEL, downloadNotificationModel.downloadId)
+              ).addAction(
+                R.drawable.ic_baseline_play,
+                getPauseOrResumeTitle(false),
+                getActionPendingIntent(ACTION_RESUME, downloadNotificationModel.downloadId)
               )
 
           downloadNotificationModel.isQueued ->
@@ -112,6 +114,21 @@ class DownloadNotificationManager @Inject constructor(
       } else {
         // the download is cancelled/paused so remove the notification.
         cancelNotification(downloadNotificationModel.downloadId)
+      }
+    }
+  }
+
+  private fun getPauseOrResumeTitle(isPause: Boolean): String {
+    val pauseOrResumeTitle = if (isPause) {
+      context.getString(R.string.tts_pause)
+    } else {
+      context.getString(R.string.tts_resume)
+    }
+    return pauseOrResumeTitle.replaceFirstChar {
+      if (it.isLowerCase()) {
+        it.titlecase(Locale.ROOT)
+      } else {
+        "$it"
       }
     }
   }
@@ -147,7 +164,7 @@ class DownloadNotificationManager @Inject constructor(
   private fun getNotificationBuilder(notificationId: Int): NotificationCompat.Builder {
     synchronized(downloadNotificationsBuilderMap) {
       val notificationBuilder = downloadNotificationsBuilderMap[notificationId]
-        ?: NotificationCompat.Builder(context, CHANNEL_ID)
+        ?: NotificationCompat.Builder(context, DOWNLOAD_NOTIFICATION_CHANNEL_ID)
       downloadNotificationsBuilderMap[notificationId] = notificationBuilder
       notificationBuilder
         .setGroup("$notificationId")
@@ -182,10 +199,10 @@ class DownloadNotificationManager @Inject constructor(
   }
 
   @RequiresApi(Build.VERSION_CODES.O)
-  private fun createChannel(channelId: String, context: Context) =
+  private fun createChannel(context: Context) =
     NotificationChannel(
-      channelId,
-      context.getString(R.string.app_name),
+      DOWNLOAD_NOTIFICATION_CHANNEL_ID,
+      context.getString(R.string.download_notification_channel_name),
       NotificationManager.IMPORTANCE_DEFAULT
     ).apply {
       setSound(null, null)
@@ -222,7 +239,6 @@ class DownloadNotificationManager @Inject constructor(
   }
 
   companion object {
-    const val CHANNEL_ID = "kiwix_notification_channel_id"
     const val NOTIFICATION_ACTION = "notification_action"
     const val ACTION_PAUSE = "action_pause"
     const val ACTION_RESUME = "action_resume"
