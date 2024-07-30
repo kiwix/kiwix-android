@@ -29,6 +29,7 @@ import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
@@ -55,6 +56,7 @@ class DownloadManagerMonitor @Inject constructor(
   private val updater = PublishSubject.create<() -> Unit>()
   private val lock = Any()
   private val downloadInfoMap = mutableMapOf<Long, DownloadInfo>()
+  private var monitoringDisposable: Disposable? = null
 
   init {
     startMonitoringDownloads()
@@ -72,18 +74,30 @@ class DownloadManagerMonitor @Inject constructor(
     }
   }
 
-  @Suppress("MagicNumber", "CheckResult")
-  private fun startMonitoringDownloads() {
-    // we have to disable this when no downloads is ongoing
-    // and should re-enable when download started.
-    Observable.interval(0, 5, TimeUnit.SECONDS)
+  /**
+   * Starts monitoring ongoing downloads using a periodic observable.
+   * This method sets up an observable that runs every 5 seconds to check the status of downloads.
+   * It only starts the monitoring process if it's not already running and disposes of the observable
+   * when there are no ongoing downloads to avoid unnecessary resource usage.
+   */
+  @Suppress("MagicNumber")
+  fun startMonitoringDownloads() {
+    // Check if monitoring is already active. If it is, do nothing.
+    if (monitoringDisposable?.isDisposed == false) return
+    monitoringDisposable = Observable.interval(0, 5, TimeUnit.SECONDS)
       .subscribeOn(Schedulers.io())
       .observeOn(Schedulers.io())
       .subscribe(
         {
           try {
-            if (downloadRoomDao.downloads().blockingFirst().isNotEmpty()) {
-              checkDownloads()
+            synchronized(lock) {
+              if (downloadRoomDao.downloads().blockingFirst().isNotEmpty()) {
+                checkDownloads()
+              } else {
+                // dispose to avoid unnecessary request to downloadManager
+                // when there is no download ongoing.
+                monitoringDisposable?.dispose()
+              }
             }
           } catch (ignore: Exception) {
             Log.i(
