@@ -84,13 +84,17 @@ class DownloadManagerMonitor @Inject constructor(
   fun startMonitoringDownloads() {
     // Check if monitoring is already active. If it is, do nothing.
     if (monitoringDisposable?.isDisposed == false) return
-    monitoringDisposable = Observable.interval(0, 5, TimeUnit.SECONDS)
+    monitoringDisposable = Observable.interval(ZERO.toLong(), 5, TimeUnit.SECONDS)
       .subscribeOn(Schedulers.io())
       .observeOn(Schedulers.io())
       .subscribe(
         {
           try {
             synchronized(lock) {
+              Log.e(
+                "DOWNLOAD_MONITOR",
+                "startMonitoringDownloads: ${downloadRoomDao.downloads().blockingFirst()}"
+              )
               if (downloadRoomDao.downloads().blockingFirst().isNotEmpty()) {
                 checkDownloads()
               } else {
@@ -425,7 +429,7 @@ class DownloadManagerMonitor @Inject constructor(
     downloadId: Long,
     control: Int
   ): Boolean {
-    Log.e("PAUSED", "pauseResumeDownloadInDownloadManagerContentResolver: $control")
+    Log.e("DOWNLOAD_MONITOR", "pauseResumeDownloadInDownloadManagerContentResolver: $control")
     return try {
       // Update the status to paused/resumed in the database
       val contentValues = ContentValues().apply {

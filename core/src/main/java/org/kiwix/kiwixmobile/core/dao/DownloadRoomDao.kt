@@ -115,7 +115,9 @@ abstract class DownloadRoomDao {
           book = book,
           file = downloadRequest.getDestinationFile(sharedPreferenceUtil).path
         )
-      )
+      ).also {
+        downloadRequester.onDownloadAdded()
+      }
     }
   }
 
