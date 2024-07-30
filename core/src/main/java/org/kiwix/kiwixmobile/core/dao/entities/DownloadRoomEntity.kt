@@ -34,12 +34,12 @@ data class DownloadRoomEntity(
   var downloadId: Long,
   val file: String? = null,
   val etaInMilliSeconds: Long = -1L,
-  val bytesDownloaded: Long = -1L,
+  var bytesDownloaded: Long = -1L,
   val totalSizeOfDownload: Long = -1L,
   @Convert(converter = StatusConverter::class, dbType = Int::class)
   var status: Status = Status.NONE,
   @Convert(converter = ErrorConverter::class, dbType = Int::class)
-  val error: Error = Error.NONE,
+  var error: Error = Error.NONE,
   val progress: Int = -1,
   val bookId: String,
   val title: String,

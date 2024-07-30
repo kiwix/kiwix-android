@@ -20,8 +20,6 @@ package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
 import android.annotation.SuppressLint
 import android.app.DownloadManager
-import android.app.DownloadManager.STATUS_PAUSED
-import android.app.DownloadManager.STATUS_RUNNING
 import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
@@ -36,8 +34,11 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -50,7 +51,8 @@ class DownloadManagerMonitor @Inject constructor(
   private val downloadManager: DownloadManager,
   val downloadRoomDao: DownloadRoomDao,
   private val context: Context,
-  private val downloadNotificationManager: DownloadNotificationManager
+  private val downloadNotificationManager: DownloadNotificationManager,
+  private val sharedPreferenceUtil: SharedPreferenceUtil
 ) : DownloadMonitor, DownloadManagerBroadcastReceiver.Callback {
 
   private val updater = PublishSubject.create<() -> Unit>()
@@ -91,9 +93,9 @@ class DownloadManagerMonitor @Inject constructor(
         {
           try {
             synchronized(lock) {
-              Log.e(
+              Log.i(
                 "DOWNLOAD_MONITOR",
-                "startMonitoringDownloads: ${downloadRoomDao.downloads().blockingFirst()}"
+                "Couldn't ${downloadRoomDao.downloads().blockingFirst()}"
               )
               if (downloadRoomDao.downloads().blockingFirst().isNotEmpty()) {
                 checkDownloads()
@@ -341,6 +343,7 @@ class DownloadManagerMonitor @Inject constructor(
   ) {
     synchronized(lock) {
       updater.onNext {
+        Log.e("DOWNLOAD_MONITOR", "update status: $status")
         downloadRoomDao.getEntityForDownloadId(downloadId)?.let { downloadEntity ->
           if (shouldUpdateStatus(downloadEntity)) {
             val downloadModel = DownloadModel(downloadEntity).apply {
@@ -400,9 +403,20 @@ class DownloadManagerMonitor @Inject constructor(
   fun pauseDownload(downloadId: Long) {
     synchronized(lock) {
       updater.onNext {
-        if (pauseResumeDownloadInDownloadManagerContentResolver(downloadId, STATUS_PAUSED)) {
+        val downloadEntity = downloadRoomDao.getEntityForDownloadId(downloadId)
+        downloadEntity?.let {
+          // Save the file path and the downloaded bytes
+          val downloadedBytes = getBytesDownloaded(downloadId)
+          it.bytesDownloaded = downloadedBytes.toLong()
+          downloadRoomDao.update(DownloadModel(it))
+
+          // Cancel the current download
+          downloadManager.remove(downloadId)
           updateDownloadStatus(downloadId, Status.PAUSED, Error.NONE)
         }
+        // if (pauseResumeDownloadInDownloadManagerContentResolver(downloadId, 1)) {
+        //   updateDownloadStatus(downloadId, Status.PAUSED, Error.NONE)
+        // }
       }
     }
   }
@@ -410,9 +424,33 @@ class DownloadManagerMonitor @Inject constructor(
   fun resumeDownload(downloadId: Long) {
     synchronized(lock) {
       updater.onNext {
-        if (pauseResumeDownloadInDownloadManagerContentResolver(downloadId, STATUS_RUNNING)) {
-          updateDownloadStatus(downloadId, Status.QUEUED, Error.NONE)
+        try {
+          val downloadEntity = downloadRoomDao.getEntityForDownloadId(downloadId)
+          downloadEntity?.let {
+            val file = File(it.file)
+            val downloadedBytes = it.bytesDownloaded
+            val downloadRequest = DownloadRequest(it.url ?: "")
+
+            val newDownloadId =
+              downloadManager.enqueue(
+                downloadRequest.toDownloadManagerRequest(
+                  sharedPreferenceUtil,
+                  downloadedBytes
+                )
+              )
+            it.downloadId = newDownloadId
+            it.status = Status.QUEUED
+            it.error = Error.NONE
+            val downloadModel = DownloadModel(it)
+            downloadRoomDao.update(downloadModel)
+            updateNotification(downloadModel, downloadEntity.title, downloadEntity.description)
+          }
+        } catch (ignore: Exception) {
+          ignore.printStackTrace()
         }
+        // if (pauseResumeDownloadInDownloadManagerContentResolver(downloadId, 0)) {
+        //   updateDownloadStatus(downloadId, Status.QUEUED, Error.NONE)
+        // }
       }
     }
   }
@@ -422,6 +460,18 @@ class DownloadManagerMonitor @Inject constructor(
       downloadManager.remove(downloadId)
       handleCancelledDownload(downloadId)
     }
+  }
+
+  @SuppressLint("Range")
+  private fun getBytesDownloaded(downloadId: Long): Int {
+    downloadManager.query(DownloadManager.Query().setFilterById(downloadId)).use { cursor ->
+      if (cursor.moveToFirst()) {
+        return@getBytesDownloaded cursor.getInt(
+          cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
+        )
+      }
+    }
+    return ZERO
   }
 
   @SuppressLint("Range")

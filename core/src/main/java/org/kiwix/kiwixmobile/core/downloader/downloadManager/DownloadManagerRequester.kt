@@ -87,7 +87,10 @@ class DownloadManagerRequester @Inject constructor(
   }
 }
 
-private fun DownloadRequest.toDownloadManagerRequest(sharedPreferenceUtil: SharedPreferenceUtil) =
+fun DownloadRequest.toDownloadManagerRequest(
+  sharedPreferenceUtil: SharedPreferenceUtil,
+  bytesDownloaded: Long = ZERO.toLong()
+) =
   DownloadManager.Request(uri).apply {
     setDestinationUri(Uri.fromFile(getDestinationFile(sharedPreferenceUtil)))
     setAllowedNetworkTypes(
@@ -98,4 +101,7 @@ private fun DownloadRequest.toDownloadManagerRequest(sharedPreferenceUtil: Share
     )
     setAllowedOverMetered(true)
     setNotificationVisibility(VISIBILITY_HIDDEN) // hide the default notification.
+    if (bytesDownloaded > 0) {
+      addRequestHeader("Range", "bytes=$bytesDownloaded-")
+    }
   }
