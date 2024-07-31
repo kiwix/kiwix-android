@@ -24,9 +24,9 @@ import android.os.ParcelFileDescriptor
 import android.util.Base64
 import androidx.core.net.toUri
 import eu.mhutti1.utils.storage.Kb
-import kotlinx.coroutines.CoroutineScope
+import io.reactivex.Completable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.DarkModeConfig
@@ -356,7 +356,7 @@ class ZimFileReader constructor(
 
   @SuppressLint("CheckResult")
   private fun streamZimContentToPipe(item: Item?, uri: String, outputStream: OutputStream) {
-    CoroutineScope(Dispatchers.IO).launch {
+    Completable.fromAction {
       try {
         outputStream.use {
           if (uri.endsWith(UNINITIALISER_ADDRESS)) {
@@ -373,7 +373,8 @@ class ZimFileReader constructor(
       } catch (ignore: Exception) {
         Log.e(TAG, "error writing pipe for $uri", ignore)
       }
-    }
+    }.subscribeOn(Schedulers.io())
+      .subscribe({ }, Throwable::printStackTrace)
   }
 
   fun getItem(url: String): Item? =
