@@ -23,8 +23,8 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.web.sugar.Web.onWebView
-import androidx.test.espresso.web.webdriver.DriverAtoms
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
+import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
 import androidx.test.espresso.web.webdriver.Locator
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
@@ -86,18 +86,11 @@ class ReaderRobot : BaseRobot() {
             "//*[contains(text(), '$articleTitle')]"
           )
         )
-        .perform(DriverAtoms.webClick())
-    })
-  }
-
-  fun goToPreviousArticle() {
-    testFlakyView({
-      onView(withId(R.id.bottom_toolbar_arrow_back)).perform(click())
+        .perform(webClick())
     })
   }
 
   fun assertArticleLoaded(articlePageContent: String) {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong()) // wait to load the article
     testFlakyView({
       onWebView()
         .withElement(
