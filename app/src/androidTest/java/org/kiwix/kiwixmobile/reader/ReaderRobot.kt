@@ -22,6 +22,10 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.web.sugar.Web.onWebView
+import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
+import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
+import androidx.test.espresso.web.webdriver.Locator
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
@@ -70,5 +74,31 @@ class ReaderRobot : BaseRobot() {
 
   private fun pauseForBetterTestPerformance() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
+  }
+
+  fun clickOnArticle(articleTitle: String) {
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    testFlakyView({
+      onWebView()
+        .withElement(
+          findElement(
+            Locator.XPATH,
+            "//*[contains(text(), '$articleTitle')]"
+          )
+        )
+        .perform(webClick())
+    })
+  }
+
+  fun assertArticleLoaded(articlePageContent: String) {
+    testFlakyView({
+      onWebView()
+        .withElement(
+          findElement(
+            Locator.XPATH,
+            "//*[contains(text(), '$articlePageContent')]"
+          )
+        )
+    })
   }
 }

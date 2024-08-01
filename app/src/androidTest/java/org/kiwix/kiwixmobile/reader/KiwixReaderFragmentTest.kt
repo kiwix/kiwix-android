@@ -29,6 +29,9 @@ import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import leakcanary.LeakAssertions
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.ResponseBody
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -44,6 +47,7 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVi
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
+import java.net.URI
 
 class KiwixReaderFragmentTest : BaseActivityTest() {
   @Rule
@@ -107,12 +111,7 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
         }
       }
     }
-    UiThreadStatement.runOnUiThread {
-      kiwixMainActivity.navigate(
-        LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
-          .apply { zimFileUri = zimFile.toUri().toString() }
-      )
-    }
+    openKiwixReaderFragmentWithFile(zimFile)
     reader {
       checkZimFileLoadedSuccessful(R.id.readerFragment)
       clickOnTabIcon()
@@ -123,5 +122,117 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
       checkZimFileLoadedSuccessful(R.id.readerFragment)
     }
     LeakAssertions.assertNoLeaks()
+  }
+
+  @Test
+  fun testZimFileRendering() {
+    activityScenario.onActivity {
+      kiwixMainActivity = it
+      kiwixMainActivity.navigate(R.id.libraryFragment)
+    }
+    val downloadingZimFile = getDownloadingZimFile()
+    OkHttpClient().newCall(downloadRequest()).execute().use { response ->
+      if (response.isSuccessful) {
+        response.body?.let { responseBody ->
+          writeZimFileData(responseBody, downloadingZimFile)
+        }
+      } else {
+        throw RuntimeException(
+          "Download Failed. Error: ${response.message}\n" +
+            " Status Code: ${response.code}"
+        )
+      }
+    }
+    openKiwixReaderFragmentWithFile(downloadingZimFile)
+    reader {
+      checkZimFileLoadedSuccessful(R.id.readerFragment)
+      // test the whole welcome page is loaded or not
+      assertArticleLoaded("Réchauffement climatique")
+      assertArticleLoaded("Hydrogène")
+      assertArticleLoaded("Automobile")
+      assertArticleLoaded("Agriculture")
+      assertArticleLoaded("Dioxyde de carbone")
+      assertArticleLoaded("Développement durable")
+      assertArticleLoaded("Précipitations")
+      assertArticleLoaded("Énergie renouvelable")
+      assertArticleLoaded("Cyclone tropical")
+      assertArticleLoaded("Charbon")
+      assertArticleLoaded("Riz")
+      assertArticleLoaded("Fromage")
+      assertArticleLoaded("Gaz naturel")
+      assertArticleLoaded("Transport en commun")
+      assertArticleLoaded("Inondation")
+      assertArticleLoaded("Ammoniac")
+      assertArticleLoaded("Énergie hydroélectrique")
+      assertArticleLoaded("Feu de forêt")
+      assertArticleLoaded("Nuage")
+      assertArticleLoaded("Essence (hydrocarbure)")
+      assertArticleLoaded("Glacier")
+      assertArticleLoaded("Ciment")
+      assertArticleLoaded("Canicule")
+      assertArticleLoaded("Énergie éolienne")
+      assertArticleLoaded("Ours blanc")
+      assertArticleLoaded("Camion")
+      assertArticleLoaded("Glaciation")
+      assertArticleLoaded("Engrais")
+      assertArticleLoaded("Greenpeace")
+      assertArticleLoaded("Déforestation")
+      assertArticleLoaded("Bos taurus")
+      assertArticleLoaded("Agriculteur")
+      assertArticleLoaded("Baleine")
+      assertArticleLoaded("Catastrophe naturelle")
+      assertArticleLoaded("Tropique")
+      assertArticleLoaded("Irrigation")
+      assertArticleLoaded("Classification de Köppen")
+      assertArticleLoaded("Effet de serre")
+      assertArticleLoaded("Géothermie")
+      assertArticleLoaded("Combustible fossile")
+      assertArticleLoaded("Tourbe")
+      assertArticleLoaded("Chanvre")
+      assertArticleLoaded("Greta Thunberg")
+      assertArticleLoaded("Zone humide")
+      assertArticleLoaded("Al Gore")
+      assertArticleLoaded("Albédo")
+      // click on a article and see it is loaded or not
+      clickOnArticle("Transport en commun")
+      assertArticleLoaded("transport en commun")
+    }
+  }
+
+  private fun downloadRequest() =
+    Request.Builder()
+      .url(
+        URI.create(
+          "https://download.kiwix.org/zim/wikipedia_fr_climate_change_mini.zim"
+        ).toURL()
+      ).build()
+
+  private fun getDownloadingZimFile(): File {
+    val zimFile = File(context.cacheDir, "klimawandel.zim")
+    if (zimFile.exists()) zimFile.delete()
+    zimFile.createNewFile()
+    return zimFile
+  }
+
+  private fun writeZimFileData(responseBody: ResponseBody, file: File) {
+    FileOutputStream(file).use { outputStream ->
+      responseBody.byteStream().use { inputStream ->
+        val buffer = ByteArray(4096)
+        var bytesRead: Int
+        while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+          outputStream.write(buffer, 0, bytesRead)
+        }
+        outputStream.flush()
+      }
+    }
+  }
+
+  private fun openKiwixReaderFragmentWithFile(zimFile: File) {
+    UiThreadStatement.runOnUiThread {
+      kiwixMainActivity.navigate(
+        LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader()
+          .apply { zimFileUri = zimFile.toUri().toString() }
+      )
+    }
   }
 }
