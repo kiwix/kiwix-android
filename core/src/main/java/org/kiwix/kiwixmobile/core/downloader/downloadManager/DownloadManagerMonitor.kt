@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
 import android.annotation.SuppressLint
 import android.app.DownloadManager
+import android.app.DownloadManager.COLUMN_STATUS
 import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
@@ -34,11 +35,9 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.files.Log
-import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -46,6 +45,18 @@ const val ZERO = 0
 const val HUNDERED = 100
 const val THOUSAND = 1000
 const val DEFAULT_INT_VALUE = -1
+
+/*
+  These below values of android.provider.Downloads.Impl class,
+  there is no direct way to access them so we defining the values
+  from https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/java/android/provider/Downloads.java
+ */
+const val CONTROL_PAUSE = 1
+const val CONTROL_RUN = 0
+const val STATUS_RUNNING = 192
+const val STATUS_PAUSED_BY_APP = 193
+const val COLUMN_CONTROL = "control"
+val downloadBaseUri: Uri = Uri.parse("content://downloads/my_downloads")
 
 class DownloadManagerMonitor @Inject constructor(
   private val downloadManager: DownloadManager,
@@ -343,11 +354,20 @@ class DownloadManagerMonitor @Inject constructor(
   ) {
     synchronized(lock) {
       updater.onNext {
-        Log.e("DOWNLOAD_MONITOR", "update status: $status")
         downloadRoomDao.getEntityForDownloadId(downloadId)?.let { downloadEntity ->
           if (shouldUpdateStatus(downloadEntity)) {
             val downloadModel = DownloadModel(downloadEntity).apply {
-              state = status
+              if (status == Status.PAUSED && downloadEntity.status == Status.QUEUED) {
+                // Check if the user has resumed the download.
+                // Do not update the download status immediately since the download manager
+                // takes some time to actually resume the download. During this time,
+                // it will still return the paused state.
+                // By not updating the status right away, we ensure that the user
+                // sees the "Pending" state, indicating that the download is in the process
+                // of resuming.
+              } else {
+                state = status
+              }
               this.error = error
               if (progress > ZERO) {
                 this.progress = progress
@@ -403,20 +423,14 @@ class DownloadManagerMonitor @Inject constructor(
   fun pauseDownload(downloadId: Long) {
     synchronized(lock) {
       updater.onNext {
-        val downloadEntity = downloadRoomDao.getEntityForDownloadId(downloadId)
-        downloadEntity?.let {
-          // Save the file path and the downloaded bytes
-          val downloadedBytes = getBytesDownloaded(downloadId)
-          it.bytesDownloaded = downloadedBytes.toLong()
-          downloadRoomDao.update(DownloadModel(it))
-
-          // Cancel the current download
-          downloadManager.remove(downloadId)
+        if (pauseResumeDownloadInDownloadManagerContentResolver(
+            downloadId,
+            CONTROL_PAUSE,
+            STATUS_PAUSED_BY_APP
+          )
+        ) {
           updateDownloadStatus(downloadId, Status.PAUSED, Error.NONE)
         }
-        // if (pauseResumeDownloadInDownloadManagerContentResolver(downloadId, 1)) {
-        //   updateDownloadStatus(downloadId, Status.PAUSED, Error.NONE)
-        // }
       }
     }
   }
@@ -424,33 +438,14 @@ class DownloadManagerMonitor @Inject constructor(
   fun resumeDownload(downloadId: Long) {
     synchronized(lock) {
       updater.onNext {
-        try {
-          val downloadEntity = downloadRoomDao.getEntityForDownloadId(downloadId)
-          downloadEntity?.let {
-            val file = File(it.file)
-            val downloadedBytes = it.bytesDownloaded
-            val downloadRequest = DownloadRequest(it.url ?: "")
-
-            val newDownloadId =
-              downloadManager.enqueue(
-                downloadRequest.toDownloadManagerRequest(
-                  sharedPreferenceUtil,
-                  downloadedBytes
-                )
-              )
-            it.downloadId = newDownloadId
-            it.status = Status.QUEUED
-            it.error = Error.NONE
-            val downloadModel = DownloadModel(it)
-            downloadRoomDao.update(downloadModel)
-            updateNotification(downloadModel, downloadEntity.title, downloadEntity.description)
-          }
-        } catch (ignore: Exception) {
-          ignore.printStackTrace()
+        if (pauseResumeDownloadInDownloadManagerContentResolver(
+            downloadId,
+            CONTROL_RUN,
+            STATUS_RUNNING
+          )
+        ) {
+          updateDownloadStatus(downloadId, Status.QUEUED, Error.NONE)
         }
-        // if (pauseResumeDownloadInDownloadManagerContentResolver(downloadId, 0)) {
-        //   updateDownloadStatus(downloadId, Status.QUEUED, Error.NONE)
-        // }
       }
     }
   }
@@ -463,38 +458,20 @@ class DownloadManagerMonitor @Inject constructor(
   }
 
   @SuppressLint("Range")
-  private fun getBytesDownloaded(downloadId: Long): Int {
-    downloadManager.query(DownloadManager.Query().setFilterById(downloadId)).use { cursor ->
-      if (cursor.moveToFirst()) {
-        return@getBytesDownloaded cursor.getInt(
-          cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
-        )
-      }
-    }
-    return ZERO
-  }
-
-  @SuppressLint("Range")
   private fun pauseResumeDownloadInDownloadManagerContentResolver(
     downloadId: Long,
-    control: Int
+    control: Int,
+    status: Int
   ): Boolean {
-    Log.e("DOWNLOAD_MONITOR", "pauseResumeDownloadInDownloadManagerContentResolver: $control")
     return try {
       // Update the status to paused/resumed in the database
       val contentValues = ContentValues().apply {
-        put("control", control)
+        put(COLUMN_CONTROL, control)
+        put(COLUMN_STATUS, status)
       }
-      val uri =
-        ContentUris.withAppendedId(Uri.parse("content://downloads/my_downloads"), downloadId)
-      val downloadEntity = downloadRoomDao.getEntityForDownloadId(downloadId)
+      val uri = ContentUris.withAppendedId(downloadBaseUri, downloadId)
       context.contentResolver
-        .update(
-          uri,
-          contentValues,
-          "title=?",
-          arrayOf(downloadEntity?.title)
-        )
+        .update(uri, contentValues, null, null)
       true
     } catch (ignore: Exception) {
       Log.e("DOWNLOAD_MONITOR", "Couldn't pause/resume the download. Original exception = $ignore")
