@@ -143,7 +143,8 @@ class DownloadManagerMonitor @Inject constructor(
       val query = DownloadManager.Query().setFilterByStatus(
         DownloadManager.STATUS_RUNNING or
           DownloadManager.STATUS_PAUSED or
-          DownloadManager.STATUS_PENDING
+          DownloadManager.STATUS_PENDING or
+          DownloadManager.STATUS_SUCCESSFUL
       )
       downloadManager.query(query).use { cursor ->
         if (cursor.moveToFirst()) {
