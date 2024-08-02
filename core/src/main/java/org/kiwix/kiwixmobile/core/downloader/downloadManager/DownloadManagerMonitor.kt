@@ -104,10 +104,6 @@ class DownloadManagerMonitor @Inject constructor(
         {
           try {
             synchronized(lock) {
-              Log.i(
-                "DOWNLOAD_MONITOR",
-                "Couldn't ${downloadRoomDao.downloads().blockingFirst()}"
-              )
               if (downloadRoomDao.downloads().blockingFirst().isNotEmpty()) {
                 checkDownloads()
               } else {
@@ -195,8 +191,14 @@ class DownloadManagerMonitor @Inject constructor(
         downloadId,
         progress,
         bytesDownloaded,
-        totalBytes
-      )
+        totalBytes,
+        reason
+      ).also {
+        Log.e(
+          "UPDATE_STATUS",
+          "handlePausedDownload: $status, reason $reason"
+        )
+      }
 
       DownloadManager.STATUS_PENDING -> handlePendingDownload(downloadId)
       DownloadManager.STATUS_RUNNING -> handleRunningDownload(
@@ -248,12 +250,14 @@ class DownloadManagerMonitor @Inject constructor(
     downloadId: Long,
     progress: Int,
     bytesDownloaded: Int,
-    totalSizeOfDownload: Int
+    totalSizeOfDownload: Int,
+    reason: Int
   ) {
+    val pauseReason = mapDownloadPauseReason(reason)
     updateDownloadStatus(
       downloadId = downloadId,
       status = Status.PAUSED,
-      error = Error.NONE,
+      error = pauseReason,
       progress = progress,
       bytesDownloaded = bytesDownloaded,
       totalSizeOfDownload = totalSizeOfDownload
@@ -340,6 +344,16 @@ class DownloadManagerMonitor @Inject constructor(
       DownloadManager.ERROR_UNHANDLED_HTTP_CODE -> Error.ERROR_UNHANDLED_HTTP_CODE
       DownloadManager.ERROR_UNKNOWN -> Error.UNKNOWN
       else -> Error.UNKNOWN
+    }
+  }
+
+  private fun mapDownloadPauseReason(reason: Int): Error {
+    return when (reason) {
+      DownloadManager.PAUSED_QUEUED_FOR_WIFI -> Error.QUEUED_FOR_WIFI
+      DownloadManager.PAUSED_WAITING_TO_RETRY -> Error.WAITING_TO_RETRY
+      DownloadManager.PAUSED_WAITING_FOR_NETWORK -> Error.WAITING_FOR_NETWORK
+      DownloadManager.PAUSED_UNKNOWN -> Error.PAUSED_UNKNOWN
+      else -> Error.PAUSED_UNKNOWN
     }
   }
 

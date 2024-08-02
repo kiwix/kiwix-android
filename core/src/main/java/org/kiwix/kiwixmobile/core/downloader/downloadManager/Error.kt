@@ -33,7 +33,11 @@ enum class Error(val value: Int) {
   ERROR_HTTP_DATA_ERROR(9),
   ERROR_INSUFFICIENT_SPACE(10),
   ERROR_TOO_MANY_REDIRECTS(11),
-  ERROR_UNHANDLED_HTTP_CODE(12);
+  ERROR_UNHANDLED_HTTP_CODE(12),
+  QUEUED_FOR_WIFI(13),
+  WAITING_FOR_NETWORK(14),
+  WAITING_TO_RETRY(15),
+  PAUSED_UNKNOWN(16);
 
   companion object {
     @Suppress("ComplexMethod", "MagicNumber")
@@ -54,6 +58,10 @@ enum class Error(val value: Int) {
         10 -> ERROR_INSUFFICIENT_SPACE
         11 -> ERROR_TOO_MANY_REDIRECTS
         12 -> ERROR_UNHANDLED_HTTP_CODE
+        13 -> QUEUED_FOR_WIFI
+        14 -> WAITING_FOR_NETWORK
+        15 -> WAITING_TO_RETRY
+        16 -> PAUSED_UNKNOWN
         else -> UNKNOWN
       }
     }

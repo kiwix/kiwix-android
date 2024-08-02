@@ -97,6 +97,7 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
   ) :
     LibraryViewHolder<LibraryDownloadItem>(itemDownloadBinding.root) {
 
+    @Suppress("MagicNumber")
     override fun bind(item: LibraryDownloadItem) {
       itemDownloadBinding.libraryDownloadFavicon.setBitmap(item.favIcon)
       itemDownloadBinding.libraryDownloadTitle.text = item.title
@@ -118,12 +119,28 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
       itemDownloadBinding.downloadState.text =
         item.downloadState.toReadableState(containerView.context).also {
           val pauseResumeIconId =
-            if (it == itemDownloadBinding.root.context.getString(R.string.paused_state)) {
+            if (it.contains(itemDownloadBinding.root.context.getString(R.string.paused_state))) {
               R.drawable.ic_play_24dp
             } else {
               R.drawable.ic_pause_24dp
             }
-          itemDownloadBinding.pauseResume.setImageDrawableCompat(pauseResumeIconId)
+          itemDownloadBinding.pauseResume.apply {
+            setImageDrawableCompat(pauseResumeIconId)
+            if (it == itemDownloadBinding.root.context.getString(R.string.paused_state) ||
+              !it.contains(itemDownloadBinding.root.context.getString(R.string.paused_state))
+            ) {
+              // If the download is paused by the user or is currently running,
+              // enable the pause/resume button.
+              isEnabled = true
+              alpha = 1f
+            } else {
+              // Otherwise, disable the pause/resume button because the download could be paused
+              // due to waiting for a WiFi connection if the user tries to download
+              // the ZIM files over WiFi only.
+              isEnabled = false
+              alpha = 0.5f
+            }
+          }
         }
       if (item.currentDownloadState == Status.FAILED) {
         clickAction.invoke(item)

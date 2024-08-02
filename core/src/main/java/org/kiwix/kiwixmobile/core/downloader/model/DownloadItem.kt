@@ -19,18 +19,18 @@ package org.kiwix.kiwixmobile.core.downloader.model
 
 import android.content.Context
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.NONE
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.ADDED
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.QUEUED
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.DOWNLOADING
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.PAUSED
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.COMPLETED
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.CANCELLED
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.FAILED
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.REMOVED
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.DELETED
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.Error
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.ADDED
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.CANCELLED
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.COMPLETED
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.DELETED
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.DOWNLOADING
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.FAILED
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.NONE
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.PAUSED
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.QUEUED
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status.REMOVED
 
 data class DownloadItem(
   val downloadId: Long,
@@ -76,7 +76,7 @@ sealed class DownloadState(
         QUEUED -> Pending
 
         DOWNLOADING -> Running
-        PAUSED -> Paused
+        PAUSED -> Paused(error)
         COMPLETED -> Successful
         CANCELLED,
         FAILED,
@@ -88,7 +88,7 @@ sealed class DownloadState(
   object Pending : DownloadState(R.string.pending_state)
   object Running : DownloadState(R.string.running_state)
   object Successful : DownloadState(R.string.complete)
-  object Paused : DownloadState(R.string.paused_state)
+  data class Paused(val reason: Error) : DownloadState(R.string.paused_state)
   data class Failed(val reason: Error, override val zimUrl: String?) :
     DownloadState(R.string.failed_state, zimUrl)
 
@@ -96,9 +96,22 @@ sealed class DownloadState(
 
   fun toReadableState(context: Context): CharSequence = when (this) {
     is Failed -> context.getString(stringId, reason.name)
+    is Paused -> getPauseReasonText(context, stringId, reason)
     Pending,
     Running,
-    Paused,
     Successful -> context.getString(stringId)
+  }
+
+  private fun getPauseReasonText(
+    context: Context,
+    stringId: Int,
+    pauseError: Error
+  ): CharSequence {
+    return when (pauseError) {
+      Error.QUEUED_FOR_WIFI,
+      Error.WAITING_FOR_NETWORK -> "${context.getString(stringId)}: ${pauseError.name}"
+
+      else -> context.getString(stringId)
+    }
   }
 }
