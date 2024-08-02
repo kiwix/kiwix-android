@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.custom.download
 
 import com.jraska.livedata.test
-import com.tonyodev.fetch2.Error.NONE
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -29,6 +28,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Error.NONE
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState.Failed
