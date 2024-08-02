@@ -102,9 +102,9 @@ fun DownloadRequest.toDownloadManagerRequest(
         if (sharedPreferenceUtil.prefWifiOnly)
           Request.NETWORK_WIFI
         else
-          Request.NETWORK_MOBILE
+          Request.NETWORK_MOBILE or Request.NETWORK_WIFI
       )
-      setAllowedOverMetered(true)
+      setAllowedOverMetered(!sharedPreferenceUtil.prefWifiOnly)
       setNotificationVisibility(VISIBILITY_HIDDEN) // hide the default notification.
       val userNameAndPassword = System.getenv(urlString.secretKey) ?: ""
       val userName = userNameAndPassword.substringBefore(":", "")
@@ -120,9 +120,9 @@ fun DownloadRequest.toDownloadManagerRequest(
         if (sharedPreferenceUtil.prefWifiOnly)
           Request.NETWORK_WIFI
         else
-          Request.NETWORK_MOBILE
+          Request.NETWORK_MOBILE or Request.NETWORK_WIFI
       )
-      setAllowedOverMetered(true)
+      setAllowedOverMetered(!sharedPreferenceUtil.prefWifiOnly)
       setNotificationVisibility(VISIBILITY_HIDDEN) // hide the default notification.
     }
   }

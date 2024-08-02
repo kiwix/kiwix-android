@@ -77,7 +77,7 @@ class DownloadNotificationManager @Inject constructor(
           notificationBuilder.setProgress(HUNDERED, downloadNotificationModel.progress, false)
         }
         when {
-          downloadNotificationModel.isQueued || downloadNotificationModel.isDownloading ->
+          downloadNotificationModel.isDownloading ->
             notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER)
               .addAction(
                 R.drawable.ic_baseline_stop,
@@ -100,6 +100,9 @@ class DownloadNotificationManager @Inject constructor(
                 getPauseOrResumeTitle(false),
                 getActionPendingIntent(ACTION_RESUME, downloadNotificationModel.downloadId)
               )
+
+          downloadNotificationModel.isQueued ->
+            notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER)
 
           else -> notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
         }
