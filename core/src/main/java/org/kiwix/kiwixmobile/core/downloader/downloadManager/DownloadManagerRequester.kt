@@ -22,9 +22,13 @@ import android.app.DownloadManager
 import android.app.DownloadManager.Request
 import android.app.DownloadManager.Request.VISIBILITY_HIDDEN
 import android.net.Uri
+import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.core.data.remote.isAuthenticationUrl
+import org.kiwix.kiwixmobile.core.data.remote.removeAuthenticationFromUrl
+import org.kiwix.kiwixmobile.core.data.remote.secretKey
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -89,15 +93,37 @@ class DownloadManagerRequester @Inject constructor(
 
 fun DownloadRequest.toDownloadManagerRequest(
   sharedPreferenceUtil: SharedPreferenceUtil
-) =
-  DownloadManager.Request(uri).apply {
-    setDestinationUri(Uri.fromFile(getDestinationFile(sharedPreferenceUtil)))
-    setAllowedNetworkTypes(
-      if (sharedPreferenceUtil.prefWifiOnly)
-        Request.NETWORK_WIFI
-      else
-        Request.NETWORK_MOBILE
-    )
-    setAllowedOverMetered(true)
-    setNotificationVisibility(VISIBILITY_HIDDEN) // hide the default notification.
+): DownloadManager.Request {
+  return if (urlString.isAuthenticationUrl) {
+    // return the request with "Authorization" header if the url is a Authentication url.
+    DownloadManager.Request(urlString.removeAuthenticationFromUrl.toUri()).apply {
+      setDestinationUri(Uri.fromFile(getDestinationFile(sharedPreferenceUtil)))
+      setAllowedNetworkTypes(
+        if (sharedPreferenceUtil.prefWifiOnly)
+          Request.NETWORK_WIFI
+        else
+          Request.NETWORK_MOBILE
+      )
+      setAllowedOverMetered(true)
+      setNotificationVisibility(VISIBILITY_HIDDEN) // hide the default notification.
+      val userNameAndPassword = System.getenv(urlString.secretKey) ?: ""
+      val userName = userNameAndPassword.substringBefore(":", "")
+      val password = userNameAndPassword.substringAfter(":", "")
+      val credentials = okhttp3.Credentials.basic(userName, password)
+      addRequestHeader("Authorization", credentials)
+    }
+  } else {
+    // return the request for normal urls.
+    DownloadManager.Request(uri).apply {
+      setDestinationUri(Uri.fromFile(getDestinationFile(sharedPreferenceUtil)))
+      setAllowedNetworkTypes(
+        if (sharedPreferenceUtil.prefWifiOnly)
+          Request.NETWORK_WIFI
+        else
+          Request.NETWORK_MOBILE
+      )
+      setAllowedOverMetered(true)
+      setNotificationVisibility(VISIBILITY_HIDDEN) // hide the default notification.
+    }
   }
+}

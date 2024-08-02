@@ -30,7 +30,6 @@ import kotlinx.coroutines.sync.Mutex
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
-import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
@@ -97,7 +96,6 @@ interface CoreComponent {
   fun application(): Application
   fun bookUtils(): BookUtils
   fun dataSource(): DataSource
-  fun fetchDownloadDao(): FetchDownloadDao
   fun newBookDao(): NewBookDao
   fun historyDao(): HistoryDao
   fun noteDao(): NewNoteDao

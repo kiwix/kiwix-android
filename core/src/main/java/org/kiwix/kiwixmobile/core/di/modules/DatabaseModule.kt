@@ -22,7 +22,6 @@ import dagger.Module
 import dagger.Provides
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
-import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
 import org.kiwix.kiwixmobile.core.dao.FlowBuilder
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
@@ -32,7 +31,6 @@ import org.kiwix.kiwixmobile.core.dao.NewNoteDao
 import org.kiwix.kiwixmobile.core.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.core.dao.entities.MyObjectBox
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Singleton
 
 @Module
@@ -69,13 +67,6 @@ open class DatabaseModule {
     boxStore: BoxStore,
     flowBuilder: FlowBuilder
   ): NewRecentSearchDao = NewRecentSearchDao(boxStore.boxFor(), flowBuilder)
-
-  @Provides @Singleton fun providesFetchDownloadDao(
-    boxStore: BoxStore,
-    newBookDao: NewBookDao,
-    sharedPreferenceUtil: SharedPreferenceUtil
-  ): FetchDownloadDao =
-    FetchDownloadDao(boxStore.boxFor(), newBookDao, sharedPreferenceUtil)
 
   @Singleton
   @Provides
