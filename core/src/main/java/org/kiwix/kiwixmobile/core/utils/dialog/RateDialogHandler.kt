@@ -23,18 +23,22 @@ import android.content.Intent
 import android.net.Uri
 import androidx.annotation.IdRes
 import org.kiwix.kiwixmobile.core.BuildConfig
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
+import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.di.ActivityScope
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
-const val VISITS_REQUIRED_TO_SHOW_RATE_DIALOG = 10
+const val VISITS_REQUIRED_TO_SHOW_RATE_DIALOG = 20
 
 @ActivityScope
 class RateDialogHandler @Inject constructor(
   private val activity: Activity,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val alertDialogShower: AlertDialogShower
+  private val alertDialogShower: AlertDialogShower,
+  private val newBookDao: NewBookDao
 ) {
   private var visitCounterPref: RateAppCounter? = null
   private var tempVisitCount = 0
@@ -70,7 +74,25 @@ class RateDialogHandler @Inject constructor(
 
   private fun shouldShowRateDialog(): Boolean {
     return tempVisitCount >= VISITS_REQUIRED_TO_SHOW_RATE_DIALOG &&
-      visitCounterPref?.noThanksState == false && !BuildConfig.DEBUG
+      visitCounterPref?.noThanksState == false && isTwoWeekPassed() &&
+      isZimFilesAvailableInLibrary() && !BuildConfig.DEBUG
+  }
+
+  private fun isZimFilesAvailableInLibrary(): Boolean {
+    // If it is a custom app, return true since custom apps always have the ZIM file.
+    if (activity.isCustomApp()) return true
+    // For Kiwix app, check if there are ZIM files available in the library.
+    return newBookDao.getBooks().isNotEmpty()
+  }
+
+  @Suppress("MagicNumber")
+  private fun isTwoWeekPassed(): Boolean {
+    val firstTimeInstallTime = activity.packageManager
+      .getPackageInformation(activity.packageName, 0).firstInstallTime
+    val timeDifference = System.currentTimeMillis() - firstTimeInstallTime
+    val twoWeeksInMillis = 14 * 24 * 60 * 60 * 1000L
+    // Check if the time difference is at least 2 weeks
+    return timeDifference >= twoWeeksInMillis
   }
 
   private fun goToRateApp(activity: Activity) {
