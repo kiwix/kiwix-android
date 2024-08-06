@@ -317,7 +317,6 @@
   <string name="allowed">İzin verildi</string>
   <string name="not_allowed">İzin verilmedi</string>
   <string name="denied_internet_permission_message">Lütfen içeriği indirmek için wifi özelliğini etkinleştirin</string>
-  <string name="select_folder">Lütfen harici depolama için bir klasör seçin.</string>
   <string name="system_unable_to_grant_permission_message">Sistem izin veremiyor!</string>
   <string name="allow">İzin ver</string>
   <string name="swipe_down_for_library">Kitaplık için Aşağı Kaydırın</string>

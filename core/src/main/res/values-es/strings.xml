@@ -326,7 +326,6 @@
   <string name="allowed">Permitido</string>
   <string name="not_allowed">No permitido</string>
   <string name="denied_internet_permission_message">Por favor habilite WiFi para descargar contenido</string>
-  <string name="select_folder">Por favor, seleccione una carpeta para el almacenamiento externo.</string>
   <string name="system_unable_to_grant_permission_message">Sistema incapaz de conceder permiso!</string>
   <string name="allow">Permitir</string>
   <string name="swipe_down_for_library">Deslizar hacia abajo para abrir la Biblioteca</string>

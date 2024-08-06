@@ -331,7 +331,6 @@
   <string name="allowed">Erlaubt</string>
   <string name="not_allowed">Nicht erlaubt</string>
   <string name="denied_internet_permission_message">Bitte WLAN aktivieren, um Inhalte herunterzuladen</string>
-  <string name="select_folder">Bitte einen Ordner für externe Speicherung auswählen.</string>
   <string name="system_unable_to_grant_permission_message">System kann keine Berechtigung erteilen!</string>
   <string name="allow">Erlauben</string>
   <string name="swipe_down_for_library">Nach unten wischen für Bibliothek</string>

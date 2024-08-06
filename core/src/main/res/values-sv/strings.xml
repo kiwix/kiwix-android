@@ -313,7 +313,6 @@
   <string name="allowed">Tillåten</string>
   <string name="not_allowed">Inte tillåtet</string>
   <string name="denied_internet_permission_message">Aktivera wifi för att ladda ner innehåll</string>
-  <string name="select_folder">Välj mapp för extern lagring.</string>
   <string name="system_unable_to_grant_permission_message">Systemet kunde inte ge tillstånd!</string>
   <string name="allow">Tillåt</string>
   <string name="swipe_down_for_library">Svep nedåt för bibliotek</string>
