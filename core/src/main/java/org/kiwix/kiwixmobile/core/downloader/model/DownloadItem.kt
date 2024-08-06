@@ -108,6 +108,7 @@ sealed class DownloadState(
     pauseError: Error
   ): CharSequence {
     return when (pauseError) {
+      Error.WAITING_TO_RETRY,
       Error.QUEUED_FOR_WIFI,
       Error.WAITING_FOR_NETWORK -> "${context.getString(stringId)}: ${pauseError.name}"
 

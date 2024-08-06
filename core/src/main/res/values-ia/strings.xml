@@ -321,7 +321,6 @@
   <string name="allowed">Permittite</string>
   <string name="not_allowed">Non permittite</string>
   <string name="denied_internet_permission_message">Per favor activa Wi-Fi pro discargar contento</string>
-  <string name="select_folder">Per favor selige un dossier pro immagazinage externe.</string>
   <string name="system_unable_to_grant_permission_message">Systema incapace de conceder permission!</string>
   <string name="allow">Autorisar</string>
   <string name="swipe_down_for_library">Glissa a basso pro le bibliotheca</string>

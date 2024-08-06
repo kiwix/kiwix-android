@@ -309,7 +309,6 @@
   <string name="allowed">Soli beni</string>
   <string name="not_allowed">Soli kani</string>
   <string name="denied_internet_permission_message">Pahimi suɣilo niŋmi Wifi din yɛn chɛ ka a tooi deei lahabali</string>
-  <string name="select_folder">Pahimi suɣilo piimi gbaŋ zaŋ n-ti sambani deei niŋ shee.</string>
   <string name="system_unable_to_grant_permission_message">Di puuni bi tooi ti soli!</string>
   <string name="allow">Saɣima</string>
   <string name="swipe_down_for_library">Dihimi gbuni zaŋ n-ti Karimbu shee</string>

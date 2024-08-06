@@ -331,7 +331,6 @@
   <string name="allowed">允許</string>
   <string name="not_allowed">不允許</string>
   <string name="denied_internet_permission_message">請啟用 wifi 來下載內容</string>
-  <string name="select_folder">請選取用於外部儲存的資料夾。</string>
   <string name="system_unable_to_grant_permission_message">系統無法授予權限！</string>
   <string name="allow">允許</string>
   <string name="swipe_down_for_library">向下滑動圖書館</string>

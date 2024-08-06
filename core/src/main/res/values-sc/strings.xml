@@ -296,7 +296,6 @@
   <string name="allowed">Permìtidu</string>
   <string name="not_allowed">Non permìtidu</string>
   <string name="denied_internet_permission_message">Abìlita su wifi pro iscarrigare cuntenutos</string>
-  <string name="select_folder">Pro praghere seletziona una cartella pro sa memòria esterna.</string>
   <string name="system_unable_to_grant_permission_message">Su sistema no est in gradu de frunire su permissu!</string>
   <string name="allow">Permite</string>
   <string name="swipe_down_for_library">Iscurre cara a bassu pro sa biblioteca</string>

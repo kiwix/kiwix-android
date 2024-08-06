@@ -235,14 +235,6 @@ sealed class KiwixDialog(
     getView = customGetView
   )
 
-  data class SelectFolder(val customGetView: (() -> View)?) : KiwixDialog(
-    R.string.select_folder,
-    null,
-    android.R.string.ok,
-    null,
-    getView = customGetView
-  )
-
   data class StartServer(val customGetView: (() -> View)?) : KiwixDialog(
     R.string.progress_dialog_starting_server,
     null,

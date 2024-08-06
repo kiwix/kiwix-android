@@ -340,7 +340,6 @@
   <string name="allowed">Разрешено</string>
   <string name="not_allowed">Не разрешено</string>
   <string name="denied_internet_permission_message">Включите Wi-Fi для загрузки содержания</string>
-  <string name="select_folder">Выберите папку для внешнего хранилища.</string>
   <string name="system_unable_to_grant_permission_message">Система не может предоставить разрешение!</string>
   <string name="allow">Разрешить</string>
   <string name="swipe_down_for_library">Проведите пальцем вниз, чтобы открыть библиотеку</string>

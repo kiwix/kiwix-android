@@ -320,7 +320,6 @@
   <string name="allowed">Permitido</string>
   <string name="not_allowed">Não permitido</string>
   <string name="denied_internet_permission_message">Por favor, habilite o wi-fi para o download de conteúdo</string>
-  <string name="select_folder">Por favor selecione uma pasta para o armazenamento externo.</string>
   <string name="system_unable_to_grant_permission_message">O sistema foi incapaz de garantir a permissão!</string>
   <string name="allow">Permitir</string>
   <string name="swipe_down_for_library">Deslize para baixo para exibir a Biblioteca</string>

@@ -313,7 +313,6 @@
   <string name="all_files_permission_needed_message">Aby uzyskać dostęp do wszystkich plików zim na urządzeniu, musimy mieć uprawnienia do wszystkich plików</string>
   <string name="allowed">Dozwolony</string>
   <string name="not_allowed">Niedozwolony</string>
-  <string name="select_folder">Wybierz katalog do przechowywania zewnętrznego.</string>
   <string name="system_unable_to_grant_permission_message">System nie może udzielić pozwolenia!</string>
   <string name="go_to_settings_label">Przejdź do ustawień</string>
 </resources>

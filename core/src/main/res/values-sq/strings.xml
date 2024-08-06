@@ -293,7 +293,6 @@
   <string name="allowed">Të lejuar</string>
   <string name="not_allowed">Jo të lejuar</string>
   <string name="denied_internet_permission_message">Që të shkarkohet lënda, ju lutemi, aktivizoni wifi-n</string>
-  <string name="select_folder">Ju lutemi, përzgjidhni një dosje për depozitim të jashtëm.</string>
   <string name="system_unable_to_grant_permission_message">Sistemi s’është në gjendje të akordojë leje!</string>
   <string name="allow">Lejoje</string>
   <string name="swipe_down_for_library">Për Bibliotekën, Fërkojeni Për Poshtë</string>

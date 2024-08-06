@@ -307,7 +307,6 @@
   <string name="allowed">مسموح به</string>
   <string name="not_allowed">غير مسموح به</string>
   <string name="denied_internet_permission_message">يرجى تمكين wifi لتنزيل المحتوى</string>
-  <string name="select_folder">الرجاء تحديد مجلد للتخزين الخارجي.</string>
   <string name="system_unable_to_grant_permission_message">النظام غير قادر على منح الإذن!</string>
   <string name="allow">السماح</string>
   <string name="no_notes">لا توجد ملاحظات</string>
