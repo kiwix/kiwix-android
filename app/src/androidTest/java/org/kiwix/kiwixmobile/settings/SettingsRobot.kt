@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.settings
 
+import android.os.Build
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onData
@@ -100,12 +101,18 @@ class SettingsRobot : BaseRobot() {
     isVisible(TextId(R.string.pref_language_title))
   }
 
-  fun clickStoragePreference() {
-    clickRecyclerViewItems(R.string.internal_storage, R.string.external_storage)
+  fun clickInternalStoragePreference() {
+    clickRecyclerViewItems(R.string.internal_storage)
   }
 
-  fun assertStorageDialogDisplayed() {
-    isVisible(TextId(R.string.pref_storage))
+  fun clickExternalStoragePreference() {
+    clickRecyclerViewItems(R.string.external_storage)
+    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) {
+      // for now when we will click on the external storage then it will show folder
+      // selection dialog which we are removing the #3935 so, for now, dismiss this dialog, we
+      // will remove this in #3935.
+      dismissDialog()
+    }
   }
 
   fun clickClearHistoryPreference() {
