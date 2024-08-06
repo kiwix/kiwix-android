@@ -127,16 +127,18 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
           itemDownloadBinding.pauseResume.apply {
             setImageDrawableCompat(pauseResumeIconId)
             if (it == itemDownloadBinding.root.context.getString(R.string.paused_state) ||
-              !it.contains(itemDownloadBinding.root.context.getString(R.string.paused_state))
+              !it.contains(itemDownloadBinding.root.context.getString(R.string.paused_state)) ||
+              !it.contains(itemDownloadBinding.root.context.getString(R.string.failed_state))
             ) {
               // If the download is paused by the user or is currently running,
               // enable the pause/resume button.
               isEnabled = true
               alpha = 1f
             } else {
-              // Otherwise, disable the pause/resume button because the download could be paused
-              // due to waiting for a WiFi connection if the user tries to download
-              // the ZIM files over WiFi only.
+              // Otherwise, disable the pause/resume button because the download could not be paused
+              // due to waiting for a WiFi connection or another condition that prevents the
+              // download from continuing, such as a failed state. Disabling the button
+              // prevents unexpected behavior when the download cannot be resumed.
               isEnabled = false
               alpha = 0.5f
             }
