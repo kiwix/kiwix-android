@@ -275,6 +275,8 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_LANG = "pref_language_chooser"
     const val PREF_DEVICE_DEFAULT_LANG = "pref_device_default_language"
     const val PREF_STORAGE = "pref_select_folder"
+    const val PREF_INTERNAL_STORAGE = "pref_internal_storage"
+    const val PREF_EXTERNAL_STORAGE = "pref_external_storage"
     const val STORAGE_POSITION = "storage_position"
     const val PREF_WIFI_ONLY = "pref_wifi_only"
     const val PREF_KIWIX_MOBILE = "kiwix-mobile"
