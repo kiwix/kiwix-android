@@ -20,30 +20,74 @@ package org.kiwix.kiwixmobile.core.settings
 
 import android.content.Context
 import android.util.AttributeSet
+import android.widget.ProgressBar
+import android.widget.RadioButton
+import android.widget.TextView
 import androidx.preference.CheckBoxPreference
+import androidx.preference.PreferenceViewHolder
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.PREF_EXTERNAL_STORAGE
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.PREF_INTERNAL_STORAGE
 
-class StorageRadioButtonPreference : CheckBoxPreference {
-  constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
-    context,
-    attrs,
-    defStyle
-  ) {
-    setView()
+class StorageRadioButtonPreference @JvmOverloads constructor(
+  context: Context,
+  attrs: AttributeSet? = null,
+  defStyleAttr: Int = 0
+) : CheckBoxPreference(context, attrs, defStyleAttr) {
+
+  init {
+    widgetLayoutResource = R.layout.item_storage_preference
   }
 
-  constructor(context: Context, attrs: AttributeSet? = null) : super(context, attrs) {
-    setView()
-  }
+  private var radioButton: RadioButton? = null
+  private var progressBar: ProgressBar? = null
+  private var usedSpaceTextView: TextView? = null
+  private var freeSpaceTextView: TextView? = null
+  private var pathAndTitleTextView: TextView? = null
+  private var usedSpace: String? = null
+  private var freeSpace: String? = null
+  private var pathAndTitle: String? = null
+  private var progress: Int = 0
 
-  private fun setView() {
-    widgetLayoutResource = R.layout.item_radio_button
+  override fun onBindViewHolder(holder: PreferenceViewHolder) {
+    super.onBindViewHolder(holder)
+    radioButton = holder.findViewById(R.id.radioButton) as RadioButton
+    progressBar = holder.findViewById(R.id.storageProgressBar) as ProgressBar
+    usedSpaceTextView = holder.findViewById(R.id.usedSpace) as TextView
+    freeSpaceTextView = holder.findViewById(R.id.freeSpace) as TextView
+    pathAndTitleTextView = holder.findViewById(R.id.storagePathAndTitle) as TextView
+    radioButton?.isChecked = isChecked
+
+    usedSpaceTextView?.let { it.text = usedSpace }
+    freeSpaceTextView?.let { it.text = freeSpace }
+    pathAndTitleTextView?.let { it.text = pathAndTitle }
+    progressBar?.let { it.progress = progress }
   }
 
   override fun onClick() {
-    if (this.isChecked)
-      return
-
+    if (isChecked) return
+    preferenceManager.findPreference<CheckBoxPreference>(PREF_INTERNAL_STORAGE)?.isChecked = false
+    preferenceManager.findPreference<CheckBoxPreference>(PREF_EXTERNAL_STORAGE)?.isChecked = false
     super.onClick()
+  }
+
+  fun setProgress(usedPercentage: Int) {
+    progress = usedPercentage
+    progressBar?.progress = usedPercentage
+  }
+
+  fun setUsedSpace(usedSpace: String) {
+    this.usedSpace = usedSpace
+    usedSpaceTextView?.text = usedSpace
+  }
+
+  fun setFreeSpace(freeSpace: String) {
+    this.freeSpace = freeSpace
+    freeSpaceTextView?.text = freeSpace
+  }
+
+  fun setPathAndTitleForStorage(storageTitleAndPath: String) {
+    pathAndTitle = storageTitleAndPath
+    pathAndTitleTextView?.text = storageTitleAndPath
   }
 }

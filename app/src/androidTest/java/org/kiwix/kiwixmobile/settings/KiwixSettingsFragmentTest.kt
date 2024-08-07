@@ -79,7 +79,9 @@ class KiwixSettingsFragmentTest {
         handleLocaleChange(
           it,
           "en",
-          SharedPreferenceUtil(it)
+          SharedPreferenceUtil(it).apply {
+            setIsPlayStoreBuildType(true)
+          }
         )
         it.navigate(R.id.introFragment)
       }

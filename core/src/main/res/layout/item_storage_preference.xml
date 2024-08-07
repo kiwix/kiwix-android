@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:padding="16dp">
+
+  <RadioButton
+    android:id="@+id/radioButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clickable="false"
+    android:focusable="false"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0" />
+
+  <TextView
+    android:id="@+id/storagePathAndTitle"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceListItem"
+    android:textColor="?android:attr/textColorPrimary"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0"
+    app:layout_constraintStart_toEndOf="@id/radioButton"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <TextView
+    android:id="@+id/usedSpace"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:textAppearance="?android:attr/textAppearanceListItemSecondary"
+    android:textColor="?android:attr/textColorSecondary"
+    app:layout_constraintStart_toStartOf="@+id/storagePathAndTitle"
+    app:layout_constraintTop_toBottomOf="@+id/storageProgressBar" />
+
+  <TextView
+    android:id="@+id/freeSpace"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceListItemSecondary"
+    android:textColor="?android:attr/textColorSecondary"
+    app:layout_constraintBaseline_toBaselineOf="@id/usedSpace"
+    app:layout_constraintEnd_toEndOf="parent" />
+
+  <ProgressBar
+    android:id="@+id/storageProgressBar"
+    style="?android:attr/progressBarStyleHorizontal"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:indeterminate="false"
+    android:max="100"
+    android:progress="50"
+    android:progressDrawable="@drawable/progress_bar_state"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@id/radioButton"
+    app:layout_constraintTop_toBottomOf="@id/storagePathAndTitle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

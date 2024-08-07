@@ -67,12 +67,12 @@
 
     <org.kiwix.kiwixmobile.core.settings.StorageRadioButtonPreference
       android:key="pref_internal_storage"
-      android:title="@string/internal_storage"
+      android:layout="@layout/item_storage_preference"
       app:iconSpaceReserved="false" />
 
     <org.kiwix.kiwixmobile.core.settings.StorageRadioButtonPreference
       android:key="pref_external_storage"
-      android:title="@string/external_storage"
+      android:layout="@layout/item_storage_preference"
       app:iconSpaceReserved="false" />
 
   </PreferenceCategory>

@@ -30,6 +30,7 @@ import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
 import org.kiwix.kiwixmobile.core.settings.StorageRadioButtonPreference
@@ -51,7 +52,7 @@ class KiwixPrefsFragment : CorePrefsFragment() {
     sharedPreferenceUtil?.let {
       if (storageDisposable?.isDisposed == false) {
         // update the storage when user switch to other storage.
-        setUpStoragePreference()
+        setUpStoragePreference(it)
       }
       storageDisposable =
         Flowable.fromCallable { StorageDeviceUtils.getWritableStorage(requireActivity()) }
@@ -61,40 +62,85 @@ class KiwixPrefsFragment : CorePrefsFragment() {
             { storageList ->
               storageDeviceList = storageList
               showExternalPreferenceIfAvailable()
-              setUpStoragePreference()
+              setUpStoragePreference(it)
             },
             Throwable::printStackTrace
           )
     }
   }
 
-  private fun setUpStoragePreference() {
+  private fun setUpStoragePreference(sharedPreferenceUtil: SharedPreferenceUtil) {
     storageDeviceList.forEachIndexed { index, storageDevice ->
-      val storageSummary = buildStorageSummary(storageDevice, index)
       val preferenceKey = if (index == 0) PREF_INTERNAL_STORAGE else PREF_EXTERNAL_STORAGE
-      val isChecked = sharedPreferenceUtil?.storagePosition == index
-
+      val selectedStoragePosition = sharedPreferenceUtil.storagePosition
+      val isChecked = selectedStoragePosition == index
       findPreference<StorageRadioButtonPreference>(preferenceKey)?.apply {
-        summary = storageSummary
         this.isChecked = isChecked
         setOnPreferenceClickListener {
           onStorageDeviceSelected(storageDevice)
           true
         }
+        setPathAndTitleForStorage(
+          buildStoragePathAndTitle(
+            storageDevice,
+            index,
+            selectedStoragePosition,
+            sharedPreferenceUtil
+          )
+        )
+        setFreeSpace(getFreeSpaceText(storageDevice))
+        setUsedSpace(getUsedSpaceText(storageDevice))
+        setProgress(calculateUsedPercentage(storageDevice))
       }
     }
   }
 
-  private fun buildStorageSummary(storageDevice: StorageDevice, index: Int): String {
-    val availableSpace = storageCalculator?.calculateAvailableSpace(storageDevice.file)
-    val totalSpace = storageCalculator?.calculateTotalSpace(storageDevice.file)
-    val storagePath = if (sharedPreferenceUtil?.storagePosition == index) {
-      "\n${sharedPreferenceUtil?.prefStorage}/Kiwix"
+  private fun getFreeSpaceText(storageDevice: StorageDevice): String {
+    val freeSpace = storageCalculator?.calculateAvailableSpace(storageDevice.file)
+    return getString(R.string.pref_free_storage, freeSpace)
+  }
+
+  private fun getUsedSpaceText(storageDevice: StorageDevice): String {
+    val usedSpace = storageCalculator?.calculateUsedSpace(storageDevice.file)
+    return getString(R.string.pref_storage_used, usedSpace)
+  }
+
+  private fun buildStoragePathAndTitle(
+    storageDevice: StorageDevice,
+    index: Int,
+    selectedStoragePosition: Int,
+    sharedPreferenceUtil: SharedPreferenceUtil
+  ): String {
+    val storageName = if (storageDevice.isInternal) {
+      getString(R.string.internal_storage)
     } else {
-      ""
+      getString(R.string.external_storage)
+    }
+    val storagePath = if (index == selectedStoragePosition) {
+      sharedPreferenceUtil.prefStorage
+    } else {
+      getStoragePathForNonSelectedStorage(storageDevice, sharedPreferenceUtil)
+    }
+    val totalSpace = storageCalculator?.calculateTotalSpace(storageDevice.file)
+    return "$storageName - $totalSpace\n$storagePath/Kiwix"
+  }
+
+  private fun getStoragePathForNonSelectedStorage(
+    storageDevice: StorageDevice,
+    sharedPreferenceUtil: SharedPreferenceUtil
+  ): String =
+    if (storageDevice.isInternal) {
+      sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
+    } else {
+      storageDevice.name
     }
 
-    return "$availableSpace / $totalSpace  $storagePath"
+  @Suppress("MagicNumber")
+  private fun calculateUsedPercentage(storageDevice: StorageDevice): Int {
+    val totalSpace = storageCalculator?.totalBytes(storageDevice.file) ?: 1
+    val availableSpace = storageCalculator?.availableBytes(storageDevice.file) ?: 0
+    val usedSpace = totalSpace - availableSpace
+    return (usedSpace.toDouble() / totalSpace * 100).toInt()
   }
 
   private fun showExternalPreferenceIfAvailable() {
