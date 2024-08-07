@@ -105,7 +105,7 @@ class DeepLinksTest : BaseActivityTest() {
   private fun loadZimFileInApplicationAndReturnSchemeTypeUri(schemeType: String): Uri? {
     val loadFileStream =
       DeepLinksTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(sharedPreferenceUtil.prefStorage, "testzim.zim")
+    val zimFile = File(sharedPreferenceUtil.defaultStorage(), "testzim.zim")
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->
