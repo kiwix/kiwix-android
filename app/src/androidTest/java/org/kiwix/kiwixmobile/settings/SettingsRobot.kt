@@ -28,6 +28,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withResourceName
+import androidx.test.espresso.matcher.ViewMatchers.withSubstring
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import org.hamcrest.Matchers
@@ -36,6 +37,7 @@ import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 /**
@@ -57,6 +59,16 @@ class SettingsRobot : BaseRobot() {
     ).perform(
       actionOnItem<RecyclerView.ViewHolder>(
         hasDescendant(Matchers.anyOf(*stringIds.matchers())), ViewActions.click()
+      )
+    )
+  }
+
+  private fun clickRecyclerViewItemsContainingText(@StringRes vararg stringIds: Int) {
+    onView(
+      withResourceName("recycler_view")
+    ).perform(
+      actionOnItem<RecyclerView.ViewHolder>(
+        hasDescendant(Matchers.anyOf(*stringIds.subStringMatchers())), ViewActions.click()
       )
     )
   }
@@ -101,11 +113,11 @@ class SettingsRobot : BaseRobot() {
   }
 
   fun clickInternalStoragePreference() {
-    clickRecyclerViewItems(R.string.internal_storage)
+    clickRecyclerViewItemsContainingText(R.string.internal_storage)
   }
 
   fun clickExternalStoragePreference() {
-    clickRecyclerViewItems(R.string.external_storage)
+    clickRecyclerViewItemsContainingText(R.string.external_storage)
   }
 
   fun clickClearHistoryPreference() {
@@ -181,4 +193,7 @@ class SettingsRobot : BaseRobot() {
     context.resources.getStringArray(R.array.pref_dark_modes_entries)
 
   private fun IntArray.matchers() = map(::withText).toTypedArray()
+  private fun IntArray.subStringMatchers() = map {
+    withSubstring(getResourceString(it))
+  }.toTypedArray()
 }
