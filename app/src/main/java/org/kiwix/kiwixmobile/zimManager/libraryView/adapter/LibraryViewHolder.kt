@@ -128,7 +128,8 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
             setImageDrawableCompat(pauseResumeIconId)
             if (it == itemDownloadBinding.root.context.getString(R.string.paused_state) ||
               !it.contains(itemDownloadBinding.root.context.getString(R.string.paused_state)) ||
-              !it.contains(itemDownloadBinding.root.context.getString(R.string.failed_state))
+              !it.contains(itemDownloadBinding.root.context.getString(R.string.failed_state)) ||
+              !it.contains(itemDownloadBinding.root.context.getString(R.string.pending_state))
             ) {
               // If the download is paused by the user or is currently running,
               // enable the pause/resume button.

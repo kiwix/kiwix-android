@@ -134,13 +134,23 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
             Log.e("STATUS", ": ${it.downloadState.toReadableState(context)}")
             downloader.pauseResumeDownload(
               it.downloadId,
-              it.downloadState.toReadableState(context) == getString(R.string.paused_state)
+              it.downloadState.toReadableState(context).contains(getString(R.string.paused_state))
             )
           }
         }
       ),
       LibraryDelegate.DividerDelegate
     )
+  }
+
+  private fun isDownloadPause(downloadState: String): Boolean {
+    return if (downloadState.contains(getString(R.string.paused_state))) {
+      true
+    } else if (downloadState != getString(R.string.pending_state)) {
+      false
+    } else {
+      false
+    }
   }
 
   private val noWifiWithWifiOnlyPreferenceSet
