@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.SharedPreferences
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
@@ -106,12 +107,12 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     get() {
       val storage = sharedPreferences.getString(PREF_STORAGE, null)
       return when {
-        storage == null -> getPublicDirectoryPath(defaultStorage()).also {
+        storage == null -> getPublicDirectoryPath(defaultPublicStorage()).also {
           putPrefStorage(it)
           putStoragePosition(0)
         }
 
-        !File(storage).isFileExist() -> getPublicDirectoryPath(defaultStorage()).also {
+        !File(storage).isFileExist() -> getPublicDirectoryPath(defaultPublicStorage()).also {
           putStoragePosition(0)
         }
 
@@ -124,6 +125,10 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   fun defaultStorage(): String =
     getExternalFilesDirs(context, null)[0]?.path
+      ?: context.filesDir.path // a workaround for emulators
+
+  fun defaultPublicStorage(): String =
+    ContextWrapper(context).externalMediaDirs[0]?.path
       ?: context.filesDir.path // a workaround for emulators
 
   fun getPrefStorageTitle(defaultTitle: String): String =

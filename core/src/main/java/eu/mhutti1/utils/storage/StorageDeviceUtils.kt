@@ -19,6 +19,7 @@
 package eu.mhutti1.utils.storage
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.os.Environment
 import androidx.core.content.ContextCompat
 import java.io.File
@@ -28,7 +29,8 @@ import java.util.ArrayList
 
 object StorageDeviceUtils {
   @JvmStatic
-  fun getWritableStorage(context: Context) = validate(externalFilesDirsDevices(context, true), true)
+  fun getWritableStorage(context: Context) =
+    validate(externalMediaFilesDirsDevices(context), true)
 
   @JvmStatic
   fun getReadableStorage(context: Context): List<StorageDevice> {
@@ -36,6 +38,7 @@ object StorageDeviceUtils {
       add(environmentDevices(context))
       addAll(externalMountPointDevices())
       addAll(externalFilesDirsDevices(context, false))
+      addAll(externalMediaFilesDirsDevices(context))
       // Scan the app-specific directory as well because we have limitations in scanning
       // all directories on Android 11 and above in the Play Store variant.
       // If a user copies the ZIM file to the app-specific directory on the SD card,
@@ -54,6 +57,12 @@ object StorageDeviceUtils {
   ) = ContextCompat.getExternalFilesDirs(context, "")
     .filterNotNull()
     .mapIndexed { index, dir -> StorageDevice(generalisePath(dir.path, writable), index == 0) }
+
+  private fun externalMediaFilesDirsDevices(
+    context: Context
+  ) = ContextWrapper(context).externalMediaDirs
+    .filterNotNull()
+    .mapIndexed { index, dir -> StorageDevice(generalisePath(dir.path, true), index == 0) }
 
   private fun externalMountPointDevices(): Collection<StorageDevice> =
     ExternalPaths.possiblePaths.fold(mutableListOf(), { acc, path ->

@@ -114,7 +114,12 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       }
     }
 
-    setMainActivityToCoreApp()
+    setMainActivityToCoreApp().also {
+      // Creates the public app-specific directory for existing users who have not
+      // configured storage, allowing them to copy their ZIM files into this
+      // public directory. This directory is created only once.
+      sharedPreferenceUtil.defaultPublicStorage()
+    }
     if (!sharedPreferenceUtil.prefIsBookmarksMigrated) {
       // run the migration on background thread to avoid any UI related issues.
       CoroutineScope(Dispatchers.IO).launch {
