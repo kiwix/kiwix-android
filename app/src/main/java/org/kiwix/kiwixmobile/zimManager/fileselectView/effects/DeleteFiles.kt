@@ -19,6 +19,8 @@
 package org.kiwix.kiwixmobile.zimManager.fileselectView.effects
 
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -33,7 +35,10 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
 
-data class DeleteFiles(private val booksOnDiskListItems: List<BookOnDisk>) :
+data class DeleteFiles(
+  private val booksOnDiskListItems: List<BookOnDisk>,
+  private val coroutineScope: CoroutineScope
+) :
   SideEffect<Unit> {
 
   @Inject lateinit var dialogShower: DialogShower
@@ -42,21 +47,22 @@ data class DeleteFiles(private val booksOnDiskListItems: List<BookOnDisk>) :
 
   override fun invokeWith(activity: AppCompatActivity) {
     (activity as BaseActivity).cachedComponent.inject(this)
-
     val name = booksOnDiskListItems.joinToString(separator = "\n") { it.book.title }
 
     dialogShower.show(DeleteZims(name), {
-      activity.toast(
-        if (booksOnDiskListItems.deleteAll()) {
-          R.string.delete_zims_toast
-        } else {
-          R.string.delete_zim_failed
-        }
-      )
+      coroutineScope.launch {
+        activity.toast(
+          if (booksOnDiskListItems.deleteAll()) {
+            R.string.delete_zims_toast
+          } else {
+            R.string.delete_zim_failed
+          }
+        )
+      }
     })
   }
 
-  private fun List<BookOnDisk>.deleteAll(): Boolean {
+  private suspend fun List<BookOnDisk>.deleteAll(): Boolean {
     return fold(true) { acc, book ->
       acc && deleteSpecificZimFile(book).also {
         if (it && book.file.canonicalPath == zimReaderContainer.zimCanonicalPath) {

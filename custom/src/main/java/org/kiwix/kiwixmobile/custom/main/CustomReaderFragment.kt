@@ -29,7 +29,11 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R.dimen
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.getResizedDrawable
@@ -68,23 +72,26 @@ class CustomReaderFragment : CoreReaderFragment() {
     if (enforcedLanguage()) {
       return
     }
-
-    if (isAdded) {
-      setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-      if (BuildConfig.DISABLE_SIDEBAR) {
-        val toolbarToc = activity?.findViewById<ImageView>(R.id.bottom_toolbar_toc)
-        toolbarToc?.isEnabled = false
-      }
-      with(activity as AppCompatActivity) {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar?.let(::setUpDrawerToggle)
-      }
-      loadPageFromNavigationArguments()
-      if (BuildConfig.DISABLE_EXTERNAL_LINK) {
-        // If "external links" are disabled in a custom app,
-        // this sets the shared preference to not show the external link popup
-        // when opening external links.
-        sharedPreferenceUtil?.putPrefExternalLinkPopup(false)
+    lifecycleScope.launch {
+      viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+        if (isAdded) {
+          setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+          if (BuildConfig.DISABLE_SIDEBAR) {
+            val toolbarToc = activity?.findViewById<ImageView>(R.id.bottom_toolbar_toc)
+            toolbarToc?.isEnabled = false
+          }
+          with(activity as AppCompatActivity) {
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            toolbar?.let(::setUpDrawerToggle)
+          }
+          loadPageFromNavigationArguments()
+          if (BuildConfig.DISABLE_EXTERNAL_LINK) {
+            // If "external links" are disabled in a custom app,
+            // this sets the shared preference to not show the external link popup
+            // when opening external links.
+            sharedPreferenceUtil?.putPrefExternalLinkPopup(false)
+          }
+        }
       }
     }
   }
@@ -129,7 +136,7 @@ class CustomReaderFragment : CoreReaderFragment() {
     super.setTabSwitcherVisibility(visibility)
   }
 
-  private fun loadPageFromNavigationArguments() {
+  private suspend fun loadPageFromNavigationArguments() {
     val args = CustomReaderFragmentArgs.fromBundle(requireArguments())
     if (args.pageUrl.isNotEmpty()) {
       loadUrlWithCurrentWebview(args.pageUrl)
@@ -148,7 +155,7 @@ class CustomReaderFragment : CoreReaderFragment() {
    * due to invalid or corrupted data. In this case, it opens the homepage of the zim file,
    * as custom apps always have the zim file available.
    */
-  override fun restoreViewStateOnInvalidJSON() {
+  override suspend fun restoreViewStateOnInvalidJSON() {
     openHomeScreen()
   }
 
@@ -179,30 +186,32 @@ class CustomReaderFragment : CoreReaderFragment() {
   private fun openObbOrZim() {
     customFileValidator.validate(
       onFilesFound = {
-        when (it) {
-          is ValidationState.HasFile -> {
-            if (it.assetFileDescriptorList.isNotEmpty()) {
-              openZimFile(null, true, it.assetFileDescriptorList)
-            } else {
-              openZimFile(it.file, true)
+        lifecycleScope.launch {
+          when (it) {
+            is ValidationState.HasFile -> {
+              if (it.assetFileDescriptorList.isNotEmpty()) {
+                openZimFile(null, true, it.assetFileDescriptorList)
+              } else {
+                openZimFile(it.file, true)
+              }
+              // Save book in the database to display it in `ZimHostFragment`.
+              zimReaderContainer?.zimFileReader?.let { zimFileReader ->
+                // Check if the file is not null. If the file is null,
+                // it means we have created zimFileReader with a fileDescriptor,
+                // so we create a demo file to save it in the database for display on the `ZimHostFragment`.
+                val file = it.file ?: createDemoFile()
+                val bookOnDisk = BookOnDisk(file, zimFileReader)
+                repositoryActions?.saveBook(bookOnDisk)
+              }
             }
-            // Save book in the database to display it in `ZimHostFragment`.
-            zimReaderContainer?.zimFileReader?.let { zimFileReader ->
-              // Check if the file is not null. If the file is null,
-              // it means we have created zimFileReader with a fileDescriptor,
-              // so we create a demo file to save it in the database for display on the `ZimHostFragment`.
-              val file = it.file ?: createDemoFile()
-              val bookOnDisk = BookOnDisk(file, zimFileReader)
-              repositoryActions?.saveBook(bookOnDisk)
+
+            is ValidationState.HasBothFiles -> {
+              it.zimFile.delete()
+              openZimFile(it.obbFile, true)
             }
-          }
 
-          is ValidationState.HasBothFiles -> {
-            it.zimFile.delete()
-            openZimFile(it.obbFile, true)
+            else -> {}
           }
-
-          else -> {}
         }
       },
       onNoFilesFound = {

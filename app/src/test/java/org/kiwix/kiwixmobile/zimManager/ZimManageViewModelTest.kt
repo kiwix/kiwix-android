@@ -22,6 +22,7 @@ import android.app.Application
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.NetworkCapabilities.TRANSPORT_WIFI
+import androidx.lifecycle.viewModelScope
 import com.jraska.livedata.test
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -470,7 +471,7 @@ class ZimManageViewModelTest {
         FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
       viewModel.sideEffects.test()
         .also { viewModel.fileSelectActions.offer(RequestDeleteMultiSelection) }
-        .assertValues(DeleteFiles(listOf(selectedBook)))
+        .assertValues(DeleteFiles(listOf(selectedBook), viewModel.viewModelScope))
     }
 
     @Test

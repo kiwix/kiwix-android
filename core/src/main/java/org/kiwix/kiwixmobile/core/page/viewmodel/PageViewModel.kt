@@ -88,7 +88,10 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
     is OnItemLongClick -> handleItemLongClick(state, action)
     is Filter -> updatePagesBasedOnFilter(state, action)
     is UpdatePages -> updatePages(state, action)
+    is Action.LoadingData -> loadData(state, action)
   }
+
+  abstract fun loadData(state: S, action: Action.LoadingData): S
 
   abstract fun updatePagesBasedOnFilter(state: S, action: Filter): S
 

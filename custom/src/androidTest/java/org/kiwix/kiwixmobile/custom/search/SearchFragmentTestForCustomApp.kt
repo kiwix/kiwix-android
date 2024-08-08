@@ -33,8 +33,10 @@ import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.ResponseBody
@@ -111,7 +113,7 @@ class SearchFragmentTestForCustomApp {
   }
 
   @Test
-  fun searchFragment() {
+  fun searchFragment() = runBlocking {
     activityScenario.onActivity {
       customMainActivity = it
     }
@@ -251,14 +253,20 @@ class SearchFragmentTestForCustomApp {
     }
   }
 
-  private fun openZimFileInReaderWithAssetFileDescriptor(downloadingZimFile: File) {
-    getAssetFileDescriptorFromFile(downloadingZimFile)?.let(::openZimFileInReader) ?: run {
-      throw RuntimeException("Unable to get fileDescriptor from file. Original exception")
-    }
+  private suspend fun openZimFileInReaderWithAssetFileDescriptor(downloadingZimFile: File) {
+    getAssetFileDescriptorFromFile(downloadingZimFile)?.let { assetFileDescriptor ->
+      withContext(Dispatchers.IO) {
+        try {
+          openZimFileInReader(assetFileDescriptor)
+        } catch (e: Exception) {
+          throw RuntimeException("Unable to get fileDescriptor from file. Original exception", e)
+        }
+      }
+    } ?: throw RuntimeException("Unable to get fileDescriptor from file.")
   }
 
-  private fun openZimFileInReader(assetFileDescriptor: AssetFileDescriptor) {
-    UiThreadStatement.runOnUiThread {
+  private suspend fun openZimFileInReader(assetFileDescriptor: AssetFileDescriptor) {
+    withContext(Dispatchers.Main) {
       val navHostFragment: NavHostFragment =
         customMainActivity.supportFragmentManager
           .findFragmentById(
@@ -266,7 +274,9 @@ class SearchFragmentTestForCustomApp {
           ) as NavHostFragment
       val customReaderFragment =
         navHostFragment.childFragmentManager.fragments[0] as CustomReaderFragment
-      customReaderFragment.openZimFile(null, true, listOf(assetFileDescriptor))
+      withContext(Dispatchers.IO) {
+        customReaderFragment.openZimFile(null, true, listOf(assetFileDescriptor))
+      }
     }
   }
 

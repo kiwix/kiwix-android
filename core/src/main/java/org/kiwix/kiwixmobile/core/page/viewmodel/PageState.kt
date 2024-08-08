@@ -24,6 +24,7 @@ import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 
 abstract class PageState<T : Page> {
   abstract val pageItems: List<T>
+  abstract val isLoading: Boolean
   val isInSelectionState: Boolean by lazy { pageItems.any(Page::isSelected) }
   protected val filteredPageItems: List<T> by lazy {
     pageItems.filter { showAll || it.zimId == currentZimId }

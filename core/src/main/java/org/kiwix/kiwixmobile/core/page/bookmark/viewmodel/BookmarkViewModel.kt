@@ -40,7 +40,15 @@ class BookmarkViewModel @Inject constructor(
 ) {
 
   override fun initialState(): BookmarkState =
-    BookmarkState(emptyList(), sharedPreferenceUtil.showBookmarksAllBooks, zimReaderContainer.id)
+    BookmarkState(
+      emptyList(),
+      sharedPreferenceUtil.showBookmarksAllBooks,
+      zimReaderContainer.id,
+      isLoading = false
+    )
+
+  override fun loadData(state: BookmarkState, action: Action.LoadingData): BookmarkState =
+    state.copy(isLoading = action.isLoading)
 
   override fun updatePagesBasedOnFilter(
     state: BookmarkState,

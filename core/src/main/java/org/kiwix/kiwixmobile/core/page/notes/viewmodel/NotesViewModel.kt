@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2020 Kiwix <android.kiwix.org>
+ * Copyright (c) 2024 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.page.notes.viewmodel
 
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -44,7 +45,15 @@ class NotesViewModel @Inject constructor(
   }
 
   override fun initialState(): NotesState =
-    NotesState(emptyList(), sharedPreferenceUtil.showNotesAllBooks, zimReaderContainer.id)
+    NotesState(
+      emptyList(),
+      sharedPreferenceUtil.showNotesAllBooks,
+      zimReaderContainer.id,
+      isLoading = false
+    )
+
+  override fun loadData(state: NotesState, action: Action.LoadingData): NotesState =
+    state.copy(isLoading = action.isLoading)
 
   override fun updatePagesBasedOnFilter(state: NotesState, action: Action.Filter): NotesState =
     state.copy(searchTerm = action.searchTerm)
@@ -70,5 +79,5 @@ class NotesViewModel @Inject constructor(
     ShowDeleteNotesDialog(effects, state, pageDao, viewModelScope)
 
   override fun onItemClick(page: Page) =
-    ShowOpenNoteDialog(effects, page, zimReaderContainer)
+    ShowOpenNoteDialog(effects, actions, page, zimReaderContainer, viewModelScope)
 }
