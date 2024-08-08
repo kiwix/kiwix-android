@@ -79,7 +79,9 @@ class KiwixSettingsFragmentTest {
         handleLocaleChange(
           it,
           "en",
-          SharedPreferenceUtil(it)
+          SharedPreferenceUtil(it).apply {
+            setIsPlayStoreBuildType(true)
+          }
         )
         it.navigate(R.id.introFragment)
       }
@@ -101,9 +103,8 @@ class KiwixSettingsFragmentTest {
       toggleOpenNewTabInBackground()
       toggleExternalLinkWarningPref()
       toggleWifiDownloadsOnlyPref()
-      clickStoragePreference()
-      assertStorageDialogDisplayed()
-      dismissDialog()
+      clickExternalStoragePreference()
+      clickInternalStoragePreference()
       clickClearHistoryPreference()
       assertHistoryDialogDisplayed()
       dismissDialog()

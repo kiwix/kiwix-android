@@ -199,7 +199,7 @@ class ZimHostFragmentTest {
   private fun loadZimFileInApplication(zimFileName: String) {
     val loadFileStream =
       ZimHostFragmentTest::class.java.classLoader.getResourceAsStream(zimFileName)
-    val zimFile = File(sharedPreferenceUtil.prefStorage, zimFileName)
+    val zimFile = File(sharedPreferenceUtil.defaultStorage(), zimFileName)
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->

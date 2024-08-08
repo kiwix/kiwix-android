@@ -40,7 +40,6 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.material.snackbar.Snackbar
 import eu.mhutti1.utils.storage.StorageDevice
-import eu.mhutti1.utils.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.DarkModeConfig
@@ -301,9 +300,6 @@ abstract class CorePrefsFragment :
     if (preference.key.equals(PREF_CREDITS, ignoreCase = true)) {
       openCredits()
     }
-    if (preference.key.equals(SharedPreferenceUtil.PREF_STORAGE, ignoreCase = true)) {
-      openFolderSelect()
-    }
     if (preference.key.equals(PREF_EXPORT_BOOKMARK, ignoreCase = true) &&
       requestExternalStorageWritePermissionForExportBookmark()
     ) {
@@ -447,18 +443,8 @@ abstract class CorePrefsFragment :
   private fun isValidBookmarkFile(mimeType: String?) =
     mimeType == "application/xml" || mimeType == "text/xml"
 
-  private fun openFolderSelect() {
-    val dialogFragment = StorageSelectDialog()
-    dialogFragment.onSelectAction =
-      ::onStorageDeviceSelected
-    dialogFragment.show(
-      requireActivity().supportFragmentManager,
-      resources.getString(R.string.pref_storage)
-    )
-  }
-
   @Suppress("NestedBlockDepth")
-  private fun onStorageDeviceSelected(storageDevice: StorageDevice) {
+  fun onStorageDeviceSelected(storageDevice: StorageDevice) {
     sharedPreferenceUtil?.let { sharedPreferenceUtil ->
       findPreference<Preference>(SharedPreferenceUtil.PREF_STORAGE)?.summary =
         storageCalculator?.calculateAvailableSpace(storageDevice.file)
@@ -466,10 +452,9 @@ abstract class CorePrefsFragment :
         sharedPreferenceUtil.putPrefStorage(
           sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
         )
-        findPreference<Preference>(SharedPreferenceUtil.PREF_STORAGE)?.title =
-          getString(R.string.internal_storage)
         sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION)
         setShowStorageOption()
+        setStorage()
       } else {
         if (sharedPreferenceUtil.isPlayStoreBuild) {
           setExternalStoragePath(storageDevice)
@@ -492,10 +477,9 @@ abstract class CorePrefsFragment :
 
   private fun setExternalStoragePath(storageDevice: StorageDevice) {
     sharedPreferenceUtil?.putPrefStorage(storageDevice.name)
-    findPreference<Preference>(SharedPreferenceUtil.PREF_STORAGE)?.title =
-      getString(R.string.external_storage)
     sharedPreferenceUtil?.putStoragePosition(EXTERNAL_SELECT_POSITION)
     setShowStorageOption()
+    setStorage()
   }
 
   private fun selectFolder() {
@@ -516,10 +500,9 @@ abstract class CorePrefsFragment :
         result.data?.let { intent ->
           getPathFromUri(requireActivity(), intent)?.let { path ->
             sharedPreferenceUtil?.putPrefStorage(path)
-            findPreference<Preference>(SharedPreferenceUtil.PREF_STORAGE)?.title =
-              getString(R.string.external_storage)
             sharedPreferenceUtil?.putStoragePosition(EXTERNAL_SELECT_POSITION)
             setShowStorageOption()
+            setStorage()
           }
         }
       }
