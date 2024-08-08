@@ -19,12 +19,14 @@
 package org.kiwix.kiwixmobile.core.extensions
 
 import android.content.Context
+import android.content.Context.RECEIVER_NOT_EXPORTED
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.util.TypedValue
 import android.widget.Toast
 import androidx.annotation.AttrRes
@@ -53,7 +55,18 @@ fun Context?.toast(
 }
 
 fun Context.registerReceiver(baseBroadcastReceiver: BaseBroadcastReceiver): Intent? =
-  registerReceiver(baseBroadcastReceiver, IntentFilter(baseBroadcastReceiver.action))
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    registerReceiver(
+      baseBroadcastReceiver,
+      IntentFilter(baseBroadcastReceiver.action),
+      RECEIVER_NOT_EXPORTED
+    )
+  } else {
+    registerReceiver(
+      baseBroadcastReceiver,
+      IntentFilter(baseBroadcastReceiver.action)
+    )
+  }
 
 val Context.locale: Locale
   get() = resources.configuration.locales.get(0)

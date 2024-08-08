@@ -329,8 +329,6 @@ object Libs {
 
   const val barista: String = "com.adevinta.android:barista:" + Versions.barista
 
-  const val fetch: String = "com.github.tonyofrancis:fetch:" + Versions.fetch
-
   /**
    * https://github.com/ReactiveX/RxJava
    */

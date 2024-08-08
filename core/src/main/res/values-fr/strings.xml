@@ -342,7 +342,6 @@
   <string name="allowed">Autorisé</string>
   <string name="not_allowed">Non autorisé</string>
   <string name="denied_internet_permission_message">Veuillez activer le Wi-Fi pour télécharger le contenu</string>
-  <string name="select_folder">Veuillez sélectionner un dossier pour le stockage externe.</string>
   <string name="system_unable_to_grant_permission_message">Le système n’a pas pu accorder le droit d’accès !</string>
   <string name="allow">Autoriser</string>
   <string name="swipe_down_for_library">Balayez vers le bas pour la bibliothèque</string>

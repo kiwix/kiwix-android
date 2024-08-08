@@ -305,7 +305,6 @@
   <string name="allowed">अनुमतित</string>
   <string name="not_allowed">अनुमति नहीं है</string>
   <string name="denied_internet_permission_message">कृपया सामग्री डाउनलोड करने के लिए वाईफाई सक्षम करें</string>
-  <string name="select_folder">कृपया बाहरी भंडारण के लिए एक फ़ोल्डर चुनें।</string>
   <string name="system_unable_to_grant_permission_message">सिस्टम अनुमति देने में असमर्थ!</string>
   <string name="allow">अनुमति दें</string>
   <string name="swipe_down_for_library">पुस्तकालय के लिए नीचे स्वाइप करें</string>

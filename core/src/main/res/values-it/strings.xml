@@ -310,7 +310,6 @@
   <string name="allowed">Consentita</string>
   <string name="not_allowed">Non consentita</string>
   <string name="denied_internet_permission_message">Abilita il Wi-Fi per scaricare i contenuti</string>
-  <string name="select_folder">Seleziona una cartella per l’archiviazione esterna.</string>
   <string name="system_unable_to_grant_permission_message">Il sistema non è in grado di concedere l’autorizzazione!</string>
   <string name="allow">Consenti</string>
   <string name="no_notes">Nessuna nota</string>

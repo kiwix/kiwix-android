@@ -305,7 +305,6 @@
   <string name="allowed">Ti gba laaye</string>
   <string name="not_allowed">Ko si aaye</string>
   <string name="denied_internet_permission_message">Jọwọ jẹ ki wifi gba akoonu lati ayelujara</string>
-  <string name="select_folder">Jọwọ yan folda kan fun ibi ipamọ ita.</string>
   <string name="system_unable_to_grant_permission_message">Eto ko le funni ni igbanilaaye!</string>
   <string name="allow">Gba laaye</string>
   <string name="swipe_down_for_library">Ra Isalẹ fun Library</string>

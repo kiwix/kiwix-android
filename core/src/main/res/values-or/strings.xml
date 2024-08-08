@@ -296,7 +296,6 @@
   <string name="allowed">ଅନୁମତି ଦିଆଯାଇଛି</string>
   <string name="not_allowed">ଅନୁମତି ନାହିଁ</string>
   <string name="denied_internet_permission_message">ବିଷୟବସ୍ତୁ ଡାଉନଲୋଡ୍ କରିବାକୁ ଦୟାକରି ୱାଇଫାଇ ସକ୍ଷମ କରନ୍ତୁ |</string>
-  <string name="select_folder">ବାହ୍ୟ ସଂରକ୍ଷଣ ପାଇଁ ଦୟାକରି ଏକ ଫୋଲ୍ଡର ବାଛନ୍ତୁ |</string>
   <string name="system_unable_to_grant_permission_message">ଅନୁମତି ପ୍ରଦାନ କରିବାରେ ଅସମର୍ଥ ସିଷ୍ଟମ୍</string>
   <string name="allow">ଅନୁମତି ଦିଅନ୍ତୁ</string>
   <string name="swipe_down_for_library">ଲାଇବ୍ରେରୀ ପାଇଁ ତଳକୁ ସ୍ୱାଇପ୍ କରନ୍ତୁ</string>

@@ -289,7 +289,6 @@
   <string name="allowed">Povolené</string>
   <string name="not_allowed">Nie je povolené</string>
   <string name="denied_internet_permission_message">Pre stiahnutie obsahu zapnite wifi</string>
-  <string name="select_folder">Prosím vyberte priečinok pre externé úložisko.</string>
   <string name="system_unable_to_grant_permission_message">Systému sa nedarí udeliť povolenie!</string>
   <string name="allow">Povoliť</string>
   <string name="no_notes">Žiadne poznámky</string>

@@ -94,8 +94,6 @@ object Versions {
 
   const val barista: String = "4.3.0"
 
-  const val fetch: String = "3.1.6"
-
   const val rxjava: String = "2.2.21"
 
   const val webkit: String = "1.7.0"

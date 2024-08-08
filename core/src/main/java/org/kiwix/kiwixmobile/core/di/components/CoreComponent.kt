@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.di.components
 
 import android.app.Application
+import android.app.DownloadManager
 import android.app.NotificationManager
 import android.content.Context
 import android.net.ConnectivityManager
@@ -28,7 +29,7 @@ import eu.mhutti1.utils.storage.StorageSelectDialog
 import kotlinx.coroutines.sync.Mutex
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.StorageObserver
-import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.HistoryDao
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
@@ -51,6 +52,8 @@ import org.kiwix.kiwixmobile.core.di.modules.MutexModule
 import org.kiwix.kiwixmobile.core.di.modules.NetworkModule
 import org.kiwix.kiwixmobile.core.di.modules.SearchModule
 import org.kiwix.kiwixmobile.core.downloader.Downloader
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerBroadcastReceiver
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationActionsBroadcastReceiver
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -93,12 +96,12 @@ interface CoreComponent {
   fun application(): Application
   fun bookUtils(): BookUtils
   fun dataSource(): DataSource
-  fun fetchDownloadDao(): FetchDownloadDao
   fun newBookDao(): NewBookDao
   fun historyDao(): HistoryDao
   fun noteDao(): NewNoteDao
   fun newLanguagesDao(): NewLanguagesDao
   fun recentSearchDao(): NewRecentSearchDao
+  fun downloadRoomDao(): DownloadRoomDao
   fun newBookmarksDao(): NewBookmarksDao
   fun connectivityManager(): ConnectivityManager
   fun wifiManager(): WifiManager
@@ -111,8 +114,12 @@ interface CoreComponent {
   fun context(): Context
   fun downloader(): Downloader
   fun notificationManager(): NotificationManager
+  fun downloadManager(): DownloadManager
   fun searchResultGenerator(): SearchResultGenerator
   fun mutex(): Mutex
+
+  fun downloadManagerBroadCastReceiver(): DownloadManagerBroadcastReceiver
+  fun downloadNotificationActionBroadCastReceiver(): DownloadNotificationActionsBroadcastReceiver
 
   fun inject(application: CoreApp)
   fun inject(kiwixWebView: KiwixWebView)

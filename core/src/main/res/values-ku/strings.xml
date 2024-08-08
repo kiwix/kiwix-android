@@ -294,7 +294,6 @@
   <string name="allowed">Destûrdayî</string>
   <string name="not_allowed">Ne destûrdayî</string>
   <string name="denied_internet_permission_message">Ji bo daxistina naverokê ji kerema xwe wîfiyê aktîv bike</string>
-  <string name="select_folder">Ji kerema xwe peldankekê bibijêre ji bo depokirina xaricî.</string>
   <string name="system_unable_to_grant_permission_message">Sîstem nikare destûrê werbigire!</string>
   <string name="allow">Destûr bide</string>
   <string name="no_notes">Not tine</string>

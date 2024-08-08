@@ -305,7 +305,6 @@
   <string name="not_allowed">This currently appears under the \"Allow to read and write ZIM files on SD card\" preference title</string>
   <string name="denied_internet_permission_message">This is used in the toast, to inform the user please enable their wifi to download the content.</string>
   <string name="android_directory_seperator">{{Ignored}}</string>
-  <string name="select_folder">This is used in the dialog as a title message, to tell the user, to select a folder to use the external storage.</string>
   <string name="system_unable_to_grant_permission_message">This is used in a toast to inform the user that the system is unable to grant permission.</string>
   <string name="allow">{{identical|Allow}}</string>
   <string name="swipe_down_for_library">* It is text information shown on the download screen.\n* It is telling the user that they can load content by swiping down on the screen.</string>

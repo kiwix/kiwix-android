@@ -312,7 +312,6 @@
   <string name="allowed">허용됨</string>
   <string name="not_allowed">허용하지 않음</string>
   <string name="denied_internet_permission_message">내용을 다운로드하려면 와이파이를 활성화해 주십시오</string>
-  <string name="select_folder">외부 저장을 위한 폴더를 선택해 주십시오.</string>
   <string name="system_unable_to_grant_permission_message">시스템이 권한을 부여할 수 없습니다!</string>
   <string name="allow">허용</string>
   <string name="download_tts_language_message">다운로드 버튼을 클릭해 주십시오. 그러면 필요한 언어를 자동으로 다운로드하게 됩니다.</string>

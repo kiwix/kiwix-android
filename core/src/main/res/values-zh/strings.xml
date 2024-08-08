@@ -348,7 +348,6 @@
   <string name="allowed">允许</string>
   <string name="not_allowed">不允许</string>
   <string name="denied_internet_permission_message">请启用 WiFi 来下载内容</string>
-  <string name="select_folder">请选择用于外部存储的文件夹。</string>
   <string name="system_unable_to_grant_permission_message">系统无法授予权限！</string>
   <string name="allow">允许</string>
   <string name="swipe_down_for_library">下滑查看图书馆</string>

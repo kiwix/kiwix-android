@@ -306,7 +306,6 @@
   <string name="allowed">An ba da izini</string>
   <string name="not_allowed">Ba a yarda ba</string>
   <string name="denied_internet_permission_message">Da fatan za a kunna wifi don zazzage abun ciki</string>
-  <string name="select_folder">Da fatan za a zaɓi babban fayil don ajiyar waje.</string>
   <string name="system_unable_to_grant_permission_message">Tsarin baya iya ba da izini!</string>
   <string name="allow">Izini</string>
   <string name="swipe_down_for_library">Danna ƙasa don Laburare</string>

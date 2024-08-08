@@ -295,7 +295,6 @@
   <string name="allowed">ߟߊߘߌ߬ߢߍ߬ߣߍ߲</string>
   <string name="not_allowed">ߟߊߘߌ߬ߢߍ߬ߓߊߟߌ</string>
   <string name="denied_internet_permission_message">ߥߌߝߌ ߟߊߞߎߣߎ߲߫ ߖߊ߰ߣߌ߲߫ ߛߊ߫ ߞߊ߬ ߛߋ߫ ߞߣߐߘߐ ߓߍ߯ ߟߊߖߌ߰ ߟߴߌ ߞߎ߲߬</string>
-  <string name="select_folder">ߞߎ߲ߓߍ߲ ߘߏ߫ ߛߎߥߊ߲ߘߌ߫ ߖߊ߰ߣߌ߲߫ ߞߣߐߘߐ ߟߊ߬ߡߙߊ߬ߦߙߐ߬ ߞߏ ߘߐ߫.</string>
   <string name="system_unable_to_grant_permission_message">ߘߌ߬ߢߍ߬ ߞߍߣߍ߲߫ ߣߍ߫ ߞߊ߲ߞߋ ߢߍ߫ ߖߡߊ߬ߙߌ߬ߟߌ ߘߐ߫߹</string>
   <string name="allow">ߊ߬ ߟߊߘߌ߬ߢߍ߬</string>
   <string name="swipe_down_for_library">ߊ߬ ߕߏ߬ߙߏ߲߬ߘߏ߫ ߘߎ߰ߟߊ ߘߐ߫ ߛߓߍߘߊ ߢߍ߫</string>

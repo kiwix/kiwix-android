@@ -300,7 +300,6 @@
   <string name="allowed">Povoleno</string>
   <string name="not_allowed">Není povoleno</string>
   <string name="denied_internet_permission_message">Pro stahování obsahu prosím povolte wifi</string>
-  <string name="select_folder">Vyberte složku pro externí úložiště.</string>
   <string name="system_unable_to_grant_permission_message">Systém nemůže udělit oprávnění!</string>
   <string name="allow">Povolit</string>
   <string name="no_notes">Žádné poznámky</string>

@@ -302,7 +302,6 @@
   <string name="allowed">అనుమతించబడింది</string>
   <string name="not_allowed">ప్రవేశము లేదు</string>
   <string name="denied_internet_permission_message">దయచేసి కంటెంట్‌ని డౌన్‌లోడ్ చేయడానికి వైఫైని ప్రారంభించండి</string>
-  <string name="select_folder">దయచేసి బాహ్య నిల్వ కోసం ఫోల్డర్‌ను ఎంచుకోండి.</string>
   <string name="system_unable_to_grant_permission_message">సిస్టమ్ అనుమతి ఇవ్వలేకపోయింది!</string>
   <string name="allow">అనుమతించు</string>
   <string name="swipe_down_for_library">లైబ్రరీ కోసం క్రిందికి స్వైప్ చేయండి</string>

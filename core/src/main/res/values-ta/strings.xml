@@ -295,7 +295,6 @@
   <string name="allowed">அனுமதிக்கப்படுகிறது</string>
   <string name="not_allowed">அனுமதி இல்லை</string>
   <string name="denied_internet_permission_message">உள்ளடக்கத்தைப் பதிவிறக்க வைஃபையை இயக்கவும்</string>
-  <string name="select_folder">வெளிப்புற சேமிப்பகத்திற்கான கோப்புறையைத் தேர்ந்தெடுக்கவும்.</string>
   <string name="system_unable_to_grant_permission_message">அமைப்பு அனுமதி வழங்க முடியவில்லை!</string>
   <string name="allow">அனுமதிக்கவும்</string>
   <string name="no_notes">குறிப்புகள் இல்லை</string>

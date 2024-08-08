@@ -154,7 +154,6 @@
   <string name="allowed">Tillatt</string>
   <string name="not_allowed">Ikke tillatt</string>
   <string name="denied_internet_permission_message">Aktiver wifi for å laste ned innhold</string>
-  <string name="select_folder">Velg en mappe for ekstern lagring.</string>
   <string name="system_unable_to_grant_permission_message">Systemet kan ikke gi tillatelse!</string>
   <string name="allow">Tillat</string>
   <string name="no_notes">Ingen merknader</string>

@@ -59,8 +59,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.OpenCredits
-import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.SelectFolder
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getPathFromUri
 import java.io.File
 import java.io.InputStream
 import java.util.Locale
@@ -446,67 +444,18 @@ abstract class CorePrefsFragment :
   @Suppress("NestedBlockDepth")
   fun onStorageDeviceSelected(storageDevice: StorageDevice) {
     sharedPreferenceUtil?.let { sharedPreferenceUtil ->
-      findPreference<Preference>(SharedPreferenceUtil.PREF_STORAGE)?.summary =
-        storageCalculator?.calculateAvailableSpace(storageDevice.file)
-      if (storageDevice.isInternal) {
-        sharedPreferenceUtil.putPrefStorage(
-          sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
-        )
-        sharedPreferenceUtil.putStoragePosition(INTERNAL_SELECT_POSITION)
-        setShowStorageOption()
-        setStorage()
-      } else {
-        if (sharedPreferenceUtil.isPlayStoreBuild) {
-          setExternalStoragePath(storageDevice)
-        } else {
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-            Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
-          ) {
-            @SuppressLint("InflateParams") val view = LayoutInflater.from(
-              activity
-            ).inflate(R.layout.select_folder_dialog, null)
-            alertDialogShower?.show(SelectFolder { view }, ::selectFolder)
-          } else {
-            setExternalStoragePath(storageDevice)
-          }
-        }
-      }
+      sharedPreferenceUtil.putPrefStorage(
+        sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
+      )
+      sharedPreferenceUtil.putStoragePosition(
+        if (storageDevice.isInternal) INTERNAL_SELECT_POSITION
+        else EXTERNAL_SELECT_POSITION
+      )
+      setShowStorageOption()
+      setStorage()
     }
     return
   }
-
-  private fun setExternalStoragePath(storageDevice: StorageDevice) {
-    sharedPreferenceUtil?.putPrefStorage(storageDevice.name)
-    sharedPreferenceUtil?.putStoragePosition(EXTERNAL_SELECT_POSITION)
-    setShowStorageOption()
-    setStorage()
-  }
-
-  private fun selectFolder() {
-    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-      addFlags(
-        Intent.FLAG_GRANT_READ_URI_PERMISSION
-          or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-          or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
-          or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
-      )
-    }
-    selectFolderLauncher.launch(intent)
-  }
-
-  private val selectFolderLauncher =
-    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-      if (result.resultCode == RESULT_OK) {
-        result.data?.let { intent ->
-          getPathFromUri(requireActivity(), intent)?.let { path ->
-            sharedPreferenceUtil?.putPrefStorage(path)
-            sharedPreferenceUtil?.putStoragePosition(EXTERNAL_SELECT_POSITION)
-            setShowStorageOption()
-            setStorage()
-          }
-        }
-      }
-    }
 
   private fun setShowStorageOption() {
     sharedPreferenceUtil?.showStorageOption = false

@@ -328,7 +328,6 @@
   <string name="allowed">מותר</string>
   <string name="not_allowed">אסור</string>
   <string name="denied_internet_permission_message">נא להפעיל וייפיי כדי להוריד תוכן</string>
-  <string name="select_folder">נא לבחור תיקייה לאחסון חיצוני.</string>
   <string name="system_unable_to_grant_permission_message">המערכת אינה יכולה לתת הרשאה!</string>
   <string name="allow">לאפשר</string>
   <string name="swipe_down_for_library">יש להחליק למטה עבור ספרייה</string>

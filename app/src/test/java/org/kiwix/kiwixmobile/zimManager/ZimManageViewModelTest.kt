@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.StorageObserver
-import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.data.DataSource
@@ -84,7 +84,7 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 @ExtendWith(InstantExecutorExtension::class)
 class ZimManageViewModelTest {
 
-  private val downloadDao: FetchDownloadDao = mockk()
+  private val downloadRoomDao: DownloadRoomDao = mockk()
   private val newBookDao: NewBookDao = mockk()
   private val newLanguagesDao: NewLanguagesDao = mockk()
   private val storageObserver: StorageObserver = mockk()
@@ -127,7 +127,7 @@ class ZimManageViewModelTest {
   fun init() {
     clearAllMocks()
     every { connectivityBroadcastReceiver.action } returns "test"
-    every { downloadDao.downloads() } returns downloads
+    every { downloadRoomDao.downloads() } returns downloads
     every { newBookDao.books() } returns books
     every {
       storageObserver.getBooksOnFileSystem(
@@ -144,7 +144,7 @@ class ZimManageViewModelTest {
     } returns networkCapabilities
     every { networkCapabilities.hasTransport(TRANSPORT_WIFI) } returns true
     viewModel = ZimManageViewModel(
-      downloadDao,
+      downloadRoomDao,
       newBookDao,
       newLanguagesDao,
       storageObserver,

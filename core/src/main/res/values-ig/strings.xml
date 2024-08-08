@@ -307,7 +307,6 @@
   <string name="allowed">E nyere ikike</string>
   <string name="not_allowed">Enyeghi ikike</string>
   <string name="denied_internet_permission_message">Biko mee ka wifi nwee ike ibudata ọdịnaya</string>
-  <string name="select_folder">Biko họrọ igbe nchekwa maka nchekwa mpụga.</string>
   <string name="system_unable_to_grant_permission_message">Sistemu enweghị ike inye ikike!</string>
   <string name="allow">Kwee</string>
   <string name="swipe_down_for_library">Gbadaa ala maka ọba akwụkwọ</string>

@@ -301,7 +301,6 @@
   <string name="allowed">Go letleletswe</string>
   <string name="not_allowed">Ga go a letlelelwa</string>
   <string name="denied_internet_permission_message">Tsweetswee letlelela wifi go tsaya tshedimosetso</string>
-  <string name="select_folder">Tsweetswee tlhopha sekgwama sa go boloka kwa ntle.</string>
   <string name="system_unable_to_grant_permission_message">Tsamaiso ga e kgone go fa tetla!</string>
   <string name="allow">Dumelela</string>
   <string name="swipe_down_for_library">Kgaphela kwa tlase kwa motlong wa dibuka</string>

@@ -311,7 +311,6 @@
   <string name="allowed">Halali</string>
   <string name="not_allowed">Hairuhusiwi</string>
   <string name="denied_internet_permission_message">Tafadhali wezesha wifi kupakua maudhui</string>
-  <string name="select_folder">Tafadhali chagua folda kwa hifadhi ya nje.</string>
   <string name="system_unable_to_grant_permission_message">Mfumo hauwezi kutoa ruhusa!</string>
   <string name="allow">Ruhusu</string>
   <string name="swipe_down_for_library">Telezesha kidole Chini kwa Maktaba</string>

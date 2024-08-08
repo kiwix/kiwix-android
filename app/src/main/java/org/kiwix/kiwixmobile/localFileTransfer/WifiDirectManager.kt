@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Context.RECEIVER_NOT_EXPORTED
 import android.content.IntentFilter
 import android.net.Uri
 import android.net.wifi.WpsInfo
@@ -32,10 +33,10 @@ import android.net.wifi.p2p.WifiP2pManager.Channel
 import android.net.wifi.p2p.WifiP2pManager.ChannelListener
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener
+import android.os.Build
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Looper.getMainLooper
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import android.widget.Toast
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.launch
@@ -44,6 +45,7 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.FileTransferConfirmation
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus
 import org.kiwix.kiwixmobile.localFileTransfer.KiwixWifiP2pBroadcastReceiver.P2pEventListener
 import java.io.IOException
@@ -105,7 +107,11 @@ class WifiDirectManager @Inject constructor(
       addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION)
       addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION)
     }
-    context.registerReceiver(receiver, intentFilter)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      context.registerReceiver(receiver, intentFilter, RECEIVER_NOT_EXPORTED)
+    } else {
+      context.registerReceiver(receiver, intentFilter)
+    }
   }
 
   private fun unregisterWifiDirectBroadcastReceiver() = context.unregisterReceiver(receiver)
