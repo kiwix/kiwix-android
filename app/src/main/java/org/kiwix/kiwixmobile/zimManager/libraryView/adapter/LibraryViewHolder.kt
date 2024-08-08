@@ -21,8 +21,10 @@ package org.kiwix.kiwixmobile.zimManager.libraryView.adapter
 import android.view.View
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Error
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
+import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.extensions.setBitmap
 import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 import org.kiwix.kiwixmobile.core.extensions.setTextAndVisibility
@@ -126,20 +128,10 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
             }
           itemDownloadBinding.pauseResume.apply {
             setImageDrawableCompat(pauseResumeIconId)
-            if (it == itemDownloadBinding.root.context.getString(R.string.paused_state) ||
-              !it.contains(itemDownloadBinding.root.context.getString(R.string.paused_state)) ||
-              !it.contains(itemDownloadBinding.root.context.getString(R.string.failed_state)) ||
-              !it.contains(itemDownloadBinding.root.context.getString(R.string.pending_state))
-            ) {
-              // If the download is paused by the user or is currently running,
-              // enable the pause/resume button.
+            if (shouldEnablePauseResumeButton(item.downloadState)) {
               isEnabled = true
               alpha = 1f
             } else {
-              // Otherwise, disable the pause/resume button because the download could not be paused
-              // due to waiting for a WiFi connection or another condition that prevents the
-              // download from continuing, such as a failed state. Disabling the button
-              // prevents unexpected behavior when the download cannot be resumed.
               isEnabled = false
               alpha = 0.5f
             }
@@ -150,6 +142,26 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
       }
       itemDownloadBinding.eta.text = item.readableEta
     }
+
+    private fun shouldEnablePauseResumeButton(
+      downloadState: DownloadState
+    ): Boolean =
+      when (downloadState) {
+        is DownloadState.Failed -> false
+        is DownloadState.Paused -> {
+          when (downloadState.reason) {
+            // Disable the pause button when the DownloadManager is waiting for
+            // Wi-Fi or network connection. This prevents the user from trying
+            // to resume the download, as it will not work without a connection.
+            Error.QUEUED_FOR_WIFI,
+            Error.WAITING_FOR_NETWORK -> false
+
+            else -> true
+          }
+        }
+
+        else -> true
+      }
   }
 
   class LibraryDividerViewHolder(private val libraryDividerBinding: LibraryDividerBinding) :

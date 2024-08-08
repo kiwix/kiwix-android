@@ -28,7 +28,6 @@ import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -131,7 +130,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         },
         {
           context?.let { context ->
-            Log.e("STATUS", ": ${it.downloadState.toReadableState(context)}")
             downloader.pauseResumeDownload(
               it.downloadId,
               it.downloadState.toReadableState(context).contains(getString(R.string.paused_state))
@@ -141,16 +139,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       ),
       LibraryDelegate.DividerDelegate
     )
-  }
-
-  private fun isDownloadPause(downloadState: String): Boolean {
-    return if (downloadState.contains(getString(R.string.paused_state))) {
-      true
-    } else if (downloadState != getString(R.string.pending_state)) {
-      false
-    } else {
-      false
-    }
   }
 
   private val noWifiWithWifiOnlyPreferenceSet
