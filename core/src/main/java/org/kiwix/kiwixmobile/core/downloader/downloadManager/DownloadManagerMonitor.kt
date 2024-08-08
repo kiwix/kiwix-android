@@ -36,7 +36,6 @@ import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -62,8 +61,7 @@ class DownloadManagerMonitor @Inject constructor(
   private val downloadManager: DownloadManager,
   val downloadRoomDao: DownloadRoomDao,
   private val context: Context,
-  private val downloadNotificationManager: DownloadNotificationManager,
-  private val sharedPreferenceUtil: SharedPreferenceUtil
+  private val downloadNotificationManager: DownloadNotificationManager
 ) : DownloadMonitor, DownloadManagerBroadcastReceiver.Callback {
 
   private val updater = PublishSubject.create<() -> Unit>()
@@ -193,12 +191,7 @@ class DownloadManagerMonitor @Inject constructor(
         bytesDownloaded,
         totalBytes,
         reason
-      ).also {
-        Log.e(
-          "UPDATE_STATUS",
-          "handlePausedDownload: $status, reason $reason"
-        )
-      }
+      )
 
       DownloadManager.STATUS_PENDING -> handlePendingDownload(downloadId)
       DownloadManager.STATUS_RUNNING -> handleRunningDownload(
@@ -436,11 +429,7 @@ class DownloadManagerMonitor @Inject constructor(
           // due to some reason.
           Error.PAUSED_UNKNOWN,
           Error.WAITING_TO_RETRY -> {
-            pauseResumeDownloadInDownloadManagerContentResolver(
-              downloadRoomEntity.downloadId,
-              CONTROL_RUN,
-              STATUS_RUNNING
-            )
+            resumeDownload(downloadRoomEntity.downloadId)
             false
           }
 
