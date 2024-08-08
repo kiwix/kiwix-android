@@ -370,17 +370,9 @@ class DownloadManagerMonitor @Inject constructor(
     synchronized(lock) {
       updater.onNext {
         downloadRoomDao.getEntityForDownloadId(downloadId)?.let { downloadEntity ->
-          if (shouldUpdateStatus(downloadEntity)) {
+          if (shouldUpdateDownloadStatus(downloadEntity)) {
             val downloadModel = DownloadModel(downloadEntity).apply {
-              if (status == Status.PAUSED && downloadEntity.status == Status.QUEUED) {
-                // Check if the user has resumed the download.
-                // Do not update the download status immediately since the download manager
-                // takes some time to actually resume the download. During this time,
-                // it will still return the paused state.
-                // By not updating the status right away, we ensure that the user
-                // sees the "Pending" state, indicating that the download is in the process
-                // of resuming.
-              } else {
+              if (shouldUpdateDownloadStatus(status, error, downloadEntity)) {
                 state = status
               }
               this.error = error
@@ -404,6 +396,61 @@ class DownloadManagerMonitor @Inject constructor(
           // already downloaded/cancelled so cancel the notification if any running.
           cancelNotification(downloadId)
         }
+      }
+    }
+  }
+
+  /**
+   * Determines whether the download status should be updated based on the current status and error.
+   *
+   * This method checks the current download status and error, and decides whether to update the status
+   * of the download entity. Specifically, it handles the case where a download is paused but has been
+   * queued for resumption. In such cases, it ensures that the download manager is instructed to resume
+   * the download, and prevents the status from being prematurely updated to "Paused".
+   *
+   * @param status The current status of the download.
+   * @param error The current error state of the download.
+   * @param downloadRoomEntity The download entity containing the current status and download ID.
+   * @return `true` if the status should be updated, `false` otherwise.
+   */
+  private fun shouldUpdateDownloadStatus(
+    status: Status,
+    error: Error,
+    downloadRoomEntity: DownloadRoomEntity
+  ): Boolean {
+    synchronized(lock) {
+      return@shouldUpdateDownloadStatus if (
+        status == Status.PAUSED &&
+        downloadRoomEntity.status == Status.QUEUED
+      ) {
+        // Check if the user has resumed the download.
+        // Do not update the download status immediately since the download manager
+        // takes some time to actually resume the download. During this time,
+        // it will still return the paused state.
+        // By not updating the status right away, we ensure that the user
+        // sees the "Pending" state, indicating that the download is in the process
+        // of resuming.
+        when (error) {
+          // When the pause reason is unknown or waiting to retry, and the user
+          // resumes the download, attempt to resume the download if it was not resumed
+          // due to some reason.
+          Error.PAUSED_UNKNOWN,
+          Error.WAITING_TO_RETRY -> {
+            pauseResumeDownloadInDownloadManagerContentResolver(
+              downloadRoomEntity.downloadId,
+              CONTROL_RUN,
+              STATUS_RUNNING
+            )
+            false
+          }
+
+          // Return true to update the status of the download if there is any other status,
+          // e.g., WAITING_FOR_WIFI, WAITING_FOR_NETWORK, or any other pause reason
+          // to inform the user.
+          else -> true
+        }
+      } else {
+        true
       }
     }
   }
@@ -494,7 +541,7 @@ class DownloadManagerMonitor @Inject constructor(
     }
   }
 
-  private fun shouldUpdateStatus(downloadRoomEntity: DownloadRoomEntity) =
+  private fun shouldUpdateDownloadStatus(downloadRoomEntity: DownloadRoomEntity) =
     downloadRoomEntity.status != Status.COMPLETED
 
   override fun init() {
