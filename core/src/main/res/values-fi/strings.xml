@@ -55,7 +55,7 @@
   <string name="pref_display_title">Näytä</string>
   <string name="pref_info_title">Tiedot</string>
   <string name="pref_info_version">Versio</string>
-  <string name="pref_dark_mode" fuzzy="true">Yötila</string>
+  <string name="pref_dark_mode">Tumma tila</string>
   <string name="pref_dark_mode_summary">Näytä artikkelit käänteisillä väreillä</string>
   <string name="pref_back_to_top">Takaisin alkuun</string>
   <string name="pref_back_to_top_summary">Näytä painike sivun lopussa rullataksesi ylös alkuun</string>

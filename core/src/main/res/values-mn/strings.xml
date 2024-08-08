@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Macofe
+* MohitMali
 * Wisdom
 -->
 <resources>
@@ -22,7 +23,7 @@
   <string name="pref_display_title">Үзүүлэх</string>
   <string name="pref_info_title">Мэдээлэл</string>
   <string name="pref_info_version">Хувилбар</string>
-  <string name="pref_dark_mode" fuzzy="true">Night mode</string>
+  <string name="pref_dark_mode">Харанхуй горим</string>
   <string name="pref_dark_mode_summary">Нийтлэлийн үсгийн өнгийг эсрэгээр харуулах</string>
   <string name="pref_back_to_top">Хамгийн дээр оч</string>
   <string name="pref_back_to_top_summary">Товчийг хуудасны сүүлд байршуулж дээш оч</string>
