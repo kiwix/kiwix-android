@@ -13,6 +13,7 @@
 * Ulhvulgv
 * بدارين
 * ديفيد
+* عبد الإله صديقي
 * علاء
 * محمد أحمد عبد الفتاح
 -->
@@ -35,6 +36,7 @@
   <string name="save_media_error">حدث خطأ عند محاولة حفظ الوسائط!</string>
   <string name="save_media_saved">حفظ الوسائط كـ%s إلى Android/media/org.kiwix…/</string>
   <string name="search_label">البحث</string>
+  <string name="searched_list">قائمة مشتركة</string>
   <string name="choose_file">حدد ملف محتوى (*.zim)</string>
   <string name="open_in_new_tab">افتح الوصلة في علامة تبويب جديدة؟</string>
   <string name="hotspot_service_channel_name">قناة خدمة هوت-سبوت</string>
@@ -61,7 +63,10 @@
   <string name="hotspot_notification_content_title">هوت-سبوت كيوكيس</string>
   <string name="start_server_label">بدء الخادم</string>
   <string name="stop_server_label">إيقاف الخادم</string>
+  <string name="error_server_already_running">الخادم يعمل بالفعل. من فضلك قم بإيقاف تشغيله وحاول مرة أخرى.</string>
+  <string name="error_ip_address_not_found">لا يمكن العثور على عنوان ip.</string>
   <string name="server_started_message">أدخل عنوان الآيبي هذا في متصفحك للوصول إلى الخادم %s</string>
+  <string name="qr_code">رمز QR المقدَم</string>
   <string name="share_host_address">مشاركة URL عبر تطبيقات أخرى</string>
   <string name="error_file_not_found">خطأ: تعذر العثور على الملف زيم (ZIM) المحدد</string>
   <string name="unable_to_read_zim_file">غير قادر على قراءة ملف zim هذا!</string>
@@ -71,7 +76,7 @@
   <string name="pref_display_title">العرض</string>
   <string name="pref_info_title">معلومات</string>
   <string name="pref_info_version">الإصدار</string>
-  <string name="pref_dark_mode" fuzzy="true">الوضع الليلي</string>
+  <string name="pref_dark_mode">الوضع الداكن</string>
   <string name="pref_dark_mode_summary">عرض المقالات بألوانٍ معكوسة</string>
   <string name="pref_back_to_top">ارجع إلى الأعلى</string>
   <string name="pref_back_to_top_summary">عرض أيقونة في نهاية الصفحة للذهاب إلى الأعلى</string>
@@ -82,6 +87,7 @@
   <string name="tts_lang_not_supported">لغة هذه الصفحة غير مدعومة، أو لم تُثبت البيانات المناسبة للغة. قد لا تتم قراءة المقالة بشكل صحيح.</string>
   <string name="no_reader_application_installed">تعذر العثور على تطبيق مثبت لهذا النوع من الملفات</string>
   <string name="no_email_application_installed">الرجاء تثبيت موفر خدمة البريد الإلكتروني أو مراسلتنا عبر البريد الإلكتروني على %1s</string>
+  <string name="no_app_found_to_select_bookmark_file">لا يوجد تطبيق لتحديد ملف علامة مرجعية</string>
   <string name="no_section_info">لم يتم العثور على عناوين محتوى</string>
   <string name="request_storage">للوصول إلى المحتوى بلا اتصال، نحتاج إلى الوصول إلى وحدة التخزين</string>
   <string name="request_write_storage">لتنزيل ملفات zim، نحتاج إلى وصول للكتابة إلى مساحة التخزين الخاصة بك</string>
@@ -91,6 +97,11 @@
   <string name="pref_clear_all_history_summary">إفراغ عمليات البحث الحديثة وعلامات التبويب</string>
   <string name="pref_notes">ملاحظات</string>
   <string name="pref_permission">الصلاحيات</string>
+  <string name="pref_import_bookmark_title">استورِد الإشارات المرجعية</string>
+  <string name="pref_import_bookmark_summary">استورِد الإشارات المرجعية المحفوظة</string>
+  <string name="pref_export_bookmark_title">صدِر الإشارات المرجعية</string>
+  <string name="pref_export_bookmark_summary">صدِر الإشارات المرجعية المحفوظة</string>
+  <string name="export_bookmark_saved">صُدِرت الإشارات المرجعية في ملف %s</string>
   <string name="all_history_cleared">أُفرغ سجل التاريخ</string>
   <string name="pref_clear_all_bookmarks_title">حذف الإشارات المرجعية</string>
   <string name="clear_all_history_dialog_title">مسح كل التاريخ</string>

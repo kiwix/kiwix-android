@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* MohitMali
 * Sovichet
 * វ័ណថារិទ្ធ
 -->
@@ -21,7 +22,7 @@
   <string name="pref_display_title">ការ​បង្ហាញ</string>
   <string name="pref_info_title">ព័ត៌មាន</string>
   <string name="pref_info_version">កំណែ</string>
-  <string name="pref_dark_mode" fuzzy="true">ម៉ូដអានពេលយប់</string>
+  <string name="pref_dark_mode">របៀបអានងងឹត</string>
   <string name="pref_dark_mode_summary">បង្ហាញអត្ថបទជាមួយនឹងពណ៌ដើម</string>
   <string name="pref_back_to_top">ត្រឡប់ទៅលើ</string>
   <string name="pref_language_title">ភាសា​</string>

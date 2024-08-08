@@ -2,6 +2,7 @@
 <!-- Authors:
 * InsomniHat
 * Kareyac
+* MohitMali
 * ShockD
 * StanProg
 * Ted Masters
@@ -33,7 +34,7 @@
   <string name="pref_display_title">Покажете</string>
   <string name="pref_info_title">Информация</string>
   <string name="pref_info_version">Версия</string>
-  <string name="pref_dark_mode" fuzzy="true">Нощен режим</string>
+  <string name="pref_dark_mode">Тъмен режим</string>
   <string name="pref_dark_mode_summary">Показване на статии в „нощен режим“</string>
   <string name="pref_back_to_top">Връщане в началото</string>
   <string name="pref_back_to_top_summary">Показване на бутон в края на страницата за превъртане нагоре</string>

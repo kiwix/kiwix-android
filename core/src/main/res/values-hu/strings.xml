@@ -10,6 +10,7 @@
 * Hanna Tardos
 * Kelson
 * Macofe
+* MohitMali
 * Tacsipacsi
 * Urbalazs
 -->
@@ -38,7 +39,7 @@
   <string name="pref_display_title">Megjelenítés</string>
   <string name="pref_info_title">Információ</string>
   <string name="pref_info_version">Verzió</string>
-  <string name="pref_dark_mode" fuzzy="true">Éjszakai mód</string>
+  <string name="pref_dark_mode">Sötét mód</string>
   <string name="pref_dark_mode_summary">Inverz színek használata a cikkek megjelenítéséhez</string>
   <string name="pref_back_to_top">Vissza a lap tetejére</string>
   <string name="pref_back_to_top_summary">Gomb megjelenítése a lap alján, melynek segítségével visszatérhetsz a lap tetejére</string>
