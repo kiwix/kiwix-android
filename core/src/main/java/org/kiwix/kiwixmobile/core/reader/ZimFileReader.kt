@@ -443,8 +443,14 @@ class ZimFileReader constructor(
            filter: invert(1); 
         }
         img#header-profile{
-          -webkit-filter: invert(0); 
-          filter: invert(0); 
+          -webkit-filter: invert(0) important; 
+          filter: invert(0) important; 
+        }
+        .vjs-poster {
+          img {
+            -webkit-filter: invert(0); 
+            filter: invert(0); 
+          }
         }
         div[poster] > video {
           -webkit-filter: invert(0); 
