@@ -148,7 +148,7 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
     ): Boolean =
       when (downloadState) {
         is DownloadState.Failed -> false
-        is DownloadState.Paused -> !shouldEnablePauseResumeButton(downloadState.reason)
+        is DownloadState.Paused -> shouldEnablePauseResumeButtonForPauseReason(downloadState.reason)
         else -> true
       }
 
@@ -157,8 +157,8 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
      * Wi-Fi or network connection. This prevents the user from trying
      * to resume the download, as it will not work without a connection.
      */
-    private fun shouldEnablePauseResumeButton(reason: Error?): Boolean =
-      reason in listOf(Error.QUEUED_FOR_WIFI, Error.WAITING_FOR_NETWORK)
+    private fun shouldEnablePauseResumeButtonForPauseReason(reason: Error?): Boolean =
+      reason !in listOf(Error.QUEUED_FOR_WIFI, Error.WAITING_FOR_NETWORK)
   }
 
   class LibraryDividerViewHolder(private val libraryDividerBinding: LibraryDividerBinding) :
