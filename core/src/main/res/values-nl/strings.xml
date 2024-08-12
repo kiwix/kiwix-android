@@ -312,7 +312,6 @@
   <string name="allowed">Toegestaan</string>
   <string name="not_allowed">Niet toegestaan</string>
   <string name="denied_internet_permission_message">Schakel WiFi in om inhoud te downloaden</string>
-  <string name="select_folder">Kies een map voor externe opslag.</string>
   <string name="system_unable_to_grant_permission_message">Systeem kan geen toestemming verlenen!</string>
   <string name="allow">Toestaan</string>
   <string name="swipe_down_for_library">Veeg omlaag voor bibliotheek</string>

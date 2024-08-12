@@ -36,7 +36,7 @@ import org.kiwix.kiwixmobile.core.di.qualifiers.Computation
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
-import org.kiwix.kiwixmobile.core.downloader.fetch.FetchDownloadMonitor
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerMonitor
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import javax.inject.Singleton
@@ -90,8 +90,9 @@ class ApplicationModule {
 
   @Provides
   @Singleton
-  internal fun provideDownloadMonitor(fetchDownloadMonitor: FetchDownloadMonitor): DownloadMonitor =
-    fetchDownloadMonitor
+  internal fun provideDownloadMonitor(
+    downloadManagerMonitor: DownloadManagerMonitor
+  ): DownloadMonitor = downloadManagerMonitor
 
   @Provides
   @Singleton

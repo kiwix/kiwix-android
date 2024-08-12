@@ -310,7 +310,6 @@
   <string name="allowed">Dovoljeno</string>
   <string name="not_allowed">Ni dovoljeno</string>
   <string name="denied_internet_permission_message">Za prenos vsebine omogočite Wi-Fi</string>
-  <string name="select_folder">Izberite mapo za zunanje shranjevanje.</string>
   <string name="system_unable_to_grant_permission_message">Sistem ne more podeliti dovoljenja!</string>
   <string name="allow">Dovoli</string>
   <string name="swipe_down_for_library">Podrsajte navzdol za knjižnico</string>

@@ -119,8 +119,14 @@ class DownloadRobot : BaseRobot() {
   }
 
   fun assertDownloadPaused() {
-    pauseForBetterTestPerformance()
-    onView(withText(org.kiwix.kiwixmobile.core.R.string.paused_state)).check(matches(isDisplayed()))
+    testFlakyView({
+      pauseForBetterTestPerformance()
+      onView(
+        withText(
+          org.kiwix.kiwixmobile.core.R.string.paused_state
+        )
+      ).check(matches(isDisplayed()))
+    })
   }
 
   fun resumeDownload() {

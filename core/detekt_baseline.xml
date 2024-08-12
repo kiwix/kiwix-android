@@ -3,7 +3,6 @@
   <ManuallySuppressedIssues/>
   <CurrentIssues>
     <ID>EmptyFunctionBlock:BooksOnDiskViewHolder.kt$BookOnDiskViewHolder.BookViewHolder${ }</ID>
-    <ID>EmptyFunctionBlock:FetchDownloadMonitor.kt$FetchDownloadMonitor.&lt;no name provided>${}</ID>
     <ID>EmptyFunctionBlock:OnSwipeTouchListener.kt$OnSwipeTouchListener${}</ID>
     <ID>ForbiddenComment:JNIInitialiser.kt$JNIInitialiser$// TODO: Consider surfacing to user</ID>
     <ID>ForbiddenComment:NetworkUtilsTest.kt$NetworkUtilsTest$// TODO: find a way to assert regex matching via JUnit and rewrite the test</ID>
@@ -20,8 +19,6 @@
     <ID>MagicNumber:DownloadItem.kt$DownloadItem$1000L</ID>
     <ID>MagicNumber:SearchState.kt$SearchState$100</ID>
     <ID>MagicNumber:DownloaderModule.kt$DownloaderModule$5</ID>
-    <ID>MagicNumber:FetchDownloadNotificationManager.kt$FetchDownloadNotificationManager$100</ID>
-    <ID>MagicNumber:FetchDownloadRequester.kt$10</ID>
     <ID>MagicNumber:FileUtils.kt$FileUtils$3</ID>
     <ID>MagicNumber:JNIInitialiser.kt$JNIInitialiser$1024</ID>
     <ID>MagicNumber:KiloByte.kt$KiloByte$1024.0</ID>

@@ -28,7 +28,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.dao.FetchDownloadDao
+import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -45,7 +45,7 @@ import java.io.File
 class StorageObserverTest {
 
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
-  private val downloadDao: FetchDownloadDao = mockk()
+  private val downloadRoomDao: DownloadRoomDao = mockk()
   private val fileSearch: FileSearch = mockk()
   private val downloadModel: DownloadModel = mockk()
   private val file: File = mockk()
@@ -72,10 +72,10 @@ class StorageObserverTest {
     clearAllMocks()
     every { sharedPreferenceUtil.prefStorage } returns "a"
     every { fileSearch.scan(scanningProgressListener) } returns files
-    every { downloadDao.downloads() } returns downloads
+    every { downloadRoomDao.downloads() } returns downloads
     every { zimFileReader.jniKiwixReader } returns mockk()
     every { runBlocking { readerFactory.create(file) } } returns zimFileReader
-    storageObserver = StorageObserver(downloadDao, fileSearch, readerFactory, libkiwixBookmarks)
+    storageObserver = StorageObserver(downloadRoomDao, fileSearch, readerFactory, libkiwixBookmarks)
   }
 
   @Test
