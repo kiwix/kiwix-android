@@ -88,11 +88,6 @@ class ApplicationModule {
   @Provides
   fun provideComputationThread(): Scheduler = Schedulers.computation()
 
-  // @Provides
-  // @Singleton
-  // internal fun provideDownloadMonitor(fetchDownloadMonitor: FetchDownloadMonitor): DownloadMonitor =
-  //   fetchDownloadMonitor
-
   @Provides
   @Singleton
   internal fun provideDownloadMonitor(
