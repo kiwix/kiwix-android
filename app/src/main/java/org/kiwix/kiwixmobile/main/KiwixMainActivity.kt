@@ -40,8 +40,6 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
-import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.databinding.ActivityKiwixMainBinding
 import org.kiwix.kiwixmobile.kiwixActivityComponent
@@ -122,16 +120,11 @@ class KiwixMainActivity : CoreMainActivity() {
 
   private fun migrateInternalToPublicAppDirectory() {
     if (!sharedPreferenceUtil.prefIsAppDirectoryMigrated) {
-      val writableStoragePaths = StorageDeviceUtils.getWritableStorage(this)
-      val targetStoragePath = when (sharedPreferenceUtil.storagePosition) {
-        INTERNAL_SELECT_POSITION ->
-          sharedPreferenceUtil.getPublicDirectoryPath(writableStoragePaths[0].name)
-
-        EXTERNAL_SELECT_POSITION -> writableStoragePaths.getOrNull(1)?.name
-        else -> null
-      }
-      targetStoragePath?.let {
-        sharedPreferenceUtil.putPrefStorage(it)
+      val storagePath = StorageDeviceUtils.getWritableStorage(this)
+        .getOrNull(sharedPreferenceUtil.storagePosition)
+        ?.name
+      storagePath?.let {
+        sharedPreferenceUtil.putPrefStorage(sharedPreferenceUtil.getPublicDirectoryPath(it))
         sharedPreferenceUtil.putPrefAppDirectoryMigrated(true)
       }
     }
