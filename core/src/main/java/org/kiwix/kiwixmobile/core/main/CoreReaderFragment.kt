@@ -77,6 +77,7 @@ import androidx.core.widget.ContentLoadingProgressBar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -95,6 +96,7 @@ import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.processors.BehaviorProcessor
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONException
 import org.kiwix.kiwixmobile.core.BuildConfig
@@ -1292,7 +1294,7 @@ abstract class CoreReaderFragment :
     mainMenu?.showBookSpecificMenuItems()
   }
 
-  protected fun exitBook() {
+  protected suspend fun exitBook() {
     showNoBookOpenViews()
     bottomToolbar?.visibility = View.GONE
     actionBar?.title = getString(R.string.reader)
@@ -1301,7 +1303,7 @@ abstract class CoreReaderFragment :
     closeZimBook()
   }
 
-  private fun closeZimBook() {
+  private suspend fun closeZimBook() {
     zimReaderContainer?.setZimFile(null)
   }
 
@@ -1320,7 +1322,6 @@ abstract class CoreReaderFragment :
           LinearLayout.LayoutParams.MATCH_PARENT
         )
       }
-      zimReaderContainer?.setZimFile(tempZimFileForUndo)
       webViewList.add(index, it)
       tabsAdapter?.notifyDataSetChanged()
       snackBarRoot?.let { root ->
@@ -1561,7 +1562,7 @@ abstract class CoreReaderFragment :
     unsupportedMimeTypeHandler?.showSaveOrOpenUnsupportedFilesDialog(url, documentType)
   }
 
-  fun openZimFile(
+  suspend fun openZimFile(
     file: File?,
     isCustomApp: Boolean = false,
     assetFileDescriptorList: List<AssetFileDescriptor> = emptyList(),
@@ -1610,11 +1611,12 @@ abstract class CoreReaderFragment :
     )
   }
 
-  private fun openAndSetInContainer(
+  private suspend fun openAndSetInContainer(
     file: File? = null,
     assetFileDescriptorList: List<AssetFileDescriptor> = emptyList(),
     filePath: String? = null
   ) {
+    progressBar?.visibility = View.VISIBLE
     try {
       if (isNotPreviouslyOpenZim(file?.canonicalPath)) {
         webViewList.clear()
@@ -1641,6 +1643,7 @@ abstract class CoreReaderFragment :
       } ?: kotlin.run {
         requireActivity().toast(R.string.error_file_invalid, Toast.LENGTH_LONG)
       }
+      progressBar?.visibility = View.GONE
     }
   }
 
@@ -1675,18 +1678,22 @@ abstract class CoreReaderFragment :
   ) {
     when (requestCode) {
       REQUEST_STORAGE_PERMISSION -> {
-        if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-          file?.let(::openZimFile)
-        } else {
-          snackBarRoot?.let { snackBarRoot ->
-            Snackbar.make(snackBarRoot, R.string.request_storage, Snackbar.LENGTH_LONG)
-              .setAction(R.string.menu_settings) {
-                val intent = Intent()
-                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                val uri = Uri.fromParts("package", requireActivity().packageName, null)
-                intent.data = uri
-                startActivity(intent)
-              }.show()
+        lifecycleScope.launch {
+          if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            file?.let { file ->
+              openZimFile(file)
+            }
+          } else {
+            snackBarRoot?.let { snackBarRoot ->
+              Snackbar.make(snackBarRoot, R.string.request_storage, Snackbar.LENGTH_LONG)
+                .setAction(R.string.menu_settings) {
+                  val intent = Intent()
+                  intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                  val uri = Uri.fromParts("package", requireActivity().packageName, null)
+                  intent.data = uri
+                  startActivity(intent)
+                }.show()
+            }
           }
         }
       }
@@ -1733,7 +1740,6 @@ abstract class CoreReaderFragment :
 
   private fun restoreDeletedTabs() {
     if (tempWebViewListForUndo.isNotEmpty()) {
-      zimReaderContainer?.setZimFile(tempZimFileForUndo)
       webViewList.addAll(tempWebViewListForUndo)
       tabsAdapter?.notifyDataSetChanged()
       snackBarRoot?.let { root ->
@@ -2281,7 +2287,7 @@ abstract class CoreReaderFragment :
   private fun isInvalidJson(jsonString: String?): Boolean =
     jsonString == null || jsonString == "[]"
 
-  protected fun manageExternalLaunchAndRestoringViewState() {
+  protected suspend fun manageExternalLaunchAndRestoringViewState() {
     val settings = requireActivity().getSharedPreferences(
       SharedPreferenceUtil.PREF_KIWIX_MOBILE,
       0
@@ -2415,5 +2421,5 @@ abstract class CoreReaderFragment :
    * KiwixReaderFragment.restoreViewStateOnInvalidJSON) to ensure consistent behavior
    * when handling invalid JSON scenarios.
    */
-  abstract fun restoreViewStateOnInvalidJSON()
+  abstract suspend fun restoreViewStateOnInvalidJSON()
 }

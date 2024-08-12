@@ -234,24 +234,29 @@ class ZimFileReader constructor(
 
   @Suppress("UnreachableCode", "NestedBlockDepth", "ReturnCount")
   private fun loadContent(uri: String, extension: String): InputStream? {
-    val item = getItem(uri)
-    if (compressedExtensions.any { it != extension }) {
-      item?.size?.let {
-        // Check if the item size exceeds 1 MB
-        if (it / Kb > 1024) {
-          // Retrieve direct access information for the item
-          val infoPair = getDirectAccessInfoOfItem(item, uri)
-          val file = infoPair?.filename?.let(::File)
-          // If no file found or file does not exist, return input stream from item data
-          if (infoPair == null || file == null || !file.exists()) {
-            return@loadContent ByteArrayInputStream(item.data?.data)
+    try {
+      val item = getItem(uri)
+      if (compressedExtensions.any { it != extension }) {
+        item?.size?.let {
+          // Check if the item size exceeds 1 MB
+          if (it / Kb > 1024) {
+            // Retrieve direct access information for the item
+            val infoPair = getDirectAccessInfoOfItem(item, uri)
+            val file = infoPair?.filename?.let(::File)
+            // If no file found or file does not exist, return input stream from item data
+            if (infoPair == null || file == null || !file.exists()) {
+              return@loadContent ByteArrayInputStream(item.data?.data)
+            }
+            // Return the input stream from the direct access information
+            return@loadContent getInputStreamFromDirectAccessInfo(item, file, infoPair)
           }
-          // Return the input stream from the direct access information
-          return@loadContent getInputStreamFromDirectAccessInfo(item, file, infoPair)
         }
       }
+      return loadContent(item, uri)
+    } catch (exception: Exception) {
+      Log.e("ZimFileReader", "exception caught while loading content$exception")
+      return null
     }
-    return loadContent(item, uri)
   }
 
   fun getMimeTypeFromUrl(uri: String): String? = getItem(uri)?.mimetype

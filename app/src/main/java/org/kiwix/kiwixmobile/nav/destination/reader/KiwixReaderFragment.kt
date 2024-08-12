@@ -33,7 +33,11 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.anim
@@ -71,44 +75,52 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-
-    val activity = activity as CoreMainActivity
-    noOpenBookButton?.setOnClickListener {
-      activity.navigate(
-        KiwixReaderFragmentDirections.actionNavigationReaderToNavigationLibrary()
-      )
+    lifecycleScope.launch {
+      viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+        val activity = activity as CoreMainActivity
+        noOpenBookButton?.setOnClickListener {
+          activity.navigate(
+            KiwixReaderFragmentDirections.actionNavigationReaderToNavigationLibrary()
+          )
+        }
+        activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar?.let(activity::setupDrawerToggle)
+        setFragmentContainerBottomMarginToSizeOfNavBar()
+        openPageInBookFromNavigationArguments()
+      }
     }
-    activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    toolbar?.let(activity::setupDrawerToggle)
-    setFragmentContainerBottomMarginToSizeOfNavBar()
-    openPageInBookFromNavigationArguments()
   }
 
-  private fun openPageInBookFromNavigationArguments() {
+  @Suppress("TooGenericExceptionCaught")
+  private suspend fun openPageInBookFromNavigationArguments() {
     val args = KiwixReaderFragmentArgs.fromBundle(requireArguments())
-
-    if (args.pageUrl.isNotEmpty()) {
-      if (args.zimFileUri.isNotEmpty()) {
-        tryOpeningZimFile(args.zimFileUri)
+    try {
+      if (args.pageUrl.isNotEmpty()) {
+        if (args.zimFileUri.isNotEmpty()) {
+          tryOpeningZimFile(args.zimFileUri)
+        } else {
+          // Set up bookmarks for the current book when opening bookmarks from the Bookmark screen.
+          // This is necessary because we are not opening the ZIM file again; the bookmark is
+          // inside the currently opened book. Bookmarks are set up when opening the ZIM file.
+          // See https://github.com/kiwix/kiwix-android/issues/3541
+          zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
+        }
+        loadUrlWithCurrentWebview(args.pageUrl)
       } else {
-        // Set up bookmarks for the current book when opening bookmarks from the Bookmark screen.
-        // This is necessary because we are not opening the ZIM file again; the bookmark is
-        // inside the currently opened book. Bookmarks are set up when opening the ZIM file.
-        // See https://github.com/kiwix/kiwix-android/issues/3541
-        zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
+        if (args.zimFileUri.isNotEmpty()) {
+          tryOpeningZimFile(args.zimFileUri)
+        } else {
+          manageExternalLaunchAndRestoringViewState()
+        }
       }
-      loadUrlWithCurrentWebview(args.pageUrl)
-    } else {
-      if (args.zimFileUri.isNotEmpty()) {
-        tryOpeningZimFile(args.zimFileUri)
-      } else {
-        manageExternalLaunchAndRestoringViewState()
-      }
+    } catch (error: Exception) {
+      Log.e("KiwixReader", "Error opening ZIM file", error)
+    } finally {
+      requireArguments().clear()
     }
-    requireArguments().clear()
   }
 
-  private fun tryOpeningZimFile(zimFileUri: String) {
+  private suspend fun tryOpeningZimFile(zimFileUri: String) {
     val filePath = FileUtils.getLocalFilePathByUri(
       requireActivity().applicationContext, Uri.parse(zimFileUri)
     )
@@ -155,14 +167,16 @@ class KiwixReaderFragment : CoreReaderFragment() {
         contentFrame?.visibility = View.VISIBLE
       }
       mainMenu?.showWebViewOptions(true)
-      if (webViewList.isEmpty()) {
-        exitBook()
-      } else {
-        // Reset the top margin of web views to 0 to remove any previously set margin
-        // This ensures that the web views are displayed without any additional
-        // top margin for kiwix main app.
-        setTopMarginToWebViews(0)
-        selectTab(currentWebViewIndex)
+      lifecycleScope.launch {
+        if (webViewList.isEmpty()) {
+          exitBook()
+        } else {
+          // Reset the top margin of web views to 0 to remove any previously set margin
+          // This ensures that the web views are displayed without any additional
+          // top margin for kiwix main app.
+          setTopMarginToWebViews(0)
+          selectTab(currentWebViewIndex)
+        }
       }
     }
   }
@@ -199,17 +213,19 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun onResume() {
     super.onResume()
-    if (zimReaderContainer?.zimFile == null &&
-      zimReaderContainer?.zimFileReader?.assetFileDescriptorList?.isEmpty() == true
-    ) {
-      exitBook()
-    }
-    if (isFullScreenVideo || isInFullScreenMode()) {
-      hideNavBar()
+    lifecycleScope.launch {
+      if (zimReaderContainer?.zimFile == null &&
+        zimReaderContainer?.zimFileReader?.assetFileDescriptorList?.isEmpty() == true
+      ) {
+        exitBook()
+      }
+      if (isFullScreenVideo || isInFullScreenMode()) {
+        hideNavBar()
+      }
     }
   }
 
-  override fun restoreViewStateOnInvalidJSON() {
+  override suspend fun restoreViewStateOnInvalidJSON() {
     Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
     exitBook()
   }
@@ -222,20 +238,22 @@ class KiwixReaderFragment : CoreReaderFragment() {
     val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
     val zimFile = settings.getString(TAG_CURRENT_FILE, null)
 
-    if (zimFile != null && File(zimFile).isFileExist()) {
-      if (zimReaderContainer?.zimFile == null) {
-        openZimFile(File(zimFile))
-        Log.d(
-          TAG_KIWIX,
-          "Kiwix normal start, Opened last used zimFile: -> $zimFile"
-        )
+    lifecycleScope.launch {
+      if (zimFile != null && File(zimFile).isFileExist()) {
+        if (zimReaderContainer?.zimFile == null) {
+          openZimFile(File(zimFile))
+          Log.d(
+            TAG_KIWIX,
+            "Kiwix normal start, Opened last used zimFile: -> $zimFile"
+          )
+        } else {
+          zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
+        }
       } else {
-        zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
+        getCurrentWebView()?.snack(R.string.zim_not_opened)
+        exitBook() // hide the options for zim file to avoid unexpected UI behavior
+        return@launch // book not found so don't need to restore the tabs for this file
       }
-    } else {
-      getCurrentWebView()?.snack(R.string.zim_not_opened)
-      exitBook() // hide the options for zim file to avoid unexpected UI behavior
-      return // book not found so don't need to restore the tabs for this file
     }
     restoreTabs(zimArticles, zimPositions, currentTab)
   }
@@ -304,10 +322,12 @@ class KiwixReaderFragment : CoreReaderFragment() {
       when (it.scheme) {
         "file" -> {
           Handler(Looper.getMainLooper()).postDelayed({
-            openZimFile(it.toFile()).also {
-              // if used once then clear it to avoid affecting any other functionality
-              // of the application.
-              requireActivity().intent.action = null
+            lifecycleScope.launch {
+              openZimFile(it.toFile()).also {
+                // if used once then clear it to avoid affecting any other functionality
+                // of the application.
+                requireActivity().intent.action = null
+              }
             }
           }, 300)
         }
@@ -315,7 +335,9 @@ class KiwixReaderFragment : CoreReaderFragment() {
         "content" -> {
           Handler(Looper.getMainLooper()).postDelayed({
             getZimFileFromUri(it)?.let { zimFile ->
-              openZimFile(zimFile)
+              lifecycleScope.launch {
+                openZimFile(zimFile)
+              }
             }.also {
               requireActivity().intent.action = null
             }

@@ -19,7 +19,9 @@ package org.kiwix.kiwixmobile.core.reader
 
 import android.content.res.AssetFileDescriptor
 import android.webkit.WebResourceResponse
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
 import java.io.File
@@ -35,21 +37,21 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
       field = value
     }
 
-  fun setZimFile(file: File?) {
+  suspend fun setZimFile(file: File?) {
     if (file?.canonicalPath == zimFileReader?.zimFile?.canonicalPath) {
       return
     }
-    zimFileReader = runBlocking {
+    zimFileReader = withContext(Dispatchers.IO) {
       if (file?.isFileExist() == true) zimFileReaderFactory.create(file)
       else null
     }
   }
 
-  fun setZimFileDescriptor(
+  suspend fun setZimFileDescriptor(
     assetFileDescriptorList: List<AssetFileDescriptor>,
     filePath: String? = null
   ) {
-    zimFileReader = runBlocking {
+    zimFileReader = withContext(Dispatchers.IO) {
       if (assetFileDescriptorList.isNotEmpty() &&
         assetFileDescriptorList[0].parcelFileDescriptor.fileDescriptor.valid()
       )
