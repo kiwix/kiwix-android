@@ -103,6 +103,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefIsHistoryMigrated: Boolean
     get() = sharedPreferences.getBoolean(PREF_HISTORY_MIGRATED, false)
 
+  val prefIsAppDirectoryMigrated: Boolean
+    get() = sharedPreferences.getBoolean(PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED, false)
+
   val prefStorage: String
     get() {
       val storage = sharedPreferences.getString(PREF_STORAGE, null)
@@ -145,6 +148,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   fun putPrefNotesMigrated(isMigrated: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_NOTES_MIGRATED, isMigrated) }
+
+  fun putPrefAppDirectoryMigrated(isMigrated: Boolean) =
+    sharedPreferences.edit { putBoolean(PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED, isMigrated) }
 
   fun putPrefLanguage(language: String) =
     sharedPreferences.edit { putString(PREF_LANG, language) }
@@ -310,5 +316,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_RECENT_SEARCH_MIGRATED = "pref_recent_search_migrated"
     const val PREF_HISTORY_MIGRATED = "pref_history_migrated"
     const val PREF_NOTES_MIGRATED = "pref_notes_migrated"
+    const val PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED = "pref_app_directory_to_public_migrated"
   }
 }
