@@ -185,10 +185,8 @@ class SearchFragmentTest : BaseActivityTest() {
       searchWithFrequentlyTypedWords(searchQueryForDownloadedZimFile, 300)
       assertSearchSuccessful(searchResultForDownloadedZimFile)
       deleteSearchedQueryFrequently(searchQueryForDownloadedZimFile, uiDevice, 300)
-      // to close the keyboard
-      pressBack()
-      // go to reader screen
-      pressBack()
+      // open the reader fragment for next text case.
+      openKiwixReaderFragmentWithFile(downloadingZimFile)
     }
 
     // Added test for checking the crash scenario where the application was crashing when we
