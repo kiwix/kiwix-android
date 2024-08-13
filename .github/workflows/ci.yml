@@ -57,7 +57,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ matrix.api-level == 33 || matrix.api-level == 34 && 'aosp_atd' || 'default' }}
+          target: ${{ (matrix.api-level == 33 || matrix.api-level == 34) && 'aosp_atd' || 'default' }}
           arch: x86_64
           profile: pixel_2
           ram-size: 4096M
@@ -76,7 +76,7 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ matrix.api-level == 33 || matrix.api-level == 34 && 'aosp_atd' || 'default' }}
+          target: ${{ (matrix.api-level == 33 || matrix.api-level == 34) && 'aosp_atd' || 'default' }}
           arch: x86_64
           profile: pixel_2
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
@@ -95,7 +95,7 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ matrix.api-level != 33 && 'default' || 'aosp_atd' }}
+          target: ${{ (matrix.api-level == 33 || matrix.api-level == 34) && 'aosp_atd' || 'default' }}
           arch: x86_64
           profile: pixel_2
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
