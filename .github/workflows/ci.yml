@@ -12,7 +12,7 @@ jobs:
     name: Automated tests
     strategy:
       matrix:
-        api-level: [ 25, 30, 33 ]
+        api-level: [ 25, 30, 33, 34 ]
       fail-fast: true
     runs-on: ubuntu-22.04
     steps:
