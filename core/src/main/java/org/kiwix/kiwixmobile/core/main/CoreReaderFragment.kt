@@ -2424,4 +2424,4 @@ abstract class CoreReaderFragment :
   abstract fun restoreViewStateOnInvalidJSON()
 }
 
-private const val CONTENT_FRAME_BOTTOM_PADDING = 32
+private const val CONTENT_FRAME_BOTTOM_PADDING = 40
