@@ -44,6 +44,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
@@ -105,7 +106,7 @@ class SearchFragmentTest : BaseActivityTest() {
       setSuppressingResultMatcher(
         allOf(
           matchesCheck(TouchTargetSizeCheck::class.java),
-          matchesViews(ViewMatchers.withId(R.id.menu_searchintext))
+          matchesViews(ViewMatchers.withId(id.menu_searchintext))
         )
       )
     }

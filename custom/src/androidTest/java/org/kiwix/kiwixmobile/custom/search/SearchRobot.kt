@@ -40,7 +40,7 @@ fun search(searchRobot: SearchRobot.() -> Unit) = SearchRobot().searchRobot()
 class SearchRobot {
   fun searchWithFrequentlyTypedWords(query: String, wait: Long = 0L) {
     testFlakyView({
-      val searchView = Espresso.onView(ViewMatchers.withId(R.id.search_src_text))
+      val searchView = Espresso.onView(ViewMatchers.withId(androidx.appcompat.R.id.search_src_text))
       searchView.perform(ViewActions.clearText())
       for (char in query) {
         searchView.perform(ViewActions.typeText(char.toString()))
@@ -75,7 +75,7 @@ class SearchRobot {
       }
 
       // clear search query if any remains due to any condition not to affect any other test scenario
-      val searchView = Espresso.onView(ViewMatchers.withId(R.id.search_src_text))
+      val searchView = Espresso.onView(ViewMatchers.withId(androidx.appcompat.R.id.search_src_text))
       searchView.perform(ViewActions.clearText())
     })
   }

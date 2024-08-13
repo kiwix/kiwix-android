@@ -34,6 +34,7 @@ import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.download.DownloadTest.Companion.KIWIX_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils
@@ -58,7 +59,7 @@ class DownloadRobot : BaseRobot() {
 
   fun waitForDataToLoad() {
     try {
-      isVisible(TextId(R.string.your_languages))
+      isVisible(TextId(string.your_languages))
     } catch (e: RuntimeException) {
       if (retryCountForDataToLoad > 0) {
         retryCountForDataToLoad--
@@ -155,7 +156,7 @@ class DownloadRobot : BaseRobot() {
 
   private fun assertStopDownloadDialogDisplayed() {
     pauseForBetterTestPerformance()
-    isVisible(TextId(R.string.confirm_stop_download_title))
+    isVisible(TextId(string.confirm_stop_download_title))
   }
 
   private fun clickOnYesButton() {

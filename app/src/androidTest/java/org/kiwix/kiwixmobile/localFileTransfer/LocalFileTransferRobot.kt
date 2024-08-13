@@ -65,7 +65,7 @@ class LocalFileTransferRobot : BaseRobot() {
   private fun closeEnableWifiP2PDialogIfVisible() {
     try {
       testFlakyView({
-        onView(withText(R.string.request_enable_wifi)).check(matches(isDisplayed()))
+        onView(withText(string.request_enable_wifi)).check(matches(isDisplayed()))
         pressBack()
       })
     } catch (ignore: Throwable) {

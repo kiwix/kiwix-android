@@ -86,11 +86,11 @@ class LocalFileTransferTest {
         anyOf(
           allOf(
             matchesCheck(SpeakableTextPresentCheck::class.java),
-            matchesViews(withId(R.id.tv_skip))
+            matchesViews(withId(uk.co.deanwild.materialshowcaseview.R.id.tv_skip))
           ),
           allOf(
             matchesCheck(TouchTargetSizeCheck::class.java),
-            matchesViews(withId(R.id.tv_skip))
+            matchesViews(withId(uk.co.deanwild.materialshowcaseview.R.id.tv_skip))
           ),
           allOf(
             matchesCheck(TouchTargetSizeCheck::class.java),

@@ -147,6 +147,6 @@ class NavigationHistoryRobot : BaseRobot() {
   }
 
   fun clickOnReaderFragment() {
-    testFlakyView({ onView(withId(R.id.readerFragment)).perform(click()) })
+    testFlakyView({ onView(withId(org.kiwix.kiwixmobile.R.id.readerFragment)).perform(click()) })
   }
 }
