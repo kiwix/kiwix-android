@@ -38,7 +38,7 @@ class ScrollingViewWithBottomNavigationBehavior(context: Context, attrs: Attribu
   private var bottomMargin = 0
 
   companion object {
-    const val DEFAULT_BOTTOM_NAVIGATION_MARGIN_ON_HIDDEN = -2
+    const val DEFAULT_BOTTOM_NAVIGATION_MARGIN_ON_HIDDEN = 2
     const val EXTRA_MARGIN_FOR_BOTTOM_BAR = 30
   }
 
