@@ -1335,12 +1335,6 @@ abstract class CoreReaderFragment :
   private fun safelyAddWebView(webView: KiwixWebView) {
     webView.parent?.let { (it as ViewGroup).removeView(webView) }
     contentFrame?.addView(webView)
-    contentFrame?.setPadding(
-      contentFrame?.paddingLeft ?: 0,
-      contentFrame?.paddingTop ?: 0,
-      contentFrame?.paddingRight ?: 0,
-      CONTENT_FRAME_BOTTOM_PADDING
-    )
   }
 
   protected fun selectTab(position: Int) {
@@ -2423,5 +2417,3 @@ abstract class CoreReaderFragment :
    */
   abstract fun restoreViewStateOnInvalidJSON()
 }
-
-private const val CONTENT_FRAME_BOTTOM_PADDING = 40
