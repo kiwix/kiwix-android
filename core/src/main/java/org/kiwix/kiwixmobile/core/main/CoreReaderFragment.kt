@@ -180,46 +180,26 @@ abstract class CoreReaderFragment :
   private val webUrlsProcessor = BehaviorProcessor.create<String>()
   private var fragmentReaderBinding: FragmentReaderBinding? = null
 
-  val toolbar: Toolbar? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.toolbar)
-  }
-  val toolbarContainer: AppBarLayout? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.fragment_main_app_bar)
-  }
-  val progressBar: ContentLoadingProgressBar? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.main_fragment_progress_view)
-  }
+  var toolbar: Toolbar? = null
+  var toolbarContainer: AppBarLayout? = null
+  var progressBar: ContentLoadingProgressBar? = null
 
   var drawerLayout: DrawerLayout? = null
   protected var tableDrawerRightContainer: NavigationView? = null
 
-  val contentFrame: FrameLayout? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.activity_main_content_frame)
-  }
+  var contentFrame: FrameLayout? = null
 
-  val bottomToolbar: BottomAppBar? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.bottom_toolbar)
-  }
+  var bottomToolbar: BottomAppBar? = null
 
-  val tabSwitcherRoot: View? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.activity_main_tab_switcher)
-  }
+  var tabSwitcherRoot: View? = null
 
-  val closeAllTabsButton: FloatingActionButton? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.tab_switcher_close_all_tabs)
-  }
+  var closeAllTabsButton: FloatingActionButton? = null
 
-  val videoView: ViewGroup? by lazy {
-    fragmentReaderBinding?.fullscreenVideoContainer
-  }
+  var videoView: ViewGroup? = null
 
-  val noOpenBookButton: Button? by lazy {
-    fragmentReaderBinding?.goToLibraryButtonNoOpenBook
-  }
+  var noOpenBookButton: Button? = null
 
-  val activityMainRoot: View? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.activity_main_root)
-  }
+  var activityMainRoot: View? = null
 
   @JvmField
   @Inject
@@ -253,61 +233,32 @@ abstract class CoreReaderFragment :
   protected var actionBar: ActionBar? = null
   protected var mainMenu: MainMenu? = null
 
-  val toolbarWithSearchPlaceholder: ConstraintLayout? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.toolbarWithSearchPlaceholder)
-  }
+  var toolbarWithSearchPlaceholder: ConstraintLayout? = null
 
-  val backToTopButton: FloatingActionButton? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.activity_main_back_to_top_fab)
-  }
+  var backToTopButton: FloatingActionButton? = null
 
-  private val stopTTSButton: Button? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.activity_main_button_stop_tts)
-  }
+  private var stopTTSButton: Button? = null
 
-  val pauseTTSButton: Button? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.activity_main_button_pause_tts)
-  }
+  var pauseTTSButton: Button? = null
 
-  val ttsControls: Group? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.activity_main_tts_controls)
-  }
+  var ttsControls: Group? = null
 
-  private val exitFullscreenButton: ImageButton? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.activity_main_fullscreen_button)
-  }
+  private var exitFullscreenButton: ImageButton? = null
 
-  private val bottomToolbarBookmark: ImageView? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.bottom_toolbar_bookmark)
-  }
+  private var bottomToolbarBookmark: ImageView? = null
 
-  private val bottomToolbarArrowBack: ImageView? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.bottom_toolbar_arrow_back)
-  }
+  private var bottomToolbarArrowBack: ImageView? = null
 
-  private val bottomToolbarArrowForward: ImageView? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.bottom_toolbar_arrow_forward)
-  }
+  private var bottomToolbarArrowForward: ImageView? = null
 
-  private val bottomToolbarHome: ImageView? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.bottom_toolbar_home)
-  }
+  private var bottomToolbarHome: ImageView? = null
 
-  private val tabRecyclerView: RecyclerView? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.tab_switcher_recycler_view)
-  }
+  private var tabRecyclerView: RecyclerView? = null
 
-  private val snackBarRoot: CoordinatorLayout? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.snackbar_root)
-  }
+  private var snackBarRoot: CoordinatorLayout? = null
 
-  private val noOpenBookText: TextView? by lazy {
-    fragmentReaderBinding?.noOpenBookText
-  }
-
-  private val bottomToolbarToc: ImageView? by lazy {
-    fragmentReaderBinding?.root?.findViewById(R.id.bottom_toolbar_toc)
-  }
+  private var noOpenBookText: TextView? = null
+  private var bottomToolbarToc: ImageView? = null
 
   private var isFirstTimeMainPageLoaded = true
 
@@ -440,6 +391,7 @@ abstract class CoreReaderFragment :
     activity?.let {
       WebView(it).destroy() // Workaround for buggy webViews see #710
     }
+    prepareViews()
     handleLocaleCheck()
     activity?.setSupportActionBar(toolbar)
     actionBar = activity?.supportActionBar
@@ -528,6 +480,37 @@ abstract class CoreReaderFragment :
       Observer(::openSearchItem)
     )
     handleClicks()
+  }
+
+  private fun prepareViews() {
+    fragmentReaderBinding?.let { readerBinding ->
+      videoView = readerBinding.fullscreenVideoContainer
+      noOpenBookButton = readerBinding.goToLibraryButtonNoOpenBook
+      noOpenBookText = readerBinding.noOpenBookText
+      with(readerBinding.root) {
+        activityMainRoot = findViewById(R.id.activity_main_root)
+        contentFrame = findViewById(R.id.activity_main_content_frame)
+        toolbar = findViewById(R.id.toolbar)
+        toolbarContainer = findViewById(R.id.fragment_main_app_bar)
+        progressBar = findViewById(R.id.main_fragment_progress_view)
+        bottomToolbar = findViewById(R.id.bottom_toolbar)
+        tabSwitcherRoot = findViewById(R.id.activity_main_tab_switcher)
+        closeAllTabsButton = findViewById(R.id.tab_switcher_close_all_tabs)
+        toolbarWithSearchPlaceholder = findViewById(R.id.toolbarWithSearchPlaceholder)
+        backToTopButton = findViewById(R.id.activity_main_back_to_top_fab)
+        stopTTSButton = findViewById(R.id.activity_main_button_stop_tts)
+        pauseTTSButton = findViewById(R.id.activity_main_button_pause_tts)
+        ttsControls = findViewById(R.id.activity_main_tts_controls)
+        exitFullscreenButton = findViewById(R.id.activity_main_fullscreen_button)
+        bottomToolbarBookmark = findViewById(R.id.bottom_toolbar_bookmark)
+        bottomToolbarArrowBack = findViewById(R.id.bottom_toolbar_arrow_back)
+        bottomToolbarArrowForward = findViewById(R.id.bottom_toolbar_arrow_forward)
+        bottomToolbarHome = findViewById(R.id.bottom_toolbar_home)
+        tabRecyclerView = findViewById(R.id.tab_switcher_recycler_view)
+        snackBarRoot = findViewById(R.id.snackbar_root)
+        bottomToolbarToc = findViewById(R.id.bottom_toolbar_toc)
+      }
+    }
   }
 
   private fun handleClicks() {
@@ -1198,6 +1181,7 @@ abstract class CoreReaderFragment :
     }
     repositoryActions?.dispose()
     safeDispose()
+    unBindViewsAndBinding()
     tabCallback = null
     hideBackToTopTimer?.cancel()
     hideBackToTopTimer = null
@@ -1207,6 +1191,7 @@ abstract class CoreReaderFragment :
     tabRecyclerView?.adapter = null
     tableDrawerRight?.adapter = null
     tableDrawerAdapter = null
+    tabsAdapter = null
     webViewList.clear()
     tempWebViewListForUndo.clear()
     // create a base Activity class that class this.
@@ -1226,6 +1211,35 @@ abstract class CoreReaderFragment :
     unRegisterReadAloudService()
     storagePermissionForNotesLauncher?.unregister()
     storagePermissionForNotesLauncher = null
+  }
+
+  private fun unBindViewsAndBinding() {
+    activityMainRoot = null
+    noOpenBookButton = null
+    toolbarWithSearchPlaceholder = null
+    backToTopButton = null
+    stopTTSButton = null
+    pauseTTSButton = null
+    ttsControls = null
+    exitFullscreenButton = null
+    bottomToolbarBookmark = null
+    bottomToolbarArrowBack = null
+    bottomToolbarArrowForward = null
+    bottomToolbarHome = null
+    tabRecyclerView = null
+    snackBarRoot = null
+    noOpenBookText = null
+    bottomToolbarToc = null
+    bottomToolbar = null
+    tabSwitcherRoot = null
+    videoView = null
+    contentFrame = null
+    toolbarContainer = null
+    toolbar = null
+    progressBar = null
+    drawerLayout = null
+    closeAllTabsButton = null
+    tableDrawerRightContainer = null
     fragmentReaderBinding = null
   }
 
@@ -1741,7 +1755,7 @@ abstract class CoreReaderFragment :
     }
   }
 
-  fun closeAllTabs() {
+  private fun closeAllTabs() {
     onReadAloudStop()
     closeAllTabsButton?.apply {
       rotate()

@@ -52,7 +52,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   context: Context,
   private val callback: WebViewCallback,
   attrs: AttributeSet,
-  nonVideoView: ViewGroup,
+  private var nonVideoView: ViewGroup?,
   videoView: ViewGroup,
   private val webViewClient: CoreWebViewClient,
   val sharedPreferenceUtil: SharedPreferenceUtil
@@ -146,6 +146,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
 
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
+    nonVideoView = null
     compositeDisposable.clear()
   }
 
