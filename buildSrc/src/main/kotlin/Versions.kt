@@ -96,7 +96,7 @@ object Versions {
 
   const val rxjava: String = "2.2.21"
 
-  const val webkit: String = "1.7.0"
+  const val webkit: String = "1.11.0"
 
   const val junit: String = "1.1.5"
 
