@@ -79,7 +79,7 @@ jobs:
           target: default
           arch: x86_64
           profile: pixel_2
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           ram-size: 4096M
           cores: 4
           force-avd-creation: false
