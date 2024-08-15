@@ -14,7 +14,7 @@ object Versions {
 
   const val document_file_version: String = "1.0.1"
 
-  const val org_jetbrains_kotlinx_kotlinx_coroutines: String = "1.7.3"
+  const val org_jetbrains_kotlinx_kotlinx_coroutines: String = "1.8.1"
 
   const val androidx_test_espresso: String = "3.5.1"
 
@@ -30,17 +30,15 @@ object Versions {
 
   const val com_google_dagger: String = "2.48.1"
 
-  const val com_jakewharton: String = "10.2.3"
+  const val androidx_test: String = "1.6.1"
 
-  const val androidx_test: String = "1.5.2"
+  const val androidx_test_core: String = "1.6.1"
 
-  const val androidx_test_core: String = "1.5.0"
-
-  const val androidx_test_orchestrator: String = "1.4.1"
+  const val androidx_test_orchestrator: String = "1.5.0"
 
   const val io_objectbox: String = "3.5.0"
 
-  const val io_mockk: String = "1.13.7"
+  const val io_mockk: String = "1.13.12"
 
   const val android_arch_lifecycle_extensions: String = "1.1.1"
 
@@ -62,9 +60,9 @@ object Versions {
 
   const val preference_ktx: String = "1.2.0"
 
-  const val junit_jupiter: String = "5.10.2"
+  const val junit_jupiter: String = "5.11.0"
 
-  const val assertj_core: String = "3.25.3"
+  const val assertj_core: String = "3.26.3"
 
   const val core_testing: String = "2.2.0"
 
@@ -74,13 +72,13 @@ object Versions {
 
   const val threetenabp: String = "1.3.0"
 
-  const val uiautomator: String = "2.3.0-alpha03"
+  const val uiautomator: String = "2.3.0"
 
-  const val annotation: String = "1.2.0"
+  const val annotation: String = "1.6.0"
 
   const val simple_xml: String = "2.7.1"
 
-  const val appcompat: String = "1.6.1"
+  const val appcompat: String = "1.7.0"
 
   const val rxandroid: String = "2.1.1"
 

@@ -124,10 +124,10 @@ internal class SearchStateTest {
       list = searchState.getVisibleResults(0)
     }
 
+    job.cancelAndJoin()
     val job1 = launch(Dispatchers.IO) {
       list1 = searchState.getVisibleResults(0)
     }
-    job.cancelAndJoin()
 
     // test the coroutine job is cancelled properly
     assertThat(job.isCancelled).isTrue

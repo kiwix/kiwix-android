@@ -32,7 +32,6 @@ import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.Interpolator
-import androidx.core.view.ViewCompat
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
@@ -510,7 +509,7 @@ class CustomPageIndicator @JvmOverloads constructor(
     moveSelected.addUpdateListener { valueAnimator -> // todo avoid autoboxing
       selectedDotX = valueAnimator.animatedValue as Float
       retreatAnimation!!.startIfNecessary(selectedDotX)
-      ViewCompat.postInvalidateOnAnimation(this@CustomPageIndicator)
+      this@CustomPageIndicator.postInvalidateOnAnimation()
     }
     moveSelected.addListener(object : AnimatorListenerAdapter() {
       override fun onAnimationStart(animation: Animator) {
@@ -536,20 +535,20 @@ class CustomPageIndicator @JvmOverloads constructor(
   private fun setJoiningFraction(leftDot: Int, fraction: Float) {
     if (leftDot < joiningFractions.size) {
       joiningFractions[leftDot] = fraction
-      ViewCompat.postInvalidateOnAnimation(this)
+      this.postInvalidateOnAnimation()
     }
   }
 
   private fun clearJoiningFractions() {
     Arrays.fill(joiningFractions, 0f)
-    ViewCompat.postInvalidateOnAnimation(this)
+    this.postInvalidateOnAnimation()
   }
 
   private fun setDotRevealFraction(dot: Int, fraction: Float) {
     if (dot < dotRevealFractions.size) {
       dotRevealFractions[dot] = fraction
     }
-    ViewCompat.postInvalidateOnAnimation(this)
+    this.postInvalidateOnAnimation()
   }
 
   private fun cancelJoiningAnimations() {
@@ -608,7 +607,7 @@ class CustomPageIndicator @JvmOverloads constructor(
         }
         addUpdateListener { valueAnimator -> // todo avoid autoboxing
           retreatingJoinX1 = valueAnimator.animatedValue as Float
-          ViewCompat.postInvalidateOnAnimation(this@CustomPageIndicator)
+          this@CustomPageIndicator.postInvalidateOnAnimation()
           // start any reveal animations if we've passed them
           for (pendingReveal in revealAnimations) {
             pendingReveal!!.startIfNecessary(retreatingJoinX1)
@@ -626,7 +625,7 @@ class CustomPageIndicator @JvmOverloads constructor(
         }
         addUpdateListener { valueAnimator -> // todo avoid autoboxing
           retreatingJoinX2 = valueAnimator.animatedValue as Float
-          ViewCompat.postInvalidateOnAnimation(this@CustomPageIndicator)
+          this@CustomPageIndicator.postInvalidateOnAnimation()
           // start any reveal animations if we've passed them
           for (pendingReveal in revealAnimations) {
             pendingReveal!!.startIfNecessary(retreatingJoinX2)
@@ -643,13 +642,13 @@ class CustomPageIndicator @JvmOverloads constructor(
           }
           retreatingJoinX1 = initialX1
           retreatingJoinX2 = initialX2
-          ViewCompat.postInvalidateOnAnimation(this@CustomPageIndicator)
+          this@CustomPageIndicator.postInvalidateOnAnimation()
         }
 
         override fun onAnimationEnd(animation: Animator) {
           retreatingJoinX1 = INVALID_FRACTION
           retreatingJoinX2 = INVALID_FRACTION
-          ViewCompat.postInvalidateOnAnimation(this@CustomPageIndicator)
+          this@CustomPageIndicator.postInvalidateOnAnimation()
         }
       })
     }
@@ -676,7 +675,7 @@ class CustomPageIndicator @JvmOverloads constructor(
       addListener(object : AnimatorListenerAdapter() {
         override fun onAnimationEnd(animation: Animator) {
           setDotRevealFraction(this@PendingRevealAnimator.dot, 0f)
-          ViewCompat.postInvalidateOnAnimation(this@CustomPageIndicator)
+          this@CustomPageIndicator.postInvalidateOnAnimation()
         }
       })
     }

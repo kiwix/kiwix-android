@@ -291,7 +291,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       return
     }
     if (activeFragments().filterIsInstance<FragmentActivityExtensions>().isEmpty()) {
-      return super.getOnBackPressedDispatcher().onBackPressed()
+      return super.onBackPressedDispatcher.onBackPressed()
     }
     activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
       if (it.onBackPressed(this) == FragmentActivityExtensions.Super.ShouldCall) {
@@ -302,7 +302,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
           drawerToggle = null
           finish()
         } else {
-          super.getOnBackPressedDispatcher().onBackPressed()
+          super.onBackPressedDispatcher.onBackPressed()
         }
       }
     }
