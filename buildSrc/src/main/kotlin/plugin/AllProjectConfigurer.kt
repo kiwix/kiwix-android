@@ -64,7 +64,7 @@ class AllProjectConfigurer {
 
       buildTypes {
         getByName("debug") {
-          isTestCoverageEnabled = true
+          isTestCoverageEnabled = false
           multiDexEnabled = true
         }
       }
@@ -165,7 +165,7 @@ class AllProjectConfigurer {
       resolutionStrategy {
         eachDependency {
           if ("org.jacoco" == this.requested.group) {
-            useVersion("0.8.8")
+            useVersion("0.8.12")
           }
         }
       }

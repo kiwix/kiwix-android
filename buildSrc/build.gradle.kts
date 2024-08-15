@@ -13,7 +13,7 @@ repositories {
 dependencies {
   implementation("com.android.tools.build:gradle:8.1.3")
   implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.20")
-  implementation("org.jacoco:org.jacoco.core:0.8.8")
+  implementation("org.jacoco:org.jacoco.core:0.8.12")
   implementation("org.jlleitschuh.gradle:ktlint-gradle:10.3.0")
   implementation("com.google.apis:google-api-services-androidpublisher:v3-rev20230406-2.0.0") {
     exclude(group = "com.google.guava", module = "guava")
