@@ -28,5 +28,7 @@ task installGitHooks(type: Exec) {
 }
 
 afterEvaluate {
-  tasks['preBuild'].dependsOn installGitHooks
+  tasks.named('preBuild').configure {
+    dependsOn installGitHooks
+  }
 }

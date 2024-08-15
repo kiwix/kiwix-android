@@ -22,11 +22,12 @@ jacoco {
   toolVersion = "0.8.12"
 }
 
-tasks.withType(Test) {
+tasks.withType(Test).configureEach {
   jacoco.includeNoLocationClasses = true
 }
 
-task jacocoInstrumentationTestReport(type: JacocoReport, dependsOn: ['createDebugCoverageReport']) {
+tasks.register('jacocoInstrumentationTestReport', JacocoReport) {
+  dependsOn = ['createDebugCoverageReport']
   group "Reporting"
   description "Generate Jacoco coverage reports."
   reports {

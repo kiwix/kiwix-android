@@ -64,7 +64,7 @@ class AllProjectConfigurer {
 
       buildTypes {
         getByName("debug") {
-          isTestCoverageEnabled = false
+          isTestCoverageEnabled = true
           multiDexEnabled = true
         }
       }
