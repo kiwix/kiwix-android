@@ -442,11 +442,7 @@ class ZimFileReader constructor(
            -webkit-filter: invert(1); 
            filter: invert(1); 
         }
-        img#header-profile{
-          -webkit-filter: invert(0); 
-          filter: invert(0); 
-        }
-        div[poster] > video {
+        div[poster] img, div[poster] video {
           -webkit-filter: invert(0); 
           filter: invert(0); 
         }
