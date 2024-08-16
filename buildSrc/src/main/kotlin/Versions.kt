@@ -38,7 +38,7 @@ object Versions {
 
   const val io_objectbox: String = "3.5.0"
 
-  const val io_mockk: String = "1.13.12"
+  const val io_mockk: String = "1.13.7"
 
   const val android_arch_lifecycle_extensions: String = "1.1.1"
 
