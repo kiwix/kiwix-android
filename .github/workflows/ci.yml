@@ -69,9 +69,9 @@ jobs:
           target: default
           arch: x86_64
           profile: pixel_2
-          ram-size: 4096M
+          ram-size: 3072M
           cores: 4
-          sdcard-path-or-size: 2048M
+          sdcard-path-or-size: 1024M
           disable-animations: true
           emulator-boot-timeout: 1200
           heap-size: 512M
