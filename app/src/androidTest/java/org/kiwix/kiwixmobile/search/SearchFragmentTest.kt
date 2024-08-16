@@ -226,7 +226,19 @@ class SearchFragmentTest : BaseActivityTest() {
       kiwixMainActivity = it
       kiwixMainActivity.navigate(R.id.libraryFragment)
     }
-    downloadingZimFile = getDownloadingZimFile(false)
+    downloadingZimFile = getDownloadingZimFile()
+    OkHttpClient().newCall(downloadRequest()).execute().use { response ->
+      if (response.isSuccessful) {
+        response.body?.let { responseBody ->
+          writeZimFileData(responseBody, downloadingZimFile)
+        }
+      } else {
+        throw RuntimeException(
+          "Download Failed. Error: ${response.message}\n" +
+            " Status Code: ${response.code}"
+        )
+      }
+    }
     openKiwixReaderFragmentWithFile(downloadingZimFile)
     search { checkZimFileSearchSuccessful(R.id.readerFragment) }
     openSearchWithQuery(searchTerms[0], downloadingZimFile)
@@ -328,12 +340,10 @@ class SearchFragmentTest : BaseActivityTest() {
     return zimFile
   }
 
-  private fun getDownloadingZimFile(isDeletePreviousZimFile: Boolean = true): File {
+  private fun getDownloadingZimFile(): File {
     val zimFile = File(context.cacheDir, "ray_charles.zim")
-    if (isDeletePreviousZimFile) {
-      if (zimFile.exists()) zimFile.delete()
-      zimFile.createNewFile()
-    }
+    if (zimFile.exists()) zimFile.delete()
+    zimFile.createNewFile()
     return zimFile
   }
 }

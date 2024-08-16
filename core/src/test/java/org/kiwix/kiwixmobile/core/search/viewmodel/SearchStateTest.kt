@@ -109,7 +109,7 @@ internal class SearchStateTest {
     val searchIteratorWrapper: SuggestionIteratorWrapper = mockk()
     val entryWrapper: SuggestionItemWrapper = mockk()
 
-    every { suggestionSearchWrapper.estimatedMatches } returns 100
+    every { suggestionSearchWrapper.estimatedMatches } returns 500
     every { searchIteratorWrapper.hasNext() } returnsMany listOf(true, false)
     every { searchIteratorWrapper.next() } returns entryWrapper
     every { entryWrapper.title } returns "Result"
