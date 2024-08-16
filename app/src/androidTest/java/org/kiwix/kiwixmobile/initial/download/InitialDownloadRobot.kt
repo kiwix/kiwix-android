@@ -34,6 +34,7 @@ import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
@@ -67,7 +68,7 @@ class InitialDownloadRobot : BaseRobot() {
 
   fun waitForDataToLoad(retryCountForDataToLoad: Int = 10) {
     try {
-      isVisible(TextId(R.string.your_languages))
+      isVisible(TextId(string.your_languages))
     } catch (e: RuntimeException) {
       if (retryCountForDataToLoad > 0) {
         waitForDataToLoad(retryCountForDataToLoad - 1)

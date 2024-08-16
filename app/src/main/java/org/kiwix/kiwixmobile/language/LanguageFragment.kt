@@ -36,6 +36,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -88,8 +89,8 @@ class LanguageFragment : BaseFragment() {
 
     activity.supportActionBar?.let {
       it.setDisplayHomeAsUpEnabled(true)
-      it.setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp)
-      it.setTitle(R.string.select_languages)
+      it.setHomeAsUpIndicator(drawable.ic_clear_white_24dp)
+      it.setTitle(string.select_languages)
     }
     // set the contentDescription to navigation back button
     toolbar.getToolbarNavigationIcon()?.setToolTipWithContentDescription(

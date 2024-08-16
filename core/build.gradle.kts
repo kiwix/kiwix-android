@@ -9,7 +9,6 @@ buildscript {
 
   dependencies {
     classpath(Libs.objectbox_gradle_plugin)
-    classpath(Libs.butterknife_gradle_plugin)
   }
 }
 plugins {
@@ -17,7 +16,6 @@ plugins {
 }
 plugins.apply(KiwixConfigurationPlugin::class)
 apply(plugin = "io.objectbox")
-apply(plugin = "com.jakewharton.butterknife")
 
 android {
   defaultConfig {
@@ -38,10 +36,7 @@ dependencies {
 
   // Get kiwixlib online if it is not populated locally
   if (!shouldUseLocalVersion()) {
-    api(Libs.libkiwix) {
-      // TODO Should be removed after we upgrade to the SDK 34
-      exclude("org.jetbrains.kotlin", "kotlin-stdlib")
-    }
+    api(Libs.libkiwix)
   } else {
     implementation("com.getkeepsafe.relinker:relinker:1.4.5")
     api(fileTree(mapOf("include" to "*.aar", "dir" to "libs")))

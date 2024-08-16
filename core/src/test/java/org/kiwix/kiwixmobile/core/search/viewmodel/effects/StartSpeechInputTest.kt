@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.core.search.viewmodel.effects
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.speech.RecognizerIntent
-import androidx.appcompat.app.AppCompatActivity
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
@@ -29,6 +28,7 @@ import io.mockk.verify
 import kotlinx.coroutines.channels.Channel
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
 import java.util.Locale
@@ -40,7 +40,7 @@ internal class StartSpeechInputTest {
   @Suppress("DEPRECATION")
   @Test
   fun `when invoke with throws exception offer StartSpeechInputFailed action`() {
-    val activity = mockk<AppCompatActivity>(relaxed = true)
+    val activity = mockk<CoreMainActivity>(relaxed = true)
     every { activity.startActivityForResult(any(), any()) } throws ActivityNotFoundException()
     StartSpeechInput(actions).invokeWith(activity)
     verify { actions.trySend(StartSpeechInputFailed).isSuccess }
@@ -49,8 +49,8 @@ internal class StartSpeechInputTest {
   @Suppress("DEPRECATION")
   @Test
   fun `invoke with starts an activity for speech recognition`() {
-    val activity = mockk<AppCompatActivity>()
-    every { activity.getString(R.string.app_name) } returns "app"
+    val activity = mockk<CoreMainActivity>()
+    every { activity.appName } returns "app"
     every { activity.getString(R.string.speech_prompt_text, "app") } returns "the app"
     every { activity.startActivityForResult(any(), any()) } returns Unit
     mockkConstructor(Intent::class)

@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.channels.Channel
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
 import java.util.Locale
@@ -41,7 +42,7 @@ data class StartSpeechInput(private val actions: Channel<Action>) : SideEffect<U
           putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
           putExtra(
             RecognizerIntent.EXTRA_PROMPT,
-            activity.getString(R.string.speech_prompt_text, activity.getString(R.string.app_name))
+            activity.getString(R.string.speech_prompt_text, (activity as CoreMainActivity).appName)
           )
         },
         REQ_CODE_SPEECH_INPUT

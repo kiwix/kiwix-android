@@ -70,8 +70,8 @@ Studio](https://developer.android.com/studio).
 
 If you prefer to build without Android Studio you must first set up
 the Android SDK and then run the command: `./gradlew build ` from the
-root directory of the project. The project requires `Java 11` to run,
-Therefore set the `Gradle JDK` to `Java 11`.
+root directory of the project. The project requires `Java 17` to run,
+Therefore set the `Gradle JDK` to `Java 17`.
 
 Kiwix Android is a multi-module project, in 99% of scenarios you will
 want to build the `app` module in the `debug` configuration. If you

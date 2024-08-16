@@ -40,7 +40,7 @@ import android.os.Looper.getMainLooper
 import android.widget.Toast
 import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower

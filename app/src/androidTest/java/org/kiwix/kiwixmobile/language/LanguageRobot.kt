@@ -28,10 +28,11 @@ import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
+import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
@@ -40,20 +41,20 @@ fun language(func: LanguageRobot.() -> Unit) = LanguageRobot().applyWithViewHier
 
 class LanguageRobot : BaseRobot() {
 
-  private var retryCountForDataToLoad = 10
-
   fun clickDownloadOnBottomNav() {
     clickOn(ViewId(R.id.downloadsFragment))
   }
 
-  fun waitForDataToLoad() {
+  fun waitForDataToLoad(retryCountForDataToLoad: Int = 10) {
     try {
-      isVisible(Findable.Text("Off the Grid"))
+      isVisible(TextId(string.your_languages))
     } catch (e: RuntimeException) {
       if (retryCountForDataToLoad > 0) {
-        retryCountForDataToLoad--
-        waitForDataToLoad()
+        waitForDataToLoad(retryCountForDataToLoad - 1)
+        return
       }
+      // throw the exception when there is no more retry left.
+      throw RuntimeException("Couldn't load the online library list.\n Original exception = $e")
     }
   }
 

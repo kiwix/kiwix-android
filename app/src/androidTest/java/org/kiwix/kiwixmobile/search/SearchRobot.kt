@@ -69,7 +69,7 @@ class SearchRobot : BaseRobot() {
 
   fun searchWithFrequentlyTypedWords(query: String, wait: Long = 0L) {
     testFlakyView({
-      val searchView = onView(withId(R.id.search_src_text))
+      val searchView = onView(withId(androidx.appcompat.R.id.search_src_text))
       for (char in query) {
         searchView.perform(typeText(char.toString()))
         if (wait != 0L) {
@@ -99,7 +99,7 @@ class SearchRobot : BaseRobot() {
     }
 
     // clear search query if any remains due to any condition not to affect any other test scenario
-    val searchView = onView(withId(R.id.search_src_text))
+    val searchView = onView(withId(androidx.appcompat.R.id.search_src_text))
     searchView.perform(clearText())
   }
 

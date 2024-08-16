@@ -27,6 +27,7 @@ import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.main.TopLevelDestinationRobot
 import org.kiwix.kiwixmobile.main.topLevel
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
@@ -37,11 +38,11 @@ class IntroRobot : BaseRobot() {
 
   fun swipeLeft() {
     isVisible(ViewId(R.id.get_started))
-    isVisible(TextId(R.string.welcome_to_the_family))
-    isVisible(TextId(R.string.humankind_knowledge))
+    isVisible(TextId(string.welcome_to_the_family))
+    isVisible(TextId(string.humankind_knowledge))
     attempt(10) {
-      isVisible(TextId(R.string.save_books_offline))
-      isVisible(TextId(R.string.download_books_message))
+      isVisible(TextId(string.save_books_offline))
+      isVisible(TextId(string.download_books_message))
     }
   }
 

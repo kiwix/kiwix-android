@@ -17,8 +17,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  package="org.kiwix.kiwixmobile.custom">
+  xmlns:tools="http://schemas.android.com/tools">
 
   <!-- support for androidx.test.orchestrator clearPackageData for android 33
        see more information here https://github.com/kiwix/kiwix-android/issues/3172

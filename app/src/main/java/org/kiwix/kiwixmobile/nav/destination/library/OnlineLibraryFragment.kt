@@ -52,6 +52,7 @@ import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
@@ -132,7 +133,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           context?.let { context ->
             downloader.pauseResumeDownload(
               it.downloadId,
-              it.downloadState.toReadableState(context).contains(getString(R.string.paused_state))
+              it.downloadState.toReadableState(context).contains(getString(string.paused_state))
             )
           }
         }
@@ -163,7 +164,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     activity.setSupportActionBar(toolbar)
     activity.supportActionBar?.apply {
       setDisplayHomeAsUpEnabled(true)
-      setTitle(R.string.download)
+      setTitle(string.download)
     }
     if (toolbar != null) {
       activity.setupDrawerToggle(toolbar)
@@ -255,7 +256,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       {
         onRefreshStateChange(false)
         context.toast(
-          resources.getString(R.string.denied_internet_permission_message),
+          resources.getString(string.denied_internet_permission_message),
           Toast.LENGTH_SHORT
         )
         hideRecyclerviewAndShowSwipeDownForLibraryErrorText()
@@ -273,7 +274,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private fun hideRecyclerviewAndShowSwipeDownForLibraryErrorText() {
     fragmentDestinationDownloadBinding?.apply {
       libraryErrorText.setText(
-        R.string.swipe_down_for_library
+        string.swipe_down_for_library
       )
       libraryErrorText.visibility = View.VISIBLE
       libraryList.visibility = View.GONE
@@ -321,7 +322,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       noInternetSnackbar()
     } else {
       fragmentDestinationDownloadBinding?.libraryErrorText?.setText(
-        R.string.no_network_connection
+        string.no_network_connection
       )
       fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.VISIBLE
     }
@@ -330,9 +331,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   private fun noInternetSnackbar() {
     fragmentDestinationDownloadBinding?.libraryList?.snack(
-      R.string.no_network_connection,
+      string.no_network_connection,
       requireActivity().findViewById(R.id.bottom_nav_view),
-      R.string.menu_settings,
+      string.menu_settings,
       ::openNetworkSettings
     )
   }
@@ -347,8 +348,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
     if (it?.isEmpty() == true) {
       fragmentDestinationDownloadBinding?.libraryErrorText?.setText(
-        if (isNotConnected) R.string.no_network_connection
-        else R.string.no_items_msg
+        if (isNotConnected) string.no_network_connection
+        else string.no_items_msg
       )
       fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.VISIBLE
     } else {
@@ -498,11 +499,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
               {
                 fragmentDestinationDownloadBinding?.libraryList?.snack(
                   """ 
-                ${getString(R.string.download_no_space)}
-                ${getString(R.string.space_available)} $it
+                ${getString(string.download_no_space)}
+                ${getString(string.space_available)} $it
                   """.trimIndent(),
                   requireActivity().findViewById(R.id.bottom_nav_view),
-                  R.string.download_change_storage,
+                  string.download_change_storage,
                   ::showStorageSelectDialog
                 )
               }
@@ -519,7 +520,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     .apply {
       onSelectAction = ::storeDeviceInPreferences
     }
-    .show(parentFragmentManager, getString(R.string.pref_storage))
+    .show(parentFragmentManager, getString(string.pref_storage))
 
   private fun showStorageConfigureDialog() {
     alertDialogShower.show(

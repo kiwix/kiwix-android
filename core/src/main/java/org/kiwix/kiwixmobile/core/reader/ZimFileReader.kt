@@ -220,6 +220,7 @@ class ZimFileReader constructor(
       null
     }
 
+  @Suppress("UnreachableCode")
   suspend fun load(uri: String): InputStream? = withContext(Dispatchers.IO) {
     val extension = uri.substringAfterLast(".")
     if (assetExtensions.any { it == extension }) {

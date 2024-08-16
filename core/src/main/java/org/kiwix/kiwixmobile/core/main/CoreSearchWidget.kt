@@ -35,7 +35,7 @@ abstract class CoreSearchWidget : AppWidgetProvider() {
     appWidgetManager: AppWidgetManager,
     appWidgetIds: IntArray
   ) {
-    val appName = context.getString(R.string.app_name)
+    val appName = (activityKClass as CoreMainActivity).appName
     appWidgetIds.forEach { appWidgetId ->
       val views = RemoteViews(context.packageName, R.layout.kiwix_search_widget)
       views.setTextViewText(R.id.search_widget_text, "Search $appName")

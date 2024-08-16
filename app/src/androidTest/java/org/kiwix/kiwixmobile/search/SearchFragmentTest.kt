@@ -44,6 +44,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
@@ -105,7 +106,7 @@ class SearchFragmentTest : BaseActivityTest() {
       setSuppressingResultMatcher(
         allOf(
           matchesCheck(TouchTargetSizeCheck::class.java),
-          matchesViews(ViewMatchers.withId(R.id.menu_searchintext))
+          matchesViews(ViewMatchers.withId(id.menu_searchintext))
         )
       )
     }
@@ -184,10 +185,8 @@ class SearchFragmentTest : BaseActivityTest() {
       searchWithFrequentlyTypedWords(searchQueryForDownloadedZimFile, 300)
       assertSearchSuccessful(searchResultForDownloadedZimFile)
       deleteSearchedQueryFrequently(searchQueryForDownloadedZimFile, uiDevice, 300)
-      // to close the keyboard
-      pressBack()
-      // go to reader screen
-      pressBack()
+      // open the reader fragment for next text case.
+      openKiwixReaderFragmentWithFile(downloadingZimFile)
     }
 
     // Added test for checking the crash scenario where the application was crashing when we
@@ -227,7 +226,19 @@ class SearchFragmentTest : BaseActivityTest() {
       kiwixMainActivity = it
       kiwixMainActivity.navigate(R.id.libraryFragment)
     }
-    downloadingZimFile = getDownloadingZimFile(false)
+    downloadingZimFile = getDownloadingZimFile()
+    OkHttpClient().newCall(downloadRequest()).execute().use { response ->
+      if (response.isSuccessful) {
+        response.body?.let { responseBody ->
+          writeZimFileData(responseBody, downloadingZimFile)
+        }
+      } else {
+        throw RuntimeException(
+          "Download Failed. Error: ${response.message}\n" +
+            " Status Code: ${response.code}"
+        )
+      }
+    }
     openKiwixReaderFragmentWithFile(downloadingZimFile)
     search { checkZimFileSearchSuccessful(R.id.readerFragment) }
     openSearchWithQuery(searchTerms[0], downloadingZimFile)
@@ -329,12 +340,10 @@ class SearchFragmentTest : BaseActivityTest() {
     return zimFile
   }
 
-  private fun getDownloadingZimFile(isDeletePreviousZimFile: Boolean = true): File {
+  private fun getDownloadingZimFile(): File {
     val zimFile = File(context.cacheDir, "ray_charles.zim")
-    if (isDeletePreviousZimFile) {
-      if (zimFile.exists()) zimFile.delete()
-      zimFile.createNewFile()
-    }
+    if (zimFile.exists()) zimFile.delete()
+    zimFile.createNewFile()
     return zimFile
   }
 }

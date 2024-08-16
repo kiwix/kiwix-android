@@ -173,14 +173,16 @@ class SettingsRobot : BaseRobot() {
 
   fun selectAlbanianLanguage() {
     testFlakyView({
-      onData(anything()).inAdapterView(withId(R.id.select_dialog_listview)).atPosition(2)
+      onData(anything()).inAdapterView(withId(androidx.appcompat.R.id.select_dialog_listview))
+        .atPosition(2)
         .perform(click())
     })
   }
 
   fun selectDeviceDefaultLanguage() {
     testFlakyView({
-      onData(anything()).inAdapterView(withId(R.id.select_dialog_listview)).atPosition(0)
+      onData(anything()).inAdapterView(withId(androidx.appcompat.R.id.select_dialog_listview))
+        .atPosition(0)
         .perform(click())
     })
   }

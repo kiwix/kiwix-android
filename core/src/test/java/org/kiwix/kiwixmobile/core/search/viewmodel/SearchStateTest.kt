@@ -124,19 +124,20 @@ internal class SearchStateTest {
       list = searchState.getVisibleResults(0)
     }
 
-    val job1 = launch(Dispatchers.IO) {
-      list1 = searchState.getVisibleResults(0)
-    }
     job.cancelAndJoin()
-
     // test the coroutine job is cancelled properly
     assertThat(job.isCancelled).isTrue
     assertThat(list?.size).isEqualTo(0)
 
-    // test the second job is successfully return the data
-    assertThat(job1.isCompleted).isTrue
-    assertThat(list1?.size).isEqualTo(1)
-    assertThat(list1?.get(0)?.url).isEqualTo("path")
-    assertThat(list1?.get(0)?.value).isEqualTo("Result")
+    val job1 = launch(Dispatchers.IO) {
+      list1 = searchState.getVisibleResults(0)
+    }
+    job1.invokeOnCompletion {
+      // test the second job is successfully return the data
+      assertThat(job1.isCompleted).isTrue
+      assertThat(list1?.size).isEqualTo(1)
+      assertThat(list1?.get(0)?.url).isEqualTo("path")
+      assertThat(list1?.get(0)?.value).isEqualTo("Result")
+    }
   }
 }

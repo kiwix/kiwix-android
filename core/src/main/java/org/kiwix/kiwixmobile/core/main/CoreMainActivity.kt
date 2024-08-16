@@ -95,6 +95,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val topLevelDestinations: Set<Int>
   abstract val navHostContainer: FragmentContainerView
   abstract val mainActivity: AppCompatActivity
+  abstract val appName: String
   @Inject lateinit var objectBoxToLibkiwixMigrator: ObjectBoxToLibkiwixMigrator
   @Inject lateinit var objectBoxToRoomMigrator: ObjectBoxToRoomMigrator
 
@@ -290,7 +291,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       return
     }
     if (activeFragments().filterIsInstance<FragmentActivityExtensions>().isEmpty()) {
-      return super.getOnBackPressedDispatcher().onBackPressed()
+      return super.onBackPressedDispatcher.onBackPressed()
     }
     activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
       if (it.onBackPressed(this) == FragmentActivityExtensions.Super.ShouldCall) {
@@ -301,7 +302,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
           drawerToggle = null
           finish()
         } else {
-          super.getOnBackPressedDispatcher().onBackPressed()
+          super.onBackPressedDispatcher.onBackPressed()
         }
       }
     }
