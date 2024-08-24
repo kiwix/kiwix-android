@@ -74,15 +74,18 @@ class ZimReaderSource(
 
   fun createArchive(): Archive? {
     if (canOpenInLibkiwix()) {
-      return file?.let {
-        Archive(it.canonicalPath)
-      } ?: assetFileDescriptorList?.let {
-        val fdInputArray = getFdInputArrayFromAssetFileDescriptorList(assetFileDescriptorList)
-        return@let if (fdInputArray.size == 1) {
-          Archive(fdInputArray[0])
-        } else {
-          Archive(fdInputArray)
+      return when {
+        file != null -> Archive(file.canonicalPath)
+        assetFileDescriptorList?.isNotEmpty() == true -> {
+          val fdInputArray = getFdInputArrayFromAssetFileDescriptorList(assetFileDescriptorList)
+          if (fdInputArray.size == 1) {
+            Archive(fdInputArray[0])
+          } else {
+            Archive(fdInputArray)
+          }
         }
+
+        else -> null
       }
     }
 
