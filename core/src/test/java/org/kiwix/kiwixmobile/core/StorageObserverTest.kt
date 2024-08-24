@@ -94,6 +94,7 @@ class StorageObserverTest {
     )
     withNoFiltering()
     every { zimFileReader.toBook() } returns expectedBook
+    every { zimFileReader.zimReaderSource } returns zimReaderSource
     booksOnFileSystem().assertValues(
       listOf(bookOnDisk(book = expectedBook, zimReaderSource = zimReaderSource))
     )

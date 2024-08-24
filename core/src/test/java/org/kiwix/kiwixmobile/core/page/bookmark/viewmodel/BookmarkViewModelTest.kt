@@ -93,6 +93,7 @@ internal class BookmarkViewModelTest {
   fun `updatePages return state with bookmark items`() {
     val zimReaderSource: ZimReaderSource = mockk()
     val databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
+    every { zimReaderSource.toDatabase() } returns ""
     assertThat(
       viewModel.updatePages(
         bookmarkState(),
@@ -126,6 +127,7 @@ internal class BookmarkViewModelTest {
   internal fun `updatePages returns state with updated items`() {
     val zimReaderSource: ZimReaderSource = mockk()
     val databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
+    every { zimReaderSource.toDatabase() } returns ""
     assertThat(
       viewModel.updatePages(
         bookmarkState(),
@@ -140,6 +142,7 @@ internal class BookmarkViewModelTest {
   internal fun `deselectAllPages deselects bookmarks items`() {
     val zimReaderSource: ZimReaderSource = mockk()
     val databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
+    every { zimReaderSource.toDatabase() } returns ""
     assertThat(
       viewModel.deselectAllPages(
         bookmarkState(
@@ -183,6 +186,7 @@ internal class BookmarkViewModelTest {
   internal fun `copyWithNewItems returns state with copied items`() {
     val zimReaderSource: ZimReaderSource = mockk()
     val databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
+    every { zimReaderSource.toDatabase() } returns ""
     assertThat(
       viewModel.copyWithNewItems(
         bookmarkState(),

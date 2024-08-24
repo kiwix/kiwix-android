@@ -33,6 +33,7 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.bookmarkState
 import org.kiwix.kiwixmobile.core.page.libkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.DeletePageItems
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteAllBookmarks
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteSelectedBookmarks
@@ -66,6 +67,8 @@ internal class ShowDeleteBookmarksDialogTest {
 
   @Test
   fun `invoke with selected items shows dialog with DeleteSelectedBookmarks title`() = runBlocking {
+    val zimReaderSource: ZimReaderSource = mockk()
+    every { zimReaderSource.toDatabase() } returns ""
     val showDeleteBookmarksDialog =
       ShowDeleteBookmarksDialog(
         effects,
@@ -74,7 +77,7 @@ internal class ShowDeleteBookmarksDialogTest {
             libkiwixBookmarkItem(
               isSelected = true,
               databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE,
-              zimReaderSource = mockk()
+              zimReaderSource = zimReaderSource
             )
           )
         ),
@@ -88,6 +91,8 @@ internal class ShowDeleteBookmarksDialogTest {
 
   @Test
   fun `invoke with no selected items shows dialog with DeleteAllBookmarks title`() = runBlocking {
+    val zimReaderSource: ZimReaderSource = mockk()
+    every { zimReaderSource.toDatabase() } returns ""
     val showDeleteBookmarksDialog =
       ShowDeleteBookmarksDialog(
         effects,
@@ -95,7 +100,7 @@ internal class ShowDeleteBookmarksDialogTest {
           listOf(
             libkiwixBookmarkItem(
               databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE,
-              zimReaderSource = mockk()
+              zimReaderSource = zimReaderSource
             )
           )
         ),

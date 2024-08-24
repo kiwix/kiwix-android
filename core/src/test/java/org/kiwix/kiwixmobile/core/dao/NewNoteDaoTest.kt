@@ -75,7 +75,6 @@ internal class NewNoteDaoTest {
     every { notesBox.query() } returns queryBuilder
     val query: Query<NotesEntity> = mockk(relaxed = true)
     every { queryBuilder.build() } returns query
-    every { newNote.title } returns ""
     every {
       queryBuilder.equal(
         NotesEntity_.noteTitle,

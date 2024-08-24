@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
+import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -32,6 +33,7 @@ internal class BookmarkStateTest {
   internal fun `copyNewItems should set new items to pageItems`() {
     val zimReaderSource: ZimReaderSource = mockk()
     val databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
+    every { zimReaderSource.toDatabase() } returns ""
     assertThat(
       bookmarkState(emptyList()).copy(
         listOf(

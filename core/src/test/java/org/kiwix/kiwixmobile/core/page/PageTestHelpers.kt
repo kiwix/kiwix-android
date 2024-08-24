@@ -109,6 +109,7 @@ fun libkiwixBookmarkItem(
   favicon: String = "favicon"
 ): LibkiwixBookmarkItem {
   return LibkiwixBookmarkItem(
+    databaseId = databaseId,
     id = id,
     zimId = zimId,
     zimName = zimName,
