@@ -42,6 +42,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
@@ -266,7 +267,10 @@ class SearchFragmentTestForCustomApp {
           ) as NavHostFragment
       val customReaderFragment =
         navHostFragment.childFragmentManager.fragments[0] as CustomReaderFragment
-      customReaderFragment.openZimFile(null, true, listOf(assetFileDescriptor))
+      customReaderFragment.openZimFile(
+        ZimReaderSource(null, null, listOf(assetFileDescriptor)),
+        true
+      )
     }
   }
 
