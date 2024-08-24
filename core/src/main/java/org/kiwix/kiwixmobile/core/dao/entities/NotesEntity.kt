@@ -30,7 +30,7 @@ data class NotesEntity(
   val zimId: String,
   var zimFilePath: String?, // keep this to handle previously saved notes
   @Convert(converter = ZimSourceConverter::class, dbType = String::class)
-  var zimReaderSource: ZimReaderSource,
+  var zimReaderSource: ZimReaderSource?,
   val zimUrl: String,
   var noteTitle: String,
   var noteFilePath: String,

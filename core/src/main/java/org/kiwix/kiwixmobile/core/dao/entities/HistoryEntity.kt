@@ -30,7 +30,7 @@ data class HistoryEntity(
   val zimName: String,
   val zimFilePath: String?, // keep this to handle previously saved history
   @Convert(converter = ZimSourceConverter::class, dbType = String::class)
-  var zimReaderSource: ZimReaderSource,
+  var zimReaderSource: ZimReaderSource?,
   val favicon: String?,
   val historyUrl: String,
   val historyTitle: String,

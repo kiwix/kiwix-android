@@ -55,7 +55,8 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
   private fun booksWithSameFilePath(booksOnDisk: List<BookOnDisk>) =
     box.query {
       inValues(
-        BookOnDiskEntity_.file, booksOnDisk.map { it.zimReaderSource.toDatabase() }.toTypedArray(),
+        BookOnDiskEntity_.zimReaderSource,
+        booksOnDisk.map { it.zimReaderSource.toDatabase() }.toTypedArray(),
         QueryBuilder.StringOrder.CASE_INSENSITIVE
       )
     }.find()
