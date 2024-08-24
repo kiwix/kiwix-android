@@ -18,9 +18,11 @@
 
 package org.kiwix.kiwixmobile.core.dao.entities
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import java.io.File
@@ -31,6 +33,7 @@ data class HistoryRoomEntity(
   val zimId: String,
   val zimName: String,
   val zimFilePath: String?,
+  @TypeConverters(ZimSourceRoomConverter::class)
   var zimReaderSource: ZimReaderSource?,
   val favicon: String?,
   var historyUrl: String,

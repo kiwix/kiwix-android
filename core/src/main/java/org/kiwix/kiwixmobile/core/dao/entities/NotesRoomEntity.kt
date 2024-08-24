@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.dao.entities
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
@@ -30,6 +31,7 @@ data class NotesRoomEntity(
   var id: Long = 0L,
   val zimId: String,
   var zimFilePath: String?, // keep this to handle previously saved notes
+  @TypeConverters(ZimSourceRoomConverter::class)
   var zimReaderSource: ZimReaderSource?,
   val zimUrl: String,
   var noteTitle: String,
