@@ -21,15 +21,11 @@ package org.kiwix.kiwixmobile.core.dao.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
-import androidx.room.TypeConverters
-import io.objectbox.annotation.Convert
-import io.objectbox.converter.PropertyConverter
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import java.io.File
 
 @Entity
-@TypeConverters(ZimSourceRoomConverter::class)
 data class HistoryRoomEntity(
   @PrimaryKey(autoGenerate = true) var id: Long = 0L,
   val zimId: String,
@@ -58,7 +54,7 @@ data class HistoryRoomEntity(
 
 class ZimSourceRoomConverter {
   @TypeConverter
-  fun convertToDatabaseValue(entityProperty: ZimReaderSource?) =
+  fun convertToDatabaseValue(entityProperty: ZimReaderSource?): String =
     entityProperty?.toDatabase() ?: ""
 
   @TypeConverter

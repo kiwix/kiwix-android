@@ -417,7 +417,7 @@ class LibkiwixBookmarks @Inject constructor(
     }
     // Add the ZIM files to the library for validating the bookmarks.
     bookDao.getBooks().forEach {
-      addBookToLibrary(file = it.file)
+      addBookToLibrary(file = it.zimReaderSource.file)
     }
     // Save the imported bookmarks to the current library.
     tempLibrary.getBookmarks(false)?.toList()?.forEach {

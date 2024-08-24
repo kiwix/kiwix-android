@@ -86,7 +86,7 @@ data class BookOnDiskEntity(
 }
 
 class ZimSourceConverter : PropertyConverter<ZimReaderSource, String> {
-  override fun convertToDatabaseValue(entityProperty: ZimReaderSource?) =
+  override fun convertToDatabaseValue(entityProperty: ZimReaderSource?): String =
     entityProperty?.toDatabase() ?: ""
 
   override fun convertToEntityProperty(databaseValue: String?): ZimReaderSource =
