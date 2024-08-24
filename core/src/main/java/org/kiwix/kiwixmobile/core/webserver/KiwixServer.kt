@@ -52,7 +52,7 @@ class KiwixServer @Inject constructor(
             val archive = if (path == getDemoFilePathForCustomApp(context)) {
               // For custom apps using a demo file, create an Archive with FileDescriptor
               val assetFileDescriptor =
-                zimReaderContainer.zimFileReader?.assetFileDescriptorList?.get(0)
+                zimReaderContainer.zimReaderSource?.assetFileDescriptorList?.get(0)
               val startOffset = assetFileDescriptor?.startOffset ?: 0L
               val size = assetFileDescriptor?.length ?: 0L
               Archive(

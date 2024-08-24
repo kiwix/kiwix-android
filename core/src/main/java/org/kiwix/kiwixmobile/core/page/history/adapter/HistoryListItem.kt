@@ -30,7 +30,7 @@ sealed class HistoryListItem : PageRelated {
     val databaseId: Long = 0L,
     override val zimId: String,
     val zimName: String,
-    override val zimReaderSource: ZimReaderSource,
+    override val zimReaderSource: ZimReaderSource?,
     override val favicon: String?,
     val historyUrl: String,
     override val title: String,

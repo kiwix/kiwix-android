@@ -23,6 +23,7 @@ import io.reactivex.processors.PublishProcessor
 import org.json.JSONArray
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenNote
@@ -36,7 +37,6 @@ import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_POSITIONS
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.ShowNoteDialog
-import java.io.File
 import javax.inject.Inject
 
 data class ShowOpenNoteDialog(
@@ -52,14 +52,15 @@ data class ShowOpenNoteDialog(
       { effects.offer(OpenPage(page, zimReaderContainer)) },
       {
         val item = page as NoteListItem
-        // Check if zimFilePath is not null, and then set it in zimReaderContainer.
+        // Check if toDatabase is not null, and then set it in zimReaderContainer.
         // For custom apps, we are currently using fileDescriptor, and they only have a single file in them,
         // which is already set in zimReaderContainer, so there's no need to set it again.
-        item.zimFilePath?.let {
-          val currentZimFilePath = zimReaderContainer.zimCanonicalPath
-          val file = File(it)
-          zimReaderContainer.setZimFile(file)
-          if (zimReaderContainer.zimCanonicalPath != currentZimFilePath) {
+        item.zimReaderSource?.toDatabase().let {
+          if (!activity.isCustomApp()) {
+            zimReaderContainer.setZimReaderSource(item.zimReaderSource)
+          }
+          val currentZimReaderSource = zimReaderContainer.zimReaderSource
+          if (zimReaderContainer.zimReaderSource != currentZimReaderSource) {
             // if current zim file is not the same set the main page of that zim file
             // so that when we go back it properly loads the article, and do nothing if the
             // zim file is same because there might be multiple tabs opened.
@@ -72,7 +73,7 @@ data class ShowOpenNoteDialog(
             val positions = JSONArray()
             urls.put(CONTENT_PREFIX + zimReaderContainer.mainPage)
             positions.put(0)
-            editor.putString(TAG_CURRENT_FILE, zimReaderContainer.zimCanonicalPath)
+            editor.putString(TAG_CURRENT_FILE, zimReaderContainer.zimReaderSource?.toDatabase())
             editor.putString(TAG_CURRENT_ARTICLES, "$urls")
             editor.putString(TAG_CURRENT_POSITIONS, "$positions")
             editor.putInt(TAG_CURRENT_TAB, 0)

@@ -54,11 +54,14 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
 import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
@@ -124,7 +127,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       activity.toast(string.error_file_not_found)
       return
     }
-    openZimFile(File(filePath))
+    openZimFile(ZimReaderSource(File(filePath)))
   }
 
   override fun loadDrawerViews() {
@@ -200,9 +203,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun onResume() {
     super.onResume()
-    if (zimReaderContainer?.zimFile == null &&
-      zimReaderContainer?.zimFileReader?.assetFileDescriptorList?.isEmpty() == true
-    ) {
+    if (zimReaderContainer?.zimReaderSource == null) {
       exitBook()
     }
     if (isFullScreenVideo || isInFullScreenMode()) {
@@ -221,14 +222,14 @@ class KiwixReaderFragment : CoreReaderFragment() {
     currentTab: Int
   ) {
     val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
-    val zimFile = settings.getString(TAG_CURRENT_FILE, null)
+    val zimReaderSource = fromDatabaseValue(settings.getString(TAG_CURRENT_FILE, null))
 
-    if (zimFile != null && File(zimFile).isFileExist()) {
-      if (zimReaderContainer?.zimFile == null) {
-        openZimFile(File(zimFile))
+    if (zimReaderSource != null && zimReaderSource.canOpenInLibkiwix()) {
+      if (zimReaderContainer?.zimReaderSource == null) {
+        openZimFile(zimReaderSource)
         Log.d(
           TAG_KIWIX,
-          "Kiwix normal start, Opened last used zimFile: -> $zimFile"
+          "Kiwix normal start, Opened last used zimFile: -> ${zimReaderSource.toDatabase()}"
         )
       } else {
         zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
@@ -305,21 +306,13 @@ class KiwixReaderFragment : CoreReaderFragment() {
       when (it.scheme) {
         "file" -> {
           Handler(Looper.getMainLooper()).postDelayed({
-            openZimFile(it.toFile()).also {
-              // if used once then clear it to avoid affecting any other functionality
-              // of the application.
-              requireActivity().intent.action = null
-            }
+            openAndSaveZimFileInLocalLibrary(it.toFile())
           }, 300)
         }
 
         "content" -> {
           Handler(Looper.getMainLooper()).postDelayed({
-            getZimFileFromUri(it)?.let { zimFile ->
-              openZimFile(zimFile)
-            }.also {
-              requireActivity().intent.action = null
-            }
+            getZimFileFromUri(it)?.let(::openAndSaveZimFileInLocalLibrary)
           }, 300)
         }
 
@@ -327,6 +320,29 @@ class KiwixReaderFragment : CoreReaderFragment() {
       }
     }
     return ShouldCall
+  }
+
+  private fun openAndSaveZimFileInLocalLibrary(file: File) {
+    val zimReaderSource = ZimReaderSource(file)
+    if (zimReaderSource.canOpenInLibkiwix()) {
+      zimReaderContainer?.let { zimReaderContainer ->
+        zimReaderContainer.setZimReaderSource(zimReaderSource)
+
+        zimReaderContainer.zimFileReader?.let { zimFileReader ->
+          BooksOnDiskListItem.BookOnDisk(zimFileReader).also { bookOnDisk ->
+            // save the book in the library
+            repositoryActions?.saveBook(bookOnDisk)
+            zimFileReader.dispose()
+          }
+        }
+      }
+      openZimFile(ZimReaderSource(file))
+    } else {
+      activity.toast(R.string.cannot_open_file)
+    }
+    // if used once then clear it to avoid affecting any other functionality
+    // of the application.
+    requireActivity().intent.action = null
   }
 
   private fun getZimFileFromUri(

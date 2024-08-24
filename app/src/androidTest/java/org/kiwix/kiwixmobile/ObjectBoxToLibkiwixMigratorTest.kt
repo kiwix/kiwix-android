@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.core.di.modules.DatabaseModule
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
@@ -74,6 +75,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       expectedZimId,
       expectedZimName,
       expectedZimFilePath,
+      ZimReaderSource(File(expectedZimFilePath)),
       expectedBookmarkUrl,
       expectedTitle,
       expectedFavicon
@@ -156,7 +158,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     val actualDataAfterMigration =
       objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
     assertEquals(1, actualDataAfterMigration.size)
-    assertEquals(actualDataAfterMigration[0].zimFilePath, expectedZimFilePath)
+    assertEquals(actualDataAfterMigration[0].zimReaderSource?.toDatabase(), expectedZimFilePath)
     assertEquals(actualDataAfterMigration[0].zimId, expectedZimId)
     assertEquals(actualDataAfterMigration[0].title, expectedTitle)
     assertEquals(actualDataAfterMigration[0].url, expectedBookmarkUrl)
@@ -185,6 +187,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       expectedZimId,
       expectedZimName,
       expectedZimFilePath,
+      ZimReaderSource(File(expectedZimFilePath)),
       existingBookmarkUrl,
       existingTitle,
       expectedFavicon
@@ -226,6 +229,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
           expectedZimId,
           expectedZimName,
           expectedZimFilePath,
+          ZimReaderSource(File(expectedZimFilePath)),
           "https://alpine_linux/search_$i",
           "title_$i",
           expectedFavicon
@@ -250,6 +254,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       expectedZimId,
       expectedZimName,
       null,
+      null,
       expectedBookmarkUrl,
       expectedTitle,
       expectedFavicon
@@ -261,7 +266,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     val actualDataAfterMigration =
       objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
     assertEquals(1, actualDataAfterMigration.size)
-    assertEquals(actualDataAfterMigration[0].zimFilePath, null)
+    assertEquals(actualDataAfterMigration[0].zimReaderSource?.toDatabase(), null)
     assertEquals(actualDataAfterMigration[0].zimId, expectedZimId)
     assertEquals(actualDataAfterMigration[0].title, expectedTitle)
     assertEquals(actualDataAfterMigration[0].url, expectedBookmarkUrl)
@@ -278,6 +283,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       expectedZimId,
       expectedZimName,
       nonExistingPath,
+      ZimReaderSource(File(nonExistingPath)),
       expectedBookmarkUrl,
       expectedTitle,
       expectedFavicon
@@ -289,7 +295,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     val actualDataAfterMigration =
       objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
     assertEquals(1, actualDataAfterMigration.size)
-    assertEquals(actualDataAfterMigration[0].zimFilePath, null)
+    assertEquals(actualDataAfterMigration[0].zimReaderSource?.toDatabase(), null)
     assertEquals(actualDataAfterMigration[0].zimId, expectedZimId)
     assertEquals(actualDataAfterMigration[0].title, expectedTitle)
     assertEquals(actualDataAfterMigration[0].url, expectedBookmarkUrl)

@@ -35,7 +35,7 @@ import java.io.File
 class ZimReaderSource(
   val file: File? = null,
   val uri: Uri? = null,
-  private val assetFileDescriptorList: List<AssetFileDescriptor>? = null
+  val assetFileDescriptorList: List<AssetFileDescriptor>? = null
 ) {
   constructor(uri: Uri) : this(
     uri = uri,

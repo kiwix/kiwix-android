@@ -26,6 +26,7 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.files.FileSearch
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
@@ -57,9 +58,9 @@ class StorageObserver @Inject constructor(
     downloads.firstOrNull { file.absolutePath.endsWith(it.fileNameFromUrl) } == null
 
   private fun convertToBookOnDisk(file: File) = runBlocking {
-    zimReaderFactory.create(file)
+    zimReaderFactory.create(ZimReaderSource(file))
       ?.let { zimFileReader ->
-        BookOnDisk(file, zimFileReader).also {
+        BookOnDisk(zimFileReader).also {
           // add the book to libkiwix library to validate the imported bookmarks
           libkiwixBookmarks.addBookToLibrary(archive = zimFileReader.jniKiwixReader)
           zimFileReader.dispose()

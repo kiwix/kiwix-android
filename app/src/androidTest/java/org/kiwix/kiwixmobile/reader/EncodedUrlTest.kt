@@ -31,11 +31,11 @@ import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils
-import org.kiwix.libzim.Archive
 import org.kiwix.libzim.SuggestionSearcher
 import java.io.File
 import java.io.FileOutputStream
@@ -89,12 +89,11 @@ class EncodedUrlTest : BaseActivityTest() {
         }
       }
     }
-    val archive = Archive(zimFile.canonicalPath)
+    val zimReaderSource = ZimReaderSource(zimFile)
+    val archive = zimReaderSource.createArchive()
     val zimFileReader = ZimFileReader(
-      zimFile,
-      emptyList(),
-      null,
-      archive,
+      zimReaderSource,
+      archive!!,
       DarkModeConfig(SharedPreferenceUtil(context), context),
       SuggestionSearcher(archive)
     )
