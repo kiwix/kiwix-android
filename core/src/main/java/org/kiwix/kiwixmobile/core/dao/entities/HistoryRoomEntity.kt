@@ -20,14 +20,18 @@ package org.kiwix.kiwixmobile.core.dao.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import io.objectbox.annotation.Convert
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 @Entity
 data class HistoryRoomEntity(
   @PrimaryKey(autoGenerate = true) var id: Long = 0L,
   val zimId: String,
   val zimName: String,
-  val zimFilePath: String,
+  val zimFilePath: String?,
+  @Convert(converter = ZimSourceConverter::class, dbType = String::class)
+  var zimReaderSource: ZimReaderSource?,
   val favicon: String?,
   var historyUrl: String,
   var historyTitle: String,
@@ -38,7 +42,8 @@ data class HistoryRoomEntity(
     historyItem.databaseId,
     historyItem.zimId,
     historyItem.zimName,
-    historyItem.zimFilePath,
+    null,
+    historyItem.zimReaderSource,
     historyItem.favicon,
     historyItem.historyUrl,
     historyItem.title,

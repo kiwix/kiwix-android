@@ -24,6 +24,7 @@ import io.objectbox.query.QueryBuilder
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity_
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
 
@@ -31,7 +32,7 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
 
   fun books() = box.asFlowable()
     .doOnNext(::removeBooksThatDoNotExist)
-    .map { books -> books.filter { it.file.exists() } }
+    .map { books -> books.filter { it.zimReaderSource.exists() } }
     .map { it.map(::BookOnDisk) }
 
   fun getBooks() = box.all.map(::BookOnDisk)
@@ -47,14 +48,14 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
   private fun uniqueBooksByFile(booksOnDisk: List<BookOnDisk>): List<BookOnDisk> {
     val booksWithSameFilePath = booksWithSameFilePath(booksOnDisk)
     return booksOnDisk.filter { bookOnDisk: BookOnDisk ->
-      booksWithSameFilePath.find { it.file.path == bookOnDisk.file.path } == null
+      booksWithSameFilePath.find { it.zimReaderSource == bookOnDisk.zimReaderSource } == null
     }
   }
 
   private fun booksWithSameFilePath(booksOnDisk: List<BookOnDisk>) =
     box.query {
       inValues(
-        BookOnDiskEntity_.file, booksOnDisk.map { it.file.path }.toTypedArray(),
+        BookOnDiskEntity_.file, booksOnDisk.map { it.zimReaderSource.toDatabase() }.toTypedArray(),
         QueryBuilder.StringOrder.CASE_INSENSITIVE
       )
     }.find()
@@ -77,11 +78,11 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
 
   @Suppress("UnsafeCallOnNullableType")
   fun migrationInsert(books: List<Book>) {
-    insert(books.map { BookOnDisk(book = it, file = it.file!!) })
+    insert(books.map { BookOnDisk(book = it, zimReaderSource = ZimReaderSource(it.file!!)) })
   }
 
   private fun removeBooksThatDoNotExist(books: MutableList<BookOnDiskEntity>) {
-    delete(books.filterNot { it.file.exists() })
+    delete(books.filterNot { it.zimReaderSource.exists() })
   }
 
   private fun delete(books: List<BookOnDiskEntity>) {
@@ -90,7 +91,7 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
 
   fun bookMatching(downloadTitle: String) = box.query {
     endsWith(
-      BookOnDiskEntity_.file, downloadTitle,
+      BookOnDiskEntity_.zimReaderSource, downloadTitle,
       QueryBuilder.StringOrder.CASE_INSENSITIVE
     )
   }.findFirst()

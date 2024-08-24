@@ -86,7 +86,7 @@ fun bookmark(
     id = id,
     zimId = zimId,
     zimName = zimName,
-    zimFilePath = zimFilePath,
+    zim = zimFilePath,
     bookmarkUrl = bookmarkUrl,
     title = bookmarkTitle,
     isSelected = isSelected,
