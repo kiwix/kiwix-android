@@ -38,6 +38,7 @@ import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity_
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.sharedFunctions.book
 import org.kiwix.sharedFunctions.bookOnDisk
@@ -75,12 +76,13 @@ internal class NewBookDaoTest {
       Pair<BookOnDiskEntity, BookOnDiskEntity> {
       val query: Query<BookOnDiskEntity> = mockk()
       every { box.query().build() } returns query
-      val fileThatExists = mockk<File>()
-      val fileThatDoesNotExist = mockk<File>()
-      every { fileThatExists.exists() } returns true
-      every { fileThatDoesNotExist.exists() } returns false
-      val entityThatExists = bookOnDiskEntity(file = fileThatExists)
-      val entityThatDoesNotExist = bookOnDiskEntity(file = fileThatDoesNotExist)
+      val zimReaderSourceThatExists = mockk<ZimReaderSource>()
+      val zimReaderSourceThatDoesNotExist = mockk<ZimReaderSource>()
+      every { zimReaderSourceThatExists.exists() } returns true
+      every { zimReaderSourceThatDoesNotExist.exists() } returns false
+      val entityThatExists = bookOnDiskEntity(zimReaderSource = zimReaderSourceThatExists)
+      val entityThatDoesNotExist =
+        bookOnDiskEntity(zimReaderSource = zimReaderSourceThatDoesNotExist)
       mockkStatic(RxQuery::class)
       every { RxQuery.observable(query) } returns Observable.just(
         listOf(entityThatExists, entityThatDoesNotExist)
@@ -110,14 +112,16 @@ internal class NewBookDaoTest {
       every { box.query() } returns queryBuilder
       every {
         queryBuilder.`in`(
-          BookOnDiskEntity_.file,
-          arrayOf(distinctBook.file.path),
+          BookOnDiskEntity_.zimReaderSource,
+          arrayOf(distinctBook.zimReaderSource.toDatabase()),
           QueryBuilder.StringOrder.CASE_INSENSITIVE
         )
       } returns queryBuilder
       val query: Query<BookOnDiskEntity> = mockk(relaxed = true)
       every { queryBuilder.build() } returns query
-      every { query.find() } returns listOf(bookOnDiskEntity(file = File("matches_nothing")))
+      every {
+        query.find()
+      } returns listOf(bookOnDiskEntity(zimReaderSource = ZimReaderSource(File("matches_nothing"))))
       slot.captured.call()
       verify { box.put(listOf(BookOnDiskEntity(distinctBook))) }
     }
@@ -132,14 +136,16 @@ internal class NewBookDaoTest {
       every { box.query() } returns queryBuilder
       every {
         queryBuilder.`in`(
-          BookOnDiskEntity_.file,
-          arrayOf(distinctBook.file.path),
+          BookOnDiskEntity_.zimReaderSource,
+          arrayOf(distinctBook.zimReaderSource.toDatabase()),
           QueryBuilder.StringOrder.CASE_INSENSITIVE
         )
       } returns queryBuilder
       val query: Query<BookOnDiskEntity> = mockk(relaxed = true)
       every { queryBuilder.build() } returns query
-      every { query.find() } returns listOf(bookOnDiskEntity(file = distinctBook.file))
+      every {
+        query.find()
+      } returns listOf(bookOnDiskEntity(zimReaderSource = distinctBook.zimReaderSource))
       slot.captured.call()
       verify { box.put(listOf()) }
     }
@@ -154,8 +160,8 @@ internal class NewBookDaoTest {
       every { box.query() } returns queryBuilder
       every {
         queryBuilder.`in`(
-          BookOnDiskEntity_.file,
-          arrayOf(distinctBook.file.path),
+          BookOnDiskEntity_.zimReaderSource,
+          arrayOf(distinctBook.zimReaderSource.toDatabase()),
           QueryBuilder.StringOrder.CASE_INSENSITIVE
         )
       } returns queryBuilder
@@ -183,12 +189,23 @@ internal class NewBookDaoTest {
 
   @Test
   fun migrationInsert() {
-    val book: LibraryNetworkEntity.Book = book(file = mockk<File>(relaxed = true))
+    val book: LibraryNetworkEntity.Book = book()
     val slot: CapturingSlot<Callable<Unit>> = slot()
     every { box.store.callInTx(capture(slot)) } returns Unit
     newBookDao.migrationInsert(listOf(book))
     slot.captured.call()
-    verify { box.put(listOf(BookOnDiskEntity(BookOnDisk(book = book, file = book.file!!)))) }
+    verify {
+      box.put(
+        listOf(
+          BookOnDiskEntity(
+            BookOnDisk(
+              book = book,
+              zimReaderSource = ZimReaderSource(book.file!!)
+            )
+          )
+        )
+      )
+    }
   }
 
   @Test
@@ -198,7 +215,7 @@ internal class NewBookDaoTest {
     every { box.query() } returns queryBuilder
     every {
       queryBuilder.endsWith(
-        BookOnDiskEntity_.file,
+        BookOnDiskEntity_.zimReaderSource,
         downloadTitle,
         QueryBuilder.StringOrder.CASE_INSENSITIVE
       )

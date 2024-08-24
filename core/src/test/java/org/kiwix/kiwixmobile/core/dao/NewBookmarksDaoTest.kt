@@ -27,6 +27,7 @@ import io.objectbox.query.Query
 import io.objectbox.query.QueryBuilder
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity_
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
+import org.kiwix.kiwixmobile.core.page.bookmark
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -37,7 +38,7 @@ internal class NewBookmarksDaoTest {
 
   @Test
   fun deletePages() {
-    val bookmarkItem: BookmarkItem = mockk(relaxed = true)
+    val bookmarkItem: BookmarkItem = bookmark(zimReaderSource = mockk())
     val bookmarkItemList: List<BookmarkItem> = listOf(bookmarkItem)
     val pagesToDelete: List<Page> = bookmarkItemList
     newBookmarksDao.deletePages(pagesToDelete)
@@ -106,7 +107,7 @@ internal class NewBookmarksDaoTest {
 
   @Test
   fun saveBookmark() {
-    val bookmarkItem: BookmarkItem = mockk(relaxed = true)
+    val bookmarkItem: BookmarkItem = bookmark(zimReaderSource = mockk())
     newBookmarksDao.saveBookmark(bookmarkItem)
     verify { box.put(BookmarkEntity(bookmarkItem)) }
   }

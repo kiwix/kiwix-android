@@ -34,6 +34,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
+import org.kiwix.kiwixmobile.core.dao.entities.ZimSourceRoomConverter
 
 @Suppress("UnnecessaryAbstractClass")
 @Database(
@@ -46,7 +47,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
   version = 4,
   exportSchema = false
 )
-@TypeConverters(HistoryRoomDaoCoverts::class)
+@TypeConverters(HistoryRoomDaoCoverts::class, ZimSourceRoomConverter::class)
 abstract class KiwixRoomDatabase : RoomDatabase() {
   abstract fun recentSearchRoomDao(): RecentSearchRoomDao
   abstract fun historyRoomDao(): HistoryRoomDao

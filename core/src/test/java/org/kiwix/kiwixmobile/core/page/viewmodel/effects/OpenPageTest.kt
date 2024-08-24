@@ -26,9 +26,11 @@ import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.PageImpl
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 internal class OpenPageTest {
-  private val page = PageImpl()
+  private val zimReaderSource: ZimReaderSource = mockk()
+  private val page = PageImpl(zimReaderSource = zimReaderSource)
   private val zimReaderContainer: ZimReaderContainer = mockk()
   val activity: CoreMainActivity = mockk()
 
@@ -39,7 +41,7 @@ internal class OpenPageTest {
 
   @Test
   fun `invokeWith navigates to page with historyUrl`() {
-    every { zimReaderContainer.zimCanonicalPath } returns "zimFilePath"
+    every { zimReaderContainer.zimReaderSource } returns zimReaderSource
     OpenPage(page, zimReaderContainer).invokeWith(activity)
     verify {
       activity.openPage(page.url)
@@ -48,10 +50,10 @@ internal class OpenPageTest {
 
   @Test
   fun `invokeWith navigates to page with historyUrl and zimFilePath`() {
-    every { zimReaderContainer.zimCanonicalPath } returns "notZimFilePath"
+    every { zimReaderContainer.zimReaderSource } returns null
     OpenPage(page, zimReaderContainer).invokeWith(activity)
     verify {
-      activity.openPage(page.url, page.zimFilePath!!)
+      activity.openPage(page.url, page.zimReaderSource!!)
     }
   }
 }

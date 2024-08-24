@@ -48,7 +48,7 @@ internal class ShowDeleteHistoryDialogTest {
     val showDeleteHistoryDialog =
       ShowDeleteHistoryDialog(
         effects,
-        historyState(listOf(historyItem(isSelected = true))),
+        historyState(listOf(historyItem(isSelected = true, zimReaderSource = mockk()))),
         historyDao,
         viewModelScope
       )

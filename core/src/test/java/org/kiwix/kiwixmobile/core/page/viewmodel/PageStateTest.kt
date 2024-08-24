@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.page.viewmodel
 
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.page.PageImpl
@@ -26,19 +27,28 @@ import org.kiwix.kiwixmobile.core.page.adapter.Page
 internal class PageStateTest {
   @Test
   internal fun `isInSelectionMode is true when item is selected`() {
-    assertThat(TestablePageState(listOf(PageImpl(isSelected = true))).isInSelectionState)
+    assertThat(
+      TestablePageState(
+        listOf(
+          PageImpl(
+            isSelected = true,
+            zimReaderSource = mockk()
+          )
+        )
+      ).isInSelectionState
+    )
       .isEqualTo(true)
   }
 
   @Test
   internal fun `isInSelectionMode is false when no item is selected`() {
-    assertThat(TestablePageState(listOf(PageImpl())).isInSelectionState)
+    assertThat(TestablePageState(listOf(PageImpl(zimReaderSource = mockk()))).isInSelectionState)
       .isEqualTo(false)
   }
 
   @Test
   internal fun `filteredPageItems should show all if show all is true`() {
-    val item = PageImpl(zimId = "notSame")
+    val item = PageImpl(zimId = "notSame", zimReaderSource = mockk())
     assertThat(
       TestablePageState(
         listOf(item),
@@ -49,7 +59,7 @@ internal class PageStateTest {
 
   @Test
   internal fun `filteredPageItems should not show all if showAll is false with different zimId`() {
-    val item = PageImpl(zimId = "notSame")
+    val item = PageImpl(zimId = "notSame", zimReaderSource = mockk())
     assertThat(
       TestablePageState(listOf(item), showAll = false).publicFilteredPageItems
     ).isEqualTo(emptyList<Page>())
@@ -57,7 +67,7 @@ internal class PageStateTest {
 
   @Test
   internal fun `filteredPageItems should show item if zimId is same`() {
-    val item = PageImpl(zimId = "sameId")
+    val item = PageImpl(zimId = "sameId", zimReaderSource = mockk())
     assertThat(
       TestablePageState(
         listOf(item),
@@ -69,7 +79,7 @@ internal class PageStateTest {
 
   @Test
   internal fun `filteredPageItems should hide items with not equal searchTerm`() {
-    val item = PageImpl(title = "title")
+    val item = PageImpl(title = "title", zimReaderSource = mockk())
     assertThat(
       TestablePageState(
         listOf(item),
@@ -81,7 +91,7 @@ internal class PageStateTest {
 
   @Test
   internal fun `filteredPageItems should show items with equal searchTerm (ignore case)`() {
-    val item = PageImpl(title = "title")
+    val item = PageImpl(title = "title", zimReaderSource = mockk())
     assertThat(
       TestablePageState(
         listOf(item),

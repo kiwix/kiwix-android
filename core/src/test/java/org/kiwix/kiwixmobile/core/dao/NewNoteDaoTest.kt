@@ -30,6 +30,7 @@ import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity_
 import org.kiwix.kiwixmobile.core.page.adapter.Page
+import org.kiwix.kiwixmobile.core.page.note
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import java.util.concurrent.Callable
 
@@ -40,7 +41,7 @@ internal class NewNoteDaoTest {
 
   @Test
   fun deletePages() {
-    val notesItem: NoteListItem = mockk(relaxed = true)
+    val notesItem: NoteListItem = note(zimReaderSource = mockk())
     val notesItemList: List<NoteListItem> = listOf(notesItem)
     val pagesToDelete: List<Page> = notesItemList
     newNotesDao.deletePages(pagesToDelete)
@@ -67,7 +68,7 @@ internal class NewNoteDaoTest {
 
   @Test
   fun saveNotePage() {
-    val newNote: NoteListItem = mockk(relaxed = true)
+    val newNote: NoteListItem = note(title = "", zimReaderSource = mockk())
     val slot: CapturingSlot<Callable<Unit>> = slot()
     every { notesBox.store.callInTx(capture(slot)) } returns Unit
     val queryBuilder: QueryBuilder<NotesEntity> = mockk(relaxed = true)
