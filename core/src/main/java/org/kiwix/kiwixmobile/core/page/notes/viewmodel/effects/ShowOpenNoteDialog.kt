@@ -56,10 +56,10 @@ data class ShowOpenNoteDialog(
         // For custom apps, we are currently using fileDescriptor, and they only have a single file in them,
         // which is already set in zimReaderContainer, so there's no need to set it again.
         item.zimReaderSource?.toDatabase().let {
+          val currentZimReaderSource = zimReaderContainer.zimReaderSource
           if (!activity.isCustomApp()) {
             zimReaderContainer.setZimReaderSource(item.zimReaderSource)
           }
-          val currentZimReaderSource = zimReaderContainer.zimReaderSource
           if (zimReaderContainer.zimReaderSource != currentZimReaderSource) {
             // if current zim file is not the same set the main page of that zim file
             // so that when we go back it properly loads the article, and do nothing if the
