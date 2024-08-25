@@ -31,7 +31,19 @@ import javax.inject.Inject
 class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
 
   fun books() = box.asFlowable()
-    .doOnNext(::removeBooksThatDoNotExist)
+    .map { books ->
+      books.map { bookOnDiskEntity ->
+        bookOnDiskEntity.file.let { file ->
+          // set zimReaderSource for previously saved books
+          val zimReaderSource = ZimReaderSource(file)
+          if (zimReaderSource.canOpenInLibkiwix()) {
+            bookOnDiskEntity.zimReaderSource = zimReaderSource
+          }
+        }
+        bookOnDiskEntity
+      }
+    }
+    .doOnNext { removeBooksThatDoNotExist(it.toMutableList()) }
     .map { books -> books.filter { it.zimReaderSource.exists() } }
     .map { it.map(::BookOnDisk) }
 
@@ -92,7 +104,7 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
   }
 
   private fun removeBooksThatDoNotExist(books: MutableList<BookOnDiskEntity>) {
-    delete(books.filterNot { it.zimReaderSource.exists() || it.file.exists() })
+    delete(books.filterNot { it.zimReaderSource.exists() })
   }
 
   private fun delete(books: List<BookOnDiskEntity>) {
