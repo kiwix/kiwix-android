@@ -196,11 +196,7 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
             FROM HistoryRoomEntity
         """
         )
-
-        // Step 3: Drop the old table
         database.execSQL("DROP TABLE HistoryRoomEntity")
-
-        // Step 4: Rename the new table to the old table's name
         database.execSQL("ALTER TABLE HistoryRoomEntity_temp RENAME TO HistoryRoomEntity")
         database.execSQL("ALTER TABLE NotesRoomEntity ADD COLUMN zimReaderSource TEXT")
       }

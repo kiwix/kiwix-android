@@ -55,7 +55,7 @@ sealed class BooksOnDiskListItem {
     }
 
     constructor(bookOnDiskEntity: BookOnDiskEntity) : this(
-      id = bookOnDiskEntity.id,
+      databaseId = bookOnDiskEntity.id,
       file = bookOnDiskEntity.file,
       book = bookOnDiskEntity.toBook(),
       zimReaderSource = bookOnDiskEntity.zimReaderSource
