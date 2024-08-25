@@ -31,8 +31,10 @@ import java.io.File
 @Entity
 data class BookOnDiskEntity(
   @Id var id: Long = 0,
+  @Convert(converter = StringToFileConverter::class, dbType = String::class)
+  val file: File = File(""),
   @Convert(converter = ZimSourceConverter::class, dbType = String::class)
-  val zimReaderSource: ZimReaderSource,
+  var zimReaderSource: ZimReaderSource,
   val bookId: String,
   val title: String,
   val description: String?,
@@ -50,6 +52,7 @@ data class BookOnDiskEntity(
 ) {
   constructor(bookOnDisk: BookOnDisk) : this(
     0,
+    bookOnDisk.file,
     bookOnDisk.zimReaderSource,
     bookOnDisk.book.id,
     bookOnDisk.book.title,
@@ -91,4 +94,9 @@ class ZimSourceConverter : PropertyConverter<ZimReaderSource, String> {
 
   override fun convertToEntityProperty(databaseValue: String?): ZimReaderSource =
     fromDatabaseValue(databaseValue) ?: ZimReaderSource(File(""))
+}
+
+class StringToFileConverter : PropertyConverter<File, String> {
+  override fun convertToDatabaseValue(entityProperty: File?) = entityProperty?.path ?: ""
+  override fun convertToEntityProperty(databaseValue: String?) = File(databaseValue ?: "")
 }

@@ -43,7 +43,7 @@ fun bookOnDisk(
   databaseId: Long = 0L,
   book: Book = book(),
   zimReaderSource: ZimReaderSource = ZimReaderSource(File(""))
-) = BookOnDisk(databaseId, book, zimReaderSource)
+) = BookOnDisk(databaseId, book, File(""), zimReaderSource)
 
 fun downloadModel(
   databaseId: Long = 1L,
@@ -193,6 +193,7 @@ fun bookOnDiskEntity(
 ) =
   BookOnDiskEntity(
     id,
+    File(""),
     zimReaderSource,
     bookId,
     title,

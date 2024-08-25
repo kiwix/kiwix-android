@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "3:5536749840871435068",
-      "lastPropertyId": "18:1711250046418389186",
+      "lastPropertyId": "19:8429535071703004578",
       "name": "BookOnDiskEntity",
       "properties": [
         {
@@ -87,6 +87,11 @@
         {
           "id": "18:1711250046418389186",
           "name": "zimReaderSource",
+          "type": 9
+        },
+        {
+          "id": "19:8429535071703004578",
+          "name": "file",
           "type": 9
         }
       ],

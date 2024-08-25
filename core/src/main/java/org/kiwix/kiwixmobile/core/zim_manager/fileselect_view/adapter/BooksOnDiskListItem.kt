@@ -44,6 +44,7 @@ sealed class BooksOnDiskListItem {
   data class BookOnDisk constructor(
     val databaseId: Long = 0L,
     val book: Book,
+    val file: File = File(""),
     val zimReaderSource: ZimReaderSource,
     val tags: List<KiwixTag> = KiwixTag.from(book.tags),
     override val id: Long = databaseId
@@ -54,9 +55,10 @@ sealed class BooksOnDiskListItem {
     }
 
     constructor(bookOnDiskEntity: BookOnDiskEntity) : this(
-      bookOnDiskEntity.id,
-      bookOnDiskEntity.toBook(),
-      bookOnDiskEntity.zimReaderSource
+      id = bookOnDiskEntity.id,
+      file = bookOnDiskEntity.file,
+      book = bookOnDiskEntity.toBook(),
+      zimReaderSource = bookOnDiskEntity.zimReaderSource
     )
 
     constructor(downloadRoomEntity: DownloadRoomEntity) : this(

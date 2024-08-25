@@ -35,7 +35,16 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
     .map { books -> books.filter { it.zimReaderSource.exists() } }
     .map { it.map(::BookOnDisk) }
 
-  fun getBooks() = box.all.map(::BookOnDisk)
+  fun getBooks() = box.all.map { bookOnDiskEntity ->
+    bookOnDiskEntity.file.let { file ->
+      // set zimReaderSource for previously saved books
+      val zimReaderSource = ZimReaderSource(file)
+      if (zimReaderSource.canOpenInLibkiwix()) {
+        bookOnDiskEntity.zimReaderSource = zimReaderSource
+      }
+    }
+    BookOnDisk(bookOnDiskEntity)
+  }
 
   fun insert(booksOnDisk: List<BookOnDisk>) {
     box.store.callInTx {
@@ -83,7 +92,7 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
   }
 
   private fun removeBooksThatDoNotExist(books: MutableList<BookOnDiskEntity>) {
-    delete(books.filterNot { it.zimReaderSource.exists() })
+    delete(books.filterNot { it.zimReaderSource.exists() || it.file.exists() })
   }
 
   private fun delete(books: List<BookOnDiskEntity>) {
