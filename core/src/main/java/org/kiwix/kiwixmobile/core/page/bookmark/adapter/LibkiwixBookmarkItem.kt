@@ -48,7 +48,7 @@ data class LibkiwixBookmarkItem(
     zimId = libkiwixBookmark.bookId,
     zimName = libkiwixBookmark.bookTitle,
     zimFilePath = zimReaderSource?.toDatabase(),
-    zimReaderSource = null,
+    zimReaderSource = zimReaderSource,
     bookmarkUrl = libkiwixBookmark.url,
     title = libkiwixBookmark.title,
     favicon = favicon,
@@ -62,7 +62,7 @@ data class LibkiwixBookmarkItem(
     libKiwixBook: Book
   ) : this(
     zimFilePath = zimFileReader.zimReaderSource.toDatabase(),
-    zimReaderSource = null,
+    zimReaderSource = zimFileReader.zimReaderSource,
     zimId = libKiwixBook.id,
     zimName = libKiwixBook.name,
     bookmarkUrl = articleUrl,
@@ -77,7 +77,7 @@ data class LibkiwixBookmarkItem(
   ) : this(
     zimId = bookmarkEntity.zimId,
     zimFilePath = bookmarkEntity.zimReaderSource?.toDatabase(),
-    zimReaderSource = null,
+    zimReaderSource = bookmarkEntity.zimReaderSource,
     zimName = bookmarkEntity.zimName,
     bookmarkUrl = bookmarkEntity.bookmarkUrl,
     title = bookmarkEntity.bookmarkTitle,
