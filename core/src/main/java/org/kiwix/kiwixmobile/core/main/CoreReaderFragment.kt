@@ -209,6 +209,10 @@ abstract class CoreReaderFragment :
 
   @JvmField
   @Inject
+  var zimReaderFactory: ZimFileReader.Factory? = null
+
+  @JvmField
+  @Inject
   var darkModeConfig: DarkModeConfig? = null
 
   @JvmField

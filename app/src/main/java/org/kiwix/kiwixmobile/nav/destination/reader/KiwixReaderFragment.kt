@@ -33,7 +33,9 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.anim
@@ -325,18 +327,17 @@ class KiwixReaderFragment : CoreReaderFragment() {
   private fun openAndSaveZimFileInLocalLibrary(file: File) {
     val zimReaderSource = ZimReaderSource(file)
     if (zimReaderSource.canOpenInLibkiwix()) {
-      zimReaderContainer?.let { zimReaderContainer ->
-        zimReaderContainer.setZimReaderSource(zimReaderSource)
-
-        zimReaderContainer.zimFileReader?.let { zimFileReader ->
-          BooksOnDiskListItem.BookOnDisk(zimFileReader).also { bookOnDisk ->
-            // save the book in the library
-            repositoryActions?.saveBook(bookOnDisk)
-            zimFileReader.dispose()
+      openZimFile(zimReaderSource).also {
+        lifecycleScope.launch {
+          zimReaderFactory?.create(zimReaderSource)?.let { zimFileReader ->
+            BooksOnDiskListItem.BookOnDisk(zimFileReader).also { bookOnDisk ->
+              // save the book in the library
+              repositoryActions?.saveBook(bookOnDisk)
+              zimFileReader.dispose()
+            }
           }
         }
       }
-      openZimFile(ZimReaderSource(file))
     } else {
       activity.toast(R.string.cannot_open_file)
     }
