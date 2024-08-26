@@ -24,6 +24,7 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.setScheduler
@@ -37,6 +38,7 @@ internal class HistoryViewModelTest {
 
   private lateinit var viewModel: HistoryViewModel
   private val testScheduler = TestScheduler()
+  private val zimReaderSource: ZimReaderSource = mockk()
 
   init {
     setScheduler(testScheduler)
@@ -72,8 +74,13 @@ internal class HistoryViewModelTest {
 
   @Test
   fun `updatePages return state with history items`() {
-    assertThat(viewModel.updatePages(historyState(), UpdatePages(listOf(historyItem())))).isEqualTo(
-      historyState(listOf(historyItem()))
+    assertThat(
+      viewModel.updatePages(
+        historyState(),
+        UpdatePages(listOf(historyItem(zimReaderSource = zimReaderSource)))
+      )
+    ).isEqualTo(
+      historyState(listOf(historyItem(zimReaderSource = zimReaderSource)))
     )
   }
 
@@ -98,8 +105,28 @@ internal class HistoryViewModelTest {
 
   @Test
   fun `deselectAllPages returns state with all pages deselected`() {
-    assertThat(viewModel.deselectAllPages(historyState(listOf(historyItem(isSelected = true)))))
-      .isEqualTo(historyState(listOf(historyItem(isSelected = false))))
+    assertThat(
+      viewModel.deselectAllPages(
+        historyState(
+          listOf(
+            historyItem(
+              isSelected = true,
+              zimReaderSource = zimReaderSource
+            )
+          )
+        )
+      )
+    )
+      .isEqualTo(
+        historyState(
+          listOf(
+            historyItem(
+              isSelected = false,
+              zimReaderSource = zimReaderSource
+            )
+          )
+        )
+      )
   }
 
   @Test
@@ -116,7 +143,21 @@ internal class HistoryViewModelTest {
 
   @Test
   fun `copyWithNewItems returns state with new items`() {
-    assertThat(viewModel.copyWithNewItems(historyState(), listOf(historyItem(isSelected = true))))
-      .isEqualTo(historyState(listOf(historyItem(isSelected = true))))
+    assertThat(
+      viewModel.copyWithNewItems(
+        historyState(),
+        listOf(historyItem(isSelected = true, zimReaderSource = zimReaderSource))
+      )
+    )
+      .isEqualTo(
+        historyState(
+          listOf(
+            historyItem(
+              isSelected = true,
+              zimReaderSource = zimReaderSource
+            )
+          )
+        )
+      )
   }
 }

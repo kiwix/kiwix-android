@@ -37,6 +37,7 @@ import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
@@ -44,7 +45,6 @@ import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirecti
 import org.kiwix.kiwixmobile.page.history.navigationHistory
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
-import org.kiwix.libzim.Archive
 import org.kiwix.libzim.SuggestionSearcher
 import java.io.File
 import java.io.FileOutputStream
@@ -118,12 +118,11 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
   fun testWithExtraZeroSizeFile() {
     createAndGetSplitedZimFile(true)?.let { zimFile ->
       // test the articleCount and mediaCount of this zim file.
-      val archive = Archive(zimFile.canonicalPath)
+      val zimReaderSource = ZimReaderSource(zimFile)
+      val archive = zimReaderSource.createArchive()
       val zimFileReader = ZimFileReader(
-        zimFile,
-        emptyList(),
-        null,
-        archive,
+        zimReaderSource,
+        archive!!,
         DarkModeConfig(SharedPreferenceUtil(context), context),
         SuggestionSearcher(archive)
       )

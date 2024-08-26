@@ -36,6 +36,7 @@ import org.kiwix.kiwixmobile.core.extensions.getResizedDrawable
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.MainMenu
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForCustomApp
@@ -182,25 +183,28 @@ class CustomReaderFragment : CoreReaderFragment() {
       onFilesFound = {
         when (it) {
           is ValidationState.HasFile -> {
-            if (it.assetFileDescriptorList.isNotEmpty()) {
-              openZimFile(null, true, it.assetFileDescriptorList)
-            } else {
-              openZimFile(it.file, true)
-            }
+            openZimFile(
+              ZimReaderSource(
+                file = it.file,
+                null,
+                it.assetFileDescriptorList
+              ),
+              true
+            )
             // Save book in the database to display it in `ZimHostFragment`.
             zimReaderContainer?.zimFileReader?.let { zimFileReader ->
               // Check if the file is not null. If the file is null,
               // it means we have created zimFileReader with a fileDescriptor,
               // so we create a demo file to save it in the database for display on the `ZimHostFragment`.
               val file = it.file ?: createDemoFile()
-              val bookOnDisk = BookOnDisk(file, zimFileReader)
+              val bookOnDisk = BookOnDisk(zimFileReader)
               repositoryActions?.saveBook(bookOnDisk)
             }
           }
 
           is ValidationState.HasBothFiles -> {
             it.zimFile.delete()
-            openZimFile(it.obbFile, true)
+            openZimFile(ZimReaderSource(it.obbFile), true)
           }
 
           else -> {}

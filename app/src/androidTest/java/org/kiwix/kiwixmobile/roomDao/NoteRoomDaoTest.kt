@@ -68,7 +68,7 @@ class NoteRoomDaoTest {
       assertThat(zimId, equalTo(noteItem.zimId))
       assertThat(zimUrl, equalTo(noteItem.zimUrl))
       assertThat(title, equalTo(noteItem.title))
-      assertThat(zimFilePath, equalTo(noteItem.zimFilePath))
+      assertThat(zimReaderSource, equalTo(noteItem.zimReaderSource))
       assertThat(noteFilePath, equalTo(noteItem.noteFilePath))
       assertThat(favicon, equalTo(noteItem.favicon))
     }

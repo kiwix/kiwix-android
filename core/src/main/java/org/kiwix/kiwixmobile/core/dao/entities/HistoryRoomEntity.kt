@@ -20,14 +20,20 @@ package org.kiwix.kiwixmobile.core.dao.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import java.io.File
 
 @Entity
 data class HistoryRoomEntity(
   @PrimaryKey(autoGenerate = true) var id: Long = 0L,
   val zimId: String,
   val zimName: String,
-  val zimFilePath: String,
+  val zimFilePath: String?,
+  @TypeConverters(ZimSourceRoomConverter::class)
+  var zimReaderSource: ZimReaderSource?,
   val favicon: String?,
   var historyUrl: String,
   var historyTitle: String,
@@ -38,11 +44,22 @@ data class HistoryRoomEntity(
     historyItem.databaseId,
     historyItem.zimId,
     historyItem.zimName,
-    historyItem.zimFilePath,
+    null,
+    historyItem.zimReaderSource,
     historyItem.favicon,
     historyItem.historyUrl,
     historyItem.title,
     historyItem.dateString,
     historyItem.timeStamp
   )
+}
+
+class ZimSourceRoomConverter {
+  @TypeConverter
+  fun convertToDatabaseValue(entityProperty: ZimReaderSource?): String =
+    entityProperty?.toDatabase() ?: ""
+
+  @TypeConverter
+  fun convertToEntityProperty(databaseValue: String?): ZimReaderSource =
+    ZimReaderSource.fromDatabaseValue(databaseValue) ?: ZimReaderSource(File(""))
 }

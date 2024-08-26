@@ -220,7 +220,7 @@ class KiwixMainActivity : CoreMainActivity() {
         {
           intent.getStringExtra(DOWNLOAD_NOTIFICATION_TITLE)?.let {
             newBookDao.bookMatching(it)?.let { bookOnDiskEntity ->
-              openZimFromFilePath(bookOnDiskEntity.file.path)
+              openZimFromFilePath(bookOnDiskEntity.zimReaderSource.toDatabase())
             }
           }
         },

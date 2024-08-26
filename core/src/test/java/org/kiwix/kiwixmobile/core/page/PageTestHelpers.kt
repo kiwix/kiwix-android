@@ -19,14 +19,17 @@
 package org.kiwix.kiwixmobile.core.page
 
 import org.kiwix.kiwixmobile.core.page.adapter.Page
+import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkState
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryState
+import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.TestablePageState
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 data class PageImpl(
-  override val zimFilePath: String? = "zimFilePath",
+  override val zimReaderSource: ZimReaderSource?,
   override val url: String = "url",
   override var isSelected: Boolean = false,
   override val id: Long = 0L,
@@ -40,15 +43,17 @@ fun historyItem(
   dateString: String = "5 Jul 2020",
   isSelected: Boolean = false,
   id: Long = 2,
-  zimId: String = "zimId"
+  zimId: String = "zimId",
+  historyUrl: String = "historyUrl",
+  zimReaderSource: ZimReaderSource
 ): HistoryListItem.HistoryItem {
   return HistoryListItem.HistoryItem(
     2,
     zimId,
     "zimName",
-    "zimFilePath",
+    zimReaderSource,
     "favicon",
-    "historyUrl",
+    historyUrl,
     historyTitle,
     dateString,
     100,
@@ -71,13 +76,35 @@ fun historyState(
   )
 
 fun bookmark(
-  databaseId: Long,
   bookmarkTitle: String = "bookmarkTitle",
   isSelected: Boolean = false,
   id: Long = 2,
   zimId: String = "zimId",
   zimName: String = "zimName",
-  zimFilePath: String = "zimFilePath",
+  zimReaderSource: ZimReaderSource,
+  bookmarkUrl: String = "bookmarkUrl",
+  favicon: String = "favicon"
+): BookmarkItem {
+  return BookmarkItem(
+    id = id,
+    zimId = zimId,
+    zimName = zimName,
+    zimReaderSource = zimReaderSource,
+    bookmarkUrl = bookmarkUrl,
+    title = bookmarkTitle,
+    isSelected = isSelected,
+    favicon = favicon
+  )
+}
+
+fun libkiwixBookmarkItem(
+  databaseId: Long = 0L,
+  bookmarkTitle: String = "bookmarkTitle",
+  isSelected: Boolean = false,
+  id: Long = 2,
+  zimId: String = "zimId",
+  zimName: String = "zimName",
+  zimReaderSource: ZimReaderSource,
   bookmarkUrl: String = "bookmarkUrl",
   favicon: String = "favicon"
 ): LibkiwixBookmarkItem {
@@ -86,12 +113,33 @@ fun bookmark(
     id = id,
     zimId = zimId,
     zimName = zimName,
-    zimFilePath = zimFilePath,
+    zimFilePath = zimReaderSource.toDatabase(),
+    zimReaderSource = null,
     bookmarkUrl = bookmarkUrl,
     title = bookmarkTitle,
     isSelected = isSelected,
     favicon = favicon,
     libKiwixBook = null
+  )
+}
+
+fun note(
+  zimId: String = "id",
+  title: String = "noteTitle",
+  zimUrl: String = "",
+  url: String = "",
+  noteFilePath: String = "",
+  zimReaderSource: ZimReaderSource,
+  favicon: String = ""
+): NoteListItem {
+  return NoteListItem(
+    zimId = zimId,
+    zimUrl = zimUrl,
+    title = title,
+    url = url,
+    noteFilePath = noteFilePath,
+    zimReaderSource = zimReaderSource,
+    favicon = favicon
   )
 }
 

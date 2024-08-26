@@ -70,7 +70,7 @@ class HistoryRoomDaoTest {
       assertThat(zimId, equalTo(historyItem.zimId))
       assertThat(zimName, equalTo(historyItem.zimName))
       assertThat(historyUrl, equalTo(historyItem.historyUrl))
-      assertThat(zimFilePath, equalTo(historyItem.zimFilePath))
+      assertThat(zimReaderSource, equalTo(historyItem.zimReaderSource))
       assertThat(favicon, equalTo(historyItem.favicon))
       assertThat(dateString, equalTo(historyItem.dateString))
       assertThat(timeStamp, equalTo(historyItem.timeStamp))

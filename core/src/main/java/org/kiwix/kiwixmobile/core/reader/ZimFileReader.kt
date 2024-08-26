@@ -39,7 +39,6 @@ import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.libkiwix.JNIKiwixException
 import org.kiwix.libzim.Archive
 import org.kiwix.libzim.DirectAccessInfo
-import org.kiwix.libzim.FdInput
 import org.kiwix.libzim.Item
 import org.kiwix.libzim.SuggestionSearch
 import org.kiwix.libzim.SuggestionSearcher
@@ -58,33 +57,35 @@ private const val TAG = "ZimFileReader"
 
 @Suppress("LongParameterList")
 class ZimFileReader constructor(
-  val zimFile: File?,
-  val assetFileDescriptorList: List<AssetFileDescriptor> = emptyList(),
-  val assetDescriptorFilePath: String? = null,
+  val zimReaderSource: ZimReaderSource,
   val jniKiwixReader: Archive,
   private val darkModeConfig: DarkModeConfig,
   private val searcher: SuggestionSearcher
 ) {
   interface Factory {
-    suspend fun create(file: File): ZimFileReader?
-    suspend fun create(
-      assetFileDescriptorList: List<AssetFileDescriptor>,
-      filePath: String? = null
-    ): ZimFileReader?
+    suspend fun create(zimReaderSource: ZimReaderSource): ZimFileReader?
 
     class Impl @Inject constructor(private val darkModeConfig: DarkModeConfig) :
       Factory {
-      override suspend fun create(file: File): ZimFileReader? =
+      override suspend fun create(zimReaderSource: ZimReaderSource): ZimFileReader? =
         withContext(Dispatchers.IO) { // Bug Fix #3805
           try {
-            val archive = Archive(file.canonicalPath)
-            ZimFileReader(
-              file,
-              darkModeConfig = darkModeConfig,
-              jniKiwixReader = archive,
-              searcher = SuggestionSearcher(archive)
-            ).also {
-              Log.e(TAG, "create: ${file.path}")
+            zimReaderSource.createArchive()?.let {
+              ZimFileReader(
+                zimReaderSource,
+                darkModeConfig = darkModeConfig,
+                jniKiwixReader = it,
+                searcher = SuggestionSearcher(it)
+              ).also {
+                Log.e(TAG, "create: ${zimReaderSource.toDatabase()}")
+              }
+            } ?: kotlin.run {
+              Log.e(
+                TAG,
+                "Error in creating ZimFileReader," +
+                  " because file does not exist on path: ${zimReaderSource.toDatabase()}"
+              )
+              null
             }
           } catch (ignore: JNIKiwixException) {
             null
@@ -92,45 +93,6 @@ class ZimFileReader constructor(
             null
           }
         }
-
-      override suspend fun create(
-        assetFileDescriptorList: List<AssetFileDescriptor>,
-        filePath: String?
-      ): ZimFileReader? = withContext(Dispatchers.IO) { // Bug Fix #3805
-        try {
-          val fdInputArray = getFdInputArrayFromAssetFileDescriptorList(assetFileDescriptorList)
-          val archive = if (fdInputArray.size == 1) {
-            Archive(fdInputArray[0])
-          } else {
-            Archive(fdInputArray)
-          }
-          ZimFileReader(
-            null,
-            assetFileDescriptorList,
-            assetDescriptorFilePath = filePath,
-            darkModeConfig = darkModeConfig,
-            jniKiwixReader = archive,
-            searcher = SuggestionSearcher(archive)
-          ).also {
-            Log.e(TAG, "create: with fileDescriptor")
-          }
-        } catch (ignore: JNIKiwixException) {
-          null
-        } catch (ignore: Exception) { // for handing the error, if any zim file is corrupted
-          null
-        }
-      }
-
-      private fun getFdInputArrayFromAssetFileDescriptorList(
-        assetFileDescriptorList: List<AssetFileDescriptor>
-      ): Array<FdInput> =
-        assetFileDescriptorList.map {
-          FdInput(
-            it.parcelFileDescriptor.fileDescriptor,
-            it.startOffset,
-            it.length
-          )
-        }.toTypedArray()
     }
   }
 

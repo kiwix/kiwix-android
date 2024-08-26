@@ -23,6 +23,8 @@ import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import io.objectbox.converter.PropertyConverter
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import java.io.File
 
@@ -31,6 +33,8 @@ data class BookOnDiskEntity(
   @Id var id: Long = 0,
   @Convert(converter = StringToFileConverter::class, dbType = String::class)
   val file: File = File(""),
+  @Convert(converter = ZimSourceConverter::class, dbType = String::class)
+  var zimReaderSource: ZimReaderSource,
   val bookId: String,
   val title: String,
   val description: String?,
@@ -49,6 +53,7 @@ data class BookOnDiskEntity(
   constructor(bookOnDisk: BookOnDisk) : this(
     0,
     bookOnDisk.file,
+    bookOnDisk.zimReaderSource,
     bookOnDisk.book.id,
     bookOnDisk.book.title,
     bookOnDisk.book.description,
@@ -83,8 +88,15 @@ data class BookOnDiskEntity(
   }
 }
 
+class ZimSourceConverter : PropertyConverter<ZimReaderSource, String> {
+  override fun convertToDatabaseValue(entityProperty: ZimReaderSource?): String =
+    entityProperty?.toDatabase() ?: ""
+
+  override fun convertToEntityProperty(databaseValue: String?): ZimReaderSource =
+    fromDatabaseValue(databaseValue) ?: ZimReaderSource(File(""))
+}
+
 class StringToFileConverter : PropertyConverter<File, String> {
   override fun convertToDatabaseValue(entityProperty: File?) = entityProperty?.path ?: ""
-
   override fun convertToEntityProperty(databaseValue: String?) = File(databaseValue ?: "")
 }

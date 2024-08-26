@@ -57,6 +57,7 @@ import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
@@ -372,12 +373,20 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     )
   }
 
-  fun openPage(pageUrl: String, zimFilePath: String = "", shouldOpenInNewTab: Boolean = false) {
+  fun openPage(
+    pageUrl: String,
+    zimReaderSource: ZimReaderSource? = null,
+    shouldOpenInNewTab: Boolean = false
+  ) {
+    var zimFileUri = ""
+    if (zimReaderSource != null) {
+      zimFileUri = zimReaderSource.toDatabase()
+    }
     navigate(
       readerFragmentResId,
       bundleOf(
         PAGE_URL_KEY to pageUrl,
-        ZIM_FILE_URI_KEY to zimFilePath,
+        ZIM_FILE_URI_KEY to zimFileUri,
         SHOULD_OPEN_IN_NEW_TAB to shouldOpenInNewTab
       )
     )

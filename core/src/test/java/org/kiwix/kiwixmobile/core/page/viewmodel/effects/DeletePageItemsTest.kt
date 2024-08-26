@@ -28,12 +28,14 @@ import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.page.historyItem
 import org.kiwix.kiwixmobile.core.page.historyState
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 internal class DeletePageItemsTest {
   private val pageDao: PageDao = mockk(relaxed = true)
   val activity: AppCompatActivity = mockk()
-  private val item1 = historyItem()
-  private val item2 = historyItem()
+  private val zimReaderSource: ZimReaderSource = mockk()
+  private val item1 = historyItem(zimReaderSource = zimReaderSource)
+  private val item2 = historyItem(zimReaderSource = zimReaderSource)
   private val viewModelScope = CoroutineScope(Dispatchers.Main)
 
   @Test

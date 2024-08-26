@@ -34,6 +34,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
+import org.kiwix.kiwixmobile.core.dao.entities.ZimSourceRoomConverter
 
 @Suppress("UnnecessaryAbstractClass")
 @Database(
@@ -43,10 +44,10 @@ import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
     NotesRoomEntity::class,
     DownloadRoomEntity::class
   ],
-  version = 4,
+  version = 5,
   exportSchema = false
 )
-@TypeConverters(HistoryRoomDaoCoverts::class)
+@TypeConverters(HistoryRoomDaoCoverts::class, ZimSourceRoomConverter::class)
 abstract class KiwixRoomDatabase : RoomDatabase() {
   abstract fun recentSearchRoomDao(): RecentSearchRoomDao
   abstract fun historyRoomDao(): HistoryRoomDao
@@ -61,8 +62,8 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
           ?: Room.databaseBuilder(context, KiwixRoomDatabase::class.java, "KiwixRoom.db")
             // We have already database name called kiwix.db in order to avoid complexity we named
             // as kiwixRoom.db
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
-            .build()
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+            .build().also { db = it }
       }
     }
 
@@ -144,6 +145,60 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
             )
             """
         )
+      }
+    }
+
+    @Suppress("MagicNumber")
+    private val MIGRATION_4_5 = object : Migration(4, 5) {
+      override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("ALTER TABLE HistoryRoomEntity ADD COLUMN zimReaderSource TEXT")
+        database.execSQL(
+          """
+            CREATE TABLE IF NOT EXISTS HistoryRoomEntity_temp (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                zimId TEXT NOT NULL,
+                zimName TEXT NOT NULL,
+                zimFilePath TEXT,
+                favicon TEXT,
+                historyUrl TEXT NOT NULL,
+                historyTitle TEXT NOT NULL,
+                dateString TEXT NOT NULL,
+                timeStamp INTEGER NOT NULL,
+                zimReaderSource TEXT
+            )
+        """
+        )
+        database.execSQL(
+          """
+            INSERT INTO HistoryRoomEntity_temp (
+            id,
+            zimId,
+            zimName,
+            zimFilePath, 
+            favicon, 
+            historyUrl,
+            historyTitle, 
+            dateString, 
+            timeStamp,
+            zimReaderSource
+            )
+            SELECT 
+            id,
+            zimId,
+            zimName,
+            zimFilePath,
+            favicon,
+            historyUrl,
+            historyTitle,
+            dateString,
+            timeStamp,
+            zimReaderSource
+            FROM HistoryRoomEntity
+        """
+        )
+        database.execSQL("DROP TABLE HistoryRoomEntity")
+        database.execSQL("ALTER TABLE HistoryRoomEntity_temp RENAME TO HistoryRoomEntity")
+        database.execSQL("ALTER TABLE NotesRoomEntity ADD COLUMN zimReaderSource TEXT")
       }
     }
 

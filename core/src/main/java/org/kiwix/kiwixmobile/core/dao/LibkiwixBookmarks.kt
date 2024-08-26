@@ -40,6 +40,7 @@ import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ILLUSTRATION_SIZE
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.libkiwix.Book
@@ -270,11 +271,12 @@ class LibkiwixBookmarks @Inject constructor(
         Base64.encodeToString(it, Base64.DEFAULT)
       }
 
+      val zimReaderSource = book?.path?.let { ZimReaderSource(File(it)) }
       // Return the LibkiwixBookmarkItem, filtering out null results.
       return@mapNotNull LibkiwixBookmarkItem(
         bookmark,
         favicon,
-        book?.path
+        zimReaderSource
       ).also {
         // set the bookmark change to false to avoid reloading the data from libkiwix
         bookmarksChanged = false
@@ -289,7 +291,7 @@ class LibkiwixBookmarks @Inject constructor(
 
   @Suppress("NestedBlockDepth")
   private fun deleteDuplicateBookmarks() {
-    bookmarkList.groupBy { it.bookmarkUrl to it.zimFilePath }
+    bookmarkList.groupBy { it.bookmarkUrl to it.zimReaderSource }
       .filter { it.value.size > 1 }
       .forEach { (_, value) ->
         value.drop(1).forEach { bookmarkItem ->
@@ -297,30 +299,13 @@ class LibkiwixBookmarks @Inject constructor(
         }
       }
     // Fixes #3890
-    bookmarkList.groupBy { it.title to it.zimFilePath }
+    bookmarkList.groupBy { it.title to it.zimReaderSource }
       .filter { it.value.size > 1 }
       .forEach { (_, value) ->
         value.forEach { bookmarkItem ->
           // This is a special case where two urls have the same title in a zim file.
           val coreApp = sharedPreferenceUtil.context as CoreApp
-          val zimFileReader = if (coreApp.getMainActivity().isCustomApp()) {
-            // in custom apps we are using the assetFileDescriptor so we do not have the filePath
-            // and in custom apps there is only a single zim file so we are directly
-            // getting the zimFileReader object.
-            zimReaderContainer?.zimFileReader
-          } else {
-            bookmarkItem.zimFilePath?.let {
-              val archive = Archive(it)
-              ZimFileReader(
-                File(it),
-                emptyList(),
-                null,
-                archive,
-                DarkModeConfig(sharedPreferenceUtil, sharedPreferenceUtil.context),
-                SuggestionSearcher(archive)
-              )
-            }
-          }
+          val zimFileReader = getZimFileReaderFromBookmark(bookmarkItem, coreApp)
           // get the redirect entry so that we can delete the other bookmark.
           zimFileReader?.getPageUrlFrom(bookmarkItem.title)?.let {
             // check if the bookmark url is not equals to redirect entry,
@@ -334,11 +319,34 @@ class LibkiwixBookmarks @Inject constructor(
       }
   }
 
+  private fun getZimFileReaderFromBookmark(
+    bookmarkItem: LibkiwixBookmarkItem,
+    coreApp: CoreApp
+  ): ZimFileReader? {
+    return if (coreApp.getMainActivity().isCustomApp()) {
+      // in custom apps we are using the assetFileDescriptor so we do not have the filePath
+      // and in custom apps there is only a single zim file so we are directly
+      // getting the zimFileReader object.
+      zimReaderContainer?.zimFileReader
+    } else {
+      bookmarkItem.zimReaderSource?.let {
+        it.createArchive()?.let { archive ->
+          ZimFileReader(
+            it,
+            archive,
+            DarkModeConfig(sharedPreferenceUtil, sharedPreferenceUtil.context),
+            SuggestionSearcher(archive)
+          )
+        }
+      }
+    }
+  }
+
   private fun isBookMarkExist(libkiwixBookmarkItem: LibkiwixBookmarkItem): Boolean =
     getBookmarksList()
       .any {
         it.url == libkiwixBookmarkItem.bookmarkUrl &&
-          it.zimFilePath == libkiwixBookmarkItem.zimFilePath
+          it.zimReaderSource == libkiwixBookmarkItem.zimReaderSource
       }
 
   private fun flowableBookmarkList(
@@ -409,7 +417,7 @@ class LibkiwixBookmarks @Inject constructor(
     }
     // Add the ZIM files to the library for validating the bookmarks.
     bookDao.getBooks().forEach {
-      addBookToLibrary(file = it.file)
+      addBookToLibrary(file = it.zimReaderSource.file)
     }
     // Save the imported bookmarks to the current library.
     tempLibrary.getBookmarks(false)?.toList()?.forEach {

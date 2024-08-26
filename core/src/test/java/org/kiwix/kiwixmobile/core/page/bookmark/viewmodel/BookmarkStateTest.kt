@@ -18,18 +18,33 @@
 
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
+import io.mockk.every
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.page.bookmark
 import org.kiwix.kiwixmobile.core.page.bookmarkState
+import org.kiwix.kiwixmobile.core.page.libkiwixBookmarkItem
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import java.util.UUID
 
 internal class BookmarkStateTest {
   @Test
   internal fun `copyNewItems should set new items to pageItems`() {
+    val zimReaderSource: ZimReaderSource = mockk()
     val databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
-    assertThat(bookmarkState(emptyList()).copy(listOf(bookmark(databaseId))).pageItems).isEqualTo(
-      listOf(bookmark(databaseId))
+    every { zimReaderSource.toDatabase() } returns ""
+    assertThat(
+      bookmarkState(emptyList()).copy(
+        listOf(
+          libkiwixBookmarkItem(
+            databaseId,
+            zimReaderSource = zimReaderSource
+          )
+        )
+      ).pageItems
+    ).isEqualTo(
+      listOf(libkiwixBookmarkItem(databaseId, zimReaderSource = zimReaderSource))
     )
   }
 }

@@ -17,12 +17,9 @@
  */
 package org.kiwix.kiwixmobile.core.reader
 
-import android.content.res.AssetFileDescriptor
 import android.webkit.WebResourceResponse
 import kotlinx.coroutines.runBlocking
-import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
-import java.io.File
 import java.net.HttpURLConnection
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -35,25 +32,13 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
       field = value
     }
 
-  fun setZimFile(file: File?) {
-    if (file?.canonicalPath == zimFileReader?.zimFile?.canonicalPath) {
+  fun setZimReaderSource(zimReaderSource: ZimReaderSource?) {
+    if (zimReaderSource == zimFileReader?.zimReaderSource) {
       return
     }
     zimFileReader = runBlocking {
-      if (file?.isFileExist() == true) zimFileReaderFactory.create(file)
-      else null
-    }
-  }
-
-  fun setZimFileDescriptor(
-    assetFileDescriptorList: List<AssetFileDescriptor>,
-    filePath: String? = null
-  ) {
-    zimFileReader = runBlocking {
-      if (assetFileDescriptorList.isNotEmpty() &&
-        assetFileDescriptorList[0].parcelFileDescriptor.fileDescriptor.valid()
-      )
-        zimFileReaderFactory.create(assetFileDescriptorList, filePath)
+      if (zimReaderSource?.exists() == true && zimReaderSource.canOpenInLibkiwix())
+        zimFileReaderFactory.create(zimReaderSource)
       else null
     }
   }
@@ -87,13 +72,7 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
       }
   }
 
-  val zimFile get() = zimFileReader?.zimFile
-
-  /**
-   * Return the zimFile path if opened from file else return the filePath of assetFileDescriptor
-   */
-  val zimCanonicalPath
-    get() = zimFileReader?.zimFile?.canonicalPath ?: zimFileReader?.assetDescriptorFilePath
+  val zimReaderSource get() = zimFileReader?.zimReaderSource
   val zimFileTitle get() = zimFileReader?.title
   val mainPage get() = zimFileReader?.mainPage
   val id get() = zimFileReader?.id

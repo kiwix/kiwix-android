@@ -21,12 +21,13 @@ package org.kiwix.kiwixmobile.core.page.bookmark.adapter
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 data class BookmarkItem(
   val databaseId: Long = 0L,
   override val zimId: String,
   val zimName: String,
-  override val zimFilePath: String?,
+  override val zimReaderSource: ZimReaderSource?,
   val bookmarkUrl: String,
   override val title: String,
   override val favicon: String?,
@@ -38,7 +39,7 @@ data class BookmarkItem(
     entity.id,
     entity.zimId,
     entity.zimName,
-    entity.zimFilePath,
+    entity.zimReaderSource,
     entity.bookmarkUrl,
     entity.bookmarkTitle,
     entity.favicon
@@ -51,7 +52,7 @@ data class BookmarkItem(
   ) : this(
     zimId = zimFileReader.id,
     zimName = zimFileReader.name,
-    zimFilePath = zimFileReader.zimFile?.canonicalPath ?: zimFileReader.assetDescriptorFilePath,
+    zimReaderSource = zimFileReader.zimReaderSource,
     bookmarkUrl = url,
     title = title,
     favicon = zimFileReader.favicon

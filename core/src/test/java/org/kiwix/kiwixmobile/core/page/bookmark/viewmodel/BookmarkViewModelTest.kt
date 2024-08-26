@@ -33,14 +33,15 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.page.adapter.Page
-import org.kiwix.kiwixmobile.core.page.bookmark
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.UpdateAllBookmarksPreference
 import org.kiwix.kiwixmobile.core.page.bookmarkState
+import org.kiwix.kiwixmobile.core.page.libkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.setScheduler
@@ -90,14 +91,16 @@ internal class BookmarkViewModelTest {
 
   @Test
   fun `updatePages return state with bookmark items`() {
+    val zimReaderSource: ZimReaderSource = mockk()
     val databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
+    every { zimReaderSource.toDatabase() } returns ""
     assertThat(
       viewModel.updatePages(
         bookmarkState(),
-        UpdatePages(listOf(bookmark(databaseId)))
+        UpdatePages(listOf(libkiwixBookmarkItem(databaseId, zimReaderSource = zimReaderSource)))
       )
     ).isEqualTo(
-      bookmarkState(listOf(bookmark(databaseId)))
+      bookmarkState(listOf(libkiwixBookmarkItem(databaseId, zimReaderSource = zimReaderSource)))
     )
   }
 
@@ -122,30 +125,46 @@ internal class BookmarkViewModelTest {
 
   @Test
   internal fun `updatePages returns state with updated items`() {
+    val zimReaderSource: ZimReaderSource = mockk()
     val databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
+    every { zimReaderSource.toDatabase() } returns ""
     assertThat(
-      viewModel.updatePages(bookmarkState(), UpdatePages(listOf(bookmark(databaseId))))
+      viewModel.updatePages(
+        bookmarkState(),
+        UpdatePages(listOf(libkiwixBookmarkItem(databaseId, zimReaderSource = zimReaderSource)))
+      )
     ).isEqualTo(
-      bookmarkState(listOf(bookmark(databaseId)))
+      bookmarkState(listOf(libkiwixBookmarkItem(databaseId, zimReaderSource = zimReaderSource)))
     )
   }
 
   @Test
   internal fun `deselectAllPages deselects bookmarks items`() {
+    val zimReaderSource: ZimReaderSource = mockk()
     val databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
+    every { zimReaderSource.toDatabase() } returns ""
     assertThat(
       viewModel.deselectAllPages(
         bookmarkState(
           bookmarks = listOf(
-            bookmark(
+            libkiwixBookmarkItem(
               isSelected = true,
-              databaseId = databaseId
+              databaseId = databaseId,
+              zimReaderSource = zimReaderSource
             )
           )
         )
       )
     ).isEqualTo(
-      bookmarkState(bookmarks = listOf(bookmark(isSelected = false, databaseId = databaseId)))
+      bookmarkState(
+        bookmarks = listOf(
+          libkiwixBookmarkItem(
+            isSelected = false,
+            databaseId = databaseId,
+            zimReaderSource = zimReaderSource
+          )
+        )
+      )
     )
   }
 
@@ -165,11 +184,16 @@ internal class BookmarkViewModelTest {
 
   @Test
   internal fun `copyWithNewItems returns state with copied items`() {
+    val zimReaderSource: ZimReaderSource = mockk()
     val databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
+    every { zimReaderSource.toDatabase() } returns ""
     assertThat(
-      viewModel.copyWithNewItems(bookmarkState(), listOf(bookmark(databaseId)))
+      viewModel.copyWithNewItems(
+        bookmarkState(),
+        listOf(libkiwixBookmarkItem(databaseId, zimReaderSource = zimReaderSource))
+      )
     ).isEqualTo(
-      bookmarkState(listOf(bookmark(databaseId)))
+      bookmarkState(listOf(libkiwixBookmarkItem(databaseId, zimReaderSource = zimReaderSource)))
     )
   }
 }

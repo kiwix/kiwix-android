@@ -18,18 +18,21 @@
 
 package org.kiwix.kiwixmobile.core.page.history.viewmodel
 
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.page.historyItem
 import org.kiwix.kiwixmobile.core.page.historyState
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 internal class HistoryStateTest {
 
   @Test
   internal fun `visiblePageItems returns history based on filter`() {
-    val matchingItem = historyItem(historyTitle = "Title")
-    val nonMatchingItem = historyItem(historyTitle = "noMatch")
+    val zimReaderSource: ZimReaderSource = mockk()
+    val matchingItem = historyItem(historyTitle = "Title", zimReaderSource = zimReaderSource)
+    val nonMatchingItem = historyItem(historyTitle = "noMatch", zimReaderSource = zimReaderSource)
     assertThat(
       historyState(listOf(matchingItem, nonMatchingItem), searchTerm = "title")
         .visiblePageItems
@@ -38,23 +41,30 @@ internal class HistoryStateTest {
 
   @Test
   internal fun `copyNewItems should set new items to pageItems`() {
-    assertThat(historyState(emptyList()).copy(listOf(historyItem())).pageItems).isEqualTo(
-      listOf(historyItem())
+    val zimReaderSource: ZimReaderSource = mockk()
+    assertThat(
+      historyState(emptyList()).copy(
+        listOf(historyItem(zimReaderSource = zimReaderSource))
+      ).pageItems
+    ).isEqualTo(
+      listOf(historyItem(zimReaderSource = zimReaderSource))
     )
   }
 
   @Test
   internal fun `visiblePageItems should merge dates if on same day`() {
-    val item1 = historyItem()
-    val item2 = historyItem()
+    val zimReaderSource: ZimReaderSource = mockk()
+    val item1 = historyItem(zimReaderSource = zimReaderSource)
+    val item2 = historyItem(zimReaderSource = zimReaderSource)
     assertThat(historyState(listOf(item1, item2)).visiblePageItems)
       .isEqualTo(listOf(DateItem(item1.dateString), item1, item2))
   }
 
   @Test
   internal fun `visiblePageItems should not merge dates if on different days`() {
-    val item1 = historyItem(dateString = "today")
-    val item2 = historyItem(dateString = "tomorrow")
+    val zimReaderSource: ZimReaderSource = mockk()
+    val item1 = historyItem(dateString = "today", zimReaderSource = zimReaderSource)
+    val item2 = historyItem(dateString = "tomorrow", zimReaderSource = zimReaderSource)
     assertThat(historyState(listOf(item1, item2)).visiblePageItems)
       .isEqualTo(listOf(DateItem(item1.dateString), item1, DateItem(item2.dateString), item2))
   }

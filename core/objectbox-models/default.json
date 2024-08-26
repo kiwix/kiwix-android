@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "3:5536749840871435068",
-      "lastPropertyId": "17:2701677664876214591",
+      "lastPropertyId": "19:8429535071703004578",
       "name": "BookOnDiskEntity",
       "properties": [
         {
@@ -13,11 +13,6 @@
           "name": "id",
           "type": 6,
           "flags": 1
-        },
-        {
-          "id": "2:2644395282642821815",
-          "name": "file",
-          "type": 9
         },
         {
           "id": "4:3145196313443812205",
@@ -88,6 +83,16 @@
           "id": "17:2701677664876214591",
           "name": "tags",
           "type": 9
+        },
+        {
+          "id": "18:1711250046418389186",
+          "name": "zimReaderSource",
+          "type": 9
+        },
+        {
+          "id": "19:8429535071703004578",
+          "name": "file",
+          "type": 9
         }
       ],
       "relations": []
@@ -123,7 +128,7 @@
     },
     {
       "id": "5:3222423958972105425",
-      "lastPropertyId": "10:8395372122440621469",
+      "lastPropertyId": "11:6493253695033019145",
       "name": "HistoryEntity",
       "properties": [
         {
@@ -171,13 +176,18 @@
           "id": "10:8395372122440621469",
           "name": "dateString",
           "type": 9
+        },
+        {
+          "id": "11:6493253695033019145",
+          "name": "zimReaderSource",
+          "type": 9
         }
       ],
       "relations": []
     },
     {
       "id": "6:2737311997994502758",
-      "lastPropertyId": "7:3805929017981932900",
+      "lastPropertyId": "8:7455000637355817969",
       "name": "BookmarkEntity",
       "properties": [
         {
@@ -215,6 +225,11 @@
           "id": "7:3805929017981932900",
           "name": "favicon",
           "type": 9
+        },
+        {
+          "id": "8:7455000637355817969",
+          "name": "zimReaderSource",
+          "type": 9
         }
       ],
       "relations": []
@@ -250,7 +265,7 @@
     },
     {
       "id": "10:3205842982118792800",
-      "lastPropertyId": "9:5286545520416917562",
+      "lastPropertyId": "10:8943937679373521794",
       "name": "NotesEntity",
       "properties": [
         {
@@ -287,6 +302,11 @@
         {
           "id": "9:5286545520416917562",
           "name": "zimUrl",
+          "type": 9
+        },
+        {
+          "id": "10:8943937679373521794",
+          "name": "zimReaderSource",
           "type": 9
         }
       ],
@@ -378,7 +398,8 @@
     5555873126720275555,
     2724607601244650879,
     5485468735259326535,
-    4272820830206771469
+    4272820830206771469,
+    2644395282642821815
   ],
   "retiredRelationUids": [],
   "version": 1

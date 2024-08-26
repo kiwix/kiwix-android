@@ -19,8 +19,8 @@ package org.kiwix.sharedFunctions
 
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.Error
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
@@ -33,6 +33,7 @@ import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.FileElement
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.Pieces
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity.Url
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import java.io.File
@@ -41,8 +42,8 @@ import java.util.LinkedList
 fun bookOnDisk(
   databaseId: Long = 0L,
   book: Book = book(),
-  file: File = File("")
-) = BookOnDisk(databaseId, book, file)
+  zimReaderSource: ZimReaderSource = ZimReaderSource(File(""))
+) = BookOnDisk(databaseId, book, File(""), zimReaderSource)
 
 fun downloadModel(
   databaseId: Long = 1L,
@@ -174,7 +175,7 @@ fun recentSearchEntity(
 
 fun bookOnDiskEntity(
   id: Long = 0,
-  file: File = File(""),
+  zimReaderSource: ZimReaderSource = ZimReaderSource(File("")),
   bookId: String = "",
   title: String = "",
   description: String = "",
@@ -192,7 +193,8 @@ fun bookOnDiskEntity(
 ) =
   BookOnDiskEntity(
     id,
-    file,
+    File(""),
+    zimReaderSource,
     bookId,
     title,
     description,

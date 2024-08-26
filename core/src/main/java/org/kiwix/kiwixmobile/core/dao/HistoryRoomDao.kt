@@ -28,6 +28,7 @@ import io.reactivex.Flowable
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 @Dao
 abstract class HistoryRoomDao : PageDao {
@@ -35,7 +36,15 @@ abstract class HistoryRoomDao : PageDao {
   abstract fun historyRoomEntity(): Flowable<List<HistoryRoomEntity>>
 
   fun history(): Flowable<List<Page>> = historyRoomEntity().map {
-    it.map(HistoryListItem::HistoryItem)
+    it.map { historyEntity ->
+      historyEntity.zimFilePath?.let { filePath ->
+        // set zimReaderSource for previously saved history items
+        ZimReaderSource.fromDatabaseValue(filePath)?.let { zimReaderSource ->
+          historyEntity.zimReaderSource = zimReaderSource
+        }
+      }
+      HistoryListItem.HistoryItem(historyEntity)
+    }
   }
 
   override fun pages() = history()

@@ -38,6 +38,8 @@ import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class KiwixRoomDatabaseTest {
@@ -112,7 +114,7 @@ class KiwixRoomDatabaseTest {
       assertThat(zimId, equalTo(historyItem.zimId))
       assertThat(zimName, equalTo(historyItem.zimName))
       assertThat(historyUrl, equalTo(historyItem.historyUrl))
-      assertThat(zimFilePath, equalTo(historyItem.zimFilePath))
+      assertThat(zimReaderSource, equalTo(historyItem.zimReaderSource))
       assertThat(favicon, equalTo(historyItem.favicon))
       assertThat(dateString, equalTo(historyItem.dateString))
       assertThat(timeStamp, equalTo(historyItem.timeStamp))
@@ -152,7 +154,7 @@ class KiwixRoomDatabaseTest {
       assertThat(zimId, equalTo(noteItem.zimId))
       assertThat(zimUrl, equalTo(noteItem.zimUrl))
       assertThat(title, equalTo(noteItem.title))
-      assertThat(zimFilePath, equalTo(noteItem.zimFilePath))
+      assertThat(zimReaderSource, equalTo(noteItem.zimReaderSource))
       assertThat(noteFilePath, equalTo(noteItem.noteFilePath))
       assertThat(favicon, equalTo(noteItem.favicon))
     }
@@ -186,7 +188,9 @@ class KiwixRoomDatabaseTest {
       databaseId: Long = 0L,
       zimId: String = "1f88ab6f-c265-b-3ff-8f49-b7f4429503800",
       zimName: String = "alpinelinux_en_all",
-      zimFilePath: String = "/storage/emulated/0/Download/alpinelinux_en_all_maxi_2023-01.zim",
+      zimReaderSource: ZimReaderSource = ZimReaderSource(
+        File("/storage/emulated/0/Download/alpinelinux_en_all_maxi_2023-01.zim")
+      ),
       timeStamp: Long = System.currentTimeMillis()
     ): HistoryListItem.HistoryItem =
       HistoryListItem.HistoryItem(
@@ -195,7 +199,7 @@ class KiwixRoomDatabaseTest {
         zimName = zimName,
         historyUrl = historyUrl,
         title = title,
-        zimFilePath = zimFilePath,
+        zimReaderSource = zimReaderSource,
         favicon = null,
         dateString = dateString,
         timeStamp = timeStamp
@@ -205,14 +209,16 @@ class KiwixRoomDatabaseTest {
       databaseId: Long = 0L,
       zimId: String = "1f88ab6f-c265-b-3ff-8f49-b7f4429503800",
       title: String = "Alpine Wiki",
-      zimFilePath: String = "/storage/emulated/0/Download/alpinelinux_en_all_maxi_2023-01.zim",
+      zimReaderSource: ZimReaderSource = ZimReaderSource(
+        File("/storage/emulated/0/Download/alpinelinux_en_all_maxi_2023-01.zim")
+      ),
       zimUrl: String,
       noteFilePath: String = "/storage/emulated/0/Download/Notes/Alpine linux/AlpineNote.txt"
     ): NoteListItem = NoteListItem(
       databaseId = databaseId,
       zimId = zimId,
       title = title,
-      zimFilePath = zimFilePath,
+      zimReaderSource = zimReaderSource,
       zimUrl = zimUrl,
       noteFilePath = noteFilePath,
       null,

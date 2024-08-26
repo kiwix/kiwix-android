@@ -201,7 +201,7 @@ class ObjectBoxToRoomMigratorTest {
       assertThat(zimId, equalTo(historyItem.zimId))
       assertThat(zimName, equalTo(historyItem.zimName))
       assertThat(historyUrl, equalTo(historyItem.historyUrl))
-      assertThat(zimFilePath, equalTo(historyItem.zimFilePath))
+      assertThat(zimReaderSource, equalTo(historyItem.zimReaderSource))
       assertThat(favicon, equalTo(historyItem.favicon))
       assertThat(dateString, equalTo(historyItem.dateString))
       assertThat(timeStamp, equalTo(historyItem.timeStamp))
@@ -325,7 +325,7 @@ class ObjectBoxToRoomMigratorTest {
       assertThat(zimId, equalTo(noteItem.zimId))
       assertThat(zimUrl, equalTo(noteItem.zimUrl))
       assertThat(title, equalTo(noteItem.title))
-      assertThat(zimFilePath, equalTo(noteItem.zimFilePath))
+      assertThat(zimReaderSource, equalTo(noteItem.zimReaderSource))
       assertThat(noteFilePath, equalTo(noteItem.noteFilePath))
       assertThat(favicon, equalTo(noteItem.favicon))
     }

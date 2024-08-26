@@ -56,10 +56,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.cachedComponent
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isManageExternalStoragePermissionGranted
@@ -75,6 +77,7 @@ import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
@@ -404,10 +407,10 @@ class LocalLibraryFragment : BaseFragment() {
       // local library screen. Since our application is already aware of this opened ZIM file,
       // we can directly add it to the database.
       // See https://github.com/kiwix/kiwix-android/issues/3650
-      runBlocking {
-        zimReaderFactory.create(file)
+      CoroutineScope(Dispatchers.IO).launch {
+        zimReaderFactory.create(ZimReaderSource(file))
           ?.let { zimFileReader ->
-            BookOnDisk(file, zimFileReader).also {
+            BookOnDisk(zimFileReader).also {
               mainRepositoryActions.saveBook(it)
               zimFileReader.dispose()
             }

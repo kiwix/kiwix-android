@@ -166,7 +166,7 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
         LibkiwixBookmarkItem(
           bookmark,
           coreReaderFragment.zimReaderContainer?.zimFileReader?.favicon,
-          coreReaderFragment.zimReaderContainer?.zimFileReader?.zimFile?.canonicalPath
+          coreReaderFragment.zimReaderContainer?.zimFileReader?.zimReaderSource
         )
       coreReaderFragment.libkiwixBookmarks?.saveBookmark(libkiwixItem).also {
         bookmarkList.add(libkiwixItem)

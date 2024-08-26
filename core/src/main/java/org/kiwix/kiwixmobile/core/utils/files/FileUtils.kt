@@ -22,6 +22,7 @@ import android.app.Activity
 import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
+import android.content.res.AssetFileDescriptor
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -44,6 +45,8 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import java.io.BufferedReader
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException
 import java.io.IOException
 
 object FileUtils {
@@ -476,4 +479,48 @@ object FileUtils {
   @JvmStatic
   fun getDemoFilePathForCustomApp(context: Context) =
     "${ContextCompat.getExternalFilesDirs(context, null)[0]}/demo.zim"
+
+  @SuppressLint("Recycle")
+  @JvmStatic
+  fun getAssetFileDescriptorFromUri(
+    context: Context,
+    uri: Uri
+  ): List<AssetFileDescriptor>? {
+    return try {
+      val assetFileDescriptor = context.contentResolver.openAssetFileDescriptor(uri, "r")
+      // Verify whether libkiwix can successfully open this file descriptor or not.
+      return if (
+        isFileDescriptorCanOpenWithLibkiwix(assetFileDescriptor?.parcelFileDescriptor?.fd)
+      ) {
+        assetFileDescriptor?.let(::listOf)
+      } else {
+        null
+      }
+    } catch (ignore: FileNotFoundException) {
+      null
+    } catch (ignore: Exception) {
+      // It may throw a SecurityException in the Play Store variant
+      // since we have limited access to storage and URIs in the Play Store variant.
+      // If the user opens the ZIM file via app linking and closes the application,
+      // the next time they try to open that ZIM file, we won't have access to this URI.
+      null
+    }
+  }
+
+  @JvmStatic
+  fun isFileDescriptorCanOpenWithLibkiwix(fdNumber: Int?): Boolean {
+    return try {
+      // Attempt to create a FileInputStream object using the specified path.
+      // Since libkiwix utilizes this path to create the archive object internally,
+      // it is crucial to verify if we can successfully read the file descriptor (fd)
+      // via the given file path before passing it to libkiwix.
+      // This precaution helps prevent runtime crashes.
+      // For more details, refer to https://github.com/kiwix/kiwix-android/pull/3636.
+      FileInputStream("dev/fd/$fdNumber")
+      true
+    } catch (ignore: Exception) {
+      ignore.printStackTrace()
+      false
+    }
+  }
 }

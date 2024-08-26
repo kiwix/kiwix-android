@@ -22,6 +22,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag
 import java.io.File
 import java.util.Locale
@@ -43,7 +44,8 @@ sealed class BooksOnDiskListItem {
   data class BookOnDisk constructor(
     val databaseId: Long = 0L,
     val book: Book,
-    val file: File,
+    val file: File = File(""),
+    val zimReaderSource: ZimReaderSource,
     val tags: List<KiwixTag> = KiwixTag.from(book.tags),
     override val id: Long = databaseId
   ) : BooksOnDiskListItem() {
@@ -53,19 +55,20 @@ sealed class BooksOnDiskListItem {
     }
 
     constructor(bookOnDiskEntity: BookOnDiskEntity) : this(
-      bookOnDiskEntity.id,
-      bookOnDiskEntity.toBook(),
-      bookOnDiskEntity.file
+      databaseId = bookOnDiskEntity.id,
+      file = bookOnDiskEntity.file,
+      book = bookOnDiskEntity.toBook(),
+      zimReaderSource = bookOnDiskEntity.zimReaderSource
     )
 
     constructor(downloadRoomEntity: DownloadRoomEntity) : this(
       book = downloadRoomEntity.toBook(),
-      file = File(downloadRoomEntity.file)
+      zimReaderSource = ZimReaderSource(File(downloadRoomEntity.file))
     )
 
-    constructor(file: File, zimFileReader: ZimFileReader) : this(
+    constructor(zimFileReader: ZimFileReader) : this(
       book = zimFileReader.toBook(),
-      file = file
+      zimReaderSource = zimFileReader.zimReaderSource
     )
   }
 }

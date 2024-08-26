@@ -27,6 +27,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity_
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
 import javax.inject.Inject
 
 class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) : PageDao {
@@ -34,7 +35,17 @@ class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) : PageDa
     box.query {
       order(BookmarkEntity_.bookmarkTitle)
     }
-  ).map { it.map(::BookmarkItem) }
+  ).map {
+    it.map { bookmarkEntity ->
+      bookmarkEntity.zimFilePath?.let { filePath ->
+        // set zimReaderSource for previously saved bookmarks
+        fromDatabaseValue(filePath)?.let { zimReaderSource ->
+          bookmarkEntity.zimReaderSource = zimReaderSource
+        }
+      }
+      BookmarkItem(bookmarkEntity)
+    }
+  }
 
   override fun pages(): Flowable<List<Page>> = bookmarks()
   override fun deletePages(pagesToDelete: List<Page>) =

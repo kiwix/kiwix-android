@@ -26,13 +26,25 @@ import io.reactivex.Flowable
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
 
 @Dao
 abstract class NotesRoomDao : PageDao {
   @Query("SELECT * FROM NotesRoomEntity ORDER BY NotesRoomEntity.noteTitle")
   abstract fun notesAsEntity(): Flowable<List<NotesRoomEntity>>
 
-  fun notes(): Flowable<List<Page>> = notesAsEntity().map { it.map(::NoteListItem) }
+  fun notes(): Flowable<List<Page>> = notesAsEntity().map {
+    it.map { notesEntity ->
+      notesEntity.zimFilePath?.let { filePath ->
+        // set zimReaderSource for previously saved notes
+        fromDatabaseValue(filePath)?.let { zimReaderSource ->
+          notesEntity.zimReaderSource = zimReaderSource
+        }
+      }
+      NoteListItem(notesEntity)
+    }
+  }
+
   override fun pages(): Flowable<List<Page>> = notes()
   override fun deletePages(pagesToDelete: List<Page>) =
     deleteNotes(pagesToDelete as List<NoteListItem>)

@@ -19,11 +19,9 @@
 package org.kiwix.kiwixmobile.zimManager.fileselectView.effects
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
-import org.kiwix.kiwixmobile.core.extensions.canReadFile
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader
@@ -32,12 +30,14 @@ data class OpenFileWithNavigation(private val bookOnDisk: BooksOnDiskListItem.Bo
   SideEffect<Unit> {
 
   override fun invokeWith(activity: AppCompatActivity) {
-    val file = bookOnDisk.file
-    if (!file.canReadFile()) {
+    val zimReaderSource = bookOnDisk.zimReaderSource
+    if (!zimReaderSource.canOpenInLibkiwix()) {
       activity.toast(R.string.error_file_not_found)
     } else {
       activity.navigate(
-        actionNavigationLibraryToNavigationReader().apply { zimFileUri = file.toUri().toString() }
+        actionNavigationLibraryToNavigationReader().apply {
+          zimFileUri = zimReaderSource.toDatabase()
+        }
       )
     }
   }
