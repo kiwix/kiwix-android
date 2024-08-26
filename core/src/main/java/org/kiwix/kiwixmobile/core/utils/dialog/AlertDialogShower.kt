@@ -56,18 +56,21 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) :
         dialog.icon?.let(this::setIcon)
 
         dialog.message?.let { setMessage(activity.getString(it, *bodyArguments(dialog))) }
-        setPositiveButton(dialog.positiveMessage) { _, _ ->
+        setPositiveButton(dialog.positiveMessage) { h, _ ->
+          h.dismiss()
           clickListeners.getOrNull(0)
             ?.invoke()
         }
         dialog.negativeMessage?.let {
-          setNegativeButton(it) { _, _ ->
+          setNegativeButton(it) { h, _ ->
+            h.dismiss()
             clickListeners.getOrNull(1)
               ?.invoke()
           }
         }
         dialog.neutralMessage?.let {
-          setNeutralButton(it) { _, _ ->
+          setNeutralButton(it) { h, _ ->
+            h.dismiss()
             clickListeners.getOrNull(2)
               ?.invoke()
           }

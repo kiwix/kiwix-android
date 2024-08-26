@@ -123,6 +123,7 @@
   <string name="download">Download</string>
   <string name="download_notification_channel_name" tools:keep="@string/download_notification_channel_name">Download Notification Channel Name</string>
   <string name="space_available" tools:keep="@string/space_available">Space Available:</string>
+  <string name="move_no_space">Insufficient space to move/copy.</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">No Pictures</string>
   <string name="zim_no_vid">No Videos</string>
@@ -326,6 +327,11 @@
   <string name="zim_files_not_showing">Zim files not showing?</string>
   <string name="zim_files_not_showing_description">Due to Google Play policies on Android 11 and above, this Google Store app can\’t open sideloaded ZIM files. You can either download them through the app or, instead, install the full version of kiwix app from our official website %s</string>
   <string name="understood">Understood</string>
+  <string name="copy" tools:ignore="PrivateResource">Copy</string>
+  <string name="move">Move</string>
+  <string name="copy_move_files_dialog_description">Do you want to copy or move the file?</string>
+  <string name="move_files_permission_dialog_title">Move/Copy files to app public directory?</string>
+  <string name="move_files_permission_dialog_description">Due to Google Play policies on Android 11 and above, our app can no longer directly access files stored elsewhere on your device. To let you view your selected files, we need to move or copy them into a special folder within our application directory. This allows us to access and open the files. Do you agree to this?</string>
   <string name="how_to_update_content">How to update content?</string>
   <string name="update_content_description">To update content (a zim file) you need to download the full latest version of this very same content. You can do that via the download section.</string>
   <string name="all_files_permission_needed">All Files Permission Needed</string>

@@ -373,7 +373,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
   }
 
-  @SuppressLint("InflateParams")
   private fun storeDeviceInPreferences(
     storageDevice: StorageDevice
   ) {

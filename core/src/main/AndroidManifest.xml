@@ -58,13 +58,14 @@
     android:fullBackupContent="@xml/backup_rules"
     android:dataExtractionRules = "@xml/data_extraction_rules"
     android:hardwareAccelerated="true"
+    android:enableOnBackInvokedCallback="true"
     android:largeHeap="true"
     android:requestLegacyExternalStorage="true"
     android:resizeableActivity="true"
     android:supportsRtl="true"
     android:theme="@style/KiwixTheme"
     android:usesCleartextTraffic="true"
-    tools:targetApi="s">
+    tools:targetApi="tiramisu">
 
     <!-- Version < 3.0. DeX Mode and Screen Mirroring support -->
     <meta-data
