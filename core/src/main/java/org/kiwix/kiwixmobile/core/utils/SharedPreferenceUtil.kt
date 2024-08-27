@@ -31,7 +31,6 @@ import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.DarkModeConfig.Mode.Companion.from
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
-import org.kiwix.kiwixmobile.core.utils.dialog.RateAppCounter
 import java.io.File
 import java.util.Locale
 import javax.inject.Inject
