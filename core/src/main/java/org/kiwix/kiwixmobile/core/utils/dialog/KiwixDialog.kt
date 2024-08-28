@@ -260,6 +260,15 @@ sealed class KiwixDialog(
     getView = customGetView
   )
 
+  data class PreparingCopyingFilesDialog(val customGetView: (() -> View)?) : KiwixDialog(
+    R.string.preparing_file_for_copy,
+    null,
+    R.string.empty_string,
+    null,
+    cancelable = false,
+    getView = customGetView
+  )
+
   object NotesDiscardConfirmation : KiwixDialog(
     null,
     R.string.confirmation_alert_dialog_message,

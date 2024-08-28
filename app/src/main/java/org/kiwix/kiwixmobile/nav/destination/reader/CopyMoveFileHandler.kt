@@ -20,12 +20,16 @@ package org.kiwix.kiwixmobile.nav.destination.reader
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Dialog
 import android.net.Uri
 import android.provider.DocumentsContract
+import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.LifecycleCoroutineScope
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -38,6 +42,10 @@ import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.Companion.FOUR_GIGABYTES_IN_KILOBYTES
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.DetectingFileSystem
 import java.io.File
 import javax.inject.Inject
 
@@ -45,16 +53,19 @@ class CopyMoveFileHandler @Inject constructor(
   private val activity: Activity,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val alertDialogShower: AlertDialogShower,
-  private val storageCalculator: StorageCalculator
+  private val storageCalculator: StorageCalculator,
+  private val fat32Checker: Fat32Checker
 ) {
   var fileCopyMoveCallback: FileCopyMoveCallback? = null
   private var selectedFileUri: Uri? = null
   private var selectedFile: File? = null
+  private var copyMovePreparingDialog: Dialog? = null
   private var progressBarDialog: AlertDialog? = null
   var lifecycleScope: LifecycleCoroutineScope? = null
   private var progressBar: ProgressBar? = null
   private var progressBarTextView: TextView? = null
   private var isCopySelected = false
+  var fileSystemDisposable: Disposable? = null
 
   private val copyMoveTitle: String by lazy {
     if (isCopySelected) {
@@ -79,33 +90,70 @@ class CopyMoveFileHandler @Inject constructor(
         KiwixDialog.MoveFileToPublicDirectoryPermissionDialog,
         {
           sharedPreferenceUtil.copyMoveZimFilePermissionDialog = true
-          showCopyMoveDialog()
+          validateAndShowCopyMoveDialog()
         }
       )
     } else {
-      showCopyMoveDialog()
+      validateAndShowCopyMoveDialog()
     }
   }
 
-  private fun showCopyMoveDialog() {
-    val availableSpace = storageCalculator.availableBytes()
-    val fileSize = selectedFile?.length() ?: 0L
+  private fun isBookLessThan4GB(): Boolean =
+    (selectedFile?.length() ?: 0L) < FOUR_GIGABYTES_IN_KILOBYTES
 
-    if (availableSpace > fileSize) {
-      alertDialogShower.show(
-        KiwixDialog.CopyMoveFileToPublicDirectoryDialog,
-        {
-          isCopySelected = true
-          copyZimFileToPublicAppDirectory()
-        },
-        {
-          isCopySelected = false
-          moveZimFileToPublicAppDirectory()
-        }
-      )
-    } else {
+  private fun validateAndShowCopyMoveDialog() {
+    hidePreparingCopyMoveDialog() // hide the dialog if already showing
+    val availableSpace = storageCalculator.availableBytes()
+    if (hasNotSufficientStorageSpace(availableSpace)) {
       fileCopyMoveCallback?.insufficientSpaceInStorage(availableSpace)
+      return
     }
+    when (fat32Checker.fileSystemStates.value) {
+      DetectingFileSystem -> handleDetectingFileSystemState()
+      CannotWrite4GbFile -> handleCannotWrite4GbFileState()
+      else -> showCopyMoveDialog()
+    }
+  }
+
+  private fun handleDetectingFileSystemState() {
+    if (isBookLessThan4GB()) {
+      showCopyMoveDialog()
+    } else {
+      showPreparingCopyMoveDialog()
+      observeFileSystemState()
+    }
+  }
+
+  private fun handleCannotWrite4GbFileState() {
+    if (isBookLessThan4GB()) {
+      showCopyMoveDialog()
+    } else {
+      // Show an error dialog indicating the file system limitation
+      fileCopyMoveCallback?.filesystemDoesNotSupportedCopyMoveFilesOver4GB()
+    }
+  }
+
+  private fun observeFileSystemState() {
+    if (fileSystemDisposable?.isDisposed == false) return
+    fileSystemDisposable = fat32Checker.fileSystemStates
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe {
+        validateAndShowCopyMoveDialog()
+      }
+  }
+
+  private fun showCopyMoveDialog() {
+    alertDialogShower.show(
+      KiwixDialog.CopyMoveFileToPublicDirectoryDialog,
+      {
+        isCopySelected = true
+        copyZimFileToPublicAppDirectory()
+      },
+      {
+        isCopySelected = false
+        moveZimFileToPublicAppDirectory()
+      }
+    )
   }
 
   private fun copyZimFileToPublicAppDirectory() {
@@ -195,6 +243,24 @@ class CopyMoveFileHandler @Inject constructor(
       if (!it.isFileExist()) it.createNewFile()
     }
 
+  private fun hasNotSufficientStorageSpace(availableSpace: Long): Boolean =
+    availableSpace < (selectedFile?.length() ?: 0L)
+
+  @SuppressLint("InflateParams")
+  private fun showPreparingCopyMoveDialog() {
+    if (copyMovePreparingDialog == null) {
+      val dialogView: View =
+        activity.layoutInflater.inflate(R.layout.item_custom_spinner, null)
+      copyMovePreparingDialog =
+        alertDialogShower.create(KiwixDialog.PreparingCopyingFilesDialog { dialogView })
+    }
+    copyMovePreparingDialog?.show()
+  }
+
+  private fun hidePreparingCopyMoveDialog() {
+    copyMovePreparingDialog?.dismiss()
+  }
+
   @SuppressLint("InflateParams")
   private fun showProgressDialog() {
     val dialogView =
@@ -225,6 +291,7 @@ class CopyMoveFileHandler @Inject constructor(
     fun onFileCopied(file: File)
     fun onFileMoved(file: File)
     fun insufficientSpaceInStorage(availableSpace: Long)
+    fun filesystemDoesNotSupportedCopyMoveFilesOver4GB()
     fun onError(errorMessage: String)
   }
 }

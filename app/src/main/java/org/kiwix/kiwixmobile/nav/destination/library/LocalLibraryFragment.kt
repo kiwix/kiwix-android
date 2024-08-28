@@ -488,6 +488,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     storagePermissionLauncher = null
     copyMoveFileHandler?.fileCopyMoveCallback = null
     copyMoveFileHandler?.lifecycleScope = null
+    copyMoveFileHandler?.fileSystemDisposable?.dispose()
   }
 
   private fun sideEffects() = zimManageViewModel.sideEffects
@@ -623,7 +624,12 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   }
 
   override fun onError(errorMessage: String) {
-    activity.toast("Unable to copy zim file $errorMessage", Toast.LENGTH_SHORT)
+    activity.toast(errorMessage)
+  }
+
+  override fun filesystemDoesNotSupportedCopyMoveFilesOver4GB() {
+    val message = "Your fileSystem does not support files over 4GB"
+    showStorageSelectionSnackBar(message)
   }
 
   override fun insufficientSpaceInStorage(availableSpace: Long) {
@@ -632,6 +638,10 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
         ${getString(string.space_available)} ${Bytes(availableSpace).humanReadable}
     """.trimIndent()
 
+    showStorageSelectionSnackBar(message)
+  }
+
+  private fun showStorageSelectionSnackBar(message: String) {
     fragmentDestinationLibraryBinding?.zimfilelist?.snack(
       message,
       requireActivity().findViewById(R.id.bottom_nav_view),
