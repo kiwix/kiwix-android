@@ -333,8 +333,10 @@
   <string name="file_copying_in_progress">Zim file coping in progress</string>
   <string name="file_moving_in_progress">Zim file moving in progress</string>
   <string name="copy_move_files_dialog_description">Do you want to copy or move the file?</string>
+  <string name="copy_file_error_message">Error in copying the zim file: %s.</string>
   <string name="move_files_permission_dialog_title">Move/Copy files to app public directory?</string>
   <string name="move_files_permission_dialog_description">Due to Google Play policies on Android 11 and above, our app can no longer directly access files stored elsewhere on your device. To let you view your selected files, we need to move or copy them into a special folder within our application directory. This allows us to access and open the files. Do you agree to this?</string>
+  <string name="move_file_error_message">Error in moving the zim file: %s.</string>
   <string name="how_to_update_content">How to update content?</string>
   <string name="update_content_description">To update content (a zim file) you need to download the full latest version of this very same content. You can do that via the download section.</string>
   <string name="all_files_permission_needed">All Files Permission Needed</string>

@@ -21,12 +21,14 @@ package org.kiwix.kiwixmobile.nav.destination.reader
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
+import android.content.ContentResolver
 import android.net.Uri
 import android.provider.DocumentsContract
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.LifecycleCoroutineScope
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -42,6 +44,7 @@ import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.Companion.FOUR_GIGABYTES_IN_KILOBYTES
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
@@ -171,12 +174,13 @@ class CopyMoveFileHandler @Inject constructor(
         }
       } catch (ignore: Exception) {
         dismissProgressDialog()
-        ignore.printStackTrace()
-        fileCopyMoveCallback?.onError("Unable to copy zim file ${ignore.message}")
-          .also {
-            // delete the temporary file if any error happens
-            destinationFile.deleteFile()
-          }
+        fileCopyMoveCallback?.onError(
+          activity.getString(R.string.copy_file_error_message, ignore.message)
+        ).also {
+          // delete the temporary file if any error happens
+          destinationFile.deleteFile()
+          ignore.printStackTrace()
+        }
       }
     }
   }
@@ -211,6 +215,7 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
+  @Suppress("UnsafeCallOnNullableType")
   private fun moveZimFileToPublicAppDirectory() {
     lifecycleScope?.launch {
       val destinationFile = getDestinationFile()
@@ -218,24 +223,89 @@ class CopyMoveFileHandler @Inject constructor(
         selectedFileUri?.let { uri ->
           showProgressDialog()
           val destinationUri = Uri.fromFile(destinationFile)
-          copyFile(uri, destinationUri)
+          if (isSameStorage()) {
+            // if we try to move the file in same storage.
+            // then simply move the document.
+            val contentResolver = activity.applicationContext.contentResolver
+            val parentDocumentUri = getParentDocumentUri(uri)
+            val destinationParentUri =
+              getParentDocumentUri(DocumentFile.fromFile(destinationFile).uri)
+            Log.e(
+              "AUTHORITY",
+              "moveZimFileToPublicAppDirectory: ${uri.authority} \n" +
+                "destination = $parentDocumentUri \n uri ${parentDocumentUri?.authority}" +
+                " after uri = ${destinationParentUri?.authority}"
+            )
+            DocumentsContract.moveDocument(
+              contentResolver,
+              uri,
+              parentDocumentUri!!,
+              destinationParentUri!!
+            )
+          } else {
+            // if we move the document in other storage, then copy the file to configured storage
+            // and delete the main file.
+            copyFile(uri, destinationUri)
+            DocumentsContract.deleteDocument(activity.applicationContext.contentResolver, uri)
+          }
           withContext(Dispatchers.Main) {
             dismissProgressDialog()
             fileCopyMoveCallback?.onFileMoved(destinationFile)
-          }.also {
-            DocumentsContract.deleteDocument(activity.applicationContext.contentResolver, uri)
           }
         }
       } catch (ignore: Exception) {
         dismissProgressDialog()
-        ignore.printStackTrace()
-        fileCopyMoveCallback?.onError("Unable to copy zim file ${ignore.message}")
-          .also {
-            // delete the temporary file if any error happens
-            destinationFile.deleteFile()
-          }
+        fileCopyMoveCallback?.onError(
+          activity.getString(R.string.move_file_error_message, ignore.message)
+        ).also {
+          // delete the temporary file if any error happens
+          destinationFile.deleteFile()
+          ignore.printStackTrace()
+        }
       }
     }
+  }
+
+  private fun getParentDocumentUri(contentResolver: ContentResolver, documentUri: Uri): Uri? {
+    val cursor = contentResolver.query(
+      documentUri,
+      arrayOf(DocumentsContract.Document.COLUMN_DOCUMENT_ID),
+      null,
+      null,
+      null
+    )
+
+    cursor?.use {
+      if (it.moveToFirst()) {
+        val documentId = it.getString(0)
+        val parentDocumentId = documentId.substringBeforeLast(':')
+        val parentDocumentUri =
+          DocumentsContract.buildDocumentUriUsingTree(documentUri, parentDocumentId)
+        return@getParentDocumentUri parentDocumentUri
+      }
+    }
+    return null
+  }
+
+  private fun getParentDocumentUri(documentUri: Uri): Uri? {
+    val docId = DocumentsContract.getDocumentId(documentUri)
+    val pathSegments = docId.split(":")
+    val parentId = if (pathSegments.size > 1) pathSegments[1].substringBeforeLast("/") else ""
+    val parentDocId = "${pathSegments[0]}:$parentId"
+
+    return if (parentId.isNotEmpty() && documentUri.authority != null) {
+      DocumentsContract.buildDocumentUri(documentUri.authority, parentDocId)
+    } else {
+      null
+    }
+  }
+
+  private fun isSameStorage(): Boolean {
+    return selectedFile?.path?.contains(
+      sharedPreferenceUtil.prefStorage.substringBefore(
+        activity.getString(R.string.android_directory_seperator)
+      )
+    ) == true
   }
 
   private fun getDestinationFile(): File =
