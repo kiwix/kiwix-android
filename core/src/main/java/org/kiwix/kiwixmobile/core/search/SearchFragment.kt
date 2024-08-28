@@ -206,6 +206,7 @@ class SearchFragment : BaseFragment() {
     renderingJob?.cancel()
     renderingJob = null
     activity?.intent?.action = null
+    searchView?.setOnQueryTextListener(null)
     searchView = null
     searchInTextMenuItem = null
     findInPageTextView = null

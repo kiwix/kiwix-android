@@ -70,6 +70,7 @@ class LanguageFragment : BaseFragment() {
 
   private val compositeDisposable = CompositeDisposable()
   private var activityLanguageBinding: ActivityLanguageBinding? = null
+  private var searchView: SearchView? = null
 
   private val languageAdapter =
     LanguageAdapter(
@@ -127,8 +128,8 @@ class LanguageFragment : BaseFragment() {
       object : MenuProvider {
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
           menuInflater.inflate(R.menu.menu_language, menu)
-          val search = menu.findItem(R.id.menu_language_search).actionView as SearchView
-          search.apply {
+          searchView = menu.findItem(R.id.menu_language_search).actionView as SearchView
+          searchView?.apply {
             setUpSearchView(requireActivity())
             setOnQueryTextListener(
               SimpleTextListener { query, _ ->
@@ -172,6 +173,8 @@ class LanguageFragment : BaseFragment() {
 
   override fun onDestroyView() {
     super.onDestroyView()
+    searchView?.setOnQueryTextListener(null)
+    searchView = null
     activityLanguageBinding = null
   }
 }

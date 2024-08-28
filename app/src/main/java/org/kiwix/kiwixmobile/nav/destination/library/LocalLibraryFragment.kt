@@ -489,6 +489,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     copyMoveFileHandler?.fileCopyMoveCallback = null
     copyMoveFileHandler?.lifecycleScope = null
     copyMoveFileHandler?.fileSystemDisposable?.dispose()
+    copyMoveFileHandler = null
   }
 
   private fun sideEffects() = zimManageViewModel.sideEffects
