@@ -75,7 +75,7 @@
   <string name="pref_display_title">표시</string>
   <string name="pref_info_title">정보</string>
   <string name="pref_info_version">버전</string>
-  <string name="pref_dark_mode" fuzzy="true">야간 모드</string>
+  <string name="pref_dark_mode">어두운 모드</string>
   <string name="pref_dark_mode_summary">반전된 색으로 문서를 보여줍니다</string>
   <string name="pref_back_to_top">맨 위로 돌아가기</string>
   <string name="pref_back_to_top_summary">맨 위로 올라가는 버튼을 페이지의 끝에 표시합니다</string>
@@ -220,7 +220,7 @@
   <string name="switch_tabs">탭 전환</string>
   <string name="close_all_tabs">모든 탭 닫기</string>
   <string name="close_tab">탭 닫기</string>
-  <string name="could_not_restore_tabs">탭을 복구할 수 없었습니다.</string>
+  <string name="could_not_restore_tabs">탭을 복구하지 못했습니다.</string>
   <string name="pending_state">보류 중</string>
   <string name="running_state">진행 중</string>
   <string name="complete">완료</string>

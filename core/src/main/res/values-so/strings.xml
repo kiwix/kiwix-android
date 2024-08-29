@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Abshirdheere
+* MohitMali
 -->
 <resources>
   <string name="menu_help">Caawinaad</string>
@@ -25,7 +26,7 @@
   <string name="pref_display_title">Qaab aragga</string>
   <string name="pref_info_title">Macluumaad</string>
   <string name="pref_info_version">Nuqul</string>
-  <string name="pref_dark_mode" fuzzy="true">Habka habeenkii</string>
+  <string name="pref_dark_mode">Qaab mugdi ah</string>
   <string name="pref_dark_mode_summary">Itus maqaalada iyagoo leh midab madadaalo ah</string>
   <string name="pref_back_to_top">Ku laabo kor</string>
   <string name="pref_back_to_top_summary">Itus batoonka dhammaadka bogga si kor loogu laabto</string>

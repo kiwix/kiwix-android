@@ -18,6 +18,7 @@
 * Rodrigo codignoli
 * Saturnow
 * Webysther
+* YoReaper
 -->
 <resources>
   <string name="menu_help">Ajuda</string>
@@ -38,6 +39,7 @@
   <string name="save_media_error">Ocorreu um erro ao tentar salvar a mídia!</string>
   <string name="save_media_saved">Mídia salva como %s em Downloads/org.kiwix…/</string>
   <string name="search_label">Pesquisar</string>
+  <string name="searched_list">Lista pesquisada</string>
   <string name="choose_file">Selecione um arquivo de conteúdo (*.zim)</string>
   <string name="open_in_new_tab">Abrir link em uma nova aba?</string>
   <string name="hotspot_service_channel_name">Canal de serviço de ponto de acesso</string>
@@ -67,6 +69,7 @@
   <string name="error_server_already_running">O servidor já está sendo executado. Por favor desligue e tente novamente.</string>
   <string name="error_ip_address_not_found">Não foi possível encontrar o endereço ip.</string>
   <string name="server_started_message">Digite este endereço IP no seu navegador para acessar o servidor %s</string>
+  <string name="qr_code">QR Code renderizado</string>
   <string name="share_host_address">Compartir URL a través de outras aplicações</string>
   <string name="error_file_not_found">Erro: O arquivo ZIM selecionado não pode ser encontrado.</string>
   <string name="unable_to_read_zim_file">\nNão é possível ler este arquivo zim!</string>
@@ -76,7 +79,7 @@
   <string name="pref_display_title">Exibição</string>
   <string name="pref_info_title">Informação</string>
   <string name="pref_info_version">Versão</string>
-  <string name="pref_dark_mode" fuzzy="true">Modo noturno</string>
+  <string name="pref_dark_mode">Modo escuro</string>
   <string name="pref_dark_mode_summary">Mostrar artigos com cores invertidas</string>
   <string name="pref_back_to_top">Voltar ao Topo</string>
   <string name="pref_back_to_top_summary">Mostra um botão no fim da página para voltar ao topo</string>
@@ -87,6 +90,7 @@
   <string name="tts_lang_not_supported">O idioma desta página não é suportado. O artigo pode não ser lido propriamente.</string>
   <string name="no_reader_application_installed">Não foi possível encontrar uma aplicação instalada para esse tipo de arquivo</string>
   <string name="no_email_application_installed">Por favor instale um serviço de email ou nos envie um email no endereço %1s</string>
+  <string name="no_app_found_to_select_bookmark_file">Nenhum aplicativo encontrado para selecionar um arquivo de marcadores</string>
   <string name="no_section_info">Nenhum cabeçalho de conteúdo encontrado</string>
   <string name="request_storage">Para acessar conteúdo off-line precisamos de acesso ao seu armazenamento</string>
   <string name="request_write_storage">Para baixar arquivos zim, precisamos de acesso de gravação ao seu armazenamento</string>
@@ -96,6 +100,11 @@
   <string name="pref_clear_all_history_summary">Limpar pesquisas recentes e histórico de guias</string>
   <string name="pref_notes">Notas</string>
   <string name="pref_permission">Permissões</string>
+  <string name="pref_import_bookmark_title">Importar Marcadores</string>
+  <string name="pref_import_bookmark_summary">Importar os marcardores salvos</string>
+  <string name="pref_export_bookmark_title">Exportar Marcadores</string>
+  <string name="pref_export_bookmark_summary">Exportar todos os marcadores salvos</string>
+  <string name="export_bookmark_saved">Marcadores são exportados no arquivo %s</string>
   <string name="all_history_cleared">Eliminando todo o histórico</string>
   <string name="pref_clear_all_bookmarks_title">Limpar marcadores</string>
   <string name="clear_all_history_dialog_title">Limpar todo o histórico?</string>
@@ -133,6 +142,7 @@
   <string name="no_files_here">Nenhum arquivo aqui</string>
   <string name="download_no_space">Espaço insuficiente para baixar o download.</string>
   <string name="download">Baixar</string>
+  <string name="download_notification_channel_name">Nome do Canal de Notificação de Download</string>
   <string name="space_available">Espaço disponível:</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">Sem Imagens</string>
@@ -150,6 +160,8 @@
   <string name="help_11">O download de arquivos do ZIM no aplicativo está localizado no diretório de armazenamento externo em uma pasta intitulada Kiwix.</string>
   <string name="pref_storage">Armazenamento</string>
   <string name="pref_current_folder">Pasta atual</string>
+  <string name="pref_storage_used">%s usado</string>
+  <string name="pref_free_storage">%s livre</string>
   <string name="delete_zim_failed">Desculpe, não foi possível excluir alguns arquivos. Você deve tentar usar um gerenciador de arquivos.</string>
   <string name="tts_pause">pausar</string>
   <string name="tts_resume">continuar</string>
@@ -232,6 +244,9 @@
   <string name="save">Salvar</string>
   <string name="note">Nota</string>
   <string name="wiki_article_title">Título do artigo da wiki</string>
+  <string name="ext_storage_permission_rationale_export_bookmark">Acesso ao armazenamento é requerido para exportar Marcadores</string>
+  <string name="ext_storage_write_permission_denied_export_bookmark">Marcadores não podem ser exportados sem acesso ao armazenamento</string>
+  <string name="export_bookmark_error">Um erro ocorreu na tentativa de exportar um marcador!</string>
   <string name="ext_storage_permission_rationale_add_note">O acesso ao armazenamento é necessário para o Notes</string>
   <string name="ext_storage_write_permission_denied_add_note">Notas não podem ser usadas sem acesso ao armazenamento</string>
   <string name="note_save_unsuccessful">Nota salva sem sucesso</string>
@@ -294,6 +309,8 @@
   <string name="delete_selected_history">Excluir histórico selecionado?</string>
   <string name="delete_bookmarks">Excluir todos os favoritos?</string>
   <string name="delete_selected_bookmarks">Excluir favoritos selecionados?</string>
+  <string name="import_bookmarks_dialog_title">Importar Marcadores?</string>
+  <string name="export_all_bookmarks_dialog_title">Exportar todos os Marcadores?</string>
   <string name="on">Lig</string>
   <string name="off">Des</string>
   <string name="auto">Auto</string>

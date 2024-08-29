@@ -2,6 +2,7 @@
 <!-- Authors:
 * David1010
 * Macofe
+* MohitMali
 * Otogi
 -->
 <resources>
@@ -27,7 +28,7 @@
   <string name="pref_display_title">ჩვენება</string>
   <string name="pref_info_title">ინფორმაცია</string>
   <string name="pref_info_version">ვერსია</string>
-  <string name="pref_dark_mode" fuzzy="true">ღამის რეჟიმი</string>
+  <string name="pref_dark_mode">მუქი რეჟიმი</string>
   <string name="pref_dark_mode_summary">სტატიის შებრუნებული ფერებით ჩვენება</string>
   <string name="pref_back_to_top">თავში დაბრუნება</string>
   <string name="pref_back_to_top_summary">გვერდის ბოლოში ზევით დაბრუნების ღილაკის ჩვენება</string>

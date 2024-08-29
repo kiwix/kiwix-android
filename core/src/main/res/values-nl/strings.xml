@@ -60,6 +60,7 @@
   <string name="error_server_already_running">De server draait al. Schakel hem uit en probeer het opnieuw.</string>
   <string name="error_ip_address_not_found">Kon het IP-adres niet vinden.</string>
   <string name="server_started_message">Voer dit IP-adres in uw browser in om toegang te krijgen tot de server %s</string>
+  <string name="qr_code">Gemaakte QR-code</string>
   <string name="share_host_address">URL delen via andere applicaties</string>
   <string name="error_file_not_found">Fout: het geselecteerde ZIM-bestand kon niet gevonden worden.</string>
   <string name="unable_to_read_zim_file">Kan dit ZIM-bestand niet lezen!</string>
@@ -69,7 +70,7 @@
   <string name="pref_display_title">Weergave</string>
   <string name="pref_info_title">Informatie</string>
   <string name="pref_info_version">Versie</string>
-  <string name="pref_dark_mode" fuzzy="true">Nachtmodus</string>
+  <string name="pref_dark_mode">Donkere modus</string>
   <string name="pref_dark_mode_summary">Artikelen weergeven met omgekeerde kleuren</string>
   <string name="pref_back_to_top">Terug naar boven</string>
   <string name="pref_back_to_top_summary">Aan het einde van de pagina een knop weergeven om terug te gaan naar het begin</string>
@@ -80,6 +81,7 @@
   <string name="tts_lang_not_supported">De taal van deze pagina wordt niet ondersteund. Het artikel is mogelijk niet goed leesbaar.</string>
   <string name="no_reader_application_installed">Kon geen geïnstalleerde applicatie vinden voor dit type bestand</string>
   <string name="no_email_application_installed">Installeer een e-mailserviceprovider of stuur ons een e-mail op %1s</string>
+  <string name="no_app_found_to_select_bookmark_file">Geen app gevonden om een bladwijzerbestand te selecteren</string>
   <string name="no_section_info">Geen inhoudskoppen gevonden</string>
   <string name="request_storage">Om offline inhoud aan te spreken is toegang tot uw opslag nodig</string>
   <string name="request_write_storage">Om ZIM-bestanden te downloaden hebben we schrijftoegang tot uw opslagruimte nodig</string>
@@ -89,6 +91,11 @@
   <string name="pref_clear_all_history_summary">Recente zoekopdrachten en tabbladgeschiedenis wissen</string>
   <string name="pref_notes">Aantekeningen</string>
   <string name="pref_permission">Rechten</string>
+  <string name="pref_import_bookmark_title">Bladwijzers importeren</string>
+  <string name="pref_import_bookmark_summary">De opgeslagen bladwijzers importeren</string>
+  <string name="pref_export_bookmark_title">Bladwijzers exporteren</string>
+  <string name="pref_export_bookmark_summary">Alle opgeslagen bladwijzers exporteren</string>
+  <string name="export_bookmark_saved">De bladwijzers worden geëxporteerd naar het bestand %s</string>
   <string name="all_history_cleared">Alle geschiedenis gewist</string>
   <string name="pref_clear_all_bookmarks_title">Bladwijzers wissen</string>
   <string name="clear_all_history_dialog_title">Alle geschiedenis wissen?</string>
@@ -225,6 +232,9 @@
   <string name="save">Opslaan</string>
   <string name="note">Aantekening</string>
   <string name="wiki_article_title">Titel wiki-artikel</string>
+  <string name="ext_storage_permission_rationale_export_bookmark">Voor het exporteren van bladwijzers is opslagtoegang vereist</string>
+  <string name="ext_storage_write_permission_denied_export_bookmark">Bladwijzers kunnen niet worden geëxporteerd zonder toegang tot opslagruimte</string>
+  <string name="export_bookmark_error">Er is een fout opgetreden bij de poging bladwijzers te exporteren!</string>
   <string name="ext_storage_permission_rationale_add_note">Voor aantekeningen is toegang tot de opslag vereist</string>
   <string name="ext_storage_write_permission_denied_add_note">Aantekeningen kunnen niet worden gebruikt zonder toegang tot opslag</string>
   <string name="note_save_unsuccessful">Kon aantekening niet opslaan</string>
@@ -287,6 +297,11 @@
   <string name="delete_selected_history">Geselecteerde geschiedenis verwijderen?</string>
   <string name="delete_bookmarks">Alle bladwijzers verwijderen?</string>
   <string name="delete_selected_bookmarks">Geselecteerde bladwijzers verwijderen?</string>
+  <string name="import_bookmarks_dialog_title">Bladwijzers importeren?</string>
+  <string name="export_all_bookmarks_dialog_title">Alle bladwijzers exporteren?</string>
+  <string name="export_all_bookmarks_dialog_message">Door het exporteren wordt in de map Download/org.kiwix…/ een bestand bookmark.xml aangemaakt.</string>
+  <string name="bookmark_imported_message">Alle bladwijzers zijn geïmporteerd.</string>
+  <string name="error_invalid_bookmark_file">Fout: het geselecteerde bestand is geen geldig bladwijzerbestand.</string>
   <string name="on">Aan</string>
   <string name="off">Uit</string>
   <string name="auto">Automatisch</string>
@@ -305,6 +320,8 @@
   <string name="open_drawer">Lade openen</string>
   <string name="close_drawer">Lade sluiten</string>
   <string name="zim_files_not_showing">Zim-bestanden niet te zien?</string>
+  <string name="zim_files_not_showing_description">Als gevolg van het Google Play-beleid op Android 11 en hoger, kan deze Google Store-app geen “sideloaded” ZIM-bestanden openen. U kunt ze downloaden via de app, of in plaats daarvan vanaf onze officiële website %s de volledige versie van de Kiwix-app installeren.</string>
+  <string name="understood">Begrepen</string>
   <string name="how_to_update_content">Hoe werk ik de inhoud bij?</string>
   <string name="update_content_description">Om inhoud (een ZIM-bestand) bij te werken moet u de volledige nieuwste versie van precies dezelfde inhoud downloaden. Dat kan via de downloadsectie.</string>
   <string name="all_files_permission_needed">Toestemming voor alle bestanden vereist</string>
@@ -339,4 +356,8 @@
   <string name="your_device_name_message">De naam van uw apparaat verschijnt hier.</string>
   <string name="nearby_devices_list_message">Hier vindt u een lijst met apparaten in de buurt. Tik op de naam van een apparaat om de bestandsoverdracht te starten.</string>
   <string name="transfer_zim_files_list_message">Hier vindt u de lijst met voor overdracht beschikbare ZIM-bestanden.</string>
+  <string name="storage_selection_dialog_accessibility_description">Selecteer de opslagplaats voor het downloaden van ZIM-bestanden.</string>
+  <string name="zim_file_content_description">ZIM-bestand met de uit te lezen inhoud</string>
+  <string name="select_language_content_description">Als u deze taal kiest, worden downloadbare boeken in die taal bovenaan weergegeven.</string>
+  <string name="toolbar_back_button_content_description">Naar het vorige scherm</string>
 </resources>

@@ -73,7 +73,7 @@
   <string name="pref_display_title">Wyświetl</string>
   <string name="pref_info_title">Informacje</string>
   <string name="pref_info_version">Wersja</string>
-  <string name="pref_dark_mode" fuzzy="true">Tryb nocny</string>
+  <string name="pref_dark_mode">Tryb ciemny</string>
   <string name="pref_dark_mode_summary">Pokaż artykuły w trybie nocnym</string>
   <string name="pref_back_to_top">Powrót do góry</string>
   <string name="pref_back_to_top_summary">Wyświetl przycisk na końcu strony, aby przewinąć do góry</string>
@@ -264,6 +264,7 @@
   <string name="get_content_from_nearby_device">Pobierz zawartość z sąsiedniego urządzenia</string>
   <string name="search_for_peers">Szukaj Pirów</string>
   <string name="your_device">Twoje urządzenie:</string>
+  <string name="device_name">Nazwa urządzenia</string>
   <string name="nearby_devices">URZĄDZENIA W POBLIŻU</string>
   <string name="no_devices_found">Nie wykryto urządzeń. Naciśnij przycisk wyszukiwania, aby spróbować ponownie.</string>
   <string name="files_for_transfer">PLIKI DO PRZESŁANIA</string>
@@ -272,6 +273,7 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Usuwa wszystkie notatki ze wszystkich artykułów</string>
   <string name="pref_clear_all_notes_title">Wyczyść wszystkie notatki</string>
+  <string name="pref_clear_notes">Wyczyść notatki</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Zezwalaj na odczytywanie i zapisywanie plików ZIM na karcie SD</string>
   <string name="pref_text_zoom_summary">Zmień rozmiar tekstu co 25%.</string>
   <string name="tag_pic">Fotka</string>
@@ -289,6 +291,8 @@
   <string name="delete_selected_history">Usunąć wybraną historię?</string>
   <string name="delete_bookmarks">Usunąć wszystkie zakładki?</string>
   <string name="delete_selected_bookmarks">Usunąć wybrane zakładki?</string>
+  <string name="import_bookmarks_dialog_title">Importować zakładki?</string>
+  <string name="export_all_bookmarks_dialog_title">Eksportować wszystkie zakładki?</string>
   <string name="on">Włącz</string>
   <string name="off">Wyłącz</string>
   <string name="auto">Automatycznie</string>
@@ -314,5 +318,6 @@
   <string name="allowed">Dozwolony</string>
   <string name="not_allowed">Niedozwolony</string>
   <string name="system_unable_to_grant_permission_message">System nie może udzielić pozwolenia!</string>
+  <string name="allow">Zezwól</string>
   <string name="go_to_settings_label">Przejdź do ustawień</string>
 </resources>

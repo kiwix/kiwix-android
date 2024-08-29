@@ -26,6 +26,7 @@
 * Susann Schweden
 * Symposiarch
 * ThisCarthing
+* TomatoCake
 * Umlaut
 -->
 <resources>
@@ -85,7 +86,7 @@
   <string name="pref_display_title">Anzeige</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
-  <string name="pref_dark_mode" fuzzy="true">Nachtmodus</string>
+  <string name="pref_dark_mode">Dunkler Modus</string>
   <string name="pref_dark_mode_summary">Artikel mit umgekehrten Farben anzeigen</string>
   <string name="pref_back_to_top">Zurück nach oben</string>
   <string name="pref_back_to_top_summary">Zeige eine Schaltfläche am Seitenende an, um zum Anfang hochzuscrollen</string>
@@ -236,6 +237,7 @@
   <string name="switch_tabs">Registerkarten wechseln</string>
   <string name="close_all_tabs">Alle Registerkarten schließen</string>
   <string name="close_tab">Tab schließen</string>
+  <string name="could_not_restore_tabs">Tabs konnten nicht wiederhergestellt werden.</string>
   <string name="pending_state">Ausstehend</string>
   <string name="running_state">In Bearbeitung</string>
   <string name="complete">Abgeschlossen</string>
@@ -279,6 +281,7 @@
   <string name="get_content_from_nearby_device">Inhalte von einem Gerät in der Nähe erhalten</string>
   <string name="search_for_peers">Nach Peer-Geräten suchen</string>
   <string name="your_device">Ihr Gerät:</string>
+  <string name="device_name">Gerätename</string>
   <string name="nearby_devices">GERÄTE IN DER NÄHE</string>
   <string name="no_devices_found">Keine Geräte erkannt. Tippen Sie auf die Schaltfläche Suchen, um es erneut zu versuchen.</string>
   <string name="files_for_transfer">DATEIEN ZUR ÜBERTRAGUNG</string>
@@ -287,6 +290,7 @@
   <string name="status">Status</string>
   <string name="pref_clear_all_notes_summary">Löscht alle Notizen zu allen Artikeln</string>
   <string name="pref_clear_all_notes_title">Alle Notizen löschen</string>
+  <string name="pref_clear_notes">Notizen löschen</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Zulassen, dass ZIM-Dateien auf der SD-Karte gelesen und geschrieben werden</string>
   <string name="pref_text_zoom_summary">Ändern Sie die Textgröße mit Schritten von 25 %.</string>
   <string name="tag_pic">Bild</string>
@@ -304,6 +308,8 @@
   <string name="delete_selected_history">Ausgewählter Verlauf löschen?</string>
   <string name="delete_bookmarks">Alle Lesezeichen löschen?</string>
   <string name="delete_selected_bookmarks">Ausgewählte Lesezeichen löschen?</string>
+  <string name="import_bookmarks_dialog_title">Lesezeichen importieren?</string>
+  <string name="export_all_bookmarks_dialog_title">Alle Lesezeichen exportieren?</string>
   <string name="on">An</string>
   <string name="off">Aus</string>
   <string name="auto">Automatisch</string>

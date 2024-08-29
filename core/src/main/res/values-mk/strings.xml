@@ -124,6 +124,7 @@
   <string name="no_files_here">Нема податотеки</string>
   <string name="download_no_space">Нема доволно место за преземање.</string>
   <string name="download">Преземи</string>
+  <string name="download_notification_channel_name">Име на каналот за известување за преземања</string>
   <string name="space_available">Достапен простор:</string>
   <string name="zim_simple">Просто</string>
   <string name="zim_no_pic">Без слики</string>
@@ -141,6 +142,8 @@
   <string name="help_11">Преземањето на ZIM-податотеките во прилогот се сместени во надворешниот склад во папка наречена Kiwix.</string>
   <string name="pref_storage">Склад</string>
   <string name="pref_current_folder">Тековна папка</string>
+  <string name="pref_storage_used">%s искористено</string>
+  <string name="pref_free_storage">%s слободно</string>
   <string name="delete_zim_failed">За жал, не можев да избришам извесни податотеки. Пробајте со Управувачот со податотеки.</string>
   <string name="tts_pause">паузирај</string>
   <string name="tts_resume">продолжи</string>

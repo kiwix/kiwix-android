@@ -60,7 +60,7 @@
   <string name="pref_display_title">Bımocne</string>
   <string name="pref_info_title">Melumat</string>
   <string name="pref_info_version">Versiyon</string>
-  <string name="pref_dark_mode" fuzzy="true">Moda şewer</string>
+  <string name="pref_dark_mode">Karanlık Mod</string>
   <string name="pref_dark_mode_summary">Meqaleya dimlaşt bıyaye rengana bımocne</string>
   <string name="pref_back_to_top">Peyser şo serêniye</string>
   <string name="pref_back_to_top_summary">Seba ameyışê seri peyniya pele de yew gocege mocneno</string>

@@ -16,19 +16,36 @@
   <string name="menu_read_aloud">ხმამაღლა კითხვა</string>
   <string name="menu_read_aloud_stop">ხმამაღლა კითხვის შეჩერება</string>
   <string name="menu_support_kiwix">Kiwix-იშ აზარა</string>
+  <string name="menu_wifi_hotspot">WIFI-შა ჭირინაფაშ ჭურჭული</string>
   <string name="save_media">მედიაფაილეფიშ ჩუალა</string>
   <string name="save_media_error">მედიაფაილიშ ჩუალას ჩილათაქ მოხვადჷ!</string>
-  <string name="save_media_saved" fuzzy="true">მედიაფაილი ჩუალირი რე მუჭოთ %s, ქძ. Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">მედიაფალირი ჩუალირი რე მუჭოთ %s  გეჸვენჯი მიოწურაფუს Downloads/org.kiwix…/</string>
   <string name="search_label">გორუა</string>
+  <string name="searched_list">გორუაშ ერკებული</string>
   <string name="choose_file">გეგშაგორით დინოხიშ ფაილი (*.zim)</string>
   <string name="open_in_new_tab">გონბწყათო რცხუ ახალი აშნაკიდას?</string>
+  <string name="hotspot_service_channel_name">ჭირინაფაშ ჭურჭულიშ ონინალე სვირი</string>
+  <string name="hotspot_failed_title">ვეშილებინუ ჭირინაფაშ ჭურჭულიშ გოტებაქ</string>
   <string name="go_to_wifi_settings_label">WIFI პარამეტრეფშა გინულა</string>
+  <string name="connection_refused">თქვანი ჭირინაფა ვარებული რე.</string>
+  <string name="hotspot_running">გოტებული რე ჭირინაფაშ ჭურჭული</string>
+  <string name="no_books_selected_toast_message">ქორთხინთ, დუდშე გეგშაგორით კჷრბეფი</string>
   <string name="server_failed_message">სერვერქ ვაჩქართინესო. ქორთხინთ, ჩართით ინტერნეტი</string>
   <string name="server_failed_toast_message">სერვერქ ვეჩირთინუ.</string>
   <string name="server_started_successfully_toast_message">ჩერვერქ ჩერთუ.</string>
+  <string name="server_stopped_successfully_toast_message">სერვერქ წჷმოძინელო გაჩერდჷ.</string>
+  <string name="hotspot_turned_on">ჭირინაფაშ ჭურჭული ჩართებული რე</string>
   <string name="hotspot_details_message">გიმე მოჩამილი რე თქვანი აბანური ინტერნეტ-მეჭირინაფაშ ჭურჭულიშ გეშა ინფორმაცია. \nSSID : %1$s \nPass : %2$s</string>
-  <string name="hotspot_dialog_title" fuzzy="true">ჩართით თქვანი WIFI მეჭირინაფაშ ჭურჭული</string>
-  <string name="hotspot_dialog_neutral_button" fuzzy="true">ქო, ჩართული მაფუ</string>
+  <string name="server_textview_default_message">გეგშაგორით ფაილეფი, ნამუეფიშ დინოხუნაფა გონებჷნა სერვერსჷნ</string>
+  <string name="progress_dialog_starting_server">სერვერიშ გოტება</string>
+  <string name="hotspot_dialog_title">კჷრბეფიშ დინოხუნაფაშ ინსტრუქცია</string>
+  <string name="wifi_dialog_title">WiFi ჭირინაფაქ გორილი რე</string>
+  <string name="hotspot_dialog_neutral_button">გოგჷნძარაფა</string>
+  <string name="hotspot_notification_content_title">Kiwix ჭირინაფაშ ჭურჭული</string>
+  <string name="start_server_label">სერვერიშ გოტება</string>
+  <string name="stop_server_label">სერვერიშ გაჩემება</string>
+  <string name="error_server_already_running">სერვერი ასე მუშენს. ქორთხინთ, გოთიშით თინა დო კჷნე ახალშო ქოცადით.</string>
+  <string name="error_ip_address_not_found">IP-მიოწურაფუქ ვეგორჷ.</string>
   <string name="error_file_not_found">ჩილათა: გიშაგორილი ZIM-ფაილქ ვეგორუ.</string>
   <string name="error_file_invalid">ჩილათა: გიშაგორილი ფაილი ვა რე თინი ZIM-ფაილი.</string>
   <string name="error_article_url_not_found">ჩილათა: სტატიაშ (Url: %1$s) გიმოხარგუაქ ვემიხუჯინუ.</string>
