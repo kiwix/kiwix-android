@@ -15,11 +15,14 @@
   <string name="menu_read_aloud">Чытаць уголас</string>
   <string name="menu_read_aloud_stop">Спыніць чытаньне ўголас</string>
   <string name="menu_support_kiwix">Падтрымаць Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">Падтрымка %s</string>
+  <string name="menu_about_app">Пра праграму %s</string>
   <string name="menu_wifi_hotspot">Пункт доступу WiFi</string>
   <string name="save_media">Захаваць мэдыя</string>
   <string name="save_media_error">Узьнікла памылка пры захаваньні мэдыяфайлу!</string>
   <string name="save_media_saved">Мэдыя-файл захаваны як %s у Downloads/org.kiwix…/</string>
   <string name="search_label">Пошук</string>
+  <string name="searched_list">Пошукавы сьпіс</string>
   <string name="choose_file">Абярыце файл зьместу (*.zim)</string>
   <string name="open_in_new_tab">Адкрыць спасылку ў новай укладцы?</string>
   <string name="hotspot_service_channel_name">Сэрвісны канал пункту досягу</string>
@@ -33,7 +36,7 @@
   <string name="error_article_url_not_found">Памылка: загрузка артыкула (Url: %1$s) не атрымалася.</string>
   <string name="pref_info_title">Інфармацыя</string>
   <string name="pref_info_version">Вэрсія</string>
-  <string name="pref_dark_mode" fuzzy="true">Начны рэжым</string>
+  <string name="pref_dark_mode">Цёмны рэжым</string>
   <string name="pref_dark_mode_summary">Паказваць артыкулы ў інвэртаваных колерах</string>
   <string name="pref_back_to_top">Вярнуцца ўгару</string>
   <string name="pref_back_to_top_summary">Паказваць кнопку ў канцы старонкі для пракручваньня ўверх</string>

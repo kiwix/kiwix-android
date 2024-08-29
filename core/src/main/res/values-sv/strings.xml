@@ -3,6 +3,7 @@
 * Jopparn
 * Marcusjehrlander
 * McDutchie
+* MohitMali
 * Rofiatmustapha12
 * Sabelöga
 * Skalman
@@ -59,6 +60,7 @@
   <string name="error_server_already_running">Servern körs redan. Stäng av den och försök igen.</string>
   <string name="error_ip_address_not_found">Kunde inte hitta ip-adressen.</string>
   <string name="server_started_message">Ange denna IP-adress i din webbläsare för att komma åt servern %s</string>
+  <string name="qr_code">Renderad QR-kod</string>
   <string name="share_host_address">Dela webbadress med andra appar</string>
   <string name="error_file_not_found">Fel: Den valda ZIM-filen kunde inte hittas.</string>
   <string name="unable_to_read_zim_file">Kunde inte läsa denna zim-fil!</string>
@@ -68,7 +70,7 @@
   <string name="pref_display_title">Visning</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
-  <string name="pref_dark_mode" fuzzy="true">Nattläge</string>
+  <string name="pref_dark_mode">Mörkt läge</string>
   <string name="pref_dark_mode_summary">Visa artiklar med inverterade färger</string>
   <string name="pref_back_to_top">Tillbaka till toppen</string>
   <string name="pref_back_to_top_summary">Visar en knapp i slutet på sidan för att rulla upp till toppen</string>
@@ -79,6 +81,7 @@
   <string name="tts_lang_not_supported">Språket på denna sida stöds inte. Artikeln kan kanske inte läsas på rätt sätt.</string>
   <string name="no_reader_application_installed">Kunde inte hitta ett installerat program för denna filtyp</string>
   <string name="no_email_application_installed">Installera en e-postleverantör eller skicka e-post till oss på %1s</string>
+  <string name="no_app_found_to_select_bookmark_file">Ingen app hittades för att välja bokmärkesfil</string>
   <string name="no_section_info">Ingen innehållsrubrik hittades</string>
   <string name="request_storage">För att komma åt offlineinnehåll behöver vi tillgång till ditt lagringsutrymme</string>
   <string name="request_write_storage">För att ladda ned zim-filer behöver vi skrivåtkomst till din lagring</string>
@@ -88,6 +91,11 @@
   <string name="pref_clear_all_history_summary">Rensa senaste sökningar och flikhistorik</string>
   <string name="pref_notes">Anteckningar</string>
   <string name="pref_permission">Behörigheter</string>
+  <string name="pref_import_bookmark_title">Importera bokmärken</string>
+  <string name="pref_import_bookmark_summary">Importera de sparade bokmärkena</string>
+  <string name="pref_export_bookmark_title">Exportera bokmärken</string>
+  <string name="pref_export_bookmark_summary">Exportera alla sparade bokmärken</string>
+  <string name="export_bookmark_saved">Bokmärkena har exporterats i %s-fil</string>
   <string name="all_history_cleared">All historik rensades</string>
   <string name="pref_clear_all_bookmarks_title">Rensa bokmärken</string>
   <string name="clear_all_history_dialog_title">Rensa all historik?</string>
@@ -224,6 +232,9 @@
   <string name="save">Spara</string>
   <string name="note">Anteckning</string>
   <string name="wiki_article_title">Wikiartikelns titel</string>
+  <string name="ext_storage_permission_rationale_export_bookmark">Lagringsåtkomst krävs för att exportera bokmärken</string>
+  <string name="ext_storage_write_permission_denied_export_bookmark">Bokmärken kan inte exportera utan åtkomst till lagringen</string>
+  <string name="export_bookmark_error">Ett fel uppstod när bokmärken skulle exporteras!</string>
   <string name="ext_storage_permission_rationale_add_note">Lagringsåtkomst krävs för anteckningar</string>
   <string name="ext_storage_write_permission_denied_add_note">Anteckningar kan inte användas utan lagringsåtkomst</string>
   <string name="note_save_unsuccessful">Anteckning sparades</string>
@@ -286,6 +297,11 @@
   <string name="delete_selected_history">Radera vald historik?</string>
   <string name="delete_bookmarks">Radera alla bokmärken?</string>
   <string name="delete_selected_bookmarks">Radera valda bokmärken?</string>
+  <string name="import_bookmarks_dialog_title">Importera bokmärken?</string>
+  <string name="export_all_bookmarks_dialog_title">Exportera alla bokmärken?</string>
+  <string name="export_all_bookmarks_dialog_message">Exportering kommer generera bokmärke.xml-fil i mappen Download/org.kiwix…/.</string>
+  <string name="bookmark_imported_message">Alla bokmärken har importerats.</string>
+  <string name="error_invalid_bookmark_file">Fel: De valda filerna är inte en giltigt bokmärke-fil.</string>
   <string name="on">På</string>
   <string name="off">Av</string>
   <string name="auto">Auto</string>
@@ -344,4 +360,6 @@
   <string name="zim_file_content_description">ZIM-filer som har läsningsinnehållet</string>
   <string name="select_language_content_description">Välj detta språk för att prioritera att visa det längst upp bland nedladdningsbara böcker.</string>
   <string name="toolbar_back_button_content_description">Gå till föregående vy</string>
+  <string name="save_or_open_unsupported_files_dialog_title">Spara eller öppna den här filen?</string>
+  <string name="save_or_open_unsupported_files_dialog_message">Att välja Öppna kommer öppna den här filen i externa läsarapplikationer.</string>
 </resources>

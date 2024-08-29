@@ -9,11 +9,13 @@
 * Eneelktransfer_to
 * Fitoschido
 * Gomoko
+* Goombiis
 * Hecatonchire
 * I'm mender
 * Kelson
 * McDutchie
 * MohitMali
+* Méthodes Bulebe Hangi
 * SleaY
 * Stephane
 * The RedBurn
@@ -74,6 +76,7 @@
   <string name="error_server_already_running">Le serveur est déjà en cours d’exécution. Veuillez l’arrêter et réessayer.</string>
   <string name="error_ip_address_not_found">Impossible de trouver l’adresse IP.</string>
   <string name="server_started_message">Entrez cette adresse IP dans votre navigateur pour accéder au serveur %s</string>
+  <string name="qr_code">Codes QR rendus</string>
   <string name="share_host_address">Partager l’URL avec d’autres applications</string>
   <string name="error_file_not_found">Erreur : le fichier ZIM sélectionné est introuvable.</string>
   <string name="unable_to_read_zim_file">Impossible de lire ce fichier ZIM !</string>
@@ -83,7 +86,7 @@
   <string name="pref_display_title">Affichage</string>
   <string name="pref_info_title">Informations</string>
   <string name="pref_info_version">Version</string>
-  <string name="pref_dark_mode" fuzzy="true">Mode nocturne</string>
+  <string name="pref_dark_mode">Mode sombre</string>
   <string name="pref_dark_mode_summary">Afficher les articles en couleurs inversées</string>
   <string name="pref_back_to_top">Retour en haut</string>
   <string name="pref_back_to_top_summary">Afficher un bouton en bas de la page pour revenir au début</string>
@@ -163,6 +166,8 @@
   <string name="help_11">Les fichiers ZIM téléchargés dans l’application sont situés dans le répertoire de stockage externe dans un répertoire appelé Kiwix.</string>
   <string name="pref_storage">Stockage</string>
   <string name="pref_current_folder">Dossier actuel</string>
+  <string name="pref_storage_used">%s utilisé</string>
+  <string name="pref_free_storage">%s gratuit</string>
   <string name="delete_zim_failed">Désolé, nous n’avons pas pu supprimer certains fichiers. Vous devriez essayer d’utiliser un gestionnaire de fichiers à la place.</string>
   <string name="tts_pause">pause</string>
   <string name="tts_resume">reprendre</string>

@@ -72,7 +72,7 @@
   <string name="pref_display_title">顯示</string>
   <string name="pref_info_title">資訊</string>
   <string name="pref_info_version">版本</string>
-  <string name="pref_dark_mode" fuzzy="true">夜間模式</string>
+  <string name="pref_dark_mode">深色模式</string>
   <string name="pref_dark_mode_summary">以反向色彩方式顯示條目</string>
   <string name="pref_back_to_top">回到頁首</string>
   <string name="pref_back_to_top_summary">在頁面底部顯示一個回到頁首的按鈕</string>
@@ -135,6 +135,7 @@
   <string name="no_files_here">沒有檔案在此</string>
   <string name="download_no_space">沒有足夠的空間來下載。</string>
   <string name="download">下載</string>
+  <string name="download_notification_channel_name">下載通知頻道名稱</string>
   <string name="space_available">可用空間：</string>
   <string name="zim_simple">簡易</string>
   <string name="zim_no_pic">沒有圖片</string>
@@ -152,6 +153,8 @@
   <string name="help_11">在應用程式下載的 ZIM 檔案會存放在名為「Kiwix」的外部儲存裝置目錄。</string>
   <string name="pref_storage">儲存裝置</string>
   <string name="pref_current_folder">目前資料夾</string>
+  <string name="pref_storage_used">已使用 %s</string>
+  <string name="pref_free_storage">剩餘 %s</string>
   <string name="delete_zim_failed">很抱歉我們無法刪除一些檔案。您應該嘗試改用檔案管理器。</string>
   <string name="tts_pause">暫停</string>
   <string name="tts_resume">繼續</string>
