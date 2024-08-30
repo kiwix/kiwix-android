@@ -21,12 +21,14 @@ package org.kiwix.kiwixmobile.nav.destination.reader
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
+import android.content.ContentResolver
 import android.net.Uri
 import android.provider.DocumentsContract
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.LifecycleCoroutineScope
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -47,7 +49,9 @@ import org.kiwix.kiwixmobile.zimManager.Fat32Checker.Companion.FOUR_GIGABYTES_IN
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.DetectingFileSystem
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileNotFoundException
+import java.io.FileOutputStream
 import javax.inject.Inject
 
 class CopyMoveFileHandler @Inject constructor(
@@ -148,56 +152,53 @@ class CopyMoveFileHandler @Inject constructor(
       KiwixDialog.CopyMoveFileToPublicDirectoryDialog,
       {
         isMoveOperation = false
-        copyMoveZimFileToPublicAppDirectory()
+        copyZimFileToPublicAppDirectory()
       },
       {
         isMoveOperation = true
-        copyMoveZimFileToPublicAppDirectory()
+        moveZimFileToPublicAppDirectory()
       }
     )
   }
 
-  private fun copyMoveZimFileToPublicAppDirectory() {
+  private fun copyZimFileToPublicAppDirectory() {
     lifecycleScope?.launch {
       val destinationFile = getDestinationFile()
       try {
-        if (selectedFileUri == null) {
-          throw FileNotFoundException("Selected file not found")
+        val sourceUri = selectedFileUri ?: throw FileNotFoundException("Selected file not found")
+        showProgressDialog()
+        copyFile(sourceUri, destinationFile)
+        withContext(Dispatchers.Main) {
+          notifyFileOperationSuccess(destinationFile)
         }
-        selectedFileUri?.let {
-          showProgressDialog()
-          val destinationUri = Uri.fromFile(destinationFile)
-          copyFile(it, destinationUri)
-          if (isMoveOperation) {
-            // delete the source file after successfully moved.
-            deleteSourceFile(it)
-          }
-          // val contentResolver = activity.applicationContext.contentResolver
-          // val parentDocumentUri = getParentDocumentUri(it)
-          // val documentFile = DocumentFile.fromSingleUri(activity, it)
-          // val destinationParentUri = getContentUriFromFilePath(destinationFile.parentFile.path)
-          // Log.e(
-          //   "AUTHORITY",
-          //   "moveZimFileToPublicAppDirectory: ${it.authority} \n" +
-          //     "destination = $parentDocumentUri \n uri ${parentDocumentUri?.authority}" +
-          //     " after uri = ${destinationParentUri?.authority}"
-          // )
-          // if (isSameStorage()) {
-          //   // if we try to move the file in same storage.
-          //   // then simply move the document.
-          //   DocumentsContract.copyDocument(
-          //     contentResolver,
-          //     it,
-          //     destinationParentUri!!
-          //   )
-          // } else {
-          //   // if we move the document in other storage, then copy the file to configured storage
-          //   // and delete the main file.
-          //   copyFile(it, destinationUri)
-          //   deleteSourceFile(it)
-          // }
-          withContext(Dispatchers.Main) {
+      } catch (ignore: Exception) {
+        ignore.printStackTrace()
+        handleFileOperationError(ignore.message, destinationFile)
+      }
+    }
+  }
+
+  private fun moveZimFileToPublicAppDirectory() {
+    lifecycleScope?.launch {
+      val destinationFile = getDestinationFile()
+      try {
+        val sourceUri = selectedFileUri ?: throw FileNotFoundException("Selected file not found")
+        showProgressDialog()
+        var moveSuccess = false
+        if (tryMoveWithRenamingFile(destinationFile)) {
+          moveSuccess = true
+        } else if (tryMoveWithDocumentContract(sourceUri)) {
+          moveSuccess = true
+        } else {
+          moveSuccess = true
+          copyFile(sourceUri, destinationFile)
+          deleteSourceFile(sourceUri)
+        }
+        withContext(Dispatchers.Main) {
+          if (moveSuccess) {
             notifyFileOperationSuccess(destinationFile)
+          } else {
+            handleFileOperationError("File move failed", destinationFile)
           }
         }
       } catch (ignore: Exception) {
@@ -207,12 +208,50 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  // private fun getContentUriFromFilePath(filePath: String): Uri? {
-  //   val basePath = Environment.getExternalStorageDirectory().absolutePath
-  //   val relativePath = filePath.removePrefix(basePath).removePrefix("/")
-  //   val documentId = "primary:$relativePath"
-  //   return Uri.parse("content://com.android.externalstorage.documents/document/$documentId")
-  // }
+  private fun tryMoveWithRenamingFile(destinationFile: File): Boolean =
+    selectedFile?.renameTo(destinationFile) == true
+
+  @Suppress("UnsafeCallOnNullableType")
+  private fun tryMoveWithDocumentContract(selectedUri: Uri): Boolean {
+    return try {
+      val contentResolver = activity.contentResolver
+      if (documentCanMove(selectedUri, contentResolver)) {
+        val sourceParentFolderUri = DocumentFile.fromFile(selectedFile?.parentFile!!).uri
+        val destinationFolderUri = DocumentFile.fromFile(File(sharedPreferenceUtil.prefStorage)).uri
+
+        DocumentsContract.moveDocument(
+          contentResolver,
+          selectedUri,
+          sourceParentFolderUri,
+          destinationFolderUri
+        )
+        true
+      } else {
+        false
+      }
+    } catch (ignore: Exception) {
+      ignore.printStackTrace()
+      false
+    }
+  }
+
+  private fun documentCanMove(uri: Uri, contentResolver: ContentResolver): Boolean {
+    if (!DocumentsContract.isDocumentUri(activity, uri)) return false
+
+    val flags =
+      contentResolver.query(
+        uri,
+        arrayOf(DocumentsContract.Document.COLUMN_FLAGS),
+        null,
+        null,
+        null
+      )
+        ?.use { cursor ->
+          if (cursor.moveToFirst()) cursor.getInt(0) else 0
+        } ?: 0
+
+    return flags and DocumentsContract.Document.FLAG_SUPPORTS_MOVE != 0
+  }
 
   private fun handleFileOperationError(
     errorMessage: String?,
@@ -247,55 +286,40 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  private fun getParentDocumentUri(documentUri: Uri): Uri? {
-    val docId = DocumentsContract.getDocumentId(documentUri)
-    val pathSegments = docId.split(":")
-    val parentId = if (pathSegments.size > 1) pathSegments[1].substringBeforeLast("/") else ""
-    val parentDocId = "${pathSegments[0]}:$parentId"
+  @Suppress("MagicNumber")
+  private suspend fun copyFile(sourceUri: Uri, destinationFile: File) =
+    withContext(Dispatchers.IO) {
+      val contentResolver = activity.contentResolver
 
-    return if (parentId.isNotEmpty() && documentUri.authority != null) {
-      DocumentsContract.buildDocumentUri(documentUri.authority, parentDocId)
-    } else {
-      null
-    }
-  }
+      // Open the ParcelFileDescriptor from the Uri
+      val parcelFileDescriptor = contentResolver.openFileDescriptor(sourceUri, "r")
+      val fileSize =
+        parcelFileDescriptor?.fileDescriptor?.let { FileInputStream(it).channel.size() } ?: 0L
+      var totalBytesTransferred = 0L
 
-  private fun isSameStorage(): Boolean {
-    return selectedFile?.path?.contains(
-      sharedPreferenceUtil.prefStorage.substringBefore(
-        activity.getString(R.string.android_directory_seperator)
-      )
-    ) == true
-  }
-
-  private suspend fun copyFile(sourceUri: Uri, destinationUri: Uri) = withContext(Dispatchers.IO) {
-    val inputStream = activity.contentResolver.openInputStream(sourceUri)
-    val outputStream = activity.contentResolver.openOutputStream(destinationUri)
-    if (inputStream != null && outputStream != null) {
-      val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-      var bytesRead: Int
-      var totalBytesCopied = 0L
-      val fileSize = selectedFile?.length() ?: 0
-
-      while (inputStream.read(buffer).also { bytesRead = it } != -1) {
-        outputStream.write(buffer, 0, bytesRead)
-        totalBytesCopied += bytesRead
-
-        // Update progress (on main thread)
-        withContext(Dispatchers.Main) {
-          @Suppress("MagicNumber")
-          val progress = (totalBytesCopied * 100 / fileSize).toInt()
-          updateProgress(progress)
+      parcelFileDescriptor?.use { pfd ->
+        val sourceFd = pfd.fileDescriptor
+        FileInputStream(sourceFd).channel.use { sourceChannel ->
+          FileOutputStream(destinationFile).channel.use { destinationChannel ->
+            var bytesTransferred: Long
+            val bufferSize = 1024 * 1024
+            while (totalBytesTransferred < fileSize) {
+              // Transfer data from source to destination in chunks
+              bytesTransferred = sourceChannel.transferTo(
+                totalBytesTransferred,
+                bufferSize.toLong(),
+                destinationChannel
+              )
+              totalBytesTransferred += bytesTransferred
+              val progress = (totalBytesTransferred * 100 / fileSize).toInt()
+              withContext(Dispatchers.Main) {
+                updateProgress(progress)
+              }
+            }
+          }
         }
-      }
-
-      outputStream.flush()
-      inputStream.close()
-      outputStream.close()
-    } else {
-      throw FileNotFoundException("The selected zim file could not open")
+      } ?: throw FileNotFoundException("The selected file could not be opened")
     }
-  }
 
   private fun getDestinationFile(): File {
     val root = File(sharedPreferenceUtil.prefStorage)
