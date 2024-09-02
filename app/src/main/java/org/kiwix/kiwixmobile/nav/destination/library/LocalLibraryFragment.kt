@@ -629,8 +629,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   }
 
   override fun filesystemDoesNotSupportedCopyMoveFilesOver4GB() {
-    val message = "Your fileSystem does not support files over 4GB"
-    showStorageSelectionSnackBar(message)
+    showStorageSelectionSnackBar(getString(R.string.file_system_does_not_support_4gb))
   }
 
   override fun insufficientSpaceInStorage(availableSpace: Long) {

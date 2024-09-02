@@ -112,8 +112,9 @@ sealed class KiwixDialog(
   data object MoveFileToPublicDirectoryPermissionDialog : KiwixDialog(
     R.string.move_files_permission_dialog_title,
     R.string.move_files_permission_dialog_description,
-    R.string.yes,
-    R.string.no,
+    R.string.copy,
+    R.string.move,
+    neutralMessage = R.string.cancel,
     cancelable = false
   )
 

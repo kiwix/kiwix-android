@@ -91,32 +91,54 @@ class CopyMoveFileHandler @Inject constructor(
     uri?.let { selectedFileUri = it }
     file?.let { selectedFile = it }
     if (!sharedPreferenceUtil.copyMoveZimFilePermissionDialog) {
-      alertDialogShower.show(
-        KiwixDialog.MoveFileToPublicDirectoryPermissionDialog,
-        {
-          sharedPreferenceUtil.copyMoveZimFilePermissionDialog = true
-          validateAndShowCopyMoveDialog()
-        }
-      )
+      showMoveToPublicDirectoryPermissionDialog()
     } else {
-      validateAndShowCopyMoveDialog()
+      if (validateZimFileCanCopyOrMove()) {
+        showCopyMoveDialog()
+      }
     }
+  }
+
+  private fun showMoveToPublicDirectoryPermissionDialog() {
+    alertDialogShower.show(
+      KiwixDialog.MoveFileToPublicDirectoryPermissionDialog,
+      {
+        sharedPreferenceUtil.copyMoveZimFilePermissionDialog = true
+        if (validateZimFileCanCopyOrMove()) {
+          performCopyOperation()
+        }
+      },
+      {
+        sharedPreferenceUtil.copyMoveZimFilePermissionDialog = true
+        if (validateZimFileCanCopyOrMove()) {
+          performMoveOperation()
+        }
+      }
+    )
   }
 
   private fun isBookLessThan4GB(): Boolean =
     (selectedFile?.length() ?: 0L) < FOUR_GIGABYTES_IN_KILOBYTES
 
-  private fun validateAndShowCopyMoveDialog() {
+  private fun validateZimFileCanCopyOrMove(): Boolean {
     hidePreparingCopyMoveDialog() // hide the dialog if already showing
     val availableSpace = storageCalculator.availableBytes()
     if (hasNotSufficientStorageSpace(availableSpace)) {
       fileCopyMoveCallback?.insufficientSpaceInStorage(availableSpace)
-      return
+      return false
     }
-    when (fat32Checker.fileSystemStates.value) {
-      DetectingFileSystem -> handleDetectingFileSystemState()
-      CannotWrite4GbFile -> handleCannotWrite4GbFileState()
-      else -> showCopyMoveDialog()
+    return when (fat32Checker.fileSystemStates.value) {
+      DetectingFileSystem -> {
+        handleDetectingFileSystemState()
+        false
+      }
+
+      CannotWrite4GbFile -> {
+        handleCannotWrite4GbFileState()
+        false
+      }
+
+      else -> true
     }
   }
 
@@ -143,22 +165,29 @@ class CopyMoveFileHandler @Inject constructor(
     fileSystemDisposable = fat32Checker.fileSystemStates
       .observeOn(AndroidSchedulers.mainThread())
       .subscribe {
-        validateAndShowCopyMoveDialog()
+        hidePreparingCopyMoveDialog()
+        if (validateZimFileCanCopyOrMove()) {
+          showCopyMoveDialog()
+        }
       }
   }
 
   private fun showCopyMoveDialog() {
     alertDialogShower.show(
       KiwixDialog.CopyMoveFileToPublicDirectoryDialog,
-      {
-        isMoveOperation = false
-        copyZimFileToPublicAppDirectory()
-      },
-      {
-        isMoveOperation = true
-        moveZimFileToPublicAppDirectory()
-      }
+      ::performCopyOperation,
+      ::performMoveOperation
     )
+  }
+
+  private fun performCopyOperation() {
+    isMoveOperation = false
+    copyZimFileToPublicAppDirectory()
+  }
+
+  private fun performMoveOperation() {
+    isMoveOperation = true
+    moveZimFileToPublicAppDirectory()
   }
 
   private fun copyZimFileToPublicAppDirectory() {
