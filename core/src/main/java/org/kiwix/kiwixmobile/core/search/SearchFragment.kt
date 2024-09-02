@@ -52,6 +52,7 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.databinding.FragmentSearchBinding
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
+import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.setUpSearchView
 import org.kiwix.kiwixmobile.core.extensions.viewModel
@@ -87,6 +88,7 @@ class SearchFragment : BaseFragment() {
 
   private var searchView: SearchView? = null
   private var searchInTextMenuItem: MenuItem? = null
+  private var searchMenuItem: MenuItem? = null
   private var findInPageTextView: TextView? = null
   private var fragmentSearchBinding: FragmentSearchBinding? = null
 
@@ -210,7 +212,11 @@ class SearchFragment : BaseFragment() {
     searchView = null
     searchInTextMenuItem = null
     findInPageTextView = null
+    searchMenuItem?.setOnActionExpandListener(null)
+    searchMenuItem = null
+    fragmentSearchBinding?.searchList?.adapter = null
     searchAdapter = null
+    fragmentSearchBinding?.root?.removeAllViews()
     fragmentSearchBinding = null
   }
 
@@ -224,9 +230,9 @@ class SearchFragment : BaseFragment() {
       object : MenuProvider {
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
           menuInflater.inflate(R.menu.menu_search, menu)
-          val searchMenuItem = menu.findItem(R.id.menu_search)
-          searchMenuItem.expandActionView()
-          searchView = searchMenuItem.actionView as SearchView
+          searchMenuItem = menu.findItem(R.id.menu_search)
+          searchMenuItem?.expandActionView()
+          searchView = searchMenuItem?.actionView as SearchView
           searchView?.apply {
             setUpSearchView(requireActivity())
             searchView?.setOnQueryTextListener(
@@ -249,7 +255,7 @@ class SearchFragment : BaseFragment() {
             )
           }
 
-          searchMenuItem.setOnActionExpandListener(object : OnActionExpandListener {
+          searchMenuItem?.setOnActionExpandListener(object : OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem) = false
 
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
@@ -343,10 +349,12 @@ class SearchFragment : BaseFragment() {
   }
 
   private fun onItemClick(it: SearchListItem) {
+    closeKeyboard()
     searchViewModel.actions.trySend(OnItemClick(it)).isSuccess
   }
 
   private fun onItemClickNewTab(it: SearchListItem) {
+    closeKeyboard()
     searchViewModel.actions.trySend(OnOpenInNewTabClick(it)).isSuccess
   }
 

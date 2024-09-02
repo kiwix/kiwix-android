@@ -142,8 +142,8 @@ class LanguageFragment : BaseFragment() {
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
           return when (menuItem.itemId) {
             R.id.menu_language_save -> {
-              languageViewModel.actions.offer(Action.SaveAll)
               closeKeyboard()
+              languageViewModel.actions.offer(Action.SaveAll)
               true
             }
 
@@ -154,11 +154,6 @@ class LanguageFragment : BaseFragment() {
       viewLifecycleOwner,
       Lifecycle.State.RESUMED
     )
-  }
-
-  override fun onDestroy() {
-    super.onDestroy()
-    compositeDisposable.clear()
   }
 
   private fun render(state: State) = when (state) {
@@ -173,8 +168,11 @@ class LanguageFragment : BaseFragment() {
 
   override fun onDestroyView() {
     super.onDestroyView()
+    compositeDisposable.clear()
+    activityLanguageBinding?.root?.removeAllViews()
     searchView?.setOnQueryTextListener(null)
     searchView = null
+    activityLanguageBinding?.languageRecyclerView?.adapter = null
     activityLanguageBinding = null
   }
 }
