@@ -29,9 +29,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.documentfile.provider.DocumentFile
-import androidx.lifecycle.LifecycleCoroutineScope
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -65,8 +65,8 @@ class CopyMoveFileHandler @Inject constructor(
   private var selectedFileUri: Uri? = null
   private var selectedFile: File? = null
   private var copyMovePreparingDialog: Dialog? = null
-  private var progressBarDialog: AlertDialog? = null
-  var lifecycleScope: LifecycleCoroutineScope? = null
+  var progressBarDialog: AlertDialog? = null
+  var lifecycleScope: CoroutineScope? = null
   private var progressBar: ProgressBar? = null
   private var progressBarTextView: TextView? = null
   private var isMoveOperation = false
@@ -88,8 +88,7 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   fun showMoveFileToPublicDirectoryDialog(uri: Uri? = null, file: File? = null) {
-    uri?.let { selectedFileUri = it }
-    file?.let { selectedFile = it }
+    setSelectedFileAndUri(uri, file)
     if (!sharedPreferenceUtil.copyMoveZimFilePermissionDialog) {
       showMoveToPublicDirectoryPermissionDialog()
     } else {
@@ -97,6 +96,11 @@ class CopyMoveFileHandler @Inject constructor(
         showCopyMoveDialog()
       }
     }
+  }
+
+  fun setSelectedFileAndUri(uri: Uri?, file: File?) {
+    selectedFileUri = uri
+    selectedFile = file
   }
 
   private fun showMoveToPublicDirectoryPermissionDialog() {
@@ -120,9 +124,9 @@ class CopyMoveFileHandler @Inject constructor(
   private fun isBookLessThan4GB(): Boolean =
     (selectedFile?.length() ?: 0L) < FOUR_GIGABYTES_IN_KILOBYTES
 
-  private fun validateZimFileCanCopyOrMove(): Boolean {
+  fun validateZimFileCanCopyOrMove(file: File = File(sharedPreferenceUtil.prefStorage)): Boolean {
     hidePreparingCopyMoveDialog() // hide the dialog if already showing
-    val availableSpace = storageCalculator.availableBytes()
+    val availableSpace = storageCalculator.availableBytes(file)
     if (hasNotSufficientStorageSpace(availableSpace)) {
       fileCopyMoveCallback?.insufficientSpaceInStorage(availableSpace)
       return false
@@ -190,7 +194,7 @@ class CopyMoveFileHandler @Inject constructor(
     moveZimFileToPublicAppDirectory()
   }
 
-  private fun copyZimFileToPublicAppDirectory() {
+  fun copyZimFileToPublicAppDirectory() {
     lifecycleScope?.launch {
       val destinationFile = getDestinationFile()
       try {
@@ -316,7 +320,7 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   @Suppress("MagicNumber")
-  private suspend fun copyFile(sourceUri: Uri, destinationFile: File) =
+  suspend fun copyFile(sourceUri: Uri, destinationFile: File) =
     withContext(Dispatchers.IO) {
       val contentResolver = activity.contentResolver
 
@@ -350,8 +354,7 @@ class CopyMoveFileHandler @Inject constructor(
       } ?: throw FileNotFoundException("The selected file could not be opened")
     }
 
-  private fun getDestinationFile(): File {
-    val root = File(sharedPreferenceUtil.prefStorage)
+  fun getDestinationFile(root: File = File(sharedPreferenceUtil.prefStorage)): File {
     val fileName = selectedFile?.name ?: ""
 
     val destinationFile = sequence {
@@ -386,7 +389,7 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   @SuppressLint("InflateParams")
-  private fun showProgressDialog() {
+  fun showProgressDialog() {
     val dialogView =
       activity.layoutInflater.inflate(layout.copy_move_progress_bar, null)
     progressBar =

@@ -95,6 +95,7 @@ play {
 
 dependencies {
   androidTestImplementation(Libs.leakcanary_android_instrumentation)
+  testImplementation(Libs.kotlinx_coroutines_test)
 }
 task("generateVersionCodeAndName") {
   val file = File("VERSION_INFO")
