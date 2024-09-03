@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.nav.destination.reader
+package org.kiwix.kiwixmobile.nav.destination.library
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -61,16 +61,16 @@ class CopyMoveFileHandler @Inject constructor(
   private val storageCalculator: StorageCalculator,
   private val fat32Checker: Fat32Checker
 ) {
-  var fileCopyMoveCallback: FileCopyMoveCallback? = null
+  private var fileCopyMoveCallback: FileCopyMoveCallback? = null
   private var selectedFileUri: Uri? = null
   private var selectedFile: File? = null
   private var copyMovePreparingDialog: Dialog? = null
-  var progressBarDialog: AlertDialog? = null
-  var lifecycleScope: CoroutineScope? = null
+  private var progressBarDialog: AlertDialog? = null
+  private var lifecycleScope: CoroutineScope? = null
   private var progressBar: ProgressBar? = null
   private var progressBarTextView: TextView? = null
   private var isMoveOperation = false
-  var fileSystemDisposable: Disposable? = null
+  private var fileSystemDisposable: Disposable? = null
 
   private val copyMoveTitle: String by lazy {
     if (isMoveOperation) {
@@ -103,6 +103,14 @@ class CopyMoveFileHandler @Inject constructor(
     selectedFile = file
   }
 
+  fun setFileCopyMoveCallback(fileCopyMoveCallback: FileCopyMoveCallback?) {
+    this.fileCopyMoveCallback = fileCopyMoveCallback
+  }
+
+  fun setLifeCycleScope(coroutineScope: CoroutineScope?) {
+    lifecycleScope = coroutineScope
+  }
+
   private fun showMoveToPublicDirectoryPermissionDialog() {
     alertDialogShower.show(
       KiwixDialog.MoveFileToPublicDirectoryPermissionDialog,
@@ -121,7 +129,7 @@ class CopyMoveFileHandler @Inject constructor(
     )
   }
 
-  private fun isBookLessThan4GB(): Boolean =
+  fun isBookLessThan4GB(): Boolean =
     (selectedFile?.length() ?: 0L) < FOUR_GIGABYTES_IN_KILOBYTES
 
   fun validateZimFileCanCopyOrMove(file: File = File(sharedPreferenceUtil.prefStorage)): Boolean {
@@ -146,7 +154,7 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  private fun handleDetectingFileSystemState() {
+  fun handleDetectingFileSystemState() {
     if (isBookLessThan4GB()) {
       showCopyMoveDialog()
     } else {
@@ -155,7 +163,7 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  private fun handleCannotWrite4GbFileState() {
+  fun handleCannotWrite4GbFileState() {
     if (isBookLessThan4GB()) {
       showCopyMoveDialog()
     } else {
@@ -164,7 +172,7 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  private fun observeFileSystemState() {
+  fun observeFileSystemState() {
     if (fileSystemDisposable?.isDisposed == false) return
     fileSystemDisposable = fat32Checker.fileSystemStates
       .observeOn(AndroidSchedulers.mainThread())
@@ -176,7 +184,7 @@ class CopyMoveFileHandler @Inject constructor(
       }
   }
 
-  private fun showCopyMoveDialog() {
+  fun showCopyMoveDialog() {
     alertDialogShower.show(
       KiwixDialog.CopyMoveFileToPublicDirectoryDialog,
       ::performCopyOperation,
@@ -184,17 +192,17 @@ class CopyMoveFileHandler @Inject constructor(
     )
   }
 
-  private fun performCopyOperation() {
+  fun performCopyOperation() {
     isMoveOperation = false
     copyZimFileToPublicAppDirectory()
   }
 
-  private fun performMoveOperation() {
+  fun performMoveOperation() {
     isMoveOperation = true
     moveZimFileToPublicAppDirectory()
   }
 
-  fun copyZimFileToPublicAppDirectory() {
+  private fun copyZimFileToPublicAppDirectory() {
     lifecycleScope?.launch {
       val destinationFile = getDestinationFile()
       try {
@@ -320,11 +328,10 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   @Suppress("MagicNumber")
-  suspend fun copyFile(sourceUri: Uri, destinationFile: File) =
+  private suspend fun copyFile(sourceUri: Uri, destinationFile: File) =
     withContext(Dispatchers.IO) {
       val contentResolver = activity.contentResolver
 
-      // Open the ParcelFileDescriptor from the Uri
       val parcelFileDescriptor = contentResolver.openFileDescriptor(sourceUri, "r")
       val fileSize =
         parcelFileDescriptor?.fileDescriptor?.let { FileInputStream(it).channel.size() } ?: 0L
@@ -354,7 +361,8 @@ class CopyMoveFileHandler @Inject constructor(
       } ?: throw FileNotFoundException("The selected file could not be opened")
     }
 
-  fun getDestinationFile(root: File = File(sharedPreferenceUtil.prefStorage)): File {
+  fun getDestinationFile(): File {
+    val root = File(sharedPreferenceUtil.prefStorage)
     val fileName = selectedFile?.name ?: ""
 
     val destinationFile = sequence {
@@ -373,8 +381,7 @@ class CopyMoveFileHandler @Inject constructor(
   private fun hasNotSufficientStorageSpace(availableSpace: Long): Boolean =
     availableSpace < (selectedFile?.length() ?: 0L)
 
-  @SuppressLint("InflateParams")
-  private fun showPreparingCopyMoveDialog() {
+  @SuppressLint("InflateParams") fun showPreparingCopyMoveDialog() {
     if (copyMovePreparingDialog == null) {
       val dialogView: View =
         activity.layoutInflater.inflate(R.layout.item_custom_spinner, null)
@@ -389,7 +396,7 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   @SuppressLint("InflateParams")
-  fun showProgressDialog() {
+  private fun showProgressDialog() {
     val dialogView =
       activity.layoutInflater.inflate(layout.copy_move_progress_bar, null)
     progressBar =
@@ -412,6 +419,12 @@ class CopyMoveFileHandler @Inject constructor(
     if (progressBarDialog?.isShowing == true) {
       progressBarDialog?.dismiss()
     }
+  }
+
+  fun dispose() {
+    fileSystemDisposable?.dispose()
+    setFileCopyMoveCallback(null)
+    setLifeCycleScope(null)
   }
 
   interface FileCopyMoveCallback {

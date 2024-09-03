@@ -98,7 +98,6 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.databinding.FragmentDestinationLibraryBinding
-import org.kiwix.kiwixmobile.nav.destination.reader.CopyMoveFileHandler
 import org.kiwix.kiwixmobile.zimManager.MAX_PROGRESS
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions
@@ -244,8 +243,10 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     setUpSwipeRefreshLayout()
-    copyMoveFileHandler?.fileCopyMoveCallback = this
-    copyMoveFileHandler?.lifecycleScope = lifecycleScope
+    copyMoveFileHandler?.apply {
+      setFileCopyMoveCallback(this@LocalLibraryFragment)
+      setLifeCycleScope(lifecycleScope)
+    }
     fragmentDestinationLibraryBinding?.zimfilelist?.run {
       adapter = booksOnDiskAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -486,9 +487,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     disposable.clear()
     storagePermissionLauncher?.unregister()
     storagePermissionLauncher = null
-    copyMoveFileHandler?.fileCopyMoveCallback = null
-    copyMoveFileHandler?.lifecycleScope = null
-    copyMoveFileHandler?.fileSystemDisposable?.dispose()
+    copyMoveFileHandler?.dispose()
     copyMoveFileHandler = null
   }
 
