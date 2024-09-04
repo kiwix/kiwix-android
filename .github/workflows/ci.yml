@@ -117,18 +117,18 @@ jobs:
           path: screencap.png
 
       - name: create unit coverage
-        if: ${{ matrix.api-level==25 }}
+        if: ${{ matrix.api-level==30 }}
         run: ./gradlew testDebugUnitTest testCustomexampleDebugUnitTest
 
       - name: Upload coverage to Codecov
-        if: ${{ matrix.api-level==25 }}
+        if: ${{ matrix.api-level==30 }}
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload Coverage to GH-Actions
         uses: actions/upload-artifact@v3
-        if: ${{ matrix.api-level==25 }}
+        if: ${{ matrix.api-level==30 }}
         with:
           name: Tests Coverage Report
           path: |
