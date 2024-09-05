@@ -177,6 +177,7 @@ class KiwixPrefsFragment : CorePrefsFragment() {
 
   override fun onDestroyView() {
     storageDisposable?.dispose()
+    storageDisposable = null
     super.onDestroyView()
   }
 

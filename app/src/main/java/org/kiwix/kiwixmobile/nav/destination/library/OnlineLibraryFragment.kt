@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.nav.destination.library
 import android.Manifest
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.ConnectivityManager
@@ -373,7 +372,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
   }
 
-  @SuppressLint("InflateParams")
   private fun storeDeviceInPreferences(
     storageDevice: StorageDevice
   ) {

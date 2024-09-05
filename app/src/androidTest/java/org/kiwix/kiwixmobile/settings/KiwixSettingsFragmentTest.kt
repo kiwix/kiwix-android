@@ -81,6 +81,7 @@ class KiwixSettingsFragmentTest {
           "en",
           SharedPreferenceUtil(it).apply {
             setIsPlayStoreBuildType(true)
+            playStoreRestrictionPermissionDialog = false
           }
         )
         it.navigate(R.id.introFragment)

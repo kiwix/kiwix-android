@@ -109,6 +109,23 @@ sealed class KiwixDialog(
     cancelable = false
   )
 
+  data object MoveFileToPublicDirectoryPermissionDialog : KiwixDialog(
+    R.string.move_files_permission_dialog_title,
+    R.string.move_files_permission_dialog_description,
+    R.string.copy,
+    R.string.move,
+    neutralMessage = R.string.cancel,
+    cancelable = false
+  )
+
+  data object CopyMoveFileToPublicDirectoryDialog : KiwixDialog(
+    null,
+    R.string.copy_move_files_dialog_description,
+    R.string.copy,
+    R.string.move,
+    cancelable = false
+  )
+
   object SaveOrOpenUnsupportedFiles : KiwixDialog(
     R.string.save_or_open_unsupported_files_dialog_title,
     R.string.save_or_open_unsupported_files_dialog_message,
@@ -241,6 +258,15 @@ sealed class KiwixDialog(
     null,
     R.string.empty_string,
     null,
+    getView = customGetView
+  )
+
+  data class PreparingCopyingFilesDialog(val customGetView: (() -> View)?) : KiwixDialog(
+    R.string.preparing_file_for_copy,
+    null,
+    R.string.empty_string,
+    null,
+    cancelable = false,
     getView = customGetView
   )
 
