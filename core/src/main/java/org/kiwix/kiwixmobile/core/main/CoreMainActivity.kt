@@ -287,7 +287,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     drawerContainerLayout.closeDrawer(drawerNavView)
   }
 
-  private fun openSupportKiwixExternalLink() {
+  fun openSupportKiwixExternalLink() {
     externalLinkOpener.openExternalUrl(KIWIX_SUPPORT_URL.toUri().browserIntent())
   }
 

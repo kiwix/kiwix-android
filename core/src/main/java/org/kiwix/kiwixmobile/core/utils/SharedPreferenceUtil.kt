@@ -271,6 +271,22 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
       }
     }
 
+  var lastDonationPopupShownInMilliSeconds: Long
+    get() = sharedPreferences.getLong(PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS, 0L)
+    set(value) {
+      sharedPreferences.edit {
+        putLong(PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS, value)
+      }
+    }
+
+  var laterClickedMilliSeconds: Long
+    get() = sharedPreferences.getLong(PREF_LATER_CLICKED_MILLIS, 0L)
+    set(value) {
+      sharedPreferences.edit {
+        putLong(PREF_LATER_CLICKED_MILLIS, value)
+      }
+    }
+
   fun getPublicDirectoryPath(path: String): String =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       path
@@ -321,5 +337,8 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_NOTES_MIGRATED = "pref_notes_migrated"
     const val PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED = "pref_app_directory_to_public_migrated"
     const val PREF_COPY_MOVE_PERMISSION = "pref_copy_move_permission"
+    private const val PREF_LATER_CLICKED_MILLIS = "pref_later_clicked_millis"
+    private const val PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS =
+      "pref_last_donation_shown_in_milliseconds"
   }
 }
