@@ -330,7 +330,7 @@
   <string name="preparing_file_for_copy">Preparing for copy/move</string>
   <string name="copy" tools:ignore="PrivateResource">Copy</string>
   <string name="move">Move</string>
-  <string name="file_copying_in_progress">Zim file coping in progress</string>
+  <string name="file_copying_in_progress">Zim file copying in progress</string>
   <string name="file_moving_in_progress">Zim file moving in progress</string>
   <string name="copy_move_files_dialog_description">Do you want to copy or move the file?</string>
   <string name="copy_file_error_message">Error in copying the zim file: %s.</string>
