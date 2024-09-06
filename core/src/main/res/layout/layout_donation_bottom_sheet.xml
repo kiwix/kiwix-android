@@ -31,13 +31,13 @@
 
     <ImageView
       android:id="@+id/heart_icon"
-      android:layout_width="40dp"
-      android:layout_height="40dp"
+      android:layout_width="50dp"
+      android:layout_height="50dp"
       android:layout_alignParentStart="true"
       android:layout_margin="@dimen/activity_horizontal_margin"
       android:layout_marginEnd="12dp"
       android:contentDescription="@string/donation_dialog_title"
-      android:src="@drawable/ic_support_24px"
+      android:src="@drawable/ic_donation_icon"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
