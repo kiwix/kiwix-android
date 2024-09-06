@@ -1870,11 +1870,17 @@ abstract class CoreReaderFragment :
     val layoutParams = FrameLayout.LayoutParams(
       FrameLayout.LayoutParams.MATCH_PARENT,
       FrameLayout.LayoutParams.WRAP_CONTENT
-    )
-    val bottomToolBarHeight =
-      requireActivity()
-        .findViewById<BottomAppBar>(org.kiwix.kiwixmobile.core.R.id.bottom_toolbar).measuredHeight
-    layoutParams.setMargins(16, 0, 16, bottomToolBarHeight + 10)
+    ).apply {
+      val rightAndLeftMargin = requireActivity().resources.getDimensionPixelSize(
+        org.kiwix.kiwixmobile.core.R.dimen.activity_horizontal_margin
+      )
+      setMargins(
+        rightAndLeftMargin,
+        0,
+        rightAndLeftMargin,
+        getBottomMarginForDonationPopup()
+      )
+    }
 
     donationCardView.layoutParams = layoutParams
     donationLayout?.apply {
@@ -1900,6 +1906,23 @@ abstract class CoreReaderFragment :
       donationDialogHandler?.donateLater()
       setDonationLayoutVisibility(GONE)
     }
+  }
+
+  private fun getBottomMarginForDonationPopup(): Int {
+    var bottomMargin = requireActivity().resources.getDimensionPixelSize(
+      R.dimen.donation_popup_bottom_margin
+    )
+    val bottomAppBar = requireActivity()
+      .findViewById<BottomAppBar>(R.id.bottom_toolbar)
+    if (bottomAppBar.visibility == VISIBLE) {
+      // if bottomAppBar is visible then add the height of the bottomAppBar.
+      bottomMargin += requireActivity().resources.getDimensionPixelSize(
+        R.dimen.material_minimum_height_and_width
+      )
+      bottomMargin += requireActivity().resources.getDimensionPixelSize(R.dimen.card_margin)
+    }
+
+    return bottomMargin
   }
 
   protected open fun openKiwixSupportUrl() {
