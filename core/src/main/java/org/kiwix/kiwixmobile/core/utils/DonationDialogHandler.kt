@@ -34,7 +34,7 @@ class DonationDialogHandler @Inject constructor(
 
   private var showDonationDialogCallback: ShowDonationDialogCallback? = null
 
-  fun showDonationDialogCallBack(showDonationDialogCallback: ShowDonationDialogCallback?) {
+  fun setDonationDialogCallBack(showDonationDialogCallback: ShowDonationDialogCallback?) {
     this.showDonationDialogCallback = showDonationDialogCallback
   }
 
@@ -61,18 +61,18 @@ class DonationDialogHandler @Inject constructor(
     return timeDifference >= THREE_DAYS_IN_MILLISECONDS
   }
 
-  private fun isZimFilesAvailableInLibrary(): Boolean =
+  fun isZimFilesAvailableInLibrary(): Boolean =
     if (activity.isCustomApp()) true else newBookDao.getBooks().isNotEmpty()
 
   fun updateLastDonationPopupShownTime() {
     sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
   }
 
-  fun donateLater() {
-    sharedPreferenceUtil.laterClickedMilliSeconds = System.currentTimeMillis()
+  fun donateLater(currentMillis: Long = System.currentTimeMillis()) {
+    sharedPreferenceUtil.laterClickedMilliSeconds = currentMillis
   }
 
-  private fun resetDonateLater() {
+  fun resetDonateLater() {
     sharedPreferenceUtil.laterClickedMilliSeconds = 0L
   }
 

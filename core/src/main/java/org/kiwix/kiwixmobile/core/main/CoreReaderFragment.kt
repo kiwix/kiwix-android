@@ -398,7 +398,7 @@ abstract class CoreReaderFragment :
   ) {
     super.onViewCreated(view, savedInstanceState)
     setupMenu()
-    donationDialogHandler?.showDonationDialogCallBack(this)
+    donationDialogHandler?.setDonationDialogCallBack(this)
     val activity = requireActivity() as AppCompatActivity?
     activity?.let {
       WebView(it).destroy() // Workaround for buggy webViews see #710
@@ -1224,7 +1224,7 @@ abstract class CoreReaderFragment :
     unRegisterReadAloudService()
     storagePermissionForNotesLauncher?.unregister()
     storagePermissionForNotesLauncher = null
-    donationDialogHandler?.showDonationDialogCallBack(null)
+    donationDialogHandler?.setDonationDialogCallBack(null)
     donationDialogHandler = null
   }
 
