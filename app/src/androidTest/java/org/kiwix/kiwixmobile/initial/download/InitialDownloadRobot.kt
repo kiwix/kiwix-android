@@ -71,11 +71,22 @@ class InitialDownloadRobot : BaseRobot() {
       isVisible(TextId(string.your_languages))
     } catch (e: RuntimeException) {
       if (retryCountForDataToLoad > 0) {
+        // refresh the data if there is "Swipe Down for Library" visible on the screen.
+        refreshOnlineListIfSwipeDownForLibraryTextVisible()
         waitForDataToLoad(retryCountForDataToLoad - 1)
         return
       }
       // throw the exception when there is no more retry left.
       throw RuntimeException("Couldn't load the online library list.\n Original exception = $e")
+    }
+  }
+
+  private fun refreshOnlineListIfSwipeDownForLibraryTextVisible() {
+    try {
+      onView(withText(string.swipe_down_for_library)).check(matches(isDisplayed()))
+      refreshOnlineList()
+    } catch (e: RuntimeException) {
+      // do nothing as the view is not visible
     }
   }
 

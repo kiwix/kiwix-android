@@ -21,16 +21,19 @@ package org.kiwix.kiwixmobile.language
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isNotChecked
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
+import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
-import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.testutils.TestUtils
@@ -50,12 +53,27 @@ class LanguageRobot : BaseRobot() {
       isVisible(TextId(string.your_languages))
     } catch (e: RuntimeException) {
       if (retryCountForDataToLoad > 0) {
+        // refresh the data if there is "Swipe Down for Library" visible on the screen.
+        refreshOnlineListIfSwipeDownForLibraryTextVisible()
         waitForDataToLoad(retryCountForDataToLoad - 1)
         return
       }
       // throw the exception when there is no more retry left.
       throw RuntimeException("Couldn't load the online library list.\n Original exception = $e")
     }
+  }
+
+  private fun refreshOnlineListIfSwipeDownForLibraryTextVisible() {
+    try {
+      onView(ViewMatchers.withText(string.swipe_down_for_library)).check(matches(isDisplayed()))
+      refreshOnlineList()
+    } catch (e: RuntimeException) {
+      // do nothing as the view is not visible
+    }
+  }
+
+  private fun refreshOnlineList() {
+    refresh(R.id.librarySwipeRefresh)
   }
 
   fun clickOnLanguageIcon() {
