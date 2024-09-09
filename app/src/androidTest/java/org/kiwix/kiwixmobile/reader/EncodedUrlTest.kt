@@ -56,6 +56,10 @@ class EncodedUrlTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
       putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, false)
       putString(SharedPreferenceUtil.PREF_LANG, "en")
+      putLong(
+        SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
+        System.currentTimeMillis()
+      )
     }
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)

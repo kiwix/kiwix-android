@@ -338,7 +338,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED = "pref_app_directory_to_public_migrated"
     const val PREF_COPY_MOVE_PERMISSION = "pref_copy_move_permission"
     private const val PREF_LATER_CLICKED_MILLIS = "pref_later_clicked_millis"
-    private const val PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS =
+    const val PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS =
       "pref_last_donation_shown_in_milliseconds"
   }
 }

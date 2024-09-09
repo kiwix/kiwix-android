@@ -108,6 +108,7 @@ class ZimHostFragmentTest {
         prefIsTest = true
         playStoreRestrictionPermissionDialog = false
         putPrefLanguage("en")
+        lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
       }
     }
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {

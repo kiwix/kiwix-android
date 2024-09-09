@@ -66,6 +66,7 @@ class DeepLinksTest : BaseActivityTest() {
         prefIsTest = true
         playStoreRestrictionPermissionDialog = false
         putPrefLanguage("en")
+        lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
       }
     }
   }
