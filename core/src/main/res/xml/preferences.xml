@@ -103,7 +103,7 @@
   </PreferenceCategory>
 
   <PreferenceCategory
-    android:key="pref_notes"
+    android:key="pref_bookmark"
     android:title="@string/bookmarks"
     app:iconSpaceReserved="false">
 
