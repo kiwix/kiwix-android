@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Firilacroco
 * Fitoschido
 * MSClaudiu
 * McDutchie
@@ -178,7 +179,7 @@
   <string name="get_started">Să începem</string>
   <string name="download_books">Descarcă cărți</string>
   <string name="humankind_knowledge">Cunoașterea omenirii pe telefonul tău.</string>
-  <string name="welcome_to_the_family">Bun venit în familie</string>
+  <string name="welcome_to_the_family">Bun-venit în familie</string>
   <string name="save_books_offline">Salvează cărți offline</string>
   <string name="download_books_message">Descărcă cărți și citește oriunde v-ați afla.</string>
   <string name="unable_to_add_to_bookmarks">Nu am putut adăuga la semne de carte</string>
