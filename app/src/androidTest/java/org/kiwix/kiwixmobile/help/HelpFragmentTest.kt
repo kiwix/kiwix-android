@@ -57,7 +57,9 @@ class HelpFragmentTest : BaseActivityTest() {
         handleLocaleChange(
           it,
           "en",
-          SharedPreferenceUtil(context)
+          SharedPreferenceUtil(context).apply {
+            lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
+          }
         )
       }
     }

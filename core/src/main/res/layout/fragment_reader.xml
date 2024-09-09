@@ -57,6 +57,15 @@
       android:layout_height="match_parent"
       android:background="@android:color/black"
       android:visibility="invisible" />
+
+    <FrameLayout
+      android:id="@+id/donation_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:visibility="visible"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

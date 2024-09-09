@@ -28,10 +28,12 @@ import android.view.View.VISIBLE
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
 import org.kiwix.kiwixmobile.core.R.dimen
 import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.getResizedDrawable
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
@@ -326,6 +328,22 @@ class CustomReaderFragment : CoreReaderFragment() {
 
   override fun createNewTab() {
     newMainPageTab()
+  }
+
+  /**
+   * Overrides the method to show the donation popup. When the "Support url" is disabled
+   * in a custom app, this function stop to show the donationPopup.
+   */
+  override fun showDonationLayout() {
+    if (BuildConfig.SUPPORT_URL.isNotEmpty()) {
+      super.showDonationLayout()
+    }
+  }
+
+  override fun openKiwixSupportUrl() {
+    if (BuildConfig.SUPPORT_URL.isNotEmpty()) {
+      openExternalUrl(BuildConfig.SUPPORT_URL.toUri().browserIntent())
+    }
   }
 
   override fun onDestroyView() {

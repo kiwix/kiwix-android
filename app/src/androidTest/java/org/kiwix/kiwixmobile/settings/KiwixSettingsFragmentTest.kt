@@ -82,6 +82,7 @@ class KiwixSettingsFragmentTest {
           SharedPreferenceUtil(it).apply {
             setIsPlayStoreBuildType(true)
             playStoreRestrictionPermissionDialog = false
+            lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
           }
         )
         it.navigate(R.id.introFragment)

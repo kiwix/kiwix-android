@@ -46,6 +46,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
@@ -133,6 +134,8 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getToolbarHeight
+import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
+import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler.ShowDonationDialogCallback
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
@@ -173,7 +176,8 @@ abstract class CoreReaderFragment :
   FragmentActivityExtensions,
   WebViewProvider,
   ReadAloudCallbacks,
-  NavigationHistoryClickListener {
+  NavigationHistoryClickListener,
+  ShowDonationDialogCallback {
   protected val webViewList: MutableList<KiwixWebView> = ArrayList()
   private val webUrlsProcessor = BehaviorProcessor.create<String>()
   private var fragmentReaderBinding: FragmentReaderBinding? = null
@@ -226,6 +230,10 @@ abstract class CoreReaderFragment :
   @JvmField
   @Inject
   var alertDialogShower: DialogShower? = null
+
+  @JvmField
+  @Inject
+  var donationDialogHandler: DonationDialogHandler? = null
 
   @JvmField
   @Inject
@@ -297,6 +305,7 @@ abstract class CoreReaderFragment :
   private var tableDrawerAdapter: TableDrawerAdapter? = null
   private var tableDrawerRight: RecyclerView? = null
   private var tabCallback: ItemTouchHelper.Callback? = null
+  private var donationLayout: FrameLayout? = null
   private var bookmarkingDisposable: Disposable? = null
   private var isBookmarked = false
   private lateinit var serviceConnection: ServiceConnection
@@ -389,6 +398,7 @@ abstract class CoreReaderFragment :
   ) {
     super.onViewCreated(view, savedInstanceState)
     setupMenu()
+    donationDialogHandler?.setDonationDialogCallBack(this)
     val activity = requireActivity() as AppCompatActivity?
     activity?.let {
       WebView(it).destroy() // Workaround for buggy webViews see #710
@@ -511,6 +521,7 @@ abstract class CoreReaderFragment :
         tabRecyclerView = findViewById(R.id.tab_switcher_recycler_view)
         snackBarRoot = findViewById(R.id.snackbar_root)
         bottomToolbarToc = findViewById(R.id.bottom_toolbar_toc)
+        donationLayout = findViewById(R.id.donation_layout)
       }
     }
   }
@@ -1213,6 +1224,8 @@ abstract class CoreReaderFragment :
     unRegisterReadAloudService()
     storagePermissionForNotesLauncher?.unregister()
     storagePermissionForNotesLauncher = null
+    donationDialogHandler?.setDonationDialogCallBack(null)
+    donationDialogHandler = null
   }
 
   private fun unBindViewsAndBinding() {
@@ -1243,6 +1256,8 @@ abstract class CoreReaderFragment :
     closeAllTabsButton = null
     tableDrawerRightContainer = null
     fragmentReaderBinding = null
+    donationLayout?.removeAllViews()
+    donationLayout = null
   }
 
   private fun updateTableOfContents() {
@@ -1846,6 +1861,76 @@ abstract class CoreReaderFragment :
     if (tts == null) {
       setUpTTS()
     }
+    donationDialogHandler?.attemptToShowDonationPopup()
+  }
+
+  @Suppress("InflateParams", "MagicNumber")
+  protected open fun showDonationLayout() {
+    val donationCardView = layoutInflater.inflate(R.layout.layout_donation_bottom_sheet, null)
+    val layoutParams = FrameLayout.LayoutParams(
+      FrameLayout.LayoutParams.MATCH_PARENT,
+      FrameLayout.LayoutParams.WRAP_CONTENT
+    ).apply {
+      val rightAndLeftMargin = requireActivity().resources.getDimensionPixelSize(
+        org.kiwix.kiwixmobile.core.R.dimen.activity_horizontal_margin
+      )
+      setMargins(
+        rightAndLeftMargin,
+        0,
+        rightAndLeftMargin,
+        getBottomMarginForDonationPopup()
+      )
+    }
+
+    donationCardView.layoutParams = layoutParams
+    donationLayout?.apply {
+      removeAllViews()
+      addView(donationCardView)
+      setDonationLayoutVisibility(VISIBLE)
+    }
+    donationCardView.findViewById<TextView>(R.id.descriptionText).apply {
+      text = getString(
+        R.string.donation_dialog_description,
+        (requireActivity() as CoreMainActivity).appName
+      )
+    }
+    val donateButton: TextView = donationCardView.findViewById(R.id.donateButton)
+    donateButton.setOnClickListener {
+      donationDialogHandler?.updateLastDonationPopupShownTime()
+      setDonationLayoutVisibility(GONE)
+      openKiwixSupportUrl()
+    }
+
+    val laterButton: TextView = donationCardView.findViewById(R.id.laterButton)
+    laterButton.setOnClickListener {
+      donationDialogHandler?.donateLater()
+      setDonationLayoutVisibility(GONE)
+    }
+  }
+
+  private fun getBottomMarginForDonationPopup(): Int {
+    var bottomMargin = requireActivity().resources.getDimensionPixelSize(
+      R.dimen.donation_popup_bottom_margin
+    )
+    val bottomAppBar = requireActivity()
+      .findViewById<BottomAppBar>(R.id.bottom_toolbar)
+    if (bottomAppBar.visibility == VISIBLE) {
+      // if bottomAppBar is visible then add the height of the bottomAppBar.
+      bottomMargin += requireActivity().resources.getDimensionPixelSize(
+        R.dimen.material_minimum_height_and_width
+      )
+      bottomMargin += requireActivity().resources.getDimensionPixelSize(R.dimen.card_margin)
+    }
+
+    return bottomMargin
+  }
+
+  protected open fun openKiwixSupportUrl() {
+    (requireActivity() as CoreMainActivity).openSupportKiwixExternalLink()
+  }
+
+  private fun setDonationLayoutVisibility(visibility: Int) {
+    donationLayout?.visibility = visibility
   }
 
   private fun openFullScreenIfEnabled() {
@@ -2386,6 +2471,10 @@ abstract class CoreReaderFragment :
   override fun onStop() {
     super.onStop()
     unbindService()
+  }
+
+  override fun showDonationDialog() {
+    showDonationLayout()
   }
 
   private fun bindService() {

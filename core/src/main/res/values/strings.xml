@@ -389,4 +389,7 @@
   <string name="toolbar_back_button_content_description">Go to previous screen</string>
   <string name="save_or_open_unsupported_files_dialog_title">Save or Open this file?</string>
   <string name="save_or_open_unsupported_files_dialog_message">Choosing Open will open this file in external reader application.</string>
+  <string name="donation_dialog_title">Donate Today</string>
+  <string name="donation_dialog_description">%s needs your help.</string>
+  <string name="make_donation">Make a donation</string>
 </resources>
