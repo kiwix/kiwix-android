@@ -14,6 +14,7 @@
 * Ice bulldog
 * Kareyac
 * Link2xt
+* Lutece398
 * McDutchie
 * MohitMali
 * Movses
@@ -98,7 +99,7 @@
   <string name="tts_lang_not_supported">Язык этой страницы не поддерживается. Статья не может быть правильно прочитана.</string>
   <string name="no_reader_application_installed">Не удалось найти установленное приложение для этого типа файлов</string>
   <string name="no_email_application_installed">Установите поставщика услуг электронной почты или напишите нам по адресу %1s</string>
-  <string name="no_section_info">Не Найдены Заголовки Содержимого.</string>
+  <string name="no_section_info">Не найдены заголовки содержимого</string>
   <string name="request_storage">Для доступа к офлайн контенту нам нужен доступ к вашему файловому хранилищу</string>
   <string name="request_write_storage">Для скачивания ZIM-файлов нам нужен доступ на запись к вашему хранилищу</string>
   <string name="clear_recent_and_tabs_history_dialog">Вы уверены, что хотите удалить историю поиска и закрыть все активные вкладки?</string>
@@ -108,7 +109,7 @@
   <string name="pref_notes">Заметки</string>
   <string name="pref_permission">Разрешения</string>
   <string name="pref_import_bookmark_title">Импортировать закладки</string>
-  <string name="pref_import_bookmark_summary">Импортировать сохраненные отметки</string>
+  <string name="pref_import_bookmark_summary">Импортировать сохраненные закладки</string>
   <string name="pref_export_bookmark_title">Экспортировать закладки</string>
   <string name="pref_export_bookmark_summary">Экспортировать все сохраненные закладки</string>
   <string name="export_bookmark_saved">Закладки экспортированы в файл %s</string>
@@ -144,28 +145,31 @@
   <string name="local_zims">Устройство</string>
   <string name="remote_zims">Онлайн</string>
   <string name="library">Библиотека</string>
-  <string name="delete_zim_body">Следующие файлы zim будут удалены:\n\n%s</string>
+  <string name="delete_zim_body">Следующие ZIM-файлы будут удалены:\n\n%s</string>
   <string name="delete_zims_toast">Файл успешно удалён</string>
   <string name="no_files_here">Файлы отсутствуют</string>
   <string name="download_no_space">Недостаточно места для загрузки.</string>
   <string name="download">Скачать</string>
   <string name="space_available">Доступно Места:</string>
+  <string name="move_no_space">Недостаточно места для перемещения/копирования.</string>
   <string name="zim_simple">Простой</string>
   <string name="zim_no_pic">Без картинок</string>
   <string name="zim_no_vid">Без видео</string>
   <string name="no_network_connection">Отсутствует сетевое подключение</string>
   <string name="help_2">Что делает Kiwix?</string>
   <string name="help_3">Kiwix - это автономный контент-ридер. Он действует схоже с браузером, но вместо обращения к онлайн страницам, он считывает содержимое из файла в формате ZIM.</string>
-  <string name="help_4">Хотя Kiwix и был изначально разработан, чтобы просматривать Wikipedia оффлайн, он также пригоден и для другого содержимого.</string>
+  <string name="help_4">Хотя Kiwix и был изначально разработан, чтобы просматривать Википедию в автономной режиме, он также пригоден и для другого содержимого.</string>
   <string name="help_5">Где содержимое?</string>
   <string name="help_6">Наш контент размещён на сайте Kiwix.</string>
   <string name="help_7">Они доступны как ZIM файлы. Их существует много:</string>
-  <string name="help_8">• Wikipedia доступна отдельно для каждого языка</string>
-  <string name="help_9">• Такое содержимое, как Wikleaks или Wikisource, также доступно</string>
+  <string name="help_8">• Википедия доступна отдельно для каждого языка</string>
+  <string name="help_9">• Такое содержимое, как Wikileaks или Викитека, также доступно</string>
   <string name="help_10">Вы можете или загрузить выбранные ZIM файлы через приложение, или тщательно выбрать те, которые вам нужны, и загрузить их с настольного компьютера, прежде чем передавать ZIM файлы на вашу SD-карту.</string>
   <string name="help_11">Загрузка ZIM файлов в приложении находится на внешнем накопителе в папке под названием Kiwix.</string>
   <string name="pref_storage">Хранилище</string>
   <string name="pref_current_folder">Текущая Папка</string>
+  <string name="pref_storage_used">%s использовано</string>
+  <string name="pref_free_storage">%s свободно</string>
   <string name="delete_zim_failed">Извините, мы не смогли удалить некоторые файлы. Вместо этого вам стоит попытаться использовать файловый менеджер.</string>
   <string name="tts_pause">пауза</string>
   <string name="tts_resume">продолжить</string>
@@ -196,7 +200,7 @@
   <string name="time_yesterday">Вчера</string>
   <string name="pref_external_link_popup_title">Предупреждать когда происходит ввод внешних ссылок</string>
   <string name="pref_external_link_popup_summary">Показать всплывающее сообщение про снятие дополнительных средств мобильным оператором или невозможности работы ссылок в офлайне.</string>
-  <string name="external_link_popup_dialog_title">Открываем Внешнюю Ссылку!</string>
+  <string name="external_link_popup_dialog_title">Открываем внешнюю ссылку!</string>
   <string name="external_link_popup_dialog_message">Вы открываете внешнюю ссылку. Её открытие может привести к снятию средств мобильным оператором или может не сработать, если вы офлайн. Хотите продолжить?</string>
   <string name="do_not_ask_anymore">Больше не спрашивать</string>
   <string name="your_languages">Выбранные языки:</string>
@@ -233,7 +237,7 @@
   <string name="history_from_current_book">Посмотреть историю из всех книг</string>
   <string name="search_history">Искать в истории</string>
   <string name="selected_items">%1$d выбрано</string>
-  <string name="bookmarks_from_current_book">Показать Закладки Во Всех Книгах</string>
+  <string name="bookmarks_from_current_book">Показать закладки из всех книг</string>
   <string name="search_bookmarks">Искать в закладках</string>
   <string name="switch_tabs">Переключить вкладки</string>
   <string name="close_all_tabs">Закрыть все вкладки</string>
@@ -249,6 +253,8 @@
   <string name="note">Заметка</string>
   <string name="wiki_article_title">Заголовок вики-статьи</string>
   <string name="ext_storage_permission_rationale_export_bookmark">Для экспорта закладок необходим доступ к хранилищу.</string>
+  <string name="ext_storage_write_permission_denied_export_bookmark">Закладки не могут быть экспортированы без доступа к хранилищу</string>
+  <string name="export_bookmark_error">При попытке экспортировать закладку произошла ошибка!</string>
   <string name="ext_storage_permission_rationale_add_note">Разрешение на хранение необходимо для Заметок</string>
   <string name="ext_storage_write_permission_denied_add_note">Заметки не могут быть использованы без разрешения на хранение</string>
   <string name="note_save_unsuccessful">Заметка не сохранена</string>
@@ -310,9 +316,10 @@
   <string name="delete_history">Удалить всю историю?</string>
   <string name="delete_selected_history">Очистить Выбранную историю?</string>
   <string name="delete_bookmarks">Удалить все закладки?</string>
-  <string name="delete_selected_bookmarks">Удалить Выбранные Закладки?</string>
+  <string name="delete_selected_bookmarks">Удалить выбранные закладки?</string>
   <string name="import_bookmarks_dialog_title">Импортировать закладки?</string>
   <string name="export_all_bookmarks_dialog_title">Экспортировать все закладки?</string>
+  <string name="export_all_bookmarks_dialog_message">Экспорт создаст файл bookmark.xml в папке Download/org.kiwix…/</string>
   <string name="bookmark_imported_message">Все закладки импортированы.</string>
   <string name="on">Вкл</string>
   <string name="off">Выкл</string>
@@ -334,6 +341,13 @@
   <string name="zim_files_not_showing">Файлы Zim не отображаются?</string>
   <string name="zim_files_not_showing_description">В соответствии с правилами Google Play для Android 11 и более поздних версий это приложение Google Store не может открывать загруженные неопубликованными файлы ZIM. Вы можете либо скачать их через приложение, либо установить полную версию приложения kiwix с нашего официального сайта %s</string>
   <string name="understood">Понятно</string>
+  <string name="preparing_file_for_copy">Подготовка к копированию/перемещению</string>
+  <string name="move">Переместить</string>
+  <string name="file_copying_in_progress" fuzzy="true">Копируем ZIM-файл</string>
+  <string name="file_moving_in_progress">Перемещаем ZIM-файл</string>
+  <string name="copy_move_files_dialog_description">Вы хотите скопировать или переместить файл?</string>
+  <string name="copy_file_error_message">Ошибка при копировании ZIM-файла: %s.</string>
+  <string name="move_file_error_message">Ошибка при перемещении ZIM-файла: %s.</string>
   <string name="how_to_update_content">Как обновить содержимое?</string>
   <string name="update_content_description">Чтобы обновить содержимое (файл zim), вам нужно скачать последнюю версию того же содержимого. Вы можете это сделать в разделе загрузок.</string>
   <string name="all_files_permission_needed">Требуются разрешения для всех файлов</string>
@@ -373,4 +387,5 @@
   <string name="select_language_content_description">При выборе этого языка приоритет отдается отображению загружаемых книг на этом языке.</string>
   <string name="toolbar_back_button_content_description">Перейти к предыдущей странице</string>
   <string name="save_or_open_unsupported_files_dialog_title">Сохранить или открыть этот файл?</string>
+  <string name="save_or_open_unsupported_files_dialog_message">При выборе «Открыть» файл откроется во внешнем приложении для чтения.</string>
 </resources>

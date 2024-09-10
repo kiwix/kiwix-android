@@ -134,6 +134,7 @@
   <string name="download">הורדה</string>
   <string name="download_notification_channel_name">שם ערוץ התראות ההורדה</string>
   <string name="space_available">נפח זמין:</string>
+  <string name="move_no_space">אין מספיק מקום להעברה או העתקה.</string>
   <string name="zim_simple">פשוט</string>
   <string name="zim_no_pic">אין תמונות</string>
   <string name="zim_no_vid">אין סרטונים</string>
@@ -324,6 +325,15 @@
   <string name="zim_files_not_showing">קובצי ה־zim אינם מוצגים?</string>
   <string name="zim_files_not_showing_description">בשל מדיניות Google Play ב־Android 11 ומעלה, יישום ה־Google Store הזה לא יכול לפתוח קובצי ZIM עם טעינת צד. באפשרותך להוריד אותם דרך היישום או להתקין את הגרסה המלאה של אפליקציית kiwix מהאתר הרשמי שלנו %s</string>
   <string name="understood">הבנתי</string>
+  <string name="preparing_file_for_copy">הכנה להעתקה או העברה</string>
+  <string name="move">העברה</string>
+  <string name="file_copying_in_progress" fuzzy="true">העתקת קובץ ZIM מתבצעת</string>
+  <string name="file_moving_in_progress">העברת קובץ ZIM מתבצעת</string>
+  <string name="copy_move_files_dialog_description">האם ברצונך להעתיק או להעביר את הקובץ?</string>
+  <string name="copy_file_error_message">שגיאה בהעתקת קובץ zim‏: %s.</string>
+  <string name="move_files_permission_dialog_title">להעביר או להעתיק קבצים לספרייה ציבורית של היישום?</string>
+  <string name="move_files_permission_dialog_description">בשל מדיניות Google Play ב־Android 11 ומעלה, היישום שלנו אינו יכול יותר לגשת ישירות לקבצים המאוחסנים במקום אחר במכשיר שלך. כדי לאפשר לך להציג את הקבצים שבחרת, עלינו להעביר או להעתיק אותם לתיקייה מיוחדת בתוך תיקיית היישום שלנו. זה מאפשר לנו לגשת ולפתוח את הקבצים. האם זה בסדר מבחינתך?</string>
+  <string name="move_file_error_message">שגיאה בהעברת קובץ zim‏: %s.</string>
   <string name="how_to_update_content">איך לעדכן תוכן?</string>
   <string name="update_content_description">כדי לעדכן תוכן (קובץ zim) עליך להוריד את הגרסה המלאה העדכנית ביותר של אותו התוכן בדיוק. ניתן לעשות זאת דרך סעיף ההורדה.</string>
   <string name="all_files_permission_needed">דרושים כל הרשאות הקבצים</string>

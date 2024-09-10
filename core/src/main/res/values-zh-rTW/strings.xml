@@ -137,6 +137,7 @@
   <string name="download">下載</string>
   <string name="download_notification_channel_name">下載通知頻道名稱</string>
   <string name="space_available">可用空間：</string>
+  <string name="move_no_space">沒有足夠的空間來移動/拷貝。</string>
   <string name="zim_simple">簡易</string>
   <string name="zim_no_pic">沒有圖片</string>
   <string name="zim_no_vid">無視訊</string>
@@ -327,6 +328,15 @@
   <string name="zim_files_not_showing">沒有看到 zim 檔案？</string>
   <string name="zim_files_not_showing_description">出自於 Android 11（或更高階版本）的 Google Play 政策，此款 Google 商店應用程式無法開啟側載的 zim 檔案。您可以改由應用程式來下載，或是從我們的官方網站：%s 來安裝完整版的 kiwix 應用程式</string>
   <string name="understood">明白了</string>
+  <string name="preparing_file_for_copy">準備拷貝/移動</string>
+  <string name="move">移動</string>
+  <string name="file_copying_in_progress" fuzzy="true">正在進行 zim 檔案拷貝</string>
+  <string name="file_moving_in_progress">正在進行 zim 檔案移動</string>
+  <string name="copy_move_files_dialog_description">您要拷貝或移動檔案嗎？</string>
+  <string name="copy_file_error_message">拷貝 zim 檔案時發生錯誤：%s。</string>
+  <string name="move_files_permission_dialog_title">將檔案移動/拷貝到應用程式公共目錄？</string>
+  <string name="move_files_permission_dialog_description">由於 Android 11（或更高版本）的 Google Play 政策，我們的應用程式已無法直接存取儲存在您設備上其他位置的檔案。為了讓您能查看所選檔案，我們需要將它們移動或拷貝到應用程式目錄中的特殊資料夾裡，這樣才能讓我們能夠存取並開啟檔案。請問您同意嗎？</string>
+  <string name="move_file_error_message">移動 zim 檔案時發生錯誤：%s。</string>
   <string name="how_to_update_content">如何更新內容？</string>
   <string name="update_content_description">要更新內容（zim 檔案）的話，您需要下載這個相似內容的完整最新版本。您可以透過下載段落來進行。</string>
   <string name="all_files_permission_needed">所有檔案需要允許權限</string>
