@@ -326,7 +326,6 @@
   <string name="zim_files_not_showing_description">בשל מדיניות Google Play ב־Android 11 ומעלה, יישום ה־Google Store הזה לא יכול לפתוח קובצי ZIM עם טעינת צד. באפשרותך להוריד אותם דרך היישום או להתקין את הגרסה המלאה של אפליקציית kiwix מהאתר הרשמי שלנו %s</string>
   <string name="understood">הבנתי</string>
   <string name="preparing_file_for_copy">הכנה להעתקה או העברה</string>
-  <string name="copy">העתקה</string>
   <string name="move">העברה</string>
   <string name="file_copying_in_progress" fuzzy="true">העתקת קובץ ZIM מתבצעת</string>
   <string name="file_moving_in_progress">העברת קובץ ZIM מתבצעת</string>

@@ -52,7 +52,7 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
 
   fun clickOnCopy() {
     testFlakyView({
-      onView(withText(R.string.copy)).perform(click())
+      onView(withText(R.string.action_copy)).perform(click())
     })
   }
 

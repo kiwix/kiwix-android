@@ -342,7 +342,6 @@
   <string name="zim_files_not_showing_description">В соответствии с правилами Google Play для Android 11 и более поздних версий это приложение Google Store не может открывать загруженные неопубликованными файлы ZIM. Вы можете либо скачать их через приложение, либо установить полную версию приложения kiwix с нашего официального сайта %s</string>
   <string name="understood">Понятно</string>
   <string name="preparing_file_for_copy">Подготовка к копированию/перемещению</string>
-  <string name="copy">Копировать</string>
   <string name="move">Переместить</string>
   <string name="file_copying_in_progress" fuzzy="true">Копируем ZIM-файл</string>
   <string name="file_moving_in_progress">Перемещаем ZIM-файл</string>
