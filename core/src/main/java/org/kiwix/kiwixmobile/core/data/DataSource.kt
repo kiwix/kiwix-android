@@ -23,6 +23,7 @@ import io.reactivex.Single
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.history.adapter.PageHistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
@@ -53,4 +54,8 @@ interface DataSource {
   fun saveNote(noteListItem: NoteListItem): Completable
   fun deleteNote(noteTitle: String): Completable
   fun deleteNotes(noteList: List<NoteListItem>): Completable
+
+  fun insertPageHistoryItem(pageHistory: PageHistoryItem): Completable
+  fun getAllPageHistory(): Flowable<List<PageHistoryItem>>
+  fun clearPageHistory(): Completable
 }
