@@ -18,6 +18,10 @@
 
 package org.kiwix.kiwixmobile.custom.main
 
+import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
+import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -28,9 +32,12 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.navigation.NavigationView
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
+import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
+import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.databinding.ActivityCustomMainBinding
 
@@ -185,4 +192,21 @@ class CustomMainActivity : CoreMainActivity() {
   }
 
   override fun getIconResId() = R.mipmap.ic_launcher
+
+  override fun createApplicationShortcuts() {
+    val shortcutManager = getSystemService(ShortcutManager::class.java)
+    // Create a shortcut for opening the "New tab"
+    val newTabShortcut = ShortcutInfo.Builder(this, "new_tab")
+      .setShortLabel(getString(string.new_tab_shortcut_label))
+      .setLongLabel(getString(string.new_tab_shortcut_label))
+      .setIcon(Icon.createWithResource(this, drawable.ic_shortcut_new_tab))
+      .setDisabledMessage(getString(string.shortcut_disabled_message))
+      .setIntent(
+        Intent(this, CustomMainActivity::class.java).apply {
+          action = ACTION_NEW_TAB
+        }
+      )
+      .build()
+    shortcutManager.dynamicShortcuts = listOf(newTabShortcut)
+  }
 }

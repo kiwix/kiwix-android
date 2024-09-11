@@ -19,7 +19,10 @@
 package org.kiwix.kiwixmobile.main
 
 import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
 import android.content.res.Configuration
+import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -36,11 +39,13 @@ import com.google.android.material.navigation.NavigationView
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.mipmap
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
+import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.databinding.ActivityKiwixMainBinding
@@ -49,6 +54,7 @@ import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragmentDirection
 import javax.inject.Inject
 
 const val NAVIGATE_TO_ZIM_HOST_FRAGMENT = "navigate_to_zim_host_fragment"
+const val ACTION_GET_CONTENT = "GET_CONTENT"
 
 class KiwixMainActivity : CoreMainActivity() {
   private var actionMode: ActionMode? = null
@@ -230,4 +236,35 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   override fun getIconResId() = mipmap.ic_launcher
+
+  override fun createApplicationShortcuts() {
+    val shortcutManager = getSystemService(ShortcutManager::class.java)
+
+    // Create a shortcut for opening the "New tab"
+    val newTabShortcut = ShortcutInfo.Builder(this, "new_tab")
+      .setShortLabel(getString(string.new_tab_shortcut_label))
+      .setLongLabel(getString(string.new_tab_shortcut_label))
+      .setIcon(Icon.createWithResource(this, drawable.ic_shortcut_new_tab))
+      .setDisabledMessage(getString(string.shortcut_disabled_message))
+      .setIntent(
+        Intent(this, KiwixMainActivity::class.java).apply {
+          action = ACTION_NEW_TAB
+        }
+      )
+      .build()
+
+    // create a shortCut for opening the online fragment.
+    val getContentShortcut = ShortcutInfo.Builder(this, "get_content")
+      .setShortLabel(getString(string.get_content_shortcut_label))
+      .setLongLabel(getString(string.get_content_shortcut_label))
+      .setIcon(Icon.createWithResource(this, drawable.ic_shortcut_get_content))
+      .setDisabledMessage(getString(string.shortcut_disabled_message))
+      .setIntent(
+        Intent(this, KiwixMainActivity::class.java).apply {
+          action = ACTION_GET_CONTENT
+        }
+      )
+      .build()
+    shortcutManager.dynamicShortcuts = listOf(newTabShortcut, getContentShortcut)
+  }
 }

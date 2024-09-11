@@ -24,9 +24,6 @@
       android:launchMode="singleTop"
       android:theme="@style/KiwixTheme.Launcher"
       android:windowSoftInputMode="adjustPan">
-      <meta-data
-        android:name="android.app.shortcuts"
-        android:resource="@xml/shortcuts" />
 
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
