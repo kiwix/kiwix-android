@@ -74,6 +74,7 @@ const val SHOULD_OPEN_IN_NEW_TAB = "shouldOpenInNewTab"
 const val FIND_IN_PAGE_SEARCH_STRING = "findInPageSearchString"
 const val ZIM_FILE_URI_KEY = "zimFileUri"
 const val KIWIX_INTERNAL_ERROR = 10
+const val ACTION_NEW_TAB = "NEW_TAB"
 
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
@@ -139,6 +140,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
     downloadManagerBroadcastReceiver.let(::registerReceiver)
     downloadNotificationActionsReceiver.let(::registerReceiver)
+    createApplicationShortcuts()
   }
 
   @Suppress("DEPRECATION")
@@ -421,4 +423,5 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   protected abstract fun getIconResId(): Int
   abstract val readerFragmentResId: Int
+  abstract fun createApplicationShortcuts()
 }
