@@ -52,6 +52,17 @@ class AppConfigurer {
             File("${target.rootDir}/app", "proguard-rules.pro")
           )
         }
+        getByName("debug") {
+          if (target.hasProperty("testingMinimizedBuild")) {
+            isMinifyEnabled = target.hasProperty("testingMinimizedBuild")
+            isShrinkResources = target.hasProperty("testingMinimizedBuild")
+            proguardFiles(
+              getDefaultProguardFile("proguard-android-optimize.txt"),
+              File("${target.rootDir}/app", "proguard-rules.pro")
+            )
+            testProguardFile(File("${target.rootDir}/app", "test-rules.pro"))
+          }
+        }
       }
 
       val abiCodes = mapOf("arm64-v8a" to 6, "x86" to 3, "x86_64" to 4, "armeabi-v7a" to 5)

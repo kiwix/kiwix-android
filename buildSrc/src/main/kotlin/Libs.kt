@@ -345,4 +345,9 @@ object Libs {
    * https://github.com/zxing/zxing
    */
   const val zxing = "com.google.zxing:core:" + Versions.zxing
+
+  /**
+   * https://github.com/slackhq/keeper
+   */
+  const val keeper = "com.slack.keeper:keeper:" + Versions.keeper
 }
