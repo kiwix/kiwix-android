@@ -24,6 +24,7 @@ import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withSubstring
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
@@ -131,11 +132,7 @@ class DownloadRobot : BaseRobot() {
   fun assertDownloadPaused() {
     testFlakyView({
       pauseForBetterTestPerformance()
-      onView(
-        withText(
-          org.kiwix.kiwixmobile.core.R.string.paused_state
-        )
-      ).check(matches(isDisplayed()))
+      onView(withSubstring(context.getString(string.paused_state))).check(matches(isDisplayed()))
     })
   }
 
