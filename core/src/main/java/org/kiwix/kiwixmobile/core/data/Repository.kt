@@ -157,7 +157,10 @@ class Repository @Inject internal constructor(
       .subscribeOn(io)
 
   override fun getAllPageHistory() =
-    pageHistoryRoomDao.getAllPageHistory() as Flowable<List<PageHistoryItem>>
+    pageHistoryRoomDao.getAllPageHistory()
+      .first(emptyList())
+      .subscribeOn(io)
+      .observeOn(mainThread)
 
   override fun clearPageHistory(): Completable =
     Completable.fromAction(pageHistoryRoomDao::clearPageHistoryWithPrimaryKey)
