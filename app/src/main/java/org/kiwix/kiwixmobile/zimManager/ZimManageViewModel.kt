@@ -33,6 +33,11 @@ import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
+import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
+import org.kiwix.kiwixmobile.BuildConfig.DEBUG
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.SideEffect
@@ -42,6 +47,13 @@ import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.data.remote.ProgressResponseBody
+import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
+import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.KIWIX_DOWNLOAD_URL
+import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
@@ -81,6 +93,7 @@ import java.io.IOException
 import java.util.LinkedList
 import java.util.Locale
 import java.util.concurrent.TimeUnit.MILLISECONDS
+import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
 const val DEFAULT_PROGRESS = 0
@@ -92,7 +105,7 @@ class ZimManageViewModel @Inject constructor(
   private val bookDao: NewBookDao,
   private val languageDao: NewLanguagesDao,
   private val storageObserver: StorageObserver,
-  private val kiwixService: KiwixService,
+  private var kiwixService: KiwixService,
   private val context: Application,
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
   private val bookUtils: BookUtils,
@@ -127,10 +140,42 @@ class ZimManageViewModel @Inject constructor(
   val requestFiltering = BehaviorProcessor.createDefault("")
 
   private var compositeDisposable: CompositeDisposable? = CompositeDisposable()
+  val downloadProgress = MutableLiveData<Int>()
+  val downloadStatus = MutableLiveData<String>()
 
   init {
+    // add listener to retrofit to get updates of downloading online library
+    kiwixService = createKiwixServiceWithProgressListener()
     compositeDisposable?.addAll(*disposables())
     context.registerReceiver(connectivityBroadcastReceiver)
+  }
+
+  private fun createKiwixServiceWithProgressListener(): KiwixService {
+    val customOkHttpClient = OkHttpClient().newBuilder()
+      .followRedirects(true)
+      .followSslRedirects(true)
+      .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
+      .readTimeout(READ_TIMEOUT, SECONDS)
+      .callTimeout(CALL_TIMEOUT, SECONDS)
+      .addNetworkInterceptor(
+        HttpLoggingInterceptor().apply {
+          level = if (DEBUG) BASIC else NONE
+        }
+      )
+      .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
+      .addNetworkInterceptor { chain ->
+        val originalResponse = chain.proceed(chain.request())
+        originalResponse.newBuilder()
+          .body(
+            ProgressResponseBody(
+              originalResponse.body!!,
+              AppProgressListenerProvider(this)
+            )
+          )
+          .build()
+      }
+      .build()
+    return KiwixService.ServiceCreator.newHackListService(customOkHttpClient, KIWIX_DOWNLOAD_URL)
   }
 
   @VisibleForTesting
@@ -232,7 +277,7 @@ class ZimManageViewModel @Inject constructor(
   }
 
   private fun requestsAndConnectivtyChangesToLibraryRequests(
-    library: PublishProcessor<LibraryNetworkEntity>
+    library: PublishProcessor<LibraryNetworkEntity>,
   ) =
     Flowable.combineLatest(
       requestDownloadLibrary,
@@ -254,21 +299,37 @@ class ZimManageViewModel @Inject constructor(
             .map { }
         }
       }
+      .doOnEach {
+        downloadStatus.postValue("Reaching remote library")
+      }
+      .switchMap {
+        Flowable.fromCallable {
+          downloadStatus.postValue("Starting download of the online library")
+        }
+      }
       .subscribeOn(Schedulers.io())
       .observeOn(Schedulers.io())
-      .subscribe(
-        {
-          compositeDisposable?.add(
-            kiwixService.library
-              .retry(5)
-              .subscribe(library::onNext) {
-                it.printStackTrace()
-                library.onNext(LibraryNetworkEntity().apply { book = LinkedList() })
-              }
-          )
-        },
-        Throwable::printStackTrace
-      )
+      .flatMap {
+        kiwixService.library
+          .toFlowable()
+          .retry(5)
+          .doOnSubscribe {
+            downloadStatus.postValue("Downloading library 0%")
+          }
+          .map { response ->
+            downloadStatus.postValue("Downloading library... parsing response")
+            response
+          }
+          .doFinally {
+            downloadStatus.postValue("Remote library downloaded, parsing data")
+          }
+          .onErrorReturn {
+            it.printStackTrace()
+            downloadStatus.postValue("Failed to download the library")
+            LibraryNetworkEntity().apply { book = LinkedList() }
+          }
+      }
+      .subscribe(library::onNext, Throwable::printStackTrace)
 
   private fun updateNetworkStates() =
     connectivityBroadcastReceiver.networkStates.subscribe(

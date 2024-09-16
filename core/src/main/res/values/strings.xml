@@ -348,6 +348,7 @@
   <string name="system_unable_to_grant_permission_message">System unable to grant permission!</string>
   <string name="allow">Allow</string>
   <string name="swipe_down_for_library">Swipe Down for Library</string>
+  <string name="reaching_remote_library">Reaching remote library</string>
   <string-array name="pref_dark_modes_entries">
     <item>@string/on</item>
     <item>@string/off</item>

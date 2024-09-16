@@ -195,6 +195,13 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         showInternetAccessViaMobileNetworkDialog()
       }
     }
+    zimManageViewModel.downloadProgress.observe(viewLifecycleOwner) { progress ->
+      fragmentDestinationDownloadBinding?.onlineLibraryProgressBar?.progress = progress
+    }
+
+    zimManageViewModel.downloadStatus.observe(viewLifecycleOwner) { status ->
+      fragmentDestinationDownloadBinding?.libraryErrorText?.text = status
+    }
     setupMenu()
 
     // hides keyboard when scrolled
@@ -268,6 +275,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       libraryErrorText.visibility = View.GONE
       libraryList.visibility = View.VISIBLE
     }
+    showProgressBarOfFetchingOnlineLibrary()
   }
 
   private fun hideRecyclerviewAndShowSwipeDownForLibraryErrorText() {
@@ -277,6 +285,17 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       )
       libraryErrorText.visibility = View.VISIBLE
       libraryList.visibility = View.GONE
+      onlineLibraryProgressBar.visibility = View.GONE
+    }
+  }
+
+  private fun showProgressBarOfFetchingOnlineLibrary() {
+    fragmentDestinationDownloadBinding?.apply {
+      onlineLibraryProgressBar.visibility = View.VISIBLE
+      libraryErrorText.apply {
+        visibility = View.VISIBLE
+        setText(string.reaching_remote_library)
+      }
     }
   }
 
@@ -345,6 +364,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     if (it != null) {
       libraryAdapter.items = it
     }
+    fragmentDestinationDownloadBinding?.onlineLibraryProgressBar?.visibility = View.GONE
     if (it?.isEmpty() == true) {
       fragmentDestinationDownloadBinding?.libraryErrorText?.setText(
         if (isNotConnected) string.no_network_connection
