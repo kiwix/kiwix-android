@@ -32,18 +32,17 @@ class ProgressResponseBody(
   private val progressListener: OnlineLibraryProgressListener
 ) : ResponseBody() {
 
-  private var bufferedSource: BufferedSource? = null
+  private lateinit var bufferedSource: BufferedSource
 
   override fun contentType(): MediaType? = responseBody.contentType()
 
   override fun contentLength(): Long = responseBody.contentLength()
 
-  @Suppress("UnsafeCallOnNullableType")
   override fun source(): BufferedSource {
-    if (bufferedSource == null) {
+    if (!::bufferedSource.isInitialized) {
       bufferedSource = source(responseBody.source()).buffer()
     }
-    return bufferedSource!!
+    return bufferedSource
   }
 
   private fun source(source: Source): Source {
@@ -57,14 +56,15 @@ class ProgressResponseBody(
           totalBytesRead,
           responseBody.contentLength(),
           isDone
-        ).also {
-          Log.e(
-            "PROGRESS",
-            "onProgress: ${contentLength()} and byteRead = $totalBytesRead\n" +
-              " sink ${bytesRead == -1L} \n byteRead = $bytesRead " +
-              "\n bufferedSource = ${bufferedSource?.isOpen}"
-          )
-        }
+        )
+          .also {
+            Log.e(
+              "PROGRESS",
+              "onProgress: ${contentLength()} and byteRead = $totalBytesRead\n" +
+                " sink ${bytesRead == -1L} \n byteRead = $bytesRead " +
+                "\n bufferedSource = ${bufferedSource.isOpen}"
+            )
+          }
         return bytesRead
       }
     }

@@ -47,8 +47,8 @@
         android:id="@+id/libraryList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"
         android:contentDescription="@string/library"
+        android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_download" />
 
@@ -66,13 +66,44 @@
     app:layout_constraintVertical_bias="0.45"
     tools:ignore="RequiredSize" />
 
-  <ProgressBar
-    android:id="@+id/onlineLibraryProgressBar"
+  <androidx.cardview.widget.CardView
+    android:id="@+id/progressCardView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:layout_constraintStart_toStartOf="parent"
+    android:layout_margin="16dp"
+    android:visibility="visible"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="4dp"
+    app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
-    android:visibility="gone"
-    app:layout_constraintBottom_toTopOf="@+id/libraryErrorText" />
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
+    <LinearLayout
+      android:id="@+id/onlineLibraryProgressLayout"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:orientation="vertical"
+      android:padding="@dimen/activity_horizontal_margin"
+      android:visibility="gone">
+
+      <ProgressBar
+        android:id="@+id/onlineLibraryProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin" />
+
+      <TextView
+        android:id="@+id/onlineLibraryProgressStatusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:gravity="center"
+        android:text="@string/reaching_remote_library"
+        android:textColor="@color/mine_shaft_gray900"
+        android:textSize="12sp" />
+    </LinearLayout>
+  </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

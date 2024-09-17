@@ -140,8 +140,7 @@ class ZimManageViewModel @Inject constructor(
   val requestFiltering = BehaviorProcessor.createDefault("")
 
   private var compositeDisposable: CompositeDisposable? = CompositeDisposable()
-  val downloadProgress = MutableLiveData<Int>()
-  val downloadStatus = MutableLiveData<String>()
+  val downloadProgress = MutableLiveData<OnlineLibraryStatus>()
 
   init {
     // add listener to retrofit to get updates of downloading online library
@@ -299,14 +298,6 @@ class ZimManageViewModel @Inject constructor(
             .map { }
         }
       }
-      .doOnEach {
-        downloadStatus.postValue("Reaching remote library")
-      }
-      .switchMap {
-        Flowable.fromCallable {
-          downloadStatus.postValue("Starting download of the online library")
-        }
-      }
       .subscribeOn(Schedulers.io())
       .observeOn(Schedulers.io())
       .flatMap {
@@ -314,18 +305,32 @@ class ZimManageViewModel @Inject constructor(
           .toFlowable()
           .retry(5)
           .doOnSubscribe {
-            downloadStatus.postValue("Downloading library 0%")
+            downloadProgress.postValue(OnlineLibraryStatus(0, "Downloading library 0%"))
           }
           .map { response ->
-            downloadStatus.postValue("Downloading library... parsing response")
+            downloadProgress.postValue(
+              OnlineLibraryStatus(
+                0,
+                "Downloading library... parsing response"
+              )
+            )
             response
           }
           .doFinally {
-            downloadStatus.postValue("Remote library downloaded, parsing data")
+            downloadProgress.postValue(
+              OnlineLibraryStatus(
+                0,
+                "Remote library downloaded, parsing data"
+              )
+            )
           }
           .onErrorReturn {
             it.printStackTrace()
-            downloadStatus.postValue("Failed to download the library")
+            downloadProgress.postValue(
+              OnlineLibraryStatus(
+                0, "Failed to download the library"
+              )
+            )
             LibraryNetworkEntity().apply { book = LinkedList() }
           }
       }

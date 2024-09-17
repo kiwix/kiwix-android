@@ -18,19 +18,4 @@
 
 package org.kiwix.kiwixmobile.zimManager
 
-import org.kiwix.kiwixmobile.core.data.remote.OnlineLibraryProgressListener
-
-class AppProgressListenerProvider(
-  private val zimManageViewModel: ZimManageViewModel
-) : OnlineLibraryProgressListener {
-  @Suppress("MagicNumber")
-  override fun onProgress(bytesRead: Long, contentLength: Long, done: Boolean) {
-    val progress = if (contentLength == -1L) 0 else (bytesRead * 100 / contentLength).toInt()
-    zimManageViewModel.downloadProgress.postValue(
-      OnlineLibraryStatus(
-        progress,
-        "Downloading online content"
-      )
-    )
-  }
-}
+data class OnlineLibraryStatus(val progress: Int, val status: String)

@@ -41,6 +41,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
@@ -86,6 +87,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.databinding.FragmentDestinationDownloadBinding
 import org.kiwix.kiwixmobile.zimManager.NetworkState
+import org.kiwix.kiwixmobile.zimManager.OnlineLibraryStatus
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryAdapter
@@ -192,16 +194,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       viewLifecycleOwner
     ) {
       if (it && !NetworkUtils.isWiFi(requireContext())) {
+        hideProgressBarOfFetchingOnlineLibrary()
         showInternetAccessViaMobileNetworkDialog()
       }
     }
-    zimManageViewModel.downloadProgress.observe(viewLifecycleOwner) { progress ->
-      fragmentDestinationDownloadBinding?.onlineLibraryProgressBar?.progress = progress
-    }
-
-    zimManageViewModel.downloadStatus.observe(viewLifecycleOwner) { status ->
-      fragmentDestinationDownloadBinding?.libraryErrorText?.text = status
-    }
+    zimManageViewModel.downloadProgress.observe(viewLifecycleOwner, ::onLibraryStatusChanged)
     setupMenu()
 
     // hides keyboard when scrolled
@@ -254,13 +251,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     dialogShower.show(
       WifiOnly,
       {
-        onRefreshStateChange(true)
         showRecyclerviewAndHideSwipeDownForLibraryErrorText()
         sharedPreferenceUtil.putPrefWifiOnly(false)
         zimManageViewModel.shouldShowWifiOnlyDialog.value = false
       },
       {
-        onRefreshStateChange(false)
         context.toast(
           resources.getString(string.denied_internet_permission_message),
           Toast.LENGTH_SHORT
@@ -285,17 +280,32 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       )
       libraryErrorText.visibility = View.VISIBLE
       libraryList.visibility = View.GONE
-      onlineLibraryProgressBar.visibility = View.GONE
     }
+    hideProgressBarOfFetchingOnlineLibrary()
   }
 
   private fun showProgressBarOfFetchingOnlineLibrary() {
+    onRefreshStateChange(false)
     fragmentDestinationDownloadBinding?.apply {
-      onlineLibraryProgressBar.visibility = View.VISIBLE
-      libraryErrorText.apply {
-        visibility = View.VISIBLE
-        setText(string.reaching_remote_library)
-      }
+      librarySwipeRefresh.isEnabled = false
+      onlineLibraryProgressLayout.visibility = View.VISIBLE
+      onlineLibraryProgressStatusText.setText(string.reaching_remote_library)
+    }
+  }
+
+  private fun hideProgressBarOfFetchingOnlineLibrary() {
+    onRefreshStateChange(false)
+    fragmentDestinationDownloadBinding?.apply {
+      librarySwipeRefresh.isEnabled = true
+      onlineLibraryProgressLayout.visibility = View.GONE
+      onlineLibraryProgressStatusText.setText(string.reaching_remote_library)
+    }
+  }
+
+  private fun onLibraryStatusChanged(onlineLibraryStatus: OnlineLibraryStatus) {
+    fragmentDestinationDownloadBinding?.apply {
+      onlineLibraryProgressBar.progress = onlineLibraryStatus.progress
+      onlineLibraryProgressStatusText.text = onlineLibraryStatus.status
     }
   }
 
@@ -312,17 +322,20 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun onRefreshStateChange(isRefreshing: Boolean?) {
-    fragmentDestinationDownloadBinding?.librarySwipeRefresh?.isRefreshing = isRefreshing == true
+    var refreshing = isRefreshing == true
+    // do not show the refreshing when the online library is downloading
+    if (fragmentDestinationDownloadBinding?.onlineLibraryProgressLayout?.isVisible == true) {
+      refreshing = false
+    }
+    fragmentDestinationDownloadBinding?.librarySwipeRefresh?.isRefreshing = refreshing
   }
 
   private fun onNetworkStateChange(networkState: NetworkState?) {
     when (networkState) {
       NetworkState.CONNECTED -> {
         if (NetworkUtils.isWiFi(requireContext())) {
-          onRefreshStateChange(true)
           refreshFragment()
         } else if (noWifiWithWifiOnlyPreferenceSet) {
-          onRefreshStateChange(false)
           hideRecyclerviewAndShowSwipeDownForLibraryErrorText()
         }
       }
@@ -344,7 +357,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       )
       fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.VISIBLE
     }
-    fragmentDestinationDownloadBinding?.librarySwipeRefresh?.isRefreshing = false
+    hideProgressBarOfFetchingOnlineLibrary()
   }
 
   private fun noInternetSnackbar() {
@@ -364,7 +377,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     if (it != null) {
       libraryAdapter.items = it
     }
-    fragmentDestinationDownloadBinding?.onlineLibraryProgressBar?.visibility = View.GONE
+    hideProgressBarOfFetchingOnlineLibrary()
     if (it?.isEmpty() == true) {
       fragmentDestinationDownloadBinding?.libraryErrorText?.setText(
         if (isNotConnected) string.no_network_connection
