@@ -56,6 +56,7 @@ import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.KIWIX_DOWNLOAD_URL
 import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DEFAULT_INT_VALUE
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
@@ -145,8 +146,6 @@ class ZimManageViewModel @Inject constructor(
   val downloadProgress = MutableLiveData<String>()
 
   init {
-    // add listener to retrofit to get updates of downloading online library
-    kiwixService = createKiwixServiceWithProgressListener()
     compositeDisposable?.addAll(*disposables())
     context.registerReceiver(connectivityBroadcastReceiver)
   }
@@ -198,10 +197,10 @@ class ZimManageViewModel @Inject constructor(
     client.newCall(headRequest).execute().use { response ->
       if (response.isSuccessful) {
         return@getContentLengthOfLibraryXmlFile response.header("content-length")?.toLongOrNull()
-          ?: -1L
+          ?: DEFAULT_INT_VALUE.toLong()
       }
     }
-    return -1L
+    return DEFAULT_INT_VALUE.toLong()
   }
 
   @VisibleForTesting
@@ -328,11 +327,13 @@ class ZimManageViewModel @Inject constructor(
       .subscribeOn(Schedulers.io())
       .observeOn(Schedulers.io())
       .concatMap {
-        kiwixService.library
+        createKiwixServiceWithProgressListener().library
           .toFlowable()
           .retry(5)
           .doOnSubscribe {
-            downloadProgress.postValue(context.getString(R.string.start_server_label))
+            downloadProgress.postValue(
+              context.getString(R.string.starting_downloading_remote_library)
+            )
           }
           .map { response ->
             downloadProgress.postValue(context.getString(R.string.parsing_remote_library))
