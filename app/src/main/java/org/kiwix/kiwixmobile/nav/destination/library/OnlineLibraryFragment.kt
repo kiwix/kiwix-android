@@ -337,6 +337,10 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           refreshFragment()
         } else if (noWifiWithWifiOnlyPreferenceSet) {
           hideRecyclerviewAndShowSwipeDownForLibraryErrorText()
+        } else if (!noWifiWithWifiOnlyPreferenceSet) {
+          if (libraryAdapter.items.isEmpty()) {
+            showProgressBarOfFetchingOnlineLibrary()
+          }
         }
       }
 
