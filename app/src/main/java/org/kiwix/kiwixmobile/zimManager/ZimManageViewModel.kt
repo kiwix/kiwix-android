@@ -129,6 +129,7 @@ class ZimManageViewModel @Inject constructor(
     object UserClickedDownloadBooksButton : FileSelectActions()
   }
 
+  private var isUnitTestCase: Boolean = false
   val sideEffects = PublishProcessor.create<SideEffect<Any?>>()
   val libraryItems: MutableLiveData<List<LibraryListItem>> = MutableLiveData()
   val fileSelectListStates: MutableLiveData<FileSelectListState> = MutableLiveData()
@@ -150,7 +151,12 @@ class ZimManageViewModel @Inject constructor(
     context.registerReceiver(connectivityBroadcastReceiver)
   }
 
+  fun setIsUnitTestCase() {
+    isUnitTestCase = true
+  }
+
   private fun createKiwixServiceWithProgressListener(): KiwixService {
+    if (isUnitTestCase) return kiwixService
     val contentLength = getContentLengthOfLibraryXmlFile()
     val customOkHttpClient = OkHttpClient().newBuilder()
       .followRedirects(true)
@@ -178,6 +184,9 @@ class ZimManageViewModel @Inject constructor(
       }
       .build()
     return KiwixService.ServiceCreator.newHackListService(customOkHttpClient, KIWIX_DOWNLOAD_URL)
+      .also {
+        kiwixService = it
+      }
   }
 
   private fun getContentLengthOfLibraryXmlFile(): Long {
@@ -327,7 +336,12 @@ class ZimManageViewModel @Inject constructor(
       .subscribeOn(Schedulers.io())
       .observeOn(Schedulers.io())
       .concatMap {
-        createKiwixServiceWithProgressListener().library
+        Flowable.fromCallable {
+          synchronized(this, ::createKiwixServiceWithProgressListener)
+        }
+      }
+      .concatMap {
+        kiwixService.library
           .toFlowable()
           .retry(5)
           .doOnSubscribe {
@@ -347,7 +361,9 @@ class ZimManageViewModel @Inject constructor(
             LibraryNetworkEntity().apply { book = LinkedList() }
           }
       }
-      .subscribe(library::onNext, Throwable::printStackTrace)
+      .subscribe(library::onNext, Throwable::printStackTrace).also {
+        compositeDisposable?.add(it)
+      }
 
   private fun updateNetworkStates() =
     connectivityBroadcastReceiver.networkStates.subscribe(

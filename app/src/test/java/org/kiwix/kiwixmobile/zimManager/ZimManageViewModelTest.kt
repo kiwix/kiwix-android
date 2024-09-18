@@ -157,7 +157,7 @@ class ZimManageViewModelTest {
       dataSource,
       connectivityManager,
       sharedPreferenceUtil
-    )
+    ).apply(ZimManageViewModel::setIsUnitTestCase)
     testScheduler.triggerActions()
   }
 
@@ -333,6 +333,7 @@ class ZimManageViewModelTest {
       defaultLanguage: Language
     ) {
       every { application.getString(any()) } returns ""
+      every { application.getString(any(), any()) } returns ""
       every { kiwixService.library } returns Single.just(
         libraryNetworkEntity(networkBooks)
       )
@@ -372,6 +373,8 @@ class ZimManageViewModelTest {
       language = "inactiveLanguage",
       url = ""
     )
+    every { application.getString(any()) } returns ""
+    every { application.getString(any(), any()) } returns ""
     every { kiwixService.library } returns Single.just(
       libraryNetworkEntity(
         listOf(
@@ -412,6 +415,8 @@ class ZimManageViewModelTest {
       url = "",
       size = "${Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES + 1}"
     )
+    every { application.getString(any()) } returns ""
+    every { application.getString(any(), any()) } returns ""
     every { kiwixService.library } returns Single.just(
       libraryNetworkEntity(
         listOf(bookOver4Gb)
