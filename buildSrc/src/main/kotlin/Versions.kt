@@ -20,9 +20,9 @@ object Versions {
 
   const val tracing: String = "1.1.0"
 
-  const val com_squareup_retrofit2: String = "2.9.0"
+  const val com_squareup_retrofit2: String = "2.11.0"
 
-  const val com_squareup_okhttp3: String = "4.10.0"
+  const val com_squareup_okhttp3: String = "4.12.0"
 
   const val org_jetbrains_kotlin: String = "1.9.20"
 

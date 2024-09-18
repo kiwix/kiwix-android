@@ -67,12 +67,12 @@
     tools:ignore="RequiredSize" />
 
   <androidx.cardview.widget.CardView
-    android:id="@+id/progressCardView"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:id="@+id/onlineLibraryProgressLayout"
+    android:layout_width="140dp"
+    android:layout_height="100dp"
     android:layout_margin="16dp"
-    android:visibility="visible"
-    app:cardCornerRadius="4dp"
+    android:visibility="gone"
+    app:cardCornerRadius="8dp"
     app:cardElevation="4dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
@@ -80,30 +80,28 @@
     app:layout_constraintTop_toTopOf="parent">
 
     <LinearLayout
-      android:id="@+id/onlineLibraryProgressLayout"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_gravity="center"
       android:gravity="center"
       android:orientation="vertical"
-      android:padding="@dimen/activity_horizontal_margin"
-      android:visibility="gone">
+      android:padding="@dimen/find_in_page_button_padding">
 
       <ProgressBar
         android:id="@+id/onlineLibraryProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin" />
+        android:layout_width="40dp"
+        android:layout_height="40dp" />
 
       <TextView
         android:id="@+id/onlineLibraryProgressStatusText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:gravity="center"
         android:text="@string/reaching_remote_library"
         android:textColor="@color/mine_shaft_gray900"
-        android:textSize="12sp" />
+        android:textSize="10sp"
+        tools:ignore="SmallSp" />
     </LinearLayout>
   </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

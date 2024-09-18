@@ -25,11 +25,13 @@ import okio.BufferedSource
 import okio.ForwardingSource
 import okio.Source
 import okio.buffer
-import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DEFAULT_INT_VALUE
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 
 class ProgressResponseBody(
   private val responseBody: ResponseBody,
-  private val progressListener: OnlineLibraryProgressListener
+  private val progressListener: OnlineLibraryProgressListener,
+  private val contentLength: Long
 ) : ResponseBody() {
 
   private lateinit var bufferedSource: BufferedSource
@@ -37,7 +39,6 @@ class ProgressResponseBody(
   override fun contentType(): MediaType? = responseBody.contentType()
 
   override fun contentLength(): Long = responseBody.contentLength()
-
   override fun source(): BufferedSource {
     if (!::bufferedSource.isInitialized) {
       bufferedSource = source(responseBody.source()).buffer()
@@ -47,24 +48,11 @@ class ProgressResponseBody(
 
   private fun source(source: Source): Source {
     return object : ForwardingSource(source) {
-      var totalBytesRead = 0L
+      var totalBytesRead = ZERO.toLong()
       override fun read(sink: Buffer, byteCount: Long): Long {
         val bytesRead = super.read(sink, byteCount)
-        totalBytesRead += if (bytesRead != -1L) bytesRead else 0
-        val isDone = bytesRead == -1L
-        progressListener.onProgress(
-          totalBytesRead,
-          responseBody.contentLength(),
-          isDone
-        )
-          .also {
-            Log.e(
-              "PROGRESS",
-              "onProgress: ${contentLength()} and byteRead = $totalBytesRead\n" +
-                " sink ${bytesRead == -1L} \n byteRead = $bytesRead " +
-                "\n bufferedSource = ${bufferedSource.isOpen}"
-            )
-          }
+        totalBytesRead += if (bytesRead != DEFAULT_INT_VALUE.toLong()) bytesRead else ZERO.toLong()
+        progressListener.onProgress(totalBytesRead, contentLength)
         return bytesRead
       }
     }

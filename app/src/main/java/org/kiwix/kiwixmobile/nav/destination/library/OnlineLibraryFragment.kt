@@ -87,7 +87,6 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.databinding.FragmentDestinationDownloadBinding
 import org.kiwix.kiwixmobile.zimManager.NetworkState
-import org.kiwix.kiwixmobile.zimManager.OnlineLibraryStatus
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryAdapter
@@ -106,7 +105,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   @Inject lateinit var availableSpaceCalculator: AvailableSpaceCalculator
   @Inject lateinit var alertDialogShower: AlertDialogShower
   private var fragmentDestinationDownloadBinding: FragmentDestinationDownloadBinding? = null
-
+  private val lock = Any()
   private var downloadBookItem: LibraryListItem.BookItem? = null
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
@@ -302,10 +301,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
   }
 
-  private fun onLibraryStatusChanged(onlineLibraryStatus: OnlineLibraryStatus) {
-    fragmentDestinationDownloadBinding?.apply {
-      onlineLibraryProgressBar.progress = onlineLibraryStatus.progress
-      onlineLibraryProgressStatusText.text = onlineLibraryStatus.status
+  private fun onLibraryStatusChanged(libraryStatus: String) {
+    synchronized(lock) {
+      fragmentDestinationDownloadBinding?.apply {
+        onlineLibraryProgressStatusText.text = libraryStatus
+      }
     }
   }
 

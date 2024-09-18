@@ -34,6 +34,7 @@ import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
@@ -47,6 +48,7 @@ import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.LIBRARY_NETWORK_PATH
 import org.kiwix.kiwixmobile.core.data.remote.ProgressResponseBody
 import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
 import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
@@ -106,7 +108,7 @@ class ZimManageViewModel @Inject constructor(
   private val languageDao: NewLanguagesDao,
   private val storageObserver: StorageObserver,
   private var kiwixService: KiwixService,
-  private val context: Application,
+  val context: Application,
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
   private val bookUtils: BookUtils,
   private val fat32Checker: Fat32Checker,
@@ -140,7 +142,7 @@ class ZimManageViewModel @Inject constructor(
   val requestFiltering = BehaviorProcessor.createDefault("")
 
   private var compositeDisposable: CompositeDisposable? = CompositeDisposable()
-  val downloadProgress = MutableLiveData<OnlineLibraryStatus>()
+  val downloadProgress = MutableLiveData<String>()
 
   init {
     // add listener to retrofit to get updates of downloading online library
@@ -150,6 +152,7 @@ class ZimManageViewModel @Inject constructor(
   }
 
   private fun createKiwixServiceWithProgressListener(): KiwixService {
+    val contentLength = getContentLengthOfLibraryXmlFile()
     val customOkHttpClient = OkHttpClient().newBuilder()
       .followRedirects(true)
       .followSslRedirects(true)
@@ -168,13 +171,37 @@ class ZimManageViewModel @Inject constructor(
           .body(
             ProgressResponseBody(
               originalResponse.body!!,
-              AppProgressListenerProvider(this)
+              AppProgressListenerProvider(this),
+              contentLength
             )
           )
           .build()
       }
       .build()
     return KiwixService.ServiceCreator.newHackListService(customOkHttpClient, KIWIX_DOWNLOAD_URL)
+  }
+
+  private fun getContentLengthOfLibraryXmlFile(): Long {
+    val headRequest = Request.Builder()
+      .url("$KIWIX_DOWNLOAD_URL$LIBRARY_NETWORK_PATH")
+      .head()
+      .header("Accept-Encoding", "identity")
+      .build()
+    val client = OkHttpClient().newBuilder()
+      .followRedirects(true)
+      .followSslRedirects(true)
+      .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
+      .readTimeout(READ_TIMEOUT, SECONDS)
+      .callTimeout(CALL_TIMEOUT, SECONDS)
+      .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
+      .build()
+    client.newCall(headRequest).execute().use { response ->
+      if (response.isSuccessful) {
+        return@getContentLengthOfLibraryXmlFile response.header("content-length")?.toLongOrNull()
+          ?: -1L
+      }
+    }
+    return -1L
   }
 
   @VisibleForTesting
@@ -300,37 +327,22 @@ class ZimManageViewModel @Inject constructor(
       }
       .subscribeOn(Schedulers.io())
       .observeOn(Schedulers.io())
-      .flatMap {
+      .concatMap {
         kiwixService.library
           .toFlowable()
           .retry(5)
           .doOnSubscribe {
-            downloadProgress.postValue(OnlineLibraryStatus(0, "Downloading library 0%"))
+            downloadProgress.postValue(context.getString(R.string.start_server_label))
           }
           .map { response ->
-            downloadProgress.postValue(
-              OnlineLibraryStatus(
-                0,
-                "Downloading library... parsing response"
-              )
-            )
+            downloadProgress.postValue(context.getString(R.string.parsing_remote_library))
             response
           }
           .doFinally {
-            downloadProgress.postValue(
-              OnlineLibraryStatus(
-                0,
-                "Remote library downloaded, parsing data"
-              )
-            )
+            downloadProgress.postValue(context.getString(R.string.parsing_remote_library))
           }
           .onErrorReturn {
             it.printStackTrace()
-            downloadProgress.postValue(
-              OnlineLibraryStatus(
-                0, "Failed to download the library"
-              )
-            )
             LibraryNetworkEntity().apply { book = LinkedList() }
           }
       }

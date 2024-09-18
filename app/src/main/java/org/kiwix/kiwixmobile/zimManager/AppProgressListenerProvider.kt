@@ -18,18 +18,27 @@
 
 package org.kiwix.kiwixmobile.zimManager
 
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.data.remote.OnlineLibraryProgressListener
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DEFAULT_INT_VALUE
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.HUNDERED
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 
 class AppProgressListenerProvider(
   private val zimManageViewModel: ZimManageViewModel
 ) : OnlineLibraryProgressListener {
   @Suppress("MagicNumber")
-  override fun onProgress(bytesRead: Long, contentLength: Long, done: Boolean) {
-    val progress = if (contentLength == -1L) 0 else (bytesRead * 100 / contentLength).toInt()
+  override fun onProgress(bytesRead: Long, contentLength: Long) {
+    val progress =
+      if (contentLength == DEFAULT_INT_VALUE.toLong()) {
+        ZERO
+      } else {
+        (bytesRead * HUNDERED / contentLength).toInt() * 3
+      }
     zimManageViewModel.downloadProgress.postValue(
-      OnlineLibraryStatus(
-        progress,
-        "Downloading online content"
+      zimManageViewModel.context.getString(
+        R.string.downloading_library,
+        zimManageViewModel.context.getString(R.string.percentage, progress)
       )
     )
   }

@@ -19,5 +19,5 @@
 package org.kiwix.kiwixmobile.core.data.remote
 
 interface OnlineLibraryProgressListener {
-  fun onProgress(bytesRead: Long, contentLength: Long, done: Boolean)
+  fun onProgress(bytesRead: Long, contentLength: Long)
 }
