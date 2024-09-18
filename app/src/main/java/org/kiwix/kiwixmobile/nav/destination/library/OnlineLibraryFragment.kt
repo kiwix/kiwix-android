@@ -193,8 +193,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       viewLifecycleOwner
     ) {
       if (it && !NetworkUtils.isWiFi(requireContext())) {
-        hideProgressBarOfFetchingOnlineLibrary()
         showInternetAccessViaMobileNetworkDialog()
+        hideProgressBarOfFetchingOnlineLibrary()
       }
     }
     zimManageViewModel.downloadProgress.observe(viewLifecycleOwner, ::onLibraryStatusChanged)
