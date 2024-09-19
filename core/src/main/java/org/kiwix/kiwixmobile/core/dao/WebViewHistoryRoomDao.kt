@@ -22,21 +22,21 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import io.reactivex.Flowable
-import org.kiwix.kiwixmobile.core.dao.entities.PageHistoryRoomEntity
+import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 
 @Dao
-abstract class PageHistoryRoomDao {
+abstract class WebViewHistoryRoomDao {
   @Insert
-  abstract fun insertPageHistoryItem(pageHistoryRoomEntity: PageHistoryRoomEntity)
+  abstract fun insertWebViewPageHistoryItem(webViewHistoryEntity: WebViewHistoryEntity)
 
-  @Query("SELECT * FROM PageHistoryRoomEntity ORDER BY isForward ASC,timestamp ASC")
-  abstract fun getAllPageHistory(): Flowable<List<PageHistoryRoomEntity>>
+  @Query("SELECT * FROM WebViewHistoryEntity ORDER BY isForward ASC,timestamp ASC")
+  abstract fun getAllWebViewPagesHistory(): Flowable<List<WebViewHistoryEntity>>
 
-  @Query("Delete from PageHistoryRoomEntity")
-  abstract fun clearPageHistory()
+  @Query("Delete from WebViewHistoryEntity")
+  abstract fun clearWebViewPagesHistory()
 
   fun clearPageHistoryWithPrimaryKey() {
-    clearPageHistory()
+    clearWebViewPagesHistory()
   }
 
   @Query("DELETE FROM sqlite_sequence WHERE name='PageHistoryRoomEntity'")
