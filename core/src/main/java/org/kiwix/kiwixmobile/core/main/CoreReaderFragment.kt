@@ -2459,7 +2459,7 @@ abstract class CoreReaderFragment :
 
       // Save ForwardStack
       webBackForwardList.let { historyList ->
-        for (index in (historyList.currentIndex + 1) until historyList.size) {
+        for (index in historyList.currentIndex + 1 until historyList.size) {
           val historyItem = historyList.getItemAtIndex(index)
           val pageHistory = WebViewHistoryItem(
             zimId = zimId,
