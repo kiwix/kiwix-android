@@ -1977,26 +1977,57 @@ abstract class CoreReaderFragment :
   private fun loadWebViewHistory(pageHistory: List<PageHistoryItem>) {
     val backStack = pageHistory.filter { !it.isForward }
     val forwardStack = pageHistory.filter(PageHistoryItem::isForward)
-    activity.toast("${pageHistory.size}   ${backStack.size}", Toast.LENGTH_LONG)
-    val currentPage = getCurrentWebView()?.copyBackForwardList()?.currentItem?.url
+    val currentWebView = getCurrentWebView() ?: return
+    val currentPageUrl = currentWebView.copyBackForwardList().currentItem?.url
 
-    // Now, restore the back and forward history manually
-    // First restore back history
-    backStack.indices.reversed()
-      .asSequence()
-      .map { backStack[it] }
-      .forEach { url -> loadUrlWithCurrentWebview(url.pageUrl) }
+    // If backStack and forwardStack are empty, return
+    if (backStack.isEmpty() && forwardStack.isEmpty()) {
+      return
+    }
 
-    loadUrlWithCurrentWebview(currentPage)
+    // Debug info: Toast to check the size of back and forward stack
+    activity.toast(
+      "${pageHistory.size} items loaded. Back stack size: ${backStack.size}",
+      Toast.LENGTH_LONG
+    )
 
-    forwardStack.indices.reversed()
-      .asSequence()
-      .map { forwardStack[it] }
-      .forEach { url -> loadUrlWithCurrentWebview(url.pageUrl) }
+    if (backStack.isNotEmpty()) {
+      // Step 1: Load the first item immediately (0th index)
+      currentWebView.loadUrl(backStack[0].pageUrl)
+    }
 
-    repeat(
-      forwardStack.indices.count()
-    ) { getCurrentWebView()?.goBack() }
+    currentWebView.postDelayed({
+      // Step 2: Clear WebView history after loading the first page
+      currentWebView.clearHistory()
+
+      // Step 3: Load the remaining items from the backStack (starting from index 1)
+      backStack.drop(1).forEachIndexed { index, page ->
+        currentWebView.postDelayed({
+          currentWebView.loadUrl(page.pageUrl)
+        }, index * 500L) // Delay to load each page sequentially
+      }
+
+      // Step 4: After loading the back stack, load the current page
+      currentWebView.postDelayed({
+        currentPageUrl?.let(::loadUrlWithCurrentWebview)
+      }, backStack.size * 500L)
+
+      // Step 5: Load forward stack URLs sequentially
+      currentWebView.postDelayed({
+        forwardStack.forEachIndexed { index, page ->
+          currentWebView.postDelayed({
+            currentWebView.loadUrl(page.pageUrl)
+          }, index * 500L) // Delay for loading forward stack
+        }
+
+        // Step 6: After loading forward stack, go back to the current page
+        currentWebView.postDelayed({
+          repeat(forwardStack.size) {
+            currentWebView.goBack()
+          }
+        }, forwardStack.size * 500L) // Delay based on forward stack size
+      }, (backStack.size + 1) * 500L) // Delay based on the back stack size
+    }, 500L) // Initial delay to allow the first page to load
   }
 
   override fun onDataFetched(pageHistory: List<PageHistoryItem>) {
@@ -2009,9 +2040,9 @@ abstract class CoreReaderFragment :
 
   override fun onResume() {
     super.onResume()
+    repositoryActions?.loadPageHistory(this)
     updateBottomToolbarVisibility()
     updateNightMode()
-    repositoryActions?.loadPageHistory(this)
     if (tts == null) {
       setUpTTS()
     }
