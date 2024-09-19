@@ -48,8 +48,17 @@
 
 ## keep everything in MetaLinkNetworkEntity.kt
 
+-keep class org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity { *; }
+-keep class org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity$* { *; }
 -keepnames class org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity$*
 -keepclassmembers class org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity$* {
+    <init>(...);
+}
+
+## keep everything in LibraryNetworkEntity.kt
+-keep class org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity { *; }
+-keep class org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity$* { *; }
+-keepclassmembers class org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity$* {
     <init>(...);
 }
 
@@ -82,3 +91,5 @@
 -dontwarn org.openjsse.javax.net.ssl.SSLParameters
 -dontwarn org.openjsse.javax.net.ssl.SSLSocket
 -dontwarn org.openjsse.net.ssl.OpenJSSE
+
+-keep class io.reactivex.** { *; }

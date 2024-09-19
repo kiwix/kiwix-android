@@ -8,6 +8,8 @@ adb logcat *:E -v color &
 
 PACKAGE_NAME="org.kiwix.kiwixmobile"
 TEST_PACKAGE_NAME="${PACKAGE_NAME}.test"
+TEST_SERVICES_PACKAGE="androidx.test.services"
+TEST_ORCHESTRATOR_PACKAGE="androidx.test.orchestrator"
 # Function to check if the application is installed
 is_app_installed() {
   adb shell pm list packages | grep -q "$1"
@@ -21,6 +23,14 @@ fi
 if is_app_installed "$TEST_PACKAGE_NAME"; then
   # Delete the test application to properly run the test cases.
   adb uninstall "${TEST_PACKAGE_NAME}"
+fi
+
+if is_app_installed "$TEST_SERVICES_PACKAGE"; then
+  adb uninstall "${TEST_SERVICES_PACKAGE}"
+fi
+
+if is_app_installed "$TEST_ORCHESTRATOR_PACKAGE"; then
+  adb uninstall "${TEST_ORCHESTRATOR_PACKAGE}"
 fi
 retry=0
 while [ $retry -le 3 ]; do
@@ -43,6 +53,12 @@ while [ $retry -le 3 ]; do
     if is_app_installed "$TEST_PACKAGE_NAME"; then
       # Delete the test application to properly run the test cases.
       adb uninstall "${TEST_PACKAGE_NAME}"
+    fi
+    if is_app_installed "$TEST_SERVICES_PACKAGE"; then
+      adb uninstall "${TEST_SERVICES_PACKAGE}"
+    fi
+    if is_app_installed "$TEST_ORCHESTRATOR_PACKAGE"; then
+      adb uninstall "${TEST_ORCHESTRATOR_PACKAGE}"
     fi
     ./gradlew clean
     retry=$(( retry + 1 ))

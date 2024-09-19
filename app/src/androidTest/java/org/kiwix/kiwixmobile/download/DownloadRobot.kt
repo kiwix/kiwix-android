@@ -24,6 +24,7 @@ import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withSubstring
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
@@ -76,7 +77,13 @@ class DownloadRobot : BaseRobot() {
       onView(withText(string.swipe_down_for_library)).check(matches(isDisplayed()))
       refreshOnlineList()
     } catch (e: RuntimeException) {
-      // do nothing as the view is not visible
+      try {
+        // do nothing as currently downloading the online library.
+        onView(withId(R.id.onlineLibraryProgressLayout)).check(matches(isDisplayed()))
+      } catch (e: RuntimeException) {
+        // if not visible try to get the online library.
+        refreshOnlineList()
+      }
     }
   }
 
@@ -131,11 +138,7 @@ class DownloadRobot : BaseRobot() {
   fun assertDownloadPaused() {
     testFlakyView({
       pauseForBetterTestPerformance()
-      onView(
-        withText(
-          org.kiwix.kiwixmobile.core.R.string.paused_state
-        )
-      ).check(matches(isDisplayed()))
+      onView(withSubstring(context.getString(string.paused_state))).check(matches(isDisplayed()))
     })
   }
 

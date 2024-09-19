@@ -226,6 +226,7 @@ class AllProjectConfigurer {
       implementation(Libs.roomRuntime)
       implementation(Libs.roomRxjava2)
       kapt(Libs.roomCompiler)
+      implementation(Libs.tracing)
     }
   }
 }
