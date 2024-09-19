@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.core.main
 
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
