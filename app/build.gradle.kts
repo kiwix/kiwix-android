@@ -1,3 +1,4 @@
+import com.slack.keeper.optInToKeeper
 import org.w3c.dom.Element
 import plugin.KiwixConfigurationPlugin
 import java.io.StringWriter
@@ -10,6 +11,9 @@ import javax.xml.transform.stream.StreamResult
 plugins {
   android
   id("com.github.triplet.play") version Versions.com_github_triplet_play_gradle_plugin
+}
+if (hasProperty("testingMinimizedBuild")) {
+  apply(plugin = "com.slack.keeper")
 }
 plugins.apply(KiwixConfigurationPlugin::class)
 
@@ -91,6 +95,14 @@ play {
   track.set("internal")
   releaseStatus.set(com.github.triplet.gradle.androidpublisher.ReleaseStatus.COMPLETED)
   resolutionStrategy.set(com.github.triplet.gradle.androidpublisher.ResolutionStrategy.FAIL)
+}
+
+androidComponents {
+  beforeVariants { variantBuilder ->
+    if (variantBuilder.name == "debug" && hasProperty("testingMinimizedBuild")) {
+      variantBuilder.optInToKeeper()
+    }
+  }
 }
 
 dependencies {

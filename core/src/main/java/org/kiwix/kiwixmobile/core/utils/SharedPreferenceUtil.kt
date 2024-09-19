@@ -288,7 +288,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     }
 
   fun getPublicDirectoryPath(path: String): String =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       path
     } else {
       path.substringBefore(context.getString(R.string.android_directory_seperator))

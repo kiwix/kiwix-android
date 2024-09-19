@@ -18,9 +18,11 @@ object Versions {
 
   const val androidx_test_espresso: String = "3.5.1"
 
-  const val com_squareup_retrofit2: String = "2.9.0"
+  const val tracing: String = "1.1.0"
 
-  const val com_squareup_okhttp3: String = "4.10.0"
+  const val com_squareup_retrofit2: String = "2.11.0"
+
+  const val com_squareup_okhttp3: String = "4.12.0"
 
   const val org_jetbrains_kotlin: String = "1.9.20"
 
@@ -103,6 +105,8 @@ object Versions {
   const val roomVersion = "2.5.0"
 
   const val zxing = "3.5.3"
+
+  const val keeper = "0.16.1"
 }
 
 /**
