@@ -68,7 +68,13 @@ class LanguageRobot : BaseRobot() {
       onView(ViewMatchers.withText(string.swipe_down_for_library)).check(matches(isDisplayed()))
       refreshOnlineList()
     } catch (e: RuntimeException) {
-      // do nothing as the view is not visible
+      try {
+        // do nothing as currently downloading the online library.
+        onView(withId(R.id.onlineLibraryProgressLayout)).check(matches(isDisplayed()))
+      } catch (e: RuntimeException) {
+        // if not visible try to get the online library.
+        refreshOnlineList()
+      }
     }
   }
 
