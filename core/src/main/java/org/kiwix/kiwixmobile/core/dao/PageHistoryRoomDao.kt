@@ -29,7 +29,7 @@ abstract class PageHistoryRoomDao {
   @Insert
   abstract fun insertPageHistoryItem(pageHistoryRoomEntity: PageHistoryRoomEntity)
 
-  @Query("SELECT * FROM PageHistoryRoomEntity ORDER BY isForward ASC,timestamp DESC")
+  @Query("SELECT * FROM PageHistoryRoomEntity ORDER BY isForward ASC,timestamp ASC")
   abstract fun getAllPageHistory(): Flowable<List<PageHistoryRoomEntity>>
 
   @Query("Delete from PageHistoryRoomEntity")
