@@ -286,6 +286,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private fun showProgressBarOfFetchingOnlineLibrary() {
     onRefreshStateChange(false)
     fragmentDestinationDownloadBinding?.apply {
+      libraryErrorText.visibility = View.GONE
       librarySwipeRefresh.isEnabled = false
       onlineLibraryProgressLayout.visibility = View.VISIBLE
       onlineLibraryProgressStatusText.setText(string.reaching_remote_library)
@@ -324,7 +325,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private fun onRefreshStateChange(isRefreshing: Boolean?) {
     var refreshing = isRefreshing == true
     // do not show the refreshing when the online library is downloading
-    if (fragmentDestinationDownloadBinding?.onlineLibraryProgressLayout?.isVisible == true) {
+    if (fragmentDestinationDownloadBinding?.onlineLibraryProgressLayout?.isVisible == true ||
+      fragmentDestinationDownloadBinding?.libraryErrorText?.isVisible == true
+    ) {
       refreshing = false
     }
     fragmentDestinationDownloadBinding?.librarySwipeRefresh?.isRefreshing = refreshing
