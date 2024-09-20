@@ -302,6 +302,15 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
         }
       }
     )
+    showCopyMoveDialogForOpenedZimFileFromStorage()
+  }
+
+  private fun showCopyMoveDialogForOpenedZimFileFromStorage() {
+    val args = LocalLibraryFragmentArgs.fromBundle(requireArguments())
+    if (args.zimFileUri.isNotEmpty()) {
+      handleSelectedFileUri(args.zimFileUri.toUri())
+    }
+    requireArguments().clear()
   }
 
   private fun setUpSwipeRefreshLayout() {
