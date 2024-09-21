@@ -45,6 +45,7 @@ import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
 import org.kiwix.kiwixmobile.core.extensions.canReadFile
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
@@ -309,13 +310,13 @@ class KiwixReaderFragment : CoreReaderFragment() {
       when (it.scheme) {
         "file" -> {
           Handler(Looper.getMainLooper()).postDelayed({
-            openAndSaveZimFileInLocalLibrary(it.toFile())
+            handleZimFileUri(it)
           }, 300)
         }
 
         "content" -> {
           Handler(Looper.getMainLooper()).postDelayed({
-            getZimFileFromUri(it)?.let(::openAndSaveZimFileInLocalLibrary)
+            handleZimFileUri(it)
           }, 300)
         }
 
@@ -323,6 +324,19 @@ class KiwixReaderFragment : CoreReaderFragment() {
       }
     }
     return ShouldCall
+  }
+
+  private fun handleZimFileUri(uri: Uri) {
+    if (sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == true) {
+      clearIntentDataAndAction()
+      requireActivity().navigate(
+        KiwixReaderFragmentDirections.actionNavigationReaderToNavigationLibrary()
+          .apply { zimFileUri = "$uri" }
+      )
+    } else {
+      val file = if (uri.scheme == "file") uri.toFile() else getZimFileFromUri(uri)
+      file?.let(::openAndSaveZimFileInLocalLibrary)
+    }
   }
 
   private fun openAndSaveZimFileInLocalLibrary(file: File) {
@@ -342,9 +356,14 @@ class KiwixReaderFragment : CoreReaderFragment() {
     } else {
       activity.toast(R.string.cannot_open_file)
     }
+    clearIntentDataAndAction()
+  }
+
+  private fun clearIntentDataAndAction() {
     // if used once then clear it to avoid affecting any other functionality
     // of the application.
     requireActivity().intent.action = null
+    requireActivity().intent.data = null
   }
 
   private fun getZimFileFromUri(
