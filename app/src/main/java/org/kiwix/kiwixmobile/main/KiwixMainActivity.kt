@@ -29,6 +29,7 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.os.ConfigurationCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -45,8 +46,10 @@ import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.databinding.ActivityKiwixMainBinding
 import org.kiwix.kiwixmobile.kiwixActivityComponent
@@ -55,6 +58,7 @@ import javax.inject.Inject
 
 const val NAVIGATE_TO_ZIM_HOST_FRAGMENT = "navigate_to_zim_host_fragment"
 const val ACTION_GET_CONTENT = "GET_CONTENT"
+const val OPENING_ZIM_FILE_DELAY = 300L
 
 class KiwixMainActivity : CoreMainActivity() {
   private var actionMode: ActionMode? = null
@@ -125,6 +129,7 @@ class KiwixMainActivity : CoreMainActivity() {
     }
     activityKiwixMainBinding.bottomNavView.setupWithNavController(navController)
     migrateInternalToPublicAppDirectory()
+    handleZimFileIntent(intent)
   }
 
   private fun migrateInternalToPublicAppDirectory() {
@@ -214,12 +219,44 @@ class KiwixMainActivity : CoreMainActivity() {
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
     handleNotificationIntent(intent)
+    handleZimFileIntent(intent)
     supportFragmentManager.fragments.filterIsInstance<FragmentActivityExtensions>().forEach {
       it.onNewIntent(intent, this)
     }
   }
 
-  @Suppress("MagicNumber")
+  private fun handleZimFileIntent(intent: Intent?) {
+    intent?.data?.let {
+      when (it.scheme) {
+        "file",
+        "content" -> {
+          Handler(Looper.getMainLooper()).postDelayed({
+            openLocalLibraryWithZimFilePath("$it")
+            clearIntentDataAndAction()
+          }, OPENING_ZIM_FILE_DELAY)
+        }
+
+        else -> toast(R.string.cannot_open_file)
+      }
+    }
+  }
+
+  private fun clearIntentDataAndAction() {
+    // if used once then clear it to avoid affecting any other functionality
+    // of the application.
+    intent.action = null
+    intent.data = null
+  }
+
+  private fun openLocalLibraryWithZimFilePath(path: String) {
+    navigate(
+      R.id.libraryFragment,
+      bundleOf(
+        ZIM_FILE_URI_KEY to path,
+      )
+    )
+  }
+
   private fun handleNotificationIntent(intent: Intent) {
     if (intent.hasExtra(DOWNLOAD_NOTIFICATION_TITLE)) {
       Handler(Looper.getMainLooper()).postDelayed(
@@ -230,7 +267,7 @@ class KiwixMainActivity : CoreMainActivity() {
             }
           }
         },
-        300
+        OPENING_ZIM_FILE_DELAY
       )
     }
   }

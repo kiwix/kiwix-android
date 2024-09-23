@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.nav.destination.reader
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -31,12 +30,8 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.anim
@@ -45,9 +40,7 @@ import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setupDrawerToggle
-import org.kiwix.kiwixmobile.core.extensions.canReadFile
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
@@ -65,7 +58,6 @@ import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.Log
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import java.io.File
 
 private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
@@ -298,94 +290,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun createNewTab() {
     newMainPageTab()
-  }
-
-  @Suppress("MagicNumber")
-  override fun onNewIntent(
-    intent: Intent,
-    activity: AppCompatActivity
-  ): Super {
-    super.onNewIntent(intent, activity)
-    intent.data?.let {
-      when (it.scheme) {
-        "file" -> {
-          Handler(Looper.getMainLooper()).postDelayed({
-            handleZimFileUri(it)
-          }, 300)
-        }
-
-        "content" -> {
-          Handler(Looper.getMainLooper()).postDelayed({
-            handleZimFileUri(it)
-          }, 300)
-        }
-
-        else -> activity.toast(R.string.cannot_open_file)
-      }
-    }
-    return ShouldCall
-  }
-
-  private fun handleZimFileUri(uri: Uri) {
-    if (sharedPreferenceUtil?.isPlayStoreBuildWithAndroid11OrAbove() == true) {
-      clearIntentDataAndAction()
-      requireActivity().navigate(
-        KiwixReaderFragmentDirections.actionNavigationReaderToNavigationLibrary()
-          .apply { zimFileUri = "$uri" }
-      )
-    } else {
-      val file = if (uri.scheme == "file") uri.toFile() else getZimFileFromUri(uri)
-      file?.let(::openAndSaveZimFileInLocalLibrary)
-    }
-  }
-
-  private fun openAndSaveZimFileInLocalLibrary(file: File) {
-    val zimReaderSource = ZimReaderSource(file)
-    if (zimReaderSource.canOpenInLibkiwix()) {
-      openZimFile(zimReaderSource).also {
-        CoroutineScope(Dispatchers.IO).launch {
-          zimReaderFactory?.create(zimReaderSource)?.let { zimFileReader ->
-            BooksOnDiskListItem.BookOnDisk(zimFileReader).also { bookOnDisk ->
-              // save the book in the library
-              repositoryActions?.saveBook(bookOnDisk)
-              zimFileReader.dispose()
-            }
-          }
-        }
-      }
-    } else {
-      activity.toast(R.string.cannot_open_file)
-    }
-    clearIntentDataAndAction()
-  }
-
-  private fun clearIntentDataAndAction() {
-    // if used once then clear it to avoid affecting any other functionality
-    // of the application.
-    requireActivity().intent.action = null
-    requireActivity().intent.data = null
-  }
-
-  private fun getZimFileFromUri(
-    uri: Uri
-  ): File? {
-    val filePath = FileUtils.getLocalFilePathByUri(
-      requireActivity().applicationContext, uri
-    )
-    if (filePath == null || !File(filePath).isFileExist()) {
-      activity.toast(string.error_file_not_found)
-      return null
-    }
-    val file = File(filePath)
-    return if (!FileUtils.isValidZimFile(file.path)) {
-      activity.toast(string.error_file_invalid)
-      null
-    } else if (!file.canReadFile()) {
-      activity.toast(R.string.cannot_open_file)
-      null
-    } else {
-      file
-    }
   }
 
   private fun setBottomMarginToNavHostContainer(margin: Int) {
