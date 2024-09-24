@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.localLibrary
 
 import android.app.Activity
+import androidx.documentfile.provider.DocumentFile
 import io.mockk.Runs
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -58,7 +59,7 @@ class CopyMoveFileHandlerTest {
   private val testDispatcher = StandardTestDispatcher()
   private val testScope = TestScope(testDispatcher)
   private val storageFile: File = mockk(relaxed = true)
-  private val selectedFile: File = mockk(relaxed = true)
+  private val selectedFile: DocumentFile = mockk(relaxed = true)
   private val storagePath = "storage/0/emulated/Android/media/org.kiwix.kiwixmobile"
 
   @BeforeEach
