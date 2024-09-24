@@ -405,9 +405,15 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
 
   private fun handleSelectedFileUri(uri: Uri) {
     if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+      val documentFile = when (uri.scheme) {
+        "file" -> DocumentFile.fromFile(File("$uri"))
+        else -> {
+          DocumentFile.fromSingleUri(requireActivity(), uri)
+        }
+      }
       copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(
         uri,
-        DocumentFile.fromSingleUri(requireActivity(), uri)
+        documentFile
       )
     } else {
       getZimFileFromUri(uri)?.let(::navigateToReaderFragment)
