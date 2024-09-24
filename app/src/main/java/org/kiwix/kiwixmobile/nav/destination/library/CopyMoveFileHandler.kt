@@ -318,6 +318,7 @@ class CopyMoveFileHandler @Inject constructor(
     try {
       DocumentsContract.deleteDocument(activity.applicationContext.contentResolver, uri)
     } catch (ignore: Exception) {
+      selectedFile?.delete()
       ignore.printStackTrace()
     }
   }
