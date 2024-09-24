@@ -58,7 +58,7 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
   }
 
   @Suppress("MagicNumber")
-  private fun getAssetFileDescriptorListFromPlayAssetDelivery(): List<AssetFileDescriptor> {
+  fun getAssetFileDescriptorListFromPlayAssetDelivery(): List<AssetFileDescriptor> {
     try {
       val assetManager = context.createPackageContext(context.packageName, 0).assets
       val assetFileDescriptorList: ArrayList<AssetFileDescriptor> = arrayListOf()
