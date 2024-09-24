@@ -356,7 +356,7 @@ class CopyMoveFileHandler @Inject constructor(
       } ?: throw FileNotFoundException("The selected file could not be opened")
     }
 
-  private fun getDestinationFile(): File {
+  fun getDestinationFile(): File {
     val root = File(sharedPreferenceUtil.prefStorage)
     val fileName = selectedFile?.name ?: ""
 
