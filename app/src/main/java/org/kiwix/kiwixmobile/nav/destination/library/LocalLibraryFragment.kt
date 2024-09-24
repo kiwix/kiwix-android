@@ -47,6 +47,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
@@ -403,12 +404,13 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     }
 
   private fun handleSelectedFileUri(uri: Uri) {
-    getZimFileFromUri(uri)?.let { file ->
-      if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
-        copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(uri, file)
-      } else {
-        navigateToReaderFragment(file)
-      }
+    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+      copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(
+        uri,
+        DocumentFile.fromSingleUri(requireActivity(), uri)
+      )
+    } else {
+      getZimFileFromUri(uri)?.let(::navigateToReaderFragment)
     }
   }
 
