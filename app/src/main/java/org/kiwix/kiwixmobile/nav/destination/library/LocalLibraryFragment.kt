@@ -381,6 +381,12 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       action = Intent.ACTION_OPEN_DOCUMENT
       type = "*/*"
       addCategory(Intent.CATEGORY_OPENABLE)
+      if (sharedPreferenceUtil.prefIsTest) {
+        putExtra(
+          "android.provider.extra.INITIAL_URI",
+          Uri.parse("content://com.android.externalstorage.documents/document/primary:Download")
+        )
+      }
     }
     try {
       fileSelectLauncher.launch(Intent.createChooser(intent, "Select a zim file"))
