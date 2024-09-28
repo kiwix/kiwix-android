@@ -23,7 +23,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import androidx.core.content.ContextCompat
@@ -41,13 +40,16 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.jupiter.api.fail
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import java.io.File
 import java.io.FileOutputStream
@@ -55,6 +57,9 @@ import java.io.OutputStream
 
 @RunWith(AndroidJUnit4::class)
 class OpeningFilesFromStorageTest : BaseActivityTest() {
+  @Rule
+  @JvmField
+  var retryRule = RetryRule()
 
   private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private lateinit var kiwixMainActivity: KiwixMainActivity
@@ -103,17 +108,40 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
         kiwixMainActivity = it
         it.navigate(R.id.libraryFragment)
       }
-      copyFileToDownloadsFolder(context, fileName)
-      sharedPreferenceUtil.copyMoveZimFilePermissionDialog = false
-      // open file picker to select a file to test the real scenario.
-      Espresso.onView(withId(R.id.select_file)).perform(ViewActions.click())
-      uiDevice.findObject(By.textContains(fileName)).click()
+      val uri = copyFileToDownloadsFolder(context, fileName)
+      try {
+        sharedPreferenceUtil.copyMoveZimFilePermissionDialog = false
+        // open file picker to select a file to test the real scenario.
+        Espresso.onView(withId(R.id.select_file)).perform(ViewActions.click())
+        uiDevice.findObject(By.textContains(fileName)).click()
 
-      copyMoveFileHandler {
-        assertCopyMovePermissionDialogDisplayed()
-        clickOnMove()
-        assertZimFileCopiedAndShowingIntoTheReader()
+        copyMoveFileHandler {
+          assertCopyMovePermissionDialogDisplayed()
+          clickOnMove()
+          assertZimFileCopiedAndShowingIntoTheReader()
+        }
+        deleteZimFileFromDownloadsFolder(uri!!)
+      } catch (ignore: Exception) {
+        deleteZimFileFromDownloadsFolder(uri!!)
+        fail("Could not open file from file manager. Original exception = $ignore")
       }
+    }
+  }
+
+  // delete the zim file from the downloads folder which we have put in the download folder.
+  // Since after this test case we do not have the access to that file, and that file takes the
+  // memory in device.
+  private fun deleteZimFileFromDownloadsFolder(uri: Uri) {
+    val resolver = context.contentResolver
+    try {
+      val rowsDeleted = resolver.delete(uri, null, null)
+      if (rowsDeleted > 0) {
+        Log.d("FileDeletion", "Deleted: $uri")
+      } else {
+        Log.e("FileDeletion", "Failed to delete: $uri")
+      }
+    } catch (e: Exception) {
+      Log.e("FileDeletion", "Error deleting file: $uri, Error: ${e.message}")
     }
   }
 
@@ -124,47 +152,29 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
         kiwixMainActivity = it
         it.navigate(R.id.libraryFragment)
       }
-      copyFileToDownloadsFolder(context, fileName)
-      val intent = Intent(Intent.ACTION_VIEW).apply {
-        putExtra(
-          "android.provider.extra.INITIAL_URI",
-          Uri.parse("content://com.android.externalstorage.documents/document/primary:Download")
-        )
-        setPackage("com.android.documentsui")
+      val uri = copyFileToDownloadsFolder(context, fileName)
+      try {
+        sharedPreferenceUtil.copyMoveZimFilePermissionDialog = false
+        openFileManager()
+        TestUtils.testFlakyView(uiDevice.findObject(By.textContains(fileName))::click, 10)
+        copyMoveFileHandler {
+          assertCopyMovePermissionDialogDisplayed()
+          clickOnMove()
+          assertZimFileCopiedAndShowingIntoTheReader()
+        }
+        deleteZimFileFromDownloadsFolder(uri!!)
+      } catch (ignore: Exception) {
+        deleteZimFileFromDownloadsFolder(uri!!)
+        fail("Could not open file from file manager. Original exception = $ignore")
       }
-
-      kiwixMainActivity.startActivity(intent)
-      sharedPreferenceUtil.copyMoveZimFilePermissionDialog = false
-      uiDevice.findObject(By.textContains(fileName)).click()
     }
   }
 
-  private fun getFileManagerPackageName(context: Context): String? {
-    val packageManager = context.packageManager
-    val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-      type = "*/*"
-      addCategory(Intent.CATEGORY_OPENABLE)
-    }
-
-    val resolveInfoList = packageManager.queryIntentActivities(intent, 0)
-    return resolveInfoList
-      .asSequence()
-      .map { it.activityInfo.packageName }
-      .firstOrNull(::isFileManagerPackage).also {
-        Log.e("PACKAGE_NAME", "getFileManagerPackageName: $it")
-      }
-  }
-
-  private fun isFileManagerPackage(packageName: String): Boolean {
-    val knownFileManagers = listOf(
-      "com.android.fileexplorer",
-      "com.android.documentsui",
-      "com.google.android.documentsui",
-      "com.samsung.android.documentsui",
-      "com.microsoft.filemanager",
-      "com.rim.browser.fileexplorer",
-    )
-    return knownFileManagers.contains(packageName)
+  private fun openFileManager() {
+    val intent =
+      context.packageManager.getLaunchIntentForPackage("com.android.documentsui")
+    intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+    context.startActivity(intent)
   }
 
   private fun getSelectedFile(): File {
@@ -194,17 +204,6 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
     fileName: String,
     content: ByteArray = getSelectedFile().readBytes()
   ): Uri? {
-    val downloadsFolder =
-      Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-    val file = File(downloadsFolder, fileName)
-
-    if (file.exists()) {
-      // File exists, don't save a new one
-      return null
-    }
-    // File does not exist, save the new file
-    file.createNewFile()
-    file.writeText("This is the new content.")
     val contentValues = ContentValues().apply {
       put(MediaStore.Downloads.DISPLAY_NAME, fileName)
       put(MediaStore.Downloads.MIME_TYPE, "application/octet-stream")
