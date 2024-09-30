@@ -120,28 +120,11 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
           clickOnMove()
           assertZimFileCopiedAndShowingIntoTheReader()
         }
-        deleteZimFileFromDownloadsFolder(uri!!)
       } catch (ignore: Exception) {
-        deleteZimFileFromDownloadsFolder(uri!!)
         fail("Could not open file from file manager. Original exception = $ignore")
+      } finally {
+        deleteZimFileFromDownloadsFolder(uri!!)
       }
-    }
-  }
-
-  // delete the zim file from the downloads folder which we have put in the download folder.
-  // Since after this test case we do not have the access to that file, and that file takes the
-  // memory in device.
-  private fun deleteZimFileFromDownloadsFolder(uri: Uri) {
-    val resolver = context.contentResolver
-    try {
-      val rowsDeleted = resolver.delete(uri, null, null)
-      if (rowsDeleted > 0) {
-        Log.d("FileDeletion", "Deleted: $uri")
-      } else {
-        Log.e("FileDeletion", "Failed to delete: $uri")
-      }
-    } catch (e: Exception) {
-      Log.e("FileDeletion", "Error deleting file: $uri, Error: ${e.message}")
     }
   }
 
@@ -162,11 +145,68 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
           clickOnMove()
           assertZimFileCopiedAndShowingIntoTheReader()
         }
-        deleteZimFileFromDownloadsFolder(uri!!)
       } catch (ignore: Exception) {
-        deleteZimFileFromDownloadsFolder(uri!!)
         fail("Could not open file from file manager. Original exception = $ignore")
+      } finally {
+        deleteZimFileFromDownloadsFolder(uri!!)
       }
+    }
+  }
+
+  @Test
+  fun testOpeningFileFromBrowser() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      testCopyMoveDialogShowing(
+        Uri.parse(
+          "content://com.opera.browser.DownloadProvider/downloads/beer.stackexchange" +
+            ".com_en_all_2023-05.zim?hash=w4A3vMuc7l1FPQwk23rmbgvfPGJfhcj5FujW37NApdA%3D&mt=" +
+            "application%2Foctet-stream"
+        )
+      )
+      testCopyMoveDialogShowing(Uri.parse("content://media/external/downloads/2825"))
+      testCopyMoveDialogShowing(
+        Uri.parse(
+          "content://org.mozilla.firefox.DownloadProvider/" +
+            "downloads/beer.stackexchange.com_en_all_2023-05.zim"
+        )
+      )
+    }
+  }
+
+  private fun testCopyMoveDialogShowing(uri: Uri) {
+    ActivityScenario.launch<KiwixMainActivity>(
+      createDeepLinkIntent(uri)
+    ).onActivity {}
+    sharedPreferenceUtil.copyMoveZimFilePermissionDialog = false
+    copyMoveFileHandler {
+      assertCopyMovePermissionDialogDisplayed()
+      clickOnCancel()
+    }
+  }
+
+  private fun createDeepLinkIntent(uri: Uri): Intent {
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+      setDataAndType(uri, "application/octet-stream")
+      addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+      setPackage(context.packageName)
+    }
+    return intent
+  }
+
+  // delete the zim file from the downloads folder which we have put in the download folder.
+  // Since after this test case we do not have the access to that file, and that file takes the
+  // memory in device.
+  private fun deleteZimFileFromDownloadsFolder(uri: Uri) {
+    val resolver = context.contentResolver
+    try {
+      val rowsDeleted = resolver.delete(uri, null, null)
+      if (rowsDeleted > 0) {
+        Log.d("FileDeletion", "Deleted: $uri")
+      } else {
+        Log.e("FileDeletion", "Failed to delete: $uri")
+      }
+    } catch (e: Exception) {
+      Log.e("FileDeletion", "Error deleting file: $uri, Error: ${e.message}")
     }
   }
 
