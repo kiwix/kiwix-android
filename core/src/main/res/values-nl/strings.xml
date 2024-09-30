@@ -321,7 +321,6 @@
   <string name="close_drawer">Lade sluiten</string>
   <string name="zim_files_not_showing">Zim-bestanden niet te zien?</string>
   <string name="zim_files_not_showing_description">Als gevolg van het Google Play-beleid op Android 11 en hoger, kan deze Google Store-app geen “sideloaded” ZIM-bestanden openen. U kunt ze downloaden via de app, of in plaats daarvan vanaf onze officiële website %s de volledige versie van de Kiwix-app installeren.</string>
-  <string name="understood">Begrepen</string>
   <string name="how_to_update_content">Hoe werk ik de inhoud bij?</string>
   <string name="update_content_description">Om inhoud (een ZIM-bestand) bij te werken moet u de volledige nieuwste versie van precies dezelfde inhoud downloaden. Dat kan via de downloadsectie.</string>
   <string name="all_files_permission_needed">Toestemming voor alle bestanden vereist</string>

@@ -316,7 +316,6 @@
   <string name="close_drawer">Затвори фиока</string>
   <string name="zim_files_not_showing">ZIM-податотеките не се прикажуваат?</string>
   <string name="zim_files_not_showing_description">Поради правилата на Google Play за Андроид 11 и подоцнежни, овој прилог од Google Store не може да отвора настрана преземени ZIM-податотеки. Мора да ги преземете преку прилогот или пак да ја воспоставите целосната верзија на прилогот Кивикс од нашата официјална страница %s</string>
-  <string name="understood">Јасно</string>
   <string name="preparing_file_for_copy">Подготовка за копирање/преместување</string>
   <string name="action_copy">Копирај</string>
   <string name="move">Премести</string>

@@ -70,7 +70,6 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
-      putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putString(SharedPreferenceUtil.PREF_LANG, "en")
     }

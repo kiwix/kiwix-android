@@ -473,28 +473,13 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
 
   override fun onResume() {
     super.onResume()
-    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
-      sharedPreferenceUtil.playStoreRestrictionPermissionDialog
-    ) {
-      showPlayStoreRestrictionInformationToUser()
-    } else if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
+    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
       !sharedPreferenceUtil.prefIsTest && !permissionDeniedLayoutShowing
     ) {
       checkPermissions()
     } else if (!permissionDeniedLayoutShowing) {
       fragmentDestinationLibraryBinding?.zimfilelist?.visibility = VISIBLE
     }
-  }
-
-  private fun showPlayStoreRestrictionInformationToUser() {
-    // We should only ask for first time
-    sharedPreferenceUtil.playStoreRestrictionPermissionDialog = false
-    // Show Dialog to the user to inform about the play store restriction
-    dialogShower.show(
-      KiwixDialog.PlayStoreRestrictionPopup(KIWIX_APK_WEBSITE_URL),
-      {},
-      ::openKiwixWebsiteForDownloadingApk
-    )
   }
 
   private fun openKiwixWebsiteForDownloadingApk() {

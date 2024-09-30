@@ -324,7 +324,6 @@
   <string name="close_drawer">סגירת מגירה</string>
   <string name="zim_files_not_showing">קובצי ה־zim אינם מוצגים?</string>
   <string name="zim_files_not_showing_description">בשל מדיניות Google Play ב־Android 11 ומעלה, יישום ה־Google Store הזה לא יכול לפתוח קובצי ZIM עם טעינת צד. באפשרותך להוריד אותם דרך היישום או להתקין את הגרסה המלאה של אפליקציית kiwix מהאתר הרשמי שלנו %s</string>
-  <string name="understood">הבנתי</string>
   <string name="preparing_file_for_copy">הכנה להעתקה או העברה</string>
   <string name="action_copy">העתקה</string>
   <string name="move">העברה</string>

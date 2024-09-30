@@ -293,7 +293,6 @@
   <string name="close_drawer">Tswala kgamelo</string>
   <string name="zim_files_not_showing">A difaele tsa Zim ga di suoe?</string>
   <string name="zim_files_not_showing_description">Ka ntlha ya melao ya Google Play mo Android 11 le go feta, app eno ya Google Store ga e kgone go bula difaele tsa ZIM tse di kwa thoko. O ka kgona go di kopa ka app kgotsa, go na le moo, tsenya version e e feletseng ya app ya kiwix go tswa mo webosaeteng ya rona ya semmuso %s</string>
-  <string name="understood">Go Tlhaloganngwa</string>
   <string name="how_to_update_content">O ka kgona jang go ntšhafatsa tshedimosetso?</string>
   <string name="update_content_description">Go tlhabololwa ga diteng (faele ya zim) o tlhoka go tsaya kgatiso e e feletseng ya bosheng ya diteng tse di tshwanang. O ka dira seo ka karolo ya download.</string>
   <string name="all_files_permission_needed">Tetla ya difaele tsotlhe e ya tlhokega</string>

@@ -307,7 +307,6 @@
   <string name="close_drawer">Kparimi leefe</string>
   <string name="zim_files_not_showing">Zim fasara nima bi yin’dɔni?</string>
   <string name="zim_files_not_showing_description">Kwa sababu ya sera za Google Play kwenye Android 11 na matoleo mapya zaidi, programu hii ya Google Store haiwezi kufungua faili za ZIM zilizopakiwa kando. Unaweza kuzipakua kupitia programu au, badala yake, usakinishe toleo kamili la programu ya kiwix kutoka kwa tovuti yetu rasmi %s.</string>
-  <string name="understood">N gbaaya</string>
   <string name="preparing_file_for_copy">Shili malibu zaŋ n-ti yaabu/kpɛhibu</string>
   <string name="action_copy">yaai</string>
   <string name="move">Kpɛhi</string>

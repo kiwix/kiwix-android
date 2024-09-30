@@ -203,7 +203,6 @@ class LocalFileTransferTest {
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, shouldShowShowCase)
-      putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, false)
       putString(SharedPreferenceUtil.PREF_LANG, "en")
     }
     if (isResetShowCaseId) {

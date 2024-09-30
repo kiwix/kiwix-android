@@ -90,7 +90,6 @@ class LocalLibraryTest : BaseActivityTest() {
       // the manage external storage permission dialog on Android 11 and above
       // while refreshing the content in LocalLibraryFragment.
       putBoolean(SharedPreferenceUtil.PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH, false)
-      putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, false)
       putString(SharedPreferenceUtil.PREF_LANG, "en")
       putLong(
         SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,

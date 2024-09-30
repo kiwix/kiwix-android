@@ -344,7 +344,6 @@
   <string name="close_drawer">关闭绘画器</string>
   <string name="zim_files_not_showing">没看到Zim文件？</string>
   <string name="zim_files_not_showing_description">根据Android11及以上版本的Google Play政策，您现在使用的版本无法侧载ZIM文件。但您可以在程序内下载ZIM文件，或者在我们的官网（%s）下载完整版的Kiwix。</string>
-  <string name="understood">明白了</string>
   <string name="preparing_file_for_copy">准备复制/移动</string>
   <string name="action_copy">复制</string>
   <string name="move">移动</string>
