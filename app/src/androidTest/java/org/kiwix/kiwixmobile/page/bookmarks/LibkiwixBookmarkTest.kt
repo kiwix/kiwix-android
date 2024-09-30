@@ -28,7 +28,6 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -204,10 +203,5 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
       }
     }
     return zimFile
-  }
-
-  @After
-  fun finish() {
-    TestUtils.deleteTemporaryFilesOfTestCases(context)
   }
 }

@@ -24,6 +24,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
@@ -60,6 +61,7 @@ internal class SaveSearchToRecentsTest {
       id,
       testDispatcher
     ).invokeWith(activity)
+    delay(50)
     verify { newRecentSearchDao.saveSearch(searchListItem.value, id, ZimFileReader.CONTENT_PREFIX) }
   }
 }
