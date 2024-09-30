@@ -39,6 +39,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.ResponseBody
 import org.hamcrest.Matchers.allOf
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -52,6 +53,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader
 import org.kiwix.kiwixmobile.testutils.RetryRule
+import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import java.io.File
@@ -349,5 +351,18 @@ class SearchFragmentTest : BaseActivityTest() {
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     return zimFile
+  }
+
+  @After
+  fun finish() {
+    TestUtils.deleteTemporaryFilesOfTestCases(context)
+    context.cacheDir?.let {
+      it.listFiles()?.let { files ->
+        for (child in files) {
+          child.delete()
+        }
+      }
+      it.delete()
+    }
   }
 }

@@ -25,12 +25,12 @@ import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.DarkModeConfig
-import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
@@ -162,9 +162,12 @@ class EncodedUrlTest : BaseActivityTest() {
       )
     }
     // dispose the ZimFileReader
-    zimFileReader.dispose().also {
-      zimFile.deleteFile()
-    }
+    zimFileReader.dispose()
+  }
+
+  @After
+  fun finish() {
+    TestUtils.deleteTemporaryFilesOfTestCases(context)
   }
 
   data class EncodedUrl(val url: String, val expectedUrl: String)

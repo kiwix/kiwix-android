@@ -19,12 +19,15 @@
 package org.kiwix.kiwixmobile.custom.testutils
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
+import androidx.core.content.ContextCompat
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject
 import androidx.test.uiautomator.UiSelector
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import java.io.File
 
 object TestUtils {
   private const val TAG = "TESTUTILS"
@@ -83,6 +86,26 @@ object TestUtils {
         testFlakyView(action, retryCount - 1)
       } else {
         throw ignore // No more retries, rethrow the exception
+      }
+    }
+  }
+
+  @JvmStatic
+  fun deleteTemporaryFilesOfTestCases(context: Context) {
+    ContextCompat.getExternalFilesDirs(context, null).filterNotNull()
+      .map(::deleteAllFilesInDirectory)
+    ContextWrapper(context).externalMediaDirs.filterNotNull()
+      .map(::deleteAllFilesInDirectory)
+  }
+
+  private fun deleteAllFilesInDirectory(directory: File) {
+    if (directory.isDirectory) {
+      directory.listFiles()?.forEach { file ->
+        if (file.isDirectory) {
+          // Recursively delete files in subdirectories
+          deleteAllFilesInDirectory(file)
+        }
+        file.delete()
       }
     }
   }

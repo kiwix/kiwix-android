@@ -25,6 +25,7 @@ import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -34,6 +35,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import org.kiwix.libzim.SuggestionSearcher
@@ -117,5 +119,10 @@ class MimeTypeTest : BaseActivityTest() {
     Assert.assertEquals(null, zimFileReader.getMimeTypeFromUrl("https://kiwix.app/A/test.html"))
     // dispose the ZimFileReader
     zimFileReader.dispose()
+  }
+
+  @After
+  fun finish() {
+    TestUtils.deleteTemporaryFilesOfTestCases(context)
   }
 }

@@ -318,6 +318,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
   @After
   fun finish() {
     IdlingRegistry.getInstance().unregister(KiwixIdlingResource.getInstance())
+    TestUtils.deleteTemporaryFilesOfTestCases(context)
   }
 
   companion object {

@@ -29,6 +29,7 @@ import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -167,5 +168,10 @@ class DarkModeViewPainterTest : BaseActivityTest() {
           .apply { zimFileUri = zimFile.toUri().toString() }
       )
     }
+  }
+
+  @After
+  fun finish() {
+    TestUtils.deleteTemporaryFilesOfTestCases(context)
   }
 }

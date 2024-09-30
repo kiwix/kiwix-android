@@ -33,6 +33,7 @@ import com.google.android.apps.common.testing.accessibility.framework.Accessibil
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.allOf
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -213,5 +214,10 @@ class ZimHostFragmentTest {
         }
       }
     }
+  }
+
+  @After
+  fun finish() {
+    context?.let(TestUtils::deleteTemporaryFilesOfTestCases)
   }
 }

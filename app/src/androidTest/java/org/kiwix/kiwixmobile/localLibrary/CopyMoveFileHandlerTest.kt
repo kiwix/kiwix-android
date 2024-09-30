@@ -30,6 +30,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -279,5 +280,10 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         file.delete()
       }
     }
+  }
+
+  @After
+  fun finish() {
+    TestUtils.deleteTemporaryFilesOfTestCases(context)
   }
 }

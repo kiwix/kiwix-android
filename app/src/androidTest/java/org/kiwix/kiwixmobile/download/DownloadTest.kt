@@ -211,6 +211,7 @@ class DownloadTest : BaseActivityTest() {
   @After
   fun finish() {
     IdlingRegistry.getInstance().unregister(getInstance())
+    TestUtils.deleteTemporaryFilesOfTestCases(context)
   }
 
   companion object {
