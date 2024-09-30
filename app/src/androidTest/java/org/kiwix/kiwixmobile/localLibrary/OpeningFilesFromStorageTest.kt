@@ -124,6 +124,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       } catch (ignore: Exception) {
         fail("Could not open file from file manager. Original exception = $ignore")
       } finally {
+        deleteAllFilesInDirectory(File(sharedPreferenceUtil.prefStorage))
         deleteZimFileFromDownloadsFolder(uri!!)
       }
     }
@@ -149,6 +150,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       } catch (ignore: Exception) {
         fail("Could not open file from file manager. Original exception = $ignore")
       } finally {
+        deleteAllFilesInDirectory(File(sharedPreferenceUtil.prefStorage))
         deleteZimFileFromDownloadsFolder(uri!!)
       }
     }
@@ -270,6 +272,18 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
     }
 
     return uri
+  }
+
+  private fun deleteAllFilesInDirectory(directory: File) {
+    if (directory.isDirectory) {
+      directory.listFiles()?.forEach { file ->
+        if (file.isDirectory) {
+          // Recursively delete files in subdirectories
+          deleteAllFilesInDirectory(file)
+        }
+        file.delete()
+      }
+    }
   }
 
   @After
