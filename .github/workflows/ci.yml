@@ -62,7 +62,7 @@ jobs:
           target: default
           arch: x86_64
           profile: pixel_c
-          ram-size: 3072M
+          ram-size: 2048M
           cores: 4
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
@@ -118,7 +118,7 @@ jobs:
           target: default
           arch: x86_64
           profile: pixel_2
-          ram-size: 3072M
+          ram-size: 2048M
           cores: 4
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           sdcard-path-or-size: 1024M
@@ -137,7 +137,7 @@ jobs:
           target: default
           arch: x86_64
           profile: pixel_2
-          ram-size: 3072M
+          ram-size: 2048M
           cores: 4
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
