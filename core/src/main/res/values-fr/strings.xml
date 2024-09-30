@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Alno
+* Benoit74
 * BlueCamille
 * Boniface
 * Derugon
@@ -18,6 +19,7 @@
 * Méthodes Bulebe Hangi
 * SleaY
 * Stephane
+* Terio legale
 * The RedBurn
 * Thibaut120094
 * Urhixidur
@@ -149,7 +151,9 @@
   <string name="no_files_here">Aucun fichier ici</string>
   <string name="download_no_space">Espace insuffisant pour le téléchargement.</string>
   <string name="download">Télécharger</string>
+  <string name="download_notification_channel_name">Télécharger le nom du canal de notification</string>
   <string name="space_available">Espace disponible :</string>
+  <string name="move_no_space">Espace insuffisant pour déplacer/copier.</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">Aucune image</string>
   <string name="zim_no_vid">Aucune vidéo</string>
@@ -340,6 +344,16 @@
   <string name="zim_files_not_showing">Les fichiers Zim ne s’affichent pas ?</string>
   <string name="zim_files_not_showing_description">En raison des politiques de Google Play sur Android 11 et versions ultérieures, cette application Google Store ne peut pas ouvrir les fichiers ZIM téléchargés. Vous pouvez soit les télécharger via l’application, soit installer la version complète de l’application kiwix depuis notre site officiel %s.</string>
   <string name="understood">Compris</string>
+  <string name="preparing_file_for_copy">Préparation de la copie/du déplacement</string>
+  <string name="action_copy">Copier</string>
+  <string name="move">Déplacer</string>
+  <string name="file_copying_in_progress">Copie du fichier Zim en cours</string>
+  <string name="file_moving_in_progress">Déplacement du fichier ZIM en cours</string>
+  <string name="copy_move_files_dialog_description">Voulez-vous copier ou déplacer le fichier ?</string>
+  <string name="copy_file_error_message">Erreur lors de la copie du fichier ZIM : %s.</string>
+  <string name="move_files_permission_dialog_title">Déplacer/copier les fichiers vers le répertoire public de l’application ?</string>
+  <string name="move_files_permission_dialog_description">En raison des politiques de Google Play sur Android 11 et versions ultérieures, notre application ne peut plus accéder directement aux fichiers stockés ailleurs sur votre appareil. Pour vous permettre de visualiser les fichiers sélectionnés, nous devons les déplacer ou les copier dans un dossier spécial dans notre répertoire d’applications. Cela nous permet d’accéder aux fichiers et de les ouvrir. Êtes-vous d’accord avec cela ?</string>
+  <string name="move_file_error_message">Erreur lors du déplacement du fichier ZIM : %s.</string>
   <string name="how_to_update_content">Comment actualiser le contenu ?</string>
   <string name="update_content_description">Pour mettre à jour un contenu (un fichier zim), vous devez télécharger la dernière version complète de ce même contenu. Vous pouvez le faire via la section de téléchargement.</string>
   <string name="all_files_permission_needed">Tous les droits sur les fichiers sont nécessaires</string>
@@ -350,6 +364,10 @@
   <string name="system_unable_to_grant_permission_message">Le système n’a pas pu accorder le droit d’accès !</string>
   <string name="allow">Autoriser</string>
   <string name="swipe_down_for_library">Balayez vers le bas pour la bibliothèque</string>
+  <string name="reaching_remote_library">Accéder à la bibliothèque à distance</string>
+  <string name="parsing_remote_library">Analyse de la bibliothèque distante</string>
+  <string name="starting_downloading_remote_library">Démarrage du téléchargement de la bibliothèque en ligne</string>
+  <string name="downloading_library">Téléchargement de la bibliothèque \n %s</string>
   <string name="no_notes">Aucune note</string>
   <string name="notes_from_all_books">Afficher les notes de tous les livres</string>
   <string name="search_notes">Rechercher des notes</string>
@@ -380,4 +398,7 @@
   <string name="toolbar_back_button_content_description">Aller à l’écran précédent</string>
   <string name="save_or_open_unsupported_files_dialog_title">Enregistrer ou ouvrir ce fichier ?</string>
   <string name="save_or_open_unsupported_files_dialog_message">Choisir « Ouvrir » ouvrira ce fichier dans une application de lecture externe.</string>
+  <string name="donation_dialog_title">Faire un don aujourd’hui</string>
+  <string name="donation_dialog_description">%s nécessite votre aide</string>
+  <string name="make_donation">Faire un don</string>
 </resources>

@@ -171,7 +171,7 @@
   <string name="no_items_msg">କୌଣସି ସାମଗ୍ରୀ ଉପଲବ୍ଧ ନାହିଁ</string>
   <string name="crash_title">ଆଚ୍ଛା… ଏହା ଲଜ୍ଜାଜନକ ଅଟେ |</string>
   <string name="crash_description">ଏହା ଦେଖାଯାଏ ଯେ ଆମେ ଦୁର୍ଘଟଣାଗ୍ରସ୍ତ।! N !! N! ଆପଣ ନିମ୍ନଲିଖିତ ସୂଚନା ପଠାଇ ଏହି ସମସ୍ୟାର ସମାଧାନ କରିବାରେ ସାହାଯ୍ୟ କରିବେ କି?</string>
-  <string name="crash_checkbox_language">ଆପଣଙ୍କ ଭାଷା ସେଟିଂ</string>
+  <string name="crash_checkbox_language">ଆପଣଙ୍କ ଭାଷା ସଜାଣି</string>
   <string name="crash_checkbox_zimfiles">ଆପଣଙ୍କ ଜିମ ଫାଇଲଗୁଡ଼ିକର ଏକ ତାଲିକା</string>
   <string name="crash_checkbox_exception">ଦୁର୍ଘଟଣାର ବିବରଣୀ</string>
   <string name="crash_checkbox_logs">ପ୍ରୟୋଗ ଲଗ୍ |</string>

@@ -318,8 +318,9 @@
   <string name="zim_files_not_showing_description">Поради правилата на Google Play за Андроид 11 и подоцнежни, овој прилог од Google Store не може да отвора настрана преземени ZIM-податотеки. Мора да ги преземете преку прилогот или пак да ја воспоставите целосната верзија на прилогот Кивикс од нашата официјална страница %s</string>
   <string name="understood">Јасно</string>
   <string name="preparing_file_for_copy">Подготовка за копирање/преместување</string>
+  <string name="action_copy">Копирај</string>
   <string name="move">Премести</string>
-  <string name="file_copying_in_progress" fuzzy="true">Копирањето на ZIM-податотеката е во тек</string>
+  <string name="file_copying_in_progress">Копирањето на ZIM-податотеката е во тек</string>
   <string name="file_moving_in_progress">Преместувањето на ZIM-податотеката е во тек</string>
   <string name="copy_move_files_dialog_description">Дали сакате да ја ископирате или преместите податотеката?</string>
   <string name="copy_file_error_message">Грешка при копирање на ZIM-податотеката: %s.</string>
@@ -336,6 +337,10 @@
   <string name="system_unable_to_grant_permission_message">Системот не може да ја даде дозволата!</string>
   <string name="allow">Дозволи</string>
   <string name="swipe_down_for_library">Повлечете надолу за Библиотеката</string>
+  <string name="reaching_remote_library">Ја добивам далечинската библиотека</string>
+  <string name="parsing_remote_library">Ја расчленувам далечинската библиотека</string>
+  <string name="starting_downloading_remote_library">Започнувам со преземање на мрежната библиотека</string>
+  <string name="downloading_library">Преземање на библиотека\n%s</string>
   <string name="no_notes">Нема белешки</string>
   <string name="notes_from_all_books">Погл. белешки од сите книги</string>
   <string name="search_notes">Пребарај белешки</string>
@@ -366,4 +371,7 @@
   <string name="toolbar_back_button_content_description">Оди на претходниот екран</string>
   <string name="save_or_open_unsupported_files_dialog_title">Да ја зачувам или отворам податотекава?</string>
   <string name="save_or_open_unsupported_files_dialog_message">Ако изберете Отвори, податотеката ќе ја отворите во надворешен читач.</string>
+  <string name="donation_dialog_title">Дарувајте денес</string>
+  <string name="donation_dialog_description">На %s му треба вашата помош.</string>
+  <string name="make_donation">Дарувајте</string>
 </resources>

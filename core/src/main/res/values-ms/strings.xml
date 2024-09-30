@@ -124,5 +124,8 @@
   <string name="no_bookmarks" fuzzy="true">Tiada bookmark!</string>
   <string name="crash_checkbox_file_system">Butiran Sistem Fail</string>
   <string name="reader">Pembaca</string>
+  <string name="move">Pindahkan</string>
   <string name="how_to_update_content">Bagaimana kemas kini kandungan?</string>
+  <string name="donation_dialog_title">Derma Hari Ini</string>
+  <string name="donation_dialog_description">%s memerlukan bantuan anda.</string>
 </resources>

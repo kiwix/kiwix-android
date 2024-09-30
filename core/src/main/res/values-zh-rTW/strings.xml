@@ -329,8 +329,9 @@
   <string name="zim_files_not_showing_description">出自於 Android 11（或更高階版本）的 Google Play 政策，此款 Google 商店應用程式無法開啟側載的 zim 檔案。您可以改由應用程式來下載，或是從我們的官方網站：%s 來安裝完整版的 kiwix 應用程式</string>
   <string name="understood">明白了</string>
   <string name="preparing_file_for_copy">準備拷貝/移動</string>
+  <string name="action_copy">拷貝</string>
   <string name="move">移動</string>
-  <string name="file_copying_in_progress" fuzzy="true">正在進行 zim 檔案拷貝</string>
+  <string name="file_copying_in_progress">正在進行 zim 檔案拷貝</string>
   <string name="file_moving_in_progress">正在進行 zim 檔案移動</string>
   <string name="copy_move_files_dialog_description">您要拷貝或移動檔案嗎？</string>
   <string name="copy_file_error_message">拷貝 zim 檔案時發生錯誤：%s。</string>
@@ -347,6 +348,10 @@
   <string name="system_unable_to_grant_permission_message">系統無法授予權限！</string>
   <string name="allow">允許</string>
   <string name="swipe_down_for_library">向下滑動圖書館</string>
+  <string name="reaching_remote_library">取得遠距圖書館</string>
+  <string name="parsing_remote_library">解析遠端圖書館</string>
+  <string name="starting_downloading_remote_library">開始下載線上圖書館</string>
+  <string name="downloading_library">正在下載圖書館\n%s</string>
   <string name="no_notes">沒有註釋</string>
   <string name="notes_from_all_books">檢視來自所有書籍的註釋</string>
   <string name="search_notes">搜尋註釋</string>
@@ -377,4 +382,7 @@
   <string name="toolbar_back_button_content_description">前往上一個畫面</string>
   <string name="save_or_open_unsupported_files_dialog_title">儲存或開啟這個檔案？</string>
   <string name="save_or_open_unsupported_files_dialog_message">選擇開啟將在外部閱讀器應用程式中開啟該檔案。</string>
+  <string name="donation_dialog_title">今天就捐款</string>
+  <string name="donation_dialog_description">%s需要您的幫忙。</string>
+  <string name="make_donation">捐款</string>
 </resources>

@@ -79,6 +79,7 @@
   <string name="error_server_already_running">Сервер уже работает. Пожалуйста, выключите его и повторите попытку.</string>
   <string name="error_ip_address_not_found">Не удалось найти IP-адрес.</string>
   <string name="server_started_message">Введите этот IP адрес в ваш браузер чтобы получить доступ к серверу %s</string>
+  <string name="qr_code">Отобразить QR-код</string>
   <string name="share_host_address">Поделиться URL через другие приложения</string>
   <string name="error_file_not_found">Ошибка: выбранный ZIM-файл не найден.</string>
   <string name="unable_to_read_zim_file">Невозможно прочитать этот ZIM-файл!</string>
@@ -99,6 +100,7 @@
   <string name="tts_lang_not_supported">Язык этой страницы не поддерживается. Статья не может быть правильно прочитана.</string>
   <string name="no_reader_application_installed">Не удалось найти установленное приложение для этого типа файлов</string>
   <string name="no_email_application_installed">Установите поставщика услуг электронной почты или напишите нам по адресу %1s</string>
+  <string name="no_app_found_to_select_bookmark_file">Не найдено приложение для выбора файла закладки</string>
   <string name="no_section_info">Не найдены заголовки содержимого</string>
   <string name="request_storage">Для доступа к офлайн контенту нам нужен доступ к вашему файловому хранилищу</string>
   <string name="request_write_storage">Для скачивания ZIM-файлов нам нужен доступ на запись к вашему хранилищу</string>
@@ -150,6 +152,7 @@
   <string name="no_files_here">Файлы отсутствуют</string>
   <string name="download_no_space">Недостаточно места для загрузки.</string>
   <string name="download">Скачать</string>
+  <string name="download_notification_channel_name">Имя канала уведомлений о загрузке</string>
   <string name="space_available">Доступно Места:</string>
   <string name="move_no_space">Недостаточно места для перемещения/копирования.</string>
   <string name="zim_simple">Простой</string>
@@ -321,6 +324,7 @@
   <string name="export_all_bookmarks_dialog_title">Экспортировать все закладки?</string>
   <string name="export_all_bookmarks_dialog_message">Экспорт создаст файл bookmark.xml в папке Download/org.kiwix…/</string>
   <string name="bookmark_imported_message">Все закладки импортированы.</string>
+  <string name="error_invalid_bookmark_file">Ошибка: Выбранный файл не является допустимым файлом закладок.</string>
   <string name="on">Вкл</string>
   <string name="off">Выкл</string>
   <string name="auto">Авто</string>
@@ -342,11 +346,14 @@
   <string name="zim_files_not_showing_description">В соответствии с правилами Google Play для Android 11 и более поздних версий это приложение Google Store не может открывать загруженные неопубликованными файлы ZIM. Вы можете либо скачать их через приложение, либо установить полную версию приложения kiwix с нашего официального сайта %s</string>
   <string name="understood">Понятно</string>
   <string name="preparing_file_for_copy">Подготовка к копированию/перемещению</string>
+  <string name="action_copy">Копировать</string>
   <string name="move">Переместить</string>
-  <string name="file_copying_in_progress" fuzzy="true">Копируем ZIM-файл</string>
+  <string name="file_copying_in_progress">Копируем ZIM-файл</string>
   <string name="file_moving_in_progress">Перемещаем ZIM-файл</string>
   <string name="copy_move_files_dialog_description">Вы хотите скопировать или переместить файл?</string>
   <string name="copy_file_error_message">Ошибка при копировании ZIM-файла: %s.</string>
+  <string name="move_files_permission_dialog_title">Перемещение/копирование файлов в публичный каталог приложения?</string>
+  <string name="move_files_permission_dialog_description">В соответствии с политикой Google Play для Android 11 и выше, наше приложение больше не может напрямую обращаться к файлам, хранящимся в других местах на вашем устройстве. Чтобы вы могли просматривать выбранные файлы, нам нужно переместить или скопировать их в специальную папку в каталоге приложения. Это позволит нам получить доступ к файлам и открыть их. Вы согласны с этим?</string>
   <string name="move_file_error_message">Ошибка при перемещении ZIM-файла: %s.</string>
   <string name="how_to_update_content">Как обновить содержимое?</string>
   <string name="update_content_description">Чтобы обновить содержимое (файл zim), вам нужно скачать последнюю версию того же содержимого. Вы можете это сделать в разделе загрузок.</string>
@@ -388,4 +395,7 @@
   <string name="toolbar_back_button_content_description">Перейти к предыдущей странице</string>
   <string name="save_or_open_unsupported_files_dialog_title">Сохранить или открыть этот файл?</string>
   <string name="save_or_open_unsupported_files_dialog_message">При выборе «Открыть» файл откроется во внешнем приложении для чтения.</string>
+  <string name="donation_dialog_title">Пожертвуйте сегодня</string>
+  <string name="donation_dialog_description">%s нуждается в вашей помощи.</string>
+  <string name="make_donation">Сделать пожертвование</string>
 </resources>

@@ -3,6 +3,7 @@
 * Accuratecy051
 * Adakaibe
 * Akwugo
+* Celetex
 * Ennydavids
 * Lebron jay
 * MohitMali
@@ -28,6 +29,7 @@
   <string name="save_media_error">Enwere mperi mgbe ị na-achọ ịchekwa mgbasa ozi!</string>
   <string name="save_media_saved">Mgbasa ozi echekwara ka %s na nbudata/org.kiwix…/</string>
   <string name="search_label">Chọọ</string>
+  <string name="searched_list">\n Ndepụta achọtara</string>
   <string name="choose_file">Họrọ faịlụ ọdịnaya (*.zim)</string>
   <string name="open_in_new_tab">Mepee njikọ na taabụ ọhụrụ?</string>
   <string name="hotspot_service_channel_name">Ọwa oru Hotspot</string>
@@ -57,6 +59,7 @@
   <string name="error_server_already_running">Ihe nkesa ahụ amalitego ịrụ orụ. Biko gbanyụọ ya ma nwaa ọzọ.</string>
   <string name="error_ip_address_not_found">Enweghị ike ịchọta adreesị ip.</string>
   <string name="server_started_message">Tinye adreesị IP a n’ime ihe nchọgharị gị iji nweta ihe nkesa %s</string>
+  <string name="qr_code">Emepụtara Koodu QR</string>
   <string name="share_host_address">Kesaa URL site na ngwa ndị ọzọ</string>
   <string name="error_file_not_found">Njehie: Enweghi ike ịchọta faịlụ ZIM ahọpụtara.</string>
   <string name="unable_to_read_zim_file">Enweghị ike ịgụ faịlụ zim a!</string>
@@ -77,6 +80,7 @@
   <string name="tts_lang_not_supported">A naghị akwado asụsụ ibe a. Enwere ike ghara ịgụ akụkọ ahụ nke ọma.</string>
   <string name="no_reader_application_installed">Enweghị ike ịchọta ngwa arụnyere maka ụdị faịlụ a</string>
   <string name="no_email_application_installed">Biko tinye onye na-eweta ọrụ email ma ọ bụ zitere anyị email na %1s</string>
+  <string name="no_app_found_to_select_bookmark_file">Onweghi ngwa achọtara iji họrọ faịlụ ibe edokọbara</string>
   <string name="no_section_info">Enweghị nkụnye eji isi mee ọdịnaya</string>
   <string name="request_storage">Iji nweta ọdịnaya anọghị n’ịntanetị anyị kwesịrị ịnweta nchekwa gị</string>
   <string name="request_write_storage">Ka ibudata faịlụ zim anyị kwesịrị ide ohere na nchekwa gị</string>
@@ -86,6 +90,7 @@
   <string name="pref_clear_all_history_summary">Kpochapụ ọchụchọ na akụkọ taabụ nso nso a</string>
   <string name="pref_notes">Ihe ndetu</string>
   <string name="pref_permission">Ọdà</string>
+  <string name="pref_import_bookmark_title">\nBubata ibe edokọbara</string>
   <string name="all_history_cleared">E kpochapụrụ akụkọ niile</string>
   <string name="pref_clear_all_bookmarks_title">Kpochapụ ibe edokọbara</string>
   <string name="clear_all_history_dialog_title">Hichapụ akụkọ niile?</string>

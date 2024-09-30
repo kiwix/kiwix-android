@@ -126,6 +126,7 @@
   <string name="tabs_restored">ٹیباں بحال تھی ڳیاں</string>
   <string name="open_drawer">دراز کھولو</string>
   <string name="close_drawer">دراز بند کرو</string>
+  <string name="action_copy">نقل کرو</string>
   <string name="move">ٹورو</string>
   <string name="allowed">مجاز</string>
   <string name="not_allowed">اجازت کائنی</string>
@@ -136,4 +137,6 @@
   <string name="open_note">نوٹ کھولو</string>
   <string name="open_article">مضمون کھولو</string>
   <string name="go_to_settings_label">ترتیباں تے ون٘ڄو</string>
+  <string name="donation_dialog_title">اڄ عطیہ ݙیوو</string>
+  <string name="make_donation">عطیہ ݙیوو</string>
 </resources>

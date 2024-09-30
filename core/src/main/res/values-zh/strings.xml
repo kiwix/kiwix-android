@@ -154,6 +154,7 @@
   <string name="download">下载</string>
   <string name="download_notification_channel_name">下载通知频道名称</string>
   <string name="space_available">可用空间：</string>
+  <string name="move_no_space">没有足够的空间来移动/复制。</string>
   <string name="zim_simple">简单</string>
   <string name="zim_no_pic">没有图片</string>
   <string name="zim_no_vid">没有视频</string>
@@ -191,7 +192,7 @@
   <string name="next">下一页</string>
   <string name="previous">上一页</string>
   <string name="wifi_only_title">允许通过移动网络下载内容？</string>
-  <string name="wifi_only_msg">如果您选择“是”，您今后就不会再被警告了。然而，您总是可以在设置中更改它</string>
+  <string name="wifi_only_msg">如果您选择“是”，您今后就不会再被警告了。然而，您随时可以在设置中更改它</string>
   <string name="pref_wifi_only">只通过 WiFi 下载内容</string>
   <string name="time_day">日</string>
   <string name="time_hour">时</string>
@@ -276,7 +277,7 @@
   <string name="discovery_failed">侦测失败</string>
   <string name="severe_loss_error">严重错误！请尝试禁用/重新启用 WiFi P2P</string>
   <string name="connection_failed">连接失败</string>
-  <string name="permission_rationale_location">我们需要定位权限来寻找对等设备（这是 Android 系统的要求）</string>
+  <string name="permission_rationale_location">Android 需要位置权限才能允许应用程序检测对等设备</string>
   <string name="permission_rationale_nearby">Android 需要获得附近设备权限，以允许应用程序检测对等设备</string>
   <string name="permission_refused_location">在没有定位权限的情况下无法找到对等设备</string>
   <string name="permission_refused_storage">在没有存储权限的情况下无法读取 ZIM 文件</string>
@@ -344,6 +345,16 @@
   <string name="zim_files_not_showing">没看到Zim文件？</string>
   <string name="zim_files_not_showing_description">根据Android11及以上版本的Google Play政策，您现在使用的版本无法侧载ZIM文件。但您可以在程序内下载ZIM文件，或者在我们的官网（%s）下载完整版的Kiwix。</string>
   <string name="understood">明白了</string>
+  <string name="preparing_file_for_copy">准备复制/移动</string>
+  <string name="action_copy">复制</string>
+  <string name="move">移动</string>
+  <string name="file_copying_in_progress">正在进行zim文件复制</string>
+  <string name="file_moving_in_progress">正在进行zim文件移动</string>
+  <string name="copy_move_files_dialog_description">您要复制或移动文件吗？</string>
+  <string name="copy_file_error_message">复制zim文件时出错：%s。</string>
+  <string name="move_files_permission_dialog_title">将文件移动/复制到应用程序公共目录？</string>
+  <string name="move_files_permission_dialog_description">由于Android 11及更高版本的Google Play政策，我们的应用无法再直接访问存储在您设备其他地方的文件。为了让您查看所选文件，我们需要将它们移动或复制到我们应用目录中的特殊文件夹中。这样我们才能访问和打开这些文件。您是否同意此操作？</string>
+  <string name="move_file_error_message">移动zim文件时出错：%s。</string>
   <string name="how_to_update_content">如何更新内容？</string>
   <string name="update_content_description">要更新内容（ZIM 文件），您需要下载此相似内容的完整最新版本。您可以通过下载章节进行。</string>
   <string name="all_files_permission_needed">需要全部文件的存储权限</string>
@@ -354,6 +365,10 @@
   <string name="system_unable_to_grant_permission_message">系统无法授予权限！</string>
   <string name="allow">允许</string>
   <string name="swipe_down_for_library">下滑查看图书馆</string>
+  <string name="reaching_remote_library">获取远程图书馆</string>
+  <string name="parsing_remote_library">解析远程图书馆</string>
+  <string name="starting_downloading_remote_library">开始下载网上图书馆</string>
+  <string name="downloading_library">正在下载图书馆\n%s</string>
   <string name="no_notes">没有注释</string>
   <string name="notes_from_all_books">查看来自所有书籍的注释</string>
   <string name="search_notes">搜索注释</string>
@@ -384,4 +399,7 @@
   <string name="toolbar_back_button_content_description">转至上一画面</string>
   <string name="save_or_open_unsupported_files_dialog_title">保存还是打开此文件？</string>
   <string name="save_or_open_unsupported_files_dialog_message">选择打开将在外部阅读器应用程序中打开该文件。</string>
+  <string name="donation_dialog_title">今天就捐款</string>
+  <string name="donation_dialog_description">%s需要您的帮助。</string>
+  <string name="make_donation">捐款</string>
 </resources>
