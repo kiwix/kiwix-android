@@ -61,7 +61,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: default
           arch: x86_64
-          profile: pixel_tablet
+          profile: pixel_c
           ram-size: 3072M
           cores: 4
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
