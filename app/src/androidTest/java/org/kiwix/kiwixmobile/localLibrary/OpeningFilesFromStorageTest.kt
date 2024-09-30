@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.localLibrary
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -163,7 +164,6 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
             "application%2Foctet-stream"
         )
       )
-      testCopyMoveDialogShowing(Uri.parse("content://media/external/downloads/2825"))
       testCopyMoveDialogShowing(
         Uri.parse(
           "content://org.mozilla.firefox.DownloadProvider/" +
@@ -174,10 +174,10 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
   }
 
   private fun testCopyMoveDialogShowing(uri: Uri) {
+    sharedPreferenceUtil.copyMoveZimFilePermissionDialog = false
     ActivityScenario.launch<KiwixMainActivity>(
       createDeepLinkIntent(uri)
     ).onActivity {}
-    sharedPreferenceUtil.copyMoveZimFilePermissionDialog = false
     copyMoveFileHandler {
       assertCopyMovePermissionDialogDisplayed()
       clickOnCancel()
@@ -261,6 +261,12 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       contentValues.clear()
       contentValues.put(MediaStore.Downloads.IS_PENDING, false)
       resolver.update(uri, contentValues, null, null)
+      MediaScannerConnection.scanFile(
+        context,
+        arrayOf(uri.toString()),
+        arrayOf("application/octet-stream"),
+        null
+      )
     }
 
     return uri

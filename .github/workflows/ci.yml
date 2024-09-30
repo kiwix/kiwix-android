@@ -52,6 +52,26 @@ jobs:
             ~/.android/adb*
           key: avd-${{ matrix.api-level }}
 
+      - name: File Opening test on Tablet
+        if: ${{ matrix.api-level!=25 }}
+        uses: reactivecircus/android-emulator-runner@v2
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: default
+          arch: x86_64
+          profile: pixel_tablet
+          ram-size: 3072M
+          cores: 4
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          force-avd-creation: true
+          sdcard-path-or-size: 1024M
+          emulator-boot-timeout: 1200
+          heap-size: 512M
+          script: bash contrib/instrumentation-file-opening-on-tablet.sh
+
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
