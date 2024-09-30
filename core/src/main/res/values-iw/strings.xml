@@ -326,8 +326,9 @@
   <string name="zim_files_not_showing_description">בשל מדיניות Google Play ב־Android 11 ומעלה, יישום ה־Google Store הזה לא יכול לפתוח קובצי ZIM עם טעינת צד. באפשרותך להוריד אותם דרך היישום או להתקין את הגרסה המלאה של אפליקציית kiwix מהאתר הרשמי שלנו %s</string>
   <string name="understood">הבנתי</string>
   <string name="preparing_file_for_copy">הכנה להעתקה או העברה</string>
+  <string name="action_copy">העתקה</string>
   <string name="move">העברה</string>
-  <string name="file_copying_in_progress" fuzzy="true">העתקת קובץ ZIM מתבצעת</string>
+  <string name="file_copying_in_progress">העתקת קובץ ZIM מתבצעת</string>
   <string name="file_moving_in_progress">העברת קובץ ZIM מתבצעת</string>
   <string name="copy_move_files_dialog_description">האם ברצונך להעתיק או להעביר את הקובץ?</string>
   <string name="copy_file_error_message">שגיאה בהעתקת קובץ zim‏: %s.</string>
@@ -344,6 +345,10 @@
   <string name="system_unable_to_grant_permission_message">המערכת אינה יכולה לתת הרשאה!</string>
   <string name="allow">לאפשר</string>
   <string name="swipe_down_for_library">יש להחליק למטה עבור ספרייה</string>
+  <string name="reaching_remote_library">ניסיון להתחבר לספרייה מרוחקת</string>
+  <string name="parsing_remote_library">פענוח ספרייה מרוחקת</string>
+  <string name="starting_downloading_remote_library">תחילת ההורדה של הספרייה המקוונת</string>
+  <string name="downloading_library">הורדת הספרייה\n%s</string>
   <string name="no_notes">אין הערות</string>
   <string name="notes_from_all_books">הצגת הערות מכל הספרים</string>
   <string name="search_notes">חיפוש בהערות</string>
@@ -374,4 +379,7 @@
   <string name="toolbar_back_button_content_description">מעבר למסך הקודם</string>
   <string name="save_or_open_unsupported_files_dialog_title">האם לשמור או לפתוח את הקובץ הזה?</string>
   <string name="save_or_open_unsupported_files_dialog_message">בחירה בפתיחה תפתח את הקובץ הזה ביישום קורא חיצוני.</string>
+  <string name="donation_dialog_title">לתרום היום</string>
+  <string name="donation_dialog_description">%s זקוק לעזרתך.</string>
+  <string name="make_donation">תרומה</string>
 </resources>

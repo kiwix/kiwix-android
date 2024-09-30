@@ -29,6 +29,7 @@
   <string name="save_media_error">Chirimbu nyɛla din niŋ saha shɛli a ni bori ni a zaŋ saɣisinli niŋ!</string>
   <string name="save_media_saved">Imehifadhi maudhui kama %s kwenye Vipakuliwa/org.kiwix\n…/</string>
   <string name="search_label">Vihima</string>
+  <string name="searched_list">vihigu yuya</string>
   <string name="choose_file">Piimi Lahabali kɔligu yaɣili (*.zim)</string>
   <string name="open_in_new_tab">Yoomi linki maa yaɣ’palli shee</string>
   <string name="hotspot_service_channel_name">Hotisipote tuma soli</string>
@@ -67,7 +68,7 @@
   <string name="pref_display_title">Zaŋ wuhi</string>
   <string name="pref_info_title">Lahabali</string>
   <string name="pref_info_version">Dabam</string>
-  <string name="pref_dark_mode" fuzzy="true">Zimsim dini</string>
+  <string name="pref_dark_mode">Zimsim dini</string>
   <string name="pref_dark_mode_summary">Onyesha makala yaliyogeuzwa\n rangi</string>
   <string name="pref_back_to_top">N labi zuɣu saa</string>
   <string name="pref_back_to_top_summary">Onyesha kitufe\n mwishoni mwa ukurasa kusogeza hadi juu</string>
@@ -125,6 +126,7 @@
   <string name="download_no_space">Polo kani ni di deei</string>
   <string name="download">Deei niŋ</string>
   <string name="space_available">Polo be ni</string>
+  <string name="move_no_space">Polo lahi kani ni a zaŋ kpɛhi/yaai</string>
   <string name="zim_simple">Alaha</string>
   <string name="zim_no_pic">Anfooni nima kani</string>
   <string name="zim_no_vid">Sinii nima kani</string>
@@ -141,6 +143,8 @@
   <string name="help_11">ZIM fasara nima deebu nyɛla din be sambani deebu shee ka di yuli booni Kiwix.</string>
   <string name="pref_storage">Kambɔŋ</string>
   <string name="pref_current_folder">Saha ŋɔ gbaŋ niŋbu shee</string>
+  <string name="pref_storage_used">%s mali</string>
+  <string name="pref_free_storage">%s yoli</string>
   <string name="delete_zim_failed">Gaafara ti daa bɛ tooi yihi mazagaya shɛŋa. A ni tooi zaŋ mazagali shɛli niŋ.</string>
   <string name="tts_pause">Zanima</string>
   <string name="tts_resume">Tuɣi</string>
@@ -213,6 +217,7 @@
   <string name="switch_tabs">Taɣimi tabisi</string>
   <string name="close_all_tabs">Kparili tabisi zaa</string>
   <string name="close_tab">Kpihimi binshɛɣ’kam</string>
+  <string name="could_not_restore_tabs">Di bi tooi zaŋ yaɣa shɛŋa a ni yoogi maa niŋ.</string>
   <string name="pending_state">Viligi</string>
   <string name="running_state">Mɔbu ni</string>
   <string name="complete">Naaya</string>
@@ -265,6 +270,7 @@
   <string name="status">dariza</string>
   <string name="pref_clear_all_notes_summary">Yihimi lahabali kam din be lahabaya ni</string>
   <string name="pref_clear_all_notes_title">Yihimi lahabaya zaa</string>
+  <string name="pref_clear_notes">Nyihimi noosi</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Tim soli ka di karim ka sabi ZIM fasara nima SD gbaŋ ni</string>
   <string name="pref_text_zoom_summary">Taɣimi sabbu barilim kamani kɔbigi puuni vaabu 25% pahibu.</string>
   <string name="tag_pic">Anfooni</string>
@@ -302,6 +308,14 @@
   <string name="zim_files_not_showing">Zim fasara nima bi yin’dɔni?</string>
   <string name="zim_files_not_showing_description">Kwa sababu ya sera za Google Play kwenye Android 11 na matoleo mapya zaidi, programu hii ya Google Store haiwezi kufungua faili za ZIM zilizopakiwa kando. Unaweza kuzipakua kupitia programu au, badala yake, usakinishe toleo kamili la programu ya kiwix kutoka kwa tovuti yetu rasmi %s.</string>
   <string name="understood">N gbaaya</string>
+  <string name="preparing_file_for_copy">Shili malibu zaŋ n-ti yaabu/kpɛhibu</string>
+  <string name="action_copy">yaai</string>
+  <string name="move">Kpɛhi</string>
+  <string name="file_copying_in_progress">Zim mazagali na yaarimi</string>
+  <string name="file_moving_in_progress">Zim mazagali na kpɛrimi</string>
+  <string name="copy_move_files_dialog_description">A borimi ni a yaai bee a zaŋ kpɛhi mazagali ŋɔ ni?</string>
+  <string name="copy_file_error_message">Chiriŋ niŋya a zim mazagali yaabu ni: %s.</string>
+  <string name="move_files_permission_dialog_title">Kpɛhimi/yaami mazagaya niŋ app salo wuhibu ni?</string>
   <string name="how_to_update_content">Wula ka lahabali ni tooi maliniŋ?</string>
   <string name="update_content_description">A yi yɛn mali lahabali niŋ (zim fasara) n- to ni a deei niŋ lala yaɣili maa ni noo. A ni tooi niŋ lala deei niŋ yaɣili.</string>
   <string name="all_files_permission_needed">Fasara nima zaa soli tibu nyɛla din bora</string>
@@ -340,4 +354,7 @@
   <string name="zim_file_content_description">ZIM ambayo ina maudhui ya kusoma</string>
   <string name="select_language_content_description">Kuchagua lugha hii kutaweka kipaumbele katika kuonyesha vitabu vinavyoweza kupakuliwa katika lugha hiyo juu.</string>
   <string name="toolbar_back_button_content_description">Cham diɣi kurili ni</string>
+  <string name="donation_dialog_title">Sɔŋmi zuŋɔ</string>
+  <string name="donation_dialog_description">%s bɔri a sɔŋsim</string>
+  <string name="make_donation">Sɔŋma</string>
 </resources>
