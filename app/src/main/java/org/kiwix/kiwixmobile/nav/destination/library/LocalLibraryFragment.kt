@@ -47,6 +47,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
@@ -380,6 +381,12 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       action = Intent.ACTION_OPEN_DOCUMENT
       type = "*/*"
       addCategory(Intent.CATEGORY_OPENABLE)
+      if (sharedPreferenceUtil.prefIsTest) {
+        putExtra(
+          "android.provider.extra.INITIAL_URI",
+          Uri.parse("content://com.android.externalstorage.documents/document/primary:Download")
+        )
+      }
     }
     try {
       fileSelectLauncher.launch(Intent.createChooser(intent, "Select a zim file"))
@@ -403,12 +410,19 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     }
 
   private fun handleSelectedFileUri(uri: Uri) {
-    getZimFileFromUri(uri)?.let { file ->
-      if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
-        copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(uri, file)
-      } else {
-        navigateToReaderFragment(file)
+    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+      val documentFile = when (uri.scheme) {
+        "file" -> DocumentFile.fromFile(File("$uri"))
+        else -> {
+          DocumentFile.fromSingleUri(requireActivity(), uri)
+        }
       }
+      copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(
+        uri,
+        documentFile
+      )
+    } else {
+      getZimFileFromUri(uri)?.let(::navigateToReaderFragment)
     }
   }
 

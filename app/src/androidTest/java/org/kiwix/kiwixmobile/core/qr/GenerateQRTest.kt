@@ -33,6 +33,7 @@ class GenerateQRTest {
     assertEquals(524288, qr.byteCount)
     assertEquals(512, qr.width)
     assertEquals(512, qr.height)
+    qr.recycle()
   }
 
   @Test fun testCreateQRWithCustomDimen() {
@@ -40,5 +41,6 @@ class GenerateQRTest {
     assertEquals(32768, qr.byteCount)
     assertEquals(128, qr.width)
     assertEquals(128, qr.height)
+    qr.recycle()
   }
 }

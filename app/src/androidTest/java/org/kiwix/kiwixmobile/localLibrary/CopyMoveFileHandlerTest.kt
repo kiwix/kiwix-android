@@ -22,6 +22,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
+import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.PreferenceManager
@@ -29,6 +30,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -193,7 +195,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         navHostFragment.childFragmentManager.fragments[0] as LocalLibraryFragment
       localLibraryFragment.copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(
         Uri.fromFile(selectedFile),
-        selectedFile
+        DocumentFile.fromFile(selectedFile)
       )
     }
   }
@@ -240,7 +242,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     selectedFile = File(parentFile, selectedFileName).apply {
       if (!isFileExist()) createNewFile()
     }
-    copyMoveFileHandler.setSelectedFileAndUri(null, selectedFile)
+    copyMoveFileHandler.setSelectedFileAndUri(null, DocumentFile.fromFile(selectedFile))
     destinationFile = copyMoveFileHandler.getDestinationFile()
     Assert.assertNotEquals(
       destinationFile.name,
@@ -254,7 +256,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
 
     // test when there is no zim file available in the storage it should return the same fileName
     selectedFile = File(parentFile, selectedFileName)
-    copyMoveFileHandler.setSelectedFileAndUri(null, selectedFile)
+    copyMoveFileHandler.setSelectedFileAndUri(null, DocumentFile.fromFile(selectedFile))
     destinationFile = copyMoveFileHandler.getDestinationFile()
     Assert.assertEquals(
       destinationFile.name,
@@ -278,5 +280,10 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         file.delete()
       }
     }
+  }
+
+  @After
+  fun finish() {
+    TestUtils.deleteTemporaryFilesOfTestCases(context)
   }
 }

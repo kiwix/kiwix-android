@@ -188,8 +188,8 @@ class ImportBookmarkTest : BaseActivityTest() {
 
   private fun getTemporaryBookmarkFile(isWithEmptyData: Boolean = false): File =
     File(context.externalCacheDir, "bookmark.xml").apply {
-      createNewFile()
       if (exists()) delete()
+      createNewFile()
 
       if (!isWithEmptyData) {
         // Write the XML data to the temp file

@@ -25,6 +25,7 @@ import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -162,6 +163,11 @@ class EncodedUrlTest : BaseActivityTest() {
     }
     // dispose the ZimFileReader
     zimFileReader.dispose()
+  }
+
+  @After
+  fun finish() {
+    TestUtils.deleteTemporaryFilesOfTestCases(context)
   }
 
   data class EncodedUrl(val url: String, val expectedUrl: String)
