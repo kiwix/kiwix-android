@@ -312,8 +312,6 @@
   <string name="tabs_restored">Schedas restaurate</string>
   <string name="open_drawer">Aperir tiratorio</string>
   <string name="close_drawer">Clauder tiratorio</string>
-  <string name="zim_files_not_showing">Le file Zim non appare?</string>
-  <string name="zim_files_not_showing_description">A causa del politicas de Google Play sur Android 11 e plus recente, iste application Google Store non pote aperir le files ZIM transferite localmente. Tu pote discargar le files per medio del application, o installar le version complete del application Kiwix de nostre sito web official: %s</string>
   <string name="how_to_update_content">Como actualisar contento?</string>
   <string name="update_content_description">Pro actualisar le contento (un file zim) tu debe discargar le ultime version complete de iste mesme contento. Tu pote facer lo in le section de discargamento.</string>
   <string name="all_files_permission_needed">Permission pro tote le files es necessari</string>

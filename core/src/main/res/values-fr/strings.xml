@@ -341,8 +341,6 @@
   <string name="tabs_restored">Onglets restaurés</string>
   <string name="open_drawer">Ouvrir le tiroir</string>
   <string name="close_drawer">Fermer le tiroir</string>
-  <string name="zim_files_not_showing">Les fichiers Zim ne s’affichent pas ?</string>
-  <string name="zim_files_not_showing_description">En raison des politiques de Google Play sur Android 11 et versions ultérieures, cette application Google Store ne peut pas ouvrir les fichiers ZIM téléchargés. Vous pouvez soit les télécharger via l’application, soit installer la version complète de l’application kiwix depuis notre site officiel %s.</string>
   <string name="preparing_file_for_copy">Préparation de la copie/du déplacement</string>
   <string name="action_copy">Copier</string>
   <string name="move">Déplacer</string>

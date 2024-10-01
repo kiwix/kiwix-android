@@ -324,8 +324,8 @@
   <string name="tabs_restored">Tabs restored</string>
   <string name="open_drawer">Open Drawer</string>
   <string name="close_drawer">Close Drawer</string>
-  <string name="zim_files_not_showing">Zim files not showing?</string>
-  <string name="zim_files_not_showing_description">Due to Google Play policies on Android 11 and above, this Google Store app can\’t open sideloaded ZIM files. You can either download them through the app or, instead, install the full version of kiwix app from our official website %s</string>
+  <string name="how_to_open_existing_zim_files">How to open existing ZIM files?</string>
+  <string name="how_to_open_existing_zim_files_description">To read your existing zim file from storage, use the file picker(+) icon in the library screen.</string>
   <string name="preparing_file_for_copy">Preparing for copy/move</string>
   <string name="action_copy">Copy</string>
   <string name="move">Move</string>

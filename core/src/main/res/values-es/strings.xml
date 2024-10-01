@@ -318,7 +318,6 @@
   <string name="tabs_restored">Pestañas restauradas</string>
   <string name="open_drawer">Abrir cajón</string>
   <string name="close_drawer">Cerrar cajón</string>
-  <string name="zim_files_not_showing">¿Los archivos de Zim no se muestran?</string>
   <string name="how_to_update_content">¿Cómo actualizar contenido?</string>
   <string name="update_content_description">Para actualizar el contenido (un archivo zim), debe descargar la última versión completa de este mismo contenido. Puede hacerlo a través de la sección de descargas.</string>
   <string name="all_files_permission_needed">Se necesita permiso para todos los archivos</string>

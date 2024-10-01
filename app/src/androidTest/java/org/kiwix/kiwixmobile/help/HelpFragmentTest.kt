@@ -112,9 +112,9 @@ class HelpFragmentTest : BaseActivityTest() {
         clickOnHowToUpdateContent()
         assertHowToUpdateContentIsExpanded()
         clickOnHowToUpdateContent()
-        clickOnZimFileNotShowing()
-        assertZimFileNotShowingIsExpanded()
-        clickOnZimFileNotShowing()
+        clickOnHowToOpenZimFiles()
+        assertHowToOpenZimFilesIsExpanded()
+        clickOnHowToOpenZimFiles()
         clickOnSendFeedback()
       }
       LeakAssertions.assertNoLeaks()

@@ -302,8 +302,6 @@
   <string name="tabs_restored">eweghachiri taabụ</string>
   <string name="open_drawer">Mepee drawer</string>
   <string name="close_drawer">Mechie drawer</string>
-  <string name="zim_files_not_showing">Faịlụ Zim anaghị egosi?</string>
-  <string name="zim_files_not_showing_description">N’ihi iwu nke Google Play na Android 11 na karịa, ngwaọrụ Google Store a enweghị ike imeghe faịlụ Zim. Inwere ike ịbelata ha site a ngwaọrụ a ma ọ bụ, kama tinye udi zuru okè nke ngwaọrụ kiwix- site na webụsaaịtị anyị ama ama nke %s</string>
   <string name="how_to_update_content">Ole Otu esi emelite ọdịnaya?</string>
   <string name="update_content_description">Imelite ọdịnaya (faịlụ zim) ịkwesịrị ibudata ụdị ọdịnaya kachasị ọhụrụ nke otu ọdịnaya a. Ị nwere ike ime nke ahụ site na ngalaba nbudata.</string>
   <string name="all_files_permission_needed">Achọrọ ikike faịlụ niile</string>

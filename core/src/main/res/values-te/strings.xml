@@ -294,7 +294,6 @@
   <string name="tabs_restored">ట్యాబ్‌లు పునరుద్ధరించబడ్డాయి</string>
   <string name="open_drawer">డ్రాయర్ తెరవండి</string>
   <string name="close_drawer">డ్రాయర్‌ని మూసివేయండి</string>
-  <string name="zim_files_not_showing">జిమ్ ఫైళ్లు కనబడటం లేదా?</string>
   <string name="how_to_update_content">కంటెంట్‌ని ఎలా అప్‌డేట్ చేయాలి?</string>
   <string name="update_content_description">కంటెంట్‌ని (జిమ్ ఫైల్) అప్‌డేట్ చేయడానికి మీరు ఇదే కంటెంట్ యొక్క పూర్తి తాజా వెర్షన్‌ను డౌన్‌లోడ్ చేసుకోవాలి. మీరు డౌన్‌లోడ్ విభాగం ద్వారా దీన్ని చేయవచ్చు.</string>
   <string name="all_files_permission_needed">అన్ని ఫైల్‌ల అనుమతి అవసరం</string>

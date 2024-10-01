@@ -27,7 +27,6 @@ import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.R.string
-import org.kiwix.kiwixmobile.core.main.KIWIX_APK_WEBSITE_URL
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 fun help(func: HelpRobot.() -> Unit) = HelpRobot().apply(func)
@@ -84,19 +83,12 @@ class HelpRobot : BaseRobot() {
     clickOn(ViewId(id.activity_help_feedback_text_view))
   }
 
-  fun clickOnZimFileNotShowing() {
-    clickOn(TextId(string.zim_files_not_showing))
+  fun clickOnHowToOpenZimFiles() {
+    clickOn(TextId(string.how_to_open_existing_zim_files))
   }
 
-  fun assertZimFileNotShowingIsExpanded() {
-    isVisible(
-      Text(
-        context.getString(
-          string.zim_files_not_showing_description,
-          KIWIX_APK_WEBSITE_URL
-        )
-      )
-    )
+  fun assertHowToOpenZimFilesIsExpanded() {
+    isVisible(Text(context.getString(string.how_to_open_existing_zim_files_description)))
   }
 
   fun assertZimFileNotShowingIsNotVisible() {

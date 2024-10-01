@@ -178,8 +178,6 @@
   <string name="open_library">Åbn bibliotek</string>
   <string name="open_drawer">Åbn skuffe</string>
   <string name="close_drawer">Luk skuffe</string>
-  <string name="zim_files_not_showing">ZIM-filer viser ikke?</string>
-  <string name="zim_files_not_showing_description">På grund af Google Play-politikker på Android 11 og nyere, kan denne Google Store-app ikke åbne sideindlæste ZIM-filer. Du kan enten downloade dem gennem appen, eller i stedet installere den fulde version af Kiwix-appen fra vores officielle hjemmeside %s.</string>
   <string name="allowed">Tilladt</string>
   <string name="not_allowed">Ikke tilladt</string>
   <string name="allow">Tillad</string>
