@@ -96,7 +96,6 @@ class HelpFragmentTest : BaseActivityTest() {
       clickOnHowToUpdateContent()
       assertHowToUpdateContentIsExpanded()
       clickOnHowToUpdateContent()
-      clickOnSendFeedback()
     }
     LeakAssertions.assertNoLeaks()
   }

@@ -80,7 +80,6 @@
   <string name="pref_credits_title">Vermeldingen</string>
   <string name="tts_lang_not_supported">De taal van deze pagina wordt niet ondersteund. Het artikel is mogelijk niet goed leesbaar.</string>
   <string name="no_reader_application_installed">Kon geen geïnstalleerde applicatie vinden voor dit type bestand</string>
-  <string name="no_email_application_installed">Installeer een e-mailserviceprovider of stuur ons een e-mail op %1s</string>
   <string name="no_app_found_to_select_bookmark_file">Geen app gevonden om een bladwijzerbestand te selecteren</string>
   <string name="no_section_info">Geen inhoudskoppen gevonden</string>
   <string name="request_storage">Om offline inhoud aan te spreken is toegang tot uw opslag nodig</string>
@@ -211,7 +210,6 @@
   <string name="table_of_contents">Inhoudsopgave</string>
   <string name="select_languages">Kies talen</string>
   <string name="save_languages">Talen opslaan</string>
-  <string name="send_feedback">Terugkoppeling verzenden</string>
   <string name="expand">Uitvouwen</string>
   <string name="history">Geschiedenis</string>
   <string name="history_from_current_book">Geschiedenis van alle boeken bekijken</string>

@@ -79,7 +79,6 @@
   <string name="pref_credits_title">תודות</string>
   <string name="tts_lang_not_supported">השפה של הדף הזה אינה נתמכת. ייתכן שהערך לא יוקרא כמו שצריך.</string>
   <string name="no_reader_application_installed">לא נמצאה אפליקציה מותקנת עבור סוג הקובץ הזה</string>
-  <string name="no_email_application_installed">נא להתקין ספק שירות דוא״ל או לשלוח לנו הודעה אל %1s בדוא״ל</string>
   <string name="no_app_found_to_select_bookmark_file">לא נמצא יישום לבחירת קובץ סימניות</string>
   <string name="no_section_info">לא נמצאו כותרות תוכן</string>
   <string name="request_storage">כדי לגשת לתכנים לא־מקוונים אנחנו צריכים גישה לאחסון שלך</string>
@@ -214,7 +213,6 @@
   <string name="table_of_contents">תוכן עניינים</string>
   <string name="select_languages">בחירת שפות</string>
   <string name="save_languages">שמירת שפות</string>
-  <string name="send_feedback">שליחת משוב</string>
   <string name="expand">הרחבה</string>
   <string name="history">היסטוריה</string>
   <string name="history_from_current_book">צפייה בהיסטוריה מכל הספרים</string>

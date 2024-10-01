@@ -74,7 +74,6 @@
   <string name="pref_credits_title">క్రెడిట్స్</string>
   <string name="tts_lang_not_supported">ఈ పేజీ యొక్క భాషకు మద్దతు లేదు. వ్యాసం సరిగా చదవకపోవచ్చు.</string>
   <string name="no_reader_application_installed">ఈ దస్త్రం చూపడానికి సహకరించే ఎప్ప్ ఇన్స్టాల్ చేయలేదు.</string>
-  <string name="no_email_application_installed">దయచేసి ఇమెయిల్ సర్వీస్ ప్రొవైడర్‌ని ఇన్‌స్టాల్ చేయండి లేదా %1s వద్ద మాకు ఇమెయిల్ చేయండి</string>
   <string name="no_section_info">కంటెంట్ హెడర్‌లు ఏవీ కనుగొనబడలేదు</string>
   <string name="request_storage">ZIM Filesలో పోందుపరచడానికి మేము మీ నిల్వ లను పోందుపరచాలి</string>
   <string name="request_write_storage">జిమ్ ఫైల్‌లను డౌన్‌లోడ్ చేయడానికి మాకు మీ స్టోరేజ్‌కి రైట్ యాక్సెస్ అవసరం</string>
@@ -199,7 +198,6 @@
   <string name="table_of_contents">విషయ సూచిక</string>
   <string name="select_languages">భాషలను ఎంచుకోండి</string>
   <string name="save_languages">భాషలను సేవ్ చేయండి</string>
-  <string name="send_feedback">అభిప్రాయాన్ని పంపండి</string>
   <string name="expand">విస్తరించు</string>
   <string name="history">చరిత్ర</string>
   <string name="history_from_current_book">అన్ని పుస్తకాల నుండి చరిత్రను వీక్షించండి</string>

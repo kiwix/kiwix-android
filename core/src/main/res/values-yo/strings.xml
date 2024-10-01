@@ -74,7 +74,6 @@
   <string name="pref_credits_title">Awọn kirediti</string>
   <string name="tts_lang_not_supported">Ede oju-iwe yii ko ni atilẹyin. Nkan naa le ma ka daradara.</string>
   <string name="no_reader_application_installed">Ko le wa ohun elo ti a fi sori ẹrọ fun iru faili yii</string>
-  <string name="no_email_application_installed">Jọwọ fi sori ẹrọ olupese iṣẹ imeeli tabi fi imeeli ranṣẹ si wa ni %1s</string>
   <string name="no_section_info">Ko ri Awọn akọle akoonu</string>
   <string name="request_storage">Lati wọle si akoonu aisinipo a nilo iraye si ibi ipamọ rẹ</string>
   <string name="request_write_storage">Lati ṣe igbasilẹ awọn faili zim a nilo iraye si ibi ipamọ rẹ</string>
@@ -199,7 +198,6 @@
   <string name="table_of_contents">Atọka akoonu</string>
   <string name="select_languages">Yan ede</string>
   <string name="save_languages">Fi awọn ede pamọ</string>
-  <string name="send_feedback">Firanṣẹ esi</string>
   <string name="expand">Fẹ̀hàn</string>
   <string name="history">Ìtàn</string>
   <string name="history_from_current_book">Wo Itan Lati Gbogbo Awọn Iwe</string>

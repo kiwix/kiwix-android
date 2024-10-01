@@ -99,7 +99,6 @@
   <string name="pref_credits_title">制作人员</string>
   <string name="tts_lang_not_supported">此页面不支持你的语言。文章可能无法正常阅读。</string>
   <string name="no_reader_application_installed">找不到此类型文件的已安装应用程序</string>
-  <string name="no_email_application_installed">请安装电子邮件服务提供商，或是在%1s发送电子邮件给我们</string>
   <string name="no_app_found_to_select_bookmark_file">未找到用来选择书签文件的应用程序</string>
   <string name="no_section_info">未找到内容标题</string>
   <string name="request_storage">要访问离线内容，我们需要获取您的存储权限</string>
@@ -234,7 +233,6 @@
   <string name="table_of_contents">目录</string>
   <string name="select_languages">选择的语言</string>
   <string name="save_languages">保存语言</string>
-  <string name="send_feedback">发送反馈</string>
   <string name="expand">展开</string>
   <string name="history">历史</string>
   <string name="history_from_current_book">查看所有书籍的历史记录</string>

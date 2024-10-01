@@ -89,7 +89,6 @@
   <string name="pref_credits_title">Créditos</string>
   <string name="tts_lang_not_supported">O idioma desta página não é suportado. O artigo pode não ser lido propriamente.</string>
   <string name="no_reader_application_installed">Não foi possível encontrar uma aplicação instalada para esse tipo de arquivo</string>
-  <string name="no_email_application_installed">Por favor instale um serviço de email ou nos envie um email no endereço %1s</string>
   <string name="no_app_found_to_select_bookmark_file">Nenhum aplicativo encontrado para selecionar um arquivo de marcadores</string>
   <string name="no_section_info">Nenhum cabeçalho de conteúdo encontrado</string>
   <string name="request_storage">Para acessar conteúdo off-line precisamos de acesso ao seu armazenamento</string>
@@ -223,7 +222,6 @@
   <string name="table_of_contents">Índice de informações</string>
   <string name="select_languages">Selecionar idiomas</string>
   <string name="save_languages">Salvar idiomas</string>
-  <string name="send_feedback">Enviar comentário</string>
   <string name="expand">Expandir</string>
   <string name="history">Histórico</string>
   <string name="history_from_current_book">Ver histórico de todos os livros</string>
