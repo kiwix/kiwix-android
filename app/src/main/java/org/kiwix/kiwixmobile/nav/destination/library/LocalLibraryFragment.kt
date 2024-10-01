@@ -72,13 +72,11 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isManageExternalStoragePermissionGranted
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
-import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.main.KIWIX_APK_WEBSITE_URL
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.navigateToSettings
@@ -473,32 +471,13 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
 
   override fun onResume() {
     super.onResume()
-    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
-      sharedPreferenceUtil.playStoreRestrictionPermissionDialog
-    ) {
-      showPlayStoreRestrictionInformationToUser()
-    } else if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
+    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
       !sharedPreferenceUtil.prefIsTest && !permissionDeniedLayoutShowing
     ) {
       checkPermissions()
     } else if (!permissionDeniedLayoutShowing) {
       fragmentDestinationLibraryBinding?.zimfilelist?.visibility = VISIBLE
     }
-  }
-
-  private fun showPlayStoreRestrictionInformationToUser() {
-    // We should only ask for first time
-    sharedPreferenceUtil.playStoreRestrictionPermissionDialog = false
-    // Show Dialog to the user to inform about the play store restriction
-    dialogShower.show(
-      KiwixDialog.PlayStoreRestrictionPopup(KIWIX_APK_WEBSITE_URL),
-      {},
-      ::openKiwixWebsiteForDownloadingApk
-    )
-  }
-
-  private fun openKiwixWebsiteForDownloadingApk() {
-    requireActivity().startActivity(KIWIX_APK_WEBSITE_URL.toUri().browserIntent())
   }
 
   override fun onDestroyView() {

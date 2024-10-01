@@ -342,9 +342,6 @@
   <string name="tabs_restored">Вкладки восстановлены</string>
   <string name="open_drawer">Открыть редактор</string>
   <string name="close_drawer">Закрыть редактор</string>
-  <string name="zim_files_not_showing">Файлы Zim не отображаются?</string>
-  <string name="zim_files_not_showing_description">В соответствии с правилами Google Play для Android 11 и более поздних версий это приложение Google Store не может открывать загруженные неопубликованными файлы ZIM. Вы можете либо скачать их через приложение, либо установить полную версию приложения kiwix с нашего официального сайта %s</string>
-  <string name="understood">Понятно</string>
   <string name="preparing_file_for_copy">Подготовка к копированию/перемещению</string>
   <string name="action_copy">Копировать</string>
   <string name="move">Переместить</string>

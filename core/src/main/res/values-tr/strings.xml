@@ -307,9 +307,6 @@
   <string name="tabs_restored">Sekmeler geri yüklendi</string>
   <string name="open_drawer">Çekmeceyi Aç</string>
   <string name="close_drawer">Çekmeceyi Kapat</string>
-  <string name="zim_files_not_showing">Zim dosyaları gösterilmiyor mu?</string>
-  <string name="zim_files_not_showing_description">Android 11 ve sonraki sürümlerdeki Google Play politikaları nedeniyle bu Google Store uygulaması, dışarıdan yüklenen ZIM dosyalarını açamaz. Bunları uygulama aracılığıyla indirebilir veya bunun yerine kiwix uygulamasının tam sürümünü resmi web sitemiz %s yükleyebilirsiniz.</string>
-  <string name="understood">Anlaşıldı</string>
   <string name="how_to_update_content">İçerik nasıl güncellenir?</string>
   <string name="update_content_description">İçeriği (bir zim dosyası) güncellemek için, aynı içeriğin en son sürümünü indirmeniz gerekir. Bunu indirme bölümünden yapabilirsiniz.</string>
   <string name="all_files_permission_needed">Tüm Dosyalar İzni Gereklidir</string>

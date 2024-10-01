@@ -287,7 +287,6 @@
   <string name="tab_restored">தாவல் மீட்டமைக்கப்பட்டது</string>
   <string name="open_drawer">இழுப்பறையைத் திற</string>
   <string name="close_drawer">இழுப்பறையை மூடு</string>
-  <string name="understood">விளங்கியது</string>
   <string name="how_to_update_content">உள்ளடக்கத்தை எவ்வாறு புதுப்பிப்பது?</string>
   <string name="update_content_description">உள்ளடக்கத்தைப் புதுப்பிக்க (ஒரு zim கோப்பு) இதே உள்ளடக்கத்தின் முழு சமீபத்திய பதிப்பை நீங்கள் பதிவிறக்க வேண்டும். பதிவிறக்கப் பிரிவு வழியாக நீங்கள் அதைச் செய்யலாம்.</string>
   <string name="all_files_permission_needed">அனைத்து கோப்புகளுக்கும் அனுமதி தேவை</string>

@@ -310,7 +310,6 @@
   <string name="tabs_restored">Zakładki przywrócone</string>
   <string name="open_drawer">Otwórz szufladę</string>
   <string name="close_drawer">Zamknij szufladę</string>
-  <string name="zim_files_not_showing">Pliki ZIM nie wyświetlają się?</string>
   <string name="how_to_update_content">Jak zaktualizować zawartość?</string>
   <string name="update_content_description">Aby zaktualizować zawartość (plik zim), musisz pobrać pełną najnowszą wersję tej samej zawartości. Możesz to zrobić w sekcji pobierania.</string>
   <string name="all_files_permission_needed">Wymagane uprawnienia do wszystkich plików</string>

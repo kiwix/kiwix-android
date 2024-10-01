@@ -295,9 +295,6 @@
   <string name="tabs_restored">Awọn taabu pada</string>
   <string name="open_drawer">Ṣii Drawer</string>
   <string name="close_drawer">Pa Drawer</string>
-  <string name="zim_files_not_showing">Awọn faili Zim ko ṣe afihan?</string>
-  <string name="zim_files_not_showing_description">Nitori awọn ilana Google Play lori Android 11 ati loke, ohun elo itaja Google yii ko le ṣii awọn faili ZIM ti o ni ẹgbe. O le ṣe igbasilẹ wọn nipasẹ ohun elo naa tabi, dipo, fi ẹya kikun ti kiwix app sori ẹrọ lati oju opo wẹẹbu osise wa %s</string>
-  <string name="understood">Oye</string>
   <string name="how_to_update_content">Bawo ni lati ṣe imudojuiwọn akoonu?</string>
   <string name="update_content_description">Lati ṣe imudojuiwọn akoonu (faili zim kan) o nilo lati ṣe igbasilẹ ẹya tuntun ni kikun ti akoonu kanna. O le ṣe bẹ nipasẹ apakan gbigba lati ayelujara.</string>
   <string name="all_files_permission_needed">Gbogbo Gbigbanilaaye Awọn faili Nilo</string>

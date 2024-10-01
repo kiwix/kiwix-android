@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.help
 
-import android.os.Build
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.IdlingRegistry
@@ -51,6 +50,15 @@ class HelpFragmentTest : BaseActivityTest() {
       }
       waitForIdle()
     }
+    context.let {
+      sharedPreferenceUtil = SharedPreferenceUtil(it).apply {
+        setIntroShown()
+        putPrefWifiOnly(false)
+        setIsPlayStoreBuildType(true)
+        prefIsTest = true
+        putPrefLanguage("en")
+      }
+    }
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
       onActivity {
@@ -75,7 +83,6 @@ class HelpFragmentTest : BaseActivityTest() {
 
   @Test
   fun verifyHelpActivity() {
-    setShowPlayStoreRestriction(false)
     activityScenario.onActivity {
       it.navigate(R.id.helpFragment)
     }
@@ -89,48 +96,9 @@ class HelpFragmentTest : BaseActivityTest() {
       clickOnHowToUpdateContent()
       assertHowToUpdateContentIsExpanded()
       clickOnHowToUpdateContent()
-      assertZimFileNotShowingIsNotVisible()
       clickOnSendFeedback()
     }
     LeakAssertions.assertNoLeaks()
-  }
-
-  @Test
-  fun verifyHelpActivityWithPlayStoreRestriction() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      setShowPlayStoreRestriction(true)
-      activityScenario.onActivity {
-        it.navigate(R.id.helpFragment)
-      }
-      help {
-        clickOnWhatDoesKiwixDo()
-        assertWhatDoesKiwixDoIsExpanded()
-        clickOnWhatDoesKiwixDo()
-        clickOnWhereIsContent()
-        assertWhereIsContentIsExpanded()
-        clickOnWhereIsContent()
-        clickOnHowToUpdateContent()
-        assertHowToUpdateContentIsExpanded()
-        clickOnHowToUpdateContent()
-        clickOnZimFileNotShowing()
-        assertZimFileNotShowingIsExpanded()
-        clickOnZimFileNotShowing()
-        clickOnSendFeedback()
-      }
-      LeakAssertions.assertNoLeaks()
-    }
-  }
-
-  private fun setShowPlayStoreRestriction(showRestriction: Boolean) {
-    context.let {
-      sharedPreferenceUtil = SharedPreferenceUtil(it).apply {
-        setIntroShown()
-        putPrefWifiOnly(false)
-        setIsPlayStoreBuildType(showRestriction)
-        prefIsTest = true
-        putPrefLanguage("en")
-      }
-    }
   }
 
   @After

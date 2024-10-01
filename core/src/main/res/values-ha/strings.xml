@@ -296,9 +296,6 @@
   <string name="tabs_restored">Tabs da aka dawo da su</string>
   <string name="open_drawer">Buɗe durowa</string>
   <string name="close_drawer">Rufe Drawer</string>
-  <string name="zim_files_not_showing">Zim fayilolin da ba su nuna ba?</string>
-  <string name="zim_files_not_showing_description">Saboda manufofin Google Play akan Android 11 da sama, wannan app ɗin Google Store ba zai iya buɗe fayilolin ZIM masu ɗaukar nauyi ba. Kuna iya ko dai zazzage su ta hanyar app ɗin ko, maimakon haka, shigar da cikakken sigar kiwix app daga gidan yanar gizon mu %s</string>
-  <string name="understood">Fahimtar</string>
   <string name="how_to_update_content">Yadda ake sabunta abun ciki?</string>
   <string name="update_content_description">Don sabunta abun ciki (fayil ɗin zim) kuna buƙatar zazzage cikakken sabon sigar wannan abun ciki iri ɗaya. Kuna iya yin hakan ta sashin zazzagewa.</string>
   <string name="all_files_permission_needed">Ana Bukata Duk Izinin Fayiloli</string>

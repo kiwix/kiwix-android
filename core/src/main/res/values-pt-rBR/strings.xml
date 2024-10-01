@@ -328,8 +328,6 @@
   <string name="tabs_restored">Guias restauradas</string>
   <string name="open_drawer">Abrir gaveta</string>
   <string name="close_drawer">Fechar gaveta</string>
-  <string name="zim_files_not_showing">Arquivos zim não estão aparecendo?</string>
-  <string name="understood">Entendido</string>
   <string name="how_to_update_content">Como atualizar o conteúdo?</string>
   <string name="update_content_description">Para atualizar o conteúdo (um arquivo zim), você precisa baixar a versão completa mais recente desse mesmo conteúdo. Você pode fazer isso através da seção de download.</string>
   <string name="all_files_permission_needed">Permissão necessária para todos os arquivos</string>

@@ -92,7 +92,6 @@ class DownloadTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_STORAGE_OPTION, false)
       putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, false)
       putString(SharedPreferenceUtil.PREF_LANG, "en")
       putLong(
         SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,

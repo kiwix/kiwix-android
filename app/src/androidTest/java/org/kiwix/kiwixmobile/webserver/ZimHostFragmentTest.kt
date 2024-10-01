@@ -107,7 +107,6 @@ class ZimHostFragmentTest {
         putPrefWifiOnly(false)
         setIsPlayStoreBuildType(true)
         prefIsTest = true
-        playStoreRestrictionPermissionDialog = false
         putPrefLanguage("en")
         lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
       }

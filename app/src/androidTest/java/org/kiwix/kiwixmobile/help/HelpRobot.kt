@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.help
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
@@ -27,7 +26,6 @@ import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.R.string
-import org.kiwix.kiwixmobile.core.main.KIWIX_APK_WEBSITE_URL
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 fun help(func: HelpRobot.() -> Unit) = HelpRobot().apply(func)
@@ -82,26 +80,6 @@ class HelpRobot : BaseRobot() {
 
   fun clickOnSendFeedback() {
     clickOn(ViewId(id.activity_help_feedback_text_view))
-  }
-
-  fun clickOnZimFileNotShowing() {
-    clickOn(TextId(string.zim_files_not_showing))
-  }
-
-  fun assertZimFileNotShowingIsExpanded() {
-    isVisible(
-      Text(
-        context.getString(
-          string.zim_files_not_showing_description,
-          KIWIX_APK_WEBSITE_URL
-        )
-      )
-    )
-  }
-
-  fun assertZimFileNotShowingIsNotVisible() {
-    onView(withText("Zim files not showing?"))
-      .check(doesNotExist())
   }
 
   private fun helpTextFormat(vararg stringIds: Int) =

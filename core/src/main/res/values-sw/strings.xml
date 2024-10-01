@@ -301,9 +301,6 @@
   <string name="tabs_restored">Vichupo vimerejeshwa</string>
   <string name="open_drawer">Fungua Droo</string>
   <string name="close_drawer">Funga Droo</string>
-  <string name="zim_files_not_showing">Faili za Zim hazionyeshwi?</string>
-  <string name="zim_files_not_showing_description">Kwa sababu ya sera za Google Play kwenye Android 11 na matoleo mapya zaidi, programu hii ya Google Store haiwezi kufungua faili za ZIM zilizopakiwa kando. Unaweza kuzipakua kupitia programu au, badala yake, usakinishe toleo kamili la programu ya kiwix kutoka kwa tovuti yetu rasmi %s</string>
-  <string name="understood">Kueleweka</string>
   <string name="how_to_update_content">Jinsi ya kusasisha maudhui?</string>
   <string name="update_content_description">Ili kusasisha maudhui (faili ya zim) unahitaji kupakua toleo jipya zaidi la maudhui haya haya. Unaweza kufanya hivyo kupitia sehemu ya kupakua.</string>
   <string name="all_files_permission_needed">Ruhusa ya Faili Zote Inahitajika</string>
