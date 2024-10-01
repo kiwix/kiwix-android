@@ -324,8 +324,6 @@
   <string name="tabs_restored">Tabs restored</string>
   <string name="open_drawer">Open Drawer</string>
   <string name="close_drawer">Close Drawer</string>
-  <string name="how_to_open_existing_zim_files">How to open existing ZIM files?</string>
-  <string name="how_to_open_existing_zim_files_description">To read your existing zim file from storage, use the file picker(+) icon in the library screen.</string>
   <string name="preparing_file_for_copy">Preparing for copy/move</string>
   <string name="action_copy">Copy</string>
   <string name="move">Move</string>
