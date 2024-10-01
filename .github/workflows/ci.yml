@@ -89,64 +89,6 @@ jobs:
           emulator-boot-timeout: 1200
           script: bash contrib/instrumentation.sh
 
-      - name: create instrumentation coverage for playStore variant
-        uses: reactivecircus/android-emulator-runner@v2
-        env:
-          GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
-        with:
-          api-level: ${{ matrix.api-level }}
-          target: default
-          arch: x86_64
-          profile: pixel_2
-          ram-size: 2048M
-          cores: 4
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          sdcard-path-or-size: 1024M
-          disable-animations: true
-          force-avd-creation: false
-          heap-size: 512M
-          emulator-boot-timeout: 1200
-          script: bash contrib/instrumentation-release.sh
-
-      - name: Test custom app
-        uses: reactivecircus/android-emulator-runner@v2
-        env:
-          GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
-        with:
-          api-level: ${{ matrix.api-level }}
-          target: default
-          arch: x86_64
-          profile: pixel_2
-          ram-size: 2048M
-          cores: 4
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: true
-          force-avd-creation: false
-          sdcard-path-or-size: 1024M
-          emulator-boot-timeout: 1200
-          heap-size: 512M
-          script: bash contrib/instrumentation-customapps.sh
-
-      - name: File Opening test on Tablet
-        if: ${{ matrix.api-level!=25 }}
-        uses: reactivecircus/android-emulator-runner@v2
-        env:
-          GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
-        with:
-          api-level: ${{ matrix.api-level }}
-          target: default
-          arch: x86_64
-          profile: pixel_c
-          ram-size: 2048M
-          cores: 4
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: true
-          force-avd-creation: true
-          sdcard-path-or-size: 1024M
-          emulator-boot-timeout: 1200
-          heap-size: 512M
-          script: bash contrib/instrumentation-file-opening-on-tablet.sh
-
       - name: Upload screenshot result
         uses: actions/upload-artifact@v3
         if: failure()
@@ -171,3 +113,246 @@ jobs:
           name: Tests Coverage Report
           path: |
             **/reports/
+
+  automated-tests-playstore:
+    name: Automated tests for PlayStore variant
+    strategy:
+      matrix:
+        api-level: [ 25, 30, 33, 34 ]
+      fail-fast: true
+    runs-on: ubuntu-22.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Restore Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: AVD cache
+        uses: actions/cache@v4
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ matrix.api-level }}
+
+      - name: Create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: default
+          arch: x86_64
+          profile: pixel_2
+          ram-size: 2048M
+          force-avd-creation: false
+          sdcard-path-or-size: 1024M
+          cores: 4
+          disable-animations: false
+          heap-size: 512M
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          channel: canary
+          script: echo "Generated AVD snapshot for caching."
+
+      - name: create instrumentation coverage for playStore variant
+        uses: reactivecircus/android-emulator-runner@v2
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: default
+          arch: x86_64
+          profile: pixel_2
+          ram-size: 2048M
+          cores: 4
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          sdcard-path-or-size: 1024M
+          disable-animations: true
+          force-avd-creation: false
+          heap-size: 512M
+          emulator-boot-timeout: 1200
+          script: bash contrib/instrumentation-release.sh
+
+  automated-tests-custom-apps:
+    name: Automated tests for Custom app
+    strategy:
+      matrix:
+        api-level: [ 25, 30, 33, 34 ]
+      fail-fast: true
+    runs-on: ubuntu-22.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Restore Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: AVD cache
+        uses: actions/cache@v4
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ matrix.api-level }}
+
+      - name: Create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: default
+          arch: x86_64
+          profile: pixel_2
+          ram-size: 2048M
+          force-avd-creation: false
+          sdcard-path-or-size: 1024M
+          cores: 4
+          disable-animations: false
+          heap-size: 512M
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          channel: canary
+          script: echo "Generated AVD snapshot for caching."
+
+      - name: Test custom app
+        uses: reactivecircus/android-emulator-runner@v2
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: default
+          arch: x86_64
+          profile: pixel_2
+          ram-size: 2048M
+          cores: 4
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          force-avd-creation: false
+          sdcard-path-or-size: 1024M
+          emulator-boot-timeout: 1200
+          heap-size: 512M
+          script: bash contrib/instrumentation-customapps.sh
+
+  automated-tests-on-tablet:
+    name: Automated tests on Tablet
+    strategy:
+      matrix:
+        api-level: [ 30, 33, 34 ]
+      fail-fast: true
+    runs-on: ubuntu-22.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Restore Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: AVD cache
+        uses: actions/cache@v4
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ matrix.api-level }}
+
+      - name: Create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: default
+          arch: x86_64
+          profile: pixel_2
+          ram-size: 2048M
+          force-avd-creation: false
+          sdcard-path-or-size: 1024M
+          cores: 4
+          disable-animations: false
+          heap-size: 512M
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          channel: canary
+          script: echo "Generated AVD snapshot for caching."
+
+      - name: File Opening test on Tablet
+        uses: reactivecircus/android-emulator-runner@v2
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: default
+          arch: x86_64
+          profile: pixel_c
+          ram-size: 2048M
+          cores: 4
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          force-avd-creation: true
+          sdcard-path-or-size: 1024M
+          emulator-boot-timeout: 1200
+          heap-size: 512M
+          script: bash contrib/instrumentation-file-opening-on-tablet.sh
