@@ -68,6 +68,7 @@
 
   <androidx.cardview.widget.CardView
     android:id="@+id/onlineLibraryProgressLayout"
+    style="@style/ThemeOverlay.MaterialComponents.Dialog.Alert"
     android:layout_width="140dp"
     android:layout_height="100dp"
     android:layout_margin="16dp"
@@ -99,7 +100,7 @@
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="@string/reaching_remote_library"
-        android:textColor="@color/mine_shaft_gray900"
+        android:textAppearance="?textAppearanceSubtitle1"
         android:textSize="10sp"
         tools:ignore="SmallSp" />
     </LinearLayout>

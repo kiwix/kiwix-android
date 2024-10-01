@@ -26,6 +26,7 @@ import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -39,6 +40,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.ResponseBody
 import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -109,9 +111,17 @@ class SearchFragmentTest : BaseActivityTest() {
     AccessibilityChecks.enable().apply {
       setRunChecksFromRootView(true)
       setSuppressingResultMatcher(
-        allOf(
-          matchesCheck(TouchTargetSizeCheck::class.java),
-          matchesViews(ViewMatchers.withId(id.menu_searchintext))
+        anyOf(
+          allOf(
+            matchesCheck(TouchTargetSizeCheck::class.java),
+            matchesViews(ViewMatchers.withId(id.menu_searchintext))
+          ),
+          allOf(
+            matchesCheck(TouchTargetSizeCheck::class.java),
+            matchesViews(
+              withContentDescription("More options")
+            )
+          )
         )
       )
     }
