@@ -21,10 +21,13 @@ import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.Context
 import android.content.res.AssetFileDescriptor
+import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.os.storage.StorageManager
 import android.provider.DocumentsContract
+import android.provider.MediaStore
 import android.webkit.URLUtil
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
@@ -143,7 +146,7 @@ object FileUtils {
         }
     } else if (uri.scheme != null) {
       if ("content".equals(uri.scheme, ignoreCase = true)) {
-        return contentQuery(context, uri)
+        return getFilePathOfContentUri(context, uri)
       } else if ("file".equals(uri.scheme, ignoreCase = true)) {
         return uri.path
       }
@@ -152,6 +155,73 @@ object FileUtils {
     }
 
     return null
+  }
+
+  private fun getFilePathOfContentUri(context: Context, uri: Uri): String? {
+    val filePath = contentQuery(context, uri)
+    return if (!filePath.isNullOrEmpty()) {
+      filePath
+    } else {
+      // Fallback method to get the actual path of the URI. This will be called
+      // when contentQuery returns null, especially in cases where the user directly clicks
+      // on the downloaded file within browsers (since different browsers provide URIs with their
+      // own file providers, the content resolver cannot directly retrieve paths for those URIs).
+      val fileName = getFileNameFromUri(context, uri)
+      getFilePathFromFileName(context, fileName)
+    }
+  }
+
+  private fun getFilePathFromFileName(context: Context, fileName: String?): String? {
+    var filePath: String? = null
+    getStorageVolumesList(context).forEach { volume ->
+      val file = File("$volume/Download/$fileName")
+      if (file.isFileExist()) {
+        filePath = file.path
+      }
+    }
+    return filePath
+  }
+
+  private fun getStorageVolumesList(context: Context): HashSet<String> {
+    val storageVolumes = context.getSystemService(Context.STORAGE_SERVICE) as StorageManager
+    val storageVolumesList = HashSet<String>()
+    storageVolumes.storageVolumes.filterNotNull().forEach {
+      if (it.isPrimary) {
+        storageVolumesList.add("${Environment.getExternalStorageDirectory()}/")
+      } else {
+        val externalStorageName = it.uuid?.let { uuid ->
+          "/$uuid/"
+        } ?: kotlin.run {
+          "/${it.getDescription(context)}/"
+        }
+        storageVolumesList.add(externalStorageName)
+      }
+    }
+    return storageVolumesList
+  }
+
+  private fun getFileNameFromUri(context: Context, uri: Uri?): String? {
+    if (uri == null) return null
+    var cursor: Cursor? = null
+    val projection = arrayOf(
+      MediaStore.MediaColumns.DISPLAY_NAME
+    )
+    return try {
+      cursor = context.contentResolver.query(
+        uri, projection, null, null,
+        null
+      )
+      if (cursor != null && cursor.moveToFirst()) {
+        val index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME)
+        cursor.getString(index)
+      } else {
+        null
+      }
+    } catch (ignore: Exception) {
+      null
+    } finally {
+      cursor?.close()
+    }
   }
 
   fun documentProviderContentQuery(
@@ -183,7 +253,14 @@ object FileUtils {
       actualDocumentId,
       contentUriPrefixes,
       documentsContractWrapper
-    )
+    ) ?: kotlin.run {
+      // Fallback method to get the actual path of the URI. This will be called
+      // when queryForActualPath returns null, especially in cases where the user directly opens
+      // the file from the file manager in the downloads folder, and the URI contains a different
+      // document ID (particularly on tablets). See https://github.com/kiwix/kiwix-android/issues/4008
+      val fileName = getFileNameFromUri(context, uri)
+      getFilePathFromFileName(context, fileName)
+    }
   }
 
   private fun queryForActualPath(
