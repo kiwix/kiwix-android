@@ -73,13 +73,15 @@ class LibraryRobot : BaseRobot() {
     try {
       onView(withId(R.id.file_management_no_files)).check(matches(isDisplayed()))
       refresh(R.id.zim_swiperefresh)
-      return
     } catch (ignore: AssertionFailedError) {
       try {
         onView(withId(R.id.zimfilelist)).check(matches(isDisplayed()))
         refresh(R.id.zim_swiperefresh)
       } catch (e: AssertionFailedError) {
-        // do nothing
+        Log.i(
+          "LOCAL_LIBRARY",
+          "No need to refresh the data, since there is no files found"
+        )
       }
     }
   }
