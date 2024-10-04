@@ -25,6 +25,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.os.storage.StorageManager
 import android.provider.DocumentsContract
 import android.provider.MediaStore
@@ -157,29 +158,39 @@ object FileUtils {
     return null
   }
 
+  /**
+   * Retrieves the file path from a given content URI. This method first attempts to get the path
+   * using the content resolver (via `contentQuery`). If that returns null or empty, it falls back
+   * to a secondary method to resolve the actual path.
+   *
+   * This fallback is especially necessary when:
+   * 1. The user clicks directly on a downloaded file from browsers, where different browsers
+   *    return URIs using their own file providers.
+   * 2. On devices below Android 11, when files are clicked directly in the file manager, the content
+   *    resolver may not be able to retrieve the path for certain URIs.
+   */
   private fun getFilePathOfContentUri(context: Context, uri: Uri): String? {
     val filePath = contentQuery(context, uri)
     return if (!filePath.isNullOrEmpty()) {
       filePath
     } else {
-      // Fallback method to get the actual path of the URI. This will be called
-      // when contentQuery returns null, especially in cases where the user directly clicks
-      // on the downloaded file within browsers (since different browsers provide URIs with their
-      // own file providers, the content resolver cannot directly retrieve paths for those URIs).
-      val fileName = getFileNameFromUri(context, uri)
-      getFilePathFromFileName(context, fileName)
+      // Fallback method to get the actual path of the URI
+      getActualFilePathOfContentUri(context, uri)
     }
   }
 
-  private fun getFilePathFromFileName(context: Context, fileName: String?): String? {
-    var filePath: String? = null
+  private fun getFullFilePathFromFilePath(
+    context: Context,
+    filePath: String?
+  ): String? {
+    var actualFilePath: String? = null
     getStorageVolumesList(context).forEach { volume ->
-      val file = File("$volume/Download/$fileName")
+      val file = File("$volume/$filePath")
       if (file.isFileExist()) {
-        filePath = file.path
+        actualFilePath = file.path
       }
     }
-    return filePath
+    return actualFilePath
   }
 
   private fun getStorageVolumesList(context: Context): HashSet<String> {
@@ -194,14 +205,13 @@ object FileUtils {
         } ?: kotlin.run {
           "/${it.getDescription(context)}/"
         }
-        storageVolumesList.add(externalStorageName)
+        storageVolumesList.add("/storage$externalStorageName")
       }
     }
     return storageVolumesList
   }
 
-  private fun getFileNameFromUri(context: Context, uri: Uri?): String? {
-    if (uri == null) return null
+  private fun getFileNameFromUri(context: Context, uri: Uri): String? {
     var cursor: Cursor? = null
     val projection = arrayOf(
       MediaStore.MediaColumns.DISPLAY_NAME
@@ -223,6 +233,61 @@ object FileUtils {
       cursor?.close()
     }
   }
+
+  /**
+   * Retrieves the actual file path from a given content URI. This method handles various cases based on
+   * the type of URI and the source (file managers, browser downloads, etc.).
+   *
+   * 1. For file managers that include the full file path in the URI (common in devices below Android 11),
+   *    it triggers when the user clicks directly on the ZIM file in the file manager. The file manager may
+   *    return the path with their own file provider, and we extract the path.
+   *
+   * 2. For URIs from the download provider (e.g., when opening files directly from browsers), this method
+   *    constructs the full path using the `DIRECTORY_DOWNLOADS` directory and the file name.
+   *
+   * 3. For other URIs, it attempts to resolve the full file path from the provided URI using a custom
+   *    method to retrieve the folder and file path.
+   */
+  private fun getActualFilePathOfContentUri(context: Context, uri: Uri): String? {
+    return when {
+      // For file managers that provide the full path in the URI (common on devices below Android 11).
+      // This triggers when the user clicks directly on a ZIM file in the file manager, and the file
+      // manager returns the path via its own file provider.
+      "$uri".contains("root") && "$uri".endsWith("zim") -> {
+        "$uri".substringAfter("/root")
+      }
+
+      // Handles URIs from the download provider, commonly used when files are opened from browsers.
+      // Some browsers return URIs with their DownloadProvider.
+      isDownloadProviderUri(uri) -> {
+        getFullFilePathFromFilePath(
+          context,
+          "$DIRECTORY_DOWNLOADS/${getFileNameFromUri(context, uri)}"
+        )
+      }
+
+      else -> {
+        // Attempts to retrieve the full path from the URI using a custom method.
+        getFullFilePathFromFilePath(
+          context,
+          getFilePathWithFolderFromUri(uri)
+        )
+      }
+    }
+  }
+
+  private fun getFilePathWithFolderFromUri(uri: Uri): String? {
+    val pathSegments = uri.pathSegments
+    if (pathSegments.isNotEmpty()) {
+      // Returns the path of the folder containing the file with the specified fileName,
+      // from which the user selects the file.
+      return pathSegments.drop(1).joinToString(separator = "/")
+    }
+    return null
+  }
+
+  private fun isDownloadProviderUri(uri: Uri): Boolean =
+    "$uri".contains("DownloadProvider") || "$uri".contains("/downloads")
 
   fun documentProviderContentQuery(
     context: Context,
@@ -259,7 +324,7 @@ object FileUtils {
       // the file from the file manager in the downloads folder, and the URI contains a different
       // document ID (particularly on tablets). See https://github.com/kiwix/kiwix-android/issues/4008
       val fileName = getFileNameFromUri(context, uri)
-      getFilePathFromFileName(context, fileName)
+      getFullFilePathFromFilePath(context, "$DIRECTORY_DOWNLOADS/$fileName")
     }
   }
 
