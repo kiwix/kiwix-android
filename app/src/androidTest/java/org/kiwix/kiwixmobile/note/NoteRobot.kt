@@ -35,7 +35,6 @@ import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.Locator
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
-import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
@@ -110,10 +109,6 @@ class NoteRobot : BaseRobot() {
     // This is flaky since it is shown in a dialog and sometimes
     // UIDevice does not found the view immediately due to rendering process.
     testFlakyView({ isVisible(Text(noteText)) })
-  }
-
-  fun refreshList() {
-    refresh(org.kiwix.kiwixmobile.R.id.zim_swiperefresh)
   }
 
   fun clickOnTrashIcon() {

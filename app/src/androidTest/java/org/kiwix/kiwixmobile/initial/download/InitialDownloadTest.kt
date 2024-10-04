@@ -108,10 +108,10 @@ class InitialDownloadTest : BaseActivityTest() {
     activityScenario.onActivity {
       it.navigate(R.id.libraryFragment)
     }
-    initialDownload(InitialDownloadRobot::refreshLocalLibraryData)
     // delete all the ZIM files showing in the LocalLibrary
     // screen to properly test the scenario.
     library {
+      refreshList()
       waitUntilZimFilesRefreshing()
       deleteZimIfExists()
     }

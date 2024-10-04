@@ -57,15 +57,6 @@ class InitialDownloadRobot : BaseRobot() {
     refresh(R.id.librarySwipeRefresh)
   }
 
-  fun refreshLocalLibraryData() {
-    try {
-      refresh(R.id.zim_swiperefresh)
-      pauseForBetterTestPerformance()
-    } catch (e: RuntimeException) {
-      Log.w("InitialDownloadTest", "Failed to refresh ZIM list: " + e.localizedMessage)
-    }
-  }
-
   fun waitForDataToLoad(retryCountForDataToLoad: Int = 10) {
     try {
       isVisible(TextId(string.your_languages))

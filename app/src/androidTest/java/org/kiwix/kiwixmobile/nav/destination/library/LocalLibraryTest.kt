@@ -27,7 +27,6 @@ import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
-import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
@@ -138,8 +137,10 @@ class LocalLibraryTest : BaseActivityTest() {
         }
       }
     }
-    refresh(R.id.zim_swiperefresh)
-    library(LibraryRobot::assertLibraryListDisplayed)
+    library {
+      refreshList()
+      assertLibraryListDisplayed()
+    }
     LeakAssertions.assertNoLeaks()
   }
 

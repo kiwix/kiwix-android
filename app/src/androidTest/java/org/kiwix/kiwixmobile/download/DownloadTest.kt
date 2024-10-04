@@ -48,6 +48,7 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChan
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.topLevel
+import org.kiwix.kiwixmobile.nav.destination.library.LibraryRobot
 import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
@@ -117,10 +118,10 @@ class DownloadTest : BaseActivityTest() {
       it.navigate(R.id.libraryFragment)
     }
     try {
-      downloadRobot(DownloadRobot::refreshLocalLibraryData)
       // delete all the ZIM files showing in the LocalLibrary
       // screen to properly test the scenario.
       library {
+        refreshList()
         waitUntilZimFilesRefreshing()
         deleteZimIfExists()
       }
@@ -138,7 +139,7 @@ class DownloadTest : BaseActivityTest() {
         waitUntilDownloadComplete()
         clickLibraryOnBottomNav()
         // refresh the local library list to show the downloaded zim file
-        refreshLocalLibraryData()
+        library(LibraryRobot::refreshList)
         checkIfZimFileDownloaded()
       }
     } catch (e: Exception) {
@@ -156,10 +157,10 @@ class DownloadTest : BaseActivityTest() {
       it.navigate(R.id.libraryFragment)
     }
     try {
-      downloadRobot(DownloadRobot::refreshLocalLibraryData)
       // delete all the ZIM files showing in the LocalLibrary
       // screen to properly test the scenario.
       library {
+        refreshList()
         waitUntilZimFilesRefreshing()
         deleteZimIfExists()
       }
