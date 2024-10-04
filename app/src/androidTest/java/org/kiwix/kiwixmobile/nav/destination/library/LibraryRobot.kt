@@ -74,7 +74,7 @@ class LibraryRobot : BaseRobot() {
       onView(withId(R.id.file_management_no_files)).check(matches(isDisplayed()))
       refresh(R.id.zim_swiperefresh)
       return
-    } catch (ignore: Exception) {
+    } catch (ignore: AssertionFailedError) {
       try {
         onView(withId(R.id.zimfilelist)).check(matches(isDisplayed()))
         refresh(R.id.zim_swiperefresh)
