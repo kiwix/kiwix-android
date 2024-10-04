@@ -184,10 +184,12 @@ object FileUtils {
     filePath: String?
   ): String? {
     var actualFilePath: String? = null
-    getStorageVolumesList(context).forEach { volume ->
-      val file = File("$volume/$filePath")
-      if (file.isFileExist()) {
-        actualFilePath = file.path
+    if (filePath?.isNotEmpty() == true) {
+      getStorageVolumesList(context).forEach { volume ->
+        val file = File("$volume/$filePath")
+        if (file.isFileExist()) {
+          actualFilePath = file.path
+        }
       }
     }
     return actualFilePath
