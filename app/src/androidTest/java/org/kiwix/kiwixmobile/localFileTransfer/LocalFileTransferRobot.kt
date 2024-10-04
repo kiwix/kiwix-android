@@ -111,6 +111,6 @@ class LocalFileTransferRobot : BaseRobot() {
   }
 
   private fun pauseForBetterTestPerformance() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_LOCAL_LIBRARY_TEST.toLong())
   }
 }
