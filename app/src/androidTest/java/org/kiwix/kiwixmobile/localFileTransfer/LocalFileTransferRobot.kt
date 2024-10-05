@@ -35,6 +35,7 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import uk.co.deanwild.materialshowcaseview.R.id
 
 /**
  * Authored by Ayush Shrivastava on 29/10/20
@@ -84,20 +85,24 @@ class LocalFileTransferRobot : BaseRobot() {
   fun assertClickNearbyDeviceMessageVisible() {
     pauseForBetterTestPerformance()
     testFlakyView({
-      onView(withId(uk.co.deanwild.materialshowcaseview.R.id.tv_content))
+      onView(withId(id.tv_content))
         .check(matches(withText(string.click_nearby_devices_message)))
     })
   }
 
   fun clickOnGotItButton() {
     pauseForBetterTestPerformance()
-    testFlakyView({ onView(withText(string.got_it)).perform(click()) })
+    testFlakyView({
+      onView(withId(id.tv_dismiss))
+        .check(matches(isDisplayed()))
+        .perform(click())
+    })
   }
 
   fun assertDeviceNameMessageVisible() {
     pauseForBetterTestPerformance()
     testFlakyView({
-      onView(withId(uk.co.deanwild.materialshowcaseview.R.id.tv_content))
+      onView(withId(id.tv_content))
         .check(matches(withText(string.your_device_name_message)))
     })
   }
@@ -105,7 +110,7 @@ class LocalFileTransferRobot : BaseRobot() {
   fun assertNearbyDeviceListMessageVisible() {
     pauseForBetterTestPerformance()
     testFlakyView({
-      onView(withId(uk.co.deanwild.materialshowcaseview.R.id.tv_content))
+      onView(withId(id.tv_content))
         .check(matches(withText(string.nearby_devices_list_message)))
     })
   }
@@ -113,7 +118,7 @@ class LocalFileTransferRobot : BaseRobot() {
   fun assertTransferZimFilesListMessageVisible() {
     pauseForBetterTestPerformance()
     testFlakyView({
-      onView(withId(uk.co.deanwild.materialshowcaseview.R.id.tv_content))
+      onView(withId(id.tv_content))
         .check(matches(withText(string.transfer_zim_files_list_message)))
     })
   }
