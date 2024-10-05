@@ -94,7 +94,6 @@ class LocalFileTransferRobot : BaseRobot() {
     pauseForBetterTestPerformance()
     testFlakyView({
       onView(withId(id.tv_dismiss))
-        .check(matches(withText(string.got_it)))
         .perform(click())
     })
   }

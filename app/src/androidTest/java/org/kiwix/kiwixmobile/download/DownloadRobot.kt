@@ -140,7 +140,8 @@ class DownloadRobot : BaseRobot() {
     onView(withText(org.kiwix.kiwixmobile.core.R.string.paused_state)).check(doesNotExist())
   }
 
-  fun waitUntilDownloadComplete(retryCountForDownloadingZimFile: Int = 25) {
+  // wait for 5 minutes for downloading the ZIM file
+  fun waitUntilDownloadComplete(retryCountForDownloadingZimFile: Int = 30) {
     try {
       onView(withId(R.id.stop)).check(doesNotExist())
       Log.i("kiwixDownloadTest", "Download complete")
