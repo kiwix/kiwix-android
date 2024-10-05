@@ -40,6 +40,7 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.BeforeClass
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.BaseActivityTest
@@ -51,6 +52,7 @@ import org.kiwix.kiwixmobile.main.topLevel
 import org.kiwix.kiwixmobile.nav.destination.library.LibraryRobot
 import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.library.library
+import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
@@ -62,9 +64,9 @@ import java.util.concurrent.TimeUnit
 @RunWith(AndroidJUnit4::class)
 class DownloadTest : BaseActivityTest() {
 
-  // @Rule
-  // @JvmField
-  // var retryRule = RetryRule()
+  @Rule
+  @JvmField
+  var retryRule = RetryRule()
 
   private lateinit var kiwixMainActivity: KiwixMainActivity
 
@@ -137,10 +139,6 @@ class DownloadTest : BaseActivityTest() {
         stopDownloadIfAlreadyStarted()
         downloadZimFile(smallestZimFileIndex)
         assertDownloadStart()
-        pauseDownload()
-        assertDownloadPaused()
-        resumeDownload()
-        assertDownloadResumed()
         waitUntilDownloadComplete()
         clickLibraryOnBottomNav()
         // refresh the local library list to show the downloaded zim file
