@@ -139,6 +139,10 @@ class DownloadTest : BaseActivityTest() {
         stopDownloadIfAlreadyStarted()
         downloadZimFile(smallestZimFileIndex)
         assertDownloadStart()
+        pauseDownload()
+        assertDownloadPaused()
+        resumeDownload()
+        assertDownloadResumed()
         waitUntilDownloadComplete()
         clickLibraryOnBottomNav()
         // refresh the local library list to show the downloaded zim file

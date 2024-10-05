@@ -153,6 +153,7 @@ class DownloadRobot : BaseRobot() {
       Log.i("kiwixDownloadTest", "Download complete")
     } catch (e: AssertionFailedError) {
       if (retryCountForDownloadingZimFile > 0) {
+        resumeDownloadIfPaused()
         BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
         Log.i("kiwixDownloadTest", "Downloading in progress")
         waitUntilDownloadComplete(retryCountForDownloadingZimFile - 1)
@@ -160,6 +161,15 @@ class DownloadRobot : BaseRobot() {
       }
       // throw the exception when there is no more retry left.
       throw RuntimeException("Couldn't download the ZIM file.\n Original exception = $e")
+    }
+  }
+
+  private fun resumeDownloadIfPaused() {
+    try {
+      onView(withSubstring(context.getString(string.paused_state))).check(matches(isDisplayed()))
+      resumeDownload()
+    } catch (e: RuntimeException) {
+      // do nothing since downloading is In Progress.
     }
   }
 
