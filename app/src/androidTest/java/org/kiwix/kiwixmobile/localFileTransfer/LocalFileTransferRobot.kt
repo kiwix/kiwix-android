@@ -24,6 +24,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
@@ -82,7 +83,10 @@ class LocalFileTransferRobot : BaseRobot() {
 
   fun assertClickNearbyDeviceMessageVisible() {
     pauseForBetterTestPerformance()
-    isVisible(TextId(string.click_nearby_devices_message))
+    testFlakyView({
+      onView(withId(uk.co.deanwild.materialshowcaseview.R.id.tv_content))
+        .check(matches(withText(string.click_nearby_devices_message)))
+    })
   }
 
   fun clickOnGotItButton() {
@@ -92,17 +96,26 @@ class LocalFileTransferRobot : BaseRobot() {
 
   fun assertDeviceNameMessageVisible() {
     pauseForBetterTestPerformance()
-    isVisible(TextId(string.your_device_name_message))
+    testFlakyView({
+      onView(withId(uk.co.deanwild.materialshowcaseview.R.id.tv_content))
+        .check(matches(withText(string.your_device_name_message)))
+    })
   }
 
   fun assertNearbyDeviceListMessageVisible() {
     pauseForBetterTestPerformance()
-    isVisible(TextId(string.nearby_devices_list_message))
+    testFlakyView({
+      onView(withId(uk.co.deanwild.materialshowcaseview.R.id.tv_content))
+        .check(matches(withText(string.nearby_devices_list_message)))
+    })
   }
 
   fun assertTransferZimFilesListMessageVisible() {
     pauseForBetterTestPerformance()
-    isVisible(TextId(string.transfer_zim_files_list_message))
+    testFlakyView({
+      onView(withId(uk.co.deanwild.materialshowcaseview.R.id.tv_content))
+        .check(matches(withText(string.transfer_zim_files_list_message)))
+    })
   }
 
   fun assertClickNearbyDeviceMessageNotVisible() {
@@ -111,6 +124,6 @@ class LocalFileTransferRobot : BaseRobot() {
   }
 
   private fun pauseForBetterTestPerformance() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_LOCAL_LIBRARY_TEST.toLong())
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
   }
 }

@@ -54,7 +54,6 @@ import java.util.Date
 object TestUtils {
   private const val TAG = "TESTUTILS"
   @JvmField var TEST_PAUSE_MS = 3000
-  const val TEST_PAUSE_MS_FOR_LOCAL_LIBRARY_TEST = 6000
   var TEST_PAUSE_MS_FOR_SEARCH_TEST = 1000
   var TEST_PAUSE_MS_FOR_DOWNLOAD_TEST = 10000
   const val RETRY_COUNT_FOR_FLAKY_TEST = 3
