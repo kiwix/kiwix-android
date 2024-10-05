@@ -46,8 +46,6 @@ fun downloadRobot(func: DownloadRobot.() -> Unit) =
 
 class DownloadRobot : BaseRobot() {
 
-  private var retryCountForCheckDownloadStart = 10
-
   fun clickLibraryOnBottomNav() {
     clickOn(ViewId(R.id.libraryFragment))
   }
@@ -100,7 +98,7 @@ class DownloadRobot : BaseRobot() {
     }
   }
 
-  fun refreshOnlineList() {
+  private fun refreshOnlineList() {
     refresh(R.id.librarySwipeRefresh)
   }
 
@@ -116,14 +114,7 @@ class DownloadRobot : BaseRobot() {
   }
 
   fun assertDownloadStart() {
-    try {
-      isVisible(ViewId(R.id.stop))
-    } catch (e: RuntimeException) {
-      if (retryCountForCheckDownloadStart > 0) {
-        retryCountForCheckDownloadStart--
-        assertDownloadStart()
-      }
-    }
+    testFlakyView({ onView(withId(R.id.stop)).check(matches(isDisplayed())) })
   }
 
   private fun stopDownload() {
@@ -136,7 +127,6 @@ class DownloadRobot : BaseRobot() {
 
   fun assertDownloadPaused() {
     testFlakyView({
-      pauseForBetterTestPerformance()
       onView(withSubstring(context.getString(string.paused_state))).check(matches(isDisplayed()))
     })
   }
@@ -150,14 +140,19 @@ class DownloadRobot : BaseRobot() {
     onView(withText(org.kiwix.kiwixmobile.core.R.string.paused_state)).check(doesNotExist())
   }
 
-  fun waitUntilDownloadComplete(retryCountForDownloadingZimFile: Int = 20) {
+  fun waitUntilDownloadComplete(retryCountForDownloadingZimFile: Int = 25) {
     try {
       onView(withId(R.id.stop)).check(doesNotExist())
       Log.i("kiwixDownloadTest", "Download complete")
     } catch (e: AssertionFailedError) {
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
-      Log.i("kiwixDownloadTest", "Downloading in progress")
-      waitUntilDownloadComplete(retryCountForDownloadingZimFile - 1)
+      if (retryCountForDownloadingZimFile > 0) {
+        BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
+        Log.i("kiwixDownloadTest", "Downloading in progress")
+        waitUntilDownloadComplete(retryCountForDownloadingZimFile - 1)
+        return
+      }
+      // throw the exception when there is no more retry left.
+      throw RuntimeException("Couldn't download the ZIM file.\n Original exception = $e")
     }
   }
 

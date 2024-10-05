@@ -118,7 +118,6 @@ class InitialDownloadTest : BaseActivityTest() {
     initialDownload {
       clickDownloadOnBottomNav()
       assertLibraryListDisplayed()
-      refreshOnlineList()
       waitForDataToLoad()
       stopDownloadIfAlreadyStarted()
       downloadZimFile()

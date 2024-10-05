@@ -86,16 +86,10 @@ class LibraryRobot : BaseRobot() {
     }
   }
 
-  fun waitUntilZimFilesRefreshing(retryCountForRefreshingZimFiles: Int = 5) {
-    try {
+  fun waitUntilZimFilesRefreshing() {
+    testFlakyView({
       onView(withId(R.id.scanning_progress_view)).check(matches(not(isDisplayed())))
-    } catch (ignore: AssertionFailedError) {
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-      Log.i("LOCAL_LIBRARY", "Scanning of storage to find ZIM files in progress")
-      if (retryCountForRefreshingZimFiles > 0) {
-        waitUntilZimFilesRefreshing(retryCountForRefreshingZimFiles - 1)
-      }
-    }
+    })
   }
 
   fun deleteZimIfExists() {

@@ -118,16 +118,8 @@ class DownloadTest : BaseActivityTest() {
       it.navigate(R.id.libraryFragment)
     }
     try {
-      // delete all the ZIM files showing in the LocalLibrary
-      // screen to properly test the scenario.
-      library {
-        refreshList()
-        waitUntilZimFilesRefreshing()
-        deleteZimIfExists()
-      }
       downloadRobot {
         clickDownloadOnBottomNav()
-        refreshOnlineList()
         waitForDataToLoad()
         stopDownloadIfAlreadyStarted()
         downloadZimFile()
@@ -157,13 +149,6 @@ class DownloadTest : BaseActivityTest() {
       it.navigate(R.id.libraryFragment)
     }
     try {
-      // delete all the ZIM files showing in the LocalLibrary
-      // screen to properly test the scenario.
-      library {
-        refreshList()
-        waitUntilZimFilesRefreshing()
-        deleteZimIfExists()
-      }
       downloadRobot {
         // change the application language
         topLevel {
@@ -177,7 +162,6 @@ class DownloadTest : BaseActivityTest() {
           }
         }
         clickDownloadOnBottomNav()
-        refreshOnlineList()
         waitForDataToLoad()
         stopDownloadIfAlreadyStarted()
         downloadZimFile()

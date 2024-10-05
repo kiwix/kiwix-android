@@ -28,7 +28,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
-import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
@@ -53,7 +52,7 @@ class InitialDownloadRobot : BaseRobot() {
     isVisible(ViewId(R.id.libraryList))
   }
 
-  fun refreshOnlineList() {
+  private fun refreshOnlineList() {
     refresh(R.id.librarySwipeRefresh)
   }
 
@@ -119,12 +118,7 @@ class InitialDownloadRobot : BaseRobot() {
   }
 
   fun assertDownloadStop() {
-    try {
-      onView(withId(R.id.stop)).check(doesNotExist())
-    } catch (e: AssertionFailedError) {
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
-      assertDownloadStop()
-    }
+    testFlakyView({ onView(withId(R.id.stop)).check(doesNotExist()) }, 10)
   }
 
   private fun pauseForBetterTestPerformance() {
