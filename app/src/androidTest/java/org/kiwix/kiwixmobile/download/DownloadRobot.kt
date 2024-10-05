@@ -18,7 +18,11 @@
 
 package org.kiwix.kiwixmobile.download
 
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.UiController
+import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -30,6 +34,7 @@ import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import junit.framework.AssertionFailedError
+import org.hamcrest.Matcher
 import org.junit.Assert
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
@@ -40,6 +45,7 @@ import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
+import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 
 fun downloadRobot(func: DownloadRobot.() -> Unit) =
   DownloadRobot().applyWithViewHierarchyPrinting(func)
@@ -102,12 +108,12 @@ class DownloadRobot : BaseRobot() {
     refresh(R.id.librarySwipeRefresh)
   }
 
-  fun downloadZimFile() {
+  fun downloadZimFile(position: Int = 1) {
     pauseForBetterTestPerformance()
     testFlakyView({
       onView(
         RecyclerViewMatcher(R.id.libraryList).atPosition(
-          1
+          position
         )
       ).perform(click())
     })
@@ -188,6 +194,54 @@ class DownloadRobot : BaseRobot() {
         "DOWNLOAD_TEST",
         "Failed to stop downloading. Probably because it is not downloading the zim file"
       )
+    }
+  }
+
+  fun getSmallestZimFileIndex(it: List<LibraryListItem>?): Int {
+    var zimFileSizeWithIndex: Pair<Int, Long> = 0 to Long.MAX_VALUE
+    it?.forEachIndexed { index, libraryItem ->
+      if (libraryItem is LibraryListItem.BookItem) {
+        val bookSize = libraryItem.book.size.toLong()
+        if (bookSize < 20000L) {
+          return@getSmallestZimFileIndex index
+        } else if (bookSize < zimFileSizeWithIndex.second) {
+          zimFileSizeWithIndex = index to bookSize
+        }
+      }
+    }
+    return zimFileSizeWithIndex.first
+  }
+
+  fun scrollToZimFileIndex(index: Int) {
+    testFlakyView({
+      onView(withId(R.id.libraryList))
+        .perform(scrollToTop(index))
+    })
+  }
+
+  private fun scrollToTop(position: Int): ViewAction {
+    return object : ViewAction {
+      override fun getDescription(): String =
+        "scroll RecyclerView item at position $position to the top"
+
+      override fun getConstraints(): Matcher<View> =
+        androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom(RecyclerView::class.java)
+
+      override fun perform(uiController: UiController, view: View) {
+        val recyclerView = view as RecyclerView
+        val viewHolder = recyclerView.findViewHolderForAdapterPosition(position)
+
+        if (viewHolder?.itemView == null) {
+          recyclerView.scrollToPosition(position)
+          uiController.loopMainThreadUntilIdle()
+        }
+
+        val newViewHolder = recyclerView.findViewHolderForAdapterPosition(position)
+        newViewHolder?.let {
+          val top = newViewHolder.itemView.top
+          recyclerView.scrollBy(0, top)
+        }
+      }
     }
   }
 }
