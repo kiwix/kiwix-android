@@ -150,14 +150,14 @@ class DownloadRobot : BaseRobot() {
     onView(withText(org.kiwix.kiwixmobile.core.R.string.paused_state)).check(doesNotExist())
   }
 
-  fun waitUntilDownloadComplete() {
+  fun waitUntilDownloadComplete(retryCountForDownloadingZimFile: Int = 20) {
     try {
       onView(withId(R.id.stop)).check(doesNotExist())
       Log.i("kiwixDownloadTest", "Download complete")
     } catch (e: AssertionFailedError) {
       BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
       Log.i("kiwixDownloadTest", "Downloading in progress")
-      waitUntilDownloadComplete()
+      waitUntilDownloadComplete(retryCountForDownloadingZimFile - 1)
     }
   }
 
