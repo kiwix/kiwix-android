@@ -34,6 +34,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -110,6 +111,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
   }
+
+  @VisibleForTesting
+  fun getOnlineLibraryList() = libraryAdapter.items
 
   private val libraryAdapter: LibraryAdapter by lazy {
     LibraryAdapter(

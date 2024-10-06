@@ -132,10 +132,10 @@ class ZimHostFragmentTest {
         it.navigate(R.id.libraryFragment)
       }
       StandardActions.closeDrawer() // close the drawer if open before running the test cases.
-      zimHost(ZimHostRobot::refreshLibraryList)
       // delete all the ZIM files showing in the LocalLibrary
       // screen to properly test the scenario.
       library {
+        refreshList()
         waitUntilZimFilesRefreshing()
         deleteZimIfExists()
       }

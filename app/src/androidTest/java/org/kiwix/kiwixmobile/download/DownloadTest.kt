@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.download
 
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.IdlingPolicies
@@ -48,12 +49,15 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChan
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.topLevel
+import org.kiwix.kiwixmobile.nav.destination.library.LibraryRobot
+import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource.Companion.getInstance
+import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import java.util.concurrent.TimeUnit
 
 @LargeTest
@@ -63,6 +67,8 @@ class DownloadTest : BaseActivityTest() {
   @Rule
   @JvmField
   var retryRule = RetryRule()
+
+  private lateinit var kiwixMainActivity: KiwixMainActivity
 
   init {
     AccessibilityChecks.enable().apply {
@@ -114,22 +120,24 @@ class DownloadTest : BaseActivityTest() {
   fun downloadTest() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     activityScenario.onActivity {
+      kiwixMainActivity = it
       it.navigate(R.id.libraryFragment)
     }
     try {
-      downloadRobot(DownloadRobot::refreshLocalLibraryData)
       // delete all the ZIM files showing in the LocalLibrary
       // screen to properly test the scenario.
       library {
+        refreshList()
         waitUntilZimFilesRefreshing()
         deleteZimIfExists()
       }
       downloadRobot {
         clickDownloadOnBottomNav()
-        refreshOnlineList()
         waitForDataToLoad()
+        val smallestZimFileIndex = getSmallestZimFileIndex(getOnlineLibraryList())
+        scrollToZimFileIndex(smallestZimFileIndex)
         stopDownloadIfAlreadyStarted()
-        downloadZimFile()
+        downloadZimFile(smallestZimFileIndex)
         assertDownloadStart()
         pauseDownload()
         assertDownloadPaused()
@@ -138,7 +146,7 @@ class DownloadTest : BaseActivityTest() {
         waitUntilDownloadComplete()
         clickLibraryOnBottomNav()
         // refresh the local library list to show the downloaded zim file
-        refreshLocalLibraryData()
+        library(LibraryRobot::refreshList)
         checkIfZimFileDownloaded()
       }
     } catch (e: Exception) {
@@ -149,6 +157,15 @@ class DownloadTest : BaseActivityTest() {
     LeakAssertions.assertNoLeaks()
   }
 
+  private fun getOnlineLibraryList(): List<LibraryListItem> {
+    val navHostFragment: NavHostFragment =
+      kiwixMainActivity.supportFragmentManager
+        .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+    val onlineLibraryFragment =
+      navHostFragment.childFragmentManager.fragments[0] as OnlineLibraryFragment
+    return onlineLibraryFragment.getOnlineLibraryList()
+  }
+
   @Test
   fun testPauseAndResumeInOtherLanguage() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
@@ -156,10 +173,10 @@ class DownloadTest : BaseActivityTest() {
       it.navigate(R.id.libraryFragment)
     }
     try {
-      downloadRobot(DownloadRobot::refreshLocalLibraryData)
       // delete all the ZIM files showing in the LocalLibrary
       // screen to properly test the scenario.
       library {
+        refreshList()
         waitUntilZimFilesRefreshing()
         deleteZimIfExists()
       }
@@ -176,7 +193,6 @@ class DownloadTest : BaseActivityTest() {
           }
         }
         clickDownloadOnBottomNav()
-        refreshOnlineList()
         waitForDataToLoad()
         stopDownloadIfAlreadyStarted()
         downloadZimFile()

@@ -164,9 +164,8 @@ class NoteFragmentTest : BaseActivityTest() {
       kiwixMainActivity.navigate(R.id.libraryFragment)
     }
 
-    note(NoteRobot::refreshList)
-
     library {
+      refreshList()
       waitUntilZimFilesRefreshing()
       deleteZimIfExists()
     }
