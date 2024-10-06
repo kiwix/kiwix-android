@@ -77,7 +77,6 @@
   <string name="pref_credits_title">Zasluge</string>
   <string name="tts_lang_not_supported">Jezik na tej strani ni podprt. Članek mogoče ne bo pravilno prebran.</string>
   <string name="no_reader_application_installed">Za to vrsto datoteke ni bilo mogoče najti nameščene aplikacije</string>
-  <string name="no_email_application_installed">Namestite ponudnika e-poštnih storitev ali nam pišite na %1s</string>
   <string name="no_section_info">Ni najdene vsebine glave</string>
   <string name="request_storage">Za dostop do vsebine brez povezave potrebujemo dostop do vašega prostora za shranjevanje</string>
   <string name="request_write_storage">Za prenos datotek ZIM potrebujemo dostop za zapisovanje v vaš prostor za shranjevanje</string>
@@ -202,7 +201,6 @@
   <string name="table_of_contents">Kazalo vsebine</string>
   <string name="select_languages">Izberite jezike</string>
   <string name="save_languages">Shrani jezike</string>
-  <string name="send_feedback">Sporočite svoje mnenje</string>
   <string name="expand">Razširi</string>
   <string name="history">Zgodovina</string>
   <string name="history_from_current_book">Ogled zgodovinr iz vseh knjig</string>

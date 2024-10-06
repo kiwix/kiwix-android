@@ -99,7 +99,6 @@
   <string name="pref_credits_title">Создатели</string>
   <string name="tts_lang_not_supported">Язык этой страницы не поддерживается. Статья не может быть правильно прочитана.</string>
   <string name="no_reader_application_installed">Не удалось найти установленное приложение для этого типа файлов</string>
-  <string name="no_email_application_installed">Установите поставщика услуг электронной почты или напишите нам по адресу %1s</string>
   <string name="no_app_found_to_select_bookmark_file">Не найдено приложение для выбора файла закладки</string>
   <string name="no_section_info">Не найдены заголовки содержимого</string>
   <string name="request_storage">Для доступа к офлайн контенту нам нужен доступ к вашему файловому хранилищу</string>
@@ -234,7 +233,6 @@
   <string name="table_of_contents">Содержание</string>
   <string name="select_languages">Выбрать языки</string>
   <string name="save_languages">Сохранить языки</string>
-  <string name="send_feedback">Отправить отзыв</string>
   <string name="expand">Развернуть</string>
   <string name="history">История</string>
   <string name="history_from_current_book">Посмотреть историю из всех книг</string>

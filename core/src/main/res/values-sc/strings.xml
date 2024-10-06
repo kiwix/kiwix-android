@@ -69,7 +69,6 @@
   <string name="pref_credits_title">Crèditos</string>
   <string name="tts_lang_not_supported">Sa limba de custa pàgina no est suportada. S’artìculu diat pòdere èssere letu in manera no adeguada.</string>
   <string name="no_reader_application_installed">Impossìbile agatare un’aplicatzione installada pro custa casta de documentu</string>
-  <string name="no_email_application_installed">Pro praghere installa unu servìtziu de posta eletrònica o imbia·nos una lìtera a %1s</string>
   <string name="no_section_info">Peruna intestatzione de cuntenutu agatada</string>
   <string name="request_storage">Pro atzèdere a su documentu ZIM tenimus bisòngiu de pòdere atzèdere a sa memòria tua</string>
   <string name="request_write_storage">Pro iscarrigare archìvios zim bisongiamus de s’atzessu a sa memòria tua</string>
@@ -194,7 +193,6 @@
   <string name="table_of_contents">Summàriu</string>
   <string name="select_languages">Ischerta sas limbas</string>
   <string name="save_languages">Sarva sas limbas</string>
-  <string name="send_feedback">Imbia cummentos</string>
   <string name="expand">Ismànnia</string>
   <string name="history">Cronologia</string>
   <string name="history_from_current_book">Pòmpia sa cronologia de totu sos libros</string>

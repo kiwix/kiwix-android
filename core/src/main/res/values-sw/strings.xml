@@ -81,7 +81,6 @@
   <string name="pref_credits_title">Mikopo</string>
   <string name="tts_lang_not_supported">Lugha ya ukurasa huu haitumiki. Makala hayawezi kusomwa ipasavyo.</string>
   <string name="no_reader_application_installed">Haikuweza kupata programu iliyosakinishwa ya aina hii ya faili</string>
-  <string name="no_email_application_installed">Tafadhali weka mtoa huduma wa barua pepe au tutumie barua pepe kwa %1s</string>
   <string name="no_section_info">Hakuna Vichwa vya Habari Vilivyopatikana</string>
   <string name="request_storage">Ili kufikia maudhui nje ya mtandao tunahitaji kupata uhifadhi wako</string>
   <string name="request_write_storage">Ili kupakua faili za zim tunahitaji ufikiaji wa kuandika kwa hifadhi yako</string>
@@ -206,7 +205,6 @@
   <string name="table_of_contents">Jedwali la maudhui</string>
   <string name="select_languages">Chagua lugha:</string>
   <string name="save_languages">Hifadhi lugha</string>
-  <string name="send_feedback">Tuma maoni</string>
   <string name="expand">Tanua</string>
   <string name="history">Historia</string>
   <string name="history_from_current_book">Tazama Historia Kutoka kwa Vitabu Vyote</string>

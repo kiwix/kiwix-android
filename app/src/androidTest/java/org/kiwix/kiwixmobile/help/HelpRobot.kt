@@ -78,10 +78,6 @@ class HelpRobot : BaseRobot() {
     isVisible(TextId(string.update_content_description))
   }
 
-  fun clickOnSendFeedback() {
-    clickOn(ViewId(id.activity_help_feedback_text_view))
-  }
-
   private fun helpTextFormat(vararg stringIds: Int) =
     stringIds.joinToString(separator = "\n", transform = context::getString)
 }

@@ -74,7 +74,6 @@
   <string name="pref_credits_title">Kiredit</string>
   <string name="tts_lang_not_supported">Ba a goyon bayan harshen wannan shafi. Ba za a iya karanta labarin yadda ya kamata ba</string>
   <string name="no_reader_application_installed">An kasa samun aikace-aikacen da aka shigar don irin wannan fayil</string>
-  <string name="no_email_application_installed">Da fatan za a shigar da mai ba da sabis na imel ko imel mana a% 1s</string>
   <string name="no_section_info">Babu Abun ciki da aka samo</string>
   <string name="request_storage">Don samun damar abun cikin layi muna buƙatar samun dama ga ajiyar ku</string>
   <string name="request_write_storage">Don sauke fayilolin zim muna buƙatar rubuta damar zuwa wurin ajiyar ku</string>
@@ -199,7 +198,6 @@
   <string name="table_of_contents">Abubuwan dake ciki</string>
   <string name="select_languages">Zaɓin harshe</string>
   <string name="save_languages">Harsuna da yawa</string>
-  <string name="send_feedback">Aika sakamakon bayani/ ra’ayi</string>
   <string name="expand">fadada</string>
   <string name="history">Tarihi</string>
   <string name="history_from_current_book">Duba Tarihi Daga Duk Littattafai</string>

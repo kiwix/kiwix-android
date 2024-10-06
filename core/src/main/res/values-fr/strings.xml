@@ -98,7 +98,6 @@
   <string name="pref_credits_title">Remerciements</string>
   <string name="tts_lang_not_supported">La langue de cette page n’est pas prise en charge. L’article peut ne pas être lu correctement.</string>
   <string name="no_reader_application_installed">Impossible de trouver une application installée pour ce type de fichier</string>
-  <string name="no_email_application_installed">Veuillez installer un fournisseur de service de messagerie ou envoyez-nous un courriel à %1s</string>
   <string name="no_app_found_to_select_bookmark_file">Aucune application trouvée pour sélectionner un fichier de signet</string>
   <string name="no_section_info">Aucun entête de contenu trouvé</string>
   <string name="request_storage">Pour accéder au contenu hors connexion, nous avons besoin d’un accès à votre espace de stockage</string>
@@ -233,7 +232,6 @@
   <string name="table_of_contents">Table des matières</string>
   <string name="select_languages">Sélectionner les langues</string>
   <string name="save_languages">Sauvegarder les langues</string>
-  <string name="send_feedback">Envoyer un avis</string>
   <string name="expand">Développer</string>
   <string name="history">Historique</string>
   <string name="history_from_current_book">Afficher l’historique de tous les livres</string>

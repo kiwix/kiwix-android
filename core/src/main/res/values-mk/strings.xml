@@ -71,7 +71,6 @@
   <string name="pref_credits_title">Признанија</string>
   <string name="tts_lang_not_supported">Јазикот на оваа страница не е поддржан. Статијата може да биде неправилно испишана.</string>
   <string name="no_reader_application_installed">Не можев да најдам воспоставен приложник за овој вид податотека</string>
-  <string name="no_email_application_installed">Воспоставете услужник за е-пошта или пишете ни на %1s</string>
   <string name="no_app_found_to_select_bookmark_file">Не пронајдов прилог за избирање на податотека со обележани</string>
   <string name="no_section_info">Не пронајдов содржински заглавија</string>
   <string name="request_storage">Ќе треба пристап до вашиот склад за да дојдам до вонмрежната содржина</string>
@@ -206,7 +205,6 @@
   <string name="table_of_contents">Содржина</string>
   <string name="select_languages">Одберете јазици</string>
   <string name="save_languages">Зачувај јазици</string>
-  <string name="send_feedback">Испрати мислење</string>
   <string name="expand">Прикажи</string>
   <string name="history">Историја</string>
   <string name="history_from_current_book">Историја од сите книги</string>

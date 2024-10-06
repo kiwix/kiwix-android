@@ -161,7 +161,6 @@
   <string name="table_of_contents">Enhavtabelo</string>
   <string name="select_languages">Elekti lingvojn</string>
   <string name="save_languages">Konservi lingvojn</string>
-  <string name="send_feedback">Sendi rimarkojn</string>
   <string name="expand">Etendi</string>
   <string name="history">Historio</string>
   <string name="history_from_current_book" fuzzy="true">Historio el la aktuala libro</string>

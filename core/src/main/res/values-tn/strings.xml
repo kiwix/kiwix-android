@@ -70,7 +70,6 @@
   <string name="pref_credits_title">Dikerediti</string>
   <string name="tts_lang_not_supported">Teme ya tsebe eno ga e rotloesege. Setlhogo se se ka nna sa se ka tswa se sa balege sentle.</string>
   <string name="no_reader_application_installed">Go bana sedirisiwa sa faele ya sebopego se ga go kgonege.</string>
-  <string name="no_email_application_installed">Tsweetswee tsenya tlamedi ya tirelo ya e-mail kgotsa re romelele e-mail ko %1s</string>
   <string name="no_section_info">Ga go na Ditlhogo Tsa Dikgatiso Tse di Bonweng</string>
   <string name="request_storage">Go fitlhelela tshedimosetso e e sa bonaleng re tlhoka go fitlhelela bobolokelo jwa gago</string>
   <string name="request_write_storage">Go tsaya difaele tsa zim re tlhoka go kwala go tsena mo mabolokelong a gago</string>
@@ -195,7 +194,6 @@
   <string name="table_of_contents">Tafole ya ditêng</string>
   <string name="select_languages">Tlhopha diteme</string>
   <string name="save_languages">Boloka diteme</string>
-  <string name="send_feedback">Romela dikakgelo</string>
   <string name="expand">Atolosa</string>
   <string name="history">Hisitori</string>
   <string name="history_from_current_book">Bona Hisitori go tswa mo Dibukeng Tsotlhe</string>
