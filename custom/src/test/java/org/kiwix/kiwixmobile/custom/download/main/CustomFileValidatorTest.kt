@@ -25,7 +25,6 @@ import android.content.res.AssetManager
 import androidx.core.content.ContextCompat
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.fail
@@ -52,8 +51,8 @@ class CustomFileValidatorTest {
   fun `validate should call onFilesFound when both OBB and ZIM files are found`() {
     val obbFile = mockk<File>()
     val zimFile = mockk<File>()
-    mockZimFiles(arrayOf(obbFile), obbFile, "obb")
-    mockZimFiles(arrayOf(zimFile), zimFile, "zim")
+    mockZimFiles(arrayOf(obbFile), "obb")
+    mockZimFiles(arrayOf(zimFile), "zim")
 
     customFileValidator.validate(
       onFilesFound = {
@@ -68,8 +67,8 @@ class CustomFileValidatorTest {
   @Test
   fun `validate should call onFilesFound when only OBB file is found`() {
     val obbFile = mockk<File>()
-    mockZimFiles(arrayOf(obbFile), obbFile, "obb")
-    mockZimFiles(emptyArray(), obbFile, "zim")
+    mockZimFiles(arrayOf(obbFile), "obb")
+    mockZimFiles(arrayOf(), "zim")
 
     customFileValidator.validate(
       onFilesFound = {
@@ -83,8 +82,8 @@ class CustomFileValidatorTest {
   @Test
   fun `validate should call onFilesFound when only ZIM file is found`() {
     val zimFile = mockk<File>()
-    mockZimFiles(emptyArray(), zimFile, "obb")
-    mockZimFiles(arrayOf(zimFile), zimFile, "zim")
+    mockZimFiles(arrayOf(), "obb")
+    mockZimFiles(arrayOf(zimFile), "zim")
 
     customFileValidator.validate(
       onFilesFound = {
@@ -97,12 +96,47 @@ class CustomFileValidatorTest {
 
   @Test
   fun `validate should call onNoFilesFound when no OBB or ZIM files are found`() {
-    mockZimFiles(emptyArray(), mockk(), extension = "zim")
-    mockZimFiles(emptyArray(), mockk(), extension = "obb")
+    mockZimFiles(arrayOf(), extension = "zim")
+    mockZimFiles(arrayOf(), extension = "obb")
 
     customFileValidator.validate(
       onFilesFound = { fail("Should not call onFilesFound") },
-      onNoFilesFound = { /* Success */ }
+      onNoFilesFound = { }
+    )
+  }
+
+  @Test
+  fun `validate should call onNoFilesFound when directories are null`() {
+    mockZimFiles(null, "zim")
+    mockZimFiles(null, "obb")
+
+    customFileValidator.validate(
+      onFilesFound = { fail("Should not call onFilesFound") },
+      onNoFilesFound = { }
+    )
+  }
+
+  @Test
+  fun `validate should call onNoFilesFound when no matching files are found`() {
+    val textFile = mockk<File>()
+    mockZimFiles(arrayOf(textFile), "txt")
+
+    customFileValidator.validate(
+      onFilesFound = { fail("Should not call onFilesFound") },
+      onNoFilesFound = { }
+    )
+  }
+
+  @Test
+  fun `validate should call onFilesFound for case insensitive file extensions`() {
+    val zimFile = mockk<File>()
+    mockZimFiles(arrayOf(zimFile), "ZIM")
+
+    customFileValidator.validate(
+      onFilesFound = {
+        fail("Should not call onFilesFound")
+      },
+      onNoFilesFound = {}
     )
   }
 
@@ -134,35 +168,31 @@ class CustomFileValidatorTest {
   }
 
   private fun mockZimFiles(
-    storageDirectory: Array<File?>,
-    zimFile: File,
+    zimFilesArray: Array<File?>?,
     extension: String
   ) {
-    every { zimFile.exists() } returns true
-    every { zimFile.isFile } returns true
-    every { zimFile.extension } returns extension
-    mockkStatic(File::walk)
-    storageDirectory.forEach { dir ->
-      dir?.let {
-        every { dir.exists() } returns true
-        every { dir.isDirectory } returns true
-        every { dir.extension } returns ""
-        every { dir.parent } returns null
-        every { dir.listFiles() } returns arrayOf(zimFile)
-        every { dir.walk() } answers { mockFileWalk(listOf(zimFile)) }
+    zimFilesArray?.forEach {
+      it?.let {
+        every { it.exists() } returns true
+        every { it.isFile } returns true
+        every { it.extension } returns extension
+        every { it.isDirectory } returns false
+        every { it.name } returns "sample.$extension"
       }
     }
+    val storageDirectory = mockk<File>()
+    every { storageDirectory.exists() } returns true
+    every { storageDirectory.isDirectory } returns true
+    every { storageDirectory.extension } returns ""
+    every { storageDirectory.parent } returns null
+    every { storageDirectory.listFiles() } returns zimFilesArray
 
     if (extension == "zim") {
-      every { ContextCompat.getExternalFilesDirs(context, null) } returns storageDirectory
+      every {
+        ContextCompat.getExternalFilesDirs(context, null)
+      } returns arrayOf(storageDirectory)
     } else {
-      every { ContextCompat.getObbDirs(context) } returns storageDirectory
+      every { ContextCompat.getObbDirs(context) } returns arrayOf(storageDirectory)
     }
-  }
-
-  private fun mockFileWalk(files: List<File>): FileTreeWalk {
-    val fileTreeWalk = mockk<FileTreeWalk>()
-    every { fileTreeWalk.iterator() } returns files.iterator()
-    return fileTreeWalk
   }
 }
