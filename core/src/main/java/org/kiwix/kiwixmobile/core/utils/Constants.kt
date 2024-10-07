@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.utils
 
 const val TAG_KIWIX = "kiwix"
+const val CRASH_AND_FEEDBACK_EMAIL_ADDRESS = "android-crash-feedback@kiwix.org"
 
 // Request stuff
 const val REQUEST_STORAGE_PERMISSION = 1
