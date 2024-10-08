@@ -40,6 +40,8 @@ import android.os.Looper
 import android.provider.Settings
 import android.util.AttributeSet
 import android.view.ActionMode
+import android.view.Gravity.BOTTOM
+import android.view.Gravity.CENTER_HORIZONTAL
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -73,6 +75,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
@@ -102,6 +105,7 @@ import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.databinding.FragmentReaderBinding
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isLandScapeMode
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.findFirstTextView
@@ -134,6 +138,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.utils.AnimationUtils.rotate
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getToolbarHeight
+import org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowWidth
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler.ShowDonationDialogCallback
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
@@ -1868,7 +1873,7 @@ abstract class CoreReaderFragment :
   protected open fun showDonationLayout() {
     val donationCardView = layoutInflater.inflate(R.layout.layout_donation_bottom_sheet, null)
     val layoutParams = FrameLayout.LayoutParams(
-      FrameLayout.LayoutParams.MATCH_PARENT,
+      getDonationPopupWidth(),
       FrameLayout.LayoutParams.WRAP_CONTENT
     ).apply {
       val rightAndLeftMargin = requireActivity().resources.getDimensionPixelSize(
@@ -1880,6 +1885,7 @@ abstract class CoreReaderFragment :
         rightAndLeftMargin,
         getBottomMarginForDonationPopup()
       )
+      gravity = BOTTOM or CENTER_HORIZONTAL
     }
 
     donationCardView.layoutParams = layoutParams
@@ -1905,6 +1911,19 @@ abstract class CoreReaderFragment :
     laterButton.setOnClickListener {
       donationDialogHandler?.donateLater()
       setDonationLayoutVisibility(GONE)
+    }
+  }
+
+  private fun getDonationPopupWidth(): Int {
+    val deviceWidth = requireActivity().getWindowWidth()
+    val maximumDonationLayoutWidth =
+      requireActivity().resources.getDimensionPixelSize(R.dimen.maximum_donation_popup_width)
+    return when {
+      deviceWidth > maximumDonationLayoutWidth || requireActivity().isLandScapeMode() -> {
+        maximumDonationLayoutWidth
+      }
+
+      else -> FrameLayout.LayoutParams.MATCH_PARENT
     }
   }
 
@@ -2108,6 +2127,10 @@ abstract class CoreReaderFragment :
     super.onConfigurationChanged(newConfig)
     // Forcing redraw of RecyclerView children so that the tabs are properly oriented on rotation
     tabRecyclerView?.adapter = tabsAdapter
+    // force redraw of donation layout if it is showing.
+    if (donationLayout?.isVisible == true) {
+      showDonationLayout()
+    }
   }
 
   private fun searchForTitle(title: String?, openInNewTab: Boolean) {

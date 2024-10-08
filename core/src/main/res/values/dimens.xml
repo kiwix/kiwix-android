@@ -25,4 +25,5 @@
   <dimen name="close_tab_button_size">24dp</dimen>
   <dimen name="find_in_page_button_padding">13dp</dimen>
   <dimen name="donation_popup_bottom_margin">20dp</dimen>
+  <dimen name="maximum_donation_popup_width">400dp</dimen>
 </resources>
