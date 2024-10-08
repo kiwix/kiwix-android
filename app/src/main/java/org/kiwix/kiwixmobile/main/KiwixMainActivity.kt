@@ -26,6 +26,7 @@ import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.os.ConfigurationCompat
@@ -226,6 +227,15 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   private fun handleZimFileIntent(intent: Intent?) {
+    Log.e(
+      "INTENT_URI",
+      "handleZimFileIntent: ${intent?.data}" +
+        "\n scheme ${intent?.scheme}" +
+        "\n mimeType ${intent?.type}" +
+        "\n host ${intent?.data?.host}" +
+        "\n other uri things ${intent?.data?.encodedUserInfo}" +
+        "\n intent = $intent"
+    )
     intent?.data?.let {
       when (it.scheme) {
         "file",
