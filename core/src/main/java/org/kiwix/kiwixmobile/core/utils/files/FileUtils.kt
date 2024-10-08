@@ -187,7 +187,9 @@ object FileUtils {
     var actualFilePath: String? = null
     if (filePath?.isNotEmpty() == true) {
       getStorageVolumesList(context).forEach { volume ->
-        val file = File("$volume/$filePath")
+        // Check if the volume is part of the file path and remove it
+        val trimmedFilePath = filePath.removePrefix(volume)
+        val file = File("$volume/$trimmedFilePath")
         if (file.isFileExist()) {
           actualFilePath = file.path
         }
@@ -284,7 +286,9 @@ object FileUtils {
     if (pathSegments.isNotEmpty()) {
       // Returns the path of the folder containing the file with the specified fileName,
       // from which the user selects the file.
-      return pathSegments.drop(1).joinToString(separator = "/")
+      return pathSegments.drop(1)
+        .filterNot { it.startsWith("0") } // remove the prefix of primary storage device
+        .joinToString(separator = "/")
     }
     return null
   }
