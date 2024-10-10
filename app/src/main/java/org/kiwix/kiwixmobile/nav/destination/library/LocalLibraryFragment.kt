@@ -47,6 +47,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
@@ -71,13 +72,11 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isManageExternalStoragePermissionGranted
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
-import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.main.KIWIX_APK_WEBSITE_URL
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.navigateToSettings
@@ -302,6 +301,15 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
         }
       }
     )
+    showCopyMoveDialogForOpenedZimFileFromStorage()
+  }
+
+  private fun showCopyMoveDialogForOpenedZimFileFromStorage() {
+    val args = LocalLibraryFragmentArgs.fromBundle(requireArguments())
+    if (args.zimFileUri.isNotEmpty()) {
+      handleSelectedFileUri(args.zimFileUri.toUri())
+    }
+    requireArguments().clear()
   }
 
   private fun setUpSwipeRefreshLayout() {
@@ -371,6 +379,12 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       action = Intent.ACTION_OPEN_DOCUMENT
       type = "*/*"
       addCategory(Intent.CATEGORY_OPENABLE)
+      if (sharedPreferenceUtil.prefIsTest) {
+        putExtra(
+          "android.provider.extra.INITIAL_URI",
+          Uri.parse("content://com.android.externalstorage.documents/document/primary:Download")
+        )
+      }
     }
     try {
       fileSelectLauncher.launch(Intent.createChooser(intent, "Select a zim file"))
@@ -394,12 +408,19 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     }
 
   private fun handleSelectedFileUri(uri: Uri) {
-    getZimFileFromUri(uri)?.let { file ->
-      if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
-        copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(uri, file)
-      } else {
-        navigateToReaderFragment(file)
+    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+      val documentFile = when (uri.scheme) {
+        "file" -> DocumentFile.fromFile(File("$uri"))
+        else -> {
+          DocumentFile.fromSingleUri(requireActivity(), uri)
+        }
       }
+      copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(
+        uri,
+        documentFile
+      )
+    } else {
+      getZimFileFromUri(uri)?.let(::navigateToReaderFragment)
     }
   }
 
@@ -450,32 +471,13 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
 
   override fun onResume() {
     super.onResume()
-    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
-      sharedPreferenceUtil.playStoreRestrictionPermissionDialog
-    ) {
-      showPlayStoreRestrictionInformationToUser()
-    } else if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
+    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
       !sharedPreferenceUtil.prefIsTest && !permissionDeniedLayoutShowing
     ) {
       checkPermissions()
     } else if (!permissionDeniedLayoutShowing) {
       fragmentDestinationLibraryBinding?.zimfilelist?.visibility = VISIBLE
     }
-  }
-
-  private fun showPlayStoreRestrictionInformationToUser() {
-    // We should only ask for first time
-    sharedPreferenceUtil.playStoreRestrictionPermissionDialog = false
-    // Show Dialog to the user to inform about the play store restriction
-    dialogShower.show(
-      KiwixDialog.PlayStoreRestrictionPopup(KIWIX_APK_WEBSITE_URL),
-      {},
-      ::openKiwixWebsiteForDownloadingApk
-    )
-  }
-
-  private fun openKiwixWebsiteForDownloadingApk() {
-    requireActivity().startActivity(KIWIX_APK_WEBSITE_URL.toUri().browserIntent())
   }
 
   override fun onDestroyView() {

@@ -34,6 +34,7 @@ import com.google.android.apps.common.testing.accessibility.framework.Accessibil
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.allOf
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -83,7 +84,6 @@ class InitialDownloadTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_STORAGE_OPTION, true)
       putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
-      putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, false)
       putString(SharedPreferenceUtil.PREF_LANG, "en")
       putLong(
         SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
@@ -108,17 +108,16 @@ class InitialDownloadTest : BaseActivityTest() {
     activityScenario.onActivity {
       it.navigate(R.id.libraryFragment)
     }
-    initialDownload(InitialDownloadRobot::refreshLocalLibraryData)
     // delete all the ZIM files showing in the LocalLibrary
     // screen to properly test the scenario.
     library {
+      refreshList()
       waitUntilZimFilesRefreshing()
       deleteZimIfExists()
     }
     initialDownload {
       clickDownloadOnBottomNav()
       assertLibraryListDisplayed()
-      refreshOnlineList()
       waitForDataToLoad()
       stopDownloadIfAlreadyStarted()
       downloadZimFile()
@@ -131,5 +130,10 @@ class InitialDownloadTest : BaseActivityTest() {
       assertDownloadStop()
     }
     LeakAssertions.assertNoLeaks()
+  }
+
+  @After
+  fun finish() {
+    TestUtils.deleteTemporaryFilesOfTestCases(context)
   }
 }

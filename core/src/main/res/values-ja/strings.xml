@@ -80,7 +80,6 @@
   <string name="pref_credits_title">クレジット</string>
   <string name="tts_lang_not_supported">このページの言語は不正確な翻訳です。記事が正しく読めない可能性があります。</string>
   <string name="no_reader_application_installed">このタイプのファイル用にインストールされたアプリケーションが見つかりませんでした</string>
-  <string name="no_email_application_installed">メールサービスプロバイダーをインストールするか、%1s にメールを送信してください。</string>
   <string name="no_section_info">コンテンツヘッダーが見つかりません</string>
   <string name="request_storage">オフライン コンテンツにアクセスするには、ストレージへのアクセスが必要です</string>
   <string name="request_write_storage">zim ファイルをダウンロードするには、ストレージへの書き込みアクセスが必要です</string>
@@ -190,7 +189,6 @@
   <string name="go_to_next_page">次のページへ</string>
   <string name="table_of_contents">目次</string>
   <string name="select_languages">言語を選択</string>
-  <string name="send_feedback">フィードバックを送信</string>
   <string name="history">履歴</string>
   <string name="history_from_current_book">すべての書籍の履歴を表示する</string>
   <string name="search_history">検索履歴</string>

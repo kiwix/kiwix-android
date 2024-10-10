@@ -80,7 +80,6 @@
   <string name="pref_credits_title">Kredituak</string>
   <string name="tts_lang_not_supported">Orrialde honetako hizkuntza ez da onartzen. Baliteke artikulua ezin ongi irakurtzea.</string>
   <string name="no_reader_application_installed">Ezin izan da aurkitu mota honetako artxiborako instalatutako aplikazioa</string>
-  <string name="no_email_application_installed">Instalatu posta elektronikoko zerbitzu-hornitzaile bat edo bidal iezaguzu mezu bat hona: %1s</string>
   <string name="no_app_found_to_select_bookmark_file">Ez da aurkitu aplikaziorik laster-markaren fitxategi bat hautatzeko</string>
   <string name="no_section_info">Ez da edukiaren goibururik aurkitu</string>
   <string name="request_storage">Konexiorik gabeko edukian sartzeko zure biltegira sartu behar gara.</string>
@@ -214,7 +213,6 @@
   <string name="table_of_contents">Eduki-taula</string>
   <string name="select_languages">Hizkuntzak aukeratu</string>
   <string name="save_languages">Gorde hizkuntzak</string>
-  <string name="send_feedback">Bidali iritzia</string>
   <string name="expand">Zabaldu</string>
   <string name="history">Historia</string>
   <string name="history_from_current_book">Ikusi liburu guztien historia</string>

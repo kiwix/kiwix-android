@@ -82,7 +82,6 @@
   <string name="pref_credits_title">參與名單</string>
   <string name="tts_lang_not_supported">本頁面不支援這個語言。條目可能無法正確讀取。</string>
   <string name="no_reader_application_installed">找不到開啟這類型檔案的應用程式</string>
-  <string name="no_email_application_installed">請安裝電子郵件服務提供方，或是在%1s發送電子郵件給我們</string>
   <string name="no_app_found_to_select_bookmark_file">找不到用於選擇書籤檔案的應用程式</string>
   <string name="no_section_info">未找到內容標題</string>
   <string name="request_storage">我們需要存取您的儲存裝置以存取離線內容。</string>
@@ -217,7 +216,6 @@
   <string name="table_of_contents">目次</string>
   <string name="select_languages">選擇語言</string>
   <string name="save_languages">儲存語言</string>
-  <string name="send_feedback">傳送意見回饋</string>
   <string name="expand">展開</string>
   <string name="history">歷史</string>
   <string name="history_from_current_book">檢視來自目前書籍的歷史</string>
@@ -325,12 +323,10 @@
   <string name="tabs_restored">分頁已恢復</string>
   <string name="open_drawer">開啟抽屜</string>
   <string name="close_drawer">關閉抽屜</string>
-  <string name="zim_files_not_showing">沒有看到 zim 檔案？</string>
-  <string name="zim_files_not_showing_description">出自於 Android 11（或更高階版本）的 Google Play 政策，此款 Google 商店應用程式無法開啟側載的 zim 檔案。您可以改由應用程式來下載，或是從我們的官方網站：%s 來安裝完整版的 kiwix 應用程式</string>
-  <string name="understood">明白了</string>
   <string name="preparing_file_for_copy">準備拷貝/移動</string>
+  <string name="action_copy">拷貝</string>
   <string name="move">移動</string>
-  <string name="file_copying_in_progress" fuzzy="true">正在進行 zim 檔案拷貝</string>
+  <string name="file_copying_in_progress">正在進行 zim 檔案拷貝</string>
   <string name="file_moving_in_progress">正在進行 zim 檔案移動</string>
   <string name="copy_move_files_dialog_description">您要拷貝或移動檔案嗎？</string>
   <string name="copy_file_error_message">拷貝 zim 檔案時發生錯誤：%s。</string>
@@ -347,6 +343,10 @@
   <string name="system_unable_to_grant_permission_message">系統無法授予權限！</string>
   <string name="allow">允許</string>
   <string name="swipe_down_for_library">向下滑動圖書館</string>
+  <string name="reaching_remote_library">取得遠距圖書館</string>
+  <string name="parsing_remote_library">解析遠端圖書館</string>
+  <string name="starting_downloading_remote_library">開始下載線上圖書館</string>
+  <string name="downloading_library">正在下載圖書館\n%s</string>
   <string name="no_notes">沒有註釋</string>
   <string name="notes_from_all_books">檢視來自所有書籍的註釋</string>
   <string name="search_notes">搜尋註釋</string>
@@ -377,4 +377,7 @@
   <string name="toolbar_back_button_content_description">前往上一個畫面</string>
   <string name="save_or_open_unsupported_files_dialog_title">儲存或開啟這個檔案？</string>
   <string name="save_or_open_unsupported_files_dialog_message">選擇開啟將在外部閱讀器應用程式中開啟該檔案。</string>
+  <string name="donation_dialog_title">今天就捐款</string>
+  <string name="donation_dialog_description">%s需要您的幫忙。</string>
+  <string name="make_donation">捐款</string>
 </resources>

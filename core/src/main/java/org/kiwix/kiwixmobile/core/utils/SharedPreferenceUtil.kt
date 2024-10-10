@@ -243,12 +243,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
           manageExternalFilesPermissionDialogOnRefresh
         )
       }
-  var playStoreRestrictionPermissionDialog: Boolean
-    get() = sharedPreferences.getBoolean(PREF_PLAY_STORE_RESTRICTION, true)
-    set(playStoreRestrictionPermissionDialog) =
-      sharedPreferences.edit {
-        putBoolean(PREF_PLAY_STORE_RESTRICTION, playStoreRestrictionPermissionDialog)
-      }
 
   var hostedBooks: Set<String>
     get() = sharedPreferences.getStringSet(PREF_HOSTED_BOOKS, null)?.toHashSet() ?: HashSet()
@@ -330,7 +324,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_MANAGE_EXTERNAL_FILES = "pref_manage_external_files"
     const val PREF_SHOW_MANAGE_PERMISSION_DIALOG_ON_REFRESH = "pref_show_manage_external_files"
     const val IS_PLAY_STORE_BUILD = "is_play_store_build"
-    const val PREF_PLAY_STORE_RESTRICTION = "pref_play_store_restriction"
     const val PREF_BOOKMARKS_MIGRATED = "pref_bookmarks_migrated"
     const val PREF_RECENT_SEARCH_MIGRATED = "pref_recent_search_migrated"
     const val PREF_HISTORY_MIGRATED = "pref_history_migrated"

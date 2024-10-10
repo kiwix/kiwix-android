@@ -24,6 +24,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
@@ -34,6 +35,7 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import uk.co.deanwild.materialshowcaseview.R.id
 
 /**
  * Authored by Ayush Shrivastava on 29/10/20
@@ -82,27 +84,42 @@ class LocalFileTransferRobot : BaseRobot() {
 
   fun assertClickNearbyDeviceMessageVisible() {
     pauseForBetterTestPerformance()
-    isVisible(TextId(string.click_nearby_devices_message))
+    testFlakyView({
+      onView(withId(id.tv_content))
+        .check(matches(withText(string.click_nearby_devices_message)))
+    })
   }
 
   fun clickOnGotItButton() {
     pauseForBetterTestPerformance()
-    testFlakyView({ onView(withText(string.got_it)).perform(click()) })
+    testFlakyView({
+      onView(withId(id.tv_dismiss))
+        .perform(click())
+    })
   }
 
   fun assertDeviceNameMessageVisible() {
     pauseForBetterTestPerformance()
-    isVisible(TextId(string.your_device_name_message))
+    testFlakyView({
+      onView(withId(id.tv_content))
+        .check(matches(withText(string.your_device_name_message)))
+    })
   }
 
   fun assertNearbyDeviceListMessageVisible() {
     pauseForBetterTestPerformance()
-    isVisible(TextId(string.nearby_devices_list_message))
+    testFlakyView({
+      onView(withId(id.tv_content))
+        .check(matches(withText(string.nearby_devices_list_message)))
+    })
   }
 
   fun assertTransferZimFilesListMessageVisible() {
     pauseForBetterTestPerformance()
-    isVisible(TextId(string.transfer_zim_files_list_message))
+    testFlakyView({
+      onView(withId(id.tv_content))
+        .check(matches(withText(string.transfer_zim_files_list_message)))
+    })
   }
 
   fun assertClickNearbyDeviceMessageNotVisible() {

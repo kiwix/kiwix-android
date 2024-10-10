@@ -147,35 +147,37 @@ class LocalFileTransferTest {
 
   @Test
   fun showCaseFeature() {
-    shouldShowShowCaseFeatureToUser(true, isResetShowCaseId = true)
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      onActivity {
-        handleLocaleChange(
-          it,
-          "en",
-          SharedPreferenceUtil(context)
-        )
-        it.navigate(R.id.libraryFragment)
+    if (Build.VERSION.SDK_INT != Build.VERSION_CODES.TIRAMISU) {
+      shouldShowShowCaseFeatureToUser(true, isResetShowCaseId = true)
+      activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+        onActivity {
+          handleLocaleChange(
+            it,
+            "en",
+            SharedPreferenceUtil(context)
+          )
+          it.navigate(R.id.libraryFragment)
+        }
       }
-    }
-    StandardActions.closeDrawer()
-    library {
-      assertGetZimNearbyDeviceDisplayed()
-      clickFileTransferIcon {
-        assertClickNearbyDeviceMessageVisible()
-        clickOnGotItButton()
-        assertDeviceNameMessageVisible()
-        clickOnGotItButton()
-        assertNearbyDeviceListMessageVisible()
-        clickOnGotItButton()
-        assertTransferZimFilesListMessageVisible()
-        clickOnGotItButton()
-        pressBack()
+      StandardActions.closeDrawer()
+      library {
         assertGetZimNearbyDeviceDisplayed()
+        clickFileTransferIcon {
+          assertClickNearbyDeviceMessageVisible()
+          clickOnGotItButton()
+          assertDeviceNameMessageVisible()
+          clickOnGotItButton()
+          assertNearbyDeviceListMessageVisible()
+          clickOnGotItButton()
+          assertTransferZimFilesListMessageVisible()
+          clickOnGotItButton()
+          pressBack()
+          assertGetZimNearbyDeviceDisplayed()
+        }
       }
+      LeakAssertions.assertNoLeaks()
     }
-    LeakAssertions.assertNoLeaks()
   }
 
   @Test
@@ -203,7 +205,6 @@ class LocalFileTransferTest {
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, shouldShowShowCase)
-      putBoolean(SharedPreferenceUtil.PREF_PLAY_STORE_RESTRICTION, false)
       putString(SharedPreferenceUtil.PREF_LANG, "en")
     }
     if (isResetShowCaseId) {

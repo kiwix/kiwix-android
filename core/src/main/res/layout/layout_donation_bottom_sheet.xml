@@ -18,6 +18,7 @@
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  style="@style/ThemeOverlay.MaterialComponents.Dialog.Alert"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:layout_margin="16dp"
@@ -43,13 +44,12 @@
 
     <TextView
       android:id="@+id/titleText"
+      style="@style/TextAppearance.M3.Sys.Typescale.TitleMedium"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="@dimen/fullscreen_control_button_margin"
       android:text="@string/donation_dialog_title"
       android:textSize="16sp"
-      android:textAppearance="@style/TextAppearance.M3.Sys.Typescale.TitleMedium"
-      android:textColor="@color/mine_shaft_gray900"
       app:layout_constraintStart_toEndOf="@id/heart_icon"
       app:layout_constraintTop_toTopOf="@+id/heart_icon" />
 
@@ -69,7 +69,7 @@
       android:layout_height="wrap_content"
       android:padding="@dimen/activity_horizontal_margin"
       android:text="@string/rate_dialog_neutral"
-      android:textColor="@color/denim_blue800"
+      android:textColor="?attr/colorPrimary"
       app:layout_constraintEnd_toStartOf="@+id/donateButton"
       app:layout_constraintTop_toBottomOf="@id/descriptionText" />
 
@@ -79,7 +79,7 @@
       android:layout_height="wrap_content"
       android:padding="@dimen/activity_horizontal_margin"
       android:text="@string/make_donation"
-      android:textColor="@color/denim_blue800"
+      android:textColor="?attr/colorPrimary"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@id/descriptionText" />
   </androidx.constraintlayout.widget.ConstraintLayout>

@@ -49,7 +49,6 @@ fun library(func: LibraryRobot.() -> Unit) = LibraryRobot().applyWithViewHierarc
 class LibraryRobot : BaseRobot() {
 
   private val zimFileTitle = "Test_Zim"
-  private var retryCountForRefreshingZimFiles = 5
 
   fun assertGetZimNearbyDeviceDisplayed() {
     isVisible(ViewId(R.id.get_zim_nearby_device))
@@ -70,20 +69,27 @@ class LibraryRobot : BaseRobot() {
   }
 
   fun refreshList() {
-    refresh(R.id.zim_swiperefresh)
+    pauseForBetterTestPerformance()
+    try {
+      onView(withId(R.id.file_management_no_files)).check(matches(isDisplayed()))
+      refresh(R.id.zim_swiperefresh)
+    } catch (ignore: AssertionFailedError) {
+      try {
+        onView(withId(R.id.zimfilelist)).check(matches(isDisplayed()))
+        refresh(R.id.zim_swiperefresh)
+      } catch (e: AssertionFailedError) {
+        Log.i(
+          "LOCAL_LIBRARY",
+          "No need to refresh the data, since there is no files found"
+        )
+      }
+    }
   }
 
   fun waitUntilZimFilesRefreshing() {
-    try {
+    testFlakyView({
       onView(withId(R.id.scanning_progress_view)).check(matches(not(isDisplayed())))
-    } catch (ignore: AssertionFailedError) {
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
-      Log.i("LOCAL_LIBRARY", "Scanning of storage to find ZIM files in progress")
-      if (retryCountForRefreshingZimFiles > 0) {
-        retryCountForRefreshingZimFiles--
-        waitUntilZimFilesRefreshing()
-      }
-    }
+    })
   }
 
   fun deleteZimIfExists() {

@@ -33,6 +33,7 @@ import com.google.android.apps.common.testing.accessibility.framework.Accessibil
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.allOf
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -106,7 +107,6 @@ class ZimHostFragmentTest {
         putPrefWifiOnly(false)
         setIsPlayStoreBuildType(true)
         prefIsTest = true
-        playStoreRestrictionPermissionDialog = false
         putPrefLanguage("en")
         lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
       }
@@ -132,10 +132,10 @@ class ZimHostFragmentTest {
         it.navigate(R.id.libraryFragment)
       }
       StandardActions.closeDrawer() // close the drawer if open before running the test cases.
-      zimHost(ZimHostRobot::refreshLibraryList)
       // delete all the ZIM files showing in the LocalLibrary
       // screen to properly test the scenario.
       library {
+        refreshList()
         waitUntilZimFilesRefreshing()
         deleteZimIfExists()
       }
@@ -213,5 +213,10 @@ class ZimHostFragmentTest {
         }
       }
     }
+  }
+
+  @After
+  fun finish() {
+    context?.let(TestUtils::deleteTemporaryFilesOfTestCases)
   }
 }

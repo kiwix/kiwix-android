@@ -73,7 +73,6 @@
   <string name="pref_credits_title">Creditos</string>
   <string name="tts_lang_not_supported">Le lingua de iste pagina non es supportate. Pote esser que le pagina non appare correctemente.</string>
   <string name="no_reader_application_installed">Non poteva trovar un application installate pro iste typo de file</string>
-  <string name="no_email_application_installed">Per favor installa un fornitor de servicio e-mail o invia nos un message a %1s</string>
   <string name="no_app_found_to_select_bookmark_file">Necun app trovate pro seliger un file de marcapaginas</string>
   <string name="no_section_info">Nulle capites de contento trovate</string>
   <string name="request_storage">Pro acceder a files ZIM, nos require accesso a tu immagazinage.</string>
@@ -204,7 +203,6 @@
   <string name="table_of_contents">Tabula de contento</string>
   <string name="select_languages">Selige linguas</string>
   <string name="save_languages">Salveguardar linguas</string>
-  <string name="send_feedback">Inviar opinion</string>
   <string name="expand">Expander</string>
   <string name="history">Historia</string>
   <string name="history_from_current_book">Vider historia de tote le libros</string>
@@ -312,9 +310,6 @@
   <string name="tabs_restored">Schedas restaurate</string>
   <string name="open_drawer">Aperir tiratorio</string>
   <string name="close_drawer">Clauder tiratorio</string>
-  <string name="zim_files_not_showing">Le file Zim non appare?</string>
-  <string name="zim_files_not_showing_description">A causa del politicas de Google Play sur Android 11 e plus recente, iste application Google Store non pote aperir le files ZIM transferite localmente. Tu pote discargar le files per medio del application, o installar le version complete del application Kiwix de nostre sito web official: %s</string>
-  <string name="understood">Comprendite</string>
   <string name="how_to_update_content">Como actualisar contento?</string>
   <string name="update_content_description">Pro actualisar le contento (un file zim) tu debe discargar le ultime version complete de iste mesme contento. Tu pote facer lo in le section de discargamento.</string>
   <string name="all_files_permission_needed">Permission pro tote le files es necessari</string>

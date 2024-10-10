@@ -62,6 +62,12 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
     })
   }
 
+  fun clickOnCancel() {
+    testFlakyView({
+      onView(withText(R.string.cancel)).perform(click())
+    })
+  }
+
   fun assertZimFileCopiedAndShowingIntoTheReader() {
     pauseForBetterTestPerformance()
     isVisible(Findable.ViewId(id.readerFragment))

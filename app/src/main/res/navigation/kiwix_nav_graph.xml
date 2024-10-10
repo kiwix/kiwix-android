@@ -81,6 +81,10 @@
     <action
       android:id="@+id/action_libraryFragment_to_localFileTransferFragment"
       app:destination="@id/localFileTransferFragment" />
+    <argument
+      android:name="zimFileUri"
+      android:defaultValue=""
+      app:argType="string" />
   </fragment>
 
   <fragment

@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.testutils
 
 import android.Manifest
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -210,6 +211,26 @@ object TestUtils {
         testFlakyView(action, retryCount - 1)
       } else {
         throw ignore // No more retries, rethrow the exception
+      }
+    }
+  }
+
+  @JvmStatic
+  fun deleteTemporaryFilesOfTestCases(context: Context) {
+    ContextCompat.getExternalFilesDirs(context, null).filterNotNull()
+      .map(::deleteAllFilesInDirectory)
+    ContextWrapper(context).externalMediaDirs.filterNotNull()
+      .map(::deleteAllFilesInDirectory)
+  }
+
+  private fun deleteAllFilesInDirectory(directory: File) {
+    if (directory.isDirectory) {
+      directory.listFiles()?.forEach { file ->
+        if (file.isDirectory) {
+          // Recursively delete files in subdirectories
+          deleteAllFilesInDirectory(file)
+        }
+        file.delete()
       }
     }
   }

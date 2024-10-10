@@ -81,7 +81,6 @@
   <string name="pref_credits_title">Erkännanden</string>
   <string name="tts_lang_not_supported">Språket på denna sida stöds inte. Artikeln kan kanske inte läsas på rätt sätt.</string>
   <string name="no_reader_application_installed">Kunde inte hitta ett installerat program för denna filtyp</string>
-  <string name="no_email_application_installed">Installera en e-postleverantör eller skicka e-post till oss på %1s</string>
   <string name="no_app_found_to_select_bookmark_file">Ingen app hittades för att välja bokmärkesfil</string>
   <string name="no_section_info">Ingen innehållsrubrik hittades</string>
   <string name="request_storage">För att komma åt offlineinnehåll behöver vi tillgång till ditt lagringsutrymme</string>
@@ -214,7 +213,6 @@
   <string name="table_of_contents">Innehållsförteckning</string>
   <string name="select_languages">Välj språk</string>
   <string name="save_languages">Spara språk</string>
-  <string name="send_feedback">Skicka återkoppling</string>
   <string name="expand">Utvidga</string>
   <string name="history">Historik</string>
   <string name="history_from_current_book">Visa historik från alla böcker</string>
@@ -322,9 +320,6 @@
   <string name="tabs_restored">Flikar återställdes</string>
   <string name="open_drawer">Öppna sidomeny</string>
   <string name="close_drawer">Stäng sidomeny</string>
-  <string name="zim_files_not_showing">Visas inte Zim-filer?</string>
-  <string name="zim_files_not_showing_description">På grund av Google Play-policyer på Android 11 och senare kan inte Google Store-appen öppna sidoladdade ZIM-filer. Du kan antingen ladda ner dem via appen eller, istället, installera den fullständiga versionen av kiwix app från vår officiella hemsida %s</string>
-  <string name="understood">Uppfattat</string>
   <string name="how_to_update_content">Hur uppdaterar man innehåll?</string>
   <string name="update_content_description">För att uppdatera innehåll (en zim-fil) behöver du ladda ned den fullständig senaste versionen samma innehåll. Du kan göra det via nedladdningsavsnittet.</string>
   <string name="all_files_permission_needed">Behörighet för alla filer behövs</string>

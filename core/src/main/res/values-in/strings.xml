@@ -179,7 +179,6 @@
   <string name="table_of_contents">Daftar isi</string>
   <string name="select_languages">Pilih bahasa</string>
   <string name="save_languages">Simpan bahasa</string>
-  <string name="send_feedback">Kirim masukan</string>
   <string name="history">Riwayat</string>
   <string name="history_from_current_book">Lihat riwayat semua buku</string>
   <string name="search_history" fuzzy="true">Riwayat pencarian</string>

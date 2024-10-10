@@ -63,7 +63,7 @@ class CopyMoveFileHandler @Inject constructor(
 ) {
   private var fileCopyMoveCallback: FileCopyMoveCallback? = null
   private var selectedFileUri: Uri? = null
-  private var selectedFile: File? = null
+  private var selectedFile: DocumentFile? = null
   private var copyMovePreparingDialog: Dialog? = null
   private var progressBarDialog: AlertDialog? = null
   private var lifecycleScope: CoroutineScope? = null
@@ -87,8 +87,8 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  fun showMoveFileToPublicDirectoryDialog(uri: Uri? = null, file: File? = null) {
-    setSelectedFileAndUri(uri, file)
+  fun showMoveFileToPublicDirectoryDialog(uri: Uri? = null, documentFile: DocumentFile? = null) {
+    setSelectedFileAndUri(uri, documentFile)
     if (!sharedPreferenceUtil.copyMoveZimFilePermissionDialog) {
       showMoveToPublicDirectoryPermissionDialog()
     } else {
@@ -98,9 +98,9 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  fun setSelectedFileAndUri(uri: Uri?, file: File?) {
+  fun setSelectedFileAndUri(uri: Uri?, documentFile: DocumentFile?) {
     selectedFileUri = uri
-    selectedFile = file
+    selectedFile = documentFile
   }
 
   fun setFileCopyMoveCallback(fileCopyMoveCallback: FileCopyMoveCallback?) {
@@ -226,9 +226,7 @@ class CopyMoveFileHandler @Inject constructor(
         val sourceUri = selectedFileUri ?: throw FileNotFoundException("Selected file not found")
         showProgressDialog()
         var moveSuccess = false
-        if (tryMoveWithRenamingFile(destinationFile)) {
-          moveSuccess = true
-        } else if (tryMoveWithDocumentContract(sourceUri)) {
+        if (tryMoveWithDocumentContract(sourceUri)) {
           moveSuccess = true
         } else {
           moveSuccess = true
@@ -249,15 +247,12 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  private fun tryMoveWithRenamingFile(destinationFile: File): Boolean =
-    selectedFile?.renameTo(destinationFile) == true
-
   @Suppress("UnsafeCallOnNullableType")
   private fun tryMoveWithDocumentContract(selectedUri: Uri): Boolean {
     return try {
       val contentResolver = activity.contentResolver
       if (documentCanMove(selectedUri, contentResolver)) {
-        val sourceParentFolderUri = DocumentFile.fromFile(selectedFile?.parentFile!!).uri
+        val sourceParentFolderUri = selectedFile?.parentFile!!.uri
         val destinationFolderUri = DocumentFile.fromFile(File(sharedPreferenceUtil.prefStorage)).uri
 
         DocumentsContract.moveDocument(
@@ -323,6 +318,7 @@ class CopyMoveFileHandler @Inject constructor(
     try {
       DocumentsContract.deleteDocument(activity.applicationContext.contentResolver, uri)
     } catch (ignore: Exception) {
+      selectedFile?.delete()
       ignore.printStackTrace()
     }
   }

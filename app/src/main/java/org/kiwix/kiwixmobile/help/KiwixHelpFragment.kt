@@ -20,25 +20,11 @@ package org.kiwix.kiwixmobile.help
 
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.help.HelpFragment
-import org.kiwix.kiwixmobile.core.main.KIWIX_APK_WEBSITE_URL
 
 class KiwixHelpFragment : HelpFragment() {
-  override fun rawTitleDescriptionMap() =
-    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
-      listOf(
-        R.string.help_2 to R.array.description_help_2,
-        R.string.help_5 to R.array.description_help_5,
-        R.string.how_to_update_content to R.array.update_content_description,
-        R.string.zim_files_not_showing to getString(
-          R.string.zim_files_not_showing_description,
-          KIWIX_APK_WEBSITE_URL
-        )
-      )
-    } else {
-      listOf(
-        R.string.help_2 to R.array.description_help_2,
-        R.string.help_5 to R.array.description_help_5,
-        R.string.how_to_update_content to R.array.update_content_description
-      )
-    }
+  override fun rawTitleDescriptionMap() = listOf(
+    R.string.help_2 to R.array.description_help_2,
+    R.string.help_5 to R.array.description_help_5,
+    R.string.how_to_update_content to R.array.update_content_description
+  )
 }

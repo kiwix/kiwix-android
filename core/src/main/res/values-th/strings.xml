@@ -91,7 +91,6 @@
   <string name="table_of_contents">สารบัญ</string>
   <string name="select_languages">เลือกภาษา</string>
   <string name="save_languages">บันทึก</string>
-  <string name="send_feedback">ส่งคำติชม</string>
   <string name="expand">ขยาย</string>
   <string name="history">ประวัติ</string>
 </resources>

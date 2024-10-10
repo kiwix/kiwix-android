@@ -81,7 +81,6 @@ class KiwixSettingsFragmentTest {
           "en",
           SharedPreferenceUtil(it).apply {
             setIsPlayStoreBuildType(true)
-            playStoreRestrictionPermissionDialog = false
             lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
           }
         )

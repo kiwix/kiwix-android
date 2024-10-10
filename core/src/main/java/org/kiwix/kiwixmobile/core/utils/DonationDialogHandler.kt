@@ -50,7 +50,9 @@ class DonationDialogHandler @Inject constructor(
     }
   }
 
-  private fun shouldShowInitialPopup(lastPopupMillis: Long): Boolean = lastPopupMillis == 0L
+  private fun shouldShowInitialPopup(lastPopupMillis: Long): Boolean =
+    lastPopupMillis == 0L && isZimFilesAvailableInLibrary()
+
   private fun isTimeToShowDonation(currentMillis: Long): Boolean =
     isLaterNotClicked() || isLaterPeriodOver(currentMillis)
 

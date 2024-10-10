@@ -70,7 +70,6 @@
   <string name="pref_credits_title">ߞߏߢߌߡߊߟߐ߲</string>
   <string name="tts_lang_not_supported">ߞߊ߲ ߡߍ߲ ߦߋ߫ ߞߐߜߍ ߣߌ߲߬ ߞߊ߲߬߸ ߏ߬ ߘߊ߲ߞߎ߲ߣߍ߲߫ ߕߍ߫ ߥߟߊ߫ ߞߊ߲ ߡߍ߲ ߓߍ߲߬ߣߍ߲߫ ߦߋ߫ ߦߊ߲߬ ߡߊ߬߸ ߏ߬ ߡߊ߫ ߡߊߞߍ߫ ߊ߬ ߞߣߐ߫. ߕߎ߬ߡߊ߬ߘߐ߫ ߞߎߡߘߊ ߘߐߞߊ߬ߙߊ߲ ߕߍߣߊ߬ ߣߐ߰ߦߊ߬ ߟߊ߫.</string>
   <string name="no_reader_application_installed">ߟߥߊ߬ߟߌ߬ߟߊ߲߫ ߡߊߞߍߣߍ߲߫ ߕߍߣߊ߬ ߛߐ߬ߘߐ߲߬ ߠߴߌ ߞߎ߲߬ ߞߐߕߐ߯ ߛߎ߮ ߣߌ߲߬ ߢߍ߫</string>
-  <string name="no_email_application_installed">ߢߎߡߍߙߋ߲߫ ߞߏ߲ߘߏ ߗߋߘߊ ߡߊߛߐߟߊ߲ ߡߊߞߍ߫ ߌ ߞߎ߲߬ ߖߊ߰ߣߌ߲߫ ߥߟߊ߫ ߞߊ߬ ߢߎߡߍߙߋ߲ ߗߋ߫ ߊ߲ ߡߊ߬ %1s ߝߍ߬</string>
   <string name="no_section_info">ߞߣߐߘߐ ߞߎ߲߬ߕߐ߰ ߡߊ߫ ߛߐ߬ߘߐ߲߫</string>
   <string name="request_storage">ߖߐ߲߬ߛߊ߫ ߞߊ߬ ߜߊ߲߬ߞߎ߲߬ߠߌ߲߬ߓߊߟߌߦߊ ߞߣߐߘߐ ߟߎ߬ ߟߊߛߐ߬ߘߐ߲߬߸ ߊ߲ ߡߊ߬ߞߏ ߦߴߌ ߟߊ߫ ߟߊ߬ߡߙߊ߬ߟߌ߫ ߦߙߐ ߡߊߛߐ߬ߘߐ߲ ߠߊ߫</string>
   <string name="request_write_storage">ߖߐ߲߬ߛߊ߫ ߞߊ߬ zim ߞߐߕߐ߮ ߡߊߞߍ߫ ߌ ߞߎ߲߬߸ ߊ߲ ߡߊ߬ߞߏ ߦߋ߫ ߛߓߍߟߌ ߟߊߛߐ߬ߘߐ߲ ߣߴߌ ߟߊ߫ ߟߊ߬ߡߙߊ߬ߟߌ߫ ߞߣߍ ߞߊ߲߬</string>
@@ -195,7 +194,6 @@
   <string name="table_of_contents">ߞߣߐߘߐ ߟߎ߬ ߥߟߊ߬ߟߋ߲</string>
   <string name="select_languages">ߞߊ߲ ߛߎߥߊ߲ߘߌ߫</string>
   <string name="save_languages">ߞߊ߲ ߠߎ߬ ߟߊߞߎ߲߬ߘߎ߬</string>
-  <string name="send_feedback">ߟߥߊ߬ߟߌ߬ߟߊ߲ ߟߢߊ߬ߟߌ߬ ߗߋߛߓߍ ߗߋ߫</string>
   <string name="expand">ߊ߬ ߟߊߛߓߊ߬ߕߌ߫</string>
   <string name="history">ߘߐ߬ߝߐ</string>
   <string name="history_from_current_book">ߞߊ߬ߝߊ ߟߎ߬ ߓߍ߯ ߘߐ߬ߝߐ ߦߋ߫</string>

@@ -151,7 +151,6 @@
   <string name="table_of_contents">Inhaltsverzeechnes</string>
   <string name="select_languages">Sproochen eraussichen</string>
   <string name="save_languages">Sprooche späicheren</string>
-  <string name="send_feedback">Feedback schécken</string>
   <string name="selected_items">%1$d ausgewielt</string>
   <string name="search_bookmarks">Lieszeechen duerchsichen</string>
   <string name="switch_tabs">Tabs wiesselen</string>
@@ -202,7 +201,6 @@
   <string name="open_library">Bibliothéik opmaachen</string>
   <string name="open_drawer">Tirang opmaachen</string>
   <string name="close_drawer">Tirang zoumaachen</string>
-  <string name="understood">Verstanen</string>
   <string name="allowed">Erlaabt</string>
   <string name="not_allowed">Net erlaabt</string>
   <string name="allow">Erlaben</string>
@@ -217,4 +215,5 @@
   <string name="go_to_settings_label">Op d’Astellunge goen</string>
   <string name="save_or_open_unsupported_files_dialog_title">Dëse Fichier Späicheren oder Opmaachen?</string>
   <string name="save_or_open_unsupported_files_dialog_message">Wann dir „Opmaachen“ wielt, gëtt de Fichier an enger externer Lies-Applikatioun opgemaach.</string>
+  <string name="make_donation">En Don maachen</string>
 </resources>

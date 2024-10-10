@@ -194,7 +194,6 @@
   <string name="table_of_contents">உள்ளடக்க அட்டவணை</string>
   <string name="select_languages">மொழிகளைத் தேர்ந்தெடுக்கவும்</string>
   <string name="save_languages">மொழிகளைச் சேமி</string>
-  <string name="send_feedback">பின்னூட்டம் அனுப்புக</string>
   <string name="expand">விரிவாக்கு</string>
   <string name="history">வரலாறு</string>
   <string name="history_from_current_book">எல்லா நூல்களிலிருந்தும் வரலாற்றைப் பார்</string>
@@ -287,7 +286,6 @@
   <string name="tab_restored">தாவல் மீட்டமைக்கப்பட்டது</string>
   <string name="open_drawer">இழுப்பறையைத் திற</string>
   <string name="close_drawer">இழுப்பறையை மூடு</string>
-  <string name="understood">விளங்கியது</string>
   <string name="how_to_update_content">உள்ளடக்கத்தை எவ்வாறு புதுப்பிப்பது?</string>
   <string name="update_content_description">உள்ளடக்கத்தைப் புதுப்பிக்க (ஒரு zim கோப்பு) இதே உள்ளடக்கத்தின் முழு சமீபத்திய பதிப்பை நீங்கள் பதிவிறக்க வேண்டும். பதிவிறக்கப் பிரிவு வழியாக நீங்கள் அதைச் செய்யலாம்.</string>
   <string name="all_files_permission_needed">அனைத்து கோப்புகளுக்கும் அனுமதி தேவை</string>

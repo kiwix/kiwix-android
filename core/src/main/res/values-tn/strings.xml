@@ -70,7 +70,6 @@
   <string name="pref_credits_title">Dikerediti</string>
   <string name="tts_lang_not_supported">Teme ya tsebe eno ga e rotloesege. Setlhogo se se ka nna sa se ka tswa se sa balege sentle.</string>
   <string name="no_reader_application_installed">Go bana sedirisiwa sa faele ya sebopego se ga go kgonege.</string>
-  <string name="no_email_application_installed">Tsweetswee tsenya tlamedi ya tirelo ya e-mail kgotsa re romelele e-mail ko %1s</string>
   <string name="no_section_info">Ga go na Ditlhogo Tsa Dikgatiso Tse di Bonweng</string>
   <string name="request_storage">Go fitlhelela tshedimosetso e e sa bonaleng re tlhoka go fitlhelela bobolokelo jwa gago</string>
   <string name="request_write_storage">Go tsaya difaele tsa zim re tlhoka go kwala go tsena mo mabolokelong a gago</string>
@@ -195,7 +194,6 @@
   <string name="table_of_contents">Tafole ya ditêng</string>
   <string name="select_languages">Tlhopha diteme</string>
   <string name="save_languages">Boloka diteme</string>
-  <string name="send_feedback">Romela dikakgelo</string>
   <string name="expand">Atolosa</string>
   <string name="history">Hisitori</string>
   <string name="history_from_current_book">Bona Hisitori go tswa mo Dibukeng Tsotlhe</string>
@@ -291,9 +289,6 @@
   <string name="tabs_restored">du-tab di tsosolositswe</string>
   <string name="open_drawer">Bula kgamelo</string>
   <string name="close_drawer">Tswala kgamelo</string>
-  <string name="zim_files_not_showing">A difaele tsa Zim ga di suoe?</string>
-  <string name="zim_files_not_showing_description">Ka ntlha ya melao ya Google Play mo Android 11 le go feta, app eno ya Google Store ga e kgone go bula difaele tsa ZIM tse di kwa thoko. O ka kgona go di kopa ka app kgotsa, go na le moo, tsenya version e e feletseng ya app ya kiwix go tswa mo webosaeteng ya rona ya semmuso %s</string>
-  <string name="understood">Go Tlhaloganngwa</string>
   <string name="how_to_update_content">O ka kgona jang go ntšhafatsa tshedimosetso?</string>
   <string name="update_content_description">Go tlhabololwa ga diteng (faele ya zim) o tlhoka go tsaya kgatiso e e feletseng ya bosheng ya diteng tse di tshwanang. O ka dira seo ka karolo ya download.</string>
   <string name="all_files_permission_needed">Tetla ya difaele tsotlhe e ya tlhokega</string>
