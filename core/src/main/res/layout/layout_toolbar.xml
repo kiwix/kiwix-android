@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:popupTheme="@style/KiwixTheme"
-    app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+    android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
     tools:showIn="@layout/fragment_search">
 
     <androidx.constraintlayout.widget.ConstraintLayout
