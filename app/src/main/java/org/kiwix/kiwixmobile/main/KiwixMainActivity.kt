@@ -26,6 +26,7 @@ import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.os.ConfigurationCompat
@@ -98,8 +99,6 @@ class KiwixMainActivity : CoreMainActivity() {
   override val notesFragmentResId: Int = R.id.notesFragment
   override val readerFragmentResId: Int = R.id.readerFragment
   override val helpFragmentResId: Int = R.id.helpFragment
-  override val zimHostFragmentResId: Int = R.id.zimHostFragment
-  override val navGraphId: Int = R.navigation.kiwix_nav_graph
   override val topLevelDestinations =
     setOf(R.id.downloadsFragment, R.id.libraryFragment, R.id.readerFragment)
 
@@ -270,6 +269,19 @@ class KiwixMainActivity : CoreMainActivity() {
         OPENING_ZIM_FILE_DELAY
       )
     }
+  }
+
+  override fun onNavigationItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+      R.id.menu_host_books -> openZimHostFragment()
+      else -> return super.onNavigationItemSelected(item)
+    }
+    return true
+  }
+
+  private fun openZimHostFragment() {
+    disableDrawer()
+    navigate(R.id.zimHostFragment)
   }
 
   override fun getIconResId() = mipmap.ic_launcher

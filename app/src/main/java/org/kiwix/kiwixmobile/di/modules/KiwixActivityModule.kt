@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.di.modules
 
 import dagger.Module
 import org.kiwix.kiwixmobile.core.di.modules.ActivityModule
-import org.kiwix.kiwixmobile.core.webserver.ZimHostModule
+import org.kiwix.kiwixmobile.webserver.ZimHostModule
 
 @Module(includes = [ActivityModule::class, ZimHostModule::class])
 class KiwixActivityModule

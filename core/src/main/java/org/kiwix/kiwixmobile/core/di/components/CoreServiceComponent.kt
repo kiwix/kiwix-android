@@ -22,15 +22,12 @@ import android.app.Service
 import dagger.BindsInstance
 import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.CoreServiceScope
-import org.kiwix.kiwixmobile.core.di.modules.CoreServiceModule
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
-import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService
 
 @Subcomponent(modules = [CoreServiceModule::class])
 @CoreServiceScope
 interface CoreServiceComponent {
   fun inject(readAloudService: ReadAloudService)
-  fun inject(hotspotService: HotspotService)
 
   @Subcomponent.Builder
   interface Builder {

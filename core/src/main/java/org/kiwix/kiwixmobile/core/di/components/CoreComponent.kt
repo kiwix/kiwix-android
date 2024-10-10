@@ -22,7 +22,6 @@ import android.app.DownloadManager
 import android.app.NotificationManager
 import android.content.Context
 import android.net.ConnectivityManager
-import android.net.wifi.WifiManager
 import dagger.BindsInstance
 import dagger.Component
 import eu.mhutti1.utils.storage.StorageSelectDialog
@@ -104,7 +103,6 @@ interface CoreComponent {
   fun downloadRoomDao(): DownloadRoomDao
   fun newBookmarksDao(): NewBookmarksDao
   fun connectivityManager(): ConnectivityManager
-  fun wifiManager(): WifiManager
   fun objectBoxToLibkiwixMigrator(): ObjectBoxToLibkiwixMigrator
   fun libkiwixBookmarks(): LibkiwixBookmarks
   fun recentSearchRoomDao(): RecentSearchRoomDao
@@ -131,5 +129,5 @@ interface CoreComponent {
   fun inject(objectBoxToRoomMigrator: ObjectBoxToRoomMigrator)
 
   fun inject(settingsFragment: CoreSettingsFragment)
-  fun coreServiceComponent(): CoreServiceComponent.Builder
+  fun coreServiceComponent(): org.kiwix.kiwixmobile.di.components.CoreServiceComponent.Builder
 }

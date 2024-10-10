@@ -15,14 +15,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.webserver
+package org.kiwix.kiwixmobile.webserver.wifi_hotspot
 
-import dagger.Binds
-import dagger.Module
-import org.kiwix.kiwixmobile.core.di.ActivityScope
-
-@Module
-abstract class ZimHostModule {
-  @ActivityScope @Binds
-  abstract fun bindsZimHostPresenter(zimHostPresenter: ZimHostPresenter): ZimHostContract.Presenter
+interface IpAddressCallbacks {
+  fun onIpAddressValid()
+  fun onIpAddressInvalid()
 }

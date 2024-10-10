@@ -73,8 +73,6 @@ class CustomMainActivity : CoreMainActivity() {
   override val historyFragmentResId: Int = R.id.historyFragment
   override val notesFragmentResId: Int = R.id.notesFragment
   override val helpFragmentResId: Int = R.id.helpFragment
-  override val zimHostFragmentResId: Int = R.id.zimHostFragment
-  override val navGraphId: Int = R.navigation.custom_nav_graph
   override val cachedComponent by lazy { customActivityComponent }
   override val topLevelDestinations =
     setOf(R.id.customReaderFragment)
@@ -108,9 +106,10 @@ class CustomMainActivity : CoreMainActivity() {
        * because we are now using fd (FileDescriptor)
        * to read the zim file from the asset folder. Currently,
        * 'KiwixServer' is unable to host zim files via fd.
-       * This feature is temporarily hidden for custom apps.
+       * This feature is temporarily for custom apps.
        * We will re-enable it for custom apps once the issue is resolved.
-       * For more info see https://github.com/kiwix/kiwix-android/pull/3516
+       * For more info see https://github.com/kiwix/kiwix-android/pull/3516,
+       * https://github.com/kiwix/kiwix-android/issues/4026
        */
       menu.findItem(org.kiwix.kiwixmobile.core.R.id.menu_host_books)?.isVisible = false
       /**
