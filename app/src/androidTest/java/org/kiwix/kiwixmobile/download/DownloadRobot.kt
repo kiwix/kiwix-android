@@ -168,6 +168,8 @@ class DownloadRobot : BaseRobot() {
     try {
       onView(withSubstring(context.getString(string.paused_state))).check(matches(isDisplayed()))
       resumeDownload()
+    } catch (e: AssertionFailedError) {
+      // do nothing since downloading is In Progress.
     } catch (e: RuntimeException) {
       // do nothing since downloading is In Progress.
     }
