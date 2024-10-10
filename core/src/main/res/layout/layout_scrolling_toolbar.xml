@@ -24,6 +24,6 @@
     android:layout_width="match_parent"
     app:layout_scrollFlags="scroll|enterAlways"
     app:popupTheme="@style/KiwixTheme"
-    app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+    android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
 </merge>
