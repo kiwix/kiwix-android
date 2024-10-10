@@ -10,10 +10,14 @@
     tools:ignore="ScopedStorage" />
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
   <!-- Device with versions >= Pie need this permission -->
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+  <!-- Device with versions >= UPSIDE_DOWN_CAKE need these permissions-->
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
 
   <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
   <uses-permission
@@ -23,8 +27,6 @@
   <uses-permission
     android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
   <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
-  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
-  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
   <queries>
     <intent>
       <action android:name="android.intent.action.TTS_SERVICE" />
@@ -104,6 +106,6 @@
       android:foregroundServiceType="mediaPlayback" />
     <service
       android:name=".webserver.wifi_hotspot.HotspotService"
-      android:foregroundServiceType="specialUse" />
+      android:foregroundServiceType="connectedDevice" />
   </application>
 </manifest>

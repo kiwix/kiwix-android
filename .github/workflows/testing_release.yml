@@ -7,6 +7,9 @@ on:
   push:
     tags:
       - 'internal_testing' # internal_testing Tag
+  pull_request:
+    branches:
+      - '*'
 
 jobs:
   publish:
