@@ -41,6 +41,7 @@ import com.google.android.material.navigation.NavigationView
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.mipmap
 import org.kiwix.kiwixmobile.core.R.string
@@ -273,7 +274,7 @@ class KiwixMainActivity : CoreMainActivity() {
 
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
-      R.id.menu_host_books -> openZimHostFragment()
+      id.menu_host_books -> openZimHostFragment()
       else -> return super.onNavigationItemSelected(item)
     }
     return true

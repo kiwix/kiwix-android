@@ -129,5 +129,5 @@ interface CoreComponent {
   fun inject(objectBoxToRoomMigrator: ObjectBoxToRoomMigrator)
 
   fun inject(settingsFragment: CoreSettingsFragment)
-  fun coreServiceComponent(): org.kiwix.kiwixmobile.di.components.CoreServiceComponent.Builder
+  fun coreServiceComponent(): CoreServiceComponent.Builder
 }

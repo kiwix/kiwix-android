@@ -22,6 +22,7 @@ import android.app.Service
 import dagger.BindsInstance
 import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.CoreServiceScope
+import org.kiwix.kiwixmobile.core.di.modules.CoreServiceModule
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
 
 @Subcomponent(modules = [CoreServiceModule::class])
