@@ -279,7 +279,6 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
     @Suppress("MagicNumber")
     private val MIGRATION_7_8 = object : Migration(7, 8) {
       override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("DROP TABLE PageHistoryRoomEntity")
         database.execSQL(
           """
             CREATE TABLE IF NOT EXISTS `WebViewHistoryEntity` (
