@@ -47,7 +47,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.ZimSourceRoomConverter
     DownloadRoomEntity::class,
     WebViewHistoryEntity::class
   ],
-  version = 7,
+  version = 6,
   exportSchema = false
 )
 @TypeConverters(HistoryRoomDaoCoverts::class, ZimSourceRoomConverter::class)
@@ -71,8 +71,7 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
               MIGRATION_2_3,
               MIGRATION_3_4,
               MIGRATION_4_5,
-              MIGRATION_5_6,
-              MIGRATION_6_7
+              MIGRATION_5_6
             )
             .build().also { db = it }
       }
@@ -216,25 +215,6 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
     @Suppress("MagicNumber")
     private val MIGRATION_5_6 = object : Migration(5, 6) {
       override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL(
-          """
-            CREATE TABLE IF NOT EXISTS `PageHistoryRoomEntity` (
-                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                `zimId` TEXT NOT NULL,
-                `title` TEXT NOT NULL,
-                `pageUrl` TEXT NOT NULL,
-                `isForward` INTEGER NOT NULL DEFAULT 0
-                `timeStamp` INTEGER NOT NULL
-            )
-            """
-        )
-      }
-    }
-
-    @Suppress("MagicNumber")
-    private val MIGRATION_6_7 = object : Migration(6, 7) {
-      override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("DROP TABLE PageHistoryRoomEntity")
         database.execSQL(
           """
             CREATE TABLE IF NOT EXISTS `WebViewHistoryEntity` (
