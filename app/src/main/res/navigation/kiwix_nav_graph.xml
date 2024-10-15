@@ -125,8 +125,8 @@
     tools:layout="@layout/activity_language" />
   <fragment
     android:id="@+id/zimHostFragment"
-    android:name="org.kiwix.kiwixmobile.core.webserver.ZimHostFragment"
-    android:label="HistoryFragment"
+    android:name="org.kiwix.kiwixmobile.webserver.ZimHostFragment"
+    android:label="ZimHostFragment"
     tools:layout="@layout/activity_zim_host" />
   <fragment
     android:id="@+id/helpFragment"

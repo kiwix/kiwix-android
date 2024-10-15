@@ -382,7 +382,7 @@ class CopyMoveFileHandler @Inject constructor(
   @SuppressLint("InflateParams") fun showPreparingCopyMoveDialog() {
     if (copyMovePreparingDialog == null) {
       val dialogView: View =
-        activity.layoutInflater.inflate(R.layout.item_custom_spinner, null)
+        activity.layoutInflater.inflate(layout.item_custom_spinner, null)
       copyMovePreparingDialog =
         alertDialogShower.create(KiwixDialog.PreparingCopyingFilesDialog { dialogView })
     }

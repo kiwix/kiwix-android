@@ -8,6 +8,11 @@
     tools:ignore="CoarseFineLocation" />
   <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
   <uses-permission android:name="${permission}" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+  <uses-permission
+    android:name="android.permission.NEARBY_WIFI_DEVICES"
+    android:usesPermissionFlags="neverForLocation"
+    tools:targetApi="s" />
 
   <application
     android:name=".KiwixApp"
@@ -136,5 +141,8 @@
         <action android:name="KiwixSearchWidget.STAR_CLICKED" />
       </intent-filter>
     </receiver>
+    <service
+      android:name=".webserver.wifi_hotspot.HotspotService"
+      android:foregroundServiceType="dataSync" />
   </application>
 </manifest>

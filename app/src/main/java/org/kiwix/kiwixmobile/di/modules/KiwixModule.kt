@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.di.modules
 
 import android.content.Context
 import android.location.LocationManager
+import android.net.wifi.WifiManager
 import android.net.wifi.p2p.WifiP2pManager
 import dagger.Module
 import dagger.Provides
@@ -55,4 +56,9 @@ object KiwixModule {
   // See: https://github.com/kiwix/kiwix-android/issues/2488
   fun providesWiFiP2pManager(context: Context): WifiP2pManager? =
     context.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager?
+
+  @Provides
+  @KiwixScope
+  fun provideWifiManager(context: Context): WifiManager =
+    context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
 }

@@ -36,15 +36,10 @@ import org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects.ShowOpenNoteDialo
 import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
-import org.kiwix.kiwixmobile.core.webserver.ZimHostFragment
-import org.kiwix.kiwixmobile.core.webserver.ZimHostModule
 
 @ActivityScope
 @Subcomponent(
-  modules = [
-    ActivityModule::class,
-    ZimHostModule::class
-  ]
+  modules = [ActivityModule::class]
 )
 interface CoreActivityComponent {
   fun inject(searchFragment: SearchFragment)
@@ -60,7 +55,6 @@ interface CoreActivityComponent {
   fun inject(helpFragment: HelpFragment)
   fun inject(notesFragment: NotesFragment)
   fun inject(navigationHistoryDialog: NavigationHistoryDialog)
-  fun inject(zimHostFragment: ZimHostFragment)
 
   @Subcomponent.Builder
   interface Builder {
