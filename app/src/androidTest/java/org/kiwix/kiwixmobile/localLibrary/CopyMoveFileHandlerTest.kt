@@ -31,7 +31,9 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -253,24 +255,26 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       destinationFile.name,
       "testCopyMove_1.zim"
     )
-    deleteBothPreviousFiles()
+    kiwixMainActivity.lifecycleScope.launch {
+      withContext(Dispatchers.IO) {
+        deleteBothPreviousFiles()
+      }
 
-    // test when there is no zim file available in the storage it should return the same fileName
-    selectedFile = File(parentFile, selectedFileName)
-    copyMoveFileHandler.setSelectedFileAndUri(null, DocumentFile.fromFile(selectedFile))
-    destinationFile = copyMoveFileHandler.getDestinationFile()
-    Assert.assertEquals(
-      destinationFile.name,
-      selectedFile.name
-    )
-    deleteBothPreviousFiles()
+      // test when there is no zim file available in the storage it should return the same fileName
+      selectedFile = File(parentFile, selectedFileName)
+      copyMoveFileHandler.setSelectedFileAndUri(null, DocumentFile.fromFile(selectedFile))
+      destinationFile = copyMoveFileHandler.getDestinationFile()
+      Assert.assertEquals(
+        destinationFile.name,
+        selectedFile.name
+      )
+      deleteBothPreviousFiles()
+    }
   }
 
-  private fun deleteBothPreviousFiles() {
-    kiwixMainActivity.lifecycleScope.launch {
-      selectedFile.deleteFile()
-      destinationFile.deleteFile()
-    }
+  private suspend fun deleteBothPreviousFiles() {
+    selectedFile.deleteFile()
+    destinationFile.deleteFile()
   }
 
   private fun deleteAllFilesInDirectory(directory: File) {
