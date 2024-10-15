@@ -301,7 +301,7 @@ class CopyMoveFileHandler @Inject constructor(
     }
     fileCopyMoveCallback?.onError(userFriendlyMessage).also {
       // Clean up the destination file if an error occurs
-      CoroutineScope(Dispatchers.IO).launch {
+      lifecycleScope?.launch {
         destinationFile.deleteFile()
       }
     }
