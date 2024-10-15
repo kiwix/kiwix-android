@@ -17,13 +17,15 @@
  */
 package org.kiwix.kiwixmobile.core.main
 
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import io.reactivex.disposables.Disposable
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
+import org.kiwix.kiwixmobile.core.page.history.adapter.DataCallback
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
 
@@ -36,6 +38,9 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
   private var saveNoteDisposable: Disposable? = null
   private var saveBookDisposable: Disposable? = null
   private var deleteNoteDisposable: Disposable? = null
+  private var savePageHistoryDisposable: Disposable? = null
+  private var clearPageHistoryDisposable: Disposable? = null
+  private var getPageHistoryDisposable: Disposable? = null
 
   fun saveHistory(history: HistoryItem) {
     saveHistoryDisposable = dataSource.saveHistory(history)
@@ -68,11 +73,32 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
       .subscribe({}, { e -> Log.e(TAG, "Unable to save book", e) })
   }
 
+  fun saveWebViewPageHistory(pageHistory: WebViewHistoryItem) {
+    savePageHistoryDisposable = dataSource.insertWebViewHistoryItem(pageHistory)
+      .subscribe({}, { e -> Log.e(TAG, "Unable to save page history", e) })
+  }
+
+  fun clearWebViewPagesHistory() {
+    clearPageHistoryDisposable = dataSource.clearWebViewPagesHistory()
+      .subscribe({}, { e -> Log.e(TAG, "Unable to clear page history", e) })
+  }
+
+  fun loadWebViewPagesHistory(callBack: DataCallback) {
+    getPageHistoryDisposable = dataSource.getAllWebViewPagesHistory()
+      .map { roomEntities ->
+        roomEntities.map(::WebViewHistoryItem)
+      }
+      .subscribe(callBack::onDataFetched) { e -> Log.e(TAG, "Unable to load page history", e) }
+  }
+
   fun dispose() {
     saveHistoryDisposable?.dispose()
     saveBookmarkDisposable?.dispose()
     saveNoteDisposable?.dispose()
     deleteNoteDisposable?.dispose()
     saveBookDisposable?.dispose()
+    savePageHistoryDisposable?.dispose()
+    clearPageHistoryDisposable?.dispose()
+    getPageHistoryDisposable?.dispose()
   }
 }
