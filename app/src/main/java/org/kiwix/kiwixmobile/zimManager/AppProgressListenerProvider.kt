@@ -33,12 +33,12 @@ class AppProgressListenerProvider(
       if (contentLength == DEFAULT_INT_VALUE.toLong()) {
         ZERO
       } else {
-        (bytesRead * HUNDERED / contentLength).toInt() * 3
+        (bytesRead * 3 * HUNDERED / contentLength).coerceAtMost(HUNDERED.toLong())
       }
     zimManageViewModel.downloadProgress.postValue(
       zimManageViewModel.context.getString(
         R.string.downloading_library,
-        zimManageViewModel.context.getString(R.string.percentage, progress)
+        zimManageViewModel.context.getString(R.string.percentage, progress.toInt())
       )
     )
   }

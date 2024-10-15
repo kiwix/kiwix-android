@@ -18,29 +18,26 @@
 package org.kiwix.kiwixmobile.core.utils.files
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.ContentUris
 import android.content.Context
-import android.content.Intent
 import android.content.res.AssetFileDescriptor
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.webkit.URLUtil
-import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.documentfile.provider.DocumentFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
-import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import java.io.BufferedReader
@@ -50,6 +47,8 @@ import java.io.FileNotFoundException
 import java.io.IOException
 
 object FileUtils {
+
+  private val fileOperationMutex = Mutex()
 
   @JvmStatic
   fun getFileCacheDir(context: Context): File? =
@@ -68,38 +67,38 @@ object FileUtils {
   }
 
   @JvmStatic
-  @Synchronized
-  fun deleteZimFile(path: String) {
-    var path = path
-    if (path.substring(path.length - ChunkUtils.PART.length) == ChunkUtils.PART) {
-      path = path.substring(0, path.length - ChunkUtils.PART.length)
-    }
-    Log.i("kiwix", "Deleting file: $path")
-    val file = File(path)
-    if (file.path.substring(file.path.length - 3) != "zim") {
-      var alphabetFirst = 'a'
-      fileloop@ while (alphabetFirst <= 'z') {
-        var alphabetSecond = 'a'
-        while (alphabetSecond <= 'z') {
-          val chunkPath = path.substring(0, path.length - 2) + alphabetFirst + alphabetSecond
-          val fileChunk = File(chunkPath)
-          if (fileChunk.isFileExist()) {
-            fileChunk.deleteFile()
-          } else if (!deleteZimFileParts(chunkPath)) {
-            break@fileloop
-          }
-          alphabetSecond++
-        }
-        alphabetFirst++
+  suspend fun deleteZimFile(path: String) {
+    fileOperationMutex.withLock {
+      var path = path
+      if (path.substring(path.length - ChunkUtils.PART.length) == ChunkUtils.PART) {
+        path = path.substring(0, path.length - ChunkUtils.PART.length)
       }
-    } else {
-      file.deleteFile()
-      deleteZimFileParts(path)
+      val file = File(path)
+      if (file.path.substring(file.path.length - 3) != "zim") {
+        var alphabetFirst = 'a'
+        fileloop@ while (alphabetFirst <= 'z') {
+          var alphabetSecond = 'a'
+          while (alphabetSecond <= 'z') {
+            val chunkPath = path.substring(0, path.length - 2) + alphabetFirst + alphabetSecond
+            val fileChunk = File(chunkPath)
+            if (fileChunk.isFileExist()) {
+              fileChunk.deleteFile()
+            } else if (!deleteZimFileParts(chunkPath)) {
+              break@fileloop
+            }
+            alphabetSecond++
+          }
+          alphabetFirst++
+        }
+      } else {
+        file.deleteFile()
+        deleteZimFileParts(path)
+      }
     }
   }
 
-  @Synchronized
-  private fun deleteZimFileParts(path: String): Boolean {
+  @Suppress("ReturnCount")
+  private suspend fun deleteZimFileParts(path: String): Boolean {
     val file = File(path + ChunkUtils.PART)
     if (file.isFileExist()) {
       file.deleteFile()
@@ -356,49 +355,6 @@ object FileUtils {
     context.getExternalFilesDirs("")
       .firstOrNull { it.path.contains(storageName) }
       ?.path?.substringBefore(context.getString(R.string.android_directory_seperator))
-
-  @SuppressLint("WrongConstant")
-  @JvmStatic
-  fun getPathFromUri(activity: Activity, data: Intent): String? {
-    val uri: Uri? = data.data
-    val takeFlags: Int = data.flags and (
-      Intent.FLAG_GRANT_READ_URI_PERMISSION
-        or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-      )
-    uri?.let {
-      activity.grantUriPermission(
-        activity.packageName, it,
-        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-      )
-      activity.contentResolver.takePersistableUriPermission(it, takeFlags)
-
-      val dFile = DocumentFile.fromTreeUri(activity, it)
-      if (dFile != null) {
-        dFile.uri.path?.let { file ->
-          val originalPath = file.substring(
-            file.lastIndexOf(":") + 1
-          )
-          val path = "${activity.getExternalFilesDirs("")[1]}"
-          return@getPathFromUri path.substringBefore(
-            activity.getString(R.string.android_directory_seperator)
-          )
-            .plus(File.separator).plus(originalPath)
-        }
-      }
-      activity.toast(
-        activity.resources
-          .getString(R.string.system_unable_to_grant_permission_message),
-        Toast.LENGTH_SHORT
-      )
-    } ?: run {
-      activity.toast(
-        activity.resources
-          .getString(R.string.system_unable_to_grant_permission_message),
-        Toast.LENGTH_SHORT
-      )
-    }
-    return null
-  }
 
   /*
    * This method returns a file name guess from the url using URLUtils.guessFileName()
