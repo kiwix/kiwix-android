@@ -25,6 +25,9 @@ import androidx.room.Query
 import androidx.room.Update
 import io.reactivex.Flowable
 import io.reactivex.Single
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status
@@ -95,7 +98,9 @@ abstract class DownloadRoomDao {
   fun delete(downloadId: Long) {
     // remove the previous file from storage since we have cancelled the download.
     getEntityForDownloadId(downloadId)?.file?.let {
-      File(it).deleteFile()
+      CoroutineScope(Dispatchers.IO).launch {
+        File(it).deleteFile()
+      }
     }
     deleteDownloadByDownloadId(downloadId)
   }

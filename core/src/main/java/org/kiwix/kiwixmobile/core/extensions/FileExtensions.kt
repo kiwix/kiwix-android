@@ -47,8 +47,4 @@ fun File.canReadFile(): Boolean = runBlocking {
   }
 }
 
-fun File.deleteFile(): Boolean = runBlocking {
-  withContext(Dispatchers.IO) {
-    delete()
-  }
-}
+suspend fun File.deleteFile(): Boolean = withContext(Dispatchers.IO) { delete() }

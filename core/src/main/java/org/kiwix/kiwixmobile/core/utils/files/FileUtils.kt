@@ -34,6 +34,8 @@ import androidx.documentfile.provider.DocumentFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
@@ -50,6 +52,8 @@ import java.io.FileNotFoundException
 import java.io.IOException
 
 object FileUtils {
+
+  private val fileOperationMutex = Mutex()
 
   @JvmStatic
   fun getFileCacheDir(context: Context): File? =
@@ -68,49 +72,52 @@ object FileUtils {
   }
 
   @JvmStatic
-  @Synchronized
-  fun deleteZimFile(path: String) {
-    var path = path
-    if (path.substring(path.length - ChunkUtils.PART.length) == ChunkUtils.PART) {
-      path = path.substring(0, path.length - ChunkUtils.PART.length)
-    }
-    Log.i("kiwix", "Deleting file: $path")
-    val file = File(path)
-    if (file.path.substring(file.path.length - 3) != "zim") {
-      var alphabetFirst = 'a'
-      fileloop@ while (alphabetFirst <= 'z') {
-        var alphabetSecond = 'a'
-        while (alphabetSecond <= 'z') {
-          val chunkPath = path.substring(0, path.length - 2) + alphabetFirst + alphabetSecond
-          val fileChunk = File(chunkPath)
-          if (fileChunk.isFileExist()) {
-            fileChunk.deleteFile()
-          } else if (!deleteZimFileParts(chunkPath)) {
-            break@fileloop
-          }
-          alphabetSecond++
-        }
-        alphabetFirst++
+  suspend fun deleteZimFile(path: String) {
+    fileOperationMutex.withLock {
+      var path = path
+      if (path.substring(path.length - ChunkUtils.PART.length) == ChunkUtils.PART) {
+        path = path.substring(0, path.length - ChunkUtils.PART.length)
       }
-    } else {
-      file.deleteFile()
-      deleteZimFileParts(path)
+      Log.i("kiwix", "Deleting file: $path")
+      val file = File(path)
+      if (file.path.substring(file.path.length - 3) != "zim") {
+        var alphabetFirst = 'a'
+        fileloop@ while (alphabetFirst <= 'z') {
+          var alphabetSecond = 'a'
+          while (alphabetSecond <= 'z') {
+            val chunkPath = path.substring(0, path.length - 2) + alphabetFirst + alphabetSecond
+            val fileChunk = File(chunkPath)
+            if (fileChunk.isFileExist()) {
+              fileChunk.deleteFile()
+            } else if (!deleteZimFileParts(chunkPath)) {
+              break@fileloop
+            }
+            alphabetSecond++
+          }
+          alphabetFirst++
+        }
+      } else {
+        file.deleteFile()
+        deleteZimFileParts(path)
+      }
     }
   }
 
-  @Synchronized
-  private fun deleteZimFileParts(path: String): Boolean {
-    val file = File(path + ChunkUtils.PART)
-    if (file.isFileExist()) {
-      file.deleteFile()
-      return true
+  @Suppress("ReturnCount")
+  private suspend fun deleteZimFileParts(path: String): Boolean {
+    fileOperationMutex.withLock {
+      val file = File(path + ChunkUtils.PART)
+      if (file.isFileExist()) {
+        file.deleteFile()
+        return@deleteZimFileParts true
+      }
+      val singlePart = File("$path.part")
+      if (singlePart.isFileExist()) {
+        singlePart.deleteFile()
+        return@deleteZimFileParts true
+      }
+      return@deleteZimFileParts false
     }
-    val singlePart = File("$path.part")
-    if (singlePart.isFileExist()) {
-      singlePart.deleteFile()
-      return true
-    }
-    return false
   }
 
   @JvmStatic
