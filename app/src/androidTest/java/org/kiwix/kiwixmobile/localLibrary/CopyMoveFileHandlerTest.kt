@@ -24,12 +24,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import kotlinx.coroutines.launch
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -265,8 +267,10 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
   }
 
   private fun deleteBothPreviousFiles() {
-    selectedFile.deleteFile()
-    destinationFile.deleteFile()
+    kiwixMainActivity.lifecycleScope.launch {
+      selectedFile.deleteFile()
+      destinationFile.deleteFile()
+    }
   }
 
   private fun deleteAllFilesInDirectory(directory: File) {
