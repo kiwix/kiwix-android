@@ -32,6 +32,9 @@ import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
 import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.hamcrest.Matchers.allOf
 import org.junit.Before
 import org.junit.Rule
@@ -186,8 +189,10 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
           coreReaderFragment.zimReaderContainer?.zimFileReader?.favicon,
           coreReaderFragment.zimReaderContainer?.zimFileReader?.zimReaderSource
         )
-      coreReaderFragment.libkiwixBookmarks?.saveBookmark(libkiwixItem).also {
-        bookmarkList.add(libkiwixItem)
+      CoroutineScope(Dispatchers.Main).launch {
+        coreReaderFragment.libkiwixBookmarks?.saveBookmark(libkiwixItem).also {
+          bookmarkList.add(libkiwixItem)
+        }
       }
     }
     bookmarks {
