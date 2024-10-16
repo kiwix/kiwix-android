@@ -19,11 +19,16 @@
 package org.kiwix.kiwixmobile.zimManager.fileselectView.effects
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader
 
 data class OpenFileWithNavigation(private val bookOnDisk: BooksOnDiskListItem.BookOnDisk) :
@@ -31,14 +36,19 @@ data class OpenFileWithNavigation(private val bookOnDisk: BooksOnDiskListItem.Bo
 
   override fun invokeWith(activity: AppCompatActivity) {
     val zimReaderSource = bookOnDisk.zimReaderSource
-    if (!zimReaderSource.canOpenInLibkiwix()) {
-      activity.toast(R.string.error_file_not_found)
-    } else {
-      activity.navigate(
-        actionNavigationLibraryToNavigationReader().apply {
-          zimFileUri = zimReaderSource.toDatabase()
-        }
-      )
+    (activity as KiwixMainActivity).lifecycleScope.launch {
+      val canOpenInLibkiwix = withContext(Dispatchers.IO) {
+        zimReaderSource.canOpenInLibkiwix()
+      }
+      if (!canOpenInLibkiwix) {
+        activity.toast(R.string.error_file_not_found)
+      } else {
+        activity.navigate(
+          actionNavigationLibraryToNavigationReader().apply {
+            zimFileUri = zimReaderSource.toDatabase()
+          }
+        )
+      }
     }
   }
 }

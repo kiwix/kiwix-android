@@ -22,6 +22,9 @@ object Libs {
     "org.jetbrains.kotlinx:kotlinx-coroutines-android:" +
       Versions.org_jetbrains_kotlinx_kotlinx_coroutines
 
+  const val kotlinx_coroutines_rx3: String =
+    "org.jetbrains.kotlinx:kotlinx-coroutines-rx3:" + Versions.kotlinx_coroutines_rx3
+
   /**
    * https://github.com/Kotlin/kotlinx.coroutines
    */
