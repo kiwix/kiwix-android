@@ -170,7 +170,7 @@ class LibkiwixBookmarks @Inject constructor(
     }
   }
 
-  fun addBookToLibrary(file: File? = null, archive: Archive? = null) {
+  suspend fun addBookToLibrary(file: File? = null, archive: Archive? = null) {
     try {
       bookmarksChanged = true
       val book = Book().apply {
@@ -219,32 +219,31 @@ class LibkiwixBookmarks @Inject constructor(
   fun deleteBookmarks(bookmarks: List<LibkiwixBookmarkItem>) {
     bookmarks.map { library.removeBookmark(it.zimId, it.bookmarkUrl) }
       .also {
-        writeBookMarksAndSaveLibraryToFile()
-        updateFlowableBookmarkList()
+        CoroutineScope(Dispatchers.IO).launch {
+          writeBookMarksAndSaveLibraryToFile()
+          updateFlowableBookmarkList()
+        }
       }
   }
 
   fun deleteBookmark(bookId: String, bookmarkUrl: String) {
-    library.removeBookmark(bookId, bookmarkUrl).also {
-      writeBookMarksAndSaveLibraryToFile()
-      updateFlowableBookmarkList()
-    }
+    deleteBookmarks(listOf(LibkiwixBookmarkItem(zimId = bookId, bookmarkUrl = bookmarkUrl)))
   }
 
   /**
    * Asynchronously writes the library and bookmarks data to their respective files in a background thread
    * to prevent potential data loss and ensures that the library holds the updated ZIM file paths and favicons.
    */
-  private fun writeBookMarksAndSaveLibraryToFile() {
-    CoroutineScope(Dispatchers.IO).launch {
-      // Save the library, which contains ZIM file paths and favicons, to a file.
-      library.writeToFile(libraryFile.canonicalPath)
+  private suspend fun writeBookMarksAndSaveLibraryToFile() {
+    // Save the library, which contains ZIM file paths and favicons, to a file.
+    library.writeToFile(libraryFile.canonicalPath)
 
-      // Save the bookmarks data to a separate file.
-      library.writeBookmarksToFile(bookmarkFile.canonicalPath)
-    }
+    // Save the bookmarks data to a separate file.
+    library.writeBookmarksToFile(bookmarkFile.canonicalPath)
     // set the bookmark change to true so that libkiwix will return the new data.
-    bookmarksChanged = true
+    CoroutineScope(Dispatchers.Main).launch {
+      bookmarksChanged = true
+    }
   }
 
   @Suppress("ReturnCount")
@@ -374,12 +373,8 @@ class LibkiwixBookmarks @Inject constructor(
     }, backpressureStrategy)
   }
 
-  private fun updateFlowableBookmarkList() {
-    bookmarkListBehaviour?.let { subject ->
-      rxSingle { getBookmarksList() }
-        .subscribeOn(io.reactivex.rxjava3.schedulers.Schedulers.io())
-        .subscribe(subject::onNext, subject::onError)
-    }
+  private suspend fun updateFlowableBookmarkList() {
+    bookmarkListBehaviour?.onNext(getBookmarksList())
   }
 
   // Export the `bookmark.xml` file to the `Download/org.kiwix/` directory of internal storage.

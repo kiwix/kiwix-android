@@ -31,6 +31,7 @@ import io.objectbox.query.Query
 import io.objectbox.query.QueryBuilder
 import io.objectbox.rx.RxQuery
 import io.reactivex.Observable
+import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -61,7 +62,10 @@ internal class NewBookDaoTest {
     @Test
     fun `books emits entities whose file exists`() {
       val (expectedEntity, _) = expectEmissionOfExistingAndNotExistingBook()
-      newBookDao.books().test().assertValues(listOf(BookOnDisk(expectedEntity)))
+      val books = newBookDao.books().test().also {
+        it.awaitTerminalEvent()
+      }
+      books.assertValues(listOf(BookOnDisk(expectedEntity)))
     }
 
     @SuppressLint("CheckResult")
@@ -92,10 +96,11 @@ internal class NewBookDaoTest {
   }
 
   @Test
-  fun getBooks() {
+  fun getBooks() = runTest {
     val entity = bookOnDiskEntity()
     every { box.all } returns mutableListOf(entity)
-    assertThat(newBookDao.getBooks()).isEqualTo(listOf(BookOnDisk(entity)))
+    val result = newBookDao.getBooks()
+    assertThat(result).isEqualTo(listOf(BookOnDisk(entity)))
   }
 
   @Nested
