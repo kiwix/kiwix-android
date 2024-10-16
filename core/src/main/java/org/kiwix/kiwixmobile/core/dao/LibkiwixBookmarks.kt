@@ -29,10 +29,12 @@ import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx3.rxSingle
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
+import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -68,8 +70,13 @@ class LibkiwixBookmarks @Inject constructor(
   private var bookmarkList: List<LibkiwixBookmarkItem> = arrayListOf()
   private var libraryBooksList: List<String> = arrayListOf()
 
+  @Suppress("CheckResult")
   private val bookmarkListBehaviour: BehaviorSubject<List<LibkiwixBookmarkItem>>? by lazy {
-    BehaviorSubject.createDefault(getBookmarksList())
+    BehaviorSubject.create<List<LibkiwixBookmarkItem>>().also { subject ->
+      rxSingle { getBookmarksList() }
+        .subscribeOn(io.reactivex.rxjava3.schedulers.Schedulers.io())
+        .subscribe(subject::onNext, subject::onError)
+    }
   }
 
   private val bookmarksFolderPath: String by lazy {
@@ -113,7 +120,7 @@ class LibkiwixBookmarks @Inject constructor(
   override fun deletePages(pagesToDelete: List<Page>) =
     deleteBookmarks(pagesToDelete as List<LibkiwixBookmarkItem>)
 
-  fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?): List<String> {
+  suspend fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?): List<String> {
     return zimFileReader?.let { reader ->
       getBookmarksList()
         .filter { it.zimId == reader.id }
@@ -134,7 +141,7 @@ class LibkiwixBookmarks @Inject constructor(
    * during data migration, where data is written to the file only once after all bookmarks
    * have been added to libkiwix to optimize the process.
    */
-  fun saveBookmark(
+  suspend fun saveBookmark(
     libkiwixBookmarkItem: LibkiwixBookmarkItem,
     shouldWriteBookmarkToFile: Boolean = true
   ) {
@@ -241,7 +248,7 @@ class LibkiwixBookmarks @Inject constructor(
   }
 
   @Suppress("ReturnCount")
-  private fun getBookmarksList(): List<LibkiwixBookmarkItem> {
+  private suspend fun getBookmarksList(): List<LibkiwixBookmarkItem> {
     if (!bookmarksChanged && bookmarkList.isNotEmpty()) {
       // No changes, return the cached data
       return bookmarkList.distinctBy(LibkiwixBookmarkItem::bookmarkUrl)
@@ -290,7 +297,7 @@ class LibkiwixBookmarks @Inject constructor(
   }
 
   @Suppress("NestedBlockDepth")
-  private fun deleteDuplicateBookmarks() {
+  private suspend fun deleteDuplicateBookmarks() {
     bookmarkList.groupBy { it.bookmarkUrl to it.zimReaderSource }
       .filter { it.value.size > 1 }
       .forEach { (_, value) ->
@@ -319,7 +326,7 @@ class LibkiwixBookmarks @Inject constructor(
       }
   }
 
-  private fun getZimFileReaderFromBookmark(
+  private suspend fun getZimFileReaderFromBookmark(
     bookmarkItem: LibkiwixBookmarkItem,
     coreApp: CoreApp
   ): ZimFileReader? {
@@ -342,7 +349,7 @@ class LibkiwixBookmarks @Inject constructor(
     }
   }
 
-  private fun isBookMarkExist(libkiwixBookmarkItem: LibkiwixBookmarkItem): Boolean =
+  private suspend fun isBookMarkExist(libkiwixBookmarkItem: LibkiwixBookmarkItem): Boolean =
     getBookmarksList()
       .any {
         it.url == libkiwixBookmarkItem.bookmarkUrl &&
@@ -368,7 +375,11 @@ class LibkiwixBookmarks @Inject constructor(
   }
 
   private fun updateFlowableBookmarkList() {
-    bookmarkListBehaviour?.onNext(getBookmarksList())
+    bookmarkListBehaviour?.let { subject ->
+      rxSingle { getBookmarksList() }
+        .subscribeOn(io.reactivex.rxjava3.schedulers.Schedulers.io())
+        .subscribe(subject::onNext, subject::onError)
+    }
   }
 
   // Export the `bookmark.xml` file to the `Download/org.kiwix/` directory of internal storage.
@@ -408,7 +419,7 @@ class LibkiwixBookmarks @Inject constructor(
     }.first { !it.isFileExist() }
   }
 
-  fun importBookmarks(bookmarkFile: File) {
+  suspend fun importBookmarks(bookmarkFile: File) {
     // Create a temporary library manager to import the bookmarks.
     val tempLibrary = Library()
     Manager(tempLibrary).apply {
@@ -426,7 +437,7 @@ class LibkiwixBookmarks @Inject constructor(
     sharedPreferenceUtil.context.toast(R.string.bookmark_imported_message)
 
     if (bookmarkFile.exists()) {
-      bookmarkFile.delete()
+      bookmarkFile.deleteFile()
     }
   }
 

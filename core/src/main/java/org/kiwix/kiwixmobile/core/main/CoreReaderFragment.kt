@@ -80,6 +80,7 @@ import androidx.core.widget.ContentLoadingProgressBar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -93,6 +94,9 @@ import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.processors.BehaviorProcessor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONException
 import org.kiwix.kiwixmobile.core.BuildConfig
@@ -1641,16 +1645,21 @@ abstract class CoreReaderFragment :
 
   fun openZimFile(zimReaderSource: ZimReaderSource, isCustomApp: Boolean = false) {
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || isCustomApp) {
-      if (zimReaderSource.canOpenInLibkiwix()) {
-        // Show content if there is `Open Library` button showing
-        // and we are opening the ZIM file
-        reopenBook()
-        openAndSetInContainer(zimReaderSource)
-        updateTitle()
-      } else {
-        exitBook()
-        Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + zimReaderSource.toDatabase())
-        requireActivity().toast(R.string.error_file_not_found, Toast.LENGTH_LONG)
+      lifecycleScope.launch {
+        val canOpenInLibkiwix = withContext(Dispatchers.IO) {
+          zimReaderSource.canOpenInLibkiwix()
+        }
+        if (canOpenInLibkiwix) {
+          // Show content if there is `Open Library` button showing
+          // and we are opening the ZIM file
+          reopenBook()
+          openAndSetInContainer(zimReaderSource)
+          updateTitle()
+        } else {
+          exitBook()
+          Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + zimReaderSource.toDatabase())
+          requireActivity().toast(R.string.error_file_not_found, Toast.LENGTH_LONG)
+        }
       }
     } else {
       this.zimReaderSource = zimReaderSource

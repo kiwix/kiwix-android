@@ -40,6 +40,9 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.material.snackbar.Snackbar
 import eu.mhutti1.utils.storage.StorageDevice
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.DarkModeConfig
@@ -403,7 +406,9 @@ abstract class CorePrefsFragment :
 
           createTempFile(contentResolver.openInputStream(uri)).apply {
             if (isValidXmlFile(this)) {
-              libkiwixBookmarks?.importBookmarks(this)
+              CoroutineScope(Dispatchers.IO).launch {
+                libkiwixBookmarks?.importBookmarks(this@apply)
+              }
             } else {
               activity.toast(
                 resources.getString(R.string.error_invalid_bookmark_file),

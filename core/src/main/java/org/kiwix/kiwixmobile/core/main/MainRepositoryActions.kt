@@ -17,13 +17,13 @@
  */
 package org.kiwix.kiwixmobile.core.main
 
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import io.reactivex.disposables.Disposable
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
 
@@ -32,7 +32,7 @@ private const val TAG = "MainPresenter"
 @ActivityScope
 class MainRepositoryActions @Inject constructor(private val dataSource: DataSource) {
   private var saveHistoryDisposable: Disposable? = null
-  private var saveBookmarkDisposable: Disposable? = null
+  private var saveBookmarkDisposable: io.reactivex.rxjava3.disposables.Disposable? = null
   private var saveNoteDisposable: Disposable? = null
   private var saveBookDisposable: Disposable? = null
   private var deleteNoteDisposable: Disposable? = null
