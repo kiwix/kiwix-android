@@ -241,9 +241,7 @@ class LibkiwixBookmarks @Inject constructor(
     // Save the bookmarks data to a separate file.
     library.writeBookmarksToFile(bookmarkFile.canonicalPath)
     // set the bookmark change to true so that libkiwix will return the new data.
-    CoroutineScope(Dispatchers.Main).launch {
-      bookmarksChanged = true
-    }
+    bookmarksChanged = true
   }
 
   @Suppress("ReturnCount")
