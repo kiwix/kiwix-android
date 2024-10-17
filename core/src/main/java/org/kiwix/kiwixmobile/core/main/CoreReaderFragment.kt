@@ -1875,7 +1875,7 @@ abstract class CoreReaderFragment :
     if (tts == null) {
       setUpTTS()
     }
-    donationDialogHandler?.attemptToShowDonationPopup()
+    lifecycleScope.launch { donationDialogHandler?.attemptToShowDonationPopup() }
   }
 
   @Suppress("InflateParams", "MagicNumber")
