@@ -84,4 +84,18 @@ data class LibkiwixBookmarkItem(
     favicon = bookmarkEntity.favicon,
     libKiwixBook = libkiwixBook
   )
+
+  constructor(
+    zimId: String,
+    bookmarkUrl: String
+  ) : this(
+    zimId = zimId,
+    zimFilePath = null,
+    zimReaderSource = null,
+    zimName = "",
+    bookmarkUrl = bookmarkUrl,
+    title = "",
+    favicon = null,
+    libKiwixBook = null
+  )
 }

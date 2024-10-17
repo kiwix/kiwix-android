@@ -43,6 +43,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
+import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
+import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
@@ -58,6 +63,8 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.net.URI
+import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 @RunWith(AndroidJUnit4::class)
 class SearchFragmentTestForCustomApp {
@@ -123,7 +130,7 @@ class SearchFragmentTestForCustomApp {
     }
     // test with a large ZIM file to properly test the scenario
     downloadingZimFile = getDownloadingZimFile()
-    OkHttpClient().newCall(downloadRequest()).execute().use { response ->
+    getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
       if (response.isSuccessful) {
         response.body?.let { responseBody ->
           writeZimFileData(responseBody, downloadingZimFile)
@@ -201,7 +208,7 @@ class SearchFragmentTestForCustomApp {
     }
     // test with a large ZIM file to properly test the scenario
     downloadingZimFile = getDownloadingZimFile()
-    OkHttpClient().newCall(downloadRequest()).execute().use { response ->
+    getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
       if (response.isSuccessful) {
         response.body?.let { responseBody ->
           writeZimFileData(responseBody, downloadingZimFile)
@@ -272,10 +279,12 @@ class SearchFragmentTestForCustomApp {
           ) as NavHostFragment
       val customReaderFragment =
         navHostFragment.childFragmentManager.fragments[0] as CustomReaderFragment
-      customReaderFragment.openZimFile(
-        ZimReaderSource(null, null, listOf(assetFileDescriptor)),
-        true
-      )
+      runBlocking {
+        customReaderFragment.openZimFile(
+          ZimReaderSource(null, null, listOf(assetFileDescriptor)),
+          true
+        )
+      }
     }
   }
 
@@ -320,6 +329,17 @@ class SearchFragmentTestForCustomApp {
     zimFile.createNewFile()
     return zimFile
   }
+
+  @Singleton
+  private fun getOkkHttpClientForTesting(): OkHttpClient =
+    OkHttpClient().newBuilder()
+      .followRedirects(true)
+      .followSslRedirects(true)
+      .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS)
+      .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
+      .callTimeout(CALL_TIMEOUT, TimeUnit.SECONDS)
+      .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
+      .build()
 
   @After
   fun finish() {

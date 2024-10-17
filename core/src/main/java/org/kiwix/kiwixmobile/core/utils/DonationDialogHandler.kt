@@ -38,7 +38,7 @@ class DonationDialogHandler @Inject constructor(
     this.showDonationDialogCallback = showDonationDialogCallback
   }
 
-  fun attemptToShowDonationPopup() {
+  suspend fun attemptToShowDonationPopup() {
     val currentMilliSeconds = System.currentTimeMillis()
     val lastPopupMillis = sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds
     val timeDifference = currentMilliSeconds - lastPopupMillis
@@ -50,7 +50,7 @@ class DonationDialogHandler @Inject constructor(
     }
   }
 
-  private fun shouldShowInitialPopup(lastPopupMillis: Long): Boolean =
+  private suspend fun shouldShowInitialPopup(lastPopupMillis: Long): Boolean =
     lastPopupMillis == 0L && isZimFilesAvailableInLibrary()
 
   private fun isTimeToShowDonation(currentMillis: Long): Boolean =
@@ -63,7 +63,7 @@ class DonationDialogHandler @Inject constructor(
     return timeDifference >= THREE_DAYS_IN_MILLISECONDS
   }
 
-  fun isZimFilesAvailableInLibrary(): Boolean =
+  suspend fun isZimFilesAvailableInLibrary(): Boolean =
     if (activity.isCustomApp()) true else newBookDao.getBooks().isNotEmpty()
 
   fun updateLastDonationPopupShownTime() {
