@@ -99,8 +99,7 @@ internal class NewBookDaoTest {
   fun getBooks() = runTest {
     val entity = bookOnDiskEntity()
     every { box.all } returns mutableListOf(entity)
-    val result = newBookDao.getBooks()
-    assertThat(result).isEqualTo(listOf(BookOnDisk(entity)))
+    assertThat(newBookDao.getBooks()).isEqualTo(listOf(BookOnDisk(entity)))
   }
 
   @Nested
