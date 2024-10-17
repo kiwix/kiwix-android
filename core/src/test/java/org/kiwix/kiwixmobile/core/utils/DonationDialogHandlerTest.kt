@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.utils
 
+import android.app.Activity
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
@@ -32,11 +33,10 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
 @ExperimentalCoroutinesApi
 class DonationDialogHandlerTest {
-  private lateinit var coreMainActivity: CoreMainActivity
+  private lateinit var activity: Activity
   private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private lateinit var newBookDao: NewBookDao
   private lateinit var donationDialogHandler: DonationDialogHandler
@@ -44,12 +44,12 @@ class DonationDialogHandlerTest {
 
   @BeforeEach
   fun setup() {
-    coreMainActivity = mockk(relaxed = true)
+    activity = mockk(relaxed = true)
     sharedPreferenceUtil = mockk(relaxed = true)
     newBookDao = mockk(relaxed = true)
     showDonationDialogCallback = mockk(relaxed = true)
     donationDialogHandler =
-      DonationDialogHandler(coreMainActivity, sharedPreferenceUtil, newBookDao)
+      DonationDialogHandler(activity, sharedPreferenceUtil, newBookDao)
     donationDialogHandler.setDonationDialogCallBack(showDonationDialogCallback)
   }
 
@@ -101,8 +101,8 @@ class DonationDialogHandlerTest {
   @Test
   fun `test isZimFilesAvailableInLibrary returns true when isCustomApp is true`() = runTest {
     with(mockk<ActivityExtensions>()) {
-      every { coreMainActivity.packageName } returns "org.kiwix.kiwixcustom"
-      every { coreMainActivity.isCustomApp() } returns true
+      every { activity.packageName } returns "org.kiwix.kiwixcustom"
+      every { activity.isCustomApp() } returns true
       val result = donationDialogHandler.isZimFilesAvailableInLibrary()
       assertTrue(result)
     }
@@ -112,8 +112,8 @@ class DonationDialogHandlerTest {
   fun `test isZimFilesAvailableInLibrary returns false when no books and isCustomApp is false`() =
     runTest {
       with(mockk<ActivityExtensions>()) {
-        every { coreMainActivity.packageName } returns "org.kiwix.kiwixmobile"
-        every { coreMainActivity.isCustomApp() } returns false
+        every { activity.packageName } returns "org.kiwix.kiwixmobile"
+        every { activity.isCustomApp() } returns false
         coEvery { newBookDao.getBooks() } returns emptyList()
         val result = donationDialogHandler.isZimFilesAvailableInLibrary()
         assertFalse(result)
@@ -124,8 +124,8 @@ class DonationDialogHandlerTest {
   fun `isZimFilesAvailableInLibrary returns true when books available and isCustomApp is false`() =
     runTest {
       with(mockk<ActivityExtensions>()) {
-        every { coreMainActivity.packageName } returns "org.kiwix.kiwixmobile"
-        every { coreMainActivity.isCustomApp() } returns false
+        every { activity.packageName } returns "org.kiwix.kiwixmobile"
+        every { activity.isCustomApp() } returns false
         coEvery { newBookDao.getBooks() } returns listOf(mockk())
         val result = donationDialogHandler.isZimFilesAvailableInLibrary()
         assertTrue(result)
