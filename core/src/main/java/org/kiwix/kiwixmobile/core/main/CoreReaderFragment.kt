@@ -165,6 +165,8 @@ import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.deleteCachedFiles
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.utils.titleToUrl
+import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import org.kiwix.libkiwix.Book
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -1676,7 +1678,7 @@ abstract class CoreReaderFragment :
     )
   }
 
-  private fun openAndSetInContainer(zimReaderSource: ZimReaderSource) {
+  private suspend fun openAndSetInContainer(zimReaderSource: ZimReaderSource) {
     try {
       if (isNotPreviouslyOpenZim(zimReaderSource)) {
         webViewList.clear()
@@ -1982,7 +1984,11 @@ abstract class CoreReaderFragment :
     if (item.shouldOpenInNewTab) {
       createNewTab()
     }
-    loadUrlWithCurrentWebview(item.pageUrl)
+    item.pageUrl?.let(::loadUrlWithCurrentWebview) ?: kotlin.run {
+      zimReaderContainer?.titleToUrl(item.pageTitle)?.apply {
+        loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(this))
+      }
+    }
     requireActivity().consumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)
   }
 
