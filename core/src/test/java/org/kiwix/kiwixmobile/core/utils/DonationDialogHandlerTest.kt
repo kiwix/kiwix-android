@@ -24,8 +24,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -35,19 +34,17 @@ import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
+@ExperimentalCoroutinesApi
 class DonationDialogHandlerTest {
   private lateinit var coreMainActivity: CoreMainActivity
   private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private lateinit var newBookDao: NewBookDao
   private lateinit var donationDialogHandler: DonationDialogHandler
   private lateinit var showDonationDialogCallback: DonationDialogHandler.ShowDonationDialogCallback
-  private val testDispatcher = StandardTestDispatcher()
-  private val testScope = TestScope(testDispatcher)
 
   @BeforeEach
   fun setup() {
     coreMainActivity = mockk(relaxed = true)
-    // every { coreMainActivity.lifecycle } returns testScope.coroutineContext
     sharedPreferenceUtil = mockk(relaxed = true)
     newBookDao = mockk(relaxed = true)
     showDonationDialogCallback = mockk(relaxed = true)
@@ -57,7 +54,7 @@ class DonationDialogHandlerTest {
   }
 
   @Test
-  fun `test should show initial popup`() {
+  fun `test should show initial popup`() = runTest {
     every { sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds } returns 0L
     coEvery { newBookDao.getBooks() } returns listOf(mockk())
     donationDialogHandler.attemptToShowDonationPopup()
@@ -65,7 +62,7 @@ class DonationDialogHandlerTest {
   }
 
   @Test
-  fun `test should not show popup when time difference is less than 3 months`() {
+  fun `test should not show popup when time difference is less than 3 months`() = runTest {
     val currentMilliSeconds = System.currentTimeMillis()
     every {
       sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds
@@ -76,7 +73,7 @@ class DonationDialogHandlerTest {
   }
 
   @Test
-  fun `test should show popup when time difference is more than 3 months`() {
+  fun `test should show popup when time difference is more than 3 months`() = runTest {
     val currentMilliSeconds = System.currentTimeMillis()
     every {
       sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds

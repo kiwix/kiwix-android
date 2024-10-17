@@ -19,11 +19,8 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.app.Activity
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import javax.inject.Inject
 
 const val THREE_DAYS_IN_MILLISECONDS = 3 * 24 * 60 * 60 * 1000L
@@ -41,18 +38,14 @@ class DonationDialogHandler @Inject constructor(
     this.showDonationDialogCallback = showDonationDialogCallback
   }
 
-  fun attemptToShowDonationPopup() {
+  suspend fun attemptToShowDonationPopup() {
     val currentMilliSeconds = System.currentTimeMillis()
     val lastPopupMillis = sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds
     val timeDifference = currentMilliSeconds - lastPopupMillis
-    (activity as CoreMainActivity).lifecycleScope.launch {
-      if (shouldShowInitialPopup(lastPopupMillis) ||
-        timeDifference >= THREE_MONTHS_IN_MILLISECONDS
-      ) {
-        if (isZimFilesAvailableInLibrary() && isTimeToShowDonation(currentMilliSeconds)) {
-          showDonationDialogCallback?.showDonationDialog()
-          resetDonateLater()
-        }
+    if (shouldShowInitialPopup(lastPopupMillis) || timeDifference >= THREE_MONTHS_IN_MILLISECONDS) {
+      if (isZimFilesAvailableInLibrary() && isTimeToShowDonation(currentMilliSeconds)) {
+        showDonationDialogCallback?.showDonationDialog()
+        resetDonateLater()
       }
     }
   }
