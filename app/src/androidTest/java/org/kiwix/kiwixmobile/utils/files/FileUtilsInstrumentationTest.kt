@@ -406,6 +406,15 @@ class FileUtilsInstrumentationTest {
         Uri.parse(
           "${downloadUriPrefix}0"
         )
+      ),
+      DummyUrlData(
+        null,
+        null,
+        null,
+        null,
+        Uri.parse(
+          "${downloadDocumentUriPrefix}msf%3A1000000057"
+        )
       )
     )
     context?.let { context ->
