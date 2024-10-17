@@ -31,11 +31,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.anim
@@ -223,27 +219,22 @@ class KiwixReaderFragment : CoreReaderFragment() {
   ) {
     val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
     val zimReaderSource = fromDatabaseValue(settings.getString(TAG_CURRENT_FILE, null))
-    lifecycleScope.launch {
-      val canOpenInLibkiwix = withContext(Dispatchers.IO) {
-        zimReaderSource?.canOpenInLibkiwix()
-      }
-      if (zimReaderSource != null && canOpenInLibkiwix == true) {
-        if (zimReaderContainer?.zimReaderSource == null) {
-          openZimFile(zimReaderSource)
-          Log.d(
-            TAG_KIWIX,
-            "Kiwix normal start, Opened last used zimFile: -> ${zimReaderSource.toDatabase()}"
-          )
-        } else {
-          zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
-        }
+    if (zimReaderSource != null) {
+      if (zimReaderContainer?.zimReaderSource == null) {
+        openZimFile(zimReaderSource)
+        Log.d(
+          TAG_KIWIX,
+          "Kiwix normal start, Opened last used zimFile: -> ${zimReaderSource.toDatabase()}"
+        )
       } else {
-        getCurrentWebView()?.snack(string.zim_not_opened)
-        exitBook() // hide the options for zim file to avoid unexpected UI behavior
-        return@launch // book not found so don't need to restore the tabs for this file
+        zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
       }
-      restoreTabs(zimArticles, zimPositions, currentTab)
+    } else {
+      getCurrentWebView()?.snack(string.zim_not_opened)
+      exitBook() // hide the options for zim file to avoid unexpected UI behavior
+      return // book not found so don't need to restore the tabs for this file
     }
+    restoreTabs(zimArticles, zimPositions, currentTab)
   }
 
   @Throws(IllegalArgumentException::class)
