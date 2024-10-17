@@ -30,7 +30,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R.dimen
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
@@ -183,33 +185,35 @@ class CustomReaderFragment : CoreReaderFragment() {
   private fun openObbOrZim() {
     customFileValidator.validate(
       onFilesFound = {
-        when (it) {
-          is ValidationState.HasFile -> {
-            openZimFile(
-              ZimReaderSource(
-                file = it.file,
-                null,
-                it.assetFileDescriptorList
-              ),
-              true
-            )
-            // Save book in the database to display it in `ZimHostFragment`.
-            zimReaderContainer?.zimFileReader?.let { zimFileReader ->
-              // Check if the file is not null. If the file is null,
-              // it means we have created zimFileReader with a fileDescriptor,
-              // so we create a demo file to save it in the database for display on the `ZimHostFragment`.
-              val file = it.file ?: createDemoFile()
-              val bookOnDisk = BookOnDisk(zimFileReader)
-              repositoryActions?.saveBook(bookOnDisk)
+        lifecycleScope.launch {
+          when (it) {
+            is ValidationState.HasFile -> {
+              openZimFile(
+                ZimReaderSource(
+                  file = it.file,
+                  null,
+                  it.assetFileDescriptorList
+                ),
+                true
+              )
+              // Save book in the database to display it in `ZimHostFragment`.
+              zimReaderContainer?.zimFileReader?.let { zimFileReader ->
+                // Check if the file is not null. If the file is null,
+                // it means we have created zimFileReader with a fileDescriptor,
+                // so we create a demo file to save it in the database for display on the `ZimHostFragment`.
+                val file = it.file ?: createDemoFile()
+                val bookOnDisk = BookOnDisk(zimFileReader)
+                repositoryActions?.saveBook(bookOnDisk)
+              }
             }
-          }
 
-          is ValidationState.HasBothFiles -> {
-            it.zimFile.delete()
-            openZimFile(ZimReaderSource(it.obbFile), true)
-          }
+            is ValidationState.HasBothFiles -> {
+              it.zimFile.delete()
+              openZimFile(ZimReaderSource(it.obbFile), true)
+            }
 
-          else -> {}
+            else -> {}
+          }
         }
       },
       onNoFilesFound = {

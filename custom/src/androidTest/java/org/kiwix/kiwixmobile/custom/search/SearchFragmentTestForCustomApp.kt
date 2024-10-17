@@ -279,10 +279,12 @@ class SearchFragmentTestForCustomApp {
           ) as NavHostFragment
       val customReaderFragment =
         navHostFragment.childFragmentManager.fragments[0] as CustomReaderFragment
-      customReaderFragment.openZimFile(
-        ZimReaderSource(null, null, listOf(assetFileDescriptor)),
-        true
-      )
+      runBlocking {
+        customReaderFragment.openZimFile(
+          ZimReaderSource(null, null, listOf(assetFileDescriptor)),
+          true
+        )
+      }
     }
   }
 

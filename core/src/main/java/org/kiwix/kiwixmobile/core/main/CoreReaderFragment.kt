@@ -94,9 +94,7 @@ import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.processors.BehaviorProcessor
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONException
 import org.kiwix.kiwixmobile.core.BuildConfig
@@ -1641,23 +1639,18 @@ abstract class CoreReaderFragment :
     unsupportedMimeTypeHandler?.showSaveOrOpenUnsupportedFilesDialog(url, documentType)
   }
 
-  fun openZimFile(zimReaderSource: ZimReaderSource, isCustomApp: Boolean = false) {
+  suspend fun openZimFile(zimReaderSource: ZimReaderSource, isCustomApp: Boolean = false) {
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || isCustomApp) {
-      lifecycleScope.launch {
-        val canOpenInLibkiwix = withContext(Dispatchers.IO) {
-          zimReaderSource.canOpenInLibkiwix()
-        }
-        if (canOpenInLibkiwix) {
-          // Show content if there is `Open Library` button showing
-          // and we are opening the ZIM file
-          reopenBook()
-          openAndSetInContainer(zimReaderSource)
-          updateTitle()
-        } else {
-          exitBook()
-          Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + zimReaderSource.toDatabase())
-          requireActivity().toast(R.string.error_file_not_found, Toast.LENGTH_LONG)
-        }
+      if (zimReaderSource.canOpenInLibkiwix()) {
+        // Show content if there is `Open Library` button showing
+        // and we are opening the ZIM file
+        reopenBook()
+        openAndSetInContainer(zimReaderSource)
+        updateTitle()
+      } else {
+        exitBook()
+        Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + zimReaderSource.toDatabase())
+        requireActivity().toast(R.string.error_file_not_found, Toast.LENGTH_LONG)
       }
     } else {
       this.zimReaderSource = zimReaderSource
@@ -1738,7 +1731,9 @@ abstract class CoreReaderFragment :
     when (requestCode) {
       REQUEST_STORAGE_PERMISSION -> {
         if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-          zimReaderSource?.let(::openZimFile)
+          lifecycleScope.launch {
+            zimReaderSource?.let { openZimFile(it) }
+          }
         } else {
           snackBarRoot?.let { snackBarRoot ->
             Snackbar.make(snackBarRoot, R.string.request_storage, Snackbar.LENGTH_LONG)
