@@ -27,13 +27,16 @@ import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
+import org.kiwix.kiwixmobile.core.dao.WebViewHistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
+import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
 import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.zim_manager.Language
@@ -55,6 +58,7 @@ class Repository @Inject internal constructor(
   private val bookDao: NewBookDao,
   private val libkiwixBookmarks: LibkiwixBookmarks,
   private val historyRoomDao: HistoryRoomDao,
+  private val webViewHistoryRoomDao: WebViewHistoryRoomDao,
   private val notesRoomDao: NotesRoomDao,
   private val languageDao: NewLanguagesDao,
   private val recentSearchRoomDao: RecentSearchRoomDao,
@@ -142,6 +146,24 @@ class Repository @Inject internal constructor(
 
   override fun deleteNotes(noteList: List<NoteListItem>) =
     Completable.fromAction { notesRoomDao.deleteNotes(noteList) }
+      .subscribeOn(io)
+
+  override fun insertWebViewHistoryItem(pageHistory: WebViewHistoryItem): Completable =
+    Completable.fromAction {
+      webViewHistoryRoomDao.insertWebViewPageHistoryItem(
+        WebViewHistoryEntity(pageHistory)
+      )
+    }
+      .subscribeOn(io)
+
+  override fun getAllWebViewPagesHistory() =
+    webViewHistoryRoomDao.getAllWebViewPagesHistory()
+      .first(emptyList())
+      .subscribeOn(io)
+      .observeOn(mainThread)
+
+  override fun clearWebViewPagesHistory(): Completable =
+    Completable.fromAction(webViewHistoryRoomDao::clearPageHistoryWithPrimaryKey)
       .subscribeOn(io)
 
   override fun deleteNote(noteTitle: String): Completable =

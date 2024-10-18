@@ -125,8 +125,10 @@ import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryClickListener
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
+import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryCallback
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryListItem
+import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudCallbacks
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_PAUSE_OR_RESUME_TTS
@@ -182,7 +184,8 @@ abstract class CoreReaderFragment :
   WebViewProvider,
   ReadAloudCallbacks,
   NavigationHistoryClickListener,
-  ShowDonationDialogCallback {
+  ShowDonationDialogCallback,
+  WebViewHistoryCallback {
   protected val webViewList: MutableList<KiwixWebView> = ArrayList()
   private val webUrlsProcessor = BehaviorProcessor.create<String>()
   private var fragmentReaderBinding: FragmentReaderBinding? = null
@@ -971,6 +974,7 @@ abstract class CoreReaderFragment :
 
   override fun clearHistory() {
     getCurrentWebView()?.clearHistory()
+    repositoryActions?.clearWebViewPageHistory()
     updateBottomToolbarArrowsAlpha()
     toast(R.string.navigation_history_cleared)
   }
@@ -1859,8 +1863,76 @@ abstract class CoreReaderFragment :
     }
   }
 
+  @Suppress("MagicNumber")
+  private fun loadWebViewHistory(pageHistory: List<WebViewHistoryItem>) {
+    val backStack = pageHistory.filter { !it.isForward }
+    val forwardStack = pageHistory.filter(WebViewHistoryItem::isForward)
+    val currentWebView = getCurrentWebView() ?: return
+    val currentPageUrl = currentWebView.copyBackForwardList().currentItem?.url
+    val currentZimId = zimReaderContainer?.zimFileReader?.id
+
+    // If backStack and forwardStack are empty, return
+    if (backStack.isEmpty() && forwardStack.isEmpty() || currentZimId != pageHistory[0].zimId) {
+      repositoryActions?.clearWebViewPageHistory()
+      return
+    }
+
+    if (backStack.isNotEmpty()) {
+      // Step 1: Load the first item immediately (0th index)
+      currentWebView.loadUrl(backStack[0].pageUrl)
+    }
+
+    currentWebView.postDelayed(
+      {
+        // Step 2: Clear WebView history after loading the first page
+        currentWebView.clearHistory()
+
+        // Step 3: Load the remaining items from the backStack (starting from index 1)
+        backStack.drop(1).forEachIndexed { index, page ->
+          currentWebView.postDelayed({
+            currentWebView.loadUrl(page.pageUrl)
+          }, index * 500L) // Delay to load each page sequentially
+        }
+
+        // Step 4: After loading the back stack, load the current page
+        currentWebView.postDelayed({
+          currentPageUrl?.let(::loadUrlWithCurrentWebview)
+        }, backStack.size * 500L)
+
+        // Step 5: Load forward stack URLs sequentially
+        currentWebView.postDelayed(
+          {
+            forwardStack.forEachIndexed { index, page ->
+              currentWebView.postDelayed({
+                currentWebView.loadUrl(page.pageUrl)
+              }, index * 500L) // Delay for loading forward stack
+            }
+
+            // Step 6: After loading forward stack, go back to the current page
+            currentWebView.postDelayed({
+              repeat(forwardStack.size) {
+                currentWebView.goBack()
+              }
+            }, forwardStack.size * 500L) // Delay based on forward stack size
+          },
+          (backStack.size + 1) * 500L
+        ) // Delay based on the back stack size
+      },
+      500L
+    ) // Initial delay to allow the first page to load
+  }
+
+  override fun onDataFetched(pageHistory: List<WebViewHistoryItem>) {
+    loadWebViewHistory(pageHistory)
+  }
+
+  override fun onError(error: Throwable) {
+    activity.toast(R.string.could_not_restore_web_view_history, Toast.LENGTH_LONG)
+  }
+
   override fun onResume() {
     super.onResume()
+    repositoryActions?.loadWebViewPagesHistory(this)
     updateBottomToolbarVisibility()
     updateNightMode()
     if (tts == null) {
@@ -2225,8 +2297,56 @@ abstract class CoreReaderFragment :
     editor.apply()
   }
 
+  private fun saveWebViewHistoryItems(
+    startIndex: Int,
+    endIndex: Int,
+    zimId: String,
+    isForward: Boolean,
+    historyList: WebBackForwardList
+  ) {
+    for (index in startIndex until endIndex) {
+      val historyItem = historyList.getItemAtIndex(index)
+      val pageHistory = WebViewHistoryItem(
+        zimId = zimId,
+        title = historyItem.title,
+        pageUrl = historyItem.url,
+        isForward = isForward,
+        timeStamp = index.toLong()
+      )
+      repositoryActions?.saveWebViewPageHistory(pageHistory)
+    }
+  }
+
+  private fun saveWebBackForwardListToRoom() {
+    val webBackForwardList = getCurrentWebView()?.copyBackForwardList()
+    val currentIndex = webBackForwardList?.currentIndex
+    val zimId = zimReaderContainer?.zimFileReader?.id ?: ""
+
+    if (currentIndex != null) {
+      // Save BackStack
+      saveWebViewHistoryItems(
+        0,
+        webBackForwardList.currentIndex,
+        zimId,
+        false,
+        webBackForwardList
+      )
+
+      // Save ForwardStack
+      saveWebViewHistoryItems(
+        currentIndex + 1,
+        webBackForwardList.size,
+        zimId,
+        true,
+        webBackForwardList
+      )
+    }
+  }
+
   override fun onPause() {
     super.onPause()
+    repositoryActions?.clearWebViewPageHistory()
+    saveWebBackForwardListToRoom()
     saveTabStates()
     Log.d(
       TAG_KIWIX,
