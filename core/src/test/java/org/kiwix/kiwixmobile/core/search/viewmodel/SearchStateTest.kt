@@ -22,6 +22,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
@@ -121,6 +122,7 @@ internal class SearchStateTest {
     var list: List<SearchListItem.RecentSearchListItem>? = emptyList()
     var list1: List<SearchListItem.RecentSearchListItem>? = emptyList()
     val job = launch(Dispatchers.IO) {
+      delay(1000)
       list = searchState.getVisibleResults(0)
     }
 
