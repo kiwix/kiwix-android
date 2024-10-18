@@ -72,7 +72,9 @@ internal class NewBookDaoTest {
     @Test
     fun `books deletes entities whose file does not exist`() {
       val (_, deletedEntity) = expectEmissionOfExistingAndNotExistingBook()
-      newBookDao.books().test()
+      newBookDao.books().test().also {
+        it.awaitTerminalEvent()
+      }
       verify { box.remove(listOf(deletedEntity)) }
     }
 
