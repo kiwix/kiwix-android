@@ -53,7 +53,7 @@ data class WebViewHistoryItem(
   )
 }
 
-interface DataCallback {
+interface WebViewHistoryCallback {
   fun onDataFetched(pageHistory: List<WebViewHistoryItem>)
   fun onError(error: Throwable)
 }
