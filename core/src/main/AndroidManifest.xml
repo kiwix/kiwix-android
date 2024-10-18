@@ -12,11 +12,6 @@
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-  <!-- Device with versions >= Pie need this permission -->
-  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-  <!-- Device with versions >= UPSIDE_DOWN_CAKE need these permissions-->
-  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
-
   <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
   <uses-permission
     android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
@@ -95,8 +90,6 @@
     <activity
       android:name=".error.DiagnosticReportActivity"
       android:exported="false" />
-    <service
-      android:name=".read_aloud.ReadAloudService"
-      android:foregroundServiceType="mediaPlayback" />
+    <service android:name=".read_aloud.ReadAloudService" />
   </application>
 </manifest>
