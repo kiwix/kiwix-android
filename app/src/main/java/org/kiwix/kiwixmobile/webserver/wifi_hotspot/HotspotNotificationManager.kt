@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2023 Kiwix <android.kiwix.org>
+ * Copyright (c) 2024 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.core.webserver.wifi_hotspot
+package org.kiwix.kiwixmobile.webserver.wifi_hotspot
 
 import android.annotation.SuppressLint
 import android.app.Notification
@@ -29,6 +29,8 @@ import androidx.core.app.NotificationCompat
 import androidx.navigation.NavDeepLinkBuilder
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.R.id
+import org.kiwix.kiwixmobile.R.navigation
 import org.kiwix.kiwixmobile.core.qr.GenerateQR
 import org.kiwix.kiwixmobile.core.utils.HOTSPOT_SERVICE_CHANNEL_ID
 import javax.inject.Inject
@@ -60,8 +62,8 @@ class HotspotNotificationManager @Inject constructor(
     val contentIntent = NavDeepLinkBuilder(context).setComponentName(
       coreMainActivity.mainActivity::class.java
     )
-      .setGraph(coreMainActivity.navGraphId)
-      .setDestination(coreMainActivity.zimHostFragmentResId)
+      .setGraph(navigation.kiwix_nav_graph)
+      .setDestination(id.zimHostFragment)
       .createPendingIntent()
     hotspotNotificationChannel()
     val stopIntent = Intent(context, HotspotService::class.java).setAction(

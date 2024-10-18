@@ -58,17 +58,14 @@ class ReadAloudService : Service() {
 
   private fun stopReadAloudAndDismissNotification() {
     readAloudCallbacks?.onReadAloudStop()
-    stopForeground(STOP_FOREGROUND_REMOVE)
     stopSelf()
     readAloudNotificationManager?.dismissNotification()
   }
 
   private fun startForegroundNotificationHelper(isPauseTTS: Boolean) {
-    val notification = readAloudNotificationManager?.buildForegroundNotification(isPauseTTS)
-    startForeground(
-      ReadAloudNotificationManger.READ_ALOUD_NOTIFICATION_ID,
-      notification
-    )
+    readAloudNotificationManager?.buildForegroundNotification(isPauseTTS)?.let {
+      readAloudNotificationManager?.notifyNotification(it)
+    }
   }
 
   override fun onBind(p0: Intent?): IBinder = serviceBinder
