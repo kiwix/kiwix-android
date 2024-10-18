@@ -40,6 +40,7 @@ import org.kiwix.kiwixmobile.core.extensions.getResizedDrawable
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.MainMenu
+import org.kiwix.kiwixmobile.core.main.RestoreOrigin
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
@@ -165,7 +166,9 @@ class CustomReaderFragment : CoreReaderFragment() {
   override fun restoreViewStateOnValidJSON(
     zimArticles: String?,
     zimPositions: String?,
-    currentTab: Int
+    currentTab: Int,
+    // Unused in custom apps as there is only one ZIM file that is already set.
+    restoreOrigin: RestoreOrigin
   ) {
     restoreTabs(zimArticles, zimPositions, currentTab)
   }

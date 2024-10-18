@@ -174,6 +174,9 @@ import java.util.Date
 import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.max
+import org.kiwix.kiwixmobile.core.main.RestoreOrigin.FromExternalLaunch
+
+const val SEARCH_ITEM_TITLE_KEY = "searchItemTitle"
 
 @Suppress("LargeClass")
 abstract class CoreReaderFragment :
@@ -2427,7 +2430,9 @@ abstract class CoreReaderFragment :
   private fun isInvalidJson(jsonString: String?): Boolean =
     jsonString == null || jsonString == "[]"
 
-  protected fun manageExternalLaunchAndRestoringViewState() {
+  protected fun manageExternalLaunchAndRestoringViewState(
+    restoreOrigin: RestoreOrigin = FromExternalLaunch
+  ) {
     val settings = requireActivity().getSharedPreferences(
       SharedPreferenceUtil.PREF_KIWIX_MOBILE,
       0
@@ -2438,7 +2443,7 @@ abstract class CoreReaderFragment :
     if (isInvalidJson(zimArticles) || isInvalidJson(zimPositions)) {
       restoreViewStateOnInvalidJSON()
     } else {
-      restoreViewStateOnValidJSON(zimArticles, zimPositions, currentTab)
+      restoreViewStateOnValidJSON(zimArticles, zimPositions, currentTab, restoreOrigin)
     }
   }
 
@@ -2554,7 +2559,8 @@ abstract class CoreReaderFragment :
   protected abstract fun restoreViewStateOnValidJSON(
     zimArticles: String?,
     zimPositions: String?,
-    currentTab: Int
+    currentTab: Int,
+    restoreOrigin: RestoreOrigin
   )
 
   /**
@@ -2566,4 +2572,9 @@ abstract class CoreReaderFragment :
    * when handling invalid JSON scenarios.
    */
   abstract fun restoreViewStateOnInvalidJSON()
+}
+
+enum class RestoreOrigin {
+  FromSearchScreen,
+  FromExternalLaunch
 }
