@@ -41,9 +41,11 @@ interface DataSource {
   fun deleteHistory(historyList: List<HistoryListItem>): Completable
   fun clearHistory(): Completable
   fun getBookmarks(): Flowable<List<LibkiwixBookmarkItem>>
-  fun getCurrentZimBookmarksUrl(): Single<List<String>>
+  fun getCurrentZimBookmarksUrl(): io.reactivex.rxjava3.core.Single<List<String>>
 
-  fun saveBookmark(libkiwixBookmarkItem: LibkiwixBookmarkItem): Completable
+  fun saveBookmark(libkiwixBookmarkItem: LibkiwixBookmarkItem):
+    io.reactivex.rxjava3.core.Completable
+
   fun deleteBookmarks(bookmarks: List<LibkiwixBookmarkItem>): Completable
   fun deleteBookmark(bookId: String, bookmarkUrl: String): Completable?
   fun booksOnDiskAsListItems(): Flowable<List<BooksOnDiskListItem>>

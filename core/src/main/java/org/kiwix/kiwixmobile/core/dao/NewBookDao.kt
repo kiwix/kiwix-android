@@ -21,6 +21,7 @@ import io.objectbox.Box
 import io.objectbox.kotlin.inValues
 import io.objectbox.kotlin.query
 import io.objectbox.query.QueryBuilder
+import kotlinx.coroutines.rx3.rxSingle
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity_
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
@@ -31,23 +32,29 @@ import javax.inject.Inject
 class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
 
   fun books() = box.asFlowable()
-    .map { books ->
-      books.map { bookOnDiskEntity ->
-        bookOnDiskEntity.file.let { file ->
-          // set zimReaderSource for previously saved books
+    .flatMap { books ->
+      io.reactivex.rxjava3.core.Flowable.fromIterable(books)
+        .flatMapSingle { bookOnDiskEntity ->
+          val file = bookOnDiskEntity.file
           val zimReaderSource = ZimReaderSource(file)
-          if (zimReaderSource.canOpenInLibkiwix()) {
-            bookOnDiskEntity.zimReaderSource = zimReaderSource
-          }
+
+          rxSingle { zimReaderSource.canOpenInLibkiwix() }
+            .map { canOpen ->
+              if (canOpen) {
+                bookOnDiskEntity.zimReaderSource = zimReaderSource
+              }
+              bookOnDiskEntity
+            }
+            .onErrorReturn { bookOnDiskEntity }
         }
-        bookOnDiskEntity
-      }
+        .toList()
+        .toFlowable()
     }
     .doOnNext { removeBooksThatDoNotExist(it.toMutableList()) }
     .map { books -> books.filter { it.zimReaderSource.exists() } }
     .map { it.map(::BookOnDisk) }
 
-  fun getBooks() = box.all.map { bookOnDiskEntity ->
+  suspend fun getBooks() = box.all.map { bookOnDiskEntity ->
     bookOnDiskEntity.file.let { file ->
       // set zimReaderSource for previously saved books
       val zimReaderSource = ZimReaderSource(file)

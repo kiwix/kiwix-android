@@ -22,11 +22,14 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import androidx.annotation.IdRes
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
@@ -67,18 +70,20 @@ class RateDialogHandler @Inject constructor(
     tempVisitCount = visitCounterPref?.count ?: 0
     ++tempVisitCount
     visitCounterPref?.count = tempVisitCount
-    if (shouldShowRateDialog() && NetworkUtils.isNetworkAvailable(activity)) {
-      showRateDialog(iconResId)
+    (activity as CoreMainActivity).lifecycleScope.launch {
+      if (shouldShowRateDialog() && NetworkUtils.isNetworkAvailable(activity)) {
+        showRateDialog(iconResId)
+      }
     }
   }
 
-  private fun shouldShowRateDialog(): Boolean {
+  private suspend fun shouldShowRateDialog(): Boolean {
     return tempVisitCount >= VISITS_REQUIRED_TO_SHOW_RATE_DIALOG &&
       visitCounterPref?.noThanksState == false && isTwoWeekPassed() &&
       isZimFilesAvailableInLibrary() && !BuildConfig.DEBUG
   }
 
-  private fun isZimFilesAvailableInLibrary(): Boolean {
+  private suspend fun isZimFilesAvailableInLibrary(): Boolean {
     // If it is a custom app, return true since custom apps always have the ZIM file.
     if (activity.isCustomApp()) return true
     // For Kiwix app, check if there are ZIM files available in the library.

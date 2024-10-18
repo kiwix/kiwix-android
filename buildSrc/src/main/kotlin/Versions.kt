@@ -16,6 +16,8 @@ object Versions {
 
   const val org_jetbrains_kotlinx_kotlinx_coroutines: String = "1.8.1"
 
+  const val kotlinx_coroutines_rx3: String = "1.3.9"
+
   const val androidx_test_espresso: String = "3.5.1"
 
   const val tracing: String = "1.1.0"

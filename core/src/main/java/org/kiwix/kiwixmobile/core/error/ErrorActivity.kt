@@ -25,6 +25,8 @@ import android.os.Process
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
@@ -87,7 +89,9 @@ open class ErrorActivity : BaseActivity() {
 
   private fun setupReportButton() {
     activityKiwixErrorBinding?.reportButton?.setOnClickListener {
-      sendEmailLauncher.launch(Intent.createChooser(emailIntent(), "Send email..."))
+      lifecycleScope.launch {
+        sendEmailLauncher.launch(Intent.createChooser(emailIntent(), "Send email..."))
+      }
     }
   }
 
@@ -96,7 +100,7 @@ open class ErrorActivity : BaseActivity() {
       restartApp()
     }
 
-  private fun emailIntent(): Intent {
+  private suspend fun emailIntent(): Intent {
     val emailBody = buildBody()
     return Intent(Intent.ACTION_SEND).apply {
       type = "text/plain"
@@ -122,7 +126,7 @@ open class ErrorActivity : BaseActivity() {
     }
   }
 
-  private fun buildBody(): String = """ 
+  private suspend fun buildBody(): String = """ 
   $initialBody
     
   ${if (activityKiwixErrorBinding?.allowCrash?.isChecked == true && exception != null) exceptionDetails() else ""}
@@ -139,7 +143,7 @@ open class ErrorActivity : BaseActivity() {
     ${exception?.let(::toStackTraceString)}
     """.trimIndent()
 
-  private fun zimFiles(): String {
+  private suspend fun zimFiles(): String {
     val allZimFiles = bookDao.getBooks().joinToString {
       """
       ${it.book.title}:
