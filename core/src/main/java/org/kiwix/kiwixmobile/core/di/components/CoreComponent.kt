@@ -106,7 +106,7 @@ interface CoreComponent {
   fun libkiwixBookmarks(): LibkiwixBookmarks
   fun recentSearchRoomDao(): RecentSearchRoomDao
   fun historyRoomDao(): HistoryRoomDao
-  fun pageHistoryRoomDao(): WebViewHistoryRoomDao
+  fun webViewHistoryRoomDao(): WebViewHistoryRoomDao
   fun noteRoomDao(): NotesRoomDao
   fun objectBoxToRoomMigrator(): ObjectBoxToRoomMigrator
   fun context(): Context
