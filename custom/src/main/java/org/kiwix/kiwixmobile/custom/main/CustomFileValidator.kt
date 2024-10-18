@@ -23,6 +23,7 @@ import android.content.pm.PackageManager
 import android.content.res.AssetFileDescriptor
 import android.content.res.AssetManager
 import androidx.core.content.ContextCompat
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasBothFiles
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasFile
@@ -57,7 +58,7 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
   }
 
   @Suppress("MagicNumber")
-  private fun getAssetFileDescriptorListFromPlayAssetDelivery(): List<AssetFileDescriptor> {
+  fun getAssetFileDescriptorListFromPlayAssetDelivery(): List<AssetFileDescriptor> {
     try {
       val assetManager = context.createPackageContext(context.packageName, 0).assets
       val assetFileDescriptorList: ArrayList<AssetFileDescriptor> = arrayListOf()
@@ -94,28 +95,34 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
     return chunkFiles
   }
 
-  private fun obbFiles() = scanDirs(ContextCompat.getObbDirs(context), "obb")
+  private fun obbFiles() =
+    scanDirs(
+      ContextCompat.getObbDirs(context).filterNotNull().filter(File::isFileExist).toTypedArray(),
+      "obb"
+    )
 
   private fun zimFiles(): List<File> {
     // Create a list to store the parent directories
     val directoryList = mutableListOf<File>()
 
     // Get the external files directories for the app
-    ContextCompat.getExternalFilesDirs(context, null).forEach { dir ->
-      // Check if the directory's parent is not null
-      dir?.parent?.let { parentPath ->
-        // Add the parent directory to the list, so we can scan all the files contained in the folder.
-        // We are doing this because ContextCompat.getExternalFilesDirs(context, null) method returns the path to the
-        // "files" folder, which is specific to the app's package name, both for internal and SD card storage.
-        // By obtaining the parent directory, we can scan files from the app-specific directory itself.
-        directoryList.add(File(parentPath))
-      } ?: kotlin.run {
-        // If the parent directory is null, it means the current directory is the target folder itself.
-        // Add the current directory to the list, as it represents the app-specific directory for both internal
-        // and SD card storage. This allows us to scan files directly from this directory.
-        directoryList.add(dir)
+    ContextCompat.getExternalFilesDirs(context, null).filterNotNull()
+      .filter(File::isFileExist)
+      .forEach { dir ->
+        // Check if the directory's parent is not null
+        dir.parent?.let { parentPath ->
+          // Add the parent directory to the list, so we can scan all the files contained in the folder.
+          // We are doing this because ContextCompat.getExternalFilesDirs(context, null) method returns the path to the
+          // "files" folder, which is specific to the app's package name, both for internal and SD card storage.
+          // By obtaining the parent directory, we can scan files from the app-specific directory itself.
+          directoryList.add(File(parentPath))
+        } ?: kotlin.run {
+          // If the parent directory is null, it means the current directory is the target folder itself.
+          // Add the current directory to the list, as it represents the app-specific directory for both internal
+          // and SD card storage. This allows us to scan files directly from this directory.
+          directoryList.add(dir)
+        }
       }
-    }
     return scanDirs(directoryList.toTypedArray(), "zim")
   }
 
