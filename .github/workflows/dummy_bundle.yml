@@ -1,0 +1,50 @@
+name: Generate dummy bundle
+
+# The workflow will trigger when the `dummy_bundle` tag is pushed.
+on:
+  push:
+    tags:
+      - 'dummy_bundle' # dummy_bundle Tag
+
+jobs:
+  publish_dummy_bundle:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Preparing signing material
+        env:
+          KEYSTORE: ${{ secrets.keystore }}
+        run: |
+          echo "$KEYSTORE" | base64 -d > kiwix-android.keystore
+
+      - name: Generate dummy Bundle
+        env:
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+        run: |
+          ./gradlew bundlePlayStore --scan
+
+
+      - name: Get Bundle name and path
+        id: bundle-path
+        run: |
+          BUNDLE_PATH="app/build/outputs/bundle/playStore/kiwix-playStore.aab"
+          BUNDLE_NAME="PlayStoreDummyBundle.aab"
+          echo "bundle_path=$BUNDLE_PATH" >> $GITHUB_ENV
+          echo "bundle_name=$BUNDLE_NAME" >> $GITHUB_ENV
+
+      - name: Upload Bundle as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.bundle_name }}
+          path: ${{ env.bundle_path }}
+
