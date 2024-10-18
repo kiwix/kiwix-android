@@ -56,7 +56,7 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
   abstract fun historyRoomDao(): HistoryRoomDao
   abstract fun notesRoomDao(): NotesRoomDao
   abstract fun downloadRoomDao(): DownloadRoomDao
-  abstract fun pageHistoryRoomDao(): WebViewHistoryRoomDao
+  abstract fun webViewHistoryRoomDao(): WebViewHistoryRoomDao
 
   companion object {
     private var db: KiwixRoomDatabase? = null
