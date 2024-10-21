@@ -31,7 +31,9 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.anim
@@ -50,6 +52,9 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
+import org.kiwix.kiwixmobile.core.main.RestoreOrigin
+import org.kiwix.kiwixmobile.core.main.RestoreOrigin.FromExternalLaunch
+import org.kiwix.kiwixmobile.core.main.RestoreOrigin.FromSearchScreen
 import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
@@ -86,33 +91,44 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   private fun openPageInBookFromNavigationArguments() {
     val args = KiwixReaderFragmentArgs.fromBundle(requireArguments())
-
-    if (args.pageUrl.isNotEmpty()) {
-      if (args.zimFileUri.isNotEmpty()) {
-        tryOpeningZimFile(args.zimFileUri)
+    lifecycleScope.launch {
+      if (args.pageUrl.isNotEmpty()) {
+        if (args.zimFileUri.isNotEmpty()) {
+          tryOpeningZimFile(args.zimFileUri)
+        } else {
+          // Set up bookmarks for the current book when opening bookmarks from the Bookmark screen.
+          // This is necessary because we are not opening the ZIM file again; the bookmark is
+          // inside the currently opened book. Bookmarks are set up when opening the ZIM file.
+          // See https://github.com/kiwix/kiwix-android/issues/3541
+          zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
+        }
+        loadUrlWithCurrentWebview(args.pageUrl)
       } else {
-        // Set up bookmarks for the current book when opening bookmarks from the Bookmark screen.
-        // This is necessary because we are not opening the ZIM file again; the bookmark is
-        // inside the currently opened book. Bookmarks are set up when opening the ZIM file.
-        // See https://github.com/kiwix/kiwix-android/issues/3541
-        zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
+        if (args.zimFileUri.isNotEmpty()) {
+          tryOpeningZimFile(args.zimFileUri)
+        } else {
+          val restoreOrigin =
+            if (args.searchItemTitle.isNotEmpty()) FromSearchScreen else FromExternalLaunch
+          manageExternalLaunchAndRestoringViewState(restoreOrigin)
+        }
       }
-      loadUrlWithCurrentWebview(args.pageUrl)
-    } else {
-      if (args.zimFileUri.isNotEmpty()) {
-        tryOpeningZimFile(args.zimFileUri)
-      } else {
-        manageExternalLaunchAndRestoringViewState()
-      }
+      requireArguments().clear()
     }
-    requireArguments().clear()
   }
 
-  private fun tryOpeningZimFile(zimFileUri: String) {
+  private suspend fun tryOpeningZimFile(zimFileUri: String) {
+    // Close the previously opened book in the reader before opening a new ZIM file
+    // to avoid native crashes due to "null pointer dereference." These crashes can occur
+    // when setting a new ZIM file in the archive while the previous one is being disposed of.
+    // Since the WebView may still asynchronously request data from the disposed archive,
+    // we close the previous book before opening a new ZIM file in the archive.
+    closeZimBook()
+    // Update the reader screen title to prevent showing the previously set title
+    // when creating the new archive object.
+    updateTitle()
     val filePath = FileUtils.getLocalFilePathByUri(
       requireActivity().applicationContext, Uri.parse(zimFileUri)
     )
-
     if (filePath == null || !File(filePath).isFileExist()) {
       // Close the previously opened book in the reader. Since this file is not found,
       // it will not be set in the zimFileReader. The previously opened ZIM file
@@ -123,7 +139,9 @@ class KiwixReaderFragment : CoreReaderFragment() {
       activity.toast(string.error_file_not_found)
       return
     }
-    openZimFile(ZimReaderSource(File(filePath)))
+    val zimReaderSource = ZimReaderSource(File(filePath))
+    clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource)
+    openZimFile(zimReaderSource)
   }
 
   override fun loadDrawerViews() {
@@ -212,30 +230,54 @@ class KiwixReaderFragment : CoreReaderFragment() {
     exitBook()
   }
 
+  /**
+   * Restores the view state based on the provided JSON data and restore origin.
+   *
+   * Depending on the `restoreOrigin`, this method either restores the last opened ZIM file
+   * (if the launch is external) or skips re-opening the ZIM file when coming from the search screen,
+   * as the ZIM file is already set in the reader. The method handles setting up the ZIM file and bookmarks,
+   * and restores the tabs and positions from the provided data.
+   *
+   * @param zimArticles   JSON string representing the list of articles to be restored.
+   * @param zimPositions  JSON string representing the positions of the restored articles.
+   * @param currentTab    Index of the tab to be restored as the currently active one.
+   * @param restoreOrigin Indicates whether the restoration is triggered from an external launch or the search screen.
+   */
+
   override fun restoreViewStateOnValidJSON(
     zimArticles: String?,
     zimPositions: String?,
-    currentTab: Int
+    currentTab: Int,
+    restoreOrigin: RestoreOrigin
   ) {
-    val settings = requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
-    val zimReaderSource = fromDatabaseValue(settings.getString(TAG_CURRENT_FILE, null))
-
-    if (zimReaderSource != null && zimReaderSource.canOpenInLibkiwix()) {
-      if (zimReaderContainer?.zimReaderSource == null) {
-        openZimFile(zimReaderSource)
-        Log.d(
-          TAG_KIWIX,
-          "Kiwix normal start, Opened last used zimFile: -> ${zimReaderSource.toDatabase()}"
-        )
-      } else {
-        zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
+    when (restoreOrigin) {
+      FromExternalLaunch -> {
+        lifecycleScope.launch {
+          val settings =
+            requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
+          val zimReaderSource = fromDatabaseValue(settings.getString(TAG_CURRENT_FILE, null))
+          if (zimReaderSource?.canOpenInLibkiwix() == true) {
+            if (zimReaderContainer?.zimReaderSource == null) {
+              openZimFile(zimReaderSource)
+              Log.d(
+                TAG_KIWIX,
+                "Kiwix normal start, Opened last used zimFile: -> ${zimReaderSource.toDatabase()}"
+              )
+            } else {
+              zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
+            }
+            restoreTabs(zimArticles, zimPositions, currentTab)
+          } else {
+            getCurrentWebView()?.snack(string.zim_not_opened)
+            exitBook() // hide the options for zim file to avoid unexpected UI behavior
+          }
+        }
       }
-    } else {
-      getCurrentWebView()?.snack(string.zim_not_opened)
-      exitBook() // hide the options for zim file to avoid unexpected UI behavior
-      return // book not found so don't need to restore the tabs for this file
+
+      FromSearchScreen -> {
+        restoreTabs(zimArticles, zimPositions, currentTab)
+      }
     }
-    restoreTabs(zimArticles, zimPositions, currentTab)
   }
 
   @Throws(IllegalArgumentException::class)

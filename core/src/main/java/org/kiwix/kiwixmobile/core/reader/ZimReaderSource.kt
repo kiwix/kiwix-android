@@ -62,7 +62,7 @@ class ZimReaderSource(
     }
   }
 
-  fun canOpenInLibkiwix(): Boolean {
+  suspend fun canOpenInLibkiwix(): Boolean {
     return when {
       file?.canReadFile() == true -> true
       assetFileDescriptorList?.get(0)?.parcelFileDescriptor?.fd
@@ -72,7 +72,7 @@ class ZimReaderSource(
     }
   }
 
-  fun createArchive(): Archive? {
+  suspend fun createArchive(): Archive? {
     if (canOpenInLibkiwix()) {
       return when {
         file != null -> Archive(file.canonicalPath)

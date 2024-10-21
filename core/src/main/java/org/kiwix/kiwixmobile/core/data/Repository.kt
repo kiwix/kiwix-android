@@ -21,7 +21,8 @@ package org.kiwix.kiwixmobile.core.data
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
-import io.reactivex.Single
+import kotlinx.coroutines.rx3.rxCompletable
+import kotlinx.coroutines.rx3.rxSingle
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
@@ -47,10 +48,9 @@ import javax.inject.Singleton
  * A central repository of data which should provide the presenters with the required data.
  */
 
-@Suppress("LongParameterList")
 @Singleton
 class Repository @Inject internal constructor(
-  @param:IO private val io: Scheduler,
+  @param:IO private val ioThread: Scheduler,
   @param:MainThread private val mainThread: Scheduler,
   private val bookDao: NewBookDao,
   private val libkiwixBookmarks: LibkiwixBookmarks,
@@ -64,7 +64,7 @@ class Repository @Inject internal constructor(
   override fun getLanguageCategorizedBooks() =
     booksOnDiskAsListItems()
       .first(emptyList())
-      .subscribeOn(io)
+      .subscribeOn(ioThread)
       .observeOn(mainThread)
 
   override fun booksOnDiskAsListItems(): Flowable<List<BooksOnDiskListItem>> = bookDao.books()
@@ -91,60 +91,60 @@ class Repository @Inject internal constructor(
 
   override fun saveBooks(books: List<BookOnDisk>) =
     Completable.fromAction { bookDao.insert(books) }
-      .subscribeOn(io)
+      .subscribeOn(ioThread)
 
   override fun saveBook(book: BookOnDisk) =
     Completable.fromAction { bookDao.insert(listOf(book)) }
-      .subscribeOn(io)
+      .subscribeOn(ioThread)
 
   override fun saveLanguages(languages: List<Language>) =
     Completable.fromAction { languageDao.insert(languages) }
-      .subscribeOn(io)
+      .subscribeOn(ioThread)
 
   override fun saveHistory(history: HistoryItem) =
     Completable.fromAction { historyRoomDao.saveHistory(history) }
-      .subscribeOn(io)
+      .subscribeOn(ioThread)
 
   override fun deleteHistory(historyList: List<HistoryListItem>) =
     Completable.fromAction {
       historyRoomDao.deleteHistory(historyList.filterIsInstance(HistoryItem::class.java))
     }
-      .subscribeOn(io)
+      .subscribeOn(ioThread)
 
   override fun clearHistory() = Completable.fromAction {
     historyRoomDao.deleteAllHistory()
     recentSearchRoomDao.deleteSearchHistory()
-  }.subscribeOn(io)
+  }.subscribeOn(ioThread)
 
   override fun getBookmarks() =
     libkiwixBookmarks.bookmarks() as Flowable<List<LibkiwixBookmarkItem>>
 
   override fun getCurrentZimBookmarksUrl() =
-    Single.just(libkiwixBookmarks.getCurrentZimBookmarksUrl(zimReaderContainer.zimFileReader))
-      .subscribeOn(io)
-      .observeOn(mainThread)
+    rxSingle {
+      libkiwixBookmarks.getCurrentZimBookmarksUrl(zimReaderContainer.zimFileReader)
+    }.subscribeOn(io.reactivex.rxjava3.schedulers.Schedulers.io())
 
   override fun saveBookmark(libkiwixBookmarkItem: LibkiwixBookmarkItem) =
-    Completable.fromAction { libkiwixBookmarks.saveBookmark(libkiwixBookmarkItem) }
-      .subscribeOn(io)
+    rxCompletable { libkiwixBookmarks.saveBookmark(libkiwixBookmarkItem) }
+      .subscribeOn(io.reactivex.rxjava3.schedulers.Schedulers.io())
 
   override fun deleteBookmarks(bookmarks: List<LibkiwixBookmarkItem>) =
     Completable.fromAction { libkiwixBookmarks.deleteBookmarks(bookmarks) }
-      .subscribeOn(io)
+      .subscribeOn(ioThread)
 
   override fun deleteBookmark(bookId: String, bookmarkUrl: String): Completable? =
     Completable.fromAction { libkiwixBookmarks.deleteBookmark(bookId, bookmarkUrl) }
-      .subscribeOn(io)
+      .subscribeOn(ioThread)
 
   override fun saveNote(noteListItem: NoteListItem): Completable =
     Completable.fromAction { notesRoomDao.saveNote(noteListItem) }
-      .subscribeOn(io)
+      .subscribeOn(ioThread)
 
   override fun deleteNotes(noteList: List<NoteListItem>) =
     Completable.fromAction { notesRoomDao.deleteNotes(noteList) }
-      .subscribeOn(io)
+      .subscribeOn(ioThread)
 
   override fun deleteNote(noteTitle: String): Completable =
     Completable.fromAction { notesRoomDao.deleteNote(noteTitle) }
-      .subscribeOn(io)
+      .subscribeOn(ioThread)
 }

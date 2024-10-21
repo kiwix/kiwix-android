@@ -80,6 +80,7 @@ import androidx.core.widget.ContentLoadingProgressBar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -93,6 +94,7 @@ import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.processors.BehaviorProcessor
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONException
 import org.kiwix.kiwixmobile.core.BuildConfig
@@ -172,6 +174,9 @@ import java.util.Date
 import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.max
+import org.kiwix.kiwixmobile.core.main.RestoreOrigin.FromExternalLaunch
+
+const val SEARCH_ITEM_TITLE_KEY = "searchItemTitle"
 
 @Suppress("LargeClass")
 abstract class CoreReaderFragment :
@@ -1381,7 +1386,7 @@ abstract class CoreReaderFragment :
     closeZimBook()
   }
 
-  private fun closeZimBook() {
+  fun closeZimBook() {
     zimReaderContainer?.setZimReaderSource(null)
   }
 
@@ -1639,7 +1644,7 @@ abstract class CoreReaderFragment :
     unsupportedMimeTypeHandler?.showSaveOrOpenUnsupportedFilesDialog(url, documentType)
   }
 
-  fun openZimFile(zimReaderSource: ZimReaderSource, isCustomApp: Boolean = false) {
+  suspend fun openZimFile(zimReaderSource: ZimReaderSource, isCustomApp: Boolean = false) {
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || isCustomApp) {
       if (zimReaderSource.canOpenInLibkiwix()) {
         // Show content if there is `Open Library` button showing
@@ -1676,14 +1681,8 @@ abstract class CoreReaderFragment :
     )
   }
 
-  private fun openAndSetInContainer(zimReaderSource: ZimReaderSource) {
-    try {
-      if (isNotPreviouslyOpenZim(zimReaderSource)) {
-        webViewList.clear()
-      }
-    } catch (e: IOException) {
-      e.printStackTrace()
-    }
+  private suspend fun openAndSetInContainer(zimReaderSource: ZimReaderSource) {
+    clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource)
     zimReaderContainer?.let { zimReaderContainer ->
       zimReaderContainer.setZimReaderSource(zimReaderSource)
 
@@ -1696,6 +1695,16 @@ abstract class CoreReaderFragment :
       } ?: kotlin.run {
         requireActivity().toast(R.string.error_file_invalid, Toast.LENGTH_LONG)
       }
+    }
+  }
+
+  fun clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource: ZimReaderSource) {
+    try {
+      if (isNotPreviouslyOpenZim(zimReaderSource)) {
+        webViewList.clear()
+      }
+    } catch (e: IOException) {
+      e.printStackTrace()
     }
   }
 
@@ -1731,7 +1740,9 @@ abstract class CoreReaderFragment :
     when (requestCode) {
       REQUEST_STORAGE_PERMISSION -> {
         if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-          zimReaderSource?.let(::openZimFile)
+          lifecycleScope.launch {
+            zimReaderSource?.let { openZimFile(it) }
+          }
         } else {
           snackBarRoot?.let { snackBarRoot ->
             Snackbar.make(snackBarRoot, R.string.request_storage, Snackbar.LENGTH_LONG)
@@ -1866,7 +1877,7 @@ abstract class CoreReaderFragment :
     if (tts == null) {
       setUpTTS()
     }
-    donationDialogHandler?.attemptToShowDonationPopup()
+    lifecycleScope.launch { donationDialogHandler?.attemptToShowDonationPopup() }
   }
 
   @Suppress("InflateParams", "MagicNumber")
@@ -1977,11 +1988,13 @@ abstract class CoreReaderFragment :
   }
 
   private fun openSearchItem(item: SearchItemToOpen) {
-    zimReaderContainer?.titleToUrl(item.pageTitle)?.let {
-      if (item.shouldOpenInNewTab) {
-        createNewTab()
+    if (item.shouldOpenInNewTab) {
+      createNewTab()
+    }
+    item.pageUrl?.let(::loadUrlWithCurrentWebview) ?: kotlin.run {
+      zimReaderContainer?.titleToUrl(item.pageTitle)?.apply {
+        loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(this))
       }
-      loadUrlWithCurrentWebview(zimReaderContainer?.urlSuffixToParsableUrl(it))
     }
     requireActivity().consumeObservable<SearchItemToOpen>(TAG_FILE_SEARCHED)
   }
@@ -2421,7 +2434,9 @@ abstract class CoreReaderFragment :
   private fun isInvalidJson(jsonString: String?): Boolean =
     jsonString == null || jsonString == "[]"
 
-  protected fun manageExternalLaunchAndRestoringViewState() {
+  protected fun manageExternalLaunchAndRestoringViewState(
+    restoreOrigin: RestoreOrigin = FromExternalLaunch
+  ) {
     val settings = requireActivity().getSharedPreferences(
       SharedPreferenceUtil.PREF_KIWIX_MOBILE,
       0
@@ -2432,7 +2447,7 @@ abstract class CoreReaderFragment :
     if (isInvalidJson(zimArticles) || isInvalidJson(zimPositions)) {
       restoreViewStateOnInvalidJSON()
     } else {
-      restoreViewStateOnValidJSON(zimArticles, zimPositions, currentTab)
+      restoreViewStateOnValidJSON(zimArticles, zimPositions, currentTab, restoreOrigin)
     }
   }
 
@@ -2548,7 +2563,8 @@ abstract class CoreReaderFragment :
   protected abstract fun restoreViewStateOnValidJSON(
     zimArticles: String?,
     zimPositions: String?,
-    currentTab: Int
+    currentTab: Int,
+    restoreOrigin: RestoreOrigin
   )
 
   /**
@@ -2560,4 +2576,9 @@ abstract class CoreReaderFragment :
    * when handling invalid JSON scenarios.
    */
   abstract fun restoreViewStateOnInvalidJSON()
+}
+
+enum class RestoreOrigin {
+  FromSearchScreen,
+  FromExternalLaunch
 }

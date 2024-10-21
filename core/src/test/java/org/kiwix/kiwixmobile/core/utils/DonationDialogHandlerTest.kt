@@ -20,10 +20,13 @@ package org.kiwix.kiwixmobile.core.utils
 
 import android.app.Activity
 import io.mockk.Runs
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -31,6 +34,7 @@ import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions
 
+@ExperimentalCoroutinesApi
 class DonationDialogHandlerTest {
   private lateinit var activity: Activity
   private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
@@ -44,36 +48,37 @@ class DonationDialogHandlerTest {
     sharedPreferenceUtil = mockk(relaxed = true)
     newBookDao = mockk(relaxed = true)
     showDonationDialogCallback = mockk(relaxed = true)
-    donationDialogHandler = DonationDialogHandler(activity, sharedPreferenceUtil, newBookDao)
+    donationDialogHandler =
+      DonationDialogHandler(activity, sharedPreferenceUtil, newBookDao)
     donationDialogHandler.setDonationDialogCallBack(showDonationDialogCallback)
   }
 
   @Test
-  fun `test should show initial popup`() {
+  fun `test should show initial popup`() = runTest {
     every { sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds } returns 0L
-    every { newBookDao.getBooks() } returns listOf(mockk())
+    coEvery { newBookDao.getBooks() } returns listOf(mockk())
     donationDialogHandler.attemptToShowDonationPopup()
     verify { showDonationDialogCallback.showDonationDialog() }
   }
 
   @Test
-  fun `test should not show popup when time difference is less than 3 months`() {
+  fun `test should not show popup when time difference is less than 3 months`() = runTest {
     val currentMilliSeconds = System.currentTimeMillis()
     every {
       sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds
     } returns currentMilliSeconds - (THREE_MONTHS_IN_MILLISECONDS / 2)
-    every { newBookDao.getBooks() } returns listOf(mockk())
+    coEvery { newBookDao.getBooks() } returns listOf(mockk())
     donationDialogHandler.attemptToShowDonationPopup()
     verify(exactly = 0) { showDonationDialogCallback.showDonationDialog() }
   }
 
   @Test
-  fun `test should show popup when time difference is more than 3 months`() {
+  fun `test should show popup when time difference is more than 3 months`() = runTest {
     val currentMilliSeconds = System.currentTimeMillis()
     every {
       sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds
     } returns currentMilliSeconds - (THREE_MONTHS_IN_MILLISECONDS + 1000)
-    every { newBookDao.getBooks() } returns listOf(mockk())
+    coEvery { newBookDao.getBooks() } returns listOf(mockk())
     donationDialogHandler.attemptToShowDonationPopup()
     verify { showDonationDialogCallback.showDonationDialog() }
   }
@@ -94,7 +99,7 @@ class DonationDialogHandlerTest {
   }
 
   @Test
-  fun `test isZimFilesAvailableInLibrary returns true when isCustomApp is true`() {
+  fun `test isZimFilesAvailableInLibrary returns true when isCustomApp is true`() = runTest {
     with(mockk<ActivityExtensions>()) {
       every { activity.packageName } returns "org.kiwix.kiwixcustom"
       every { activity.isCustomApp() } returns true
@@ -104,24 +109,26 @@ class DonationDialogHandlerTest {
   }
 
   @Test
-  fun `test isZimFilesAvailableInLibrary returns false when no books and isCustomApp is false`() {
-    with(mockk<ActivityExtensions>()) {
-      every { activity.packageName } returns "org.kiwix.kiwixmobile"
-      every { activity.isCustomApp() } returns false
-      every { newBookDao.getBooks() } returns emptyList()
-      val result = donationDialogHandler.isZimFilesAvailableInLibrary()
-      assertFalse(result)
+  fun `test isZimFilesAvailableInLibrary returns false when no books and isCustomApp is false`() =
+    runTest {
+      with(mockk<ActivityExtensions>()) {
+        every { activity.packageName } returns "org.kiwix.kiwixmobile"
+        every { activity.isCustomApp() } returns false
+        coEvery { newBookDao.getBooks() } returns emptyList()
+        val result = donationDialogHandler.isZimFilesAvailableInLibrary()
+        assertFalse(result)
+      }
     }
-  }
 
   @Test
-  fun `isZimFilesAvailableInLibrary returns true when books available and isCustomApp is false`() {
-    with(mockk<ActivityExtensions>()) {
-      every { activity.packageName } returns "org.kiwix.kiwixmobile"
-      every { activity.isCustomApp() } returns false
-      every { newBookDao.getBooks() } returns listOf(mockk())
-      val result = donationDialogHandler.isZimFilesAvailableInLibrary()
-      assertTrue(result)
+  fun `isZimFilesAvailableInLibrary returns true when books available and isCustomApp is false`() =
+    runTest {
+      with(mockk<ActivityExtensions>()) {
+        every { activity.packageName } returns "org.kiwix.kiwixmobile"
+        every { activity.isCustomApp() } returns false
+        coEvery { newBookDao.getBooks() } returns listOf(mockk())
+        val result = donationDialogHandler.isZimFilesAvailableInLibrary()
+        assertTrue(result)
+      }
     }
-  }
 }
