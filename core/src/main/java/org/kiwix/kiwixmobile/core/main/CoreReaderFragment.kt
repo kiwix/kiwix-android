@@ -1682,13 +1682,7 @@ abstract class CoreReaderFragment :
   }
 
   private suspend fun openAndSetInContainer(zimReaderSource: ZimReaderSource) {
-    try {
-      if (isNotPreviouslyOpenZim(zimReaderSource)) {
-        webViewList.clear()
-      }
-    } catch (e: IOException) {
-      e.printStackTrace()
-    }
+    clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource)
     zimReaderContainer?.let { zimReaderContainer ->
       zimReaderContainer.setZimReaderSource(zimReaderSource)
 
@@ -1701,6 +1695,16 @@ abstract class CoreReaderFragment :
       } ?: kotlin.run {
         requireActivity().toast(R.string.error_file_invalid, Toast.LENGTH_LONG)
       }
+    }
+  }
+
+  fun clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource: ZimReaderSource) {
+    try {
+      if (isNotPreviouslyOpenZim(zimReaderSource)) {
+        webViewList.clear()
+      }
+    } catch (e: IOException) {
+      e.printStackTrace()
     }
   }
 

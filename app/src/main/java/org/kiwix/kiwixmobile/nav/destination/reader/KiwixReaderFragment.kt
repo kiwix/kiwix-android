@@ -129,7 +129,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
     val filePath = FileUtils.getLocalFilePathByUri(
       requireActivity().applicationContext, Uri.parse(zimFileUri)
     )
-
     if (filePath == null || !File(filePath).isFileExist()) {
       // Close the previously opened book in the reader. Since this file is not found,
       // it will not be set in the zimFileReader. The previously opened ZIM file
@@ -140,7 +139,9 @@ class KiwixReaderFragment : CoreReaderFragment() {
       activity.toast(string.error_file_not_found)
       return
     }
-    openZimFile(ZimReaderSource(File(filePath)))
+    val zimReaderSource = ZimReaderSource(File(filePath))
+    clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource)
+    openZimFile(zimReaderSource)
   }
 
   override fun loadDrawerViews() {
