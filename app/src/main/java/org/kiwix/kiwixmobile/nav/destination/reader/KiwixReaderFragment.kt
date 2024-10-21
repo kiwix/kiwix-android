@@ -53,8 +53,8 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
 import org.kiwix.kiwixmobile.core.main.RestoreOrigin
-import org.kiwix.kiwixmobile.core.main.RestoreOrigin.FromSearchScreen
 import org.kiwix.kiwixmobile.core.main.RestoreOrigin.FromExternalLaunch
+import org.kiwix.kiwixmobile.core.main.RestoreOrigin.FromSearchScreen
 import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
@@ -117,6 +117,15 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private suspend fun tryOpeningZimFile(zimFileUri: String) {
+    // Close the previously opened book in the reader before opening a new ZIM file
+    // to avoid native crashes due to "null pointer dereference." These crashes can occur
+    // when setting a new ZIM file in the archive while the previous one is being disposed of.
+    // Since the WebView may still asynchronously request data from the disposed archive,
+    // we close the previous book before opening a new ZIM file in the archive.
+    closeZimBook()
+    // Update the reader screen title to prevent showing the previously set title
+    // when creating the new archive object.
+    updateTitle()
     val filePath = FileUtils.getLocalFilePathByUri(
       requireActivity().applicationContext, Uri.parse(zimFileUri)
     )

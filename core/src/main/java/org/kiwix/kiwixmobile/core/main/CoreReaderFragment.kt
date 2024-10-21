@@ -1386,7 +1386,7 @@ abstract class CoreReaderFragment :
     closeZimBook()
   }
 
-  private fun closeZimBook() {
+  fun closeZimBook() {
     zimReaderContainer?.setZimReaderSource(null)
   }
 
