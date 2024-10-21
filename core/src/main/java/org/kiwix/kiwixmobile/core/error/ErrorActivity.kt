@@ -25,7 +25,6 @@ import android.os.Bundle
 import android.os.Process
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
@@ -102,12 +101,7 @@ open class ErrorActivity : BaseActivity() {
         if (activities.isNotEmpty()) {
           sendEmailLauncher.launch(Intent.createChooser(emailIntent, "Send email..."))
         } else {
-          toast(
-            getString(
-              R.string.no_email_application_installed,
-              CRASH_AND_FEEDBACK_EMAIL_ADDRESS
-            )
-          )
+          toast(getString(R.string.no_email_application_installed))
         }
       }
     }
@@ -124,20 +118,11 @@ open class ErrorActivity : BaseActivity() {
       data = Uri.parse("mailto:")
       putExtra(Intent.EXTRA_EMAIL, arrayOf(CRASH_AND_FEEDBACK_EMAIL_ADDRESS))
       putExtra(Intent.EXTRA_SUBJECT, subject)
-      putExtra(Intent.EXTRA_TEXT, emailBody)
       val file = fileLogger.writeLogFile(
         this@ErrorActivity,
         activityKiwixErrorBinding?.allowLogs?.isChecked == true
       )
-      file.appendText(emailBody)
-      val path =
-        FileProvider.getUriForFile(
-          this@ErrorActivity,
-          applicationContext.packageName + ".fileprovider",
-          file
-        )
-      addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
-      putExtra(android.content.Intent.EXTRA_STREAM, path)
+      putExtra(Intent.EXTRA_TEXT, "$emailBody\n\nDevice Logs:\n$${file.readText()}")
     }
   }
 
