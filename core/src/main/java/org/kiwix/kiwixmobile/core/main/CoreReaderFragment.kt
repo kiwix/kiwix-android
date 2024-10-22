@@ -132,6 +132,7 @@ import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryClickListener
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
+import org.kiwix.kiwixmobile.core.page.history.adapter.DataCallback
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.PageHistoryItem
@@ -192,7 +193,8 @@ abstract class CoreReaderFragment :
   WebViewProvider,
   ReadAloudCallbacks,
   NavigationHistoryClickListener,
-  ShowDonationDialogCallback {
+  ShowDonationDialogCallback,
+  DataCallback {
   protected val webViewList: MutableList<KiwixWebView> = ArrayList()
   private val webUrlsProcessor = BehaviorProcessor.create<String>()
   private var fragmentReaderBinding: FragmentReaderBinding? = null
@@ -326,7 +328,6 @@ abstract class CoreReaderFragment :
   private lateinit var serviceConnection: ServiceConnection
   private var readAloudService: ReadAloudService? = null
   private var navigationHistoryList: MutableList<NavigationHistoryListItem> = ArrayList()
-  private var pageTimeStamp: MutableList<Long> = ArrayList()
   private var isReadSelection = false
   private var isReadAloudServiceRunning = false
   private var readerLifeCycleScope: CoroutineScope? = null
@@ -991,6 +992,7 @@ abstract class CoreReaderFragment :
 
   override fun clearHistory() {
     getCurrentWebView()?.clearHistory()
+    repositoryActions?.clearPageHistory()
     updateBottomToolbarArrowsAlpha()
     toast(R.string.navigation_history_cleared)
   }
@@ -1929,10 +1931,44 @@ abstract class CoreReaderFragment :
     }
   }
 
+  private fun loadWebViewHistory(pageHistory: List<PageHistoryItem>) {
+    val backStack = pageHistory.filter { !it.isForward }
+    val forwardStack = pageHistory.filter(PageHistoryItem::isForward)
+    activity.toast("${pageHistory.size}   ${backStack.size}", Toast.LENGTH_LONG)
+    val currentPage = getCurrentWebView()?.copyBackForwardList()?.currentItem?.url
+
+    // Now, restore the back and forward history manually
+    // First restore back history
+    backStack.indices.reversed()
+      .asSequence()
+      .map { backStack[it] }
+      .forEach { url -> loadUrlWithCurrentWebview(url.pageUrl) }
+
+    loadUrlWithCurrentWebview(currentPage)
+
+    forwardStack.indices.reversed()
+      .asSequence()
+      .map { forwardStack[it] }
+      .forEach { url -> loadUrlWithCurrentWebview(url.pageUrl) }
+
+    repeat(
+      forwardStack.indices.count()
+    ) { getCurrentWebView()?.goBack() }
+  }
+
+  override fun onDataFetched(pageHistory: List<PageHistoryItem>) {
+    loadWebViewHistory(pageHistory)
+  }
+
+  override fun onError(error: Throwable) {
+    activity.toast(R.string.could_not_restore_tabs, Toast.LENGTH_LONG)
+  }
+
   override fun onResume() {
     super.onResume()
     updateBottomToolbarVisibility()
     updateNightMode()
+    repositoryActions?.loadPageHistory(this)
     if (tts == null) {
       setUpTTS()
     }
@@ -2300,8 +2336,9 @@ abstract class CoreReaderFragment :
   private fun saveWebBackForwardListToRoom() {
     val webBackForwardList = getCurrentWebView()?.copyBackForwardList()
     val currentIndex = webBackForwardList?.currentIndex
+    val zimId = zimReaderContainer?.zimFileReader?.id ?: ""
+
     if (currentIndex != null) {
-      repositoryActions?.clearPageHistory()
       // Save BackStack
       webBackForwardList.let { historyList ->
         (0 until historyList.currentIndex)
@@ -2309,11 +2346,11 @@ abstract class CoreReaderFragment :
           .forEach {
             val historyItem = webBackForwardList.getItemAtIndex(it)
             val pageHistory = PageHistoryItem(
-              zimId = zimReaderContainer?.zimFileReader?.id ?: "",
+              zimId = zimId,
               title = historyItem.title,
               pageUrl = historyItem.url,
               isForward = false,
-              timeStamp = 0
+              timeStamp = it.toLong()
             )
             repositoryActions?.savePageHistory(pageHistory)
           }
@@ -2326,11 +2363,11 @@ abstract class CoreReaderFragment :
           .forEach {
             val historyItem = webBackForwardList.getItemAtIndex(it)
             val pageHistory = PageHistoryItem(
-              zimId = zimReaderContainer?.zimFileReader?.id ?: "",
+              zimId = zimId,
               title = historyItem.title,
               pageUrl = historyItem.url,
               isForward = true,
-              timeStamp = 0
+              timeStamp = it.toLong()
             )
             repositoryActions?.savePageHistory(pageHistory)
           }
@@ -2340,8 +2377,9 @@ abstract class CoreReaderFragment :
 
   override fun onPause() {
     super.onPause()
-    saveTabStates()
+    repositoryActions?.clearPageHistory()
     saveWebBackForwardListToRoom()
+    saveTabStates()
     Log.d(
       TAG_KIWIX,
       "onPause Save current zim file to preferences: " +
@@ -2391,7 +2429,6 @@ abstract class CoreReaderFragment :
       val zimFileReader = zimReaderContainer?.zimFileReader
       if (hasValidFileAndUrl(getCurrentWebView()?.url, zimFileReader)) {
         val timeStamp = System.currentTimeMillis()
-        pageTimeStamp.add(timeStamp)
         val sdf = SimpleDateFormat(
           "d MMM yyyy",
           getCurrentLocale(
