@@ -29,7 +29,7 @@ abstract class PageHistoryRoomDao {
   @Insert
   abstract fun insertPageHistoryItem(pageHistoryRoomEntity: PageHistoryRoomEntity)
 
-  @Query("SELECT * FROM PageHistoryRoomEntity")
+  @Query("SELECT * FROM PageHistoryRoomEntity ORDER BY isForward ASC,timestamp DESC")
   abstract fun getAllPageHistory(): Flowable<List<PageHistoryRoomEntity>>
 
   @Query("Delete from PageHistoryRoomEntity")
@@ -37,7 +37,6 @@ abstract class PageHistoryRoomDao {
 
   fun clearPageHistoryWithPrimaryKey() {
     clearPageHistory()
-    resetPrimaryKey()
   }
 
   @Query("DELETE FROM sqlite_sequence WHERE name='PageHistoryRoomEntity'")

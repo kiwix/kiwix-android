@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.data
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import org.kiwix.kiwixmobile.core.dao.entities.PageHistoryRoomEntity
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
@@ -56,6 +57,6 @@ interface DataSource {
   fun deleteNotes(noteList: List<NoteListItem>): Completable
 
   fun insertPageHistoryItem(pageHistory: PageHistoryItem): Completable
-  fun getAllPageHistory(): Flowable<List<PageHistoryItem>>
+  fun getAllPageHistory(): Single<List<PageHistoryRoomEntity>>
   fun clearPageHistory(): Completable
 }

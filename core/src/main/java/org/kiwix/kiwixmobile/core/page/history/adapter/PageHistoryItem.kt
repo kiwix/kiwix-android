@@ -52,3 +52,8 @@ data class PageHistoryItem(
     pageHistoryRoomEntity.timeStamp
   )
 }
+
+interface DataCallback {
+  fun onDataFetched(pageHistory: List<PageHistoryItem>)
+  fun onError(error: Throwable)
+}
