@@ -20,11 +20,11 @@ package org.kiwix.kiwixmobile.core.data
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
-import org.kiwix.kiwixmobile.core.dao.entities.PageHistoryRoomEntity
+import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
-import org.kiwix.kiwixmobile.core.page.history.adapter.PageHistoryItem
+import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
@@ -56,7 +56,7 @@ interface DataSource {
   fun deleteNote(noteTitle: String): Completable
   fun deleteNotes(noteList: List<NoteListItem>): Completable
 
-  fun insertPageHistoryItem(pageHistory: PageHistoryItem): Completable
-  fun getAllPageHistory(): Single<List<PageHistoryRoomEntity>>
-  fun clearPageHistory(): Completable
+  fun insertWebViewHistoryItem(pageHistory: WebViewHistoryItem): Completable
+  fun getAllWebViewPagesHistory(): Single<List<WebViewHistoryEntity>>
+  fun clearWebViewPagesHistory(): Completable
 }

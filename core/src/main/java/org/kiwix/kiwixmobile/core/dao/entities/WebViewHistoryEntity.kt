@@ -16,44 +16,27 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.page.history.adapter
+package org.kiwix.kiwixmobile.core.dao.entities
 
-import org.kiwix.kiwixmobile.core.dao.entities.PageHistoryRoomEntity
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 
-data class PageHistoryItem(
-  val databaseId: Long = 0L,
+@Entity
+data class WebViewHistoryEntity(
+  @PrimaryKey(autoGenerate = true) var id: Long = 0L,
   val zimId: String,
   val title: String,
   val pageUrl: String,
-  val isForward: Boolean,
+  val isForward: Boolean = false,
   val timeStamp: Long
 ) {
-  constructor(
-    zimId: String,
-    title: String,
-    pageUrl: String,
-    isForward: Boolean,
-    timeStamp: Long
-  ) : this(
-    0L,
-    zimId,
-    title,
-    pageUrl,
-    isForward,
-    timeStamp
+  constructor(webViewHistoryItem: WebViewHistoryItem) : this(
+    webViewHistoryItem.databaseId,
+    webViewHistoryItem.zimId,
+    webViewHistoryItem.title,
+    webViewHistoryItem.pageUrl,
+    webViewHistoryItem.isForward,
+    webViewHistoryItem.timeStamp
   )
-
-  constructor(pageHistoryRoomEntity: PageHistoryRoomEntity) : this(
-    pageHistoryRoomEntity.id,
-    pageHistoryRoomEntity.zimId,
-    pageHistoryRoomEntity.title,
-    pageHistoryRoomEntity.pageUrl,
-    pageHistoryRoomEntity.isForward,
-    pageHistoryRoomEntity.timeStamp
-  )
-}
-
-interface DataCallback {
-  fun onDataFetched(pageHistory: List<PageHistoryItem>)
-  fun onError(error: Throwable)
 }

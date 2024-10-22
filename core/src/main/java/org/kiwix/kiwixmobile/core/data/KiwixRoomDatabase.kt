@@ -29,13 +29,13 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDaoCoverts
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
-import org.kiwix.kiwixmobile.core.dao.PageHistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
+import org.kiwix.kiwixmobile.core.dao.WebViewHistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
-import org.kiwix.kiwixmobile.core.dao.entities.PageHistoryRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
+import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.dao.entities.ZimSourceRoomConverter
 
 @Suppress("UnnecessaryAbstractClass")
@@ -45,7 +45,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.ZimSourceRoomConverter
     HistoryRoomEntity::class,
     NotesRoomEntity::class,
     DownloadRoomEntity::class,
-    PageHistoryRoomEntity::class
+    WebViewHistoryEntity::class
   ],
   version = 8,
   exportSchema = false
@@ -56,7 +56,7 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
   abstract fun historyRoomDao(): HistoryRoomDao
   abstract fun notesRoomDao(): NotesRoomDao
   abstract fun downloadRoomDao(): DownloadRoomDao
-  abstract fun pageHistoryRoomDao(): PageHistoryRoomDao
+  abstract fun pageHistoryRoomDao(): WebViewHistoryRoomDao
 
   companion object {
     private var db: KiwixRoomDatabase? = null
@@ -279,14 +279,15 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
     @Suppress("MagicNumber")
     private val MIGRATION_7_8 = object : Migration(7, 8) {
       override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("DROP TABLE PageHistoryRoomEntity")
         database.execSQL(
           """
-            CREATE TABLE IF NOT EXISTS `PageHistoryRoomEntity` (
+            CREATE TABLE IF NOT EXISTS `WebViewHistoryEntity` (
                 `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 `zimId` TEXT NOT NULL,
                 `title` TEXT NOT NULL,
                 `pageUrl` TEXT NOT NULL,
-                `isForward` INTEGER NOT NULL DEFAULT 0
+                `isForward` INTEGER NOT NULL DEFAULT 0,
                 `timeStamp` INTEGER NOT NULL
             )
             """
