@@ -23,7 +23,7 @@ import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.DataCallback
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
-import org.kiwix.kiwixmobile.core.page.history.adapter.PageHistoryItem
+import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
@@ -73,20 +73,20 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
       .subscribe({}, { e -> Log.e(TAG, "Unable to save book", e) })
   }
 
-  fun savePageHistory(pageHistory: PageHistoryItem) {
-    savePageHistoryDisposable = dataSource.insertPageHistoryItem(pageHistory)
+  fun saveWebViewPageHistory(pageHistory: WebViewHistoryItem) {
+    savePageHistoryDisposable = dataSource.insertWebViewHistoryItem(pageHistory)
       .subscribe({}, { e -> Log.e(TAG, "Unable to save page history", e) })
   }
 
-  fun clearPageHistory() {
-    clearPageHistoryDisposable = dataSource.clearPageHistory()
+  fun clearWebViewPagesHistory() {
+    clearPageHistoryDisposable = dataSource.clearWebViewPagesHistory()
       .subscribe({}, { e -> Log.e(TAG, "Unable to clear page history", e) })
   }
 
-  fun loadPageHistory(callBack: DataCallback) {
-    getPageHistoryDisposable = dataSource.getAllPageHistory()
+  fun loadWebViewPagesHistory(callBack: DataCallback) {
+    getPageHistoryDisposable = dataSource.getAllWebViewPagesHistory()
       .map { roomEntities ->
-        roomEntities.map(::PageHistoryItem)
+        roomEntities.map(::WebViewHistoryItem)
       }
       .subscribe(callBack::onDataFetched) { e -> Log.e(TAG, "Unable to load page history", e) }
   }
