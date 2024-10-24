@@ -30,10 +30,13 @@ import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDaoCoverts
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
+import org.kiwix.kiwixmobile.core.dao.WebViewHistoryRoomDao
+import org.kiwix.kiwixmobile.core.dao.entities.BundleRoomConverter
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
+import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.dao.entities.ZimSourceRoomConverter
 
 @Suppress("UnnecessaryAbstractClass")
@@ -42,17 +45,23 @@ import org.kiwix.kiwixmobile.core.dao.entities.ZimSourceRoomConverter
     RecentSearchRoomEntity::class,
     HistoryRoomEntity::class,
     NotesRoomEntity::class,
-    DownloadRoomEntity::class
+    DownloadRoomEntity::class,
+    WebViewHistoryEntity::class
   ],
-  version = 5,
+  version = 6,
   exportSchema = false
 )
-@TypeConverters(HistoryRoomDaoCoverts::class, ZimSourceRoomConverter::class)
+@TypeConverters(
+  HistoryRoomDaoCoverts::class,
+  ZimSourceRoomConverter::class,
+  BundleRoomConverter::class
+)
 abstract class KiwixRoomDatabase : RoomDatabase() {
   abstract fun recentSearchRoomDao(): RecentSearchRoomDao
   abstract fun historyRoomDao(): HistoryRoomDao
   abstract fun notesRoomDao(): NotesRoomDao
   abstract fun downloadRoomDao(): DownloadRoomDao
+  abstract fun webViewHistoryRoomDao(): WebViewHistoryRoomDao
 
   companion object {
     private var db: KiwixRoomDatabase? = null
@@ -62,7 +71,13 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
           ?: Room.databaseBuilder(context, KiwixRoomDatabase::class.java, "KiwixRoom.db")
             // We have already database name called kiwix.db in order to avoid complexity we named
             // as kiwixRoom.db
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+            .addMigrations(
+              MIGRATION_1_2,
+              MIGRATION_2_3,
+              MIGRATION_3_4,
+              MIGRATION_4_5,
+              MIGRATION_5_6
+            )
             .build().also { db = it }
       }
     }
@@ -199,6 +214,23 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
         database.execSQL("DROP TABLE HistoryRoomEntity")
         database.execSQL("ALTER TABLE HistoryRoomEntity_temp RENAME TO HistoryRoomEntity")
         database.execSQL("ALTER TABLE NotesRoomEntity ADD COLUMN zimReaderSource TEXT")
+      }
+    }
+
+    @Suppress("MagicNumber")
+    private val MIGRATION_5_6 = object : Migration(5, 6) {
+      override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL(
+          """
+            CREATE TABLE IF NOT EXISTS `WebViewHistoryEntity` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `zimId` TEXT NOT NULL,
+                `webViewIndex` INTEGER NOT NULL,
+                `webViewCurrentPosition` INTEGER NOT NULL,
+                `webViewBackForwardListBundle` BLOB NULL
+            )
+            """
+        )
       }
     }
 
