@@ -19,21 +19,26 @@ package org.kiwix.kiwixmobile.core.error
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Process
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.queryIntentActivitiesCompat
+import org.kiwix.kiwixmobile.core.compat.ResolveInfoFlagsCompat
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.databinding.ActivityKiwixErrorBinding
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.utils.CRASH_AND_FEEDBACK_EMAIL_ADDRESS
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
 import org.kiwix.kiwixmobile.core.zim_manager.MountPointProducer
@@ -90,7 +95,14 @@ open class ErrorActivity : BaseActivity() {
   private fun setupReportButton() {
     activityKiwixErrorBinding?.reportButton?.setOnClickListener {
       lifecycleScope.launch {
-        sendEmailLauncher.launch(Intent.createChooser(emailIntent(), "Send email..."))
+        val emailIntent = emailIntent()
+        val activities =
+          packageManager.queryIntentActivitiesCompat(emailIntent, ResolveInfoFlagsCompat.EMPTY)
+        if (activities.isNotEmpty()) {
+          sendEmailLauncher.launch(Intent.createChooser(emailIntent, "Send email..."))
+        } else {
+          toast(getString(R.string.no_email_application_installed))
+        }
       }
     }
   }
@@ -102,27 +114,15 @@ open class ErrorActivity : BaseActivity() {
 
   private suspend fun emailIntent(): Intent {
     val emailBody = buildBody()
-    return Intent(Intent.ACTION_SEND).apply {
-      type = "text/plain"
-      putExtra(
-        Intent.EXTRA_EMAIL,
-        arrayOf("android-crash-feedback@kiwix.org")
-      )
+    return Intent(Intent.ACTION_SENDTO).apply {
+      data = Uri.parse("mailto:")
+      putExtra(Intent.EXTRA_EMAIL, arrayOf(CRASH_AND_FEEDBACK_EMAIL_ADDRESS))
       putExtra(Intent.EXTRA_SUBJECT, subject)
-      putExtra(Intent.EXTRA_TEXT, emailBody)
       val file = fileLogger.writeLogFile(
         this@ErrorActivity,
         activityKiwixErrorBinding?.allowLogs?.isChecked == true
       )
-      file.appendText(emailBody)
-      val path =
-        FileProvider.getUriForFile(
-          this@ErrorActivity,
-          applicationContext.packageName + ".fileprovider",
-          file
-        )
-      addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
-      putExtra(android.content.Intent.EXTRA_STREAM, path)
+      putExtra(Intent.EXTRA_TEXT, "$emailBody\n\nDevice Logs:\n$${file.readText()}")
     }
   }
 
