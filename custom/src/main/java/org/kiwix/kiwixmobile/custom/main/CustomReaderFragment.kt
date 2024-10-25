@@ -150,25 +150,26 @@ class CustomReaderFragment : CoreReaderFragment() {
   }
 
   /**
-   * Restores the view state when the attempt to read JSON from shared preferences fails
-   * due to invalid or corrupted data. In this case, it opens the homepage of the zim file,
-   * as custom apps always have the zim file available.
+   * Restores the view state when the attempt to read web view history from the room database fails
+   * due to the absence of any history records. In this case, it navigates to the homepage of the
+   * ZIM file, as custom apps are expected to have the ZIM file readily available.
    */
-  override fun restoreViewStateOnInvalidJSON() {
+  override fun restoreViewStateOnInvalidWebViewHistory() {
     openHomeScreen()
   }
 
   /**
-   * Restores the view state when the JSON data is valid. This method restores the tabs
-   * and loads the last opened article in the specified tab.
+   * Restores the view state when the webViewHistory data is valid.
+   * This method restores the tabs with webView pages history.
    */
-  override fun restoreViewStateOnValidJSON(
+  override fun restoreViewStateOnValidWebViewHistory(
     webViewHistoryItemList: List<WebViewHistoryItem>,
     currentTab: Int,
     // Unused in custom apps as there is only one ZIM file that is already set.
-    restoreOrigin: RestoreOrigin
+    restoreOrigin: RestoreOrigin,
+    onComplete: () -> Unit
   ) {
-    restoreTabs(webViewHistoryItemList, currentTab)
+    restoreTabs(webViewHistoryItemList, currentTab, onComplete)
   }
 
   /**
@@ -183,6 +184,27 @@ class CustomReaderFragment : CoreReaderFragment() {
     )
   }
 
+  /**
+   * Opens a ZIM file or an OBB file based on the validation of available files.
+   *
+   * This method uses the `customFileValidator` to check for the presence of required files.
+   * Depending on the validation results, it performs the following actions:
+   *
+   * - If a valid ZIM file is found:
+   *   - It opens the ZIM file and creates a `ZimReaderSource` for it.
+   *   - Saves the book information in the database to be displayed in the `ZimHostFragment`.
+   *   - Manages the external launch and restores the view state if specified.
+   *
+   * - If both ZIM and OBB files are found:
+   *   - The ZIM file is deleted, and the OBB file is opened instead.
+   *   - Manages the external launch and restores the view state if specified.
+   *
+   * If no valid files are found and the app is not in test mode, the user is navigated to
+   * the `customDownloadFragment` to facilitate downloading the required files.
+   *
+   * @param shouldManageExternalLaunch Indicates whether to manage external launch and
+   *                                   restore the view state after opening the file. Default is false.
+   */
   private fun openObbOrZim(shouldManageExternalLaunch: Boolean = false) {
     customFileValidator.validate(
       onFilesFound = {
