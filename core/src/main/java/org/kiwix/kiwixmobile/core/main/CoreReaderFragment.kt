@@ -288,6 +288,7 @@ abstract class CoreReaderFragment :
   private var isFromManageExternalLaunch = false
   private var shouldSaveTabsOnPause = true
   private var searchItemToOpen: SearchItemToOpen? = null
+  private var findInPageTitle: String? = null
 
   @JvmField
   @Inject
@@ -2358,6 +2359,23 @@ abstract class CoreReaderFragment :
     }
   }
 
+  /**
+   * Stores the given title for a "find in page" search operation.
+   * This title is used later when triggering the "find in page" functionality.
+   *
+   * @param title The title or keyword to search for within the current WebView content.
+   */
+  private fun storeFindInPageTitle(title: String) {
+    findInPageTitle = title
+  }
+
+  /**
+   * Initiates the "find in page" UI for searching within the current WebView content.
+   * If the `compatCallback` is active, it sets up the WebView to search for the
+   * specified title and displays the search input UI.
+   *
+   * @param title The search term or keyword to locate within the page. If null, no action is taken.
+   */
   private fun findInPage(title: String?) {
     // if the search is localized trigger find in page UI.
     compatCallback?.apply {
@@ -2734,12 +2752,15 @@ abstract class CoreReaderFragment :
           currentTab,
           restoreOrigin
         ) {
-          // This lambda function is invoked after restoring the tabs. It checks if there is a
-          // search item to open. If `searchItemToOpen` is not null, it will call the openSearchItem
-          // method to open the specified search item. After opening, it sets `searchItemToOpen`
-          // to null to prevent any unexpected behavior on subsequent calls.
+          // This lambda is executed after the tabs have been restored. It checks if there is a
+          // search item to open. If `searchItemToOpen` is not null, it calls `openSearchItem`
+          // to open the specified item, then sets `searchItemToOpen` to null to prevent
+          // any unexpected behavior on future calls. Similarly, if `findInPageTitle` is set,
+          // it invokes `findInPage` and resets `findInPageTitle` to null.
           searchItemToOpen?.let(::openSearchItem)
           searchItemToOpen = null
+          findInPageTitle?.let(::findInPage)
+          findInPageTitle = null
         }
       }, {
         restoreViewStateOnInvalidWebViewHistory()
@@ -2808,7 +2829,7 @@ abstract class CoreReaderFragment :
     requireActivity().observeNavigationResult<String>(
       FIND_IN_PAGE_SEARCH_STRING,
       viewLifecycleOwner,
-      Observer(::findInPage)
+      Observer(::storeFindInPageTitle)
     )
     requireActivity().observeNavigationResult<SearchItemToOpen>(
       TAG_FILE_SEARCHED,
