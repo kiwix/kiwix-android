@@ -286,6 +286,7 @@ abstract class CoreReaderFragment :
   private var isFirstTimeMainPageLoaded = true
   private var isFromManageExternalLaunch = false
   private var shouldSaveTabsOnPause = true
+  private var searchItemToOpen: SearchItemToOpen? = null
 
   @JvmField
   @Inject
@@ -516,7 +517,7 @@ abstract class CoreReaderFragment :
     requireActivity().observeNavigationResult<SearchItemToOpen>(
       TAG_FILE_SEARCHED,
       viewLifecycleOwner,
-      Observer(::openSearchItem)
+      Observer(::storeSearchItem)
     )
     handleClicks()
   }
@@ -2098,6 +2099,18 @@ abstract class CoreReaderFragment :
   }
 
   /**
+   * Stores the specified search item to be opened later.
+   *
+   * This method saves the provided `SearchItemToOpen` object, which will be used to
+   * open the searched item after the tabs have been restored.
+   *
+   * @param item The search item to be opened after restoring the tabs.
+   */
+  private fun storeSearchItem(item: SearchItemToOpen) {
+    searchItemToOpen = item
+  }
+
+  /**
    * Opens a search item based on its properties.
    *
    * If the item should open in a new tab, a new tab is created.
@@ -2105,13 +2118,8 @@ abstract class CoreReaderFragment :
    * The method attempts to load the page URL directly. If the page URL is not available,
    * it attempts to convert the page title to a URL using the ZIM reader container. The
    * resulting URL is then loaded in the current web view.
-   *
-   * Note: This method is overridden in the `KiwixReaderFragment` class to store the
-   * `SearchItemToOpen` object for later use. If modifications are made to this method,
-   * please check the overridden version to understand how it interacts with the fragment's
-   * navigation logic.
    */
-  open fun openSearchItem(item: SearchItemToOpen) {
+  private fun openSearchItem(item: SearchItemToOpen) {
     if (item.shouldOpenInNewTab) {
       createNewTab()
     }
@@ -2641,8 +2649,7 @@ abstract class CoreReaderFragment :
 
   @SuppressLint("CheckResult")
   protected fun manageExternalLaunchAndRestoringViewState(
-    restoreOrigin: RestoreOrigin = FromExternalLaunch,
-    onComplete: () -> Unit = {}
+    restoreOrigin: RestoreOrigin = FromExternalLaunch
   ) {
     val settings = requireActivity().getSharedPreferences(
       SharedPreferenceUtil.PREF_KIWIX_MOBILE,
@@ -2658,9 +2665,15 @@ abstract class CoreReaderFragment :
         restoreViewStateOnValidWebViewHistory(
           webViewHistoryItemList,
           currentTab,
-          restoreOrigin,
-          onComplete
-        )
+          restoreOrigin
+        ) {
+          // This lambda function is invoked after restoring the tabs. It checks if there is a
+          // search item to open. If `searchItemToOpen` is not null, it will call the openSearchItem
+          // method to open the specified search item. After opening, it sets `searchItemToOpen`
+          // to null to prevent any unexpected behavior on subsequent calls.
+          searchItemToOpen?.let(::openSearchItem)
+          searchItemToOpen = null
+        }
       }, {
         restoreViewStateOnInvalidWebViewHistory()
       })
