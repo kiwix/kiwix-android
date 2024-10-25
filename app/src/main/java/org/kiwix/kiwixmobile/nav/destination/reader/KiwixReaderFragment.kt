@@ -58,7 +58,6 @@ import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
 import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
-import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
@@ -70,7 +69,6 @@ private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
 
 class KiwixReaderFragment : CoreReaderFragment() {
   private var isFullScreenVideo: Boolean = false
-  private var searchItemToOpen: SearchItemToOpen? = null
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
@@ -113,16 +111,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
         } else {
           val restoreOrigin =
             if (args.searchItemTitle.isNotEmpty()) FromSearchScreen else FromExternalLaunch
-          manageExternalLaunchAndRestoringViewState(restoreOrigin) {
-            // This lambda function is invoked after restoring the tabs. It checks if there is a
-            // search item to open. If `searchItemToOpen` is not null, it will call the superclass
-            // method to open the specified search item. After opening, it sets `searchItemToOpen`
-            // to null to prevent any unexpected behavior on subsequent calls.
-            searchItemToOpen?.let {
-              super.openSearchItem(it)
-            }
-            searchItemToOpen = null
-          }
+          manageExternalLaunchAndRestoringViewState(restoreOrigin)
         }
       }
       requireArguments().clear()
@@ -160,18 +149,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
     }
     val zimReaderSource = ZimReaderSource(File(filePath))
     openZimFile(zimReaderSource)
-  }
-
-  /**
-   * Stores the specified search item to be opened later.
-   *
-   * This method saves the provided `SearchItemToOpen` object, which will be used to
-   * open the searched item after the tabs have been restored.
-   *
-   * @param item The search item to be opened after restoring the tabs.
-   */
-  override fun openSearchItem(item: SearchItemToOpen) {
-    searchItemToOpen = item
   }
 
   override fun loadDrawerViews() {
