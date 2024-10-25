@@ -28,8 +28,8 @@ import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
-import org.kiwix.kiwixmobile.core.dao.WebViewHistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
+import org.kiwix.kiwixmobile.core.dao.WebViewHistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
@@ -37,7 +37,6 @@ import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
-import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.zim_manager.Language
@@ -148,7 +147,9 @@ class Repository @Inject internal constructor(
     Completable.fromAction { notesRoomDao.deleteNotes(noteList) }
       .subscribeOn(ioThread)
 
-  override suspend fun insertWebViewPageHistoryItems(webViewHistoryEntityList: List<WebViewHistoryEntity>) {
+  override suspend fun insertWebViewPageHistoryItems(
+    webViewHistoryEntityList: List<WebViewHistoryEntity>
+  ) {
     webViewHistoryRoomDao.insertWebViewPageHistoryItems(webViewHistoryEntityList)
   }
 
@@ -159,7 +160,7 @@ class Repository @Inject internal constructor(
       .observeOn(mainThread)
 
   override suspend fun clearWebViewPagesHistory() {
-    webViewHistoryRoomDao.clearPageHistoryWithPrimaryKey()
+    webViewHistoryRoomDao.clearWebViewPagesHistory()
   }
 
   override fun deleteNote(noteTitle: String): Completable =

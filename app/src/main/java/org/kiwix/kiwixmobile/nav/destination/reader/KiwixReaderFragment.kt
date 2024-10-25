@@ -58,6 +58,7 @@ import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
 import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
+import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
@@ -69,6 +70,7 @@ private const val HIDE_TAB_SWITCHER_DELAY: Long = 300
 
 class KiwixReaderFragment : CoreReaderFragment() {
   private var isFullScreenVideo: Boolean = false
+  private var searchItemToOpen: SearchItemToOpen? = null
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
@@ -111,7 +113,16 @@ class KiwixReaderFragment : CoreReaderFragment() {
         } else {
           val restoreOrigin =
             if (args.searchItemTitle.isNotEmpty()) FromSearchScreen else FromExternalLaunch
-          manageExternalLaunchAndRestoringViewState(restoreOrigin)
+          manageExternalLaunchAndRestoringViewState(restoreOrigin) {
+            // This lambda function is invoked after restoring the tabs. It checks if there is a
+            // search item to open. If `searchItemToOpen` is not null, it will call the superclass
+            // method to open the specified search item. After opening, it sets `searchItemToOpen`
+            // to null to prevent any unexpected behavior on subsequent calls.
+            searchItemToOpen?.let {
+              super.openSearchItem(it)
+            }
+            searchItemToOpen = null
+          }
         }
       }
       requireArguments().clear()
@@ -149,6 +160,18 @@ class KiwixReaderFragment : CoreReaderFragment() {
     }
     val zimReaderSource = ZimReaderSource(File(filePath))
     openZimFile(zimReaderSource)
+  }
+
+  /**
+   * Stores the specified search item to be opened later.
+   *
+   * This method saves the provided `SearchItemToOpen` object, which will be used to
+   * open the searched item after the tabs have been restored.
+   *
+   * @param item The search item to be opened after restoring the tabs.
+   */
+  override fun openSearchItem(item: SearchItemToOpen) {
+    searchItemToOpen = item
   }
 
   override fun loadDrawerViews() {
@@ -243,7 +266,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     }
   }
 
-  override fun restoreViewStateOnInvalidJSON() {
+  override fun restoreViewStateOnInvalidWebViewHistory() {
     Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
     exitBook()
   }
@@ -256,15 +279,16 @@ class KiwixReaderFragment : CoreReaderFragment() {
    * as the ZIM file is already set in the reader. The method handles setting up the ZIM file and bookmarks,
    * and restores the tabs and positions from the provided data.
    *
-   * @param webViewHistoryItemList   JSON string representing the list of articles to be restored.
-   * @param currentTab    Index of the tab to be restored as the currently active one.
+   * @param webViewHistoryItemList   WebViewHistoryItem list representing the list of articles to be restored.
+   * @param currentTab Index of the tab to be restored as the currently active one.
    * @param restoreOrigin Indicates whether the restoration is triggered from an external launch or the search screen.
+   * @param onComplete  Callback to be invoked upon completion of the restoration process.
    */
-
-  override fun restoreViewStateOnValidJSON(
+  override fun restoreViewStateOnValidWebViewHistory(
     webViewHistoryItemList: List<WebViewHistoryItem>,
     currentTab: Int,
-    restoreOrigin: RestoreOrigin
+    restoreOrigin: RestoreOrigin,
+    onComplete: () -> Unit
   ) {
     when (restoreOrigin) {
       FromExternalLaunch -> {
@@ -274,7 +298,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
           val zimReaderSource = fromDatabaseValue(settings.getString(TAG_CURRENT_FILE, null))
           if (zimReaderSource?.canOpenInLibkiwix() == true) {
             if (zimReaderContainer?.zimReaderSource == null) {
-              openZimFile(zimReaderSource)
+              openZimFile(zimReaderSource, isFromManageExternalLaunch = true)
               Log.d(
                 TAG_KIWIX,
                 "Kiwix normal start, Opened last used zimFile: -> ${zimReaderSource.toDatabase()}"
@@ -282,7 +306,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
             } else {
               zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
             }
-            restoreTabs(webViewHistoryItemList, currentTab)
+            restoreTabs(webViewHistoryItemList, currentTab, onComplete)
           } else {
             getCurrentWebView()?.snack(string.zim_not_opened)
             exitBook() // hide the options for zim file to avoid unexpected UI behavior
@@ -291,7 +315,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       }
 
       FromSearchScreen -> {
-        restoreTabs(webViewHistoryItemList, currentTab)
+        restoreTabs(webViewHistoryItemList, currentTab, onComplete)
       }
     }
   }
