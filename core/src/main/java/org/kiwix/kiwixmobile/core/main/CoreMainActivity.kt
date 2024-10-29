@@ -39,6 +39,7 @@ import androidx.fragment.app.FragmentContainerView
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDirections
+import androidx.navigation.NavOptions
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -347,6 +348,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     navController.navigate(fragmentId, bundle)
   }
 
+  fun navigate(fragmentId: Int, bundle: Bundle, navOptions: NavOptions) {
+    navController.navigate(fragmentId, bundle, navOptions)
+  }
+
   private fun openSettings() {
     handleDrawerOnNavigation()
     navigate(settingsFragmentResId)
@@ -389,13 +394,18 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     if (zimReaderSource != null) {
       zimFileUri = zimReaderSource.toDatabase()
     }
+    val navOptions = NavOptions.Builder()
+      .setLaunchSingleTop(true)
+      .setPopUpTo(readerFragmentResId, inclusive = true)
+      .build()
     navigate(
       readerFragmentResId,
       bundleOf(
         PAGE_URL_KEY to pageUrl,
         ZIM_FILE_URI_KEY to zimFileUri,
         SHOULD_OPEN_IN_NEW_TAB to shouldOpenInNewTab
-      )
+      ),
+      navOptions
     )
   }
 
