@@ -29,8 +29,6 @@ const val REQUEST_POST_NOTIFICATION_PERMISSION = 4
 const val TAG_FILE_SEARCHED = "searchedarticle"
 const val TAG_FILE_SEARCHED_NEW_TAB = "searchedarticlenewtab"
 const val TAG_CURRENT_FILE = "currentzimfile"
-const val TAG_CURRENT_ARTICLES = "currentarticles"
-const val TAG_CURRENT_POSITIONS = "currentpositions"
 const val TAG_CURRENT_TAB = "currenttab"
 const val TAG_FROM_TAB_SWITCHER = "fromtabswitcher"
 

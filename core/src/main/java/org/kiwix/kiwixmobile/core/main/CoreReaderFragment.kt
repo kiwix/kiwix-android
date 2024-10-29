@@ -2828,21 +2828,29 @@ abstract class CoreReaderFragment :
   }
 
   /**
-   * Restores the state of a given KiwixWebView based on the provided WebViewHistoryItem.
+   * Restores the state of the specified KiwixWebView based on the provided WebViewHistoryItem.
    *
    * This method retrieves the back-forward list from the WebViewHistoryItem and
    * uses it to restore the web view's state. It also sets the vertical scroll position
    * of the web view to the position stored in the WebViewHistoryItem.
    *
-   * If the provided WebViewHistoryItem is null, the method does nothing.
+   * If the provided WebViewHistoryItem is null, the method instead loads the main page
+   * of the currently opened ZIM file. This fallback behavior is triggered, for example,
+   * when opening a note in the notes screen, where the webViewHistoryList is intentionally
+   * set to null to indicate that the main page of the newly opened ZIM file should be loaded.
    *
    * @param webView The KiwixWebView instance whose state is to be restored.
-   * @param webViewHistoryItem The WebViewHistoryItem containing the saved state and scroll position.
+   * @param webViewHistoryItem The WebViewHistoryItem containing the saved state and scroll position,
+   * or null if the main page should be loaded.
    */
   private fun restoreTabState(webView: KiwixWebView, webViewHistoryItem: WebViewHistoryItem?) {
     webViewHistoryItem?.webViewBackForwardListBundle?.let { bundle ->
       webView.restoreState(bundle)
       webView.scrollY = webViewHistoryItem.webViewCurrentPosition
+    } ?: kotlin.run {
+      zimReaderContainer?.zimFileReader?.let {
+        webView.loadUrl(redirectOrOriginal(contentUrl("${it.mainPage}")))
+      }
     }
   }
 
