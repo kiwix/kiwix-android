@@ -32,7 +32,7 @@ data class WebViewHistoryItem(
     zimId: String,
     webViewIndex: Int,
     webViewPosition: Int,
-    webViewBackForwardList: Bundle
+    webViewBackForwardList: Bundle?
   ) : this(
     0L,
     zimId,
