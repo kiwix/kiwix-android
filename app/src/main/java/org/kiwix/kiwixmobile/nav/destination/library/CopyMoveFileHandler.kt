@@ -28,6 +28,7 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -40,6 +41,7 @@ import org.kiwix.kiwixmobile.R.layout
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -69,7 +71,8 @@ class CopyMoveFileHandler @Inject constructor(
   private var lifecycleScope: CoroutineScope? = null
   private var progressBar: ProgressBar? = null
   private var progressBarTextView: TextView? = null
-  private var isMoveOperation = false
+  var isMoveOperation = false
+  private var shouldValidateZimFile: Boolean = false
   private var fileSystemDisposable: Disposable? = null
 
   private val copyMoveTitle: String by lazy {
@@ -87,7 +90,12 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  fun showMoveFileToPublicDirectoryDialog(uri: Uri? = null, documentFile: DocumentFile? = null) {
+  fun showMoveFileToPublicDirectoryDialog(
+    uri: Uri? = null,
+    documentFile: DocumentFile? = null,
+    shouldValidateZimFile: Boolean = false
+  ) {
+    this.shouldValidateZimFile = shouldValidateZimFile
     setSelectedFileAndUri(uri, documentFile)
     if (!sharedPreferenceUtil.copyMoveZimFilePermissionDialog) {
       showMoveToPublicDirectoryPermissionDialog()
@@ -210,50 +218,63 @@ class CopyMoveFileHandler @Inject constructor(
         showProgressDialog()
         copyFile(sourceUri, destinationFile)
         withContext(Dispatchers.Main) {
-          notifyFileOperationSuccess(destinationFile)
+          notifyFileOperationSuccess(destinationFile, sourceUri)
         }
       } catch (ignore: Exception) {
         ignore.printStackTrace()
-        handleFileOperationError(ignore.message, destinationFile)
+        handleFileOperationError(
+          activity.getString(R.string.copy_file_error_message, ignore.message),
+          destinationFile
+        )
       }
     }
   }
 
+  @Suppress("UnsafeCallOnNullableType")
   private fun moveZimFileToPublicAppDirectory() {
     lifecycleScope?.launch {
       val destinationFile = getDestinationFile()
       try {
         val sourceUri = selectedFileUri ?: throw FileNotFoundException("Selected file not found")
         showProgressDialog()
-        var moveSuccess = false
-        if (tryMoveWithDocumentContract(sourceUri)) {
-          moveSuccess = true
-        } else {
-          moveSuccess = true
+        val moveSuccess = selectedFile?.parentFile?.uri?.let { parentUri ->
+          tryMoveWithDocumentContract(
+            sourceUri,
+            parentUri,
+            DocumentFile.fromFile(File(sharedPreferenceUtil.prefStorage)).uri
+          )
+        } ?: run {
           copyFile(sourceUri, destinationFile)
-          deleteSourceFile(sourceUri)
+          true
         }
         withContext(Dispatchers.Main) {
           if (moveSuccess) {
-            notifyFileOperationSuccess(destinationFile)
+            notifyFileOperationSuccess(destinationFile, sourceUri)
           } else {
-            handleFileOperationError("File move failed", destinationFile)
+            handleFileOperationError(
+              activity.getString(R.string.move_file_error_message, "File move failed"),
+              destinationFile
+            )
           }
         }
       } catch (ignore: Exception) {
         ignore.printStackTrace()
-        handleFileOperationError(ignore.message, destinationFile)
+        handleFileOperationError(
+          activity.getString(R.string.move_file_error_message, ignore.message),
+          destinationFile
+        )
       }
     }
   }
 
-  @Suppress("UnsafeCallOnNullableType")
-  private fun tryMoveWithDocumentContract(selectedUri: Uri): Boolean {
+  fun tryMoveWithDocumentContract(
+    selectedUri: Uri,
+    sourceParentFolderUri: Uri,
+    destinationFolderUri: Uri
+  ): Boolean {
     return try {
       val contentResolver = activity.contentResolver
       if (documentCanMove(selectedUri, contentResolver)) {
-        val sourceParentFolderUri = selectedFile?.parentFile!!.uri
-        val destinationFolderUri = DocumentFile.fromFile(File(sharedPreferenceUtil.prefStorage)).uri
 
         DocumentsContract.moveDocument(
           contentResolver,
@@ -289,17 +310,12 @@ class CopyMoveFileHandler @Inject constructor(
     return flags and DocumentsContract.Document.FLAG_SUPPORTS_MOVE != 0
   }
 
-  private fun handleFileOperationError(
+  fun handleFileOperationError(
     errorMessage: String?,
     destinationFile: File
   ) {
     dismissProgressDialog()
-    val userFriendlyMessage = if (isMoveOperation) {
-      activity.getString(R.string.move_file_error_message, errorMessage)
-    } else {
-      activity.getString(R.string.copy_file_error_message, errorMessage)
-    }
-    fileCopyMoveCallback?.onError(userFriendlyMessage).also {
+    fileCopyMoveCallback?.onError("$errorMessage").also {
       // Clean up the destination file if an error occurs
       lifecycleScope?.launch {
         destinationFile.deleteFile()
@@ -307,16 +323,55 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  private fun notifyFileOperationSuccess(destinationFile: File) {
+  suspend fun notifyFileOperationSuccess(destinationFile: File, sourceUri: Uri) {
+    if (shouldValidateZimFile && !isValidZimFile(destinationFile)) {
+      handleInvalidZimFile(destinationFile, sourceUri)
+      return
+    }
     dismissProgressDialog()
     if (isMoveOperation) {
+      deleteSourceFile(sourceUri)
       fileCopyMoveCallback?.onFileMoved(destinationFile)
     } else {
       fileCopyMoveCallback?.onFileCopied(destinationFile)
     }
   }
 
-  private fun deleteSourceFile(uri: Uri) {
+  fun handleInvalidZimFile(destinationFile: File, sourceUri: Uri) {
+    val errorMessage = activity.getString(R.string.error_file_invalid)
+    if (isMoveOperation) {
+      val moveSuccessful = tryMoveWithDocumentContract(
+        destinationFile.toUri(),
+        destinationFile.parentFile.toUri(),
+        sourceUri
+      )
+
+      if (moveSuccessful) {
+        // If files is moved back using the documentContract then show the error message to user
+        dismissProgressDialog()
+        fileCopyMoveCallback?.onError(errorMessage)
+      } else {
+        // Show error message and delete the moved file if move failed.
+        handleFileOperationError(errorMessage, destinationFile)
+      }
+    } else {
+      // For copy operation, show error message and delete the copied file.
+      handleFileOperationError(errorMessage, destinationFile)
+    }
+  }
+
+  suspend fun isValidZimFile(destinationFile: File): Boolean {
+    return try {
+      // create archive object, and check if it has the mainEntry or not to validate the ZIM file.
+      val archive = ZimReaderSource(destinationFile).createArchive()
+      archive?.hasMainEntry() == true
+    } catch (ignore: Exception) {
+      // if it is a invalid ZIM file
+      false
+    }
+  }
+
+  fun deleteSourceFile(uri: Uri) {
     try {
       DocumentsContract.deleteDocument(activity.applicationContext.contentResolver, uri)
     } catch (ignore: Exception) {
@@ -413,7 +468,7 @@ class CopyMoveFileHandler @Inject constructor(
     progressBarDialog?.show()
   }
 
-  private fun dismissProgressDialog() {
+  fun dismissProgressDialog() {
     if (progressBarDialog?.isShowing == true) {
       progressBarDialog?.dismiss()
     }

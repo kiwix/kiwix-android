@@ -19,17 +19,22 @@
 package org.kiwix.kiwixmobile.localLibrary
 
 import android.app.Activity
+import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import io.mockk.Runs
 import io.mockk.clearAllMocks
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.verify
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -46,6 +51,9 @@ import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4Gb
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.DetectingFileSystem
 import java.io.File
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.libzim.Archive
 
 class CopyMoveFileHandlerTest {
   private lateinit var fileHandler: CopyMoveFileHandler
@@ -61,6 +69,8 @@ class CopyMoveFileHandlerTest {
   private val storageFile: File = mockk(relaxed = true)
   private val selectedFile: DocumentFile = mockk(relaxed = true)
   private val storagePath = "storage/0/emulated/Android/media/org.kiwix.kiwixmobile"
+  private val destinationFile = mockk<File>()
+  private val sourceUri = mockk<Uri>()
 
   @BeforeEach
   fun setup() {
@@ -76,6 +86,7 @@ class CopyMoveFileHandlerTest {
       setLifeCycleScope(testScope)
       setFileCopyMoveCallback(this@CopyMoveFileHandlerTest.fileCopyMoveCallback)
     }
+    every { destinationFile.canRead() } returns true
   }
 
   @Test
@@ -290,6 +301,91 @@ class CopyMoveFileHandlerTest {
     every { selectedFile.length() } returns selectedFileLength
     every { storageCalculator.availableBytes(storageFile) } returns availableStorageSize
     every { fat32Checker.fileSystemStates.value } returns fileSystemState
+  }
+
+  @Test
+  fun notifyFileOperationSuccessShouldCallOnFileMovedIfValidZIMFileAndIsMoveOperationIsTrue() =
+    runTest {
+      fileHandler = spyk(fileHandler)
+      coEvery { fileHandler.isValidZimFile(destinationFile) } returns true
+      fileHandler.isMoveOperation = true
+
+      fileHandler.notifyFileOperationSuccess(destinationFile, sourceUri)
+
+      verify { fileCopyMoveCallback.onFileMoved(destinationFile) }
+      verify { fileHandler.dismissProgressDialog() }
+      coVerify { fileHandler.deleteSourceFile(sourceUri) }
+    }
+
+  @Test
+  fun notifyFileOperationSuccessShouldCallOnFileCopiedIfValidZIMFileAndIsMoveOperationIsFalse() =
+    runTest {
+      fileHandler = spyk(fileHandler)
+      coEvery { fileHandler.isValidZimFile(destinationFile) } returns true
+      fileHandler.isMoveOperation = false
+
+      fileHandler.notifyFileOperationSuccess(destinationFile, sourceUri)
+
+      verify { fileCopyMoveCallback.onFileCopied(destinationFile) }
+      verify { fileHandler.dismissProgressDialog() }
+    }
+
+  @Test
+  fun `notifyFileOperationSuccess should handle invalid ZIM file`() = runTest {
+    mockkConstructor(Archive::class)
+    val archiveMock = mockk<Archive>(relaxed = true)
+    every { constructedWith<Archive>(any()) } returns archiveMock
+    coEvery { fileHandler.isValidZimFile(destinationFile) } returns false
+
+    fileHandler.notifyFileOperationSuccess(destinationFile, sourceUri)
+
+    verify { fileHandler.handleInvalidZimFile(destinationFile, sourceUri) }
+  }
+
+  @Test
+  fun `handleInvalidZimFile should call onError if move is successful`() {
+    every { fileHandler.tryMoveWithDocumentContract(any(), any(), any()) } returns true
+    fileHandler.isMoveOperation = true
+
+    fileHandler.handleInvalidZimFile(destinationFile, sourceUri)
+
+    verify { fileHandler.dismissProgressDialog() }
+    verify { fileCopyMoveCallback.onError(activity.getString(R.string.error_file_invalid)) }
+  }
+
+  @Test
+  fun `handleInvalidZimFile should delete file and show error if move fails`() {
+    every { fileHandler.tryMoveWithDocumentContract(any(), any(), any()) } returns false
+    fileHandler.isMoveOperation = true
+
+    fileHandler.handleInvalidZimFile(destinationFile, sourceUri)
+
+    verify {
+      fileHandler.handleFileOperationError(
+        activity.getString(R.string.error_file_invalid),
+        destinationFile
+      )
+    }
+  }
+
+  @Test
+  fun `isValidZimFile should return true if ZIM file has main entry`() = runTest {
+    val archive: Archive = mockk()
+    every { archive.hasMainEntry() } returns true
+    coEvery { ZimReaderSource(destinationFile).createArchive() } returns archive
+
+    val result = fileHandler.isValidZimFile(destinationFile)
+
+    assertTrue(result)
+  }
+
+  @Test
+  fun `isValidZimFile should return false if ZIM file creation fails`() = runTest {
+    coEvery { ZimReaderSource(destinationFile).createArchive() } throws Exception()
+
+    val result = fileHandler.isValidZimFile(destinationFile)
+
+    assertFalse(result)
   }
 
   @AfterEach
