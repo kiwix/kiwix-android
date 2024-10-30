@@ -50,6 +50,18 @@
 
       </intent-filter>
       <intent-filter>
+        <!-- Intent filter for Samsung's "My Files" file manager.
+         This is necessary because it returns an empty mimeType for ZIM files,
+         preventing our application from appearing in the suggestion list. -->
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <!-- This will match any URI that starts with "content://0@media/external/file/" -->
+        <data android:scheme="content" />
+        <data android:host="media" />
+        <data android:pathPrefix="/external/file/" />
+        <data android:mimeType="*/*" />
+      </intent-filter>
+      <intent-filter>
         <action android:name="android.intent.action.VIEW" />
 
         <category android:name="android.intent.category.DEFAULT" />
