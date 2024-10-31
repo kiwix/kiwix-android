@@ -407,7 +407,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       }
     }
 
-  private fun handleSelectedFileUri(uri: Uri) {
+  fun handleSelectedFileUri(uri: Uri) {
     if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
       val documentFile = when (uri.scheme) {
         "file" -> DocumentFile.fromFile(File("$uri"))
