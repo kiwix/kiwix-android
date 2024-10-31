@@ -81,6 +81,7 @@
   <string name="pref_credits_title">Erkännanden</string>
   <string name="tts_lang_not_supported">Språket på denna sida stöds inte. Artikeln kan kanske inte läsas på rätt sätt.</string>
   <string name="no_reader_application_installed">Kunde inte hitta ett installerat program för denna filtyp</string>
+  <string name="no_email_application_installed">Installera en e-postleverantör eller skicka e-post till oss på %1s</string>
   <string name="no_app_found_to_select_bookmark_file">Ingen app hittades för att välja bokmärkesfil</string>
   <string name="no_section_info">Ingen innehållsrubrik hittades</string>
   <string name="request_storage">För att komma åt offlineinnehåll behöver vi tillgång till ditt lagringsutrymme</string>

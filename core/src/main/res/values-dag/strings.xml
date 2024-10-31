@@ -78,6 +78,7 @@
   <string name="pref_credits_title">Viɛnyɛla</string>
   <string name="tts_lang_not_supported">Balli zaŋ n-ti yaɣili ŋɔ nyɛla bɛ ni bi saɣi n-ti shɛli. Din tooi niŋ ka lahabali ŋɔ bi tooi karim viɛnyɛla.</string>
   <string name="no_reader_application_installed">Haikuweza kupata\n programu iliyosakinishwa kwa aina hii ya faili</string>
+  <string name="no_email_application_installed">Tafadhali sakinisha\n mtoa huduma wa barua pepe au tutumie barua pepe kwa %1s</string>
   <string name="no_section_info">Lahabaya zuɣu nyɛla din kani</string>
   <string name="request_storage">A yi bori ni a ka pɔhim zuɣu ka nyari lahabali ti bori soli a deei niŋ shee</string>
   <string name="request_write_storage">A yi bori ni a deei zim mazagaya ti bori la sabbu soli tibu a kambɔŋ ni</string>

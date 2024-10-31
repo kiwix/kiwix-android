@@ -69,6 +69,7 @@
   <string name="pref_credits_title">କ୍ରେଡିଟ୍</string>
   <string name="tts_lang_not_supported">ଏହି ପୃଷ୍ଠାର ଭାଷା ସମର୍ଥିତ ନୁହେଁ । ଲେଖାଟି ଠିକ୍ ଭାବେ ପଢ଼ାଯାଇ ନଥାଇପାରେ ।</string>
   <string name="no_reader_application_installed">ଏହି ପ୍ରକାର ଫାଇଲ୍ ପାଇଁ ଏକ ସଂସ୍ଥାପିତ ପ୍ରୟୋଗ ଖୋଜି ପାଇଲା ନାହିଁ</string>
+  <string name="no_email_application_installed">ଦୟାକରି ଏକ ଇମେଲ ସେବା ପ୍ରଦାନକାରୀ ସଂସ୍ଥାପନ କରନ୍ତୁ କିମ୍ବା ଆମକୁ %1s ରେ ଇମେଲ କରନ୍ତୁ</string>
   <string name="no_section_info">କୌଣସି ବିଷଯ଼ବସ୍ତୁ ଶୀର୍ଷକ ମିଳୁନାହିଁ</string>
   <string name="request_storage">ଅଫଲାଇନ୍ ବିଷୟବସ୍ତୁକୁ ଆକସେସ୍ କରିବାକୁ ଆମେ ଆପଣଙ୍କର ଷ୍ଟୋରେଜ୍ କୁ ପ୍ରବେଶ କରିବା ଆବଶ୍ୟକ</string>
   <string name="request_write_storage">ଜିମ୍ ଫାଇଲ ଡାଉନଲୋଡ୍ କରିବା ପାଇଁ ଆମେ ଆପଣଙ୍କ ଷ୍ଟୋରେଜ୍ କୁ ପ୍ରବେଶ କରିବା ଆବଶ୍ଯ଼କ</string>

@@ -71,6 +71,7 @@
   <string name="pref_credits_title">Credits</string>
   <string name="tts_lang_not_supported">De language of dis page no dey support. Maybe de article no go fi read well.</string>
   <string name="no_reader_application_installed">Eno fi find sam installed application for dis type of file</string>
+  <string name="no_email_application_installed">Abeg make you install sam email service provider anaa make you email we for %1s</string>
   <string name="no_section_info">Eno fi find Content Headers</string>
   <string name="request_storage">So say you go fi access offline content you dey hia access give your storage</string>
   <string name="request_write_storage">So say you go fi download zim files we dey hia write access give your storage</string>

@@ -80,6 +80,7 @@
   <string name="pref_credits_title">クレジット</string>
   <string name="tts_lang_not_supported">このページの言語は不正確な翻訳です。記事が正しく読めない可能性があります。</string>
   <string name="no_reader_application_installed">このタイプのファイル用にインストールされたアプリケーションが見つかりませんでした</string>
+  <string name="no_email_application_installed">メールサービスプロバイダーをインストールするか、%1s にメールを送信してください。</string>
   <string name="no_section_info">コンテンツヘッダーが見つかりません</string>
   <string name="request_storage">オフライン コンテンツにアクセスするには、ストレージへのアクセスが必要です</string>
   <string name="request_write_storage">zim ファイルをダウンロードするには、ストレージへの書き込みアクセスが必要です</string>

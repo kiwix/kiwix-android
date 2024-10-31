@@ -86,6 +86,7 @@
   <string name="pref_credits_title">Katkıda bulunanlar</string>
   <string name="tts_lang_not_supported">Bu sayfanın dili desteklenmiyor. Makale düzgün okunamayabilir.</string>
   <string name="no_reader_application_installed">Bu dosya türü için yüklü bir uygulama bulunamadı</string>
+  <string name="no_email_application_installed">Lütfen bir e-posta servis sağlayıcısı kurun veya %1s adresinden bize e-posta gönderin</string>
   <string name="no_section_info">İçerik başlığı bulunamadı</string>
   <string name="request_storage">Çevrimdışı içeriğe erişmek için belleğinize erişmemiz gerekmektedir.</string>
   <string name="request_write_storage">Zim dosyalarını indirmek için depolama alanınıza yazma erişimine ihtiyacımız var</string>

@@ -4,5 +4,5 @@
 -->
 <resources>
   <string name="retry">Reprobar</string>
-  <string name="invalid_installation">Installation non valide. Per favor discarga Zim.\n Assecura te que Wi-Fi es active e que tu ha bastante immagazinage.</string>
+  <string name="invalid_installation">Installation non valide. Per favor discarga un file ZIM.\n Assecura te que WiFi es active e que tu ha bastante immagazinage.</string>
 </resources>

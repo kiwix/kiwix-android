@@ -215,5 +215,6 @@
   <string name="go_to_settings_label">Op d’Astellunge goen</string>
   <string name="save_or_open_unsupported_files_dialog_title">Dëse Fichier Späicheren oder Opmaachen?</string>
   <string name="save_or_open_unsupported_files_dialog_message">Wann dir „Opmaachen“ wielt, gëtt de Fichier an enger externer Lies-Applikatioun opgemaach.</string>
+  <string name="donation_dialog_description">%s brauch Är Hëllef.</string>
   <string name="make_donation">En Don maachen</string>
 </resources>

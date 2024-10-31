@@ -77,6 +77,7 @@
   <string name="pref_credits_title">श्रेय</string>
   <string name="tts_lang_not_supported">इस पृष्ठ की भाषा समर्थित नहीं है। लेख ठीक से नहीं पढ़ा जा सकता है।</string>
   <string name="no_reader_application_installed">इस प्रकार की फ़ाइल के लिए एक इंस्टॉल किया गया एप्लिकेशन नहीं मिला</string>
+  <string name="no_email_application_installed">कृपया एक ईमेल सेवा प्रदाता स्थापित करें या हमें %1s पर ईमेल करें</string>
   <string name="no_section_info">कोई सामग्री शीर्षलेख नहीं मिला</string>
   <string name="request_storage">ऑफ़लाइन सामग्री का उपयोग करने के लिए हमें आपके संग्रहण में पहुंच की आवश्यकता है</string>
   <string name="request_write_storage">ज़िम फ़ाइलें डाउनलोड करने के लिए हमें आपके स्टोरेज तक राइट एक्सेस की आवश्यकता है</string>

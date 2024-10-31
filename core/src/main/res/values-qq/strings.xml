@@ -78,6 +78,7 @@
   <string name="pref_credits_title">{{Identical|Credit}}</string>
   <string name="tts_lang_not_supported">This appears in \"Android Toast\" as an error message when we are opening the ZIM file to read and the language of the articles of that zim file is not supported by the \"Text to Speech\" feature, then we are showing this error message.</string>
   <string name="no_reader_application_installed">This message appears in \"Android Toast\" as an error message when we want to open a pdf or URL in external applications but there is no application installed on the user\'s device to handle this file type.</string>
+  <string name="no_email_application_installed">* This message appears in \"Android Toast\" as an error message when the user sends feedback to the \"Kiwix Team\" but there is no application installed on the user\'s device to handle this action.\n* Here %1s will be replaced by the \"Kiwix team Gmail\" at runtime.</string>
   <string name="no_section_info">This appears as a text message when there is no content header found for the article.</string>
   <string name="request_storage">This appears in the \"Android Toast\" to inform the user, please grant storage access to read the zim file from his storage.</string>
   <string name="request_write_storage">This message appears in \"Android Dialog\" to inform the user when he clicks on downloading any zim file, and we do have not permission to write any zim file to his storage. Then we are showing this message to the user to give write access to their storage.</string>
@@ -141,6 +142,7 @@
   <string name="help_11">This is a descriptive message explaining where the Zim files are located after downloading. It is showing on the help screen.</string>
   <string name="pref_storage">{{Identical|Storage}}</string>
   <string name="pref_current_folder">This is showing on the preference settings screen, it shows the currently selected storage in which we are downloading the zim files, whether it is internal or external.</string>
+  <string name="pref_free_storage">This refers to free (unused) storage space, \'\'not\'\' to free as in free of charge.</string>
   <string name="delete_zim_failed">This message appears in the \"Android Toast\" as an error message. When there are some files that could not be deleted, due to some reason.</string>
   <string name="tts_pause">{{identical|pause}}</string>
   <string name="tts_resume">{{identical|resume}}</string>
