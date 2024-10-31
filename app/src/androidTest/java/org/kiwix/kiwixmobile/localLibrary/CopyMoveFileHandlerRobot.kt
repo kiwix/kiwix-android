@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.localLibrary
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.web.sugar.Web
@@ -48,6 +49,12 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
 
   fun assertCopyMoveDialogDisplayed() {
     isVisible(TextId(R.string.copy_move_files_dialog_description))
+  }
+
+  fun assertCopyMoveDialogNotDisplayed() {
+    testFlakyView({
+      onView(withText(R.string.copy_move_files_dialog_description)).check(doesNotExist())
+    })
   }
 
   fun clickOnCopy() {

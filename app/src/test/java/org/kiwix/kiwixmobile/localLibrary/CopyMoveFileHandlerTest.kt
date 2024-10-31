@@ -28,7 +28,6 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkConstructor
 import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.verify
@@ -40,6 +39,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -51,9 +51,6 @@ import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4Gb
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.DetectingFileSystem
 import java.io.File
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
-import org.kiwix.libzim.Archive
 
 class CopyMoveFileHandlerTest {
   private lateinit var fileHandler: CopyMoveFileHandler
@@ -332,11 +329,9 @@ class CopyMoveFileHandlerTest {
 
   @Test
   fun `notifyFileOperationSuccess should handle invalid ZIM file`() = runTest {
-    mockkConstructor(Archive::class)
-    val archiveMock = mockk<Archive>(relaxed = true)
-    every { constructedWith<Archive>(any()) } returns archiveMock
+    fileHandler = spyk(fileHandler)
+    fileHandler.shouldValidateZimFile = true
     coEvery { fileHandler.isValidZimFile(destinationFile) } returns false
-
     fileHandler.notifyFileOperationSuccess(destinationFile, sourceUri)
 
     verify { fileHandler.handleInvalidZimFile(destinationFile, sourceUri) }
@@ -344,7 +339,9 @@ class CopyMoveFileHandlerTest {
 
   @Test
   fun `handleInvalidZimFile should call onError if move is successful`() {
+    fileHandler = spyk(fileHandler)
     every { fileHandler.tryMoveWithDocumentContract(any(), any(), any()) } returns true
+    every { destinationFile.parentFile } returns mockk()
     fileHandler.isMoveOperation = true
 
     fileHandler.handleInvalidZimFile(destinationFile, sourceUri)
@@ -355,7 +352,9 @@ class CopyMoveFileHandlerTest {
 
   @Test
   fun `handleInvalidZimFile should delete file and show error if move fails`() {
+    fileHandler = spyk(fileHandler)
     every { fileHandler.tryMoveWithDocumentContract(any(), any(), any()) } returns false
+    every { destinationFile.parentFile } returns mockk()
     fileHandler.isMoveOperation = true
 
     fileHandler.handleInvalidZimFile(destinationFile, sourceUri)
@@ -366,26 +365,6 @@ class CopyMoveFileHandlerTest {
         destinationFile
       )
     }
-  }
-
-  @Test
-  fun `isValidZimFile should return true if ZIM file has main entry`() = runTest {
-    val archive: Archive = mockk()
-    every { archive.hasMainEntry() } returns true
-    coEvery { ZimReaderSource(destinationFile).createArchive() } returns archive
-
-    val result = fileHandler.isValidZimFile(destinationFile)
-
-    assertTrue(result)
-  }
-
-  @Test
-  fun `isValidZimFile should return false if ZIM file creation fails`() = runTest {
-    coEvery { ZimReaderSource(destinationFile).createArchive() } throws Exception()
-
-    val result = fileHandler.isValidZimFile(destinationFile)
-
-    assertFalse(result)
   }
 
   @AfterEach

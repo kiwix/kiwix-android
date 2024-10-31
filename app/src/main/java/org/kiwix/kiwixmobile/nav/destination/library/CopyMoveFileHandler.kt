@@ -72,7 +72,7 @@ class CopyMoveFileHandler @Inject constructor(
   private var progressBar: ProgressBar? = null
   private var progressBarTextView: TextView? = null
   var isMoveOperation = false
-  private var shouldValidateZimFile: Boolean = false
+  var shouldValidateZimFile: Boolean = false
   private var fileSystemDisposable: Disposable? = null
 
   private val copyMoveTitle: String by lazy {
@@ -275,7 +275,6 @@ class CopyMoveFileHandler @Inject constructor(
     return try {
       val contentResolver = activity.contentResolver
       if (documentCanMove(selectedUri, contentResolver)) {
-
         DocumentsContract.moveDocument(
           contentResolver,
           selectedUri,
