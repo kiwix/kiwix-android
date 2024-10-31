@@ -203,6 +203,19 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     }
   }
 
+  private fun tryOpeningInvalidZimFiles(uri: Uri) {
+    UiThreadStatement.runOnUiThread {
+      val navHostFragment: NavHostFragment =
+        kiwixMainActivity.supportFragmentManager
+          .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+      val localLibraryFragment =
+        navHostFragment.childFragmentManager.fragments[0] as LocalLibraryFragment
+      localLibraryFragment.handleSelectedFileUri(
+        uri,
+      )
+    }
+  }
+
   private fun getSelectedFile(): File {
     val loadFileStream =
       CopyMoveFileHandlerTest::class.java.classLoader.getResourceAsStream("testzim.zim")
@@ -223,6 +236,16 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       }
     }
     return zimFile
+  }
+
+  private fun getInvalidZimFileUri(extension: String): Uri {
+    val zimFile = File(
+      ContextCompat.getExternalFilesDirs(context, null)[0],
+      "testzim$extension"
+    )
+    if (zimFile.exists()) zimFile.delete()
+    zimFile.createNewFile()
+    return Uri.fromFile(zimFile)
   }
 
   @Test
@@ -269,6 +292,33 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         selectedFile.name
       )
       deleteBothPreviousFiles()
+    }
+  }
+
+  @Test
+  fun testInvalidFileShouldNotOpenInReader() {
+    deleteAllFilesInDirectory(parentFile)
+    // Test the scenario in playStore build on Android 11 and above.
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      selectedFile = getSelectedFile()
+      activityScenario.onActivity {
+        kiwixMainActivity = it
+        kiwixMainActivity.navigate(R.id.libraryFragment)
+      }
+      copyMoveFileHandler(CopyMoveFileHandlerRobot::pauseForBetterTestPerformance)
+      sharedPreferenceUtil.apply {
+        copyMoveZimFilePermissionDialog = true
+        setIsPlayStoreBuildType(true)
+      }
+      // test opening images
+      tryOpeningInvalidZimFiles(getInvalidZimFileUri(".jpg"))
+      copyMoveFileHandler(CopyMoveFileHandlerRobot::assertCopyMoveDialogNotDisplayed)
+      // test opening videos
+      tryOpeningInvalidZimFiles(getInvalidZimFileUri(".mp4"))
+      copyMoveFileHandler(CopyMoveFileHandlerRobot::assertCopyMoveDialogNotDisplayed)
+      // test opening pdf
+      tryOpeningInvalidZimFiles(getInvalidZimFileUri(".pdf"))
+      copyMoveFileHandler(CopyMoveFileHandlerRobot::assertCopyMoveDialogNotDisplayed)
     }
   }
 

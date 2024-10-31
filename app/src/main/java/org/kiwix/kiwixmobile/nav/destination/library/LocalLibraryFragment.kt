@@ -407,7 +407,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       }
     }
 
-  private fun handleSelectedFileUri(uri: Uri) {
+  fun handleSelectedFileUri(uri: Uri) {
     if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
       val documentFile = when (uri.scheme) {
         "file" -> DocumentFile.fromFile(File("$uri"))
@@ -415,9 +415,19 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
           DocumentFile.fromSingleUri(requireActivity(), uri)
         }
       }
+      // If the file is not valid, it shows an error message and stops further processing.
+      // If the file name is not found, then let them to copy the file
+      // and we will handle this later.
+      val fileName = documentFile?.name
+      if (fileName != null && !FileUtils.isValidZimFile(fileName)) {
+        activity.toast(string.error_file_invalid)
+        return
+      }
       copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(
         uri,
-        documentFile
+        documentFile,
+        // pass if fileName is null then we will validate it after copying/moving
+        fileName == null
       )
     } else {
       getZimFileFromUri(uri)?.let(::navigateToReaderFragment)
