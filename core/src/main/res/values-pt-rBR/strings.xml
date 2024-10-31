@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
-* Amire80
 * Duke of Wikipädia
 * Eduardo Addad de Oliveira
 * Eduardoaddad
@@ -8,6 +7,7 @@
 * Freeedusoft
 * Harrymacdougat
 * HenriqueCrang
+* Klgor1803
 * McDutchie
 * Mello25
 * MohitMali
@@ -89,6 +89,7 @@
   <string name="pref_credits_title">Créditos</string>
   <string name="tts_lang_not_supported">O idioma desta página não é suportado. O artigo pode não ser lido propriamente.</string>
   <string name="no_reader_application_installed">Não foi possível encontrar uma aplicação instalada para esse tipo de arquivo</string>
+  <string name="no_email_application_installed">Por favor instale um serviço de email ou nos envie um email no endereço %1s</string>
   <string name="no_app_found_to_select_bookmark_file">Nenhum aplicativo encontrado para selecionar um arquivo de marcadores</string>
   <string name="no_section_info">Nenhum cabeçalho de conteúdo encontrado</string>
   <string name="request_storage">Para acessar conteúdo off-line precisamos de acesso ao seu armazenamento</string>
@@ -143,6 +144,7 @@
   <string name="download">Baixar</string>
   <string name="download_notification_channel_name">Nome do Canal de Notificação de Download</string>
   <string name="space_available">Espaço disponível:</string>
+  <string name="move_no_space">Sem espaço suficiente para mover/copiar.</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_no_pic">Sem Imagens</string>
   <string name="zim_no_vid">Sem Vídeos</string>
@@ -309,6 +311,9 @@
   <string name="delete_selected_bookmarks">Excluir favoritos selecionados?</string>
   <string name="import_bookmarks_dialog_title">Importar Marcadores?</string>
   <string name="export_all_bookmarks_dialog_title">Exportar todos os Marcadores?</string>
+  <string name="export_all_bookmarks_dialog_message">Exportar irá gerar o arquivo bookmark.xml na pasta Download/org.kiwix…/</string>
+  <string name="bookmark_imported_message">Todos os favoritos foram importados.</string>
+  <string name="error_invalid_bookmark_file">Erro: O arquivo selecionado não é um arquivo de favoritos válido.</string>
   <string name="on">Lig</string>
   <string name="off">Des</string>
   <string name="auto">Auto</string>
@@ -326,6 +331,16 @@
   <string name="tabs_restored">Guias restauradas</string>
   <string name="open_drawer">Abrir gaveta</string>
   <string name="close_drawer">Fechar gaveta</string>
+  <string name="preparing_file_for_copy">Preparando-se para copiar/mover</string>
+  <string name="action_copy">Copiar</string>
+  <string name="move">Mover</string>
+  <string name="file_copying_in_progress">Copiando arquivo zim</string>
+  <string name="file_moving_in_progress">Movendo arquivo zim</string>
+  <string name="copy_move_files_dialog_description">Você quer copiar ou mover o arquivo?</string>
+  <string name="copy_file_error_message">Erro ao copiar o arquivo zim: %s.</string>
+  <string name="move_files_permission_dialog_title">Mover/Copiar arquivos para o diretório público do app?</string>
+  <string name="move_files_permission_dialog_description">Devido às políticas do Google Play no Android 11 e acima, nosso app não pode mais acessar arquivos armazenados em outro lugar do seu dispositivo. Para você poder ver seus arquivos selecionados, nós precisamos mover ou copiar eles em uma pasta especial no diretório do app. Isso permite acessar e abrir os arquivos. Você concorda com isso?</string>
+  <string name="move_file_error_message">Erro ao mover o arquivo zim: %s.</string>
   <string name="how_to_update_content">Como atualizar o conteúdo?</string>
   <string name="update_content_description">Para atualizar o conteúdo (um arquivo zim), você precisa baixar a versão completa mais recente desse mesmo conteúdo. Você pode fazer isso através da seção de download.</string>
   <string name="all_files_permission_needed">Permissão necessária para todos os arquivos</string>
@@ -336,6 +351,10 @@
   <string name="system_unable_to_grant_permission_message">O sistema foi incapaz de garantir a permissão!</string>
   <string name="allow">Permitir</string>
   <string name="swipe_down_for_library">Deslize para baixo para exibir a Biblioteca</string>
+  <string name="reaching_remote_library">Conectando à biblioteca remota</string>
+  <string name="parsing_remote_library">analisando a biblioteca remota</string>
+  <string name="starting_downloading_remote_library">Iniciando download da biblioteca online</string>
+  <string name="downloading_library">Baixando biblioteca %s</string>
   <string name="no_notes">Sem notas</string>
   <string name="notes_from_all_books">Ver histórico de todos os livros</string>
   <string name="search_notes">Pesquisar datas</string>
@@ -351,6 +370,8 @@
   <string name="read_aloud_channel_description">Controle de texto para fala.</string>
   <string name="read_aloud_running">Rodando o recurso Leitura Permitida</string>
   <string name="backward_history">Histórico de pendências</string>
+  <string name="forward_history">Histórico à frente</string>
+  <string name="clear_all_navigation_history_message">Limpa todo o histórico de navegação (à frente, à trás)</string>
   <string name="navigation_history_cleared">Histórico de Navegação Apagado</string>
   <string name="go_to_settings_label">Ir para configurações</string>
   <string name="request_notification_permission_message">Por favor dê o acesso de notificação, para poder realizar essa ação</string>
@@ -359,5 +380,12 @@
   <string name="nearby_devices_list_message">Aqui você encontrará a lista de dispositivos próximos. Clique no nome do dispositivo para realizar a transferência.</string>
   <string name="transfer_zim_files_list_message">Aqui você encontrará a lista de arquivos ZIM disponíveis para transferir.</string>
   <string name="storage_selection_dialog_accessibility_description">Selecione o armazenamento para baixar o arquivos ZIM.</string>
+  <string name="zim_file_content_description">Arquivo ZIM que contém o conteúdo</string>
+  <string name="select_language_content_description">Selecionar esse idioma vai priorizar mostrar livros nesse idioma no topo.</string>
   <string name="toolbar_back_button_content_description">Ir para tela anterior</string>
+  <string name="save_or_open_unsupported_files_dialog_title">Salvar ou Abrir esse arquivo?</string>
+  <string name="save_or_open_unsupported_files_dialog_message">Escolher Abrir vai abrir esse arquivo em um leitor externo.</string>
+  <string name="donation_dialog_title">Doar Hoje</string>
+  <string name="donation_dialog_description">%s precisa da sua ajuda.</string>
+  <string name="make_donation">Fazer uma doação</string>
 </resources>

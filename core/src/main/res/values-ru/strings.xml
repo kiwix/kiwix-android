@@ -8,6 +8,7 @@
 * Dirruw'o
 * Facenapalm
 * Fenixs-ru
+* Firapinch
 * Fitoschido
 * Gehhrr
 * Helpau
@@ -99,6 +100,7 @@
   <string name="pref_credits_title">Создатели</string>
   <string name="tts_lang_not_supported">Язык этой страницы не поддерживается. Статья не может быть правильно прочитана.</string>
   <string name="no_reader_application_installed">Не удалось найти установленное приложение для этого типа файлов</string>
+  <string name="no_email_application_installed">Установите поставщика услуг электронной почты или напишите нам по адресу %1s</string>
   <string name="no_app_found_to_select_bookmark_file">Не найдено приложение для выбора файла закладки</string>
   <string name="no_section_info">Не найдены заголовки содержимого</string>
   <string name="request_storage">Для доступа к офлайн контенту нам нужен доступ к вашему файловому хранилищу</string>
@@ -360,6 +362,7 @@
   <string name="system_unable_to_grant_permission_message">Система не может предоставить разрешение!</string>
   <string name="allow">Разрешить</string>
   <string name="swipe_down_for_library">Проведите пальцем вниз, чтобы открыть библиотеку</string>
+  <string name="downloading_library">Загрузка библиотеки \n %s</string>
   <string name="no_notes">Нет заметок</string>
   <string name="notes_from_all_books">Просмотр заметок из всех книг</string>
   <string name="search_notes">Искать заметки</string>

@@ -8,6 +8,6 @@
   <string name="cannot_open_file">Non poteva aperir le file.\nPer favor tenta cercar iste file in tu Bibliotheca.</string>
   <string name="send_files_title">Inviar files</string>
   <string name="receive_files_title">Reciper files</string>
-  <string name="no_app_found_to_open">Necun application trovate pro seliger file zim!</string>
-  <string name="select_zim_file">Selige file zim a leger</string>
+  <string name="no_app_found_to_open">Necun application trovate pro seliger file ZIM!</string>
+  <string name="select_zim_file">Selige le file ZIM a leger</string>
 </resources>

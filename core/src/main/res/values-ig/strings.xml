@@ -79,6 +79,7 @@
   <string name="pref_credits_title">Ebe e si nweta</string>
   <string name="tts_lang_not_supported">A naghị akwado asụsụ ibe a. Enwere ike ghara ịgụ akụkọ ahụ nke ọma.</string>
   <string name="no_reader_application_installed">Enweghị ike ịchọta ngwa arụnyere maka ụdị faịlụ a</string>
+  <string name="no_email_application_installed">Biko tinye onye na-eweta ọrụ email ma ọ bụ zitere anyị email na %1s</string>
   <string name="no_app_found_to_select_bookmark_file">Onweghi ngwa achọtara iji họrọ faịlụ ibe edokọbara</string>
   <string name="no_section_info">Enweghị nkụnye eji isi mee ọdịnaya</string>
   <string name="request_storage">Iji nweta ọdịnaya anọghị n’ịntanetị anyị kwesịrị ịnweta nchekwa gị</string>

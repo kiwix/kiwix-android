@@ -98,6 +98,7 @@
   <string name="pref_credits_title">Remerciements</string>
   <string name="tts_lang_not_supported">La langue de cette page n’est pas prise en charge. L’article peut ne pas être lu correctement.</string>
   <string name="no_reader_application_installed">Impossible de trouver une application installée pour ce type de fichier</string>
+  <string name="no_email_application_installed">Veuillez installer un fournisseur de service de messagerie ou envoyez-nous un courriel à %1s</string>
   <string name="no_app_found_to_select_bookmark_file">Aucune application trouvée pour sélectionner un fichier de signet</string>
   <string name="no_section_info">Aucun entête de contenu trouvé</string>
   <string name="request_storage">Pour accéder au contenu hors connexion, nous avons besoin d’un accès à votre espace de stockage</string>
@@ -150,7 +151,7 @@
   <string name="no_files_here">Aucun fichier ici</string>
   <string name="download_no_space">Espace insuffisant pour le téléchargement.</string>
   <string name="download">Télécharger</string>
-  <string name="download_notification_channel_name">Télécharger le nom du canal de notification</string>
+  <string name="download_notification_channel_name">Nom du canal de notification des téléchargements</string>
   <string name="space_available">Espace disponible :</string>
   <string name="move_no_space">Espace insuffisant pour déplacer/copier.</string>
   <string name="zim_simple">Simple</string>
@@ -170,7 +171,7 @@
   <string name="pref_storage">Stockage</string>
   <string name="pref_current_folder">Dossier actuel</string>
   <string name="pref_storage_used">%s utilisé</string>
-  <string name="pref_free_storage">%s gratuit</string>
+  <string name="pref_free_storage">%s libre</string>
   <string name="delete_zim_failed">Désolé, nous n’avons pas pu supprimer certains fichiers. Vous devriez essayer d’utiliser un gestionnaire de fichiers à la place.</string>
   <string name="tts_pause">pause</string>
   <string name="tts_resume">reprendre</string>
