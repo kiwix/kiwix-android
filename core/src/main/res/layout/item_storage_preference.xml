@@ -18,7 +18,7 @@
 
   <TextView
     android:id="@+id/storagePathAndTitle"
-    android:layout_width="0dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="?android:attr/textAppearanceListItem"
     android:textColor="?android:attr/textColorPrimary"
@@ -61,6 +61,16 @@
     app:layout_constraintStart_toEndOf="@id/radioButton"
     app:layout_constraintTop_toBottomOf="@id/storagePathAndTitle" />
 
+  <View
+    android:id="@+id/clickOverlay"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:visibility="gone"
+    android:background="?selectableItemBackground"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

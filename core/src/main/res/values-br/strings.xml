@@ -122,10 +122,8 @@
   <string name="tts_pause">ehanañ</string>
   <string name="tts_resume">adkemer</string>
   <string name="stop">paouez</string>
-  <string name="configure_storage_option">Pellgargañ al levr er stokañ diabarzh?</string>
   <string name="internal_storage">Diabarzh</string>
   <string name="external_storage">Diavaez</string>
-  <string name="configure">Kefluniañ</string>
   <string name="yes">Ya</string>
   <string name="no">Ket</string>
   <string name="confirm_stop_download_title">Paouez ar pellgargadur ?</string>

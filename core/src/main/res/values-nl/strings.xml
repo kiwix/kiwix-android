@@ -154,10 +154,8 @@
   <string name="tts_pause">pauzeren</string>
   <string name="tts_resume">hervatten</string>
   <string name="stop">stoppen</string>
-  <string name="configure_storage_option">Boek naar interne opslag downloaden?</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Extern</string>
-  <string name="configure">Instellen</string>
   <string name="yes">Ja</string>
   <string name="no">Nee</string>
   <string name="confirm_stop_download_title">Download stoppen?</string>

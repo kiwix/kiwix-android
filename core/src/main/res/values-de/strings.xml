@@ -169,10 +169,8 @@
   <string name="tts_pause">pausieren</string>
   <string name="tts_resume">fortfahren</string>
   <string name="stop">abbrechen</string>
-  <string name="configure_storage_option">Buch in den internen Speicher herunterladen?</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Extern</string>
-  <string name="configure">Konfigurieren</string>
   <string name="yes">Ja</string>
   <string name="no">Nein</string>
   <string name="confirm_stop_download_title">Herunterladen beenden?</string>

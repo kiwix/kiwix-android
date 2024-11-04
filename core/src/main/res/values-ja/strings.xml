@@ -146,10 +146,8 @@
   <string name="tts_pause">一時停止</string>
   <string name="tts_resume">再開</string>
   <string name="stop">停止</string>
-  <string name="configure_storage_option">本を内部ストレージにダウンロードしますか？</string>
   <string name="internal_storage">内部ストレージ</string>
   <string name="external_storage">外部ストレージ</string>
-  <string name="configure">設定</string>
   <string name="yes">はい</string>
   <string name="no">いいえ</string>
   <string name="confirm_stop_download_title">ダウンロードを停止しますか？</string>

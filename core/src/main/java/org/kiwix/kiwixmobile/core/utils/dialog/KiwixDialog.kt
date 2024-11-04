@@ -292,14 +292,6 @@ sealed class KiwixDialog(
     )
   }
 
-  object StorageConfigure : KiwixDialog(
-    R.string.configure_storage_option,
-    null,
-    positiveMessage = R.string.configure,
-    negativeMessage = R.string.yes,
-    icon = R.drawable.ic_baseline_storage_24
-  )
-
   object ImportBookmarks : KiwixDialog(
     R.string.import_bookmarks_dialog_title,
     message = null,

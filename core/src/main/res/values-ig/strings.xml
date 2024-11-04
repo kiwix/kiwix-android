@@ -149,10 +149,8 @@
   <string name="tts_pause">kwụsịtụ</string>
   <string name="tts_resume">maliteghachi</string>
   <string name="stop">ịkwụsị</string>
-  <string name="configure_storage_option">Budata akwụkwọ na nchekwa ime?</string>
   <string name="internal_storage">Ime</string>
   <string name="external_storage">Mpụga</string>
-  <string name="configure">Hazie</string>
   <string name="yes">Ee</string>
   <string name="no">Mba</string>
   <string name="confirm_stop_download_title">Kwụsị nbudata?</string>

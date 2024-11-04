@@ -138,10 +138,8 @@
   <string name="tts_pause">Kgama</string>
   <string name="tts_resume">Tsweledisa</string>
   <string name="stop">Ema</string>
-  <string name="configure_storage_option">A o kopa buka go e baya mo mabolokelong a a moteng?</string>
   <string name="internal_storage">Mo teng</string>
   <string name="external_storage">Ka fa ntle</string>
-  <string name="configure">Sekaseka</string>
   <string name="yes">Ee</string>
   <string name="no">Nnyaa</string>
   <string name="confirm_stop_download_title">A o emisa go e itseela?</string>

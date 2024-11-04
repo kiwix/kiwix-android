@@ -167,10 +167,8 @@
   <string name="tts_pause">pausar</string>
   <string name="tts_resume">continuar</string>
   <string name="stop">parar</string>
-  <string name="configure_storage_option">Transferir livro para armazenamento interno?</string>
   <string name="internal_storage">Interna</string>
   <string name="external_storage">Externo</string>
-  <string name="configure">Configurar</string>
   <string name="yes">Sim</string>
   <string name="no">Não</string>
   <string name="confirm_stop_download_title">Parar o download?</string>

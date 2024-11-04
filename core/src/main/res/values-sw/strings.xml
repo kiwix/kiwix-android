@@ -149,10 +149,8 @@
   <string name="tts_pause">kupumzika</string>
   <string name="tts_resume">rejea</string>
   <string name="stop">acha</string>
-  <string name="configure_storage_option">Ungependa kupakua kitabu hadi hifadhi ya ndani?</string>
   <string name="internal_storage">Ndani</string>
   <string name="external_storage">Nje</string>
-  <string name="configure">Sanidi</string>
   <string name="yes">Ndiyo</string>
   <string name="no">Hapana</string>
   <string name="confirm_stop_download_title">Acha kupakua?</string>

@@ -137,10 +137,8 @@
   <string name="tts_pause">pàusa</string>
   <string name="tts_resume">sighi</string>
   <string name="stop">firma</string>
-  <string name="configure_storage_option">Iscarrigare su libru in sa memòria interna?</string>
   <string name="internal_storage">Interna</string>
   <string name="external_storage">Esterna</string>
-  <string name="configure">Cunfigura</string>
   <string name="yes">Eja</string>
   <string name="no">Nono</string>
   <string name="confirm_stop_download_title">Firmare s’iscarrigamentu?</string>

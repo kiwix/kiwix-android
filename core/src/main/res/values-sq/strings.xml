@@ -134,10 +134,8 @@
   <string name="tts_pause">ndalesë</string>
   <string name="tts_resume">rimerre</string>
   <string name="stop">ndale</string>
-  <string name="configure_storage_option">Të shkarkohet libri te depozita e brendshme?</string>
   <string name="internal_storage">I brendshëm</string>
   <string name="external_storage">I jashtëm</string>
-  <string name="configure">Formësojeni</string>
   <string name="yes">Po</string>
   <string name="no">Jo</string>
   <string name="confirm_stop_download_title">Të ndalet shkarkim?</string>

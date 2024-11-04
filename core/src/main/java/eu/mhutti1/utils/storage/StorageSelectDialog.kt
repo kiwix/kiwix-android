@@ -18,6 +18,7 @@
 
 package eu.mhutti1.utils.storage
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -33,13 +34,19 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.R.dimen
 import org.kiwix.kiwixmobile.core.databinding.StorageSelectDialogBinding
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isLandScapeMode
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
+import org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowWidth
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
+const val STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE = 16F
+
 class StorageSelectDialog : DialogFragment() {
   var onSelectAction: ((StorageDevice) -> Unit)? = null
+  var titleSize: Float? = null
 
   @Inject lateinit var storageCalculator: StorageCalculator
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
@@ -68,7 +75,10 @@ class StorageSelectDialog : DialogFragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     CoreApp.coreComponent.inject(this)
-    storageSelectDialogViewBinding?.title?.text = aTitle
+    storageSelectDialogViewBinding?.title?.apply {
+      text = aTitle
+      titleSize?.let(::setTextSize)
+    }
     storageSelectDialogViewBinding?.deviceList?.run {
       adapter = storageAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -88,6 +98,31 @@ class StorageSelectDialog : DialogFragment() {
   override fun show(fm: FragmentManager, text: String?) {
     aTitle = text
     super.show(fm, text)
+  }
+
+  override fun onStart() {
+    super.onStart()
+    setStorageSelectDialogWidth()
+  }
+
+  override fun onConfigurationChanged(newConfig: Configuration) {
+    super.onConfigurationChanged(newConfig)
+    setStorageSelectDialogWidth()
+  }
+
+  @Suppress("MagicNumber")
+  private fun setStorageSelectDialogWidth() {
+    val windowWidth = requireActivity().getWindowWidth()
+    val maximumStorageSelectDialogWidth =
+      requireActivity().resources.getDimensionPixelSize(dimen.maximum_donation_popup_width)
+
+    val width =
+      if (windowWidth > maximumStorageSelectDialogWidth || requireActivity().isLandScapeMode()) {
+        maximumStorageSelectDialogWidth
+      } else {
+        (windowWidth * 0.9).toInt()
+      }
+    dialog?.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
   }
 
   override fun onDestroyView() {

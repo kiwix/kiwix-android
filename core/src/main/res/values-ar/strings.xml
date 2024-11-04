@@ -87,7 +87,7 @@
   <string name="pref_credits_title">الإحالات</string>
   <string name="tts_lang_not_supported">لغة هذه الصفحة غير مدعومة، أو لم تُثبت البيانات المناسبة للغة. قد لا تتم قراءة المقالة بشكل صحيح.</string>
   <string name="no_reader_application_installed">تعذر العثور على تطبيق مثبت لهذا النوع من الملفات</string>
-  <string name="no_email_application_installed">الرجاء تثبيت موفر خدمة البريد الإلكتروني أو مراسلتنا عبر البريد الإلكتروني على %1s</string>
+  <string name="no_email_application_installed">الرجاء تثبيت موفر خدمة البريد الإلكتروني أو مراسلتنا عبر البريد الإلكتروني على</string>
   <string name="no_app_found_to_select_bookmark_file">لا يوجد تطبيق لتحديد ملف علامة مرجعية</string>
   <string name="no_section_info">لم يتم العثور على عناوين محتوى</string>
   <string name="request_storage">للوصول إلى المحتوى بلا اتصال، نحتاج إلى الوصول إلى وحدة التخزين</string>
@@ -161,10 +161,8 @@
   <string name="tts_pause">إيقاف مؤقت</string>
   <string name="tts_resume">استئناف</string>
   <string name="stop">إيقاف</string>
-  <string name="configure_storage_option">هل تريد تنزيل الكتاب إلى وحدة التخزين الداخلية؟</string>
   <string name="internal_storage">داخلي</string>
   <string name="external_storage">خارجي</string>
-  <string name="configure">اضبط الإعدادات</string>
   <string name="yes">نعم</string>
   <string name="no">لا</string>
   <string name="confirm_stop_download_title">إيقاف التنزيل؟</string>

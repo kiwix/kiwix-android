@@ -49,6 +49,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import eu.mhutti1.utils.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.R
@@ -419,6 +420,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private fun storeDeviceInPreferences(
     storageDevice: StorageDevice
   ) {
+    sharedPreferenceUtil.showStorageOption = false
     sharedPreferenceUtil.putPrefStorage(
       sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
     )
@@ -528,7 +530,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           }
 
           else -> if (sharedPreferenceUtil.showStorageOption) {
-            showStorageConfigureDialog()
+            showStorageSelectDialog()
           } else if (!requireActivity().isManageExternalStoragePermissionGranted(
               sharedPreferenceUtil
             )
@@ -561,22 +563,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private fun showStorageSelectDialog() = StorageSelectDialog()
     .apply {
       onSelectAction = ::storeDeviceInPreferences
+      titleSize = STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
     }
-    .show(parentFragmentManager, getString(string.pref_storage))
-
-  private fun showStorageConfigureDialog() {
-    alertDialogShower.show(
-      KiwixDialog.StorageConfigure,
-      {
-        showStorageSelectDialog()
-        sharedPreferenceUtil.showStorageOption = false
-      },
-      {
-        sharedPreferenceUtil.showStorageOption = false
-        clickOnBookItem()
-      }
-    )
-  }
+    .show(parentFragmentManager, getString(string.choose_storage_to_download_book))
 
   private fun clickOnBookItem() {
     if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {

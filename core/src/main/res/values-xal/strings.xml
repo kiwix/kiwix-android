@@ -71,10 +71,8 @@
   <string name="tts_pause">завсрлһ</string>
   <string name="tts_resume">үрглҗлүлх</string>
   <string name="stop">зогсах</string>
-  <string name="configure_storage_option">Дегтриг дотад багтамҗур татҗ авхий?</string>
   <string name="internal_storage">Дотад</string>
   <string name="external_storage">Һазад</string>
-  <string name="configure">Тохрулх</string>
   <string name="yes">Тиим</string>
   <string name="no">Уга</string>
   <string name="confirm_stop_download_title">Ацалхиг зогсахий?</string>

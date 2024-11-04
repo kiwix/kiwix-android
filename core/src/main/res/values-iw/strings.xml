@@ -157,10 +157,8 @@
   <string name="tts_pause">השהיה</string>
   <string name="tts_resume">המשך</string>
   <string name="stop">עצירה</string>
-  <string name="configure_storage_option">להוריד את הספר לאחסון פנימי?</string>
   <string name="internal_storage">פנימי</string>
   <string name="external_storage">חיצוני</string>
-  <string name="configure">הגדרות</string>
   <string name="yes">כן</string>
   <string name="no">לא</string>
   <string name="confirm_stop_download_title">לעצור הורדה?</string>

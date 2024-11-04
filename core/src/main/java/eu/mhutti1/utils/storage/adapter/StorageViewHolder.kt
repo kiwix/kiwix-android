@@ -19,42 +19,84 @@
 package eu.mhutti1.utils.storage.adapter
 
 import android.annotation.SuppressLint
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.AbsoluteSizeSpan
+import android.view.View.VISIBLE
 import eu.mhutti1.utils.storage.StorageDevice
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
-import org.kiwix.kiwixmobile.core.databinding.DeviceItemBinding
+import org.kiwix.kiwixmobile.core.databinding.ItemStoragePreferenceBinding
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
+import org.kiwix.kiwixmobile.core.extensions.getFreeSpace
+import org.kiwix.kiwixmobile.core.extensions.getUsedSpace
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
+import org.kiwix.kiwixmobile.core.extensions.storagePathAndTitle
+import org.kiwix.kiwixmobile.core.extensions.usedPercentage
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
+const val FREE_SPACE_TEXTVIEW_SIZE = 12F
+const val STORAGE_TITLE_TEXTVIEW_SIZE = 15
+
 @SuppressLint("SetTextI18n")
 internal class StorageViewHolder(
-  private val deviceItemBinding: DeviceItemBinding,
+  private val itemStoragePreferenceBinding: ItemStoragePreferenceBinding,
   private val storageCalculator: StorageCalculator,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val onClickAction: (StorageDevice) -> Unit
-) : BaseViewHolder<StorageDevice>(deviceItemBinding.root) {
+) : BaseViewHolder<StorageDevice>(itemStoragePreferenceBinding.root) {
 
   override fun bind(item: StorageDevice) {
-    deviceItemBinding.fileName.setText(
-      if (item.isInternal) R.string.internal_storage
-      else R.string.external_storage
-    )
-
-    if (adapterPosition == sharedPreferenceUtil.storagePosition) {
-      deviceItemBinding.fileName.isChecked = true
-    }
-    deviceItemBinding.fileSize.text = storageCalculator.calculateAvailableSpace(item.file) + " / " +
-      storageCalculator.calculateTotalSpace(item.file) + "  "
-    deviceItemBinding.clickOverlay.apply {
-      setToolTipWithContentDescription(
-        deviceItemBinding.root.context.getString(
-          R.string.storage_selection_dialog_accessibility_description
+    with(itemStoragePreferenceBinding) {
+      storagePathAndTitle.text =
+        resizeStoragePathAndTitle(
+          item.storagePathAndTitle(
+            root.context,
+            adapterPosition,
+            sharedPreferenceUtil,
+            storageCalculator
+          )
         )
-      )
-      setOnClickListener {
-        onClickAction.invoke(item)
+
+      radioButton.isChecked =
+        adapterPosition == sharedPreferenceUtil.storagePosition
+      freeSpace.apply {
+        text = item.getFreeSpace(root.context, storageCalculator)
+        textSize = FREE_SPACE_TEXTVIEW_SIZE
+      }
+      usedSpace.apply {
+        text = item.getUsedSpace(root.context, storageCalculator)
+        textSize = FREE_SPACE_TEXTVIEW_SIZE
+      }
+      storageProgressBar.progress = item.usedPercentage(storageCalculator)
+      clickOverlay.apply {
+        visibility = VISIBLE
+        setToolTipWithContentDescription(
+          root.context.getString(
+            R.string.storage_selection_dialog_accessibility_description
+          )
+        )
+        setOnClickListener {
+          onClickAction.invoke(item)
+        }
       }
     }
   }
+
+  private fun resizeStoragePathAndTitle(storagePathAndTitle: String): CharSequence =
+    SpannableStringBuilder(storagePathAndTitle).apply {
+      setSpan(
+        AbsoluteSizeSpan(STORAGE_TITLE_TEXTVIEW_SIZE, true),
+        ZERO,
+        storagePathAndTitle.indexOf('\n'),
+        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+      )
+      setSpan(
+        AbsoluteSizeSpan(FREE_SPACE_TEXTVIEW_SIZE.toInt(), true),
+        storagePathAndTitle.indexOf('\n') + 1,
+        storagePathAndTitle.length,
+        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+      )
+    }
 }

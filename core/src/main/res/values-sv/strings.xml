@@ -157,10 +157,8 @@
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">återuppta</string>
   <string name="stop">stoppa</string>
-  <string name="configure_storage_option">Ladda ned bok till intern lagring?</string>
   <string name="internal_storage">Internt</string>
   <string name="external_storage">Extern</string>
-  <string name="configure">Konfigurera</string>
   <string name="yes">Ja</string>
   <string name="no">Nej</string>
   <string name="confirm_stop_download_title">Stoppa nedladdning?</string>
