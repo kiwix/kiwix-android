@@ -51,6 +51,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import eu.mhutti1.utils.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
 import eu.mhutti1.utils.storage.StorageDevice
+import eu.mhutti1.utils.storage.StorageDeviceUtils
 import eu.mhutti1.utils.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
@@ -530,7 +531,15 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           }
 
           else -> if (sharedPreferenceUtil.showStorageOption) {
-            showStorageSelectDialog()
+            // Show the storage selection dialog for configuration if there is an SD card available.
+            if (StorageDeviceUtils.getWritableStorage(requireActivity()).size > 1) {
+              showStorageSelectDialog()
+            } else {
+              // If only internal storage is available, proceed with the ZIM file download directly.
+              // Displaying a configuration dialog is unnecessary in this case.
+              sharedPreferenceUtil.showStorageOption = false
+              onBookItemClick(item)
+            }
           } else if (!requireActivity().isManageExternalStoragePermissionGranted(
               sharedPreferenceUtil
             )
