@@ -44,6 +44,7 @@ internal class StorageViewHolder(
   private val itemStoragePreferenceBinding: ItemStoragePreferenceBinding,
   private val storageCalculator: StorageCalculator,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
+  private val isShowingStorageOptionForFirstDownload: Boolean,
   private val onClickAction: (StorageDevice) -> Unit
 ) : BaseViewHolder<StorageDevice>(itemStoragePreferenceBinding.root) {
 
@@ -60,7 +61,8 @@ internal class StorageViewHolder(
         )
 
       radioButton.isChecked =
-        adapterPosition == sharedPreferenceUtil.storagePosition
+        !isShowingStorageOptionForFirstDownload &&
+          adapterPosition == sharedPreferenceUtil.storagePosition
       freeSpace.apply {
         text = item.getFreeSpace(root.context, storageCalculator)
         textSize = FREE_SPACE_TEXTVIEW_SIZE

@@ -29,11 +29,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import eu.mhutti1.utils.storage.adapter.StorageAdapter
 import eu.mhutti1.utils.storage.adapter.StorageDelegate
-import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.dimen
 import org.kiwix.kiwixmobile.core.databinding.StorageSelectDialogBinding
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isLandScapeMode
@@ -52,15 +49,23 @@ class StorageSelectDialog : DialogFragment() {
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private var aTitle: String? = null
   private var storageSelectDialogViewBinding: StorageSelectDialogBinding? = null
-  private var storageDisposable: Disposable? = null
+  private val storageDeviceList = arrayListOf<StorageDevice>()
 
   private val storageAdapter: StorageAdapter by lazy {
     StorageAdapter(
-      StorageDelegate(storageCalculator, sharedPreferenceUtil) {
+      StorageDelegate(
+        storageCalculator,
+        sharedPreferenceUtil,
+        aTitle == getString(R.string.choose_storage_to_download_book)
+      ) {
         onSelectAction?.invoke(it)
         dismiss()
       }
     )
+  }
+
+  fun setStorageDeviceList(storageDeviceList: List<StorageDevice>) {
+    this.storageDeviceList.addAll(storageDeviceList)
   }
 
   override fun onCreateView(
@@ -84,15 +89,7 @@ class StorageSelectDialog : DialogFragment() {
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
-
-    storageDisposable =
-      Flowable.fromCallable { StorageDeviceUtils.getWritableStorage(requireActivity()) }
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(
-          { storageAdapter.items = it },
-          Throwable::printStackTrace
-        )
+    storageAdapter.items = storageDeviceList
   }
 
   override fun show(fm: FragmentManager, text: String?) {
@@ -127,7 +124,6 @@ class StorageSelectDialog : DialogFragment() {
 
   override fun onDestroyView() {
     super.onDestroyView()
-    storageDisposable?.dispose()
     storageSelectDialogViewBinding = null
   }
 }

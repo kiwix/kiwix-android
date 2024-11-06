@@ -113,6 +113,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
   }
+  private val storageDeviceList by lazy {
+    StorageDeviceUtils.getWritableStorage(requireActivity())
+  }
 
   @VisibleForTesting
   fun getOnlineLibraryList() = libraryAdapter.items
@@ -532,7 +535,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
           else -> if (sharedPreferenceUtil.showStorageOption) {
             // Show the storage selection dialog for configuration if there is an SD card available.
-            if (StorageDeviceUtils.getWritableStorage(requireActivity()).size > 1) {
+            if (storageDeviceList.size > 1) {
               showStorageSelectDialog()
             } else {
               // If only internal storage is available, proceed with the ZIM file download directly.
@@ -573,6 +576,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     .apply {
       onSelectAction = ::storeDeviceInPreferences
       titleSize = STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
+      setStorageDeviceList(storageDeviceList)
     }
     .show(parentFragmentManager, getString(string.choose_storage_to_download_book))
 
