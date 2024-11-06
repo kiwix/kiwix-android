@@ -60,9 +60,8 @@ internal class StorageViewHolder(
           )
         )
 
-      radioButton.isChecked =
-        !isShowingStorageOptionForFirstDownload &&
-          adapterPosition == sharedPreferenceUtil.storagePosition
+      radioButton.isChecked = !isShowingStorageOptionForFirstDownload &&
+        adapterPosition == sharedPreferenceUtil.storagePosition
       freeSpace.apply {
         text = item.getFreeSpace(root.context, storageCalculator)
         textSize = FREE_SPACE_TEXTVIEW_SIZE
