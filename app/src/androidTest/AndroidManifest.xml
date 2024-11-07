@@ -6,7 +6,6 @@
        see more information here https://github.com/kiwix/kiwix-android/issues/3172
   -->
   <application
-    android:forceQueryable="true"
-    android:usesCleartextTraffic="true"/>
+    android:forceQueryable="true" />
   <uses-sdk tools:overrideLibrary="android_libs.ub_uiautomator" />
 </manifest>
