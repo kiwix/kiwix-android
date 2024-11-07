@@ -24,6 +24,8 @@ import android.text.SpannableStringBuilder
 import android.text.style.AbsoluteSizeSpan
 import android.view.View.VISIBLE
 import eu.mhutti1.utils.storage.StorageDevice
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.databinding.ItemStoragePreferenceBinding
@@ -43,6 +45,7 @@ const val STORAGE_TITLE_TEXTVIEW_SIZE = 15
 internal class StorageViewHolder(
   private val itemStoragePreferenceBinding: ItemStoragePreferenceBinding,
   private val storageCalculator: StorageCalculator,
+  private val lifecycleScope: CoroutineScope,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val shouldShowCheckboxSelected: Boolean,
   private val onClickAction: (StorageDevice) -> Unit

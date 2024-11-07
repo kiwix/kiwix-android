@@ -34,6 +34,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
 import androidx.preference.Preference
@@ -97,20 +98,22 @@ abstract class CorePrefsFragment :
   @Inject
   internal var libkiwixBookmarks: LibkiwixBookmarks? = null
   override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-    coreComponent
-      .activityComponentBuilder()
-      .activity(requireActivity())
-      .build()
-      .inject(this)
-    addPreferencesFromResource(R.xml.preferences)
-    setStorage()
-    setUpSettings()
-    setupZoom()
-    sharedPreferenceUtil?.let {
-      LanguageUtils(requireActivity()).changeFont(
-        requireActivity(),
-        it
-      )
+    lifecycleScope.launch {
+      coreComponent
+        .activityComponentBuilder()
+        .activity(requireActivity())
+        .build()
+        .inject(this@CorePrefsFragment)
+      addPreferencesFromResource(R.xml.preferences)
+      setStorage()
+      setUpSettings()
+      setupZoom()
+      sharedPreferenceUtil?.let {
+        LanguageUtils(requireActivity()).changeFont(
+          requireActivity(),
+          it
+        )
+      }
     }
   }
 
@@ -129,7 +132,7 @@ abstract class CorePrefsFragment :
     textZoom?.summary = getString(R.string.percentage, sharedPreferenceUtil?.textZoom)
   }
 
-  protected abstract fun setStorage()
+  protected abstract suspend fun setStorage()
   override fun onResume() {
     super.onResume()
     preferenceScreen.sharedPreferences
@@ -448,18 +451,19 @@ abstract class CorePrefsFragment :
 
   @Suppress("NestedBlockDepth")
   fun onStorageDeviceSelected(storageDevice: StorageDevice) {
-    sharedPreferenceUtil?.let { sharedPreferenceUtil ->
-      sharedPreferenceUtil.putPrefStorage(
-        sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
-      )
-      sharedPreferenceUtil.putStoragePosition(
-        if (storageDevice.isInternal) INTERNAL_SELECT_POSITION
-        else EXTERNAL_SELECT_POSITION
-      )
-      setShowStorageOption()
-      setStorage()
+    lifecycleScope.launch {
+      sharedPreferenceUtil?.let { sharedPreferenceUtil ->
+        sharedPreferenceUtil.putPrefStorage(
+          sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
+        )
+        sharedPreferenceUtil.putStoragePosition(
+          if (storageDevice.isInternal) INTERNAL_SELECT_POSITION
+          else EXTERNAL_SELECT_POSITION
+        )
+        setShowStorageOption()
+        setStorage()
+      }
     }
-    return
   }
 
   private fun setShowStorageOption() {

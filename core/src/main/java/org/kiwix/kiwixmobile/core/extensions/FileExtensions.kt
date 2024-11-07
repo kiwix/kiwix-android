@@ -35,11 +35,7 @@ fun File.freeSpace(): Long = runBlocking {
   }
 }
 
-fun File.totalSpace(): Long = runBlocking {
-  withContext(Dispatchers.IO) {
-    totalSpace
-  }
-}
+suspend fun File.totalSpace(): Long = withContext(Dispatchers.IO) { totalSpace }
 
 suspend fun File.canReadFile(): Boolean = withContext(Dispatchers.IO) { canRead() }
 
