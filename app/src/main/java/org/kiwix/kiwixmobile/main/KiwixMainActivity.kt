@@ -117,9 +117,6 @@ class KiwixMainActivity : CoreMainActivity() {
     super.onCreate(savedInstanceState)
     activityKiwixMainBinding = ActivityKiwixMainBinding.inflate(layoutInflater)
     setContentView(activityKiwixMainBinding.root)
-    if (intent.action == "GET_CONTENT") {
-      navigate(R.id.downloadsFragment)
-    }
 
     navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
     activityKiwixMainBinding.drawerNavView.setupWithNavController(navController)
@@ -130,6 +127,7 @@ class KiwixMainActivity : CoreMainActivity() {
     activityKiwixMainBinding.bottomNavView.setupWithNavController(navController)
     migrateInternalToPublicAppDirectory()
     handleZimFileIntent(intent)
+    handleGetContentIntent(intent)
   }
 
   private fun migrateInternalToPublicAppDirectory() {
@@ -220,8 +218,15 @@ class KiwixMainActivity : CoreMainActivity() {
     super.onNewIntent(intent)
     handleNotificationIntent(intent)
     handleZimFileIntent(intent)
+    handleGetContentIntent(intent)
     supportFragmentManager.fragments.filterIsInstance<FragmentActivityExtensions>().forEach {
       it.onNewIntent(intent, this)
+    }
+  }
+
+  private fun handleGetContentIntent(intent: Intent?) {
+    if (intent?.action == ACTION_GET_CONTENT) {
+      navigate(R.id.downloadsFragment)
     }
   }
 
