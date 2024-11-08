@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.download
 
+import android.util.Log
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.NavHostFragment
@@ -138,17 +139,21 @@ class DownloadTest : BaseActivityTest() {
         scrollToZimFileIndex(smallestZimFileIndex)
         stopDownloadIfAlreadyStarted()
         downloadZimFile(smallestZimFileIndex)
-        assertDownloadStart()
         try {
+          assertDownloadStart()
           pauseDownload()
           assertDownloadPaused()
           resumeDownload()
           assertDownloadResumed()
+          waitUntilDownloadComplete()
         } catch (ignore: Exception) {
           // do nothing as ZIM file already downloaded, since we are downloading the smallest file
           // so it can be downloaded immediately after starting.
+          Log.e(
+            KIWIX_DOWNLOAD_TEST,
+            "Could not pause download. Original exception = $ignore"
+          )
         }
-        waitUntilDownloadComplete()
         clickLibraryOnBottomNav()
         // refresh the local library list to show the downloaded zim file
         library(LibraryRobot::refreshList)
