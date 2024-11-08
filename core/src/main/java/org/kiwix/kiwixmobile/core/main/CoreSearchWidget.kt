@@ -35,10 +35,13 @@ abstract class CoreSearchWidget : AppWidgetProvider() {
     appWidgetManager: AppWidgetManager,
     appWidgetIds: IntArray
   ) {
-    val appName = (activityKClass as CoreMainActivity).appName
+    val searchWidgetText = when (val activity = activityKClass) {
+      is CoreMainActivity -> "${activity.getString(R.string.search_label)} ${activity.appName}"
+      else -> context.getString(R.string.search_widget_text)
+    }
     appWidgetIds.forEach { appWidgetId ->
       val views = RemoteViews(context.packageName, R.layout.kiwix_search_widget)
-      views.setTextViewText(R.id.search_widget_text, "Search $appName")
+      views.setTextViewText(R.id.search_widget_text, searchWidgetText)
       idsToActions.forEach { (id, action) ->
         views.setOnClickPendingIntent(id, pendingIntent(context, action))
       }
