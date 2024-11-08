@@ -203,7 +203,7 @@ class DownloadRobot : BaseRobot() {
       clickOnYesButton()
       pauseForBetterTestPerformance()
     } catch (e: Exception) {
-      Log.i(
+      Log.e(
         KIWIX_DOWNLOAD_TEST,
         "Failed to stop downloading. Probably because it is not downloading the zim file"
       )
