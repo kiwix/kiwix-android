@@ -122,7 +122,7 @@ class InitialDownloadTest : BaseActivityTest() {
       stopDownloadIfAlreadyStarted()
       downloadZimFile()
       assertStorageConfigureDialogDisplayed()
-      clickOnYesToConfirm()
+      clickOnInternalStorage()
       assertDownloadStart()
       stopDownload()
       assertStopDownloadDialogDisplayed()

@@ -137,10 +137,8 @@
   <string name="tts_pause">ߊ߬ ߟߊߟߐ߬</string>
   <string name="tts_resume">ߊ߬ ߘߊߡߌ߬ߣߊ߬</string>
   <string name="stop">ߌ ߟߐ߬</string>
-  <string name="configure_storage_option">ߞߊ߬ ߞߊ߬ߝߊ ߡߊߞߍ߫ ߞߣߐߟߊ ߟߊ߬ߡߙߊ߬ߦߙߐ ߘߐ߫؟</string>
   <string name="internal_storage">ߞߣߐߟߊ</string>
   <string name="external_storage">ߞߐߞߊ߲ߠߊ</string>
-  <string name="configure">ߊ߬ ߢߊߓߐ߫</string>
   <string name="yes">ߊ߬ߥߐ߫</string>
   <string name="no">ߍ߲߬ߍ߲߫</string>
   <string name="confirm_stop_download_title">ߥߎߟߊߟߊߖߛߐߟߌ ߟߊߟߐ߬؟</string>

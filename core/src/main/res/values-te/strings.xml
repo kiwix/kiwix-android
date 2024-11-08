@@ -142,10 +142,8 @@
   <string name="tts_pause">విరామం</string>
   <string name="tts_resume">పునఃప్రారంభం</string>
   <string name="stop">ఆపండి</string>
-  <string name="configure_storage_option">పుస్తకాన్ని అంతర్గత నిల్వకు డౌన్‌లోడ్ చేయాలా?</string>
   <string name="internal_storage">అంతర్గత</string>
   <string name="external_storage">అంతర్గత</string>
-  <string name="configure">కాన్ఫిగర్ చేయండి</string>
   <string name="yes">సరే</string>
   <string name="no">వద్దు</string>
   <string name="confirm_stop_download_title">డౌన్‌లోడ్ ఆపివేయాలా?</string>

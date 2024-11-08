@@ -145,10 +145,8 @@
   <string name="tts_pause">रुका</string>
   <string name="tts_resume">फिर से शुरू करना</string>
   <string name="stop">रोकें</string>
-  <string name="configure_storage_option">आंतरिक भंडारण में पुस्तक डाउनलोड करें?</string>
   <string name="internal_storage">अन्दरूनी</string>
   <string name="external_storage">बाहरी</string>
-  <string name="configure">कॉन्फ़िगर करें</string>
   <string name="yes">हाँ</string>
   <string name="no">नहीं</string>
   <string name="confirm_stop_download_title">डाउनलोड रोकें?</string>

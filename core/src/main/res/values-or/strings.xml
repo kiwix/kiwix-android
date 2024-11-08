@@ -137,10 +137,8 @@
   <string name="tts_pause">ବିରାମ</string>
   <string name="tts_resume">ପୁନଃ ଆରମ୍ଭ କରନ୍ତୁ</string>
   <string name="stop">ଅଟକି ଯାଆନ୍ତୁ</string>
-  <string name="configure_storage_option">ଆଭ୍ୟନ୍ତରୀଣ ଭଣ୍ଡାରକୁ ବହି ଡାଉନଲୋଡ୍ କରନ୍ତୁ?</string>
   <string name="internal_storage">ମଧ୍ୟାନ୍ତର</string>
   <string name="external_storage">ବାହ୍ୟ</string>
-  <string name="configure">ସଜଡ଼ାନ୍ତୁ</string>
   <string name="yes">ହଁ</string>
   <string name="no">ନାହିଁ</string>
   <string name="confirm_stop_download_title">ଡାଉନଲୋଡ୍ ବନ୍ଦ କରନ୍ତୁ?</string>

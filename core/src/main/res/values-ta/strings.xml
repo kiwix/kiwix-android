@@ -137,10 +137,8 @@
   <string name="tts_pause">இடைநிறுத்து</string>
   <string name="tts_resume">தொடர்க</string>
   <string name="stop">நிறுத்து</string>
-  <string name="configure_storage_option">புத்தகத்தை உள் சேமிப்பகத்தில் பதிவிறக்கவா?</string>
   <string name="internal_storage">உள்ளே</string>
   <string name="external_storage">வெளியிலுள்ள</string>
-  <string name="configure">கட்டமைக்கவும்</string>
   <string name="yes">ஆம்</string>
   <string name="no">இல்லை</string>
   <string name="confirm_stop_download_title">பதிவிறக்குவதை நிறுத்தவா?</string>

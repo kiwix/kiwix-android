@@ -157,10 +157,8 @@
   <string name="tts_pause">pausatua</string>
   <string name="tts_resume">jarraitu</string>
   <string name="stop">Gelditu</string>
-  <string name="configure_storage_option">Liburua barneko biltegiratzera deskargatu nahi duzu?</string>
   <string name="internal_storage">Barneko</string>
   <string name="external_storage">Kanpokoa</string>
-  <string name="configure">Konfiguratu</string>
   <string name="yes">Bai</string>
   <string name="no">Ez</string>
   <string name="confirm_stop_download_title">Deskarga geldiarazi?</string>

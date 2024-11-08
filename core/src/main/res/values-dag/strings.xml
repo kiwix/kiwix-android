@@ -149,10 +149,8 @@
   <string name="tts_pause">Zanima</string>
   <string name="tts_resume">Tuɣi</string>
   <string name="stop">zanima</string>
-  <string name="configure_storage_option">A bɔri ni a vooi la buku maa n zaŋ niŋ a maŋmaŋ kpanjɔɣu ni?</string>
   <string name="internal_storage">Puuni</string>
   <string name="external_storage">Kpaŋa</string>
-  <string name="configure">Sanidi</string>
   <string name="yes">ii</string>
   <string name="no">Aayi</string>
   <string name="confirm_stop_download_title">A bɔri ni a chɛla voobu bee?</string>

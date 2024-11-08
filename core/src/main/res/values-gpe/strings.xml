@@ -139,7 +139,6 @@
   <string name="tts_pause">pause</string>
   <string name="tts_resume">resume</string>
   <string name="stop">stop</string>
-  <string name="configure_storage_option">Download book go internal storage?</string>
   <string name="internal_storage">Internal</string>
   <string name="external_storage">External</string>
 </resources>

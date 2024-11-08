@@ -142,10 +142,8 @@
   <string name="tts_pause">dan dakata</string>
   <string name="tts_resume">ci gaba</string>
   <string name="stop">Dakata</string>
-  <string name="configure_storage_option">Download littafin zuwa ciki ajiya</string>
   <string name="internal_storage">Ciki</string>
   <string name="external_storage">Waje</string>
-  <string name="configure">Sanya</string>
   <string name="yes">Ee</string>
   <string name="no">A’a</string>
   <string name="confirm_stop_download_title">A daina saukewa?</string>

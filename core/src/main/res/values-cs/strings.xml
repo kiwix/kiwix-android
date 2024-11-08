@@ -144,10 +144,8 @@
   <string name="tts_pause">Pozastavit</string>
   <string name="tts_resume">Obnovit</string>
   <string name="stop">stop</string>
-  <string name="configure_storage_option">Stáhnout knihu do interního úložiště?</string>
   <string name="internal_storage">Interní</string>
   <string name="external_storage">Externí</string>
-  <string name="configure">Konfigurovat</string>
   <string name="yes">Ano</string>
   <string name="no">Ne</string>
   <string name="confirm_stop_download_title">Zastavit stahování?</string>

@@ -177,10 +177,8 @@
   <string name="tts_pause">暂停</string>
   <string name="tts_resume">恢复</string>
   <string name="stop">停止</string>
-  <string name="configure_storage_option">将书籍下载至内部存储空间？</string>
   <string name="internal_storage">内部</string>
   <string name="external_storage">外部</string>
-  <string name="configure">配置</string>
   <string name="yes">是</string>
   <string name="no">否</string>
   <string name="confirm_stop_download_title">停止下载？</string>

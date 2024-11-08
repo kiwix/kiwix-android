@@ -151,10 +151,8 @@
   <string name="tts_pause">pauza</string>
   <string name="tts_resume">Podsumuj</string>
   <string name="stop">stop</string>
-  <string name="configure_storage_option">Pobrać książkę do pamięci wewnętrznej?</string>
   <string name="internal_storage">Wewnętrzny</string>
   <string name="external_storage">Zewnętrzny</string>
-  <string name="configure">Konfiguruj</string>
   <string name="yes">Tak</string>
   <string name="no">Nie</string>
   <string name="confirm_stop_download_title">Zatrzymać pobieranie?</string>

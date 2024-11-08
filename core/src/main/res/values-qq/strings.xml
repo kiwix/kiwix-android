@@ -147,10 +147,8 @@
   <string name="tts_pause">{{identical|pause}}</string>
   <string name="tts_resume">{{identical|resume}}</string>
   <string name="stop">{{Identical|Stop}}</string>
-  <string name="configure_storage_option">This message appears in the \"Android Dialog\" as an information message. It takes confirmation from the user if he wants to download books in internal storage.</string>
   <string name="internal_storage">{{Identical|Internal}}</string>
   <string name="external_storage">{{Identical|External}}</string>
-  <string name="configure">{{Identical|Configure}}</string>
   <string name="yes">{{Identical|Yes}}</string>
   <string name="no">{{Identical|No}}</string>
   <string name="confirm_stop_download_title">This message appears in the \"Android Dialog\" as a confirmation title message. When the user wants to stop the current running download.</string>

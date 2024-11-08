@@ -149,10 +149,8 @@
   <string name="tts_pause">паузирај</string>
   <string name="tts_resume">продолжи</string>
   <string name="stop">запри</string>
-  <string name="configure_storage_option">Да ја преземам книгата во внатрешен склад?</string>
   <string name="internal_storage">Внатрешен</string>
   <string name="external_storage">Надворешен</string>
-  <string name="configure">Нагоди</string>
   <string name="yes">Да</string>
   <string name="no">Не</string>
   <string name="confirm_stop_download_title">Да го прекинам преземањето?</string>

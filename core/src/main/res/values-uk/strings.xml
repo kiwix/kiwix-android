@@ -145,7 +145,6 @@
   <string name="stop">зупинити</string>
   <string name="internal_storage">Внутрішнє</string>
   <string name="external_storage">Зовнішні</string>
-  <string name="configure">Налаштувати</string>
   <string name="yes">Так</string>
   <string name="no">Ні</string>
   <string name="confirm_stop_download_title">Зупинити завантаження?</string>

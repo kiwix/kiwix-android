@@ -18,6 +18,7 @@
 
 package eu.mhutti1.utils.storage
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,32 +29,43 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import eu.mhutti1.utils.storage.adapter.StorageAdapter
 import eu.mhutti1.utils.storage.adapter.StorageDelegate
-import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.R.dimen
 import org.kiwix.kiwixmobile.core.databinding.StorageSelectDialogBinding
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isLandScapeMode
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
+import org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowWidth
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
+const val STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE = 16F
+
 class StorageSelectDialog : DialogFragment() {
   var onSelectAction: ((StorageDevice) -> Unit)? = null
+  var titleSize: Float? = null
 
   @Inject lateinit var storageCalculator: StorageCalculator
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private var aTitle: String? = null
   private var storageSelectDialogViewBinding: StorageSelectDialogBinding? = null
-  private var storageDisposable: Disposable? = null
+  private val storageDeviceList = arrayListOf<StorageDevice>()
 
   private val storageAdapter: StorageAdapter by lazy {
     StorageAdapter(
-      StorageDelegate(storageCalculator, sharedPreferenceUtil) {
+      StorageDelegate(
+        storageCalculator,
+        sharedPreferenceUtil,
+        aTitle == getString(R.string.choose_storage_to_download_book)
+      ) {
         onSelectAction?.invoke(it)
         dismiss()
       }
     )
+  }
+
+  fun setStorageDeviceList(storageDeviceList: List<StorageDevice>) {
+    this.storageDeviceList.addAll(storageDeviceList)
   }
 
   override fun onCreateView(
@@ -68,21 +80,16 @@ class StorageSelectDialog : DialogFragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     CoreApp.coreComponent.inject(this)
-    storageSelectDialogViewBinding?.title?.text = aTitle
+    storageSelectDialogViewBinding?.title?.apply {
+      text = aTitle
+      titleSize?.let(::setTextSize)
+    }
     storageSelectDialogViewBinding?.deviceList?.run {
       adapter = storageAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
-
-    storageDisposable =
-      Flowable.fromCallable { StorageDeviceUtils.getWritableStorage(requireActivity()) }
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(
-          { storageAdapter.items = it },
-          Throwable::printStackTrace
-        )
+    storageAdapter.items = storageDeviceList
   }
 
   override fun show(fm: FragmentManager, text: String?) {
@@ -90,9 +97,33 @@ class StorageSelectDialog : DialogFragment() {
     super.show(fm, text)
   }
 
+  override fun onStart() {
+    super.onStart()
+    setStorageSelectDialogWidth()
+  }
+
+  override fun onConfigurationChanged(newConfig: Configuration) {
+    super.onConfigurationChanged(newConfig)
+    setStorageSelectDialogWidth()
+  }
+
+  @Suppress("MagicNumber")
+  private fun setStorageSelectDialogWidth() {
+    val windowWidth = requireActivity().getWindowWidth()
+    val maximumStorageSelectDialogWidth =
+      requireActivity().resources.getDimensionPixelSize(dimen.maximum_donation_popup_width)
+
+    val width =
+      if (windowWidth > maximumStorageSelectDialogWidth || requireActivity().isLandScapeMode()) {
+        maximumStorageSelectDialogWidth
+      } else {
+        (windowWidth * 0.9).toInt()
+      }
+    dialog?.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+  }
+
   override fun onDestroyView() {
     super.onDestroyView()
-    storageDisposable?.dispose()
     storageSelectDialogViewBinding = null
   }
 }

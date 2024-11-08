@@ -22,7 +22,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import eu.mhutti1.utils.storage.StorageDevice
 import org.kiwix.kiwixmobile.core.base.adapter.AdapterDelegate
-import org.kiwix.kiwixmobile.core.databinding.DeviceItemBinding
+import org.kiwix.kiwixmobile.core.databinding.ItemStoragePreferenceBinding
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.viewBinding
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -30,13 +30,15 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 class StorageDelegate(
   private val storageCalculator: StorageCalculator,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
+  private val isShowingStorageOptionForFirstDownload: Boolean,
   private val onClickAction: (StorageDevice) -> Unit
 ) : AdapterDelegate<StorageDevice> {
   override fun createViewHolder(parent: ViewGroup): ViewHolder {
     return StorageViewHolder(
-      parent.viewBinding(DeviceItemBinding::inflate, false),
+      parent.viewBinding(ItemStoragePreferenceBinding::inflate, false),
       storageCalculator,
       sharedPreferenceUtil,
+      isShowingStorageOptionForFirstDownload,
       onClickAction
     )
   }

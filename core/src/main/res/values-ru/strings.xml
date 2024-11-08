@@ -178,10 +178,8 @@
   <string name="tts_pause">пауза</string>
   <string name="tts_resume">продолжить</string>
   <string name="stop">остановить</string>
-  <string name="configure_storage_option">Загрузить книгу во внутреннюю память?</string>
   <string name="internal_storage">Внутренний</string>
   <string name="external_storage">Внешний</string>
-  <string name="configure">Настроить</string>
   <string name="yes">Да</string>
   <string name="no">Нет</string>
   <string name="confirm_stop_download_title">Остановить загрузку?</string>

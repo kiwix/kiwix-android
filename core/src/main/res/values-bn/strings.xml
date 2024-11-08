@@ -113,10 +113,8 @@
   <string name="tts_pause">বিরতি</string>
   <string name="tts_resume">পুনরায় শুরু করুন</string>
   <string name="stop">বন্ধ</string>
-  <string name="configure_storage_option">অভ্যন্তরীণ স্টোরেজে বই ডাউনলোড করবেন?</string>
   <string name="internal_storage">অভ্যন্তরীণ</string>
   <string name="external_storage">বহিঃস্থ</string>
-  <string name="configure">কনফিগার করুন</string>
   <string name="yes">হ্যাঁ</string>
   <string name="no">না</string>
   <string name="confirm_stop_download_title">ডাউনলোড বন্ধ করবেন?</string>

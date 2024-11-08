@@ -142,10 +142,8 @@
   <string name="tts_pause">da duro</string>
   <string name="tts_resume">bẹrẹ pada</string>
   <string name="stop">dúró</string>
-  <string name="configure_storage_option">Ṣe igbasilẹ iwe si ibi ipamọ inu?</string>
   <string name="internal_storage">Àárín</string>
   <string name="external_storage">Ita</string>
-  <string name="configure">Ṣiṣeto</string>
   <string name="yes">Bẹ́ẹ̀ni</string>
   <string name="no">Bẹ́ẹ̀kọ́</string>
   <string name="confirm_stop_download_title">Duro gbigba lati ayelujara?</string>

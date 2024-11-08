@@ -152,10 +152,8 @@
   <string name="tts_pause">pausar</string>
   <string name="tts_resume">reprender</string>
   <string name="stop">stoppar</string>
-  <string name="configure_storage_option">Discargar le libro al immagazinage interne?</string>
   <string name="internal_storage">Interne</string>
   <string name="external_storage">Externe</string>
-  <string name="configure">Configurar</string>
   <string name="yes">Si</string>
   <string name="no">No</string>
   <string name="confirm_stop_download_title">Stoppar le discargamento?</string>

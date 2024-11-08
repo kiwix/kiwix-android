@@ -58,6 +58,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import eu.mhutti1.utils.storage.Bytes
 import eu.mhutti1.utils.storage.StorageDevice
+import eu.mhutti1.utils.storage.StorageDeviceUtils
 import eu.mhutti1.utils.storage.StorageSelectDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -132,6 +133,9 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
 
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
+  }
+  private val storageDeviceList by lazy {
+    StorageDeviceUtils.getWritableStorage(requireActivity())
   }
 
   private var storagePermissionLauncher: ActivityResultLauncher<Array<String>>? =
@@ -664,6 +668,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   private fun showStorageSelectDialog() = StorageSelectDialog()
     .apply {
       onSelectAction = ::storeDeviceInPreferences
+      setStorageDeviceList(storageDeviceList)
     }
     .show(parentFragmentManager, getString(string.pref_storage))
 

@@ -145,10 +145,8 @@
   <string name="tts_pause">premor</string>
   <string name="tts_resume">nadaljuj</string>
   <string name="stop">ustavi</string>
-  <string name="configure_storage_option">Prenesem knjigo v notranji pomnilnik?</string>
   <string name="internal_storage">Notranji</string>
   <string name="external_storage">Zunanji</string>
-  <string name="configure">Konfiguriraj</string>
   <string name="yes">Da</string>
   <string name="no">Ne</string>
   <string name="confirm_stop_download_title">Ustavim prenos?</string>

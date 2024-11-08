@@ -34,6 +34,7 @@ import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
@@ -98,7 +99,7 @@ class InitialDownloadRobot : BaseRobot() {
   }
 
   fun assertStorageConfigureDialogDisplayed() {
-    testFlakyView({ isVisible(Text("Download book to internal storage?")) })
+    testFlakyView({ onView(withText(string.choose_storage_to_download_book)) })
   }
 
   fun assertStopDownloadDialogDisplayed() {
@@ -107,6 +108,17 @@ class InitialDownloadRobot : BaseRobot() {
 
   fun clickOnYesToConfirm() {
     testFlakyView({ onView(withText("YES")).perform(click()) })
+  }
+
+  fun clickOnInternalStorage() {
+    pauseForBetterTestPerformance()
+    testFlakyView({
+      onView(
+        RecyclerViewMatcher(id.device_list).atPosition(
+          0
+        )
+      ).perform(click())
+    })
   }
 
   fun assertDownloadStart() {
