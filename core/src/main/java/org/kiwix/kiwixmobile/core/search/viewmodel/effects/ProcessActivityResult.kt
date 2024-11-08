@@ -25,7 +25,7 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.channels.Channel
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.VoiceSearchResult
 
 data class ProcessActivityResult(
   private val requestCode: Int,
@@ -40,7 +40,7 @@ data class ProcessActivityResult(
     ) {
       data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.apply {
         first()?.let {
-          actions.trySend(Filter(it)).isSuccess
+          actions.trySend(VoiceSearchResult(it)).isSuccess
         }
       }
     }

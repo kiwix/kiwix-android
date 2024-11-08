@@ -38,4 +38,6 @@ sealed class Action {
   data class CreatedWithArguments(val arguments: Bundle?) : Action()
   data class ActivityResultReceived(val requestCode: Int, val resultCode: Int, val data: Intent?) :
     Action()
+
+  data class VoiceSearchResult(val term: String) : Action()
 }
