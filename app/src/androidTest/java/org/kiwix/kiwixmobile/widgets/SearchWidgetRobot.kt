@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.widgets
 
 import android.graphics.Point
+import android.util.Log
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
@@ -28,10 +29,12 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import applyWithViewHierarchyPrinting
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.hamcrest.core.AllOf.allOf
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 fun searchWidget(func: SearchWidgetRobot.() -> Unit) =
@@ -62,6 +65,18 @@ class SearchWidgetRobot : BaseRobot() {
   }
 
   fun addWidgetToHomeScreen(uiDevice: UiDevice) {
+    try {
+      if (uiDevice.findObject(By.text("Search Kiwix")).text == "Search Kiwix") {
+        // since search widget is already exist we does not require to add it again.
+        return
+      }
+    } catch (ignore: Exception) {
+      // widget does not exist.
+      Log.e(
+        "SEARCH_WIDGET",
+        "Could not find the Search widget. Probably it does not exist"
+      )
+    }
     val center = getScreenCenter(uiDevice)
     longPressInCenterOfScreen(uiDevice, center)
     clickOnWidgetsText(uiDevice)
@@ -122,6 +137,18 @@ class SearchWidgetRobot : BaseRobot() {
     ).click()
   }
 
+  fun closeIfGoogleSearchVisible(uiDevice: UiDevice) {
+    try {
+      pauseForBetterTestPerformance()
+      testFlakyView({ uiDevice.findObject(By.text("Google")) })
+      pressBack()
+      Log.e("SEARCH_WIDGET_TEST", "Closed the Google speak dialog")
+    } catch (ignore: Exception) {
+      // do nothing since the Google speak is not recognized in this emulator.
+      Log.e("SEARCH_WIDGET_TEST", "Could not close the Google speak dialog.")
+    }
+  }
+
   fun assertSearchScreenVisible() {
     testFlakyView({
       onView(withText(R.string.menu_search_in_text)).check(matches(isDisplayed()))
@@ -132,5 +159,9 @@ class SearchWidgetRobot : BaseRobot() {
     uiDevice.findObject(
       By.res("${kiwixMainActivity.packageName}:id/search_widget_text")
     ).click()
+  }
+
+  private fun pauseForBetterTestPerformance() {
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
   }
 }

@@ -89,7 +89,6 @@ class SearchWidgetTest : BaseActivityTest() {
       }
       searchWidget {
         pressHome()
-        removeWidgetIfAlreadyAdded(uiDevice)
         addWidgetToHomeScreen(uiDevice)
         assertSearchWidgetAddedToHomeScreen(uiDevice)
         clickOnBookmarkIcon(uiDevice, kiwixMainActivity)
@@ -97,6 +96,7 @@ class SearchWidgetTest : BaseActivityTest() {
         pressBack()
         pressHome()
         clickOnMicIcon(uiDevice, kiwixMainActivity)
+        closeIfGoogleSearchVisible(uiDevice)
         assertSearchScreenVisible()
         pressBack()
         pressHome()
