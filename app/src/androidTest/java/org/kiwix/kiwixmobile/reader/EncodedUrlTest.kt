@@ -21,12 +21,11 @@ package org.kiwix.kiwixmobile.reader
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -76,7 +75,7 @@ class EncodedUrlTest : BaseActivityTest() {
   }
 
   @Test
-  fun testEncodedUrls() {
+  fun testEncodedUrls() = runBlocking {
     val loadFileStream =
       EncodedUrlTest::class.java.classLoader.getResourceAsStream("characters_encoding.zim")
     val zimFile = File(
@@ -96,78 +95,74 @@ class EncodedUrlTest : BaseActivityTest() {
       }
     }
     val zimReaderSource = ZimReaderSource(zimFile)
-    activityScenario.onActivity {
-      it.lifecycleScope.launch {
-        val archive = zimReaderSource.createArchive()
-        val zimFileReader = ZimFileReader(
-          zimReaderSource,
-          archive!!,
-          DarkModeConfig(SharedPreferenceUtil(context), context),
-          SuggestionSearcher(archive)
-        )
-        val encodedUrls = arrayOf(
-          EncodedUrl(
-            "https://kiwix.app/foo/part%2520with%2520space/bar%253Fkey%253Dvalue",
-            "https://kiwix.app/foo/part%2520with%2520space/bar%253Fkey%253Dvalue"
-          ),
-          EncodedUrl(
-            "https://kiwix.app/foo/part%20with%20space/bar%3Fkey%3Dvalue",
-            "https://kiwix.app/foo/part%20with%20space/bar%3Fkey%3Dvalue"
-          ),
-          EncodedUrl(
-            "https://kiwix.app/foo%2Fpart%20with%20space%2Fbar%3Fkey%3Dvalue",
-            "https://kiwix.app/foo%2Fpart%20with%20space%2Fbar%3Fkey%3Dvalue"
-          ),
-          EncodedUrl(
-            "https://kiwix.app/foo/part%20with%20space/bar?key=value",
-            "https://kiwix.app/foo/part%20with%20space/bar?key=value"
-          ),
-          EncodedUrl(
-            "https://kiwix.app/foo/part/file%20with%20%3F%20and%20+?who=Chip%26Dale&quer=Is%20" +
-              "there%20any%20%2B%20here%3F",
-            "https://kiwix.app/foo/part/file%20with%20%3F%20and%20+?who=Chip%26Dale&quer" +
-              "=Is%20there%20any%20%2B%20here%3F"
-          ),
-          EncodedUrl(
-            "https://kiwix.app/foo/part/file%20with%20%253F%20and%20%2B%3Fwho%3DChip%2526Dale%26" +
-              "quer%3DIs%2520there%2520any%2520%252B%2520here%253F",
-            "https://kiwix.app/foo/part/file%20with%20%253F%20and%20%2B%3Fwho%3DChip" +
-              "%2526Dale%26quer%3DIs%2520there%2520any%2520%252B%2520here%253F"
-          ),
-          EncodedUrl(
-            "https://kiwix.app/foo/part/file%20with%20%3F%20and%20%2B%3Fwho%3DChip%26Dale%26" +
-              "question%3DIt%20there%20any%20%2B%20here%3F",
-            "https://kiwix.app/foo/part/file%20with%20%3F%20and%20%2B%3Fwho%3DChip%26" +
-              "Dale%26question%3DIt%20there%20any%20%2B%20here%3F"
-          ),
-          EncodedUrl(
-            "https://kiwix.app/foo/part/file%3Fquestion%3DIs%2520there%2520any" +
-              "%2520%252B%2520here%253F",
-            "https://kiwix.app/foo/part/file%3Fquestion%3DIs%2520there%2520" +
-              "any%2520%252B%2520here%253F"
-          ),
-          EncodedUrl(
-            "https://kiwix.app/foo/part/file%3Fquestion%3DIs%2Bthere%2Bany%2B%252B%2Bhere%253F",
-            "https://kiwix.app/foo/part/file%3Fquestion%3DIs%2Bthere%2Bany%2B%252B%2B" +
-              "here%253F"
-          ),
-          EncodedUrl(
-            "https://kiwix.app/%F0%9F%A5%B3%F0%9F%A5%B0%F0%9F%98%98%F0%9F%A4%A9%F0%9F%98%8D%F0%9F" +
-              "%A4%8D%F0%9F%8E%80%F0%9F%A7%B8%F0%9F%8C%B7%F0%9F%8D%AD",
-            "https://kiwix.app/%F0%9F%A5%B3%F0%9F%A5%B0%F0%9F%98%98%F0%9F%A4%A9%F0%9F%98%8D" +
-              "%F0%9F%A4%8D%F0%9F%8E%80%F0%9F%A7%B8%F0%9F%8C%B7%F0%9F%8D%AD"
-          )
-        )
-        encodedUrls.forEach { encodedUrl ->
-          Assert.assertEquals(
-            encodedUrl.expectedUrl,
-            zimFileReader.getRedirect(encodedUrl.url)
-          )
-        }
-        // dispose the ZimFileReader
-        zimFileReader.dispose()
-      }
+    val archive = zimReaderSource.createArchive()
+    val zimFileReader = ZimFileReader(
+      zimReaderSource,
+      archive!!,
+      DarkModeConfig(SharedPreferenceUtil(context), context),
+      SuggestionSearcher(archive)
+    )
+    val encodedUrls = arrayOf(
+      EncodedUrl(
+        "https://kiwix.app/foo/part%2520with%2520space/bar%253Fkey%253Dvalue",
+        "https://kiwix.app/foo/part%2520with%2520space/bar%253Fkey%253Dvalue"
+      ),
+      EncodedUrl(
+        "https://kiwix.app/foo/part%20with%20space/bar%3Fkey%3Dvalue",
+        "https://kiwix.app/foo/part%20with%20space/bar%3Fkey%3Dvalue"
+      ),
+      EncodedUrl(
+        "https://kiwix.app/foo%2Fpart%20with%20space%2Fbar%3Fkey%3Dvalue",
+        "https://kiwix.app/foo%2Fpart%20with%20space%2Fbar%3Fkey%3Dvalue"
+      ),
+      EncodedUrl(
+        "https://kiwix.app/foo/part%20with%20space/bar?key=value",
+        "https://kiwix.app/foo/part%20with%20space/bar?key=value"
+      ),
+      EncodedUrl(
+        "https://kiwix.app/foo/part/file%20with%20%3F%20and%20+?who=Chip%26Dale&quer=Is%20" +
+          "there%20any%20%2B%20here%3F",
+        "https://kiwix.app/foo/part/file%20with%20%3F%20and%20+?who=Chip%26Dale&quer" +
+          "=Is%20there%20any%20%2B%20here%3F"
+      ),
+      EncodedUrl(
+        "https://kiwix.app/foo/part/file%20with%20%253F%20and%20%2B%3Fwho%3DChip%2526Dale%26" +
+          "quer%3DIs%2520there%2520any%2520%252B%2520here%253F",
+        "https://kiwix.app/foo/part/file%20with%20%253F%20and%20%2B%3Fwho%3DChip" +
+          "%2526Dale%26quer%3DIs%2520there%2520any%2520%252B%2520here%253F"
+      ),
+      EncodedUrl(
+        "https://kiwix.app/foo/part/file%20with%20%3F%20and%20%2B%3Fwho%3DChip%26Dale%26" +
+          "question%3DIt%20there%20any%20%2B%20here%3F",
+        "https://kiwix.app/foo/part/file%20with%20%3F%20and%20%2B%3Fwho%3DChip%26" +
+          "Dale%26question%3DIt%20there%20any%20%2B%20here%3F"
+      ),
+      EncodedUrl(
+        "https://kiwix.app/foo/part/file%3Fquestion%3DIs%2520there%2520any" +
+          "%2520%252B%2520here%253F",
+        "https://kiwix.app/foo/part/file%3Fquestion%3DIs%2520there%2520" +
+          "any%2520%252B%2520here%253F"
+      ),
+      EncodedUrl(
+        "https://kiwix.app/foo/part/file%3Fquestion%3DIs%2Bthere%2Bany%2B%252B%2Bhere%253F",
+        "https://kiwix.app/foo/part/file%3Fquestion%3DIs%2Bthere%2Bany%2B%252B%2B" +
+          "here%253F"
+      ),
+      EncodedUrl(
+        "https://kiwix.app/%F0%9F%A5%B3%F0%9F%A5%B0%F0%9F%98%98%F0%9F%A4%A9%F0%9F%98%8D%F0%9F" +
+          "%A4%8D%F0%9F%8E%80%F0%9F%A7%B8%F0%9F%8C%B7%F0%9F%8D%AD",
+        "https://kiwix.app/%F0%9F%A5%B3%F0%9F%A5%B0%F0%9F%98%98%F0%9F%A4%A9%F0%9F%98%8D" +
+          "%F0%9F%A4%8D%F0%9F%8E%80%F0%9F%A7%B8%F0%9F%8C%B7%F0%9F%8D%AD"
+      )
+    )
+    encodedUrls.forEach { encodedUrl ->
+      Assert.assertEquals(
+        encodedUrl.expectedUrl,
+        zimFileReader.getRedirect(encodedUrl.url)
+      )
     }
+    // dispose the ZimFileReader
+    zimFileReader.dispose()
   }
 
   @After
