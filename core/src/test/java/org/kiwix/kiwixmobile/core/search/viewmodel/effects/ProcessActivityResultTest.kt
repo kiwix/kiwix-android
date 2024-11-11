@@ -31,7 +31,7 @@ import kotlinx.coroutines.channels.Channel
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
-import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.VoiceSearchResult
 
 internal class ProcessActivityResultTest {
 
@@ -72,6 +72,6 @@ internal class ProcessActivityResultTest {
   fun `invoke with sends filter action with data`() {
     every { data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS) } returns arrayListOf("")
     successfulResult.invokeWith(activity)
-    verify { actions.trySend(Filter("")).isSuccess }
+    verify { actions.trySend(VoiceSearchResult("")).isSuccess }
   }
 }

@@ -33,8 +33,8 @@ import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.R.id
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
@@ -146,7 +146,7 @@ class InitialDownloadRobot : BaseRobot() {
       clickOnYesToConfirm()
       pauseForBetterTestPerformance()
     } catch (e: Exception) {
-      Log.i(
+      Log.e(
         "INITIAL_DOWNLOAD_TEST",
         "Failed to stop downloading. Probably because it is not downloading the zim file"
       )

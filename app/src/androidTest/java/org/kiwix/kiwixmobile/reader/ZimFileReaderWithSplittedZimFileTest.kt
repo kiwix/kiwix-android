@@ -22,7 +22,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
@@ -33,7 +32,7 @@ import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
 import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Assert
@@ -133,23 +132,19 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
   }
 
   @Test
-  fun testWithExtraZeroSizeFile() {
+  fun testWithExtraZeroSizeFile() = runBlocking {
     createAndGetSplitedZimFile(true)?.let { zimFile ->
       // test the articleCount and mediaCount of this zim file.
       val zimReaderSource = ZimReaderSource(zimFile)
-      activityScenario.onActivity {
-        it.lifecycleScope.launch {
-          val archive = zimReaderSource.createArchive()
-          val zimFileReader = ZimFileReader(
-            zimReaderSource,
-            archive!!,
-            DarkModeConfig(SharedPreferenceUtil(context), context),
-            SuggestionSearcher(archive)
-          )
-          Assert.assertEquals(zimFileReader.mediaCount, 16)
-          Assert.assertEquals(zimFileReader.articleCount, 4)
-        }
-      }
+      val archive = zimReaderSource.createArchive()
+      val zimFileReader = ZimFileReader(
+        zimReaderSource,
+        archive!!,
+        DarkModeConfig(SharedPreferenceUtil(context), context),
+        SuggestionSearcher(archive)
+      )
+      Assert.assertEquals(zimFileReader.mediaCount, 16)
+      Assert.assertEquals(zimFileReader.articleCount, 4)
     } ?: kotlin.run {
       // error in creating the zim file chunk
       fail("Couldn't create the zim file chunk")

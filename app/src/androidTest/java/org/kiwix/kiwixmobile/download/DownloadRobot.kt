@@ -42,6 +42,7 @@ import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.download.DownloadTest.Companion.KIWIX_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
@@ -150,12 +151,12 @@ class DownloadRobot : BaseRobot() {
   fun waitUntilDownloadComplete(retryCountForDownloadingZimFile: Int = 30) {
     try {
       onView(withId(R.id.stop)).check(doesNotExist())
-      Log.i("kiwixDownloadTest", "Download complete")
+      Log.e(KIWIX_DOWNLOAD_TEST, "Download complete")
     } catch (e: AssertionFailedError) {
       if (retryCountForDownloadingZimFile > 0) {
         resumeDownloadIfPaused()
         BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
-        Log.i("kiwixDownloadTest", "Downloading in progress")
+        Log.e(KIWIX_DOWNLOAD_TEST, "Downloading in progress")
         waitUntilDownloadComplete(retryCountForDownloadingZimFile - 1)
         return
       }
@@ -202,8 +203,8 @@ class DownloadRobot : BaseRobot() {
       clickOnYesButton()
       pauseForBetterTestPerformance()
     } catch (e: Exception) {
-      Log.i(
-        "DOWNLOAD_TEST",
+      Log.e(
+        KIWIX_DOWNLOAD_TEST,
         "Failed to stop downloading. Probably because it is not downloading the zim file"
       )
     }

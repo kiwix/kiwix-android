@@ -72,6 +72,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnOpenInNewTabClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchState
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
+import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import javax.inject.Inject
@@ -277,6 +278,12 @@ class SearchFragment : BaseFragment() {
             searchView?.setQuery(searchStringFromArguments, false)
           }
           searchViewModel.actions.trySend(Action.CreatedWithArguments(arguments)).isSuccess
+          arguments?.remove(EXTRA_IS_WIDGET_VOICE)
+          searchViewModel.voiceSearchResult.observe(viewLifecycleOwner) { searchTerm ->
+            searchTerm?.let {
+              searchView?.setQuery(it, false)
+            }
+          }
         }
 
         override fun onMenuItemSelected(menuItem: MenuItem) = true

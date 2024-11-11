@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.search.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -48,6 +49,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnOpenInNewTabClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ReceivedPromptForSpeechInput
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ScreenWasStartedFrom
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
+import org.kiwix.kiwixmobile.core.search.viewmodel.Action.VoiceSearchResult
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.DeleteRecentSearch
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.OpenSearchItem
@@ -87,6 +89,7 @@ class SearchViewModel @Inject constructor(
   val actions = Channel<Action>(Channel.UNLIMITED)
   private val filter = MutableStateFlow("")
   private val searchOrigin = MutableStateFlow(FromWebView)
+  val voiceSearchResult: MutableLiveData<String?> = MutableLiveData(null)
 
   init {
     viewModelScope.launch { reducer() }
@@ -148,6 +151,7 @@ class SearchViewModel @Inject constructor(
         ).isSuccess
 
       is ScreenWasStartedFrom -> searchOrigin.tryEmit(it.searchOrigin)
+      is VoiceSearchResult -> voiceSearchResult.value = it.term
     }
   }
 

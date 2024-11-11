@@ -54,6 +54,10 @@ abstract class BaseRobot(
     uiDevice.pressBack()
   }
 
+  internal fun pressHome() {
+    uiDevice.pressHome()
+  }
+
   protected fun isVisible(findable: Findable, timeout: Long = VERY_LONG_WAIT) =
     waitFor(findable, timeout) ?: throw RuntimeException(findable.errorMessage(this))
 
