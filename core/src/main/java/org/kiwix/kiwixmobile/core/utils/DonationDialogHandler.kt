@@ -19,11 +19,12 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.app.Activity
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import javax.inject.Inject
 
-const val THREE_DAYS_IN_MILLISECONDS = 3 * 24 * 60 * 60 * 1000L
 const val THREE_MONTHS_IN_MILLISECONDS = 90 * 24 * 60 * 60 * 1000L
 
 class DonationDialogHandler @Inject constructor(
@@ -41,26 +42,35 @@ class DonationDialogHandler @Inject constructor(
   suspend fun attemptToShowDonationPopup() {
     val currentMilliSeconds = System.currentTimeMillis()
     val lastPopupMillis = sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds
-    val timeDifference = currentMilliSeconds - lastPopupMillis
-    if (shouldShowInitialPopup(lastPopupMillis) || timeDifference >= THREE_MONTHS_IN_MILLISECONDS) {
-      if (isZimFilesAvailableInLibrary() && isTimeToShowDonation(currentMilliSeconds)) {
-        showDonationDialogCallback?.showDonationDialog()
-        resetDonateLater()
-      }
+
+    val shouldShowPopup = (lastPopupMillis == 0L && shouldShowInitialPopup(currentMilliSeconds)) ||
+      isThreeMonthsElapsed(currentMilliSeconds, lastPopupMillis)
+
+    if (shouldShowPopup &&
+      isZimFilesAvailableInLibrary() &&
+      isTimeToShowDonation(currentMilliSeconds)
+    ) {
+      showDonationDialogCallback?.showDonationDialog()
+      resetDonateLater()
     }
   }
 
-  private suspend fun shouldShowInitialPopup(lastPopupMillis: Long): Boolean =
-    lastPopupMillis == 0L && isZimFilesAvailableInLibrary()
+  fun shouldShowInitialPopup(currentMillis: Long): Boolean {
+    val appInstallTime =
+      activity.packageManager.getPackageInformation(activity.packageName, ZERO).firstInstallTime
+    return isThreeMonthsElapsed(currentMillis, appInstallTime)
+  }
 
-  private fun isTimeToShowDonation(currentMillis: Long): Boolean =
-    isLaterNotClicked() || isLaterPeriodOver(currentMillis)
+  fun isTimeToShowDonation(currentMillis: Long): Boolean {
+    val lastLaterClick = sharedPreferenceUtil.laterClickedMilliSeconds
+    return lastLaterClick == 0L ||
+      isThreeMonthsElapsed(currentMillis, lastLaterClick)
+  }
 
-  private fun isLaterNotClicked(): Boolean = sharedPreferenceUtil.laterClickedMilliSeconds == 0L
-
-  private fun isLaterPeriodOver(currentMillis: Long): Boolean {
-    val timeDifference = currentMillis - sharedPreferenceUtil.laterClickedMilliSeconds
-    return timeDifference >= THREE_DAYS_IN_MILLISECONDS
+  fun isThreeMonthsElapsed(currentMilliSeconds: Long, lastPopupMillis: Long): Boolean {
+    if (lastPopupMillis == 0L) return false
+    val timeDifference = currentMilliSeconds - lastPopupMillis
+    return timeDifference >= THREE_MONTHS_IN_MILLISECONDS
   }
 
   suspend fun isZimFilesAvailableInLibrary(): Boolean =
