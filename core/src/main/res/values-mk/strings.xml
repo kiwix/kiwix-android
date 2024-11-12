@@ -314,8 +314,6 @@
   <string name="preparing_file_for_copy">Подготовка за копирање/преместување</string>
   <string name="action_copy">Копирај</string>
   <string name="move">Премести</string>
-  <string name="file_copying_in_progress">Копирањето на ZIM-податотеката е во тек</string>
-  <string name="file_moving_in_progress">Преместувањето на ZIM-податотеката е во тек</string>
   <string name="copy_move_files_dialog_description">Дали сакате да ја ископирате или преместите податотеката?</string>
   <string name="copy_file_error_message">Грешка при копирање на ZIM-податотеката: %s.</string>
   <string name="move_files_permission_dialog_title">Да се преместат/прекопираат податотеките во јавниот директориум на прилогот?</string>

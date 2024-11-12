@@ -2,5 +2,5 @@
 
 <resources>
   <string name="retry">Retry</string>
-  <string name="invalid_installation">Invalid Install. Please Download Zim.\n Ensure WiFi is on and you have enough storage</string>
+  <string name="invalid_installation">Invalid Install. Please Download ZIM.\n Ensure WiFi is on and you have enough storage</string>
 </resources>

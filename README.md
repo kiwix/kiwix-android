@@ -42,7 +42,7 @@ with the Play Store policies and ensure a smooth user experience.  We
 recommend using the official version of the app available on our
 website to access the complete set of features.
 
-Possible paths for play store version which supports for the scanning/reading zim files.
+Possible paths for play store version which supports for the scanning/reading ZIM files.
 
 | Storage path                                            | Viewable outside kiwix(in File manager) | Could be scanned by Kiwix |
 |---------------------------------------------------------|-----------------------------------------|---------------------------|

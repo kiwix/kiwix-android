@@ -4,7 +4,7 @@ Bug Fixed:
 * Zimit2 Youtube video does not play in Android reader. (https://github.com/kiwix/kiwix-android/pull/3879)
 * Xapian crash scenarios(When searching for an article). (https://github.com/kiwix/kiwix-android/pull/3885)
 * ServiceWorker management seems unstable. (https://github.com/kiwix/kiwix-android/pull/3880)
-* Outdated text showing when a zim file could not open. (https://github.com/kiwix/kiwix-android/pull/3887)
+* Outdated text showing when a ZIM file could not open. (https://github.com/kiwix/kiwix-android/pull/3887)
 * Sometimes not all bookmarks are showing. (https://github.com/kiwix/kiwix-android/pull/3893)
 * Application crashes when loading the media in webView. (https://github.com/kiwix/kiwix-android/pull/3898)
 * Application crashes while migrating the history/notes. (https://github.com/kiwix/kiwix-android/pull/3900)
@@ -23,7 +23,7 @@ Bug Fixed:
 * Unable to restart download after pausing if application language is other than English. (https://github.com/kiwix/kiwix-android/pull/3847)
 * Can't open EPUB from Project Gutenberg in external app. (https://github.com/kiwix/kiwix-android/pull/3738)
 * Some EPUB files are not downloading. (https://github.com/kiwix/kiwix-android/pull/3738)
-* Saving bookmarks in the zim-split splitted ZIM files are crashing the application, when there is a 0 size extra zim chunk. (https://github.com/kiwix/kiwix-android/pull/3862)
+* Saving bookmarks in the zim-split splitted ZIM files are crashing the application, when there is a 0 size extra ZIM chunk. (https://github.com/kiwix/kiwix-android/pull/3862)
 * Suspended the application from F-droid store. (https://github.com/kiwix/kiwix-android/issues/3672)
 * New nightly APK signatures prevent easy update. (https://github.com/kiwix/kiwix-android/pull/3844)
 * Improved the article search. (https://github.com/kiwix/kiwix-android/pull/3849)
@@ -39,10 +39,10 @@ Compilation/CI/CD:
 
 3.10.1
 Bug Fixed:
-* Error on opening a split zim file. (https://github.com/kiwix/kiwix-android/pull/3803)
+* Error on opening a split ZIM file. (https://github.com/kiwix/kiwix-android/pull/3803)
 * Sometimes setting the org.kiwix.libzim.Archive.setNativeArchive crashes the application. (https://github.com/kiwix/kiwix-android/pull/3807)
-* Zim files are not opening with Kiwix when clicking on zim files in the storage. (https://github.com/kiwix/kiwix-android/pull/3834)
-* Main page is not loading for zim files. (https://github.com/kiwix/kiwix-android/pull/3817)
+* ZIM files are not opening with Kiwix when clicking on ZIM files in the storage. (https://github.com/kiwix/kiwix-android/pull/3834)
+* Main page is not loading for ZIM files. (https://github.com/kiwix/kiwix-android/pull/3817)
 * Fixed some issues reported by the playStore. (https://github.com/kiwix/kiwix-android/pull/3815, https://github.com/kiwix/kiwix-android/pull/3818, https://github.com/kiwix/kiwix-android/pull/3814, https://github.com/kiwix/kiwix-android/pull/3823, https://github.com/kiwix/kiwix-android/pull/3824)
 * The Delete icon is showing wrong content description on the notes and history screen. (https://github.com/kiwix/kiwix-android/pull/3826)
 
@@ -215,15 +215,15 @@ Compilation/CI/CD:
 
 
 3.5.0
-* FIX: Storing Zim/Book files inside the public Kiwix Directory on internal storage.
-* FIX: Storing Zim/Book files inside the public Kiwix Directory on external storage in android 11 and above.
+* FIX: Storing ZIM/Book files inside the public Kiwix Directory on internal storage.
+* FIX: Storing ZIM/Book files inside the public Kiwix Directory on external storage in android 11 and above.
 * FIX: Ability to save Notes in android 10 and above.
-* FIX: Ability to open externally downloaded Zim Files.
+* FIX: Ability to open externally downloaded ZIM Files.
 * FIX: MIME type fix for "*.js" titles.
 * FIX: CI/CD Pipeline fixed for android 21 & android 30.
 * FIX: Partial library migration from jcenter to jitpack & maven repo.
 * FIX: Add network permission dialog on download navigation.
-* NEW: File Selector for selecting any zim files from storage.
+* NEW: File Selector for selecting any ZIM files from storage.
 
 3.4.6
 * FIX: Added MANAGE_EXTERNAL_STORAGE permission for Android 11 and later
@@ -236,13 +236,13 @@ Compilation/CI/CD:
 3.4.5
 NEW: Supports Android 11
 NEW: Hotspot socket address better visible, clickable and shareable
-BUGFIX: Some zim-it files doesn't read anymore
+BUGFIX: Some zimit files doesn't read anymore
 BUGFIX: "Search in Kiwix" is just redirecting to Kiwix
 BUGFIX: Laggy input in search box
 + More
 
 3.4.4
-NEW: The Download of Zim in now more stable
+NEW: The Download of ZIM in now more stable
 NEW: Updated translations
 BUGFIX: In Search menu item recreates multiple times
 BUGFIX: Clicking the search result doesn't go anywhere
@@ -259,7 +259,7 @@ BUGFIX: Creating multiple tabs was causing `loading` in previously opened tabs
 BUGFIX: Messages displayed when no books are present were inconsistent typographically
 
 3.4.2
-NEW: Service worker support for war2c zim files
+NEW: Service worker support for war2c ZIM files
 NEW: Updated translations
 NEW: Online Library won't be downloaded on mobile data when wifi only preference is set
 BUGFIX: Text to Speech continues in background
@@ -299,19 +299,19 @@ BUGFIX: Crash on older devices due to OKHTTP
 
 3.3.2
 NEW: Better flow for hosting books
-NEW: Control text zoom for zim files
+NEW: Control text zoom for ZIM files
 NEW: Bookmarks/History internals rewrite
 NEW: Updated translations
 BUGFIX: Search results were inaccurate when typing too quickly
-BUGFIX: new zim scheme for addressing content
+BUGFIX: new ZIM scheme for addressing content
 BUGFIX: Native memory leaks fixed
 BUGFIX: fix crash on returning to webview from search result
-BUGFIX: some zim files could not be found after downloading
+BUGFIX: some ZIM files could not be found after downloading
 + Lots More
 
 3.3.1
 NEW: Send Diagnostic Reports
-BUGFIX: Loading older zim files could fail
+BUGFIX: Loading older ZIM files could fail
 BUGFIX: Some svgs were not loading
 + Lots More
 
@@ -357,12 +357,12 @@ NEW: Tags for books
 
 
 3.0.5
-BUGFIX: Some zim files could not be downloaded due to missing metadata
+BUGFIX: Some ZIM files could not be downloaded due to missing metadata
 BUGFIX: Some mirrors were not allowed to download via http
 
 3.0.4
 BUGFIX: Some users language was causing a crash due to unstable ISO codes
-BUGFIX: Some unstable zim files were crashing when opened
+BUGFIX: Some unstable ZIM files were crashing when opened
 BUGFIX: Long titles were rendering off screen on home page
 BUGFIX: Issues when opening a file externally
 
@@ -372,20 +372,20 @@ NEW: In app error reporting
 NEW: Improved bookmarks
 NEW: Help screen
 NEW: Home page
-NEW: Zim history
+NEW: ZIM history
 NEW: Introductory screen
 NEW: Improved language selection
 NEW: Add note to articles
 NEW: Tabs
-NEW: Share zim files to other Kiwix users
-NEW: Host zim files on your phone
+NEW: Share ZIM files to other Kiwix users
+NEW: Host ZIM files on your phone
 + Bugfixes & Lots More
 
 2.5.3
 BUGFIX: Fix IndexOutOfBounds in KiwixMobileActivity onResume
 
 2.5.2
-BUGFIX: Some zim files were not displaying
+BUGFIX: Some ZIM files were not displaying
 
 2.5.1
 NEW: Downloads are done over http

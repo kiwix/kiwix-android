@@ -317,8 +317,6 @@
   <string name="preparing_file_for_copy">Preparation pro copiar/displaciar</string>
   <string name="action_copy">Copiar</string>
   <string name="move">Displaciar</string>
-  <string name="file_copying_in_progress">Copia del file ZIM in curso</string>
-  <string name="file_moving_in_progress">Displaciamento del file ZIM in curso</string>
   <string name="copy_move_files_dialog_description">Vole tu copiar o displaciar le file?</string>
   <string name="copy_file_error_message">Error durante le copia del file ZIM: %s.</string>
   <string name="move_files_permission_dialog_title">Displaciar/copiar files al directorio public del app?</string>

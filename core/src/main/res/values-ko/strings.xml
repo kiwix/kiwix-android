@@ -328,8 +328,6 @@
   <string name="preparing_file_for_copy">복사/이동 준비 중</string>
   <string name="action_copy">복사</string>
   <string name="move">이동</string>
-  <string name="file_copying_in_progress">Zim 파일 복사 진행 중</string>
-  <string name="file_moving_in_progress">Zim 파일 이동 진행 중</string>
   <string name="copy_move_files_dialog_description">파일을 복사하거나 이동하시겠습니까?</string>
   <string name="copy_file_error_message">zim 파일 복사 오류: %s.</string>
   <string name="move_files_permission_dialog_title">앱 공개 디렉토리로 파일을 이동/복사하시겠습니까?</string>

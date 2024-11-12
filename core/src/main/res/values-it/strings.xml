@@ -304,8 +304,6 @@
   <string name="preparing_file_for_copy">Preparazione per la copia/spostamento</string>
   <string name="action_copy">Copia</string>
   <string name="move">Sposta</string>
-  <string name="file_copying_in_progress">Copia del file Zim in corso</string>
-  <string name="file_moving_in_progress">Spostamento del file Zim in corso</string>
   <string name="copy_move_files_dialog_description">Vuoi copiare o spostare il file?</string>
   <string name="copy_file_error_message">Errore nella copia del file zim: %s.</string>
   <string name="move_files_permission_dialog_title">Spostare/copiare i file nella directory pubblica dell’app?</string>

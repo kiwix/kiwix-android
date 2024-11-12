@@ -342,8 +342,6 @@
   <string name="preparing_file_for_copy">准备复制/移动</string>
   <string name="action_copy">复制</string>
   <string name="move">移动</string>
-  <string name="file_copying_in_progress">正在进行zim文件复制</string>
-  <string name="file_moving_in_progress">正在进行zim文件移动</string>
   <string name="copy_move_files_dialog_description">您要复制或移动文件吗？</string>
   <string name="copy_file_error_message">复制zim文件时出错：%s。</string>
   <string name="move_files_permission_dialog_title">将文件移动/复制到应用程序公共目录？</string>

@@ -341,8 +341,6 @@
   <string name="preparing_file_for_copy">Préparation de la copie/du déplacement</string>
   <string name="action_copy">Copier</string>
   <string name="move">Déplacer</string>
-  <string name="file_copying_in_progress">Copie du fichier Zim en cours</string>
-  <string name="file_moving_in_progress">Déplacement du fichier ZIM en cours</string>
   <string name="copy_move_files_dialog_description">Voulez-vous copier ou déplacer le fichier ?</string>
   <string name="copy_file_error_message">Erreur lors de la copie du fichier ZIM : %s.</string>
   <string name="move_files_permission_dialog_title">Déplacer/copier les fichiers vers le répertoire public de l’application ?</string>

@@ -28,7 +28,7 @@
     android:layout_height="wrap_content"
     android:layout_marginEnd="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_horizontal_margin"
-    android:text="@string/file_copying_in_progress"
+    android:text="@string/copying_zim_file"
     android:textSize="12sp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/progressBar" />
