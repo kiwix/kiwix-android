@@ -322,8 +322,6 @@
   <string name="preparing_file_for_copy">הכנה להעתקה או העברה</string>
   <string name="action_copy">העתקה</string>
   <string name="move">העברה</string>
-  <string name="file_copying_in_progress">העתקת קובץ ZIM מתבצעת</string>
-  <string name="file_moving_in_progress">העברת קובץ ZIM מתבצעת</string>
   <string name="copy_move_files_dialog_description">האם ברצונך להעתיק או להעביר את הקובץ?</string>
   <string name="copy_file_error_message">שגיאה בהעתקת קובץ zim‏: %s.</string>
   <string name="move_files_permission_dialog_title">להעביר או להעתיק קבצים לספרייה ציבורית של היישום?</string>

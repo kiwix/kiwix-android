@@ -325,8 +325,6 @@
   <string name="preparing_file_for_copy">準備拷貝/移動</string>
   <string name="action_copy">拷貝</string>
   <string name="move">移動</string>
-  <string name="file_copying_in_progress">正在進行 zim 檔案拷貝</string>
-  <string name="file_moving_in_progress">正在進行 zim 檔案移動</string>
   <string name="copy_move_files_dialog_description">您要拷貝或移動檔案嗎？</string>
   <string name="copy_file_error_message">拷貝 zim 檔案時發生錯誤：%s。</string>
   <string name="move_files_permission_dialog_title">將檔案移動/拷貝到應用程式公共目錄？</string>

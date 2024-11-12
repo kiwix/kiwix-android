@@ -343,8 +343,6 @@
   <string name="preparing_file_for_copy">Подготовка к копированию/перемещению</string>
   <string name="action_copy">Копировать</string>
   <string name="move">Переместить</string>
-  <string name="file_copying_in_progress">Копируем ZIM-файл</string>
-  <string name="file_moving_in_progress">Перемещаем ZIM-файл</string>
   <string name="copy_move_files_dialog_description">Вы хотите скопировать или переместить файл?</string>
   <string name="copy_file_error_message">Ошибка при копировании ZIM-файла: %s.</string>
   <string name="move_files_permission_dialog_title">Перемещение/копирование файлов в публичный каталог приложения?</string>

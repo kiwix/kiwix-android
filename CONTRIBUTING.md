@@ -68,7 +68,7 @@ For an overview of how to make design changes to Kiwix Android, check out [DESIG
 The Kiwix app is split into 3 modules
 1. `core` - the "core" functionality of the app shared between different clients
 1. `app` - the main app Kiwix, Wikipedia Offline
-1. `custom` - this is for building custom applications that supply only 1 zim file and a custom skin
+1. `custom` - this is for building custom applications that supply only 1 ZIM file and a custom skin
 
 The default build is `debug`, with this variant you can use a debugger while developing. To install the application click the `run` button in Android Studio with the `app` configuration selected while you have a device connected. The `release` build is what gets uploaded to the Google Play store and can be built locally with the dummy credentials/keystore provided.
 

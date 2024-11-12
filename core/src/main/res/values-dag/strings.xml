@@ -305,8 +305,6 @@
   <string name="preparing_file_for_copy">Shili malibu zaŋ n-ti yaabu/kpɛhibu</string>
   <string name="action_copy">yaai</string>
   <string name="move">Kpɛhi</string>
-  <string name="file_copying_in_progress">Zim mazagali na yaarimi</string>
-  <string name="file_moving_in_progress">Zim mazagali na kpɛrimi</string>
   <string name="copy_move_files_dialog_description">A borimi ni a yaai bee a zaŋ kpɛhi mazagali ŋɔ ni?</string>
   <string name="copy_file_error_message">Chiriŋ niŋya a zim mazagali yaabu ni: %s.</string>
   <string name="move_files_permission_dialog_title">Kpɛhimi/yaami mazagaya niŋ app salo wuhibu ni?</string>

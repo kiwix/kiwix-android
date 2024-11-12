@@ -77,9 +77,9 @@ class CopyMoveFileHandler @Inject constructor(
 
   private val copyMoveTitle: String by lazy {
     if (isMoveOperation) {
-      activity.getString(R.string.file_moving_in_progress)
+      activity.getString(R.string.moving_zim_file)
     } else {
-      activity.getString(R.string.file_copying_in_progress)
+      activity.getString(R.string.copying_zim_file)
     }
   }
 
