@@ -76,23 +76,25 @@ class KiwixPrefsFragment : CorePrefsFragment() {
   }
 
   private fun setUpStoragePreference(sharedPreferenceUtil: SharedPreferenceUtil) {
-    storageDeviceList.forEachIndexed { index, storageDevice ->
-      val preferenceKey = if (index == 0) PREF_INTERNAL_STORAGE else PREF_EXTERNAL_STORAGE
-      val selectedStoragePosition = sharedPreferenceUtil.storagePosition
-      val isChecked = selectedStoragePosition == index
-      findPreference<StorageRadioButtonPreference>(preferenceKey)?.apply {
-        this.isChecked = isChecked
-        setOnPreferenceClickListener {
-          onStorageDeviceSelected(storageDevice)
-          true
-        }
-        storageCalculator?.let {
-          setPathAndTitleForStorage(
-            storageDevice.storagePathAndTitle(context, index, sharedPreferenceUtil, it)
-          )
-          setFreeSpace(storageDevice.getFreeSpace(context, it))
-          setUsedSpace(storageDevice.getUsedSpace(context, it))
-          setProgress(storageDevice.usedPercentage(it))
+    lifecycleScope.launch {
+      storageDeviceList.forEachIndexed { index, storageDevice ->
+        val preferenceKey = if (index==0) PREF_INTERNAL_STORAGE else PREF_EXTERNAL_STORAGE
+        val selectedStoragePosition = sharedPreferenceUtil.storagePosition
+        val isChecked = selectedStoragePosition==index
+        findPreference<StorageRadioButtonPreference>(preferenceKey)?.apply {
+          this.isChecked = isChecked
+          setOnPreferenceClickListener {
+            onStorageDeviceSelected(storageDevice)
+            true
+          }
+          storageCalculator?.let {
+            setPathAndTitleForStorage(
+              storageDevice.storagePathAndTitle(context, index, sharedPreferenceUtil, it)
+            )
+            setFreeSpace(storageDevice.getFreeSpace(context, it))
+            setUsedSpace(storageDevice.getUsedSpace(context, it))
+            setProgress(storageDevice.usedPercentage(it))
+          }
         }
       }
     }

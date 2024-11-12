@@ -29,20 +29,20 @@ fun StorageDevice.getFreeSpace(context: Context, storageCalculator: StorageCalcu
   return context.getString(R.string.pref_free_storage, freeSpace)
 }
 
-fun StorageDevice.getUsedSpace(context: Context, storageCalculator: StorageCalculator): String {
+suspend fun StorageDevice.getUsedSpace(context: Context, storageCalculator: StorageCalculator): String {
   val usedSpace = storageCalculator.calculateUsedSpace(file)
   return context.getString(R.string.pref_storage_used, usedSpace)
 }
 
 @Suppress("MagicNumber")
-fun StorageDevice.usedPercentage(storageCalculator: StorageCalculator): Int {
+suspend fun StorageDevice.usedPercentage(storageCalculator: StorageCalculator): Int {
   val totalSpace = storageCalculator.totalBytes(file)
   val availableSpace = storageCalculator.availableBytes(file)
   val usedSpace = totalSpace - availableSpace
   return (usedSpace.toDouble() / totalSpace * 100).toInt()
 }
 
-fun StorageDevice.storagePathAndTitle(
+suspend fun StorageDevice.storagePathAndTitle(
   context: Context,
   index: Int,
   sharedPreferenceUtil: SharedPreferenceUtil,
