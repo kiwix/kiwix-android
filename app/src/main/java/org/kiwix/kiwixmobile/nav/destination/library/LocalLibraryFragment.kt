@@ -431,7 +431,8 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
         uri,
         documentFile,
         // pass if fileName is null then we will validate it after copying/moving
-        fileName == null
+        fileName == null,
+        parentFragmentManager
       )
     } else {
       getZimFileFromUri(uri)?.let(::navigateToReaderFragment)
@@ -669,6 +670,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     .apply {
       onSelectAction = ::storeDeviceInPreferences
       setStorageDeviceList(storageDeviceList)
+      setShouldShowCheckboxSelected(true)
     }
     .show(parentFragmentManager, getString(string.pref_storage))
 
@@ -683,6 +685,6 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       else EXTERNAL_SELECT_POSITION
     )
     // after selecting the storage try to copy/move the zim file.
-    copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog()
+    copyMoveFileHandler?.copyMoveZIMFileInSelectedStorage(storageDevice)
   }
 }

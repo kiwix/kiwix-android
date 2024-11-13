@@ -123,6 +123,7 @@ sealed class KiwixDialog(
     R.string.copy_move_files_dialog_description,
     R.string.action_copy,
     R.string.move,
+    neutralMessage = R.string.cancel,
     cancelable = false
   )
 

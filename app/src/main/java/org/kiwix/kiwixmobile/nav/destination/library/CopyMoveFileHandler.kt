@@ -30,6 +30,11 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
+import androidx.fragment.app.FragmentManager
+import eu.mhutti1.utils.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
+import eu.mhutti1.utils.storage.StorageDevice
+import eu.mhutti1.utils.storage.StorageDeviceUtils
+import eu.mhutti1.utils.storage.StorageSelectDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
@@ -43,6 +48,8 @@ import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
+import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
+import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -74,6 +81,10 @@ class CopyMoveFileHandler @Inject constructor(
   var isMoveOperation = false
   var shouldValidateZimFile: Boolean = false
   private var fileSystemDisposable: Disposable? = null
+  private lateinit var fragmentManager: FragmentManager
+  private val storageDeviceList by lazy {
+    StorageDeviceUtils.getWritableStorage(activity)
+  }
 
   private val copyMoveTitle: String by lazy {
     if (isMoveOperation) {
@@ -93,13 +104,24 @@ class CopyMoveFileHandler @Inject constructor(
   fun showMoveFileToPublicDirectoryDialog(
     uri: Uri? = null,
     documentFile: DocumentFile? = null,
-    shouldValidateZimFile: Boolean = false
+    shouldValidateZimFile: Boolean = false,
+    fragmentManager: FragmentManager
   ) {
     this.shouldValidateZimFile = shouldValidateZimFile
+    this.fragmentManager = fragmentManager
     setSelectedFileAndUri(uri, documentFile)
-    if (!sharedPreferenceUtil.copyMoveZimFilePermissionDialog) {
-      showMoveToPublicDirectoryPermissionDialog()
+    if (sharedPreferenceUtil.shouldShowStorageSelectionDialog && storageDeviceList.size > 1) {
+      // Show dialog to select storage if more than one storage device is available, and user
+      // have not configured the storage yet.
+      showCopyMoveDialog(true)
     } else {
+      if (storageDeviceList.size == 1) {
+        // If only internal storage is currently available, set shouldShowStorageSelectionDialog
+        // to true. This allows the storage configuration dialog to be shown again if the
+        // user removes an external storage device (like an SD card) and then reinserts it.
+        // This ensures they are prompted to configure storage settings upon SD card reinsertion.
+        sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
+      }
       if (validateZimFileCanCopyOrMove()) {
         showCopyMoveDialog()
       }
@@ -107,8 +129,8 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   fun setSelectedFileAndUri(uri: Uri?, documentFile: DocumentFile?) {
-    selectedFileUri = uri
-    selectedFile = documentFile
+    uri?.let { selectedFileUri = it }
+    documentFile?.let { selectedFile = it }
   }
 
   fun setFileCopyMoveCallback(fileCopyMoveCallback: FileCopyMoveCallback?) {
@@ -119,22 +141,34 @@ class CopyMoveFileHandler @Inject constructor(
     lifecycleScope = coroutineScope
   }
 
-  private fun showMoveToPublicDirectoryPermissionDialog() {
-    alertDialogShower.show(
-      KiwixDialog.MoveFileToPublicDirectoryPermissionDialog,
-      {
-        sharedPreferenceUtil.copyMoveZimFilePermissionDialog = true
-        if (validateZimFileCanCopyOrMove()) {
-          performCopyOperation()
-        }
-      },
-      {
-        sharedPreferenceUtil.copyMoveZimFilePermissionDialog = true
-        if (validateZimFileCanCopyOrMove()) {
-          performMoveOperation()
-        }
-      }
+  private fun showStorageSelectDialog() = StorageSelectDialog()
+    .apply {
+      onSelectAction = ::copyMoveZIMFileInSelectedStorage
+      titleSize = STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
+      setStorageDeviceList(storageDeviceList)
+      setShouldShowCheckboxSelected(false)
+    }
+    .show(
+      fragmentManager,
+      activity.getString(R.string.choose_storage_to_copy_move_zim_file)
     )
+
+  fun copyMoveZIMFileInSelectedStorage(storageDevice: StorageDevice) {
+    sharedPreferenceUtil.apply {
+      shouldShowStorageSelectionDialog = false
+      putPrefStorage(sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name))
+      putStoragePosition(
+        if (storageDevice.isInternal) INTERNAL_SELECT_POSITION
+        else EXTERNAL_SELECT_POSITION
+      )
+    }
+    if (validateZimFileCanCopyOrMove()) {
+      if (isMoveOperation) {
+        performMoveOperation()
+      } else {
+        performCopyOperation()
+      }
+    }
   }
 
   fun isBookLessThan4GB(): Boolean =
@@ -192,22 +226,30 @@ class CopyMoveFileHandler @Inject constructor(
       }
   }
 
-  fun showCopyMoveDialog() {
+  fun showCopyMoveDialog(showStorageSelectionDialog: Boolean = false) {
     alertDialogShower.show(
       KiwixDialog.CopyMoveFileToPublicDirectoryDialog,
-      ::performCopyOperation,
-      ::performMoveOperation
+      { performCopyOperation(showStorageSelectionDialog) },
+      { performMoveOperation(showStorageSelectionDialog) }
     )
   }
 
-  fun performCopyOperation() {
+  fun performCopyOperation(showStorageSelectionDialog: Boolean = false) {
     isMoveOperation = false
-    copyZimFileToPublicAppDirectory()
+    if (showStorageSelectionDialog) {
+      showStorageSelectDialog()
+    } else {
+      copyZimFileToPublicAppDirectory()
+    }
   }
 
-  fun performMoveOperation() {
+  fun performMoveOperation(showStorageSelectionDialog: Boolean = false) {
     isMoveOperation = true
-    moveZimFileToPublicAppDirectory()
+    if (showStorageSelectionDialog) {
+      showStorageSelectDialog()
+    } else {
+      moveZimFileToPublicAppDirectory()
+    }
   }
 
   private fun copyZimFileToPublicAppDirectory() {

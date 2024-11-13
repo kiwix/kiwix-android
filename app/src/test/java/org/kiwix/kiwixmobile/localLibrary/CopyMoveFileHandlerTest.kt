@@ -230,15 +230,15 @@ class CopyMoveFileHandlerTest {
 
     fileHandler.showMoveFileToPublicDirectoryDialog()
     every { fileHandler.validateZimFileCanCopyOrMove() } returns true
-    every { fileHandler.performCopyOperation() } just Runs
+    every { fileHandler.performCopyOperation(showStorageSelectionDialog) } just Runs
 
     positiveButtonClickSlot.captured.invoke()
-    verify { fileHandler.performCopyOperation() }
+    verify { fileHandler.performCopyOperation(showStorageSelectionDialog) }
     every { sharedPreferenceUtil.copyMoveZimFilePermissionDialog } returns false
-    every { fileHandler.performMoveOperation() } just Runs
+    every { fileHandler.performMoveOperation(showStorageSelectionDialog) } just Runs
     negativeButtonClickSlot.captured.invoke()
 
-    verify { fileHandler.performMoveOperation() }
+    verify { fileHandler.performMoveOperation(showStorageSelectionDialog) }
 
     verify { sharedPreferenceUtil.copyMoveZimFilePermissionDialog = true }
   }
@@ -275,14 +275,14 @@ class CopyMoveFileHandlerTest {
 
     every { fileHandler.validateZimFileCanCopyOrMove() } returns true
     fileHandler.showMoveFileToPublicDirectoryDialog()
-    every { fileHandler.performCopyOperation() } just Runs
+    every { fileHandler.performCopyOperation(showStorageSelectionDialog) } just Runs
 
     positiveButtonClickSlot.captured.invoke()
-    verify { fileHandler.performCopyOperation() }
-    every { fileHandler.performMoveOperation() } just Runs
+    verify { fileHandler.performCopyOperation(showStorageSelectionDialog) }
+    every { fileHandler.performMoveOperation(showStorageSelectionDialog) } just Runs
     negativeButtonClickSlot.captured.invoke()
 
-    verify { fileHandler.performMoveOperation() }
+    verify { fileHandler.performMoveOperation(showStorageSelectionDialog) }
   }
 
   private fun prepareFileSystemAndFileForMockk(

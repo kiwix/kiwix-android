@@ -30,7 +30,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 class StorageDelegate(
   private val storageCalculator: StorageCalculator,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val isShowingStorageOptionForFirstDownload: Boolean,
+  private val shouldShowCheckboxSelected: Boolean,
   private val onClickAction: (StorageDevice) -> Unit
 ) : AdapterDelegate<StorageDevice> {
   override fun createViewHolder(parent: ViewGroup): ViewHolder {
@@ -38,7 +38,7 @@ class StorageDelegate(
       parent.viewBinding(ItemStoragePreferenceBinding::inflate, false),
       storageCalculator,
       sharedPreferenceUtil,
-      isShowingStorageOptionForFirstDownload,
+      shouldShowCheckboxSelected,
       onClickAction
     )
   }

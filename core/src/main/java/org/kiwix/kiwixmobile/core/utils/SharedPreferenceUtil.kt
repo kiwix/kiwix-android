@@ -257,11 +257,11 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
       _textZooms.offer(textZoom)
     }
 
-  var copyMoveZimFilePermissionDialog: Boolean
-    get() = sharedPreferences.getBoolean(PREF_COPY_MOVE_PERMISSION, false)
+  var shouldShowStorageSelectionDialog: Boolean
+    get() = sharedPreferences.getBoolean(PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG, true)
     set(value) {
       sharedPreferences.edit {
-        putBoolean(PREF_COPY_MOVE_PERMISSION, value)
+        putBoolean(PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG, value)
       }
     }
 
@@ -329,7 +329,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     const val PREF_HISTORY_MIGRATED = "pref_history_migrated"
     const val PREF_NOTES_MIGRATED = "pref_notes_migrated"
     const val PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED = "pref_app_directory_to_public_migrated"
-    const val PREF_COPY_MOVE_PERMISSION = "pref_copy_move_permission"
+    const val PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG = "pref_show_copy_move_storage_dialog"
     private const val PREF_LATER_CLICKED_MILLIS = "pref_later_clicked_millis"
     const val PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS =
       "pref_last_donation_shown_in_milliseconds"
