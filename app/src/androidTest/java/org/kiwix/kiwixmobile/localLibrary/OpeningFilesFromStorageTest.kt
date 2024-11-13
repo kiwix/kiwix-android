@@ -110,14 +110,16 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       }
       val uri = copyFileToDownloadsFolder(context, fileName)
       try {
-        sharedPreferenceUtil.copyMoveZimFilePermissionDialog = false
+        sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
         // open file picker to select a file to test the real scenario.
         Espresso.onView(withId(R.id.select_file)).perform(ViewActions.click())
         uiDevice.findObject(By.textContains(fileName)).click()
 
         copyMoveFileHandler {
-          assertCopyMovePermissionDialogDisplayed()
+          assertCopyMoveDialogDisplayed()
           clickOnMove()
+          assertStorageSelectionDialogDisplayed()
+          clickOnInternalStorage()
           assertZimFileCopiedAndShowingIntoTheReader()
         }
       } catch (ignore: Exception) {
@@ -138,12 +140,14 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       }
       val uri = copyFileToDownloadsFolder(context, fileName)
       try {
-        sharedPreferenceUtil.copyMoveZimFilePermissionDialog = false
+        sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
         openFileManager()
         TestUtils.testFlakyView(uiDevice.findObject(By.textContains(fileName))::click, 10)
         copyMoveFileHandler {
-          assertCopyMovePermissionDialogDisplayed()
+          assertCopyMoveDialogDisplayed()
           clickOnMove()
+          assertStorageSelectionDialogDisplayed()
+          clickOnInternalStorage()
           assertZimFileCopiedAndShowingIntoTheReader()
         }
       } catch (ignore: Exception) {
@@ -175,12 +179,12 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
   }
 
   private fun testCopyMoveDialogShowing(uri: Uri) {
-    sharedPreferenceUtil.copyMoveZimFilePermissionDialog = false
+    sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
     ActivityScenario.launch<KiwixMainActivity>(
       createDeepLinkIntent(uri)
     ).onActivity {}
     copyMoveFileHandler {
-      assertCopyMovePermissionDialogDisplayed()
+      assertCopyMoveDialogDisplayed()
       clickOnCancel()
     }
   }

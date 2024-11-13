@@ -37,6 +37,7 @@ import org.kiwix.kiwixmobile.R.id
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
 
 fun copyMoveFileHandler(func: CopyMoveFileHandlerRobot.() -> Unit) =
   CopyMoveFileHandlerRobot().applyWithViewHierarchyPrinting(func)
@@ -54,6 +55,23 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
   fun assertCopyMoveDialogNotDisplayed() {
     testFlakyView({
       onView(withText(R.string.copy_move_files_dialog_description)).check(doesNotExist())
+    })
+  }
+
+  fun assertStorageSelectionDialogDisplayed() {
+    testFlakyView({
+      onView(withText(R.string.choose_storage_to_copy_move_zim_file))
+    })
+  }
+
+  fun clickOnInternalStorage() {
+    pauseForBetterTestPerformance()
+    testFlakyView({
+      onView(
+        RecyclerViewMatcher(R.id.device_list).atPosition(
+          0
+        )
+      ).perform(click())
     })
   }
 
