@@ -44,10 +44,6 @@ fun copyMoveFileHandler(func: CopyMoveFileHandlerRobot.() -> Unit) =
 
 class CopyMoveFileHandlerRobot : BaseRobot() {
 
-  fun assertCopyMovePermissionDialogDisplayed() {
-    isVisible(TextId(R.string.move_files_permission_dialog_title))
-  }
-
   fun assertCopyMoveDialogDisplayed() {
     isVisible(TextId(R.string.copy_move_files_dialog_description))
   }
