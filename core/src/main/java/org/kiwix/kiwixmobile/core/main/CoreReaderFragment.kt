@@ -121,6 +121,7 @@ import org.kiwix.kiwixmobile.core.main.DocumentParser.SectionsListener
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnInitSucceedListener
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnSpeakingListener
 import org.kiwix.kiwixmobile.core.main.MainMenu.MenuClickListener
+import org.kiwix.kiwixmobile.core.main.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.TableClickListener
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
@@ -174,7 +175,6 @@ import java.util.Date
 import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.max
-import org.kiwix.kiwixmobile.core.main.RestoreOrigin.FromExternalLaunch
 
 const val SEARCH_ITEM_TITLE_KEY = "searchItemTitle"
 
@@ -1382,12 +1382,28 @@ abstract class CoreReaderFragment :
     bottomToolbar?.visibility = View.GONE
     actionBar?.title = getString(R.string.reader)
     contentFrame?.visibility = View.GONE
+    hideProgressBar()
     mainMenu?.hideBookSpecificMenuItems()
     closeZimBook()
   }
 
   fun closeZimBook() {
     zimReaderContainer?.setZimReaderSource(null)
+  }
+
+  protected fun showProgressBarWithProgress(progress: Int) {
+    progressBar?.apply {
+      visibility = VISIBLE
+      show()
+      this.progress = progress
+    }
+  }
+
+  protected fun hideProgressBar() {
+    progressBar?.apply {
+      visibility = View.GONE
+      hide()
+    }
   }
 
   private fun restoreDeletedTab(index: Int) {
@@ -2331,14 +2347,10 @@ abstract class CoreReaderFragment :
   override fun webViewProgressChanged(progress: Int, webView: WebView) {
     if (isAdded) {
       updateUrlProcessor()
-      progressBar?.apply {
-        visibility = View.VISIBLE
-        show()
-        this.progress = progress
-        if (progress == 100) {
-          hide()
-          Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView()?.url)
-        }
+      showProgressBarWithProgress(progress)
+      if (progress == 100) {
+        hideProgressBar()
+        Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView()?.url)
       }
       (webView.context as AppCompatActivity).invalidateOptionsMenu()
     }

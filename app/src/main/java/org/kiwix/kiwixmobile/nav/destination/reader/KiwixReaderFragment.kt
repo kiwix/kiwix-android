@@ -89,7 +89,9 @@ class KiwixReaderFragment : CoreReaderFragment() {
     openPageInBookFromNavigationArguments()
   }
 
+  @Suppress("MagicNumber")
   private fun openPageInBookFromNavigationArguments() {
+    showProgressBarWithProgress(30)
     val args = KiwixReaderFragmentArgs.fromBundle(requireArguments())
     lifecycleScope.launch {
       if (args.pageUrl.isNotEmpty()) {
@@ -102,6 +104,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
           // See https://github.com/kiwix/kiwix-android/issues/3541
           zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
         }
+        hideProgressBar()
         loadUrlWithCurrentWebview(args.pageUrl)
       } else {
         if (args.zimFileUri.isNotEmpty()) {
@@ -217,9 +220,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun onResume() {
     super.onResume()
-    if (zimReaderContainer?.zimReaderSource == null) {
-      exitBook()
-    }
     if (isFullScreenVideo || isInFullScreenMode()) {
       hideNavBar()
     }
