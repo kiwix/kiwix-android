@@ -30,7 +30,6 @@ import androidx.recyclerview.widget.RecyclerView
 import eu.mhutti1.utils.storage.adapter.StorageAdapter
 import eu.mhutti1.utils.storage.adapter.StorageDelegate
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.dimen
 import org.kiwix.kiwixmobile.core.databinding.StorageSelectDialogBinding
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isLandScapeMode
@@ -50,13 +49,14 @@ class StorageSelectDialog : DialogFragment() {
   private var aTitle: String? = null
   private var storageSelectDialogViewBinding: StorageSelectDialogBinding? = null
   private val storageDeviceList = arrayListOf<StorageDevice>()
+  private var shouldShowCheckboxSelected: Boolean = true
 
   private val storageAdapter: StorageAdapter by lazy {
     StorageAdapter(
       StorageDelegate(
         storageCalculator,
         sharedPreferenceUtil,
-        aTitle == getString(R.string.choose_storage_to_download_book)
+        shouldShowCheckboxSelected
       ) {
         onSelectAction?.invoke(it)
         dismiss()
@@ -66,6 +66,10 @@ class StorageSelectDialog : DialogFragment() {
 
   fun setStorageDeviceList(storageDeviceList: List<StorageDevice>) {
     this.storageDeviceList.addAll(storageDeviceList)
+  }
+
+  fun setShouldShowCheckboxSelected(shouldShowCheckboxSelected: Boolean) {
+    this.shouldShowCheckboxSelected = shouldShowCheckboxSelected
   }
 
   override fun onCreateView(

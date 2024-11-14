@@ -334,8 +334,6 @@
   <string name="move">Mover</string>
   <string name="copy_move_files_dialog_description">Você quer copiar ou mover o arquivo?</string>
   <string name="copy_file_error_message">Erro ao copiar o arquivo zim: %s.</string>
-  <string name="move_files_permission_dialog_title">Mover/Copiar arquivos para o diretório público do app?</string>
-  <string name="move_files_permission_dialog_description">Devido às políticas do Google Play no Android 11 e acima, nosso app não pode mais acessar arquivos armazenados em outro lugar do seu dispositivo. Para você poder ver seus arquivos selecionados, nós precisamos mover ou copiar eles em uma pasta especial no diretório do app. Isso permite acessar e abrir os arquivos. Você concorda com isso?</string>
   <string name="move_file_error_message">Erro ao mover o arquivo zim: %s.</string>
   <string name="how_to_update_content">Como atualizar o conteúdo?</string>
   <string name="update_content_description">Para atualizar o conteúdo (um arquivo zim), você precisa baixar a versão completa mais recente desse mesmo conteúdo. Você pode fazer isso através da seção de download.</string>

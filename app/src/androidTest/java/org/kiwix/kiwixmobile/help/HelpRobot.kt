@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.help
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
@@ -76,6 +77,19 @@ class HelpRobot : BaseRobot() {
 
   fun assertHowToUpdateContentIsExpanded() {
     isVisible(TextId(string.update_content_description))
+  }
+
+  fun clickWhyCopyMoveFilesToAppPublicDirectory() {
+    clickOn(TextId(string.why_copy_move_files_to_app_directory))
+  }
+
+  fun assertWhyCopyMoveFilesToAppPublicDirectoryIsExpanded() {
+    isVisible(Text(context.getString(string.copy_move_files_to_app_directory_description)))
+  }
+
+  fun assertWhyCopyMoveFilesToAppPublicDirectoryIsNotVisible() {
+    onView(withText(string.why_copy_move_files_to_app_directory))
+      .check(doesNotExist())
   }
 
   private fun helpTextFormat(vararg stringIds: Int) =

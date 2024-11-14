@@ -113,12 +113,14 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       }
       copyMoveFileHandler(CopyMoveFileHandlerRobot::pauseForBetterTestPerformance)
       // test with first launch
-      sharedPreferenceUtil.copyMoveZimFilePermissionDialog = false
+      sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
       showMoveFileToPublicDirectoryDialog()
       // should show the permission dialog.
       copyMoveFileHandler {
-        assertCopyMovePermissionDialogDisplayed()
+        assertCopyMoveDialogDisplayed()
         clickOnCopy()
+        assertStorageSelectionDialogDisplayed()
+        clickOnInternalStorage()
         assertZimFileCopiedAndShowingIntoTheReader()
       }
       assertZimFileAddedInTheLocalLibrary()
@@ -150,12 +152,14 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       }
       copyMoveFileHandler(CopyMoveFileHandlerRobot::pauseForBetterTestPerformance)
       // test with first launch
-      sharedPreferenceUtil.copyMoveZimFilePermissionDialog = false
+      sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
       showMoveFileToPublicDirectoryDialog()
       // should show the permission dialog.
       copyMoveFileHandler {
-        assertCopyMovePermissionDialogDisplayed()
+        assertCopyMoveDialogDisplayed()
         clickOnMove()
+        assertStorageSelectionDialogDisplayed()
+        clickOnInternalStorage()
         assertZimFileCopiedAndShowingIntoTheReader()
       }
       assertZimFileAddedInTheLocalLibrary()
@@ -198,7 +202,8 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         navHostFragment.childFragmentManager.fragments[0] as LocalLibraryFragment
       localLibraryFragment.copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(
         Uri.fromFile(selectedFile),
-        DocumentFile.fromFile(selectedFile)
+        DocumentFile.fromFile(selectedFile),
+        fragmentManager = localLibraryFragment.parentFragmentManager
       )
     }
   }
@@ -307,7 +312,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       }
       copyMoveFileHandler(CopyMoveFileHandlerRobot::pauseForBetterTestPerformance)
       sharedPreferenceUtil.apply {
-        copyMoveZimFilePermissionDialog = true
+        shouldShowStorageSelectionDialog = false
         setIsPlayStoreBuildType(true)
       }
       // test opening images

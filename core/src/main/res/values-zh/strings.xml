@@ -344,8 +344,6 @@
   <string name="move">移动</string>
   <string name="copy_move_files_dialog_description">您要复制或移动文件吗？</string>
   <string name="copy_file_error_message">复制zim文件时出错：%s。</string>
-  <string name="move_files_permission_dialog_title">将文件移动/复制到应用程序公共目录？</string>
-  <string name="move_files_permission_dialog_description">由于Android 11及更高版本的Google Play政策，我们的应用无法再直接访问存储在您设备其他地方的文件。为了让您查看所选文件，我们需要将它们移动或复制到我们应用目录中的特殊文件夹中。这样我们才能访问和打开这些文件。您是否同意此操作？</string>
   <string name="move_file_error_message">移动zim文件时出错：%s。</string>
   <string name="how_to_update_content">如何更新内容？</string>
   <string name="update_content_description">要更新内容（ZIM 文件），您需要下载此相似内容的完整最新版本。您可以通过下载章节进行。</string>
