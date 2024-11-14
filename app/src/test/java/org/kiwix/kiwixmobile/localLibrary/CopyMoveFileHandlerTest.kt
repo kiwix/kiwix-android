@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.localLibrary
 import android.app.Activity
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
+import androidx.fragment.app.FragmentManager
 import io.mockk.Runs
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
@@ -68,6 +69,7 @@ class CopyMoveFileHandlerTest {
   private val storagePath = "storage/0/emulated/Android/media/org.kiwix.kiwixmobile"
   private val destinationFile = mockk<File>()
   private val sourceUri = mockk<Uri>()
+  private val fragmentManager = mockk<FragmentManager>()
 
   @BeforeEach
   fun setup() {
@@ -124,7 +126,7 @@ class CopyMoveFileHandlerTest {
   @Test
   fun validateZimFileCanCopyOrMoveShouldReturnFalseWhenDetectingFileSystem() {
     every { fileHandler.isBookLessThan4GB() } returns true
-    every { fileHandler.showCopyMoveDialog() } just Runs
+    every { fileHandler.performCopyMoveOperation() } just Runs
     prepareFileSystemAndFileForMockk(fileSystemState = DetectingFileSystem)
 
     val result = fileHandler.validateZimFileCanCopyOrMove(storageFile)
@@ -201,13 +203,13 @@ class CopyMoveFileHandlerTest {
 
   @Test
   fun showMoveToPublicDirectoryPermissionDialogShouldShowPermissionDialogAtFirstLaunch() {
-    every { sharedPreferenceUtil.copyMoveZimFilePermissionDialog } returns false
+    every { sharedPreferenceUtil.shouldShowStorageSelectionDialog } returns true
     every { alertDialogShower.show(any(), any(), any()) } just Runs
-    fileHandler.showMoveFileToPublicDirectoryDialog()
+    fileHandler.showMoveFileToPublicDirectoryDialog(fragmentManager = fragmentManager)
 
     verify {
       alertDialogShower.show(
-        KiwixDialog.MoveFileToPublicDirectoryPermissionDialog,
+        KiwixDialog.CopyMoveFileToPublicDirectoryDialog,
         any(),
         any()
       )
@@ -219,36 +221,36 @@ class CopyMoveFileHandlerTest {
     val positiveButtonClickSlot = slot<() -> Unit>()
     val negativeButtonClickSlot = slot<() -> Unit>()
     fileHandler = spyk(fileHandler)
-    every { sharedPreferenceUtil.copyMoveZimFilePermissionDialog } returns false
+    every { sharedPreferenceUtil.shouldShowStorageSelectionDialog } returns true
     every {
       alertDialogShower.show(
-        KiwixDialog.MoveFileToPublicDirectoryPermissionDialog,
+        KiwixDialog.CopyMoveFileToPublicDirectoryDialog,
         capture(positiveButtonClickSlot),
         capture(negativeButtonClickSlot)
       )
     } just Runs
 
-    fileHandler.showMoveFileToPublicDirectoryDialog()
+    fileHandler.showMoveFileToPublicDirectoryDialog(fragmentManager = fragmentManager)
     every { fileHandler.validateZimFileCanCopyOrMove() } returns true
-    every { fileHandler.performCopyOperation(showStorageSelectionDialog) } just Runs
+    every { fileHandler.performCopyOperation(false) } just Runs
 
     positiveButtonClickSlot.captured.invoke()
-    verify { fileHandler.performCopyOperation(showStorageSelectionDialog) }
-    every { sharedPreferenceUtil.copyMoveZimFilePermissionDialog } returns false
-    every { fileHandler.performMoveOperation(showStorageSelectionDialog) } just Runs
+    verify { fileHandler.performCopyOperation(false) }
+    every { sharedPreferenceUtil.shouldShowStorageSelectionDialog } returns false
+    every { fileHandler.performMoveOperation(false) } just Runs
     negativeButtonClickSlot.captured.invoke()
 
-    verify { fileHandler.performMoveOperation(showStorageSelectionDialog) }
+    verify { fileHandler.performMoveOperation(false) }
 
-    verify { sharedPreferenceUtil.copyMoveZimFilePermissionDialog = true }
+    verify { sharedPreferenceUtil.shouldShowStorageSelectionDialog = true }
   }
 
   @Test
   fun showCopyMoveDialog() {
-    every { sharedPreferenceUtil.copyMoveZimFilePermissionDialog } returns true
+    every { sharedPreferenceUtil.shouldShowStorageSelectionDialog } returns false
     prepareFileSystemAndFileForMockk()
     every { alertDialogShower.show(any(), any(), any()) } just Runs
-    fileHandler.showMoveFileToPublicDirectoryDialog()
+    fileHandler.showMoveFileToPublicDirectoryDialog(fragmentManager = fragmentManager)
 
     verify {
       alertDialogShower.show(
@@ -264,7 +266,7 @@ class CopyMoveFileHandlerTest {
     val positiveButtonClickSlot = slot<() -> Unit>()
     val negativeButtonClickSlot = slot<() -> Unit>()
     fileHandler = spyk(fileHandler)
-    every { sharedPreferenceUtil.copyMoveZimFilePermissionDialog } returns true
+    every { sharedPreferenceUtil.shouldShowStorageSelectionDialog } returns false
     every {
       alertDialogShower.show(
         KiwixDialog.CopyMoveFileToPublicDirectoryDialog,
@@ -274,15 +276,15 @@ class CopyMoveFileHandlerTest {
     } just Runs
 
     every { fileHandler.validateZimFileCanCopyOrMove() } returns true
-    fileHandler.showMoveFileToPublicDirectoryDialog()
-    every { fileHandler.performCopyOperation(showStorageSelectionDialog) } just Runs
+    fileHandler.showMoveFileToPublicDirectoryDialog(fragmentManager = fragmentManager)
+    every { fileHandler.performCopyOperation() } just Runs
 
     positiveButtonClickSlot.captured.invoke()
-    verify { fileHandler.performCopyOperation(showStorageSelectionDialog) }
-    every { fileHandler.performMoveOperation(showStorageSelectionDialog) } just Runs
+    verify { fileHandler.performCopyOperation() }
+    every { fileHandler.performMoveOperation() } just Runs
     negativeButtonClickSlot.captured.invoke()
 
-    verify { fileHandler.performMoveOperation(showStorageSelectionDialog) }
+    verify { fileHandler.performMoveOperation() }
   }
 
   private fun prepareFileSystemAndFileForMockk(

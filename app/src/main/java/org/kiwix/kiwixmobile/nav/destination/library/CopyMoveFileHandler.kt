@@ -162,21 +162,24 @@ class CopyMoveFileHandler @Inject constructor(
         else EXTERNAL_SELECT_POSITION
       )
     }
-    performCopyMoveOperation()
+    if (validateZimFileCanCopyOrMove()) {
+      performCopyMoveOperation()
+    }
   }
 
-  private fun performCopyMoveOperation() {
-    if (validateZimFileCanCopyOrMove()) {
-      if (isMoveOperation) {
-        performMoveOperation()
-      } else {
-        performCopyOperation()
-      }
+  fun performCopyMoveOperation() {
+    if (isMoveOperation) {
+      performMoveOperation()
+    } else {
+      performCopyOperation()
     }
   }
 
   fun isBookLessThan4GB(): Boolean =
     (selectedFile?.length() ?: 0L) < FOUR_GIGABYTES_IN_KILOBYTES
+
+  private fun hasNotSufficientStorageSpace(availableSpace: Long): Boolean =
+    availableSpace < (selectedFile?.length() ?: 0L)
 
   fun validateZimFileCanCopyOrMove(file: File = File(sharedPreferenceUtil.prefStorage)): Boolean {
     hidePreparingCopyMoveDialog() // hide the dialog if already showing
@@ -202,7 +205,7 @@ class CopyMoveFileHandler @Inject constructor(
 
   fun handleDetectingFileSystemState() {
     if (isBookLessThan4GB()) {
-      performCopyMoveOperation()
+      performCopyMoveOperationIfSufficientSpaceAvailable()
     } else {
       showPreparingCopyMoveDialog()
       observeFileSystemState()
@@ -211,7 +214,7 @@ class CopyMoveFileHandler @Inject constructor(
 
   fun handleCannotWrite4GbFileState() {
     if (isBookLessThan4GB()) {
-      performCopyMoveOperation()
+      performCopyMoveOperationIfSufficientSpaceAvailable()
     } else {
       // Show an error dialog indicating the file system limitation
       fileCopyMoveCallback?.filesystemDoesNotSupportedCopyMoveFilesOver4GB()
@@ -228,6 +231,15 @@ class CopyMoveFileHandler @Inject constructor(
           performCopyMoveOperation()
         }
       }
+  }
+
+  private fun performCopyMoveOperationIfSufficientSpaceAvailable() {
+    val availableSpace = storageCalculator.availableBytes(File(sharedPreferenceUtil.prefStorage))
+    if (hasNotSufficientStorageSpace(availableSpace)) {
+      fileCopyMoveCallback?.insufficientSpaceInStorage(availableSpace)
+    } else {
+      performCopyMoveOperation()
+    }
   }
 
   fun showCopyMoveDialog(showStorageSelectionDialog: Boolean = false) {
@@ -475,9 +487,6 @@ class CopyMoveFileHandler @Inject constructor(
     destinationFile.createNewFile()
     return destinationFile
   }
-
-  private fun hasNotSufficientStorageSpace(availableSpace: Long): Boolean =
-    availableSpace < (selectedFile?.length() ?: 0L)
 
   @SuppressLint("InflateParams") fun showPreparingCopyMoveDialog() {
     if (copyMovePreparingDialog == null) {
