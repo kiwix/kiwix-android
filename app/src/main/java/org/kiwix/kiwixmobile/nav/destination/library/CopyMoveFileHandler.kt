@@ -162,6 +162,10 @@ class CopyMoveFileHandler @Inject constructor(
         else EXTERNAL_SELECT_POSITION
       )
     }
+    performCopyMoveOperation()
+  }
+
+  private fun performCopyMoveOperation() {
     if (validateZimFileCanCopyOrMove()) {
       if (isMoveOperation) {
         performMoveOperation()
@@ -198,7 +202,7 @@ class CopyMoveFileHandler @Inject constructor(
 
   fun handleDetectingFileSystemState() {
     if (isBookLessThan4GB()) {
-      showCopyMoveDialog()
+      performCopyMoveOperation()
     } else {
       showPreparingCopyMoveDialog()
       observeFileSystemState()
@@ -207,7 +211,7 @@ class CopyMoveFileHandler @Inject constructor(
 
   fun handleCannotWrite4GbFileState() {
     if (isBookLessThan4GB()) {
-      showCopyMoveDialog()
+      performCopyMoveOperation()
     } else {
       // Show an error dialog indicating the file system limitation
       fileCopyMoveCallback?.filesystemDoesNotSupportedCopyMoveFilesOver4GB()
@@ -221,7 +225,7 @@ class CopyMoveFileHandler @Inject constructor(
       .subscribe {
         hidePreparingCopyMoveDialog()
         if (validateZimFileCanCopyOrMove()) {
-          showCopyMoveDialog()
+          performCopyMoveOperation()
         }
       }
   }
