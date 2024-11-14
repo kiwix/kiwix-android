@@ -85,6 +85,7 @@ class DeepLinksTest : BaseActivityTest() {
         setIsPlayStoreBuildType(true)
         prefIsTest = true
         putPrefLanguage("en")
+        shouldShowStorageSelectionDialog = false
         lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
       }
     }
