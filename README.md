@@ -44,12 +44,12 @@ website to access the complete set of features.
 
 Possible paths for play store version which supports for the scanning/reading ZIM files.
 
-| Storage path                                            | Viewable outside kiwix(in File manager) | Could be scanned by Kiwix |
-|---------------------------------------------------------|-----------------------------------------|---------------------------|
-| storge/0/Android/media/org.kiwix.kiwixmobile/           | Yes                                     | Yes                       |
-| storge/0/Android/data/org.kiwix.kiwixmobile/            | No                                      | Yes                       |
-| storge/sdcard-name/Android/media/org.kiwix.kiwixmobile/ | Yes                                     | Yes                       |
-| storge/sdcard-name/Android/data/org.kiwix.kiwixmobile/  | No                                      | Yes                       |
+| Storage path                                              | Viewable outside kiwix(in File manager) | Could be scanned by Kiwix |
+|-----------------------------------------------------------|-----------------------------------------|---------------------------|
+| storage/0/Android/media/org.kiwix.kiwixmobile/            | Yes                                     | Yes                       |
+| storage/0/Android/data/org.kiwix.kiwixmobile/             | No                                      | Yes                       |
+| storage/sdcard-name/Android/media/org.kiwix.kiwixmobile/  | Yes                                     | Yes                       |
+| storage/sdcard-name/Android/data/org.kiwix.kiwixmobile/   | No                                      | Yes                       |
 
 Kiwix Android is written in [Kotlin](https://kotlinlang.org/)
 
