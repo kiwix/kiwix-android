@@ -127,6 +127,7 @@ class KiwixMainActivity : CoreMainActivity() {
     activityKiwixMainBinding.bottomNavView.setupWithNavController(navController)
     migrateInternalToPublicAppDirectory()
     handleZimFileIntent(intent)
+    handleNotificationIntent(intent)
     handleGetContentIntent(intent)
   }
 
