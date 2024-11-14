@@ -82,7 +82,7 @@ class CopyMoveFileHandler @Inject constructor(
   var shouldValidateZimFile: Boolean = false
   private var fileSystemDisposable: Disposable? = null
   private lateinit var fragmentManager: FragmentManager
-  private val storageDeviceList by lazy {
+  val storageDeviceList by lazy {
     StorageDeviceUtils.getWritableStorage(activity)
   }
 
@@ -141,7 +141,7 @@ class CopyMoveFileHandler @Inject constructor(
     lifecycleScope = coroutineScope
   }
 
-  private fun showStorageSelectDialog() = StorageSelectDialog()
+  fun showStorageSelectDialog() = StorageSelectDialog()
     .apply {
       onSelectAction = ::copyMoveZIMFileInSelectedStorage
       titleSize = STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
@@ -167,7 +167,7 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  fun performCopyMoveOperation() {
+  private fun performCopyMoveOperation() {
     if (isMoveOperation) {
       performMoveOperation()
     } else {
@@ -233,7 +233,7 @@ class CopyMoveFileHandler @Inject constructor(
       }
   }
 
-  private fun performCopyMoveOperationIfSufficientSpaceAvailable() {
+  fun performCopyMoveOperationIfSufficientSpaceAvailable() {
     val availableSpace = storageCalculator.availableBytes(File(sharedPreferenceUtil.prefStorage))
     if (hasNotSufficientStorageSpace(availableSpace)) {
       fileCopyMoveCallback?.insufficientSpaceInStorage(availableSpace)
