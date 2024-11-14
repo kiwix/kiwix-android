@@ -316,8 +316,6 @@
   <string name="move">Премести</string>
   <string name="copy_move_files_dialog_description">Дали сакате да ја ископирате или преместите податотеката?</string>
   <string name="copy_file_error_message">Грешка при копирање на ZIM-податотеката: %s.</string>
-  <string name="move_files_permission_dialog_title">Да се преместат/прекопираат податотеките во јавниот директориум на прилогот?</string>
-  <string name="move_files_permission_dialog_description">Поради правилата на Google Play за Андроид 11 и поново, нашиот прилог повеќе нема непосреден пристап до податотеки складирани на други места на вашиот уред. За да ви овозможиме да ги гледате избраните податотеки ќе треба да ги преместиме или да ги прекопираме во специјална папка во директориумот на прилогот. Дали се сложувате со ова?</string>
   <string name="move_file_error_message">Грешка при преместување на ZIM-податотеката: %s.</string>
   <string name="how_to_update_content">Како се подновува содржината?</string>
   <string name="update_content_description">За да ја подновите содржината (ZIM-поатотека) ќе треба да ја преземете последната полна верзија на истава содржина. Ова се прави во одделот за преземање.</string>

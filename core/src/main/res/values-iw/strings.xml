@@ -324,8 +324,6 @@
   <string name="move">העברה</string>
   <string name="copy_move_files_dialog_description">האם ברצונך להעתיק או להעביר את הקובץ?</string>
   <string name="copy_file_error_message">שגיאה בהעתקת קובץ zim‏: %s.</string>
-  <string name="move_files_permission_dialog_title">להעביר או להעתיק קבצים לספרייה ציבורית של היישום?</string>
-  <string name="move_files_permission_dialog_description">בשל מדיניות Google Play ב־Android 11 ומעלה, היישום שלנו אינו יכול יותר לגשת ישירות לקבצים המאוחסנים במקום אחר במכשיר שלך. כדי לאפשר לך להציג את הקבצים שבחרת, עלינו להעביר או להעתיק אותם לתיקייה מיוחדת בתוך תיקיית היישום שלנו. זה מאפשר לנו לגשת ולפתוח את הקבצים. האם זה בסדר מבחינתך?</string>
   <string name="move_file_error_message">שגיאה בהעברת קובץ zim‏: %s.</string>
   <string name="how_to_update_content">איך לעדכן תוכן?</string>
   <string name="update_content_description">כדי לעדכן תוכן (קובץ zim) עליך להוריד את הגרסה המלאה העדכנית ביותר של אותו התוכן בדיוק. ניתן לעשות זאת דרך סעיף ההורדה.</string>

@@ -329,8 +329,8 @@
   <string name="moving_zim_file">Moving ZIM file…</string>
   <string name="copy_move_files_dialog_description">Kiwix requires the ZIM file to be in its own data directory. Do you want to copy or move it there?</string>
   <string name="copy_file_error_message">Error in copying the ZIM file: %s.</string>
-  <string name="move_files_permission_dialog_title">Move/Copy files to app public directory?</string>
-  <string name="move_files_permission_dialog_description">Due to Google Play policies on Android 11 and above, our app can no longer directly access files stored elsewhere on your device. To let you view your selected files, we need to move or copy them into a special folder within our application directory. This allows us to access and open the files. Do you agree to this?</string>
+  <string name="why_copy_move_files_to_app_directory">Why copy/move files to app public directory?</string>
+  <string name="copy_move_files_to_app_directory_description">Due to Google Play policies on Android 11 and above, our app can no longer directly access files stored elsewhere on your device. To let you view your selected files, we need to move or copy them into a special folder within our application directory. This allows us to access and open the files.</string>
   <string name="choose_storage_to_copy_move_zim_file">Choose storage to copy/move ZIM file</string>
   <string name="move_file_error_message">Error in moving the ZIM file: %s.</string>
   <string name="how_to_update_content">How to update content?</string>

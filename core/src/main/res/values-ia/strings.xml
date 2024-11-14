@@ -319,8 +319,6 @@
   <string name="move">Displaciar</string>
   <string name="copy_move_files_dialog_description">Vole tu copiar o displaciar le file?</string>
   <string name="copy_file_error_message">Error durante le copia del file ZIM: %s.</string>
-  <string name="move_files_permission_dialog_title">Displaciar/copiar files al directorio public del app?</string>
-  <string name="move_files_permission_dialog_description">A causa del politicas de Google Play sur Android 11 e plus recente, iste application non pote plus acceder directemente al files immagazinate in altere locos sur iste apparato. Pro permitter le accesso al files seligite, es necessari displaciar o copiar los in un dossier special in le directorio de iste application. Isto permittera acceder al files e aperir los. Es tu de accordo con isto?</string>
   <string name="move_file_error_message">Error durante le displaciamento del file ZIM: %s.</string>
   <string name="how_to_update_content">Como actualisar contento?</string>
   <string name="update_content_description">Pro actualisar le contento (un file ZIM) tu debe discargar le ultime version complete de iste mesme contento. Tu pote facer lo in le section de discargamento.</string>

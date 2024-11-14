@@ -306,7 +306,6 @@
   <string name="move">Sposta</string>
   <string name="copy_move_files_dialog_description">Vuoi copiare o spostare il file?</string>
   <string name="copy_file_error_message">Errore nella copia del file zim: %s.</string>
-  <string name="move_files_permission_dialog_title">Spostare/copiare i file nella directory pubblica dell’app?</string>
   <string name="move_file_error_message">Errore nello spostamento del file zim: %s.</string>
   <string name="how_to_update_content">Come aggiornare i contenuti?</string>
   <string name="update_content_description">Per aggiornare un contenuto (un file ZIM), devi scaricare l’ultima versione completa di quello stesso contenuto. Puoi farlo nella sezione Scarica.</string>

@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.help
 
+import android.os.Build
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.IdlingRegistry
@@ -50,15 +51,6 @@ class HelpFragmentTest : BaseActivityTest() {
       }
       waitForIdle()
     }
-    context.let {
-      sharedPreferenceUtil = SharedPreferenceUtil(it).apply {
-        setIntroShown()
-        putPrefWifiOnly(false)
-        setIsPlayStoreBuildType(true)
-        prefIsTest = true
-        putPrefLanguage("en")
-      }
-    }
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
       onActivity {
@@ -83,6 +75,7 @@ class HelpFragmentTest : BaseActivityTest() {
 
   @Test
   fun verifyHelpActivity() {
+    setShowCopyMoveToPublicDirectory(false)
     activityScenario.onActivity {
       it.navigate(R.id.helpFragment)
     }
@@ -96,8 +89,46 @@ class HelpFragmentTest : BaseActivityTest() {
       clickOnHowToUpdateContent()
       assertHowToUpdateContentIsExpanded()
       clickOnHowToUpdateContent()
+      assertWhyCopyMoveFilesToAppPublicDirectoryIsNotVisible()
     }
     LeakAssertions.assertNoLeaks()
+  }
+
+  @Test
+  fun verifyHelpActivityWithPlayStoreRestriction() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      setShowCopyMoveToPublicDirectory(true)
+      activityScenario.onActivity {
+        it.navigate(R.id.helpFragment)
+      }
+      help {
+        clickOnWhatDoesKiwixDo()
+        assertWhatDoesKiwixDoIsExpanded()
+        clickOnWhatDoesKiwixDo()
+        clickOnWhereIsContent()
+        assertWhereIsContentIsExpanded()
+        clickOnWhereIsContent()
+        clickOnHowToUpdateContent()
+        assertHowToUpdateContentIsExpanded()
+        clickOnHowToUpdateContent()
+        clickWhyCopyMoveFilesToAppPublicDirectory()
+        assertWhyCopyMoveFilesToAppPublicDirectoryIsExpanded()
+        clickWhyCopyMoveFilesToAppPublicDirectory()
+      }
+      LeakAssertions.assertNoLeaks()
+    }
+  }
+
+  private fun setShowCopyMoveToPublicDirectory(showRestriction: Boolean) {
+    context.let {
+      sharedPreferenceUtil = SharedPreferenceUtil(it).apply {
+        setIntroShown()
+        putPrefWifiOnly(false)
+        setIsPlayStoreBuildType(showRestriction)
+        prefIsTest = true
+        putPrefLanguage("en")
+      }
+    }
   }
 
   @After

@@ -343,8 +343,6 @@
   <string name="move">Déplacer</string>
   <string name="copy_move_files_dialog_description">Voulez-vous copier ou déplacer le fichier ?</string>
   <string name="copy_file_error_message">Erreur lors de la copie du fichier ZIM : %s.</string>
-  <string name="move_files_permission_dialog_title">Déplacer/copier les fichiers vers le répertoire public de l’application ?</string>
-  <string name="move_files_permission_dialog_description">En raison des politiques de Google Play sur Android 11 et versions ultérieures, notre application ne peut plus accéder directement aux fichiers stockés ailleurs sur votre appareil. Pour vous permettre de visualiser les fichiers sélectionnés, nous devons les déplacer ou les copier dans un dossier spécial dans notre répertoire d’applications. Cela nous permet d’accéder aux fichiers et de les ouvrir. Êtes-vous d’accord avec cela ?</string>
   <string name="move_file_error_message">Erreur lors du déplacement du fichier ZIM : %s.</string>
   <string name="how_to_update_content">Comment actualiser le contenu ?</string>
   <string name="update_content_description">Pour mettre à jour un contenu (un fichier zim), vous devez télécharger la dernière version complète de ce même contenu. Vous pouvez le faire via la section de téléchargement.</string>

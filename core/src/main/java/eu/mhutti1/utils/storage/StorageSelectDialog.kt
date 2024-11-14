@@ -30,7 +30,6 @@ import androidx.recyclerview.widget.RecyclerView
 import eu.mhutti1.utils.storage.adapter.StorageAdapter
 import eu.mhutti1.utils.storage.adapter.StorageDelegate
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.dimen
 import org.kiwix.kiwixmobile.core.databinding.StorageSelectDialogBinding
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isLandScapeMode
