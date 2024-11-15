@@ -28,13 +28,16 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiObjectNotFoundException
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.hamcrest.core.AllOf.allOf
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.Findable.Text
+import org.kiwix.kiwixmobile.SHORT_WAIT
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
-import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 fun searchWidget(func: SearchWidgetRobot.() -> Unit) =
@@ -45,96 +48,51 @@ class SearchWidgetRobot : BaseRobot() {
   fun removeWidgetIfAlreadyAdded(uiDevice: UiDevice) {
     try {
       val widget = uiDevice.findObject(By.text("Search Kiwix"))
-      widget.click(1000L)
-      uiDevice.waitForIdle()
-      val center = getScreenCenter(uiDevice)
-      val widgetBounds = widget.visibleBounds
+      val removeTarget = Point(uiDevice.displayWidth / 2, uiDevice.displayHeight / 10)
 
-      uiDevice.swipe(
-        widgetBounds.centerX(),
-        widgetBounds.centerY(),
-        center.x,
-        100,
-        150
-      )
+      widget.drag(removeTarget)
 
       uiDevice.waitForIdle()
     } catch (ignore: Exception) {
       // nothing to do since widget is not added
+      Log.e("SEARCH_WIDGET", "Could not find the Search widget. It likely does not exist.")
     }
   }
 
-  fun addWidgetToHomeScreen(uiDevice: UiDevice) {
+  fun addWidgetToHomeScreenFromWidgetWindow() {
+    testFlakyView({ clickOn(Text("Add automatically")) })
+  }
+
+  fun findSearchWidget(uiDevice: UiDevice) {
     try {
-      if (uiDevice.findObject(By.text("Search Kiwix")).text == "Search Kiwix") {
-        // since search widget is already exist we does not require to add it again.
-        return
-      }
-    } catch (ignore: Exception) {
-      // widget does not exist.
-      Log.e(
-        "SEARCH_WIDGET",
-        "Could not find the Search widget. Probably it does not exist"
-      )
+      assertSearchWidgetAddedToHomeScreen(2)
+    } catch (ignore: RuntimeException) {
+      // the search widget is not on the home screen, swipe right because
+      // the widget has been added to next window
+      swipeRightToOpenNextWindow(uiDevice)
     }
-    val center = getScreenCenter(uiDevice)
-    longPressInCenterOfScreen(uiDevice, center)
-    clickOnWidgetsText(uiDevice)
-    var widget = uiDevice.findObject(By.text("Kiwix"))
-    var maxSwipes = 30
-    while (widget == null && maxSwipes > 0) {
-      uiDevice.swipe(center.x, center.y, center.x, 0, 200)
-      uiDevice.waitForIdle()
-      widget = uiDevice.findObject(By.text("Kiwix"))
-      maxSwipes--
-    }
-    uiDevice.swipe(center.x, center.y, center.x, 0, 200)
-    val b = widget.visibleBounds
-    val c = Point(b.left + 150, b.bottom + 150)
-    val dest = Point(c.x + 250, c.y + 250)
-    uiDevice.swipe(arrayOf(c, c, dest), 150)
   }
 
-  private fun clickOnWidgetsText(uiDevice: UiDevice) {
-    try {
-      // Different according to the devices
-      uiDevice.findObject(By.text("Widgets")).click()
-    } catch (ignore: Exception) {
-      uiDevice.findObject(By.text("WIDGETS")).click()
-    }
-    uiDevice.waitForIdle()
+  private fun swipeRightToOpenNextWindow(uiDevice: UiDevice) {
+    val displayWidth = uiDevice.displayWidth
+    val displayHeight = uiDevice.displayHeight
+
+    val startX = (displayWidth * 0.9).toInt()
+    val endX = (displayWidth * 0.1).toInt()
+    val centerY = displayHeight / 2
+
+    uiDevice.swipe(startX, centerY, endX, centerY, 20)
   }
 
-  fun assertSearchWidgetAddedToHomeScreen(uiDevice: UiDevice) {
-    uiDevice.findObject(By.text("Search Kiwix"))
+  fun assertSearchWidgetAddedToHomeScreen(retryCount: Int = 5) {
+    testFlakyView({ isVisible(Text("Search Kiwix"), SHORT_WAIT) }, retryCount)
   }
 
-  private fun longPressInCenterOfScreen(uiDevice: UiDevice, center: Point) {
-    uiDevice.swipe(arrayOf(center, center), 150)
-  }
-
-  private fun getScreenCenter(device: UiDevice): Point {
-    val size = device.displaySizeDp
-    return Point(size.x / 2, size.y / 2)
-  }
-
-  fun clickOnBookmarkIcon(uiDevice: UiDevice, kiwixMainActivity: KiwixMainActivity) {
-    uiDevice.findObject(
-      By.res("${kiwixMainActivity.packageName}:id/search_widget_star")
-    ).click()
-  }
-
-  fun assertBookmarkScreenVisible() {
-    testFlakyView({
-      onView(allOf(withText(R.string.bookmarks), isDescendantOfA(withId(R.id.toolbar))))
-        .check(matches(isDisplayed()))
-    })
-  }
-
-  fun clickOnMicIcon(uiDevice: UiDevice, kiwixMainActivity: KiwixMainActivity) {
-    uiDevice.findObject(
-      By.res("${kiwixMainActivity.packageName}:id/search_widget_mic")
-    ).click()
+  fun clickOnMicIcon(
+    uiDevice: UiDevice,
+    kiwixMainActivity: KiwixMainActivity
+  ) {
+    clickOnElementById(uiDevice, kiwixMainActivity, "search_widget_mic")
   }
 
   fun closeIfGoogleSearchVisible(uiDevice: UiDevice) {
@@ -149,19 +107,55 @@ class SearchWidgetRobot : BaseRobot() {
     }
   }
 
+  fun clickOnBookmarkIcon(
+    uiDevice: UiDevice,
+    kiwixMainActivity: KiwixMainActivity
+  ) {
+    clickOnElementById(uiDevice, kiwixMainActivity, "search_widget_star")
+  }
+
+  fun assertBookmarkScreenVisible() {
+    testFlakyView({
+      onView(allOf(withText(R.string.bookmarks), isDescendantOfA(withId(R.id.toolbar))))
+        .check(matches(isDisplayed()))
+    })
+  }
+
   fun assertSearchScreenVisible() {
     testFlakyView({
       onView(withText(R.string.menu_search_in_text)).check(matches(isDisplayed()))
     })
   }
 
-  fun clickOnSearchText(uiDevice: UiDevice, kiwixMainActivity: KiwixMainActivity) {
-    uiDevice.findObject(
-      By.res("${kiwixMainActivity.packageName}:id/search_widget_text")
-    ).click()
+  fun clickOnSearchText(
+    uiDevice: UiDevice,
+    kiwixMainActivity: KiwixMainActivity
+  ) {
+    clickOnElementById(uiDevice, kiwixMainActivity, "search_widget_text")
+  }
+
+  private fun clickOnElementById(
+    uiDevice: UiDevice,
+    kiwixMainActivity: KiwixMainActivity,
+    elementId: String,
+    retryCount: Int = 20
+  ) {
+    var attempts = 0
+    while (attempts < retryCount) {
+      try {
+        uiDevice.findObject(
+          By.res("${kiwixMainActivity.packageName}:id/$elementId")
+        ).click()
+        return
+      } catch (e: UiObjectNotFoundException) {
+        attempts++
+        Log.e("SEARCH_WIDGET", "Attempt $attempts: Failed to click on $elementId")
+      }
+    }
+    throw RuntimeException("Could not find $elementId after $retryCount attempts")
   }
 
   private fun pauseForBetterTestPerformance() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
   }
 }
