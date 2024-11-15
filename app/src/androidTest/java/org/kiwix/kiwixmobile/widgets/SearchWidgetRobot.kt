@@ -55,9 +55,20 @@ class SearchWidgetRobot : BaseRobot() {
       uiDevice.waitForIdle()
     } catch (ignore: Exception) {
       // nothing to do since widget is not added
-      Log.e("SEARCH_WIDGET", "Could not find the Search widget. It likely does not exist.")
+      Log.e(
+        "SEARCH_WIDGET_TEST",
+        "Could not find the Search widget. It likely does not exist."
+      )
     }
   }
+
+  fun assertAddWidgetToHomeScreenVisible(): Boolean =
+    try {
+      isVisible(Text("Add automatically"))
+      true
+    } catch (ignore: Exception) {
+      false
+    }
 
   fun addWidgetToHomeScreenFromWidgetWindow() {
     testFlakyView({ clickOn(Text("Add automatically")) })
@@ -95,10 +106,10 @@ class SearchWidgetRobot : BaseRobot() {
     clickOnElementById(uiDevice, kiwixMainActivity, "search_widget_mic")
   }
 
-  fun closeIfGoogleSearchVisible(uiDevice: UiDevice) {
+  fun closeIfGoogleSearchVisible() {
     try {
       pauseForBetterTestPerformance()
-      testFlakyView({ uiDevice.findObject(By.text("Google")) })
+      testFlakyView({ isVisible(Text("Google")) })
       pressBack()
       Log.e("SEARCH_WIDGET_TEST", "Closed the Google speak dialog")
     } catch (ignore: Exception) {
@@ -149,7 +160,7 @@ class SearchWidgetRobot : BaseRobot() {
         return
       } catch (e: UiObjectNotFoundException) {
         attempts++
-        Log.e("SEARCH_WIDGET", "Attempt $attempts: Failed to click on $elementId")
+        Log.e("SEARCH_WIDGET_TEST", "Attempt $attempts: Failed to click on $elementId")
       }
     }
     throw RuntimeException("Could not find $elementId after $retryCount attempts")
