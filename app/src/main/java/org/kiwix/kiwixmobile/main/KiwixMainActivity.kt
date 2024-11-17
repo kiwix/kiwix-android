@@ -36,6 +36,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import eu.mhutti1.utils.storage.StorageDeviceUtils
@@ -227,7 +228,9 @@ class KiwixMainActivity : CoreMainActivity() {
 
   private fun handleGetContentIntent(intent: Intent?) {
     if (intent?.action == ACTION_GET_CONTENT) {
-      navigate(R.id.downloadsFragment)
+      activityKiwixMainBinding.bottomNavView.menu.findItem(R.id.downloadsFragment)?.let {
+        NavigationUI.onNavDestinationSelected(it, navController)
+      }
     }
   }
 
