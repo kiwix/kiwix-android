@@ -36,7 +36,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -55,9 +54,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.R.string
-import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.cachedComponent
+import org.kiwix.kiwixmobile.core.R.drawable
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
@@ -69,6 +68,7 @@ import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.databinding.FragmentLocalFileTransferBinding
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getDeviceStatus
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiP2pDelegate
@@ -193,12 +193,12 @@ class LocalFileTransferFragment :
           getString(string.got_it)
         )
         addSequenceItem(
-          fragmentLocalFileTransferBinding?.listPeerDevices,
+          fragmentLocalFileTransferBinding?.nearbyDeviceShowCaseView,
           getString(string.nearby_devices_list_message),
           getString(string.got_it)
         )
         addSequenceItem(
-          fragmentLocalFileTransferBinding?.recyclerViewTransferFiles,
+          fragmentLocalFileTransferBinding?.fileTransferShowCaseView,
           getString(string.transfer_zim_files_list_message),
           getString(string.got_it)
         )
