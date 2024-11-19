@@ -24,8 +24,8 @@
   <string name="menu_random_article">{{Identical|Random article}}</string>
   <string name="menu_full_screen">{{Identical|Full screen}}</string>
   <string name="menu_exit_full_screen">This is for the content description of ImageButton, this is showing when the user reads the article in full-screen mode, by clicking on this ImageButton full-screen mode will close.</string>
-  <string name="menu_read_aloud">This is for the MenuItem button text, by clicking on this button we are starting to read the current page text with \"Text to speech\" functionality.</string>
-  <string name="menu_read_aloud_stop">This is for the MenuItem button text, when the \"Read aloud (Text to speech is reading the current page data)\" and if the user clicks on this button \"Text to speech\" will stop reading the current page data.</string>
+  <string name="menu_read_aloud">This is for the MenuItem button text, by clicking on this button we are starting to read the current page text with “Read Aloud” functionality.</string>
+  <string name="menu_read_aloud_stop">This is for the MenuItem button text, when the “Read aloud (Text to speech is reading the current page data)” and if the user clicks on this button “Read Aloud” will stop reading the current page data.</string>
   <string name="menu_support_kiwix">This is for the \"Navigation Item\" button text on the main page of the \"Kiwix app\", clicking on this button leads to opening the \"Kiwix support\" website page.</string>
   <string name="menu_wifi_hotspot">* English : it maps to some \"hotspot\" feature in order to serve collections of contents (aka books) over a local network area.\n* French : il s’agit de la fonctionnalité \'\'hotspot\'\' : l’anglais \'\'host books\'\' n’est pas particulièrement satisfaisant à la base.</string>
   <string name="save_media">This appears in a dialog window when we long-click on any image/pdf/video. By clicking on this button, it will save the data into phone storage.</string>
@@ -76,7 +76,7 @@
   <string name="pref_language_chooser">{{Identical|Choose language}}</string>
   <string name="pref_credits">This is part of preference settings, by clicking on this text it will show a dialog with the information of contributors who are contributing to this project and also shows the licenses as well.</string>
   <string name="pref_credits_title">{{Identical|Credit}}</string>
-  <string name="tts_lang_not_supported">This appears in \"Android Toast\" as an error message when we are opening the ZIM file to read and the language of the articles of that zim file is not supported by the \"Text to Speech\" feature, then we are showing this error message.</string>
+  <string name="tts_lang_not_supported">This appears in \"Android Toast\" as an error message when we are opening the ZIM file to read and the language of the articles of that zim file is not supported by the “Read Aloud” feature, then we are showing this error message.</string>
   <string name="no_reader_application_installed">This message appears in \"Android Toast\" as an error message when we want to open a pdf or URL in external applications but there is no application installed on the user\'s device to handle this file type.</string>
   <string name="no_email_application_installed">* This message appears in \"Android Toast\" as an error message when the user sends feedback to the \"Kiwix Team\" but there is no application installed on the user\'s device to handle this action.\n* Here %1s will be replaced by the \"Kiwix team Gmail\" at runtime.</string>
   <string name="no_section_info">This appears as a text message when there is no content header found for the article.</string>
@@ -154,9 +154,9 @@
   <string name="confirm_stop_download_title">This message appears in the \"Android Dialog\" as a confirmation title message. When the user wants to stop the current running download.</string>
   <string name="confirm_stop_download_msg">This message appears in the \"Android Dialog\" as a confirmation description message. When the user wants to stop the current running download, so it takes confirmation from the user.</string>
   <string name="download_change_storage">This message appears in the \"Android Snackbar\" when there is not enough space to download the zim file then this message shows to the user to select secondary storage.</string>
-  <string name="tts_not_enabled">This message appears in the \"Android Toast\" as a warning message. When the selected zim file language is not supported by this Text to speech feature, we are informing the user that in this zim file, this feature will not work.</string>
-  <string name="texttospeech_initialization_failed">This is an error message showing in the \"Android Toast\". when there is an error in the initialization of text to speech feature.</string>
-  <string name="texttospeech_error">This is an error message showing in the \"Android Toast\". when there is an error while reading the zim file text via text to speech feature.</string>
+  <string name="tts_not_enabled">This message appears in the \"Android Toast\" as a warning message. When the selected zim file language is not supported by this Read Aloud feature, we are informing the user that in this zim file, this feature will not work.</string>
+  <string name="texttospeech_initialization_failed">This is an error message showing in the \"Android Toast\". when there is an error in the initialization of Read Aloud feature.</string>
+  <string name="texttospeech_error">This is an error message showing in the \"Android Toast\". when there is an error while reading the zim file text via Read Aloud feature.</string>
   <string name="next">{{Identical|Next}}</string>
   <string name="previous">{{Identical|Previous}}</string>
   <string name="wifi_only_title">This confirmation message shows in the \"Android Dialog\" when the user tries to download zim files via the mobile network.</string>
