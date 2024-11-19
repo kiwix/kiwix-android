@@ -26,5 +26,6 @@
   <dimen name="find_in_page_button_padding">13dp</dimen>
   <dimen name="donation_popup_bottom_margin">20dp</dimen>
   <dimen name="maximum_donation_popup_width">400dp</dimen>
-  <dimen name="showcase_view_maximum_width">200dp</dimen>
+  <dimen name="showcase_view_maximum_width_in_landscape_mode">150dp</dimen>
+  <dimen name="showcase_view_maximum_height">10dp</dimen>
 </resources>

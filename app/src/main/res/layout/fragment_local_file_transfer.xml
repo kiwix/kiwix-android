@@ -100,7 +100,7 @@
 
   <View
     android:id="@+id/nearby_device_show_case_view"
-    android:layout_width="@dimen/showcase_view_maximum_width"
+    android:layout_width="10dp"
     android:layout_height="10dp"
     android:layout_margin="50dp"
     app:layout_constraintEnd_toEndOf="parent"
@@ -149,7 +149,7 @@
 
   <View
     android:id="@+id/file_transfer_show_case_view"
-    android:layout_width="@dimen/showcase_view_maximum_width"
+    android:layout_width="10dp"
     android:layout_height="10dp"
     android:layout_margin="50dp"
     app:layout_constraintEnd_toEndOf="parent"
