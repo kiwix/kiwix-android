@@ -26,7 +26,7 @@
   <string name="menu_exit_full_screen">This is for the content description of ImageButton, this is showing when the user reads the article in full-screen mode, by clicking on this ImageButton full-screen mode will close.</string>
   <string name="menu_read_aloud">This is for the MenuItem button text, by clicking on this button we are starting to read the current page text with “Read Aloud” functionality.</string>
   <string name="menu_read_aloud_stop">This is for the MenuItem button text, when the “Read aloud (Text to speech is reading the current page data)” and if the user clicks on this button “Read Aloud” will stop reading the current page data.</string>
-  <string name="menu_support_kiwix">This is for the “Navigation” Item button text on the main page of the “Kiwix app”, clicking on this button leads to opening the “Kiwix support” website page.</string>
+  <string name="menu_support_kiwix">This is for the “Navigation Item” button text on the main page of the “Kiwix app”, clicking on this button leads to opening the “Kiwix support” website page.</string>
   <string name="menu_wifi_hotspot">* English : it maps to some “hotspot” feature in order to serve collections of contents (aka books) over a local network area.\n* French : il s’agit de la fonctionnalité “hotspot” l’anglais “host books” n’est pas particulièrement satisfaisant à la base.</string>
   <string name="save_media">This appears in a dialog window when we long-click on any image/pdf/video. By clicking on this button, it will save the data into phone storage.</string>
   <string name="save_media_error">This error message shows to the user in an “Android Toast”, when there is an error while saving the file in phone storage.</string>
