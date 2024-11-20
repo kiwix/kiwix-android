@@ -189,4 +189,14 @@ object ActivityExtensions {
 
   fun Activity.isLandScapeMode(): Boolean =
     resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+  @Suppress("MagicNumber")
+  fun Activity.isTablet(): Boolean {
+    val configuration = resources.configuration
+    val isLargeOrXLarge =
+      configuration.screenLayout and
+        Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
+    val isWideEnough = configuration.smallestScreenWidthDp >= 600
+    return isLargeOrXLarge && isWideEnough
+  }
 }

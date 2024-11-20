@@ -35,15 +35,15 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="15dp"
     android:background="@android:color/transparent"
+    android:contentDescription="@string/device_name"
+    android:gravity="start|center"
+    android:minHeight="@dimen/material_minimum_height_and_width"
     android:paddingStart="5dp"
     android:paddingEnd="5dp"
     android:paddingBottom="5dp"
     android:textIsSelectable="true"
-    android:gravity="start|center"
-    android:minHeight="@dimen/material_minimum_height_and_width"
     android:textSize="17sp"
     android:textStyle="bold"
-    android:contentDescription="@string/device_name"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.0"
     app:layout_constraintStart_toStartOf="parent"
@@ -98,6 +98,15 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/text_view_available_device" />
 
+  <View
+    android:id="@+id/nearby_device_show_case_view"
+    android:layout_width="10dp"
+    android:layout_height="10dp"
+    android:layout_margin="50dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/text_view_available_device" />
+
   <ProgressBar
     android:id="@+id/progress_bar_searching_peers"
     android:layout_width="wrap_content"
@@ -138,8 +147,16 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/view_file_list_boundary" />
 
+  <View
+    android:id="@+id/file_transfer_show_case_view"
+    android:layout_width="10dp"
+    android:layout_height="10dp"
+    android:layout_margin="50dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/text_view_files_for_transfer" />
+
   <androidx.recyclerview.widget.RecyclerView
-    tools:listitem="@layout/item_transfer_list"
     android:id="@+id/recycler_view_transfer_files"
     android:layout_width="match_parent"
     android:layout_height="0dp"
@@ -148,6 +165,7 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/text_view_files_for_transfer" />
+    app:layout_constraintTop_toBottomOf="@id/text_view_files_for_transfer"
+    tools:listitem="@layout/item_transfer_list" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

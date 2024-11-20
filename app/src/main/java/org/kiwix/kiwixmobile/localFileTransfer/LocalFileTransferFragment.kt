@@ -36,13 +36,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -55,11 +55,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.R.string
-import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.cachedComponent
+import org.kiwix.kiwixmobile.core.R.dimen
+import org.kiwix.kiwixmobile.core.R.drawable
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isLandScapeMode
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isTablet
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBackstack
 import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
@@ -69,6 +72,7 @@ import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.databinding.FragmentLocalFileTransferBinding
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getDeviceStatus
 import org.kiwix.kiwixmobile.localFileTransfer.adapter.WifiP2pDelegate
@@ -143,10 +147,41 @@ class LocalFileTransferFragment :
     wifiDirectManager.callbacks = this
     wifiDirectManager.lifecycleCoroutineScope = lifecycleScope
     wifiDirectManager.startWifiDirectManager(filesForTransfer)
-    fragmentLocalFileTransferBinding
-      ?.textViewDeviceName
-      ?.setToolTipWithContentDescription(getString(string.your_device))
+    fragmentLocalFileTransferBinding?.apply {
+      textViewDeviceName.setToolTipWithContentDescription(getString(string.your_device))
+      fileTransferShowCaseView.apply {
+        val fileTransferShowViewParams = layoutParams
+        fileTransferShowViewParams.width = getShowCaseViewWidth()
+        fileTransferShowViewParams.height = getShowCaseViewHeight()
+        layoutParams = fileTransferShowViewParams
+      }
+      nearbyDeviceShowCaseView.apply {
+        val nearbyDeviceShowCaseViewParams = layoutParams
+        nearbyDeviceShowCaseViewParams.width = getShowCaseViewWidth()
+        nearbyDeviceShowCaseViewParams.height = getShowCaseViewHeight()
+        layoutParams = nearbyDeviceShowCaseViewParams
+      }
+    }
   }
+
+  private fun getShowCaseViewWidth(): Int {
+    return when {
+      requireActivity().isTablet() -> {
+        requireActivity().resources.getDimensionPixelSize(dimen.maximum_donation_popup_width)
+      }
+
+      requireActivity().isLandScapeMode() -> {
+        requireActivity().resources.getDimensionPixelSize(
+          dimen.showcase_view_maximum_width_in_landscape_mode
+        )
+      }
+
+      else -> FrameLayout.LayoutParams.MATCH_PARENT
+    }
+  }
+
+  private fun getShowCaseViewHeight(): Int =
+    requireActivity().resources.getDimensionPixelSize(dimen.showcase_view_maximum_height)
 
   private fun setupMenu() {
     (requireActivity() as MenuHost).addMenuProvider(
@@ -193,12 +228,12 @@ class LocalFileTransferFragment :
           getString(string.got_it)
         )
         addSequenceItem(
-          fragmentLocalFileTransferBinding?.listPeerDevices,
+          fragmentLocalFileTransferBinding?.nearbyDeviceShowCaseView,
           getString(string.nearby_devices_list_message),
           getString(string.got_it)
         )
         addSequenceItem(
-          fragmentLocalFileTransferBinding?.recyclerViewTransferFiles,
+          fragmentLocalFileTransferBinding?.fileTransferShowCaseView,
           getString(string.transfer_zim_files_list_message),
           getString(string.got_it)
         )
