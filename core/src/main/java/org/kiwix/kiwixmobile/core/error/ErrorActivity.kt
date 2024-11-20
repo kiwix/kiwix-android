@@ -19,12 +19,13 @@ package org.kiwix.kiwixmobile.core.error
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
+import android.content.pm.ResolveInfo
 import android.os.Build
 import android.os.Bundle
 import android.os.Process
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
@@ -96,16 +97,66 @@ open class ErrorActivity : BaseActivity() {
     activityKiwixErrorBinding?.reportButton?.setOnClickListener {
       lifecycleScope.launch {
         val emailIntent = emailIntent()
-        val activities =
-          packageManager.queryIntentActivitiesCompat(emailIntent, ResolveInfoFlagsCompat.EMPTY)
-        if (activities.isNotEmpty()) {
-          sendEmailLauncher.launch(Intent.createChooser(emailIntent, "Send email..."))
+        val activities = getSupportedEmailApps(emailIntent, supportedEmailPackages)
+        val targetedIntents = createEmailIntents(emailIntent, activities)
+        if (activities.isNotEmpty() && targetedIntents.isNotEmpty()) {
+          val chooserIntent =
+            Intent.createChooser(targetedIntents.removeFirst(), "Send email...")
+          chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedIntents.toTypedArray())
+          sendEmailLauncher.launch(chooserIntent)
         } else {
           toast(getString(R.string.no_email_application_installed))
         }
       }
     }
   }
+
+  /**
+   * Get a list of supported email apps.
+   */
+  private fun getSupportedEmailApps(
+    emailIntent: Intent,
+    supportedPackages: List<String>
+  ): List<ResolveInfo> {
+    return packageManager.queryIntentActivitiesCompat(emailIntent, ResolveInfoFlagsCompat.EMPTY)
+      .filter {
+        supportedPackages.any(it.activityInfo.packageName::contains)
+      }
+  }
+
+  /**
+   * Create a list of intents for supported email apps.
+   */
+  private fun createEmailIntents(
+    emailIntent: Intent,
+    activities: List<ResolveInfo>
+  ): MutableList<Intent> {
+    return activities.map { resolveInfo ->
+      Intent(emailIntent).apply {
+        setPackage(resolveInfo.activityInfo.packageName)
+      }
+    }.toMutableList()
+  }
+
+  // List of supported email apps
+  private val supportedEmailPackages = listOf(
+    "com.google.android.gm",               // Gmail
+    "com.zoho.mail",                       // Zoho Mail
+    "com.microsoft.office.outlook",        // Outlook
+    "com.yahoo.mobile.client.android.mail",// Yahoo Mail
+    "me.bluemail.mail",                    // BlueMail
+    "ch.protonmail.android",               // ProtonMail
+    "com.fsck.k9",                         // K-9 Mail
+    "com.maildroid",                       // Maildroid
+    "org.kman.AquaMail",                   // Aqua Mail
+    "com.edison.android.mail",              // Edison Mail
+    "com.readdle.spark",                   // Spark
+    "com.gmx.mobile.android.mail",          // GMX Mail
+    "com.fastmail",                        // FastMail
+    "ru.mail.mailapp",                     // Mail.ru
+    "ru.yandex.mail",                      // Yandex.Mail
+    "de.tutao.tutanota"                    // Tutanota
+  )
 
   private val sendEmailLauncher =
     registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -114,15 +165,24 @@ open class ErrorActivity : BaseActivity() {
 
   private suspend fun emailIntent(): Intent {
     val emailBody = buildBody()
-    return Intent(Intent.ACTION_SENDTO).apply {
-      data = Uri.parse("mailto:")
+    return Intent(Intent.ACTION_SEND).apply {
+      type = "text/plain"
       putExtra(Intent.EXTRA_EMAIL, arrayOf(CRASH_AND_FEEDBACK_EMAIL_ADDRESS))
       putExtra(Intent.EXTRA_SUBJECT, subject)
       val file = fileLogger.writeLogFile(
         this@ErrorActivity,
         activityKiwixErrorBinding?.allowLogs?.isChecked == true
       )
-      putExtra(Intent.EXTRA_TEXT, "$emailBody\n\nDevice Logs:\n$${file.readText()}")
+      file.appendText(emailBody)
+      val path =
+        FileProvider.getUriForFile(
+          this@ErrorActivity,
+          applicationContext.packageName + ".fileprovider",
+          file
+        )
+      addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+      putExtra(android.content.Intent.EXTRA_STREAM, path)
+      putExtra(Intent.EXTRA_TEXT, emailBody)
     }
   }
 
