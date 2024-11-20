@@ -18,6 +18,9 @@ jobs:
           java-version: 17
           distribution: temurin
 
+      - name: Set tag variable
+        run: echo "TAG=$(echo ${GITHUB_REF:10})" >> $GITHUB_ENV
+
       - name: Retrieve secrets to files
         env:
           KEYSTORE: ${{ secrets.keystore }}
@@ -46,13 +49,14 @@ jobs:
 #          ./gradlew generateVersionCodeAndName
 #          scp -P 30022 -vrp -i ssh_key -o StrictHostKeyChecking=no VERSION_INFO ci@master.download.kiwix.org:/data/download/release/kiwix-android/
 
-      - name: Publish to GitHub
+      - name: Upload APKs to Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "app/build/outputs/apk/release/**"
+          artifacts: "app/build/outputs/apk/standalone/**"
           token: ${{ secrets.GITHUB_TOKEN }}
-          draft: true
-          prerelease: true
+          tag: ${{ env.TAG }}
+          allowUpdates: true
+          replacesArtifacts: true
 
       - name: Publish bundle to Google Play
         env:
