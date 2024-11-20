@@ -233,6 +233,7 @@
   <string name="custom_download_error_message_for_authentication_failed">The ZIM file could not be downloaded. Please try reinstalling the application from the Play store.</string>
   <string name="save">Save</string>
   <string name="note">Note</string>
+  <string name="take_notes">Take notes</string>
   <string name="wiki_article_title">Wiki Article Title</string>
   <string name="ext_storage_permission_rationale_export_bookmark">Storage access is required for exporting Bookmarks</string>
   <string name="ext_storage_write_permission_denied_export_bookmark">Bookmarks can’t export without access of storage</string>

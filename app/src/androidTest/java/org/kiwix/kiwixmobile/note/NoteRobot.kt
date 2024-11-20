@@ -67,7 +67,7 @@ class NoteRobot : BaseRobot() {
     // overFlowOptionMenu so that we can easily click on it.
     pauseForBetterTestPerformance()
     openActionBarOverflowOrOptionsMenu(context)
-    clickOn(Text("Note"))
+    clickOn(TextId(R.string.take_notes))
   }
 
   fun assertNoteDialogDisplayed() {
