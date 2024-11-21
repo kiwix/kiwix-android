@@ -32,6 +32,7 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.verify
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -90,7 +91,7 @@ class CopyMoveFileHandlerTest {
 
   @Test
   fun validateZimFileCanCopyOrMoveShouldReturnTrueWhenSufficientSpaceAndValidFileSystem() =
-    runTest {
+    runBlocking {
       prepareFileSystemAndFileForMockk()
 
       val result = fileHandler.validateZimFileCanCopyOrMove(storageFile)
@@ -102,7 +103,7 @@ class CopyMoveFileHandlerTest {
 
   @Test
   fun validateZimFileCanCopyOrMoveShouldReturnFalseAndCallCallbackWhenInsufficientSpace() =
-    runTest {
+    runBlocking {
       prepareFileSystemAndFileForMockk(
         selectedFileLength = 2000L,
         fileSystemState = CanWrite4GbFile
@@ -115,7 +116,7 @@ class CopyMoveFileHandlerTest {
 
   @Test
   fun validateZimFileCanCopyOrMoveShouldReturnFalseWhenDetectingAndCanNotWrite4GBFiles() =
-    runTest {
+    runBlocking {
       prepareFileSystemAndFileForMockk(fileSystemState = DetectingFileSystem)
       // check when detecting the fileSystem
       assertFalse(fileHandler.validateZimFileCanCopyOrMove(storageFile))
@@ -129,6 +130,7 @@ class CopyMoveFileHandlerTest {
   @Test
   fun validateZimFileCanCopyOrMoveShouldReturnFalseWhenDetectingFileSystem() = runTest {
     every { fileHandler.isBookLessThan4GB() } returns true
+    // every { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() } just Runs
     coEvery { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() } just Runs
     prepareFileSystemAndFileForMockk(fileSystemState = DetectingFileSystem)
 
@@ -139,7 +141,7 @@ class CopyMoveFileHandlerTest {
   }
 
   @Test
-  fun validateZimFileCanCopyOrMoveShouldReturnFalseWhenCannotWrite4GbFile() = runTest {
+  fun validateZimFileCanCopyOrMoveShouldReturnFalseWhenCannotWrite4GbFile() = runBlocking {
     every { fileHandler.isBookLessThan4GB() } returns true
     every { fileHandler.showCopyMoveDialog() } just Runs
     every {
@@ -225,7 +227,7 @@ class CopyMoveFileHandlerTest {
   }
 
   @Test
-  fun shouldNotShowStorageConfigureDialogWhenThereIsOnlyInternalAvailable() = runTest {
+  fun shouldNotShowStorageConfigureDialogWhenThereIsOnlyInternalAvailable() = runBlocking {
     fileHandler = spyk(fileHandler)
     every { sharedPreferenceUtil.shouldShowStorageSelectionDialog } returns true
     every { fileHandler.storageDeviceList } returns listOf(mockk())
