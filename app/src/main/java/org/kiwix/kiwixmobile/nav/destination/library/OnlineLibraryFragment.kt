@@ -47,12 +47,14 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import eu.mhutti1.utils.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import eu.mhutti1.utils.storage.StorageSelectDialog
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.string
@@ -123,7 +125,12 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   private val libraryAdapter: LibraryAdapter by lazy {
     LibraryAdapter(
-      LibraryDelegate.BookDelegate(bookUtils, ::onBookItemClick, availableSpaceCalculator),
+      LibraryDelegate.BookDelegate(
+        bookUtils,
+        ::onBookItemClick,
+        availableSpaceCalculator,
+        lifecycleScope
+      ),
       LibraryDelegate.DownloadDelegate(
         {
           if (it.currentDownloadState == Status.FAILED) {
@@ -322,7 +329,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   override fun onDestroyView() {
     super.onDestroyView()
-    availableSpaceCalculator.dispose()
     fragmentDestinationDownloadBinding?.libraryList?.adapter = null
     fragmentDestinationDownloadBinding = null
   }
@@ -520,58 +526,60 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   @Suppress("NestedBlockDepth")
   private fun onBookItemClick(item: LibraryListItem.BookItem) {
-    if (checkExternalStorageWritePermission()) {
-      downloadBookItem = item
-      if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
-        when {
-          isNotConnected -> {
-            noInternetSnackbar()
-            return
-          }
-
-          noWifiWithWifiOnlyPreferenceSet -> {
-            dialogShower.show(WifiOnly, {
-              sharedPreferenceUtil.putPrefWifiOnly(false)
-              clickOnBookItem()
-            })
-            return
-          }
-
-          else -> if (sharedPreferenceUtil.showStorageOption) {
-            // Show the storage selection dialog for configuration if there is an SD card available.
-            if (storageDeviceList.size > 1) {
-              showStorageSelectDialog()
-            } else {
-              // If only internal storage is available, proceed with the ZIM file download directly.
-              // Displaying a configuration dialog is unnecessary in this case.
-              sharedPreferenceUtil.showStorageOption = false
-              onBookItemClick(item)
+    lifecycleScope.launch {
+      if (checkExternalStorageWritePermission()) {
+        downloadBookItem = item
+        if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
+          when {
+            isNotConnected -> {
+              noInternetSnackbar()
+              return@launch
             }
-          } else if (!requireActivity().isManageExternalStoragePermissionGranted(
-              sharedPreferenceUtil
-            )
-          ) {
-            showManageExternalStoragePermissionDialog()
-          } else {
-            availableSpaceCalculator.hasAvailableSpaceFor(
-              item,
-              { downloadFile() },
-              {
-                fragmentDestinationDownloadBinding?.libraryList?.snack(
-                  """ 
+
+            noWifiWithWifiOnlyPreferenceSet -> {
+              dialogShower.show(WifiOnly, {
+                sharedPreferenceUtil.putPrefWifiOnly(false)
+                clickOnBookItem()
+              })
+              return@launch
+            }
+
+            else -> if (sharedPreferenceUtil.showStorageOption) {
+              // Show the storage selection dialog for configuration if there is an SD card available.
+              if (storageDeviceList.size > 1) {
+                showStorageSelectDialog()
+              } else {
+                // If only internal storage is available, proceed with the ZIM file download directly.
+                // Displaying a configuration dialog is unnecessary in this case.
+                sharedPreferenceUtil.showStorageOption = false
+                onBookItemClick(item)
+              }
+            } else if (!requireActivity().isManageExternalStoragePermissionGranted(
+                sharedPreferenceUtil
+              )
+            ) {
+              showManageExternalStoragePermissionDialog()
+            } else {
+              availableSpaceCalculator.hasAvailableSpaceFor(
+                item,
+                { downloadFile() },
+                {
+                  fragmentDestinationDownloadBinding?.libraryList?.snack(
+                    """ 
                 ${getString(string.download_no_space)}
                 ${getString(string.space_available)} $it
-                  """.trimIndent(),
-                  requireActivity().findViewById(R.id.bottom_nav_view),
-                  string.download_change_storage,
-                  ::showStorageSelectDialog
-                )
-              }
-            )
+                    """.trimIndent(),
+                    requireActivity().findViewById(R.id.bottom_nav_view),
+                    string.download_change_storage,
+                    ::showStorageSelectDialog
+                  )
+                }
+              )
+            }
           }
+        } else {
+          requestNotificationPermission()
         }
-      } else {
-        requestNotificationPermission()
       }
     }
   }

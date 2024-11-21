@@ -29,11 +29,10 @@ fun File.isFileExist(): Boolean = runBlocking {
   }
 }
 
-fun File.freeSpace(): Long = runBlocking {
+suspend fun File.freeSpace(): Long =
   withContext(Dispatchers.IO) {
     freeSpace
   }
-}
 
 fun File.totalSpace(): Long = runBlocking {
   withContext(Dispatchers.IO) {
