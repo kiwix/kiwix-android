@@ -128,19 +128,18 @@ class CopyMoveFileHandlerTest {
     }
 
   @Test
-  fun validateZimFileCanCopyOrMoveShouldReturnFalseWhenDetectingFileSystem() =
-    runTest {
-      every { fileHandler.isBookLessThan4GB() } returns true
-      prepareFileSystemAndFileForMockk(fileSystemState = DetectingFileSystem)
+  fun validateZimFileCanCopyOrMoveShouldReturnFalseWhenDetectingFileSystem() = runTest {
+    every { fileHandler.isBookLessThan4GB() } returns true
+    prepareFileSystemAndFileForMockk(fileSystemState = DetectingFileSystem)
 
-      val result = fileHandler.validateZimFileCanCopyOrMove(storageFile)
+    val result = fileHandler.validateZimFileCanCopyOrMove(storageFile)
 
-      assertFalse(result)
-      coVerify { fileHandler.handleDetectingFileSystemState() }
-    }
+    assertFalse(result)
+    coVerify { fileHandler.handleDetectingFileSystemState() }
+  }
 
   @Test
-  fun validateZimFileCanCopyOrMoveShouldReturnFalseWhenCannotWrite4GbFile() = runTest {
+  fun validateZimFileCanCopyOrMoveShouldReturnFalseWhenCannotWrite4GbFile() = runBlocking {
     every { fileHandler.isBookLessThan4GB() } returns true
     every { fileHandler.showCopyMoveDialog() } just Runs
     every {
