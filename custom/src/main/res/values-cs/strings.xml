@@ -5,5 +5,5 @@
 -->
 <resources>
   <string name="retry">Zkusit znovu</string>
-  <string name="invalid_installation">Neplatná instalace. Stáhněte si prosím Zim.\nZkontrolujte, zda je zapnuto WiFi a zda máte v úložišti dostatek místa</string>
+  <string name="invalid_installation" fuzzy="true">Neplatná instalace. Stáhněte si prosím Zim.\nZkontrolujte, zda je zapnuto WiFi a zda máte v úložišti dostatek místa</string>
 </resources>

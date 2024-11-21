@@ -8,6 +8,6 @@
   <string name="cannot_open_file" fuzzy="true">Imeshindwa kufungua faili\nTafadhali jaribu kutafuta faili hii katika Kichupo cha Kifaa cha Maktaba yako</string>
   <string name="send_files_title">Tuma Faili</string>
   <string name="receive_files_title">Pokea Faili</string>
-  <string name="no_app_found_to_open">Hakuna programu iliyopatikana ya kuchagua faili ya zim!</string>
-  <string name="select_zim_file">Chagua faili ya zim kusoma</string>
+  <string name="no_app_found_to_open" fuzzy="true">Hakuna programu iliyopatikana ya kuchagua faili ya zim!</string>
+  <string name="select_zim_file" fuzzy="true">Chagua faili ya zim kusoma</string>
 </resources>

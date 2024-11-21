@@ -93,6 +93,6 @@
   <string name="other_languages">Бусд келәр</string>
   <string name="crash_title">Нә… Эвго болва</string>
   <string name="crash_checkbox_language">Тана Келнә Тохрлһ</string>
-  <string name="custom_download_error_message_for_authentication_failed">Zim файлыг татҗ авч чадснго, програмиг Play store-ас дәкн суулһҗ үзтн.</string>
+  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">Zim файлыг татҗ авч чадснго, програмиг Play store-ас дәкн суулһҗ үзтн.</string>
   <string name="allow">Зөвшәрх</string>
 </resources>

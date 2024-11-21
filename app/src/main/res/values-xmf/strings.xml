@@ -8,6 +8,6 @@
   <string name="cannot_open_file" fuzzy="true">ფაილიშ გონწყუმაქ ვემიხუჯინჷ.\nქორთხინთ, ათე ფაილი დოგორათ თქვან მონწყილიბაშ ფაილეფიშ ბიბლიოთეკას</string>
   <string name="send_files_title">ფაილეფიშ ჯღონუა</string>
   <string name="receive_files_title">ფაილეფიშ მეღება</string>
-  <string name="no_app_found_to_open">ვეგორჷ აპლიკაციაქ ZIM-ფაილიშ გიშაგორალო!</string>
-  <string name="select_zim_file">ოკითხირალო გეგშაგორიათ ZIM-ფაილი</string>
+  <string name="no_app_found_to_open" fuzzy="true">ვეგორჷ აპლიკაციაქ ZIM-ფაილიშ გიშაგორალო!</string>
+  <string name="select_zim_file" fuzzy="true">ოკითხირალო გეგშაგორიათ ZIM-ფაილი</string>
 </resources>

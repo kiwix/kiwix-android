@@ -53,8 +53,8 @@
   <string name="server_started_message">Tyá adresi IP oyo na navigateur na yo mpo na kokɔta na serveur %s</string>
   <string name="share_host_address">Kabola URL na nzela ya ba applications misusu</string>
   <string name="error_file_not_found">Mabunga: Fisyé ZIM oyo oponi ezwami te.</string>
-  <string name="unable_to_read_zim_file">Epesameli nzela te ya kotanga fisyé ZIM oyo!</string>
-  <string name="zim_not_opened">Ekoki te kofungola fisyé ZIM</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">Epesameli nzela te ya kotanga fisyé ZIM oyo!</string>
+  <string name="zim_not_opened" fuzzy="true">Ekoki te kofungola fisyé ZIM</string>
   <string name="error_file_invalid">Libunga: Fisyé oyo oponi ezali fisyé ZIM ya malamu te.</string>
   <string name="error_article_url_not_found">Libunga: Kokɔtisa lisolo (Url: %1$s ) elongi te.</string>
   <string name="pref_display_title">Kolakisa</string>
@@ -69,10 +69,10 @@
   <string name="pref_credits_title">Matondi</string>
   <string name="tts_lang_not_supported">Elobeli ya lokasa oyo esimbami te. Ekoki kozala ete lisolo yango etángami malamu te.</string>
   <string name="no_reader_application_installed">Nakokaki te komona application ya lolenge oyo ya fisyé</string>
-  <string name="no_email_application_installed">Esengeli ko kotisa moteki nsango email to tindela biso email na %1s</string>
+  <string name="no_email_application_installed">Esengeli kotisa moteki nsango email</string>
   <string name="no_section_info">Mitó ya makambo ezwamaki te</string>
   <string name="request_storage">Mpo na kozwa makambo oyo ezali na libanda ya internet, tosengeli kozwa esika na yo ya kobomba biloko</string>
-  <string name="request_write_storage">Kozwa ba fisyé ya ZIM esengeli ko zala na ndingisa esika ya ebombelo na yo</string>
+  <string name="request_write_storage" fuzzy="true">Kozwa ba fisyé ya ZIM esengeli ko zala na ndingisa esika ya ebombelo na yo</string>
   <string name="clear_recent_and_tabs_history_dialog">Ozali na elikya ete olingi kolongola lisolo ya bolukiluki na yo mpe kozongisa makambo nyonso ya mosala?</string>
   <string name="delete_recent_search_item">Kolongola eloko oyo?</string>
   <string name="pref_clear_all_history_title">Longola makambo ya kala</string>
@@ -108,7 +108,7 @@
   <string name="local_zims">Esaleli</string>
   <string name="remote_zims">Na Internet</string>
   <string name="library">Ebómbelo múku</string>
-  <string name="delete_zim_body">Fisyé ZIM oyo elandi ekolongolama:\n\n%s</string>
+  <string name="delete_zim_body" fuzzy="true">Fisyé ZIM oyo elandi ekolongolama:\n\n%s</string>
   <string name="delete_zims_toast">Ba fisyé elongolamaki</string>
   <string name="no_files_here">Ba fisyé ezali te awa</string>
   <string name="download_no_space">Esika ekoki te mpo na kozwa yango.</string>

@@ -51,8 +51,8 @@
   <string name="server_started_message">سرور تک رسائی حاصل کرنے کے لیے اس آئی پی کو اپنے براؤزر میں درج کریں %s</string>
   <string name="share_host_address">دوسرے ایپلیکیشنز کے ذریعے یو آر ایل شیئر کریں۔</string>
   <string name="error_file_not_found">خرابی: منتخب کردہ ZIM فائل نہیں مل سکی۔</string>
-  <string name="unable_to_read_zim_file">اس zim فائل کو پڑھنے سے قاصر!</string>
-  <string name="zim_not_opened">zim فائل کو کھولنے سے قاصر</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">اس zim فائل کو پڑھنے سے قاصر!</string>
+  <string name="zim_not_opened" fuzzy="true">zim فائل کو کھولنے سے قاصر</string>
   <string name="error_file_invalid">خرابی: منتخب فائل ایک درست ZIM فائل نہیں ہے۔</string>
   <string name="error_article_url_not_found">خرابی: مضمون لوڈ کرنا (Url: %1$s ) ناکام ہو گیا۔</string>
   <string name="pref_display_title">تظاہرہ</string>

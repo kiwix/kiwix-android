@@ -56,8 +56,8 @@
   <string name="server_started_message">Dí únyí kí ip dë tefú ẹnwú ķẹdú búraúze atodú kẹneke lotígbo ẹńwú agbúćhẹ dẹ %s</string>
   <string name="share_host_address">Kpí URL pkáyí ápplícásiọn omúnẹ</string>
   <string name="error_file_not_found">Faìlú: ZIM mádú málíñ úgbodúń</string>
-  <string name="unable_to_read_zim_file">Ineke gbi Zim file no</string>
-  <string name="zim_not_opened">Unekén bi Zim filuñ</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">Ineke gbi Zim file no</string>
+  <string name="zim_not_opened" fuzzy="true">Unekén bi Zim filuñ</string>
   <string name="error_file_invalid">Inyọno: File kẹtu chi Zim file Kuma dẹn</string>
   <string name="pref_display_title">Dutẹ</string>
   <string name="pref_info_title">Inabali</string>
@@ -99,7 +99,7 @@
   <string name="pref_extras">Ẹbọ</string>
   <string name="search_widget_text">Fi kiwix</string>
   <string name="speech_prompt_text">Kọla Kẹ tene %s</string>
-  <string name="delete_zim_body">Ami Zim file Anya kpalu\n\n%s</string>
+  <string name="delete_zim_body" fuzzy="true">Ami Zim file Anya kpalu\n\n%s</string>
   <string name="no_files_here">File du demin</string>
   <string name="download_no_space">É ñwa dé kua download ñwu</string>
   <string name="download">Downloadu</string>

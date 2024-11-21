@@ -9,6 +9,6 @@
   <string name="cannot_open_file">פתיחת הקובץ נכשלה\nנא לנסות לחפש את הקובץ הזה בספרייה שלך</string>
   <string name="send_files_title">שליחת קבצים</string>
   <string name="receive_files_title">קבלת קבצים</string>
-  <string name="no_app_found_to_open">לא נמצא יישום שיכול לבחור קובץ zim!</string>
-  <string name="select_zim_file">נא לבחור איזה קובץ zim לקרוא</string>
+  <string name="no_app_found_to_open">לא נמצא יישום שיכול לבחור קובץ ZIM!</string>
+  <string name="select_zim_file">נא לבחור איזה קובץ ZIM לקרוא</string>
 </resources>

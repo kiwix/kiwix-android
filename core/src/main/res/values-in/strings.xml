@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Akmaie Ajam
 * Arifin.wijaya
 * Arifpedia
 * Esiahaan
@@ -24,16 +25,22 @@
   <string name="menu_read_aloud">Bacakan</string>
   <string name="menu_read_aloud_stop">Hentikan pembacaan</string>
   <string name="menu_support_kiwix">Dukung Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">Dukung %s</string>
+  <string name="menu_about_app">Tentang %s app</string>
+  <string name="menu_wifi_hotspot">Hotspot WiFi</string>
   <string name="save_media">Simpan Media</string>
   <string name="save_media_error">Terjadi kesalahan saat menyimpan media!</string>
-  <string name="save_media_saved" fuzzy="true">Simpan media sebagai %s pada Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Media tersimpan sebagai %s ke Downloads/org.kiwix…/</string>
   <string name="search_label">Cari</string>
+  <string name="searched_list">Daftar yang telah dicari</string>
   <string name="choose_file">Pilih Berkas Konten (*.zim)</string>
   <string name="open_in_new_tab">Buka pranala di tab baru?</string>
   <string name="hotspot_service_channel_name">Saluran Servis Hotspot</string>
   <string name="hotspot_failed_title">Hotspot gagal dihidupkan</string>
   <string name="hotspot_failed_message">Tampaknya hotspot Anda telah hidup. Silakan memutuskan koneksi hotspot wifi Anda untuk lanjut.</string>
   <string name="go_to_wifi_settings_label">Ke pengaturan WIFI</string>
+  <string name="connection_refused">Koneksi ditolak.</string>
+  <string name="hotspot_running">Hotspot Berjalan</string>
   <string name="no_books_selected_toast_message">Silakan pilih buku terlebih dahulu</string>
   <string name="server_failed_message">Server tidak dapat dihidupkan. Silakan menyalakan hotspot Anda.</string>
   <string name="server_failed_toast_message">Server tidak dapat dinyalakan.</string>
@@ -41,16 +48,24 @@
   <string name="server_stopped_successfully_toast_message">Server berhasil dimatikan.</string>
   <string name="hotspot_turned_on">Hotspot sudah menyala.</string>
   <string name="hotspot_details_message">Berikut adalah detil hotspot lokal Anda.\nSSID : %1$s\nPass : %2$s</string>
+  <string name="server_textview_default_message">Pilih file yang ingin Anda host di server</string>
   <string name="progress_dialog_starting_server">Menyalakan server</string>
+  <string name="hotspot_dialog_title">Petunjuk untuk hosting buku</string>
   <string name="wifi_dialog_title">Koneksi Wifi telah terdeteksi</string>
   <string name="wifi_dialog_body">Untuk dapat melihat buku dengan alat elektronik lainnya, pastikan semua alat elektronik Anda terhubung ke jaringan Wifi yang sama.</string>
   <string name="hotspot_dialog_neutral_button">LANJUT</string>
+  <string name="hotspot_channel_description">Pembaruan tentang status hotspot/server Anda.</string>
+  <string name="hotspot_notification_content_title">Hotspot Kiwix</string>
   <string name="start_server_label">Nyalakan server</string>
   <string name="stop_server_label">Matikan server</string>
+  <string name="error_server_already_running">Server sudah berjalan. Tolong matikan dan coba lagi.</string>
   <string name="error_ip_address_not_found">Tak dapat menemukan alamat IP.</string>
   <string name="server_started_message">Masukkan alamat IP ini ke browser Anda untuk mengakses server %s</string>
+  <string name="qr_code">Kode QR yang Dirender</string>
+  <string name="share_host_address">Bagikan URL melalui aplikasi lain</string>
   <string name="error_file_not_found">Galat: Berkas ZIM yang dipilih tidak ditemukan.</string>
-  <string name="zim_not_opened">Zim file tidak dapat dibuka</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">Tidak bisa membaca berkas zim ini!</string>
+  <string name="zim_not_opened" fuzzy="true">Zim file tidak dapat dibuka</string>
   <string name="error_file_invalid">Galat: Berkas yang dipilih bukan berkas ZIM yang sah.</string>
   <string name="error_article_url_not_found">Galat: Pemuatan artikel (Url: %1$s) gagal.</string>
   <string name="pref_display_title">Tampilan</string>
@@ -64,15 +79,21 @@
   <string name="pref_language_chooser">Pilih bahasa</string>
   <string name="pref_credits">Kontributor dan Lisensi</string>
   <string name="pref_credits_title">Kredit</string>
-  <string name="tts_lang_not_supported" fuzzy="true">Bahasa halaman ini tidak didukung, atau data bahasa yang tepat tidak dipasang. Artikel mungkin tidak dapat dibaca dengan benar.</string>
+  <string name="tts_lang_not_supported">Bahasa halaman ini tidak didukung. Artikel mungkin tidak dapat dibaca dengan benar.</string>
   <string name="no_reader_application_installed">Tidak dapat menemukan aplikasi yang terpasang untuk jenis berkas ini</string>
+  <string name="no_email_application_installed">Harap instal klien email</string>
   <string name="no_section_info">Tidak Ada Judul Konten yang Ditemukan</string>
   <string name="request_storage">Untuk mengakses konten luring, kami memerlukan akses ke penyimpanan Anda</string>
   <string name="clear_recent_and_tabs_history_dialog">Apakah Anda yakin ingin menghapus riwayat penelusuran dan menutup semua tab yang aktif?</string>
   <string name="delete_recent_search_item">Hapus item ini?</string>
   <string name="pref_clear_all_history_title">Hapus riwayat</string>
   <string name="pref_clear_all_history_summary">Hapus riwayat penelusuran dan tab terakhir</string>
+  <string name="pref_notes">Catatan</string>
   <string name="pref_permission">Izin</string>
+  <string name="pref_import_bookmark_title">Impor Penanda</string>
+  <string name="pref_import_bookmark_summary">Impor penanda yang tersimpan</string>
+  <string name="pref_export_bookmark_title">Ekspor Penanda</string>
+  <string name="pref_export_bookmark_summary">Ekspor semua penanda tersimpan</string>
   <string name="all_history_cleared">Semua Markah Telah Dibersihkan</string>
   <string name="pref_clear_all_bookmarks_title">Hapus markah buku</string>
   <string name="clear_all_history_dialog_title">Bersihkan Semua Riwayat?</string>
@@ -104,7 +125,7 @@
   <string name="local_zims">Perangkat</string>
   <string name="remote_zims">Daring</string>
   <string name="library">Perpustakaan</string>
-  <string name="delete_zim_body">Zim file berikut akan dihapus:\n\n%s</string>
+  <string name="delete_zim_body" fuzzy="true">Zim file berikut akan dihapus:\n\n%s</string>
   <string name="delete_zims_toast">Berkas telah dihapus</string>
   <string name="no_files_here">Tidak ada berkas disini</string>
   <string name="download_no_space">Tidak tersedia cukup ruang data untuk mengunduh.</string>
@@ -122,7 +143,7 @@
   <string name="help_7">Mereka tersedia sebagai berkas ZIM. Ada banyak dari mereka:</string>
   <string name="help_8">• Wikipedia tersedia terpisah untuk setiap bahasa</string>
   <string name="help_9">• Konten lain seperti Wikileaks atau Wikisource juga tersedia</string>
-  <string name="help_10">Anda dapat mengunduh berkas ZIM yang diinginkan dari dalam aplikasi atau mengunduh berkas yang Anda inginkan dari komputer Desktop sebelum memindahkannya ke kartu SD Anda.</string>
+  <string name="help_10" fuzzy="true">Anda dapat mengunduh berkas ZIM yang diinginkan dari dalam aplikasi atau mengunduh berkas yang Anda inginkan dari komputer Desktop sebelum memindahkannya ke kartu SD Anda.</string>
   <string name="help_11">Berkas ZIM yang diunduh dari dalam apl terletak di direktori penyimpanan eksternal didalam folder Kiwix.</string>
   <string name="pref_storage">Penyimpanan</string>
   <string name="pref_current_folder">Folder Saat Ini</string>
@@ -137,7 +158,7 @@
   <string name="confirm_stop_download_title">Hentikan unduhan?</string>
   <string name="confirm_stop_download_msg">Apakah Anda yakin ingin menghentikan unduhan ini?</string>
   <string name="download_change_storage">Pemilih perangkat penyimpanan</string>
-  <string name="tts_not_enabled">Teks ke bicara tidak diaktifkan untuk berkas ZIM ini</string>
+  <string name="tts_not_enabled" fuzzy="true">Teks ke bicara tidak diaktifkan untuk berkas ZIM ini</string>
   <string name="next">Berikutnya</string>
   <string name="previous">Sebelumnya</string>
   <string name="wifi_only_title">Izinkan mengunduh konten via jaringan seluler?</string>
@@ -158,7 +179,7 @@
   <string name="your_languages">Bahasa terpilih:</string>
   <string name="other_languages">Bahasa lain:</string>
   <string name="crash_title">Yah… Ini memalukan</string>
-  <string name="crash_checkbox_zimfiles">Daftar file Zim Anda</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">Daftar file Zim Anda</string>
   <string name="crash_checkbox_logs">Log Aplikasi</string>
   <string name="crash_checkbox_device">Rincian Perangkat</string>
   <string name="crash_button_confirm">KIRIM RINCIAN</string>

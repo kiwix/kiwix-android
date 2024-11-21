@@ -8,6 +8,6 @@
   <string name="cannot_open_file" fuzzy="true">Emepeghị faịlụ\nBiko nwaa ịchọ faịlụ a na taabụ ngwaọrụ nke ọba akwụkwọ gị</string>
   <string name="send_files_title">Zipu faịlụ</string>
   <string name="receive_files_title">Nata faịlụ</string>
-  <string name="no_app_found_to_open">Ọ nweghị ngwa ahụrụ iji họrọ faịlụ zim!</string>
-  <string name="select_zim_file">Họrọ faịlụ zim ka ị gụọ</string>
+  <string name="no_app_found_to_open" fuzzy="true">Ọ nweghị ngwa ahụrụ iji họrọ faịlụ zim!</string>
+  <string name="select_zim_file" fuzzy="true">Họrọ faịlụ zim ka ị gụọ</string>
 </resources>

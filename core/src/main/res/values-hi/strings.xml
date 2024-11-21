@@ -5,6 +5,7 @@
 * Bl707
 * Innocentbunny
 * Juuz0
+* MohitMali
 * Nikhilsheth
 * Nitin1485
 * Sachinkatiyar
@@ -60,8 +61,8 @@
   <string name="server_started_message">सर्वर %s प्रयोग करने के लिए इस आईपी पते को अपने ब्राउज़र में दर्ज करें</string>
   <string name="share_host_address">अन्य एप्लिकेशन के माध्यम से यूआरएल साझा करें</string>
   <string name="error_file_not_found">त्रुटि: चुनी गयी ZIM फ़ाइल नही मिल सकी।</string>
-  <string name="unable_to_read_zim_file">इस ज़िम फ़ाइल को पढ़ने में असमर्थ!</string>
-  <string name="zim_not_opened">ज़िम फ़ाइल खोलने में असमर्थ</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">इस ज़िम फ़ाइल को पढ़ने में असमर्थ!</string>
+  <string name="zim_not_opened" fuzzy="true">ज़िम फ़ाइल खोलने में असमर्थ</string>
   <string name="error_file_invalid">त्रुटि: चुनी गयी फ़ाइल एक वैध ZIM फ़ाइल नहीं है।</string>
   <string name="error_article_url_not_found">त्रुटि: आलेख (Url:  %1$s ) लोड करना विफल रहा।</string>
   <string name="pref_display_title">प्रदर्शन</string>
@@ -77,10 +78,10 @@
   <string name="pref_credits_title">श्रेय</string>
   <string name="tts_lang_not_supported">इस पृष्ठ की भाषा समर्थित नहीं है। लेख ठीक से नहीं पढ़ा जा सकता है।</string>
   <string name="no_reader_application_installed">इस प्रकार की फ़ाइल के लिए एक इंस्टॉल किया गया एप्लिकेशन नहीं मिला</string>
-  <string name="no_email_application_installed">कृपया एक ईमेल सेवा प्रदाता स्थापित करें या हमें %1s पर ईमेल करें</string>
+  <string name="no_email_application_installed">कृपया एक ईमेल सेवा प्रदाता स्थापित करें</string>
   <string name="no_section_info">कोई सामग्री शीर्षलेख नहीं मिला</string>
   <string name="request_storage">ऑफ़लाइन सामग्री का उपयोग करने के लिए हमें आपके संग्रहण में पहुंच की आवश्यकता है</string>
-  <string name="request_write_storage">ज़िम फ़ाइलें डाउनलोड करने के लिए हमें आपके स्टोरेज तक राइट एक्सेस की आवश्यकता है</string>
+  <string name="request_write_storage" fuzzy="true">ज़िम फ़ाइलें डाउनलोड करने के लिए हमें आपके स्टोरेज तक राइट एक्सेस की आवश्यकता है</string>
   <string name="clear_recent_and_tabs_history_dialog">क्या आप वाकई अपना खोज इतिहास हटाना चाहते हैं और सभी सक्रिय टैब फिर से कायम करना चाहते हैं?</string>
   <string name="delete_recent_search_item">इस फ़ाइल को हटाएँ?</string>
   <string name="pref_clear_all_history_title">इतिहास साफ़ करें</string>
@@ -119,7 +120,7 @@
   <string name="local_zims">डिवाइस</string>
   <string name="remote_zims">ऑनलाइन</string>
   <string name="library">पुस्तकालय</string>
-  <string name="delete_zim_body">निम्न ज़िम फ़ाइल (ओं) को हटा दिया जाएगा:\n\n%s</string>
+  <string name="delete_zim_body" fuzzy="true">निम्न ज़िम फ़ाइल (ओं) को हटा दिया जाएगा:\n\n%s</string>
   <string name="delete_zims_toast">फाइल हटा दी गई</string>
   <string name="no_files_here">यहां कोई फ़ाइल नहीं</string>
   <string name="download_no_space">डाउनलोड करने के लिए अपर्याप्त स्टोरेज।</string>
@@ -137,7 +138,7 @@
   <string name="help_7">वे ZIM फाइलों के रूप में उपलब्ध हैं।उनमें से ऐसे बहुत से हैं:</string>
   <string name="help_8">• विकिपीडिया प्रत्येक भाषा के लिए अलग से उपलब्ध है</string>
   <string name="help_9">• विकिलीक्स या विकीसोर्स जैसी अन्य सामग्री भी उपलब्ध हैं</string>
-  <string name="help_10">आप या तो अपनी चुनी हुई ZIM फ़ाइलों को ऐप में डाउनलोड कर सकते हैं या जिन्हें आप चाहते हैं उन्हें सावधानीपूर्वक चुनें और ZIM फ़ाइलों को अपने SD कार्ड में स्थानांतरित करने से पहले डेस्कटॉप कंप्यूटर से डाउनलोड करें।</string>
+  <string name="help_10" fuzzy="true">आप या तो अपनी चुनी हुई ZIM फ़ाइलों को ऐप में डाउनलोड कर सकते हैं या जिन्हें आप चाहते हैं उन्हें सावधानीपूर्वक चुनें और ZIM फ़ाइलों को अपने SD कार्ड में स्थानांतरित करने से पहले डेस्कटॉप कंप्यूटर से डाउनलोड करें।</string>
   <string name="help_11">ZIM फाइलें जो इन-ऐप में डाउनलोड हैं, एक बाहरी फ़ोल्डर में स्थित हैं, जिसमें किवीक्स नामक एक फ़ोल्डर है।</string>
   <string name="pref_storage">संचयन</string>
   <string name="pref_current_folder">वर्तमान फोल्डर</string>
@@ -152,9 +153,9 @@
   <string name="confirm_stop_download_title">डाउनलोड रोकें?</string>
   <string name="confirm_stop_download_msg">क्या आप वास्तव में इस डाउनलोड को रोकना चाहते हैं?</string>
   <string name="download_change_storage">संग्रहण यंत्र चयनकर्ता</string>
-  <string name="tts_not_enabled">इस ZIM फ़ाइल के भाषण के लिए पाठ सक्षम नहीं है</string>
-  <string name="texttospeech_initialization_failed">टेक्स्ट टू स्पीच का आरंभीकरण विफल रहा। कृपया पुन: प्रयास करें</string>
-  <string name="texttospeech_error">टेक्स्ट टू स्पीच में अप्रत्याशित त्रुटि। कृपया पुन: प्रयास करें</string>
+  <string name="tts_not_enabled" fuzzy="true">इस ZIM फ़ाइल के भाषण के लिए पाठ सक्षम नहीं है</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">टेक्स्ट टू स्पीच का आरंभीकरण विफल रहा। कृपया पुन: प्रयास करें</string>
+  <string name="texttospeech_error" fuzzy="true">टेक्स्ट टू स्पीच में अप्रत्याशित त्रुटि। कृपया पुन: प्रयास करें</string>
   <string name="next">अगला</string>
   <string name="previous">पिछला</string>
   <string name="wifi_only_title">मोबाइल नेटवर्क के जरिए सामग्री डाउनलोड करने की अनुमति दें?</string>
@@ -178,7 +179,7 @@
   <string name="crash_title">खैर, यह शर्मनाक है</string>
   <string name="crash_description">ऐसा लगता है जैसे हम दुर्घटनाग्रस्त हो गए।\n\nक्या आप निम्नलिखित जानकारी भेजकर इस समस्या को ठीक करने में हमारी मदद करना चाहेंगे?</string>
   <string name="crash_checkbox_language">अधिक भाषा सेटिंग्स</string>
-  <string name="crash_checkbox_zimfiles">आपकी ZIM फ़ाइलों की एक सूची</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">आपकी ZIM फ़ाइलों की एक सूची</string>
   <string name="crash_checkbox_exception">दुर्घटना का विवरण</string>
   <string name="crash_checkbox_logs">आवेदन डेटा</string>
   <string name="crash_checkbox_device">डिवाइस विवरण</string>
@@ -215,7 +216,7 @@
   <string name="complete">पूर्ण</string>
   <string name="paused_state">रोके गए</string>
   <string name="failed_state">विफल: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed">ज़िम फ़ाइल डाउनलोड नहीं की जा सकी. कृपया प्ले स्टोर से एप्लिकेशन को पुनः इंस्टॉल करने का प्रयास करें।</string>
+  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">ज़िम फ़ाइल डाउनलोड नहीं की जा सकी. कृपया प्ले स्टोर से एप्लिकेशन को पुनः इंस्टॉल करने का प्रयास करें।</string>
   <string name="save">सहेजें</string>
   <string name="note">टिप्पणी</string>
   <string name="wiki_article_title">विकी आलेख शीर्षक</string>
@@ -240,7 +241,7 @@
   <string name="connection_failed">कनेक्शन विफल</string>
   <string name="permission_rationale_location">ऐप को सहकर्मी उपकरणों का पता लगाने की अनुमति देने के लिए एंड्रॉइड द्वारा स्थान अनुमति की आवश्यकता होती है</string>
   <string name="permission_refused_location">स्थान अनुमतियों के बिना सहकर्मी उपकरणों का पता नहीं लगाया जा सकता</string>
-  <string name="permission_refused_storage">भंडारण अनुमति के बिना ZIM फ़ाइलों तक नहीं पहुंच सकते</string>
+  <string name="permission_refused_storage" fuzzy="true">भंडारण अनुमति के बिना ZIM फ़ाइलों तक नहीं पहुंच सकते</string>
   <string name="request_enable_location">साथियों का पता लगाने की अनुमति देने के लिए स्थान सक्षम करें</string>
   <string name="discovery_needs_location">स्थान सेवाओं के बिना साथियों की खोज नहीं की जा सकती</string>
   <string name="request_enable_wifi">सिस्टम सेटिंग्स से वाईफाई पी2पी सक्षम करें</string>
@@ -296,9 +297,9 @@
   <string name="open_drawer">दराज खोलें</string>
   <string name="close_drawer">दराज बंद करें</string>
   <string name="how_to_update_content">सामग्री कैसे अद्यतन करें?</string>
-  <string name="update_content_description">सामग्री (एक ZIM फ़ाइल) को अद्यतन करने के लिए आपको इसी सामग्री का पूर्ण नवीनतम संस्करण डाउनलोड करना होगा। आप इसे डाउनलोड अनुभाग के माध्यम से कर सकते हैं।</string>
+  <string name="update_content_description" fuzzy="true">सामग्री (एक ZIM फ़ाइल) को अद्यतन करने के लिए आपको इसी सामग्री का पूर्ण नवीनतम संस्करण डाउनलोड करना होगा। आप इसे डाउनलोड अनुभाग के माध्यम से कर सकते हैं।</string>
   <string name="all_files_permission_needed">सभी फ़ाइलों की अनुमति आवश्यक है</string>
-  <string name="all_files_permission_needed_message">पूरे डिवाइस में सभी ZIM फ़ाइलों तक पहुँचने के लिए हमारे पास सभी फ़ाइलों की अनुमति होनी चाहिए</string>
+  <string name="all_files_permission_needed_message" fuzzy="true">पूरे डिवाइस में सभी ZIM फ़ाइलों तक पहुँचने के लिए हमारे पास सभी फ़ाइलों की अनुमति होनी चाहिए</string>
   <string name="allowed">अनुमतित</string>
   <string name="not_allowed">अनुमति नहीं है</string>
   <string name="denied_internet_permission_message">कृपया सामग्री डाउनलोड करने के लिए वाईफाई सक्षम करें</string>
@@ -317,7 +318,7 @@
   <string name="download_tts_language_message">कृपया डाउनलोड बटन पर क्लिक करें। यह स्वचालित रूप से आवश्यक भाषा डाउनलोड कर लेगा.</string>
   <string name="external_link_copied_message">बाहरी लिंक क्लिपबोर्ड पर कॉपी किया गया</string>
   <string name="read_aloud_service_channel_name">सर्विस चैनल को जोर से पढ़ें</string>
-  <string name="read_aloud_channel_description">पाठ से वाक् नियंत्रण.</string>
+  <string name="read_aloud_channel_description" fuzzy="true">पाठ से वाक् नियंत्रण.</string>
   <string name="read_aloud_running">जोर से पढ़ना चल रहा है</string>
   <string name="backward_history">पीछे का इतिहास</string>
   <string name="forward_history">आगे का इतिहास</string>

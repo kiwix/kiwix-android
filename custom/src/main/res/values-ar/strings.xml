@@ -4,5 +4,5 @@
 -->
 <resources>
   <string name="retry">إعادة المحاولة</string>
-  <string name="invalid_installation">تثبيت غير صالح؛ يُرجَى تنزيل Zim.\nتأكد من تشغيل واي فاي وأن لديك مساحة تخزين كافية</string>
+  <string name="invalid_installation" fuzzy="true">تثبيت غير صالح؛ يُرجَى تنزيل Zim.\nتأكد من تشغيل واي فاي وأن لديك مساحة تخزين كافية</string>
 </resources>

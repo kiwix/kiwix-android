@@ -51,7 +51,7 @@
   <string name="stop_server_label">Τερματισμός διακομιστή</string>
   <string name="server_started_message">Εισάγετε την διεύθυνση ip στον περιηγητής σας, για πρόσβαση στον διακομιστή %s</string>
   <string name="error_file_not_found">Σφάλμα: Το επιλεγμένο ZIM αρχείο δεν μπόρεσε να βρεθεί.</string>
-  <string name="zim_not_opened">Δεν μπόρεσε να ανοιχθεί το αρχείο zim</string>
+  <string name="zim_not_opened" fuzzy="true">Δεν μπόρεσε να ανοιχθεί το αρχείο zim</string>
   <string name="error_file_invalid">Σφάλμα: Το επιλεγμένο αρχείο δεν είναι έγκυρο αρχείο ZIM.</string>
   <string name="error_article_url_not_found">Σφάλμα:το Ανέβασμα του λήμματος (Url: %1$s) απέτυχε.</string>
   <string name="pref_display_title">Εμφάνιση</string>
@@ -125,7 +125,7 @@
   <string name="confirm_stop_download_title">Σταμάτημα λήψης;</string>
   <string name="confirm_stop_download_msg">Είστε σίγουροι ότι θέλετε να σταματήσετε αυτή τη λήψη;</string>
   <string name="download_change_storage">Επιλογέας συσκευής αποθηκευτικού χώρου</string>
-  <string name="tts_not_enabled">Το κείμενο σε ομιλία δεν είναι ενεργοποιημένο για αυτό το αρχείο ZIM</string>
+  <string name="tts_not_enabled" fuzzy="true">Το κείμενο σε ομιλία δεν είναι ενεργοποιημένο για αυτό το αρχείο ZIM</string>
   <string name="next">Επόμενο</string>
   <string name="previous">Προηγούμενο</string>
   <string name="wifi_only_title">Να επιτρέπεται η λήψη περιεχομένου μέσω δικτύου κινητής τηλεφωνίας;</string>

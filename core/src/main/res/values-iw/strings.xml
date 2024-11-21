@@ -62,8 +62,8 @@
   <string name="qr_code">קוד QR מתוצג</string>
   <string name="share_host_address">שיתוף URL דרך יישומים אחרים</string>
   <string name="error_file_not_found">שגיאה: קובץ ה־ZIM שנבחר לא נמצא.</string>
-  <string name="unable_to_read_zim_file">לא ניתן לקרוא מקובץ ה־zim הזה!</string>
-  <string name="zim_not_opened">לא ניתן לפתוח את קובץ ה־zim</string>
+  <string name="unable_to_read_zim_file">לא ניתן לקרוא מקובץ ה־ZIM הזה!</string>
+  <string name="zim_not_opened">לא ניתן לפתוח את קובץ ה־ZIM</string>
   <string name="error_file_invalid">שגיאה: הקובץ שנבחר אינו קובץ ZIM תקין.</string>
   <string name="error_article_url_not_found">שגיאה: טעינת הערך נכשלה (כתובת: %1$s).</string>
   <string name="pref_display_title">תצוגה</string>
@@ -79,11 +79,11 @@
   <string name="pref_credits_title">תודות</string>
   <string name="tts_lang_not_supported">השפה של הדף הזה אינה נתמכת. ייתכן שהערך לא יוקרא כמו שצריך.</string>
   <string name="no_reader_application_installed">לא נמצאה אפליקציה מותקנת עבור סוג הקובץ הזה</string>
-  <string name="no_email_application_installed">נא להתקין ספק שירות דוא״ל או לשלוח לנו הודעה אל %1s בדוא״ל</string>
+  <string name="no_email_application_installed">נא להתקין לקוח דוא״ל</string>
   <string name="no_app_found_to_select_bookmark_file">לא נמצא יישום לבחירת קובץ סימניות</string>
   <string name="no_section_info">לא נמצאו כותרות תוכן</string>
   <string name="request_storage">כדי לגשת לתכנים לא־מקוונים אנחנו צריכים גישה לאחסון שלך</string>
-  <string name="request_write_storage">כדי להוריד קובצי zim, אנחנו זקוקים להרשאת גישה לאחסון שלך.</string>
+  <string name="request_write_storage">כדי להוריד קובצי ZIM, אנחנו זקוקים להרשאת גישה לאחסון שלך.</string>
   <string name="clear_recent_and_tabs_history_dialog">למחוק את היסטוריית החיפוש ולאפס את כל הלשוניות הפעילות?</string>
   <string name="delete_recent_search_item">למחוק את הפריט הזה?</string>
   <string name="pref_clear_all_history_title">ניקוי ההיסטוריה</string>
@@ -127,7 +127,7 @@
   <string name="local_zims">מכשיר</string>
   <string name="remote_zims">מקוון</string>
   <string name="library">ספרייה</string>
-  <string name="delete_zim_body">קובצי ה־zim הבאים יימחקו:\n\n%s</string>
+  <string name="delete_zim_body">קובצי ה־ZIM הבאים יימחקו:\n\n%s</string>
   <string name="delete_zims_toast">הקבצים נמחקו בהצלחה</string>
   <string name="no_files_here">אין כאן קבצים</string>
   <string name="download_no_space">אין מספיק מקום להורדה.</string>
@@ -147,12 +147,13 @@
   <string name="help_7">הם זמינים כקבצי ZIM. ישנם קבצים רבים כאלו:</string>
   <string name="help_8">• ויקיפדיה זמינה באופן נפרד לכל שפה</string>
   <string name="help_9">• ישנם מקורות נוספים זמינים כגון ויקיליקס או ויקיטקסט</string>
-  <string name="help_10">באפשרותך להוריד את קובצי ה־ZIM שנבחרו מתוך היישום או לחלופין לבחור בזהירות בקובץ אחד או מספר קבצים שאתה רוצה ולהוריד ממחשב שולחני לפני העברת קובצי ה־ZIM לכרטיס ה־SD שלך.</string>
+  <string name="help_10" fuzzy="true">באפשרותך להוריד את קובצי ה־ZIM שנבחרו מתוך היישום או לחלופין לבחור בזהירות בקובץ אחד או מספר קבצים שאתה רוצה ולהוריד ממחשב שולחני לפני העברת קובצי ה־ZIM לכרטיס ה־SD שלך.</string>
   <string name="help_11">קובצי ה־ZIM המורדים דרך היישום נמצאים בספריית האחסון החיצוני בתוך תיקייה בשם Kiwix.</string>
   <string name="pref_storage">אחסון</string>
   <string name="pref_current_folder">תיקייה נוכחית</string>
   <string name="pref_storage_used">בשימוש: %s</string>
   <string name="pref_free_storage">פנוי: %s</string>
+  <string name="choose_storage_to_download_book">יש לבחור אחסון כדי להוריד את הספר</string>
   <string name="delete_zim_failed">לא הצלחנו למחוק קבצים מסוימים. עליך לנסות להשתמש במנהל קבצים במקום זאת, עמך הסליחה.</string>
   <string name="tts_pause">השהיה</string>
   <string name="tts_resume">המשך</string>
@@ -164,9 +165,9 @@
   <string name="confirm_stop_download_title">לעצור הורדה?</string>
   <string name="confirm_stop_download_msg">לעצור את ההורדה הזאת?</string>
   <string name="download_change_storage">בורר התקני אחסון</string>
-  <string name="tts_not_enabled">טקסט לדיבור אינו זמין עבור קובץ ZIM זה</string>
-  <string name="texttospeech_initialization_failed">האתחול של טקסט לדיבור נכשל. נא לנסות שוב</string>
-  <string name="texttospeech_error">שגיאה בלתי־צפויה בטקסט לדיבור. נא לנסות שוב</string>
+  <string name="tts_not_enabled" fuzzy="true">טקסט לדיבור אינו זמין עבור קובץ ZIM זה</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">האתחול של טקסט לדיבור נכשל. נא לנסות שוב</string>
+  <string name="texttospeech_error" fuzzy="true">שגיאה בלתי־צפויה בטקסט לדיבור. נא לנסות שוב</string>
   <string name="next">הבא</string>
   <string name="previous">הקודם</string>
   <string name="wifi_only_title">לאפשר הורדת תוכן דרך רשת סלולרית?</string>
@@ -190,7 +191,7 @@
   <string name="crash_title">טוב… זה מביך</string>
   <string name="crash_description">נראה שקרסנו.\n\nהאם ברצונך לעזור לנו לתקן את הבעיה הזאת באמצעות שליחת המידע הבא?</string>
   <string name="crash_checkbox_language">הגדרות השפה שלך</string>
-  <string name="crash_checkbox_zimfiles">רשימה של קובצי ה־Zim שלך</string>
+  <string name="crash_checkbox_zimfiles">רשימה של קובצי ה־ZIM שלך</string>
   <string name="crash_checkbox_exception">פרטים על הקריסה</string>
   <string name="crash_checkbox_logs">יומני היישום</string>
   <string name="crash_checkbox_device">פרטי המכשיר</string>
@@ -228,7 +229,7 @@
   <string name="complete">הושלם</string>
   <string name="paused_state">מושהה</string>
   <string name="failed_state">נכשל: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed">לא היה אפשר להוריד את קובץ ה־zim. נא לנסות להתקין את היישום מחדש מחנות ה־Play.</string>
+  <string name="custom_download_error_message_for_authentication_failed">לא היה אפשר להוריד את קובץ ה־ZIM. נא לנסות להתקין את היישום מחדש מחנות ה־Play.</string>
   <string name="save">שמירה</string>
   <string name="note">הערה</string>
   <string name="wiki_article_title">כותרת ערך בוויקי</string>
@@ -257,7 +258,7 @@
   <string name="permission_rationale_location">נדרשת הרשאת מיקום באנדרואיד כדי לאפשר ליישום לזהות מכשירים עמיתים</string>
   <string name="permission_rationale_nearby">נדרשת הרשאת מכשירים סמוכים באנדרואיד כדי לאפשר ליישום לזהות מכשירים עמיתים</string>
   <string name="permission_refused_location">לא ניתן לאתר מגשירים עמיתים ללא הרשאות מיקום</string>
-  <string name="permission_refused_storage">לא ניתן לגשת לקובצי zim ללא הרשאות אחסון</string>
+  <string name="permission_refused_storage">לא ניתן לגשת לקובצי ZIM ללא הרשאות אחסון</string>
   <string name="request_enable_location">נא להפעיל מיקום כדי לאפשר זיהוי עמיתים</string>
   <string name="discovery_needs_location">לא ניתן לזהות עמיתים ללא שירותי מיקום</string>
   <string name="request_enable_wifi">נא להפעיל P2P בווייפיי בהגדרות המערכת</string>
@@ -322,13 +323,18 @@
   <string name="preparing_file_for_copy">הכנה להעתקה או העברה</string>
   <string name="action_copy">העתקה</string>
   <string name="move">העברה</string>
-  <string name="copy_move_files_dialog_description">האם ברצונך להעתיק או להעביר את הקובץ?</string>
-  <string name="copy_file_error_message">שגיאה בהעתקת קובץ zim‏: %s.</string>
-  <string name="move_file_error_message">שגיאה בהעברת קובץ zim‏: %s.</string>
+  <string name="copying_zim_file">מתבצעת העתקת קובץ ZIM…</string>
+  <string name="moving_zim_file">מתבצעת העברת קובץ ZIM…</string>
+  <string name="copy_move_files_dialog_description">לקיוויקס דורש שקובץ ZIM יהיה בספריית נתונים משלו. האם ברצונך להעתיק או להעביר אותו לשם?</string>
+  <string name="copy_file_error_message">שגיאה בהעתקת קובץ ZIM‏: %s.</string>
+  <string name="why_copy_move_files_to_app_directory">למה להעביר או להעתיק קבצים לספרייה ציבורית של היישום?</string>
+  <string name="copy_move_files_to_app_directory_description">בשל מדיניות Google Play ב־Android 11 ומעלה, היישום שלנו אינו יכול יותר לגשת ישירות לקבצים המאוחסנים במקום אחר במכשיר שלך. כדי לאפשר לך להציג את הקבצים שבחרת, עלינו להעביר או להעתיק אותם לתיקייה מיוחדת בתוך תיקיית היישום שלנו. זה מאפשר לנו לגשת ולפתוח את הקבצים.</string>
+  <string name="choose_storage_to_copy_move_zim_file">נא לבחור אחסון כדי להעתיק או להעביר קובץ ZIM</string>
+  <string name="move_file_error_message">שגיאה בהעברת קובץ ZIM‏: %s.</string>
   <string name="how_to_update_content">איך לעדכן תוכן?</string>
-  <string name="update_content_description">כדי לעדכן תוכן (קובץ zim) עליך להוריד את הגרסה המלאה העדכנית ביותר של אותו התוכן בדיוק. ניתן לעשות זאת דרך סעיף ההורדה.</string>
+  <string name="update_content_description">כדי לעדכן תוכן (קובץ ZIM) עליך להוריד את הגרסה המלאה העדכנית ביותר של אותו התוכן בדיוק. ניתן לעשות זאת דרך סעיף ההורדה.</string>
   <string name="all_files_permission_needed">דרושים כל הרשאות הקבצים</string>
-  <string name="all_files_permission_needed_message">כדי לגשת לכל קובצי ה־zim במכשיר, אנחנו זקוקים להרשאת כל הקבצים</string>
+  <string name="all_files_permission_needed_message">כדי לגשת לכל קובצי ה־ZIM במכשיר, אנחנו זקוקים להרשאת כל הקבצים</string>
   <string name="allowed">מותר</string>
   <string name="not_allowed">אסור</string>
   <string name="denied_internet_permission_message">נא להפעיל וייפיי כדי להוריד תוכן</string>
@@ -351,7 +357,7 @@
   <string name="download_tts_language_message">נא ללחוץ על כפתור ההורדה. זה יוריד אוטומטית את השפה הדרושה.</string>
   <string name="external_link_copied_message">קישור חיצוני הועתק ללוח</string>
   <string name="read_aloud_service_channel_name">ערוץ שירות של קריאה בקול</string>
-  <string name="read_aloud_channel_description">בקרת המרת טקסט לדיבור.</string>
+  <string name="read_aloud_channel_description" fuzzy="true">בקרת המרת טקסט לדיבור.</string>
   <string name="read_aloud_running">הרצת קריאה בקול</string>
   <string name="backward_history">אחורה בהיסטוריה</string>
   <string name="forward_history">קדימה בהיסטוריה</string>

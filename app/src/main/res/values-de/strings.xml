@@ -10,6 +10,6 @@
   <string name="cannot_open_file" fuzzy="true">Konnte Datei nicht öffnen\nBitte versuchen Sie, in der Geräteregisterkarte Ihrer Bibliothek nach dieser Datei zu suchen</string>
   <string name="send_files_title">Dateien senden</string>
   <string name="receive_files_title">Dateien empfangen</string>
-  <string name="no_app_found_to_open">Keine App gefunden, um zim-Datei auszuwählen!</string>
-  <string name="select_zim_file">Zim-Datei zum Lesen auswählen</string>
+  <string name="no_app_found_to_open" fuzzy="true">Keine App gefunden, um zim-Datei auszuwählen!</string>
+  <string name="select_zim_file" fuzzy="true">Zim-Datei zum Lesen auswählen</string>
 </resources>

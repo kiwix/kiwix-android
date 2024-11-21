@@ -100,7 +100,7 @@
   <string name="help_7">Ili estas haveblaj kiel ZIM-dosieroj. Jen multe da ili:</string>
   <string name="help_8">• Vikipedio estas havebla aparte por ĉiu lingvo</string>
   <string name="help_9">• Alia enhavo, kiel Wikileaks aŭ Vikifontaro, estas havebla</string>
-  <string name="help_10">Vi povas aŭ elŝuti vian elektitajn ZIM-dosierojn per ĉi tiu aplikaĵo, aŭ zorge elekti tiu(j)n kiu(j) vi deziras kaj elŝuti ilin per surtabla komputilo, antaŭ transigi la ZIM-dosierojn per SD-karto.</string>
+  <string name="help_10" fuzzy="true">Vi povas aŭ elŝuti vian elektitajn ZIM-dosierojn per ĉi tiu aplikaĵo, aŭ zorge elekti tiu(j)n kiu(j) vi deziras kaj elŝuti ilin per surtabla komputilo, antaŭ transigi la ZIM-dosierojn per SD-karto.</string>
   <string name="help_11">ZIM-dosieroj elŝutitaj per ĉi tiu aplikaĵo estas en la dosierujo nomita Kiwix en ekstera konservejo.</string>
   <string name="pref_storage">Konservejo</string>
   <string name="pref_current_folder">Aktuala Dosierujo</string>
@@ -115,7 +115,7 @@
   <string name="confirm_stop_download_title">Haltigi elŝuton?</string>
   <string name="confirm_stop_download_msg">Ĉu vi certas ke vi volas ĉesigi ĉi tiun elŝuton?</string>
   <string name="download_change_storage">Elektilo de konservejo</string>
-  <string name="tts_not_enabled">Parolsintezo estas neebla por ĉi tiu ZIM-dosiero</string>
+  <string name="tts_not_enabled" fuzzy="true">Parolsintezo estas neebla por ĉi tiu ZIM-dosiero</string>
   <string name="next">Sekven</string>
   <string name="previous">Antaŭen</string>
   <string name="wifi_only_title">Ĉu permesi elŝutadon de enhavo per poŝaparata reto?</string>
@@ -139,7 +139,7 @@
   <string name="crash_title">Nu… Tio estas Hontinda</string>
   <string name="crash_description">Ŝajne ni fiaskis.\n\nĈu vi povas helpi la korektadon de ĉi tiu problemo per sendado de la jena informo?</string>
   <string name="crash_checkbox_language">Viaj Agordoj pri Lingvoj</string>
-  <string name="crash_checkbox_zimfiles">Listo de Viaj Zim-Dosieroj</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">Listo de Viaj Zim-Dosieroj</string>
   <string name="crash_checkbox_exception">Detaloj pri la Fiasko</string>
   <string name="crash_checkbox_logs">Protokoloj de la Aplikaĵo</string>
   <string name="crash_checkbox_device">Detaloj pri aparato</string>

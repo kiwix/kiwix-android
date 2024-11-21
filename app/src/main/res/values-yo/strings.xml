@@ -8,6 +8,6 @@
   <string name="cannot_open_file" fuzzy="true">Kuna lati ṣii faili! N! Jọwọ gbiyanju wiwa faili yii ni Taabu Ẹrọ ti Ile-ikawe rẹ</string>
   <string name="send_files_title">Firanṣẹ Awọn faili</string>
   <string name="receive_files_title">Gba Awọn faili</string>
-  <string name="no_app_found_to_open">Ko si ohun elo ti a rii lati yan faili zim!</string>
-  <string name="select_zim_file">Yan faili zim lati ka</string>
+  <string name="no_app_found_to_open" fuzzy="true">Ko si ohun elo ti a rii lati yan faili zim!</string>
+  <string name="select_zim_file" fuzzy="true">Yan faili zim lati ka</string>
 </resources>

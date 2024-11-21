@@ -15,11 +15,14 @@
   <string name="menu_read_aloud">Lexoje me zë</string>
   <string name="menu_read_aloud_stop">Ndale leximin me zë</string>
   <string name="menu_support_kiwix">Përkrahni Kiwix-in</string>
+  <string name="menu_support_kiwix_for_custom_apps">Përkrahni %s</string>
+  <string name="menu_about_app">Rreth aplikacionit %s</string>
   <string name="menu_wifi_hotspot">Hotspot WiFi</string>
   <string name="save_media">Ruajë Median</string>
   <string name="save_media_error">Ndodhi një gabim teksa provohej të ruhej media!</string>
   <string name="save_media_saved">Media u ruajt te Android/media/org.kiwix…/ si %s</string>
   <string name="search_label">Kērko</string>
+  <string name="searched_list">Lista e kërkuar</string>
   <string name="choose_file">Përzgjidhni një Kartelë Lënde  (*.zim)</string>
   <string name="open_in_new_tab">Të hapet lidhja në skedë të re?</string>
   <string name="hotspot_service_channel_name">Kanal Shërbimi Hotspot</string>
@@ -46,17 +49,20 @@
   <string name="hotspot_notification_content_title">Hotspot Kiwix</string>
   <string name="start_server_label">Nise shërbyesin</string>
   <string name="stop_server_label">Ndale shërbyesin</string>
+  <string name="error_server_already_running">Shërbyesi është tashmë në punë. Ju lutemi, fikeni dhe riprovoni.</string>
+  <string name="error_ip_address_not_found">S’u gjet adresë IP.</string>
   <string name="server_started_message">Që të hyni te shërbyesi %s, jepni këtë adresë IP te shfletuesi juaj</string>
+  <string name="qr_code">Kodi QR i vizatuar</string>
   <string name="share_host_address">Jepeni URL-në përmes aplikacionesh të tjera</string>
   <string name="error_file_not_found">Gabim: S’u gjet dot kartela ZIM e përzgjedhur.</string>
-  <string name="unable_to_read_zim_file">S’arrihet të lexohet kjo kartelë zim!</string>
-  <string name="zim_not_opened">S’arrihet të hapet kartelë zim</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">S’arrihet të lexohet kjo kartelë zim!</string>
+  <string name="zim_not_opened" fuzzy="true">S’arrihet të hapet kartelë zim</string>
   <string name="error_file_invalid">Gabim: Kartela e përzgjedhur s’është kartelë ZIM e vlefshme.</string>
   <string name="error_article_url_not_found">Gabim: Dështoi ngarkimi i artikullit (Url: %1$s).</string>
   <string name="pref_display_title">Ekran</string>
   <string name="pref_info_title">Informacione</string>
   <string name="pref_info_version">Version</string>
-  <string name="pref_dark_mode" fuzzy="true">Mënyra mbrëmje</string>
+  <string name="pref_dark_mode">Mënyra “E errët”</string>
   <string name="pref_dark_mode_summary">Shfaqi artikujt me ngjyra së prapthi</string>
   <string name="pref_back_to_top">Mbrapsht te Kreu</string>
   <string name="pref_back_to_top_summary">Shfaq në fund të faqes një buton për t’u ngjitur sipër në krye</string>
@@ -66,16 +72,22 @@
   <string name="pref_credits_title">Falënderime</string>
   <string name="tts_lang_not_supported">Gjuha e kësaj faqeje nuk mbulohet. Artikulli mund të mos lexohet si duhet.</string>
   <string name="no_reader_application_installed">S’u gjet dot ndonjë aplikacion i instaluar për këtë lloj kartele</string>
-  <string name="no_email_application_installed">Ju lutemi, instaloni një shërbim email-esh, ose dërgonani një email te %1s</string>
+  <string name="no_email_application_installed">Ju lutemi, instaloni një klient email-i</string>
+  <string name="no_app_found_to_select_bookmark_file">S’u gjet aplikacion për të përzgjedhur një kartelë faqerojtësish</string>
   <string name="no_section_info">S’u gjetën Krye Lënde</string>
   <string name="request_storage">Që të përdorni lëndë jashtë interneti, na duhet hyrje te depoja juaj</string>
-  <string name="request_write_storage">Që të shkarkohen kartela zim, na duhen leje shkrimi te depozita juaj</string>
+  <string name="request_write_storage" fuzzy="true">Që të shkarkohen kartela zim, na duhen leje shkrimi te depozita juaj</string>
   <string name="clear_recent_and_tabs_history_dialog">Jeni i sigurt se doni të fshihet historiku juaj i kërkimeve dhe të rikthehen krejt skedat aktive?</string>
   <string name="delete_recent_search_item">Të fshihet ky objekt?</string>
   <string name="pref_clear_all_history_title">Spastro historikun</string>
   <string name="pref_clear_all_history_summary">Pastro historik kërkimesh dhe skedash së fundi</string>
   <string name="pref_notes">Shënime</string>
   <string name="pref_permission">Leje</string>
+  <string name="pref_import_bookmark_title">Importoni Faqerojtës</string>
+  <string name="pref_import_bookmark_summary">Importo faqerojtësit e ruajtur</string>
+  <string name="pref_export_bookmark_title">Eksportoni Faqerojtës</string>
+  <string name="pref_export_bookmark_summary">Eksportoni krejt faqerojtësit e ruajtur</string>
+  <string name="export_bookmark_saved">Faqerojtësit u eksportuan te kartela %s</string>
   <string name="all_history_cleared">U spastrua Krejt Historiku</string>
   <string name="pref_clear_all_bookmarks_title">Spastroji faqerojtësit</string>
   <string name="clear_all_history_dialog_title">Të spastrohet Krejt Historiku?</string>
@@ -108,12 +120,14 @@
   <string name="local_zims">Pajisje</string>
   <string name="remote_zims">Në linjë</string>
   <string name="library">Bibliotekë</string>
-  <string name="delete_zim_body">Kartela(t) zim vijuese do të fshihen:\n\n%s</string>
+  <string name="delete_zim_body" fuzzy="true">Kartela(t) zim vijuese do të fshihen:\n\n%s</string>
   <string name="delete_zims_toast">Kartela u fshi</string>
   <string name="no_files_here">S’ka kartela këtu</string>
   <string name="download_no_space">Hapësirë e pamjaftueshme për shkarkim.</string>
   <string name="download">Shkarkim</string>
+  <string name="download_notification_channel_name">Emër Kanali Njoftimesh Shkarkimesh</string>
   <string name="space_available">Hapësirë e Përdorshme:</string>
+  <string name="move_no_space">Hapësirë e pamjaftueshme për lëvizje/kopjim</string>
   <string name="zim_simple">I thjeshtë</string>
   <string name="zim_no_pic">S’ka Foto</string>
   <string name="zim_no_vid">S’ka Video</string>
@@ -126,10 +140,12 @@
   <string name="help_7">Janë të përdorshme në trajtë kartelash ZIM. Ka plot të tilla:</string>
   <string name="help_8">• Wikipedia mund të kihet ndaras për çdo gjuhë</string>
   <string name="help_9">• Ka të gatshme lëndë tjetër, të tillë si Wikileaks ose Wikisource</string>
-  <string name="help_10">Mundeni ose t’i shkarkoni brenda aplikacionit kartelat ZIM që keni zgjedhur, ose të përzgjidhni me kujdes atë(ato) që doni dhe ta(t’i) shkarkoni nga një kompjuter desktop përpara se të shpërngulni kartelat ZIM te kujtesa juaj SD card.</string>
+  <string name="help_10" fuzzy="true">Mundeni ose t’i shkarkoni brenda aplikacionit kartelat ZIM që keni zgjedhur, ose të përzgjidhni me kujdes atë(ato) që doni dhe ta(t’i) shkarkoni nga një kompjuter desktop përpara se të shpërngulni kartelat ZIM te kujtesa juaj SD card.</string>
   <string name="help_11">Kartelat ZIM të shkarkuara brenda aplikacionit gjenden te drejtoria e depozitimit të jashtëm, në një dosje të quajtu Kiwix.</string>
   <string name="pref_storage">Depozitim</string>
   <string name="pref_current_folder">Dosja e Tanishme</string>
+  <string name="pref_storage_used">%s të përdorur</string>
+  <string name="pref_free_storage">%s të lirë</string>
   <string name="delete_zim_failed">Na ndjeni, s’qemë në gjendje ta fshinim disa kartela. Në vend të kësaj, duhet të provoni të përdorni një përgjegjës kartelash.</string>
   <string name="tts_pause">ndalesë</string>
   <string name="tts_resume">rimerre</string>
@@ -141,9 +157,9 @@
   <string name="confirm_stop_download_title">Të ndalet shkarkim?</string>
   <string name="confirm_stop_download_msg">Jeni i sigurt se dëshironi të ndalet ky shkarkim?</string>
   <string name="download_change_storage">Përzgjedhës pajisjeje depozitimi</string>
-  <string name="tts_not_enabled">Për këtë kartelë ZIM s’bëhet dot shndërrim nga tekst në të folur</string>
-  <string name="texttospeech_initialization_failed">Gatitja e “Tekst në të Folur” dështoi. Ju lutemi, riprovoni</string>
-  <string name="texttospeech_error">Gabim i papritur në “Tekst në të Folur”. Ju lutemi, riprovoni</string>
+  <string name="tts_not_enabled" fuzzy="true">Për këtë kartelë ZIM s’bëhet dot shndërrim nga tekst në të folur</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">Gatitja e “Tekst në të Folur” dështoi. Ju lutemi, riprovoni</string>
+  <string name="texttospeech_error" fuzzy="true">Gabim i papritur në “Tekst në të Folur”. Ju lutemi, riprovoni</string>
   <string name="next">Pasuesi</string>
   <string name="previous">E mëparshmja</string>
   <string name="wifi_only_title">Të lejohet shkarkim lënde përmes rrjetit celular?</string>
@@ -167,7 +183,7 @@
   <string name="crash_title">Hëm… Kjo është turpëruese</string>
   <string name="crash_description">Duket se u vithisëm.\n\nA do t’ju prishej punë të na ndihmonit në ndreqjen e këtij problemi duke na dërguar hollësitë vijuese?</string>
   <string name="crash_checkbox_language">Rregullimet tuaja për Gjuhën</string>
-  <string name="crash_checkbox_zimfiles">Një Listë e Kartelave Tuaja Zim</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">Një Listë e Kartelave Tuaja Zim</string>
   <string name="crash_checkbox_exception">Hollësi të Vithisjes</string>
   <string name="crash_checkbox_logs">Regjistra Aplikacioni</string>
   <string name="crash_checkbox_device">Hollësi Pajisjeje</string>
@@ -198,15 +214,20 @@
   <string name="search_bookmarks">Kërkoni te faqerojtësit</string>
   <string name="switch_tabs">Këmbeni skeda</string>
   <string name="close_all_tabs">Mbylli krejt skedat</string>
+  <string name="close_tab">Mbylle skedën</string>
+  <string name="could_not_restore_tabs">S’u rikthyen dot skedat.</string>
   <string name="pending_state">Pezull</string>
   <string name="running_state">Në Ecuri e Sipër</string>
   <string name="complete">I plotësuar</string>
   <string name="paused_state">Pushuar</string>
   <string name="failed_state">Dështoi: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">S’u shkarkua dot kartela zim, ju lutemi, provoni të riinstaloni aplikacionin që prej shitores.</string>
+  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">S’u shkarkua dot kartela zim. Ju lutemi, provoni të riinstaloni aplikacionin që prej shitores Play.</string>
   <string name="save">Ruaje</string>
   <string name="note">Shënim</string>
   <string name="wiki_article_title">Titull Artikulli Wiki</string>
+  <string name="ext_storage_permission_rationale_export_bookmark">Që të eksportohen Faqerojtës, lypset hyrje në depozitë</string>
+  <string name="ext_storage_write_permission_denied_export_bookmark">Faqerojtësit s’mund të eksportohen pa pasur hyrje në depozitë</string>
+  <string name="export_bookmark_error">Ndodhi një gabim teksa provohej të eksportoheshin faqerojtësit!</string>
   <string name="ext_storage_permission_rationale_add_note">Për Shënimet lypset hyrje në depozitë</string>
   <string name="ext_storage_write_permission_denied_add_note">Shënimet s’mund të përdoren pa hyrje në depozitë</string>
   <string name="note_save_unsuccessful">Shënimi u ruajt me sukses</string>
@@ -227,8 +248,9 @@
   <string name="severe_loss_error">Gabim shërbyesi! Provoni të Çaktivizoni/Riaktivizoni WiFi P2P</string>
   <string name="connection_failed">Lidhja dështoi</string>
   <string name="permission_rationale_location">Leja mbi vendndodhjen është e domosdoshme për Android-in që të lejojë aplikacionin të pikasë pajisje ortake</string>
+  <string name="permission_rationale_nearby">Që të lejohet aplikacioni të pikasë pajisje ortake, nga Android-i lypsen leje për pajisje atypari</string>
   <string name="permission_refused_location">Pa leje mbi vendndodhjen s’mund të lokalizohen pajisje ortake</string>
-  <string name="permission_refused_storage">S’mund të përdoren kartela ZIM pa leje depozite</string>
+  <string name="permission_refused_storage" fuzzy="true">S’mund të përdoren kartela ZIM pa leje depozite</string>
   <string name="request_enable_location">Që të lejoni pikasje ortakësh, aktivizoni vendndodhje</string>
   <string name="discovery_needs_location">Pa shërbime vendndodhje s’mund të zbulohen ortakë</string>
   <string name="request_enable_wifi">Aktivizoni WiFi P2P që nga rregullimet e sistemit</string>
@@ -241,6 +263,7 @@
   <string name="get_content_from_nearby_device">Merr lëndë prej pajisjes atypari</string>
   <string name="search_for_peers">Kërko Për Ortakë</string>
   <string name="your_device">Pajisja Juaj:</string>
+  <string name="device_name">Emër Pajisjeje</string>
   <string name="nearby_devices">PAJISJE ATYPARI</string>
   <string name="no_devices_found">S’u pikasën pajisje. Prekni butonin e kërkimit, që të rikërkohet.</string>
   <string name="files_for_transfer">KARTELA PËR SHËPRNGULJE</string>
@@ -249,6 +272,7 @@
   <string name="status">Gjendje</string>
   <string name="pref_clear_all_notes_summary">Spastron krejt shënimet në krejt artikujt</string>
   <string name="pref_clear_all_notes_title">Spastro krejt shënimet</string>
+  <string name="pref_clear_notes">Fshiji shënimet</string>
   <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Lejoni të lexohen dhe shkruhen kartela ZIM në kartë SD</string>
   <string name="pref_text_zoom_summary">Ndrysho madhësi teksti me rritje prej 25%.</string>
   <string name="tag_pic">Fot</string>
@@ -266,6 +290,11 @@
   <string name="delete_selected_history">Të fshihet Historiku i Përzgjedhur?</string>
   <string name="delete_bookmarks">Të fshihen Krejt Faqerojtësit?</string>
   <string name="delete_selected_bookmarks">Të fshihen Faqerojtësit e Përzgjedhur?</string>
+  <string name="import_bookmarks_dialog_title">Të importohen Faqerojtës?</string>
+  <string name="export_all_bookmarks_dialog_title">Të eksportohen Krejt Faqerojtësit?</string>
+  <string name="export_all_bookmarks_dialog_message">Eksportimi do të krijojë një kartelë bookmark.xml fte dosja Download/org.kiwix…/ folder.</string>
+  <string name="bookmark_imported_message">Janë importuar krejt faqerojtësit.</string>
+  <string name="error_invalid_bookmark_file">Gabim: Kartela e përzgjedhur s’është kartelë e vlefshme faqerojtësish.</string>
   <string name="on">On</string>
   <string name="off">Off</string>
   <string name="auto">Auto</string>
@@ -283,16 +312,28 @@
   <string name="tabs_restored">Skedat u rikthyen</string>
   <string name="open_drawer">Hap Sirtar</string>
   <string name="close_drawer">Mbylle Sirtarin</string>
+  <string name="preparing_file_for_copy">Po përgatitet kopjim/lëvizje</string>
+  <string name="action_copy">Kopjoje</string>
+  <string name="move">Lëvize</string>
+  <string name="copy_move_files_dialog_description" fuzzy="true">Doni të kopjohet, apo të lëvizet kartela?</string>
+  <string name="copy_file_error_message" fuzzy="true">Gabim në kopjimin e kartelës zim: %s.</string>
+  <string name="why_copy_move_files_to_app_directory" fuzzy="true">Të lëvizen/Kopjohen kartelat te drejtoria publike e aplikacionit?</string>
+  <string name="copy_move_files_to_app_directory_description" fuzzy="true">Për shkak rregullash nga Google Play mbi Android 11 e përpjetë, aplikacioni ynë s’mund të hyjë drejtpërdrejt në kartela të depozituara gjetkë në pajisjen tuaj. Që t’ju lëmë të shihni kartelat që keni përzgjedhur, na duhet t’i lëvizim, ose t’i kopjojmë në një dosje të posaçme brenda drejtorisë së aplikacionit tuaj. Kjo na lejon të hyjmë në kartela dhe t’i hapim. Pajtoheni me këtë?</string>
+  <string name="move_file_error_message" fuzzy="true">Gabim gjatë lëvizjes së kartelës zim: %s.</string>
   <string name="how_to_update_content">Si të përditësohet lënda?</string>
-  <string name="update_content_description">Që të përditësoni lëndën (një kartelë zim) lypset të shkarkoni versionin e plotë më të ri të kësaj lënde. Këtë mund ta bëni që nga ndarja për shkarkimet.</string>
+  <string name="update_content_description" fuzzy="true">Që të përditësoni lëndën (një kartelë zim) lypset të shkarkoni versionin e plotë më të ri të kësaj lënde. Këtë mund ta bëni që nga ndarja për shkarkimet.</string>
   <string name="all_files_permission_needed">Duhen Krejt Lejet Mbi Kartelat</string>
-  <string name="all_files_permission_needed_message">Që të mund të përdorim krejt kartelat zim nëpër pajisje, na duhet Leje mbi Krejt Kartelat</string>
+  <string name="all_files_permission_needed_message" fuzzy="true">Që të mund të përdorim krejt kartelat zim nëpër pajisje, na duhet Leje mbi Krejt Kartelat</string>
   <string name="allowed">Të lejuar</string>
   <string name="not_allowed">Jo të lejuar</string>
   <string name="denied_internet_permission_message">Që të shkarkohet lënda, ju lutemi, aktivizoni wifi-n</string>
   <string name="system_unable_to_grant_permission_message">Sistemi s’është në gjendje të akordojë leje!</string>
   <string name="allow">Lejoje</string>
   <string name="swipe_down_for_library">Për Bibliotekën, Fërkojeni Për Poshtë</string>
+  <string name="reaching_remote_library">Po shkohet te bibliotekë e largët</string>
+  <string name="parsing_remote_library">Po analizohet bilbiotekë e largët</string>
+  <string name="starting_downloading_remote_library">Po nis shkarkimi i bibliotekës internetore</string>
+  <string name="downloading_library">Po shkarkohet biblioteka\n%s</string>
   <string name="no_notes">S’ka Shënime</string>
   <string name="notes_from_all_books">Shihni Shënime Prej Krejt Librave</string>
   <string name="search_notes">Kërko Te Shënimet</string>
@@ -305,7 +346,7 @@
   <string name="download_tts_language_message">Ju lutemi, klikoni butonin “Shkarkoje”. Do të shkarkojë automatikisht gjuhën e duhur.</string>
   <string name="external_link_copied_message">Lidhja e Jashtme u Kopjua në të Papastër</string>
   <string name="read_aloud_service_channel_name">Kanal Shërbimi Leximi Me Zë</string>
-  <string name="read_aloud_channel_description">Kontrolle për shndërrim teksti në të folur.</string>
+  <string name="read_aloud_channel_description" fuzzy="true">Kontrolle për shndërrim teksti në të folur.</string>
   <string name="read_aloud_running">Me “Lexim Me Zë” të Aktivizuar</string>
   <string name="backward_history">Historik së prapthi</string>
   <string name="forward_history">Historik së mbari</string>
@@ -313,4 +354,17 @@
   <string name="navigation_history_cleared">U Spastrua Historiku i Lëvizjeve</string>
   <string name="go_to_settings_label">Kalo te Rregullimet</string>
   <string name="request_notification_permission_message">Që të kryhet ky veprim, akordoni leje për njoftime</string>
+  <string name="click_nearby_devices_message">Klikoni këtu që të kërkohet për pajisje atypari.</string>
+  <string name="your_device_name_message">Emri i pajisjes tuaj do të duket këtu.</string>
+  <string name="nearby_devices_list_message">Këtu do të gjeni një listë pajisjesh atypari. Që të nisni shpërngulje kartelash, prekni mbi emrin e një pajisjeje.</string>
+  <string name="transfer_zim_files_list_message">Këtu do të gjeni listën e kartelave ZIM të gatshme për shpërngulje.</string>
+  <string name="storage_selection_dialog_accessibility_description">Përzgjidhni depozitë për shkarkim kartelash ZIM.</string>
+  <string name="zim_file_content_description">Kartela ZIM që përmban lëndën e leximit</string>
+  <string name="select_language_content_description">Përzgjedhja e kësaj gjuhe do t’i japë përparësi shfaqjes në krye të librave të shkarkueshëm në atë gjuhë.</string>
+  <string name="toolbar_back_button_content_description">Kalo te skena e mëparshme</string>
+  <string name="save_or_open_unsupported_files_dialog_title">Të ruhet, apo të Hapet kjo kartelë?</string>
+  <string name="save_or_open_unsupported_files_dialog_message">Zgjedhja e “Hape” do të sjellë hapjen e kësaj kartele te aplikacioni i jashtëm për lexime.</string>
+  <string name="donation_dialog_title">Dhuroni Sot</string>
+  <string name="donation_dialog_description">%s ka nevojë për ndihmën tuaj.</string>
+  <string name="make_donation">Bëni një dhurim</string>
 </resources>

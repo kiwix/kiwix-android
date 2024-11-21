@@ -21,6 +21,7 @@
 * Movses
 * Okras
 * Pacha Tchernof
+* Pavel200071
 * Putnik
 * Razno0
 * Rivka Silinsky
@@ -83,8 +84,8 @@
   <string name="qr_code">Отобразить QR-код</string>
   <string name="share_host_address">Поделиться URL через другие приложения</string>
   <string name="error_file_not_found">Ошибка: выбранный ZIM-файл не найден.</string>
-  <string name="unable_to_read_zim_file">Невозможно прочитать этот ZIM-файл!</string>
-  <string name="zim_not_opened">Невозможно открыть файл zim</string>
+  <string name="unable_to_read_zim_file">Не удается прочитать этот ZIM-файл!</string>
+  <string name="zim_not_opened">Не удается открыть ZIM-файл</string>
   <string name="error_file_invalid">Ошибка: Выбранный файл не является пригодным ZIM-файлом.</string>
   <string name="error_article_url_not_found">Ошибка: Загрузка статьи (Url: %1$s) не удалась.</string>
   <string name="pref_display_title">Экран</string>
@@ -100,11 +101,11 @@
   <string name="pref_credits_title">Создатели</string>
   <string name="tts_lang_not_supported">Язык этой страницы не поддерживается. Статья не может быть правильно прочитана.</string>
   <string name="no_reader_application_installed">Не удалось найти установленное приложение для этого типа файлов</string>
-  <string name="no_email_application_installed">Установите поставщика услуг электронной почты или напишите нам по адресу %1s</string>
+  <string name="no_email_application_installed">Пожалуйста, установите клиент электронной почты</string>
   <string name="no_app_found_to_select_bookmark_file">Не найдено приложение для выбора файла закладки</string>
   <string name="no_section_info">Не найдены заголовки содержимого</string>
   <string name="request_storage">Для доступа к офлайн контенту нам нужен доступ к вашему файловому хранилищу</string>
-  <string name="request_write_storage">Для скачивания ZIM-файлов нам нужен доступ на запись к вашему хранилищу</string>
+  <string name="request_write_storage">Чтобы загрузить файлы ZIM, нам нужен доступ на запись в ваше хранилище</string>
   <string name="clear_recent_and_tabs_history_dialog">Вы уверены, что хотите удалить историю поиска и закрыть все активные вкладки?</string>
   <string name="delete_recent_search_item">Удалить этот элемент?</string>
   <string name="pref_clear_all_history_title">Очистить историю</string>
@@ -168,7 +169,7 @@
   <string name="help_7">Они доступны как ZIM файлы. Их существует много:</string>
   <string name="help_8">• Википедия доступна отдельно для каждого языка</string>
   <string name="help_9">• Такое содержимое, как Wikileaks или Викитека, также доступно</string>
-  <string name="help_10">Вы можете или загрузить выбранные ZIM файлы через приложение, или тщательно выбрать те, которые вам нужны, и загрузить их с настольного компьютера, прежде чем передавать ZIM файлы на вашу SD-карту.</string>
+  <string name="help_10">Вы можете либо загрузить выбранные вами файлы ZIM в приложении, либо тщательно выбрать те, которые вы хотите, и загрузить с настольного компьютера, прежде чем переносить файлы ZIM на SD-карту.</string>
   <string name="help_11">Загрузка ZIM файлов в приложении находится на внешнем накопителе в папке под названием Kiwix.</string>
   <string name="pref_storage">Хранилище</string>
   <string name="pref_current_folder">Текущая Папка</string>
@@ -185,9 +186,9 @@
   <string name="confirm_stop_download_title">Остановить загрузку?</string>
   <string name="confirm_stop_download_msg">Вы уверены, что хотите остановить эту загрузку?</string>
   <string name="download_change_storage">Выбор носителя информации</string>
-  <string name="tts_not_enabled">Перевод текста в речь не доступен для этого ZIM файла</string>
-  <string name="texttospeech_initialization_failed">Не удалось инициализировать сервис Text to Speech. Пожалуйста, попробуйте еще раз</string>
-  <string name="texttospeech_error">Непредвиденная ошибка при переводе текста в речь. Пожалуйста, попробуйте ещё раз.</string>
+  <string name="tts_not_enabled">Функция чтения вслух для этого ZIM-файла не включена</string>
+  <string name="texttospeech_initialization_failed">Не удалось выполнить инициализацию чтения вслух. Пожалуйста, попробуйте снова</string>
+  <string name="texttospeech_error">Неожиданная ошибка при чтении вслух. Пожалуйста, попробуйте снова</string>
   <string name="next">Далее</string>
   <string name="previous">Предыдущий</string>
   <string name="wifi_only_title">Разрешить загрузку контента через мобильную сеть?</string>
@@ -211,7 +212,7 @@
   <string name="crash_title">Хммм… Как неловко</string>
   <string name="crash_description">Похоже, приложение вылетело.\n\nНе могли бы вы помочь нам исправить эту проблему, предоставив следующую информацию?</string>
   <string name="crash_checkbox_language">Ваши Языковые Настройки</string>
-  <string name="crash_checkbox_zimfiles">Список Ваших Zim Файлов</string>
+  <string name="crash_checkbox_zimfiles">Список ваших ZIM-файлов</string>
   <string name="crash_checkbox_exception">Детали ошибки</string>
   <string name="crash_checkbox_logs">Журнал Действий Приложения</string>
   <string name="crash_checkbox_device">Подробности об Устройстве</string>
@@ -249,9 +250,10 @@
   <string name="complete">Завершено</string>
   <string name="paused_state">Приостановлено</string>
   <string name="failed_state">Ошибка: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed">Не удалось загрузить файл ZIM. Пожалуйста, попробуйте переустановить приложение из магазина Play.</string>
+  <string name="custom_download_error_message_for_authentication_failed">Не удалось загрузить ZIM-файл. Пожалуйста, попробуйте переустановить приложение из Play Store.</string>
   <string name="save">Сохранить</string>
   <string name="note">Заметка</string>
+  <string name="take_notes">Делайте заметки</string>
   <string name="wiki_article_title">Заголовок вики-статьи</string>
   <string name="ext_storage_permission_rationale_export_bookmark">Для экспорта закладок необходим доступ к хранилищу.</string>
   <string name="ext_storage_write_permission_denied_export_bookmark">Закладки не могут быть экспортированы без доступа к хранилищу</string>
@@ -278,7 +280,7 @@
   <string name="permission_rationale_location">Доступ к местонахождению требуется Android для поиска близлежащих устройств</string>
   <string name="permission_rationale_nearby">Доступ к местонахождению требуется Android для поиска близлежащих устройств</string>
   <string name="permission_refused_location">Невозможно обнаружить устройства без доступа к местоположению</string>
-  <string name="permission_refused_storage">Невозможно получить доступ к файлам zim без разрешения на доступ к хранилищу</string>
+  <string name="permission_refused_storage">Невозможно получить доступ к файлам ZIM без разрешения на хранение</string>
   <string name="request_enable_location">Разрешите доступ к местоположению, чтобы позволить поиск устройств</string>
   <string name="discovery_needs_location">Поиск близлежащих устройств невозможен без доступа к местоположению</string>
   <string name="request_enable_wifi">Включите WiFi P2P в настройках системы</string>
@@ -343,13 +345,15 @@
   <string name="preparing_file_for_copy">Подготовка к копированию/перемещению</string>
   <string name="action_copy">Копировать</string>
   <string name="move">Переместить</string>
-  <string name="copy_move_files_dialog_description">Вы хотите скопировать или переместить файл?</string>
-  <string name="copy_file_error_message">Ошибка при копировании ZIM-файла: %s.</string>
-  <string name="move_file_error_message">Ошибка при перемещении ZIM-файла: %s.</string>
+  <string name="copy_move_files_dialog_description">Для Kiwix требуется, чтобы ZIM-файл находился в его собственном каталоге данных. Вы хотите скопировать или переместить его туда?</string>
+  <string name="copy_file_error_message">Ошибка при копировании ZIP-файла: %s.</string>
+  <string name="why_copy_move_files_to_app_directory">Зачем копировать / перемещать файлы в общий каталог приложения?</string>
+  <string name="copy_move_files_to_app_directory_description">Из-за политики Google Play на Android 11 и выше наше приложение больше не может напрямую обращаться к файлам, хранящимся в другом месте на вашем устройстве. Чтобы вы могли просматривать выбранные файлы, нам необходимо переместить или скопировать их в специальную папку в каталоге нашего приложения. Это позволяет нам получать доступ к файлам и открывать их.</string>
+  <string name="move_file_error_message">Ошибка при перемещении файла ZIM: %s.</string>
   <string name="how_to_update_content">Как обновить содержимое?</string>
-  <string name="update_content_description">Чтобы обновить содержимое (файл zim), вам нужно скачать последнюю версию того же содержимого. Вы можете это сделать в разделе загрузок.</string>
+  <string name="update_content_description">Чтобы обновить содержимое (ZIM-файл), вам необходимо загрузить полную версию этого самого содержимого. Вы можете сделать это через раздел загрузки.</string>
   <string name="all_files_permission_needed">Требуются разрешения для всех файлов</string>
-  <string name="all_files_permission_needed_message">Чтобы получить доступ ко всем zim-файлам на устройстве, нам необходимо иметь разрешение на все файлы.</string>
+  <string name="all_files_permission_needed_message">Чтобы получить доступ ко всем файлам ZIM на разных устройствах, нам нужно иметь разрешение на все файлы</string>
   <string name="allowed">Разрешено</string>
   <string name="not_allowed">Не разрешено</string>
   <string name="denied_internet_permission_message">Включите Wi-Fi для загрузки содержания</string>
@@ -369,7 +373,7 @@
   <string name="download_tts_language_message">Пожалуйста, нажмите кнопку «Загрузить». Это автоматически загрузит необходимый язык.</string>
   <string name="external_link_copied_message">Внешняя ссылка скопирована в буфер обмена</string>
   <string name="read_aloud_service_channel_name">Сервисный канал чтения вслух</string>
-  <string name="read_aloud_channel_description">Настройки перевода текста в речь.</string>
+  <string name="read_aloud_channel_description">Прочитайте вслух элементы управления.</string>
   <string name="read_aloud_running">Запуск Чтения вслух</string>
   <string name="backward_history">История (назад)</string>
   <string name="forward_history">История (вперёд)</string>

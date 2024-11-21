@@ -62,7 +62,7 @@
   <string name="tts_resume">انتظارول</string>
   <string name="stop">درول</string>
   <string name="yes">هو</string>
-  <string name="tts_not_enabled">د زيم دوتنې لپاره متن ته د وینا متن ندی فعال شوی</string>
+  <string name="tts_not_enabled" fuzzy="true">د زيم دوتنې لپاره متن ته د وینا متن ندی فعال شوی</string>
   <string name="wifi_only_title">د ګرځنده شبکې له لارې د منځپانګې ډاونلوډ ته اجازه ورکړئ؟</string>
   <string name="wifi_only_msg">که تاسو “هو” انتخاب کړئ نو تاسو به په راتلونکی کې خبرداری ورنکړئ. په هرصورت، تاسو کولی شئ دا په ترتیباتو کې بدل کړئ</string>
   <string name="time_day">ورځ</string>

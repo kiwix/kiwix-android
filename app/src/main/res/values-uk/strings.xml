@@ -10,6 +10,6 @@
   <string name="cannot_open_file" fuzzy="true">Не вдається відкрити файл\nБудь ласка, перегляньте цей файл на вкладці пристроїв у бібліотеці</string>
   <string name="send_files_title">Надіслати файли</string>
   <string name="receive_files_title">Отримати файли</string>
-  <string name="no_app_found_to_open">Не знайдено програми для вибору файлу zim!</string>
-  <string name="select_zim_file">Виберіть файл zim для читання</string>
+  <string name="no_app_found_to_open" fuzzy="true">Не знайдено програми для вибору файлу zim!</string>
+  <string name="select_zim_file" fuzzy="true">Виберіть файл zim для читання</string>
 </resources>

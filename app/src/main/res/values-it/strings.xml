@@ -9,5 +9,6 @@
   <string name="cannot_open_file">Impossibile aprire il file\nProva a cercare questo file nella tua libreria</string>
   <string name="send_files_title">Invia file</string>
   <string name="receive_files_title">Ricevi file</string>
-  <string name="no_app_found_to_open">Nessuna app trovata per selezionare il file zim!</string>
+  <string name="no_app_found_to_open">Nessuna applicazione trovata per selezionare il file ZIM!</string>
+  <string name="select_zim_file">Seleziona il file ZIM da leggere</string>
 </resources>

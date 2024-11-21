@@ -8,6 +8,6 @@
   <string name="cannot_open_file" fuzzy="true">Di zaɣisiya ni di ku yoogi fasara pahimi suɣilo labi lihi m- bo fasara ŋɔ bimbuɣisirigu ni a karimbu shee</string>
   <string name="send_files_title">Tahimi fasara nima</string>
   <string name="receive_files_title">Deemi fasara nima</string>
-  <string name="no_app_found_to_open">App kani din yɛn piigi Zim fasara!</string>
-  <string name="select_zim_file">Piimi zim fasara karim</string>
+  <string name="no_app_found_to_open" fuzzy="true">App kani din yɛn piigi Zim fasara!</string>
+  <string name="select_zim_file" fuzzy="true">Piimi zim fasara karim</string>
 </resources>

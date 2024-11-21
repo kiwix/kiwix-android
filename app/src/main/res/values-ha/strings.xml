@@ -10,6 +10,6 @@
   <string name="cannot_open_file" fuzzy="true">Rashin buɗe fayil Don Allah yi ƙoƙari ya nemi wannan fayil a cikin Na’urar Tab na Laburarenka</string>
   <string name="send_files_title">Aika Fayiloli</string>
   <string name="receive_files_title">Karɓi Fayiloli</string>
-  <string name="no_app_found_to_open">Babu app da aka samo don zaɓar fayil ɗin zim!</string>
-  <string name="select_zim_file">Zaɓi fayil ɗin zim don karantawa</string>
+  <string name="no_app_found_to_open" fuzzy="true">Babu app da aka samo don zaɓar fayil ɗin zim!</string>
+  <string name="select_zim_file" fuzzy="true">Zaɓi fayil ɗin zim don karantawa</string>
 </resources>

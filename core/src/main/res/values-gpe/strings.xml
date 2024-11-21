@@ -54,8 +54,8 @@
   <string name="server_started_message">Make you Enter dis ip address for your browser insyd so say you go fi access de server %s</string>
   <string name="share_host_address">Make you Share URL via oda applications</string>
   <string name="error_file_not_found">Error: Eno fi find de selected ZIM file.</string>
-  <string name="unable_to_read_zim_file">Eno fi read dis zim file!</string>
-  <string name="zim_not_opened">Eno fi open zim file</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">Eno fi read dis zim file!</string>
+  <string name="zim_not_opened" fuzzy="true">Eno fi open zim file</string>
   <string name="error_file_invalid">Error: De file wey you select no be valid ZIM file.</string>
   <string name="error_article_url_not_found">Error: Loading article (Url: %1$s) fail.</string>
   <string name="pref_display_title">Display</string>
@@ -71,10 +71,10 @@
   <string name="pref_credits_title">Credits</string>
   <string name="tts_lang_not_supported">De language of dis page no dey support. Maybe de article no go fi read well.</string>
   <string name="no_reader_application_installed">Eno fi find sam installed application for dis type of file</string>
-  <string name="no_email_application_installed">Abeg make you install sam email service provider anaa make you email we for %1s</string>
+  <string name="no_email_application_installed">Abeg, install email client</string>
   <string name="no_section_info">Eno fi find Content Headers</string>
   <string name="request_storage">So say you go fi access offline content you dey hia access give your storage</string>
-  <string name="request_write_storage">So say you go fi download zim files we dey hia write access give your storage</string>
+  <string name="request_write_storage" fuzzy="true">So say you go fi download zim files we dey hia write access give your storage</string>
   <string name="clear_recent_and_tabs_history_dialog">You sure say you dey want delete your search history den reset all active tabs?</string>
   <string name="delete_recent_search_item">Delete dis item?</string>
   <string name="pref_clear_all_history_title">Clear history</string>
@@ -113,7 +113,7 @@
   <string name="local_zims">Device</string>
   <string name="remote_zims">Online</string>
   <string name="library">Library</string>
-  <string name="delete_zim_body">De following zim file(s) go delete:\n\n%s</string>
+  <string name="delete_zim_body" fuzzy="true">De following zim file(s) go delete:\n\n%s</string>
   <string name="delete_zims_toast">Files delete successfully</string>
   <string name="no_files_here">No files dey here</string>
   <string name="download_no_space">Insufficient space no dey wey ego download.</string>
@@ -131,7 +131,7 @@
   <string name="help_7">Dem be available as ZIM files. Chaw dey:</string>
   <string name="help_8">• Wikipedia be available separately give each language</string>
   <string name="help_9">• Oda contents like Wikileaks anaa Wikisource sana be available</string>
-  <string name="help_10">You go fi either download your chosen ZIM files in-app anaa carefully select de one(s) you dey want den download from sam Desktop computer before you go transfer de ZIM files go your SD card top.</string>
+  <string name="help_10" fuzzy="true">You go fi either download your chosen ZIM files in-app anaa carefully select de one(s) you dey want den download from sam Desktop computer before you go transfer de ZIM files go your SD card top.</string>
   <string name="help_11">ZIM files download in-app dey de external storage directory for sam folder wey dem entitle am Kiwix insyd.</string>
   <string name="pref_storage">Storage</string>
   <string name="pref_current_folder">Current Folder</string>

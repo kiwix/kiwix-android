@@ -2,6 +2,7 @@
 <!-- Authors:
 * Fenixs-ru
 * Kareyac
+* Pavel200071
 * Smavrina
 * UniCollab
 -->
@@ -12,5 +13,5 @@
   <string name="send_files_title">Послать файлы</string>
   <string name="receive_files_title">Получить файлы</string>
   <string name="no_app_found_to_open">Не найдено приложение для выбора ZIM-файла!</string>
-  <string name="select_zim_file">Выберите zim-файл для чтения</string>
+  <string name="select_zim_file">Выберите ZIM-файл для чтения</string>
 </resources>

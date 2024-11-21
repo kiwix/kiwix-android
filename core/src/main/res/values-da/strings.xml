@@ -38,8 +38,8 @@
   <string name="start_server_label">Start server</string>
   <string name="stop_server_label">Stop server</string>
   <string name="error_file_not_found">Fejl: Den valgte ZIM fil blev ikke fundet.</string>
-  <string name="unable_to_read_zim_file">Kan ikke åbne den zim fil!</string>
-  <string name="zim_not_opened">Kan ikke åbne zim fil</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">Kan ikke åbne den zim fil!</string>
+  <string name="zim_not_opened" fuzzy="true">Kan ikke åbne zim fil</string>
   <string name="error_file_invalid">Fejl: Den valgte fil er ikke en gyldig ZIM fil.</string>
   <string name="error_article_url_not_found">Fejl: Indlæsning af artikel (Url: %1$s) mislykkedes.</string>
   <string name="pref_display_title">Visning</string>
@@ -120,7 +120,7 @@
   <string name="confirm_stop_download_title">Stop overførsel</string>
   <string name="confirm_stop_download_msg">Er du sikker på, at du ønsker at stoppe denne overførsel?</string>
   <string name="download_change_storage">Valg af lagerenhed</string>
-  <string name="tts_not_enabled">Tekst til tale er ikke aktiveret for denne ZIM-fil</string>
+  <string name="tts_not_enabled" fuzzy="true">Tekst til tale er ikke aktiveret for denne ZIM-fil</string>
   <string name="next">Næste</string>
   <string name="previous">Forrige</string>
   <string name="wifi_only_title">Tillad overførsel af indhold via det mobile netværk?</string>
@@ -141,7 +141,7 @@
   <string name="your_languages">Valgte sprog:</string>
   <string name="other_languages">Andre sprog:</string>
   <string name="crash_checkbox_language">Dine sprogindstillinger</string>
-  <string name="crash_checkbox_zimfiles">En liste over dine Zim-filer</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">En liste over dine Zim-filer</string>
   <string name="crash_button_confirm">SEND DETALJER</string>
   <string name="new_tab_shortcut_label">Ny fane</string>
   <string name="get_content_shortcut_label">Få indhold</string>

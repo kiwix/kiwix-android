@@ -81,7 +81,7 @@
   <string name="delete_zim_failed">Выбачайце, мы не змаглі выдаліць некаторыя файлы. Паспрабуйце скарыстацца файлавым кіраўніком.</string>
   <string name="confirm_stop_download_title">Спыніць загрузку?</string>
   <string name="confirm_stop_download_msg">Вы ўпэўненыя, што хочаце спыніць гэтую загрузку?</string>
-  <string name="texttospeech_initialization_failed">Няўдалая спроба ініцыялізацыі Тэксту-ў-Размову. Калі ласка, паспрабуйце яшчэ раз</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">Няўдалая спроба ініцыялізацыі Тэксту-ў-Размову. Калі ласка, паспрабуйце яшчэ раз</string>
   <string name="time_left">засталося</string>
   <string name="time_today">Сёньня</string>
   <string name="time_yesterday">Учора</string>
@@ -92,7 +92,7 @@
   <string name="other_languages">Іншыя мовы:</string>
   <string name="crash_description">Падобна, што мы паламаліся.\n\nЦі можаце дапамагчы нам выправіць гэтую праблему, адаслаўшы наступную інфармацыю?</string>
   <string name="crash_checkbox_language">Вашыя моўныя налады</string>
-  <string name="crash_checkbox_zimfiles">Сьпіс вашых zim-файлаў</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">Сьпіс вашых zim-файлаў</string>
   <string name="crash_checkbox_exception">Падрабязнасьці аварыі</string>
   <string name="crash_checkbox_logs">Журналы праграмы</string>
   <string name="crash_checkbox_device">Падрабязнасьці прылады</string>

@@ -62,7 +62,7 @@
   <string name="new_tab_snack_bar">Article obert en una pestanya nova</string>
   <string name="local_zims">Dispositiu</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_zim_body">Els següents arxius ZIM seran eliminats:\n\n%s</string>
+  <string name="delete_zim_body" fuzzy="true">Els següents arxius ZIM seran eliminats:\n\n%s</string>
   <string name="delete_zims_toast">Fitxer esborrat</string>
   <string name="no_files_here">Cap fitxer aquí</string>
   <string name="download_no_space">L’espai és insuficient per a la baixada.</string>
@@ -75,7 +75,7 @@
   <string name="help_7">Estan disponibles com a fitxers ZIM. Hi ha molts d’ells:</string>
   <string name="help_8">• La Viquipèdia està disponible per separat per a cada idioma</string>
   <string name="help_9">• Altres continguts com Wikileaks o Wikisource també estan disponibles</string>
-  <string name="help_10">Podeu descarregar els arxius ZIM triats a l’aplicació, o bé seleccionar acuradament els que vulgueu, descarregar-los des d’un ordinador i transferir-los a la vostra targeta SD.</string>
+  <string name="help_10" fuzzy="true">Podeu descarregar els arxius ZIM triats a l’aplicació, o bé seleccionar acuradament els que vulgueu, descarregar-los des d’un ordinador i transferir-los a la vostra targeta SD.</string>
   <string name="help_11">Els fitxers ZIM descarregats en l’aplicació es troben al directori d’emmagatzematge extern, en una carpeta anomenada Kiwix.</string>
   <string name="delete_zim_failed">No podem eliminar alguns arxius. Hauries de provar amb un administrador d’arxius</string>
   <string name="internal_storage">Intern</string>

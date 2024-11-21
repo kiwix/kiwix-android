@@ -16,6 +16,7 @@
 * Killarnee
 * Lucas Werkmeister
 * McDutchie
+* Mcliquid
 * Metalhead64
 * MohitMali
 * Nol
@@ -48,6 +49,7 @@
   <string name="save_media_error">Beim Versuch, das Medium zu speichern, ist ein Fehler aufgetreten!</string>
   <string name="save_media_saved">Medium als %s nach Downloads/org.kiwix…/ gespeichert</string>
   <string name="search_label">Suchen</string>
+  <string name="searched_list">Durchsuchte Liste</string>
   <string name="choose_file">Wähle eine Inhaltsdatei aus (*.zim)</string>
   <string name="open_in_new_tab">Link in neuer Registerkarte öffnen?</string>
   <string name="hotspot_service_channel_name">Hotspot Servicekanal</string>
@@ -77,10 +79,11 @@
   <string name="error_server_already_running">Der Server läuft bereits. Bitte schalten Sie es aus und versuchen Sie es erneut.</string>
   <string name="error_ip_address_not_found">IP-Adresse konnte nicht gefunden werden.</string>
   <string name="server_started_message">Geben Sie diese IP-Adresse in Ihren Browser ein, um auf den Server %s zuzugreifen</string>
+  <string name="qr_code">Gerenderter QR-Code</string>
   <string name="share_host_address">URL mit anderen Applikationen teilen</string>
   <string name="error_file_not_found">Fehler: Die ausgewählte ZIM-Datei konnte nicht gefunden werden.</string>
-  <string name="unable_to_read_zim_file">Diese Zim-Datei konnte nicht gelesen werden!</string>
-  <string name="zim_not_opened">Konnte die ZIM-Datei nicht öffnen</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">Diese Zim-Datei konnte nicht gelesen werden!</string>
+  <string name="zim_not_opened" fuzzy="true">Konnte die ZIM-Datei nicht öffnen</string>
   <string name="error_file_invalid">Fehler: Die ausgewählte Datei ist keine gültige ZIM-Datei.</string>
   <string name="error_article_url_not_found">Fehler: Das Laden des Artikels (URL: %1$s) ist fehlgeschlagen.</string>
   <string name="pref_display_title">Anzeige</string>
@@ -96,11 +99,11 @@
   <string name="pref_credits_title">Danksagungen</string>
   <string name="tts_lang_not_supported">Die Sprache dieser Seite wird nicht unterstützt. Der Artikel kann möglicherweise nicht richtig vorgelesen werden.</string>
   <string name="no_reader_application_installed">Es konnte keine installierte Anwendung für diesen Dateityp gefunden werden</string>
-  <string name="no_email_application_installed">Bitten installieren Sie eine Mailanwendung oder schreiben Sie uns eine E-Mail an %1s</string>
+  <string name="no_email_application_installed">Bitte installieren Sie einen E-Mail-Client</string>
   <string name="no_app_found_to_select_bookmark_file">Keine App zum Auswählen einer Lesezeichendatei gefunden</string>
   <string name="no_section_info">Keine Inhaltsheader gefunden</string>
   <string name="request_storage">Um auf Offlineinhalt zuzugreifen, müssen wir auf Ihren Speicher zugreifen.</string>
-  <string name="request_write_storage">Um zim-Dateien herunterzuladen, benötigen wir Schreibzugriff auf Ihren Speicher</string>
+  <string name="request_write_storage" fuzzy="true">Um zim-Dateien herunterzuladen, benötigen wir Schreibzugriff auf Ihren Speicher</string>
   <string name="clear_recent_and_tabs_history_dialog">Sind Sie sicher, dass Sie Ihren Suchverlauf löschen und alle aktiven Registerkarten zurücksetzen möchten?</string>
   <string name="delete_recent_search_item">Dieses Element löschen?</string>
   <string name="pref_clear_all_history_title">Verlauf löschen</string>
@@ -111,6 +114,7 @@
   <string name="pref_import_bookmark_summary">Gespeicherte Lesezeichen importieren</string>
   <string name="pref_export_bookmark_title">Lesezeichen exportieren</string>
   <string name="pref_export_bookmark_summary">Alle gespeicherten Lesezeichen exportieren</string>
+  <string name="export_bookmark_saved">Lesezeichen werden in die Datei %s exportiert</string>
   <string name="all_history_cleared">Gesamter Verlauf gelöscht</string>
   <string name="pref_clear_all_bookmarks_title">Lesezeichen löschen</string>
   <string name="clear_all_history_dialog_title">Gesamten Verlauf löschen?</string>
@@ -143,12 +147,13 @@
   <string name="local_zims">Gerät</string>
   <string name="remote_zims">Online</string>
   <string name="library">Bibliothek</string>
-  <string name="delete_zim_body">Die folgende(n) ZIM-Datei(en) werden gelöscht werden:\n\n%s</string>
+  <string name="delete_zim_body" fuzzy="true">Die folgende(n) ZIM-Datei(en) werden gelöscht werden:\n\n%s</string>
   <string name="delete_zims_toast">Dateien erfolgreich gelöscht</string>
   <string name="no_files_here">Hier gibt es keine Dateien</string>
   <string name="download_no_space">Unzureichender Speicherplatz für einen Download.</string>
   <string name="download">Herunterladen</string>
   <string name="space_available">Verfügbarer Speicher:</string>
+  <string name="move_no_space">Nicht genügend Platz zum Verschieben/Kopieren.</string>
   <string name="zim_simple">Einfach</string>
   <string name="zim_no_pic">Keine Bilder</string>
   <string name="zim_no_vid">Keine Videos</string>
@@ -161,7 +166,7 @@
   <string name="help_7">Sie sind verfügbar als ZIM-Dateien. Es gibt viele von ihnen:</string>
   <string name="help_8">• Wikipedia ist für jede Sprache getrennt verfügbar</string>
   <string name="help_9">• Andere Inhalte wie Wikileaks oder Wikisource sind ebenfalls verfügbar</string>
-  <string name="help_10">Sie können entweder Ihre ausgewählten ZIM-Dateien in der App herunterladen oder die gewünschten Datei(en) sorgsam auf einem Desktopcomputer auswählen und herunterladen, bevor Sie die ZIM-Dateien auf Ihre SD-Karte übertragen.</string>
+  <string name="help_10" fuzzy="true">Sie können entweder Ihre ausgewählten ZIM-Dateien in der App herunterladen oder die gewünschten Datei(en) sorgsam auf einem Desktopcomputer auswählen und herunterladen, bevor Sie die ZIM-Dateien auf Ihre SD-Karte übertragen.</string>
   <string name="help_11">Heruntergeladene ZIM-Dateien in der App befinden sich im Verzeichnis des externen Speichers in einem Ordner namens Kiwix.</string>
   <string name="pref_storage">Speicher</string>
   <string name="pref_current_folder">Aktueller Ordner</string>
@@ -176,9 +181,9 @@
   <string name="confirm_stop_download_title">Herunterladen beenden?</string>
   <string name="confirm_stop_download_msg">Sind Sie sicher, dass Sie diesen Download abbrechen möchten?</string>
   <string name="download_change_storage">Speichergeräteauswahl</string>
-  <string name="tts_not_enabled">Die Vorlesefunktion ist für diese ZIM-Datei nicht aktiviert</string>
-  <string name="texttospeech_initialization_failed">Die Initialisierung der Vorlesefunktion ist fehlgeschlagen. Bitte versuchen Sie es noch einmal</string>
-  <string name="texttospeech_error">Unerwarteter Fehler in der Vorlesefunktion. Bitte versuchen Sie es noch einmal</string>
+  <string name="tts_not_enabled" fuzzy="true">Die Vorlesefunktion ist für diese ZIM-Datei nicht aktiviert</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">Die Initialisierung der Vorlesefunktion ist fehlgeschlagen. Bitte versuchen Sie es noch einmal</string>
+  <string name="texttospeech_error" fuzzy="true">Unerwarteter Fehler in der Vorlesefunktion. Bitte versuchen Sie es noch einmal</string>
   <string name="next">Nächste</string>
   <string name="previous">Vorherige</string>
   <string name="wifi_only_title">Herunterladen des Inhalts über das mobile Netzwerk erlauben?</string>
@@ -202,7 +207,7 @@
   <string name="crash_title">Also… Das ist peinlich.</string>
   <string name="crash_description">Es sieht aus, als wären wir abgestürzt.\n\nWürde es Ihnen etwas ausmachen, uns bei der Behebung dieses Problems zu helfen, indem Sie uns die folgenden Informationen schicken?</string>
   <string name="crash_checkbox_language">Ihre Spracheinstellungen</string>
-  <string name="crash_checkbox_zimfiles">Eine Liste Ihrer ZIM-Dateien</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">Eine Liste Ihrer ZIM-Dateien</string>
   <string name="crash_checkbox_exception">Einzelheiten zum Absturz</string>
   <string name="crash_checkbox_logs">Anwendungsprotokolle</string>
   <string name="crash_checkbox_device">Geräte-Details</string>
@@ -240,7 +245,7 @@
   <string name="complete">Abgeschlossen</string>
   <string name="paused_state">Pausiert</string>
   <string name="failed_state">Fehlgeschlagen: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed">Die ZIM-Datei konnte nicht heruntergeladen werden. Versuchen Sie bitte, die Anwendung aus dem Play Store neu zu installieren.</string>
+  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">Die ZIM-Datei konnte nicht heruntergeladen werden. Versuchen Sie bitte, die Anwendung aus dem Play Store neu zu installieren.</string>
   <string name="save">Speichern</string>
   <string name="note">Notiz</string>
   <string name="wiki_article_title">Wiki-Artikel-Titel</string>
@@ -265,7 +270,7 @@
   <string name="connection_failed">Verbindung fehlgeschlagen</string>
   <string name="permission_rationale_location">Android benötigt eine Standorterlaubnis, damit die App Peer-Geräte erkennen kann.</string>
   <string name="permission_refused_location">Ohne Standortberechtigungen können Peer-Geräte nicht lokalisiert werden</string>
-  <string name="permission_refused_storage">Ohne Speichererlaubnis ist kein Zugriff auf ZIM-Dateien möglich</string>
+  <string name="permission_refused_storage" fuzzy="true">Ohne Speichererlaubnis ist kein Zugriff auf ZIM-Dateien möglich</string>
   <string name="request_enable_location">Standort aktivieren, um Peer-Geräte zu finden</string>
   <string name="discovery_needs_location">Ohne standortbezogene Dienste können keine Peer-Geräte gefunden werden</string>
   <string name="request_enable_wifi">Aktivieren Sie Wi-Fi P2P in den Systemeinstellungen</string>
@@ -325,9 +330,9 @@
   <string name="open_drawer">Schublade öffnen</string>
   <string name="close_drawer">Schublade schließen</string>
   <string name="how_to_update_content">Wie aktualisiert man Inhalte?</string>
-  <string name="update_content_description">Um Inhalte (eine Zim-Datei) zu aktualisieren, musst du die neueste Version genau derselben Inhalte vollständig herunterladen. Das kannst du über den Download-Bereich tun.</string>
+  <string name="update_content_description" fuzzy="true">Um Inhalte (eine Zim-Datei) zu aktualisieren, musst du die neueste Version genau derselben Inhalte vollständig herunterladen. Das kannst du über den Download-Bereich tun.</string>
   <string name="all_files_permission_needed">Berechtigung für alle Dateien erforderlich</string>
-  <string name="all_files_permission_needed_message">Um geräteübergreifend auf alle Zim-Dateien zugreifen zu können, benötigen wir die Berechtigung für alle Dateien</string>
+  <string name="all_files_permission_needed_message" fuzzy="true">Um geräteübergreifend auf alle Zim-Dateien zugreifen zu können, benötigen wir die Berechtigung für alle Dateien</string>
   <string name="allowed">Erlaubt</string>
   <string name="not_allowed">Nicht erlaubt</string>
   <string name="denied_internet_permission_message">Bitte WLAN aktivieren, um Inhalte herunterzuladen</string>
@@ -346,7 +351,7 @@
   <string name="download_tts_language_message">Bitte klicke auf die Schaltfläche Download. Es wird automatisch die gewünschte Sprache heruntergeladen.</string>
   <string name="external_link_copied_message">Externer Link in die Zwischenablage kopiert</string>
   <string name="read_aloud_service_channel_name">Servicekanal für das Vorlesen</string>
-  <string name="read_aloud_channel_description">Steuerung für das Vorlesen.</string>
+  <string name="read_aloud_channel_description" fuzzy="true">Steuerung für das Vorlesen.</string>
   <string name="read_aloud_running">Lese vor</string>
   <string name="backward_history">Vorangeganener Verlauf</string>
   <string name="forward_history">Nachfolgender Verlauf</string>

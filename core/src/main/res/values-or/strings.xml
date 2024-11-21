@@ -52,8 +52,8 @@
   <string name="server_started_message">ସର୍ଭର %s ପ୍ରବେଶ କରିବାକୁ ଆପଣଙ୍କ ବ୍ରାଉଜରରେ ଏହି ip ଠିକଣା ପ୍ରବେଶ କରନ୍ତୁ</string>
   <string name="share_host_address">ଅନ୍ୟ ପ୍ରୟୋଗଗୁଡ଼ିକ ମାଧ୍ୟମରେ URL ଅଂଶୀଦାର କରନ୍ତୁ</string>
   <string name="error_file_not_found">ଅସୁବିଧା: ବଛାଯାଇଥିବା ଜିମ ଫାଇଲ ମିଳିଲାନାହିଁ ।</string>
-  <string name="unable_to_read_zim_file">ଏହି zim ଫାଇଲକୁ ପଢ଼ିବାରେ ଅସମର୍ଥ</string>
-  <string name="zim_not_opened">ଜିମ୍ ଫାଇଲ୍ ଖୋଲିବାକୁ ଅସମର୍ଥ</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">ଏହି zim ଫାଇଲକୁ ପଢ଼ିବାରେ ଅସମର୍ଥ</string>
+  <string name="zim_not_opened" fuzzy="true">ଜିମ୍ ଫାଇଲ୍ ଖୋଲିବାକୁ ଅସମର୍ଥ</string>
   <string name="error_file_invalid">ଅସୁବିଧା: ବଛାଯାଇଥିବା ଜିମ ଫାଇଲଟି ବୈଧ ନୁହେଁ ।</string>
   <string name="error_article_url_not_found">ଅସୁବିଧା: (Url: %1$s) ପ୍ରସଙ୍ଗ ଖୋଲିବାରେ ବିଫଳ ହେଲୁ ।</string>
   <string name="pref_display_title">ଦେଖଣା</string>
@@ -69,10 +69,10 @@
   <string name="pref_credits_title">କ୍ରେଡିଟ୍</string>
   <string name="tts_lang_not_supported">ଏହି ପୃଷ୍ଠାର ଭାଷା ସମର୍ଥିତ ନୁହେଁ । ଲେଖାଟି ଠିକ୍ ଭାବେ ପଢ଼ାଯାଇ ନଥାଇପାରେ ।</string>
   <string name="no_reader_application_installed">ଏହି ପ୍ରକାର ଫାଇଲ୍ ପାଇଁ ଏକ ସଂସ୍ଥାପିତ ପ୍ରୟୋଗ ଖୋଜି ପାଇଲା ନାହିଁ</string>
-  <string name="no_email_application_installed">ଦୟାକରି ଏକ ଇମେଲ ସେବା ପ୍ରଦାନକାରୀ ସଂସ୍ଥାପନ କରନ୍ତୁ କିମ୍ବା ଆମକୁ %1s ରେ ଇମେଲ କରନ୍ତୁ</string>
+  <string name="no_email_application_installed">ଦୟାକରି ଏକ ଇମେଲ କ୍ଲାଇଏଣ୍ଟ ସଂସ୍ଥାପନ କରନ୍ତୁ</string>
   <string name="no_section_info">କୌଣସି ବିଷଯ଼ବସ୍ତୁ ଶୀର୍ଷକ ମିଳୁନାହିଁ</string>
   <string name="request_storage">ଅଫଲାଇନ୍ ବିଷୟବସ୍ତୁକୁ ଆକସେସ୍ କରିବାକୁ ଆମେ ଆପଣଙ୍କର ଷ୍ଟୋରେଜ୍ କୁ ପ୍ରବେଶ କରିବା ଆବଶ୍ୟକ</string>
-  <string name="request_write_storage">ଜିମ୍ ଫାଇଲ ଡାଉନଲୋଡ୍ କରିବା ପାଇଁ ଆମେ ଆପଣଙ୍କ ଷ୍ଟୋରେଜ୍ କୁ ପ୍ରବେଶ କରିବା ଆବଶ୍ଯ଼କ</string>
+  <string name="request_write_storage" fuzzy="true">ଜିମ୍ ଫାଇଲ ଡାଉନଲୋଡ୍ କରିବା ପାଇଁ ଆମେ ଆପଣଙ୍କ ଷ୍ଟୋରେଜ୍ କୁ ପ୍ରବେଶ କରିବା ଆବଶ୍ଯ଼କ</string>
   <string name="clear_recent_and_tabs_history_dialog">ଆପଣ ନିଶ୍ଚିତ କି ଆପଣ ଆପଣଙ୍କର ସନ୍ଧାନ ଇତିହାସକୁ ଅପସାରଣ କରିବାକୁ ଏବଂ ସମସ୍ତ ସକ୍ରିଯ଼ ଟ୍ଯ଼ାବଗୁଡ଼ିକୁ ପୁନଃସ୍ଥାପନ କରିବାକୁ ଚାହୁଁଛନ୍ତି ?</string>
   <string name="delete_recent_search_item">ଏହି ବସ୍ତୁକୁ ହଟାନ୍ତୁ?</string>
   <string name="pref_clear_all_history_title">ଇତିହାସ ସଫା କରନ୍ତୁ</string>
@@ -111,7 +111,7 @@
   <string name="local_zims">ଉପକରଣ</string>
   <string name="remote_zims">ଅନଲାଇନ୍</string>
   <string name="library">ପାଠାଗାର</string>
-  <string name="delete_zim_body">ନିମ୍ନଲିଖିତ ଜିମ୍ ଫାଇଲ୍ (ଗୁଡିକ) ବିଲୋପ ହେବ :! N !! N! %s</string>
+  <string name="delete_zim_body" fuzzy="true">ନିମ୍ନଲିଖିତ ଜିମ୍ ଫାଇଲ୍ (ଗୁଡିକ) ବିଲୋପ ହେବ :! N !! N! %s</string>
   <string name="delete_zims_toast">ଫାଇଲଗୁଡିକ ସଫଳତାର ସହିତ ବିଲୋପ ହେଲା |</string>
   <string name="no_files_here">ଏଠାରେ କୌଣସି ଫାଇଲ ନାହିଁ</string>
   <string name="download_no_space">ଡାଉନଲୋଡ୍ କରିବାକୁ ପର୍ଯ୍ୟାପ୍ତ ସ୍ଥାନ ନାହିଁ |</string>
@@ -129,7 +129,7 @@
   <string name="help_7">ସେଗୁଡିକ ZIM ଫାଇଲ୍ ଭାବରେ ଉପଲବ୍ଧ | ସେମାନଙ୍କ ମଧ୍ୟରୁ ବହୁତ ଅଛି:</string>
   <string name="help_8">ପ୍ରତ୍ୟେକ ଭାଷା ପାଇଁ ଉଇକିପିଡ଼ିଆ ପୃଥକ ଭାବରେ ଉପଲବ୍ଧ |</string>
   <string name="help_9">ଉଇକିଲିକ୍ସ କିମ୍ବା ୱିକିସୋର୍ସ ପରି ଅନ୍ୟାନ୍ୟ ବିଷୟବସ୍ତୁ ମଧ୍ୟ ଉପଲବ୍ଧ |</string>
-  <string name="help_10">ଆପଣ ନିଜ ମନୋନୀତ ZIM ଫାଇଲଗୁଡ଼ିକୁ ଇନ୍-ଆପ୍ ଡାଉନଲୋଡ୍ କରିପାରିବେ କିମ୍ବା ଯତ୍ନର ସହିତ ଆପଣ ଚାହୁଁଥିବା (ଗୁଡିକୁ) ଚୟନ କରିପାରିବେ ଏବଂ ZIM ଫାଇଲଗୁଡ଼ିକୁ ଆପଣଙ୍କ SD କାର୍ଡକୁ ସ୍ଥାନାନ୍ତର କରିବା ପୂର୍ବରୁ ଏକ ଡେସ୍କଟପ୍ କମ୍ପ୍ୟୁଟରରୁ ଡାଉନଲୋଡ୍ କରିପାରିବେ |</string>
+  <string name="help_10" fuzzy="true">ଆପଣ ନିଜ ମନୋନୀତ ZIM ଫାଇଲଗୁଡ଼ିକୁ ଇନ୍-ଆପ୍ ଡାଉନଲୋଡ୍ କରିପାରିବେ କିମ୍ବା ଯତ୍ନର ସହିତ ଆପଣ ଚାହୁଁଥିବା (ଗୁଡିକୁ) ଚୟନ କରିପାରିବେ ଏବଂ ZIM ଫାଇଲଗୁଡ଼ିକୁ ଆପଣଙ୍କ SD କାର୍ଡକୁ ସ୍ଥାନାନ୍ତର କରିବା ପୂର୍ବରୁ ଏକ ଡେସ୍କଟପ୍ କମ୍ପ୍ୟୁଟରରୁ ଡାଉନଲୋଡ୍ କରିପାରିବେ |</string>
   <string name="help_11">ଆପ୍ ରେ ଡାଉନଲୋଡ୍ ହୋଇଥିବା ZIM ଫାଇଲଗୁଡିକ କିୱିକ୍ସ ନାମକ ଏକ ଫୋଲ୍ଡରରେ ବାହ୍ୟ ଷ୍ଟୋରେଜ୍ ଡିରେକ୍ଟୋରୀରେ ଅବସ୍ଥିତ |</string>
   <string name="pref_storage">ସଂରକ୍ଷଣ</string>
   <string name="pref_current_folder">ବର୍ତ୍ତମାନର ଫୋଲଡର</string>
@@ -144,9 +144,9 @@
   <string name="confirm_stop_download_title">ଡାଉନଲୋଡ୍ ବନ୍ଦ କରନ୍ତୁ?</string>
   <string name="confirm_stop_download_msg">ଆପଣ ନିଶ୍ଚିତ କି ଆପଣ ଏହି ଡାଉନଲୋଡ୍ ବନ୍ଦ କରିବାକୁ ଚାହୁଁଛନ୍ତି?</string>
   <string name="download_change_storage">ସଂରକ୍ଷଣ ଉପକରଣ ଚୟନକର୍ତ୍ତା</string>
-  <string name="tts_not_enabled">ଏହି ZIM ଫାଇଲ୍ ପାଇଁ ଟେକ୍ସଟ୍ ଟୁ ସ୍ପିଚ୍ ସକ୍ଷମ ନୁହେଁ</string>
-  <string name="texttospeech_initialization_failed">’ Text to Speech ’ କୁ ଆରମ୍ଭ କରିବାରେ ବିଫଳ ହେଲା । ଦଯ଼ାକରି ପୁଣିଥରେ ଚେଷ୍ଟା କରନ୍ତୁ ।</string>
-  <string name="texttospeech_error">ଟେକ୍ସଟ୍ ଟୁ ସ୍ପିଚ୍ ରେ ଅପ୍ରତ୍ୟାଶିତ ତ୍ରୁଟି | ଦୟାକରି ପୁଣିଥରେ ଚେଷ୍ଟା କରନ୍ତୁ</string>
+  <string name="tts_not_enabled" fuzzy="true">ଏହି ZIM ଫାଇଲ୍ ପାଇଁ ଟେକ୍ସଟ୍ ଟୁ ସ୍ପିଚ୍ ସକ୍ଷମ ନୁହେଁ</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">’ Text to Speech ’ କୁ ଆରମ୍ଭ କରିବାରେ ବିଫଳ ହେଲା । ଦଯ଼ାକରି ପୁଣିଥରେ ଚେଷ୍ଟା କରନ୍ତୁ ।</string>
+  <string name="texttospeech_error" fuzzy="true">ଟେକ୍ସଟ୍ ଟୁ ସ୍ପିଚ୍ ରେ ଅପ୍ରତ୍ୟାଶିତ ତ୍ରୁଟି | ଦୟାକରି ପୁଣିଥରେ ଚେଷ୍ଟା କରନ୍ତୁ</string>
   <string name="next">ଆଗାମୀ</string>
   <string name="previous">ପୂର୍ବ</string>
   <string name="wifi_only_title">ମୋବାଇଲ୍ ନେଟୱାର୍କ ମାଧ୍ୟମରେ ବିଷୟବସ୍ତୁ ଡାଉନଲୋଡ୍ କରିବାକୁ ଅନୁମତି ଦିଅନ୍ତୁ?</string>
@@ -170,7 +170,7 @@
   <string name="crash_title">ଆଚ୍ଛା… ଏହା ଲଜ୍ଜାଜନକ ଅଟେ |</string>
   <string name="crash_description">ଏହା ଦେଖାଯାଏ ଯେ ଆମେ ଦୁର୍ଘଟଣାଗ୍ରସ୍ତ।! N !! N! ଆପଣ ନିମ୍ନଲିଖିତ ସୂଚନା ପଠାଇ ଏହି ସମସ୍ୟାର ସମାଧାନ କରିବାରେ ସାହାଯ୍ୟ କରିବେ କି?</string>
   <string name="crash_checkbox_language">ଆପଣଙ୍କ ଭାଷା ସଜାଣି</string>
-  <string name="crash_checkbox_zimfiles">ଆପଣଙ୍କ ଜିମ ଫାଇଲଗୁଡ଼ିକର ଏକ ତାଲିକା</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">ଆପଣଙ୍କ ଜିମ ଫାଇଲଗୁଡ଼ିକର ଏକ ତାଲିକା</string>
   <string name="crash_checkbox_exception">ଦୁର୍ଘଟଣାର ବିବରଣୀ</string>
   <string name="crash_checkbox_logs">ପ୍ରୟୋଗ ଲଗ୍ |</string>
   <string name="crash_checkbox_device">ଉପକରଣ ବିବରଣୀ</string>
@@ -206,7 +206,7 @@
   <string name="complete">ସଂପୂର୍ଣ୍ଣ</string>
   <string name="paused_state">ବିରାମ ଦିଆଯାଇଛି</string>
   <string name="failed_state">ବିଫଳ: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed">zim ଫାଇଲଟି ଡାଉନଲୋଡ୍ ହୋଇପାରିଲା ନାହିଁ । ଦଯ଼ାକରି ପ୍ଲେ ଷ୍ଟୋରରୁ ଆପ୍ଲିକେସନ୍କୁ ପୁନଃସ୍ଥାପନ କରିବାକୁ ଚେଷ୍ଟା କରନ୍ତୁ ।</string>
+  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">zim ଫାଇଲଟି ଡାଉନଲୋଡ୍ ହୋଇପାରିଲା ନାହିଁ । ଦଯ଼ାକରି ପ୍ଲେ ଷ୍ଟୋରରୁ ଆପ୍ଲିକେସନ୍କୁ ପୁନଃସ୍ଥାପନ କରିବାକୁ ଚେଷ୍ଟା କରନ୍ତୁ ।</string>
   <string name="save">ସଞ୍ଚୟ କରନ୍ତୁ |</string>
   <string name="note">ଟିପ୍ପଣୀ</string>
   <string name="wiki_article_title">ୱିକି ପ୍ରବନ୍ଧ ଶୀର୍ଷକ</string>
@@ -231,7 +231,7 @@
   <string name="connection_failed">ସଂଯୋଗ ବିଫଳ ହୋଇଛି</string>
   <string name="permission_rationale_location">ଆପକୁ ସାଥୀ ଉପକରଣଗୁଡ଼ିକୁ ଚିହ୍ନଟ କରିବାକୁ ଅନୁମତି ଦେବା ପାଇଁ ଆଣ୍ଡ୍ରଏଡ୍ ଦ୍ୱାରା ଅବସ୍ଥାନ ଅନୁମତି ଆବଶ୍ୟକ |</string>
   <string name="permission_refused_location">ଅବସ୍ଥାନ ଅନୁମତି ବିନା ସାଥି ଉପକରଣଗୁଡ଼ିକୁ ଚିହ୍ନଟ କରିପାରିବ ନାହିଁ |</string>
-  <string name="permission_refused_storage">ଷ୍ଟୋରେଜ୍ ଅନୁମତି ବିନା ଜିମ୍ ଫାଇଲଗୁଡିକ ପ୍ରବେଶ କରିପାରିବ ନାହିଁ |</string>
+  <string name="permission_refused_storage" fuzzy="true">ଷ୍ଟୋରେଜ୍ ଅନୁମତି ବିନା ଜିମ୍ ଫାଇଲଗୁଡିକ ପ୍ରବେଶ କରିପାରିବ ନାହିଁ |</string>
   <string name="request_enable_location">ସାଥୀମାନଙ୍କୁ ଚିହ୍ନଟ କରିବାକୁ ସ୍ଥାନ ସକ୍ଷମ କରନ୍ତୁ |</string>
   <string name="discovery_needs_location">ଅବସ୍ଥାନ ସେବା ବିନା ସାଥୀମାନଙ୍କୁ ଆବିଷ୍କାର କରିପାରିବ ନାହିଁ |</string>
   <string name="request_enable_wifi">ସିଷ୍ଟମ୍ ସେଟିଂସମୂହରୁ ୱାଇଫାଇ P2P ସକ୍ଷମ କରନ୍ତୁ |</string>
@@ -287,9 +287,9 @@
   <string name="open_drawer">ଡ୍ରଯ଼ାର ଖୋଲନ୍ତୁ</string>
   <string name="close_drawer">ଡ୍ରୟର ବନ୍ଦ କରନ୍ତୁ</string>
   <string name="how_to_update_content">ବିଷୟବସ୍ତୁ କିପରି ଅପଡେଟ୍ କରିବେ?</string>
-  <string name="update_content_description">ବିଷୟବସ୍ତୁ ଅପଡେଟ୍ କରିବାକୁ (ଏକ ଜିମ୍ ଫାଇଲ୍) ଆପଣଙ୍କୁ ଏହି ସମାନ ବିଷୟବସ୍ତୁର ସମ୍ପୂର୍ଣ୍ଣ ନୂତନତମ ସଂସ୍କରଣ ଡାଉନଲୋଡ୍ କରିବାକୁ ପଡିବ | ଆପଣ ଡାଉନଲୋଡ୍ ବିଭାଗ ମାଧ୍ୟମରେ ତାହା କରିପାରିବେ |</string>
+  <string name="update_content_description" fuzzy="true">ବିଷୟବସ୍ତୁ ଅପଡେଟ୍ କରିବାକୁ (ଏକ ଜିମ୍ ଫାଇଲ୍) ଆପଣଙ୍କୁ ଏହି ସମାନ ବିଷୟବସ୍ତୁର ସମ୍ପୂର୍ଣ୍ଣ ନୂତନତମ ସଂସ୍କରଣ ଡାଉନଲୋଡ୍ କରିବାକୁ ପଡିବ | ଆପଣ ଡାଉନଲୋଡ୍ ବିଭାଗ ମାଧ୍ୟମରେ ତାହା କରିପାରିବେ |</string>
   <string name="all_files_permission_needed">ସମସ୍ତ ଫାଇଲ୍ ଅନୁମତି ଆବଶ୍ୟକ</string>
-  <string name="all_files_permission_needed_message">ଡିଭାଇସ୍ ଉପରେ ସମସ୍ତ ଜିମ୍ ଫାଇଲ୍ ଆକ୍ସେସ୍ କରିବାକୁ ଆମକୁ ସମସ୍ତ ଫାଇଲ୍ ଅନୁମତି ରହିବା ଆବଶ୍ୟକ |</string>
+  <string name="all_files_permission_needed_message" fuzzy="true">ଡିଭାଇସ୍ ଉପରେ ସମସ୍ତ ଜିମ୍ ଫାଇଲ୍ ଆକ୍ସେସ୍ କରିବାକୁ ଆମକୁ ସମସ୍ତ ଫାଇଲ୍ ଅନୁମତି ରହିବା ଆବଶ୍ୟକ |</string>
   <string name="allowed">ଅନୁମତି ଦିଆଯାଇଛି</string>
   <string name="not_allowed">ଅନୁମତି ନାହିଁ</string>
   <string name="denied_internet_permission_message">ବିଷୟବସ୍ତୁ ଡାଉନଲୋଡ୍ କରିବାକୁ ଦୟାକରି ୱାଇଫାଇ ସକ୍ଷମ କରନ୍ତୁ |</string>
@@ -308,7 +308,7 @@
   <string name="download_tts_language_message">ଦୟାକରି ଡାଉନଲୋଡ୍ ବଟନ୍ କ୍ଲିକ୍ କରନ୍ତୁ | ଏହା ସ୍ୱୟଂଚାଳିତ ଭାବରେ ଆବଶ୍ୟକ ଭାଷା ଡାଉନଲୋଡ୍ କରିବ |</string>
   <string name="external_link_copied_message">କ୍ଲିପବୋର୍ଡରେ ବାହ୍ୟ ଲିଙ୍କ୍ କପି ହୋଇଛି |</string>
   <string name="read_aloud_service_channel_name"> ଆଲାଉଡ୍ ସର୍ଭିସ୍ ଚ୍ଯ଼ାନେଲ୍  ପଢ଼ନ୍ତୁ</string>
-  <string name="read_aloud_channel_description">ବକ୍ତବ୍ୟ ନିୟନ୍ତ୍ରଣକୁ ପାଠ୍ୟ |</string>
+  <string name="read_aloud_channel_description" fuzzy="true">ବକ୍ତବ୍ୟ ନିୟନ୍ତ୍ରଣକୁ ପାଠ୍ୟ |</string>
   <string name="read_aloud_running">ଉଚ୍ଚ ସ୍ୱରରେ ପଢ଼ନ୍ତୁ</string>
   <string name="backward_history">ପଛୁଆ ଇତିହାସ</string>
   <string name="forward_history">ଆଗକୁ ଇତିହାସ</string>

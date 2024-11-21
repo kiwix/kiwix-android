@@ -45,6 +45,7 @@
   <string name="server_started_message">Gitt dës IP-Adress an Äre Browser a fir op de Server %s zouzegräifen</string>
   <string name="share_host_address">URL mat aneren Applikatiounen deelen</string>
   <string name="error_file_not_found">Feeler: Déi ausgewielten ZIM-Datei konnt net fonnt ginn.</string>
+  <string name="unable_to_read_zim_file">Dëse ZIM-Fichier konnt net gelies ginn!</string>
   <string name="error_file_invalid">Feeler: Déi ausgewielten Datei ass keng gülteg ZIM-Datei.</string>
   <string name="error_article_url_not_found">Feeler: D’Luede vum Artikel (URL: %1$s) huet net funktionéiert.</string>
   <string name="pref_display_title">Weisen</string>
@@ -111,6 +112,7 @@
   <string name="help_8">• Wikipedia ass fir all Sprooch separat verfügbar</string>
   <string name="help_9">• Aner Inhalter wéi Wikileaks oder Wikisource sinn och verfügbar</string>
   <string name="pref_current_folder">Aktuelle Repertoire</string>
+  <string name="pref_storage_used">%s benotzt</string>
   <string name="pref_free_storage">%s fräi</string>
   <string name="tts_pause">pauséieren</string>
   <string name="tts_resume">virufueren</string>
@@ -136,7 +138,9 @@
   <string name="your_languages">Erausgesicht Sproochen:</string>
   <string name="other_languages">Aner Sproochen:</string>
   <string name="crash_checkbox_language">Är Sproochastellungen</string>
+  <string name="crash_checkbox_zimfiles">Eng Lëscht vun Äre ZIM-Fichieren</string>
   <string name="crash_checkbox_device">Detailer vum Apparat</string>
+  <string name="crash_button_confirm">DETAILER SCHÉCKEN</string>
   <string name="new_tab_shortcut_label">Neien Tab</string>
   <string name="articleCount">%s Artikelen</string>
   <string name="get_started">Ufänken</string>
@@ -200,6 +204,10 @@
   <string name="open_library">Bibliothéik opmaachen</string>
   <string name="open_drawer">Tirang opmaachen</string>
   <string name="close_drawer">Tirang zoumaachen</string>
+  <string name="copying_zim_file">ZIM-Fichier kopéieren…</string>
+  <string name="moving_zim_file">ZIM-Fichier réckelen…</string>
+  <string name="copy_file_error_message">Feeler beim Opmaache vum ZIM-FIchier: %s.</string>
+  <string name="move_file_error_message">Feeler beim Réckele vum ZIM-FIchier: %s.</string>
   <string name="allowed">Erlaabt</string>
   <string name="not_allowed">Net erlaabt</string>
   <string name="allow">Erlaben</string>

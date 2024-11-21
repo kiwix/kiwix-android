@@ -4,5 +4,5 @@
 -->
 <resources>
   <string name="retry">Повторити</string>
-  <string name="invalid_installation">Невдале встановлення. Будь ласка завантажте Zim.\nТакож впевніться, що WiFi підключений і ви маєте достатньо місця на пристрої</string>
+  <string name="invalid_installation" fuzzy="true">Невдале встановлення. Будь ласка завантажте Zim.\nТакож впевніться, що WiFi підключений і ви маєте достатньо місця на пристрої</string>
 </resources>

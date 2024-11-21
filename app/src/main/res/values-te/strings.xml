@@ -8,6 +8,6 @@
   <string name="cannot_open_file" fuzzy="true">ఫైల్‌ను తెరవడంలో విఫలమైంది\nదయచేసి మీ లైబ్రరీ యొక్క పరికరం ట్యాబ్‌లో ఈ ఫైల్ కోసం వెతకడానికి ప్రయత్నించండి</string>
   <string name="send_files_title">ఫైల్‌లను పంపండి</string>
   <string name="receive_files_title">ఫైల్‌లను స్వీకరించండి</string>
-  <string name="no_app_found_to_open">జిమ్ ఫైల్‌ని ఎంచుకోవడానికి యాప్ ఏదీ కనుగొనబడలేదు!</string>
-  <string name="select_zim_file">చదవడానికి జిమ్ ఫైల్‌ని ఎంచుకోండి</string>
+  <string name="no_app_found_to_open" fuzzy="true">జిమ్ ఫైల్‌ని ఎంచుకోవడానికి యాప్ ఏదీ కనుగొనబడలేదు!</string>
+  <string name="select_zim_file" fuzzy="true">చదవడానికి జిమ్ ఫైల్‌ని ఎంచుకోండి</string>
 </resources>

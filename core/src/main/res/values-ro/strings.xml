@@ -54,7 +54,7 @@
   <string name="server_started_message">Introduceți această adresă ip în browserul dvs. pentru a accesa serverul %s</string>
   <string name="share_host_address">Distribuie URL prin alte aplicaţii</string>
   <string name="error_file_not_found">Eroare: Fișierul ZIM selectat nu poate fi găsit.</string>
-  <string name="zim_not_opened">Imposibil de deschis fișierul zim</string>
+  <string name="zim_not_opened" fuzzy="true">Imposibil de deschis fișierul zim</string>
   <string name="error_file_invalid">Eroare: Fișierul selectat nu este un fișier ZIM valid.</string>
   <string name="error_article_url_not_found">Eroare: Încărcarea articolului (Url: %1$s) nu a reușit.</string>
   <string name="pref_display_title">Afișaj</string>
@@ -107,7 +107,7 @@
   <string name="local_zims">Dispozitiv</string>
   <string name="remote_zims">Online</string>
   <string name="library">Bibliotecă</string>
-  <string name="delete_zim_body">Următoarele fișier(e) zim vor fi șterse:\n\n%s</string>
+  <string name="delete_zim_body" fuzzy="true">Următoarele fișier(e) zim vor fi șterse:\n\n%s</string>
   <string name="delete_zims_toast">Filă ștearsă cu succes</string>
   <string name="no_files_here">Nu sunt fișiere aici</string>
   <string name="download_no_space">Spațiu insuficient pentru a descarca.</string>
@@ -125,7 +125,7 @@
   <string name="help_7">Există mai multe fișiere ZIM. Sunt multe:</string>
   <string name="help_8">• Wikipedia este disponibilă în mod separat pentru fiecare limbă</string>
   <string name="help_9">• Alt conținut ca Wikileaks sa Wikisursă este de asemenea disponibil</string>
-  <string name="help_10">Puteți să descărcați în aplicație fișierele ZIM alese sau să le selectați cu atenție pe cele pe care le doriți și să le descărcați de pe un computer desktop înainte de a transfera fișierele ZIM pe cardul SD.</string>
+  <string name="help_10" fuzzy="true">Puteți să descărcați în aplicație fișierele ZIM alese sau să le selectați cu atenție pe cele pe care le doriți și să le descărcați de pe un computer desktop înainte de a transfera fișierele ZIM pe cardul SD.</string>
   <string name="help_11">Fișierele ZIM descărcate în aplicație sunt localizate în directorul extern de stocare într-un folder denumit Kiwix.</string>
   <string name="pref_storage">Stocare</string>
   <string name="pref_current_folder">Folder curent</string>
@@ -140,9 +140,9 @@
   <string name="confirm_stop_download_title">Oprești descărcarea?</string>
   <string name="confirm_stop_download_msg">Ești sigur că vrei să oprești această descărcare?</string>
   <string name="download_change_storage">Selectează mediul de descărcare</string>
-  <string name="tts_not_enabled">Text la vorbire nu este disponibil pentru acest fișier ZIM</string>
-  <string name="texttospeech_initialization_failed">Inițializarea Text în Vorbire a eșuat. Vă rugăm să încercați din nou</string>
-  <string name="texttospeech_error">Eroare neașteptată la Text în Vorbire. Vă rugăm încercați din nou</string>
+  <string name="tts_not_enabled" fuzzy="true">Text la vorbire nu este disponibil pentru acest fișier ZIM</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">Inițializarea Text în Vorbire a eșuat. Vă rugăm să încercați din nou</string>
+  <string name="texttospeech_error" fuzzy="true">Eroare neașteptată la Text în Vorbire. Vă rugăm încercați din nou</string>
   <string name="next">Următoarea</string>
   <string name="previous">Precedenta</string>
   <string name="wifi_only_title">Permite descărcarea conținutului prin intermediul unei rețele mobile?</string>
@@ -166,7 +166,7 @@
   <string name="crash_title">Ei bine … Este jenant</string>
   <string name="crash_description">Se pare că ne-am prăbușit.</string>
   <string name="crash_checkbox_language">Setările dvs. de limbă</string>
-  <string name="crash_checkbox_zimfiles">O Listă cu Fișierele Dvs. Zim</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">O Listă cu Fișierele Dvs. Zim</string>
   <string name="crash_checkbox_exception">Detaliile prăbușirii</string>
   <string name="crash_checkbox_logs">Jurnalul aplicației</string>
   <string name="crash_checkbox_device">Detalii dispozitiv</string>
@@ -226,7 +226,7 @@
   <string name="connection_failed">Conexiune eșuată</string>
   <string name="permission_rationale_location">Android are nevoie de permisiunea de geolocalizare pentru a permite aplicației să detecteze dispozitivele din apropiere.</string>
   <string name="permission_refused_location">Nu se pot găsi dispozitive din apropiere fără permisiuni de geolocalizare</string>
-  <string name="permission_refused_storage">Nu puteți accesa fișiere zim fără permisiunea de stocare</string>
+  <string name="permission_refused_storage" fuzzy="true">Nu puteți accesa fișiere zim fără permisiunea de stocare</string>
   <string name="request_enable_location">Activați geolocalizarea pentru a permite detectarea dispozitivelor din apropiere</string>
   <string name="discovery_needs_location">Nu se pot descoperi colegi fără serviciul de geolocalizare</string>
   <string name="request_enable_wifi">Activați WiFi P2P din setările sistemului</string>
@@ -280,5 +280,5 @@
   <string name="open_drawer">Deschide Sertar</string>
   <string name="close_drawer">Închide Sertar</string>
   <string name="how_to_update_content">Cum să actualizezi conținut?</string>
-  <string name="update_content_description">Pentru a actualiza conținutul (un fișier zim) trebuie să descărcați cea mai recentă versiune completă a acestui conținut. Puteți face acest lucru prin secțiunea de descărcare.</string>
+  <string name="update_content_description" fuzzy="true">Pentru a actualiza conținutul (un fișier zim) trebuie să descărcați cea mai recentă versiune completă a acestui conținut. Puteți face acest lucru prin secțiunea de descărcare.</string>
 </resources>

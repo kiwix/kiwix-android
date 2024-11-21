@@ -52,8 +52,8 @@
   <string name="server_started_message">IP ߢߌ߲߬ ߠߊߘߏ߲߬ ߌ ߟߊ߫ ߛߏ߲߯ߓߊߟߊ߲ ߠߊ߫ ߞߊ߬ ߡߊ߬ߛߐ߬ߟߊ߲ ߠߊߛߐ߬ߘߐ߲߬ %s</string>
   <string name="share_host_address">URL ߟߊߖߍ߲ߛߍ߲߫ ߟߥߊ߬ߟߌ߬ߟߊ߲ ߜߘߍ ߟߎ߬ ߛߌߟߊ ߝߍ߬</string>
   <string name="error_file_not_found">ߝߌ߬ߟߌ: ZIM ߞߐߕߐ߯ ߡߊߡߌ߬ߘߊ߬ߣߍ߲ ߕߍߣߊ߬ ߡߊߛߐ߬ߘߐ߲߫ ߠߊ߫.</string>
-  <string name="unable_to_read_zim_file">ߊ߬ ߕߴߛߋ߫ ߞߊ߬ ZIM ߞߐߕߐ߮ ߣߌ߲߬ ߘߐߞߊ߬ߙߊ߲߬߹</string>
-  <string name="zim_not_opened">ZIM ߞߐߕߐ߮ ߕߍ߫ ߛߐ߲߬ ߠߊߞߊ߬ ߟߊ߫</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">ߊ߬ ߕߴߛߋ߫ ߞߊ߬ ZIM ߞߐߕߐ߮ ߣߌ߲߬ ߘߐߞߊ߬ߙߊ߲߬߹</string>
+  <string name="zim_not_opened" fuzzy="true">ZIM ߞߐߕߐ߮ ߕߍ߫ ߛߐ߲߬ ߠߊߞߊ߬ ߟߊ߫</string>
   <string name="error_file_invalid">ߝߌ߬ߟߌ: ߞߐߕߐ߯ ߓߊߕߐ߬ߡߐ߲߬ߣߍ߲ ߣߌ߲߬ ߕߍ߫ ZIM ߞߐߕߐ߯ ߓߍ߲߬ߣߍ߲ ߝߋ߲߫ ߘߌ߫.</string>
   <string name="error_article_url_not_found">ߝߎ߬ߕߎ߲߬ߕߌ: ߞߎߡߘߊ ߟߊߢߎ߲ߠߌ߲ (Url: %1$s) ߓߘߊ߫ ߗߌߙߏ߲߫.</string>
   <string name="pref_display_title">ߦߌ߬ߘߊ߬ߟߌ</string>
@@ -69,10 +69,10 @@
   <string name="pref_credits_title">ߞߏߢߌߡߊߟߐ߲</string>
   <string name="tts_lang_not_supported">ߞߊ߲ ߡߍ߲ ߦߋ߫ ߞߐߜߍ ߣߌ߲߬ ߞߊ߲߬߸ ߏ߬ ߘߊ߲ߞߎ߲ߣߍ߲߫ ߕߍ߫ ߥߟߊ߫ ߞߊ߲ ߡߍ߲ ߓߍ߲߬ߣߍ߲߫ ߦߋ߫ ߦߊ߲߬ ߡߊ߬߸ ߏ߬ ߡߊ߫ ߡߊߞߍ߫ ߊ߬ ߞߣߐ߫. ߕߎ߬ߡߊ߬ߘߐ߫ ߞߎߡߘߊ ߘߐߞߊ߬ߙߊ߲ ߕߍߣߊ߬ ߣߐ߰ߦߊ߬ ߟߊ߫.</string>
   <string name="no_reader_application_installed">ߟߥߊ߬ߟߌ߬ߟߊ߲߫ ߡߊߞߍߣߍ߲߫ ߕߍߣߊ߬ ߛߐ߬ߘߐ߲߬ ߠߴߌ ߞߎ߲߬ ߞߐߕߐ߯ ߛߎ߮ ߣߌ߲߬ ߢߍ߫</string>
-  <string name="no_email_application_installed">ߢߎߡߍߙߋ߲߫ ߞߏ߲ߘߏ ߗߋߘߊ ߡߊߛߐߟߊ߲ ߡߊߞߍ߫ ߌ ߞߎ߲߬ ߖߊ߰ߣߌ߲߫ ߥߟߊ߫ ߞߊ߬ ߢߎߡߍߙߋ߲ ߗߋ߫ ߊ߲ ߡߊ߬ %1s ߝߍ߬</string>
+  <string name="no_email_application_installed">ߡߊߛߐߟߊ߲ ߡߊߞߍ߫ ߌ ߞߎ߲߬ ߖߊ߰ߣߌ߲߫</string>
   <string name="no_section_info">ߞߣߐߘߐ ߞߎ߲߬ߕߐ߰ ߡߊ߫ ߛߐ߬ߘߐ߲߫</string>
   <string name="request_storage">ߖߐ߲߬ߛߊ߫ ߞߊ߬ ߜߊ߲߬ߞߎ߲߬ߠߌ߲߬ߓߊߟߌߦߊ ߞߣߐߘߐ ߟߎ߬ ߟߊߛߐ߬ߘߐ߲߬߸ ߊ߲ ߡߊ߬ߞߏ ߦߴߌ ߟߊ߫ ߟߊ߬ߡߙߊ߬ߟߌ߫ ߦߙߐ ߡߊߛߐ߬ߘߐ߲ ߠߊ߫</string>
-  <string name="request_write_storage">ߖߐ߲߬ߛߊ߫ ߞߊ߬ zim ߞߐߕߐ߮ ߡߊߞߍ߫ ߌ ߞߎ߲߬߸ ߊ߲ ߡߊ߬ߞߏ ߦߋ߫ ߛߓߍߟߌ ߟߊߛߐ߬ߘߐ߲ ߣߴߌ ߟߊ߫ ߟߊ߬ߡߙߊ߬ߟߌ߫ ߞߣߍ ߞߊ߲߬</string>
+  <string name="request_write_storage" fuzzy="true">ߖߐ߲߬ߛߊ߫ ߞߊ߬ zim ߞߐߕߐ߮ ߡߊߞߍ߫ ߌ ߞߎ߲߬߸ ߊ߲ ߡߊ߬ߞߏ ߦߋ߫ ߛߓߍߟߌ ߟߊߛߐ߬ߘߐ߲ ߣߴߌ ߟߊ߫ ߟߊ߬ߡߙߊ߬ߟߌ߫ ߞߣߍ ߞߊ߲߬</string>
   <string name="clear_recent_and_tabs_history_dialog">ߌ ߟߊߣߴߊ߬ ߟߊ߫ ߞߴߌ ߦߴߊ߬ ߝߍ߬ ߞߵߌ ߟߊ߫ ߕߌߙߌ߲ߠߌ߲ ߘߐ߬ߝߐ ߖߏ߲߫ ߊ߬ ߣߌ߫ ߞߵߌ ߟߊ߫ ߞߊ߲ߠߊߛߓߍ ߓߍ߯ ߞߐߦߟߍ߬ߡߊ߲߫؟</string>
   <string name="delete_recent_search_item">ߞߊ߬ ߝߌ߬ߛߌ ߣߌ߲߬ ߖߏ߰ߛߌ߫؟</string>
   <string name="pref_clear_all_history_title">ߘߐ߬ߝߐ ߖߏ߬ߛߌ߬</string>
@@ -111,7 +111,7 @@
   <string name="local_zims">ߞߍߟߊ߲</string>
   <string name="remote_zims">ߛߌ߬ߕߊߙߌ ߟߊ߫</string>
   <string name="library">ߟߍߙߊߓߏ߲</string>
-  <string name="delete_zim_body"> ZIM ߞߐߕߐ߯ ߢߌ߲߬ ߠߎ߬ ߘߌ߫ ߣߊ߬ ߖߏ߰ߛߌ߫: %s</string>
+  <string name="delete_zim_body" fuzzy="true"> ZIM ߞߐߕߐ߯ ߢߌ߲߬ ߠߎ߬ ߘߌ߫ ߣߊ߬ ߖߏ߰ߛߌ߫: %s</string>
   <string name="delete_zims_toast">ߞߐߕߐ߮ ߖߏ߰ߛߌ߬ߟߌ ߓߘߊ߫ ߛߎߘߊ߲߫</string>
   <string name="no_files_here">ߞߐߕߐ߯ ߛߌ߫ ߟߎ߬ ߕߍ߫ ߦߊ߲߬</string>
   <string name="download_no_space">ߞߣߍ߫ ߘߐߥߛߊ߬ߣߍ߲߫ ߕߴߦߋ߲߬ ߞߊ߬ ߟߊ߬ߖߌ߰ߒ߰ߞߎ߲߬ߠߌ߲ ߞߍ߫.</string>
@@ -129,7 +129,7 @@
   <string name="help_7">ߊ߬ߟߎ߬ ߦߋ߫ ߦߋ߲߬ ZIM ߞߐߕߐ߮ ߟߎ߬ ߟߋ߬ ߘߌ߫. ߤߋߦߌ߬߸ ߊ߬ߟߎ߫ ߘߏ߲߬ ߛߌߦߊߡߊ߲ߓߊ ߟߋ߬ ߦߋ߲߬:</string>
   <string name="help_8">• ߥߞߌߡߋߘߌߦߊ ߦߋ߫ ߦߋ߲߬. ߞߏ߬ߣߌ߲߬ ߞߊ߲ ߓߍ߯ ߦߴߊ߬ ߞߏ߫ ߟߊ߫ ߟߋ߬</string>
   <string name="help_9">• ߞߣߐߘߐ߫ ߜߘߍ ߟߎ߬ ߦߏ߫ ߥߞߌߟߌߞߛ ߥߟߊ߫ ߥߞߌߛߎߙߛ ߟߎ߫ ߝߣߊ߫ ߦߋ߫ ߦߋ߲߬</string>
-  <string name="help_10">ߌ ߘߌ߫ ߛߴߌ ߟߊ߫ ߖ߭ߌߡ ߞߐߕߐ߯ ߛߎߥߊ߲ߘߌߣߍ߲ ߠߊߖߌ߰ ߟߴߌ ߞߎ߲߬ ߟߥߊ߬ߟߌ߬ߟߊ߲-ߠߊ߫ ߕߋ߲߬ ߝߛߊߦߌ߫߸ ߥߟߊ߫ ߞߵߌ ߘߌߦߊߣߊ߲ߕߊ߫ ߞߋߟߋ߲߫ ߛߎߥߊ߲ߘߌ߫ ߞߵߊ߬ ߟߊߖߵߌ ߞߎ߲߬ ߞߊ߬ ߝߘߊ߫ ߕߟߋ߬ߓߊ߮ ߟߊ߫ ߦߊ߬ߣߴߌ ߞߍߕߐ߫ ߊ߬ ߟߊߦߌ߬ߙߌ߲߬ߘߌ߫ ߟߴߌ ߟߊ߫ SD card ߞߊ߲߬.</string>
+  <string name="help_10" fuzzy="true">ߌ ߘߌ߫ ߛߴߌ ߟߊ߫ ߖ߭ߌߡ ߞߐߕߐ߯ ߛߎߥߊ߲ߘߌߣߍ߲ ߠߊߖߌ߰ ߟߴߌ ߞߎ߲߬ ߟߥߊ߬ߟߌ߬ߟߊ߲-ߠߊ߫ ߕߋ߲߬ ߝߛߊߦߌ߫߸ ߥߟߊ߫ ߞߵߌ ߘߌߦߊߣߊ߲ߕߊ߫ ߞߋߟߋ߲߫ ߛߎߥߊ߲ߘߌ߫ ߞߵߊ߬ ߟߊߖߵߌ ߞߎ߲߬ ߞߊ߬ ߝߘߊ߫ ߕߟߋ߬ߓߊ߮ ߟߊ߫ ߦߊ߬ߣߴߌ ߞߍߕߐ߫ ߊ߬ ߟߊߦߌ߬ߙߌ߲߬ߘߌ߫ ߟߴߌ ߟߊ߫ SD card ߞߊ߲߬.</string>
   <string name="help_11">ߖ߭ߌߡ ߞߐߕߐ߮ ߟߊߖߌ߰ߟߌ ߟߥߊ߬ߟߌ߬ߟߊ߲ ߞߣߐ߫ ߏ߬ ߦߴߊ߬ ߛߌ߲߫ ߠߊ߫ ߞߐߞߊ߲ߠߊ ߟߊ߬ߡߙߊ߬ߦߙߐ ߟߋ߬ ߟߊ߫ ߞߎ߲ߓߍ߲ ߘߏ߫ ߘߐ߫ ߡߍ߲ ߕߐ߯ ߦߋ߫ ߞߏ߫ ߞߥߌߞߛ.</string>
   <string name="pref_storage">ߟߊ߬ߡߊ߲߬ߘߌ߬ߦߙߐ</string>
   <string name="pref_current_folder">ߕߋ߲߭ߕߋ߲߭ ߝߙߏߞߏ</string>
@@ -144,9 +144,9 @@
   <string name="confirm_stop_download_title">ߥߎߟߊߟߊߖߛߐߟߌ ߟߊߟߐ߬؟</string>
   <string name="confirm_stop_download_msg">ߌ ߘߍ߲߬ߞߣߍ߬ߦߊ߬ߣߍ߲߫ ߞߴߌ ߦߴߊ߬ ߝߍ߬ ߞߊ߬ ߟߊ߬ߖߌ߰ߒ߬ߞߎ߲߬ߠߌ߲ ߣߌ߲߬ ߠߊߟߐ߬؟</string>
   <string name="download_change_storage">ߞߍߟߊ߲ ߟߊ߬ߡߙߊ߬ߟߌ߫ ߦߙߐ ߓߊߕߐߡߐ߲ߟߊ߲</string>
-  <string name="tts_not_enabled">ߛߓߍߟߌ߫ ߞߎߡߕߊ ߡߊ߫ ߟߊߞߎߣߎ߲߫ ZIM ߞߐߕߐ߮ ߣߌ߲߬ ߢߍ߫.</string>
-  <string name="texttospeech_initialization_failed">ߛߓߍߟߌ߫ ߞߎߡߕߊ ߘߊߦߟߍߟߌ ߓߘߊ߫ ߗߌߙߏ߲߫. ߊ߬ ߡߊߝߍߣߍ߲߫ ߌߞߐ߫ ߝߊ߰ߣߌ߲߫߹</string>
-  <string name="texttospeech_error">ߝߎ߬ߕߎ߲߬ߕߌ߫ ߡߊߟߐ߲ߓߊߟߌ ߘߏ߫ ߓߘߊ߫ ߓߌ߬ߟߊ߬ ߛߓߍߟߌ߫ ߞߎߡߕߊ ߟߊ߫ ߞߏ߫ ߘߐ߫. ߊ߬ ߡߊߝߍߣߍ߲߫ ߌߞߐ߫ ߖߊ߰ߣߌ߲߫</string>
+  <string name="tts_not_enabled" fuzzy="true">ߛߓߍߟߌ߫ ߞߎߡߕߊ ߡߊ߫ ߟߊߞߎߣߎ߲߫ ZIM ߞߐߕߐ߮ ߣߌ߲߬ ߢߍ߫.</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">ߛߓߍߟߌ߫ ߞߎߡߕߊ ߘߊߦߟߍߟߌ ߓߘߊ߫ ߗߌߙߏ߲߫. ߊ߬ ߡߊߝߍߣߍ߲߫ ߌߞߐ߫ ߝߊ߰ߣߌ߲߫߹</string>
+  <string name="texttospeech_error" fuzzy="true">ߝߎ߬ߕߎ߲߬ߕߌ߫ ߡߊߟߐ߲ߓߊߟߌ ߘߏ߫ ߓߘߊ߫ ߓߌ߬ߟߊ߬ ߛߓߍߟߌ߫ ߞߎߡߕߊ ߟߊ߫ ߞߏ߫ ߘߐ߫. ߊ߬ ߡߊߝߍߣߍ߲߫ ߌߞߐ߫ ߖߊ߰ߣߌ߲߫</string>
   <string name="next">ߢߍߕߊ</string>
   <string name="previous">ߕߊ߬ߡߌ߲߬ߣߍ߲</string>
   <string name="wifi_only_title">ߞߊ߬ ߞߣߐߘߐ ߟߎ߬ ߟߊ߬ߖߌ߰ߒ߬ߞߎ߲߬ߠߌ߲ ߠߊߘߊ߬ߤߊ߫ ߜߋߟߋ߲ߜߋߟߋ߲ ߞߙߏ߬ߝߏ ߟߊ߫؟</string>
@@ -170,7 +170,7 @@
   <string name="crash_title">ߏ߬ ߓߘߊ߫ ߓߍ߲߬… ߏ߬ ߦߋ߫ ߞߏ߫ ߓߘߍ߫ ߓߊ߫ ߟߋ߬ ߘߌ߫</string>
   <string name="crash_description">ߊ߬ ߞߍߣߍ߲߫ ߦߋ߫ ߦߴߊ߲ ߓߘߊ߫ ߜߊߛߊ߲߫. \n\nߊ߬ ߝߐ߫ ߌ ߘߌ߫ ߛߵߊ߲ ߘߍ߬ߡߍ߲߬ ߠߊ߫ ߝߙߋߞߋ ߏ߬ ߝߎߟߋ߲ ߡߊ߬ ߞߎ߲߬ߠߊ߬ߝߏߣߌ߲ ߢߌ߲߬ ߠߎ߬ ߗߋߟߌ ߟߊ߫؟</string>
   <string name="crash_checkbox_language">ߌ ߟߊ߫ ߞߊ߲ ߟߊ߬ߓߍ߲߬ߢߐ߲߰ߡߦߊ߬ߘߊ ߟߎ߫</string>
-  <string name="crash_checkbox_zimfiles">ߌ ߟߊ߫ ZIM ߞߐߕߐ߮ ߟߎ߬ ߛߙߍߘߍ</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">ߌ ߟߊ߫ ZIM ߞߐߕߐ߮ ߟߎ߬ ߛߙߍߘߍ</string>
   <string name="crash_checkbox_exception">ߜߊߛߊ߲ߠߌ߲ ߝߊߙߊ߲ߝߊ߯ߛߌ ߟߎ߬</string>
   <string name="crash_checkbox_logs">ߟߥߊ߬ߟߌ߬ߟߊ߲ ߕߋ߬ߟߋ߲ ߠߎ߬</string>
   <string name="crash_checkbox_device">ߞߍߟߊ߲ ߝߊߙߊ߲ߝߊ߯ߛߌ ߟߎ߬</string>
@@ -230,7 +230,7 @@
   <string name="connection_failed">ߜߊ߲߬ߞߎ߲߬ߠߌ߲ ߓߘߊ߫ ߗߌߙߏ߲߫</string>
   <string name="permission_rationale_location">ߘߌ߲߬ߞߌߙߊ ߟߊߘߤߊ߬ߟߌ ߞߊ߬ߣߌ߲߬ߣߍ߲߫ ߦߋ߫ ߊ߲ߘߙߏߦߌߘ ߓߟߏ߫ ߛߊ߫ ߞߊ߬ ߞߙߍ߬ߝߍ߬ ߞߍߟߊ߲ ߠߎ߬ ߡߊߟߐ߲߫</string>
   <string name="permission_refused_location">ߞߙߍ߬ߝߍ߬ ߞߍߟߊ߲ ߕߍ߫ ߛߐ߲߬ ߡߊߟߐ߲߫ ߠߊ߫ ߣߌ߫ ߘߌ߲߬ߞߌߙߊ ߡߊ߫ ߟߊߘߊ߬ߤߊ߫</string>
-  <string name="permission_refused_storage">ߖ߭ߌߡ ߞߐߕߐ߮ ߟߎ߬ ߕߍߣߊ߬ ߟߊߛߐ߬ߘߐ߲߬ ߠߊ߫ ߣߌ߫ ߟߊ߬ߡߙߊ߬ߦߙߐ ߡߊ߫ ߟߊߘߤߊ߬</string>
+  <string name="permission_refused_storage" fuzzy="true">ߖ߭ߌߡ ߞߐߕߐ߮ ߟߎ߬ ߕߍߣߊ߬ ߟߊߛߐ߬ߘߐ߲߬ ߠߊ߫ ߣߌ߫ ߟߊ߬ߡߙߊ߬ߦߙߐ ߡߊ߫ ߟߊߘߤߊ߬</string>
   <string name="request_enable_location">ߘߌ߲߬ߞߌߙߊ ߟߊߘߤߊ߬ ߛߊ߫ ߞߊ߬ ߞߙߍ߬ߝߍ߬ߟߊ ߟߊߛߐ߬ߘߐ߲߬</string>
   <string name="discovery_needs_location">ߞߙߍ߬ߝߍ߬ߟߊ ߕߍߣߊ߬ ߞߎ߲߬ߠߊߞߊ߬ ߟߊ߫ ߣߌ߫ ߘߌ߲߬ߞߌߙߊ ߗߋߘߊ ߕߴߊ߬ ߟߊ߫</string>
   <string name="request_enable_wifi">ߥߌߝߌ ߘߊߓߍ߲-ߘߊߓߍ߲ ߞߊ߬ ߝߘߊ߫ ߞߊ߲ߞߋ ߟߊ߬ߓߍ߲߬ߢߐ߲߰ߡߦߊ߬ߘߊ ߟߊ߫</string>
@@ -285,9 +285,9 @@
   <string name="open_drawer">ߛߊߥߎߙߊߟߊ߲ ߘߊߦߟߍ߬</string>
   <string name="close_drawer">ߛߊ߬ߥߎߙߊߟߊ߲ ߘߊߕߎ߲߯</string>
   <string name="how_to_update_content">ߞߣߐߘߐ ߦߋ߫ ߟߊߞߎߘߦߊ߫ ߟߊ߫ ߘߌ߬؟</string>
-  <string name="update_content_description">ߖߐ߲߬ߛߊ߫ ߞߊ߬ ߞߣߐߘߐ ߟߊߞߎߘߦߊ߫ (ߖ߭ߌߡ ߞߐߕߐ߮ ߘߏ߫) ߌ ߞߊߡߊ߲߫ ߦߋ߫ ߞߊ߬ ߦߌߟߡߊ߫ ߘߝߊߣߍ߲ ߡߎ߰ߡߍ ߟߋ߬ ߟߊߖߌ߰ ߌ ߞߎ߲߬ ߊ߬ߟߋ߬ ߞߣߐߘߐ߫ ߞߋߟߋ߲ ߣߌ߲߬ ߗߐ߫. ߌ ߝߊ߲߭ ߘߌ߫ ߛߴߏ߬ ߞߍ߫ ߟߊ߫ ߟߊ߬ߖߌ߰ߒ߬ߞߎ߲߬ߠߌ߲ ߕߍߕߍ߮ ߘߐ߫.</string>
+  <string name="update_content_description" fuzzy="true">ߖߐ߲߬ߛߊ߫ ߞߊ߬ ߞߣߐߘߐ ߟߊߞߎߘߦߊ߫ (ߖ߭ߌߡ ߞߐߕߐ߮ ߘߏ߫) ߌ ߞߊߡߊ߲߫ ߦߋ߫ ߞߊ߬ ߦߌߟߡߊ߫ ߘߝߊߣߍ߲ ߡߎ߰ߡߍ ߟߋ߬ ߟߊߖߌ߰ ߌ ߞߎ߲߬ ߊ߬ߟߋ߬ ߞߣߐߘߐ߫ ߞߋߟߋ߲ ߣߌ߲߬ ߗߐ߫. ߌ ߝߊ߲߭ ߘߌ߫ ߛߴߏ߬ ߞߍ߫ ߟߊ߫ ߟߊ߬ߖߌ߰ߒ߬ߞߎ߲߬ߠߌ߲ ߕߍߕߍ߮ ߘߐ߫.</string>
   <string name="all_files_permission_needed">ߡߊ߬ߞߏ ߦߋ߫ ߞߐߕߐ߮ ߓߍ߯ ߟߊߘߌ߬ߢߍ߬ߟߌ ߟߊ߫</string>
-  <string name="all_files_permission_needed_message">ߖߐ߲߬ߛߊ߫ ߞߊ߬ ߛߋ߫ ߖ߭ߌߡ ߞߐߕߐ߮ ߟߎ߬ ߓߍ߯ ߟߊߛߐ߬ߘߐ߲߬ ߠߊ߫ ߞߍߟߊ߲ ߝߊ߲߭ ߓߍ߯ ߘߐ߫߸ ߊ߲ ߡߊ߬ߞߏ ߦߋ߫ ߞߐߕߐ߮ ߛߎ߯ߦߊ ߓߍ߯ ߟߊߘߌ߬ߢߍ߬ߟߌ ߟߊ߫</string>
+  <string name="all_files_permission_needed_message" fuzzy="true">ߖߐ߲߬ߛߊ߫ ߞߊ߬ ߛߋ߫ ߖ߭ߌߡ ߞߐߕߐ߮ ߟߎ߬ ߓߍ߯ ߟߊߛߐ߬ߘߐ߲߬ ߠߊ߫ ߞߍߟߊ߲ ߝߊ߲߭ ߓߍ߯ ߘߐ߫߸ ߊ߲ ߡߊ߬ߞߏ ߦߋ߫ ߞߐߕߐ߮ ߛߎ߯ߦߊ ߓߍ߯ ߟߊߘߌ߬ߢߍ߬ߟߌ ߟߊ߫</string>
   <string name="allowed">ߟߊߘߌ߬ߢߍ߬ߣߍ߲</string>
   <string name="not_allowed">ߟߊߘߌ߬ߢߍ߬ߓߊߟߌ</string>
   <string name="denied_internet_permission_message">ߥߌߝߌ ߟߊߞߎߣߎ߲߫ ߖߊ߰ߣߌ߲߫ ߛߊ߫ ߞߊ߬ ߛߋ߫ ߞߣߐߘߐ ߓߍ߯ ߟߊߖߌ߰ ߟߴߌ ߞߎ߲߬</string>

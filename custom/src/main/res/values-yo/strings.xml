@@ -4,5 +4,5 @@
 -->
 <resources>
   <string name="retry">Ìtúndánwò</string>
-  <string name="invalid_installation">Fifi sori ẹrọ ti ko tọ. Jọwọ Ṣe igbasilẹ Zim.\n Rii daju pe WiFi wa ni titan ati pe o ni ibi ipamọ to to</string>
+  <string name="invalid_installation" fuzzy="true">Fifi sori ẹrọ ti ko tọ. Jọwọ Ṣe igbasilẹ Zim.\n Rii daju pe WiFi wa ni titan ati pe o ni ibi ipamọ to to</string>
 </resources>

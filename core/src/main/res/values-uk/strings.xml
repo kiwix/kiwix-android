@@ -61,8 +61,8 @@
   <string name="server_started_message">Уведіть цю IP адресу у ваш браузер, аби отримати доступ до серверу %s</string>
   <string name="share_host_address">Поділіться URL-адресою за допомогою інших програм</string>
   <string name="error_file_not_found">Помилка: вибраний ZIM файл неможливо знайти.</string>
-  <string name="unable_to_read_zim_file">Неможливо прочитати цей файл zim!</string>
-  <string name="zim_not_opened">Неможливо відкрити файл zim</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">Неможливо прочитати цей файл zim!</string>
+  <string name="zim_not_opened" fuzzy="true">Неможливо відкрити файл zim</string>
   <string name="error_file_invalid">Помилка: вибраний файл не є вірним файлом ZIM.</string>
   <string name="error_article_url_not_found">Помилка: завантаження статті (Url: %1$s) не вдалося.</string>
   <string name="pref_display_title">Дисплей</string>
@@ -80,7 +80,7 @@
   <string name="no_reader_application_installed">Не вдалось знайти встановлений застосунок для файлу цього типу</string>
   <string name="no_section_info">Не знайдено заголовків вмісту</string>
   <string name="request_storage">Для доступу до офлайнового контенту нам потрібен доступ до Вашого зберігання даних</string>
-  <string name="request_write_storage">Щоб завантажити файли zim, нам потрібен доступ для запису до вашого сховища</string>
+  <string name="request_write_storage" fuzzy="true">Щоб завантажити файли zim, нам потрібен доступ для запису до вашого сховища</string>
   <string name="clear_recent_and_tabs_history_dialog">Ви впевнені, що хочете вилучити свою історію пошуку і скинути всі активні вкладки?</string>
   <string name="delete_recent_search_item">Вилучити цей елемент?</string>
   <string name="pref_clear_all_history_title">Очистити історію</string>
@@ -117,7 +117,7 @@
   <string name="local_zims">Пристрій</string>
   <string name="remote_zims">Онлайн</string>
   <string name="library">Бібліотека</string>
-  <string name="delete_zim_body">Такі zim файли буде видалено:\n\n%s</string>
+  <string name="delete_zim_body" fuzzy="true">Такі zim файли буде видалено:\n\n%s</string>
   <string name="delete_zims_toast">Файл вилучено</string>
   <string name="no_files_here">Тут немає файлів</string>
   <string name="download_no_space">Недостатньо простору для завантаження.</string>
@@ -135,7 +135,7 @@
   <string name="help_7">Він доступний у формі ZIM-файлів. Їх є чимало:</string>
   <string name="help_8">• Вікіпедія доступна окремо для кожної мови</string>
   <string name="help_9">• Доступний також інший контент, такий як Вікілікс чи Вікіджерела</string>
-  <string name="help_10">Ви можете або завантажити свої обрані ZIM-файли в межах застосунка, або обережно вибрати ті, які Ви хочете, й завантажити їх зі стаціонарного комп’ютера, перед тим як переносити ZIM-файли на свою SD-карту.</string>
+  <string name="help_10" fuzzy="true">Ви можете або завантажити свої обрані ZIM-файли в межах застосунка, або обережно вибрати ті, які Ви хочете, й завантажити їх зі стаціонарного комп’ютера, перед тим як переносити ZIM-файли на свою SD-карту.</string>
   <string name="help_11">ZIM-файли, завантажені із застосунка, розташовані в каталозі зовнішнього зберігання даних у папці під назвою Kiwix.</string>
   <string name="pref_storage">Зберігання даних</string>
   <string name="pref_current_folder">Поточна папка</string>
@@ -150,9 +150,9 @@
   <string name="confirm_stop_download_title">Зупинити завантаження?</string>
   <string name="confirm_stop_download_msg">Ви впевнені, що хочете зупинити це завантаження?</string>
   <string name="download_change_storage">Селектор пристрою зберігання даних</string>
-  <string name="tts_not_enabled">Читання тексту вголос не увімкнене для цього ZIM-файлу</string>
-  <string name="texttospeech_initialization_failed">Не вдалося иніціалізувати Текст-у-Розмову. Будь оаска, спробуйте ще раз</string>
-  <string name="texttospeech_error">Несподівана помилка Текст-у-Розмову. Будь ласка, спробуйте ще раз</string>
+  <string name="tts_not_enabled" fuzzy="true">Читання тексту вголос не увімкнене для цього ZIM-файлу</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">Не вдалося иніціалізувати Текст-у-Розмову. Будь оаска, спробуйте ще раз</string>
+  <string name="texttospeech_error" fuzzy="true">Несподівана помилка Текст-у-Розмову. Будь ласка, спробуйте ще раз</string>
   <string name="next">Наступна</string>
   <string name="previous">Попереднє</string>
   <string name="wifi_only_title">Дозволити завантаження контенту через мобільну мережу?</string>
@@ -176,7 +176,7 @@
   <string name="crash_title">Хммм… Це збентежує</string>
   <string name="crash_description">Схоже, наша програма впала.\n\nЧи не бажаєте допомогти нам виправити цю проблему, надавши наступну інформацію?</string>
   <string name="crash_checkbox_language">Ваші налаштування мави</string>
-  <string name="crash_checkbox_zimfiles">Перелік Ваших Zim Файлів</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">Перелік Ваших Zim Файлів</string>
   <string name="crash_checkbox_exception">Деталі помилки</string>
   <string name="crash_checkbox_logs">Журнал подій застосунку</string>
   <string name="crash_checkbox_device">Подробиці про пристрій</string>
@@ -236,7 +236,7 @@
   <string name="connection_failed">З’єднання не вдалося</string>
   <string name="permission_rationale_location">Android-у потрібний дозвіл на отримання місцезнахождення для пошуку сусідніх пристроїв</string>
   <string name="permission_refused_location">Неможливо знайти сусідні пристрої без дозволу на доступ до місцезнаходження</string>
-  <string name="permission_refused_storage">Неможливо отримати доступ до файлів zim без дозволу на доступ до сховища</string>
+  <string name="permission_refused_storage" fuzzy="true">Неможливо отримати доступ до файлів zim без дозволу на доступ до сховища</string>
   <string name="request_enable_location">Вмикнути місцезнаходження для вможливлення пошуку сусідніх пристроїв</string>
   <string name="discovery_needs_location">Пошук сусідніх пристроїв неможливий без сервісу місцезнаходження</string>
   <string name="request_enable_wifi">Ввімкніть WiFi P2P у налаштуваннях системи</string>
@@ -291,9 +291,9 @@
   <string name="open_drawer">Відкрити редактор</string>
   <string name="close_drawer">Закрити редактор</string>
   <string name="how_to_update_content">Як оновити вміст?</string>
-  <string name="update_content_description">Щоб оновити вміст (zim-файл), вам треба завантажити повну найсвіжішу версію цього самого вмісту. Ви можете зробити це у розділі завантажень.</string>
+  <string name="update_content_description" fuzzy="true">Щоб оновити вміст (zim-файл), вам треба завантажити повну найсвіжішу версію цього самого вмісту. Ви можете зробити це у розділі завантажень.</string>
   <string name="all_files_permission_needed">Потрібний дозвіл на всі файли</string>
-  <string name="all_files_permission_needed_message">Щоб отримати доступ до всіх файлів zim на пристрої, нам потрібно мати дозвіл на всі файли</string>
+  <string name="all_files_permission_needed_message" fuzzy="true">Щоб отримати доступ до всіх файлів zim на пристрої, нам потрібно мати дозвіл на всі файли</string>
   <string name="allowed">Дозволено</string>
   <string name="not_allowed">Не дозволено</string>
   <string name="allow">Дозволити</string>

@@ -54,8 +54,8 @@
   <string name="server_started_message">Vê adresa IPyê di geroka xwe de binivîsîne ji bo ku xwe bigihînî servera %s</string>
   <string name="share_host_address">URLyê bi riya sepanên din parve bike</string>
   <string name="error_file_not_found">Çewtîː Peldanka ZIM’ê ya bijartî nehate dîtin.</string>
-  <string name="unable_to_read_zim_file">Nebû ku vê dosyeya zimê bixwîne!</string>
-  <string name="zim_not_opened">Nikare dosyeya zim-ê veke</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">Nebû ku vê dosyeya zimê bixwîne!</string>
+  <string name="zim_not_opened" fuzzy="true">Nikare dosyeya zim-ê veke</string>
   <string name="error_file_invalid">Çewtîː Peldanka bijartî ne peldankeke ZIMê ya derbasdar e.</string>
   <string name="error_article_url_not_found">Çewtîː Barkirina gotara (Url: %1$s) têk çû.</string>
   <string name="pref_display_title">Nîşan bide</string>
@@ -73,7 +73,7 @@
   <string name="no_reader_application_installed">Ji bo cureya vê peldankê sepanekî sazkirî nehat dîtin</string>
   <string name="no_section_info">Sernavê Naverok Nehat Dîtin</string>
   <string name="request_storage">Ji bo ku em têkevin naveroka offline divê em têkevin depoya we</string>
-  <string name="request_write_storage">Ji bo daxistina dosyeyên zimê îhtiyaciya me bi îznê gihîna depoya cîhaza te heye</string>
+  <string name="request_write_storage" fuzzy="true">Ji bo daxistina dosyeyên zimê îhtiyaciya me bi îznê gihîna depoya cîhaza te heye</string>
   <string name="clear_recent_and_tabs_history_dialog">Tu ji daxwazên xwe yên jêbirina raboriya lêgerînê û sifirkirina hemû paceyên çalak bawer î?</string>
   <string name="delete_recent_search_item">Vê pelê jê bibe?</string>
   <string name="pref_clear_all_history_title">Raboriyê paqij bike</string>
@@ -111,7 +111,7 @@
   <string name="local_zims">Amûr</string>
   <string name="remote_zims">Online</string>
   <string name="library">Pirtûkxane</string>
-  <string name="delete_zim_body">Dosyeya(yên) li jêr yên zim-ê wê bêne jêbirin:\n\n%s</string>
+  <string name="delete_zim_body" fuzzy="true">Dosyeya(yên) li jêr yên zim-ê wê bêne jêbirin:\n\n%s</string>
   <string name="delete_zims_toast">Pel hat jêbirin</string>
   <string name="no_files_here">Li vir peldank tune ne</string>
   <string name="download_no_space">Ji bo daxistinê cihê ku hewce dike, tune ye.</string>
@@ -129,7 +129,7 @@
   <string name="help_7">Wekî peldankên ZIMê hene. Li wir gelek hene:</string>
   <string name="help_8">• Wikipedia ji bo her zimanî di bikaranînê de ye</string>
   <string name="help_9">• Mîna Wikileaks an jî Wikisource naverokên din jî hene</string>
-  <string name="help_10">Tu dikarî peldankên ZIMê yên ku te bijartiye ji nav sepanê daxînî yan jî berî ku peldankên ZIMê li SD card-ê neqil bikî, yên ku tu dixwazî bibijêrî û ji kompûtereke sermaseyê daxînî.</string>
+  <string name="help_10" fuzzy="true">Tu dikarî peldankên ZIMê yên ku te bijartiye ji nav sepanê daxînî yan jî berî ku peldankên ZIMê li SD card-ê neqil bikî, yên ku tu dixwazî bibijêrî û ji kompûtereke sermaseyê daxînî.</string>
   <string name="help_11">Peldankên ZIMê yên ku yên ji nava sepanê hatine daxistin, di nav pelbendekî bi navê Kiwix-ê de ne ya ku li nav cîhaza depokirinê ya derveyî ye.</string>
   <string name="pref_storage">Depokirin</string>
   <string name="pref_current_folder">Peldanka niha</string>
@@ -144,9 +144,9 @@
   <string name="confirm_stop_download_title">Daxistinê rabiwestîne?</string>
   <string name="confirm_stop_download_msg">Tu ji daxwaza xwe ya rawestandina vê daxistinê bawer î?</string>
   <string name="download_change_storage">Hilbijêra amûra depokirinê</string>
-  <string name="tts_not_enabled">Ji bo vê peldanka ZIM-ê xwendina nivîsê ne ya sepandinê ye</string>
-  <string name="texttospeech_initialization_failed">Destpêkirina Nivîsê-kirin-Xeberdanê bi ser neket. Ji kerema xwe cardin biceribîne</string>
-  <string name="texttospeech_error">Çewtiyeke nehêvîkirî rû da di Nivîsê-kirin-Xeberdanê (Text to Speech) de. Ji kerema xwe cardin biceribîne</string>
+  <string name="tts_not_enabled" fuzzy="true">Ji bo vê peldanka ZIM-ê xwendina nivîsê ne ya sepandinê ye</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">Destpêkirina Nivîsê-kirin-Xeberdanê bi ser neket. Ji kerema xwe cardin biceribîne</string>
+  <string name="texttospeech_error" fuzzy="true">Çewtiyeke nehêvîkirî rû da di Nivîsê-kirin-Xeberdanê (Text to Speech) de. Ji kerema xwe cardin biceribîne</string>
   <string name="next">Pêşve</string>
   <string name="previous">Yê berê</string>
   <string name="wifi_only_title">Bira ji tora mobîlê destûra daxistina naverokê bê dayîn?</string>
@@ -170,7 +170,7 @@
   <string name="crash_title">Baş e… Ev Şermker e</string>
   <string name="crash_description">Wisa dixuye ku em hilweşiyan. \n\nGelo tu dixwazî alî me bikî ku em vê problemê çareser bikin bi şandina agahiyên li jêr?</string>
   <string name="crash_checkbox_language">Mîhengên Te yên Zimanî</string>
-  <string name="crash_checkbox_zimfiles">Lîsteyeke Dosyeyên Te yên Zim-ê</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">Lîsteyeke Dosyeyên Te yên Zim-ê</string>
   <string name="crash_checkbox_exception">Detayên Hilweşînê</string>
   <string name="crash_checkbox_logs">Tomarên Sepanê</string>
   <string name="crash_checkbox_device">Detayên Amûrê</string>
@@ -230,7 +230,7 @@
   <string name="connection_failed">Girêdan têk çû</string>
   <string name="permission_rationale_location">Destûra lokasyonê lazim e ji aliyê Androîdê ve ji bo destûr bidin sepanê ku karibe cîhazên din ên wekhev tesbît bike.</string>
   <string name="permission_refused_location">Nikare cîhazên wekhev tesbît bike bêyî destûrên lokasyonê</string>
-  <string name="permission_refused_storage">Nikare bigihe pelên zim-ê bêyî destûra depoyê</string>
+  <string name="permission_refused_storage" fuzzy="true">Nikare bigihe pelên zim-ê bêyî destûra depoyê</string>
   <string name="request_enable_location">Lokasyonê aktîv bike ji bo destûr vidî tesbîtkirina hevcinsan</string>
   <string name="discovery_needs_location">Bêyî xizmetên lokasyonê hevcinsan nikare tesbît bike</string>
   <string name="request_enable_wifi">Ji mîhengan Wîfî P2Pyê aktîv bike</string>
@@ -285,9 +285,9 @@
   <string name="open_drawer">Çaviyê veke</string>
   <string name="close_drawer">Çaviyê bigire</string>
   <string name="how_to_update_content">Naverok çawa tê rojanekirin?</string>
-  <string name="update_content_description">Ji bo rojanekirina naverokê (dosyeyeke zim-ê) divê tu fullversiyona dawîn a eynî naverokê daxînî. Tu vê yekê bi riya beşa daxistinê dikarî pêk bînî.</string>
+  <string name="update_content_description" fuzzy="true">Ji bo rojanekirina naverokê (dosyeyeke zim-ê) divê tu fullversiyona dawîn a eynî naverokê daxînî. Tu vê yekê bi riya beşa daxistinê dikarî pêk bînî.</string>
   <string name="all_files_permission_needed">Îzna Temamê Dosyeyan Lazim e</string>
-  <string name="all_files_permission_needed_message">Ji bo ku em karibin bigihin temamê dosyeyên zim-ê yê di cîhaza te de divê Îzna Temamê Dosyeyan bidî me</string>
+  <string name="all_files_permission_needed_message" fuzzy="true">Ji bo ku em karibin bigihin temamê dosyeyên zim-ê yê di cîhaza te de divê Îzna Temamê Dosyeyan bidî me</string>
   <string name="allowed">Destûrdayî</string>
   <string name="not_allowed">Ne destûrdayî</string>
   <string name="denied_internet_permission_message">Ji bo daxistina naverokê ji kerema xwe wîfiyê aktîv bike</string>

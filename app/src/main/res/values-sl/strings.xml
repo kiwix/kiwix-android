@@ -8,6 +8,6 @@
   <string name="cannot_open_file" fuzzy="true">Datoteke ni bilo mogoče odpreti\nPoskusite to datoteko poiskati na zavihku Naprava v vaši knjižnici</string>
   <string name="send_files_title">Pošlji datoteke</string>
   <string name="receive_files_title">Prejmi datoteke</string>
-  <string name="no_app_found_to_open">Ni najdene aplikacije za izbiro datoteke ZIM!</string>
-  <string name="select_zim_file">Izberite datoteko ZIM za branje</string>
+  <string name="no_app_found_to_open" fuzzy="true">Ni najdene aplikacije za izbiro datoteke ZIM!</string>
+  <string name="select_zim_file" fuzzy="true">Izberite datoteko ZIM za branje</string>
 </resources>

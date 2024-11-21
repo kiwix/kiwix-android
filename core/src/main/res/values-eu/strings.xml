@@ -63,8 +63,8 @@
   <string name="qr_code">Errendaturiko QR kodea</string>
   <string name="share_host_address">Partekatu URLa beste aplikazioen bitartez</string>
   <string name="error_file_not_found">Akatsa: Hautatutako ZIM artxiboa ezin izan da aurkitu.</string>
-  <string name="unable_to_read_zim_file">Ezin da irakurri ZIM fitxategi hau.</string>
-  <string name="zim_not_opened">Ezin da ireki ZIM fitxategia</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">Ezin da irakurri ZIM fitxategi hau.</string>
+  <string name="zim_not_opened" fuzzy="true">Ezin da ireki ZIM fitxategia</string>
   <string name="error_file_invalid">Akatsa: Hautatutako artikulua ez da baliozko ZIM artxiboa.</string>
   <string name="error_article_url_not_found">Akatsa: (Url: %1$s) artikuluaren kargatzea eten da.</string>
   <string name="pref_display_title">Erakutsi</string>
@@ -80,11 +80,11 @@
   <string name="pref_credits_title">Kredituak</string>
   <string name="tts_lang_not_supported">Orrialde honetako hizkuntza ez da onartzen. Baliteke artikulua ezin ongi irakurtzea.</string>
   <string name="no_reader_application_installed">Ezin izan da aurkitu mota honetako artxiborako instalatutako aplikazioa</string>
-  <string name="no_email_application_installed">Instalatu posta elektronikoko zerbitzu-hornitzaile bat edo bidal iezaguzu mezu bat hona: %1s</string>
+  <string name="no_email_application_installed">Mesedez, instalatu posta elektronikoko bezero bat</string>
   <string name="no_app_found_to_select_bookmark_file">Ez da aurkitu aplikaziorik laster-markaren fitxategi bat hautatzeko</string>
   <string name="no_section_info">Ez da edukiaren goibururik aurkitu</string>
   <string name="request_storage">Konexiorik gabeko edukian sartzeko zure biltegira sartu behar gara.</string>
-  <string name="request_write_storage">ZIM fitxategiak deskargatzeko, biltegiratzea irakurtzeko baimena behar dugu.</string>
+  <string name="request_write_storage" fuzzy="true">ZIM fitxategiak deskargatzeko, biltegiratzea irakurtzeko baimena behar dugu.</string>
   <string name="clear_recent_and_tabs_history_dialog">Ziur zaude historiala ezabatu eta aktibatutako erailtz guztiak berrabiarazi nahi dituzula?</string>
   <string name="delete_recent_search_item">Elementu hau ezabatu?</string>
   <string name="pref_clear_all_history_title">Historia garbitu</string>
@@ -128,7 +128,7 @@
   <string name="local_zims">Gailua</string>
   <string name="remote_zims">Konektatuta</string>
   <string name="library">Liburutegia</string>
-  <string name="delete_zim_body">Honako ZIM fitxategi hauek ezabatuko dira:\n\n%s</string>
+  <string name="delete_zim_body" fuzzy="true">Honako ZIM fitxategi hauek ezabatuko dira:\n\n%s</string>
   <string name="delete_zims_toast">Fitxategi ezabatua</string>
   <string name="no_files_here">Artxiborik ez hemen</string>
   <string name="download_no_space">Ez dago nahikoa lekurik deskargatzeko.</string>
@@ -147,7 +147,7 @@
   <string name="help_7">ZIM artxibo gisa prest daude. Asko daude:</string>
   <string name="help_8">• Wikipedia hizkuntza bakoitzean erabili daiteke.</string>
   <string name="help_9">• Beste edukiak Wikileaks edo Wikisource gisa baliogarriak dira ere.</string>
-  <string name="help_10">Aukeratutako ZIM fitxategiak aplikazioan bertan deskarga ditzakezu; edo, bestela, kontu handiz hauta itzazu nahi dituzunak eta mahaigaineko ordenagailu batetik deskarga ditzakezu, ZIM fitxategiak SD txartelera transferitu aurretik.</string>
+  <string name="help_10" fuzzy="true">Aukeratutako ZIM fitxategiak aplikazioan bertan deskarga ditzakezu; edo, bestela, kontu handiz hauta itzazu nahi dituzunak eta mahaigaineko ordenagailu batetik deskarga ditzakezu, ZIM fitxategiak SD txartelera transferitu aurretik.</string>
   <string name="help_11">In-app-eko jaitsitako ZIM artxiboak kanpoko memorian daude, Kiwix deritzon karpeta batean.</string>
   <string name="pref_storage">Biltegia</string>
   <string name="pref_current_folder">Oraingo Artxiboa</string>
@@ -164,9 +164,9 @@
   <string name="confirm_stop_download_title">Deskarga geldiarazi?</string>
   <string name="confirm_stop_download_msg">Ziur zaude deskarga eten nahi duzula?</string>
   <string name="download_change_storage">Memoria hautatzaile gailua</string>
-  <string name="tts_not_enabled">Testuak ez du balio ZIM artxibo honetarako</string>
-  <string name="texttospeech_initialization_failed">Ezin izan da abiarazi testua ahots bihurtzeko eginbidea. Saiatu berriro.</string>
-  <string name="texttospeech_error">Ustekabeko errore bat izan da testua ahots bihurtzeko eginbidean. Saiatu berriro.</string>
+  <string name="tts_not_enabled" fuzzy="true">Testuak ez du balio ZIM artxibo honetarako</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">Ezin izan da abiarazi testua ahots bihurtzeko eginbidea. Saiatu berriro.</string>
+  <string name="texttospeech_error" fuzzy="true">Ustekabeko errore bat izan da testua ahots bihurtzeko eginbidean. Saiatu berriro.</string>
   <string name="next">Hurrengoa</string>
   <string name="previous">Aurrekoa</string>
   <string name="wifi_only_title">Deskarga baimendu mobil konexioaren bidez?</string>
@@ -190,7 +190,7 @@
   <string name="crash_title">Kriskitin, kraskitin!</string>
   <string name="crash_description">Badirudi errore bat izan dela.\n\nLagunduko al zeniguke honako informazio hau bidaltzen arazoa konpon dezagun?</string>
   <string name="crash_checkbox_language">Hizkuntzaren ezarpenak</string>
-  <string name="crash_checkbox_zimfiles">ZIM fitxategien zerrenda</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">ZIM fitxategien zerrenda</string>
   <string name="crash_checkbox_exception">Errorearen xehetasunak</string>
   <string name="crash_checkbox_logs">Aplikazioaren egunkariak</string>
   <string name="crash_checkbox_device">Gailuaren xehetasunak</string>

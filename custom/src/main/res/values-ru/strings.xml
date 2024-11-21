@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Pavel200071
 * Smavrina
 -->
 <resources>
   <string name="retry">Повторить</string>
-  <string name="invalid_installation">Проблема с установкой. Пожалуйста скачайте Zim.\n Проверьте, что WiFi включён и в хранилище достаточно места</string>
+  <string name="invalid_installation">Неверная установка. Пожалуйста, скачайте ZIM.\n Убедитесь, что включен Wi-Fi и у вас достаточно места для хранения</string>
 </resources>

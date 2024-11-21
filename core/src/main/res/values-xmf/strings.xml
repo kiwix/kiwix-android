@@ -135,7 +135,7 @@
   <string name="your_languages">გიშაგორილი ნინეფი:</string>
   <string name="other_languages">შხვა ნინეფი:</string>
   <string name="crash_checkbox_language">თქვანი ნინაშ პარამეტრეფი</string>
-  <string name="crash_checkbox_zimfiles">თქვანი Zim ფაილეფიშ ერკებული</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">თქვანი Zim ფაილეფიშ ერკებული</string>
   <string name="crash_checkbox_device">მონწყილობაშ ინფორმაცია</string>
   <string name="crash_button_confirm">ინფორმაციაშ ჯღონუა</string>
   <string name="new_tab_shortcut_label">ახალი აშნაკიდა</string>

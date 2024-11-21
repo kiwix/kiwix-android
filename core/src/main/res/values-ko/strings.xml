@@ -70,8 +70,8 @@
   <string name="qr_code">표시된 QR 코드</string>
   <string name="share_host_address">다른 애플리케이션을 통해 URL 공유</string>
   <string name="error_file_not_found">오류: 선택된 ZIM 파일을 찾을 수 없습니다.</string>
-  <string name="unable_to_read_zim_file">이 zim 파일을 읽을 수 없습니다!</string>
-  <string name="zim_not_opened">zim 파일을 열 수 없음</string>
+  <string name="unable_to_read_zim_file">이 ZIM 파일을 읽을 수 없습니다!</string>
+  <string name="zim_not_opened">ZIM 파일을 열 수 없습니다</string>
   <string name="error_file_invalid">오류: 선택한 파일은 올바른 ZIM 파일이 아닙니다.</string>
   <string name="error_article_url_not_found">오류: 문서(Url: %1$s)를 불러오는 데 실패했습니다.</string>
   <string name="pref_display_title">표시</string>
@@ -87,11 +87,11 @@
   <string name="pref_credits_title">제작진</string>
   <string name="tts_lang_not_supported">이 문서의 언어는 지원되지 않습니다. 이 글을 올바르게 읽지 못할 수 있습니다.</string>
   <string name="no_reader_application_installed">이 파일 형식을 지원하는 응용 프로그램을 찾을 수 없습니다</string>
-  <string name="no_email_application_installed">이메일 서비스 제공자를 설치하거나 %1s에 이메일을 보내 주시기 바랍니다</string>
+  <string name="no_email_application_installed">이메일 클라이언트를 설치해주세요</string>
   <string name="no_app_found_to_select_bookmark_file">북마크 파일을 선택할 수 있는 앱이 없습니다.</string>
   <string name="no_section_info">콘텐츠 헤더를 찾을 수 없습니다</string>
   <string name="request_storage">오프라인 콘텐츠에 접근하려면 저장소 접근 권한이 필요합니다</string>
-  <string name="request_write_storage">zim 파일을 다운로드하려면 저장소에 쓰기 권한이 필요합니다.</string>
+  <string name="request_write_storage">ZIM 파일을 다운로드하려면 저장소에 쓰기 권한이 필요합니다</string>
   <string name="clear_recent_and_tabs_history_dialog">검색 기록을 삭제하고 열려있는 모든 탭을 초기화하겠습니까?</string>
   <string name="delete_recent_search_item">이 항목을 지우겠습니까?</string>
   <string name="pref_clear_all_history_title">기록 지우기</string>
@@ -135,7 +135,7 @@
   <string name="local_zims">장치</string>
   <string name="remote_zims">온라인</string>
   <string name="library">라이브러리</string>
-  <string name="delete_zim_body">다음 zim 파일이 삭제됩니다:\n\n%s</string>
+  <string name="delete_zim_body">다음 ZIM 파일이 삭제됩니다:\n\n%s</string>
   <string name="delete_zims_toast">파일이 삭제되었습니다</string>
   <string name="no_files_here">여기에 파일이 없습니다</string>
   <string name="download_no_space">다운로드할 공간이 충분하지 않습니다.</string>
@@ -155,12 +155,13 @@
   <string name="help_7">ZIM 파일로 사용이 가능합니다. 많은 수의 파일이 있습니다:</string>
   <string name="help_8">• 위키백과는 각각의 언어별로 사용이 가능합니다</string>
   <string name="help_9">• 위키리크스나 위키문헌과 같은 다른 콘텐츠도 사용이 가능합니다</string>
-  <string name="help_10">앱 안에서 선택한 ZIM 파일을 다운로드하거나 원하는 항목을 주의하여 선택한 다음 ZIM 파일을 SD 카드로 전송하기 전에 데스크톱 컴퓨터로부터 다운로드할 수 있습니다.</string>
+  <string name="help_10" fuzzy="true">앱 안에서 선택한 ZIM 파일을 다운로드하거나 원하는 항목을 주의하여 선택한 다음 ZIM 파일을 SD 카드로 전송하기 전에 데스크톱 컴퓨터로부터 다운로드할 수 있습니다.</string>
   <string name="help_11">앱 안에서 다운로드되는 ZIM 파일들은 Kiwix라는 이름의 폴더의 외부 저장 디렉터리에 위치합니다.</string>
   <string name="pref_storage">저장 공간</string>
   <string name="pref_current_folder">현재 폴더</string>
   <string name="pref_storage_used">%s 사용됨</string>
   <string name="pref_free_storage">%s 무료</string>
+  <string name="choose_storage_to_download_book">책을 다운로드할 저장소를 선택</string>
   <string name="delete_zim_failed">죄송하지만 일부 파일을 삭제하지 못했습니다. 파일 관리자를 대신 사용해 보십시오.</string>
   <string name="tts_pause">일시 정지</string>
   <string name="tts_resume">계속하기</string>
@@ -172,9 +173,9 @@
   <string name="confirm_stop_download_title">다운로드를 중단하겠습니까?</string>
   <string name="confirm_stop_download_msg">이 다운로드를 중단하겠습니까?</string>
   <string name="download_change_storage">기억 장치 선택기</string>
-  <string name="tts_not_enabled">이 ZIM 파일에 대해 TTS가 활성화되어 있지 않습니다</string>
-  <string name="texttospeech_initialization_failed">텍스트–음성 초기화가 실패했습니다. 다시 시도해 주세요</string>
-  <string name="texttospeech_error">텍스트–음성 변환 과정 중 예기치 않은 오류가 발생했습니다. 다시 시도해 주세요</string>
+  <string name="tts_not_enabled" fuzzy="true">이 ZIM 파일에 대해 TTS가 활성화되어 있지 않습니다</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">텍스트–음성 초기화가 실패했습니다. 다시 시도해 주세요</string>
+  <string name="texttospeech_error" fuzzy="true">텍스트–음성 변환 과정 중 예기치 않은 오류가 발생했습니다. 다시 시도해 주세요</string>
   <string name="next">다음</string>
   <string name="previous">이전</string>
   <string name="wifi_only_title">모바일 네트워크를 통해 내용을 다운로드할 수 있도록 하겠습니까?</string>
@@ -198,7 +199,7 @@
   <string name="crash_title">앗.. 부끄럽네요.</string>
   <string name="crash_description">충돌이 발생한 것 같습니다.\n\n다음의 정보를 보냄으로써 저희가 이 문제를 해결하는데 도움을 주시겠습니까?</string>
   <string name="crash_checkbox_language">내 언어 설정</string>
-  <string name="crash_checkbox_zimfiles">Zim 파일 목록</string>
+  <string name="crash_checkbox_zimfiles">ZIM 파일 목록</string>
   <string name="crash_checkbox_exception">충돌 상세 정보</string>
   <string name="crash_checkbox_logs">애플리케이션 로그</string>
   <string name="crash_checkbox_device">장치 상세 정보</string>
@@ -236,7 +237,7 @@
   <string name="complete">완료</string>
   <string name="paused_state">일시 중단됨</string>
   <string name="failed_state">실패: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed">짐 파일을 다운로드할 수 없습니다. 플레이 스토어에서 애플리케이션을 다시 설치해 보십시오.</string>
+  <string name="custom_download_error_message_for_authentication_failed">ZIM 파일을 다운로드할 수 없습니다. 플레이 스토어에서 애플리케이션을 다시 설치해 보십시오.</string>
   <string name="save">저장</string>
   <string name="note">노트</string>
   <string name="wiki_article_title">위키 문서 제목</string>
@@ -264,7 +265,7 @@
   <string name="connection_failed">연결 실패</string>
   <string name="permission_rationale_location">안드로이드에서 앱의 피어 장치 찾기를 허용하려면 위치 권한이 필요합니다</string>
   <string name="permission_refused_location">위치 권한 없이 피어 장치를 찾을 수 없습니다</string>
-  <string name="permission_refused_storage">스토리지 권한 없이 zim 파일에 접근할 수 없습니다</string>
+  <string name="permission_refused_storage">저장 권한 없이 ZIM 파일에 접근할 수 없습니다</string>
   <string name="request_enable_location">친구를 찾기 위해 위치 접근을 활성화합니다</string>
   <string name="discovery_needs_location">위치 서비스 없이 피어를 찾을 수 없습니다</string>
   <string name="request_enable_wifi">시스템 설정에서 와이파이 P2P 활성화</string>
@@ -306,6 +307,7 @@
   <string name="delete_selected_bookmarks">선택한 북마크를 지울까요?</string>
   <string name="import_bookmarks_dialog_title">북마크를 가져올까요?</string>
   <string name="export_all_bookmarks_dialog_title">모든 북마크를 내보낼까요?</string>
+  <string name="export_all_bookmarks_dialog_message">내보내기를 하면 Download/org.kiwix…/ 폴더에 bookmark.xml 파일이 생성됩니다.</string>
   <string name="bookmark_imported_message">모든 북마크를 가져왔습니다.</string>
   <string name="error_invalid_bookmark_file">오류: 선택한 파일은 유효한 북마크 파일이 아닙니다.</string>
   <string name="on">켜기</string>
@@ -328,11 +330,16 @@
   <string name="preparing_file_for_copy">복사/이동 준비 중</string>
   <string name="action_copy">복사</string>
   <string name="move">이동</string>
-  <string name="copy_move_files_dialog_description">파일을 복사하거나 이동하시겠습니까?</string>
-  <string name="copy_file_error_message">zim 파일 복사 오류: %s.</string>
-  <string name="move_file_error_message">zim 파일 이동 오류: %s.</string>
+  <string name="copying_zim_file">ZIM 파일을 복사하는 중…</string>
+  <string name="moving_zim_file">ZIM 파일을 이동하는 중…</string>
+  <string name="copy_move_files_dialog_description">Kiwix는 ZIM 파일을 자체 데이터 디렉터리에 위치할 것을 요구합니다. 복사하거나 이동하시겠습니까?</string>
+  <string name="copy_file_error_message">ZIM 파일 복사 오류: %s.</string>
+  <string name="why_copy_move_files_to_app_directory">앱 공개 디렉토리로 파일을 이동/복사하는 이유는 무엇입니까?</string>
+  <string name="copy_move_files_to_app_directory_description">안드로이드 11 이상의 구글 플레이 정책으로 인해 당사 앱은 더 이상 기기의 다른 곳에 저장된 파일에 직접 접근할 수 없습니다. 선택한 파일을 보려면 해당 파일을 애플리케이션 디렉터리 내의 특수 폴더로 이동하거나 복사해야 합니다. 이를 통해 파일에 접근하고 열 수 있습니다.</string>
+  <string name="choose_storage_to_copy_move_zim_file">ZIM 파일을 복사/이동할 저장소 선택</string>
+  <string name="move_file_error_message">ZIM 파일 이동 오류: %s.</string>
   <string name="how_to_update_content">어떻게 콘텐츠를 업데이트합니까?</string>
-  <string name="update_content_description">콘텐츠(zim 파일)을 업데이트하려면 매우 동일한 콘텐츠의 최신판 전체를 다운로드해야 합니다. 다운로드 부분에서 해당 작업을 할 수 있습니다.</string>
+  <string name="update_content_description">콘텐츠(ZIM 파일)을 업데이트하려면 매우 동일한 콘텐츠의 최신판 전체를 다운로드해야 합니다. 다운로드 부분에서 해당 작업을 할 수 있습니다.</string>
   <string name="all_files_permission_needed">모든 파일 권한 필요</string>
   <string name="all_files_permission_needed_message">장치의 모든 ZIM 파일에 접근하려면 모든 파일 권한이 있어야 합니다</string>
   <string name="allowed">허용됨</string>
@@ -340,6 +347,7 @@
   <string name="denied_internet_permission_message">내용을 다운로드하려면 와이파이를 활성화해 주십시오</string>
   <string name="system_unable_to_grant_permission_message">시스템이 권한을 부여할 수 없습니다!</string>
   <string name="allow">허용</string>
+  <string name="swipe_down_for_library">라이브러리를 보려면 아래로 스와이프하세요</string>
   <string name="starting_downloading_remote_library">온라인 라이브러리 다운로드 시작 중</string>
   <string name="downloading_library">라이브러리를 다운로드하는 중\n%s</string>
   <string name="no_notes">노트 없음</string>
@@ -350,13 +358,24 @@
   <string name="open_article">문서 열기</string>
   <string name="delete_note_dialog_message">참고: 스토리지에서 노트가 삭제되지 않았습니다</string>
   <string name="delete_selected_notes">선택한 노트를 삭제할까요?</string>
+  <string name="download_tts_language_title">이 언어를 다운로드하여 소리내어 읽기 기능을 사용하세요</string>
   <string name="download_tts_language_message">다운로드 버튼을 클릭해 주십시오. 그러면 필요한 언어를 자동으로 다운로드하게 됩니다.</string>
   <string name="external_link_copied_message">외부 링크가 클립보드에 복사되었습니다</string>
+  <string name="read_aloud_service_channel_name">소리내어 읽기 서비스 채널</string>
+  <string name="read_aloud_running">소리내어 읽기 실행 중</string>
+  <string name="backward_history">이전 역사</string>
+  <string name="forward_history">이후 역사</string>
+  <string name="clear_all_navigation_history_message">모든 (이전, 이후) 둘러보기 역사를 지웁니다</string>
+  <string name="navigation_history_cleared">둘러보기 역사를 지웠습니다</string>
   <string name="go_to_settings_label">설정으로 이동</string>
+  <string name="click_nearby_devices_message">근처 기기를 검색하려면 여기를 클릭하세요.</string>
   <string name="your_device_name_message">장치 이름이 여기에 표시됩니다.</string>
   <string name="storage_selection_dialog_accessibility_description">ZIM 파일을 다운로드하기 위한 스토리지를 선택하십시오.</string>
+  <string name="zim_file_content_description">읽기 내용이 있는 ZIM 파일</string>
   <string name="toolbar_back_button_content_description">이전 화면으로 이동</string>
   <string name="save_or_open_unsupported_files_dialog_title">이 파일을 저장하거나 열겠습니까?</string>
+  <string name="save_or_open_unsupported_files_dialog_message">\'열기\'를 선택하면 이 파일이 외부 리더 애플리케이션에서 열립니다</string>
   <string name="donation_dialog_title">오늘 기부하세요</string>
+  <string name="donation_dialog_description">%s에 여러분의 도움이 필요합니다.</string>
   <string name="make_donation">기부하기</string>
 </resources>

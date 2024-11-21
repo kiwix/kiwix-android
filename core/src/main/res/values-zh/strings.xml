@@ -16,6 +16,7 @@
 * LowensteinYang
 * Lynzrand
 * McDutchie
+* MohitMali
 * Shuiwater
 * SomeyaMako
 * StarrySky
@@ -99,7 +100,7 @@
   <string name="pref_credits_title">制作人员</string>
   <string name="tts_lang_not_supported">此页面不支持你的语言。文章可能无法正常阅读。</string>
   <string name="no_reader_application_installed">找不到此类型文件的已安装应用程序</string>
-  <string name="no_email_application_installed">请安装电子邮件服务提供商，或是在%1s发送电子邮件给我们</string>
+  <string name="no_email_application_installed">请安装电子邮件客户端。</string>
   <string name="no_app_found_to_select_bookmark_file">未找到用来选择书签文件的应用程序</string>
   <string name="no_section_info">未找到内容标题</string>
   <string name="request_storage">要访问离线内容，我们需要获取您的存储权限</string>
@@ -167,12 +168,13 @@
   <string name="help_7">它们以ZIM格式的文件存在。这里是其中一些：</string>
   <string name="help_8">• 维基百科分别提供每种语言版本</string>
   <string name="help_9">• 同样可用于例如维基解密或维基文库等其他内容</string>
-  <string name="help_10">您可以在应用中下载您选择的ZIM文件，也可以在电脑端下载您想要的文件，并在稍后将其转移至您的SD卡中。</string>
+  <string name="help_10" fuzzy="true">您可以在应用中下载您选择的ZIM文件，也可以在电脑端下载您想要的文件，并在稍后将其转移至您的SD卡中。</string>
   <string name="help_11">应用内下载的 ZIM 文件位于您的外部存储目录中名为 Kiwix 的文件夹中。</string>
   <string name="pref_storage">存储</string>
   <string name="pref_current_folder">当前文件夹</string>
   <string name="pref_storage_used">已使用 %s</string>
   <string name="pref_free_storage">剩余 %s</string>
+  <string name="choose_storage_to_download_book">选择存储来下载书籍</string>
   <string name="delete_zim_failed">对不起，我们无法删除一些文件。您应尝试改用文件管理器。</string>
   <string name="tts_pause">暂停</string>
   <string name="tts_resume">恢复</string>
@@ -184,9 +186,9 @@
   <string name="confirm_stop_download_title">停止下载？</string>
   <string name="confirm_stop_download_msg">您确定要停止此次下载么？</string>
   <string name="download_change_storage">存储设备选择器</string>
-  <string name="tts_not_enabled">文字转换语音功能未对该ZIM文件启用</string>
-  <string name="texttospeech_initialization_failed">文字转语音的初始化失败。请重试</string>
-  <string name="texttospeech_error">文本转语音出现意外错误。请重试</string>
+  <string name="tts_not_enabled" fuzzy="true">文字转换语音功能未对该ZIM文件启用</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">文字转语音的初始化失败。请重试</string>
+  <string name="texttospeech_error" fuzzy="true">文本转语音出现意外错误。请重试</string>
   <string name="next">下一页</string>
   <string name="previous">上一页</string>
   <string name="wifi_only_title">允许通过移动网络下载内容？</string>
@@ -210,7 +212,7 @@
   <string name="crash_title">额…这太尴尬了</string>
   <string name="crash_description">看起来我们崩溃了。\n\n您是否介意通过发送以下信息帮助我们解决此问题？</string>
   <string name="crash_checkbox_language">您的语言设置</string>
-  <string name="crash_checkbox_zimfiles">Zim文件列表</string>
+  <string name="crash_checkbox_zimfiles">ZIM 文件列表</string>
   <string name="crash_checkbox_exception">崩溃详情</string>
   <string name="crash_checkbox_logs">应用日志</string>
   <string name="crash_checkbox_device">设备详情</string>
@@ -248,7 +250,7 @@
   <string name="complete">完成</string>
   <string name="paused_state">暂停</string>
   <string name="failed_state">失败：%s</string>
-  <string name="custom_download_error_message_for_authentication_failed">无法下载此 zim 文件。请尝试从 Play 商店重新安装此应用程序。</string>
+  <string name="custom_download_error_message_for_authentication_failed">无法下载此 ZIM 文件。请尝试从 Play 商店重新安装此应用程序。</string>
   <string name="save">保存</string>
   <string name="note">笔记</string>
   <string name="wiki_article_title">Wiki条目标题</string>
@@ -342,9 +344,14 @@
   <string name="preparing_file_for_copy">准备复制/移动</string>
   <string name="action_copy">复制</string>
   <string name="move">移动</string>
-  <string name="copy_move_files_dialog_description">您要复制或移动文件吗？</string>
-  <string name="copy_file_error_message">复制zim文件时出错：%s。</string>
-  <string name="move_file_error_message">移动zim文件时出错：%s。</string>
+  <string name="copying_zim_file">正在复制 ZIM 文件…</string>
+  <string name="moving_zim_file">正在移动 ZIM 文件…</string>
+  <string name="copy_move_files_dialog_description">Kiwix 要求 ZIM 文件位于自己的数据目录中。您要复制或移动文件到该目录吗？</string>
+  <string name="copy_file_error_message">复制 ZIM 文件时出错：%s。</string>
+  <string name="why_copy_move_files_to_app_directory">为什么要将文件复制/移动到应用程序公共目录？</string>
+  <string name="copy_move_files_to_app_directory_description">由于Android 11及更高版本的Google Play政策，我们的应用无法再直接访问存储在您设备其他地方的文件。为了让您查看所选文件，我们需要将它们移动或复制到我们应用目录中的特殊文件夹中。这样我们才能访问和打开这些文件。</string>
+  <string name="choose_storage_to_copy_move_zim_file">选择存储来复制/移动 ZIM 文件</string>
+  <string name="move_file_error_message">移动 ZIM 文件时出错：%s。</string>
   <string name="how_to_update_content">如何更新内容？</string>
   <string name="update_content_description">要更新内容（ZIM 文件），您需要下载此相似内容的完整最新版本。您可以通过下载章节进行。</string>
   <string name="all_files_permission_needed">需要全部文件的存储权限</string>
@@ -371,7 +378,7 @@
   <string name="download_tts_language_message">请点击下载按钮。这将会自动下载所需要的语言。</string>
   <string name="external_link_copied_message">外部链接已复制到剪贴板</string>
   <string name="read_aloud_service_channel_name">朗读服务频道</string>
-  <string name="read_aloud_channel_description">文本转语音控制。</string>
+  <string name="read_aloud_channel_description" fuzzy="true">文本转语音控制。</string>
   <string name="read_aloud_running">正在朗读</string>
   <string name="backward_history">历史向后</string>
   <string name="forward_history">历史向前</string>

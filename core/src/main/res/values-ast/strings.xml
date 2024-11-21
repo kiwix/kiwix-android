@@ -48,7 +48,7 @@
   <string name="stop_server_label">Parar el sirvidor</string>
   <string name="server_started_message">Escribi esta direición ip nel restolador pa tener accesu al sirvidor %s</string>
   <string name="error_file_not_found">Error: Nun pudo alcontrase ficheru ZIM seleicionáu.</string>
-  <string name="zim_not_opened">Nun pudo abrise l ficheru zim</string>
+  <string name="zim_not_opened" fuzzy="true">Nun pudo abrise l ficheru zim</string>
   <string name="error_file_invalid">Error: El ficheru seleicionáu nun ye un ficheru ZIM válidu.</string>
   <string name="error_article_url_not_found">Error: Falló la carga del artículu (Url: %1$s).</string>
   <string name="pref_display_title">Amosar</string>
@@ -100,7 +100,7 @@
   <string name="local_zims">Preséu</string>
   <string name="remote_zims">En llinia</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_zim_body">Van desaniciase los  ficheros zim siguientes:\n\n%s</string>
+  <string name="delete_zim_body" fuzzy="true">Van desaniciase los  ficheros zim siguientes:\n\n%s</string>
   <string name="delete_zims_toast">Los ficheros desaniciáronse correutamente</string>
   <string name="no_files_here">Nun hai nengún ficheru equí</string>
   <string name="download_no_space">Nun hai espaciu abondo pa descargar.</string>
@@ -118,7 +118,7 @@
   <string name="help_7">Tán disponibles como ficheros ZIM. Hai una bayura d’ellos:</string>
   <string name="help_8">• Wikipedia ta disponible aparte pa cada idioma</string>
   <string name="help_9">• Tamién ta disponible otru conteníu, como Wikileaks o Wikisource</string>
-  <string name="help_10">Puedes descargar los ficheros ZIM escoyíos na aplicación, o bien escoyer con procuru los que quies y descargalos dende un ordenador pa llueu tresferilos a una tarxeta SD.</string>
+  <string name="help_10" fuzzy="true">Puedes descargar los ficheros ZIM escoyíos na aplicación, o bien escoyer con procuru los que quies y descargalos dende un ordenador pa llueu tresferilos a una tarxeta SD.</string>
   <string name="help_11">Los ficheros ZIM descargaos na aplicación alcuéntrense nel direutoriu d’almacenamientu esternu, nuna carpeta llamada Kiwix.</string>
   <string name="pref_storage">Almacenamientu</string>
   <string name="pref_current_folder">Carpeta actual</string>
@@ -133,9 +133,9 @@
   <string name="confirm_stop_download_title">¿Parar la descarga?</string>
   <string name="confirm_stop_download_msg">¿Tas seguru de que quies parar esta descarga?</string>
   <string name="download_change_storage">Selector de preséu d’almacenamientu</string>
-  <string name="tts_not_enabled">El testu a voz nun ta activáu pa esti ficheru ZIM</string>
-  <string name="texttospeech_initialization_failed">Falló aniciar el Testu a Charra. Tenta nuevamente</string>
-  <string name="texttospeech_error">Fallu inesperáu nel Testu a Charra. Tenta nuevamente</string>
+  <string name="tts_not_enabled" fuzzy="true">El testu a voz nun ta activáu pa esti ficheru ZIM</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">Falló aniciar el Testu a Charra. Tenta nuevamente</string>
+  <string name="texttospeech_error" fuzzy="true">Fallu inesperáu nel Testu a Charra. Tenta nuevamente</string>
   <string name="next">Siguiente</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">¿Permitir la descarga de conteníu pela rede móvil?</string>
@@ -159,7 +159,7 @@
   <string name="crash_title">Bien… esto ye vergonzoso</string>
   <string name="crash_description">Paez que colgamos.\n\n¿Importaríate ayudanos a iguar esti problema unviándonos la siguiente información?</string>
   <string name="crash_checkbox_language">La to configuración de llingua</string>
-  <string name="crash_checkbox_zimfiles">Una llista de los tos ficheros Zim</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">Una llista de los tos ficheros Zim</string>
   <string name="crash_checkbox_exception">Detalles del cuelgue</string>
   <string name="crash_checkbox_logs">Rexistros de l’aplicación</string>
   <string name="crash_checkbox_device">Detalles del preséu</string>
@@ -219,7 +219,7 @@
   <string name="connection_failed">Falló la conexón</string>
   <string name="permission_rationale_location">Android rique’l permisu Allugamientu pa permitir que la app detecte preseos pares</string>
   <string name="permission_refused_location">Nun pueden llocalizase preseos pares ensin el permisu Allugamientu</string>
-  <string name="permission_refused_storage">Nun hai accesu a ficheros zim ensin permisu d’almacenamientu</string>
+  <string name="permission_refused_storage" fuzzy="true">Nun hai accesu a ficheros zim ensin permisu d’almacenamientu</string>
   <string name="request_enable_location">Activa Allugamientu pa permitir la detección de pares</string>
   <string name="discovery_needs_location">Nun puen descubrise pares ensin servicios d’allugamientu</string>
   <string name="request_enable_wifi">Activa los servicios ente pares (P2P) de la WiFi na configuración del sistema</string>

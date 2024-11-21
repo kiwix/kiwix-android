@@ -57,8 +57,8 @@
   <string name="server_started_message">Shigar da wannan adireshin ip a cikin burauzarka don samun damar sabar %s</string>
   <string name="share_host_address">Raba URL ta hanyar wasu aikace-aikace</string>
   <string name="error_file_not_found">Kuskure: Ba a iya samun fayil din ZIM da aka zaba ba</string>
-  <string name="unable_to_read_zim_file">An kasa karanta wannan fayil na zim!</string>
-  <string name="zim_not_opened">An kasa buɗe fayil na zim</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">An kasa karanta wannan fayil na zim!</string>
+  <string name="zim_not_opened" fuzzy="true">An kasa buɗe fayil na zim</string>
   <string name="error_file_invalid">Kuskure: Fayil ɗin da aka zaɓa ba ingantaccen fayil na ZIM bane.</string>
   <string name="error_article_url_not_found">Kuskure: Loading labarin (Url: %1$s) ya gaza</string>
   <string name="pref_display_title">Nunawa</string>
@@ -74,10 +74,10 @@
   <string name="pref_credits_title">Kiredit</string>
   <string name="tts_lang_not_supported">Ba a goyon bayan harshen wannan shafi. Ba za a iya karanta labarin yadda ya kamata ba</string>
   <string name="no_reader_application_installed">An kasa samun aikace-aikacen da aka shigar don irin wannan fayil</string>
-  <string name="no_email_application_installed">Da fatan za a shigar da mai ba da sabis na imel ko imel mana a% 1s</string>
+  <string name="no_email_application_installed">Don Allah, shigar da mai amfani da imel</string>
   <string name="no_section_info">Babu Abun ciki da aka samo</string>
   <string name="request_storage">Don samun damar abun cikin layi muna buƙatar samun dama ga ajiyar ku</string>
-  <string name="request_write_storage">Don sauke fayilolin zim muna buƙatar rubuta damar zuwa wurin ajiyar ku</string>
+  <string name="request_write_storage" fuzzy="true">Don sauke fayilolin zim muna buƙatar rubuta damar zuwa wurin ajiyar ku</string>
   <string name="clear_recent_and_tabs_history_dialog">Shin kun tabbata kuna son share tarihin bincikenku kuma sake saita duk shafuka masu aiki</string>
   <string name="delete_recent_search_item">Goge wannan abun</string>
   <string name="pref_clear_all_history_title">Share tarihi</string>
@@ -116,7 +116,7 @@
   <string name="local_zims">Na’ura</string>
   <string name="remote_zims">Kan layi</string>
   <string name="library">Laburare</string>
-  <string name="delete_zim_body">The following zim file(s) will be deleted:\n\n%s</string>
+  <string name="delete_zim_body" fuzzy="true">The following zim file(s) will be deleted:\n\n%s</string>
   <string name="delete_zims_toast">An goge fayiloli cikin nasara</string>
   <string name="no_files_here">Babu fayilolin a nan</string>
   <string name="download_no_space">Rashin isasshen sarari don saukewa</string>
@@ -134,7 +134,7 @@
   <string name="help_7">Suna samuwa a matsayin fayilolin ZIM. Akwai su da yawa:</string>
   <string name="help_8">Ana samun wikipedia a ko wani yare</string>
   <string name="help_9">• Sauran abubuwan da ke ciki kamar Wikileaks ko Wikissource suma suna samuwa</string>
-  <string name="help_10">Za ka iya ko dai download your zaba ZIM fayiloli a-app ko m zaži daya (s) kana so da kuma download daga Desktop kwamfuta kafin canja wurin ZIM fayiloli zuwa SD katin</string>
+  <string name="help_10" fuzzy="true">Za ka iya ko dai download your zaba ZIM fayiloli a-app ko m zaži daya (s) kana so da kuma download daga Desktop kwamfuta kafin canja wurin ZIM fayiloli zuwa SD katin</string>
   <string name="help_11">ZIM fayiloli download in-app suna located a cikin external ajiya directory a cikin wani babban fayil mai suna Kiwix</string>
   <string name="pref_storage">Adana</string>
   <string name="pref_current_folder">Jaka na yanzu</string>
@@ -149,9 +149,9 @@
   <string name="confirm_stop_download_title">A daina saukewa?</string>
   <string name="confirm_stop_download_msg">Ka tabbata kana son dakatar da wannan saukewa</string>
   <string name="download_change_storage">Storage na’urar selector</string>
-  <string name="tts_not_enabled">Ba a kunna rubutu zuwa magana don wannan fayil na ZIM ba</string>
-  <string name="texttospeech_initialization_failed">Initialization of Text to Speech failed. Da fatan a sake gwadawa</string>
-  <string name="texttospeech_error">Kuskuren da ba a tsammani a cikin Rubutu zuwa Jawabi. Da fatan a sake gwadawa</string>
+  <string name="tts_not_enabled" fuzzy="true">Ba a kunna rubutu zuwa magana don wannan fayil na ZIM ba</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">Initialization of Text to Speech failed. Da fatan a sake gwadawa</string>
+  <string name="texttospeech_error" fuzzy="true">Kuskuren da ba a tsammani a cikin Rubutu zuwa Jawabi. Da fatan a sake gwadawa</string>
   <string name="next">Na gaba</string>
   <string name="previous">A baya</string>
   <string name="wifi_only_title">Bada izinin zazzage abun ciki ta hanyar sadarwar wayar hannu?</string>
@@ -175,7 +175,7 @@
   <string name="crash_title">To… Wannan Abin Abin kunya ne</string>
   <string name="crash_description">Kamar dai mun fadi.\n\nShin kuna son taimaka mana mu gyara wannan matsala ta hanyar aika da bayanai masu zuwa?</string>
   <string name="crash_checkbox_language">Ƙari saituttukan harshe.</string>
-  <string name="crash_checkbox_zimfiles">Jerin Fayilolin Zim ɗinku</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">Jerin Fayilolin Zim ɗinku</string>
   <string name="crash_checkbox_exception">Cikakkun bayanai na Crash</string>
   <string name="crash_checkbox_logs">Rubutun Aikace-aikace</string>
   <string name="crash_checkbox_device">Cikakkun na’ura</string>
@@ -212,7 +212,7 @@
   <string name="complete">Cikakken</string>
   <string name="paused_state">An dakata</string>
   <string name="failed_state">Rashin nasara: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed">Ba za a iya sauke fayil ɗin zim ba. Don Allah ku yi ƙoƙarin sake shigar da aikace-aikacen daga shagon Play.</string>
+  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">Ba za a iya sauke fayil ɗin zim ba. Don Allah ku yi ƙoƙarin sake shigar da aikace-aikacen daga shagon Play.</string>
   <string name="save">Ajiya</string>
   <string name="note">Bayani</string>
   <string name="wiki_article_title">Taken Labarin Wiki</string>
@@ -238,7 +238,7 @@
   <string name="permission_rationale_location">Android na buƙatar izinin wuri don ba da damar ƙa’idar ta gano na’urorin tsara</string>
   <string name="permission_rationale_nearby">Android na buƙatar izinin na’urorin kusa don ba da damar ƙa’idar ta gano na’urorin tsara</string>
   <string name="permission_refused_location">Ba za a iya gano na’urorin takwarorinsu ba tare da izinin wuri ba</string>
-  <string name="permission_refused_storage">Ba za a iya samun damar yin amfani da fayilolin zim ba tare da izinin ajiya ba</string>
+  <string name="permission_refused_storage" fuzzy="true">Ba za a iya samun damar yin amfani da fayilolin zim ba tare da izinin ajiya ba</string>
   <string name="request_enable_location">Kunna wurin don ba da damar gano takwarorinsu</string>
   <string name="discovery_needs_location">Ba za a iya gano takwarorinsu ba tare da sabis na wuri ba</string>
   <string name="request_enable_wifi">Kunna WiFi P2P daga saitunan tsarin</string>
@@ -294,9 +294,9 @@
   <string name="open_drawer">Buɗe durowa</string>
   <string name="close_drawer">Rufe Drawer</string>
   <string name="how_to_update_content">Yadda ake sabunta abun ciki?</string>
-  <string name="update_content_description">Don sabunta abun ciki (fayil ɗin zim) kuna buƙatar zazzage cikakken sabon sigar wannan abun ciki iri ɗaya. Kuna iya yin hakan ta sashin zazzagewa.</string>
+  <string name="update_content_description" fuzzy="true">Don sabunta abun ciki (fayil ɗin zim) kuna buƙatar zazzage cikakken sabon sigar wannan abun ciki iri ɗaya. Kuna iya yin hakan ta sashin zazzagewa.</string>
   <string name="all_files_permission_needed">Ana Bukata Duk Izinin Fayiloli</string>
-  <string name="all_files_permission_needed_message">Domin samun damar duk fayilolin zim a cikin na’urar muna buƙatar samun Duk Izinin Fayiloli</string>
+  <string name="all_files_permission_needed_message" fuzzy="true">Domin samun damar duk fayilolin zim a cikin na’urar muna buƙatar samun Duk Izinin Fayiloli</string>
   <string name="allowed">An ba da izini</string>
   <string name="not_allowed">Ba a yarda ba</string>
   <string name="denied_internet_permission_message">Da fatan za a kunna wifi don zazzage abun ciki</string>
@@ -315,7 +315,7 @@
   <string name="download_tts_language_message">Don Allah danna maɓallin Saukawa. Zai sauke harshen da ake buƙata ta atomatik.</string>
   <string name="external_link_copied_message">An Kwafi Haɗin Wuta zuwa Alloton allo</string>
   <string name="read_aloud_service_channel_name">Karanta Tashar Sabis da Gaggawa</string>
-  <string name="read_aloud_channel_description">Rubutu zuwa sarrafa magana.</string>
+  <string name="read_aloud_channel_description" fuzzy="true">Rubutu zuwa sarrafa magana.</string>
   <string name="read_aloud_running">Gudun Karanta da Girma</string>
   <string name="backward_history">Tarihi na baya</string>
   <string name="forward_history">Tarihin gaba</string>

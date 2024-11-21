@@ -4,5 +4,5 @@
 -->
 <resources>
   <string name="retry">Prv igjen</string>
-  <string name="invalid_installation">Ugyldig installering. Vennligst last ned Zim.\n Sørg for at wifi er aktivert og at du har nok lagringsplass</string>
+  <string name="invalid_installation" fuzzy="true">Ugyldig installering. Vennligst last ned Zim.\n Sørg for at wifi er aktivert og at du har nok lagringsplass</string>
 </resources>
