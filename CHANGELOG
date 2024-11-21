@@ -1,3 +1,44 @@
+3.12.0
+New Features:
+* Support for Android 14.
+* Added `file picker` in Play Store application. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/3979)
+* Showing progress of loading the online library. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/3994)
+* Introduced a new UI for showing `Storage` in the settings screen. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/3972)
+* Added QR code on "Hotspot" screen. (@shaunburch https://github.com/kiwix/kiwix-android/pull/3874)
+
+Bug Fixed:
+* Application crashes when deleting very large ZIM files. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4034)
+* Transfer ZIM files feature was stuck when educating users about the feature on tablets. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4088)
+* ZIM file was not opening from download notification if application is not in the background. (@shashank-0-0 https://github.com/kiwix/kiwix-android/pull/4079)
+* Kiwix opens in samsung file navigator when opening files from the file manager. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4058)
+* ZIM file was not opening from Samsung's "My Files" file explorer. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4022)
+* In Samsung tablet of Android 14, downloaded files can not be opened via file picker or deep linking. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4015)
+* Opening `new tab` from app's shortcut in custom apps was not working. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/issues/3988)
+* Improved the "Note" label in the OverFlowMenu for more clarity. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4094)
+* Medical wikimedia (mini) keeps crashing. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4007)
+* Dark mode failing on "Astrolabe" homepage. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/3974)
+* After scrolling up and down any TED article, bottom of the page issue cut. (@CalebKL https://github.com/kiwix/kiwix-android/pull/3977)
+* Moved the `canReadFile()` method to the IO thread so that it could not block the UI thread. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4040)
+* GooglePlay store evaluation was showing too early. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/3971)
+* Application crashes when loading the online library content on the `Download` screen. (@CalebKL https://github.com/kiwix/kiwix-android/pull/3953)
+* Application crashes when loading the asset(videos) from cache. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/3946)
+* Application crashes when creating the webView. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/3947)
+* Application crashes when opening the random article. (@kelson42 , @MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/3927)
+* When opening the Download screen from the "Get content" shortcut, we can not navigate to the reader screen. (@shashank-0-0 https://github.com/kiwix/kiwix-android/pull/3959)
+* "Send diagnostic report" function should open the user's email client. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4042)
+* Removed the "Send feedback" option from Help tab. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4013)
+* Images are not saving in TED zim files. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/3938)
+* Opening an article will show that it has been added as a bookmark. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/3918)
+* Improvement in loading articles, and searching. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/3925, https://github.com/kiwix/kiwix-android/pull/3923)
+* File drawer was showing on Tabs screen. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/3981)
++ More
+
+Compilation/CI/CD:
+* Using libkiwix `2.2.3`. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4033)
+* APK files missing from releases. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4054)
+* Added feature to generate `Dummy bundle`. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4030)
+* Automatically publish to PlayStore for internal testing team. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/3948)
+
 3.11.1
 Bug Fixed:
 * Not able to upload 512MB+ custom apps on playStore. (https://github.com/kiwix/kiwix-android/pull/3801)
