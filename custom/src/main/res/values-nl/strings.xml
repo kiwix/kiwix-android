@@ -6,5 +6,5 @@
 -->
 <resources>
   <string name="retry">Opnieuw proberen</string>
-  <string name="invalid_installation">Ongeldige installatie. Download een ZIM-bestand. Zorg ervoor dat WiFi werkt en dat u voldoende opslagruimte hebt.</string>
+  <string name="invalid_installation">Onjuiste installatie. Download een ZIM-bestand. Zorg ervoor dat WiFi aan staat en dat u voldoende opslagruimte hebt.</string>
 </resources>

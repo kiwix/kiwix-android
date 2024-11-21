@@ -5,5 +5,5 @@
 -->
 <resources>
   <string name="retry">Tekrar dene</string>
-  <string name="invalid_installation">Geçersiz Kurulum Lütfen Zim’i indirin.\n  WiFi’nin açık olduğundan ve yeterli depolama alanınız olduğundan emin olun</string>
+  <string name="invalid_installation" fuzzy="true">Geçersiz Kurulum Lütfen Zim’i indirin.\n  WiFi’nin açık olduğundan ve yeterli depolama alanınız olduğundan emin olun</string>
 </resources>

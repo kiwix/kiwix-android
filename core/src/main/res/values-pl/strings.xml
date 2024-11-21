@@ -66,8 +66,8 @@
   <string name="server_started_message">Wpisz ten adres IP w przeglądarce, aby uzyskać dostęp do serwera %s</string>
   <string name="share_host_address">Udostępnij adres URL za pośrednictwem innych aplikacji</string>
   <string name="error_file_not_found">Błąd: Wybrany plik ZIM nie został znaleziony.</string>
-  <string name="unable_to_read_zim_file">Nie można odczytać tego pliku zim!</string>
-  <string name="zim_not_opened">Nie można otworzyć pliku zim</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">Nie można odczytać tego pliku zim!</string>
+  <string name="zim_not_opened" fuzzy="true">Nie można otworzyć pliku zim</string>
   <string name="error_file_invalid">Błąd: Wybrany plik nie jest prawidłowym plikiem ZIM.</string>
   <string name="error_article_url_not_found">Błąd: Ładowanie artykułu (Url:  %1$s ) się nie powiodło.</string>
   <string name="pref_display_title">Wyświetl</string>
@@ -83,10 +83,10 @@
   <string name="pref_credits_title">Twórcy</string>
   <string name="tts_lang_not_supported">Język tej strony nie jest obsługiwany. Artykuł może nie zostać poprawnie przeczytany.</string>
   <string name="no_reader_application_installed">Nie udało się znaleźć zainstalowanego programu dla tego typu plików</string>
-  <string name="no_email_application_installed">Zainstaluj dostawcę usług e-mail lub napisz do nas na adres %1s</string>
+  <string name="no_email_application_installed">Proszę zainstalować klienta poczty elektronicznej</string>
   <string name="no_section_info">Nie znaleziono nagłówków treści</string>
   <string name="request_storage">Aby uzyskać dostęp do plików ZIM, musimy mieć dostęp do twojego nośnika</string>
-  <string name="request_write_storage">Aby pobrać pliki zim, potrzebujemy dostępu do zapisu w Twojej pamięci</string>
+  <string name="request_write_storage" fuzzy="true">Aby pobrać pliki zim, potrzebujemy dostępu do zapisu w Twojej pamięci</string>
   <string name="clear_recent_and_tabs_history_dialog">Czy na pewno chcesz usunąć historię wyszukiwania i zresetować wszystkie aktywne karty?</string>
   <string name="delete_recent_search_item">Usunąć ten obiekt?</string>
   <string name="pref_clear_all_history_title">Wyczyść historię</string>
@@ -125,7 +125,7 @@
   <string name="local_zims">Urządzenie</string>
   <string name="remote_zims">Dostępne</string>
   <string name="library">Biblioteka</string>
-  <string name="delete_zim_body">Następujące pliki zim zostaną usunięte:\n\n%s</string>
+  <string name="delete_zim_body" fuzzy="true">Następujące pliki zim zostaną usunięte:\n\n%s</string>
   <string name="delete_zims_toast">Plik został usunięty</string>
   <string name="no_files_here">Tu nie ma plików</string>
   <string name="download_no_space">Za mało miejsca, aby pobrać ten plik.</string>
@@ -143,7 +143,7 @@
   <string name="help_7">Są one dostępne w postaci plików ZIM. Jest ich wiele:</string>
   <string name="help_8">• Wikipedia jest dostępna osobno dla każdego języka</string>
   <string name="help_9">• Dostępne są również inne treści jak Wikileaks czy Wikiźródła</string>
-  <string name="help_10">Możesz pobrać wybrane pliki ZIM w aplikacji lub starannie wybrać żądane pliki i pobrać je z komputera stacjonarnego przed przesłaniem plików ZIM na kartę SD.</string>
+  <string name="help_10" fuzzy="true">Możesz pobrać wybrane pliki ZIM w aplikacji lub starannie wybrać żądane pliki i pobrać je z komputera stacjonarnego przed przesłaniem plików ZIM na kartę SD.</string>
   <string name="help_11">Pliki ZIM pobrane rzez aplikacje znajdują się w zewnętrznym katalogu dysku w folderze o nazwie Kiwix.</string>
   <string name="pref_storage">Magazyn</string>
   <string name="pref_current_folder">Bieżący folder</string>
@@ -158,9 +158,9 @@
   <string name="confirm_stop_download_title">Zatrzymać pobieranie?</string>
   <string name="confirm_stop_download_msg">Czy na pewno chcesz zatrzymać pobieranie?</string>
   <string name="download_change_storage">Wybór urządzenia pamięci</string>
-  <string name="tts_not_enabled">Tekst na mowę nie jest włączony dla tego pliku ZIM</string>
-  <string name="texttospeech_initialization_failed">Inicjalizacja zamiany tekstu na mowę nie powiodła się. Spróbuj ponownie</string>
-  <string name="texttospeech_error">Nieoczekiwany błąd w zamianie tekstu na mowę. Spróbuj ponownie</string>
+  <string name="tts_not_enabled" fuzzy="true">Tekst na mowę nie jest włączony dla tego pliku ZIM</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">Inicjalizacja zamiany tekstu na mowę nie powiodła się. Spróbuj ponownie</string>
+  <string name="texttospeech_error" fuzzy="true">Nieoczekiwany błąd w zamianie tekstu na mowę. Spróbuj ponownie</string>
   <string name="next">Następny</string>
   <string name="previous">Poprzednia</string>
   <string name="wifi_only_title">Zezwolić na pobieranie zawartości przez sieć komórkową?</string>
@@ -184,7 +184,7 @@
   <string name="crash_title">Cóż… To jest krępujące</string>
   <string name="crash_description">Czy mógłbyś pomóc nam rozwiązać ten problem, wysyłając następujące informacje?</string>
   <string name="crash_checkbox_language">Ustawienia języka</string>
-  <string name="crash_checkbox_zimfiles">Lista twoich plików Zim</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">Lista twoich plików Zim</string>
   <string name="crash_checkbox_exception">Szczegóły awarii</string>
   <string name="crash_checkbox_logs">Dzienniki aplikacji</string>
   <string name="crash_checkbox_device">Szczegóły urządzenia</string>
@@ -222,7 +222,7 @@
   <string name="complete">Zakończono</string>
   <string name="paused_state">Wstrzymano</string>
   <string name="failed_state">Błąd: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed">Nie można pobrać pliku zim. Spróbuj ponownie zainstalować aplikację ze sklepu Play.</string>
+  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">Nie można pobrać pliku zim. Spróbuj ponownie zainstalować aplikację ze sklepu Play.</string>
   <string name="save">Zapisz</string>
   <string name="note">Uwaga</string>
   <string name="wiki_article_title">Tytuł Artykułu Wiki</string>
@@ -248,7 +248,7 @@
   <string name="permission_rationale_location">Uprawnienie lokalizacja jest wymagane przez system Android, aby umożliwić aplikacji do wykrywania urządzeń</string>
   <string name="permission_rationale_nearby">Aby aplikacja mogła wykrywać urządzenia równorzędne, system Android wymaga pozwolenia na urządzenia w pobliżu</string>
   <string name="permission_refused_location">Nie można zlokalizować urządzeń bez uprawnień do lokalizacji</string>
-  <string name="permission_refused_storage">Nie można uzyskać dostępu do plików zim bez uprawnień do przechowywania</string>
+  <string name="permission_refused_storage" fuzzy="true">Nie można uzyskać dostępu do plików zim bez uprawnień do przechowywania</string>
   <string name="request_enable_location">Włączyć lokalizację, aby umożliwić wykrywanie równorzędnych elementów</string>
   <string name="discovery_needs_location">Nie można wykryć elementów równorzędnych bez usług lokalizacji</string>
   <string name="request_enable_wifi">Włącz WiFi P2P w ustawieniach systemu</string>
@@ -308,9 +308,9 @@
   <string name="open_drawer">Otwórz szufladę</string>
   <string name="close_drawer">Zamknij szufladę</string>
   <string name="how_to_update_content">Jak zaktualizować zawartość?</string>
-  <string name="update_content_description">Aby zaktualizować zawartość (plik zim), musisz pobrać pełną najnowszą wersję tej samej zawartości. Możesz to zrobić w sekcji pobierania.</string>
+  <string name="update_content_description" fuzzy="true">Aby zaktualizować zawartość (plik zim), musisz pobrać pełną najnowszą wersję tej samej zawartości. Możesz to zrobić w sekcji pobierania.</string>
   <string name="all_files_permission_needed">Wymagane uprawnienia do wszystkich plików</string>
-  <string name="all_files_permission_needed_message">Aby uzyskać dostęp do wszystkich plików zim na urządzeniu, musimy mieć uprawnienia do wszystkich plików</string>
+  <string name="all_files_permission_needed_message" fuzzy="true">Aby uzyskać dostęp do wszystkich plików zim na urządzeniu, musimy mieć uprawnienia do wszystkich plików</string>
   <string name="allowed">Dozwolony</string>
   <string name="not_allowed">Niedozwolony</string>
   <string name="system_unable_to_grant_permission_message">System nie może udzielić pozwolenia!</string>

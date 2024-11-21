@@ -54,8 +54,8 @@
   <string name="server_started_message">%s சேவையகத்தை அணுக உங்கள் உலாவியில் இந்த ஐபி முகவரியை உள்ளிடவும்</string>
   <string name="share_host_address">பிற பயன்பாடுகள் வழியாக URL ஐப் பகிரவும்</string>
   <string name="error_file_not_found">பிழை: தேர்வு செய்யப்பட்ட ZIM கோப்பு காணப்படவில்லை</string>
-  <string name="unable_to_read_zim_file">இந்த ஜிம் கோப்பைப் படிக்க முடியவில்லை!</string>
-  <string name="zim_not_opened">ZIM கோப்பைத் திறக்க முடியவில்லை</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">இந்த ஜிம் கோப்பைப் படிக்க முடியவில்லை!</string>
+  <string name="zim_not_opened" fuzzy="true">ZIM கோப்பைத் திறக்க முடியவில்லை</string>
   <string name="error_file_invalid">பிழை: தேர்வு செய்யப்பட்ட கோப்பு, ஏற்புடைய ZIM கோப்பு அல்ல</string>
   <string name="error_article_url_not_found">பிழை: (Url: %1$s) கட்டுரையை ஏற்றித்துவங்க தவறிவிட்டது</string>
   <string name="pref_display_title">காண்பி</string>
@@ -73,7 +73,7 @@
   <string name="no_reader_application_installed">இந்த வகை கோப்பிற்கான நிறுவப்பட்ட செயலியைக் கண்டுபிடிக்க முடியவில்லை</string>
   <string name="no_section_info">உள்ளடக்க தலைப்புகள் எதுவும் கிடைக்கவில்லை</string>
   <string name="request_storage">அணைவரி உள்ளடக்கத்தை அணுக உங்கள் சேமிப்பகத்தை அணுக வேண்டும்</string>
-  <string name="request_write_storage">ஜிம் கோப்புகளைப் பதிவிறக்க, உங்கள் சேமிப்பகத்திற்கான எழுத்து அணுகல் எங்களுக்குத் தேவை</string>
+  <string name="request_write_storage" fuzzy="true">ஜிம் கோப்புகளைப் பதிவிறக்க, உங்கள் சேமிப்பகத்திற்கான எழுத்து அணுகல் எங்களுக்குத் தேவை</string>
   <string name="clear_recent_and_tabs_history_dialog">உங்கள் தேடல் வரலாற்றை நீக்க மற்றும் அனைத்து செயலில் உள்ள தாவல்களையும் மீட்டமைக்க விரும்புகிறீர்களா?</string>
   <string name="delete_recent_search_item">இந்த உருப்படியை நீக்கவா?</string>
   <string name="pref_clear_all_history_title">வரலாற்றை நீக்கு</string>
@@ -111,7 +111,7 @@
   <string name="local_zims">கருவி</string>
   <string name="remote_zims">எழிவரி</string>
   <string name="library">நூலகம்</string>
-  <string name="delete_zim_body">பின்வரும் zim கோப்பு(கள்) நீக்கப்படும் :! N !! N! %s</string>
+  <string name="delete_zim_body" fuzzy="true">பின்வரும் zim கோப்பு(கள்) நீக்கப்படும் :! N !! N! %s</string>
   <string name="delete_zims_toast">கோப்புகள் வெற்றிகரமாக நீக்கப்பட்டன</string>
   <string name="no_files_here">இங்கே கோப்புகள் இல்லை</string>
   <string name="download_no_space">பதிவிறக்க போதுமான இடம் இல்லை.</string>
@@ -129,7 +129,7 @@
   <string name="help_7">அவை ZIM கோப்புகளாக கிடைக்கின்றன. அவற்றில் நிறைய உள்ளன:</string>
   <string name="help_8">• விக்கிபீடியா ஒவ்வொரு மொழிக்கும் தனித்தனியாக கிடைக்கிறது</string>
   <string name="help_9">• விக்கிலீக்ஸ் அல்லது விக்கிசோர்ஸ் போன்ற பிற உள்ளடக்கங்களும் கிடைக்கின்றன</string>
-  <string name="help_10">இந்த செயலியிலேயே நீங்கள் தேர்ந்தெடுத்த ZIM கோப்புகளை பதிவிறக்கம் செய்யலாம் அல்லது உங்களுக்குத் தேவைப்படும் ZIM கோப்புகளை கவனமாகத் தேர்ந்தெடுத்து மேசை கணினியிலிருந்து பதிவிறக்கம் செய்து பிறகு நினைவக அட்டைக்கு மாற்றிக் கொள்ளலாம்.</string>
+  <string name="help_10" fuzzy="true">இந்த செயலியிலேயே நீங்கள் தேர்ந்தெடுத்த ZIM கோப்புகளை பதிவிறக்கம் செய்யலாம் அல்லது உங்களுக்குத் தேவைப்படும் ZIM கோப்புகளை கவனமாகத் தேர்ந்தெடுத்து மேசை கணினியிலிருந்து பதிவிறக்கம் செய்து பிறகு நினைவக அட்டைக்கு மாற்றிக் கொள்ளலாம்.</string>
   <string name="help_11">செயலியில் பதிவிறக்கம் செய்யும் ZIM கோப்புகள் Kiwix என்ற கோப்புறையில் வெளிப்புற சேமிப்பக கோப்பகத்தில் அமைந்துள்ளன.</string>
   <string name="pref_storage">சேமிப்பகம்</string>
   <string name="pref_current_folder">தற்போதைய கோப்புறை</string>
@@ -144,9 +144,9 @@
   <string name="confirm_stop_download_title">பதிவிறக்குவதை நிறுத்தவா?</string>
   <string name="confirm_stop_download_msg">இந்த பதிவிறக்கத்தை நிறுத்த விரும்புகிறீர்களா?</string>
   <string name="download_change_storage">சேமிப்பக சாதன தேர்வாளர்</string>
-  <string name="tts_not_enabled">இந்த ZIM கோப்பிற்கு உரைக்கு பேச்சு இயக்கப்படவில்லை</string>
-  <string name="texttospeech_initialization_failed">உரையைப் பேச்சாக்குதல் தொடங்குவது தோல்வியுற்றது. தயவுசெய்து மீண்டும் முயற்சி செய்க</string>
-  <string name="texttospeech_error">உரையைப் பேச்சாக்குதலில் எதிர்பாராத பிழை. தயவுசெய்து மீண்டும் முயற்சி செய்க</string>
+  <string name="tts_not_enabled" fuzzy="true">இந்த ZIM கோப்பிற்கு உரைக்கு பேச்சு இயக்கப்படவில்லை</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">உரையைப் பேச்சாக்குதல் தொடங்குவது தோல்வியுற்றது. தயவுசெய்து மீண்டும் முயற்சி செய்க</string>
+  <string name="texttospeech_error" fuzzy="true">உரையைப் பேச்சாக்குதலில் எதிர்பாராத பிழை. தயவுசெய்து மீண்டும் முயற்சி செய்க</string>
   <string name="next">அடுத்து</string>
   <string name="previous">முந்தைய</string>
   <string name="wifi_only_title">கைபேசி இணையம் வழியாக உள்ளடக்கத்தைப் பதிவிறக்க அனுமதிக்கவா?</string>
@@ -170,7 +170,7 @@
   <string name="crash_title">நன்று… இது சங்கடமாக இருக்கிறது</string>
   <string name="crash_description">நாங்கள் செயலிழந்ததாகத் தெரிகிறது.! N !! N! பின்வரும் தகவல்களை அனுப்புவதன் மூலம் இந்த சிக்கலை சரிசெய்ய எங்களுக்கு உதவ விரும்புகிறீர்களா?</string>
   <string name="crash_checkbox_language">உங்கள் மொழி அமைப்புகள்</string>
-  <string name="crash_checkbox_zimfiles">உங்கள் Zim கோப்புகளின் பட்டியல்</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">உங்கள் Zim கோப்புகளின் பட்டியல்</string>
   <string name="crash_checkbox_exception">செயலி செயலிழந்ததற்கான விவரங்கள்</string>
   <string name="crash_checkbox_logs">பயன்பாட்டு பதிவுகள்</string>
   <string name="crash_checkbox_device">சாதன விவரங்கள்</string>
@@ -230,7 +230,7 @@
   <string name="connection_failed">இணைப்பு தோல்வியடைந்தது</string>
   <string name="permission_rationale_location">சக சாதனங்களைக் கண்டறிவதற்கான செயலியை அனுமதிக்க ஆன்ட்ராய்டுக்கு இருப்பிட அனுமதி தேவை</string>
   <string name="permission_refused_location">இருப்பிட அனுமதியின்றி சக சாதனங்களைக் கண்டுபிடிக்க முடியாது</string>
-  <string name="permission_refused_storage">சேமிப்பக அனுமதியின்றி zim கோப்புகளை அணுக முடியாது</string>
+  <string name="permission_refused_storage" fuzzy="true">சேமிப்பக அனுமதியின்றி zim கோப்புகளை அணுக முடியாது</string>
   <string name="request_enable_location">சகாக்களைக் கண்டறிய அனுமதிக்க இருப்பிடத்தை இயக்கவும்</string>
   <string name="discovery_needs_location">இருப்பிட சேவைகள் இல்லாமல் சகாக்களைக் கண்டறிய முடியாது</string>
   <string name="request_enable_wifi">கணினி அமைப்புகளிலிருந்து வைஃபை P2P ஐ இயக்கவும்</string>
@@ -285,9 +285,9 @@
   <string name="open_drawer">இழுப்பறையைத் திற</string>
   <string name="close_drawer">இழுப்பறையை மூடு</string>
   <string name="how_to_update_content">உள்ளடக்கத்தை எவ்வாறு புதுப்பிப்பது?</string>
-  <string name="update_content_description">உள்ளடக்கத்தைப் புதுப்பிக்க (ஒரு zim கோப்பு) இதே உள்ளடக்கத்தின் முழு சமீபத்திய பதிப்பை நீங்கள் பதிவிறக்க வேண்டும். பதிவிறக்கப் பிரிவு வழியாக நீங்கள் அதைச் செய்யலாம்.</string>
+  <string name="update_content_description" fuzzy="true">உள்ளடக்கத்தைப் புதுப்பிக்க (ஒரு zim கோப்பு) இதே உள்ளடக்கத்தின் முழு சமீபத்திய பதிப்பை நீங்கள் பதிவிறக்க வேண்டும். பதிவிறக்கப் பிரிவு வழியாக நீங்கள் அதைச் செய்யலாம்.</string>
   <string name="all_files_permission_needed">அனைத்து கோப்புகளுக்கும் அனுமதி தேவை</string>
-  <string name="all_files_permission_needed_message">சாதனம் முழுவதும் உள்ள அனைத்து ஜிம் கோப்புகளையும் அணுக, எல்லா கோப்புகளுக்கும் அனுமதி இருக்க வேண்டும்</string>
+  <string name="all_files_permission_needed_message" fuzzy="true">சாதனம் முழுவதும் உள்ள அனைத்து ஜிம் கோப்புகளையும் அணுக, எல்லா கோப்புகளுக்கும் அனுமதி இருக்க வேண்டும்</string>
   <string name="allowed">அனுமதிக்கப்படுகிறது</string>
   <string name="not_allowed">அனுமதி இல்லை</string>
   <string name="denied_internet_permission_message">உள்ளடக்கத்தைப் பதிவிறக்க வைஃபையை இயக்கவும்</string>

@@ -88,7 +88,7 @@
   <string name="yes">Ja</string>
   <string name="confirm_stop_download_title">Vil du stoppe nedlastingen?</string>
   <string name="confirm_stop_download_msg">Er du sikker på at du vil stoppe denne nedlastingen?</string>
-  <string name="tts_not_enabled">Tekst til tale er ikke aktivert for denne ZIM-filen</string>
+  <string name="tts_not_enabled" fuzzy="true">Tekst til tale er ikke aktivert for denne ZIM-filen</string>
   <string name="next">Neste</string>
   <string name="previous">Forrige</string>
   <string name="wifi_only_title">Vil du tillate nedlasting av innhold via mobilnettverket?</string>
@@ -106,7 +106,7 @@
   <string name="crash_title">Vel … Dette er pinlig</string>
   <string name="crash_description">Det ser ut som vi krasjet.\n\nVil du hjelpe oss med å løse dette problemet ved å sende følgende informasjon?</string>
   <string name="crash_checkbox_language">Dine språkinnstillinger</string>
-  <string name="crash_checkbox_zimfiles">En liste over Zim-filene dine</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">En liste over Zim-filene dine</string>
   <string name="crash_checkbox_logs">Applikasjonslogger</string>
   <string name="crash_checkbox_device">Enhetsdetaljer</string>
   <string name="crash_button_confirm">SEND DETALJER</string>

@@ -4,5 +4,5 @@
 -->
 <resources>
   <string name="retry">Йухадан</string>
-  <string name="invalid_installation">ДӀахӀоттош гӀалат ду. Дехар до Zim схьаэца.\n Хьажа WiFi латина а, лармин чохь тоъал меттиг йуй а</string>
+  <string name="invalid_installation" fuzzy="true">ДӀахӀоттош гӀалат ду. Дехар до Zim схьаэца.\n Хьажа WiFi латина а, лармин чохь тоъал меттиг йуй а</string>
 </resources>

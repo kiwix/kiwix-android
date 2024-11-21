@@ -8,6 +8,6 @@
   <string name="cannot_open_file" fuzzy="true">फ़ाइल खोलने में विफल\nकृपया अपनी लाइब्रेरी के डिवाइस टैब में इस फ़ाइल को खोजने का प्रयास करें</string>
   <string name="send_files_title">फाइल भेजें</string>
   <string name="receive_files_title">फ़ाइलें प्राप्त करें</string>
-  <string name="no_app_found_to_open">ZIM फ़ाइल चुनने के लिए कोई ऐप नहीं मिला</string>
-  <string name="select_zim_file">पढ़ने के लिए ज़िम फ़ाइल का चयन करें</string>
+  <string name="no_app_found_to_open" fuzzy="true">ZIM फ़ाइल चुनने के लिए कोई ऐप नहीं मिला</string>
+  <string name="select_zim_file" fuzzy="true">पढ़ने के लिए ज़िम फ़ाइल का चयन करें</string>
 </resources>

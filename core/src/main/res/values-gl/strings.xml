@@ -89,7 +89,7 @@
   <string name="help_7">Están dispoñibles como ficheiros ZIM. Hai unha chea deles:</string>
   <string name="help_8">• Wikipedia está dispoñible para cada lingua por separado</string>
   <string name="help_9">• Outros contidos, como Wikileaks ou Wikisource tamén están dispoñibles</string>
-  <string name="help_10">Pode descargar os ficheiros ZIM elixidos na aplicación, ou ben seleccionar coidadosamente os que queira, descargalos dende un ordenador e transferilos á súa tarxeta SD.</string>
+  <string name="help_10" fuzzy="true">Pode descargar os ficheiros ZIM elixidos na aplicación, ou ben seleccionar coidadosamente os que queira, descargalos dende un ordenador e transferilos á súa tarxeta SD.</string>
   <string name="help_11">Os ficheiros ZIM descargados na aplicación atópanse no directorio de almacenamento externo, nunha carpeta chamada Kiwix.</string>
   <string name="pref_storage">Almacenamento</string>
   <string name="pref_current_folder">Carpeta actual</string>
@@ -104,7 +104,7 @@
   <string name="confirm_stop_download_title">Deter descarga?</string>
   <string name="confirm_stop_download_msg">Seguro que quere deter esta descarga?</string>
   <string name="download_change_storage">Selector de dispositivo de almacenamento</string>
-  <string name="tts_not_enabled">A síntese vocal non está activa para este ficheiro ZIM</string>
+  <string name="tts_not_enabled" fuzzy="true">A síntese vocal non está activa para este ficheiro ZIM</string>
   <string name="next">Seguinte</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">Permitir descargar contido mediante a rede móbil?</string>

@@ -61,8 +61,8 @@
   <string name="server_started_message">Vložte tuto IP adresu do svého prohlížeče pro přístup na server %s</string>
   <string name="share_host_address">Sdílet URL přes jiné aplikace</string>
   <string name="error_file_not_found">Chyba: Nelze najít vybraný soubor ZIM.</string>
-  <string name="unable_to_read_zim_file">Tento soubor zim nelze přečíst!</string>
-  <string name="zim_not_opened">Nelze otevřít soubor zim</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">Tento soubor zim nelze přečíst!</string>
+  <string name="zim_not_opened" fuzzy="true">Nelze otevřít soubor zim</string>
   <string name="error_file_invalid">Chyba: Vybraný soubor není platným souborem ZIM.</string>
   <string name="error_article_url_not_found">Chyba: Načtení článku (Url: %1$s ) se nezdařilo.</string>
   <string name="pref_display_title">Zobrazení</string>
@@ -80,7 +80,7 @@
   <string name="no_reader_application_installed">Pro tento typ souboru nebylo možné najít nainstalovanou aplikaci</string>
   <string name="no_section_info">Nebyly nalezeny žádné hlavičky obsahu.</string>
   <string name="request_storage">Pro přístup k obsahu offline potřebujeme přístup k vašemu úložišti.</string>
-  <string name="request_write_storage">Ke stažení zim souborů potřebujeme přístup pro zápis do vašeho úložiště</string>
+  <string name="request_write_storage" fuzzy="true">Ke stažení zim souborů potřebujeme přístup pro zápis do vašeho úložiště</string>
   <string name="clear_recent_and_tabs_history_dialog">Jste si jistí, že chcete smazat svou historii vyhledávání a resetovat všechny aktivní záložky?</string>
   <string name="delete_recent_search_item">Smazat tuto položku?</string>
   <string name="pref_clear_all_history_title">Smazat historii</string>
@@ -118,7 +118,7 @@
   <string name="local_zims">Zařízení</string>
   <string name="remote_zims">Online</string>
   <string name="library">Knihovna</string>
-  <string name="delete_zim_body">Následující zim soubory budou smazány:\n\n%s</string>
+  <string name="delete_zim_body" fuzzy="true">Následující zim soubory budou smazány:\n\n%s</string>
   <string name="delete_zims_toast">Soubor byl smazán</string>
   <string name="no_files_here">Zde nejsou žádné soubory</string>
   <string name="download_no_space">Nedostatečný prostor ke stažení.</string>
@@ -136,7 +136,7 @@
   <string name="help_7">Jsou dostupné v ZIM souborech. Je jich mnoho:</string>
   <string name="help_8">• Wikipedie je pro každý jazyk dostupná zvlášť</string>
   <string name="help_9">• Další obsahy jako Wikileaks nebo Wikizdroje jsou také dostupné</string>
-  <string name="help_10">Soubory ZIM si můžete buď vybrat a stáhnout v aplikaci, nebo je můžete pečlivě vybrat a stáhnout na stolním počítači před přesunem ZIM souborů na Vaši SD kartu.</string>
+  <string name="help_10" fuzzy="true">Soubory ZIM si můžete buď vybrat a stáhnout v aplikaci, nebo je můžete pečlivě vybrat a stáhnout na stolním počítači před přesunem ZIM souborů na Vaši SD kartu.</string>
   <string name="help_11">ZIM soubory stažené v aplikaci jsou umístěny v externím paměťovém adresáři ve složce s názvem Kiwix.</string>
   <string name="pref_storage">Úložiště</string>
   <string name="pref_current_folder">Stávající Adresář</string>
@@ -151,9 +151,9 @@
   <string name="confirm_stop_download_title">Zastavit stahování?</string>
   <string name="confirm_stop_download_msg">Jste si jisti, že chcete zastavit toto stahování?</string>
   <string name="download_change_storage">Nástroj výběru úloženého zařízení</string>
-  <string name="tts_not_enabled">Výstup textu na řeč není u tohoto ZIM souboru umožněn</string>
-  <string name="texttospeech_initialization_failed">Inicializace převodu textu na řeč selhala. Prosím zkuste to znovu.</string>
-  <string name="texttospeech_error">Neočekávaná chyba při převodu textu na řeč. Prosím zkuste to znovu.</string>
+  <string name="tts_not_enabled" fuzzy="true">Výstup textu na řeč není u tohoto ZIM souboru umožněn</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">Inicializace převodu textu na řeč selhala. Prosím zkuste to znovu.</string>
+  <string name="texttospeech_error" fuzzy="true">Neočekávaná chyba při převodu textu na řeč. Prosím zkuste to znovu.</string>
   <string name="next">Další</string>
   <string name="previous">Předchozí</string>
   <string name="wifi_only_title">Povolit stahování obsahu přes mobilní připojení?</string>
@@ -177,7 +177,7 @@
   <string name="crash_title">Inu…to je trapné</string>
   <string name="crash_description">Vypadá to, že aplikace selhala.\n\nNevadilo by Vám pomoci nám opravit tento problém zasláním následující informace?</string>
   <string name="crash_checkbox_language">Vaše nastavení jazyka</string>
-  <string name="crash_checkbox_zimfiles">Seznam Vašich Zim souborů</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">Seznam Vašich Zim souborů</string>
   <string name="crash_checkbox_exception">Informace o výpadku</string>
   <string name="crash_checkbox_logs">Záznamy aplikace</string>
   <string name="crash_checkbox_device">Informace o zařízení</string>
@@ -237,7 +237,7 @@
   <string name="connection_failed">Spojení selhalo</string>
   <string name="permission_rationale_location">Systém Android vyžaduje povolení polohy, aby aplikace mohla detekovat zařízení v okolí</string>
   <string name="permission_refused_location">Nelze nalézt zařízení v okolí bez přístupu k poloze</string>
-  <string name="permission_refused_storage">Nelze získat přístup k souborům zim bez povolení přístupu do úložiště</string>
+  <string name="permission_refused_storage" fuzzy="true">Nelze získat přístup k souborům zim bez povolení přístupu do úložiště</string>
   <string name="request_enable_location">Povolit přístup k poloze a umožnit vyhledávání zařízení</string>
   <string name="discovery_needs_location">Vyhledávání blízkých zařízení není možné bez přístupu k poloze</string>
   <string name="request_enable_wifi">V nastavení systému povolte WiFi P2P</string>
@@ -292,9 +292,9 @@
   <string name="open_drawer">Otevři náčrtník</string>
   <string name="close_drawer">Zavřít náčtník</string>
   <string name="how_to_update_content">Jak aktualizovat obsah?</string>
-  <string name="update_content_description">Chcete-li aktualizovat obsah (soubor zim), musíte si stáhnout úplnou nejnovější verzi tohoto stejného obsahu. Můžete to udělat v sekci stahování.</string>
+  <string name="update_content_description" fuzzy="true">Chcete-li aktualizovat obsah (soubor zim), musíte si stáhnout úplnou nejnovější verzi tohoto stejného obsahu. Můžete to udělat v sekci stahování.</string>
   <string name="all_files_permission_needed">Potřebné povolení pro všechny soubory</string>
-  <string name="all_files_permission_needed_message">Pro přístup k souborům ZIM musíme mít povolenou funkci Povolení pro všechny soubory</string>
+  <string name="all_files_permission_needed_message" fuzzy="true">Pro přístup k souborům ZIM musíme mít povolenou funkci Povolení pro všechny soubory</string>
   <string name="allowed">Povoleno</string>
   <string name="not_allowed">Není povoleno</string>
   <string name="denied_internet_permission_message">Pro stahování obsahu prosím povolte wifi</string>

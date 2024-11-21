@@ -6,6 +6,7 @@
 * Jeleniccz
 * Mainframe98
 * McDutchie
+* MohitMali
 * PonkoSasuke
 * Romaine
 * Siebrand
@@ -80,7 +81,7 @@
   <string name="pref_credits_title">Vermeldingen</string>
   <string name="tts_lang_not_supported">De taal van deze pagina wordt niet ondersteund. Het artikel is mogelijk niet goed leesbaar.</string>
   <string name="no_reader_application_installed">Kon geen geïnstalleerde applicatie vinden voor dit type bestand</string>
-  <string name="no_email_application_installed">Installeer een e-mailserviceprovider of stuur ons een e-mail op %1s</string>
+  <string name="no_email_application_installed">Installeer alstublieft een e-mailclient</string>
   <string name="no_app_found_to_select_bookmark_file">Geen app gevonden om een bladwijzerbestand te selecteren</string>
   <string name="no_section_info">Geen inhoudskoppen gevonden</string>
   <string name="request_storage">Om offline inhoud aan te spreken is toegang tot uw opslag nodig</string>
@@ -133,7 +134,9 @@
   <string name="no_files_here">Geen bestanden hier</string>
   <string name="download_no_space">Onvoldoende ruimte om te downloaden.</string>
   <string name="download">Downloaden</string>
+  <string name="download_notification_channel_name">Naam meldingskanaal downloads</string>
   <string name="space_available">Beschikbare ruimte:</string>
+  <string name="move_no_space">Onvoldoende ruimte om te verplaatsen/kopiëren.</string>
   <string name="zim_simple">Eenvoudig</string>
   <string name="zim_no_pic">Geen afbeeldingen</string>
   <string name="zim_no_vid">Geen video’s</string>
@@ -146,10 +149,13 @@
   <string name="help_7">Die is beschikbaar als ZIM-bestanden. Er zijn er veel van:</string>
   <string name="help_8">• Wikipedia is voor elke taal afzonderlijk beschikbaar</string>
   <string name="help_9">• Andere inhoud zoals Wikileaks of Wikisource zijn er ook</string>
-  <string name="help_10">U kunt de door u gekozen ZIM-bestanden in de app downloaden, of de gewenste bestanden zorgvuldig selecteren en downloaden vanaf een desktopcomputer voordat u de ZIM-bestanden naar uw SD-kaart overbrengt.</string>
+  <string name="help_10" fuzzy="true">U kunt de door u gekozen ZIM-bestanden in de app downloaden, of de gewenste bestanden zorgvuldig selecteren en downloaden vanaf een desktopcomputer voordat u de ZIM-bestanden naar uw SD-kaart overbrengt.</string>
   <string name="help_11">ZIM-bestanden die in de app worden gedownload, bevinden zich in de externe opslagmap in een map met de naam Kiwix.</string>
   <string name="pref_storage">Opslag</string>
   <string name="pref_current_folder">Huidige map</string>
+  <string name="pref_storage_used">%s gebruikt</string>
+  <string name="pref_free_storage">%s vrij</string>
+  <string name="choose_storage_to_download_book">Kies de opslag om het boek te downloaden</string>
   <string name="delete_zim_failed">Sommige bestanden konden niet worden verwijderd. Probeer een bestandsbeheerprogramma te gebruiken.</string>
   <string name="tts_pause">pauzeren</string>
   <string name="tts_resume">hervatten</string>
@@ -161,9 +167,9 @@
   <string name="confirm_stop_download_title">Download stoppen?</string>
   <string name="confirm_stop_download_msg">Weet u zeker dat u deze download wilt stoppen?</string>
   <string name="download_change_storage">Selectie opslagapparaat</string>
-  <string name="tts_not_enabled">Tekst-naar-spraak is voor dit ZIM-bestand niet beschikbaar</string>
-  <string name="texttospeech_initialization_failed">Initialisatie van tekst-naar-spraak is mislukt. Probeer het opnieuw</string>
-  <string name="texttospeech_error">Onverwachte fout in tekst-naar-spraak. Probeer het opnieuw</string>
+  <string name="tts_not_enabled" fuzzy="true">Tekst-naar-spraak is voor dit ZIM-bestand niet beschikbaar</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">Initialisatie van tekst-naar-spraak is mislukt. Probeer het opnieuw</string>
+  <string name="texttospeech_error" fuzzy="true">Onverwachte fout in tekst-naar-spraak. Probeer het opnieuw</string>
   <string name="next">Volgende</string>
   <string name="previous">Vorige</string>
   <string name="wifi_only_title">Het downloaden van inhoud via een mobiel netwerk toestaan?</string>
@@ -254,7 +260,7 @@
   <string name="permission_rationale_location">Android vereist locatietoestemming zodat de app nabije apparaten kan detecteren</string>
   <string name="permission_rationale_nearby">Android heeft toestemming voor apparaten in de buurt nodig om de app gelijkaardige apparaten te laten detecteren</string>
   <string name="permission_refused_location">Kan geen nabije apparaten vinden zonder locatierechten</string>
-  <string name="permission_refused_storage">Geen toegang tot ZIM-bestanden zonder opslagrechten</string>
+  <string name="permission_refused_storage">Zonder opslagrechten geen toegang tot ZIM-bestanden</string>
   <string name="request_enable_location">Schakel locatie in om detectie van nabije apparaten mogelijk te maken</string>
   <string name="discovery_needs_location">Kan geen nabije apparaten ontdekken zonder locatieservices</string>
   <string name="request_enable_wifi">Schakel WiFi P2P in via de systeeminstellingen</string>
@@ -316,16 +322,31 @@
   <string name="tabs_restored">Tabbladen hersteld</string>
   <string name="open_drawer">Lade openen</string>
   <string name="close_drawer">Lade sluiten</string>
+  <string name="preparing_file_for_copy">Voorbereiden op kopiëren/verplaatsen</string>
+  <string name="action_copy">Kopiëren</string>
+  <string name="move">Verplaatsen</string>
+  <string name="copying_zim_file">ZIM-bestand kopiëren…</string>
+  <string name="moving_zim_file">ZIM-bestand verplaatsen…</string>
+  <string name="copy_move_files_dialog_description">Kiwix vereist dat het ZIM-bestand in een eigen gegevensdirectory staat. Wilt u het daarheen kopiëren of verplaatsen?</string>
+  <string name="copy_file_error_message">Fout bij het kopiëren van het ZIM-bestand: %s.</string>
+  <string name="why_copy_move_files_to_app_directory">Waarom bestanden verplaatsen/kopiëren naar de openbare directory van de app?</string>
+  <string name="copy_move_files_to_app_directory_description">Vanwege het beleid van Google Play op Android 11 en hoger kan deze app niet langer rechtstreeks toegang krijgen tot bestanden die elders op uw apparaat zijn opgeslagen. Als u uw geselecteerde bestanden wilt bekijken, moeten ze worden verplaatst of gekopieerd naar een speciale map in de directory van deze app. Alleen zo kunnen de bestanden in de app worden geopend.</string>
+  <string name="choose_storage_to_copy_move_zim_file">Kies de opslag om het ZIM-bestand naar te kopiëren/verplaatsen</string>
+  <string name="move_file_error_message">Fout bij het verplaatsen van het ZIM-bestand: %s.</string>
   <string name="how_to_update_content">Hoe werk ik de inhoud bij?</string>
   <string name="update_content_description">Om inhoud (een ZIM-bestand) bij te werken moet u de volledige nieuwste versie van precies dezelfde inhoud downloaden. Dat kan via de downloadsectie.</string>
   <string name="all_files_permission_needed">Toestemming voor alle bestanden vereist</string>
-  <string name="all_files_permission_needed_message">Om toegang te krijgen tot alle ZIM-bestanden op het apparaat hebben we toestemming voor alle bestanden nodig</string>
+  <string name="all_files_permission_needed_message">Om toegang te krijgen tot alle ZIM-bestanden op het apparaat is de toestemming “Alle bestanden” nodig</string>
   <string name="allowed">Toegestaan</string>
   <string name="not_allowed">Niet toegestaan</string>
   <string name="denied_internet_permission_message">Schakel WiFi in om inhoud te downloaden</string>
   <string name="system_unable_to_grant_permission_message">Systeem kan geen toestemming verlenen!</string>
   <string name="allow">Toestaan</string>
   <string name="swipe_down_for_library">Veeg omlaag voor bibliotheek</string>
+  <string name="reaching_remote_library">Met bibliotheek op afstand verbinden</string>
+  <string name="parsing_remote_library">Bibliotheek op afstand verwerken</string>
+  <string name="starting_downloading_remote_library">Starten met downloaden van de online bibliotheek</string>
+  <string name="downloading_library">Downloaden van bibliotheek\n%s</string>
   <string name="no_notes">Geen aantekeningen</string>
   <string name="notes_from_all_books">Aantekeningen bij alle boeken bekijken</string>
   <string name="search_notes">Aantekeningen zoeken</string>
@@ -338,7 +359,7 @@
   <string name="download_tts_language_message">Klik op de knop Downloaden. Zo wordt automatisch de vereiste taal gedownload.</string>
   <string name="external_link_copied_message">Externe koppeling gekopieerd naar klembord</string>
   <string name="read_aloud_service_channel_name">Dienstkanaal hardop voorlezen</string>
-  <string name="read_aloud_channel_description">Regelaars voor tekst-naar-spraak.</string>
+  <string name="read_aloud_channel_description" fuzzy="true">Regelaars voor tekst-naar-spraak.</string>
   <string name="read_aloud_running">Bezig met hardop voorlezen</string>
   <string name="backward_history">Achterwaartse geschiedenis</string>
   <string name="forward_history">Voorwaartse geschiedenis</string>
@@ -354,4 +375,9 @@
   <string name="zim_file_content_description">ZIM-bestand met de uit te lezen inhoud</string>
   <string name="select_language_content_description">Als u deze taal kiest, worden downloadbare boeken in die taal bovenaan weergegeven.</string>
   <string name="toolbar_back_button_content_description">Naar het vorige scherm</string>
+  <string name="save_or_open_unsupported_files_dialog_title">Dit bestand opslaan of openen?</string>
+  <string name="save_or_open_unsupported_files_dialog_message">Als u Openen kiest, wordt dit bestand geopend in een externe lezerapplicatie.</string>
+  <string name="donation_dialog_title">Doneer vandaag nog</string>
+  <string name="donation_dialog_description">%s heeft uw hulp nodig.</string>
+  <string name="make_donation">Doneren</string>
 </resources>

@@ -5,5 +5,5 @@
 -->
 <resources>
   <string name="retry">Labininŋ</string>
-  <string name="invalid_installation">Chiriŋ Deei niŋ ni. Pahimi suɣilo deemi Zim. Kpaŋmi a maŋ ka WiFi be pɔhim zuɣu ka polo viɛnyɛla be a deei niŋ shee</string>
+  <string name="invalid_installation" fuzzy="true">Chiriŋ Deei niŋ ni. Pahimi suɣilo deemi Zim. Kpaŋmi a maŋ ka WiFi be pɔhim zuɣu ka polo viɛnyɛla be a deei niŋ shee</string>
 </resources>

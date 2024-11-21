@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Gomoko
+* Mahabarata
 * Thibaut120094
 * Verdy p
 -->
@@ -11,5 +12,5 @@
   <string name="send_files_title">Envoyer des fichiers</string>
   <string name="receive_files_title">Recevoir des fichiers</string>
   <string name="no_app_found_to_open">Aucune application trouvée pour sélectionner le fichier ZIM !</string>
-  <string name="select_zim_file">Sélectionnez le fichier zim à lire</string>
+  <string name="select_zim_file">Sélectionnez le fichier ZIM à lire</string>
 </resources>

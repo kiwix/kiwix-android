@@ -93,7 +93,7 @@
   <string name="help_7">Те са достъпни като ZIM файлове. Съществуват много от тях:</string>
   <string name="help_8">• Уикипедия е налична отделно за всеки език.</string>
   <string name="help_9">• Също така е налично и съдържание от други източници, като Уикилиийкс и Уикиизточник.</string>
-  <string name="help_10">Вие можете или да смъкнете избраните от вас ZIM файлове, докато сте в мобилното приложение, или да изберете внимателно желаните от вас и да ги смъкнете от десктоп компютър, след което да прехвърлите ZIM файловете във вашата SD карта.</string>
+  <string name="help_10" fuzzy="true">Вие можете или да смъкнете избраните от вас ZIM файлове, докато сте в мобилното приложение, или да изберете внимателно желаните от вас и да ги смъкнете от десктоп компютър, след което да прехвърлите ZIM файловете във вашата SD карта.</string>
   <string name="help_11">ZIM файловете, които са смъкнати в мобилното приложение, се намират във външната памет, в папка с име Kiwix.</string>
   <string name="pref_storage">Хранилище</string>
   <string name="pref_current_folder">Текуща папка</string>
@@ -108,7 +108,7 @@
   <string name="confirm_stop_download_title">Да се прекрати ли даунлоуда?</string>
   <string name="confirm_stop_download_msg">Сигурни ли сте, че желаете да прекъснете този даунлоуд?</string>
   <string name="download_change_storage">Селектор на устройство за съхраняване на данни</string>
-  <string name="tts_not_enabled">Текст към говор не е позволен за този ZIM файл</string>
+  <string name="tts_not_enabled" fuzzy="true">Текст към говор не е позволен за този ZIM файл</string>
   <string name="next">Следващи</string>
   <string name="previous">Предишни</string>
   <string name="wifi_only_title">Ще позволите ли смъкването на съдържание, чрез мобилната мрежа?</string>

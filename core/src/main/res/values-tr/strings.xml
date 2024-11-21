@@ -69,8 +69,8 @@
   <string name="server_started_message">%s sunucusuna erişmek için tarayıcınıza bu ip adresini girin.</string>
   <string name="share_host_address">URL’yi diğer uygulamalar aracılığıyla paylaşın</string>
   <string name="error_file_not_found">Hata: Seçili ZIM dosyası bulunamadı.</string>
-  <string name="unable_to_read_zim_file">Bu zim dosyası okunamıyor!</string>
-  <string name="zim_not_opened">Zim dosyası açılamıyor</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">Bu zim dosyası okunamıyor!</string>
+  <string name="zim_not_opened" fuzzy="true">Zim dosyası açılamıyor</string>
   <string name="error_file_invalid">Hata: Seçili dosya geçerli bir ZIM dosyası değil.</string>
   <string name="error_article_url_not_found">Hata: (Url: %1$s) makalesinin yüklemesi başarısız.</string>
   <string name="pref_display_title">Görüntüle</string>
@@ -86,10 +86,10 @@
   <string name="pref_credits_title">Katkıda bulunanlar</string>
   <string name="tts_lang_not_supported">Bu sayfanın dili desteklenmiyor. Makale düzgün okunamayabilir.</string>
   <string name="no_reader_application_installed">Bu dosya türü için yüklü bir uygulama bulunamadı</string>
-  <string name="no_email_application_installed">Lütfen bir e-posta servis sağlayıcısı kurun veya %1s adresinden bize e-posta gönderin</string>
+  <string name="no_email_application_installed">Lütfen bir e-posta istemcisi kurun</string>
   <string name="no_section_info">İçerik başlığı bulunamadı</string>
   <string name="request_storage">Çevrimdışı içeriğe erişmek için belleğinize erişmemiz gerekmektedir.</string>
-  <string name="request_write_storage">Zim dosyalarını indirmek için depolama alanınıza yazma erişimine ihtiyacımız var</string>
+  <string name="request_write_storage" fuzzy="true">Zim dosyalarını indirmek için depolama alanınıza yazma erişimine ihtiyacımız var</string>
   <string name="clear_recent_and_tabs_history_dialog">Tüm aktif sekmeleri sıfırlamak ve arama geçmişinizi silmek istediğinize emin misiniz?</string>
   <string name="delete_recent_search_item">Bu öğe silinsin mi?</string>
   <string name="pref_clear_all_history_title">Geçmişi temizle</string>
@@ -128,7 +128,7 @@
   <string name="local_zims">Cihaz</string>
   <string name="remote_zims">Çevrimiçi</string>
   <string name="library">Kütüphane</string>
-  <string name="delete_zim_body">Aşağıdaki zim dosyaları silinecektir:\n\n%s</string>
+  <string name="delete_zim_body" fuzzy="true">Aşağıdaki zim dosyaları silinecektir:\n\n%s</string>
   <string name="delete_zims_toast">Dosyalar başarıyla silindi</string>
   <string name="no_files_here">Dosya yok</string>
   <string name="download_no_space">İndirmek için yetersiz alan.</string>
@@ -146,7 +146,7 @@
   <string name="help_7">ZIM dosyaları olarak kullanılabilir durumdadırlar. Onlardan çok sayıda vardır:</string>
   <string name="help_8">• Vikipedi her dil için ayrı ayrı kullanılabilir durumdadır.</string>
   <string name="help_9">• Wikileaks veya Vikikaynak gibi diğer kaynaklarımız da kullanılabilir durumdadır</string>
-  <string name="help_10">Seçtiğiniz ZIM dosyalarını uygulama içerisinden indirebilir veya istediklerinizi seçerek SD kartınıza aktarmadan önce bir Masaüstü bilgisayarından indirebilirsiniz.</string>
+  <string name="help_10" fuzzy="true">Seçtiğiniz ZIM dosyalarını uygulama içerisinden indirebilir veya istediklerinizi seçerek SD kartınıza aktarmadan önce bir Masaüstü bilgisayarından indirebilirsiniz.</string>
   <string name="help_11">Uygulama içinden indirilen ZIM dosyaları harici depolama aygıtındaki Kiwix başlıklı bir klasördedir.</string>
   <string name="pref_storage">Depolama</string>
   <string name="pref_current_folder">Mevcut Klasör</string>
@@ -161,9 +161,9 @@
   <string name="confirm_stop_download_title">İndirme durdurulsun mu?</string>
   <string name="confirm_stop_download_msg">Bu indirmeyi durdurmak istediğinize emin misiniz?</string>
   <string name="download_change_storage">Depolama aygıtı seçicisi</string>
-  <string name="tts_not_enabled">Bu ZIM dosyası için metin okuma uygulanabilir değil</string>
-  <string name="texttospeech_initialization_failed">Metinden Konuşmaya başlatılamadı. Lütfen tekrar deneyin</string>
-  <string name="texttospeech_error">Metinden Konuşmaya beklenmeyen hata. Lütfen tekrar deneyin</string>
+  <string name="tts_not_enabled" fuzzy="true">Bu ZIM dosyası için metin okuma uygulanabilir değil</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">Metinden Konuşmaya başlatılamadı. Lütfen tekrar deneyin</string>
+  <string name="texttospeech_error" fuzzy="true">Metinden Konuşmaya beklenmeyen hata. Lütfen tekrar deneyin</string>
   <string name="next">Sonraki</string>
   <string name="previous">Önceki</string>
   <string name="wifi_only_title">İçeriğin mobil ağ kullanılarak indirilmesine izin verilsin mi?</string>
@@ -187,7 +187,7 @@
   <string name="crash_title">Peki… Bu utanç verici.</string>
   <string name="crash_description">Düşmüş gibiyiz.\n\nAşağıdaki bilgileri göndererek bu sorunu çözmemize yardımcı olur musunuz?</string>
   <string name="crash_checkbox_language">Dil Ayarlarınız</string>
-  <string name="crash_checkbox_zimfiles">Zim Dosyalarınızın Listesi</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">Zim Dosyalarınızın Listesi</string>
   <string name="crash_checkbox_exception">Çökme Detayları</string>
   <string name="crash_checkbox_logs">Uygulama Günlükleri</string>
   <string name="crash_checkbox_device">Cihaz Detayları</string>
@@ -224,7 +224,7 @@
   <string name="complete">Tamamlandı</string>
   <string name="paused_state">Durduruldu</string>
   <string name="failed_state">Başarısız: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed">Zim dosyası indirilemedi. Lütfen uygulamayı Play Store’dan yeniden yüklemeyi deneyin.</string>
+  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">Zim dosyası indirilemedi. Lütfen uygulamayı Play Store’dan yeniden yüklemeyi deneyin.</string>
   <string name="save">Kaydet</string>
   <string name="note">Not</string>
   <string name="wiki_article_title">Viki Madde Başlığı</string>
@@ -249,7 +249,7 @@
   <string name="connection_failed">Bağlantı kurulamadı</string>
   <string name="permission_rationale_location">Uygulamanın eş aygıtları algılamasına izin vermek için Android tarafından konum izni gerekir</string>
   <string name="permission_refused_location">Konum izinleri olmadan eş aygıtlar bulunamıyor</string>
-  <string name="permission_refused_storage">Depolama izni olmadan zim dosyalarına erişilemiyor</string>
+  <string name="permission_refused_storage" fuzzy="true">Depolama izni olmadan zim dosyalarına erişilemiyor</string>
   <string name="request_enable_location">Eşlerin algılanmasına izin vermek için konumu etkinleştir</string>
   <string name="discovery_needs_location">Konum servisleri olmadan eşleri bulamıyor</string>
   <string name="request_enable_wifi">WiFi P2P’yi sistem ayarlarından etkinleştir</string>
@@ -305,9 +305,9 @@
   <string name="open_drawer">Çekmeceyi Aç</string>
   <string name="close_drawer">Çekmeceyi Kapat</string>
   <string name="how_to_update_content">İçerik nasıl güncellenir?</string>
-  <string name="update_content_description">İçeriği (bir zim dosyası) güncellemek için, aynı içeriğin en son sürümünü indirmeniz gerekir. Bunu indirme bölümünden yapabilirsiniz.</string>
+  <string name="update_content_description" fuzzy="true">İçeriği (bir zim dosyası) güncellemek için, aynı içeriğin en son sürümünü indirmeniz gerekir. Bunu indirme bölümünden yapabilirsiniz.</string>
   <string name="all_files_permission_needed">Tüm Dosyalar İzni Gereklidir</string>
-  <string name="all_files_permission_needed_message">Cihaz içindeki tüm zim dosyalara erişmek için Tüm Dosyalar İzni’ne ihtiyacımız var</string>
+  <string name="all_files_permission_needed_message" fuzzy="true">Cihaz içindeki tüm zim dosyalara erişmek için Tüm Dosyalar İzni’ne ihtiyacımız var</string>
   <string name="allowed">İzin verildi</string>
   <string name="not_allowed">İzin verilmedi</string>
   <string name="denied_internet_permission_message">Lütfen içeriği indirmek için wifi özelliğini etkinleştirin</string>
@@ -326,7 +326,7 @@
   <string name="download_tts_language_message">Lütfen İndir düğmesine tıklayın. Gerekli dili otomatik olarak indirecektir.</string>
   <string name="external_link_copied_message">Kalıcı bağlantısı panoya kopyalandı</string>
   <string name="read_aloud_service_channel_name">Yüksek Sesle Okuma Servis Kanalı</string>
-  <string name="read_aloud_channel_description">Metinden konuşmaya kontroller.</string>
+  <string name="read_aloud_channel_description" fuzzy="true">Metinden konuşmaya kontroller.</string>
   <string name="read_aloud_running">Sesli Okumayı Çalıştırma</string>
   <string name="backward_history">Birikmiş iş geçmişi</string>
   <string name="forward_history">İleri tarih</string>

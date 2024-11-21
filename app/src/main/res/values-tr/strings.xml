@@ -10,6 +10,6 @@
   <string name="cannot_open_file" fuzzy="true">Dosya açılamadı\nLütfen bu dosyayı Kitaplığınızın Cihaz Sekmesinde aramayı deneyin</string>
   <string name="send_files_title">Dosya Yükle</string>
   <string name="receive_files_title">Dosya Al</string>
-  <string name="no_app_found_to_open">zim dosyasını seçecek uygulama bulunamadı!</string>
-  <string name="select_zim_file">Okumak için zim dosyasını seçin</string>
+  <string name="no_app_found_to_open" fuzzy="true">zim dosyasını seçecek uygulama bulunamadı!</string>
+  <string name="select_zim_file" fuzzy="true">Okumak için zim dosyasını seçin</string>
 </resources>

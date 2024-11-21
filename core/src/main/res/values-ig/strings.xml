@@ -62,8 +62,8 @@
   <string name="qr_code">Emepụtara Koodu QR</string>
   <string name="share_host_address">Kesaa URL site na ngwa ndị ọzọ</string>
   <string name="error_file_not_found">Njehie: Enweghi ike ịchọta faịlụ ZIM ahọpụtara.</string>
-  <string name="unable_to_read_zim_file">Enweghị ike ịgụ faịlụ zim a!</string>
-  <string name="zim_not_opened">Enweghị ike imepe faịlụ zim</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">Enweghị ike ịgụ faịlụ zim a!</string>
+  <string name="zim_not_opened" fuzzy="true">Enweghị ike imepe faịlụ zim</string>
   <string name="error_file_invalid">Njehie: faịlụ ahọpụtara abụghị faịlụ ZIM ziri ezi.</string>
   <string name="error_article_url_not_found">Njehie: Ịbute akụkọ (URl: %1$s ) dara.</string>
   <string name="pref_display_title">Ngosipụta</string>
@@ -79,11 +79,11 @@
   <string name="pref_credits_title">Ebe e si nweta</string>
   <string name="tts_lang_not_supported">A naghị akwado asụsụ ibe a. Enwere ike ghara ịgụ akụkọ ahụ nke ọma.</string>
   <string name="no_reader_application_installed">Enweghị ike ịchọta ngwa arụnyere maka ụdị faịlụ a</string>
-  <string name="no_email_application_installed">Biko tinye onye na-eweta ọrụ email ma ọ bụ zitere anyị email na %1s</string>
+  <string name="no_email_application_installed">Biko, wụnye onye ahịa email</string>
   <string name="no_app_found_to_select_bookmark_file">Onweghi ngwa achọtara iji họrọ faịlụ ibe edokọbara</string>
   <string name="no_section_info">Enweghị nkụnye eji isi mee ọdịnaya</string>
   <string name="request_storage">Iji nweta ọdịnaya anọghị n’ịntanetị anyị kwesịrị ịnweta nchekwa gị</string>
-  <string name="request_write_storage">Ka ibudata faịlụ zim anyị kwesịrị ide ohere na nchekwa gị</string>
+  <string name="request_write_storage" fuzzy="true">Ka ibudata faịlụ zim anyị kwesịrị ide ohere na nchekwa gị</string>
   <string name="clear_recent_and_tabs_history_dialog">Ị ji n’aka na ịchọrọ ihichapụ akụkọ ọchụchọ gị wee tọgharịa taabụ niile na-arụ ọrụ?</string>
   <string name="delete_recent_search_item">hichapụ ihe niile</string>
   <string name="pref_clear_all_history_title">Kpochapụ akụkọ ihe mere eme</string>
@@ -123,7 +123,7 @@
   <string name="local_zims">Ngwaọrụ</string>
   <string name="remote_zims">Ntanetị</string>
   <string name="library">Ọ́bá Akwụkwọ</string>
-  <string name="delete_zim_body">A ga-ehichapụ faịlụ zim ndị a:\n\n %s</string>
+  <string name="delete_zim_body" fuzzy="true">A ga-ehichapụ faịlụ zim ndị a:\n\n %s</string>
   <string name="delete_zims_toast">Ehichapụrụ faịlụ ndị ahụ n’enweghi nsogbụ</string>
   <string name="no_files_here">Enweghị faịlụ ebe a</string>
   <string name="download_no_space">Enweghị ohere zuru ezu iji budata.</string>
@@ -141,7 +141,7 @@
   <string name="help_7">Ha dị na faịlụ ZIM. E nwere ọtụtụ n’ime ha:</string>
   <string name="help_8">• Wikipedia dị iche iche maka asụsụ ọ bụla</string>
   <string name="help_9">• Ọdịnaya anyi ndị ọzọ dị ka Wikileaks ma ọ bụ Wikisource dịkwa</string>
-  <string name="help_10">Ị nwere ike budata faịlụ ZIM gị n’ime ngwa ma ọ bụ jiri nlezianya họrọ nke ịchọrọ ma budata na kọmputa Desktọpụ tupu ibufee faịlụ ZIM na kaadị SD gị.</string>
+  <string name="help_10" fuzzy="true">Ị nwere ike budata faịlụ ZIM gị n’ime ngwa ma ọ bụ jiri nlezianya họrọ nke ịchọrọ ma budata na kọmputa Desktọpụ tupu ibufee faịlụ ZIM na kaadị SD gị.</string>
   <string name="help_11">Nbudata n’ime ngwa faịlụ ZIM dị na ndekọ nchekwa mpụga na folda akpọrọ Kiwix.</string>
   <string name="pref_storage">Nchekwa</string>
   <string name="pref_current_folder">Folder nke ugbu a</string>
@@ -156,9 +156,9 @@
   <string name="confirm_stop_download_title">Kwụsị nbudata?</string>
   <string name="confirm_stop_download_msg">Ị ji n’aka n’ịchọrọ ịkwụsị nbudata a?</string>
   <string name="download_change_storage">Nhọrọ ngwaọrụ nchekwa</string>
-  <string name="tts_not_enabled">Enweghi isi na ederede gaa na okwu maka faịlụ ZIM a</string>
-  <string name="texttospeech_initialization_failed">Mmalite ederede gaa na okwu agaghi. Biko nwaa ọzọ</string>
-  <string name="texttospeech_error">Njehie a na-atụghị anya ya na Ederede gaa na Okwu. Biko nwaa ọzọ</string>
+  <string name="tts_not_enabled" fuzzy="true">Enweghi isi na ederede gaa na okwu maka faịlụ ZIM a</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">Mmalite ederede gaa na okwu agaghi. Biko nwaa ọzọ</string>
+  <string name="texttospeech_error" fuzzy="true">Njehie a na-atụghị anya ya na Ederede gaa na Okwu. Biko nwaa ọzọ</string>
   <string name="next">Nkeọzọ</string>
   <string name="previous">Nke gara aga</string>
   <string name="wifi_only_title">Kwe ka nbudata ọdịnaya site na netwọk ekwentị?</string>
@@ -182,7 +182,7 @@
   <string name="crash_title">Ewo… Nke a bụ ihe ihere</string>
   <string name="crash_description">Ọ dị ka anyị dara.\n\nỌ ga-amasị gị inyere anyị aka idozi nsogbu a site na izipu ozi ndị a?</string>
   <string name="crash_checkbox_language">Ntọala asụsụ gị</string>
-  <string name="crash_checkbox_zimfiles">Ndepụta nke Zim Files Gị</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">Ndepụta nke Zim Files Gị</string>
   <string name="crash_checkbox_exception">Nkọwa maka ọdịda</string>
   <string name="crash_checkbox_logs">Ndepụta itinye akwụkwọ</string>
   <string name="crash_checkbox_device">Nkọwa nke Ngwaọrụ</string>
@@ -219,7 +219,7 @@
   <string name="complete">Zuru oke</string>
   <string name="paused_state">Ịkwụsịtụ</string>
   <string name="failed_state">Ọ dara:%s</string>
-  <string name="custom_download_error_message_for_authentication_failed">Enweghị ike ibudata faịlụ zim ahụ. Biko nwaa itinyegharịa ngwa ahụ na Play Store.</string>
+  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">Enweghị ike ibudata faịlụ zim ahụ. Biko nwaa itinyegharịa ngwa ahụ na Play Store.</string>
   <string name="save">Chekwa</string>
   <string name="note">Ihe odide</string>
   <string name="wiki_article_title">Aha edemede Wiki</string>
@@ -244,7 +244,7 @@
   <string name="connection_failed">Njikọ\n dara</string>
   <string name="permission_rationale_location">Ebe\n Android chọrọ ikike iji kwe ka ngwa ahụ chọpụta ngwaọrụ ndị ọgbọ</string>
   <string name="permission_refused_location">Enweghị ike\n chọta ngwaọrụ ndị ọgbọ na-enweghị ikike ebe</string>
-  <string name="permission_refused_storage">Enweghị ike\n nweta faịlụ zim na-enweghị ikike nchekwa</string>
+  <string name="permission_refused_storage" fuzzy="true">Enweghị ike\n nweta faịlụ zim na-enweghị ikike nchekwa</string>
   <string name="request_enable_location">Gbanye ngosi ebe iji nabata nchọpụta nke otu</string>
   <string name="discovery_needs_location">Enweghị ike ịchọpụta ndị otu na-enweghị ngosi ebe</string>
   <string name="request_enable_wifi">Gbanye WiFi P2P site na ntọala sistemụ</string>
@@ -300,9 +300,9 @@
   <string name="open_drawer">Mepee drawer</string>
   <string name="close_drawer">Mechie drawer</string>
   <string name="how_to_update_content">Ole Otu esi emelite ọdịnaya?</string>
-  <string name="update_content_description">Imelite ọdịnaya (faịlụ zim) ịkwesịrị ibudata ụdị ọdịnaya kachasị ọhụrụ nke otu ọdịnaya a. Ị nwere ike ime nke ahụ site na ngalaba nbudata.</string>
+  <string name="update_content_description" fuzzy="true">Imelite ọdịnaya (faịlụ zim) ịkwesịrị ibudata ụdị ọdịnaya kachasị ọhụrụ nke otu ọdịnaya a. Ị nwere ike ime nke ahụ site na ngalaba nbudata.</string>
   <string name="all_files_permission_needed">Achọrọ ikike faịlụ niile</string>
-  <string name="all_files_permission_needed_message">Iji nweta faịlụ zim niile n’ofe ngwaọrụ anyị kwesịrị ịnweta ikike faịlụ niile</string>
+  <string name="all_files_permission_needed_message" fuzzy="true">Iji nweta faịlụ zim niile n’ofe ngwaọrụ anyị kwesịrị ịnweta ikike faịlụ niile</string>
   <string name="allowed">E nyere ikike</string>
   <string name="not_allowed">Enyeghi ikike</string>
   <string name="denied_internet_permission_message">Biko mee ka wifi nwee ike ibudata ọdịnaya</string>
@@ -321,7 +321,7 @@
   <string name="download_tts_language_message">Biko pịa bọtịnụ nbudata. Ọ ga-ebudata asụsụ achọrọ na-akpaghị aka.</string>
   <string name="external_link_copied_message">Eṅomiri Njikọ Mpụga na Klipbọọdụ</string>
   <string name="read_aloud_service_channel_name">Gụọ ọwa ozi n’olu dara ụda</string>
-  <string name="read_aloud_channel_description">Ederede gaa na njikwa okwu.</string>
+  <string name="read_aloud_channel_description" fuzzy="true">Ederede gaa na njikwa okwu.</string>
   <string name="read_aloud_running">Na-agba ọsọ Gụọ n’olu dara ụda</string>
   <string name="backward_history">Akụkọ banyere azụ</string>
   <string name="forward_history">Akụkọ n’ihu</string>

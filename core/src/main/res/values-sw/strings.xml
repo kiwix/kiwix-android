@@ -64,8 +64,8 @@
   <string name="server_started_message">Ingiza anwani hii ya ip kwenye kivinjari chako ili kufikia seva %s</string>
   <string name="share_host_address">Kushiriki URL kupitia programu nyingine</string>
   <string name="error_file_not_found">Hitilafu: Faili ya ZIM iliyochaguliwa haija patikana.</string>
-  <string name="unable_to_read_zim_file">Haiwezi kusoma faili hii zim!</string>
-  <string name="zim_not_opened">Haiwezi kufungua faili ya zim</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">Haiwezi kusoma faili hii zim!</string>
+  <string name="zim_not_opened" fuzzy="true">Haiwezi kufungua faili ya zim</string>
   <string name="error_file_invalid">Hitilafu:Faili iliyochaguliwa sio faili sahihi ya ZIM.</string>
   <string name="error_article_url_not_found">Hitilafu:Upakiaji wa makala umefeli (Url: %1$s)</string>
   <string name="pref_display_title">Onesha</string>
@@ -81,10 +81,10 @@
   <string name="pref_credits_title">Mikopo</string>
   <string name="tts_lang_not_supported">Lugha ya ukurasa huu haitumiki. Makala hayawezi kusomwa ipasavyo.</string>
   <string name="no_reader_application_installed">Haikuweza kupata programu iliyosakinishwa ya aina hii ya faili</string>
-  <string name="no_email_application_installed">Tafadhali weka mtoa huduma wa barua pepe au tutumie barua pepe kwa %1s</string>
+  <string name="no_email_application_installed">Tafadhali weka mteja wa barua pepe</string>
   <string name="no_section_info">Hakuna Vichwa vya Habari Vilivyopatikana</string>
   <string name="request_storage">Ili kufikia maudhui nje ya mtandao tunahitaji kupata uhifadhi wako</string>
-  <string name="request_write_storage">Ili kupakua faili za zim tunahitaji ufikiaji wa kuandika kwa hifadhi yako</string>
+  <string name="request_write_storage" fuzzy="true">Ili kupakua faili za zim tunahitaji ufikiaji wa kuandika kwa hifadhi yako</string>
   <string name="clear_recent_and_tabs_history_dialog">Je, una uhakika unataka kufuta historia yako ya utafutaji na kuweka upya vichupo vyote vinavyotumika?</string>
   <string name="delete_recent_search_item">Je, unataka kufuta hiki kitu?</string>
   <string name="pref_clear_all_history_title">Futa historia</string>
@@ -123,7 +123,7 @@
   <string name="local_zims">Kifaa</string>
   <string name="remote_zims">Mtandaoni</string>
   <string name="library">Maktaba</string>
-  <string name="delete_zim_body">Faili zifuatazo za zim zitafutwa: Msaada %s</string>
+  <string name="delete_zim_body" fuzzy="true">Faili zifuatazo za zim zitafutwa: Msaada %s</string>
   <string name="delete_zims_toast">Faili zilizofutwa kwa mafanikio</string>
   <string name="no_files_here">Hakuna faili hapa</string>
   <string name="download_no_space">Nafasi haitoshi kupakua.</string>
@@ -141,7 +141,7 @@
   <string name="help_7">Zinapatikana kama faili za ZIM. Kuna mengi yao:</string>
   <string name="help_8">• Wikipedia inapatikana kwa njia tofauti kwa kila lugha</string>
   <string name="help_9">• Maudhui mengine kama Wikileaks au Wikisource yanapatikana pia</string>
-  <string name="help_10">Unaweza kupakua faili zako za ZIM ulizochagua ndani ya programu au uchague kwa uangalifu (za) unayotaka na kupakua kutoka kwa Kompyuta ya Mezani kabla ya kuhamisha faili za ZIM hadi kwenye kadi yako ya SD.</string>
+  <string name="help_10" fuzzy="true">Unaweza kupakua faili zako za ZIM ulizochagua ndani ya programu au uchague kwa uangalifu (za) unayotaka na kupakua kutoka kwa Kompyuta ya Mezani kabla ya kuhamisha faili za ZIM hadi kwenye kadi yako ya SD.</string>
   <string name="help_11">Faili za ZIM zinazopakuliwa ndani ya programu ziko katika saraka ya hifadhi ya nje katika folda yenye kichwa Kiwix.</string>
   <string name="pref_storage">Hifadhi</string>
   <string name="pref_current_folder">Folda ya Sasa</string>
@@ -156,9 +156,9 @@
   <string name="confirm_stop_download_title">Acha kupakua?</string>
   <string name="confirm_stop_download_msg">Je, una uhakika unataka kuacha kupakua hii?</string>
   <string name="download_change_storage">Chagua kifaa cha kuhifadhi</string>
-  <string name="tts_not_enabled">Ujumbe kwa hotuba haiwezi kufanywa kwa faili hii ya ZIM</string>
-  <string name="texttospeech_initialization_failed">Kuanzisha maandishi kwa hotuba kushindwa. Tafadhali jaribu tena</string>
-  <string name="texttospeech_error">Hitilafu isiyotarajiwa katika Maandishi hadi Hotuba. Tafadhali jaribu tena</string>
+  <string name="tts_not_enabled" fuzzy="true">Ujumbe kwa hotuba haiwezi kufanywa kwa faili hii ya ZIM</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">Kuanzisha maandishi kwa hotuba kushindwa. Tafadhali jaribu tena</string>
+  <string name="texttospeech_error" fuzzy="true">Hitilafu isiyotarajiwa katika Maandishi hadi Hotuba. Tafadhali jaribu tena</string>
   <string name="next">Ijayo</string>
   <string name="previous">-liyopita</string>
   <string name="wifi_only_title">Ungependa kuruhusu upakuaji wa maudhui kupitia mtandao wa simu?</string>
@@ -182,7 +182,7 @@
   <string name="crash_title">Naam… Hii ni Aibu</string>
   <string name="crash_description">Inaonekana tulianguka.\n\nUngependa kutusaidia kurekebisha tatizo hili kwa kutuma maelezo yafuatayo?</string>
   <string name="crash_checkbox_language">Mipangilio mingine ya lugha</string>
-  <string name="crash_checkbox_zimfiles">Orodha ya Faili zako za Zim</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">Orodha ya Faili zako za Zim</string>
   <string name="crash_checkbox_exception">Maelezo ya mshuko</string>
   <string name="crash_checkbox_logs">Matumizi ya Programu</string>
   <string name="crash_checkbox_device">Maelezo ya Kifaa</string>
@@ -219,7 +219,7 @@
   <string name="complete">Imekamilika</string>
   <string name="paused_state">Imesitishwa</string>
   <string name="failed_state">Imeshindwa: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed">Faili ya zim haikuweza kupakuliwa. Tafadhali jaribu kusakinisha tena programu kutoka Play store.</string>
+  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">Faili ya zim haikuweza kupakuliwa. Tafadhali jaribu kusakinisha tena programu kutoka Play store.</string>
   <string name="save">Hifadhi</string>
   <string name="note">Kidokezo</string>
   <string name="wiki_article_title">Kichwa cha Makala ya Wiki</string>
@@ -244,7 +244,7 @@
   <string name="connection_failed">Muunganisho haukufaulu</string>
   <string name="permission_rationale_location">Ruhusa ya eneo inahitajika na Android ili kuruhusu programu kutambua vifaa vingine</string>
   <string name="permission_refused_location">Haiwezi kupata vifaa vya programu zingine bila ruhusa za eneo</string>
-  <string name="permission_refused_storage">Haiwezi kufikia faili za zim bila ruhusa ya kuhifadhi</string>
+  <string name="permission_refused_storage" fuzzy="true">Haiwezi kufikia faili za zim bila ruhusa ya kuhifadhi</string>
   <string name="request_enable_location">Wezesha eneo ili kuruhusu ugunduzi wa programu zingine</string>
   <string name="discovery_needs_location">Haiwezi kugundua programu zingine bila huduma za eneo</string>
   <string name="request_enable_wifi">Washa WiFi P2P kutoka kwa mipangilio ya mfumo</string>
@@ -299,9 +299,9 @@
   <string name="open_drawer">Fungua Droo</string>
   <string name="close_drawer">Funga Droo</string>
   <string name="how_to_update_content">Jinsi ya kusasisha maudhui?</string>
-  <string name="update_content_description">Ili kusasisha maudhui (faili ya zim) unahitaji kupakua toleo jipya zaidi la maudhui haya haya. Unaweza kufanya hivyo kupitia sehemu ya kupakua.</string>
+  <string name="update_content_description" fuzzy="true">Ili kusasisha maudhui (faili ya zim) unahitaji kupakua toleo jipya zaidi la maudhui haya haya. Unaweza kufanya hivyo kupitia sehemu ya kupakua.</string>
   <string name="all_files_permission_needed">Ruhusa ya Faili Zote Inahitajika</string>
-  <string name="all_files_permission_needed_message">Ili kufikia faili zote za zim kwenye kifaa tunahitaji kuwa na Ruhusa ya Faili Zote</string>
+  <string name="all_files_permission_needed_message" fuzzy="true">Ili kufikia faili zote za zim kwenye kifaa tunahitaji kuwa na Ruhusa ya Faili Zote</string>
   <string name="allowed">Halali</string>
   <string name="not_allowed">Hairuhusiwi</string>
   <string name="denied_internet_permission_message">Tafadhali wezesha wifi kupakua maudhui</string>
@@ -320,7 +320,7 @@
   <string name="download_tts_language_message">Tafadhali bofya kitufe cha Kupakua. Itapakua kiotomatiki lugha inayohitajika.</string>
   <string name="external_link_copied_message">Kiungo cha Nje Kimenakiliwa kwenye Ubao wa kunakili</string>
   <string name="read_aloud_service_channel_name">Soma Kituo cha Huduma kwa Sauti</string>
-  <string name="read_aloud_channel_description">Maandishi hadi vidhibiti vya usemi.</string>
+  <string name="read_aloud_channel_description" fuzzy="true">Maandishi hadi vidhibiti vya usemi.</string>
   <string name="read_aloud_running">Kukimbia Kusoma kwa Sauti</string>
   <string name="backward_history">Historia ya nyuma</string>
   <string name="forward_history">Historia ya mbele</string>

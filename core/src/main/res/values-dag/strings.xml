@@ -61,8 +61,8 @@
   <string name="server_started_message">Kpɛhimi a ip fasara a browzɛr ni din yɛn chɛ ka a  nya niŋsim niŋda %s</string>
   <string name="share_host_address">Shiriki URL kupitia programu zingine</string>
   <string name="error_file_not_found">Chiriŋ: ZIM mazagali shɛli bɛ ni daa piigi ŋɔ bi tooi nya.</string>
-  <string name="unable_to_read_zim_file">Di bi tooi karim zim mazagali ŋɔ!</string>
-  <string name="zim_not_opened">Di bi tooi yoogi zim mazagali</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">Di bi tooi karim zim mazagali ŋɔ!</string>
+  <string name="zim_not_opened" fuzzy="true">Di bi tooi yoogi zim mazagali</string>
   <string name="error_file_invalid">Chiriŋ: Mazagali shɛli bɛ ni daa piigi ŋɔ pala ZIM mazagali din niŋ viɛnyɛla.</string>
   <string name="error_article_url_not_found">Chiriŋ: Yaɣ’shɛli dini yoori a (Url: %1$s) bi yooi</string>
   <string name="pref_display_title">Zaŋ wuhi</string>
@@ -78,10 +78,10 @@
   <string name="pref_credits_title">Viɛnyɛla</string>
   <string name="tts_lang_not_supported">Balli zaŋ n-ti yaɣili ŋɔ nyɛla bɛ ni bi saɣi n-ti shɛli. Din tooi niŋ ka lahabali ŋɔ bi tooi karim viɛnyɛla.</string>
   <string name="no_reader_application_installed">Haikuweza kupata\n programu iliyosakinishwa kwa aina hii ya faili</string>
-  <string name="no_email_application_installed">Tafadhali sakinisha\n mtoa huduma wa barua pepe au tutumie barua pepe kwa %1s</string>
+  <string name="no_email_application_installed">Tafadhali sakinisha mtoa huduma wa barua pepe</string>
   <string name="no_section_info">Lahabaya zuɣu nyɛla din kani</string>
   <string name="request_storage">A yi bori ni a ka pɔhim zuɣu ka nyari lahabali ti bori soli a deei niŋ shee</string>
-  <string name="request_write_storage">A yi bori ni a deei zim mazagaya ti bori la sabbu soli tibu a kambɔŋ ni</string>
+  <string name="request_write_storage" fuzzy="true">A yi bori ni a deei zim mazagaya ti bori la sabbu soli tibu a kambɔŋ ni</string>
   <string name="clear_recent_and_tabs_history_dialog">A niŋ dihitabili ni a borimi ni a yihi a vihigu taarihi ka labi niŋ binshɛɣ’kam?</string>
   <string name="delete_recent_search_item">Nyɛhimi ŋɔ?</string>
   <string name="pref_clear_all_history_title">Yihimi taarihi</string>
@@ -120,7 +120,7 @@
   <string name="local_zims">Bimbuɣisirigu</string>
   <string name="remote_zims">Pohim zuɣu</string>
   <string name="library">Karimbu shee</string>
-  <string name="delete_zim_body">Zim mazagali(ya) din doli na ŋɔ nyɛla din yɛn yihi:\n\n\n%s</string>
+  <string name="delete_zim_body" fuzzy="true">Zim mazagali(ya) din doli na ŋɔ nyɛla din yɛn yihi:\n\n\n%s</string>
   <string name="delete_zims_toast">Mazagaya yihiya ni nasara</string>
   <string name="no_files_here">Mazagaya ka kpee</string>
   <string name="download_no_space">Polo kani ni di deei</string>
@@ -139,7 +139,7 @@
   <string name="help_7">Faali nim maa nyɛla ZIM faali nima.\nDi galisiya pam:</string>
   <string name="help_8">• Wikipedia bɛla zuliya dabam dabam ni</string>
   <string name="help_9">• Lahabaya din pahi kamani Wikileaks bee Wikisource nyɛla din gba be ni</string>
-  <string name="help_10">A ni tooi deei ZIM fasara shɛli a ni piigi bee ka a maagi a maŋ piigi a ni bori ni a deegi shɛli niŋ a kɔmputa ni pɔi ka naai yi zaŋ li niŋ a ZIM fasara deebu shee.</string>
+  <string name="help_10" fuzzy="true">A ni tooi deei ZIM fasara shɛli a ni piigi bee ka a maagi a maŋ piigi a ni bori ni a deegi shɛli niŋ a kɔmputa ni pɔi ka naai yi zaŋ li niŋ a ZIM fasara deebu shee.</string>
   <string name="help_11">ZIM fasara nima deebu nyɛla din be sambani deebu shee ka di yuli booni Kiwix.</string>
   <string name="pref_storage">Kambɔŋ</string>
   <string name="pref_current_folder">Saha ŋɔ gbaŋ niŋbu shee</string>
@@ -156,9 +156,9 @@
   <string name="confirm_stop_download_title">A bɔri ni a chɛla voobu bee?</string>
   <string name="confirm_stop_download_msg">A niŋ dihitabili ni a bɔri ni a chɛla voobu maa?</string>
   <string name="download_change_storage">Kpanjɔɣu piibu</string>
-  <string name="tts_not_enabled">ZIM faali nim be saɣi n ti ni a tooi lɛbigi sabibu yɛltɔɣili</string>
-  <string name="texttospeech_initialization_failed">Sabbu zaŋ niŋ yɛltɔɣa yɛlibu nyɛla din zaɣisi. Pahimi suɣilo labi niŋ</string>
-  <string name="texttospeech_error">Alahiʒiba chiriŋ sabbu zaŋ chaŋ yɛligu ni. Pahimi suɣilo labi niŋ</string>
+  <string name="tts_not_enabled" fuzzy="true">ZIM faali nim be saɣi n ti ni a tooi lɛbigi sabibu yɛltɔɣili</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">Sabbu zaŋ niŋ yɛltɔɣa yɛlibu nyɛla din zaɣisi. Pahimi suɣilo labi niŋ</string>
+  <string name="texttospeech_error" fuzzy="true">Alahiʒiba chiriŋ sabbu zaŋ chaŋ yɛligu ni. Pahimi suɣilo labi niŋ</string>
   <string name="next">Din paya</string>
   <string name="previous">Din gari</string>
   <string name="wifi_only_title">Timi deebu soli a nucheebaŋ ni?</string>
@@ -182,7 +182,7 @@
   <string name="crash_title">Toh… Di maa mali vi pam</string>
   <string name="crash_description">Di ŋmanila ti binshaɣu mali la gadama.\n\nDim bɔŋɔ a bɔri ni a sɔŋ ti ka ti bo maliŋ zaŋ ti li? Sabima n zaŋ ti ti</string>
   <string name="crash_checkbox_language">A zuliya yɛltɔɣa nim malizali shee</string>
-  <string name="crash_checkbox_zimfiles">A Zim faali nim biɛlima</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">A Zim faali nim biɛlima</string>
   <string name="crash_checkbox_exception">Karikari ŋɔ bayana</string>
   <string name="crash_checkbox_logs">Maombi\n Kumbukumbu</string>
   <string name="crash_checkbox_device">Bimbuɣisirigu bayana nima</string>
@@ -220,7 +220,7 @@
   <string name="complete">Naaya</string>
   <string name="paused_state">Nazanima</string>
   <string name="failed_state">Zaɣisi: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed">Zim fasara bi tooi deei. Pahimi suɣilo labi deei li a binyɛra deebu shee.</string>
+  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">Zim fasara bi tooi deei. Pahimi suɣilo labi deei li a binyɛra deebu shee.</string>
   <string name="save">Zaŋ niŋ</string>
   <string name="note">Guhimbu</string>
   <string name="wiki_article_title">Wiki article lahabal’kpani</string>
@@ -246,7 +246,7 @@
   <string name="permission_rationale_location">Dooshee soli nyɛla binshɛli Android ni bora ni di tooi chɛ ka app ŋɔ tooi baŋ di taba</string>
   <string name="permission_rationale_nearby">Dooshee soli nyɛla binshɛli Android ni bora ni di tooi chɛ ka app ŋɔ tooi baŋ di taba</string>
   <string name="permission_refused_location">Ku tooi m-bo gbaai di taba  shee di yi niŋ ka a bi ti dooshee soya</string>
-  <string name="permission_refused_storage">Ku tooi nya zim fasara nima di yi niŋ ka a bi ti deei niŋ shee soli</string>
+  <string name="permission_refused_storage" fuzzy="true">Ku tooi nya zim fasara nima di yi niŋ ka a bi ti deei niŋ shee soli</string>
   <string name="request_enable_location">Tim dooshee soli di yɛn chɛ ka di gbaai di taba</string>
   <string name="discovery_needs_location">Ku tooi nya di taba di yi niŋ ka a bi ti dooshee soli</string>
   <string name="request_enable_wifi">Niŋmi WiFi din yina bintaɣindisi puuni</string>
@@ -305,12 +305,13 @@
   <string name="preparing_file_for_copy">Shili malibu zaŋ n-ti yaabu/kpɛhibu</string>
   <string name="action_copy">yaai</string>
   <string name="move">Kpɛhi</string>
-  <string name="copy_move_files_dialog_description">A borimi ni a yaai bee a zaŋ kpɛhi mazagali ŋɔ ni?</string>
-  <string name="copy_file_error_message">Chiriŋ niŋya a zim mazagali yaabu ni: %s.</string>
+  <string name="copy_move_files_dialog_description" fuzzy="true">A borimi ni a yaai bee a zaŋ kpɛhi mazagali ŋɔ ni?</string>
+  <string name="copy_file_error_message" fuzzy="true">Chiriŋ niŋya a zim mazagali yaabu ni: %s.</string>
+  <string name="why_copy_move_files_to_app_directory" fuzzy="true">Kpɛhimi/yaami mazagaya niŋ app salo wuhibu ni?</string>
   <string name="how_to_update_content">Wula ka lahabali ni tooi maliniŋ?</string>
-  <string name="update_content_description">A yi yɛn mali lahabali niŋ (zim fasara) n- to ni a deei niŋ lala yaɣili maa ni noo. A ni tooi niŋ lala deei niŋ yaɣili.</string>
+  <string name="update_content_description" fuzzy="true">A yi yɛn mali lahabali niŋ (zim fasara) n- to ni a deei niŋ lala yaɣili maa ni noo. A ni tooi niŋ lala deei niŋ yaɣili.</string>
   <string name="all_files_permission_needed">Fasara nima zaa soli tibu nyɛla din bora</string>
-  <string name="all_files_permission_needed_message">Di yi niŋ ka a bori ni a nya zim fasara nima zaa bimbuɣisirigu ni din ŋuna di to ni ti nya soli a fasara nima zaa ni</string>
+  <string name="all_files_permission_needed_message" fuzzy="true">Di yi niŋ ka a bori ni a nya zim fasara nima zaa bimbuɣisirigu ni din ŋuna di to ni ti nya soli a fasara nima zaa ni</string>
   <string name="allowed">Soli beni</string>
   <string name="not_allowed">Soli kani</string>
   <string name="denied_internet_permission_message">Pahimi suɣilo niŋmi Wifi din yɛn chɛ ka a tooi deei lahabali</string>
@@ -329,7 +330,7 @@
   <string name="download_tts_language_message">Pahimi suɣilo dihimi deeimi shee. Di nyɛla din yɛn deei di’toli balli shɛli din bori ŋɔ.</string>
   <string name="external_link_copied_message">Sambani soli nyɛla din yaai kpɛ Clipboard</string>
   <string name="read_aloud_service_channel_name">Karim ka Yina so’doligu</string>
-  <string name="read_aloud_channel_description">Sabbi n-ti yɛligu gbibira.</string>
+  <string name="read_aloud_channel_description" fuzzy="true">Sabbi n-ti yɛligu gbibira.</string>
   <string name="read_aloud_running">Karim ka di yina niŋbu</string>
   <string name="backward_history">Nyaaŋa Taarihi</string>
   <string name="forward_history">Tooni taarihi</string>

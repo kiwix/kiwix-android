@@ -4,5 +4,5 @@
 -->
 <resources>
   <string name="retry">Poskusi znova</string>
-  <string name="invalid_installation">Neveljavna namestitev. Prenesite ZIM.\n Zagotovite, da je Wi-Fi vklopljen in da imate dovolj prostora za shranjevanje.</string>
+  <string name="invalid_installation" fuzzy="true">Neveljavna namestitev. Prenesite ZIM.\n Zagotovite, da je Wi-Fi vklopljen in da imate dovolj prostora za shranjevanje.</string>
 </resources>

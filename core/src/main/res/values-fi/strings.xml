@@ -48,8 +48,8 @@
   <string name="stop_server_label">Pysäytä palvelin</string>
   <string name="error_ip_address_not_found">IP-osoitetta ei löytynyt.</string>
   <string name="error_file_not_found">Virhe: valittua ZIM-tiedostoa ei löytynyt.</string>
-  <string name="unable_to_read_zim_file">Zim-tiedostoa ei voitu lukea!</string>
-  <string name="zim_not_opened">Zim-tiedostoa ei voi avata</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">Zim-tiedostoa ei voitu lukea!</string>
+  <string name="zim_not_opened" fuzzy="true">Zim-tiedostoa ei voi avata</string>
   <string name="error_file_invalid">Virhe: valittu tiedosto ei ole kelvollinen ZIM-tiedosto.</string>
   <string name="error_article_url_not_found">Virhe: Artikkelin (Url: %1$s) lataus epäonnistui.</string>
   <string name="pref_display_title">Näytä</string>
@@ -103,7 +103,7 @@
   <string name="local_zims">Laite</string>
   <string name="remote_zims">Online</string>
   <string name="library">Kirjasto</string>
-  <string name="delete_zim_body">Seuraava(t) zim-tiedosto(t) tullaan poistamaan:\n\n%s</string>
+  <string name="delete_zim_body" fuzzy="true">Seuraava(t) zim-tiedosto(t) tullaan poistamaan:\n\n%s</string>
   <string name="delete_zims_toast">Tiedosto poistettu</string>
   <string name="no_files_here">Ei tiedostoja täällä</string>
   <string name="download">Lataa</string>
@@ -130,7 +130,7 @@
   <string name="confirm_stop_download_title">Pysäytä lataaminen?</string>
   <string name="confirm_stop_download_msg">Haluatko varmasti pysäyttää tämän latauksen?</string>
   <string name="download_change_storage">Tallennuslaitteen valitsin</string>
-  <string name="tts_not_enabled">Teksti puheeksi ei ole käytössä tässä ZIM-tiedostossa</string>
+  <string name="tts_not_enabled" fuzzy="true">Teksti puheeksi ei ole käytössä tässä ZIM-tiedostossa</string>
   <string name="next">Seuraava</string>
   <string name="previous">Edellinen</string>
   <string name="wifi_only_title">Salli sisällön lataaminen mobiiliverkon kautta?</string>
@@ -150,7 +150,7 @@
   <string name="no_items_msg">Ei kohteita saatavilla</string>
   <string name="crash_title">Jaha… Tämä on noloa</string>
   <string name="crash_checkbox_language">Omat kieliasetukset</string>
-  <string name="crash_checkbox_zimfiles">Luettelo Zim-tiedostoistasi</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">Luettelo Zim-tiedostoistasi</string>
   <string name="crash_checkbox_exception">Tiedot kaatumisesta</string>
   <string name="crash_checkbox_device">Laitteen tiedot</string>
   <string name="crash_button_confirm">LÄHETÄ TIEDOT</string>

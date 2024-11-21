@@ -53,8 +53,8 @@
   <string name="server_started_message">Tsenya aterese eno ya ip mo browser ya gago go fitlhelela server %s</string>
   <string name="share_host_address">Abelana URL ka ditselna tse dingwe</string>
   <string name="error_file_not_found">Phoso: Faele ya ZIM e e tlhophilweng ga e a ka ya bonwa.</string>
-  <string name="unable_to_read_zim_file">Go batla faele ye ya ZIM ga go kgonege!</string>
-  <string name="zim_not_opened">Go bula faele ya ZIM go a retela</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">Go batla faele ye ya ZIM ga go kgonege!</string>
+  <string name="zim_not_opened" fuzzy="true">Go bula faele ya ZIM go a retela</string>
   <string name="error_file_invalid">Phoso: Faele e e tlhophilweng ga se faele ya ZIM e e siameng.</string>
   <string name="error_article_url_not_found">Phoso:Tsebe ye e letetsweng (Url:%1$s) e retetse.</string>
   <string name="pref_display_title">Pontsho</string>
@@ -70,10 +70,10 @@
   <string name="pref_credits_title">Dikerediti</string>
   <string name="tts_lang_not_supported">Teme ya tsebe eno ga e rotloesege. Setlhogo se se ka nna sa se ka tswa se sa balege sentle.</string>
   <string name="no_reader_application_installed">Go bana sedirisiwa sa faele ya sebopego se ga go kgonege.</string>
-  <string name="no_email_application_installed">Tsweetswee tsenya tlamedi ya tirelo ya e-mail kgotsa re romelele e-mail ko %1s</string>
+  <string name="no_email_application_installed">Tsweetswee tlhamedi ya moamogedi wa imeile</string>
   <string name="no_section_info">Ga go na Ditlhogo Tsa Dikgatiso Tse di Bonweng</string>
   <string name="request_storage">Go fitlhelela tshedimosetso e e sa bonaleng re tlhoka go fitlhelela bobolokelo jwa gago</string>
-  <string name="request_write_storage">Go tsaya difaele tsa zim re tlhoka go kwala go tsena mo mabolokelong a gago</string>
+  <string name="request_write_storage" fuzzy="true">Go tsaya difaele tsa zim re tlhoka go kwala go tsena mo mabolokelong a gago</string>
   <string name="clear_recent_and_tabs_history_dialog">A o tlhomamisegile gore o batla go phimola hisitori ya gago ya go batla le go busetsa gape di-tab tsotlhe tse di dirang?</string>
   <string name="delete_recent_search_item">A o phimole selo se?</string>
   <string name="pref_clear_all_history_title">Hisitori e e phepa</string>
@@ -112,7 +112,7 @@
   <string name="local_zims">Sedirisiwa</string>
   <string name="remote_zims">Mo maranyaneng</string>
   <string name="library">motlobo wa dikuka</string>
-  <string name="delete_zim_body">Difele tse di latelang tsa ZIM di tlaa phimolwa:\n%s</string>
+  <string name="delete_zim_body" fuzzy="true">Difele tse di latelang tsa ZIM di tlaa phimolwa:\n%s</string>
   <string name="delete_zims_toast">Difaele di phimotswe ka katlego</string>
   <string name="no_files_here">Ga go na difaele fa</string>
   <string name="download_no_space">Ga gona mabolokelo a a lekanetseng go baya.</string>
@@ -130,7 +130,7 @@
   <string name="help_7">Di teng jaaka difaele tsa ZIM. Go na le tse dintsi tsa tsone:</string>
   <string name="help_8">• Wikipedia e teng ka go farologana mo puong nngwe le nngwe</string>
   <string name="help_9">• Dilo tse dingwe tse di tshwanang le Wikileaks kgotsa Wikisource le tsone di teng</string>
-  <string name="help_10">O ka kgona go tsaya difaele tsa ZIM tse o di tlhophileng mo app kgotsa o ka tlhopha tse o di batlang ka kelotlhoko o bo o di tsaya go tswa mo khomputareng ya Desktop pele o fetisetsa difaele tša ZIM mo karateng ya gago ya SD.</string>
+  <string name="help_10" fuzzy="true">O ka kgona go tsaya difaele tsa ZIM tse o di tlhophileng mo app kgotsa o ka tlhopha tse o di batlang ka kelotlhoko o bo o di tsaya go tswa mo khomputareng ya Desktop pele o fetisetsa difaele tša ZIM mo karateng ya gago ya SD.</string>
   <string name="help_11">Difaele tsa ZIM tse di ntshiwang mo app di mo direkotong tsa bobolokelo tsa kwa ntle mo foromong e e bidiwang Kiwix.</string>
   <string name="pref_storage">Mabolokelo</string>
   <string name="pref_current_folder">Folder ya Gone Jaanong</string>
@@ -145,9 +145,9 @@
   <string name="confirm_stop_download_title">A o emisa go e itseela?</string>
   <string name="confirm_stop_download_msg">A o tlhomamisegile gore o batla go emisa go e itseela?</string>
   <string name="download_change_storage">Setlhophi sa mabolokelo a sedirisiwa</string>
-  <string name="tts_not_enabled">Mokwalo go ya go puo ga o kgone go dirisiwa mo difaeleng tsa ZIM</string>
-  <string name="texttospeech_initialization_failed">Go simololwa ga Text to Speech go retetse. Tsweetswee leka gape</string>
-  <string name="texttospeech_error">Phoso e e sa solofelwang mo mokwalong go ya puong. Tsweetswee leka gape</string>
+  <string name="tts_not_enabled" fuzzy="true">Mokwalo go ya go puo ga o kgone go dirisiwa mo difaeleng tsa ZIM</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">Go simololwa ga Text to Speech go retetse. Tsweetswee leka gape</string>
+  <string name="texttospeech_error" fuzzy="true">Phoso e e sa solofelwang mo mokwalong go ya puong. Tsweetswee leka gape</string>
   <string name="next">Se se latelang</string>
   <string name="previous">Pele ga moo</string>
   <string name="wifi_only_title">A o letlelela go tsaya tshedimosetso ka maranyane a mogala WA lotheka?</string>
@@ -171,7 +171,7 @@
   <string name="crash_title">Ee--- Seno se tlhabisa ditlhong</string>
   <string name="crash_description">Go lebega ekete re kgautlhane.\nA o ka re thusa go baakanya bothata jo ka romela kitso e e latelang?</string>
   <string name="crash_checkbox_language">Dipaakanyo tsa teme ya gago</string>
-  <string name="crash_checkbox_zimfiles">Lenaane la Difaele Tsa Gago Tsa Zim</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">Lenaane la Difaele Tsa Gago Tsa Zim</string>
   <string name="crash_checkbox_exception">Dintlha Tsa Thotobolo</string>
   <string name="crash_checkbox_logs">Matshwao a Tiriso</string>
   <string name="crash_checkbox_device">Dintlha Tsa Sedirisiwa</string>
@@ -208,7 +208,7 @@
   <string name="complete">E feletse</string>
   <string name="paused_state">E kgamilwe</string>
   <string name="failed_state">E reteletswe: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed">Faele ya zim e ne e ka se kgone go bonwa. Tsweetswee leka go busetsa app go tswa kwa Play store.</string>
+  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">Faele ya zim e ne e ka se kgone go bonwa. Tsweetswee leka go busetsa app go tswa kwa Play store.</string>
   <string name="save">Boloka</string>
   <string name="note">Kwala</string>
   <string name="wiki_article_title">Setlhôgô sa padi ya Wiki</string>
@@ -233,7 +233,7 @@
   <string name="connection_failed">Go ikgolaganya go ne ga se ka ga atlega</string>
   <string name="permission_rationale_location">Tumelelo ya lefelo e tlhokiwa ke Android go letlelela app go lemoga didirisiwa tsa balekane</string>
   <string name="permission_refused_location">Ga o kgone go bona didirisiwa tsa balekane ntle le go fa tetla ya lefelo</string>
-  <string name="permission_refused_storage">Ga o kgone go fitlhelela difaele tsa zim ntle le tetla ya go boloka</string>
+  <string name="permission_refused_storage" fuzzy="true">Ga o kgone go fitlhelela difaele tsa zim ntle le tetla ya go boloka</string>
   <string name="request_enable_location">Fa tetla ya lefelo gore go kgonege go lemoga balekane</string>
   <string name="discovery_needs_location">Ga o ka ke wa bona balekane ba gago ntle le ditirelo tsa lefelo</string>
   <string name="request_enable_wifi">Fa WiFi P2P tetla go tswa mo dithulaganyong tsa tsamaiso</string>
@@ -289,9 +289,9 @@
   <string name="open_drawer">Bula kgamelo</string>
   <string name="close_drawer">Tswala kgamelo</string>
   <string name="how_to_update_content">O ka kgona jang go ntšhafatsa tshedimosetso?</string>
-  <string name="update_content_description">Go tlhabololwa ga diteng (faele ya zim) o tlhoka go tsaya kgatiso e e feletseng ya bosheng ya diteng tse di tshwanang. O ka dira seo ka karolo ya download.</string>
+  <string name="update_content_description" fuzzy="true">Go tlhabololwa ga diteng (faele ya zim) o tlhoka go tsaya kgatiso e e feletseng ya bosheng ya diteng tse di tshwanang. O ka dira seo ka karolo ya download.</string>
   <string name="all_files_permission_needed">Tetla ya difaele tsotlhe e ya tlhokega</string>
-  <string name="all_files_permission_needed_message">Gore re kgone go fitlhelela difaele tsa zim tsotlhe go ya ka didirisiwa re tlhoka teseletso ya difaele</string>
+  <string name="all_files_permission_needed_message" fuzzy="true">Gore re kgone go fitlhelela difaele tsa zim tsotlhe go ya ka didirisiwa re tlhoka teseletso ya difaele</string>
   <string name="allowed">Go letleletswe</string>
   <string name="not_allowed">Ga go a letlelelwa</string>
   <string name="denied_internet_permission_message">Tsweetswee letlelela wifi go tsaya tshedimosetso</string>
@@ -310,7 +310,7 @@
   <string name="download_tts_language_message">Tsweetswee tobetsa konopo ya Download. E tla ikgolaganya ka boyone puo e e tlhokegang.</string>
   <string name="external_link_copied_message">Kgolaganyi ya ko ntle e kopetswe kwa Clopboard</string>
   <string name="read_aloud_service_channel_name">Tsamaiso ya karolo ya go balela kwa godimo</string>
-  <string name="read_aloud_channel_description">Taolo ya puo go ya ko mokwalong.</string>
+  <string name="read_aloud_channel_description" fuzzy="true">Taolo ya puo go ya ko mokwalong.</string>
   <string name="read_aloud_running">Go balela ko godimo go mo tirisong</string>
   <string name="backward_history">Hisitori ya bogologolo</string>
   <string name="forward_history">Hisitori ya pele</string>

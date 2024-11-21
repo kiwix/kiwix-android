@@ -57,8 +57,8 @@
   <string name="server_started_message">Tẹ adiresi IP yii sinu ẹrọ aṣawakiri rẹ lati wọle si olupin %s</string>
   <string name="share_host_address">Pin URL nipasẹ awọn ohun elo miiran</string>
   <string name="error_file_not_found">Aṣiṣe: Faili ZIM ti o yan ko ṣee ri.</string>
-  <string name="unable_to_read_zim_file">Ko le ka faili zim yii!</string>
-  <string name="zim_not_opened">Ko le ṣi faili zim</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">Ko le ka faili zim yii!</string>
+  <string name="zim_not_opened" fuzzy="true">Ko le ṣi faili zim</string>
   <string name="error_file_invalid">Aṣiṣe: Faili ti o yan kii ṣe faili ZIM to wulo.</string>
   <string name="error_article_url_not_found">Aṣiṣe: Nkojọpọ nkan (Url: %1$s ) kuna.</string>
   <string name="pref_display_title">Ìmúhàn</string>
@@ -74,10 +74,10 @@
   <string name="pref_credits_title">Awọn kirediti</string>
   <string name="tts_lang_not_supported">Ede oju-iwe yii ko ni atilẹyin. Nkan naa le ma ka daradara.</string>
   <string name="no_reader_application_installed">Ko le wa ohun elo ti a fi sori ẹrọ fun iru faili yii</string>
-  <string name="no_email_application_installed">Jọwọ fi sori ẹrọ olupese iṣẹ imeeli tabi fi imeeli ranṣẹ si wa ni %1s</string>
+  <string name="no_email_application_installed">Jọwọ fi ohun elo imeeli sori ẹrọ</string>
   <string name="no_section_info">Ko ri Awọn akọle akoonu</string>
   <string name="request_storage">Lati wọle si akoonu aisinipo a nilo iraye si ibi ipamọ rẹ</string>
-  <string name="request_write_storage">Lati ṣe igbasilẹ awọn faili zim a nilo iraye si ibi ipamọ rẹ</string>
+  <string name="request_write_storage" fuzzy="true">Lati ṣe igbasilẹ awọn faili zim a nilo iraye si ibi ipamọ rẹ</string>
   <string name="clear_recent_and_tabs_history_dialog">Ṣe o da ọ loju pe o fẹ pa itan-akọọlẹ wiwa rẹ rẹ ki o tun gbogbo awọn taabu ti nṣiṣe lọwọ?</string>
   <string name="delete_recent_search_item">Pa nkan yii rẹ bi?</string>
   <string name="pref_clear_all_history_title">Ìparẹ́ ìtàn</string>
@@ -116,7 +116,7 @@
   <string name="local_zims">Ẹrọ</string>
   <string name="remote_zims">Àwọn ojúewé wọ̀nyí jápọ̀ mọ́</string>
   <string name="library">Ile-ikawe</string>
-  <string name="delete_zim_body">A óò pa àwọn faili zim tó tẹ̀ lé e: yor_Latnyor_Latnyor_Latn ni o %s</string>
+  <string name="delete_zim_body" fuzzy="true">A óò pa àwọn faili zim tó tẹ̀ lé e: yor_Latnyor_Latnyor_Latn ni o %s</string>
   <string name="delete_zims_toast">Awọn faili ti paarẹ ni aṣeyọri</string>
   <string name="no_files_here">Ko si awọn faili nibi</string>
   <string name="download_no_space">Aisi aaye lati ṣe igbasilẹ.</string>
@@ -134,7 +134,7 @@
   <string name="help_7">Wọn wa bi awọn faili ZIM. Ọpọlọpọ wọn wa:</string>
   <string name="help_8">• Wikipedia wà ní àkànṣe fún èdè kọ̀ọ̀kan</string>
   <string name="help_9">• Awọn akoonu miiran bi Wikileaks tabi Wikisource tun wa</string>
-  <string name="help_10">O le ṣe igbasilẹ awọn faili ZIM ti o yan ni app tabi ṣọra yan ọkan(s) ti o fẹ ati ṣe igbasilẹ lati kọnputa Ojú-iṣẹ ṣaaju gbigbe awọn faili ZIM si kaadi SD rẹ.</string>
+  <string name="help_10" fuzzy="true">O le ṣe igbasilẹ awọn faili ZIM ti o yan ni app tabi ṣọra yan ọkan(s) ti o fẹ ati ṣe igbasilẹ lati kọnputa Ojú-iṣẹ ṣaaju gbigbe awọn faili ZIM si kaadi SD rẹ.</string>
   <string name="help_11">Awọn faili ZIM ti o ṣe igbasilẹ ni-app wa ninu itọsọna ibi ipamọ ita ninu folda ti o ni ẹtọ Kiwix.</string>
   <string name="pref_storage">Ibi ipamọ</string>
   <string name="pref_current_folder">Folda lọwọlọwọ</string>
@@ -149,9 +149,9 @@
   <string name="confirm_stop_download_title">Duro gbigba lati ayelujara?</string>
   <string name="confirm_stop_download_msg">Ṣe o da ọ loju pe o fẹ da igbasilẹ yii duro?</string>
   <string name="download_change_storage">Oluyan ẹrọ ipamọ</string>
-  <string name="tts_not_enabled">Ọrọ si ọrọ ko ṣiṣẹ fun faili ZIM yii</string>
-  <string name="texttospeech_initialization_failed">Bibẹrẹ Ọrọ si Ọrọ kuna. Jọwọ gbiyanju lẹẹkansi</string>
-  <string name="texttospeech_error">Aṣiṣe airotẹlẹ ni Ọrọ si Ọrọ. Jọwọ gbiyanju lẹẹkansi</string>
+  <string name="tts_not_enabled" fuzzy="true">Ọrọ si ọrọ ko ṣiṣẹ fun faili ZIM yii</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">Bibẹrẹ Ọrọ si Ọrọ kuna. Jọwọ gbiyanju lẹẹkansi</string>
+  <string name="texttospeech_error" fuzzy="true">Aṣiṣe airotẹlẹ ni Ọrọ si Ọrọ. Jọwọ gbiyanju lẹẹkansi</string>
   <string name="next">tókàn</string>
   <string name="previous">Ti tẹlẹ</string>
   <string name="wifi_only_title">Gba akoonu lati ayelujara nipasẹ nẹtiwọki alagbeka?</string>
@@ -175,7 +175,7 @@
   <string name="crash_title">O dara… Eyi jẹ didamu</string>
   <string name="crash_description">Ó jọ pé a ṣubú. yor_Latnyor_Latnyor_Latn ni o Ṣé wàá fẹ́ ràn wá lọ́wọ́ láti yanjú ìṣòro yìí nípa rírán àwọn ìsọfúnni tó wà nísàlẹ̀ yìí ránṣẹ́?</string>
   <string name="crash_checkbox_language">Awọn Eto Ede Rẹ</string>
-  <string name="crash_checkbox_zimfiles">Atokọ ti Awọn faili Zim rẹ</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">Atokọ ti Awọn faili Zim rẹ</string>
   <string name="crash_checkbox_exception">Awọn alaye ti jamba naa</string>
   <string name="crash_checkbox_logs">Awọn iwe ohun elo</string>
   <string name="crash_checkbox_device">Awọn alaye ẹrọ</string>
@@ -212,7 +212,7 @@
   <string name="complete">Pari</string>
   <string name="paused_state">Daduro</string>
   <string name="failed_state">Ti kuna: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed">Faili zim ko le ṣe igbasilẹ. Jọwọ gbiyanju lati tun awọn ohun elo lati Play itaja.</string>
+  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">Faili zim ko le ṣe igbasilẹ. Jọwọ gbiyanju lati tun awọn ohun elo lati Play itaja.</string>
   <string name="save">Ìmúpamọ́</string>
   <string name="note">Akiyesi</string>
   <string name="wiki_article_title">Akọle Abala Wiki</string>
@@ -237,7 +237,7 @@
   <string name="connection_failed">No Lock.</string>
   <string name="permission_rationale_location">Igbanilaaye ipo ni Android nilo lati gba ohun elo laaye lati ṣawari awọn ẹrọ ẹlẹgbẹ</string>
   <string name="permission_refused_location">Ko le wa awọn ẹrọ ẹlẹgbẹ laisi awọn igbanilaaye ipo</string>
-  <string name="permission_refused_storage">Ko le wọle si awọn faili zim laisi igbanilaaye ibi ipamọ</string>
+  <string name="permission_refused_storage" fuzzy="true">Ko le wọle si awọn faili zim laisi igbanilaaye ibi ipamọ</string>
   <string name="request_enable_location">Mu ipo ṣiṣẹ lati gba wiwa awọn ẹlẹgbẹ laaye</string>
   <string name="discovery_needs_location">Ko le ṣe iwari awọn ẹlẹgbẹ laisi awọn iṣẹ ipo</string>
   <string name="request_enable_wifi">Mu WiFi P2P ṣiṣẹ lati awọn eto eto</string>
@@ -293,9 +293,9 @@
   <string name="open_drawer">Ṣii Drawer</string>
   <string name="close_drawer">Pa Drawer</string>
   <string name="how_to_update_content">Bawo ni lati ṣe imudojuiwọn akoonu?</string>
-  <string name="update_content_description">Lati ṣe imudojuiwọn akoonu (faili zim kan) o nilo lati ṣe igbasilẹ ẹya tuntun ni kikun ti akoonu kanna. O le ṣe bẹ nipasẹ apakan gbigba lati ayelujara.</string>
+  <string name="update_content_description" fuzzy="true">Lati ṣe imudojuiwọn akoonu (faili zim kan) o nilo lati ṣe igbasilẹ ẹya tuntun ni kikun ti akoonu kanna. O le ṣe bẹ nipasẹ apakan gbigba lati ayelujara.</string>
   <string name="all_files_permission_needed">Gbogbo Gbigbanilaaye Awọn faili Nilo</string>
-  <string name="all_files_permission_needed_message">Lati le wọle si gbogbo awọn faili zim kọja ẹrọ a nilo lati ni Gbogbo Gbigbanilaaye Awọn faili</string>
+  <string name="all_files_permission_needed_message" fuzzy="true">Lati le wọle si gbogbo awọn faili zim kọja ẹrọ a nilo lati ni Gbogbo Gbigbanilaaye Awọn faili</string>
   <string name="allowed">Ti gba laaye</string>
   <string name="not_allowed">Ko si aaye</string>
   <string name="denied_internet_permission_message">Jọwọ jẹ ki wifi gba akoonu lati ayelujara</string>
@@ -314,7 +314,7 @@
   <string name="download_tts_language_message">Jọwọ tẹ bọtini Gbigba lati ayelujara. Yoo ṣe igbasilẹ ede ti o nilo laifọwọyi.</string>
   <string name="external_link_copied_message">Ọna asopọ ita Ti daakọ si Agekuru</string>
   <string name="read_aloud_service_channel_name">Ka Aloud Service ikanni</string>
-  <string name="read_aloud_channel_description">Ọrọ si awọn iṣakoso ọrọ.</string>
+  <string name="read_aloud_channel_description" fuzzy="true">Ọrọ si awọn iṣakoso ọrọ.</string>
   <string name="read_aloud_running">Ṣiṣe Ka Aloud</string>
   <string name="backward_history">Ìtàn àtìgbàdégbà</string>
   <string name="forward_history">Itan siwaju</string>

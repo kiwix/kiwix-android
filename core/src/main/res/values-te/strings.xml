@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* MohitMali
 * Nskjnv
 * Rishitha 1238
 * V Bhavya
@@ -57,8 +58,8 @@
   <string name="server_started_message">%s సర్వర్‌ని యాక్సెస్ చేయడానికి మీ బ్రౌజర్‌లో ఈ ip చిరునామాను నమోదు చేయండి</string>
   <string name="share_host_address">ఇతర అప్లికేషన్ల ద్వారా URLని భాగస్వామ్యం చేయండి</string>
   <string name="error_file_not_found">దోషం‌ :‌ మీరు ఎంపిక చేసిన ZIM దస్త్రం దొరకలేదు.</string>
-  <string name="unable_to_read_zim_file">ఈ జిమ్ ఫైల్‌ని చదవడం సాధ్యం కాలేదు!</string>
-  <string name="zim_not_opened">జిమ్ ఫైల్‌ను తెరవడం సాధ్యం కాలేదు</string>
+  <string name="unable_to_read_zim_file" fuzzy="true">ఈ జిమ్ ఫైల్‌ని చదవడం సాధ్యం కాలేదు!</string>
+  <string name="zim_not_opened" fuzzy="true">జిమ్ ఫైల్‌ను తెరవడం సాధ్యం కాలేదు</string>
   <string name="error_file_invalid">దోషం : మీరు ఎంపిక చేసిన దస్త్రం సరియైన ZIM దస్త్రం కాదు.</string>
   <string name="error_article_url_not_found">దోషం : వ్యాసం (Url: %1$s) ను లోడ్ చెయ్యడం విఫలమయింది.</string>
   <string name="pref_display_title">వీక్షణం</string>
@@ -74,10 +75,10 @@
   <string name="pref_credits_title">క్రెడిట్స్</string>
   <string name="tts_lang_not_supported">ఈ పేజీ యొక్క భాషకు మద్దతు లేదు. వ్యాసం సరిగా చదవకపోవచ్చు.</string>
   <string name="no_reader_application_installed">ఈ దస్త్రం చూపడానికి సహకరించే ఎప్ప్ ఇన్స్టాల్ చేయలేదు.</string>
-  <string name="no_email_application_installed">దయచేసి ఇమెయిల్ సర్వీస్ ప్రొవైడర్‌ని ఇన్‌స్టాల్ చేయండి లేదా %1s వద్ద మాకు ఇమెయిల్ చేయండి</string>
+  <string name="no_email_application_installed">దయచేసి ఇమెయిల్ క్లయింట్‌ని ఇన్‌స్టాల్ చేయండి</string>
   <string name="no_section_info">కంటెంట్ హెడర్‌లు ఏవీ కనుగొనబడలేదు</string>
   <string name="request_storage">ZIM Filesలో పోందుపరచడానికి మేము మీ నిల్వ లను పోందుపరచాలి</string>
-  <string name="request_write_storage">జిమ్ ఫైల్‌లను డౌన్‌లోడ్ చేయడానికి మాకు మీ స్టోరేజ్‌కి రైట్ యాక్సెస్ అవసరం</string>
+  <string name="request_write_storage" fuzzy="true">జిమ్ ఫైల్‌లను డౌన్‌లోడ్ చేయడానికి మాకు మీ స్టోరేజ్‌కి రైట్ యాక్సెస్ అవసరం</string>
   <string name="clear_recent_and_tabs_history_dialog">మీరు ఖచ్చితంగా మీ శోధన చరిత్రను తొలగించాలనుకుంటున్నారా మరియు అన్ని సక్రియ ట్యాబ్‌లను రీసెట్ చేయాలనుకుంటున్నారా?</string>
   <string name="delete_recent_search_item">ఈ అంశాన్ని తొలగించాలా?</string>
   <string name="pref_clear_all_history_title">చరిత్రను క్లియర్ చేయండి</string>
@@ -116,7 +117,7 @@
   <string name="local_zims">పరికరం</string>
   <string name="remote_zims">ఆన్‌లైన్</string>
   <string name="library">గ్రంథాలయము</string>
-  <string name="delete_zim_body">కింది జిమ్ ఫైల్(లు) తొలగించబడతాయి:\n\n %s</string>
+  <string name="delete_zim_body" fuzzy="true">కింది జిమ్ ఫైల్(లు) తొలగించబడతాయి:\n\n %s</string>
   <string name="delete_zims_toast">ఫైల్‌లు విజయవంతంగా తొలగించబడ్డాయి</string>
   <string name="no_files_here">ఇక్కడ ఫైల్‌లు లేవు</string>
   <string name="download_no_space">డౌన్‌లోడ్ చేయడానికి తగినంత స్థలం లేదు.</string>
@@ -134,7 +135,7 @@
   <string name="help_7">అవి ZIM ఫైల్‌లుగా అందుబాటులో ఉన్నాయి. వాటిలో చాలా ఉన్నాయి:</string>
   <string name="help_8">• వికీపీడియా ప్రతి భాషకు విడివిడిగా అందుబాటులో ఉంటుంది</string>
   <string name="help_9">• వికీలీక్స్ లేదా వికీసోర్స్ వంటి ఇతర విషయాలు కూడా అందుబాటులో ఉన్నాయి</string>
-  <string name="help_10">మీరు ఎంచుకున్న ZIM ఫైల్‌లను యాప్‌లో డౌన్‌లోడ్ చేసుకోవచ్చు లేదా మీ SD కార్డ్‌కి ZIM ఫైల్‌లను బదిలీ చేయడానికి ముందు మీకు కావలసిన ఒక(ల)ను ఎంచుకోండి మరియు డెస్క్‌టాప్ కంప్యూటర్ నుండి డౌన్‌లోడ్ చేసుకోవచ్చు.</string>
+  <string name="help_10" fuzzy="true">మీరు ఎంచుకున్న ZIM ఫైల్‌లను యాప్‌లో డౌన్‌లోడ్ చేసుకోవచ్చు లేదా మీ SD కార్డ్‌కి ZIM ఫైల్‌లను బదిలీ చేయడానికి ముందు మీకు కావలసిన ఒక(ల)ను ఎంచుకోండి మరియు డెస్క్‌టాప్ కంప్యూటర్ నుండి డౌన్‌లోడ్ చేసుకోవచ్చు.</string>
   <string name="help_11">యాప్‌లో డౌన్‌లోడ్ చేయబడిన ZIM ఫైల్‌లు Kiwix పేరుతో ఉన్న ఫోల్డర్‌లోని బాహ్య నిల్వ డైరెక్టరీలో ఉన్నాయి.</string>
   <string name="pref_storage">నిల్వ</string>
   <string name="pref_current_folder">ప్రస్తుత ఫోల్డర్</string>
@@ -149,9 +150,9 @@
   <string name="confirm_stop_download_title">డౌన్‌లోడ్ ఆపివేయాలా?</string>
   <string name="confirm_stop_download_msg">మీరు ఖచ్చితంగా ఈ డౌన్‌లోడ్‌ను ఆపివేయాలనుకుంటున్నారా?</string>
   <string name="download_change_storage">నిల్వ పరికర ఎంపిక సాధనం</string>
-  <string name="tts_not_enabled">ఈ ZIM ఫైల్ కోసం టెక్స్ట్ టు స్పీచ్ ప్రారంభించబడలేదు</string>
-  <string name="texttospeech_initialization_failed">వచనం నుండి ప్రసంగం ప్రారంభించడం విఫలమైంది. దయచేసి మళ్లీ ప్రయత్నించండి</string>
-  <string name="texttospeech_error">టెక్స్ట్ టు స్పీచ్‌లో ఊహించని లోపం. దయచేసి మళ్లీ ప్రయత్నించండి</string>
+  <string name="tts_not_enabled" fuzzy="true">ఈ ZIM ఫైల్ కోసం టెక్స్ట్ టు స్పీచ్ ప్రారంభించబడలేదు</string>
+  <string name="texttospeech_initialization_failed" fuzzy="true">వచనం నుండి ప్రసంగం ప్రారంభించడం విఫలమైంది. దయచేసి మళ్లీ ప్రయత్నించండి</string>
+  <string name="texttospeech_error" fuzzy="true">టెక్స్ట్ టు స్పీచ్‌లో ఊహించని లోపం. దయచేసి మళ్లీ ప్రయత్నించండి</string>
   <string name="next">తరువాత</string>
   <string name="previous">మునుపటి</string>
   <string name="wifi_only_title">మొబైల్ నెట్‌వర్క్ ద్వారా కంటెంట్‌ని డౌన్‌లోడ్ చేయడానికి అనుమతించాలా?</string>
@@ -175,7 +176,7 @@
   <string name="crash_title">సరే. ఇది సిగ్గుచేటు</string>
   <string name="crash_description">మేము క్రాష్ అయినట్లు కనిపిస్తోంది.\n\nక్రింది సమాచారాన్ని పంపడం ద్వారా ఈ సమస్యను పరిష్కరించడంలో మాకు సహాయం చేయడానికి మీరు ఇష్టపడతారా?</string>
   <string name="crash_checkbox_language">మీ భాష సెట్టింగ్‌లు</string>
-  <string name="crash_checkbox_zimfiles">మీ జిమ్ ఫైల్‌ల జాబితా</string>
+  <string name="crash_checkbox_zimfiles" fuzzy="true">మీ జిమ్ ఫైల్‌ల జాబితా</string>
   <string name="crash_checkbox_exception">క్రాష్ యొక్క వివరాలు</string>
   <string name="crash_checkbox_logs">అప్లికేషన్ లాగ్‌లు</string>
   <string name="crash_checkbox_device">పరికర వివరాలు</string>
@@ -211,7 +212,7 @@
   <string name="complete">పూర్తయ్యింది!</string>
   <string name="paused_state">పాజ్ చేయబడింది</string>
   <string name="failed_state">విఫలమైంది: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed">జిమ్ ఫైల్ డౌన్‌లోడ్ చేయడం సాధ్యపడలేదు. దయచేసి ప్లే స్టోర్ నుండి అప్లికేషన్‌ను మళ్లీ ఇన్‌స్టాల్ చేయడానికి ప్రయత్నించండి.</string>
+  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">జిమ్ ఫైల్ డౌన్‌లోడ్ చేయడం సాధ్యపడలేదు. దయచేసి ప్లే స్టోర్ నుండి అప్లికేషన్‌ను మళ్లీ ఇన్‌స్టాల్ చేయడానికి ప్రయత్నించండి.</string>
   <string name="save">సేవ్ చేయండి</string>
   <string name="note">గమనిక</string>
   <string name="wiki_article_title">వికీ వ్యాసం శీర్షిక</string>
@@ -236,7 +237,7 @@
   <string name="connection_failed">సంధానము విఫలమైనది</string>
   <string name="permission_rationale_location">పీర్ పరికరాలను గుర్తించడానికి యాప్‌ను అనుమతించడానికి Androidకి స్థాన అనుమతి అవసరం</string>
   <string name="permission_refused_location">స్థాన అనుమతులు లేకుండా పీర్ పరికరాలను గుర్తించడం సాధ్యం కాదు</string>
-  <string name="permission_refused_storage">నిల్వ అనుమతి లేకుండా జిమ్ ఫైల్‌లను యాక్సెస్ చేయలేరు</string>
+  <string name="permission_refused_storage" fuzzy="true">నిల్వ అనుమతి లేకుండా జిమ్ ఫైల్‌లను యాక్సెస్ చేయలేరు</string>
   <string name="request_enable_location">సహచరులను గుర్తించడాన్ని అనుమతించడానికి స్థానాన్ని ప్రారంభించండి</string>
   <string name="discovery_needs_location">స్థాన సేవలు లేకుండా సహచరులను కనుగొనడం సాధ్యం కాదు</string>
   <string name="request_enable_wifi">సిస్టమ్ సెట్టింగ్‌ల నుండి WiFi P2Pని ప్రారంభించండి</string>
@@ -292,9 +293,9 @@
   <string name="open_drawer">డ్రాయర్ తెరవండి</string>
   <string name="close_drawer">డ్రాయర్‌ని మూసివేయండి</string>
   <string name="how_to_update_content">కంటెంట్‌ని ఎలా అప్‌డేట్ చేయాలి?</string>
-  <string name="update_content_description">కంటెంట్‌ని (జిమ్ ఫైల్) అప్‌డేట్ చేయడానికి మీరు ఇదే కంటెంట్ యొక్క పూర్తి తాజా వెర్షన్‌ను డౌన్‌లోడ్ చేసుకోవాలి. మీరు డౌన్‌లోడ్ విభాగం ద్వారా దీన్ని చేయవచ్చు.</string>
+  <string name="update_content_description" fuzzy="true">కంటెంట్‌ని (జిమ్ ఫైల్) అప్‌డేట్ చేయడానికి మీరు ఇదే కంటెంట్ యొక్క పూర్తి తాజా వెర్షన్‌ను డౌన్‌లోడ్ చేసుకోవాలి. మీరు డౌన్‌లోడ్ విభాగం ద్వారా దీన్ని చేయవచ్చు.</string>
   <string name="all_files_permission_needed">అన్ని ఫైల్‌ల అనుమతి అవసరం</string>
-  <string name="all_files_permission_needed_message">పరికరంలో అన్ని జిమ్ ఫైల్‌లను యాక్సెస్ చేయడానికి మేము అన్ని ఫైల్‌ల అనుమతిని కలిగి ఉండాలి</string>
+  <string name="all_files_permission_needed_message" fuzzy="true">పరికరంలో అన్ని జిమ్ ఫైల్‌లను యాక్సెస్ చేయడానికి మేము అన్ని ఫైల్‌ల అనుమతిని కలిగి ఉండాలి</string>
   <string name="allowed">అనుమతించబడింది</string>
   <string name="not_allowed">ప్రవేశము లేదు</string>
   <string name="denied_internet_permission_message">దయచేసి కంటెంట్‌ని డౌన్‌లోడ్ చేయడానికి వైఫైని ప్రారంభించండి</string>
@@ -313,7 +314,7 @@
   <string name="download_tts_language_message">దయచేసి డౌన్‌లోడ్ బటన్‌ను క్లిక్ చేయండి. ఇది స్వయంచాలకంగా అవసరమైన భాషను డౌన్‌లోడ్ చేస్తుంది.</string>
   <string name="external_link_copied_message">బాహ్య లింక్ క్లిప్‌బోర్డ్‌కి కాపీ చేయబడింది</string>
   <string name="read_aloud_service_channel_name">బిగ్గరగా సేవా ఛానెల్‌ని చదవండి</string>
-  <string name="read_aloud_channel_description">వచనం నుండి ప్రసంగ నియంత్రణలు.</string>
+  <string name="read_aloud_channel_description" fuzzy="true">వచనం నుండి ప్రసంగ నియంత్రణలు.</string>
   <string name="read_aloud_running">రన్నింగ్ బిగ్గరగా చదవండి</string>
   <string name="backward_history">వెనుకబడిన చరిత్ర</string>
   <string name="forward_history">ఫార్వర్డ్ హిస్టరీ</string>

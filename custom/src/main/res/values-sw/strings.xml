@@ -4,5 +4,5 @@
 -->
 <resources>
   <string name="retry">Jaribu tena</string>
-  <string name="invalid_installation">Sakinisha Batili. Tafadhali Pakua Zim.\n Hakikisha WiFi imewashwa na una hifadhi ya kutosha</string>
+  <string name="invalid_installation" fuzzy="true">Sakinisha Batili. Tafadhali Pakua Zim.\n Hakikisha WiFi imewashwa na una hifadhi ya kutosha</string>
 </resources>

@@ -8,6 +8,6 @@
   <string name="cannot_open_file" fuzzy="true">Go bula faele go retetse\nTsweetswee leka go batla faele eno mo Tab ya Sedirisiwa ya motlobo wa gago wa dibuka</string>
   <string name="send_files_title">Romela difaele</string>
   <string name="receive_files_title">Amogela Difaele</string>
-  <string name="no_app_found_to_open">Ga go na app e e fitlhetsweng go tlhopha faele ya zim!</string>
-  <string name="select_zim_file">Tlhopha faele ya zim go e bala</string>
+  <string name="no_app_found_to_open" fuzzy="true">Ga go na app e e fitlhetsweng go tlhopha faele ya zim!</string>
+  <string name="select_zim_file" fuzzy="true">Tlhopha faele ya zim go e bala</string>
 </resources>

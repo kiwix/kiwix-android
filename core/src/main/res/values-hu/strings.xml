@@ -112,7 +112,7 @@
   <string name="confirm_stop_download_title">Letöltés megállítása?</string>
   <string name="confirm_stop_download_msg">Biztosan le szeretnéd állítani ezt a letöltést?</string>
   <string name="download_change_storage">Tároló eszköz kiválasztó</string>
-  <string name="tts_not_enabled">A szöveg ehhez a beszédhez nincs engedélyezve ennél a ZIM fájlnál</string>
+  <string name="tts_not_enabled" fuzzy="true">A szöveg ehhez a beszédhez nincs engedélyezve ennél a ZIM fájlnál</string>
   <string name="next">Következő</string>
   <string name="previous">Előző</string>
   <string name="wifi_only_title">Engedélyezed a tartalom letöltését mobilhálózaton keresztül?</string>
@@ -134,7 +134,7 @@
   <string name="crash_button_confirm">RÉSZLETEK KÜLDÉSE</string>
   <string name="download_books">Könyvek letöltése</string>
   <string name="close_all_tabs">Az összes lap bezárása</string>
-  <string name="custom_download_error_message_for_authentication_failed">A zim fájlt nem sikerült letölteni. Próbáld meg újratelepíteni az alkalmazást a play store-ból!</string>
+  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">A zim fájlt nem sikerült letölteni. Próbáld meg újratelepíteni az alkalmazást a play store-ból!</string>
   <string name="delete_notes_confirmation_msg">Törölsz minden jegyzetet?</string>
   <string name="pref_clear_all_notes_title" fuzzy="true">Minden megjegyzés törlése</string>
   <string name="no_bookmarks">Nincsenek könyvjelzők!</string>

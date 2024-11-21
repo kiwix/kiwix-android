@@ -4,5 +4,5 @@
 -->
 <resources>
   <string name="retry">Sake</string>
-  <string name="invalid_installation">Shigar da ba daidai ba. Da fatan za a sauke Zim.\n Tabbatar cewa WiFi yana kunne kuma kuna da isasshen ajiya</string>
+  <string name="invalid_installation" fuzzy="true">Shigar da ba daidai ba. Da fatan za a sauke Zim.\n Tabbatar cewa WiFi yana kunne kuma kuna da isasshen ajiya</string>
 </resources>

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* GuoPC
 * StarrySky
 -->
 <resources>
   <string name="retry">重试</string>
-  <string name="invalid_installation">安装无效。 请下载 Zim。\n  确保 WiFi 已打开并且您有足够的存储空间</string>
+  <string name="invalid_installation">安装无效。请下载 ZIM。\n 确保 WiFi 已打开并且有足够的存储空间</string>
 </resources>

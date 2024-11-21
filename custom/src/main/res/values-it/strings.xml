@@ -5,5 +5,5 @@
 -->
 <resources>
   <string name="retry">Riprova</string>
-  <string name="invalid_installation">Installazione non valida. Scarica Zim.\n Assicurati che il Wi-Fi sia attivo e di avere spazio di archiviazione sufficiente</string>
+  <string name="invalid_installation">Installazione non valida. Scarica ZIM.\n Assicurati che il Wi-Fi sia attivo e di avere spazio di archiviazione sufficiente</string>
 </resources>
