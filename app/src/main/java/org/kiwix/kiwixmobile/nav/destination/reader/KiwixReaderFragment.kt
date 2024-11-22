@@ -31,7 +31,6 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
@@ -93,7 +92,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   private fun openPageInBookFromNavigationArguments() {
     showProgressBarWithProgress(30)
     val args = KiwixReaderFragmentArgs.fromBundle(requireArguments())
-    lifecycleScope.launch {
+    coreReaderLifeCycleScope?.launch {
       if (args.pageUrl.isNotEmpty()) {
         if (args.zimFileUri.isNotEmpty()) {
           tryOpeningZimFile(args.zimFileUri)
@@ -120,6 +119,12 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   private suspend fun tryOpeningZimFile(zimFileUri: String) {
+    // Stop any ongoing WebView loading and clear the WebView list
+    // before setting a new ZIM file to the reader. This helps prevent native crashes.
+    // The WebView's `shouldInterceptRequest` method continues to be invoked until the WebView is
+    // fully destroyed, which can cause a native crash. This happens because a new ZIM file is set
+    // in the reader while the WebView is still trying to access content from the old archive.
+    stopOngoingLoadingAndClearWebViewList()
     // Close the previously opened book in the reader before opening a new ZIM file
     // to avoid native crashes due to "null pointer dereference." These crashes can occur
     // when setting a new ZIM file in the archive while the previous one is being disposed of.
@@ -143,7 +148,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
       return
     }
     val zimReaderSource = ZimReaderSource(File(filePath))
-    clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource)
     openZimFile(zimReaderSource)
   }
 
@@ -252,7 +256,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   ) {
     when (restoreOrigin) {
       FromExternalLaunch -> {
-        lifecycleScope.launch {
+        coreReaderLifeCycleScope?.launch {
           val settings =
             requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
           val zimReaderSource = fromDatabaseValue(settings.getString(TAG_CURRENT_FILE, null))
