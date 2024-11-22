@@ -94,6 +94,10 @@ import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.processors.BehaviorProcessor
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONException
@@ -323,6 +327,15 @@ abstract class CoreReaderFragment :
   private var navigationHistoryList: MutableList<NavigationHistoryListItem> = ArrayList()
   private var isReadSelection = false
   private var isReadAloudServiceRunning = false
+  private var readerLifeCycleScope: CoroutineScope? = null
+
+  val coreReaderLifeCycleScope: CoroutineScope?
+    get() {
+      if (readerLifeCycleScope == null) {
+        readerLifeCycleScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+      }
+      return readerLifeCycleScope
+    }
 
   private var storagePermissionForNotesLauncher: ActivityResultLauncher<String>? =
     registerForActivityResult(
@@ -1198,6 +1211,12 @@ abstract class CoreReaderFragment :
 
   override fun onDestroyView() {
     super.onDestroyView()
+    try {
+      readerLifeCycleScope?.cancel()
+      readerLifeCycleScope = null
+    } catch (ignore: Exception) {
+      ignore.printStackTrace()
+    }
     if (sharedPreferenceUtil?.showIntro() == true) {
       val activity = requireActivity() as AppCompatActivity?
       activity?.setSupportActionBar(null)
@@ -1208,14 +1227,13 @@ abstract class CoreReaderFragment :
     tabCallback = null
     hideBackToTopTimer?.cancel()
     hideBackToTopTimer = null
-    webViewList.clear()
+    stopOngoingLoadingAndClearWebViewList()
     actionBar = null
     mainMenu = null
     tabRecyclerView?.adapter = null
     tableDrawerRight?.adapter = null
     tableDrawerAdapter = null
     tabsAdapter = null
-    webViewList.clear()
     tempWebViewListForUndo.clear()
     // create a base Activity class that class this.
     deleteCachedFiles(requireActivity())
@@ -1714,13 +1732,36 @@ abstract class CoreReaderFragment :
     }
   }
 
-  fun clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource: ZimReaderSource) {
+  private fun clearWebViewListIfNotPreviouslyOpenZimFile(zimReaderSource: ZimReaderSource?) {
+    if (isNotPreviouslyOpenZim(zimReaderSource)) {
+      stopOngoingLoadingAndClearWebViewList()
+    }
+  }
+
+  protected fun stopOngoingLoadingAndClearWebViewList() {
     try {
-      if (isNotPreviouslyOpenZim(zimReaderSource)) {
-        webViewList.clear()
+      webViewList.apply {
+        forEach { webView ->
+          // Stop any ongoing loading of the WebView
+          webView.stopLoading()
+          // Clear the navigation history of the WebView
+          webView.clearHistory()
+          // Clear cached resources to prevent loading old content
+          webView.clearCache(true)
+          // Pause any ongoing activity in the WebView to prevent resource usage
+          webView.onPause()
+          // Forcefully destroy the WebView before setting the new ZIM file
+          // to ensure that it does not continue attempting to load internal links
+          // from the previous ZIM file, which could cause errors.
+          webView.destroy()
+        }
+        // Clear the WebView list after destroying the WebViews
+        clear()
       }
     } catch (e: IOException) {
       e.printStackTrace()
+      // Clear the WebView list in case of an error
+      webViewList.clear()
     }
   }
 

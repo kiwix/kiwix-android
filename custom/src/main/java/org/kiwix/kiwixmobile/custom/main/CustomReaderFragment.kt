@@ -30,7 +30,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R.dimen
@@ -188,7 +187,7 @@ class CustomReaderFragment : CoreReaderFragment() {
   private fun openObbOrZim() {
     customFileValidator.validate(
       onFilesFound = {
-        lifecycleScope.launch {
+        coreReaderLifeCycleScope?.launch {
           when (it) {
             is ValidationState.HasFile -> {
               openZimFile(

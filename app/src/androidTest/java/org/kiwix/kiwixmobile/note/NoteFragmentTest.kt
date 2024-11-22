@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.note
 
+import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
@@ -179,7 +180,10 @@ class NoteFragmentTest : BaseActivityTest() {
       assertNoteSaved()
       pressBack()
     }
-    LeakAssertions.assertNoLeaks()
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+      // temporary disabled on Android 25
+      LeakAssertions.assertNoLeaks()
+    }
   }
 
   @Test

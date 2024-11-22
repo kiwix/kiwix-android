@@ -57,6 +57,7 @@ import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.Companion.FOUR_GIGABYTES_IN_KILOBYTES
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.DetectingFileSystem
+import org.kiwix.libzim.Archive
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -418,13 +419,16 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   suspend fun isValidZimFile(destinationFile: File): Boolean {
+    var archive: Archive? = null
     return try {
       // create archive object, and check if it has the mainEntry or not to validate the ZIM file.
-      val archive = ZimReaderSource(destinationFile).createArchive()
+      archive = ZimReaderSource(destinationFile).createArchive()
       archive?.hasMainEntry() == true
     } catch (ignore: Exception) {
       // if it is a invalid ZIM file
       false
+    } finally {
+      archive?.dispose()
     }
   }
 

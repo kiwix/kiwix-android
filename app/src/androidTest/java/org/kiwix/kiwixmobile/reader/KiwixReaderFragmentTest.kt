@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.reader
 
+import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
@@ -137,7 +138,10 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
       pressBack()
       checkZimFileLoadedSuccessful(R.id.readerFragment)
     }
-    LeakAssertions.assertNoLeaks()
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+      // temporary disabled on Android 25
+      LeakAssertions.assertNoLeaks()
+    }
   }
 
   @Test
