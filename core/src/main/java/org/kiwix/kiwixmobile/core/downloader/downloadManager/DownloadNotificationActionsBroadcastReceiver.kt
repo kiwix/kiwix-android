@@ -31,8 +31,9 @@ import javax.inject.Inject
 const val DOWNLOAD_NOTIFICATION_ACTION = "org.kiwix.kiwixmobile.download_notification_action"
 
 class DownloadNotificationActionsBroadcastReceiver @Inject constructor(
-  private val downloadManagerMonitor: DownloadManagerMonitor
-) : BaseBroadcastReceiver() {
+  private val callback: Callback
+) :
+  BaseBroadcastReceiver() {
 
   override val action: String = DOWNLOAD_NOTIFICATION_ACTION
   override fun onIntentWithActionReceived(context: Context, intent: Intent) {
@@ -40,10 +41,16 @@ class DownloadNotificationActionsBroadcastReceiver @Inject constructor(
     val notificationAction = intent.getStringExtra(NOTIFICATION_ACTION)
     if (downloadId != -1) {
       when (notificationAction) {
-        ACTION_PAUSE -> downloadManagerMonitor.pauseDownload(downloadId.toLong())
-        ACTION_RESUME -> downloadManagerMonitor.resumeDownload(downloadId.toLong())
-        ACTION_CANCEL -> downloadManagerMonitor.cancelDownload(downloadId.toLong())
+        ACTION_PAUSE -> callback.pauseDownloads(downloadId.toLong())
+        ACTION_RESUME -> callback.resumeDownloads(downloadId.toLong())
+        ACTION_CANCEL -> callback.cancelDownloads(downloadId.toLong())
       }
     }
+  }
+
+  interface Callback {
+    fun pauseDownloads(downloadId: Long)
+    fun resumeDownloads(downloadId: Long)
+    fun cancelDownloads(downloadId: Long)
   }
 }

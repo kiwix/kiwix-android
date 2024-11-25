@@ -23,6 +23,7 @@ import android.app.Service
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationActionsBroadcastReceiver
 import org.kiwix.kiwixmobile.core.qr.GenerateQR
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudNotificationManger
 import org.kiwix.kiwixmobile.di.ServiceScope
@@ -75,4 +76,17 @@ class ServiceModule {
   @Provides
   @ServiceScope
   fun providesGenerateQr(): GenerateQR = GenerateQR()
+
+  @Provides
+  @ServiceScope
+  fun providesDownloadNotificationActionsBroadcastReceiverCallback(service: Service):
+    DownloadNotificationActionsBroadcastReceiver.Callback =
+    service as DownloadNotificationActionsBroadcastReceiver.Callback
+
+  @Provides
+  @ServiceScope
+  fun providesDownloadNotificationActionsBroadcastReceiver(
+    callBack: DownloadNotificationActionsBroadcastReceiver.Callback
+  ): DownloadNotificationActionsBroadcastReceiver =
+    DownloadNotificationActionsBroadcastReceiver(callBack)
 }

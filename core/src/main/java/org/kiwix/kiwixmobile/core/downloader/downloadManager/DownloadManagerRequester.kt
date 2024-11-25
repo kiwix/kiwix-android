@@ -41,7 +41,12 @@ class DownloadManagerRequester @Inject constructor(
   private val downloadManagerMonitor: DownloadManagerMonitor
 ) : DownloadRequester {
   override fun enqueue(downloadRequest: DownloadRequest): Long =
-    downloadManager.enqueue(downloadRequest.toDownloadManagerRequest(sharedPreferenceUtil))
+    downloadManager.enqueue(downloadRequest.toDownloadManagerRequest(sharedPreferenceUtil)).also {
+      Log.e(
+        "DOWNLOADING_STEP",
+        "enqueue: ${downloadRequest.toDownloadManagerRequest(sharedPreferenceUtil)}"
+      )
+    }
 
   override fun onDownloadAdded() {
     // Start monitoring downloads after enqueuing a new download request.
