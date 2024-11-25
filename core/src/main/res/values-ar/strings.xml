@@ -153,7 +153,7 @@
   <string name="help_7">هي متاحة كملفات زيم (ZIM)، وهناك الكثير منها:</string>
   <string name="help_8">• تتوفر ويكيبيديا بشكل منفصلٍ لكل لغة</string>
   <string name="help_9">• تتوفر أيضًا محتويات أخرى مثل ويكيليكس أو ويكي مصدر</string>
-  <string name="help_10" fuzzy="true">يمكنك إما تنزيل ملفات زيم (ZIM) المختارة داخل التطبيق أو اختيار التطبيق(ات) الذي تريده وتنزيله من حاسوب مكتبي قبل نقل ملفات زيم (ZIM) إلى بطاقة SD الخاصة بك.</string>
+  <string name="help_10">يمكنك إما تنزيل ملفات ZIM المختارة داخل التطبيق أو تحديد الملفات التي تريدها بعناية وتنزيلها من جهاز كمبيوتر سطح المكتب قبل نقل ملفات ZIM إلى بطاقة SD الخاصة بك.</string>
   <string name="help_11">توجد ملفات زيم (ZIM) قابلة للتنزيل داخل التطبيق في دليل التخزين الخارجي في مجلد بعنوان كيويكس (Kiwix).</string>
   <string name="pref_storage">التخزين</string>
   <string name="pref_current_folder">المجلد الحالي</string>
@@ -168,9 +168,9 @@
   <string name="confirm_stop_download_title">إيقاف التنزيل؟</string>
   <string name="confirm_stop_download_msg">هل أنت متأكد من أنك تريد إيقاف هذا التنزيل؟</string>
   <string name="download_change_storage">محدد جهاز التخزين</string>
-  <string name="tts_not_enabled" fuzzy="true">لم يتم تمكين النص إلى الكلام لملف زيم (ZIM) هذا</string>
-  <string name="texttospeech_initialization_failed" fuzzy="true">فشل تهيئة النص إلى كلام. حاول مرةً أخرى</string>
-  <string name="texttospeech_error" fuzzy="true">خطأٌ غير متوقع في تحويل النص إلى كلام. حاول مرةً أخرى</string>
+  <string name="tts_not_enabled">لم يتم تمكين القراءة بصوت عالٍ لملف ZIM هذا</string>
+  <string name="texttospeech_initialization_failed">فشلت عملية تهيئة القراءة بصوت عالٍ. يُرجى المحاولة مرة أخرى</string>
+  <string name="texttospeech_error">خطأ غير متوقع في القراءة بصوت عالٍ. يُرجى المحاولة مرة أخرى</string>
   <string name="next">التالي</string>
   <string name="previous">السابق</string>
   <string name="wifi_only_title">السماح بتنزيل المحتوى عبر شبكة المحمول؟</string>

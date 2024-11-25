@@ -175,7 +175,7 @@
   <string name="download_change_storage">기억 장치 선택기</string>
   <string name="tts_not_enabled" fuzzy="true">이 ZIM 파일에 대해 TTS가 활성화되어 있지 않습니다</string>
   <string name="texttospeech_initialization_failed" fuzzy="true">텍스트–음성 초기화가 실패했습니다. 다시 시도해 주세요</string>
-  <string name="texttospeech_error" fuzzy="true">텍스트–음성 변환 과정 중 예기치 않은 오류가 발생했습니다. 다시 시도해 주세요</string>
+  <string name="texttospeech_error">소리내어 읽기 과정 중 예기치 않은 오류가 발생했습니다. 다시 시도해 주세요</string>
   <string name="next">다음</string>
   <string name="previous">이전</string>
   <string name="wifi_only_title">모바일 네트워크를 통해 내용을 다운로드할 수 있도록 하겠습니까?</string>
@@ -362,6 +362,7 @@
   <string name="download_tts_language_message">다운로드 버튼을 클릭해 주십시오. 그러면 필요한 언어를 자동으로 다운로드하게 됩니다.</string>
   <string name="external_link_copied_message">외부 링크가 클립보드에 복사되었습니다</string>
   <string name="read_aloud_service_channel_name">소리내어 읽기 서비스 채널</string>
+  <string name="read_aloud_channel_description">소리내어 읽기 컨트롤입니다.</string>
   <string name="read_aloud_running">소리내어 읽기 실행 중</string>
   <string name="backward_history">이전 역사</string>
   <string name="forward_history">이후 역사</string>

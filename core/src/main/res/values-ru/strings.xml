@@ -346,10 +346,10 @@
   <string name="action_copy">Копировать</string>
   <string name="move">Переместить</string>
   <string name="copy_move_files_dialog_description">Для Kiwix требуется, чтобы ZIM-файл находился в его собственном каталоге данных. Вы хотите скопировать или переместить его туда?</string>
-  <string name="copy_file_error_message">Ошибка при копировании ZIP-файла: %s.</string>
+  <string name="copy_file_error_message">Ошибка при копировании ZIM-файла: %s.</string>
   <string name="why_copy_move_files_to_app_directory">Зачем копировать / перемещать файлы в общий каталог приложения?</string>
   <string name="copy_move_files_to_app_directory_description">Из-за политики Google Play на Android 11 и выше наше приложение больше не может напрямую обращаться к файлам, хранящимся в другом месте на вашем устройстве. Чтобы вы могли просматривать выбранные файлы, нам необходимо переместить или скопировать их в специальную папку в каталоге нашего приложения. Это позволяет нам получать доступ к файлам и открывать их.</string>
-  <string name="move_file_error_message">Ошибка при перемещении файла ZIM: %s.</string>
+  <string name="move_file_error_message">Ошибка при перемещении ZIM-файла: %s.</string>
   <string name="how_to_update_content">Как обновить содержимое?</string>
   <string name="update_content_description">Чтобы обновить содержимое (ZIM-файл), вам необходимо загрузить полную версию этого самого содержимого. Вы можете сделать это через раздел загрузки.</string>
   <string name="all_files_permission_needed">Требуются разрешения для всех файлов</string>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Ajeje Brazorf
+* Akmaie Ajam
 * Amire80
 * Fitoschido
 * Fs00
@@ -239,6 +240,7 @@
   <string name="severe_loss_error">This is toast’s message when a user’s wifi P2P gets disconnected from another device.</string>
   <string name="connection_failed">This is toast’s message when a user fails to connect to another device via wifi P2P.</string>
   <string name="permission_rationale_location">This is dialog’s message when a user is trying to search nearby devices but the app does not have access to location permission.</string>
+  <string name="permission_rationale_nearby">This is the dialog’s message when a user is trying to search nearby devices but the app does not have access to nearby devices permission.</string>
   <string name="permission_refused_location">It is a toast’s message shown when a user tries to share zim files but the app does not have access to location permission.</string>
   <string name="permission_refused_storage">It is a toast’s message shown when a user tries to share zim files but the app does not have access to storage permission.</string>
   <string name="request_enable_location">It is a dialog’s message shown when a user tries to share zim files but location service is not enabled.</string>
@@ -293,7 +295,7 @@
   <string name="open_library">{{Doc-important|This means “Open the library”. “Open” is a verb. This doesn’t mean “An open library”.}}\nThe action of opening the library destination, used on a button.</string>
   <string name="tab_restored">Tell the user that a tab has been restored.</string>
   <string name="tabs_restored">This is used in the snack bar, to inform users all tabs are restored.</string>
-  <string name="open_drawer">This is a label text for opening the “Navigation Drawer”.</string>
+  <string name="open_drawer">{{Doc-important|This means “Open the drawer”. “Open” is a verb. This doesn’t mean “An open drawer”.}}\nThis is a label text for opening the “Navigation Drawer”.</string>
   <string name="close_drawer">This is a label text for closing the “Navigation Drawer”.</string>
   <string name="how_to_update_content">This message appears in the help screen as an information title to tell users how they can update the content.</string>
   <string name="update_content_description">This message appears in the help screen as an informative description to briefly explain to the users how they can update the content.</string>

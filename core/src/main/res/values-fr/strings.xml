@@ -167,7 +167,7 @@
   <string name="help_7">Ils sont disponibles sous forme de fichiers ZIM. Il y en a beaucoup :</string>
   <string name="help_8">• Wikipédia est disponible séparément pour chaque langue</string>
   <string name="help_9">• D’autres contenus comme Wikileaks ou Wikisource sont également disponibles</string>
-  <string name="help_10" fuzzy="true">Vous pouvez soit télécharger vos fichiers ZIM sélectionnés dans l’application, soit sélectionner soigneusement ceux que vous voulez télécharger depuis un ordinateur de bureau, avant de transférer les fichiers ZIM sur votre carte SD.</string>
+  <string name="help_10">Vous pouvez soit télécharger vos fichiers ZIM sélectionnés dans l’application, soit sélectionner soigneusement ceux que vous voulez télécharger depuis un ordinateur de bureau avant de transférer les fichiers ZIM sur votre carte SD.</string>
   <string name="help_11">Les fichiers ZIM téléchargés dans l’application sont situés dans le répertoire de stockage externe dans un répertoire appelé Kiwix.</string>
   <string name="pref_storage">Espace de stockage</string>
   <string name="pref_current_folder">Dossier actuel</string>
