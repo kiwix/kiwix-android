@@ -168,7 +168,7 @@
   <string name="help_7">它们以ZIM格式的文件存在。这里是其中一些：</string>
   <string name="help_8">• 维基百科分别提供每种语言版本</string>
   <string name="help_9">• 同样可用于例如维基解密或维基文库等其他内容</string>
-  <string name="help_10" fuzzy="true">您可以在应用中下载您选择的ZIM文件，也可以在电脑端下载您想要的文件，并在稍后将其转移至您的SD卡中。</string>
+  <string name="help_10">您可以在应用中下载您选择的ZIM文件，也可以在电脑端下载您想要的文件，并在稍后将其转移至您的SD卡中。</string>
   <string name="help_11">应用内下载的 ZIM 文件位于您的外部存储目录中名为 Kiwix 的文件夹中。</string>
   <string name="pref_storage">存储</string>
   <string name="pref_current_folder">当前文件夹</string>
@@ -186,9 +186,9 @@
   <string name="confirm_stop_download_title">停止下载？</string>
   <string name="confirm_stop_download_msg">您确定要停止此次下载么？</string>
   <string name="download_change_storage">存储设备选择器</string>
-  <string name="tts_not_enabled" fuzzy="true">文字转换语音功能未对该ZIM文件启用</string>
-  <string name="texttospeech_initialization_failed" fuzzy="true">文字转语音的初始化失败。请重试</string>
-  <string name="texttospeech_error" fuzzy="true">文本转语音出现意外错误。请重试</string>
+  <string name="tts_not_enabled">朗读功能未对该 ZIM 文件启用</string>
+  <string name="texttospeech_initialization_failed">朗读初始化失败。请重试</string>
+  <string name="texttospeech_error">朗读出现意外错误。请重试</string>
   <string name="next">下一页</string>
   <string name="previous">上一页</string>
   <string name="wifi_only_title">允许通过移动网络下载内容？</string>
@@ -209,7 +209,7 @@
   <string name="your_languages">选择的语言：</string>
   <string name="other_languages">其他语言：</string>
   <string name="no_items_msg">没有可用的项目</string>
-  <string name="crash_title">额…这太尴尬了</string>
+  <string name="crash_title">呃…这太尴尬了</string>
   <string name="crash_description">看起来我们崩溃了。\n\n您是否介意通过发送以下信息帮助我们解决此问题？</string>
   <string name="crash_checkbox_language">您的语言设置</string>
   <string name="crash_checkbox_zimfiles">ZIM 文件列表</string>
@@ -253,6 +253,7 @@
   <string name="custom_download_error_message_for_authentication_failed">无法下载此 ZIM 文件。请尝试从 Play 商店重新安装此应用程序。</string>
   <string name="save">保存</string>
   <string name="note">笔记</string>
+  <string name="take_notes">做笔记</string>
   <string name="wiki_article_title">Wiki条目标题</string>
   <string name="ext_storage_permission_rationale_export_bookmark">需要存储访问权限以导出书签</string>
   <string name="ext_storage_write_permission_denied_export_bookmark">如果没有存储访问权限，则无法导出书签</string>
@@ -378,7 +379,7 @@
   <string name="download_tts_language_message">请点击下载按钮。这将会自动下载所需要的语言。</string>
   <string name="external_link_copied_message">外部链接已复制到剪贴板</string>
   <string name="read_aloud_service_channel_name">朗读服务频道</string>
-  <string name="read_aloud_channel_description" fuzzy="true">文本转语音控制。</string>
+  <string name="read_aloud_channel_description">朗读控制。</string>
   <string name="read_aloud_running">正在朗读</string>
   <string name="backward_history">历史向后</string>
   <string name="forward_history">历史向前</string>

@@ -12,6 +12,6 @@
   <string name="cannot_open_file">No se ha podido abrir el archivo Intente buscar este archivo en su biblioteca.</string>
   <string name="send_files_title">Enviar archivos</string>
   <string name="receive_files_title">Recibir archivos</string>
-  <string name="no_app_found_to_open" fuzzy="true">¡No se encontró ninguna aplicación para seleccionar el archivo zim!</string>
-  <string name="select_zim_file" fuzzy="true">Seleccione el archivo zim para leer</string>
+  <string name="no_app_found_to_open">¡No se encontró ninguna aplicación para seleccionar el archivo ZIM!</string>
+  <string name="select_zim_file">Seleccione el archivo zim para leer</string>
 </resources>

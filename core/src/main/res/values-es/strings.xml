@@ -77,8 +77,8 @@
   <string name="qr_code">Código QR renderizado</string>
   <string name="share_host_address">Compartir URL a través de otras aplicaciones</string>
   <string name="error_file_not_found">Error: no se encontró el archivo ZIM seleccionado.</string>
-  <string name="unable_to_read_zim_file" fuzzy="true">¡No se puede leer este archivo zim!</string>
-  <string name="zim_not_opened" fuzzy="true">No se pudo abrir el archivo .zim</string>
+  <string name="unable_to_read_zim_file">¡No se puede leer este archivo zim!</string>
+  <string name="zim_not_opened">No se pudo abrir el archivo .zim</string>
   <string name="error_file_invalid">Error: el archivo seleccionado no es un archivo ZIM válido.</string>
   <string name="error_article_url_not_found">Error: falló la carga del artículo (URL: %1$s).</string>
   <string name="pref_display_title">Mostrar</string>
@@ -98,7 +98,7 @@
   <string name="no_app_found_to_select_bookmark_file">No se encontró ninguna aplicación para seleccionar un archivo de marcadores</string>
   <string name="no_section_info">No se encontraron cabeceras de contenido</string>
   <string name="request_storage">Para acceder a contenido sin conexión necesitamos tener acceso a tu almacenamiento</string>
-  <string name="request_write_storage" fuzzy="true">Para descargar archivos zim, necesitamos acceso de escritura a su almacenamiento</string>
+  <string name="request_write_storage">Para descargar archivos ZIM, necesitamos acceso de escritura a su almacenamiento</string>
   <string name="clear_recent_and_tabs_history_dialog">¿Seguro que quieres eliminar tu historial de búsqueda y restablecer todas las pestañas activas?</string>
   <string name="delete_recent_search_item">¿Borrar este elemento?</string>
   <string name="pref_clear_all_history_title">Limpiar el historial</string>
@@ -142,7 +142,7 @@
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">En línea</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_zim_body" fuzzy="true">Los siguientes archivos ZIM serán eliminados:\n\n%s</string>
+  <string name="delete_zim_body">Se eliminarán los siguientes archivos ZIM:\n\n%s</string>
   <string name="delete_zims_toast">Archivo eliminado</string>
   <string name="no_files_here">No hay archivos</string>
   <string name="download_no_space">No queda espacio suficiente para la descarga.</string>
@@ -162,12 +162,13 @@
   <string name="help_7">Están disponibles como archivos ZIM. Hay un montón:</string>
   <string name="help_8">• Wikipedia está disponible para cada idioma por separado</string>
   <string name="help_9">• Otros contenidos, como Wikileaks o Wikisource también están disponibles</string>
-  <string name="help_10" fuzzy="true">Puedes descargar los archivos ZIM elegidos en la aplicación, o bien seleccionar cuidadosamente los que quieras, descargarlos desde una computadora y transferirlos a tu tarjeta SD.</string>
+  <string name="help_10">Puede descargar los archivos ZIM elegidos en la aplicación o seleccionar cuidadosamente los que desee y descargarlos desde un ordenador de escritorio antes de transferir los archivos ZIM a su tarjeta SD.</string>
   <string name="help_11">Los archivos ZIM descargados en la aplicación se encuentran en el directorio de almacenamiento externo, en una carpeta llamada Kiwix.</string>
   <string name="pref_storage">Almacenamiento</string>
   <string name="pref_current_folder">Carpeta actual</string>
   <string name="pref_storage_used">%s usado</string>
   <string name="pref_free_storage">%s libre</string>
+  <string name="choose_storage_to_download_book">Elija el almacenamiento para descargar el libro</string>
   <string name="delete_zim_failed">No podemos eliminar algunos archivos. Deberías probar con un administrador de archivos.</string>
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">continuar</string>
@@ -179,9 +180,9 @@
   <string name="confirm_stop_download_title">¿Detener descarga?</string>
   <string name="confirm_stop_download_msg">¿Seguro que quieres detener esta descarga?</string>
   <string name="download_change_storage">Selector de dispositivo de almacenamiento</string>
-  <string name="tts_not_enabled" fuzzy="true">Texto a voz no está activado para este archivo ZIM</string>
-  <string name="texttospeech_initialization_failed" fuzzy="true">La inicialización de Texto a Voz falló. Inténtalo de nuevo</string>
-  <string name="texttospeech_error" fuzzy="true">Error inesperado en Texto a voz. Inténtalo de nuevo</string>
+  <string name="tts_not_enabled">La lectura en voz alta no está habilitada para este archivo ZIM</string>
+  <string name="texttospeech_initialization_failed">La inicialización de la lectura en voz alta falló. Inténtalo de nuevo</string>
+  <string name="texttospeech_error">Error inesperado en la lectura en voz alta. Inténtalo de nuevo.</string>
   <string name="next">Siguiente</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">¿Permitir descargar contenido mediante la red móvil?</string>
@@ -205,7 +206,7 @@
   <string name="crash_title">Bien, esto es vergonzoso</string>
   <string name="crash_description">Parece que nos colgamos.\n¿Te importaría ayudarnos a solucionar este problema enviándonos la siguiente información?</string>
   <string name="crash_checkbox_language">Tu configuración de idioma</string>
-  <string name="crash_checkbox_zimfiles" fuzzy="true">Una lista de todos tus archivos ZIM</string>
+  <string name="crash_checkbox_zimfiles">Una lista de todos sus archivos ZIM</string>
   <string name="crash_checkbox_exception">Detalles del bloqueo</string>
   <string name="crash_checkbox_logs">Registros de la aplicación</string>
   <string name="crash_checkbox_device">Datos del dispositivo</string>
@@ -243,9 +244,10 @@
   <string name="complete">Completado</string>
   <string name="paused_state">En pausa</string>
   <string name="failed_state">Error: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">No pudo ser descargado el archivo zim. Por favor, intente reinstalando la aplicación desde Google Play Store.</string>
+  <string name="custom_download_error_message_for_authentication_failed">No se pudo descargar el archivo ZIM. Intente reinstalar la aplicación desde Play Store.</string>
   <string name="save">Guardar</string>
   <string name="note">Nota</string>
+  <string name="take_notes">Tomar apuntes</string>
   <string name="wiki_article_title">Título del artículo de la wiki</string>
   <string name="ext_storage_permission_rationale_export_bookmark">Se requiere acceso al almacenamiento para exportar marcadores</string>
   <string name="ext_storage_write_permission_denied_export_bookmark">Los marcadores no se pueden exportar sin acceso al almacenamiento</string>
@@ -272,7 +274,7 @@
   <string name="permission_rationale_location">Se requieren permisos de localización en Android para detectar dispositivos participantes</string>
   <string name="permission_rationale_nearby">Android requiere el permiso de los dispositivos cercanos para permitir a la aplicación que los detecte.</string>
   <string name="permission_refused_location">No se pueden ubicar dispositivos de pares sin permisos de ubicación</string>
-  <string name="permission_refused_storage" fuzzy="true">No se puede acceder a archivos ZIM sin permisos de almacenamiento</string>
+  <string name="permission_refused_storage">No se puede acceder a los  archivos ZIM sin permisos de almacenamiento</string>
   <string name="request_enable_location">Habilite la ubicación para permitir la detección de compañeros</string>
   <string name="discovery_needs_location">No se pueden descubrir pares sin servicios de ubicación</string>
   <string name="request_enable_wifi">Habilita WiFi punto a punt en ajustes del sistema</string>
@@ -337,15 +339,18 @@
   <string name="preparing_file_for_copy">Preparando para copiar/mover</string>
   <string name="action_copy">Copiar</string>
   <string name="move">Mover</string>
-  <string name="copy_move_files_dialog_description" fuzzy="true">¿Quieres copiar o mover el archivo?</string>
-  <string name="copy_file_error_message" fuzzy="true">Error al copiar el archivo zim: %s</string>
-  <string name="why_copy_move_files_to_app_directory" fuzzy="true">¿Mover/Copiar archivos al directorio público de la aplicación?</string>
-  <string name="copy_move_files_to_app_directory_description" fuzzy="true">Debido a las políticas de Google Play en Android 11 y superior, nuestra aplicacion ya no podrá acceder a los archivos de tu dispositivo. Para que puedas ver los archivos seleccionados, tenemos que moverlos o copiarlos en una carpeta especial dentro del directorio de nuestra aplicación. Esto nos permite acceder a los archivos y abrirlos. ¿Estás de acuerdo?</string>
-  <string name="move_file_error_message" fuzzy="true">Error al mover el archivo zim: %s.</string>
+  <string name="copying_zim_file">Copiando el archivo ZIM…</string>
+  <string name="moving_zim_file">Moviendo el archivo ZIM…</string>
+  <string name="copy_move_files_dialog_description">Kiwix requiere que el archivo ZIM se encuentre en su propio directorio de datos. ¿Quieres copiarlo o moverlo allí?</string>
+  <string name="copy_file_error_message">Error al copiar el archivo ZIM: %s</string>
+  <string name="why_copy_move_files_to_app_directory">¿Por qué copiar/mover archivos al directorio público de la aplicación?</string>
+  <string name="copy_move_files_to_app_directory_description">Debido a las políticas de Google Play en Android 11 y superior, nuestra aplicacion ya no podrá acceder a los archivos de tu dispositivo. Para que puedas ver los archivos seleccionados, tenemos que moverlos o copiarlos en una carpeta especial dentro del directorio de nuestra aplicación. Esto nos permite acceder a los archivos y abrirlos.</string>
+  <string name="choose_storage_to_copy_move_zim_file">Elija el almacenamiento para copiar/mover el archivo ZIM</string>
+  <string name="move_file_error_message">Error al mover el archivo ZIM: %s.</string>
   <string name="how_to_update_content">¿Cómo actualizar contenido?</string>
-  <string name="update_content_description" fuzzy="true">Para actualizar el contenido (un archivo zim), debe descargar la última versión completa de este mismo contenido. Puede hacerlo a través de la sección de descargas.</string>
+  <string name="update_content_description">Para actualizar el contenido (un archivo ZIM), debe descargar la última versión completa de este mismo contenido. Puede hacerlo a través de la sección de descargas.</string>
   <string name="all_files_permission_needed">Se necesita permiso para todos los archivos</string>
-  <string name="all_files_permission_needed_message" fuzzy="true">Para acceder a todos los archivos zim en el dispositivo, necesitamos tener permiso para todos los archivos</string>
+  <string name="all_files_permission_needed_message">Para acceder a todos los archivos ZIM en el dispositivo, necesitamos tener permiso para todos los archivos</string>
   <string name="allowed">Permitido</string>
   <string name="not_allowed">No permitido</string>
   <string name="denied_internet_permission_message">Por favor habilite WiFi para descargar contenido</string>
@@ -368,7 +373,7 @@
   <string name="download_tts_language_message">Por favor haga clic en el botón descargar. Descargará automáticamente el idioma requerido.</string>
   <string name="external_link_copied_message">Enlace externo copiado al portapapeles</string>
   <string name="read_aloud_service_channel_name">Canal de servicio de lectura en voz alta</string>
-  <string name="read_aloud_channel_description" fuzzy="true">Controles de texto a voz.</string>
+  <string name="read_aloud_channel_description">Controles de lectura en voz alta.</string>
   <string name="read_aloud_running">Ejecutándose Lectura en Voz Alta</string>
   <string name="backward_history">Historial hacia atrás</string>
   <string name="forward_history">Historial hacia delante</string>

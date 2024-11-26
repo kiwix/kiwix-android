@@ -9,6 +9,6 @@
   <string name="cannot_open_file">فشل فتح الملف!\nيرجى محاولة البحث عن هذا الملف في مكتبتك</string>
   <string name="send_files_title">أرسال الملفات</string>
   <string name="receive_files_title">تلقي الملفات</string>
-  <string name="no_app_found_to_open" fuzzy="true">لم يتم العثور على تطبيق لتحديد ملف zim!</string>
-  <string name="select_zim_file" fuzzy="true">حدد ملف zim لقراءته</string>
+  <string name="no_app_found_to_open">لم يتم العثور على تطبيق لتحديد ملف ZIM!</string>
+  <string name="select_zim_file">حدد ملف ZIM للقراءة</string>
 </resources>
