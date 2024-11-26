@@ -54,7 +54,8 @@ class DownloadNotificationManager @Inject constructor(
   }
 
   fun updateNotification(
-    downloadNotificationModel: DownloadNotificationModel
+    downloadNotificationModel: DownloadNotificationModel,
+    assignNewForegroundServiceNotification: AssignNewForegroundServiceNotification
   ) {
     synchronized(downloadNotificationsBuilderMap) {
       if (shouldUpdateNotification(downloadNotificationModel)) {
@@ -64,7 +65,9 @@ class DownloadNotificationManager @Inject constructor(
         )
       } else {
         // the download is cancelled/paused so remove the notification.
-        cancelNotification(downloadNotificationModel.downloadId)
+        assignNewForegroundServiceNotification.assignNewForegroundServiceNotification(
+          downloadNotificationModel.downloadId.toLong()
+        )
       }
     }
   }
@@ -191,16 +194,16 @@ class DownloadNotificationManager @Inject constructor(
   }
 
   private fun getActionPendingIntent(action: String, downloadId: Int): PendingIntent {
-    val intent =
-      Intent(DOWNLOAD_NOTIFICATION_ACTION).apply {
+    val pendingIntent =
+      Intent(context, DownloadMonitorService::class.java).apply {
         putExtra(NOTIFICATION_ACTION, action)
         putExtra(EXTRA_DOWNLOAD_ID, downloadId)
       }
     val requestCode = downloadId + action.hashCode()
-    return PendingIntent.getBroadcast(
+    return PendingIntent.getService(
       context,
       requestCode,
-      intent,
+      pendingIntent,
       PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     )
   }
@@ -250,6 +253,7 @@ class DownloadNotificationManager @Inject constructor(
     const val ACTION_PAUSE = "action_pause"
     const val ACTION_RESUME = "action_resume"
     const val ACTION_CANCEL = "action_cancel"
+    const val ACTION_QUERY_DOWNLOAD_STATUS = "action_query_download_status"
     const val EXTRA_DOWNLOAD_ID = "extra_download_id"
   }
 }

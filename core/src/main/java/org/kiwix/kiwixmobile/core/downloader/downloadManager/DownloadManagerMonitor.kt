@@ -19,94 +19,82 @@
 package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
 import android.app.DownloadManager
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.ServiceConnection
-import android.os.IBinder
-import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
+import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationManager.Companion.ACTION_CANCEL
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationManager.Companion.ACTION_PAUSE
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationManager.Companion.ACTION_QUERY_DOWNLOAD_STATUS
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationManager.Companion.ACTION_RESUME
 import javax.inject.Inject
 
 class DownloadManagerMonitor @Inject constructor(
   val downloadRoomDao: DownloadRoomDao,
   private val context: Context
-) : DownloadMonitor, DownloadManagerBroadcastReceiver.Callback, DownloadMonitorServiceCallback {
+) : DownloadMonitor, DownloadManagerBroadcastReceiver.Callback {
   private val lock = Any()
-  private var downloadMonitorService: DownloadMonitorService? = null
-  private val serviceConnection = object : ServiceConnection {
-    override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
-      downloadMonitorService =
-        (binder as? DownloadMonitorService.DownloadMonitorBinder)?.downloadMonitorService?.get()
-      downloadMonitorService?.registerCallback(this@DownloadManagerMonitor)
-      CoroutineScope(Dispatchers.IO).launch {
-        if (downloadRoomDao.downloads().blockingFirst().isNotEmpty()) {
-          startService()
-        }
-      }
-    }
-
-    override fun onServiceDisconnected(name: ComponentName?) {
-      downloadMonitorService = null
-    }
-  }
 
   init {
-    bindService()
+    CoroutineScope(Dispatchers.IO).launch {
+      if (getActiveDownloads().isNotEmpty()) {
+        startService()
+      }
+    }
   }
 
-  private fun bindService() {
-    val serviceIntent = Intent(context, DownloadMonitorService::class.java)
-    context.bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
-  }
+  private suspend fun getActiveDownloads(): List<DownloadRoomEntity> =
+    downloadRoomDao.downloadRoomEntity().blockingFirst().filter {
+      it.status != Status.PAUSED && it.status != Status.CANCELLED
+    }
 
   override fun downloadCompleteOrCancelled(intent: Intent) {
     synchronized(lock) {
       intent.extras?.let {
         val downloadId = it.getLong(DownloadManager.EXTRA_DOWNLOAD_ID, -1L)
         if (downloadId != -1L) {
-          downloadMonitorService?.queryDownloadStatus(downloadId)
+          context.startService(
+            getDownloadMonitorIntent(
+              ACTION_QUERY_DOWNLOAD_STATUS,
+              downloadId.toInt()
+            )
+          )
         }
       }
     }
   }
 
   fun startMonitoringDownloads() {
-    bindService()
     startService()
-    downloadMonitorService?.startMonitoringDownloads()
   }
 
   private fun startService() {
-    ContextCompat.startForegroundService(
-      context,
-      Intent(context, DownloadMonitorService::class.java)
-    )
+    context.startService(Intent(context, DownloadMonitorService::class.java))
   }
 
   fun pauseDownload(downloadId: Long) {
-    downloadMonitorService?.pauseDownload(downloadId)
+    context.startService(getDownloadMonitorIntent(ACTION_PAUSE, downloadId.toInt()))
   }
 
   fun resumeDownload(downloadId: Long) {
-    downloadMonitorService?.resumeDownload(downloadId)
+    context.startService(getDownloadMonitorIntent(ACTION_RESUME, downloadId.toInt()))
   }
 
   fun cancelDownload(downloadId: Long) {
-    downloadMonitorService?.cancelDownload(downloadId)
+    context.startService(getDownloadMonitorIntent(ACTION_CANCEL, downloadId.toInt()))
   }
+
+  private fun getDownloadMonitorIntent(action: String, downloadId: Int): Intent =
+    Intent(context, DownloadMonitorService::class.java).apply {
+      putExtra(DownloadNotificationManager.NOTIFICATION_ACTION, action)
+      putExtra(DownloadNotificationManager.EXTRA_DOWNLOAD_ID, downloadId)
+    }
 
   override fun init() {
     // empty method to so class does not get reported unused
-  }
-
-  override fun onServiceDestroyed() {
-    downloadMonitorService?.registerCallback(null)
-    context.unbindService(serviceConnection)
-    downloadMonitorService = null
   }
 }

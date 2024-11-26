@@ -26,7 +26,6 @@ import android.content.ContentValues
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
-import android.os.Binder
 import android.os.IBinder
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -35,10 +34,13 @@ import io.reactivex.subjects.PublishSubject
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationManager.Companion.ACTION_CANCEL
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationManager.Companion.ACTION_PAUSE
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationManager.Companion.ACTION_QUERY_DOWNLOAD_STATUS
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationManager.Companion.ACTION_RESUME
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.utils.files.Log
-import java.lang.ref.WeakReference
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -59,7 +61,7 @@ const val STATUS_PAUSED_BY_APP = 193
 const val COLUMN_CONTROL = "control"
 val downloadBaseUri: Uri = Uri.parse("content://downloads/my_downloads")
 
-class DownloadMonitorService : Service(), DownloadNotificationActionsBroadcastReceiver.Callback {
+class DownloadMonitorService : Service() {
 
   @Inject
   lateinit var downloadManager: DownloadManager
@@ -73,19 +75,9 @@ class DownloadMonitorService : Service(), DownloadNotificationActionsBroadcastRe
   private var monitoringDisposable: Disposable? = null
   private val downloadInfoMap = mutableMapOf<Long, DownloadInfo>()
   private val updater = PublishSubject.create<() -> Unit>()
-  private val downloadMonitorBinder: IBinder = DownloadMonitorBinder(this)
-  private var downloadMonitorServiceCallback: DownloadMonitorServiceCallback? = null
-  private var isForeGroundServiceNotification: Boolean = true
+  private var foreGroundServiceInformation: Pair<Boolean, Int> = true to DEFAULT_INT_VALUE
 
-  // @set:Inject
-  // var downloadNotificationBroadcastReceiver: DownloadNotificationActionsBroadcastReceiver? = null
-
-  class DownloadMonitorBinder(downloadMonitorService: DownloadMonitorService) : Binder() {
-    val downloadMonitorService: WeakReference<DownloadMonitorService> =
-      WeakReference<DownloadMonitorService>(downloadMonitorService)
-  }
-
-  override fun onBind(intent: Intent?): IBinder = downloadMonitorBinder
+  override fun onBind(intent: Intent?): IBinder? = null
 
   override fun onCreate() {
     CoreApp.coreComponent
@@ -96,13 +88,22 @@ class DownloadMonitorService : Service(), DownloadNotificationActionsBroadcastRe
     super.onCreate()
     setupUpdater()
     startMonitoringDownloads()
-    // downloadNotificationBroadcastReceiver?.let(this::registerReceiver)
   }
 
-  override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_NOT_STICKY
-
-  fun registerCallback(downloadMonitorServiceCallback: DownloadMonitorServiceCallback?) {
-    this.downloadMonitorServiceCallback = downloadMonitorServiceCallback
+  override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    val downloadId =
+      intent?.getIntExtra(DownloadNotificationManager.EXTRA_DOWNLOAD_ID, DEFAULT_INT_VALUE)
+        ?: DEFAULT_INT_VALUE
+    val notificationAction = intent?.getStringExtra(DownloadNotificationManager.NOTIFICATION_ACTION)
+    if (downloadId != DEFAULT_INT_VALUE) {
+      when (notificationAction) {
+        ACTION_PAUSE -> pauseDownload(downloadId.toLong())
+        ACTION_RESUME -> resumeDownload(downloadId.toLong())
+        ACTION_CANCEL -> cancelDownload(downloadId.toLong())
+        ACTION_QUERY_DOWNLOAD_STATUS -> queryDownloadStatus(downloadId.toLong())
+      }
+    }
+    return START_NOT_STICKY
   }
 
   @Suppress("CheckResult")
@@ -122,8 +123,7 @@ class DownloadMonitorService : Service(), DownloadNotificationActionsBroadcastRe
    * when there are no ongoing downloads to avoid unnecessary resource usage.
    */
   @Suppress("MagicNumber")
-  fun startMonitoringDownloads() {
-    Log.e("DOWNLOADING_STEP", "startMonitoringDownloads:")
+  private fun startMonitoringDownloads() {
     // Check if monitoring is already active. If it is, do nothing.
     if (monitoringDisposable?.isDisposed == false) return
     monitoringDisposable = Observable.interval(ZERO.toLong(), 5, TimeUnit.SECONDS)
@@ -142,7 +142,7 @@ class DownloadMonitorService : Service(), DownloadNotificationActionsBroadcastRe
               }
             }
           } catch (ignore: Exception) {
-            Log.i(
+            Log.e(
               "DOWNLOAD_MONITOR",
               "Couldn't get the downloads update. Original exception = $ignore"
             )
@@ -155,7 +155,6 @@ class DownloadMonitorService : Service(), DownloadNotificationActionsBroadcastRe
   @SuppressLint("Range")
   private fun checkDownloads() {
     synchronized(lock) {
-      Log.e("DOWNLOADING_STEP", "checkDownloads: lock")
       val query = DownloadManager.Query().setFilterByStatus(
         DownloadManager.STATUS_RUNNING or
           DownloadManager.STATUS_PAUSED or
@@ -163,7 +162,6 @@ class DownloadMonitorService : Service(), DownloadNotificationActionsBroadcastRe
           DownloadManager.STATUS_SUCCESSFUL
       )
       downloadManager.query(query).use { cursor ->
-        Log.e("DOWNLOADING_STEP", "checkDownloads:")
         if (cursor.moveToFirst()) {
           do {
             val downloadId = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_ID))
@@ -385,10 +383,8 @@ class DownloadMonitorService : Service(), DownloadNotificationActionsBroadcastRe
   ) {
     synchronized(lock) {
       updater.onNext {
-        Log.e("DOWNLOADING_STEP", "updateDownloadStatus:")
         downloadRoomDao.getEntityForDownloadId(downloadId)?.let { downloadEntity ->
           if (shouldUpdateDownloadStatus(downloadEntity)) {
-            Log.e("DOWNLOADING_STEP", "shouldUpdateDownloadStatus:")
             val downloadModel = DownloadModel(downloadEntity).apply {
               if (shouldUpdateDownloadStatus(status, error, downloadEntity)) {
                 state = status
@@ -406,7 +402,6 @@ class DownloadMonitorService : Service(), DownloadNotificationActionsBroadcastRe
               }
             }
             downloadRoomDao.update(downloadModel)
-            Log.e("DOWNLOADING_STEP", "updateNotification: $downloadModel")
             updateNotification(downloadModel, downloadEntity.title, downloadEntity.description)
             return@let
           }
@@ -472,14 +467,63 @@ class DownloadMonitorService : Service(), DownloadNotificationActionsBroadcastRe
 
   private fun cancelNotification(downloadId: Long) {
     downloadNotificationManager.cancelNotification(downloadId.toInt())
+    assignNewForegroundNotification()
   }
+
+  private fun assignNewForegroundNotification() {
+    val activeDownloads = getActiveDownloads()
+    if (activeDownloads.isNotEmpty()) {
+      // Promote the first active download to foreground
+      val downloadRoomEntity = activeDownloads.first()
+      foreGroundServiceInformation =
+        foreGroundServiceInformation.first to downloadRoomEntity.downloadId.toInt()
+      val downloadNotificationModel =
+        getDownloadNotificationModel(
+          DownloadModel(downloadRoomEntity),
+          downloadRoomEntity.title,
+          downloadRoomEntity.description
+        )
+      val notification = downloadNotificationManager.createNotification(downloadNotificationModel)
+      startForeground(foreGroundServiceInformation.second, notification)
+    } else {
+      // Stop the service if no active downloads remain
+      stopMonitoringDownloads()
+    }
+  }
+
+  private fun getActiveDownloads(): List<DownloadRoomEntity> =
+    downloadRoomDao.downloadRoomEntity().blockingFirst().filter {
+      it.status != Status.PAUSED && it.status != Status.CANCELLED
+    }
 
   private fun updateNotification(
     downloadModel: DownloadModel,
     title: String,
     description: String?
   ) {
-    val downloadNotificationModel = DownloadNotificationModel(
+    val downloadNotificationModel = getDownloadNotificationModel(downloadModel, title, description)
+    val notification = downloadNotificationManager.createNotification(downloadNotificationModel)
+    if (foreGroundServiceInformation.first) {
+      startForeground(downloadModel.downloadId.toInt(), notification)
+      foreGroundServiceInformation = false to downloadModel.downloadId.toInt()
+    } else {
+      downloadNotificationManager.updateNotification(
+        downloadNotificationModel,
+        object : AssignNewForegroundServiceNotification {
+          override fun assignNewForegroundServiceNotification(downloadId: Long) {
+            cancelNotification(downloadId)
+          }
+        }
+      )
+    }
+  }
+
+  private fun getDownloadNotificationModel(
+    downloadModel: DownloadModel,
+    title: String,
+    description: String?
+  ): DownloadNotificationModel =
+    DownloadNotificationModel(
       downloadId = downloadModel.downloadId.toInt(),
       status = downloadModel.state,
       progress = downloadModel.progress,
@@ -493,28 +537,8 @@ class DownloadMonitorService : Service(), DownloadNotificationActionsBroadcastRe
         downloadModel.book.url
       ).toReadableState(this).toString()
     )
-    val notification = downloadNotificationManager.createNotification(downloadNotificationModel)
-    if (isForeGroundServiceNotification) {
-      startForeground(downloadModel.downloadId.toInt(), notification)
-      isForeGroundServiceNotification = false
-    } else {
-      downloadNotificationManager.updateNotification(downloadNotificationModel)
-    }
-  }
 
-  override fun pauseDownloads(downloadId: Long) {
-    pauseDownload(downloadId)
-  }
-
-  override fun resumeDownloads(downloadId: Long) {
-    resumeDownload(downloadId)
-  }
-
-  override fun cancelDownloads(downloadId: Long) {
-    cancelNotification(downloadId)
-  }
-
-  fun pauseDownload(downloadId: Long) {
+  private fun pauseDownload(downloadId: Long) {
     synchronized(lock) {
       updater.onNext {
         if (pauseResumeDownloadInDownloadManagerContentResolver(
@@ -529,7 +553,7 @@ class DownloadMonitorService : Service(), DownloadNotificationActionsBroadcastRe
     }
   }
 
-  fun resumeDownload(downloadId: Long) {
+  private fun resumeDownload(downloadId: Long) {
     synchronized(lock) {
       updater.onNext {
         if (pauseResumeDownloadInDownloadManagerContentResolver(
@@ -544,7 +568,7 @@ class DownloadMonitorService : Service(), DownloadNotificationActionsBroadcastRe
     }
   }
 
-  fun cancelDownload(downloadId: Long) {
+  private fun cancelDownload(downloadId: Long) {
     synchronized(lock) {
       downloadManager.remove(downloadId)
       handleCancelledDownload(downloadId)
@@ -577,23 +601,15 @@ class DownloadMonitorService : Service(), DownloadNotificationActionsBroadcastRe
     downloadRoomEntity.status != Status.COMPLETED
 
   override fun onDestroy() {
-    // downloadNotificationBroadcastReceiver?.let(::unregisterReceiver)
     monitoringDisposable?.dispose()
     super.onDestroy()
   }
 
   private fun stopMonitoringDownloads() {
-    Log.e("DOWNLOADING_STEP", "stopMonitoringDownloads: ")
-    isForeGroundServiceNotification = true
+    foreGroundServiceInformation = true to DEFAULT_INT_VALUE
     monitoringDisposable?.dispose()
-    downloadMonitorServiceCallback?.onServiceDestroyed()
     stopForeground(STOP_FOREGROUND_REMOVE)
     stopSelf()
-  }
-
-  companion object {
-    private const val CHANNEL_ID = "download_monitor_channel"
-    private const val ONGOING_NOTIFICATION_ID = 1
   }
 }
 
@@ -601,3 +617,7 @@ data class DownloadInfo(
   var startTime: Long,
   var initialBytesDownloaded: Int
 )
+
+interface AssignNewForegroundServiceNotification {
+  fun assignNewForegroundServiceNotification(downloadId: Long)
+}
