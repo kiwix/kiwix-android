@@ -51,7 +51,6 @@ import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerBroadcastReceiver
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationActionsBroadcastReceiver
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
@@ -101,10 +100,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   @Inject
   lateinit var downloadManagerBroadcastReceiver: DownloadManagerBroadcastReceiver
-
-  @Inject
-  lateinit var downloadNotificationActionsReceiver: DownloadNotificationActionsBroadcastReceiver
-
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.KiwixTheme)
     super.onCreate(savedInstanceState)
@@ -136,7 +131,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       objectBoxToRoomMigrator.migrateObjectBoxDataToRoom()
     }
     downloadManagerBroadcastReceiver.let(::registerReceiver)
-    downloadNotificationActionsReceiver.let(::registerReceiver)
     createApplicationShortcuts()
   }
 
@@ -156,7 +150,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   override fun onDestroy() {
     downloadManagerBroadcastReceiver.let(::unregisterReceiver)
-    downloadNotificationActionsReceiver.let(::unregisterReceiver)
     super.onDestroy()
   }
 

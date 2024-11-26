@@ -24,7 +24,6 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import org.kiwix.kiwixmobile.core.qr.GenerateQR
-import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudNotificationManger
 import org.kiwix.kiwixmobile.di.ServiceScope
 import org.kiwix.kiwixmobile.webserver.KiwixServer
 import org.kiwix.kiwixmobile.webserver.WebServerHelper
@@ -34,12 +33,6 @@ import org.kiwix.kiwixmobile.webserver.wifi_hotspot.IpAddressCallbacks
 
 @Module
 class ServiceModule {
-  @Provides
-  @ServiceScope
-  fun providesReadAloudNotificationManager(
-    notificationManager: NotificationManager,
-    context: Context
-  ): ReadAloudNotificationManger = ReadAloudNotificationManger(notificationManager, context)
 
   @Provides
   @ServiceScope

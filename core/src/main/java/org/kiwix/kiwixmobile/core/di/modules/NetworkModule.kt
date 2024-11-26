@@ -35,8 +35,8 @@ const val CONNECTION_TIMEOUT = 10L
 // increase the read and call timeout since the content is 19MB large so it takes
 // more time to read on slow internet connection, and due to less read timeout
 // the request is canceled.
-const val READ_TIMEOUT = 180L
-const val CALL_TIMEOUT = 180L
+const val READ_TIMEOUT = 300L
+const val CALL_TIMEOUT = 300L
 const val USER_AGENT = "kiwix-android-version:${BuildConfig.VERSION_CODE}"
 const val KIWIX_DOWNLOAD_URL = "https://mirror.download.kiwix.org/"
 

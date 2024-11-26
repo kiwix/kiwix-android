@@ -30,7 +30,6 @@ import org.kiwix.kiwixmobile.core.downloader.DownloaderImpl
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerBroadcastReceiver
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerMonitor
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerRequester
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationActionsBroadcastReceiver
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationManager
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Singleton
@@ -70,13 +69,6 @@ object DownloaderModule {
   fun providesDownloadManagerBroadcastReceiver(
     callback: DownloadManagerBroadcastReceiver.Callback
   ): DownloadManagerBroadcastReceiver = DownloadManagerBroadcastReceiver(callback)
-
-  @Provides
-  @Singleton
-  fun providesDownloadNotificationActionsBroadcastReceiver(
-    downloadManagerMonitor: DownloadManagerMonitor
-  ): DownloadNotificationActionsBroadcastReceiver =
-    DownloadNotificationActionsBroadcastReceiver(downloadManagerMonitor)
 
   @Provides
   @Singleton

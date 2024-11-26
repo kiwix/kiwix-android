@@ -123,7 +123,13 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
           directoryList.add(dir)
         }
       }
-    return scanDirs(directoryList.toTypedArray(), "zim")
+    return scanDirs(directoryList.toTypedArray(), "zim").filterNot {
+      // Excluding the demo.zim file from the list as it is used for demonstration purposes
+      // on the ZimHostFragment for hosting the ZIM file on the server.
+      // Since we are now using the "asset delivery mode", in this we are using the
+      // assetFileDescriptor instead of a regular file.
+      it.name.equals("demo.zim", ignoreCase = true)
+    }
   }
 
   private fun scanDirs(dirs: Array<out File?>?, extensionToMatch: String): List<File> =
