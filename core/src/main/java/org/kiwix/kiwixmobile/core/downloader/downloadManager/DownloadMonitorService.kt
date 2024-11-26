@@ -136,9 +136,7 @@ class DownloadMonitorService : Service() {
               if (downloadRoomDao.downloads().blockingFirst().isNotEmpty()) {
                 checkDownloads()
               } else {
-                // dispose to avoid unnecessary request to downloadManager
-                // when there is no download ongoing.
-                stopMonitoringDownloads()
+                stopForegroundServiceForDownloads()
               }
             }
           } catch (ignore: Exception) {
@@ -405,10 +403,11 @@ class DownloadMonitorService : Service() {
             updateNotification(downloadModel, downloadEntity.title, downloadEntity.description)
             return@let
           }
-          cancelNotification(downloadId)
+          cancelNotificationAndAssignNewNotificationToForegroundService(downloadId)
         } ?: run {
-          // already downloaded/cancelled so cancel the notification if any running.
-          cancelNotification(downloadId)
+          // already downloaded/cancelled so cancel the notification if any running, and
+          // assign new notification to foreground service.
+          cancelNotificationAndAssignNewNotificationToForegroundService(downloadId)
         }
       }
     }
@@ -465,12 +464,12 @@ class DownloadMonitorService : Service() {
     }
   }
 
-  private fun cancelNotification(downloadId: Long) {
+  private fun cancelNotificationAndAssignNewNotificationToForegroundService(downloadId: Long) {
     downloadNotificationManager.cancelNotification(downloadId.toInt())
-    assignNewForegroundNotification()
+    updateForegroundNotificationOrStopService()
   }
 
-  private fun assignNewForegroundNotification() {
+  private fun updateForegroundNotificationOrStopService() {
     val activeDownloads = getActiveDownloads()
     if (activeDownloads.isNotEmpty()) {
       // Promote the first active download to foreground
@@ -487,7 +486,7 @@ class DownloadMonitorService : Service() {
       startForeground(foreGroundServiceInformation.second, notification)
     } else {
       // Stop the service if no active downloads remain
-      stopMonitoringDownloads()
+      stopForegroundServiceForDownloads()
     }
   }
 
@@ -511,7 +510,7 @@ class DownloadMonitorService : Service() {
         downloadNotificationModel,
         object : AssignNewForegroundServiceNotification {
           override fun assignNewForegroundServiceNotification(downloadId: Long) {
-            cancelNotification(downloadId)
+            cancelNotificationAndAssignNewNotificationToForegroundService(downloadId)
           }
         }
       )
@@ -605,7 +604,7 @@ class DownloadMonitorService : Service() {
     super.onDestroy()
   }
 
-  private fun stopMonitoringDownloads() {
+  private fun stopForegroundServiceForDownloads() {
     foreGroundServiceInformation = true to DEFAULT_INT_VALUE
     monitoringDisposable?.dispose()
     stopForeground(STOP_FOREGROUND_REMOVE)
