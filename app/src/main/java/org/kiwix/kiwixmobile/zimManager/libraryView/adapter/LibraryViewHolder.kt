@@ -103,8 +103,8 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
     @Suppress("MagicNumber")
     override fun bind(item: LibraryDownloadItem) {
       itemDownloadBinding.libraryDownloadFavicon.setBitmap(item.favIcon)
-      itemDownloadBinding.libraryDownloadTitle.text = item.title
-      itemDownloadBinding.libraryDownloadDescription.text = item.description
+      itemDownloadBinding.libraryDownloadTitle.setTextAndVisibility(item.title)
+      itemDownloadBinding.libraryDownloadDescription.setTextAndVisibility(item.description)
       itemDownloadBinding.downloadProgress.progress = item.progress
       itemDownloadBinding.stop.apply {
         setToolTipWithContentDescription(itemDownloadBinding.root.context.getString(string.stop))

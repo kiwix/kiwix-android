@@ -20,10 +20,11 @@ package org.kiwix.kiwixmobile.core.extensions
 
 import android.view.View
 import android.widget.TextView
+import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 
 fun TextView.setTextAndVisibility(nullableText: String?) =
-  if (nullableText != null && nullableText.isNotEmpty()) {
-    text = nullableText
+  if (!nullableText.isNullOrEmpty()) {
+    text = nullableText.fromHtml().toString()
     visibility = View.VISIBLE
   } else {
     visibility = View.GONE
