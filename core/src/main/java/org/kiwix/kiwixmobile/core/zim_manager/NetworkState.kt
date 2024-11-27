@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.zimManager
+package org.kiwix.kiwixmobile.core.zim_manager
 
 enum class NetworkState {
   CONNECTED,
