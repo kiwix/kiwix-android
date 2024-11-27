@@ -31,10 +31,12 @@ Bug Fixed:
 * Opening an article will show that it has been added as a bookmark. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/3918)
 * Improvement in loading articles, and searching. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/3925, https://github.com/kiwix/kiwix-android/pull/3923)
 * File drawer was showing on Tabs screen. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/3981)
+* Download notification disappears when the application is in the background. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4108)
 + More
 
 Compilation/CI/CD:
 * Using libkiwix `2.2.3`. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4033)
+* Removed the Fetch library from project. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/3935)
 * APK files missing from releases. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4054)
 * Added feature to generate `Dummy bundle`. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4030)
 * Automatically publish to PlayStore for internal testing team. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/3948)
