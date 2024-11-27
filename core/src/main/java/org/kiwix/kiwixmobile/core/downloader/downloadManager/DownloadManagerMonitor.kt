@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
+import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
@@ -25,32 +26,49 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
-import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationManager.Companion.ACTION_CANCEL
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationManager.Companion.ACTION_PAUSE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationManager.Companion.ACTION_QUERY_DOWNLOAD_STATUS
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationManager.Companion.ACTION_RESUME
+import org.kiwix.kiwixmobile.core.extensions.registerReceiver
+import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import javax.inject.Inject
 
 class DownloadManagerMonitor @Inject constructor(
   val downloadRoomDao: DownloadRoomDao,
-  private val context: Context
+  private val context: Context,
+  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
 ) : DownloadMonitor, DownloadManagerBroadcastReceiver.Callback {
   private val lock = Any()
 
   init {
+    context.registerReceiver(connectivityBroadcastReceiver)
+    startServiceIfActiveDownloads()
+    trackNetworkState()
+  }
+
+  @SuppressLint("CheckResult")
+  private fun trackNetworkState() {
+    connectivityBroadcastReceiver.networkStates
+      .distinctUntilChanged()
+      .subscribe(
+        {
+          // Start the service when the network changes so that we can
+          // track the progress accurately.
+          startServiceIfActiveDownloads()
+        },
+        Throwable::printStackTrace
+      )
+  }
+
+  private fun startServiceIfActiveDownloads() {
     CoroutineScope(Dispatchers.IO).launch {
-      if (getActiveDownloads().isNotEmpty()) {
+      if (downloadRoomDao.downloads().blockingFirst().isNotEmpty()) {
         startService()
       }
     }
   }
-
-  private suspend fun getActiveDownloads(): List<DownloadRoomEntity> =
-    downloadRoomDao.downloadRoomEntity().blockingFirst().filter {
-      it.status != Status.PAUSED && it.status != Status.CANCELLED
-    }
 
   override fun downloadCompleteOrCancelled(intent: Intent) {
     synchronized(lock) {

@@ -17,7 +17,6 @@
     <ID>NestedBlockDepth:ReceiverHandShake.kt$ReceiverHandShake$override fun exchangeFileTransferMetadata(inputStream: InputStream, outputStream: OutputStream)</ID>
     <ID>PackageNaming:AvailableSpaceCalculator.kt$package
       org.kiwix.kiwixmobile.zimManager.libraryView</ID>
-    <ID>PackageNaming:ConnectivityBroadcastReceiver.kt$package org.kiwix.kiwixmobile.zimManager</ID>
     <ID>PackageNaming:DefaultLanguageProvider.kt$package org.kiwix.kiwixmobile.zimManager</ID>
     <ID>PackageNaming:DeleteFiles.kt$package
       org.kiwix.kiwixmobile.zimManager.fileselectView.effects</ID>
@@ -37,7 +36,6 @@
     <ID>PackageNaming:MountFileSystemChecker.kt$package org.kiwix.kiwixmobile.zimManager</ID>
     <ID>PackageNaming:NavigateToDownloads.kt$package
       org.kiwix.kiwixmobile.zimManager.fileselectView.effects</ID>
-    <ID>PackageNaming:NetworkState.kt$package org.kiwix.kiwixmobile.zimManager</ID>
     <ID>PackageNaming:None.kt$package org.kiwix.kiwixmobile.zimManager.fileselectView.effects</ID>
     <ID>PackageNaming:OpenFileWithNavigation.kt$package
       org.kiwix.kiwixmobile.zimManager.fileselectView.effects</ID>

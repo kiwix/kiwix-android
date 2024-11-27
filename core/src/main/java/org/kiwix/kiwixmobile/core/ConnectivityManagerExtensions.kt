@@ -16,13 +16,13 @@
  *
  */
 
-package org.kiwix.kiwixmobile
+package org.kiwix.kiwixmobile.core
 
 import android.net.ConnectivityManager
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
-import org.kiwix.kiwixmobile.zimManager.NetworkState
-import org.kiwix.kiwixmobile.zimManager.NetworkState.CONNECTED
-import org.kiwix.kiwixmobile.zimManager.NetworkState.NOT_CONNECTED
+import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
+import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.CONNECTED
+import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.NOT_CONNECTED
 
 val ConnectivityManager.networkState: NetworkState
   get() = if (isNetworkAvailable())
