@@ -1,4 +1,4 @@
-name: Generate dummy bundle
+name: Generate dummy bundle and APK
 
 # The workflow will trigger when the `dummy_bundle` tag is pushed.
 on:
@@ -7,7 +7,7 @@ on:
       - 'dummy_bundle' # dummy_bundle Tag
 
 jobs:
-  publish_dummy_bundle:
+  publish_dummy_bundle_and_apk:
     runs-on: ubuntu-22.04
 
     steps:
@@ -25,26 +25,33 @@ jobs:
         run: |
           echo "$KEYSTORE" | base64 -d > kiwix-android.keystore
 
-      - name: Generate dummy Bundle
+      - name: Generate dummy Bundle and APKs
         env:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
         run: |
-          ./gradlew bundlePlayStore --scan
+          ./gradlew bundlePlayStore assembleRelease --scan
 
-
-      - name: Get Bundle name and path
-        id: bundle-path
+      - name: Get Bundle and APKs name and path
+        id: get-bundle-and-apk-paths
         run: |
           BUNDLE_PATH="app/build/outputs/bundle/playStore/kiwix-playStore.aab"
           BUNDLE_NAME="PlayStoreDummyBundle.aab"
           echo "bundle_path=$BUNDLE_PATH" >> $GITHUB_ENV
           echo "bundle_name=$BUNDLE_NAME" >> $GITHUB_ENV
+          APK_DIR="app/build/outputs/apk/release/"
+          echo "apk_dir=$APK_DIR" >> $GITHUB_ENV
 
       - name: Upload Bundle as an artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.bundle_name }}
           path: ${{ env.bundle_path }}
+
+      - name: Upload All Release APKs as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ReleaseApks
+          path: ${{ env.apk_dir }}*.apk
 
