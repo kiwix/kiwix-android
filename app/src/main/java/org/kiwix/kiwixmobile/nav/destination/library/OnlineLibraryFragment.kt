@@ -68,6 +68,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificat
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
+import org.kiwix.kiwixmobile.core.extensions.isKeyboardVisible
 import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
 import org.kiwix.kiwixmobile.core.extensions.setUpSearchView
 import org.kiwix.kiwixmobile.core.extensions.snack
@@ -327,8 +328,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
-    getActivity()?.finish()
-    return FragmentActivityExtensions.Super.ShouldNotCall
+    if (isKeyboardVisible()) {
+      closeKeyboard()
+      return FragmentActivityExtensions.Super.ShouldNotCall
+    }
+    return FragmentActivityExtensions.Super.ShouldCall
   }
 
   private fun onRefreshStateChange(isRefreshing: Boolean?) {

@@ -24,6 +24,7 @@ import android.os.Process
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -47,6 +48,7 @@ import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
+import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCall
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
@@ -132,6 +134,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
     downloadManagerBroadcastReceiver.let(::registerReceiver)
     createApplicationShortcuts()
+    handleBackPressed()
   }
 
   @Suppress("DEPRECATION")
@@ -149,6 +152,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   override fun onDestroy() {
+    onBackPressedCallBack.remove()
     downloadManagerBroadcastReceiver.let(::unregisterReceiver)
     super.onDestroy()
   }
@@ -277,28 +281,40 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     externalLinkOpener.openExternalUrl(KIWIX_SUPPORT_URL.toUri().browserIntent())
   }
 
-  override fun onBackPressed() {
-    if (navigationDrawerIsOpen()) {
-      closeNavigationDrawer()
-      return
-    }
-    if (activeFragments().filterIsInstance<FragmentActivityExtensions>().isEmpty()) {
-      return super.onBackPressedDispatcher.onBackPressed()
-    }
-    activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
-      if (it.onBackPressed(this) == FragmentActivityExtensions.Super.ShouldCall) {
-        if (navController.currentDestination?.id?.equals(readerFragmentResId) == true &&
-          navController.previousBackStackEntry?.destination
-            ?.id?.equals(searchFragmentResId) == false
-        ) {
-          drawerToggle = null
-          finish()
-        } else {
-          super.onBackPressedDispatcher.onBackPressed()
+  private fun handleBackPressed() {
+    onBackPressedDispatcher.addCallback(this, onBackPressedCallBack)
+  }
+
+  private val onBackPressedCallBack =
+    object : OnBackPressedCallback(true) {
+      override fun handleOnBackPressed() {
+        if (navigationDrawerIsOpen()) {
+          closeNavigationDrawer()
+          return
+        }
+        if (activeFragments().filterIsInstance<FragmentActivityExtensions>().isEmpty()) {
+          isEnabled = false
+          return onBackPressedDispatcher.onBackPressed().also {
+            isEnabled = true
+          }
+        }
+        activeFragments().filterIsInstance<FragmentActivityExtensions>().forEach {
+          if (it.onBackPressed(this@CoreMainActivity) == ShouldCall) {
+            if (navController.currentDestination?.id?.equals(readerFragmentResId) == true &&
+              navController.previousBackStackEntry?.destination
+                ?.id?.equals(searchFragmentResId) == false
+            ) {
+              drawerToggle = null
+              finish()
+            } else {
+              isEnabled = false
+              onBackPressedDispatcher.onBackPressed()
+              isEnabled = true
+            }
+          }
         }
       }
     }
-  }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
 

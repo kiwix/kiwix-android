@@ -22,6 +22,8 @@ import android.content.Context
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -34,6 +36,11 @@ inline fun <reified T : ViewModel> Fragment.viewModel(
 
 fun Fragment.toast(stringId: Int, length: Int = Toast.LENGTH_LONG) {
   requireActivity().toast(stringId, length)
+}
+
+fun Fragment.isKeyboardVisible(): Boolean {
+  val insets = ViewCompat.getRootWindowInsets(requireView()) ?: return false
+  return insets.isVisible(WindowInsetsCompat.Type.ime())
 }
 
 fun Fragment.closeKeyboard() {
