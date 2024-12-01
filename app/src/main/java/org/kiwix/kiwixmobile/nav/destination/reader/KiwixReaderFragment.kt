@@ -83,7 +83,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       )
     }
     activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    toolbar?.let(activity::setupDrawerToggle)
+    toolbar?.let { activity.setupDrawerToggle(it, true) }
     setFragmentContainerBottomMarginToSizeOfNavBar()
     openPageInBookFromNavigationArguments()
   }
@@ -167,7 +167,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   override fun hideTabSwitcher() {
     actionBar?.let { actionBar ->
       actionBar.setDisplayShowTitleEnabled(true)
-      toolbar?.let { activity?.setupDrawerToggle(it) }
+      toolbar?.let { activity?.setupDrawerToggle(it, true) }
 
       setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
 

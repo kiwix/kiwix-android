@@ -98,8 +98,8 @@ class CustomMainActivity : CoreMainActivity() {
     }
   }
 
-  override fun setupDrawerToggle(toolbar: Toolbar) {
-    super.setupDrawerToggle(toolbar)
+  override fun setupDrawerToggle(toolbar: Toolbar, shouldEnableRightDrawer: Boolean) {
+    super.setupDrawerToggle(toolbar, shouldEnableRightDrawer)
     activityCustomMainBinding.drawerNavView.apply {
       /**
        * Hide the 'ZimHostFragment' option from the navigation menu
