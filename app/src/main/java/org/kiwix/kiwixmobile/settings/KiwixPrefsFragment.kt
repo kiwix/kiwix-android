@@ -78,9 +78,9 @@ class KiwixPrefsFragment : CorePrefsFragment() {
   private fun setUpStoragePreference(sharedPreferenceUtil: SharedPreferenceUtil) {
     lifecycleScope.launch {
       storageDeviceList.forEachIndexed { index, storageDevice ->
-        val preferenceKey = if (index==0) PREF_INTERNAL_STORAGE else PREF_EXTERNAL_STORAGE
+        val preferenceKey = if (index == 0) PREF_INTERNAL_STORAGE else PREF_EXTERNAL_STORAGE
         val selectedStoragePosition = sharedPreferenceUtil.storagePosition
-        val isChecked = selectedStoragePosition==index
+        val isChecked = selectedStoragePosition == index
         findPreference<StorageRadioButtonPreference>(preferenceKey)?.apply {
           this.isChecked = isChecked
           setOnPreferenceClickListener {
