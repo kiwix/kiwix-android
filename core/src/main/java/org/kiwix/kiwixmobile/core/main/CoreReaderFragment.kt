@@ -1675,7 +1675,11 @@ abstract class CoreReaderFragment :
   }
 
   override fun showSaveOrOpenUnsupportedFilesDialog(url: String, documentType: String?) {
-    unsupportedMimeTypeHandler?.showSaveOrOpenUnsupportedFilesDialog(url, documentType)
+    unsupportedMimeTypeHandler?.showSaveOrOpenUnsupportedFilesDialog(
+      url,
+      documentType,
+      coreReaderLifeCycleScope
+    )
   }
 
   suspend fun openZimFile(zimReaderSource: ZimReaderSource, isCustomApp: Boolean = false) {

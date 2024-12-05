@@ -27,6 +27,9 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.slot
 import io.mockk.verify
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.R
@@ -34,8 +37,8 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
 import java.io.File
 import java.io.InputStream
 
@@ -48,6 +51,7 @@ class UnsupportedMimeTypeHandlerTest {
   private val savedFile: File = mockk(relaxed = true)
   private val activity: Activity = mockk()
   private val webResourceResponse: WebResourceResponse = mockk()
+  private val coroutineScope = CoroutineScope(Dispatchers.Main)
   private val inputStream: InputStream = mockk()
   private val unsupportedMimeTypeHandler = UnsupportedMimeTypeHandler(
     activity,
@@ -85,13 +89,17 @@ class UnsupportedMimeTypeHandlerTest {
   }
 
   @Test
-  fun testOpeningFileInExternalReaderApplication() {
+  fun testOpeningFileInExternalReaderApplication() = runBlocking {
     every {
       unsupportedMimeTypeHandler.intent.resolveActivity(activity.packageManager)
     } returns mockk()
     every { activity.startActivity(unsupportedMimeTypeHandler.intent) } returns mockk()
     val lambdaSlot = slot<() -> Unit>()
-    unsupportedMimeTypeHandler.showSaveOrOpenUnsupportedFilesDialog(demoUrl, "application/pdf")
+    unsupportedMimeTypeHandler.showSaveOrOpenUnsupportedFilesDialog(
+      demoUrl,
+      "application/pdf",
+      coroutineScope
+    )
     verify {
       alertDialogShower.show(
         KiwixDialog.SaveOrOpenUnsupportedFiles,
@@ -116,7 +124,11 @@ class UnsupportedMimeTypeHandlerTest {
       Toast.makeText(activity, R.string.no_reader_application_installed, Toast.LENGTH_LONG).show()
     }
     val lambdaSlot = slot<() -> Unit>()
-    unsupportedMimeTypeHandler.showSaveOrOpenUnsupportedFilesDialog(demoUrl, "application/pdf")
+    unsupportedMimeTypeHandler.showSaveOrOpenUnsupportedFilesDialog(
+      demoUrl,
+      "application/pdf",
+      coroutineScope
+    )
     verify {
       alertDialogShower.show(
         KiwixDialog.SaveOrOpenUnsupportedFiles,
@@ -143,7 +155,8 @@ class UnsupportedMimeTypeHandlerTest {
     val lambdaSlot = slot<() -> Unit>()
     unsupportedMimeTypeHandler.showSaveOrOpenUnsupportedFilesDialog(
       demoUrl,
-      "application/pdf"
+      "application/pdf",
+      coroutineScope
     )
     verify {
       alertDialogShower.show(
@@ -160,7 +173,11 @@ class UnsupportedMimeTypeHandlerTest {
   @Test
   fun testUserClicksOnNoThanksButton() {
     val lambdaSlot = slot<() -> Unit>()
-    unsupportedMimeTypeHandler.showSaveOrOpenUnsupportedFilesDialog(demoUrl, "application/pdf")
+    unsupportedMimeTypeHandler.showSaveOrOpenUnsupportedFilesDialog(
+      demoUrl,
+      "application/pdf",
+      coroutineScope
+    )
     verify {
       alertDialogShower.show(
         KiwixDialog.SaveOrOpenUnsupportedFiles,
@@ -186,7 +203,11 @@ class UnsupportedMimeTypeHandlerTest {
       Toast.makeText(activity, R.string.save_media_error, Toast.LENGTH_LONG).show()
     }
     val lambdaSlot = slot<() -> Unit>()
-    downloadOrOpenEpubAndPdfHandler.showSaveOrOpenUnsupportedFilesDialog(null, "application/pdf")
+    downloadOrOpenEpubAndPdfHandler.showSaveOrOpenUnsupportedFilesDialog(
+      null,
+      "application/pdf",
+      coroutineScope
+    )
     verify {
       alertDialogShower.show(
         KiwixDialog.SaveOrOpenUnsupportedFiles,

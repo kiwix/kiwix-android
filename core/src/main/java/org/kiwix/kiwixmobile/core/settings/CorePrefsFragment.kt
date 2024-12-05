@@ -34,6 +34,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
 import androidx.preference.Preference
@@ -364,7 +365,11 @@ abstract class CorePrefsFragment :
   private fun showExportBookmarkDialog() {
     alertDialogShower?.show(
       KiwixDialog.YesNoDialog.ExportBookmarks,
-      { libkiwixBookmarks?.exportBookmark() }
+      {
+        lifecycleScope.launch {
+          libkiwixBookmarks?.exportBookmark()
+        }
+      }
     )
   }
 

@@ -30,7 +30,6 @@ import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.DarkModeConfig.Mode.Companion.from
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import java.io.File
 import java.util.Locale
 import javax.inject.Inject
@@ -115,7 +114,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
           putStoragePosition(0)
         }
 
-        !File(storage).isFileExist() -> getPublicDirectoryPath(defaultPublicStorage()).also {
+        !File(storage).exists() -> getPublicDirectoryPath(defaultPublicStorage()).also {
           putStoragePosition(0)
         }
 

@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.zimManager.libraryView.adapter
 
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleCoroutineScope
 import org.kiwix.kiwixmobile.core.base.adapter.AbsDelegateAdapter
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.viewBinding
 import org.kiwix.kiwixmobile.core.utils.BookUtils
@@ -38,7 +39,8 @@ sealed class LibraryDelegate<I : LibraryListItem, out VH : LibraryViewHolder<I>>
   class BookDelegate(
     private val bookUtils: BookUtils,
     private val clickAction: (BookItem) -> Unit,
-    private val availableSpaceCalculator: AvailableSpaceCalculator
+    private val availableSpaceCalculator: AvailableSpaceCalculator,
+    private val lifecycleCoroutineScope: LifecycleCoroutineScope
   ) : LibraryDelegate<BookItem, LibraryBookViewHolder>() {
     override val itemClass = BookItem::class.java
 
@@ -47,7 +49,8 @@ sealed class LibraryDelegate<I : LibraryListItem, out VH : LibraryViewHolder<I>>
         parent.viewBinding(ItemLibraryBinding::inflate, false),
         bookUtils,
         clickAction,
-        availableSpaceCalculator
+        availableSpaceCalculator,
+        lifecycleCoroutineScope
       )
   }
 

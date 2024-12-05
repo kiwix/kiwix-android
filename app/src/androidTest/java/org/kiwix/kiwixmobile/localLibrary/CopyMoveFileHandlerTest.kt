@@ -174,13 +174,15 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         clickOnMove()
         assertZimFileCopiedAndShowingIntoTheReader()
       }
-      assertZimFileAddedInTheLocalLibrary()
-      assertSelectedZimFileIsDeletedFromTheStorage(selectedFile)
-      deleteAllFilesInDirectory(parentFile)
+      kiwixMainActivity.lifecycleScope.launch {
+        assertZimFileAddedInTheLocalLibrary()
+        assertSelectedZimFileIsDeletedFromTheStorage(selectedFile)
+        deleteAllFilesInDirectory(parentFile)
+      }
     }
   }
 
-  private fun assertSelectedZimFileIsDeletedFromTheStorage(selectedZimFile: File) {
+  private suspend fun assertSelectedZimFileIsDeletedFromTheStorage(selectedZimFile: File) {
     if (selectedZimFile.isFileExist()) {
       throw RuntimeException("Selected zim file is not deleted from the storage")
     }
@@ -194,7 +196,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
   }
 
   private fun showMoveFileToPublicDirectoryDialog() {
-    UiThreadStatement.runOnUiThread {
+    kiwixMainActivity.lifecycleScope.launch {
       val navHostFragment: NavHostFragment =
         kiwixMainActivity.supportFragmentManager
           .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -268,22 +270,22 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       StorageCalculator(sharedPreferenceUtil),
       Fat32Checker(sharedPreferenceUtil, listOf(FileWritingFileSystemChecker()))
     )
-    // test fileName when there is already a file available with same name.
-    // it should return different name
-    selectedFile = File(parentFile, selectedFileName).apply {
-      if (!isFileExist()) createNewFile()
-    }
-    copyMoveFileHandler.setSelectedFileAndUri(null, DocumentFile.fromFile(selectedFile))
-    destinationFile = copyMoveFileHandler.getDestinationFile()
-    Assert.assertNotEquals(
-      destinationFile.name,
-      selectedFile.name
-    )
-    Assert.assertEquals(
-      destinationFile.name,
-      "testCopyMove_1.zim"
-    )
     kiwixMainActivity.lifecycleScope.launch {
+      // test fileName when there is already a file available with same name.
+      // it should return different name
+      selectedFile = File(parentFile, selectedFileName).apply {
+        if (!isFileExist()) createNewFile()
+      }
+      copyMoveFileHandler.setSelectedFileAndUri(null, DocumentFile.fromFile(selectedFile))
+      destinationFile = copyMoveFileHandler.getDestinationFile()
+      Assert.assertNotEquals(
+        destinationFile.name,
+        selectedFile.name
+      )
+      Assert.assertEquals(
+        destinationFile.name,
+        "testCopyMove_1.zim"
+      )
       withContext(Dispatchers.IO) {
         deleteBothPreviousFiles()
       }

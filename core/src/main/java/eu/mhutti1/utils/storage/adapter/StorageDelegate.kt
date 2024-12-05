@@ -19,6 +19,7 @@
 package eu.mhutti1.utils.storage.adapter
 
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import eu.mhutti1.utils.storage.StorageDevice
 import org.kiwix.kiwixmobile.core.base.adapter.AdapterDelegate
@@ -31,6 +32,7 @@ class StorageDelegate(
   private val storageCalculator: StorageCalculator,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val shouldShowCheckboxSelected: Boolean,
+  private val lifecycleCoroutineScope: LifecycleCoroutineScope,
   private val onClickAction: (StorageDevice) -> Unit
 ) : AdapterDelegate<StorageDevice> {
   override fun createViewHolder(parent: ViewGroup): ViewHolder {
@@ -39,6 +41,7 @@ class StorageDelegate(
       storageCalculator,
       sharedPreferenceUtil,
       shouldShowCheckboxSelected,
+      lifecycleCoroutineScope,
       onClickAction
     )
   }

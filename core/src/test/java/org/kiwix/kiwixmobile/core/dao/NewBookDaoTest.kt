@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.dao
 import android.annotation.SuppressLint
 import io.mockk.CapturingSlot
 import io.mockk.clearAllMocks
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -84,8 +85,8 @@ internal class NewBookDaoTest {
       every { box.query().build() } returns query
       val zimReaderSourceThatExists = mockk<ZimReaderSource>()
       val zimReaderSourceThatDoesNotExist = mockk<ZimReaderSource>()
-      every { zimReaderSourceThatExists.exists() } returns true
-      every { zimReaderSourceThatDoesNotExist.exists() } returns false
+      coEvery { zimReaderSourceThatExists.exists() } returns true
+      coEvery { zimReaderSourceThatDoesNotExist.exists() } returns false
       val entityThatExists = bookOnDiskEntity(zimReaderSource = zimReaderSourceThatExists)
       val entityThatDoesNotExist =
         bookOnDiskEntity(zimReaderSource = zimReaderSourceThatDoesNotExist)
@@ -93,7 +94,7 @@ internal class NewBookDaoTest {
       every { RxQuery.observable(query) } returns Observable.just(
         listOf(entityThatExists, entityThatDoesNotExist)
       )
-      return Pair(entityThatExists, entityThatDoesNotExist)
+      return entityThatExists to entityThatDoesNotExist
     }
   }
 

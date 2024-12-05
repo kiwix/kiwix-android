@@ -74,6 +74,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isManageExternal
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -412,40 +413,42 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     }
 
   fun handleSelectedFileUri(uri: Uri) {
-    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
-      val documentFile = when (uri.scheme) {
-        "file" -> DocumentFile.fromFile(File("$uri"))
-        else -> {
-          DocumentFile.fromSingleUri(requireActivity(), uri)
+    lifecycleScope.launch {
+      if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+        val documentFile = when (uri.scheme) {
+          "file" -> DocumentFile.fromFile(File("$uri"))
+          else -> {
+            DocumentFile.fromSingleUri(requireActivity(), uri)
+          }
         }
+        // If the file is not valid, it shows an error message and stops further processing.
+        // If the file name is not found, then let them to copy the file
+        // and we will handle this later.
+        val fileName = documentFile?.name
+        if (fileName != null && !FileUtils.isValidZimFile(fileName)) {
+          activity.toast(string.error_file_invalid)
+          return@launch
+        }
+        copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(
+          uri,
+          documentFile,
+          // pass if fileName is null then we will validate it after copying/moving
+          fileName == null,
+          parentFragmentManager
+        )
+      } else {
+        getZimFileFromUri(uri)?.let(::navigateToReaderFragment)
       }
-      // If the file is not valid, it shows an error message and stops further processing.
-      // If the file name is not found, then let them to copy the file
-      // and we will handle this later.
-      val fileName = documentFile?.name
-      if (fileName != null && !FileUtils.isValidZimFile(fileName)) {
-        activity.toast(string.error_file_invalid)
-        return
-      }
-      copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(
-        uri,
-        documentFile,
-        // pass if fileName is null then we will validate it after copying/moving
-        fileName == null,
-        parentFragmentManager
-      )
-    } else {
-      getZimFileFromUri(uri)?.let(::navigateToReaderFragment)
     }
   }
 
-  private fun getZimFileFromUri(
+  private suspend fun getZimFileFromUri(
     uri: Uri
   ): File? {
     val filePath = FileUtils.getLocalFilePathByUri(
       requireActivity().applicationContext, uri
     )
-    if (filePath == null || !File(filePath).exists()) {
+    if (filePath == null || !File(filePath).isFileExist()) {
       activity.toast(string.error_file_not_found)
       return null
     }
