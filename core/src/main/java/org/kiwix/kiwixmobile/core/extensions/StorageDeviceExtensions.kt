@@ -29,7 +29,10 @@ fun StorageDevice.getFreeSpace(context: Context, storageCalculator: StorageCalcu
   return context.getString(R.string.pref_free_storage, freeSpace)
 }
 
-suspend fun StorageDevice.getUsedSpace(context: Context, storageCalculator: StorageCalculator): String {
+suspend fun StorageDevice.getUsedSpace(
+  context: Context,
+  storageCalculator: StorageCalculator
+): String {
   val usedSpace = storageCalculator.calculateUsedSpace(file)
   return context.getString(R.string.pref_storage_used, usedSpace)
 }
