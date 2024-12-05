@@ -24,18 +24,24 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
-fun StorageDevice.getFreeSpace(context: Context, storageCalculator: StorageCalculator): String {
+suspend fun StorageDevice.getFreeSpace(
+  context: Context,
+  storageCalculator: StorageCalculator
+): String {
   val freeSpace = storageCalculator.calculateAvailableSpace(file)
   return context.getString(R.string.pref_free_storage, freeSpace)
 }
 
-fun StorageDevice.getUsedSpace(context: Context, storageCalculator: StorageCalculator): String {
+suspend fun StorageDevice.getUsedSpace(
+  context: Context,
+  storageCalculator: StorageCalculator
+): String {
   val usedSpace = storageCalculator.calculateUsedSpace(file)
   return context.getString(R.string.pref_storage_used, usedSpace)
 }
 
 @Suppress("MagicNumber")
-fun StorageDevice.usedPercentage(storageCalculator: StorageCalculator): Int {
+suspend fun StorageDevice.usedPercentage(storageCalculator: StorageCalculator): Int {
   val totalSpace = storageCalculator.totalBytes(file)
   val availableSpace = storageCalculator.availableBytes(file)
   val usedSpace = totalSpace - availableSpace

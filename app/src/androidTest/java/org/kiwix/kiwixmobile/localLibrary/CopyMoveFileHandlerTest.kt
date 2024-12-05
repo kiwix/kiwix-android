@@ -194,7 +194,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
   }
 
   private fun showMoveFileToPublicDirectoryDialog() {
-    UiThreadStatement.runOnUiThread {
+    kiwixMainActivity.lifecycleScope.launch {
       val navHostFragment: NavHostFragment =
         kiwixMainActivity.supportFragmentManager
           .findFragmentById(R.id.nav_host_fragment) as NavHostFragment

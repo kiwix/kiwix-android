@@ -32,6 +32,7 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.verify
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -89,54 +90,58 @@ class CopyMoveFileHandlerTest {
   }
 
   @Test
-  fun validateZimFileCanCopyOrMoveShouldReturnTrueWhenSufficientSpaceAndValidFileSystem() {
-    prepareFileSystemAndFileForMockk()
+  fun validateZimFileCanCopyOrMoveShouldReturnTrueWhenSufficientSpaceAndValidFileSystem() =
+    runBlocking {
+      prepareFileSystemAndFileForMockk()
 
-    val result = fileHandler.validateZimFileCanCopyOrMove(storageFile)
+      val result = fileHandler.validateZimFileCanCopyOrMove(storageFile)
 
-    assertTrue(result)
-    // check insufficientSpaceInStorage callback should not call.
-    verify(exactly = 0) { fileCopyMoveCallback.insufficientSpaceInStorage(any()) }
-  }
-
-  @Test
-  fun validateZimFileCanCopyOrMoveShouldReturnFalseAndCallCallbackWhenInsufficientSpace() {
-    prepareFileSystemAndFileForMockk(
-      selectedFileLength = 2000L,
-      fileSystemState = CanWrite4GbFile
-    )
-    val result = fileHandler.validateZimFileCanCopyOrMove(storageFile)
-
-    assertFalse(result)
-    verify { fileCopyMoveCallback.insufficientSpaceInStorage(any()) }
-  }
+      assertTrue(result)
+      // check insufficientSpaceInStorage callback should not call.
+      verify(exactly = 0) { fileCopyMoveCallback.insufficientSpaceInStorage(any()) }
+    }
 
   @Test
-  fun validateZimFileCanCopyOrMoveShouldReturnFalseWhenDetectingAndCanNotWrite4GBFiles() {
-    prepareFileSystemAndFileForMockk(fileSystemState = DetectingFileSystem)
-    // check when detecting the fileSystem
-    assertFalse(fileHandler.validateZimFileCanCopyOrMove(storageFile))
+  fun validateZimFileCanCopyOrMoveShouldReturnFalseAndCallCallbackWhenInsufficientSpace() =
+    runBlocking {
+      prepareFileSystemAndFileForMockk(
+        selectedFileLength = 2000L,
+        fileSystemState = CanWrite4GbFile
+      )
+      val result = fileHandler.validateZimFileCanCopyOrMove(storageFile)
 
-    prepareFileSystemAndFileForMockk(fileSystemState = CannotWrite4GbFile)
-
-    // check when Can not write 4GB files on the fileSystem
-    assertFalse(fileHandler.validateZimFileCanCopyOrMove())
-  }
+      assertFalse(result)
+      verify { fileCopyMoveCallback.insufficientSpaceInStorage(any()) }
+    }
 
   @Test
-  fun validateZimFileCanCopyOrMoveShouldReturnFalseWhenDetectingFileSystem() {
+  fun validateZimFileCanCopyOrMoveShouldReturnFalseWhenDetectingAndCanNotWrite4GBFiles() =
+    runBlocking {
+      prepareFileSystemAndFileForMockk(fileSystemState = DetectingFileSystem)
+      // check when detecting the fileSystem
+      assertFalse(fileHandler.validateZimFileCanCopyOrMove(storageFile))
+
+      prepareFileSystemAndFileForMockk(fileSystemState = CannotWrite4GbFile)
+
+      // check when Can not write 4GB files on the fileSystem
+      assertFalse(fileHandler.validateZimFileCanCopyOrMove())
+    }
+
+  @Test
+  fun validateZimFileCanCopyOrMoveShouldReturnFalseWhenDetectingFileSystem() = runTest {
     every { fileHandler.isBookLessThan4GB() } returns true
-    every { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() } just Runs
+    // every { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() } just Runs
+    coEvery { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() } just Runs
     prepareFileSystemAndFileForMockk(fileSystemState = DetectingFileSystem)
 
     val result = fileHandler.validateZimFileCanCopyOrMove(storageFile)
 
     assertFalse(result)
-    verify { fileHandler.handleDetectingFileSystemState() }
+    coVerify { fileHandler.handleDetectingFileSystemState() }
   }
 
   @Test
-  fun validateZimFileCanCopyOrMoveShouldReturnFalseWhenCannotWrite4GbFile() {
+  fun validateZimFileCanCopyOrMoveShouldReturnFalseWhenCannotWrite4GbFile() = runBlocking {
     every { fileHandler.isBookLessThan4GB() } returns true
     every { fileHandler.showCopyMoveDialog() } just Runs
     every {
@@ -147,23 +152,23 @@ class CopyMoveFileHandlerTest {
     val result = fileHandler.validateZimFileCanCopyOrMove(storageFile)
 
     assertFalse(result)
-    verify { fileHandler.handleCannotWrite4GbFileState() }
+    coVerify { fileHandler.handleCannotWrite4GbFileState() }
   }
 
   @Test
-  fun handleDetectingFileSystemStateShouldPerformCopyMoveOperationIfBookLessThan4GB() {
+  fun handleDetectingFileSystemStateShouldPerformCopyMoveOperationIfBookLessThan4GB() = runTest {
     fileHandler = spyk(fileHandler)
     prepareFileSystemAndFileForMockk()
     every { fileHandler.isBookLessThan4GB() } returns true
-    every { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() } just Runs
+    coEvery { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() } just Runs
 
     fileHandler.handleDetectingFileSystemState()
 
-    verify { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() }
+    coVerify { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() }
   }
 
   @Test
-  fun handleDetectingFileSystemStateShouldObserveFileSystemStateIfBookGreaterThan4GB() {
+  fun handleDetectingFileSystemStateShouldObserveFileSystemStateIfBookGreaterThan4GB() = runTest {
     fileHandler = spyk(fileHandler)
     prepareFileSystemAndFileForMockk(fileSystemState = DetectingFileSystem)
     every { fileHandler.isBookLessThan4GB() } returns false
@@ -174,19 +179,19 @@ class CopyMoveFileHandlerTest {
   }
 
   @Test
-  fun handleCannotWrite4GbFileStateShouldPerformCopyMoveOperationIfBookLessThan4GB() {
+  fun handleCannotWrite4GbFileStateShouldPerformCopyMoveOperationIfBookLessThan4GB() = runTest {
     fileHandler = spyk(fileHandler)
     prepareFileSystemAndFileForMockk()
     every { fileHandler.isBookLessThan4GB() } returns true
-    every { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() } just Runs
+    coEvery { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() } just Runs
 
     fileHandler.handleCannotWrite4GbFileState()
 
-    verify { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() }
+    coVerify { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() }
   }
 
   @Test
-  fun handleCannotWrite4GbFileStateShouldCallCallbackIfBookGreaterThan4GB() {
+  fun handleCannotWrite4GbFileStateShouldCallCallbackIfBookGreaterThan4GB() = runTest {
     fileHandler = spyk(fileHandler)
     prepareFileSystemAndFileForMockk()
     every { fileHandler.isBookLessThan4GB() } returns false
@@ -202,7 +207,7 @@ class CopyMoveFileHandlerTest {
   }
 
   @Test
-  fun showStorageConfigureDialogAtFirstLaunch() {
+  fun showStorageConfigureDialogAtFirstLaunch() = runTest {
     fileHandler = spyk(fileHandler)
     every { fileHandler.showStorageSelectDialog() } just Runs
     every { sharedPreferenceUtil.shouldShowStorageSelectionDialog } returns true
@@ -216,13 +221,13 @@ class CopyMoveFileHandlerTest {
       )
     } just Runs
     fileHandler.showMoveFileToPublicDirectoryDialog(fragmentManager = fragmentManager)
-    every { fileHandler.validateZimFileCanCopyOrMove() } returns true
+    coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
     positiveButtonClickSlot.captured.invoke()
     verify { fileHandler.showStorageSelectDialog() }
   }
 
   @Test
-  fun shouldNotShowStorageConfigureDialogWhenThereIsOnlyInternalAvailable() {
+  fun shouldNotShowStorageConfigureDialogWhenThereIsOnlyInternalAvailable() = runBlocking {
     fileHandler = spyk(fileHandler)
     every { sharedPreferenceUtil.shouldShowStorageSelectionDialog } returns true
     every { fileHandler.storageDeviceList } returns listOf(mockk())
@@ -234,18 +239,18 @@ class CopyMoveFileHandlerTest {
         any()
       )
     } just Runs
-    every { fileHandler.validateZimFileCanCopyOrMove() } returns true
+    coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
     fileHandler.showMoveFileToPublicDirectoryDialog(fragmentManager = fragmentManager)
     positiveButtonClickSlot.captured.invoke()
     verify(exactly = 0) { fileHandler.showStorageSelectDialog() }
   }
 
   @Test
-  fun showDirectlyCopyMoveDialogAfterFirstLaunch() {
+  fun showDirectlyCopyMoveDialogAfterFirstLaunch() = runTest {
     fileHandler = spyk(fileHandler)
     every { sharedPreferenceUtil.shouldShowStorageSelectionDialog } returns false
     every { fileHandler.storageDeviceList } returns listOf(mockk(), mockk())
-    every { fileHandler.validateZimFileCanCopyOrMove() } returns true
+    coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
     prepareFileSystemAndFileForMockk()
     every { alertDialogShower.show(any(), any(), any()) } just Runs
     fileHandler.showMoveFileToPublicDirectoryDialog(fragmentManager = fragmentManager)
@@ -260,7 +265,7 @@ class CopyMoveFileHandlerTest {
   }
 
   @Test
-  fun copyMoveFunctionsShouldCallWhenClickingOnButtonsInCopyMoveDialog() {
+  fun copyMoveFunctionsShouldCallWhenClickingOnButtonsInCopyMoveDialog() = runTest {
     val positiveButtonClickSlot = slot<() -> Unit>()
     val negativeButtonClickSlot = slot<() -> Unit>()
     fileHandler = spyk(fileHandler)
@@ -274,7 +279,7 @@ class CopyMoveFileHandlerTest {
       )
     } just Runs
 
-    every { fileHandler.validateZimFileCanCopyOrMove() } returns true
+    coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
     fileHandler.showMoveFileToPublicDirectoryDialog(fragmentManager = fragmentManager)
     every { fileHandler.performCopyOperation() } just Runs
 
@@ -297,7 +302,7 @@ class CopyMoveFileHandlerTest {
     every { storageFile.freeSpace } returns freeSpaceInStorage
     every { storageFile.path } returns storagePath
     every { selectedFile.length() } returns selectedFileLength
-    every { storageCalculator.availableBytes(storageFile) } returns availableStorageSize
+    coEvery { storageCalculator.availableBytes(storageFile) } returns availableStorageSize
     every { fat32Checker.fileSystemStates.value } returns fileSystemState
   }
 
