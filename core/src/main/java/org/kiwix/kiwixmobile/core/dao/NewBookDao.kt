@@ -22,7 +22,6 @@ import io.objectbox.kotlin.inValues
 import io.objectbox.kotlin.query
 import io.objectbox.query.QueryBuilder
 import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Flowable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -64,12 +63,12 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
         .flatMapSingle { bookOnDiskEntity ->
           // Check if the zimReaderSource exists as a suspend function
           rxSingle { bookOnDiskEntity.zimReaderSource.exists() }
-            .flatMap { exists ->
-              if (exists) io.reactivex.rxjava3.core.Single.just(bookOnDiskEntity)
-              else io.reactivex.rxjava3.core.Single.never()
+            .map { exists ->
+              bookOnDiskEntity to exists
             }
-            .onErrorResumeNext { _: Throwable -> io.reactivex.rxjava3.core.Single.never() }
         }
+        .filter(Pair<BookOnDiskEntity, Boolean>::second)
+        .map(Pair<BookOnDiskEntity, Boolean>::first)
         .toList()
         .toFlowable()
     }

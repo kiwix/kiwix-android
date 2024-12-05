@@ -60,7 +60,7 @@ class LibkiwixBookmarks @Inject constructor(
   manager: Manager,
   val sharedPreferenceUtil: SharedPreferenceUtil,
   private val bookDao: NewBookDao,
-  private val zimReaderContainer: ZimReaderContainer?,
+  private val zimReaderContainer: ZimReaderContainer?
 ) : PageDao {
 
   /**
