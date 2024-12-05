@@ -106,7 +106,6 @@ androidComponents {
 }
 
 dependencies {
-  implementation(Libs.kotlinx_coroutines_rx3)
   androidTestImplementation(Libs.leakcanary_android_instrumentation)
   testImplementation(Libs.kotlinx_coroutines_test)
 }

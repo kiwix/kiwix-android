@@ -20,10 +20,8 @@ package org.kiwix.kiwixmobile.zimManager.libraryView
 
 import eu.mhutti1.utils.storage.Bytes
 import eu.mhutti1.utils.storage.Kb
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
@@ -44,13 +42,10 @@ class AvailableSpaceCalculator @Inject constructor(
       .map { downloads -> downloads.sumOf(DownloadModel::bytesRemaining) }
       .map { bytesToBeDownloaded -> storageCalculator.availableBytes() - bytesToBeDownloaded }
       .first()
-
-    withContext(Dispatchers.Main) {
-      if (bookItem.book.size.toLong() * Kb < trueAvailableBytes) {
-        successAction(bookItem)
-      } else {
-        failureAction(Bytes(trueAvailableBytes).humanReadable)
-      }
+    if (bookItem.book.size.toLong() * Kb < trueAvailableBytes) {
+      successAction(bookItem)
+    } else {
+      failureAction(Bytes(trueAvailableBytes).humanReadable)
     }
   }
 
