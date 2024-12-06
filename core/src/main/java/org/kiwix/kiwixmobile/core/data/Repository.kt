@@ -28,13 +28,16 @@ import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
+import org.kiwix.kiwixmobile.core.dao.PageHistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
+import org.kiwix.kiwixmobile.core.dao.entities.PageHistoryRoomEntity
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
 import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.history.adapter.PageHistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.zim_manager.Language
@@ -55,6 +58,7 @@ class Repository @Inject internal constructor(
   private val bookDao: NewBookDao,
   private val libkiwixBookmarks: LibkiwixBookmarks,
   private val historyRoomDao: HistoryRoomDao,
+  private val pageHistoryRoomDao: PageHistoryRoomDao,
   private val notesRoomDao: NotesRoomDao,
   private val languageDao: NewLanguagesDao,
   private val recentSearchRoomDao: RecentSearchRoomDao,
@@ -143,6 +147,21 @@ class Repository @Inject internal constructor(
   override fun deleteNotes(noteList: List<NoteListItem>) =
     Completable.fromAction { notesRoomDao.deleteNotes(noteList) }
       .subscribeOn(ioThread)
+
+  override fun insertPageHistoryItem(pageHistory: PageHistoryItem): Completable =
+    Completable.fromAction {
+      pageHistoryRoomDao.insertPageHistoryItem(
+        PageHistoryRoomEntity(pageHistory)
+      )
+    }
+      .subscribeOn(io)
+
+  override fun getAllPageHistory() =
+    pageHistoryRoomDao.getAllPageHistory() as Flowable<List<PageHistoryItem>>
+
+  override fun clearPageHistory(): Completable =
+    Completable.fromAction(pageHistoryRoomDao::clearPageHistoryWithPrimaryKey)
+      .subscribeOn(io)
 
   override fun deleteNote(noteTitle: String): Completable =
     Completable.fromAction { notesRoomDao.deleteNote(noteTitle) }
