@@ -95,7 +95,7 @@ class SearchRobot {
     clickOnSearchItemInSearchList()
   }
 
-  fun clickOnSearchItemInSearchList() {
+  private fun clickOnSearchItemInSearchList() {
     testFlakyView({
       BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
       Espresso.onView(ViewMatchers.withId(R.id.search_list)).perform(
