@@ -17,11 +17,12 @@
  */
 package org.kiwix.kiwixmobile.core.main
 
+import io.reactivex.Single
 import io.reactivex.disposables.Disposable
+import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
-import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryCallback
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
@@ -73,23 +74,23 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
       .subscribe({}, { e -> Log.e(TAG, "Unable to save book", e) })
   }
 
-  fun saveWebViewPageHistory(pageHistory: WebViewHistoryItem) {
-    saveWebViewHistoryDisposable = dataSource.insertWebViewHistoryItem(pageHistory)
-      .subscribe({}, { e -> Log.e(TAG, "Unable to save page history", e) })
+  suspend fun saveWebViewPageHistory(webViewHistoryEntityList: List<WebViewHistoryEntity>) {
+    dataSource.insertWebViewPageHistoryItems(webViewHistoryEntityList)
   }
 
-  fun clearWebViewPageHistory() {
-    clearWebViewHistoryDisposable = dataSource.clearWebViewPagesHistory()
-      .subscribe({}, { e -> Log.e(TAG, "Unable to clear page history", e) })
+  suspend fun clearWebViewPageHistory() {
+    dataSource.clearWebViewPagesHistory()
   }
 
-  fun loadWebViewPagesHistory(callBack: WebViewHistoryCallback) {
-    getWebViewHistoryDisposable = dataSource.getAllWebViewPagesHistory()
+  fun loadWebViewPagesHistory(): Single<List<WebViewHistoryItem>> =
+    dataSource.getAllWebViewPagesHistory()
       .map { roomEntities ->
         roomEntities.map(::WebViewHistoryItem)
       }
-      .subscribe(callBack::onDataFetched) { e -> Log.e(TAG, "Unable to load page history", e) }
-  }
+      .onErrorReturn {
+        Log.e(TAG, "Unable to load page history", it)
+        emptyList()
+      }
 
   fun dispose() {
     saveHistoryDisposable?.dispose()
