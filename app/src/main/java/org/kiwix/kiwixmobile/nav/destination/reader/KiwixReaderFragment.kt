@@ -270,9 +270,10 @@ class KiwixReaderFragment : CoreReaderFragment() {
     when (restoreOrigin) {
       FromExternalLaunch -> {
         coreReaderLifeCycleScope?.launch {
+          if (!isAdded) return@launch
           val settings =
-            requireActivity().getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
-          val zimReaderSource = fromDatabaseValue(settings.getString(TAG_CURRENT_FILE, null))
+            activity?.getSharedPreferences(SharedPreferenceUtil.PREF_KIWIX_MOBILE, 0)
+          val zimReaderSource = fromDatabaseValue(settings?.getString(TAG_CURRENT_FILE, null))
           if (zimReaderSource?.canOpenInLibkiwix() == true) {
             if (zimReaderContainer?.zimReaderSource == null) {
               openZimFile(zimReaderSource, isFromManageExternalLaunch = true)
