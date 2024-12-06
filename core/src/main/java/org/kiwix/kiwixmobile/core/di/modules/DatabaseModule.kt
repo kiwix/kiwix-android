@@ -86,6 +86,10 @@ open class DatabaseModule {
   @Singleton
   fun provideHistoryDao(db: KiwixRoomDatabase) = db.historyRoomDao()
 
+  @Provides
+  @Singleton
+  fun providePageHistoryRoomDao(db: KiwixRoomDatabase) = db.pageHistoryRoomDao()
+
   @Singleton
   @Provides
   fun provideNoteRoomDao(db: KiwixRoomDatabase) = db.notesRoomDao()

@@ -135,6 +135,7 @@ import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryClickListener
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryListItem
+import org.kiwix.kiwixmobile.core.page.history.adapter.PageHistoryItem
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudCallbacks
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_PAUSE_OR_RESUME_TTS
@@ -326,6 +327,7 @@ abstract class CoreReaderFragment :
   private lateinit var serviceConnection: ServiceConnection
   private var readAloudService: ReadAloudService? = null
   private var navigationHistoryList: MutableList<NavigationHistoryListItem> = ArrayList()
+  private var pageTimeStamp: MutableList<Long> = ArrayList()
   private var isReadSelection = false
   private var isReadAloudServiceRunning = false
   private var readerLifeCycleScope: CoroutineScope? = null
@@ -2364,9 +2366,51 @@ abstract class CoreReaderFragment :
     editor.apply()
   }
 
+  private fun saveWebBackForwardListToRoom() {
+    val webBackForwardList = getCurrentWebView()?.copyBackForwardList()
+    val currentIndex = webBackForwardList?.currentIndex
+    if (currentIndex != null) {
+      repositoryActions?.clearPageHistory()
+      // Save BackStack
+      webBackForwardList.let { historyList ->
+        (0 until historyList.currentIndex)
+          .asSequence()
+          .forEach {
+            val historyItem = webBackForwardList.getItemAtIndex(it)
+            val pageHistory = PageHistoryItem(
+              zimId = zimReaderContainer?.zimFileReader?.id ?: "",
+              title = historyItem.title,
+              pageUrl = historyItem.url,
+              isForward = false,
+              timeStamp = 0
+            )
+            repositoryActions?.savePageHistory(pageHistory)
+          }
+      }
+
+      // Save ForwardStack
+      webBackForwardList.let { historyList ->
+        (historyList.currentIndex + 1 until webBackForwardList.size)
+          .asSequence()
+          .forEach {
+            val historyItem = webBackForwardList.getItemAtIndex(it)
+            val pageHistory = PageHistoryItem(
+              zimId = zimReaderContainer?.zimFileReader?.id ?: "",
+              title = historyItem.title,
+              pageUrl = historyItem.url,
+              isForward = true,
+              timeStamp = 0
+            )
+            repositoryActions?.savePageHistory(pageHistory)
+          }
+      }
+    }
+  }
+
   override fun onPause() {
     super.onPause()
     saveTabStates()
+    saveWebBackForwardListToRoom()
     Log.d(
       TAG_KIWIX,
       "onPause Save current zim file to preferences: " +
@@ -2416,6 +2460,7 @@ abstract class CoreReaderFragment :
       val zimFileReader = zimReaderContainer?.zimFileReader
       if (hasValidFileAndUrl(getCurrentWebView()?.url, zimFileReader)) {
         val timeStamp = System.currentTimeMillis()
+        pageTimeStamp.add(timeStamp)
         val sdf = SimpleDateFormat(
           "d MMM yyyy",
           getCurrentLocale(
