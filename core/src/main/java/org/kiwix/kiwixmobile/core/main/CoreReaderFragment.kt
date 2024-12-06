@@ -1220,6 +1220,7 @@ abstract class CoreReaderFragment :
   override fun onDestroyView() {
     super.onDestroyView()
     try {
+      coreReaderLifeCycleScope?.cancel()
       readerLifeCycleScope?.cancel()
       readerLifeCycleScope = null
     } catch (ignore: Exception) {
