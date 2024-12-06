@@ -18,25 +18,51 @@
 
 package org.kiwix.kiwixmobile.core.dao.entities
 
+import android.os.Bundle
+import android.os.Parcel
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 
 @Entity
 data class WebViewHistoryEntity(
   @PrimaryKey(autoGenerate = true) var id: Long = 0L,
   val zimId: String,
-  val title: String,
-  val pageUrl: String,
-  val isForward: Boolean = false,
-  val timeStamp: Long
+  val webViewIndex: Int,
+  val webViewCurrentPosition: Int,
+  @TypeConverters(BundleRoomConverter::class)
+  val webViewBackForwardListBundle: Bundle?
 ) {
   constructor(webViewHistoryItem: WebViewHistoryItem) : this(
     webViewHistoryItem.databaseId,
     webViewHistoryItem.zimId,
-    webViewHistoryItem.title,
-    webViewHistoryItem.pageUrl,
-    webViewHistoryItem.isForward,
-    webViewHistoryItem.timeStamp
+    webViewHistoryItem.webViewIndex,
+    webViewHistoryItem.webViewCurrentPosition,
+    webViewHistoryItem.webViewBackForwardListBundle,
   )
+}
+
+class BundleRoomConverter {
+  @TypeConverter
+  fun convertToDatabaseValue(bundle: Bundle?): ByteArray? {
+    if (bundle == null) return null
+    val parcel = Parcel.obtain()
+    parcel.writeBundle(bundle)
+    val bytes = parcel.marshall()
+    parcel.recycle()
+    return bytes
+  }
+
+  @TypeConverter
+  fun convertToEntityProperty(byteArray: ByteArray?): Bundle? {
+    if (byteArray == null) return null
+    val parcel = Parcel.obtain()
+    parcel.unmarshall(byteArray, 0, byteArray.size)
+    parcel.setDataPosition(0)
+    val bundle = parcel.readBundle(Bundle::class.java.classLoader)
+    parcel.recycle()
+    return bundle
+  }
 }

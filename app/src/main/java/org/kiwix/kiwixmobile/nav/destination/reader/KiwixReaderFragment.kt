@@ -55,6 +55,7 @@ import org.kiwix.kiwixmobile.core.main.RestoreOrigin
 import org.kiwix.kiwixmobile.core.main.RestoreOrigin.FromExternalLaunch
 import org.kiwix.kiwixmobile.core.main.RestoreOrigin.FromSearchScreen
 import org.kiwix.kiwixmobile.core.main.ToolbarScrollingKiwixWebView
+import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -248,22 +249,20 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   /**
-   * Restores the view state based on the provided JSON data and restore origin.
+   * Restores the view state based on the provided webViewHistoryItemList data and restore origin.
    *
    * Depending on the `restoreOrigin`, this method either restores the last opened ZIM file
    * (if the launch is external) or skips re-opening the ZIM file when coming from the search screen,
    * as the ZIM file is already set in the reader. The method handles setting up the ZIM file and bookmarks,
    * and restores the tabs and positions from the provided data.
    *
-   * @param zimArticles   JSON string representing the list of articles to be restored.
-   * @param zimPositions  JSON string representing the positions of the restored articles.
+   * @param webViewHistoryItemList   JSON string representing the list of articles to be restored.
    * @param currentTab    Index of the tab to be restored as the currently active one.
    * @param restoreOrigin Indicates whether the restoration is triggered from an external launch or the search screen.
    */
 
   override fun restoreViewStateOnValidJSON(
-    zimArticles: String?,
-    zimPositions: String?,
+    webViewHistoryItemList: List<WebViewHistoryItem>,
     currentTab: Int,
     restoreOrigin: RestoreOrigin
   ) {
@@ -283,7 +282,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
             } else {
               zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
             }
-            restoreTabs(zimArticles, zimPositions, currentTab)
+            restoreTabs(webViewHistoryItemList, currentTab)
           } else {
             getCurrentWebView()?.snack(string.zim_not_opened)
             exitBook() // hide the options for zim file to avoid unexpected UI behavior
@@ -292,7 +291,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       }
 
       FromSearchScreen -> {
-        restoreTabs(zimArticles, zimPositions, currentTab)
+        restoreTabs(webViewHistoryItemList, currentTab)
       }
     }
   }

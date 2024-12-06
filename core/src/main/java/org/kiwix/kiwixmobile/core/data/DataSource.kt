@@ -56,7 +56,7 @@ interface DataSource {
   fun deleteNote(noteTitle: String): Completable
   fun deleteNotes(noteList: List<NoteListItem>): Completable
 
-  fun insertWebViewHistoryItem(pageHistory: WebViewHistoryItem): Completable
+  suspend fun insertWebViewPageHistoryItems(webViewHistoryEntityList: List<WebViewHistoryEntity>)
   fun getAllWebViewPagesHistory(): Single<List<WebViewHistoryEntity>>
-  fun clearWebViewPagesHistory(): Completable
+  suspend fun clearWebViewPagesHistory()
 }

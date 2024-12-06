@@ -99,7 +99,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import org.json.JSONArray
+import kotlinx.coroutines.withContext
 import org.json.JSONException
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.DarkModeConfig
@@ -108,6 +108,7 @@ import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
+import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.databinding.FragmentReaderBinding
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
@@ -133,7 +134,6 @@ import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryClickListener
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
-import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryCallback
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
@@ -159,14 +159,11 @@ import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.getAttributes
-import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_ARTICLES
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
-import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_POSITIONS
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED_NEW_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
-import org.kiwix.kiwixmobile.core.utils.UpdateUtils.reformatProviderUrl
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
@@ -194,8 +191,7 @@ abstract class CoreReaderFragment :
   WebViewProvider,
   ReadAloudCallbacks,
   NavigationHistoryClickListener,
-  ShowDonationDialogCallback,
-  WebViewHistoryCallback {
+  ShowDonationDialogCallback {
   protected val webViewList: MutableList<KiwixWebView> = ArrayList()
   private val webUrlsProcessor = BehaviorProcessor.create<String>()
   private var fragmentReaderBinding: FragmentReaderBinding? = null
@@ -289,6 +285,7 @@ abstract class CoreReaderFragment :
   private var bottomToolbarToc: ImageView? = null
 
   private var isFirstTimeMainPageLoaded = true
+  private var isFromManageExternalLaunch = false
 
   @JvmField
   @Inject
@@ -991,7 +988,9 @@ abstract class CoreReaderFragment :
 
   override fun clearHistory() {
     getCurrentWebView()?.clearHistory()
-    repositoryActions?.clearWebViewPageHistory()
+    CoroutineScope(Dispatchers.IO).launch {
+      repositoryActions?.clearWebViewPageHistory()
+    }
     updateBottomToolbarArrowsAlpha()
     toast(R.string.navigation_history_cleared)
   }
@@ -1307,7 +1306,7 @@ abstract class CoreReaderFragment :
     }
   }
 
-  private fun initalizeWebView(url: String): KiwixWebView? {
+  private fun initalizeWebView(url: String, shouldLoadUrl: Boolean = true): KiwixWebView? {
     if (isAdded) {
       val attrs = requireActivity().getAttributes(R.xml.webview)
       val webView: KiwixWebView? = try {
@@ -1320,7 +1319,9 @@ abstract class CoreReaderFragment :
         null
       }
       webView?.let {
-        loadUrl(url, it)
+        if (shouldLoadUrl) {
+          loadUrl(url, it)
+        }
         setUpWithTextToSpeech(it)
         documentParser?.initInterface(it)
         ServiceWorkerUninitialiser(::openMainPage).initInterface(it)
@@ -1353,8 +1354,12 @@ abstract class CoreReaderFragment :
     newTab(url, false)
   }
 
-  private fun newTab(url: String, selectTab: Boolean = true): KiwixWebView? {
-    val webView = initalizeWebView(url)
+  private fun newTab(
+    url: String,
+    selectTab: Boolean = true,
+    shouldLoadUrl: Boolean = true
+  ): KiwixWebView? {
+    val webView = initalizeWebView(url, shouldLoadUrl)
     webView?.let {
       webViewList.add(it)
       if (selectTab) {
@@ -1709,7 +1714,12 @@ abstract class CoreReaderFragment :
     )
   }
 
-  suspend fun openZimFile(zimReaderSource: ZimReaderSource, isCustomApp: Boolean = false) {
+  suspend fun openZimFile(
+    zimReaderSource: ZimReaderSource,
+    isCustomApp: Boolean = false,
+    isFromManageExternalLaunch: Boolean = false
+  ) {
+    this.isFromManageExternalLaunch = isFromManageExternalLaunch
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || isCustomApp) {
       if (zimReaderSource.canOpenInLibkiwix()) {
         // Show content if there is `Open Library` button showing
@@ -1755,7 +1765,9 @@ abstract class CoreReaderFragment :
       val zimFileReader = zimReaderContainer.zimFileReader
       zimFileReader?.let { zimFileReader ->
         // uninitialized the service worker to fix https://github.com/kiwix/kiwix-android/issues/2561
-        openArticle(UNINITIALISER_ADDRESS)
+        if (!isFromManageExternalLaunch) {
+          openArticle(UNINITIALISER_ADDRESS)
+        }
         mainMenu?.onFileOpened(urlIsValid())
         setUpBookmarks(zimFileReader)
       } ?: kotlin.run {
@@ -1974,76 +1986,8 @@ abstract class CoreReaderFragment :
     }
   }
 
-  @Suppress("MagicNumber")
-  private fun loadWebViewHistory(pageHistory: List<WebViewHistoryItem>) {
-    val backStack = pageHistory.filter { !it.isForward }
-    val forwardStack = pageHistory.filter(WebViewHistoryItem::isForward)
-    val currentWebView = getCurrentWebView() ?: return
-    val currentPageUrl = currentWebView.copyBackForwardList().currentItem?.url
-    val currentZimId = zimReaderContainer?.zimFileReader?.id
-
-    // If backStack and forwardStack are empty, return
-    if (backStack.isEmpty() && forwardStack.isEmpty() || currentZimId != pageHistory[0].zimId) {
-      repositoryActions?.clearWebViewPageHistory()
-      return
-    }
-
-    if (backStack.isNotEmpty()) {
-      // Step 1: Load the first item immediately (0th index)
-      currentWebView.loadUrl(backStack[0].pageUrl)
-    }
-
-    currentWebView.postDelayed(
-      {
-        // Step 2: Clear WebView history after loading the first page
-        currentWebView.clearHistory()
-
-        // Step 3: Load the remaining items from the backStack (starting from index 1)
-        backStack.drop(1).forEachIndexed { index, page ->
-          currentWebView.postDelayed({
-            currentWebView.loadUrl(page.pageUrl)
-          }, index * 500L) // Delay to load each page sequentially
-        }
-
-        // Step 4: After loading the back stack, load the current page
-        currentWebView.postDelayed({
-          currentPageUrl?.let(::loadUrlWithCurrentWebview)
-        }, backStack.size * 500L)
-
-        // Step 5: Load forward stack URLs sequentially
-        currentWebView.postDelayed(
-          {
-            forwardStack.forEachIndexed { index, page ->
-              currentWebView.postDelayed({
-                currentWebView.loadUrl(page.pageUrl)
-              }, index * 500L) // Delay for loading forward stack
-            }
-
-            // Step 6: After loading forward stack, go back to the current page
-            currentWebView.postDelayed({
-              repeat(forwardStack.size) {
-                currentWebView.goBack()
-              }
-            }, forwardStack.size * 500L) // Delay based on forward stack size
-          },
-          (backStack.size + 1) * 500L
-        ) // Delay based on the back stack size
-      },
-      500L
-    ) // Initial delay to allow the first page to load
-  }
-
-  override fun onDataFetched(pageHistory: List<WebViewHistoryItem>) {
-    loadWebViewHistory(pageHistory)
-  }
-
-  override fun onError(error: Throwable) {
-    activity.toast(R.string.could_not_restore_web_view_history, Toast.LENGTH_LONG)
-  }
-
   override fun onResume() {
     super.onResume()
-    repositoryActions?.loadWebViewPagesHistory(this)
     updateBottomToolbarVisibility()
     updateNightMode()
     if (tts == null) {
@@ -2417,75 +2361,53 @@ abstract class CoreReaderFragment :
   }
 
   private fun saveTabStates() {
-    val settings = requireActivity().getSharedPreferences(
-      SharedPreferenceUtil.PREF_KIWIX_MOBILE,
-      0
-    )
-    val editor = settings.edit()
-    val urls = JSONArray()
-    val positions = JSONArray()
-    for (view in webViewList) {
-      if (view.url == null) continue
-      urls.put(view.url)
-      positions.put(view.scrollY)
-    }
-    editor.putString(TAG_CURRENT_FILE, zimReaderContainer?.zimReaderSource?.toDatabase())
-    editor.putString(TAG_CURRENT_ARTICLES, "$urls")
-    editor.putString(TAG_CURRENT_POSITIONS, "$positions")
-    editor.putInt(TAG_CURRENT_TAB, currentWebViewIndex)
-    editor.apply()
-  }
-
-  private fun saveWebViewHistoryItems(
-    startIndex: Int,
-    endIndex: Int,
-    zimId: String,
-    isForward: Boolean,
-    historyList: WebBackForwardList
-  ) {
-    for (index in startIndex until endIndex) {
-      val historyItem = historyList.getItemAtIndex(index)
-      val pageHistory = WebViewHistoryItem(
-        zimId = zimId,
-        title = historyItem.title,
-        pageUrl = historyItem.url,
-        isForward = isForward,
-        timeStamp = index.toLong()
+    CoroutineScope(Dispatchers.Main).launch {
+      // clear the previous history saved in database
+      withContext(Dispatchers.IO) {
+        repositoryActions?.clearWebViewPageHistory()
+      }
+      val settings = requireActivity().getSharedPreferences(
+        SharedPreferenceUtil.PREF_KIWIX_MOBILE,
+        0
       )
-      repositoryActions?.saveWebViewPageHistory(pageHistory)
+      val editor = settings.edit()
+      val webViewHistoryEntityList = arrayListOf<WebViewHistoryEntity>()
+      webViewList.forEachIndexed { index, view ->
+        if (view.url == null) return@forEachIndexed
+        getWebViewHistoryEntity(view, index)?.let(webViewHistoryEntityList::add)
+      }
+      withContext(Dispatchers.IO) {
+        repositoryActions?.saveWebViewPageHistory(webViewHistoryEntityList)
+      }
+      editor.putString(TAG_CURRENT_FILE, zimReaderContainer?.zimReaderSource?.toDatabase())
+      editor.putInt(TAG_CURRENT_TAB, currentWebViewIndex)
+      editor.apply()
     }
   }
 
-  private fun saveWebBackForwardListToRoom() {
-    val webBackForwardList = getCurrentWebView()?.copyBackForwardList()
-    val currentIndex = webBackForwardList?.currentIndex
-    val zimId = zimReaderContainer?.zimFileReader?.id ?: ""
+  private fun getWebViewHistoryEntity(
+    webView: KiwixWebView,
+    webViewIndex: Int
+  ): WebViewHistoryEntity? {
+    val bundle = Bundle()
+    val webBackForwardList = webView.saveState(bundle)
+    val zimId = zimReaderContainer?.zimFileReader?.id
 
-    if (currentIndex != null) {
-      // Save BackStack
-      saveWebViewHistoryItems(
-        0,
-        webBackForwardList.currentIndex,
-        zimId,
-        false,
-        webBackForwardList
-      )
-
-      // Save ForwardStack
-      saveWebViewHistoryItems(
-        currentIndex + 1,
-        webBackForwardList.size,
-        zimId,
-        true,
-        webBackForwardList
+    if (zimId != null && webBackForwardList != null && webBackForwardList.size > 0) {
+      return WebViewHistoryEntity(
+        WebViewHistoryItem(
+          zimId = zimId,
+          webViewIndex = webViewIndex,
+          webViewPosition = webView.scrollY,
+          webViewBackForwardList = bundle
+        )
       )
     }
+    return null
   }
 
   override fun onPause() {
     super.onPause()
-    repositoryActions?.clearWebViewPageHistory()
-    saveWebBackForwardListToRoom()
     saveTabStates()
     Log.d(
       TAG_KIWIX,
@@ -2512,9 +2434,9 @@ abstract class CoreReaderFragment :
       // it will not remove the service worker from the history, so it will remain in the history.
       // To clear this, we are clearing the history when the main page is loaded for the first time.
       val mainPageUrl = zimReaderContainer?.mainPage
-      if (mainPageUrl != null &&
-        isFirstTimeMainPageLoaded &&
-        getCurrentWebView()?.url?.endsWith(mainPageUrl) == true
+      if (isFirstTimeMainPageLoaded &&
+        !isFromManageExternalLaunch &&
+        mainPageUrl?.let { getCurrentWebView()?.url?.endsWith(it) } == true
       ) {
         // Set isFirstTimeMainPageLoaded to false. This ensures that if the user clicks
         // on the home menu after visiting multiple pages, the history will not be erased.
@@ -2673,9 +2595,7 @@ abstract class CoreReaderFragment :
     )
   }
 
-  private fun isInvalidJson(jsonString: String?): Boolean =
-    jsonString == null || jsonString == "[]"
-
+  @SuppressLint("CheckResult")
   protected fun manageExternalLaunchAndRestoringViewState(
     restoreOrigin: RestoreOrigin = FromExternalLaunch
   ) {
@@ -2683,14 +2603,22 @@ abstract class CoreReaderFragment :
       SharedPreferenceUtil.PREF_KIWIX_MOBILE,
       0
     )
-    val zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null)
-    val zimPositions = settings.getString(TAG_CURRENT_POSITIONS, null)
     val currentTab = safelyGetCurrentTab(settings)
-    if (isInvalidJson(zimArticles) || isInvalidJson(zimPositions)) {
-      restoreViewStateOnInvalidJSON()
-    } else {
-      restoreViewStateOnValidJSON(zimArticles, zimPositions, currentTab, restoreOrigin)
-    }
+    repositoryActions?.loadWebViewPagesHistory()
+      ?.subscribe({ webViewHistoryItemList ->
+        Log.e(
+          "VALID_DATA",
+          "manageExternalLaunchAndRestoringViewState: ${webViewHistoryItemList.size}"
+        )
+        if (webViewHistoryItemList.isEmpty()) {
+          restoreViewStateOnInvalidJSON()
+          return@subscribe
+        }
+        restoreViewStateOnValidJSON(webViewHistoryItemList, currentTab, restoreOrigin)
+      }, {
+        Log.e("INVALID_DATA", "manageExternalLaunchAndRestoringViewState: $it")
+        restoreViewStateOnInvalidJSON()
+      })
   }
 
   private fun safelyGetCurrentTab(settings: SharedPreferences): Int =
@@ -2699,30 +2627,22 @@ abstract class CoreReaderFragment :
   /* This method restores tabs state in new launches, do not modify it
      unless it is explicitly mentioned in the issue you're fixing */
   protected fun restoreTabs(
-    zimArticles: String?,
-    zimPositions: String?,
+    webViewHistoryItemList: List<WebViewHistoryItem>,
     currentTab: Int
   ) {
     try {
-      val urls = JSONArray(zimArticles)
-      val positions = JSONArray(zimPositions)
       currentWebViewIndex = 0
       tabsAdapter?.apply {
+        webViewList.removeAt(0)
         notifyItemRemoved(0)
         notifyDataSetChanged()
       }
-      var cursor = 0
-      getCurrentWebView()?.let { kiwixWebView ->
-        kiwixWebView.loadUrl(reformatProviderUrl(urls.getString(cursor)))
-        kiwixWebView.scrollY = positions.getInt(cursor)
-        cursor++
-        while (cursor < urls.length()) {
-          newTab(reformatProviderUrl(urls.getString(cursor)))
-          kiwixWebView.scrollY = positions.getInt(cursor)
-          cursor++
+      webViewHistoryItemList.forEach { webViewHistoryItem ->
+        newTab("", shouldLoadUrl = false)?.let {
+          restoreTabState(it, webViewHistoryItem)
         }
-        selectTab(currentTab)
       }
+      selectTab(currentTab)
     } catch (e: JSONException) {
       Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e)
       activity.toast(R.string.could_not_restore_tabs, Toast.LENGTH_LONG)
@@ -2749,6 +2669,13 @@ abstract class CoreReaderFragment :
       viewLifecycleOwner,
       Observer(::openSearchItem)
     )
+  }
+
+  private fun restoreTabState(webView: KiwixWebView, webViewHistoryItem: WebViewHistoryItem?) {
+    webViewHistoryItem?.webViewBackForwardListBundle?.let { bundle ->
+      webView.restoreState(bundle)
+      webView.scrollY = webViewHistoryItem.webViewCurrentPosition
+    }
   }
 
   override fun onReadAloudPauseOrResume(isPauseTTS: Boolean) {
@@ -2825,8 +2752,7 @@ abstract class CoreReaderFragment :
    * when handling valid JSON scenarios.
    */
   protected abstract fun restoreViewStateOnValidJSON(
-    zimArticles: String?,
-    zimPositions: String?,
+    webViewHistoryItemList: List<WebViewHistoryItem>,
     currentTab: Int,
     restoreOrigin: RestoreOrigin
   )

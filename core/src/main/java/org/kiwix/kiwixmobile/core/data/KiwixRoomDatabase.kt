@@ -31,6 +31,7 @@ import org.kiwix.kiwixmobile.core.dao.HistoryRoomDaoCoverts
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.WebViewHistoryRoomDao
+import org.kiwix.kiwixmobile.core.dao.entities.BundleRoomConverter
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
@@ -50,7 +51,11 @@ import org.kiwix.kiwixmobile.core.dao.entities.ZimSourceRoomConverter
   version = 8,
   exportSchema = false
 )
-@TypeConverters(HistoryRoomDaoCoverts::class, ZimSourceRoomConverter::class)
+@TypeConverters(
+  HistoryRoomDaoCoverts::class,
+  ZimSourceRoomConverter::class,
+  BundleRoomConverter::class
+)
 abstract class KiwixRoomDatabase : RoomDatabase() {
   abstract fun recentSearchRoomDao(): RecentSearchRoomDao
   abstract fun historyRoomDao(): HistoryRoomDao
@@ -284,10 +289,9 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
             CREATE TABLE IF NOT EXISTS `WebViewHistoryEntity` (
                 `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 `zimId` TEXT NOT NULL,
-                `title` TEXT NOT NULL,
-                `pageUrl` TEXT NOT NULL,
-                `isForward` INTEGER NOT NULL DEFAULT 0,
-                `timeStamp` INTEGER NOT NULL
+                `webViewIndex` INTEGER NOT NULL,
+                `webViewCurrentPosition` INTEGER NOT NULL,
+                `webViewBackForwardListBundle` BLOB NULL
             )
             """
         )

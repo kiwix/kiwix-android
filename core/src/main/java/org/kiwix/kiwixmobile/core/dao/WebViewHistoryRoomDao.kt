@@ -26,10 +26,15 @@ import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 
 @Dao
 abstract class WebViewHistoryRoomDao {
-  @Insert
-  abstract fun insertWebViewPageHistoryItem(webViewHistoryEntity: WebViewHistoryEntity)
 
-  @Query("SELECT * FROM WebViewHistoryEntity ORDER BY isForward ASC,timestamp ASC")
+  fun insertWebViewPageHistoryItem(webViewHistoryEntity: WebViewHistoryEntity) {
+    insertWebViewPageHistoryItems(listOf(webViewHistoryEntity))
+  }
+
+  @Insert
+  abstract fun insertWebViewPageHistoryItems(webViewHistoryEntityList: List<WebViewHistoryEntity>)
+
+  @Query("SELECT * FROM WebViewHistoryEntity ORDER BY webViewIndex ASC")
   abstract fun getAllWebViewPagesHistory(): Flowable<List<WebViewHistoryEntity>>
 
   @Query("Delete from WebViewHistoryEntity")

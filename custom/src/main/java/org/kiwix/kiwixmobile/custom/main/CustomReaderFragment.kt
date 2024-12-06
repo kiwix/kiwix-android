@@ -40,6 +40,7 @@ import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.MainMenu
 import org.kiwix.kiwixmobile.core.main.RestoreOrigin
+import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
@@ -143,7 +144,7 @@ class CustomReaderFragment : CoreReaderFragment() {
       // See https://github.com/kiwix/kiwix-android/issues/3541
       zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
     } else {
-      openObbOrZim()
+      openObbOrZim(true)
     }
     requireArguments().clear()
   }
@@ -162,13 +163,12 @@ class CustomReaderFragment : CoreReaderFragment() {
    * and loads the last opened article in the specified tab.
    */
   override fun restoreViewStateOnValidJSON(
-    zimArticles: String?,
-    zimPositions: String?,
+    webViewHistoryItemList: List<WebViewHistoryItem>,
     currentTab: Int,
     // Unused in custom apps as there is only one ZIM file that is already set.
     restoreOrigin: RestoreOrigin
   ) {
-    restoreTabs(zimArticles, zimPositions, currentTab)
+    restoreTabs(webViewHistoryItemList, currentTab)
   }
 
   /**
@@ -183,7 +183,7 @@ class CustomReaderFragment : CoreReaderFragment() {
     )
   }
 
-  private fun openObbOrZim() {
+  private fun openObbOrZim(shouldManageExternalLaunch: Boolean = false) {
     customFileValidator.validate(
       onFilesFound = {
         coreReaderLifeCycleScope?.launch {
@@ -195,7 +195,8 @@ class CustomReaderFragment : CoreReaderFragment() {
                   null,
                   it.assetFileDescriptorList
                 ),
-                true
+                true,
+                shouldManageExternalLaunch
               )
               // Save book in the database to display it in `ZimHostFragment`.
               zimReaderContainer?.zimFileReader?.let { zimFileReader ->
@@ -206,15 +207,19 @@ class CustomReaderFragment : CoreReaderFragment() {
                 val bookOnDisk = BookOnDisk(zimFileReader)
                 repositoryActions?.saveBook(bookOnDisk)
               }
-              // Open the previous loaded pages after ZIM file loads.
-              manageExternalLaunchAndRestoringViewState()
+              if (shouldManageExternalLaunch) {
+                // Open the previous loaded pages after ZIM file loads.
+                manageExternalLaunchAndRestoringViewState()
+              }
             }
 
             is ValidationState.HasBothFiles -> {
               it.zimFile.delete()
-              openZimFile(ZimReaderSource(it.obbFile), true)
-              // Open the previous loaded pages after ZIM file loads.
-              manageExternalLaunchAndRestoringViewState()
+              openZimFile(ZimReaderSource(it.obbFile), true, shouldManageExternalLaunch)
+              if (shouldManageExternalLaunch) {
+                // Open the previous loaded pages after ZIM file loads.
+                manageExternalLaunchAndRestoringViewState()
+              }
             }
 
             else -> {}

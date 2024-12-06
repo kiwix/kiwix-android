@@ -148,13 +148,9 @@ class Repository @Inject internal constructor(
     Completable.fromAction { notesRoomDao.deleteNotes(noteList) }
       .subscribeOn(ioThread)
 
-  override fun insertWebViewHistoryItem(pageHistory: WebViewHistoryItem): Completable =
-    Completable.fromAction {
-      webViewHistoryRoomDao.insertWebViewPageHistoryItem(
-        WebViewHistoryEntity(pageHistory)
-      )
-    }
-      .subscribeOn(ioThread)
+  override suspend fun insertWebViewPageHistoryItems(webViewHistoryEntityList: List<WebViewHistoryEntity>) {
+    webViewHistoryRoomDao.insertWebViewPageHistoryItems(webViewHistoryEntityList)
+  }
 
   override fun getAllWebViewPagesHistory() =
     webViewHistoryRoomDao.getAllWebViewPagesHistory()
@@ -162,9 +158,9 @@ class Repository @Inject internal constructor(
       .subscribeOn(ioThread)
       .observeOn(mainThread)
 
-  override fun clearWebViewPagesHistory(): Completable =
-    Completable.fromAction(webViewHistoryRoomDao::clearPageHistoryWithPrimaryKey)
-      .subscribeOn(ioThread)
+  override suspend fun clearWebViewPagesHistory() {
+    webViewHistoryRoomDao.clearPageHistoryWithPrimaryKey()
+  }
 
   override fun deleteNote(noteTitle: String): Completable =
     Completable.fromAction { notesRoomDao.deleteNote(noteTitle) }
