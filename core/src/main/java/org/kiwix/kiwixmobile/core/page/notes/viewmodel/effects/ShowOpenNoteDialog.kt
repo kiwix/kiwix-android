@@ -24,7 +24,6 @@ import io.reactivex.processors.PublishProcessor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONArray
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.data.DataSource
@@ -36,7 +35,6 @@ import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenNote
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
@@ -93,8 +91,6 @@ data class ShowOpenNoteDialog(
                 )
               }
               val editor = settings.edit()
-              val urls = JSONArray()
-              urls.put(CONTENT_PREFIX + zimReaderContainer.mainPage)
               editor.putString(TAG_CURRENT_FILE, zimReaderContainer.zimReaderSource?.toDatabase())
               editor.putInt(TAG_CURRENT_TAB, 0)
               editor.apply()
