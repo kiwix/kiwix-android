@@ -183,6 +183,7 @@ class SearchFragmentTest : BaseActivityTest() {
       }
     }
     openKiwixReaderFragmentWithFile(downloadingZimFile)
+    search { checkZimFileSearchSuccessful(R.id.readerFragment) }
     openSearchWithQuery(zimFile = downloadingZimFile)
     search {
       // test with fast typing/deleting
