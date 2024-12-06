@@ -174,8 +174,8 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         clickOnMove()
         assertZimFileCopiedAndShowingIntoTheReader()
       }
+      assertZimFileAddedInTheLocalLibrary()
       kiwixMainActivity.lifecycleScope.launch {
-        assertZimFileAddedInTheLocalLibrary()
         assertSelectedZimFileIsDeletedFromTheStorage(selectedFile)
         deleteAllFilesInDirectory(parentFile)
       }
