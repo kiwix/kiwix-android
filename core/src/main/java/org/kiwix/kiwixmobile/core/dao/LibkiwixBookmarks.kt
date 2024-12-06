@@ -28,8 +28,8 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.rx3.rxSingle
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.DarkModeConfig
@@ -70,7 +70,6 @@ class LibkiwixBookmarks @Inject constructor(
   private var bookmarksChanged: Boolean = false
   private var bookmarkList: List<LibkiwixBookmarkItem> = arrayListOf()
   private var libraryBooksList: List<String> = arrayListOf()
-  private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
   @Suppress("CheckResult")
   private val bookmarkListBehaviour: BehaviorSubject<List<LibkiwixBookmarkItem>>? by lazy {
@@ -101,18 +100,16 @@ class LibkiwixBookmarks @Inject constructor(
   }
 
   init {
-    coroutineScope.launch {
-      // Check if bookmark folder exist if not then create the folder first.
-      if (!File(bookmarksFolderPath).isFileExist()) File(bookmarksFolderPath).mkdir()
-      // Check if library file exist if not then create the file to save the library with book information.
-      if (!libraryFile.isFileExist()) libraryFile.createNewFile()
-      // set up manager to read the library from this file
-      manager.readFile(libraryFile.canonicalPath)
-      // Check if bookmark file exist if not then create the file to save the bookmarks.
-      if (!bookmarkFile.isFileExist()) bookmarkFile.createNewFile()
-      // set up manager to read the bookmarks from this file
-      manager.readBookmarkFile(bookmarkFile.canonicalPath)
-    }
+    // Check if bookmark folder exist if not then create the folder first.
+    if (runBlocking { !File(bookmarksFolderPath).isFileExist() }) File(bookmarksFolderPath).mkdir()
+    // Check if library file exist if not then create the file to save the library with book information.
+    if (runBlocking { !libraryFile.isFileExist() }) libraryFile.createNewFile()
+    // set up manager to read the library from this file
+    manager.readFile(libraryFile.canonicalPath)
+    // Check if bookmark file exist if not then create the file to save the bookmarks.
+    if (runBlocking { !bookmarkFile.isFileExist() }) bookmarkFile.createNewFile()
+    // set up manager to read the bookmarks from this file
+    manager.readBookmarkFile(bookmarkFile.canonicalPath)
   }
 
   fun bookmarks(): Flowable<List<Page>> =
