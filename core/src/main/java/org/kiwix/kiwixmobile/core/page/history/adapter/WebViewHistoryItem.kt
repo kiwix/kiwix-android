@@ -18,42 +18,34 @@
 
 package org.kiwix.kiwixmobile.core.page.history.adapter
 
+import android.os.Bundle
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 
 data class WebViewHistoryItem(
   val databaseId: Long = 0L,
   val zimId: String,
-  val title: String,
-  val pageUrl: String,
-  val isForward: Boolean,
-  val timeStamp: Long
+  val webViewIndex: Int,
+  val webViewCurrentPosition: Int,
+  val webViewBackForwardListBundle: Bundle?
 ) {
   constructor(
     zimId: String,
-    title: String,
-    pageUrl: String,
-    isForward: Boolean,
-    timeStamp: Long
+    webViewIndex: Int,
+    webViewPosition: Int,
+    webViewBackForwardList: Bundle
   ) : this(
     0L,
     zimId,
-    title,
-    pageUrl,
-    isForward,
-    timeStamp
+    webViewIndex,
+    webViewPosition,
+    webViewBackForwardList
   )
 
   constructor(webViewHistoryEntity: WebViewHistoryEntity) : this(
     webViewHistoryEntity.id,
     webViewHistoryEntity.zimId,
-    webViewHistoryEntity.title,
-    webViewHistoryEntity.pageUrl,
-    webViewHistoryEntity.isForward,
-    webViewHistoryEntity.timeStamp
+    webViewHistoryEntity.webViewIndex,
+    webViewHistoryEntity.webViewCurrentPosition,
+    webViewHistoryEntity.webViewBackForwardListBundle
   )
-}
-
-interface WebViewHistoryCallback {
-  fun onDataFetched(pageHistory: List<WebViewHistoryItem>)
-  fun onError(error: Throwable)
 }
