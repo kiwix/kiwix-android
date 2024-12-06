@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.dao
 import android.annotation.SuppressLint
 import io.mockk.CapturingSlot
 import io.mockk.clearAllMocks
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -31,6 +32,8 @@ import io.objectbox.query.Query
 import io.objectbox.query.QueryBuilder
 import io.objectbox.rx.RxQuery
 import io.reactivex.Observable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -61,20 +64,20 @@ internal class NewBookDaoTest {
   inner class BooksTests {
     @Test
     fun `books emits entities whose file exists`() {
-      val (expectedEntity, _) = expectEmissionOfExistingAndNotExistingBook()
-      val books = newBookDao.books().test().also {
-        it.awaitTerminalEvent()
+      runBlocking {
+        val (expectedEntity, _) = expectEmissionOfExistingAndNotExistingBook()
+        val books = newBookDao.books().test()
+        delay(1000)
+        books.assertValues(listOf(BookOnDisk(expectedEntity)))
       }
-      books.assertValues(listOf(BookOnDisk(expectedEntity)))
     }
 
     @SuppressLint("CheckResult")
     @Test
-    fun `books deletes entities whose file does not exist`() {
+    fun `books deletes entities whose file does not exist`() = runBlocking {
       val (_, deletedEntity) = expectEmissionOfExistingAndNotExistingBook()
-      newBookDao.books().test().also {
-        it.awaitTerminalEvent()
-      }
+      newBookDao.books().test()
+      delay(1000)
       verify { box.remove(listOf(deletedEntity)) }
     }
 
@@ -84,8 +87,8 @@ internal class NewBookDaoTest {
       every { box.query().build() } returns query
       val zimReaderSourceThatExists = mockk<ZimReaderSource>()
       val zimReaderSourceThatDoesNotExist = mockk<ZimReaderSource>()
-      every { zimReaderSourceThatExists.exists() } returns true
-      every { zimReaderSourceThatDoesNotExist.exists() } returns false
+      coEvery { zimReaderSourceThatExists.exists() } returns true
+      coEvery { zimReaderSourceThatDoesNotExist.exists() } returns false
       val entityThatExists = bookOnDiskEntity(zimReaderSource = zimReaderSourceThatExists)
       val entityThatDoesNotExist =
         bookOnDiskEntity(zimReaderSource = zimReaderSourceThatDoesNotExist)
@@ -93,7 +96,7 @@ internal class NewBookDaoTest {
       every { RxQuery.observable(query) } returns Observable.just(
         listOf(entityThatExists, entityThatDoesNotExist)
       )
-      return Pair(entityThatExists, entityThatDoesNotExist)
+      return entityThatExists to entityThatDoesNotExist
     }
   }
 

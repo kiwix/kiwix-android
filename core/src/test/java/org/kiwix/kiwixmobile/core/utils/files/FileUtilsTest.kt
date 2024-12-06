@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.utils.files
 import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -61,7 +62,7 @@ class FileUtilsTest {
   }
 
   @Test
-  fun fileNameEndsWithZimAndNoSuchFileExistsAtAnySuchLocation() {
+  fun fileNameEndsWithZimAndNoSuchFileExistsAtAnySuchLocation() = runBlocking {
     expect("zimab", false)
     assertEquals(
       FileUtils.getAllZimParts(testBook).size,
@@ -70,7 +71,7 @@ class FileUtilsTest {
     )
   }
 
-  private fun testWith(extension: String, fileExists: Boolean) {
+  private fun testWith(extension: String, fileExists: Boolean) = runBlocking {
     expect(extension, fileExists)
     val coreApp = mockk<CoreApp>()
     CoreApp.instance = coreApp

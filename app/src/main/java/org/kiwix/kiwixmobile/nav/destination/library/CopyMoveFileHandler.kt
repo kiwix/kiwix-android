@@ -102,7 +102,7 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  fun showMoveFileToPublicDirectoryDialog(
+  suspend fun showMoveFileToPublicDirectoryDialog(
     uri: Uri? = null,
     documentFile: DocumentFile? = null,
     shouldValidateZimFile: Boolean = false,
@@ -155,16 +155,18 @@ class CopyMoveFileHandler @Inject constructor(
     )
 
   fun copyMoveZIMFileInSelectedStorage(storageDevice: StorageDevice) {
-    sharedPreferenceUtil.apply {
-      shouldShowStorageSelectionDialog = false
-      putPrefStorage(sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name))
-      putStoragePosition(
-        if (storageDevice.isInternal) INTERNAL_SELECT_POSITION
-        else EXTERNAL_SELECT_POSITION
-      )
-    }
-    if (validateZimFileCanCopyOrMove()) {
-      performCopyMoveOperation()
+    lifecycleScope?.launch {
+      sharedPreferenceUtil.apply {
+        shouldShowStorageSelectionDialog = false
+        putPrefStorage(sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name))
+        putStoragePosition(
+          if (storageDevice.isInternal) INTERNAL_SELECT_POSITION
+          else EXTERNAL_SELECT_POSITION
+        )
+      }
+      if (validateZimFileCanCopyOrMove()) {
+        performCopyMoveOperation()
+      }
     }
   }
 
@@ -182,7 +184,9 @@ class CopyMoveFileHandler @Inject constructor(
   private fun hasNotSufficientStorageSpace(availableSpace: Long): Boolean =
     availableSpace < (selectedFile?.length() ?: 0L)
 
-  fun validateZimFileCanCopyOrMove(file: File = File(sharedPreferenceUtil.prefStorage)): Boolean {
+  suspend fun validateZimFileCanCopyOrMove(
+    file: File = File(sharedPreferenceUtil.prefStorage)
+  ): Boolean {
     hidePreparingCopyMoveDialog() // hide the dialog if already showing
     val availableSpace = storageCalculator.availableBytes(file)
     if (hasNotSufficientStorageSpace(availableSpace)) {
@@ -227,19 +231,23 @@ class CopyMoveFileHandler @Inject constructor(
     fileSystemDisposable = fat32Checker.fileSystemStates
       .observeOn(AndroidSchedulers.mainThread())
       .subscribe {
-        hidePreparingCopyMoveDialog()
-        if (validateZimFileCanCopyOrMove()) {
-          performCopyMoveOperation()
+        lifecycleScope?.launch {
+          hidePreparingCopyMoveDialog()
+          if (validateZimFileCanCopyOrMove()) {
+            performCopyMoveOperation()
+          }
         }
       }
   }
 
   fun performCopyMoveOperationIfSufficientSpaceAvailable() {
-    val availableSpace = storageCalculator.availableBytes(File(sharedPreferenceUtil.prefStorage))
-    if (hasNotSufficientStorageSpace(availableSpace)) {
-      fileCopyMoveCallback?.insufficientSpaceInStorage(availableSpace)
-    } else {
-      performCopyMoveOperation()
+    lifecycleScope?.launch {
+      val availableSpace = storageCalculator.availableBytes(File(sharedPreferenceUtil.prefStorage))
+      if (hasNotSufficientStorageSpace(availableSpace)) {
+        fileCopyMoveCallback?.insufficientSpaceInStorage(availableSpace)
+      } else {
+        performCopyMoveOperation()
+      }
     }
   }
 
@@ -475,7 +483,7 @@ class CopyMoveFileHandler @Inject constructor(
       } ?: throw FileNotFoundException("The selected file could not be opened")
     }
 
-  fun getDestinationFile(): File {
+  suspend fun getDestinationFile(): File {
     val root = File(sharedPreferenceUtil.prefStorage)
     val fileName = selectedFile?.name ?: ""
 

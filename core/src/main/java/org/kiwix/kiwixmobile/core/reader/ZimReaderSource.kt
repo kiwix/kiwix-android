@@ -52,7 +52,7 @@ class ZimReaderSource(
       }
   }
 
-  fun exists(): Boolean {
+  suspend fun exists(): Boolean {
     return when {
       file != null -> file.isFileExist()
       assetFileDescriptorList?.isNotEmpty() == true ->

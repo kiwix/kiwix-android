@@ -21,6 +21,10 @@ import io.objectbox.Box
 import io.objectbox.kotlin.inValues
 import io.objectbox.kotlin.query
 import io.objectbox.query.QueryBuilder
+import io.reactivex.rxjava3.core.Completable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx3.rxSingle
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity_
@@ -49,10 +53,41 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
         }
         .toList()
         .toFlowable()
+        .flatMap { booksList ->
+          completableFromCoroutine { removeBooksThatDoNotExist(booksList.toMutableList()) }
+            .andThen(io.reactivex.rxjava3.core.Flowable.just(booksList))
+        }
     }
-    .doOnNext { removeBooksThatDoNotExist(it.toMutableList()) }
-    .map { books -> books.filter { it.zimReaderSource.exists() } }
+    .flatMap { booksList ->
+      io.reactivex.rxjava3.core.Flowable.fromIterable(booksList)
+        .flatMapSingle { bookOnDiskEntity ->
+          // Check if the zimReaderSource exists as a suspend function
+          rxSingle { bookOnDiskEntity.zimReaderSource.exists() }
+            .map { exists ->
+              bookOnDiskEntity to exists
+            }
+        }
+        .filter(Pair<BookOnDiskEntity, Boolean>::second)
+        .map(Pair<BookOnDiskEntity, Boolean>::first)
+        .toList()
+        .toFlowable()
+    }
     .map { it.map(::BookOnDisk) }
+
+  private fun completableFromCoroutine(block: suspend () -> Unit): Completable {
+    return Completable.defer {
+      Completable.create { emitter ->
+        CoroutineScope(Dispatchers.IO).launch {
+          try {
+            block()
+            emitter.onComplete()
+          } catch (ignore: Exception) {
+            emitter.onError(ignore)
+          }
+        }
+      }
+    }
+  }
 
   suspend fun getBooks() = box.all.map { bookOnDiskEntity ->
     bookOnDiskEntity.file.let { file ->
@@ -110,7 +145,7 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
     insert(books.map { BookOnDisk(book = it, zimReaderSource = ZimReaderSource(it.file!!)) })
   }
 
-  private fun removeBooksThatDoNotExist(books: MutableList<BookOnDiskEntity>) {
+  private suspend fun removeBooksThatDoNotExist(books: MutableList<BookOnDiskEntity>) {
     delete(books.filterNot { it.zimReaderSource.exists() })
   }
 

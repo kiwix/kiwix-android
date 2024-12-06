@@ -20,9 +20,8 @@ package org.kiwix.kiwixmobile.zimManager.libraryView
 
 import eu.mhutti1.utils.storage.Bytes
 import eu.mhutti1.utils.storage.Kb
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
@@ -34,30 +33,22 @@ class AvailableSpaceCalculator @Inject constructor(
   private val downloadRoomDao: DownloadRoomDao,
   private val storageCalculator: StorageCalculator
 ) {
-  private var availableSpaceCalculatorDisposable: Disposable? = null
-  fun hasAvailableSpaceFor(
+  suspend fun hasAvailableSpaceFor(
     bookItem: LibraryListItem.BookItem,
     successAction: (LibraryListItem.BookItem) -> Unit,
     failureAction: (String) -> Unit
   ) {
-    availableSpaceCalculatorDisposable = downloadRoomDao.allDownloads()
-      .map { it.map(DownloadModel::bytesRemaining).sum() }
+    val trueAvailableBytes = downloadRoomDao.allDownloads()
+      .map { downloads -> downloads.sumOf(DownloadModel::bytesRemaining) }
       .map { bytesToBeDownloaded -> storageCalculator.availableBytes() - bytesToBeDownloaded }
-      .subscribeOn(Schedulers.io())
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe { trueAvailableBytes ->
-        if (bookItem.book.size.toLong() * Kb < trueAvailableBytes) {
-          successAction.invoke(bookItem)
-        } else {
-          failureAction.invoke(Bytes(trueAvailableBytes).humanReadable)
-        }
-      }
+      .first()
+    if (bookItem.book.size.toLong() * Kb < trueAvailableBytes) {
+      successAction.invoke(bookItem)
+    } else {
+      failureAction.invoke(Bytes(trueAvailableBytes).humanReadable)
+    }
   }
 
-  fun hasAvailableSpaceForBook(book: Book) =
+  suspend fun hasAvailableSpaceForBook(book: Book) =
     book.size.toLong() * Kb < storageCalculator.availableBytes()
-
-  fun dispose() {
-    availableSpaceCalculatorDisposable?.dispose()
-  }
 }
