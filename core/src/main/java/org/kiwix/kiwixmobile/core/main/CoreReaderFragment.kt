@@ -99,6 +99,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp
@@ -286,7 +288,7 @@ abstract class CoreReaderFragment :
 
   private var isFirstTimeMainPageLoaded = true
   private var isFromManageExternalLaunch = false
-  private var shouldSaveTabsOnPause = true
+  private val savingTabsMutex = Mutex()
   private var searchItemToOpen: SearchItemToOpen? = null
   private var findInPageTitle: String? = null
 
@@ -424,9 +426,6 @@ abstract class CoreReaderFragment :
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    // Set this to true to enable saving the tab history
-    // when the fragment goes into the paused state.
-    shouldSaveTabsOnPause = true
     setupMenu()
     donationDialogHandler?.setDonationDialogCallBack(this)
     val activity = requireActivity() as AppCompatActivity?
@@ -1556,9 +1555,6 @@ abstract class CoreReaderFragment :
   }
 
   override fun onSearchMenuClickedMenuClicked() {
-    // Set this to false to prevent saving the tab history in onPause
-    // when opening the search fragment.
-    shouldSaveTabsOnPause = false
     saveTabStates {
       // Pass this function to saveTabStates so that after saving
       // the tab state in the database, it will open the search fragment.
@@ -2465,33 +2461,35 @@ abstract class CoreReaderFragment :
    */
   private fun saveTabStates(onComplete: () -> Unit = {}) {
     CoroutineScope(Dispatchers.Main).launch {
-      // clear the previous history saved in database
-      withContext(Dispatchers.IO) {
-        repositoryActions?.clearWebViewPageHistory()
+      savingTabsMutex.withLock {
+        // clear the previous history saved in database
+        withContext(Dispatchers.IO) {
+          repositoryActions?.clearWebViewPageHistory()
+        }
+        val coreApp = sharedPreferenceUtil?.context as CoreApp
+        val settings = coreApp.getMainActivity().getSharedPreferences(
+          SharedPreferenceUtil.PREF_KIWIX_MOBILE,
+          0
+        )
+        val editor = settings.edit()
+        val webViewHistoryEntityList = arrayListOf<WebViewHistoryEntity>()
+        webViewList.forEachIndexed { index, view ->
+          if (view.url == null) return@forEachIndexed
+          getWebViewHistoryEntity(view, index)?.let(webViewHistoryEntityList::add)
+        }
+        withContext(Dispatchers.IO) {
+          repositoryActions?.saveWebViewPageHistory(webViewHistoryEntityList)
+        }
+        editor.putString(TAG_CURRENT_FILE, zimReaderContainer?.zimReaderSource?.toDatabase())
+        editor.putInt(TAG_CURRENT_TAB, currentWebViewIndex)
+        editor.apply()
+        Log.d(
+          TAG_KIWIX,
+          "Save current zim file to preferences: " +
+            "${zimReaderContainer?.zimReaderSource?.toDatabase()}"
+        )
+        onComplete.invoke()
       }
-      val coreApp = sharedPreferenceUtil?.context as CoreApp
-      val settings = coreApp.getMainActivity().getSharedPreferences(
-        SharedPreferenceUtil.PREF_KIWIX_MOBILE,
-        0
-      )
-      val editor = settings.edit()
-      val webViewHistoryEntityList = arrayListOf<WebViewHistoryEntity>()
-      webViewList.forEachIndexed { index, view ->
-        if (view.url == null) return@forEachIndexed
-        getWebViewHistoryEntity(view, index)?.let(webViewHistoryEntityList::add)
-      }
-      withContext(Dispatchers.IO) {
-        repositoryActions?.saveWebViewPageHistory(webViewHistoryEntityList)
-      }
-      editor.putString(TAG_CURRENT_FILE, zimReaderContainer?.zimReaderSource?.toDatabase())
-      editor.putInt(TAG_CURRENT_TAB, currentWebViewIndex)
-      editor.apply()
-      Log.d(
-        TAG_KIWIX,
-        "Save current zim file to preferences: " +
-          "${zimReaderContainer?.zimReaderSource?.toDatabase()}"
-      )
-      onComplete.invoke()
     }
   }
 
@@ -2541,16 +2539,6 @@ abstract class CoreReaderFragment :
       )
     }
     return null
-  }
-
-  /**
-   * @see shouldSaveTabsOnPause
-   */
-  override fun onPause() {
-    super.onPause()
-    if (shouldSaveTabsOnPause) {
-      saveTabStates()
-    }
   }
 
   override fun webViewUrlLoading() {
@@ -2639,6 +2627,7 @@ abstract class CoreReaderFragment :
       showProgressBarWithProgress(progress)
       if (progress == 100) {
         hideProgressBar()
+        saveTabStates()
         Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView()?.url)
       }
       (webView.context as AppCompatActivity).invalidateOptionsMenu()
