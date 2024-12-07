@@ -87,6 +87,15 @@ android {
       java.srcDirs("$rootDir/core/src/sharedTestFunctions/java")
     }
   }
+  dependenciesInfo {
+    // Disables dependency metadata when building APKs.
+    // This is for the signed APKs posted on IzzyOnDroid, GitHub, and our website,
+    // where dependency metadata is not needed.
+    includeInApk = false
+    // Enable dependency metadata when building Android App Bundles.
+    // This is for the Google Play Store, where metadata is required.
+    includeInBundle = true
+  }
 }
 
 play {
