@@ -19,21 +19,25 @@
 package org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import io.reactivex.processors.PublishProcessor
-import org.json.JSONArray
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
+import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
+import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenNote
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_ARTICLES
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
-import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_POSITIONS
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.ShowNoteDialog
@@ -45,6 +49,7 @@ data class ShowOpenNoteDialog(
   private val zimReaderContainer: ZimReaderContainer
 ) : SideEffect<Unit> {
   @Inject lateinit var dialogShower: DialogShower
+  @Inject lateinit var dataSource: DataSource
   override fun invokeWith(activity: AppCompatActivity) {
     activity.cachedComponent.inject(this)
     dialogShower.show(
@@ -56,31 +61,43 @@ data class ShowOpenNoteDialog(
         // For custom apps, we are currently using fileDescriptor, and they only have a single file in them,
         // which is already set in zimReaderContainer, so there's no need to set it again.
         item.zimReaderSource?.toDatabase().let {
-          val currentZimReaderSource = zimReaderContainer.zimReaderSource
-          if (!activity.isCustomApp()) {
-            zimReaderContainer.setZimReaderSource(item.zimReaderSource)
+          (activity as CoreMainActivity).lifecycleScope.launch {
+            val currentZimReaderSource = zimReaderContainer.zimReaderSource
+            if (!activity.isCustomApp()) {
+              zimReaderContainer.setZimReaderSource(item.zimReaderSource)
+            }
+            if (zimReaderContainer.zimReaderSource != currentZimReaderSource) {
+              // if current zim file is not the same set the main page of that zim file
+              // so that when we go back it properly loads the article, and do nothing if the
+              // zim file is same because there might be multiple tabs opened.
+              val settings = activity.getSharedPreferences(
+                SharedPreferenceUtil.PREF_KIWIX_MOBILE,
+                0
+              )
+              val zimId = zimReaderContainer.zimFileReader?.id ?: ""
+              withContext(Dispatchers.IO) {
+                dataSource.clearWebViewPagesHistory()
+                dataSource.insertWebViewPageHistoryItems(
+                  listOf(
+                    WebViewHistoryEntity(
+                      WebViewHistoryItem(
+                        zimId = zimId,
+                        webViewIndex = 0,
+                        webViewPosition = 0,
+                        webViewBackForwardList = null
+                      )
+                    )
+                  )
+                )
+              }
+              val editor = settings.edit()
+              editor.putString(TAG_CURRENT_FILE, zimReaderContainer.zimReaderSource?.toDatabase())
+              editor.putInt(TAG_CURRENT_TAB, 0)
+              editor.apply()
+            }
           }
-          if (zimReaderContainer.zimReaderSource != currentZimReaderSource) {
-            // if current zim file is not the same set the main page of that zim file
-            // so that when we go back it properly loads the article, and do nothing if the
-            // zim file is same because there might be multiple tabs opened.
-            val settings = activity.getSharedPreferences(
-              SharedPreferenceUtil.PREF_KIWIX_MOBILE,
-              0
-            )
-            val editor = settings.edit()
-            val urls = JSONArray()
-            val positions = JSONArray()
-            urls.put(CONTENT_PREFIX + zimReaderContainer.mainPage)
-            positions.put(0)
-            editor.putString(TAG_CURRENT_FILE, zimReaderContainer.zimReaderSource?.toDatabase())
-            editor.putString(TAG_CURRENT_ARTICLES, "$urls")
-            editor.putString(TAG_CURRENT_POSITIONS, "$positions")
-            editor.putInt(TAG_CURRENT_TAB, 0)
-            editor.apply()
-          }
+          effects.offer(OpenNote(item.noteFilePath, item.zimUrl, item.title))
         }
-        effects.offer(OpenNote(item.noteFilePath, item.zimUrl, item.title))
       }
     )
   }

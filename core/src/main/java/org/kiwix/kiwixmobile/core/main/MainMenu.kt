@@ -61,6 +61,7 @@ class MainMenu(
     fun onRandomArticleMenuClicked()
     fun onReadAloudMenuClicked()
     fun onFullscreenMenuClicked()
+    fun onSearchMenuClickedMenuClicked()
   }
 
   init {
@@ -154,7 +155,7 @@ class MainMenu(
   }
 
   private fun navigateToSearch(): Boolean {
-    (activity as CoreMainActivity).openSearch(isOpenedFromTabView = isInTabSwitcher)
+    menuClickListener.onSearchMenuClickedMenuClicked()
     return true
   }
 
