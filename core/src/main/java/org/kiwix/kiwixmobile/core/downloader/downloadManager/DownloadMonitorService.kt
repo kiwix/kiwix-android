@@ -188,8 +188,8 @@ class DownloadMonitorService : Service() {
     val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
     val reason = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_REASON))
     val bytesDownloaded =
-      cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR))
-    val totalBytes = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
+      cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR))
+    val totalBytes = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
     val progress = calculateProgress(bytesDownloaded, totalBytes)
 
     val etaInMilliSeconds = calculateETA(downloadId, bytesDownloaded, totalBytes)
@@ -243,8 +243,8 @@ class DownloadMonitorService : Service() {
     reason: Int,
     progress: Int,
     etaInMilliSeconds: Long,
-    bytesDownloaded: Int,
-    totalBytes: Int
+    bytesDownloaded: Long,
+    totalBytes: Long
   ) {
     val error = mapDownloadError(reason)
     updateDownloadStatus(
@@ -261,8 +261,8 @@ class DownloadMonitorService : Service() {
   private fun handlePausedDownload(
     downloadId: Long,
     progress: Int,
-    bytesDownloaded: Int,
-    totalSizeOfDownload: Int,
+    bytesDownloaded: Long,
+    totalSizeOfDownload: Long,
     reason: Int
   ) {
     val pauseReason = mapDownloadPauseReason(reason)
@@ -288,8 +288,8 @@ class DownloadMonitorService : Service() {
     downloadId: Long,
     progress: Int,
     etaInMilliSeconds: Long,
-    bytesDownloaded: Int,
-    totalSizeOfDownload: Int
+    bytesDownloaded: Long,
+    totalSizeOfDownload: Long
   ) {
     updateDownloadStatus(
       downloadId,
@@ -317,14 +317,14 @@ class DownloadMonitorService : Service() {
     downloadInfoMap.remove(downloadId)
   }
 
-  private fun calculateProgress(bytesDownloaded: Int, totalBytes: Int): Int =
+  private fun calculateProgress(bytesDownloaded: Long, totalBytes: Long): Int =
     if (totalBytes > ZERO) {
       (bytesDownloaded / totalBytes.toDouble()).times(HUNDERED).toInt()
     } else {
       ZERO
     }
 
-  private fun calculateETA(downloadedFileId: Long, bytesDownloaded: Int, totalBytes: Int): Long {
+  private fun calculateETA(downloadedFileId: Long, bytesDownloaded: Long, totalBytes: Long): Long {
     val currentTime = System.currentTimeMillis()
     val downloadInfo = downloadInfoMap.getOrPut(downloadedFileId) {
       DownloadInfo(startTime = currentTime, initialBytesDownloaded = bytesDownloaded)
@@ -376,8 +376,8 @@ class DownloadMonitorService : Service() {
     error: Error,
     progress: Int = DEFAULT_INT_VALUE,
     etaInMilliSeconds: Long = DEFAULT_INT_VALUE.toLong(),
-    bytesDownloaded: Int = DEFAULT_INT_VALUE,
-    totalSizeOfDownload: Int = DEFAULT_INT_VALUE
+    bytesDownloaded: Long = DEFAULT_INT_VALUE.toLong(),
+    totalSizeOfDownload: Long = DEFAULT_INT_VALUE.toLong()
   ) {
     synchronized(lock) {
       updater.onNext {
@@ -392,11 +392,11 @@ class DownloadMonitorService : Service() {
                 this.progress = progress
               }
               this.etaInMilliSeconds = etaInMilliSeconds
-              if (bytesDownloaded != DEFAULT_INT_VALUE) {
-                this.bytesDownloaded = bytesDownloaded.toLong()
+              if (bytesDownloaded != DEFAULT_INT_VALUE.toLong()) {
+                this.bytesDownloaded = bytesDownloaded
               }
-              if (totalSizeOfDownload != DEFAULT_INT_VALUE) {
-                this.totalSizeOfDownload = totalSizeOfDownload.toLong()
+              if (totalSizeOfDownload != DEFAULT_INT_VALUE.toLong()) {
+                this.totalSizeOfDownload = totalSizeOfDownload
               }
             }
             downloadRoomDao.update(downloadModel)
@@ -614,7 +614,7 @@ class DownloadMonitorService : Service() {
 
 data class DownloadInfo(
   var startTime: Long,
-  var initialBytesDownloaded: Int
+  var initialBytesDownloaded: Long
 )
 
 interface AssignNewForegroundServiceNotification {

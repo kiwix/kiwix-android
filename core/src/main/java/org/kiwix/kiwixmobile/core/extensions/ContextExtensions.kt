@@ -18,6 +18,8 @@
 
 package org.kiwix.kiwixmobile.core.extensions
 
+import android.app.ActivityManager
+import android.app.Service
 import android.content.Context
 import android.content.Context.RECEIVER_NOT_EXPORTED
 import android.content.Intent
@@ -112,4 +114,12 @@ fun Context.getBitmapFromDrawable(drawable: Drawable): Bitmap {
   drawable.draw(canvas)
 
   return bitmap
+}
+
+@Suppress("Deprecation")
+fun Context.isServiceRunning(serviceClass: Class<out Service>): Boolean {
+  val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+  val services = activityManager.getRunningServices(Int.MAX_VALUE)
+
+  return services.any { it.service.className == serviceClass.name && it.foreground }
 }

@@ -100,8 +100,8 @@ object ActivityExtensions {
   val Activity.cachedComponent: CoreActivityComponent
     get() = coreMainActivity.cachedComponent
 
-  fun Activity.setupDrawerToggle(toolbar: Toolbar) =
-    coreMainActivity.setupDrawerToggle(toolbar)
+  fun Activity.setupDrawerToggle(toolbar: Toolbar, shouldEnableRightDrawer: Boolean = false) =
+    coreMainActivity.setupDrawerToggle(toolbar, shouldEnableRightDrawer)
 
   fun Activity.navigate(fragmentId: Int) {
     coreMainActivity.navigate(fragmentId)

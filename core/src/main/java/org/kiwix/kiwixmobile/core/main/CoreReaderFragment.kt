@@ -893,7 +893,9 @@ abstract class CoreReaderFragment :
    * to verify proper functionality.
    */
   open fun setUpDrawerToggle(toolbar: Toolbar) {
-    toolbar.let((requireActivity() as CoreMainActivity)::setupDrawerToggle)
+    toolbar.let {
+      (requireActivity() as CoreMainActivity).setupDrawerToggle(it, true)
+    }
   }
 
   /**

@@ -220,7 +220,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   override fun onSupportNavigateUp(): Boolean =
     navController.navigateUp() || super.onSupportNavigateUp()
 
-  open fun setupDrawerToggle(toolbar: Toolbar) {
+  open fun setupDrawerToggle(toolbar: Toolbar, shouldEnableRightDrawer: Boolean = false) {
     // Set the initial contentDescription to the hamburger icon.
     // This method is called from various locations after modifying the navigationIcon.
     // For example, we previously changed this icon/contentDescription to the "+" button
@@ -241,8 +241,10 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       it.syncState()
     }
     drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-    // Enable the right drawer
-    drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END)
+    if (shouldEnableRightDrawer) {
+      // Enable the right drawer
+      drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END)
+    }
   }
 
   open fun disableDrawer() {

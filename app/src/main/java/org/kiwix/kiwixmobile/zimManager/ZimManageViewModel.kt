@@ -205,11 +205,15 @@ class ZimManageViewModel @Inject constructor(
       .callTimeout(CALL_TIMEOUT, SECONDS)
       .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
       .build()
-    client.newCall(headRequest).execute().use { response ->
-      if (response.isSuccessful) {
-        return@getContentLengthOfLibraryXmlFile response.header("content-length")?.toLongOrNull()
-          ?: DEFAULT_INT_VALUE.toLong()
+    try {
+      client.newCall(headRequest).execute().use { response ->
+        if (response.isSuccessful) {
+          return@getContentLengthOfLibraryXmlFile response.header("content-length")?.toLongOrNull()
+            ?: DEFAULT_INT_VALUE.toLong()
+        }
       }
+    } catch (ignore: Exception) {
+      // do nothing
     }
     return DEFAULT_INT_VALUE.toLong()
   }
