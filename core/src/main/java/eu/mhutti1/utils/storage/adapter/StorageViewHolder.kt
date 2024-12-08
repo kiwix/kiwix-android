@@ -24,6 +24,8 @@ import android.text.SpannableStringBuilder
 import android.text.style.AbsoluteSizeSpan
 import android.view.View.VISIBLE
 import eu.mhutti1.utils.storage.StorageDevice
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.databinding.ItemStoragePreferenceBinding
@@ -40,46 +42,50 @@ const val FREE_SPACE_TEXTVIEW_SIZE = 12F
 const val STORAGE_TITLE_TEXTVIEW_SIZE = 15
 
 @SuppressLint("SetTextI18n")
+@Suppress("LongParameterList")
 internal class StorageViewHolder(
   private val itemStoragePreferenceBinding: ItemStoragePreferenceBinding,
   private val storageCalculator: StorageCalculator,
+  private val lifecycleScope: CoroutineScope,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val shouldShowCheckboxSelected: Boolean,
   private val onClickAction: (StorageDevice) -> Unit
 ) : BaseViewHolder<StorageDevice>(itemStoragePreferenceBinding.root) {
 
   override fun bind(item: StorageDevice) {
-    with(itemStoragePreferenceBinding) {
-      storagePathAndTitle.text =
-        resizeStoragePathAndTitle(
-          item.storagePathAndTitle(
-            root.context,
-            adapterPosition,
-            sharedPreferenceUtil,
-            storageCalculator
+    lifecycleScope.launch {
+      with(itemStoragePreferenceBinding) {
+        storagePathAndTitle.text =
+          resizeStoragePathAndTitle(
+            item.storagePathAndTitle(
+              root.context,
+              adapterPosition,
+              sharedPreferenceUtil,
+              storageCalculator
+            )
           )
-        )
 
-      radioButton.isChecked = shouldShowCheckboxSelected &&
-        adapterPosition == sharedPreferenceUtil.storagePosition
-      freeSpace.apply {
-        text = item.getFreeSpace(root.context, storageCalculator)
-        textSize = FREE_SPACE_TEXTVIEW_SIZE
-      }
-      usedSpace.apply {
-        text = item.getUsedSpace(root.context, storageCalculator)
-        textSize = FREE_SPACE_TEXTVIEW_SIZE
-      }
-      storageProgressBar.progress = item.usedPercentage(storageCalculator)
-      clickOverlay.apply {
-        visibility = VISIBLE
-        setToolTipWithContentDescription(
-          root.context.getString(
-            R.string.storage_selection_dialog_accessibility_description
+        radioButton.isChecked = shouldShowCheckboxSelected &&
+          adapterPosition == sharedPreferenceUtil.storagePosition
+        freeSpace.apply {
+          text = item.getFreeSpace(root.context, storageCalculator)
+          textSize = FREE_SPACE_TEXTVIEW_SIZE
+        }
+        usedSpace.apply {
+          text = item.getUsedSpace(root.context, storageCalculator)
+          textSize = FREE_SPACE_TEXTVIEW_SIZE
+        }
+        storageProgressBar.progress = item.usedPercentage(storageCalculator)
+        clickOverlay.apply {
+          visibility = VISIBLE
+          setToolTipWithContentDescription(
+            root.context.getString(
+              R.string.storage_selection_dialog_accessibility_description
+            )
           )
-        )
-        setOnClickListener {
-          onClickAction.invoke(item)
+          setOnClickListener {
+            onClickAction.invoke(item)
+          }
         }
       }
     }

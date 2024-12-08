@@ -22,6 +22,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import eu.mhutti1.utils.storage.StorageDevice
@@ -30,6 +31,7 @@ import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.getFreeSpace
 import org.kiwix.kiwixmobile.core.extensions.getUsedSpace
@@ -52,7 +54,7 @@ class KiwixPrefsFragment : CorePrefsFragment() {
     setMangeExternalStoragePermission()
   }
 
-  override fun setStorage() {
+  override suspend fun setStorage() {
     sharedPreferenceUtil?.let {
       if (storageDisposable?.isDisposed == false) {
         // update the storage when user switch to other storage.
@@ -74,23 +76,25 @@ class KiwixPrefsFragment : CorePrefsFragment() {
   }
 
   private fun setUpStoragePreference(sharedPreferenceUtil: SharedPreferenceUtil) {
-    storageDeviceList.forEachIndexed { index, storageDevice ->
-      val preferenceKey = if (index == 0) PREF_INTERNAL_STORAGE else PREF_EXTERNAL_STORAGE
-      val selectedStoragePosition = sharedPreferenceUtil.storagePosition
-      val isChecked = selectedStoragePosition == index
-      findPreference<StorageRadioButtonPreference>(preferenceKey)?.apply {
-        this.isChecked = isChecked
-        setOnPreferenceClickListener {
-          onStorageDeviceSelected(storageDevice)
-          true
-        }
-        storageCalculator?.let {
-          setPathAndTitleForStorage(
-            storageDevice.storagePathAndTitle(context, index, sharedPreferenceUtil, it)
-          )
-          setFreeSpace(storageDevice.getFreeSpace(context, it))
-          setUsedSpace(storageDevice.getUsedSpace(context, it))
-          setProgress(storageDevice.usedPercentage(it))
+    lifecycleScope.launch {
+      storageDeviceList.forEachIndexed { index, storageDevice ->
+        val preferenceKey = if (index == 0) PREF_INTERNAL_STORAGE else PREF_EXTERNAL_STORAGE
+        val selectedStoragePosition = sharedPreferenceUtil.storagePosition
+        val isChecked = selectedStoragePosition == index
+        findPreference<StorageRadioButtonPreference>(preferenceKey)?.apply {
+          this.isChecked = isChecked
+          setOnPreferenceClickListener {
+            onStorageDeviceSelected(storageDevice)
+            true
+          }
+          storageCalculator?.let {
+            setPathAndTitleForStorage(
+              storageDevice.storagePathAndTitle(context, index, sharedPreferenceUtil, it)
+            )
+            setFreeSpace(storageDevice.getFreeSpace(context, it))
+            setUsedSpace(storageDevice.getUsedSpace(context, it))
+            setProgress(storageDevice.usedPercentage(it))
+          }
         }
       }
     }

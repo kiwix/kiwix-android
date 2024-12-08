@@ -50,7 +50,7 @@ class CustomPrefsFragment : CorePrefsFragment() {
     sharedPreferenceUtil?.putPrefExternalLinkPopup(false)
   }
 
-  override fun setStorage() {
+  override suspend fun setStorage() {
     findPreference<Preference>("pref_storage")?.let(preferenceScreen::removePreference)
   }
 }

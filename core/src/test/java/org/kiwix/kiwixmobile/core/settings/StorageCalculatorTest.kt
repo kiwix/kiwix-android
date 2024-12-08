@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.settings
 
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -37,14 +38,14 @@ internal class StorageCalculatorTest {
   }
 
   @Test
-  fun `calculate total space of existing file`() {
+  fun `calculate total space of existing file`() = runTest {
     every { file.totalSpace } returns 1
     every { file.exists() } returns true
     assertThat(storageCalculator.calculateTotalSpace(file)).isEqualTo("1 Bytes")
   }
 
   @Test
-  fun `calculate total space of non existing file`() {
+  fun `calculate total space of non existing file`() = runTest {
     every { file.exists() } returns false
     assertThat(storageCalculator.calculateTotalSpace(file)).isEqualTo("0 Bytes")
   }

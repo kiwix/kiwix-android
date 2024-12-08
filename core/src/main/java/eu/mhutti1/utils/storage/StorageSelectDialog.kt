@@ -25,6 +25,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import eu.mhutti1.utils.storage.adapter.StorageAdapter
@@ -56,7 +57,8 @@ class StorageSelectDialog : DialogFragment() {
       StorageDelegate(
         storageCalculator,
         sharedPreferenceUtil,
-        shouldShowCheckboxSelected
+        lifecycleScope,
+        shouldShowCheckboxSelected,
       ) {
         onSelectAction?.invoke(it)
         dismiss()

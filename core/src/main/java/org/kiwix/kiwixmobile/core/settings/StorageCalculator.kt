@@ -33,15 +33,15 @@ class StorageCalculator @Inject constructor(
   fun calculateAvailableSpace(file: File = File(sharedPreferenceUtil.prefStorage)): String =
     Bytes(availableBytes(file)).humanReadable
 
-  fun calculateTotalSpace(file: File = File(sharedPreferenceUtil.prefStorage)): String =
+  suspend fun calculateTotalSpace(file: File = File(sharedPreferenceUtil.prefStorage)): String =
     Bytes(totalBytes(file)).humanReadable
 
-  fun calculateUsedSpace(file: File): String =
+  suspend fun calculateUsedSpace(file: File): String =
     Bytes(totalBytes(file) - availableBytes(file)).humanReadable
 
   fun availableBytes(file: File = File(sharedPreferenceUtil.prefStorage)) =
     if (file.isFileExist()) file.freeSpace()
     else 0L
 
-  fun totalBytes(file: File) = if (file.isFileExist()) file.totalSpace() else 0L
+  suspend fun totalBytes(file: File) = if (file.isFileExist()) file.totalSpace() else 0L
 }

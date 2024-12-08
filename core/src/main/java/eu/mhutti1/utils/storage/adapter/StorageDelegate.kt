@@ -21,6 +21,7 @@ package eu.mhutti1.utils.storage.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import eu.mhutti1.utils.storage.StorageDevice
+import kotlinx.coroutines.CoroutineScope
 import org.kiwix.kiwixmobile.core.base.adapter.AdapterDelegate
 import org.kiwix.kiwixmobile.core.databinding.ItemStoragePreferenceBinding
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.viewBinding
@@ -30,6 +31,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 class StorageDelegate(
   private val storageCalculator: StorageCalculator,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
+  private val lifecycleScope: CoroutineScope,
   private val shouldShowCheckboxSelected: Boolean,
   private val onClickAction: (StorageDevice) -> Unit
 ) : AdapterDelegate<StorageDevice> {
@@ -37,6 +39,7 @@ class StorageDelegate(
     return StorageViewHolder(
       parent.viewBinding(ItemStoragePreferenceBinding::inflate, false),
       storageCalculator,
+      lifecycleScope,
       sharedPreferenceUtil,
       shouldShowCheckboxSelected,
       onClickAction
