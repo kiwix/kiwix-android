@@ -244,72 +244,69 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     )
   }
 
-  @Suppress("LongMethod")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    lifecycleScope.launch {
-      setUpSwipeRefreshLayout()
-      copyMoveFileHandler?.apply {
-        setFileCopyMoveCallback(this@LocalLibraryFragment)
-        setLifeCycleScope(lifecycleScope)
-      }
-      fragmentDestinationLibraryBinding?.zimfilelist?.run {
-        adapter = booksOnDiskAdapter
-        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        setHasFixedSize(true)
-        visibility = GONE
-      }
-      zimManageViewModel.fileSelectListStates.observe(viewLifecycleOwner, Observer(::render))
-        .also {
-          coreMainActivity.navHostContainer
-            .setBottomMarginToFragmentContainerView(0)
-
-          getBottomNavigationView()?.let {
-            setBottomMarginToSwipeRefreshLayout(it.measuredHeight)
-          }
-        }
-      disposable.add(sideEffects())
-      disposable.add(fileSelectActions())
-      zimManageViewModel.deviceListScanningProgress.observe(viewLifecycleOwner) {
-        fragmentDestinationLibraryBinding?.scanningProgressView?.apply {
-          progress = it
-          // hide this progress bar when scanning is complete.
-          visibility = if (it == MAX_PROGRESS) GONE else VISIBLE
-          // enable if the previous scanning is completes.
-          fragmentDestinationLibraryBinding?.zimSwiperefresh?.isEnabled = it == MAX_PROGRESS
-        }
-      }
-      if (savedInstanceState != null && savedInstanceState.getBoolean(WAS_IN_ACTION_MODE)) {
-        zimManageViewModel.fileSelectActions.offer(FileSelectActions.RestartActionMode)
-      }
-
-      fragmentDestinationLibraryBinding?.goToDownloadsButtonNoFiles?.setOnClickListener {
-        if (permissionDeniedLayoutShowing) {
-          permissionDeniedLayoutShowing = false
-          requireActivity().navigateToAppSettings()
-        } else {
-          offerAction(FileSelectActions.UserClickedDownloadBooksButton)
-        }
-      }
-      setUpFilePickerButton()
-
-      fragmentDestinationLibraryBinding?.zimfilelist?.addOnScrollListener(
-        SimpleRecyclerViewScrollListener { _, newState ->
-          when (newState) {
-            SCROLL_DOWN -> {
-              setBottomMarginToSwipeRefreshLayout(0)
-            }
-
-            SCROLL_UP -> {
-              getBottomNavigationView()?.let {
-                setBottomMarginToSwipeRefreshLayout(it.measuredHeight)
-              }
-            }
-          }
-        }
-      )
-      showCopyMoveDialogForOpenedZimFileFromStorage()
+    setUpSwipeRefreshLayout()
+    copyMoveFileHandler?.apply {
+      setFileCopyMoveCallback(this@LocalLibraryFragment)
+      setLifeCycleScope(lifecycleScope)
     }
+    fragmentDestinationLibraryBinding?.zimfilelist?.run {
+      adapter = booksOnDiskAdapter
+      layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+      setHasFixedSize(true)
+      visibility = GONE
+    }
+    zimManageViewModel.fileSelectListStates.observe(viewLifecycleOwner, Observer(::render))
+      .also {
+        coreMainActivity.navHostContainer
+          .setBottomMarginToFragmentContainerView(0)
+
+        getBottomNavigationView()?.let {
+          setBottomMarginToSwipeRefreshLayout(it.measuredHeight)
+        }
+      }
+    disposable.add(sideEffects())
+    disposable.add(fileSelectActions())
+    zimManageViewModel.deviceListScanningProgress.observe(viewLifecycleOwner) {
+      fragmentDestinationLibraryBinding?.scanningProgressView?.apply {
+        progress = it
+        // hide this progress bar when scanning is complete.
+        visibility = if (it == MAX_PROGRESS) GONE else VISIBLE
+        // enable if the previous scanning is completes.
+        fragmentDestinationLibraryBinding?.zimSwiperefresh?.isEnabled = it == MAX_PROGRESS
+      }
+    }
+    if (savedInstanceState != null && savedInstanceState.getBoolean(WAS_IN_ACTION_MODE)) {
+      zimManageViewModel.fileSelectActions.offer(FileSelectActions.RestartActionMode)
+    }
+
+    fragmentDestinationLibraryBinding?.goToDownloadsButtonNoFiles?.setOnClickListener {
+      if (permissionDeniedLayoutShowing) {
+        permissionDeniedLayoutShowing = false
+        requireActivity().navigateToAppSettings()
+      } else {
+        offerAction(FileSelectActions.UserClickedDownloadBooksButton)
+      }
+    }
+    setUpFilePickerButton()
+
+    fragmentDestinationLibraryBinding?.zimfilelist?.addOnScrollListener(
+      SimpleRecyclerViewScrollListener { _, newState ->
+        when (newState) {
+          SCROLL_DOWN -> {
+            setBottomMarginToSwipeRefreshLayout(0)
+          }
+
+          SCROLL_UP -> {
+            getBottomNavigationView()?.let {
+              setBottomMarginToSwipeRefreshLayout(it.measuredHeight)
+            }
+          }
+        }
+      }
+    )
+    showCopyMoveDialogForOpenedZimFileFromStorage()
   }
 
   private fun showCopyMoveDialogForOpenedZimFileFromStorage() {
