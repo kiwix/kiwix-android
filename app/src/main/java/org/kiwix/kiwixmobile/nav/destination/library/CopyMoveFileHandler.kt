@@ -432,7 +432,7 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  fun deleteSourceFile(uri: Uri) {
+  suspend fun deleteSourceFile(uri: Uri) = withContext(Dispatchers.IO) {
     try {
       DocumentsContract.deleteDocument(activity.applicationContext.contentResolver, uri)
     } catch (ignore: Exception) {
