@@ -379,7 +379,7 @@
   <string name="toolbar_back_button_content_description">Ke halaman sebelumnya</string>
   <string name="save_or_open_unsupported_files_dialog_title">Simpan atau Buka berkas ini?</string>
   <string name="save_or_open_unsupported_files_dialog_message">Memilih Buka akan membuka berkas ini di aplikasi pembaca eksternal.</string>
-  <string name="donation_dialog_title">Bersumbang Hari Ini</string>
+  <string name="donation_dialog_title">Donasikan Hari Ini</string>
   <string name="donation_dialog_description">%s membutuhkan bantuan Anda.</string>
   <string name="make_donation">Menyumbang</string>
 </resources>
