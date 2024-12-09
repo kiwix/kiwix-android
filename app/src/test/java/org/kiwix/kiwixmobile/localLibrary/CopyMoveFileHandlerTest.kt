@@ -136,11 +136,11 @@ class CopyMoveFileHandlerTest {
       val result = fileHandler.validateZimFileCanCopyOrMove(storageFile)
 
       assertFalse(result)
-      verify { fileHandler.handleDetectingFileSystemState() }
+      coVerify { fileHandler.handleDetectingFileSystemState() }
     }
 
   @Test
-  fun validateZimFileCanCopyOrMoveShouldReturnFalseWhenCannotWrite4GbFile() = runBlocking {
+  fun validateZimFileCanCopyOrMoveShouldReturnFalseWhenCannotWrite4GbFile() = runTest {
     every { fileHandler.isBookLessThan4GB() } returns true
     every { fileHandler.showCopyMoveDialog() } just Runs
     every {
@@ -151,23 +151,23 @@ class CopyMoveFileHandlerTest {
     val result = fileHandler.validateZimFileCanCopyOrMove(storageFile)
 
     assertFalse(result)
-    verify { fileHandler.handleCannotWrite4GbFileState() }
+    coVerify { fileHandler.handleCannotWrite4GbFileState() }
   }
 
   @Test
-  fun handleDetectingFileSystemStateShouldPerformCopyMoveOperationIfBookLessThan4GB() {
+  fun handleDetectingFileSystemStateShouldPerformCopyMoveOperationIfBookLessThan4GB() = runTest {
     fileHandler = spyk(fileHandler)
     prepareFileSystemAndFileForMockk()
     every { fileHandler.isBookLessThan4GB() } returns true
-    every { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() } just Runs
+    coEvery { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() } just Runs
 
     fileHandler.handleDetectingFileSystemState()
 
-    verify { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() }
+    coVerify { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() }
   }
 
   @Test
-  fun handleDetectingFileSystemStateShouldObserveFileSystemStateIfBookGreaterThan4GB() {
+  fun handleDetectingFileSystemStateShouldObserveFileSystemStateIfBookGreaterThan4GB() = runTest {
     fileHandler = spyk(fileHandler)
     prepareFileSystemAndFileForMockk(fileSystemState = DetectingFileSystem)
     every { fileHandler.isBookLessThan4GB() } returns false
@@ -178,19 +178,19 @@ class CopyMoveFileHandlerTest {
   }
 
   @Test
-  fun handleCannotWrite4GbFileStateShouldPerformCopyMoveOperationIfBookLessThan4GB() {
+  fun handleCannotWrite4GbFileStateShouldPerformCopyMoveOperationIfBookLessThan4GB() = runTest {
     fileHandler = spyk(fileHandler)
     prepareFileSystemAndFileForMockk()
     every { fileHandler.isBookLessThan4GB() } returns true
-    every { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() } just Runs
+    coEvery { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() } just Runs
 
     fileHandler.handleCannotWrite4GbFileState()
 
-    verify { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() }
+    coVerify { fileHandler.performCopyMoveOperationIfSufficientSpaceAvailable() }
   }
 
   @Test
-  fun handleCannotWrite4GbFileStateShouldCallCallbackIfBookGreaterThan4GB() {
+  fun handleCannotWrite4GbFileStateShouldCallCallbackIfBookGreaterThan4GB() = runTest {
     fileHandler = spyk(fileHandler)
     prepareFileSystemAndFileForMockk()
     every { fileHandler.isBookLessThan4GB() } returns false
