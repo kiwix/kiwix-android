@@ -28,6 +28,9 @@ import android.view.ContextMenu
 import android.view.ViewGroup
 import android.webkit.WebView
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
@@ -169,14 +172,16 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
       val url = msg.data.getString("url", null)
       val src = msg.data.getString("src", null)
       if (url != null || src != null) {
-        val savedFile =
-          FileUtils.downloadFileFromUrl(url, src, zimReaderContainer, sharedPreferenceUtil)
-        savedFile?.let {
-          instance.toast(instance.getString(R.string.save_media_saved, it.name)).also {
-            Log.e("savedFile", "handleMessage: ${savedFile.isFile} ${savedFile.path}")
+        CoroutineScope(Dispatchers.Main.immediate).launch {
+          val savedFile =
+            FileUtils.downloadFileFromUrl(url, src, zimReaderContainer, sharedPreferenceUtil)
+          savedFile?.let {
+            instance.toast(instance.getString(R.string.save_media_saved, it.name)).also {
+              Log.e("savedFile", "handleMessage: ${savedFile.isFile} ${savedFile.path}")
+            }
+          } ?: run {
+            instance.toast(R.string.save_media_error)
           }
-        } ?: run {
-          instance.toast(R.string.save_media_error)
         }
       }
     }

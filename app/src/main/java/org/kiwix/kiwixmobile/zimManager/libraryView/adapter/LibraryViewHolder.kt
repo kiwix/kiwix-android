@@ -19,6 +19,8 @@
 package org.kiwix.kiwixmobile.zimManager.libraryView.adapter
 
 import android.view.View
+import androidx.lifecycle.LifecycleCoroutineScope
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
@@ -50,45 +52,49 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
     private val itemLibraryBinding: ItemLibraryBinding,
     private val bookUtils: BookUtils,
     private val clickAction: (BookItem) -> Unit,
-    private val availableSpaceCalculator: AvailableSpaceCalculator
+    private val availableSpaceCalculator: AvailableSpaceCalculator,
+    private val lifecycleCoroutineScope: LifecycleCoroutineScope
   ) : LibraryViewHolder<BookItem>(itemLibraryBinding.root) {
     override fun bind(item: BookItem) {
-      itemLibraryBinding.libraryBookTitle.setTextAndVisibility(item.book.title)
-      itemLibraryBinding.libraryBookDescription.setTextAndVisibility(item.book.description)
-      itemLibraryBinding.libraryBookCreator.setTextAndVisibility(item.book.creator)
-      itemLibraryBinding.libraryBookDate.setTextAndVisibility(item.book.date)
-      itemLibraryBinding.libraryBookSize.setTextAndVisibility(
-        KiloByte(item.book.size).humanReadable
-      )
-      itemLibraryBinding.libraryBookLanguage.text = bookUtils.getLanguage(item.book.language)
-      itemLibraryBinding.libraryBookFavicon.setBitmap(Base64String(item.book.favicon))
+      lifecycleCoroutineScope.launch {
+        itemLibraryBinding.libraryBookTitle.setTextAndVisibility(item.book.title)
+        itemLibraryBinding.libraryBookDescription.setTextAndVisibility(item.book.description)
+        itemLibraryBinding.libraryBookCreator.setTextAndVisibility(item.book.creator)
+        itemLibraryBinding.libraryBookDate.setTextAndVisibility(item.book.date)
+        itemLibraryBinding.libraryBookSize.setTextAndVisibility(
+          KiloByte(item.book.size).humanReadable
+        )
+        itemLibraryBinding.libraryBookLanguage.text = bookUtils.getLanguage(item.book.language)
+        itemLibraryBinding.libraryBookFavicon.setBitmap(Base64String(item.book.favicon))
 
-      val hasAvailableSpaceInStorage = availableSpaceCalculator.hasAvailableSpaceForBook(item.book)
-      containerView.setOnClickListener { clickAction.invoke(item) }
-      containerView.isClickable =
-        item.canBeDownloaded && hasAvailableSpaceInStorage
+        val hasAvailableSpaceInStorage =
+          availableSpaceCalculator.hasAvailableSpaceForBook(item.book)
+        containerView.setOnClickListener { clickAction.invoke(item) }
+        containerView.isClickable =
+          item.canBeDownloaded && hasAvailableSpaceInStorage
 
-      itemLibraryBinding.tags.render(item.tags)
+        itemLibraryBinding.tags.render(item.tags)
 
-      itemLibraryBinding.unableToDownload.visibility =
-        if (item.canBeDownloaded && hasAvailableSpaceInStorage)
-          View.GONE
-        else
-          View.VISIBLE
-      itemLibraryBinding.unableToDownload.setOnLongClickListener {
-        val context = itemLibraryBinding.root.context
-        when (item.fileSystemState) {
-          CannotWrite4GbFile -> context.toast(R.string.file_system_does_not_support_4gb)
-          DetectingFileSystem -> context.toast(R.string.detecting_file_system)
-          else -> {
-            if (item.canBeDownloaded && !hasAvailableSpaceInStorage) {
-              clickAction.invoke(item)
-            } else {
-              throw RuntimeException("impossible invalid state: ${item.fileSystemState}")
+        itemLibraryBinding.unableToDownload.visibility =
+          if (item.canBeDownloaded && hasAvailableSpaceInStorage)
+            View.GONE
+          else
+            View.VISIBLE
+        itemLibraryBinding.unableToDownload.setOnLongClickListener {
+          val context = itemLibraryBinding.root.context
+          when (item.fileSystemState) {
+            CannotWrite4GbFile -> context.toast(R.string.file_system_does_not_support_4gb)
+            DetectingFileSystem -> context.toast(R.string.detecting_file_system)
+            else -> {
+              if (item.canBeDownloaded && !hasAvailableSpaceInStorage) {
+                clickAction.invoke(item)
+              } else {
+                throw RuntimeException("impossible invalid state: ${item.fileSystemState}")
+              }
             }
           }
+          true
         }
-        true
       }
     }
   }

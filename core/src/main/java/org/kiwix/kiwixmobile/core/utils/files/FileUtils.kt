@@ -117,7 +117,7 @@ object FileUtils {
   }
 
   @JvmStatic
-  fun getLocalFilePathByUri(
+  suspend fun getLocalFilePathByUri(
     context: Context,
     uri: Uri
   ): String? {
@@ -169,7 +169,7 @@ object FileUtils {
    * 2. On devices below Android 11, when files are clicked directly in the file manager, the content
    *    resolver may not be able to retrieve the path for certain URIs.
    */
-  private fun getFilePathOfContentUri(context: Context, uri: Uri): String? {
+  private suspend fun getFilePathOfContentUri(context: Context, uri: Uri): String? {
     val filePath = contentQuery(context, uri)
     return if (!filePath.isNullOrEmpty()) {
       filePath
@@ -179,7 +179,7 @@ object FileUtils {
     }
   }
 
-  private fun getFullFilePathFromFilePath(
+  private suspend fun getFullFilePathFromFilePath(
     context: Context,
     filePath: String?
   ): String? {
@@ -252,7 +252,7 @@ object FileUtils {
    * 3. For other URIs, it attempts to resolve the full file path from the provided URI using a custom
    *    method to retrieve the folder and file path.
    */
-  private fun getActualFilePathOfContentUri(context: Context, uri: Uri): String? {
+  private suspend fun getActualFilePathOfContentUri(context: Context, uri: Uri): String? {
     return when {
       // For file managers that provide the full path in the URI (common on devices below Android 11).
       // This triggers when the user clicks directly on a ZIM file in the file manager, and the file
@@ -295,7 +295,7 @@ object FileUtils {
   private fun isDownloadProviderUri(uri: Uri): Boolean =
     "$uri".contains("DownloadProvider") || "$uri".contains("/downloads")
 
-  fun documentProviderContentQuery(
+  suspend fun documentProviderContentQuery(
     context: Context,
     uri: Uri,
     documentsContractWrapper: DocumentResolverWrapper = DocumentResolverWrapper()
@@ -417,7 +417,8 @@ object FileUtils {
   }
 
   @Suppress("NestedBlockDepth")
-  @JvmStatic fun getAllZimParts(book: Book): List<File> {
+  @JvmStatic
+  suspend fun getAllZimParts(book: Book): List<File> {
     val files = ArrayList<File>()
     book.file?.let {
       if (it.path.endsWith(".zim") || it.path.endsWith(".zim.part")) {
@@ -444,7 +445,7 @@ object FileUtils {
   }
 
   @JvmStatic
-  fun hasPart(file: File): Boolean {
+  suspend fun hasPart(file: File): Boolean {
     var file = file
     file = File(getFileName(file.path))
     if (file.path.endsWith(".zim")) {
@@ -469,7 +470,7 @@ object FileUtils {
   }
 
   @JvmStatic
-  fun getFileName(fileName: String) =
+  suspend fun getFileName(fileName: String) =
     when {
       File(fileName).isFileExist() -> fileName
       File("$fileName.part").isFileExist() -> "$fileName.part"
@@ -543,7 +544,7 @@ object FileUtils {
 
   @Suppress("ReturnCount")
   @JvmStatic
-  fun downloadFileFromUrl(
+  suspend fun downloadFileFromUrl(
     url: String?,
     src: String?,
     zimReaderContainer: ZimReaderContainer,

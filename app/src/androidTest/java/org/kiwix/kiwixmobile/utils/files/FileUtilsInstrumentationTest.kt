@@ -24,6 +24,10 @@ import android.os.Environment
 import androidx.test.platform.app.InstrumentationRegistry
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -71,7 +75,7 @@ class FileUtilsInstrumentationTest {
 
   @Test
   @Throws(IOException::class)
-  fun testGetAllZimParts() {
+  fun testGetAllZimParts() = runBlocking {
 
     // Filename ends with .zimXX and the files up till "FileName.zimer" exist
     // i.e. 26 * 4 + 18 = 122 files exist
@@ -140,7 +144,7 @@ class FileUtilsInstrumentationTest {
 
   @Test
   @Throws(IOException::class)
-  fun testHasPart() {
+  fun testHasPart() = runBlocking {
     val testId = "3yd5474g-55d1-aqw0-108z-1xp69x25260d"
     val baseName = testDir?.path + "/" + testId + "testFile"
 
@@ -418,12 +422,14 @@ class FileUtilsInstrumentationTest {
       )
     )
     context?.let { context ->
-      dummyUriData.forEach { dummyUrlData ->
-        dummyUrlData.uri?.let { uri ->
-          Assertions.assertEquals(
-            FileUtils.getLocalFilePathByUri(context, uri),
-            dummyUrlData.expectedFileName
-          )
+      CoroutineScope(Dispatchers.Main).launch {
+        dummyUriData.forEach { dummyUrlData ->
+          dummyUrlData.uri?.let { uri ->
+            Assertions.assertEquals(
+              FileUtils.getLocalFilePathByUri(context, uri),
+              dummyUrlData.expectedFileName
+            )
+          }
         }
       }
     }
@@ -489,7 +495,7 @@ class FileUtilsInstrumentationTest {
   }
 
   @Test
-  fun testDocumentProviderContentQuery() {
+  fun testDocumentProviderContentQuery() = runBlocking {
     // We are not running this test case on Android 13 and above. In this version,
     // numerous security updates have been included, preventing us from modifying the
     // default behavior of ContentResolver.
@@ -544,7 +550,7 @@ class FileUtilsInstrumentationTest {
     }
   }
 
-  private fun testWithDownloadUri(
+  private suspend fun testWithDownloadUri(
     uri: Uri,
     expectedPath: String,
     documentsContractWrapper: DocumentResolverWrapper = DocumentResolverWrapper()

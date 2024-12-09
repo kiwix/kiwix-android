@@ -367,7 +367,11 @@ abstract class CorePrefsFragment :
   private fun showExportBookmarkDialog() {
     alertDialogShower?.show(
       KiwixDialog.YesNoDialog.ExportBookmarks,
-      { libkiwixBookmarks?.exportBookmark() }
+      {
+        lifecycleScope.launch {
+          libkiwixBookmarks?.exportBookmark()
+        }
+      }
     )
   }
 
