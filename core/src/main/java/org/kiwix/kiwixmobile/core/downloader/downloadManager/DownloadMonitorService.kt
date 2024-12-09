@@ -100,7 +100,11 @@ class DownloadMonitorService : Service() {
         ACTION_PAUSE -> pauseDownload(downloadId.toLong())
         ACTION_RESUME -> resumeDownload(downloadId.toLong())
         ACTION_CANCEL -> cancelDownload(downloadId.toLong())
-        ACTION_QUERY_DOWNLOAD_STATUS -> queryDownloadStatus(downloadId.toLong())
+        ACTION_QUERY_DOWNLOAD_STATUS -> {
+          updater.onNext {
+            queryDownloadStatus(downloadId.toLong())
+          }
+        }
       }
     }
     return START_NOT_STICKY
@@ -569,8 +573,11 @@ class DownloadMonitorService : Service() {
 
   private fun cancelDownload(downloadId: Long) {
     synchronized(lock) {
-      downloadManager.remove(downloadId)
-      handleCancelledDownload(downloadId)
+      updater.onNext {
+        // Remove the download from DownloadManager on IO thread.
+        downloadManager.remove(downloadId)
+        handleCancelledDownload(downloadId)
+      }
     }
   }
 
