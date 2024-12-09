@@ -155,7 +155,7 @@
   <string name="help_7">ZIM 파일로 사용이 가능합니다. 많은 수의 파일이 있습니다:</string>
   <string name="help_8">• 위키백과는 각각의 언어별로 사용이 가능합니다</string>
   <string name="help_9">• 위키리크스나 위키문헌과 같은 다른 콘텐츠도 사용이 가능합니다</string>
-  <string name="help_10" fuzzy="true">앱 안에서 선택한 ZIM 파일을 다운로드하거나 원하는 항목을 주의하여 선택한 다음 ZIM 파일을 SD 카드로 전송하기 전에 데스크톱 컴퓨터로부터 다운로드할 수 있습니다.</string>
+  <string name="help_10">앱 안에서 선택한 ZIM 파일을 다운로드하거나 원하는 항목을 주의하여 선택한 다음 ZIM 파일을 SD 카드로 전송하기 전에 데스크톱 컴퓨터로부터 다운로드할 수 있습니다.</string>
   <string name="help_11">앱 안에서 다운로드되는 ZIM 파일들은 Kiwix라는 이름의 폴더의 외부 저장 디렉터리에 위치합니다.</string>
   <string name="pref_storage">저장 공간</string>
   <string name="pref_current_folder">현재 폴더</string>
@@ -173,8 +173,8 @@
   <string name="confirm_stop_download_title">다운로드를 중단하겠습니까?</string>
   <string name="confirm_stop_download_msg">이 다운로드를 중단하겠습니까?</string>
   <string name="download_change_storage">기억 장치 선택기</string>
-  <string name="tts_not_enabled" fuzzy="true">이 ZIM 파일에 대해 TTS가 활성화되어 있지 않습니다</string>
-  <string name="texttospeech_initialization_failed" fuzzy="true">텍스트–음성 초기화가 실패했습니다. 다시 시도해 주세요</string>
+  <string name="tts_not_enabled">이 ZIM 파일에 대해 소리내어 읽기가 활성화되어 있지 않습니다</string>
+  <string name="texttospeech_initialization_failed">소리내어 읽기 초기화를 실패했습니다. 다시 시도해 주세요</string>
   <string name="texttospeech_error">소리내어 읽기 과정 중 예기치 않은 오류가 발생했습니다. 다시 시도해 주세요</string>
   <string name="next">다음</string>
   <string name="previous">이전</string>
@@ -240,6 +240,7 @@
   <string name="custom_download_error_message_for_authentication_failed">ZIM 파일을 다운로드할 수 없습니다. 플레이 스토어에서 애플리케이션을 다시 설치해 보십시오.</string>
   <string name="save">저장</string>
   <string name="note">노트</string>
+  <string name="take_notes">메모하기</string>
   <string name="wiki_article_title">위키 문서 제목</string>
   <string name="ext_storage_permission_rationale_export_bookmark">북마크 내보내기 위해 저장소 접근 권한이 필요합니다.</string>
   <string name="ext_storage_write_permission_denied_export_bookmark">북마크는 저장소 접근 없이 수출할 수 없습니다</string>
@@ -264,6 +265,7 @@
   <string name="severe_loss_error">서버 오류! 와이파이 P2P를 비활성화/재활성화해 보십시오</string>
   <string name="connection_failed">연결 실패</string>
   <string name="permission_rationale_location">안드로이드에서 앱의 피어 장치 찾기를 허용하려면 위치 권한이 필요합니다</string>
+  <string name="permission_rationale_nearby">사용가능한 장치를 찾기 위해 Android에서 앱은 근처장치의 접근이 필요</string>
   <string name="permission_refused_location">위치 권한 없이 피어 장치를 찾을 수 없습니다</string>
   <string name="permission_refused_storage">저장 권한 없이 ZIM 파일에 접근할 수 없습니다</string>
   <string name="request_enable_location">친구를 찾기 위해 위치 접근을 활성화합니다</string>
@@ -348,6 +350,8 @@
   <string name="system_unable_to_grant_permission_message">시스템이 권한을 부여할 수 없습니다!</string>
   <string name="allow">허용</string>
   <string name="swipe_down_for_library">라이브러리를 보려면 아래로 스와이프하세요</string>
+  <string name="reaching_remote_library">원격라이브러리 찾는 중</string>
+  <string name="parsing_remote_library">원격라이브러리를 구문분석 중</string>
   <string name="starting_downloading_remote_library">온라인 라이브러리 다운로드 시작 중</string>
   <string name="downloading_library">라이브러리를 다운로드하는 중\n%s</string>
   <string name="no_notes">노트 없음</string>
@@ -369,10 +373,14 @@
   <string name="clear_all_navigation_history_message">모든 (이전, 이후) 둘러보기 역사를 지웁니다</string>
   <string name="navigation_history_cleared">둘러보기 역사를 지웠습니다</string>
   <string name="go_to_settings_label">설정으로 이동</string>
+  <string name="request_notification_permission_message">이 작업을 수행하려면 알림 접근 권한을 부여해 주십시오</string>
   <string name="click_nearby_devices_message">근처 기기를 검색하려면 여기를 클릭하세요.</string>
   <string name="your_device_name_message">장치 이름이 여기에 표시됩니다.</string>
+  <string name="nearby_devices_list_message">여기, 근처장치의 목록을 찾을 수 있다. 파일을 전송하려면 장치이름을 클릭.</string>
+  <string name="transfer_zim_files_list_message">여기에서 전송 가능한 ZIM 파일 목록을 확인할 수 있습니다.</string>
   <string name="storage_selection_dialog_accessibility_description">ZIM 파일을 다운로드하기 위한 스토리지를 선택하십시오.</string>
   <string name="zim_file_content_description">읽기 내용이 있는 ZIM 파일</string>
+  <string name="select_language_content_description">이 언어를 선택하면 해당 언어로 다운로드할 수 있는 책이 맨 위에 우선적으로 표시됩니다.</string>
   <string name="toolbar_back_button_content_description">이전 화면으로 이동</string>
   <string name="save_or_open_unsupported_files_dialog_title">이 파일을 저장하거나 열겠습니까?</string>
   <string name="save_or_open_unsupported_files_dialog_message">\'열기\'를 선택하면 이 파일이 외부 리더 애플리케이션에서 열립니다</string>
