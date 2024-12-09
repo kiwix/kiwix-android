@@ -2686,6 +2686,10 @@ abstract class CoreReaderFragment :
           findInPageTitle = null
         }
       }, {
+        Log.e(
+          TAG_KIWIX,
+          "Could not restore tabs. Original exception = ${it.printStackTrace()}"
+        )
         restoreViewStateOnInvalidWebViewHistory()
       })
   }
