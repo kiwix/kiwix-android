@@ -28,7 +28,7 @@ import javax.inject.Inject
 
 class SetPreferredStorageWithMostSpace @Inject constructor(
   private val storageCalculator: StorageCalculator,
-  private val sharedPreferenceUtil: SharedPreferenceUtil
+  private val sharedPreferenceUtil: SharedPreferenceUtil,
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     activity.lifecycleScope.launch {

@@ -680,14 +680,16 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   private fun storeDeviceInPreferences(
     storageDevice: StorageDevice
   ) {
-    sharedPreferenceUtil.putPrefStorage(
-      sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
-    )
-    sharedPreferenceUtil.putStoragePosition(
-      if (storageDevice.isInternal) INTERNAL_SELECT_POSITION
-      else EXTERNAL_SELECT_POSITION
-    )
-    // after selecting the storage try to copy/move the zim file.
-    copyMoveFileHandler?.copyMoveZIMFileInSelectedStorage(storageDevice)
+    lifecycleScope.launch {
+      sharedPreferenceUtil.putPrefStorage(
+        sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
+      )
+      sharedPreferenceUtil.putStoragePosition(
+        if (storageDevice.isInternal) INTERNAL_SELECT_POSITION
+        else EXTERNAL_SELECT_POSITION
+      )
+      // after selecting the storage try to copy/move the zim file.
+      copyMoveFileHandler?.copyMoveZIMFileInSelectedStorage(storageDevice)
+    }
   }
 }

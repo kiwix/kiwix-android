@@ -208,7 +208,7 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  fun handleDetectingFileSystemState() {
+  suspend fun handleDetectingFileSystemState() {
     if (isBookLessThan4GB()) {
       performCopyMoveOperationIfSufficientSpaceAvailable()
     } else {
@@ -217,7 +217,7 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  fun handleCannotWrite4GbFileState() {
+  suspend fun handleCannotWrite4GbFileState() {
     if (isBookLessThan4GB()) {
       performCopyMoveOperationIfSufficientSpaceAvailable()
     } else {
@@ -240,14 +240,12 @@ class CopyMoveFileHandler @Inject constructor(
       }
   }
 
-  fun performCopyMoveOperationIfSufficientSpaceAvailable() {
-    lifecycleScope?.launch {
-      val availableSpace = storageCalculator.availableBytes(File(sharedPreferenceUtil.prefStorage))
-      if (hasNotSufficientStorageSpace(availableSpace)) {
-        fileCopyMoveCallback?.insufficientSpaceInStorage(availableSpace)
-      } else {
-        performCopyMoveOperation()
-      }
+  suspend fun performCopyMoveOperationIfSufficientSpaceAvailable() {
+    val availableSpace = storageCalculator.availableBytes(File(sharedPreferenceUtil.prefStorage))
+    if (hasNotSufficientStorageSpace(availableSpace)) {
+      fileCopyMoveCallback?.insufficientSpaceInStorage(availableSpace)
+    } else {
+      performCopyMoveOperation()
     }
   }
 
