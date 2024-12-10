@@ -62,11 +62,15 @@ class DownloadManagerMonitor @Inject constructor(
               // Download Manager takes some time to update the download status.
               // In such cases, the foreground service may stop prematurely due to
               // a lack of active downloads during this update delay.
+              Log.e(
+                "DOWNLOAD_MONITOR",
+                "startMonitoringDownloads: monitor ${shouldStartDownloadMonitorService()}"
+              )
               if (downloadRoomDao.downloads().blockingFirst().isNotEmpty()) {
                 // Check if there are active downloads and the service is not running.
                 // If so, start the DownloadMonitorService to properly track download progress.
-                if (shouldStartService()) {
-                  startService()
+                if (shouldStartDownloadMonitorService()) {
+                  startDownloadMonitorService()
                 } else {
                   // Do nothing; it is for fixing the error when "if" is used as an expression.
                 }
@@ -89,32 +93,42 @@ class DownloadManagerMonitor @Inject constructor(
    * Determines if the DownloadMonitorService should be started.
    * Checks if there are active downloads and if the service is not already running.
    */
-  private fun shouldStartService(): Boolean =
+  private fun shouldStartDownloadMonitorService(): Boolean =
     getActiveDownloads().isNotEmpty() &&
       !context.isServiceRunning(DownloadMonitorService::class.java)
 
   private fun getActiveDownloads(): List<DownloadRoomEntity> =
     downloadRoomDao.downloadRoomEntity().blockingFirst().filter {
-      it.status != Status.PAUSED && it.status != Status.CANCELLED
+      (it.status != Status.PAUSED || it.error == Error.WAITING_TO_RETRY) &&
+        it.status != Status.CANCELLED
     }
 
   override fun downloadCompleteOrCancelled(intent: Intent) {
     synchronized(lock) {
       intent.extras?.let {
-        val downloadId = it.getLong(DownloadManager.EXTRA_DOWNLOAD_ID, -1L)
-        if (downloadId != -1L) {
-          context.startService(
-            getDownloadMonitorIntent(
-              ACTION_QUERY_DOWNLOAD_STATUS,
-              downloadId.toInt()
+        val downloadId = it.getLong(DownloadManager.EXTRA_DOWNLOAD_ID, DEFAULT_INT_VALUE.toLong())
+        if (downloadId != DEFAULT_INT_VALUE.toLong()) {
+          try {
+            context.startService(
+              getDownloadMonitorIntent(
+                ACTION_QUERY_DOWNLOAD_STATUS,
+                downloadId.toInt()
+              )
             )
-          )
+          } catch (ignore: Exception) {
+            // Catching exception if application is not in foreground.
+            // Since we can not start the foreground services from background.
+            Log.e(
+              "DOWNLOAD_MONITOR",
+              "Couldn't start download service. Original exception = $ignore"
+            )
+          }
         }
       }
     }
   }
 
-  private fun startService() {
+  private fun startDownloadMonitorService() {
     context.startService(Intent(context, DownloadMonitorService::class.java))
   }
 
