@@ -502,7 +502,8 @@ class DownloadMonitorService : Service() {
 
   private fun getActiveDownloads(): List<DownloadRoomEntity> =
     downloadRoomDao.downloadRoomEntity().blockingFirst().filter {
-      it.status != Status.PAUSED && it.status != Status.CANCELLED
+      (it.status != Status.PAUSED || it.error == Error.WAITING_TO_RETRY) &&
+        it.status != Status.CANCELLED
     }
 
   private fun updateNotification(
