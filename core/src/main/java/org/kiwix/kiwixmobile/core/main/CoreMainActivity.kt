@@ -280,7 +280,7 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   }
 
   fun openSupportKiwixExternalLink() {
-    externalLinkOpener.openExternalUrl(KIWIX_SUPPORT_URL.toUri().browserIntent())
+    externalLinkOpener.openExternalUrl(KIWIX_SUPPORT_URL.toUri().browserIntent(), false)
   }
 
   private fun handleBackPressed() {
