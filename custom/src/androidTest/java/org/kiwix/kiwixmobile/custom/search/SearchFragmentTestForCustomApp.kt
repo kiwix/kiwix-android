@@ -20,8 +20,7 @@ package org.kiwix.kiwixmobile.custom.search
 
 import android.Manifest
 import android.content.Context
-import android.content.res.AssetFileDescriptor
-import android.os.ParcelFileDescriptor
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.NavHostFragment
@@ -61,7 +60,6 @@ import org.kiwix.kiwixmobile.custom.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
 import java.net.URI
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -145,7 +143,7 @@ class SearchFragmentTestForCustomApp {
     UiThreadStatement.runOnUiThread {
       customMainActivity.navigate(customMainActivity.readerFragmentResId)
     }
-    openZimFileInReaderWithAssetFileDescriptor(downloadingZimFile)
+    openZimFileInReader(downloadingZimFile)
     openSearchWithQuery()
     val searchTerm = "gard"
     val searchedItem = "Gardanta Spirito"
@@ -223,7 +221,7 @@ class SearchFragmentTestForCustomApp {
     UiThreadStatement.runOnUiThread {
       customMainActivity.navigate(customMainActivity.readerFragmentResId)
     }
-    openZimFileInReaderWithAssetFileDescriptor(downloadingZimFile)
+    openZimFileInReader(downloadingZimFile)
     openSearchWithQuery(searchTerms[0])
     // wait for searchFragment become visible on screen.
     delay(2000)
@@ -264,13 +262,7 @@ class SearchFragmentTestForCustomApp {
     }
   }
 
-  private fun openZimFileInReaderWithAssetFileDescriptor(downloadingZimFile: File) {
-    getAssetFileDescriptorFromFile(downloadingZimFile)?.let(::openZimFileInReader) ?: run {
-      throw RuntimeException("Unable to get fileDescriptor from file. Original exception")
-    }
-  }
-
-  private fun openZimFileInReader(assetFileDescriptor: AssetFileDescriptor) {
+  private fun openZimFileInReader(file: File) {
     UiThreadStatement.runOnUiThread {
       val navHostFragment: NavHostFragment =
         customMainActivity.supportFragmentManager
@@ -281,27 +273,10 @@ class SearchFragmentTestForCustomApp {
         navHostFragment.childFragmentManager.fragments[0] as CustomReaderFragment
       runBlocking {
         customReaderFragment.openZimFile(
-          ZimReaderSource(null, null, listOf(assetFileDescriptor)),
+          ZimReaderSource(file, null, null),
           true
         )
       }
-    }
-  }
-
-  private fun getAssetFileDescriptorFromFile(file: File): AssetFileDescriptor? {
-    val parcelFileDescriptor = getFileDescriptor(file)
-    if (parcelFileDescriptor != null) {
-      return AssetFileDescriptor(parcelFileDescriptor, 0, file.length())
-    }
-    return null
-  }
-
-  private fun getFileDescriptor(file: File?): ParcelFileDescriptor? {
-    try {
-      return ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
-    } catch (e: IOException) {
-      e.printStackTrace()
-      return null
     }
   }
 
@@ -324,7 +299,7 @@ class SearchFragmentTestForCustomApp {
       .build()
 
   private fun getDownloadingZimFile(): File {
-    val zimFile = File(context.cacheDir, "ray_charles.zim")
+    val zimFile = File(ContextCompat.getExternalFilesDirs(context, null)[0], "ray_charles.zim")
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     return zimFile
