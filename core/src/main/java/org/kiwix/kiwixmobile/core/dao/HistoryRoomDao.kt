@@ -69,7 +69,7 @@ abstract class HistoryRoomDao : PageDao {
       historyItem.dateString
     )?.let {
       it.apply {
-        // update the exiting entity
+        // update the existing entity
         historyUrl = historyItem.historyUrl
         historyTitle = historyItem.title
         timeStamp = historyItem.timeStamp
