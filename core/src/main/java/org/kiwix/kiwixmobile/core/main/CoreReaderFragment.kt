@@ -1214,6 +1214,7 @@ abstract class CoreReaderFragment :
   override fun onDestroyView() {
     super.onDestroyView()
     try {
+      coreReaderLifeCycleScope?.cancel()
       readerLifeCycleScope?.cancel()
       readerLifeCycleScope = null
     } catch (ignore: Exception) {
@@ -1803,7 +1804,7 @@ abstract class CoreReaderFragment :
     when (requestCode) {
       REQUEST_STORAGE_PERMISSION -> {
         if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-          lifecycleScope.launch {
+          coreReaderLifeCycleScope?.launch {
             zimReaderSource?.let { openZimFile(it) }
           }
         } else {
@@ -1899,32 +1900,34 @@ abstract class CoreReaderFragment :
   @Suppress("NestedBlockDepth")
   private fun toggleBookmark() {
     try {
-      getCurrentWebView()?.url?.let { articleUrl ->
-        zimReaderContainer?.zimFileReader?.let { zimFileReader ->
-          val libKiwixBook = Book().apply {
-            update(zimFileReader.jniKiwixReader)
-          }
-          if (isBookmarked) {
-            repositoryActions?.deleteBookmark(libKiwixBook.id, articleUrl)
-            snackBarRoot?.snack(R.string.bookmark_removed)
-          } else {
-            getCurrentWebView()?.title?.let {
-              repositoryActions?.saveBookmark(
-                LibkiwixBookmarkItem(it, articleUrl, zimFileReader, libKiwixBook)
-              )
-              snackBarRoot?.snack(
-                stringId = R.string.bookmark_added,
-                actionStringId = R.string.open,
-                actionClick = {
-                  goToBookmarks()
-                  Unit
-                }
-              )
+      lifecycleScope.launch {
+        getCurrentWebView()?.url?.let { articleUrl ->
+          zimReaderContainer?.zimFileReader?.let { zimFileReader ->
+            val libKiwixBook = Book().apply {
+              update(zimFileReader.jniKiwixReader)
+            }
+            if (isBookmarked) {
+              repositoryActions?.deleteBookmark(libKiwixBook.id, articleUrl)
+              snackBarRoot?.snack(R.string.bookmark_removed)
+            } else {
+              getCurrentWebView()?.title?.let {
+                repositoryActions?.saveBookmark(
+                  LibkiwixBookmarkItem(it, articleUrl, zimFileReader, libKiwixBook)
+                )
+                snackBarRoot?.snack(
+                  stringId = R.string.bookmark_added,
+                  actionStringId = R.string.open,
+                  actionClick = {
+                    goToBookmarks()
+                    Unit
+                  }
+                )
+              }
             }
           }
+        } ?: kotlin.run {
+          requireActivity().toast(R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
         }
-      } ?: kotlin.run {
-        requireActivity().toast(R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
       }
     } catch (ignore: Exception) {
       // Catch the exception while saving the bookmarks for splitted zim files.

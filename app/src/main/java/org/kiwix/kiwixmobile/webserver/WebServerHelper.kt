@@ -45,7 +45,7 @@ class WebServerHelper @Inject constructor(
   private var isServerStarted = false
   private var validIpAddressDisposable: Disposable? = null
 
-  fun startServerHelper(
+  suspend fun startServerHelper(
     selectedBooksPath: ArrayList<String>,
     restartServer: Boolean
   ): ServerStatus? {
@@ -64,7 +64,7 @@ class WebServerHelper @Inject constructor(
     }
   }
 
-  private fun startAndroidWebServer(
+  private suspend fun startAndroidWebServer(
     selectedBooksPath: ArrayList<String>,
     restartServer: Boolean
   ): ServerStatus? {
@@ -78,7 +78,7 @@ class WebServerHelper @Inject constructor(
     return serverStatus
   }
 
-  private fun startKiwixServer(selectedBooksPath: ArrayList<String>): ServerStatus {
+  private suspend fun startKiwixServer(selectedBooksPath: ArrayList<String>): ServerStatus {
     var errorMessage: Int? = null
     ServerUtils.port = DEFAULT_PORT
     kiwixServer = kiwixServerFactory.createKiwixServer(selectedBooksPath).also {

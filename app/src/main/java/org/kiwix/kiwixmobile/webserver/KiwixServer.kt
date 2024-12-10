@@ -19,6 +19,8 @@
 package org.kiwix.kiwixmobile.webserver
 
 import android.content.Context
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForCustomApp
@@ -43,41 +45,42 @@ class KiwixServer @Inject constructor(
     private val zimReaderContainer: ZimReaderContainer
   ) {
     @Suppress("NestedBlockDepth")
-    fun createKiwixServer(selectedBooksPath: ArrayList<String>): KiwixServer {
-      val kiwixLibrary = Library()
-      selectedBooksPath.forEach { path ->
-        try {
-          val book = Book().apply {
-            // Determine whether to create an Archive from an asset or a file path
-            val archive = if (path == getDemoFilePathForCustomApp(context)) {
-              // For custom apps using a demo file, create an Archive with FileDescriptor
-              val assetFileDescriptor =
-                zimReaderContainer.zimReaderSource?.assetFileDescriptorList?.get(0)
-              val startOffset = assetFileDescriptor?.startOffset ?: 0L
-              val size = assetFileDescriptor?.length ?: 0L
-              Archive(
-                assetFileDescriptor?.parcelFileDescriptor?.fileDescriptor,
-                startOffset,
-                size
-              )
-            } else {
-              // For regular files, create an Archive from the file path
-              Archive(path)
+    suspend fun createKiwixServer(selectedBooksPath: ArrayList<String>): KiwixServer =
+      withContext(Dispatchers.IO) {
+        val kiwixLibrary = Library()
+        selectedBooksPath.forEach { path ->
+          try {
+            val book = Book().apply {
+              // Determine whether to create an Archive from an asset or a file path
+              val archive = if (path == getDemoFilePathForCustomApp(context)) {
+                // For custom apps using a demo file, create an Archive with FileDescriptor
+                val assetFileDescriptor =
+                  zimReaderContainer.zimReaderSource?.assetFileDescriptorList?.get(0)
+                val startOffset = assetFileDescriptor?.startOffset ?: 0L
+                val size = assetFileDescriptor?.length ?: 0L
+                Archive(
+                  assetFileDescriptor?.parcelFileDescriptor?.fileDescriptor,
+                  startOffset,
+                  size
+                )
+              } else {
+                // For regular files, create an Archive from the file path
+                Archive(path)
+              }
+              update(archive)
             }
-            update(archive)
+            kiwixLibrary.addBook(book)
+          } catch (ignore: Exception) {
+            // Catch the other exceptions as well. e.g. while hosting the split zim files.
+            // we have an issue with split zim files, see #3827
+            Log.v(
+              TAG,
+              "Couldn't add book with path:{ $path }.\n Original Exception = $ignore"
+            )
           }
-          kiwixLibrary.addBook(book)
-        } catch (ignore: Exception) {
-          // Catch the other exceptions as well. e.g. while hosting the split zim files.
-          // we have an issue with split zim files, see #3827
-          Log.v(
-            TAG,
-            "Couldn't add book with path:{ $path }.\n Original Exception = $ignore"
-          )
         }
+        return@withContext KiwixServer(kiwixLibrary, Server(kiwixLibrary))
       }
-      return KiwixServer(kiwixLibrary, Server(kiwixLibrary))
-    }
   }
 
   fun startServer(port: Int): Boolean {

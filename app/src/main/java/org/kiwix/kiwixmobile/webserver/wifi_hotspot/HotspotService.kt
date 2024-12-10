@@ -22,6 +22,10 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import android.widget.Toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.KiwixApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
@@ -75,18 +79,22 @@ class HotspotService :
       ACTION_START_SERVER -> {
         val restartServer = intent.getBooleanExtra(RESTART_SERVER, false)
         intent.getStringArrayListExtra(ZimHostFragment.SELECTED_ZIM_PATHS_KEY)?.let {
-          val serverStatus = webServerHelper?.startServerHelper(it, restartServer)
-          if (serverStatus?.isServerStarted == true) {
-            zimHostCallbacks?.onServerStarted(getSocketAddress())
-            startForegroundNotificationHelper()
-            if (!restartServer) {
-              Toast.makeText(
-                this, R.string.server_started_successfully_toast_message,
-                Toast.LENGTH_SHORT
-              ).show()
+          CoroutineScope(Dispatchers.Main).launch {
+            val serverStatus = withContext(Dispatchers.IO) {
+              webServerHelper?.startServerHelper(it, restartServer)
             }
-          } else {
-            onServerFailedToStart(serverStatus?.errorMessage)
+            if (serverStatus?.isServerStarted == true) {
+              zimHostCallbacks?.onServerStarted(getSocketAddress())
+              startForegroundNotificationHelper()
+              if (!restartServer) {
+                Toast.makeText(
+                  this@HotspotService, R.string.server_started_successfully_toast_message,
+                  Toast.LENGTH_SHORT
+                ).show()
+              }
+            } else {
+              onServerFailedToStart(serverStatus?.errorMessage)
+            }
           }
         } ?: kotlin.run { onServerFailedToStart(R.string.no_books_selected_toast_message) }
       }
