@@ -42,8 +42,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.R.layout
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
@@ -443,6 +443,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     Intent(requireActivity(), HotspotService::class.java).setAction(action)
 
   override fun onServerStarted(ip: String) {
+    dialog?.dismiss() // Dismiss dialog when server started.
     this.ip = ip
     layoutServerStarted()
   }
@@ -452,6 +453,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   override fun onServerFailedToStart(errorMessage: Int?) {
+    dialog?.dismiss() // Dismiss dialog if there is some error in starting the server.
     errorMessage?.let {
       toast(errorMessage)
     }
@@ -514,7 +516,6 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   override fun onIpAddressValid() {
-    dialog?.dismiss()
     startWifiHotspot(false)
   }
 
