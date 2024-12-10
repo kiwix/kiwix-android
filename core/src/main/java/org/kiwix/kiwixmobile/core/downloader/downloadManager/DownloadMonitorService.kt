@@ -137,6 +137,7 @@ class DownloadMonitorService : Service() {
         {
           try {
             synchronized(lock) {
+              Log.e("DOWNLOAD_MONITOR", "startMonitoringDownloads: service")
               if (downloadRoomDao.downloads().blockingFirst().isNotEmpty()) {
                 checkDownloads()
               } else {
@@ -385,6 +386,11 @@ class DownloadMonitorService : Service() {
   ) {
     synchronized(lock) {
       updater.onNext {
+        Log.e(
+          "DOWNLOAD_MONITOR",
+          "updateDownloadStatus: status = $status\n" +
+            "error = $error\n bytesDownloaded = $bytesDownloaded"
+        )
         downloadRoomDao.getEntityForDownloadId(downloadId)?.let { downloadEntity ->
           if (shouldUpdateDownloadStatus(downloadEntity)) {
             val downloadModel = DownloadModel(downloadEntity).apply {
@@ -612,6 +618,7 @@ class DownloadMonitorService : Service() {
   }
 
   private fun stopForegroundServiceForDownloads() {
+    Log.e("DOWNLOAD_MONITOR", "stopForegroundServiceForDownloads: service")
     foreGroundServiceInformation = true to DEFAULT_INT_VALUE
     monitoringDisposable?.dispose()
     stopForeground(STOP_FOREGROUND_REMOVE)
