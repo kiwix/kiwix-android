@@ -19,17 +19,12 @@
 package org.kiwix.kiwixmobile.core.extensions
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.io.File
 
 suspend fun File.isFileExist(): Boolean = withContext(Dispatchers.IO) { exists() }
 
-fun File.freeSpace(): Long = runBlocking {
-  withContext(Dispatchers.IO) {
-    freeSpace
-  }
-}
+suspend fun File.freeSpace(): Long = withContext(Dispatchers.IO) { freeSpace }
 
 suspend fun File.totalSpace(): Long = withContext(Dispatchers.IO) { totalSpace }
 
