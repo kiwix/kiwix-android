@@ -18,7 +18,6 @@
 
 package eu.mhutti1.utils.storage.adapter
 
-import android.annotation.SuppressLint
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.AbsoluteSizeSpan
@@ -41,7 +40,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 const val FREE_SPACE_TEXTVIEW_SIZE = 12F
 const val STORAGE_TITLE_TEXTVIEW_SIZE = 15
 
-@SuppressLint("SetTextI18n")
 @Suppress("LongParameterList")
 internal class StorageViewHolder(
   private val itemStoragePreferenceBinding: ItemStoragePreferenceBinding,
@@ -53,8 +51,8 @@ internal class StorageViewHolder(
 ) : BaseViewHolder<StorageDevice>(itemStoragePreferenceBinding.root) {
 
   override fun bind(item: StorageDevice) {
-    lifecycleScope.launch {
-      with(itemStoragePreferenceBinding) {
+    with(itemStoragePreferenceBinding) {
+      lifecycleScope.launch {
         storagePathAndTitle.text =
           resizeStoragePathAndTitle(
             item.storagePathAndTitle(

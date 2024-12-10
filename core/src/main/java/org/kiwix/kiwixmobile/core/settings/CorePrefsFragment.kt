@@ -41,8 +41,6 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.material.snackbar.Snackbar
 import eu.mhutti1.utils.storage.StorageDevice
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
@@ -367,7 +365,11 @@ abstract class CorePrefsFragment :
   private fun showExportBookmarkDialog() {
     alertDialogShower?.show(
       KiwixDialog.YesNoDialog.ExportBookmarks,
-      { libkiwixBookmarks?.exportBookmark() }
+      {
+        lifecycleScope.launch {
+          libkiwixBookmarks?.exportBookmark()
+        }
+      }
     )
   }
 
@@ -409,7 +411,7 @@ abstract class CorePrefsFragment :
 
           createTempFile(contentResolver.openInputStream(uri)).apply {
             if (isValidXmlFile(this)) {
-              CoroutineScope(Dispatchers.IO).launch {
+              lifecycleScope.launch {
                 libkiwixBookmarks?.importBookmarks(this@apply)
               }
             } else {

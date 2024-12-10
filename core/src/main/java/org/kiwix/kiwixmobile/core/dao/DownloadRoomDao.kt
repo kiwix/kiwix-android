@@ -24,9 +24,10 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import io.reactivex.Flowable
-import io.reactivex.Single
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
@@ -50,7 +51,7 @@ abstract class DownloadRoomDao {
   abstract fun downloadRoomEntity(): Flowable<List<DownloadRoomEntity>>
 
   @Query("SELECT * FROM DownloadRoomEntity")
-  abstract fun getAllDownloads(): Single<List<DownloadRoomEntity>>
+  abstract fun getAllDownloads(): Flow<List<DownloadRoomEntity>>
 
   fun downloads(): Flowable<List<DownloadModel>> =
     downloadRoomEntity()

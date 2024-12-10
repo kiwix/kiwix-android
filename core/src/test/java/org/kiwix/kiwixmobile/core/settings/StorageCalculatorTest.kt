@@ -31,7 +31,7 @@ internal class StorageCalculatorTest {
   private val file: File = mockk()
 
   @Test
-  fun `calculate available space with existing file`() {
+  fun `calculate available space with existing file`() = runTest {
     every { file.freeSpace } returns 1
     every { file.exists() } returns true
     assertThat(storageCalculator.calculateAvailableSpace(file)).isEqualTo("1 Bytes")
@@ -51,7 +51,7 @@ internal class StorageCalculatorTest {
   }
 
   @Test
-  fun `available bytes of non existing file`() {
+  fun `available bytes of non existing file`() = runTest {
     every { file.exists() } returns false
     assertThat(storageCalculator.availableBytes(file)).isEqualTo(0L)
   }

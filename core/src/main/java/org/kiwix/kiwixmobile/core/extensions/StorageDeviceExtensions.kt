@@ -24,7 +24,10 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
-fun StorageDevice.getFreeSpace(context: Context, storageCalculator: StorageCalculator): String {
+suspend fun StorageDevice.getFreeSpace(
+  context: Context,
+  storageCalculator: StorageCalculator
+): String {
   val freeSpace = storageCalculator.calculateAvailableSpace(file)
   return context.getString(R.string.pref_free_storage, freeSpace)
 }

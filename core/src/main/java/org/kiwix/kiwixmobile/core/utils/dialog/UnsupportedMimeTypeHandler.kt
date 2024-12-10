@@ -22,6 +22,8 @@ import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import androidx.core.content.FileProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -38,31 +40,42 @@ class UnsupportedMimeTypeHandler @Inject constructor(
 ) {
   var intent: Intent = Intent(Intent.ACTION_VIEW)
 
-  fun showSaveOrOpenUnsupportedFilesDialog(url: String?, documentType: String?) {
+  fun showSaveOrOpenUnsupportedFilesDialog(
+    url: String?,
+    documentType: String?,
+    lifecycleScope: CoroutineScope?
+  ) {
     alertDialogShower.show(
       KiwixDialog.SaveOrOpenUnsupportedFiles,
-      { openOrSaveFile(url, documentType, true) },
-      { openOrSaveFile(url, documentType, false) },
+      { openOrSaveFile(url, documentType, true, lifecycleScope) },
+      { openOrSaveFile(url, documentType, false, lifecycleScope) },
       { }
     )
   }
 
-  private fun openOrSaveFile(url: String?, documentType: String?, openFile: Boolean) {
-    downloadFileFromUrl(
-      url,
-      null,
-      zimReaderContainer,
-      sharedPreferenceUtil
-    )?.let { savedFile ->
-      if (openFile) {
-        openFile(savedFile, documentType)
-      } else {
-        activity.toast(activity.getString(R.string.save_media_saved, savedFile.name)).also {
-          Log.e("DownloadOrOpenEpubAndPdf", "File downloaded at = ${savedFile.path}")
+  private fun openOrSaveFile(
+    url: String?,
+    documentType: String?,
+    openFile: Boolean,
+    lifecycleScope: CoroutineScope?
+  ) {
+    lifecycleScope?.launch {
+      downloadFileFromUrl(
+        url,
+        null,
+        zimReaderContainer,
+        sharedPreferenceUtil
+      )?.let { savedFile ->
+        if (openFile) {
+          openFile(savedFile, documentType)
+        } else {
+          activity.toast(activity.getString(R.string.save_media_saved, savedFile.name)).also {
+            Log.e("DownloadOrOpenEpubAndPdf", "File downloaded at = ${savedFile.path}")
+          }
         }
+      } ?: run {
+        activity.toast(R.string.save_media_error)
       }
-    } ?: run {
-      activity.toast(R.string.save_media_error)
     }
   }
 

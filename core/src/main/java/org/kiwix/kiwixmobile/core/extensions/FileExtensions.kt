@@ -23,11 +23,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.io.File
 
-fun File.isFileExist(): Boolean = runBlocking {
-  withContext(Dispatchers.IO) {
-    exists()
-  }
-}
+suspend fun File.isFileExist(): Boolean = withContext(Dispatchers.IO) { exists() }
 
 fun File.freeSpace(): Long = runBlocking {
   withContext(Dispatchers.IO) {

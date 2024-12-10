@@ -226,7 +226,7 @@ class CustomReaderFragment : CoreReaderFragment() {
     )
   }
 
-  private fun createDemoFile() =
+  private suspend fun createDemoFile() =
     File(getDemoFilePathForCustomApp(requireActivity())).also {
       if (!it.isFileExist()) it.createNewFile()
     }
