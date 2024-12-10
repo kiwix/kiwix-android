@@ -32,6 +32,7 @@ import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificatio
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationManager.Companion.ACTION_QUERY_DOWNLOAD_STATUS
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationManager.Companion.ACTION_RESUME
 import org.kiwix.kiwixmobile.core.extensions.isServiceRunning
+import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -62,10 +63,6 @@ class DownloadManagerMonitor @Inject constructor(
               // Download Manager takes some time to update the download status.
               // In such cases, the foreground service may stop prematurely due to
               // a lack of active downloads during this update delay.
-              Log.e(
-                "DOWNLOAD_MONITOR",
-                "startMonitoringDownloads: monitor ${shouldStartDownloadMonitorService()}"
-              )
               if (downloadRoomDao.downloads().blockingFirst().isNotEmpty()) {
                 // Check if there are active downloads and the service is not running.
                 // If so, start the DownloadMonitorService to properly track download progress.
@@ -98,10 +95,51 @@ class DownloadManagerMonitor @Inject constructor(
       !context.isServiceRunning(DownloadMonitorService::class.java)
 
   private fun getActiveDownloads(): List<DownloadRoomEntity> =
-    downloadRoomDao.downloadRoomEntity().blockingFirst().filter {
-      (it.status != Status.PAUSED || it.error == Error.WAITING_TO_RETRY) &&
-        it.status != Status.CANCELLED
-    }
+    downloadRoomDao.downloadRoomEntity().blockingFirst().filter(::isActiveDownload)
+
+  /**
+   * Determines if a given download is considered active.
+   *
+   * @param download The DownloadRoomEntity to evaluate.
+   * @return True if the download is active, false otherwise.
+   */
+  private fun isActiveDownload(download: DownloadRoomEntity): Boolean =
+    (download.status != Status.PAUSED || isPausedAndRetryable(download)) &&
+      download.status != Status.CANCELLED
+
+  /**
+   * Checks if a paused download is eligible for retry based on its error status and network conditions.
+   *
+   * @param download The DownloadRoomEntity to evaluate.
+   * @return True if the paused download is retryable, false otherwise.
+   */
+  private fun isPausedAndRetryable(download: DownloadRoomEntity): Boolean {
+    return download.status == Status.PAUSED &&
+      (
+        isQueuedForWiFiAndConnected(download) ||
+          isQueuedForNetwork(download) ||
+          download.error == Error.WAITING_TO_RETRY
+        ) &&
+      NetworkUtils.isNetworkAvailable(context)
+  }
+
+  /**
+   * Checks if the download is queued for Wi-Fi and the device is connected to Wi-Fi.
+   *
+   * @param download The DownloadRoomEntity to evaluate.
+   * @return True if the download is queued for Wi-Fi and connected, false otherwise.
+   */
+  private fun isQueuedForWiFiAndConnected(download: DownloadRoomEntity): Boolean =
+    download.error == Error.QUEUED_FOR_WIFI && NetworkUtils.isWiFi(context)
+
+  /**
+   * Checks if the download is waiting for a network connection and the network is now available.
+   *
+   * @param download The DownloadRoomEntity to evaluate.
+   * @return True if the download is waiting for a network and connected, false otherwise.
+   */
+  private fun isQueuedForNetwork(download: DownloadRoomEntity): Boolean =
+    download.error == Error.WAITING_FOR_NETWORK && NetworkUtils.isNetworkAvailable(context)
 
   override fun downloadCompleteOrCancelled(intent: Intent) {
     synchronized(lock) {

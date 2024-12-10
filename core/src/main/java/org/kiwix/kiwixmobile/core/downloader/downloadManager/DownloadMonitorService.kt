@@ -40,6 +40,7 @@ import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificatio
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadNotificationManager.Companion.ACTION_RESUME
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
+import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -137,7 +138,6 @@ class DownloadMonitorService : Service() {
         {
           try {
             synchronized(lock) {
-              Log.e("DOWNLOAD_MONITOR", "startMonitoringDownloads: service")
               if (downloadRoomDao.downloads().blockingFirst().isNotEmpty()) {
                 checkDownloads()
               } else {
@@ -386,11 +386,6 @@ class DownloadMonitorService : Service() {
   ) {
     synchronized(lock) {
       updater.onNext {
-        Log.e(
-          "DOWNLOAD_MONITOR",
-          "updateDownloadStatus: status = $status\n" +
-            "error = $error\n bytesDownloaded = $bytesDownloaded"
-        )
         downloadRoomDao.getEntityForDownloadId(downloadId)?.let { downloadEntity ->
           if (shouldUpdateDownloadStatus(downloadEntity)) {
             val downloadModel = DownloadModel(downloadEntity).apply {
@@ -426,10 +421,9 @@ class DownloadMonitorService : Service() {
   /**
    * Determines whether the download status should be updated based on the current status and error.
    *
-   * This method checks the current download status and error, and decides whether to update the status
-   * of the download entity. Specifically, it handles the case where a download is paused but has been
-   * queued for resumption. In such cases, it ensures that the download manager is instructed to resume
-   * the download, and prevents the status from being prematurely updated to "Paused".
+   * This method evaluates the current download status and error conditions, ensuring proper handling
+   * for paused downloads, queued downloads, and network-related retries. It coordinates with the
+   * Download Manager to resume downloads when necessary and prevents premature status updates.
    *
    * @param status The current status of the download.
    * @param error The current error state of the download.
@@ -442,36 +436,92 @@ class DownloadMonitorService : Service() {
     downloadRoomEntity: DownloadRoomEntity
   ): Boolean {
     synchronized(lock) {
-      return@shouldUpdateDownloadStatus if (
-        status == Status.PAUSED &&
-        downloadRoomEntity.status == Status.QUEUED
-      ) {
-        // Check if the user has resumed the download.
-        // Do not update the download status immediately since the download manager
-        // takes some time to actually resume the download. During this time,
-        // it will still return the paused state.
-        // By not updating the status right away, we ensure that the user
-        // sees the "Pending" state, indicating that the download is in the process
-        // of resuming.
-        when (error) {
-          // When the pause reason is unknown or waiting to retry, and the user
-          // resumes the download, attempt to resume the download if it was not resumed
-          // due to some reason.
-          Error.PAUSED_UNKNOWN,
-          Error.WAITING_TO_RETRY -> {
-            resumeDownload(downloadRoomEntity.downloadId)
-            false
-          }
+      return@shouldUpdateDownloadStatus when {
+        // Check if the download is paused and was previously queued.
+        isPausedAndQueued(status, downloadRoomEntity) ->
+          handlePausedAndQueuedDownload(error, downloadRoomEntity)
 
-          // Return true to update the status of the download if there is any other status,
-          // e.g., WAITING_FOR_WIFI, WAITING_FOR_NETWORK, or any other pause reason
-          // to inform the user.
-          else -> true
-        }
-      } else {
-        true
+        // Check if the download is paused and retryable due to network availability.
+        isPausedAndRetryable(status, error) -> handleRetryablePausedDownload(downloadRoomEntity)
+
+        // Default case: update the status.
+        else -> true
       }
     }
+  }
+
+  /**
+   * Checks if the download is paused and was previously queued.
+   *
+   * Specifically, it evaluates whether the current status is "Paused" while the previous status
+   * was "Queued", indicating that the user might have initiated a resume action.
+   *
+   * @param status The current status of the download.
+   * @param downloadRoomEntity The download entity to evaluate.
+   * @return `true` if the download is paused and queued, `false` otherwise.
+   */
+  private fun isPausedAndQueued(status: Status, downloadRoomEntity: DownloadRoomEntity): Boolean =
+    status == Status.PAUSED && downloadRoomEntity.status == Status.QUEUED
+
+  /**
+   * Checks if the download is paused and retryable based on the error and network conditions.
+   *
+   * This evaluates whether the download can be resumed, considering its paused state,
+   * error condition (e.g., waiting for retry), and the availability of a network connection.
+   *
+   * @param status The current status of the download.
+   * @param error The current error state of the download.
+   * @return `true` if the download is paused and retryable, `false` otherwise.
+   */
+  private fun isPausedAndRetryable(status: Status, error: Error): Boolean {
+    return status == Status.PAUSED &&
+      error == Error.WAITING_TO_RETRY &&
+      NetworkUtils.isNetworkAvailable(this)
+  }
+
+  /**
+   * Handles the case where a paused download was previously queued.
+   *
+   * This ensures that the download manager is instructed to resume the download and prevents
+   * the status from being prematurely updated to "Paused". Instead, the user will see the "Pending"
+   * state, indicating that the download is in the process of resuming.
+   *
+   * @param error The current error state of the download.
+   * @param downloadRoomEntity The download entity to evaluate.
+   * @return `true` if the status should be updated, `false` otherwise.
+   */
+  private fun handlePausedAndQueuedDownload(
+    error: Error,
+    downloadRoomEntity: DownloadRoomEntity
+  ): Boolean {
+    return when (error) {
+      // When the pause reason is unknown or waiting to retry, and the user
+      // resumes the download, attempt to resume the download if it was not resumed
+      // due to some reason.
+      Error.PAUSED_UNKNOWN,
+      Error.WAITING_TO_RETRY -> {
+        resumeDownload(downloadRoomEntity.downloadId)
+        false
+      }
+
+      // For any other error state, update the status to reflect the current state
+      // and provide feedback to the user.
+      else -> true
+    }
+  }
+
+  /**
+   * Handles the case where a paused download is retryable due to network availability.
+   *
+   * If the download manager is waiting to retry due to a network error caused by fluctuations,
+   * this method resumes the download and ensures the status reflects the resumption process.
+   *
+   * @param downloadRoomEntity The download entity to evaluate.
+   * @return `true` to update the status and attempt to resume the download.
+   */
+  private fun handleRetryablePausedDownload(downloadRoomEntity: DownloadRoomEntity): Boolean {
+    resumeDownload(downloadRoomEntity.downloadId)
+    return true
   }
 
   private fun cancelNotificationAndAssignNewNotificationToForegroundService(downloadId: Long) {
@@ -501,10 +551,51 @@ class DownloadMonitorService : Service() {
   }
 
   private fun getActiveDownloads(): List<DownloadRoomEntity> =
-    downloadRoomDao.downloadRoomEntity().blockingFirst().filter {
-      (it.status != Status.PAUSED || it.error == Error.WAITING_TO_RETRY) &&
-        it.status != Status.CANCELLED
-    }
+    downloadRoomDao.downloadRoomEntity().blockingFirst().filter(::isActiveDownload)
+
+  /**
+   * Determines if a given download is considered active.
+   *
+   * @param download The DownloadRoomEntity to evaluate.
+   * @return True if the download is active, false otherwise.
+   */
+  private fun isActiveDownload(download: DownloadRoomEntity): Boolean =
+    (download.status != Status.PAUSED || isPausedAndRetryable(download)) &&
+      download.status != Status.CANCELLED
+
+  /**
+   * Checks if a paused download is eligible for retry based on its error status and network conditions.
+   *
+   * @param download The DownloadRoomEntity to evaluate.
+   * @return True if the paused download is retryable, false otherwise.
+   */
+  private fun isPausedAndRetryable(download: DownloadRoomEntity): Boolean {
+    return download.status == Status.PAUSED &&
+      (
+        isQueuedForWiFiAndConnected(download) ||
+          isQueuedForNetwork(download) ||
+          download.error == Error.WAITING_TO_RETRY
+        ) &&
+      NetworkUtils.isNetworkAvailable(this)
+  }
+
+  /**
+   * Checks if the download is queued for Wi-Fi and the device is connected to Wi-Fi.
+   *
+   * @param download The DownloadRoomEntity to evaluate.
+   * @return True if the download is queued for Wi-Fi and connected, false otherwise.
+   */
+  private fun isQueuedForWiFiAndConnected(download: DownloadRoomEntity): Boolean =
+    download.error == Error.QUEUED_FOR_WIFI && NetworkUtils.isWiFi(this)
+
+  /**
+   * Checks if the download is waiting for a network connection and the network is now available.
+   *
+   * @param download The DownloadRoomEntity to evaluate.
+   * @return True if the download is waiting for a network and connected, false otherwise.
+   */
+  private fun isQueuedForNetwork(download: DownloadRoomEntity): Boolean =
+    download.error == Error.WAITING_FOR_NETWORK && NetworkUtils.isNetworkAvailable(this)
 
   private fun updateNotification(
     downloadModel: DownloadModel,
@@ -619,7 +710,6 @@ class DownloadMonitorService : Service() {
   }
 
   private fun stopForegroundServiceForDownloads() {
-    Log.e("DOWNLOAD_MONITOR", "stopForegroundServiceForDownloads: service")
     foreGroundServiceInformation = true to DEFAULT_INT_VALUE
     monitoringDisposable?.dispose()
     stopForeground(STOP_FOREGROUND_REMOVE)
