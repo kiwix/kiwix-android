@@ -34,10 +34,15 @@ class ExternalLinkOpener @Inject constructor(
 ) {
 
   fun openExternalUrl(intent: Intent) {
+    // Show popup with warning that this url is external and could lead to additional costs
+    // or may event not work when the user is offline.
+    openExternalUrl(intent, sharedPreferenceUtil.prefExternalLinkPopup)
+  }
+
+  // Overload for ignoring sharedPreferenceUtil.prefExternalLinkPopup
+  fun openExternalUrl(intent: Intent, showExternalLinkPopup: Boolean) {
     if (intent.resolveActivity(activity.packageManager) != null) {
-      // Show popup with warning that this url is external and could lead to additional costs
-      // or may event not work when the user is offline.
-      if (sharedPreferenceUtil.prefExternalLinkPopup) {
+      if (showExternalLinkPopup) {
         requestOpenLink(intent)
       } else {
         openLink(intent)
