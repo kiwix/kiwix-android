@@ -1674,7 +1674,7 @@ abstract class CoreReaderFragment :
   }
 
   override fun openExternalUrl(intent: Intent) {
-    externalLinkOpener?.openExternalUrl(intent)
+    externalLinkOpener?.openExternalUrl(intent, false)
   }
 
   override fun showSaveOrOpenUnsupportedFilesDialog(url: String, documentType: String?) {
