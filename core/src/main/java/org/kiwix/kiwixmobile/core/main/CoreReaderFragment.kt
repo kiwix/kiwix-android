@@ -1674,7 +1674,7 @@ abstract class CoreReaderFragment :
   }
 
   override fun openExternalUrl(intent: Intent) {
-    externalLinkOpener?.openExternalUrl(intent, false)
+    externalLinkOpener?.openExternalUrl(intent)
   }
 
   fun openExternalUrl(intent: Intent, showExternalLinkPopup: Boolean) {
