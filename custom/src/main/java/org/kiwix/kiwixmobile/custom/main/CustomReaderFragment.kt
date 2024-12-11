@@ -30,6 +30,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R.dimen
@@ -70,27 +71,29 @@ class CustomReaderFragment : CoreReaderFragment() {
   @Suppress("NestedBlockDepth")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    if (enforcedLanguage()) {
-      return
-    }
+    lifecycleScope.launch {
+      if (enforcedLanguage()) {
+        return@launch
+      }
 
-    if (isAdded) {
-      setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-      if (BuildConfig.DISABLE_SIDEBAR) {
-        val toolbarToc =
-          activity?.findViewById<ImageView>(org.kiwix.kiwixmobile.core.R.id.bottom_toolbar_toc)
-        toolbarToc?.isEnabled = false
-      }
-      with(activity as AppCompatActivity) {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar?.let(::setUpDrawerToggle)
-      }
-      loadPageFromNavigationArguments()
-      if (BuildConfig.DISABLE_EXTERNAL_LINK) {
-        // If "external links" are disabled in a custom app,
-        // this sets the shared preference to not show the external link popup
-        // when opening external links.
-        sharedPreferenceUtil?.putPrefExternalLinkPopup(false)
+      if (isAdded) {
+        setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+        if (BuildConfig.DISABLE_SIDEBAR) {
+          val toolbarToc =
+            activity?.findViewById<ImageView>(org.kiwix.kiwixmobile.core.R.id.bottom_toolbar_toc)
+          toolbarToc?.isEnabled = false
+        }
+        with(activity as AppCompatActivity) {
+          supportActionBar?.setDisplayHomeAsUpEnabled(true)
+          toolbar?.let(::setUpDrawerToggle)
+        }
+        loadPageFromNavigationArguments()
+        if (BuildConfig.DISABLE_EXTERNAL_LINK) {
+          // If "external links" are disabled in a custom app,
+          // this sets the shared preference to not show the external link popup
+          // when opening external links.
+          sharedPreferenceUtil?.putPrefExternalLinkPopup(false)
+        }
       }
     }
   }
@@ -135,7 +138,7 @@ class CustomReaderFragment : CoreReaderFragment() {
     super.setTabSwitcherVisibility(visibility)
   }
 
-  private fun loadPageFromNavigationArguments() {
+  private suspend fun loadPageFromNavigationArguments() {
     val args = CustomReaderFragmentArgs.fromBundle(requireArguments())
     if (args.pageUrl.isNotEmpty()) {
       loadUrlWithCurrentWebview(args.pageUrl)
@@ -154,7 +157,7 @@ class CustomReaderFragment : CoreReaderFragment() {
    * due to invalid or corrupted data. In this case, it opens the homepage of the zim file,
    * as custom apps always have the zim file available.
    */
-  override fun restoreViewStateOnInvalidJSON() {
+  override suspend fun restoreViewStateOnInvalidJSON() {
     openHomeScreen()
   }
 

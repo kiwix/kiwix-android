@@ -31,6 +31,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
@@ -165,29 +166,31 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   override fun hideTabSwitcher() {
-    actionBar?.let { actionBar ->
-      actionBar.setDisplayShowTitleEnabled(true)
-      toolbar?.let { activity?.setupDrawerToggle(it, true) }
+    lifecycleScope.launch {
+      actionBar?.let { actionBar ->
+        actionBar.setDisplayShowTitleEnabled(true)
+        toolbar?.let { activity?.setupDrawerToggle(it, true) }
 
-      setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+        setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
 
-      closeAllTabsButton?.setImageDrawableCompat(drawable.ic_close_black_24dp)
-      if (tabSwitcherRoot?.visibility == View.VISIBLE) {
-        tabSwitcherRoot?.visibility = GONE
-        startAnimation(tabSwitcherRoot, anim.slide_up)
-        progressBar?.visibility = View.GONE
-        progressBar?.progress = 0
-        contentFrame?.visibility = View.VISIBLE
-      }
-      mainMenu?.showWebViewOptions(true)
-      if (webViewList.isEmpty()) {
-        exitBook()
-      } else {
-        // Reset the top margin of web views to 0 to remove any previously set margin
-        // This ensures that the web views are displayed without any additional
-        // top margin for kiwix main app.
-        setTopMarginToWebViews(0)
-        selectTab(currentWebViewIndex)
+        closeAllTabsButton?.setImageDrawableCompat(drawable.ic_close_black_24dp)
+        if (tabSwitcherRoot?.visibility == View.VISIBLE) {
+          tabSwitcherRoot?.visibility = GONE
+          startAnimation(tabSwitcherRoot, anim.slide_up)
+          progressBar?.visibility = View.GONE
+          progressBar?.progress = 0
+          contentFrame?.visibility = View.VISIBLE
+        }
+        mainMenu?.showWebViewOptions(true)
+        if (webViewList.isEmpty()) {
+          exitBook()
+        } else {
+          // Reset the top margin of web views to 0 to remove any previously set margin
+          // This ensures that the web views are displayed without any additional
+          // top margin for kiwix main app.
+          setTopMarginToWebViews(0)
+          selectTab(currentWebViewIndex)
+        }
       }
     }
   }
@@ -229,7 +232,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     }
   }
 
-  override fun restoreViewStateOnInvalidJSON() {
+  override suspend fun restoreViewStateOnInvalidJSON() {
     Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page")
     exitBook()
   }

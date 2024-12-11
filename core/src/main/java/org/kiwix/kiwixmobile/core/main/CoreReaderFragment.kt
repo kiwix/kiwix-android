@@ -1398,7 +1398,7 @@ abstract class CoreReaderFragment :
     mainMenu?.showBookSpecificMenuItems()
   }
 
-  protected fun exitBook() {
+  protected suspend fun exitBook() {
     showNoBookOpenViews()
     bottomToolbar?.visibility = View.GONE
     actionBar?.title = getString(R.string.reader)
@@ -1408,7 +1408,7 @@ abstract class CoreReaderFragment :
     closeZimBook()
   }
 
-  fun closeZimBook() {
+  suspend fun closeZimBook() {
     zimReaderContainer?.setZimReaderSource(null)
   }
 
@@ -1428,29 +1428,31 @@ abstract class CoreReaderFragment :
   }
 
   private fun restoreDeletedTab(index: Int) {
-    if (webViewList.isEmpty()) {
-      reopenBook()
-    }
-    tempWebViewForUndo?.let {
-      if (tabSwitcherRoot?.visibility == View.GONE) {
-        // Remove the top margin from the webView when the tabSwitcher is not visible.
-        // We have added this margin in `TabsAdapter` to not show the top margin in tabs.
-        // `tempWebViewForUndo` saved with that margin so before showing it to the `contentFrame`
-        // We need to set full width and height for properly showing the content of webView.
-        it.layoutParams = LinearLayout.LayoutParams(
-          LinearLayout.LayoutParams.MATCH_PARENT,
-          LinearLayout.LayoutParams.MATCH_PARENT
-        )
+    lifecycleScope.launch {
+      if (webViewList.isEmpty()) {
+        reopenBook()
       }
-      zimReaderContainer?.setZimReaderSource(tempZimSourceForUndo)
-      webViewList.add(index, it)
-      tabsAdapter?.notifyDataSetChanged()
-      snackBarRoot?.let { root ->
-        Snackbar.make(root, R.string.tab_restored, Snackbar.LENGTH_SHORT).show()
+      tempWebViewForUndo?.let {
+        if (tabSwitcherRoot?.visibility == View.GONE) {
+          // Remove the top margin from the webView when the tabSwitcher is not visible.
+          // We have added this margin in `TabsAdapter` to not show the top margin in tabs.
+          // `tempWebViewForUndo` saved with that margin so before showing it to the `contentFrame`
+          // We need to set full width and height for properly showing the content of webView.
+          it.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+          )
+        }
+        zimReaderContainer?.setZimReaderSource(tempZimSourceForUndo)
+        webViewList.add(index, it)
+        tabsAdapter?.notifyDataSetChanged()
+        snackBarRoot?.let { root ->
+          Snackbar.make(root, R.string.tab_restored, Snackbar.LENGTH_SHORT).show()
+        }
+        setUpWithTextToSpeech(it)
+        updateBottomToolbarVisibility()
+        safelyAddWebView(it)
       }
-      setUpWithTextToSpeech(it)
-      updateBottomToolbarVisibility()
-      safelyAddWebView(it)
     }
   }
 
@@ -1861,18 +1863,20 @@ abstract class CoreReaderFragment :
   }
 
   private fun restoreDeletedTabs() {
-    if (tempWebViewListForUndo.isNotEmpty()) {
-      zimReaderContainer?.setZimReaderSource(tempZimSourceForUndo)
-      webViewList.addAll(tempWebViewListForUndo)
-      tabsAdapter?.notifyDataSetChanged()
-      snackBarRoot?.let { root ->
-        Snackbar.make(root, R.string.tabs_restored, Snackbar.LENGTH_SHORT).show()
+    lifecycleScope.launch {
+      if (tempWebViewListForUndo.isNotEmpty()) {
+        zimReaderContainer?.setZimReaderSource(tempZimSourceForUndo)
+        webViewList.addAll(tempWebViewListForUndo)
+        tabsAdapter?.notifyDataSetChanged()
+        snackBarRoot?.let { root ->
+          Snackbar.make(root, R.string.tabs_restored, Snackbar.LENGTH_SHORT).show()
+        }
+        reopenBook()
+        showTabSwitcher()
+        setUpWithTextToSpeech(tempWebViewListForUndo.last())
+        updateBottomToolbarVisibility()
+        safelyAddWebView(tempWebViewListForUndo.last())
       }
-      reopenBook()
-      showTabSwitcher()
-      setUpWithTextToSpeech(tempWebViewListForUndo.last())
-      updateBottomToolbarVisibility()
-      safelyAddWebView(tempWebViewListForUndo.last())
     }
   }
 
@@ -2496,7 +2500,7 @@ abstract class CoreReaderFragment :
   private fun isInvalidJson(jsonString: String?): Boolean =
     jsonString == null || jsonString == "[]"
 
-  protected fun manageExternalLaunchAndRestoringViewState(
+  protected suspend fun manageExternalLaunchAndRestoringViewState(
     restoreOrigin: RestoreOrigin = FromExternalLaunch
   ) {
     val settings = requireActivity().getSharedPreferences(
@@ -2637,7 +2641,7 @@ abstract class CoreReaderFragment :
    * KiwixReaderFragment.restoreViewStateOnInvalidJSON) to ensure consistent behavior
    * when handling invalid JSON scenarios.
    */
-  abstract fun restoreViewStateOnInvalidJSON()
+  abstract suspend fun restoreViewStateOnInvalidJSON()
 }
 
 enum class RestoreOrigin {
