@@ -186,7 +186,7 @@ class CustomMainActivity : CoreMainActivity() {
   private fun openExternalUrl(url: String) {
     // check if the provided url is not empty.
     if (url.isNotEmpty()) {
-      externalLinkOpener.openExternalUrl(url.toUri().browserIntent())
+      externalLinkOpener.openExternalUrl(url.toUri().browserIntent(), false)
     }
   }
 
