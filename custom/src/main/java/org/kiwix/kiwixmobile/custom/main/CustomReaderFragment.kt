@@ -348,7 +348,7 @@ class CustomReaderFragment : CoreReaderFragment() {
 
   override fun openKiwixSupportUrl() {
     if (BuildConfig.SUPPORT_URL.isNotEmpty()) {
-      openExternalUrl(BuildConfig.SUPPORT_URL.toUri().browserIntent(), false)
+      externalLinkOpener?.openExternalUrl(BuildConfig.SUPPORT_URL.toUri().browserIntent(), false)
     }
   }
 

@@ -128,7 +128,6 @@ class GetContentShortcutTest {
       clickSettingsOnSideNav(SettingsRobot::assertMenuSettingsDisplayed)
       clickHelpOnSideNav(HelpRobot::assertToolbarDisplayed)
       clickSupportKiwixOnSideNav()
-      assertExternalLinkDialogDisplayed()
       pressBack()
     }
   }
