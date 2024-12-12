@@ -19,7 +19,7 @@
   <string name="menu_random_article">ערך אקראי</string>
   <string name="menu_full_screen">מסך מלא</string>
   <string name="menu_exit_full_screen">יציאה ממסך מלא</string>
-  <string name="menu_read_aloud">להקריא בקול</string>
+  <string name="menu_read_aloud">הקראה בקול</string>
   <string name="menu_read_aloud_stop">להפסיק להקריא בקול</string>
   <string name="menu_support_kiwix">לתמוך בקיוויקס</string>
   <string name="menu_support_kiwix_for_custom_apps">תמיכה ביישום %s</string>
@@ -147,7 +147,7 @@
   <string name="help_7">הם זמינים כקבצי ZIM. ישנם קבצים רבים כאלו:</string>
   <string name="help_8">• ויקיפדיה זמינה באופן נפרד לכל שפה</string>
   <string name="help_9">• ישנם מקורות נוספים זמינים כגון ויקיליקס או ויקיטקסט</string>
-  <string name="help_10" fuzzy="true">באפשרותך להוריד את קובצי ה־ZIM שנבחרו מתוך היישום או לחלופין לבחור בזהירות בקובץ אחד או מספר קבצים שאתה רוצה ולהוריד ממחשב שולחני לפני העברת קובצי ה־ZIM לכרטיס ה־SD שלך.</string>
+  <string name="help_10">באפשרותך להוריד את קובצי ה־ZIM שנבחרו מתוך היישום או לחלופין לבחור בזהירות בקובץ אחד או מספר קבצים שאתה רוצה ולהוריד ממחשב שולחני לפני העברת קובצי ה־ZIM לכרטיס ה־SD שלך.</string>
   <string name="help_11">קובצי ה־ZIM המורדים דרך היישום נמצאים בספריית האחסון החיצוני בתוך תיקייה בשם Kiwix.</string>
   <string name="pref_storage">אחסון</string>
   <string name="pref_current_folder">תיקייה נוכחית</string>
@@ -165,9 +165,9 @@
   <string name="confirm_stop_download_title">לעצור הורדה?</string>
   <string name="confirm_stop_download_msg">לעצור את ההורדה הזאת?</string>
   <string name="download_change_storage">בורר התקני אחסון</string>
-  <string name="tts_not_enabled" fuzzy="true">טקסט לדיבור אינו זמין עבור קובץ ZIM זה</string>
-  <string name="texttospeech_initialization_failed" fuzzy="true">האתחול של טקסט לדיבור נכשל. נא לנסות שוב</string>
-  <string name="texttospeech_error" fuzzy="true">שגיאה בלתי־צפויה בטקסט לדיבור. נא לנסות שוב</string>
+  <string name="tts_not_enabled">הקראה בקול אינה זמינה עבור קובץ ה־ZIM הזה</string>
+  <string name="texttospeech_initialization_failed">אתחול ההקראה בקול נכשל. נא לנסות שוב</string>
+  <string name="texttospeech_error">שגיאה בלתי־צפויה בטקסט לדיבור. נא לנסות שוב</string>
   <string name="next">הבא</string>
   <string name="previous">הקודם</string>
   <string name="wifi_only_title">לאפשר הורדת תוכן דרך רשת סלולרית?</string>
@@ -232,6 +232,7 @@
   <string name="custom_download_error_message_for_authentication_failed">לא היה אפשר להוריד את קובץ ה־ZIM. נא לנסות להתקין את היישום מחדש מחנות ה־Play.</string>
   <string name="save">שמירה</string>
   <string name="note">הערה</string>
+  <string name="take_notes">כתיבת הערות</string>
   <string name="wiki_article_title">כותרת ערך בוויקי</string>
   <string name="ext_storage_permission_rationale_export_bookmark">נדרשת גישת אחסון ליצוא סימניות</string>
   <string name="ext_storage_write_permission_denied_export_bookmark">לא ניתן לייצא סימניות ללא גישה לאחסון</string>
@@ -356,9 +357,9 @@
   <string name="download_tts_language_title">יש להוריד את השפה הזאת בשביל שימוש בתכונת ההקראה בקול</string>
   <string name="download_tts_language_message">נא ללחוץ על כפתור ההורדה. זה יוריד אוטומטית את השפה הדרושה.</string>
   <string name="external_link_copied_message">קישור חיצוני הועתק ללוח</string>
-  <string name="read_aloud_service_channel_name">ערוץ שירות של קריאה בקול</string>
-  <string name="read_aloud_channel_description" fuzzy="true">בקרת המרת טקסט לדיבור.</string>
-  <string name="read_aloud_running">הרצת קריאה בקול</string>
+  <string name="read_aloud_service_channel_name">ערוץ שירות של הקראה בקול</string>
+  <string name="read_aloud_channel_description">בקרת הקראה בקול.</string>
+  <string name="read_aloud_running">הרצת הקראה בקול</string>
   <string name="backward_history">אחורה בהיסטוריה</string>
   <string name="forward_history">קדימה בהיסטוריה</string>
   <string name="clear_all_navigation_history_message">מנקה את כל היסטוריית הניווט (אחורה, קדימה)</string>
