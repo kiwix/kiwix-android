@@ -100,7 +100,8 @@ data class DownloadRoomEntity(
     totalSizeOfDownload = download.totalSizeOfDownload,
     status = download.state,
     error = download.error,
-    progress = download.progress
+    progress = download.progress,
+    pausedByUser = download.pausedByUser
   )
 }
 
