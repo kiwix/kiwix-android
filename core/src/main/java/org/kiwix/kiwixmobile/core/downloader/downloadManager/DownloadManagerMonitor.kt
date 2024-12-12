@@ -118,9 +118,10 @@ class DownloadManagerMonitor @Inject constructor(
       (
         isQueuedForWiFiAndConnected(download) ||
           isQueuedForNetwork(download) ||
-          download.error == Error.WAITING_TO_RETRY
+          (download.error == Error.WAITING_TO_RETRY || download.error == Error.PAUSED_UNKNOWN)
         ) &&
-      NetworkUtils.isNetworkAvailable(context)
+      NetworkUtils.isNetworkAvailable(context) &&
+      !download.pausedByUser
   }
 
   /**

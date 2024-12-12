@@ -382,13 +382,18 @@ class DownloadMonitorService : Service() {
     progress: Int = DEFAULT_INT_VALUE,
     etaInMilliSeconds: Long = DEFAULT_INT_VALUE.toLong(),
     bytesDownloaded: Long = DEFAULT_INT_VALUE.toLong(),
-    totalSizeOfDownload: Long = DEFAULT_INT_VALUE.toLong()
+    totalSizeOfDownload: Long = DEFAULT_INT_VALUE.toLong(),
+    pausedByUser: Boolean? = null
   ) {
     synchronized(lock) {
       updater.onNext {
         downloadRoomDao.getEntityForDownloadId(downloadId)?.let { downloadEntity ->
           if (shouldUpdateDownloadStatus(downloadEntity)) {
             val downloadModel = DownloadModel(downloadEntity).apply {
+              pausedByUser?.let {
+                this.pausedByUser = it
+                downloadEntity.pausedByUser = it
+              }
               if (shouldUpdateDownloadStatus(status, error, downloadEntity)) {
                 state = status
               }
@@ -442,7 +447,13 @@ class DownloadMonitorService : Service() {
           handlePausedAndQueuedDownload(error, downloadRoomEntity)
 
         // Check if the download is paused and retryable due to network availability.
-        isPausedAndRetryable(status, error) -> handleRetryablePausedDownload(downloadRoomEntity)
+        isPausedAndRetryable(
+          status,
+          error,
+          downloadRoomEntity.pausedByUser
+        ) -> {
+          handleRetryablePausedDownload(downloadRoomEntity)
+        }
 
         // Default case: update the status.
         else -> true
@@ -471,12 +482,14 @@ class DownloadMonitorService : Service() {
    *
    * @param status The current status of the download.
    * @param error The current error state of the download.
+   * @param pausedByUser To identify if the download paused by user or downloadManager.
    * @return `true` if the download is paused and retryable, `false` otherwise.
    */
-  private fun isPausedAndRetryable(status: Status, error: Error): Boolean {
+  private fun isPausedAndRetryable(status: Status, error: Error, pausedByUser: Boolean): Boolean {
     return status == Status.PAUSED &&
-      error == Error.WAITING_TO_RETRY &&
-      NetworkUtils.isNetworkAvailable(this)
+      (error == Error.WAITING_TO_RETRY || error == Error.PAUSED_UNKNOWN) &&
+      NetworkUtils.isNetworkAvailable(this) &&
+      !pausedByUser
   }
 
   /**
@@ -576,7 +589,8 @@ class DownloadMonitorService : Service() {
           isQueuedForNetwork(download) ||
           download.error == Error.WAITING_TO_RETRY
         ) &&
-      NetworkUtils.isNetworkAvailable(this)
+      NetworkUtils.isNetworkAvailable(this) &&
+      !download.pausedByUser
   }
 
   /**
@@ -648,7 +662,8 @@ class DownloadMonitorService : Service() {
             STATUS_PAUSED_BY_APP
           )
         ) {
-          updateDownloadStatus(downloadId, Status.PAUSED, Error.NONE)
+          // pass true when user paused the download to not retry the download automatically.
+          updateDownloadStatus(downloadId, Status.PAUSED, Error.NONE, pausedByUser = true)
         }
       }
     }
@@ -663,7 +678,8 @@ class DownloadMonitorService : Service() {
             STATUS_RUNNING
           )
         ) {
-          updateDownloadStatus(downloadId, Status.QUEUED, Error.NONE)
+          // pass false when user resumed the download to proceed with further checks.
+          updateDownloadStatus(downloadId, Status.QUEUED, Error.NONE, pausedByUser = false)
         }
       }
     }

@@ -33,7 +33,8 @@ data class DownloadModel(
   var state: Status,
   var error: Error,
   var progress: Int,
-  val book: Book
+  val book: Book,
+  var pausedByUser: Boolean
 ) {
   val bytesRemaining: Long by lazy { totalSizeOfDownload - bytesDownloaded }
   val fileNameFromUrl: String by lazy { StorageUtils.getFileNameFromUrl(book.url) }
@@ -48,6 +49,7 @@ data class DownloadModel(
     downloadEntity.status,
     downloadEntity.error,
     downloadEntity.progress,
-    downloadEntity.toBook()
+    downloadEntity.toBook(),
+    downloadEntity.pausedByUser
   )
 }

@@ -44,7 +44,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.ZimSourceRoomConverter
     NotesRoomEntity::class,
     DownloadRoomEntity::class
   ],
-  version = 5,
+  version = 6,
   exportSchema = false
 )
 @TypeConverters(HistoryRoomDaoCoverts::class, ZimSourceRoomConverter::class)
@@ -62,7 +62,13 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
           ?: Room.databaseBuilder(context, KiwixRoomDatabase::class.java, "KiwixRoom.db")
             // We have already database name called kiwix.db in order to avoid complexity we named
             // as kiwixRoom.db
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+            .addMigrations(
+              MIGRATION_1_2,
+              MIGRATION_2_3,
+              MIGRATION_3_4,
+              MIGRATION_4_5,
+              MIGRATION_5_6
+            )
             .build().also { db = it }
       }
     }
@@ -199,6 +205,15 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
         database.execSQL("DROP TABLE HistoryRoomEntity")
         database.execSQL("ALTER TABLE HistoryRoomEntity_temp RENAME TO HistoryRoomEntity")
         database.execSQL("ALTER TABLE NotesRoomEntity ADD COLUMN zimReaderSource TEXT")
+      }
+    }
+
+    @Suppress("MagicNumber")
+    private val MIGRATION_5_6 = object : Migration(5, 6) {
+      override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL(
+          "ALTER TABLE DownloadRoomEntity ADD COLUMN pausedByUser INTEGER NOT NULL DEFAULT 0"
+        )
       }
     }
 
