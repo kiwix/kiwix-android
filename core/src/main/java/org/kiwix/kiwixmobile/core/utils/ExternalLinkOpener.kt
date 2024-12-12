@@ -33,11 +33,12 @@ class ExternalLinkOpener @Inject constructor(
   private val alertDialogShower: AlertDialogShower
 ) {
 
-  fun openExternalUrl(intent: Intent) {
+  fun openExternalUrl(
+    intent: Intent,
+    showExternalLinkPopup: Boolean = sharedPreferenceUtil.prefExternalLinkPopup
+  ) {
     if (intent.resolveActivity(activity.packageManager) != null) {
-      // Show popup with warning that this url is external and could lead to additional costs
-      // or may event not work when the user is offline.
-      if (sharedPreferenceUtil.prefExternalLinkPopup) {
+      if (showExternalLinkPopup) {
         requestOpenLink(intent)
       } else {
         openLink(intent)

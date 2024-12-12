@@ -170,23 +170,20 @@ class CustomMainActivity : CoreMainActivity() {
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     return when (item.itemId) {
       org.kiwix.kiwixmobile.core.R.id.menu_about_app -> {
-        openExternalUrl(BuildConfig.ABOUT_APP_URL)
+        if (BuildConfig.ABOUT_APP_URL.isNotEmpty()) {
+          externalLinkOpener.openExternalUrl(BuildConfig.ABOUT_APP_URL.toUri().browserIntent())
+        }
         true
       }
 
       org.kiwix.kiwixmobile.core.R.id.menu_support_kiwix -> {
-        openExternalUrl(BuildConfig.SUPPORT_URL)
+        if (BuildConfig.SUPPORT_URL.isNotEmpty()) {
+          externalLinkOpener.openExternalUrl(BuildConfig.SUPPORT_URL.toUri().browserIntent(), false)
+        }
         true
       }
 
       else -> super.onNavigationItemSelected(item)
-    }
-  }
-
-  private fun openExternalUrl(url: String) {
-    // check if the provided url is not empty.
-    if (url.isNotEmpty()) {
-      externalLinkOpener.openExternalUrl(url.toUri().browserIntent())
     }
   }
 

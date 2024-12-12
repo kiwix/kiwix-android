@@ -123,7 +123,6 @@ class TopLevelDestinationTest : BaseActivityTest() {
       clickSettingsOnSideNav(SettingsRobot::assertMenuSettingsDisplayed)
       clickHelpOnSideNav(HelpRobot::assertToolbarDisplayed)
       clickSupportKiwixOnSideNav()
-      assertExternalLinkDialogDisplayed()
       pressBack()
     }
     LeakAssertions.assertNoLeaks()
