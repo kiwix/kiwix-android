@@ -2,10 +2,11 @@
   "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
   "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "_note4": "The IDs of the entities and properties should not be changed unless there is a change in the corresponding entity.",
   "entities": [
     {
       "id": "3:5536749840871435068",
-      "lastPropertyId": "18:1711250046418389186",
+      "lastPropertyId": "19:8429535071703004578",
       "name": "BookOnDiskEntity",
       "properties": [
         {
@@ -13,6 +14,11 @@
           "name": "id",
           "type": 6,
           "flags": 1
+        },
+        {
+          "id": "2:2644395282642821815",
+          "name": "file",
+          "type": 9
         },
         {
           "id": "4:3145196313443812205",
@@ -393,8 +399,7 @@
     5555873126720275555,
     2724607601244650879,
     5485468735259326535,
-    4272820830206771469,
-    2644395282642821815
+    4272820830206771469
   ],
   "retiredRelationUids": [],
   "version": 1
