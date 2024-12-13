@@ -1428,7 +1428,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun restoreDeletedTab(index: Int) {
-    lifecycleScope.launch {
+    coreReaderLifeCycleScope?.launch {
       if (webViewList.isEmpty()) {
         reopenBook()
       }
@@ -1863,7 +1863,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun restoreDeletedTabs() {
-    lifecycleScope.launch {
+    coreReaderLifeCycleScope?.launch {
       if (tempWebViewListForUndo.isNotEmpty()) {
         zimReaderContainer?.setZimReaderSource(tempZimSourceForUndo)
         webViewList.addAll(tempWebViewListForUndo)

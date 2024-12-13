@@ -71,7 +71,7 @@ class CustomReaderFragment : CoreReaderFragment() {
   @Suppress("NestedBlockDepth")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    lifecycleScope.launch {
+    coreReaderLifeCycleScope?.launch {
       if (enforcedLanguage()) {
         return@launch
       }

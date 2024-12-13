@@ -166,7 +166,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
   }
 
   override fun hideTabSwitcher() {
-    lifecycleScope.launch {
+    coreReaderLifeCycleScope?.launch {
       actionBar?.let { actionBar ->
         actionBar.setDisplayShowTitleEnabled(true)
         toolbar?.let { activity?.setupDrawerToggle(it, true) }
