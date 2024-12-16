@@ -12,6 +12,9 @@
     android:name="android.permission.NEARBY_WIFI_DEVICES"
     android:usesPermissionFlags="neverForLocation"
     tools:targetApi="s" />
+  <!-- Device with versions >= Pie need this permission -->
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
 
   <application
     android:name=".KiwixApp"

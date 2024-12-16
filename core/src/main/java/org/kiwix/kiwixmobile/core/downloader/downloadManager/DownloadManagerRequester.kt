@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
 import android.app.DownloadManager
 import android.app.DownloadManager.Request
-import android.app.DownloadManager.Request.VISIBILITY_HIDDEN
+import android.app.DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED
 import android.net.Uri
 import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineScope
@@ -105,7 +105,7 @@ fun DownloadRequest.toDownloadManagerRequest(
           Request.NETWORK_MOBILE or Request.NETWORK_WIFI
       )
       setAllowedOverMetered(!sharedPreferenceUtil.prefWifiOnly)
-      setNotificationVisibility(VISIBILITY_HIDDEN) // hide the default notification.
+      setNotificationVisibility(VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
       val userNameAndPassword = System.getenv(urlString.secretKey) ?: ""
       val userName = userNameAndPassword.substringBefore(":", "")
       val password = userNameAndPassword.substringAfter(":", "")
@@ -123,7 +123,7 @@ fun DownloadRequest.toDownloadManagerRequest(
           Request.NETWORK_MOBILE or Request.NETWORK_WIFI
       )
       setAllowedOverMetered(!sharedPreferenceUtil.prefWifiOnly)
-      setNotificationVisibility(VISIBILITY_HIDDEN) // hide the default notification.
+      setNotificationVisibility(VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
     }
   }
 }
