@@ -110,8 +110,9 @@ class DownloadManagerMonitor @Inject constructor(
         {
           try {
             synchronized(lock) {
-              if (downloadRoomDao.downloads().blockingFirst().isNotEmpty()) {
-                checkDownloads()
+              val downloadingList = downloadRoomDao.downloads().blockingFirst()
+              if (downloadingList.isNotEmpty()) {
+                checkDownloads(downloadingList)
               } else {
                 monitoringDisposable?.dispose()
               }
@@ -128,21 +129,10 @@ class DownloadManagerMonitor @Inject constructor(
   }
 
   @SuppressLint("Range")
-  private fun checkDownloads() {
+  private fun checkDownloads(downloadingList: List<DownloadModel>) {
     synchronized(lock) {
-      val query = DownloadManager.Query().setFilterByStatus(
-        DownloadManager.STATUS_RUNNING or
-          DownloadManager.STATUS_PAUSED or
-          DownloadManager.STATUS_PENDING or
-          DownloadManager.STATUS_SUCCESSFUL
-      )
-      downloadManager.query(query).use { cursor ->
-        if (cursor.moveToFirst()) {
-          do {
-            val downloadId = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_ID))
-            queryDownloadStatus(downloadId)
-          } while (cursor.moveToNext())
-        }
+      downloadingList.forEach {
+        queryDownloadStatus(it.downloadId)
       }
     }
   }
@@ -150,11 +140,13 @@ class DownloadManagerMonitor @Inject constructor(
   @SuppressLint("Range")
   fun queryDownloadStatus(downloadId: Long) {
     synchronized(lock) {
-      downloadManager.query(DownloadManager.Query().setFilterById(downloadId)).use { cursor ->
-        if (cursor.moveToFirst()) {
-          handleDownloadStatus(cursor, downloadId)
-        } else {
-          handleCancelledDownload(downloadId)
+      updater.onNext {
+        downloadManager.query(DownloadManager.Query().setFilterById(downloadId)).use { cursor ->
+          if (cursor.moveToFirst()) {
+            handleDownloadStatus(cursor, downloadId)
+          } else {
+            handleCancelledDownload(downloadId)
+          }
         }
       }
     }
