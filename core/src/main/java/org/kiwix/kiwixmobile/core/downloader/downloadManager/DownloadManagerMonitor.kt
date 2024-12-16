@@ -479,7 +479,7 @@ class DownloadManagerMonitor @Inject constructor(
       // due to some reason.
       Error.PAUSED_UNKNOWN,
       Error.WAITING_TO_RETRY -> {
-        resumeDownload(downloadRoomEntity.downloadId)
+        resumeDownload(downloadRoomEntity.downloadId, shouldUpdateStatus = false)
         false
       }
 
@@ -499,7 +499,7 @@ class DownloadManagerMonitor @Inject constructor(
    * @return `true` to update the status and attempt to resume the download.
    */
   private fun handleRetryablePausedDownload(downloadRoomEntity: DownloadRoomEntity): Boolean {
-    resumeDownload(downloadRoomEntity.downloadId)
+    resumeDownload(downloadRoomEntity.downloadId, shouldUpdateStatus = false)
     return true
   }
 
@@ -519,7 +519,10 @@ class DownloadManagerMonitor @Inject constructor(
     }
   }
 
-  fun resumeDownload(downloadId: Long) {
+  fun resumeDownload(
+    downloadId: Long,
+    shouldUpdateStatus: Boolean = true
+  ) {
     synchronized(lock) {
       updater.onNext {
         if (pauseResumeDownloadInDownloadManagerContentResolver(
@@ -528,8 +531,10 @@ class DownloadManagerMonitor @Inject constructor(
             STATUS_RUNNING
           )
         ) {
-          // pass false when user resumed the download to proceed with further checks.
-          updateDownloadStatus(downloadId, Status.QUEUED, Error.NONE, pausedByUser = false)
+          if (shouldUpdateStatus) {
+            // pass false when user resumed the download to proceed with further checks.
+            updateDownloadStatus(downloadId, Status.QUEUED, Error.NONE, pausedByUser = false)
+          }
         }
       }
     }
