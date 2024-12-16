@@ -351,7 +351,14 @@ class DownloadManagerMonitor @Inject constructor(
   ) {
     synchronized(lock) {
       updater.onNext {
-        Log.e("DOWNLOAD_MONITOR", "updateDownloadStatus: $status \n $error \n $progress")
+        Log.e(
+          "DOWNLOAD_MONITOR",
+          "updateDownloadStatus: " +
+            "\n Status = $status" +
+            "\n Error = $error" +
+            "\n Progress = $progress" +
+            "\n DownloadId = $downloadId"
+        )
         downloadRoomDao.getEntityForDownloadId(downloadId)?.let { downloadEntity ->
           if (shouldUpdateDownloadStatus(downloadEntity)) {
             val downloadModel = DownloadModel(downloadEntity).apply {

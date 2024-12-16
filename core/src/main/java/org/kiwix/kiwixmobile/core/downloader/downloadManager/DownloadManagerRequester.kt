@@ -60,7 +60,7 @@ class DownloadManagerRequester @Inject constructor(
           .downloadRoomDao
           .getEntityForDownloadId(downloadId)?.let { downloadRoomEntity ->
             downloadRoomEntity.url?.let {
-              val downloadRequest = DownloadRequest(urlString = it)
+              val downloadRequest = DownloadRequest(urlString = it, downloadRoomEntity.title)
               val newDownloadEntity =
                 downloadRoomEntity.copy(downloadId = enqueue(downloadRequest), id = 0)
               // cancel the previous download and its data from database and fileSystem.
@@ -97,6 +97,7 @@ fun DownloadRequest.toDownloadManagerRequest(
   return if (urlString.isAuthenticationUrl) {
     // return the request with "Authorization" header if the url is a Authentication url.
     DownloadManager.Request(urlString.removeAuthenticationFromUrl.toUri()).apply {
+      setTitle(bookTitle)
       setDestinationUri(Uri.fromFile(getDestinationFile(sharedPreferenceUtil)))
       setAllowedNetworkTypes(
         if (sharedPreferenceUtil.prefWifiOnly)
@@ -115,6 +116,7 @@ fun DownloadRequest.toDownloadManagerRequest(
   } else {
     // return the request for normal urls.
     DownloadManager.Request(uri).apply {
+      setTitle(bookTitle)
       setDestinationUri(Uri.fromFile(getDestinationFile(sharedPreferenceUtil)))
       setAllowedNetworkTypes(
         if (sharedPreferenceUtil.prefWifiOnly)
