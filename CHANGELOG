@@ -1,3 +1,18 @@
+3.13.0
+Bug Fixed:
+* ZIM files were not appearing on the "Library" screen after updating to version `3.12.0`. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4134)
+* Application crashes when adding bookmarks. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4129)
+* Application crashes when canceling the downloads. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4126)
+* Application crashes when moving file to kiwix's public directory. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4124)
+* Downloading large files always shows "In Progress", and seems it is not starting for large files. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4118)
+* Hiding the virtual keyboard reset the search (in online library). (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4117)
+* Improved the display of external link warning. (@viditpawar0 https://github.com/kiwix/kiwix-android/pull/4133)
+* Moved all file-related operations to the IO thread (@MohitMaliFtechiz , @CalebKL https://github.com/kiwix/kiwix-android/pull/4103, https://github.com/kiwix/kiwix-android/pull/4119, https://github.com/kiwix/kiwix-android/pull/4061)
+* Various improvements to the downloading functionality. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4130)
+
+Compilation/CI/CD:
+* Uploading `release` APK in Github release instead of `standalone` APK. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4115)
+
 3.12.0
 New Features:
 * Support for Android 14.
