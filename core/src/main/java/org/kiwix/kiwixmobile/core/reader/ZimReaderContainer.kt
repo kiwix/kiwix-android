@@ -32,15 +32,14 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
       field = value
     }
 
-  fun setZimReaderSource(zimReaderSource: ZimReaderSource?) {
+  suspend fun setZimReaderSource(zimReaderSource: ZimReaderSource?) {
     if (zimReaderSource == zimFileReader?.zimReaderSource) {
       return
     }
-    zimFileReader = runBlocking {
+    zimFileReader =
       if (zimReaderSource?.exists() == true && zimReaderSource.canOpenInLibkiwix())
         zimFileReaderFactory.create(zimReaderSource)
       else null
-    }
   }
 
   fun getPageUrlFromTitle(title: String) = zimFileReader?.getPageUrlFrom(title)
