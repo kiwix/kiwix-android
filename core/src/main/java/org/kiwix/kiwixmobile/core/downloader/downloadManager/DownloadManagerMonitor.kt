@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
 import android.annotation.SuppressLint
 import android.app.DownloadManager
-import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -562,14 +561,45 @@ class DownloadManagerMonitor @Inject constructor(
         put(COLUMN_CONTROL, control)
         put(DownloadManager.COLUMN_STATUS, status)
       }
-      val uri = ContentUris.withAppendedId(downloadBaseUri, downloadId)
       context.contentResolver
-        .update(uri, contentValues, null, null)
+        .update(
+          downloadBaseUri,
+          contentValues,
+          getWhereClauseForIds(longArrayOf(downloadId)),
+          getWhereArgsForIds(longArrayOf(downloadId))
+        )
       true
     } catch (ignore: Exception) {
       Log.e("DOWNLOAD_MONITOR", "Couldn't pause/resume the download. Original exception = $ignore")
       false
     }
+  }
+
+  private fun getWhereArgsForIds(ids: LongArray): Array<String?> {
+    val whereArgs = arrayOfNulls<String>(ids.size)
+    return getWhereArgsForIds(ids, whereArgs)
+  }
+
+  private fun getWhereArgsForIds(ids: LongArray, args: Array<String?>): Array<String?> {
+    assert(args.size >= ids.size)
+    for (i in ids.indices) {
+      args[i] = "${ids[i]}"
+    }
+    return args
+  }
+
+  private fun getWhereClauseForIds(ids: LongArray): String {
+    val whereClause = StringBuilder()
+    whereClause.append("(")
+    for (i in ids.indices) {
+      if (i > 0) {
+        whereClause.append("OR ")
+      }
+      whereClause.append("_id")
+      whereClause.append(" = ? ")
+    }
+    whereClause.append(")")
+    return "$whereClause"
   }
 
   private fun shouldUpdateDownloadStatus(downloadRoomEntity: DownloadRoomEntity) =
