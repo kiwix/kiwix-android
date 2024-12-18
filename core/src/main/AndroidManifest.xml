@@ -13,12 +13,8 @@
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
   <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-  <uses-permission
-    android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
-  <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
-  <!-- Device with versions >= Pie need this permission -->
-  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+  <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+
   <queries>
     <intent>
       <action android:name="android.intent.action.TTS_SERVICE" />
@@ -52,8 +48,8 @@
 
   <application
     android:allowBackup="true"
+    android:dataExtractionRules="@xml/data_extraction_rules"
     android:fullBackupContent="@xml/backup_rules"
-    android:dataExtractionRules = "@xml/data_extraction_rules"
     android:hardwareAccelerated="true"
     android:largeHeap="true"
     android:requestLegacyExternalStorage="true"
@@ -80,9 +76,9 @@
       android:name="androidx.core.content.FileProvider"
       android:authorities="${applicationId}.fileprovider"
       android:exported="false"
+      android:grantUriPermissions="true"
       tools:node="merge"
-      tools:overrideLibrary="com.squareup.picasso.picasso"
-      android:grantUriPermissions="true">
+      tools:overrideLibrary="com.squareup.picasso.picasso">
       <meta-data
         android:name="android.support.FILE_PROVIDER_PATHS"
         android:resource="@xml/provider_paths" />
@@ -92,8 +88,5 @@
       android:name=".error.DiagnosticReportActivity"
       android:exported="false" />
     <service android:name=".read_aloud.ReadAloudService" />
-    <service
-      android:name=".downloader.downloadManager.DownloadMonitorService"
-      android:foregroundServiceType="dataSync" />
   </application>
 </manifest>

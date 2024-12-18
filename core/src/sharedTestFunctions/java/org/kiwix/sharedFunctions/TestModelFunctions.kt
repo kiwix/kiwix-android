@@ -58,7 +58,7 @@ fun downloadModel(
   book: Book = book()
 ) = DownloadModel(
   databaseId, downloadId, file, etaInMilliSeconds, bytesDownloaded, totalSizeOfDownload,
-  status, error, progress, book
+  status, error, progress, book, false
 )
 
 fun downloadItem(

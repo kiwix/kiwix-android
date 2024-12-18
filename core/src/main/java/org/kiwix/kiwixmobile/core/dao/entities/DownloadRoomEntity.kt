@@ -54,7 +54,8 @@ data class DownloadRoomEntity(
   val size: String,
   val name: String?,
   val favIcon: String,
-  val tags: String? = null
+  val tags: String? = null,
+  var pausedByUser: Boolean = false
 ) {
   constructor(downloadUrl: String, downloadId: Long, book: Book, file: String?) : this(
     file = file,
@@ -99,7 +100,8 @@ data class DownloadRoomEntity(
     totalSizeOfDownload = download.totalSizeOfDownload,
     status = download.state,
     error = download.error,
-    progress = download.progress
+    progress = download.progress,
+    pausedByUser = download.pausedByUser
   )
 }
 

@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
 import android.app.DownloadManager
 import android.app.DownloadManager.Request
-import android.app.DownloadManager.Request.VISIBILITY_HIDDEN
+import android.app.DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED
 import android.net.Uri
 import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineScope
@@ -60,7 +60,7 @@ class DownloadManagerRequester @Inject constructor(
           .downloadRoomDao
           .getEntityForDownloadId(downloadId)?.let { downloadRoomEntity ->
             downloadRoomEntity.url?.let {
-              val downloadRequest = DownloadRequest(urlString = it)
+              val downloadRequest = DownloadRequest(urlString = it, downloadRoomEntity.title)
               val newDownloadEntity =
                 downloadRoomEntity.copy(downloadId = enqueue(downloadRequest), id = 0)
               // cancel the previous download and its data from database and fileSystem.
@@ -97,6 +97,7 @@ fun DownloadRequest.toDownloadManagerRequest(
   return if (urlString.isAuthenticationUrl) {
     // return the request with "Authorization" header if the url is a Authentication url.
     DownloadManager.Request(urlString.removeAuthenticationFromUrl.toUri()).apply {
+      setTitle(bookTitle)
       setDestinationUri(Uri.fromFile(getDestinationFile(sharedPreferenceUtil)))
       setAllowedNetworkTypes(
         if (sharedPreferenceUtil.prefWifiOnly)
@@ -105,7 +106,7 @@ fun DownloadRequest.toDownloadManagerRequest(
           Request.NETWORK_MOBILE or Request.NETWORK_WIFI
       )
       setAllowedOverMetered(!sharedPreferenceUtil.prefWifiOnly)
-      setNotificationVisibility(VISIBILITY_HIDDEN) // hide the default notification.
+      setNotificationVisibility(VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
       val userNameAndPassword = System.getenv(urlString.secretKey) ?: ""
       val userName = userNameAndPassword.substringBefore(":", "")
       val password = userNameAndPassword.substringAfter(":", "")
@@ -115,6 +116,7 @@ fun DownloadRequest.toDownloadManagerRequest(
   } else {
     // return the request for normal urls.
     DownloadManager.Request(uri).apply {
+      setTitle(bookTitle)
       setDestinationUri(Uri.fromFile(getDestinationFile(sharedPreferenceUtil)))
       setAllowedNetworkTypes(
         if (sharedPreferenceUtil.prefWifiOnly)
@@ -123,7 +125,7 @@ fun DownloadRequest.toDownloadManagerRequest(
           Request.NETWORK_MOBILE or Request.NETWORK_WIFI
       )
       setAllowedOverMetered(!sharedPreferenceUtil.prefWifiOnly)
-      setNotificationVisibility(VISIBILITY_HIDDEN) // hide the default notification.
+      setNotificationVisibility(VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
     }
   }
 }

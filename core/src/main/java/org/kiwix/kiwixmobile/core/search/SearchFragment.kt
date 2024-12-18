@@ -192,11 +192,12 @@ class SearchFragment : BaseFragment() {
     )
   }
 
+  @Suppress("UnnecessarySafeCall")
   private fun setupToolbar(view: View) {
     view.post {
-      with(requireActivity() as CoreMainActivity) {
-        setSupportActionBar(view.findViewById(R.id.toolbar))
-        supportActionBar?.apply {
+      with(activity as? CoreMainActivity) {
+        this?.setSupportActionBar(view.findViewById(R.id.toolbar))
+        this?.supportActionBar?.apply {
           setHomeButtonEnabled(true)
           title = getString(R.string.menu_search_in_text)
         }

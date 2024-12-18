@@ -148,6 +148,10 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         },
         {
           context?.let { context ->
+            if (isNotConnected) {
+              noInternetSnackbar()
+              return@let
+            }
             downloader.pauseResumeDownload(
               it.downloadId,
               it.downloadState.toReadableState(context).contains(getString(string.paused_state))
