@@ -10,6 +10,9 @@ Bug Fixed:
 * Moved all file-related operations to the IO thread (@MohitMaliFtechiz , @CalebKL https://github.com/kiwix/kiwix-android/pull/4103, https://github.com/kiwix/kiwix-android/pull/4119, https://github.com/kiwix/kiwix-android/pull/4061)
 * Various improvements to the downloading functionality. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4130)
 
+Compilation/CI/CD:
+* Uploading `release` APK in Github release instead of `standalone` APK. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4115)
+
 3.12.0
 New Features:
 * Support for Android 14.
