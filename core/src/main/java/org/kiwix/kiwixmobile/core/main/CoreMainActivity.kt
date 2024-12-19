@@ -52,11 +52,9 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCa
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerBroadcastReceiver
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
-import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
@@ -100,8 +98,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   @Inject lateinit var objectBoxToLibkiwixMigrator: ObjectBoxToLibkiwixMigrator
   @Inject lateinit var objectBoxToRoomMigrator: ObjectBoxToRoomMigrator
 
-  @Inject
-  lateinit var downloadManagerBroadcastReceiver: DownloadManagerBroadcastReceiver
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.KiwixTheme)
     super.onCreate(savedInstanceState)
@@ -132,7 +128,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     CoroutineScope(Dispatchers.IO).launch {
       objectBoxToRoomMigrator.migrateObjectBoxDataToRoom()
     }
-    downloadManagerBroadcastReceiver.let(::registerReceiver)
     createApplicationShortcuts()
     handleBackPressed()
   }
@@ -153,7 +148,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   override fun onDestroy() {
     onBackPressedCallBack.remove()
-    downloadManagerBroadcastReceiver.let(::unregisterReceiver)
     super.onDestroy()
   }
 
