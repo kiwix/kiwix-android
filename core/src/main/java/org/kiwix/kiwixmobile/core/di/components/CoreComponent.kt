@@ -18,7 +18,6 @@
 package org.kiwix.kiwixmobile.core.di.components
 
 import android.app.Application
-import android.app.DownloadManager
 import android.app.NotificationManager
 import android.content.Context
 import android.net.ConnectivityManager
@@ -110,7 +109,6 @@ interface CoreComponent {
   fun context(): Context
   fun downloader(): Downloader
   fun notificationManager(): NotificationManager
-  fun downloadManager(): DownloadManager
   fun searchResultGenerator(): SearchResultGenerator
   fun mutex(): Mutex
 
