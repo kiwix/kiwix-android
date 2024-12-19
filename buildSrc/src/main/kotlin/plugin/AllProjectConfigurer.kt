@@ -228,7 +228,7 @@ class AllProjectConfigurer {
       kapt(Libs.roomCompiler)
       implementation(Libs.tracing)
       implementation(Libs.fetch)
-      // implementation(Libs.fetchOkhttp)
+      implementation(Libs.fetchOkhttp)
     }
   }
 }
