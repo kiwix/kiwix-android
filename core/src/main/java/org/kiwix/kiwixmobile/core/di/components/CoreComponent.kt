@@ -18,7 +18,6 @@
 package org.kiwix.kiwixmobile.core.di.components
 
 import android.app.Application
-import android.app.DownloadManager
 import android.app.NotificationManager
 import android.content.Context
 import android.net.ConnectivityManager
@@ -51,7 +50,6 @@ import org.kiwix.kiwixmobile.core.di.modules.MutexModule
 import org.kiwix.kiwixmobile.core.di.modules.NetworkModule
 import org.kiwix.kiwixmobile.core.di.modules.SearchModule
 import org.kiwix.kiwixmobile.core.downloader.Downloader
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerBroadcastReceiver
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -111,11 +109,9 @@ interface CoreComponent {
   fun context(): Context
   fun downloader(): Downloader
   fun notificationManager(): NotificationManager
-  fun downloadManager(): DownloadManager
   fun searchResultGenerator(): SearchResultGenerator
   fun mutex(): Mutex
 
-  fun downloadManagerBroadCastReceiver(): DownloadManagerBroadcastReceiver
   fun inject(application: CoreApp)
   fun inject(kiwixWebView: KiwixWebView)
   fun inject(storageSelectDialog: StorageSelectDialog)

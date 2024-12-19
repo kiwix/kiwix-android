@@ -18,7 +18,6 @@
 package org.kiwix.kiwixmobile.core.di.modules
 
 import android.app.Application
-import android.app.DownloadManager
 import android.app.NotificationManager
 import android.content.Context
 import android.net.ConnectivityManager
@@ -57,11 +56,6 @@ class ApplicationModule {
   @Singleton
   internal fun provideNotificationManager(context: Context): NotificationManager =
     context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-  @Provides
-  @Singleton
-  internal fun provideDownloadManager(context: Context): DownloadManager =
-    context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 
   @Provides
   @Singleton

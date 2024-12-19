@@ -109,6 +109,8 @@ object Versions {
   const val zxing = "3.5.3"
 
   const val keeper = "0.16.1"
+
+  const val fetch: String = "3.3.0"
 }
 
 /**

@@ -25,6 +25,7 @@ import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.ConnectivityManager
 import android.os.Build
+import com.tonyodev.fetch2.Status
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
@@ -62,7 +63,6 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.downloader.Downloader
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isManageExternalStoragePermissionGranted
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
@@ -154,7 +154,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
             }
             downloader.pauseResumeDownload(
               it.downloadId,
-              it.downloadState.toReadableState(context).contains(getString(string.paused_state))
+              it.downloadState.toReadableState(context) == getString(string.paused_state)
             )
           }
         }

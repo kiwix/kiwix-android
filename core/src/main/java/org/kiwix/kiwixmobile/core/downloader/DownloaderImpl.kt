@@ -25,14 +25,12 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
 class DownloaderImpl @Inject constructor(
   private val downloadRequester: DownloadRequester,
   private val downloadRoomDao: DownloadRoomDao,
-  private val kiwixService: KiwixService,
-  private val sharedPreferenceUtil: SharedPreferenceUtil
+  private val kiwixService: KiwixService
 ) : Downloader {
 
   @SuppressLint("CheckResult")
@@ -42,7 +40,7 @@ class DownloaderImpl @Inject constructor(
       .subscribeOn(Schedulers.io())
       .subscribe(
         {
-          downloadRoomDao.addIfDoesNotExist(it, book, downloadRequester, sharedPreferenceUtil)
+          downloadRoomDao.addIfDoesNotExist(it, book, downloadRequester)
         },
         Throwable::printStackTrace
       )
