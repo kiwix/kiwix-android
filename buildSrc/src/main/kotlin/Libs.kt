@@ -357,4 +357,6 @@ object Libs {
    * https://github.com/slackhq/keeper
    */
   const val keeper = "com.slack.keeper:keeper:" + Versions.keeper
+
+  const val fetch: String = "com.github.tonyofrancis.Fetch:fetch2:" + Versions.fetch
 }
