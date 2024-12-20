@@ -25,7 +25,6 @@ import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.FetchListener
-import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2core.DownloadBlock
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -33,7 +32,6 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
-import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -72,8 +70,10 @@ class DownloadMonitorService : Service() {
         {
           try {
             synchronized(lock) {
-              if (getActiveDownloads().isEmpty()) {
-                stopForegroundServiceForDownloads()
+              fetch.hasActiveDownloads(includeAddedDownloads = true) {
+                if (!it) {
+                  stopForegroundServiceForDownloads()
+                }
               }
             }
           } catch (ignore: Exception) {
@@ -86,9 +86,6 @@ class DownloadMonitorService : Service() {
         Throwable::printStackTrace
       )
   }
-
-  private fun getActiveDownloads(): List<DownloadRoomEntity> =
-    downloadRoomDao.downloadRoomEntity().blockingFirst().filter { it.status != Status.PAUSED }
 
   private fun setupUpdater() {
     updaterDisposable = updater.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
