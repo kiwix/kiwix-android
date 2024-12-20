@@ -101,8 +101,11 @@ object Libs {
   /**
    * https://kotlinlang.org/
    */
-  const val kotlin_stdlib_jdk7: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:" +
+  const val kotlin_stdlib_jdk8: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:" +
     Versions.org_jetbrains_kotlin
+
+  const val kotlin_ksp: String =
+    "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:" + Versions.kotlin_ksp
 
   /**
    * https://developer.android.com/topic/libraries/architecture/index.html
