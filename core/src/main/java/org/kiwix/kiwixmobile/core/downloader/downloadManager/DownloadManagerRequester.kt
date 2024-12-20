@@ -30,20 +30,27 @@ import javax.inject.Inject
 
 class DownloadManagerRequester @Inject constructor(
   private val fetch: Fetch,
-  private val sharedPreferenceUtil: SharedPreferenceUtil
+  private val sharedPreferenceUtil: SharedPreferenceUtil,
+  private val downloadManagerMonitor: DownloadManagerMonitor
 ) : DownloadRequester {
   override fun enqueue(downloadRequest: DownloadRequest): Long {
     val request = downloadRequest.toFetchRequest(sharedPreferenceUtil)
     fetch.enqueue(request)
-    return request.id.toLong()
+    return request.id.toLong().also {
+      downloadManagerMonitor.startMonitoringDownloads()
+    }
   }
 
   override fun cancel(downloadId: Long) {
-    fetch.delete(downloadId.toInt())
+    fetch.delete(downloadId.toInt()).also {
+      downloadManagerMonitor.startMonitoringDownloads()
+    }
   }
 
   override fun retryDownload(downloadId: Long) {
-    fetch.retry(downloadId.toInt())
+    fetch.retry(downloadId.toInt()).also {
+      downloadManagerMonitor.startMonitoringDownloads()
+    }
   }
 
   override fun pauseResumeDownload(downloadId: Long, isPause: Boolean) {
@@ -51,6 +58,8 @@ class DownloadManagerRequester @Inject constructor(
       fetch.resume(downloadId.toInt())
     } else {
       fetch.pause(downloadId.toInt())
+    }.also {
+      downloadManagerMonitor.startMonitoringDownloads()
     }
   }
 }

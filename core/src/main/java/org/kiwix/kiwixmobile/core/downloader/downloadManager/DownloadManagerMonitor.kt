@@ -19,108 +19,38 @@
 package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
 import android.annotation.SuppressLint
-import com.tonyodev.fetch2.Download
-import com.tonyodev.fetch2.Error
-import com.tonyodev.fetch2.Fetch
-import com.tonyodev.fetch2.FetchListener
-import com.tonyodev.fetch2core.DownloadBlock
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
-import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
+import android.content.Context
+import android.content.Intent
+import android.util.Log
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
+import org.kiwix.kiwixmobile.core.extensions.isServiceRunning
 import javax.inject.Inject
 
 const val ZERO = 0
+const val FIVE = 5
 const val HUNDERED = 100
 const val DEFAULT_INT_VALUE = -1
 
 @SuppressLint("CheckResult")
 class DownloadManagerMonitor @Inject constructor(
-  fetch: Fetch,
-  val downloadRoomDao: DownloadRoomDao
+  val context: Context
 ) : DownloadMonitor {
-  private val updater = PublishSubject.create<() -> Unit>()
-
-  private val fetchListener = object : FetchListener {
-    override fun onAdded(download: Download) {
-      // Do nothing
-    }
-
-    override fun onCancelled(download: Download) {
-      delete(download)
-    }
-
-    override fun onCompleted(download: Download) {
-      update(download)
-    }
-
-    override fun onDeleted(download: Download) {
-      delete(download)
-    }
-
-    override fun onDownloadBlockUpdated(
-      download: Download,
-      downloadBlock: DownloadBlock,
-      totalBlocks: Int
-    ) {
-      update(download)
-    }
-
-    override fun onError(download: Download, error: Error, throwable: Throwable?) {
-      update(download)
-    }
-
-    override fun onPaused(download: Download) {
-      update(download)
-    }
-
-    override fun onProgress(
-      download: Download,
-      etaInMilliSeconds: Long,
-      downloadedBytesPerSecond: Long
-    ) {
-      update(download)
-    }
-
-    override fun onQueued(download: Download, waitingOnNetwork: Boolean) {
-      update(download)
-    }
-
-    override fun onRemoved(download: Download) {
-      delete(download)
-    }
-
-    override fun onResumed(download: Download) {
-      update(download)
-    }
-
-    override fun onStarted(
-      download: Download,
-      downloadBlocks: List<DownloadBlock>,
-      totalBlocks: Int
-    ) {
-      update(download)
-    }
-
-    override fun onWaitingNetwork(download: Download) {
-      update(download)
-    }
-
-    private fun update(download: Download) {
-      updater.onNext { downloadRoomDao.update(download) }
-    }
-
-    private fun delete(download: Download) {
-      updater.onNext { downloadRoomDao.delete(download) }
-    }
-  }
 
   init {
-    fetch.addListener(fetchListener, true)
-    updater.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
-      { it.invoke() },
-      Throwable::printStackTrace
-    )
+    startMonitoringDownloads()
+  }
+
+  /**
+   * Starts monitoring the downloads by ensuring that the `DownloadMonitorService` is running.
+   * This service keeps the Fetch instance alive when the application is in the background
+   *  or has been killed by the user or system, allowing downloads to continue in the background.
+   */
+  fun startMonitoringDownloads() {
+    if (!context.isServiceRunning(DownloadMonitorService::class.java)) {
+      context.startService(Intent(context, DownloadMonitorService::class.java)).also {
+        Log.e("DOWNLOAD_MANAGER_MONITOR", "Starting DownloadMonitorService")
+      }
+    }
   }
 
   override fun init() {
