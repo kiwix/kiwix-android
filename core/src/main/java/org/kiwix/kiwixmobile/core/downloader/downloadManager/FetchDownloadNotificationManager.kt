@@ -190,7 +190,12 @@ class FetchDownloadNotificationManager(
         putExtra(DOWNLOAD_NOTIFICATION_TITLE, downloadNotification.title)
       }
       val pendingIntent =
-        getActivity(context, ZERO, internal, FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT)
+        getActivity(
+          context,
+          downloadNotification.notificationId,
+          internal,
+          FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
+        )
       notificationBuilder.setContentIntent(pendingIntent)
       notificationBuilder.setAutoCancel(true)
     }
