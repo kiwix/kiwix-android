@@ -121,5 +121,5 @@ fun Context.isServiceRunning(serviceClass: Class<out Service>): Boolean {
   val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
   val services = activityManager.getRunningServices(Int.MAX_VALUE)
 
-  return services.any { it.service.className == serviceClass.name && it.foreground }
+  return services.any { it.service.className == serviceClass.name }
 }

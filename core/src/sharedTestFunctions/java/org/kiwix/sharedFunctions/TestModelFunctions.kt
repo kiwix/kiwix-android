@@ -19,8 +19,9 @@ package org.kiwix.sharedFunctions
 
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.Error
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status
+import com.tonyodev.fetch2.Error
+import com.tonyodev.fetch2.Status
+import com.tonyodev.fetch2.Status.NONE
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
@@ -52,13 +53,13 @@ fun downloadModel(
   etaInMilliSeconds: Long = 0L,
   bytesDownloaded: Long = 1L,
   totalSizeOfDownload: Long = 1L,
-  status: Status = Status.NONE,
+  status: Status = NONE,
   error: Error = Error.NONE,
   progress: Int = 1,
   book: Book = book()
 ) = DownloadModel(
   databaseId, downloadId, file, etaInMilliSeconds, bytesDownloaded, totalSizeOfDownload,
-  status, error, progress, book, false
+  status, error, progress, book
 )
 
 fun downloadItem(
