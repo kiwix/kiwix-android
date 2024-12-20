@@ -11,8 +11,9 @@ repositories {
 }
 
 dependencies {
-  implementation("com.android.tools.build:gradle:8.1.3")
+  implementation("com.android.tools.build:gradle:8.4.0")
   implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.0")
+  implementation("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:2.1.0-1.0.29")
   implementation("org.jacoco:org.jacoco.core:0.8.12")
   implementation("org.jlleitschuh.gradle:ktlint-gradle:10.3.0")
   implementation("com.google.apis:google-api-services-androidpublisher:v3-rev20230406-2.0.0") {

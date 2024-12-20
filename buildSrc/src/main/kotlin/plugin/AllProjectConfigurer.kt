@@ -37,6 +37,7 @@ class AllProjectConfigurer {
   fun applyPlugins(target: Project) {
     target.plugins.apply("kotlin-android")
     target.plugins.apply("kotlin-kapt")
+    target.plugins.apply("com.google.devtools.ksp")
     target.plugins.apply("kotlin-parcelize")
     target.plugins.apply("jacoco")
     target.plugins.apply("org.jlleitschuh.gradle.ktlint")
@@ -77,7 +78,7 @@ class AllProjectConfigurer {
       }
       target.tasks.withType(KotlinCompile::class.java) {
         compilerOptions {
-          jvmTarget.set(JvmTarget.JVM_1_8)
+          jvmTarget.set(JvmTarget.JVM_17)
           freeCompilerArgs.add("-Xjvm-default=all-compatibility")
         }
       }
@@ -137,7 +138,7 @@ class AllProjectConfigurer {
   }
 
   fun configureCommonExtension(target: Project) {
-    target.configureExtension<CommonExtension<*, *, *, *, *>> {
+    target.configureExtension<CommonExtension<*, *, *, *, *, *>> {
       lint {
         abortOnError = true
         checkAllWarnings = true
@@ -216,8 +217,8 @@ class AllProjectConfigurer {
       compileOnly(Libs.javax_annotation_api)
       implementation(Libs.dagger)
       implementation(Libs.dagger_android)
-      kapt(Libs.dagger_compiler)
-      kapt(Libs.dagger_android_processor)
+      annotationProcessor(Libs.dagger_compiler)
+      annotationProcessor(Libs.dagger_android_processor)
       implementation(Libs.core_ktx)
       implementation(Libs.fragment_ktx)
       implementation(Libs.collection_ktx)
@@ -229,7 +230,7 @@ class AllProjectConfigurer {
       annotationProcessor(Libs.roomCompiler)
       implementation(Libs.roomRuntime)
       implementation(Libs.roomRxjava2)
-      kapt(Libs.roomCompiler)
+      ksp(Libs.roomCompiler)
       implementation(Libs.tracing)
       implementation(Libs.fetchOkhttp)
     }

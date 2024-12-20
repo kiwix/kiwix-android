@@ -14,7 +14,7 @@ object Versions {
 
   const val document_file_version: String = "1.0.1"
 
-  const val org_jetbrains_kotlinx_kotlinx_coroutines: String = "1.8.1"
+  const val org_jetbrains_kotlinx_kotlinx_coroutines: String = "1.9.0"
 
   const val kotlinx_coroutines_rx3: String = "1.3.9"
 
@@ -27,6 +27,8 @@ object Versions {
   const val com_squareup_okhttp3: String = "4.12.0"
 
   const val org_jetbrains_kotlin: String = "2.0.0"
+
+  const val kotlin_ksp: String = "2.1.0-1.0.29"
 
   const val androidx_navigation: String = "2.5.3"
 
@@ -46,7 +48,7 @@ object Versions {
 
   const val android_arch_lifecycle_extensions: String = "1.1.1"
 
-  const val com_android_tools_build_gradle: String = "8.1.3"
+  const val com_android_tools_build_gradle: String = "8.4.0"
 
   const val de_fayard_buildsrcversions_gradle_plugin: String = "0.7.0"
 
@@ -60,9 +62,9 @@ object Versions {
 
   const val swipe_refresh_layout: String = "1.1.0"
 
-  const val collection_ktx: String = "1.1.0"
+  const val collection_ktx: String = "1.4.5"
 
-  const val preference_ktx: String = "1.2.0"
+  const val preference_ktx: String = "1.2.1"
 
   const val junit_jupiter: String = "5.11.0"
 
@@ -70,7 +72,7 @@ object Versions {
 
   const val core_testing: String = "2.2.0"
 
-  const val fragment_ktx: String = "1.2.5"
+  const val fragment_ktx: String = "1.8.5"
 
   const val testing_ktx: String = "1.3.0"
 
@@ -86,7 +88,7 @@ object Versions {
 
   const val rxandroid: String = "2.1.1"
 
-  const val core_ktx: String = "1.9.0"
+  const val core_ktx: String = "1.15.0"
 
   const val libkiwix: String = "2.2.3"
 
