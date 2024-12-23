@@ -1851,8 +1851,7 @@ abstract class CoreReaderFragment :
           setIsCloseAllTabButtonClickable(true)
           restoreDeletedTabs()
         }
-        show()
-      }
+      }.show()
     }
   }
 

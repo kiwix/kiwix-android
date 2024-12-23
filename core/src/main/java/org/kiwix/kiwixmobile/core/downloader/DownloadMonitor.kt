@@ -18,5 +18,6 @@
 package org.kiwix.kiwixmobile.core.downloader
 
 interface DownloadMonitor {
-  fun init()
+  fun startMonitoringDownload()
+  fun stopListeningDownloads()
 }

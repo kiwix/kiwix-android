@@ -25,6 +25,7 @@ import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.FetchListener
+import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2core.DownloadBlock
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -46,6 +47,9 @@ class DownloadMonitorService : Service() {
   lateinit var fetch: Fetch
 
   @Inject
+  lateinit var fetchDownloadNotificationManager: FetchDownloadNotificationManager
+
+  @Inject
   lateinit var downloadRoomDao: DownloadRoomDao
 
   override fun onCreate() {
@@ -55,11 +59,16 @@ class DownloadMonitorService : Service() {
       .build()
       .inject(this)
     super.onCreate()
-    fetch.addListener(fetchListener, true)
     setupUpdater()
     startMonitoringDownloads()
+    fetch.addListener(fetchListener, true)
+    setForegroundNotification()
   }
 
+  /**
+   * Periodically checks if there are active downloads.
+   * If no downloads are active, it stops the foreground service.
+   */
   private fun startMonitoringDownloads() {
     // Check if monitoring is already active. If it is, do nothing.
     if (monitoringDisposable?.isDisposed == false) return
@@ -96,7 +105,38 @@ class DownloadMonitorService : Service() {
 
   override fun onBind(intent: Intent?): IBinder? = null
 
-  override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_NOT_STICKY
+  override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    if (intent?.action == STOP_DOWNLOAD_SERVICE) {
+      stopForegroundServiceForDownloads()
+    }
+    return START_NOT_STICKY
+  }
+
+  /**
+   * Sets the foreground notification for the service.
+   * This notification is used to display the current download progress,
+   * and it is updated dynamically based on the state of the downloads.
+   *
+   * The method checks for any active downloads and, if found, updates the notification
+   * with the latest download progress. If there are no active downloads,
+   * the service is stopped and removed from the foreground.
+   */
+  private fun setForegroundNotification() {
+    updater.onNext {
+      fetch.getDownloads { downloadList ->
+        downloadList.firstOrNull {
+          it.status == Status.NONE ||
+            it.status == Status.ADDED ||
+            it.status == Status.QUEUED ||
+            it.status == Status.DOWNLOADING
+        }?.let {
+          val notificationBuilder =
+            fetchDownloadNotificationManager.getNotificationBuilder(it.id, it.id)
+          startForeground(it.id, notificationBuilder.build())
+        } ?: kotlin.run(::stopForegroundServiceForDownloads)
+      }
+    }
+  }
 
   private val fetchListener = object : FetchListener {
     override fun onAdded(download: Download) {
@@ -108,7 +148,7 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onCompleted(download: Download) {
-      update(download)
+      update(download, true)
     }
 
     override fun onDeleted(download: Download) {
@@ -124,11 +164,11 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onError(download: Download, error: Error, throwable: Throwable?) {
-      update(download)
+      update(download, true)
     }
 
     override fun onPaused(download: Download) {
-      update(download)
+      update(download, true)
     }
 
     override fun onProgress(
@@ -163,25 +203,33 @@ class DownloadMonitorService : Service() {
       update(download)
     }
 
-    private fun update(download: Download) {
-      updater.onNext { downloadRoomDao.update(download) }
+    private fun update(download: Download, shouldSetForegroundNotification: Boolean = false) {
+      updater.onNext { downloadRoomDao.update(download) }.also {
+        if (shouldSetForegroundNotification) {
+          setForegroundNotification()
+        }
+      }
     }
 
     private fun delete(download: Download) {
-      updater.onNext { downloadRoomDao.delete(download) }
+      updater.onNext { downloadRoomDao.delete(download) }.also {
+        setForegroundNotification()
+      }
     }
   }
 
+  /**
+   * Stops the foreground service, disposes of resources, and removes the Fetch listener.
+   */
   private fun stopForegroundServiceForDownloads() {
-    // foreGroundServiceInformation = true to DEFAULT_INT_VALUE
-    Log.e(
-      "DOWNLOAD_MANAGER_MONITOR",
-      "Stopping DownloadMonitorService as there is no more download available to track"
-    )
     monitoringDisposable?.dispose()
     updaterDisposable?.dispose()
     fetch.removeListener(fetchListener)
     stopForeground(STOP_FOREGROUND_REMOVE)
     stopSelf()
+  }
+
+  companion object {
+    const val STOP_DOWNLOAD_SERVICE = "stop_download_service"
   }
 }

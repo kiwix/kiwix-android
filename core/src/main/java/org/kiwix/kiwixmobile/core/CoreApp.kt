@@ -28,7 +28,6 @@ import androidx.multidex.MultiDex
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.kiwix.kiwixmobile.core.di.components.CoreComponent
 import org.kiwix.kiwixmobile.core.di.components.DaggerCoreComponent
-import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
 import javax.inject.Inject
@@ -42,9 +41,6 @@ abstract class CoreApp : Application() {
     @JvmStatic
     lateinit var coreComponent: CoreComponent
   }
-
-  @Inject
-  lateinit var downloadMonitor: DownloadMonitor
 
   @Inject
   lateinit var darkModeConfig: DarkModeConfig
@@ -84,7 +80,6 @@ abstract class CoreApp : Application() {
     AndroidThreeTen.init(this)
     coreComponent.inject(this)
     serviceWorkerInitialiser.init(this)
-    downloadMonitor.init()
     darkModeConfig.init()
     fileLogger.writeLogFile(this)
     configureStrictMode()

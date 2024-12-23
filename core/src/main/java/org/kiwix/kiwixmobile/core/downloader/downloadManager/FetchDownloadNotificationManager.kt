@@ -21,45 +21,51 @@ package org.kiwix.kiwixmobile.core.downloader.downloadManager
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import com.tonyodev.fetch2.ACTION_TYPE_CANCEL
-import com.tonyodev.fetch2.ACTION_TYPE_DELETE
-import com.tonyodev.fetch2.ACTION_TYPE_INVALID
-import com.tonyodev.fetch2.ACTION_TYPE_PAUSE
-import com.tonyodev.fetch2.ACTION_TYPE_RESUME
-import com.tonyodev.fetch2.ACTION_TYPE_RETRY
 import com.tonyodev.fetch2.DefaultFetchNotificationManager
 import com.tonyodev.fetch2.DownloadNotification
-import com.tonyodev.fetch2.EXTRA_ACTION_TYPE
-import com.tonyodev.fetch2.EXTRA_DOWNLOAD_ID
-import com.tonyodev.fetch2.EXTRA_GROUP_ACTION
-import com.tonyodev.fetch2.EXTRA_NAMESPACE
-import com.tonyodev.fetch2.EXTRA_NOTIFICATION_GROUP_ID
-import com.tonyodev.fetch2.EXTRA_NOTIFICATION_ID
 import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.R.drawable
 import com.tonyodev.fetch2.R.string
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import javax.inject.Inject
 
 const val DOWNLOAD_NOTIFICATION_TITLE = "OPEN_ZIM_FILE"
 
-class FetchDownloadNotificationManager(
-  private val context: Context,
+class FetchDownloadNotificationManager @Inject constructor(
+  context: Context,
   private val downloadRoomDao: DownloadRoomDao
 ) : DefaultFetchNotificationManager(context) {
   override fun getFetchInstanceForNamespace(namespace: String): Fetch = Fetch.getDefaultInstance()
+
+  override fun registerBroadcastReceiver() {
+    val context = CoreApp.instance.applicationContext
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      context.registerReceiver(
+        broadcastReceiver,
+        IntentFilter(notificationManagerAction),
+        Context.RECEIVER_EXPORTED
+      )
+    } else {
+      context.registerReceiver(
+        broadcastReceiver,
+        IntentFilter(notificationManagerAction)
+      )
+    }
+  }
 
   override fun createNotificationChannels(
     context: Context,
@@ -90,7 +96,6 @@ class FetchDownloadNotificationManager(
     downloadNotification: DownloadNotification,
     context: Context
   ) {
-    // super method but with pause button removed
     val smallIcon = if (downloadNotification.isDownloading) {
       android.R.drawable.stat_sys_download
     } else {
@@ -124,7 +129,7 @@ class FetchDownloadNotificationManager(
             getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.DELETE)
           ).addAction(
             drawable.fetch_notification_pause,
-            context.getString(R.string.tts_pause),
+            context.getString(R.string.notification_pause_button_text),
             getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.PAUSE)
           )
 
@@ -132,7 +137,7 @@ class FetchDownloadNotificationManager(
         notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
           .addAction(
             drawable.fetch_notification_resume,
-            context.getString(R.string.tts_resume),
+            context.getString(R.string.notification_resume_button_text),
             getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.RESUME)
           )
           .addAction(
@@ -147,35 +152,6 @@ class FetchDownloadNotificationManager(
       else -> notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
     }
     notificationCustomisation(downloadNotification, notificationBuilder, context)
-  }
-
-  override fun getActionPendingIntent(
-    downloadNotification: DownloadNotification,
-    actionType: DownloadNotification.ActionType
-  ): PendingIntent {
-    val intent = Intent(notificationManagerAction).apply {
-      putExtra(EXTRA_NAMESPACE, downloadNotification.namespace)
-      putExtra(EXTRA_DOWNLOAD_ID, downloadNotification.notificationId)
-      putExtra(EXTRA_NOTIFICATION_ID, downloadNotification.notificationId)
-      putExtra(EXTRA_GROUP_ACTION, false)
-      putExtra(EXTRA_NOTIFICATION_GROUP_ID, downloadNotification.groupId)
-    }
-    val action = when (actionType) {
-      DownloadNotification.ActionType.CANCEL -> ACTION_TYPE_CANCEL
-      DownloadNotification.ActionType.DELETE -> ACTION_TYPE_DELETE
-      DownloadNotification.ActionType.RESUME -> ACTION_TYPE_RESUME
-      DownloadNotification.ActionType.PAUSE -> ACTION_TYPE_PAUSE
-      DownloadNotification.ActionType.RETRY -> ACTION_TYPE_RETRY
-      else -> ACTION_TYPE_INVALID
-    }
-    intent.putExtra(EXTRA_ACTION_TYPE, action)
-    val flags = PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-    return PendingIntent.getBroadcast(
-      context,
-      downloadNotification.notificationId + action,
-      intent,
-      flags
-    )
   }
 
   @SuppressLint("UnspecifiedImmutableFlag")

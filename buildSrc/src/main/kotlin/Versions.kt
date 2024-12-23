@@ -26,13 +26,13 @@ object Versions {
 
   const val com_squareup_okhttp3: String = "4.12.0"
 
-  const val org_jetbrains_kotlin: String = "1.9.20"
+  const val org_jetbrains_kotlin: String = "2.0.0"
 
   const val androidx_navigation: String = "2.5.3"
 
   const val navigation_ui_ktx: String = "2.4.1"
 
-  const val com_google_dagger: String = "2.48.1"
+  const val com_google_dagger: String = "2.53.1"
 
   const val androidx_test: String = "1.6.1"
 
@@ -40,7 +40,7 @@ object Versions {
 
   const val androidx_test_orchestrator: String = "1.5.0"
 
-  const val io_objectbox: String = "3.5.0"
+  const val io_objectbox: String = "4.0.3"
 
   const val io_mockk: String = "1.13.13"
 
@@ -110,7 +110,7 @@ object Versions {
 
   const val keeper = "0.16.1"
 
-  const val fetch: String = "3.3.0"
+  const val fetch: String = "3.4.1"
 }
 
 /**

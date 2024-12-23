@@ -101,7 +101,7 @@ object Libs {
   /**
    * https://kotlinlang.org/
    */
-  const val kotlin_stdlib_jdk7: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:" +
+  const val kotlin_stdlib_jdk8: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:" +
     Versions.org_jetbrains_kotlin
 
   /**

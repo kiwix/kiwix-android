@@ -19,9 +19,9 @@
 package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
 import com.tonyodev.fetch2.Fetch
-import com.tonyodev.fetch2.Request
 import com.tonyodev.fetch2.NetworkType.ALL
 import com.tonyodev.fetch2.NetworkType.WIFI_ONLY
+import com.tonyodev.fetch2.Request
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.utils.AUTO_RETRY_MAX_ATTEMPTS
@@ -30,27 +30,20 @@ import javax.inject.Inject
 
 class DownloadManagerRequester @Inject constructor(
   private val fetch: Fetch,
-  private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val downloadManagerMonitor: DownloadManagerMonitor
+  private val sharedPreferenceUtil: SharedPreferenceUtil
 ) : DownloadRequester {
   override fun enqueue(downloadRequest: DownloadRequest): Long {
     val request = downloadRequest.toFetchRequest(sharedPreferenceUtil)
     fetch.enqueue(request)
-    return request.id.toLong().also {
-      downloadManagerMonitor.startMonitoringDownloads()
-    }
+    return request.id.toLong()
   }
 
   override fun cancel(downloadId: Long) {
-    fetch.delete(downloadId.toInt()).also {
-      downloadManagerMonitor.startMonitoringDownloads()
-    }
+    fetch.delete(downloadId.toInt())
   }
 
   override fun retryDownload(downloadId: Long) {
-    fetch.retry(downloadId.toInt()).also {
-      downloadManagerMonitor.startMonitoringDownloads()
-    }
+    fetch.retry(downloadId.toInt())
   }
 
   override fun pauseResumeDownload(downloadId: Long, isPause: Boolean) {
@@ -58,8 +51,6 @@ class DownloadManagerRequester @Inject constructor(
       fetch.resume(downloadId.toInt())
     } else {
       fetch.pause(downloadId.toInt())
-    }.also {
-      downloadManagerMonitor.startMonitoringDownloads()
     }
   }
 }

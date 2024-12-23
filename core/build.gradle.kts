@@ -63,4 +63,8 @@ dependencies {
   implementation(Libs.kotlinx_coroutines_android)
   implementation(Libs.kotlinx_coroutines_rx3)
   implementation(Libs.zxing)
+  api(Libs.fetch) {
+    // Todo: Will remove this when we add support for Android 15
+    exclude("androidx.core", "core-ktx")
+  }
 }
