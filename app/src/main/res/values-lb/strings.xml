@@ -7,4 +7,5 @@
   <string name="file_system_does_not_support_4gb">Ären Dateisystem ënnerstëtzt keng Fichiere mat méi wéi 4 GB</string>
   <string name="send_files_title">Fichiere schécken</string>
   <string name="receive_files_title">Fichiere kréien</string>
+  <string name="select_zim_file">ZIM-Fichier fir ze liesen eraussichen</string>
 </resources>
