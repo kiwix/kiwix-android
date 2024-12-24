@@ -19,9 +19,15 @@
 package org.kiwix.kiwixmobile
 
 import android.content.Context
+import androidx.core.content.edit
+import androidx.lifecycle.Lifecycle
+import androidx.preference.PreferenceManager
 import androidx.room.Room
+import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
 import io.objectbox.Box
 import io.objectbox.BoxStore
 import kotlinx.coroutines.flow.first
@@ -44,7 +50,10 @@ import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.core.di.modules.DatabaseModule
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
+import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.testutils.TestUtils
 
 @RunWith(AndroidJUnit4::class)
 class ObjectBoxToRoomMigratorTest {
@@ -57,6 +66,33 @@ class ObjectBoxToRoomMigratorTest {
   @Before
   fun setup() {
     context = ApplicationProvider.getApplicationContext()
+    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+      if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
+        TestUtils.closeSystemDialogs(context, this)
+      }
+      waitForIdle()
+    }
+    PreferenceManager.getDefaultSharedPreferences(context).edit {
+      putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
+      putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
+      putBoolean(SharedPreferenceUtil.IS_PLAY_STORE_BUILD, true)
+      putString(SharedPreferenceUtil.PREF_LANG, "en")
+      putLong(
+        SharedPreferenceUtil.PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS,
+        System.currentTimeMillis()
+      )
+    }
+    ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+      moveToState(Lifecycle.State.RESUMED)
+      onActivity {
+        LanguageUtils.handleLocaleChange(
+          it,
+          "en",
+          SharedPreferenceUtil(context)
+        )
+        it.navigate(R.id.libraryFragment)
+      }
+    }
     kiwixRoomDatabase = Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java)
       .allowMainThreadQueries()
       .build()

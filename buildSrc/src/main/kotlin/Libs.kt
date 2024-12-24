@@ -101,7 +101,7 @@ object Libs {
   /**
    * https://kotlinlang.org/
    */
-  const val kotlin_stdlib_jdk7: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:" +
+  const val kotlin_stdlib_jdk8: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:" +
     Versions.org_jetbrains_kotlin
 
   /**
@@ -357,4 +357,10 @@ object Libs {
    * https://github.com/slackhq/keeper
    */
   const val keeper = "com.slack.keeper:keeper:" + Versions.keeper
+
+  /**
+   * https://github.com/tonyofrancis/Fetch
+   */
+  const val fetch: String = "com.github.tonyofrancis.Fetch:fetch2:" + Versions.fetch
+  const val fetchOkhttp: String = "com.github.tonyofrancis.Fetch:fetch2okhttp:" + Versions.fetch
 }

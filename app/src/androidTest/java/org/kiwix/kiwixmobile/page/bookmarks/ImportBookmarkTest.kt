@@ -52,10 +52,10 @@ class ImportBookmarkTest : BaseActivityTest() {
   @JvmField
   var retryRule = RetryRule()
 
-  private val boxStore: BoxStore? = DatabaseModule.boxStore
+  private var boxStore: BoxStore? = null
   private val library = Library()
   private val manager = Manager(library)
-  private val newBookDao = NewBookDao(boxStore!!.boxFor(BookOnDiskEntity::class.java))
+  private lateinit var newBookDao: NewBookDao
   private lateinit var libkiwixBookmarks: LibkiwixBookmarks
 
   private val bookmarkXmlData = """
@@ -127,6 +127,8 @@ class ImportBookmarkTest : BaseActivityTest() {
         )
       }
     }
+    boxStore = DatabaseModule.boxStore
+    newBookDao = NewBookDao(boxStore!!.boxFor(BookOnDiskEntity::class.java))
     libkiwixBookmarks =
       LibkiwixBookmarks(
         library,

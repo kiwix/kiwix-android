@@ -24,7 +24,7 @@
   <issue id="TypographyEllipsis">
     <ignore path="**-iw/**.xml" />
   </issue>
-  <issue id="DuplicateStrings">
+  <issue id="DuplicateStrings" severity="warning">
     <ignore path="**/.gradle/caches/**" />
     <ignore path="**/values-**/**.xml" />
   </issue>

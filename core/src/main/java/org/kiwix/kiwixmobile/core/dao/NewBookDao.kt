@@ -35,6 +35,7 @@ import javax.inject.Inject
 
 class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
 
+  @Suppress("NoOp")
   fun books() = box.asFlowable()
     .flatMap { books ->
       io.reactivex.rxjava3.core.Flowable.fromIterable(books)

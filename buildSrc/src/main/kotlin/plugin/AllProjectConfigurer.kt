@@ -28,6 +28,7 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
@@ -75,7 +76,10 @@ class AllProjectConfigurer {
         targetCompatibility = Config.javaVersion
       }
       target.tasks.withType(KotlinCompile::class.java) {
-        kotlinOptions.jvmTarget = "1.8"
+        compilerOptions {
+          jvmTarget.set(JvmTarget.JVM_1_8)
+          freeCompilerArgs.add("-Xjvm-default=all-compatibility")
+        }
       }
       buildFeatures.apply {
         viewBinding = true
@@ -191,7 +195,7 @@ class AllProjectConfigurer {
 
   fun configureDependencies(target: Project) {
     target.dependencies {
-      implementation(Libs.kotlin_stdlib_jdk7)
+      implementation(Libs.kotlin_stdlib_jdk8)
       implementation(Libs.appcompat)
       implementation(Libs.material)
       implementation(Libs.constraintlayout)
@@ -227,6 +231,7 @@ class AllProjectConfigurer {
       implementation(Libs.roomRxjava2)
       kapt(Libs.roomCompiler)
       implementation(Libs.tracing)
+      implementation(Libs.fetchOkhttp)
     }
   }
 }

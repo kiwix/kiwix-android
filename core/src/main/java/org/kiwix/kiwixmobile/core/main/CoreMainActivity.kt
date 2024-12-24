@@ -52,11 +52,13 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions.Super.ShouldCa
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerBroadcastReceiver
+import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService.Companion.STOP_DOWNLOAD_SERVICE
 import org.kiwix.kiwixmobile.core.error.ErrorActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
-import org.kiwix.kiwixmobile.core.extensions.registerReceiver
+import org.kiwix.kiwixmobile.core.extensions.isServiceRunning
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
@@ -101,7 +103,8 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   @Inject lateinit var objectBoxToRoomMigrator: ObjectBoxToRoomMigrator
 
   @Inject
-  lateinit var downloadManagerBroadcastReceiver: DownloadManagerBroadcastReceiver
+  lateinit var downloadMonitor: DownloadMonitor
+
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.KiwixTheme)
     super.onCreate(savedInstanceState)
@@ -132,7 +135,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     CoroutineScope(Dispatchers.IO).launch {
       objectBoxToRoomMigrator.migrateObjectBoxDataToRoom()
     }
-    downloadManagerBroadcastReceiver.let(::registerReceiver)
     createApplicationShortcuts()
     handleBackPressed()
   }
@@ -145,16 +147,49 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   override fun onStart() {
     super.onStart()
+    downloadMonitor.startMonitoringDownload()
+    stopDownloadServiceIfRunning()
     rateDialogHandler.checkForRateDialog(getIconResId())
     navController.addOnDestinationChangedListener { _, destination, _ ->
       configureActivityBasedOn(destination)
     }
   }
 
+  /**
+   * Stops the DownloadService if it is currently running,
+   * as the application is now in the foreground and can handle downloads directly.
+   */
+  private fun stopDownloadServiceIfRunning() {
+    if (isServiceRunning(DownloadMonitorService::class.java)) {
+      startService(
+        Intent(
+          this,
+          DownloadMonitorService::class.java
+        ).setAction(STOP_DOWNLOAD_SERVICE)
+      )
+    }
+  }
+
   override fun onDestroy() {
     onBackPressedCallBack.remove()
-    downloadManagerBroadcastReceiver.let(::unregisterReceiver)
     super.onDestroy()
+  }
+
+  override fun onStop() {
+    startMonitoringDownloads()
+    downloadMonitor.stopListeningDownloads()
+    super.onStop()
+  }
+
+  /**
+   * Starts monitoring the downloads by ensuring that the `DownloadMonitorService` is running.
+   * This service keeps the Fetch instance alive when the application is in the background
+   *  or has been killed by the user or system, allowing downloads to continue in the background.
+   */
+  private fun startMonitoringDownloads() {
+    if (!isServiceRunning(DownloadMonitorService::class.java)) {
+      startService(Intent(this, DownloadMonitorService::class.java))
+    }
   }
 
   open fun configureActivityBasedOn(destination: NavDestination) {

@@ -23,22 +23,17 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.tonyodev.fetch2.Download
+import com.tonyodev.fetch2.Status.COMPLETED
 import io.reactivex.Flowable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
-import org.kiwix.kiwixmobile.core.extensions.deleteFile
-import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
-import java.io.File
 import javax.inject.Inject
 
 @Dao
@@ -62,7 +57,7 @@ abstract class DownloadRoomDao {
   fun allDownloads() = getAllDownloads().map { it.map(::DownloadModel) }
 
   private fun moveCompletedToBooksOnDiskDao(downloadEntities: List<DownloadRoomEntity>) {
-    downloadEntities.filter { it.status == Status.COMPLETED }
+    downloadEntities.filter { it.status == COMPLETED }
       .takeIf(List<DownloadRoomEntity>::isNotEmpty)
       ?.let {
         deleteDownloadsList(it)
@@ -70,9 +65,9 @@ abstract class DownloadRoomDao {
       }
   }
 
-  fun update(downloadModel: DownloadModel) {
-    getEntityForDownloadId(downloadModel.downloadId)?.let { downloadRoomEntity ->
-      downloadRoomEntity.updateWith(downloadModel)
+  fun update(download: Download) {
+    getEntityForDownloadId(download.id.toLong())?.let { downloadRoomEntity ->
+      downloadRoomEntity.updateWith(download)
         .takeIf { updatedEntity -> updatedEntity != downloadRoomEntity }
         ?.let(::updateDownloadItem)
     }
@@ -93,37 +88,31 @@ abstract class DownloadRoomDao {
   @Query("SELECT COUNT() FROM DownloadRoomEntity WHERE bookId = :bookId")
   abstract fun count(bookId: String): Int
 
+  @Query(
+    "SELECT * FROM DownloadRoomEntity WHERE " +
+      "file LIKE '%' || :fileName || '%' COLLATE NOCASE LIMIT 1"
+  )
+  abstract fun getEntityForFileName(fileName: String): DownloadRoomEntity?
+
   @Insert
   abstract fun saveDownload(downloadRoomEntity: DownloadRoomEntity)
 
-  fun delete(downloadId: Long) {
-    // remove the previous file from storage since we have cancelled the download.
-    getEntityForDownloadId(downloadId)?.file?.let {
-      CoroutineScope(Dispatchers.IO).launch {
-        File(it).deleteFile()
-      }
-    }
-    deleteDownloadByDownloadId(downloadId)
+  fun delete(download: Download) {
+    deleteDownloadByDownloadId(download.id.toLong())
   }
 
   fun addIfDoesNotExist(
     url: String,
     book: LibraryNetworkEntity.Book,
-    downloadRequester: DownloadRequester,
-    sharedPreferenceUtil: SharedPreferenceUtil
+    downloadRequester: DownloadRequester
   ) {
     if (doesNotAlreadyExist(book)) {
-      val downloadRequest = DownloadRequest(url, book.title)
       saveDownload(
         DownloadRoomEntity(
-          url,
-          downloadRequester.enqueue(downloadRequest),
-          book = book,
-          file = downloadRequest.getDestinationFile(sharedPreferenceUtil).path
+          downloadRequester.enqueue(DownloadRequest(url)),
+          book = book
         )
-      ).also {
-        downloadRequester.onDownloadAdded()
-      }
+      )
     }
   }
 

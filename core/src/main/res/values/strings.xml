@@ -147,6 +147,8 @@
   <string name="tts_pause">pause</string>
   <string name="tts_resume">resume</string>
   <string name="stop">stop</string>
+  <string name="notification_pause_button_text">Pause</string>
+  <string name="notification_resume_button_text">Resume</string>
   <string name="internal_storage">Internal</string>
   <string name="external_storage">External</string>
   <string name="yes">Yes</string>
