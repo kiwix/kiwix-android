@@ -78,19 +78,19 @@ abstract class CorePrefsFragment :
 
   @JvmField
   @Inject
-  protected var sharedPreferenceUtil: SharedPreferenceUtil? = null
+  var sharedPreferenceUtil: SharedPreferenceUtil? = null
 
   @JvmField
   @Inject
-  protected var storageCalculator: StorageCalculator? = null
+  var storageCalculator: StorageCalculator? = null
 
   @JvmField
   @Inject
-  protected var darkModeConfig: DarkModeConfig? = null
+  var darkModeConfig: DarkModeConfig? = null
 
   @JvmField
   @Inject
-  protected var alertDialogShower: DialogShower? = null
+  var alertDialogShower: DialogShower? = null
 
   @JvmField
   @Inject
@@ -229,7 +229,7 @@ abstract class CorePrefsFragment :
     @Suppress("TooGenericExceptionThrown")
     get() = try {
       requireActivity().packageManager
-        .getPackageInformation(requireActivity().packageName, 0).versionName
+        .getPackageInformation(requireActivity().packageName, 0).versionName.toString()
     } catch (e: PackageManager.NameNotFoundException) {
       throw RuntimeException(e)
     }

@@ -1,4 +1,3 @@
-import com.android.build.gradle.internal.utils.isKotlinKaptPluginApplied
 import plugin.KiwixConfigurationPlugin
 
 buildscript {

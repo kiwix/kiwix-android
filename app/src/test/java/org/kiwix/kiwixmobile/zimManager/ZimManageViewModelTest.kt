@@ -51,6 +51,8 @@ import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
+import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.CONNECTED
+import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.NOT_CONNECTED
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULTI
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
@@ -58,8 +60,6 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
-import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.CONNECTED
-import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.NOT_CONNECTED
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.MultiModeFinished
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
@@ -139,7 +139,7 @@ class ZimManageViewModelTest {
     every { newLanguagesDao.languages() } returns languages
     every { fat32Checker.fileSystemStates } returns fileSystemStates
     every { connectivityBroadcastReceiver.networkStates } returns networkStates
-    every { application.registerReceiver(any(), any()) } returns mockk()
+    every { application.registerReceiver(any(), any(), any()) } returns mockk()
     every { dataSource.booksOnDiskAsListItems() } returns booksOnDiskListItems
     every {
       connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
@@ -168,7 +168,7 @@ class ZimManageViewModelTest {
     @Test
     fun `registers broadcastReceiver in init`() {
       verify {
-        application.registerReceiver(connectivityBroadcastReceiver, any())
+        application.registerReceiver(connectivityBroadcastReceiver, any(), any())
       }
     }
 

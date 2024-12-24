@@ -21,11 +21,9 @@ package eu.mhutti1.utils.storage
 import android.content.Context
 import android.content.ContextWrapper
 import android.os.Environment
-import androidx.core.content.ContextCompat
 import java.io.File
 import java.io.FileFilter
 import java.io.RandomAccessFile
-import java.util.ArrayList
 
 object StorageDeviceUtils {
   @JvmStatic
@@ -54,7 +52,7 @@ object StorageDeviceUtils {
   private fun externalFilesDirsDevices(
     context: Context,
     writable: Boolean
-  ) = ContextCompat.getExternalFilesDirs(context, "")
+  ) = context.getExternalFilesDirs("")
     .filterNotNull()
     .mapIndexed { index, dir -> StorageDevice(generalisePath(dir.path, writable), index == 0) }
 
