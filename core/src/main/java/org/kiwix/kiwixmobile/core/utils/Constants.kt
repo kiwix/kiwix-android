@@ -39,6 +39,7 @@ const val EXTRA_IS_WIDGET_VOICE = "isWidgetVoice"
 const val HOTSPOT_SERVICE_CHANNEL_ID = "hotspotService"
 const val OLD_PROVIDER_DOMAIN = "org.kiwix.zim.base"
 const val READ_ALOUD_SERVICE_CHANNEL_ID = "readAloudService"
+const val DOWNLOAD_NOTIFICATION_CHANNEL_ID = "kiwixDownloadNotificationChannel"
 
 // For Storage select dialog
 const val INTERNAL_SELECT_POSITION = 0
