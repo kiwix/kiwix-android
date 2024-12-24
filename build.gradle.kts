@@ -7,6 +7,7 @@ buildscript {
   dependencies {
     classpath(Libs.com_android_tools_build_gradle)
     classpath(Libs.kotlin_gradle_plugin)
+    classpath(Libs.kotlin_ksp)
     classpath(Libs.navigation_safe_args_gradle_plugin)
     classpath(Libs.keeper)
 

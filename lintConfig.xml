@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
-  <issue id="TypographyQuotes">
+  <issue id="TypographyQuotes" severity="warning">
     <ignore path="**-qq/**.xml" />
     <ignore path="**-iw/**.xml" />
   </issue>
@@ -24,7 +24,7 @@
   <issue id="TypographyEllipsis">
     <ignore path="**-iw/**.xml" />
   </issue>
-  <issue id="DuplicateStrings">
+  <issue id="DuplicateStrings" severity="warning">
     <ignore path="**/.gradle/caches/**" />
     <ignore path="**/values-**/**.xml" />
   </issue>

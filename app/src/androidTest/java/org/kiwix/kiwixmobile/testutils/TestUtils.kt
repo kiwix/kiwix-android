@@ -25,7 +25,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Environment
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.test.core.app.canTakeScreenshot
 import androidx.test.core.app.takeScreenshot
@@ -90,10 +89,6 @@ object TestUtils {
       InstrumentationRegistry.getInstrumentation().targetContext,
       Manifest.permission.WRITE_EXTERNAL_STORAGE
     ) == PackageManager.PERMISSION_GRANTED
-
-  @RequiresApi(Build.VERSION_CODES.R)
-  private fun hasManageExternalStoragePermission(): Boolean =
-    Environment.isExternalStorageManager()
 
   @JvmStatic fun hasStoragePermission() = Build.VERSION.SDK_INT > Build.VERSION_CODES.M &&
     hasReadExternalStoragePermission() && hasWriteExternalStoragePermission()
