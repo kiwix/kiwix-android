@@ -14,13 +14,13 @@ object Versions {
 
   const val document_file_version: String = "1.0.1"
 
-  const val org_jetbrains_kotlinx_kotlinx_coroutines: String = "1.9.0"
+  const val org_jetbrains_kotlinx_kotlinx_coroutines: String = "1.10.1"
 
   const val kotlinx_coroutines_rx3: String = "1.3.9"
 
-  const val androidx_test_espresso: String = "3.5.1"
+  const val androidx_test_espresso: String = "3.6.1"
 
-  const val tracing: String = "1.1.0"
+  const val tracing: String = "1.2.0"
 
   const val com_squareup_retrofit2: String = "2.11.0"
 
@@ -48,7 +48,7 @@ object Versions {
 
   const val android_arch_lifecycle_extensions: String = "1.1.1"
 
-  const val com_android_tools_build_gradle: String = "8.4.0"
+  const val com_android_tools_build_gradle: String = "8.7.2"
 
   const val de_fayard_buildsrcversions_gradle_plugin: String = "0.7.0"
 
@@ -92,7 +92,7 @@ object Versions {
 
   const val libkiwix: String = "2.2.3"
 
-  const val material: String = "1.8.0"
+  const val material: String = "1.12.0"
 
   const val multidex: String = "2.0.1"
 
@@ -100,13 +100,13 @@ object Versions {
 
   const val rxjava: String = "2.2.21"
 
-  const val webkit: String = "1.11.0"
+  const val webkit: String = "1.12.1"
 
   const val junit: String = "1.1.5"
 
   const val material_show_case_view: String = "1.3.7"
 
-  const val roomVersion = "2.5.0"
+  const val roomVersion = "2.6.1"
 
   const val zxing = "3.5.3"
 

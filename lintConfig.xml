@@ -5,21 +5,21 @@
     <ignore path="**-iw/**.xml" />
   </issue>
   <issue id="LintError">
-    <ignore regexp=".*BookmarksRobot.kt.*"/>
-    <ignore regexp=".*DebugFunctions.kt.*"/>
-    <ignore regexp=".*HistoryRobot.kt.*"/>
-    <ignore regexp=".*IntroRobot.kt.*"/>
-    <ignore regexp=".*LanguageRobot.kt.*"/>
-    <ignore regexp=".*LibraryRobot.kt.*"/>
-    <ignore regexp=".*LocalFileTransferRobot.kt.*"/>
-    <ignore regexp=".*OnlineLibraryRobot.kt.*"/>
-    <ignore regexp=".*ReaderRobot.kt.*"/>
-    <ignore regexp=".*SettingsRobot.kt.*"/>
-    <ignore regexp=".*TopLevelDestinationRobot.kt.*"/>
-    <ignore regexp=".*ZimHostRobot.kt.*"/>
-    <ignore regexp=".*SearchRobot.kt.*"/>
-    <ignore regexp=".*InitialDownloadRobot.kt.*"/>
-    <ignore regexp=".*DownloadRobot.kt.*"/>
+    <ignore regexp=".*BookmarksRobot.kt.*" />
+    <ignore regexp=".*DebugFunctions.kt.*" />
+    <ignore regexp=".*HistoryRobot.kt.*" />
+    <ignore regexp=".*IntroRobot.kt.*" />
+    <ignore regexp=".*LanguageRobot.kt.*" />
+    <ignore regexp=".*LibraryRobot.kt.*" />
+    <ignore regexp=".*LocalFileTransferRobot.kt.*" />
+    <ignore regexp=".*OnlineLibraryRobot.kt.*" />
+    <ignore regexp=".*ReaderRobot.kt.*" />
+    <ignore regexp=".*SettingsRobot.kt.*" />
+    <ignore regexp=".*TopLevelDestinationRobot.kt.*" />
+    <ignore regexp=".*ZimHostRobot.kt.*" />
+    <ignore regexp=".*SearchRobot.kt.*" />
+    <ignore regexp=".*InitialDownloadRobot.kt.*" />
+    <ignore regexp=".*DownloadRobot.kt.*" />
   </issue>
   <issue id="TypographyEllipsis">
     <ignore path="**-iw/**.xml" />
@@ -48,4 +48,7 @@
   <issue id="DataExtractionRules" severity="warning" />
   <issue id="ObsoleteSdkInt" severity="warning" />
   <issue id="AppLinksAutoVerify" severity="warning" />
+  <issue id="CheckResult">
+    <ignore path="**/androidTest/**.kt" />
+  </issue>
 </lint>
