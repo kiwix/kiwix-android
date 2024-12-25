@@ -96,6 +96,8 @@ are interested in our custom apps, they have their own repo
 - [JUnit5](https://github.com/junit-team/junit5/) - The next generation of JUnit
 - [AssertJ](https://github.com/joel-costigliola/assertj-core) - Fluent assertions for test code
 - [ZXing](https://github.com/zxing/zxing) - Barcode scanning library for Java, Android
+- [Fetch](https://github.com/tonyofrancis/Fetch) - A customizable file download manager library for
+    Android
 
 ## Contributing
 

@@ -44,7 +44,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.ZimSourceRoomConverter
     NotesRoomEntity::class,
     DownloadRoomEntity::class
   ],
-  version = 6,
+  version = 7,
   exportSchema = false
 )
 @TypeConverters(HistoryRoomDaoCoverts::class, ZimSourceRoomConverter::class)
@@ -67,15 +67,16 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
               MIGRATION_2_3,
               MIGRATION_3_4,
               MIGRATION_4_5,
-              MIGRATION_5_6
+              MIGRATION_5_6,
+              MIGRATION_6_7
             )
             .build().also { db = it }
       }
     }
 
     private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
-      override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL(
+      override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
           """
             CREATE TABLE IF NOT EXISTS `HistoryRoomEntity`(
             `id` INTEGER NOT NULL,
@@ -96,8 +97,8 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
 
     @Suppress("MagicNumber")
     private val MIGRATION_2_3 = object : Migration(2, 3) {
-      override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL(
+      override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
           """
             CREATE TABLE IF NOT EXISTS `NotesRoomEntity`(
               `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -111,7 +112,7 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
           """
         )
 
-        database.execSQL(
+        db.execSQL(
           """
             CREATE UNIQUE INDEX IF NOT EXISTS `index_NotesRoomEntity_noteTitle` ON `NotesRoomEntity` (`noteTitle`)
             """
@@ -121,8 +122,8 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
 
     @Suppress("MagicNumber")
     private val MIGRATION_3_4 = object : Migration(3, 4) {
-      override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL(
+      override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
           """
             CREATE TABLE IF NOT EXISTS `DownloadRoomEntity` (
                 `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -156,9 +157,9 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
 
     @Suppress("MagicNumber")
     private val MIGRATION_4_5 = object : Migration(4, 5) {
-      override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE HistoryRoomEntity ADD COLUMN zimReaderSource TEXT")
-        database.execSQL(
+      override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE HistoryRoomEntity ADD COLUMN zimReaderSource TEXT")
+        db.execSQL(
           """
             CREATE TABLE IF NOT EXISTS HistoryRoomEntity_temp (
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -174,7 +175,7 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
             )
         """
         )
-        database.execSQL(
+        db.execSQL(
           """
             INSERT INTO HistoryRoomEntity_temp (
             id,
@@ -202,18 +203,71 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
             FROM HistoryRoomEntity
         """
         )
-        database.execSQL("DROP TABLE HistoryRoomEntity")
-        database.execSQL("ALTER TABLE HistoryRoomEntity_temp RENAME TO HistoryRoomEntity")
-        database.execSQL("ALTER TABLE NotesRoomEntity ADD COLUMN zimReaderSource TEXT")
+        db.execSQL("DROP TABLE HistoryRoomEntity")
+        db.execSQL("ALTER TABLE HistoryRoomEntity_temp RENAME TO HistoryRoomEntity")
+        db.execSQL("ALTER TABLE NotesRoomEntity ADD COLUMN zimReaderSource TEXT")
       }
     }
 
     @Suppress("MagicNumber")
     private val MIGRATION_5_6 = object : Migration(5, 6) {
-      override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL(
+      override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
           "ALTER TABLE DownloadRoomEntity ADD COLUMN pausedByUser INTEGER NOT NULL DEFAULT 0"
         )
+      }
+    }
+
+    @Suppress("MagicNumber")
+    private val MIGRATION_6_7 = object : Migration(6, 7) {
+      override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+          """
+            CREATE TABLE IF NOT EXISTS DownloadRoomEntity_new (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                downloadId INTEGER NOT NULL,
+                file TEXT,
+                etaInMilliSeconds INTEGER NOT NULL DEFAULT -1,
+                bytesDownloaded INTEGER NOT NULL DEFAULT -1,
+                totalSizeOfDownload INTEGER NOT NULL DEFAULT -1,
+                status TEXT NOT NULL DEFAULT 'NONE',
+                error TEXT NOT NULL DEFAULT 'NONE',
+                progress INTEGER NOT NULL DEFAULT -1,
+                bookId TEXT NOT NULL,
+                title TEXT NOT NULL,
+                description TEXT,
+                language TEXT NOT NULL,
+                creator TEXT NOT NULL,
+                publisher TEXT NOT NULL,
+                date TEXT NOT NULL,
+                url TEXT,
+                articleCount TEXT,
+                mediaCount TEXT,
+                size TEXT NOT NULL,
+                name TEXT,
+                favIcon TEXT NOT NULL,
+                tags TEXT
+            )
+          """.trimIndent()
+        )
+        db.execSQL(
+          """
+            INSERT INTO DownloadRoomEntity_new (
+                id, downloadId, file, etaInMilliSeconds, bytesDownloaded,
+                totalSizeOfDownload, status, error, progress, bookId, title, description,
+                language, creator, publisher, date, url, articleCount, mediaCount, size,
+                name, favIcon, tags
+            )
+            SELECT id, downloadId, file, etaInMilliSeconds, bytesDownloaded,
+                totalSizeOfDownload, status, error, progress, bookId, title, description,
+                language, creator, publisher, date, url, articleCount, mediaCount, size,
+                name, favIcon, tags
+            FROM DownloadRoomEntity
+          """.trimIndent()
+        )
+
+        db.execSQL("DROP TABLE DownloadRoomEntity")
+        db.execSQL("ALTER TABLE DownloadRoomEntity_new RENAME TO DownloadRoomEntity")
       }
     }
 

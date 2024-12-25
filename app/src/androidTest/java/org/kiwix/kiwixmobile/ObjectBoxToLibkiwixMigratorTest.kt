@@ -60,7 +60,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
   private val objectBoxToLibkiwixMigrator = ObjectBoxToLibkiwixMigrator()
 
   // take the existing boxStore object
-  private val boxStore: BoxStore? = DatabaseModule.boxStore
+  private var boxStore: BoxStore? = null
   private lateinit var zimFile: File
   private lateinit var box: Box<BookmarkEntity>
   private val expectedZimName = "Alpine_Linux"
@@ -115,6 +115,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
         it.navigate(R.id.libraryFragment)
       }
     }
+    boxStore = DatabaseModule.boxStore
     CoreApp.coreComponent.inject(objectBoxToLibkiwixMigrator)
     setUpObjectBoxAndData()
   }
@@ -126,7 +127,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
           " check is your application running"
       )
     }
-    box = boxStore.boxFor(BookmarkEntity::class.java)
+    box = boxStore!!.boxFor(BookmarkEntity::class.java)
 
     // clear the data before running the test case
     clearBookmarks()

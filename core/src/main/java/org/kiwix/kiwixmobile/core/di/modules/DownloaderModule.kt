@@ -17,18 +17,27 @@
  */
 package org.kiwix.kiwixmobile.core.di.modules
 
-import android.app.DownloadManager
+import android.content.Context
+import com.tonyodev.fetch2.Fetch
+import com.tonyodev.fetch2.FetchConfiguration
+import com.tonyodev.fetch2.FetchNotificationManager
+import com.tonyodev.fetch2okhttp.OkHttpDownloader
 import dagger.Module
 import dagger.Provides
+import okhttp3.OkHttpClient
+import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
+import org.kiwix.kiwixmobile.core.data.remote.BasicAuthInterceptor
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.downloader.DownloaderImpl
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerBroadcastReceiver
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerMonitor
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerRequester
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.FetchDownloadNotificationManager
+import org.kiwix.kiwixmobile.core.utils.CONNECT_TIME_OUT
+import org.kiwix.kiwixmobile.core.utils.READ_TIME_OUT
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -38,32 +47,53 @@ object DownloaderModule {
   fun providesDownloader(
     downloadRequester: DownloadRequester,
     downloadRoomDao: DownloadRoomDao,
-    kiwixService: KiwixService,
-    sharedPreferenceUtil: SharedPreferenceUtil
+    kiwixService: KiwixService
   ): Downloader =
-    DownloaderImpl(downloadRequester, downloadRoomDao, kiwixService, sharedPreferenceUtil)
+    DownloaderImpl(downloadRequester, downloadRoomDao, kiwixService)
 
   @Provides
   @Singleton
   fun providesDownloadRequester(
-    downloadManager: DownloadManager,
-    sharedPreferenceUtil: SharedPreferenceUtil,
-    downloadManagerMonitor: DownloadManagerMonitor
-  ): DownloadRequester = DownloadManagerRequester(
-    downloadManager,
-    sharedPreferenceUtil,
-    downloadManagerMonitor
+    fetch: Fetch,
+    sharedPreferenceUtil: SharedPreferenceUtil
+  ): DownloadRequester =
+    DownloadManagerRequester(fetch, sharedPreferenceUtil)
+
+  @Provides
+  @Singleton
+  fun provideFetch(fetchConfiguration: FetchConfiguration): Fetch =
+    Fetch.getInstance(fetchConfiguration)
+
+  @Provides
+  @Singleton
+  fun provideFetchConfiguration(
+    context: Context,
+    okHttpDownloader: OkHttpDownloader,
+    fetchNotificationManager: FetchNotificationManager
+  ): FetchConfiguration =
+    FetchConfiguration.Builder(context).apply {
+      setDownloadConcurrentLimit(5)
+      enableLogging(BuildConfig.DEBUG)
+      enableRetryOnNetworkGain(true)
+      setHttpDownloader(okHttpDownloader)
+      preAllocateFileOnCreation(false)
+      setNotificationManager(fetchNotificationManager)
+    }.build().also(Fetch.Impl::setDefaultInstanceConfiguration)
+
+  @Provides
+  @Singleton
+  fun provideOkHttpDownloader() = OkHttpDownloader(
+    OkHttpClient.Builder()
+      .connectTimeout(CONNECT_TIME_OUT, TimeUnit.MINUTES)
+      .readTimeout(READ_TIME_OUT, TimeUnit.MINUTES)
+      .addInterceptor(BasicAuthInterceptor())
+      .followRedirects(true)
+      .followSslRedirects(true)
+      .build()
   )
 
   @Provides
   @Singleton
-  fun provideDownloadManagerCallback(
-    downloadManagerMonitor: DownloadManagerMonitor
-  ): DownloadManagerBroadcastReceiver.Callback = downloadManagerMonitor
-
-  @Provides
-  @Singleton
-  fun providesDownloadManagerBroadcastReceiver(
-    callback: DownloadManagerBroadcastReceiver.Callback
-  ): DownloadManagerBroadcastReceiver = DownloadManagerBroadcastReceiver(callback)
+  fun provideFetchDownloadNotificationManager(context: Context, downloadRoomDao: DownloadRoomDao):
+    FetchNotificationManager = FetchDownloadNotificationManager(context, downloadRoomDao)
 }

@@ -134,7 +134,9 @@ class DownloadRobot : BaseRobot() {
 
   fun assertDownloadPaused() {
     testFlakyView({
-      onView(withSubstring(context.getString(string.paused_state))).check(matches(isDisplayed()))
+      onView(
+        withText(org.kiwix.kiwixmobile.core.R.string.paused_state)
+      ).check(matches(isDisplayed()))
     })
   }
 

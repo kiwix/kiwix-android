@@ -19,7 +19,7 @@
 package org.kiwix.kiwixmobile.zimManager.libraryView.adapter
 
 import androidx.annotation.StringRes
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status
+import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState

@@ -22,9 +22,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import io.objectbox.annotation.Convert
 import io.objectbox.converter.PropertyConverter
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.Error
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.Status
-import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
+import com.tonyodev.fetch2.Download
+import com.tonyodev.fetch2.Error
+import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 
 @Entity
@@ -34,12 +34,12 @@ data class DownloadRoomEntity(
   var downloadId: Long,
   val file: String? = null,
   val etaInMilliSeconds: Long = -1L,
-  var bytesDownloaded: Long = -1L,
+  val bytesDownloaded: Long = -1L,
   val totalSizeOfDownload: Long = -1L,
   @Convert(converter = StatusConverter::class, dbType = Int::class)
-  var status: Status = Status.NONE,
+  val status: Status = Status.NONE,
   @Convert(converter = ErrorConverter::class, dbType = Int::class)
-  var error: Error = Error.NONE,
+  val error: Error = Error.NONE,
   val progress: Int = -1,
   val bookId: String,
   val title: String,
@@ -54,11 +54,9 @@ data class DownloadRoomEntity(
   val size: String,
   val name: String?,
   val favIcon: String,
-  val tags: String? = null,
-  var pausedByUser: Boolean = false
+  val tags: String? = null
 ) {
-  constructor(downloadUrl: String, downloadId: Long, book: Book, file: String?) : this(
-    file = file,
+  constructor(downloadId: Long, book: Book) : this(
     downloadId = downloadId,
     bookId = book.id,
     title = book.title,
@@ -67,7 +65,7 @@ data class DownloadRoomEntity(
     creator = book.creator,
     publisher = book.publisher,
     date = book.date,
-    url = downloadUrl,
+    url = book.url,
     articleCount = book.articleCount,
     mediaCount = book.mediaCount,
     size = book.size,
@@ -93,15 +91,14 @@ data class DownloadRoomEntity(
     tags = this@DownloadRoomEntity.tags
   }
 
-  fun updateWith(download: DownloadModel) = copy(
+  fun updateWith(download: Download) = copy(
     file = download.file,
     etaInMilliSeconds = download.etaInMilliSeconds,
-    bytesDownloaded = download.bytesDownloaded,
-    totalSizeOfDownload = download.totalSizeOfDownload,
-    status = download.state,
+    bytesDownloaded = download.downloaded,
+    totalSizeOfDownload = download.total,
+    status = download.status,
     error = download.error,
-    progress = download.progress,
-    pausedByUser = download.pausedByUser
+    progress = download.progress
   )
 }
 
