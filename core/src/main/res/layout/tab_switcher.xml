@@ -8,6 +8,7 @@
     android:id="@+id/tab_switcher_recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
     android:orientation="horizontal"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 

@@ -17,12 +17,13 @@
       android:id="@+id/search_list"
       android:layout_width="0dp"
       android:layout_height="0dp"
+      android:layout_marginTop="?actionBarSize"
+      android:clipToPadding="false"
+      android:contentDescription="@string/searched_list"
       app:layout_constraintBottom_toTopOf="@+id/loadingMoreDataIndicator"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      android:contentDescription="@string/searched_list"
       app:layout_constraintTop_toTopOf="parent"
-      android:layout_marginTop="?actionBarSize"
       tools:listitem="@layout/list_item_search" />
 
     <androidx.core.widget.ContentLoadingProgressBar
@@ -31,10 +32,10 @@
       android:layout_width="40dp"
       android:layout_height="40dp"
       android:layout_gravity="center"
+      android:visibility="gone"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      android:visibility="gone" />
+      app:layout_constraintStart_toStartOf="parent" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 
