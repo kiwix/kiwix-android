@@ -233,6 +233,7 @@ class AllProjectConfigurer {
       kapt(Libs.roomCompiler)
       implementation(Libs.tracing)
       implementation(Libs.fetchOkhttp)
+      implementation(Libs.androidx_activity)
     }
   }
 }

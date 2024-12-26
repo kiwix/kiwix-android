@@ -90,6 +90,8 @@ object Versions {
 
   const val core_ktx: String = "1.15.0"
 
+  const val androidx_activity: String = "1.9.3"
+
   const val libkiwix: String = "2.2.3"
 
   const val material: String = "1.12.0"

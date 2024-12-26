@@ -22,7 +22,6 @@
   android:id="@+id/custom_drawer_container"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:fitsSystemWindows="true"
   tools:ignore="UnusedIds">
 
   <androidx.fragment.app.FragmentContainerView
@@ -38,7 +37,6 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_gravity="start"
-    android:fitsSystemWindows="true"
     app:headerLayout="@layout/nav_main"
     app:menu="@menu/menu_drawer_main" />
 
@@ -48,6 +46,5 @@
     android:layout_height="match_parent"
     android:layout_gravity="end"
     android:layout_marginTop="24dp"
-    android:fitsSystemWindows="true"
     app:headerLayout="@layout/drawer_right" />
 </androidx.drawerlayout.widget.DrawerLayout>

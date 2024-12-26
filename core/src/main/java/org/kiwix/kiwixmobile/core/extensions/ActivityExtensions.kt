@@ -29,6 +29,8 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.Menu
 import android.view.MenuItem
+import android.view.WindowInsetsController
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
@@ -198,5 +200,22 @@ object ActivityExtensions {
         Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
     val isWideEnough = configuration.smallestScreenWidthDp >= 600
     return isLargeOrXLarge && isWideEnough
+  }
+
+  /**
+   * This method is for setting the statusBar color for Android 15 and above.
+   * Since in Android 15 the setStatusBarColor method is deprecated and not works anymore.
+   */
+  @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
+  fun Activity.changeStatusBarAndNavigationBarColorInAndroid15AndAbove() {
+    window?.apply {
+      // Set the white color to icon since the statusBar color is black.
+      decorView.windowInsetsController?.setSystemBarsAppearance(
+        0,
+        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+      )
+      insetsController?.hide(android.view.WindowInsets.Type.statusBars())
+      insetsController?.show(android.view.WindowInsets.Type.statusBars())
+    }
   }
 }

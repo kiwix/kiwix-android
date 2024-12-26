@@ -21,10 +21,14 @@ package org.kiwix.kiwixmobile.core.base
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.enableEdgeToEdgeMode
 import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 
@@ -46,7 +50,17 @@ abstract class BaseFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    enableEdgeToEdgeMode()
     setupToolbar()
+    this.view?.let {
+      ViewCompat.setOnApplyWindowInsetsListener(it) { view, windowInsets ->
+        val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+        val layoutParams = view.layoutParams as? ViewGroup.MarginLayoutParams
+        layoutParams?.topMargin = insets.top
+        view.layoutParams = layoutParams
+        WindowInsetsCompat.CONSUMED
+      }
+    }
   }
 
   // Setup toolbar to handle common back pressed event

@@ -17,8 +17,13 @@
  */
 package org.kiwix.kiwixmobile.core.base
 
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.changeStatusBarAndNavigationBarColorInAndroid15AndAbove
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
@@ -29,7 +34,14 @@ open class BaseActivity : AppCompatActivity() {
   lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    enableEdgeToEdge(
+      statusBarStyle = SystemBarStyle.dark(Color.BLACK),
+      navigationBarStyle = SystemBarStyle.dark(Color.BLACK)
+    )
     super.onCreate(savedInstanceState)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+      changeStatusBarAndNavigationBarColorInAndroid15AndAbove()
+    }
     LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil)
   }
 }
