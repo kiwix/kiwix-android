@@ -232,6 +232,7 @@ class AllProjectConfigurer {
       implementation(Libs.roomRxjava2)
       kapt(Libs.roomCompiler)
       implementation(Libs.tracing)
+      implementation(Libs.fetch)
       implementation(Libs.fetchOkhttp)
       implementation(Libs.androidx_activity)
     }
