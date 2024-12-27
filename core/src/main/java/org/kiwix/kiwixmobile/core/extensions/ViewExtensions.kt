@@ -96,7 +96,7 @@ fun View.showFullScreenMode(window: Window) {
   WindowCompat.setDecorFitsSystemWindows(window, false)
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
     WindowInsetsControllerCompat(window, window.decorView).apply {
-      hide(WindowInsetsCompat.Type.statusBars())
+      hide(WindowInsetsCompat.Type.systemBars())
       hide(WindowInsetsCompat.Type.displayCutout())
       systemBarsBehavior =
         WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
@@ -113,7 +113,7 @@ fun View.closeFullScreenMode(window: Window) {
   WindowCompat.setDecorFitsSystemWindows(window, true)
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
     WindowInsetsControllerCompat(window, window.decorView).apply {
-      show(WindowInsetsCompat.Type.statusBars())
+      show(WindowInsetsCompat.Type.systemBars())
       show(WindowInsetsCompat.Type.displayCutout())
     }
   }
