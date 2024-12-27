@@ -51,7 +51,7 @@ import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
-import org.kiwix.kiwixmobile.core.extensions.setTopMarginToViewForEdgeToEdgeMode
+import org.kiwix.kiwixmobile.core.extensions.applyEdgeToEdgeInsets
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -129,7 +129,7 @@ class KiwixMainActivity : CoreMainActivity() {
         closeNavigationDrawer()
         onNavigationItemSelected(item)
       }
-      setTopMarginToViewForEdgeToEdgeMode()
+      applyEdgeToEdgeInsets()
     }
     activityKiwixMainBinding.bottomNavView.setupWithNavController(navController)
     lifecycleScope.launch {
@@ -138,7 +138,7 @@ class KiwixMainActivity : CoreMainActivity() {
     handleZimFileIntent(intent)
     handleNotificationIntent(intent)
     handleGetContentIntent(intent)
-    readerTableOfContentsDrawer.setTopMarginToViewForEdgeToEdgeMode()
+    readerTableOfContentsDrawer.applyEdgeToEdgeInsets()
   }
 
   private suspend fun migrateInternalToPublicAppDirectory() {

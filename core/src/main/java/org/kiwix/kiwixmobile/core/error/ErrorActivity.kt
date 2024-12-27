@@ -36,6 +36,7 @@ import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.queryIntentActiv
 import org.kiwix.kiwixmobile.core.compat.ResolveInfoFlagsCompat
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.databinding.ActivityKiwixErrorBinding
+import org.kiwix.kiwixmobile.core.extensions.applyEdgeToEdgeInsets
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.CRASH_AND_FEEDBACK_EMAIL_ADDRESS
@@ -85,6 +86,7 @@ open class ErrorActivity : BaseActivity() {
     }
     setupReportButton()
     activityKiwixErrorBinding?.restartButton?.setOnClickListener { restartApp() }
+    activityKiwixErrorBinding?.root.applyEdgeToEdgeInsets(true)
   }
 
   override fun onDestroy() {
