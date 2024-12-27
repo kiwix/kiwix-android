@@ -19,15 +19,12 @@
 package org.kiwix.kiwixmobile.core.extensions
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.view.WindowManager
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.ViewCompat
-import androidx.core.view.ViewGroupCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -94,33 +91,19 @@ fun View.setToolTipWithContentDescription(description: String) {
 
 fun View.showFullScreenMode(window: Window) {
   WindowCompat.setDecorFitsSystemWindows(window, false)
-  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-    WindowInsetsControllerCompat(window, window.decorView).apply {
-      hide(WindowInsetsCompat.Type.systemBars())
-      hide(WindowInsetsCompat.Type.displayCutout())
-      systemBarsBehavior =
-        WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-    }
-  }
-  @Suppress("Deprecation")
-  window.apply {
-    addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-    clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
+  WindowInsetsControllerCompat(window, window.decorView).apply {
+    hide(WindowInsetsCompat.Type.systemBars())
+    hide(WindowInsetsCompat.Type.displayCutout())
+    systemBarsBehavior =
+      WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
   }
 }
 
 fun View.closeFullScreenMode(window: Window) {
   WindowCompat.setDecorFitsSystemWindows(window, true)
-  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-    WindowInsetsControllerCompat(window, window.decorView).apply {
-      show(WindowInsetsCompat.Type.systemBars())
-      show(WindowInsetsCompat.Type.displayCutout())
-    }
-  }
-  @Suppress("DEPRECATION")
-  window.apply {
-    addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
-    clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+  WindowInsetsControllerCompat(window, window.decorView).apply {
+    show(WindowInsetsCompat.Type.systemBars())
+    show(WindowInsetsCompat.Type.displayCutout())
   }
 }
 
@@ -137,7 +120,6 @@ fun View.closeFullScreenMode(window: Window) {
  */
 fun View?.applyEdgeToEdgeInsets(shouldAddBottomPadding: Boolean = true) {
   this?.let {
-    ViewGroupCompat.installCompatInsetsDispatch(this)
     ViewCompat.setOnApplyWindowInsetsListener(it) { view, windowInsets ->
       val insets = windowInsets.getInsets(
         WindowInsetsCompat.Type.systemBars()

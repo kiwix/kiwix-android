@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.extensions
 
 import android.content.Context
-import android.os.Build
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -60,9 +59,6 @@ val Fragment.coreMainActivity get() = activity as CoreMainActivity
 
 fun Fragment.enableEdgeToEdgeMode() {
   activity?.window?.let {
-    WindowCompat.setDecorFitsSystemWindows(
-      it,
-      Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
-    )
+    WindowCompat.setDecorFitsSystemWindows(it, false)
   }
 }
