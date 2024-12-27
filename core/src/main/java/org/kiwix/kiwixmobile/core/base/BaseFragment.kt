@@ -19,16 +19,18 @@
 package org.kiwix.kiwixmobile.core.base
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.applyEdgeToEdgeInsets
 import org.kiwix.kiwixmobile.core.extensions.enableEdgeToEdgeMode
 import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
+import org.kiwix.kiwixmobile.core.extensions.setFragmentBackgroundColorForAndroid15AndAbove
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
-import org.kiwix.kiwixmobile.core.extensions.applyEdgeToEdgeInsets
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 
 /**
@@ -51,6 +53,9 @@ abstract class BaseFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     enableEdgeToEdgeMode()
     setupToolbar()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+      setFragmentBackgroundColorForAndroid15AndAbove()
+    }
     // Ignore adding the bottom padding to coreReaderFragment.
     this.view.applyEdgeToEdgeInsets(this !is CoreReaderFragment)
   }

@@ -24,12 +24,12 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.Menu
 import android.view.MenuItem
-import android.view.WindowInsetsController
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
@@ -203,19 +203,16 @@ object ActivityExtensions {
   }
 
   /**
-   * This method is for setting the statusBar color for Android 15 and above.
-   * Since in Android 15 the setStatusBarColor method is deprecated and not works anymore.
+   * Sets the window background color to black for Android 15 and above.
+   *
+   * In Android 15, the `setStatusBarColor` method is deprecated and no longer functional.
+   * As a workaround, this method sets the window background color to black because the
+   * status bar and navigation bar now inherit the background color of the window.
+   *
+   * @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
    */
   @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
-  fun Activity.changeStatusBarAndNavigationBarColorInAndroid15AndAbove() {
-    window?.apply {
-      // Set the white color to icon since the statusBar color is black.
-      decorView.windowInsetsController?.setSystemBarsAppearance(
-        0,
-        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-      )
-      insetsController?.hide(android.view.WindowInsets.Type.statusBars())
-      insetsController?.show(android.view.WindowInsets.Type.statusBars())
-    }
+  fun Activity.setWindowBackgroundColorForAndroid15AndAbove() {
+    window.decorView.setBackgroundColor(Color.BLACK)
   }
 }

@@ -23,7 +23,7 @@ import android.os.Bundle
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.changeStatusBarAndNavigationBarColorInAndroid15AndAbove
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setWindowBackgroundColorForAndroid15AndAbove
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
@@ -40,7 +40,7 @@ open class BaseActivity : AppCompatActivity() {
     )
     super.onCreate(savedInstanceState)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-      changeStatusBarAndNavigationBarColorInAndroid15AndAbove()
+      setWindowBackgroundColorForAndroid15AndAbove()
     }
     LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil)
   }
