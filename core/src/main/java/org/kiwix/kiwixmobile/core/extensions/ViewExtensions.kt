@@ -21,10 +21,12 @@ package org.kiwix.kiwixmobile.core.extensions
 import android.annotation.SuppressLint
 import android.os.Build
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.TooltipCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -117,5 +119,17 @@ fun View.closeFullScreenMode(window: Window) {
   window.apply {
     addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
     clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+  }
+}
+
+fun View?.setTopMarginToViewForEdgeToEdgeMode() {
+  this?.let {
+    ViewCompat.setOnApplyWindowInsetsListener(it) { view, windowInsets ->
+      val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+      val layoutParams = view.layoutParams as? ViewGroup.MarginLayoutParams
+      layoutParams?.topMargin = insets.top
+      view.layoutParams = layoutParams
+      WindowInsetsCompat.CONSUMED
+    }
   }
 }
