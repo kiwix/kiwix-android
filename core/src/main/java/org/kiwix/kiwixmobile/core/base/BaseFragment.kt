@@ -28,7 +28,8 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.enableEdgeToEdgeMode
 import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
-import org.kiwix.kiwixmobile.core.extensions.setTopMarginToViewForEdgeToEdgeMode
+import org.kiwix.kiwixmobile.core.extensions.applyEdgeToEdgeInsets
+import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 
 /**
  * All fragments should inherit from this fragment.
@@ -50,7 +51,8 @@ abstract class BaseFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     enableEdgeToEdgeMode()
     setupToolbar()
-    this.view.setTopMarginToViewForEdgeToEdgeMode()
+    // Ignore adding the bottom padding to coreReaderFragment.
+    this.view.applyEdgeToEdgeInsets(this !is CoreReaderFragment)
   }
 
   // Setup toolbar to handle common back pressed event

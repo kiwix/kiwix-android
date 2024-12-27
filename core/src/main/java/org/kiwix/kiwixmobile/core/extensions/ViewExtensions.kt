@@ -27,9 +27,11 @@ import android.view.WindowManager
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.ViewGroupCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.updatePadding
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 
@@ -122,13 +124,34 @@ fun View.closeFullScreenMode(window: Window) {
   }
 }
 
-fun View?.setTopMarginToViewForEdgeToEdgeMode() {
+/**
+ * Adjusts the view's top margin and optionally its bottom padding to handle edge-to-edge insets
+ * (e.g., system bars, display cutouts, and system gestures).
+ *
+ * By default, this method adds bottom padding to avoid content being obscured by the system bar.
+ * However, bottom padding can be skipped for specific cases like the reader fragment, where adding
+ * it might cause the BottomAppBar to overlap the content.
+ *
+ * @param shouldAddBottomPadding Whether to add padding to the bottom of the view to handle system insets.
+ * Defaults to `true`.
+ */
+fun View?.applyEdgeToEdgeInsets(shouldAddBottomPadding: Boolean = true) {
   this?.let {
+    ViewGroupCompat.installCompatInsetsDispatch(this)
     ViewCompat.setOnApplyWindowInsetsListener(it) { view, windowInsets ->
-      val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+      val insets = windowInsets.getInsets(
+        WindowInsetsCompat.Type.systemBars()
+          or WindowInsetsCompat.Type.displayCutout()
+      )
       val layoutParams = view.layoutParams as? ViewGroup.MarginLayoutParams
       layoutParams?.topMargin = insets.top
       view.layoutParams = layoutParams
+      // Optionally add padding to the bottom to prevent content from being obscured by system bars.
+      if (shouldAddBottomPadding) {
+        val systemBarsInsets =
+          windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+        view.updatePadding(bottom = systemBarsInsets.bottom)
+      }
       WindowInsetsCompat.CONSUMED
     }
   }
