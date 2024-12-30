@@ -276,7 +276,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private fun startKiwixHotspot() {
     if (dialog == null) {
       val dialogView: View =
-        layoutInflater.inflate(layout.item_custom_spinner, null)
+        layoutInflater.inflate(R.layout.item_custom_spinner, null)
       dialog = alertDialogShower.create(StartServer { dialogView })
     }
     dialog?.show()

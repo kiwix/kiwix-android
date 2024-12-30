@@ -33,6 +33,7 @@ import androidx.core.os.ConfigurationCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
@@ -40,6 +41,7 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import eu.mhutti1.utils.storage.StorageDeviceUtils
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.id
@@ -126,13 +128,15 @@ class KiwixMainActivity : CoreMainActivity() {
       onNavigationItemSelected(item)
     }
     activityKiwixMainBinding.bottomNavView.setupWithNavController(navController)
-    migrateInternalToPublicAppDirectory()
+    lifecycleScope.launch {
+      migrateInternalToPublicAppDirectory()
+    }
     handleZimFileIntent(intent)
     handleNotificationIntent(intent)
     handleGetContentIntent(intent)
   }
 
-  private fun migrateInternalToPublicAppDirectory() {
+  private suspend fun migrateInternalToPublicAppDirectory() {
     if (!sharedPreferenceUtil.prefIsAppDirectoryMigrated) {
       val storagePath = StorageDeviceUtils.getWritableStorage(this)
         .getOrNull(sharedPreferenceUtil.storagePosition)

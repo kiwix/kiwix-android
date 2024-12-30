@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.os.Environment
 import androidx.core.content.ContextCompat
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import java.io.File
 import java.io.FileFilter
 import java.io.RandomAccessFile
@@ -34,10 +35,9 @@ object StorageDeviceUtils {
 
   @JvmStatic
   fun getReadableStorage(context: Context): List<StorageDevice> {
+    var sharedPreferenceUtil: SharedPreferenceUtil? = SharedPreferenceUtil(context)
     val storageDevices = ArrayList<StorageDevice>().apply {
       add(environmentDevices(context))
-      addAll(externalMountPointDevices())
-      addAll(externalFilesDirsDevices(context, false))
       addAll(externalMediaFilesDirsDevices(context))
       // Scan the app-specific directory as well because we have limitations in scanning
       // all directories on Android 11 and above in the Play Store variant.
@@ -47,6 +47,15 @@ object StorageDeviceUtils {
       // Therefore, we need to explicitly include the app-specific directory for scanning.
       // See https://github.com/kiwix/kiwix-android/issues/3579
       addAll(externalFilesDirsDevices(context, true))
+      // Do not scan storage directories in the Play Store build on Android 11 and above.
+      // In the Play Store variant, we can only access app-specific directories,
+      // so scanning other directories is unnecessary, wastes resources,
+      // and increases the scanning time.
+      if (sharedPreferenceUtil?.isNotPlayStoreBuildWithAndroid11OrAbove() == true) {
+        addAll(externalMountPointDevices())
+        addAll(externalFilesDirsDevices(context, false))
+      }
+      sharedPreferenceUtil = null
     }
     return validate(storageDevices, false)
   }
