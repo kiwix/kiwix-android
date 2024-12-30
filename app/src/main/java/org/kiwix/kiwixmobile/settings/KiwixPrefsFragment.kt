@@ -39,10 +39,13 @@ import org.kiwix.kiwixmobile.core.extensions.storagePathAndTitle
 import org.kiwix.kiwixmobile.core.extensions.usedPercentage
 import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.settings.CorePrefsFragment
+import org.kiwix.kiwixmobile.core.settings.StorageLoadingPreference
 import org.kiwix.kiwixmobile.core.settings.StorageRadioButtonPreference
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.PREF_EXTERNAL_STORAGE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.PREF_INTERNAL_STORAGE
+
+const val PREF_STORAGE_PROGRESSBAR = "storage_progressbar"
 
 class KiwixPrefsFragment : CorePrefsFragment() {
   private var storageDisposable: Disposable? = null
@@ -56,10 +59,12 @@ class KiwixPrefsFragment : CorePrefsFragment() {
 
   override suspend fun setStorage() {
     sharedPreferenceUtil?.let {
-      if (storageDisposable?.isDisposed == false) {
+      if (storageDeviceList.isNotEmpty()) {
         // update the storage when user switch to other storage.
         setUpStoragePreference(it)
+        return@setStorage
       }
+      showHideProgressBarWhileFetchingStorageInfo(true)
       storageDisposable =
         Flowable.fromCallable { StorageDeviceUtils.getWritableStorage(requireActivity()) }
           .subscribeOn(Schedulers.io())
@@ -67,11 +72,27 @@ class KiwixPrefsFragment : CorePrefsFragment() {
           .subscribe(
             { storageList ->
               storageDeviceList = storageList
+              showHideProgressBarWhileFetchingStorageInfo(false)
+              showInternalStoragePreferece()
               showExternalPreferenceIfAvailable()
               setUpStoragePreference(it)
             },
             Throwable::printStackTrace
           )
+    }
+  }
+
+  /**
+   * Shows or hides the progress bar while the application is fetching
+   * storage information in the background. The progress bar is displayed
+   * with a title indicating that the storage information is being retrieved.
+   *
+   * @param show If true, the progress bar will be displayed; otherwise, it will be hidden.
+   */
+  private fun showHideProgressBarWhileFetchingStorageInfo(show: Boolean) {
+    findPreference<StorageLoadingPreference>(PREF_STORAGE_PROGRESSBAR)?.apply {
+      isVisible = show
+      setTitle(getString(R.string.fetching_storage_info))
     }
   }
 
@@ -98,6 +119,10 @@ class KiwixPrefsFragment : CorePrefsFragment() {
         }
       }
     }
+  }
+
+  private fun showInternalStoragePreferece() {
+    findPreference<StorageRadioButtonPreference>(PREF_INTERNAL_STORAGE)?.isVisible = true
   }
 
   private fun showExternalPreferenceIfAvailable() {
