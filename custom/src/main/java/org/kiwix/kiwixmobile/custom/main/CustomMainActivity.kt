@@ -85,8 +85,7 @@ class CustomMainActivity : CoreMainActivity() {
     super.onCreate(savedInstanceState)
     activityCustomMainBinding = ActivityCustomMainBinding.inflate(layoutInflater)
     setContentView(activityCustomMainBinding.root)
-    drawerNavView.applyEdgeToEdgeInsets()
-    readerTableOfContentsDrawer.applyEdgeToEdgeInsets()
+    activityCustomMainBinding.root.applyEdgeToEdgeInsets()
     if (savedInstanceState != null) {
       return
     }

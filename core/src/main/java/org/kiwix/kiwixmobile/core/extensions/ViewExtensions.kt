@@ -19,16 +19,18 @@
 package org.kiwix.kiwixmobile.core.extensions
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.WindowManager
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.updatePadding
+import androidx.core.view.updateLayoutParams
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 
@@ -91,48 +93,58 @@ fun View.setToolTipWithContentDescription(description: String) {
 
 fun View.showFullScreenMode(window: Window) {
   WindowCompat.setDecorFitsSystemWindows(window, false)
-  WindowInsetsControllerCompat(window, window.decorView).apply {
-    hide(WindowInsetsCompat.Type.systemBars())
-    hide(WindowInsetsCompat.Type.displayCutout())
-    systemBarsBehavior =
-      WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+    WindowInsetsControllerCompat(window, window.decorView).apply {
+      hide(WindowInsetsCompat.Type.systemBars())
+      hide(WindowInsetsCompat.Type.displayCutout())
+      systemBarsBehavior =
+        WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    }
+  }
+  @Suppress("Deprecation")
+  window.apply {
+    addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+    clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
   }
 }
 
 fun View.closeFullScreenMode(window: Window) {
   WindowCompat.setDecorFitsSystemWindows(window, false)
-  WindowInsetsControllerCompat(window, window.decorView).apply {
-    show(WindowInsetsCompat.Type.systemBars())
-    show(WindowInsetsCompat.Type.displayCutout())
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+    WindowInsetsControllerCompat(window, window.decorView).apply {
+      show(WindowInsetsCompat.Type.systemBars())
+      show(WindowInsetsCompat.Type.displayCutout())
+    }
+  }
+  @Suppress("DEPRECATION")
+  window.apply {
+    addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
+    clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
   }
 }
 
 /**
- * Adjusts the view's top margin and optionally its bottom padding to handle edge-to-edge insets
- * (e.g., system bars, display cutouts, and system gestures).
+ * Applies edge-to-edge insets to the current view by adjusting its margins
+ * to account for system bars and display cutouts (e.g., status bar, navigation bar, and notches).
  *
- * By default, this method adds bottom padding to avoid content being obscured by the system bar.
- * However, bottom padding can be skipped for specific cases like the reader fragment, where adding
- * it might cause the BottomAppBar to overlap the content.
+ * This method ensures that the view avoids overlapping with system UI components by dynamically
+ * setting margins based on the insets provided by the system.
  *
- * @param shouldAddBottomPadding Whether to add padding to the bottom of the view to handle system insets.
- * Defaults to `true`.
+ * Usage: Call this method on any view to apply edge-to-edge handling.
  */
-fun View?.applyEdgeToEdgeInsets(shouldAddBottomPadding: Boolean = true) {
+fun View?.applyEdgeToEdgeInsets() {
   this?.let {
     ViewCompat.setOnApplyWindowInsetsListener(it) { view, windowInsets ->
-      val insets = windowInsets.getInsets(
-        WindowInsetsCompat.Type.systemBars()
-          or WindowInsetsCompat.Type.displayCutout()
-      )
-      val layoutParams = view.layoutParams as? ViewGroup.MarginLayoutParams
-      layoutParams?.topMargin = insets.top
-      view.layoutParams = layoutParams
-      // Optionally add padding to the bottom to prevent content from being obscured by system bars.
-      if (shouldAddBottomPadding) {
-        val systemBarsInsets =
-          windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-        view.updatePadding(bottom = systemBarsInsets.bottom)
+      val systemBarsInsets =
+        windowInsets.getInsets(
+          WindowInsetsCompat.Type.displayCutout() or
+            WindowInsetsCompat.Type.systemBars()
+        )
+      view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        topMargin = systemBarsInsets.top
+        leftMargin = systemBarsInsets.left
+        bottomMargin = systemBarsInsets.bottom
+        rightMargin = systemBarsInsets.right
       }
       WindowInsetsCompat.CONSUMED
     }

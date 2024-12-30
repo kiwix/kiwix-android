@@ -91,6 +91,8 @@
     <item name="colorAccent">?colorSecondary</item>
     <item name="android:navigationBarColor">@color/black</item>
 
+    <!-- To prevent showing content behind the cutouts -->
+    <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">never</item>
   </style>
 
 </resources>

@@ -129,7 +129,6 @@ class KiwixMainActivity : CoreMainActivity() {
         closeNavigationDrawer()
         onNavigationItemSelected(item)
       }
-      applyEdgeToEdgeInsets()
     }
     activityKiwixMainBinding.bottomNavView.setupWithNavController(navController)
     lifecycleScope.launch {
@@ -138,7 +137,7 @@ class KiwixMainActivity : CoreMainActivity() {
     handleZimFileIntent(intent)
     handleNotificationIntent(intent)
     handleGetContentIntent(intent)
-    readerTableOfContentsDrawer.applyEdgeToEdgeInsets()
+    activityKiwixMainBinding.root.applyEdgeToEdgeInsets()
   }
 
   private suspend fun migrateInternalToPublicAppDirectory() {

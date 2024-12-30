@@ -26,12 +26,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.extensions.applyEdgeToEdgeInsets
 import org.kiwix.kiwixmobile.core.extensions.enableEdgeToEdgeMode
 import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
 import org.kiwix.kiwixmobile.core.extensions.setFragmentBackgroundColorForAndroid15AndAbove
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
-import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 
 /**
  * All fragments should inherit from this fragment.
@@ -56,8 +54,6 @@ abstract class BaseFragment : Fragment() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
       setFragmentBackgroundColorForAndroid15AndAbove()
     }
-    // Ignore adding the bottom padding to coreReaderFragment.
-    this.view.applyEdgeToEdgeInsets(this !is CoreReaderFragment)
   }
 
   // Setup toolbar to handle common back pressed event

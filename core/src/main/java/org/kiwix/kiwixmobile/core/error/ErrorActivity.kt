@@ -86,7 +86,7 @@ open class ErrorActivity : BaseActivity() {
     }
     setupReportButton()
     activityKiwixErrorBinding?.restartButton?.setOnClickListener { restartApp() }
-    activityKiwixErrorBinding?.root.applyEdgeToEdgeInsets(true)
+    activityKiwixErrorBinding?.root.applyEdgeToEdgeInsets()
   }
 
   override fun onDestroy() {
