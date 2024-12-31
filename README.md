@@ -17,7 +17,7 @@ with additional metadata.
 This is the version for Android, with [support versions ranging from 7.1
 to 13](https://github.com/kiwix/kiwix-android/blob/main/buildSrc/src/main/kotlin/Config.kt).
 
-**Important Note**: Starting from Android 11, the ZIM file picker
+**Important Note**: Starting from Android 11, the storage scanning
 feature has been restricted in the [Play Store
 variant](https://play.google.com/store/apps/details?id=org.kiwix.kiwixmobile)
 due to Play Store policies. This means that users running Android 11
@@ -27,9 +27,11 @@ Google Play Store. This restriction is in place to comply with the
 Play Store policies. The Play Store variant of Kiwix does not require
 the `MANAGE_EXTERNAL_STORAGE` permission anymore, which is necessary
 to scan storage and access ZIM files at arbitrary locations.
-Therefore, the storage scanning & file picking functionalities are not
+Therefore, the storage scanning functionality is not
 available in this variant anymore. For already downloaded ZIM files, You can copy
-them to the `Android/media/org.kiwix.kiwixmobile/` folder, and the application will read them.
+them to the `Android/media/org.kiwix.kiwixmobile/` folder or you can use file picker to select the
+ZIM files from storage and it will copy/move the ZIM files in this folder based on your choice
+, and the application will read them.
 Before uninstalling the application, please ensure that you move all your ZIM files
 from this folder, as they will be automatically deleted when the application is uninstalled
 or if the application data is cleared.  To use the full version of Kiwix
