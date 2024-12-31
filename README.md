@@ -61,6 +61,21 @@ Kiwix Android is written in [Kotlin](https://kotlinlang.org/)
 [![Public Chat](https://img.shields.io/badge/public-chat-green)](https://chat.kiwix.org)
 [![Slack](https://img.shields.io/badge/Slack-chat-E01E5A)](https://kiwixoffline.slack.com)
 
+## App permissions
+
+Our application requests the following permissions, which are necessary for its functionality:
+
+- `ACCESS_FINE_LOCATION`: Required on devices running Android 12 and below to discover nearby 
+   devices when transferring ZIM files.
+- `NEARBY_WIFI_DEVICES`: Required on devices running Android 13 and above to discover nearby devices
+   for transferring ZIM files.
+- `READ_EXTERNAL_STORAGE`: Required to access and read ZIM files stored on the device.
+- `WRITE_EXTERNAL_STORAGE`: Required to download ZIM files, export bookmarks, save notes, etc.
+- `POST_NOTIFICATIONS`: Required to display notifications for ongoing downloads, active hotspots, 
+   and the read-aloud feature.
+- `MANAGE_EXTERNAL_STORAGE`: Required on Android 11 and above to scan the storage and locate all
+   ZIM files. This permission is only available in the full version of the application.
+
 ## Build instructions
 
 To build Kiwix Android, clone [this
