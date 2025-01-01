@@ -57,6 +57,7 @@
     android:largeHeap="true"
     android:requestLegacyExternalStorage="true"
     android:resizeableActivity="true"
+    android:hasFragileUserData="true"
     android:supportsRtl="true"
     android:theme="@style/KiwixTheme"
     tools:targetApi="tiramisu">
