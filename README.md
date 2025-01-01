@@ -10,48 +10,14 @@
 
 Kiwix is an offline reader for Web content. One of its main purposes
 is to make [Wikipedia](https://www.wikipedia.org/) available
-offline. This is achieved by reading the content of a file in the
-[ZIM](https://openzim.org) format, a highly compressed open format
+offline. This is achieved by reading archives in the
+[ZIM](https://openzim.org) file format, a highly compressed open format
 with additional metadata.
 
 This is the version for Android, with [support versions ranging from 7.1
-to 13](https://github.com/kiwix/kiwix-android/blob/main/buildSrc/src/main/kotlin/Config.kt).
+to 15](https://github.com/kiwix/kiwix-android/blob/main/buildSrc/src/main/kotlin/Config.kt).
 
-**Important Note**: Starting from Android 11, the ZIM file picker
-feature has been restricted in the [Play Store
-variant](https://play.google.com/store/apps/details?id=org.kiwix.kiwixmobile)
-due to Play Store policies. This means that users running Android 11
-and above will not be able to load ZIM files from internal/external
-storage directly within the app if they have downloaded Kiwix from the
-Google Play Store. This restriction is in place to comply with the
-Play Store policies. The Play Store variant of Kiwix does not require
-the `MANAGE_EXTERNAL_STORAGE` permission anymore, which is necessary
-to scan storage and access ZIM files at arbitrary locations.
-Therefore, the storage scanning & file picking functionalities are not
-available in this variant anymore. For already downloaded ZIM files, You can copy
-them to the `Android/media/org.kiwix.kiwixmobile/` folder, and the application will read them.
-Before uninstalling the application, please ensure that you move all your ZIM files
-from this folder, as they will be automatically deleted when the application is uninstalled
-or if the application data is cleared.  To use the full version of Kiwix
-and benefit of the ZIM file picker feature, you can download it
-directly from the [official
-repository](https://download.kiwix.org/release/kiwix-android/) or use
-[IzzyOnDroid](https://apt.izzysoft.de/fdroid/index/apk/org.kiwix.kiwixmobile). We understand that this
-restriction may cause inconvenience, but it is necessary to comply
-with the Play Store policies and ensure a smooth user experience.  We
-recommend using the official version of the app available on our
-website to access the complete set of features.
-
-Possible paths for play store version which supports for the scanning/reading ZIM files.
-
-| Storage path                                              | Viewable outside kiwix(in File manager) | Could be scanned by Kiwix |
-|-----------------------------------------------------------|-----------------------------------------|---------------------------|
-| storage/0/Android/media/org.kiwix.kiwixmobile/            | Yes                                     | Yes                       |
-| storage/0/Android/data/org.kiwix.kiwixmobile/             | No                                      | Yes                       |
-| storage/sdcard-name/Android/media/org.kiwix.kiwixmobile/  | Yes                                     | Yes                       |
-| storage/sdcard-name/Android/data/org.kiwix.kiwixmobile/   | No                                      | Yes                       |
-
-Kiwix Android is written in [Kotlin](https://kotlinlang.org/)
+Kiwix Android is written in [Kotlin](https://kotlinlang.org/).
 
 [![Build Status](https://github.com/kiwix/kiwix-android/workflows/CI/badge.svg?query=branch%3Amain+workflow%3ANightly)](https://github.com/kiwix/kiwix-android/actions?query=workflow%3ACI+branch%3Amain)
 [![Nightly](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml/badge.svg)](https://github.com/kiwix/kiwix-android/actions/workflows/nightly.yml)
@@ -60,6 +26,61 @@ Kiwix Android is written in [Kotlin](https://kotlinlang.org/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Public Chat](https://img.shields.io/badge/public-chat-green)](https://chat.kiwix.org)
 [![Slack](https://img.shields.io/badge/Slack-chat-E01E5A)](https://kiwixoffline.slack.com)
+
+## Important Notes
+
+Starting from Android 11, Google has introduced a new very restrictive
+policy which concretly forbids Kiwix [Play Store
+variant](https://play.google.com/store/apps/details?id=org.kiwix.kiwixmobile)
+users to directly load ZIM files from internal/external storage. For
+the same reason, and still only in the Play Store variant, the storage
+scanning feature has been removed.
+
+Actualy, Kiwix Play Store variant can only directly scan/read ZIM
+files in reserved app directories:
+
+| Directory name   | Storage path                                                | Readable by File manager |
+|------------------|-------------------------------------------------------------|--------------------------|
+| Internal public  | `storage/0/Android/media/org.kiwix.kiwixmobile/`            | Yes                      |
+| Internal private | `storage/0/Android/data/org.kiwix.kiwixmobile/`             | No                       |
+| External public  | `storage/sdcard-name/Android/media/org.kiwix.kiwixmobile/`  | Yes                      |
+| External private | `storage/sdcard-name/Android/data/org.kiwix.kiwixmobile/`   | No                       |
+
+As a workaround, for ZIM files downloaded through third party apps,
+Kiwix users can use the file picker (in Kiwix library) to select these
+ZIM files... which then will be copied/moved to one of the the Kiwix
+app public directories (see above). An operation which can also be
+done manually.
+
+Be careful, before uninstalling Kiwix, if the user wants to keep its
+ZIM files, he will have to move them outside of the app
+directory. Otherwise, the ZIM file might be removed during the
+process.
+
+To use the full version of Kiwix and avoid to suffer of this
+restriction, you can download it directly from the [official
+repository](https://download.kiwix.org/release/kiwix-android/) or use
+[IzzyOnDroid](https://apt.izzysoft.de/fdroid/index/apk/org.kiwix.kiwixmobile).
+
+We understand that this restriction may cause inconvenience, but it is
+necessary to comply with the Play Store policies and ensure a smooth
+user experience.  We recommend using the official version of the app
+available on our website to access the complete set of features.
+
+## Android permissions needed
+
+Kiwix requires the following permissions to fully work:
+
+- `ACCESS_FINE_LOCATION`: Required on devices running Android 12 and below to discover nearby 
+   devices when transferring ZIM files.
+- `NEARBY_WIFI_DEVICES`: Required on devices running Android 13 and above to discover nearby devices
+   for transferring ZIM files.
+- `READ_EXTERNAL_STORAGE`: Required to access and read ZIM files stored on the device.
+- `WRITE_EXTERNAL_STORAGE`: Required to download ZIM files, export bookmarks, save notes, etc.
+- `POST_NOTIFICATIONS`: Required to display notifications for ongoing downloads, active hotspots, 
+   and the read-aloud feature.
+- `MANAGE_EXTERNAL_STORAGE`: Required on Android 11 and above to scan the storage and locate all
+   ZIM files. This permission is only available in the full version of the application.
 
 ## Build instructions
 
