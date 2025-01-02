@@ -1,6 +1,3 @@
-import java.time.LocalDate
-import java.time.temporal.ChronoUnit
-
 /*
  * Kiwix Android
  * Copyright (c) 2024 Kiwix <android.kiwix.org>
@@ -19,29 +16,37 @@ import java.time.temporal.ChronoUnit
  *
  */
 
-fun String.getVersionCode(): Int {
-  // the date when the automatic version code generation started
-  val lastDate = LocalDate.of(2024, 7, 17)
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
-  // Get the current date. If the "RELEASE_DATE" environment variable is set(in YYYY-MM-DD format).
-  // it uses the specified date to generate the APK version code.
+/**
+ * The date when the automatic version code generation started.
+ */
+val LAST_DATE: LocalDate = LocalDate.of(2024, 7, 17)
+
+/**
+ * Base version code. This is the version code of the last release uploaded to the Play Store.
+ * We use this as the starting point for generating new version codes automatically.
+ */
+const val BASE_VERSION_CODE = 231101
+
+fun String.getVersionCode(): Int {
+  // Get the current date. If the "KIWIX_ANDROID_RELEASE_DATE" environment
+  // variable is set(in YYYY-MM-DD format).
+  // It uses the specified date to generate the APK version code.
   // Otherwise, it generates the version code based on the current date.
   // See https://github.com/kiwix/kiwix-android/issues/4120 for more details.
-  val currentDate = if (!System.getenv("RELEASE_DATE").isNullOrEmpty()) {
-    LocalDate.parse(System.getenv("RELEASE_DATE"))
+  val currentDate = if (!System.getenv("KIWIX_ANDROID_RELEASE_DATE").isNullOrEmpty()) {
+    LocalDate.parse(System.getenv("KIWIX_ANDROID_RELEASE_DATE"))
   } else {
     LocalDate.now()
   }
-  // Calculate the number of days between the lastDate and today's date.
+  // Calculate the number of days between the LAST_DATE and today's date.
   // This gives us the total number of days since the last version code was set.
-  val daysDifference = ChronoUnit.DAYS.between(lastDate, currentDate).toInt()
-
-  // Base version code. This is the version code of the last release uploaded to the Play Store.
-  // We use this as the starting point for generating new version codes automatically.
-  val baseVersionCode = 231101
+  val daysDifference = ChronoUnit.DAYS.between(LAST_DATE, currentDate).toInt()
 
   // Generate and return the new version code.
-  // The new version code is calculated by adding the number of days since lastDate
+  // The new version code is calculated by adding the number of days since LAST_DATE
   // to the base version code. This creates a unique version code for each day.
-  return baseVersionCode + daysDifference
+  return BASE_VERSION_CODE + daysDifference
 }
