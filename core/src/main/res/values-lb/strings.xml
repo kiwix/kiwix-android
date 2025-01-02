@@ -118,6 +118,8 @@
   <string name="tts_pause">pauséieren</string>
   <string name="tts_resume">virufueren</string>
   <string name="stop">stopp</string>
+  <string name="notification_pause_button_text">Pauséieren</string>
+  <string name="notification_resume_button_text">Virufueren</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Extern</string>
   <string name="yes">Jo</string>

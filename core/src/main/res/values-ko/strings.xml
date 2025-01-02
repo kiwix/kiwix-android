@@ -157,6 +157,7 @@
   <string name="help_9">• 위키리크스나 위키문헌과 같은 다른 콘텐츠도 사용이 가능합니다</string>
   <string name="help_10">앱 안에서 선택한 ZIM 파일을 다운로드하거나 원하는 항목을 주의하여 선택한 다음 ZIM 파일을 SD 카드로 전송하기 전에 데스크톱 컴퓨터로부터 다운로드할 수 있습니다.</string>
   <string name="help_11">앱 안에서 다운로드되는 ZIM 파일들은 Kiwix라는 이름의 폴더의 외부 저장 디렉터리에 위치합니다.</string>
+  <string name="fetching_storage_info">스토리지의 세부 정보를 가져오는 중…</string>
   <string name="pref_storage">저장 공간</string>
   <string name="pref_current_folder">현재 폴더</string>
   <string name="pref_storage_used">%s 사용됨</string>
@@ -166,6 +167,8 @@
   <string name="tts_pause">일시 정지</string>
   <string name="tts_resume">계속하기</string>
   <string name="stop">정지</string>
+  <string name="notification_pause_button_text">일시 정지</string>
+  <string name="notification_resume_button_text">계속하기</string>
   <string name="internal_storage">내부 장치</string>
   <string name="external_storage">외부 장치</string>
   <string name="yes">예</string>
