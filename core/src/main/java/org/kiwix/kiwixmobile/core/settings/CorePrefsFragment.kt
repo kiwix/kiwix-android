@@ -229,7 +229,7 @@ abstract class CorePrefsFragment :
     @Suppress("TooGenericExceptionThrown")
     get() = try {
       requireActivity().packageManager
-        .getPackageInformation(requireActivity().packageName, 0).versionName
+        .getPackageInformation(requireActivity().packageName, 0).versionName.toString()
     } catch (e: PackageManager.NameNotFoundException) {
       throw RuntimeException(e)
     }

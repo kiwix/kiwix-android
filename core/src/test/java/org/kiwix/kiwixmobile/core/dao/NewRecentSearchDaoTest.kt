@@ -25,7 +25,7 @@ import io.objectbox.Box
 import io.objectbox.query.Query
 import io.objectbox.query.QueryBuilder
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
@@ -43,7 +43,7 @@ internal class NewRecentSearchDaoTest {
   @Nested
   inner class RecentSearchTests {
     @Test
-    fun `recentSearches searches by Id passed`() = runBlockingTest {
+    fun `recentSearches searches by Id passed`() = runTest {
       val zimId = "id"
       val queryResult = listOf<RecentSearchEntity>(recentSearchEntity())
       expectFromRecentSearches(queryResult, zimId)
@@ -56,7 +56,7 @@ internal class NewRecentSearchDaoTest {
     }
 
     @Test
-    fun `recentSearches searches with blank Id if null passed`() = runBlockingTest {
+    fun `recentSearches searches with blank Id if null passed`() = runTest {
       val queryResult = listOf<RecentSearchEntity>(recentSearchEntity())
       expectFromRecentSearches(queryResult, "")
       newRecentSearchDao.recentSearches(null)
@@ -68,7 +68,7 @@ internal class NewRecentSearchDaoTest {
     }
 
     @Test
-    fun `recentSearches searches returns distinct entities by searchTerm`() = runBlockingTest {
+    fun `recentSearches searches returns distinct entities by searchTerm`() = runTest {
       val queryResult = listOf<RecentSearchEntity>(recentSearchEntity(), recentSearchEntity())
       expectFromRecentSearches(queryResult, "")
       newRecentSearchDao.recentSearches("")
@@ -80,7 +80,7 @@ internal class NewRecentSearchDaoTest {
     }
 
     @Test
-    fun `recentSearches searches returns a limitedNumber of entities`() = runBlockingTest {
+    fun `recentSearches searches returns a limitedNumber of entities`() = runTest {
       val searchResults: List<RecentSearchEntity> =
         (0..200).map { recentSearchEntity(searchTerm = "$it") }
       expectFromRecentSearches(searchResults, "")

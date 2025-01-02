@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
-  <issue id="TypographyQuotes">
+  <issue id="TypographyQuotes" severity="warning">
     <ignore path="**-qq/**.xml" />
     <ignore path="**-iw/**.xml" />
   </issue>

@@ -22,7 +22,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.AssetFileDescriptor
 import android.content.res.AssetManager
-import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasBothFiles
 import org.kiwix.kiwixmobile.custom.main.ValidationState.HasFile
@@ -96,7 +95,7 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
 
   private fun obbFiles() =
     scanDirs(
-      ContextCompat.getObbDirs(context).filterNotNull().filter(File::exists).toTypedArray(),
+      context.obbDirs.filterNotNull().filter(File::exists).toTypedArray(),
       "obb"
     )
 
@@ -105,7 +104,7 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
     val directoryList = mutableListOf<File>()
 
     // Get the external files directories for the app
-    ContextCompat.getExternalFilesDirs(context, null).filterNotNull()
+    context.getExternalFilesDirs(null).filterNotNull()
       .filter(File::exists)
       .forEach { dir ->
         // Check if the directory's parent is not null

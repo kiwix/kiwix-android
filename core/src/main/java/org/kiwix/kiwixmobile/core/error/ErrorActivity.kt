@@ -24,7 +24,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Process
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
@@ -101,7 +100,7 @@ open class ErrorActivity : BaseActivity() {
         val targetedIntents = createEmailIntents(emailIntent, activities)
         if (activities.isNotEmpty() && targetedIntents.isNotEmpty()) {
           val chooserIntent =
-            Intent.createChooser(targetedIntents.removeFirst(), "Send email...")
+            Intent.createChooser(targetedIntents.removeAt(0), "Send email...")
           chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedIntents.toTypedArray())
           sendEmailLauncher.launch(chooserIntent)
         } else {
@@ -245,7 +244,7 @@ open class ErrorActivity : BaseActivity() {
   """.trimIndent()
 
   private fun externalFileDetails(): String =
-    ContextCompat.getExternalFilesDirs(this, null).joinToString("\n") { it?.path ?: "null" }
+    getExternalFilesDirs(null).joinToString("\n") { it?.path ?: "null" }
 
   private fun safeContains(extras: Bundle): Boolean {
     return try {
@@ -272,7 +271,7 @@ open class ErrorActivity : BaseActivity() {
   private val versionName: String
     @SuppressLint("WrongConstant")
     get() = packageManager
-      .getPackageInformation(packageName, ZERO).versionName
+      .getPackageInformation(packageName, ZERO).versionName.toString()
 
   private fun toStackTraceString(exception: Throwable): String =
     try {
