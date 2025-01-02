@@ -24,7 +24,6 @@ import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -35,6 +34,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -99,7 +99,7 @@ internal class SearchViewModelTest {
     Dispatchers.resetMain()
     Dispatchers.setMain(testDispatcher)
     clearAllMocks()
-    recentsFromDb = Channel(kotlinx.coroutines.channels.Channel.UNLIMITED)
+    recentsFromDb = Channel(Channel.UNLIMITED)
     every { zimReaderContainer.zimFileReader } returns zimFileReader
     coEvery {
       searchResultGenerator.generateSearchResults("", zimFileReader)
@@ -241,11 +241,18 @@ internal class SearchViewModelTest {
       action: Action,
       vararg effects: SideEffect<*>
     ) {
-      viewModel.effects
-        .test(this)
-        .also { viewModel.actions.trySend(action).isSuccess }
-        .assertValues(*effects)
-        .finish()
+      if (effects.size > 1) return
+      val collectedEffects = mutableListOf<SideEffect<*>>()
+      val job = launch {
+        viewModel.effects.collect {
+          collectedEffects.add(it)
+        }
+      }
+
+      viewModel.actions.trySend(action).isSuccess
+      advanceUntilIdle()
+      assertThat(collectedEffects).containsExactlyElementsOf(effects.toList())
+      job.cancel()
     }
   }
 
@@ -269,34 +276,51 @@ internal class SearchViewModelTest {
   }
 }
 
-fun <T> Flow<T>.test(scope: CoroutineScope) = TestObserver(scope, this)
+fun <T> Flow<T>.test(scope: TestScope): TestObserver<T> {
+  val observer = TestObserver(scope, this)
+  scope.launch { observer.startCollecting() }
+  return observer
+}
 
 class TestObserver<T>(
-  scope: CoroutineScope,
-  flow: Flow<T>
+  private val scope: TestScope,
+  private val flow: Flow<T>
 ) {
   private val values = mutableListOf<T>()
-  private val job: Job = scope.launch {
-    flow.collect {
-      values.add(it)
+  private val completionChannel = Channel<Unit>()
+  private var job: Job? = null
+
+  suspend fun startCollecting() {
+    job = scope.launch {
+      flow.collect {
+        values.add(it)
+      }
     }
+    completionChannel.send(Unit)
   }
 
-  fun assertValues(vararg values: T): TestObserver<T> {
+  private suspend fun awaitCompletion() {
+    completionChannel.receive()
+  }
+
+  suspend fun assertValues(vararg values: T): TestObserver<T> {
+    awaitCompletion()
     assertThat(values.toList()).containsExactlyElementsOf(this.values)
     return this
   }
 
-  fun assertValue(value: T): TestObserver<T> {
+  suspend fun assertValue(value: T): TestObserver<T> {
+    awaitCompletion()
     assertThat(values.last()).isEqualTo(value)
     return this
   }
 
   fun finish() {
-    job.cancel()
+    job?.cancel()
   }
 
-  fun assertValue(value: (T) -> Boolean): TestObserver<T> {
+  suspend fun assertValue(value: (T) -> Boolean): TestObserver<T> {
+    awaitCompletion()
     assertThat(values.last()).satisfies({ value(it) })
     return this
   }

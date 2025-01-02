@@ -22,6 +22,7 @@ import android.app.Application
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.NetworkCapabilities.TRANSPORT_WIFI
+import android.os.Build
 import com.jraska.livedata.test
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -139,7 +140,12 @@ class ZimManageViewModelTest {
     every { newLanguagesDao.languages() } returns languages
     every { fat32Checker.fileSystemStates } returns fileSystemStates
     every { connectivityBroadcastReceiver.networkStates } returns networkStates
-    every { application.registerReceiver(any(), any(), any()) } returns mockk()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      every { application.registerReceiver(any(), any(), any()) } returns mockk()
+    } else {
+      @Suppress("UnspecifiedRegisterReceiverFlag")
+      every { application.registerReceiver(any(), any()) } returns mockk()
+    }
     every { dataSource.booksOnDiskAsListItems() } returns booksOnDiskListItems
     every {
       connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
@@ -167,8 +173,15 @@ class ZimManageViewModelTest {
   inner class Context {
     @Test
     fun `registers broadcastReceiver in init`() {
-      verify {
-        application.registerReceiver(connectivityBroadcastReceiver, any(), any())
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        verify {
+          application.registerReceiver(connectivityBroadcastReceiver, any(), any())
+        }
+      } else {
+        @Suppress("UnspecifiedRegisterReceiverFlag")
+        verify {
+          application.registerReceiver(connectivityBroadcastReceiver, any())
+        }
       }
     }
 
