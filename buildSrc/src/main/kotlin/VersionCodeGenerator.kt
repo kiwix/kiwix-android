@@ -23,9 +23,18 @@ fun String.getVersionCode(): Int {
   // the date when the automatic version code generation started
   val lastDate = LocalDate.of(2024, 7, 17)
 
+  // Get the current date. If the "RELEASE_DATE" environment variable is set(in YYYY-MM-DD format).
+  // it uses the specified date to generate the APK version code.
+  // Otherwise, it generates the version code based on the current date.
+  // See https://github.com/kiwix/kiwix-android/issues/4120 for more details.
+  val currentDate = if (!System.getenv("RELEASE_DATE").isNullOrEmpty()) {
+    LocalDate.parse(System.getenv("RELEASE_DATE"))
+  } else {
+    LocalDate.now()
+  }
   // Calculate the number of days between the lastDate and today's date.
   // This gives us the total number of days since the last version code was set.
-  val daysDifference = ChronoUnit.DAYS.between(lastDate, LocalDate.now()).toInt()
+  val daysDifference = ChronoUnit.DAYS.between(lastDate, currentDate).toInt()
 
   // Base version code. This is the version code of the last release uploaded to the Play Store.
   // We use this as the starting point for generating new version codes automatically.
