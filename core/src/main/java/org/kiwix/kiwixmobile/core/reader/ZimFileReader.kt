@@ -199,7 +199,7 @@ class ZimFileReader constructor(
   private fun loadContent(uri: String, extension: String): InputStream? {
     val item = getItem(uri)
     if (compressedExtensions.any { it != extension }) {
-      item?.size?.let {
+      item?.itemSize()?.let {
         // Check if the item size exceeds 1 MB
         if (it / Kb > 1024) {
           // Retrieve direct access information for the item
@@ -293,7 +293,7 @@ class ZimFileReader constructor(
     file: File,
     infoPair: DirectAccessInfo
   ): InputStream? =
-    item?.size?.let {
+    item?.itemSize()?.let {
       AssetFileDescriptor(
         infoPair.parcelFileDescriptor(file),
         infoPair.offset,
@@ -455,3 +455,14 @@ const val ILLUSTRATION_SIZE = 48
 // add content prefix to url since searched items return the url inside of zim without content prefix.
 val String.addContentPrefix: String
   get() = if (startsWith(CONTENT_PREFIX)) this else CONTENT_PREFIX + this
+
+/**
+ * Handles any error thrown by this method. Developers should handle the flow if this method
+ * returns null. For more details, see: https://github.com/kiwix/kiwix-android/issues/4157
+ */
+fun Item.itemSize(): Long? = try {
+  size
+} catch (ignore: Exception) {
+  Log.e(TAG, "Could not retrieve the item size.\n Original exception: $ignore")
+  null
+}
