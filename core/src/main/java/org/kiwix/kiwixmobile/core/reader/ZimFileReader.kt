@@ -457,12 +457,12 @@ val String.addContentPrefix: String
   get() = if (startsWith(CONTENT_PREFIX)) this else CONTENT_PREFIX + this
 
 /**
- * Handling the any error thrown by this method. Devs should handle the flow if this methods
- * returns null. See https://github.com/kiwix/kiwix-android/issues/4157 for more details.
+ * Handles any error thrown by this method. Developers should handle the flow if this method
+ * returns null. For more details, see: https://github.com/kiwix/kiwix-android/issues/4157
  */
 fun Item.itemSize(): Long? = try {
   size
 } catch (ignore: Exception) {
-  Log.e(TAG, "Could not get the item size.\n Original exception = $ignore")
+  Log.e(TAG, "Could not retrieve the item size.\n Original exception: $ignore")
   null
 }
