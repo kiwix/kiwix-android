@@ -38,6 +38,7 @@ import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.R.drawable
+import org.kiwix.kiwixmobile.core.extensions.applyEdgeToEdgeInsets
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.databinding.ActivityCustomMainBinding
 
@@ -84,6 +85,7 @@ class CustomMainActivity : CoreMainActivity() {
     super.onCreate(savedInstanceState)
     activityCustomMainBinding = ActivityCustomMainBinding.inflate(layoutInflater)
     setContentView(activityCustomMainBinding.root)
+    activityCustomMainBinding.root.applyEdgeToEdgeInsets()
     if (savedInstanceState != null) {
       return
     }

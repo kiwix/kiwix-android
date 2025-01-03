@@ -18,10 +18,10 @@
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
   android:background="@android:color/transparent">
 
   <include layout="@layout/layout_standard_app_bar" />
@@ -30,19 +30,20 @@
     android:id="@+id/navigationHistoryRecyclerView"
     android:layout_width="0dp"
     android:layout_height="0dp"
+    android:clipToPadding="false"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
-    tools:listitem="@layout/item_bookmark_history"
-    app:layout_constraintTop_toBottomOf="@+id/app_bar" />
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/app_bar"
+    tools:listitem="@layout/item_bookmark_history" />
 
   <TextView
     android:id="@+id/searchNoResults"
     style="@style/no_content"
     android:text="@string/no_history"
-    app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent" />
+    app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

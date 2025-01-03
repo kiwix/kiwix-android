@@ -24,7 +24,6 @@ import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -33,11 +32,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
@@ -84,7 +82,7 @@ internal class SearchViewModelTest {
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val searchResultGenerator: SearchResultGenerator = mockk()
   private val zimFileReader: ZimFileReader = mockk()
-  private val testDispatcher = TestCoroutineDispatcher()
+  private val testDispatcher = StandardTestDispatcher()
   private val searchMutex: Mutex = mockk()
 
   lateinit var viewModel: SearchViewModel
@@ -101,7 +99,7 @@ internal class SearchViewModelTest {
     Dispatchers.resetMain()
     Dispatchers.setMain(testDispatcher)
     clearAllMocks()
-    recentsFromDb = Channel(kotlinx.coroutines.channels.Channel.UNLIMITED)
+    recentsFromDb = Channel(Channel.UNLIMITED)
     every { zimReaderContainer.zimFileReader } returns zimFileReader
     coEvery {
       searchResultGenerator.generateSearchResults("", zimFileReader)
@@ -115,7 +113,7 @@ internal class SearchViewModelTest {
   @Nested
   inner class StateTests {
     @Test
-    fun `initial state is Initialising`() = runBlockingTest {
+    fun `initial state is Initialising`() = runTest {
       viewModel.state.test(this).assertValue(
         SearchState("", SearchResultsWithTerm("", null, searchMutex), emptyList(), FromWebView)
       ).finish()
@@ -152,12 +150,12 @@ internal class SearchViewModelTest {
   inner class ActionMapping {
 
     @Test
-    fun `ExitedSearch offers PopFragmentBackstack`() = runBlockingTest {
+    fun `ExitedSearch offers PopFragmentBackstack`() = runTest {
       actionResultsInEffects(ExitedSearch, PopFragmentBackstack)
     }
 
     @Test
-    fun `OnItemClick offers Saves and Opens`() = runBlockingTest {
+    fun `OnItemClick offers Saves and Opens`() = runTest {
       val searchListItem = RecentSearchListItem("", "")
       actionResultsInEffects(
         OnItemClick(searchListItem),
@@ -170,7 +168,7 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `OnOpenInNewTabClick offers Saves and Opens in new tab`() = runBlockingTest {
+    fun `OnOpenInNewTabClick offers Saves and Opens in new tab`() = runTest {
       val searchListItem = RecentSearchListItem("", "")
       actionResultsInEffects(
         OnOpenInNewTabClick(searchListItem),
@@ -183,7 +181,7 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `OnItemLongClick offers Saves and Opens`() = runBlockingTest {
+    fun `OnItemLongClick offers Saves and Opens`() = runTest {
       val searchListItem = RecentSearchListItem("", "")
       actionResultsInEffects(
         OnItemLongClick(searchListItem),
@@ -192,12 +190,12 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `ClickedSearchInText offers SearchInPreviousScreen`() = runBlockingTest {
+    fun `ClickedSearchInText offers SearchInPreviousScreen`() = runTest {
       actionResultsInEffects(ClickedSearchInText, SearchInPreviousScreen(""))
     }
 
     @Test
-    fun `ConfirmedDelete offers Delete and Toast`() = runBlockingTest {
+    fun `ConfirmedDelete offers Delete and Toast`() = runTest {
       val searchListItem = RecentSearchListItem("", "")
       actionResultsInEffects(
         ConfirmedDelete(searchListItem),
@@ -207,7 +205,7 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `CreatedWithArguments offers SearchArgumentProcessing`() = runBlockingTest {
+    fun `CreatedWithArguments offers SearchArgumentProcessing`() = runTest {
       val bundle = mockk<Bundle>()
       actionResultsInEffects(
         CreatedWithArguments(bundle),
@@ -216,7 +214,7 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `ReceivedPromptForSpeechInput offers StartSpeechInput`() = runBlockingTest {
+    fun `ReceivedPromptForSpeechInput offers StartSpeechInput`() = runTest {
       actionResultsInEffects(
         ReceivedPromptForSpeechInput,
         StartSpeechInput(viewModel.actions)
@@ -224,7 +222,7 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `StartSpeechInputFailed offers ShowToast`() = runBlockingTest {
+    fun `StartSpeechInputFailed offers ShowToast`() = runTest {
       actionResultsInEffects(
         StartSpeechInputFailed,
         ShowToast(string.speech_not_supported)
@@ -232,22 +230,29 @@ internal class SearchViewModelTest {
     }
 
     @Test
-    fun `ActivityResultReceived offers ProcessActivityResult`() = runBlockingTest {
+    fun `ActivityResultReceived offers ProcessActivityResult`() = runTest {
       actionResultsInEffects(
         ActivityResultReceived(0, 1, null),
         ProcessActivityResult(0, 1, null, viewModel.actions)
       )
     }
 
-    private fun TestCoroutineScope.actionResultsInEffects(
+    private fun TestScope.actionResultsInEffects(
       action: Action,
       vararg effects: SideEffect<*>
     ) {
-      viewModel.effects
-        .test(this)
-        .also { viewModel.actions.trySend(action).isSuccess }
-        .assertValues(*effects)
-        .finish()
+      if (effects.size > 1) return
+      val collectedEffects = mutableListOf<SideEffect<*>>()
+      val job = launch {
+        viewModel.effects.collect {
+          collectedEffects.add(it)
+        }
+      }
+
+      viewModel.actions.trySend(action).isSuccess
+      advanceUntilIdle()
+      assertThat(collectedEffects).containsExactlyElementsOf(effects.toList())
+      job.cancel()
     }
   }
 
@@ -271,34 +276,51 @@ internal class SearchViewModelTest {
   }
 }
 
-fun <T> Flow<T>.test(scope: CoroutineScope) = TestObserver(scope, this)
+fun <T> Flow<T>.test(scope: TestScope): TestObserver<T> {
+  val observer = TestObserver(scope, this)
+  scope.launch { observer.startCollecting() }
+  return observer
+}
 
 class TestObserver<T>(
-  scope: CoroutineScope,
-  flow: Flow<T>
+  private val scope: TestScope,
+  private val flow: Flow<T>
 ) {
   private val values = mutableListOf<T>()
-  private val job: Job = scope.launch {
-    flow.collect {
-      values.add(it)
+  private val completionChannel = Channel<Unit>()
+  private var job: Job? = null
+
+  suspend fun startCollecting() {
+    job = scope.launch {
+      flow.collect {
+        values.add(it)
+      }
     }
+    completionChannel.send(Unit)
   }
 
-  fun assertValues(vararg values: T): TestObserver<T> {
+  private suspend fun awaitCompletion() {
+    completionChannel.receive()
+  }
+
+  suspend fun assertValues(vararg values: T): TestObserver<T> {
+    awaitCompletion()
     assertThat(values.toList()).containsExactlyElementsOf(this.values)
     return this
   }
 
-  fun assertValue(value: T): TestObserver<T> {
+  suspend fun assertValue(value: T): TestObserver<T> {
+    awaitCompletion()
     assertThat(values.last()).isEqualTo(value)
     return this
   }
 
   fun finish() {
-    job.cancel()
+    job?.cancel()
   }
 
-  fun assertValue(value: (T) -> Boolean): TestObserver<T> {
+  suspend fun assertValue(value: (T) -> Boolean): TestObserver<T> {
+    awaitCompletion()
     assertThat(values.last()).satisfies({ value(it) })
     return this
   }

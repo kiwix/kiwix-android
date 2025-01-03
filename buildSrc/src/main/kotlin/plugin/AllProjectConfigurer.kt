@@ -37,6 +37,7 @@ class AllProjectConfigurer {
   fun applyPlugins(target: Project) {
     target.plugins.apply("kotlin-android")
     target.plugins.apply("kotlin-kapt")
+    target.plugins.apply("com.google.devtools.ksp")
     target.plugins.apply("kotlin-parcelize")
     target.plugins.apply("jacoco")
     target.plugins.apply("org.jlleitschuh.gradle.ktlint")
@@ -77,7 +78,7 @@ class AllProjectConfigurer {
       }
       target.tasks.withType(KotlinCompile::class.java) {
         compilerOptions {
-          jvmTarget.set(JvmTarget.JVM_1_8)
+          jvmTarget.set(JvmTarget.JVM_17)
           freeCompilerArgs.add("-Xjvm-default=all-compatibility")
         }
       }
@@ -137,7 +138,7 @@ class AllProjectConfigurer {
   }
 
   fun configureCommonExtension(target: Project) {
-    target.configureExtension<CommonExtension<*, *, *, *, *>> {
+    target.configureExtension<CommonExtension<*, *, *, *, *, *>> {
       lint {
         abortOnError = true
         checkAllWarnings = true
@@ -231,7 +232,9 @@ class AllProjectConfigurer {
       implementation(Libs.roomRxjava2)
       kapt(Libs.roomCompiler)
       implementation(Libs.tracing)
+      implementation(Libs.fetch)
       implementation(Libs.fetchOkhttp)
+      implementation(Libs.androidx_activity)
     }
   }
 }

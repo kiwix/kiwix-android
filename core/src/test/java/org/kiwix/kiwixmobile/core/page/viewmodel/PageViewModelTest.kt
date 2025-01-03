@@ -26,7 +26,13 @@ import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -51,6 +57,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.setScheduler
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(InstantExecutorExtension::class)
 internal class PageViewModelTest {
   private val pageDao: PageDao = mockk()
@@ -69,12 +76,18 @@ internal class PageViewModelTest {
 
   @BeforeEach
   fun init() {
+    Dispatchers.setMain(UnconfinedTestDispatcher())
     clearAllMocks()
     every { zimReaderContainer.id } returns "id"
     every { zimReaderContainer.name } returns "zimName"
     every { sharedPreferenceUtil.showHistoryAllBooks } returns true
     every { pageDao.pages() } returns itemsFromDb
     viewModel = TestablePageViewModel(zimReaderContainer, sharedPreferenceUtil, pageDao)
+  }
+
+  @AfterEach
+  fun tearDown() {
+    Dispatchers.resetMain()
   }
 
   @Test

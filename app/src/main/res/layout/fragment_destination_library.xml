@@ -21,8 +21,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:fitsSystemWindows="true">
+  android:layout_height="match_parent">
 
   <org.kiwix.kiwixmobile.core.utils.NestedCoordinatorLayout
     android:layout_width="match_parent"
@@ -55,6 +54,7 @@
           android:id="@+id/zimfilelist"
           android:layout_width="0dp"
           android:layout_height="match_parent"
+          android:clipToPadding="false"
           android:contentDescription="@string/crash_checkbox_zimfiles"
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintEnd_toEndOf="parent"

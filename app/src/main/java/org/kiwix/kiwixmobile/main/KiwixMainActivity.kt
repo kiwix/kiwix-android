@@ -51,6 +51,7 @@ import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
+import org.kiwix.kiwixmobile.core.extensions.applyEdgeToEdgeInsets
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -122,10 +123,12 @@ class KiwixMainActivity : CoreMainActivity() {
     setContentView(activityKiwixMainBinding.root)
 
     navController.addOnDestinationChangedListener(finishActionModeOnDestinationChange)
-    activityKiwixMainBinding.drawerNavView.setupWithNavController(navController)
-    activityKiwixMainBinding.drawerNavView.setNavigationItemSelectedListener { item ->
-      closeNavigationDrawer()
-      onNavigationItemSelected(item)
+    activityKiwixMainBinding.drawerNavView.apply {
+      setupWithNavController(navController)
+      setNavigationItemSelectedListener { item ->
+        closeNavigationDrawer()
+        onNavigationItemSelected(item)
+      }
     }
     activityKiwixMainBinding.bottomNavView.setupWithNavController(navController)
     lifecycleScope.launch {
@@ -134,6 +137,7 @@ class KiwixMainActivity : CoreMainActivity() {
     handleZimFileIntent(intent)
     handleNotificationIntent(intent)
     handleGetContentIntent(intent)
+    activityKiwixMainBinding.root.applyEdgeToEdgeInsets()
   }
 
   private suspend fun migrateInternalToPublicAppDirectory() {

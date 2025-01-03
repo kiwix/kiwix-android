@@ -24,7 +24,6 @@
   <ImageView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:fitsSystemWindows="true"
     tools:ignore="ContentDescription"
     android:src="@drawable/ic_home_kiwix_banner" />
 </LinearLayout>

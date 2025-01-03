@@ -116,6 +116,9 @@ abstract class CoreApp : Application() {
           detectLeakedSqlLiteObjects()
           penaltyLog()
           detectLeakedRegistrationObjects()
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            detectUnsafeIntentLaunch()
+          }
         }.build()
       )
     }

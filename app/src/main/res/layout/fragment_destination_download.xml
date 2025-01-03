@@ -49,6 +49,7 @@
         android:layout_height="match_parent"
         android:contentDescription="@string/library"
         android:scrollbars="vertical"
+        android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_download" />
 

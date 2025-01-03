@@ -19,13 +19,16 @@
 package org.kiwix.kiwixmobile.core.base
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.enableEdgeToEdgeMode
 import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
+import org.kiwix.kiwixmobile.core.extensions.setFragmentBackgroundColorForAndroid15AndAbove
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 
 /**
@@ -46,7 +49,11 @@ abstract class BaseFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    enableEdgeToEdgeMode()
     setupToolbar()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+      setFragmentBackgroundColorForAndroid15AndAbove()
+    }
   }
 
   // Setup toolbar to handle common back pressed event

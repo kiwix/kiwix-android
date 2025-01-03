@@ -30,7 +30,6 @@ import android.os.storage.StorageManager
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.webkit.URLUtil
-import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -583,7 +582,7 @@ object FileUtils {
 
   @JvmStatic
   fun getDemoFilePathForCustomApp(context: Context) =
-    "${ContextCompat.getExternalFilesDirs(context, null)[0]}/demo.zim"
+    "${context.getExternalFilesDirs(null)[0]}/demo.zim"
 
   @SuppressLint("Recycle")
   @JvmStatic

@@ -1869,9 +1869,9 @@ abstract class CoreReaderFragment :
       }
       reopenBook()
       showTabSwitcher()
-      setUpWithTextToSpeech(tempWebViewListForUndo.last())
+      setUpWithTextToSpeech(tempWebViewListForUndo[tempWebViewListForUndo.lastIndex])
       updateBottomToolbarVisibility()
-      safelyAddWebView(tempWebViewListForUndo.last())
+      safelyAddWebView(tempWebViewListForUndo[tempWebViewListForUndo.lastIndex])
     }
   }
 

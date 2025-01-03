@@ -82,7 +82,6 @@
   </style>
 
   <style name="Base.MaterialThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-
     <item name="android:statusBarColor" tools:ignore="NewApi">@color/black</item>
     <item name="actionModeBackground">@color/cornflower_blue</item>
     <item name="windowActionModeOverlay">true</item>
@@ -92,6 +91,8 @@
     <item name="colorAccent">?colorSecondary</item>
     <item name="android:navigationBarColor">@color/black</item>
 
+    <!-- To prevent showing content behind the cutouts -->
+    <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">never</item>
   </style>
 
 </resources>

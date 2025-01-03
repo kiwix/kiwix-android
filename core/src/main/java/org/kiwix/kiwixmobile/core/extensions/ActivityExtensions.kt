@@ -24,11 +24,13 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.Menu
 import android.view.MenuItem
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
@@ -198,5 +200,19 @@ object ActivityExtensions {
         Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
     val isWideEnough = configuration.smallestScreenWidthDp >= 600
     return isLargeOrXLarge && isWideEnough
+  }
+
+  /**
+   * Sets the window background color to black for Android 15 and above.
+   *
+   * In Android 15, the `setStatusBarColor` method is deprecated and no longer functional.
+   * As a workaround, this method sets the window background color to black because the
+   * status bar and navigation bar now inherit the background color of the window.
+   *
+   * @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
+   */
+  @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
+  fun Activity.setWindowBackgroundColorForAndroid15AndAbove() {
+    window.decorView.setBackgroundColor(Color.BLACK)
   }
 }
