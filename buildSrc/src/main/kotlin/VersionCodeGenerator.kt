@@ -22,7 +22,7 @@ import java.time.temporal.ChronoUnit
 /**
  * The date when the automatic version code generation started.
  */
-val LAST_DATE: LocalDate = LocalDate.of(2024, 7, 17)
+const val LAST_DATE = "2024-07-17"
 
 /**
  * Base version code. This is the version code of the last release uploaded to the Play Store.
@@ -43,7 +43,7 @@ fun String.getVersionCode(): Int {
   }
   // Calculate the number of days between the LAST_DATE and today's date.
   // This gives us the total number of days since the last version code was set.
-  val daysDifference = ChronoUnit.DAYS.between(LAST_DATE, currentDate).toInt()
+  val daysDifference = ChronoUnit.DAYS.between(LocalDate.parse(LAST_DATE), currentDate).toInt()
 
   // Generate and return the new version code.
   // The new version code is calculated by adding the number of days since LAST_DATE
