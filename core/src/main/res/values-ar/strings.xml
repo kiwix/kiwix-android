@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Cigaryno
 * Dr-Taher
 * Dyolf77
 * Eyas
@@ -155,6 +156,7 @@
   <string name="help_9">• تتوفر أيضًا محتويات أخرى مثل ويكيليكس أو ويكي مصدر</string>
   <string name="help_10">يمكنك إما تنزيل ملفات ZIM المختارة داخل التطبيق أو تحديد الملفات التي تريدها بعناية وتنزيلها من جهاز كمبيوتر سطح المكتب قبل نقل ملفات ZIM إلى بطاقة SD الخاصة بك.</string>
   <string name="help_11">توجد ملفات زيم (ZIM) قابلة للتنزيل داخل التطبيق في دليل التخزين الخارجي في مجلد بعنوان كيويكس (Kiwix).</string>
+  <string name="fetching_storage_info">جاري احضار تفاصيل التخزين..</string>
   <string name="pref_storage">التخزين</string>
   <string name="pref_current_folder">المجلد الحالي</string>
   <string name="delete_zim_failed">.نعتذر لم نتمكن من حذف بعض الملفات. يجب أن تحاول استخدام مدير ملفات بدل ذلك.</string>

@@ -142,6 +142,7 @@
   <string name="help_9">• Достапни се и други содржини Викиликс и Викиизвор</string>
   <string name="help_10">Можете да ги преземете избраните ZIM-податотеки во прилогот, или пак внимателно да ги изберете посакуваните и да ги преземете од столен сметач, а потоа да ги префрлите ZIM-податотеките на SD-картичка.</string>
   <string name="help_11">Преземањето на ZIM-податотеките во прилогот се сместени во надворешниот склад во папка наречена Kiwix.</string>
+  <string name="fetching_storage_info">Преземам поединости за складирање…</string>
   <string name="pref_storage">Склад</string>
   <string name="pref_current_folder">Тековна папка</string>
   <string name="pref_storage_used">%s искористено</string>
@@ -151,6 +152,8 @@
   <string name="tts_pause">паузирај</string>
   <string name="tts_resume">продолжи</string>
   <string name="stop">запри</string>
+  <string name="notification_pause_button_text">Паузирај</string>
+  <string name="notification_resume_button_text">Продолжи</string>
   <string name="internal_storage">Внатрешен</string>
   <string name="external_storage">Надворешен</string>
   <string name="yes">Да</string>

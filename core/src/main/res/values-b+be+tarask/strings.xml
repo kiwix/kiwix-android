@@ -26,8 +26,11 @@
   <string name="choose_file">Абярыце файл зьместу (*.zim)</string>
   <string name="open_in_new_tab">Адкрыць спасылку ў новай укладцы?</string>
   <string name="hotspot_service_channel_name">Сэрвісны канал пункту досягу</string>
+  <string name="hotspot_failed_title">Не атрымалася запусьціць пункт досягу</string>
   <string name="hotspot_failed_message">Падобна, што ваш пункт доступу ўжо ўключаны. Каб працягнуць, адключыце пункт доступу вай-фай.</string>
   <string name="go_to_wifi_settings_label">Перайсьці да наладаў вай-фаю</string>
+  <string name="connection_refused">У падключэньні адмоўлена.</string>
+  <string name="hotspot_running">Пункт досягу працуе</string>
   <string name="server_failed_message">Немагчыма запусьціць сэрвэр. Калі ласка, уключыце ваш пункт доступу</string>
   <string name="server_failed_toast_message">Немагчыма запусьціць сэрвэр.</string>
   <string name="hotspot_details_message">Дэталі вашага лякальнага пункту досягу. \nSSID: %1$s \nСпокліч: %2$s</string>
@@ -81,7 +84,7 @@
   <string name="delete_zim_failed">Выбачайце, мы не змаглі выдаліць некаторыя файлы. Паспрабуйце скарыстацца файлавым кіраўніком.</string>
   <string name="confirm_stop_download_title">Спыніць загрузку?</string>
   <string name="confirm_stop_download_msg">Вы ўпэўненыя, што хочаце спыніць гэтую загрузку?</string>
-  <string name="texttospeech_initialization_failed" fuzzy="true">Няўдалая спроба ініцыялізацыі Тэксту-ў-Размову. Калі ласка, паспрабуйце яшчэ раз</string>
+  <string name="texttospeech_initialization_failed">Няўдалая спроба ініцыялізацыі Чытаньня ўслых. Калі ласка, паспрабуйце яшчэ раз</string>
   <string name="time_left">засталося</string>
   <string name="time_today">Сёньня</string>
   <string name="time_yesterday">Учора</string>
@@ -92,7 +95,7 @@
   <string name="other_languages">Іншыя мовы:</string>
   <string name="crash_description">Падобна, што мы паламаліся.\n\nЦі можаце дапамагчы нам выправіць гэтую праблему, адаслаўшы наступную інфармацыю?</string>
   <string name="crash_checkbox_language">Вашыя моўныя налады</string>
-  <string name="crash_checkbox_zimfiles" fuzzy="true">Сьпіс вашых zim-файлаў</string>
+  <string name="crash_checkbox_zimfiles">Сьпіс вашых ZIM-файлаў</string>
   <string name="crash_checkbox_exception">Падрабязнасьці аварыі</string>
   <string name="crash_checkbox_logs">Журналы праграмы</string>
   <string name="crash_checkbox_device">Падрабязнасьці прылады</string>
