@@ -1,0 +1,76 @@
+name: Generate dummy bundle and APK
+
+# This workflow will trigger when the 'dummy_bundle_and_apk' or 'dummy_bundle_and_apk_v*' tag is pushed.
+# In 'dummy_bundle_and_apk_v*', '*' is a dynamic date pushed in the tag.
+# The date format should be YYYY-MM-DD (e.g., 2024-12-18).
+on:
+  push:
+    tags:
+      - 'dummy_bundle_and_apk' # dummy_bundle_and_apk Tag.
+      - 'dummy_bundle_and_apk_v*' # Trigger for generating dummy bundle and APKs with dynamic date.
+
+jobs:
+  publish_dummy_bundle_and_apk:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Preparing signing material
+        env:
+          KEYSTORE: ${{ secrets.keystore }}
+        run: |
+          echo "$KEYSTORE" | base64 -d > kiwix-android.keystore
+          
+      - name: Retrieve date from TAG
+        id: extract_date
+        run: |
+          # Check if the tag matches the pattern 'dummy_bundle_and_apk_vYYYY-MM-DD'.
+          # If the date is found in the tag, it will be extracted and set as the RELEASE_DATE.
+          # If no date is found or the tag does not match, an empty string will be set for RELEASE_DATE,
+          # and Android will generate the APK and app bundle for the current date.
+          if [[ "${GITHUB_REF}" =~ dummy_bundle_and_apk_v([0-9]{4}-[0-9]{2}-[0-9]{2}) ]]; then
+             RELEASE_DATE="${BASH_REMATCH[1]}"
+          else
+             RELEASE_DATE=""
+          fi
+          echo "KIWIX_ANDROID_RELEASE_DATE=$RELEASE_DATE" >> $GITHUB_ENV
+
+      - name: Generate dummy Bundle and APKs
+        env:
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          KIWIX_ANDROID_RELEASE_DATE: ${{ env.KIWIX_ANDROID_RELEASE_DATE }}
+        run: |
+          ./gradlew bundlePlayStore assembleRelease --scan
+
+
+      - name: Get Bundle and APKs name and path
+        id: get-bundle-and-apk-paths
+        run: |
+          BUNDLE_PATH="app/build/outputs/bundle/playStore/kiwix-playStore.aab"
+          BUNDLE_NAME="PlayStoreDummyBundle.aab"
+          echo "bundle_path=$BUNDLE_PATH" >> $GITHUB_ENV
+          echo "bundle_name=$BUNDLE_NAME" >> $GITHUB_ENV
+          APK_DIR="app/build/outputs/apk/release/"
+          echo "apk_dir=$APK_DIR" >> $GITHUB_ENV
+
+      - name: Upload Bundle as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.bundle_name }}
+          path: ${{ env.bundle_path }}
+
+      - name: Upload All Release APKs as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ReleaseApks
+          path: ${{ env.apk_dir }}*.apk
+
