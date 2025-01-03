@@ -58,7 +58,7 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
         val headers = mutableMapOf("Accept-Ranges" to "bytes")
         if ("Range" in requestHeaders.keys) {
           setStatusCodeAndReasonPhrase(HttpURLConnection.HTTP_PARTIAL, "Partial Content")
-          val fullSize = zimFileReader?.getItem(url)?.size ?: 0L
+          val fullSize = zimFileReader?.getItem(url)?.itemSize() ?: 0L
           val lastByte = fullSize - 1
           val byteRanges = requestHeaders.getValue("Range").substringAfter("=").split("-")
           headers["Content-Range"] = "bytes ${byteRanges[0]}-$lastByte/$fullSize"
