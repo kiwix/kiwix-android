@@ -99,6 +99,19 @@ want to build the `app` module in the `debug` configuration. If you
 are interested in our custom apps, they have their own repo
 [kiwix-android-custom](https://github.com/kiwix/kiwix-android-custom).
 
+## Release
+
+We have implemented an [automatic version code generation](https://github.com/kiwix/kiwix-android/blob/main/buildSrc/src/main/kotlin/VersionCodeGenerator.kt) system based on the current date.
+This ensures that every new build is generated with a unique version code daily.
+If you need to generate an APK or app bundle for a specific date, you can do so by creating and pushing one of the following tags:
+
+- `internal_testing_vYYYY-MM-DD`: If you want to publish the app bundle for a specific date on play store, create a tag e.g. `internal_testing_v2024-12-18` and push it.
+   This will automatically trigger the [testing_release](https://github.com/kiwix/kiwix-android/blob/main/.github/workflows/testing_release.yml) workflow, which generates the app bundle
+   and publishes the application to the internal testing track on the play store.
+- `dummy_bundle_and_apk_vYYYY-MM-DD`: If you need a bundle or APK for specific date, create a tag e.g. `dummy_bundle_and_apk_v2024-12-18` and push it, it will automatically triggered
+   the [dummy_bundle_and_apk](https://github.com/kiwix/kiwix-android/blob/main/.github/workflows/dummy_bundle_and_apk.yml) workflow, which creates the app bundle and APK for specific date.
+   The generated files can be found in the triggered workflow.
+
 ## Libraries Used
 
 - [Libkiwix](https://github.com/kiwix/java-libkiwix) - Kotlin/Java binding for the core Kiwix
