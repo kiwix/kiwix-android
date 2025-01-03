@@ -12,7 +12,7 @@ jobs:
     name: Automated tests
     strategy:
       matrix:
-        api-level: [ 35 ]
+        api-level: [ 25, 30, 33, 34, 35 ]
       fail-fast: true
     runs-on: ubuntu-22.04
     steps:
@@ -118,7 +118,7 @@ jobs:
     name: Automated tests for PlayStore variant
     strategy:
       matrix:
-        api-level: [ 35 ]
+        api-level: [ 25, 30, 33, 34, 35 ]
       fail-fast: true
     runs-on: ubuntu-22.04
     steps:
@@ -199,7 +199,7 @@ jobs:
     name: Automated tests for Custom app
     strategy:
       matrix:
-        api-level: [ 35 ]
+        api-level: [ 25, 30, 33, 34, 35 ]
       fail-fast: true
     runs-on: ubuntu-22.04
     steps:
@@ -280,7 +280,7 @@ jobs:
     name: Automated tests on Tablet
     strategy:
       matrix:
-        api-level: [ 35 ]
+        api-level: [ 25, 30, 33, 34, 35 ]
       fail-fast: true
     runs-on: ubuntu-22.04
     steps:
