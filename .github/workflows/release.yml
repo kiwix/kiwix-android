@@ -21,6 +21,18 @@ jobs:
       - name: Set tag variable
         run: echo "TAG=$(echo ${GITHUB_REF:10})" >> $GITHUB_ENV
 
+      - name: Retrieve date from git revision
+        id: git_date
+        run: |
+          DATE=$(git log -1 --format=%cd --date=format:%Y-%m-%d || echo "NoCommits")
+          if [ "$DATE" = "NoCommits" ]; then
+            RELEASE_DATE=""
+          else
+            RELEASE_DATE="$DATE"
+          fi
+          echo "KIWIX_ANDROID_RELEASE_DATE=$RELEASE_DATE" >> $GITHUB_ENV
+        shell: bash
+
       - name: Retrieve secrets to files
         env:
           KEYSTORE: ${{ secrets.keystore }}
@@ -37,6 +49,7 @@ jobs:
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
           UNIVERSAL_RELEASE_APK: app/build/outputs/apk/standalone/*universal*.apk
           ARCHIVE_NAME: kiwix-${{ github.event.release.tag_name }}.apk
+          KIWIX_ANDROID_RELEASE_DATE: ${{ env.KIWIX_ANDROID_RELEASE_DATE }}
         run: |
           ./gradlew assembleStandalone
           cp ${UNIVERSAL_RELEASE_APK} ${ARCHIVE_NAME}
@@ -64,6 +77,7 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
           PLAYSTORE_JSON: ${{ secrets.PLAYSTORE_JSON }}
+          KIWIX_ANDROID_RELEASE_DATE: ${{ env.KIWIX_ANDROID_RELEASE_DATE }}
         run: |
           echo "$PLAYSTORE_JSON" > playstore.json
           ./gradlew publishPlayStoreBundle --scan

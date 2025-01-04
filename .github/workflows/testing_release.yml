@@ -1,15 +1,13 @@
 name: Publish App to Play Store
 
 # This workflow is triggered on a schedule or when specific tags are pushed.
-# It runs every Monday at 12:00 UTC and also when the 'internal_testing' or 'internal_testing_v*' tag is pushed.
-# In 'internal_testing_v*', '*' represents a dynamic date (e.g., 2024-12-18).
+# It runs every Monday at 12:00 UTC and also when the 'internal_testing' tag is pushed.
 on:
   schedule:
     - cron: '0 12 * * 1'  # Runs every Monday at 12:00
   push:
     tags:
       - 'internal_testing' # internal_testing Tag
-      - 'internal_testing_v*' # Dynamic date tag for internal testing
 
 jobs:
   publish:
@@ -32,19 +30,17 @@ jobs:
           echo "$KEYSTORE" | base64 -d > kiwix-android.keystore
           echo "$PLAYSTORE_JSON" > playstore.json
 
-      - name: Retrieve date from TAG
-        id: extract_date
+      - name: Retrieve date from git revision
+        id: git_date
         run: |
-          # Check if the tag matches the pattern 'internal_testing_vYYYY-MM-DD'.
-          # If the date is found in the tag, it will be extracted and set as the RELEASE_DATE.
-          # If no date is found or the tag does not match, an empty string will be set for RELEASE_DATE.
-          # Android will use the current date for the APK generation.
-          if [[ "${GITHUB_REF}" =~ internal_testing_v([0-9]{4}-[0-9]{2}-[0-9]{2}) ]]; then
-             RELEASE_DATE="${BASH_REMATCH[1]}"
+          DATE=$(git log -1 --format=%cd --date=format:%Y-%m-%d || echo "NoCommits")
+          if [ "$DATE" = "NoCommits" ]; then
+            RELEASE_DATE=""
           else
-             RELEASE_DATE=""
+            RELEASE_DATE="$DATE"
           fi
           echo "KIWIX_ANDROID_RELEASE_DATE=$RELEASE_DATE" >> $GITHUB_ENV
+        shell: bash
 
       - name: Publish bundle in internal testing on Google Play
         env:
