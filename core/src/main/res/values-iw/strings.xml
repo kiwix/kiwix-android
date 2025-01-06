@@ -158,6 +158,8 @@
   <string name="tts_pause">השהיה</string>
   <string name="tts_resume">המשך</string>
   <string name="stop">עצירה</string>
+  <string name="notification_pause_button_text">השהיה</string>
+  <string name="notification_resume_button_text">המשך</string>
   <string name="internal_storage">פנימי</string>
   <string name="external_storage">חיצוני</string>
   <string name="yes">כן</string>

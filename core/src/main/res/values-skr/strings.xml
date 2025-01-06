@@ -61,6 +61,8 @@
   <string name="tts_pause">اجھکو</string>
   <string name="tts_resume">ولدا شروع کرو</string>
   <string name="stop">اختتام</string>
+  <string name="notification_pause_button_text">اجھکو</string>
+  <string name="notification_resume_button_text">ولدا شروع کرو</string>
   <string name="internal_storage">اندرونی</string>
   <string name="external_storage">ٻاہر آلا</string>
   <string name="yes">جیا</string>

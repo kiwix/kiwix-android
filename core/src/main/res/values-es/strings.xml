@@ -6,6 +6,7 @@
 * DDPAT
 * Ejegg
 * Eulalio
+* Feeglgeef
 * Fitoschido
 * Geryescalier
 * Ice bulldog
@@ -173,6 +174,8 @@
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">continuar</string>
   <string name="stop">detener</string>
+  <string name="notification_pause_button_text">Pausar</string>
+  <string name="notification_resume_button_text">Reanudar</string>
   <string name="internal_storage">Interno</string>
   <string name="external_storage">Externo</string>
   <string name="yes">Sí</string>

@@ -23,6 +23,7 @@
 * Pittigrilli
 * Rofiatmustapha12
 * Sebastian Wallroth
+* SergeCroise
 * Stephane
 * Susann Schweden
 * Symposiarch
@@ -168,6 +169,7 @@
   <string name="help_9">• Andere Inhalte wie Wikileaks oder Wikisource sind ebenfalls verfügbar</string>
   <string name="help_10" fuzzy="true">Sie können entweder Ihre ausgewählten ZIM-Dateien in der App herunterladen oder die gewünschten Datei(en) sorgsam auf einem Desktopcomputer auswählen und herunterladen, bevor Sie die ZIM-Dateien auf Ihre SD-Karte übertragen.</string>
   <string name="help_11">Heruntergeladene ZIM-Dateien in der App befinden sich im Verzeichnis des externen Speichers in einem Ordner namens Kiwix.</string>
+  <string name="fetching_storage_info">Speicherdetails werden abgerufen …</string>
   <string name="pref_storage">Speicher</string>
   <string name="pref_current_folder">Aktueller Ordner</string>
   <string name="delete_zim_failed">Leider konnten wir einige Dateien nicht löschen. Sie sollten versuchen, stattdessen einen Dateimanager zu verwenden.</string>

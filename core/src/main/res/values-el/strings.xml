@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Fitoschido
+* Fotis A.
 * Geraki
 * Giorgos456
 * Glavkos
@@ -112,6 +113,7 @@
   <string name="help_7">Είναι διαθέσιμα ως αρχεία ZIM. Υπάρχουν πολλά από αυτά:</string>
   <string name="help_8">• Η Βικιπαίδεια είναι διαθέσιμη ξεχωριστά για κάθε γλώσσα</string>
   <string name="help_9">• Άλλα περιεχόμενα όπως το Wikileaks ή η Βικιθήκη είναι επίσης διαθέσιμα</string>
+  <string name="fetching_storage_info">Λήψη λεπτομερειών αποθήκευσης…</string>
   <string name="pref_storage">Αποθηκευτικός χώρος</string>
   <string name="pref_current_folder">Τρέχων φάκελος</string>
   <string name="delete_zim_failed">Λυπούμαστε, δεν ήταν δυνατή η διαγραφή ορισμένων αρχείων. Θα πρέπει να χρησιμοποιήσετε έναν διαχειριστή αρχείων.</string>
