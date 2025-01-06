@@ -26,15 +26,10 @@ jobs:
           echo "$KEYSTORE" | base64 -d > kiwix-android.keystore
           
       - name: Retrieve date from git revision
-        id: git_date
+        id: git_head_revision_date
         run: |
-          DATE=$(git log -1 --format=%cd --date=format:%Y-%m-%d || echo "NoCommits")
-          if [ "$DATE" = "NoCommits" ]; then
-            RELEASE_DATE=""
-          else
-            RELEASE_DATE="$DATE"
-          fi
-          echo "KIWIX_ANDROID_RELEASE_DATE=$RELEASE_DATE" >> $GITHUB_ENV
+          DATE=$(git log -1 --format=%cd --date=format:%Y-%m-%d)
+          echo "KIWIX_ANDROID_RELEASE_DATE=$DATE" >> $GITHUB_ENV
         shell: bash
 
       - name: Generate dummy Bundle and APKs

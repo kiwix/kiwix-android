@@ -37,9 +37,13 @@ fun String.getVersionCode(): Int {
   // Otherwise, it generates the version code based on the current date.
   // See https://github.com/kiwix/kiwix-android/issues/4120 for more details.
   val currentDate = if (!System.getenv("KIWIX_ANDROID_RELEASE_DATE").isNullOrEmpty()) {
-    LocalDate.parse(System.getenv("KIWIX_ANDROID_RELEASE_DATE"))
+    LocalDate.parse(System.getenv("KIWIX_ANDROID_RELEASE_DATE")).also {
+      println("Environment variable found. Using date: $it for version code generation.")
+    }
   } else {
-    LocalDate.now()
+    LocalDate.now().also {
+      println("No environment variable found. Using current date: $it for version code generation.")
+    }
   }
   // Calculate the number of days between the LAST_DATE and today's date.
   // This gives us the total number of days since the last version code was set.
