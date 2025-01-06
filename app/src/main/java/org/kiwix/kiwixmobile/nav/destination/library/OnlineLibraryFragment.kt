@@ -53,7 +53,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import eu.mhutti1.utils.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
 import eu.mhutti1.utils.storage.StorageDevice
-import eu.mhutti1.utils.storage.StorageDeviceUtils
 import eu.mhutti1.utils.storage.StorageSelectDialog
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
@@ -93,6 +92,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.databinding.FragmentDestinationDownloadBinding
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryAdapter
@@ -115,9 +115,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private var downloadBookItem: LibraryListItem.BookItem? = null
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
-  }
-  private val storageDeviceList by lazy {
-    StorageDeviceUtils.getWritableStorage(requireActivity())
   }
 
   @VisibleForTesting
@@ -550,8 +547,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
             else -> if (sharedPreferenceUtil.showStorageOption) {
               // Show the storage selection dialog for configuration if there is an SD card available.
-              if (storageDeviceList.size > 1) {
-                showStorageSelectDialog()
+              if (getStorageDeviceList().size > 1) {
+                showStorageSelectDialog(getStorageDeviceList())
               } else {
                 // If only internal storage is available, proceed with the ZIM file download directly.
                 // Displaying a configuration dialog is unnecessary in this case.
@@ -575,7 +572,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
                     """.trimIndent(),
                     requireActivity().findViewById(R.id.bottom_nav_view),
                     string.download_change_storage,
-                    ::showStorageSelectDialog
+                    {
+                      lifecycleScope.launch {
+                        showStorageSelectDialog(getStorageDeviceList())
+                      }
+                    }
                   )
                 }
               )
@@ -588,14 +589,15 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
   }
 
-  private fun showStorageSelectDialog() = StorageSelectDialog()
-    .apply {
-      onSelectAction = ::storeDeviceInPreferences
-      titleSize = STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
-      setStorageDeviceList(storageDeviceList)
-      setShouldShowCheckboxSelected(false)
-    }
-    .show(parentFragmentManager, getString(string.choose_storage_to_download_book))
+  private fun showStorageSelectDialog(storageDeviceList: List<StorageDevice>) =
+    StorageSelectDialog()
+      .apply {
+        onSelectAction = ::storeDeviceInPreferences
+        titleSize = STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
+        setStorageDeviceList(storageDeviceList)
+        setShouldShowCheckboxSelected(false)
+      }
+      .show(parentFragmentManager, getString(string.choose_storage_to_download_book))
 
   private fun clickOnBookItem() {
     if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
@@ -615,4 +617,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       )
     }
   }
+
+  private suspend fun getStorageDeviceList() =
+    (activity as KiwixMainActivity).getStorageDeviceList()
 }

@@ -58,7 +58,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import eu.mhutti1.utils.storage.Bytes
 import eu.mhutti1.utils.storage.StorageDevice
-import eu.mhutti1.utils.storage.StorageDeviceUtils
 import eu.mhutti1.utils.storage.StorageSelectDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -99,6 +98,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.databinding.FragmentDestinationLibraryBinding
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.zimManager.MAX_PROGRESS
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions
@@ -134,9 +134,6 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
 
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
-  }
-  private val storageDeviceList by lazy {
-    StorageDeviceUtils.getWritableStorage(requireActivity())
   }
 
   private var storagePermissionLauncher: ActivityResultLauncher<Array<String>>? =
@@ -665,17 +662,22 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       message,
       requireActivity().findViewById(R.id.bottom_nav_view),
       string.download_change_storage,
-      ::showStorageSelectDialog
+      {
+        lifecycleScope.launch {
+          showStorageSelectDialog((requireActivity() as KiwixMainActivity).getStorageDeviceList())
+        }
+      }
     )
   }
 
-  private fun showStorageSelectDialog() = StorageSelectDialog()
-    .apply {
-      onSelectAction = ::storeDeviceInPreferences
-      setStorageDeviceList(storageDeviceList)
-      setShouldShowCheckboxSelected(true)
-    }
-    .show(parentFragmentManager, getString(string.pref_storage))
+  private fun showStorageSelectDialog(storageDeviceList: List<StorageDevice>) =
+    StorageSelectDialog()
+      .apply {
+        onSelectAction = ::storeDeviceInPreferences
+        setStorageDeviceList(storageDeviceList)
+        setShouldShowCheckboxSelected(true)
+      }
+      .show(parentFragmentManager, getString(string.pref_storage))
 
   private fun storeDeviceInPreferences(
     storageDevice: StorageDevice

@@ -40,6 +40,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.BuildConfig
@@ -115,6 +116,7 @@ class KiwixMainActivity : CoreMainActivity() {
     NavController.OnDestinationChangedListener { _, _, _ ->
       actionMode?.finish()
     }
+  private val storageDeviceList = arrayListOf<StorageDevice>()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     cachedComponent.inject(this)
@@ -142,7 +144,7 @@ class KiwixMainActivity : CoreMainActivity() {
 
   private suspend fun migrateInternalToPublicAppDirectory() {
     if (!sharedPreferenceUtil.prefIsAppDirectoryMigrated) {
-      val storagePath = StorageDeviceUtils.getWritableStorage(this)
+      val storagePath = getStorageDeviceList()
         .getOrNull(sharedPreferenceUtil.storagePosition)
         ?.name
       storagePath?.let {
@@ -150,6 +152,23 @@ class KiwixMainActivity : CoreMainActivity() {
         sharedPreferenceUtil.putPrefAppDirectoryMigrated(true)
       }
     }
+  }
+
+  /**
+   * Fetches the storage device list once in the main activity and reuses it across all fragments.
+   * This is necessary because retrieving the storage device list, especially on devices with large SD cards,
+   * is a resource-intensive operation. Performing this operation repeatedly in fragments can negatively
+   * affect the user experience, as it takes time and can block the UI.
+   *
+   * If a fragment is destroyed and we need to retrieve the device list again, performing the operation
+   * repeatedly leads to inefficiency. To optimize this, we fetch the storage device list once and reuse
+   * it in all fragments, thereby reducing redundant processing and improving performance.
+   */
+  suspend fun getStorageDeviceList(): List<StorageDevice> {
+    if (storageDeviceList.isEmpty()) {
+      storageDeviceList.addAll(StorageDeviceUtils.getWritableStorage(this))
+    }
+    return storageDeviceList
   }
 
   override fun onConfigurationChanged(newConfig: Configuration) {

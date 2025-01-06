@@ -22,6 +22,7 @@ import android.app.Activity
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.FragmentManager
+import eu.mhutti1.utils.storage.StorageDevice
 import io.mockk.Runs
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
@@ -207,9 +208,11 @@ class CopyMoveFileHandlerTest {
   @Test
   fun showStorageConfigureDialogAtFirstLaunch() = runBlocking {
     fileHandler = spyk(fileHandler)
-    every { fileHandler.showStorageSelectDialog() } just Runs
+    val storageDeviceList = listOf<StorageDevice>(mockk(), mockk())
+    every { fileHandler.showStorageSelectDialog(storageDeviceList) } just Runs
+
     every { sharedPreferenceUtil.shouldShowStorageSelectionDialog } returns true
-    every { fileHandler.storageDeviceList } returns listOf(mockk(), mockk())
+    coEvery { fileHandler.getStorageDeviceList() } returns storageDeviceList
     val positiveButtonClickSlot = slot<() -> Unit>()
     every {
       alertDialogShower.show(
@@ -221,14 +224,15 @@ class CopyMoveFileHandlerTest {
     fileHandler.showMoveFileToPublicDirectoryDialog(fragmentManager = fragmentManager)
     coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
     positiveButtonClickSlot.captured.invoke()
-    verify { fileHandler.showStorageSelectDialog() }
+    testDispatcher.scheduler.advanceUntilIdle()
+    coVerify { fileHandler.showStorageSelectDialog(storageDeviceList) }
   }
 
   @Test
   fun shouldNotShowStorageConfigureDialogWhenThereIsOnlyInternalAvailable() = runBlocking {
     fileHandler = spyk(fileHandler)
     every { sharedPreferenceUtil.shouldShowStorageSelectionDialog } returns true
-    every { fileHandler.storageDeviceList } returns listOf(mockk())
+    coEvery { fileHandler.getStorageDeviceList() } returns listOf(mockk())
     val positiveButtonClickSlot = slot<() -> Unit>()
     every {
       alertDialogShower.show(
@@ -240,14 +244,14 @@ class CopyMoveFileHandlerTest {
     coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
     fileHandler.showMoveFileToPublicDirectoryDialog(fragmentManager = fragmentManager)
     positiveButtonClickSlot.captured.invoke()
-    verify(exactly = 0) { fileHandler.showStorageSelectDialog() }
+    verify(exactly = 0) { fileHandler.showStorageSelectDialog(listOf(mockk())) }
   }
 
   @Test
   fun showDirectlyCopyMoveDialogAfterFirstLaunch() = runBlocking {
     fileHandler = spyk(fileHandler)
     every { sharedPreferenceUtil.shouldShowStorageSelectionDialog } returns false
-    every { fileHandler.storageDeviceList } returns listOf(mockk(), mockk())
+    coEvery { fileHandler.getStorageDeviceList() } returns listOf(mockk(), mockk())
     coEvery { fileHandler.validateZimFileCanCopyOrMove() } returns true
     prepareFileSystemAndFileForMockk()
     every { alertDialogShower.show(any(), any(), any()) } just Runs
@@ -267,7 +271,7 @@ class CopyMoveFileHandlerTest {
     val positiveButtonClickSlot = slot<() -> Unit>()
     val negativeButtonClickSlot = slot<() -> Unit>()
     fileHandler = spyk(fileHandler)
-    every { fileHandler.storageDeviceList } returns listOf(mockk(), mockk())
+    coEvery { fileHandler.getStorageDeviceList() } returns listOf(mockk(), mockk())
     every { sharedPreferenceUtil.shouldShowStorageSelectionDialog } returns false
     every {
       alertDialogShower.show(

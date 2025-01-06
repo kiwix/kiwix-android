@@ -26,11 +26,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import eu.mhutti1.utils.storage.StorageDevice
-import eu.mhutti1.utils.storage.StorageDeviceUtils
-import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.getFreeSpace
@@ -44,11 +39,11 @@ import org.kiwix.kiwixmobile.core.settings.StorageRadioButtonPreference
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.PREF_EXTERNAL_STORAGE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil.Companion.PREF_INTERNAL_STORAGE
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 
 const val PREF_STORAGE_PROGRESSBAR = "storage_progressbar"
 
 class KiwixPrefsFragment : CorePrefsFragment() {
-  private var storageDisposable: Disposable? = null
   private var storageDeviceList: List<StorageDevice> = listOf()
 
   override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -65,20 +60,13 @@ class KiwixPrefsFragment : CorePrefsFragment() {
         return@setStorage
       }
       showHideProgressBarWhileFetchingStorageInfo(true)
-      storageDisposable =
-        Flowable.fromCallable { StorageDeviceUtils.getWritableStorage(requireActivity()) }
-          .subscribeOn(Schedulers.io())
-          .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(
-            { storageList ->
-              storageDeviceList = storageList
-              showHideProgressBarWhileFetchingStorageInfo(false)
-              showInternalStoragePreferece()
-              showExternalPreferenceIfAvailable()
-              setUpStoragePreference(it)
-            },
-            Throwable::printStackTrace
-          )
+      lifecycleScope.launch {
+        storageDeviceList = (requireActivity() as KiwixMainActivity).getStorageDeviceList()
+        showHideProgressBarWhileFetchingStorageInfo(false)
+        showInternalStoragePreferece()
+        showExternalPreferenceIfAvailable()
+        setUpStoragePreference(it)
+      }
     }
   }
 
@@ -155,12 +143,6 @@ class KiwixPrefsFragment : CorePrefsFragment() {
       PREF_PERMISSION
     )
     preferenceCategory?.isVisible = true
-  }
-
-  override fun onDestroyView() {
-    storageDisposable?.dispose()
-    storageDisposable = null
-    super.onDestroyView()
   }
 
   companion object {

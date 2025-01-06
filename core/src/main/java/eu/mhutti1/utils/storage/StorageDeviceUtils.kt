@@ -21,6 +21,8 @@ package eu.mhutti1.utils.storage
 import android.content.Context
 import android.content.ContextWrapper
 import android.os.Environment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import java.io.File
 import java.io.FileFilter
@@ -28,8 +30,9 @@ import java.io.RandomAccessFile
 
 object StorageDeviceUtils {
   @JvmStatic
-  fun getWritableStorage(context: Context) =
+  suspend fun getWritableStorage(context: Context) = withContext(Dispatchers.IO) {
     validate(externalMediaFilesDirsDevices(context), true)
+  }
 
   @JvmStatic
   fun getReadableStorage(context: Context): List<StorageDevice> {
