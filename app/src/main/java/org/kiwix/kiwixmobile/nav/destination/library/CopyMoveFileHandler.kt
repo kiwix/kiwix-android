@@ -33,7 +33,6 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.FragmentManager
 import eu.mhutti1.utils.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
 import eu.mhutti1.utils.storage.StorageDevice
-import eu.mhutti1.utils.storage.StorageDeviceUtils
 import eu.mhutti1.utils.storage.StorageSelectDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -53,6 +52,7 @@ import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.Companion.FOUR_GIGABYTES_IN_KILOBYTES
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
@@ -83,9 +83,6 @@ class CopyMoveFileHandler @Inject constructor(
   var shouldValidateZimFile: Boolean = false
   private var fileSystemDisposable: Disposable? = null
   private lateinit var fragmentManager: FragmentManager
-  val storageDeviceList by lazy {
-    StorageDeviceUtils.getWritableStorage(activity)
-  }
 
   private val copyMoveTitle: String by lazy {
     if (isMoveOperation) {
@@ -111,18 +108,23 @@ class CopyMoveFileHandler @Inject constructor(
     this.shouldValidateZimFile = shouldValidateZimFile
     this.fragmentManager = fragmentManager
     setSelectedFileAndUri(uri, documentFile)
-    if (sharedPreferenceUtil.shouldShowStorageSelectionDialog && storageDeviceList.size > 1) {
+    if (getStorageDeviceList().isEmpty()) {
+      showPreparingCopyMoveDialog()
+    }
+    if (sharedPreferenceUtil.shouldShowStorageSelectionDialog && getStorageDeviceList().size > 1) {
       // Show dialog to select storage if more than one storage device is available, and user
       // have not configured the storage yet.
+      hidePreparingCopyMoveDialog()
       showCopyMoveDialog(true)
     } else {
-      if (storageDeviceList.size == 1) {
+      if (getStorageDeviceList().size == 1) {
         // If only internal storage is currently available, set shouldShowStorageSelectionDialog
         // to true. This allows the storage configuration dialog to be shown again if the
         // user removes an external storage device (like an SD card) and then reinserts it.
         // This ensures they are prompted to configure storage settings upon SD card reinsertion.
         sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
       }
+      hidePreparingCopyMoveDialog()
       if (validateZimFileCanCopyOrMove()) {
         showCopyMoveDialog()
       }
@@ -142,17 +144,15 @@ class CopyMoveFileHandler @Inject constructor(
     lifecycleScope = coroutineScope
   }
 
-  fun showStorageSelectDialog() = StorageSelectDialog()
-    .apply {
-      onSelectAction = ::copyMoveZIMFileInSelectedStorage
-      titleSize = STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
-      setStorageDeviceList(storageDeviceList)
-      setShouldShowCheckboxSelected(false)
-    }
-    .show(
-      fragmentManager,
-      activity.getString(R.string.choose_storage_to_copy_move_zim_file)
-    )
+  fun showStorageSelectDialog(storageDeviceList: List<StorageDevice>) =
+    StorageSelectDialog()
+      .apply {
+        onSelectAction = ::copyMoveZIMFileInSelectedStorage
+        titleSize = STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
+        setStorageDeviceList(storageDeviceList)
+        setShouldShowCheckboxSelected(false)
+      }
+      .show(fragmentManager, activity.getString(R.string.choose_storage_to_copy_move_zim_file))
 
   fun copyMoveZIMFileInSelectedStorage(storageDevice: StorageDevice) {
     lifecycleScope?.launch {
@@ -259,19 +259,23 @@ class CopyMoveFileHandler @Inject constructor(
 
   fun performCopyOperation(showStorageSelectionDialog: Boolean = false) {
     isMoveOperation = false
-    if (showStorageSelectionDialog) {
-      showStorageSelectDialog()
-    } else {
-      copyZimFileToPublicAppDirectory()
+    lifecycleScope?.launch {
+      if (showStorageSelectionDialog) {
+        showStorageSelectDialog(getStorageDeviceList())
+      } else {
+        copyZimFileToPublicAppDirectory()
+      }
     }
   }
 
   fun performMoveOperation(showStorageSelectionDialog: Boolean = false) {
     isMoveOperation = true
-    if (showStorageSelectionDialog) {
-      showStorageSelectDialog()
-    } else {
-      moveZimFileToPublicAppDirectory()
+    lifecycleScope?.launch {
+      if (showStorageSelectionDialog) {
+        showStorageSelectDialog(getStorageDeviceList())
+      } else {
+        moveZimFileToPublicAppDirectory()
+      }
     }
   }
 
@@ -537,6 +541,9 @@ class CopyMoveFileHandler @Inject constructor(
       progressBarDialog?.dismiss()
     }
   }
+
+  suspend fun getStorageDeviceList() =
+    (activity as KiwixMainActivity).getStorageDeviceList()
 
   fun dispose() {
     fileSystemDisposable?.dispose()
