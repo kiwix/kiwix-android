@@ -1,6 +1,7 @@
 name: Publish App to Play Store
 
-# Trigger the workflow on a schedule (every Monday at 12:00 UTC)
+# This workflow is triggered on a schedule or when specific tags are pushed.
+# It runs every Monday at 12:00 UTC and also when the 'internal_testing' tag is pushed.
 on:
   schedule:
     - cron: '0 12 * * 1'  # Runs every Monday at 12:00
@@ -29,10 +30,30 @@ jobs:
           echo "$KEYSTORE" | base64 -d > kiwix-android.keystore
           echo "$PLAYSTORE_JSON" > playstore.json
 
+      - name: Retrieve date from git revision
+        id: git_head_revision_date
+        run: |
+          DATE=$(git log -1 --format=%cd --date=format:%Y-%m-%d)
+          echo "KIWIX_ANDROID_RELEASE_DATE=$DATE" >> $GITHUB_ENV
+        shell: bash
+
       - name: Publish bundle in internal testing on Google Play
         env:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          KIWIX_ANDROID_RELEASE_DATE: ${{ env.KIWIX_ANDROID_RELEASE_DATE }}
         run: |
-          ./gradlew publishPlayStoreBundle --scan
+          OUTPUT=$(./gradlew publishPlayStoreBundle --scan 2>&1)
+          echo "$OUTPUT" > gradle_output.log
+          if echo "$OUTPUT" | grep -q "BUILD SUCCESSFUL"; then
+            echo "$OUTPUT"
+            exit 0
+          fi
+          
+          if echo "$OUTPUT" | grep -q "Try another version code."; then
+            echo "Upload skipped because very same version. $OUTPUT"
+            exit 0
+          fi
+          echo "$OUTPUT"
+          exit 1

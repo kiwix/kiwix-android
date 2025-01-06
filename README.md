@@ -99,6 +99,13 @@ want to build the `app` module in the `debug` configuration. If you
 are interested in our custom apps, they have their own repo
 [kiwix-android-custom](https://github.com/kiwix/kiwix-android-custom).
 
+## Release
+
+We have an [automatic version code generation](https://github.com/kiwix/kiwix-android/blob/main/buildSrc/src/main/kotlin/VersionCodeGenerator.kt) system based on the current date. However, you 
+can override this by setting the environment variable `KIWIX_ANDROID_RELEASE_DATE` to a specific
+date in the `YYYY-MM-DD` format. This will use the provided date for the version code calculation
+instead of the current date.
+
 ## Libraries Used
 
 - [Libkiwix](https://github.com/kiwix/java-libkiwix) - Kotlin/Java binding for the core Kiwix
