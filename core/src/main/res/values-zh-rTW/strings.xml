@@ -12,6 +12,7 @@
 * Wehwei
 * Winston Sung
 * 列维劳德
+* 張詠涵
 * 捍粵者
 -->
 <resources>
@@ -153,6 +154,7 @@
   <string name="help_9">• 其它內容如維基解密、或維基文庫也同樣可用</string>
   <string name="help_10" fuzzy="true">您可以從應用程式來下載您挑選的 ZIM 檔案，或者是仔細選擇從您桌上型電腦所下載 ZIM 檔案來傳輸到您的 SD 記憶卡。</string>
   <string name="help_11">在應用程式下載的 ZIM 檔案會存放在名為「Kiwix」的外部儲存裝置目錄。</string>
+  <string name="fetching_storage_info">正在取得儲存詳細資訊…</string>
   <string name="pref_storage">儲存裝置</string>
   <string name="pref_current_folder">目前資料夾</string>
   <string name="pref_storage_used">已使用 %s</string>

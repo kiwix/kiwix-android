@@ -27,6 +27,7 @@
   <string name="menu_read_aloud">Leggi a voce alta</string>
   <string name="menu_read_aloud_stop">Interrompi lettura a voce alta</string>
   <string name="menu_support_kiwix">Sostieni Kiwix</string>
+  <string name="menu_about_app">Informazioni sull’app %s</string>
   <string name="menu_wifi_hotspot">Hotspot Wi-Fi</string>
   <string name="save_media">Salva file multimediale come…</string>
   <string name="save_media_error">Si è verificato un errore durante il salvataggio del file multimediale!</string>
@@ -58,7 +59,10 @@
   <string name="hotspot_notification_content_title">Hotspot di Kiwix</string>
   <string name="start_server_label">Avvia server</string>
   <string name="stop_server_label">Arresta server</string>
+  <string name="error_server_already_running">Il server è già in esecuzione. Spegnilo e riprova.</string>
+  <string name="error_ip_address_not_found">Impossibile trovare l’indirizzo IP.</string>
   <string name="server_started_message">Inserisci questo indirizzo IP nel tuo browser per accedere al server: %s</string>
+  <string name="qr_code">Codice QR renderizzato</string>
   <string name="share_host_address">Condividi URL con altre applicazioni</string>
   <string name="error_file_not_found">Errore: il file ZIM selezionato non è stato trovato.</string>
   <string name="unable_to_read_zim_file">Impossibile leggere questo file ZIM!</string>
