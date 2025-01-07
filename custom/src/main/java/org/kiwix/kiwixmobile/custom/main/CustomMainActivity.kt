@@ -19,26 +19,27 @@
 package org.kiwix.kiwixmobile.custom.main
 
 import android.content.Intent
-import android.content.pm.ShortcutInfo
-import android.content.pm.ShortcutManager
-import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.graphics.drawable.IconCompat
 import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.navigation.NavigationView
+import org.kiwix.kiwixmobile.core.R.drawable
+import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.extensions.applyEdgeToEdgeInsets
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
-import org.kiwix.kiwixmobile.core.R.string
-import org.kiwix.kiwixmobile.core.R.drawable
-import org.kiwix.kiwixmobile.core.extensions.applyEdgeToEdgeInsets
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.databinding.ActivityCustomMainBinding
 
@@ -192,12 +193,13 @@ class CustomMainActivity : CoreMainActivity() {
   override fun getIconResId() = R.mipmap.ic_launcher
 
   override fun createApplicationShortcuts() {
-    val shortcutManager = getSystemService(ShortcutManager::class.java)
+    // Remove previously added dynamic shortcuts for old ids if any found.
+    removeOutdatedIdShortcuts()
     // Create a shortcut for opening the "New tab"
-    val newTabShortcut = ShortcutInfo.Builder(this, "new_tab")
+    val newTabShortcut = ShortcutInfoCompat.Builder(this, NEW_TAB_SHORTCUT_ID)
       .setShortLabel(getString(string.new_tab_shortcut_label))
       .setLongLabel(getString(string.new_tab_shortcut_label))
-      .setIcon(Icon.createWithResource(this, drawable.ic_shortcut_new_tab))
+      .setIcon(IconCompat.createWithResource(this, drawable.ic_shortcut_new_tab))
       .setDisabledMessage(getString(string.shortcut_disabled_message))
       .setIntent(
         Intent(this, CustomMainActivity::class.java).apply {
@@ -205,6 +207,16 @@ class CustomMainActivity : CoreMainActivity() {
         }
       )
       .build()
-    shortcutManager.dynamicShortcuts = listOf(newTabShortcut)
+    ShortcutManagerCompat.addDynamicShortcuts(this, listOf(newTabShortcut))
+  }
+
+  // Outdated shortcut id(new_tab)
+  // Remove if the application has the outdated shortcut.
+  private fun removeOutdatedIdShortcuts() {
+    ShortcutManagerCompat.getDynamicShortcuts(this).forEach {
+      if (it.id == "new_tab") {
+        ShortcutManagerCompat.removeDynamicShortcuts(this, arrayListOf(it.id))
+      }
+    }
   }
 }
