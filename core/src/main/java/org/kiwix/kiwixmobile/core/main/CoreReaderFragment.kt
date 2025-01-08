@@ -1735,6 +1735,10 @@ abstract class CoreReaderFragment :
         mainMenu?.onFileOpened(urlIsValid())
         setUpBookmarks(zimFileReader)
       } ?: kotlin.run {
+        // If the ZIM file is not opened properly (especially for ZIM chunks), exit the book to
+        // disable all controls for this ZIM file. This prevents potential crashes.
+        // See issue #4161 for more details.
+        exitBook()
         requireActivity().toast(R.string.error_file_invalid, Toast.LENGTH_LONG)
       }
     }
