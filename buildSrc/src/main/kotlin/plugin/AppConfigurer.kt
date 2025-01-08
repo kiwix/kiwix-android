@@ -103,7 +103,7 @@ class AppConfigurer {
   }
 
   private fun setNameForNightlyUniversalApk(): String =
-    "kiwix-universal-${getCurrentDate()}.apk"
+    "org.kiwix.kiwixmobile.standalone-universal-${getCurrentDate()}.apk"
 
   private fun getCurrentDate() =
     Date().let(SimpleDateFormat("yyyy-MM-dd", Locale.ROOT)::format)
