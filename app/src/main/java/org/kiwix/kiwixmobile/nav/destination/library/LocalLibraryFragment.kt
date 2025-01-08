@@ -93,6 +93,7 @@ import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener.Compani
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.isSplittedZimFile
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
@@ -633,11 +634,11 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       !shouldShowRationalePermission()
 
   override fun onFileCopied(file: File) {
-    navigateToReaderFragment(file = file)
+    validateAndOpenZimInReader(file)
   }
 
   override fun onFileMoved(file: File) {
-    navigateToReaderFragment(file = file)
+    validateAndOpenZimInReader(file)
   }
 
   override fun onError(errorMessage: String) {
@@ -693,5 +694,20 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       // after selecting the storage try to copy/move the zim file.
       copyMoveFileHandler?.copyMoveZIMFileInSelectedStorage(storageDevice)
     }
+  }
+
+  private fun validateAndOpenZimInReader(file: File) {
+    if (isSplittedZimFile(file.path)) {
+      showWarningDialogForSplittedZimFile()
+    } else {
+      navigateToReaderFragment(file = file)
+    }
+  }
+
+  private fun showWarningDialogForSplittedZimFile() {
+    dialogShower.show(
+      KiwixDialog.ShowWarningAboutSplittedZimFile,
+      {}
+    )
   }
 }
