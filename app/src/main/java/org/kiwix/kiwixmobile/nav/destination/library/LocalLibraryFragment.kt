@@ -44,7 +44,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -709,28 +708,6 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   }
 
   private fun showWarningDialogForSplittedZimFile() {
-    dialogShower.show(
-      KiwixDialog.ShowWarningAboutSplittedZimFile,
-      ::openCopiedMovedDirectory
-    )
-  }
-
-  private fun openCopiedMovedDirectory() {
-    val downloadedDirectoryPath = FileProvider.getUriForFile(
-      requireActivity(),
-      requireActivity().applicationContext.packageName + ".fileprovider",
-      File(sharedPreferenceUtil.prefStorage)
-    )
-    val intent = Intent(Intent.ACTION_VIEW).apply {
-      setDataAndType(downloadedDirectoryPath, "*/*")
-      addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-      addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    }
-    try {
-      requireActivity().startActivity(intent)
-    } catch (ignore: Exception) {
-      // TODO change the message
-      activity.toast(org.kiwix.kiwixmobile.core.R.string.no_reader_application_installed)
-    }
+    dialogShower.show(KiwixDialog.ShowWarningAboutSplittedZimFile)
   }
 }

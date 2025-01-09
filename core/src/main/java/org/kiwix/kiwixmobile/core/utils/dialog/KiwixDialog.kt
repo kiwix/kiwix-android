@@ -121,8 +121,8 @@ sealed class KiwixDialog(
   data object ShowWarningAboutSplittedZimFile : KiwixDialog(
     R.string.verify_zim_chunk_dialog_title,
     R.string.verify_zim_chunks_dialog_message,
-    R.string.view,
     android.R.string.ok,
+    null,
     cancelable = false
   )
 
