@@ -334,7 +334,8 @@
   <string name="moving_zim_file">Moving ZIM file…</string>
   <string name="copy_move_files_dialog_description">Kiwix requires the ZIM file to be in its own data directory. Do you want to copy or move it there?</string>
   <string name="copy_file_error_message">Error in copying the ZIM file: %s.</string>
-  <string name="verify_zim_chunk_copied_moved_properly">Be cautious: verify that all the ZIM chunks have been moved/copied properly!</string>
+  <string name="verify_zim_chunk_copied_moved_properly">Be cautious: verify that all the ZIM chunks have been moved/copied properly! \nAfter copying/moving all the ZIM chunks please refresh the library screen by swipe down. The Split ZIM file will add in library.</string>
+  <string name="view">View</string>
   <string name="why_copy_move_files_to_app_directory">Why copy/move files to app public directory?</string>
   <string name="copy_move_files_to_app_directory_description">Due to Google Play policies on Android 11 and above, our app can no longer directly access files stored elsewhere on your device. To let you view your selected files, we need to move or copy them into a special folder within our application directory. This allows us to access and open the files.</string>
   <string name="choose_storage_to_copy_move_zim_file">Choose storage to copy/move ZIM file</string>

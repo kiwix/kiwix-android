@@ -44,6 +44,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -423,7 +424,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
         // If the file name is not found, then let them to copy the file
         // and we will handle this later.
         val fileName = documentFile?.name
-        if (fileName != null && !FileUtils.isValidZimFile(fileName)) {
+        if (fileName != null && !isValidZimFile(fileName)) {
           activity.toast(string.error_file_invalid)
           return@launch
         }
@@ -439,6 +440,9 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       }
     }
   }
+
+  private fun isValidZimFile(fileName: String): Boolean =
+    FileUtils.isValidZimFile(fileName) || FileUtils.isSplittedZimFile(fileName)
 
   private suspend fun getZimFileFromUri(
     uri: Uri
@@ -707,7 +711,26 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   private fun showWarningDialogForSplittedZimFile() {
     dialogShower.show(
       KiwixDialog.ShowWarningAboutSplittedZimFile,
-      {}
+      ::openCopiedMovedDirectory
     )
+  }
+
+  private fun openCopiedMovedDirectory() {
+    val downloadedDirectoryPath = FileProvider.getUriForFile(
+      requireActivity(),
+      requireActivity().applicationContext.packageName + ".fileprovider",
+      File(sharedPreferenceUtil.prefStorage)
+    )
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+      setDataAndType(downloadedDirectoryPath, "*/*")
+      addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+      addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+    try {
+      requireActivity().startActivity(intent)
+    } catch (ignore: Exception) {
+      // TODO change the message
+      activity.toast(org.kiwix.kiwixmobile.core.R.string.no_reader_application_installed)
+    }
   }
 }

@@ -52,6 +52,7 @@ import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.Companion.FOUR_GIGABYTES_IN_KILOBYTES
@@ -405,6 +406,9 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
+  suspend fun isValidZimFile(destinationFile: File): Boolean =
+    FileUtils.isSplittedZimFile(destinationFile.name) || validateZimFileValid(destinationFile)
+
   fun handleInvalidZimFile(destinationFile: File, sourceUri: Uri) {
     val errorMessage = activity.getString(R.string.error_file_invalid)
     if (isMoveOperation) {
@@ -428,7 +432,7 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  suspend fun isValidZimFile(destinationFile: File): Boolean {
+  private suspend fun validateZimFileValid(destinationFile: File): Boolean {
     var archive: Archive? = null
     return try {
       // create archive object, and check if it has the mainEntry or not to validate the ZIM file.
