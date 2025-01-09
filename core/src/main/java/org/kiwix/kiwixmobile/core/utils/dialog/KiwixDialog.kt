@@ -120,7 +120,7 @@ sealed class KiwixDialog(
 
   data object ShowWarningAboutSplittedZimFile : KiwixDialog(
     null,
-    R.string.verify_zim_chunk_copied_moved_properly,
+    R.string.ensure_zim_chunk_copied_moved_properly,
     R.string.view,
     android.R.string.ok,
     cancelable = false
