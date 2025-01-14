@@ -18,25 +18,77 @@
 
 package org.kiwix.kiwixmobile.help
 
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.help.HelpFragment
+import android.content.Context
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.help.HelpScreen
+import org.kiwix.kiwixmobile.core.help.HelpScreenItemDataClass
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
-class KiwixHelpFragment : HelpFragment() {
-  override fun rawTitleDescriptionMap() =
-    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+open class KiwixHelpFragment : Fragment() {
+  private lateinit var navController: NavController
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View {
+    val context = requireContext()
+    val sharedPrefUtil = SharedPreferenceUtil(context)
+
+    val rawData = if (sharedPrefUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
       listOf(
-        R.string.help_2 to R.array.description_help_2,
-        R.string.help_5 to R.array.description_help_5,
-        R.string.how_to_update_content to R.array.update_content_description,
-        R.string.why_copy_move_files_to_app_directory to getString(
-          R.string.copy_move_files_to_app_directory_description
+        org.kiwix.kiwixmobile.core.R.string.help_2 to org.kiwix.kiwixmobile.core.R.array
+          .description_help_2,
+        org.kiwix.kiwixmobile.core.R.string.help_5 to org.kiwix.kiwixmobile.core.R.array
+          .description_help_5,
+        org.kiwix.kiwixmobile.core.R.string.how_to_update_content to org.kiwix.kiwixmobile
+          .core.R.array.update_content_description,
+        org.kiwix.kiwixmobile.core.R.string.why_copy_move_files_to_app_directory to getString(
+          org.kiwix.kiwixmobile.core.R.string.copy_move_files_to_app_directory_description
         )
       )
     } else {
       listOf(
-        R.string.help_2 to R.array.description_help_2,
-        R.string.help_5 to R.array.description_help_5,
-        R.string.how_to_update_content to R.array.update_content_description
+        org.kiwix.kiwixmobile.core.R.string.help_2 to org.kiwix.kiwixmobile.core.R.array
+          .description_help_2,
+        org.kiwix.kiwixmobile.core.R.string.help_5 to org.kiwix.kiwixmobile.core.R.array
+          .description_help_5,
+        org.kiwix.kiwixmobile.core.R.string.how_to_update_content to org.kiwix.kiwixmobile
+          .core.R.array.update_content_description
       )
     }
+
+    val helpScreenData: List<HelpScreenItemDataClass> = transformToHelpScreenData(context, rawData)
+    navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+
+    return ComposeView(requireContext()).apply {
+      setContent {
+        HelpScreen(data = helpScreenData, navController = navController)
+      }
+    }
+  }
+}
+
+fun transformToHelpScreenData(
+  context: Context,
+  rawTitleDescriptionMap: List<Pair<Int, Any>>
+): List<HelpScreenItemDataClass> {
+  return rawTitleDescriptionMap.map { (titleResId, description) ->
+    val title = context.getString(titleResId)
+    val descriptionValue = when (description) {
+      is String -> description
+      is Int -> context.resources.getStringArray(description).joinToString(separator = "\n")
+      else -> {
+        throw IllegalArgumentException("Invalid description resource type for title: $titleResId")
+      }
+    }
+    HelpScreenItemDataClass(title, descriptionValue)
+  }
 }

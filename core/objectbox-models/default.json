@@ -2,7 +2,6 @@
   "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
   "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
-  "_note4": "The IDs of the entities and properties should not be changed unless there is a change in the corresponding entity.",
   "entities": [
     {
       "id": "3:5536749840871435068",
