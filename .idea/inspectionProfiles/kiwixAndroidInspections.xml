@@ -51,7 +51,6 @@
     <inspection_tool class="AndroidLintExportedPreferenceActivity" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintExportedReceiver" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintExportedService" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintExtraText" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintFindViewByIdCast" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintFloatMath" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintFontValidationWarning" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -93,7 +92,6 @@
     <inspection_tool class="AndroidLintInstantApps" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintIntentReset" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintInvalidNavigation" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintInvalidPermission" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintJobSchedulerService" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintKeyboardInaccessibleWidget" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintKotlinPropertyAccess" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -135,7 +133,6 @@
     <inspection_tool class="AndroidLintProxyPassword" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintPxUsage" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintRecycle" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintRecyclerView" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintRedundantNamespace" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintRegistered" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintRelativeOverlap" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -215,7 +212,6 @@
     <inspection_tool class="AndroidLintViewTag" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintVisibleForTests" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintWakelockTimeout" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintWearStandaloneAppFlag" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintWifiManagerPotentialLeak" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintWorldReadableFiles" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintWorldWriteableFiles" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -229,6 +225,18 @@
     <inspection_tool class="CanSealedSubClassBeObject" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="CascadeIf" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="ClassName" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="ComposePreviewDimensionRespectsLimit" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+    </inspection_tool>
+    <inspection_tool class="ComposePreviewMustBeTopLevelFunction" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+    </inspection_tool>
+    <inspection_tool class="ComposePreviewNeedsComposableAnnotation" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+    </inspection_tool>
+    <inspection_tool class="ComposePreviewNotSupportedInUnitTestFiles" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+    </inspection_tool>
     <inspection_tool class="ConflictingExtensionProperty" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="ConstPropertyName" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="ConstantConditionIf" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -262,6 +270,18 @@
     <inspection_tool class="FromClosedRangeMigration" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="FunctionName" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="FunctionWithLambdaExpressionBody" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="GlancePreviewDimensionRespectsLimit" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+    </inspection_tool>
+    <inspection_tool class="GlancePreviewMustBeTopLevelFunction" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+    </inspection_tool>
+    <inspection_tool class="GlancePreviewNeedsComposableAnnotation" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+    </inspection_tool>
+    <inspection_tool class="GlancePreviewNotSupportedInUnitTestFiles" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+    </inspection_tool>
     <inspection_tool class="HasPlatformType" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="IfThenToElvis" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="IfThenToSafeAccess" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -303,6 +323,24 @@
     <inspection_tool class="PackageName" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="PermissionUsageInspection" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="PlatformExtensionReceiverOfInline" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="PreviewAnnotationInFunctionWithParameters" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PreviewApiLevelMustBeValid" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PreviewDeviceShouldUseNewSpec" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PreviewFontScaleMustBeGreaterThanZero" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PreviewMultipleParameterProviders" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PreviewPickerAnnotation" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="composableFile" value="true" />
+    </inspection_tool>
     <inspection_tool class="PrivatePropertyName" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="PropertyName" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="ProtectedInFinal" enabled="true" level="ERROR" enabled_by_default="true" />

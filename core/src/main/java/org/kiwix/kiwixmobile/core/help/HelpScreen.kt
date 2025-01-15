@@ -59,11 +59,6 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.error.DiagnosticReportActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 
-/*
-Added the Values Here because of Linter configured according to XML Project
-and the Composable names are in Camel case for the linter rules needed to be changed to Capital
-*/
-
 @Composable
 fun HelpScreen(
   modifier: Modifier = Modifier,
