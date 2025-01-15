@@ -48,10 +48,15 @@ class FileSearch @Inject constructor(private val context: Context) {
   private fun scanMediaStore() = mutableListOf<File>().apply {
     queryMediaStore()
       ?.forEachRow { cursor ->
-        File(cursor.get<String>(MediaColumns.DATA)).takeIf(File::canRead)
-          ?.also { add(it) }
+        File(cursor.get<String>(MediaColumns.DATA))
+          .takeIf { it.canRead() && isNotInTrashFolder(it) }
+          ?.also(::add)
       }
   }
+
+  // Exclude any file in trash folder.
+  private fun isNotInTrashFolder(it: File) =
+    !Regex("/\\.Trash/").containsMatchIn(it.path)
 
   private fun queryMediaStore() = context.contentResolver
     .query(
@@ -86,8 +91,8 @@ class FileSearch @Inject constructor(private val context: Context) {
   private fun scanDirectory(directory: String): List<File> {
     return File(directory).walk()
       .onEnter { dir ->
-        // Excluding the "data," "obb," and "Trash" folders from scanning is justified for
-        // several reasons. The "Trash" folder contains deleted files,
+        // Excluding the "data," "obb," "hidden folders," and "Trash" folders from scanning is
+        // justified for several reasons. The "Trash" folder contains deleted files,
         // making it unnecessary for scanning. Additionally,
         // the "data" and "obb" folders are specifically designed for the
         // app's private directory, and users usually do not store ZIM files there.
@@ -97,7 +102,8 @@ class FileSearch @Inject constructor(private val context: Context) {
         // which are irrelevant to our application.
         !dir.name.equals(".Trash", ignoreCase = true) &&
           !dir.name.equals("data", ignoreCase = true) &&
-          !dir.name.equals("obb", ignoreCase = true)
+          !dir.name.equals("obb", ignoreCase = true) &&
+          !dir.name.startsWith(".", ignoreCase = true)
       }.filter {
         it.extension.isAny(*zimFileExtensions)
       }.toList()
