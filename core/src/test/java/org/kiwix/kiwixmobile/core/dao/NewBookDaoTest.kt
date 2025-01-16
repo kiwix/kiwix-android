@@ -81,7 +81,17 @@ internal class NewBookDaoTest {
       verify { box.remove(listOf(deletedEntity)) }
     }
 
-    private fun expectEmissionOfExistingAndNotExistingBook():
+    @Test
+    fun `books removes entities whose files are in the trash folder`() {
+      runBlocking {
+        val (_, _) = expectEmissionOfExistingAndNotExistingBook(true)
+        val books = newBookDao.books().test()
+        delay(1000)
+        books.assertValues(emptyList())
+      }
+    }
+
+    private fun expectEmissionOfExistingAndNotExistingBook(isInTrashFolder: Boolean = false):
       Pair<BookOnDiskEntity, BookOnDiskEntity> {
       val query: Query<BookOnDiskEntity> = mockk()
       every { box.query().build() } returns query
@@ -89,6 +99,10 @@ internal class NewBookDaoTest {
       val zimReaderSourceThatDoesNotExist = mockk<ZimReaderSource>()
       coEvery { zimReaderSourceThatExists.exists() } returns true
       coEvery { zimReaderSourceThatDoesNotExist.exists() } returns false
+      every {
+        zimReaderSourceThatExists.toDatabase()
+      } returns if (isInTrashFolder) "/.Trash/test.zim" else ""
+      every { zimReaderSourceThatDoesNotExist.toDatabase() } returns ""
       val entityThatExists = bookOnDiskEntity(zimReaderSource = zimReaderSourceThatExists)
       val entityThatDoesNotExist =
         bookOnDiskEntity(zimReaderSource = zimReaderSourceThatDoesNotExist)
