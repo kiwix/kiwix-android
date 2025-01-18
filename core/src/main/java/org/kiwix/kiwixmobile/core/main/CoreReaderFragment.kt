@@ -1691,7 +1691,8 @@ abstract class CoreReaderFragment :
       if (zimReaderSource.canOpenInLibkiwix()) {
         // Show content if there is `Open Library` button showing
         // and we are opening the ZIM file
-        reopenBook()
+        hideNoBookOpenViews()
+        contentFrame?.visibility = View.VISIBLE
         openAndSetInContainer(zimReaderSource)
         updateTitle()
       } else {
