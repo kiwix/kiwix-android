@@ -101,10 +101,16 @@ class DownloadMonitorService : Service() {
    *
    * The method checks for any active downloads and, if found, updates the notification
    * with the latest download progress. If there are no active downloads,
-   * the service is stopped and removed from the foreground.
+   * the service is stopped and removed from the foreground. Additionally, if the user cancels a
+   * download, the corresponding notification is immediately removed to reflect the cancellation.
+   *
+   * @param downloadId Optional parameter representing the ID of the download whose notification
+   *                   should be canceled if the user cancels the download.
    */
-  private fun setForegroundNotification() {
+  private fun setForegroundNotification(downloadId: Int? = null) {
     updater.onNext {
+      // Cancel the ongoing download notification if the user cancels the download.
+      downloadId?.let(::cancelNotificationForId)
       fetch.getDownloads { downloadList ->
         downloadList.firstOrNull {
           it.status == Status.NONE ||
@@ -115,9 +121,18 @@ class DownloadMonitorService : Service() {
           val notificationBuilder =
             fetchDownloadNotificationManager.getNotificationBuilder(it.id, it.id)
           startForeground(it.id, notificationBuilder.build())
-        } ?: kotlin.run(::stopForegroundServiceForDownloads)
+        } ?: kotlin.run {
+          stopForegroundServiceForDownloads()
+          // Cancel the last ongoing notification after detaching it from
+          // the foreground service if no active downloads are found.
+          downloadId?.let(::cancelNotificationForId)
+        }
       }
     }
+  }
+
+  private fun cancelNotificationForId(downloadId: Int) {
+    notificationManager.cancel(downloadId)
   }
 
   private val fetchListener = object : FetchListener {
@@ -199,7 +214,7 @@ class DownloadMonitorService : Service() {
           }
         }
         if (shouldSetForegroundNotification) {
-          setForegroundNotification()
+          setForegroundNotification(download.id)
         }
       }
     }
@@ -207,11 +222,12 @@ class DownloadMonitorService : Service() {
     private fun delete(download: Download) {
       updater.onNext {
         downloadRoomDao.delete(download)
-        setForegroundNotification()
+        setForegroundNotification(download.id)
       }
     }
   }
 
+  @Suppress("MagicNumber")
   private fun showDownloadCompletedNotification(download: Download) {
     downloadNotificationChannel()
     val notificationBuilder = getNotificationBuilder(download.id)
@@ -229,7 +245,12 @@ class DownloadMonitorService : Service() {
       .setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
       .setContentIntent(getPendingIntentForDownloadedNotification(download))
       .setAutoCancel(true)
-    notificationManager.notify(download.id, notificationBuilder.build())
+    // Assigning a new ID to the notification because the same ID is used for the foreground
+    // notification. If we use the same ID, changing the foreground notification for another
+    // ongoing download cancels the previous notification for that id, preventing the download
+    // complete notification from being displayed.
+    val downloadCompleteNotificationId = download.id + 33
+    notificationManager.notify(downloadCompleteNotificationId, notificationBuilder.build())
   }
 
   private fun getPendingIntentForDownloadedNotification(download: Download): PendingIntent {
