@@ -44,6 +44,10 @@ class IntroRobot : BaseRobot() {
       isVisible(TextId(string.save_books_offline))
       isVisible(TextId(string.download_books_message))
     }
+    attempt(10) {
+      isVisible(TextId(string.save_books_in_desired_storage))
+      isVisible(TextId(string.storage_location_hint))
+    }
   }
 
   infix fun clickGetStarted(func: TopLevelDestinationRobot.() -> Unit): TopLevelDestinationRobot {
