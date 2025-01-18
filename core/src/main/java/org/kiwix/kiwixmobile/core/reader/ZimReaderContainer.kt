@@ -18,7 +18,9 @@
 package org.kiwix.kiwixmobile.core.reader
 
 import android.webkit.WebResourceResponse
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
 import java.net.HttpURLConnection
 import javax.inject.Inject
@@ -32,11 +34,11 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
       field = value
     }
 
-  fun setZimReaderSource(zimReaderSource: ZimReaderSource?) {
+  suspend fun setZimReaderSource(zimReaderSource: ZimReaderSource?) {
     if (zimReaderSource == zimFileReader?.zimReaderSource) {
       return
     }
-    zimFileReader = runBlocking {
+    zimFileReader = withContext(Dispatchers.IO) {
       if (zimReaderSource?.exists() == true && zimReaderSource.canOpenInLibkiwix())
         zimFileReaderFactory.create(zimReaderSource)
       else null
