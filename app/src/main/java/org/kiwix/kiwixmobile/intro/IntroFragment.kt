@@ -65,7 +65,8 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
     fragmentIntroBinding?.viewPager?.let { viewPager ->
       views = arrayOf(
         layoutInflater.inflate(R.layout.item_intro_1, viewPager, false),
-        layoutInflater.inflate(R.layout.item_intro_2, viewPager, false)
+        layoutInflater.inflate(R.layout.item_intro_2, viewPager, false),
+        layoutInflater.inflate(R.layout.item_intro_3, viewPager, false)
       )
       viewPager.run {
         adapter = IntroPagerAdapter(views)
