@@ -109,6 +109,7 @@ import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.databinding.FragmentReaderBinding
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isLandScapeMode
@@ -1690,7 +1691,8 @@ abstract class CoreReaderFragment :
       if (zimReaderSource.canOpenInLibkiwix()) {
         // Show content if there is `Open Library` button showing
         // and we are opening the ZIM file
-        reopenBook()
+        hideNoBookOpenViews()
+        contentFrame?.visibility = View.VISIBLE
         openAndSetInContainer(zimReaderSource)
         updateTitle()
       } else {
@@ -1734,6 +1736,10 @@ abstract class CoreReaderFragment :
         mainMenu?.onFileOpened(urlIsValid())
         setUpBookmarks(zimFileReader)
       } ?: kotlin.run {
+        // If the ZIM file is not opened properly (especially for ZIM chunks), exit the book to
+        // disable all controls for this ZIM file. This prevents potential crashes.
+        // See issue #4161 for more details.
+        exitBook()
         requireActivity().toast(R.string.error_file_invalid, Toast.LENGTH_LONG)
       }
     }
@@ -2173,13 +2179,39 @@ abstract class CoreReaderFragment :
     }
   }
 
-  private fun openRandomArticle() {
+  /**
+   * Attempts to open a random article from the ZIM file. If the article URL cannot be retrieved
+   * due to internal errors or a missing ZIM file reader, the method will retry up to a certain
+   * number of times (default: 2). If the article URL is still unavailable after retries,
+   * an error message will be displayed to the user. The method ensures that the user does not
+   * see a blank or previously loaded page, but instead receives an appropriate error message
+   * if the random article cannot be fetched.
+   *
+   * @param retryCount The number of attempts left to retry fetching the random article.
+   *                   Default is 2. The method decreases this count with each retry attempt.
+   */
+  private fun openRandomArticle(retryCount: Int = 2) {
+    // Check if the ZIM file reader is available, if not show an error and exit.
+    if (zimReaderContainer?.zimFileReader == null) {
+      toast(R.string.error_loading_random_article_zim_not_loaded)
+      return
+    }
     val articleUrl = zimReaderContainer?.getRandomArticleUrl()
     if (articleUrl == null) {
       // Check if the random url is null due to some internal error in libzim(See #3926)
-      // then again try to get the random article. So that the user can see the random article
-      // instead of a (blank/same page) currently loaded in the webView.
-      openRandomArticle()
+      // then try one more time to get the random article. So that the user can see the
+      // random article instead of a (blank/same page) currently loaded in the webView.
+      if (retryCount > ZERO) {
+        Log.e(
+          TAG_KIWIX,
+          "Random article URL is null, retrying... Remaining attempts: $retryCount"
+        )
+        openRandomArticle(retryCount - 1)
+      } else {
+        // if it is failed to find the random article two times then show a error to user.
+        Log.e(TAG_KIWIX, "Failed to load random article after multiple attempts")
+        toast(R.string.could_not_find_random_article)
+      }
       return
     }
     Log.d(TAG_KIWIX, "openRandomArticle: $articleUrl")
