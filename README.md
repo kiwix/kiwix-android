@@ -69,50 +69,53 @@ available on our website to access the complete set of features.
 
 ## App variants
 
-Starting from version `3.12.0`, Kiwix now offers two variants of the application:
+Starting from version `3.12.0`, Kiwix is available in two variants which are slightly different:
 
-1. **PlayStore version:** App ID: `org.kiwix.kiwixmobile`.
-2. **Full version:** App ID: `org.kiwix.kiwixmobile.standalone` available on our [official
-repository](https://download.kiwix.org/release/kiwix-android/).
-   
-Both variants have the different app id meaning these are two different apps.
+- [Google Play version](https://android.kiwix.org/) using application id `org.kiwix.kiwixmobile`
+- [Full version](https://download.kiwix.org/release/kiwix-android/) using application id `org.kiwix.kiwixmobile.standalone`
 
-**What are the difference between these variants**
+### What are the difference between the two variants?
 
-The Play Store version has a limitation when it comes to scanning ZIM files from your storage,
-as mentioned in the [Important Notes](https://github.com/kiwix/kiwix-android?tab=readme-ov-file#important-notes).
-In contrast, the full version of the application can scan storage and load ZIM files directly from
-other storage locations via the file picker, without requiring them to be copied or moved
-to the app-specific directory. While the core functionality of both versions remains the same,
-the primary difference lies in the ability to access ZIM files from outside the app-specific directory.
+While the core functionalities remain the same, the primary difference
+lies in the ability to access ZIM files located outside the (Kiwix)
+reserved app directories.
 
-**Why two variants**
+The Google Play version has a limitation when it comes to scan and
+open ZIM files from anywhere in your device storage, as mentioned in
+the [Important Notes](#important-notes).
 
-To avoid confusion between the Play Store version and the full version, we introduced separate app
-IDs for each variant.
-Using the same app ID for both versions caused conflicts with the Play Store, as it treated them as
-the same app. This resulted in scenarios where the Play Store would prompt updates for the full
-version. If users updated through the Play Store, they would lose advanced file management
-capabilities (such as scanning storage or directly opening ZIM files using the file picker).
+In contrast, the full version of the application can load (and scan
+for) ZIM files directly from other storage locations via the file
+picker... without requiring them to be copied or moved to the reserved
+app directories.
 
-This separation ensures clarity for users and prevents undesirable behavior.
+### Why two variants?
 
-**How previous full version users move their content in this new app**
+To avoid confusion between the Google Play version and the full
+version, we introduced dedicated application ids (one for each
+variant). Using the same application id for both versions caused
+conflicts with the Google Play Store, as it treated them as the same
+app. This resulted in scenarios where Google Play would prompt updates
+for the full version. If users updated through the Play Store, they
+would lose advanced file management capabilities (such as scanning
+storage or directly opening ZIM files using the file picker).
 
-For user who are using the previous full version of the application can download the new version of
-application from our [official repository](https://download.kiwix.org/release/kiwix-android/), and
-move the bookmarks by exporting them from the previous version and importing them into new version of the app, the
-options are available in the "Settings" screen.
-For the already downloaded library move the ZIM files from
-"Android/media/org.kiwix.kiwixmobile/" or "Android/data/org.kiwix.kiwixmobile/" from both internal
-and SD card to other storage locations before uninstalling the previous full version of the app,
-the new version of the application can load your all ZIM files available in your storage location.
-You just need to swipe down on the "Library" screen and it will scan your storage and load your all
-ZIM files in the application.
+This separation ensures clarity for users and prevents undesirable
+behavior.
 
-The migration is a one-time process. After completing it, you can directly download the new version
-of the application from our [official repository](https://download.kiwix.org/release/kiwix-android/),
-and it will update your current full version of the app when you install it.
+### How to move content between two variants?
+
+You can move the bookmarks by exporting and reimporting them. The
+feature is available in the "Settings".
+
+Regarding ZIM files, you should move them to - or from - the reserved
+app directories `Android/media/org.kiwix.kiwixmobile/` or
+`Android/data/org.kiwix.kiwixmobile/`. This might have to be done for
+both internal storage and SD card.
+
+Kiwix can detect automatically all ZIM files available in your
+storage. You just need to swipe down in the local "Library" screen and
+it will scan your storage and recognize all your ZIM files.
 
 ## Android permissions needed
 
