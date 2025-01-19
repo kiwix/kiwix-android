@@ -43,7 +43,7 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
           UNIVERSAL_RELEASE_APK: app/build/outputs/apk/standalone/*universal*.apk
-          ARCHIVE_NAME: kiwix-${{ github.event.release.tag_name }}.apk
+          ARCHIVE_NAME: org.kiwix.kiwixmobile.standalone-${{ github.event.release.tag_name }}.apk
           KIWIX_ANDROID_RELEASE_DATE: ${{ env.KIWIX_ANDROID_RELEASE_DATE }}
         run: |
           ./gradlew assembleStandalone
