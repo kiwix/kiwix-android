@@ -19,16 +19,16 @@
 package org.kiwix.kiwixmobile.main
 
 import android.content.Intent
-import android.content.pm.ShortcutInfo
-import android.content.pm.ShortcutManager
 import android.content.res.Configuration
-import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.graphics.drawable.IconCompat
 import androidx.core.os.ConfigurationCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -45,8 +45,8 @@ import eu.mhutti1.utils.storage.StorageDeviceUtils
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.BuildConfig
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.R.drawable
+import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.R.mipmap
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
@@ -56,6 +56,7 @@ import org.kiwix.kiwixmobile.core.extensions.applyEdgeToEdgeInsets
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.databinding.ActivityKiwixMainBinding
@@ -66,6 +67,7 @@ import javax.inject.Inject
 const val NAVIGATE_TO_ZIM_HOST_FRAGMENT = "navigate_to_zim_host_fragment"
 const val ACTION_GET_CONTENT = "GET_CONTENT"
 const val OPENING_ZIM_FILE_DELAY = 300L
+const val GET_CONTENT_SHORTCUT_ID = "get_content_shortcut"
 
 class KiwixMainActivity : CoreMainActivity() {
   private var actionMode: ActionMode? = null
@@ -324,13 +326,27 @@ class KiwixMainActivity : CoreMainActivity() {
   override fun getIconResId() = mipmap.ic_launcher
 
   override fun createApplicationShortcuts() {
-    val shortcutManager = getSystemService(ShortcutManager::class.java)
+    // Remove previously added dynamic shortcuts for old ids if any found.
+    removeOutdatedIdShortcuts()
+    ShortcutManagerCompat.addDynamicShortcuts(this, dynamicShortcutList())
+  }
 
+  // Outdated shortcut ids(new_tab, get_content)
+  // Remove if the application has the outdated shortcuts.
+  private fun removeOutdatedIdShortcuts() {
+    ShortcutManagerCompat.getDynamicShortcuts(this).forEach {
+      if (it.id == "new_tab" || it.id == "get_content") {
+        ShortcutManagerCompat.removeDynamicShortcuts(this, arrayListOf(it.id))
+      }
+    }
+  }
+
+  private fun dynamicShortcutList(): List<ShortcutInfoCompat> {
     // Create a shortcut for opening the "New tab"
-    val newTabShortcut = ShortcutInfo.Builder(this, "new_tab")
+    val newTabShortcut = ShortcutInfoCompat.Builder(this, NEW_TAB_SHORTCUT_ID)
       .setShortLabel(getString(string.new_tab_shortcut_label))
       .setLongLabel(getString(string.new_tab_shortcut_label))
-      .setIcon(Icon.createWithResource(this, drawable.ic_shortcut_new_tab))
+      .setIcon(IconCompat.createWithResource(this, drawable.ic_shortcut_new_tab))
       .setDisabledMessage(getString(string.shortcut_disabled_message))
       .setIntent(
         Intent(this, KiwixMainActivity::class.java).apply {
@@ -340,10 +356,10 @@ class KiwixMainActivity : CoreMainActivity() {
       .build()
 
     // create a shortCut for opening the online fragment.
-    val getContentShortcut = ShortcutInfo.Builder(this, "get_content")
+    val getContentShortcut = ShortcutInfoCompat.Builder(this, GET_CONTENT_SHORTCUT_ID)
       .setShortLabel(getString(string.get_content_shortcut_label))
       .setLongLabel(getString(string.get_content_shortcut_label))
-      .setIcon(Icon.createWithResource(this, drawable.ic_shortcut_get_content))
+      .setIcon(IconCompat.createWithResource(this, drawable.ic_shortcut_get_content))
       .setDisabledMessage(getString(string.shortcut_disabled_message))
       .setIntent(
         Intent(this, KiwixMainActivity::class.java).apply {
@@ -351,6 +367,7 @@ class KiwixMainActivity : CoreMainActivity() {
         }
       )
       .build()
-    shortcutManager.dynamicShortcuts = listOf(newTabShortcut, getContentShortcut)
+
+    return listOf(newTabShortcut, getContentShortcut)
   }
 }
