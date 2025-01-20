@@ -1387,9 +1387,7 @@ abstract class CoreReaderFragment :
       Snackbar.make(it, R.string.tab_closed, Snackbar.LENGTH_LONG)
         .setAction(R.string.undo) { undoButton ->
           undoButton.isEnabled = false
-          coreReaderLifeCycleScope?.launch {
-            restoreDeletedTab(index)
-          }
+          restoreDeletedTab(index)
         }.show()
     }
     openHomeScreen()
@@ -1432,7 +1430,7 @@ abstract class CoreReaderFragment :
     }
   }
 
-  private suspend fun restoreDeletedTab(index: Int) {
+  private fun restoreDeletedTab(index: Int) {
     if (webViewList.isEmpty()) {
       reopenBook()
     }
@@ -1447,7 +1445,7 @@ abstract class CoreReaderFragment :
           LinearLayout.LayoutParams.MATCH_PARENT
         )
       }
-      zimReaderContainer?.setZimReaderSource(tempZimSourceForUndo)
+      // zimReaderContainer?.setZimReaderSource(tempZimSourceForUndo)
       webViewList.add(index, it)
       tabsAdapter?.notifyDataSetChanged()
       snackBarRoot?.let { root ->
@@ -1878,9 +1876,7 @@ abstract class CoreReaderFragment :
         setAction(R.string.undo) {
           it.isEnabled = false // to prevent multiple clicks on this button
           setIsCloseAllTabButtonClickable(true)
-          coreReaderLifeCycleScope?.launch {
-            restoreDeletedTabs()
-          }
+          restoreDeletedTabs()
         }
       }.show()
     }
@@ -1890,9 +1886,9 @@ abstract class CoreReaderFragment :
     closeAllTabsButton?.isClickable = isClickable
   }
 
-  private suspend fun restoreDeletedTabs() {
+  private fun restoreDeletedTabs() {
     if (tempWebViewListForUndo.isNotEmpty()) {
-      zimReaderContainer?.setZimReaderSource(tempZimSourceForUndo)
+      // zimReaderContainer?.setZimReaderSource(tempZimSourceForUndo)
       webViewList.addAll(tempWebViewListForUndo)
       tabsAdapter?.notifyDataSetChanged()
       snackBarRoot?.let { root ->
