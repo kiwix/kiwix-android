@@ -44,15 +44,7 @@ class NotesViewModel @Inject constructor(
   }
 
   override fun initialState(): NotesState =
-    NotesState(
-      emptyList(),
-      sharedPreferenceUtil.showNotesAllBooks,
-      zimReaderContainer.id,
-      isLoading = false
-    )
-
-  override fun loadData(state: NotesState, action: Action.LoadingData): NotesState =
-    state.copy(isLoading = action.isLoading)
+    NotesState(emptyList(), sharedPreferenceUtil.showNotesAllBooks, zimReaderContainer.id)
 
   override fun updatePagesBasedOnFilter(state: NotesState, action: Action.Filter): NotesState =
     state.copy(searchTerm = action.searchTerm)
@@ -78,5 +70,5 @@ class NotesViewModel @Inject constructor(
     ShowDeleteNotesDialog(effects, state, pageDao, viewModelScope)
 
   override fun onItemClick(page: Page) =
-    ShowOpenNoteDialog(effects, actions, page, zimReaderContainer)
+    ShowOpenNoteDialog(effects, page, zimReaderContainer)
 }

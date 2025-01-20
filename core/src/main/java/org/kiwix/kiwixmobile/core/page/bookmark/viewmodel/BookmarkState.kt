@@ -26,8 +26,7 @@ data class BookmarkState(
   override val pageItems: List<LibkiwixBookmarkItem>,
   override val showAll: Boolean,
   override val currentZimId: String?,
-  override val searchTerm: String = "",
-  override val isLoading: Boolean
+  override val searchTerm: String = ""
 ) : PageState<LibkiwixBookmarkItem>() {
   override val visiblePageItems: List<PageRelated> = filteredPageItems
 

@@ -43,7 +43,6 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.databinding.FragmentPageBinding
-import org.kiwix.kiwixmobile.core.downloader.downloadManager.FIVE
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
@@ -196,31 +195,14 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     pageAdapter.items = state.visiblePageItems
     fragmentPageBinding?.pageSwitch?.isEnabled = !state.isInSelectionState
     fragmentPageBinding?.noPage?.visibility = if (state.pageItems.isEmpty()) VISIBLE else GONE
-    when {
-      state.isInSelectionState -> {
-        if (actionMode == null) {
-          actionMode =
-            (requireActivity() as AppCompatActivity).startSupportActionMode(actionModeCallback)
-        }
-        actionMode?.title = getString(R.string.selected_items, state.numberOfSelectedItems())
+    if (state.isInSelectionState) {
+      if (actionMode == null) {
+        actionMode =
+          (requireActivity() as AppCompatActivity).startSupportActionMode(actionModeCallback)
       }
-
-      state.isLoading -> {
-        fragmentPageBinding?.loadingZimfileContent?.apply {
-          if (state.isLoading) {
-            progress = FIVE
-            visibility = View.VISIBLE
-            show()
-          } else {
-            visibility = View.GONE
-            hide()
-          }
-        }
-      }
-
-      else -> {
-        actionMode?.finish()
-      }
+      actionMode?.title = getString(R.string.selected_items, state.numberOfSelectedItems())
+    } else {
+      actionMode?.finish()
     }
   }
 
