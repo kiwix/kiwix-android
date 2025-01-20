@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.databinding.FragmentPageBinding
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.FIVE
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
@@ -205,7 +206,16 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
       }
 
       state.isLoading -> {
-        fragmentPageBinding?.loadingZimfileContent?.visibility = View.VISIBLE
+        fragmentPageBinding?.loadingZimfileContent?.apply {
+          if (state.isLoading) {
+            progress = FIVE
+            visibility = View.VISIBLE
+            show()
+          } else {
+            visibility = View.GONE
+            hide()
+          }
+        }
       }
 
       else -> {
