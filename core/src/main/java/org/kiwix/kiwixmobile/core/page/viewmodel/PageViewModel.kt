@@ -32,6 +32,7 @@ import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Exit
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.ExitActionModeMenu
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.LoadingData
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
@@ -88,7 +89,10 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
     is OnItemLongClick -> handleItemLongClick(state, action)
     is Filter -> updatePagesBasedOnFilter(state, action)
     is UpdatePages -> updatePages(state, action)
+    is LoadingData -> loadData(state, action)
   }
+
+  abstract fun loadData(state: S, action: LoadingData): S
 
   abstract fun updatePagesBasedOnFilter(state: S, action: Filter): S
 
