@@ -159,12 +159,25 @@ class KiwixReaderFragment : CoreReaderFragment() {
   override fun openHomeScreen() {
     Handler(Looper.getMainLooper()).postDelayed({
       if (webViewList.size == 0) {
-        hideTabSwitcher()
+        hideTabSwitcher(false)
       }
     }, HIDE_TAB_SWITCHER_DELAY)
   }
 
-  override fun hideTabSwitcher() {
+  /**
+   * Hides the tab switcher and optionally closes the ZIM book based on the `shouldCloseZimBook` parameter.
+   *
+   * @param shouldCloseZimBook If `true`, the ZIM book will be closed, and the `ZimFileReader` will be set to `null`.
+   * If `false`, it skips setting the `ZimFileReader` to `null`. This is particularly useful when restoring tabs,
+   * as setting the `ZimFileReader` to `null` would require re-creating it, which is a resource-intensive operation,
+   * especially for large ZIM files.
+   *
+   * Refer to the following methods for more details:
+   * @See exitBook
+   * @see closeTab
+   * @see closeAllTabs
+   */
+  override fun hideTabSwitcher(shouldCloseZimBook: Boolean) {
     actionBar?.let { actionBar ->
       actionBar.setDisplayShowTitleEnabled(true)
       toolbar?.let { activity?.setupDrawerToggle(it, true) }
@@ -181,7 +194,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       }
       mainMenu?.showWebViewOptions(true)
       if (webViewList.isEmpty()) {
-        exitBook()
+        exitBook(shouldCloseZimBook)
       } else {
         // Reset the top margin of web views to 0 to remove any previously set margin
         // This ensures that the web views are displayed without any additional
