@@ -24,15 +24,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
-import org.kiwix.kiwixmobile.core.main.AddNoteDialog.Companion.ARTICLE_URL
-import org.kiwix.kiwixmobile.core.main.AddNoteDialog.Companion.NOTES_TITLE
-import org.kiwix.kiwixmobile.core.main.AddNoteDialog.Companion.NOTE_FILE_PATH
+import org.kiwix.kiwixmobile.core.main.AddNoteDialog.Companion.NOTE_LIST_ITEM_TAG
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 
 class OpenNote(
-  private val noteFilePath: String,
-  private val zimFileUrl: String,
-  private val title: String,
+  private val noteListItem: NoteListItem
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     activity as CoreMainActivity
@@ -49,9 +46,7 @@ class OpenNote(
     if (previousInstance == null) {
       val dialogFragment = AddNoteDialog()
       val bundle = Bundle().apply {
-        putString(NOTE_FILE_PATH, noteFilePath)
-        putString(ARTICLE_URL, zimFileUrl)
-        putString(NOTES_TITLE, title)
+        putSerializable(NOTE_LIST_ITEM_TAG, noteListItem)
       }
       dialogFragment.arguments = bundle
       dialogFragment.show(fragmentTransaction, AddNoteDialog.TAG)
