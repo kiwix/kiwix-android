@@ -129,10 +129,10 @@ class LibkiwixBookmarks @Inject constructor(
     } ?: emptyList()
   }
 
-  fun bookmarkUrlsForCurrentBook(zimFileReader: ZimFileReader): Flowable<List<String>> =
+  fun bookmarkUrlsForCurrentBook(zimId: String): Flowable<List<String>> =
     flowableBookmarkList()
       .map { bookmarksList ->
-        bookmarksList.filter { it.zimId == zimFileReader.id }
+        bookmarksList.filter { it.zimId == zimId }
           .map(LibkiwixBookmarkItem::bookmarkUrl)
       }
       .subscribeOn(Schedulers.io())
