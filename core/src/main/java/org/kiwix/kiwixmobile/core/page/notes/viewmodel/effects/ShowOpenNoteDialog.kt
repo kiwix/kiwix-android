@@ -44,7 +44,7 @@ data class ShowOpenNoteDialog(
       { effects.offer(OpenPage(page, zimReaderContainer)) },
       {
         val item = page as NoteListItem
-        effects.offer(OpenNote(item.noteFilePath, item.zimUrl, item.title))
+        effects.offer(OpenNote(item))
       }
     )
   }
