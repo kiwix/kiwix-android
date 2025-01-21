@@ -1800,7 +1800,7 @@ abstract class CoreReaderFragment :
   protected fun setUpBookmarks(zimFileReader: ZimFileReader) {
     safeDispose()
     bookmarkingDisposable = Flowable.combineLatest(
-      libkiwixBookmarks?.bookmarkUrlsForCurrentBook(zimFileReader),
+      libkiwixBookmarks?.bookmarkUrlsForCurrentBook(zimFileReader.id),
       webUrlsProcessor,
       List<String?>::contains
     )
