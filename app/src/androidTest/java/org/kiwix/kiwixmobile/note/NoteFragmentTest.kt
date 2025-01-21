@@ -201,17 +201,12 @@ class NoteFragmentTest : BaseActivityTest() {
     }
     loadZimFileInReader("testzim.zim")
     note {
+      assertHomePageIsLoadedOfTestZimFile()
       clickOnNoteMenuItem(context)
       assertNoteDialogDisplayed()
       writeDemoNote()
       saveNote()
       pressBack()
-    }
-
-    // switch the zim file so that we can test this scenario where opening
-    // the zim file properly open in the reader screen.
-    loadZimFileInReader("small.zim")
-    note {
       openNoteFragment()
       assertToolbarExist()
       assertNoteRecyclerViewExist()
@@ -222,9 +217,6 @@ class NoteFragmentTest : BaseActivityTest() {
       pressBack()
       // to close the notes fragment.
       pressBack()
-
-      // now test the testzim.zim file is successfully loaded in the ZimFileReader.
-      assertHomePageIsLoadedOfTestZimFile()
     }
   }
 

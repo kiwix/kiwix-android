@@ -42,6 +42,7 @@ import org.kiwix.sharedFunctions.bookOnDisk
 import org.kiwix.sharedFunctions.resetSchedulers
 import org.kiwix.sharedFunctions.setScheduler
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 class StorageObserverTest {
 
@@ -106,6 +107,7 @@ class StorageObserverTest {
     .also {
       downloads.offer(listOf(downloadModel))
       files.offer(listOf(file))
+      it.awaitDone(2, TimeUnit.SECONDS)
     }
 
   private fun withFiltering() {

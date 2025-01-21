@@ -110,12 +110,12 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
   abstract fun copyWithNewItems(state: S, newItems: List<T>): S
 
   private fun handleItemClick(state: S, action: Action.OnItemClick): S {
+    if (state.isInSelectionState) {
+      return copyWithNewItems(state, state.getItemsAfterToggleSelectionOfItem(action.page))
+    }
     if (::pageViewModelClickListener.isInitialized) {
       effects.offer(pageViewModelClickListener.onItemClick(action.page))
     } else {
-      if (state.isInSelectionState) {
-        return copyWithNewItems(state, state.getItemsAfterToggleSelectionOfItem(action.page))
-      }
       effects.offer(OpenPage(action.page, zimReaderContainer))
     }
     return state

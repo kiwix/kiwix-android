@@ -3,8 +3,8 @@ package org.kiwix.kiwixmobile.core.page.notes.adapter
 import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import java.io.Serializable
 
 data class NoteListItem(
   val databaseId: Long = 0L,
@@ -17,7 +17,7 @@ data class NoteListItem(
   override var isSelected: Boolean = false,
   override val url: String = zimUrl,
   override val id: Long = databaseId
-) : Page {
+) : Page, Serializable {
 
   constructor(notesEntity: NotesEntity) : this(
     notesEntity.id,
@@ -30,16 +30,18 @@ data class NoteListItem(
   )
 
   constructor(
+    zimId: String,
     title: String,
+    zimReaderSource: ZimReaderSource?,
     url: String,
-    noteFilePath: String,
-    zimFileReader: ZimFileReader
+    favicon: String?,
+    noteFilePath: String
   ) : this(
-    zimId = zimFileReader.id,
+    zimId = zimId,
     title = title,
-    zimReaderSource = zimFileReader.zimReaderSource,
+    zimReaderSource = zimReaderSource,
     zimUrl = url,
-    favicon = zimFileReader.favicon,
+    favicon = favicon,
     noteFilePath = noteFilePath
   )
 

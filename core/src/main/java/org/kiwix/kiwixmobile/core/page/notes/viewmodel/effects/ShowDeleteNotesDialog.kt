@@ -29,7 +29,6 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.effects.DeletePageItems
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteAllNotes
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteSelectedNotes
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import javax.inject.Inject
 
 data class ShowDeleteNotesDialog(
@@ -41,7 +40,6 @@ data class ShowDeleteNotesDialog(
   @Inject lateinit var dialogShower: DialogShower
   override fun invokeWith(activity: AppCompatActivity) {
     activity.cachedComponent.inject(this)
-    Log.d("invoke", "invokeWith: invoked")
     dialogShower.show(
       if (state.isInSelectionState) DeleteSelectedNotes else DeleteAllNotes,
       {
