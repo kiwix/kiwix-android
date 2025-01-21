@@ -421,9 +421,7 @@ class AddNoteDialog : DialogFragment() {
           zimReaderSource = zimReaderSource,
           favicon = favicon,
         )
-        mainRepositoryActions.saveNote(noteToSave).also {
-          Log.e(TAG, "addNoteToDao: $noteToSave")
-        }
+        mainRepositoryActions.saveNote(noteToSave)
       } else {
         Log.d(TAG, "Cannot process with empty zim url or noteFilePath")
       }
