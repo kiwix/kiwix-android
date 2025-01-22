@@ -437,7 +437,9 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
         )
       } else {
         zimFileUri = uri
-        if (requestExternalStorageWritePermission()) {
+        if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
+          showManageExternalStoragePermissionDialog()
+        } else if (requestExternalStorageWritePermission()) {
           getZimFileFromUri(uri)?.let(::navigateToReaderFragment)
         }
       }
