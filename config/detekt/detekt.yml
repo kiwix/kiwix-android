@@ -106,7 +106,6 @@ complexity:
     ignoreDeprecated: false
     ignorePrivate: false
     ignoreOverridden: false
-    ignoreAnnotatedFunctions: ['Preview']
 
 coroutines:
   active: true
@@ -262,7 +261,7 @@ naming:
   TopLevelPropertyNaming:
     active: true
     excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
-    constantPattern: '[A-Z][A-Za-z0-9]*'
+    constantPattern: '[A-Z][_A-Z0-9]*'
     propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
     privatePropertyPattern: '_?[A-Za-z][_A-Za-z0-9]*'
   VariableMaxLength:
@@ -476,6 +475,7 @@ style:
   UnusedPrivateMember:
     active: false
     allowedNames: "(_|ignored|expected|serialVersionUID)"
+    ignoreAnnotated: ['Preview']
   UseArrayLiteralsInAnnotations:
     active: false
   UseCheckOrError:
