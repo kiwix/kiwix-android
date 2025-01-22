@@ -118,6 +118,14 @@ sealed class KiwixDialog(
     cancelable = false
   )
 
+  data object ShowWarningAboutSplittedZimFile : KiwixDialog(
+    R.string.verify_zim_chunk_dialog_title,
+    R.string.verify_zim_chunks_dialog_message,
+    android.R.string.ok,
+    null,
+    cancelable = false
+  )
+
   object SaveOrOpenUnsupportedFiles : KiwixDialog(
     R.string.save_or_open_unsupported_files_dialog_title,
     R.string.save_or_open_unsupported_files_dialog_message,

@@ -20,6 +20,7 @@ package eu.mhutti1.utils.storage
 
 import android.content.Context
 import android.content.ContextWrapper
+import android.os.Build
 import android.os.Environment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -52,7 +53,9 @@ object StorageDeviceUtils {
       // In the Play Store variant, we can only access app-specific directories,
       // so scanning other directories is unnecessary, wastes resources,
       // and increases the scanning time.
-      if (sharedPreferenceUtil?.isNotPlayStoreBuildWithAndroid11OrAbove() == true) {
+      if (sharedPreferenceUtil?.isPlayStoreBuild == false ||
+        Build.VERSION.SDK_INT < Build.VERSION_CODES.R
+      ) {
         addAll(externalMountPointDevices())
         addAll(externalFilesDirsDevices(context, false))
       }

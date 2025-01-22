@@ -77,6 +77,7 @@ const val FIND_IN_PAGE_SEARCH_STRING = "findInPageSearchString"
 const val ZIM_FILE_URI_KEY = "zimFileUri"
 const val KIWIX_INTERNAL_ERROR = 10
 const val ACTION_NEW_TAB = "NEW_TAB"
+const val NEW_TAB_SHORTCUT_ID = "new_tab_shortcut"
 
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 

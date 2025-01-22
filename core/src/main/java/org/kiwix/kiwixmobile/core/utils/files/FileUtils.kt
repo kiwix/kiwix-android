@@ -490,6 +490,19 @@ object FileUtils {
     filePath.endsWith(".zim") || filePath.endsWith(".zimaa")
 
   /**
+   * Determines whether the given file path corresponds to a split ZIM file.
+   *
+   * A split ZIM file has an extension that starts with ".zima" followed by a single character,
+   * such as ".zimaa", ".zimab", etc. This method checks if the file path ends with this specific pattern.
+   *
+   * @param filePath The file path to evaluate.
+   * @return `true` if the file path corresponds to a split ZIM file, `false` otherwise.
+   */
+  @JvmStatic
+  fun isSplittedZimFile(filePath: String): Boolean =
+    filePath.matches(Regex(".*\\.zima.$"))
+
+  /**
    * Get the main storage path for a given storage name (SD card or USB stick).
    *
    * @param context The application context.

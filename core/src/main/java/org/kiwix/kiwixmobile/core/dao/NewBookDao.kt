@@ -55,7 +55,10 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
         .toList()
         .toFlowable()
         .flatMap { booksList ->
-          completableFromCoroutine { removeBooksThatDoNotExist(booksList.toMutableList()) }
+          completableFromCoroutine {
+            removeBooksThatAreInTrashFolder(booksList)
+            removeBooksThatDoNotExist(booksList.toMutableList())
+          }
             .andThen(io.reactivex.rxjava3.core.Flowable.just(booksList))
         }
     }
@@ -68,7 +71,9 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
               bookOnDiskEntity to exists
             }
         }
-        .filter(Pair<BookOnDiskEntity, Boolean>::second)
+        .filter { (bookOnDiskEntity, exists) ->
+          exists && !isInTrashFolder(bookOnDiskEntity.zimReaderSource.toDatabase())
+        }
         .map(Pair<BookOnDiskEntity, Boolean>::first)
         .toList()
         .toFlowable()
@@ -149,6 +154,15 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
   private suspend fun removeBooksThatDoNotExist(books: MutableList<BookOnDiskEntity>) {
     delete(books.filterNot { it.zimReaderSource.exists() })
   }
+
+  // Remove the existing books from database which are showing on the library screen.
+  private fun removeBooksThatAreInTrashFolder(books: List<BookOnDiskEntity>) {
+    delete(books.filter { isInTrashFolder(it.zimReaderSource.toDatabase()) })
+  }
+
+  // Check if any existing ZIM file showing on the library screen which is inside the trash folder.
+  private fun isInTrashFolder(filePath: String) =
+    Regex("/\\.Trash/").containsMatchIn(filePath)
 
   private fun delete(books: List<BookOnDiskEntity>) {
     box.remove(books)
