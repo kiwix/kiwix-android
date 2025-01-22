@@ -132,6 +132,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   private var fragmentDestinationLibraryBinding: FragmentDestinationLibraryBinding? = null
   private var permissionDeniedLayoutShowing = false
   private var fileSelectListState: FileSelectListState? = null
+  private var zimFileUri: Uri? = null
 
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
@@ -371,7 +372,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     fragmentDestinationLibraryBinding?.selectFile?.setOnClickListener {
       if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
         showManageExternalStoragePermissionDialog()
-      } else {
+      } else if (requestExternalStorageWritePermission()) {
         showFileChooser()
       }
     }
@@ -435,7 +436,12 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
           parentFragmentManager
         )
       } else {
-        getZimFileFromUri(uri)?.let(::navigateToReaderFragment)
+        zimFileUri = uri
+        if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
+          showManageExternalStoragePermissionDialog()
+        } else if (requestExternalStorageWritePermission()) {
+          getZimFileFromUri(uri)?.let(::navigateToReaderFragment)
+        }
       }
     }
   }
@@ -510,6 +516,9 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     storagePermissionLauncher = null
     copyMoveFileHandler?.dispose()
     copyMoveFileHandler = null
+    readStoragePermissionLauncher?.unregister()
+    readStoragePermissionLauncher = null
+    zimFileUri = null
   }
 
   private fun sideEffects() = zimManageViewModel.sideEffects
@@ -709,5 +718,60 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
 
   private fun showWarningDialogForSplittedZimFile() {
     dialogShower.show(KiwixDialog.ShowWarningAboutSplittedZimFile)
+  }
+
+  private var readStoragePermissionLauncher: ActivityResultLauncher<Array<String>>? =
+    registerForActivityResult(
+      ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissionResult ->
+      val isGranted =
+        permissionResult.entries.all(
+          Map.Entry<String, @kotlin.jvm.JvmSuppressWildcards Boolean>::value
+        )
+      if (isGranted) {
+        zimFileUri?.let {
+          // open the selected ZIM file in reader.
+          lifecycleScope.launch {
+            getZimFileFromUri(it)?.let(::navigateToReaderFragment)
+          }
+        }
+      } else {
+        if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+          /* shouldShowRequestPermissionRationale() returns false when:
+             *  1) User has previously checked on "Don't ask me again", and/or
+             *  2) Permission has been disabled on device
+             */
+          requireActivity().toast(string.request_storage, Toast.LENGTH_LONG)
+        } else {
+          dialogShower.show(
+            KiwixDialog.ReadPermissionRequired,
+            requireActivity()::navigateToAppSettings
+          )
+        }
+      }
+    }
+
+  @Suppress("NestedBlockDepth")
+  private fun requestExternalStorageWritePermission(): Boolean {
+    var isPermissionGranted = false
+    if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() &&
+      Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+    ) {
+      if (requireActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        == PackageManager.PERMISSION_GRANTED
+      ) {
+        isPermissionGranted = true
+      } else {
+        readStoragePermissionLauncher?.launch(
+          arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+          )
+        )
+      }
+    } else {
+      isPermissionGranted = true
+    }
+    return isPermissionGranted
   }
 }
