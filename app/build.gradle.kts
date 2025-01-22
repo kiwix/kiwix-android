@@ -11,6 +11,8 @@ import javax.xml.transform.stream.StreamResult
 plugins {
   android
   id("com.github.triplet.play") version Versions.com_github_triplet_play_gradle_plugin
+  id("org.jetbrains.kotlin.android")
+  id("org.jetbrains.kotlin.plugin.compose") version "2.1.0"
 }
 if (hasProperty("testingMinimizedBuild")) {
   apply(plugin = "com.slack.keeper")
@@ -108,6 +110,13 @@ android {
     // is analyzed to provide actionable feedback on potential issues with dependencies.
     includeInBundle = true
   }
+
+  buildFeatures {
+    compose = true
+  }
+  composeOptions {
+    kotlinCompilerExtensionVersion = "1.5.15"
+  }
 }
 
 play {
@@ -129,6 +138,23 @@ androidComponents {
 dependencies {
   androidTestImplementation(Libs.leakcanary_android_instrumentation)
   testImplementation(Libs.kotlinx_coroutines_test)
+
+  implementation("androidx.compose.material3:material3-android:1.3.1")
+  implementation("androidx.activity:activity-compose:1.9.3")
+
+  implementation("androidx.compose.ui:ui:1.7.6")
+  implementation("androidx.compose.material:material:1.7.6")
+
+  implementation(platform("androidx.compose:compose-bom:2024.12.01"))
+  implementation("androidx.compose.ui:ui")
+  implementation("androidx.compose.ui:ui-tooling-preview")
+  implementation("androidx.compose.material:material")
+  implementation("androidx.compose.runtime:runtime-livedata")
+  implementation("androidx.compose.runtime:runtime-rxjava2")
+
+  // For testing
+  androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.7.6")
+  debugImplementation("androidx.compose.ui:ui-tooling")
 }
 task("generateVersionCodeAndName") {
   val file = File("VERSION_INFO")
