@@ -283,11 +283,16 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
   }
 
-  open fun disableDrawer() {
+  open fun disableDrawer(disableRightDrawer: Boolean = true) {
     drawerToggle?.isDrawerIndicatorEnabled = false
     drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-    // Disable the right drawer
-    drawerContainerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.END)
+    if (disableRightDrawer) {
+      // Disable the right drawer
+      drawerContainerLayout.setDrawerLockMode(
+        DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
+        GravityCompat.END
+      )
+    }
   }
 
   open fun onNavigationItemSelected(item: MenuItem): Boolean {
