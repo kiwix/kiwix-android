@@ -1643,12 +1643,29 @@ abstract class CoreReaderFragment :
     return true
   }
 
+  /**
+   * Handles the toggling of fullscreen video mode and adjusts the drawer's behavior accordingly.
+   * - If a video is playing in fullscreen mode, the drawer is disabled to restrict interactions.
+   * - When fullscreen mode is exited, the drawer is re-enabled unless the reader is still
+   *   in fullscreen mode.
+   * - Specifically, if the reader is in fullscreen mode and the user plays a video in
+   *   fullscreen, then exits the video's fullscreen mode, the drawer remains disabled
+   *   because the reader is still in fullscreen mode.
+   */
   override fun onFullscreenVideoToggled(isFullScreen: Boolean) {
-    // does nothing because custom doesn't have a nav bar
+    if (isFullScreen) {
+      (requireActivity() as CoreMainActivity).disableDrawer(false)
+    } else {
+      if (!isInFullScreenMode()) {
+        toolbar?.let(::setUpDrawerToggle)
+        setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+      }
+    }
   }
 
   @Suppress("MagicNumber")
   protected open fun openFullScreen() {
+    (requireActivity() as CoreMainActivity).disableDrawer(false)
     toolbarContainer?.visibility = View.GONE
     bottomToolbar?.visibility = View.GONE
     exitFullscreenButton?.visibility = View.VISIBLE
@@ -1664,6 +1681,8 @@ abstract class CoreReaderFragment :
 
   @Suppress("MagicNumber")
   open fun closeFullScreen() {
+    toolbar?.let(::setUpDrawerToggle)
+    setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     sharedPreferenceUtil?.putPrefFullScreen(false)
     toolbarContainer?.visibility = View.VISIBLE
     updateBottomToolbarVisibility()

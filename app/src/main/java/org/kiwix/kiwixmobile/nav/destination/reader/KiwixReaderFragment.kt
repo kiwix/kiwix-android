@@ -308,6 +308,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     } else {
       showNavBar()
     }
+    super.onFullscreenVideoToggled(isFullScreen)
   }
 
   override fun openFullScreen() {
