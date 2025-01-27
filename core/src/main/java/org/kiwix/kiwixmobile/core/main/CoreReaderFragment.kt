@@ -860,7 +860,13 @@ abstract class CoreReaderFragment :
     view?.startAnimation(AnimationUtils.loadAnimation(view.context, anim))
   }
 
-  protected open fun hideTabSwitcher() {
+  /**
+   * @param shouldCloseZimBook A flag to indicate whether the ZIM book should be closed.
+   *        - Default is `true`, which ensures normal behavior for most scenarios.
+   *        - If `false`, the ZIM book is not closed. This is useful in cases where the user restores tabs,
+   *          as closing the ZIM book would require reloading the ZIM file, which can be a resource-intensive operation.
+   */
+  protected open fun hideTabSwitcher(shouldCloseZimBook: Boolean = true) {
     actionBar?.apply {
       setDisplayShowTitleEnabled(true)
     }
@@ -1388,7 +1394,17 @@ abstract class CoreReaderFragment :
         .setAction(R.string.undo) { undoButton ->
           undoButton.isEnabled = false
           restoreDeletedTab(index)
-        }.show()
+        }.addCallback(object : Snackbar.Callback() {
+          override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+            super.onDismissed(transientBottomBar, event)
+            // If the undo button is not clicked and no tabs are left, exit the book and
+            // clean up resources.
+            if (event != DISMISS_EVENT_ACTION && webViewList.isEmpty()) {
+              closeZimBook()
+            }
+          }
+        })
+        .show()
     }
     openHomeScreen()
   }
@@ -1399,18 +1415,22 @@ abstract class CoreReaderFragment :
     mainMenu?.showBookSpecificMenuItems()
   }
 
-  protected fun exitBook() {
+  protected fun exitBook(shouldCloseZimBook: Boolean = true) {
     showNoBookOpenViews()
     bottomToolbar?.visibility = View.GONE
     actionBar?.title = getString(R.string.reader)
     contentFrame?.visibility = View.GONE
     hideProgressBar()
     mainMenu?.hideBookSpecificMenuItems()
-    closeZimBook()
+    if (shouldCloseZimBook) {
+      closeZimBook()
+    }
   }
 
   fun closeZimBook() {
-    zimReaderContainer?.setZimReaderSource(null)
+    lifecycleScope.launch {
+      zimReaderContainer?.setZimReaderSource(null)
+    }
   }
 
   protected fun showProgressBarWithProgress(progress: Int) {
@@ -1443,7 +1463,6 @@ abstract class CoreReaderFragment :
           LinearLayout.LayoutParams.MATCH_PARENT
         )
       }
-      zimReaderContainer?.setZimReaderSource(tempZimSourceForUndo)
       webViewList.add(index, it)
       tabsAdapter?.notifyDataSetChanged()
       snackBarRoot?.let { root ->
@@ -1800,7 +1819,7 @@ abstract class CoreReaderFragment :
   protected fun setUpBookmarks(zimFileReader: ZimFileReader) {
     safeDispose()
     bookmarkingDisposable = Flowable.combineLatest(
-      libkiwixBookmarks?.bookmarkUrlsForCurrentBook(zimFileReader),
+      libkiwixBookmarks?.bookmarkUrlsForCurrentBook(zimFileReader.id),
       webUrlsProcessor,
       List<String?>::contains
     )
@@ -1876,7 +1895,16 @@ abstract class CoreReaderFragment :
           setIsCloseAllTabButtonClickable(true)
           restoreDeletedTabs()
         }
-      }.show()
+      }.addCallback(object : Snackbar.Callback() {
+        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+          super.onDismissed(transientBottomBar, event)
+          // If the undo button is not clicked and no tabs are left, exit the book and
+          // clean up resources.
+          if (event != DISMISS_EVENT_ACTION && webViewList.isEmpty()) {
+            closeZimBook()
+          }
+        }
+      }).show()
     }
   }
 
@@ -1886,7 +1914,6 @@ abstract class CoreReaderFragment :
 
   private fun restoreDeletedTabs() {
     if (tempWebViewListForUndo.isNotEmpty()) {
-      zimReaderContainer?.setZimReaderSource(tempZimSourceForUndo)
       webViewList.addAll(tempWebViewListForUndo)
       tabsAdapter?.notifyDataSetChanged()
       snackBarRoot?.let { root ->
