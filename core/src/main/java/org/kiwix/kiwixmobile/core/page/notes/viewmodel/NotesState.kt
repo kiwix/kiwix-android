@@ -26,7 +26,8 @@ data class NotesState(
   override val pageItems: List<NoteListItem>,
   override val showAll: Boolean,
   override val currentZimId: String?,
-  override val searchTerm: String = ""
+  override val searchTerm: String = "",
+  override val isLoading: Boolean,
 ) : PageState<NoteListItem>() {
   override val visiblePageItems: List<PageRelated> = filteredPageItems
 

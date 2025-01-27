@@ -37,6 +37,18 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/app_bar" />
 
+  <androidx.core.widget.ContentLoadingProgressBar
+    android:id="@+id/loading_zimfile_content"
+    style="?android:attr/progressBarStyleHorizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/progress_view_height"
+    android:indeterminate="false"
+    android:max="100"
+    android:theme="@style/ThemeOverlay.KiwixTheme.ProgressBar"
+    android:visibility="gone"
+    app:layout_constraintTop_toBottomOf="@+id/app_bar"
+    tools:progress="70" />
+
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recycler_view"
     android:layout_width="0dp"

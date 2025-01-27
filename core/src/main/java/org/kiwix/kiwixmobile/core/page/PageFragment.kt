@@ -195,14 +195,22 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     pageAdapter.items = state.visiblePageItems
     fragmentPageBinding?.pageSwitch?.isEnabled = !state.isInSelectionState
     fragmentPageBinding?.noPage?.visibility = if (state.pageItems.isEmpty()) VISIBLE else GONE
-    if (state.isInSelectionState) {
-      if (actionMode == null) {
-        actionMode =
-          (requireActivity() as AppCompatActivity).startSupportActionMode(actionModeCallback)
+    when {
+      state.isInSelectionState -> {
+        if (actionMode == null) {
+          actionMode =
+            (requireActivity() as AppCompatActivity).startSupportActionMode(actionModeCallback)
+        }
+        actionMode?.title = getString(R.string.selected_items, state.numberOfSelectedItems())
       }
-      actionMode?.title = getString(R.string.selected_items, state.numberOfSelectedItems())
-    } else {
-      actionMode?.finish()
+
+      state.isLoading -> {
+        fragmentPageBinding?.loadingZimfileContent?.visibility = View.VISIBLE
+      }
+
+      else -> {
+        actionMode?.finish()
+      }
     }
   }
 
