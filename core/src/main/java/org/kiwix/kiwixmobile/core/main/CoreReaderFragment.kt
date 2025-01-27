@@ -1387,7 +1387,9 @@ abstract class CoreReaderFragment :
       Snackbar.make(it, R.string.tab_closed, Snackbar.LENGTH_LONG)
         .setAction(R.string.undo) { undoButton ->
           undoButton.isEnabled = false
-          restoreDeletedTab(index)
+          coreReaderLifeCycleScope?.launch {
+            restoreDeletedTab(index)
+          }
         }.show()
     }
     openHomeScreen()
@@ -1410,7 +1412,9 @@ abstract class CoreReaderFragment :
   }
 
   fun closeZimBook() {
-    zimReaderContainer?.setZimReaderSource(null)
+    coreReaderLifeCycleScope?.launch {
+      zimReaderContainer?.setZimReaderSource(null)
+    }
   }
 
   protected fun showProgressBarWithProgress(progress: Int) {
@@ -1428,7 +1432,7 @@ abstract class CoreReaderFragment :
     }
   }
 
-  private fun restoreDeletedTab(index: Int) {
+  private suspend fun restoreDeletedTab(index: Int) {
     if (webViewList.isEmpty()) {
       reopenBook()
     }
@@ -1874,7 +1878,9 @@ abstract class CoreReaderFragment :
         setAction(R.string.undo) {
           it.isEnabled = false // to prevent multiple clicks on this button
           setIsCloseAllTabButtonClickable(true)
-          restoreDeletedTabs()
+          coreReaderLifeCycleScope?.launch {
+            restoreDeletedTabs()
+          }
         }
       }.show()
     }
@@ -1884,7 +1890,7 @@ abstract class CoreReaderFragment :
     closeAllTabsButton?.isClickable = isClickable
   }
 
-  private fun restoreDeletedTabs() {
+  private suspend fun restoreDeletedTabs() {
     if (tempWebViewListForUndo.isNotEmpty()) {
       zimReaderContainer?.setZimReaderSource(tempZimSourceForUndo)
       webViewList.addAll(tempWebViewListForUndo)
