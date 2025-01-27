@@ -13,5 +13,4 @@ sealed class Action {
   data class UserClickedShowAllToggle(val isChecked: Boolean) : Action()
   data class Filter(val searchTerm: String) : Action()
   data class UpdatePages(val pages: List<Page>) : Action()
-  data class LoadingData(val isLoading: Boolean) : Action()
 }

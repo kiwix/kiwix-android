@@ -37,8 +37,6 @@ class TestablePageViewModel(
   var createDeletePageDialogEffectCalled = false
 
   override fun initialState(): TestablePageState = pageState()
-  override fun loadData(state: TestablePageState, action: Action.LoadingData): TestablePageState =
-    state.copy(isLoading = action.isLoading)
 
   override fun updatePagesBasedOnFilter(
     state: TestablePageState,
@@ -78,8 +76,7 @@ data class TestablePageState(
   override val visiblePageItems: List<PageRelated> = pageItems,
   override val showAll: Boolean = true,
   override val currentZimId: String? = "currentZimId",
-  override val searchTerm: String = "",
-  override val isLoading: Boolean = false
+  override val searchTerm: String = ""
 ) : PageState<Page>() {
   override fun copyWithNewItems(newItems: List<Page>): PageState<Page> =
     TestablePageState(pageItems = pageItems)

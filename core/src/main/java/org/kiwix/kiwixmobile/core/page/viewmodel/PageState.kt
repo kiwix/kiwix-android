@@ -30,7 +30,6 @@ abstract class PageState<T : Page> {
       .filter { it.title.contains(searchTerm, true) }
   }
 
-  abstract val isLoading: Boolean
   abstract val visiblePageItems: List<PageRelated>
   abstract val showAll: Boolean
   abstract val currentZimId: String?

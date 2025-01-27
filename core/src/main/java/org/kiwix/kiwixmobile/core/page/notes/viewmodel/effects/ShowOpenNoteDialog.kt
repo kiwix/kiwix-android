@@ -24,7 +24,6 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenNote
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -34,7 +33,6 @@ import javax.inject.Inject
 
 data class ShowOpenNoteDialog(
   private val effects: PublishProcessor<SideEffect<*>>,
-  private val actions: PublishProcessor<Action>,
   private val page: Page,
   private val zimReaderContainer: ZimReaderContainer
 ) : SideEffect<Unit> {

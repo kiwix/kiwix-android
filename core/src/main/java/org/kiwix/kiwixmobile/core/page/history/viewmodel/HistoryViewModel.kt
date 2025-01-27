@@ -36,15 +36,7 @@ class HistoryViewModel @Inject constructor(
 ) : PageViewModel<HistoryItem, HistoryState>(historyRoomDao, sharedPrefs, zimReaderContainer) {
 
   override fun initialState(): HistoryState =
-    HistoryState(
-      emptyList(),
-      sharedPreferenceUtil.showHistoryAllBooks,
-      zimReaderContainer.id,
-      isLoading = false
-    )
-
-  override fun loadData(state: HistoryState, action: Action.LoadingData): HistoryState =
-    state.copy(isLoading = action.isLoading)
+    HistoryState(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
 
   override fun updatePagesBasedOnFilter(
     state: HistoryState,

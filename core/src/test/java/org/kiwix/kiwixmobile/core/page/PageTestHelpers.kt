@@ -72,8 +72,7 @@ fun historyState(
     historyItems,
     showAll,
     zimId,
-    searchTerm,
-    false
+    searchTerm
   )
 
 fun bookmark(
@@ -149,6 +148,6 @@ fun bookmarkState(
   showAll: Boolean = true,
   zimId: String = "id",
   searchTerm: String = ""
-): BookmarkState = BookmarkState(bookmarks, showAll, zimId, searchTerm, false)
+): BookmarkState = BookmarkState(bookmarks, showAll, zimId, searchTerm)
 
 fun pageState(): TestablePageState = TestablePageState()
