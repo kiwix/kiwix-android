@@ -1,3 +1,28 @@
+3.14.0
+New Features:
+* Support for Android 15. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4147)
+* Added a new intro screen to inform users how they can select the storage for downloading ZIM files. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4179)
+
+Bug Fixed:
+* Application crashes when opening the ZIM file in the reader. (@MohitMaliFtechiz, @CalebKL https://github.com/kiwix/kiwix-android/pull/3937)
+* Sometimes application crashes due to native crashes. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4190)
+* Improved the copying/moving of ZIM chunks. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4170)
+* Download stops when the app is backgrounded. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4143)
+* Downloading stuck on pending for large ZIM files. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4143)
+* Downloading was not resuming on some devices. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4143)
+* Improved the scanning of ZIM files in the Play Store variant. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4149)
+* Application crashes when getting the Item size. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/issues/4157)
+* Application crashes when opening the random article. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4162)
+* Application crashes when creating the application shortcuts. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4167)
+* The trash folder's ZIM files are showing on the library screen but not opening. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4176)
++ More
+
+Compilation/CI/CD:
+* Using libkiwix `2.2.4`. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4190)
+* Added functionality to generate APK for a specified date. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4156)
+* Changed the website, and Nightly APKs name. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4168)
+* Reintroduced the Fetch Library for Downloading ZIM files. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4143)
+
 3.13.0
 Bug Fixed:
 * ZIM files were not appearing on the "Library" screen after updating to version `3.12.0`. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4134)
