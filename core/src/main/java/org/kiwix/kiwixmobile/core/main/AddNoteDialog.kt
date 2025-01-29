@@ -436,7 +436,7 @@ class AddNoteDialog : DialogFragment() {
     val noteText = dialogNoteAddNoteBinding?.addNoteEditText?.text.toString()
     if (noteDeleted) {
       dialogNoteAddNoteBinding?.addNoteEditText?.text?.clear()
-      mainRepositoryActions.deleteNote(articleNoteFileName)
+      mainRepositoryActions.deleteNote(getNoteTitle())
       disableMenuItems()
       view?.snack(
         stringId = R.string.note_delete_successful,

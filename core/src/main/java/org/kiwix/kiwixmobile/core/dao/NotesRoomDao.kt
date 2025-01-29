@@ -23,10 +23,16 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import io.reactivex.Flowable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
+import org.kiwix.kiwixmobile.core.extensions.deleteFile
+import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseValue
+import java.io.File
 
 @Dao
 abstract class NotesRoomDao : PageDao {
@@ -71,6 +77,22 @@ abstract class NotesRoomDao : PageDao {
     notesList.forEachIndexed { _, note ->
       val notesRoomEntity = NotesRoomEntity(note)
       deleteNote(noteTitle = notesRoomEntity.noteTitle)
+      removeNoteFileFromStorage(notesRoomEntity.noteFilePath)
+    }
+  }
+
+  /**
+   * Deletes the saved file from storage.
+   * When the user deletes a note from the "Notes" screen,
+   * the associated file should also be removed from storage,
+   * as it is no longer needed.
+   */
+  private fun removeNoteFileFromStorage(noteFilePath: String) {
+    CoroutineScope(Dispatchers.IO).launch {
+      val noteFile = File(noteFilePath)
+      if (noteFile.isFileExist()) {
+        noteFile.deleteFile()
+      }
     }
   }
 }
