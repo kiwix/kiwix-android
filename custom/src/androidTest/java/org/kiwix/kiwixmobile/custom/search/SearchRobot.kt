@@ -19,19 +19,31 @@
 package org.kiwix.kiwixmobile.custom.search
 
 import android.view.KeyEvent
+import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
 import androidx.test.espresso.web.sugar.Web
+import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms
+import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
+import androidx.test.espresso.web.webdriver.DriverAtoms.getText
+import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
 import androidx.test.espresso.web.webdriver.Locator
 import androidx.test.uiautomator.UiDevice
+import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDrawerWithGravity
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.adevinta.android.barista.internal.matcher.HelperMatchers
+import org.hamcrest.CoreMatchers.containsString
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.custom.R.id
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.testFlakyView
 
@@ -117,5 +129,44 @@ class SearchRobot {
           )
         )
     })
+  }
+
+  fun clickOnHomeButton() {
+    testFlakyView({
+      Espresso.onView(ViewMatchers.withId(R.id.bottom_toolbar_home))
+        .perform(ViewActions.click())
+    })
+  }
+
+  fun clickOnAFoolForYouArticle() {
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    testFlakyView({
+      onWebView()
+        .withElement(
+          findElement(
+            Locator.XPATH,
+            "//*[contains(text(), 'A Fool for You')]"
+          )
+        ).perform(webClick())
+    })
+  }
+
+  fun assertAFoolForYouArticleLoaded() {
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    testFlakyView({
+      onWebView()
+        .withElement(
+          findElement(
+            Locator.XPATH,
+            "//*[contains(text(), '\"A Fool for You\"')]"
+          )
+        ).check(webMatches(getText(), containsString("\"A Fool for You\"")))
+    })
+  }
+
+  fun openNoteFragment() {
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    openDrawerWithGravity(id.custom_drawer_container, GravityCompat.START)
+    testFlakyView({ onView(withText(R.string.pref_notes)).perform(click()) })
   }
 }

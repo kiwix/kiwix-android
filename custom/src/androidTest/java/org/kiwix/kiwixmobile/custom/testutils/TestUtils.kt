@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.custom.testutils
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
-import androidx.core.content.ContextCompat
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject
@@ -32,6 +31,7 @@ import java.io.File
 object TestUtils {
   private const val TAG = "TESTUTILS"
   var TEST_PAUSE_MS_FOR_SEARCH_TEST = 1000
+  var TEST_PAUSE_MS = 3000
 
   @JvmStatic
   fun isSystemUINotRespondingDialogVisible(uiDevice: UiDevice) =
@@ -92,7 +92,7 @@ object TestUtils {
 
   @JvmStatic
   fun deleteTemporaryFilesOfTestCases(context: Context) {
-    ContextCompat.getExternalFilesDirs(context, null).filterNotNull()
+    context.getExternalFilesDirs(null).filterNotNull()
       .map(::deleteAllFilesInDirectory)
     ContextWrapper(context).externalMediaDirs.filterNotNull()
       .map(::deleteAllFilesInDirectory)

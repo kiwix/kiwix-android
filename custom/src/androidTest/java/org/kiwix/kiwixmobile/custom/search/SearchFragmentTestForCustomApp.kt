@@ -90,8 +90,10 @@ class SearchFragmentTestForCustomApp {
   private lateinit var downloadingZimFile: File
   private lateinit var activityScenario: ActivityScenario<CustomMainActivity>
 
-  private val rayCharlesZimFileUrl =
+  private val scientificAllianceZIMUrl =
     "https://download.kiwix.org/zim/zimit/scientific-alliance.obscurative.ru_ru_all_2024-06.zim"
+  private val rayCharlesZIMFileUrl =
+    "https://dev.kiwix.org/kiwix-android/test/wikipedia_en_ray_charles_maxi_2023-12.zim"
 
   @Before
   fun waitForIdle() {
@@ -258,6 +260,44 @@ class SearchFragmentTestForCustomApp {
     }
   }
 
+  @Test
+  fun testPreviouslyLoadedArticleLoadsAgainWhenSwitchingToAnotherScreen() {
+    activityScenario.onActivity {
+      customMainActivity = it
+    }
+    // test with a large ZIM file to properly test the scenario
+    downloadingZimFile = getDownloadingZimFileFromDataFolder()
+    getOkkHttpClientForTesting().newCall(downloadRequest(rayCharlesZIMFileUrl)).execute()
+      .use { response ->
+        if (response.isSuccessful) {
+          response.body?.let { responseBody ->
+            writeZimFileData(responseBody, downloadingZimFile)
+          }
+        } else {
+          throw RuntimeException(
+            "Download Failed. Error: ${response.message}\n" +
+              " Status Code: ${response.code}"
+          )
+        }
+      }
+    UiThreadStatement.runOnUiThread {
+      customMainActivity.navigate(customMainActivity.readerFragmentResId)
+    }
+    openZimFileInReader(zimFile = downloadingZimFile)
+    search {
+      // click on home button to load the main page of ZIM file.
+      clickOnHomeButton()
+      // click on an article to load the other page.
+      clickOnAFoolForYouArticle()
+      assertAFoolForYouArticleLoaded()
+      // open note screen.
+      openNoteFragment()
+      pressBack()
+      // after came back check the previously loaded article is still showing or not.
+      assertAFoolForYouArticleLoaded()
+    }
+  }
+
   private fun openSearchWithQuery(query: String = "") {
     UiThreadStatement.runOnUiThread {
       customMainActivity.openSearch(searchString = query)
@@ -270,7 +310,10 @@ class SearchFragmentTestForCustomApp {
     }
   }
 
-  private fun openZimFileInReader(assetFileDescriptor: AssetFileDescriptor) {
+  private fun openZimFileInReader(
+    assetFileDescriptor: AssetFileDescriptor? = null,
+    zimFile: File? = null
+  ) {
     UiThreadStatement.runOnUiThread {
       val navHostFragment: NavHostFragment =
         customMainActivity.supportFragmentManager
@@ -280,10 +323,17 @@ class SearchFragmentTestForCustomApp {
       val customReaderFragment =
         navHostFragment.childFragmentManager.fragments[0] as CustomReaderFragment
       runBlocking {
-        customReaderFragment.openZimFile(
-          ZimReaderSource(null, null, listOf(assetFileDescriptor)),
-          true
-        )
+        assetFileDescriptor?.let {
+          customReaderFragment.openZimFile(
+            ZimReaderSource(assetFileDescriptorList = listOf(assetFileDescriptor)),
+            true
+          )
+        } ?: run {
+          customReaderFragment.openZimFile(
+            ZimReaderSource(zimFile),
+            true
+          )
+        }
       }
     }
   }
@@ -318,13 +368,20 @@ class SearchFragmentTestForCustomApp {
     }
   }
 
-  private fun downloadRequest() =
+  private fun downloadRequest(zimUrl: String = scientificAllianceZIMUrl) =
     Request.Builder()
-      .url(URI.create(rayCharlesZimFileUrl).toURL())
+      .url(URI.create(zimUrl).toURL())
       .build()
 
   private fun getDownloadingZimFile(): File {
     val zimFile = File(context.cacheDir, "ray_charles.zim")
+    if (zimFile.exists()) zimFile.delete()
+    zimFile.createNewFile()
+    return zimFile
+  }
+
+  private fun getDownloadingZimFileFromDataFolder(): File {
+    val zimFile = File(context.getExternalFilesDirs(null)[0], "ray_charles.zim")
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     return zimFile
