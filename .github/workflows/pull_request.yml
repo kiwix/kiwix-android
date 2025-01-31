@@ -38,7 +38,7 @@ jobs:
 
       - name: Upload ktlint Reports
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
          name: ktlint-report
          path: '**/build/reports/ktlint'
@@ -74,7 +74,7 @@ jobs:
       - name: Static Analysis
         run: ./gradlew detektDebug detektCustomExampleDebug
       - name: Upload Lint Reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: detekt-report
@@ -112,7 +112,7 @@ jobs:
         run: ./gradlew app:lintDebug custom:lintCustomexampleDebug
 
       - name: Upload Lint Reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: lint-report
@@ -141,7 +141,7 @@ jobs:
         run: ./gradlew assemble
 
       - name: Upload APK as Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
             name: kiwix-android
