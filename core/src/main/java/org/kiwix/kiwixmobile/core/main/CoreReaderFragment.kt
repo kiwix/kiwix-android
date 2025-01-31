@@ -505,16 +505,6 @@ abstract class CoreReaderFragment :
         readAloudService?.registerCallBack(this@CoreReaderFragment)
       }
     }
-    requireActivity().observeNavigationResult<String>(
-      FIND_IN_PAGE_SEARCH_STRING,
-      viewLifecycleOwner,
-      Observer(::findInPage)
-    )
-    requireActivity().observeNavigationResult<SearchItemToOpen>(
-      TAG_FILE_SEARCHED,
-      viewLifecycleOwner,
-      Observer(::openSearchItem)
-    )
     handleClicks()
   }
 
@@ -2617,6 +2607,28 @@ abstract class CoreReaderFragment :
       Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e)
       activity.toast(R.string.could_not_restore_tabs, Toast.LENGTH_LONG)
     }
+    // After restoring the tabs, observe any search actions that the user might have triggered.
+    // Since the ZIM file opening functionality has been moved to a background thread,
+    // we ensure that all necessary actions are completed before observing these search actions.
+    observeSearchActions()
+  }
+
+  /**
+   * Observes any search-related actions triggered by the user, such as "Find in Page" or
+   * opening a specific search item.
+   * This method sets up observers for navigation results related to search functionality.
+   */
+  private fun observeSearchActions() {
+    requireActivity().observeNavigationResult<String>(
+      FIND_IN_PAGE_SEARCH_STRING,
+      viewLifecycleOwner,
+      Observer(::findInPage)
+    )
+    requireActivity().observeNavigationResult<SearchItemToOpen>(
+      TAG_FILE_SEARCHED,
+      viewLifecycleOwner,
+      Observer(::openSearchItem)
+    )
   }
 
   override fun onReadAloudPauseOrResume(isPauseTTS: Boolean) {
