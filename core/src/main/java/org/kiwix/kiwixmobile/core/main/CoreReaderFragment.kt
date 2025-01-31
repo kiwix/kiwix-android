@@ -1220,6 +1220,7 @@ abstract class CoreReaderFragment :
 
   override fun onDestroyView() {
     super.onDestroyView()
+    restoreTabsSnackbarCallback = null
     try {
       coreReaderLifeCycleScope?.cancel()
       readerLifeCycleScope?.cancel()
@@ -1394,17 +1395,7 @@ abstract class CoreReaderFragment :
         .setAction(R.string.undo) { undoButton ->
           undoButton.isEnabled = false
           restoreDeletedTab(index)
-        }.addCallback(object : Snackbar.Callback() {
-          override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-            super.onDismissed(transientBottomBar, event)
-            // If the undo button is not clicked and no tabs are left, exit the book and
-            // clean up resources.
-            if (event != DISMISS_EVENT_ACTION && webViewList.isEmpty()) {
-              closeZimBook()
-            }
-          }
-        })
-        .show()
+        }.addCallback(restoreTabsSnackbarCallback).show()
     }
     openHomeScreen()
   }
@@ -1895,16 +1886,18 @@ abstract class CoreReaderFragment :
           setIsCloseAllTabButtonClickable(true)
           restoreDeletedTabs()
         }
-      }.addCallback(object : Snackbar.Callback() {
-        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-          super.onDismissed(transientBottomBar, event)
-          // If the undo button is not clicked and no tabs are left, exit the book and
-          // clean up resources.
-          if (event != DISMISS_EVENT_ACTION && webViewList.isEmpty()) {
-            closeZimBook()
-          }
-        }
-      }).show()
+      }.addCallback(restoreTabsSnackbarCallback).show()
+    }
+  }
+
+  private var restoreTabsSnackbarCallback: Snackbar.Callback? = object : Snackbar.Callback() {
+    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+      super.onDismissed(transientBottomBar, event)
+      // If the undo button is not clicked and no tabs are left, exit the book and
+      // clean up resources.
+      if (event != DISMISS_EVENT_ACTION && webViewList.isEmpty() && isAdded) {
+        closeZimBook()
+      }
     }
   }
 
