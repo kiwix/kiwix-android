@@ -100,14 +100,16 @@ class SearchRobot {
   }
 
   fun searchAndClickOnArticle(searchString: String) {
-    // wait a bit to properly load the ZIM file in the reader
+    // Wait a bit to properly load the ZIM file in the reader.
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
     openSearchScreen()
+    // Wait a bit to properly visible the search screen.
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
     searchWithFrequentlyTypedWords(searchString)
     clickOnSearchItemInSearchList()
   }
 
-  fun clickOnSearchItemInSearchList() {
+  private fun clickOnSearchItemInSearchList() {
     testFlakyView({
       BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
       Espresso.onView(ViewMatchers.withId(R.id.search_list)).perform(

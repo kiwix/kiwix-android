@@ -131,7 +131,7 @@ class SearchFragmentTestForCustomApp {
       customMainActivity = it
     }
     // test with a large ZIM file to properly test the scenario
-    downloadingZimFile = getDownloadingZimFile()
+    downloadingZimFile = getDownloadingZimFileFromDataFolder()
     getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
       if (response.isSuccessful) {
         response.body?.let { responseBody ->
@@ -147,7 +147,7 @@ class SearchFragmentTestForCustomApp {
     UiThreadStatement.runOnUiThread {
       customMainActivity.navigate(customMainActivity.readerFragmentResId)
     }
-    openZimFileInReaderWithAssetFileDescriptor(downloadingZimFile)
+    openZimFileInReader(zimFile = downloadingZimFile)
     openSearchWithQuery()
     val searchTerm = "gard"
     val searchedItem = "Gardanta Spirito"
