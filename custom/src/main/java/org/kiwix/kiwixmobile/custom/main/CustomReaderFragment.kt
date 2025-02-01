@@ -144,7 +144,6 @@ class CustomReaderFragment : CoreReaderFragment() {
       zimReaderContainer?.zimFileReader?.let(::setUpBookmarks)
     } else {
       openObbOrZim()
-      manageExternalLaunchAndRestoringViewState()
     }
     requireArguments().clear()
   }
@@ -207,11 +206,15 @@ class CustomReaderFragment : CoreReaderFragment() {
                 val bookOnDisk = BookOnDisk(zimFileReader)
                 repositoryActions?.saveBook(bookOnDisk)
               }
+              // Open the previous loaded pages after ZIM file loads.
+              manageExternalLaunchAndRestoringViewState()
             }
 
             is ValidationState.HasBothFiles -> {
               it.zimFile.delete()
               openZimFile(ZimReaderSource(it.obbFile), true)
+              // Open the previous loaded pages after ZIM file loads.
+              manageExternalLaunchAndRestoringViewState()
             }
 
             else -> {}
