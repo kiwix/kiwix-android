@@ -84,7 +84,6 @@ class KiwixReaderFragment : CoreReaderFragment() {
     }
     activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
     toolbar?.let { activity.setupDrawerToggle(it, true) }
-    setFragmentContainerBottomMarginToSizeOfNavBar()
     openPageInBookFromNavigationArguments()
   }
 
@@ -237,6 +236,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun onResume() {
     super.onResume()
+    setFragmentContainerBottomMarginToSizeOfNavBar()
     if (isFullScreenVideo || isInFullScreenMode()) {
       hideNavBar()
     }
