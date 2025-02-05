@@ -116,11 +116,21 @@ class DownloadMonitorService : Service() {
           it.status == Status.NONE ||
             it.status == Status.ADDED ||
             it.status == Status.QUEUED ||
-            it.status == Status.DOWNLOADING
+            it.status == Status.DOWNLOADING ||
+            it.isPaused()
         }?.let {
           val notificationBuilder =
             fetchDownloadNotificationManager.getNotificationBuilder(it.id, it.id)
-          startForeground(it.id, notificationBuilder.build())
+          var foreGroundServiceNotification = notificationBuilder.build()
+          if (it.isPaused()) {
+            // Clear any pending actions on this notification builder.
+            notificationBuilder.clearActions()
+            // If a download is paused that means there is no notification for it, so we have to
+            // show our custom cancel notification.
+            foreGroundServiceNotification =
+              fetchDownloadNotificationManager.getCancelNotification(fetch, it, notificationBuilder)
+          }
+          startForeground(it.id, foreGroundServiceNotification)
         } ?: kotlin.run {
           stopForegroundServiceForDownloads()
           // Cancel the last ongoing notification after detaching it from
@@ -165,7 +175,7 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onPaused(download: Download) {
-      update(download, true)
+      update(download)
     }
 
     override fun onProgress(
@@ -212,6 +222,11 @@ class DownloadMonitorService : Service() {
             // to move these downloads in NewBookDao.
             downloadRoomDao.downloads().blockingFirst()
           }
+        }
+        // If someone pause the Download then post a notification since fetch removes the
+        // notification for ongoing download when pause so we needs to show our custom notification.
+        if (download.isPaused()) {
+          fetchDownloadNotificationManager.showDownloadPauseNotification(fetch, download)
         }
         if (shouldSetForegroundNotification) {
           setForegroundNotification(download.id)
