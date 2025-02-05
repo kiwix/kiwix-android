@@ -64,7 +64,7 @@ This separation ensures clarity for users and prevents undesirable behavior.
 
 **Bookmarks**: Export and reimport them via the "Settings" menu.
 **ZIM files**: Move them to or from the reserved app directories `Android/media/org.kiwix.kiwixmobile/` or
-`Android/data/org.kiwix.kiwixmobile/. This might have to be done for both internal storage and SD card. Kiwix can detect automatically all ZIM files available in your storage. You just need to swipe down in the local "Library" screen and
+`Android/data/org.kiwix.kiwixmobile/`. This might have to be done for both internal storage and SD card. Kiwix can detect automatically all ZIM files available in your storage. You just need to swipe down in the local "Library" screen and
 it will scan your storage and recognize all your ZIM files.
 
 ## Android permissions needed
