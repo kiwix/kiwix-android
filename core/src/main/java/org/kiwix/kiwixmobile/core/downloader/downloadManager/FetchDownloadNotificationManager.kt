@@ -26,7 +26,6 @@ import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.app.PendingIntent.getActivity
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -40,7 +39,6 @@ import com.tonyodev.fetch2.ACTION_TYPE_INVALID
 import com.tonyodev.fetch2.ACTION_TYPE_PAUSE
 import com.tonyodev.fetch2.ACTION_TYPE_RESUME
 import com.tonyodev.fetch2.ACTION_TYPE_RETRY
-import com.tonyodev.fetch2.DOWNLOAD_ID_INVALID
 import com.tonyodev.fetch2.DefaultFetchNotificationManager
 import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.DownloadNotification
@@ -79,28 +77,6 @@ class FetchDownloadNotificationManager @Inject constructor(
 ) : DefaultFetchNotificationManager(context) {
   private val downloadNotificationManager: NotificationManager by lazy {
     context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-  }
-
-  private val notificationDismissAction = "NOTIFICATION_DISMISS_ACTION"
-
-  init {
-    registerDismissNotificationBroadcastReceiver()
-  }
-
-  @SuppressLint("UnspecifiedRegisterReceiverFlag")
-  private fun registerDismissNotificationBroadcastReceiver() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      context.registerReceiver(
-        notificationDismissBroadcastReceiver,
-        IntentFilter(notificationDismissAction),
-        Context.RECEIVER_EXPORTED
-      )
-    } else {
-      context.registerReceiver(
-        notificationDismissBroadcastReceiver,
-        IntentFilter(notificationDismissAction)
-      )
-    }
   }
 
   override fun getFetchInstanceForNamespace(namespace: String): Fetch = Fetch.getDefaultInstance()
@@ -271,43 +247,8 @@ class FetchDownloadNotificationManager @Inject constructor(
         context.getString(R.string.notification_resume_button_text),
         getActionPendingIntent(fetch, download, DownloadNotification.ActionType.RESUME)
       )
-      // Set the delete intent so that we can know that user dismiss the paused notification.
-      .setDeleteIntent(getDeletePendingIntent(download, fetch))
       .build()
   }
-
-  /**
-   * This pending intent will use in the "Pause" notifications when a user removes the paused
-   * notification this pending intent will trigger and will re-enable the paused notification.
-   * So that user can see that a download is paused and he can perform the necessary actions.
-   */
-  private fun getDeletePendingIntent(download: Download, fetch: Fetch): PendingIntent {
-    val intent = Intent(notificationDismissAction).apply {
-      putExtra(EXTRA_DOWNLOAD_ID, download.id)
-      putExtra(EXTRA_NAMESPACE, fetch.namespace)
-    }
-    return PendingIntent.getBroadcast(
-      context,
-      download.id,
-      intent,
-      PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-    )
-  }
-
-  private val notificationDismissBroadcastReceiver: BroadcastReceiver
-    get() = object : BroadcastReceiver() {
-      override fun onReceive(context: Context?, intent: Intent?) {
-        val namespace = intent?.getStringExtra(EXTRA_NAMESPACE) ?: return
-        val downloadId = intent.getIntExtra(EXTRA_DOWNLOAD_ID, DOWNLOAD_ID_INVALID)
-        if (namespace.isEmpty() || downloadId == DOWNLOAD_ID_INVALID) return
-        val fetch = getFetchInstanceForNamespace(namespace)
-        if (!fetch.isClosed) {
-          fetch.getDownload(downloadId) { download ->
-            download?.takeIf(Download::isPaused)?.let { showDownloadPauseNotification(fetch, it) }
-          }
-        }
-      }
-    }
 
   private fun getActionPendingIntent(
     fetch: Fetch,

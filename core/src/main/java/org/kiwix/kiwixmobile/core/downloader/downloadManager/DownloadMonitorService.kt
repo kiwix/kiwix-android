@@ -118,20 +118,7 @@ class DownloadMonitorService : Service() {
             it.status == Status.QUEUED ||
             it.status == Status.DOWNLOADING ||
             it.isPaused()
-        }?.let {
-          val notificationBuilder =
-            fetchDownloadNotificationManager.getNotificationBuilder(it.id, it.id)
-          var foreGroundServiceNotification = notificationBuilder.build()
-          if (it.isPaused()) {
-            // Clear any pending actions on this notification builder.
-            notificationBuilder.clearActions()
-            // If a download is paused that means there is no notification for it, so we have to
-            // show our custom cancel notification.
-            foreGroundServiceNotification =
-              fetchDownloadNotificationManager.getCancelNotification(fetch, it, notificationBuilder)
-          }
-          startForeground(it.id, foreGroundServiceNotification)
-        } ?: kotlin.run {
+        }?.let(::setForegroundNotificationForDownload) ?: kotlin.run {
           stopForegroundServiceForDownloads()
           // Cancel the last ongoing notification after detaching it from
           // the foreground service if no active downloads are found.
@@ -139,6 +126,21 @@ class DownloadMonitorService : Service() {
         }
       }
     }
+  }
+
+  private fun setForegroundNotificationForDownload(it: Download) {
+    val notificationBuilder =
+      fetchDownloadNotificationManager.getNotificationBuilder(it.id, it.id)
+    var foreGroundServiceNotification = notificationBuilder.build()
+    if (it.isPaused()) {
+      // Clear any pending actions on this notification builder.
+      notificationBuilder.clearActions()
+      // If a download is paused that means there is no notification for it, so we have to
+      // show our custom cancel notification.
+      foreGroundServiceNotification =
+        fetchDownloadNotificationManager.getCancelNotification(fetch, it, notificationBuilder)
+    }
+    startForeground(it.id, foreGroundServiceNotification)
   }
 
   private fun cancelNotificationForId(downloadId: Int) {
@@ -226,7 +228,9 @@ class DownloadMonitorService : Service() {
         // If someone pause the Download then post a notification since fetch removes the
         // notification for ongoing download when pause so we needs to show our custom notification.
         if (download.isPaused()) {
-          fetchDownloadNotificationManager.showDownloadPauseNotification(fetch, download)
+          fetchDownloadNotificationManager.showDownloadPauseNotification(fetch, download).also {
+            setForeGroundServiceNotificationIfNoActiveDownloads(fetch, download)
+          }
         }
         if (shouldSetForegroundNotification) {
           setForegroundNotification(download.id)
@@ -238,6 +242,24 @@ class DownloadMonitorService : Service() {
       updater.onNext {
         downloadRoomDao.delete(download)
         setForegroundNotification(download.id)
+      }
+    }
+  }
+
+  private fun setForeGroundServiceNotificationIfNoActiveDownloads(
+    fetch: Fetch,
+    download: Download
+  ) {
+    updater.onNext {
+      // Check if there are any ongoing downloads.
+      // If the list is empty, it means no other downloads are running,
+      // so we need to promote this download to a foreground service.
+      fetch.getDownloadsWithStatus(
+        listOf(Status.NONE, Status.ADDED, Status.QUEUED, Status.DOWNLOADING)
+      ) { activeDownloads ->
+        if (activeDownloads.isEmpty()) {
+          setForegroundNotificationForDownload(download)
+        }
       }
     }
   }
