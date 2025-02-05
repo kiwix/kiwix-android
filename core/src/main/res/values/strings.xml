@@ -181,6 +181,7 @@
   <string name="do_not_ask_anymore">Do not ask anymore</string>
   <string name="your_languages" tools:keep="@string/your_languages">Selected languages:</string>
   <string name="other_languages" tools:keep="@string/other_languages">Other languages:</string>
+  <string name="downloading" tools:keep="@string/no_items_msg">Downloading:</string>
   <string name="no_items_msg" tools:keep="@string/no_items_msg">No items available</string>
   <string name="crash_title">Well… This is Embarrassing</string>
   <string name="crash_description">It looks like we crashed.\n\nWould you mind helping us fix this problem by sending the following information?</string>
