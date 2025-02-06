@@ -26,6 +26,7 @@ import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.action.ViewActions.clearText
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
@@ -109,6 +110,15 @@ class NoteRobot : BaseRobot() {
     // This is flaky since it is shown in a dialog and sometimes
     // UIDevice does not found the view immediately due to rendering process.
     testFlakyView({ isVisible(Text(noteText)) })
+  }
+
+  fun assertNotDoesNotExist() {
+    testFlakyView({ onView(withText(noteText)).check(doesNotExist()) })
+  }
+
+  fun clickOnDeleteIcon() {
+    pauseForBetterTestPerformance()
+    testFlakyView({ clickOn(ViewId(R.id.delete_note)) })
   }
 
   fun clickOnTrashIcon() {

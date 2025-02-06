@@ -129,17 +129,7 @@ class NoteFragmentTest : BaseActivityTest() {
 
   @Test
   fun testUserCanSeeNotesForDeletedFiles() {
-    // delete the notes if any saved to properly run the test scenario
-    note {
-      openNoteFragment()
-      assertToolbarExist()
-      assertNoteRecyclerViewExist()
-      clickOnTrashIcon()
-      assertDeleteNoteDialogDisplayed()
-      clickOnDeleteButton()
-      assertNoNotesTextDisplayed()
-      pressBack()
-    }
+    deletePreviouslySavedNotes()
     loadZimFileInReader("testzim.zim")
     StandardActions.closeDrawer() // close the drawer if open before running the test cases.
     note {
@@ -188,30 +178,15 @@ class NoteFragmentTest : BaseActivityTest() {
 
   @Test
   fun testZimFileOpenedAfterOpeningNoteOnNotesScreen() {
-    // delete the notes if any saved to properly run the test scenario
-    note {
-      openNoteFragment()
-      assertToolbarExist()
-      assertNoteRecyclerViewExist()
-      clickOnTrashIcon()
-      assertDeleteNoteDialogDisplayed()
-      clickOnDeleteButton()
-      assertNoNotesTextDisplayed()
-      pressBack()
-    }
+    deletePreviouslySavedNotes()
     loadZimFileInReader("testzim.zim")
     note {
+      assertHomePageIsLoadedOfTestZimFile()
       clickOnNoteMenuItem(context)
       assertNoteDialogDisplayed()
       writeDemoNote()
       saveNote()
       pressBack()
-    }
-
-    // switch the zim file so that we can test this scenario where opening
-    // the zim file properly open in the reader screen.
-    loadZimFileInReader("small.zim")
-    note {
       openNoteFragment()
       assertToolbarExist()
       assertNoteRecyclerViewExist()
@@ -222,9 +197,65 @@ class NoteFragmentTest : BaseActivityTest() {
       pressBack()
       // to close the notes fragment.
       pressBack()
+    }
+  }
 
-      // now test the testzim.zim file is successfully loaded in the ZimFileReader.
-      assertHomePageIsLoadedOfTestZimFile()
+  @Test
+  fun testNoteEntryIsRemovedFromDatabaseWhenDeletedInAddNoteDialog() {
+    deletePreviouslySavedNotes()
+    loadZimFileInReader("testzim.zim")
+    note {
+      clickOnNoteMenuItem(context)
+      assertNoteDialogDisplayed()
+      writeDemoNote()
+      saveNote()
+      pressBack()
+      openNoteFragment()
+      assertToolbarExist()
+      assertNoteRecyclerViewExist()
+      clickOnSavedNote()
+      clickOnOpenNote()
+      assertNoteSaved()
+      clickOnDeleteIcon()
+      pressBack()
+      assertNoNotesTextDisplayed()
+    }
+  }
+
+  @Test
+  fun testNoteFileIsDeletedWhenNoteIsRemovedFromNotesScreen() {
+    deletePreviouslySavedNotes()
+    loadZimFileInReader("testzim.zim")
+    // Save a note.
+    note {
+      clickOnNoteMenuItem(context)
+      assertNoteDialogDisplayed()
+      writeDemoNote()
+      saveNote()
+      pressBack()
+    }
+    // Delete that note from "Note" screen.
+    deletePreviouslySavedNotes()
+    // Test the note file is deleted or not.
+    note {
+      clickOnNoteMenuItem(context)
+      assertNoteDialogDisplayed()
+      assertNotDoesNotExist()
+      pressBack()
+    }
+  }
+
+  private fun deletePreviouslySavedNotes() {
+    // delete the notes if any saved to properly run the test scenario
+    note {
+      openNoteFragment()
+      assertToolbarExist()
+      assertNoteRecyclerViewExist()
+      clickOnTrashIcon()
+      assertDeleteNoteDialogDisplayed()
+      clickOnDeleteButton()
+      assertNoNotesTextDisplayed()
+      pressBack()
     }
   }
 

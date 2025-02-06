@@ -220,7 +220,7 @@ object TestUtils {
 
   @JvmStatic
   fun deleteTemporaryFilesOfTestCases(context: Context) {
-    ContextCompat.getExternalFilesDirs(context, null).filterNotNull()
+    context.getExternalFilesDirs(null).filterNotNull()
       .map(::deleteAllFilesInDirectory)
     ContextWrapper(context).externalMediaDirs.filterNotNull()
       .map(::deleteAllFilesInDirectory)

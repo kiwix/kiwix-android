@@ -505,16 +505,6 @@ abstract class CoreReaderFragment :
         readAloudService?.registerCallBack(this@CoreReaderFragment)
       }
     }
-    requireActivity().observeNavigationResult<String>(
-      FIND_IN_PAGE_SEARCH_STRING,
-      viewLifecycleOwner,
-      Observer(::findInPage)
-    )
-    requireActivity().observeNavigationResult<SearchItemToOpen>(
-      TAG_FILE_SEARCHED,
-      viewLifecycleOwner,
-      Observer(::openSearchItem)
-    )
     handleClicks()
   }
 
@@ -860,7 +850,13 @@ abstract class CoreReaderFragment :
     view?.startAnimation(AnimationUtils.loadAnimation(view.context, anim))
   }
 
-  protected open fun hideTabSwitcher() {
+  /**
+   * @param shouldCloseZimBook A flag to indicate whether the ZIM book should be closed.
+   *        - Default is `true`, which ensures normal behavior for most scenarios.
+   *        - If `false`, the ZIM book is not closed. This is useful in cases where the user restores tabs,
+   *          as closing the ZIM book would require reloading the ZIM file, which can be a resource-intensive operation.
+   */
+  protected open fun hideTabSwitcher(shouldCloseZimBook: Boolean = true) {
     actionBar?.apply {
       setDisplayShowTitleEnabled(true)
     }
@@ -1214,6 +1210,7 @@ abstract class CoreReaderFragment :
 
   override fun onDestroyView() {
     super.onDestroyView()
+    restoreTabsSnackbarCallback = null
     try {
       coreReaderLifeCycleScope?.cancel()
       readerLifeCycleScope?.cancel()
@@ -1388,7 +1385,7 @@ abstract class CoreReaderFragment :
         .setAction(R.string.undo) { undoButton ->
           undoButton.isEnabled = false
           restoreDeletedTab(index)
-        }.show()
+        }.addCallback(restoreTabsSnackbarCallback).show()
     }
     openHomeScreen()
   }
@@ -1399,18 +1396,22 @@ abstract class CoreReaderFragment :
     mainMenu?.showBookSpecificMenuItems()
   }
 
-  protected fun exitBook() {
+  protected fun exitBook(shouldCloseZimBook: Boolean = true) {
     showNoBookOpenViews()
     bottomToolbar?.visibility = View.GONE
     actionBar?.title = getString(R.string.reader)
     contentFrame?.visibility = View.GONE
     hideProgressBar()
     mainMenu?.hideBookSpecificMenuItems()
-    closeZimBook()
+    if (shouldCloseZimBook) {
+      closeZimBook()
+    }
   }
 
   fun closeZimBook() {
-    zimReaderContainer?.setZimReaderSource(null)
+    lifecycleScope.launch {
+      zimReaderContainer?.setZimReaderSource(null)
+    }
   }
 
   protected fun showProgressBarWithProgress(progress: Int) {
@@ -1443,7 +1444,6 @@ abstract class CoreReaderFragment :
           LinearLayout.LayoutParams.MATCH_PARENT
         )
       }
-      zimReaderContainer?.setZimReaderSource(tempZimSourceForUndo)
       webViewList.add(index, it)
       tabsAdapter?.notifyDataSetChanged()
       snackBarRoot?.let { root ->
@@ -1643,12 +1643,29 @@ abstract class CoreReaderFragment :
     return true
   }
 
+  /**
+   * Handles the toggling of fullscreen video mode and adjusts the drawer's behavior accordingly.
+   * - If a video is playing in fullscreen mode, the drawer is disabled to restrict interactions.
+   * - When fullscreen mode is exited, the drawer is re-enabled unless the reader is still
+   *   in fullscreen mode.
+   * - Specifically, if the reader is in fullscreen mode and the user plays a video in
+   *   fullscreen, then exits the video's fullscreen mode, the drawer remains disabled
+   *   because the reader is still in fullscreen mode.
+   */
   override fun onFullscreenVideoToggled(isFullScreen: Boolean) {
-    // does nothing because custom doesn't have a nav bar
+    if (isFullScreen) {
+      (requireActivity() as CoreMainActivity).disableDrawer(false)
+    } else {
+      if (!isInFullScreenMode()) {
+        toolbar?.let(::setUpDrawerToggle)
+        setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+      }
+    }
   }
 
   @Suppress("MagicNumber")
   protected open fun openFullScreen() {
+    (requireActivity() as CoreMainActivity).disableDrawer(false)
     toolbarContainer?.visibility = View.GONE
     bottomToolbar?.visibility = View.GONE
     exitFullscreenButton?.visibility = View.VISIBLE
@@ -1664,6 +1681,8 @@ abstract class CoreReaderFragment :
 
   @Suppress("MagicNumber")
   open fun closeFullScreen() {
+    toolbar?.let(::setUpDrawerToggle)
+    setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     sharedPreferenceUtil?.putPrefFullScreen(false)
     toolbarContainer?.visibility = View.VISIBLE
     updateBottomToolbarVisibility()
@@ -1781,7 +1800,7 @@ abstract class CoreReaderFragment :
   protected fun setUpBookmarks(zimFileReader: ZimFileReader) {
     safeDispose()
     bookmarkingDisposable = Flowable.combineLatest(
-      libkiwixBookmarks?.bookmarkUrlsForCurrentBook(zimFileReader),
+      libkiwixBookmarks?.bookmarkUrlsForCurrentBook(zimFileReader.id),
       webUrlsProcessor,
       List<String?>::contains
     )
@@ -1857,7 +1876,18 @@ abstract class CoreReaderFragment :
           setIsCloseAllTabButtonClickable(true)
           restoreDeletedTabs()
         }
-      }.show()
+      }.addCallback(restoreTabsSnackbarCallback).show()
+    }
+  }
+
+  private var restoreTabsSnackbarCallback: Snackbar.Callback? = object : Snackbar.Callback() {
+    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+      super.onDismissed(transientBottomBar, event)
+      // If the undo button is not clicked and no tabs are left, exit the book and
+      // clean up resources.
+      if (event != DISMISS_EVENT_ACTION && webViewList.isEmpty() && isAdded) {
+        closeZimBook()
+      }
     }
   }
 
@@ -1867,7 +1897,6 @@ abstract class CoreReaderFragment :
 
   private fun restoreDeletedTabs() {
     if (tempWebViewListForUndo.isNotEmpty()) {
-      zimReaderContainer?.setZimReaderSource(tempZimSourceForUndo)
       webViewList.addAll(tempWebViewListForUndo)
       tabsAdapter?.notifyDataSetChanged()
       snackBarRoot?.let { root ->
@@ -2578,6 +2607,28 @@ abstract class CoreReaderFragment :
       Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e)
       activity.toast(R.string.could_not_restore_tabs, Toast.LENGTH_LONG)
     }
+    // After restoring the tabs, observe any search actions that the user might have triggered.
+    // Since the ZIM file opening functionality has been moved to a background thread,
+    // we ensure that all necessary actions are completed before observing these search actions.
+    observeSearchActions()
+  }
+
+  /**
+   * Observes any search-related actions triggered by the user, such as "Find in Page" or
+   * opening a specific search item.
+   * This method sets up observers for navigation results related to search functionality.
+   */
+  private fun observeSearchActions() {
+    requireActivity().observeNavigationResult<String>(
+      FIND_IN_PAGE_SEARCH_STRING,
+      viewLifecycleOwner,
+      Observer(::findInPage)
+    )
+    requireActivity().observeNavigationResult<SearchItemToOpen>(
+      TAG_FILE_SEARCHED,
+      viewLifecycleOwner,
+      Observer(::openSearchItem)
+    )
   }
 
   override fun onReadAloudPauseOrResume(isPauseTTS: Boolean) {

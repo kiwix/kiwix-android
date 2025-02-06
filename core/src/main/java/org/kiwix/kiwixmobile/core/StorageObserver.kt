@@ -19,9 +19,12 @@
 package org.kiwix.kiwixmobile.core
 
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
@@ -45,7 +48,17 @@ class StorageObserver @Inject constructor(
   ): Flowable<List<BookOnDisk>> {
     return scanFiles(scanningProgressListener)
       .withLatestFrom(downloadRoomDao.downloads(), BiFunction(::toFilesThatAreNotDownloading))
-      .map { it.mapNotNull(::convertToBookOnDisk) }
+      .flatMapSingle { files ->
+        Single.create { emitter ->
+          CoroutineScope(Dispatchers.IO).launch {
+            try {
+              emitter.onSuccess(files.mapNotNull { convertToBookOnDisk(it) })
+            } catch (ignore: Exception) {
+              emitter.onError(ignore)
+            }
+          }
+        }
+      }
   }
 
   private fun scanFiles(scanningProgressListener: ScanningProgressListener) =
@@ -57,7 +70,7 @@ class StorageObserver @Inject constructor(
   private fun fileHasNoMatchingDownload(downloads: List<DownloadModel>, file: File) =
     downloads.firstOrNull { file.absolutePath.endsWith(it.fileNameFromUrl) } == null
 
-  private fun convertToBookOnDisk(file: File) = runBlocking {
+  private suspend fun convertToBookOnDisk(file: File) =
     zimReaderFactory.create(ZimReaderSource(file))
       ?.let { zimFileReader ->
         BookOnDisk(zimFileReader).also {
@@ -66,5 +79,4 @@ class StorageObserver @Inject constructor(
           zimFileReader.dispose()
         }
       }
-  }
 }

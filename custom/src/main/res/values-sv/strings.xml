@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Larsa
 * WikiPhoenix
 -->
 <resources>
   <string name="retry">Försök igen</string>
-  <string name="invalid_installation" fuzzy="true">Ogiltig installation. Var god ladda ned Zim.\n Se till att WiFi är aktiverat och att du har tillräckligt mycket lagringsutrymme</string>
+  <string name="invalid_installation">Ogiltig installation. Var god ladda ned ZIM.\nSe till att WiFi är aktiverat och att du har tillräckligt mycket lagringsutrymme</string>
 </resources>

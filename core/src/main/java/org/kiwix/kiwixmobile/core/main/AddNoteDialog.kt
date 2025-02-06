@@ -25,7 +25,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -49,10 +48,12 @@ import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleTextWatcher
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
@@ -110,6 +111,10 @@ class AddNoteDialog : DialogFragment() {
 
   private val deleteItem by lazy { toolbar?.menu?.findItem(R.id.delete_note) }
 
+  private var noteListItem: NoteListItem? = null
+  private var zimReaderSource: ZimReaderSource? = null
+  private var favicon: String? = null
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     coreComponent
@@ -118,35 +123,45 @@ class AddNoteDialog : DialogFragment() {
       .build()
       .inject(this)
 
-    // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
-    zimFileName = zimReaderContainer.zimReaderSource?.toDatabase() ?: zimReaderContainer.name
-    if (zimFileName != null) { // No zim file currently opened
+    if (arguments != null) {
+      // For opening the note dialog from note screen.
+      noteListItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        arguments?.getSerializable(NOTE_LIST_ITEM_TAG, NoteListItem::class.java)
+      } else {
+        @Suppress("DEPRECATION")
+        arguments?.getSerializable(NOTE_LIST_ITEM_TAG) as NoteListItem
+      }
+
+      zimFileName = noteListItem?.zimReaderSource?.toDatabase()
+      zimFileTitle = noteListItem?.title
+      zimId = noteListItem?.zimId.orEmpty()
+      zimReaderSource = noteListItem?.zimReaderSource
+      favicon = noteListItem?.favicon
+      articleNoteFileName = getArticleNoteFileName()
+      zimNotesDirectory = noteListItem?.noteFilePath
+        ?.substringBefore(articleNoteFileName)
+      getArticleTitleAndZimFileUrlFromArguments()
+    } else {
+      // Note is opened from the reader screen.
+      // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
+      zimFileName = zimReaderContainer.zimReaderSource?.toDatabase() ?: zimReaderContainer.name
       zimFileTitle = zimReaderContainer.zimFileTitle
       zimId = zimReaderContainer.id.orEmpty()
-
-      if (arguments != null) {
-        getArticleTitleAndZimFileUrlFromArguments()
-      } else {
-        val webView = (activity as WebViewProvider?)?.getCurrentWebView()
-        articleTitle = webView?.title
-        zimFileUrl = webView?.url.orEmpty()
-      }
+      zimReaderSource = zimReaderContainer.zimReaderSource
+      favicon = zimReaderContainer.favicon
+      val webView = (activity as WebViewProvider?)?.getCurrentWebView()
+      articleTitle = webView?.title
+      zimFileUrl = webView?.url.orEmpty()
 
       // Corresponds to "ZimFileName" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
       articleNoteFileName = getArticleNoteFileName()
       zimNotesDirectory = "$NOTES_DIRECTORY$zimNoteDirectoryName/"
-    } else {
-      articleNoteFileName = getArticleNoteFileName()
-      zimNotesDirectory = arguments?.getString(NOTE_FILE_PATH)
-        ?.substringBefore(articleNoteFileName)
-      getArticleTitleAndZimFileUrlFromArguments()
-      context.toast(R.string.error_file_not_found, Toast.LENGTH_LONG)
     }
   }
 
   private fun getArticleTitleAndZimFileUrlFromArguments() {
-    articleTitle = arguments?.getString(NOTES_TITLE)?.substringAfter(": ")
-    zimFileUrl = arguments?.getString(ARTICLE_URL).orEmpty()
+    articleTitle = noteListItem?.title?.substringAfter(": ")
+    zimFileUrl = noteListItem?.zimUrl.orEmpty()
   }
 
   private fun isZimFileExist() = zimFileName != null
@@ -174,7 +189,7 @@ class AddNoteDialog : DialogFragment() {
 
   private fun getArticleNoteFileName(): String {
     // Returns url of the form: "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html"
-    arguments?.getString(NOTE_FILE_PATH)?.let {
+    noteListItem?.noteFilePath?.let {
       return@getArticleNoteFileName getTextAfterLastSlashWithoutExtension(it)
     }
 
@@ -365,7 +380,7 @@ class AddNoteDialog : DialogFragment() {
           noteEdited = false // As no unsaved changes remain
           enableDeleteNoteMenuItem()
           // adding only if saving file is success
-          addNoteToDao(noteFile.canonicalPath, "${zimFileTitle.orEmpty()}: $articleTitle")
+          addNoteToDao(noteFile.canonicalPath, getNoteTitle())
           disableSaveNoteMenuItem()
         } catch (e: IOException) {
           e.printStackTrace()
@@ -380,21 +395,33 @@ class AddNoteDialog : DialogFragment() {
     }
   }
 
+  /**
+   * This method determines the note title to be saved in the database.
+   * - If the note is opened from the Reader screen, it combines the `zimFileTitle`
+   *   and `articleTitle`, as it previously did.
+   * - If `noteListItem` is not null, it means the note is opened from the Notes screen,
+   *   as this item is passed in the bundle from the Notes screen. In this case, it
+   *   returns `zimFileTitle`, which represents the current note's title.
+   */
+  private fun getNoteTitle(): String =
+    noteListItem?.let {
+      zimFileTitle
+    } ?: run {
+      "${zimFileTitle.orEmpty()}: $articleTitle"
+    }
+
   private fun addNoteToDao(noteFilePath: String?, title: String) {
     noteFilePath?.let { filePath ->
       if (filePath.isNotEmpty() && zimFileUrl.isNotEmpty()) {
-        val zimReader = zimReaderContainer.zimFileReader
-        if (zimReader != null) {
-          val noteToSave = NoteListItem(
-            title = title,
-            url = zimFileUrl,
-            noteFilePath = noteFilePath,
-            zimFileReader = zimReader
-          )
-          mainRepositoryActions.saveNote(noteToSave)
-        } else {
-          Log.d(TAG, "zim reader found null")
-        }
+        val noteToSave = NoteListItem(
+          zimId = zimId,
+          title = title,
+          url = zimFileUrl,
+          noteFilePath = noteFilePath,
+          zimReaderSource = zimReaderSource,
+          favicon = favicon,
+        )
+        mainRepositoryActions.saveNote(noteToSave)
       } else {
         Log.d(TAG, "Cannot process with empty zim url or noteFilePath")
       }
@@ -409,7 +436,7 @@ class AddNoteDialog : DialogFragment() {
     val noteText = dialogNoteAddNoteBinding?.addNoteEditText?.text.toString()
     if (noteDeleted) {
       dialogNoteAddNoteBinding?.addNoteEditText?.text?.clear()
-      mainRepositoryActions.deleteNote(articleNoteFileName)
+      mainRepositoryActions.deleteNote(getNoteTitle())
       disableMenuItems()
       view?.snack(
         stringId = R.string.note_delete_successful,
@@ -514,8 +541,6 @@ class AddNoteDialog : DialogFragment() {
     @JvmField val NOTES_DIRECTORY =
       instance.getExternalFilesDir("").toString() + "/Kiwix/Notes/"
     const val TAG = "AddNoteDialog"
-    const val NOTE_FILE_PATH = "NoteFilePath"
-    const val ARTICLE_URL = "ArticleUrl"
-    const val NOTES_TITLE = "NotesTitle"
+    const val NOTE_LIST_ITEM_TAG = "NoteListItemTag"
   }
 }
