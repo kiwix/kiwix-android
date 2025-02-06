@@ -2,6 +2,8 @@
 New Features:
 * Support for Android 15. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4147)
 * Added a new intro screen to inform users how they can select the storage for downloading ZIM files. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4179)
+* Currently downloading ZIM files will be shown at the top in "Online" Library screen. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4211)
+* Users can resume a paused download from the notification. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4210)
 
 Bug Fixed:
 * Application crashes when opening the ZIM file in the reader. (@MohitMaliFtechiz, @CalebKL https://github.com/kiwix/kiwix-android/pull/3937)
@@ -15,6 +17,7 @@ Bug Fixed:
 * Application crashes when opening the random article. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4162)
 * Application crashes when creating the application shortcuts. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4167)
 * The trash folder's ZIM files are showing on the library screen but not opening. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4176)
+* `FIND_IN_PAGE` feature only works with first tab page. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4201)
 + More
 
 Compilation/CI/CD:
