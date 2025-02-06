@@ -384,7 +384,7 @@ class ZimManageViewModelTest {
       url = ""
     )
     val bookWithInactiveLanguage = book(
-      id = "3",
+      id = "4",
       language = "inactiveLanguage",
       url = ""
     )
@@ -415,10 +415,12 @@ class ZimManageViewModelTest {
     viewModel.libraryItems.test()
       .assertValue(
         listOf(
-          LibraryListItem.DividerItem(Long.MAX_VALUE, R.string.your_languages),
+          LibraryListItem.DividerItem(Long.MAX_VALUE, R.string.downloading),
+          LibraryListItem.LibraryDownloadItem(downloadModel(book = bookDownloading)),
+          LibraryListItem.DividerItem(Long.MAX_VALUE - 1, R.string.your_languages),
           LibraryListItem.BookItem(bookWithActiveLanguage, CanWrite4GbFile),
           LibraryListItem.DividerItem(Long.MIN_VALUE, R.string.other_languages),
-          LibraryListItem.LibraryDownloadItem(downloadModel(book = bookDownloading))
+          LibraryListItem.BookItem(bookWithInactiveLanguage, CanWrite4GbFile)
         )
       )
   }
