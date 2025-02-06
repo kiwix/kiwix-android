@@ -41,7 +41,8 @@ const val DEFAULT_INT_VALUE = -1
 class DownloadManagerMonitor @Inject constructor(
   val fetch: Fetch,
   val context: Context,
-  val downloadRoomDao: DownloadRoomDao
+  val downloadRoomDao: DownloadRoomDao,
+  private val fetchDownloadNotificationManager: FetchDownloadNotificationManager
 ) : DownloadMonitor {
   private val updater = PublishSubject.create<() -> Unit>()
   private var updaterDisposable: Disposable? = null
@@ -122,7 +123,12 @@ class DownloadManagerMonitor @Inject constructor(
   }
 
   private fun update(download: Download) {
-    updater.onNext { downloadRoomDao.update(download) }
+    updater.onNext {
+      downloadRoomDao.update(download)
+      if (download.isPaused()) {
+        fetchDownloadNotificationManager.showDownloadPauseNotification(fetch, download)
+      }
+    }
   }
 
   private fun delete(download: Download) {
