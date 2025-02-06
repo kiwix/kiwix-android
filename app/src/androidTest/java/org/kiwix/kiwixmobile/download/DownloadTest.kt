@@ -140,6 +140,8 @@ class DownloadTest : BaseActivityTest() {
         stopDownloadIfAlreadyStarted()
         downloadZimFile(smallestZimFileIndex)
         try {
+          // Scroll to the top because now the downloading ZIM files are showing on the top.
+          scrollToZimFileIndex(0)
           assertDownloadStart()
           pauseDownload()
           assertDownloadPaused()
