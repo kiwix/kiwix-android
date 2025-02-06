@@ -15,7 +15,7 @@ Bug Fixed:
 * Improved the scanning of ZIM files in the Play Store variant. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4149)
 * Application crashes when getting the Item size. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/issues/4157)
 * Application crashes when opening the random article. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4162)
-* Application crashes when creating the application shortcuts. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4167)
+* Application crashes when creating the application shortcuts. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4167, https://github.com/kiwix/kiwix-android/pull/4214)
 * The trash folder's ZIM files are showing on the library screen but not opening. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4176)
 * `FIND_IN_PAGE` feature only works with first tab page. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4201)
 + More
