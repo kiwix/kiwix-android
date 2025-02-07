@@ -82,7 +82,7 @@ dependencies {
   implementation(Libs.androidx_compose_runtime_livedata)
   implementation(Libs.androidx_compose_runtime_rxjava2)
 
-  //For Compose UI Testing
+  // For Compose UI Testing
   androidTestImplementation(Libs.androidx_compose_ui_test_junit4)
   debugImplementation(Libs.androidx_compose_ui_tooling)
 }
