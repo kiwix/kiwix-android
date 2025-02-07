@@ -36,6 +36,7 @@ import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDirections
@@ -136,7 +137,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     CoroutineScope(Dispatchers.IO).launch {
       objectBoxToRoomMigrator.migrateObjectBoxDataToRoom()
     }
-    createApplicationShortcuts()
+    lifecycleScope.launch(Dispatchers.IO) {
+      createApplicationShortcuts()
+    }
     handleBackPressed()
   }
 
