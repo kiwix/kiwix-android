@@ -13,6 +13,8 @@ buildscript {
 }
 plugins {
   `android-library`
+  id("org.jetbrains.kotlin.android")
+  id("org.jetbrains.kotlin.plugin.compose") version Versions.org_jetbrains_kotlin_plugin_compose
 }
 plugins.apply(KiwixConfigurationPlugin::class)
 apply(plugin = "io.objectbox")
@@ -25,6 +27,12 @@ android {
     getByName("release") {
       isMinifyEnabled = false
     }
+  }
+  buildFeatures {
+    compose = true
+  }
+  composeOptions {
+    kotlinCompilerExtensionVersion = Versions.kotlin_compiler_extension_version
   }
 }
 
@@ -63,4 +71,17 @@ dependencies {
   implementation(Libs.kotlinx_coroutines_android)
   implementation(Libs.kotlinx_coroutines_rx3)
   implementation(Libs.zxing)
+
+  implementation(Libs.androidx_compose_material3)
+  implementation(Libs.androidx_activity_compose)
+
+  implementation(Libs.androidx_compose_ui)
+  implementation(platform(Libs.androidx_compose_bom))
+  implementation(Libs.androidx_compose_ui_tooling)
+  implementation(Libs.androidx_compose_runtime_livedata)
+  implementation(Libs.androidx_compose_runtime_rxjava2)
+
+  // For Compose UI Testing
+  androidTestImplementation(Libs.androidx_compose_ui_test_junit4)
+  debugImplementation(Libs.androidx_compose_ui_tooling)
 }
