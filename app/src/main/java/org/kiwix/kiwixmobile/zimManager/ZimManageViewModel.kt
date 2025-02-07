@@ -488,24 +488,35 @@ class ZimManageViewModel @Inject constructor(
   ): List<LibraryListItem> {
     val activeLanguageCodes = allLanguages.filter(Language::active)
       .map(Language::languageCode)
+    val allBooks = libraryNetworkEntity.book!! - booksOnFileSystem.map(BookOnDisk::book).toSet()
+    val downloadingBooks = activeDownloads.mapNotNull { download ->
+      allBooks.firstOrNull { it.id == download.book.id }
+    }
     val booksUnfilteredByLanguage =
       applySearchFilter(
-        libraryNetworkEntity.book!! - booksOnFileSystem.map(BookOnDisk::book),
+        allBooks - downloadingBooks.toSet(),
         filter
       )
 
     val booksWithActiveLanguages =
       booksUnfilteredByLanguage.filter { activeLanguageCodes.contains(it.language) }
+    val booksWithoutActiveLanguages = booksUnfilteredByLanguage - booksWithActiveLanguages.toSet()
     return createLibrarySection(
-      booksWithActiveLanguages,
+      downloadingBooks,
       activeDownloads,
       fileSystemState,
-      R.string.your_languages,
+      R.string.downloading,
       Long.MAX_VALUE
+    ) + createLibrarySection(
+      booksWithActiveLanguages,
+      emptyList(),
+      fileSystemState,
+      R.string.your_languages,
+      Long.MAX_VALUE - 1
     ) +
       createLibrarySection(
-        booksUnfilteredByLanguage - booksWithActiveLanguages,
-        activeDownloads,
+        booksWithoutActiveLanguages,
+        emptyList(),
         fileSystemState,
         R.string.other_languages,
         Long.MIN_VALUE
