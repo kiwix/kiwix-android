@@ -339,6 +339,7 @@ class CopyMoveFileHandlerTest {
   fun `notifyFileOperationSuccess should handle invalid ZIM file`() = runTest {
     fileHandler = spyk(fileHandler)
     fileHandler.shouldValidateZimFile = true
+    every { destinationFile.path } returns ""
     coEvery { fileHandler.isValidZimFile(destinationFile) } returns false
     fileHandler.notifyFileOperationSuccess(destinationFile, sourceUri)
 
