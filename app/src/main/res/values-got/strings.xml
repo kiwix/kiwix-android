@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Gothicspeaker
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">𐌽𐌹 𐍃𐍄𐍉𐌳𐌴𐌹𐌸 𐍃𐍅𐍃𐍄𐌴𐌼𐌰 𐍆𐌰𐌾𐌻𐌴 𐌸𐌴𐌹𐌽𐌰 𐍆𐌰𐌾𐌻𐌰 𐌸𐍉𐌴𐌹 𐌿𐍆𐌰𐍂𐍂𐌹𐌽𐌽𐌰𐌽𐌳 •𐌳• 𐌲𐌱</string>
+  <string name="send_files_title">𐍃𐌰𐌽𐌳𐌴𐌹 𐍆𐌰𐌾𐌻𐌰</string>
+  <string name="receive_files_title">𐌰𐌽𐌳𐌽𐌹𐌼 𐍆𐌰𐌾𐌻𐌰</string>
+  <string name="no_app_found_to_open">𐌰𐍀𐍀 𐌳𐌿 𐍅𐌰𐌻𐌾𐌰𐌽 𐌶𐌹𐌼 𐍆𐌰𐌾𐌻 𐌱𐌹𐌲𐌹𐍄𐌰𐌽 𐌽𐌹𐍃𐍄!</string>
+  <string name="select_zim_file">𐍅𐌰𐌻𐌴𐌹 𐌶𐌹𐌼 𐍆𐌰𐌾𐌻 𐌳𐌿 𐌰𐌽𐌰𐌺𐌿𐌽𐌽𐌰𐌽</string>
+</resources>
