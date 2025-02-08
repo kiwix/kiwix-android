@@ -20,8 +20,8 @@
   <string name="search_label">Raadi</string>
   <string name="choose_file" fuzzy="true">Dooro galka ZIM ee ka samaysan (*.zim)</string>
   <string name="open_in_new_tab">Fur webka qaab cusub</string>
-  <string name="error_file_not_found">Qalad: Galka ZIM ee aad dooratay lama helin.</string>
-  <string name="error_file_invalid">Qalad: Galka ZIM ee aad dooratay maaha mid shaqaynaya.</string>
+  <string name="error_file_not_found">Qalad: Galka ZIM ee aad dooratay lama helin. %s</string>
+  <string name="error_file_invalid">Qalad: Galka ZIM ee aad dooratay maaha mid shaqaynaya. %s</string>
   <string name="error_article_url_not_found">Qalad: Galinta maqaalka (Url: %1$s) ma galin.</string>
   <string name="pref_display_title">Qaab aragga</string>
   <string name="pref_info_title">Macluumaad</string>

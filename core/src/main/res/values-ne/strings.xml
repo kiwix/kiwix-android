@@ -25,8 +25,8 @@
   <string name="search_label">खोज्नुहोस्</string>
   <string name="choose_file">सामग्री फाइल छान्नुहोस् (*.zim)</string>
   <string name="open_in_new_tab">लिङ्कलाई नयाँ ट्याबमा खोल्ने?</string>
-  <string name="error_file_not_found">त्रुटी: छानिएको ZIM फाइल भेटाउन सकिएन।</string>
-  <string name="error_file_invalid">त्रुटी: छानिएको फाइल मान्य ZIM फाइल होइन।</string>
+  <string name="error_file_not_found">त्रुटी: छानिएको ZIM फाइल भेटाउन सकिएन। %s</string>
+  <string name="error_file_invalid">त्रुटी: छानिएको फाइल मान्य ZIM फाइल होइन। %s</string>
   <string name="error_article_url_not_found">त्रुटी: लेख खोल्न असफल । (Url: %1$s)</string>
   <string name="pref_display_title">देखाउनुहोस्</string>
   <string name="pref_info_title">जानकारी</string>

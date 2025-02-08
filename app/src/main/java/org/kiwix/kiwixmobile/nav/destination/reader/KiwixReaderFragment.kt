@@ -144,7 +144,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
       // it will attempt to open the last opened ZIM file with the last loaded URL,
       // which is inside the non-existing ZIM file. This leads to unexpected behavior.
       exitBook()
-      activity.toast(string.error_file_not_found)
+      activity.toast(getString(string.error_file_not_found, zimFileUri))
       return
     }
     val zimReaderSource = ZimReaderSource(File(filePath))

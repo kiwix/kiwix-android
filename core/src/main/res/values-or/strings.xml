@@ -51,10 +51,10 @@
   <string name="stop_server_label">ସର୍ଭର ବନ୍ଦ କରନ୍ତୁ</string>
   <string name="server_started_message">ସର୍ଭର %s ପ୍ରବେଶ କରିବାକୁ ଆପଣଙ୍କ ବ୍ରାଉଜରରେ ଏହି ip ଠିକଣା ପ୍ରବେଶ କରନ୍ତୁ</string>
   <string name="share_host_address">ଅନ୍ୟ ପ୍ରୟୋଗଗୁଡ଼ିକ ମାଧ୍ୟମରେ URL ଅଂଶୀଦାର କରନ୍ତୁ</string>
-  <string name="error_file_not_found">ଅସୁବିଧା: ବଛାଯାଇଥିବା ଜିମ ଫାଇଲ ମିଳିଲାନାହିଁ ।</string>
+  <string name="error_file_not_found">ଅସୁବିଧା: ବଛାଯାଇଥିବା ଜିମ ଫାଇଲ ମିଳିଲାନାହିଁ । %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">ଏହି zim ଫାଇଲକୁ ପଢ଼ିବାରେ ଅସମର୍ଥ</string>
   <string name="zim_not_opened" fuzzy="true">ଜିମ୍ ଫାଇଲ୍ ଖୋଲିବାକୁ ଅସମର୍ଥ</string>
-  <string name="error_file_invalid">ଅସୁବିଧା: ବଛାଯାଇଥିବା ଜିମ ଫାଇଲଟି ବୈଧ ନୁହେଁ ।</string>
+  <string name="error_file_invalid">ଅସୁବିଧା: ବଛାଯାଇଥିବା ଜିମ ଫାଇଲଟି ବୈଧ ନୁହେଁ । %s</string>
   <string name="error_article_url_not_found">ଅସୁବିଧା: (Url: %1$s) ପ୍ରସଙ୍ଗ ଖୋଲିବାରେ ବିଫଳ ହେଲୁ ।</string>
   <string name="pref_display_title">ଦେଖଣା</string>
   <string name="pref_info_title">ସୂଚନା</string>

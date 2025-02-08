@@ -53,9 +53,9 @@
   <string name="stop_server_label">Serveri vındardış</string>
   <string name="server_started_message">Seba resayışê serverê %s re browseri rê ena adresê ip cı kerê</string>
   <string name="share_host_address">URL’yi be aplikasyonanê binan ra bare ke</string>
-  <string name="error_file_not_found">Xeta: Dosyaya ZIMia weçinıtiye nêvêniye.</string>
+  <string name="error_file_not_found">Xeta: Dosyaya ZIMia weçinıtiye nêvêniye. %s</string>
   <string name="zim_not_opened" fuzzy="true">Dosyay Zimi nêabiyena</string>
-  <string name="error_file_invalid">Xeta: Dosyaya weçinıtiye yew dosyaya ZIMia vêrdiye niya.</string>
+  <string name="error_file_invalid">Xeta: Dosyaya weçinıtiye yew dosyaya ZIMia vêrdiye niya. %s</string>
   <string name="error_article_url_not_found">Xeta: Barkerdışê meqaleyê (Url: %1$s) nêbi.</string>
   <string name="pref_display_title">Bımocne</string>
   <string name="pref_info_title">Melumat</string>

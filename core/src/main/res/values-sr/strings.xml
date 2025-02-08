@@ -25,8 +25,8 @@
   <string name="choose_file">Изаберите датотеку са садржајем (*.zim)</string>
   <string name="open_in_new_tab">Отворити везу у новој картици?</string>
   <string name="server_stopped_successfully_toast_message">Сервер је успешно заустављен.</string>
-  <string name="error_file_not_found">Грешка: изабрана ZIM датотека се не може наћи.</string>
-  <string name="error_file_invalid">Грешка: изабрана датотека није важећа ZIM датотека.</string>
+  <string name="error_file_not_found">Грешка: изабрана ZIM датотека се не може наћи. %s</string>
+  <string name="error_file_invalid">Грешка: изабрана датотека није важећа ZIM датотека. %s</string>
   <string name="error_article_url_not_found">Грешка: учитавање чланка (Url: %1$s) није успело.</string>
   <string name="pref_display_title">Приказ</string>
   <string name="pref_info_title">Информације</string>

@@ -28,8 +28,8 @@
   <string name="search_label">Търсене</string>
   <string name="choose_file">Изберете файл със съдържание (*.zim)</string>
   <string name="open_in_new_tab">Отваряне на препратката в нов раздел?</string>
-  <string name="error_file_not_found">Грешка: Избраният ZIM файл не е намерен.</string>
-  <string name="error_file_invalid">Грешка: Избраният файл не е валиден ZIM файл.</string>
+  <string name="error_file_not_found">Грешка: Избраният ZIM файл не е намерен. %s</string>
+  <string name="error_file_invalid">Грешка: Избраният файл не е валиден ZIM файл. %s</string>
   <string name="error_article_url_not_found">Грешка: Зареждането на статия (Url: %1$s) е неуспешно.</string>
   <string name="pref_display_title">Покажете</string>
   <string name="pref_info_title">Информация</string>

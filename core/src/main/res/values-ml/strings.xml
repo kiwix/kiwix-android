@@ -39,9 +39,9 @@
   <string name="hotspot_notification_content_title">കിവിക്സ് ഹോട്ട്സ്പോട്ട്</string>
   <string name="start_server_label">സെർവർ തുടങ്ങുക</string>
   <string name="stop_server_label">സെർവർ നിർത്തുക</string>
-  <string name="error_file_not_found">പിഴവ്: തിരഞ്ഞെടുത്ത സിം ഫയൽ കണ്ടെത്താനായില്ല</string>
+  <string name="error_file_not_found">പിഴവ്: തിരഞ്ഞെടുത്ത സിം ഫയൽ കണ്ടെത്താനായില്ല %s</string>
   <string name="zim_not_opened" fuzzy="true">zim ഫയൽ തുറക്കുവാൻ സാധിച്ചില്ല</string>
-  <string name="error_file_invalid">പിഴവ്: തിരഞ്ഞെടുത്ത സിം ഫയൽ സാധുവല്ല.</string>
+  <string name="error_file_invalid">പിഴവ്: തിരഞ്ഞെടുത്ത സിം ഫയൽ സാധുവല്ല. %s</string>
   <string name="error_article_url_not_found">പിഴവ്: (Url: %1$s) എന്ന ലേഖനം ലോഡ് ചെയ്യുന്നത് പരാജയപ്പെട്ടു.</string>
   <string name="pref_display_title">കാഴ്ച</string>
   <string name="pref_info_title">വിവരം</string>

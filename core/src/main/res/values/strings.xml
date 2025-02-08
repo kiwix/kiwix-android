@@ -50,10 +50,10 @@
   <string name="server_started_message" tools:keep="@string/server_started_message">Enter this ip address into your browser to access the server %s</string>
   <string name="qr_code">Rendered QR Code</string>
   <string name="share_host_address">Share URL via other applications</string>
-  <string name="error_file_not_found">Error: The selected ZIM file could not be found.</string>
+  <string name="error_file_not_found">Error: The selected ZIM file could not be found. %s</string>
   <string name="unable_to_read_zim_file">Unable to read this ZIM file!</string>
   <string name="zim_not_opened">Unable to open ZIM file</string>
-  <string name="error_file_invalid">Error: The selected file is not a valid ZIM file.</string>
+  <string name="error_file_invalid">Error: The selected file is not a valid ZIM file. %s</string>
   <string name="error_article_url_not_found">Error: Loading article (Url: %1$s) failed.</string>
   <string name="error_loading_random_article_zim_not_loaded">Unable to load article. The ZIM file is not properly loaded.</string>
   <string name="could_not_find_random_article">Unable to find a random article. Please try again later.</string>

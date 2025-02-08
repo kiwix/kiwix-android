@@ -57,10 +57,10 @@
   <string name="error_ip_address_not_found">ip చిరునామా కనుగొనబడలేదు.</string>
   <string name="server_started_message">%s సర్వర్‌ని యాక్సెస్ చేయడానికి మీ బ్రౌజర్‌లో ఈ ip చిరునామాను నమోదు చేయండి</string>
   <string name="share_host_address">ఇతర అప్లికేషన్ల ద్వారా URLని భాగస్వామ్యం చేయండి</string>
-  <string name="error_file_not_found">దోషం‌ :‌ మీరు ఎంపిక చేసిన ZIM దస్త్రం దొరకలేదు.</string>
+  <string name="error_file_not_found">దోషం‌ :‌ మీరు ఎంపిక చేసిన ZIM దస్త్రం దొరకలేదు. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">ఈ జిమ్ ఫైల్‌ని చదవడం సాధ్యం కాలేదు!</string>
   <string name="zim_not_opened" fuzzy="true">జిమ్ ఫైల్‌ను తెరవడం సాధ్యం కాలేదు</string>
-  <string name="error_file_invalid">దోషం : మీరు ఎంపిక చేసిన దస్త్రం సరియైన ZIM దస్త్రం కాదు.</string>
+  <string name="error_file_invalid">దోషం : మీరు ఎంపిక చేసిన దస్త్రం సరియైన ZIM దస్త్రం కాదు. %s</string>
   <string name="error_article_url_not_found">దోషం : వ్యాసం (Url: %1$s) ను లోడ్ చెయ్యడం విఫలమయింది.</string>
   <string name="pref_display_title">వీక్షణం</string>
   <string name="pref_info_title">సమాచారం</string>

@@ -60,10 +60,10 @@
   <string name="stop_server_label">सर्वर बंद करें।</string>
   <string name="server_started_message">सर्वर %s प्रयोग करने के लिए इस आईपी पते को अपने ब्राउज़र में दर्ज करें</string>
   <string name="share_host_address">अन्य एप्लिकेशन के माध्यम से यूआरएल साझा करें</string>
-  <string name="error_file_not_found">त्रुटि: चुनी गयी ZIM फ़ाइल नही मिल सकी।</string>
+  <string name="error_file_not_found">त्रुटि: चुनी गयी ZIM फ़ाइल नही मिल सकी। %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">इस ज़िम फ़ाइल को पढ़ने में असमर्थ!</string>
   <string name="zim_not_opened" fuzzy="true">ज़िम फ़ाइल खोलने में असमर्थ</string>
-  <string name="error_file_invalid">त्रुटि: चुनी गयी फ़ाइल एक वैध ZIM फ़ाइल नहीं है।</string>
+  <string name="error_file_invalid">त्रुटि: चुनी गयी फ़ाइल एक वैध ZIM फ़ाइल नहीं है। %s</string>
   <string name="error_article_url_not_found">त्रुटि: आलेख (Url:  %1$s ) लोड करना विफल रहा।</string>
   <string name="pref_display_title">प्रदर्शन</string>
   <string name="pref_info_title">जानकारी</string>

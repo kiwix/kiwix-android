@@ -22,8 +22,8 @@
   <string name="search_label">ძიება</string>
   <string name="choose_file" fuzzy="true">აირჩიეთ ZIM-ფაილი (*.zim)</string>
   <string name="open_in_new_tab">ბმული ახალ ჩანართში გაიხსნას?</string>
-  <string name="error_file_not_found">შეცდომა: არჩეული ZIM ფაილი ვერ მოიძებნა.</string>
-  <string name="error_file_invalid">შეცდომა: არჩეული ფაილი არ არის სწორი ZIM ფაილი.</string>
+  <string name="error_file_not_found">შეცდომა: არჩეული ZIM ფაილი ვერ მოიძებნა. %s</string>
+  <string name="error_file_invalid">შეცდომა: არჩეული ფაილი არ არის სწორი ZIM ფაილი. %s</string>
   <string name="error_article_url_not_found">შეცდომა: სტატია (Url: %1$s) ვერ ჩაიტვირთა.</string>
   <string name="pref_display_title">ჩვენება</string>
   <string name="pref_info_title">ინფორმაცია</string>

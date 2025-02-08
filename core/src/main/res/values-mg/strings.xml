@@ -20,8 +20,8 @@
   <string name="search_label">Hikaroka</string>
   <string name="choose_file" fuzzy="true">Hisafidy rakitra misy votoatiny (*.zim)</string>
   <string name="open_in_new_tab">Hanokatra rohy anaty sasa-joro vaovao?</string>
-  <string name="error_file_not_found">Hadisoana: Tsy nahita ilay rakitra ZIM voafidinao.</string>
-  <string name="error_file_invalid">Hadisoana: Rakitra ZIM tsy azo raisina ilay voafidinao.</string>
+  <string name="error_file_not_found">Hadisoana: Tsy nahita ilay rakitra ZIM voafidinao. %s</string>
+  <string name="error_file_invalid">Hadisoana: Rakitra ZIM tsy azo raisina ilay voafidinao. %s</string>
   <string name="error_article_url_not_found">Hadisoana: tsy nahafahana ilay lahatsoratra (Url: %1$s).</string>
   <string name="pref_display_title">Fiseho</string>
   <string name="pref_info_title">Fampahalalana</string>

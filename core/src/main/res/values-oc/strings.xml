@@ -22,8 +22,8 @@
   <string name="search_label">Recercar</string>
   <string name="choose_file">Seleccionar un fichièr de contengut (*.zim)</string>
   <string name="open_in_new_tab">Dobrir lo ligam dins un onglet novèl ?</string>
-  <string name="error_file_not_found">Error : Lo fichièr ZIM seleccionat es introbable.</string>
-  <string name="error_file_invalid">Error : Lo fichièr seleccionat es pas un fichièr ZIM valid.</string>
+  <string name="error_file_not_found">Error : Lo fichièr ZIM seleccionat es introbable. %s</string>
+  <string name="error_file_invalid">Error : Lo fichièr seleccionat es pas un fichièr ZIM valid. %s</string>
   <string name="error_article_url_not_found">Error : Lo cargament de l’article (Url: %1$s) a fracassat.</string>
   <string name="pref_display_title">Afichatge</string>
   <string name="pref_info_title">Informacion</string>

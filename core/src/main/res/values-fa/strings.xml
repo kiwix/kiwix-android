@@ -32,8 +32,8 @@
   <string name="open_in_new_tab">بازکردن پیوند در زبانهٔ جدید؟</string>
   <string name="go_to_wifi_settings_label">برو به تنظیمات وای‌فای</string>
   <string name="no_books_selected_toast_message">لطفاً نخست کتاب‌ها را انتخاب کنید</string>
-  <string name="error_file_not_found">خطا: پروندهٔ ZIM انتخاب شده پیدا نشد.</string>
-  <string name="error_file_invalid">خطا: پروندهٔ انتخاب‌شده یک پروندهٔ ZIM معتبر نیست.</string>
+  <string name="error_file_not_found">خطا: پروندهٔ ZIM انتخاب شده پیدا نشد. %s</string>
+  <string name="error_file_invalid">خطا: پروندهٔ انتخاب‌شده یک پروندهٔ ZIM معتبر نیست. %s</string>
   <string name="error_article_url_not_found">حطا: بارگیری مقالهٔ (نشانی: %1$s) شکست خورد.</string>
   <string name="pref_display_title">نمایش</string>
   <string name="pref_info_title">اطلاعات</string>

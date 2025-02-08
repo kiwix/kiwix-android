@@ -54,10 +54,10 @@
   <string name="server_started_message">Që të hyni te shërbyesi %s, jepni këtë adresë IP te shfletuesi juaj</string>
   <string name="qr_code">Kodi QR i vizatuar</string>
   <string name="share_host_address">Jepeni URL-në përmes aplikacionesh të tjera</string>
-  <string name="error_file_not_found">Gabim: S’u gjet dot kartela ZIM e përzgjedhur.</string>
+  <string name="error_file_not_found">Gabim: S’u gjet dot kartela ZIM e përzgjedhur. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">S’arrihet të lexohet kjo kartelë zim!</string>
   <string name="zim_not_opened" fuzzy="true">S’arrihet të hapet kartelë zim</string>
-  <string name="error_file_invalid">Gabim: Kartela e përzgjedhur s’është kartelë ZIM e vlefshme.</string>
+  <string name="error_file_invalid">Gabim: Kartela e përzgjedhur s’është kartelë ZIM e vlefshme. %s</string>
   <string name="error_article_url_not_found">Gabim: Dështoi ngarkimi i artikullit (Url: %1$s).</string>
   <string name="pref_display_title">Ekran</string>
   <string name="pref_info_title">Informacione</string>
