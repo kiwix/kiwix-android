@@ -115,6 +115,18 @@ object Versions {
   const val keeper = "0.16.1"
 
   const val fetch: String = "3.4.1"
+
+  const val org_jetbrains_kotlin_plugin_compose = "2.1.10"
+
+  const val kotlin_compiler_extension_version = "1.5.15"
+
+  const val androidx_compose_material3_version = "1.3.1"
+
+  const val androidx_activity_compose_version = "1.10.0"
+
+  const val androidx_compose_ui_version = "1.7.7"
+
+  const val androidx_compose_bom_version = "2025.01.01"
 }
 
 /**
