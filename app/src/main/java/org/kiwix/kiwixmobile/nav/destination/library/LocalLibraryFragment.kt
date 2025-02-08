@@ -425,7 +425,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
         // and we will handle this later.
         val fileName = documentFile?.name
         if (fileName != null && !isValidZimFile(fileName)) {
-          activity.toast(string.error_file_invalid)
+          activity.toast(getString(string.error_file_invalid, "$uri"))
           return@launch
         }
         copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(
@@ -456,12 +456,12 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       requireActivity().applicationContext, uri
     )
     if (filePath == null || !File(filePath).isFileExist()) {
-      activity.toast(string.error_file_not_found)
+      activity.toast(getString(string.error_file_not_found, "$uri"))
       return null
     }
     val file = File(filePath)
     return if (!FileUtils.isValidZimFile(file.path)) {
-      activity.toast(string.error_file_invalid)
+      activity.toast(getString(string.error_file_invalid, file.path))
       null
     } else {
       file

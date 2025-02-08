@@ -47,10 +47,10 @@
   <string name="start_server_label">Käynnistä palvelin</string>
   <string name="stop_server_label">Pysäytä palvelin</string>
   <string name="error_ip_address_not_found">IP-osoitetta ei löytynyt.</string>
-  <string name="error_file_not_found">Virhe: valittua ZIM-tiedostoa ei löytynyt.</string>
+  <string name="error_file_not_found">Virhe: valittua ZIM-tiedostoa ei löytynyt. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Zim-tiedostoa ei voitu lukea!</string>
   <string name="zim_not_opened" fuzzy="true">Zim-tiedostoa ei voi avata</string>
-  <string name="error_file_invalid">Virhe: valittu tiedosto ei ole kelvollinen ZIM-tiedosto.</string>
+  <string name="error_file_invalid">Virhe: valittu tiedosto ei ole kelvollinen ZIM-tiedosto. %s</string>
   <string name="error_article_url_not_found">Virhe: Artikkelin (Url: %1$s) lataus epäonnistui.</string>
   <string name="pref_display_title">Näytä</string>
   <string name="pref_info_title">Tiedot</string>

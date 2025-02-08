@@ -37,10 +37,10 @@
   <string name="progress_dialog_starting_server">Starter serveren</string>
   <string name="start_server_label">Start server</string>
   <string name="stop_server_label">Stop server</string>
-  <string name="error_file_not_found">Fejl: Den valgte ZIM fil blev ikke fundet.</string>
+  <string name="error_file_not_found">Fejl: Den valgte ZIM fil blev ikke fundet. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Kan ikke åbne den zim fil!</string>
   <string name="zim_not_opened" fuzzy="true">Kan ikke åbne zim fil</string>
-  <string name="error_file_invalid">Fejl: Den valgte fil er ikke en gyldig ZIM fil.</string>
+  <string name="error_file_invalid">Fejl: Den valgte fil er ikke en gyldig ZIM fil. %s</string>
   <string name="error_article_url_not_found">Fejl: Indlæsning af artikel (Url: %1$s) mislykkedes.</string>
   <string name="pref_display_title">Visning</string>
   <string name="pref_info_title">Information</string>

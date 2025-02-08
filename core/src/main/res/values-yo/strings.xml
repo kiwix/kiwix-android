@@ -56,10 +56,10 @@
   <string name="error_ip_address_not_found">Ko le ri adiresi ip.</string>
   <string name="server_started_message">Tẹ adiresi IP yii sinu ẹrọ aṣawakiri rẹ lati wọle si olupin %s</string>
   <string name="share_host_address">Pin URL nipasẹ awọn ohun elo miiran</string>
-  <string name="error_file_not_found">Aṣiṣe: Faili ZIM ti o yan ko ṣee ri.</string>
+  <string name="error_file_not_found">Aṣiṣe: Faili ZIM ti o yan ko ṣee ri. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Ko le ka faili zim yii!</string>
   <string name="zim_not_opened" fuzzy="true">Ko le ṣi faili zim</string>
-  <string name="error_file_invalid">Aṣiṣe: Faili ti o yan kii ṣe faili ZIM to wulo.</string>
+  <string name="error_file_invalid">Aṣiṣe: Faili ti o yan kii ṣe faili ZIM to wulo. %s</string>
   <string name="error_article_url_not_found">Aṣiṣe: Nkojọpọ nkan (Url: %1$s ) kuna.</string>
   <string name="pref_display_title">Ìmúhàn</string>
   <string name="pref_info_title">Ìfitọ́nilétí</string>

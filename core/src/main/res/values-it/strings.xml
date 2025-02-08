@@ -64,10 +64,10 @@
   <string name="server_started_message">Inserisci questo indirizzo IP nel tuo browser per accedere al server: %s</string>
   <string name="qr_code">Codice QR renderizzato</string>
   <string name="share_host_address">Condividi URL con altre applicazioni</string>
-  <string name="error_file_not_found">Errore: il file ZIM selezionato non è stato trovato.</string>
+  <string name="error_file_not_found">Errore: il file ZIM selezionato non è stato trovato. %s</string>
   <string name="unable_to_read_zim_file">Impossibile leggere questo file ZIM!</string>
   <string name="zim_not_opened">Impossibile aprire il file ZIM</string>
-  <string name="error_file_invalid">Errore: il file selezionato non è un file ZIM valido.</string>
+  <string name="error_file_invalid">Errore: il file selezionato non è un file ZIM valido. %s</string>
   <string name="error_article_url_not_found">Errore: caricamento della voce (URL: %1$s) non riuscito.</string>
   <string name="pref_display_title">Aspetto</string>
   <string name="pref_info_title">Informazioni</string>

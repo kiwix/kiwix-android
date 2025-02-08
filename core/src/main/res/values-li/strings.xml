@@ -17,8 +17,8 @@
   <string name="search_label">Zeuk</string>
   <string name="choose_file">Sillekteer ’n Inhawdsbestandj (*.zim)</string>
   <string name="open_in_new_tab">Äöpen link in nuuj tabblaad?</string>
-  <string name="error_file_not_found">Fout: ’t geselecteerd ZIM-bestandj kós neet waere gevónje.</string>
-  <string name="error_file_invalid">Fout: ’t geselecteerd bestandj is gei geldig ZIM-bestandj.</string>
+  <string name="error_file_not_found">Fout: ’t geselecteerd ZIM-bestandj kós neet waere gevónje. %s</string>
+  <string name="error_file_invalid">Fout: ’t geselecteerd bestandj is gei geldig ZIM-bestandj. %s</string>
   <string name="error_article_url_not_found">Fout: ’t laje van de pagina (URL: %1$s) is mislök.</string>
   <string name="pref_display_title">Waergaaf</string>
   <string name="pref_info_title">Infermasie</string>

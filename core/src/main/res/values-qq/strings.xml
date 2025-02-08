@@ -61,10 +61,10 @@
   <string name="stop_server_label">This message shows as the button text, by clicking on this button “Kiwix server” stops.</string>
   <string name="server_started_message">This message appears in “Android TextView” as a text message. When the “Kiwix server” is successfully started, in this message %s will be replaced with the IP address on which the server is running. It shows the details of the server IP address to the user.</string>
   <string name="share_host_address">This message is the content description of “Android ImageView”, this appears when the “Kiwix server” is running and the IP address is visible to the user on which server is running. By clicking on this it will share the IP address with other applications.</string>
-  <string name="error_file_not_found">This message appears in “Android Toast” as an error message when the user tries to open a Zim file but the file was moved to another directory or deleted. So this message informs the user this file could not be found.</string>
+  <string name="error_file_not_found">This message appears in “Android Toast” as an error message when the user tries to open a Zim file but the file was moved to another directory or deleted. So this message informs the user this file could not be found. Here %s will be replaced with the ZIM file path which is failed to open.</string>
   <string name="unable_to_read_zim_file">This message appears in “Android Toast” as a error message when our application is unable to read the zim file.</string>
   <string name="zim_not_opened">This message appears in “Android Toast” as an error message when the user opens the application and the previously opened zim file was deleted from the phone storage, then we are showing this error message to the user.</string>
-  <string name="error_file_invalid">The message appears in “Android Toast” as a warning message when the user tries to open a file and that file is not the zim file.</string>
+  <string name="error_file_invalid">The message appears in “Android Toast” as a warning message when the user tries to open a file and that file is not the zim file.\n Here %s will be replaced by the ZIM file path which is failed to open.</string>
   <string name="error_article_url_not_found">* This message appears in “Android Toast” as an error message when “Kiwix Reader” is unable to load the given URL.\n* Here %1$s will be replaced by the URL which is failed to load.</string>
   <string name="pref_display_title">{{Identical|Display}}</string>
   <string name="pref_info_title">{{Identical|Information}}</string>

@@ -56,10 +56,10 @@
   <string name="error_ip_address_not_found">An kasa samun ip address.</string>
   <string name="server_started_message">Shigar da wannan adireshin ip a cikin burauzarka don samun damar sabar %s</string>
   <string name="share_host_address">Raba URL ta hanyar wasu aikace-aikace</string>
-  <string name="error_file_not_found">Kuskure: Ba a iya samun fayil din ZIM da aka zaba ba</string>
+  <string name="error_file_not_found">Kuskure: Ba a iya samun fayil din ZIM da aka zaba ba %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">An kasa karanta wannan fayil na zim!</string>
   <string name="zim_not_opened" fuzzy="true">An kasa buɗe fayil na zim</string>
-  <string name="error_file_invalid">Kuskure: Fayil ɗin da aka zaɓa ba ingantaccen fayil na ZIM bane.</string>
+  <string name="error_file_invalid">Kuskure: Fayil ɗin da aka zaɓa ba ingantaccen fayil na ZIM bane. %s</string>
   <string name="error_article_url_not_found">Kuskure: Loading labarin (Url: %1$s) ya gaza</string>
   <string name="pref_display_title">Nunawa</string>
   <string name="pref_info_title">Bayani</string>

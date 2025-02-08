@@ -410,7 +410,7 @@ class CopyMoveFileHandler @Inject constructor(
     FileUtils.isSplittedZimFile(destinationFile.name) || validateZimFileValid(destinationFile)
 
   fun handleInvalidZimFile(destinationFile: File, sourceUri: Uri) {
-    val errorMessage = activity.getString(R.string.error_file_invalid)
+    val errorMessage = activity.getString(R.string.error_file_invalid, destinationFile.path)
     if (isMoveOperation) {
       val moveSuccessful = tryMoveWithDocumentContract(
         destinationFile.toUri(),

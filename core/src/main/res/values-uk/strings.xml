@@ -60,10 +60,10 @@
   <string name="stop_server_label">Зупинити сервер</string>
   <string name="server_started_message">Уведіть цю IP адресу у ваш браузер, аби отримати доступ до серверу %s</string>
   <string name="share_host_address">Поділіться URL-адресою за допомогою інших програм</string>
-  <string name="error_file_not_found">Помилка: вибраний ZIM файл неможливо знайти.</string>
+  <string name="error_file_not_found">Помилка: вибраний ZIM файл неможливо знайти. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Неможливо прочитати цей файл zim!</string>
   <string name="zim_not_opened" fuzzy="true">Неможливо відкрити файл zim</string>
-  <string name="error_file_invalid">Помилка: вибраний файл не є вірним файлом ZIM.</string>
+  <string name="error_file_invalid">Помилка: вибраний файл не є вірним файлом ZIM. %s</string>
   <string name="error_article_url_not_found">Помилка: завантаження статті (Url: %1$s) не вдалося.</string>
   <string name="pref_display_title">Дисплей</string>
   <string name="pref_info_title">Інформація</string>

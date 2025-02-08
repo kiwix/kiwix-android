@@ -61,10 +61,10 @@
   <string name="server_started_message">יש להזין את כתובת ה־IP הזאת לדפדפן שלך כדי לגשת לשרת %s</string>
   <string name="qr_code">קוד QR מתוצג</string>
   <string name="share_host_address">שיתוף URL דרך יישומים אחרים</string>
-  <string name="error_file_not_found">שגיאה: קובץ ה־ZIM שנבחר לא נמצא.</string>
+  <string name="error_file_not_found">%s שגיאה: קובץ ה־ZIM שנבחר לא נמצא.</string>
   <string name="unable_to_read_zim_file">לא ניתן לקרוא מקובץ ה־ZIM הזה!</string>
   <string name="zim_not_opened">לא ניתן לפתוח את קובץ ה־ZIM</string>
-  <string name="error_file_invalid">שגיאה: הקובץ שנבחר אינו קובץ ZIM תקין.</string>
+  <string name="error_file_invalid">שגיאה: הקובץ שנבחר אינו קובץ ZIM תקין. %s</string>
   <string name="error_article_url_not_found">שגיאה: טעינת הערך נכשלה (כתובת: %1$s).</string>
   <string name="pref_display_title">תצוגה</string>
   <string name="pref_info_title">מידע</string>

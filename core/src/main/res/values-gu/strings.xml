@@ -16,8 +16,8 @@
   <string name="search_label">શોધો</string>
   <string name="choose_file" fuzzy="true">ZIM માહિતી ફાઇલ (*.zim) પસંદ કરો</string>
   <string name="open_in_new_tab">કડી નવી ટેબમાં ખોલશો?</string>
-  <string name="error_file_not_found">ક્ષતિ: પસંદ કરેલ ZIM ફાઇલ મળી શકી નહી.</string>
-  <string name="error_file_invalid">ક્ષતિ: પસંદ કરેલ ફાઇલ યોગ્ય ZIM ફાઇલ નથી.</string>
+  <string name="error_file_not_found">ક્ષતિ: પસંદ કરેલ ZIM ફાઇલ મળી શકી નહી. %s</string>
+  <string name="error_file_invalid">ક્ષતિ: પસંદ કરેલ ફાઇલ યોગ્ય ZIM ફાઇલ નથી. %s</string>
   <string name="error_article_url_not_found">ક્ષતિ: લેખ (Url: %1$s) લાવવાનું નિષ્ફળ થયું.</string>
   <string name="pref_display_title">દર્શાવો</string>
   <string name="pref_info_title">માહિતી</string>

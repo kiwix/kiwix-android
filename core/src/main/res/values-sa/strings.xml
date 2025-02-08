@@ -19,8 +19,8 @@
   <string name="search_label">अन्विष्यताम्</string>
   <string name="choose_file" fuzzy="true">एतस्याः ZIM पूर्वलिखितसञ्चिकायाः चयनं करोतु (*.zim)</string>
   <string name="open_in_new_tab">एतत् परिसन्धिं नवीन-टेब्-मध्ये उद्घाटयतु</string>
-  <string name="error_file_not_found">दोषः : चितसञ्चिका ZIM न प्राप्ता ।</string>
-  <string name="error_file_invalid">दोषः : चितसञ्चिका योग्या ZIM-सञ्चिका नस्ति ।</string>
+  <string name="error_file_not_found">दोषः : चितसञ्चिका ZIM न प्राप्ता । %s</string>
+  <string name="error_file_invalid">दोषः : चितसञ्चिका योग्या ZIM-सञ्चिका नस्ति । %s</string>
   <string name="error_article_url_not_found">दोषः : (Url: %1$s) लेखस्य अवारोपणं विफलम् अभवत् ।</string>
   <string name="pref_display_title">प्रदर्श्यताम्</string>
   <string name="pref_info_title">सूचना</string>

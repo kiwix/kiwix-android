@@ -52,10 +52,10 @@
   <string name="error_ip_address_not_found">Go batla ip adress go retetse.</string>
   <string name="server_started_message">Tsenya aterese eno ya ip mo browser ya gago go fitlhelela server %s</string>
   <string name="share_host_address">Abelana URL ka ditselna tse dingwe</string>
-  <string name="error_file_not_found">Phoso: Faele ya ZIM e e tlhophilweng ga e a ka ya bonwa.</string>
+  <string name="error_file_not_found">Phoso: Faele ya ZIM e e tlhophilweng ga e a ka ya bonwa. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Go batla faele ye ya ZIM ga go kgonege!</string>
   <string name="zim_not_opened" fuzzy="true">Go bula faele ya ZIM go a retela</string>
-  <string name="error_file_invalid">Phoso: Faele e e tlhophilweng ga se faele ya ZIM e e siameng.</string>
+  <string name="error_file_invalid">Phoso: Faele e e tlhophilweng ga se faele ya ZIM e e siameng. %s</string>
   <string name="error_article_url_not_found">Phoso:Tsebe ye e letetsweng (Url:%1$s) e retetse.</string>
   <string name="pref_display_title">Pontsho</string>
   <string name="pref_info_title">Tshedimosetso</string>

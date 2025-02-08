@@ -51,9 +51,9 @@
   <string name="start_server_label">Έναρξη διακομιστή</string>
   <string name="stop_server_label">Τερματισμός διακομιστή</string>
   <string name="server_started_message">Εισάγετε την διεύθυνση ip στον περιηγητής σας, για πρόσβαση στον διακομιστή %s</string>
-  <string name="error_file_not_found">Σφάλμα: Το επιλεγμένο ZIM αρχείο δεν μπόρεσε να βρεθεί.</string>
+  <string name="error_file_not_found">Σφάλμα: Το επιλεγμένο ZIM αρχείο δεν μπόρεσε να βρεθεί. %s</string>
   <string name="zim_not_opened" fuzzy="true">Δεν μπόρεσε να ανοιχθεί το αρχείο zim</string>
-  <string name="error_file_invalid">Σφάλμα: Το επιλεγμένο αρχείο δεν είναι έγκυρο αρχείο ZIM.</string>
+  <string name="error_file_invalid">Σφάλμα: Το επιλεγμένο αρχείο δεν είναι έγκυρο αρχείο ZIM. %s</string>
   <string name="error_article_url_not_found">Σφάλμα:το Ανέβασμα του λήμματος (Url: %1$s) απέτυχε.</string>
   <string name="pref_display_title">Εμφάνιση</string>
   <string name="pref_info_title">Πληροφορίες</string>

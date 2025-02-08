@@ -16,8 +16,8 @@
   <string name="search_label">ស្វែងរក</string>
   <string name="choose_file" fuzzy="true">ជ្រើសរើសឯកសារមាតិកា ZIM (*.zim)</string>
   <string name="open_in_new_tab">បើក​តំណ​ក្នុង​ផ្ទាំង​ថ្មី?</string>
-  <string name="error_file_not_found">កំហុស៖ ឯកសារ ZIM ដែលបានជ្រើសនេះ រកមិនឃើញទេ។</string>
-  <string name="error_file_invalid">កំហុស៖ ឯកសារ ZIM ដែលបានជ្រើសនេះ មិនមែនជាឯកសារ ZIM ត្រឹមត្រូវ។</string>
+  <string name="error_file_not_found">កំហុស៖ ឯកសារ ZIM ដែលបានជ្រើសនេះ រកមិនឃើញទេ។ %s</string>
+  <string name="error_file_invalid">កំហុស៖ ឯកសារ ZIM ដែលបានជ្រើសនេះ មិនមែនជាឯកសារ ZIM ត្រឹមត្រូវ។ %s</string>
   <string name="error_article_url_not_found">កំហុស៖ ទាញយកអត្ថបទ (Url: %1$s) បានបរាជ័យ។</string>
   <string name="pref_display_title">ការ​បង្ហាញ</string>
   <string name="pref_info_title">ព័ត៌មាន</string>

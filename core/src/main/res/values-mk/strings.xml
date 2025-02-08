@@ -54,10 +54,10 @@
   <string name="server_started_message">Внесете ја оваа IP-адреса во прелистувачот за да пристапите на опслужувачот %s</string>
   <string name="qr_code">Испишан QR-код</string>
   <string name="share_host_address">Сподели URL преку други прилози</string>
-  <string name="error_file_not_found">Грешка: Не ја најдов избраната ZIM-податотека.</string>
+  <string name="error_file_not_found">Грешка: Не ја најдов избраната ZIM-податотека. %s</string>
   <string name="unable_to_read_zim_file">Не можам да ја прочитам оваа ZIM-податотека!</string>
   <string name="zim_not_opened">Не можам да ја отворам ZIM-податотеката</string>
-  <string name="error_file_invalid">Грешка: Одбраната податотека не е вежачка ZIM-податотека.</string>
+  <string name="error_file_invalid">Грешка: Одбраната податотека не е вежачка ZIM-податотека. %s</string>
   <string name="error_article_url_not_found">Грешка: Не успеав да ја вчитам статијата (URL: %1$s).</string>
   <string name="pref_display_title">Приказник</string>
   <string name="pref_info_title">Информации</string>
