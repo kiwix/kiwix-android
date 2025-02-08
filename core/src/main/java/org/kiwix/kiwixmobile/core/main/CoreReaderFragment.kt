@@ -99,15 +99,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import org.json.JSONArray
-import org.json.JSONException
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.BuildConfig
+import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
+import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.databinding.FragmentReaderBinding
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.consumeObservable
@@ -135,6 +138,7 @@ import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryClickListener
 import org.kiwix.kiwixmobile.core.page.history.NavigationHistoryDialog
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryListItem
+import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudCallbacks
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_PAUSE_OR_RESUME_TTS
@@ -157,14 +161,11 @@ import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.getAttributes
-import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_ARTICLES
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
-import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_POSITIONS
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED_NEW_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
-import org.kiwix.kiwixmobile.core.utils.UpdateUtils.reformatProviderUrl
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
@@ -286,6 +287,10 @@ abstract class CoreReaderFragment :
   private var bottomToolbarToc: ImageView? = null
 
   private var isFirstTimeMainPageLoaded = true
+  private var isFromManageExternalLaunch = false
+  private val savingTabsMutex = Mutex()
+  private var searchItemToOpen: SearchItemToOpen? = null
+  private var findInPageTitle: String? = null
 
   @JvmField
   @Inject
@@ -505,6 +510,16 @@ abstract class CoreReaderFragment :
         readAloudService?.registerCallBack(this@CoreReaderFragment)
       }
     }
+    requireActivity().observeNavigationResult<String>(
+      FIND_IN_PAGE_SEARCH_STRING,
+      viewLifecycleOwner,
+      Observer(::storeFindInPageTitle)
+    )
+    requireActivity().observeNavigationResult<SearchItemToOpen>(
+      TAG_FILE_SEARCHED,
+      viewLifecycleOwner,
+      Observer(::storeSearchItem)
+    )
     handleClicks()
   }
 
@@ -988,6 +1003,9 @@ abstract class CoreReaderFragment :
 
   override fun clearHistory() {
     getCurrentWebView()?.clearHistory()
+    CoroutineScope(Dispatchers.IO).launch {
+      repositoryActions?.clearWebViewPageHistory()
+    }
     updateBottomToolbarArrowsAlpha()
     toast(R.string.navigation_history_cleared)
   }
@@ -1303,7 +1321,16 @@ abstract class CoreReaderFragment :
     }
   }
 
-  private fun initalizeWebView(url: String): KiwixWebView? {
+  /**
+   * Initializes a new instance of `KiwixWebView` with the specified URL.
+   *
+   * @param url The URL to load in the web view. This is ignored if `shouldLoadUrl` is false.
+   * @param shouldLoadUrl A flag indicating whether to load the specified URL in the web view.
+   *                      When restoring tabs, this should be set to false to avoid loading
+   *                      an extra page, as the previous web view history will be restored directly.
+   * @return The initialized `KiwixWebView` instance, or null if initialization fails.
+   */
+  private fun initalizeWebView(url: String, shouldLoadUrl: Boolean = true): KiwixWebView? {
     if (isAdded) {
       val attrs = requireActivity().getAttributes(R.xml.webview)
       val webView: KiwixWebView? = try {
@@ -1316,7 +1343,9 @@ abstract class CoreReaderFragment :
         null
       }
       webView?.let {
-        loadUrl(url, it)
+        if (shouldLoadUrl) {
+          loadUrl(url, it)
+        }
         setUpWithTextToSpeech(it)
         documentParser?.initInterface(it)
         ServiceWorkerUninitialiser(::openMainPage).initInterface(it)
@@ -1349,8 +1378,23 @@ abstract class CoreReaderFragment :
     newTab(url, false)
   }
 
-  private fun newTab(url: String, selectTab: Boolean = true): KiwixWebView? {
-    val webView = initalizeWebView(url)
+  /**
+   * Creates a new instance of `KiwixWebView` and adds it to the list of web views.
+   *
+   * @param url The URL to load in the newly created web view.
+   * @param selectTab A flag indicating whether to select the newly created tab immediately.
+   *                  Defaults to true, which means the new tab will be selected.
+   * @param shouldLoadUrl A flag indicating whether to load the specified URL in the web view.
+   *                      If set to false, the web view will be created without loading the URL,
+   *                      which is useful when restoring tabs.
+   * @return The newly created `KiwixWebView` instance, or null if the initialization fails.
+   */
+  private fun newTab(
+    url: String,
+    selectTab: Boolean = true,
+    shouldLoadUrl: Boolean = true
+  ): KiwixWebView? {
+    val webView = initalizeWebView(url, shouldLoadUrl)
     webView?.let {
       webViewList.add(it)
       if (selectTab) {
@@ -1517,6 +1561,14 @@ abstract class CoreReaderFragment :
       closeFullScreen()
     } else {
       openFullScreen()
+    }
+  }
+
+  override fun onSearchMenuClickedMenuClicked() {
+    saveTabStates {
+      // Pass this function to saveTabStates so that after saving
+      // the tab state in the database, it will open the search fragment.
+      openSearch("", isOpenedFromTabView = isInTabSwitcher, false)
     }
   }
 
@@ -1705,7 +1757,12 @@ abstract class CoreReaderFragment :
     )
   }
 
-  suspend fun openZimFile(zimReaderSource: ZimReaderSource, isCustomApp: Boolean = false) {
+  suspend fun openZimFile(
+    zimReaderSource: ZimReaderSource,
+    isCustomApp: Boolean = false,
+    isFromManageExternalLaunch: Boolean = false
+  ) {
+    this.isFromManageExternalLaunch = isFromManageExternalLaunch
     if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || isCustomApp) {
       if (zimReaderSource.canOpenInLibkiwix()) {
         // Show content if there is `Open Library` button showing
@@ -1751,7 +1808,9 @@ abstract class CoreReaderFragment :
       val zimFileReader = zimReaderContainer.zimFileReader
       zimFileReader?.let { zimFileReader ->
         // uninitialized the service worker to fix https://github.com/kiwix/kiwix-android/issues/2561
-        openArticle(UNINITIALISER_ADDRESS)
+        if (!isFromManageExternalLaunch) {
+          openArticle(UNINITIALISER_ADDRESS)
+        }
         mainMenu?.onFileOpened(urlIsValid())
         setUpBookmarks(zimFileReader)
       } ?: kotlin.run {
@@ -2087,6 +2146,27 @@ abstract class CoreReaderFragment :
     openSearch("", isOpenedFromTabView = false, isVoice)
   }
 
+  /**
+   * Stores the specified search item to be opened later.
+   *
+   * This method saves the provided `SearchItemToOpen` object, which will be used to
+   * open the searched item after the tabs have been restored.
+   *
+   * @param item The search item to be opened after restoring the tabs.
+   */
+  private fun storeSearchItem(item: SearchItemToOpen) {
+    searchItemToOpen = item
+  }
+
+  /**
+   * Opens a search item based on its properties.
+   *
+   * If the item should open in a new tab, a new tab is created.
+   *
+   * The method attempts to load the page URL directly. If the page URL is not available,
+   * it attempts to convert the page title to a URL using the ZIM reader container. The
+   * resulting URL is then loaded in the current web view.
+   */
   private fun openSearchItem(item: SearchItemToOpen) {
     if (item.shouldOpenInNewTab) {
       createNewTab()
@@ -2285,6 +2365,23 @@ abstract class CoreReaderFragment :
     }
   }
 
+  /**
+   * Stores the given title for a "find in page" search operation.
+   * This title is used later when triggering the "find in page" functionality.
+   *
+   * @param title The title or keyword to search for within the current WebView content.
+   */
+  private fun storeFindInPageTitle(title: String) {
+    findInPageTitle = title
+  }
+
+  /**
+   * Initiates the "find in page" UI for searching within the current WebView content.
+   * If the `compatCallback` is active, it sets up the WebView to search for the
+   * specified title and displays the search input UI.
+   *
+   * @param title The search term or keyword to locate within the page. If null, no action is taken.
+   */
   private fun findInPage(title: String?) {
     // if the search is localized trigger find in page UI.
     compatCallback?.apply {
@@ -2344,34 +2441,114 @@ abstract class CoreReaderFragment :
     updateNightMode()
   }
 
-  private fun saveTabStates() {
-    val settings = requireActivity().getSharedPreferences(
-      SharedPreferenceUtil.PREF_KIWIX_MOBILE,
-      0
-    )
-    val editor = settings.edit()
-    val urls = JSONArray()
-    val positions = JSONArray()
-    for (view in webViewList) {
-      if (view.url == null) continue
-      urls.put(view.url)
-      positions.put(view.scrollY)
+  /**
+   * Saves the current state of tabs and web view history to persistent storage.
+   *
+   * This method is designed to be called when the fragment is about to pause,
+   * ensuring that the current tab states are preserved. It performs the following steps:
+   *
+   * 1. Clears any previous web view page history stored in the database.
+   * 2. Retrieves the current activity's shared preferences to store the tab states.
+   * 3. Iterates over the currently opened web views, creating a list of
+   *    `WebViewHistoryEntity` objects based on their URLs.
+   * 4. Saves the collected web view history entities to the database.
+   * 5. Updates the shared preferences with the current ZIM file and tab index.
+   * 6. Logs the current ZIM file being saved for debugging purposes.
+   * 7. Calls the provided `onComplete` callback function once all operations are finished.
+   *
+   * Note: This method runs on the main thread and performs database operations
+   * in a background thread to avoid blocking the UI.
+   *
+   * @param onComplete A lambda function to be executed after the tab states have
+   *                   been successfully saved. This is optional and defaults to
+   *                   an empty function.
+   *
+   * Example usage:
+   * ```
+   *  saveTabStates {
+   *    openSearch("", isOpenedFromTabView = isInTabSwitcher, false)
+   *  }
+   */
+  private fun saveTabStates(onComplete: () -> Unit = {}) {
+    CoroutineScope(Dispatchers.Main).launch {
+      savingTabsMutex.withLock {
+        // clear the previous history saved in database
+        withContext(Dispatchers.IO) {
+          repositoryActions?.clearWebViewPageHistory()
+        }
+        val coreApp = sharedPreferenceUtil?.context as CoreApp
+        val settings = coreApp.getMainActivity().getSharedPreferences(
+          SharedPreferenceUtil.PREF_KIWIX_MOBILE,
+          0
+        )
+        val editor = settings.edit()
+        val webViewHistoryEntityList = arrayListOf<WebViewHistoryEntity>()
+        webViewList.forEachIndexed { index, view ->
+          if (view.url == null) return@forEachIndexed
+          getWebViewHistoryEntity(view, index)?.let(webViewHistoryEntityList::add)
+        }
+        withContext(Dispatchers.IO) {
+          repositoryActions?.saveWebViewPageHistory(webViewHistoryEntityList)
+        }
+        editor.putString(TAG_CURRENT_FILE, zimReaderContainer?.zimReaderSource?.toDatabase())
+        editor.putInt(TAG_CURRENT_TAB, currentWebViewIndex)
+        editor.apply()
+        Log.d(
+          TAG_KIWIX,
+          "Save current zim file to preferences: " +
+            "${zimReaderContainer?.zimReaderSource?.toDatabase()}"
+        )
+        onComplete.invoke()
+      }
     }
-    editor.putString(TAG_CURRENT_FILE, zimReaderContainer?.zimReaderSource?.toDatabase())
-    editor.putString(TAG_CURRENT_ARTICLES, "$urls")
-    editor.putString(TAG_CURRENT_POSITIONS, "$positions")
-    editor.putInt(TAG_CURRENT_TAB, currentWebViewIndex)
-    editor.apply()
   }
 
-  override fun onPause() {
-    super.onPause()
-    saveTabStates()
-    Log.d(
-      TAG_KIWIX,
-      "onPause Save current zim file to preferences: " +
-        "${zimReaderContainer?.zimReaderSource?.toDatabase()}"
-    )
+  /**
+   * Retrieves a `WebViewHistoryEntity` from the given `KiwixWebView` instance.
+   *
+   * This method captures the current state of the specified web view, including its
+   * scroll position and back-forward list, and creates a `WebViewHistoryEntity`
+   * if the necessary conditions are met. The steps involved are as follows:
+   *
+   * 1. Initializes a `Bundle` to store the state of the web view.
+   * 2. Calls `saveState` on the provided `webView`, which populates the bundle
+   *    with the current state of the web view's back-forward list.
+   * 3. Retrieves the ID of the currently loaded ZIM file from the `zimReaderContainer`.
+   * 4. Checks if the ZIM ID is not null and if the web back-forward list contains any entries:
+   *    - If both conditions are satisfied, it creates and returns a `WebViewHistoryEntity`
+   *      containing a `WebViewHistoryItem` with the following data:
+   *      - `zimId`: The ID of the current ZIM file.
+   *      - `webViewIndex`: The index of the web view in the list of opened views.
+   *      - `webViewPosition`: The current vertical scroll position of the web view.
+   *      - `webViewBackForwardList`: The bundle containing the saved state of the
+   *        web view's back-forward list.
+   * 5. If the ZIM ID is null or the web back-forward list is empty, the method returns null.
+   *
+   * @param webView The `KiwixWebView` instance from which to retrieve the history entity.
+   * @param webViewIndex The index of the web view in the list of opened web views,
+   *                     used to identify the position of this web view in the history.
+   * @return A `WebViewHistoryEntity` containing the state information of the web view,
+   *         or null if the necessary conditions for creating the entity are not met.
+   */
+  private suspend fun getWebViewHistoryEntity(
+    webView: KiwixWebView,
+    webViewIndex: Int
+  ): WebViewHistoryEntity? {
+    val bundle = Bundle()
+    val webBackForwardList = webView.saveState(bundle)
+    val zimId = zimReaderContainer?.zimFileReader?.id
+
+    if (zimId != null && webBackForwardList != null && webBackForwardList.size > 0) {
+      return WebViewHistoryEntity(
+        WebViewHistoryItem(
+          zimId = zimId,
+          webViewIndex = webViewIndex,
+          webViewPosition = webView.scrollY,
+          webViewBackForwardList = bundle
+        )
+      )
+    }
+    return null
   }
 
   override fun webViewUrlLoading() {
@@ -2392,9 +2569,9 @@ abstract class CoreReaderFragment :
       // it will not remove the service worker from the history, so it will remain in the history.
       // To clear this, we are clearing the history when the main page is loaded for the first time.
       val mainPageUrl = zimReaderContainer?.mainPage
-      if (mainPageUrl != null &&
-        isFirstTimeMainPageLoaded &&
-        getCurrentWebView()?.url?.endsWith(mainPageUrl) == true
+      if (isFirstTimeMainPageLoaded &&
+        !isFromManageExternalLaunch &&
+        mainPageUrl?.let { getCurrentWebView()?.url?.endsWith(it) } == true
       ) {
         // Set isFirstTimeMainPageLoaded to false. This ensures that if the user clicks
         // on the home menu after visiting multiple pages, the history will not be erased.
@@ -2460,6 +2637,7 @@ abstract class CoreReaderFragment :
       showProgressBarWithProgress(progress)
       if (progress == 100) {
         hideProgressBar()
+        saveTabStates()
         Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView()?.url)
       }
       (webView.context as AppCompatActivity).invalidateOptionsMenu()
@@ -2553,9 +2731,7 @@ abstract class CoreReaderFragment :
     )
   }
 
-  private fun isInvalidJson(jsonString: String?): Boolean =
-    jsonString == null || jsonString == "[]"
-
+  @SuppressLint("CheckResult")
   protected fun manageExternalLaunchAndRestoringViewState(
     restoreOrigin: RestoreOrigin = FromExternalLaunch
   ) {
@@ -2563,72 +2739,112 @@ abstract class CoreReaderFragment :
       SharedPreferenceUtil.PREF_KIWIX_MOBILE,
       0
     )
-    val zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null)
-    val zimPositions = settings.getString(TAG_CURRENT_POSITIONS, null)
     val currentTab = safelyGetCurrentTab(settings)
-    if (isInvalidJson(zimArticles) || isInvalidJson(zimPositions)) {
-      restoreViewStateOnInvalidJSON()
-    } else {
-      restoreViewStateOnValidJSON(zimArticles, zimPositions, currentTab, restoreOrigin)
-    }
+    repositoryActions?.loadWebViewPagesHistory()
+      ?.subscribe({ webViewHistoryItemList ->
+        if (webViewHistoryItemList.isEmpty()) {
+          restoreViewStateOnInvalidWebViewHistory()
+          return@subscribe
+        }
+        restoreViewStateOnValidWebViewHistory(
+          webViewHistoryItemList,
+          currentTab,
+          restoreOrigin
+        ) {
+          // This lambda is executed after the tabs have been restored. It checks if there is a
+          // search item to open. If `searchItemToOpen` is not null, it calls `openSearchItem`
+          // to open the specified item, then sets `searchItemToOpen` to null to prevent
+          // any unexpected behavior on future calls. Similarly, if `findInPageTitle` is set,
+          // it invokes `findInPage` and resets `findInPageTitle` to null.
+          searchItemToOpen?.let(::openSearchItem)
+          searchItemToOpen = null
+          findInPageTitle?.let(::findInPage)
+          findInPageTitle = null
+        }
+      }, {
+        Log.e(
+          TAG_KIWIX,
+          "Could not restore tabs. Original exception = ${it.printStackTrace()}"
+        )
+        restoreViewStateOnInvalidWebViewHistory()
+      })
   }
 
   private fun safelyGetCurrentTab(settings: SharedPreferences): Int =
     max(settings.getInt(TAG_CURRENT_TAB, 0), 0)
 
-  /* This method restores tabs state in new launches, do not modify it
-     unless it is explicitly mentioned in the issue you're fixing */
+  /**
+   * Restores the tabs based on the provided webViewHistoryItemList.
+   *
+   * This method performs the following actions:
+   * - Resets the current web view index to zero.
+   * - Removes the first tab from the webViewList and updates the tabs adapter.
+   * - Iterates over the provided webViewHistoryItemList, creating new tabs and restoring
+   *   their states based on the historical data.
+   * - Selects the specified tab to make it the currently active one.
+   * - Invokes the onComplete callback once the restoration is finished.
+   *
+   * If any error occurs during the restoration process, it logs a warning and displays
+   * a toast message to inform the user that the tabs could not be restored.
+   *
+   * @param webViewHistoryItemList   List of WebViewHistoryItem representing the historical data for restoring tabs.
+   * @param currentTab               Index of the tab to be set as the currently active tab after restoration.
+   * @param onComplete               Callback to be invoked upon successful restoration of the tabs.
+   *
+   * @Warning: This method restores tabs state in new launches, do not modify it
+   *           unless it is explicitly mentioned in the issue you're fixing.
+   */
   protected fun restoreTabs(
-    zimArticles: String?,
-    zimPositions: String?,
-    currentTab: Int
+    webViewHistoryItemList: List<WebViewHistoryItem>,
+    currentTab: Int,
+    onComplete: () -> Unit
   ) {
     try {
-      val urls = JSONArray(zimArticles)
-      val positions = JSONArray(zimPositions)
+      isFromManageExternalLaunch = true
       currentWebViewIndex = 0
       tabsAdapter?.apply {
+        webViewList.removeAt(0)
         notifyItemRemoved(0)
         notifyDataSetChanged()
       }
-      var cursor = 0
-      getCurrentWebView()?.let { kiwixWebView ->
-        kiwixWebView.loadUrl(reformatProviderUrl(urls.getString(cursor)))
-        kiwixWebView.scrollY = positions.getInt(cursor)
-        cursor++
-        while (cursor < urls.length()) {
-          newTab(reformatProviderUrl(urls.getString(cursor)))
-          kiwixWebView.scrollY = positions.getInt(cursor)
-          cursor++
+      webViewHistoryItemList.forEach { webViewHistoryItem ->
+        newTab("", shouldLoadUrl = false)?.let {
+          restoreTabState(it, webViewHistoryItem)
         }
-        selectTab(currentTab)
       }
-    } catch (e: JSONException) {
-      Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e)
+      selectTab(currentTab)
+      onComplete.invoke()
+    } catch (ignore: Exception) {
+      Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", ignore)
       activity.toast(R.string.could_not_restore_tabs, Toast.LENGTH_LONG)
     }
-    // After restoring the tabs, observe any search actions that the user might have triggered.
-    // Since the ZIM file opening functionality has been moved to a background thread,
-    // we ensure that all necessary actions are completed before observing these search actions.
-    observeSearchActions()
   }
 
   /**
-   * Observes any search-related actions triggered by the user, such as "Find in Page" or
-   * opening a specific search item.
-   * This method sets up observers for navigation results related to search functionality.
+   * Restores the state of the specified KiwixWebView based on the provided WebViewHistoryItem.
+   *
+   * This method retrieves the back-forward list from the WebViewHistoryItem and
+   * uses it to restore the web view's state. It also sets the vertical scroll position
+   * of the web view to the position stored in the WebViewHistoryItem.
+   *
+   * If the provided WebViewHistoryItem is null, the method instead loads the main page
+   * of the currently opened ZIM file. This fallback behavior is triggered, for example,
+   * when opening a note in the notes screen, where the webViewHistoryList is intentionally
+   * set to null to indicate that the main page of the newly opened ZIM file should be loaded.
+   *
+   * @param webView The KiwixWebView instance whose state is to be restored.
+   * @param webViewHistoryItem The WebViewHistoryItem containing the saved state and scroll position,
+   * or null if the main page should be loaded.
    */
-  private fun observeSearchActions() {
-    requireActivity().observeNavigationResult<String>(
-      FIND_IN_PAGE_SEARCH_STRING,
-      viewLifecycleOwner,
-      Observer(::findInPage)
-    )
-    requireActivity().observeNavigationResult<SearchItemToOpen>(
-      TAG_FILE_SEARCHED,
-      viewLifecycleOwner,
-      Observer(::openSearchItem)
-    )
+  private fun restoreTabState(webView: KiwixWebView, webViewHistoryItem: WebViewHistoryItem?) {
+    webViewHistoryItem?.webViewBackForwardListBundle?.let { bundle ->
+      webView.restoreState(bundle)
+      webView.scrollY = webViewHistoryItem.webViewCurrentPosition
+    } ?: kotlin.run {
+      zimReaderContainer?.zimFileReader?.let {
+        webView.loadUrl(redirectOrOriginal(contentUrl("${it.mainPage}")))
+      }
+    }
   }
 
   override fun onReadAloudPauseOrResume(isPauseTTS: Boolean) {
@@ -2697,29 +2913,29 @@ abstract class CoreReaderFragment :
   }
 
   /**
-   * Restores the view state after successfully reading valid JSON from shared preferences.
+   * Restores the view state after successfully reading valid webViewHistory from room database.
    * Developers modifying this method in subclasses, such as CustomReaderFragment and
    * KiwixReaderFragment, should review and consider the implementations in those subclasses
-   * (e.g., CustomReaderFragment.restoreViewStateOnValidJSON,
-   * KiwixReaderFragment.restoreViewStateOnValidJSON) to ensure consistent behavior
-   * when handling valid JSON scenarios.
+   * (e.g., CustomReaderFragment.restoreViewStateOnValidWebViewHistory,
+   * KiwixReaderFragment.restoreViewStateOnValidWebViewHistory) to ensure consistent behavior
+   * when handling valid webViewHistory scenarios.
    */
-  protected abstract fun restoreViewStateOnValidJSON(
-    zimArticles: String?,
-    zimPositions: String?,
+  protected abstract fun restoreViewStateOnValidWebViewHistory(
+    webViewHistoryItemList: List<WebViewHistoryItem>,
     currentTab: Int,
-    restoreOrigin: RestoreOrigin
+    restoreOrigin: RestoreOrigin,
+    onComplete: () -> Unit
   )
 
   /**
-   * Restores the view state when the attempt to read JSON from shared preferences fails
-   * due to invalid or corrupted data. Developers modifying this method in subclasses, such as
+   * Restores the view state when the attempt to read webViewHistory from room database fails
+   * due to the absence of any history records. Developers modifying this method in subclasses, such as
    * CustomReaderFragment and KiwixReaderFragment, should review and consider the implementations
-   * in those subclasses (e.g., CustomReaderFragment.restoreViewStateOnInvalidJSON,
-   * KiwixReaderFragment.restoreViewStateOnInvalidJSON) to ensure consistent behavior
+   * in those subclasses (e.g., CustomReaderFragment.restoreViewStateOnInvalidWebViewHistory,
+   * KiwixReaderFragment.restoreViewStateOnInvalidWebViewHistory) to ensure consistent behavior
    * when handling invalid JSON scenarios.
    */
-  abstract fun restoreViewStateOnInvalidJSON()
+  abstract fun restoreViewStateOnInvalidWebViewHistory()
 }
 
 enum class RestoreOrigin {

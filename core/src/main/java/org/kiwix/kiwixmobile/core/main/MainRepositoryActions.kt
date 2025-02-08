@@ -17,11 +17,14 @@
  */
 package org.kiwix.kiwixmobile.core.main
 
+import io.reactivex.Single
 import io.reactivex.disposables.Disposable
+import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
@@ -36,6 +39,9 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
   private var saveNoteDisposable: Disposable? = null
   private var saveBookDisposable: Disposable? = null
   private var deleteNoteDisposable: Disposable? = null
+  private var saveWebViewHistoryDisposable: Disposable? = null
+  private var clearWebViewHistoryDisposable: Disposable? = null
+  private var getWebViewHistoryDisposable: Disposable? = null
 
   fun saveHistory(history: HistoryItem) {
     saveHistoryDisposable = dataSource.saveHistory(history)
@@ -68,11 +74,32 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
       .subscribe({}, { e -> Log.e(TAG, "Unable to save book", e) })
   }
 
+  suspend fun saveWebViewPageHistory(webViewHistoryEntityList: List<WebViewHistoryEntity>) {
+    dataSource.insertWebViewPageHistoryItems(webViewHistoryEntityList)
+  }
+
+  suspend fun clearWebViewPageHistory() {
+    dataSource.clearWebViewPagesHistory()
+  }
+
+  fun loadWebViewPagesHistory(): Single<List<WebViewHistoryItem>> =
+    dataSource.getAllWebViewPagesHistory()
+      .map { roomEntities ->
+        roomEntities.map(::WebViewHistoryItem)
+      }
+      .onErrorReturn {
+        Log.e(TAG, "Unable to load page history", it)
+        emptyList()
+      }
+
   fun dispose() {
     saveHistoryDisposable?.dispose()
     saveBookmarkDisposable?.dispose()
     saveNoteDisposable?.dispose()
     deleteNoteDisposable?.dispose()
     saveBookDisposable?.dispose()
+    saveWebViewHistoryDisposable?.dispose()
+    clearWebViewHistoryDisposable?.dispose()
+    getWebViewHistoryDisposable?.dispose()
   }
 }
