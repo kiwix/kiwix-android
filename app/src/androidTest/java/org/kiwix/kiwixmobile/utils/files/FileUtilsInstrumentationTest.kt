@@ -340,7 +340,7 @@ class FileUtilsInstrumentationTest {
     // get the SD card path
     val sdCardPath = context?.getExternalFilesDirs("")
       ?.get(1)?.path?.substringBefore("/Android")
-    val dummyUriData = listOf(
+    val dummyUriData = arrayListOf(
       // test the download uri on older devices
       DummyUrlData(
         null,
@@ -385,14 +385,6 @@ class FileUtilsInstrumentationTest {
             "%3A$commonUri"
         )
       ),
-      // test with USB stick uri
-      DummyUrlData(
-        null,
-        null,
-        "/mnt/media_rw/USB/$commonPath",
-        null,
-        Uri.parse("${primaryStorageUriPrefix}USB%3A$commonUri")
-      ),
       // test with invalid uri
       DummyUrlData(
         null,
@@ -421,6 +413,18 @@ class FileUtilsInstrumentationTest {
         )
       )
     )
+    // test with USB stick uri
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+      dummyUriData.add(
+        DummyUrlData(
+          null,
+          null,
+          "/mnt/media_rw/USB/$commonPath",
+          null,
+          Uri.parse("${primaryStorageUriPrefix}USB%3A$commonUri")
+        )
+      )
+    }
     context?.let { context ->
       CoroutineScope(Dispatchers.Main).launch {
         dummyUriData.forEach { dummyUrlData ->
