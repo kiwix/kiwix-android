@@ -27,9 +27,11 @@ import android.os.Build
 import android.os.Environment
 import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.os.storage.StorageManager
+import android.os.storage.StorageVolume
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.webkit.URLUtil
+import androidx.annotation.RequiresApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,6 +45,7 @@ import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileInputStream
@@ -120,6 +123,7 @@ object FileUtils {
     context: Context,
     uri: Uri
   ): String? {
+    Log.e(TAG_KIWIX, "Trying to get the ZIM file path for Uri = $uri")
     if (DocumentsContract.isDocumentUri(context, uri)) {
       if ("com.android.externalstorage.documents" == uri.authority) {
         val documentId = DocumentsContract.getDocumentId(uri)
@@ -129,10 +133,10 @@ object FileUtils {
           return "${Environment.getExternalStorageDirectory()}/${documentId[1]}"
         }
         return try {
-          var sdCardOrUsbMainPath = getSdCardOrUSBMainPath(context, documentId[0])
-          if (sdCardOrUsbMainPath == null) {
-            // USB sticks are mounted under the `/mnt/media_rw` directory.
-            sdCardOrUsbMainPath = "/mnt/media_rw/${documentId[0]}"
+          val sdCardOrUsbMainPath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            getSDCardOrUSBMainPathForAndroid10AndAbove(context, documentId[0])
+          } else {
+            getSdCardOrUSBMainPathForAndroid9AndBelow(context, documentId[0])
           }
           "$sdCardOrUsbMainPath/${documentId[1]}"
         } catch (ignore: Exception) {
@@ -156,6 +160,24 @@ object FileUtils {
 
     return null
   }
+
+  /**
+   * Retrieves the main storage path for a given external storage device (SD card, USB stick, or external hard drive).
+   *
+   * @param context The application context.
+   * @param storageName The name of the storage (e.g., "sdcard" or "usbstick").
+   * @return The main storage path for the given storage name, or `null` if not found.
+   *
+   * This method leverages `getStorageVolumesList`, which directly provides the storage path
+   * for USB and other mounted devices on Android 10 (API 29) and above.
+   *
+   * For Android 9 (API 28) and below, refer to `getSdCardOrUSBMainPath` for retrieving the USB path.
+   *
+   * @see getSdCardOrUSBMainPathForAndroid9AndBelow
+   */
+  @RequiresApi(Build.VERSION_CODES.Q)
+  private fun getSDCardOrUSBMainPathForAndroid10AndAbove(context: Context, storageName: String) =
+    getStorageVolumesList(context).firstOrNull { it.contains(storageName) }
 
   /**
    * Retrieves the file path from a given content URI. This method first attempts to get the path
@@ -196,22 +218,62 @@ object FileUtils {
     return actualFilePath
   }
 
+  /**
+   * Retrieves a list of storage volume paths available on the device.
+   *
+   * This method uses the `StorageManager` system service to obtain a list of storage volumes,
+   * including internal storage, SD cards, and USB devices. The method accounts for API differences:
+   * - On Android 11 (API 30) and above, it directly retrieves the storage path using `StorageVolume.directory`.
+   * - On Android 10 (API 29) and below, it constructs the storage path based on the volume's UUID or description.
+   *
+   * @param context The application context used to access system services.
+   * @return A `HashSet<String>` containing paths of available storage volumes.
+   */
   private fun getStorageVolumesList(context: Context): HashSet<String> {
     val storageVolumes = context.getSystemService(Context.STORAGE_SERVICE) as StorageManager
     val storageVolumesList = HashSet<String>()
     storageVolumes.storageVolumes.filterNotNull().forEach {
-      if (it.isPrimary) {
-        storageVolumesList.add("${Environment.getExternalStorageDirectory()}/")
-      } else {
-        val externalStorageName = it.uuid?.let { uuid ->
-          "/$uuid/"
-        } ?: kotlin.run {
-          "/${it.getDescription(context)}/"
-        }
-        storageVolumesList.add("/storage$externalStorageName")
-      }
+      storageVolumesList.add(getStoragePath(context, it))
     }
     return storageVolumesList
+  }
+
+  /**
+   * Determines the appropriate storage path for a given volume.
+   *
+   * This method retrieves the storage path based on the Android version:
+   * - **Android 11+ (API 30+)**: Directly retrieves the storage path from `StorageVolume.directory`.
+   * - **Primary storage (Internal storage)**: Returns the path using `Environment.getExternalStorageDirectory()`.
+   * - **External storage (SD card, USB, etc.)**:
+   *   - If the volume has a UUID, constructs the path using `/storage/{UUID}/`.
+   *   - If no UUID is available, falls back to using the volume description.
+   *
+   * @param context The application context used for accessing volume descriptions.
+   * @param volume The `StorageVolume` whose path needs to be determined.
+   * @return The storage path as a `String`.
+   */
+  private fun getStoragePath(context: Context, volume: StorageVolume): String {
+    return when {
+      Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
+        // On Android 11 (API 30) and above, return the storage path directly.
+        "${volume.directory?.path}"
+      }
+
+      volume.isPrimary -> {
+        // If this is the primary internal storage, return the default external storage directory.
+        "${Environment.getExternalStorageDirectory()}/"
+      }
+
+      else -> {
+        // If this is an external storage device, construct the path using UUID or description.
+        val externalStorageName = volume.uuid?.let { uuid ->
+          "/$uuid/"
+        } ?: "/${volume.getDescription(context)}/"
+
+        // On Android 10 and below, external storage devices are mounted under `/storage`.
+        "/storage$externalStorageName"
+      }
+    }
   }
 
   private fun getFileNameFromUri(context: Context, uri: Uri): String? {
@@ -510,9 +572,12 @@ object FileUtils {
    * @return The main storage path for the given storage name,
    *         or null if the path is a USB path on Android 10 and above
    *         (due to limitations in `context.getExternalFilesDirs("")` behavior).
+   *
+   *  To get the SD card or USB main path for Android 10 and above refer to:
+   *  @See getSDCardOrUSBMainPathForAndroid10AndAbove
    */
   @JvmStatic
-  fun getSdCardOrUSBMainPath(context: Context, storageName: String) =
+  fun getSdCardOrUSBMainPathForAndroid9AndBelow(context: Context, storageName: String) =
     context.getExternalFilesDirs("")
       .firstOrNull { it.path.contains(storageName) }
       ?.path?.substringBefore(context.getString(R.string.android_directory_seperator))

@@ -22,8 +22,8 @@
   <string name="search_label">ගවේෂණය</string>
   <string name="choose_file" fuzzy="true">ZIM වර්ගයේ ගොනුවක් තෝරාගන්න (*.zim)</string>
   <string name="open_in_new_tab">සබැඳිය නව තීරුවක විවෘත කරන්න?</string>
-  <string name="error_file_not_found">දෝෂය: තෝරාගත් ZIM ගොනුව සොයා ගැනීමට නොහැකි විය.</string>
-  <string name="error_file_invalid">දෝෂය: තෝරාගත් ගොනුව වලංගු ZIM ගොනුවක් නොවේ.</string>
+  <string name="error_file_not_found">දෝෂය: තෝරාගත් ZIM ගොනුව සොයා ගැනීමට නොහැකි විය. %s</string>
+  <string name="error_file_invalid">දෝෂය: තෝරාගත් ගොනුව වලංගු ZIM ගොනුවක් නොවේ. %s</string>
   <string name="error_article_url_not_found">දෝෂය: (Url: %1$s) ලිපිය පූරණය වීම අසාර්ථකයි.</string>
   <string name="pref_display_title">පෙන්වීම</string>
   <string name="pref_info_title">තොරතුරු</string>

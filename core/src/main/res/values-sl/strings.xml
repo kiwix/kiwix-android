@@ -59,10 +59,10 @@
   <string name="error_ip_address_not_found">IP-naslova ni bilo mogoče najti.</string>
   <string name="server_started_message">Za dostop do strežnika %s vnesite v brskalnik ta lP-naslov</string>
   <string name="share_host_address">Delite URL z drugimi aplikacijami</string>
-  <string name="error_file_not_found">Napaka: izbrane datoteke ZIM ni bilo mogoče najti.</string>
+  <string name="error_file_not_found">Napaka: izbrane datoteke ZIM ni bilo mogoče najti. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Te datoteke ZIM ni mogoče prebrati!</string>
   <string name="zim_not_opened" fuzzy="true">Datoteke ZIM ni mogoče odpreti</string>
-  <string name="error_file_invalid">Napaka: izbrana datoteka ni veljavna datoteka ZIM.</string>
+  <string name="error_file_invalid">Napaka: izbrana datoteka ni veljavna datoteka ZIM. %s</string>
   <string name="error_article_url_not_found">Napaka: Nalaganje članka (url: %1$s) ni uspelo.</string>
   <string name="pref_display_title">Prikaz</string>
   <string name="pref_info_title">Informacije</string>

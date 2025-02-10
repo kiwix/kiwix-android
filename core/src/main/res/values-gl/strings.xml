@@ -25,8 +25,8 @@
   <string name="search_label">Procurar</string>
   <string name="choose_file">Seleccione un ficheiro de contido (*.zim)</string>
   <string name="open_in_new_tab">Quere abrir a ligazón nunha nova lapela?</string>
-  <string name="error_file_not_found">Erro: Non se puido atopar o ficheiro ZIM seleccionado.</string>
-  <string name="error_file_invalid">Erro: O ficheiro seleccionado non é un ficheiro ZIM válido.</string>
+  <string name="error_file_not_found">Erro: Non se puido atopar o ficheiro ZIM seleccionado. %s</string>
+  <string name="error_file_invalid">Erro: O ficheiro seleccionado non é un ficheiro ZIM válido. %s</string>
   <string name="error_article_url_not_found">Erro: Non se puido cargar o artigo (URL: %1$s).</string>
   <string name="pref_display_title">Visualización</string>
   <string name="pref_info_title">Información</string>

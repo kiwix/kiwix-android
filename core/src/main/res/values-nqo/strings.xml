@@ -51,10 +51,10 @@
   <string name="stop_server_label">ߡߊ߬ߛߐ߬ߟߊ߲ ߟߊߟߐ߬</string>
   <string name="server_started_message">IP ߢߌ߲߬ ߠߊߘߏ߲߬ ߌ ߟߊ߫ ߛߏ߲߯ߓߊߟߊ߲ ߠߊ߫ ߞߊ߬ ߡߊ߬ߛߐ߬ߟߊ߲ ߠߊߛߐ߬ߘߐ߲߬ %s</string>
   <string name="share_host_address">URL ߟߊߖߍ߲ߛߍ߲߫ ߟߥߊ߬ߟߌ߬ߟߊ߲ ߜߘߍ ߟߎ߬ ߛߌߟߊ ߝߍ߬</string>
-  <string name="error_file_not_found">ߝߌ߬ߟߌ: ZIM ߞߐߕߐ߯ ߡߊߡߌ߬ߘߊ߬ߣߍ߲ ߕߍߣߊ߬ ߡߊߛߐ߬ߘߐ߲߫ ߠߊ߫.</string>
+  <string name="error_file_not_found">ߝߌ߬ߟߌ: ZIM ߞߐߕߐ߯ ߡߊߡߌ߬ߘߊ߬ߣߍ߲ ߕߍߣߊ߬ ߡߊߛߐ߬ߘߐ߲߫ ߠߊ߫. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">ߊ߬ ߕߴߛߋ߫ ߞߊ߬ ZIM ߞߐߕߐ߮ ߣߌ߲߬ ߘߐߞߊ߬ߙߊ߲߬߹</string>
   <string name="zim_not_opened" fuzzy="true">ZIM ߞߐߕߐ߮ ߕߍ߫ ߛߐ߲߬ ߠߊߞߊ߬ ߟߊ߫</string>
-  <string name="error_file_invalid">ߝߌ߬ߟߌ: ߞߐߕߐ߯ ߓߊߕߐ߬ߡߐ߲߬ߣߍ߲ ߣߌ߲߬ ߕߍ߫ ZIM ߞߐߕߐ߯ ߓߍ߲߬ߣߍ߲ ߝߋ߲߫ ߘߌ߫.</string>
+  <string name="error_file_invalid">ߝߌ߬ߟߌ: ߞߐߕߐ߯ ߓߊߕߐ߬ߡߐ߲߬ߣߍ߲ ߣߌ߲߬ ߕߍ߫ ZIM ߞߐߕߐ߯ ߓߍ߲߬ߣߍ߲ ߝߋ߲߫ ߘߌ߫. %s</string>
   <string name="error_article_url_not_found">ߝߎ߬ߕߎ߲߬ߕߌ: ߞߎߡߘߊ ߟߊߢߎ߲ߠߌ߲ (Url: %1$s) ߓߘߊ߫ ߗߌߙߏ߲߫.</string>
   <string name="pref_display_title">ߦߌ߬ߘߊ߬ߟߌ</string>
   <string name="pref_info_title">ߞߎ߲߬ߠߊ߬ߝߏߣߌ߲</string>

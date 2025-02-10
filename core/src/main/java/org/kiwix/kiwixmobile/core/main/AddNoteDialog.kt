@@ -167,7 +167,7 @@ class AddNoteDialog : DialogFragment() {
   private fun isZimFileExist() = zimFileName != null
 
   private fun onFailureToCreateAddNoteDialog() {
-    context.toast(R.string.error_file_not_found, Toast.LENGTH_LONG)
+    context.toast(getString(R.string.error_file_not_found, zimFileName), Toast.LENGTH_LONG)
     parentFragmentManager.beginTransaction().remove(this).commit()
   }
 

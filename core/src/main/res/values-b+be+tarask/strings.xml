@@ -34,8 +34,8 @@
   <string name="server_failed_message">Немагчыма запусьціць сэрвэр. Калі ласка, уключыце ваш пункт доступу</string>
   <string name="server_failed_toast_message">Немагчыма запусьціць сэрвэр.</string>
   <string name="hotspot_details_message">Дэталі вашага лякальнага пункту досягу. \nSSID: %1$s \nСпокліч: %2$s</string>
-  <string name="error_file_not_found">Памылка: абраны ZIM-файл ня знойдзены.</string>
-  <string name="error_file_invalid">Памылка: абраны файл не зьяўляецца слушным ZIM-файлам.</string>
+  <string name="error_file_not_found">Памылка: абраны ZIM-файл ня знойдзены. %s</string>
+  <string name="error_file_invalid">Памылка: абраны файл не зьяўляецца слушным ZIM-файлам. %s</string>
   <string name="error_article_url_not_found">Памылка: загрузка артыкула (Url: %1$s) не атрымалася.</string>
   <string name="pref_info_title">Інфармацыя</string>
   <string name="pref_info_version">Вэрсія</string>

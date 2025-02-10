@@ -22,7 +22,6 @@ import android.content.ContextWrapper
 import android.content.SharedPreferences
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContextCompat.getExternalFilesDirs
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import io.reactivex.Flowable

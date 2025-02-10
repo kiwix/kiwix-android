@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile
 
-import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -136,7 +135,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     val loadFileStream =
       ObjectBoxToLibkiwixMigratorTest::class.java.classLoader.getResourceAsStream("testzim.zim")
     zimFile = File(
-      ContextCompat.getExternalFilesDirs(context, null)[0],
+      context.getExternalFilesDirs(null)[0],
       "testzim.zim"
     )
     if (zimFile.exists()) zimFile.delete()

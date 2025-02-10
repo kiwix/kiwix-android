@@ -28,9 +28,9 @@
   <string name="open_in_new_tab">ต้องการเปิดลิงก์ในแท็บใหม่หรือไม่</string>
   <string name="no_books_selected_toast_message">กรุณาเลือกหน้งสือก่อน</string>
   <string name="hotspot_dialog_neutral_button">ดำเนินการต่อ</string>
-  <string name="error_file_not_found">ข้อผิดพลาด:ไม่พบไฟล์ ZIM ที่เลือก</string>
+  <string name="error_file_not_found">ข้อผิดพลาด:ไม่พบไฟล์ ZIM ที่เลือก %s</string>
   <string name="zim_not_opened" fuzzy="true">ไม่สามารถเปิดไฟล์ zim ได้</string>
-  <string name="error_file_invalid">ข้อผิดพลาด:ไฟล์ที่เลือกไม่ได้เป็นไฟล์ ZIM ที่ถูกต้อง</string>
+  <string name="error_file_invalid">ข้อผิดพลาด:ไฟล์ที่เลือกไม่ได้เป็นไฟล์ ZIM ที่ถูกต้อง %s</string>
   <string name="error_article_url_not_found">ข้อผิดพลาด:ไม่สามารถดาวน์โหลดบทความได้ (URL:%1$s)</string>
   <string name="pref_display_title">แสดงผล</string>
   <string name="pref_info_title">ข้อมูล</string>

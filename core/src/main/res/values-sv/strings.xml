@@ -63,10 +63,10 @@
   <string name="server_started_message">Ange denna IP-adress i din webbläsare för att komma åt servern %s</string>
   <string name="qr_code">Renderad QR-kod</string>
   <string name="share_host_address">Dela webbadress med andra appar</string>
-  <string name="error_file_not_found">Fel: Den valda ZIM-filen kunde inte hittas.</string>
+  <string name="error_file_not_found">Fel: Den valda ZIM-filen kunde inte hittas. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Kunde inte läsa denna zim-fil!</string>
   <string name="zim_not_opened" fuzzy="true">Kunde inte öppna zip-fil</string>
-  <string name="error_file_invalid">Fel: Den valda filen är inte en giltig ZIM-fil.</string>
+  <string name="error_file_invalid">Fel: Den valda filen är inte en giltig ZIM-fil. %s</string>
   <string name="error_article_url_not_found">Fel: Inläsning av artikel (url: %1$s) misslyckades.</string>
   <string name="pref_display_title">Visning</string>
   <string name="pref_info_title">Information</string>

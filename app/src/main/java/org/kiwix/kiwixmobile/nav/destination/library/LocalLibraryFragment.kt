@@ -27,6 +27,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -90,6 +91,7 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener.Companion.SCROLL_DOWN
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener.Companion.SCROLL_UP
+import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
@@ -425,7 +427,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
         // and we will handle this later.
         val fileName = documentFile?.name
         if (fileName != null && !isValidZimFile(fileName)) {
-          activity.toast(string.error_file_invalid)
+          activity.toast(getString(string.error_file_invalid, "$uri"))
           return@launch
         }
         copyMoveFileHandler?.showMoveFileToPublicDirectoryDialog(
@@ -456,12 +458,18 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       requireActivity().applicationContext, uri
     )
     if (filePath == null || !File(filePath).isFileExist()) {
-      activity.toast(string.error_file_not_found)
+      Log.e(
+        TAG_KIWIX,
+        "The Selected ZIM file not found in the storage. File Uri = $uri\n" +
+          "Retrieved Path = $filePath"
+      )
+      activity.toast(getString(string.error_file_not_found, "$uri"))
       return null
     }
     val file = File(filePath)
     return if (!FileUtils.isValidZimFile(file.path)) {
-      activity.toast(string.error_file_invalid)
+      Log.e(TAG_KIWIX, "Selected ZIM file is not a valid ZIM file. File path = ${file.path}")
+      activity.toast(getString(string.error_file_invalid, file.path))
       null
     } else {
       file

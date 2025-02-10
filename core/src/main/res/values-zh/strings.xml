@@ -82,10 +82,10 @@
   <string name="server_started_message">将这个 IP 地址输入到你的浏览器中来连接服务器 %s</string>
   <string name="qr_code">显示二维码</string>
   <string name="share_host_address">通过其他应用程序分享 URL</string>
-  <string name="error_file_not_found">错误：找不到选定的 ZIM 文件。</string>
+  <string name="error_file_not_found">错误：找不到选定的 ZIM 文件。 %s</string>
   <string name="unable_to_read_zim_file">无法读取此 ZIM 文件！</string>
   <string name="zim_not_opened">无法打开 ZIM 文件</string>
-  <string name="error_file_invalid">错误：选定的文件不是有效的 ZIM 文件。</string>
+  <string name="error_file_invalid">错误：选定的文件不是有效的 ZIM 文件。 %s</string>
   <string name="error_article_url_not_found">错误：加载条目（网址：%1$s）失败。</string>
   <string name="pref_display_title">显示</string>
   <string name="pref_info_title">信息</string>

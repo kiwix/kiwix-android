@@ -24,8 +24,8 @@
   <string name="search_label">Soek</string>
   <string name="choose_file">Kies ’n inhoudslêer (*.zim)</string>
   <string name="open_in_new_tab">Open skakel in nuwe oortjie?</string>
-  <string name="error_file_not_found">Fout: die geselekteerde ZIM-lêer kon nie gevind word nie.</string>
-  <string name="error_file_invalid">Fout: die geselekteerde lêer is nie ’n geldige ZIM-lêer nie.</string>
+  <string name="error_file_not_found">Fout: die geselekteerde ZIM-lêer kon nie gevind word nie. %s</string>
+  <string name="error_file_invalid">Fout: die geselekteerde lêer is nie ’n geldige ZIM-lêer nie. %s</string>
   <string name="error_article_url_not_found">Fout: Laai van bladsy (URL: %1$s) het gefaal.</string>
   <string name="pref_display_title">Wys</string>
   <string name="pref_info_title">Inligting</string>

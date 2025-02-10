@@ -70,10 +70,10 @@
   <string name="server_started_message">أدخل عنوان الآيبي هذا في متصفحك للوصول إلى الخادم %s</string>
   <string name="qr_code">رمز QR المقدَم</string>
   <string name="share_host_address">مشاركة URL عبر تطبيقات أخرى</string>
-  <string name="error_file_not_found">خطأ: تعذر العثور على الملف زيم (ZIM) المحدد</string>
+  <string name="error_file_not_found">خطأ: تعذر العثور على الملف زيم (ZIM) المحدد %s</string>
   <string name="unable_to_read_zim_file">غير قادر على قراءة هذا الملف ZIM!</string>
   <string name="zim_not_opened">غير قادر على فتح ملف ZIM</string>
-  <string name="error_file_invalid">خطأ: ملف زيم (ZIM) المحدد ليس صالحًا.</string>
+  <string name="error_file_invalid">%s خطأ: ملف زيم (ZIM) المحدد ليس صالحًا.</string>
   <string name="error_article_url_not_found">خطأ: لم ينجح تحميل المقالة (Url: %1$s).</string>
   <string name="pref_display_title">العرض</string>
   <string name="pref_info_title">معلومات</string>

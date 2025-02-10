@@ -36,8 +36,8 @@
   <string name="stop_server_label">Сервериг зогсах</string>
   <string name="error_server_already_running">Сервер негнт аҗллҗ эклсмн. Үүг унтраһад, дәкн орлдтн.</string>
   <string name="error_ip_address_not_found">IP хайгиг олҗ чадсн уга.</string>
-  <string name="error_file_not_found">Эндү: Суңһсн файл олдсн уга.</string>
-  <string name="error_file_invalid">Эндү: Суңһсн ZIM файл эндүтә бәәнә.</string>
+  <string name="error_file_not_found">Эндү: Суңһсн файл олдсн уга. %s</string>
+  <string name="error_file_invalid">Эндү: Суңһсн ZIM файл эндүтә бәәнә. %s</string>
   <string name="error_article_url_not_found">Эндү: (Url: %1$s) ниитллиг умшхд эндү һарв.</string>
   <string name="pref_display_title">Үзүлх</string>
   <string name="pref_info_title">Медәлл</string>

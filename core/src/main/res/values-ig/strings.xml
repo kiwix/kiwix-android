@@ -61,10 +61,10 @@
   <string name="server_started_message">Tinye adreesị IP a n’ime ihe nchọgharị gị iji nweta ihe nkesa %s</string>
   <string name="qr_code">Emepụtara Koodu QR</string>
   <string name="share_host_address">Kesaa URL site na ngwa ndị ọzọ</string>
-  <string name="error_file_not_found">Njehie: Enweghi ike ịchọta faịlụ ZIM ahọpụtara.</string>
+  <string name="error_file_not_found">Njehie: Enweghi ike ịchọta faịlụ ZIM ahọpụtara. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Enweghị ike ịgụ faịlụ zim a!</string>
   <string name="zim_not_opened" fuzzy="true">Enweghị ike imepe faịlụ zim</string>
-  <string name="error_file_invalid">Njehie: faịlụ ahọpụtara abụghị faịlụ ZIM ziri ezi.</string>
+  <string name="error_file_invalid">Njehie: faịlụ ahọpụtara abụghị faịlụ ZIM ziri ezi. %s</string>
   <string name="error_article_url_not_found">Njehie: Ịbute akụkọ (URl: %1$s ) dara.</string>
   <string name="pref_display_title">Ngosipụta</string>
   <string name="pref_info_title">Ozi</string>

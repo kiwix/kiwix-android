@@ -339,6 +339,7 @@ class CopyMoveFileHandlerTest {
   fun `notifyFileOperationSuccess should handle invalid ZIM file`() = runTest {
     fileHandler = spyk(fileHandler)
     fileHandler.shouldValidateZimFile = true
+    every { destinationFile.path } returns ""
     coEvery { fileHandler.isValidZimFile(destinationFile) } returns false
     fileHandler.notifyFileOperationSuccess(destinationFile, sourceUri)
 
@@ -350,17 +351,26 @@ class CopyMoveFileHandlerTest {
     fileHandler = spyk(fileHandler)
     every { fileHandler.tryMoveWithDocumentContract(any(), any(), any()) } returns true
     every { destinationFile.parentFile } returns mockk()
+    every { destinationFile.path } returns ""
     fileHandler.isMoveOperation = true
 
     fileHandler.handleInvalidZimFile(destinationFile, sourceUri)
 
     verify { fileHandler.dismissProgressDialog() }
-    verify { fileCopyMoveCallback.onError(activity.getString(R.string.error_file_invalid)) }
+    verify {
+      fileCopyMoveCallback.onError(
+        activity.getString(
+          R.string.error_file_invalid,
+          destinationFile.path
+        )
+      )
+    }
   }
 
   @Test
   fun `handleInvalidZimFile should delete file and show error if move fails`() {
     fileHandler = spyk(fileHandler)
+    every { destinationFile.path } returns ""
     every { fileHandler.tryMoveWithDocumentContract(any(), any(), any()) } returns false
     every { destinationFile.parentFile } returns mockk()
     fileHandler.isMoveOperation = true
@@ -369,7 +379,7 @@ class CopyMoveFileHandlerTest {
 
     verify {
       fileHandler.handleFileOperationError(
-        activity.getString(R.string.error_file_invalid),
+        activity.getString(R.string.error_file_invalid, destinationFile.path),
         destinationFile
       )
     }

@@ -62,10 +62,10 @@
   <string name="server_started_message">Sartu IP helbide hau arakatzailean %s zerbitzaria atzitzeko.</string>
   <string name="qr_code">Errendaturiko QR kodea</string>
   <string name="share_host_address">Partekatu URLa beste aplikazioen bitartez</string>
-  <string name="error_file_not_found">Akatsa: Hautatutako ZIM artxiboa ezin izan da aurkitu.</string>
+  <string name="error_file_not_found">Akatsa: Hautatutako ZIM artxiboa ezin izan da aurkitu. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Ezin da irakurri ZIM fitxategi hau.</string>
   <string name="zim_not_opened" fuzzy="true">Ezin da ireki ZIM fitxategia</string>
-  <string name="error_file_invalid">Akatsa: Hautatutako artikulua ez da baliozko ZIM artxiboa.</string>
+  <string name="error_file_invalid">Akatsa: Hautatutako artikulua ez da baliozko ZIM artxiboa. %s</string>
   <string name="error_article_url_not_found">Akatsa: (Url: %1$s) artikuluaren kargatzea eten da.</string>
   <string name="pref_display_title">Erakutsi</string>
   <string name="pref_info_title">Informazioa</string>

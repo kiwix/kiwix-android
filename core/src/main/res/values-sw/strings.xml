@@ -63,10 +63,10 @@
   <string name="error_ip_address_not_found">Sikuweza kupata anwani ya IP.</string>
   <string name="server_started_message">Ingiza anwani hii ya ip kwenye kivinjari chako ili kufikia seva %s</string>
   <string name="share_host_address">Kushiriki URL kupitia programu nyingine</string>
-  <string name="error_file_not_found">Hitilafu: Faili ya ZIM iliyochaguliwa haija patikana.</string>
+  <string name="error_file_not_found">Hitilafu: Faili ya ZIM iliyochaguliwa haija patikana. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Haiwezi kusoma faili hii zim!</string>
   <string name="zim_not_opened" fuzzy="true">Haiwezi kufungua faili ya zim</string>
-  <string name="error_file_invalid">Hitilafu:Faili iliyochaguliwa sio faili sahihi ya ZIM.</string>
+  <string name="error_file_invalid">Hitilafu:Faili iliyochaguliwa sio faili sahihi ya ZIM. %s</string>
   <string name="error_article_url_not_found">Hitilafu:Upakiaji wa makala umefeli (Url: %1$s)</string>
   <string name="pref_display_title">Onesha</string>
   <string name="pref_info_title">Maarifa</string>

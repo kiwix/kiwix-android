@@ -82,10 +82,10 @@
   <string name="server_started_message">Entrez cette adresse IP dans votre navigateur pour accéder au serveur %s</string>
   <string name="qr_code">Rendu du QR Code</string>
   <string name="share_host_address">Partager l’URL via d’autres applications</string>
-  <string name="error_file_not_found">Erreur : le fichier ZIM sélectionné est introuvable.</string>
+  <string name="error_file_not_found">Erreur : le fichier ZIM sélectionné est introuvable. %s</string>
   <string name="unable_to_read_zim_file">Impossible de lire ce fichier ZIM !</string>
   <string name="zim_not_opened">Impossible d’ouvrir le fichier ZIM</string>
-  <string name="error_file_invalid">Erreur : le fichier sélectionné n’est pas un fichier ZIM valide.</string>
+  <string name="error_file_invalid">Erreur : le fichier sélectionné n’est pas un fichier ZIM valide. %s</string>
   <string name="error_article_url_not_found">Erreur : le chargement de l’article (URL : %1$s) a échoué.</string>
   <string name="pref_display_title">Affichage</string>
   <string name="pref_info_title">Informations</string>
