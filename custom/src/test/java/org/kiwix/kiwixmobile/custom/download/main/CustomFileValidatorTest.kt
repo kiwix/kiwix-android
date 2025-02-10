@@ -22,7 +22,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.AssetFileDescriptor
 import android.content.res.AssetManager
-import androidx.core.content.ContextCompat
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -189,10 +188,10 @@ class CustomFileValidatorTest {
 
     if (extension == "zim") {
       every {
-        ContextCompat.getExternalFilesDirs(context, null)
+        context.getExternalFilesDirs(null)
       } returns arrayOf(storageDirectory)
     } else {
-      every { ContextCompat.getObbDirs(context) } returns arrayOf(storageDirectory)
+      every { context.obbDirs } returns arrayOf(storageDirectory)
     }
   }
 }

@@ -110,7 +110,7 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
         // Check if the directory's parent is not null
         dir.parent?.let { parentPath ->
           // Add the parent directory to the list, so we can scan all the files contained in the folder.
-          // We are doing this because ContextCompat.getExternalFilesDirs(context, null) method returns the path to the
+          // We are doing this because context.getExternalFilesDirs(null) method returns the path to the
           // "files" folder, which is specific to the app's package name, both for internal and SD card storage.
           // By obtaining the parent directory, we can scan files from the app-specific directory itself.
           directoryList.add(File(parentPath))
