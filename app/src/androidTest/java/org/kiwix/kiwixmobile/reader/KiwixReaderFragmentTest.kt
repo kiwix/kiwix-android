@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.reader
 
 import android.os.Build
-import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
@@ -113,7 +112,7 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
     val loadFileStream =
       KiwixReaderFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
     val zimFile = File(
-      ContextCompat.getExternalFilesDirs(context, null)[0],
+      context.getExternalFilesDirs(null)[0],
       "testzim.zim"
     )
     if (zimFile.exists()) zimFile.delete()

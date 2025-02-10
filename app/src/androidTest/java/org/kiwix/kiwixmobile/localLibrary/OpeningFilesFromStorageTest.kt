@@ -26,7 +26,6 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
-import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -228,7 +227,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
     val loadFileStream =
       CopyMoveFileHandlerTest::class.java.classLoader.getResourceAsStream(fileName)
     val zimFile = File(
-      ContextCompat.getExternalFilesDirs(context, null)[0],
+      context.getExternalFilesDirs(null)[0],
       fileName
     )
     if (zimFile.exists()) zimFile.delete()

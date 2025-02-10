@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.localLibrary
 
 import android.net.Uri
 import android.os.Build
-import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.Lifecycle
@@ -227,7 +226,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     val loadFileStream =
       CopyMoveFileHandlerTest::class.java.classLoader.getResourceAsStream("testzim.zim")
     val zimFile = File(
-      ContextCompat.getExternalFilesDirs(context, null)[0],
+      context.getExternalFilesDirs(null)[0],
       "testzim.zim"
     )
     if (zimFile.exists()) zimFile.delete()
@@ -247,7 +246,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
 
   private fun getInvalidZimFileUri(extension: String): Uri {
     val zimFile = File(
-      ContextCompat.getExternalFilesDirs(context, null)[0],
+      context.getExternalFilesDirs(null)[0],
       "testzim$extension"
     )
     if (zimFile.exists()) zimFile.delete()

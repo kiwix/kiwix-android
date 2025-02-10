@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.custom.search
 import android.Manifest
 import android.content.Context
 import android.content.res.AssetFileDescriptor
-import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.NavHostFragment
@@ -350,7 +349,7 @@ class SearchFragmentTestForCustomApp {
       .build()
 
   private fun getDownloadingZimFile(): File {
-    val zimFile = File(ContextCompat.getExternalFilesDirs(context, null)[0], "ray_charles.zim")
+    val zimFile = File(context.getExternalFilesDirs(null)[0], "ray_charles.zim")
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     return zimFile
