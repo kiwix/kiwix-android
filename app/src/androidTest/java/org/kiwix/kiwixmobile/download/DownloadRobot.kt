@@ -23,7 +23,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.action.ViewActions.clearText
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -34,6 +36,8 @@ import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import junit.framework.AssertionFailedError
+import junit.framework.TestCase.assertEquals
+import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.Matcher
 import org.junit.Assert
 import org.kiwix.kiwixmobile.BaseRobot
@@ -43,6 +47,7 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.download.DownloadTest.Companion.KIWIX_DOWNLOAD_TEST
+import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
@@ -258,5 +263,42 @@ class DownloadRobot : BaseRobot() {
         }
       }
     }
+  }
+
+  fun clickOnSearchIcon() {
+    pauseForBetterTestPerformance()
+    testFlakyView({ clickOn(ViewId(R.id.action_search)) })
+  }
+
+  fun clickOnClearSearchIcon() {
+    pauseForBetterTestPerformance()
+    testFlakyView({ clickOn(ViewId(androidx.appcompat.R.id.search_close_btn)) })
+  }
+
+  fun searchWikipediaZIMFiles() {
+    pauseForBetterTestPerformance()
+    testFlakyView({
+      val searchView = onView(withId(androidx.appcompat.R.id.search_src_text))
+      searchView.perform(clearText())
+      searchView.perform(typeText("Wikipedia"))
+    })
+  }
+
+  fun assertPreviousSearchRemainsActive() {
+    pauseForBetterTestPerformance()
+    testFlakyView({
+      val searchView = onView(withId(androidx.appcompat.R.id.search_src_text))
+      searchView.check(matches(withText(containsString("Wikipedia"))))
+    })
+  }
+
+  fun assertSearchViewIsNotActive(kiwixMainActivity: KiwixMainActivity) {
+    pauseForBetterTestPerformance()
+    testFlakyView({
+      assertEquals(
+        kiwixMainActivity.supportActionBar?.title,
+        kiwixMainActivity.getString(string.download)
+      )
+    })
   }
 }
