@@ -4,8 +4,10 @@ New Features:
 * Added a new intro screen to inform users how they can select the storage for downloading ZIM files. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4179)
 * Currently downloading ZIM files will be shown at the top in "Online" Library screen. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4211)
 * Users can resume a paused download from the notification. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4210)
+* Added navigation history restoring feature, which restores the previously visited pages for an opened ZIM file, when reopening the application so that users can continue reading the Book where they left off. (@MohitMaliFtechiz, @Saifuddin53 https://github.com/kiwix/kiwix-android/pull/3996)
 
 Bug Fixed:
+* Opening of ZIM files from USB sticks and external hard drives was not working on some devices. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4218)
 * Application crashes when opening the ZIM file in the reader. (@MohitMaliFtechiz, @CalebKL https://github.com/kiwix/kiwix-android/pull/3937)
 * Sometimes application crashes due to native crashes. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4190)
 * Improved the copying/moving of ZIM chunks. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4170)
@@ -18,6 +20,7 @@ Bug Fixed:
 * Application crashes when creating the application shortcuts. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4167, https://github.com/kiwix/kiwix-android/pull/4214)
 * The trash folder's ZIM files are showing on the library screen but not opening. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4176)
 * `FIND_IN_PAGE` feature only works with first tab page. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4201)
+* When the device goes to sleep mode, the search filter resets of the online library. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4220)
 + More
 
 Compilation/CI/CD:
@@ -273,7 +276,7 @@ Bug Fixes:
 * Multiple memory leaks
 
 Compilation/CI/CD:
-* Complated java to Kotlin migration
+* Completed java to Kotlin migration
 * Memory leak detection introduction
 * Multiple Linting improvements
 * Jcenter/libkiwix JNI removal (now handled separatly with Maven Central)
@@ -363,7 +366,7 @@ BUGFIX: Search speed increased and loading state added
 BUGFIX: Memory leaks patched
 BUGFIX: More consistent labelling drives internal/external
 BUGFIX: Cache results of a conclusive file system detection
-BUGFIX: Overlapping lables in Library
+BUGFIX: Overlapping labels in Library
 BUGFIX: Accessibility improvements
 + Lots Lots Lots More
 
@@ -486,7 +489,7 @@ FIX: External SD card problems
 FIX: Some UI translation
 FIX: Download manager process sporadic problems
 NEW: Display download time estimation
-NEW: Many improvments in fulltext search
+NEW: Many improvements in fulltext search
 NEW: Allow manual update of storage location
 NEW: Sort Bookmarks alphabetically
 NEW: Option to download only via WIFI
@@ -574,7 +577,7 @@ REMOVED: Share with friends
 REMOVED: Zoom button
 
 1.93
-* FIXED: blanck pages and broken images on Android 5.0 (Lollipop)
+* FIXED: blank pages and broken images on Android 5.0 (Lollipop)
 * KNOWN BUG: text rewrapping problem with 4.4 & 5.0
 
 1.92
