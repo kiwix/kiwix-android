@@ -19,11 +19,15 @@
 package org.kiwix.kiwixmobile.core.webserver
 
 import android.content.Context
+import android.os.Looper
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForCustomApp
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Server
@@ -44,29 +48,28 @@ class KiwixServer @Inject constructor(
     private val context: Context,
     private val zimReaderContainer: ZimReaderContainer
   ) {
-    @Suppress("NestedBlockDepth")
+    @Suppress("NestedBlockDepth", "MagicNumber")
     suspend fun createKiwixServer(selectedBooksPath: ArrayList<String>): KiwixServer =
       withContext(Dispatchers.IO) {
         val kiwixLibrary = Library()
         selectedBooksPath.forEach { path ->
           try {
             val book = Book().apply {
+              Log.e(
+                TAG,
+                " FD is valid = ${zimReaderContainer.zimReaderSource?.exists()} \n" +
+                  "FD can read via the dev/fd/fdNumber = " +
+                  "${zimReaderContainer.zimReaderSource?.canOpenInLibkiwix()}"
+              )
               // Determine whether to create an Archive from an asset or a file path
-              val archive = if (path == getDemoFilePathForCustomApp(context)) {
-                // For custom apps using a demo file, create an Archive with FileDescriptor
-                val assetFileDescriptor =
-                  zimReaderContainer.zimReaderSource?.assetFileDescriptorList?.get(0)
-                val startOffset = assetFileDescriptor?.startOffset ?: 0L
-                val size = assetFileDescriptor?.length ?: 0L
-                Archive(
-                  assetFileDescriptor?.parcelFileDescriptor?.fileDescriptor,
-                  startOffset,
-                  size
-                )
-              } else {
-                // For regular files, create an Archive from the file path
-                Archive(path)
-              }
+              val archive =
+                if (path == "null" && (context as CoreApp).getMainActivity().isCustomApp()) {
+                  // For custom apps using create an Archive with FileDescriptor
+                  zimReaderContainer.zimReaderSource?.createArchive()
+                } else {
+                  // For regular files, create an Archive from the file path
+                  Archive(path)
+                }
               update(archive)
             }
             kiwixLibrary.addBook(book)
@@ -79,6 +82,17 @@ class KiwixServer @Inject constructor(
             )
           }
         }
+        android.os.Handler(Looper.getMainLooper()).postDelayed({
+          CoroutineScope(Dispatchers.IO).launch {
+            Log.e(
+              TAG,
+              "After 5 second FD is valid = " +
+                "${zimReaderContainer.zimReaderSource?.exists()} \n" +
+                "FD can read via the dev/fd/fdNumber =" +
+                " ${zimReaderContainer.zimReaderSource?.canOpenInLibkiwix()}"
+            )
+          }
+        }, 5000)
         return@withContext KiwixServer(kiwixLibrary, Server(kiwixLibrary))
       }
   }

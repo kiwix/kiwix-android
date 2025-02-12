@@ -230,8 +230,10 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun handleStoragePermissionAndServer() {
-    // we does not require any permission for playStore variant.
-    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
+    // we does not require any permission for playStore variant, and custom apps.
+    if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove() ||
+      requireActivity().isCustomApp()
+    ) {
       startStopServer()
       return
     }
