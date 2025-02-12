@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.webserver.wifi_hotspot
+package org.kiwix.kiwixmobile.core.webserver.wifi_hotspot
 
 import android.app.Service
 import android.content.Intent
@@ -26,14 +26,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.kiwix.kiwixmobile.KiwixApp
+import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.utils.ServerUtils.getSocketAddress
-import org.kiwix.kiwixmobile.webserver.WebServerHelper
-import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks
-import org.kiwix.kiwixmobile.webserver.ZimHostFragment
-import org.kiwix.kiwixmobile.webserver.ZimHostFragment.Companion.RESTART_SERVER
+import org.kiwix.kiwixmobile.core.webserver.WebServerHelper
+import org.kiwix.kiwixmobile.core.webserver.ZimHostCallbacks
+import org.kiwix.kiwixmobile.core.webserver.ZimHostFragment
+import org.kiwix.kiwixmobile.core.webserver.ZimHostFragment.Companion.RESTART_SERVER
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
@@ -58,18 +58,18 @@ class HotspotService :
   private val serviceBinder: IBinder = HotspotBinder(this)
 
   override fun onCreate() {
-    (this.application as KiwixApp).kiwixComponent
-      .serviceComponent()
+    coreComponent
+      .coreServiceComponent()
       .service(this)
       .build()
       .inject(this)
     super.onCreate()
-    hotspotStateReceiver?.let(this::registerReceiver)
+    hotspotStateReceiver?.let(::registerReceiver)
   }
 
   override fun onDestroy() {
     webServerHelper?.dispose()
-    hotspotStateReceiver?.let(this@HotspotService::unregisterReceiver)
+    hotspotStateReceiver?.let(::unregisterReceiver)
     super.onDestroy()
   }
 

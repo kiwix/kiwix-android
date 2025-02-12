@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.webserver
+package org.kiwix.kiwixmobile.core.webserver
 
 import org.kiwix.kiwixmobile.core.base.BaseContract
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem

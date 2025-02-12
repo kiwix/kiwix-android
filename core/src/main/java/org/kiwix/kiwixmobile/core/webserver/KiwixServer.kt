@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.webserver
+package org.kiwix.kiwixmobile.core.webserver
 
 import android.content.Context
 import kotlinx.coroutines.Dispatchers

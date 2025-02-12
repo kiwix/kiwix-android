@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.webserver.wifi_hotspot
+package org.kiwix.kiwixmobile.core.webserver.wifi_hotspot
 
 import android.annotation.SuppressLint
 import android.app.Notification
@@ -29,8 +29,6 @@ import androidx.core.app.NotificationCompat
 import androidx.navigation.NavDeepLinkBuilder
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.R.id
-import org.kiwix.kiwixmobile.R.navigation
 import org.kiwix.kiwixmobile.core.qr.GenerateQR
 import org.kiwix.kiwixmobile.core.utils.HOTSPOT_SERVICE_CHANNEL_ID
 import javax.inject.Inject
@@ -62,8 +60,8 @@ class HotspotNotificationManager @Inject constructor(
     val contentIntent = NavDeepLinkBuilder(context).setComponentName(
       coreMainActivity.mainActivity::class.java
     )
-      .setGraph(navigation.kiwix_nav_graph)
-      .setDestination(id.zimHostFragment)
+      .setGraph(coreMainActivity.navGraphId)
+      .setDestination(coreMainActivity.zimHostFragmentResId)
       .createPendingIntent()
     hotspotNotificationChannel()
     val stopIntent = Intent(context, HotspotService::class.java).setAction(

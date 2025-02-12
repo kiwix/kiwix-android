@@ -97,6 +97,8 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val historyFragmentResId: Int
   abstract val notesFragmentResId: Int
   abstract val helpFragmentResId: Int
+  abstract val zimHostFragmentResId: Int
+  abstract val navGraphId: Int
   abstract val cachedComponent: CoreActivityComponent
   abstract val topLevelDestinations: Set<Int>
   abstract val navHostContainer: FragmentContainerView
@@ -307,9 +309,15 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       R.id.menu_notes -> openNotes()
       R.id.menu_history -> openHistory()
       R.id.menu_bookmarks_list -> openBookmarks()
+      R.id.menu_host_books -> openZimHostFragment()
       else -> return false
     }
     return true
+  }
+
+  private fun openZimHostFragment() {
+    navigate(zimHostFragmentResId)
+    handleDrawerOnNavigation()
   }
 
   private fun openHelpFragment() {

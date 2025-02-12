@@ -21,6 +21,7 @@ import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.wifi.WifiManager
 import android.os.storage.StorageManager
 import dagger.Module
 import dagger.Provides
@@ -101,4 +102,9 @@ class ApplicationModule {
   @Singleton
   fun provideConnectivityManager(context: Context): ConnectivityManager =
     context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+  @Provides
+  @Singleton
+  fun provideWifiManager(context: Context): WifiManager =
+    context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
 }

@@ -22,6 +22,7 @@ import android.app.Activity
 import dagger.BindsInstance
 import dagger.Subcomponent
 import org.kiwix.kiwixmobile.core.di.ActivityScope
+import org.kiwix.kiwixmobile.core.webserver.ZimHostModule
 import org.kiwix.kiwixmobile.core.di.components.CoreActivityComponent
 import org.kiwix.kiwixmobile.custom.download.CustomDownloadFragment
 import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
@@ -29,7 +30,7 @@ import org.kiwix.kiwixmobile.custom.main.CustomReaderFragment
 import org.kiwix.kiwixmobile.custom.settings.CustomSettingsFragment
 
 @ActivityScope
-@Subcomponent(modules = [CustomActivityModule::class])
+@Subcomponent(modules = [CustomActivityModule::class, ZimHostModule::class])
 interface CustomActivityComponent : CoreActivityComponent {
   fun inject(customMainActivity: CustomMainActivity)
   fun inject(customSettingsFragment: CustomSettingsFragment)
