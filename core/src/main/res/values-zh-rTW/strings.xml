@@ -66,10 +66,10 @@
   <string name="server_started_message">在您的瀏覽器輸入 IP 位址來存取伺服器%s</string>
   <string name="qr_code">呈現 QR 碼</string>
   <string name="share_host_address">透過別種應用程式分享 URL</string>
-  <string name="error_file_not_found">錯誤：找不到所選的 ZIM 檔案。</string>
+  <string name="error_file_not_found">錯誤：找不到所選的 ZIM 檔案。 %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">無法讀取這個 zim 檔案！</string>
   <string name="zim_not_opened" fuzzy="true">無法打開 zim 檔案</string>
-  <string name="error_file_invalid">錯誤：所選檔案不是有效的 ZIM 檔。</string>
+  <string name="error_file_invalid">錯誤：所選檔案不是有效的 ZIM 檔。 %s</string>
   <string name="error_article_url_not_found">錯誤：載入條目(網址：%1$s)失敗。</string>
   <string name="pref_display_title">顯示</string>
   <string name="pref_info_title">資訊</string>

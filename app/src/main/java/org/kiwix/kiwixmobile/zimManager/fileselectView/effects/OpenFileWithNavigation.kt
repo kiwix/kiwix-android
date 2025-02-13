@@ -41,7 +41,9 @@ data class OpenFileWithNavigation(private val bookOnDisk: BooksOnDiskListItem.Bo
         zimReaderSource.canOpenInLibkiwix()
       }
       if (!canOpenInLibkiwix) {
-        activity.toast(R.string.error_file_not_found)
+        activity.toast(
+          activity.getString(R.string.error_file_not_found, zimReaderSource.toDatabase())
+        )
       } else {
         activity.navigate(
           actionNavigationLibraryToNavigationReader().apply {

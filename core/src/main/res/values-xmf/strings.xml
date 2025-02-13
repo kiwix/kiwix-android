@@ -46,8 +46,8 @@
   <string name="stop_server_label">სერვერიშ გაჩემება</string>
   <string name="error_server_already_running">სერვერი ასე მუშენს. ქორთხინთ, გოთიშით თინა დო კჷნე ახალშო ქოცადით.</string>
   <string name="error_ip_address_not_found">IP-მიოწურაფუქ ვეგორჷ.</string>
-  <string name="error_file_not_found">ჩილათა: გიშაგორილი ZIM-ფაილქ ვეგორუ.</string>
-  <string name="error_file_invalid">ჩილათა: გიშაგორილი ფაილი ვა რე თინი ZIM-ფაილი.</string>
+  <string name="error_file_not_found">ჩილათა: გიშაგორილი ZIM-ფაილქ ვეგორუ. %s</string>
+  <string name="error_file_invalid">ჩილათა: გიშაგორილი ფაილი ვა რე თინი ZIM-ფაილი. %s</string>
   <string name="error_article_url_not_found">ჩილათა: სტატიაშ (Url: %1$s) გიმოხარგუაქ ვემიხუჯინუ.</string>
   <string name="pref_display_title">ეკრანი</string>
   <string name="pref_info_title">ინფორმაცია</string>

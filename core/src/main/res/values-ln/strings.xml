@@ -52,10 +52,10 @@
   <string name="error_ip_address_not_found">Nakokaki te kozwa adrɛsi ya IP.</string>
   <string name="server_started_message">Tyá adresi IP oyo na navigateur na yo mpo na kokɔta na serveur %s</string>
   <string name="share_host_address">Kabola URL na nzela ya ba applications misusu</string>
-  <string name="error_file_not_found">Mabunga: Fisyé ZIM oyo oponi ezwami te.</string>
+  <string name="error_file_not_found">Mabunga: Fisyé ZIM oyo oponi ezwami te. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Epesameli nzela te ya kotanga fisyé ZIM oyo!</string>
   <string name="zim_not_opened" fuzzy="true">Ekoki te kofungola fisyé ZIM</string>
-  <string name="error_file_invalid">Libunga: Fisyé oyo oponi ezali fisyé ZIM ya malamu te.</string>
+  <string name="error_file_invalid">Libunga: Fisyé oyo oponi ezali fisyé ZIM ya malamu te. %s</string>
   <string name="error_article_url_not_found">Libunga: Kokɔtisa lisolo (Url: %1$s ) elongi te.</string>
   <string name="pref_display_title">Kolakisa</string>
   <string name="pref_info_title">Nsango</string>

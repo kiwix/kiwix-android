@@ -60,10 +60,10 @@
   <string name="error_ip_address_not_found">N bi nya ip addreesi</string>
   <string name="server_started_message">Kpɛhimi a ip fasara a browzɛr ni din yɛn chɛ ka a  nya niŋsim niŋda %s</string>
   <string name="share_host_address">Shiriki URL kupitia programu zingine</string>
-  <string name="error_file_not_found">Chiriŋ: ZIM mazagali shɛli bɛ ni daa piigi ŋɔ bi tooi nya.</string>
+  <string name="error_file_not_found">Chiriŋ: ZIM mazagali shɛli bɛ ni daa piigi ŋɔ bi tooi nya. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Di bi tooi karim zim mazagali ŋɔ!</string>
   <string name="zim_not_opened" fuzzy="true">Di bi tooi yoogi zim mazagali</string>
-  <string name="error_file_invalid">Chiriŋ: Mazagali shɛli bɛ ni daa piigi ŋɔ pala ZIM mazagali din niŋ viɛnyɛla.</string>
+  <string name="error_file_invalid">Chiriŋ: Mazagali shɛli bɛ ni daa piigi ŋɔ pala ZIM mazagali din niŋ viɛnyɛla. %s</string>
   <string name="error_article_url_not_found">Chiriŋ: Yaɣ’shɛli dini yoori a (Url: %1$s) bi yooi</string>
   <string name="pref_display_title">Zaŋ wuhi</string>
   <string name="pref_info_title">Lahabali</string>

@@ -31,8 +31,8 @@
   <string name="wifi_dialog_title">ဝိုင်ဖိုင် ကွန်နက်ရှင် ခြေရာခံမိသည်</string>
   <string name="start_server_label">ဆာဗာ စတင်ရန်</string>
   <string name="stop_server_label">ဆာဗာ ရပ်တန့်ရန်</string>
-  <string name="error_file_not_found">အမှားသတိပေးချက် − ရွေးချယ်ထားသော ZIM ဖိုင်ကို ရှာမတွေ့ပါ။</string>
-  <string name="error_file_invalid">အမှားသတိပေးချက် − ရွေးချယ်ထားသောဖိုင်သည် တရားဝင် ZIM ဖိုင် မဟုတ်ပါ။</string>
+  <string name="error_file_not_found">အမှားသတိပေးချက် − ရွေးချယ်ထားသော ZIM ဖိုင်ကို ရှာမတွေ့ပါ။ %s</string>
+  <string name="error_file_invalid">အမှားသတိပေးချက် − ရွေးချယ်ထားသောဖိုင်သည် တရားဝင် ZIM ဖိုင် မဟုတ်ပါ။ %s</string>
   <string name="error_article_url_not_found">အမှားသတိပေးချက် − (Url: %1$s) ဆောင်းပါးထည့်သွင်းခြင်း မအောင်မြင်ပါ။</string>
   <string name="pref_display_title">မြင်ကွင်း</string>
   <string name="pref_info_title">သတင်းအချက်အလက်</string>

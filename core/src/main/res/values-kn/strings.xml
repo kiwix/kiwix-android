@@ -34,7 +34,7 @@
   <string name="hotspot_running">ಹಾಟ್‌ಸ್ಪಾಟ್ ರನ್ ಆಗುತ್ತಿದೆ</string>
   <string name="no_books_selected_toast_message">ದಯವಿಟ್ಟು ಮೊದಲು ಪುಸ್ತಕಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
   <string name="hotspot_dialog_neutral_button">ಮುಂದುವರಿಸಿ</string>
-  <string name="error_file_invalid">ದೋಷ: ಆರಿಸಿದ ಫೈಲು ಸರಿಯಾದ ZIM ಫೈಲು ಅಲ್ಲ</string>
+  <string name="error_file_invalid">ದೋಷ: ಆರಿಸಿದ ಫೈಲು ಸರಿಯಾದ ZIM ಫೈಲು ಅಲ್ಲ %s</string>
   <string name="error_article_url_not_found">ದೋಷ: ಲೇಖನ (Url: %1$s) ತರುವುದು ವಿಫಲವಾಗಿದೆ.</string>
   <string name="pref_display_title">ಪ್ರದರ್ಶಿಸು</string>
   <string name="pref_info_title">ಮಾಹಿತಿ</string>

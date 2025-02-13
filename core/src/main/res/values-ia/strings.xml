@@ -56,10 +56,10 @@
   <string name="server_started_message">Entra iste adresse IP in tu navigator pro acceder al servitor %s</string>
   <string name="qr_code">Codice QR rendite</string>
   <string name="share_host_address">Condivider le URL via altere applicationes</string>
-  <string name="error_file_not_found">Error: Le file ZIM seligite non poteva esser trovate.</string>
+  <string name="error_file_not_found">Error: Le file ZIM seligite non poteva esser trovate. %s</string>
   <string name="unable_to_read_zim_file">Impossibile leger iste file ZIM!</string>
   <string name="zim_not_opened">Impossibile aperir le file ZIM</string>
-  <string name="error_file_invalid">Error: Le file seligite non es un file ZIM valide.</string>
+  <string name="error_file_invalid">Error: Le file seligite non es un file ZIM valide. %s</string>
   <string name="error_article_url_not_found">Error: Le cargamento del articulo (Url: %1$s) ha fallite.</string>
   <string name="pref_display_title">Visualisation</string>
   <string name="pref_info_title">Information</string>

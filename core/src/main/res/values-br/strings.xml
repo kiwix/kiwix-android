@@ -39,10 +39,10 @@
   <string name="error_ip_address_not_found">N’haller ket kavout ar chomlec’h IP.</string>
   <string name="server_started_message">Enankit ar chomlec’h IP-mañ e-barzh ho merdeer evit kaout ar servijer %s</string>
   <string name="share_host_address">Rannañ an URL war-bouez arloadoù all</string>
-  <string name="error_file_not_found">Fazi : N’eus ket bet gallet kavout ar restr ZIM diuzet.</string>
+  <string name="error_file_not_found">Fazi : N’eus ket bet gallet kavout ar restr ZIM diuzet. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">N’haller ket lenn ar restr ZIM-mañ!</string>
   <string name="zim_not_opened" fuzzy="true">Dibosupl digeriñ ar restr zim</string>
-  <string name="error_file_invalid">Fazi : Ar restr diuzet n’eo ket ur restr ZIM reizh.</string>
+  <string name="error_file_invalid">Fazi : Ar restr diuzet n’eo ket ur restr ZIM reizh. %s</string>
   <string name="error_article_url_not_found">Fazi : N’eus ket bet gallet kargañ ar pennad “%1$s”</string>
   <string name="pref_display_title">Diskwel</string>
   <string name="pref_info_title">Titouroù</string>

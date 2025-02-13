@@ -83,10 +83,10 @@
   <string name="server_started_message">Введите этот IP адрес в ваш браузер чтобы получить доступ к серверу %s</string>
   <string name="qr_code">Отобразить QR-код</string>
   <string name="share_host_address">Поделиться URL через другие приложения</string>
-  <string name="error_file_not_found">Ошибка: выбранный ZIM-файл не найден.</string>
+  <string name="error_file_not_found">Ошибка: выбранный ZIM-файл не найден. %s</string>
   <string name="unable_to_read_zim_file">Не удается прочитать этот ZIM-файл!</string>
   <string name="zim_not_opened">Не удается открыть ZIM-файл</string>
-  <string name="error_file_invalid">Ошибка: Выбранный файл не является пригодным ZIM-файлом.</string>
+  <string name="error_file_invalid">Ошибка: Выбранный файл не является пригодным ZIM-файлом. %s</string>
   <string name="error_article_url_not_found">Ошибка: Загрузка статьи (Url: %1$s) не удалась.</string>
   <string name="pref_display_title">Экран</string>
   <string name="pref_info_title">Информация</string>

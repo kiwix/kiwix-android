@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.reader
 
-import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -79,7 +78,7 @@ class EncodedUrlTest : BaseActivityTest() {
     val loadFileStream =
       EncodedUrlTest::class.java.classLoader.getResourceAsStream("characters_encoding.zim")
     val zimFile = File(
-      ContextCompat.getExternalFilesDirs(context, null)[0],
+      context.getExternalFilesDirs(null)[0],
       "characters_encoding.zim"
     )
     if (zimFile.exists()) zimFile.delete()

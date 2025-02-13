@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.reader
 
-import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
@@ -154,7 +153,7 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
   private fun createAndGetSplitedZimFile(shouldCreateExtraZeroSizeFile: Boolean = false): File? {
     val loadFileStream =
       EncodedUrlTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val storageDir = ContextCompat.getExternalFilesDirs(context, null)[0]
+    val storageDir = context.getExternalFilesDirs(null)[0]
 
     // Delete existing parts if they exist
     (1..3)

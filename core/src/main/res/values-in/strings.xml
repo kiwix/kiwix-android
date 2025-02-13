@@ -64,10 +64,10 @@
   <string name="server_started_message">Masukkan alamat IP ini ke browser Anda untuk mengakses server %s</string>
   <string name="qr_code">Kode QR yang Dirender</string>
   <string name="share_host_address">Bagikan URL melalui aplikasi lain</string>
-  <string name="error_file_not_found">Galat: Berkas ZIM yang dipilih tidak ditemukan.</string>
+  <string name="error_file_not_found">Galat: Berkas ZIM yang dipilih tidak ditemukan. %s</string>
   <string name="unable_to_read_zim_file">Tidak bisa membaca berkas ZIM ini!</string>
   <string name="zim_not_opened">ZIM file tidak dapat dibuka</string>
-  <string name="error_file_invalid">Galat: Berkas yang dipilih bukan berkas ZIM yang sah.</string>
+  <string name="error_file_invalid">Galat: Berkas yang dipilih bukan berkas ZIM yang sah. %s</string>
   <string name="error_article_url_not_found">Galat: Pemuatan artikel (Url: %1$s) gagal.</string>
   <string name="pref_display_title">Tampilan</string>
   <string name="pref_info_title">Informasi</string>

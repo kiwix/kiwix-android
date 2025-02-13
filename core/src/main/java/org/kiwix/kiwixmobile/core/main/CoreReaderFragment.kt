@@ -1774,7 +1774,10 @@ abstract class CoreReaderFragment :
       } else {
         exitBook()
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + zimReaderSource.toDatabase())
-        requireActivity().toast(R.string.error_file_not_found, Toast.LENGTH_LONG)
+        requireActivity().toast(
+          getString(R.string.error_file_not_found, zimReaderSource.toDatabase()),
+          Toast.LENGTH_LONG
+        )
       }
     } else {
       this.zimReaderSource = zimReaderSource
@@ -1818,7 +1821,10 @@ abstract class CoreReaderFragment :
         // disable all controls for this ZIM file. This prevents potential crashes.
         // See issue #4161 for more details.
         exitBook()
-        requireActivity().toast(R.string.error_file_invalid, Toast.LENGTH_LONG)
+        requireActivity().toast(
+          getString(R.string.error_file_invalid, zimReaderSource.toDatabase()),
+          Toast.LENGTH_LONG
+        )
       }
     }
   }

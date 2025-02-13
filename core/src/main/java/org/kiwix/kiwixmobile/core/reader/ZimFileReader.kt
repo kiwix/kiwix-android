@@ -88,8 +88,14 @@ class ZimFileReader constructor(
               null
             }
           } catch (ignore: JNIKiwixException) {
+            Log.e(
+              TAG,
+              "Error in creating ZimFileReader," +
+                " there is an JNI exception happens: $ignore"
+            )
             null
           } catch (ignore: Exception) { // for handing the error, if any zim file is corrupted
+            Log.e(TAG, "Error in creating ZimFileReader: $ignore")
             null
           }
         }

@@ -53,10 +53,10 @@
   <string name="stop_server_label">சேவையகத்தை நிறுத்து</string>
   <string name="server_started_message">%s சேவையகத்தை அணுக உங்கள் உலாவியில் இந்த ஐபி முகவரியை உள்ளிடவும்</string>
   <string name="share_host_address">பிற பயன்பாடுகள் வழியாக URL ஐப் பகிரவும்</string>
-  <string name="error_file_not_found">பிழை: தேர்வு செய்யப்பட்ட ZIM கோப்பு காணப்படவில்லை</string>
+  <string name="error_file_not_found">பிழை: தேர்வு செய்யப்பட்ட ZIM கோப்பு காணப்படவில்லை %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">இந்த ஜிம் கோப்பைப் படிக்க முடியவில்லை!</string>
   <string name="zim_not_opened" fuzzy="true">ZIM கோப்பைத் திறக்க முடியவில்லை</string>
-  <string name="error_file_invalid">பிழை: தேர்வு செய்யப்பட்ட கோப்பு, ஏற்புடைய ZIM கோப்பு அல்ல</string>
+  <string name="error_file_invalid">பிழை: தேர்வு செய்யப்பட்ட கோப்பு, ஏற்புடைய ZIM கோப்பு அல்ல %s</string>
   <string name="error_article_url_not_found">பிழை: (Url: %1$s) கட்டுரையை ஏற்றித்துவங்க தவறிவிட்டது</string>
   <string name="pref_display_title">காண்பி</string>
   <string name="pref_info_title">தகவல்</string>
