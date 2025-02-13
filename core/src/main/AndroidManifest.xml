@@ -95,5 +95,8 @@
     <service
       android:name=".downloader.downloadManager.DownloadMonitorService"
       android:foregroundServiceType="dataSync" />
+    <service
+      android:name=".webserver.wifi_hotspot.HotspotService"
+      android:foregroundServiceType="dataSync" />
   </application>
 </manifest>

@@ -75,6 +75,8 @@ class CustomMainActivity : CoreMainActivity() {
   override val historyFragmentResId: Int = R.id.historyFragment
   override val notesFragmentResId: Int = R.id.notesFragment
   override val helpFragmentResId: Int = R.id.helpFragment
+  override val zimHostFragmentResId: Int = R.id.zimHostFragment
+  override val navGraphId: Int = R.navigation.custom_nav_graph
   override val cachedComponent by lazy { customActivityComponent }
   override val topLevelDestinations =
     setOf(R.id.customReaderFragment)
@@ -114,7 +116,7 @@ class CustomMainActivity : CoreMainActivity() {
        * For more info see https://github.com/kiwix/kiwix-android/pull/3516,
        * https://github.com/kiwix/kiwix-android/issues/4026
        */
-      menu.findItem(org.kiwix.kiwixmobile.core.R.id.menu_host_books)?.isVisible = false
+      menu.findItem(org.kiwix.kiwixmobile.core.R.id.menu_host_books)?.isVisible = true
       /**
        * Hide the `HelpFragment` from custom apps.
        * We have not removed the relevant code for `HelpFragment` from custom apps.

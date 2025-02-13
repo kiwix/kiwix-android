@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.webserver
+package org.kiwix.kiwixmobile.core.webserver
 
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,8 +27,8 @@ import org.kiwix.kiwixmobile.core.utils.ServerUtils.INVALID_IP
 import org.kiwix.kiwixmobile.core.utils.ServerUtils.getIp
 import org.kiwix.kiwixmobile.core.utils.ServerUtils.getIpAddress
 import org.kiwix.kiwixmobile.core.utils.files.Log
-import org.kiwix.kiwixmobile.webserver.wifi_hotspot.IpAddressCallbacks
-import org.kiwix.kiwixmobile.webserver.wifi_hotspot.ServerStatus
+import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.IpAddressCallbacks
+import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.ServerStatus
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

@@ -56,6 +56,10 @@
     android:name="org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment"
     android:label="BookmarksFragment" />
   <fragment
+    android:id="@+id/zimHostFragment"
+    android:name="org.kiwix.kiwixmobile.core.webserver.ZimHostFragment"
+    android:label="ZimHostFragment" />
+  <fragment
     android:id="@+id/helpFragment"
     android:name="org.kiwix.kiwixmobile.custom.help.CustomHelpFragment"
     android:label="HelpFragment" />

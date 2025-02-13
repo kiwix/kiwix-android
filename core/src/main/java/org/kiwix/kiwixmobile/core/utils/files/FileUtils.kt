@@ -658,10 +658,6 @@ object FileUtils {
     }
   }
 
-  @JvmStatic
-  fun getDemoFilePathForCustomApp(context: Context) =
-    "${context.getExternalFilesDirs(null)[0]}/demo.zim"
-
   @SuppressLint("Recycle")
   @JvmStatic
   fun getAssetFileDescriptorFromUri(
@@ -698,6 +694,10 @@ object FileUtils {
       // via the given file path before passing it to libkiwix.
       // This precaution helps prevent runtime crashes.
       // For more details, refer to https://github.com/kiwix/kiwix-android/pull/3636.
+      Log.e(
+        "CAN_OPEN_IN_LIBKIWIX",
+        "isFileDescriptorCanOpenWithLibkiwix: ${FileInputStream("dev/fd/$fdNumber")}"
+      )
       FileInputStream("dev/fd/$fdNumber")
       true
     } catch (ignore: Exception) {

@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.webserver
+package org.kiwix.kiwixmobile.core.webserver
 
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import io.reactivex.SingleObserver
@@ -24,8 +24,8 @@ import org.kiwix.kiwixmobile.core.base.BasePresenter
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
-import org.kiwix.kiwixmobile.webserver.ZimHostContract.Presenter
-import org.kiwix.kiwixmobile.webserver.ZimHostContract.View
+import org.kiwix.kiwixmobile.core.webserver.ZimHostContract.Presenter
+import org.kiwix.kiwixmobile.core.webserver.ZimHostContract.View
 import javax.inject.Inject
 
 @ActivityScope

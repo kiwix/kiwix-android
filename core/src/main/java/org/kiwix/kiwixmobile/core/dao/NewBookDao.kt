@@ -26,9 +26,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx3.rxSingle
+import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity_
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
@@ -42,7 +44,6 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
         .flatMapSingle { bookOnDiskEntity ->
           val file = bookOnDiskEntity.file
           val zimReaderSource = ZimReaderSource(file)
-
           rxSingle { zimReaderSource.canOpenInLibkiwix() }
             .map { canOpen ->
               if (canOpen) {
@@ -72,7 +73,8 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
             }
         }
         .filter { (bookOnDiskEntity, exists) ->
-          exists && !isInTrashFolder(bookOnDiskEntity.zimReaderSource.toDatabase())
+          (instance.getMainActivity().isCustomApp() || exists) &&
+            !isInTrashFolder(bookOnDiskEntity.zimReaderSource.toDatabase())
         }
         .map(Pair<BookOnDiskEntity, Boolean>::first)
         .toList()
@@ -152,6 +154,7 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
   }
 
   private suspend fun removeBooksThatDoNotExist(books: MutableList<BookOnDiskEntity>) {
+    if (instance.getMainActivity().isCustomApp()) return
     delete(books.filterNot { it.zimReaderSource.exists() })
   }
 

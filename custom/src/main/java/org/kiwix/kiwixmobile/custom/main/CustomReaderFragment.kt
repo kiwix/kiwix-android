@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.custom.main
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -36,7 +37,6 @@ import org.kiwix.kiwixmobile.core.R.dimen
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.getResizedDrawable
-import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.main.MainMenu
 import org.kiwix.kiwixmobile.core.main.RestoreOrigin
@@ -44,12 +44,10 @@ import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForCustomApp
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
-import java.io.File
 import java.util.Locale
 import javax.inject.Inject
 
@@ -220,19 +218,11 @@ class CustomReaderFragment : CoreReaderFragment() {
                 true,
                 shouldManageExternalLaunch
               )
-              // Save book in the database to display it in `ZimHostFragment`.
-              zimReaderContainer?.zimFileReader?.let { zimFileReader ->
-                // Check if the file is not null. If the file is null,
-                // it means we have created zimFileReader with a fileDescriptor,
-                // so we create a demo file to save it in the database for display on the `ZimHostFragment`.
-                val file = it.file ?: createDemoFile()
-                val bookOnDisk = BookOnDisk(zimFileReader)
-                repositoryActions?.saveBook(bookOnDisk)
-              }
               if (shouldManageExternalLaunch) {
                 // Open the previous loaded pages after ZIM file loads.
                 manageExternalLaunchAndRestoringViewState()
               }
+              saveBookInDatabase()
             }
 
             is ValidationState.HasBothFiles -> {
@@ -242,6 +232,7 @@ class CustomReaderFragment : CoreReaderFragment() {
                 // Open the previous loaded pages after ZIM file loads.
                 manageExternalLaunchAndRestoringViewState()
               }
+              saveBookInDatabase()
             }
 
             else -> {}
@@ -256,16 +247,19 @@ class CustomReaderFragment : CoreReaderFragment() {
     )
   }
 
-  private suspend fun createDemoFile() =
-    File(getDemoFilePathForCustomApp(requireActivity())).also {
-      if (!it.isFileExist()) it.createNewFile()
+  private fun saveBookInDatabase() {
+    // Save book in the database to display it in `ZimHostFragment`.
+    zimReaderContainer?.zimFileReader?.let { zimFileReader ->
+      Log.e("SELECTED_BOOKS", "saveBookInDatabase: Saving book to database")
+      repositoryActions?.saveBook(BookOnDisk(zimFileReader))
     }
+  }
 
   @Suppress("DEPRECATION")
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, inflater)
     menu.findItem(org.kiwix.kiwixmobile.core.R.id.menu_help)?.isVisible = false
-    menu.findItem(org.kiwix.kiwixmobile.core.R.id.menu_host_books)?.isVisible = false
+    menu.findItem(org.kiwix.kiwixmobile.core.R.id.menu_host_books)?.isVisible = true
   }
 
   private fun enforcedLanguage(): Boolean {

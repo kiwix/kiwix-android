@@ -25,12 +25,14 @@ import org.kiwix.kiwixmobile.core.di.CoreServiceScope
 import org.kiwix.kiwixmobile.core.di.modules.CoreServiceModule
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
+import org.kiwix.kiwixmobile.core.webserver.wifi_hotspot.HotspotService
 
 @Subcomponent(modules = [CoreServiceModule::class])
 @CoreServiceScope
 interface CoreServiceComponent {
   fun inject(readAloudService: ReadAloudService)
   fun inject(downloadMonitorService: DownloadMonitorService)
+  fun inject(hotspotService: HotspotService)
 
   @Subcomponent.Builder
   interface Builder {

@@ -152,8 +152,5 @@
         <action android:name="KiwixSearchWidget.STAR_CLICKED" />
       </intent-filter>
     </receiver>
-    <service
-      android:name=".webserver.wifi_hotspot.HotspotService"
-      android:foregroundServiceType="dataSync" />
   </application>
 </manifest>

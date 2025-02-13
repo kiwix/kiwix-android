@@ -35,7 +35,6 @@ import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.R.id
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
@@ -75,7 +74,7 @@ class ZimHostRobot : BaseRobot() {
   fun startServer() {
     // stop the server if it is already running.
     stopServerIfAlreadyStarted()
-    clickOn(ViewId(id.startServerButton))
+    clickOn(ViewId(R.id.startServerButton))
     assetWifiDialogDisplayed()
     testFlakyView({ onView(withText("PROCEED")).perform(click()) })
   }
@@ -116,7 +115,7 @@ class ZimHostRobot : BaseRobot() {
     } catch (assertionFailedError: AssertionFailedError) {
       try {
         val recyclerViewItemsCount =
-          RecyclerViewItemCount(id.recyclerViewZimHost).checkRecyclerViewCount()
+          RecyclerViewItemCount(R.id.recyclerViewZimHost).checkRecyclerViewCount()
         (0 until recyclerViewItemsCount)
           .asSequence()
           .filter { it != 0 }
@@ -130,14 +129,14 @@ class ZimHostRobot : BaseRobot() {
   private fun selectZimFile(position: Int) {
     try {
       onView(
-        RecyclerViewMatcher(id.recyclerViewZimHost).atPositionOnView(
+        RecyclerViewMatcher(R.id.recyclerViewZimHost).atPositionOnView(
           position,
           R.id.itemBookCheckbox
         )
       ).check(matches(ViewMatchers.isChecked()))
     } catch (assertionError: AssertionFailedError) {
       onView(
-        RecyclerViewMatcher(id.recyclerViewZimHost).atPositionOnView(
+        RecyclerViewMatcher(R.id.recyclerViewZimHost).atPositionOnView(
           position,
           R.id.itemBookCheckbox
         )
@@ -148,14 +147,14 @@ class ZimHostRobot : BaseRobot() {
   fun assertItemHostedOnServer(itemCount: Int) {
     val checkedCheckboxCount =
       RecyclerViewSelectedCheckBoxCountAssertion(
-        id.recyclerViewZimHost,
+        R.id.recyclerViewZimHost,
         R.id.itemBookCheckbox
       ).countCheckedCheckboxes()
     assertThat(checkedCheckboxCount, CoreMatchers.`is`(itemCount))
   }
 
   fun stopServer() {
-    testFlakyView({ onView(withId(id.startServerButton)).perform(click()) })
+    testFlakyView({ onView(withId(R.id.startServerButton)).perform(click()) })
   }
 
   fun assertServerStopped() {
@@ -164,11 +163,11 @@ class ZimHostRobot : BaseRobot() {
   }
 
   fun assertQrShown() {
-    isVisible(ViewId(id.serverQrCode))
+    isVisible(ViewId(R.id.serverQrCode))
   }
 
   fun assertQrNotShown() {
-    isNotVisible(ViewId(id.serverQrCode))
+    isNotVisible(ViewId(R.id.serverQrCode))
   }
 
   private fun pauseForBetterTestPerformance() {
