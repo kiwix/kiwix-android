@@ -1228,6 +1228,8 @@ abstract class CoreReaderFragment :
 
   override fun onDestroyView() {
     super.onDestroyView()
+    findInPageTitle = null
+    searchItemToOpen = null
     restoreTabsSnackbarCallback = null
     try {
       coreReaderLifeCycleScope?.cancel()
