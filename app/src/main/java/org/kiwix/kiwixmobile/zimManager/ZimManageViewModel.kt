@@ -144,6 +144,7 @@ class ZimManageViewModel @Inject constructor(
   val fileSelectActions = PublishProcessor.create<FileSelectActions>()
   val requestDownloadLibrary = BehaviorProcessor.createDefault(Unit)
   val requestFiltering = BehaviorProcessor.createDefault("")
+  val onlineBooksSearchedQuery = MutableLiveData<String>()
 
   private var compositeDisposable: CompositeDisposable? = CompositeDisposable()
   val downloadProgress = MutableLiveData<String>()

@@ -25,7 +25,6 @@ import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.ConnectivityManager
 import android.os.Build
-import com.tonyodev.fetch2.Status
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
@@ -34,6 +33,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
@@ -51,6 +51,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.tonyodev.fetch2.Status
 import eu.mhutti1.utils.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageSelectDialog
@@ -237,15 +238,48 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           val getZimItem = menu.findItem(R.id.get_zim_nearby_device)
           getZimItem?.isVisible = false
 
+          searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(p0: MenuItem): Boolean = true
+
+            override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
+              // Clear search query when user reset the search.
+              zimManageViewModel.onlineBooksSearchedQuery.value = null
+              return true
+            }
+          })
+
           (searchItem?.actionView as? SearchView)?.apply {
             setUpSearchView(requireActivity())
             setOnQueryTextListener(
               SimpleTextListener { query, _ ->
+                if (query.isNotEmpty()) {
+                  // Store only when query is not empty because when device going to sleep,
+                  // then `viewLifecycleOwner` tries to clear the written text in searchView
+                  // and due to that, this listener fired with empty query which resets the search.
+                  zimManageViewModel.onlineBooksSearchedQuery.value = query
+                }
                 zimManageViewModel.requestFiltering.onNext(query)
               }
             )
+
+            val closeButton = findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
+            closeButton?.setOnClickListener {
+              // Reset search query when user clicks on close image button in searchView.
+              zimManageViewModel.onlineBooksSearchedQuery.value = null
+              setQuery("", false)
+            }
+            zimManageViewModel.onlineBooksSearchedQuery.value.takeIf { it?.isNotEmpty() == true }
+              ?.let {
+                // Expand the searchView if there is previously saved query exist.
+                searchItem.expandActionView()
+                // Set the query in searchView which was previously set.
+                setQuery(it, false)
+              } ?: kotlin.run {
+              // If no previously saved query found then normally initiate the search.
+              zimManageViewModel.onlineBooksSearchedQuery.value = ""
+              zimManageViewModel.requestFiltering.onNext("")
+            }
           }
-          zimManageViewModel.requestFiltering.onNext("")
         }
 
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
