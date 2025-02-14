@@ -18,7 +18,9 @@
     android:allowBackup="true"
     android:icon="@mipmap/ic_launcher"
     android:roundIcon="@mipmap/ic_launcher_round"
-    android:supportsRtl="true">
+    android:supportsRtl="true"
+    android:localeConfig="@xml/locales_config"
+    tools:targetApi="tiramisu">
 
     <activity
       android:name=".main.KiwixMainActivity"
@@ -169,5 +171,13 @@
     <service
       android:name=".webserver.wifi_hotspot.HotspotService"
       android:foregroundServiceType="dataSync" />
+    <service
+      android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+      android:enabled="false"
+      android:exported="false">
+      <meta-data
+        android:name="autoStoreLocales"
+        android:value="true" />
+    </service>
   </application>
 </manifest>
