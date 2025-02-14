@@ -33,7 +33,9 @@ import android.webkit.WebView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
@@ -51,12 +53,10 @@ import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -161,7 +161,12 @@ abstract class CorePrefsFragment :
       var languageCodeList = LanguageUtils(requireActivity()).keys
       languageCodeList = listOf(Locale.ROOT.language) + languageCodeList
       sharedPreferenceUtil?.let { sharedPreferenceUtil ->
-        val selectedLang = selectedLanguage(languageCodeList, sharedPreferenceUtil.prefLanguage)
+        val selectedLang = if (!AppCompatDelegate.getApplicationLocales().isEmpty) {
+          // Fetches the current Application Locale from the list
+          AppCompatDelegate.getApplicationLocales()[0]?.language
+        } else {
+          selectedLanguage(languageCodeList, sharedPreferenceUtil.prefLanguage)
+        }
         languagePref.entries = languageDisplayValues(languageCodeList)
         languagePref.entryValues = languageCodeList.toTypedArray()
         languagePref.setDefaultValue(selectedLang)
@@ -176,21 +181,10 @@ abstract class CorePrefsFragment :
           Preference.OnPreferenceChangeListener { _, newValue ->
             val languageCode = newValue as String?
             languageCode?.let {
-              handleLocaleChange(requireActivity(), it, sharedPreferenceUtil)
-              sharedPreferenceUtil.putPrefLanguage(it)
-              restartActivity()
+              AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(it))
             }
             true
           }
-      }
-    }
-  }
-
-  private fun restartActivity() {
-    (activity as CoreMainActivity?)?.let {
-      it.navController.apply {
-        popBackStack()
-        navigate(it.settingsFragmentResId)
       }
     }
   }
