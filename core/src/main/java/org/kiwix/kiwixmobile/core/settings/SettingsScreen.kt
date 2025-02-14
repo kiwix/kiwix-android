@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.settings
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.activity.compose.LocalActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -64,12 +65,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.W400
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
-import org.kiwix.kiwixmobile.core.utils.SIX
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.AllowPermission
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ClearAllHistory
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ClearAllNotes
@@ -94,7 +93,8 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.STORAGE_LOADING_PROGRESS_BAR_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
+import org.kiwix.kiwixmobile.core.utils.SIX
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogConfirmButton
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogTitle
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
@@ -210,10 +210,13 @@ private fun LanguageCategory(settingScreenState: SettingScreenState) {
     val prefLanguage by settingScreenState.kiwixDataStore.prefLanguage
       .collectAsState(initial = "en")
     val selectedCode =
-      if (languageCodes.contains(prefLanguage)) {
-        prefLanguage
-      } else {
-        "en"
+      when {
+        !AppCompatDelegate.getApplicationLocales().isEmpty ->
+          // Fetches the current Application Locale from the list
+          AppCompatDelegate.getApplicationLocales()[0]?.language ?: "en"
+
+        languageCodes.contains(prefLanguage) -> prefLanguage
+        else -> "en"
       }
 
     val languageDisplayNames = languageCodes.mapIndexed { index, code ->
@@ -235,13 +238,7 @@ private fun LanguageCategory(settingScreenState: SettingScreenState) {
       ) { selectedDisplay ->
         val index = languageDisplayNames.indexOf(selectedDisplay)
         val selectedLangCode = languageCodes.getOrNull(index) ?: return@ListPreference
-        settingScreenState.lifeCycleScope?.launch {
-          settingScreenState.kiwixDataStore.apply {
-            setPrefLanguage(selectedLangCode)
-            handleLocaleChange(context, selectedLangCode, this)
-          }
-          settingScreenState.onLanguageChanged()
-        }
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(selectedLangCode))
       }
     }
   }
