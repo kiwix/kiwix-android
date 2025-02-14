@@ -106,6 +106,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefIsAppDirectoryMigrated: Boolean
     get() = sharedPreferences.getBoolean(PREF_APP_DIRECTORY_TO_PUBLIC_MIGRATED, false)
 
+  val perAppLanguageMigrated: Boolean
+    get() = sharedPreferences.getBoolean(PER_APP_LANGUAGE_MIGRATION, false)
+
   val prefStorage: String
     get() {
       val storage = sharedPreferences.getString(PREF_STORAGE, null)
@@ -158,6 +161,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   fun putPrefDeviceDefaultLanguage(language: String) =
     sharedPreferences.edit { putString(PREF_DEVICE_DEFAULT_LANG, language) }
+
+  fun putPerAppLanguageMigration(isMigrated: Boolean) =
+    sharedPreferences.edit { putBoolean(PER_APP_LANGUAGE_MIGRATION, isMigrated) }
 
   fun putPrefIsFirstRun(isFirstRun: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_IS_FIRST_RUN, isFirstRun) }
@@ -334,5 +340,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val PREF_LATER_CLICKED_MILLIS = "pref_later_clicked_millis"
     const val PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS =
       "pref_last_donation_shown_in_milliseconds"
+    const val PER_APP_LANGUAGE_MIGRATION = "per_app_language_migration"
   }
 }
