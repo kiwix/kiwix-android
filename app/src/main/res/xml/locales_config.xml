@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Kiwix Android
+  ~ Copyright (c) 2025 Kiwix <android.kiwix.org>
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+  <locale android:name="am" />
+  <locale android:name="oc" />
+  <locale android:name="vi" />
+  <locale android:name="nl" />
+  <locale android:name="uz" />
+  <locale android:name="hu" />
+  <locale android:name="cs" />
+  <locale android:name="da" />
+  <locale android:name="ko" />
+  <locale android:name="et" />
+  <locale android:name="ie" />
+  <locale android:name="bm" />
+  <locale android:name="hr" />
+  <locale android:name="ta" />
+  <locale android:name="id" />
+  <locale android:name="th" />
+  <locale android:name="cy" />
+  <locale android:name="nb" />
+  <locale android:name="nn" />
+  <locale android:name="ml" />
+  <locale android:name="ur" />
+  <locale android:name="sc" />
+  <locale android:name="or" />
+  <locale android:name="si" />
+  <locale android:name="ps" />
+  <locale android:name="gu" />
+  <locale android:name="it" />
+  <locale android:name="in" />
+  <locale android:name="so" />
+  <locale android:name="ba" />
+  <locale android:name="he" />
+  <locale android:name="lv" />
+  <locale android:name="su" />
+  <locale android:name="sv" />
+  <locale android:name="be" />
+  <locale android:name="ms" />
+  <locale android:name="yo" />
+  <locale android:name="as" />
+  <locale android:name="fi" />
+  <locale android:name="li" />
+  <locale android:name="lt" />
+  <locale android:name="sq" />
+  <locale android:name="eo" />
+  <locale android:name="fr" />
+  <locale android:name="km" />
+  <locale android:name="ru" />
+  <locale android:name="qu" />
+  <locale android:name="tl" />
+  <locale android:name="fa" />
+  <locale android:name="br" />
+  <locale android:name="sh" />
+  <locale android:name="my" />
+  <locale android:name="ja" />
+  <locale android:name="uk" />
+  <locale android:name="ia" />
+  <locale android:name="tr" />
+  <locale android:name="jv" />
+  <locale android:name="hi" />
+  <locale android:name="az" />
+  <locale android:name="cv" />
+  <locale android:name="pt" />
+  <locale android:name="rm" />
+  <locale android:name="es" />
+  <locale android:name="mn" />
+  <locale android:name="bn" />
+  <locale android:name="mg" />
+  <locale android:name="fo" />
+  <locale android:name="lb" />
+  <locale android:name="te" />
+  <locale android:name="sk" />
+  <locale android:name="yi" />
+  <locale android:name="mk" />
+  <locale android:name="ro" />
+  <locale android:name="ne" />
+  <locale android:name="iw" />
+  <locale android:name="af" />
+  <locale android:name="sw" />
+  <locale android:name="pl" />
+  <locale android:name="zh" />
+  <locale android:name="el" />
+  <locale android:name="ar" />
+  <locale android:name="sl" />
+  <locale android:name="gl" />
+  <locale android:name="sa" />
+  <locale android:name="ka" />
+  <locale android:name="ji" />
+  <locale android:name="kn" />
+  <locale android:name="de" />
+  <locale android:name="ky" />
+  <locale android:name="bg" />
+  <locale android:name="ca" />
+  <locale android:name="mt" />
+  <locale android:name="en" />
+</locale-config>
+
