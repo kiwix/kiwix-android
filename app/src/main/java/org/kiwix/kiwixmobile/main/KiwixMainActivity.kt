@@ -25,11 +25,13 @@ import android.os.Handler
 import android.os.Looper
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.view.ActionMode
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.os.ConfigurationCompat
+import androidx.core.os.LocaleListCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
@@ -142,6 +144,16 @@ class KiwixMainActivity : CoreMainActivity() {
     handleNotificationIntent(intent)
     handleGetContentIntent(intent)
     activityKiwixMainBinding.root.applyEdgeToEdgeInsets()
+    migratedToPerAppLanguage()
+  }
+
+  private fun migratedToPerAppLanguage() {
+    if (!sharedPreferenceUtil.perAppLanguageMigrated) {
+      AppCompatDelegate.setApplicationLocales(
+        LocaleListCompat.forLanguageTags(sharedPreferenceUtil.prefLanguage)
+      )
+      sharedPreferenceUtil.putPerAppLanguageMigration(true)
+    }
   }
 
   private suspend fun migrateInternalToPublicAppDirectory() {

@@ -296,6 +296,8 @@ object Libs {
    */
   const val appcompat: String = "androidx.appcompat:appcompat:" + Versions.appcompat
 
+  const val appcompat_resource = "androidx.appcompat:appcompat-resources:" + Versions.appcompat
+
   /**
    * https://github.com/ReactiveX/RxAndroid
    */
