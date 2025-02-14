@@ -60,7 +60,7 @@ jobs:
       - name: Upload APKs to Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "app/build/outputs/apk/standalone/**"
+          artifacts: "app/build/outputs/apk/standalone/*.apk"
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ env.TAG }}
           allowUpdates: true
