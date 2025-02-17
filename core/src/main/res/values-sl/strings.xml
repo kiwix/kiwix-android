@@ -62,7 +62,7 @@
   <string name="error_file_not_found">Napaka: izbrane datoteke ZIM ni bilo mogoče najti. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Te datoteke ZIM ni mogoče prebrati!</string>
   <string name="zim_not_opened" fuzzy="true">Datoteke ZIM ni mogoče odpreti</string>
-  <string name="error_file_invalid">Napaka: izbrana datoteka ni veljavna datoteka ZIM. %s</string>
+  <string name="error_file_invalid" fuzzy="true">Napaka: izbrana datoteka ni veljavna datoteka ZIM. %s</string>
   <string name="error_article_url_not_found">Napaka: Nalaganje članka (url: %1$s) ni uspelo.</string>
   <string name="pref_display_title">Prikaz</string>
   <string name="pref_info_title">Informacije</string>

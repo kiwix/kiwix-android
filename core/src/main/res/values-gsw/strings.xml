@@ -43,7 +43,7 @@
   <string name="start_server_label">Server schtartä</string>
   <string name="stop_server_label">Server schtoppe</string>
   <string name="server_started_message">Gäbed Si diä IP Adrässe i ihräm Browser i um uf de Server %s zuezgrifä</string>
-  <string name="error_file_not_found">Fehler: Di usgwählti ZIM-Datei isch nit gfunde worde. %s</string>
+  <string name="error_file_not_found" fuzzy="true">Fehler: Di usgwählti ZIM-Datei isch nit gfunde worde. %s</string>
   <string name="zim_not_opened" fuzzy="true">Cha zim Datei nid uftue</string>
   <string name="error_file_invalid">Fehler: Di usgwählti Datei isch chei gültigi ZIM-Datei. %s</string>
   <string name="error_article_url_not_found">Fehler: S’ Lade vom Artikel (URL: %1$s) het nit gchlappt.</string>

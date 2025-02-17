@@ -39,7 +39,7 @@
   <string name="hotspot_notification_content_title">Kawasan Khas Kiwix</string>
   <string name="start_server_label">Mula pelayan</string>
   <string name="stop_server_label">Hentikan pelayan</string>
-  <string name="error_file_not_found">Ralat: Fail ZIM yang terpilih tidak dapat ditemui. %s</string>
+  <string name="error_file_not_found" fuzzy="true">Ralat: Fail ZIM yang terpilih tidak dapat ditemui. %s</string>
   <string name="error_file_invalid">Ralat: Fail yang terpilih bukan fail ZIM yang sah. %s</string>
   <string name="error_article_url_not_found">Ralat: Rencana (Url: %1$s) gagal dimuatkan.</string>
   <string name="pref_display_title">Paparan</string>

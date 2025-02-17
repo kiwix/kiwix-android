@@ -17,8 +17,8 @@
   <string name="search_label">Хайлт</string>
   <string name="choose_file" fuzzy="true">ZIM  агуулгын файлыг сонгох (*.zim)</string>
   <string name="open_in_new_tab">Холбоосыг өөр табд нээ</string>
-  <string name="error_file_not_found">Алдаа: Сонгосон ZIM файл олдсонгүй. %s</string>
-  <string name="error_file_invalid">Алдаа: Сонгосон ZIM файл алдаатай байна. %s</string>
+  <string name="error_file_not_found" fuzzy="true">Алдаа: Сонгосон ZIM файл олдсонгүй. %s</string>
+  <string name="error_file_invalid" fuzzy="true">Алдаа: Сонгосон ZIM файл алдаатай байна. %s</string>
   <string name="error_article_url_not_found">Алдаа: (Url: %1$s) нийтлэлийг уншихад алдаа.</string>
   <string name="pref_display_title">Үзүүлэх</string>
   <string name="pref_info_title">Мэдээлэл</string>

@@ -53,7 +53,7 @@
   <string name="stop_server_label">Serverê bide sekinandin</string>
   <string name="server_started_message">Vê adresa IPyê di geroka xwe de binivîsîne ji bo ku xwe bigihînî servera %s</string>
   <string name="share_host_address">URLyê bi riya sepanên din parve bike</string>
-  <string name="error_file_not_found">Çewtîː Peldanka ZIM’ê ya bijartî nehate dîtin. %s</string>
+  <string name="error_file_not_found" fuzzy="true">Çewtîː Peldanka ZIM’ê ya bijartî nehate dîtin. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Nebû ku vê dosyeya zimê bixwîne!</string>
   <string name="zim_not_opened" fuzzy="true">Nikare dosyeya zim-ê veke</string>
   <string name="error_file_invalid">Çewtîː Peldanka bijartî ne peldankeke ZIMê ya derbasdar e. %s</string>

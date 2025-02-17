@@ -55,7 +55,7 @@
   <string name="error_file_not_found">Chyba: Vybraný súbor ZIM sa nenašiel. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Nepodarilo sa prečítať súbor zim!</string>
   <string name="zim_not_opened" fuzzy="true">Nepodarilo sa otvoriť súbor zim</string>
-  <string name="error_file_invalid">Chyba: Vybraný súbor nie je platný ZIM súbor. %s</string>
+  <string name="error_file_invalid" fuzzy="true">Chyba: Vybraný súbor nie je platný ZIM súbor. %s</string>
   <string name="error_article_url_not_found">Chyba: Načítavanie článku (Url: %1$s) sa nepodarilo.</string>
   <string name="pref_display_title">Zobrazenie</string>
   <string name="pref_info_title">Informácie</string>
