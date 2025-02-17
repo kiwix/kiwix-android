@@ -19,6 +19,8 @@
 package org.kiwix.kiwixmobile
 
 import android.content.Context
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -32,7 +34,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.json.JSONArray
 import org.json.JSONObject
@@ -43,7 +44,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE
 import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -73,7 +73,7 @@ class SharedPreferenceToDatastoreMigratorTest {
       }
       waitForIdle()
     }
-    val kiwixDataStore = KiwixDataStore(context).apply {
+    KiwixDataStore(context).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
         setIntroShown()
@@ -88,13 +88,7 @@ class SharedPreferenceToDatastoreMigratorTest {
     ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
       onActivity {
-        runBlocking {
-          LanguageUtils.handleLocaleChange(
-            it,
-            "en",
-            kiwixDataStore
-          )
-        }
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
         it.navigate(KiwixDestination.Library.route)
       }
     }
@@ -149,7 +143,6 @@ class SharedPreferenceToDatastoreMigratorTest {
       .putBoolean(KiwixDataStore.PREF_BOOK_ON_DISK_MIGRATED, true)
       .putString(KiwixDataStore.CACHED_LANGUAGE_CODES, jsonArray.toString())
       .putString(KiwixDataStore.SELECTED_ONLINE_CONTENT_LANGUAGE, "eng")
-      .putString(KiwixDataStore.PREF_DEVICE_DEFAULT_LANG, "eng")
       .putString(KiwixDataStore.PREF_LANG, "fr")
       .putBoolean(KiwixDataStore.PREF_SHOW_HISTORY_ALL_BOOKS, false)
       .putBoolean(KiwixDataStore.PREF_SHOW_BOOKMARKS_ALL_BOOKS, true)
@@ -209,7 +202,6 @@ class SharedPreferenceToDatastoreMigratorTest {
     assertEquals(100L, obj.getLong(KEY_LANGUAGE_ID))
     // End of cached migration.
     assertEquals("eng", prefs[PreferencesKeys.SELECTED_ONLINE_CONTENT_LANGUAGE])
-    assertEquals("eng", prefs[PreferencesKeys.PREF_DEVICE_DEFAULT_LANG])
     assertEquals("fr", prefs[PreferencesKeys.PREF_LANG])
     assertEquals(false, prefs[PreferencesKeys.PREF_SHOW_HISTORY_ALL_BOOKS])
     assertEquals(true, prefs[PreferencesKeys.PREF_SHOW_BOOKMARKS_ALL_BOOKS])

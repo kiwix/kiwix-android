@@ -21,11 +21,13 @@ package org.kiwix.kiwixmobile.page.bookmarks
 import android.accessibilityservice.AccessibilityService
 import android.content.Context
 import android.content.Intent
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.core.net.toUri
+import androidx.core.os.LocaleListCompat
 import androidx.navigation.NavOptions
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
@@ -48,7 +50,6 @@ import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -84,7 +85,7 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
       }
       waitForIdle()
     }
-    val kiwixDataStore = KiwixDataStore(context).apply {
+    KiwixDataStore(context).apply {
       lifeCycleScope.launch {
         setWifiOnly(false)
         setIntroShown()
@@ -99,13 +100,7 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
 
     composeTestRule.apply {
       runOnUiThread {
-        runBlocking {
-          handleLocaleChange(
-            kiwixMainActivity,
-            "en",
-            kiwixDataStore
-          )
-        }
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
       }
       waitForIdle()
     }
