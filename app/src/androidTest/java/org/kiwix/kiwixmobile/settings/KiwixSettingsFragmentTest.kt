@@ -19,8 +19,10 @@ package org.kiwix.kiwixmobile.settings
 
 import android.Manifest
 import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
@@ -36,7 +38,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -82,7 +83,7 @@ class KiwixSettingsFragmentTest {
       }
       waitForIdle()
     }
-    val kiwixDataStore = KiwixDataStore(
+    KiwixDataStore(
       InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
     ).apply {
       runBlocking {
@@ -96,13 +97,7 @@ class KiwixSettingsFragmentTest {
     activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
       moveToState(Lifecycle.State.RESUMED)
       onActivity {
-        runBlocking {
-          handleLocaleChange(
-            it,
-            "en",
-            kiwixDataStore
-          )
-        }
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
       }
     }
     val accessibilityValidator = AccessibilityValidator().setRunChecksFromRootView(true).apply {

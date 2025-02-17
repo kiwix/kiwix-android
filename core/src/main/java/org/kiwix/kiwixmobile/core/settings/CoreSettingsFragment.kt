@@ -125,7 +125,8 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
         shouldShowStorageCategory = false,
         shouldShowExternalLinkPreference = false,
         shouldShowPrefWifiOnlyPreference = false,
-        kiwixDataStore = kiwixDataStore ?: throw IllegalStateException("")
+        kiwixDataStore = kiwixDataStore ?: throw IllegalStateException(""),
+        lifecycleScope = null
       )
     )
   }
@@ -142,6 +143,9 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
         }
         DialogHost(alertDialogShower as AlertDialogShower)
         LaunchedEffect(Unit) {
+          settingsScreenState.value.update {
+            copy(lifecycleScope = lifecycleScope)
+          }
           kiwixDataStore?.let {
             LanguageUtils(requireActivity()).changeFont(
               requireActivity(),

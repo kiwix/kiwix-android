@@ -17,37 +17,33 @@
  */
 package org.kiwix.kiwixmobile.core.base
 
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 open class BaseActivity : AppCompatActivity() {
   @Inject
   lateinit var kiwixDataStore: KiwixDataStore
-
-  /**
-   * Apply the currently selected language to the base context
-   * so that Compose can properly localize everything.
-   */
-  override fun attachBaseContext(newBase: Context) {
-    val kiwixDataStore = KiwixDataStore(newBase)
-    val localizedContext = runBlocking {
-      LanguageUtils.handleLocaleChange(
-        newBase,
-        kiwixDataStore.prefLanguage.first(),
-        kiwixDataStore
-      )
-    }
-    super.attachBaseContext(localizedContext)
-  }
+  //
+  // /**
+  //  * Apply the currently selected language to the base context
+  //  * so that Compose can properly localize everything.
+  //  */
+  // override fun attachBaseContext(newBase: Context) {
+  //   val kiwixDataStore = KiwixDataStore(newBase)
+  //   val localizedContext = runBlocking {
+  //     LanguageUtils.handleLocaleChange(
+  //       newBase,
+  //       kiwixDataStore.prefLanguage.first(),
+  //       kiwixDataStore
+  //     )
+  //   }
+  //   super.attachBaseContext(localizedContext)
+  // }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     enableEdgeToEdge(

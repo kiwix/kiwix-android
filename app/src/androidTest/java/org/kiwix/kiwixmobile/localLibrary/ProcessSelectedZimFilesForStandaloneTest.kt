@@ -19,8 +19,10 @@
 package org.kiwix.kiwixmobile.localLibrary
 
 import android.net.Uri
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -36,7 +38,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -82,13 +83,7 @@ class ProcessSelectedZimFilesForStandaloneTest : BaseActivityTest() {
     composeTestRule.apply {
       kiwixMainActivity = activity
       runOnUiThread {
-        runBlocking {
-          handleLocaleChange(
-            kiwixMainActivity,
-            "en",
-            kiwixDataStore
-          )
-        }
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
         parentFile = runBlocking { File(kiwixDataStore.selectedStorage.first()) }
       }
       waitForIdle()

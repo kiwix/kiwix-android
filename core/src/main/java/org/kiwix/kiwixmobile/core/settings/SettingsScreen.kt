@@ -67,6 +67,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.W400
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.AllowPermission
@@ -238,7 +239,10 @@ private fun LanguageCategory(settingScreenState: SettingScreenState) {
       ) { selectedDisplay ->
         val index = languageDisplayNames.indexOf(selectedDisplay)
         val selectedLangCode = languageCodes.getOrNull(index) ?: return@ListPreference
-        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(selectedLangCode))
+        settingScreenState.lifecycleScope?.launch {
+          settingScreenState.kiwixDataStore.setPrefLanguage(selectedLangCode)
+          AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(selectedLangCode))
+        }
       }
     }
   }
