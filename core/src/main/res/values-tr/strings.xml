@@ -68,7 +68,7 @@
   <string name="error_ip_address_not_found">IP adresi bulunamadı.</string>
   <string name="server_started_message">%s sunucusuna erişmek için tarayıcınıza bu ip adresini girin.</string>
   <string name="share_host_address">URL’yi diğer uygulamalar aracılığıyla paylaşın</string>
-  <string name="error_file_not_found">Hata: Seçili ZIM dosyası bulunamadı. %s</string>
+  <string name="error_file_not_found" fuzzy="true">Hata: Seçili ZIM dosyası bulunamadı.</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Bu zim dosyası okunamıyor!</string>
   <string name="zim_not_opened" fuzzy="true">Zim dosyası açılamıyor</string>
   <string name="error_file_invalid">Hata: Seçili dosya geçerli bir ZIM dosyası değil. %s</string>

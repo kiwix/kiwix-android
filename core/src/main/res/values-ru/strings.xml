@@ -2,6 +2,7 @@
 <!-- Authors:
 * Alexander Yukal
 * Avd2ev
+* Cabadeck
 * DDPAT
 * DevilishSkull
 * Diman Russkov
@@ -83,7 +84,7 @@
   <string name="server_started_message">Введите этот IP адрес в ваш браузер чтобы получить доступ к серверу %s</string>
   <string name="qr_code">Отобразить QR-код</string>
   <string name="share_host_address">Поделиться URL через другие приложения</string>
-  <string name="error_file_not_found">Ошибка: выбранный ZIM-файл не найден. %s</string>
+  <string name="error_file_not_found" fuzzy="true">Ошибка: выбранный ZIM-файл не найден. %s</string>
   <string name="unable_to_read_zim_file">Не удается прочитать этот ZIM-файл!</string>
   <string name="zim_not_opened">Не удается открыть ZIM-файл</string>
   <string name="error_file_invalid">Ошибка: Выбранный файл не является пригодным ZIM-файлом. %s</string>
@@ -183,7 +184,7 @@
   <string name="stop">остановить</string>
   <string name="notification_pause_button_text">Пауза</string>
   <string name="notification_resume_button_text">Продолжить</string>
-  <string name="internal_storage">Внутренний</string>
+  <string name="internal_storage">Внутреннее</string>
   <string name="external_storage">Внешний</string>
   <string name="yes">Да</string>
   <string name="no">Нет</string>
@@ -212,6 +213,7 @@
   <string name="do_not_ask_anymore">Больше не спрашивать</string>
   <string name="your_languages">Выбранные языки:</string>
   <string name="other_languages">Другие языки:</string>
+  <string name="downloading">Скачивание:</string>
   <string name="no_items_msg">Нет доступных элементов</string>
   <string name="crash_title">Хммм… Как неловко</string>
   <string name="crash_description">Похоже, приложение вылетело.\n\nНе могли бы вы помочь нам исправить эту проблему, предоставив следующую информацию?</string>
@@ -337,7 +339,7 @@
   <string name="diagnostic_report">Отчёт диагностики</string>
   <string name="diagnostic_report_message">Пожалуйста, пришлите нам всю информацию ниже, чтобы мы смогли обнаружить проблему</string>
   <string name="percentage">%d%%</string>
-  <string name="pref_text_zoom_title">Масштаб Текста</string>
+  <string name="pref_text_zoom_title">Масштаб текста</string>
   <string name="search_open_in_new_tab">Открыть в новой вкладке</string>
   <string name="reader">Просмотрщик</string>
   <string name="no_open_book">Нет открытых книг</string>

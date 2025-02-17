@@ -63,7 +63,7 @@
   <string name="server_started_message">Voer dit IP-adres in uw browser in om toegang te krijgen tot de server %s</string>
   <string name="qr_code">Gemaakte QR-code</string>
   <string name="share_host_address">URL delen via andere applicaties</string>
-  <string name="error_file_not_found">Fout: het geselecteerde ZIM-bestand kon niet gevonden worden. %s</string>
+  <string name="error_file_not_found" fuzzy="true">Fout: het geselecteerde ZIM-bestand kon niet gevonden worden. %s</string>
   <string name="unable_to_read_zim_file">Kan dit ZIM-bestand niet lezen!</string>
   <string name="zim_not_opened">Kan ZIM-bestand niet openen</string>
   <string name="error_file_invalid">Fout: het geselecteerde bestand is geen geldig ZIM-bestand. %s</string>
