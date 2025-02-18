@@ -26,7 +26,9 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
@@ -46,7 +48,6 @@ import org.junit.jupiter.api.fail
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -91,11 +92,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       moveToState(Lifecycle.State.RESUMED)
       sharedPreferenceUtil = SharedPreferenceUtil(context)
       onActivity {
-        LanguageUtils.handleLocaleChange(
-          it,
-          "en",
-          sharedPreferenceUtil
-        )
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
       }
     }
   }

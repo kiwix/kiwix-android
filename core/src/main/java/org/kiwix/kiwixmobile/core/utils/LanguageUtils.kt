@@ -18,10 +18,8 @@
 
 package org.kiwix.kiwixmobile.core.utils
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Handler
 import android.os.Looper
@@ -144,41 +142,6 @@ class LanguageUtils(private val context: Context) {
       // Link above shows that we are allowed to distribute this font
       "chr" to "fonts/Digohweli.ttf"
     )
-
-    @JvmStatic
-    fun handleLocaleChange(
-      activity: Activity,
-      sharedPreferenceUtil: SharedPreferenceUtil
-    ) {
-      sharedPreferenceUtil.prefLanguage.takeIf { it != Locale.ROOT.toString() }?.let {
-        handleLocaleChange(activity, it, sharedPreferenceUtil)
-      }
-    }
-
-    @SuppressLint("AppBundleLocaleChanges")
-    @Suppress("DEPRECATION")
-    @JvmStatic
-    fun handleLocaleChange(
-      activity: Activity,
-      language: String,
-      sharedPreferenceUtil: SharedPreferenceUtil
-    ) {
-      val locale =
-        if (language == Locale.ROOT.toString())
-          Locale(sharedPreferenceUtil.prefDeviceDefaultLanguage)
-        else
-          Locale(language)
-      Locale.setDefault(locale)
-      val config = Configuration()
-      config.setLocale(locale)
-      config.setLayoutDirection(locale)
-      activity.resources
-        .updateConfiguration(config, activity.resources.displayMetrics).also {
-          activity.applicationContext.resources
-            .updateConfiguration(config, activity.resources.displayMetrics)
-        }
-      activity.onConfigurationChanged(config)
-    }
 
     /**
      * Converts ISO3 language code to [java.util.Locale].

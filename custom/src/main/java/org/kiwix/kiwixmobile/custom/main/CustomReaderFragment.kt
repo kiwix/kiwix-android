@@ -27,8 +27,10 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
+import androidx.core.os.LocaleListCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.launch
@@ -42,7 +44,6 @@ import org.kiwix.kiwixmobile.core.main.MainMenu
 import org.kiwix.kiwixmobile.core.main.RestoreOrigin
 import org.kiwix.kiwixmobile.core.page.history.adapter.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getDemoFilePathForCustomApp
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
@@ -272,10 +273,8 @@ class CustomReaderFragment : CoreReaderFragment() {
     val currentLocaleCode = Locale.getDefault().toString()
     if (BuildConfig.ENFORCED_LANG.isNotEmpty() && BuildConfig.ENFORCED_LANG != currentLocaleCode) {
       sharedPreferenceUtil?.let { sharedPreferenceUtil ->
-        LanguageUtils.handleLocaleChange(
-          requireActivity(),
-          BuildConfig.ENFORCED_LANG,
-          sharedPreferenceUtil
+        AppCompatDelegate.setApplicationLocales(
+          LocaleListCompat.forLanguageTags(BuildConfig.ENFORCED_LANG)
         )
         sharedPreferenceUtil.putPrefLanguage(BuildConfig.ENFORCED_LANG)
       }

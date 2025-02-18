@@ -18,6 +18,8 @@
 package org.kiwix.kiwixmobile.settings
 
 import android.Manifest
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
@@ -29,7 +31,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.intro.IntroRobot
 import org.kiwix.kiwixmobile.intro.intro
@@ -76,14 +77,11 @@ class KiwixSettingsFragmentTest {
     }
     UiThreadStatement.runOnUiThread {
       activityScenarioRule.scenario.onActivity {
-        handleLocaleChange(
-          it,
-          "en",
-          SharedPreferenceUtil(it).apply {
-            setIsPlayStoreBuildType(true)
-            lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
-          }
-        )
+        SharedPreferenceUtil(it).apply {
+          setIsPlayStoreBuildType(true)
+          lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
+        }
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
         it.navigate(R.id.introFragment)
       }
     }

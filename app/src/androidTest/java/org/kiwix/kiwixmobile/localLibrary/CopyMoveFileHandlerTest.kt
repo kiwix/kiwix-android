@@ -20,7 +20,9 @@ package org.kiwix.kiwixmobile.localLibrary
 
 import android.net.Uri
 import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
+import androidx.core.os.LocaleListCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -43,7 +45,6 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
@@ -90,11 +91,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       moveToState(Lifecycle.State.RESUMED)
       sharedPreferenceUtil = SharedPreferenceUtil(context)
       onActivity {
-        LanguageUtils.handleLocaleChange(
-          it,
-          "en",
-          sharedPreferenceUtil
-        )
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
         parentFile = File(sharedPreferenceUtil.prefStorage)
       }
     }

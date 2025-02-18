@@ -156,7 +156,6 @@ import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler.ShowDonationDialog
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -1221,7 +1220,6 @@ abstract class CoreReaderFragment :
   // Reset the Locale and change the font of all TextViews and its subclasses, if necessary
   private fun handleLocaleCheck() {
     sharedPreferenceUtil?.let {
-      handleLocaleChange(requireActivity(), it)
       LanguageUtils(requireActivity()).changeFont(requireActivity(), it)
     }
   }

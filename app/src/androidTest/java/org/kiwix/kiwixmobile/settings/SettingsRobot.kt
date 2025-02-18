@@ -24,8 +24,10 @@ import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withResourceName
 import androidx.test.espresso.matcher.ViewMatchers.withSubstring
@@ -109,7 +111,7 @@ class SettingsRobot : BaseRobot() {
   }
 
   fun assertLanguagePrefDialogDisplayed() {
-    isVisible(TextId(R.string.pref_language_title))
+    testFlakyView({ onView(withText(R.string.pref_language_title)).check(matches(isDisplayed())) })
   }
 
   fun clickInternalStoragePreference() {

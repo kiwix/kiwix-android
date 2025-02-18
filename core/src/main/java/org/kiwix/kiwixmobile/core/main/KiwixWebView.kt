@@ -27,6 +27,7 @@ import android.util.AttributeSet
 import android.view.ContextMenu
 import android.view.ViewGroup
 import android.webkit.WebView
+import androidx.core.content.ContextCompat
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -175,12 +176,15 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
         CoroutineScope(Dispatchers.Main.immediate).launch {
           val savedFile =
             FileUtils.downloadFileFromUrl(url, src, zimReaderContainer, sharedPreferenceUtil)
+          val applicationContextForLanguage = ContextCompat.getContextForLanguage(instance)
           savedFile?.let {
-            instance.toast(instance.getString(R.string.save_media_saved, it.name)).also {
+            applicationContextForLanguage.toast(
+              applicationContextForLanguage.getString(R.string.save_media_saved, it.name)
+            ).also {
               Log.e("savedFile", "handleMessage: ${savedFile.isFile} ${savedFile.path}")
             }
           } ?: run {
-            instance.toast(R.string.save_media_error)
+            applicationContextForLanguage.toast(R.string.save_media_error)
           }
         }
       }

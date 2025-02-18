@@ -41,7 +41,6 @@ import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.Matcher
 import org.junit.Assert
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
@@ -68,7 +67,8 @@ class DownloadRobot : BaseRobot() {
 
   fun waitForDataToLoad(retryCountForDataToLoad: Int = 10) {
     try {
-      isVisible(TextId(string.your_languages))
+      pauseForBetterTestPerformance()
+      onView(withText(string.your_languages)).check(matches(isDisplayed()))
     } catch (e: RuntimeException) {
       if (retryCountForDataToLoad > 0) {
         // refresh the data if there is "Swipe Down for Library" visible on the screen.
@@ -85,11 +85,11 @@ class DownloadRobot : BaseRobot() {
     try {
       onView(withText(string.swipe_down_for_library)).check(matches(isDisplayed()))
       refreshOnlineList()
-    } catch (e: RuntimeException) {
+    } catch (e: Throwable) {
       try {
         // do nothing as currently downloading the online library.
         onView(withId(R.id.onlineLibraryProgressLayout)).check(matches(isDisplayed()))
-      } catch (e: RuntimeException) {
+      } catch (e: Throwable) {
         // if not visible try to get the online library.
         refreshOnlineList()
       }
@@ -189,7 +189,7 @@ class DownloadRobot : BaseRobot() {
 
   private fun assertStopDownloadDialogDisplayed() {
     pauseForBetterTestPerformance()
-    isVisible(TextId(string.confirm_stop_download_title))
+    testFlakyView({ onView(withText(string.confirm_stop_download_title)) })
   }
 
   private fun clickOnYesButton() {

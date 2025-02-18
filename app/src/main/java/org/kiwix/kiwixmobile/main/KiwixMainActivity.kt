@@ -25,11 +25,12 @@ import android.os.Handler
 import android.os.Looper
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.view.ActionMode
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
-import androidx.core.os.ConfigurationCompat
+import androidx.core.os.LocaleListCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
@@ -58,7 +59,6 @@ import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
-import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.databinding.ActivityKiwixMainBinding
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragmentDirections
@@ -142,6 +142,16 @@ class KiwixMainActivity : CoreMainActivity() {
     handleNotificationIntent(intent)
     handleGetContentIntent(intent)
     activityKiwixMainBinding.root.applyEdgeToEdgeInsets()
+    migratedToPerAppLanguage()
+  }
+
+  private fun migratedToPerAppLanguage() {
+    if (!sharedPreferenceUtil.perAppLanguageMigrated) {
+      AppCompatDelegate.setApplicationLocales(
+        LocaleListCompat.forLanguageTags(sharedPreferenceUtil.prefLanguage)
+      )
+      sharedPreferenceUtil.putPerAppLanguageMigration(true)
+    }
   }
 
   private suspend fun migrateInternalToPublicAppDirectory() {
@@ -218,22 +228,6 @@ class KiwixMainActivity : CoreMainActivity() {
     }
     if (!sharedPreferenceUtil.prefIsTest) {
       sharedPreferenceUtil.setIsPlayStoreBuildType(BuildConfig.IS_PLAYSTORE)
-    }
-    setDefaultDeviceLanguage()
-  }
-
-  private fun setDefaultDeviceLanguage() {
-    if (sharedPreferenceUtil.prefDeviceDefaultLanguage.isEmpty()) {
-      ConfigurationCompat.getLocales(
-        applicationContext.resources.configuration
-      )[0]?.language?.let {
-        sharedPreferenceUtil.putPrefDeviceDefaultLanguage(it)
-        handleLocaleChange(
-          this,
-          sharedPreferenceUtil.prefLanguage,
-          sharedPreferenceUtil
-        )
-      }
     }
   }
 

@@ -102,7 +102,7 @@ class TopLevelDestinationRobot : BaseRobot() {
 
   fun clickSettingsOnSideNav(func: SettingsRobot.() -> Unit) {
     inNavDrawer {
-      clickOn(TextId(string.menu_settings))
+      testFlakyView({ onView(withText(string.menu_settings)).perform(click()) })
       settingsRobo(func)
     }
   }

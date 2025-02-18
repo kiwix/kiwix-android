@@ -56,7 +56,7 @@ object Versions {
 
   const val javax_annotation_api: String = "1.3.2"
 
-  const val leakcanary_android: String = "2.13"
+  const val leakcanary_android: String = "2.14"
 
   const val constraintlayout: String = "2.1.4"
 
