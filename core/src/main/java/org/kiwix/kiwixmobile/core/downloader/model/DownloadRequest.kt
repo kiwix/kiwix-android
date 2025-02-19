@@ -20,10 +20,11 @@ package org.kiwix.kiwixmobile.core.downloader.model
 import android.net.Uri
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.StorageUtils
+import androidx.core.net.toUri
 
 data class DownloadRequest(val urlString: String) {
 
-  val uri: Uri get() = Uri.parse(urlString)
+  val uri: Uri get() = urlString.toUri()
 
   fun getDestination(sharedPreferenceUtil: SharedPreferenceUtil): String =
     "${sharedPreferenceUtil.prefStorage}/Kiwix/${StorageUtils.getFileNameFromUrl(urlString)}"

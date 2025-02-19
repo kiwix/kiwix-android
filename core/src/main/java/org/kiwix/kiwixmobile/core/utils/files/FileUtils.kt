@@ -51,6 +51,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
+import androidx.core.net.toUri
 
 object FileUtils {
 
@@ -405,7 +406,7 @@ object FileUtils {
       for (prefix in contentUriPrefixes) {
         contentQuery(
           context,
-          ContentUris.withAppendedId(Uri.parse(prefix), documentId),
+          ContentUris.withAppendedId(prefix.toUri(), documentId),
           documentsContractWrapper
         )?.let {
           return@queryForActualPath it

@@ -21,6 +21,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.database.DataSetObserver
 import android.graphics.Canvas
@@ -767,7 +768,8 @@ class CustomPageIndicator @JvmOverloads constructor(
   init {
     val density = context.resources.displayMetrics.density.toInt()
 
-    // Load attributes
+    // Load
+    @SuppressLint("UseKtx")
     val a = getContext().obtainStyledAttributes(
       attrs, R.styleable.CustomPageIndicator, defStyle, 0
     )

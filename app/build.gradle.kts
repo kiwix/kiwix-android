@@ -28,13 +28,17 @@ android {
   // This is now specified in the Gradle configuration instead of declaring
   // it directly in the AndroidManifest file.
   namespace = "org.kiwix.kiwixmobile"
+  compileSdkPreview = Config.compileSdk
   defaultConfig {
+    minSdk = Config.minSdk
     base.archivesName.set(apkPrefix)
+    targetSdkPreview = Config.targetSdk
     resValue("string", "app_name", "Kiwix")
     resValue("string", "app_search_string", "Search Kiwix")
     versionCode = "".getVersionCode()
     versionName = generateVersionName()
     manifestPlaceholders["permission"] = "android.permission.MANAGE_EXTERNAL_STORAGE"
+    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
   lint {
     checkDependencies = true
