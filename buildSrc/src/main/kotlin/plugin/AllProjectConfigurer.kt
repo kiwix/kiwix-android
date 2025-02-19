@@ -59,12 +59,6 @@ class AllProjectConfigurer {
       if (isLibrary) {
         namespace = "org.kiwix.kiwixmobile.core"
       }
-      setCompileSdkVersion(Config.compileSdk)
-      defaultConfig {
-        minSdk = Config.minSdk
-        setTargetSdkVersion(Config.targetSdk)
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-      }
 
       buildTypes {
         getByName("debug") {
