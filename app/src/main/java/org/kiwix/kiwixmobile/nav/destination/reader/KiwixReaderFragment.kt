@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.nav.destination.reader
 
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -30,6 +29,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
@@ -135,7 +135,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
     // when creating the new archive object.
     updateTitle()
     val filePath = FileUtils.getLocalFilePathByUri(
-      requireActivity().applicationContext, Uri.parse(zimFileUri)
+      requireActivity().applicationContext, zimFileUri.toUri()
     )
     if (filePath == null || !File(filePath).isFileExist()) {
       // Close the previously opened book in the reader. Since this file is not found,
@@ -158,7 +158,7 @@ class KiwixReaderFragment : CoreReaderFragment() {
 
   override fun openHomeScreen() {
     Handler(Looper.getMainLooper()).postDelayed({
-      if (webViewList.size == 0) {
+      if (webViewList.isEmpty()) {
         hideTabSwitcher(false)
       }
     }, HIDE_TAB_SWITCHER_DELAY)

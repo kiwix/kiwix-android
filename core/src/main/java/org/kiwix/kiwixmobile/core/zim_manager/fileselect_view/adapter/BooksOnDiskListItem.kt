@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter
 
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
@@ -51,7 +52,7 @@ sealed class BooksOnDiskListItem {
   ) : BooksOnDiskListItem() {
 
     val locale: Locale by lazy {
-      Locale(book.language)
+      book.language.convertToLocal()
     }
 
     constructor(bookOnDiskEntity: BookOnDiskEntity) : this(

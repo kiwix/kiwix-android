@@ -46,6 +46,7 @@ import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
@@ -169,9 +170,7 @@ abstract class CorePrefsFragment :
         languagePref.title =
           if (selectedLang == Locale.ROOT.toString())
             getString(R.string.device_default)
-          else Locale(
-            selectedLang
-          ).displayLanguage
+          else selectedLang.convertToLocal().displayLanguage
         languagePref.onPreferenceChangeListener =
           Preference.OnPreferenceChangeListener { _, newValue ->
             val languageCode = newValue as String?
@@ -205,7 +204,7 @@ abstract class CorePrefsFragment :
     val entries = arrayOfNulls<String>(languageCodeList.size)
     entries[0] = getString(R.string.device_default)
     for (i in 1 until languageCodeList.size) {
-      val locale = Locale(languageCodeList[i])
+      val locale = languageCodeList[i].convertToLocal()
       entries[i] = locale.displayLanguage + " (" + locale.getDisplayLanguage(locale) + ") "
     }
     return entries

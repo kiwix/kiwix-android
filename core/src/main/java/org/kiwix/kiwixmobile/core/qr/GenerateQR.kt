@@ -18,12 +18,15 @@
 
 package org.kiwix.kiwixmobile.core.qr
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Color
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
 import javax.inject.Inject
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.set
 
 /**
  * Utility class to generate QR codes.
@@ -37,6 +40,7 @@ class GenerateQR @Inject constructor() {
    * @param foregroundColor The color of the QR code.
    * @param backgroundColor The background color of the QR code.
    */
+  @SuppressLint("UseKtx")
   fun createQR(
     code: String,
     size: Int = 512,
@@ -47,7 +51,7 @@ class GenerateQR @Inject constructor() {
       it[EncodeHintType.MARGIN] = 1
     }
     val bits = QRCodeWriter().encode(code, BarcodeFormat.QR_CODE, size, size, hints)
-    return Bitmap.createBitmap(size, size, Bitmap.Config.RGB_565).also {
+    return createBitmap(size, size, Bitmap.Config.RGB_565).also {
       for (x in 0 until size) {
         for (y in 0 until size) {
           it.setPixel(x, y, if (bits[x, y]) foregroundColor else backgroundColor)

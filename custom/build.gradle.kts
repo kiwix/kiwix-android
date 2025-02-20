@@ -4,16 +4,16 @@ import com.android.build.gradle.internal.dsl.ProductFlavor
 import custom.CustomApps
 import custom.createPublisher
 import custom.transactionWithCommit
-import plugin.KiwixConfigurationPlugin
-import java.net.URI
-import java.net.URLDecoder
-import java.util.Locale
-import java.util.Base64
-import java.io.FileOutputStream
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.ResponseBody
+import plugin.KiwixConfigurationPlugin
 import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.net.URI
+import java.net.URLDecoder
+import java.util.Base64
+import java.util.Locale
 
 plugins {
   android
@@ -22,8 +22,14 @@ plugins {
 plugins.apply(KiwixConfigurationPlugin::class)
 
 android {
+  compileSdkPreview = Config.compileSdk
   defaultConfig {
     applicationId = "org.kiwix"
+    // TODO: We will move this from here to AllProjectConfigure once
+    //  Android 16 stable release is available.
+    minSdk = Config.minSdk
+    targetSdkPreview = Config.targetSdk
+    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 
   flavorDimensions += "default"
