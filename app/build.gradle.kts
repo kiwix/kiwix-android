@@ -30,6 +30,8 @@ android {
   namespace = "org.kiwix.kiwixmobile"
   compileSdkPreview = Config.compileSdk
   defaultConfig {
+    // TODO: We will move this from here to AllProjectConfigure once
+    //  Android 16 stable release is available.
     minSdk = Config.minSdk
     base.archivesName.set(apkPrefix)
     targetSdkPreview = Config.targetSdk
