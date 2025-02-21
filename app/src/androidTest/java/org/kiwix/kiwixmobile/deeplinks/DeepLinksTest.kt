@@ -79,15 +79,16 @@ class DeepLinksTest : BaseActivityTest() {
       waitForIdle()
     }
     context.let {
-      sharedPreferenceUtil = SharedPreferenceUtil(it).apply {
-        setIntroShown()
-        putPrefWifiOnly(false)
-        setIsPlayStoreBuildType(true)
-        prefIsTest = true
-        putPrefLanguage("en")
-        shouldShowStorageSelectionDialog = false
-        lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
-      }
+      sharedPreferenceUtil =
+        SharedPreferenceUtil(it).apply {
+          setIntroShown()
+          putPrefWifiOnly(false)
+          setIsPlayStoreBuildType(true)
+          prefIsTest = true
+          putPrefLanguage("en")
+          shouldShowStorageSelectionDialog = false
+          lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
+        }
     }
   }
 
@@ -151,22 +152,24 @@ class DeepLinksTest : BaseActivityTest() {
     }
     return when (schemeType) {
       "file" -> Uri.fromFile(zimFile)
-      "content" -> FileProvider.getUriForFile(
-        context,
-        "${context.packageName}.fileprovider",
-        zimFile
-      )
+      "content" ->
+        FileProvider.getUriForFile(
+          context,
+          "${context.packageName}.fileprovider",
+          zimFile
+        )
 
       else -> null
     }
   }
 
   private fun createDeepLinkIntent(uri: Uri): Intent {
-    val intent = Intent(Intent.ACTION_VIEW).apply {
-      setDataAndType(uri, "application/octet-stream")
-      addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-      setPackage(context.packageName)
-    }
+    val intent =
+      Intent(Intent.ACTION_VIEW).apply {
+        setDataAndType(uri, "application/octet-stream")
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        setPackage(context.packageName)
+      }
     return intent
   }
 

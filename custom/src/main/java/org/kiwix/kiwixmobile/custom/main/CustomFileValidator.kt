@@ -31,7 +31,6 @@ import java.io.IOException
 import javax.inject.Inject
 
 class CustomFileValidator @Inject constructor(private val context: Context) {
-
   fun validate(onFilesFound: (ValidationState) -> Unit, onNoFilesFound: () -> Unit) =
     when (val installationState = detectInstallationState()) {
       is HasBothFiles,

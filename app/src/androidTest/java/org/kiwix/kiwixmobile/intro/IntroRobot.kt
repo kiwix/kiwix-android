@@ -35,7 +35,6 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 fun intro(func: IntroRobot.() -> Unit) = IntroRobot().applyWithViewHierarchyPrinting(func)
 
 class IntroRobot : BaseRobot() {
-
   fun swipeLeft() {
     isVisible(ViewId(R.id.get_started))
     isVisible(TextId(string.welcome_to_the_family))

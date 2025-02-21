@@ -71,7 +71,6 @@ abstract class CorePrefsFragment :
   PreferenceFragmentCompat(),
   SettingsContract.View,
   OnSharedPreferenceChangeListener {
-
   @JvmField
   @Inject
   internal var presenter: SettingsPresenter? = null
@@ -167,11 +166,13 @@ abstract class CorePrefsFragment :
         languagePref.setDefaultValue(selectedLang)
         languagePref.value = selectedLang
         languagePref.title =
-          if (selectedLang == Locale.ROOT.toString())
+          if (selectedLang == Locale.ROOT.toString()) {
             getString(R.string.device_default)
-          else Locale(
-            selectedLang
-          ).displayLanguage
+          } else {
+            Locale(
+              selectedLang
+            ).displayLanguage
+          }
         languagePref.onPreferenceChangeListener =
           Preference.OnPreferenceChangeListener { _, newValue ->
             val languageCode = newValue as String?
@@ -342,9 +343,9 @@ abstract class CorePrefsFragment :
       } else {
         if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
           /* shouldShowRequestPermissionRationale() returns false when:
-             *  1) User has previously checked on "Don't ask me again", and/or
-             *  2) Permission has been disabled on device
-             */
+           *  1) User has previously checked on "Don't ask me again", and/or
+           *  2) Permission has been disabled on device
+           */
           requireActivity().toast(
             R.string.ext_storage_permission_rationale_export_bookmark,
             Toast.LENGTH_LONG
@@ -459,8 +460,11 @@ abstract class CorePrefsFragment :
           sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
         )
         sharedPreferenceUtil.putStoragePosition(
-          if (storageDevice.isInternal) INTERNAL_SELECT_POSITION
-          else EXTERNAL_SELECT_POSITION
+          if (storageDevice.isInternal) {
+            INTERNAL_SELECT_POSITION
+          } else {
+            EXTERNAL_SELECT_POSITION
+          }
         )
         setShowStorageOption()
         setStorage()

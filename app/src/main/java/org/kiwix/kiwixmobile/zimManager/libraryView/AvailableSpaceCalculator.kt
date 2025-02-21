@@ -19,7 +19,7 @@
 package org.kiwix.kiwixmobile.zimManager.libraryView
 
 import eu.mhutti1.utils.storage.Bytes
-import eu.mhutti1.utils.storage.Kb
+import eu.mhutti1.utils.storage.KB
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
@@ -42,7 +42,7 @@ class AvailableSpaceCalculator @Inject constructor(
       .map { downloads -> downloads.sumOf(DownloadModel::bytesRemaining) }
       .map { bytesToBeDownloaded -> storageCalculator.availableBytes() - bytesToBeDownloaded }
       .first()
-    if (bookItem.book.size.toLong() * Kb < trueAvailableBytes) {
+    if (bookItem.book.size.toLong() * KB < trueAvailableBytes) {
       successAction.invoke(bookItem)
     } else {
       failureAction.invoke(Bytes(trueAvailableBytes).humanReadable)
@@ -50,5 +50,5 @@ class AvailableSpaceCalculator @Inject constructor(
   }
 
   suspend fun hasAvailableSpaceForBook(book: Book) =
-    book.size.toLong() * Kb < storageCalculator.availableBytes()
+    book.size.toLong() * KB < storageCalculator.availableBytes()
 }

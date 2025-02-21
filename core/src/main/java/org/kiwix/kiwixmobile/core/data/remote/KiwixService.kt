@@ -33,18 +33,22 @@ import retrofit2.http.Url
 
 interface KiwixService {
   @get:GET(LIBRARY_NETWORK_PATH) val library: Single<LibraryNetworkEntity?>
-  @GET fun getMetaLinks(@Url url: String): Observable<MetaLinkNetworkEntity?>
+
+  @GET fun getMetaLinks(
+    @Url url: String
+  ): Observable<MetaLinkNetworkEntity?>
 
   /******** Helper class that sets up new services  */
   object ServiceCreator {
     @Suppress("DEPRECATION")
     fun newHackListService(okHttpClient: OkHttpClient, baseUrl: String): KiwixService {
-      val retrofit = Retrofit.Builder()
-        .baseUrl(baseUrl)
-        .client(okHttpClient)
-        .addConverterFactory(SimpleXmlConverterFactory.create())
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
-        .build()
+      val retrofit =
+        Retrofit.Builder()
+          .baseUrl(baseUrl)
+          .client(okHttpClient)
+          .addConverterFactory(SimpleXmlConverterFactory.create())
+          .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
+          .build()
       return retrofit.create(KiwixService::class.java)
     }
   }

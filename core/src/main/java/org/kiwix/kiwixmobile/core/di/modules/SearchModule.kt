@@ -26,6 +26,5 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.ZimSearchResultGenerator
 @Module
 abstract class SearchModule {
   @Binds
-  abstract fun bindsSearchResultGenerator(zimSearchResultGenerator: ZimSearchResultGenerator):
-    SearchResultGenerator
+  abstract fun bindsSearchResultGenerator(zimSearchResultGenerator: ZimSearchResultGenerator): SearchResultGenerator
 }

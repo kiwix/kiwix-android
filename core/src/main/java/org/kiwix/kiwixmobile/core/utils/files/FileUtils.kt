@@ -53,7 +53,6 @@ import java.io.FileNotFoundException
 import java.io.IOException
 
 object FileUtils {
-
   private val fileOperationMutex = Mutex()
 
   @JvmStatic
@@ -126,28 +125,31 @@ object FileUtils {
     Log.e(TAG_KIWIX, "Trying to get the ZIM file path for Uri = $uri")
     if (DocumentsContract.isDocumentUri(context, uri)) {
       if ("com.android.externalstorage.documents" == uri.authority) {
-        val documentId = DocumentsContract.getDocumentId(uri)
-          .split(":")
+        val documentId =
+          DocumentsContract.getDocumentId(uri)
+            .split(":")
 
         if (documentId[0] == "primary") {
           return "${Environment.getExternalStorageDirectory()}/${documentId[1]}"
         }
         return try {
-          val sdCardOrUsbMainPath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            getSDCardOrUSBMainPathForAndroid10AndAbove(context, documentId[0])
-          } else {
-            getSdCardOrUSBMainPathForAndroid9AndBelow(context, documentId[0])
-          }
+          val sdCardOrUsbMainPath =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+              getSDCardOrUSBMainPathForAndroid10AndAbove(context, documentId[0])
+            } else {
+              getSdCardOrUSBMainPathForAndroid9AndBelow(context, documentId[0])
+            }
           "$sdCardOrUsbMainPath/${documentId[1]}"
         } catch (ignore: Exception) {
           null
         }
-      } else if ("com.android.providers.downloads.documents" == uri.authority)
+      } else if ("com.android.providers.downloads.documents" == uri.authority) {
         return try {
           documentProviderContentQuery(context, uri)
         } catch (ignore: IllegalArgumentException) {
           null
         }
+      }
     } else if (uri.scheme != null) {
       if ("content".equals(uri.scheme, ignoreCase = true)) {
         return getFilePathOfContentUri(context, uri)
@@ -266,9 +268,10 @@ object FileUtils {
 
       else -> {
         // If this is an external storage device, construct the path using UUID or description.
-        val externalStorageName = volume.uuid?.let { uuid ->
-          "/$uuid/"
-        } ?: "/${volume.getDescription(context)}/"
+        val externalStorageName =
+          volume.uuid?.let { uuid ->
+            "/$uuid/"
+          } ?: "/${volume.getDescription(context)}/"
 
         // On Android 10 and below, external storage devices are mounted under `/storage`.
         "/storage$externalStorageName"
@@ -278,14 +281,16 @@ object FileUtils {
 
   private fun getFileNameFromUri(context: Context, uri: Uri): String? {
     var cursor: Cursor? = null
-    val projection = arrayOf(
-      MediaStore.MediaColumns.DISPLAY_NAME
-    )
-    return try {
-      cursor = context.contentResolver.query(
-        uri, projection, null, null,
-        null
+    val projection =
+      arrayOf(
+        MediaStore.MediaColumns.DISPLAY_NAME
       )
+    return try {
+      cursor =
+        context.contentResolver.query(
+          uri, projection, null, null,
+          null
+        )
       if (cursor != null && cursor.moveToFirst()) {
         val index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME)
         cursor.getString(index)
@@ -370,16 +375,18 @@ object FileUtils {
     }
 
     // Try different content URI prefixes in some case download content prefix is different.
-    val contentUriPrefixes = arrayOf(
-      "content://downloads/public_downloads",
-      "content://downloads/my_downloads",
-      "content://downloads/all_downloads"
-    )
-    val actualDocumentId = try {
-      documentId.toLong()
-    } catch (ignore: NumberFormatException) {
-      0L
-    }
+    val contentUriPrefixes =
+      arrayOf(
+        "content://downloads/public_downloads",
+        "content://downloads/my_downloads",
+        "content://downloads/all_downloads"
+      )
+    val actualDocumentId =
+      try {
+        documentId.toLong()
+      } catch (ignore: NumberFormatException) {
+        0L
+      }
     return queryForActualPath(
       context,
       actualDocumentId,
@@ -539,13 +546,14 @@ object FileUtils {
     }
 
   @JvmStatic
-  fun Context.readFile(filePath: String): String = try {
-    assets.open(filePath)
-      .bufferedReader()
-      .use(BufferedReader::readText)
-  } catch (e: IOException) {
-    "".also { e.printStackTrace() }
-  }
+  fun Context.readFile(filePath: String): String =
+    try {
+      assets.open(filePath)
+        .bufferedReader()
+        .use(BufferedReader::readText)
+    } catch (e: IOException) {
+      "".also { e.printStackTrace() }
+    }
 
   @JvmStatic
   fun isValidZimFile(filePath: String): Boolean =

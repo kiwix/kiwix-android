@@ -40,7 +40,6 @@ import org.kiwix.sharedFunctions.setScheduler
 import java.io.File
 
 class FileSearchTest {
-
   private val context: Context = mockk()
   private lateinit var fileSearch: FileSearch
 
@@ -62,9 +61,10 @@ class FileSearchTest {
     every { Environment.getExternalStorageDirectory() } returns externalStorageDirectory
     every { externalStorageDirectory.absolutePath } returns "/externalStorageDirectory"
     every { context.contentResolver } returns contentResolver
-    every { StorageDeviceUtils.getReadableStorage(context) } returns arrayListOf(
-      storageDevice
-    )
+    every { StorageDeviceUtils.getReadableStorage(context) } returns
+      arrayListOf(
+        storageDevice
+      )
     every { storageDevice.name } returns "/deviceDir"
     fileSearch = FileSearch(context)
   }
@@ -77,7 +77,6 @@ class FileSearchTest {
 
   @Nested
   inner class FileSystem {
-
     @Test
     fun `scan of directory that doesn't exist returns nothing`() {
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
@@ -93,33 +92,36 @@ class FileSearchTest {
       File.createTempFile("willNotFind", ".txt")
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
       every { storageDevice.name } returns zimFile.parent
-      val fileList = fileSearch.scan(scanningProgressListener)
-        .test()
-        .values()[0]
+      val fileList =
+        fileSearch.scan(scanningProgressListener)
+          .test()
+          .values()[0]
       assertThat(fileList).containsExactlyInAnyOrder(zimFile, zimaaFile)
     }
 
     @Test
     fun `scan of directory recursively traverses filesystem`() {
-      val tempRoot = File.createTempFile("tofindroot", "extension")
-        .parentFile.absolutePath
-      val zimFile = File.createTempFile(
-        "fileToFind",
-        ".zim",
-        File("$tempRoot${File.separator}dir").apply(File::mkdirs)
-      )
+      val tempRoot =
+        File.createTempFile("tofindroot", "extension")
+          .parentFile.absolutePath
+      val zimFile =
+        File.createTempFile(
+          "fileToFind",
+          ".zim",
+          File("$tempRoot${File.separator}dir").apply(File::mkdirs)
+        )
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
       every { storageDevice.name } returns zimFile.parentFile.parent
-      val fileList = fileSearch.scan(scanningProgressListener)
-        .test()
-        .values()[0]
+      val fileList =
+        fileSearch.scan(scanningProgressListener)
+          .test()
+          .values()[0]
       assertThat(fileList).containsExactlyInAnyOrder(zimFile)
     }
   }
 
   @Nested
   inner class MediaStore {
-
     @Test
     fun `scan media store, if files are readable they are returned`() {
       val fileToFind = File.createTempFile("fileToFind", ".zim")

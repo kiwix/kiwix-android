@@ -86,7 +86,6 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 
 @ExtendWith(InstantExecutorExtension::class)
 class ZimManageViewModelTest {
-
   private val downloadRoomDao: DownloadRoomDao = mockk()
   private val newBookDao: NewBookDao = mockk()
   private val newLanguagesDao: NewLanguagesDao = mockk()
@@ -151,21 +150,22 @@ class ZimManageViewModelTest {
       connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
     } returns networkCapabilities
     every { networkCapabilities.hasTransport(TRANSPORT_WIFI) } returns true
-    viewModel = ZimManageViewModel(
-      downloadRoomDao,
-      newBookDao,
-      newLanguagesDao,
-      storageObserver,
-      kiwixService,
-      application,
-      connectivityBroadcastReceiver,
-      bookUtils,
-      fat32Checker,
-      defaultLanguageProvider,
-      dataSource,
-      connectivityManager,
-      sharedPreferenceUtil
-    ).apply(ZimManageViewModel::setIsUnitTestCase)
+    viewModel =
+      ZimManageViewModel(
+        downloadRoomDao,
+        newBookDao,
+        newLanguagesDao,
+        storageObserver,
+        kiwixService,
+        application,
+        connectivityBroadcastReceiver,
+        bookUtils,
+        fat32Checker,
+        defaultLanguageProvider,
+        dataSource,
+        connectivityManager,
+        sharedPreferenceUtil
+      ).apply(ZimManageViewModel::setIsUnitTestCase)
     testScheduler.triggerActions()
   }
 
@@ -232,17 +232,17 @@ class ZimManageViewModelTest {
 
   @Nested
   inner class Lanuages {
-
     @Test
     fun `network no result & empty language db activates the default locale`() {
-      val expectedLanguage = Language(
-        active = true,
-        occurencesOfLanguage = 1,
-        language = "eng",
-        languageLocalized = "englocal",
-        languageCode = "ENG",
-        languageCodeISO2 = "en"
-      )
+      val expectedLanguage =
+        Language(
+          active = true,
+          occurencesOfLanguage = 1,
+          language = "eng",
+          languageLocalized = "englocal",
+          languageCode = "ENG",
+          languageCodeISO2 = "en"
+        )
       expectNetworkDbAndDefault(
         listOf(),
         listOf(),
@@ -272,14 +272,15 @@ class ZimManageViewModelTest {
 
     @Test
     fun `network result & empty language db triggers combined result of default + network`() {
-      val defaultLanguage = Language(
-        active = true,
-        occurencesOfLanguage = 1,
-        language = "English",
-        languageLocalized = "English",
-        languageCode = "eng",
-        languageCodeISO2 = "eng"
-      )
+      val defaultLanguage =
+        Language(
+          active = true,
+          occurencesOfLanguage = 1,
+          language = "English",
+          languageLocalized = "English",
+          languageCode = "eng",
+          languageCodeISO2 = "eng"
+        )
       expectNetworkDbAndDefault(
         listOf(
           book(language = "eng"),
@@ -308,14 +309,15 @@ class ZimManageViewModelTest {
 
     @Test
     fun `network result & language db results activates a combined network + db result`() {
-      val dbLanguage = Language(
-        active = true,
-        occurencesOfLanguage = 1,
-        language = "English",
-        languageLocalized = "English",
-        languageCode = "eng",
-        languageCodeISO2 = "eng"
-      )
+      val dbLanguage =
+        Language(
+          active = true,
+          occurencesOfLanguage = 1,
+          language = "English",
+          languageLocalized = "English",
+          languageCode = "eng",
+          languageCodeISO2 = "eng"
+        )
       expectNetworkDbAndDefault(
         listOf(
           book(language = "eng"),
@@ -349,9 +351,7 @@ class ZimManageViewModelTest {
     ) {
       every { application.getString(any()) } returns ""
       every { application.getString(any(), any()) } returns ""
-      every { kiwixService.library } returns Single.just(
-        libraryNetworkEntity(networkBooks)
-      )
+      every { kiwixService.library } returns Single.just(libraryNetworkEntity(networkBooks))
       every { defaultLanguageProvider.provide() } returns defaultLanguage
       languages.onNext(dbBooks)
       testScheduler.triggerActions()
@@ -369,37 +369,25 @@ class ZimManageViewModelTest {
 
   @Test
   fun `library update removes from sources and maps to list items`() {
-    val bookAlreadyOnDisk = book(
-      id = "0",
-      url = "",
-      language = Locale.ENGLISH.language
-    )
-    val bookDownloading = book(
-      id = "1",
-      url = ""
-    )
-    val bookWithActiveLanguage = book(
-      id = "3",
-      language = "activeLanguage",
-      url = ""
-    )
-    val bookWithInactiveLanguage = book(
-      id = "4",
-      language = "inactiveLanguage",
-      url = ""
-    )
+    val bookAlreadyOnDisk = book(id = "0", url = "", language = Locale.ENGLISH.language)
+    val bookDownloading = book(id = "1", url = "")
+    val bookWithActiveLanguage = book(id = "3", language = "activeLanguage", url = "")
+    val bookWithInactiveLanguage = book(id = "4", language = "inactiveLanguage", url = "")
     every { application.getString(any()) } returns ""
     every { application.getString(any(), any()) } returns ""
-    every { kiwixService.library } returns Single.just(
-      libraryNetworkEntity(
-        listOf(
-          bookAlreadyOnDisk,
-          bookDownloading,
-          bookWithActiveLanguage,
-          bookWithInactiveLanguage
+    every {
+      kiwixService.library
+    } returns
+      Single.just(
+        libraryNetworkEntity(
+          listOf(
+            bookAlreadyOnDisk,
+            bookDownloading,
+            bookWithActiveLanguage,
+            bookWithInactiveLanguage
+          )
         )
       )
-    )
     networkStates.onNext(CONNECTED)
     downloads.onNext(listOf(downloadModel(book = bookDownloading)))
     books.onNext(listOf(bookOnDisk(book = bookAlreadyOnDisk)))
@@ -427,18 +415,17 @@ class ZimManageViewModelTest {
 
   @Test
   fun `library marks files over 4GB as can't download if file system state says to`() {
-    val bookOver4Gb = book(
-      id = "0",
-      url = "",
-      size = "${Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES + 1}"
-    )
+    val bookOver4Gb =
+      book(
+        id = "0",
+        url = "",
+        size = "${Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES + 1}"
+      )
     every { application.getString(any()) } returns ""
     every { application.getString(any(), any()) } returns ""
-    every { kiwixService.library } returns Single.just(
-      libraryNetworkEntity(
-        listOf(bookOver4Gb)
-      )
-    )
+    every {
+      kiwixService.library
+    } returns Single.just(libraryNetworkEntity(listOf(bookOver4Gb)))
     networkStates.onNext(CONNECTED)
     downloads.onNext(listOf())
     books.onNext(listOf())
@@ -461,18 +448,18 @@ class ZimManageViewModelTest {
 
   @Nested
   inner class SideEffects {
-
     @Test
     fun `RequestMultiSelection offers StartMultiSelection and selects a book`() {
       val bookToSelect = bookOnDisk(databaseId = 0L)
       val unSelectedBook = bookOnDisk(databaseId = 1L)
-      viewModel.fileSelectListStates.value = FileSelectListState(
-        listOf(
-          bookToSelect,
-          unSelectedBook
-        ),
-        NORMAL
-      )
+      viewModel.fileSelectListStates.value =
+        FileSelectListState(
+          listOf(
+            bookToSelect,
+            unSelectedBook
+          ),
+          NORMAL
+        )
       viewModel.sideEffects.test()
         .also { viewModel.fileSelectActions.offer(RequestMultiSelection(bookToSelect)) }
         .assertValues(StartMultiSelection(viewModel.fileSelectActions))

@@ -34,7 +34,6 @@ class StorageRadioButtonPreference @JvmOverloads constructor(
   attrs: AttributeSet? = null,
   defStyleAttr: Int = 0
 ) : CheckBoxPreference(context, attrs, defStyleAttr) {
-
   init {
     widgetLayoutResource = R.layout.item_storage_preference
   }

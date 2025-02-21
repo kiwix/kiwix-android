@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.page.adapter
 
 interface OnItemClickListener {
-
   fun onItemClick(page: Page)
 
   fun onItemLongClick(page: Page): Boolean

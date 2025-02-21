@@ -32,10 +32,11 @@ object Intents {
 
 @RequiresApi(Build.VERSION_CODES.R)
 fun Activity.navigateToSettings() {
-  val intent = Intent().apply {
-    action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
-    data = Uri.fromParts("package", packageName, null)
-  }
+  val intent =
+    Intent().apply {
+      action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
+      data = Uri.fromParts("package", packageName, null)
+    }
   startActivity(intent)
 }
 

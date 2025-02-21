@@ -32,8 +32,9 @@ object NetworkUtils {
    * @return true if a network is ready to be used
    */
   fun isNetworkAvailable(context: Context): Boolean {
-    val connectivity: ConnectivityManager = context
-      .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val connectivity: ConnectivityManager =
+      context
+        .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     return connectivity.isNetworkAvailable()
   }
 
@@ -46,8 +47,9 @@ object NetworkUtils {
   //  express the state which is checked
   //  (postponed to refactoring deprecated android.net.* usage)
   fun isWiFi(context: Context): Boolean {
-    val connectivity = context
-      .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val connectivity =
+      context
+        .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     return connectivity.isWifi()
   }
 
@@ -55,11 +57,12 @@ object NetworkUtils {
     var filename = ""
     url?.let { url1 ->
       val index = url1.lastIndexOf('?')
-      filename = if (index > 1) {
-        url1.substring(url1.lastIndexOf('/') + 1, index)
-      } else {
-        url1.substring(url.lastIndexOf('/') + 1)
-      }
+      filename =
+        if (index > 1) {
+          url1.substring(url1.lastIndexOf('/') + 1, index)
+        } else {
+          url1.substring(url.lastIndexOf('/') + 1)
+        }
       if ("" == filename.trim { it <= ' ' }) {
         filename = UUID.randomUUID().toString()
       }
@@ -71,24 +74,26 @@ object NetworkUtils {
   fun parseURL(context: Context, url: String?): String {
     return if (url == null) {
       ""
-    } else try {
-      var details = url.substring(url.lastIndexOf("/") + 1)
-      val beginIndex = details.indexOf("_", details.indexOf("_") + 1) + 1
-      val endIndex = details.lastIndexOf("_")
-      if (beginIndex < 0 || endIndex > details.length || beginIndex > endIndex) {
-        return ""
+    } else {
+      try {
+        var details = url.substring(url.lastIndexOf("/") + 1)
+        val beginIndex = details.indexOf("_", details.indexOf("_") + 1) + 1
+        val endIndex = details.lastIndexOf("_")
+        if (beginIndex < 0 || endIndex > details.length || beginIndex > endIndex) {
+          return ""
+        }
+        details = details.substring(beginIndex, endIndex)
+        details = details.replace("_".toRegex(), " ")
+        details = details.replace("all".toRegex(), "")
+        details = details.replace("nopic".toRegex(), context.getString(R.string.zim_no_pic))
+        details = details.replace("novid".toRegex(), context.getString(R.string.zim_no_vid))
+        details = details.replace("simple".toRegex(), context.getString(R.string.zim_simple))
+        details = details.trim { it <= ' ' }.replace(" +".toRegex(), " ")
+        details
+      } catch (e: Exception) {
+        Log.d(TAG_KIWIX, "Context invalid url: $url", e)
+        ""
       }
-      details = details.substring(beginIndex, endIndex)
-      details = details.replace("_".toRegex(), " ")
-      details = details.replace("all".toRegex(), "")
-      details = details.replace("nopic".toRegex(), context.getString(R.string.zim_no_pic))
-      details = details.replace("novid".toRegex(), context.getString(R.string.zim_no_vid))
-      details = details.replace("simple".toRegex(), context.getString(R.string.zim_simple))
-      details = details.trim { it <= ' ' }.replace(" +".toRegex(), " ")
-      details
-    } catch (e: Exception) {
-      Log.d(TAG_KIWIX, "Context invalid url: $url", e)
-      ""
     }
   }
 }

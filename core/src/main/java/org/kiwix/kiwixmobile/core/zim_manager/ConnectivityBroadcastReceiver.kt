@@ -31,21 +31,20 @@ class ConnectivityBroadcastReceiver @Inject constructor(
   private val connectivityManager: ConnectivityManager
 ) :
   BaseBroadcastReceiver() {
+    @Suppress("DEPRECATION")
+    override val action: String = ConnectivityManager.CONNECTIVITY_ACTION
 
-  @Suppress("DEPRECATION")
-  override val action: String = ConnectivityManager.CONNECTIVITY_ACTION
+    private val _networkStates = BehaviorProcessor.createDefault(connectivityManager.networkState)
+    val networkStates: Flowable<NetworkState> = _networkStates
 
-  private val _networkStates = BehaviorProcessor.createDefault(connectivityManager.networkState)
-  val networkStates: Flowable<NetworkState> = _networkStates
+    override fun onIntentWithActionReceived(
+      context: Context,
+      intent: Intent
+    ) {
+      _networkStates.onNext(connectivityManager.networkState)
+    }
 
-  override fun onIntentWithActionReceived(
-    context: Context,
-    intent: Intent
-  ) {
-    _networkStates.onNext(connectivityManager.networkState)
+    fun stopNetworkState() {
+      _networkStates.onComplete()
+    }
   }
-
-  fun stopNetworkState() {
-    _networkStates.onComplete()
-  }
-}

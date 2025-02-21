@@ -35,7 +35,6 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.test
 import org.kiwix.sharedFunctions.recentSearchEntity
 
 internal class NewRecentSearchDaoTest {
-
   private val box: Box<RecentSearchEntity> = mockk(relaxed = true)
   private val flowBuilder: FlowBuilder = mockk()
   private val newRecentSearchDao = NewRecentSearchDao(box, flowBuilder)
@@ -43,52 +42,56 @@ internal class NewRecentSearchDaoTest {
   @Nested
   inner class RecentSearchTests {
     @Test
-    fun `recentSearches searches by Id passed`() = runTest {
-      val zimId = "id"
-      val queryResult = listOf<RecentSearchEntity>(recentSearchEntity())
-      expectFromRecentSearches(queryResult, zimId)
-      newRecentSearchDao.recentSearches(zimId)
-        .test(this)
-        .assertValues(
-          queryResult.map { RecentSearchListItem(it.searchTerm, it.url) }
-        )
-        .finish()
-    }
+    fun `recentSearches searches by Id passed`() =
+      runTest {
+        val zimId = "id"
+        val queryResult = listOf<RecentSearchEntity>(recentSearchEntity())
+        expectFromRecentSearches(queryResult, zimId)
+        newRecentSearchDao.recentSearches(zimId)
+          .test(this)
+          .assertValues(
+            queryResult.map { RecentSearchListItem(it.searchTerm, it.url) }
+          )
+          .finish()
+      }
 
     @Test
-    fun `recentSearches searches with blank Id if null passed`() = runTest {
-      val queryResult = listOf<RecentSearchEntity>(recentSearchEntity())
-      expectFromRecentSearches(queryResult, "")
-      newRecentSearchDao.recentSearches(null)
-        .test(this)
-        .assertValues(
-          queryResult.map { RecentSearchListItem(it.searchTerm, it.url) }
-        )
-        .finish()
-    }
+    fun `recentSearches searches with blank Id if null passed`() =
+      runTest {
+        val queryResult = listOf<RecentSearchEntity>(recentSearchEntity())
+        expectFromRecentSearches(queryResult, "")
+        newRecentSearchDao.recentSearches(null)
+          .test(this)
+          .assertValues(
+            queryResult.map { RecentSearchListItem(it.searchTerm, it.url) }
+          )
+          .finish()
+      }
 
     @Test
-    fun `recentSearches searches returns distinct entities by searchTerm`() = runTest {
-      val queryResult = listOf<RecentSearchEntity>(recentSearchEntity(), recentSearchEntity())
-      expectFromRecentSearches(queryResult, "")
-      newRecentSearchDao.recentSearches("")
-        .test(this)
-        .assertValues(
-          queryResult.take(1).map { RecentSearchListItem(it.searchTerm, it.url) }
-        )
-        .finish()
-    }
+    fun `recentSearches searches returns distinct entities by searchTerm`() =
+      runTest {
+        val queryResult = listOf<RecentSearchEntity>(recentSearchEntity(), recentSearchEntity())
+        expectFromRecentSearches(queryResult, "")
+        newRecentSearchDao.recentSearches("")
+          .test(this)
+          .assertValues(
+            queryResult.take(1).map { RecentSearchListItem(it.searchTerm, it.url) }
+          )
+          .finish()
+      }
 
     @Test
-    fun `recentSearches searches returns a limitedNumber of entities`() = runTest {
-      val searchResults: List<RecentSearchEntity> =
-        (0..200).map { recentSearchEntity(searchTerm = "$it") }
-      expectFromRecentSearches(searchResults, "")
-      newRecentSearchDao.recentSearches("")
-        .test(this)
-        .assertValue { it.size == 100 }
-        .finish()
-    }
+    fun `recentSearches searches returns a limitedNumber of entities`() =
+      runTest {
+        val searchResults: List<RecentSearchEntity> =
+          (0..200).map { recentSearchEntity(searchTerm = "$it") }
+        expectFromRecentSearches(searchResults, "")
+        newRecentSearchDao.recentSearches("")
+          .test(this)
+          .assertValue { it.size == 100 }
+          .finish()
+      }
 
     private fun expectFromRecentSearches(queryResult: List<RecentSearchEntity>, zimId: String) {
       val queryBuilder = mockk<QueryBuilder<RecentSearchEntity>>()

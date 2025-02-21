@@ -29,7 +29,6 @@ class DarkModeConfig @Inject constructor(
   val sharedPreferenceUtil: SharedPreferenceUtil,
   val context: Context
 ) {
-
   fun init() {
     sharedPreferenceUtil.darkModes().subscribe(::setMode, Throwable::printStackTrace)
   }
@@ -67,8 +66,9 @@ class DarkModeConfig @Inject constructor(
 
     companion object {
       @JvmStatic
-      fun from(uiMode: Int) = values().firstOrNull { it.value == uiMode }
-        ?: throw RuntimeException("Invalid dark mode $uiMode")
+      fun from(uiMode: Int) =
+        values().firstOrNull { it.value == uiMode }
+          ?: throw RuntimeException("Invalid dark mode $uiMode")
     }
   }
 }

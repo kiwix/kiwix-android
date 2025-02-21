@@ -353,9 +353,9 @@ abstract class CoreReaderFragment :
       } else {
         if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
           /* shouldShowRequestPermissionRationale() returns false when:
-             *  1) User has previously checked on "Don't ask me again", and/or
-             *  2) Permission has been disabled on device
-             */
+           *  1) User has previously checked on "Don't ask me again", and/or
+           *  2) Permission has been disabled on device
+           */
           requireActivity().toast(
             R.string.ext_storage_permission_rationale_add_note,
             Toast.LENGTH_LONG
@@ -438,38 +438,40 @@ abstract class CoreReaderFragment :
     actionBar = activity?.supportActionBar
     initHideBackToTopTimer()
     initTabCallback()
-    toolbar?.setOnTouchListener(object : OnSwipeTouchListener(requireActivity()) {
-      @SuppressLint("SyntheticAccessor")
-      override fun onSwipeBottom() {
-        showTabSwitcher()
-      }
-
-      override fun onSwipeLeft() {
-        if (currentWebViewIndex < webViewList.size - 1) {
-          val current: View? = getCurrentWebView()
-          startAnimation(current, R.anim.transition_left)
-          selectTab(currentWebViewIndex + 1)
+    toolbar?.setOnTouchListener(
+      object : OnSwipeTouchListener(requireActivity()) {
+        @SuppressLint("SyntheticAccessor")
+        override fun onSwipeBottom() {
+          showTabSwitcher()
         }
-      }
 
-      override fun onSwipeRight() {
-        if (currentWebViewIndex > 0) {
-          val current: View? = getCurrentWebView()
-          startAnimation(current, R.anim.transition_right)
-          selectTab(currentWebViewIndex - 1)
+        override fun onSwipeLeft() {
+          if (currentWebViewIndex < webViewList.size - 1) {
+            val current: View? = getCurrentWebView()
+            startAnimation(current, R.anim.transition_left)
+            selectTab(currentWebViewIndex + 1)
+          }
         }
-      }
 
-      override fun onTap(e: MotionEvent?) {
-        e?.let {
-          val titleTextView = toolbar?.findFirstTextView() ?: return@onTap
-          titleTextView.let {
-            // only initiate search if it is on the reader screen
-            mainMenu?.tryExpandSearch(zimReaderContainer?.zimFileReader)
+        override fun onSwipeRight() {
+          if (currentWebViewIndex > 0) {
+            val current: View? = getCurrentWebView()
+            startAnimation(current, R.anim.transition_right)
+            selectTab(currentWebViewIndex - 1)
+          }
+        }
+
+        override fun onTap(e: MotionEvent?) {
+          e?.let {
+            val titleTextView = toolbar?.findFirstTextView() ?: return@onTap
+            titleTextView.let {
+              // only initiate search if it is on the reader screen
+              mainMenu?.tryExpandSearch(zimReaderContainer?.zimFileReader)
+            }
           }
         }
       }
-    })
+    )
     loadDrawerViews()
     tableDrawerRight =
       tableDrawerRightContainer?.getHeaderView(0)?.findViewById(R.id.right_drawer_list)
@@ -500,16 +502,17 @@ abstract class CoreReaderFragment :
       onNewIntent(requireActivity().intent, requireActivity() as AppCompatActivity)
     }
 
-    serviceConnection = object : ServiceConnection {
-      override fun onServiceDisconnected(name: ComponentName?) {
-        /*do nothing*/
-      }
+    serviceConnection =
+      object : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName?) {
+          // do nothing
+        }
 
-      override fun onServiceConnected(className: ComponentName, service: IBinder) {
-        readAloudService = (service as ReadAloudService.ReadAloudBinder).service.get()
-        readAloudService?.registerCallBack(this@CoreReaderFragment)
+        override fun onServiceConnected(className: ComponentName, service: IBinder) {
+          readAloudService = (service as ReadAloudService.ReadAloudBinder).service.get()
+          readAloudService?.registerCallBack(this@CoreReaderFragment)
+        }
       }
-    }
     requireActivity().observeNavigationResult<String>(
       FIND_IN_PAGE_SEARCH_STRING,
       viewLifecycleOwner,
@@ -714,7 +717,8 @@ abstract class CoreReaderFragment :
         hideTabSwitcher()
         selectTab(position)
 
-        /* Bug Fix #592 */updateBottomToolbarArrowsAlpha()
+        // Bug Fix #592
+        updateBottomToolbarArrowsAlpha()
       }
 
       override fun onCloseTab(view: View, position: Int) {
@@ -861,7 +865,10 @@ abstract class CoreReaderFragment :
     }
   }
 
-  protected fun startAnimation(view: View?, @AnimRes anim: Int) {
+  protected fun startAnimation(
+    view: View?,
+    @AnimRes anim: Int
+  ) {
     view?.startAnimation(AnimationUtils.loadAnimation(view.context, anim))
   }
 
@@ -987,8 +994,11 @@ abstract class CoreReaderFragment :
        *  returning null means that the NavigationHistoryDialog is currently not on display (as doesn't exist)
        **/
       val dialogFragment = NavigationHistoryDialog(
-        if (isForwardHistory) getString(R.string.forward_history)
-        else getString(R.string.backward_history),
+        if (isForwardHistory) {
+          getString(R.string.forward_history)
+        } else {
+          getString(R.string.backward_history)
+        },
         navigationHistoryList,
         this
       )
@@ -1037,9 +1047,11 @@ abstract class CoreReaderFragment :
     when {
       tabSwitcherRoot?.visibility == View.VISIBLE -> {
         selectTab(
-          if (currentWebViewIndex < webViewList.size)
+          if (currentWebViewIndex < webViewList.size) {
             currentWebViewIndex
-          else webViewList.size - 1
+          } else {
+            webViewList.size - 1
+          }
         )
         hideTabSwitcher()
         return FragmentActivityExtensions.Super.ShouldNotCall
@@ -1116,8 +1128,11 @@ abstract class CoreReaderFragment :
   }
 
   private fun getValidTitle(zimFileTitle: String?): String =
-    if (isAdded && isInvalidTitle(zimFileTitle)) (requireActivity() as CoreMainActivity).appName
-    else zimFileTitle.toString()
+    if (isAdded && isInvalidTitle(zimFileTitle)) {
+      (requireActivity() as CoreMainActivity).appName
+    } else {
+      zimFileTitle.toString()
+    }
 
   private fun isInvalidTitle(zimFileTitle: String?): Boolean =
     zimFileTitle == null || zimFileTitle.trim { it <= ' ' }.isEmpty()
@@ -1792,15 +1807,18 @@ abstract class CoreReaderFragment :
       Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
     ) {
       true
-    } else ContextCompat.checkSelfPermission(
-      requireActivity(),
-      permission
-    ) == PackageManager.PERMISSION_GRANTED
+    } else {
+      ContextCompat.checkSelfPermission(
+        requireActivity(),
+        permission
+      ) == PackageManager.PERMISSION_GRANTED
+    }
   }
 
   private fun requestExternalStoragePermission() {
     ActivityCompat.requestPermissions(
-      requireActivity(), arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+      requireActivity(),
+      arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
       REQUEST_STORAGE_PERMISSION
     )
   }
@@ -2113,9 +2131,10 @@ abstract class CoreReaderFragment :
       .findViewById<BottomAppBar>(R.id.bottom_toolbar)
     if (bottomAppBar.visibility == VISIBLE) {
       // if bottomAppBar is visible then add the height of the bottomAppBar.
-      bottomMargin += requireActivity().resources.getDimensionPixelSize(
-        R.dimen.material_minimum_height_and_width
-      )
+      bottomMargin +=
+        requireActivity().resources.getDimensionPixelSize(
+          R.dimen.material_minimum_height_and_width
+        )
       bottomMargin += requireActivity().resources.getDimensionPixelSize(R.dimen.card_margin)
     }
 
@@ -2220,20 +2239,21 @@ abstract class CoreReaderFragment :
         requireActivity().intent.action = null
       }
 
-      Intent.ACTION_VIEW -> if (
-        (intent.type == null || intent.type != "application/octet-stream") &&
-        // Added condition to handle ZIM files. When opening from storage, the intent may
-        // return null for the type, triggering the search unintentionally. This condition
-        // prevents such occurrences.
-        intent.scheme !in listOf("file", "content")
-      ) {
-        val searchString = if (intent.data == null) "" else intent.data?.lastPathSegment
-        openSearch(
-          searchString = searchString,
-          isOpenedFromTabView = false,
-          isVoice = false
-        )
-      }
+      Intent.ACTION_VIEW ->
+        if (
+          (intent.type == null || intent.type != "application/octet-stream") &&
+          // Added condition to handle ZIM files. When opening from storage, the intent may
+          // return null for the type, triggering the search unintentionally. This condition
+          // prevents such occurrences.
+          intent.scheme !in listOf("file", "content")
+        ) {
+          val searchString = if (intent.data == null) "" else intent.data?.lastPathSegment
+          openSearch(
+            searchString = searchString,
+            isOpenedFromTabView = false,
+            isVoice = false
+          )
+        }
     }
   }
 
@@ -2288,9 +2308,13 @@ abstract class CoreReaderFragment :
 
   private fun redirectOrOriginal(contentUrl: String): String {
     zimReaderContainer?.let {
-      return@redirectOrOriginal if (it.isRedirect(contentUrl)) it.getRedirect(
+      return@redirectOrOriginal if (it.isRedirect(contentUrl)) {
+        it.getRedirect(
+          contentUrl
+        )
+      } else {
         contentUrl
-      ) else contentUrl
+      }
     } ?: kotlin.run {
       return@redirectOrOriginal contentUrl
     }
@@ -2669,7 +2693,7 @@ abstract class CoreReaderFragment :
             (
               backToTopButton?.visibility == View.GONE ||
                 backToTopButton?.visibility == View.INVISIBLE
-              ) &&
+            ) &&
             ttsControls?.visibility == View.GONE
           ) {
             backToTopButton?.show()
@@ -2726,9 +2750,7 @@ abstract class CoreReaderFragment :
             stringId = R.string.new_tab_snack_bar,
             actionStringId = R.string.open,
             actionClick = {
-              if (webViewList.size > 1) selectTab(
-                webViewList.size - 1
-              )
+              if (webViewList.size > 1) selectTab(webViewList.size - 1)
             }
           )
         } else {
@@ -2885,7 +2907,8 @@ abstract class CoreReaderFragment :
 
   private fun bindService() {
     requireActivity().bindService(
-      Intent(requireActivity(), ReadAloudService::class.java), serviceConnection,
+      Intent(requireActivity(), ReadAloudService::class.java),
+      serviceConnection,
       Context.BIND_AUTO_CREATE
     )
   }
@@ -2908,7 +2931,8 @@ abstract class CoreReaderFragment :
     Intent(requireActivity(), ReadAloudService::class.java).apply {
       setAction(action)
       putExtra(
-        ReadAloudService.IS_TTS_PAUSE_OR_RESUME, isPauseTTS
+        ReadAloudService.IS_TTS_PAUSE_OR_RESUME,
+        isPauseTTS
       )
     }
 

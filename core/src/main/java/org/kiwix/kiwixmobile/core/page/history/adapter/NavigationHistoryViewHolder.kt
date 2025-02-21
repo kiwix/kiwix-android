@@ -26,7 +26,6 @@ import org.kiwix.kiwixmobile.core.extensions.setImageDrawableCompat
 
 sealed class NavigationHistoryViewHolder<in T : NavigationHistoryListItem>(containerView: View) :
   BaseViewHolder<T>(containerView) {
-
   class HistoryViewHolder(
     private val itemBookmarkHistoryBinding: ItemBookmarkHistoryBinding,
     private val onClickListener: ((NavigationHistoryListItem) -> Unit)

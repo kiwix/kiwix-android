@@ -31,7 +31,6 @@ data class SaveLanguagesAndFinish(
   val languages: List<Language>,
   val languageDao: NewLanguagesDao
 ) : SideEffect<Unit> {
-
   override fun invokeWith(activity: AppCompatActivity) {
     Flowable.fromCallable { languageDao.insert(languages) }
       .subscribeOn(Schedulers.io())

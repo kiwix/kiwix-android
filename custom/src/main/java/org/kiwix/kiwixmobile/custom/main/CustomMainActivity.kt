@@ -44,13 +44,12 @@ import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.databinding.ActivityCustomMainBinding
 
 class CustomMainActivity : CoreMainActivity() {
-
   override val navController: NavController by lazy {
     (
       supportFragmentManager.findFragmentById(
         R.id.custom_nav_controller
       ) as NavHostFragment
-      )
+    )
       .navController
   }
   override val drawerContainerLayout: DrawerLayout by lazy {

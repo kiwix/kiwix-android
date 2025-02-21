@@ -60,6 +60,7 @@ import javax.inject.Singleton
  */
 object TestUtils {
   private const val TAG = "TESTUTILS"
+
   @JvmField var TEST_PAUSE_MS = 3000
   var TEST_PAUSE_MS_FOR_SEARCH_TEST = 1000
   var TEST_PAUSE_MS_FOR_DOWNLOAD_TEST = 10000
@@ -90,8 +91,9 @@ object TestUtils {
       Manifest.permission.WRITE_EXTERNAL_STORAGE
     ) == PackageManager.PERMISSION_GRANTED
 
-  @JvmStatic fun hasStoragePermission() = Build.VERSION.SDK_INT > Build.VERSION_CODES.M &&
-    hasReadExternalStoragePermission() && hasWriteExternalStoragePermission()
+  @JvmStatic fun hasStoragePermission() =
+    Build.VERSION.SDK_INT > Build.VERSION_CODES.M &&
+      hasReadExternalStoragePermission() && hasWriteExternalStoragePermission()
 
   @JvmStatic fun allowStoragePermissionsIfNeeded() {
     if (!hasStoragePermission()) {
@@ -112,10 +114,11 @@ object TestUtils {
   }
 
   @JvmStatic fun captureAndSaveScreenshot(name: String?) {
-    val screenshotDir = File(
-      Environment.getExternalStorageDirectory().toString() +
-        "/Android/data/KIWIXTEST/Screenshots"
-    )
+    val screenshotDir =
+      File(
+        Environment.getExternalStorageDirectory().toString() +
+          "/Android/data/KIWIXTEST/Screenshots"
+      )
     if (!screenshotDir.exists()) {
       if (!screenshotDir.mkdirs()) {
         return

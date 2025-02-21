@@ -37,7 +37,6 @@ import org.kiwix.kiwixmobile.core.page.historyItem
 import java.util.concurrent.Callable
 
 internal class HistoryDaoTest {
-
   private val box: Box<HistoryEntity> = mockk(relaxed = true)
   private val historyDao = HistoryDao(box)
 
@@ -57,11 +56,12 @@ internal class HistoryDaoTest {
 
   @Test
   fun saveHistory() {
-    val historyItem: HistoryListItem.HistoryItem = historyItem(
-      historyUrl = "",
-      dateString = "",
-      zimReaderSource = mockk()
-    )
+    val historyItem: HistoryListItem.HistoryItem =
+      historyItem(
+        historyUrl = "",
+        dateString = "",
+        zimReaderSource = mockk()
+      )
     val slot: CapturingSlot<Callable<Unit>> = slot()
     every { box.store.callInTx(capture(slot)) } returns Unit
     val queryBuilder: QueryBuilder<HistoryEntity> = mockk()

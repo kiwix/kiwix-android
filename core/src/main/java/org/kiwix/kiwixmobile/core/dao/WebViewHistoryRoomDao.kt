@@ -26,7 +26,6 @@ import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 
 @Dao
 abstract class WebViewHistoryRoomDao {
-
   fun insertWebViewPageHistoryItem(webViewHistoryEntity: WebViewHistoryEntity) {
     insertWebViewPageHistoryItems(listOf(webViewHistoryEntity))
   }

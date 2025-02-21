@@ -54,7 +54,6 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 
 class NavigationHistoryTest : BaseActivityTest() {
-
   @Rule
   @JvmField
   var retryRule = RetryRule()
@@ -79,16 +78,17 @@ class NavigationHistoryTest : BaseActivityTest() {
         System.currentTimeMillis()
       )
     }
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      onActivity {
-        handleLocaleChange(
-          it,
-          "en",
-          SharedPreferenceUtil(context)
-        )
+    activityScenario =
+      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+        onActivity {
+          handleLocaleChange(
+            it,
+            "en",
+            SharedPreferenceUtil(context)
+          )
+        }
       }
-    }
   }
 
   init {
@@ -113,10 +113,11 @@ class NavigationHistoryTest : BaseActivityTest() {
     }
     val loadFileStream =
       NavigationHistoryTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(
-      context.getExternalFilesDirs(null)[0],
-      "testzim.zim"
-    )
+    val zimFile =
+      File(
+        context.getExternalFilesDirs(null)[0],
+        "testzim.zim"
+      )
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->

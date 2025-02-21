@@ -32,7 +32,6 @@ data class Language constructor(
   var languageCode: String,
   var languageCodeISO2: String
 ) : Parcelable {
-
   constructor(
     locale: Locale,
     active: Boolean,

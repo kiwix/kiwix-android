@@ -30,9 +30,10 @@ import org.kiwix.kiwixmobile.core.R
 const val CLOSE_ICON_PADDING = 30
 
 fun SearchView.setUpSearchView(context: Context) {
-  val heightAndWidth = context.resources.getDimensionPixelSize(
-    R.dimen.material_minimum_height_and_width
-  )
+  val heightAndWidth =
+    context.resources.getDimensionPixelSize(
+      R.dimen.material_minimum_height_and_width
+    )
   val searchViewEditText =
     findViewById<SearchView.SearchAutoComplete>(androidx.appcompat.R.id.search_src_text) as EditText
   val closeImageButton = findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)

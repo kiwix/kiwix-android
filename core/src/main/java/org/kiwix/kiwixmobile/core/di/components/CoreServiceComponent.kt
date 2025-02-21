@@ -34,7 +34,6 @@ interface CoreServiceComponent {
 
   @Subcomponent.Builder
   interface Builder {
-
     @BindsInstance fun service(service: Service): Builder
 
     fun build(): CoreServiceComponent

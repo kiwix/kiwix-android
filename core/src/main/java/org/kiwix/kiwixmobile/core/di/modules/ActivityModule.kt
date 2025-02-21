@@ -47,27 +47,31 @@ abstract class ActivityModule {
 
     @Provides
     @ActivityScope
-    fun providesMainMenuFactory(activity: Activity, zimReaderContainer: ZimReaderContainer):
-      MainMenu.Factory = object : Factory {
-      override fun create(
-        menu: Menu,
-        webViews: MutableList<KiwixWebView>,
-        urlIsValid: Boolean,
-        menuClickListener: MenuClickListener,
-        disableReadAloud: Boolean,
-        disableTabs: Boolean,
-        disableSearch: Boolean
-      ): MainMenu = MainMenu(
-        activity,
-        zimReaderContainer.zimFileReader,
-        menu,
-        webViews,
-        urlIsValid,
-        disableReadAloud,
-        disableTabs,
-        disableSearch,
-        menuClickListener
-      )
-    }
+    fun providesMainMenuFactory(
+      activity: Activity,
+      zimReaderContainer: ZimReaderContainer
+    ): MainMenu.Factory =
+      object : Factory {
+        override fun create(
+          menu: Menu,
+          webViews: MutableList<KiwixWebView>,
+          urlIsValid: Boolean,
+          menuClickListener: MenuClickListener,
+          disableReadAloud: Boolean,
+          disableTabs: Boolean,
+          disableSearch: Boolean
+        ): MainMenu =
+          MainMenu(
+            activity,
+            zimReaderContainer.zimFileReader,
+            menu,
+            webViews,
+            urlIsValid,
+            disableReadAloud,
+            disableTabs,
+            disableSearch,
+            menuClickListener
+          )
+      }
   }
 }

@@ -25,24 +25,24 @@ internal class BytesTest {
   @Test
   fun `byte formatting range checks`() {
     assertBytesGetFormatted(1, "1 Bytes")
-    assertBytesGetFormatted(Kb - 1, "1023 Bytes")
+    assertBytesGetFormatted(KB - 1, "1023 Bytes")
 
-    assertBytesGetFormatted(Kb, "1 KB")
-    assertBytesGetFormatted(Mb - 1, "1024 KB")
+    assertBytesGetFormatted(KB, "1 KB")
+    assertBytesGetFormatted(MB - 1, "1024 KB")
 
-    assertBytesGetFormatted(Mb, "1 MB")
-    assertBytesGetFormatted(Gb - 1, "1024 MB")
+    assertBytesGetFormatted(MB, "1 MB")
+    assertBytesGetFormatted(GB - 1, "1024 MB")
 
-    assertBytesGetFormatted(Gb, "1 GB")
-    assertBytesGetFormatted(Tb - 1, "1024 GB")
+    assertBytesGetFormatted(GB, "1 GB")
+    assertBytesGetFormatted(TB - 1, "1024 GB")
 
-    assertBytesGetFormatted(Tb, "1 TB")
-    assertBytesGetFormatted(Pb - 1, "1024 TB")
+    assertBytesGetFormatted(TB, "1 TB")
+    assertBytesGetFormatted(PB - 1, "1024 TB")
 
-    assertBytesGetFormatted(Pb, "1 PB")
-    assertBytesGetFormatted(Eb - 1, "1024 PB")
+    assertBytesGetFormatted(PB, "1 PB")
+    assertBytesGetFormatted(EB - 1, "1024 PB")
 
-    assertBytesGetFormatted(Eb, "1 EB")
+    assertBytesGetFormatted(EB, "1 EB")
     assertBytesGetFormatted(Long.MAX_VALUE, "8 EB")
   }
 

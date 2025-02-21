@@ -40,8 +40,11 @@ data class SearchArgumentProcessing(
     bundle?.let {
       actions.trySend(
         ScreenWasStartedFrom(
-          if (it.getBoolean(TAG_FROM_TAB_SWITCHER, false)) FromTabView
-          else FromWebView
+          if (it.getBoolean(TAG_FROM_TAB_SWITCHER, false)) {
+            FromTabView
+          } else {
+            FromWebView
+          }
         )
       ).isSuccess
       actions.trySend(Filter(it.getString(NAV_ARG_SEARCH_STRING, ""))).isSuccess

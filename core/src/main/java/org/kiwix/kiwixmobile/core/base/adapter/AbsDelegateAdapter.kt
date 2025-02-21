@@ -21,9 +21,11 @@ package org.kiwix.kiwixmobile.core.base.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-interface AbsDelegateAdapter<INSTANCE : SUPERTYPE,
+interface AbsDelegateAdapter<
+  INSTANCE : SUPERTYPE,
   SUPERTYPE : Any,
-  out VIEWHOLDER : BaseViewHolder<INSTANCE>> :
+  out VIEWHOLDER : BaseViewHolder<INSTANCE>
+  > :
   AdapterDelegate<SUPERTYPE> {
   val itemClass: Class<INSTANCE>
 

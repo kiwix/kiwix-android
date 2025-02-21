@@ -37,7 +37,6 @@ import javax.inject.Inject
 class LanguageViewModel @Inject constructor(
   private val languageDao: NewLanguagesDao
 ) : ViewModel() {
-
   val state = MutableLiveData<State>().apply { value = Loading }
   val actions = PublishProcessor.create<Action>()
   val effects = PublishProcessor.create<SideEffect<*>>()
@@ -67,10 +66,11 @@ class LanguageViewModel @Inject constructor(
     currentState: State
   ): State {
     return when (action) {
-      is UpdateLanguages -> when (currentState) {
-        Loading -> Content(action.languages)
-        else -> currentState
-      }
+      is UpdateLanguages ->
+        when (currentState) {
+          Loading -> Content(action.languages)
+          else -> currentState
+        }
       is Filter -> {
         when (currentState) {
           is Content -> filterContent(action.filter, currentState)
@@ -93,7 +93,8 @@ class LanguageViewModel @Inject constructor(
   private fun saveAll(currentState: Content): State {
     effects.offer(
       SaveLanguagesAndFinish(
-        currentState.items, languageDao
+        currentState.items,
+        languageDao
       )
     )
     return Saving

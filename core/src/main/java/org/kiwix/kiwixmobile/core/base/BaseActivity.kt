@@ -29,7 +29,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
 open class BaseActivity : AppCompatActivity() {
-
   @Inject
   lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 

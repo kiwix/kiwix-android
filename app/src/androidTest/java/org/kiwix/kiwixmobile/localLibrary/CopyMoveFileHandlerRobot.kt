@@ -43,7 +43,6 @@ fun copyMoveFileHandler(func: CopyMoveFileHandlerRobot.() -> Unit) =
   CopyMoveFileHandlerRobot().applyWithViewHierarchyPrinting(func)
 
 class CopyMoveFileHandlerRobot : BaseRobot() {
-
   fun assertCopyMoveDialogDisplayed() {
     isVisible(TextId(R.string.copy_move_files_dialog_description))
   }

@@ -113,129 +113,144 @@ internal class SearchViewModelTest {
   @Nested
   inner class StateTests {
     @Test
-    fun `initial state is Initialising`() = runTest {
-      viewModel.state.test(this).assertValue(
-        SearchState("", SearchResultsWithTerm("", null, searchMutex), emptyList(), FromWebView)
-      ).finish()
-    }
+    fun `initial state is Initialising`() =
+      runTest {
+        viewModel.state.test(this).assertValue(
+          SearchState("", SearchResultsWithTerm("", null, searchMutex), emptyList(), FromWebView)
+        ).finish()
+      }
 
     @Test
-    fun `SearchState combines sources from inputs`() = runTest {
-      val item = ZimSearchResultListItem("", "")
-      val searchTerm = "searchTerm"
-      val searchOrigin = FromWebView
-      val suggestionSearch: SuggestionSearch = mockk()
-      viewModel.state.test(this)
-        .also {
-          emissionOf(
-            searchTerm = searchTerm,
-            suggestionSearch = suggestionSearch,
-            databaseResults = listOf(RecentSearchListItem("", "")),
-            searchOrigin = searchOrigin
+    fun `SearchState combines sources from inputs`() =
+      runTest {
+        val item = ZimSearchResultListItem("", "")
+        val searchTerm = "searchTerm"
+        val searchOrigin = FromWebView
+        val suggestionSearch: SuggestionSearch = mockk()
+        viewModel.state.test(this)
+          .also {
+            emissionOf(
+              searchTerm = searchTerm,
+              suggestionSearch = suggestionSearch,
+              databaseResults = listOf(RecentSearchListItem("", "")),
+              searchOrigin = searchOrigin
+            )
+          }
+          .assertValue(
+            SearchState(
+              searchTerm,
+              SearchResultsWithTerm(searchTerm, suggestionSearch, searchMutex),
+              listOf(RecentSearchListItem("", "")),
+              searchOrigin
+            )
           )
-        }
-        .assertValue(
-          SearchState(
-            searchTerm,
-            SearchResultsWithTerm(searchTerm, suggestionSearch, searchMutex),
-            listOf(RecentSearchListItem("", "")),
-            searchOrigin
-          )
-        )
-        .finish()
-    }
+          .finish()
+      }
   }
 
   @Nested
   inner class ActionMapping {
+    @Test
+    fun `ExitedSearch offers PopFragmentBackstack`() =
+      runTest {
+        actionResultsInEffects(ExitedSearch, PopFragmentBackstack)
+      }
 
     @Test
-    fun `ExitedSearch offers PopFragmentBackstack`() = runTest {
-      actionResultsInEffects(ExitedSearch, PopFragmentBackstack)
-    }
+    fun `OnItemClick offers Saves and Opens`() =
+      runTest {
+        val searchListItem = RecentSearchListItem("", "")
+        actionResultsInEffects(
+          OnItemClick(searchListItem),
+          SaveSearchToRecents(
+            recentSearchRoomDao,
+            searchListItem,
+            "id",
+            viewModel.viewModelScope
+          ),
+          OpenSearchItem(searchListItem, false)
+        )
+      }
 
     @Test
-    fun `OnItemClick offers Saves and Opens`() = runTest {
-      val searchListItem = RecentSearchListItem("", "")
-      actionResultsInEffects(
-        OnItemClick(searchListItem),
-        SaveSearchToRecents(
-          recentSearchRoomDao, searchListItem, "id",
-          viewModel.viewModelScope
-        ),
-        OpenSearchItem(searchListItem, false)
-      )
-    }
+    fun `OnOpenInNewTabClick offers Saves and Opens in new tab`() =
+      runTest {
+        val searchListItem = RecentSearchListItem("", "")
+        actionResultsInEffects(
+          OnOpenInNewTabClick(searchListItem),
+          SaveSearchToRecents(
+            recentSearchRoomDao,
+            searchListItem,
+            "id",
+            viewModel.viewModelScope
+          ),
+          OpenSearchItem(searchListItem, true)
+        )
+      }
 
     @Test
-    fun `OnOpenInNewTabClick offers Saves and Opens in new tab`() = runTest {
-      val searchListItem = RecentSearchListItem("", "")
-      actionResultsInEffects(
-        OnOpenInNewTabClick(searchListItem),
-        SaveSearchToRecents(
-          recentSearchRoomDao, searchListItem, "id",
-          viewModel.viewModelScope
-        ),
-        OpenSearchItem(searchListItem, true)
-      )
-    }
+    fun `OnItemLongClick offers Saves and Opens`() =
+      runTest {
+        val searchListItem = RecentSearchListItem("", "")
+        actionResultsInEffects(
+          OnItemLongClick(searchListItem),
+          ShowDeleteSearchDialog(searchListItem, viewModel.actions)
+        )
+      }
 
     @Test
-    fun `OnItemLongClick offers Saves and Opens`() = runTest {
-      val searchListItem = RecentSearchListItem("", "")
-      actionResultsInEffects(
-        OnItemLongClick(searchListItem),
-        ShowDeleteSearchDialog(searchListItem, viewModel.actions)
-      )
-    }
+    fun `ClickedSearchInText offers SearchInPreviousScreen`() =
+      runTest {
+        actionResultsInEffects(ClickedSearchInText, SearchInPreviousScreen(""))
+      }
 
     @Test
-    fun `ClickedSearchInText offers SearchInPreviousScreen`() = runTest {
-      actionResultsInEffects(ClickedSearchInText, SearchInPreviousScreen(""))
-    }
+    fun `ConfirmedDelete offers Delete and Toast`() =
+      runTest {
+        val searchListItem = RecentSearchListItem("", "")
+        actionResultsInEffects(
+          ConfirmedDelete(searchListItem),
+          DeleteRecentSearch(searchListItem, recentSearchRoomDao, viewModel.viewModelScope),
+          ShowToast(R.string.delete_specific_search_toast)
+        )
+      }
 
     @Test
-    fun `ConfirmedDelete offers Delete and Toast`() = runTest {
-      val searchListItem = RecentSearchListItem("", "")
-      actionResultsInEffects(
-        ConfirmedDelete(searchListItem),
-        DeleteRecentSearch(searchListItem, recentSearchRoomDao, viewModel.viewModelScope),
-        ShowToast(R.string.delete_specific_search_toast)
-      )
-    }
+    fun `CreatedWithArguments offers SearchArgumentProcessing`() =
+      runTest {
+        val bundle = mockk<Bundle>()
+        actionResultsInEffects(
+          CreatedWithArguments(bundle),
+          SearchArgumentProcessing(bundle, viewModel.actions)
+        )
+      }
 
     @Test
-    fun `CreatedWithArguments offers SearchArgumentProcessing`() = runTest {
-      val bundle = mockk<Bundle>()
-      actionResultsInEffects(
-        CreatedWithArguments(bundle),
-        SearchArgumentProcessing(bundle, viewModel.actions)
-      )
-    }
+    fun `ReceivedPromptForSpeechInput offers StartSpeechInput`() =
+      runTest {
+        actionResultsInEffects(
+          ReceivedPromptForSpeechInput,
+          StartSpeechInput(viewModel.actions)
+        )
+      }
 
     @Test
-    fun `ReceivedPromptForSpeechInput offers StartSpeechInput`() = runTest {
-      actionResultsInEffects(
-        ReceivedPromptForSpeechInput,
-        StartSpeechInput(viewModel.actions)
-      )
-    }
+    fun `StartSpeechInputFailed offers ShowToast`() =
+      runTest {
+        actionResultsInEffects(
+          StartSpeechInputFailed,
+          ShowToast(string.speech_not_supported)
+        )
+      }
 
     @Test
-    fun `StartSpeechInputFailed offers ShowToast`() = runTest {
-      actionResultsInEffects(
-        StartSpeechInputFailed,
-        ShowToast(string.speech_not_supported)
-      )
-    }
-
-    @Test
-    fun `ActivityResultReceived offers ProcessActivityResult`() = runTest {
-      actionResultsInEffects(
-        ActivityResultReceived(0, 1, null),
-        ProcessActivityResult(0, 1, null, viewModel.actions)
-      )
-    }
+    fun `ActivityResultReceived offers ProcessActivityResult`() =
+      runTest {
+        actionResultsInEffects(
+          ActivityResultReceived(0, 1, null),
+          ProcessActivityResult(0, 1, null, viewModel.actions)
+        )
+      }
 
     private fun TestScope.actionResultsInEffects(
       action: Action,
@@ -243,11 +258,12 @@ internal class SearchViewModelTest {
     ) {
       if (effects.size > 1) return
       val collectedEffects = mutableListOf<SideEffect<*>>()
-      val job = launch {
-        viewModel.effects.collect {
-          collectedEffects.add(it)
+      val job =
+        launch {
+          viewModel.effects.collect {
+            collectedEffects.add(it)
+          }
         }
-      }
 
       viewModel.actions.trySend(action).isSuccess
       advanceUntilIdle()
@@ -262,7 +278,6 @@ internal class SearchViewModelTest {
     databaseResults: List<RecentSearchListItem>,
     searchOrigin: SearchOrigin
   ) {
-
     coEvery {
       searchResultGenerator.generateSearchResults(searchTerm, zimFileReader)
     } returns suggestionSearch
@@ -291,11 +306,12 @@ class TestObserver<T>(
   private var job: Job? = null
 
   suspend fun startCollecting() {
-    job = scope.launch {
-      flow.collect {
-        values.add(it)
+    job =
+      scope.launch {
+        flow.collect {
+          values.add(it)
+        }
       }
-    }
     completionChannel.send(Unit)
   }
 

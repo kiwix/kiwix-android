@@ -38,11 +38,14 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
     if (zimReaderSource == zimFileReader?.zimReaderSource) {
       return
     }
-    zimFileReader = withContext(Dispatchers.IO) {
-      if (zimReaderSource?.exists() == true && zimReaderSource.canOpenInLibkiwix())
-        zimFileReaderFactory.create(zimReaderSource)
-      else null
-    }
+    zimFileReader =
+      withContext(Dispatchers.IO) {
+        if (zimReaderSource?.exists() == true && zimReaderSource.canOpenInLibkiwix()) {
+          zimFileReaderFactory.create(zimReaderSource)
+        } else {
+          null
+        }
+      }
   }
 
   fun getPageUrlFromTitle(title: String) = zimFileReader?.getPageUrlFrom(title)
@@ -50,29 +53,30 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
   fun getRandomArticleUrl() = zimFileReader?.getRandomArticleUrl()
   fun isRedirect(url: String): Boolean = zimFileReader?.isRedirect(url) == true
   fun getRedirect(url: String): String = zimFileReader?.getRedirect(url) ?: ""
-  fun load(url: String, requestHeaders: Map<String, String>): WebResourceResponse = runBlocking {
-    return@runBlocking WebResourceResponse(
-      zimFileReader?.getMimeTypeFromUrl(url),
-      Charsets.UTF_8.name(),
-      zimFileReader?.load(url)
-    )
-      .apply {
-        val headers = mutableMapOf("Accept-Ranges" to "bytes")
-        if ("Range" in requestHeaders.keys) {
-          setStatusCodeAndReasonPhrase(HttpURLConnection.HTTP_PARTIAL, "Partial Content")
-          val fullSize = zimFileReader?.getItem(url)?.itemSize() ?: 0L
-          val lastByte = fullSize - 1
-          val byteRanges = requestHeaders.getValue("Range").substringAfter("=").split("-")
-          headers["Content-Range"] = "bytes ${byteRanges[0]}-$lastByte/$fullSize"
-          if (byteRanges.size == 1) {
-            headers["Connection"] = "close"
+  fun load(url: String, requestHeaders: Map<String, String>): WebResourceResponse =
+    runBlocking {
+      return@runBlocking WebResourceResponse(
+        zimFileReader?.getMimeTypeFromUrl(url),
+        Charsets.UTF_8.name(),
+        zimFileReader?.load(url)
+      )
+        .apply {
+          val headers = mutableMapOf("Accept-Ranges" to "bytes")
+          if ("Range" in requestHeaders.keys) {
+            setStatusCodeAndReasonPhrase(HttpURLConnection.HTTP_PARTIAL, "Partial Content")
+            val fullSize = zimFileReader?.getItem(url)?.itemSize() ?: 0L
+            val lastByte = fullSize - 1
+            val byteRanges = requestHeaders.getValue("Range").substringAfter("=").split("-")
+            headers["Content-Range"] = "bytes ${byteRanges[0]}-$lastByte/$fullSize"
+            if (byteRanges.size == 1) {
+              headers["Connection"] = "close"
+            }
+          } else {
+            setStatusCodeAndReasonPhrase(HttpURLConnection.HTTP_OK, "OK")
           }
-        } else {
-          setStatusCodeAndReasonPhrase(HttpURLConnection.HTTP_OK, "OK")
+          responseHeaders = headers
         }
-        responseHeaders = headers
-      }
-  }
+    }
 
   val zimReaderSource get() = zimFileReader?.zimReaderSource
   val zimFileTitle get() = zimFileReader?.title

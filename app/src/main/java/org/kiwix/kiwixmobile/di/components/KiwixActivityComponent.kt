@@ -58,7 +58,6 @@ interface KiwixActivityComponent : CoreActivityComponent {
 
   @Subcomponent.Builder
   interface Builder {
-
     @BindsInstance fun activity(activity: Activity): Builder
 
     fun build(): KiwixActivityComponent

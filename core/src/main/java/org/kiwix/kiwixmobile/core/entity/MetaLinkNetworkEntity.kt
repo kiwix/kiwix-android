@@ -40,6 +40,7 @@ class MetaLinkNetworkEntity {
 
     @field:ElementList(inline = true, entry = "url")
     var urls: List<Url>? = null
+
     @field:Element var size: Long = 0
 
     @field:ElementMap(

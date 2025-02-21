@@ -39,7 +39,6 @@ class KiwixServer @Inject constructor(
   private val library: Library,
   private val jniKiwixServer: Server
 ) {
-
   class Factory @Inject constructor(
     private val context: Context,
     private val zimReaderContainer: ZimReaderContainer
@@ -50,25 +49,27 @@ class KiwixServer @Inject constructor(
         val kiwixLibrary = Library()
         selectedBooksPath.forEach { path ->
           try {
-            val book = Book().apply {
-              // Determine whether to create an Archive from an asset or a file path
-              val archive = if (path == getDemoFilePathForCustomApp(context)) {
-                // For custom apps using a demo file, create an Archive with FileDescriptor
-                val assetFileDescriptor =
-                  zimReaderContainer.zimReaderSource?.assetFileDescriptorList?.get(0)
-                val startOffset = assetFileDescriptor?.startOffset ?: 0L
-                val size = assetFileDescriptor?.length ?: 0L
-                Archive(
-                  assetFileDescriptor?.parcelFileDescriptor?.fileDescriptor,
-                  startOffset,
-                  size
-                )
-              } else {
-                // For regular files, create an Archive from the file path
-                Archive(path)
+            val book =
+              Book().apply {
+                // Determine whether to create an Archive from an asset or a file path
+                val archive =
+                  if (path == getDemoFilePathForCustomApp(context)) {
+                    // For custom apps using a demo file, create an Archive with FileDescriptor
+                    val assetFileDescriptor =
+                      zimReaderContainer.zimReaderSource?.assetFileDescriptorList?.get(0)
+                    val startOffset = assetFileDescriptor?.startOffset ?: 0L
+                    val size = assetFileDescriptor?.length ?: 0L
+                    Archive(
+                      assetFileDescriptor?.parcelFileDescriptor?.fileDescriptor,
+                      startOffset,
+                      size
+                    )
+                  } else {
+                    // For regular files, create an Archive from the file path
+                    Archive(path)
+                  }
+                update(archive)
               }
-              update(archive)
-            }
             kiwixLibrary.addBook(book)
           } catch (ignore: Exception) {
             // Catch the other exceptions as well. e.g. while hosting the split zim files.

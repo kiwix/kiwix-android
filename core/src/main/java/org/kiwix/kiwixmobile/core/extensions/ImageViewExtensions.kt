@@ -39,10 +39,14 @@ fun ImageView.setBitmapFromString(string: String?) {
   setBitmap(Base64String(string))
 }
 
-fun ImageView.setImageDrawableCompat(@DrawableRes id: Int) {
+fun ImageView.setImageDrawableCompat(
+  @DrawableRes id: Int
+) {
   setImageDrawable(ContextCompat.getDrawable(context, id))
 }
 
-fun ImageView.tint(@ColorInt colorId: Int) {
+fun ImageView.tint(
+  @ColorInt colorId: Int
+) {
   ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(colorId))
 }

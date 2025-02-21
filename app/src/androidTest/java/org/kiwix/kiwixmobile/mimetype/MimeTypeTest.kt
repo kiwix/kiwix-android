@@ -44,7 +44,6 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 
 class MimeTypeTest : BaseActivityTest() {
-
   @Before
   override fun waitForIdle() {
     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
@@ -62,63 +61,67 @@ class MimeTypeTest : BaseActivityTest() {
         System.currentTimeMillis()
       )
     }
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-    }
+    activityScenario =
+      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+      }
   }
 
   @Test
-  fun testMimeType() = runBlocking {
-    val loadFileStream = MimeTypeTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(
-      context.getExternalFilesDirs(null)[0],
-      "testzim.zim"
-    )
-    if (zimFile.exists()) zimFile.delete()
-    zimFile.createNewFile()
-    loadFileStream.use { inputStream ->
-      val outputStream: OutputStream = FileOutputStream(zimFile)
-      outputStream.use { it ->
-        val buffer = ByteArray(1024)
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-          it.write(buffer, 0, length)
+  fun testMimeType() =
+    runBlocking {
+      val loadFileStream = MimeTypeTest::class.java.classLoader.getResourceAsStream("testzim.zim")
+      val zimFile =
+        File(
+          context.getExternalFilesDirs(null)[0],
+          "testzim.zim"
+        )
+      if (zimFile.exists()) zimFile.delete()
+      zimFile.createNewFile()
+      loadFileStream.use { inputStream ->
+        val outputStream: OutputStream = FileOutputStream(zimFile)
+        outputStream.use { it ->
+          val buffer = ByteArray(1024)
+          var length: Int
+          while (inputStream.read(buffer).also { length = it } > 0) {
+            it.write(buffer, 0, length)
+          }
         }
       }
-    }
-    val zimSource = ZimReaderSource(zimFile)
-    val archive = zimSource.createArchive()
-    val zimFileReader = ZimFileReader(
-      zimSource,
-      archive!!,
-      DarkModeConfig(SharedPreferenceUtil(context), context),
-      SuggestionSearcher(archive)
-    )
-    zimFileReader.getRandomArticleUrl()?.let { randomArticle ->
-      val mimeType = zimFileReader.getMimeTypeFromUrl(randomArticle)
-      if (mimeType?.contains("^([^ ]+).*$") == true || mimeType?.contains(";") == true) {
-        Assert.fail(
-          "Unable to get mime type from zim file. File = " +
-            " $zimFile and url of article = $randomArticle"
+      val zimSource = ZimReaderSource(zimFile)
+      val archive = zimSource.createArchive()
+      val zimFileReader =
+        ZimFileReader(
+          zimSource,
+          archive!!,
+          DarkModeConfig(SharedPreferenceUtil(context), context),
+          SuggestionSearcher(archive)
         )
+      zimFileReader.getRandomArticleUrl()?.let { randomArticle ->
+        val mimeType = zimFileReader.getMimeTypeFromUrl(randomArticle)
+        if (mimeType?.contains("^([^ ]+).*$") == true || mimeType?.contains(";") == true) {
+          Assert.fail(
+            "Unable to get mime type from zim file. File = " +
+              " $zimFile and url of article = $randomArticle"
+          )
+        }
+      } ?: kotlin.run {
+        Assert.fail("Unable to get article from zim file $zimFile")
       }
-    } ?: kotlin.run {
-      Assert.fail("Unable to get article from zim file $zimFile")
+      // test mimetypes for some actual url
+      Assert.assertEquals(
+        "text/html",
+        zimFileReader.getMimeTypeFromUrl("https://kiwix.app/A/index.html")
+      )
+      Assert.assertEquals(
+        "text/css",
+        zimFileReader.getMimeTypeFromUrl("https://kiwix.app/-/assets/style1.css")
+      )
+      // test mimetype for invalid url
+      Assert.assertEquals(null, zimFileReader.getMimeTypeFromUrl("https://kiwix.app/A/test.html"))
+      // dispose the ZimFileReader
+      zimFileReader.dispose()
     }
-    // test mimetypes for some actual url
-    Assert.assertEquals(
-      "text/html",
-      zimFileReader.getMimeTypeFromUrl("https://kiwix.app/A/index.html")
-    )
-    Assert.assertEquals(
-      "text/css",
-      zimFileReader.getMimeTypeFromUrl("https://kiwix.app/-/assets/style1.css")
-    )
-    // test mimetype for invalid url
-    Assert.assertEquals(null, zimFileReader.getMimeTypeFromUrl("https://kiwix.app/A/test.html"))
-    // dispose the ZimFileReader
-    zimFileReader.dispose()
-  }
 
   @After
   fun finish() {

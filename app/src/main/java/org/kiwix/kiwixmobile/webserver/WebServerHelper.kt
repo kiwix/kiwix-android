@@ -81,14 +81,15 @@ class WebServerHelper @Inject constructor(
   private suspend fun startKiwixServer(selectedBooksPath: ArrayList<String>): ServerStatus {
     var errorMessage: Int? = null
     ServerUtils.port = DEFAULT_PORT
-    kiwixServer = kiwixServerFactory.createKiwixServer(selectedBooksPath).also {
-      updateServerState(it.startServer(ServerUtils.port))
-      Log.d(TAG, "Server status$isServerStarted").also {
-        if (!isServerStarted) {
-          errorMessage = R.string.error_server_already_running
+    kiwixServer =
+      kiwixServerFactory.createKiwixServer(selectedBooksPath).also {
+        updateServerState(it.startServer(ServerUtils.port))
+        Log.d(TAG, "Server status$isServerStarted").also {
+          if (!isServerStarted) {
+            errorMessage = R.string.error_server_already_running
+          }
         }
       }
-    }
     return ServerStatus(isServerStarted, errorMessage)
   }
 
@@ -101,21 +102,22 @@ class WebServerHelper @Inject constructor(
   // If no ip is found after 15 seconds, dismisses the progress dialog
   @Suppress("MagicNumber")
   fun pollForValidIpAddress() {
-    validIpAddressDisposable = Flowable.interval(1, TimeUnit.SECONDS)
-      .map { getIp() }
-      .filter { s: String? -> s != INVALID_IP }
-      .timeout(15, TimeUnit.SECONDS)
-      .take(1)
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe(
-        { s: String? ->
-          ipAddressCallbacks.onIpAddressValid()
-          Log.d(TAG, "onSuccess:  $s")
+    validIpAddressDisposable =
+      Flowable.interval(1, TimeUnit.SECONDS)
+        .map { getIp() }
+        .filter { s: String? -> s != INVALID_IP }
+        .timeout(15, TimeUnit.SECONDS)
+        .take(1)
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(
+          { s: String? ->
+            ipAddressCallbacks.onIpAddressValid()
+            Log.d(TAG, "onSuccess:  $s")
+          }
+        ) { e: Throwable? ->
+          Log.d(TAG, "Unable to turn on server", e)
+          ipAddressCallbacks.onIpAddressInvalid()
         }
-      ) { e: Throwable? ->
-        Log.d(TAG, "Unable to turn on server", e)
-        ipAddressCallbacks.onIpAddressInvalid()
-      }
   }
 
   fun dispose() {

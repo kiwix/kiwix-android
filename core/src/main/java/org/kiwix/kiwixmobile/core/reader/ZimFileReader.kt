@@ -23,7 +23,7 @@ import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.util.Base64
 import androidx.core.net.toUri
-import eu.mhutti1.utils.storage.Kb
+import eu.mhutti1.utils.storage.KB
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
@@ -67,39 +67,40 @@ class ZimFileReader constructor(
 
     class Impl @Inject constructor(private val darkModeConfig: DarkModeConfig) :
       Factory {
-      override suspend fun create(zimReaderSource: ZimReaderSource): ZimFileReader? =
-        withContext(Dispatchers.IO) { // Bug Fix #3805
-          try {
-            zimReaderSource.createArchive()?.let {
-              ZimFileReader(
-                zimReaderSource,
-                darkModeConfig = darkModeConfig,
-                jniKiwixReader = it,
-                searcher = SuggestionSearcher(it)
-              ).also {
-                Log.e(TAG, "create: ${zimReaderSource.toDatabase()}")
+        override suspend fun create(zimReaderSource: ZimReaderSource): ZimFileReader? =
+          withContext(Dispatchers.IO) { // Bug Fix #3805
+            try {
+              zimReaderSource.createArchive()?.let {
+                ZimFileReader(
+                  zimReaderSource,
+                  darkModeConfig = darkModeConfig,
+                  jniKiwixReader = it,
+                  searcher = SuggestionSearcher(it)
+                ).also {
+                  Log.e(TAG, "create: ${zimReaderSource.toDatabase()}")
+                }
+              } ?: kotlin.run {
+                Log.e(
+                  TAG,
+                  "Error in creating ZimFileReader," +
+                    " because file does not exist on path: ${zimReaderSource.toDatabase()}"
+                )
+                null
               }
-            } ?: kotlin.run {
+            } catch (ignore: JNIKiwixException) {
               Log.e(
                 TAG,
                 "Error in creating ZimFileReader," +
-                  " because file does not exist on path: ${zimReaderSource.toDatabase()}"
+                  " there is an JNI exception happens: $ignore"
               )
               null
+            } catch (ignore: Exception) {
+              // for handing the error, if any zim file is corrupted
+              Log.e(TAG, "Error in creating ZimFileReader: $ignore")
+              null
             }
-          } catch (ignore: JNIKiwixException) {
-            Log.e(
-              TAG,
-              "Error in creating ZimFileReader," +
-                " there is an JNI exception happens: $ignore"
-            )
-            null
-          } catch (ignore: Exception) { // for handing the error, if any zim file is corrupted
-            Log.e(TAG, "Error in creating ZimFileReader: $ignore")
-            null
           }
-        }
-    }
+      }
   }
 
   /**
@@ -129,39 +130,41 @@ class ZimFileReader constructor(
   val date: String get() = getSafeMetaData("Date", "")
   val description: String get() = getSafeMetaData("Description", "")
   val favicon: String?
-    get() = if (jniKiwixReader.hasIllustration(ILLUSTRATION_SIZE))
-      Base64.encodeToString(
-        jniKiwixReader.getIllustrationItem(ILLUSTRATION_SIZE).data.data,
-        Base64.DEFAULT
-      )
-    else
-      null
+    get() =
+      if (jniKiwixReader.hasIllustration(ILLUSTRATION_SIZE)) {
+        Base64.encodeToString(
+          jniKiwixReader.getIllustrationItem(ILLUSTRATION_SIZE).data.data,
+          Base64.DEFAULT
+        )
+      } else {
+        null
+      }
   val language: String get() = getSafeMetaData("Language", "")
 
   val tags: String
     get() = getSafeMetaData("Tags", "")
   val mediaCount: Int?
-    get() = try {
-      jniKiwixReader.mediaCount
-    }
-    // Catch all exceptions to prevent the rendering process of other zim files from aborting.
-    // If the zim file is split with zim-tool,
-    // refer to https://github.com/kiwix/kiwix-android/issues/3827.
-    catch (ignore: Exception) {
-      Log.e(TAG, "Unable to find the media count $ignore")
-      null
-    }
+    get() =
+      try {
+        jniKiwixReader.mediaCount
+      } catch (ignore: Exception) {
+        // Catch all exceptions to prevent the rendering process of other zim files from aborting.
+        // If the zim file is split with zim-tool,
+        // refer to https://github.com/kiwix/kiwix-android/issues/3827. catch (ignore: Exception) {
+        Log.e(TAG, "Unable to find the media count $ignore")
+        null
+      }
   val articleCount: Int?
-    get() = try {
-      jniKiwixReader.articleCount
-    }
-    // Catch all exceptions to prevent the rendering process of other zim files from aborting.
-    // If the zim file is split with zim-tool,
-    // refer to https://github.com/kiwix/kiwix-android/issues/3827.
-    catch (ignore: Exception) {
-      Log.e(TAG, "Unable to find the article count $ignore")
-      null
-    }
+    get() =
+      try {
+        jniKiwixReader.articleCount
+      } catch (ignore: Exception) {
+        // Catch all exceptions to prevent the rendering process of other zim files from aborting.
+        // If the zim file is split with zim-tool,
+        // refer to https://github.com/kiwix/kiwix-android/issues/3827. catch (ignore: Exception) {
+        Log.e(TAG, "Unable to find the article count $ignore")
+        null
+      }
 
   fun searchSuggestions(prefix: String): SuggestionSearch? =
     try {
@@ -189,17 +192,18 @@ class ZimFileReader constructor(
     }
 
   @Suppress("UnreachableCode")
-  suspend fun load(uri: String): InputStream? = withContext(Dispatchers.IO) {
-    val extension = uri.substringAfterLast(".")
-    if (assetExtensions.any { it == extension }) {
-      try {
-        return@withContext loadAsset(uri)
-      } catch (ioException: IOException) {
-        Log.e(TAG, "failed to write video for $uri", ioException)
+  suspend fun load(uri: String): InputStream? =
+    withContext(Dispatchers.IO) {
+      val extension = uri.substringAfterLast(".")
+      if (assetExtensions.any { it == extension }) {
+        try {
+          return@withContext loadAsset(uri)
+        } catch (ioException: IOException) {
+          Log.e(TAG, "failed to write video for $uri", ioException)
+        }
       }
+      return@withContext loadContent(uri, extension)
     }
-    return@withContext loadContent(uri, extension)
-  }
 
   @Suppress("UnreachableCode", "NestedBlockDepth", "ReturnCount")
   private fun loadContent(uri: String, extension: String): InputStream? {
@@ -207,7 +211,7 @@ class ZimFileReader constructor(
     if (compressedExtensions.any { it != extension }) {
       item?.itemSize()?.let {
         // Check if the item size exceeds 1 MB
-        if (it / Kb > 1024) {
+        if (it / KB > 1024) {
           // Retrieve direct access information for the item
           val infoPair = getDirectAccessInfoOfItem(item, uri)
           val file = infoPair?.filename?.let(::File)
@@ -223,10 +227,11 @@ class ZimFileReader constructor(
     return loadContent(item, uri)
   }
 
-  fun getMimeTypeFromUrl(uri: String): String? = getItem(uri)?.mimetype
-    ?.truncateMimeType.also {
-      Log.d(TAG, "getting mimetype for $uri = $it")
-    }
+  fun getMimeTypeFromUrl(uri: String): String? =
+    getItem(uri)?.mimetype
+      ?.truncateMimeType.also {
+        Log.d(TAG, "getting mimetype for $uri = $it")
+      }
 
   fun getRedirect(url: String) = "${toRedirect(url)}"
 
@@ -241,13 +246,14 @@ class ZimFileReader constructor(
 
   private fun getActualUrl(url: String): String {
     val actualPath = url.toUri().filePath
-    var redirectPath = try {
-      jniKiwixReader.getEntryByPath(actualPath)
-        .getItem(true)
-        .path
-    } catch (ignore: Exception) {
-      actualPath
-    }
+    var redirectPath =
+      try {
+        jniKiwixReader.getEntryByPath(actualPath)
+          .getItem(true)
+          .path
+      } catch (ignore: Exception) {
+        actualPath
+      }
     if (url.contains("?")) {
       redirectPath += extractQueryParam(url)
     }
@@ -267,20 +273,22 @@ class ZimFileReader constructor(
       throw IOException("Could not open pipe for $uri", ioException)
     }
 
-  private suspend fun loadAsset(uri: String): InputStream? = withContext(Dispatchers.IO) {
-    val item = try {
-      jniKiwixReader.getEntryByPath(uri.filePath).getItem(true)
-    } catch (exception: Exception) {
-      Log.e(TAG, "Could not get Item for uri = $uri \n original exception = $exception")
-      null
+  private suspend fun loadAsset(uri: String): InputStream? =
+    withContext(Dispatchers.IO) {
+      val item =
+        try {
+          jniKiwixReader.getEntryByPath(uri.filePath).getItem(true)
+        } catch (exception: Exception) {
+          Log.e(TAG, "Could not get Item for uri = $uri \n original exception = $exception")
+          null
+        }
+      val infoPair = getDirectAccessInfoOfItem(item, uri)
+      val file = infoPair?.filename?.let(::File)
+      if (infoPair == null || file == null || !file.exists()) {
+        return@withContext loadAssetFromCache(uri)
+      }
+      return@withContext getInputStreamFromDirectAccessInfo(item, file, infoPair)
     }
-    val infoPair = getDirectAccessInfoOfItem(item, uri)
-    val file = infoPair?.filename?.let(::File)
-    if (infoPair == null || file == null || !file.exists()) {
-      return@withContext loadAssetFromCache(uri)
-    }
-    return@withContext getInputStreamFromDirectAccessInfo(item, file, infoPair)
-  }
 
   private fun getDirectAccessInfoOfItem(item: Item?, uri: String): DirectAccessInfo? =
     try {
@@ -316,12 +324,13 @@ class ZimFileReader constructor(
       .inputStream()
   }
 
-  private fun getContent(url: String) = try {
-    getItem(url)?.data?.data
-  } catch (ignore: Exception) {
-    Log.e(TAG, "Could not get content for url = $url original exception = $ignore")
-    null
-  }
+  private fun getContent(url: String) =
+    try {
+      getItem(url)?.data?.data
+    } catch (ignore: Exception) {
+      Log.e(TAG, "Could not get content for url = $url original exception = $ignore")
+      null
+    }
 
   @SuppressLint("CheckResult")
   private fun streamZimContentToPipe(item: Item?, uri: String, outputStream: OutputStream) {
@@ -366,21 +375,22 @@ class ZimFileReader constructor(
     }
 
   @Suppress("ExplicitThis") // this@ZimFileReader.name is required
-  fun toBook() = Book().apply {
-    title = this@ZimFileReader.title
-    id = this@ZimFileReader.id
-    size = "$fileSize"
-    favicon = this@ZimFileReader.favicon.toString()
-    creator = this@ZimFileReader.creator
-    publisher = this@ZimFileReader.publisher
-    date = this@ZimFileReader.date
-    description = this@ZimFileReader.description
-    language = this@ZimFileReader.language
-    articleCount = this@ZimFileReader.articleCount.toString()
-    mediaCount = this@ZimFileReader.mediaCount.toString()
-    bookName = this@ZimFileReader.name
-    tags = this@ZimFileReader.tags
-  }
+  fun toBook() =
+    Book().apply {
+      title = this@ZimFileReader.title
+      id = this@ZimFileReader.id
+      size = "$fileSize"
+      favicon = this@ZimFileReader.favicon.toString()
+      creator = this@ZimFileReader.creator
+      publisher = this@ZimFileReader.publisher
+      date = this@ZimFileReader.date
+      description = this@ZimFileReader.description
+      language = this@ZimFileReader.language
+      articleCount = this@ZimFileReader.articleCount.toString()
+      mediaCount = this@ZimFileReader.mediaCount.toString()
+      bookName = this@ZimFileReader.name
+      tags = this@ZimFileReader.tags
+    }
 
   fun dispose() {
     jniKiwixReader.dispose()
@@ -397,9 +407,9 @@ class ZimFileReader constructor(
 
   companion object {
     /*
-    * these uris aren't actually nullable but unit tests fail to compile as
-    * Uri.parse returns null without android dependencies loaded
-    */
+     * these uris aren't actually nullable but unit tests fail to compile as
+     * Uri.parse returns null without android dependencies loaded
+     */
     @JvmField
     val UI_URI: Uri? = Uri.parse("content://org.kiwix.ui/")
 
@@ -407,14 +417,14 @@ class ZimFileReader constructor(
 
     private val INVERT_IMAGES_VIDEO =
       """
-        img, video, div[poster] { 
-           -webkit-filter: invert(1); 
-           filter: invert(1); 
-        }
-        div[poster] img, div[poster] video {
-          -webkit-filter: invert(0); 
-          filter: invert(0); 
-        }
+      img, video, div[poster] { 
+         -webkit-filter: invert(1); 
+         filter: invert(1); 
+      }
+      div[poster] img, div[poster] video {
+        -webkit-filter: invert(0); 
+        filter: invert(0); 
+      }
       """.trimIndent()
     private val assetExtensions =
       listOf("3gp", "mp4", "m4a", "webm", "mkv", "ogg", "ogv", "svg", "warc")
@@ -430,18 +440,19 @@ private val String.filePath: String
 
 // Decode the URL if it is encoded because libkiwix does not return the path for encoded paths.
 val String.decodeUrl: String
-  get() = try {
-    URLDecoder.decode(this, "UTF-8")
-  } catch (illegalArgumentException: IllegalArgumentException) {
-    // Searched item already has the decoded URL,
-    // and if any URL contains % in it, then it will fail to decode that URL and will not load the page.
-    // e.g. https://kiwix.app/A/FT%, More info https://github.com/kiwix/kiwix-android/pull/3514
-    Log.e(
-      "ZimFileReader",
-      "Could not decode url $this \n original exception = $illegalArgumentException"
-    )
-    this
-  }
+  get() =
+    try {
+      URLDecoder.decode(this, "UTF-8")
+    } catch (illegalArgumentException: IllegalArgumentException) {
+      // Searched item already has the decoded URL,
+      // and if any URL contains % in it, then it will fail to decode that URL and will not load the page.
+      // e.g. https://kiwix.app/A/FT%, More info https://github.com/kiwix/kiwix-android/pull/3514
+      Log.e(
+        "ZimFileReader",
+        "Could not decode url $this \n original exception = $illegalArgumentException"
+      )
+      this
+    }
 
 // Truncate mime-type (everything after the first space and semi-colon(if exists)
 val String.truncateMimeType: String
@@ -466,9 +477,10 @@ val String.addContentPrefix: String
  * Handles any error thrown by this method. Developers should handle the flow if this method
  * returns null. For more details, see: https://github.com/kiwix/kiwix-android/issues/4157
  */
-fun Item.itemSize(): Long? = try {
-  size
-} catch (ignore: Exception) {
-  Log.e(TAG, "Could not retrieve the item size.\n Original exception: $ignore")
-  null
-}
+fun Item.itemSize(): Long? =
+  try {
+    size
+  } catch (ignore: Exception) {
+    Log.e(TAG, "Could not retrieve the item size.\n Original exception: $ignore")
+    null
+  }

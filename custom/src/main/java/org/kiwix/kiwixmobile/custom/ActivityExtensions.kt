@@ -37,4 +37,6 @@ private fun BaseActivity.customApp() = applicationContext as? CustomApp ?: appli
 internal inline val BaseActivity.customActivityComponent
   get() = customComponent.activityComponentBuilder().activity(this).build()
 
-fun <T : View> Activity.lazyView(@IdRes viewId: Int): Lazy<T> = lazy { findViewById<T>(viewId) }
+fun <T : View> Activity.lazyView(
+  @IdRes viewId: Int
+): Lazy<T> = lazy { findViewById<T>(viewId) }

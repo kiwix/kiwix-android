@@ -29,22 +29,22 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseV
 import javax.inject.Inject
 
 class HistoryDao @Inject constructor(val box: Box<HistoryEntity>) : PageDao {
-
-  fun history(): Flowable<List<Page>> = box.asFlowable(
-    box.query {
-      orderDesc(HistoryEntity_.timeStamp)
-    }
-  ).map {
-    it.map { historyEntity ->
-      historyEntity.zimFilePath?.let { filePath ->
-        // set zimReaderSource for previously saved history items
-        fromDatabaseValue(filePath)?.let { zimReaderSource ->
-          historyEntity.zimReaderSource = zimReaderSource
-        }
+  fun history(): Flowable<List<Page>> =
+    box.asFlowable(
+      box.query {
+        orderDesc(HistoryEntity_.timeStamp)
       }
-      HistoryItem(historyEntity)
+    ).map {
+      it.map { historyEntity ->
+        historyEntity.zimFilePath?.let { filePath ->
+          // set zimReaderSource for previously saved history items
+          fromDatabaseValue(filePath)?.let { zimReaderSource ->
+            historyEntity.zimReaderSource = zimReaderSource
+          }
+        }
+        HistoryItem(historyEntity)
+      }
     }
-  }
 
   override fun pages(): Flowable<List<Page>> = history()
   override fun deletePages(pagesToDelete: List<Page>) =

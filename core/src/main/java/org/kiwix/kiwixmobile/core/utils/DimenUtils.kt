@@ -40,14 +40,15 @@ object DimenUtils {
     computedDisplayMetric.widthPixels
 
   private val Activity.computedDisplayMetric
-    get() = DisplayMetrics().apply {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        val displayRect = windowManager.currentWindowMetrics.bounds
-        widthPixels = displayRect.width()
-        heightPixels = displayRect.height()
-      } else {
-        @Suppress("Deprecation")
-        windowManager.defaultDisplay.getMetrics(this)
+    get() =
+      DisplayMetrics().apply {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+          val displayRect = windowManager.currentWindowMetrics.bounds
+          widthPixels = displayRect.width()
+          heightPixels = displayRect.height()
+        } else {
+          @Suppress("Deprecation")
+          windowManager.defaultDisplay.getMetrics(this)
+        }
       }
-    }
 }

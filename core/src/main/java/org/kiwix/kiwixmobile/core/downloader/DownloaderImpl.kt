@@ -32,7 +32,6 @@ class DownloaderImpl @Inject constructor(
   private val downloadRoomDao: DownloadRoomDao,
   private val kiwixService: KiwixService
 ) : Downloader {
-
   @SuppressLint("CheckResult")
   override fun download(book: LibraryNetworkEntity.Book) {
     urlProvider(book)
@@ -48,9 +47,12 @@ class DownloaderImpl @Inject constructor(
 
   @Suppress("UnsafeCallOnNullableType")
   private fun urlProvider(book: Book): Observable<String> =
-    if (book.url?.endsWith("meta4") == true) kiwixService.getMetaLinks(book.url!!)
-      .map { it.relevantUrl.value }
-    else Observable.just(book.url)
+    if (book.url?.endsWith("meta4") == true) {
+      kiwixService.getMetaLinks(book.url!!)
+        .map { it.relevantUrl.value }
+    } else {
+      Observable.just(book.url)
+    }
 
   override fun cancelDownload(downloadId: Long) {
     downloadRequester.cancel(downloadId)

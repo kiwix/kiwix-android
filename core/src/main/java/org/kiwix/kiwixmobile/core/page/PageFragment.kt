@@ -61,7 +61,9 @@ import javax.inject.Inject
 
 abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActivityExtensions {
   abstract val pageViewModel: PageViewModel<*, *>
+
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private var actionMode: ActionMode? = null
   val compositeDisposable = CompositeDisposable()

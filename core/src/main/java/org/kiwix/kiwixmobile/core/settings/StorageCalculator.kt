@@ -29,7 +29,6 @@ import javax.inject.Inject
 class StorageCalculator @Inject constructor(
   private val sharedPreferenceUtil: SharedPreferenceUtil
 ) {
-
   suspend fun calculateAvailableSpace(file: File = File(sharedPreferenceUtil.prefStorage)): String =
     Bytes(availableBytes(file)).humanReadable
 
@@ -40,8 +39,11 @@ class StorageCalculator @Inject constructor(
     Bytes(totalBytes(file) - availableBytes(file)).humanReadable
 
   suspend fun availableBytes(file: File = File(sharedPreferenceUtil.prefStorage)) =
-    if (file.isFileExist()) file.freeSpace()
-    else 0L
+    if (file.isFileExist()) {
+      file.freeSpace()
+    } else {
+      0L
+    }
 
   suspend fun totalBytes(file: File) = if (file.isFileExist()) file.totalSpace() else 0L
 }

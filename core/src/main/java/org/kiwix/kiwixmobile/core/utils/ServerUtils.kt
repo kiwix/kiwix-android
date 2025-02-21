@@ -24,6 +24,7 @@ import java.net.SocketException
 
 object ServerUtils {
   @JvmField var port = 0
+
   @JvmField var isServerStarted = false
   const val INVALID_IP = "-1" // To remove extra characters from IP for Android Pie
   private const val TAG = "ServerUtils"

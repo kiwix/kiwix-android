@@ -34,10 +34,11 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 abstract class BaseActivityTest {
   open lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
 
-  private val permissions = arrayOf(
-    permission.READ_EXTERNAL_STORAGE,
-    permission.WRITE_EXTERNAL_STORAGE
-  )
+  private val permissions =
+    arrayOf(
+      permission.READ_EXTERNAL_STORAGE,
+      permission.WRITE_EXTERNAL_STORAGE
+    )
 
   @get:Rule
   var permissionRules: GrantPermissionRule =

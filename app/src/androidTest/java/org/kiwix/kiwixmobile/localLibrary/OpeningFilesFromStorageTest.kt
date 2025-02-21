@@ -87,17 +87,18 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
         System.currentTimeMillis()
       )
     }
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      sharedPreferenceUtil = SharedPreferenceUtil(context)
-      onActivity {
-        LanguageUtils.handleLocaleChange(
-          it,
-          "en",
-          sharedPreferenceUtil
-        )
+    activityScenario =
+      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+        sharedPreferenceUtil = SharedPreferenceUtil(context)
+        onActivity {
+          LanguageUtils.handleLocaleChange(
+            it,
+            "en",
+            sharedPreferenceUtil
+          )
+        }
       }
-    }
   }
 
   @Test
@@ -191,11 +192,12 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
   }
 
   private fun createDeepLinkIntent(uri: Uri): Intent {
-    val intent = Intent(Intent.ACTION_VIEW).apply {
-      setDataAndType(uri, "application/octet-stream")
-      addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-      setPackage(context.packageName)
-    }
+    val intent =
+      Intent(Intent.ACTION_VIEW).apply {
+        setDataAndType(uri, "application/octet-stream")
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        setPackage(context.packageName)
+      }
     return intent
   }
 
@@ -226,10 +228,11 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
   private fun getSelectedFile(): File {
     val loadFileStream =
       CopyMoveFileHandlerTest::class.java.classLoader.getResourceAsStream(fileName)
-    val zimFile = File(
-      context.getExternalFilesDirs(null)[0],
-      fileName
-    )
+    val zimFile =
+      File(
+        context.getExternalFilesDirs(null)[0],
+        fileName
+      )
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->
@@ -250,11 +253,12 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
     fileName: String,
     content: ByteArray = getSelectedFile().readBytes()
   ): Uri? {
-    val contentValues = ContentValues().apply {
-      put(MediaStore.Downloads.DISPLAY_NAME, fileName)
-      put(MediaStore.Downloads.MIME_TYPE, "application/octet-stream")
-      put(MediaStore.Downloads.IS_PENDING, true)
-    }
+    val contentValues =
+      ContentValues().apply {
+        put(MediaStore.Downloads.DISPLAY_NAME, fileName)
+        put(MediaStore.Downloads.MIME_TYPE, "application/octet-stream")
+        put(MediaStore.Downloads.IS_PENDING, true)
+      }
 
     val resolver = context.contentResolver
     val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)

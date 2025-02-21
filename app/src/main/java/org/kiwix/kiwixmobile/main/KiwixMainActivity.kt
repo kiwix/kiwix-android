@@ -77,7 +77,7 @@ class KiwixMainActivity : CoreMainActivity() {
     (
       supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
         as NavHostFragment
-      ).navController
+    ).navController
   }
 
   override val drawerContainerLayout: DrawerLayout by lazy {
@@ -146,9 +146,10 @@ class KiwixMainActivity : CoreMainActivity() {
 
   private suspend fun migrateInternalToPublicAppDirectory() {
     if (!sharedPreferenceUtil.prefIsAppDirectoryMigrated) {
-      val storagePath = getStorageDeviceList()
-        .getOrNull(sharedPreferenceUtil.storagePosition)
-        ?.name
+      val storagePath =
+        getStorageDeviceList()
+          .getOrNull(sharedPreferenceUtil.storagePosition)
+          ?.name
       storagePath?.let {
         sharedPreferenceUtil.putPrefStorage(sharedPreferenceUtil.getPublicDirectoryPath(it))
         sharedPreferenceUtil.putPrefAppDirectoryMigrated(true)
@@ -238,7 +239,9 @@ class KiwixMainActivity : CoreMainActivity() {
   }
 
   private fun isIntroScreenNotVisible(): Boolean =
-    isIntroScreenVisible.also { isIntroScreenVisible = true }
+    isIntroScreenVisible.also {
+      isIntroScreenVisible = true
+    }
 
   override fun onSupportActionModeStarted(mode: ActionMode) {
     super.onSupportActionModeStarted(mode)
@@ -343,30 +346,32 @@ class KiwixMainActivity : CoreMainActivity() {
 
   private fun dynamicShortcutList(): List<ShortcutInfoCompat> {
     // Create a shortcut for opening the "New tab"
-    val newTabShortcut = ShortcutInfoCompat.Builder(this, NEW_TAB_SHORTCUT_ID)
-      .setShortLabel(getString(string.new_tab_shortcut_label))
-      .setLongLabel(getString(string.new_tab_shortcut_label))
-      .setIcon(IconCompat.createWithResource(this, drawable.ic_shortcut_new_tab))
-      .setDisabledMessage(getString(string.shortcut_disabled_message))
-      .setIntent(
-        Intent(this, KiwixMainActivity::class.java).apply {
-          action = ACTION_NEW_TAB
-        }
-      )
-      .build()
+    val newTabShortcut =
+      ShortcutInfoCompat.Builder(this, NEW_TAB_SHORTCUT_ID)
+        .setShortLabel(getString(string.new_tab_shortcut_label))
+        .setLongLabel(getString(string.new_tab_shortcut_label))
+        .setIcon(IconCompat.createWithResource(this, drawable.ic_shortcut_new_tab))
+        .setDisabledMessage(getString(string.shortcut_disabled_message))
+        .setIntent(
+          Intent(this, KiwixMainActivity::class.java).apply {
+            action = ACTION_NEW_TAB
+          }
+        )
+        .build()
 
     // create a shortCut for opening the online fragment.
-    val getContentShortcut = ShortcutInfoCompat.Builder(this, GET_CONTENT_SHORTCUT_ID)
-      .setShortLabel(getString(string.get_content_shortcut_label))
-      .setLongLabel(getString(string.get_content_shortcut_label))
-      .setIcon(IconCompat.createWithResource(this, drawable.ic_shortcut_get_content))
-      .setDisabledMessage(getString(string.shortcut_disabled_message))
-      .setIntent(
-        Intent(this, KiwixMainActivity::class.java).apply {
-          action = ACTION_GET_CONTENT
-        }
-      )
-      .build()
+    val getContentShortcut =
+      ShortcutInfoCompat.Builder(this, GET_CONTENT_SHORTCUT_ID)
+        .setShortLabel(getString(string.get_content_shortcut_label))
+        .setLongLabel(getString(string.get_content_shortcut_label))
+        .setIcon(IconCompat.createWithResource(this, drawable.ic_shortcut_get_content))
+        .setDisabledMessage(getString(string.shortcut_disabled_message))
+        .setIntent(
+          Intent(this, KiwixMainActivity::class.java).apply {
+            action = ACTION_GET_CONTENT
+          }
+        )
+        .build()
 
     return listOf(newTabShortcut, getContentShortcut)
   }

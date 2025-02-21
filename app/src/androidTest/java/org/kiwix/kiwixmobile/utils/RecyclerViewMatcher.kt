@@ -26,7 +26,6 @@ import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
 class RecyclerViewMatcher(private val recyclerViewId: Int) {
-
   fun atPosition(position: Int): Matcher<View?>? = atPositionOnView(position, -1)
 
   fun atPositionOnView(position: Int, targetViewId: Int): Matcher<View?>? {
@@ -37,11 +36,12 @@ class RecyclerViewMatcher(private val recyclerViewId: Int) {
       override fun describeTo(description: Description) {
         var idDescription = recyclerViewId.toString()
         resources?.let { resource ->
-          idDescription = try {
-            resource.getResourceName(recyclerViewId)
-          } catch (resourcesNotFoundException: Resources.NotFoundException) {
-            "${arrayOf<Any>(Integer.valueOf(recyclerViewId))} (resource name not found)"
-          }
+          idDescription =
+            try {
+              resource.getResourceName(recyclerViewId)
+            } catch (resourcesNotFoundException: Resources.NotFoundException) {
+              "${arrayOf<Any>(Integer.valueOf(recyclerViewId))} (resource name not found)"
+            }
         }
         description.appendText("with id: $idDescription")
       }
@@ -51,11 +51,12 @@ class RecyclerViewMatcher(private val recyclerViewId: Int) {
         if (childView == null) {
           val recyclerView =
             view?.rootView?.findViewById(recyclerViewId) as RecyclerView
-          childView = if (recyclerView.id == recyclerViewId) {
-            recyclerView.findViewHolderForAdapterPosition(position)?.itemView
-          } else {
-            return false
-          }
+          childView =
+            if (recyclerView.id == recyclerViewId) {
+              recyclerView.findViewHolderForAdapterPosition(position)?.itemView
+            } else {
+              return false
+            }
         }
         return if (targetViewId == -1) {
           view == childView

@@ -33,7 +33,6 @@ import org.threeten.bp.format.DateTimeParseException
 
 sealed class PageRelatedListItemViewHolder<in T : PageRelated>(containerView: View) :
   BaseViewHolder<T>(containerView) {
-
   class PageListItemViewHolder(
     private val itemBookmarkHistoryBinding: ItemBookmarkHistoryBinding,
     private val itemClickListener: OnItemClickListener
@@ -54,15 +53,15 @@ sealed class PageRelatedListItemViewHolder<in T : PageRelated>(containerView: Vi
 
   class DateItemViewHolder(private val headerDateBinding: HeaderDateBinding) :
     PageRelatedListItemViewHolder<DateItem>(headerDateBinding.root) {
-
     override fun bind(item: DateItem) {
       val todaysDate = LocalDate.now()
       val yesterdayDate = todaysDate.minusDays(1)
-      val givenDate = try {
-        LocalDate.parse(item.dateString, DateTimeFormatter.ofPattern("d MMM yyyy"))
-      } catch (ignore: DateTimeParseException) {
-        null
-      }
+      val givenDate =
+        try {
+          LocalDate.parse(item.dateString, DateTimeFormatter.ofPattern("d MMM yyyy"))
+        } catch (ignore: DateTimeParseException) {
+          null
+        }
 
       when (givenDate) {
         todaysDate -> headerDateBinding.headerDate.setText(R.string.time_today)

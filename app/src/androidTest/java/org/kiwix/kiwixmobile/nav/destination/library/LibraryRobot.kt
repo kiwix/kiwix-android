@@ -47,7 +47,6 @@ import org.kiwix.kiwixmobile.utils.RecyclerViewItemCount
 fun library(func: LibraryRobot.() -> Unit) = LibraryRobot().applyWithViewHierarchyPrinting(func)
 
 class LibraryRobot : BaseRobot() {
-
   private val zimFileTitle = "Test_Zim"
 
   fun assertGetZimNearbyDeviceDisplayed() {

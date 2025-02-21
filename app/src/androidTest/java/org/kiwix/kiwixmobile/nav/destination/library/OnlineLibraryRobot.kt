@@ -27,7 +27,6 @@ fun onlineLibrary(func: OnlineLibraryRobot.() -> Unit) =
   OnlineLibraryRobot().applyWithViewHierarchyPrinting(func)
 
 class OnlineLibraryRobot : BaseRobot() {
-
   fun assertLibraryListDisplayed() {
     isVisible(ViewId(R.id.libraryList))
   }

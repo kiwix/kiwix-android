@@ -60,7 +60,6 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   private val webViewClient: CoreWebViewClient,
   val sharedPreferenceUtil: SharedPreferenceUtil
 ) : VideoEnabledWebView(context, attrs) {
-
   @Inject
   lateinit var zimReaderContainer: ZimReaderContainer
 
@@ -98,14 +97,17 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
     setInitialScale(INITIAL_SCALE)
     clearCache(true)
     setWebViewClient(webViewClient)
-    webChromeClient = KiwixWebChromeClient(callback, nonVideoView, videoView, this).apply {
-      setOnToggledFullscreen(object : ToggledFullscreenCallback {
-        override fun toggledFullscreen(fullscreen: Boolean) {
-          setWindowVisibility(fullscreen)
-          callback.onFullscreenVideoToggled(fullscreen)
-        }
-      })
-    }
+    webChromeClient =
+      KiwixWebChromeClient(callback, nonVideoView, videoView, this).apply {
+        setOnToggledFullscreen(
+          object : ToggledFullscreenCallback {
+            override fun toggledFullscreen(fullscreen: Boolean) {
+              setWindowVisibility(fullscreen)
+              callback.onFullscreenVideoToggled(fullscreen)
+            }
+          }
+        )
+      }
   }
 
   override fun performLongClick(): Boolean {
@@ -166,7 +168,6 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
     private val sharedPreferenceUtil: SharedPreferenceUtil
   ) :
     Handler(Looper.getMainLooper()) {
-
     @SuppressWarnings("NestedBlockDepth")
     override fun handleMessage(msg: Message) {
       val url = msg.data.getString("url", null)
@@ -188,12 +189,13 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   }
 
   companion object {
-    val DARK_MODE_COLORS = floatArrayOf(
-      -1.0f, 0f, 0f, 0f,
-      255f, 0f, -1.0f, 0f,
-      0f, 255f, 0f, 0f,
-      -1.0f, 0f, 255f, 0f,
-      0f, 0f, 1.0f, 0f
-    )
+    val DARK_MODE_COLORS =
+      floatArrayOf(
+        -1.0f, 0f, 0f, 0f,
+        255f, 0f, -1.0f, 0f,
+        0f, 255f, 0f, 0f,
+        -1.0f, 0f, 255f, 0f,
+        0f, 0f, 1.0f, 0f
+      )
   }
 }

@@ -48,7 +48,6 @@ internal class HelpAdapter(titleDescriptionMap: Map<String, String>) :
 
   internal inner class Item(private val itemHelpBinding: ItemHelpBinding) :
     BaseViewHolder<HelpItem>(itemHelpBinding.root) {
-
     @SuppressWarnings("MagicNumber")
     fun toggleDescriptionVisibility() {
       if (itemHelpBinding.itemHelpDescription.visibility == View.GONE) {

@@ -27,19 +27,20 @@ import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.TagValue.YES
 
 sealed class KiwixTag {
   companion object {
-    fun from(tagString: String?) = tagString?.split(";")
-      ?.map { tags ->
-        val split = tags.split(":")
-        val value = split.getOrNull(1)
-        when (val tag = split[0]) {
-          "_ftindex" -> FtIndexTag(value)
-          "_pictures" -> PicturesTag(value)
-          "_videos" -> VideoTag(value)
-          "_details" -> DetailsTag(value)
-          "_category" -> CategoryTag(value)
-          else -> value?.let { ArbitraryTag(tag, it) } ?: TagOnly(tag)
-        }
-      } ?: emptyList()
+    fun from(tagString: String?) =
+      tagString?.split(";")
+        ?.map { tags ->
+          val split = tags.split(":")
+          val value = split.getOrNull(1)
+          when (val tag = split[0]) {
+            "_ftindex" -> FtIndexTag(value)
+            "_pictures" -> PicturesTag(value)
+            "_videos" -> VideoTag(value)
+            "_details" -> DetailsTag(value)
+            "_category" -> CategoryTag(value)
+            else -> value?.let { ArbitraryTag(tag, it) } ?: TagOnly(tag)
+          }
+        } ?: emptyList()
 
     data class CategoryTag(val categoryValue: String?) : KiwixTag()
     data class ArbitraryTag(val tag: String, val value: String) : KiwixTag()

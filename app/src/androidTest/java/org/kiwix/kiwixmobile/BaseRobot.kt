@@ -41,7 +41,6 @@ abstract class BaseRobot(
   val context: Context = instrumentation.targetContext,
   val uiDevice: UiDevice = UiDevice.getInstance(instrumentation)
 ) {
-
   internal fun clickNegativeDialogButton() {
     clickOn(ViewId(id.button2))
   }

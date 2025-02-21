@@ -48,8 +48,7 @@ class LanguageUtils(private val context: Context) {
       .map { locale -> locale.trim { it <= ' ' } }
   }
 
-  private fun sortWithCollator(languageCodesFromAssets: MutableList<LanguageContainer>):
-    MutableList<LanguageContainer> {
+  private fun sortWithCollator(languageCodesFromAssets: MutableList<LanguageContainer>): MutableList<LanguageContainer> {
     val localeCollator =
       Collator.getInstance(context.locale).apply { strength = Collator.SECONDARY }
     languageCodesFromAssets.sortWith(
@@ -84,7 +83,6 @@ class LanguageUtils(private val context: Context) {
     activity: Activity,
     sharedPreferenceUtil: SharedPreferenceUtil
   ) {
-
     if (!haveToChangeFont(sharedPreferenceUtil)) {
       return
     }
@@ -121,7 +119,6 @@ class LanguageUtils(private val context: Context) {
   }
 
   companion object {
-
     private var isO3LanguageToLocaleMap: Map<String, Locale> =
       Locale.getAvailableLocales().associateBy {
         try {
@@ -131,19 +128,20 @@ class LanguageUtils(private val context: Context) {
         }
       }
 
-    private var fontExceptions = mapOf(
-      "km" to "fonts/KhmerOS.ttf",
-      "my" to "fonts/Parabaik.ttf",
-      "guj" to "fonts/Lohit-Gujarati.ttf",
-      "ori" to "fonts/Lohit-Odia.ttf",
-      "pan" to "fonts/Lohit-Punjabi.ttf",
-      "dzo" to "fonts/DDC_Uchen.ttf",
-      "bod" to "fonts/DDC_Uchen.ttf",
-      "sin" to "fonts/Kaputa-Regular.ttf",
-      // http://scriptsource.org/cms/scripts/page.php?item_id=entry_detail&uid=kstzk8hbg4
-      // Link above shows that we are allowed to distribute this font
-      "chr" to "fonts/Digohweli.ttf"
-    )
+    private var fontExceptions =
+      mapOf(
+        "km" to "fonts/KhmerOS.ttf",
+        "my" to "fonts/Parabaik.ttf",
+        "guj" to "fonts/Lohit-Gujarati.ttf",
+        "ori" to "fonts/Lohit-Odia.ttf",
+        "pan" to "fonts/Lohit-Punjabi.ttf",
+        "dzo" to "fonts/DDC_Uchen.ttf",
+        "bod" to "fonts/DDC_Uchen.ttf",
+        "sin" to "fonts/Kaputa-Regular.ttf",
+        // http://scriptsource.org/cms/scripts/page.php?item_id=entry_detail&uid=kstzk8hbg4
+        // Link above shows that we are allowed to distribute this font
+        "chr" to "fonts/Digohweli.ttf"
+      )
 
     @JvmStatic
     fun handleLocaleChange(
@@ -164,10 +162,11 @@ class LanguageUtils(private val context: Context) {
       sharedPreferenceUtil: SharedPreferenceUtil
     ) {
       val locale =
-        if (language == Locale.ROOT.toString())
+        if (language == Locale.ROOT.toString()) {
           Locale(sharedPreferenceUtil.prefDeviceDefaultLanguage)
-        else
+        } else {
           Locale(language)
+        }
       Locale.setDefault(locale)
       val config = Configuration()
       config.setLocale(locale)

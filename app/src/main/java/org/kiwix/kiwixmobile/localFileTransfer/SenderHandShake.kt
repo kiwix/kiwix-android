@@ -26,7 +26,6 @@ import java.io.OutputStream
 
 class SenderHandShake(private val wifiDirectManager: WifiDirectManager, groupInfo: WifiP2pInfo) :
   PeerGroupHandshake(groupInfo) {
-
   override fun exchangeFileTransferMetadata(inputStream: InputStream, outputStream: OutputStream) {
     try {
       ObjectOutputStream(outputStream).use { objectOutputStream ->

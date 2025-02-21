@@ -35,9 +35,14 @@ import java.io.File
 import javax.inject.Inject
 
 class ObjectBoxToLibkiwixMigrator {
-  @Inject lateinit var boxStore: BoxStore
-  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
-  @Inject lateinit var libkiwixBookmarks: LibkiwixBookmarks
+  @Inject
+  lateinit var boxStore: BoxStore
+
+  @Inject
+  lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+
+  @Inject
+  lateinit var libkiwixBookmarks: LibkiwixBookmarks
   private val migrationMutex = Mutex()
 
   suspend fun migrateBookmarksToLibkiwix() {
@@ -57,22 +62,23 @@ class ObjectBoxToLibkiwixMigrator {
           // for saving book to library, otherwise it does not save the
           // favicon and zimFilePath in library.
           var archive: Archive? = null
-          val libkiwixBook = bookmarkEntity.zimFilePath?.let {
-            if (File(it).exists()) {
-              archive = Archive(bookmarkEntity.zimFilePath)
-              Book().apply {
-                update(archive)
+          val libkiwixBook =
+            bookmarkEntity.zimFilePath?.let {
+              if (File(it).exists()) {
+                archive = Archive(bookmarkEntity.zimFilePath)
+                Book().apply {
+                  update(archive)
+                }
+              } else {
+                // Migrate bookmarks even if the file does not exist in the file system,
+                // to display them on the bookmark screen.
+                null
               }
-            } else {
-              // Migrate bookmarks even if the file does not exist in the file system,
-              // to display them on the bookmark screen.
+            } ?: kotlin.run {
+              // for migrating bookmarks for recent custom apps since in recent version of
+              // custom app we are using the `assetFileDescriptor` which does not have the filePath.
               null
             }
-          } ?: kotlin.run {
-            // for migrating bookmarks for recent custom apps since in recent version of
-            // custom app we are using the `assetFileDescriptor` which does not have the filePath.
-            null
-          }
           libkiwixBookmarks.saveBookmark(
             LibkiwixBookmarkItem(bookmarkEntity, libkiwixBook),
             shouldWriteBookmarkToFile = index == bookMarksList.size - 1

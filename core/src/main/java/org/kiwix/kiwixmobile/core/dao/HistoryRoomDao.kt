@@ -35,17 +35,18 @@ abstract class HistoryRoomDao : PageDao {
   @Query("SELECT * FROM HistoryRoomEntity ORDER BY HistoryRoomEntity.timeStamp DESC")
   abstract fun historyRoomEntity(): Flowable<List<HistoryRoomEntity>>
 
-  fun history(): Flowable<List<Page>> = historyRoomEntity().map {
-    it.map { historyEntity ->
-      historyEntity.zimFilePath?.let { filePath ->
-        // set zimReaderSource for previously saved history items
-        ZimReaderSource.fromDatabaseValue(filePath)?.let { zimReaderSource ->
-          historyEntity.zimReaderSource = zimReaderSource
+  fun history(): Flowable<List<Page>> =
+    historyRoomEntity().map {
+      it.map { historyEntity ->
+        historyEntity.zimFilePath?.let { filePath ->
+          // set zimReaderSource for previously saved history items
+          ZimReaderSource.fromDatabaseValue(filePath)?.let { zimReaderSource ->
+            historyEntity.zimReaderSource = zimReaderSource
+          }
         }
+        HistoryListItem.HistoryItem(historyEntity)
       }
-      HistoryListItem.HistoryItem(historyEntity)
     }
-  }
 
   override fun pages() = history()
   override fun deletePages(pagesToDelete: List<Page>) =

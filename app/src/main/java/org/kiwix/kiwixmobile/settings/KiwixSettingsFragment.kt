@@ -23,7 +23,6 @@ import org.kiwix.kiwixmobile.core.settings.CoreSettingsFragment
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 
 class KiwixSettingsFragment : CoreSettingsFragment() {
-
   override fun createPreferenceFragment() = KiwixPrefsFragment()
 
   override fun inject(baseActivity: BaseActivity) {

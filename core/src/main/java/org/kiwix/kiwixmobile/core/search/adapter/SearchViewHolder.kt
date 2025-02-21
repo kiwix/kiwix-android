@@ -26,7 +26,6 @@ import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultL
 
 sealed class SearchViewHolder<in T : SearchListItem>(containerView: View) :
   BaseViewHolder<T>(containerView) {
-
   class RecentSearchViewHolder(
     private val listItemSearchBinding: ListItemSearchBinding,
     private val onClickListener: (SearchListItem) -> Unit,

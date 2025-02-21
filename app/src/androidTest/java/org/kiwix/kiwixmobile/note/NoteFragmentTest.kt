@@ -58,7 +58,6 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 
 class NoteFragmentTest : BaseActivityTest() {
-
   @Rule
   @JvmField
   var retryRule = RetryRule()
@@ -83,16 +82,17 @@ class NoteFragmentTest : BaseActivityTest() {
         System.currentTimeMillis()
       )
     }
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      onActivity {
-        handleLocaleChange(
-          it,
-          "en",
-          SharedPreferenceUtil(context)
-        )
+    activityScenario =
+      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+        onActivity {
+          handleLocaleChange(
+            it,
+            "en",
+            SharedPreferenceUtil(context)
+          )
+        }
       }
-    }
   }
 
   init {

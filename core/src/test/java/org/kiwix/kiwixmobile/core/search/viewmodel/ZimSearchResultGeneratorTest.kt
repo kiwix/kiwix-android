@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 
 internal class ZimSearchResultGeneratorTest {
-
   private val zimFileReader: ZimFileReader = mockk()
 
   private val zimSearchResultGenerator: ZimSearchResultGenerator =

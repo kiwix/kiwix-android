@@ -27,12 +27,12 @@ import org.simpleframework.xml.core.Persister
 import java.io.StringWriter
 
 class KiwixMockServer {
-
   var forcedResponse: MockResponse? = null
 
-  private val mockWebServer = MockWebServer().apply {
-    start(TEST_PORT)
-  }
+  private val mockWebServer =
+    MockWebServer().apply {
+      start(TEST_PORT)
+    }
 
   fun stop() {
     mockWebServer.shutdown()
@@ -40,28 +40,31 @@ class KiwixMockServer {
 
   fun map(vararg pathsToResponses: Pair<String, Any>) {
     val mapOfPathsToResponses = mapOf(*pathsToResponses)
-    mockWebServer.dispatcher = object : Dispatcher() {
-      override fun dispatch(request: RecordedRequest) =
-        mapOfPathsToResponses[request.path]?.let(::successfulResponse)
-          ?: forcedResponse?.let { return@let it }
-          ?: throw RuntimeException(
-            "No response mapped for ${request.path}" +
-              "\nmapped $mapOfPathsToResponses\nqueued $forcedResponse"
-          )
-    }
+    mockWebServer.dispatcher =
+      object : Dispatcher() {
+        override fun dispatch(request: RecordedRequest) =
+          mapOfPathsToResponses[request.path]?.let(::successfulResponse)
+            ?: forcedResponse?.let { return@let it }
+            ?: throw RuntimeException(
+              "No response mapped for ${request.path}" +
+                "\nmapped $mapOfPathsToResponses\nqueued $forcedResponse"
+            )
+      }
   }
 
-  private fun successfulResponse(bodyObject: Any) = MockResponse().apply {
-    setResponseCode(200)
-    setBody(bodyObject.asXmlString())
-  }
+  private fun successfulResponse(bodyObject: Any) =
+    MockResponse().apply {
+      setResponseCode(200)
+      setBody(bodyObject.asXmlString())
+    }
 
   fun forceResponse(mockResponse: MockResponse) {
     forcedResponse = mockResponse
   }
 
-  private fun Any.asXmlString() = StringWriter().let {
-    Persister().write(this, it)
-    "$it"
-  }
+  private fun Any.asXmlString() =
+    StringWriter().let {
+      Persister().write(this, it)
+      "$it"
+    }
 }

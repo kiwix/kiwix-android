@@ -22,7 +22,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.StorageUtils
 
 data class DownloadRequest(val urlString: String) {
-
   val uri: Uri get() = Uri.parse(urlString)
 
   fun getDestination(sharedPreferenceUtil: SharedPreferenceUtil): String =

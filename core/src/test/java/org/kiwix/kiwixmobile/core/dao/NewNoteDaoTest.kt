@@ -35,7 +35,6 @@ import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 import java.util.concurrent.Callable
 
 internal class NewNoteDaoTest {
-
   private val notesBox: Box<NotesEntity> = mockk(relaxed = true)
   private val newNotesDao = NewNoteDao(notesBox)
 

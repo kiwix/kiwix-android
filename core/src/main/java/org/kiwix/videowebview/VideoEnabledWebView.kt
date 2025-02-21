@@ -62,14 +62,17 @@ open class VideoEnabledWebView : WebView {
 
   @SuppressWarnings("unused")
   constructor(context: Context, attrs: AttributeSet?) : super(
-    context, attrs
+    context,
+    attrs
   ) {
     addedJavascriptInterface = false
   }
 
   @SuppressWarnings("unused")
   constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(
-    context, attrs, defStyle
+    context,
+    attrs,
+    defStyle
   ) {
     addedJavascriptInterface = false
   }

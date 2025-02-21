@@ -48,47 +48,51 @@ internal class SenderDevice(
   private val wifiDirectManager: WifiDirectManager,
   private val fileReceiverDeviceAddress: InetAddress
 ) {
-  suspend fun send(fileItems: List<FileItem?>) = withContext(Dispatchers.IO) {
-    // Delay trying to connect with receiver, to allow slow receiver devices to setup server
-    delay(FOR_SLOW_RECEIVER)
-    val hostAddress = fileReceiverDeviceAddress.hostAddress
-    var isTransferErrorFree = true
-    fileItems.asSequence()
-      .takeWhile { isActive } // checks if coroutine is live
-      .forEachIndexed { fileIndex, fileItem ->
-        try {
-          Socket().use { socket ->
-            fileItem?.fileUri?.let {
-              context.contentResolver.openInputStream(it).use { fileInputStream ->
-                socket.bind(null)
-                socket.connect(
-                  InetSocketAddress(hostAddress, WifiDirectManager.FILE_TRANSFER_PORT),
-                  TIME_OUT
-                )
-                Log.d(TAG, "Sender socket connected to server - " + socket.isConnected)
-                publishProgress(fileIndex, FileItem.FileStatus.SENDING)
-                val socketOutputStream = socket.getOutputStream()
-                @Suppress("UnsafeCallOnNullableType")
-                copyToOutputStream(fileInputStream!!, socketOutputStream)
-                Log.d(TAG, "Sender: Data written")
-                publishProgress(fileIndex, FileItem.FileStatus.SENT)
+  suspend fun send(fileItems: List<FileItem?>) =
+    withContext(Dispatchers.IO) {
+      // Delay trying to connect with receiver, to allow slow receiver devices to setup server
+      delay(FOR_SLOW_RECEIVER)
+      val hostAddress = fileReceiverDeviceAddress.hostAddress
+      var isTransferErrorFree = true
+      fileItems.asSequence()
+        .takeWhile { isActive } // checks if coroutine is live
+        .forEachIndexed { fileIndex, fileItem ->
+          try {
+            Socket().use { socket ->
+              fileItem?.fileUri?.let {
+                context.contentResolver.openInputStream(it).use { fileInputStream ->
+                  socket.bind(null)
+                  socket.connect(
+                    InetSocketAddress(hostAddress, WifiDirectManager.fileTransferPort),
+                    TIME_OUT
+                  )
+                  Log.d(TAG, "Sender socket connected to server - " + socket.isConnected)
+                  publishProgress(fileIndex, FileItem.FileStatus.SENDING)
+                  val socketOutputStream = socket.getOutputStream()
+                  @Suppress("UnsafeCallOnNullableType")
+                  copyToOutputStream(fileInputStream!!, socketOutputStream)
+                  Log.d(TAG, "Sender: Data written")
+                  publishProgress(fileIndex, FileItem.FileStatus.SENT)
+                }
               }
             }
+          } catch (e: IOException) {
+            e.message?.let { message ->
+              Log.e(TAG, message)
+            }
+            e.printStackTrace()
+            isTransferErrorFree = false
+            publishProgress(fileIndex, FileItem.FileStatus.ERROR)
           }
-        } catch (e: IOException) {
-          e.message?.let { message ->
-            Log.e(TAG, message)
-          }
-          e.printStackTrace()
-          isTransferErrorFree = false
-          publishProgress(fileIndex, FileItem.FileStatus.ERROR)
         }
-      }
 
-    isTransferErrorFree
-  }
+      isTransferErrorFree
+    }
 
-  private suspend fun publishProgress(fileIndex: Int, fileStatus: FileItem.FileStatus) {
+  private suspend fun publishProgress(
+    fileIndex: Int,
+    fileStatus: FileItem.FileStatus
+  ) {
     withContext(Dispatchers.Main) {
       wifiDirectManager.changeStatus(fileIndex, fileStatus)
     }

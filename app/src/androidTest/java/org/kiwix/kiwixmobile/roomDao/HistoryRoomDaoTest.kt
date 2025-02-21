@@ -53,97 +53,100 @@ class HistoryRoomDaoTest {
   }
 
   @Test
-  fun testHistoryRoomDao() = runBlocking {
-    // delete all the history from database to properly run the test cases.
-    historyRoomDao.deleteAllHistory()
-    val historyItem = getHistoryItem(
-      title = "Main Page",
-      historyUrl = "https://kiwix.app/A/MainPage",
-      databaseId = 1
-    )
+  fun testHistoryRoomDao() =
+    runBlocking {
+      // delete all the history from database to properly run the test cases.
+      historyRoomDao.deleteAllHistory()
+      val historyItem =
+        getHistoryItem(
+          title = "Main Page",
+          historyUrl = "https://kiwix.app/A/MainPage",
+          databaseId = 1
+        )
 
-    // Save and retrieve a history item
-    historyRoomDao.saveHistory(historyItem)
-    var historyList = historyRoomDao.historyRoomEntity().blockingFirst()
-    with(historyList.first()) {
-      assertThat(historyTitle, equalTo(historyItem.title))
-      assertThat(zimId, equalTo(historyItem.zimId))
-      assertThat(zimName, equalTo(historyItem.zimName))
-      assertThat(historyUrl, equalTo(historyItem.historyUrl))
-      assertThat(zimReaderSource, equalTo(historyItem.zimReaderSource))
-      assertThat(favicon, equalTo(historyItem.favicon))
-      assertThat(dateString, equalTo(historyItem.dateString))
-      assertThat(timeStamp, equalTo(historyItem.timeStamp))
+      // Save and retrieve a history item
+      historyRoomDao.saveHistory(historyItem)
+      var historyList = historyRoomDao.historyRoomEntity().blockingFirst()
+      with(historyList.first()) {
+        assertThat(historyTitle, equalTo(historyItem.title))
+        assertThat(zimId, equalTo(historyItem.zimId))
+        assertThat(zimName, equalTo(historyItem.zimName))
+        assertThat(historyUrl, equalTo(historyItem.historyUrl))
+        assertThat(zimReaderSource, equalTo(historyItem.zimReaderSource))
+        assertThat(favicon, equalTo(historyItem.favicon))
+        assertThat(dateString, equalTo(historyItem.dateString))
+        assertThat(timeStamp, equalTo(historyItem.timeStamp))
+      }
+
+      // Test to update the same day history for url
+      historyRoomDao.saveHistory(historyItem)
+      historyList = historyRoomDao.historyRoomEntity().blockingFirst()
+      assertEquals(historyList.size, 1)
+
+      // Delete the saved history item
+      historyRoomDao.deleteHistory(listOf(historyItem))
+      historyList = historyRoomDao.historyRoomEntity().blockingFirst()
+      assertEquals(historyList.size, 0)
+
+      // Save and delete all history items
+      historyRoomDao.saveHistory(historyItem)
+      historyRoomDao.saveHistory(getHistoryItem(databaseId = 2, dateString = "31 May 2024"))
+      historyRoomDao.deleteAllHistory()
+      historyList = historyRoomDao.historyRoomEntity().blockingFirst()
+      assertThat(historyList.size, equalTo(0))
+
+      // Save history item with empty fields
+      val emptyHistoryUrl = ""
+      val emptyTitle = ""
+      historyRoomDao.saveHistory(getHistoryItem(emptyTitle, emptyHistoryUrl, databaseId = 1))
+      historyList = historyRoomDao.historyRoomEntity().blockingFirst()
+      assertThat(historyList.size, equalTo(1))
+      historyRoomDao.deleteAllHistory()
+
+      // Save two entity same data and database id but with different date
+      historyRoomDao.saveHistory(historyItem)
+      val historyItem1 =
+        getHistoryItem(
+          title = "Main Page",
+          historyUrl = "https://kiwix.app/A/MainPage",
+          databaseId = 1,
+          dateString = "31 May 2024"
+        )
+      historyRoomDao.saveHistory(historyItem1)
+      historyList = historyRoomDao.historyRoomEntity().blockingFirst()
+      assertThat(historyList.size, equalTo(2))
+      historyRoomDao.deleteAllHistory()
+
+      // Save two entity with same and database id with same date to see if it's updated or not.
+      historyRoomDao.saveHistory(historyItem)
+      historyRoomDao.saveHistory(historyItem)
+      historyList = historyRoomDao.historyRoomEntity().blockingFirst()
+      assertThat(historyList.size, equalTo(1))
+      historyRoomDao.deleteAllHistory()
+
+      // Attempt to save undefined history item
+      lateinit var undefinedHistoryItem: HistoryListItem.HistoryItem
+      try {
+        historyRoomDao.saveHistory(undefinedHistoryItem)
+        assertThat(
+          "Undefined value was saved into database",
+          false
+        )
+      } catch (e: Exception) {
+        assertThat("Undefined value was not saved, as expected.", true)
+      }
+
+      // Save history item with Unicode values
+      val unicodeTitle = "title \u03A3" // Unicode character for Greek capital letter Sigma
+      val historyItem2 = getHistoryItem(title = unicodeTitle, databaseId = 2)
+      historyRoomDao.saveHistory(historyItem2)
+      historyList = historyRoomDao.historyRoomEntity().blockingFirst()
+      assertThat(historyList.first().historyTitle, equalTo("title Σ"))
+
+      // Test deletePages function
+      historyRoomDao.saveHistory(historyItem)
+      historyRoomDao.deletePages(listOf(historyItem, historyItem2))
+      historyList = historyRoomDao.historyRoomEntity().blockingFirst()
+      assertThat(historyList.size, equalTo(0))
     }
-
-    // Test to update the same day history for url
-    historyRoomDao.saveHistory(historyItem)
-    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
-    assertEquals(historyList.size, 1)
-
-    // Delete the saved history item
-    historyRoomDao.deleteHistory(listOf(historyItem))
-    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
-    assertEquals(historyList.size, 0)
-
-    // Save and delete all history items
-    historyRoomDao.saveHistory(historyItem)
-    historyRoomDao.saveHistory(getHistoryItem(databaseId = 2, dateString = "31 May 2024"))
-    historyRoomDao.deleteAllHistory()
-    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
-    assertThat(historyList.size, equalTo(0))
-
-    // Save history item with empty fields
-    val emptyHistoryUrl = ""
-    val emptyTitle = ""
-    historyRoomDao.saveHistory(getHistoryItem(emptyTitle, emptyHistoryUrl, databaseId = 1))
-    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
-    assertThat(historyList.size, equalTo(1))
-    historyRoomDao.deleteAllHistory()
-
-    // Save two entity same data and database id but with different date
-    historyRoomDao.saveHistory(historyItem)
-    val historyItem1 = getHistoryItem(
-      title = "Main Page",
-      historyUrl = "https://kiwix.app/A/MainPage",
-      databaseId = 1,
-      dateString = "31 May 2024"
-    )
-    historyRoomDao.saveHistory(historyItem1)
-    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
-    assertThat(historyList.size, equalTo(2))
-    historyRoomDao.deleteAllHistory()
-
-    // Save two entity with same and database id with same date to see if it's updated or not.
-    historyRoomDao.saveHistory(historyItem)
-    historyRoomDao.saveHistory(historyItem)
-    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
-    assertThat(historyList.size, equalTo(1))
-    historyRoomDao.deleteAllHistory()
-
-    // Attempt to save undefined history item
-    lateinit var undefinedHistoryItem: HistoryListItem.HistoryItem
-    try {
-      historyRoomDao.saveHistory(undefinedHistoryItem)
-      assertThat(
-        "Undefined value was saved into database",
-        false
-      )
-    } catch (e: Exception) {
-      assertThat("Undefined value was not saved, as expected.", true)
-    }
-
-    // Save history item with Unicode values
-    val unicodeTitle = "title \u03A3" // Unicode character for Greek capital letter Sigma
-    val historyItem2 = getHistoryItem(title = unicodeTitle, databaseId = 2)
-    historyRoomDao.saveHistory(historyItem2)
-    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
-    assertThat(historyList.first().historyTitle, equalTo("title Σ"))
-
-    // Test deletePages function
-    historyRoomDao.saveHistory(historyItem)
-    historyRoomDao.deletePages(listOf(historyItem, historyItem2))
-    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
-    assertThat(historyList.size, equalTo(0))
-  }
 }

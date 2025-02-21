@@ -30,7 +30,6 @@ import javax.inject.Singleton
 /** A class for writing logs to the file in the device */
 @Singleton
 class FileLogger @Inject constructor() {
-
   fun writeLogFile(context: Context, shouldWriteDeviceLogs: Boolean = true): File {
     // Create a new folder in private storage with name: logs
     val logDir = File(context.filesDir, "logs")

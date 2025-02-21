@@ -82,15 +82,16 @@ object DownloaderModule {
 
   @Provides
   @Singleton
-  fun provideOkHttpDownloader() = OkHttpDownloader(
-    OkHttpClient.Builder()
-      .connectTimeout(CONNECT_TIME_OUT, TimeUnit.MINUTES)
-      .readTimeout(READ_TIME_OUT, TimeUnit.MINUTES)
-      .addInterceptor(BasicAuthInterceptor())
-      .followRedirects(true)
-      .followSslRedirects(true)
-      .build()
-  )
+  fun provideOkHttpDownloader() =
+    OkHttpDownloader(
+      OkHttpClient.Builder()
+        .connectTimeout(CONNECT_TIME_OUT, TimeUnit.MINUTES)
+        .readTimeout(READ_TIME_OUT, TimeUnit.MINUTES)
+        .addInterceptor(BasicAuthInterceptor())
+        .followRedirects(true)
+        .followSslRedirects(true)
+        .build()
+    )
 
   @Provides
   @Singleton

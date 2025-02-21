@@ -25,7 +25,6 @@ import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.sharedFunctions.book
 
 internal class DownloadCustomTest {
-
   @Test
   fun `invokeWith queues download with ZimUrl`() {
     val downloader = mockk<Downloader>()
@@ -35,19 +34,20 @@ internal class DownloadCustomTest {
     }
   }
 
-  private fun expectedBook() = book(
-    "custom",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    ""
-  )
+  private fun expectedBook() =
+    book(
+      "custom",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    )
 }

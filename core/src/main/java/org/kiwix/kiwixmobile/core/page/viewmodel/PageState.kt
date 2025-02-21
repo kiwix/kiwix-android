@@ -42,9 +42,13 @@ abstract class PageState<T : Page> {
       // selected items we check for url since url is unique for every bookmark.
       val currentItemIdentifier = if (it is LibkiwixBookmarkItem) it.url else it.id
       val pageIdentifier = if (it is LibkiwixBookmarkItem) page.url else page.id
-      if (currentItemIdentifier == pageIdentifier) it.apply {
-        isSelected = !isSelected
-      } else it
+      if (currentItemIdentifier == pageIdentifier) {
+        it.apply {
+          isSelected = !isSelected
+        }
+      } else {
+        it
+      }
     }
   }
 

@@ -39,7 +39,6 @@ import java.util.TimerTask
 import javax.inject.Inject
 
 class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtensions {
-
   companion object {
     private const val timerDelay: Long = 0
     private const val timerPeriod: Long = 2000
@@ -63,11 +62,12 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
     super.onViewCreated(view, savedInstanceState)
     fragmentIntroBinding?.getStarted?.setOnClickListener { navigateToLibrary() }
     fragmentIntroBinding?.viewPager?.let { viewPager ->
-      views = arrayOf(
-        layoutInflater.inflate(R.layout.item_intro_1, viewPager, false),
-        layoutInflater.inflate(R.layout.item_intro_2, viewPager, false),
-        layoutInflater.inflate(R.layout.item_intro_3, viewPager, false)
-      )
+      views =
+        arrayOf(
+          layoutInflater.inflate(R.layout.item_intro_1, viewPager, false),
+          layoutInflater.inflate(R.layout.item_intro_2, viewPager, false),
+          layoutInflater.inflate(R.layout.item_intro_3, viewPager, false)
+        )
       viewPager.run {
         adapter = IntroPagerAdapter(views)
         simplePageChangeListener?.let(::addOnPageChangeListener)

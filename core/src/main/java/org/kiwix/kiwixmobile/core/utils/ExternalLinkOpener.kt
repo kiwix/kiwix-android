@@ -32,7 +32,6 @@ class ExternalLinkOpener @Inject constructor(
   private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val alertDialogShower: AlertDialogShower
 ) {
-
   fun openExternalUrl(
     intent: Intent,
     showExternalLinkPopup: Boolean = sharedPreferenceUtil.prefExternalLinkPopup

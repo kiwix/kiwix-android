@@ -30,8 +30,8 @@ import java.io.File
 
 object TestUtils {
   private const val TAG = "TESTUTILS"
-  var TEST_PAUSE_MS_FOR_SEARCH_TEST = 1000
-  var TEST_PAUSE_MS = 3000
+  const val TEST_PAUSE_MS_FOR_SEARCH_TEST = 1000
+  const val TEST_PAUSE_MS = 3000
 
   @JvmStatic
   fun isSystemUINotRespondingDialogVisible(uiDevice: UiDevice) =

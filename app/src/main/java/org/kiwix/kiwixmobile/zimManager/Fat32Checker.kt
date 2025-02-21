@@ -82,8 +82,11 @@ class Fat32Checker constructor(
   private fun toFileSystemState(it: String) =
     when {
       File(it).freeSpace > FOUR_GIGABYTES_IN_BYTES ->
-        if (canCreate4GbFile(it)) CanWrite4GbFile
-        else CannotWrite4GbFile
+        if (canCreate4GbFile(it)) {
+          CanWrite4GbFile
+        } else {
+          CannotWrite4GbFile
+        }
       else -> NotEnoughSpaceFor4GbFile
     }
 
@@ -93,7 +96,7 @@ class Fat32Checker constructor(
         CAN_WRITE_4GB -> return@canCreate4GbFile true
         CANNOT_WRITE_4GB -> return@canCreate4GbFile false
         INCONCLUSIVE -> {
-          /*do nothing*/
+          // do nothing
         }
       }
     }

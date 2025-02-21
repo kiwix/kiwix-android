@@ -34,7 +34,6 @@ import org.kiwix.kiwixmobile.custom.main.ValidationState
 import java.io.File
 
 class CustomFileValidatorTest {
-
   private lateinit var context: Context
   private lateinit var customFileValidator: CustomFileValidator
   private lateinit var assetManager: AssetManager

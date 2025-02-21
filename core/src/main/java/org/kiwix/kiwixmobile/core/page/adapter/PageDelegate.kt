@@ -29,7 +29,6 @@ import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.DateItem
 
 sealed class PageDelegate<I : PageRelated, out VH : PageRelatedListItemViewHolder<I>> :
   AbsDelegateAdapter<I, PageRelated, VH> {
-
   class PageItemDelegate(
     private val itemClickListener: OnItemClickListener
   ) : PageDelegate<Page, PageListItemViewHolder>() {

@@ -29,7 +29,6 @@ import org.kiwix.kiwixmobile.core.search.adapter.SearchViewHolder.ZimSearchResul
 
 sealed class SearchDelegate<I : SearchListItem, out VH : SearchViewHolder<I>> :
   AbsDelegateAdapter<I, SearchListItem, VH> {
-
   class RecentSearchDelegate(
     private val onClickListener: (SearchListItem) -> Unit,
     private val onClickListenerNewTab: (SearchListItem) -> Unit,

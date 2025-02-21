@@ -33,7 +33,6 @@ class ProgressResponseBody(
   private val progressListener: OnlineLibraryProgressListener,
   private val contentLength: Long
 ) : ResponseBody() {
-
   private lateinit var bufferedSource: BufferedSource
 
   override fun contentType(): MediaType? = responseBody.contentType()

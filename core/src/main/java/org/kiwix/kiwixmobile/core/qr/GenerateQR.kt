@@ -43,9 +43,10 @@ class GenerateQR @Inject constructor() {
     foregroundColor: Int = Color.BLACK,
     backgroundColor: Int = Color.WHITE
   ): Bitmap {
-    val hints = hashMapOf<EncodeHintType, Int>().also {
-      it[EncodeHintType.MARGIN] = 1
-    }
+    val hints =
+      hashMapOf<EncodeHintType, Int>().also {
+        it[EncodeHintType.MARGIN] = 1
+      }
     val bits = QRCodeWriter().encode(code, BarcodeFormat.QR_CODE, size, size, hints)
     return Bitmap.createBitmap(size, size, Bitmap.Config.RGB_565).also {
       for (x in 0 until size) {

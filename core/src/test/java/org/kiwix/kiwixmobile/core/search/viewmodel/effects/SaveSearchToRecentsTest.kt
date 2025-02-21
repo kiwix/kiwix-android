@@ -32,7 +32,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 
 internal class SaveSearchToRecentsTest {
-
   private val newRecentSearchDao: RecentSearchRoomDao = mockk()
   private val searchListItem = RecentSearchListItem("", ZimFileReader.CONTENT_PREFIX)
 
@@ -40,28 +39,30 @@ internal class SaveSearchToRecentsTest {
   private val testDispatcher = CoroutineScope(Dispatchers.IO)
 
   @Test
-  fun `invoke with null Id does nothing`() = runBlocking {
-    SaveSearchToRecents(
-      newRecentSearchDao,
-      searchListItem,
-      null,
-      testDispatcher
-    ).invokeWith(
-      activity
-    )
-    verify { newRecentSearchDao wasNot Called }
-  }
+  fun `invoke with null Id does nothing`() =
+    runBlocking {
+      SaveSearchToRecents(
+        newRecentSearchDao,
+        searchListItem,
+        null,
+        testDispatcher
+      ).invokeWith(
+        activity
+      )
+      verify { newRecentSearchDao wasNot Called }
+    }
 
   @Test
-  fun `invoke with non null Id saves search`() = runBlocking {
-    val id = "8812214350305159407L"
-    SaveSearchToRecents(
-      newRecentSearchDao,
-      searchListItem,
-      id,
-      testDispatcher
-    ).invokeWith(activity)
-    delay(50)
-    verify { newRecentSearchDao.saveSearch(searchListItem.value, id, ZimFileReader.CONTENT_PREFIX) }
-  }
+  fun `invoke with non null Id saves search`() =
+    runBlocking {
+      val id = "8812214350305159407L"
+      SaveSearchToRecents(
+        newRecentSearchDao,
+        searchListItem,
+        id,
+        testDispatcher
+      ).invokeWith(activity)
+      delay(50)
+      verify { newRecentSearchDao.saveSearch(searchListItem.value, id, ZimFileReader.CONTENT_PREFIX) }
+    }
 }

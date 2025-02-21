@@ -35,7 +35,6 @@ import org.kiwix.kiwixmobile.core.compat.CompatV25
 import java.util.regex.Pattern
 
 class NetworkUtilsTest {
-
   private val context: Context = mockk()
   private val connectivity: ConnectivityManager = mockk()
   private val networkCapabilities: NetworkCapabilities = mockk()
@@ -97,21 +96,24 @@ class NetworkUtilsTest {
 
     // URL contains no '?' character but has '/' characters
     assertEquals(
-      "File Name from URL (no '?' character)", "q=kiwix+android",
+      "File Name from URL (no '?' character)",
+      "q=kiwix+android",
       NetworkUtils.getFileNameFromUrl("https://github.com/search/q=kiwix+android")
     )
     // and ends with a '/' character
-    matcher = pattern.matcher(
-      NetworkUtils.getFileNameFromUrl("https://github.com/search/q=kiwix+android/")
-    )
+    matcher =
+      pattern.matcher(
+        NetworkUtils.getFileNameFromUrl("https://github.com/search/q=kiwix+android/")
+      )
     if (!matcher.matches()) {
       assertEquals("filename doesn't match UUID regex (for no '?' and '/' in end)", 0, 1)
     }
 
     // Empty string between last '?' and preceding '/'
-    matcher = pattern.matcher(
-      NetworkUtils.getFileNameFromUrl("https://github.com/search/?q=kiwix+android")
-    )
+    matcher =
+      pattern.matcher(
+        NetworkUtils.getFileNameFromUrl("https://github.com/search/?q=kiwix+android")
+      )
     if (!matcher.matches()) {
       assertEquals("filename doesn't match UUID regex (for consecutive '/?')", 0, 1)
     }
@@ -119,7 +121,8 @@ class NetworkUtilsTest {
     // Standard case
     // Here the Method should return the substring between the first '?' character and the nearest '/' character preceeding it
     assertEquals(
-      "File Name from URL standard case", "search",
+      "File Name from URL standard case",
+      "search",
       NetworkUtils.getFileNameFromUrl(
         "https://www.google.com/search?source=hp&ei=zs4LW6W1E5n6rQH65Z-wDQ&q=" +
           "kiwix+android&oq=kiwix+android&gs_l=psy-ab.3..." +
@@ -128,14 +131,16 @@ class NetworkUtilsTest {
       )
     )
     assertEquals(
-      "File Name from URL standard case", "Special:Search",
+      "File Name from URL standard case",
+      "Special:Search",
       NetworkUtils.getFileNameFromUrl(
         "https://en.wikipedia.org/wiki/Special:Search?search=" +
           "kiwix+android&go=Go&searchToken=3zrcxw8fltdcij99zvoh5c6wy"
       )
     )
     assertEquals(
-      "File Name from URL standard case", "search",
+      "File Name from URL standard case",
+      "search",
       NetworkUtils.getFileNameFromUrl("https://github.com/search?q=kiwix+android")
     )
   }
@@ -147,20 +152,23 @@ class NetworkUtilsTest {
     every { context.getString(R.string.zim_simple) } returns "Simple"
 
     assertEquals(
-      "URL Parsing on empty string", "",
+      "URL Parsing on empty string",
+      "",
       NetworkUtils.parseURL(context, "")
     )
 
     // Using the standard Kiwix Download URLs
     assertEquals(
-      "URL Parsing", "No Pictures",
+      "URL Parsing",
+      "No Pictures",
       NetworkUtils.parseURL(
         context,
         "http://ftpmirror.your.org/pub/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"
       )
     )
     assertEquals(
-      "URL Parsing", "No Videos",
+      "URL Parsing",
+      "No Videos",
       NetworkUtils.parseURL(
         context,
         "http://www.mirrorservice.org/sites/download.kiwix.org/zim/wikipedia/" +
@@ -168,21 +176,24 @@ class NetworkUtilsTest {
       )
     )
     assertEquals(
-      "URL Parsing", "Simple",
+      "URL Parsing",
+      "Simple",
       NetworkUtils.parseURL(
         context,
         "http://download.wikimedia.org/kiwix/zim/wikipedia/wikipedia_af_all_simple_2016-05.zim"
       )
     )
     assertEquals(
-      "URL Parsing", "No Pictures",
+      "URL Parsing",
+      "No Pictures",
       NetworkUtils.parseURL(
         context,
         "http://mirror.netcologne.de/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"
       )
     )
     assertEquals(
-      "URL Parsing", "Simple",
+      "URL Parsing",
+      "Simple",
       NetworkUtils.parseURL(
         context,
         "http://mirror3.kiwix.org/zim/wikipedia/wikipedia_af_all_simple_2016-05.zim"

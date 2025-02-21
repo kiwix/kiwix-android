@@ -81,11 +81,12 @@ class UnsupportedMimeTypeHandler @Inject constructor(
 
   private fun openFile(savedFile: File, documentType: String?) {
     if (savedFile.exists()) {
-      val uri = FileProvider.getUriForFile(
-        activity,
-        "${activity.packageName}.fileprovider",
-        savedFile
-      )
+      val uri =
+        FileProvider.getUriForFile(
+          activity,
+          "${activity.packageName}.fileprovider",
+          savedFile
+        )
       intent.apply {
         setDataAndType(uri, documentType)
         flags = Intent.FLAG_ACTIVITY_NO_HISTORY

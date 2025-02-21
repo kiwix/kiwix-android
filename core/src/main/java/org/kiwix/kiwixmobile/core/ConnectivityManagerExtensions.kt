@@ -25,7 +25,4 @@ import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.NOT_CONNECTED
 
 val ConnectivityManager.networkState: NetworkState
-  get() = if (isNetworkAvailable())
-    CONNECTED
-  else
-    NOT_CONNECTED
+  get() = if (isNetworkAvailable()) CONNECTED else NOT_CONNECTED

@@ -45,15 +45,15 @@ import org.kiwix.kiwixmobile.utils.StandardActions
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class LanguageFragmentTest {
-
   @Rule
   @JvmField
   var retryRule = RetryRule()
 
-  private val permissions = arrayOf(
-    Manifest.permission.READ_EXTERNAL_STORAGE,
-    Manifest.permission.WRITE_EXTERNAL_STORAGE
-  )
+  private val permissions =
+    arrayOf(
+      Manifest.permission.READ_EXTERNAL_STORAGE,
+      Manifest.permission.WRITE_EXTERNAL_STORAGE
+    )
 
   @Rule
   @JvmField

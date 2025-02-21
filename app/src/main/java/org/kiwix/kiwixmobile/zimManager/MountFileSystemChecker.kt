@@ -31,8 +31,7 @@ class MountFileSystemChecker @Inject constructor(
   override fun checkFilesystemSupports4GbFiles(path: String) =
     recursivelyDetermineFilesystem(mountPointProducer.produce(), path)
 
-  private fun recursivelyDetermineFilesystem(mountPoints: List<MountInfo>, path: String):
-    FileSystemCapability =
+  private fun recursivelyDetermineFilesystem(mountPoints: List<MountInfo>, path: String): FileSystemCapability =
     mountPoints.maxBy { it.matchCount(path) }
       ?.takeIf { it.matchCount(path) > 0 }
       ?.let {

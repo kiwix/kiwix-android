@@ -47,8 +47,11 @@ class ZimReaderSource(
   companion object {
     fun fromDatabaseValue(databaseValue: String?) =
       databaseValue?.run {
-        if (startsWith("content://")) ZimReaderSource(toUri())
-        else ZimReaderSource(File(this))
+        if (startsWith("content://")) {
+          ZimReaderSource(toUri())
+        } else {
+          ZimReaderSource(File(this))
+        }
       }
   }
 

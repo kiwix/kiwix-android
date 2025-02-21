@@ -49,7 +49,6 @@ import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 
 object ActivityExtensions {
-
   private val Activity.coreMainActivity: CoreMainActivity get() = this as CoreMainActivity
 
   fun AppCompatActivity.startActionMode(
@@ -164,7 +163,8 @@ object ActivityExtensions {
   fun Activity.requestNotificationPermission() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       ActivityCompat.requestPermissions(
-        this, arrayOf(POST_NOTIFICATIONS),
+        this,
+        arrayOf(POST_NOTIFICATIONS),
         REQUEST_POST_NOTIFICATION_PERMISSION
       )
     }

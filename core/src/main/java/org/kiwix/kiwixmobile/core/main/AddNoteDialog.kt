@@ -206,7 +206,7 @@ class AddNoteDialog : DialogFragment() {
   /* From ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim", returns "granbluefantasy_en_all_all_nopic_2018-10"
    * From "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html", returns "Main_Page"
    * For null input or on being unable to find required text, returns null
-    */
+   */
   private fun getTextAfterLastSlashWithoutExtension(path: String): String =
     path.substringAfterLast('/', "").substringBeforeLast('.')
 
@@ -340,7 +340,8 @@ class AddNoteDialog : DialogFragment() {
     editText.postDelayed(
       {
         inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
-      }, 100
+      },
+      100
     )
   }
 
@@ -484,7 +485,6 @@ class AddNoteDialog : DialogFragment() {
   }
 
   private fun shareNote() {
-
     /* The note text file corresponding to the currently open article, given at:
      *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
      * is shared via an app-chooser intent
@@ -498,7 +498,8 @@ class AddNoteDialog : DialogFragment() {
       // From Nougat 7 (API 24) access to files is shared temporarily with other apps
       // Need to use FileProvider for the same
       val noteFileUri = FileProvider.getUriForFile(
-        requireContext(), requireContext().packageName + ".fileprovider",
+        requireContext(),
+        requireContext().packageName + ".fileprovider",
         noteFile
       )
       val noteFileShareIntent = Intent(Intent.ACTION_SEND).apply {

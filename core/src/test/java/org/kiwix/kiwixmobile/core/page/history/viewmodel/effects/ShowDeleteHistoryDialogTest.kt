@@ -27,49 +27,52 @@ internal class ShowDeleteHistoryDialogTest {
   private val viewModelScope = CoroutineScope(Dispatchers.IO)
 
   @Test
-  fun `invoke with shows dialog that offers ConfirmDelete action`() = runBlocking {
-    val showDeleteHistoryDialog =
-      ShowDeleteHistoryDialog(
-        effects,
-        historyState(),
-        historyDao,
-        viewModelScope
-      )
-    mockkActivityInjection(showDeleteHistoryDialog)
-    val lambdaSlot = slot<() -> Unit>()
-    showDeleteHistoryDialog.invokeWith(activity)
-    verify { dialogShower.show(any(), capture(lambdaSlot)) }
-    lambdaSlot.captured.invoke()
-    verify { effects.offer(DeletePageItems(historyState(), historyDao, viewModelScope)) }
-  }
+  fun `invoke with shows dialog that offers ConfirmDelete action`() =
+    runBlocking {
+      val showDeleteHistoryDialog =
+        ShowDeleteHistoryDialog(
+          effects,
+          historyState(),
+          historyDao,
+          viewModelScope
+        )
+      mockkActivityInjection(showDeleteHistoryDialog)
+      val lambdaSlot = slot<() -> Unit>()
+      showDeleteHistoryDialog.invokeWith(activity)
+      verify { dialogShower.show(any(), capture(lambdaSlot)) }
+      lambdaSlot.captured.invoke()
+      verify { effects.offer(DeletePageItems(historyState(), historyDao, viewModelScope)) }
+    }
 
   @Test
-  fun `invoke with selected item shows dialog with delete selected items title`() = runBlocking {
-    val showDeleteHistoryDialog =
-      ShowDeleteHistoryDialog(
-        effects,
-        historyState(listOf(historyItem(isSelected = true, zimReaderSource = mockk()))),
-        historyDao,
-        viewModelScope
-      )
-    mockkActivityInjection(showDeleteHistoryDialog)
-    showDeleteHistoryDialog.invokeWith(activity)
-    verify { dialogShower.show(DeleteSelectedHistory, any()) }
-  }
+  fun `invoke with selected item shows dialog with delete selected items title`() =
+    runBlocking {
+      val showDeleteHistoryDialog =
+        ShowDeleteHistoryDialog(
+          effects,
+          historyState(listOf(historyItem(isSelected = true, zimReaderSource = mockk()))),
+          historyDao,
+          viewModelScope
+        )
+      mockkActivityInjection(showDeleteHistoryDialog)
+      showDeleteHistoryDialog.invokeWith(activity)
+      verify { dialogShower.show(DeleteSelectedHistory, any()) }
+    }
 
   @Test
-  fun `invoke with no selected items shows dialog with delete all items title`() = runBlocking {
-    val showDeleteHistoryDialog =
-      ShowDeleteHistoryDialog(
-        effects,
-        historyState(),
-        historyDao,
-        viewModelScope
-      )
-    mockkActivityInjection(showDeleteHistoryDialog)
-    showDeleteHistoryDialog.invokeWith(activity)
-    verify { dialogShower.show(DeleteAllHistory, any()) }
-  }
+  fun `invoke with no selected items shows dialog with delete all items title`() =
+    runBlocking {
+      val showDeleteHistoryDialog =
+        ShowDeleteHistoryDialog(
+          effects,
+          historyState(),
+          historyDao,
+          viewModelScope
+        )
+      mockkActivityInjection(showDeleteHistoryDialog)
+      showDeleteHistoryDialog.invokeWith(activity)
+      verify { dialogShower.show(DeleteAllHistory, any()) }
+    }
 
   private fun mockkActivityInjection(showDeleteHistoryDialog: ShowDeleteHistoryDialog) {
     every { activity.cachedComponent.inject(showDeleteHistoryDialog) } answers {

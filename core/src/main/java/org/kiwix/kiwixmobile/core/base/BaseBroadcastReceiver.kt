@@ -23,7 +23,6 @@ import android.content.Context
 import android.content.Intent
 
 abstract class BaseBroadcastReceiver : BroadcastReceiver() {
-
   abstract val action: String
 
   override fun onReceive(

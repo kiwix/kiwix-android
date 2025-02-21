@@ -49,7 +49,6 @@ internal class StorageViewHolder(
   private val shouldShowCheckboxSelected: Boolean,
   private val onClickAction: (StorageDevice) -> Unit
 ) : BaseViewHolder<StorageDevice>(itemStoragePreferenceBinding.root) {
-
   override fun bind(item: StorageDevice) {
     with(itemStoragePreferenceBinding) {
       lifecycleScope.launch {

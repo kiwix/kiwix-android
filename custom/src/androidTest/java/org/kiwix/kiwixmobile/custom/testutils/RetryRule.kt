@@ -31,7 +31,8 @@ class RetryRule : TestRule {
 
   private fun statement(base: Statement, description: Description): Statement {
     return object : Statement() {
-      @Throws(Throwable::class) override fun evaluate() {
+      @Throws(Throwable::class)
+      override fun evaluate() {
         var caughtThrowable: Throwable? = null
         for (i in 0 until retryCountForFlakyTest) {
           try {

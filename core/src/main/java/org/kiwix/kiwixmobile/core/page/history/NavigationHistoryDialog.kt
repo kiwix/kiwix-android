@@ -45,7 +45,6 @@ class NavigationHistoryDialog(
   private val navigationHistoryList: MutableList<NavigationHistoryListItem>,
   private val navigationHistoryClickListener: NavigationHistoryClickListener
 ) : DialogFragment() {
-
   private var dialogNavigationHistoryBinding: DialogNavigationHistoryBinding? = null
   private var navigationHistoryAdapter: NavigationHistoryAdapter? = null
 
@@ -86,9 +85,10 @@ class NavigationHistoryDialog(
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    navigationHistoryAdapter = NavigationHistoryAdapter(NavigationDelegate(::onItemClick)).apply {
-      items = navigationHistoryList
-    }
+    navigationHistoryAdapter =
+      NavigationHistoryAdapter(NavigationDelegate(::onItemClick)).apply {
+        items = navigationHistoryList
+      }
     toolbar?.apply {
       title = toolbarTitle
       setNavigationIcon(R.drawable.ic_close_white_24dp)

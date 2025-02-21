@@ -26,33 +26,36 @@ import org.junit.jupiter.api.Test
 import java.io.File
 
 internal class StorageCalculatorTest {
-
   private val storageCalculator = StorageCalculator(mockk())
   private val file: File = mockk()
 
   @Test
-  fun `calculate available space with existing file`() = runTest {
-    every { file.freeSpace } returns 1
-    every { file.exists() } returns true
-    assertThat(storageCalculator.calculateAvailableSpace(file)).isEqualTo("1 Bytes")
-  }
+  fun `calculate available space with existing file`() =
+    runTest {
+      every { file.freeSpace } returns 1
+      every { file.exists() } returns true
+      assertThat(storageCalculator.calculateAvailableSpace(file)).isEqualTo("1 Bytes")
+    }
 
   @Test
-  fun `calculate total space of existing file`() = runTest {
-    every { file.totalSpace } returns 1
-    every { file.exists() } returns true
-    assertThat(storageCalculator.calculateTotalSpace(file)).isEqualTo("1 Bytes")
-  }
+  fun `calculate total space of existing file`() =
+    runTest {
+      every { file.totalSpace } returns 1
+      every { file.exists() } returns true
+      assertThat(storageCalculator.calculateTotalSpace(file)).isEqualTo("1 Bytes")
+    }
 
   @Test
-  fun `calculate total space of non existing file`() = runTest {
-    every { file.exists() } returns false
-    assertThat(storageCalculator.calculateTotalSpace(file)).isEqualTo("0 Bytes")
-  }
+  fun `calculate total space of non existing file`() =
+    runTest {
+      every { file.exists() } returns false
+      assertThat(storageCalculator.calculateTotalSpace(file)).isEqualTo("0 Bytes")
+    }
 
   @Test
-  fun `available bytes of non existing file`() = runTest {
-    every { file.exists() } returns false
-    assertThat(storageCalculator.availableBytes(file)).isEqualTo(0L)
-  }
+  fun `available bytes of non existing file`() =
+    runTest {
+      every { file.exists() } returns false
+      assertThat(storageCalculator.availableBytes(file)).isEqualTo(0L)
+    }
 }

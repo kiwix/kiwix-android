@@ -74,16 +74,17 @@ open class ErrorActivity : BaseActivity() {
     activityKiwixErrorBinding = ActivityKiwixErrorBinding.inflate(layoutInflater)
     setContentView(activityKiwixErrorBinding?.root)
     val extras = intent.extras
-    exception = if (extras != null && safeContains(extras)) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        extras.getSerializable(EXCEPTION_KEY, Throwable::class.java)
+    exception =
+      if (extras != null && safeContains(extras)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+          extras.getSerializable(EXCEPTION_KEY, Throwable::class.java)
+        } else {
+          @Suppress("DEPRECATION")
+          extras.getSerializable(EXCEPTION_KEY) as Throwable
+        }
       } else {
-        @Suppress("DEPRECATION")
-        extras.getSerializable(EXCEPTION_KEY) as Throwable
+        null
       }
-    } else {
-      null
-    }
     setupReportButton()
     activityKiwixErrorBinding?.restartButton?.setOnClickListener { restartApp() }
     activityKiwixErrorBinding?.root.applyEdgeToEdgeInsets()
@@ -140,24 +141,25 @@ open class ErrorActivity : BaseActivity() {
   }
 
   // List of supported email apps
-  private val supportedEmailPackages = listOf(
-    "com.google.android.gm", // Gmail
-    "com.zoho.mail", // Zoho Mail
-    "com.microsoft.office.outlook", // Outlook
-    "com.yahoo.mobile.client.android.mail", // Yahoo Mail
-    "me.bluemail.mail", // BlueMail
-    "ch.protonmail.android", // ProtonMail
-    "com.fsck.k9", // K-9 Mail
-    "com.maildroid", // Maildroid
-    "org.kman.AquaMail", // Aqua Mail
-    "com.edison.android.mail", // Edison Mail
-    "com.readdle.spark", // Spark
-    "com.gmx.mobile.android.mail", // GMX Mail
-    "com.fastmail", // FastMail
-    "ru.mail.mailapp", // Mail.ru
-    "ru.yandex.mail", // Yandex.Mail
-    "de.tutao.tutanota" // Tutanota
-  )
+  private val supportedEmailPackages =
+    listOf(
+      "com.google.android.gm", // Gmail
+      "com.zoho.mail", // Zoho Mail
+      "com.microsoft.office.outlook", // Outlook
+      "com.yahoo.mobile.client.android.mail", // Yahoo Mail
+      "me.bluemail.mail", // BlueMail
+      "ch.protonmail.android", // ProtonMail
+      "com.fsck.k9", // K-9 Mail
+      "com.maildroid", // Maildroid
+      "org.kman.AquaMail", // Aqua Mail
+      "com.edison.android.mail", // Edison Mail
+      "com.readdle.spark", // Spark
+      "com.gmx.mobile.android.mail", // GMX Mail
+      "com.fastmail", // FastMail
+      "ru.mail.mailapp", // Mail.ru
+      "ru.yandex.mail", // Yandex.Mail
+      "de.tutao.tutanota" // Tutanota
+    )
 
   private val sendEmailLauncher =
     registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -170,10 +172,11 @@ open class ErrorActivity : BaseActivity() {
       type = "text/plain"
       putExtra(Intent.EXTRA_EMAIL, arrayOf(CRASH_AND_FEEDBACK_EMAIL_ADDRESS))
       putExtra(Intent.EXTRA_SUBJECT, subject)
-      val file = fileLogger.writeLogFile(
-        this@ErrorActivity,
-        activityKiwixErrorBinding?.allowLogs?.isChecked == true
-      )
+      val file =
+        fileLogger.writeLogFile(
+          this@ErrorActivity,
+          activityKiwixErrorBinding?.allowLogs?.isChecked == true
+        )
       file.appendText(emailBody)
       val path =
         FileProvider.getUriForFile(
@@ -187,16 +190,17 @@ open class ErrorActivity : BaseActivity() {
     }
   }
 
-  private suspend fun buildBody(): String = """ 
-  $initialBody
+  private suspend fun buildBody(): String =
+    """ 
+    $initialBody
+      
+    ${if (activityKiwixErrorBinding?.allowCrash?.isChecked == true && exception != null) exceptionDetails() else ""}
+    ${if (activityKiwixErrorBinding?.allowZims?.isChecked == true) zimFiles() else ""}
+    ${if (activityKiwixErrorBinding?.allowLanguage?.isChecked == true) languageLocale() else ""}
+    ${if (activityKiwixErrorBinding?.allowDeviceDetails?.isChecked == true) deviceDetails() else ""}
+    ${if (activityKiwixErrorBinding?.allowFileSystemDetails?.isChecked == true) systemDetails() else ""} 
     
-  ${if (activityKiwixErrorBinding?.allowCrash?.isChecked == true && exception != null) exceptionDetails() else ""}
-  ${if (activityKiwixErrorBinding?.allowZims?.isChecked == true) zimFiles() else ""}
-  ${if (activityKiwixErrorBinding?.allowLanguage?.isChecked == true) languageLocale() else ""}
-  ${if (activityKiwixErrorBinding?.allowDeviceDetails?.isChecked == true) deviceDetails() else ""}
-  ${if (activityKiwixErrorBinding?.allowFileSystemDetails?.isChecked == true) systemDetails() else ""} 
-  
-  """.trimIndent()
+    """.trimIndent()
 
   private fun exceptionDetails(): String =
     """
@@ -205,29 +209,32 @@ open class ErrorActivity : BaseActivity() {
     """.trimIndent()
 
   private suspend fun zimFiles(): String {
-    val allZimFiles = bookDao.getBooks().joinToString {
-      """
-      ${it.book.title}:
-      Articles: [${it.book.articleCount}]
-      Creator: [${it.book.creator}]
-      """.trimIndent()
-    }
+    val allZimFiles =
+      bookDao.getBooks().joinToString {
+        """
+        ${it.book.title}:
+        Articles: [${it.book.articleCount}]
+        Creator: [${it.book.creator}]
+        """.trimIndent()
+      }
     return """
-        Current Zim File:
-        ${zimReaderContainer.zimReaderSource?.toDatabase()}
-        All Zim Files in DB:
-        $allZimFiles
-        
-    """.trimIndent()
+      Current Zim File:
+      ${zimReaderContainer.zimReaderSource?.toDatabase()}
+      All Zim Files in DB:
+      $allZimFiles
+      
+      """.trimIndent()
   }
 
-  private fun languageLocale(): String = """
+  private fun languageLocale(): String =
+    """
     Current Locale:
     ${getCurrentLocale(applicationContext)}
     
-  """.trimIndent()
+    """.trimIndent()
 
-  private fun deviceDetails(): String = """
+  private fun deviceDetails(): String =
+    """
     BluetoothClass.Device Details:
     Device:[${Build.DEVICE}]
     Model:[${Build.MODEL}]
@@ -236,14 +243,15 @@ open class ErrorActivity : BaseActivity() {
     Android Version:[${Build.VERSION.RELEASE}]
     App Version:[$versionName $versionCode]
     
-  """.trimIndent()
+    """.trimIndent()
 
-  private fun systemDetails(): String = """
+  private fun systemDetails(): String =
+    """
     Mount Points
     ${mountPointProducer.produce().joinToString { "$it\n" }}
     External Directories
     ${externalFileDetails()}
-  """.trimIndent()
+    """.trimIndent()
 
   private fun externalFileDetails(): String =
     getExternalFilesDirs(null).joinToString("\n") { it?.path ?: "null" }
@@ -260,20 +268,23 @@ open class ErrorActivity : BaseActivity() {
     get() = "Someone has reported a crash"
 
   protected open val initialBody: String
-    get() = """
+    get() =
+      """
       Hi Kiwix Developers!
       The Android app crashed, here are some details to help fix it:
-    """.trimIndent()
+      """.trimIndent()
 
   private val versionCode: Int
     @SuppressLint("WrongConstant")
-    get() = packageManager
-      .getPackageInformation(packageName, ZERO).getVersionCode()
+    get() =
+      packageManager
+        .getPackageInformation(packageName, ZERO).getVersionCode()
 
   private val versionName: String
     @SuppressLint("WrongConstant")
-    get() = packageManager
-      .getPackageInformation(packageName, ZERO).versionName.toString()
+    get() =
+      packageManager
+        .getPackageInformation(packageName, ZERO).versionName.toString()
 
   private fun toStackTraceString(exception: Throwable): String =
     try {
@@ -289,9 +300,10 @@ open class ErrorActivity : BaseActivity() {
     }
 
   open fun restartApp() {
-    val restartAppIntent = packageManager.getLaunchIntentForPackage(packageName)?.apply {
-      addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-    }
+    val restartAppIntent =
+      packageManager.getLaunchIntentForPackage(packageName)?.apply {
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+      }
     startActivity(restartAppIntent)
     finish()
     killCurrentProcess()

@@ -110,10 +110,11 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     get() {
       val storage = sharedPreferences.getString(PREF_STORAGE, null)
       return when {
-        storage == null -> getPublicDirectoryPath(defaultPublicStorage()).also {
-          putPrefStorage(it)
-          putStoragePosition(0)
-        }
+        storage == null ->
+          getPublicDirectoryPath(defaultPublicStorage()).also {
+            putPrefStorage(it)
+            putStoragePosition(0)
+          }
 
         runBlocking { !File(storage).isFileExist() } ->
           getPublicDirectoryPath(defaultPublicStorage()).also {
@@ -201,27 +202,31 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   var showBookmarksAllBooks: Boolean
     get() = sharedPreferences.getBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, true)
-    set(prefShowBookmarksFromCurrentBook) = sharedPreferences.edit {
-      putBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, prefShowBookmarksFromCurrentBook)
-    }
+    set(prefShowBookmarksFromCurrentBook) =
+      sharedPreferences.edit {
+        putBoolean(PREF_SHOW_BOOKMARKS_ALL_BOOKS, prefShowBookmarksFromCurrentBook)
+      }
 
   var showStorageOption: Boolean
     get() = sharedPreferences.getBoolean(PREF_SHOW_STORAGE_OPTION, true)
-    set(prefShowStorageOption) = sharedPreferences.edit {
-      putBoolean(PREF_SHOW_STORAGE_OPTION, prefShowStorageOption)
-    }
+    set(prefShowStorageOption) =
+      sharedPreferences.edit {
+        putBoolean(PREF_SHOW_STORAGE_OPTION, prefShowStorageOption)
+      }
 
   var showNotesAllBooks: Boolean
     get() = sharedPreferences.getBoolean(PREF_SHOW_NOTES_ALL_BOOKS, true)
-    set(prefShowBookmarksFromCurrentBook) = sharedPreferences.edit {
-      putBoolean(PREF_SHOW_NOTES_ALL_BOOKS, prefShowBookmarksFromCurrentBook)
-    }
+    set(prefShowBookmarksFromCurrentBook) =
+      sharedPreferences.edit {
+        putBoolean(PREF_SHOW_NOTES_ALL_BOOKS, prefShowBookmarksFromCurrentBook)
+      }
 
   val darkMode: DarkModeConfig.Mode
-    get() = from(
-      sharedPreferences.getString(PREF_DARK_MODE, null)?.toInt()
-        ?: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-    )
+    get() =
+      from(
+        sharedPreferences.getString(PREF_DARK_MODE, null)?.toInt()
+          ?: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+      )
 
   fun darkModes(): Flowable<DarkModeConfig.Mode> = darkModes.startWith(darkMode)
 

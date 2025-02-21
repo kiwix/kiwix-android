@@ -43,17 +43,21 @@ fun View.snack(
   @ColorInt actionTextColor: Int? = null
 ) {
   Snackbar.make(
-    this, stringId, Snackbar.LENGTH_LONG
+    this,
+    stringId,
+    Snackbar.LENGTH_LONG
   ).apply {
     actionStringId?.let { setAction(it) { actionClick?.invoke() } }
     actionTextColor?.let(::setActionTextColor)
     anchor?.let {
       anchorView = anchor
-      addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-          transientBottomBar?.anchorView = null
+      addCallback(
+        object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+          override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+            transientBottomBar?.anchorView = null
+          }
         }
-      })
+      )
     }
   }.show()
 }
@@ -67,16 +71,20 @@ fun View.snack(
   @ColorInt actionTextColor: Int? = null
 ) {
   Snackbar.make(
-    this, message, Snackbar.LENGTH_LONG
+    this,
+    message,
+    Snackbar.LENGTH_LONG
   ).apply {
     actionStringId?.let { setAction(it) { actionClick?.invoke() } }
     actionTextColor?.let(::setActionTextColor)
     anchorView = anchor
-    addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-      override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-        transientBottomBar?.anchorView = null
+    addCallback(
+      object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+          transientBottomBar?.anchorView = null
+        }
       }
-    })
+    )
   }.show()
 }
 

@@ -27,7 +27,6 @@ import org.kiwix.kiwixmobile.core.page.historyState
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 internal class HistoryStateTest {
-
   @Test
   internal fun `visiblePageItems returns history based on filter`() {
     val zimReaderSource: ZimReaderSource = mockk()

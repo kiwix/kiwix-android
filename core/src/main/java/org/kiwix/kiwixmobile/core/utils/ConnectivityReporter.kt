@@ -29,7 +29,6 @@ class ConnectivityReporter @Inject constructor(
   private val wifiManager: WifiManager,
   private val connectivityManager: ConnectivityManager
 ) {
-
   fun checkWifi(): Boolean =
     connectivityManager.isWifi()
 

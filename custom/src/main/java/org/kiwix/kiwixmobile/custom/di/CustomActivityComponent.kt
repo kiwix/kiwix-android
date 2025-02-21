@@ -38,7 +38,6 @@ interface CustomActivityComponent : CoreActivityComponent {
 
   @Subcomponent.Builder
   interface Builder {
-
     @BindsInstance fun activity(activity: Activity): Builder
 
     fun build(): CustomActivityComponent

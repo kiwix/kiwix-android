@@ -29,7 +29,6 @@ import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getFi
  * Defines a file-item to represent the files being transferred.
  */
 class FileItem private constructor(val fileUri: Uri?, val fileName: String) {
-
   var fileStatus = FileStatus.TO_BE_SENT
 
   enum class FileStatus {

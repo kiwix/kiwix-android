@@ -21,36 +21,36 @@ package eu.mhutti1.utils.storage
 import android.annotation.SuppressLint
 
 internal object ExternalPaths {
-
   @SuppressLint("SdCardPath")
-  val possiblePaths = arrayOf(
-    "/storage/sdcard0",
-    "/storage/sdcard1",
-    "/storage/extsdcard",
-    "/storage/extSdCard",
-    "/storage/sdcard0/external_sdcard",
-    "/mnt/sdcard/external_sd",
-    "/mnt/external_sd",
-    "/mnt/media_rw/*",
-    "/removable/microsd",
-    "/mnt/emmc",
-    "/storage/external_SD",
-    "/storage/ext_sd",
-    "/storage/removable/sdcard1",
-    "/data/sdext",
-    "/data/sdext2",
-    "/data/sdext3",
-    "/data/sdext2",
-    "/data/sdext3",
-    "/data/sdext4",
-    "/sdcard",
-    "/sdcard1",
-    "/sdcard2",
-    "/storage/microsd",
-    "/mnt/extsd",
-    "/extsd",
-    "/mnt/sdcard",
-    "/misc/android",
-    "/mnt"
-  )
+  val possiblePaths =
+    arrayOf(
+      "/storage/sdcard0",
+      "/storage/sdcard1",
+      "/storage/extsdcard",
+      "/storage/extSdCard",
+      "/storage/sdcard0/external_sdcard",
+      "/mnt/sdcard/external_sd",
+      "/mnt/external_sd",
+      "/mnt/media_rw/*",
+      "/removable/microsd",
+      "/mnt/emmc",
+      "/storage/external_SD",
+      "/storage/ext_sd",
+      "/storage/removable/sdcard1",
+      "/data/sdext",
+      "/data/sdext2",
+      "/data/sdext3",
+      "/data/sdext2",
+      "/data/sdext3",
+      "/data/sdext4",
+      "/sdcard",
+      "/sdcard1",
+      "/sdcard2",
+      "/storage/microsd",
+      "/mnt/extsd",
+      "/extsd",
+      "/mnt/sdcard",
+      "/misc/android",
+      "/mnt"
+    )
 }

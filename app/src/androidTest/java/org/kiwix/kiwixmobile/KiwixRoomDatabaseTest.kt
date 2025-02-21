@@ -51,9 +51,10 @@ class KiwixRoomDatabaseTest {
   @Before
   fun setUpDatabase() {
     val context = ApplicationProvider.getApplicationContext<Context>()
-    db = Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java)
-      .allowMainThreadQueries()
-      .build()
+    db =
+      Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java)
+        .allowMainThreadQueries()
+        .build()
   }
 
   @After
@@ -62,123 +63,128 @@ class KiwixRoomDatabaseTest {
   }
 
   @Test
-  fun testRecentSearchRoomDao() = runBlocking {
-    val zimId = "34388L"
-    val searchTerm = "title 1"
-    val searchTerm2 = "title 2"
-    val url = ""
-    recentSearchRoomDao = db.recentSearchRoomDao()
-    // delete the previous saved data from recentSearches to run the test cases properly.
-    recentSearchRoomDao.deleteSearchHistory()
-    val recentSearch = RecentSearchRoomEntity(zimId = zimId, searchTerm = searchTerm, url = url)
-    val recentSearch1 = RecentSearchRoomEntity(zimId = zimId, searchTerm = searchTerm2, url = url)
+  fun testRecentSearchRoomDao() =
+    runBlocking {
+      val zimId = "34388L"
+      val searchTerm = "title 1"
+      val searchTerm2 = "title 2"
+      val url = ""
+      recentSearchRoomDao = db.recentSearchRoomDao()
+      // delete the previous saved data from recentSearches to run the test cases properly.
+      recentSearchRoomDao.deleteSearchHistory()
+      val recentSearch = RecentSearchRoomEntity(zimId = zimId, searchTerm = searchTerm, url = url)
+      val recentSearch1 = RecentSearchRoomEntity(zimId = zimId, searchTerm = searchTerm2, url = url)
 
-    // test inserting into recent search database
-    recentSearchRoomDao.saveSearch(recentSearch.searchTerm, recentSearch.zimId, url = url)
-    var recentSearches = recentSearchRoomDao.search(zimId).first()
-    assertEquals(recentSearches.size, 1)
-    assertEquals(recentSearch.searchTerm, recentSearches.first().searchTerm)
-    assertEquals(recentSearch.zimId, recentSearches.first().zimId)
+      // test inserting into recent search database
+      recentSearchRoomDao.saveSearch(recentSearch.searchTerm, recentSearch.zimId, url = url)
+      var recentSearches = recentSearchRoomDao.search(zimId).first()
+      assertEquals(recentSearches.size, 1)
+      assertEquals(recentSearch.searchTerm, recentSearches.first().searchTerm)
+      assertEquals(recentSearch.zimId, recentSearches.first().zimId)
 
-    // test deleting recent search
-    recentSearchRoomDao.deleteSearchString(searchTerm)
-    recentSearches = recentSearchRoomDao.search(searchTerm).first()
-    assertEquals(recentSearches.size, 0)
+      // test deleting recent search
+      recentSearchRoomDao.deleteSearchString(searchTerm)
+      recentSearches = recentSearchRoomDao.search(searchTerm).first()
+      assertEquals(recentSearches.size, 0)
 
-    // test deleting all recent search history
-    recentSearchRoomDao.saveSearch(recentSearch.searchTerm, recentSearch.zimId, url = url)
-    recentSearchRoomDao.saveSearch(recentSearch1.searchTerm, recentSearch1.zimId, url = url)
-    recentSearches = recentSearchRoomDao.search(zimId).first()
-    assertEquals(recentSearches.size, 2)
-    recentSearchRoomDao.deleteSearchHistory()
-    recentSearches = recentSearchRoomDao.search(searchTerm).first()
-    assertEquals(recentSearches.size, 0)
-  }
-
-  @Test
-  fun testHistoryRoomDao() = runBlocking {
-    historyRoomDao = db.historyRoomDao()
-    // delete the previous saved data from history to run the test cases properly.
-    historyRoomDao.deleteAllHistory()
-    val historyItem = getHistoryItem(
-      title = "Main Page",
-      historyUrl = "https://kiwix.app/A/MainPage",
-      databaseId = 1
-    )
-
-    // test inserting into history database
-    historyRoomDao.saveHistory(historyItem)
-    var historyList = historyRoomDao.historyRoomEntity().blockingFirst()
-    with(historyList.first()) {
-      assertThat(historyTitle, equalTo(historyItem.title))
-      assertThat(zimId, equalTo(historyItem.zimId))
-      assertThat(zimName, equalTo(historyItem.zimName))
-      assertThat(historyUrl, equalTo(historyItem.historyUrl))
-      assertThat(zimReaderSource, equalTo(historyItem.zimReaderSource))
-      assertThat(favicon, equalTo(historyItem.favicon))
-      assertThat(dateString, equalTo(historyItem.dateString))
-      assertThat(timeStamp, equalTo(historyItem.timeStamp))
+      // test deleting all recent search history
+      recentSearchRoomDao.saveSearch(recentSearch.searchTerm, recentSearch.zimId, url = url)
+      recentSearchRoomDao.saveSearch(recentSearch1.searchTerm, recentSearch1.zimId, url = url)
+      recentSearches = recentSearchRoomDao.search(zimId).first()
+      assertEquals(recentSearches.size, 2)
+      recentSearchRoomDao.deleteSearchHistory()
+      recentSearches = recentSearchRoomDao.search(searchTerm).first()
+      assertEquals(recentSearches.size, 0)
     }
 
-    // test deleting the history
-    historyRoomDao.deleteHistory(listOf(historyItem))
-    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
-    assertEquals(historyList.size, 0)
-
-    // test deleting all history
-    historyRoomDao.saveHistory(historyItem)
-    historyRoomDao.saveHistory(
-      getHistoryItem(databaseId = 2)
-    )
-    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
-    assertEquals(historyList.size, 2)
-    historyRoomDao.deleteAllHistory()
-    historyList = historyRoomDao.historyRoomEntity().blockingFirst()
-    assertEquals(historyList.size, 0)
-  }
-
   @Test
-  fun testNoteRoomDao() = runBlocking {
-    notesRoomDao = db.notesRoomDao()
-    // delete all the notes from database to properly run the test cases.
-    notesRoomDao.deleteNotes(notesRoomDao.notes().blockingFirst() as List<NoteListItem>)
-    val noteItem = getNoteListItem(
-      zimUrl = "http://kiwix.app/MainPage",
-      noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/MainPage.txt"
-    )
+  fun testHistoryRoomDao() =
+    runBlocking {
+      historyRoomDao = db.historyRoomDao()
+      // delete the previous saved data from history to run the test cases properly.
+      historyRoomDao.deleteAllHistory()
+      val historyItem =
+        getHistoryItem(
+          title = "Main Page",
+          historyUrl = "https://kiwix.app/A/MainPage",
+          databaseId = 1
+        )
 
-    // Save and retrieve a notes item
-    notesRoomDao.saveNote(noteItem)
-    var notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
-    with(notesList.first()) {
-      assertThat(zimId, equalTo(noteItem.zimId))
-      assertThat(zimUrl, equalTo(noteItem.zimUrl))
-      assertThat(title, equalTo(noteItem.title))
-      assertThat(zimReaderSource, equalTo(noteItem.zimReaderSource))
-      assertThat(noteFilePath, equalTo(noteItem.noteFilePath))
-      assertThat(favicon, equalTo(noteItem.favicon))
-    }
-    assertEquals(notesList.size, 1)
+      // test inserting into history database
+      historyRoomDao.saveHistory(historyItem)
+      var historyList = historyRoomDao.historyRoomEntity().blockingFirst()
+      with(historyList.first()) {
+        assertThat(historyTitle, equalTo(historyItem.title))
+        assertThat(zimId, equalTo(historyItem.zimId))
+        assertThat(zimName, equalTo(historyItem.zimName))
+        assertThat(historyUrl, equalTo(historyItem.historyUrl))
+        assertThat(zimReaderSource, equalTo(historyItem.zimReaderSource))
+        assertThat(favicon, equalTo(historyItem.favicon))
+        assertThat(dateString, equalTo(historyItem.dateString))
+        assertThat(timeStamp, equalTo(historyItem.timeStamp))
+      }
 
-    // test deleting the history
-    notesRoomDao.deleteNotes(listOf(noteItem))
-    notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
-    assertEquals(notesList.size, 0)
+      // test deleting the history
+      historyRoomDao.deleteHistory(listOf(historyItem))
+      historyList = historyRoomDao.historyRoomEntity().blockingFirst()
+      assertEquals(historyList.size, 0)
 
-    // test deleting all notes
-    notesRoomDao.saveNote(noteItem)
-    notesRoomDao.saveNote(
-      getNoteListItem(
-        title = "Installing",
-        zimUrl = "http://kiwix.app/Installing"
+      // test deleting all history
+      historyRoomDao.saveHistory(historyItem)
+      historyRoomDao.saveHistory(
+        getHistoryItem(databaseId = 2)
       )
-    )
-    notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
-    assertEquals(notesList.size, 2)
-    notesRoomDao.deletePages(notesRoomDao.notes().blockingFirst())
-    notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
-    assertEquals(notesList.size, 0)
-  }
+      historyList = historyRoomDao.historyRoomEntity().blockingFirst()
+      assertEquals(historyList.size, 2)
+      historyRoomDao.deleteAllHistory()
+      historyList = historyRoomDao.historyRoomEntity().blockingFirst()
+      assertEquals(historyList.size, 0)
+    }
+
+  @Test
+  fun testNoteRoomDao() =
+    runBlocking {
+      notesRoomDao = db.notesRoomDao()
+      // delete all the notes from database to properly run the test cases.
+      notesRoomDao.deleteNotes(notesRoomDao.notes().blockingFirst() as List<NoteListItem>)
+      val noteItem =
+        getNoteListItem(
+          zimUrl = "http://kiwix.app/MainPage",
+          noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/MainPage.txt"
+        )
+
+      // Save and retrieve a notes item
+      notesRoomDao.saveNote(noteItem)
+      var notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+      with(notesList.first()) {
+        assertThat(zimId, equalTo(noteItem.zimId))
+        assertThat(zimUrl, equalTo(noteItem.zimUrl))
+        assertThat(title, equalTo(noteItem.title))
+        assertThat(zimReaderSource, equalTo(noteItem.zimReaderSource))
+        assertThat(noteFilePath, equalTo(noteItem.noteFilePath))
+        assertThat(favicon, equalTo(noteItem.favicon))
+      }
+      assertEquals(notesList.size, 1)
+
+      // test deleting the history
+      notesRoomDao.deleteNotes(listOf(noteItem))
+      notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+      assertEquals(notesList.size, 0)
+
+      // test deleting all notes
+      notesRoomDao.saveNote(noteItem)
+      notesRoomDao.saveNote(
+        getNoteListItem(
+          title = "Installing",
+          zimUrl = "http://kiwix.app/Installing"
+        )
+      )
+      notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+      assertEquals(notesList.size, 2)
+      notesRoomDao.deletePages(notesRoomDao.notes().blockingFirst())
+      notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+      assertEquals(notesList.size, 0)
+    }
 
   companion object {
     fun getHistoryItem(
@@ -188,9 +194,10 @@ class KiwixRoomDatabaseTest {
       databaseId: Long = 0L,
       zimId: String = "1f88ab6f-c265-b-3ff-8f49-b7f4429503800",
       zimName: String = "alpinelinux_en_all",
-      zimReaderSource: ZimReaderSource = ZimReaderSource(
-        File("/storage/emulated/0/Download/alpinelinux_en_all_maxi_2023-01.zim")
-      ),
+      zimReaderSource: ZimReaderSource =
+        ZimReaderSource(
+          File("/storage/emulated/0/Download/alpinelinux_en_all_maxi_2023-01.zim")
+        ),
       timeStamp: Long = System.currentTimeMillis()
     ): HistoryListItem.HistoryItem =
       HistoryListItem.HistoryItem(
@@ -209,20 +216,22 @@ class KiwixRoomDatabaseTest {
       databaseId: Long = 0L,
       zimId: String = "1f88ab6f-c265-b-3ff-8f49-b7f4429503800",
       title: String = "Alpine Wiki",
-      zimReaderSource: ZimReaderSource = ZimReaderSource(
-        File("/storage/emulated/0/Download/alpinelinux_en_all_maxi_2023-01.zim")
-      ),
+      zimReaderSource: ZimReaderSource =
+        ZimReaderSource(
+          File("/storage/emulated/0/Download/alpinelinux_en_all_maxi_2023-01.zim")
+        ),
       zimUrl: String,
       noteFilePath: String = "/storage/emulated/0/Download/Notes/Alpine linux/AlpineNote.txt"
-    ): NoteListItem = NoteListItem(
-      databaseId = databaseId,
-      zimId = zimId,
-      title = title,
-      zimReaderSource = zimReaderSource,
-      zimUrl = zimUrl,
-      noteFilePath = noteFilePath,
-      null,
-      false
-    )
+    ): NoteListItem =
+      NoteListItem(
+        databaseId = databaseId,
+        zimId = zimId,
+        title = title,
+        zimReaderSource = zimReaderSource,
+        zimUrl = zimUrl,
+        noteFilePath = noteFilePath,
+        null,
+        false
+      )
   }
 }

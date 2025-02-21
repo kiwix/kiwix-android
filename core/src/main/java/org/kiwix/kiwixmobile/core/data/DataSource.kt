@@ -36,26 +36,38 @@ interface DataSource {
   fun getLanguageCategorizedBooks(): Single<List<BooksOnDiskListItem>>
 
   fun saveBook(book: BookOnDisk): Completable
+
   fun saveBooks(book: List<BookOnDisk>): Completable
+
   fun saveLanguages(languages: List<Language>): Completable
+
   fun saveHistory(history: HistoryItem): Completable
+
   fun deleteHistory(historyList: List<HistoryListItem>): Completable
+
   fun clearHistory(): Completable
+
   fun getBookmarks(): Flowable<List<LibkiwixBookmarkItem>>
+
   fun getCurrentZimBookmarksUrl(): io.reactivex.rxjava3.core.Single<List<String>>
 
-  fun saveBookmark(libkiwixBookmarkItem: LibkiwixBookmarkItem):
-    io.reactivex.rxjava3.core.Completable
+  fun saveBookmark(libkiwixBookmarkItem: LibkiwixBookmarkItem): io.reactivex.rxjava3.core.Completable
 
   fun deleteBookmarks(bookmarks: List<LibkiwixBookmarkItem>): Completable
+
   fun deleteBookmark(bookId: String, bookmarkUrl: String): Completable?
+
   fun booksOnDiskAsListItems(): Flowable<List<BooksOnDiskListItem>>
 
   fun saveNote(noteListItem: NoteListItem): Completable
+
   fun deleteNote(noteTitle: String): Completable
+
   fun deleteNotes(noteList: List<NoteListItem>): Completable
 
   suspend fun insertWebViewPageHistoryItems(webViewHistoryEntityList: List<WebViewHistoryEntity>)
+
   fun getAllWebViewPagesHistory(): Single<List<WebViewHistoryEntity>>
+
   suspend fun clearWebViewPagesHistory()
 }

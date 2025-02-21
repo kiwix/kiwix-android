@@ -30,6 +30,5 @@ data class BookmarkState(
 ) : PageState<LibkiwixBookmarkItem>() {
   override val visiblePageItems: List<PageRelated> = filteredPageItems
 
-  override fun copyWithNewItems(newItems: List<LibkiwixBookmarkItem>):
-    PageState<LibkiwixBookmarkItem> = copy(pageItems = newItems)
+  override fun copyWithNewItems(newItems: List<LibkiwixBookmarkItem>): PageState<LibkiwixBookmarkItem> = copy(pageItems = newItems)
 }

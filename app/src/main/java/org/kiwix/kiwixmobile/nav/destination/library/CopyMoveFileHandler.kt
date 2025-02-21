@@ -161,8 +161,11 @@ class CopyMoveFileHandler @Inject constructor(
         shouldShowStorageSelectionDialog = false
         putPrefStorage(sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name))
         putStoragePosition(
-          if (storageDevice.isInternal) INTERNAL_SELECT_POSITION
-          else EXTERNAL_SELECT_POSITION
+          if (storageDevice.isInternal) {
+            INTERNAL_SELECT_POSITION
+          } else {
+            EXTERNAL_SELECT_POSITION
+          }
         )
       }
       if (validateZimFileCanCopyOrMove()) {

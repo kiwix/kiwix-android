@@ -25,7 +25,6 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.popNavigationBac
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
 internal class PopFragmentBackstackTest {
-
   @Test
   fun `invoke with pops activity backstack`() {
     val activity = mockk<CoreMainActivity>(relaxed = true)

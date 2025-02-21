@@ -45,7 +45,6 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 class StorageObserverTest {
-
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
   private val downloadRoomDao: DownloadRoomDao = mockk()
   private val fileSearch: FileSearch = mockk()
@@ -89,10 +88,11 @@ class StorageObserverTest {
 
   @Test
   fun `zim files are read by the file reader`() {
-    val expectedBook = book(
-      "id", "title", "1", "favicon", "creator", "publisher", "date",
-      "description", "language"
-    )
+    val expectedBook =
+      book(
+        "id", "title", "1", "favicon", "creator", "publisher", "date",
+        "description", "language"
+      )
     withNoFiltering()
     every { zimFileReader.toBook() } returns expectedBook
     every { zimFileReader.zimReaderSource } returns zimReaderSource
@@ -102,13 +102,14 @@ class StorageObserverTest {
     verify { zimFileReader.dispose() }
   }
 
-  private fun booksOnFileSystem() = storageObserver.getBooksOnFileSystem(scanningProgressListener)
-    .test()
-    .also {
-      downloads.offer(listOf(downloadModel))
-      files.offer(listOf(file))
-      it.awaitDone(2, TimeUnit.SECONDS)
-    }
+  private fun booksOnFileSystem() =
+    storageObserver.getBooksOnFileSystem(scanningProgressListener)
+      .test()
+      .also {
+        downloads.offer(listOf(downloadModel))
+        files.offer(listOf(file))
+        it.awaitDone(2, TimeUnit.SECONDS)
+      }
 
   private fun withFiltering() {
     every { downloadModel.fileNameFromUrl } returns "test"

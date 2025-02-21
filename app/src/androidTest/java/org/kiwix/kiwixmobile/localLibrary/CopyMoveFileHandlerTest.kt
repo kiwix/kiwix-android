@@ -225,10 +225,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
   private fun getSelectedFile(): File {
     val loadFileStream =
       CopyMoveFileHandlerTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(
-      context.getExternalFilesDirs(null)[0],
-      "testzim.zim"
-    )
+    val zimFile = File(context.getExternalFilesDirs(null)[0], "testzim.zim")
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->
@@ -245,10 +242,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
   }
 
   private fun getInvalidZimFileUri(extension: String): Uri {
-    val zimFile = File(
-      context.getExternalFilesDirs(null)[0],
-      "testzim$extension"
-    )
+    val zimFile = File(context.getExternalFilesDirs(null)[0], "testzim$extension")
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     return Uri.fromFile(zimFile)

@@ -41,10 +41,10 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 fun searchWidget(func: SearchWidgetRobot.() -> Unit) =
-  SearchWidgetRobot().applyWithViewHierarchyPrinting(func)
+  SearchWidgetRobot()
+    .applyWithViewHierarchyPrinting(func)
 
 class SearchWidgetRobot : BaseRobot() {
-
   fun removeWidgetIfAlreadyAdded(uiDevice: UiDevice) {
     try {
       val widget = uiDevice.findObject(By.text("Search Kiwix"))

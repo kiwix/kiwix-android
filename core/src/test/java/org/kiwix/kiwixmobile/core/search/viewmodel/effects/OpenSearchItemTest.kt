@@ -33,7 +33,6 @@ import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED_NEW_TAB
 
 internal class OpenSearchItemTest {
-
   @Test
   fun `invoke with returns an Ok Result with list item value`() {
     val searchListItem = RecentSearchListItem("", ZimFileReader.CONTENT_PREFIX)

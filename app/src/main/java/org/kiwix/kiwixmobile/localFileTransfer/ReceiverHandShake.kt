@@ -26,7 +26,6 @@ import java.io.OutputStream
 
 class ReceiverHandShake(private val wifiDirectManager: WifiDirectManager, groupInfo: WifiP2pInfo) :
   PeerGroupHandshake(groupInfo) {
-
   companion object {
     private const val TAG = "ReceiverHandshake"
   }
@@ -38,12 +37,13 @@ class ReceiverHandShake(private val wifiDirectManager: WifiDirectManager, groupI
         (objectInputStream.readObject() as? Int)?.let { total ->
           Log.d(TAG, "Metadata: $total files")
           // Read names of each of those files, in order
-          val fileItems = (0 until total).mapNotNull {
-            (objectInputStream.readObject() as? String)?.let { fileName ->
-              Log.d(TAG, "Expecting $fileName")
-              FileItem(fileName = fileName)
+          val fileItems =
+            (0 until total).mapNotNull {
+              (objectInputStream.readObject() as? String)?.let { fileName ->
+                Log.d(TAG, "Expecting $fileName")
+                FileItem(fileName = fileName)
+              }
             }
-          }
           wifiDirectManager.setFilesForTransfer(fileItems)
         }
       }

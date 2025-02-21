@@ -39,9 +39,10 @@ import javax.inject.Inject
 
 data class DeleteFiles(private val booksOnDiskListItems: List<BookOnDisk>) :
   SideEffect<Unit> {
-
   @Inject lateinit var dialogShower: DialogShower
+
   @Inject lateinit var newBookDao: NewBookDao
+
   @Inject lateinit var zimReaderContainer: ZimReaderContainer
 
   override fun invokeWith(activity: AppCompatActivity) {
@@ -51,9 +52,10 @@ data class DeleteFiles(private val booksOnDiskListItems: List<BookOnDisk>) :
 
     dialogShower.show(DeleteZims(name), {
       activity.lifecycleScope.launch {
-        val deleteResult = withContext(Dispatchers.IO) {
-          booksOnDiskListItems.deleteAll()
-        }
+        val deleteResult =
+          withContext(Dispatchers.IO) {
+            booksOnDiskListItems.deleteAll()
+          }
         activity.toast(
           if (deleteResult) {
             R.string.delete_zims_toast
@@ -67,11 +69,12 @@ data class DeleteFiles(private val booksOnDiskListItems: List<BookOnDisk>) :
 
   private suspend fun List<BookOnDisk>.deleteAll(): Boolean {
     return fold(true) { acc, book ->
-      acc && deleteSpecificZimFile(book).also {
-        if (it && book.zimReaderSource == zimReaderContainer.zimReaderSource) {
-          zimReaderContainer.setZimReaderSource(null)
+      acc &&
+        deleteSpecificZimFile(book).also {
+          if (it && book.zimReaderSource == zimReaderContainer.zimReaderSource) {
+            zimReaderContainer.setZimReaderSource(null)
+          }
         }
-      }
     }
   }
 

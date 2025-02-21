@@ -47,7 +47,6 @@ import org.kiwix.kiwixmobile.custom.download.State.DownloadRequired
 import javax.inject.Inject
 
 class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
-
   private val downloadViewModel by lazy {
     viewModel<CustomDownloadViewModel>(viewModelFactory)
   }

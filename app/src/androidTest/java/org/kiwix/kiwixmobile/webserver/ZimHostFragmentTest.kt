@@ -58,21 +58,22 @@ class ZimHostFragmentTest {
 
   private lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
 
-  private val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-    arrayOf(
-      Manifest.permission.READ_EXTERNAL_STORAGE,
-      Manifest.permission.WRITE_EXTERNAL_STORAGE,
-      Manifest.permission.NEARBY_WIFI_DEVICES,
-      Manifest.permission.ACCESS_NETWORK_STATE
-    )
-  } else {
-    arrayOf(
-      Manifest.permission.READ_EXTERNAL_STORAGE,
-      Manifest.permission.WRITE_EXTERNAL_STORAGE,
-      Manifest.permission.ACCESS_FINE_LOCATION,
-      Manifest.permission.ACCESS_NETWORK_STATE
-    )
-  }
+  private val permissions =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      arrayOf(
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.NEARBY_WIFI_DEVICES,
+        Manifest.permission.ACCESS_NETWORK_STATE
+      )
+    } else {
+      arrayOf(
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_NETWORK_STATE
+      )
+    }
 
   @Rule
   @JvmField
@@ -102,25 +103,27 @@ class ZimHostFragmentTest {
       waitForIdle()
     }
     context?.let {
-      sharedPreferenceUtil = SharedPreferenceUtil(it).apply {
-        setIntroShown()
-        putPrefWifiOnly(false)
-        setIsPlayStoreBuildType(true)
-        prefIsTest = true
-        putPrefLanguage("en")
-        lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
-      }
+      sharedPreferenceUtil =
+        SharedPreferenceUtil(it).apply {
+          setIntroShown()
+          putPrefWifiOnly(false)
+          setIsPlayStoreBuildType(true)
+          prefIsTest = true
+          putPrefLanguage("en")
+          lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
+        }
     }
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      onActivity {
-        handleLocaleChange(
-          it,
-          "en",
-          SharedPreferenceUtil(it)
-        )
+    activityScenario =
+      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+        onActivity {
+          handleLocaleChange(
+            it,
+            "en",
+            SharedPreferenceUtil(it)
+          )
+        }
       }
-    }
   }
 
   @Test

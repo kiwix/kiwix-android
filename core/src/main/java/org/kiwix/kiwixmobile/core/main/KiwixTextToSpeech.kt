@@ -60,6 +60,7 @@ class KiwixTextToSpeech internal constructor(
   private var focusRequest: AudioFocusRequest? = null
   private val focusLock: Any = Any()
   private val am: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
   @JvmField var currentTTSTask: TTSTask? = null
   private lateinit var tts: TextToSpeech
 
@@ -67,21 +68,22 @@ class KiwixTextToSpeech internal constructor(
    * Initializes the TextToSpeech object.
    */
   fun initializeTTS() {
-    tts = TextToSpeech(
-      context
-    ) { status: Int ->
-      if (status == TextToSpeech.SUCCESS) {
-        Log.d(TAG_KIWIX, "TextToSpeech was initialized successfully.")
-        this.isInitialized = true
-        onInitSucceedListener.onInitSucceed()
-      } else {
-        Log.e(TAG_KIWIX, "Initialization of TextToSpeech Failed!")
-        context.toast(
-          R.string.texttospeech_initialization_failed,
-          Toast.LENGTH_SHORT
-        )
+    tts =
+      TextToSpeech(
+        context
+      ) { status: Int ->
+        if (status == TextToSpeech.SUCCESS) {
+          Log.d(TAG_KIWIX, "TextToSpeech was initialized successfully.")
+          this.isInitialized = true
+          onInitSucceedListener.onInitSucceed()
+        } else {
+          Log.e(TAG_KIWIX, "Initialization of TextToSpeech Failed!")
+          context.toast(
+            R.string.texttospeech_initialization_failed,
+            Toast.LENGTH_SHORT
+          )
+        }
       }
-    }
   }
 
   /**
@@ -123,7 +125,8 @@ class KiwixTextToSpeech internal constructor(
       }
       if (locale == null || isMissingOrUnsupportedLanguage(tts.isLanguageAvailable(locale))) {
         Log.d(
-          TAG_KIWIX, "TextToSpeech: language not supported:  ${zimReaderContainer.language}"
+          TAG_KIWIX,
+          "TextToSpeech: language not supported:  ${zimReaderContainer.language}"
         )
         context.toast(R.string.tts_lang_not_supported, Toast.LENGTH_LONG)
       } else {
@@ -149,12 +152,12 @@ class KiwixTextToSpeech internal constructor(
     // changes in the page
     webView.loadUrl(
       """
-        javascript:
-        body = document.getElementsByTagName('body')[0].cloneNode(true);
-        toRemove = body.querySelectorAll('sup.reference, #toc, .thumbcaption, title, .navbox, style');
-        Array.prototype.forEach.call(toRemove, function(elem) {    
-          elem.parentElement.removeChild(elem);});
-        tts.speakAloud(body.innerText);
+      javascript:
+      body = document.getElementsByTagName('body')[0].cloneNode(true);
+      toRemove = body.querySelectorAll('sup.reference, #toc, .thumbcaption, title, .navbox, style');
+      Array.prototype.forEach.call(toRemove, function(elem) {    
+        elem.parentElement.removeChild(elem);});
+      tts.speakAloud(body.innerText);
       """.trimIndent()
     )
   }
@@ -171,16 +174,17 @@ class KiwixTextToSpeech internal constructor(
   private fun requestAudioFocus(): Boolean {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       if (focusRequest == null) {
-        focusRequest = onAudioFocusChangeListener?.let {
-          AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
-            .setAudioAttributes(
-              AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).build()
-            )
-            .setAcceptsDelayedFocusGain(true)
-            .setOnAudioFocusChangeListener(it)
-            .setWillPauseWhenDucked(true)
-            .build()
-        }
+        focusRequest =
+          onAudioFocusChangeListener?.let {
+            AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+              .setAudioAttributes(
+                AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).build()
+              )
+              .setAcceptsDelayedFocusGain(true)
+              .setOnAudioFocusChangeListener(it)
+              .setWillPauseWhenDucked(true)
+              .build()
+          }
       }
       Log.d(TAG_KIWIX, "Audio Focus Requested")
       val focusGain = focusRequest?.let(am::requestAudioFocus)
@@ -189,10 +193,12 @@ class KiwixTextToSpeech internal constructor(
       }
     }
     @Suppress("DEPRECATION")
-    val audioFocusRequest = am.requestAudioFocus(
-      onAudioFocusChangeListener, AudioManager.STREAM_MUSIC,
-      AudioManager.AUDIOFOCUS_GAIN
-    )
+    val audioFocusRequest =
+      am.requestAudioFocus(
+        onAudioFocusChangeListener,
+        AudioManager.STREAM_MUSIC,
+        AudioManager.AUDIOFOCUS_GAIN
+      )
     Log.d(TAG_KIWIX, "Audio Focus Requested")
     synchronized(focusLock) {
       return@requestAudioFocus audioFocusRequest == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
@@ -256,6 +262,7 @@ class KiwixTextToSpeech internal constructor(
   inner class TTSTask(private val pieces: List<String>) {
     private val currentPiece =
       AtomicInteger(0)
+
     @JvmField var paused = true
     fun pause() {
       paused = true
@@ -271,9 +278,10 @@ class KiwixTextToSpeech internal constructor(
       paused = false
       // The utterance ID isn't actually used anywhere, the param is passed only to force
       // the utterance listener to be notified
-      val bundle = Bundle().apply {
-        putString(Engine.KEY_PARAM_UTTERANCE_ID, "kiwixLastMessage")
-      }
+      val bundle =
+        Bundle().apply {
+          putString(Engine.KEY_PARAM_UTTERANCE_ID, "kiwixLastMessage")
+        }
       if (currentPiece.get() < pieces.size) {
         tts.speak(
           pieces[currentPiece.getAndIncrement()],
@@ -284,30 +292,32 @@ class KiwixTextToSpeech internal constructor(
       } else {
         stop()
       }
-      tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-        @SuppressWarnings("EmptyFunctionBlock")
-        override fun onStart(s: String) {
-        }
+      tts.setOnUtteranceProgressListener(
+        object : UtteranceProgressListener() {
+          @SuppressWarnings("EmptyFunctionBlock")
+          override fun onStart(s: String) {
+          }
 
-        override fun onDone(s: String) {
-          val line: Int = currentPiece.toInt()
-          if (line >= pieces.size && !paused) {
-            stop()
-          } else {
-            tts.speak(
-              pieces[currentPiece.getAndIncrement()],
-              TextToSpeech.QUEUE_ADD,
-              bundle,
-              bundle.getString(Engine.KEY_PARAM_UTTERANCE_ID)
-            )
+          override fun onDone(s: String) {
+            val line: Int = currentPiece.toInt()
+            if (line >= pieces.size && !paused) {
+              stop()
+            } else {
+              tts.speak(
+                pieces[currentPiece.getAndIncrement()],
+                TextToSpeech.QUEUE_ADD,
+                bundle,
+                bundle.getString(Engine.KEY_PARAM_UTTERANCE_ID)
+              )
+            }
+          }
+
+          override fun onError(s: String) {
+            Log.e(TAG_KIWIX, "TextToSpeech Error: $s")
+            context.toast(R.string.texttospeech_error, Toast.LENGTH_SHORT)
           }
         }
-
-        override fun onError(s: String) {
-          Log.e(TAG_KIWIX, "TextToSpeech Error: $s")
-          context.toast(R.string.texttospeech_error, Toast.LENGTH_SHORT)
-        }
-      })
+      )
     }
 
     fun stop() {
@@ -318,9 +328,10 @@ class KiwixTextToSpeech internal constructor(
 
   private inner class TTSJavaScriptInterface {
     @JavascriptInterface fun speakAloud(content: String) {
-      val pieces = content.split("[\\n.;]".toRegex())
-        .filter(String::isNotBlank)
-        .map(String::trim)
+      val pieces =
+        content.split("[\\n.;]".toRegex())
+          .filter(String::isNotBlank)
+          .map(String::trim)
       if (pieces.isNotEmpty()) {
         onSpeakingListener.onSpeakingStarted()
         currentTTSTask = TTSTask(pieces)

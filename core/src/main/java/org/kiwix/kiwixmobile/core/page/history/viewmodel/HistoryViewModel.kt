@@ -34,7 +34,6 @@ class HistoryViewModel @Inject constructor(
   zimReaderContainer: ZimReaderContainer,
   sharedPrefs: SharedPreferenceUtil
 ) : PageViewModel<HistoryItem, HistoryState>(historyRoomDao, sharedPrefs, zimReaderContainer) {
-
   override fun initialState(): HistoryState =
     HistoryState(emptyList(), sharedPreferenceUtil.showHistoryAllBooks, zimReaderContainer.id)
 

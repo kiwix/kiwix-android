@@ -25,7 +25,6 @@ import androidx.core.view.children
 import androidx.viewbinding.ViewBinding
 
 object ViewGroupExtensions {
-
   fun ViewGroup.inflate(layoutId: Int, attachToRoot: Boolean = true): View =
     LayoutInflater.from(context).inflate(layoutId, this, attachToRoot)
 

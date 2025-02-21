@@ -43,19 +43,20 @@ import java.net.Socket
  * (no. of files & their names) with the receiver.
  */
 abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
-  private val HANDSHAKE_MESSAGE = "Request Kiwix File Sharing"
-  suspend fun handshake(): InetAddress? = withContext(Dispatchers.IO) {
-    Log.d(TAG, "Handshake in progress")
-    when {
-      groupInfo.groupFormed && groupInfo.isGroupOwner && isActive ->
-        readHandshakeAndExchangeMetaData()
+  private val handshakeMessage = "Request Kiwix File Sharing"
+  suspend fun handshake(): InetAddress? =
+    withContext(Dispatchers.IO) {
+      Log.d(TAG, "Handshake in progress")
+      when {
+        groupInfo.groupFormed && groupInfo.isGroupOwner && isActive ->
+          readHandshakeAndExchangeMetaData()
 
-      groupInfo.groupFormed && isActive -> // && !groupInfo.isGroupOwner
-        writeHandshakeAndExchangeMetaData()
+        groupInfo.groupFormed && isActive -> // && !groupInfo.isGroupOwner
+          writeHandshakeAndExchangeMetaData()
 
-      else -> null
+        else -> null
+      }
     }
-  }
 
   private fun writeHandshakeAndExchangeMetaData(): InetAddress? {
     return try {
@@ -70,7 +71,7 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
         )
         val objectOutputStream = ObjectOutputStream(client.getOutputStream())
         // Send message for the peer device to verify
-        objectOutputStream.writeObject(HANDSHAKE_MESSAGE)
+        objectOutputStream.writeObject(handshakeMessage)
         exchangeFileTransferMetadata(client.getInputStream(), client.getOutputStream())
         groupInfo.groupOwnerAddress
       }
@@ -113,5 +114,5 @@ abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
   abstract fun exchangeFileTransferMetadata(inputStream: InputStream, outputStream: OutputStream)
 
   private fun isKiwixHandshake(handshakeMessage: Any): Boolean =
-    HANDSHAKE_MESSAGE == handshakeMessage
+    this@PeerGroupHandshake.handshakeMessage == handshakeMessage
 }

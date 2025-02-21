@@ -33,7 +33,6 @@ data class LanguageEntity(
   val active: Boolean = false,
   val occurencesOfLanguage: Int = 0
 ) {
-
   constructor(language: Language) : this(
     0,
     Locale(language.languageCode),

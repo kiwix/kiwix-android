@@ -42,7 +42,6 @@ class StorageObserver @Inject constructor(
   private val zimReaderFactory: ZimFileReader.Factory,
   private val libkiwixBookmarks: LibkiwixBookmarks
 ) {
-
   fun getBooksOnFileSystem(
     scanningProgressListener: ScanningProgressListener
   ): Flowable<List<BookOnDisk>> {

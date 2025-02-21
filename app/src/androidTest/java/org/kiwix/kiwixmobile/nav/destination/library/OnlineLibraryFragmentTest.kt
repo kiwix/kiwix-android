@@ -46,7 +46,6 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 
 class OnlineLibraryFragmentTest : BaseActivityTest() {
-
   @Rule
   @JvmField
   var retryRule = RetryRule()
@@ -87,16 +86,17 @@ class OnlineLibraryFragmentTest : BaseActivityTest() {
         System.currentTimeMillis()
       )
     }
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      onActivity {
-        handleLocaleChange(
-          it,
-          "en",
-          SharedPreferenceUtil(context)
-        )
+    activityScenario =
+      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+        onActivity {
+          handleLocaleChange(
+            it,
+            "en",
+            SharedPreferenceUtil(context)
+          )
+        }
       }
-    }
   }
 
   @Test

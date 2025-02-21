@@ -31,52 +31,58 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseV
 import javax.inject.Inject
 
 class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) : PageDao {
-  fun bookmarks(): Flowable<List<Page>> = box.asFlowable(
-    box.query {
-      order(BookmarkEntity_.bookmarkTitle)
-    }
-  ).map {
-    it.map { bookmarkEntity ->
-      bookmarkEntity.zimFilePath?.let { filePath ->
-        // set zimReaderSource for previously saved bookmarks
-        fromDatabaseValue(filePath)?.let { zimReaderSource ->
-          bookmarkEntity.zimReaderSource = zimReaderSource
-        }
+  fun bookmarks(): Flowable<List<Page>> =
+    box.asFlowable(
+      box.query {
+        order(BookmarkEntity_.bookmarkTitle)
       }
-      BookmarkItem(bookmarkEntity)
+    ).map {
+      it.map { bookmarkEntity ->
+        bookmarkEntity.zimFilePath?.let { filePath ->
+          // set zimReaderSource for previously saved bookmarks
+          fromDatabaseValue(filePath)?.let { zimReaderSource ->
+            bookmarkEntity.zimReaderSource = zimReaderSource
+          }
+        }
+        BookmarkItem(bookmarkEntity)
+      }
     }
-  }
 
   override fun pages(): Flowable<List<Page>> = bookmarks()
   override fun deletePages(pagesToDelete: List<Page>) =
     deleteBookmarks(pagesToDelete as List<BookmarkItem>)
 
-  fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?) = box.query {
-    equal(
-      BookmarkEntity_.zimId, zimFileReader?.id ?: "",
-      QueryBuilder.StringOrder.CASE_INSENSITIVE
-    )
-      .or()
-      .equal(
-        BookmarkEntity_.zimName, zimFileReader?.name ?: "",
+  fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?) =
+    box.query {
+      equal(
+        BookmarkEntity_.zimId,
+        zimFileReader?.id ?: "",
         QueryBuilder.StringOrder.CASE_INSENSITIVE
       )
-    order(BookmarkEntity_.bookmarkTitle)
-  }.property(BookmarkEntity_.bookmarkUrl)
-    .findStrings()
-    .toList()
-    .distinct()
+        .or()
+        .equal(
+          BookmarkEntity_.zimName,
+          zimFileReader?.name ?: "",
+          QueryBuilder.StringOrder.CASE_INSENSITIVE
+        )
+      order(BookmarkEntity_.bookmarkTitle)
+    }.property(BookmarkEntity_.bookmarkUrl)
+      .findStrings()
+      .toList()
+      .distinct()
 
   fun bookmarkUrlsForCurrentBook(zimFileReader: ZimFileReader?): Flowable<List<String>> =
     box.asFlowable(
       box.query {
         equal(
-          BookmarkEntity_.zimId, zimFileReader?.id ?: "",
+          BookmarkEntity_.zimId,
+          zimFileReader?.id ?: "",
           QueryBuilder.StringOrder.CASE_INSENSITIVE
         )
           .or()
           .equal(
-            BookmarkEntity_.zimName, zimFileReader?.name ?: "",
+            BookmarkEntity_.zimName,
+            zimFileReader?.name ?: "",
             QueryBuilder.StringOrder.CASE_INSENSITIVE
           )
         order(BookmarkEntity_.bookmarkTitle)

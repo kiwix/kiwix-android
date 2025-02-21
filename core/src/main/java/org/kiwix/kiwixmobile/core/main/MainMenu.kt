@@ -41,7 +41,6 @@ class MainMenu(
   private val disableSearch: Boolean = false,
   private val menuClickListener: MenuClickListener
 ) {
-
   interface Factory {
     fun create(
       menu: Menu,
@@ -95,10 +94,11 @@ class MainMenu(
     }
 
     randomArticle.setShowAsAction(
-      if (activity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
+      if (activity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
         MenuItem.SHOW_AS_ACTION_IF_ROOM
-      else
+      } else {
         MenuItem.SHOW_AS_ACTION_NEVER
+      }
     )
     tabSwitcher?.actionView?.apply {
       setOnClickListener { menuClickListener.onTabMenuClicked() }

@@ -33,13 +33,13 @@ import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirecti
 
 data class OpenFileWithNavigation(private val bookOnDisk: BooksOnDiskListItem.BookOnDisk) :
   SideEffect<Unit> {
-
   override fun invokeWith(activity: AppCompatActivity) {
     val zimReaderSource = bookOnDisk.zimReaderSource
     (activity as KiwixMainActivity).lifecycleScope.launch {
-      val canOpenInLibkiwix = withContext(Dispatchers.IO) {
-        zimReaderSource.canOpenInLibkiwix()
-      }
+      val canOpenInLibkiwix =
+        withContext(Dispatchers.IO) {
+          zimReaderSource.canOpenInLibkiwix()
+        }
       if (!canOpenInLibkiwix) {
         activity.toast(
           activity.getString(R.string.error_file_not_found, zimReaderSource.toDatabase())

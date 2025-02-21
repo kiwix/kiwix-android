@@ -34,10 +34,12 @@ sealed class KiwixDialog(
   val neutralMessage: Int? = null,
   val getView: (() -> View)? = null
 ) {
-
   data class DeleteZims(override val args: List<Any>) :
     KiwixDialog(
-      null, R.string.delete_zim_body, R.string.delete, R.string.no
+      null,
+      R.string.delete_zim_body,
+      R.string.delete,
+      R.string.no
     ),
     HasBodyFormatArgs {
     constructor(zimNameList: String) : this(listOf(zimNameList))
@@ -79,11 +81,17 @@ sealed class KiwixDialog(
   )
 
   object EnableWifiP2pServices : KiwixDialog(
-    null, R.string.request_enable_wifi, R.string.yes, android.R.string.cancel
+    null,
+    R.string.request_enable_wifi,
+    R.string.yes,
+    android.R.string.cancel
   )
 
   object EnableLocationServices : KiwixDialog(
-    null, R.string.request_enable_location, R.string.yes, android.R.string.cancel
+    null,
+    R.string.request_enable_location,
+    R.string.yes,
+    android.R.string.cancel
   )
 
   object TurnOffHotspotManually : KiwixDialog(
@@ -164,14 +172,20 @@ sealed class KiwixDialog(
 
   data class FileTransferConfirmation(override val args: List<Any>) :
     KiwixDialog(
-      null, R.string.transfer_to, R.string.yes, android.R.string.cancel
+      null,
+      R.string.transfer_to,
+      R.string.yes,
+      android.R.string.cancel
     ),
     HasBodyFormatArgs {
     constructor(selectedPeerDeviceName: String) : this(listOf(selectedPeerDeviceName))
   }
 
   object DeleteSearch : KiwixDialog(
-    null, R.string.delete_recent_search_item, R.string.delete, R.string.no
+    null,
+    R.string.delete_recent_search_item,
+    R.string.delete,
+    R.string.no
   )
 
   object ContentsDrawerHint : KiwixDialog(
@@ -275,15 +289,18 @@ sealed class KiwixDialog(
     message: Int
   ) : KiwixDialog(title, message, R.string.yes, R.string.no) {
     object StopDownload : YesNoDialog(
-      R.string.confirm_stop_download_title, R.string.confirm_stop_download_msg
+      R.string.confirm_stop_download_title,
+      R.string.confirm_stop_download_msg
     )
 
     object WifiOnly : YesNoDialog(
-      R.string.wifi_only_title, R.string.wifi_only_msg
+      R.string.wifi_only_title,
+      R.string.wifi_only_msg
     )
 
     object OpenInNewTab : YesNoDialog(
-      null, R.string.open_in_new_tab
+      null,
+      R.string.open_in_new_tab
     )
 
     object ExportBookmarks : YesNoDialog(

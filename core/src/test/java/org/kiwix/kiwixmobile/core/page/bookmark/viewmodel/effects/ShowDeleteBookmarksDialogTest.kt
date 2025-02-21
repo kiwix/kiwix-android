@@ -66,49 +66,51 @@ internal class ShowDeleteBookmarksDialogTest {
   }
 
   @Test
-  fun `invoke with selected items shows dialog with DeleteSelectedBookmarks title`() = runBlocking {
-    val zimReaderSource: ZimReaderSource = mockk()
-    every { zimReaderSource.toDatabase() } returns ""
-    val showDeleteBookmarksDialog =
-      ShowDeleteBookmarksDialog(
-        effects,
-        bookmarkState(
-          listOf(
-            libkiwixBookmarkItem(
-              isSelected = true,
-              databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE,
-              zimReaderSource = zimReaderSource
+  fun `invoke with selected items shows dialog with DeleteSelectedBookmarks title`() =
+    runBlocking {
+      val zimReaderSource: ZimReaderSource = mockk()
+      every { zimReaderSource.toDatabase() } returns ""
+      val showDeleteBookmarksDialog =
+        ShowDeleteBookmarksDialog(
+          effects,
+          bookmarkState(
+            listOf(
+              libkiwixBookmarkItem(
+                isSelected = true,
+                databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE,
+                zimReaderSource = zimReaderSource
+              )
             )
-          )
-        ),
-        newBookmarksDao,
-        viewModelScope
-      )
-    mockkActivityInjection(showDeleteBookmarksDialog)
-    showDeleteBookmarksDialog.invokeWith(activity)
-    verify { dialogShower.show(DeleteSelectedBookmarks, any()) }
-  }
+          ),
+          newBookmarksDao,
+          viewModelScope
+        )
+      mockkActivityInjection(showDeleteBookmarksDialog)
+      showDeleteBookmarksDialog.invokeWith(activity)
+      verify { dialogShower.show(DeleteSelectedBookmarks, any()) }
+    }
 
   @Test
-  fun `invoke with no selected items shows dialog with DeleteAllBookmarks title`() = runBlocking {
-    val zimReaderSource: ZimReaderSource = mockk()
-    every { zimReaderSource.toDatabase() } returns ""
-    val showDeleteBookmarksDialog =
-      ShowDeleteBookmarksDialog(
-        effects,
-        bookmarkState(
-          listOf(
-            libkiwixBookmarkItem(
-              databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE,
-              zimReaderSource = zimReaderSource
+  fun `invoke with no selected items shows dialog with DeleteAllBookmarks title`() =
+    runBlocking {
+      val zimReaderSource: ZimReaderSource = mockk()
+      every { zimReaderSource.toDatabase() } returns ""
+      val showDeleteBookmarksDialog =
+        ShowDeleteBookmarksDialog(
+          effects,
+          bookmarkState(
+            listOf(
+              libkiwixBookmarkItem(
+                databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE,
+                zimReaderSource = zimReaderSource
+              )
             )
-          )
-        ),
-        newBookmarksDao,
-        viewModelScope
-      )
-    mockkActivityInjection(showDeleteBookmarksDialog)
-    showDeleteBookmarksDialog.invokeWith(activity)
-    verify { dialogShower.show(DeleteAllBookmarks, any()) }
-  }
+          ),
+          newBookmarksDao,
+          viewModelScope
+        )
+      mockkActivityInjection(showDeleteBookmarksDialog)
+      showDeleteBookmarksDialog.invokeWith(activity)
+      verify { dialogShower.show(DeleteAllBookmarks, any()) }
+    }
 }

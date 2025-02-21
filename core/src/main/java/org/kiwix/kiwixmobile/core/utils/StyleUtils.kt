@@ -28,7 +28,9 @@ import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 
 object StyleUtils {
-  @JvmStatic fun Context.getAttributes(@XmlRes xml: Int): AttributeSet {
+  @JvmStatic fun Context.getAttributes(
+    @XmlRes xml: Int
+  ): AttributeSet {
     val parser: XmlPullParser = resources.getXml(xml)
     try {
       parser.next()

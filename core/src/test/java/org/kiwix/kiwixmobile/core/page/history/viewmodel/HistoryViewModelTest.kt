@@ -88,7 +88,8 @@ internal class HistoryViewModelTest {
   fun `offerUpdateToShowAllToggle offers UpdateAllHistoryPreference`() {
     viewModel.effects.test().also {
       viewModel.offerUpdateToShowAllToggle(
-        UserClickedShowAllToggle(false), historyState()
+        UserClickedShowAllToggle(false),
+        historyState()
       )
     }.assertValues(UpdateAllHistoryPreference(sharedPreferenceUtil, false))
   }
@@ -130,16 +131,17 @@ internal class HistoryViewModelTest {
   }
 
   @Test
-  fun `createDeletePageDialogEffect returns ShowDeleteHistoryDialog`() = runTest {
-    assertThat(viewModel.createDeletePageDialogEffect(historyState(), viewModelScope)).isEqualTo(
-      ShowDeleteHistoryDialog(
-        viewModel.effects,
-        historyState(),
-        historyRoomDao,
-        viewModelScope
+  fun `createDeletePageDialogEffect returns ShowDeleteHistoryDialog`() =
+    runTest {
+      assertThat(viewModel.createDeletePageDialogEffect(historyState(), viewModelScope)).isEqualTo(
+        ShowDeleteHistoryDialog(
+          viewModel.effects,
+          historyState(),
+          historyRoomDao,
+          viewModelScope
+        )
       )
-    )
-  }
+    }
 
   @Test
   fun `copyWithNewItems returns state with new items`() {

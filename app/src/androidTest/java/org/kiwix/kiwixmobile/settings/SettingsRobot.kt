@@ -48,27 +48,32 @@ fun settingsRobo(func: SettingsRobot.() -> Unit) =
   SettingsRobot().applyWithViewHierarchyPrinting(func)
 
 class SettingsRobot : BaseRobot() {
-
   fun assertMenuSettingsDisplayed() {
     isVisible(TextId(R.string.menu_settings))
   }
 
-  private fun clickRecyclerViewItems(@StringRes vararg stringIds: Int) {
+  private fun clickRecyclerViewItems(
+    @StringRes vararg stringIds: Int
+  ) {
     onView(
       withResourceName("recycler_view")
     ).perform(
       actionOnItem<RecyclerView.ViewHolder>(
-        hasDescendant(Matchers.anyOf(*stringIds.matchers())), ViewActions.click()
+        hasDescendant(Matchers.anyOf(*stringIds.matchers())),
+        ViewActions.click()
       )
     )
   }
 
-  private fun clickRecyclerViewItemsContainingText(@StringRes vararg stringIds: Int) {
+  private fun clickRecyclerViewItemsContainingText(
+    @StringRes vararg stringIds: Int
+  ) {
     onView(
       withResourceName("recycler_view")
     ).perform(
       actionOnItem<RecyclerView.ViewHolder>(
-        hasDescendant(Matchers.anyOf(*stringIds.subStringMatchers())), ViewActions.click()
+        hasDescendant(Matchers.anyOf(*stringIds.subStringMatchers())),
+        ViewActions.click()
       )
     )
   }
@@ -195,7 +200,8 @@ class SettingsRobot : BaseRobot() {
     context.resources.getStringArray(R.array.pref_dark_modes_entries)
 
   private fun IntArray.matchers() = map(::withText).toTypedArray()
-  private fun IntArray.subStringMatchers() = map {
-    withSubstring(getResourceString(it))
-  }.toTypedArray()
+  private fun IntArray.subStringMatchers() =
+    map {
+      withSubstring(getResourceString(it))
+    }.toTypedArray()
 }

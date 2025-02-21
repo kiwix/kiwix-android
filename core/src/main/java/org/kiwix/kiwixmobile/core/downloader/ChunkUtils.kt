@@ -47,10 +47,11 @@ object ChunkUtils {
     return fileNames.zip(ranges).map { (filename, currentRange) ->
       Chunk(
         "${currentRange.first}-${
-        if (contentLength in currentRange)
-          ""
-        else
-          "${currentRange.last}"
+          if (contentLength in currentRange) {
+            ""
+          } else {
+            "${currentRange.last}"
+          }
         }",
         filename,
         url,

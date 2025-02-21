@@ -32,33 +32,34 @@ import javax.inject.Inject
 class ZimHostPresenter @Inject internal constructor(private val dataSource: DataSource) :
   BasePresenter<View>(),
   Presenter {
+    override fun loadBooks(previouslyHostedBooks: Set<String>) {
+      dataSource.getLanguageCategorizedBooks()
+        .map { books ->
+          books
+            .filterIsInstance<BooksOnDiskListItem.BookOnDisk>()
+            .forEach {
+              it.isSelected =
+                previouslyHostedBooks.contains(it.book.title) || previouslyHostedBooks.isEmpty()
+            }
+          books
+        }.subscribe(
+          object : SingleObserver<List<BooksOnDiskListItem>> {
+            override fun onSubscribe(d: Disposable) {
+              compositeDisposable.add(d)
+            }
 
-  override fun loadBooks(previouslyHostedBooks: Set<String>) {
-    dataSource.getLanguageCategorizedBooks()
-      .map { books ->
-        books
-          .filterIsInstance<BooksOnDiskListItem.BookOnDisk>()
-          .forEach {
-            it.isSelected =
-              previouslyHostedBooks.contains(it.book.title) || previouslyHostedBooks.isEmpty()
+            override fun onSuccess(books: List<BooksOnDiskListItem>) {
+              view?.addBooks(books)
+            }
+
+            override fun onError(e: Throwable) {
+              Log.e(TAG, "Unable to load books", e)
+            }
           }
-        books
-      }.subscribe(object : SingleObserver<List<BooksOnDiskListItem>> {
-        override fun onSubscribe(d: Disposable) {
-          compositeDisposable.add(d)
-        }
+        )
+    }
 
-        override fun onSuccess(books: List<BooksOnDiskListItem>) {
-          view?.addBooks(books)
-        }
-
-        override fun onError(e: Throwable) {
-          Log.e(TAG, "Unable to load books", e)
-        }
-      })
+    companion object {
+      private const val TAG = "ZimHostPresenter"
+    }
   }
-
-  companion object {
-    private const val TAG = "ZimHostPresenter"
-  }
-}

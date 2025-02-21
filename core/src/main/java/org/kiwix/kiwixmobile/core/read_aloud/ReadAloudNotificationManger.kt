@@ -35,7 +35,6 @@ class ReadAloudNotificationManger @Inject constructor(
   private val notificationManager: NotificationManager,
   private val context: Context
 ) {
-
   private fun readAloudNotificationChannel() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       notificationManager.createNotificationChannel(
@@ -54,24 +53,28 @@ class ReadAloudNotificationManger @Inject constructor(
   @SuppressLint("UnspecifiedImmutableFlag")
   fun buildForegroundNotification(isPauseTTS: Boolean): Notification {
     readAloudNotificationChannel()
-    val stopIntent = Intent(context, ReadAloudService::class.java).setAction(
-      ReadAloudService.ACTION_STOP_TTS
-    )
-    val stopReadAloud = PendingIntent.getService(
-      context,
-      0,
-      stopIntent,
-      PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-    )
-    val pauseOrResumeIntent = Intent(context, ReadAloudService::class.java).setAction(
-      ReadAloudService.ACTION_PAUSE_OR_RESUME_TTS
-    ).putExtra(IS_TTS_PAUSE_OR_RESUME, !isPauseTTS)
-    val pauseOrResumeReadAloud = PendingIntent.getService(
-      context,
-      0,
-      pauseOrResumeIntent,
-      PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-    )
+    val stopIntent =
+      Intent(context, ReadAloudService::class.java).setAction(
+        ReadAloudService.ACTION_STOP_TTS
+      )
+    val stopReadAloud =
+      PendingIntent.getService(
+        context,
+        0,
+        stopIntent,
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+      )
+    val pauseOrResumeIntent =
+      Intent(context, ReadAloudService::class.java).setAction(
+        ReadAloudService.ACTION_PAUSE_OR_RESUME_TTS
+      ).putExtra(IS_TTS_PAUSE_OR_RESUME, !isPauseTTS)
+    val pauseOrResumeReadAloud =
+      PendingIntent.getService(
+        context,
+        0,
+        pauseOrResumeIntent,
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+      )
     return NotificationCompat.Builder(context, READ_ALOUD_SERVICE_CHANNEL_ID)
       .setContentTitle(context.getString(R.string.menu_read_aloud))
       .setContentText(context.getString(R.string.read_aloud_running))
@@ -95,12 +98,18 @@ class ReadAloudNotificationManger @Inject constructor(
   }
 
   private fun getPauseOrResumeTitle(isPauseTTS: Boolean) =
-    if (isPauseTTS) context.getString(R.string.tts_resume)
-    else context.getString(R.string.tts_pause)
+    if (isPauseTTS) {
+      context.getString(R.string.tts_resume)
+    } else {
+      context.getString(R.string.tts_pause)
+    }
 
   private fun getPauseOrResumeIcon(isPauseTTS: Boolean) =
-    if (isPauseTTS) R.drawable.ic_baseline_play
-    else R.drawable.ic_baseline_pause
+    if (isPauseTTS) {
+      R.drawable.ic_baseline_play
+    } else {
+      R.drawable.ic_baseline_pause
+    }
 
   fun dismissNotification() {
     notificationManager.cancel(READ_ALOUD_NOTIFICATION_ID)

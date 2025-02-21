@@ -29,7 +29,6 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.FIND_IN_PAGE_SEARCH_STRING
 
 internal class SearchInPreviousScreenTest {
-
   @Test
   fun `invoke with returns positive result with string to previous screen`() {
     val searchString = "search"

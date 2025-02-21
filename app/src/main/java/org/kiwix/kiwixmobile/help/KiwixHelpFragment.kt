@@ -28,9 +28,10 @@ class KiwixHelpFragment : HelpFragment() {
         R.string.help_2 to R.array.description_help_2,
         R.string.help_5 to R.array.description_help_5,
         R.string.how_to_update_content to R.array.update_content_description,
-        R.string.why_copy_move_files_to_app_directory to getString(
-          R.string.copy_move_files_to_app_directory_description
-        )
+        R.string.why_copy_move_files_to_app_directory to
+          getString(
+            R.string.copy_move_files_to_app_directory_description
+          )
       )
     } else {
       listOf(

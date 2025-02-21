@@ -44,7 +44,6 @@ fun initialDownload(func: InitialDownloadRobot.() -> Unit) =
   InitialDownloadRobot().applyWithViewHierarchyPrinting(func)
 
 class InitialDownloadRobot : BaseRobot() {
-
   fun clickDownloadOnBottomNav() {
     clickOn(ViewId(R.id.downloadsFragment))
   }

@@ -33,8 +33,11 @@ sealed class LanguageListViewHolder<in T : LanguageListItem>(override val contai
     LanguageListViewHolder<HeaderItem>(headerDateBinding.root) {
     override fun bind(item: HeaderItem) {
       headerDateBinding.headerDate.setText(
-        if (item.id == HeaderItem.SELECTED) R.string.your_languages
-        else R.string.other_languages
+        if (item.id == HeaderItem.SELECTED) {
+          R.string.your_languages
+        } else {
+          R.string.other_languages
+        }
       )
     }
   }
@@ -47,8 +50,9 @@ sealed class LanguageListViewHolder<in T : LanguageListItem>(override val contai
       val language = item.language
       itemLanguageBinding.itemLanguageName.text = language.language
       itemLanguageBinding.itemLanguageLocalizedName.text = language.languageLocalized
-      itemLanguageBinding.itemLanguageBooksCount.text = containerView.context
-        .getString(R.string.books_count, language.occurencesOfLanguage)
+      itemLanguageBinding.itemLanguageBooksCount.text =
+        containerView.context
+          .getString(R.string.books_count, language.occurencesOfLanguage)
       itemLanguageBinding.itemLanguageCheckbox.apply {
         setToolTipWithContentDescription(
           containerView.context.getString(R.string.select_language_content_description)

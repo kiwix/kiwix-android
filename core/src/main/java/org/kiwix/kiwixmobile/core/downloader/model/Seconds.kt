@@ -32,29 +32,41 @@ value class Seconds(val seconds: Long) {
 
     val context = CoreApp.instance
     return when {
-      (seconds / days).roundToLong() > 0 -> String.format(
-        Locale.getDefault(), "%d %s %s", (seconds / days).roundToLong(),
-        context.getString(R.string.time_day),
-        context.getString(R.string.time_left)
-      )
+      (seconds / days).roundToLong() > 0 ->
+        String.format(
+          Locale.getDefault(),
+          "%d %s %s",
+          (seconds / days).roundToLong(),
+          context.getString(R.string.time_day),
+          context.getString(R.string.time_left)
+        )
 
-      (seconds / hours).roundToLong() > 0 -> String.format(
-        Locale.getDefault(), "%d %s %s", (seconds / hours).roundToLong(),
-        context.getString(R.string.time_hour),
-        context.getString(R.string.time_left)
-      )
+      (seconds / hours).roundToLong() > 0 ->
+        String.format(
+          Locale.getDefault(),
+          "%d %s %s",
+          (seconds / hours).roundToLong(),
+          context.getString(R.string.time_hour),
+          context.getString(R.string.time_left)
+        )
 
-      (seconds / minutes).roundToLong() > 0 -> String.format(
-        Locale.getDefault(), "%d %s %s", (seconds / minutes).roundToLong(),
-        context.getString(R.string.time_minute),
-        context.getString(R.string.time_left)
-      )
+      (seconds / minutes).roundToLong() > 0 ->
+        String.format(
+          Locale.getDefault(),
+          "%d %s %s",
+          (seconds / minutes).roundToLong(),
+          context.getString(R.string.time_minute),
+          context.getString(R.string.time_left)
+        )
 
-      else -> String.format(
-        Locale.getDefault(), "%d %s %s", seconds,
-        context.getString(R.string.time_second),
-        context.getString(R.string.time_left)
-      )
+      else ->
+        String.format(
+          Locale.getDefault(),
+          "%d %s %s",
+          seconds,
+          context.getString(R.string.time_second),
+          context.getString(R.string.time_left)
+        )
     }
   }
 }

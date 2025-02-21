@@ -35,10 +35,12 @@ class ServiceWorkerInitialiser @Inject constructor(val zimReaderContainer: ZimRe
       WebViewFeature.isFeatureSupported(WebViewFeature.SERVICE_WORKER_BASIC_USAGE)
     ) {
       ServiceWorkerControllerCompat.getInstance()
-        .setServiceWorkerClient(object : ServiceWorkerClientCompat() {
-          override fun shouldInterceptRequest(request: WebResourceRequest): WebResourceResponse? =
-            zimReaderContainer.load(request.url.toString(), request.requestHeaders)
-        })
+        .setServiceWorkerClient(
+          object : ServiceWorkerClientCompat() {
+            override fun shouldInterceptRequest(request: WebResourceRequest): WebResourceResponse? =
+              zimReaderContainer.load(request.url.toString(), request.requestHeaders)
+          }
+        )
     }
   }
 

@@ -25,7 +25,6 @@ import org.kiwix.kiwixmobile.core.data.remote.removeAuthenticationFromUrl
 import org.kiwix.kiwixmobile.core.data.remote.secretKey
 
 class BasicAuthInterceptorTest {
-
   private val authenticationUrl =
     "https://{{BASIC_AUTH_KEY}}@www.dwds.de/kiwix/f/dwds_de_dictionary_nopic_2023-09-12.zim"
 

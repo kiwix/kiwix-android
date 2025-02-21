@@ -23,13 +23,16 @@ import org.kiwix.kiwixmobile.core.base.adapter.AbsDelegateAdapter
 import org.kiwix.kiwixmobile.core.databinding.ItemBookmarkHistoryBinding
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.viewBinding
 
-sealed class NavigationHistoryDelegate<I : NavigationHistoryListItem,
-  out VH : NavigationHistoryViewHolder<I>> :
+sealed class NavigationHistoryDelegate<
+  I : NavigationHistoryListItem,
+  out VH : NavigationHistoryViewHolder<I>
+  > :
   AbsDelegateAdapter<I, NavigationHistoryListItem, VH> {
-
   class NavigationDelegate(private val onClickListener: ((NavigationHistoryListItem) -> Unit)) :
-    NavigationHistoryDelegate<NavigationHistoryListItem,
-      NavigationHistoryViewHolder.HistoryViewHolder>() {
+    NavigationHistoryDelegate<
+      NavigationHistoryListItem,
+      NavigationHistoryViewHolder.HistoryViewHolder
+      >() {
     override val itemClass = NavigationHistoryListItem::class.java
 
     override fun createViewHolder(parent: ViewGroup) =

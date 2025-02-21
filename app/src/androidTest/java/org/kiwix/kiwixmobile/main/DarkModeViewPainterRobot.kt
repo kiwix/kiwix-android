@@ -35,7 +35,6 @@ fun darkModeViewPainter(func: DarkModeViewPainterRobot.() -> Unit) =
   DarkModeViewPainterRobot().applyWithViewHierarchyPrinting(func)
 
 class DarkModeViewPainterRobot : BaseRobot() {
-
   fun openSettings() {
     openDrawer()
     enterSettings()

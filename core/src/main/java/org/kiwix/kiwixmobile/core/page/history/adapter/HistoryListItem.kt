@@ -25,7 +25,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 
 sealed class HistoryListItem : PageRelated {
-
   data class HistoryItem constructor(
     val databaseId: Long = 0L,
     override val zimId: String,
@@ -40,7 +39,6 @@ sealed class HistoryListItem : PageRelated {
     override val id: Long = databaseId,
     override val url: String = historyUrl
   ) : HistoryListItem(), Page {
-
     constructor(
       url: String,
       title: String,

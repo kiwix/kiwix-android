@@ -30,7 +30,6 @@ import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import java.io.File
 
 class FileUtilsTest {
-
   private val mockFile: File = mockk()
   private val testBook = Book().apply { file = mockFile }
   private val testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c"
@@ -62,40 +61,42 @@ class FileUtilsTest {
   }
 
   @Test
-  fun fileNameEndsWithZimAndNoSuchFileExistsAtAnySuchLocation() = runBlocking {
-    expect("zimab", false)
-    assertEquals(
-      FileUtils.getAllZimParts(testBook).size,
-      0,
-      "Nothing is returned in this case"
-    )
-  }
-
-  private fun testWith(extension: String, fileExists: Boolean) = runBlocking {
-    expect(extension, fileExists)
-    val coreApp = mockk<CoreApp>()
-    CoreApp.instance = coreApp
-    every { coreApp.packageName } returns "mock_package"
-    val files = FileUtils.getAllZimParts(testBook)
-    assertEquals(
-      files.size,
-      1,
-      "Only a single book is returned in case the file has extension $extension"
-    )
-    if (fileExists) {
+  fun fileNameEndsWithZimAndNoSuchFileExistsAtAnySuchLocation() =
+    runBlocking {
+      expect("zimab", false)
       assertEquals(
-        testBook.file,
-        files[0],
-        "The filename retained as such"
-      )
-    } else {
-      assertEquals(
-        testBook.file.toString() + ".part",
-        files[0].path,
-        "The filename is appended with .part"
+        FileUtils.getAllZimParts(testBook).size,
+        0,
+        "Nothing is returned in this case"
       )
     }
-  }
+
+  private fun testWith(extension: String, fileExists: Boolean) =
+    runBlocking {
+      expect(extension, fileExists)
+      val coreApp = mockk<CoreApp>()
+      CoreApp.instance = coreApp
+      every { coreApp.packageName } returns "mock_package"
+      val files = FileUtils.getAllZimParts(testBook)
+      assertEquals(
+        files.size,
+        1,
+        "Only a single book is returned in case the file has extension $extension"
+      )
+      if (fileExists) {
+        assertEquals(
+          testBook.file,
+          files[0],
+          "The filename retained as such"
+        )
+      } else {
+        assertEquals(
+          testBook.file.toString() + ".part",
+          files[0].path,
+          "The filename is appended with .part"
+        )
+      }
+    }
 
   private fun expect(extension: String, fileExists: Boolean) {
     every { mockFile.path } returns "$fileName$extension"

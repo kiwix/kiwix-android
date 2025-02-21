@@ -18,7 +18,6 @@ data class NoteListItem(
   override val url: String = zimUrl,
   override val id: Long = databaseId
 ) : Page, Serializable {
-
   constructor(notesEntity: NotesEntity) : this(
     notesEntity.id,
     notesEntity.zimId,

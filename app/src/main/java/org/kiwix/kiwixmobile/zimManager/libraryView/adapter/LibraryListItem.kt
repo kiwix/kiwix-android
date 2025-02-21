@@ -47,14 +47,13 @@ sealed class LibraryListItem {
     val tags: List<KiwixTag> = KiwixTag.from(book.tags),
     override val id: Long = book.id.hashCode().toLong()
   ) : LibraryListItem() {
-
-    val canBeDownloaded: Boolean = when (fileSystemState) {
-      DetectingFileSystem, CannotWrite4GbFile -> book.isLessThan4GB()
-      NotEnoughSpaceFor4GbFile, CanWrite4GbFile -> true
-    }
+    val canBeDownloaded: Boolean =
+      when (fileSystemState) {
+        DetectingFileSystem, CannotWrite4GbFile -> book.isLessThan4GB()
+        NotEnoughSpaceFor4GbFile, CanWrite4GbFile -> true
+      }
 
     companion object {
-
       private fun Book.isLessThan4GB() =
         size.toLongOrNull() ?: 0L < Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES
     }
@@ -73,7 +72,6 @@ sealed class LibraryListItem {
     override val id: Long,
     val currentDownloadState: Status
   ) : LibraryListItem() {
-
     val readableEta: CharSequence = eta.takeIf { it.seconds > 0L }?.toHumanReadableTime() ?: ""
 
     constructor(downloadModel: DownloadModel) : this(

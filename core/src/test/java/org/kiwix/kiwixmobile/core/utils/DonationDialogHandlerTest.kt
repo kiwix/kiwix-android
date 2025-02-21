@@ -64,102 +64,111 @@ class DonationDialogHandlerTest {
   }
 
   @Test
-  fun `should show initial donation popup when app is three month old`() = runTest {
-    donationDialogHandler = spyk(donationDialogHandler)
-    every { sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds } returns 0L
-    every { sharedPreferenceUtil.laterClickedMilliSeconds } returns 0L
-    coEvery { newBookDao.getBooks() } returns listOf(mockk())
-    every {
-      donationDialogHandler.shouldShowInitialPopup(any())
-    } returns true
-    donationDialogHandler.attemptToShowDonationPopup()
-    verify { showDonationDialogCallback.showDonationDialog() }
-  }
-
-  @Test
-  fun `should not show donation popup if app is not three month old`() = runTest {
-    every { sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds } returns 0L
-    coEvery { newBookDao.getBooks() } returns listOf(mockk())
-    val currentMillis = System.currentTimeMillis()
-    val installTime = currentMillis - 1000
-    val packageInfo = PackageInfo().apply {
-      firstInstallTime = installTime
-    }
-    every {
-      packageManager.getPackageInformation(activity.packageName, ZERO)
-    } returns packageInfo
-    donationDialogHandler.attemptToShowDonationPopup()
-    verify { showDonationDialogCallback wasNot Called }
-  }
-
-  @Test
-  fun `should not show donation popup when no ZIM files available in library`() = runTest {
-    every { sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds } returns 0L
-    coEvery { newBookDao.getBooks() } returns emptyList()
-    val currentMillis = System.currentTimeMillis()
-    val threeMonthsAgo = currentMillis - THREE_MONTHS_IN_MILLISECONDS
-    val packageInfo = PackageInfo().apply {
-      firstInstallTime = threeMonthsAgo
+  fun `should show initial donation popup when app is three month old`() =
+    runTest {
+      donationDialogHandler = spyk(donationDialogHandler)
+      every { sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds } returns 0L
+      every { sharedPreferenceUtil.laterClickedMilliSeconds } returns 0L
+      coEvery { newBookDao.getBooks() } returns listOf(mockk())
+      every {
+        donationDialogHandler.shouldShowInitialPopup(any())
+      } returns true
+      donationDialogHandler.attemptToShowDonationPopup()
+      verify { showDonationDialogCallback.showDonationDialog() }
     }
 
-    every { packageManager.getPackageInformation(activity.packageName, ZERO) } returns packageInfo
-    donationDialogHandler.attemptToShowDonationPopup()
-    verify { showDonationDialogCallback wasNot Called }
-  }
+  @Test
+  fun `should not show donation popup if app is not three month old`() =
+    runTest {
+      every { sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds } returns 0L
+      coEvery { newBookDao.getBooks() } returns listOf(mockk())
+      val currentMillis = System.currentTimeMillis()
+      val installTime = currentMillis - 1000
+      val packageInfo =
+        PackageInfo().apply {
+          firstInstallTime = installTime
+        }
+      every {
+        packageManager.getPackageInformation(activity.packageName, ZERO)
+      } returns packageInfo
+      donationDialogHandler.attemptToShowDonationPopup()
+      verify { showDonationDialogCallback wasNot Called }
+    }
 
   @Test
-  fun `should not show popup if time since last popup is less than three month`() = runTest {
-    val currentMilliSeconds = System.currentTimeMillis()
-    every {
-      sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds
-    } returns currentMilliSeconds - (THREE_MONTHS_IN_MILLISECONDS / 2)
-    coEvery { newBookDao.getBooks() } returns listOf(mockk())
-    donationDialogHandler.attemptToShowDonationPopup()
-    verify(exactly = 0) { showDonationDialogCallback.showDonationDialog() }
-  }
+  fun `should not show donation popup when no ZIM files available in library`() =
+    runTest {
+      every { sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds } returns 0L
+      coEvery { newBookDao.getBooks() } returns emptyList()
+      val currentMillis = System.currentTimeMillis()
+      val threeMonthsAgo = currentMillis - THREE_MONTHS_IN_MILLISECONDS
+      val packageInfo =
+        PackageInfo().apply {
+          firstInstallTime = threeMonthsAgo
+        }
+
+      every { packageManager.getPackageInformation(activity.packageName, ZERO) } returns packageInfo
+      donationDialogHandler.attemptToShowDonationPopup()
+      verify { showDonationDialogCallback wasNot Called }
+    }
 
   @Test
-  fun `should show donation popup if time since last popup exceeds three months`() = runTest {
-    val currentMilliSeconds = System.currentTimeMillis()
-    every {
-      sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds
-    } returns currentMilliSeconds - (THREE_MONTHS_IN_MILLISECONDS + 1000)
-    coEvery { newBookDao.getBooks() } returns listOf(mockk())
-    donationDialogHandler.attemptToShowDonationPopup()
-    verify { showDonationDialogCallback.showDonationDialog() }
-  }
+  fun `should not show popup if time since last popup is less than three month`() =
+    runTest {
+      val currentMilliSeconds = System.currentTimeMillis()
+      every {
+        sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds
+      } returns currentMilliSeconds - (THREE_MONTHS_IN_MILLISECONDS / 2)
+      coEvery { newBookDao.getBooks() } returns listOf(mockk())
+      donationDialogHandler.attemptToShowDonationPopup()
+      verify(exactly = 0) { showDonationDialogCallback.showDonationDialog() }
+    }
 
   @Test
-  fun `test should show donation popup when later clicked time exceeds three months`() = runTest {
-    donationDialogHandler = spyk(donationDialogHandler)
-    val currentMilliSeconds = System.currentTimeMillis()
-    every {
-      sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds
-    } returns 0L
-    every { donationDialogHandler.shouldShowInitialPopup(any()) } returns true
-    coEvery { newBookDao.getBooks() } returns listOf(mockk())
-    every {
-      sharedPreferenceUtil.laterClickedMilliSeconds
-    } returns currentMilliSeconds - (THREE_MONTHS_IN_MILLISECONDS + 1000)
-    donationDialogHandler.attemptToShowDonationPopup()
-    verify { showDonationDialogCallback.showDonationDialog() }
-  }
+  fun `should show donation popup if time since last popup exceeds three months`() =
+    runTest {
+      val currentMilliSeconds = System.currentTimeMillis()
+      every {
+        sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds
+      } returns currentMilliSeconds - (THREE_MONTHS_IN_MILLISECONDS + 1000)
+      coEvery { newBookDao.getBooks() } returns listOf(mockk())
+      donationDialogHandler.attemptToShowDonationPopup()
+      verify { showDonationDialogCallback.showDonationDialog() }
+    }
 
   @Test
-  fun `test should show popup if later clicked time is less than three months`() = runTest {
-    donationDialogHandler = spyk(donationDialogHandler)
-    val currentMilliSeconds = System.currentTimeMillis()
-    every {
-      sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds
-    } returns 0L
-    every { donationDialogHandler.shouldShowInitialPopup(any()) } returns true
-    coEvery { newBookDao.getBooks() } returns listOf(mockk())
-    every {
-      sharedPreferenceUtil.laterClickedMilliSeconds
-    } returns currentMilliSeconds - 10000L
-    donationDialogHandler.attemptToShowDonationPopup()
-    verify { showDonationDialogCallback wasNot Called }
-  }
+  fun `test should show donation popup when later clicked time exceeds three months`() =
+    runTest {
+      donationDialogHandler = spyk(donationDialogHandler)
+      val currentMilliSeconds = System.currentTimeMillis()
+      every {
+        sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds
+      } returns 0L
+      every { donationDialogHandler.shouldShowInitialPopup(any()) } returns true
+      coEvery { newBookDao.getBooks() } returns listOf(mockk())
+      every {
+        sharedPreferenceUtil.laterClickedMilliSeconds
+      } returns currentMilliSeconds - (THREE_MONTHS_IN_MILLISECONDS + 1000)
+      donationDialogHandler.attemptToShowDonationPopup()
+      verify { showDonationDialogCallback.showDonationDialog() }
+    }
+
+  @Test
+  fun `test should show popup if later clicked time is less than three months`() =
+    runTest {
+      donationDialogHandler = spyk(donationDialogHandler)
+      val currentMilliSeconds = System.currentTimeMillis()
+      every {
+        sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds
+      } returns 0L
+      every { donationDialogHandler.shouldShowInitialPopup(any()) } returns true
+      coEvery { newBookDao.getBooks() } returns listOf(mockk())
+      every {
+        sharedPreferenceUtil.laterClickedMilliSeconds
+      } returns currentMilliSeconds - 10000L
+      donationDialogHandler.attemptToShowDonationPopup()
+      verify { showDonationDialogCallback wasNot Called }
+    }
 
   @Test
   fun `donate later saves the correct time`() {
@@ -218,14 +227,15 @@ class DonationDialogHandlerTest {
   }
 
   @Test
-  fun `isZimFilesAvailableInLibrary returns true when isCustomApp is true`() = runTest {
-    with(mockk<ActivityExtensions>()) {
-      every { activity.packageName } returns "org.kiwix.kiwixcustom"
-      every { activity.isCustomApp() } returns true
-      val result = donationDialogHandler.isZimFilesAvailableInLibrary()
-      assertTrue(result)
+  fun `isZimFilesAvailableInLibrary returns true when isCustomApp is true`() =
+    runTest {
+      with(mockk<ActivityExtensions>()) {
+        every { activity.packageName } returns "org.kiwix.kiwixcustom"
+        every { activity.isCustomApp() } returns true
+        val result = donationDialogHandler.isZimFilesAvailableInLibrary()
+        assertTrue(result)
+      }
     }
-  }
 
   @Test
   fun `isZimFilesAvailableInLibrary returns false when no books and isCustomApp is false`() =

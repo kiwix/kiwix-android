@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 class IntroPresenter @Inject internal constructor(private val preferences: SharedPreferenceUtil) :
   BasePresenter<View?>(), Presenter {
-  override fun setIntroShown() {
-    preferences.setIntroShown()
+    override fun setIntroShown() {
+      preferences.setIntroShown()
+    }
   }
-}

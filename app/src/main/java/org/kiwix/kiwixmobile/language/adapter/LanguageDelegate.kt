@@ -30,7 +30,6 @@ import org.kiwix.kiwixmobile.language.adapter.LanguageListViewHolder.LanguageVie
 
 sealed class LanguageDelegate<I : LanguageListItem, out VH : LanguageListViewHolder<I>> :
   AbsDelegateAdapter<I, LanguageListItem, VH> {
-
   class HeaderDelegate : LanguageDelegate<HeaderItem, HeaderViewHolder>() {
     override val itemClass = HeaderItem::class.java
 

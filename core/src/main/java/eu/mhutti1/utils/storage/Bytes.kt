@@ -19,26 +19,27 @@ package eu.mhutti1.utils.storage
 
 import java.text.DecimalFormat
 
-const val Kb = 1 * 1024L
-const val Mb = Kb * 1024
-const val Gb = Mb * 1024
-const val Tb = Gb * 1024
-const val Pb = Tb * 1024
-const val Eb = Pb * 1024
+const val KB = 1 * 1024L
+const val MB = KB * 1024
+const val GB = MB * 1024
+const val TB = GB * 1024
+const val PB = TB * 1024
+const val EB = PB * 1024
 
 @JvmInline
 value class Bytes(val size: Long) {
   val humanReadable
-    get() = when {
-      size < Kb -> "$size Bytes"
-      size in Kb until Mb -> format(size.toDouble() / Kb) + " KB"
-      size in Mb until Gb -> format(size.toDouble() / Mb) + " MB"
-      size in Gb until Tb -> format(size.toDouble() / Gb) + " GB"
-      size in Tb until Pb -> format(size.toDouble() / Tb) + " TB"
-      size in Pb until Eb -> format(size.toDouble() / Pb) + " PB"
-      size >= Eb -> format(size.toDouble() / Eb) + " EB"
-      else -> throw RuntimeException("impossible value $size")
-    }
+    get() =
+      when {
+        size < KB -> "$size Bytes"
+        size in KB until MB -> format(size.toDouble() / KB) + " KB"
+        size in MB until GB -> format(size.toDouble() / MB) + " MB"
+        size in GB until TB -> format(size.toDouble() / GB) + " GB"
+        size in TB until PB -> format(size.toDouble() / TB) + " TB"
+        size in PB until EB -> format(size.toDouble() / PB) + " PB"
+        size >= EB -> format(size.toDouble() / EB) + " EB"
+        else -> throw RuntimeException("impossible value $size")
+      }
 
   fun format(size: Double): String = DecimalFormat("#.#").format(size)
 }

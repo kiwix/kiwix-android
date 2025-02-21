@@ -28,7 +28,6 @@ import kotlin.collections.ArrayList
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection
 
 class DocumentParser(private var listener: DocumentParser.SectionsListener) {
-
   private var title: String = ""
   private var sections = ArrayList<TableDrawerAdapter.DocumentSection>()
 
@@ -43,12 +42,10 @@ class DocumentParser(private var listener: DocumentParser.SectionsListener) {
   }
 
   inner class ParserCallback {
-
     @JavascriptInterface fun parse(sectionTitle: String, element: String, id: String) {
-
-      if (element == "H1")
+      if (element == "H1") {
         title = sectionTitle.trim()
-      else {
+      } else {
         sections.add(
           DocumentSection(
             id = id,

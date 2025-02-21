@@ -34,14 +34,12 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
 
 sealed class BookOnDiskViewHolder<in T : BooksOnDiskListItem>(containerView: View) :
   BaseViewHolder<T>(containerView) {
-
   class BookViewHolder(
     private val itemBookBinding: ItemBookBinding,
     private val clickAction: ((BookOnDisk) -> Unit)?,
     private val longClickAction: ((BookOnDisk) -> Unit)?,
     private val multiSelectAction: ((BookOnDisk) -> Unit)?
   ) : BookOnDiskViewHolder<BookOnDisk>(itemBookBinding.root) {
-
     override fun bind(item: BookOnDisk) {
     }
 
@@ -88,7 +86,6 @@ sealed class BookOnDiskViewHolder<in T : BooksOnDiskListItem>(containerView: Vie
 
 class LanguageItemViewHolder(private val headerLanguageBinding: HeaderLanguageBinding) :
   BookOnDiskViewHolder<LanguageItem>(headerLanguageBinding.root) {
-
   override fun bind(item: LanguageItem) {
     headerLanguageBinding.headerLanguage.text = item.text
   }
