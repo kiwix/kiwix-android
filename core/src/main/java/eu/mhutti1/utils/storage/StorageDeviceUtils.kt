@@ -109,6 +109,7 @@ object StorageDeviceUtils {
     }
 
   // Amazingly file.canWrite() does not always return the correct value
+  @Suppress("NestedBlockDepth")
   private fun canWrite(file: File): Boolean =
     "$file/test.txt".let {
       try {

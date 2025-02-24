@@ -946,9 +946,7 @@ abstract class CoreReaderFragment :
       getCurrentWebView()?.copyBackForwardList()?.let { historyList ->
         navigationHistoryList.clear()
         for (i in historyList.currentIndex downTo 0) {
-          if (i != historyList.currentIndex) {
-            addItemToNavigationHistoryList(historyList, i)
-          }
+          addItemToNavigationHistoryList(historyList, i)
         }
         showNavigationHistoryDialog(false)
       }
@@ -960,9 +958,7 @@ abstract class CoreReaderFragment :
       getCurrentWebView()?.copyBackForwardList()?.let { historyList ->
         navigationHistoryList.clear()
         for (i in historyList.currentIndex until historyList.size) {
-          if (i != historyList.currentIndex) {
-            addItemToNavigationHistoryList(historyList, i)
-          }
+          addItemToNavigationHistoryList(historyList, i)
         }
         showNavigationHistoryDialog(true)
       }
@@ -970,6 +966,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun addItemToNavigationHistoryList(historyList: WebBackForwardList, index: Int) {
+    if (index == historyList.currentIndex) return
     historyList.getItemAtIndex(index)?.let { webHistoryItem ->
       navigationHistoryList.add(
         NavigationHistoryListItem(
