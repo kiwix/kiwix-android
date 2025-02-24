@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.core.reader
 
-import android.annotation.SuppressLint
 import android.content.res.AssetFileDescriptor
 import android.net.Uri
 import android.os.ParcelFileDescriptor
@@ -65,42 +64,43 @@ class ZimFileReader constructor(
   interface Factory {
     suspend fun create(zimReaderSource: ZimReaderSource): ZimFileReader?
 
-    class Impl @Inject constructor(private val darkModeConfig: DarkModeConfig) :
-      Factory {
-        override suspend fun create(zimReaderSource: ZimReaderSource): ZimFileReader? =
-          withContext(Dispatchers.IO) { // Bug Fix #3805
-            try {
-              zimReaderSource.createArchive()?.let {
-                ZimFileReader(
-                  zimReaderSource,
-                  darkModeConfig = darkModeConfig,
-                  jniKiwixReader = it,
-                  searcher = SuggestionSearcher(it)
-                ).also {
-                  Log.e(TAG, "create: ${zimReaderSource.toDatabase()}")
-                }
-              } ?: kotlin.run {
-                Log.e(
-                  TAG,
-                  "Error in creating ZimFileReader," +
-                    " because file does not exist on path: ${zimReaderSource.toDatabase()}"
-                )
-                null
+    class Impl @Inject constructor(
+      private val darkModeConfig: DarkModeConfig
+    ) : Factory {
+      override suspend fun create(zimReaderSource: ZimReaderSource): ZimFileReader? =
+        withContext(Dispatchers.IO) { // Bug Fix #3805
+          try {
+            zimReaderSource.createArchive()?.let {
+              ZimFileReader(
+                zimReaderSource,
+                darkModeConfig = darkModeConfig,
+                jniKiwixReader = it,
+                searcher = SuggestionSearcher(it)
+              ).also {
+                Log.e(TAG, "create: ${zimReaderSource.toDatabase()}")
               }
-            } catch (ignore: JNIKiwixException) {
+            } ?: kotlin.run {
               Log.e(
                 TAG,
                 "Error in creating ZimFileReader," +
-                  " there is an JNI exception happens: $ignore"
+                  " because file does not exist on path: ${zimReaderSource.toDatabase()}"
               )
               null
-            } catch (ignore: Exception) {
-              // for handing the error, if any zim file is corrupted
-              Log.e(TAG, "Error in creating ZimFileReader: $ignore")
-              null
             }
+          } catch (ignore: JNIKiwixException) {
+            Log.e(
+              TAG,
+              "Error in creating ZimFileReader," +
+                " there is an JNI exception happens: $ignore"
+            )
+            null
+          } catch (ignore: Exception) {
+            // for handing the error, if any zim file is corrupted
+            Log.e(TAG, "Error in creating ZimFileReader: $ignore")
+            null
           }
-      }
+        }
+    }
   }
 
   /**
@@ -332,7 +332,7 @@ class ZimFileReader constructor(
       null
     }
 
-  @SuppressLint("CheckResult")
+  @Suppress("CheckResult", "IgnoredReturnValue")
   private fun streamZimContentToPipe(item: Item?, uri: String, outputStream: OutputStream) {
     Completable.fromAction {
       try {

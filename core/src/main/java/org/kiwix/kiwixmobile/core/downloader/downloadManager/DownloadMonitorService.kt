@@ -222,6 +222,7 @@ class DownloadMonitorService : Service() {
           downloadRoomDao.getEntityForDownloadId(download.id.toLong())?.let {
             showDownloadCompletedNotification(download)
             // to move these downloads in NewBookDao.
+            @Suppress("IgnoredReturnValue")
             downloadRoomDao.downloads().blockingFirst()
           }
         }

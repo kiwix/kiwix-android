@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.downloader
 
-import android.annotation.SuppressLint
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
@@ -32,7 +31,7 @@ class DownloaderImpl @Inject constructor(
   private val downloadRoomDao: DownloadRoomDao,
   private val kiwixService: KiwixService
 ) : Downloader {
-  @SuppressLint("CheckResult")
+  @Suppress("CheckResult", "IgnoredReturnValue")
   override fun download(book: LibraryNetworkEntity.Book) {
     urlProvider(book)
       .take(1)

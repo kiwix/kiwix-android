@@ -75,6 +75,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.isGone
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -2684,15 +2686,13 @@ abstract class CoreReaderFragment :
       getCurrentWebView()?.scrollY?.let {
         if (it > 200) {
           if (
-            (
-              backToTopButton?.visibility == View.GONE ||
-                backToTopButton?.visibility == View.INVISIBLE
-              ) &&
+            (backToTopButton?.isGone == true || backToTopButton?.isInvisible == true) &&
             ttsControls?.visibility == View.GONE
           ) {
             backToTopButton?.show()
           }
         } else {
+          backToTopButton?.isVisible
           if (backToTopButton?.visibility == View.VISIBLE) {
             backToTopButton?.hide()
           }
@@ -2755,7 +2755,7 @@ abstract class CoreReaderFragment :
     )
   }
 
-  @SuppressLint("CheckResult")
+  @Suppress("CheckResult", "IgnoredReturnValue")
   protected fun manageExternalLaunchAndRestoringViewState(
     restoreOrigin: RestoreOrigin = FromExternalLaunch
   ) {

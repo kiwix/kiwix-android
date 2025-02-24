@@ -70,7 +70,7 @@ class LibkiwixBookmarks @Inject constructor(
   private var bookmarkList: List<LibkiwixBookmarkItem> = arrayListOf()
   private var libraryBooksList: List<String> = arrayListOf()
 
-  @Suppress("CheckResult")
+  @Suppress("CheckResult", "IgnoredReturnValue")
   private val bookmarkListBehaviour: BehaviorSubject<List<LibkiwixBookmarkItem>>? by lazy {
     BehaviorSubject.create<List<LibkiwixBookmarkItem>>().also { subject ->
       rxSingle { getBookmarksList() }
