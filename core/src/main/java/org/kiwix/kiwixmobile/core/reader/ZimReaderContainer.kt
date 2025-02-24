@@ -34,6 +34,7 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
       field = value
     }
 
+  @Suppress("InjectDispatcher")
   suspend fun setZimReaderSource(zimReaderSource: ZimReaderSource?) {
     if (zimReaderSource == zimFileReader?.zimReaderSource) {
       return

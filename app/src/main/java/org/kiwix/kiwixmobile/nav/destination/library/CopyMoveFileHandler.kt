@@ -449,6 +449,7 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
+  @Suppress("InjectDispatcher")
   suspend fun deleteSourceFile(uri: Uri) = withContext(Dispatchers.IO) {
     try {
       DocumentsContract.deleteDocument(activity.applicationContext.contentResolver, uri)
@@ -458,7 +459,7 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  @Suppress("MagicNumber")
+  @Suppress("MagicNumber", "InjectDispatcher")
   private suspend fun copyFile(sourceUri: Uri, destinationFile: File) =
     withContext(Dispatchers.IO) {
       val contentResolver = activity.contentResolver

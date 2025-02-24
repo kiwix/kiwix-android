@@ -25,6 +25,7 @@ import androidx.core.net.toUri
 import eu.mhutti1.utils.storage.KB
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp
@@ -67,6 +68,7 @@ class ZimFileReader constructor(
     class Impl @Inject constructor(
       private val darkModeConfig: DarkModeConfig
     ) : Factory {
+      @Suppress("InjectDispatcher")
       override suspend fun create(zimReaderSource: ZimReaderSource): ZimFileReader? =
         withContext(Dispatchers.IO) { // Bug Fix #3805
           try {
@@ -192,12 +194,15 @@ class ZimFileReader constructor(
     }
 
   @Suppress("UnreachableCode")
-  suspend fun load(uri: String): InputStream? =
-    withContext(Dispatchers.IO) {
+  suspend fun load(
+    uri: String,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ): InputStream? =
+    withContext(dispatcher) {
       val extension = uri.substringAfterLast(".")
       if (assetExtensions.any { it == extension }) {
         try {
-          return@withContext loadAsset(uri)
+          return@withContext loadAsset(uri, dispatcher)
         } catch (ioException: IOException) {
           Log.e(TAG, "failed to write video for $uri", ioException)
         }
@@ -273,8 +278,12 @@ class ZimFileReader constructor(
       throw IOException("Could not open pipe for $uri", ioException)
     }
 
-  private suspend fun loadAsset(uri: String): InputStream? =
-    withContext(Dispatchers.IO) {
+  @Suppress("InjectDispatcher")
+  private suspend fun loadAsset(
+    uri: String,
+    dispatcher: CoroutineDispatcher
+  ): InputStream? =
+    withContext(dispatcher) {
       val item =
         try {
           jniKiwixReader.getEntryByPath(uri.filePath).getItem(true)

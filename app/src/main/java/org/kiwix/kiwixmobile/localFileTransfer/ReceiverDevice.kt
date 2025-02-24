@@ -38,6 +38,7 @@ import java.net.ServerSocket
  * many times as the no. of files).
  */
 internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) {
+  @Suppress("InjectDispatcher")
   suspend fun receive(): Boolean {
     return try {
       withContext(Dispatchers.IO) {

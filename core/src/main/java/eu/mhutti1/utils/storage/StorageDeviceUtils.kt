@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.os.Build
 import android.os.Environment
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -31,10 +32,12 @@ import java.io.RandomAccessFile
 
 object StorageDeviceUtils {
   @JvmStatic
-  suspend fun getWritableStorage(context: Context) =
-    withContext(Dispatchers.IO) {
-      validate(externalMediaFilesDirsDevices(context), true)
-    }
+  suspend fun getWritableStorage(
+    context: Context,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ) = withContext(dispatcher) {
+    validate(externalMediaFilesDirsDevices(context), true)
+  }
 
   @JvmStatic
   fun getReadableStorage(context: Context): List<StorageDevice> {

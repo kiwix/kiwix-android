@@ -484,6 +484,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     }
   }
 
+  @Suppress("InjectDispatcher")
   private fun navigateToReaderFragment(file: File) {
     if (!file.canRead()) {
       activity.toast(string.unable_to_read_zim_file)

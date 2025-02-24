@@ -129,6 +129,7 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
     }
   }
 
+  @Suppress("UseOrEmpty")
   private fun scanDirs(dirs: Array<out File?>?, extensionToMatch: String): List<File> =
     dirs?.filterNotNull()?.fold(listOf()) { acc, dir ->
       acc + dir.walk().filter { it.extension.startsWith(extensionToMatch) }.toList()

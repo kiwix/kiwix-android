@@ -48,6 +48,7 @@ internal class SenderDevice(
   private val wifiDirectManager: WifiDirectManager,
   private val fileReceiverDeviceAddress: InetAddress
 ) {
+  @Suppress("InjectDispatcher")
   suspend fun send(fileItems: List<FileItem?>) =
     withContext(Dispatchers.IO) {
       // Delay trying to connect with receiver, to allow slow receiver devices to setup server

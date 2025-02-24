@@ -26,6 +26,7 @@ import io.reactivex.BackpressureStrategy.LATEST
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -219,10 +220,13 @@ class LibkiwixBookmarks @Inject constructor(
     return libraryBooksList.any { it == bookId }
   }
 
-  fun deleteBookmarks(bookmarks: List<LibkiwixBookmarkItem>) {
+  fun deleteBookmarks(
+    bookmarks: List<LibkiwixBookmarkItem>,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ) {
     bookmarks.map { library.removeBookmark(it.zimId, it.bookmarkUrl) }
       .also {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(dispatcher).launch {
           writeBookMarksAndSaveLibraryToFile()
           updateFlowableBookmarkList()
         }

@@ -31,6 +31,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader
 
+@Suppress("InjectDispatcher")
 data class OpenFileWithNavigation(private val bookOnDisk: BooksOnDiskListItem.BookOnDisk) :
   SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {

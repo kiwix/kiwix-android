@@ -44,6 +44,8 @@ import java.net.Socket
  */
 abstract class PeerGroupHandshake(private var groupInfo: WifiP2pInfo) {
   private val handshakeMessage = "Request Kiwix File Sharing"
+
+  @Suppress("InjectDispatcher")
   suspend fun handshake(): InetAddress? =
     withContext(Dispatchers.IO) {
       Log.d(TAG, "Handshake in progress")

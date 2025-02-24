@@ -23,6 +23,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import io.reactivex.Flowable
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -88,8 +89,11 @@ abstract class NotesRoomDao : PageDao {
    * the associated file should also be removed from storage,
    * as it is no longer needed.
    */
-  private fun removeNoteFileFromStorage(noteFilePath: String) {
-    CoroutineScope(Dispatchers.IO).launch {
+  private fun removeNoteFileFromStorage(
+    noteFilePath: String,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ) {
+    CoroutineScope(dispatcher).launch {
       val noteFile = File(noteFilePath)
       if (noteFile.isFileExist()) {
         noteFile.deleteFile()

@@ -27,6 +27,7 @@ import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 
+@Suppress("InjectDispatcher")
 data class DeletePageItems(
   private val state: PageState<*>,
   private val pageDao: PageDao,

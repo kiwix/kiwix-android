@@ -305,6 +305,7 @@ class SearchFragment : BaseFragment() {
       it.value.equals(query, ignoreCase = true)
     }
 
+  @Suppress("InjectDispatcher")
   suspend fun render(state: SearchState) {
     renderingJob?.apply {
       // cancel the children job. Since we are getting the result on IO thread

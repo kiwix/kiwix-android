@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.language.viewmodel
 
-import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -26,7 +25,7 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 
-@SuppressLint("CheckResult")
+@Suppress("IgnoredReturnValue")
 data class SaveLanguagesAndFinish(
   val languages: List<Language>,
   val languageDao: NewLanguagesDao

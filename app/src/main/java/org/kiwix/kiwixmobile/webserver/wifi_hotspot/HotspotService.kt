@@ -73,7 +73,7 @@ class HotspotService :
     super.onDestroy()
   }
 
-  @Suppress("NestedBlockDepth")
+  @Suppress("NestedBlockDepth", "InjectDispatcher")
   override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
     when (intent.action) {
       ACTION_START_SERVER -> {

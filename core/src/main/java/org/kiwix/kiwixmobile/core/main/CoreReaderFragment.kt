@@ -1008,6 +1008,7 @@ abstract class CoreReaderFragment :
     loadUrlWithCurrentWebview(navigationHistoryListItem.pageUrl)
   }
 
+  @Suppress("InjectDispatcher")
   override fun clearHistory() {
     getCurrentWebView()?.clearHistory()
     CoroutineScope(Dispatchers.IO).launch {
@@ -2497,6 +2498,7 @@ abstract class CoreReaderFragment :
    *    openSearch("", isOpenedFromTabView = isInTabSwitcher, false)
    *  }
    */
+  @Suppress("InjectDispatcher")
   private fun saveTabStates(onComplete: () -> Unit = {}) {
     CoroutineScope(Dispatchers.Main).launch {
       savingTabsMutex.withLock {

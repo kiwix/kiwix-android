@@ -27,6 +27,7 @@ import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.reader.addContentPrefix
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 
+@Suppress("InjectDispatcher")
 data class SaveSearchToRecents(
   private val recentSearchRoomDao: RecentSearchRoomDao,
   private val searchListItem: SearchListItem,

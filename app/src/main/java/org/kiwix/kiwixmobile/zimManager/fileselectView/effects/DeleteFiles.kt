@@ -45,6 +45,7 @@ data class DeleteFiles(private val booksOnDiskListItems: List<BookOnDisk>) :
 
   @Inject lateinit var zimReaderContainer: ZimReaderContainer
 
+  @Suppress("InjectDispatcher")
   override fun invokeWith(activity: AppCompatActivity) {
     (activity as BaseActivity).cachedComponent.inject(this)
 

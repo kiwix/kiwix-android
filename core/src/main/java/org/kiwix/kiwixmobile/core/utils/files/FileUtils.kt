@@ -32,6 +32,7 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.webkit.URLUtil
 import androidx.annotation.RequiresApi
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -65,8 +66,11 @@ object FileUtils {
 
   @JvmStatic
   @Synchronized
-  fun deleteCachedFiles(context: Context) {
-    CoroutineScope(Dispatchers.IO).launch {
+  fun deleteCachedFiles(
+    context: Context,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ) {
+    CoroutineScope(dispatcher).launch {
       getFileCacheDir(context)?.deleteRecursively()
     }
   }
@@ -84,7 +88,8 @@ object FileUtils {
         fileloop@ while (alphabetFirst <= 'z') {
           var alphabetSecond = 'a'
           while (alphabetSecond <= 'z') {
-            val chunkPath = filePath.substring(0, filePath.length - 2) + alphabetFirst + alphabetSecond
+            val chunkPath =
+              filePath.substring(0, filePath.length - 2) + alphabetFirst + alphabetSecond
             val fileChunk = File(chunkPath)
             if (fileChunk.isFileExist()) {
               fileChunk.deleteFile()

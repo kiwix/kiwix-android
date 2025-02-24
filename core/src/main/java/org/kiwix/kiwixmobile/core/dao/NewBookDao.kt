@@ -22,6 +22,7 @@ import io.objectbox.kotlin.inValues
 import io.objectbox.kotlin.query
 import io.objectbox.query.QueryBuilder
 import io.reactivex.rxjava3.core.Completable
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -55,10 +56,10 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
           .toList()
           .toFlowable()
           .flatMap { booksList ->
-            completableFromCoroutine {
+            completableFromCoroutine(block = {
               removeBooksThatAreInTrashFolder(booksList)
               removeBooksThatDoNotExist(booksList.toMutableList())
-            }
+            })
               .andThen(io.reactivex.rxjava3.core.Flowable.just(booksList))
           }
       }
@@ -80,10 +81,13 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
       }
       .map { it.map(::BookOnDisk) }
 
-  private fun completableFromCoroutine(block: suspend () -> Unit): Completable {
+  private fun completableFromCoroutine(
+    block: suspend () -> Unit,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ): Completable {
     return Completable.defer {
       Completable.create { emitter ->
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(dispatcher).launch {
           try {
             block()
             emitter.onComplete()

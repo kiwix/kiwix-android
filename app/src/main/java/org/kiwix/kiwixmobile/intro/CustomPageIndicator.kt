@@ -171,7 +171,6 @@ class CustomPageIndicator @JvmOverloads constructor(
     val left = paddingLeft
     val top = paddingTop
     val right = width - paddingRight
-    val bottom = height - paddingBottom
     val requiredWidth = getRequiredWidth()
     val startLeft = left + (right - left - requiredWidth) / 2 + dotRadius
     dotCenterX = FloatArray(pageCount)
