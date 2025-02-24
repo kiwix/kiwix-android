@@ -143,22 +143,22 @@ open class ErrorActivity : BaseActivity() {
   // List of supported email apps
   private val supportedEmailPackages =
     listOf(
-      "com.google.android.gm", // Gmail
-      "com.zoho.mail", // Zoho Mail
-      "com.microsoft.office.outlook", // Outlook
-      "com.yahoo.mobile.client.android.mail", // Yahoo Mail
-      "me.bluemail.mail", // BlueMail
-      "ch.protonmail.android", // ProtonMail
-      "com.fsck.k9", // K-9 Mail
-      "com.maildroid", // Maildroid
-      "org.kman.AquaMail", // Aqua Mail
-      "com.edison.android.mail", // Edison Mail
-      "com.readdle.spark", // Spark
-      "com.gmx.mobile.android.mail", // GMX Mail
-      "com.fastmail", // FastMail
-      "ru.mail.mailapp", // Mail.ru
-      "ru.yandex.mail", // Yandex.Mail
-      "de.tutao.tutanota" // Tutanota
+      "com.google.android.gm",
+      "com.zoho.mail",
+      "com.microsoft.office.outlook",
+      "com.yahoo.mobile.client.android.mail",
+      "me.bluemail.mail",
+      "ch.protonmail.android",
+      "com.fsck.k9",
+      "com.maildroid",
+      "org.kman.AquaMail",
+      "com.edison.android.mail",
+      "com.readdle.spark",
+      "com.gmx.mobile.android.mail",
+      "com.fastmail",
+      "ru.mail.mailapp",
+      "ru.yandex.mail",
+      "de.tutao.tutanota"
     )
 
   private val sendEmailLauncher =

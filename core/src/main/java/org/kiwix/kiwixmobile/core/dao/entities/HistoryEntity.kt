@@ -28,7 +28,8 @@ data class HistoryEntity(
   @Id var id: Long = 0L,
   val zimId: String,
   val zimName: String,
-  val zimFilePath: String?, // keep this to handle previously saved history
+  // keep this to handle previously saved history
+  val zimFilePath: String?,
   @Convert(converter = ZimSourceConverter::class, dbType = String::class)
   var zimReaderSource: ZimReaderSource?,
   val favicon: String?,
@@ -41,7 +42,8 @@ data class HistoryEntity(
     historyItem.databaseId,
     historyItem.zimId,
     historyItem.zimName,
-    null, // pass null for new history items
+    // pass null for new history items
+    null,
     historyItem.zimReaderSource,
     historyItem.favicon,
     historyItem.historyUrl,

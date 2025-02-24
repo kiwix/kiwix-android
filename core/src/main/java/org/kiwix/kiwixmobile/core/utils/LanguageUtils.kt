@@ -48,7 +48,9 @@ class LanguageUtils(private val context: Context) {
       .map { locale -> locale.trim { it <= ' ' } }
   }
 
-  private fun sortWithCollator(languageCodesFromAssets: MutableList<LanguageContainer>): MutableList<LanguageContainer> {
+  private fun sortWithCollator(
+    languageCodesFromAssets: MutableList<LanguageContainer>
+  ): MutableList<LanguageContainer> {
     val localeCollator =
       Collator.getInstance(context.locale).apply { strength = Collator.SECONDARY }
     languageCodesFromAssets.sortWith(

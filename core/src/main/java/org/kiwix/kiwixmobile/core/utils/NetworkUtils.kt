@@ -42,10 +42,11 @@ object NetworkUtils {
    * check if network of type WIFI is connected
    *
    * @return true if WIFI is connected
+   *
+   * TODO method isWiFi should be renamed to isWifiConnected to
+   *  express the state which is checked
+   *  (postponed to refactoring deprecated android.net.* usage)
    */
-  // TODO method isWiFi should be renamed to isWifiConnected to
-  //  express the state which is checked
-  //  (postponed to refactoring deprecated android.net.* usage)
   fun isWiFi(context: Context): Boolean {
     val connectivity =
       context

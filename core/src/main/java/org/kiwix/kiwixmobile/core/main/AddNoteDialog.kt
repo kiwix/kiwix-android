@@ -67,7 +67,6 @@ import javax.inject.Inject
  * Notes are saved as text files at location: "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
  */
 
-// constant
 const val DISABLE_ICON_ITEM_ALPHA = 130
 const val ENABLE_ICON_ITEM_ALPHA = 255
 

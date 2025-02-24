@@ -37,87 +37,86 @@ import org.kiwix.kiwixmobile.core.extensions.getAttribute
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 import javax.inject.Inject
 
-class AlertDialogShower @Inject constructor(private val activity: Activity) :
-  DialogShower {
-    companion object {
-      const val externalLinkLeftMargin = 10
-      const val externalLinkRightMargin = 10
-      const val externalLinkTopMargin = 10
-      const val externalLinkBottomMargin = 0
-    }
+class AlertDialogShower @Inject constructor(private val activity: Activity) : DialogShower {
+  companion object {
+    const val EXTERNAL_LINK_LEFT_MARGIN = 10
+    const val EXTERNAL_LINK_RIGHT_MARGIN = 10
+    const val EXTERNAL_LINK_TOP_MARGIN = 10
+    const val EXTERNAL_LINK_BOTTOM_MARGIN = 0
+  }
 
-    override fun show(dialog: KiwixDialog, vararg clickListeners: () -> Unit, uri: Uri?) =
-      create(dialog, *clickListeners, uri = uri).show()
+  override fun show(dialog: KiwixDialog, vararg clickListeners: () -> Unit, uri: Uri?) =
+    create(dialog, *clickListeners, uri = uri).show()
 
-    override fun create(dialog: KiwixDialog, vararg clickListeners: () -> Unit, uri: Uri?): Dialog {
-      return AlertDialog.Builder(activity)
-        .apply {
-          dialog.title?.let(this::setTitle)
-          dialog.icon?.let(this::setIcon)
+  override fun create(dialog: KiwixDialog, vararg clickListeners: () -> Unit, uri: Uri?): Dialog {
+    return AlertDialog.Builder(activity)
+      .apply {
+        dialog.title?.let(this::setTitle)
+        dialog.icon?.let(this::setIcon)
 
-          dialog.message?.let { setMessage(activity.getString(it, *bodyArguments(dialog))) }
-          setPositiveButton(dialog.positiveMessage) { _, _ ->
-            clickListeners.getOrNull(0)
+        dialog.message?.let { setMessage(activity.getString(it, *bodyArguments(dialog))) }
+        setPositiveButton(dialog.positiveMessage) { _, _ ->
+          clickListeners.getOrNull(0)
+            ?.invoke()
+        }
+        dialog.negativeMessage?.let {
+          setNegativeButton(it) { _, _ ->
+            clickListeners.getOrNull(1)
               ?.invoke()
           }
-          dialog.negativeMessage?.let {
-            setNegativeButton(it) { _, _ ->
-              clickListeners.getOrNull(1)
-                ?.invoke()
-            }
-          }
-          dialog.neutralMessage?.let {
-            setNeutralButton(it) { _, _ ->
-              clickListeners.getOrNull(2)
-                ?.invoke()
-            }
-          }
-          uri?.let {
-            val frameLayout = FrameLayout(activity.baseContext)
-
-            val textView = TextView(activity.baseContext).apply {
-              layoutParams = getFrameLayoutParams()
-              gravity = Gravity.CENTER
-              minHeight = resources.getDimensionPixelSize(R.dimen.material_minimum_height_and_width)
-              setLinkTextColor(activity.getAttribute(attr.colorPrimary))
-              setOnLongClickListener {
-                val clipboard =
-                  ContextCompat.getSystemService(activity.baseContext, ClipboardManager::class.java)
-                val clip = ClipData.newPlainText("External Url", "$uri")
-                clipboard?.setPrimaryClip(clip)
-                Toast.makeText(
-                  activity.baseContext,
-                  R.string.external_link_copied_message,
-                  Toast.LENGTH_SHORT
-                ).show()
-                true
-              }
-              @SuppressLint("SetTextI18n")
-              text = "</br><a href=$uri> <b>$uri</b>".fromHtml()
-            }
-            frameLayout.addView(textView)
-            setView(frameLayout)
-          }
-          dialog.getView?.let { setView(it()) }
-          setCancelable(dialog.cancelable)
         }
-        .create()
-    }
+        dialog.neutralMessage?.let {
+          setNeutralButton(it) { _, _ ->
+            clickListeners.getOrNull(2)
+              ?.invoke()
+          }
+        }
+        uri?.let {
+          val frameLayout = FrameLayout(activity.baseContext)
 
-    private fun getFrameLayoutParams() = FrameLayout.LayoutParams(
-      LayoutParams.MATCH_PARENT,
-      LayoutParams.WRAP_CONTENT
-    ).apply {
-      topMargin = externalLinkTopMargin
-      bottomMargin = externalLinkBottomMargin
-      leftMargin = externalLinkLeftMargin
-      rightMargin = externalLinkRightMargin
-    }
-
-    private fun bodyArguments(dialog: KiwixDialog) =
-      if (dialog is HasBodyFormatArgs) {
-        dialog.args.toTypedArray()
-      } else {
-        emptyArray()
+          val textView = TextView(activity.baseContext).apply {
+            layoutParams = getFrameLayoutParams()
+            gravity = Gravity.CENTER
+            minHeight = resources.getDimensionPixelSize(R.dimen.material_minimum_height_and_width)
+            setLinkTextColor(activity.getAttribute(attr.colorPrimary))
+            setOnLongClickListener {
+              val clipboard =
+                ContextCompat.getSystemService(activity.baseContext, ClipboardManager::class.java)
+              val clip = ClipData.newPlainText("External Url", "$uri")
+              clipboard?.setPrimaryClip(clip)
+              Toast.makeText(
+                activity.baseContext,
+                R.string.external_link_copied_message,
+                Toast.LENGTH_SHORT
+              ).show()
+              true
+            }
+            @SuppressLint("SetTextI18n")
+            text = "</br><a href=$uri> <b>$uri</b>".fromHtml()
+          }
+          frameLayout.addView(textView)
+          setView(frameLayout)
+        }
+        dialog.getView?.let { setView(it()) }
+        setCancelable(dialog.cancelable)
       }
+      .create()
   }
+
+  private fun getFrameLayoutParams() = FrameLayout.LayoutParams(
+    LayoutParams.MATCH_PARENT,
+    LayoutParams.WRAP_CONTENT
+  ).apply {
+    topMargin = EXTERNAL_LINK_TOP_MARGIN
+    bottomMargin = EXTERNAL_LINK_BOTTOM_MARGIN
+    leftMargin = EXTERNAL_LINK_LEFT_MARGIN
+    rightMargin = EXTERNAL_LINK_RIGHT_MARGIN
+  }
+
+  private fun bodyArguments(dialog: KiwixDialog) =
+    if (dialog is HasBodyFormatArgs) {
+      dialog.args.toTypedArray()
+    } else {
+      emptyArray()
+    }
+}

@@ -30,7 +30,8 @@ data class NotesRoomEntity(
   @PrimaryKey(autoGenerate = true)
   var id: Long = 0L,
   val zimId: String,
-  var zimFilePath: String?, // keep this to handle previously saved notes
+  // keep this to handle previously saved notes
+  var zimFilePath: String?,
   @TypeConverters(ZimSourceRoomConverter::class)
   var zimReaderSource: ZimReaderSource?,
   val zimUrl: String,
