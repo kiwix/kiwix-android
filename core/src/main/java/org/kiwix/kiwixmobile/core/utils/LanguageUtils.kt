@@ -68,9 +68,9 @@ class LanguageUtils(private val context: Context) {
     if (sharedPreferenceUtil.prefLanguage == Locale.ROOT.toString()) {
       return false
     }
-    return Locale.getAvailableLocales().firstOrNull { locale ->
+    return Locale.getAvailableLocales().none { locale ->
       locale.language == Locale.getDefault().toString()
-    } == null
+    }
   }
 
   // Change the font of all the TextViews and its subclasses in our whole app by attaching a custom

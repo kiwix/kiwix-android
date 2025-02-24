@@ -118,7 +118,7 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
   private fun uniqueBooksByFile(booksOnDisk: List<BookOnDisk>): List<BookOnDisk> {
     val booksWithSameFilePath = booksWithSameFilePath(booksOnDisk)
     return booksOnDisk.filter { bookOnDisk: BookOnDisk ->
-      booksWithSameFilePath.find { it.zimReaderSource == bookOnDisk.zimReaderSource } == null
+      booksWithSameFilePath.none { it.zimReaderSource == bookOnDisk.zimReaderSource }
     }
   }
 

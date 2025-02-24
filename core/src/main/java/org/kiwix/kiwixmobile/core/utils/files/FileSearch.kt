@@ -112,4 +112,4 @@ class FileSearch @Inject constructor(private val context: Context) {
 }
 
 internal fun String.isAny(vararg suffixes: String) =
-  suffixes.firstOrNull { endsWith(it) } != null
+  suffixes.any { endsWith(it) }

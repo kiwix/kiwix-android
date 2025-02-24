@@ -67,7 +67,7 @@ class StorageObserver @Inject constructor(
     files.filter { fileHasNoMatchingDownload(downloads, it) }
 
   private fun fileHasNoMatchingDownload(downloads: List<DownloadModel>, file: File) =
-    downloads.firstOrNull { file.absolutePath.endsWith(it.fileNameFromUrl) } == null
+    downloads.none { file.absolutePath.endsWith(it.fileNameFromUrl) }
 
   private suspend fun convertToBookOnDisk(file: File) =
     zimReaderFactory.create(ZimReaderSource(file))
