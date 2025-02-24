@@ -945,12 +945,11 @@ abstract class CoreReaderFragment :
     if (getCurrentWebView()?.canGoBack() == true) {
       getCurrentWebView()?.copyBackForwardList()?.let { historyList ->
         navigationHistoryList.clear()
-        (historyList.currentIndex downTo 0)
-          .asSequence()
-          .filter { it != historyList.currentIndex }
-          .forEach {
-            addItemToNavigationHistoryList(historyList, it)
+        for (i in historyList.currentIndex downTo 0) {
+          if (i != historyList.currentIndex) {
+            addItemToNavigationHistoryList(historyList, i)
           }
+        }
         showNavigationHistoryDialog(false)
       }
     }
@@ -960,12 +959,11 @@ abstract class CoreReaderFragment :
     if (getCurrentWebView()?.canGoForward() == true) {
       getCurrentWebView()?.copyBackForwardList()?.let { historyList ->
         navigationHistoryList.clear()
-        (historyList.currentIndex until historyList.size)
-          .asSequence()
-          .filter { it != historyList.currentIndex }
-          .forEach {
-            addItemToNavigationHistoryList(historyList, it)
+        for (i in historyList.currentIndex until historyList.size) {
+          if (i != historyList.currentIndex) {
+            addItemToNavigationHistoryList(historyList, i)
           }
+        }
         showNavigationHistoryDialog(true)
       }
     }
