@@ -74,17 +74,17 @@ object FileUtils {
   @JvmStatic
   suspend fun deleteZimFile(path: String) {
     fileOperationMutex.withLock {
-      var path = path
-      if (path.substring(path.length - ChunkUtils.PART.length) == ChunkUtils.PART) {
-        path = path.substring(0, path.length - ChunkUtils.PART.length)
+      var filePath = path
+      if (filePath.substring(filePath.length - ChunkUtils.PART.length) == ChunkUtils.PART) {
+        filePath = filePath.substring(0, filePath.length - ChunkUtils.PART.length)
       }
-      val file = File(path)
+      val file = File(filePath)
       if (file.path.substring(file.path.length - 3) != "zim") {
         var alphabetFirst = 'a'
         fileloop@ while (alphabetFirst <= 'z') {
           var alphabetSecond = 'a'
           while (alphabetSecond <= 'z') {
-            val chunkPath = path.substring(0, path.length - 2) + alphabetFirst + alphabetSecond
+            val chunkPath = filePath.substring(0, filePath.length - 2) + alphabetFirst + alphabetSecond
             val fileChunk = File(chunkPath)
             if (fileChunk.isFileExist()) {
               fileChunk.deleteFile()
@@ -97,7 +97,7 @@ object FileUtils {
         }
       } else {
         file.deleteFile()
-        deleteZimFileParts(path)
+        deleteZimFileParts(filePath)
       }
     }
   }
@@ -514,15 +514,15 @@ object FileUtils {
 
   @JvmStatic
   suspend fun hasPart(file: File): Boolean {
-    var file = file
-    file = File(getFileName(file.path))
-    if (file.path.endsWith(".zim")) {
+    var tempFile = file
+    tempFile = File(getFileName(tempFile.path))
+    if (tempFile.path.endsWith(".zim")) {
       return false
     }
-    if (file.path.endsWith(".part")) {
+    if (tempFile.path.endsWith(".part")) {
       return true
     }
-    val path = file.path
+    val path = tempFile.path
     for (firstCharacter in 'a'..'z') {
       for (secondCharacter in 'a'..'z') {
         val chunkPath = path.substring(0, path.length - 2) + firstCharacter + secondCharacter

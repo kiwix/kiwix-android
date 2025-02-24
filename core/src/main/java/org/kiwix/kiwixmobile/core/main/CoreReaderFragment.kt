@@ -1828,8 +1828,7 @@ abstract class CoreReaderFragment :
     zimReaderContainer?.let { zimReaderContainer ->
       zimReaderContainer.setZimReaderSource(zimReaderSource)
 
-      val zimFileReader = zimReaderContainer.zimFileReader
-      zimFileReader?.let { zimFileReader ->
+      zimReaderContainer.zimFileReader?.let { zimFileReader ->
         // uninitialized the service worker to fix https://github.com/kiwix/kiwix-android/issues/2561
         if (!isFromManageExternalLaunch) {
           openArticle(UNINITIALISER_ADDRESS)
@@ -2693,7 +2692,7 @@ abstract class CoreReaderFragment :
             (
               backToTopButton?.visibility == View.GONE ||
                 backToTopButton?.visibility == View.INVISIBLE
-            ) &&
+              ) &&
             ttsControls?.visibility == View.GONE
           ) {
             backToTopButton?.show()
