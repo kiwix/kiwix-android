@@ -113,37 +113,34 @@ class SearchFragment : BaseFragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    searchAdapter =
-      SearchAdapter(
-        RecentSearchDelegate(::onItemClick, ::onItemClickNewTab) {
-          searchViewModel.actions.trySend(OnItemLongClick(it)).isSuccess
-        },
-        ZimSearchResultDelegate(::onItemClick, ::onItemClickNewTab)
-      )
+    searchAdapter = SearchAdapter(
+      RecentSearchDelegate(::onItemClick, ::onItemClickNewTab) {
+        searchViewModel.actions.trySend(OnItemLongClick(it)).isSuccess
+      },
+      ZimSearchResultDelegate(::onItemClick, ::onItemClickNewTab)
+    )
     setupToolbar(view)
     fragmentSearchBinding?.searchList?.run {
       adapter = searchAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
       // Add scroll listener to detect when the last item is reached
-      addOnScrollListener(
-        object : RecyclerView.OnScrollListener() {
-          override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            super.onScrolled(recyclerView, dx, dy)
+      addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+          super.onScrolled(recyclerView, dx, dy)
 
-            val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-            val totalItemCount = layoutManager.itemCount
-            val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
-            // Check if the user is about to reach the last item
-            if (!isDataLoading &&
-              totalItemCount <= lastVisibleItem + VISIBLE_ITEMS_THRESHOLD - LOADING_ITEMS_BEFORE
-            ) {
-              // Load more data when the last item is almost visible
-              loadMoreSearchResult()
-            }
+          val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+          val totalItemCount = layoutManager.itemCount
+          val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+          // Check if the user is about to reach the last item
+          if (!isDataLoading &&
+            totalItemCount <= lastVisibleItem + VISIBLE_ITEMS_THRESHOLD - LOADING_ITEMS_BEFORE
+          ) {
+            // Load more data when the last item is almost visible
+            loadMoreSearchResult()
           }
         }
-      )
+      })
     }
     lifecycleScope.launchWhenCreated {
       searchViewModel.effects.collect { it.invokeWith(this@SearchFragment.coreMainActivity) }
@@ -170,16 +167,15 @@ class SearchFragment : BaseFragment() {
           // Hide the loading indicator when data loading is complete
           fragmentSearchBinding?.loadingMoreDataIndicator?.isShowing(false)
           // Update data loading status based on the received search results
-          isDataLoading =
-            when {
-              searchResults == null -> true
-              searchResults.isEmpty() -> false
-              else -> {
-                // Append the new search results to the existing list
-                searchAdapter?.addData(searchResults)
-                false
-              }
+          isDataLoading = when {
+            searchResults == null -> true
+            searchResults.isEmpty() -> false
+            else -> {
+              // Append the new search results to the existing list
+              searchAdapter?.addData(searchResults)
+              false
             }
+          }
         }
     }
   }

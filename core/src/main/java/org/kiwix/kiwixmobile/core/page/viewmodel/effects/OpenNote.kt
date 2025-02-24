@@ -45,10 +45,9 @@ class OpenNote(
 
     if (previousInstance == null) {
       val dialogFragment = AddNoteDialog()
-      val bundle =
-        Bundle().apply {
-          putSerializable(NOTE_LIST_ITEM_TAG, noteListItem)
-        }
+      val bundle = Bundle().apply {
+        putSerializable(NOTE_LIST_ITEM_TAG, noteListItem)
+      }
       dialogFragment.arguments = bundle
       dialogFragment.show(fragmentTransaction, AddNoteDialog.TAG)
     }

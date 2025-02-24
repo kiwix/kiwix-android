@@ -79,11 +79,10 @@ class DownloadMonitorService : Service() {
   }
 
   private fun setupUpdater() {
-    updaterDisposable =
-      updater.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
-        { it.invoke() },
-        Throwable::printStackTrace
-      )
+    updaterDisposable = updater.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
+      { it.invoke() },
+      Throwable::printStackTrace
+    )
   }
 
   override fun onBind(intent: Intent?): IBinder? = null
@@ -148,105 +147,104 @@ class DownloadMonitorService : Service() {
     notificationManager.cancel(downloadId)
   }
 
-  private val fetchListener =
-    object : FetchListener {
-      override fun onAdded(download: Download) {
-        // Do nothing
-      }
+  private val fetchListener = object : FetchListener {
+    override fun onAdded(download: Download) {
+      // Do nothing
+    }
 
-      override fun onCancelled(download: Download) {
-        delete(download)
-      }
+    override fun onCancelled(download: Download) {
+      delete(download)
+    }
 
-      override fun onCompleted(download: Download) {
-        update(download, true)
-      }
+    override fun onCompleted(download: Download) {
+      update(download, true)
+    }
 
-      override fun onDeleted(download: Download) {
-        delete(download)
-      }
+    override fun onDeleted(download: Download) {
+      delete(download)
+    }
 
-      override fun onDownloadBlockUpdated(
-        download: Download,
-        downloadBlock: DownloadBlock,
-        totalBlocks: Int
-      ) {
-        update(download)
-      }
+    override fun onDownloadBlockUpdated(
+      download: Download,
+      downloadBlock: DownloadBlock,
+      totalBlocks: Int
+    ) {
+      update(download)
+    }
 
-      override fun onError(download: Download, error: Error, throwable: Throwable?) {
-        update(download, true)
-      }
+    override fun onError(download: Download, error: Error, throwable: Throwable?) {
+      update(download, true)
+    }
 
-      override fun onPaused(download: Download) {
-        update(download)
-      }
+    override fun onPaused(download: Download) {
+      update(download)
+    }
 
-      override fun onProgress(
-        download: Download,
-        etaInMilliSeconds: Long,
-        downloadedBytesPerSecond: Long
-      ) {
-        update(download)
-      }
+    override fun onProgress(
+      download: Download,
+      etaInMilliSeconds: Long,
+      downloadedBytesPerSecond: Long
+    ) {
+      update(download)
+    }
 
-      override fun onQueued(download: Download, waitingOnNetwork: Boolean) {
-        update(download)
-      }
+    override fun onQueued(download: Download, waitingOnNetwork: Boolean) {
+      update(download)
+    }
 
-      override fun onRemoved(download: Download) {
-        delete(download)
-      }
+    override fun onRemoved(download: Download) {
+      delete(download)
+    }
 
-      override fun onResumed(download: Download) {
-        update(download)
-      }
+    override fun onResumed(download: Download) {
+      update(download)
+    }
 
-      override fun onStarted(
-        download: Download,
-        downloadBlocks: List<DownloadBlock>,
-        totalBlocks: Int
-      ) {
-        update(download)
-      }
+    override fun onStarted(
+      download: Download,
+      downloadBlocks: List<DownloadBlock>,
+      totalBlocks: Int
+    ) {
+      update(download)
+    }
 
-      override fun onWaitingNetwork(download: Download) {
-        update(download)
-      }
+    override fun onWaitingNetwork(download: Download) {
+      update(download)
+    }
 
-      private fun update(
-        download: Download,
-        shouldSetForegroundNotification: Boolean = false
-      ) {
-        updater.onNext {
-          downloadRoomDao.update(download)
-          if (download.status == Status.COMPLETED) {
-            downloadRoomDao.getEntityForDownloadId(download.id.toLong())?.let {
-              showDownloadCompletedNotification(download)
-              // to move these downloads in NewBookDao.
-              downloadRoomDao.downloads().blockingFirst()
-            }
-          }
-          // If someone pause the Download then post a notification since fetch removes the
-          // notification for ongoing download when pause so we needs to show our custom notification.
-          if (download.isPaused()) {
-            fetchDownloadNotificationManager.showDownloadPauseNotification(fetch, download).also {
-              setForeGroundServiceNotificationIfNoActiveDownloads(fetch, download)
-            }
-          }
-          if (shouldSetForegroundNotification) {
-            setForegroundNotification(download.id)
+    private fun update(
+      download: Download,
+      shouldSetForegroundNotification: Boolean = false
+    ) {
+      updater.onNext {
+        downloadRoomDao.update(download)
+        if (download.status == Status.COMPLETED) {
+          downloadRoomDao.getEntityForDownloadId(download.id.toLong())?.let {
+            showDownloadCompletedNotification(download)
+            // to move these downloads in NewBookDao.
+            downloadRoomDao.downloads().blockingFirst()
           }
         }
-      }
-
-      private fun delete(download: Download) {
-        updater.onNext {
-          downloadRoomDao.delete(download)
+        // If someone pause the Download then post a notification since fetch removes the
+        // notification for ongoing download when pause so we needs to show our custom notification.
+        if (download.isPaused()) {
+          fetchDownloadNotificationManager.showDownloadPauseNotification(fetch, download).also {
+            setForeGroundServiceNotificationIfNoActiveDownloads(fetch, download)
+          }
+        }
+        if (shouldSetForegroundNotification) {
           setForegroundNotification(download.id)
         }
       }
     }
+
+    private fun delete(download: Download) {
+      updater.onNext {
+        downloadRoomDao.delete(download)
+        setForegroundNotification(download.id)
+      }
+    }
+  }
 
   private fun setForeGroundServiceNotificationIfNoActiveDownloads(
     fetch: Fetch,

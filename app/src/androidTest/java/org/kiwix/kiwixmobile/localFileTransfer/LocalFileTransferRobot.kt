@@ -42,8 +42,7 @@ import uk.co.deanwild.materialshowcaseview.R.id
  */
 
 fun localFileTransfer(func: LocalFileTransferRobot.() -> Unit) =
-  LocalFileTransferRobot()
-    .applyWithViewHierarchyPrinting(func)
+  LocalFileTransferRobot().applyWithViewHierarchyPrinting(func)
 
 class LocalFileTransferRobot : BaseRobot() {
   fun assertReceiveFileTitleVisible() {

@@ -25,8 +25,7 @@ interface AbsDelegateAdapter<
   INSTANCE : SUPERTYPE,
   SUPERTYPE : Any,
   out VIEWHOLDER : BaseViewHolder<INSTANCE>
-  > :
-  AdapterDelegate<SUPERTYPE> {
+  > : AdapterDelegate<SUPERTYPE> {
   val itemClass: Class<INSTANCE>
 
   @Suppress("UNCHECKED_CAST")

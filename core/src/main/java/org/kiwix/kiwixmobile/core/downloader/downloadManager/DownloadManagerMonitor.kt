@@ -48,81 +48,79 @@ class DownloadManagerMonitor @Inject constructor(
   private var updaterDisposable: Disposable? = null
 
   private fun setupUpdater() {
-    updaterDisposable =
-      updater.subscribeOn(Schedulers.io())
-        .observeOn(Schedulers.io())
-        .subscribe(
-          { it.invoke() },
-          Throwable::printStackTrace
-        )
+    updaterDisposable = updater.subscribeOn(Schedulers.io())
+      .observeOn(Schedulers.io())
+      .subscribe(
+        { it.invoke() },
+        Throwable::printStackTrace
+      )
   }
 
-  private val fetchListener =
-    object : FetchListener {
-      override fun onAdded(download: Download) {
-        // Do nothing
-      }
-
-      override fun onCancelled(download: Download) {
-        delete(download)
-      }
-
-      override fun onCompleted(download: Download) {
-        update(download)
-      }
-
-      override fun onDeleted(download: Download) {
-        delete(download)
-      }
-
-      override fun onDownloadBlockUpdated(
-        download: Download,
-        downloadBlock: DownloadBlock,
-        totalBlocks: Int
-      ) {
-        update(download)
-      }
-
-      override fun onError(download: Download, error: Error, throwable: Throwable?) {
-        update(download)
-      }
-
-      override fun onPaused(download: Download) {
-        update(download)
-      }
-
-      override fun onProgress(
-        download: Download,
-        etaInMilliSeconds: Long,
-        downloadedBytesPerSecond: Long
-      ) {
-        update(download)
-      }
-
-      override fun onQueued(download: Download, waitingOnNetwork: Boolean) {
-        update(download)
-      }
-
-      override fun onRemoved(download: Download) {
-        delete(download)
-      }
-
-      override fun onResumed(download: Download) {
-        update(download)
-      }
-
-      override fun onStarted(
-        download: Download,
-        downloadBlocks: List<DownloadBlock>,
-        totalBlocks: Int
-      ) {
-        update(download)
-      }
-
-      override fun onWaitingNetwork(download: Download) {
-        update(download)
-      }
+  private val fetchListener = object : FetchListener {
+    override fun onAdded(download: Download) {
+      // Do nothing
     }
+
+    override fun onCancelled(download: Download) {
+      delete(download)
+    }
+
+    override fun onCompleted(download: Download) {
+      update(download)
+    }
+
+    override fun onDeleted(download: Download) {
+      delete(download)
+    }
+
+    override fun onDownloadBlockUpdated(
+      download: Download,
+      downloadBlock: DownloadBlock,
+      totalBlocks: Int
+    ) {
+      update(download)
+    }
+
+    override fun onError(download: Download, error: Error, throwable: Throwable?) {
+      update(download)
+    }
+
+    override fun onPaused(download: Download) {
+      update(download)
+    }
+
+    override fun onProgress(
+      download: Download,
+      etaInMilliSeconds: Long,
+      downloadedBytesPerSecond: Long
+    ) {
+      update(download)
+    }
+
+    override fun onQueued(download: Download, waitingOnNetwork: Boolean) {
+      update(download)
+    }
+
+    override fun onRemoved(download: Download) {
+      delete(download)
+    }
+
+    override fun onResumed(download: Download) {
+      update(download)
+    }
+
+    override fun onStarted(
+      download: Download,
+      downloadBlocks: List<DownloadBlock>,
+      totalBlocks: Int
+    ) {
+      update(download)
+    }
+
+    override fun onWaitingNetwork(download: Download) {
+      update(download)
+    }
+  }
 
   private fun update(download: Download) {
     updater.onNext {

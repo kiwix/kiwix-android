@@ -26,8 +26,7 @@ import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.viewBinding
 sealed class NavigationHistoryDelegate<
   I : NavigationHistoryListItem,
   out VH : NavigationHistoryViewHolder<I>
-  > :
-  AbsDelegateAdapter<I, NavigationHistoryListItem, VH> {
+  > : AbsDelegateAdapter<I, NavigationHistoryListItem, VH> {
   class NavigationDelegate(private val onClickListener: ((NavigationHistoryListItem) -> Unit)) :
     NavigationHistoryDelegate<
       NavigationHistoryListItem,

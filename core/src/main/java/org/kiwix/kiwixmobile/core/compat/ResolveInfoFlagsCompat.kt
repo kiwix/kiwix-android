@@ -26,19 +26,18 @@ import android.os.UserManager
 
 class ResolveInfoFlagsCompat private constructor(
   @ResolveInfoFlagsBitsCompat value: Long
-) :
-  Flags(value) {
-    companion object {
-      fun of(
-        @ResolveInfoFlagsBitsCompat value: Long
-      ): ResolveInfoFlagsCompat =
-        ResolveInfoFlagsCompat(value)
+) : Flags(value) {
+  companion object {
+    fun of(
+      @ResolveInfoFlagsBitsCompat value: Long
+    ): ResolveInfoFlagsCompat =
+      ResolveInfoFlagsCompat(value)
 
-      /** Helper property. Does not exist on Platform API */
-      val EMPTY
-        get() = ResolveInfoFlagsCompat(0)
-    }
+    /** Helper property. Does not exist on Platform API */
+    val EMPTY
+      get() = ResolveInfoFlagsCompat(0)
   }
+}
 
 /**
  * [ComponentInfo] flag: return the [ComponentInfo.metaData]

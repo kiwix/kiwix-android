@@ -23,8 +23,6 @@ import org.kiwix.kiwixmobile.core.base.adapter.BaseDelegateAdapter
 
 class LibraryAdapter(
   vararg delegates: AdapterDelegate<LibraryListItem>
-) : BaseDelegateAdapter<LibraryListItem>(
-    *delegates
-  ) {
+) : BaseDelegateAdapter<LibraryListItem>(*delegates) {
   override fun getIdFor(item: LibraryListItem) = item.id
 }

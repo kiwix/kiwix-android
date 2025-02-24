@@ -32,37 +32,38 @@ const val WIFI_AP_STATE_ENABLING = 12
 const val WIFI_AP_STATE_ENABLED = 13
 const val WIFI_AP_STATE_FAILED = 14
 
-class HotspotStateReceiver @Inject constructor(private val callback: Callback) :
-  BaseBroadcastReceiver() {
-    override val action: String = ACTION_WIFI_AP_STATE
+class HotspotStateReceiver @Inject constructor(
+  private val callback: Callback
+) : BaseBroadcastReceiver() {
+  override val action: String = ACTION_WIFI_AP_STATE
 
-    override fun onIntentWithActionReceived(context: Context, intent: Intent) {
-      if (DISABLED == hotspotState(intent)) {
-        callback.onHotspotDisabled()
-      }
-    }
-
-    private fun hotspotState(intent: Intent) =
-      HotspotState.from(
-        intent.getIntExtra(
-          EXTRA_WIFI_AP_STATE,
-          -1
-        )
-      )
-
-    interface Callback {
-      fun onHotspotDisabled()
-    }
-
-    private enum class HotspotState(val state: Int) {
-      DISABLING(WIFI_AP_STATE_DISABLING),
-      DISABLED(WIFI_AP_STATE_DISABLED),
-      ENABLING(WIFI_AP_STATE_ENABLING),
-      ENABLED(WIFI_AP_STATE_ENABLED),
-      FAILED(WIFI_AP_STATE_FAILED);
-
-      companion object {
-        fun from(state: Int) = HotspotState.values().firstOrNull { state == it.state }
-      }
+  override fun onIntentWithActionReceived(context: Context, intent: Intent) {
+    if (DISABLED == hotspotState(intent)) {
+      callback.onHotspotDisabled()
     }
   }
+
+  private fun hotspotState(intent: Intent) =
+    HotspotState.from(
+      intent.getIntExtra(
+        EXTRA_WIFI_AP_STATE,
+        -1
+      )
+    )
+
+  interface Callback {
+    fun onHotspotDisabled()
+  }
+
+  private enum class HotspotState(val state: Int) {
+    DISABLING(WIFI_AP_STATE_DISABLING),
+    DISABLED(WIFI_AP_STATE_DISABLED),
+    ENABLING(WIFI_AP_STATE_ENABLING),
+    ENABLED(WIFI_AP_STATE_ENABLED),
+    FAILED(WIFI_AP_STATE_FAILED);
+
+    companion object {
+      fun from(state: Int) = HotspotState.values().firstOrNull { state == it.state }
+    }
+  }
+}

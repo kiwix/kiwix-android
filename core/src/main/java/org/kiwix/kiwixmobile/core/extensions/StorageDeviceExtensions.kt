@@ -54,18 +54,16 @@ suspend fun StorageDevice.storagePathAndTitle(
   sharedPreferenceUtil: SharedPreferenceUtil,
   storageCalculator: StorageCalculator
 ): String {
-  val storageName =
-    if (isInternal) {
-      context.getString(R.string.internal_storage)
-    } else {
-      context.getString(R.string.external_storage)
-    }
-  val storagePath =
-    if (index == sharedPreferenceUtil.storagePosition) {
-      sharedPreferenceUtil.prefStorage
-    } else {
-      getStoragePathForNonSelectedStorage(this, sharedPreferenceUtil)
-    }
+  val storageName = if (isInternal) {
+    context.getString(R.string.internal_storage)
+  } else {
+    context.getString(R.string.external_storage)
+  }
+  val storagePath = if (index == sharedPreferenceUtil.storagePosition) {
+    sharedPreferenceUtil.prefStorage
+  } else {
+    getStoragePathForNonSelectedStorage(this, sharedPreferenceUtil)
+  }
   val totalSpace = storageCalculator.calculateTotalSpace(file)
   return "$storageName - $totalSpace\n$storagePath/Kiwix"
 }

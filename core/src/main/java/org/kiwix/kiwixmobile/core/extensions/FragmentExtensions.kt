@@ -80,12 +80,11 @@ fun Fragment.enableEdgeToEdgeMode() {
 fun Fragment.setFragmentBackgroundColorForAndroid15AndAbove() {
   this.view?.let {
     val darkModeActivity = CoreApp.instance.darkModeConfig.isDarkModeActive()
-    val windowBackGroundColor =
-      if (darkModeActivity) {
-        MaterialColors.getColor(it.context, android.R.attr.windowBackground, Color.BLACK)
-      } else {
-        MaterialColors.getColor(it.context, android.R.attr.windowBackground, Color.WHITE)
-      }
+    val windowBackGroundColor = if (darkModeActivity) {
+      MaterialColors.getColor(it.context, android.R.attr.windowBackground, Color.BLACK)
+    } else {
+      MaterialColors.getColor(it.context, android.R.attr.windowBackground, Color.WHITE)
+    }
     it.setBackgroundColor(windowBackGroundColor)
   }
 }
