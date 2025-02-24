@@ -310,7 +310,7 @@ abstract class CoreReaderFragment :
   @Inject
   var unsupportedMimeTypeHandler: UnsupportedMimeTypeHandler? = null
   private var hideBackToTopTimer: CountDownTimer? = null
-  private var documentSections: MutableList<DocumentSection>? = null
+  private val documentSections: MutableList<DocumentSection>? = ArrayList()
   private var isBackToTopEnabled = false
   private var isOpenNewTabInBackground = false
   private var documentParserJs: String? = null
@@ -321,7 +321,7 @@ abstract class CoreReaderFragment :
   private var zimReaderSource: ZimReaderSource? = null
   private var actionMode: ActionMode? = null
   private var tempWebViewForUndo: KiwixWebView? = null
-  private var tempWebViewListForUndo: MutableList<KiwixWebView> = ArrayList()
+  private val tempWebViewListForUndo: MutableList<KiwixWebView> = ArrayList()
   private var tempZimSourceForUndo: ZimReaderSource? = null
   private var isFirstRun = false
   private var tableDrawerAdapter: TableDrawerAdapter? = null
@@ -332,7 +332,7 @@ abstract class CoreReaderFragment :
   private var isBookmarked = false
   private lateinit var serviceConnection: ServiceConnection
   private var readAloudService: ReadAloudService? = null
-  private var navigationHistoryList: MutableList<NavigationHistoryListItem> = ArrayList()
+  private val navigationHistoryList: MutableList<NavigationHistoryListItem> = ArrayList()
   private var isReadSelection = false
   private var isReadAloudServiceRunning = false
   private var readerLifeCycleScope: CoroutineScope? = null
@@ -756,7 +756,7 @@ abstract class CoreReaderFragment :
 
   private fun addFileReader() {
     documentParserJs = requireActivity().readFile("js/documentParser.js")
-    documentSections = ArrayList()
+    documentSections?.clear()
   }
 
   private fun setupTableDrawerAdapter(): TableDrawerAdapter {
