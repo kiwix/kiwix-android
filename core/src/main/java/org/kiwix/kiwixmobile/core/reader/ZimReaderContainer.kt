@@ -51,7 +51,7 @@ class ZimReaderContainer @Inject constructor(private val zimFileReaderFactory: F
 
   fun getRandomArticleUrl() = zimFileReader?.getRandomArticleUrl()
   fun isRedirect(url: String): Boolean = zimFileReader?.isRedirect(url) == true
-  fun getRedirect(url: String): String = zimFileReader?.getRedirect(url) ?: ""
+  fun getRedirect(url: String): String = zimFileReader?.getRedirect(url).orEmpty()
   fun load(url: String, requestHeaders: Map<String, String>): WebResourceResponse = runBlocking {
     return@runBlocking WebResourceResponse(
       zimFileReader?.getMimeTypeFromUrl(url),

@@ -89,7 +89,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     get() = sharedPreferences.getString(PREF_LANG, "") ?: Locale.ROOT.toString()
 
   val prefDeviceDefaultLanguage: String
-    get() = sharedPreferences.getString(PREF_DEVICE_DEFAULT_LANG, "") ?: ""
+    get() = sharedPreferences.getString(PREF_DEVICE_DEFAULT_LANG, "").orEmpty()
 
   val prefIsBookmarksMigrated: Boolean
     get() = sharedPreferences.getBoolean(PREF_BOOKMARKS_MIGRATED, false)

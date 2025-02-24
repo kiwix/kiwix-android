@@ -44,7 +44,7 @@ object StyleUtils {
   }
 
   @JvmStatic fun String?.fromHtml(): Spanned {
-    return (this ?: "").let {
+    return (this.orEmpty()).let {
       Html.fromHtml(
         this,
         Html.FROM_HTML_MODE_LEGACY

@@ -145,7 +145,7 @@ class KiwixTextToSpeech internal constructor(
     languageAvailabilityResult == LANG_MISSING_DATA ||
       languageAvailabilityResult == LANG_NOT_SUPPORTED
 
-  private fun getFeatures(tts: TextToSpeech?): Set<String> = tts?.voice?.features ?: setOf()
+  private fun getFeatures(tts: TextToSpeech?): Set<String> = tts?.voice?.features.orEmpty()
 
   private fun loadURL(webView: WebView) {
     // We use JavaScript to get the content of the page conveniently, earlier making some

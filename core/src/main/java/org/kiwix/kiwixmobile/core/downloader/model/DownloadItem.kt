@@ -43,7 +43,7 @@ data class DownloadItem(
   val eta: Seconds,
   val downloadState: DownloadState
 ) {
-  val readableEta: CharSequence = eta.takeIf { it.seconds > 0L }?.toHumanReadableTime() ?: ""
+  val readableEta: CharSequence = eta.takeIf { it.seconds > 0L }?.toHumanReadableTime().orEmpty()
 
   constructor(downloadModel: DownloadModel) : this(
     downloadModel.downloadId,

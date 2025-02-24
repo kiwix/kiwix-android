@@ -125,7 +125,7 @@ class LibkiwixBookmarks @Inject constructor(
       getBookmarksList()
         .filter { it.zimId == reader.id }
         .map(LibkiwixBookmarkItem::bookmarkUrl)
-    } ?: emptyList()
+    }.orEmpty()
   }
 
   fun bookmarkUrlsForCurrentBook(zimId: String): Flowable<List<String>> =

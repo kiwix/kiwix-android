@@ -56,13 +56,13 @@ class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) : PageDa
     box.query {
       equal(
         BookmarkEntity_.zimId,
-        zimFileReader?.id ?: "",
+        zimFileReader?.id.orEmpty(),
         QueryBuilder.StringOrder.CASE_INSENSITIVE
       )
         .or()
         .equal(
           BookmarkEntity_.zimName,
-          zimFileReader?.name ?: "",
+          zimFileReader?.name.orEmpty(),
           QueryBuilder.StringOrder.CASE_INSENSITIVE
         )
       order(BookmarkEntity_.bookmarkTitle)
@@ -76,7 +76,7 @@ class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) : PageDa
       box.query {
         equal(
           BookmarkEntity_.zimId,
-          zimFileReader?.id ?: "",
+          zimFileReader?.id.orEmpty(),
           QueryBuilder.StringOrder.CASE_INSENSITIVE
         )
           .or()

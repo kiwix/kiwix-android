@@ -35,7 +35,7 @@ class NewRecentSearchDao @Inject constructor(
       box.query {
         equal(
           RecentSearchEntity_.zimId,
-          zimId ?: "",
+          zimId.orEmpty(),
           QueryBuilder.StringOrder.CASE_INSENSITIVE
         )
         orderDesc(RecentSearchEntity_.id)

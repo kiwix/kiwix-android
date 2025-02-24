@@ -182,8 +182,8 @@ class AddNoteDialog : DialogFragment() {
 
   private val zimNoteDirectoryName: String
     get() {
-      val noteDirectoryName = getTextAfterLastSlashWithoutExtension(zimFileName ?: "")
-      return (if (noteDirectoryName.isNotEmpty()) noteDirectoryName else zimFileTitle) ?: ""
+      val noteDirectoryName = getTextAfterLastSlashWithoutExtension(zimFileName.orEmpty())
+      return (if (noteDirectoryName.isNotEmpty()) noteDirectoryName else zimFileTitle).orEmpty()
     }
 
   private fun getArticleNoteFileName(): String {
@@ -199,7 +199,7 @@ class AddNoteDialog : DialogFragment() {
     } else {
       noteFileName = getTextAfterLastSlashWithoutExtension(articleUrl)
     }
-    return noteFileName.ifEmpty { articleTitle } ?: ""
+    return noteFileName.ifEmpty { articleTitle }.orEmpty()
   }
 
   /* From ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim", returns "granbluefantasy_en_all_all_nopic_2018-10"

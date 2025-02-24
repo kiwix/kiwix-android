@@ -31,7 +31,7 @@ class BasicAuthInterceptor : Interceptor {
     val request: Request = chain.request()
     val url = request.url.toString()
     if (url.isAuthenticationUrl) {
-      val userNameAndPassword = System.getenv(url.secretKey) ?: ""
+      val userNameAndPassword = System.getenv(url.secretKey).orEmpty()
       val userName = userNameAndPassword.substringBefore(":", "")
       val password = userNameAndPassword.substringAfter(":", "")
       val credentials = okhttp3.Credentials.basic(userName, password)

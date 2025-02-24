@@ -27,7 +27,7 @@ class MountPointProducer @Inject constructor() {
       .takeIf(File::exists)
       ?.readLines()
       ?.map { MountInfo(it.split(" ")) }
-      ?: emptyList()
+      .orEmpty()
 }
 
 data class MountInfo(val device: String, val mountPoint: String, val fileSystem: String) {

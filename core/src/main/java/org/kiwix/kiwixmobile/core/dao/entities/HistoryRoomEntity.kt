@@ -57,7 +57,7 @@ data class HistoryRoomEntity(
 class ZimSourceRoomConverter {
   @TypeConverter
   fun convertToDatabaseValue(entityProperty: ZimReaderSource?): String =
-    entityProperty?.toDatabase() ?: ""
+    entityProperty?.toDatabase().orEmpty()
 
   @TypeConverter
   fun convertToEntityProperty(databaseValue: String?): ZimReaderSource =
