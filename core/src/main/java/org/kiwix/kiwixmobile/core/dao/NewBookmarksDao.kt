@@ -82,7 +82,7 @@ class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) : PageDa
           .or()
           .equal(
             BookmarkEntity_.zimName,
-            zimFileReader?.name ?: "",
+            zimFileReader?.name.orEmpty(),
             QueryBuilder.StringOrder.CASE_INSENSITIVE
           )
         order(BookmarkEntity_.bookmarkTitle)

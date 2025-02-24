@@ -72,7 +72,7 @@ sealed class LibraryListItem {
     override val id: Long,
     val currentDownloadState: Status
   ) : LibraryListItem() {
-    val readableEta: CharSequence = eta.takeIf { it.seconds > 0L }?.toHumanReadableTime() ?: ""
+    val readableEta: CharSequence = eta.takeIf { it.seconds > 0L }?.toHumanReadableTime().orEmpty()
 
     constructor(downloadModel: DownloadModel) : this(
       downloadModel.downloadId,

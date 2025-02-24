@@ -308,7 +308,7 @@ class ZimManageViewModel @Inject constructor(
     return None
   }
 
-  private fun selectionsFromState() = fileSelectListStates.value?.selectedBooks ?: emptyList()
+  private fun selectionsFromState() = fileSelectListStates.value?.selectedBooks.orEmpty()
 
   private fun noSideEffectAndClearSelectionState(): SideEffect<Unit> {
     fileSelectListStates.value?.let {
@@ -653,7 +653,7 @@ class ZimManageViewModel @Inject constructor(
             oldState.bookOnDiskListItems.firstOrNull { oldBookOnDisk ->
               oldBookOnDisk.id == newBookOnDisk.id
             }
-          newBookOnDisk.apply { isSelected = firstOrNull?.isSelected ?: false }
+          newBookOnDisk.apply { isSelected = firstOrNull?.isSelected == true }
         }
     )
   }

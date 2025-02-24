@@ -87,7 +87,7 @@ sealed class State {
         .filter { filter.isEmpty() or it.matches(filter) }
         .takeIf { it.isNotEmpty() }
         ?.let { listOf(HeaderItem(headerId)) + it.map { language -> LanguageItem(language) } }
-        ?: emptyList()
+        .orEmpty()
     }
   }
 }

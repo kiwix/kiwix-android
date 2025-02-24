@@ -309,8 +309,7 @@ class LocalFileTransferFragment :
   }
 
   private fun getFilesForTransfer() =
-    LocalFileTransferFragmentArgs.fromBundle(requireArguments()).uris?.map(::FileItem)
-      ?: emptyList()
+    LocalFileTransferFragmentArgs.fromBundle(requireArguments()).uris?.map(::FileItem).orEmpty()
 
   private fun showPeerDiscoveryProgressBar() { // Setup UI for searching peers
     fragmentLocalFileTransferBinding?.progressBarSearchingPeers?.visibility = View.VISIBLE

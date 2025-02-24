@@ -80,7 +80,7 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
 
     try {
       // List of all files in the asset directory
-      val assets = assetManager.list("") ?: emptyArray()
+      val assets = assetManager.list("").orEmpty()
 
       // Filter and count chunk files.
       assets.filterTo(chunkFiles) { it.startsWith("chunk") && it.endsWith(".zim") }

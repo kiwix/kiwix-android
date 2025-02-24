@@ -100,7 +100,7 @@ fun visibility(v: View) =
 fun contentDescription(view: View) =
   view.contentDescription?.let {
     if (it.isNotEmpty()) " contDesc:$it" else null
-  } ?: ""
+  }.orEmpty()
 
 fun text(v: View) =
   if (v is TextView) {

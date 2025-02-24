@@ -494,7 +494,7 @@ class CopyMoveFileHandler @Inject constructor(
 
   suspend fun getDestinationFile(): File {
     val root = File(sharedPreferenceUtil.prefStorage)
-    val fileName = selectedFile?.name ?: ""
+    val fileName = selectedFile?.name.orEmpty()
 
     val destinationFile = sequence {
       yield(File(root, fileName))
