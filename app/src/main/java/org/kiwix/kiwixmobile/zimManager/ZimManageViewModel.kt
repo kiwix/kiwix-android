@@ -176,15 +176,17 @@ class ZimManageViewModel @Inject constructor(
         .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
         .addNetworkInterceptor { chain ->
           val originalResponse = chain.proceed(chain.request())
-          originalResponse.newBuilder()
-            .body(
-              ProgressResponseBody(
-                originalResponse.body!!,
-                AppProgressListenerProvider(this),
-                contentLength
+          originalResponse.body?.let { responseBody ->
+            originalResponse.newBuilder()
+              .body(
+                ProgressResponseBody(
+                  responseBody,
+                  AppProgressListenerProvider(this),
+                  contentLength
+                )
               )
-            )
-            .build()
+              .build()
+          } ?: originalResponse
         }
         .build()
     return KiwixService.ServiceCreator.newHackListService(customOkHttpClient, KIWIX_DOWNLOAD_URL)
@@ -325,6 +327,7 @@ class ZimManageViewModel @Inject constructor(
     return None
   }
 
+  @Suppress("NoNameShadowing")
   private fun requestsAndConnectivtyChangesToLibraryRequests(
     library: PublishProcessor<LibraryNetworkEntity>,
   ) =
