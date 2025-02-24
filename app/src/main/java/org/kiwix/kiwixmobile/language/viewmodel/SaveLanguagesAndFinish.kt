@@ -25,7 +25,7 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 
-@Suppress("IgnoredReturnValue")
+@Suppress("IgnoredReturnValue", "CheckResult")
 data class SaveLanguagesAndFinish(
   val languages: List<Language>,
   val languageDao: NewLanguagesDao

@@ -167,7 +167,7 @@ class CustomPageIndicator @JvmOverloads constructor(
     requestLayout()
   }
 
-  private fun calculateDotPositions(width: Int, height: Int) {
+  private fun calculateDotPositions(width: Int) {
     val left = paddingLeft
     val top = paddingTop
     val right = width - paddingRight
@@ -217,7 +217,7 @@ class CustomPageIndicator @JvmOverloads constructor(
       else -> desiredWidth
     }
     setMeasuredDimension(width, height)
-    calculateDotPositions(width, height)
+    calculateDotPositions(width)
   }
 
   private fun getDesiredHeight(): Int = paddingTop + dotDiameter + paddingBottom

@@ -267,8 +267,8 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
         coreMainActivity.navHostContainer
           .setBottomMarginToFragmentContainerView(0)
 
-        getBottomNavigationView()?.let {
-          setBottomMarginToSwipeRefreshLayout(it.measuredHeight)
+        getBottomNavigationView()?.let { bottomNavigationView ->
+          setBottomMarginToSwipeRefreshLayout(bottomNavigationView.measuredHeight)
         }
       }
     disposable.add(sideEffects())

@@ -33,7 +33,7 @@ import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.CAN_WRITE_4GB
 import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.INCONCLUSIVE
 import java.io.File
 
-@Suppress("IgnoredReturnValue")
+@Suppress("IgnoredReturnValue", "CheckResult")
 class Fat32Checker constructor(
   sharedPreferenceUtil: SharedPreferenceUtil,
   private val fileSystemCheckers: List<FileSystemChecker>
