@@ -37,6 +37,7 @@ import androidx.core.widget.ContentLoadingProgressBar
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -142,8 +143,10 @@ class SearchFragment : BaseFragment() {
         }
       })
     }
-    lifecycleScope.launchWhenCreated {
-      searchViewModel.effects.collect { it.invokeWith(this@SearchFragment.coreMainActivity) }
+    viewLifecycleOwner.lifecycleScope.launch {
+      repeatOnLifecycle(Lifecycle.State.CREATED) {
+        searchViewModel.effects.collect { it.invokeWith(this@SearchFragment.coreMainActivity) }
+      }
     }
     handleBackPress()
   }
@@ -272,8 +275,10 @@ class SearchFragment : BaseFragment() {
           searchInTextMenuItem?.actionView?.setOnClickListener {
             searchViewModel.actions.trySend(ClickedSearchInText).isSuccess
           }
-          lifecycleScope.launchWhenCreated {
-            searchViewModel.state.collect { render(it) }
+          viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+              searchViewModel.state.collect { render(it) }
+            }
           }
           val searchStringFromArguments = arguments?.getString(NAV_ARG_SEARCH_STRING)
           if (searchStringFromArguments != null) {
