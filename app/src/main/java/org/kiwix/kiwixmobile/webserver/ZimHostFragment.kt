@@ -295,13 +295,12 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun select(bookOnDisk: BooksOnDiskListItem.BookOnDisk) {
-    val booksList: List<BooksOnDiskListItem> =
-      booksAdapter.items.map {
-        if (it == bookOnDisk) {
-          it.isSelected = !it.isSelected
-        }
-        it
+    val booksList: List<BooksOnDiskListItem> = booksAdapter.items.onEach {
+      if (it == bookOnDisk) {
+        it.isSelected = !it.isSelected
       }
+      it
+    }
     booksAdapter.items = booksList
     saveHostedBooks(booksList)
     if (ServerUtils.isServerStarted) {
