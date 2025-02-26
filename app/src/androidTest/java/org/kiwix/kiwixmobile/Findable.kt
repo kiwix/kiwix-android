@@ -27,7 +27,9 @@ sealed class Findable {
   abstract fun selector(baseRobot: BaseRobot): BySelector
   abstract fun errorMessage(baseRobot: BaseRobot): String
 
-  class ViewId(@IdRes private val resId: Int) : Findable() {
+  class ViewId(
+    @IdRes private val resId: Int
+  ) : Findable() {
     override fun errorMessage(baseRobot: BaseRobot) =
       "No view found with Id ${resourceName(baseRobot)}"
 
@@ -44,25 +46,32 @@ sealed class Findable {
     override fun selector(baseRobot: BaseRobot): BySelector = By.text(text)
   }
 
-  sealed class StringId(@StringRes private val resId: Int) : Findable() {
-
+  sealed class StringId(
+    @StringRes private val resId: Int
+  ) : Findable() {
     fun text(baseRobot: BaseRobot): String = baseRobot.context.getString(resId)
 
-    class ContentDesc(@StringRes resId: Int) : StringId(resId) {
+    class ContentDesc(
+      @StringRes resId: Int
+    ) : StringId(resId) {
       override fun selector(baseRobot: BaseRobot): BySelector = By.desc(text(baseRobot))
 
       override fun errorMessage(baseRobot: BaseRobot) =
         "No view found with content description ${text(baseRobot)}"
     }
 
-    class TextContains(@StringRes resId: Int) : StringId(resId) {
+    class TextContains(
+      @StringRes resId: Int
+    ) : StringId(resId) {
       override fun selector(baseRobot: BaseRobot): BySelector = By.textContains(text(baseRobot))
 
       override fun errorMessage(baseRobot: BaseRobot) =
         "No view found containing ${text(baseRobot)}"
     }
 
-    class TextId(@StringRes resId: Int) : StringId(resId) {
+    class TextId(
+      @StringRes resId: Int
+    ) : StringId(resId) {
       override fun selector(baseRobot: BaseRobot): BySelector = By.text(text(baseRobot))
 
       override fun errorMessage(baseRobot: BaseRobot) = "No view found with text ${text(baseRobot)}"

@@ -32,14 +32,12 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
 
 sealed class BookOnDiskDelegate<I : BooksOnDiskListItem, out VH : BookOnDiskViewHolder<I>> :
   AbsDelegateAdapter<I, BooksOnDiskListItem, VH> {
-
   class BookDelegate(
     val sharedPreferenceUtil: SharedPreferenceUtil,
     private val clickAction: ((BookOnDisk) -> Unit)? = null,
     private val longClickAction: ((BookOnDisk) -> Unit)? = null,
     private val multiSelectAction: ((BookOnDisk) -> Unit)? = null
   ) : BookOnDiskDelegate<BookOnDisk, BookViewHolder>() {
-
     override val itemClass = BookOnDisk::class.java
 
     var selectionMode: SelectionMode = NORMAL
@@ -61,7 +59,6 @@ sealed class BookOnDiskDelegate<I : BooksOnDiskListItem, out VH : BookOnDiskView
   }
 
   object LanguageDelegate : BookOnDiskDelegate<LanguageItem, LanguageItemViewHolder>() {
-
     override val itemClass = LanguageItem::class.java
 
     override fun createViewHolder(parent: ViewGroup) =

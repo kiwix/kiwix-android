@@ -54,7 +54,6 @@ import java.util.Locale
 import javax.inject.Inject
 
 class CustomReaderFragment : CoreReaderFragment() {
-
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.customActivityComponent.inject(this)
   }
@@ -179,8 +178,11 @@ class CustomReaderFragment : CoreReaderFragment() {
    */
   override fun setDrawerLockMode(lockMode: Int) {
     super.setDrawerLockMode(
-      if (BuildConfig.DISABLE_SIDEBAR) DrawerLayout.LOCK_MODE_LOCKED_CLOSED
-      else lockMode
+      if (BuildConfig.DISABLE_SIDEBAR) {
+        DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+      } else {
+        lockMode
+      }
     )
   }
 

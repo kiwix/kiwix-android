@@ -130,7 +130,7 @@ abstract class CoreApp : Application() {
 
   fun getMainActivity() = coreMainActivity
 
-  /* Checks if external storage is available for read and write */
+  // Checks if external storage is available for read and write
   val isExternalStorageWritable: Boolean
     get() = MEDIA_MOUNTED == getExternalStorageState()
 }

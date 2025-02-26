@@ -29,9 +29,11 @@ sealed class State {
   data class Content(
     val items: List<Language>,
     val filter: String = "",
-    val viewItems: List<LanguageListItem> = createViewList(
-      items, filter
-    )
+    val viewItems: List<LanguageListItem> =
+      createViewList(
+        items,
+        filter
+      )
   ) : State() {
     fun select(languageItem: LanguageItem) =
       Content(
@@ -48,17 +50,21 @@ sealed class State {
         filter: String
       ) = activeItems(
         items, filter
-      ) + otherItems(
-        items,
-        filter
-      )
+      ) +
+        otherItems(
+          items,
+          filter
+        )
 
       private fun activeItems(
         items: List<Language>,
         filter: String
       ) =
         createLanguageSection(
-          items, filter, Language::active, HeaderItem.SELECTED
+          items,
+          filter,
+          Language::active,
+          HeaderItem.SELECTED
         )
 
       private fun otherItems(
@@ -66,7 +72,10 @@ sealed class State {
         filter: String
       ) =
         createLanguageSection(
-          items, filter, { !it.active }, HeaderItem.OTHER
+          items,
+          filter,
+          { !it.active },
+          HeaderItem.OTHER
         )
 
       private fun createLanguageSection(
@@ -78,7 +87,7 @@ sealed class State {
         .filter { filter.isEmpty() or it.matches(filter) }
         .takeIf { it.isNotEmpty() }
         ?.let { listOf(HeaderItem(headerId)) + it.map { language -> LanguageItem(language) } }
-        ?: emptyList()
+        .orEmpty()
     }
   }
 }

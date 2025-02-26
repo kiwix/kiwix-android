@@ -32,7 +32,6 @@ class DonationDialogHandler @Inject constructor(
   private val sharedPreferenceUtil: SharedPreferenceUtil,
   private val newBookDao: NewBookDao
 ) {
-
   private var showDonationDialogCallback: ShowDonationDialogCallback? = null
 
   fun setDonationDialogCallBack(showDonationDialogCallback: ShowDonationDialogCallback?) {
@@ -43,8 +42,9 @@ class DonationDialogHandler @Inject constructor(
     val currentMilliSeconds = System.currentTimeMillis()
     val lastPopupMillis = sharedPreferenceUtil.lastDonationPopupShownInMilliSeconds
 
-    val shouldShowPopup = (lastPopupMillis == 0L && shouldShowInitialPopup(currentMilliSeconds)) ||
-      isThreeMonthsElapsed(currentMilliSeconds, lastPopupMillis)
+    val shouldShowPopup =
+      (lastPopupMillis == 0L && shouldShowInitialPopup(currentMilliSeconds)) ||
+        isThreeMonthsElapsed(currentMilliSeconds, lastPopupMillis)
 
     if (shouldShowPopup &&
       isZimFilesAvailableInLibrary() &&

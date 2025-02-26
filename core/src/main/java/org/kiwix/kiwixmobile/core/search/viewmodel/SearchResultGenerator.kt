@@ -33,11 +33,14 @@ interface SearchResultGenerator {
 }
 
 class ZimSearchResultGenerator @Inject constructor() : SearchResultGenerator {
-
+  @Suppress("InjectDispatcher")
   override suspend fun generateSearchResults(searchTerm: String, zimFileReader: ZimFileReader?) =
     withContext(Dispatchers.IO) {
-      if (searchTerm.isNotEmpty()) readResultsFromZim(searchTerm, zimFileReader)
-      else null
+      if (searchTerm.isNotEmpty()) {
+        readResultsFromZim(searchTerm, zimFileReader)
+      } else {
+        null
+      }
     }
 
   private suspend fun readResultsFromZim(

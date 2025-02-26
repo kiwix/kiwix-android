@@ -36,7 +36,6 @@ import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
  */
 
 abstract class BaseFragment : Fragment() {
-
   open val fragmentToolbar: Toolbar? = null
   open val fragmentTitle: String? = null
 

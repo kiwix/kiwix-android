@@ -134,10 +134,7 @@ task("generateVersionCodeAndName") {
   val file = File("VERSION_INFO")
   if (!file.exists()) file.createNewFile()
   file.printWriter().use {
-    it.print(
-      "${generateVersionName()}\n" +
-        "7" + "".getVersionCode()
-    )
+    it.print("${generateVersionName()}\n7${"".getVersionCode()}")
   }
 }
 
@@ -186,7 +183,10 @@ fun getStringTags(file: File): Set<String> {
   return tags
 }
 
-fun filterStringsByTags(file: File, tags: Set<String>): List<String> {
+fun filterStringsByTags(
+  file: File,
+  tags: Set<String>
+): List<String> {
   val filteredStrings = mutableListOf<String>()
   val factory = DocumentBuilderFactory.newInstance()
   val builder = factory.newDocumentBuilder()

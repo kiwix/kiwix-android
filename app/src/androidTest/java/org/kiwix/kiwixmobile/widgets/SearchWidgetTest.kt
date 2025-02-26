@@ -45,7 +45,6 @@ import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 
 class SearchWidgetTest : BaseActivityTest() {
-
   @Rule
   @JvmField
   var retryRule = RetryRule()
@@ -66,12 +65,13 @@ class SearchWidgetTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
-    uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-      if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
-        TestUtils.closeSystemDialogs(context, this)
+    uiDevice =
+      UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+        if (TestUtils.isSystemUINotRespondingDialogVisible(this)) {
+          TestUtils.closeSystemDialogs(context, this)
+        }
+        waitForIdle()
       }
-      waitForIdle()
-    }
     context.let {
       SharedPreferenceUtil(it).apply {
         setIntroShown()
@@ -82,9 +82,10 @@ class SearchWidgetTest : BaseActivityTest() {
         lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
       }
     }
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-    }
+    activityScenario =
+      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+      }
   }
 
   @Test

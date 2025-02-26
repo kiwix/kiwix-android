@@ -64,7 +64,6 @@ import java.io.OutputStream
 import java.net.URI
 
 class SearchFragmentTest : BaseActivityTest() {
-
   private val rayCharlesZimFileUrl =
     "https://dev.kiwix.org/kiwix-android/test/wikipedia_en_ray_charles_maxi_2023-12.zim"
 
@@ -79,12 +78,13 @@ class SearchFragmentTest : BaseActivityTest() {
 
   @Before
   override fun waitForIdle() {
-    uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-      if (isSystemUINotRespondingDialogVisible(this)) {
-        closeSystemDialogs(context, this)
+    uiDevice =
+      UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+        if (isSystemUINotRespondingDialogVisible(this)) {
+          closeSystemDialogs(context, this)
+        }
+        waitForIdle()
       }
-      waitForIdle()
-    }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
@@ -95,16 +95,17 @@ class SearchFragmentTest : BaseActivityTest() {
         System.currentTimeMillis()
       )
     }
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      onActivity {
-        handleLocaleChange(
-          it,
-          "en",
-          SharedPreferenceUtil(context)
-        )
+    activityScenario =
+      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+        onActivity {
+          handleLocaleChange(
+            it,
+            "en",
+            SharedPreferenceUtil(context)
+          )
+        }
       }
-    }
   }
 
   init {
@@ -229,68 +230,70 @@ class SearchFragmentTest : BaseActivityTest() {
   }
 
   @Test
-  fun testConcurrencyOfSearch() = runBlocking {
-    val searchTerms = listOf(
-      "A Song",
-      "The Ra",
-      "The Ge",
-      "Wish",
-      "WIFI",
-      "Woman",
-      "Big Ba",
-      "My Wor",
-      "100"
-    )
-    activityScenario.onActivity {
-      kiwixMainActivity = it
-      kiwixMainActivity.navigate(R.id.libraryFragment)
-    }
-    downloadingZimFile = getDownloadingZimFile()
-    getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
-      if (response.isSuccessful) {
-        response.body?.let { responseBody ->
-          writeZimFileData(responseBody, downloadingZimFile)
-        }
-      } else {
-        throw RuntimeException(
-          "Download Failed. Error: ${response.message}\n" +
-            " Status Code: ${response.code}"
+  fun testConcurrencyOfSearch() =
+    runBlocking {
+      val searchTerms =
+        listOf(
+          "A Song",
+          "The Ra",
+          "The Ge",
+          "Wish",
+          "WIFI",
+          "Woman",
+          "Big Ba",
+          "My Wor",
+          "100"
         )
+      activityScenario.onActivity {
+        kiwixMainActivity = it
+        kiwixMainActivity.navigate(R.id.libraryFragment)
+      }
+      downloadingZimFile = getDownloadingZimFile()
+      getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
+        if (response.isSuccessful) {
+          response.body?.let { responseBody ->
+            writeZimFileData(responseBody, downloadingZimFile)
+          }
+        } else {
+          throw RuntimeException(
+            "Download Failed. Error: ${response.message}\n" +
+              " Status Code: ${response.code}"
+          )
+        }
+      }
+      openKiwixReaderFragmentWithFile(downloadingZimFile)
+      search { checkZimFileSearchSuccessful(R.id.readerFragment) }
+      openSearchWithQuery(searchTerms[0], downloadingZimFile)
+      // wait for searchFragment become visible on screen.
+      delay(2000)
+      val navHostFragment: NavHostFragment =
+        kiwixMainActivity.supportFragmentManager
+          .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+      val searchFragment = navHostFragment.childFragmentManager.fragments[0] as SearchFragment
+      for (i in 1..100) {
+        // This will execute the render method 100 times frequently.
+        val searchTerm = searchTerms[i % searchTerms.size]
+        searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
+      }
+      for (i in 1..100) {
+        // this will execute the render method 100 times with 100MS delay.
+        delay(100)
+        val searchTerm = searchTerms[i % searchTerms.size]
+        searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
+      }
+      for (i in 1..100) {
+        // this will execute the render method 100 times with 200MS delay.
+        delay(200)
+        val searchTerm = searchTerms[i % searchTerms.size]
+        searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
+      }
+      for (i in 1..100) {
+        // this will execute the render method 100 times with 200MS delay.
+        delay(300)
+        val searchTerm = searchTerms[i % searchTerms.size]
+        searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
       }
     }
-    openKiwixReaderFragmentWithFile(downloadingZimFile)
-    search { checkZimFileSearchSuccessful(R.id.readerFragment) }
-    openSearchWithQuery(searchTerms[0], downloadingZimFile)
-    // wait for searchFragment become visible on screen.
-    delay(2000)
-    val navHostFragment: NavHostFragment =
-      kiwixMainActivity.supportFragmentManager
-        .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-    val searchFragment = navHostFragment.childFragmentManager.fragments[0] as SearchFragment
-    for (i in 1..100) {
-      // This will execute the render method 100 times frequently.
-      val searchTerm = searchTerms[i % searchTerms.size]
-      searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
-    }
-    for (i in 1..100) {
-      // this will execute the render method 100 times with 100MS delay.
-      delay(100)
-      val searchTerm = searchTerms[i % searchTerms.size]
-      searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
-    }
-    for (i in 1..100) {
-      // this will execute the render method 100 times with 200MS delay.
-      delay(200)
-      val searchTerm = searchTerms[i % searchTerms.size]
-      searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
-    }
-    for (i in 1..100) {
-      // this will execute the render method 100 times with 200MS delay.
-      delay(300)
-      val searchTerm = searchTerms[i % searchTerms.size]
-      searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
-    }
-  }
 
   private fun removeTemporaryZimFilesToFreeUpDeviceStorage() {
     testZimFile.delete()
@@ -340,10 +343,11 @@ class SearchFragmentTest : BaseActivityTest() {
   private fun getTestZimFile(): File {
     val loadFileStream =
       SearchFragmentTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(
-      context.getExternalFilesDirs(null)[0],
-      "testzim.zim"
-    )
+    val zimFile =
+      File(
+        context.getExternalFilesDirs(null)[0],
+        "testzim.zim"
+      )
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->

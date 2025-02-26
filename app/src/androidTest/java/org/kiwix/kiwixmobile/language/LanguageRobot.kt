@@ -43,7 +43,6 @@ import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
 fun language(func: LanguageRobot.() -> Unit) = LanguageRobot().applyWithViewHierarchyPrinting(func)
 
 class LanguageRobot : BaseRobot() {
-
   fun clickDownloadOnBottomNav() {
     clickOn(ViewId(R.id.downloadsFragment))
   }

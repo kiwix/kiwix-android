@@ -31,7 +31,6 @@ import org.kiwix.sharedFunctions.resetSchedulers
 import org.kiwix.sharedFunctions.setScheduler
 
 class SaveLanguagesAndFinishTest {
-
   @Test
   fun `invoke saves and finishes`() {
     setScheduler(Schedulers.trampoline())

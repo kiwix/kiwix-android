@@ -73,16 +73,17 @@ class HotspotService :
     super.onDestroy()
   }
 
-  @Suppress("NestedBlockDepth")
+  @Suppress("NestedBlockDepth", "InjectDispatcher")
   override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
     when (intent.action) {
       ACTION_START_SERVER -> {
         val restartServer = intent.getBooleanExtra(RESTART_SERVER, false)
         intent.getStringArrayListExtra(ZimHostFragment.SELECTED_ZIM_PATHS_KEY)?.let {
           CoroutineScope(Dispatchers.Main).launch {
-            val serverStatus = withContext(Dispatchers.IO) {
-              webServerHelper?.startServerHelper(it, restartServer)
-            }
+            val serverStatus =
+              withContext(Dispatchers.IO) {
+                webServerHelper?.startServerHelper(it, restartServer)
+              }
             if (serverStatus?.isServerStarted == true) {
               zimHostCallbacks?.onServerStarted(getSocketAddress())
               startForegroundNotificationHelper()
@@ -101,7 +102,8 @@ class HotspotService :
 
       ACTION_STOP_SERVER -> {
         Toast.makeText(
-          this, R.string.server_stopped_successfully_toast_message,
+          this,
+          R.string.server_stopped_successfully_toast_message,
           Toast.LENGTH_SHORT
         ).show()
         stopHotspotAndDismissNotification()

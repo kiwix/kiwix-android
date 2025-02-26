@@ -31,19 +31,19 @@ import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
 
 internal class DeleteRecentSearchTest {
-
   @Test
-  fun `invoke with deletes a search`() = runBlocking {
-    val searchListItem: SearchListItem = RecentSearchListItem("", "")
-    val recentSearchDao: RecentSearchRoomDao = mockk()
-    val activity: AppCompatActivity = mockk()
-    val viewModelScope = CoroutineScope(Dispatchers.IO)
-    DeleteRecentSearch(
-      searchListItem = searchListItem,
-      recentSearchRoomDao = recentSearchDao,
-      viewModelScope = viewModelScope
-    ).invokeWith(activity)
-    delay(50)
-    verify { recentSearchDao.deleteSearchString(searchListItem.value) }
-  }
+  fun `invoke with deletes a search`() =
+    runBlocking {
+      val searchListItem: SearchListItem = RecentSearchListItem("", "")
+      val recentSearchDao: RecentSearchRoomDao = mockk()
+      val activity: AppCompatActivity = mockk()
+      val viewModelScope = CoroutineScope(Dispatchers.IO)
+      DeleteRecentSearch(
+        searchListItem = searchListItem,
+        recentSearchRoomDao = recentSearchDao,
+        viewModelScope = viewModelScope
+      ).invokeWith(activity)
+      delay(50)
+      verify { recentSearchDao.deleteSearchString(searchListItem.value) }
+    }
 }

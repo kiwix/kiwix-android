@@ -134,9 +134,11 @@ class KiwixReaderFragment : CoreReaderFragment() {
     // Update the reader screen title to prevent showing the previously set title
     // when creating the new archive object.
     updateTitle()
-    val filePath = FileUtils.getLocalFilePathByUri(
-      requireActivity().applicationContext, Uri.parse(zimFileUri)
-    )
+    val filePath =
+      FileUtils.getLocalFilePathByUri(
+        requireActivity().applicationContext,
+        Uri.parse(zimFileUri)
+      )
     if (filePath == null || !File(filePath).isFileExist()) {
       // Close the previously opened book in the reader. Since this file is not found,
       // it will not be set in the zimFileReader. The previously opened ZIM file

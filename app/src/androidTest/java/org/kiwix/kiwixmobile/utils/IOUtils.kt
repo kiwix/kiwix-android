@@ -39,7 +39,9 @@ object IOUtils {
     val count = copyLarge(input, output)
     return if (count > Int.MAX_VALUE) {
       -1
-    } else count.toInt()
+    } else {
+      count.toInt()
+    }
   }
 
   @Throws(IOException::class)

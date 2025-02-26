@@ -22,6 +22,7 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,15 +43,15 @@ class StorageObserver @Inject constructor(
   private val zimReaderFactory: ZimFileReader.Factory,
   private val libkiwixBookmarks: LibkiwixBookmarks
 ) {
-
   fun getBooksOnFileSystem(
-    scanningProgressListener: ScanningProgressListener
+    scanningProgressListener: ScanningProgressListener,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
   ): Flowable<List<BookOnDisk>> {
     return scanFiles(scanningProgressListener)
       .withLatestFrom(downloadRoomDao.downloads(), BiFunction(::toFilesThatAreNotDownloading))
       .flatMapSingle { files ->
         Single.create { emitter ->
-          CoroutineScope(Dispatchers.IO).launch {
+          CoroutineScope(dispatcher).launch {
             try {
               emitter.onSuccess(files.mapNotNull { convertToBookOnDisk(it) })
             } catch (ignore: Exception) {
@@ -68,7 +69,7 @@ class StorageObserver @Inject constructor(
     files.filter { fileHasNoMatchingDownload(downloads, it) }
 
   private fun fileHasNoMatchingDownload(downloads: List<DownloadModel>, file: File) =
-    downloads.firstOrNull { file.absolutePath.endsWith(it.fileNameFromUrl) } == null
+    downloads.none { file.absolutePath.endsWith(it.fileNameFromUrl) }
 
   private suspend fun convertToBookOnDisk(file: File) =
     zimReaderFactory.create(ZimReaderSource(file))

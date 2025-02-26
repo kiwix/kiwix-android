@@ -44,7 +44,6 @@ class CustomDownloadViewModel @Inject constructor(
   private val downloadCustom: DownloadCustom,
   private val navigateToCustomReader: NavigateToCustomReader
 ) : ViewModel() {
-
   val state = MutableLiveData<State>().apply { value = DownloadRequired }
   val actions = PublishProcessor.create<Action>()
   private val _effects = PublishProcessor.create<SideEffect<*>>()
@@ -84,17 +83,22 @@ class CustomDownloadViewModel @Inject constructor(
   private fun reduceDatabaseEmission(state: State, action: DatabaseEmission) = when (state) {
     is DownloadFailed,
     DownloadRequired ->
-      if (action.downloads.isNotEmpty()) DownloadInProgress(action.downloads)
-      else state
+      if (action.downloads.isNotEmpty()) {
+        DownloadInProgress(action.downloads)
+      } else {
+        state
+      }
 
     is DownloadInProgress ->
-      if (action.downloads.isNotEmpty())
-        if (action.downloads[0].downloadState is Failed)
+      if (action.downloads.isNotEmpty()) {
+        if (action.downloads[0].downloadState is Failed) {
           DownloadFailed(action.downloads[0].downloadState)
-        else
+        } else {
           DownloadInProgress(action.downloads)
-      else
+        }
+      } else {
         DownloadComplete.also { _effects.offer(navigateToCustomReader) }
+      }
 
     DownloadComplete -> state
   }

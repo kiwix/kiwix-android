@@ -54,14 +54,14 @@ import org.kiwix.kiwixmobile.core.R.string
  */
 @RunWith(AndroidJUnit4::class)
 class NetworkTest {
-
   // @Inject
   // MockWebServer mockWebServer
 
-  private val permissions = arrayOf(
-    Manifest.permission.READ_EXTERNAL_STORAGE,
-    Manifest.permission.WRITE_EXTERNAL_STORAGE
-  )
+  private val permissions =
+    arrayOf(
+      Manifest.permission.READ_EXTERNAL_STORAGE,
+      Manifest.permission.WRITE_EXTERNAL_STORAGE
+    )
 
   @Rule
   @JvmField
@@ -69,9 +69,10 @@ class NetworkTest {
     GrantPermissionRule.grant(*permissions)
 
   @Before fun setUp() {
-    val component = DaggerTestComponent.builder().context(
-      InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
-    ).build()
+    val component =
+      DaggerTestComponent.builder().context(
+        InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
+      ).build()
     coreComponent = component
     component.inject(this)
     val library = NetworkTest::class.java.classLoader.getResourceAsStream("library.xml")
@@ -92,7 +93,8 @@ class NetworkTest {
     // }
   }
 
-  @Test @Ignore("Broken in 2.5") // TODO Fix in 3.0
+  @Test
+  @Ignore("Broken in 2.5") // TODO Fix in 3.0
   fun networkTest() {
     ActivityScenario.launch(KiwixMainActivity::class.java)
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
@@ -121,13 +123,15 @@ class NetworkTest {
 
     // Find matching zim files on the device
     try {
-      val dataInteraction = Espresso.onData(TestUtils.withContent("wikipedia_ab_all_2017-03"))
-        .inAdapterView(ViewMatchers.withId(R.id.zimfilelist))
+      val dataInteraction =
+        Espresso.onData(TestUtils.withContent("wikipedia_ab_all_2017-03"))
+          .inAdapterView(ViewMatchers.withId(R.id.zimfilelist))
       // TODO how can we get a count of the items matching the dataInteraction?
       dataInteraction.atPosition(0).perform(ViewActions.click())
       clickMenu(string.library)
-      val dataInteraction1 = Espresso.onData(TestUtils.withContent("wikipedia_ab_all_2017-03"))
-        .inAdapterView(ViewMatchers.withId(R.id.zimfilelist))
+      val dataInteraction1 =
+        Espresso.onData(TestUtils.withContent("wikipedia_ab_all_2017-03"))
+          .inAdapterView(ViewMatchers.withId(R.id.zimfilelist))
       dataInteraction1.atPosition(0).perform(ViewActions.longClick()) // to delete the zim file
       BaristaDialogInteractions.clickDialogPositiveButton()
     } catch (e: Exception) {

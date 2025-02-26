@@ -27,20 +27,18 @@ import org.hamcrest.Matcher
 
 class RecyclerViewItemCountAssertion private constructor(private val matcher: Matcher<Int>) :
   ViewAssertion {
-  override fun check(view: View, noViewFoundException: NoMatchingViewException?) {
-    if (noViewFoundException != null) {
-      throw noViewFoundException
+    override fun check(view: View, noViewFoundException: NoMatchingViewException?) {
+      if (noViewFoundException != null) {
+        throw noViewFoundException
+      }
+      val recyclerView = view as RecyclerView
+      val adapter = recyclerView.adapter
+      ViewMatchers.assertThat(adapter?.itemCount, matcher)
     }
-    val recyclerView = view as RecyclerView
-    val adapter = recyclerView.adapter
-    ViewMatchers.assertThat(adapter?.itemCount, matcher)
-  }
 
-  companion object {
-    fun withItemCount(expectedCount: Int): RecyclerViewItemCountAssertion =
-      withItemCount(CoreMatchers.`is`(expectedCount))
+    companion object {
+      fun withItemCount(expectedCount: Int): RecyclerViewItemCountAssertion = withItemCount(CoreMatchers.`is`(expectedCount))
 
-    private fun withItemCount(matcher: Matcher<Int>): RecyclerViewItemCountAssertion =
-      RecyclerViewItemCountAssertion(matcher)
+      private fun withItemCount(matcher: Matcher<Int>): RecyclerViewItemCountAssertion = RecyclerViewItemCountAssertion(matcher)
+    }
   }
-}

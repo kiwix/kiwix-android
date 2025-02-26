@@ -118,11 +118,14 @@ private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
 private const val MATERIAL_BOTTOM_VIEW_ENTER_ANIMATION_DURATION = 225L
 
 class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCallback {
-
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+
   @Inject lateinit var dialogShower: DialogShower
+
   @Inject lateinit var mainRepositoryActions: MainRepositoryActions
+
   @Inject lateinit var zimReaderFactory: ZimFileReader.Factory
 
   @JvmField
@@ -199,11 +202,12 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   ): View? {
     LanguageUtils(requireActivity())
       .changeFont(requireActivity(), sharedPreferenceUtil)
-    fragmentDestinationLibraryBinding = FragmentDestinationLibraryBinding.inflate(
-      inflater,
-      container,
-      false
-    )
+    fragmentDestinationLibraryBinding =
+      FragmentDestinationLibraryBinding.inflate(
+        inflater,
+        container,
+        false
+      )
     val toolbar = fragmentDestinationLibraryBinding?.root?.findViewById<Toolbar>(R.id.toolbar)
     val activity = activity as CoreMainActivity
     activity.setSupportActionBar(toolbar)
@@ -263,8 +267,8 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
         coreMainActivity.navHostContainer
           .setBottomMarginToFragmentContainerView(0)
 
-        getBottomNavigationView()?.let {
-          setBottomMarginToSwipeRefreshLayout(it.measuredHeight)
+        getBottomNavigationView()?.let { bottomNavigationView ->
+          setBottomMarginToSwipeRefreshLayout(bottomNavigationView.measuredHeight)
         }
       }
     disposable.add(sideEffects())
@@ -381,17 +385,18 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   }
 
   private fun showFileChooser() {
-    val intent = Intent().apply {
-      action = Intent.ACTION_OPEN_DOCUMENT
-      type = "*/*"
-      addCategory(Intent.CATEGORY_OPENABLE)
-      if (sharedPreferenceUtil.prefIsTest) {
-        putExtra(
-          "android.provider.extra.INITIAL_URI",
-          Uri.parse("content://com.android.externalstorage.documents/document/primary:Download")
-        )
+    val intent =
+      Intent().apply {
+        action = Intent.ACTION_OPEN_DOCUMENT
+        type = "*/*"
+        addCategory(Intent.CATEGORY_OPENABLE)
+        if (sharedPreferenceUtil.prefIsTest) {
+          putExtra(
+            "android.provider.extra.INITIAL_URI",
+            Uri.parse("content://com.android.externalstorage.documents/document/primary:Download")
+          )
+        }
       }
-    }
     try {
       fileSelectLauncher.launch(Intent.createChooser(intent, "Select a zim file"))
     } catch (ex: ActivityNotFoundException) {
@@ -416,12 +421,13 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   fun handleSelectedFileUri(uri: Uri) {
     lifecycleScope.launch {
       if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
-        val documentFile = when (uri.scheme) {
-          "file" -> DocumentFile.fromFile(File("$uri"))
-          else -> {
-            DocumentFile.fromSingleUri(requireActivity(), uri)
+        val documentFile =
+          when (uri.scheme) {
+            "file" -> DocumentFile.fromFile(File("$uri"))
+            else -> {
+              DocumentFile.fromSingleUri(requireActivity(), uri)
+            }
           }
-        }
         // If the file is not valid, it shows an error message and stops further processing.
         // If the file name is not found, then let them to copy the file
         // and we will handle this later.
@@ -454,9 +460,11 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   private suspend fun getZimFileFromUri(
     uri: Uri
   ): File? {
-    val filePath = FileUtils.getLocalFilePathByUri(
-      requireActivity().applicationContext, uri
-    )
+    val filePath =
+      FileUtils.getLocalFilePathByUri(
+        requireActivity().applicationContext,
+        uri
+      )
     if (filePath == null || !File(filePath).isFileExist()) {
       Log.e(
         TAG_KIWIX,
@@ -476,6 +484,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     }
   }
 
+  @Suppress("InjectDispatcher")
   private fun navigateToReaderFragment(file: File) {
     if (!file.canRead()) {
       activity.toast(string.unable_to_read_zim_file)
@@ -529,27 +538,30 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     zimFileUri = null
   }
 
-  private fun sideEffects() = zimManageViewModel.sideEffects
-    .observeOn(AndroidSchedulers.mainThread())
-    .subscribe(
-      {
-        val effectResult = it.invokeWith(requireActivity() as AppCompatActivity)
-        if (effectResult is ActionMode) {
-          actionMode = effectResult
-          fileSelectListState?.selectedBooks?.size?.let(::setActionModeTitle)
-        }
-      }, Throwable::printStackTrace
-    )
+  private fun sideEffects() =
+    zimManageViewModel.sideEffects
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe(
+        {
+          val effectResult = it.invokeWith(requireActivity() as AppCompatActivity)
+          if (effectResult is ActionMode) {
+            actionMode = effectResult
+            fileSelectListState?.selectedBooks?.size?.let(::setActionModeTitle)
+          }
+        },
+        Throwable::printStackTrace
+      )
 
-  private fun fileSelectActions() = zimManageViewModel.fileSelectActions
-    .observeOn(AndroidSchedulers.mainThread())
-    .filter { it === RequestDeleteMultiSelection }
-    .subscribe(
-      {
-        animateBottomViewToOrigin()
-      },
-      Throwable::printStackTrace
-    )
+  private fun fileSelectActions() =
+    zimManageViewModel.fileSelectActions
+      .observeOn(AndroidSchedulers.mainThread())
+      .filter { it === RequestDeleteMultiSelection }
+      .subscribe(
+        {
+          animateBottomViewToOrigin()
+        },
+        Throwable::printStackTrace
+      )
 
   private fun animateBottomViewToOrigin() {
     getBottomNavigationView().animate()
@@ -670,10 +682,11 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   }
 
   override fun insufficientSpaceInStorage(availableSpace: Long) {
-    val message = """
-        ${getString(string.move_no_space)}
-        ${getString(string.space_available)} ${Bytes(availableSpace).humanReadable}
-    """.trimIndent()
+    val message =
+      """
+      ${getString(string.move_no_space)}
+      ${getString(string.space_available)} ${Bytes(availableSpace).humanReadable}
+      """.trimIndent()
 
     showStorageSelectionSnackBar(message)
   }
@@ -708,8 +721,11 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
         sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
       )
       sharedPreferenceUtil.putStoragePosition(
-        if (storageDevice.isInternal) INTERNAL_SELECT_POSITION
-        else EXTERNAL_SELECT_POSITION
+        if (storageDevice.isInternal) {
+          INTERNAL_SELECT_POSITION
+        } else {
+          EXTERNAL_SELECT_POSITION
+        }
       )
       // after selecting the storage try to copy/move the zim file.
       copyMoveFileHandler?.copyMoveZIMFileInSelectedStorage(storageDevice)
@@ -746,9 +762,9 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       } else {
         if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
           /* shouldShowRequestPermissionRationale() returns false when:
-             *  1) User has previously checked on "Don't ask me again", and/or
-             *  2) Permission has been disabled on device
-             */
+           *  1) User has previously checked on "Don't ask me again", and/or
+           *  2) Permission has been disabled on device
+           */
           requireActivity().toast(string.request_storage, Toast.LENGTH_LONG)
         } else {
           dialogShower.show(

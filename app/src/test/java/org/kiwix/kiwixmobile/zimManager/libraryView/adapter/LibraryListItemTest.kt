@@ -34,7 +34,6 @@ import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.DetectingFi
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.BookItem
 
 internal class LibraryListItemTest {
-
   private val book = mockk<Book>()
 
   @BeforeEach

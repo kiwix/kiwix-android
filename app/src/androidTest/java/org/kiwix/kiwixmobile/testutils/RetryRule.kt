@@ -25,7 +25,6 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.RETRY_COUNT_FOR_FLAKY_TEST
 import java.util.Objects
 
 class RetryRule : TestRule {
-
   override fun apply(base: Statement, description: Description): Statement =
     statement(base, description)
 

@@ -74,32 +74,34 @@ data class DownloadRoomEntity(
     tags = book.tags
   )
 
-  fun toBook() = Book().apply {
-    id = bookId
-    title = this@DownloadRoomEntity.title
-    description = this@DownloadRoomEntity.description
-    language = this@DownloadRoomEntity.language
-    creator = this@DownloadRoomEntity.creator
-    publisher = this@DownloadRoomEntity.publisher
-    date = this@DownloadRoomEntity.date
-    url = this@DownloadRoomEntity.url
-    articleCount = this@DownloadRoomEntity.articleCount
-    mediaCount = this@DownloadRoomEntity.mediaCount
-    size = this@DownloadRoomEntity.size
-    bookName = name
-    favicon = favIcon
-    tags = this@DownloadRoomEntity.tags
-  }
+  fun toBook() =
+    Book().apply {
+      id = bookId
+      title = this@DownloadRoomEntity.title
+      description = this@DownloadRoomEntity.description
+      language = this@DownloadRoomEntity.language
+      creator = this@DownloadRoomEntity.creator
+      publisher = this@DownloadRoomEntity.publisher
+      date = this@DownloadRoomEntity.date
+      url = this@DownloadRoomEntity.url
+      articleCount = this@DownloadRoomEntity.articleCount
+      mediaCount = this@DownloadRoomEntity.mediaCount
+      size = this@DownloadRoomEntity.size
+      bookName = name
+      favicon = favIcon
+      tags = this@DownloadRoomEntity.tags
+    }
 
-  fun updateWith(download: Download) = copy(
-    file = download.file,
-    etaInMilliSeconds = download.etaInMilliSeconds,
-    bytesDownloaded = download.downloaded,
-    totalSizeOfDownload = download.total,
-    status = download.status,
-    error = download.error,
-    progress = download.progress
-  )
+  fun updateWith(download: Download) =
+    copy(
+      file = download.file,
+      etaInMilliSeconds = download.etaInMilliSeconds,
+      bytesDownloaded = download.downloaded,
+      totalSizeOfDownload = download.total,
+      status = download.status,
+      error = download.error,
+      progress = download.progress
+    )
 }
 
 class StatusConverter : EnumConverter<Status>() {

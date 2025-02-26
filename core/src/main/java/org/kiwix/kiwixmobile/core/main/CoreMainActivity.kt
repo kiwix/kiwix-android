@@ -82,11 +82,13 @@ const val ACTION_NEW_TAB = "NEW_TAB"
 const val NEW_TAB_SHORTCUT_ID = "new_tab_shortcut"
 
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
-
   abstract val searchFragmentResId: Int
+
   @Inject lateinit var externalLinkOpener: ExternalLinkOpener
+
   @Inject lateinit var rateDialogHandler: RateDialogHandler
   private var drawerToggle: ActionBarDrawerToggle? = null
+
   @Inject lateinit var zimReaderContainer: ZimReaderContainer
   abstract val navController: NavController
   abstract val drawerContainerLayout: DrawerLayout
@@ -102,19 +104,23 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val navHostContainer: FragmentContainerView
   abstract val mainActivity: AppCompatActivity
   abstract val appName: String
+
   @Inject lateinit var objectBoxToLibkiwixMigrator: ObjectBoxToLibkiwixMigrator
+
   @Inject lateinit var objectBoxToRoomMigrator: ObjectBoxToRoomMigrator
 
   @Inject
   lateinit var downloadMonitor: DownloadMonitor
 
+  @Suppress("InjectDispatcher")
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.KiwixTheme)
     super.onCreate(savedInstanceState)
     if (!BuildConfig.DEBUG) {
       val appContext = applicationContext
-      Thread.setDefaultUncaughtExceptionHandler { paramThread: Thread?,
-        paramThrowable: Throwable? ->
+      Thread.setDefaultUncaughtExceptionHandler {
+          paramThread: Thread?,
+          paramThrowable: Throwable? ->
         val intent = Intent(appContext, ErrorActivity::class.java)
         val extras = Bundle()
         extras.putSerializable(ErrorActivity.EXCEPTION_KEY, paramThrowable)
@@ -202,8 +208,11 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
       handleDrawerOnNavigation()
     }
     readerTableOfContentsDrawer.setLockMode(
-      if (destination.id == readerFragmentResId) LOCK_MODE_UNLOCKED
-      else LOCK_MODE_LOCKED_CLOSED
+      if (destination.id == readerFragmentResId) {
+        LOCK_MODE_UNLOCKED
+      } else {
+        LOCK_MODE_LOCKED_CLOSED
+      }
     )
   }
 
@@ -364,7 +373,6 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
-
     if (activeFragments().filterIsInstance<FragmentActivityExtensions>().isEmpty()) {
       return super.onCreateOptionsMenu(menu)
     }

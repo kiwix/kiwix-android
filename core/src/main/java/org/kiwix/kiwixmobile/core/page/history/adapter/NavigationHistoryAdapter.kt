@@ -23,8 +23,6 @@ import org.kiwix.kiwixmobile.core.base.adapter.BaseDelegateAdapter
 
 class NavigationHistoryAdapter(
   vararg delegates: AdapterDelegate<NavigationHistoryListItem>
-) : BaseDelegateAdapter<NavigationHistoryListItem>(
-  *delegates
-) {
+) : BaseDelegateAdapter<NavigationHistoryListItem>(*delegates) {
   override fun getIdFor(item: NavigationHistoryListItem) = item.title.hashCode().toLong()
 }

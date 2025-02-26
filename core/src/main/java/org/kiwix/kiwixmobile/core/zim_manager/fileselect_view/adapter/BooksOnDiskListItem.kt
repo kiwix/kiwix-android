@@ -49,7 +49,6 @@ sealed class BooksOnDiskListItem {
     val tags: List<KiwixTag> = KiwixTag.from(book.tags),
     override val id: Long = databaseId
   ) : BooksOnDiskListItem() {
-
     val locale: Locale by lazy {
       Locale(book.language)
     }

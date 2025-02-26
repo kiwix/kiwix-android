@@ -38,8 +38,7 @@ abstract class CoreViewModelModule {
   abstract fun bindSearchViewModel(searchViewModel: SearchViewModel): ViewModel
 
   @Binds
-  abstract fun bindViewModelFactory(factory: ViewModelFactory):
-    ViewModelProvider.Factory
+  abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
 
   @Binds
   @IntoMap

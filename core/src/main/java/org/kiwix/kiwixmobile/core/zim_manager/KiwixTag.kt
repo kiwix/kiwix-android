@@ -39,7 +39,7 @@ sealed class KiwixTag {
           "_category" -> CategoryTag(value)
           else -> value?.let { ArbitraryTag(tag, it) } ?: TagOnly(tag)
         }
-      } ?: emptyList()
+      }.orEmpty()
 
     data class CategoryTag(val categoryValue: String?) : KiwixTag()
     data class ArbitraryTag(val tag: String, val value: String) : KiwixTag()

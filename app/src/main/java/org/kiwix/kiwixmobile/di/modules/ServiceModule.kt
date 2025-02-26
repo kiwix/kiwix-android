@@ -33,7 +33,6 @@ import org.kiwix.kiwixmobile.webserver.wifi_hotspot.IpAddressCallbacks
 
 @Module
 class ServiceModule {
-
   @Provides
   @ServiceScope
   fun providesWebServerHelper(

@@ -32,8 +32,11 @@ fun Book.calculateSearchMatches(
     .foldRight(
       0,
       { filterWord, acc ->
-        if (searchableText.contains(filterWord, true)) acc + 1
-        else acc
+        if (searchableText.contains(filterWord, true)) {
+          acc + 1
+        } else {
+          acc
+        }
       }
     )
 }

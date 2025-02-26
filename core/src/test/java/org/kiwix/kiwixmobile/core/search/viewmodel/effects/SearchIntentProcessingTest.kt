@@ -40,7 +40,6 @@ import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
 
 internal class SearchIntentProcessingTest {
-
   private val actions: Channel<Action> = mockk(relaxed = true)
 
   private val activity: AppCompatActivity = mockk()

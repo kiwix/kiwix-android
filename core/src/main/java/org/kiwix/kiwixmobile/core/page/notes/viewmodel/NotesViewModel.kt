@@ -38,7 +38,6 @@ class NotesViewModel @Inject constructor(
   sharedPrefs: SharedPreferenceUtil
 ) : PageViewModel<NoteListItem, NotesState>(notesRoomDao, sharedPrefs, zimReaderContainer),
   PageViewModelClickListener {
-
   init {
     setOnItemClickListener(this)
   }

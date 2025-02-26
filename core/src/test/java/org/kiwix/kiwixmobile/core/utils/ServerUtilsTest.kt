@@ -22,18 +22,17 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
 internal class ServerUtilsTest {
-
   @Test
   internal fun `formatIpForAndroidPie should return first ip occurrence of pie address`() {
     assertThat(
       ServerUtils.formatIpForAndroidPie(
         """
-      fec0::15:b2ff:fe00:0
-      fec0::15d6:ece1:61fb:5b55
-      192.168.232.2
-      fec0::d8d1:9ff:fe42:160c
-      fec0::8d6e:2327:6d9f:ce75
-      192.168.200.2
+        fec0::15:b2ff:fe00:0
+        fec0::15d6:ece1:61fb:5b55
+        192.168.232.2
+        fec0::d8d1:9ff:fe42:160c
+        fec0::8d6e:2327:6d9f:ce75
+        192.168.200.2
         """.trimIndent()
       )
     ).isEqualTo(

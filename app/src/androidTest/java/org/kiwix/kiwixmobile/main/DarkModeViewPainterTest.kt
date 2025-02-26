@@ -75,16 +75,17 @@ class DarkModeViewPainterTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_SHOWCASE, false)
       putString(SharedPreferenceUtil.PREF_LANG, "en")
     }
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      onActivity {
-        LanguageUtils.handleLocaleChange(
-          it,
-          "en",
-          SharedPreferenceUtil(context)
-        )
+    activityScenario =
+      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+        onActivity {
+          LanguageUtils.handleLocaleChange(
+            it,
+            "en",
+            SharedPreferenceUtil(context)
+          )
+        }
       }
-    }
   }
 
   init {
@@ -159,10 +160,11 @@ class DarkModeViewPainterTest : BaseActivityTest() {
   private fun loadZimFileInReader() {
     val loadFileStream =
       DarkModeViewPainterTest::class.java.classLoader.getResourceAsStream("testzim.zim")
-    val zimFile = File(
-      context.getExternalFilesDirs(null)[0],
-      "testzim.zim"
-    )
+    val zimFile =
+      File(
+        context.getExternalFilesDirs(null)[0],
+        "testzim.zim"
+      )
     if (zimFile.exists()) zimFile.delete()
     zimFile.createNewFile()
     loadFileStream.use { inputStream ->

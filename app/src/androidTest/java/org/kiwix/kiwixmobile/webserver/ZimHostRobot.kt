@@ -47,7 +47,6 @@ import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 fun zimHost(func: ZimHostRobot.() -> Unit) = ZimHostRobot().applyWithViewHierarchyPrinting(func)
 
 class ZimHostRobot : BaseRobot() {
-
   fun assertMenuWifiHotspotDiplayed() {
     isVisible(TextId(R.string.menu_wifi_hotspot))
   }

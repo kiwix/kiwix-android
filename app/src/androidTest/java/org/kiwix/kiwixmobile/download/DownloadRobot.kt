@@ -57,7 +57,6 @@ fun downloadRobot(func: DownloadRobot.() -> Unit) =
   DownloadRobot().applyWithViewHierarchyPrinting(func)
 
 class DownloadRobot : BaseRobot() {
-
   fun clickLibraryOnBottomNav() {
     clickOn(ViewId(R.id.libraryFragment))
   }

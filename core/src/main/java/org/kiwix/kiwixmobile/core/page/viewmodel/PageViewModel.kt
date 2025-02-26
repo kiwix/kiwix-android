@@ -48,7 +48,6 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
   val sharedPreferenceUtil: SharedPreferenceUtil,
   val zimReaderContainer: ZimReaderContainer
 ) : ViewModel() {
-
   abstract fun initialState(): S
 
   private lateinit var pageViewModelClickListener: PageViewModelClickListener
@@ -79,16 +78,17 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
     )
   }
 
-  private fun reduce(action: Action, state: S): S = when (action) {
-    Exit -> exitFragment(state)
-    ExitActionModeMenu -> deselectAllPages(state)
-    UserClickedDeleteButton, UserClickedDeleteSelectedPages -> offerShowDeleteDialog(state)
-    is UserClickedShowAllToggle -> offerUpdateToShowAllToggle(action, state)
-    is OnItemClick -> handleItemClick(state, action)
-    is OnItemLongClick -> handleItemLongClick(state, action)
-    is Filter -> updatePagesBasedOnFilter(state, action)
-    is UpdatePages -> updatePages(state, action)
-  }
+  private fun reduce(action: Action, state: S): S =
+    when (action) {
+      Exit -> exitFragment(state)
+      ExitActionModeMenu -> deselectAllPages(state)
+      UserClickedDeleteButton, UserClickedDeleteSelectedPages -> offerShowDeleteDialog(state)
+      is UserClickedShowAllToggle -> offerUpdateToShowAllToggle(action, state)
+      is OnItemClick -> handleItemClick(state, action)
+      is OnItemLongClick -> handleItemLongClick(state, action)
+      is Filter -> updatePagesBasedOnFilter(state, action)
+      is UpdatePages -> updatePages(state, action)
+    }
 
   abstract fun updatePagesBasedOnFilter(state: S, action: Filter): S
 

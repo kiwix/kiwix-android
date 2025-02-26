@@ -23,6 +23,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import io.reactivex.Flowable
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,17 +40,18 @@ abstract class NotesRoomDao : PageDao {
   @Query("SELECT * FROM NotesRoomEntity ORDER BY NotesRoomEntity.noteTitle")
   abstract fun notesAsEntity(): Flowable<List<NotesRoomEntity>>
 
-  fun notes(): Flowable<List<Page>> = notesAsEntity().map {
-    it.map { notesEntity ->
-      notesEntity.zimFilePath?.let { filePath ->
-        // set zimReaderSource for previously saved notes
-        fromDatabaseValue(filePath)?.let { zimReaderSource ->
-          notesEntity.zimReaderSource = zimReaderSource
+  fun notes(): Flowable<List<Page>> =
+    notesAsEntity().map {
+      it.map { notesEntity ->
+        notesEntity.zimFilePath?.let { filePath ->
+          // set zimReaderSource for previously saved notes
+          fromDatabaseValue(filePath)?.let { zimReaderSource ->
+            notesEntity.zimReaderSource = zimReaderSource
+          }
         }
+        NoteListItem(notesEntity)
       }
-      NoteListItem(notesEntity)
     }
-  }
 
   override fun pages(): Flowable<List<Page>> = notes()
   override fun deletePages(pagesToDelete: List<Page>) =
@@ -87,8 +89,11 @@ abstract class NotesRoomDao : PageDao {
    * the associated file should also be removed from storage,
    * as it is no longer needed.
    */
-  private fun removeNoteFileFromStorage(noteFilePath: String) {
-    CoroutineScope(Dispatchers.IO).launch {
+  private fun removeNoteFileFromStorage(
+    noteFilePath: String,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ) {
+    CoroutineScope(dispatcher).launch {
       val noteFile = File(noteFilePath)
       if (noteFile.isFileExist()) {
         noteFile.deleteFile()

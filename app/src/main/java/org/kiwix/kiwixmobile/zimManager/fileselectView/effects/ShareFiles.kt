@@ -29,9 +29,10 @@ import org.kiwix.kiwixmobile.localFileTransfer.URIS_KEY
 data class ShareFiles(private val selectedBooks: List<BookOnDisk>) :
   SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    val selectedFileContentURIs = selectedBooks.mapNotNull {
-      it.zimReaderSource.getUri(activity)
-    }
+    val selectedFileContentURIs =
+      selectedBooks.mapNotNull {
+        it.zimReaderSource.getUri(activity)
+      }
     activity.navigate(
       R.id.localFileTransferFragment,
       bundleOf(URIS_KEY to selectedFileContentURIs.toTypedArray())

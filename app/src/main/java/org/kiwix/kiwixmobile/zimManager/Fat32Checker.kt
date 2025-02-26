@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.zimManager
 
-import android.annotation.SuppressLint
 import android.os.Build
 import android.os.FileObserver
 import io.reactivex.Flowable
@@ -34,7 +33,7 @@ import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.CAN_WRITE_4GB
 import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.INCONCLUSIVE
 import java.io.File
 
-@SuppressLint("CheckResult")
+@Suppress("IgnoredReturnValue", "CheckResult")
 class Fat32Checker constructor(
   sharedPreferenceUtil: SharedPreferenceUtil,
   private val fileSystemCheckers: List<FileSystemChecker>
@@ -82,8 +81,11 @@ class Fat32Checker constructor(
   private fun toFileSystemState(it: String) =
     when {
       File(it).freeSpace > FOUR_GIGABYTES_IN_BYTES ->
-        if (canCreate4GbFile(it)) CanWrite4GbFile
-        else CannotWrite4GbFile
+        if (canCreate4GbFile(it)) {
+          CanWrite4GbFile
+        } else {
+          CannotWrite4GbFile
+        }
       else -> NotEnoughSpaceFor4GbFile
     }
 
@@ -93,7 +95,7 @@ class Fat32Checker constructor(
         CAN_WRITE_4GB -> return@canCreate4GbFile true
         CANNOT_WRITE_4GB -> return@canCreate4GbFile false
         INCONCLUSIVE -> {
-          /*do nothing*/
+          // do nothing
         }
       }
     }

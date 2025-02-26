@@ -22,7 +22,6 @@ import org.junit.Assert.assertEquals
 import org.junit.jupiter.api.Test
 
 class BookUtilsTest {
-
   // Test that the language returned for the given language code is correct
   @Test
   fun testLanguageFromCode() {

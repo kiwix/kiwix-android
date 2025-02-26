@@ -108,7 +108,8 @@ internal class BookmarkViewModelTest {
   fun `offerUpdateToShowAllToggle offers UpdateAllBookmarksPreference`() {
     viewModel.effects.test().also {
       viewModel.offerUpdateToShowAllToggle(
-        Action.UserClickedShowAllToggle(false), bookmarkState()
+        Action.UserClickedShowAllToggle(false),
+        bookmarkState()
       )
     }.assertValues(UpdateAllBookmarksPreference(sharedPreferenceUtil, false))
   }
@@ -169,18 +170,19 @@ internal class BookmarkViewModelTest {
   }
 
   @Test
-  internal fun `createDeletePageDialogEffect returns correct dialog`() = runTest {
-    assertThat(
-      viewModel.createDeletePageDialogEffect(bookmarkState(), viewModelScope)
-    ).isEqualTo(
-      ShowDeleteBookmarksDialog(
-        viewModel.effects,
-        bookmarkState(),
-        libkiwixBookMarks,
-        viewModelScope
+  internal fun `createDeletePageDialogEffect returns correct dialog`() =
+    runTest {
+      assertThat(
+        viewModel.createDeletePageDialogEffect(bookmarkState(), viewModelScope)
+      ).isEqualTo(
+        ShowDeleteBookmarksDialog(
+          viewModel.effects,
+          bookmarkState(),
+          libkiwixBookMarks,
+          viewModelScope
+        )
       )
-    )
-  }
+    }
 
   @Test
   internal fun `copyWithNewItems returns state with copied items`() {

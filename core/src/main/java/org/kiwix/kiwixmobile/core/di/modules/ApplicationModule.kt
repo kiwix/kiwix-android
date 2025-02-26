@@ -46,7 +46,6 @@ import javax.inject.Singleton
   ]
 )
 class ApplicationModule {
-
   @Provides
   @Singleton
   internal fun provideApplication(context: Context): Application =

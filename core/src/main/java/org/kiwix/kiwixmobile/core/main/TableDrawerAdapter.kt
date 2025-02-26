@@ -28,9 +28,9 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.databinding.SectionListBinding
 
-class TableDrawerAdapter constructor(private val listener: TableClickListener) :
-  Adapter<ViewHolder>() {
-
+class TableDrawerAdapter constructor(
+  private val listener: TableClickListener
+) : Adapter<ViewHolder>() {
   private var title: String = ""
   private val sections: MutableList<DocumentSection> = mutableListOf()
 
@@ -44,8 +44,11 @@ class TableDrawerAdapter constructor(private val listener: TableClickListener) :
   }
 
   override fun getItemViewType(position: Int): Int {
-    return if (position == 0) 0
-    else 1
+    return if (position == 0) {
+      0
+    } else {
+      1
+    }
   }
 
   override fun onCreateViewHolder(
@@ -68,6 +71,7 @@ class TableDrawerAdapter constructor(private val listener: TableClickListener) :
         holder.bind(title)
         holder.itemView.setOnClickListener(listener::onHeaderClick)
       }
+
       is SectionTableDrawerViewHolder -> {
         val titleAdjustedPosition = position - 1
         holder.bind(sections[titleAdjustedPosition])
@@ -75,6 +79,7 @@ class TableDrawerAdapter constructor(private val listener: TableClickListener) :
           listener.onSectionClick(it, titleAdjustedPosition)
         }
       }
+
       else -> {
         throw IllegalStateException("Unknown ViewHolder $holder found")
       }
@@ -88,16 +93,18 @@ class TableDrawerAdapter constructor(private val listener: TableClickListener) :
 
   class HeaderTableDrawerViewHolder(private val sectionListBinding: SectionListBinding) :
     BaseViewHolder<String>(sectionListBinding.root) {
-
     override fun bind(item: String) {
       val context = itemView.context
       sectionListBinding.titleText.typeface = Typeface.DEFAULT_BOLD
-      sectionListBinding.titleText.text = when {
-        item.isNotEmpty() -> item
-        context is WebViewProvider -> context.getCurrentWebView()?.title
-          ?: context.getString(R.string.no_section_info)
-        else -> context.getString(R.string.no_section_info)
-      }
+      sectionListBinding.titleText.text =
+        when {
+          item.isNotEmpty() -> item
+          context is WebViewProvider ->
+            context.getCurrentWebView()?.title
+              ?: context.getString(R.string.no_section_info)
+
+          else -> context.getString(R.string.no_section_info)
+        }
     }
   }
 

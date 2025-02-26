@@ -58,6 +58,7 @@ import com.tonyodev.fetch2.R.drawable
 import com.tonyodev.fetch2.R.string
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -126,11 +127,12 @@ class FetchDownloadNotificationManager @Inject constructor(
     downloadNotification: DownloadNotification,
     context: Context
   ) {
-    val smallIcon = if (downloadNotification.isDownloading) {
-      android.R.drawable.stat_sys_download
-    } else {
-      android.R.drawable.stat_sys_download_done
-    }
+    val smallIcon =
+      if (downloadNotification.isDownloading) {
+        android.R.drawable.stat_sys_download
+      } else {
+        android.R.drawable.stat_sys_download_done
+      }
     val notificationTitle =
       downloadRoomDao.getEntityForFileName(downloadNotification.title)?.title
         ?: downloadNotification.title
@@ -191,10 +193,11 @@ class FetchDownloadNotificationManager @Inject constructor(
     context: Context
   ) {
     if (downloadNotification.isCompleted) {
-      val internal = Intents.internal(CoreMainActivity::class.java).apply {
-        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        putExtra(DOWNLOAD_NOTIFICATION_TITLE, downloadNotification.title)
-      }
+      val internal =
+        Intents.internal(CoreMainActivity::class.java).apply {
+          addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+          putExtra(DOWNLOAD_NOTIFICATION_TITLE, downloadNotification.title)
+        }
       val pendingIntent =
         getActivity(
           context,
@@ -207,14 +210,19 @@ class FetchDownloadNotificationManager @Inject constructor(
     }
   }
 
-  fun showDownloadPauseNotification(fetch: Fetch, download: Download) {
-    CoroutineScope(Dispatchers.IO).launch {
+  fun showDownloadPauseNotification(
+    fetch: Fetch,
+    download: Download,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ) {
+    CoroutineScope(dispatcher).launch {
       val notificationBuilder = getNotificationBuilder(download.id, download.id)
       val cancelNotification = getCancelNotification(fetch, download, notificationBuilder)
       downloadNotificationManager.notify(download.id, cancelNotification)
     }
   }
 
+  @Suppress("InjectDispatcher")
   fun getCancelNotification(
     fetch: Fetch,
     download: Download,
@@ -255,21 +263,23 @@ class FetchDownloadNotificationManager @Inject constructor(
     download: Download,
     actionType: DownloadNotification.ActionType
   ): PendingIntent {
-    val intent = Intent(notificationManagerAction).apply {
-      putExtra(EXTRA_NAMESPACE, fetch.namespace)
-      putExtra(EXTRA_DOWNLOAD_ID, download.id)
-      putExtra(EXTRA_NOTIFICATION_ID, download.id)
-      putExtra(EXTRA_GROUP_ACTION, false)
-      putExtra(EXTRA_NOTIFICATION_GROUP_ID, download.id)
-    }
-    val action = when (actionType) {
-      CANCEL -> ACTION_TYPE_CANCEL
-      DELETE -> ACTION_TYPE_DELETE
-      RESUME -> ACTION_TYPE_RESUME
-      PAUSE -> ACTION_TYPE_PAUSE
-      RETRY -> ACTION_TYPE_RETRY
-      else -> ACTION_TYPE_INVALID
-    }
+    val intent =
+      Intent(notificationManagerAction).apply {
+        putExtra(EXTRA_NAMESPACE, fetch.namespace)
+        putExtra(EXTRA_DOWNLOAD_ID, download.id)
+        putExtra(EXTRA_NOTIFICATION_ID, download.id)
+        putExtra(EXTRA_GROUP_ACTION, false)
+        putExtra(EXTRA_NOTIFICATION_GROUP_ID, download.id)
+      }
+    val action =
+      when (actionType) {
+        CANCEL -> ACTION_TYPE_CANCEL
+        DELETE -> ACTION_TYPE_DELETE
+        RESUME -> ACTION_TYPE_RESUME
+        PAUSE -> ACTION_TYPE_PAUSE
+        RETRY -> ACTION_TYPE_RETRY
+        else -> ACTION_TYPE_INVALID
+      }
     intent.putExtra(EXTRA_ACTION_TYPE, action)
     return PendingIntent.getBroadcast(
       context,

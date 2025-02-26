@@ -63,12 +63,16 @@ fun combineMessages(
 fun getViewHierarchy(v: View) =
   StringBuilder().apply { getViewHierarchy(v, this, 0) }.toString()
 
-fun attempt(count: Int, function: () -> Unit): Unit = try {
-  function.invoke()
-} catch (e: Exception) {
-  if (count - 1 == 0) throw e
-  else attempt(count - 1, function)
-}
+fun attempt(count: Int, function: () -> Unit): Unit =
+  try {
+    function.invoke()
+  } catch (e: Exception) {
+    if (count - 1 == 0) {
+      throw e
+    } else {
+      attempt(count - 1, function)
+    }
+  }
 
 private fun getViewHierarchy(v: View, desc: StringBuilder, margin: Int) {
   desc.append(getViewMessage(v, margin))
@@ -85,27 +89,31 @@ private fun getViewMessage(v: View, marginOffset: Int) =
 
 fun page(v: View) = if (v is ViewPager) " page: ${v.currentItem}" else ""
 
-fun visibility(v: View) = " visibility:" +
-  when (v.visibility) {
-    View.VISIBLE -> "visible"
-    View.INVISIBLE -> "invisible"
-    else -> "gone"
-  }
+fun visibility(v: View) =
+  " visibility:" +
+    when (v.visibility) {
+      View.VISIBLE -> "visible"
+      View.INVISIBLE -> "invisible"
+      else -> "gone"
+    }
 
 fun contentDescription(view: View) =
   view.contentDescription?.let {
-    if (it.isNotEmpty()) " contDesc:$it"
-    else null
-  } ?: ""
+    if (it.isNotEmpty()) " contDesc:$it" else null
+  }.orEmpty()
 
 fun text(v: View) =
-  if (v is TextView)
-    if (v.text.isNotEmpty()) " text:${v.text}"
-    else ""
-  else ""
+  if (v is TextView) {
+    if (v.text.isNotEmpty()) " text:${v.text}" else ""
+  } else {
+    ""
+  }
 
 private fun resourceId(view: View) =
-  if (view.id > 0 && view.resources != null) " id:${view.resources.getResourceName(view.id)}"
-  else ""
+  if (view.id > 0 && view.resources != null) {
+    " id:${view.resources.getResourceName(view.id)}"
+  } else {
+    ""
+  }
 
 private fun numSpaces(marginOffset: Int) = (0..marginOffset).fold("") { acc, _ -> "$acc-" }

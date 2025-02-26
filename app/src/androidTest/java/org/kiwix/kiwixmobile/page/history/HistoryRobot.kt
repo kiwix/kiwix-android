@@ -29,7 +29,6 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 fun history(func: HistoryRobot.() -> Unit) = HistoryRobot().applyWithViewHierarchyPrinting(func)
 
 class HistoryRobot : BaseRobot() {
-
   fun assertHistoryDisplayed() {
     assertDisplayed(R.string.history_from_current_book)
   }

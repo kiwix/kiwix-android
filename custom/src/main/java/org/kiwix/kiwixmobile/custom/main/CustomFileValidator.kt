@@ -31,7 +31,6 @@ import java.io.IOException
 import javax.inject.Inject
 
 class CustomFileValidator @Inject constructor(private val context: Context) {
-
   fun validate(onFilesFound: (ValidationState) -> Unit, onNoFilesFound: () -> Unit) =
     when (val installationState = detectInstallationState()) {
       is HasBothFiles,
@@ -81,7 +80,7 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
 
     try {
       // List of all files in the asset directory
-      val assets = assetManager.list("") ?: emptyArray()
+      val assets = assetManager.list("").orEmpty()
 
       // Filter and count chunk files.
       assets.filterTo(chunkFiles) { it.startsWith("chunk") && it.endsWith(".zim") }
@@ -130,6 +129,7 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
     }
   }
 
+  @Suppress("UseOrEmpty")
   private fun scanDirs(dirs: Array<out File?>?, extensionToMatch: String): List<File> =
     dirs?.filterNotNull()?.fold(listOf()) { acc, dir ->
       acc + dir.walk().filter { it.extension.startsWith(extensionToMatch) }.toList()

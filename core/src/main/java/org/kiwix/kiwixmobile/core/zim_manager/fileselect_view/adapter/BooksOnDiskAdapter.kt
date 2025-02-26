@@ -24,7 +24,7 @@ import org.kiwix.kiwixmobile.core.base.adapter.BaseDelegateAdapter
 class BooksOnDiskAdapter(
   vararg delegates: AdapterDelegate<BooksOnDiskListItem>
 ) : BaseDelegateAdapter<BooksOnDiskListItem>(
-  *delegates
-) {
+    *delegates
+  ) {
   override fun getIdFor(item: BooksOnDiskListItem) = item.id
 }

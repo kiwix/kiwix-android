@@ -32,5 +32,5 @@ value class KiloByte(private val kilobyteString: String?) {
         .format(it / 1024.0.pow(conversion.toDouble())) +
         " " +
         units[conversion]
-    } ?: ""
+    }.orEmpty()
 }

@@ -45,7 +45,6 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.Libr
 
 sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
   BaseViewHolder<T>(containerView) {
-
   class LibraryBookViewHolder(
     private val itemLibraryBinding: ItemLibraryBinding,
     private val bookUtils: BookUtils,
@@ -74,10 +73,11 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
         itemLibraryBinding.tags.render(item.tags)
 
         itemLibraryBinding.unableToDownload.visibility =
-          if (item.canBeDownloaded && hasAvailableSpaceInStorage)
+          if (item.canBeDownloaded && hasAvailableSpaceInStorage) {
             View.GONE
-          else
+          } else {
             View.VISIBLE
+          }
         itemLibraryBinding.unableToDownload.setOnLongClickListener {
           val context = itemLibraryBinding.root.context
           when (item.fileSystemState) {
@@ -103,7 +103,6 @@ sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
     private val pauseResumeClickAction: (LibraryDownloadItem) -> Unit
   ) :
     LibraryViewHolder<LibraryDownloadItem>(itemDownloadBinding.root) {
-
     @Suppress("MagicNumber")
     override fun bind(item: LibraryDownloadItem) {
       itemDownloadBinding.libraryDownloadFavicon.setBitmap(item.favIcon)

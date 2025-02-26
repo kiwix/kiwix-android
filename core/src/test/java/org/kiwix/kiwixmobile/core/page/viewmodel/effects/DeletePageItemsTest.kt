@@ -39,30 +39,32 @@ internal class DeletePageItemsTest {
   private val viewModelScope = CoroutineScope(Dispatchers.Main)
 
   @Test
-  fun `delete with selected items only deletes the selected items`() = runBlocking {
-    retryTest {
-      item1.isSelected = true
-      DeletePageItems(
-        historyState(listOf(item1, item2)),
-        pageDao,
-        viewModelScope
-      ).invokeWith(activity)
-      verify { pageDao.deletePages(listOf(item1)) }
+  fun `delete with selected items only deletes the selected items`() =
+    runBlocking {
+      retryTest {
+        item1.isSelected = true
+        DeletePageItems(
+          historyState(listOf(item1, item2)),
+          pageDao,
+          viewModelScope
+        ).invokeWith(activity)
+        verify { pageDao.deletePages(listOf(item1)) }
+      }
     }
-  }
 
   @Test
-  fun `delete with no selected items deletes all items`() = runBlocking {
-    retryTest {
-      item1.isSelected = false
-      DeletePageItems(
-        historyState(listOf(item1, item2)),
-        pageDao,
-        viewModelScope
-      ).invokeWith(activity)
-      verify { pageDao.deletePages(listOf(item1, item2)) }
+  fun `delete with no selected items deletes all items`() =
+    runBlocking {
+      retryTest {
+        item1.isSelected = false
+        DeletePageItems(
+          historyState(listOf(item1, item2)),
+          pageDao,
+          viewModelScope
+        ).invokeWith(activity)
+        verify { pageDao.deletePages(listOf(item1, item2)) }
+      }
     }
-  }
 
   private fun retryTest(maxRetries: Int = 5, block: () -> Unit) {
     var currentAttempt = 0

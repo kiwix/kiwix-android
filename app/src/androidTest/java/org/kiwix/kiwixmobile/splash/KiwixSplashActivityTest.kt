@@ -52,15 +52,15 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class KiwixSplashActivityTest {
-
   @Rule
   @JvmField
   var retryRule = RetryRule()
 
-  private val permissions = arrayOf(
-    Manifest.permission.READ_EXTERNAL_STORAGE,
-    Manifest.permission.WRITE_EXTERNAL_STORAGE
-  )
+  private val permissions =
+    arrayOf(
+      Manifest.permission.READ_EXTERNAL_STORAGE,
+      Manifest.permission.WRITE_EXTERNAL_STORAGE
+    )
 
   @Rule
   @JvmField
@@ -129,9 +129,10 @@ class KiwixSplashActivityTest {
   }
 
   private fun shouldShowIntro(value: Boolean) {
-    val preferencesEditor = PreferenceManager.getDefaultSharedPreferences(
-      context
-    ).edit()
+    val preferencesEditor =
+      PreferenceManager.getDefaultSharedPreferences(
+        context
+      ).edit()
     preferencesEditor.putBoolean(
       SharedPreferenceUtil.PREF_SHOW_INTRO,
       value

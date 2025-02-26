@@ -29,10 +29,10 @@ import org.kiwix.kiwixmobile.webserver.ZimHostContract.View
 import javax.inject.Inject
 
 @ActivityScope
-class ZimHostPresenter @Inject internal constructor(private val dataSource: DataSource) :
-  BasePresenter<View>(),
+class ZimHostPresenter @Inject internal constructor(
+  private val dataSource: DataSource
+) : BasePresenter<View>(),
   Presenter {
-
   override fun loadBooks(previouslyHostedBooks: Set<String>) {
     dataSource.getLanguageCategorizedBooks()
       .map { books ->
@@ -43,19 +43,21 @@ class ZimHostPresenter @Inject internal constructor(private val dataSource: Data
               previouslyHostedBooks.contains(it.book.title) || previouslyHostedBooks.isEmpty()
           }
         books
-      }.subscribe(object : SingleObserver<List<BooksOnDiskListItem>> {
-        override fun onSubscribe(d: Disposable) {
-          compositeDisposable.add(d)
-        }
+      }.subscribe(
+        object : SingleObserver<List<BooksOnDiskListItem>> {
+          override fun onSubscribe(d: Disposable) {
+            compositeDisposable.add(d)
+          }
 
-        override fun onSuccess(books: List<BooksOnDiskListItem>) {
-          view?.addBooks(books)
-        }
+          override fun onSuccess(books: List<BooksOnDiskListItem>) {
+            view?.addBooks(books)
+          }
 
-        override fun onError(e: Throwable) {
-          Log.e(TAG, "Unable to load books", e)
+          override fun onError(e: Throwable) {
+            Log.e(TAG, "Unable to load books", e)
+          }
         }
-      })
+      )
   }
 
   companion object {

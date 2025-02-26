@@ -51,7 +51,6 @@ import java.io.File
 import java.util.concurrent.Callable
 
 internal class NewBookDaoTest {
-
   private val box: Box<BookOnDiskEntity> = mockk(relaxed = true)
   private val newBookDao = NewBookDao(box)
 
@@ -74,12 +73,13 @@ internal class NewBookDaoTest {
 
     @SuppressLint("CheckResult")
     @Test
-    fun `books deletes entities whose file does not exist`() = runBlocking {
-      val (_, deletedEntity) = expectEmissionOfExistingAndNotExistingBook()
-      newBookDao.books().test()
-      delay(1000)
-      verify { box.remove(listOf(deletedEntity)) }
-    }
+    fun `books deletes entities whose file does not exist`() =
+      runBlocking {
+        val (_, deletedEntity) = expectEmissionOfExistingAndNotExistingBook()
+        newBookDao.books().test()
+        delay(1000)
+        verify { box.remove(listOf(deletedEntity)) }
+      }
 
     @Test
     fun `books removes entities whose files are in the trash folder`() {
@@ -91,8 +91,7 @@ internal class NewBookDaoTest {
       }
     }
 
-    private fun expectEmissionOfExistingAndNotExistingBook(isInTrashFolder: Boolean = false):
-      Pair<BookOnDiskEntity, BookOnDiskEntity> {
+    private fun expectEmissionOfExistingAndNotExistingBook(isInTrashFolder: Boolean = false): Pair<BookOnDiskEntity, BookOnDiskEntity> {
       val query: Query<BookOnDiskEntity> = mockk()
       every { box.query().build() } returns query
       val zimReaderSourceThatExists = mockk<ZimReaderSource>()
@@ -107,19 +106,21 @@ internal class NewBookDaoTest {
       val entityThatDoesNotExist =
         bookOnDiskEntity(zimReaderSource = zimReaderSourceThatDoesNotExist)
       mockkStatic(RxQuery::class)
-      every { RxQuery.observable(query) } returns Observable.just(
-        listOf(entityThatExists, entityThatDoesNotExist)
-      )
+      every { RxQuery.observable(query) } returns
+        Observable.just(
+          listOf(entityThatExists, entityThatDoesNotExist)
+        )
       return entityThatExists to entityThatDoesNotExist
     }
   }
 
   @Test
-  fun getBooks() = runTest {
-    val entity = bookOnDiskEntity()
-    every { box.all } returns mutableListOf(entity)
-    assertThat(newBookDao.getBooks()).isEqualTo(listOf(BookOnDisk(entity)))
-  }
+  fun getBooks() =
+    runTest {
+      val entity = bookOnDiskEntity()
+      every { box.all } returns mutableListOf(entity)
+      assertThat(newBookDao.getBooks()).isEqualTo(listOf(BookOnDisk(entity)))
+    }
 
   @Nested
   inner class Insertion {

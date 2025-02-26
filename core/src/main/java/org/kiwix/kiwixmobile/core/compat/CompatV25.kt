@@ -28,7 +28,6 @@ import android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET
 import android.net.NetworkCapabilities.TRANSPORT_WIFI
 
 open class CompatV25 : Compat {
-
   override fun queryIntentActivities(
     packageManager: PackageManager,
     intent: Intent,

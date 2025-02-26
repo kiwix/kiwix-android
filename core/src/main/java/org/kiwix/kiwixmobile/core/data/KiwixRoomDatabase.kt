@@ -84,10 +84,11 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
       }
     }
 
-    private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
-      override fun migrate(db: SupportSQLiteDatabase) {
-        db.execSQL(
-          """
+    private val MIGRATION_1_2: Migration =
+      object : Migration(1, 2) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+          db.execSQL(
+            """
             CREATE TABLE IF NOT EXISTS `HistoryRoomEntity`(
             `id` INTEGER NOT NULL,
             `timeStamp` INTEGER NOT NULL,
@@ -101,15 +102,16 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
             PRIMARY KEY (`id`)
           )
           """
-        )
+          )
+        }
       }
-    }
 
     @Suppress("MagicNumber")
-    private val MIGRATION_2_3 = object : Migration(2, 3) {
-      override fun migrate(db: SupportSQLiteDatabase) {
-        db.execSQL(
-          """
+    private val MIGRATION_2_3 =
+      object : Migration(2, 3) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+          db.execSQL(
+            """
             CREATE TABLE IF NOT EXISTS `NotesRoomEntity`(
               `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
               `zimId` TEXT NOT NULL,
@@ -120,21 +122,22 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
               `favicon` TEXT
             )
           """
-        )
+          )
 
-        db.execSQL(
-          """
+          db.execSQL(
+            """
             CREATE UNIQUE INDEX IF NOT EXISTS `index_NotesRoomEntity_noteTitle` ON `NotesRoomEntity` (`noteTitle`)
             """
-        )
+          )
+        }
       }
-    }
 
     @Suppress("MagicNumber")
-    private val MIGRATION_3_4 = object : Migration(3, 4) {
-      override fun migrate(db: SupportSQLiteDatabase) {
-        db.execSQL(
-          """
+    private val MIGRATION_3_4 =
+      object : Migration(3, 4) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+          db.execSQL(
+            """
             CREATE TABLE IF NOT EXISTS `DownloadRoomEntity` (
                 `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 `downloadId` INTEGER NOT NULL,
@@ -161,16 +164,17 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
                 `tags` TEXT
             )
             """
-        )
+          )
+        }
       }
-    }
 
     @Suppress("MagicNumber")
-    private val MIGRATION_4_5 = object : Migration(4, 5) {
-      override fun migrate(db: SupportSQLiteDatabase) {
-        db.execSQL("ALTER TABLE HistoryRoomEntity ADD COLUMN zimReaderSource TEXT")
-        db.execSQL(
-          """
+    private val MIGRATION_4_5 =
+      object : Migration(4, 5) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+          db.execSQL("ALTER TABLE HistoryRoomEntity ADD COLUMN zimReaderSource TEXT")
+          db.execSQL(
+            """
             CREATE TABLE IF NOT EXISTS HistoryRoomEntity_temp (
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 zimId TEXT NOT NULL,
@@ -184,9 +188,9 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
                 zimReaderSource TEXT
             )
         """
-        )
-        db.execSQL(
-          """
+          )
+          db.execSQL(
+            """
             INSERT INTO HistoryRoomEntity_temp (
             id,
             zimId,
@@ -212,27 +216,29 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
             zimReaderSource
             FROM HistoryRoomEntity
         """
-        )
-        db.execSQL("DROP TABLE HistoryRoomEntity")
-        db.execSQL("ALTER TABLE HistoryRoomEntity_temp RENAME TO HistoryRoomEntity")
-        db.execSQL("ALTER TABLE NotesRoomEntity ADD COLUMN zimReaderSource TEXT")
+          )
+          db.execSQL("DROP TABLE HistoryRoomEntity")
+          db.execSQL("ALTER TABLE HistoryRoomEntity_temp RENAME TO HistoryRoomEntity")
+          db.execSQL("ALTER TABLE NotesRoomEntity ADD COLUMN zimReaderSource TEXT")
+        }
       }
-    }
 
     @Suppress("MagicNumber")
-    private val MIGRATION_5_6 = object : Migration(5, 6) {
-      override fun migrate(db: SupportSQLiteDatabase) {
-        db.execSQL(
-          "ALTER TABLE DownloadRoomEntity ADD COLUMN pausedByUser INTEGER NOT NULL DEFAULT 0"
-        )
+    private val MIGRATION_5_6 =
+      object : Migration(5, 6) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+          db.execSQL(
+            "ALTER TABLE DownloadRoomEntity ADD COLUMN pausedByUser INTEGER NOT NULL DEFAULT 0"
+          )
+        }
       }
-    }
 
     @Suppress("MagicNumber")
-    private val MIGRATION_6_7 = object : Migration(6, 7) {
-      override fun migrate(db: SupportSQLiteDatabase) {
-        db.execSQL(
-          """
+    private val MIGRATION_6_7 =
+      object : Migration(6, 7) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+          db.execSQL(
+            """
             CREATE TABLE IF NOT EXISTS DownloadRoomEntity_new (
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 downloadId INTEGER NOT NULL,
@@ -258,10 +264,10 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
                 favIcon TEXT NOT NULL,
                 tags TEXT
             )
-          """.trimIndent()
-        )
-        db.execSQL(
-          """
+            """.trimIndent()
+          )
+          db.execSQL(
+            """
             INSERT INTO DownloadRoomEntity_new (
                 id, downloadId, file, etaInMilliSeconds, bytesDownloaded,
                 totalSizeOfDownload, status, error, progress, bookId, title, description,
@@ -273,19 +279,20 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
                 language, creator, publisher, date, url, articleCount, mediaCount, size,
                 name, favIcon, tags
             FROM DownloadRoomEntity
-          """.trimIndent()
-        )
+            """.trimIndent()
+          )
 
-        db.execSQL("DROP TABLE DownloadRoomEntity")
-        db.execSQL("ALTER TABLE DownloadRoomEntity_new RENAME TO DownloadRoomEntity")
+          db.execSQL("DROP TABLE DownloadRoomEntity")
+          db.execSQL("ALTER TABLE DownloadRoomEntity_new RENAME TO DownloadRoomEntity")
+        }
       }
-    }
 
     @Suppress("MagicNumber")
-    private val MIGRATION_7_8 = object : Migration(7, 8) {
-      override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL(
-          """
+    private val MIGRATION_7_8 =
+      object : Migration(7, 8) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+          database.execSQL(
+            """
             CREATE TABLE IF NOT EXISTS `WebViewHistoryEntity` (
                 `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 `zimId` TEXT NOT NULL,
@@ -294,9 +301,9 @@ abstract class KiwixRoomDatabase : RoomDatabase() {
                 `webViewBackForwardListBundle` BLOB NULL
             )
             """
-        )
+          )
+        }
       }
-    }
 
     fun destroyInstance() {
       db = null

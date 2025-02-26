@@ -32,7 +32,6 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteSearch
 
 internal class ShowDeleteSearchDialogTest {
-
   @Test
   fun `invoke with shows dialog that offers ConfirmedDelete action`() {
     val actions = mockk<Channel<Action>>(relaxed = true)

@@ -90,13 +90,13 @@ data class BookOnDiskEntity(
 
 class ZimSourceConverter : PropertyConverter<ZimReaderSource, String> {
   override fun convertToDatabaseValue(entityProperty: ZimReaderSource?): String =
-    entityProperty?.toDatabase() ?: ""
+    entityProperty?.toDatabase().orEmpty()
 
   override fun convertToEntityProperty(databaseValue: String?): ZimReaderSource =
     fromDatabaseValue(databaseValue) ?: ZimReaderSource(File(""))
 }
 
 class StringToFileConverter : PropertyConverter<File, String> {
-  override fun convertToDatabaseValue(entityProperty: File?) = entityProperty?.path ?: ""
-  override fun convertToEntityProperty(databaseValue: String?) = File(databaseValue ?: "")
+  override fun convertToDatabaseValue(entityProperty: File?) = entityProperty?.path.orEmpty()
+  override fun convertToEntityProperty(databaseValue: String?) = File(databaseValue.orEmpty())
 }

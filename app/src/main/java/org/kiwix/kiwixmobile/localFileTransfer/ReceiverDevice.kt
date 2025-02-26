@@ -38,11 +38,12 @@ import java.net.ServerSocket
  * many times as the no. of files).
  */
 internal class ReceiverDevice(private val wifiDirectManager: WifiDirectManager) {
+  @Suppress("InjectDispatcher")
   suspend fun receive(): Boolean {
     return try {
       withContext(Dispatchers.IO) {
-        ServerSocket(WifiDirectManager.FILE_TRANSFER_PORT).use { serverSocket ->
-          Log.d(TAG, "Server: Socket opened at " + WifiDirectManager.FILE_TRANSFER_PORT)
+        ServerSocket(WifiDirectManager.fileTransferPort).use { serverSocket ->
+          Log.d(TAG, "Server: Socket opened at " + WifiDirectManager.fileTransferPort)
           val zimStorageRootPath = wifiDirectManager.zimStorageRootPath
           val fileItems = wifiDirectManager.getFilesForTransfer()
           var isTransferErrorFree = true

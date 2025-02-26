@@ -54,27 +54,29 @@ class KiwixWifiP2pBroadcastReceiver(
       }
       WIFI_P2P_PEERS_CHANGED_ACTION -> p2pEventListener.onPeersChanged()
       WIFI_P2P_CONNECTION_CHANGED_ACTION -> {
-        val networkInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-          intent.getParcelableExtra(
-            EXTRA_NETWORK_INFO,
-            NetworkInfo::class.java
-          )
-        } else {
-          intent.getParcelableExtra(EXTRA_NETWORK_INFO)
-        }
+        val networkInfo =
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(
+              EXTRA_NETWORK_INFO,
+              NetworkInfo::class.java
+            )
+          } else {
+            intent.getParcelableExtra(EXTRA_NETWORK_INFO)
+          }
         networkInfo?.let {
           p2pEventListener.onConnectionChanged(networkInfo.isConnected)
         }
       }
       WIFI_P2P_THIS_DEVICE_CHANGED_ACTION -> {
-        val userDevice = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-          intent.getParcelableExtra(
-            EXTRA_WIFI_P2P_DEVICE,
-            WifiP2pDevice::class.java
-          )
-        } else {
-          intent.getParcelableExtra(EXTRA_WIFI_P2P_DEVICE)
-        }
+        val userDevice =
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(
+              EXTRA_WIFI_P2P_DEVICE,
+              WifiP2pDevice::class.java
+            )
+          } else {
+            intent.getParcelableExtra(EXTRA_WIFI_P2P_DEVICE)
+          }
         p2pEventListener.onDeviceChanged(userDevice)
       }
     }

@@ -23,6 +23,7 @@ package org.kiwix.kiwixmobile.core.utils
 object TestingUtils {
   private var callback: IdleListener? = null
   private val resources: MutableSet<Class<*>> = HashSet()
+
   @JvmStatic fun bindResource(bindClass: Class<*>) {
     callback?.let {
       resources.add(bindClass)

@@ -41,14 +41,14 @@ class ToolbarScrollingKiwixWebView @JvmOverloads constructor(
   sharedPreferenceUtil: SharedPreferenceUtil,
   private val parentNavigationBar: View? = null
 ) : KiwixWebView(
-  context,
-  callback,
-  attrs,
-  nonVideoView,
-  videoView,
-  webViewClient,
-  sharedPreferenceUtil
-) {
+    context,
+    callback,
+    attrs,
+    nonVideoView,
+    videoView,
+    webViewClient,
+    sharedPreferenceUtil
+  ) {
   private val toolbarHeight = context.getToolbarHeight()
 
   private var startY = 0f
@@ -67,12 +67,14 @@ class ToolbarScrollingKiwixWebView @JvmOverloads constructor(
 
   private fun moveToolbar(scrollDelta: Int): Boolean {
     val originalTranslation = toolbarView.translationY
-    val newTranslation = if (scrollDelta > 0)
-    // scroll down
-      max(-toolbarHeight.toFloat(), originalTranslation - scrollDelta)
-    else
-    // scroll up
-      min(0f, originalTranslation - scrollDelta)
+    val newTranslation =
+      if (scrollDelta > 0) {
+        // scroll down
+        max(-toolbarHeight.toFloat(), originalTranslation - scrollDelta)
+      } else {
+        // scroll up
+        min(0f, originalTranslation - scrollDelta)
+      }
 
     toolbarView.translationY = newTranslation
     bottomBarView.translationY =
@@ -90,7 +92,6 @@ class ToolbarScrollingKiwixWebView @JvmOverloads constructor(
     when (event.actionMasked) {
       MotionEvent.ACTION_DOWN -> startY = event.rawY
       MotionEvent.ACTION_MOVE -> {
-
         // If we are in fullscreen don't scroll bar
         if (sharedPreferenceUtil.prefFullScreen) {
           return super.onTouchEvent(event)

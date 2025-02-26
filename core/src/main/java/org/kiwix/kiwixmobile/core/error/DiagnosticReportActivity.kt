@@ -23,7 +23,6 @@ import android.view.View
 import org.kiwix.kiwixmobile.core.R
 
 class DiagnosticReportActivity : ErrorActivity() {
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     activityKiwixErrorBinding?.textView2?.setText(R.string.diagnostic_report)
@@ -37,9 +36,10 @@ class DiagnosticReportActivity : ErrorActivity() {
 
   override val subject = "Somebody has sent a Diagnostic Report  "
 
-  override val initialBody = """
+  override val initialBody =
+    """
     Hi Kiwix Developers,
     I am having an issue with the app and would like you to check these details
     
-  """.trimIndent()
+    """.trimIndent()
 }

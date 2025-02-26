@@ -37,13 +37,12 @@ import org.kiwix.kiwixmobile.core.extensions.getAttribute
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 import javax.inject.Inject
 
-class AlertDialogShower @Inject constructor(private val activity: Activity) :
-  DialogShower {
+class AlertDialogShower @Inject constructor(private val activity: Activity) : DialogShower {
   companion object {
-    const val externalLinkLeftMargin = 10
-    const val externalLinkRightMargin = 10
-    const val externalLinkTopMargin = 10
-    const val externalLinkBottomMargin = 0
+    const val EXTERNAL_LINK_LEFT_MARGIN = 10
+    const val EXTERNAL_LINK_RIGHT_MARGIN = 10
+    const val EXTERNAL_LINK_TOP_MARGIN = 10
+    const val EXTERNAL_LINK_BOTTOM_MARGIN = 0
   }
 
   override fun show(dialog: KiwixDialog, vararg clickListeners: () -> Unit, uri: Uri?) =
@@ -108,13 +107,16 @@ class AlertDialogShower @Inject constructor(private val activity: Activity) :
     LayoutParams.MATCH_PARENT,
     LayoutParams.WRAP_CONTENT
   ).apply {
-    topMargin = externalLinkTopMargin
-    bottomMargin = externalLinkBottomMargin
-    leftMargin = externalLinkLeftMargin
-    rightMargin = externalLinkRightMargin
+    topMargin = EXTERNAL_LINK_TOP_MARGIN
+    bottomMargin = EXTERNAL_LINK_BOTTOM_MARGIN
+    leftMargin = EXTERNAL_LINK_LEFT_MARGIN
+    rightMargin = EXTERNAL_LINK_RIGHT_MARGIN
   }
 
   private fun bodyArguments(dialog: KiwixDialog) =
-    if (dialog is HasBodyFormatArgs) dialog.args.toTypedArray()
-    else emptyArray()
+    if (dialog is HasBodyFormatArgs) {
+      dialog.args.toTypedArray()
+    } else {
+      emptyArray()
+    }
 }

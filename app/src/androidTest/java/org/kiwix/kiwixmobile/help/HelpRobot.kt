@@ -32,7 +32,6 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 fun help(func: HelpRobot.() -> Unit) = HelpRobot().apply(func)
 
 class HelpRobot : BaseRobot() {
-
   fun assertToolbarDisplayed() {
     isVisible(ViewId(id.toolbar))
   }

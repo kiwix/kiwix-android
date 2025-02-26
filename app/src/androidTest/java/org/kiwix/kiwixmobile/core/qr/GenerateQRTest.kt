@@ -27,7 +27,6 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 @SmallTest
 class GenerateQRTest {
-
   @Test fun testCreateQR() {
     val qr = GenerateQR().createQR("https://kiwix.org")
     assertEquals(524288, qr.byteCount)

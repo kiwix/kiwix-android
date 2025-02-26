@@ -32,6 +32,7 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.webkit.URLUtil
 import androidx.annotation.RequiresApi
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,7 +54,6 @@ import java.io.FileNotFoundException
 import java.io.IOException
 
 object FileUtils {
-
   private val fileOperationMutex = Mutex()
 
   @JvmStatic
@@ -66,8 +66,11 @@ object FileUtils {
 
   @JvmStatic
   @Synchronized
-  fun deleteCachedFiles(context: Context) {
-    CoroutineScope(Dispatchers.IO).launch {
+  fun deleteCachedFiles(
+    context: Context,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ) {
+    CoroutineScope(dispatcher).launch {
       getFileCacheDir(context)?.deleteRecursively()
     }
   }
@@ -75,17 +78,18 @@ object FileUtils {
   @JvmStatic
   suspend fun deleteZimFile(path: String) {
     fileOperationMutex.withLock {
-      var path = path
-      if (path.substring(path.length - ChunkUtils.PART.length) == ChunkUtils.PART) {
-        path = path.substring(0, path.length - ChunkUtils.PART.length)
+      var filePath = path
+      if (filePath.substring(filePath.length - ChunkUtils.PART.length) == ChunkUtils.PART) {
+        filePath = filePath.substring(0, filePath.length - ChunkUtils.PART.length)
       }
-      val file = File(path)
+      val file = File(filePath)
       if (file.path.substring(file.path.length - 3) != "zim") {
         var alphabetFirst = 'a'
         fileloop@ while (alphabetFirst <= 'z') {
           var alphabetSecond = 'a'
           while (alphabetSecond <= 'z') {
-            val chunkPath = path.substring(0, path.length - 2) + alphabetFirst + alphabetSecond
+            val chunkPath =
+              filePath.substring(0, filePath.length - 2) + alphabetFirst + alphabetSecond
             val fileChunk = File(chunkPath)
             if (fileChunk.isFileExist()) {
               fileChunk.deleteFile()
@@ -98,7 +102,7 @@ object FileUtils {
         }
       } else {
         file.deleteFile()
-        deleteZimFileParts(path)
+        deleteZimFileParts(filePath)
       }
     }
   }
@@ -126,28 +130,31 @@ object FileUtils {
     Log.e(TAG_KIWIX, "Trying to get the ZIM file path for Uri = $uri")
     if (DocumentsContract.isDocumentUri(context, uri)) {
       if ("com.android.externalstorage.documents" == uri.authority) {
-        val documentId = DocumentsContract.getDocumentId(uri)
-          .split(":")
+        val documentId =
+          DocumentsContract.getDocumentId(uri)
+            .split(":")
 
         if (documentId[0] == "primary") {
           return "${Environment.getExternalStorageDirectory()}/${documentId[1]}"
         }
         return try {
-          val sdCardOrUsbMainPath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            getSDCardOrUSBMainPathForAndroid10AndAbove(context, documentId[0])
-          } else {
-            getSdCardOrUSBMainPathForAndroid9AndBelow(context, documentId[0])
-          }
+          val sdCardOrUsbMainPath =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+              getSDCardOrUSBMainPathForAndroid10AndAbove(context, documentId[0])
+            } else {
+              getSdCardOrUSBMainPathForAndroid9AndBelow(context, documentId[0])
+            }
           "$sdCardOrUsbMainPath/${documentId[1]}"
         } catch (ignore: Exception) {
           null
         }
-      } else if ("com.android.providers.downloads.documents" == uri.authority)
+      } else if ("com.android.providers.downloads.documents" == uri.authority) {
         return try {
           documentProviderContentQuery(context, uri)
         } catch (ignore: IllegalArgumentException) {
           null
         }
+      }
     } else if (uri.scheme != null) {
       if ("content".equals(uri.scheme, ignoreCase = true)) {
         return getFilePathOfContentUri(context, uri)
@@ -266,9 +273,10 @@ object FileUtils {
 
       else -> {
         // If this is an external storage device, construct the path using UUID or description.
-        val externalStorageName = volume.uuid?.let { uuid ->
-          "/$uuid/"
-        } ?: "/${volume.getDescription(context)}/"
+        val externalStorageName =
+          volume.uuid?.let { uuid ->
+            "/$uuid/"
+          } ?: "/${volume.getDescription(context)}/"
 
         // On Android 10 and below, external storage devices are mounted under `/storage`.
         "/storage$externalStorageName"
@@ -278,14 +286,16 @@ object FileUtils {
 
   private fun getFileNameFromUri(context: Context, uri: Uri): String? {
     var cursor: Cursor? = null
-    val projection = arrayOf(
-      MediaStore.MediaColumns.DISPLAY_NAME
-    )
-    return try {
-      cursor = context.contentResolver.query(
-        uri, projection, null, null,
-        null
+    val projection =
+      arrayOf(
+        MediaStore.MediaColumns.DISPLAY_NAME
       )
+    return try {
+      cursor =
+        context.contentResolver.query(
+          uri, projection, null, null,
+          null
+        )
       if (cursor != null && cursor.moveToFirst()) {
         val index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME)
         cursor.getString(index)
@@ -370,16 +380,18 @@ object FileUtils {
     }
 
     // Try different content URI prefixes in some case download content prefix is different.
-    val contentUriPrefixes = arrayOf(
-      "content://downloads/public_downloads",
-      "content://downloads/my_downloads",
-      "content://downloads/all_downloads"
-    )
-    val actualDocumentId = try {
-      documentId.toLong()
-    } catch (ignore: NumberFormatException) {
-      0L
-    }
+    val contentUriPrefixes =
+      arrayOf(
+        "content://downloads/public_downloads",
+        "content://downloads/my_downloads",
+        "content://downloads/all_downloads"
+      )
+    val actualDocumentId =
+      try {
+        documentId.toLong()
+      } catch (ignore: NumberFormatException) {
+        0L
+      }
     return queryForActualPath(
       context,
       actualDocumentId,
@@ -507,15 +519,15 @@ object FileUtils {
 
   @JvmStatic
   suspend fun hasPart(file: File): Boolean {
-    var file = file
-    file = File(getFileName(file.path))
-    if (file.path.endsWith(".zim")) {
+    var tempFile = file
+    tempFile = File(getFileName(tempFile.path))
+    if (tempFile.path.endsWith(".zim")) {
       return false
     }
-    if (file.path.endsWith(".part")) {
+    if (tempFile.path.endsWith(".part")) {
       return true
     }
-    val path = file.path
+    val path = tempFile.path
     for (firstCharacter in 'a'..'z') {
       for (secondCharacter in 'a'..'z') {
         val chunkPath = path.substring(0, path.length - 2) + firstCharacter + secondCharacter
@@ -539,13 +551,14 @@ object FileUtils {
     }
 
   @JvmStatic
-  fun Context.readFile(filePath: String): String = try {
-    assets.open(filePath)
-      .bufferedReader()
-      .use(BufferedReader::readText)
-  } catch (e: IOException) {
-    "".also { e.printStackTrace() }
-  }
+  fun Context.readFile(filePath: String): String =
+    try {
+      assets.open(filePath)
+        .bufferedReader()
+        .use(BufferedReader::readText)
+    } catch (e: IOException) {
+      "".also { e.printStackTrace() }
+    }
 
   @JvmStatic
   fun isValidZimFile(filePath: String): Boolean =

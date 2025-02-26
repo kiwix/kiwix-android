@@ -27,7 +27,6 @@ import org.kiwix.kiwixmobile.core.R
 import kotlin.reflect.KClass
 
 abstract class CoreSearchWidget : AppWidgetProvider() {
-
   abstract val activityKClass: KClass<*>
 
   override fun onUpdate(

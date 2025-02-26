@@ -161,8 +161,11 @@ class CopyMoveFileHandler @Inject constructor(
         shouldShowStorageSelectionDialog = false
         putPrefStorage(sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name))
         putStoragePosition(
-          if (storageDevice.isInternal) INTERNAL_SELECT_POSITION
-          else EXTERNAL_SELECT_POSITION
+          if (storageDevice.isInternal) {
+            INTERNAL_SELECT_POSITION
+          } else {
+            EXTERNAL_SELECT_POSITION
+          }
         )
       }
       if (validateZimFileCanCopyOrMove()) {
@@ -446,6 +449,7 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
+  @Suppress("InjectDispatcher")
   suspend fun deleteSourceFile(uri: Uri) = withContext(Dispatchers.IO) {
     try {
       DocumentsContract.deleteDocument(activity.applicationContext.contentResolver, uri)
@@ -455,7 +459,7 @@ class CopyMoveFileHandler @Inject constructor(
     }
   }
 
-  @Suppress("MagicNumber")
+  @Suppress("MagicNumber", "InjectDispatcher")
   private suspend fun copyFile(sourceUri: Uri, destinationFile: File) =
     withContext(Dispatchers.IO) {
       val contentResolver = activity.contentResolver
@@ -491,7 +495,7 @@ class CopyMoveFileHandler @Inject constructor(
 
   suspend fun getDestinationFile(): File {
     val root = File(sharedPreferenceUtil.prefStorage)
-    val fileName = selectedFile?.name ?: ""
+    val fileName = selectedFile?.name.orEmpty()
 
     val destinationFile = sequence {
       yield(File(root, fileName))

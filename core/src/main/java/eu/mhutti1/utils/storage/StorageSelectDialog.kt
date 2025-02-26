@@ -45,8 +45,11 @@ class StorageSelectDialog : DialogFragment() {
   var onSelectAction: ((StorageDevice) -> Unit)? = null
   var titleSize: Float? = null
 
-  @Inject lateinit var storageCalculator: StorageCalculator
-  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  @Inject
+  lateinit var storageCalculator: StorageCalculator
+
+  @Inject
+  lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private var aTitle: String? = null
   private var storageSelectDialogViewBinding: StorageSelectDialogBinding? = null
   private val storageDeviceList = arrayListOf<StorageDevice>()

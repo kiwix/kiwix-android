@@ -4,7 +4,15 @@ end_of_line=lf
 insert_final_newline=true
 indent_style=space
 indent_size=2
-disabled_rules=import-ordering
+ktlint_standard_import-ordering = disabled
+ktlint_standard_trailing-comma-on-call-site = disabled
+ktlint_standard_trailing-comma-on-declaration-site = disabled
+ktlint_standard_annotation = disabled
+ktlint_standard_function-signature = disabled
+ktlint_standard_blank-line-before-declaration = disabled
+ktlint_standard_string-template-indent = disabled
+ktlint_standard_multiline-expression-wrapping = disabled
+ktlint_standard_package-name = disabled
 
 [{*.sht,*.html,*.shtm,*.shtml,*.htm}]
 indent_style=space

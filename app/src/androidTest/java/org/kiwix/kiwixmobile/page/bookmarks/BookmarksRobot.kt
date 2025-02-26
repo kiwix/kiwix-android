@@ -47,7 +47,6 @@ fun bookmarks(func: BookmarksRobot.() -> Unit) =
   BookmarksRobot().applyWithViewHierarchyPrinting(func)
 
 class BookmarksRobot : BaseRobot() {
-
   private var retryCountForBookmarkAddedButton = 5
 
   fun assertBookMarksDisplayed() {

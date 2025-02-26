@@ -35,7 +35,6 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryViewHolder.Li
 
 sealed class LibraryDelegate<I : LibraryListItem, out VH : LibraryViewHolder<I>> :
   AbsDelegateAdapter<I, LibraryListItem, VH> {
-
   class BookDelegate(
     private val bookUtils: BookUtils,
     private val clickAction: (BookItem) -> Unit,
@@ -70,7 +69,6 @@ sealed class LibraryDelegate<I : LibraryListItem, out VH : LibraryViewHolder<I>>
   }
 
   object DividerDelegate : LibraryDelegate<DividerItem, LibraryDividerViewHolder>() {
-
     override val itemClass = DividerItem::class.java
 
     override fun createViewHolder(parent: ViewGroup) =

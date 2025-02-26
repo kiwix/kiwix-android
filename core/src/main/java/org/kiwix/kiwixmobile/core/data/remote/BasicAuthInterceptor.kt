@@ -18,21 +18,20 @@
 
 package org.kiwix.kiwixmobile.core.data.remote
 
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
 import org.kiwix.kiwixmobile.core.reader.decodeUrl
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.IOException
 
 class BasicAuthInterceptor : Interceptor {
-
   @Throws(IOException::class)
   override fun intercept(chain: Interceptor.Chain): Response {
     val request: Request = chain.request()
     val url = request.url.toString()
     if (url.isAuthenticationUrl) {
-      val userNameAndPassword = System.getenv(url.secretKey) ?: ""
+      val userNameAndPassword = System.getenv(url.secretKey).orEmpty()
       val userName = userNameAndPassword.substringBefore(":", "")
       val password = userNameAndPassword.substringAfter(":", "")
       val credentials = okhttp3.Credentials.basic(userName, password)

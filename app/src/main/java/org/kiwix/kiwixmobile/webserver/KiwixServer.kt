@@ -35,40 +35,43 @@ private const val TAG = "KiwixServer"
 // jniKiwixServer is a server running on a existing library.
 // We must keep the library alive (keep a reference to it) to not delete the library the server
 // is working on. See https://github.com/kiwix/java-libkiwix/issues/51
+// Suppressing the detekt not to show the error for the `library` object for being unused.
+@Suppress("UnusedPrivateProperty")
 class KiwixServer @Inject constructor(
   private val library: Library,
   private val jniKiwixServer: Server
 ) {
-
   class Factory @Inject constructor(
     private val context: Context,
     private val zimReaderContainer: ZimReaderContainer
   ) {
-    @Suppress("NestedBlockDepth")
+    @Suppress("NestedBlockDepth", "InjectDispatcher")
     suspend fun createKiwixServer(selectedBooksPath: ArrayList<String>): KiwixServer =
       withContext(Dispatchers.IO) {
         val kiwixLibrary = Library()
         selectedBooksPath.forEach { path ->
           try {
-            val book = Book().apply {
-              // Determine whether to create an Archive from an asset or a file path
-              val archive = if (path == getDemoFilePathForCustomApp(context)) {
-                // For custom apps using a demo file, create an Archive with FileDescriptor
-                val assetFileDescriptor =
-                  zimReaderContainer.zimReaderSource?.assetFileDescriptorList?.get(0)
-                val startOffset = assetFileDescriptor?.startOffset ?: 0L
-                val size = assetFileDescriptor?.length ?: 0L
-                Archive(
-                  assetFileDescriptor?.parcelFileDescriptor?.fileDescriptor,
-                  startOffset,
-                  size
-                )
-              } else {
-                // For regular files, create an Archive from the file path
-                Archive(path)
+            val book =
+              Book().apply {
+                // Determine whether to create an Archive from an asset or a file path
+                val archive =
+                  if (path == getDemoFilePathForCustomApp(context)) {
+                    // For custom apps using a demo file, create an Archive with FileDescriptor
+                    val assetFileDescriptor =
+                      zimReaderContainer.zimReaderSource?.assetFileDescriptorList?.get(0)
+                    val startOffset = assetFileDescriptor?.startOffset ?: 0L
+                    val size = assetFileDescriptor?.length ?: 0L
+                    Archive(
+                      assetFileDescriptor?.parcelFileDescriptor?.fileDescriptor,
+                      startOffset,
+                      size
+                    )
+                  } else {
+                    // For regular files, create an Archive from the file path
+                    Archive(path)
+                  }
+                update(archive)
               }
-              update(archive)
-            }
             kiwixLibrary.addBook(book)
           } catch (ignore: Exception) {
             // Catch the other exceptions as well. e.g. while hosting the split zim files.

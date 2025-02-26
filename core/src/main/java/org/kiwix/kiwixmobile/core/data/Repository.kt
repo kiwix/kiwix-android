@@ -63,34 +63,34 @@ class Repository @Inject internal constructor(
   private val recentSearchRoomDao: RecentSearchRoomDao,
   private val zimReaderContainer: ZimReaderContainer
 ) : DataSource {
-
   override fun getLanguageCategorizedBooks() =
     booksOnDiskAsListItems()
       .first(emptyList())
       .subscribeOn(ioThread)
       .observeOn(mainThread)
 
-  override fun booksOnDiskAsListItems(): Flowable<List<BooksOnDiskListItem>> = bookDao.books()
-    .map { books ->
-      books.flatMap { bookOnDisk ->
-        // Split languages if there are multiple, otherwise return the single book. Bug fix #3892
-        if (bookOnDisk.book.language.contains(',')) {
-          bookOnDisk.book.language.split(',').map { lang ->
-            bookOnDisk.copy(book = bookOnDisk.book.copy(language = lang.trim()))
+  override fun booksOnDiskAsListItems(): Flowable<List<BooksOnDiskListItem>> =
+    bookDao.books()
+      .map { books ->
+        books.flatMap { bookOnDisk ->
+          // Split languages if there are multiple, otherwise return the single book. Bug fix #3892
+          if (bookOnDisk.book.language.contains(',')) {
+            bookOnDisk.book.language.split(',').map { lang ->
+              bookOnDisk.copy(book = bookOnDisk.book.copy(language = lang.trim()))
+            }
+          } else {
+            listOf(bookOnDisk)
           }
-        } else {
-          listOf(bookOnDisk)
-        }
-      }.distinctBy { it.book.language to it.book.title }
-        .sortedBy { it.book.language + it.book.title }
-    }
-    .map { items ->
-      HeaderizableList<BooksOnDiskListItem, BookOnDisk, LanguageItem>(items).foldOverAddingHeaders(
-        { bookOnDisk -> LanguageItem(bookOnDisk.locale) },
-        { current, next -> current.locale.displayName != next.locale.displayName }
-      )
-    }
-    .map(MutableList<BooksOnDiskListItem>::toList)
+        }.distinctBy { it.book.language to it.book.title }
+          .sortedBy { it.book.language + it.book.title }
+      }
+      .map { items ->
+        HeaderizableList<BooksOnDiskListItem, BookOnDisk, LanguageItem>(items).foldOverAddingHeaders(
+          { bookOnDisk -> LanguageItem(bookOnDisk.locale) },
+          { current, next -> current.locale.displayName != next.locale.displayName }
+        )
+      }
+      .map(MutableList<BooksOnDiskListItem>::toList)
 
   override fun saveBooks(books: List<BookOnDisk>) =
     Completable.fromAction { bookDao.insert(books) }
@@ -114,10 +114,11 @@ class Repository @Inject internal constructor(
     }
       .subscribeOn(ioThread)
 
-  override fun clearHistory() = Completable.fromAction {
-    historyRoomDao.deleteAllHistory()
-    recentSearchRoomDao.deleteSearchHistory()
-  }.subscribeOn(ioThread)
+  override fun clearHistory() =
+    Completable.fromAction {
+      historyRoomDao.deleteAllHistory()
+      recentSearchRoomDao.deleteSearchHistory()
+    }.subscribeOn(ioThread)
 
   override fun getBookmarks() =
     libkiwixBookmarks.bookmarks() as Flowable<List<LibkiwixBookmarkItem>>

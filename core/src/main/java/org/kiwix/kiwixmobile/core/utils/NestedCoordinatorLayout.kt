@@ -41,7 +41,6 @@ class NestedCoordinatorLayout @JvmOverloads constructor(
   @SuppressLint("PrivateResource")
   defStyleAttr: Int = attr.coordinatorLayoutStyle
 ) : CoordinatorLayout(context, attrs, defStyleAttr), NestedScrollingChild3 {
-
   private val helper = NestedScrollingChildHelper(this)
 
   init {
@@ -187,14 +186,15 @@ class NestedCoordinatorLayout @JvmOverloads constructor(
     dyUnconsumed: Int,
     offsetInWindow: IntArray?,
     type: Int
-  ): Boolean = helper.dispatchNestedScroll(
-    dxConsumed,
-    dyConsumed,
-    dxUnconsumed,
-    dyUnconsumed,
-    offsetInWindow,
-    type
-  )
+  ): Boolean =
+    helper.dispatchNestedScroll(
+      dxConsumed,
+      dyConsumed,
+      dxUnconsumed,
+      dyUnconsumed,
+      offsetInWindow,
+      type
+    )
 
   override fun dispatchNestedScroll(
     dxConsumed: Int,

@@ -62,9 +62,9 @@ android {
 fun ProductFlavor.createDownloadTask(file: File): Task {
   return tasks.create(
     "download${
-    name.replaceFirstChar {
-      if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it"
-    }
+      name.replaceFirstChar {
+        if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it"
+      }
     }Zim"
   ) {
     group = "Downloading"
@@ -123,7 +123,8 @@ fun writeZimFileData(responseBody: ResponseBody, file: File) {
 fun writeZimFileDataInChunk(
   responseBody: ResponseBody,
   file: File,
-  chunkSize: Long = 500 * 1024 * 1024 // create a chunk of 500MB
+  // create a chunk of 500MB
+  chunkSize: Long = 500 * 1024 * 1024
 ) {
   var outputStream: FileOutputStream? = null
   val buffer = ByteArray(4096)
@@ -155,14 +156,12 @@ fun writeZimFileDataInChunk(
   outputStream?.close()
 }
 
-fun ProductFlavor.createDownloadTaskForPlayAssetDelivery(
-  file: File
-): Task {
+fun ProductFlavor.createDownloadTaskForPlayAssetDelivery(file: File): Task {
   return tasks.create(
     "download${
-    name.replaceFirstChar {
-      if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it"
-    }
+      name.replaceFirstChar {
+        if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it"
+      }
     }ZimAndPutInAssetFolder"
   ) {
     group = "Downloading"
@@ -192,13 +191,16 @@ val String.isAuthenticationUrl: Boolean
   get() = decodeUrl.trim().matches(Regex("https://[^@]+@.*\\.zim"))
 
 val String.secretKey: String
-  get() = decodeUrl.substringAfter("{{", "")
-    .substringBefore("}}", "")
-    .trim()
+  get() =
+    decodeUrl.substringAfter("{{", "")
+      .substringBefore("}}", "")
+      .trim()
 
 val String.removeAuthenticationFromUrl: String
-  get() = decodeUrl.trim()
-    .replace(Regex("\\{\\{\\s*[^}]+\\s*\\}\\}@"), "")
+  get() =
+    decodeUrl
+      .trim()
+      .replace(Regex("\\{\\{\\s*[^}]+\\s*\\}\\}@"), "")
 
 fun ProductFlavor.createPublishApkWithExpansionTask(
   file: File,

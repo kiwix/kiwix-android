@@ -22,6 +22,7 @@ import io.objectbox.kotlin.inValues
 import io.objectbox.kotlin.query
 import io.objectbox.query.QueryBuilder
 import io.reactivex.rxjava3.core.Completable
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,56 +35,59 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
 import javax.inject.Inject
 
 class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
-
   @Suppress("NoOp")
-  fun books() = box.asFlowable()
-    .flatMap { books ->
-      io.reactivex.rxjava3.core.Flowable.fromIterable(books)
-        .flatMapSingle { bookOnDiskEntity ->
-          val file = bookOnDiskEntity.file
-          val zimReaderSource = ZimReaderSource(file)
+  fun books() =
+    box.asFlowable()
+      .flatMap { books ->
+        io.reactivex.rxjava3.core.Flowable.fromIterable(books)
+          .flatMapSingle { bookOnDiskEntity ->
+            val file = bookOnDiskEntity.file
+            val zimReaderSource = ZimReaderSource(file)
 
-          rxSingle { zimReaderSource.canOpenInLibkiwix() }
-            .map { canOpen ->
-              if (canOpen) {
-                bookOnDiskEntity.zimReaderSource = zimReaderSource
+            rxSingle { zimReaderSource.canOpenInLibkiwix() }
+              .map { canOpen ->
+                if (canOpen) {
+                  bookOnDiskEntity.zimReaderSource = zimReaderSource
+                }
+                bookOnDiskEntity
               }
-              bookOnDiskEntity
-            }
-            .onErrorReturn { bookOnDiskEntity }
-        }
-        .toList()
-        .toFlowable()
-        .flatMap { booksList ->
-          completableFromCoroutine {
-            removeBooksThatAreInTrashFolder(booksList)
-            removeBooksThatDoNotExist(booksList.toMutableList())
+              .onErrorReturn { bookOnDiskEntity }
           }
-            .andThen(io.reactivex.rxjava3.core.Flowable.just(booksList))
-        }
-    }
-    .flatMap { booksList ->
-      io.reactivex.rxjava3.core.Flowable.fromIterable(booksList)
-        .flatMapSingle { bookOnDiskEntity ->
-          // Check if the zimReaderSource exists as a suspend function
-          rxSingle { bookOnDiskEntity.zimReaderSource.exists() }
-            .map { exists ->
-              bookOnDiskEntity to exists
-            }
-        }
-        .filter { (bookOnDiskEntity, exists) ->
-          exists && !isInTrashFolder(bookOnDiskEntity.zimReaderSource.toDatabase())
-        }
-        .map(Pair<BookOnDiskEntity, Boolean>::first)
-        .toList()
-        .toFlowable()
-    }
-    .map { it.map(::BookOnDisk) }
+          .toList()
+          .toFlowable()
+          .flatMap { booksList ->
+            completableFromCoroutine(block = {
+              removeBooksThatAreInTrashFolder(booksList)
+              removeBooksThatDoNotExist(booksList.toMutableList())
+            })
+              .andThen(io.reactivex.rxjava3.core.Flowable.just(booksList))
+          }
+      }
+      .flatMap { booksList ->
+        io.reactivex.rxjava3.core.Flowable.fromIterable(booksList)
+          .flatMapSingle { bookOnDiskEntity ->
+            // Check if the zimReaderSource exists as a suspend function
+            rxSingle { bookOnDiskEntity.zimReaderSource.exists() }
+              .map { exists ->
+                bookOnDiskEntity to exists
+              }
+          }
+          .filter { (bookOnDiskEntity, exists) ->
+            exists && !isInTrashFolder(bookOnDiskEntity.zimReaderSource.toDatabase())
+          }
+          .map(Pair<BookOnDiskEntity, Boolean>::first)
+          .toList()
+          .toFlowable()
+      }
+      .map { it.map(::BookOnDisk) }
 
-  private fun completableFromCoroutine(block: suspend () -> Unit): Completable {
+  private fun completableFromCoroutine(
+    block: suspend () -> Unit,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ): Completable {
     return Completable.defer {
       Completable.create { emitter ->
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(dispatcher).launch {
           try {
             block()
             emitter.onComplete()
@@ -95,16 +99,17 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
     }
   }
 
-  suspend fun getBooks() = box.all.map { bookOnDiskEntity ->
-    bookOnDiskEntity.file.let { file ->
-      // set zimReaderSource for previously saved books
-      val zimReaderSource = ZimReaderSource(file)
-      if (zimReaderSource.canOpenInLibkiwix()) {
-        bookOnDiskEntity.zimReaderSource = zimReaderSource
+  suspend fun getBooks() =
+    box.all.map { bookOnDiskEntity ->
+      bookOnDiskEntity.file.let { file ->
+        // set zimReaderSource for previously saved books
+        val zimReaderSource = ZimReaderSource(file)
+        if (zimReaderSource.canOpenInLibkiwix()) {
+          bookOnDiskEntity.zimReaderSource = zimReaderSource
+        }
       }
+      BookOnDisk(bookOnDiskEntity)
     }
-    BookOnDisk(bookOnDiskEntity)
-  }
 
   fun insert(booksOnDisk: List<BookOnDisk>) {
     box.store.callInTx {
@@ -117,7 +122,7 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
   private fun uniqueBooksByFile(booksOnDisk: List<BookOnDisk>): List<BookOnDisk> {
     val booksWithSameFilePath = booksWithSameFilePath(booksOnDisk)
     return booksOnDisk.filter { bookOnDisk: BookOnDisk ->
-      booksWithSameFilePath.find { it.zimReaderSource == bookOnDisk.zimReaderSource } == null
+      booksWithSameFilePath.none { it.zimReaderSource == bookOnDisk.zimReaderSource }
     }
   }
 
@@ -168,10 +173,12 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
     box.remove(books)
   }
 
-  fun bookMatching(downloadTitle: String) = box.query {
-    endsWith(
-      BookOnDiskEntity_.zimReaderSource, downloadTitle,
-      QueryBuilder.StringOrder.CASE_INSENSITIVE
-    )
-  }.findFirst()
+  fun bookMatching(downloadTitle: String) =
+    box.query {
+      endsWith(
+        BookOnDiskEntity_.zimReaderSource,
+        downloadTitle,
+        QueryBuilder.StringOrder.CASE_INSENSITIVE
+      )
+    }.findFirst()
 }

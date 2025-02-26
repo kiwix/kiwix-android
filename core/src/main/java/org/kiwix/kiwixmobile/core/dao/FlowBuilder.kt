@@ -29,8 +29,9 @@ class FlowBuilder @Inject constructor() {
   @OptIn(ExperimentalCoroutinesApi::class)
   fun <T> buildCallbackFlow(query: Query<T>) =
     callbackFlow<List<T>> {
-      val subscription = query.subscribe()
-        .observer { trySendBlocking(it) }
+      val subscription =
+        query.subscribe()
+          .observer { trySendBlocking(it) }
       awaitClose(subscription::cancel)
     }
 }

@@ -23,13 +23,13 @@ import android.os.Looper
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import kotlin.collections.List
-import kotlin.collections.ArrayList
 
 import org.kiwix.kiwixmobile.core.main.TableDrawerAdapter.DocumentSection
 
 class DocumentParser(private var listener: DocumentParser.SectionsListener) {
-
   private var title: String = ""
+
+  @Suppress("DoubleMutabilityForCollection")
   private var sections = ArrayList<TableDrawerAdapter.DocumentSection>()
 
   fun initInterface(webView: WebView) {
@@ -43,12 +43,10 @@ class DocumentParser(private var listener: DocumentParser.SectionsListener) {
   }
 
   inner class ParserCallback {
-
     @JavascriptInterface fun parse(sectionTitle: String, element: String, id: String) {
-
-      if (element == "H1")
+      if (element == "H1") {
         title = sectionTitle.trim()
-      else {
+      } else {
         sections.add(
           DocumentSection(
             id = id,

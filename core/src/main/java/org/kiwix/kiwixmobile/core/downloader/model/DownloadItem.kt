@@ -43,8 +43,7 @@ data class DownloadItem(
   val eta: Seconds,
   val downloadState: DownloadState
 ) {
-
-  val readableEta: CharSequence = eta.takeIf { it.seconds > 0L }?.toHumanReadableTime() ?: ""
+  val readableEta: CharSequence = eta.takeIf { it.seconds > 0L }?.toHumanReadableTime().orEmpty()
 
   constructor(downloadModel: DownloadModel) : this(
     downloadModel.downloadId,
@@ -67,7 +66,6 @@ sealed class DownloadState(
   private val stringId: Int,
   open val zimUrl: String? = null
 ) {
-
   companion object {
     fun from(state: Status, error: Error, zimUrl: String?): DownloadState =
       when (state) {
@@ -94,11 +92,12 @@ sealed class DownloadState(
 
   override fun toString(): String = javaClass.simpleName
 
-  fun toReadableState(context: Context): CharSequence = when (this) {
-    is Failed -> context.getString(stringId, reason.name)
-    Pending,
-    Running,
-    Paused,
-    Successful -> context.getString(stringId)
-  }
+  fun toReadableState(context: Context): CharSequence =
+    when (this) {
+      is Failed -> context.getString(stringId, reason.name)
+      Pending,
+      Running,
+      Paused,
+      Successful -> context.getString(stringId)
+    }
 }

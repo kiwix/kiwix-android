@@ -139,9 +139,10 @@ class KiwixPrefsFragment : CorePrefsFragment() {
   }
 
   private fun showPermissionPreference() {
-    val preferenceCategory = findPreference<PreferenceCategory>(
-      PREF_PERMISSION
-    )
+    val preferenceCategory =
+      findPreference<PreferenceCategory>(
+        PREF_PERMISSION
+      )
     preferenceCategory?.isVisible = true
   }
 

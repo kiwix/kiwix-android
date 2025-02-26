@@ -66,8 +66,8 @@ class WifiDirectManager @Inject constructor(
 ) : ChannelListener, PeerListListener, ConnectionInfoListener, P2pEventListener {
   var callbacks: Callbacks? = null
 
-  /* Helper methods */
-  /* Variables related to the WiFi P2P API */
+  // Helper methods
+  // Variables related to the WiFi P2P API
   // Whether WiFi has been enabled or not
   var isWifiP2pEnabled = false
     private set
@@ -88,7 +88,7 @@ class WifiDirectManager @Inject constructor(
   private var hasSenderStartedConnection = false
   lateinit var lifecycleCoroutineScope: LifecycleCoroutineScope
 
-  /* Initialisations for using the WiFi P2P API */
+  // Initialisations for using the WiFi P2P API
   fun startWifiDirectManager(filesForTransfer: List<FileItem>) {
     this.filesForTransfer = filesForTransfer
     isFileSender = filesForTransfer.isNotEmpty()
@@ -132,7 +132,7 @@ class WifiDirectManager @Inject constructor(
     )
   }
 
-  /* From KiwixWifiP2pBroadcastReceiver.P2pEventListener callback-interface*/
+  // From KiwixWifiP2pBroadcastReceiver.P2pEventListener callback-interface
   override fun onWifiP2pStateChanged(isEnabled: Boolean) {
     isWifiP2pEnabled = isEnabled
     if (!isWifiP2pEnabled) {
@@ -164,7 +164,7 @@ class WifiDirectManager @Inject constructor(
     callbacks?.onUserDeviceDetailsAvailable(userDevice)
   }
 
-  /* From WifiP2pManager.ChannelListener interface */
+  // From WifiP2pManager.ChannelListener interface
   override fun onChannelDisconnected() {
     // Upon disconnection, retry one more time
     if (shouldRetry) {
@@ -177,22 +177,25 @@ class WifiDirectManager @Inject constructor(
     }
   }
 
-  /* From WifiP2pManager.PeerListListener callback-interface */
+  // From WifiP2pManager.PeerListListener callback-interface
   override fun onPeersAvailable(peers: WifiP2pDeviceList) {
     callbacks?.updateListOfAvailablePeers(peers)
   }
 
-  /* From WifiP2pManager.ConnectionInfoListener callback-interface */
+  // From WifiP2pManager.ConnectionInfoListener callback-interface
   override fun onConnectionInfoAvailable(groupInfo: WifiP2pInfo) {
-    /* Devices have successfully connected, and 'info' holds information about the wifi p2p group formed */
+    // Devices have successfully connected, and 'info' holds information about the wifi
+    // p2p group formed
     performHandshakeWith(groupInfo)
   }
 
   fun sendToDevice(senderSelectedPeerDevice: WifiP2pDevice) {
-    /* Connection can only be initiated by user of the sender device, & only when transfer has not been started */
+    // Connection can only be initiated by user of the sender device, & only when
+    // transfer has not been started
     if (isFileSender && !hasSenderStartedConnection) {
       alertDialogShower.show(
-        FileTransferConfirmation(senderSelectedPeerDevice.deviceName), {
+        FileTransferConfirmation(senderSelectedPeerDevice.deviceName),
+        {
           hasSenderStartedConnection = true
           connect(senderSelectedPeerDevice)
           context.toast(R.string.performing_handshake, Toast.LENGTH_LONG)
@@ -202,10 +205,11 @@ class WifiDirectManager @Inject constructor(
   }
 
   private fun connect(senderSelectedPeerDevice: WifiP2pDevice) {
-    val config = WifiP2pConfig().apply {
-      deviceAddress = senderSelectedPeerDevice.deviceAddress
-      wps.setup = WpsInfo.PBC
-    }
+    val config =
+      WifiP2pConfig().apply {
+        deviceAddress = senderSelectedPeerDevice.deviceAddress
+        wps.setup = WpsInfo.PBC
+      }
     manager?.connect(
       channel,
       config,
@@ -226,11 +230,12 @@ class WifiDirectManager @Inject constructor(
   private fun performHandshakeWith(groupInfo: WifiP2pInfo) {
     Log.d(TAG, "Starting handshake")
     lifecycleCoroutineScope.launch {
-      val peerGroupHandshake = if (isFileSender)
-        SenderHandShake(this@WifiDirectManager, groupInfo)
-      else
-        ReceiverHandShake(this@WifiDirectManager, groupInfo)
-
+      val peerGroupHandshake =
+        if (isFileSender) {
+          SenderHandShake(this@WifiDirectManager, groupInfo)
+        } else {
+          ReceiverHandShake(this@WifiDirectManager, groupInfo)
+        }
       val inetAddress = peerGroupHandshake.handshake()
       if (inetAddress != null) {
         startFileTransfer(groupInfo, inetAddress)
@@ -279,9 +284,7 @@ class WifiDirectManager @Inject constructor(
     callbacks?.onFileStatusChanged(itemIndex)
     if (status == FileStatus.ERROR) {
       context.toast(
-        context.getString(
-          R.string.error_transferring, filesForTransfer[itemIndex].fileName
-        )
+        context.getString(R.string.error_transferring, filesForTransfer[itemIndex].fileName)
       )
     }
   }
@@ -347,8 +350,13 @@ class WifiDirectManager @Inject constructor(
 
   companion object {
     private const val TAG = "WifiDirectManager"
-    @JvmField var FILE_TRANSFER_PORT = 8008
-    @JvmStatic @Throws(IOException::class) fun copyToOutputStream(
+
+    @JvmField
+    var fileTransferPort = 8008
+
+    @JvmStatic
+    @Throws(IOException::class)
+    fun copyToOutputStream(
       inputStream: InputStream,
       outputStream: OutputStream
     ) {

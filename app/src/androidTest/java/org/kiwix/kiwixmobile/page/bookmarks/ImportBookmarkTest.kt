@@ -47,7 +47,6 @@ import org.kiwix.libkiwix.Manager
 import java.io.File
 
 class ImportBookmarkTest : BaseActivityTest() {
-
   @Rule
   @JvmField
   var retryRule = RetryRule()
@@ -58,46 +57,47 @@ class ImportBookmarkTest : BaseActivityTest() {
   private lateinit var newBookDao: NewBookDao
   private lateinit var libkiwixBookmarks: LibkiwixBookmarks
 
-  private val bookmarkXmlData = """
-        <bookmarks>
-          <bookmark>
-            <book>
-              <id>1f88ab6f-c265-b3ff-8f49-b7f442950380</id>
-              <title>Alpine Linux Wiki</title>
-              <name>alpinelinux_en_all</name>
-              <flavour>maxi</flavour>
-              <language>eng</language>
-              <date>2023-01-18</date>
-            </book>
-            <title>Main Page</title>
-            <url>https://kiwix.app/A/Main_Page</url>
-          </bookmark>
-          <bookmark>
-            <book>
-              <id>1f88ab6f-c265-b3ff-8f49-b7f442950380</id>
-              <title>Alpine Linux Wiki</title>
-              <name>alpinelinux_en_all</name>
-              <flavour>maxi</flavour>
-              <language>eng</language>
-              <date>2023-01-18</date>
-            </book>
-            <title>Installation</title>
-            <url>https://kiwix.app/A/Installation</url>
-          </bookmark>
-          <bookmark>
-            <book>
-              <id>04bf4329-9bfb-3681-03e2-cfae7b047f24</id>
-              <title>Ray Charles</title>
-              <name>wikipedia_en_ray_charles</name>
-              <flavour>maxi</flavour>
-              <language>eng</language>
-              <date>2024-03-17</date>
-            </book>
-            <title>Wikipedia</title>
-            <url>https://kiwix.app/A/index</url>
-          </bookmark>
-        </bookmarks>
-  """.trimIndent()
+  private val bookmarkXmlData =
+    """
+    <bookmarks>
+      <bookmark>
+        <book>
+          <id>1f88ab6f-c265-b3ff-8f49-b7f442950380</id>
+          <title>Alpine Linux Wiki</title>
+          <name>alpinelinux_en_all</name>
+          <flavour>maxi</flavour>
+          <language>eng</language>
+          <date>2023-01-18</date>
+        </book>
+        <title>Main Page</title>
+        <url>https://kiwix.app/A/Main_Page</url>
+      </bookmark>
+      <bookmark>
+        <book>
+          <id>1f88ab6f-c265-b3ff-8f49-b7f442950380</id>
+          <title>Alpine Linux Wiki</title>
+          <name>alpinelinux_en_all</name>
+          <flavour>maxi</flavour>
+          <language>eng</language>
+          <date>2023-01-18</date>
+        </book>
+        <title>Installation</title>
+        <url>https://kiwix.app/A/Installation</url>
+      </bookmark>
+      <bookmark>
+        <book>
+          <id>04bf4329-9bfb-3681-03e2-cfae7b047f24</id>
+          <title>Ray Charles</title>
+          <name>wikipedia_en_ray_charles</name>
+          <flavour>maxi</flavour>
+          <language>eng</language>
+          <date>2024-03-17</date>
+        </book>
+        <title>Wikipedia</title>
+        <url>https://kiwix.app/A/index</url>
+      </bookmark>
+    </bookmarks>
+    """.trimIndent()
 
   @Before
   override fun waitForIdle() {
@@ -117,16 +117,17 @@ class ImportBookmarkTest : BaseActivityTest() {
         System.currentTimeMillis()
       )
     }
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      onActivity {
-        LanguageUtils.handleLocaleChange(
-          it,
-          "en",
-          SharedPreferenceUtil(context)
-        )
+    activityScenario =
+      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+        onActivity {
+          LanguageUtils.handleLocaleChange(
+            it,
+            "en",
+            SharedPreferenceUtil(context)
+          )
+        }
       }
-    }
     boxStore = DatabaseModule.boxStore
     newBookDao = NewBookDao(boxStore!!.boxFor(BookOnDiskEntity::class.java))
     libkiwixBookmarks =
@@ -144,32 +145,33 @@ class ImportBookmarkTest : BaseActivityTest() {
   }
 
   @Test
-  fun importBookmark() = runBlocking {
-    // clear the bookmarks to perform tes case properly.
-    clearBookmarks()
-    // test with empty data file
-    var tempBookmarkFile = getTemporaryBookmarkFile(true)
-    importBookmarks(tempBookmarkFile)
-    var actualDataAfterImporting = libkiwixBookmarks.bookmarks().blockingFirst()
-    assertEquals(0, actualDataAfterImporting.size)
+  fun importBookmark() =
+    runBlocking {
+      // clear the bookmarks to perform tes case properly.
+      clearBookmarks()
+      // test with empty data file
+      var tempBookmarkFile = getTemporaryBookmarkFile(true)
+      importBookmarks(tempBookmarkFile)
+      var actualDataAfterImporting = libkiwixBookmarks.bookmarks().blockingFirst()
+      assertEquals(0, actualDataAfterImporting.size)
 
-    // import the bookmark
-    tempBookmarkFile = getTemporaryBookmarkFile()
-    importBookmarks(tempBookmarkFile)
-    actualDataAfterImporting = libkiwixBookmarks.bookmarks().blockingFirst()
-    assertEquals(3, actualDataAfterImporting.size)
-    assertEquals(actualDataAfterImporting[0].title, "Main Page")
-    assertEquals(actualDataAfterImporting[0].url, "https://kiwix.app/A/Main_Page")
-    assertEquals(actualDataAfterImporting[0].zimId, "1f88ab6f-c265-b3ff-8f49-b7f442950380")
+      // import the bookmark
+      tempBookmarkFile = getTemporaryBookmarkFile()
+      importBookmarks(tempBookmarkFile)
+      actualDataAfterImporting = libkiwixBookmarks.bookmarks().blockingFirst()
+      assertEquals(3, actualDataAfterImporting.size)
+      assertEquals(actualDataAfterImporting[0].title, "Main Page")
+      assertEquals(actualDataAfterImporting[0].url, "https://kiwix.app/A/Main_Page")
+      assertEquals(actualDataAfterImporting[0].zimId, "1f88ab6f-c265-b3ff-8f49-b7f442950380")
 
-    // import duplicate bookmarks
-    importBookmarks(tempBookmarkFile)
-    actualDataAfterImporting = libkiwixBookmarks.bookmarks().blockingFirst()
-    assertEquals(3, actualDataAfterImporting.size)
+      // import duplicate bookmarks
+      importBookmarks(tempBookmarkFile)
+      actualDataAfterImporting = libkiwixBookmarks.bookmarks().blockingFirst()
+      assertEquals(3, actualDataAfterImporting.size)
 
-    // delete the temp file
-    if (tempBookmarkFile.exists()) tempBookmarkFile.delete()
-  }
+      // delete the temp file
+      if (tempBookmarkFile.exists()) tempBookmarkFile.delete()
+    }
 
   private fun importBookmarks(tempBookmarkFile: File) {
     activityScenario.onActivity {

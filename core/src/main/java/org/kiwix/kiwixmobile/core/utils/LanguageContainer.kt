@@ -26,10 +26,11 @@ class LanguageContainer private constructor(val languageCode: String, val langua
   companion object {
     private fun chooseLanguageName(languageCode: String): String {
       val displayLanguage = Locale(languageCode).displayLanguage
-      return if (displayLanguage.length == 2 || displayLanguage.isEmpty())
+      return if (displayLanguage.length == 2 || displayLanguage.isEmpty()) {
         Locale.ENGLISH.displayLanguage
-      else
+      } else {
         displayLanguage
+      }
     }
   }
 }

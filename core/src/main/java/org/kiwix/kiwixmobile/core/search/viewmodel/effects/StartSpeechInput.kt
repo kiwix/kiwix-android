@@ -31,7 +31,6 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
 import java.util.Locale
 
 data class StartSpeechInput(private val actions: Channel<Action>) : SideEffect<Unit> {
-
   @Suppress("DEPRECATION")
   override fun invokeWith(activity: AppCompatActivity) {
     try {

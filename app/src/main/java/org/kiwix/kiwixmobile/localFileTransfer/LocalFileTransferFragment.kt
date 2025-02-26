@@ -181,7 +181,9 @@ class LocalFileTransferFragment :
   }
 
   private fun getShowCaseViewHeight(): Int =
-    requireActivity().resources.getDimensionPixelSize(dimen.showcase_view_maximum_height)
+    requireActivity()
+      .resources
+      .getDimensionPixelSize(dimen.showcase_view_maximum_height)
 
   private fun setupMenu() {
     (requireActivity() as MenuHost).addMenuProvider(
@@ -199,7 +201,7 @@ class LocalFileTransferFragment :
 
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
           if (menuItem.itemId == R.id.menu_item_search_devices) {
-            /* Permissions essential for this module */
+            // Permissions essential for this module
             return onSearchMenuClicked()
           }
           return false
@@ -212,42 +214,45 @@ class LocalFileTransferFragment :
 
   private fun showCaseFeatureToUsers() {
     searchIconView?.let {
-      materialShowCaseSequence = MaterialShowcaseSequence(activity, SHOWCASE_ID).apply {
-        val config = ShowcaseConfig().apply {
-          delay = 500 // half second between each showcase view
+      materialShowCaseSequence =
+        MaterialShowcaseSequence(activity, SHOWCASE_ID).apply {
+          val config =
+            ShowcaseConfig().apply {
+              // half second between each showcase view
+              delay = 500
+            }
+          setConfig(config)
+          addSequenceItem(
+            it,
+            getString(string.click_nearby_devices_message),
+            getString(string.got_it)
+          )
+          addSequenceItem(
+            fragmentLocalFileTransferBinding?.textViewDeviceName,
+            getString(string.your_device_name_message),
+            getString(string.got_it)
+          )
+          addSequenceItem(
+            fragmentLocalFileTransferBinding?.nearbyDeviceShowCaseView,
+            getString(string.nearby_devices_list_message),
+            getString(string.got_it)
+          )
+          addSequenceItem(
+            fragmentLocalFileTransferBinding?.fileTransferShowCaseView,
+            getString(string.transfer_zim_files_list_message),
+            getString(string.got_it)
+          )
+          setOnItemDismissedListener { showcaseView, _ ->
+            // To fix the memory leak by setting setTarget to null
+            // because the memory leak occurred inside the library.
+            // They had forgotten to detach the view after its successful use,
+            // so it holds the reference of these views in memory.
+            // By setting these views as null we remove the reference from
+            // the memory after they are successfully shown.
+            showcaseView.setTarget(null)
+          }
+          start()
         }
-        setConfig(config)
-        addSequenceItem(
-          it,
-          getString(string.click_nearby_devices_message),
-          getString(string.got_it)
-        )
-        addSequenceItem(
-          fragmentLocalFileTransferBinding?.textViewDeviceName,
-          getString(string.your_device_name_message),
-          getString(string.got_it)
-        )
-        addSequenceItem(
-          fragmentLocalFileTransferBinding?.nearbyDeviceShowCaseView,
-          getString(string.nearby_devices_list_message),
-          getString(string.got_it)
-        )
-        addSequenceItem(
-          fragmentLocalFileTransferBinding?.fileTransferShowCaseView,
-          getString(string.transfer_zim_files_list_message),
-          getString(string.got_it)
-        )
-        setOnItemDismissedListener { showcaseView, _ ->
-          // To fix the memory leak by setting setTarget to null
-          // because the memory leak occurred inside the library.
-          // They had forgotten to detach the view after its successful use,
-          // so it holds the reference of these views in memory.
-          // By setting these views as null we remove the reference from
-          // the memory after they are successfully shown.
-          showcaseView.setTarget(null)
-        }
-        start()
-      }
     }
   }
 
@@ -258,7 +263,7 @@ class LocalFileTransferFragment :
 
       !checkExternalStorageWritePermission() ->
         true
-      /* Initiate discovery */
+      // Initiate discovery
       !wifiDirectManager.isWifiP2pEnabled -> {
         requestEnableWifiP2pServices()
         true
@@ -289,8 +294,11 @@ class LocalFileTransferFragment :
     toolbar.apply {
       activity.setSupportActionBar(this)
       title =
-        if (isReceiver) getString(R.string.receive_files_title)
-        else getString(R.string.send_files_title)
+        if (isReceiver) {
+          getString(R.string.receive_files_title)
+        } else {
+          getString(R.string.send_files_title)
+        }
       setNavigationIcon(drawable.ic_close_white_24dp)
       // set the contentDescription to navigation back button
       getToolbarNavigationIcon()?.setToolTipWithContentDescription(
@@ -301,8 +309,7 @@ class LocalFileTransferFragment :
   }
 
   private fun getFilesForTransfer() =
-    LocalFileTransferFragmentArgs.fromBundle(requireArguments()).uris?.map(::FileItem)
-      ?: emptyList()
+    LocalFileTransferFragmentArgs.fromBundle(requireArguments()).uris?.map(::FileItem).orEmpty()
 
   private fun showPeerDiscoveryProgressBar() { // Setup UI for searching peers
     fragmentLocalFileTransferBinding?.progressBarSearchingPeers?.visibility = View.VISIBLE
@@ -310,7 +317,7 @@ class LocalFileTransferFragment :
     fragmentLocalFileTransferBinding?.textViewEmptyPeerList?.visibility = View.INVISIBLE
   }
 
-  /* From WifiDirectManager.Callbacks interface */
+  // From WifiDirectManager.Callbacks interface
   override fun onUserDeviceDetailsAvailable(userDevice: WifiP2pDevice?) {
     // Update UI with user device's details
     if (userDevice != null) {
@@ -354,7 +361,7 @@ class LocalFileTransferFragment :
     requireActivity().popNavigationBackstack()
   }
 
-  /* Helper methods used for checking permissions and states of services */
+  // Helper methods used for checking permissions and states of services
   private fun checkFineLocationAccessPermission(): Boolean {
     // Required by Android to detect wifi-p2p peers
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -388,7 +395,8 @@ class LocalFileTransferFragment :
   @RequiresApi(Build.VERSION_CODES.TIRAMISU)
   private fun askNearbyWifiDevicesPermission() {
     ActivityCompat.requestPermissions(
-      requireActivity(), arrayOf(Manifest.permission.NEARBY_WIFI_DEVICES),
+      requireActivity(),
+      arrayOf(Manifest.permission.NEARBY_WIFI_DEVICES),
       PERMISSION_REQUEST_CODE_NEARBY_WIFI_DEVICES
     )
   }
@@ -470,11 +478,12 @@ class LocalFileTransferFragment :
   }
 
   private val isLocationServiceEnabled: Boolean
-    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      true
-    } else {
-      isProviderEnabled(GPS_PROVIDER) || isProviderEnabled(NETWORK_PROVIDER)
-    }
+    get() =
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        true
+      } else {
+        isProviderEnabled(GPS_PROVIDER) || isProviderEnabled(NETWORK_PROVIDER)
+      }
 
   private fun isProviderEnabled(locationProvider: String): Boolean {
     return try {
@@ -490,7 +499,8 @@ class LocalFileTransferFragment :
 
   private fun requestEnableLocationServices() {
     alertDialogShower.show(
-      KiwixDialog.EnableLocationServices, {
+      KiwixDialog.EnableLocationServices,
+      {
         enableLocationServicesLauncher.launch(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
       },
       { toast(string.discovery_needs_location, Toast.LENGTH_SHORT) }
@@ -499,7 +509,8 @@ class LocalFileTransferFragment :
 
   private fun requestEnableWifiP2pServices() {
     alertDialogShower.show(
-      KiwixDialog.EnableWifiP2pServices, {
+      KiwixDialog.EnableWifiP2pServices,
+      {
         startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
       },
       { toast(string.discovery_needs_wifi, Toast.LENGTH_SHORT) }

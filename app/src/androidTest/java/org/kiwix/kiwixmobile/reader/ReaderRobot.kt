@@ -38,7 +38,6 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 fun reader(func: ReaderRobot.() -> Unit) = ReaderRobot().applyWithViewHierarchyPrinting(func)
 
 class ReaderRobot : BaseRobot() {
-
   private var retryCountForClickOnUndoButton = 5
 
   fun checkZimFileLoadedSuccessful(readerFragment: Int) {

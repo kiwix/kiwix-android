@@ -22,5 +22,5 @@ import org.kiwix.kiwixmobile.core.base.adapter.BaseDelegateAdapter
 
 internal class WifiPeerListAdapter(wifiP2pDelegate: WifiP2pDelegate) :
   BaseDelegateAdapter<WifiP2pDevice>(wifiP2pDelegate) {
-  override fun getIdFor(item: WifiP2pDevice) = item.deviceAddress.hashCode().toLong() ?: 0L
+  override fun getIdFor(item: WifiP2pDevice) = item.deviceAddress.hashCode().toLong()
 }

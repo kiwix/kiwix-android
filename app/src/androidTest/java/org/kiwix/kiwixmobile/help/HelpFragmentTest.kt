@@ -40,7 +40,6 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVi
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource
 
 class HelpFragmentTest : BaseActivityTest() {
-
   private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
   @Before
@@ -51,18 +50,19 @@ class HelpFragmentTest : BaseActivityTest() {
       }
       waitForIdle()
     }
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      onActivity {
-        handleLocaleChange(
-          it,
-          "en",
-          SharedPreferenceUtil(context).apply {
-            lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
-          }
-        )
+    activityScenario =
+      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+        onActivity {
+          handleLocaleChange(
+            it,
+            "en",
+            SharedPreferenceUtil(context).apply {
+              lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
+            }
+          )
+        }
       }
-    }
   }
 
   @Rule
@@ -121,13 +121,14 @@ class HelpFragmentTest : BaseActivityTest() {
 
   private fun setShowCopyMoveToPublicDirectory(showRestriction: Boolean) {
     context.let {
-      sharedPreferenceUtil = SharedPreferenceUtil(it).apply {
-        setIntroShown()
-        putPrefWifiOnly(false)
-        setIsPlayStoreBuildType(showRestriction)
-        prefIsTest = true
-        putPrefLanguage("en")
-      }
+      sharedPreferenceUtil =
+        SharedPreferenceUtil(it).apply {
+          setIntroShown()
+          putPrefWifiOnly(false)
+          setIsPlayStoreBuildType(showRestriction)
+          prefIsTest = true
+          putPrefLanguage("en")
+        }
     }
   }
 

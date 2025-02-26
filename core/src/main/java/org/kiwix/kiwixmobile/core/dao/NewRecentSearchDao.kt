@@ -30,20 +30,21 @@ class NewRecentSearchDao @Inject constructor(
   private val box: Box<RecentSearchEntity>,
   private val flowBuilder: FlowBuilder
 ) {
-  fun recentSearches(zimId: String?) = flowBuilder.buildCallbackFlow(
-    box.query {
-      equal(
-        RecentSearchEntity_.zimId,
-        zimId ?: "",
-        QueryBuilder.StringOrder.CASE_INSENSITIVE
-      )
-      orderDesc(RecentSearchEntity_.id)
+  fun recentSearches(zimId: String?) =
+    flowBuilder.buildCallbackFlow(
+      box.query {
+        equal(
+          RecentSearchEntity_.zimId,
+          zimId.orEmpty(),
+          QueryBuilder.StringOrder.CASE_INSENSITIVE
+        )
+        orderDesc(RecentSearchEntity_.id)
+      }
+    ).map { searchEntities ->
+      searchEntities.distinctBy(RecentSearchEntity::searchTerm)
+        .take(NUM_RECENT_RESULTS)
+        .map { searchEntity -> RecentSearchListItem(searchEntity.searchTerm, searchEntity.url) }
     }
-  ).map { searchEntities ->
-    searchEntities.distinctBy(RecentSearchEntity::searchTerm)
-      .take(NUM_RECENT_RESULTS)
-      .map { searchEntity -> RecentSearchListItem(searchEntity.searchTerm, searchEntity.url) }
-  }
 
   fun saveSearch(title: String, id: String, url: String?) {
     box.put(RecentSearchEntity(searchTerm = title, zimId = id, url = url))

@@ -51,13 +51,13 @@ class TabsAdapter internal constructor(
   private val webViews: List<KiwixWebView>,
   private val painter: DarkModeViewPainter
 ) : RecyclerView.Adapter<TabsAdapter.ViewHolder>() {
-
   init {
     setHasStableIds(true)
   }
 
   private var listener: TabClickListener? = null
   var selected = 0
+
   @SuppressLint("ResourceType") override fun onCreateViewHolder(
     parent: ViewGroup,
     viewType: Int
@@ -66,50 +66,55 @@ class TabsAdapter internal constructor(
     val margin16 = context.resources.getDimensionPixelSize(R.dimen.activity_horizontal_margin)
     val closeImageWidthAndHeight =
       context.resources.getDimensionPixelSize(R.dimen.close_tab_button_size)
-    val close = ImageView(context)
-      .apply {
-        id = R.id.tabsAdapterCloseImageView
-        setImageDrawableCompat(R.drawable.ic_clear_white_24dp)
-        setToolTipWithContentDescription(resources.getString(R.string.close_tab))
-        val outValue = TypedValue()
-        context.theme.resolveAttribute(android.R.attr.actionBarItemBackground, outValue, true)
-        setBackgroundResource(outValue.resourceId)
-        tint(context.getAttribute(attr.colorOnSurface))
-      }
-    val cardView = MaterialCardView(context)
-      .apply {
-        id = R.id.tabsAdapterCardView
-        useCompatPadding = true
-      }
-    val textView = TextView(context)
-      .apply {
-        id = R.id.tabsAdapterTextView
-        maxLines = 1
-        ellipsize = TextUtils.TruncateAt.END
-      }
-    val constraintLayout = ConstraintLayout(context)
-      .apply {
-        isFocusableInTouchMode = true
-        addView(
-          cardView,
-          ConstraintLayout.LayoutParams(
-            activity.getWindowWidth() / 2,
-            -activity.getToolbarHeight() / 2 + activity.getWindowHeight() / 2
+    val close =
+      ImageView(context)
+        .apply {
+          id = R.id.tabsAdapterCloseImageView
+          setImageDrawableCompat(R.drawable.ic_clear_white_24dp)
+          setToolTipWithContentDescription(resources.getString(R.string.close_tab))
+          val outValue = TypedValue()
+          context.theme.resolveAttribute(android.R.attr.actionBarItemBackground, outValue, true)
+          setBackgroundResource(outValue.resourceId)
+          tint(context.getAttribute(attr.colorOnSurface))
+        }
+    val cardView =
+      MaterialCardView(context)
+        .apply {
+          id = R.id.tabsAdapterCardView
+          useCompatPadding = true
+        }
+    val textView =
+      TextView(context)
+        .apply {
+          id = R.id.tabsAdapterTextView
+          maxLines = 1
+          ellipsize = TextUtils.TruncateAt.END
+        }
+    val constraintLayout =
+      ConstraintLayout(context)
+        .apply {
+          isFocusableInTouchMode = true
+          addView(
+            cardView,
+            ConstraintLayout.LayoutParams(
+              activity.getWindowWidth() / 2,
+              -activity.getToolbarHeight() / 2 + activity.getWindowHeight() / 2
+            )
           )
-        )
-        addView(
-          close,
-          ConstraintLayout.LayoutParams(closeImageWidthAndHeight, closeImageWidthAndHeight)
-        )
-        layoutParams = RecyclerView.LayoutParams(
-          RecyclerView.LayoutParams.WRAP_CONTENT,
-          RecyclerView.LayoutParams.MATCH_PARENT
-        )
-        addView(
-          textView,
-          ConstraintLayout.LayoutParams(0, ConstraintLayout.LayoutParams.WRAP_CONTENT)
-        )
-      }
+          addView(
+            close,
+            ConstraintLayout.LayoutParams(closeImageWidthAndHeight, closeImageWidthAndHeight)
+          )
+          layoutParams =
+            RecyclerView.LayoutParams(
+              RecyclerView.LayoutParams.WRAP_CONTENT,
+              RecyclerView.LayoutParams.MATCH_PARENT
+            )
+          addView(
+            textView,
+            ConstraintLayout.LayoutParams(0, ConstraintLayout.LayoutParams.WRAP_CONTENT)
+          )
+        }
     ConstraintSet()
       .apply {
         clone(constraintLayout)
@@ -142,17 +147,19 @@ class TabsAdapter internal constructor(
         frameLayout.addView(webView)
         // Create a custom view that covers the entire
         // webView(which prevent to clicks inside the webView) and handles tab selection
-        val view = View(context).apply {
-          layoutParams = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.MATCH_PARENT
-          )
-          setOnClickListener { v: View ->
-            selected = adapterPosition
-            listener?.onSelectTab(v, selected)
-            notifyDataSetChanged()
+        val view =
+          View(context).apply {
+            layoutParams =
+              FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+              )
+            setOnClickListener { v: View ->
+              selected = adapterPosition
+              listener?.onSelectTab(v, selected)
+              notifyDataSetChanged()
+            }
           }
-        }
         // Add the custom view to the frame layout
         frameLayout.addView(view)
         // Add the frame layout to the material card view

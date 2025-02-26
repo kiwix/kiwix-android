@@ -44,9 +44,10 @@ class StateTest {
 
     @Test
     fun `filters out based on filter`() {
-      val content = Content(
-        listOf(language(language = "matchesFilter"), language(isActive = true))
-      ).updateFilter("matches")
+      val content =
+        Content(
+          listOf(language(language = "matchesFilter"), language(isActive = true))
+        ).updateFilter("matches")
       assertThat(content.viewItems).isEqualTo(
         listOf(
           HeaderItem(Long.MIN_VALUE),

@@ -27,17 +27,18 @@ import javax.inject.Inject
 
 internal class SettingsPresenter @Inject constructor(private val dataSource: DataSource) :
   BasePresenter<View?>(), Presenter {
-  private var dataSourceDisposable: Disposable? = null
-  override fun clearHistory() {
-    dataSourceDisposable = dataSource.clearHistory()
-      .subscribe({
-        // TODO
-      }, { e ->
-        Log.e("SettingsPresenter", e.message, e)
-      })
-  }
+    private var dataSourceDisposable: Disposable? = null
+    override fun clearHistory() {
+      dataSourceDisposable =
+        dataSource.clearHistory()
+          .subscribe({
+            // TODO
+          }, { e ->
+            Log.e("SettingsPresenter", e.message, e)
+          })
+    }
 
-  fun dispose() {
-    dataSourceDisposable?.dispose()
+    fun dispose() {
+      dataSourceDisposable?.dispose()
+    }
   }
-}

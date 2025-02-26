@@ -25,12 +25,13 @@ import java.lang.System.currentTimeMillis
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/** Authored by s-ayush2903 on 19 June 2020 */
-
-/** A class for writing logs to the file in the device */
+/**
+ * Authored by s-ayush2903 on 19 June 2020
+ *
+ * A class for writing logs to the file in the device
+ */
 @Singleton
 class FileLogger @Inject constructor() {
-
   fun writeLogFile(context: Context, shouldWriteDeviceLogs: Boolean = true): File {
     // Create a new folder in private storage with name: logs
     val logDir = File(context.filesDir, "logs")

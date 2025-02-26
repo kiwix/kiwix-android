@@ -102,14 +102,20 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import javax.inject.Inject
 
 class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
-
   @Inject lateinit var conMan: ConnectivityManager
+
   @Inject lateinit var downloader: Downloader
+
   @Inject lateinit var dialogShower: DialogShower
+
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+
   @Inject lateinit var bookUtils: BookUtils
+
   @Inject lateinit var availableSpaceCalculator: AvailableSpaceCalculator
+
   @Inject lateinit var alertDialogShower: AlertDialogShower
   private var fragmentDestinationDownloadBinding: FragmentDestinationDownloadBinding? = null
   private val lock = Any()
@@ -205,7 +211,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           .setBottomMarginToFragmentContainerView(0)
       }
     zimManageViewModel.libraryListIsRefreshing.observe(
-      viewLifecycleOwner, Observer(::onRefreshStateChange)
+      viewLifecycleOwner,
+      Observer(::onRefreshStateChange)
     )
     zimManageViewModel.networkStates.observe(viewLifecycleOwner, Observer(::onNetworkStateChange))
     zimManageViewModel.shouldShowWifiOnlyDialog.observe(
@@ -238,15 +245,17 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           val getZimItem = menu.findItem(R.id.get_zim_nearby_device)
           getZimItem?.isVisible = false
 
-          searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionExpand(p0: MenuItem): Boolean = true
+          searchItem.setOnActionExpandListener(
+            object : MenuItem.OnActionExpandListener {
+              override fun onMenuItemActionExpand(p0: MenuItem): Boolean = true
 
-            override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
-              // Clear search query when user reset the search.
-              zimManageViewModel.onlineBooksSearchedQuery.value = null
-              return true
+              override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
+                // Clear search query when user reset the search.
+                zimManageViewModel.onlineBooksSearchedQuery.value = null
+                return true
+              }
             }
-          })
+          )
 
           (searchItem?.actionView as? SearchView)?.apply {
             setUpSearchView(requireActivity())
@@ -441,8 +450,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     hideProgressBarOfFetchingOnlineLibrary()
     if (it?.isEmpty() == true) {
       fragmentDestinationDownloadBinding?.libraryErrorText?.setText(
-        if (isNotConnected) string.no_network_connection
-        else string.no_items_msg
+        if (isNotConnected) {
+          string.no_network_connection
+        } else {
+          string.no_items_msg
+        }
       )
       fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.VISIBLE
     } else {
@@ -474,8 +486,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       sharedPreferenceUtil.getPublicDirectoryPath(storageDevice.name)
     )
     sharedPreferenceUtil.putStoragePosition(
-      if (storageDevice.isInternal) INTERNAL_SELECT_POSITION
-      else EXTERNAL_SELECT_POSITION
+      if (storageDevice.isInternal) {
+        INTERNAL_SELECT_POSITION
+      } else {
+        EXTERNAL_SELECT_POSITION
+      }
     )
     clickOnBookItem()
   }
@@ -523,7 +538,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   private fun requestPermission(permission: String, requestCode: Int) {
     ActivityCompat.requestPermissions(
-      requireActivity(), arrayOf(permission),
+      requireActivity(),
+      arrayOf(permission),
       requestCode
     )
   }
@@ -543,8 +559,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       permissions[0] == Manifest.permission.WRITE_EXTERNAL_STORAGE
     ) {
       if (grantResults[0] != PERMISSION_GRANTED) {
-        if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove())
+        if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
           checkExternalStorageWritePermission()
+        }
       }
     } else if (requestCode == REQUEST_POST_NOTIFICATION_PERMISSION &&
       permissions.isNotEmpty() &&
@@ -579,42 +596,43 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
               return@launch
             }
 
-            else -> if (sharedPreferenceUtil.showStorageOption) {
-              // Show the storage selection dialog for configuration if there is an SD card available.
-              if (getStorageDeviceList().size > 1) {
-                showStorageSelectDialog(getStorageDeviceList())
-              } else {
-                // If only internal storage is available, proceed with the ZIM file download directly.
-                // Displaying a configuration dialog is unnecessary in this case.
-                sharedPreferenceUtil.showStorageOption = false
-                onBookItemClick(item)
-              }
-            } else if (!requireActivity().isManageExternalStoragePermissionGranted(
-                sharedPreferenceUtil
-              )
-            ) {
-              showManageExternalStoragePermissionDialog()
-            } else {
-              availableSpaceCalculator.hasAvailableSpaceFor(
-                item,
-                { downloadFile() },
-                {
-                  fragmentDestinationDownloadBinding?.libraryList?.snack(
-                    """ 
-                    ${getString(string.download_no_space)}
-                    ${getString(string.space_available)} $it
-                    """.trimIndent(),
-                    requireActivity().findViewById(R.id.bottom_nav_view),
-                    string.download_change_storage,
-                    {
-                      lifecycleScope.launch {
-                        showStorageSelectDialog(getStorageDeviceList())
-                      }
-                    }
-                  )
+            else ->
+              if (sharedPreferenceUtil.showStorageOption) {
+                // Show the storage selection dialog for configuration if there is an SD card available.
+                if (getStorageDeviceList().size > 1) {
+                  showStorageSelectDialog(getStorageDeviceList())
+                } else {
+                  // If only internal storage is available, proceed with the ZIM file download directly.
+                  // Displaying a configuration dialog is unnecessary in this case.
+                  sharedPreferenceUtil.showStorageOption = false
+                  onBookItemClick(item)
                 }
-              )
-            }
+              } else if (!requireActivity().isManageExternalStoragePermissionGranted(
+                  sharedPreferenceUtil
+                )
+              ) {
+                showManageExternalStoragePermissionDialog()
+              } else {
+                availableSpaceCalculator.hasAvailableSpaceFor(
+                  item,
+                  { downloadFile() },
+                  {
+                    fragmentDestinationDownloadBinding?.libraryList?.snack(
+                      """ 
+                      ${getString(string.download_no_space)}
+                      ${getString(string.space_available)} $it
+                      """.trimIndent(),
+                      requireActivity().findViewById(R.id.bottom_nav_view),
+                      string.download_change_storage,
+                      {
+                        lifecycleScope.launch {
+                          showStorageSelectDialog(getStorageDeviceList())
+                        }
+                      }
+                    )
+                  }
+                )
+              }
           }
         } else {
           requestNotificationPermission()

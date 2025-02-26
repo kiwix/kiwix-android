@@ -28,7 +28,6 @@ import io.mockk.mockkStatic
 import org.junit.jupiter.api.Test
 
 internal class ShowToastTest {
-
   @Test
   fun `invoke with shows short toast`() {
     mockkStatic(Toast::class)

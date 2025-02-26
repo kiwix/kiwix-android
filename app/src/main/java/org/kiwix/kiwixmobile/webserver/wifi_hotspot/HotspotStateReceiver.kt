@@ -32,8 +32,9 @@ const val WIFI_AP_STATE_ENABLING = 12
 const val WIFI_AP_STATE_ENABLED = 13
 const val WIFI_AP_STATE_FAILED = 14
 
-class HotspotStateReceiver @Inject constructor(private val callback: Callback) :
-  BaseBroadcastReceiver() {
+class HotspotStateReceiver @Inject constructor(
+  private val callback: Callback
+) : BaseBroadcastReceiver() {
   override val action: String = ACTION_WIFI_AP_STATE
 
   override fun onIntentWithActionReceived(context: Context, intent: Intent) {
@@ -55,7 +56,6 @@ class HotspotStateReceiver @Inject constructor(private val callback: Callback) :
   }
 
   private enum class HotspotState(val state: Int) {
-
     DISABLING(WIFI_AP_STATE_DISABLING),
     DISABLED(WIFI_AP_STATE_DISABLED),
     ENABLING(WIFI_AP_STATE_ENABLING),

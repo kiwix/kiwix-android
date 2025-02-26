@@ -32,7 +32,6 @@ data class ShowDeleteSearchDialog(
   private val searchListItem: SearchListItem,
   private val actions: Channel<Action>
 ) : SideEffect<Unit> {
-
   @Inject lateinit var dialogShower: DialogShower
 
   override fun invokeWith(activity: AppCompatActivity) {

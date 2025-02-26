@@ -47,13 +47,14 @@ abstract class HelpFragment : BaseFragment() {
 
   private val titleDescriptionMap by lazy {
     rawTitleDescriptionMap().associate { (title, description) ->
-      val descriptionValue = when (description) {
-        is String -> description
-        is Int -> resources.getStringArray(description).joinToString(separator = "\n")
-        else -> {
-          throw IllegalArgumentException("Invalid description resource type for title: $title")
+      val descriptionValue =
+        when (description) {
+          is String -> description
+          is Int -> resources.getStringArray(description).joinToString(separator = "\n")
+          else -> {
+            throw IllegalArgumentException("Invalid description resource type for title: $title")
+          }
         }
-      }
 
       getString(title) to descriptionValue
     }

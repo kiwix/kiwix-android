@@ -52,7 +52,6 @@ fun topLevel(func: TopLevelDestinationRobot.() -> Unit) =
   TopLevelDestinationRobot().applyWithViewHierarchyPrinting(func)
 
 class TopLevelDestinationRobot : BaseRobot() {
-
   fun clickReaderOnBottomNav(func: ReaderRobot.() -> Unit) {
     isVisible(ViewId(R.id.navigation_container))
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())

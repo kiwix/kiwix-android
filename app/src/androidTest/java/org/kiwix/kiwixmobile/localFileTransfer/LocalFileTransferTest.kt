@@ -58,17 +58,18 @@ class LocalFileTransferTest {
   private lateinit var context: Context
   private lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
 
-  private val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-    arrayOf(
-      Manifest.permission.NEARBY_WIFI_DEVICES
-    )
-  } else {
-    arrayOf(
-      Manifest.permission.READ_EXTERNAL_STORAGE,
-      Manifest.permission.WRITE_EXTERNAL_STORAGE,
-      Manifest.permission.ACCESS_FINE_LOCATION
-    )
-  }
+  private val permissions =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      arrayOf(
+        Manifest.permission.NEARBY_WIFI_DEVICES
+      )
+    } else {
+      arrayOf(
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.ACCESS_FINE_LOCATION
+      )
+    }
 
   @Rule
   @JvmField
@@ -115,16 +116,17 @@ class LocalFileTransferTest {
   @Test
   fun localFileTransfer() {
     shouldShowShowCaseFeatureToUser(false)
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      onActivity {
-        handleLocaleChange(
-          it,
-          "en",
-          SharedPreferenceUtil(context)
-        )
+    activityScenario =
+      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+        onActivity {
+          handleLocaleChange(
+            it,
+            "en",
+            SharedPreferenceUtil(context)
+          )
+        }
       }
-    }
     StandardActions.closeDrawer()
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       activityScenario.onActivity {
@@ -148,17 +150,18 @@ class LocalFileTransferTest {
   @Test
   fun showCaseFeature() {
     shouldShowShowCaseFeatureToUser(true, isResetShowCaseId = true)
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      onActivity {
-        handleLocaleChange(
-          it,
-          "en",
-          SharedPreferenceUtil(context)
-        )
-        it.navigate(R.id.libraryFragment)
+    activityScenario =
+      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+        onActivity {
+          handleLocaleChange(
+            it,
+            "en",
+            SharedPreferenceUtil(context)
+          )
+          it.navigate(R.id.libraryFragment)
+        }
       }
-    }
     StandardActions.closeDrawer()
     library {
       assertGetZimNearbyDeviceDisplayed()
@@ -181,12 +184,13 @@ class LocalFileTransferTest {
   @Test
   fun testShowCaseFeatureShowOnce() {
     shouldShowShowCaseFeatureToUser(true)
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      onActivity {
-        it.navigate(R.id.libraryFragment)
+    activityScenario =
+      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+        onActivity {
+          it.navigate(R.id.libraryFragment)
+        }
       }
-    }
     StandardActions.closeDrawer()
     library {
       // test show case view show once.

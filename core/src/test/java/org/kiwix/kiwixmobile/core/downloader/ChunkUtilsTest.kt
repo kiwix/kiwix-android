@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.utils.StorageUtils
 
 class ChunkUtilsTest {
-
   private val url =
     "http://mirror.netcologne.de/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"
 
@@ -45,22 +44,28 @@ class ChunkUtilsTest {
     listReturned = ChunkUtils.getChunks(url, size, 27)
 
     assertEquals(
-      "verify that the list contains correct number of chunks", 1, listReturned.size.toLong()
+      "verify that the list contains correct number of chunks",
+      1,
+      listReturned.size.toLong()
     )
     assertEquals(
-      "verify that the range format is correct", "0-",
+      "verify that the range format is correct",
+      "0-",
       listReturned[0].rangeHeader
     )
     assertEquals(
-      "verify that the same notificationID is passed to the chunk", 27,
+      "verify that the same notificationID is passed to the chunk",
+      27,
       listReturned[0].notificationID.toLong()
     )
     assertEquals(
       "verify that the file name is correctly assigned in case of a single file",
-      "TestFileName.part.part", listReturned[0].fileName
+      "TestFileName.part.part",
+      listReturned[0].fileName
     )
     assertEquals(
-      "verify that the same URL is passed on to the chunk", url,
+      "verify that the same URL is passed on to the chunk",
+      url,
       listReturned[0].url
     )
 
@@ -69,14 +74,18 @@ class ChunkUtilsTest {
     listReturned = ChunkUtils.getChunks(url, size, 56)
 
     assertEquals(
-      "verify that the list contains correct number of chunks", 6, listReturned.size.toLong()
+      "verify that the list contains correct number of chunks",
+      6,
+      listReturned.size.toLong()
     )
     assertEquals(
-      "verify that the rangehandler for the last chunk is correct", "10737418245-",
+      "verify that the rangehandler for the last chunk is correct",
+      "10737418245-",
       listReturned[listReturned.size - 1].rangeHeader
     )
     assertEquals(
-      "verify that the rangehandler for the first chunk is corect", "0-2147483648",
+      "verify that the rangehandler for the first chunk is corect",
+      "0-2147483648",
       listReturned[0].rangeHeader
     )
 
@@ -105,9 +114,10 @@ class ChunkUtilsTest {
     // test assignment of file names
     val alphabet = "abcdefghijklmnopqrstuvwxyz"
     for (i in listReturned.indices) {
-      val extension = listReturned[i]
-        .fileName
-        ?.substringAfter('.')
+      val extension =
+        listReturned[i]
+          .fileName
+          ?.substringAfter('.')
       val expectedExtension = "zim" + alphabet[i / 26] + alphabet[i % 26] + ".part.part"
       assertThat(extension).isEqualTo(expectedExtension)
     }
@@ -117,22 +127,28 @@ class ChunkUtilsTest {
     listReturned = ChunkUtils.getChunks(url, size, 37)
 
     assertEquals(
-      "verify that the list contains correct number of chunks", 1, listReturned.size.toLong()
+      "verify that the list contains correct number of chunks",
+      1,
+      listReturned.size.toLong()
     )
     assertEquals(
-      "verify that the range format is correct", "0-",
+      "verify that the range format is correct",
+      "0-",
       listReturned[0].rangeHeader
     )
     assertEquals(
-      "verify that the same notificationID is passed to the chunk", 37,
+      "verify that the same notificationID is passed to the chunk",
+      37,
       listReturned[0].notificationID.toLong()
     )
     assertEquals(
       "verify that the file name is correctly assigned in case of a single file",
-      "TestFileName.part.part", listReturned[0].fileName
+      "TestFileName.part.part",
+      listReturned[0].fileName
     )
     assertEquals(
-      "verify that the same URL is passed on to the chunk", url,
+      "verify that the same URL is passed on to the chunk",
+      url,
       listReturned[0].url
     )
 
@@ -142,7 +158,8 @@ class ChunkUtilsTest {
     assertEquals(
       "verify that previous extension in the filename (if any) is removed" +
         " in case of files having 1 chunk",
-      "TestFileName.xml.part.part", listReturned[0].fileName
+      "TestFileName.xml.part.part",
+      listReturned[0].fileName
     )
 
     size = ChunkUtils.CHUNK_SIZE * 2.toLong()
@@ -150,12 +167,14 @@ class ChunkUtilsTest {
     assertEquals(
       "verify that previous extension in the filename (if any) is removed" +
         " in case of files having more than 1 chunk",
-      "TestFileName.zimaa.part.part", listReturned[0].fileName
+      "TestFileName.zimaa.part.part",
+      listReturned[0].fileName
     )
     assertEquals(
       "verify that previous extension in the filename (if any) is removed" +
         " in case of files having more than 1 chunk",
-      "TestFileName.zimab.part.part", listReturned[1].fileName
+      "TestFileName.zimab.part.part",
+      listReturned[1].fileName
     )
   }
 }

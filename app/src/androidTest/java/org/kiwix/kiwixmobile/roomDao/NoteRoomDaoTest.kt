@@ -53,100 +53,104 @@ class NoteRoomDaoTest {
   }
 
   @Test
-  fun testNotesRoomDao() = runBlocking {
-    // delete all the notes from database to properly run the test cases.
-    clearNotes()
-    val noteItem = getNoteListItem(
-      zimUrl = "http://kiwix.app/MainPage",
-      noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/MainPage.txt"
-    )
+  fun testNotesRoomDao() =
+    runBlocking {
+      // delete all the notes from database to properly run the test cases.
+      clearNotes()
+      val noteItem =
+        getNoteListItem(
+          zimUrl = "http://kiwix.app/MainPage",
+          noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/MainPage.txt"
+        )
 
-    // Save and retrieve a notes item
-    notesRoomDao.saveNote(noteItem)
-    var notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
-    with(notesList.first()) {
-      assertThat(zimId, equalTo(noteItem.zimId))
-      assertThat(zimUrl, equalTo(noteItem.zimUrl))
-      assertThat(title, equalTo(noteItem.title))
-      assertThat(zimReaderSource, equalTo(noteItem.zimReaderSource))
-      assertThat(noteFilePath, equalTo(noteItem.noteFilePath))
-      assertThat(favicon, equalTo(noteItem.favicon))
-    }
-    assertEquals(notesList.size, 1)
+      // Save and retrieve a notes item
+      notesRoomDao.saveNote(noteItem)
+      var notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+      with(notesList.first()) {
+        assertThat(zimId, equalTo(noteItem.zimId))
+        assertThat(zimUrl, equalTo(noteItem.zimUrl))
+        assertThat(title, equalTo(noteItem.title))
+        assertThat(zimReaderSource, equalTo(noteItem.zimReaderSource))
+        assertThat(noteFilePath, equalTo(noteItem.noteFilePath))
+        assertThat(favicon, equalTo(noteItem.favicon))
+      }
+      assertEquals(notesList.size, 1)
 
-    // Test update the existing note
-    notesRoomDao.saveNote(noteItem)
-    notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
-    assertEquals(notesList.size, 1)
+      // Test update the existing note
+      notesRoomDao.saveNote(noteItem)
+      notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+      assertEquals(notesList.size, 1)
 
-    // Delete the saved note item with all delete methods available in NoteRoomDao.
-    // delete via noteTitle
-    notesRoomDao.deleteNote(noteItem.title)
-    notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
-    assertEquals(notesList.size, 0)
+      // Delete the saved note item with all delete methods available in NoteRoomDao.
+      // delete via noteTitle
+      notesRoomDao.deleteNote(noteItem.title)
+      notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+      assertEquals(notesList.size, 0)
 
-    // delete with deletePages method
-    notesRoomDao.saveNote(noteItem)
-    notesRoomDao.deletePages(listOf(noteItem))
-    notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
-    assertEquals(notesList.size, 0)
+      // delete with deletePages method
+      notesRoomDao.saveNote(noteItem)
+      notesRoomDao.deletePages(listOf(noteItem))
+      notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+      assertEquals(notesList.size, 0)
 
-    // delete with list of NoteListItem
-    notesRoomDao.saveNote(noteItem)
-    notesRoomDao.deleteNotes(listOf(noteItem))
-    notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
-    assertEquals(notesList.size, 0)
+      // delete with list of NoteListItem
+      notesRoomDao.saveNote(noteItem)
+      notesRoomDao.deleteNotes(listOf(noteItem))
+      notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+      assertEquals(notesList.size, 0)
 
-    // Save note with empty title
-    notesRoomDao.saveNote(
-      getNoteListItem(
-        title = "",
-        zimUrl = "http://kiwix.app/Installing",
-        noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/Installing.txt"
+      // Save note with empty title
+      notesRoomDao.saveNote(
+        getNoteListItem(
+          title = "",
+          zimUrl = "http://kiwix.app/Installing",
+          noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/Installing.txt"
+        )
       )
-    )
-    notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
-    assertEquals(notesList.size, 1)
-    clearNotes()
+      notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+      assertEquals(notesList.size, 1)
+      clearNotes()
 
-    // Test to insert the items with same id.
-    val noteItem2 = getNoteListItem(
-      databaseId = 1,
-      zimUrl = "http://kiwix.app/Installing",
-      noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/Installing.txt"
-    )
-    val noteItem3 = getNoteListItem(
-      databaseId = 1,
-      title = "Installing",
-      zimUrl = "http://kiwix.app/Installing",
-      noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/Installing.txt"
-    )
-    kiwixRoomDatabase.notesRoomDao().saveNote(noteItem2)
-    kiwixRoomDatabase.notesRoomDao().saveNote(noteItem3)
-    notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
-    assertEquals(2, notesList.size)
-    clearNotes()
+      // Test to insert the items with same id.
+      val noteItem2 =
+        getNoteListItem(
+          databaseId = 1,
+          zimUrl = "http://kiwix.app/Installing",
+          noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/Installing.txt"
+        )
+      val noteItem3 =
+        getNoteListItem(
+          databaseId = 1,
+          title = "Installing",
+          zimUrl = "http://kiwix.app/Installing",
+          noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/Installing.txt"
+        )
+      kiwixRoomDatabase.notesRoomDao().saveNote(noteItem2)
+      kiwixRoomDatabase.notesRoomDao().saveNote(noteItem3)
+      notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+      assertEquals(2, notesList.size)
+      clearNotes()
 
-    // Attempt to save undefined history item
-    lateinit var undefinedNoteListItem: NoteListItem
-    try {
-      notesRoomDao.saveNote(undefinedNoteListItem)
-      assertThat(
-        "Undefined value was saved into database",
-        false
-      )
-    } catch (e: Exception) {
-      assertThat("Undefined value was not saved, as expected.", true)
+      // Attempt to save undefined history item
+      lateinit var undefinedNoteListItem: NoteListItem
+      try {
+        notesRoomDao.saveNote(undefinedNoteListItem)
+        assertThat(
+          "Undefined value was saved into database",
+          false
+        )
+      } catch (e: Exception) {
+        assertThat("Undefined value was not saved, as expected.", true)
+      }
+
+      // Save history item with Unicode values
+      val unicodeTitle = "title \u03A3" // Unicode character for Greek capital letter Sigma
+      val noteListItem2 =
+        getNoteListItem(title = unicodeTitle, zimUrl = "http://kiwix.app/Installing")
+      notesRoomDao.saveNote(noteListItem2)
+      notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+      assertThat(notesList.first().title, equalTo("title Σ"))
     }
-
-    // Save history item with Unicode values
-    val unicodeTitle = "title \u03A3" // Unicode character for Greek capital letter Sigma
-    val noteListItem2 =
-      getNoteListItem(title = unicodeTitle, zimUrl = "http://kiwix.app/Installing")
-    notesRoomDao.saveNote(noteListItem2)
-    notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
-    assertThat(notesList.first().title, equalTo("title Σ"))
-  }
 
   private suspend fun clearNotes() {
     notesRoomDao.deleteNotes(notesRoomDao.notes().blockingFirst() as List<NoteListItem>)

@@ -63,7 +63,6 @@ import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
 import javax.inject.Inject
 
 class LanguageFragment : BaseFragment() {
-
   private val languageViewModel by lazy { viewModel<LanguageViewModel>(viewModelFactory) }
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -156,15 +155,16 @@ class LanguageFragment : BaseFragment() {
     )
   }
 
-  private fun render(state: State) = when (state) {
-    Loading -> activityLanguageBinding?.languageProgressbar?.show()
-    is Content -> {
-      activityLanguageBinding?.languageProgressbar?.hide()
-      languageAdapter.items = state.viewItems
-    }
+  private fun render(state: State) =
+    when (state) {
+      Loading -> activityLanguageBinding?.languageProgressbar?.show()
+      is Content -> {
+        activityLanguageBinding?.languageProgressbar?.hide()
+        languageAdapter.items = state.viewItems
+      }
 
-    Saving -> Unit
-  }
+      Saving -> Unit
+    }
 
   override fun onDestroyView() {
     super.onDestroyView()

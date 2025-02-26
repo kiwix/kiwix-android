@@ -40,7 +40,6 @@ fun navigationHistory(func: NavigationHistoryRobot.() -> Unit) =
   NavigationHistoryRobot().applyWithViewHierarchyPrinting(func)
 
 class NavigationHistoryRobot : BaseRobot() {
-
   private var retryCountForClearNavigationHistory = 5
   private var retryCountForBackwardNavigationHistory = 5
   private var retryCountForForwardNavigationHistory = 5

@@ -66,10 +66,11 @@ import javax.inject.Singleton
 
 @RunWith(AndroidJUnit4::class)
 class SearchFragmentTestForCustomApp {
-  private val permissions = arrayOf(
-    Manifest.permission.READ_EXTERNAL_STORAGE,
-    Manifest.permission.WRITE_EXTERNAL_STORAGE
-  )
+  private val permissions =
+    arrayOf(
+      Manifest.permission.READ_EXTERNAL_STORAGE,
+      Manifest.permission.WRITE_EXTERNAL_STORAGE
+    )
 
   @get:Rule
   var permissionRules: GrantPermissionRule =
@@ -95,12 +96,13 @@ class SearchFragmentTestForCustomApp {
 
   @Before
   fun waitForIdle() {
-    uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
-      if (isSystemUINotRespondingDialogVisible(this)) {
-        closeSystemDialogs(context, this)
+    uiDevice =
+      UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).apply {
+        if (isSystemUINotRespondingDialogVisible(this)) {
+          closeSystemDialogs(context, this)
+        }
+        waitForIdle()
       }
-      waitForIdle()
-    }
     PreferenceManager.getDefaultSharedPreferences(context).edit {
       putBoolean(SharedPreferenceUtil.PREF_SHOW_INTRO, false)
       putBoolean(SharedPreferenceUtil.PREF_WIFI_ONLY, false)
@@ -111,16 +113,17 @@ class SearchFragmentTestForCustomApp {
         System.currentTimeMillis()
       )
     }
-    activityScenario = ActivityScenario.launch(CustomMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      onActivity {
-        LanguageUtils.handleLocaleChange(
-          it,
-          "en",
-          SharedPreferenceUtil(context)
-        )
+    activityScenario =
+      ActivityScenario.launch(CustomMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+        onActivity {
+          LanguageUtils.handleLocaleChange(
+            it,
+            "en",
+            SharedPreferenceUtil(context)
+          )
+        }
       }
-    }
   }
 
   @Test
@@ -191,72 +194,74 @@ class SearchFragmentTestForCustomApp {
   }
 
   @Test
-  fun testConcurrencyOfSearch() = runBlocking {
-    val searchTerms = listOf(
-      "eilum",
-      "page",
-      "list",
-      "ladder",
-      "welc",
-      "js",
-      "hizo",
-      "fad",
-      "forum"
-    )
-    activityScenario.onActivity {
-      customMainActivity = it
-    }
-    // test with a large ZIM file to properly test the scenario
-    downloadingZimFile = getDownloadingZimFile()
-    getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
-      if (response.isSuccessful) {
-        response.body?.let { responseBody ->
-          writeZimFileData(responseBody, downloadingZimFile)
-        }
-      } else {
-        throw RuntimeException(
-          "Download Failed. Error: ${response.message}\n" +
-            " Status Code: ${response.code}"
+  fun testConcurrencyOfSearch() =
+    runBlocking {
+      val searchTerms =
+        listOf(
+          "eilum",
+          "page",
+          "list",
+          "ladder",
+          "welc",
+          "js",
+          "hizo",
+          "fad",
+          "forum"
         )
+      activityScenario.onActivity {
+        customMainActivity = it
+      }
+      // test with a large ZIM file to properly test the scenario
+      downloadingZimFile = getDownloadingZimFile()
+      getOkkHttpClientForTesting().newCall(downloadRequest()).execute().use { response ->
+        if (response.isSuccessful) {
+          response.body?.let { responseBody ->
+            writeZimFileData(responseBody, downloadingZimFile)
+          }
+        } else {
+          throw RuntimeException(
+            "Download Failed. Error: ${response.message}\n" +
+              " Status Code: ${response.code}"
+          )
+        }
+      }
+      UiThreadStatement.runOnUiThread {
+        customMainActivity.navigate(customMainActivity.readerFragmentResId)
+      }
+      openZimFileInReader(zimFile = downloadingZimFile)
+      openSearchWithQuery(searchTerms[0])
+      // wait for searchFragment become visible on screen.
+      delay(2000)
+      val navHostFragment: NavHostFragment =
+        customMainActivity.supportFragmentManager
+          .findFragmentById(
+            customMainActivity.activityCustomMainBinding.customNavController.id
+          ) as NavHostFragment
+      val searchFragment = navHostFragment.childFragmentManager.fragments[0] as SearchFragment
+      for (i in 1..100) {
+        // This will execute the render method 100 times frequently.
+        val searchTerm = searchTerms[i % searchTerms.size]
+        searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
+      }
+      for (i in 1..100) {
+        // this will execute the render method 100 times with 100MS delay.
+        delay(100)
+        val searchTerm = searchTerms[i % searchTerms.size]
+        searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
+      }
+      for (i in 1..100) {
+        // this will execute the render method 100 times with 200MS delay.
+        delay(200)
+        val searchTerm = searchTerms[i % searchTerms.size]
+        searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
+      }
+      for (i in 1..100) {
+        // this will execute the render method 100 times with 200MS delay.
+        delay(300)
+        val searchTerm = searchTerms[i % searchTerms.size]
+        searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
       }
     }
-    UiThreadStatement.runOnUiThread {
-      customMainActivity.navigate(customMainActivity.readerFragmentResId)
-    }
-    openZimFileInReader(zimFile = downloadingZimFile)
-    openSearchWithQuery(searchTerms[0])
-    // wait for searchFragment become visible on screen.
-    delay(2000)
-    val navHostFragment: NavHostFragment =
-      customMainActivity.supportFragmentManager
-        .findFragmentById(
-          customMainActivity.activityCustomMainBinding.customNavController.id
-        ) as NavHostFragment
-    val searchFragment = navHostFragment.childFragmentManager.fragments[0] as SearchFragment
-    for (i in 1..100) {
-      // This will execute the render method 100 times frequently.
-      val searchTerm = searchTerms[i % searchTerms.size]
-      searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
-    }
-    for (i in 1..100) {
-      // this will execute the render method 100 times with 100MS delay.
-      delay(100)
-      val searchTerm = searchTerms[i % searchTerms.size]
-      searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
-    }
-    for (i in 1..100) {
-      // this will execute the render method 100 times with 200MS delay.
-      delay(200)
-      val searchTerm = searchTerms[i % searchTerms.size]
-      searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
-    }
-    for (i in 1..100) {
-      // this will execute the render method 100 times with 200MS delay.
-      delay(300)
-      val searchTerm = searchTerms[i % searchTerms.size]
-      searchFragment.searchViewModel.actions.trySend(Action.Filter(searchTerm)).isSuccess
-    }
-  }
 
   @Test
   fun testPreviouslyLoadedArticleLoadsAgainWhenSwitchingToAnotherScreen() {

@@ -17,11 +17,11 @@
  */
 package org.kiwix.sharedFunctions
 
-import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
-import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.Status.NONE
+import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
+import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
@@ -64,23 +64,25 @@ fun downloadModel(
 
 fun downloadItem(
   downloadId: Long = 1L,
-  favIcon: Base64String = Base64String(
-    "favIcon"
-  ),
+  favIcon: Base64String = Base64String("favIcon"),
   title: String = "title",
   description: String = "description",
   bytesDownloaded: Long = 1L,
   totalSizeBytes: Long = 1L,
   progress: Int = 1,
-  eta: Seconds = Seconds(
-    0
-  ),
+  eta: Seconds = Seconds(0),
   state: DownloadState = Pending
-) =
-  DownloadItem(
-    downloadId, favIcon, title, description, bytesDownloaded,
-    totalSizeBytes, progress, eta, state
-  )
+) = DownloadItem(
+  downloadId,
+  favIcon,
+  title,
+  description,
+  bytesDownloaded,
+  totalSizeBytes,
+  progress,
+  eta,
+  state
+)
 
 fun language(
   id: Long = 0,
@@ -91,18 +93,22 @@ fun language(
   languageCode: String = "",
   languageCodeISO2: String = ""
 ) = Language(
-  id, isActive, occurencesOfLanguage, language, languageLocalized, languageCode,
+  id,
+  isActive,
+  occurencesOfLanguage,
+  language,
+  languageLocalized,
+  languageCode,
   languageCodeISO2
 )
 
-fun metaLinkNetworkEntity() = MetaLinkNetworkEntity().apply {
-  file = fileElement()
-}
+fun metaLinkNetworkEntity() =
+  MetaLinkNetworkEntity().apply {
+    file = fileElement()
+  }
 
 fun fileElement(
-  urls: List<Url> = listOf(
-    url()
-  ),
+  urls: List<Url> = listOf(url()),
   name: String = "name",
   hashes: Map<String, String> = mapOf("hash" to "hash"),
   pieces: Pieces = pieces()
@@ -144,35 +150,34 @@ fun book(
   name: String = "name",
   favIcon: String = "favIcon",
   file: File = File("")
-) =
-  Book().apply {
-    this.id = id
-    this.title = title
-    this.description = description
-    this.language = language
-    this.creator = creator
-    this.publisher = publisher
-    this.date = date
-    this.url = url
-    this.articleCount = articleCount
-    this.mediaCount = mediaCount
-    this.size = size
-    this.file = file
-    bookName = name
-    favicon = favIcon
-  }
-
-fun libraryNetworkEntity(books: List<Book> = emptyList()) = LibraryNetworkEntity().apply {
-  book = LinkedList(books)
+) = Book().apply {
+  this.id = id
+  this.title = title
+  this.description = description
+  this.language = language
+  this.creator = creator
+  this.publisher = publisher
+  this.date = date
+  this.url = url
+  this.articleCount = articleCount
+  this.mediaCount = mediaCount
+  this.size = size
+  this.file = file
+  bookName = name
+  favicon = favIcon
 }
+
+fun libraryNetworkEntity(books: List<Book> = emptyList()) =
+  LibraryNetworkEntity().apply {
+    book = LinkedList(books)
+  }
 
 fun recentSearchEntity(
   id: Long = 0L,
   searchTerm: String = "",
   zimId: String = "",
   url: String = ""
-) =
-  RecentSearchEntity(id, searchTerm, zimId, url)
+) = RecentSearchEntity(id, searchTerm, zimId, url)
 
 fun bookOnDiskEntity(
   id: Long = 0,
@@ -191,23 +196,22 @@ fun bookOnDiskEntity(
   name: String? = "",
   favIcon: String = "",
   tags: String? = ""
-) =
-  BookOnDiskEntity(
-    id,
-    File(""),
-    zimReaderSource,
-    bookId,
-    title,
-    description,
-    language,
-    creator,
-    publisher,
-    date,
-    url,
-    articleCount,
-    mediaCount,
-    size,
-    name,
-    favIcon,
-    tags
-  )
+) = BookOnDiskEntity(
+  id,
+  File(""),
+  zimReaderSource,
+  bookId,
+  title,
+  description,
+  language,
+  creator,
+  publisher,
+  date,
+  url,
+  articleCount,
+  mediaCount,
+  size,
+  name,
+  favIcon,
+  tags
+)

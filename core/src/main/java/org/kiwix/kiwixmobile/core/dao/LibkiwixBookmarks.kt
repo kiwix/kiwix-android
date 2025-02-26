@@ -26,6 +26,7 @@ import io.reactivex.BackpressureStrategy.LATEST
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -62,7 +63,6 @@ class LibkiwixBookmarks @Inject constructor(
   private val bookDao: NewBookDao,
   private val zimReaderContainer: ZimReaderContainer?
 ) : PageDao {
-
   /**
    * Request new data from Libkiwix when changes occur inside it; otherwise,
    * return the previous data to avoid unnecessary data load on Libkiwix.
@@ -71,7 +71,7 @@ class LibkiwixBookmarks @Inject constructor(
   private var bookmarkList: List<LibkiwixBookmarkItem> = arrayListOf()
   private var libraryBooksList: List<String> = arrayListOf()
 
-  @Suppress("CheckResult")
+  @Suppress("CheckResult", "IgnoredReturnValue")
   private val bookmarkListBehaviour: BehaviorSubject<List<LibkiwixBookmarkItem>>? by lazy {
     BehaviorSubject.create<List<LibkiwixBookmarkItem>>().also { subject ->
       rxSingle { getBookmarksList() }
@@ -126,7 +126,7 @@ class LibkiwixBookmarks @Inject constructor(
       getBookmarksList()
         .filter { it.zimId == reader.id }
         .map(LibkiwixBookmarkItem::bookmarkUrl)
-    } ?: emptyList()
+    }.orEmpty()
   }
 
   fun bookmarkUrlsForCurrentBook(zimId: String): Flowable<List<String>> =
@@ -148,18 +148,20 @@ class LibkiwixBookmarks @Inject constructor(
   ) {
     if (!isBookMarkExist(libkiwixBookmarkItem)) {
       addBookToLibraryIfNotExist(libkiwixBookmarkItem.libKiwixBook)
-      val bookmark = Bookmark().apply {
-        bookId = libkiwixBookmarkItem.zimId
-        title = libkiwixBookmarkItem.title
-        url = libkiwixBookmarkItem.url
-        bookTitle = when {
-          libkiwixBookmarkItem.libKiwixBook?.title != null ->
-            libkiwixBookmarkItem.libKiwixBook.title
+      val bookmark =
+        Bookmark().apply {
+          bookId = libkiwixBookmarkItem.zimId
+          title = libkiwixBookmarkItem.title
+          url = libkiwixBookmarkItem.url
+          bookTitle =
+            when {
+              libkiwixBookmarkItem.libKiwixBook?.title != null ->
+                libkiwixBookmarkItem.libKiwixBook.title
 
-          libkiwixBookmarkItem.zimName.isNotBlank() -> libkiwixBookmarkItem.zimName
-          else -> libkiwixBookmarkItem.zimId
+              libkiwixBookmarkItem.zimName.isNotBlank() -> libkiwixBookmarkItem.zimName
+              else -> libkiwixBookmarkItem.zimId
+            }
         }
-      }
       library.addBookmark(bookmark).also {
         if (shouldWriteBookmarkToFile) {
           writeBookMarksAndSaveLibraryToFile()
@@ -174,13 +176,14 @@ class LibkiwixBookmarks @Inject constructor(
   suspend fun addBookToLibrary(file: File? = null, archive: Archive? = null) {
     try {
       bookmarksChanged = true
-      val book = Book().apply {
-        archive?.let {
-          update(archive)
-        } ?: run {
-          update(Archive(file?.canonicalPath))
+      val book =
+        Book().apply {
+          archive?.let {
+            update(archive)
+          } ?: run {
+            update(Archive(file?.canonicalPath))
+          }
         }
-      }
       addBookToLibraryIfNotExist(book)
       updateFlowableBookmarkList()
     } catch (ignore: Exception) {
@@ -217,10 +220,13 @@ class LibkiwixBookmarks @Inject constructor(
     return libraryBooksList.any { it == bookId }
   }
 
-  fun deleteBookmarks(bookmarks: List<LibkiwixBookmarkItem>) {
+  fun deleteBookmarks(
+    bookmarks: List<LibkiwixBookmarkItem>,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ) {
     bookmarks.map { library.removeBookmark(it.zimId, it.bookmarkUrl) }
       .also {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(dispatcher).launch {
           writeBookMarksAndSaveLibraryToFile()
           updateFlowableBookmarkList()
         }
@@ -257,36 +263,39 @@ class LibkiwixBookmarks @Inject constructor(
         ?: return bookmarkList.distinctBy(LibkiwixBookmarkItem::bookmarkUrl)
 
     // Create a list to store LibkiwixBookmarkItem objects.
-    bookmarkList = bookmarkArray.mapNotNull { bookmark ->
-      // Check if the library contains the book associated with the bookmark.
-      val book = if (isBookAlreadyExistInLibrary(bookmark.bookId)) {
-        library.getBookById(bookmark.bookId)
-      } else {
-        Log.d(
-          TAG,
-          "Library does not contain the book for this bookmark:\n" +
-            "Book Title: ${bookmark.bookTitle}\n" +
-            "Bookmark URL: ${bookmark.url}"
-        )
-        null
-      }
+    bookmarkList =
+      bookmarkArray.mapNotNull { bookmark ->
+        // Check if the library contains the book associated with the bookmark.
+        val book =
+          if (isBookAlreadyExistInLibrary(bookmark.bookId)) {
+            library.getBookById(bookmark.bookId)
+          } else {
+            Log.d(
+              TAG,
+              "Library does not contain the book for this bookmark:\n" +
+                "Book Title: ${bookmark.bookTitle}\n" +
+                "Bookmark URL: ${bookmark.url}"
+            )
+            null
+          }
 
-      // Check if the book has an illustration of the specified size and encode it to Base64.
-      val favicon = book?.getIllustration(ILLUSTRATION_SIZE)?.data?.let {
-        Base64.encodeToString(it, Base64.DEFAULT)
-      }
+        // Check if the book has an illustration of the specified size and encode it to Base64.
+        val favicon =
+          book?.getIllustration(ILLUSTRATION_SIZE)?.data?.let {
+            Base64.encodeToString(it, Base64.DEFAULT)
+          }
 
-      val zimReaderSource = book?.path?.let { ZimReaderSource(File(it)) }
-      // Return the LibkiwixBookmarkItem, filtering out null results.
-      return@mapNotNull LibkiwixBookmarkItem(
-        bookmark,
-        favicon,
-        zimReaderSource
-      ).also {
-        // set the bookmark change to false to avoid reloading the data from libkiwix
-        bookmarksChanged = false
+        val zimReaderSource = book?.path?.let { ZimReaderSource(File(it)) }
+        // Return the LibkiwixBookmarkItem, filtering out null results.
+        return@mapNotNull LibkiwixBookmarkItem(
+          bookmark,
+          favicon,
+          zimReaderSource
+        ).also {
+          // set the bookmark change to false to avoid reloading the data from libkiwix
+          bookmarksChanged = false
+        }
       }
-    }
 
     // Delete duplicates bookmarks if any exist
     deleteDuplicateBookmarks()
@@ -358,15 +367,16 @@ class LibkiwixBookmarks @Inject constructor(
     backpressureStrategy: BackpressureStrategy = LATEST
   ): Flowable<List<LibkiwixBookmarkItem>> {
     return Flowable.create({ emitter ->
-      val disposable = bookmarkListBehaviour?.subscribe(
-        { list ->
-          if (!emitter.isCancelled) {
-            emitter.onNext(list.toList())
-          }
-        },
-        emitter::onError,
-        emitter::onComplete
-      )
+      val disposable =
+        bookmarkListBehaviour?.subscribe(
+          { list ->
+            if (!emitter.isCancelled) {
+              emitter.onNext(list.toList())
+            }
+          },
+          emitter::onError,
+          emitter::onComplete
+        )
 
       emitter.setDisposable(disposable)
     }, backpressureStrategy)
@@ -396,17 +406,19 @@ class LibkiwixBookmarks @Inject constructor(
   }
 
   private suspend fun exportedFile(fileName: String): File {
-    val rootFolder = File(
-      "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}" +
-        "/org.kiwix"
-    )
+    val rootFolder =
+      File(
+        "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}" +
+          "/org.kiwix"
+      )
     if (!rootFolder.isFileExist()) rootFolder.mkdir()
     return sequence {
       yield(File(rootFolder, fileName))
       yieldAll(
         generateSequence(1) { it + 1 }.map {
           File(
-            rootFolder, fileName.replace(".", "_$it.")
+            rootFolder,
+            fileName.replace(".", "_$it.")
           )
         }
       )

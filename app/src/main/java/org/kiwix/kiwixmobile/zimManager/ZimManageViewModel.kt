@@ -161,31 +161,34 @@ class ZimManageViewModel @Inject constructor(
   private fun createKiwixServiceWithProgressListener(): KiwixService {
     if (isUnitTestCase) return kiwixService
     val contentLength = getContentLengthOfLibraryXmlFile()
-    val customOkHttpClient = OkHttpClient().newBuilder()
-      .followRedirects(true)
-      .followSslRedirects(true)
-      .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
-      .readTimeout(READ_TIMEOUT, SECONDS)
-      .callTimeout(CALL_TIMEOUT, SECONDS)
-      .addNetworkInterceptor(
-        HttpLoggingInterceptor().apply {
-          level = if (DEBUG) BASIC else NONE
+    val customOkHttpClient =
+      OkHttpClient().newBuilder()
+        .followRedirects(true)
+        .followSslRedirects(true)
+        .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
+        .readTimeout(READ_TIMEOUT, SECONDS)
+        .callTimeout(CALL_TIMEOUT, SECONDS)
+        .addNetworkInterceptor(
+          HttpLoggingInterceptor().apply {
+            level = if (DEBUG) BASIC else NONE
+          }
+        )
+        .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
+        .addNetworkInterceptor { chain ->
+          val originalResponse = chain.proceed(chain.request())
+          originalResponse.body?.let { responseBody ->
+            originalResponse.newBuilder()
+              .body(
+                ProgressResponseBody(
+                  responseBody,
+                  AppProgressListenerProvider(this),
+                  contentLength
+                )
+              )
+              .build()
+          } ?: originalResponse
         }
-      )
-      .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
-      .addNetworkInterceptor { chain ->
-        val originalResponse = chain.proceed(chain.request())
-        originalResponse.newBuilder()
-          .body(
-            ProgressResponseBody(
-              originalResponse.body!!,
-              AppProgressListenerProvider(this),
-              contentLength
-            )
-          )
-          .build()
-      }
-      .build()
+        .build()
     return KiwixService.ServiceCreator.newHackListService(customOkHttpClient, KIWIX_DOWNLOAD_URL)
       .also {
         kiwixService = it
@@ -193,19 +196,21 @@ class ZimManageViewModel @Inject constructor(
   }
 
   private fun getContentLengthOfLibraryXmlFile(): Long {
-    val headRequest = Request.Builder()
-      .url("$KIWIX_DOWNLOAD_URL$LIBRARY_NETWORK_PATH")
-      .head()
-      .header("Accept-Encoding", "identity")
-      .build()
-    val client = OkHttpClient().newBuilder()
-      .followRedirects(true)
-      .followSslRedirects(true)
-      .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
-      .readTimeout(READ_TIMEOUT, SECONDS)
-      .callTimeout(CALL_TIMEOUT, SECONDS)
-      .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
-      .build()
+    val headRequest =
+      Request.Builder()
+        .url("$KIWIX_DOWNLOAD_URL$LIBRARY_NETWORK_PATH")
+        .head()
+        .header("Accept-Encoding", "identity")
+        .build()
+    val client =
+      OkHttpClient().newBuilder()
+        .followRedirects(true)
+        .followSslRedirects(true)
+        .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
+        .readTimeout(READ_TIMEOUT, SECONDS)
+        .callTimeout(CALL_TIMEOUT, SECONDS)
+        .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
+        .build()
     try {
       client.newCall(headRequest).execute().use { response ->
         if (response.isSuccessful) {
@@ -253,20 +258,21 @@ class ZimManageViewModel @Inject constructor(
     }
   }
 
-  private fun fileSelectActions() = fileSelectActions.subscribe({
-    sideEffects.offer(
-      when (it) {
-        is RequestNavigateTo -> OpenFileWithNavigation(it.bookOnDisk)
-        is RequestMultiSelection -> startMultiSelectionAndSelectBook(it.bookOnDisk)
-        RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState())
-        RequestShareMultiSelection -> ShareFiles(selectionsFromState())
-        MultiModeFinished -> noSideEffectAndClearSelectionState()
-        is RequestSelect -> noSideEffectSelectBook(it.bookOnDisk)
-        RestartActionMode -> StartMultiSelection(fileSelectActions)
-        UserClickedDownloadBooksButton -> NavigateToDownloads
-      }
-    )
-  }, Throwable::printStackTrace)
+  private fun fileSelectActions() =
+    fileSelectActions.subscribe({
+      sideEffects.offer(
+        when (it) {
+          is RequestNavigateTo -> OpenFileWithNavigation(it.bookOnDisk)
+          is RequestMultiSelection -> startMultiSelectionAndSelectBook(it.bookOnDisk)
+          RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState())
+          RequestShareMultiSelection -> ShareFiles(selectionsFromState())
+          MultiModeFinished -> noSideEffectAndClearSelectionState()
+          is RequestSelect -> noSideEffectSelectBook(it.bookOnDisk)
+          RestartActionMode -> StartMultiSelection(fileSelectActions)
+          UserClickedDownloadBooksButton -> NavigateToDownloads
+        }
+      )
+    }, Throwable::printStackTrace)
 
   private fun startMultiSelectionAndSelectBook(
     bookOnDisk: BookOnDisk
@@ -287,8 +293,11 @@ class ZimManageViewModel @Inject constructor(
     bookOnDisk: BookOnDisk
   ): List<BooksOnDiskListItem> {
     return it.bookOnDiskListItems.map { listItem ->
-      if (listItem.id == bookOnDisk.id) listItem.apply { isSelected = !isSelected }
-      else listItem
+      if (listItem.id == bookOnDisk.id) {
+        listItem.apply { isSelected = !isSelected }
+      } else {
+        listItem
+      }
     }
   }
 
@@ -301,15 +310,16 @@ class ZimManageViewModel @Inject constructor(
     return None
   }
 
-  private fun selectionsFromState() = fileSelectListStates.value?.selectedBooks ?: emptyList()
+  private fun selectionsFromState() = fileSelectListStates.value?.selectedBooks.orEmpty()
 
   private fun noSideEffectAndClearSelectionState(): SideEffect<Unit> {
     fileSelectListStates.value?.let {
       fileSelectListStates.postValue(
         it.copy(
-          bookOnDiskListItems = it.bookOnDiskListItems.map { booksOnDiskListItem ->
-            booksOnDiskListItem.apply { isSelected = false }
-          },
+          bookOnDiskListItems =
+            it.bookOnDiskListItems.map { booksOnDiskListItem ->
+              booksOnDiskListItem.apply { isSelected = false }
+            },
           selectionMode = NORMAL
         )
       )
@@ -317,6 +327,7 @@ class ZimManageViewModel @Inject constructor(
     return None
   }
 
+  @Suppress("NoNameShadowing")
   private fun requestsAndConnectivtyChangesToLibraryRequests(
     library: PublishProcessor<LibraryNetworkEntity>,
   ) =
@@ -374,7 +385,8 @@ class ZimManageViewModel @Inject constructor(
 
   private fun updateNetworkStates() =
     connectivityBroadcastReceiver.networkStates.subscribe(
-      networkStates::postValue, Throwable::printStackTrace
+      networkStates::postValue,
+      Throwable::printStackTrace
     )
 
   private fun updateLibraryItems(
@@ -434,12 +446,14 @@ class ZimManageViewModel @Inject constructor(
     booksFromNetwork.isEmpty() && allLanguages.isNotEmpty() -> emptyList()
     booksFromNetwork.isNotEmpty() && allLanguages.isEmpty() ->
       fromLocalesWithNetworkMatchesSetActiveBy(
-        networkLanguageCounts(booksFromNetwork), defaultLanguage()
+        networkLanguageCounts(booksFromNetwork),
+        defaultLanguage()
       )
 
     booksFromNetwork.isNotEmpty() && allLanguages.isNotEmpty() ->
       fromLocalesWithNetworkMatchesSetActiveBy(
-        networkLanguageCounts(booksFromNetwork), allLanguages
+        networkLanguageCounts(booksFromNetwork),
+        allLanguages
       )
 
     else -> throw RuntimeException("Impossible state")
@@ -487,12 +501,14 @@ class ZimManageViewModel @Inject constructor(
     filter: String,
     fileSystemState: FileSystemState
   ): List<LibraryListItem> {
-    val activeLanguageCodes = allLanguages.filter(Language::active)
-      .map(Language::languageCode)
+    val activeLanguageCodes =
+      allLanguages.filter(Language::active)
+        .map(Language::languageCode)
     val allBooks = libraryNetworkEntity.book!! - booksOnFileSystem.map(BookOnDisk::book).toSet()
-    val downloadingBooks = activeDownloads.mapNotNull { download ->
-      allBooks.firstOrNull { it.id == download.book.id }
-    }
+    val downloadingBooks =
+      activeDownloads.mapNotNull { download ->
+        allBooks.firstOrNull { it.id == download.book.id }
+      }
     val booksUnfilteredByLanguage =
       applySearchFilter(
         allBooks - downloadingBooks.toSet(),
@@ -508,13 +524,14 @@ class ZimManageViewModel @Inject constructor(
       fileSystemState,
       R.string.downloading,
       Long.MAX_VALUE
-    ) + createLibrarySection(
-      booksWithActiveLanguages,
-      emptyList(),
-      fileSystemState,
-      R.string.your_languages,
-      Long.MAX_VALUE - 1
     ) +
+      createLibrarySection(
+        booksWithActiveLanguages,
+        emptyList(),
+        fileSystemState,
+        R.string.your_languages,
+        Long.MAX_VALUE - 1
+      ) +
       createLibrarySection(
         booksWithoutActiveLanguages,
         emptyList(),
@@ -531,10 +548,12 @@ class ZimManageViewModel @Inject constructor(
     sectionStringId: Int,
     sectionId: Long
   ) =
-    if (books.isNotEmpty())
+    if (books.isNotEmpty()) {
       listOf(DividerItem(sectionId, sectionStringId)) +
         books.asLibraryItems(activeDownloads, fileSystemState)
-    else emptyList()
+    } else {
+      emptyList()
+    }
 
   private fun applySearchFilter(
     unDownloadedBooks: List<Book>,
@@ -555,8 +574,7 @@ class ZimManageViewModel @Inject constructor(
       ?: BookItem(book, fileSystemState)
   }
 
-  private fun checkFileSystemForBooksOnRequest(booksFromDao: Flowable<List<BookOnDisk>>):
-    Disposable =
+  private fun checkFileSystemForBooksOnRequest(booksFromDao: Flowable<List<BookOnDisk>>): Disposable =
     requestFileSystemCheck
       .subscribeOn(Schedulers.io())
       .observeOn(Schedulers.io())
@@ -594,9 +612,10 @@ class ZimManageViewModel @Inject constructor(
         Throwable::printStackTrace
       )
 
-  private fun books() = bookDao.books()
-    .subscribeOn(Schedulers.io())
-    .map { it.sortedBy { book -> book.book.title } }
+  private fun books() =
+    bookDao.books()
+      .subscribeOn(Schedulers.io())
+      .map { it.sortedBy { book -> book.book.title } }
 
   private fun booksFromStorageNotIn(
     booksFromDao: Flowable<List<BookOnDisk>>,
@@ -631,13 +650,14 @@ class ZimManageViewModel @Inject constructor(
     newList: MutableList<BooksOnDiskListItem>
   ): FileSelectListState {
     return oldState.copy(
-      bookOnDiskListItems = newList.map { newBookOnDisk ->
-        val firstOrNull =
-          oldState.bookOnDiskListItems.firstOrNull { oldBookOnDisk ->
-            oldBookOnDisk.id == newBookOnDisk.id
-          }
-        newBookOnDisk.apply { isSelected = firstOrNull?.isSelected ?: false }
-      }
+      bookOnDiskListItems =
+        newList.map { newBookOnDisk ->
+          val firstOrNull =
+            oldState.bookOnDiskListItems.firstOrNull { oldBookOnDisk ->
+              oldBookOnDisk.id == newBookOnDisk.id
+            }
+          newBookOnDisk.apply { isSelected = firstOrNull?.isSelected == true }
+        }
     )
   }
 

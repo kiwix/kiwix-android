@@ -71,8 +71,7 @@ open class DatabaseModule {
   @Singleton
   @Provides
   fun provideYourDatabase(
-    context: Context,
-    boxStore: BoxStore
+    context: Context
   ) =
     KiwixRoomDatabase.getInstance(
       context = context

@@ -39,11 +39,10 @@ import java.util.TimerTask
 import javax.inject.Inject
 
 class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtensions {
-
   companion object {
-    private const val timerDelay: Long = 0
-    private const val timerPeriod: Long = 2000
-    private const val animationDuration: Long = 800
+    private const val TIMER_DELAY: Long = 0
+    private const val TIMER_PERIOD: Long = 2000
+    private const val ANIMATION_DURATION: Long = 800
   }
 
   private val handler = Handler(Looper.getMainLooper())
@@ -63,11 +62,12 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
     super.onViewCreated(view, savedInstanceState)
     fragmentIntroBinding?.getStarted?.setOnClickListener { navigateToLibrary() }
     fragmentIntroBinding?.viewPager?.let { viewPager ->
-      views = arrayOf(
-        layoutInflater.inflate(R.layout.item_intro_1, viewPager, false),
-        layoutInflater.inflate(R.layout.item_intro_2, viewPager, false),
-        layoutInflater.inflate(R.layout.item_intro_3, viewPager, false)
-      )
+      views =
+        arrayOf(
+          layoutInflater.inflate(R.layout.item_intro_1, viewPager, false),
+          layoutInflater.inflate(R.layout.item_intro_2, viewPager, false),
+          layoutInflater.inflate(R.layout.item_intro_3, viewPager, false)
+        )
       viewPager.run {
         adapter = IntroPagerAdapter(views)
         simplePageChangeListener?.let(::addOnPageChangeListener)
@@ -83,8 +83,8 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
           }
         }
       },
-      timerDelay,
-      timerPeriod
+      TIMER_DELAY,
+      TIMER_PERIOD
     )
     views.forEach {
       it.setOnClickListener { dismissAutoRotate() }
@@ -123,7 +123,7 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
     val airplane = views[1].findViewById<ImageView>(R.id.airplane) ?: return
     airplane.isVisible = position == 1
     if (position == 1) {
-      airplane.animate().translationX(airplane.width.toFloat()).duration = animationDuration
+      airplane.animate().translationX(airplane.width.toFloat()).duration = ANIMATION_DURATION
     } else {
       airplane.animate().translationX(-airplane.width.toFloat())
     }

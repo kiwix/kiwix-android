@@ -36,7 +36,7 @@ internal class JNIInitialiser @Inject constructor(context: Context, jniKiwix: JN
       if (!icuDir.exists()) {
         icuDir.mkdirs()
       }
-      val icuFileNames = context.assets.list("icu") ?: emptyArray()
+      val icuFileNames = context.assets.list("icu").orEmpty()
       for (icuFileName in icuFileNames) {
         val icuDataFile = File(icuDir, icuFileName)
         if (!icuDataFile.exists()) {

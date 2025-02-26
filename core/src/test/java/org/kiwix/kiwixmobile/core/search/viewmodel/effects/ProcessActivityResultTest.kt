@@ -34,16 +34,16 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.VoiceSearchResult
 
 internal class ProcessActivityResultTest {
-
   private val activity: AppCompatActivity = mockk()
   private val data = mockk<Intent>()
   private val actions = mockk<Channel<Action>>(relaxed = true)
-  private val successfulResult = ProcessActivityResult(
-    StartSpeechInput.REQ_CODE_SPEECH_INPUT,
-    Activity.RESULT_OK,
-    data,
-    actions
-  )
+  private val successfulResult =
+    ProcessActivityResult(
+      StartSpeechInput.REQ_CODE_SPEECH_INPUT,
+      Activity.RESULT_OK,
+      data,
+      actions
+    )
 
   @BeforeEach
   fun init() {

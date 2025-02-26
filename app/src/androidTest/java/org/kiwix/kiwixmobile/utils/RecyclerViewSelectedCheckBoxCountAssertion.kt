@@ -38,21 +38,23 @@ class RecyclerViewSelectedCheckBoxCountAssertion(
     var checkedCount = 0
 
     // Find the RecyclerView
-    val recyclerViewMatcher: Matcher<View> = allOf(
-      isAssignableFrom(RecyclerView::class.java),
-      isDisplayed(),
-      withId(recyclerViewId)
-    )
+    val recyclerViewMatcher: Matcher<View> =
+      allOf(
+        isAssignableFrom(RecyclerView::class.java),
+        isDisplayed(),
+        withId(recyclerViewId)
+      )
 
     // Use a custom ViewMatcher to find checkboxes that are checked
-    val checkBoxMatcher: Matcher<View> = object : TypeSafeMatcher<View>() {
-      override fun matchesSafely(view: View): Boolean =
-        view is CheckBox && view.isChecked
+    val checkBoxMatcher: Matcher<View> =
+      object : TypeSafeMatcher<View>() {
+        override fun matchesSafely(view: View): Boolean =
+          view is CheckBox && view.isChecked
 
-      override fun describeTo(description: Description) {
-        description.appendText("is checked")
+        override fun describeTo(description: Description) {
+          description.appendText("is checked")
+        }
       }
-    }
 
     // Count the checked checkboxes
     onView(recyclerViewMatcher).check { view, noViewFoundException ->

@@ -45,7 +45,6 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 fun search(func: SearchRobot.() -> Unit) = SearchRobot().applyWithViewHierarchyPrinting(func)
 
 class SearchRobot : BaseRobot() {
-
   val searchUnitTestingQuery = "Unit testi"
   val searchUnitTestResult = "Unit testing - Wikipedia"
   val searchQueryForDownloadedZimFile = "A Fool"

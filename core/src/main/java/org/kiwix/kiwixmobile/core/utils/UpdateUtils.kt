@@ -22,8 +22,9 @@ import org.kiwix.kiwixmobile.core.CoreApp
 
 object UpdateUtils {
   @JvmStatic
-  fun reformatProviderUrl(url: String) = url.replace(
-    OLD_PROVIDER_DOMAIN,
-    CoreApp.instance.packageName + ".zim.base"
-  )
+  fun reformatProviderUrl(url: String) =
+    url.replace(
+      OLD_PROVIDER_DOMAIN,
+      CoreApp.instance.packageName + ".zim.base"
+    )
 }

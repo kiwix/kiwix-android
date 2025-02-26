@@ -57,7 +57,6 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 
 class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
-
   @Rule
   @JvmField
   var retryRule = RetryRule()
@@ -78,16 +77,17 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
       putBoolean(SharedPreferenceUtil.PREF_IS_TEST, true)
       putString(SharedPreferenceUtil.PREF_LANG, "en")
     }
-    activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
-      moveToState(Lifecycle.State.RESUMED)
-      onActivity {
-        handleLocaleChange(
-          it,
-          "en",
-          SharedPreferenceUtil(context)
-        )
+    activityScenario =
+      ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+        moveToState(Lifecycle.State.RESUMED)
+        onActivity {
+          handleLocaleChange(
+            it,
+            "en",
+            SharedPreferenceUtil(context)
+          )
+        }
       }
-    }
   }
 
   init {
@@ -131,24 +131,26 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
   }
 
   @Test
-  fun testWithExtraZeroSizeFile() = runBlocking {
-    createAndGetSplitedZimFile(true)?.let { zimFile ->
-      // test the articleCount and mediaCount of this zim file.
-      val zimReaderSource = ZimReaderSource(zimFile)
-      val archive = zimReaderSource.createArchive()
-      val zimFileReader = ZimFileReader(
-        zimReaderSource,
-        archive!!,
-        DarkModeConfig(SharedPreferenceUtil(context), context),
-        SuggestionSearcher(archive)
-      )
-      Assert.assertEquals(zimFileReader.mediaCount, 16)
-      Assert.assertEquals(zimFileReader.articleCount, 4)
-    } ?: kotlin.run {
-      // error in creating the zim file chunk
-      fail("Couldn't create the zim file chunk")
+  fun testWithExtraZeroSizeFile() =
+    runBlocking {
+      createAndGetSplitedZimFile(true)?.let { zimFile ->
+        // test the articleCount and mediaCount of this zim file.
+        val zimReaderSource = ZimReaderSource(zimFile)
+        val archive = zimReaderSource.createArchive()
+        val zimFileReader =
+          ZimFileReader(
+            zimReaderSource,
+            archive!!,
+            DarkModeConfig(SharedPreferenceUtil(context), context),
+            SuggestionSearcher(archive)
+          )
+        Assert.assertEquals(zimFileReader.mediaCount, 16)
+        Assert.assertEquals(zimFileReader.articleCount, 4)
+      } ?: kotlin.run {
+        // error in creating the zim file chunk
+        fail("Couldn't create the zim file chunk")
+      }
     }
-  }
 
   private fun createAndGetSplitedZimFile(shouldCreateExtraZeroSizeFile: Boolean = false): File? {
     val loadFileStream =

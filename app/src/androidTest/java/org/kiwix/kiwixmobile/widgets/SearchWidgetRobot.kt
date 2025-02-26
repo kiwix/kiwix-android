@@ -44,7 +44,6 @@ fun searchWidget(func: SearchWidgetRobot.() -> Unit) =
   SearchWidgetRobot().applyWithViewHierarchyPrinting(func)
 
 class SearchWidgetRobot : BaseRobot() {
-
   fun removeWidgetIfAlreadyAdded(uiDevice: UiDevice) {
     try {
       val widget = uiDevice.findObject(By.text("Search Kiwix"))

@@ -33,7 +33,11 @@ import retrofit2.http.Url
 
 interface KiwixService {
   @get:GET(LIBRARY_NETWORK_PATH) val library: Single<LibraryNetworkEntity?>
-  @GET fun getMetaLinks(@Url url: String): Observable<MetaLinkNetworkEntity?>
+
+  @GET
+  fun getMetaLinks(
+    @Url url: String
+  ): Observable<MetaLinkNetworkEntity?>
 
   /******** Helper class that sets up new services  */
   object ServiceCreator {

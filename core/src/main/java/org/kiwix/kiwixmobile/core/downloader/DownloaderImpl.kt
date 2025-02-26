@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.downloader
 
-import android.annotation.SuppressLint
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
@@ -32,8 +31,7 @@ class DownloaderImpl @Inject constructor(
   private val downloadRoomDao: DownloadRoomDao,
   private val kiwixService: KiwixService
 ) : Downloader {
-
-  @SuppressLint("CheckResult")
+  @Suppress("CheckResult", "IgnoredReturnValue")
   override fun download(book: LibraryNetworkEntity.Book) {
     urlProvider(book)
       .take(1)
@@ -48,9 +46,12 @@ class DownloaderImpl @Inject constructor(
 
   @Suppress("UnsafeCallOnNullableType")
   private fun urlProvider(book: Book): Observable<String> =
-    if (book.url?.endsWith("meta4") == true) kiwixService.getMetaLinks(book.url!!)
-      .map { it.relevantUrl.value }
-    else Observable.just(book.url)
+    if (book.url?.endsWith("meta4") == true) {
+      kiwixService.getMetaLinks(book.url!!)
+        .map { it.relevantUrl.value }
+    } else {
+      Observable.just(book.url)
+    }
 
   override fun cancelDownload(downloadId: Long) {
     downloadRequester.cancel(downloadId)

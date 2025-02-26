@@ -71,7 +71,6 @@ class SearchViewModel @Inject constructor(
   private val searchResultGenerator: SearchResultGenerator,
   private val searchMutex: Mutex = Mutex()
 ) : ViewModel() {
-
   private val initialState: SearchState =
     SearchState(
       "",
@@ -105,55 +104,60 @@ class SearchViewModel @Inject constructor(
       searchOrigin.asStateFlow()
     ) { searchTerm, searchResultsWithTerm, recentResults, searchOrigin ->
       SearchState(
-        searchTerm, searchResultsWithTerm,
-        recentResults as List<SearchListItem.RecentSearchListItem>, searchOrigin
+        searchTerm,
+        searchResultsWithTerm,
+        recentResults as List<SearchListItem.RecentSearchListItem>,
+        searchOrigin
       )
     }
       .collect { state.value = it }
   }
 
   @Suppress("DEPRECATION")
-  private fun searchResults() = filter.asStateFlow()
-    .mapLatest {
-      SearchResultsWithTerm(
-        it,
-        searchResultGenerator.generateSearchResults(it, zimReaderContainer.zimFileReader),
-        searchMutex
-      )
-    }
-
-  private suspend fun actionMapper() = actions.consumeEach {
-    when (it) {
-      ExitedSearch -> _effects.trySend(PopFragmentBackstack).isSuccess
-      is OnItemClick -> saveSearchAndOpenItem(it.searchListItem, false)
-      is OnOpenInNewTabClick -> saveSearchAndOpenItem(it.searchListItem, true)
-      is OnItemLongClick -> showDeleteDialog(it)
-      is Filter -> filter.tryEmit(it.term)
-      ClickedSearchInText -> searchPreviousScreenWhenStateIsValid()
-      is ConfirmedDelete -> deleteItemAndShowToast(it)
-      is CreatedWithArguments -> _effects.trySend(
-        SearchArgumentProcessing(
-          it.arguments,
-          actions
+  private fun searchResults() =
+    filter.asStateFlow()
+      .mapLatest {
+        SearchResultsWithTerm(
+          it,
+          searchResultGenerator.generateSearchResults(it, zimReaderContainer.zimFileReader),
+          searchMutex
         )
-      ).isSuccess
+      }
 
-      ReceivedPromptForSpeechInput -> _effects.trySend(StartSpeechInput(actions)).isSuccess
-      StartSpeechInputFailed -> _effects.trySend(ShowToast(R.string.speech_not_supported)).isSuccess
-      is ActivityResultReceived ->
-        _effects.trySend(
-          ProcessActivityResult(
-            it.requestCode,
-            it.resultCode,
-            it.data,
-            actions
-          )
-        ).isSuccess
+  private suspend fun actionMapper() =
+    actions.consumeEach {
+      when (it) {
+        ExitedSearch -> _effects.trySend(PopFragmentBackstack).isSuccess
+        is OnItemClick -> saveSearchAndOpenItem(it.searchListItem, false)
+        is OnOpenInNewTabClick -> saveSearchAndOpenItem(it.searchListItem, true)
+        is OnItemLongClick -> showDeleteDialog(it)
+        is Filter -> filter.tryEmit(it.term)
+        ClickedSearchInText -> searchPreviousScreenWhenStateIsValid()
+        is ConfirmedDelete -> deleteItemAndShowToast(it)
+        is CreatedWithArguments ->
+          _effects.trySend(
+            SearchArgumentProcessing(
+              it.arguments,
+              actions
+            )
+          ).isSuccess
 
-      is ScreenWasStartedFrom -> searchOrigin.tryEmit(it.searchOrigin)
-      is VoiceSearchResult -> voiceSearchResult.value = it.term
+        ReceivedPromptForSpeechInput -> _effects.trySend(StartSpeechInput(actions)).isSuccess
+        StartSpeechInputFailed -> _effects.trySend(ShowToast(R.string.speech_not_supported)).isSuccess
+        is ActivityResultReceived ->
+          _effects.trySend(
+            ProcessActivityResult(
+              it.requestCode,
+              it.resultCode,
+              it.data,
+              actions
+            )
+          ).isSuccess
+
+        is ScreenWasStartedFrom -> searchOrigin.tryEmit(it.searchOrigin)
+        is VoiceSearchResult -> voiceSearchResult.value = it.term
+      }
     }
-  }
 
   private fun deleteItemAndShowToast(it: ConfirmedDelete) {
     _effects.trySend(

@@ -125,24 +125,25 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
         as ArrayList<String>
     }
 
-  private val notificationPermissionListener = registerForActivityResult(
-    ActivityResultContracts.RequestPermission()
-  ) { isGranted ->
-    if (isGranted) {
-      activityZimHostBinding?.startServerButton?.performClick()
-    } else {
-      if (!ActivityCompat.shouldShowRequestPermissionRationale(
-          requireActivity(),
-          POST_NOTIFICATIONS
-        )
-      ) {
-        alertDialogShower.show(
-          KiwixDialog.NotificationPermissionDialog,
-          requireActivity()::navigateToAppSettings
-        )
+  private val notificationPermissionListener =
+    registerForActivityResult(
+      ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+      if (isGranted) {
+        activityZimHostBinding?.startServerButton?.performClick()
+      } else {
+        if (!ActivityCompat.shouldShowRequestPermissionRationale(
+            requireActivity(),
+            POST_NOTIFICATIONS
+          )
+        ) {
+          alertDialogShower.show(
+            KiwixDialog.NotificationPermissionDialog,
+            requireActivity()::navigateToAppSettings
+          )
+        }
       }
     }
-  }
 
   private var storagePermissionLauncher: ActivityResultLauncher<Array<String>>? =
     registerForActivityResult(
@@ -187,24 +188,26 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     bookDelegate =
       BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil, multiSelectAction = ::select)
     bookDelegate.selectionMode = SelectionMode.MULTI
-    booksAdapter = BooksOnDiskAdapter(
-      bookDelegate,
-      BookOnDiskDelegate.LanguageDelegate
-    )
+    booksAdapter =
+      BooksOnDiskAdapter(
+        bookDelegate,
+        BookOnDiskDelegate.LanguageDelegate
+      )
 
     activityZimHostBinding?.recyclerViewZimHost?.adapter = booksAdapter
     presenter.attachView(this)
 
-    serviceConnection = object : ServiceConnection {
-      override fun onServiceDisconnected(name: ComponentName?) {
-        /*do nothing*/
-      }
+    serviceConnection =
+      object : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName?) {
+          // do nothing
+        }
 
-      override fun onServiceConnected(className: ComponentName, service: IBinder) {
-        hotspotService = (service as HotspotService.HotspotBinder).service.get()
-        hotspotService?.registerCallBack(this@ZimHostFragment)
+        override fun onServiceConnected(className: ComponentName, service: IBinder) {
+          hotspotService = (service as HotspotService.HotspotBinder).service.get()
+          hotspotService?.registerCallBack(this@ZimHostFragment)
+        }
       }
-    }
 
     activityZimHostBinding?.startServerButton?.setOnClickListener {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
@@ -292,7 +295,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun select(bookOnDisk: BooksOnDiskListItem.BookOnDisk) {
-    val booksList: List<BooksOnDiskListItem> = booksAdapter.items.map {
+    val booksList: List<BooksOnDiskListItem> = booksAdapter.items.onEach {
       if (it == bookOnDisk) {
         it.isSelected = !it.isSelected
       }
@@ -317,7 +320,8 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   private fun bindService() {
     requireActivity().bindService(
-      Intent(requireActivity(), HotspotService::class.java), serviceConnection,
+      Intent(requireActivity(), HotspotService::class.java),
+      serviceConnection,
       Context.BIND_AUTO_CREATE
     )
   }
@@ -343,11 +347,12 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   private fun saveHostedBooks(booksList: List<BooksOnDiskListItem>) {
-    sharedPreferenceUtil.hostedBooks = booksList.asSequence()
-      .filter(BooksOnDiskListItem::isSelected)
-      .filterIsInstance<BookOnDisk>()
-      .mapNotNull { it.book.title }
-      .toSet()
+    sharedPreferenceUtil.hostedBooks =
+      booksList.asSequence()
+        .filter(BooksOnDiskListItem::isSelected)
+        .filterIsInstance<BookOnDisk>()
+        .mapNotNull { it.book.title }
+        .toSet()
   }
 
   private fun layoutServerStarted() {
@@ -417,7 +422,6 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   // Advice user to turn on hotspot manually for API<26
   private fun startHotspotManuallyDialog() {
-
     alertDialogShower.show(
       KiwixDialog.StartHotspotManually,
       ::launchTetheringSettingsScreen,
@@ -497,7 +501,8 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private fun startWifiHotspot(restartServer: Boolean) {
     requireActivity().startService(
       createHotspotIntent(ACTION_START_SERVER).putStringArrayListExtra(
-        SELECTED_ZIM_PATHS_KEY, selectedBooksPath
+        SELECTED_ZIM_PATHS_KEY,
+        selectedBooksPath
       ).putExtra(RESTART_SERVER, restartServer)
     ).also {
       isHotspotServiceRunning = true

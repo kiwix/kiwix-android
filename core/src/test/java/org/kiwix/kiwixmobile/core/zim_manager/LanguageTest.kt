@@ -25,7 +25,6 @@ import org.junit.jupiter.api.Test
 import org.kiwix.sharedFunctions.language
 
 class LanguageTest {
-
   @Nested
   inner class Equals {
     @Test
@@ -47,9 +46,10 @@ class LanguageTest {
     @Test
     fun `is equal when language and active are equal`() {
       assertThat(
-        language(language = "lang", isActive = true) == language(
-          language = "lang", isActive = true
-        )
+        language(language = "lang", isActive = true) ==
+          language(
+            language = "lang", isActive = true
+          )
       ).isTrue()
     }
   }

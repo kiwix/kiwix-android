@@ -40,7 +40,6 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVi
 import org.kiwix.kiwixmobile.utils.StandardActions
 
 class KiwixSettingsFragmentTest {
-
   @Rule
   @JvmField
   var retryRule = RetryRule()
@@ -48,10 +47,11 @@ class KiwixSettingsFragmentTest {
   @get:Rule
   var activityScenarioRule = ActivityScenarioRule(KiwixMainActivity::class.java)
 
-  private val permissions = arrayOf(
-    Manifest.permission.READ_EXTERNAL_STORAGE,
-    Manifest.permission.WRITE_EXTERNAL_STORAGE
-  )
+  private val permissions =
+    arrayOf(
+      Manifest.permission.READ_EXTERNAL_STORAGE,
+      Manifest.permission.WRITE_EXTERNAL_STORAGE
+    )
 
   @Rule
   @JvmField

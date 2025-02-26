@@ -37,6 +37,7 @@ import androidx.core.widget.ContentLoadingProgressBar
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -84,7 +85,6 @@ const val DISABLED_SEARCH_IN_TEXT_OPACITY = 0.6f
 const val ENABLED_SEARCH_IN_TEXT_OPACITY = 1f
 
 class SearchFragment : BaseFragment() {
-
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
   private var searchView: SearchView? = null
@@ -143,8 +143,10 @@ class SearchFragment : BaseFragment() {
         }
       })
     }
-    lifecycleScope.launchWhenCreated {
-      searchViewModel.effects.collect { it.invokeWith(this@SearchFragment.coreMainActivity) }
+    viewLifecycleOwner.lifecycleScope.launch {
+      repeatOnLifecycle(Lifecycle.State.CREATED) {
+        searchViewModel.effects.collect { it.invokeWith(this@SearchFragment.coreMainActivity) }
+      }
     }
     handleBackPress()
   }
@@ -257,22 +259,26 @@ class SearchFragment : BaseFragment() {
             )
           }
 
-          searchMenuItem?.setOnActionExpandListener(object : OnActionExpandListener {
-            override fun onMenuItemActionExpand(item: MenuItem) = false
+          searchMenuItem?.setOnActionExpandListener(
+            object : OnActionExpandListener {
+              override fun onMenuItemActionExpand(item: MenuItem) = false
 
-            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-              searchViewModel.actions.trySend(ExitedSearch).isSuccess
-              return false
+              override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                searchViewModel.actions.trySend(ExitedSearch).isSuccess
+                return false
+              }
             }
-          })
+          )
           searchInTextMenuItem = menu.findItem(R.id.menu_searchintext)
           findInPageTextView =
             searchInTextMenuItem?.actionView?.findViewById(R.id.find_in_page_text_view)
           searchInTextMenuItem?.actionView?.setOnClickListener {
             searchViewModel.actions.trySend(ClickedSearchInText).isSuccess
           }
-          lifecycleScope.launchWhenCreated {
-            searchViewModel.state.collect { render(it) }
+          viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+              searchViewModel.state.collect { render(it) }
+            }
           }
           val searchStringFromArguments = arguments?.getString(NAV_ARG_SEARCH_STRING)
           if (searchStringFromArguments != null) {
@@ -299,6 +305,7 @@ class SearchFragment : BaseFragment() {
       it.value.equals(query, ignoreCase = true)
     }
 
+  @Suppress("InjectDispatcher")
   suspend fun render(state: SearchState) {
     renderingJob?.apply {
       // cancel the children job. Since we are getting the result on IO thread
@@ -323,37 +330,40 @@ class SearchFragment : BaseFragment() {
     setIsPageSearchEnabled(state.searchTerm.isNotBlank())
 
     fragmentSearchBinding?.searchLoadingIndicator?.isShowing(true)
-    renderingJob = lifecycleScope.launch {
-      try {
-        val searchResult = withContext(Dispatchers.IO) {
-          state.getVisibleResults(0, coroutineContext[Job])
-        }
+    renderingJob =
+      lifecycleScope.launch {
+        try {
+          val searchResult =
+            withContext(Dispatchers.IO) {
+              state.getVisibleResults(0, coroutineContext[Job])
+            }
 
-        fragmentSearchBinding?.searchLoadingIndicator?.isShowing(false)
-        searchResult?.let {
-          fragmentSearchBinding?.searchNoResults?.isVisible = it.isEmpty()
-          searchAdapter?.items = it
+          fragmentSearchBinding?.searchLoadingIndicator?.isShowing(false)
+          searchResult?.let {
+            fragmentSearchBinding?.searchNoResults?.isVisible = it.isEmpty()
+            searchAdapter?.items = it
+          }
+        } catch (ignore: CancellationException) {
+          Log.e("SEARCH_RESULT", "Cancelled the previous job ${ignore.message}")
+        } catch (ignore: Exception) {
+          Log.e(
+            "SEARCH_RESULT",
+            "Error in getting searched result\nOriginal exception ${ignore.message}"
+          )
+        } finally {
+          fragmentSearchBinding?.searchLoadingIndicator?.isShowing(false)
         }
-      } catch (ignore: CancellationException) {
-        Log.e("SEARCH_RESULT", "Cancelled the previous job ${ignore.message}")
-      } catch (ignore: Exception) {
-        Log.e(
-          "SEARCH_RESULT",
-          "Error in getting searched result\nOriginal exception ${ignore.message}"
-        )
-      } finally {
-        fragmentSearchBinding?.searchLoadingIndicator?.isShowing(false)
       }
-    }
   }
 
   private fun setIsPageSearchEnabled(isEnabled: Boolean) {
     searchInTextMenuItem?.actionView?.isEnabled = isEnabled
-    findInPageTextView?.alpha = if (isEnabled) {
-      ENABLED_SEARCH_IN_TEXT_OPACITY
-    } else {
-      DISABLED_SEARCH_IN_TEXT_OPACITY
-    }
+    findInPageTextView?.alpha =
+      if (isEnabled) {
+        ENABLED_SEARCH_IN_TEXT_OPACITY
+      } else {
+        DISABLED_SEARCH_IN_TEXT_OPACITY
+      }
   }
 
   private fun onItemClick(it: SearchListItem) {

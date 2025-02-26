@@ -73,7 +73,6 @@ const val UNINITIALISE_HTML = """
 """
 
 class ServiceWorkerUninitialiser(val onUninitialisedAction: () -> Unit) {
-
   fun initInterface(webView: WebView) {
     webView.addJavascriptInterface(this, UNINITIALISER_INTERFACE)
   }

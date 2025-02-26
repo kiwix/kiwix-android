@@ -38,7 +38,6 @@ import javax.inject.Inject
 
 @Dao
 abstract class DownloadRoomDao {
-
   @Inject
   lateinit var newBookDao: NewBookDao
 

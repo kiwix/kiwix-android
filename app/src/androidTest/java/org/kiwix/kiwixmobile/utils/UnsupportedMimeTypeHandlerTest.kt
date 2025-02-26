@@ -53,12 +53,13 @@ class UnsupportedMimeTypeHandlerTest {
   private val webResourceResponse: WebResourceResponse = mockk()
   private val coroutineScope = CoroutineScope(Dispatchers.Main)
   private val inputStream: InputStream = mockk()
-  private val unsupportedMimeTypeHandler = UnsupportedMimeTypeHandler(
-    activity,
-    sharedPreferenceUtil,
-    alertDialogShower,
-    zimReaderContainer
-  )
+  private val unsupportedMimeTypeHandler =
+    UnsupportedMimeTypeHandler(
+      activity,
+      sharedPreferenceUtil,
+      alertDialogShower,
+      zimReaderContainer
+    )
 
   @Before
   fun before() {
@@ -89,30 +90,31 @@ class UnsupportedMimeTypeHandlerTest {
   }
 
   @Test
-  fun testOpeningFileInExternalReaderApplication() = runBlocking {
-    every {
-      unsupportedMimeTypeHandler.intent.resolveActivity(activity.packageManager)
-    } returns mockk()
-    every { activity.startActivity(unsupportedMimeTypeHandler.intent) } returns mockk()
-    val lambdaSlot = slot<() -> Unit>()
-    unsupportedMimeTypeHandler.showSaveOrOpenUnsupportedFilesDialog(
-      demoUrl,
-      "application/pdf",
-      coroutineScope
-    )
-    verify {
-      alertDialogShower.show(
-        KiwixDialog.SaveOrOpenUnsupportedFiles,
-        capture(lambdaSlot),
-        any(),
-        any()
+  fun testOpeningFileInExternalReaderApplication() =
+    runBlocking {
+      every {
+        unsupportedMimeTypeHandler.intent.resolveActivity(activity.packageManager)
+      } returns mockk()
+      every { activity.startActivity(unsupportedMimeTypeHandler.intent) } returns mockk()
+      val lambdaSlot = slot<() -> Unit>()
+      unsupportedMimeTypeHandler.showSaveOrOpenUnsupportedFilesDialog(
+        demoUrl,
+        "application/pdf",
+        coroutineScope
       )
+      verify {
+        alertDialogShower.show(
+          KiwixDialog.SaveOrOpenUnsupportedFiles,
+          capture(lambdaSlot),
+          any(),
+          any()
+        )
+      }
+      lambdaSlot.captured.invoke()
+      verify {
+        activity.startActivity(unsupportedMimeTypeHandler.intent)
+      }
     }
-    lambdaSlot.captured.invoke()
-    verify {
-      activity.startActivity(unsupportedMimeTypeHandler.intent)
-    }
-  }
 
   @Test
   fun testOpeningFileWhenNoReaderApplicationInstalled() {
@@ -192,12 +194,13 @@ class UnsupportedMimeTypeHandlerTest {
 
   @Test
   fun testIfSavingFailed() {
-    val downloadOrOpenEpubAndPdfHandler = UnsupportedMimeTypeHandler(
-      activity,
-      sharedPreferenceUtil,
-      alertDialogShower,
-      zimReaderContainer
-    )
+    val downloadOrOpenEpubAndPdfHandler =
+      UnsupportedMimeTypeHandler(
+        activity,
+        sharedPreferenceUtil,
+        alertDialogShower,
+        zimReaderContainer
+      )
     mockkStatic(Toast::class)
     justRun {
       Toast.makeText(activity, R.string.save_media_error, Toast.LENGTH_LONG).show()

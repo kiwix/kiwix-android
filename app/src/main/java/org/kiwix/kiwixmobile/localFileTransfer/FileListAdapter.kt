@@ -39,7 +39,6 @@ import org.kiwix.kiwixmobile.localFileTransfer.FileListAdapter.FileViewHolder
  */
 class FileListAdapter(private val fileItems: List<FileItem>) :
   RecyclerView.Adapter<FileViewHolder>() {
-
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileViewHolder =
     FileViewHolder(
       ItemTransferListBinding.inflate(

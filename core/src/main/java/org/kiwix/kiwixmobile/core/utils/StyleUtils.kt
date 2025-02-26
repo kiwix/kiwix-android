@@ -28,7 +28,9 @@ import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 
 object StyleUtils {
-  @JvmStatic fun Context.getAttributes(@XmlRes xml: Int): AttributeSet {
+  @JvmStatic fun Context.getAttributes(
+    @XmlRes xml: Int
+  ): AttributeSet {
     val parser: XmlPullParser = resources.getXml(xml)
     try {
       parser.next()
@@ -42,7 +44,7 @@ object StyleUtils {
   }
 
   @JvmStatic fun String?.fromHtml(): Spanned {
-    return (this ?: "").let {
+    return (this.orEmpty()).let {
       Html.fromHtml(
         this,
         Html.FROM_HTML_MODE_LEGACY

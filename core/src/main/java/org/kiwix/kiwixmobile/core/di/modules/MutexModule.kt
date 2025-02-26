@@ -25,7 +25,6 @@ import javax.inject.Singleton
 
 @Module
 class MutexModule {
-
   @Provides
   @Singleton
   fun provideMutex(): Mutex = Mutex()

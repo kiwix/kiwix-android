@@ -40,7 +40,6 @@ class HotspotNotificationManager @Inject constructor(
   private val context: Context,
   private val generateQR: GenerateQR,
 ) {
-
   private fun hotspotNotificationChannel() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       notificationManager.createNotificationChannel(
@@ -59,22 +58,25 @@ class HotspotNotificationManager @Inject constructor(
   @SuppressLint("UnspecifiedImmutableFlag")
   fun buildForegroundNotification(uri: String? = null): Notification {
     val coreMainActivity = (context as CoreApp).getMainActivity()
-    val contentIntent = NavDeepLinkBuilder(context).setComponentName(
-      coreMainActivity.mainActivity::class.java
-    )
-      .setGraph(navigation.kiwix_nav_graph)
-      .setDestination(id.zimHostFragment)
-      .createPendingIntent()
+    val contentIntent =
+      NavDeepLinkBuilder(context).setComponentName(
+        coreMainActivity.mainActivity::class.java
+      )
+        .setGraph(navigation.kiwix_nav_graph)
+        .setDestination(id.zimHostFragment)
+        .createPendingIntent()
     hotspotNotificationChannel()
-    val stopIntent = Intent(context, HotspotService::class.java).setAction(
-      HotspotService.ACTION_STOP_SERVER
-    )
-    val stopHotspot = PendingIntent.getService(
-      context,
-      0,
-      stopIntent,
-      PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-    )
+    val stopIntent =
+      Intent(context, HotspotService::class.java).setAction(
+        HotspotService.ACTION_STOP_SERVER
+      )
+    val stopHotspot =
+      PendingIntent.getService(
+        context,
+        0,
+        stopIntent,
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+      )
     return NotificationCompat.Builder(context, HOTSPOT_SERVICE_CHANNEL_ID)
       .setContentTitle(context.getString(R.string.hotspot_notification_content_title))
       .setContentText(context.getString(R.string.hotspot_running))

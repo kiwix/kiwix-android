@@ -32,7 +32,6 @@ import java.io.File
 import javax.inject.Inject
 
 class FileSearch @Inject constructor(private val context: Context) {
-
   private val zimFileExtensions = arrayOf("zim", "zimaa")
 
   fun scan(scanningProgressListener: ScanningProgressListener): Flowable<List<File>> =
@@ -45,27 +44,29 @@ class FileSearch @Inject constructor(private val context: Context) {
       }
     )
 
-  private fun scanMediaStore() = mutableListOf<File>().apply {
-    queryMediaStore()
-      ?.forEachRow { cursor ->
-        File(cursor.get<String>(MediaColumns.DATA))
-          .takeIf { it.canRead() && isNotInTrashFolder(it) }
-          ?.also(::add)
-      }
-  }
+  private fun scanMediaStore() =
+    mutableListOf<File>().apply {
+      queryMediaStore()
+        ?.forEachRow { cursor ->
+          File(cursor.get<String>(MediaColumns.DATA))
+            .takeIf { it.canRead() && isNotInTrashFolder(it) }
+            ?.also(::add)
+        }
+    }
 
   // Exclude any file in trash folder.
   private fun isNotInTrashFolder(it: File) =
     !Regex("/\\.Trash/").containsMatchIn(it.path)
 
-  private fun queryMediaStore() = context.contentResolver
-    .query(
-      Files.getContentUri("external"),
-      arrayOf(MediaColumns.DATA),
-      MediaColumns.DATA + " like ? or " + MediaColumns.DATA + " like ? ",
-      arrayOf("%." + zimFileExtensions[0], "%." + zimFileExtensions[1]),
-      null
-    )
+  private fun queryMediaStore() =
+    context.contentResolver
+      .query(
+        Files.getContentUri("external"),
+        arrayOf(MediaColumns.DATA),
+        MediaColumns.DATA + " like ? or " + MediaColumns.DATA + " like ? ",
+        arrayOf("%." + zimFileExtensions[0], "%." + zimFileExtensions[1]),
+        null
+      )
 
   private fun scanFileSystem(scanningProgressListener: ScanningProgressListener): List<File> {
     val directoryRoots = directoryRoots()
@@ -111,4 +112,4 @@ class FileSearch @Inject constructor(private val context: Context) {
 }
 
 internal fun String.isAny(vararg suffixes: String) =
-  suffixes.firstOrNull { endsWith(it) } != null
+  suffixes.any { endsWith(it) }

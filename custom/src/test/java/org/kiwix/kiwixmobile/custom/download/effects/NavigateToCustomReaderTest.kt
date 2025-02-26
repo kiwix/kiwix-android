@@ -24,7 +24,6 @@ import io.mockk.verify
 import org.junit.jupiter.api.Test
 
 internal class NavigateToCustomReaderTest {
-
   @Test
   fun `invokeWith finishes activity and starts main`() {
     val activity = mockk<AppCompatActivity>()

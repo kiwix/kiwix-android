@@ -27,12 +27,13 @@ class MetaLinkNetworkEntityTest {
   @Throws(Exception::class)
   fun testDeserialize() {
     val serializer = Persister()
-    val result = serializer.read(
-      MetaLinkNetworkEntity::class.java,
-      MetaLinkNetworkEntityTest::class.java.classLoader!!.getResourceAsStream(
-        "wikipedia_af_all_nopic_2016-05.zim.meta4"
+    val result =
+      serializer.read(
+        MetaLinkNetworkEntity::class.java,
+        MetaLinkNetworkEntityTest::class.java.classLoader!!.getResourceAsStream(
+          "wikipedia_af_all_nopic_2016-05.zim.meta4"
+        )
       )
-    )
     result?.urls?.let {
       MetaLinkNetworkEntityUrlAssert(it).hasItems(
         listOf(
@@ -41,10 +42,11 @@ class MetaLinkNetworkEntityTest {
             1,
             "http://ftpmirror.your.org/pub/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"
           ),
+          @Suppress("ktlint")
           DummyUrl(
             "gb",
             2,
-            "http://www.mirrorservice.org/sites/download.kiwix.org/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim" // ktlint-disable
+            "http://www.mirrorservice.org/sites/download.kiwix.org/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"
           ),
           DummyUrl(
             "us",
@@ -103,17 +105,18 @@ class MetaLinkNetworkEntityTest {
     actual: List<MetaLinkNetworkEntity.Url>
   ) :
     AbstractAssert<MetaLinkNetworkEntityUrlAssert, List<MetaLinkNetworkEntity.Url>>(
-      actual,
-      MetaLinkNetworkEntityUrlAssert::class.java
-    ) {
+        actual,
+        MetaLinkNetworkEntityUrlAssert::class.java
+      ) {
     private fun <S, T> intersectionWith(
       first: List<S>,
       second: List<T>,
       function: (S, T) -> Boolean
     ): Boolean {
       val filtered = first.filter { a -> second.any { b -> function(a, b) } }
-      if (filtered.isNotEmpty())
+      if (filtered.isNotEmpty()) {
         return true
+      }
       return false
     }
 

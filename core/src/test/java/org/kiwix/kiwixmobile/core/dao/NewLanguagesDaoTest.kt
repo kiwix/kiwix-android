@@ -31,7 +31,6 @@ import java.util.Locale
 import java.util.concurrent.Callable
 
 internal class NewLanguagesDaoTest {
-
   private val box: Box<LanguageEntity> = mockk(relaxed = true)
   private val newLanguagesDao = NewLanguagesDao(box)
 

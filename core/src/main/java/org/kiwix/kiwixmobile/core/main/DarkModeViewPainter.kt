@@ -32,7 +32,6 @@ import javax.inject.Inject
 class DarkModeViewPainter @Inject constructor(
   private val darkModeConfig: DarkModeConfig
 ) {
-
   private val invertedPaint =
     Paint().apply { colorFilter = ColorMatrixColorFilter(KiwixWebView.DARK_MODE_COLORS) }
 

@@ -35,7 +35,6 @@ class ReadAloudNotificationManger @Inject constructor(
   private val notificationManager: NotificationManager,
   private val context: Context
 ) {
-
   private fun readAloudNotificationChannel() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       notificationManager.createNotificationChannel(
@@ -94,13 +93,17 @@ class ReadAloudNotificationManger @Inject constructor(
     notificationManager.notify(READ_ALOUD_NOTIFICATION_ID, notification)
   }
 
-  private fun getPauseOrResumeTitle(isPauseTTS: Boolean) =
-    if (isPauseTTS) context.getString(R.string.tts_resume)
-    else context.getString(R.string.tts_pause)
+  private fun getPauseOrResumeTitle(isPauseTTS: Boolean) = if (isPauseTTS) {
+    context.getString(R.string.tts_resume)
+  } else {
+    context.getString(R.string.tts_pause)
+  }
 
-  private fun getPauseOrResumeIcon(isPauseTTS: Boolean) =
-    if (isPauseTTS) R.drawable.ic_baseline_play
-    else R.drawable.ic_baseline_pause
+  private fun getPauseOrResumeIcon(isPauseTTS: Boolean) = if (isPauseTTS) {
+    R.drawable.ic_baseline_play
+  } else {
+    R.drawable.ic_baseline_pause
+  }
 
   fun dismissNotification() {
     notificationManager.cancel(READ_ALOUD_NOTIFICATION_ID)

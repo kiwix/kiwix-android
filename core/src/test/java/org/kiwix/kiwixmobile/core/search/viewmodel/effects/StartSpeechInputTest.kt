@@ -34,7 +34,6 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.StartSpeechInputFailed
 import java.util.Locale
 
 internal class StartSpeechInputTest {
-
   private val actions = mockk<Channel<Action>>(relaxed = true)
 
   @Suppress("DEPRECATION")

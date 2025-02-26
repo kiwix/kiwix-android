@@ -33,7 +33,6 @@ class TestablePageViewModel(
   sharedPreferenceUtil: SharedPreferenceUtil,
   val dao: PageDao
 ) : PageViewModel<Page, TestablePageState>(dao, sharedPreferenceUtil, zimReaderContainer) {
-
   var createDeletePageDialogEffectCalled = false
 
   override fun initialState(): TestablePageState = pageState()

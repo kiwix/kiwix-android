@@ -73,11 +73,14 @@ fun Context.registerReceiver(baseBroadcastReceiver: BaseBroadcastReceiver): Inte
 val Context.locale: Locale
   get() = resources.configuration.locales.get(0)
 
-fun Context.getAttribute(@AttrRes attributeRes: Int) = with(TypedValue()) {
-  if (theme.resolveAttribute(attributeRes, this, true))
+fun Context.getAttribute(
+  @AttrRes attributeRes: Int
+) = with(TypedValue()) {
+  if (theme.resolveAttribute(attributeRes, this, true)) {
     data
-  else
+  } else {
     throw RuntimeException("invalid attribute $attributeRes")
+  }
 }
 
 fun Context.getResizedDrawable(resourceId: Int, width: Int, height: Int): Drawable? {

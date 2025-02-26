@@ -64,7 +64,9 @@ class RateDialogHandler @Inject constructor(
     )
   }
 
-  fun checkForRateDialog(@IdRes iconResId: Int) {
+  fun checkForRateDialog(
+    @IdRes iconResId: Int
+  ) {
     isFirstRun = sharedPreferenceUtil.prefIsFirstRun
     visitCounterPref = RateAppCounter(activity)
     tempVisitCount = visitCounterPref?.count ?: 0
@@ -92,8 +94,9 @@ class RateDialogHandler @Inject constructor(
 
   @Suppress("MagicNumber")
   private fun isTwoWeekPassed(): Boolean {
-    val firstTimeInstallTime = activity.packageManager
-      .getPackageInformation(activity.packageName, 0).firstInstallTime
+    val firstTimeInstallTime =
+      activity.packageManager
+        .getPackageInformation(activity.packageName, 0).firstInstallTime
     val timeDifference = System.currentTimeMillis() - firstTimeInstallTime
     val twoWeeksInMillis = 14 * 24 * 60 * 60 * 1000L
     // Check if the time difference is at least 2 weeks

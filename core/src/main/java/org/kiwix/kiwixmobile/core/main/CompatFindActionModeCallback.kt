@@ -35,10 +35,13 @@ import android.widget.TextView
 import androidx.appcompat.view.ActionMode
 import org.kiwix.kiwixmobile.core.R
 
-class CompatFindActionModeCallback internal constructor(context: Context) :
-  ActionMode.Callback, TextWatcher, View.OnClickListener {
+class CompatFindActionModeCallback internal constructor(
+  context: Context
+) : ActionMode.Callback, TextWatcher, View.OnClickListener {
   private val tag = "CompatFindActionMode"
-  @JvmField var isActive: Boolean = false
+
+  @JvmField
+  var isActive: Boolean = false
 
   @SuppressLint("InflateParams")
   private val customView: View = LayoutInflater.from(context).inflate(R.layout.webview_search, null)

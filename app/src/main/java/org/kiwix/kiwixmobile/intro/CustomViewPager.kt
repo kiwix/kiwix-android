@@ -32,7 +32,6 @@ class CustomViewPager @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet?
 ) : ViewPager(context, attrs) {
-
   init {
     postInitViewPager()
   }

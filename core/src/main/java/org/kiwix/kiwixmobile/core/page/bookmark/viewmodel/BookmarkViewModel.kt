@@ -34,11 +34,10 @@ class BookmarkViewModel @Inject constructor(
   zimReaderContainer: ZimReaderContainer,
   sharedPrefs: SharedPreferenceUtil
 ) : PageViewModel<LibkiwixBookmarkItem, BookmarkState>(
-  libkiwixBookmarks,
-  sharedPrefs,
-  zimReaderContainer
-) {
-
+    libkiwixBookmarks,
+    sharedPrefs,
+    zimReaderContainer
+  ) {
   override fun initialState(): BookmarkState =
     BookmarkState(emptyList(), sharedPreferenceUtil.showBookmarksAllBooks, zimReaderContainer.id)
 

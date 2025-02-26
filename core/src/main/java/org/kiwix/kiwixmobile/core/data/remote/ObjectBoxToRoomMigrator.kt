@@ -33,7 +33,9 @@ import javax.inject.Inject
 
 class ObjectBoxToRoomMigrator {
   @Inject lateinit var kiwixRoomDatabase: KiwixRoomDatabase
+
   @Inject lateinit var boxStore: BoxStore
+
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
   suspend fun migrateObjectBoxDataToRoom() {

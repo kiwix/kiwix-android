@@ -51,7 +51,6 @@ import org.kiwix.kiwixmobile.webserver.ZimHostRobot
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class GetContentShortcutTest {
-
   @Rule
   @JvmField
   val retryRule = RetryRule()
@@ -98,12 +97,13 @@ class GetContentShortcutTest {
 
   @Test
   fun testHandleGetContentShortcut() {
-    val shortcutIntent = Intent(
-      InstrumentationRegistry.getInstrumentation().targetContext,
-      KiwixMainActivity::class.java
-    ).apply {
-      action = ACTION_GET_CONTENT
-    }
+    val shortcutIntent =
+      Intent(
+        InstrumentationRegistry.getInstrumentation().targetContext,
+        KiwixMainActivity::class.java
+      ).apply {
+        action = ACTION_GET_CONTENT
+      }
     ActivityScenario.launch<KiwixMainActivity>(shortcutIntent)
     onlineLibrary(OnlineLibraryRobot::assertLibraryListDisplayed)
     topLevel {

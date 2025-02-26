@@ -37,7 +37,6 @@ class StorageLoadingPreference @JvmOverloads constructor(
   attrs: AttributeSet? = null,
   defStyleAttr: Int = ZERO
 ) : Preference(context, attrs, defStyleAttr) {
-
   private var customProgressTitle: TextView? = null
   private var progressBarTitleText: String? = null
 

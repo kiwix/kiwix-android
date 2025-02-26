@@ -123,7 +123,11 @@ class CustomPageIndicator @JvmOverloads constructor(
     setCurrentPageImmediate()
   }
 
-  override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+  override fun onPageScrolled(
+    position: Int,
+    positionOffset: Float,
+    positionOffsetPixels: Int
+  ) {
     if (attachedToWindow) {
       var fraction = positionOffset
       val currentPosition = if (pageChanging) previousPage else currentPage
@@ -163,11 +167,10 @@ class CustomPageIndicator @JvmOverloads constructor(
     requestLayout()
   }
 
-  private fun calculateDotPositions(width: Int, height: Int) {
+  private fun calculateDotPositions(width: Int) {
     val left = paddingLeft
     val top = paddingTop
     val right = width - paddingRight
-    val bottom = height - paddingBottom
     val requiredWidth = getRequiredWidth()
     val startLeft = left + (right - left - requiredWidth) / 2 + dotRadius
     dotCenterX = FloatArray(pageCount)
@@ -182,15 +185,11 @@ class CustomPageIndicator @JvmOverloads constructor(
   }
 
   private fun setCurrentPageImmediate() {
-    currentPage = if (viewPager != null) {
-      viewPager!!.currentItem
-    } else {
-      0
-    }
-    if (dotCenterX != null && dotCenterX!!.isNotEmpty()
-    ) {
-      if (moveAnimation == null || !moveAnimation!!.isStarted)
+    currentPage = viewPager?.currentItem ?: 0
+    if (dotCenterX?.isNotEmpty() == true) {
+      if (moveAnimation?.isStarted == false) {
         selectedDotX = dotCenterX!![currentPage]
+      }
     }
   }
 
@@ -218,17 +217,14 @@ class CustomPageIndicator @JvmOverloads constructor(
       else -> desiredWidth
     }
     setMeasuredDimension(width, height)
-    calculateDotPositions(width, height)
+    calculateDotPositions(width)
   }
 
-  private fun getDesiredHeight(): Int =
-    paddingTop + dotDiameter + paddingBottom
+  private fun getDesiredHeight(): Int = paddingTop + dotDiameter + paddingBottom
 
-  private fun getRequiredWidth(): Int =
-    pageCount * dotDiameter + (pageCount - 1) * gap
+  private fun getRequiredWidth(): Int = pageCount * dotDiameter + (pageCount - 1) * gap
 
-  private fun getDesiredWidth(): Int =
-    paddingLeft + getRequiredWidth() + paddingRight
+  private fun getDesiredWidth(): Int = paddingLeft + getRequiredWidth() + paddingRight
 
   override fun onViewAttachedToWindow(view: View) {
     attachedToWindow = true
@@ -276,15 +272,15 @@ class CustomPageIndicator @JvmOverloads constructor(
     dotRevealFraction: Float
   ): Path {
     unselectedDotPath.rewind()
-    if (joiningFraction == selectedFactor || joiningFraction == INVALID_FRACTION) {
-      if (dotRevealFraction == selectedFactor && !(page == currentPage && selectedDotInPosition)) {
+    if (joiningFraction == SELECTED_FACTOR || joiningFraction == INVALID_FRACTION) {
+      if (dotRevealFraction == SELECTED_FACTOR && !(page == currentPage && selectedDotInPosition)) {
         // case #1 – At rest
         unselectedDotPath.addCircle(dotCenterX!![page], dotCenterY, dotRadius, Path.Direction.CW)
       }
     }
     unselectedDotRightPath(centerX, joiningFraction, nextCenterX)
-    if (joiningFraction > smallUnSelectedFactor &&
-      joiningFraction < unselectedFactor &&
+    if (joiningFraction > SMALL_UNSELECTED_FACTOR &&
+      joiningFraction < UNSELECTED_FACTOR &&
       retreatingJoinX1 == INVALID_FRACTION
     ) {
       joinNeighbour(joiningFraction, centerX, nextCenterX)
@@ -300,10 +296,11 @@ class CustomPageIndicator @JvmOverloads constructor(
     // this is done separately so that we can have a single retreating path spanning
     // multiple dots and therefore animate it's movement smoothly
     if (dotRevealFraction > MINIMAL_REVEAL) {
-
       // case #6 – previously hidden dot revealing
       unselectedDotPath.addCircle(
-        centerX, dotCenterY, dotRevealFraction * dotRadius,
+        centerX,
+        dotCenterY,
+        dotRevealFraction * dotRadius,
         Path.Direction.CW
       )
     }
@@ -318,12 +315,12 @@ class CustomPageIndicator @JvmOverloads constructor(
     // case #3 – Joining neighbour, combined curved
     // adjust the fraction so that it goes from 0.3 -> 1 to produce a more realistic 'join'
     val adjustedFraction =
-      (joiningFraction - zeroPointTwoFractionConst) * onePointTwoFiveFractionConst
+      (joiningFraction - ZERO_POINT_TWO_FRACTION_CONST) * ONE_POINT_TWO_FIVE_FRACTION_CONST
     // start in the bottom left
     unselectedDotPath.moveTo(centerX, dotBottomY)
     // semi-circle to the top left
     rectF[centerX - dotRadius, dotTopY, centerX + dotRadius] = dotBottomY
-    unselectedDotPath.arcTo(rectF, startAngle, sweepAngle, true)
+    unselectedDotPath.arcTo(rectF, START_ANGLE, SWEEP_ANGLE, true)
     // bezier to the middle top of the join
     endX1 = centerX + dotRadius + gap / 2
     endY1 = dotCenterY - adjustedFraction * dotRadius
@@ -331,9 +328,7 @@ class CustomPageIndicator @JvmOverloads constructor(
     controlY1 = dotTopY
     controlX2 = endX1 - (1 - adjustedFraction) * dotRadius
     controlY2 = endY1
-    unselectedDotPath.cubicTo(
-      controlX1, controlY1, controlX2, controlY2, endX1, endY1
-    )
+    unselectedDotPath.cubicTo(controlX1, controlY1, controlX2, controlY2, endX1, endY1)
     // bezier to the top right of the join
     endX2 = nextCenterX
     endY2 = dotTopY
@@ -341,15 +336,13 @@ class CustomPageIndicator @JvmOverloads constructor(
     controlY1 = endY1
     controlX2 = endX1 + adjustedFraction * dotRadius
     controlY2 = dotTopY
-    unselectedDotPath.cubicTo(
-      controlX1, controlY1, controlX2, controlY2, endX2, endY2
-    )
+    unselectedDotPath.cubicTo(controlX1, controlY1, controlX2, controlY2, endX2, endY2)
     // semi-circle to the bottom right
     rectF[nextCenterX - dotRadius, dotTopY, nextCenterX + dotRadius] = dotBottomY
     unselectedDotPath.arcTo(
       rectF,
-      startAngle + sweepAngle,
-      sweepAngle,
+      START_ANGLE + SWEEP_ANGLE,
+      SWEEP_ANGLE,
       true
     )
     // bezier to the middle bottom of the join
@@ -359,9 +352,7 @@ class CustomPageIndicator @JvmOverloads constructor(
     controlY1 = dotBottomY
     controlX2 = endX1 + (1 - adjustedFraction) * dotRadius
     controlY2 = endY1
-    unselectedDotPath.cubicTo(
-      controlX1, controlY1, controlX2, controlY2, endX1, endY1
-    )
+    unselectedDotPath.cubicTo(controlX1, controlY1, controlX2, controlY2, endX1, endY1)
     // bezier back to the start point in the bottom left
     endX2 = centerX
     endY2 = dotBottomY
@@ -369,9 +360,7 @@ class CustomPageIndicator @JvmOverloads constructor(
     controlY1 = endY1
     controlX2 = endX1 - adjustedFraction * dotRadius
     controlY2 = endY2
-    unselectedDotPath.cubicTo(
-      controlX1, controlY1, controlX2, controlY2, endX2, endY2
-    )
+    unselectedDotPath.cubicTo(controlX1, controlY1, controlX2, controlY2, endX2, endY2)
   }
 
   private fun unselectedDotRightPath(
@@ -379,8 +368,8 @@ class CustomPageIndicator @JvmOverloads constructor(
     joiningFraction: Float,
     nextCenterX: Float
   ) {
-    if (joiningFraction > selectedFactor &&
-      joiningFraction <= smallUnSelectedFactor &&
+    if (joiningFraction > SELECTED_FACTOR &&
+      joiningFraction <= SMALL_UNSELECTED_FACTOR &&
       retreatingJoinX1 == INVALID_FRACTION
     ) {
       // case #2 – Joining neighbour, still separate
@@ -390,7 +379,7 @@ class CustomPageIndicator @JvmOverloads constructor(
       unselectedDotLeftPath.moveTo(centerX, dotBottomY)
       // semi circle to the top center
       rectF[centerX - dotRadius, dotTopY, centerX + dotRadius] = dotBottomY
-      unselectedDotLeftPath.arcTo(rectF, startAngle, sweepAngle, true)
+      unselectedDotLeftPath.arcTo(rectF, START_ANGLE, SWEEP_ANGLE, true)
       // cubic to the right middle
       endX1 = centerX + dotRadius + joiningFraction * gap
       endY1 = dotCenterY
@@ -398,9 +387,7 @@ class CustomPageIndicator @JvmOverloads constructor(
       controlY1 = dotTopY
       controlX2 = endX1
       controlY2 = endY1 - halfDotRadius
-      unselectedDotLeftPath.cubicTo(
-        controlX1, controlY1, controlX2, controlY2, endX1, endY1
-      )
+      unselectedDotLeftPath.cubicTo(controlX1, controlY1, controlX2, controlY2, endX1, endY1)
       // cubic back to the bottom center
       endX2 = centerX
       endY2 = dotBottomY
@@ -408,9 +395,7 @@ class CustomPageIndicator @JvmOverloads constructor(
       controlY1 = endY1 + halfDotRadius
       controlX2 = centerX + halfDotRadius
       controlY2 = dotBottomY
-      unselectedDotLeftPath.cubicTo(
-        controlX1, controlY1, controlX2, controlY2, endX2, endY2
-      )
+      unselectedDotLeftPath.cubicTo(controlX1, controlY1, controlX2, controlY2, endX2, endY2)
       unselectedDotPath.addPath(unselectedDotLeftPath)
       // now do the next dot to the right
       unselectedDotRightPath.rewind()
@@ -418,7 +403,7 @@ class CustomPageIndicator @JvmOverloads constructor(
       unselectedDotRightPath.moveTo(nextCenterX, dotBottomY)
       // semi circle to the top center
       rectF[nextCenterX - dotRadius, dotTopY, nextCenterX + dotRadius] = dotBottomY
-      unselectedDotRightPath.arcTo(rectF, startAngle, negativeSweepAngle, true)
+      unselectedDotRightPath.arcTo(rectF, START_ANGLE, NEGATIVE_SWEEP_ANGLE, true)
       // cubic to the left middle
       endX1 = nextCenterX - dotRadius - joiningFraction * gap
       endY1 = dotCenterY
@@ -426,9 +411,7 @@ class CustomPageIndicator @JvmOverloads constructor(
       controlY1 = dotTopY
       controlX2 = endX1
       controlY2 = endY1 - halfDotRadius
-      unselectedDotRightPath.cubicTo(
-        controlX1, controlY1, controlX2, controlY2, endX1, endY1
-      )
+      unselectedDotRightPath.cubicTo(controlX1, controlY1, controlX2, controlY2, endX1, endY1)
       // cubic back to the bottom center
       endX2 = nextCenterX
       endY2 = dotBottomY
@@ -436,9 +419,7 @@ class CustomPageIndicator @JvmOverloads constructor(
       controlY1 = endY1 + halfDotRadius
       controlX2 = endX2 - halfDotRadius
       controlY2 = dotBottomY
-      unselectedDotRightPath.cubicTo(
-        controlX1, controlY1, controlX2, controlY2, endX2, endY2
-      )
+      unselectedDotRightPath.cubicTo(controlX1, controlY1, controlX2, controlY2, endX2, endY2)
       unselectedDotPath.addPath(unselectedDotRightPath)
     }
   }
@@ -487,47 +468,53 @@ class CustomPageIndicator @JvmOverloads constructor(
     now: Int,
     steps: Int
   ): ValueAnimator {
-
     // create the actual move animator
     val moveSelected = ValueAnimator.ofFloat(selectedDotX, moveTo)
 
     // also set up a pending retreat anim – this starts when the move is 75% complete
-    retreatAnimation = PendingRetreatAnimator(
-      was, now, steps,
-      if (now > was)
-        RightwardStartPredicate(moveTo - (moveTo - selectedDotX) * thresholdMultiplier)
-      else LeftwardStartPredicate(
-        moveTo + (selectedDotX - moveTo) * thresholdMultiplier
+    retreatAnimation =
+      PendingRetreatAnimator(
+        was,
+        now,
+        steps,
+        if (now > was) {
+          RightwardStartPredicate(moveTo - (moveTo - selectedDotX) * THRESHOLD_MULTIPLIER)
+        } else {
+          LeftwardStartPredicate(moveTo + (selectedDotX - moveTo) * THRESHOLD_MULTIPLIER)
+        }
       )
-    )
-    retreatAnimation!!.addListener(object : AnimatorListenerAdapter() {
-      override fun onAnimationEnd(animation: Animator) {
-        resetState()
-        pageChanging = false
+    retreatAnimation!!.addListener(
+      object : AnimatorListenerAdapter() {
+        override fun onAnimationEnd(animation: Animator) {
+          resetState()
+          pageChanging = false
+        }
       }
-    })
+    )
     moveSelected.addUpdateListener { valueAnimator -> // todo avoid autoboxing
       selectedDotX = valueAnimator.animatedValue as Float
       retreatAnimation!!.startIfNecessary(selectedDotX)
       this@CustomPageIndicator.postInvalidateOnAnimation()
     }
-    moveSelected.addListener(object : AnimatorListenerAdapter() {
-      override fun onAnimationStart(animation: Animator) {
-        // set a flag so that we continue to draw the unselected dot in the target position
-        // until the selected dot has finished moving into place
-        selectedDotInPosition = false
-      }
+    moveSelected.addListener(
+      object : AnimatorListenerAdapter() {
+        override fun onAnimationStart(animation: Animator) {
+          // set a flag so that we continue to draw the unselected dot in the target position
+          // until the selected dot has finished moving into place
+          selectedDotInPosition = false
+        }
 
-      override fun onAnimationEnd(animation: Animator) {
-        // set a flag when anim finishes so that we don't draw both selected & unselected
-        // page dots
-        selectedDotInPosition = true
+        override fun onAnimationEnd(animation: Animator) {
+          // set a flag when anim finishes so that we don't draw both selected & unselected
+          // page dots
+          selectedDotInPosition = true
+        }
       }
-    })
+    )
     // slightly delay the start to give the joins a chance to run
     // unless dot isn't in position yet – then don't delay!
-    moveSelected.startDelay = if (selectedDotInPosition) animDuration / fourLong else zeroLong
-    moveSelected.duration = animDuration * threeLong / fourLong
+    moveSelected.startDelay = if (selectedDotInPosition) animDuration / FOUR_LONG else ZERO_LONG
+    moveSelected.duration = animDuration * THREE_LONG / FOUR_LONG
     moveSelected.interpolator = interpolator
     return moveSelected
   }
@@ -581,15 +568,30 @@ class CustomPageIndicator @JvmOverloads constructor(
       // work out the start/end values of the retreating join from the direction we're
       // travelling in.  Also look at the current selected dot position, i.e. we're moving on
       // before a prior anim has finished.
-      val initialX1 = if (now > was) min(
-        dotCenterX!![was],
-        selectedDotX
-      ) - dotRadius else dotCenterX!![now] - dotRadius
-      val finalX1 = if (now > was) dotCenterX!![now] - dotRadius else dotCenterX!![now] - dotRadius
-      val initialX2 = if (now > was) dotCenterX!![now] + dotRadius else max(
-        dotCenterX!![was], selectedDotX
-      ) + dotRadius
-      val finalX2 = if (now > was) dotCenterX!![now] + dotRadius else dotCenterX!![now] + dotRadius
+      val initialX1 =
+        if (now > was) {
+          min(dotCenterX!![was], selectedDotX) - dotRadius
+        } else {
+          dotCenterX!![now] - dotRadius
+        }
+      val finalX1 =
+        if (now > was) {
+          dotCenterX!![now] - dotRadius
+        } else {
+          dotCenterX!![now] - dotRadius
+        }
+      val initialX2 =
+        if (now > was) {
+          dotCenterX!![now] + dotRadius
+        } else {
+          max(dotCenterX!![was], selectedDotX) + dotRadius
+        }
+      val finalX2 =
+        if (now > was) {
+          dotCenterX!![now] + dotRadius
+        } else {
+          dotCenterX!![now] + dotRadius
+        }
       revealAnimations = arrayOfNulls(steps)
       // hold on to the indexes of the dots that will be hidden by the retreat so that
       // we can initialize their revealFraction's i.e. make sure they're hidden while the
@@ -599,10 +601,11 @@ class CustomPageIndicator @JvmOverloads constructor(
         setFloatValues(initialX1, finalX1)
         // create the reveal animations that will run when the retreat passes them
         for (i in 0 until steps) {
-          revealAnimations[i] = PendingRevealAnimator(
-            was + i,
-            RightwardStartPredicate(dotCenterX!![was + i])
-          )
+          revealAnimations[i] =
+            PendingRevealAnimator(
+              was + i,
+              RightwardStartPredicate(dotCenterX!![was + i])
+            )
           dotsToHide[i] = was + i
         }
         addUpdateListener { valueAnimator -> // todo avoid autoboxing
@@ -617,10 +620,11 @@ class CustomPageIndicator @JvmOverloads constructor(
         setFloatValues(initialX2, finalX2)
         // create the reveal animations that will run when the retreat passes them
         for (i in 0 until steps) {
-          revealAnimations[i] = PendingRevealAnimator(
-            was - i,
-            LeftwardStartPredicate(dotCenterX!![was - i])
-          )
+          revealAnimations[i] =
+            PendingRevealAnimator(
+              was - i,
+              LeftwardStartPredicate(dotCenterX!![was - i])
+            )
           dotsToHide[i] = was - i
         }
         addUpdateListener { valueAnimator -> // todo avoid autoboxing
@@ -632,25 +636,27 @@ class CustomPageIndicator @JvmOverloads constructor(
           }
         }
       }
-      addListener(object : AnimatorListenerAdapter() {
-        override fun onAnimationStart(animation: Animator) {
-          cancelJoiningAnimations()
-          clearJoiningFractions()
-          // we need to set this so that the dots are hidden until the reveal anim runs
-          for (dot in dotsToHide) {
-            setDotRevealFraction(dot, MINIMAL_REVEAL)
+      addListener(
+        object : AnimatorListenerAdapter() {
+          override fun onAnimationStart(animation: Animator) {
+            cancelJoiningAnimations()
+            clearJoiningFractions()
+            // we need to set this so that the dots are hidden until the reveal anim runs
+            for (dot in dotsToHide) {
+              setDotRevealFraction(dot, MINIMAL_REVEAL)
+            }
+            retreatingJoinX1 = initialX1
+            retreatingJoinX2 = initialX2
+            this@CustomPageIndicator.postInvalidateOnAnimation()
           }
-          retreatingJoinX1 = initialX1
-          retreatingJoinX2 = initialX2
-          this@CustomPageIndicator.postInvalidateOnAnimation()
-        }
 
-        override fun onAnimationEnd(animation: Animator) {
-          retreatingJoinX1 = INVALID_FRACTION
-          retreatingJoinX2 = INVALID_FRACTION
-          this@CustomPageIndicator.postInvalidateOnAnimation()
+          override fun onAnimationEnd(animation: Animator) {
+            retreatingJoinX1 = INVALID_FRACTION
+            retreatingJoinX2 = INVALID_FRACTION
+            this@CustomPageIndicator.postInvalidateOnAnimation()
+          }
         }
-      })
+      )
     }
   }
 
@@ -672,12 +678,14 @@ class CustomPageIndicator @JvmOverloads constructor(
           valueAnimator.animatedValue as Float
         )
       }
-      addListener(object : AnimatorListenerAdapter() {
-        override fun onAnimationEnd(animation: Animator) {
-          setDotRevealFraction(this@PendingRevealAnimator.dot, 0f)
-          this@CustomPageIndicator.postInvalidateOnAnimation()
+      addListener(
+        object : AnimatorListenerAdapter() {
+          override fun onAnimationEnd(animation: Animator) {
+            setDotRevealFraction(this@PendingRevealAnimator.dot, 0f)
+            this@CustomPageIndicator.postInvalidateOnAnimation()
+          }
         }
-      })
+      )
     }
   }
 
@@ -750,50 +758,54 @@ class CustomPageIndicator @JvmOverloads constructor(
     // constants
     private const val INVALID_FRACTION = -1f
     private const val MINIMAL_REVEAL = 0.00001f
-    private const val zeroPointTwoFractionConst: Float = 0.2f
-    private const val onePointTwoFiveFractionConst: Float = 1.25f
-    private const val unselectedFactor: Float = 1f
-    private const val smallUnSelectedFactor: Float = 0.5f
-    private const val selectedFactor: Float = 0f
-    private const val threeLong: Long = 3L
-    private const val zeroLong: Long = 0L
-    private const val fourLong: Long = 4L
-    private const val thresholdMultiplier: Float = 0.25f
-    private const val negativeSweepAngle: Float = -180f
-    private const val sweepAngle: Float = 180f
-    private const val startAngle: Float = 90f
+    private const val ZERO_POINT_TWO_FRACTION_CONST: Float = 0.2f
+    private const val ONE_POINT_TWO_FIVE_FRACTION_CONST: Float = 1.25f
+    private const val UNSELECTED_FACTOR: Float = 1f
+    private const val SMALL_UNSELECTED_FACTOR: Float = 0.5f
+    private const val SELECTED_FACTOR: Float = 0f
+    private const val THREE_LONG: Long = 3L
+    private const val ZERO_LONG: Long = 0L
+    private const val FOUR_LONG: Long = 4L
+    private const val THRESHOLD_MULTIPLIER: Float = 0.25f
+    private const val NEGATIVE_SWEEP_ANGLE: Float = -180f
+    private const val SWEEP_ANGLE: Float = 180f
+    private const val START_ANGLE: Float = 90f
   }
 
   init {
     val density = context.resources.displayMetrics.density.toInt()
 
     // Load attributes
-    val a = getContext().obtainStyledAttributes(
-      attrs, R.styleable.CustomPageIndicator, defStyle, 0
-    )
-    dotDiameter = a.getDimensionPixelSize(
-      R.styleable.CustomPageIndicator_ipi_dotDiameter,
-      DEFAULT_DOT_SIZE * density
-    )
+    val a =
+      getContext().obtainStyledAttributes(attrs, R.styleable.CustomPageIndicator, defStyle, 0)
+    dotDiameter =
+      a.getDimensionPixelSize(
+        R.styleable.CustomPageIndicator_ipi_dotDiameter,
+        DEFAULT_DOT_SIZE * density
+      )
     dotRadius = (dotDiameter / 2).toFloat()
     halfDotRadius = dotRadius / 2
-    gap = a.getDimensionPixelSize(
-      R.styleable.CustomPageIndicator_ipi_dotGap,
-      DEFAULT_GAP * density
-    )
-    animDuration = a.getInteger(
-      R.styleable.CustomPageIndicator_ipi_animationDuration,
-      DEFAULT_ANIM_DURATION
-    ).toLong()
+    gap =
+      a.getDimensionPixelSize(
+        R.styleable.CustomPageIndicator_ipi_dotGap,
+        DEFAULT_GAP * density
+      )
+    animDuration =
+      a.getInteger(
+        R.styleable.CustomPageIndicator_ipi_animationDuration,
+        DEFAULT_ANIM_DURATION
+      ).toLong()
     animHalfDuration = animDuration / 2
-    unselectedColour = a.getColor(
-      R.styleable.CustomPageIndicator_ipi_pageIndicatorColor,
-      DEFAULT_UNSELECTED_COLOUR
-    )
-    selectedColour = a.getColor(
-      R.styleable.CustomPageIndicator_ipi_currentPageIndicatorColor,
-      DEFAULT_SELECTED_COLOUR
-    )
+    unselectedColour =
+      a.getColor(
+        R.styleable.CustomPageIndicator_ipi_pageIndicatorColor,
+        DEFAULT_UNSELECTED_COLOUR
+      )
+    selectedColour =
+      a.getColor(
+        R.styleable.CustomPageIndicator_ipi_currentPageIndicatorColor,
+        DEFAULT_SELECTED_COLOUR
+      )
     a.recycle()
     unselectedPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     unselectedPaint.color = unselectedColour

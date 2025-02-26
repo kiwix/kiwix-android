@@ -24,9 +24,10 @@ import org.kiwix.kiwixmobile.core.zim_manager.Language
 import javax.inject.Inject
 
 class DefaultLanguageProvider @Inject constructor(private val context: Context) {
-  fun provide() = Language(
-    context.locale.isO3Language,
-    true,
-    1
-  )
+  fun provide() =
+    Language(
+      context.locale.isO3Language,
+      true,
+      1
+    )
 }

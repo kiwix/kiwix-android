@@ -21,7 +21,6 @@ package eu.mhutti1.utils.storage
 import java.io.File
 
 data class StorageDevice(val file: File, val isInternal: Boolean) {
-
   constructor(path: String, internal: Boolean) : this(File(path), internal)
 
   val name: String

@@ -57,9 +57,10 @@ class DarkModeConfigTest {
 
   @Test
   fun `should return true when dark mode is SYSTEM and uiMode is ON`() {
-    val configuration = Configuration().apply {
-      uiMode = Configuration.UI_MODE_NIGHT_YES
-    }
+    val configuration =
+      Configuration().apply {
+        uiMode = Configuration.UI_MODE_NIGHT_YES
+      }
     every { context.resources } returns mockk(relaxed = true)
     every { context.resources.configuration } returns configuration
     every { sharedPreferenceUtil.darkMode } returns DarkModeConfig.Mode.SYSTEM
@@ -69,9 +70,10 @@ class DarkModeConfigTest {
 
   @Test
   fun `should return false when dark mode is SYSTEM and uiMode is OFF`() {
-    val configuration = Configuration().apply {
-      uiMode = Configuration.UI_MODE_NIGHT_NO
-    }
+    val configuration =
+      Configuration().apply {
+        uiMode = Configuration.UI_MODE_NIGHT_NO
+      }
     every { context.resources } returns mockk(relaxed = true)
     every { context.resources.configuration } returns configuration
     every { sharedPreferenceUtil.darkMode } returns DarkModeConfig.Mode.SYSTEM
@@ -81,9 +83,10 @@ class DarkModeConfigTest {
 
   @Test
   fun `should return false when dark mode is SYSTEM and uiMode is NOT_SET`() {
-    val configuration = Configuration().apply {
-      uiMode = Configuration.UI_MODE_NIGHT_UNDEFINED
-    }
+    val configuration =
+      Configuration().apply {
+        uiMode = Configuration.UI_MODE_NIGHT_UNDEFINED
+      }
     every { context.resources } returns mockk(relaxed = true)
     every { context.resources.configuration } returns configuration
     every { sharedPreferenceUtil.darkMode } returns DarkModeConfig.Mode.SYSTEM

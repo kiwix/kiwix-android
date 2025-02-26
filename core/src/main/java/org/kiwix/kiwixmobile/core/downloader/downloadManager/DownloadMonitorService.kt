@@ -222,6 +222,7 @@ class DownloadMonitorService : Service() {
           downloadRoomDao.getEntityForDownloadId(download.id.toLong())?.let {
             showDownloadCompletedNotification(download)
             // to move these downloads in NewBookDao.
+            @Suppress("IgnoredReturnValue")
             downloadRoomDao.downloads().blockingFirst()
           }
         }
@@ -291,10 +292,11 @@ class DownloadMonitorService : Service() {
   }
 
   private fun getPendingIntentForDownloadedNotification(download: Download): PendingIntent {
-    val internal = Intents.internal(CoreMainActivity::class.java).apply {
-      addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-      putExtra(DOWNLOAD_NOTIFICATION_TITLE, getDownloadNotificationTitle(download))
-    }
+    val internal =
+      Intents.internal(CoreMainActivity::class.java).apply {
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        putExtra(DOWNLOAD_NOTIFICATION_TITLE, getDownloadNotificationTitle(download))
+      }
     return PendingIntent.getActivity(
       this,
       download.id,
@@ -325,8 +327,9 @@ class DownloadMonitorService : Service() {
   @SuppressLint("RestrictedApi")
   private fun getNotificationBuilder(notificationId: Int): NotificationCompat.Builder {
     synchronized(downloadNotificationsBuilderMap) {
-      val notificationBuilder = downloadNotificationsBuilderMap[notificationId]
-        ?: NotificationCompat.Builder(this, DOWNLOAD_NOTIFICATION_CHANNEL_ID)
+      val notificationBuilder =
+        downloadNotificationsBuilderMap[notificationId]
+          ?: NotificationCompat.Builder(this, DOWNLOAD_NOTIFICATION_CHANNEL_ID)
       downloadNotificationsBuilderMap[notificationId] = notificationBuilder
       notificationBuilder
         .setGroup("$notificationId")

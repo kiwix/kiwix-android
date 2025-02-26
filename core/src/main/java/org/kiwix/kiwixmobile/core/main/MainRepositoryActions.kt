@@ -44,13 +44,15 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
   private var getWebViewHistoryDisposable: Disposable? = null
 
   fun saveHistory(history: HistoryItem) {
-    saveHistoryDisposable = dataSource.saveHistory(history)
-      .subscribe({}, { e -> Log.e(TAG, "Unable to save history", e) })
+    saveHistoryDisposable =
+      dataSource.saveHistory(history)
+        .subscribe({}, { e -> Log.e(TAG, "Unable to save history", e) })
   }
 
   fun saveBookmark(bookmark: LibkiwixBookmarkItem) {
-    saveBookmarkDisposable = dataSource.saveBookmark(bookmark)
-      .subscribe({}, { e -> Log.e(TAG, "Unable to save bookmark", e) })
+    saveBookmarkDisposable =
+      dataSource.saveBookmark(bookmark)
+        .subscribe({}, { e -> Log.e(TAG, "Unable to save bookmark", e) })
   }
 
   fun deleteBookmark(bookId: String, bookmarkUrl: String) {
@@ -60,18 +62,21 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
   }
 
   fun saveNote(note: NoteListItem) {
-    saveNoteDisposable = dataSource.saveNote(note)
-      .subscribe({}, { e -> Log.e(TAG, "Unable to save note", e) })
+    saveNoteDisposable =
+      dataSource.saveNote(note)
+        .subscribe({}, { e -> Log.e(TAG, "Unable to save note", e) })
   }
 
   fun deleteNote(noteTitle: String) {
-    deleteNoteDisposable = dataSource.deleteNote(noteTitle)
-      .subscribe({}, { e -> Log.e(TAG, "Unable to delete note", e) })
+    deleteNoteDisposable =
+      dataSource.deleteNote(noteTitle)
+        .subscribe({}, { e -> Log.e(TAG, "Unable to delete note", e) })
   }
 
   fun saveBook(book: BookOnDisk) {
-    saveBookDisposable = dataSource.saveBook(book)
-      .subscribe({}, { e -> Log.e(TAG, "Unable to save book", e) })
+    saveBookDisposable =
+      dataSource.saveBook(book)
+        .subscribe({}, { e -> Log.e(TAG, "Unable to save book", e) })
   }
 
   suspend fun saveWebViewPageHistory(webViewHistoryEntityList: List<WebViewHistoryEntity>) {

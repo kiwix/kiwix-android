@@ -22,22 +22,27 @@ import java.io.File
 import javax.inject.Inject
 
 class MountPointProducer @Inject constructor() {
-  fun produce() = File("proc/mounts")
-    .takeIf(File::exists)
-    ?.readLines()
-    ?.map { MountInfo(it.split(" ")) }
-    ?: emptyList()
+  fun produce() =
+    File("proc/mounts")
+      .takeIf(File::exists)
+      ?.readLines()
+      ?.map { MountInfo(it.split(" ")) }
+      .orEmpty()
 }
 
 data class MountInfo(val device: String, val mountPoint: String, val fileSystem: String) {
   constructor(split: List<String>) : this(split[0], split[1], split[2])
 
-  fun matchCount(storage: String) = storage.split("/")
-    .zip(mountPoint.split("/"))
-    .fold(0, { acc, pair ->
-      if (pair.first == pair.second) acc + 1
-      else acc
-    })
+  fun matchCount(storage: String) =
+    storage.split("/")
+      .zip(mountPoint.split("/"))
+      .fold(0, { acc, pair ->
+        if (pair.first == pair.second) {
+          acc + 1
+        } else {
+          acc
+        }
+      })
 
   val isVirtual = VIRTUAL_FILE_SYSTEMS.contains(fileSystem)
   val supports4GBFiles = SUPPORTS_4GB_FILE_SYSTEMS.contains(fileSystem)

@@ -30,7 +30,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import java.io.File
 
 internal class SetPreferredStorageWithMostSpaceTest {
-
   @Test
   fun `invokeWith sets the storage with the most space as preferred`() {
     val storageCalculator = mockk<StorageCalculator>()
@@ -39,9 +38,9 @@ internal class SetPreferredStorageWithMostSpaceTest {
     val directoryWithMoreStorage = mockk<File>()
     val directoryWithLessStorage = mockk<File>()
     val sut = SetPreferredStorageWithMostSpace(storageCalculator, sharedPreferenceUtil)
-    every { activity.externalMediaDirs } returns arrayOf(
-      directoryWithMoreStorage, null, directoryWithLessStorage
-    )
+    every {
+      activity.externalMediaDirs
+    } returns arrayOf(directoryWithMoreStorage, null, directoryWithLessStorage)
     coEvery { storageCalculator.availableBytes(directoryWithMoreStorage) } returns 1
     coEvery { storageCalculator.availableBytes(directoryWithLessStorage) } returns 0
     val expectedStorage = "expectedStorage"
