@@ -140,6 +140,7 @@
   <string name="do_not_ask_anymore">Net méi froen</string>
   <string name="your_languages">Erausgesicht Sproochen:</string>
   <string name="other_languages">Aner Sproochen:</string>
+  <string name="downloading">Eroflueden:</string>
   <string name="crash_checkbox_language">Är Sproochastellungen</string>
   <string name="crash_checkbox_zimfiles">Eng Lëscht vun Äre ZIM-Fichieren</string>
   <string name="crash_checkbox_device">Detailer vum Apparat</string>

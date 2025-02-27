@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* AnnaTheProgrammer777
 * Susann Schweden
 -->
 <resources>
   <string name="retry">Erneut versuchen</string>
-  <string name="invalid_installation" fuzzy="true">Ungültige Installation. Bitte ZIM herunterladen.\nStellen Sie sicher, das Wi-Fi an ist und sie genügend Speicherplatz haben</string>
+  <string name="invalid_installation">Ungültige Installation. Bitte ZIM herunterladen.\nStellen Sie sicher, das Wi-Fi an ist und sie genügend Speicherplatz haben</string>
 </resources>
