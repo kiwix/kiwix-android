@@ -181,6 +181,28 @@ class FetchDownloadNotificationManager @Inject constructor(
       else -> notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
     }
     notificationCustomisation(downloadNotification, notificationBuilder, context)
+    // Remove the already shown notification if any, because fetch now pushes a
+    // download complete notification.
+    removeNotificationIfAlreadyShowingForCompletedDownload(downloadNotification)
+  }
+
+  /**
+   * We are adding 33 to the groupId (which is the download ID) because the download
+   * complete notification is shown by DownloadMonitorService. If the application resumes
+   * just before the download completes, Fetch in the application might also push a
+   * download complete notification.
+   *
+   * To avoid duplicate notifications, we clear the previous notification if it is already shown.
+   * See #4237 for more information.
+   *
+   * @see DownloadMonitorService.showDownloadCompletedNotification
+   */
+  private fun removeNotificationIfAlreadyShowingForCompletedDownload(
+    downloadNotification: DownloadNotification
+  ) {
+    if (downloadNotification.isCompleted) {
+      downloadNotificationManager.cancel(downloadNotification.groupId + THIRTY_TREE)
+    }
   }
 
   @SuppressLint("UnspecifiedImmutableFlag")
