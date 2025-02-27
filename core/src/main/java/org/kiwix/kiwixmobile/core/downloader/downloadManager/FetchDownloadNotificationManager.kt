@@ -58,10 +58,7 @@ import com.tonyodev.fetch2.R.drawable
 import com.tonyodev.fetch2.R.string
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.Intents
@@ -212,14 +209,11 @@ class FetchDownloadNotificationManager @Inject constructor(
 
   fun showDownloadPauseNotification(
     fetch: Fetch,
-    download: Download,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    download: Download
   ) {
-    CoroutineScope(dispatcher).launch {
-      val notificationBuilder = getNotificationBuilder(download.id, download.id)
-      val cancelNotification = getCancelNotification(fetch, download, notificationBuilder)
-      downloadNotificationManager.notify(download.id, cancelNotification)
-    }
+    val notificationBuilder = getNotificationBuilder(download.id, download.id)
+    val cancelNotification = getCancelNotification(fetch, download, notificationBuilder)
+    downloadNotificationManager.notify(download.id, cancelNotification)
   }
 
   @Suppress("InjectDispatcher")
