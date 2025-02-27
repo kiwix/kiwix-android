@@ -111,6 +111,20 @@ class FetchDownloadNotificationManager @Inject constructor(
     }
   }
 
+  override fun getSubtitleText(
+    context: Context,
+    downloadNotification: DownloadNotification
+  ): String {
+    return when {
+      downloadNotification.isCompleted -> context.getString(R.string.fetch_notification_download_complete)
+      downloadNotification.isFailed -> context.getString(R.string.fetch_notification_download_failed)
+      downloadNotification.isPaused -> context.getString(R.string.fetch_notification_download_paused)
+      downloadNotification.isQueued -> context.getString(R.string.fetch_notification_download_resuming)
+      downloadNotification.etaInMilliSeconds < 0 -> context.getString(R.string.fetch_notification_download_downloading)
+      else -> super.getSubtitleText(context, downloadNotification)
+    }
+  }
+
   @RequiresApi(Build.VERSION_CODES.O)
   private fun createChannel(channelId: String, context: Context) =
     NotificationChannel(
