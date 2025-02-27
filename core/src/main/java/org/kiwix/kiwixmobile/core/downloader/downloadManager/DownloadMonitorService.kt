@@ -48,6 +48,8 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import javax.inject.Inject
 
+const val THIRTY_TREE = 33
+
 class DownloadMonitorService : Service() {
   private val updater = PublishSubject.create<() -> Unit>()
   private var updaterDisposable: Disposable? = null
@@ -265,7 +267,6 @@ class DownloadMonitorService : Service() {
     }
   }
 
-  @Suppress("MagicNumber")
   private fun showDownloadCompletedNotification(download: Download) {
     downloadNotificationChannel()
     val notificationBuilder = getNotificationBuilder(download.id)
@@ -287,7 +288,10 @@ class DownloadMonitorService : Service() {
     // notification. If we use the same ID, changing the foreground notification for another
     // ongoing download cancels the previous notification for that id, preventing the download
     // complete notification from being displayed.
-    val downloadCompleteNotificationId = download.id + 33
+    val downloadCompleteNotificationId = download.id + THIRTY_TREE
+    // Cancel the complete download notification if already shown due to the application's
+    // lifecycle fetch. See #4237 for more details.
+    cancelNotificationForId(download.id - THIRTY_TREE)
     notificationManager.notify(downloadCompleteNotificationId, notificationBuilder.build())
   }
 
