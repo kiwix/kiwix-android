@@ -58,10 +58,7 @@ import com.tonyodev.fetch2.R.drawable
 import com.tonyodev.fetch2.R.string
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.Intents
@@ -198,6 +195,28 @@ class FetchDownloadNotificationManager @Inject constructor(
       else -> notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
     }
     notificationCustomisation(downloadNotification, notificationBuilder, context)
+    // Remove the already shown notification if any, because fetch now pushes a
+    // download complete notification.
+    removeNotificationIfAlreadyShowingForCompletedDownload(downloadNotification)
+  }
+
+  /**
+   * We are adding 33 to the groupId (which is the download ID) because the download
+   * complete notification is shown by DownloadMonitorService. If the application resumes
+   * just before the download completes, Fetch in the application might also push a
+   * download complete notification.
+   *
+   * To avoid duplicate notifications, we clear the previous notification if it is already shown.
+   * See #4237 for more information.
+   *
+   * @see DownloadMonitorService.showDownloadCompletedNotification
+   */
+  private fun removeNotificationIfAlreadyShowingForCompletedDownload(
+    downloadNotification: DownloadNotification
+  ) {
+    if (downloadNotification.isCompleted) {
+      downloadNotificationManager.cancel(downloadNotification.groupId + THIRTY_TREE)
+    }
   }
 
   @SuppressLint("UnspecifiedImmutableFlag")
@@ -226,14 +245,11 @@ class FetchDownloadNotificationManager @Inject constructor(
 
   fun showDownloadPauseNotification(
     fetch: Fetch,
-    download: Download,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    download: Download
   ) {
-    CoroutineScope(dispatcher).launch {
-      val notificationBuilder = getNotificationBuilder(download.id, download.id)
-      val cancelNotification = getCancelNotification(fetch, download, notificationBuilder)
-      downloadNotificationManager.notify(download.id, cancelNotification)
-    }
+    val notificationBuilder = getNotificationBuilder(download.id, download.id)
+    val cancelNotification = getCancelNotification(fetch, download, notificationBuilder)
+    downloadNotificationManager.notify(download.id, cancelNotification)
   }
 
   @Suppress("InjectDispatcher")
