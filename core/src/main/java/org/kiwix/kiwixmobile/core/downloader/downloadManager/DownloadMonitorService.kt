@@ -33,7 +33,6 @@ import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.FetchListener
-import com.tonyodev.fetch2.R
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import com.tonyodev.fetch2core.DownloadBlock
@@ -47,6 +46,8 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import javax.inject.Inject
+
+const val THIRTY_TREE = 33
 
 class DownloadMonitorService : Service() {
   private val updater = PublishSubject.create<() -> Unit>()
@@ -265,7 +266,6 @@ class DownloadMonitorService : Service() {
     }
   }
 
-  @Suppress("MagicNumber")
   private fun showDownloadCompletedNotification(download: Download) {
     downloadNotificationChannel()
     val notificationBuilder = getNotificationBuilder(download.id)
@@ -275,7 +275,7 @@ class DownloadMonitorService : Service() {
     notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
       .setSmallIcon(android.R.drawable.stat_sys_download_done)
       .setContentTitle(notificationTitle)
-      .setContentText(getString(R.string.fetch_notification_download_complete))
+      .setContentText(getString(string.complete))
       .setOngoing(false)
       .setGroup(download.id.toString())
       .setGroupSummary(false)
@@ -287,7 +287,10 @@ class DownloadMonitorService : Service() {
     // notification. If we use the same ID, changing the foreground notification for another
     // ongoing download cancels the previous notification for that id, preventing the download
     // complete notification from being displayed.
-    val downloadCompleteNotificationId = download.id + 33
+    val downloadCompleteNotificationId = download.id + THIRTY_TREE
+    // Cancel the complete download notification if already shown due to the application's
+    // lifecycle fetch. See #4237 for more details.
+    cancelNotificationForId(download.id - THIRTY_TREE)
     notificationManager.notify(downloadCompleteNotificationId, notificationBuilder.build())
   }
 

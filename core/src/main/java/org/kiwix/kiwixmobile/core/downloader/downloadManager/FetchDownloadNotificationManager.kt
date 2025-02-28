@@ -58,10 +58,7 @@ import com.tonyodev.fetch2.R.drawable
 import com.tonyodev.fetch2.R.string
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.Intents
@@ -116,11 +113,11 @@ class FetchDownloadNotificationManager @Inject constructor(
     downloadNotification: DownloadNotification
   ): String {
     return when {
-      downloadNotification.isCompleted -> context.getString(R.string.fetch_notification_download_complete)
-      downloadNotification.isFailed -> context.getString(R.string.fetch_notification_download_failed)
-      downloadNotification.isPaused -> context.getString(R.string.fetch_notification_download_paused)
-      downloadNotification.isQueued -> context.getString(R.string.fetch_notification_download_resuming)
-      downloadNotification.etaInMilliSeconds < 0 -> context.getString(R.string.fetch_notification_download_downloading)
+      downloadNotification.isCompleted -> context.getString(R.string.complete)
+      downloadNotification.isFailed -> context.getString(R.string.download_failed_state)
+      downloadNotification.isPaused -> context.getString(R.string.paused_state)
+      downloadNotification.isQueued -> context.getString(R.string.resuming_state)
+      downloadNotification.etaInMilliSeconds < 0 -> context.getString(R.string.downloading_state)
       else -> super.getSubtitleText(context, downloadNotification)
     }
   }
@@ -198,6 +195,28 @@ class FetchDownloadNotificationManager @Inject constructor(
       else -> notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
     }
     notificationCustomisation(downloadNotification, notificationBuilder, context)
+    // Remove the already shown notification if any, because fetch now pushes a
+    // download complete notification.
+    removeNotificationIfAlreadyShowingForCompletedDownload(downloadNotification)
+  }
+
+  /**
+   * We are adding 33 to the groupId (which is the download ID) because the download
+   * complete notification is shown by DownloadMonitorService. If the application resumes
+   * just before the download completes, Fetch in the application might also push a
+   * download complete notification.
+   *
+   * To avoid duplicate notifications, we clear the previous notification if it is already shown.
+   * See #4237 for more information.
+   *
+   * @see DownloadMonitorService.showDownloadCompletedNotification
+   */
+  private fun removeNotificationIfAlreadyShowingForCompletedDownload(
+    downloadNotification: DownloadNotification
+  ) {
+    if (downloadNotification.isCompleted) {
+      downloadNotificationManager.cancel(downloadNotification.groupId + THIRTY_TREE)
+    }
   }
 
   @SuppressLint("UnspecifiedImmutableFlag")
@@ -226,14 +245,11 @@ class FetchDownloadNotificationManager @Inject constructor(
 
   fun showDownloadPauseNotification(
     fetch: Fetch,
-    download: Download,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    download: Download
   ) {
-    CoroutineScope(dispatcher).launch {
-      val notificationBuilder = getNotificationBuilder(download.id, download.id)
-      val cancelNotification = getCancelNotification(fetch, download, notificationBuilder)
-      downloadNotificationManager.notify(download.id, cancelNotification)
-    }
+    val notificationBuilder = getNotificationBuilder(download.id, download.id)
+    val cancelNotification = getCancelNotification(fetch, download, notificationBuilder)
+    downloadNotificationManager.notify(download.id, cancelNotification)
   }
 
   @Suppress("InjectDispatcher")
@@ -251,7 +267,7 @@ class FetchDownloadNotificationManager @Inject constructor(
     return notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
       .setSmallIcon(android.R.drawable.stat_sys_download_done)
       .setContentTitle(notificationTitle)
-      .setContentText(context.getString(string.fetch_notification_download_paused))
+      .setContentText(context.getString(R.string.paused_state))
       // Set the ongoing true so that could not cancel the pause notification.
       // However, on Android 14 and above user can cancel the notification by swipe right so we
       // can't control that see https://developer.android.com/about/versions/14/behavior-changes-all#non-dismissable-notifications

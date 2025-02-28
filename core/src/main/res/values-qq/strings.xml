@@ -329,9 +329,7 @@
   <string name="go_to_settings_label">This is a text label, by clicking on this text user navigates to the app settings on their device.</string>
   <string name="request_notification_permission_message">This message appears in the “Android Dialog” as an information message. When the user tries to run any functionality which requires notification access but the app does not have that access, then this message shows to the user to give notification access.</string>
   <string name="empty_string">{{Ignored}}</string>
-  <string name="fetch_notification_download_complete">This appears in the "Android Notification" as a notification description message indicating the download is complete.</string>
-  <string name="fetch_notification_download_failed">This appears in the "Android Notification" as a notification description message indicating the download failed.</string>
-  <string name="fetch_notification_download_paused">This appears in the "Android Notification" as a notification description message indicating the download has been paused.</string>
-  <string name="fetch_notification_download_resuming">This appears in the "Android Notification" as a notification description message indicating a paused download is resuming.</string>
-  <string name="fetch_notification_download_downloading">This appears in the "Android Notification" as a notification description message indicating that a download is in progress.</string>
+  <string name="resuming_state">This text is shown to inform the user that the current state of download is resuming.</string>
+  <string name="downloading_state">This text is shown to inform the user that the current state of download is actively in progress.</string>
+  <string name="download_failed_state">This text is shown to inform the user when a download has been failed.</string>
 </resources>
