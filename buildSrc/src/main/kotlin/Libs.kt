@@ -366,4 +366,43 @@ object Libs {
    */
   const val fetch: String = "com.github.tonyofrancis.Fetch:fetch2:" + Versions.fetch
   const val fetchOkhttp: String = "com.github.tonyofrancis.Fetch:fetch2okhttp:" + Versions.fetch
+
+  /**
+   * https://developer.android.com/reference/kotlin/androidx/compose/material3
+   */
+  const val ANDROIDX_COMPOSE_MATERIAL3: String =
+    "androidx.compose.material3:material3-android:" + Versions.ANDROIDX_COMPOSE_MATERIAL3_VERSION
+
+  /**
+   * https://developer.android.com/reference/kotlin/androidx/activity/compose
+   */
+  const val ANDROIDX_ACTIVITY_COMPOSE: String =
+    "androidx.activity:activity-compose:" + Versions.ANDROIDX_ACTIVITY_COMPOSE_VERSION
+
+  /**
+   * https://developer.android.com/develop/ui/compose/documentation
+   */
+  const val ANDROIDX_COMPOSE_UI: String =
+    "androidx.compose.ui:ui:" + Versions.ANDROIDX_COMPOSE_UI_VERSION
+
+  const val ANDROIDX_COMPOSE_BOM: String =
+    "androidx.compose:compose-bom:" + Versions.ANDROIDX_COMPOSE_BOM_VERSION
+
+  const val ANDROIDX_COMPOSE_TOOLING_PREVIEW: String =
+    "androidx.compose.ui:ui-tooling-preview"
+
+  const val ANDROIDX_COMPOSE_RUNTIME_LIVEDATA: String =
+    "androidx.compose.runtime:runtime-livedata"
+
+  const val ANDROIDX_COMPOSE_RUNTIME_RXJAVA2: String =
+    "androidx.compose.runtime:runtime-rxjava2"
+
+  /**
+   * testing libraries for compose
+   */
+  const val ANDROIDX_COMPOSE_UI_TEST_JUNIT4: String =
+    "androidx.compose.ui:ui-test-junit4"
+
+  const val ANDROIDX_COMPOSE_UI_TOOLING: String =
+    "androidx.compose.ui:ui-tooling"
 }

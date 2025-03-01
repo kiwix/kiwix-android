@@ -35,6 +35,7 @@ import org.jlleitschuh.gradle.ktlint.KtlintExtension
 class AllProjectConfigurer {
 
   fun applyPlugins(target: Project) {
+    target.plugins.apply("org.jetbrains.kotlin.plugin.compose")
     target.plugins.apply("kotlin-android")
     target.plugins.apply("kotlin-kapt")
     target.plugins.apply("com.google.devtools.ksp")
@@ -90,6 +91,11 @@ class AllProjectConfigurer {
          * enabling this attribute will generate the `BuildConfig` file.
          */
         buildConfig = true
+        compose = true
+      }
+
+      composeOptions {
+        kotlinCompilerExtensionVersion = Versions.KOTLIN_COMPILER_EXTENSION_VERSION
       }
 
       testOptions {
@@ -235,6 +241,14 @@ class AllProjectConfigurer {
       implementation(Libs.fetch)
       implementation(Libs.fetchOkhttp)
       implementation(Libs.androidx_activity)
+
+      // compose
+      implementation(Libs.ANDROIDX_COMPOSE_MATERIAL3)
+      implementation(Libs.ANDROIDX_ACTIVITY_COMPOSE)
+      implementation(Libs.ANDROIDX_COMPOSE_UI)
+      implementation(Libs.ANDROIDX_COMPOSE_UI_TOOLING)
+      implementation(Libs.ANDROIDX_COMPOSE_RUNTIME_LIVEDATA)
+      implementation(Libs.ANDROIDX_COMPOSE_RUNTIME_RXJAVA2)
     }
   }
 }
