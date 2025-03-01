@@ -29,9 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BUTTON_DEFAULT_ELEVATION
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BUTTON_DEFAULT_PADDING
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BUTTON_PRESSED_ELEVATION
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BUTTON_ROUND_CORNER_SHAPE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DEFAULT_LETTER_SPACING
 
 /**
  * This is our custom composable button according to our theme.
@@ -47,13 +50,16 @@ fun ComposeButton(
       containerColor = colorResource(id = R.color.denim_blue800),
       contentColor = Color.White
     ),
-    modifier = Modifier.padding(4.dp),
-    shape = RoundedCornerShape(5.dp),
-    elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp, pressedElevation = 4.dp)
+    modifier = Modifier.padding(BUTTON_DEFAULT_PADDING),
+    shape = RoundedCornerShape(BUTTON_ROUND_CORNER_SHAPE),
+    elevation = ButtonDefaults.buttonElevation(
+      defaultElevation = BUTTON_DEFAULT_ELEVATION,
+      pressedElevation = BUTTON_PRESSED_ELEVATION
+    )
   ) {
     Text(
       text = stringResource(id = buttonTextId).uppercase(),
-      letterSpacing = 0.0333.em
+      letterSpacing = DEFAULT_LETTER_SPACING
     )
   }
 }

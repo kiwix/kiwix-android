@@ -41,12 +41,19 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.tonyodev.fetch2.R.string
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.composeviews.ComposeButton
 import org.kiwix.kiwixmobile.core.composeviews.CrashCheckBox
 import org.kiwix.kiwixmobile.core.extensions.loadBitmapFromMipmap
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CRASH_IMAGE_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CRASH_MESSAGE_TEXT_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CRASH_TITLE_TEXT_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTY_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THIRTY_TWO_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 
 @Composable
 fun ErrorActivityScreen(
@@ -60,30 +67,30 @@ fun ErrorActivityScreen(
     modifier = Modifier
       .fillMaxSize()
       .background(colorResource(id = R.color.error_activity_background))
-      .padding(16.dp),
+      .padding(SIXTEEN_DP),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
     Text(
       text = stringResource(crashTitleStringId),
-      fontSize = 24.sp,
+      fontSize = CRASH_TITLE_TEXT_SIZE,
       color = colorResource(id = R.color.alabaster_white),
-      modifier = Modifier.padding(top = 60.dp, start = 8.dp, end = 8.dp)
+      modifier = Modifier.padding(top = SIXTY_DP, start = EIGHT_DP, end = EIGHT_DP)
     )
 
     Image(
       bitmap = ImageBitmap.loadBitmapFromMipmap(LocalContext.current, R.mipmap.ic_launcher),
       contentDescription = stringResource(id = string.app_name),
       modifier = Modifier
-        .height(70.dp)
-        .padding(top = 12.dp, start = 8.dp, end = 8.dp)
+        .height(CRASH_IMAGE_SIZE)
+        .padding(top = TWELVE_DP, start = EIGHT_DP, end = EIGHT_DP)
     )
 
     Text(
       text = stringResource(messageStringId),
-      fontSize = 14.sp,
+      fontSize = CRASH_MESSAGE_TEXT_SIZE,
       textAlign = TextAlign.Center,
       color = colorResource(id = R.color.white),
-      modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp)
+      modifier = Modifier.padding(start = EIGHT_DP, top = EIGHT_DP, end = EIGHT_DP)
     )
 
     Column(modifier = Modifier.weight(1f)) {
@@ -99,7 +106,7 @@ fun ErrorActivityScreen(
     Row(
       modifier = Modifier
         .fillMaxWidth()
-        .padding(bottom = 32.dp),
+        .padding(bottom = THIRTY_TWO_DP),
       horizontalArrangement = Arrangement.SpaceEvenly
     ) {
       ComposeButton(
