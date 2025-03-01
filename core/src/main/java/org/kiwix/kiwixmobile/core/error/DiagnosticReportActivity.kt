@@ -18,16 +18,24 @@
 
 package org.kiwix.kiwixmobile.core.error
 
-import android.os.Bundle
-import android.view.View
 import org.kiwix.kiwixmobile.core.R
 
 class DiagnosticReportActivity : ErrorActivity() {
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    activityKiwixErrorBinding?.textView2?.setText(R.string.diagnostic_report)
-    activityKiwixErrorBinding?.messageText?.setText(R.string.diagnostic_report_message)
-    activityKiwixErrorBinding?.allowCrash?.visibility = View.GONE
+  override val crashTitle: Int = R.string.diagnostic_report
+  override val crashDescription: Int = R.string.diagnostic_report_message
+
+  /**
+   * Overrides this method to hide the `Details of The Crash` checkbox.
+   * Since this screen for sending the diagnostic report.
+   */
+  override fun getCrashCheckBoxItems(): List<Pair<Int, Boolean>> {
+    return listOf(
+      R.string.crash_checkbox_language,
+      R.string.crash_checkbox_logs,
+      R.string.crash_checkbox_zimfiles,
+      R.string.crash_checkbox_device,
+      R.string.crash_checkbox_file_system
+    ).map { it to true }
   }
 
   override fun restartApp() {
