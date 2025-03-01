@@ -11,6 +11,8 @@ import javax.xml.transform.stream.StreamResult
 plugins {
   android
   id("com.github.triplet.play") version Versions.com_github_triplet_play_gradle_plugin
+  id("org.jetbrains.kotlin.android")
+  id("org.jetbrains.kotlin.plugin.compose") version Versions.org_jetbrains_kotlin_plugin_compose
 }
 if (hasProperty("testingMinimizedBuild")) {
   apply(plugin = "com.slack.keeper")
@@ -39,7 +41,12 @@ android {
   lint {
     checkDependencies = true
   }
-
+  buildFeatures {
+    compose = true
+  }
+  composeOptions {
+    kotlinCompilerExtensionVersion = Versions.kotlin_compiler_extension_version
+  }
   buildTypes {
     getByName("debug") {
       multiDexKeepProguard = file("multidex-instrumentation-config.pro")
@@ -129,6 +136,10 @@ androidComponents {
 dependencies {
   androidTestImplementation(Libs.leakcanary_android_instrumentation)
   testImplementation(Libs.kotlinx_coroutines_test)
+  implementation(Libs.androidx_compose_material3)
+  implementation(Libs.androidx_activity_compose)
+  implementation(Libs.androidx_compose_ui)
+  implementation(Libs.androidx_compose_runtime)
 }
 task("generateVersionCodeAndName") {
   val file = File("VERSION_INFO")
