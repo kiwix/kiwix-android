@@ -28,18 +28,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CRASH_CHECKBOX_START_PADDING
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CRASH_CHECKBOX_TOP_PADDING
 
 @Composable
 fun CrashCheckBox(checkBoxItem: Pair<Int, MutableState<Boolean>>) {
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .padding(start = 100.dp, top = 8.dp),
+      .padding(start = CRASH_CHECKBOX_START_PADDING, top = CRASH_CHECKBOX_TOP_PADDING),
     verticalAlignment = Alignment.CenterVertically
   ) {
     Checkbox(
@@ -48,13 +48,13 @@ fun CrashCheckBox(checkBoxItem: Pair<Int, MutableState<Boolean>>) {
       colors = CheckboxDefaults.colors(
         checkedColor = colorResource(id = R.color.denim_blue200),
         checkmarkColor = colorResource(id = R.color.error_activity_background),
-        uncheckedColor = Color.White
+        uncheckedColor = colorResource(R.color.denim_blue200)
       )
     )
     Text(
       text = stringResource(id = checkBoxItem.first),
       color = colorResource(id = R.color.white),
-      modifier = Modifier.padding(start = 8.dp)
+      modifier = Modifier.padding(start = CRASH_CHECKBOX_TOP_PADDING)
     )
   }
 }
