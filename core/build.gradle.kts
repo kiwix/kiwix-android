@@ -63,4 +63,8 @@ dependencies {
   implementation(Libs.kotlinx_coroutines_android)
   implementation(Libs.kotlinx_coroutines_rx3)
   implementation(Libs.zxing)
+  implementation(platform(Libs.ANDROIDX_COMPOSE_BOM))
+  // For Compose UI Testing
+  androidTestImplementation(Libs.ANDROIDX_COMPOSE_UI_TEST_JUNIT4)
+  debugImplementation(Libs.ANDROIDX_COMPOSE_UI_TOOLING)
 }

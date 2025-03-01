@@ -51,4 +51,5 @@
   <issue id="CheckResult">
     <ignore path="**/androidTest/**.kt" />
   </issue>
+  <issue id="PrivateResource" severity="warning" />
 </lint>
