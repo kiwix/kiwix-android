@@ -108,6 +108,20 @@ class FetchDownloadNotificationManager @Inject constructor(
     }
   }
 
+  override fun getSubtitleText(
+    context: Context,
+    downloadNotification: DownloadNotification
+  ): String {
+    return when {
+      downloadNotification.isCompleted -> context.getString(R.string.complete)
+      downloadNotification.isFailed -> context.getString(R.string.download_failed_state)
+      downloadNotification.isPaused -> context.getString(R.string.paused_state)
+      downloadNotification.isQueued -> context.getString(R.string.resuming_state)
+      downloadNotification.etaInMilliSeconds < 0 -> context.getString(R.string.downloading_state)
+      else -> super.getSubtitleText(context, downloadNotification)
+    }
+  }
+
   @RequiresApi(Build.VERSION_CODES.O)
   private fun createChannel(channelId: String, context: Context) =
     NotificationChannel(
@@ -253,7 +267,7 @@ class FetchDownloadNotificationManager @Inject constructor(
     return notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
       .setSmallIcon(android.R.drawable.stat_sys_download_done)
       .setContentTitle(notificationTitle)
-      .setContentText(context.getString(string.fetch_notification_download_paused))
+      .setContentText(context.getString(R.string.paused_state))
       // Set the ongoing true so that could not cancel the pause notification.
       // However, on Android 14 and above user can cancel the notification by swipe right so we
       // can't control that see https://developer.android.com/about/versions/14/behavior-changes-all#non-dismissable-notifications

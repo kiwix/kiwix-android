@@ -402,4 +402,7 @@
   <string name="donation_dialog_title">Donate Today</string>
   <string name="donation_dialog_description">%s needs your help.</string>
   <string name="make_donation">Make a donation</string>
+  <string name="resuming_state">Resuming</string>
+  <string name="downloading_state">Downloading</string>
+  <string name="download_failed_state">Failed</string>
 </resources>
