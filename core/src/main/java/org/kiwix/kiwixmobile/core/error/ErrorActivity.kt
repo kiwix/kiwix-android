@@ -20,17 +20,14 @@ package org.kiwix.kiwixmobile.core.error
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ResolveInfo
-import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.os.Process
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
@@ -92,31 +89,18 @@ open class ErrorActivity : BaseActivity() {
         null
       }
     setContent {
-      PreviewScreen()
-    }
-  }
-
-  @Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "DefaultPreviewDark"
-  )
-  @Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-    name = "DefaultPreviewLight"
-  )
-  @Composable
-  fun PreviewScreen() {
-    checkBoxItems = remember {
-      getCrashCheckBoxItems().map { it.first to mutableStateOf(it.second) }
-    }
-    KiwixTheme {
-      ErrorActivityScreen(
-        crashTitle,
-        crashDescription,
-        checkBoxItems,
-        { restartApp() },
-        { sendDetailsOnMail() }
-      )
+      checkBoxItems = remember {
+        getCrashCheckBoxItems().map { it.first to mutableStateOf(it.second) }
+      }
+      KiwixTheme {
+        ErrorActivityScreen(
+          crashTitle,
+          crashDescription,
+          checkBoxItems,
+          { restartApp() },
+          { sendDetailsOnMail() }
+        )
+      }
     }
   }
 

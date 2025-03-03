@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes
-import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EXTRA_LARGE_ROUND_SHAPE_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EXTRA_SMALL_ROUND_SHAPE_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.LARGE_ROUND_SHAPE_SIZE
