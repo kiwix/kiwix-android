@@ -27,7 +27,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
@@ -51,7 +54,6 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEVENTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTY_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THIRTY_TWO_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 
 @Composable
@@ -66,6 +68,8 @@ fun ErrorActivityScreen(
     modifier = Modifier
       .fillMaxSize()
       .background(colorResource(id = R.color.error_activity_background))
+      .systemBarsPadding()
+      .imePadding()
       .padding(SIXTEEN_DP),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
@@ -105,7 +109,7 @@ fun ErrorActivityScreen(
     Row(
       modifier = Modifier
         .fillMaxWidth()
-        .padding(bottom = THIRTY_TWO_DP),
+        .navigationBarsPadding(),
       horizontalArrangement = Arrangement.SpaceEvenly
     ) {
       ComposeButton(
