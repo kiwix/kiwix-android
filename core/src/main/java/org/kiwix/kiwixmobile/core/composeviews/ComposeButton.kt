@@ -36,7 +36,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BUTTON_PRESSED_ELEVATION
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DEFAULT_LETTER_SPACING
 
 /**
- * This is our custom composable button according to our theme.
+ * This is our custom compose button according to our theme.
  */
 @Composable
 fun ComposeButton(
