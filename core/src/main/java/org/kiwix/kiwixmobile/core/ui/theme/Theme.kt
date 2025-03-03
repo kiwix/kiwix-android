@@ -63,6 +63,7 @@ fun KiwixTheme(
   MaterialTheme(
     colorScheme = colorScheme,
     content = content,
-    shapes = shapes
+    shapes = shapes,
+    typography = KiwixTypography
   )
 }
