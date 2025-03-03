@@ -28,7 +28,6 @@ object ComposeDimens {
   val CRASH_CHECKBOX_TOP_PADDING = 8.dp
 
   // Our default Button dimens
-  val BUTTON_ROUND_CORNER_SHAPE = 5.dp
   val BUTTON_DEFAULT_ELEVATION = 2.dp
   val BUTTON_PRESSED_ELEVATION = 4.dp
   val BUTTON_DEFAULT_PADDING = 4.dp
@@ -55,4 +54,10 @@ object ComposeDimens {
 
   // Default letter spacing in text according to theme
   val DEFAULT_LETTER_SPACING = 0.0333.em
+
+  // Shape configuration sizes. See Shape.kt
+  val EXTRA_SMALL = 4.dp
+  val SMALL = 8.dp
+  val MEDIUM = 16.dp
+  val LARGE = 16.dp
 }

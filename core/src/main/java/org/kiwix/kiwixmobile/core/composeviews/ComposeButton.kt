@@ -20,9 +20,9 @@ package org.kiwix.kiwixmobile.core.composeviews
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -33,7 +33,6 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BUTTON_DEFAULT_ELEVATION
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BUTTON_DEFAULT_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BUTTON_PRESSED_ELEVATION
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BUTTON_ROUND_CORNER_SHAPE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DEFAULT_LETTER_SPACING
 
 /**
@@ -51,7 +50,7 @@ fun ComposeButton(
       contentColor = Color.White
     ),
     modifier = Modifier.padding(BUTTON_DEFAULT_PADDING),
-    shape = RoundedCornerShape(BUTTON_ROUND_CORNER_SHAPE),
+    shape = MaterialTheme.shapes.extraSmall,
     elevation = ButtonDefaults.buttonElevation(
       defaultElevation = BUTTON_DEFAULT_ELEVATION,
       pressedElevation = BUTTON_PRESSED_ELEVATION

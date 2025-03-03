@@ -20,14 +20,17 @@ package org.kiwix.kiwixmobile.core.error
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ResolveInfo
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.os.Process
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
@@ -41,6 +44,7 @@ import org.kiwix.kiwixmobile.core.compat.ResolveInfoFlagsCompat
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.CRASH_AND_FEEDBACK_EMAIL_ADDRESS
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
@@ -88,9 +92,24 @@ open class ErrorActivity : BaseActivity() {
         null
       }
     setContent {
-      checkBoxItems = remember {
-        getCrashCheckBoxItems().map { it.first to mutableStateOf(it.second) }
-      }
+      PreviewScreen()
+    }
+  }
+
+  @Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark"
+  )
+  @Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight"
+  )
+  @Composable
+  fun PreviewScreen() {
+    checkBoxItems = remember {
+      getCrashCheckBoxItems().map { it.first to mutableStateOf(it.second) }
+    }
+    KiwixTheme {
       ErrorActivityScreen(
         crashTitle,
         crashDescription,
