@@ -401,8 +401,11 @@ object Libs {
    * testing libraries for compose
    */
   const val ANDROIDX_COMPOSE_UI_TEST_JUNIT4: String =
-    "androidx.compose.ui:ui-test-junit4"
+    "androidx.compose.ui:ui-test-junit4:${Versions.ANDROIDX_COMPOSE_UI_VERSION}"
 
   const val ANDROIDX_COMPOSE_UI_TOOLING: String =
     "androidx.compose.ui:ui-tooling"
+
+  const val ANDROIDX_COMPOSE_UI_TEST_MANIFEST =
+    "androidx.compose.ui:ui-test-manifest:${Versions.ANDROIDX_COMPOSE_UI_VERSION}"
 }
