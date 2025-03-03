@@ -56,8 +56,23 @@ object ComposeDimens {
   val DEFAULT_LETTER_SPACING = 0.0333.em
 
   // Shape configuration sizes. See Shape.kt
-  val EXTRA_SMALL = 4.dp
-  val SMALL = 8.dp
-  val MEDIUM = 16.dp
-  val LARGE = 16.dp
+  val EXTRA_SMALL_ROUND_SHAPE_SIZE = 4.dp
+  val SMALL_ROUND_SHAPE_SIZE = 8.dp
+  val MEDIUM_ROUND_SHAPE_SIZE = 16.dp
+  val LARGE_ROUND_SHAPE_SIZE = 24.dp
+  val EXTRA_LARGE_ROUND_SHAPE_SIZE = 32.dp
+
+  // Typography configuration sizes. See Typography.kt
+  val LARGE_HEADLINE_TEXT_SIZE = 32.sp
+  val MEDIUM_HEADLINE_TEXT_SIZE = 28.sp
+  val SMALL_HEADLINE_TEXT_SIZE = 24.sp
+  val LARGE_TITLE_TEXT_SIZE = 22.sp
+  val MEDIUM_TITLE_TEXT_SIZE = 18.sp
+  val SMALL_TITLE_TEXT_SIZE = 16.sp
+  val LARGE_BODY_TEXT_SIZE = 16.sp
+  val MEDIUM_BODY_TEXT_SIZE = 14.sp
+  val SMALL_BODY_TEXT_SIZE = 12.sp
+  val LARGE_LABEL_TEXT_SIZE = 14.sp
+  val MEDIUM_LABEL_TEXT_SIZE = 12.sp
+  val SMALL_LABEL_TEXT_SIZE = 10.sp
 }

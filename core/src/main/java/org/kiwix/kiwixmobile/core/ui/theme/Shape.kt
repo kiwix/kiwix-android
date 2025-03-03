@@ -21,18 +21,22 @@ package org.kiwix.kiwixmobile.core.ui.theme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes
 import androidx.compose.ui.unit.dp
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EXTRA_LARGE_ROUND_SHAPE_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EXTRA_SMALL_ROUND_SHAPE_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.LARGE_ROUND_SHAPE_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MEDIUM_ROUND_SHAPE_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SMALL_ROUND_SHAPE_SIZE
 
 /**
- * Most of the shares we are using in round corners.
- * So we are defining the shapes here so that we can directly use these
- * shapes in our code from Material theme.
+ * Defines the shape styles used throughout the app, primarily with rounded corners.
+ * These shapes are applied consistently via the Material theme to ensure uniformity.
  *
  * @see KiwixTheme
  */
 val shapes = Shapes(
-  extraSmall = RoundedCornerShape(4.dp),
-  small = RoundedCornerShape(8.dp),
-  medium = RoundedCornerShape(16.dp),
-  large = RoundedCornerShape(24.dp),
-  extraLarge = RoundedCornerShape(32.dp)
+  extraSmall = RoundedCornerShape(EXTRA_SMALL_ROUND_SHAPE_SIZE),
+  small = RoundedCornerShape(SMALL_ROUND_SHAPE_SIZE),
+  medium = RoundedCornerShape(MEDIUM_ROUND_SHAPE_SIZE),
+  large = RoundedCornerShape(LARGE_ROUND_SHAPE_SIZE),
+  extraLarge = RoundedCornerShape(EXTRA_LARGE_ROUND_SHAPE_SIZE)
 )
