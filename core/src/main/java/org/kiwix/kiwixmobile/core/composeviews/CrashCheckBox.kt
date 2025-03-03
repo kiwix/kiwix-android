@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -52,6 +53,7 @@ fun CrashCheckBox(checkBoxItem: Pair<Int, MutableState<Boolean>>) {
       )
     )
     Text(
+      style = MaterialTheme.typography.bodyMedium,
       text = stringResource(id = checkBoxItem.first),
       color = colorResource(id = R.color.white),
       modifier = Modifier.padding(start = CRASH_CHECKBOX_TOP_PADDING)
