@@ -127,6 +127,7 @@ androidComponents {
 }
 
 dependencies {
+  androidTestImplementation(Libs.ANDROIDX_COMPOSE_UI_TEST_JUNIT4)
   androidTestImplementation(Libs.leakcanary_android_instrumentation)
   testImplementation(Libs.kotlinx_coroutines_test)
 }
