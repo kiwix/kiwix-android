@@ -51,10 +51,10 @@
   <string name="stop_server_label">ସର୍ଭର ବନ୍ଦ କରନ୍ତୁ</string>
   <string name="server_started_message">ସର୍ଭର %s ପ୍ରବେଶ କରିବାକୁ ଆପଣଙ୍କ ବ୍ରାଉଜରରେ ଏହି ip ଠିକଣା ପ୍ରବେଶ କରନ୍ତୁ</string>
   <string name="share_host_address">ଅନ୍ୟ ପ୍ରୟୋଗଗୁଡ଼ିକ ମାଧ୍ୟମରେ URL ଅଂଶୀଦାର କରନ୍ତୁ</string>
-  <string name="error_file_not_found">ଅସୁବିଧା: ବଛାଯାଇଥିବା ଜିମ ଫାଇଲ ମିଳିଲାନାହିଁ । %s</string>
+  <string name="error_file_not_found" fuzzy="true">ଅସୁବିଧା: ବଛାଯାଇଥିବା ଜିମ ଫାଇଲ ମିଳିଲାନାହିଁ । %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">ଏହି zim ଫାଇଲକୁ ପଢ଼ିବାରେ ଅସମର୍ଥ</string>
   <string name="zim_not_opened" fuzzy="true">ଜିମ୍ ଫାଇଲ୍ ଖୋଲିବାକୁ ଅସମର୍ଥ</string>
-  <string name="error_file_invalid">ଅସୁବିଧା: ବଛାଯାଇଥିବା ଜିମ ଫାଇଲଟି ବୈଧ ନୁହେଁ । %s</string>
+  <string name="error_file_invalid" fuzzy="true">ଅସୁବିଧା: ବଛାଯାଇଥିବା ଜିମ ଫାଇଲଟି ବୈଧ ନୁହେଁ । %s</string>
   <string name="error_article_url_not_found">ଅସୁବିଧା: (Url: %1$s) ପ୍ରସଙ୍ଗ ଖୋଲିବାରେ ବିଫଳ ହେଲୁ ।</string>
   <string name="pref_display_title">ଦେଖଣା</string>
   <string name="pref_info_title">ସୂଚନା</string>
@@ -162,7 +162,7 @@
   <string name="pref_external_link_popup_title">ବାହ୍ଯ଼ ଲିଙ୍କଗୁଡ଼ିକୁ ପ୍ରବେଶ କରିବା ସମଯ଼ରେ ଚେତାବନୀ ଦିଅନ୍ତୁ</string>
   <string name="pref_external_link_popup_summary">ଅତିରିକ୍ତ ଖର୍ଚ୍ଚ କିମ୍ବା ଅଫଲାଇନ୍ ଲିଙ୍କରେ କାମ ନକରିବା ପାଇଁ ପପ୍ଅପ୍ ପ୍ରଦର୍ଶନ କରନ୍ତୁ |</string>
   <string name="external_link_popup_dialog_title">ବାହ୍ୟ ଲିଙ୍କ୍ ପ୍ରବେଶ କରୁଛି!</string>
-  <string name="external_link_popup_dialog_message">ଆପଣ ଏକ ବାହ୍ୟ ଲିଙ୍କ୍ ପ୍ରବେଶ କରୁଛନ୍ତି | ଡାଟା ଟ୍ରାନ୍ସଫର ପାଇଁ ଏହା ଅତିରିକ୍ତ ଖର୍ଚ୍ଚର କାରଣ ହୋଇପାରେ କିମ୍ବା ଯେତେବେଳେ ଆପଣ ଅଫଲାଇନ୍ ଥାଆନ୍ତି ସେତେବେଳେ କାମ କରିବ ନାହିଁ | ଆପଣ ଜାରି ରଖିବାକୁ ଚାହୁଁଛନ୍ତି କି?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">ଆପଣ ଏକ ବାହ୍ୟ ଲିଙ୍କ୍ ପ୍ରବେଶ କରୁଛନ୍ତି | ଡାଟା ଟ୍ରାନ୍ସଫର ପାଇଁ ଏହା ଅତିରିକ୍ତ ଖର୍ଚ୍ଚର କାରଣ ହୋଇପାରେ କିମ୍ବା ଯେତେବେଳେ ଆପଣ ଅଫଲାଇନ୍ ଥାଆନ୍ତି ସେତେବେଳେ କାମ କରିବ ନାହିଁ | ଆପଣ ଜାରି ରଖିବାକୁ ଚାହୁଁଛନ୍ତି କି?</string>
   <string name="do_not_ask_anymore">ଆଉ ପଚାରନ୍ତୁ ନାହିଁ</string>
   <string name="your_languages">ମନୋନୀତ ଭାଷା:</string>
   <string name="other_languages">ଅଲଗା ଭାଷା</string>

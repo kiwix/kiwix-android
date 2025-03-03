@@ -167,7 +167,7 @@
   <string name="pref_external_link_popup_title">Kilọ nigba titẹ awọn ọna asopọ ita</string>
   <string name="pref_external_link_popup_summary">Ṣe afihan agbejade lati kilo nipa awọn idiyele afikun tabi ko ṣiṣẹ ni awọn ọna asopọ aisinipo.</string>
   <string name="external_link_popup_dialog_title">Nwọle Ọna asopọ Ita!</string>
-  <string name="external_link_popup_dialog_message">O n wọle si ọna asopọ ita. Eyi le ja si awọn idiyele afikun fun gbigbe data tabi kii yoo ṣiṣẹ nigbati o ba wa ni offline. Ṣe o fẹ tẹsiwaju bi?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">O n wọle si ọna asopọ ita. Eyi le ja si awọn idiyele afikun fun gbigbe data tabi kii yoo ṣiṣẹ nigbati o ba wa ni offline. Ṣe o fẹ tẹsiwaju bi?</string>
   <string name="do_not_ask_anymore">Maṣe beere mọ</string>
   <string name="your_languages">Yan ede</string>
   <string name="other_languages">Awọn ede miiran:</string>

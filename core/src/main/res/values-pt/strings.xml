@@ -67,7 +67,7 @@
   <string name="server_started_message">Digite este endereço IP no seu navegador para aceder ao servidor %s</string>
   <string name="qr_code">Código QR renderizado</string>
   <string name="share_host_address">Compartilhar URL através de outros aplicativos</string>
-  <string name="error_file_not_found">Erro: não foi possível encontrar o ficheiro ZIM selecionado. %s</string>
+  <string name="error_file_not_found" fuzzy="true">Erro: não foi possível encontrar o ficheiro ZIM selecionado. %s</string>
   <string name="unable_to_read_zim_file">Não é possível ler este arquivo ZIM!</string>
   <string name="zim_not_opened">Não é possível abrir o arquivo ZIM</string>
   <string name="error_file_invalid">Erro: o ficheiro selecionado não é um ficheiro ZIM válido. %s</string>
@@ -187,7 +187,7 @@
   <string name="pref_external_link_popup_title">Avisar quando seguir hiperligações externas</string>
   <string name="pref_external_link_popup_summary">Mostrar os cartões flutuantes para avisar sobre os custos adicionais ou quando não funcionar nas hiperligações quando desligadas.</string>
   <string name="external_link_popup_dialog_title">Acesso a uma ligação externa!</string>
-  <string name="external_link_popup_dialog_message">Está a aceder a uma hiperligação externa. Isto pode acarretar custos adicionais para a transferência de dados ou simplesmente não funcionará quando estiver desligado. Deseja realmente continuar?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Está a aceder a uma hiperligação externa. Isto pode acarretar custos adicionais para a transferência de dados ou simplesmente não funcionará quando estiver desligado. Deseja realmente continuar?</string>
   <string name="do_not_ask_anymore">Não perguntar mais</string>
   <string name="your_languages">Línguas selecionadas:</string>
   <string name="other_languages">Outras línguas:</string>

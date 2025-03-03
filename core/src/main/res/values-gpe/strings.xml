@@ -56,7 +56,7 @@
   <string name="error_file_not_found">Error: Eno fi find de selected ZIM file. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Eno fi read dis zim file!</string>
   <string name="zim_not_opened" fuzzy="true">Eno fi open zim file</string>
-  <string name="error_file_invalid">Error: De file wey you select no be valid ZIM file. %s</string>
+  <string name="error_file_invalid" fuzzy="true">Error: De file wey you select no be valid ZIM file. %s</string>
   <string name="error_article_url_not_found">Error: Loading article (Url: %1$s) fail.</string>
   <string name="pref_display_title">Display</string>
   <string name="pref_info_title">Information</string>

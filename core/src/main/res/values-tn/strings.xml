@@ -163,7 +163,7 @@
   <string name="pref_external_link_popup_title">Tlhagiso fa o tsena mo dikopanong tsa ka fa ntle</string>
   <string name="pref_external_link_popup_summary">Supa popup go tlhagisa ka ditshenyegelo tse oketsegang kgotsa go sa direng mo sokgolaganong tse disw g mo maranyaneng.</string>
   <string name="external_link_popup_dialog_title">O tsena mo kgolaganyong ye e kwa ntle!</string>
-  <string name="external_link_popup_dialog_message">O tsena mo kgolaganyong ye e kwa ntle. Sê se ka baka ditshenyegelo tse di oketsegileng tsa data kgotsa go sa bereka fa ose mo maranyaneng. A o batla go tswelela?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">O tsena mo kgolaganyong ye e kwa ntle. Sê se ka baka ditshenyegelo tse di oketsegileng tsa data kgotsa go sa bereka fa ose mo maranyaneng. A o batla go tswelela?</string>
   <string name="do_not_ask_anymore">Se tlhole o botsa gotlhêlêlê</string>
   <string name="your_languages">Diteme tse di tlhophilweng:</string>
   <string name="other_languages">Diteme tse dingwe:</string>

@@ -65,7 +65,7 @@
   <string name="error_ip_address_not_found">Nie udało się znaleźć adresu IP.</string>
   <string name="server_started_message">Wpisz ten adres IP w przeglądarce, aby uzyskać dostęp do serwera %s</string>
   <string name="share_host_address">Udostępnij adres URL za pośrednictwem innych aplikacji</string>
-  <string name="error_file_not_found">Błąd: Wybrany plik ZIM nie został znaleziony. %s</string>
+  <string name="error_file_not_found" fuzzy="true">Błąd: Wybrany plik ZIM nie został znaleziony. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Nie można odczytać tego pliku zim!</string>
   <string name="zim_not_opened" fuzzy="true">Nie można otworzyć pliku zim</string>
   <string name="error_file_invalid">Błąd: Wybrany plik nie jest prawidłowym plikiem ZIM. %s</string>
@@ -176,7 +176,7 @@
   <string name="pref_external_link_popup_title">Ostrzegaj podczas wchodzenia w linki zewnętrzne</string>
   <string name="pref_external_link_popup_summary">Wyświetl wyskakujące okienko, aby ostrzec o dodatkowych kosztach lub braku działania w linkach offline.</string>
   <string name="external_link_popup_dialog_title">Wprowadzanie linku zewnętrznego!</string>
-  <string name="external_link_popup_dialog_message">Wprowadzasz link zewnętrzny. Może to prowadzić do dodatkowych kosztów transferu danych lub po prostu nie będzie działać, gdy będziesz offline. Czy chcesz kontynuować?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Wprowadzasz link zewnętrzny. Może to prowadzić do dodatkowych kosztów transferu danych lub po prostu nie będzie działać, gdy będziesz offline. Czy chcesz kontynuować?</string>
   <string name="do_not_ask_anymore">Nie pytaj więcej</string>
   <string name="your_languages">Wybierz język</string>
   <string name="other_languages">Inne języki:</string>

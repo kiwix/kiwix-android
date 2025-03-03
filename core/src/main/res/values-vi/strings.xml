@@ -25,8 +25,8 @@
   <string name="choose_file">Chọn một Tập tin Nội dung (*.zim)</string>
   <string name="open_in_new_tab">Mở liên kết trong thẻ mới?</string>
   <string name="share_host_address">Chia sẻ URL thông qua phần mềm khác</string>
-  <string name="error_file_not_found">Lỗi: Không tìm thấy tập tin ZIM đã chọn %s</string>
-  <string name="error_file_invalid">Lỗi: Tập tin đã chọn không phải là tập tin ZIM hợp lệ. %s</string>
+  <string name="error_file_not_found" fuzzy="true">Lỗi: Không tìm thấy tập tin ZIM đã chọn %s</string>
+  <string name="error_file_invalid" fuzzy="true">Lỗi: Tập tin đã chọn không phải là tập tin ZIM hợp lệ. %s</string>
   <string name="error_article_url_not_found">Lỗi: Việc tải bài (URL: %1$s) bị thất bại.</string>
   <string name="pref_display_title">Hiển thị</string>
   <string name="pref_info_title">Thông tin</string>
@@ -118,7 +118,7 @@
   <string name="pref_external_link_popup_title">Cảnh báo khi truy cập đường dẫn ngoài</string>
   <string name="pref_external_link_popup_summary">Hiện cảnh báo về việc mất thêm cước truy cập hoặc không hoạt động đối với các đường dẫn ngoại tuyến.</string>
   <string name="external_link_popup_dialog_title" fuzzy="true">Đang truy cập đường dẫn ngoài</string>
-  <string name="external_link_popup_dialog_message">Bạn đang truy cập một đường dẫn ngoài. Điều này có thể phát sinh cước dữ liệu hoặc đường dẫn sẽ không hoạt động nếu bạn không có kết nối mạng. Tiếp tục chứ?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Bạn đang truy cập một đường dẫn ngoài. Điều này có thể phát sinh cước dữ liệu hoặc đường dẫn sẽ không hoạt động nếu bạn không có kết nối mạng. Tiếp tục chứ?</string>
   <string name="do_not_ask_anymore">Đừng hỏi lại</string>
   <string name="your_languages">Ngôn ngữ được chọn:</string>
   <string name="other_languages">Ngôn ngữ khác:</string>

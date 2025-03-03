@@ -53,10 +53,10 @@
   <string name="stop_server_label">சேவையகத்தை நிறுத்து</string>
   <string name="server_started_message">%s சேவையகத்தை அணுக உங்கள் உலாவியில் இந்த ஐபி முகவரியை உள்ளிடவும்</string>
   <string name="share_host_address">பிற பயன்பாடுகள் வழியாக URL ஐப் பகிரவும்</string>
-  <string name="error_file_not_found">பிழை: தேர்வு செய்யப்பட்ட ZIM கோப்பு காணப்படவில்லை %s</string>
+  <string name="error_file_not_found" fuzzy="true">பிழை: தேர்வு செய்யப்பட்ட ZIM கோப்பு காணப்படவில்லை</string>
   <string name="unable_to_read_zim_file" fuzzy="true">இந்த ஜிம் கோப்பைப் படிக்க முடியவில்லை!</string>
   <string name="zim_not_opened" fuzzy="true">ZIM கோப்பைத் திறக்க முடியவில்லை</string>
-  <string name="error_file_invalid">பிழை: தேர்வு செய்யப்பட்ட கோப்பு, ஏற்புடைய ZIM கோப்பு அல்ல %s</string>
+  <string name="error_file_invalid" fuzzy="true">பிழை: தேர்வு செய்யப்பட்ட கோப்பு, ஏற்புடைய ZIM கோப்பு அல்ல</string>
   <string name="error_article_url_not_found">பிழை: (Url: %1$s) கட்டுரையை ஏற்றித்துவங்க தவறிவிட்டது</string>
   <string name="pref_display_title">காண்பி</string>
   <string name="pref_info_title">தகவல்</string>
@@ -162,7 +162,7 @@
   <string name="pref_external_link_popup_title">வெளிப்புற இணைப்புகளை உள்ளிடும்போது எச்சரிக்கவும்</string>
   <string name="pref_external_link_popup_summary">கூடுதல் செலவுகள் அல்லது அணைவரி இணைப்புகளில் வேலை செய்யாமல் இருப்பதை எச்சரிக்க தெரித்தெழு பட்டியைக் காண்பி.</string>
   <string name="external_link_popup_dialog_title">வெளிப்புற இணைப்பில் நுழைகிறது!</string>
-  <string name="external_link_popup_dialog_message">நீங்கள் வெளிப்புற இணைப்பை உள்ளிடுகிறீர்கள். இது தரவு பரிமாற்றத்திற்கான கூடுதல் செலவுகளுக்கு வழிவகுக்கும் அல்லது நீங்கள்  அணைவரியில் இருக்கும்போது வேலை செய்யாது. நீங்கள் தொடர விரும்புகிறீர்களா?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">நீங்கள் வெளிப்புற இணைப்பை உள்ளிடுகிறீர்கள். இது தரவு பரிமாற்றத்திற்கான கூடுதல் செலவுகளுக்கு வழிவகுக்கும் அல்லது நீங்கள்  அணைவரியில் இருக்கும்போது வேலை செய்யாது. நீங்கள் தொடர விரும்புகிறீர்களா?</string>
   <string name="do_not_ask_anymore">இனி கேட்க வேண்டாம்</string>
   <string name="your_languages">தேர்ந்தெடுக்கப்பட்ட மொழிகள்:</string>
   <string name="other_languages">பிற மொழிகள்:</string>

@@ -60,7 +60,7 @@
   <string name="error_ip_address_not_found">N bi nya ip addreesi</string>
   <string name="server_started_message">Kpɛhimi a ip fasara a browzɛr ni din yɛn chɛ ka a  nya niŋsim niŋda %s</string>
   <string name="share_host_address">Shiriki URL kupitia programu zingine</string>
-  <string name="error_file_not_found">Chiriŋ: ZIM mazagali shɛli bɛ ni daa piigi ŋɔ bi tooi nya. %s</string>
+  <string name="error_file_not_found" fuzzy="true">Chiriŋ: ZIM mazagali shɛli bɛ ni daa piigi ŋɔ bi tooi nya. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Di bi tooi karim zim mazagali ŋɔ!</string>
   <string name="zim_not_opened" fuzzy="true">Di bi tooi yoogi zim mazagali</string>
   <string name="error_file_invalid">Chiriŋ: Mazagali shɛli bɛ ni daa piigi ŋɔ pala ZIM mazagali din niŋ viɛnyɛla. %s</string>
@@ -174,7 +174,7 @@
   <string name="pref_external_link_popup_title">Saɣisigu di yi niŋ ka a kpɛri sambani soya</string>
   <string name="pref_external_link_popup_summary">Onyesha ibukizi ili kuonya\n gharama za ziada au kutofanya kazi katika viungo vya nje ya mtandao</string>
   <string name="external_link_popup_dialog_title">Sambani soya kpɛbu!</string>
-  <string name="external_link_popup_dialog_message">A kpɛri la sambani soli. Ŋɔ ni tooi chɛ ka a niŋ samli pahi bee ka di bi tumda a ka pɔhim zuɣu. A bori ni a tuɣi?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">A kpɛri la sambani soli. Ŋɔ ni tooi chɛ ka a niŋ samli pahi bee ka di bi tumda a ka pɔhim zuɣu. A bori ni a tuɣi?</string>
   <string name="do_not_ask_anymore">Di bɔhi pahi yaha</string>
   <string name="your_languages">Din pii bal’shɛŋa</string>
   <string name="other_languages">Bal’shɛŋa</string>

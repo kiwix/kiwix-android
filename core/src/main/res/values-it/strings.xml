@@ -175,7 +175,7 @@
   <string name="pref_external_link_popup_title">Avvisa quando si aprono link esterni</string>
   <string name="pref_external_link_popup_summary">Mostra un avviso in merito a possibili costi aggiuntivi o al mancato funzionamento dei link in assenza di connessione.</string>
   <string name="external_link_popup_dialog_title">Apertura di un link esterno!</string>
-  <string name="external_link_popup_dialog_message">Stai aprendo un link esterno. Ciò potrebbe comportare dei costi aggiuntivi per il trasferimento dati e non funzionerà se non sei connesso a Internet. Vuoi continuare?</string>
+  <string name="external_link_popup_dialog_message">Stai aprendo un collegamento esterno. Ciò potrebbe comportare dei costi aggiuntivi per il trasferimento dati e non funzionerà se non sei connesso a Internet.\nVuoi continuare?</string>
   <string name="do_not_ask_anymore">Non chiedere più</string>
   <string name="your_languages">Lingue selezionate:</string>
   <string name="other_languages">Altre lingue:</string>
@@ -309,7 +309,7 @@
   <string name="action_copy">Copia</string>
   <string name="move">Sposta</string>
   <string name="moving_zim_file">Spostamento del file ZIM…</string>
-  <string name="copy_move_files_dialog_description">Kiwix richiede che il file ZIM sia nella sua directory dati. Vuoi copiarlo o spostarlo lì?</string>
+  <string name="copy_move_files_dialog_description">Kiwix richiede che il file ZIM sia nella sua directory dati.\nVuoi copiarlo o spostarlo lì?</string>
   <string name="copy_file_error_message">Errore nella copia del file ZIM: %s.</string>
   <string name="why_copy_move_files_to_app_directory">Perché copiare/spostare i file nella directory pubblica dell’app?</string>
   <string name="move_file_error_message">Errore nello spostamento del file ZIM: %s.</string>

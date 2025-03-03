@@ -59,7 +59,7 @@
   <string name="error_file_not_found">Kuskure: Ba a iya samun fayil din ZIM da aka zaba ba %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">An kasa karanta wannan fayil na zim!</string>
   <string name="zim_not_opened" fuzzy="true">An kasa buɗe fayil na zim</string>
-  <string name="error_file_invalid">Kuskure: Fayil ɗin da aka zaɓa ba ingantaccen fayil na ZIM bane. %s</string>
+  <string name="error_file_invalid" fuzzy="true">Kuskure: Fayil ɗin da aka zaɓa ba ingantaccen fayil na ZIM bane. %s</string>
   <string name="error_article_url_not_found">Kuskure: Loading labarin (Url: %1$s) ya gaza</string>
   <string name="pref_display_title">Nunawa</string>
   <string name="pref_info_title">Bayani</string>
@@ -167,7 +167,7 @@
   <string name="pref_external_link_popup_title">Gargadi lokacin shigar da hanyoyin haɗin waje</string>
   <string name="pref_external_link_popup_summary">Nuna bugu don faɗakar da ƙarin farashi ko rashin aiki a cikin hanyoyin layi.</string>
   <string name="external_link_popup_dialog_title">Shigar da Hanyar waje!</string>
-  <string name="external_link_popup_dialog_message">Kuna shigar da hanyar haɗin waje. Wannan na iya haifar da ƙarin farashi don canja wurin bayanai ko kuma ba zai yi aiki ba lokacin da kuke layi. Kuna so ku ci gaba?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Kuna shigar da hanyar haɗin waje. Wannan na iya haifar da ƙarin farashi don canja wurin bayanai ko kuma ba zai yi aiki ba lokacin da kuke layi. Kuna so ku ci gaba?</string>
   <string name="do_not_ask_anymore">Kar a sake tambaya</string>
   <string name="your_languages">Zaɓin harshe</string>
   <string name="other_languages">Wasu harsuna</string>

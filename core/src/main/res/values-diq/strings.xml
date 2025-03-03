@@ -53,7 +53,7 @@
   <string name="stop_server_label">Serveri vındardış</string>
   <string name="server_started_message">Seba resayışê serverê %s re browseri rê ena adresê ip cı kerê</string>
   <string name="share_host_address">URL’yi be aplikasyonanê binan ra bare ke</string>
-  <string name="error_file_not_found">Xeta: Dosyaya ZIMia weçinıtiye nêvêniye. %s</string>
+  <string name="error_file_not_found" fuzzy="true">Xeta: Dosyaya ZIMia weçinıtiye nêvêniye. %s</string>
   <string name="zim_not_opened" fuzzy="true">Dosyay Zimi nêabiyena</string>
   <string name="error_file_invalid">Xeta: Dosyaya weçinıtiye yew dosyaya ZIMia vêrdiye niya. %s</string>
   <string name="error_article_url_not_found">Xeta: Barkerdışê meqaleyê (Url: %1$s) nêbi.</string>
@@ -159,7 +159,7 @@
   <string name="pref_external_link_popup_title">Gırey teberi cıkerdış de iqaz bıde</string>
   <string name="pref_external_link_popup_summary">Ekstra ucret ya zi gırey offline nêgureyê se akerde teqa mocnayışiya iqaz bıdê.</string>
   <string name="external_link_popup_dialog_title">Gıreyê teberi beno cı!</string>
-  <string name="external_link_popup_dialog_message">Şımayê kenê ke şırê gırey teberi. No seba transferê ekstra ucreta tabiyo yana weziyetê offline de nêgureniyeno. Şıma qayılê dewam bıkerê?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Şımayê kenê ke şırê gırey teberi. No seba transferê ekstra ucreta tabiyo yana weziyetê offline de nêgureniyeno. Şıma qayılê dewam bıkerê?</string>
   <string name="do_not_ask_anymore">Endi meperse</string>
   <string name="your_languages">Weçinaye zıwan :</string>
   <string name="other_languages">Zıwano bin:</string>

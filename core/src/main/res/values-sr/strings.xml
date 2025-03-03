@@ -89,7 +89,7 @@
   <string name="time_today">Данас</string>
   <string name="time_yesterday">Јуче</string>
   <string name="external_link_popup_dialog_title">Уношење спољашње везе!</string>
-  <string name="external_link_popup_dialog_message">Уносите спољашњу везу. То може довести до додатних трошкова за пренос података или неће радити када сте офлајн. Желите ли да наставите?</string>
+  <string name="external_link_popup_dialog_message">Уносите спољашњу везу. То може довести до додатних трошкова за пренос података или неће радити када сте офлајн. \nЖелите ли да наставите?</string>
   <string name="do_not_ask_anymore">Не питај више</string>
   <string name="your_languages">Изабрани језици:</string>
   <string name="other_languages">Други језици:</string>
