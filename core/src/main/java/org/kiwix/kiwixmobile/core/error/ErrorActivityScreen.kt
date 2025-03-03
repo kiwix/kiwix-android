@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -46,9 +47,8 @@ import org.kiwix.kiwixmobile.core.composeviews.ComposeButton
 import org.kiwix.kiwixmobile.core.composeviews.CrashCheckBox
 import org.kiwix.kiwixmobile.core.extensions.loadBitmapFromMipmap
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CRASH_IMAGE_SIZE
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CRASH_MESSAGE_TEXT_SIZE
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CRASH_TITLE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEVENTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTY_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THIRTY_TWO_DP
@@ -71,7 +71,7 @@ fun ErrorActivityScreen(
   ) {
     Text(
       text = stringResource(crashTitleStringId),
-      fontSize = CRASH_TITLE_TEXT_SIZE,
+      style = MaterialTheme.typography.headlineSmall,
       color = colorResource(id = R.color.alabaster_white),
       modifier = Modifier.padding(top = SIXTY_DP, start = EIGHT_DP, end = EIGHT_DP)
     )
@@ -86,13 +86,13 @@ fun ErrorActivityScreen(
 
     Text(
       text = stringResource(messageStringId),
-      fontSize = CRASH_MESSAGE_TEXT_SIZE,
+      style = MaterialTheme.typography.bodyMedium,
       textAlign = TextAlign.Center,
       color = colorResource(id = R.color.white),
       modifier = Modifier.padding(start = EIGHT_DP, top = EIGHT_DP, end = EIGHT_DP)
     )
 
-    Column(modifier = Modifier.weight(1f)) {
+    Column(modifier = Modifier.weight(1f).padding(top = SEVENTEEN_DP, bottom = EIGHT_DP)) {
       LazyColumn(
         modifier = Modifier.fillMaxWidth()
       ) {

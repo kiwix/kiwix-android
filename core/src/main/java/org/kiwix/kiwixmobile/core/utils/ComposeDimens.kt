@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 
 object ComposeDimens {
   // Crash checkbox dimens
-  val CRASH_CHECKBOX_START_PADDING = 100.dp
+  val CRASH_CHECKBOX_START_PADDING = 80.dp
   val CRASH_CHECKBOX_TOP_PADDING = 8.dp
 
   // Our default Button dimens
@@ -40,6 +40,7 @@ object ComposeDimens {
   // Padding & Margins
   val SIXTY_DP = 60.dp
   val THIRTY_TWO_DP = 30.dp
+  val SEVENTEEN_DP = 17.dp
   val SIXTEEN_DP = 16.dp
   val TWELVE_DP = 12.dp
   val EIGHT_DP = 8.dp
