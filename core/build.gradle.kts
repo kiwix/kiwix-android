@@ -65,6 +65,6 @@ dependencies {
   implementation(Libs.zxing)
   implementation(platform(Libs.ANDROIDX_COMPOSE_BOM))
   // For Compose UI Testing
-  androidTestImplementation(Libs.ANDROIDX_COMPOSE_UI_TEST_JUNIT4)
   debugImplementation(Libs.ANDROIDX_COMPOSE_UI_TOOLING)
+  debugImplementation(Libs.ANDROIDX_COMPOSE_UI_TEST_MANIFEST)
 }
