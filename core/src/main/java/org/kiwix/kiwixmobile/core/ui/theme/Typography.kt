@@ -52,7 +52,7 @@ val KiwixTypography = Typography(
   bodySmall = TextStyle(fontSize = SMALL_BODY_TEXT_SIZE),
   labelLarge = TextStyle(
     fontSize = LARGE_LABEL_TEXT_SIZE,
-    fontWeight = FontWeight.Bold,
+    fontWeight = FontWeight.SemiBold,
   ),
   labelMedium = TextStyle(fontSize = MEDIUM_LABEL_TEXT_SIZE),
   labelSmall = TextStyle(fontSize = SMALL_LABEL_TEXT_SIZE),
