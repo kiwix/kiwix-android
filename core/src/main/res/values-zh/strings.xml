@@ -87,11 +87,13 @@
   <string name="zim_not_opened">无法打开 ZIM 文件</string>
   <string name="error_file_invalid">错误：选定的文件不是有效的 ZIM 文件。 %s</string>
   <string name="error_article_url_not_found">错误：加载条目（网址：%1$s）失败。</string>
+  <string name="error_loading_random_article_zim_not_loaded">无法加载文章。ZIM 文件未正确加载。</string>
+  <string name="could_not_find_random_article">无法找到随机文章。请稍后重试。</string>
   <string name="pref_display_title">显示</string>
   <string name="pref_info_title">信息</string>
   <string name="pref_info_version">版本</string>
   <string name="pref_dark_mode">深色模式</string>
-  <string name="pref_dark_mode_summary">以反色调显示文章</string>
+  <string name="pref_dark_mode_summary">以反色调显示条目</string>
   <string name="pref_back_to_top">返回顶部</string>
   <string name="pref_back_to_top_summary">在页底显示一个按钮以供返回顶端</string>
   <string name="pref_language_title">语言</string>
@@ -170,6 +172,7 @@
   <string name="help_9">• 同样可用于例如维基解密或维基文库等其他内容</string>
   <string name="help_10">您可以在应用中下载您选择的ZIM文件，也可以在电脑端下载您想要的文件，并在稍后将其转移至您的SD卡中。</string>
   <string name="help_11">应用内下载的 ZIM 文件位于您的外部存储目录中名为 Kiwix 的文件夹中。</string>
+  <string name="fetching_storage_info">正在获取存储详细信息…</string>
   <string name="pref_storage">存储</string>
   <string name="pref_current_folder">当前文件夹</string>
   <string name="pref_storage_used">已使用 %s</string>
@@ -179,6 +182,8 @@
   <string name="tts_pause">暂停</string>
   <string name="tts_resume">恢复</string>
   <string name="stop">停止</string>
+  <string name="notification_pause_button_text">暂停</string>
+  <string name="notification_resume_button_text">恢复</string>
   <string name="internal_storage">内部</string>
   <string name="external_storage">外部</string>
   <string name="yes">是</string>
@@ -204,10 +209,11 @@
   <string name="pref_external_link_popup_title">访问外部链接时警告</string>
   <string name="pref_external_link_popup_summary">对额外费用或离线时链接不可用弹出警告</string>
   <string name="external_link_popup_dialog_title">正在访问外部链接！</string>
-  <string name="external_link_popup_dialog_message">您正在输入外部链接。这可能会导致数据传输产生额外费用，或者在您离线时无法使用。要继续吗？</string>
+  <string name="external_link_popup_dialog_message">您正在打开一个外部链接。这可能会因数据传输产生额外费用，或者在您离线时无法使用。要继续吗？</string>
   <string name="do_not_ask_anymore">不再询问</string>
   <string name="your_languages">选择的语言：</string>
   <string name="other_languages">其他语言：</string>
+  <string name="downloading">下载中：</string>
   <string name="no_items_msg">没有可用的项目</string>
   <string name="crash_title">呃…这太尴尬了</string>
   <string name="crash_description">看起来我们崩溃了。\n\n您是否介意通过发送以下信息帮助我们解决此问题？</string>
@@ -228,6 +234,8 @@
   <string name="welcome_to_the_family">欢迎来到这个大家庭！</string>
   <string name="save_books_offline">保存以供离线阅读</string>
   <string name="download_books_message">随时随地下载书籍并阅读。</string>
+  <string name="save_books_in_desired_storage">将书籍保存在偏好的存储空间</string>
+  <string name="storage_location_hint">您可以从“设置”界面选择首选存储位置（SD 卡或内部存储）来下载 ZIM 文件。</string>
   <string name="unable_to_add_to_bookmarks">无法添加到书签</string>
   <string name="go_to_previous_page">转到上一页</string>
   <string name="go_to_next_page">转到下一页</string>
@@ -349,6 +357,8 @@
   <string name="moving_zim_file">正在移动 ZIM 文件…</string>
   <string name="copy_move_files_dialog_description">Kiwix 要求 ZIM 文件位于自己的数据目录中。您要复制或移动文件到该目录吗？</string>
   <string name="copy_file_error_message">复制 ZIM 文件时出错：%s。</string>
+  <string name="verify_zim_chunk_dialog_title">注意：请确保所有的 ZIM 块都已正确移动/复制！</string>
+  <string name="verify_zim_chunks_dialog_message">您可以在“Android/media/org.kiwix…/”文件夹中验证这些块。验证完成后，请向下滑动以刷新文库界面。拆分的 ZIM 文件将出现在您的文库中。</string>
   <string name="why_copy_move_files_to_app_directory">为什么要将文件复制/移动到应用程序公共目录？</string>
   <string name="copy_move_files_to_app_directory_description">由于Android 11及更高版本的Google Play政策，我们的应用无法再直接访问存储在您设备其他地方的文件。为了让您查看所选文件，我们需要将它们移动或复制到我们应用目录中的特殊文件夹中。这样我们才能访问和打开这些文件。</string>
   <string name="choose_storage_to_copy_move_zim_file">选择存储来复制/移动 ZIM 文件</string>

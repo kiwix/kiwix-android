@@ -37,7 +37,7 @@
   <string name="menu_settings">Options</string>
   <string name="menu_search_in_text">Rechercher dans la page</string>
   <string name="bookmarks">Marque-pages</string>
-  <string name="menu_random_article">Article aléatoire</string>
+  <string name="menu_random_article">Article au hasard</string>
   <string name="menu_full_screen">Plein écran</string>
   <string name="menu_exit_full_screen">Sortir du mode plein écran</string>
   <string name="menu_read_aloud">Lire à haute voix</string>
@@ -87,6 +87,8 @@
   <string name="zim_not_opened">Impossible d’ouvrir le fichier ZIM</string>
   <string name="error_file_invalid">Erreur : le fichier sélectionné n’est pas un fichier ZIM valide. %s</string>
   <string name="error_article_url_not_found">Erreur : le chargement de l’article (URL : %1$s) a échoué.</string>
+  <string name="error_loading_random_article_zim_not_loaded">Impossible de charger l\'article. Le fichier ZIM n\'est pas correctement chargé.</string>
+  <string name="could_not_find_random_article">Impossible de trouver un article au hasard. Veuillez réessayer plus tard.</string>
   <string name="pref_display_title">Affichage</string>
   <string name="pref_info_title">Informations</string>
   <string name="pref_info_version">Version</string>
@@ -211,6 +213,7 @@
   <string name="do_not_ask_anymore">Ne plus demander</string>
   <string name="your_languages">Langues sélectionnées :</string>
   <string name="other_languages">Autres langues :</string>
+  <string name="downloading">Téléchargement:</string>
   <string name="no_items_msg">Aucun élément disponible</string>
   <string name="crash_title">Eh bien… c’est embarrassant</string>
   <string name="crash_description">Il semble que nous ayons planté.\n\nPourriez-vous nous aider à corriger ce problème en envoyant l’information suivante ?</string>
@@ -231,6 +234,8 @@
   <string name="welcome_to_the_family">Bienvenue dans la famille</string>
   <string name="save_books_offline">Enregistrer des livres hors connexion</string>
   <string name="download_books_message">Téléchargez et lisez des livres où que vous soyez.</string>
+  <string name="save_books_in_desired_storage">Sauvegardez les livres dans l\'espace de stockage souhaité</string>
+  <string name="storage_location_hint">Vous pouvez choisir dans l\'écran Paramètres votre emplacement de stockage préféré pour télécharger vos fichiers ZIM, qu\'il s\'agisse d\'une carte SD ou d\'un stockage interne.</string>
   <string name="unable_to_add_to_bookmarks">Impossible d’ajouter des marque-pages</string>
   <string name="go_to_previous_page">Aller à la page précédente</string>
   <string name="go_to_next_page">Aller à la page suivante</string>
@@ -352,6 +357,8 @@
   <string name="moving_zim_file">Déplacement du fichier ZIM…</string>
   <string name="copy_move_files_dialog_description">Kiwix a besoin que le fichier ZIM soit dans son propre répertoire de données. Voulez-vous le copier ou le déplacer à cet endroit ?</string>
   <string name="copy_file_error_message">Erreur lors de la copie du fichier ZIM : %s.</string>
+  <string name="verify_zim_chunk_dialog_title">Soyez prudent : assurez-vous que tous les blocs ZIM ont été correctement déplacés/copiés !</string>
+  <string name="verify_zim_chunks_dialog_message">Vous pouvez les vérifier dans le dossier « Android/media/org.kiwix…/ ».\nUne fois terminé, actualisez l\'écran de la bibliothèque en faisant glisser votre doigt vers le bas. Le fichier ZIM divisé apparaîtra alors dans votre bibliothèque.</string>
   <string name="why_copy_move_files_to_app_directory">Pourquoi copier/déplacer des fichiers vers le répertoire public de l’application ?</string>
   <string name="copy_move_files_to_app_directory_description">En raison des politiques de Google Play sur Android 11 et versions ultérieures, notre application ne peut plus accéder directement aux fichiers stockés n’importe où sur votre appareil. Pour vous permettre de visualiser les fichiers sélectionnés, nous devons les déplacer ou les copier dans un dossier spécial dans le répertoire de notre application. Cela permettra d’accéder aux fichiers et de les ouvrir.</string>
   <string name="choose_storage_to_copy_move_zim_file">Choisissez l’espace de stockage pour copier/déplacer le fichier ZIM</string>

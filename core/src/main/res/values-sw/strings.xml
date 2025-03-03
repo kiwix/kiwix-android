@@ -63,10 +63,10 @@
   <string name="error_ip_address_not_found">Sikuweza kupata anwani ya IP.</string>
   <string name="server_started_message">Ingiza anwani hii ya ip kwenye kivinjari chako ili kufikia seva %s</string>
   <string name="share_host_address">Kushiriki URL kupitia programu nyingine</string>
-  <string name="error_file_not_found">Hitilafu: Faili ya ZIM iliyochaguliwa haija patikana. %s</string>
+  <string name="error_file_not_found" fuzzy="true">Hitilafu: Faili ya ZIM iliyochaguliwa haija patikana.</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Haiwezi kusoma faili hii zim!</string>
   <string name="zim_not_opened" fuzzy="true">Haiwezi kufungua faili ya zim</string>
-  <string name="error_file_invalid">Hitilafu:Faili iliyochaguliwa sio faili sahihi ya ZIM. %s</string>
+  <string name="error_file_invalid" fuzzy="true">Hitilafu:Faili iliyochaguliwa sio faili sahihi ya ZIM.</string>
   <string name="error_article_url_not_found">Hitilafu:Upakiaji wa makala umefeli (Url: %1$s)</string>
   <string name="pref_display_title">Onesha</string>
   <string name="pref_info_title">Maarifa</string>
@@ -174,7 +174,7 @@
   <string name="pref_external_link_popup_title">Onyo wakati wa kuingia viungo vya nje</string>
   <string name="pref_external_link_popup_summary">Onyesha ibukizi kuonya kuhusu gharama za ziada au si kazi katika viungo nje ya mtandao.</string>
   <string name="external_link_popup_dialog_title">Kuingia Link ya Nje!</string>
-  <string name="external_link_popup_dialog_message">Unaingia kwenye uhusiano wa nje. Hii inaweza kusababisha gharama za ziada kwa ajili ya uhamisho wa data au tu si kazi wakati wewe ni nje ya mtandao. Je, unataka kuendelea?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Unaingia kwenye uhusiano wa nje. Hii inaweza kusababisha gharama za ziada kwa ajili ya uhamisho wa data au tu si kazi wakati wewe ni nje ya mtandao. Je, unataka kuendelea?</string>
   <string name="do_not_ask_anymore">Usiniulize tena</string>
   <string name="your_languages">Chagua lugha</string>
   <string name="other_languages">Lugha zingine:</string>

@@ -51,9 +51,9 @@
   <string name="start_server_label">Έναρξη διακομιστή</string>
   <string name="stop_server_label">Τερματισμός διακομιστή</string>
   <string name="server_started_message">Εισάγετε την διεύθυνση ip στον περιηγητής σας, για πρόσβαση στον διακομιστή %s</string>
-  <string name="error_file_not_found">Σφάλμα: Το επιλεγμένο ZIM αρχείο δεν μπόρεσε να βρεθεί. %s</string>
+  <string name="error_file_not_found" fuzzy="true">Σφάλμα: Το επιλεγμένο ZIM αρχείο δεν μπόρεσε να βρεθεί. %s</string>
   <string name="zim_not_opened" fuzzy="true">Δεν μπόρεσε να ανοιχθεί το αρχείο zim</string>
-  <string name="error_file_invalid">Σφάλμα: Το επιλεγμένο αρχείο δεν είναι έγκυρο αρχείο ZIM. %s</string>
+  <string name="error_file_invalid" fuzzy="true">Σφάλμα: Το επιλεγμένο αρχείο δεν είναι έγκυρο αρχείο ZIM. %s</string>
   <string name="error_article_url_not_found">Σφάλμα:το Ανέβασμα του λήμματος (Url: %1$s) απέτυχε.</string>
   <string name="pref_display_title">Εμφάνιση</string>
   <string name="pref_info_title">Πληροφορίες</string>
@@ -140,7 +140,7 @@
   <string name="time_left">έμεινε</string>
   <string name="pref_external_link_popup_title">Προειδοποίησέ με όταν μπαίνω σε εξωτερικούς συνδέσμους</string>
   <string name="external_link_popup_dialog_title" fuzzy="true">Είσοδος σε εξωτερικό σύνδεσμο</string>
-  <string name="external_link_popup_dialog_message">Μπαίνετε σε ένα εξωτερικό σύνδεσμο. Αυτό μπορεί να οδηγήσει σε πρόσθετο κόστος για μεταφορά δεδομένων που δεν θα δουλεύει μόνο όταν θα είστε εκτός σύνδεσης. Θέλετε να συνεχίσετε;</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Μπαίνετε σε ένα εξωτερικό σύνδεσμο. Αυτό μπορεί να οδηγήσει σε πρόσθετο κόστος για μεταφορά δεδομένων που δεν θα δουλεύει μόνο όταν θα είστε εκτός σύνδεσης. Θέλετε να συνεχίσετε;</string>
   <string name="do_not_ask_anymore">Μη με ρωτήσεις άλλο</string>
   <string name="your_languages">Επιλεγμένες γλώσσες:</string>
   <string name="other_languages">Άλλες γλώσσες:</string>

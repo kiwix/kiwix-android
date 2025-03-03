@@ -188,7 +188,7 @@
   <string name="pref_external_link_popup_title">當輸入外部連結時警告</string>
   <string name="pref_external_link_popup_summary">顯示彈跳項目來警告有關額外的耗費或不運作在離線連結上。</string>
   <string name="external_link_popup_dialog_title">輸入外部連結！</string>
-  <string name="external_link_popup_dialog_message">您正輸入一個外部連結。這可能會導致出額外耗費的資料傳遞，否則當您離線時不要運作。您要繼續嗎？</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">您正輸入一個外部連結。這可能會導致出額外耗費的資料傳遞，否則當您離線時不要運作。您要繼續嗎？</string>
   <string name="do_not_ask_anymore">不再詢問</string>
   <string name="your_languages">所選語言：</string>
   <string name="other_languages">其它語言：</string>

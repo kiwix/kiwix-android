@@ -175,7 +175,7 @@
   <string name="pref_external_link_popup_title">Sinjalizo kur hyhet në lidhje të jashtme</string>
   <string name="pref_external_link_popup_summary">Shfaq një flluskë për të sinjalizuar mbi kosto shtesë ose për mosfunksionim lidhjesh “offline”</string>
   <string name="external_link_popup_dialog_title">Po hyhet Në Lidhje të Jashtme!</string>
-  <string name="external_link_popup_dialog_message">Po hyni në një lidhje të jashtme. Kjo mund të sjellë kosto shtesë për shpërngulje të dhënash ose thjesht mund të mos funksionojë, nëse s’jeni i lidhur në internet. Doni të vazhdohet?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Po hyni në një lidhje të jashtme. Kjo mund të sjellë kosto shtesë për shpërngulje të dhënash ose thjesht mund të mos funksionojë, nëse s’jeni i lidhur në internet. Doni të vazhdohet?</string>
   <string name="do_not_ask_anymore">Mos pyet më</string>
   <string name="your_languages">Gjuhë të përzgjedhura:</string>
   <string name="other_languages">Gjuhë të tjera:</string>

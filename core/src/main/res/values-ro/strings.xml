@@ -20,11 +20,14 @@
   <string name="menu_read_aloud">Citește cu voce tare</string>
   <string name="menu_read_aloud_stop">Oprește citirea cu voce tare</string>
   <string name="menu_support_kiwix">Susține Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">Susține %s</string>
+  <string name="menu_about_app">Aproximativ  %s app</string>
   <string name="menu_wifi_hotspot">Găzduiește Cărți</string>
   <string name="save_media">Salvează Media</string>
   <string name="save_media_error">A apărut o eroare în încercarea de a salva fișierul media!</string>
-  <string name="save_media_saved" fuzzy="true">Media salvată %s în Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Salvează media ca %s în Downloads/org.kiwix…/</string>
   <string name="search_label">Caută</string>
+  <string name="searched_list">Lista căutată</string>
   <string name="choose_file">Alegeți un fișier cu conținut ZIM (*.zim)</string>
   <string name="open_in_new_tab">Deschideți legătura într-o filă nouă?</string>
   <string name="hotspot_service_channel_name">Canal Serviciu Hotspot</string>
@@ -51,12 +54,18 @@
   <string name="hotspot_notification_content_title">Kiwix Hotspot</string>
   <string name="start_server_label">Pornește server</string>
   <string name="stop_server_label">Oprește server</string>
+  <string name="error_server_already_running">Serverul rulează deja. Opriți-l și încercați din nou.</string>
+  <string name="error_ip_address_not_found">Nu am putut găsi adresa ip.</string>
   <string name="server_started_message">Introduceți această adresă ip în browserul dvs. pentru a accesa serverul %s</string>
+  <string name="qr_code">Cod QR redat</string>
   <string name="share_host_address">Distribuie URL prin alte aplicaţii</string>
   <string name="error_file_not_found">Eroare: Fișierul ZIM selectat nu poate fi găsit. %s</string>
-  <string name="zim_not_opened" fuzzy="true">Imposibil de deschis fișierul zim</string>
-  <string name="error_file_invalid">Eroare: Fișierul selectat nu este un fișier ZIM valid. %s</string>
+  <string name="unable_to_read_zim_file">Nu se poate citi acest fișier ZIM!</string>
+  <string name="zim_not_opened">Nu se poate deschide fișierul ZIM</string>
+  <string name="error_file_invalid" fuzzy="true">Eroare: Fișierul selectat nu este un fișier ZIM valid. %s</string>
   <string name="error_article_url_not_found">Eroare: Încărcarea articolului (Url: %1$s) nu a reușit.</string>
+  <string name="error_loading_random_article_zim_not_loaded">Nu se poate încărca articolul. Fișierul ZIM nu este încărcat corect.</string>
+  <string name="could_not_find_random_article">Imposibil de găsit un articol aleatoriu. Vă rugăm să încercați din nou mai târziu.</string>
   <string name="pref_display_title">Afișaj</string>
   <string name="pref_info_title">Informații</string>
   <string name="pref_info_version">Versiune</string>
@@ -68,15 +77,24 @@
   <string name="pref_language_chooser">Alegeți o limbă</string>
   <string name="pref_credits">Contribuitori și Licențe</string>
   <string name="pref_credits_title">Credite</string>
-  <string name="tts_lang_not_supported" fuzzy="true">Fie limba acestei pagini nu este acceptată, fie nu s-au instalat datele corespunzătoare limbii. Este posibil ca articolul să nu fie corect afișat.</string>
+  <string name="tts_lang_not_supported">Limba acestei pagini nu este acceptată. Este posibil ca articolul să nu fie citit corect.</string>
   <string name="no_reader_application_installed">Nu s-a găsit nicio aplicație instalată pentru acest tip de fișier</string>
+  <string name="no_email_application_installed">Vă rugăm să instalați un client de e-mail</string>
+  <string name="no_app_found_to_select_bookmark_file">Nu a fost găsită nicio aplicație pentru a selecta un fișier de marcaj</string>
   <string name="no_section_info">Nu s-a găsit niciun antet de conținut</string>
   <string name="request_storage">Pentru a accesa conținut off-line trebuie să vă accesăm spațiul de stocare</string>
+  <string name="request_write_storage">Pentru a descărca fișiere ZIM avem nevoie de acces de scriere la spațiul de stocare</string>
   <string name="clear_recent_and_tabs_history_dialog">Ești sigur că vrei să ștergi tot istoricul de căutare și să resetezi toate filele active?</string>
   <string name="delete_recent_search_item">Șterge acest item?</string>
   <string name="pref_clear_all_history_title">Curăță istoricul</string>
   <string name="pref_clear_all_history_summary">Curăță căutările recente și istoricul filelor</string>
   <string name="pref_notes">Note</string>
+  <string name="pref_permission">Permisiuni</string>
+  <string name="pref_import_bookmark_title">Importați Semne de carte</string>
+  <string name="pref_import_bookmark_summary">Importați Semnele de carte salvate</string>
+  <string name="pref_export_bookmark_title">Exportați Semnele de carte</string>
+  <string name="pref_export_bookmark_summary">Exportați toate semnele de carte</string>
+  <string name="export_bookmark_saved">Semnele de carte sunt exportate în fișierul %s</string>
   <string name="all_history_cleared">Tot istoricul curățat</string>
   <string name="pref_clear_all_bookmarks_title">Șterge semnele de carte</string>
   <string name="clear_all_history_dialog_title">Șterge tot istoricul</string>
@@ -90,8 +108,10 @@
   <string name="did_you_know">Știați că?</string>
   <string name="undo">Anulează</string>
   <string name="tab_closed">Filă închisă</string>
+  <string name="tabs_closed">Filele închise</string>
   <string name="bookmark_added">Marcaj adăugat</string>
   <string name="rate_dialog_title">Vă rugăm să ne evaluați</string>
+  <string name="rate_dialog_msg">Dacă vă place să utilizați %s, vă rugăm să acordați un rating pentru a-l evalua. Vă mulțumim pentru sprijin!</string>
   <string name="rate_dialog_positive">Evaluează!</string>
   <string name="no_thanks">Nu, mulțumesc</string>
   <string name="rate_dialog_neutral">Mai târziu</string>
@@ -107,12 +127,14 @@
   <string name="local_zims">Dispozitiv</string>
   <string name="remote_zims">Online</string>
   <string name="library">Bibliotecă</string>
-  <string name="delete_zim_body" fuzzy="true">Următoarele fișier(e) zim vor fi șterse:\n\n%s</string>
+  <string name="delete_zim_body">Următoarele fișiere ZIM vor fi șterse:\n\n%s</string>
   <string name="delete_zims_toast">Filă ștearsă cu succes</string>
   <string name="no_files_here">Nu sunt fișiere aici</string>
   <string name="download_no_space">Spațiu insuficient pentru a descarca.</string>
   <string name="download">Descarcă</string>
+  <string name="download_notification_channel_name">Descărcați numele canalului de notificare</string>
   <string name="space_available">Spațiu disponibil:</string>
+  <string name="move_no_space">Spațiu insuficient pentru mutare/copiere.</string>
   <string name="zim_simple">Simplu</string>
   <string name="zim_no_pic">Fără imagini</string>
   <string name="zim_no_vid">Fără video</string>
@@ -125,14 +147,20 @@
   <string name="help_7">Există mai multe fișiere ZIM. Sunt multe:</string>
   <string name="help_8">• Wikipedia este disponibilă în mod separat pentru fiecare limbă</string>
   <string name="help_9">• Alt conținut ca Wikileaks sa Wikisursă este de asemenea disponibil</string>
-  <string name="help_10" fuzzy="true">Puteți să descărcați în aplicație fișierele ZIM alese sau să le selectați cu atenție pe cele pe care le doriți și să le descărcați de pe un computer desktop înainte de a transfera fișierele ZIM pe cardul SD.</string>
+  <string name="help_10">Puteți fie să descărcați fișierele ZIM alese în aplicație, fie să le selectați cu atenție pe cele pe care le doriți și să le descărcați de pe un computer desktop înainte de a transfera fișierele ZIM pe cardul SD.</string>
   <string name="help_11">Fișierele ZIM descărcate în aplicație sunt localizate în directorul extern de stocare într-un folder denumit Kiwix.</string>
+  <string name="fetching_storage_info">Se preiau detaliile de stocare…</string>
   <string name="pref_storage">Stocare</string>
   <string name="pref_current_folder">Folder curent</string>
+  <string name="pref_storage_used">%s folosit</string>
+  <string name="pref_free_storage">%s gratuit</string>
+  <string name="choose_storage_to_download_book">Alegeți spațiu de stocare pentru a descărca cartea</string>
   <string name="delete_zim_failed">Ne pare rău, dar nu am reușit să ștergem unele fișiere. Ar trebui să folosiți un manager de fișier în loc.</string>
   <string name="tts_pause">pauză</string>
   <string name="tts_resume">rezumat</string>
   <string name="stop">stop</string>
+  <string name="notification_pause_button_text">Pauză</string>
+  <string name="notification_resume_button_text">Reia</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Externă</string>
   <string name="yes">Da</string>
@@ -140,9 +168,9 @@
   <string name="confirm_stop_download_title">Oprești descărcarea?</string>
   <string name="confirm_stop_download_msg">Ești sigur că vrei să oprești această descărcare?</string>
   <string name="download_change_storage">Selectează mediul de descărcare</string>
-  <string name="tts_not_enabled" fuzzy="true">Text la vorbire nu este disponibil pentru acest fișier ZIM</string>
-  <string name="texttospeech_initialization_failed" fuzzy="true">Inițializarea Text în Vorbire a eșuat. Vă rugăm să încercați din nou</string>
-  <string name="texttospeech_error" fuzzy="true">Eroare neașteptată la Text în Vorbire. Vă rugăm încercați din nou</string>
+  <string name="tts_not_enabled">Citirea cu voce tare nu este activată pentru acest fișier ZIM</string>
+  <string name="texttospeech_initialization_failed">Inițializarea citirii cu voce tare a eșuat. Vă rugăm să încercați din nou</string>
+  <string name="texttospeech_error">Eroare neașteptată în Citire cu voce tare. Vă rugăm să încercați din nou</string>
   <string name="next">Următoarea</string>
   <string name="previous">Precedenta</string>
   <string name="wifi_only_title">Permite descărcarea conținutului prin intermediul unei rețele mobile?</string>
@@ -158,15 +186,16 @@
   <string name="pref_external_link_popup_title">Atenționați când introduceți legături extern</string>
   <string name="pref_external_link_popup_summary">Afișează popup pentru a avertiza în legătură cu costurile suplimentare sau care nu merg în legăturile off-line.</string>
   <string name="external_link_popup_dialog_title">Introduc Legătura externă!</string>
-  <string name="external_link_popup_dialog_message">Introduci o legătură externă. Acesta ar putea duce la costuri suplimentare pentru transferul de date sau nu va funcționa când ești off-line. Vrei să continui?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Introduci o legătură externă. Acesta ar putea duce la costuri suplimentare pentru transferul de date sau nu va funcționa când ești off-line. Vrei să continui?</string>
   <string name="do_not_ask_anymore">Nu mă mai întreba</string>
   <string name="your_languages">Limbi selectate:</string>
   <string name="other_languages">Alte limbi:</string>
+  <string name="downloading">Descărcare:</string>
   <string name="no_items_msg">Nu sunt item-uri disponibile</string>
   <string name="crash_title">Ei bine … Este jenant</string>
   <string name="crash_description">Se pare că ne-am prăbușit.</string>
   <string name="crash_checkbox_language">Setările dvs. de limbă</string>
-  <string name="crash_checkbox_zimfiles" fuzzy="true">O Listă cu Fișierele Dvs. Zim</string>
+  <string name="crash_checkbox_zimfiles">O listă a fișierelor dvs. ZIM</string>
   <string name="crash_checkbox_exception">Detaliile prăbușirii</string>
   <string name="crash_checkbox_logs">Jurnalul aplicației</string>
   <string name="crash_checkbox_device">Detalii dispozitiv</string>
@@ -179,9 +208,11 @@
   <string name="get_started">Să începem</string>
   <string name="download_books">Descarcă cărți</string>
   <string name="humankind_knowledge">Cunoașterea omenirii pe telefonul tău.</string>
-  <string name="welcome_to_the_family">Bun-venit în familie</string>
+  <string name="welcome_to_the_family">Bine aţi venit în familie</string>
   <string name="save_books_offline">Salvează cărți offline</string>
-  <string name="download_books_message">Descărcă cărți și citește oriunde v-ați afla.</string>
+  <string name="download_books_message">Descărcaţi cărţi şi citiţi oriunde sunteţi.</string>
+  <string name="save_books_in_desired_storage">Salvați cărțile în spațiul de stocare dorit</string>
+  <string name="storage_location_hint">Puteți alege locația de stocare preferată, fie card SD, fie stocare internă, pentru descărcarea fișierelor ZIM din ecranul Setări.</string>
   <string name="unable_to_add_to_bookmarks">Nu am putut adăuga la semne de carte</string>
   <string name="go_to_previous_page">Accesați pagina anterioară</string>
   <string name="go_to_next_page">Accesați pagina următoare</string>
@@ -191,20 +222,27 @@
   <string name="expand">Extinde</string>
   <string name="history">Istorie</string>
   <string name="history_from_current_book">Vedeți Istoria De Pe Toate Cărțile</string>
-  <string name="search_history" fuzzy="true">Istoricul căutării</string>
+  <string name="search_history">Istoricul căutărilor</string>
   <string name="selected_items">%1$d selectat</string>
   <string name="bookmarks_from_current_book">Vezi Semne De Carte Din Toate Cărțile</string>
   <string name="search_bookmarks">Caută semnele de carte</string>
   <string name="switch_tabs">Schimbă filă</string>
   <string name="close_all_tabs">Închide toate filele</string>
+  <string name="close_tab">Închide fila</string>
+  <string name="could_not_restore_tabs">Nu s-au putut restabili filele.</string>
   <string name="pending_state">Așteptare</string>
   <string name="running_state">În Progres</string>
   <string name="complete">Complet</string>
   <string name="paused_state">Pauză</string>
   <string name="failed_state">Eșuat: %s</string>
+  <string name="custom_download_error_message_for_authentication_failed">Fișierul ZIM nu a putut fi descărcat. Vă rugăm să încercați să reinstalați aplicația din magazinul Play.</string>
   <string name="save">Salvează</string>
   <string name="note">Notă</string>
+  <string name="take_notes">Ia notiţe</string>
   <string name="wiki_article_title">Titlu Articol Wiki</string>
+  <string name="ext_storage_permission_rationale_export_bookmark">Accesul la stocare este necesar pentru exportul semnelor de carte</string>
+  <string name="ext_storage_write_permission_denied_export_bookmark">Semnele de carte nu pot fi exportate fară acces la stocare</string>
+  <string name="export_bookmark_error">A apărut o eroare la încercarea de a exporta semnele de carte!</string>
   <string name="ext_storage_permission_rationale_add_note">Accesul la stocare este necesar pentru Note</string>
   <string name="ext_storage_write_permission_denied_add_note">Notele nu pot fi utilizate fără acces la stocare</string>
   <string name="note_save_unsuccessful">Notă salvare nereușită</string>
@@ -225,8 +263,9 @@
   <string name="severe_loss_error">Eroare majoră! Încercați Dezactivarea/Reactivarea WiFi P2P</string>
   <string name="connection_failed">Conexiune eșuată</string>
   <string name="permission_rationale_location">Android are nevoie de permisiunea de geolocalizare pentru a permite aplicației să detecteze dispozitivele din apropiere.</string>
+  <string name="permission_rationale_nearby">Android necesită permisiunea dispozitivelor din apropiere pentru a permite aplicației să detecteze dispozitive similare</string>
   <string name="permission_refused_location">Nu se pot găsi dispozitive din apropiere fără permisiuni de geolocalizare</string>
-  <string name="permission_refused_storage" fuzzy="true">Nu puteți accesa fișiere zim fără permisiunea de stocare</string>
+  <string name="permission_refused_storage">Nu puteți accesa fișiere zim fără permisiunea de stocare</string>
   <string name="request_enable_location">Activați geolocalizarea pentru a permite detectarea dispozitivelor din apropiere</string>
   <string name="discovery_needs_location">Nu se pot descoperi colegi fără serviciul de geolocalizare</string>
   <string name="request_enable_wifi">Activați WiFi P2P din setările sistemului</string>
@@ -239,14 +278,17 @@
   <string name="get_content_from_nearby_device">Obțineți conținut de pe dispozitivul din apropiere</string>
   <string name="search_for_peers">Caută dispozitive pentru împerechere</string>
   <string name="your_device">Dispozitivul tău:</string>
+  <string name="device_name">Nume Dispozitiv</string>
   <string name="nearby_devices">DISPOZITIVE DIN APROPIERE</string>
   <string name="no_devices_found">Nu au fost detectate dispozitive. Atingeți butonul de căutare pentru a încerca din nou.</string>
   <string name="files_for_transfer">FIȘIERE PENTRU TRANSFER</string>
   <string name="preparing_files">Pregătirea fișierelor pentru transfer …</string>
-  <string name="performing_handshake" fuzzy="true">Stabilirea legăturii în curs …</string>
+  <string name="performing_handshake">Stabilirea legăturii în curs …</string>
   <string name="status">Starea</string>
   <string name="pref_clear_all_notes_summary">Șterge toate notele la toate articolele</string>
   <string name="pref_clear_all_notes_title">Ștergeți toate notele</string>
+  <string name="pref_clear_notes">Note clare</string>
+  <string name="pref_allow_to_read_or_write_zim_files_on_sd_card">Permiteți să citiți și să scrieți fișiere ZIM pe cardul SD</string>
   <string name="pref_text_zoom_summary">Schimbați dimensiunea textului cu trepte de 25%.</string>
   <string name="tag_pic">Foto</string>
   <string name="tag_vid">Video</string>
@@ -263,6 +305,11 @@
   <string name="delete_selected_history">Șterge Istoricul Selectat?</string>
   <string name="delete_bookmarks">Ștergeți Toate Semnele de Carte?</string>
   <string name="delete_selected_bookmarks">Ștergeți Semnele de Carte Selectate?</string>
+  <string name="import_bookmarks_dialog_title">Importă Semnele de carte?</string>
+  <string name="export_all_bookmarks_dialog_title">Exportă Toate Semnele de Carte?</string>
+  <string name="export_all_bookmarks_dialog_message">Exportarea va genera fișierul bookmark.xml în folderul Download/org.kiwix…/.</string>
+  <string name="bookmark_imported_message">Toate semnele de carte au fost importate.</string>
+  <string name="error_invalid_bookmark_file">Eroare: Fișierul selectat nu este un fișier de semn de carte valid.</string>
   <string name="on">Pornit</string>
   <string name="off">Oprit</string>
   <string name="auto">Auto</string>
@@ -277,8 +324,67 @@
   <string name="no_open_book">Fără carte deschisă</string>
   <string name="open_library">Deschide biblioteca</string>
   <string name="tab_restored">Filă redeschisă</string>
+  <string name="tabs_restored">Filele au fost restaurate</string>
   <string name="open_drawer">Deschide Sertar</string>
   <string name="close_drawer">Închide Sertar</string>
+  <string name="preparing_file_for_copy">Se pregătește pentru copiere/mutare</string>
+  <string name="action_copy">Copie</string>
+  <string name="move">Mută</string>
+  <string name="copying_zim_file">Se copiază fişierul ZIM…</string>
+  <string name="moving_zim_file">Se mută fișierul ZIM…</string>
+  <string name="copy_move_files_dialog_description" fuzzy="true">Kiwix necesită ca fișierul ZIM să fie în propriul director de date. Doriți să o copiați sau să o mutați acolo?</string>
+  <string name="copy_file_error_message">Eroare la copierea fișierului ZIM: %s .</string>
+  <string name="verify_zim_chunk_dialog_title">Fiți atenți: asigurați-vă că toate fragmentele ZIM au fost mutate/copiate corect!</string>
+  <string name="verify_zim_chunks_dialog_message">Le puteți verifica în folderul „Android/media/org.kiwix…/”.\nDupă ce ați terminat, reîmprospătați ecranul bibliotecii glisând în jos. Fișierul ZIM divizat va apărea apoi în biblioteca dvs.</string>
+  <string name="why_copy_move_files_to_app_directory">De ce să copiați/mutați fișierele în directorul public al aplicației?</string>
+  <string name="copy_move_files_to_app_directory_description">Din cauza politicilor Google Play pentru Android 11 și versiuni ulterioare, aplicația noastră nu mai poate accesa direct fișierele stocate în altă parte pe dispozitivul dvs. Pentru a vă permite să vizualizați fișierele selectate, trebuie să le mutăm sau să le copiam într-un folder special din directorul aplicației noastre. Acest lucru ne permite să accesăm și să deschidem fișierele.</string>
+  <string name="choose_storage_to_copy_move_zim_file">Alegeți spațiu de stocare pentru a copia/muta fișierul ZIM</string>
+  <string name="move_file_error_message">Eroare la mutarea fișierului ZIM: %s.</string>
   <string name="how_to_update_content">Cum să actualizezi conținut?</string>
-  <string name="update_content_description" fuzzy="true">Pentru a actualiza conținutul (un fișier zim) trebuie să descărcați cea mai recentă versiune completă a acestui conținut. Puteți face acest lucru prin secțiunea de descărcare.</string>
+  <string name="update_content_description">Pentru a actualiza conținutul (un fișier ZIM) trebuie să descărcați cea mai recentă versiune completă a acestui conținut. Puteți face acest lucru prin secțiunea de descărcare.</string>
+  <string name="all_files_permission_needed">Este Necesară Permisiunea pentru toate Fișierele</string>
+  <string name="all_files_permission_needed_message">Pentru a accesa toate fișierele ZIM pe dispozitiv, trebuie să avem permisiunea pentru toate fișierele</string>
+  <string name="allowed">Permis</string>
+  <string name="not_allowed">Nepermis</string>
+  <string name="denied_internet_permission_message">Vă rugăm să activați wifi pentru a descărca conținut</string>
+  <string name="system_unable_to_grant_permission_message">Sistemul nu poate acorda permisiunea!</string>
+  <string name="allow">Permite</string>
+  <string name="swipe_down_for_library">Glisați în jos pentru Bibliotecă</string>
+  <string name="reaching_remote_library">Se ajunge la biblioteca de la distanță</string>
+  <string name="parsing_remote_library">Analizarea bibliotecii de la distanță</string>
+  <string name="starting_downloading_remote_library">Începe descărcarea bibliotecii online</string>
+  <string name="downloading_library">Descărcare bibliotecă\n%s</string>
+  <string name="no_notes">Nicio notă</string>
+  <string name="notes_from_all_books">Vedeți notele din toate cărțile</string>
+  <string name="search_notes">Căutați Note</string>
+  <string name="choose_your_action">Alegeți acțiunea</string>
+  <string name="open_note">Deschideți Notă</string>
+  <string name="open_article">Deschideți articolul</string>
+  <string name="delete_note_dialog_message">Notă: notele nu sunt șterse din spațiul de stocare</string>
+  <string name="delete_selected_notes">Ștergeți Elementele Selectate?</string>
+  <string name="download_tts_language_title">Descărcați această limbă pentru funcția de citire cu voce tare</string>
+  <string name="download_tts_language_message">Vă rugăm să faceți click pe butonul Descărcare. Va descărca automat limba necesară.</string>
+  <string name="external_link_copied_message">Link extern copiat în Clipboard</string>
+  <string name="read_aloud_service_channel_name">Citiți cu voce tare Canalul de servicii</string>
+  <string name="read_aloud_channel_description">Citeşte Cu Voce tare controlurile.</string>
+  <string name="read_aloud_running">Pornește Citește Tare</string>
+  <string name="backward_history">Istoria trecută</string>
+  <string name="forward_history">Istoria înainte</string>
+  <string name="clear_all_navigation_history_message">Șterge tot istoricul de navigare (înapoi, înainte).</string>
+  <string name="navigation_history_cleared">Istoricul navigației a fost șters</string>
+  <string name="go_to_settings_label">Accesați Setări</string>
+  <string name="request_notification_permission_message">Pentru a efectua această acțiune, acordați acces la notificări</string>
+  <string name="click_nearby_devices_message">Faceți click aici pentru a căuta dispozitive din apropiere.</string>
+  <string name="your_device_name_message">Numele dispozitivului va apărea aici.</string>
+  <string name="nearby_devices_list_message">Aici veți găsi o listă de dispozitive din apropiere. Atingeți numele unui dispozitiv pentru a iniția transferul de fișiere.</string>
+  <string name="transfer_zim_files_list_message">Aici veți găsi lista de fișiere ZIM disponibile pentru transfer.</string>
+  <string name="storage_selection_dialog_accessibility_description">Selectați spațiu de stocare pentru descărcarea fișierelor ZIM.</string>
+  <string name="zim_file_content_description">Fișierul ZIM care are conținutul de citire</string>
+  <string name="select_language_content_description">Selectarea acestei limbi va acorda prioritate afișarii cărților descărcabile în limba respectivă în partea de sus.</string>
+  <string name="toolbar_back_button_content_description">Accesați ecranul anterior</string>
+  <string name="save_or_open_unsupported_files_dialog_title">Salvați sau Deschideți acest fișier?</string>
+  <string name="save_or_open_unsupported_files_dialog_message">Dacă alegeți Deschidere, acest fișier va fi deschis în aplicația de citire externă.</string>
+  <string name="donation_dialog_title">Donează Astăzi</string>
+  <string name="donation_dialog_description">%s are nevoie de ajutorul tău.</string>
+  <string name="make_donation">Fă o donație</string>
 </resources>
