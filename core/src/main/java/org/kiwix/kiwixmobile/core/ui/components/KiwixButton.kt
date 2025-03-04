@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.composeviews
+package org.kiwix.kiwixmobile.core.ui.components
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
@@ -39,7 +39,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DEFAULT_LETTER_SPACING
  * This is our custom compose button according to our theme.
  */
 @Composable
-fun ComposeButton(
+fun KiwixButton(
   @StringRes buttonTextId: Int,
   clickListener: () -> Unit
 ) {
