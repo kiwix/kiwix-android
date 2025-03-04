@@ -93,12 +93,17 @@ class ZimFileReader constructor(
             Log.e(
               TAG,
               "Error in creating ZimFileReader," +
-                " there is an JNI exception happens: $ignore"
+                " there is an JNI exception happens: $ignore\n" +
+                "For ZIM file = ${zimReaderSource.toDatabase()}"
             )
             null
           } catch (ignore: Exception) {
             // for handing the error, if any zim file is corrupted
-            Log.e(TAG, "Error in creating ZimFileReader: $ignore")
+            Log.e(
+              TAG,
+              "Error in creating ZimFileReader: $ignore\n" +
+                "For ZIM file = ${zimReaderSource.toDatabase()}"
+            )
             null
           }
         }
@@ -433,6 +438,9 @@ class ZimFileReader constructor(
       div[poster] img, div[poster] video {
         -webkit-filter: invert(0); 
         filter: invert(0); 
+      }
+      img {
+          background-color: white !important;
       }
       """.trimIndent()
     private val assetExtensions =
