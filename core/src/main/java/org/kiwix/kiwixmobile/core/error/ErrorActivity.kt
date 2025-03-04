@@ -23,7 +23,11 @@ import android.content.pm.ResolveInfo
 import android.os.Build
 import android.os.Bundle
 import android.os.Process
+import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
@@ -35,10 +39,9 @@ import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.queryIntentActivitiesCompat
 import org.kiwix.kiwixmobile.core.compat.ResolveInfoFlagsCompat
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
-import org.kiwix.kiwixmobile.core.databinding.ActivityKiwixErrorBinding
-import org.kiwix.kiwixmobile.core.extensions.applyEdgeToEdgeInsets
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.CRASH_AND_FEEDBACK_EMAIL_ADDRESS
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
@@ -66,13 +69,13 @@ open class ErrorActivity : BaseActivity() {
 
   private var exception: Throwable? = null
 
-  var activityKiwixErrorBinding: ActivityKiwixErrorBinding? = null
+  open val crashTitle: Int = R.string.crash_title
+  open val crashDescription: Int = R.string.crash_description
+  private lateinit var checkBoxItems: List<Pair<Int, MutableState<Boolean>>>
 
   override fun onCreate(savedInstanceState: Bundle?) {
     coreComponent.inject(this)
     super.onCreate(savedInstanceState)
-    activityKiwixErrorBinding = ActivityKiwixErrorBinding.inflate(layoutInflater)
-    setContentView(activityKiwixErrorBinding?.root)
     val extras = intent.extras
     exception =
       if (extras != null && safeContains(extras)) {
@@ -85,30 +88,53 @@ open class ErrorActivity : BaseActivity() {
       } else {
         null
       }
-    setupReportButton()
-    activityKiwixErrorBinding?.restartButton?.setOnClickListener { restartApp() }
-    activityKiwixErrorBinding?.root.applyEdgeToEdgeInsets()
+    setContent {
+      checkBoxItems = remember {
+        getCrashCheckBoxItems().map { it.first to mutableStateOf(it.second) }
+      }
+      KiwixTheme {
+        ErrorActivityScreen(
+          crashTitle,
+          crashDescription,
+          checkBoxItems,
+          { restartApp() },
+          { sendDetailsOnMail() }
+        )
+      }
+    }
   }
 
-  override fun onDestroy() {
-    super.onDestroy()
-    activityKiwixErrorBinding = null
+  /**
+   * This list will create the checkBox items in ErrorActivity.
+   * Subclasses like DiagnosticReportActivity override this method to customize
+   * the behavior, such as hiding the crashLogs checkbox.
+   *
+   * WARNING: If modifying this method, ensure thorough testing with DiagnosticReportActivity
+   *    to verify proper functionality.
+   */
+  open fun getCrashCheckBoxItems(): List<Pair<Int, Boolean>> {
+    return listOf(
+      R.string.crash_checkbox_language,
+      R.string.crash_checkbox_logs,
+      R.string.crash_checkbox_exception,
+      R.string.crash_checkbox_zimfiles,
+      R.string.crash_checkbox_device,
+      R.string.crash_checkbox_file_system
+    ).map { it to true }
   }
 
-  private fun setupReportButton() {
-    activityKiwixErrorBinding?.reportButton?.setOnClickListener {
-      lifecycleScope.launch {
-        val emailIntent = emailIntent()
-        val activities = getSupportedEmailApps(emailIntent, supportedEmailPackages)
-        val targetedIntents = createEmailIntents(emailIntent, activities)
-        if (activities.isNotEmpty() && targetedIntents.isNotEmpty()) {
-          val chooserIntent =
-            Intent.createChooser(targetedIntents.removeAt(0), "Send email...")
-          chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedIntents.toTypedArray())
-          sendEmailLauncher.launch(chooserIntent)
-        } else {
-          toast(getString(R.string.no_email_application_installed))
-        }
+  private fun sendDetailsOnMail() {
+    lifecycleScope.launch {
+      val emailIntent = emailIntent()
+      val activities = getSupportedEmailApps(emailIntent, supportedEmailPackages)
+      val targetedIntents = createEmailIntents(emailIntent, activities)
+      if (activities.isNotEmpty() && targetedIntents.isNotEmpty()) {
+        val chooserIntent =
+          Intent.createChooser(targetedIntents.removeAt(0), "Send email...")
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedIntents.toTypedArray())
+        sendEmailLauncher.launch(chooserIntent)
+      } else {
+        toast(getString(R.string.no_email_application_installed))
       }
     }
   }
@@ -172,11 +198,7 @@ open class ErrorActivity : BaseActivity() {
       type = "text/plain"
       putExtra(Intent.EXTRA_EMAIL, arrayOf(CRASH_AND_FEEDBACK_EMAIL_ADDRESS))
       putExtra(Intent.EXTRA_SUBJECT, subject)
-      val file =
-        fileLogger.writeLogFile(
-          this@ErrorActivity,
-          activityKiwixErrorBinding?.allowLogs?.isChecked == true
-        )
+      val file = fileLogger.writeLogFile(this@ErrorActivity, shouldWriteDeviceLogsInFile())
       file.appendText(emailBody)
       val path =
         FileProvider.getUriForFile(
@@ -184,23 +206,47 @@ open class ErrorActivity : BaseActivity() {
           applicationContext.packageName + ".fileprovider",
           file
         )
-      addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
-      putExtra(android.content.Intent.EXTRA_STREAM, path)
+      addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+      putExtra(Intent.EXTRA_STREAM, path)
       putExtra(Intent.EXTRA_TEXT, emailBody)
     }
   }
 
-  private suspend fun buildBody(): String =
-    """ 
+  /**
+   * Determines whether device logs should be written to a file.
+   *
+   * This function checks if the user has selected the option to include
+   * device logs in the crash report by looking for the corresponding checkbox entry.
+   *
+   * @return `true` if the user has enabled the log inclusion option, otherwise `false`.
+   */
+  private fun shouldWriteDeviceLogsInFile(): Boolean =
+    checkBoxItems.firstOrNull { it.first == R.string.crash_checkbox_logs }?.second?.value == true
+
+  /**
+   * Builds a detailed crash report body based on user-selected options.
+   *
+   * This function dynamically constructs a report by checking which options
+   * the user has selected in the error reporting UI. It gathers relevant
+   * details such as exception information, ZIM file details, language settings,
+   * device specifications, and file system details.
+   *
+   * @return A formatted string containing the selected crash report details.
+   */
+  private suspend fun buildBody(): String {
+    // Convert the checkbox list into a map for easy lookup of selected options.
+    val optionMap = checkBoxItems.associate { it.first to it.second.value }
+    return """ 
     $initialBody
       
-    ${if (activityKiwixErrorBinding?.allowCrash?.isChecked == true && exception != null) exceptionDetails() else ""}
-    ${if (activityKiwixErrorBinding?.allowZims?.isChecked == true) zimFiles() else ""}
-    ${if (activityKiwixErrorBinding?.allowLanguage?.isChecked == true) languageLocale() else ""}
-    ${if (activityKiwixErrorBinding?.allowDeviceDetails?.isChecked == true) deviceDetails() else ""}
-    ${if (activityKiwixErrorBinding?.allowFileSystemDetails?.isChecked == true) systemDetails() else ""} 
+    ${if (optionMap[R.string.crash_checkbox_exception] == true && exception != null) exceptionDetails() else ""}
+    ${if (optionMap[R.string.crash_checkbox_zimfiles] == true) zimFiles() else ""}
+    ${if (optionMap[R.string.crash_checkbox_language] == true) languageLocale() else ""}
+    ${if (optionMap[R.string.crash_checkbox_device] == true) deviceDetails() else ""}
+    ${if (optionMap[R.string.crash_checkbox_file_system] == true) systemDetails() else ""} 
     
-    """.trimIndent()
+      """.trimIndent()
+  }
 
   private fun exceptionDetails(): String =
     """
