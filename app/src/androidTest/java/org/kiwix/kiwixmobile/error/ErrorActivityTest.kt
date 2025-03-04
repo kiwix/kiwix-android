@@ -94,6 +94,10 @@ class ErrorActivityTest : BaseActivityTest() {
       assertErrorActivityDisplayed(composeTestRule)
       // Click on "No, Thanks" button to see it's functionality working or not.
       clickOnNoThanksButton(composeTestRule)
+      // Handle the app restart explicitly. Since test case does not handle the app restart.
+      activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).onActivity {
+        it.navigate(R.id.helpFragment)
+      }
       // Assert HelpFragment is visible or not after clicking on the "No, Thanks" button.
       assertSendDiagnosticReportDisplayed()
       // Again click on "Send diagnostic report" button to open the ErrorActivity.
