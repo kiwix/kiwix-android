@@ -20,6 +20,7 @@ package plugin
 
 import Config
 import Libs
+import Versions
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.gradle.BaseExtension
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
@@ -92,10 +93,6 @@ class AllProjectConfigurer {
          */
         buildConfig = true
         compose = true
-      }
-
-      composeOptions {
-        kotlinCompilerExtensionVersion = Versions.KOTLIN_COMPILER_EXTENSION_VERSION
       }
 
       testOptions {
@@ -241,14 +238,19 @@ class AllProjectConfigurer {
       implementation(Libs.fetch)
       implementation(Libs.fetchOkhttp)
       implementation(Libs.androidx_activity)
+      androidTestImplementation(Libs.leakcanary_android_instrumentation)
 
       // compose
-      implementation(Libs.ANDROIDX_COMPOSE_MATERIAL3)
+      implementation(Libs.COMPOSE_MATERIAL3)
       implementation(Libs.ANDROIDX_ACTIVITY_COMPOSE)
-      implementation(Libs.ANDROIDX_COMPOSE_UI)
-      implementation(Libs.ANDROIDX_COMPOSE_UI_TOOLING)
-      implementation(Libs.ANDROIDX_COMPOSE_RUNTIME_LIVEDATA)
-      implementation(Libs.ANDROIDX_COMPOSE_RUNTIME_RXJAVA2)
+      implementation(Libs.COMPOSE_TOOLING_PREVIEW)
+      implementation(Libs.COMPOSE_RX_JAVA2)
+      implementation(Libs.COMPOSE_LIVE_DATA)
+
+      // Compose UI test implementation
+      androidTestImplementation(Libs.COMPOSE_UI_TEST_JUNIT)
+      debugImplementation(Libs.COMPOSE_UI_MANIFEST)
+      debugImplementation(Libs.COMPOSE_TOOLING)
     }
   }
 }

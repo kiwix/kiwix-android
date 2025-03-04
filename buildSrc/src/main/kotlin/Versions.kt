@@ -116,17 +116,11 @@ object Versions {
 
   const val fetch: String = "3.4.1"
 
-  const val ORG_JETBRAINS_KOTLIN_PLUGIN_COMPOSE = "2.1.10"
+  const val COMPOSE_ACTIVITY_VERSION = "1.10.0"
 
-  const val KOTLIN_COMPILER_EXTENSION_VERSION = "1.5.15"
+  const val COMPOSE_VERSION = "1.7.8"
 
-  const val ANDROIDX_COMPOSE_MATERIAL3_VERSION = "1.3.1"
-
-  const val ANDROIDX_ACTIVITY_COMPOSE_VERSION = "1.10.0"
-
-  const val ANDROIDX_COMPOSE_UI_VERSION = "1.7.7"
-
-  const val ANDROIDX_COMPOSE_BOM_VERSION = "2025.01.01"
+  const val COMPOSE_MATERIAL3 = "1.3.1"
 }
 
 /**
