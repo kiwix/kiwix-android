@@ -17,7 +17,7 @@ buildscript {
 }
 plugins {
   buildSrcVersions
-  id("org.jetbrains.kotlin.plugin.compose") version Versions.ORG_JETBRAINS_KOTLIN_PLUGIN_COMPOSE apply false
+  id("org.jetbrains.kotlin.plugin.compose") version Versions.org_jetbrains_kotlin apply false
 }
 
 allprojects {
