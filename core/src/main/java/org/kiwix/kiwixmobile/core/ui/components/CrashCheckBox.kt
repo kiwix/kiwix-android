@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.composeviews
+package org.kiwix.kiwixmobile.core.ui.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

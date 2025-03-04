@@ -46,9 +46,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.tonyodev.fetch2.R.string
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.composeviews.ComposeButton
-import org.kiwix.kiwixmobile.core.composeviews.CrashCheckBox
 import org.kiwix.kiwixmobile.core.extensions.loadBitmapFromMipmap
+import org.kiwix.kiwixmobile.core.ui.components.CrashCheckBox
+import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CRASH_IMAGE_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEVENTEEN_DP
@@ -112,12 +112,12 @@ fun ErrorActivityScreen(
         .navigationBarsPadding(),
       horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-      ComposeButton(
+      KiwixButton(
         buttonTextId = R.string.crash_button_confirm,
         clickListener = { sendDetailsButtonClickListener.invoke() },
       )
 
-      ComposeButton(
+      KiwixButton(
         clickListener = { noThanksButtonClickListener.invoke() },
         buttonTextId = R.string.no_thanks
       )
