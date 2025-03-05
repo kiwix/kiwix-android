@@ -20,8 +20,8 @@ package org.kiwix.kiwixmobile.core.utils.dialog
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.net.Uri
 import androidx.annotation.IdRes
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.BuildConfig
@@ -105,9 +105,9 @@ class RateDialogHandler @Inject constructor(
 
   private fun goToRateApp(activity: Activity) {
     val kiwixLocalMarketUri =
-      Uri.parse("market://details?id=${activity.packageName}")
+      "market://details?id=${activity.packageName}".toUri()
     val kiwixBrowserMarketUri =
-      Uri.parse("http://play.google.com/store/apps/details?id=${activity.packageName}")
+      "http://play.google.com/store/apps/details?id=${activity.packageName}".toUri()
     val goToMarket = Intent(Intent.ACTION_VIEW, kiwixLocalMarketUri)
     goToMarket.addFlags(
       Intent.FLAG_ACTIVITY_NO_HISTORY or

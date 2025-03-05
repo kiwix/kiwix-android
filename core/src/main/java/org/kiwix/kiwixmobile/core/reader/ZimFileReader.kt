@@ -425,7 +425,7 @@ class ZimFileReader constructor(
      * Uri.parse returns null without android dependencies loaded
      */
     @JvmField
-    val UI_URI: Uri? = Uri.parse("content://org.kiwix.ui/")
+    val UI_URI: Uri? = "content://org.kiwix.ui/".toUri()
 
     const val CONTENT_PREFIX = "https://kiwix.app/"
 

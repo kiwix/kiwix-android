@@ -22,7 +22,7 @@ import android.view.View
 import android.widget.TextView
 
 fun TextView.setTextAndVisibility(nullableText: String?) =
-  if (nullableText != null && nullableText.isNotEmpty()) {
+  if (nullableText?.isNotEmpty() == true) {
     text = nullableText
     visibility = View.VISIBLE
   } else {
