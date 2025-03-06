@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Jopparn
+* Larsa
 * Marcusjehrlander
 * McDutchie
 * MohitMali
@@ -64,10 +65,12 @@
   <string name="qr_code">Renderad QR-kod</string>
   <string name="share_host_address">Dela webbadress med andra appar</string>
   <string name="error_file_not_found">Fel: Den valda ZIM-filen kunde inte hittas. %s</string>
-  <string name="unable_to_read_zim_file" fuzzy="true">Kunde inte läsa denna zim-fil!</string>
-  <string name="zim_not_opened" fuzzy="true">Kunde inte öppna zip-fil</string>
+  <string name="unable_to_read_zim_file">Kunde inte läsa denna ZIM-fil!</string>
+  <string name="zim_not_opened">Kunde inte öppna ZIM-fil</string>
   <string name="error_file_invalid">Fel: Den valda filen är inte en giltig ZIM-fil. %s</string>
   <string name="error_article_url_not_found">Fel: Inläsning av artikel (url: %1$s) misslyckades.</string>
+  <string name="error_loading_random_article_zim_not_loaded">Det gick inte att ladda artikeln. ZIM-filen är inte korrekt laddad.</string>
+  <string name="could_not_find_random_article">Det gick inte att hitta en slumpmässig artikel. Försök igen senare.</string>
   <string name="pref_display_title">Visning</string>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
@@ -85,7 +88,7 @@
   <string name="no_app_found_to_select_bookmark_file">Ingen app hittades för att välja bokmärkesfil</string>
   <string name="no_section_info">Ingen innehållsrubrik hittades</string>
   <string name="request_storage">För att komma åt offlineinnehåll behöver vi tillgång till ditt lagringsutrymme</string>
-  <string name="request_write_storage" fuzzy="true">För att ladda ned zim-filer behöver vi skrivåtkomst till din lagring</string>
+  <string name="request_write_storage">För att ladda ned ZIM-filer behöver vi skrivåtkomst till din lagring</string>
   <string name="clear_recent_and_tabs_history_dialog">Är du säker på att du vill radera din sökhistorik och återställa alla aktiva flikar?</string>
   <string name="delete_recent_search_item">Radera detta objekt?</string>
   <string name="pref_clear_all_history_title">Rensa historik</string>
@@ -129,12 +132,14 @@
   <string name="local_zims">Enhet</string>
   <string name="remote_zims">Ansluten</string>
   <string name="library">Bibliotek</string>
-  <string name="delete_zim_body" fuzzy="true">Följande zim-fil(er) kommer att raderas:\n\n%s</string>
+  <string name="delete_zim_body">Följande ZIM-fil(er) kommer att raderas:\n\n%s</string>
   <string name="delete_zims_toast">Fil raderades</string>
   <string name="no_files_here">Inga filer här</string>
   <string name="download_no_space">Otillräckligt utrymme för att ladda ned.</string>
   <string name="download">Ladda ned</string>
+  <string name="download_notification_channel_name">Kanalnamn för nedladdningsnotifikationer</string>
   <string name="space_available">Tillgängligt utrymme:</string>
+  <string name="move_no_space">Otillräckligt utrymme för att flytta/kopiera.</string>
   <string name="zim_simple">Enkelt</string>
   <string name="zim_no_pic">Inga bilder</string>
   <string name="zim_no_vid">Inga videor</string>
@@ -147,16 +152,20 @@
   <string name="help_7">De finns tillgängliga som ZIM-filer. Det är många:</string>
   <string name="help_8">• Wikipedia är tillgänglig separat för varje språk</string>
   <string name="help_9">• Annat innehåll som Wikileaks eller Wikisource finns också tillgängligt</string>
-  <string name="help_10" fuzzy="true">Du kan antingen ladda ned dina valda ZIM-filer i appen eller försiktigt välja ut de som du vill ladda ned från en dator innan du överför ZIM-filerna till ditt SD-kort.</string>
+  <string name="help_10">Du kan antingen ladda ned dina valda ZIM-filer i appen eller välja de som du vill ladda ned via en dator och sen överföra ZIM-filerna till ditt SD-kort.</string>
   <string name="help_11">ZIM-filer som laddas ned i appen placeras i den externa lagringskatalogen i en mapp som heter Kiwix.</string>
+  <string name="fetching_storage_info">Hämtar lagringsinformation…</string>
   <string name="pref_storage">Lagring</string>
   <string name="pref_current_folder">Nuvarande mapp</string>
   <string name="pref_storage_used">%s använt</string>
   <string name="pref_free_storage">%s ledigt</string>
+  <string name="choose_storage_to_download_book">Välj lagringsutrymme för att ladda ner boken</string>
   <string name="delete_zim_failed">Tyvärr kunde vi inte radera några filer. Du kan försöka använda en filhanterare istället.</string>
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">återuppta</string>
   <string name="stop">stoppa</string>
+  <string name="notification_pause_button_text">Pausa</string>
+  <string name="notification_resume_button_text">Återuppta</string>
   <string name="internal_storage">Internt</string>
   <string name="external_storage">Extern</string>
   <string name="yes">Ja</string>
@@ -164,9 +173,9 @@
   <string name="confirm_stop_download_title">Stoppa nedladdning?</string>
   <string name="confirm_stop_download_msg">Är du säker på att du vill stoppa denna nedladdning?</string>
   <string name="download_change_storage">Val av enhetslagring</string>
-  <string name="tts_not_enabled" fuzzy="true">Text till tal är inte aktiverat för denna ZIM-fil</string>
-  <string name="texttospeech_initialization_failed" fuzzy="true">Misslyckades att initialisera text-till-tal. Var god försök igen</string>
-  <string name="texttospeech_error" fuzzy="true">Oväntat fel uppstod för text-till-tal. Var god försök igen</string>
+  <string name="tts_not_enabled">Text-till-tal är inte aktiverat för denna ZIM-fil</string>
+  <string name="texttospeech_initialization_failed">Misslyckades att initialisera text-till-tal. Var god försök igen</string>
+  <string name="texttospeech_error">Oväntat fel uppstod för text-till-tal. Var god försök igen</string>
   <string name="next">Nästa</string>
   <string name="previous">Föregående</string>
   <string name="wifi_only_title">Tillåt att ladda ned innehåll med mobildata?</string>
@@ -182,7 +191,7 @@
   <string name="pref_external_link_popup_title">Varna vid externa länkar</string>
   <string name="pref_external_link_popup_summary">Visar popup för att varna om ytterligare kostnader eller att det inte fungerar i offlinelänkar.</string>
   <string name="external_link_popup_dialog_title">Går till extern länk!</string>
-  <string name="external_link_popup_dialog_message">Du går till en extern länk. Detta kan leda till ytterligare dataöverföringskostnader eller kommer helt enkelt inte fungera när du är offline. Vill du fortsätta?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Du går till en extern länk. Detta kan leda till ytterligare dataöverföringskostnader eller kommer helt enkelt inte fungera när du är offline. Vill du fortsätta?</string>
   <string name="do_not_ask_anymore">Fråga inte igen</string>
   <string name="your_languages">Valda språk:</string>
   <string name="other_languages">Andra språk:</string>
@@ -190,7 +199,7 @@
   <string name="crash_title">Ajdå… det här är pinsam</string>
   <string name="crash_description">Det verkar som att vi kraschade.\n\nSkulle du vilja hjälpa oss att fixa detta problem genom att skicka följande information?</string>
   <string name="crash_checkbox_language">Dina språkinställningar</string>
-  <string name="crash_checkbox_zimfiles" fuzzy="true">En lista över dina Zim-filer</string>
+  <string name="crash_checkbox_zimfiles">En lista över dina ZIM-filer</string>
   <string name="crash_checkbox_exception">Kraschdetaljer</string>
   <string name="crash_checkbox_logs">Applikationsloggar</string>
   <string name="crash_checkbox_device">Enhetsdetaljer</string>
@@ -206,6 +215,8 @@
   <string name="welcome_to_the_family">Välkommen till famlijen</string>
   <string name="save_books_offline">Spara böcker offline</string>
   <string name="download_books_message">Ladda ned böcker och läs var du än är.</string>
+  <string name="save_books_in_desired_storage">Spara böcker i önskad lagring</string>
+  <string name="storage_location_hint">Du kan välja din föredragna lagringsplats, antingen SD-kort eller internminne, för nedladdning av ZIM-filer från skärmen Inställningar.</string>
   <string name="unable_to_add_to_bookmarks">Kan inte lägga till i bokmärken</string>
   <string name="go_to_previous_page">Gå till föregående sida</string>
   <string name="go_to_next_page">Gå till nästa sida</string>
@@ -228,9 +239,10 @@
   <string name="complete">Färdig</string>
   <string name="paused_state">Pausad</string>
   <string name="failed_state">Misslyckades: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">zim-filen kunde inte laddas ner. Testa att ominstallera applikationen från Play Store.</string>
+  <string name="custom_download_error_message_for_authentication_failed">ZIM-filen kunde inte laddas ner. Testa att ominstallera applikationen från Play Store.</string>
   <string name="save">Spara</string>
   <string name="note">Anteckning</string>
+  <string name="take_notes">Gör anteckningar</string>
   <string name="wiki_article_title">Wikiartikelns titel</string>
   <string name="ext_storage_permission_rationale_export_bookmark">Lagringsåtkomst krävs för att exportera bokmärken</string>
   <string name="ext_storage_write_permission_denied_export_bookmark">Bokmärken kan inte exportera utan åtkomst till lagringen</string>
@@ -257,7 +269,7 @@
   <string name="permission_rationale_location">Platsåtkomst krävs från Android för att låta appen söka efter närliggande enheter.</string>
   <string name="permission_rationale_nearby">Behörigheten för enheter i närheten krävs av Android för att låta appen upptäcka peer-enheter</string>
   <string name="permission_refused_location">Kan inte hitta närliggande enheter utan platsåtkomst.</string>
-  <string name="permission_refused_storage" fuzzy="true">Kan inte komma åt zim-filer utan lagringsbehörighet</string>
+  <string name="permission_refused_storage">Kan inte komma åt ZIM-filer utan lagringsbehörighet</string>
   <string name="request_enable_location">Aktivera plats för att tillåta sökning efter närliggande enheter</string>
   <string name="discovery_needs_location">Kan inte hitta närliggande enheter utan platstjänster</string>
   <string name="request_enable_wifi">Aktivera WiFi P2P i systeminställningar</string>
@@ -319,16 +331,33 @@
   <string name="tabs_restored">Flikar återställdes</string>
   <string name="open_drawer">Öppna sidomeny</string>
   <string name="close_drawer">Stäng sidomeny</string>
+  <string name="preparing_file_for_copy">Förbereder för kopiering/flyttning</string>
+  <string name="action_copy">Kopiera</string>
+  <string name="move">Flytta</string>
+  <string name="copying_zim_file">Kopierar ZIM-fil…</string>
+  <string name="moving_zim_file">Flyttar ZIM-fil…</string>
+  <string name="copy_move_files_dialog_description" fuzzy="true">Kiwix kräver att ZIM-filen finns i sin egen datakatalog. Vill du kopiera eller flytta den dit?</string>
+  <string name="copy_file_error_message">Fel vid kopiering av ZIM-filen: %s .</string>
+  <string name="verify_zim_chunk_dialog_title">Var försiktig: Se till att alla ZIM-bitar har flyttats/kopierats på rätt sätt!</string>
+  <string name="verify_zim_chunks_dialog_message">Du kan verifiera dem i mappen “Android/media/org.kiwix…/”.\nNär du är klar uppdaterar du biblioteksskärmen genom att svepa nedåt. Den delade ZIM-filen visas sedan i ditt bibliotek.</string>
+  <string name="why_copy_move_files_to_app_directory">Varför kopiera/flytta filer till appens offentliga katalog?</string>
+  <string name="copy_move_files_to_app_directory_description">På grund av Google Plays policyer på Android 11 och senare kan vår app inte längre direkt komma åt filer som lagras någon annanstans på din enhet. För att du ska kunna se dina valda filer måste vi flytta eller kopiera dem till en speciell mapp i vår applikationskatalog. Detta gör att vi kan komma åt och öppna filerna.</string>
+  <string name="choose_storage_to_copy_move_zim_file">Välj lagringsutrymme för att kopiera/flytta ZIM-fil</string>
+  <string name="move_file_error_message">Fel vid flyttning av ZIM-filen: %s .</string>
   <string name="how_to_update_content">Hur uppdaterar man innehåll?</string>
-  <string name="update_content_description" fuzzy="true">För att uppdatera innehåll (en zim-fil) behöver du ladda ned den fullständig senaste versionen samma innehåll. Du kan göra det via nedladdningsavsnittet.</string>
+  <string name="update_content_description">För att uppdatera innehåll (en ZIM-fil) behöver du ladda ned den fullständiga senaste versionen av samma innehåll. Du kan göra det via nedladdningssektionen.</string>
   <string name="all_files_permission_needed">Behörighet för alla filer behövs</string>
-  <string name="all_files_permission_needed_message" fuzzy="true">För att kunna komma åt alla ZIM-filer på enheten behöver vi behörighet för alla filer</string>
+  <string name="all_files_permission_needed_message">För att kunna komma åt alla ZIM-filer på enheten behöver vi behörighet till alla filer</string>
   <string name="allowed">Tillåten</string>
   <string name="not_allowed">Inte tillåtet</string>
   <string name="denied_internet_permission_message">Aktivera wifi för att ladda ner innehåll</string>
   <string name="system_unable_to_grant_permission_message">Systemet kunde inte ge tillstånd!</string>
   <string name="allow">Tillåt</string>
   <string name="swipe_down_for_library">Svep nedåt för bibliotek</string>
+  <string name="reaching_remote_library">Nå fjärrbiblioteket</string>
+  <string name="parsing_remote_library">Bearbetar fjärrbibliotek</string>
+  <string name="starting_downloading_remote_library">Startar nedladdning av onlinebiblioteket</string>
+  <string name="downloading_library">Nedladdningsbibliotek\n%s</string>
   <string name="no_notes">Inga anteckningar</string>
   <string name="notes_from_all_books">Visa anteckningar från alla böcker</string>
   <string name="search_notes">Sök i anteckningar</string>
@@ -341,7 +370,7 @@
   <string name="download_tts_language_message">Klicka på nedladdningsknappen. Det kommer automatiskt att ladda ned det önskade språket.</string>
   <string name="external_link_copied_message">Extern länk kopierades till urklipp</string>
   <string name="read_aloud_service_channel_name">Läs upp tjänstkanal</string>
-  <string name="read_aloud_channel_description" fuzzy="true">Text till tal-kontroller.</string>
+  <string name="read_aloud_channel_description">Text-till-tal-kontroller.</string>
   <string name="read_aloud_running">Uppläsning körs</string>
   <string name="backward_history">Bakåthistorik</string>
   <string name="forward_history">Framåthistorik</string>
@@ -359,4 +388,7 @@
   <string name="toolbar_back_button_content_description">Gå till föregående vy</string>
   <string name="save_or_open_unsupported_files_dialog_title">Spara eller öppna den här filen?</string>
   <string name="save_or_open_unsupported_files_dialog_message">Att välja Öppna kommer öppna den här filen i externa läsarapplikationer.</string>
+  <string name="donation_dialog_title">Donera idag</string>
+  <string name="donation_dialog_description">%s behöver din hjälp.</string>
+  <string name="make_donation">Gör en donation</string>
 </resources>

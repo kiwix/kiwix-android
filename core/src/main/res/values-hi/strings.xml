@@ -27,11 +27,14 @@
   <string name="menu_read_aloud">पढ़ा कर सुनें</string>
   <string name="menu_read_aloud_stop">पढ़ा कर सुनना रोकें</string>
   <string name="menu_support_kiwix">किविक्स का समर्थन करें</string>
+  <string name="menu_support_kiwix_for_custom_apps">%s समर्थन करें</string>
+  <string name="menu_about_app">%s ऐप के बारे में</string>
   <string name="menu_wifi_hotspot">वाईफाई हॉटस्पॉट</string>
   <string name="save_media">मीडिया सहेजें</string>
   <string name="save_media_error">मीडिया को सहेजते समय एक त्रुटि आयी।</string>
   <string name="save_media_saved">मीडिया को %s के रूप में  Downloads/org.kiwix/ में सहेजा गया</string>
   <string name="search_label">खोजें</string>
+  <string name="searched_list">खोजी गई सूची</string>
   <string name="choose_file">सामग्री फ़ाइल चुनें (*.zim)</string>
   <string name="open_in_new_tab">नए टैब में लिंक खोलें?</string>
   <string name="hotspot_service_channel_name">हॉटस्पॉट सेवा चैनल</string>
@@ -58,17 +61,22 @@
   <string name="hotspot_notification_content_title">किविक्स हॉटस्पॉट</string>
   <string name="start_server_label">सर्वर प्रारंभ करें</string>
   <string name="stop_server_label">सर्वर बंद करें।</string>
+  <string name="error_server_already_running">सर्वर पहले से चल रहा है। कृपया इसे बंद करें और पुनः प्रयास करें।</string>
+  <string name="error_ip_address_not_found">आईपी पता नहीं मिला।</string>
   <string name="server_started_message">सर्वर %s प्रयोग करने के लिए इस आईपी पते को अपने ब्राउज़र में दर्ज करें</string>
+  <string name="qr_code">रेंडर किया गया QR कोड</string>
   <string name="share_host_address">अन्य एप्लिकेशन के माध्यम से यूआरएल साझा करें</string>
-  <string name="error_file_not_found">त्रुटि: चुनी गयी ZIM फ़ाइल नही मिल सकी। %s</string>
-  <string name="unable_to_read_zim_file" fuzzy="true">इस ज़िम फ़ाइल को पढ़ने में असमर्थ!</string>
-  <string name="zim_not_opened" fuzzy="true">ज़िम फ़ाइल खोलने में असमर्थ</string>
-  <string name="error_file_invalid">त्रुटि: चुनी गयी फ़ाइल एक वैध ZIM फ़ाइल नहीं है। %s</string>
+  <string name="error_file_not_found" fuzzy="true">त्रुटि: चुनी गयी ZIM फ़ाइल नही मिल सकी। %s</string>
+  <string name="unable_to_read_zim_file">इस ZIM फ़ाइल को पढ़ने में असमर्थ!</string>
+  <string name="zim_not_opened">ZIM फ़ाइल खोलने में असमर्थ</string>
+  <string name="error_file_invalid" fuzzy="true">त्रुटि: चुनी गयी फ़ाइल एक वैध ZIM फ़ाइल नहीं है। %s</string>
   <string name="error_article_url_not_found">त्रुटि: आलेख (Url:  %1$s ) लोड करना विफल रहा।</string>
+  <string name="error_loading_random_article_zim_not_loaded">लेख लोड करने में असमर्थ. ज़िम फ़ाइल ठीक से लोड नहीं की गई है।</string>
+  <string name="could_not_find_random_article">कोई यादृच्छिक लेख नहीं मिल सका। कृपया बाद में पुनः प्रयास करें।</string>
   <string name="pref_display_title">प्रदर्शन</string>
   <string name="pref_info_title">जानकारी</string>
   <string name="pref_info_version">संस्करण</string>
-  <string name="pref_dark_mode" fuzzy="true">रात्रि मोड</string>
+  <string name="pref_dark_mode">डार्क मोड</string>
   <string name="pref_dark_mode_summary">उल्टे रंगों के साथ लेख दिखाएँ</string>
   <string name="pref_back_to_top">वापस शीर्ष पे जाएँ</string>
   <string name="pref_back_to_top_summary">उपर तक खिसकाने के लिए पृष्ठ के अंत में एक बटन दिखाएँ</string>
@@ -79,15 +87,21 @@
   <string name="tts_lang_not_supported">इस पृष्ठ की भाषा समर्थित नहीं है। लेख ठीक से नहीं पढ़ा जा सकता है।</string>
   <string name="no_reader_application_installed">इस प्रकार की फ़ाइल के लिए एक इंस्टॉल किया गया एप्लिकेशन नहीं मिला</string>
   <string name="no_email_application_installed">कृपया एक ईमेल सेवा प्रदाता स्थापित करें</string>
+  <string name="no_app_found_to_select_bookmark_file">बुकमार्क फ़ाइल चुनने के लिए कोई ऐप नहीं मिला</string>
   <string name="no_section_info">कोई सामग्री शीर्षलेख नहीं मिला</string>
   <string name="request_storage">ऑफ़लाइन सामग्री का उपयोग करने के लिए हमें आपके संग्रहण में पहुंच की आवश्यकता है</string>
-  <string name="request_write_storage" fuzzy="true">ज़िम फ़ाइलें डाउनलोड करने के लिए हमें आपके स्टोरेज तक राइट एक्सेस की आवश्यकता है</string>
+  <string name="request_write_storage">ज़िम फ़ाइलें डाउनलोड करने के लिए हमें आपके स्टोरेज की \'राइट एक्सेस\' की आवश्यकता है</string>
   <string name="clear_recent_and_tabs_history_dialog">क्या आप वाकई अपना खोज इतिहास हटाना चाहते हैं और सभी सक्रिय टैब फिर से कायम करना चाहते हैं?</string>
   <string name="delete_recent_search_item">इस फ़ाइल को हटाएँ?</string>
   <string name="pref_clear_all_history_title">इतिहास साफ़ करें</string>
   <string name="pref_clear_all_history_summary">हाल की खोजों और टैब इतिहास को साफ़ करें</string>
   <string name="pref_notes">टिप्पणियाँ</string>
   <string name="pref_permission">अनुमतियां</string>
+  <string name="pref_import_bookmark_title">बुकमार्क आयात करें</string>
+  <string name="pref_import_bookmark_summary">सेव किए गए बुकमार्क आयात करें</string>
+  <string name="pref_export_bookmark_title">बुकमार्क निर्यात करें</string>
+  <string name="pref_export_bookmark_summary">सभी सेव किए गए बुकमार्क निर्यात करें</string>
+  <string name="export_bookmark_saved">बुकमार्क %s फ़ाइल में निर्यात किए जाते हैं</string>
   <string name="all_history_cleared">सभी इतिहास मिट गया</string>
   <string name="pref_clear_all_bookmarks_title">बुकमार्क साफ़ करें</string>
   <string name="clear_all_history_dialog_title">सारा इतिहास साफ़ करें?</string>
@@ -120,12 +134,14 @@
   <string name="local_zims">डिवाइस</string>
   <string name="remote_zims">ऑनलाइन</string>
   <string name="library">पुस्तकालय</string>
-  <string name="delete_zim_body" fuzzy="true">निम्न ज़िम फ़ाइल (ओं) को हटा दिया जाएगा:\n\n%s</string>
+  <string name="delete_zim_body">निम्नलिखित ZIM फ़ाइल(फ़ाइलें) हटा दी जाएंगी:\n\n %s</string>
   <string name="delete_zims_toast">फाइल हटा दी गई</string>
   <string name="no_files_here">यहां कोई फ़ाइल नहीं</string>
   <string name="download_no_space">डाउनलोड करने के लिए अपर्याप्त स्टोरेज।</string>
   <string name="download">डाउनलोड</string>
+  <string name="download_notification_channel_name">अधिसूचना चैनल का नाम डाउनलोड करें</string>
   <string name="space_available">उपलब्ध जगह:</string>
+  <string name="move_no_space">स्थानांतरित/कॉपी करने के लिए अपर्याप्त स्थान.</string>
   <string name="zim_simple">साधारण</string>
   <string name="zim_no_pic">चित्र नहीं</string>
   <string name="zim_no_vid">चलचित्र नहीं</string>
@@ -138,14 +154,20 @@
   <string name="help_7">वे ZIM फाइलों के रूप में उपलब्ध हैं।उनमें से ऐसे बहुत से हैं:</string>
   <string name="help_8">• विकिपीडिया प्रत्येक भाषा के लिए अलग से उपलब्ध है</string>
   <string name="help_9">• विकिलीक्स या विकीसोर्स जैसी अन्य सामग्री भी उपलब्ध हैं</string>
-  <string name="help_10" fuzzy="true">आप या तो अपनी चुनी हुई ZIM फ़ाइलों को ऐप में डाउनलोड कर सकते हैं या जिन्हें आप चाहते हैं उन्हें सावधानीपूर्वक चुनें और ZIM फ़ाइलों को अपने SD कार्ड में स्थानांतरित करने से पहले डेस्कटॉप कंप्यूटर से डाउनलोड करें।</string>
+  <string name="help_10">आप अपनी चुनी हुई ZIM फ़ाइलों को या तो ऐप में डाउनलोड कर सकते हैं या अपनी इच्छित फ़ाइल का सावधानीपूर्वक चयन कर ZIM फ़ाइलों को अपने SD कार्ड में स्थानांतरित करने से पहले डेस्कटॉप कंप्यूटर से डाउनलोड कर सकते हैं।</string>
   <string name="help_11">ZIM फाइलें जो इन-ऐप में डाउनलोड हैं, एक बाहरी फ़ोल्डर में स्थित हैं, जिसमें किवीक्स नामक एक फ़ोल्डर है।</string>
+  <string name="fetching_storage_info">संग्रहण का विवरण प्राप्त किया जा रहा है…</string>
   <string name="pref_storage">संचयन</string>
   <string name="pref_current_folder">वर्तमान फोल्डर</string>
+  <string name="pref_storage_used">%s उपयोग किया गया</string>
+  <string name="pref_free_storage">%s उपलब्ध</string>
+  <string name="choose_storage_to_download_book">पुस्तक डाउनलोड करने के लिए संग्रहण (storage) चुनें</string>
   <string name="delete_zim_failed">क्षमा करें हम कुछ फ़ाइलों को हटाने में असमर्थ थे।  आपको इसके बजाय फ़ाइल प्रबंधक का उपयोग करने का प्रयास करना चाहिए।</string>
   <string name="tts_pause">रुका</string>
   <string name="tts_resume">फिर से शुरू करना</string>
   <string name="stop">रोकें</string>
+  <string name="notification_pause_button_text">विराम</string>
+  <string name="notification_resume_button_text">पुनः प्रारम्भ करें</string>
   <string name="internal_storage">अन्दरूनी</string>
   <string name="external_storage">बाहरी</string>
   <string name="yes">हाँ</string>
@@ -153,9 +175,9 @@
   <string name="confirm_stop_download_title">डाउनलोड रोकें?</string>
   <string name="confirm_stop_download_msg">क्या आप वास्तव में इस डाउनलोड को रोकना चाहते हैं?</string>
   <string name="download_change_storage">संग्रहण यंत्र चयनकर्ता</string>
-  <string name="tts_not_enabled" fuzzy="true">इस ZIM फ़ाइल के भाषण के लिए पाठ सक्षम नहीं है</string>
-  <string name="texttospeech_initialization_failed" fuzzy="true">टेक्स्ट टू स्पीच का आरंभीकरण विफल रहा। कृपया पुन: प्रयास करें</string>
-  <string name="texttospeech_error" fuzzy="true">टेक्स्ट टू स्पीच में अप्रत्याशित त्रुटि। कृपया पुन: प्रयास करें</string>
+  <string name="tts_not_enabled">इस ज़िम फ़ाइल के लिए \'रीड अलाउड\' सक्षम नहीं है</string>
+  <string name="texttospeech_initialization_failed">रीड अलाउड की शुरुआत विफल रही। कृपया पुनः प्रयास करें</string>
+  <string name="texttospeech_error">रीड अलाउड में अप्रत्याशित त्रुटि। कृपया पुनः प्रयास करें</string>
   <string name="next">अगला</string>
   <string name="previous">पिछला</string>
   <string name="wifi_only_title">मोबाइल नेटवर्क के जरिए सामग्री डाउनलोड करने की अनुमति दें?</string>
@@ -171,7 +193,7 @@
   <string name="pref_external_link_popup_title">बाह्य कड़ियों में प्रवेश करने पर सावधान करें</string>
   <string name="pref_external_link_popup_summary">“अतिरिक्त खर्च एवं ऑफलाइन होने पर काम नहीं करने वाली कड़ी” से सावधान करने हेतु पॉपअप संदेश प्रदर्शित करें।</string>
   <string name="external_link_popup_dialog_title">बहरी कड़ी में प्रवेश किया जा रहा है!</string>
-  <string name="external_link_popup_dialog_message">आप बहरी कड़ी में प्रवेश कर रहे हैं। इसके कारण डेटा स्थानांतरण हेतु अतिरिक्त खर्च पड़ सकता है, अथवा ऑफलाइन होने पर यह काम ही नहीं करेगा। क्या आप अभी भी आगे बढ़ना चाहते हैं?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">आप बहरी कड़ी में प्रवेश कर रहे हैं। इसके कारण डेटा स्थानांतरण हेतु अतिरिक्त खर्च पड़ सकता है, अथवा ऑफलाइन होने पर यह काम ही नहीं करेगा। क्या आप अभी भी आगे बढ़ना चाहते हैं?</string>
   <string name="do_not_ask_anymore">आगे और ना पूछें</string>
   <string name="your_languages">चयनित भाषाएं</string>
   <string name="other_languages">अन्य भाषाएँ</string>
@@ -179,7 +201,7 @@
   <string name="crash_title">खैर, यह शर्मनाक है</string>
   <string name="crash_description">ऐसा लगता है जैसे हम दुर्घटनाग्रस्त हो गए।\n\nक्या आप निम्नलिखित जानकारी भेजकर इस समस्या को ठीक करने में हमारी मदद करना चाहेंगे?</string>
   <string name="crash_checkbox_language">अधिक भाषा सेटिंग्स</string>
-  <string name="crash_checkbox_zimfiles" fuzzy="true">आपकी ZIM फ़ाइलों की एक सूची</string>
+  <string name="crash_checkbox_zimfiles">आपकी ZIM फ़ाइलों की सूची</string>
   <string name="crash_checkbox_exception">दुर्घटना का विवरण</string>
   <string name="crash_checkbox_logs">आवेदन डेटा</string>
   <string name="crash_checkbox_device">डिवाइस विवरण</string>
@@ -195,6 +217,7 @@
   <string name="welcome_to_the_family">परिवार में आपका स्वागत है</string>
   <string name="save_books_offline">पुस्तकें ऑफ़लाइन सहेजें</string>
   <string name="download_books_message">आप जहां भी हों, किताबें डाउनलोड करें और पढ़ें।</string>
+  <string name="save_books_in_desired_storage">पुस्तकों को इच्छित संग्रहण में सहेजें</string>
   <string name="unable_to_add_to_bookmarks">बुकमार्क में जोड़ने में असमर्थ</string>
   <string name="go_to_previous_page">पिछले पृष्ठ पर जाएं</string>
   <string name="go_to_next_page">अगले पृष्ठ पर जाएँ</string>

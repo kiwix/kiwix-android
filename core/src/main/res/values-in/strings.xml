@@ -186,7 +186,7 @@
   <string name="pref_external_link_popup_title">Peringatkan saat mengunjungi pranala luar</string>
   <string name="pref_external_link_popup_summary">Tampilkan popup untuk memperingatkan tentang biaya tambahan atau tidak bekerja dalam pranala luring.</string>
   <string name="external_link_popup_dialog_title">Mengunjungi Pranala Luar!</string>
-  <string name="external_link_popup_dialog_message">Anda sedang mengunjungi pranala luar. Hal ini dapat menyebabkan biaya tambahan untuk transfer data atau tidak akan berjalan saat Anda luring. Apakah Anda ingin melanjutkan?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Anda sedang mengunjungi pranala luar. Hal ini dapat menyebabkan biaya tambahan untuk transfer data atau tidak akan berjalan saat Anda luring. Apakah Anda ingin melanjutkan?</string>
   <string name="do_not_ask_anymore">Jangan tanya lagi</string>
   <string name="your_languages">Bahasa terpilih:</string>
   <string name="other_languages">Bahasa lain:</string>
@@ -329,7 +329,7 @@
   <string name="move">Pindahkan</string>
   <string name="copying_zim_file">Menyalin berkas ZIM…</string>
   <string name="moving_zim_file">Memindahkan berkas ZIM…</string>
-  <string name="copy_move_files_dialog_description">Kiwix mewajibkan file ZIM berada di direktori datanya sendiri. Apakah Anda ingin menyalin atau memindahkannya ke sana?</string>
+  <string name="copy_move_files_dialog_description" fuzzy="true">Kiwix mewajibkan file ZIM berada di direktori datanya sendiri. Apakah Anda ingin menyalin atau memindahkannya ke sana?</string>
   <string name="copy_file_error_message">Kesalahan saat menyalin berkas ZIM: %s.</string>
   <string name="why_copy_move_files_to_app_directory">Mengapa menyalin/memindahkan file ke direktori publik aplikasi?</string>
   <string name="copy_move_files_to_app_directory_description">Karena kebijakan Google Play pada Android 11 dan atas, aplikasi kami tidak dapat lagi mengakses berkas yang tersimpan di tempat lain di perangkat Anda secara langsung. Agar Anda dapat melihat berkas yang Anda pilih, kami perlu memindahkan atau menyalinnya ke folder khusus dalam direktori aplikasi kami. Ini memungkinkan kami untuk mengakses dan membuka berkas tersebut.</string>

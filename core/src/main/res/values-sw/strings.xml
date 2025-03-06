@@ -174,7 +174,7 @@
   <string name="pref_external_link_popup_title">Onyo wakati wa kuingia viungo vya nje</string>
   <string name="pref_external_link_popup_summary">Onyesha ibukizi kuonya kuhusu gharama za ziada au si kazi katika viungo nje ya mtandao.</string>
   <string name="external_link_popup_dialog_title">Kuingia Link ya Nje!</string>
-  <string name="external_link_popup_dialog_message">Unaingia kwenye uhusiano wa nje. Hii inaweza kusababisha gharama za ziada kwa ajili ya uhamisho wa data au tu si kazi wakati wewe ni nje ya mtandao. Je, unataka kuendelea?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Unaingia kwenye uhusiano wa nje. Hii inaweza kusababisha gharama za ziada kwa ajili ya uhamisho wa data au tu si kazi wakati wewe ni nje ya mtandao. Je, unataka kuendelea?</string>
   <string name="do_not_ask_anymore">Usiniulize tena</string>
   <string name="your_languages">Chagua lugha</string>
   <string name="other_languages">Lugha zingine:</string>

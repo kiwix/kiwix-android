@@ -179,7 +179,7 @@
   <string name="pref_external_link_popup_title">Harici bağlantı girilirken uyarı ver</string>
   <string name="pref_external_link_popup_summary">Ek ücretlendirmelerde veya çevrimdışı bağlantılarla çalışılmadığında açılır pencere göstererek uyar.</string>
   <string name="external_link_popup_dialog_title">Harici Bağlantı Giriliyor!</string>
-  <string name="external_link_popup_dialog_message">Bir dış bağlantı giriyorsunuz. Bu, veri aktarımı için ilave ücretlendirmeye neden olabilir veya çevrimdışı olduğunuzda çalışmaz. Devam etmek istiyor musunuz?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Bir dış bağlantı giriyorsunuz. Bu, veri aktarımı için ilave ücretlendirmeye neden olabilir veya çevrimdışı olduğunuzda çalışmaz. Devam etmek istiyor musunuz?</string>
   <string name="do_not_ask_anymore">Artık sorma</string>
   <string name="your_languages">Seçilen diller:</string>
   <string name="other_languages">Diğer diller:</string>

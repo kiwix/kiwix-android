@@ -168,7 +168,7 @@
   <string name="pref_external_link_popup_title">Попереджувати, коли введено зовнішнє посилання</string>
   <string name="pref_external_link_popup_summary">Відображати попередження щодо проблем із зовнішніми посиланнями, як от зняття додаткових грошей або неспрацювання посилань в офлайні.</string>
   <string name="external_link_popup_dialog_title">Введіть зовнішнє посилання!</string>
-  <string name="external_link_popup_dialog_message">Ви вказали зовнішнє посилання. Будь ласка пам’ятайте, що якщо ви офлайн, то воно не буде відкрито. Також зауважте, що відкриття цього посилання може призвести до зняття грошей мобільним оператором. Дійсно бажаєте відкрити зовнішнє посилання?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Ви вказали зовнішнє посилання. Будь ласка пам’ятайте, що якщо ви офлайн, то воно не буде відкрито. Також зауважте, що відкриття цього посилання може призвести до зняття грошей мобільним оператором. Дійсно бажаєте відкрити зовнішнє посилання?</string>
   <string name="do_not_ask_anymore">Більш не питати</string>
   <string name="your_languages">Вибір мови:</string>
   <string name="other_languages">Інші мови:</string>

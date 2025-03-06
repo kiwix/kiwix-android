@@ -59,6 +59,8 @@
   <string name="zim_not_opened">Не можам да ја отворам ZIM-податотеката</string>
   <string name="error_file_invalid">Грешка: Одбраната податотека не е вежачка ZIM-податотека. %s</string>
   <string name="error_article_url_not_found">Грешка: Не успеав да ја вчитам статијата (URL: %1$s).</string>
+  <string name="error_loading_random_article_zim_not_loaded">Не можам да ја вчитам статијата. ZIM-податотеката не е правилно вчитана.</string>
+  <string name="could_not_find_random_article">Не можам да најдам случајна статија. Обидете се подоцна.</string>
   <string name="pref_display_title">Приказник</string>
   <string name="pref_info_title">Информации</string>
   <string name="pref_info_version">Верзија</string>
@@ -179,10 +181,11 @@
   <string name="pref_external_link_popup_title">Предупреди ме кога се внесуваат надворешни врски</string>
   <string name="pref_external_link_popup_summary">Прикажи отскочници со предупредување за дополнителни трошоци или неработа во вонмрежни врски.</string>
   <string name="external_link_popup_dialog_title">Внесувате надворешна врска!</string>
-  <string name="external_link_popup_dialog_message">Внесувате надворешна врска. Ова може да доведе до дополнителни трошоци за податочен пренос или пак просто нема да работи кога не сте на линија. Дали сакате да продолжите?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Внесувате надворешна врска. Ова може да доведе до дополнителни трошоци за податочен пренос или пак просто нема да работи кога не сте на линија. Дали сакате да продолжите?</string>
   <string name="do_not_ask_anymore">Повеќе не прашувај</string>
   <string name="your_languages">Избрани јазици:</string>
   <string name="other_languages">Други јазици:</string>
+  <string name="downloading">Преземање:</string>
   <string name="no_items_msg">Нема ставки</string>
   <string name="crash_title">Ова е незгодно</string>
   <string name="crash_description">Се чини дека се урнавме.\n\nБи сакале ли да ни ги испратите следниве информации за да го поправиме проблемот?</string>
@@ -203,6 +206,8 @@
   <string name="welcome_to_the_family">Добре дојдовте во семејството</string>
   <string name="save_books_offline">Зачувај книги вонмрежно</string>
   <string name="download_books_message">Преземајте книги и читајте ги каде и да сте.</string>
+  <string name="save_books_in_desired_storage">Зачувајте книги во посакувано складиште</string>
+  <string name="storage_location_hint">Можете да изберете претпочитано место за складирање, или SD-картичка или внатрешен склад, за преземање на ZIM-податотеката од екранот „Поставки“.</string>
   <string name="unable_to_add_to_bookmarks">Не можам да додадам обележувачи</string>
   <string name="go_to_previous_page">Оди на претходната страница</string>
   <string name="go_to_next_page">Оди на следната страница</string>
@@ -322,8 +327,10 @@
   <string name="move">Премести</string>
   <string name="copying_zim_file">Ја копирам ZIM податотеката…</string>
   <string name="moving_zim_file">Ја преместувам ZIM-податотеката…</string>
-  <string name="copy_move_files_dialog_description">Кивикс бара ZIM-податотеката да биде во сопствена податочна папка. Дали сакате да ја прекопирате или преместите таму?</string>
+  <string name="copy_move_files_dialog_description" fuzzy="true">Кивикс бара ZIM-податотеката да биде во сопствена податочна папка. Дали сакате да ја прекопирате или преместите таму?</string>
   <string name="copy_file_error_message">Грешка при копирање на ZIM-податотеката: %s.</string>
+  <string name="verify_zim_chunk_dialog_title">Бидете внимателни: Проверете дали сите ZIM-делови се правилно преместени/ископирани!</string>
+  <string name="verify_zim_chunks_dialog_message">Можете да ги проверите во папката „Android/media/org.kiwix…/“.\nШтом сте готови, превчитајте го екранот на библиотеката со поминување надолу. Разделената ZIM-податотека потоа ќе се појави во вашата библиотека.</string>
   <string name="why_copy_move_files_to_app_directory">Зошто да се преместат/прекопираат податотеките во јавната папка на прилогот?</string>
   <string name="copy_move_files_to_app_directory_description">Поради правилата на Google Play за Андроид 11 и поново, нашиот прилог повеќе нема непосреден пристап до податотеки складирани на други места на вашиот уред. За да ви овозможиме да ги гледате избраните податотеки ќе треба да ги преместиме или да ги прекопираме во специјална папка во директориумот на прилогот.</string>
   <string name="choose_storage_to_copy_move_zim_file">Изберете склад за копирање/преместување на ZIM-податотеката</string>

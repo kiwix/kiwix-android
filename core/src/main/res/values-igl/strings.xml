@@ -58,7 +58,7 @@
   <string name="error_file_not_found">Faìlú: ZIM mádú málíñ úgbodúń %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Ineke gbi Zim file no</string>
   <string name="zim_not_opened" fuzzy="true">Unekén bi Zim filuñ</string>
-  <string name="error_file_invalid">Inyọno: File kẹtu chi Zim file Kuma dẹn %s</string>
+  <string name="error_file_invalid" fuzzy="true">Inyọno: File kẹtu chi Zim file Kuma dẹn %s</string>
   <string name="pref_display_title">Dutẹ</string>
   <string name="pref_info_title">Inabali</string>
   <string name="pref_info_version">Enwñ ojioji</string>

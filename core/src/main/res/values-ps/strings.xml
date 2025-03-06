@@ -22,7 +22,7 @@
   <string name="choose_file" fuzzy="true">د ZIM مېنځپانگې يوه دوتنه ټاکل (*.zim)</string>
   <string name="open_in_new_tab">تړنه په نوې کړکۍ کې پرانيستل</string>
   <string name="error_file_not_found">تېروتنه: ستاسې ټاکلې ZIM دوتنه و نه موندل شوه. %s</string>
-  <string name="error_file_invalid">تېروتنه: ستاسې ټاکلې دوتنه يوه کره ZIM دوتنه نه ده. %s</string>
+  <string name="error_file_invalid" fuzzy="true">تېروتنه: ستاسې ټاکلې دوتنه يوه کره ZIM دوتنه نه ده. %s</string>
   <string name="error_article_url_not_found">تېروتنه: ليکنه برسېرېدنه (يو آر ال: %1$s) نابريالئ شوه.</string>
   <string name="pref_display_title">ښکارېدنه</string>
   <string name="pref_info_title">مالومات</string>

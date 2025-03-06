@@ -86,7 +86,7 @@
   <string name="time_left">links</string>
   <string name="pref_external_link_popup_title">Waorsjoewing mich wen ich nao ’nen externe link gaon</string>
   <string name="external_link_popup_dialog_title">Externe link in ’nt tikke!</string>
-  <string name="external_link_popup_dialog_message">Doe bös ’nen externe link in ’nt tikke. Det kan leie toet extra köste veur ’t euverbringe van gegaeves of wirk neet wen se offline bös. Wils se doorgaon?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Doe bös ’nen externe link in ’nt tikke. Det kan leie toet extra köste veur ’t euverbringe van gegaeves of wirk neet wen se offline bös. Wils se doorgaon?</string>
   <string name="do_not_ask_anymore">Vraog nimmieë</string>
   <string name="other_languages">Anger spraoke:</string>
   <string name="no_bookmarks">Gein blaadwiezers</string>
