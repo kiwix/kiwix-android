@@ -33,9 +33,10 @@ object ComposeDimens {
   val BUTTON_DEFAULT_PADDING = 4.dp
 
   // Error screen dimens
-  val CRASH_TITLE_TEXT_SIZE = 24.sp
-  val CRASH_MESSAGE_TEXT_SIZE = 14.sp
   val CRASH_IMAGE_SIZE = 70.dp
+
+  // KiwixAppBar(Toolbar) height
+  val KIWIX_APP_BAR_HEIGHT = 56.dp
 
   // Padding & Margins
   val SIXTY_DP = 60.dp
