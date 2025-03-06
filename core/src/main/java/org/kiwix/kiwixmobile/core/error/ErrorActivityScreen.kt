@@ -41,7 +41,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.tonyodev.fetch2.R.string
@@ -49,6 +48,9 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.loadBitmapFromMipmap
 import org.kiwix.kiwixmobile.core.ui.components.CrashCheckBox
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
+import org.kiwix.kiwixmobile.core.ui.theme.AlabasterWhite
+import org.kiwix.kiwixmobile.core.ui.theme.ErrorActivityBackground
+import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CRASH_IMAGE_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEVENTEEN_DP
@@ -67,7 +69,7 @@ fun ErrorActivityScreen(
   Column(
     modifier = Modifier
       .fillMaxSize()
-      .background(colorResource(id = R.color.error_activity_background))
+      .background(ErrorActivityBackground)
       .systemBarsPadding()
       .imePadding()
       .padding(SIXTEEN_DP),
@@ -76,7 +78,7 @@ fun ErrorActivityScreen(
     Text(
       text = stringResource(crashTitleStringId),
       style = MaterialTheme.typography.headlineSmall,
-      color = colorResource(id = R.color.alabaster_white),
+      color = AlabasterWhite,
       modifier = Modifier.padding(top = SIXTY_DP, start = EIGHT_DP, end = EIGHT_DP)
     )
 
@@ -92,7 +94,7 @@ fun ErrorActivityScreen(
       text = stringResource(messageStringId),
       style = MaterialTheme.typography.bodyMedium,
       textAlign = TextAlign.Center,
-      color = colorResource(id = R.color.white),
+      color = White,
       modifier = Modifier.padding(start = EIGHT_DP, top = EIGHT_DP, end = EIGHT_DP)
     )
 

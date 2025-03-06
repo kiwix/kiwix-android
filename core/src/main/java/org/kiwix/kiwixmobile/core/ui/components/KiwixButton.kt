@@ -26,10 +26,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
+import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BUTTON_DEFAULT_ELEVATION
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BUTTON_DEFAULT_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BUTTON_PRESSED_ELEVATION
@@ -46,8 +45,8 @@ fun KiwixButton(
   Button(
     onClick = { clickListener.invoke() },
     colors = ButtonDefaults.buttonColors(
-      containerColor = colorResource(id = R.color.denim_blue800),
-      contentColor = Color.White
+      containerColor = DenimBlue800,
+      contentColor = White
     ),
     modifier = Modifier.padding(BUTTON_DEFAULT_PADDING),
     shape = MaterialTheme.shapes.extraSmall,
