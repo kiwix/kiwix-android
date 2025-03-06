@@ -168,7 +168,7 @@
   <string name="pref_external_link_popup_title">బాహ్య లింక్‌లను నమోదు చేసేటప్పుడు హెచ్చరించండి</string>
   <string name="pref_external_link_popup_summary">అదనపు ఖర్చులు లేదా ఆఫ్‌లైన్ లింక్‌లలో పని చేయకపోవడం గురించి హెచ్చరించడానికి పాప్‌అప్‌ని ప్రదర్శించండి.</string>
   <string name="external_link_popup_dialog_title">బాహ్య లింక్‌లోకి ప్రవేశిస్తోంది!</string>
-  <string name="external_link_popup_dialog_message">మీరు బాహ్య లింక్‌ని నమోదు చేస్తున్నారు. ఇది డేటా బదిలీకి అదనపు ఖర్చులకు దారితీయవచ్చు లేదా మీరు ఆఫ్‌లైన్‌లో ఉన్నప్పుడు పని చేయదు. మీరు కొనసాగించాలనుకుంటున్నారా?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">మీరు బాహ్య లింక్‌ని నమోదు చేస్తున్నారు. ఇది డేటా బదిలీకి అదనపు ఖర్చులకు దారితీయవచ్చు లేదా మీరు ఆఫ్‌లైన్‌లో ఉన్నప్పుడు పని చేయదు. మీరు కొనసాగించాలనుకుంటున్నారా?</string>
   <string name="do_not_ask_anymore">ఇక అడగవద్దు</string>
   <string name="your_languages">ఎంచుకున్న భాషలు:</string>
   <string name="other_languages">ఇతర భాషలు:</string>

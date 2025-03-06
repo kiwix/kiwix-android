@@ -54,7 +54,7 @@
   <string name="error_file_not_found">ߝߌ߬ߟߌ: ZIM ߞߐߕߐ߯ ߡߊߡߌ߬ߘߊ߬ߣߍ߲ ߕߍߣߊ߬ ߡߊߛߐ߬ߘߐ߲߫ ߠߊ߫. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">ߊ߬ ߕߴߛߋ߫ ߞߊ߬ ZIM ߞߐߕߐ߮ ߣߌ߲߬ ߘߐߞߊ߬ߙߊ߲߬߹</string>
   <string name="zim_not_opened" fuzzy="true">ZIM ߞߐߕߐ߮ ߕߍ߫ ߛߐ߲߬ ߠߊߞߊ߬ ߟߊ߫</string>
-  <string name="error_file_invalid">ߝߌ߬ߟߌ: ߞߐߕߐ߯ ߓߊߕߐ߬ߡߐ߲߬ߣߍ߲ ߣߌ߲߬ ߕߍ߫ ZIM ߞߐߕߐ߯ ߓߍ߲߬ߣߍ߲ ߝߋ߲߫ ߘߌ߫. %s</string>
+  <string name="error_file_invalid" fuzzy="true">ߝߌ߬ߟߌ: ߞߐߕߐ߯ ߓߊߕߐ߬ߡߐ߲߬ߣߍ߲ ߣߌ߲߬ ߕߍ߫ ZIM ߞߐߕߐ߯ ߓߍ߲߬ߣߍ߲ ߝߋ߲߫ ߘߌ߫. %s</string>
   <string name="error_article_url_not_found">ߝߎ߬ߕߎ߲߬ߕߌ: ߞߎߡߘߊ ߟߊߢߎ߲ߠߌ߲ (Url: %1$s) ߓߘߊ߫ ߗߌߙߏ߲߫.</string>
   <string name="pref_display_title">ߦߌ߬ߘߊ߬ߟߌ</string>
   <string name="pref_info_title">ߞߎ߲߬ߠߊ߬ߝߏߣߌ߲</string>
@@ -162,7 +162,7 @@
   <string name="pref_external_link_popup_title">ߞߊ߬ ߖߊ߬ߛߙߋ߬ߡߊ߬ߟߊ ߞߍ߫ ߘߏ߲߬ ߕߎߡߊ ߟߊ߫ ߞߐߞߊ߲߫ ߛߘߌߜߋ߲ ߠߎ߬ ߟߊ߫</string>
   <string name="pref_external_link_popup_summary">ߦߌ߬ߘߊ߬ߥߟߊ ߟߊߓߊ߯ߙߊ߫ ߞߊ߬ ߟߊ߬ߟߌ߰ߟߌ ߞߍ߫ ߛߐ߲߬ߞߐ ߡߊߞߊ߬ߝߏ߬ߞߏ ߟߊ߫ ߥߟߊ߫ ߞߏ߫ ߛߘߌ߬ߜߋ߲ ߕߍ߫ ߓߊ߯ߙߊ߫ ߟߊ߫ ߓߟߐߟߐߒߕߊ߲ߧߊ ߘߐ߫.</string>
   <string name="external_link_popup_dialog_title">ߞߐߞߊ߲߫ ߛߘߌߜߋ߲ ߟߊߛߐ߬ߘߐ߲</string>
-  <string name="external_link_popup_dialog_message">ߌ ߦߴߌ ߘߐ߫ ߞߊ߬ ߞߐߞߊ߲߫ ߛߘߌߜߋ߲ ߠߋ߬ ߟߊߘߏ߲߬ ߏ߬ ߘߌ߫. ߏ߬ ߘߏ߲߬ ߘߌ߫ ߛߋ߫ ߥߟߏ߫ ߟߊ߫ ߓߟߏߡߟߊ ߟߊߕߊ߬ߡߌ߲ ߛߐ߲߬ߞߐ ߡߊߞߊ߬ߝߏ߬ߟߌ ߟߊ߫ ߤߊߡߊ߲ߕߍ߫ ߊ߬ ߕߍ߫ ߣߊ߬ ߓߊ߯ߙߊ߫ ߟߊ߫ ߞߵߌ ߕߏ߫ ߜߊ߲߬ߞߎ߲߬ߓߊߟߌߦߊ ߘߐ߫. ߌ ߦߴߊ߬ ߝߍ߬ ߞߵߊ߬ ߘߊߓߊ߲߫ ߖߋߎ߫؟</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">ߌ ߦߴߌ ߘߐ߫ ߞߊ߬ ߞߐߞߊ߲߫ ߛߘߌߜߋ߲ ߠߋ߬ ߟߊߘߏ߲߬ ߏ߬ ߘߌ߫. ߏ߬ ߘߏ߲߬ ߘߌ߫ ߛߋ߫ ߥߟߏ߫ ߟߊ߫ ߓߟߏߡߟߊ ߟߊߕߊ߬ߡߌ߲ ߛߐ߲߬ߞߐ ߡߊߞߊ߬ߝߏ߬ߟߌ ߟߊ߫ ߤߊߡߊ߲ߕߍ߫ ߊ߬ ߕߍ߫ ߣߊ߬ ߓߊ߯ߙߊ߫ ߟߊ߫ ߞߵߌ ߕߏ߫ ߜߊ߲߬ߞߎ߲߬ߓߊߟߌߦߊ ߘߐ߫. ߌ ߦߴߊ߬ ߝߍ߬ ߞߵߊ߬ ߘߊߓߊ߲߫ ߖߋߎ߫؟</string>
   <string name="do_not_ask_anymore">ߢߌ߬ߣߌ߲߬ߞߊ߬ߟߌ߫ ߜߘߍ߫ ߞߊ߫ ߞߴߏ߬ ߞߐ߫</string>
   <string name="your_languages">ߞߊ߲ ߛߎߥߊ߲ߘߌ߫</string>
   <string name="other_languages">ߞߊ߲߫ ߜߘߍ ߟߎ߬:</string>

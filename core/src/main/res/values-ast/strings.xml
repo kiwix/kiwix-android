@@ -47,7 +47,7 @@
   <string name="start_server_label">Aniciar el sirvidor</string>
   <string name="stop_server_label">Parar el sirvidor</string>
   <string name="server_started_message">Escribi esta direición ip nel restolador pa tener accesu al sirvidor %s</string>
-  <string name="error_file_not_found">Error: Nun pudo alcontrase ficheru ZIM seleicionáu. %s</string>
+  <string name="error_file_not_found" fuzzy="true">Error: Nun pudo alcontrase ficheru ZIM seleicionáu. %s</string>
   <string name="zim_not_opened" fuzzy="true">Nun pudo abrise l ficheru zim</string>
   <string name="error_file_invalid">Error: El ficheru seleicionáu nun ye un ficheru ZIM válidu. %s</string>
   <string name="error_article_url_not_found">Error: Falló la carga del artículu (Url: %1$s).</string>
@@ -151,7 +151,7 @@
   <string name="pref_external_link_popup_title">Alvertir al siguir enllaces esternos</string>
   <string name="pref_external_link_popup_summary">Amuesa un cuadru emerxente p’avisar sobre posibles gastos por consumu de datos o nun funcionamientu d’enllaces ensin conexón.</string>
   <string name="external_link_popup_dialog_title">¡Entrando n’enllaz esternu!</string>
-  <string name="external_link_popup_dialog_message">Tas por siguir un enllaz esternu. Ello podría xenerar gastos por tresferencia de datos o cenciellamente nun va funcionar si nun tienes conexón. ¿Quies siguir?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Tas por siguir un enllaz esternu. Ello podría xenerar gastos por tresferencia de datos o cenciellamente nun va funcionar si nun tienes conexón. ¿Quies siguir?</string>
   <string name="do_not_ask_anymore">Nun preguntar más</string>
   <string name="your_languages">Llingües seleicionaes:</string>
   <string name="other_languages">Otres llingües:</string>

@@ -162,7 +162,7 @@
   <string name="pref_external_link_popup_title">வெளிப்புற இணைப்புகளை உள்ளிடும்போது எச்சரிக்கவும்</string>
   <string name="pref_external_link_popup_summary">கூடுதல் செலவுகள் அல்லது அணைவரி இணைப்புகளில் வேலை செய்யாமல் இருப்பதை எச்சரிக்க தெரித்தெழு பட்டியைக் காண்பி.</string>
   <string name="external_link_popup_dialog_title">வெளிப்புற இணைப்பில் நுழைகிறது!</string>
-  <string name="external_link_popup_dialog_message">நீங்கள் வெளிப்புற இணைப்பை உள்ளிடுகிறீர்கள். இது தரவு பரிமாற்றத்திற்கான கூடுதல் செலவுகளுக்கு வழிவகுக்கும் அல்லது நீங்கள்  அணைவரியில் இருக்கும்போது வேலை செய்யாது. நீங்கள் தொடர விரும்புகிறீர்களா?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">நீங்கள் வெளிப்புற இணைப்பை உள்ளிடுகிறீர்கள். இது தரவு பரிமாற்றத்திற்கான கூடுதல் செலவுகளுக்கு வழிவகுக்கும் அல்லது நீங்கள்  அணைவரியில் இருக்கும்போது வேலை செய்யாது. நீங்கள் தொடர விரும்புகிறீர்களா?</string>
   <string name="do_not_ask_anymore">இனி கேட்க வேண்டாம்</string>
   <string name="your_languages">தேர்ந்தெடுக்கப்பட்ட மொழிகள்:</string>
   <string name="other_languages">பிற மொழிகள்:</string>

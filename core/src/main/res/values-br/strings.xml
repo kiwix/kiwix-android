@@ -145,7 +145,7 @@
   <string name="pref_external_link_popup_title">Kemenn pa’z eer liammoù diavaez</string>
   <string name="pref_external_link_popup_summary">Diskwel ur popup evit reiñ da c’houzout e vo koustoù ouzhpenn pe e vo liammoù ha ned aint ket en-dro ezlinenn.</string>
   <string name="external_link_popup_dialog_title">Moned d’al liamm diavaez</string>
-  <string name="external_link_popup_dialog_message">Emaoc’h o tiraez ul liamm diavaez. Gallout a ra degas frejoù ouzhpenn deoc’h evit treuzkas roadennoù pe ne yelo ket en-dro pa viot enlinenn, tra ken. Ha c’hoant ho peus da genderc’hel ?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Emaoc’h o tiraez ul liamm diavaez. Gallout a ra degas frejoù ouzhpenn deoc’h evit treuzkas roadennoù pe ne yelo ket en-dro pa viot enlinenn, tra ken. Ha c’hoant ho peus da genderc’hel ?</string>
   <string name="do_not_ask_anymore">Chom hep goulenn ken</string>
   <string name="your_languages">Yezhoù diuzet</string>
   <string name="other_languages">Yezhoù all :</string>

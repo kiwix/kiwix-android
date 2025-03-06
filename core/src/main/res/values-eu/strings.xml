@@ -182,7 +182,7 @@
   <string name="pref_external_link_popup_title">Kanpo esteketara sartzerakoan ohartarazi</string>
   <string name="pref_external_link_popup_summary">Gaitu popup-a gastu gehigarriez edo konexiorik gabe funtzionatzen ez duten estekez abisatzeko</string>
   <string name="external_link_popup_dialog_title">Kanpo estekara sartzen!</string>
-  <string name="external_link_popup_dialog_message">Kanpo-esteka batera sartzen ari zara. Honek datu transferentziarako gastu gehigarrietara eraman dezake edo besterik gabe, ez du funtzionatuko konexiorik ez dagoenean. Jarraitu nahi duzu?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Kanpo-esteka batera sartzen ari zara. Honek datu transferentziarako gastu gehigarrietara eraman dezake edo besterik gabe, ez du funtzionatuko konexiorik ez dagoenean. Jarraitu nahi duzu?</string>
   <string name="do_not_ask_anymore">Ez galdetu berriz</string>
   <string name="your_languages">Hautatutako hizkuntzak:</string>
   <string name="other_languages">Beste hizkuntzak:</string>

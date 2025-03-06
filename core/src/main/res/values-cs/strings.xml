@@ -169,7 +169,7 @@
   <string name="pref_external_link_popup_title">Upozornit při vkládání externích odkazů</string>
   <string name="pref_external_link_popup_summary">Zobrazit vyskakovací zprávu, která vás upozorní na další možné finanční náklady nebo nefunkčnost offline odkazů.</string>
   <string name="external_link_popup_dialog_title">Vkládám externí odkaz!</string>
-  <string name="external_link_popup_dialog_message">Vkládáte externí odkaz. Toto může vést k dodatečným nákladům na přenos dat, nebo to prostě nebude fungovat, když jste offline. Chcete pokračovat?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Vkládáte externí odkaz. Toto může vést k dodatečným nákladům na přenos dat, nebo to prostě nebude fungovat, když jste offline. Chcete pokračovat?</string>
   <string name="do_not_ask_anymore">Neptat se příště</string>
   <string name="your_languages">Vybrané jazyky:</string>
   <string name="other_languages">Jiné jazyky:</string>

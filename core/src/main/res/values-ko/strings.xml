@@ -69,10 +69,10 @@
   <string name="server_started_message">%s 서버에 접속하려면 브라우저에 이 IP 주소를 입력하십시오</string>
   <string name="qr_code">표시된 QR 코드</string>
   <string name="share_host_address">다른 애플리케이션을 통해 URL 공유</string>
-  <string name="error_file_not_found">오류: 선택된 ZIM 파일을 찾을 수 없습니다. %s</string>
+  <string name="error_file_not_found" fuzzy="true">오류: 선택된 ZIM 파일을 찾을 수 없습니다. %s</string>
   <string name="unable_to_read_zim_file">이 ZIM 파일을 읽을 수 없습니다!</string>
   <string name="zim_not_opened">ZIM 파일을 열 수 없습니다</string>
-  <string name="error_file_invalid">오류: 선택한 파일은 올바른 ZIM 파일이 아닙니다. %s</string>
+  <string name="error_file_invalid" fuzzy="true">오류: 선택한 파일은 올바른 ZIM 파일이 아닙니다. %s</string>
   <string name="error_article_url_not_found">오류: 문서(Url: %1$s)를 불러오는 데 실패했습니다.</string>
   <string name="pref_display_title">표시</string>
   <string name="pref_info_title">정보</string>
@@ -194,10 +194,11 @@
   <string name="pref_external_link_popup_title">외부 링크에 진입할 때 경고합니다</string>
   <string name="pref_external_link_popup_summary">추가 비용 또는 오프라인 링크로 동작하지 않음에 대한 경고에 대한 팝업을 표시합니다.</string>
   <string name="external_link_popup_dialog_title">외부 링크에 진입합니다!</string>
-  <string name="external_link_popup_dialog_message">외부 링크를 입력하고 있습니다. 추가적인 데이터 전송 비용이 들거나 오프라인일 때 동작하지 않을 수 있습니다. 계속하시겠습니까?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">외부 링크를 입력하고 있습니다. 추가적인 데이터 전송 비용이 들거나 오프라인일 때 동작하지 않을 수 있습니다. 계속하시겠습니까?</string>
   <string name="do_not_ask_anymore">더 이상 묻지 않습니다</string>
   <string name="your_languages">선택한 언어:</string>
   <string name="other_languages">다른 언어:</string>
+  <string name="downloading">다운로드 중:</string>
   <string name="no_items_msg">사용 가능한 항목이 없음</string>
   <string name="crash_title">앗.. 부끄럽네요.</string>
   <string name="crash_description">충돌이 발생한 것 같습니다.\n\n다음의 정보를 보냄으로써 저희가 이 문제를 해결하는데 도움을 주시겠습니까?</string>
@@ -337,7 +338,7 @@
   <string name="move">이동</string>
   <string name="copying_zim_file">ZIM 파일을 복사하는 중…</string>
   <string name="moving_zim_file">ZIM 파일을 이동하는 중…</string>
-  <string name="copy_move_files_dialog_description">Kiwix는 ZIM 파일을 자체 데이터 디렉터리에 위치할 것을 요구합니다. 복사하거나 이동하시겠습니까?</string>
+  <string name="copy_move_files_dialog_description" fuzzy="true">Kiwix는 ZIM 파일을 자체 데이터 디렉터리에 위치할 것을 요구합니다. 복사하거나 이동하시겠습니까?</string>
   <string name="copy_file_error_message">ZIM 파일 복사 오류: %s.</string>
   <string name="why_copy_move_files_to_app_directory">앱 공개 디렉토리로 파일을 이동/복사하는 이유는 무엇입니까?</string>
   <string name="copy_move_files_to_app_directory_description">안드로이드 11 이상의 구글 플레이 정책으로 인해 당사 앱은 더 이상 기기의 다른 곳에 저장된 파일에 직접 접근할 수 없습니다. 선택한 파일을 보려면 해당 파일을 애플리케이션 디렉터리 내의 특수 폴더로 이동하거나 복사해야 합니다. 이를 통해 파일에 접근하고 열 수 있습니다.</string>
@@ -390,4 +391,7 @@
   <string name="donation_dialog_title">오늘 기부하세요</string>
   <string name="donation_dialog_description">%s에 여러분의 도움이 필요합니다.</string>
   <string name="make_donation">기부하기</string>
+  <string name="resuming_state">재개 중</string>
+  <string name="downloading_state">다운로드 중</string>
+  <string name="download_failed_state">실패</string>
 </resources>

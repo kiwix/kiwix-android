@@ -185,7 +185,7 @@
   <string name="pref_external_link_popup_title">Waarschuwen bij openen externe koppelingen</string>
   <string name="pref_external_link_popup_summary">Pop-up weergeven om te waarschuwen dat bij externe koppelingen extra kosten kunnen worden gemaakt of dat deze offline niet werken.</string>
   <string name="external_link_popup_dialog_title">U opent een externe koppeling!</string>
-  <string name="external_link_popup_dialog_message">U volgt nu een externe koppeling. Dit kan leiden tot extra kosten voor gegevensoverdracht of werkt gewoon niet als u offline bent. Wilt u doorgaan?</string>
+  <string name="external_link_popup_dialog_message">U volgt nu een externe koppeling. Dit kan leiden tot extra kosten voor gegevensoverdracht of werkt gewoon niet als u offline bent.\nWilt u doorgaan?</string>
   <string name="do_not_ask_anymore">Dit niet meer vragen</string>
   <string name="your_languages">Geselecteerde talen:</string>
   <string name="other_languages">Andere talen:</string>
@@ -327,7 +327,7 @@
   <string name="move">Verplaatsen</string>
   <string name="copying_zim_file">ZIM-bestand kopiëren…</string>
   <string name="moving_zim_file">ZIM-bestand verplaatsen…</string>
-  <string name="copy_move_files_dialog_description">Kiwix vereist dat het ZIM-bestand in een eigen gegevensdirectory staat. Wilt u het daarheen kopiëren of verplaatsen?</string>
+  <string name="copy_move_files_dialog_description">Kiwix vereist dat het ZIM-bestand in een eigen gegevensdirectory staat.\nWilt u het daarheen kopiëren of verplaatsen?</string>
   <string name="copy_file_error_message">Fout bij het kopiëren van het ZIM-bestand: %s.</string>
   <string name="why_copy_move_files_to_app_directory">Waarom bestanden verplaatsen/kopiëren naar de openbare directory van de app?</string>
   <string name="copy_move_files_to_app_directory_description">Vanwege het beleid van Google Play op Android 11 en hoger kan deze app niet langer rechtstreeks toegang krijgen tot bestanden die elders op uw apparaat zijn opgeslagen. Als u uw geselecteerde bestanden wilt bekijken, moeten ze worden verplaatst of gekopieerd naar een speciale map in de directory van deze app. Alleen zo kunnen de bestanden in de app worden geopend.</string>

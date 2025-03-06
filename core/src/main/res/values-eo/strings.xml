@@ -131,7 +131,7 @@
   <string name="pref_external_link_popup_title">Averti pri aliro al eksteraj ligiloj</string>
   <string name="pref_external_link_popup_summary">Montri averton pri plia kosto aŭ nefunkciado pri eksteraj ligiloj.</string>
   <string name="external_link_popup_dialog_title">Enigi Eksteran Ligilon!</string>
-  <string name="external_link_popup_dialog_message">Vi estas ironta al celo de ekstera ligilo. Tio eble plie kostos por datentransigo, aŭ simple ne funkcios se vi ne estas konektita. Ĉu daŭrigi?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Vi estas ironta al celo de ekstera ligilo. Tio eble plie kostos por datentransigo, aŭ simple ne funkcios se vi ne estas konektita. Ĉu daŭrigi?</string>
   <string name="do_not_ask_anymore">Ne demandu plu</string>
   <string name="your_languages">Elektitaj lingvoj:</string>
   <string name="other_languages">Aliaj Lingvoj:</string>

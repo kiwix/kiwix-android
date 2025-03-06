@@ -51,10 +51,10 @@
   <string name="error_ip_address_not_found">Non apo pòdidu agatare s’indiritzu IP.</string>
   <string name="server_started_message">Inserta custu indiritzu ip in su navigadore tuo pro intrare in su servidore %s</string>
   <string name="share_host_address">Cumpartzi s’URL cun àteras aplicatziones</string>
-  <string name="error_file_not_found">Errore: su documentu ZIM ischertadu no est istadu agatadu. %s</string>
+  <string name="error_file_not_found" fuzzy="true">Errore: su documentu ZIM ischertadu no est istadu agatadu. %s</string>
   <string name="unable_to_read_zim_file" fuzzy="true">Non faghet a lèghere custu archìviu zim!</string>
   <string name="zim_not_opened" fuzzy="true">Impossìbile abèrrere su documentu zim</string>
-  <string name="error_file_invalid">Errore: su documentu ischertadu no est unu documentu ZIM vàlidu. %s</string>
+  <string name="error_file_invalid" fuzzy="true">Errore: su documentu ischertadu no est unu documentu ZIM vàlidu. %s</string>
   <string name="error_article_url_not_found">Errore: carrigamentu de s’artìculu (Url: %1$s) non resèssidu.</string>
   <string name="pref_display_title">Ischermu</string>
   <string name="pref_info_title">Informatziones</string>
@@ -162,7 +162,7 @@
   <string name="pref_external_link_popup_title">Avisa cando ses aberende unu ligàmene esternu</string>
   <string name="pref_external_link_popup_summary">Ammustra ventaneddas pro t’avisare de costos agiuntivos o ligàmenes chi non funtzionant chene una connessione a ìnternet.</string>
   <string name="external_link_popup_dialog_title">Aberende unu ligàmene esternu!</string>
-  <string name="external_link_popup_dialog_message">Ses aberende unu ligàmene esternu. Custu diat pòdere causare costos in prus pro s’impreu de trasferimentu de datos o diant pòdere non funtzionare cando non ses connessu a ìnternet. Cheres sighire?</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Ses aberende unu ligàmene esternu. Custu diat pòdere causare costos in prus pro s’impreu de trasferimentu de datos o diant pòdere non funtzionare cando non ses connessu a ìnternet. Cheres sighire?</string>
   <string name="do_not_ask_anymore">Non mi lu preguntes prus</string>
   <string name="your_languages">Limbas ischertadas:</string>
   <string name="other_languages">Àteras limbas:</string>

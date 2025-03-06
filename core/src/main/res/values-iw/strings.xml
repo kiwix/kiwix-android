@@ -4,6 +4,7 @@
 * Ghsuvr
 * Guycn2
 * IKhitron
+* MohitMali
 * Steeve815
 * Tuvalevsku
 * YaronSh
@@ -61,11 +62,13 @@
   <string name="server_started_message">יש להזין את כתובת ה־IP הזאת לדפדפן שלך כדי לגשת לשרת %s</string>
   <string name="qr_code">קוד QR מתוצג</string>
   <string name="share_host_address">שיתוף URL דרך יישומים אחרים</string>
-  <string name="error_file_not_found">%s שגיאה: קובץ ה־ZIM שנבחר לא נמצא.</string>
+  <string name="error_file_not_found">שגיאה: קובץ ה־ZIM שנבחר לא נמצא. %s</string>
   <string name="unable_to_read_zim_file">לא ניתן לקרוא מקובץ ה־ZIM הזה!</string>
   <string name="zim_not_opened">לא ניתן לפתוח את קובץ ה־ZIM</string>
   <string name="error_file_invalid">שגיאה: הקובץ שנבחר אינו קובץ ZIM תקין. %s</string>
   <string name="error_article_url_not_found">שגיאה: טעינת הערך נכשלה (כתובת: %1$s).</string>
+  <string name="error_loading_random_article_zim_not_loaded">לא ניתן לטעון ערך. קובץ ה־ZIM לא נטען כהלכה.</string>
+  <string name="could_not_find_random_article">לא ניתן למצוא ערך אקראי. נא לנסות שוב מאוחר יותר.</string>
   <string name="pref_display_title">תצוגה</string>
   <string name="pref_info_title">מידע</string>
   <string name="pref_info_version">גרסה</string>
@@ -149,6 +152,7 @@
   <string name="help_9">• ישנם מקורות נוספים זמינים כגון ויקיליקס או ויקיטקסט</string>
   <string name="help_10">באפשרותך להוריד את קובצי ה־ZIM שנבחרו מתוך היישום או לחלופין לבחור בזהירות בקובץ אחד או מספר קבצים שאתה רוצה ולהוריד ממחשב שולחני לפני העברת קובצי ה־ZIM לכרטיס ה־SD שלך.</string>
   <string name="help_11">קובצי ה־ZIM המורדים דרך היישום נמצאים בספריית האחסון החיצוני בתוך תיקייה בשם Kiwix.</string>
+  <string name="fetching_storage_info">אחזור נתוני אחסון…</string>
   <string name="pref_storage">אחסון</string>
   <string name="pref_current_folder">תיקייה נוכחית</string>
   <string name="pref_storage_used">בשימוש: %s</string>
@@ -185,10 +189,11 @@
   <string name="pref_external_link_popup_title">תן אזהרה בעת כניסה לקישורים חיצוניים</string>
   <string name="pref_external_link_popup_summary">הצגת בועת אזהרה על תשלומים נוספים או כאשר אין אפשרות עבודה עם קישורים לא-מקוונים.</string>
   <string name="external_link_popup_dialog_title">העברה לקישור חיצוני!</string>
-  <string name="external_link_popup_dialog_message">פעולה זו מובילה לקישור חיצוני. כתוצאה מכך עשויות לחול עליך עלויות בגין העברת נתונים או שהקישור לא יעבוד עקב העדר חיבור. להמשיך?</string>
+  <string name="external_link_popup_dialog_message">פעולה זו מובילה לקישור חיצוני. כתוצאה מכך עשויות לחול עליך עלויות בגין העברת נתונים או שהקישור לא יעבוד עקב העדר חיבור.\n\nלהמשיך?</string>
   <string name="do_not_ask_anymore">לא לשאול שוב</string>
   <string name="your_languages">שפות נבחרות:</string>
   <string name="other_languages">שפות אחרות:</string>
+  <string name="downloading">מתבצעת הורדה:</string>
   <string name="no_items_msg">אין פריטים זמינים</string>
   <string name="crash_title">טוב… זה מביך</string>
   <string name="crash_description">נראה שקרסנו.\n\nהאם ברצונך לעזור לנו לתקן את הבעיה הזאת באמצעות שליחת המידע הבא?</string>
@@ -209,6 +214,8 @@
   <string name="welcome_to_the_family">ברוכים הבאים למשפחה!</string>
   <string name="save_books_offline">תשמרו ספרים לקריאה ללא חיבור לרשת</string>
   <string name="download_books_message">תורידו ספרים ותקראו אותם בכל מקום.</string>
+  <string name="save_books_in_desired_storage">שמירת ספרים באחסון הרצוי</string>
+  <string name="storage_location_hint">אפשר לבחור את מיקום האחסון המועדף עליך, כרטיס SD או אחסון פנימי, להורדת קובצי ZIM ממסך ההגדרות.</string>
   <string name="unable_to_add_to_bookmarks">לא ניתן להוסיף סימניות</string>
   <string name="go_to_previous_page">מעבר לדף הקודם</string>
   <string name="go_to_next_page">מעבר לדף הבא</string>
@@ -328,8 +335,10 @@
   <string name="move">העברה</string>
   <string name="copying_zim_file">מתבצעת העתקת קובץ ZIM…</string>
   <string name="moving_zim_file">מתבצעת העברת קובץ ZIM…</string>
-  <string name="copy_move_files_dialog_description">לקיוויקס דורש שקובץ ZIM יהיה בספריית נתונים משלו. האם ברצונך להעתיק או להעביר אותו לשם?</string>
+  <string name="copy_move_files_dialog_description">לקיוויקס דורש שקובץ ZIM יהיה בספריית נתונים משלו.\n\nהאם ברצונך להעתיק או להעביר אותו לשם?</string>
   <string name="copy_file_error_message">שגיאה בהעתקת קובץ ZIM‏: %s.</string>
+  <string name="verify_zim_chunk_dialog_title">זהירות: נא לשים לב לכך שכל קטעי ה־ZIM הועברו או הועתקו כמו שצריך!</string>
+  <string name="verify_zim_chunks_dialog_message">אפשר לאמת אותם בתוך תיקיית \"Android/media/org.kiwix…/\".\nאחרי־כן, יש לרענן את מסך הספרייה על־ידי החלקה מטה. קובץ ה־ZIM המפוצל יופיע אז בספרייה שלך.</string>
   <string name="why_copy_move_files_to_app_directory">למה להעביר או להעתיק קבצים לספרייה ציבורית של היישום?</string>
   <string name="copy_move_files_to_app_directory_description">בשל מדיניות Google Play ב־Android 11 ומעלה, היישום שלנו אינו יכול יותר לגשת ישירות לקבצים המאוחסנים במקום אחר במכשיר שלך. כדי לאפשר לך להציג את הקבצים שבחרת, עלינו להעביר או להעתיק אותם לתיקייה מיוחדת בתוך תיקיית היישום שלנו. זה מאפשר לנו לגשת ולפתוח את הקבצים.</string>
   <string name="choose_storage_to_copy_move_zim_file">נא לבחור אחסון כדי להעתיק או להעביר קובץ ZIM</string>
@@ -381,4 +390,7 @@
   <string name="donation_dialog_title">לתרום היום</string>
   <string name="donation_dialog_description">%s זקוק לעזרתך.</string>
   <string name="make_donation">תרומה</string>
+  <string name="resuming_state">מתחילים מחדש</string>
+  <string name="downloading_state">בהורדה</string>
+  <string name="download_failed_state">זה לא עבד</string>
 </resources>
