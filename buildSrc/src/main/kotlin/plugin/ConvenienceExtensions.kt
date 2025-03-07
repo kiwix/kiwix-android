@@ -54,6 +54,9 @@ internal fun DependencyHandlerScope.ksp(dependency: String) =
 internal fun DependencyHandlerScope.testImplementation(dependency: String) =
   addDependency("testImplementation", dependency)
 
+internal fun DependencyHandlerScope.debugImplementation(dependency: String) =
+  addDependency("debugImplementation", dependency)
+
 internal fun DependencyHandlerScope.implementation(dependency: String) =
   addDependency("implementation", dependency)
 

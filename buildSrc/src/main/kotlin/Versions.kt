@@ -115,6 +115,12 @@ object Versions {
   const val keeper = "0.16.1"
 
   const val fetch: String = "3.4.1"
+
+  const val COMPOSE_ACTIVITY_VERSION = "1.10.0"
+
+  const val COMPOSE_VERSION = "1.7.8"
+
+  const val COMPOSE_MATERIAL3 = "1.3.1"
 }
 
 /**

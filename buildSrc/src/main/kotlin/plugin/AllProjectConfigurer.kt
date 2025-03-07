@@ -20,6 +20,7 @@ package plugin
 
 import Config
 import Libs
+import Versions
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.gradle.BaseExtension
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
@@ -35,6 +36,7 @@ import org.jlleitschuh.gradle.ktlint.KtlintExtension
 class AllProjectConfigurer {
 
   fun applyPlugins(target: Project) {
+    target.plugins.apply("org.jetbrains.kotlin.plugin.compose")
     target.plugins.apply("kotlin-android")
     target.plugins.apply("kotlin-kapt")
     target.plugins.apply("com.google.devtools.ksp")
@@ -90,6 +92,7 @@ class AllProjectConfigurer {
          * enabling this attribute will generate the `BuildConfig` file.
          */
         buildConfig = true
+        compose = true
       }
 
       testOptions {
@@ -235,6 +238,19 @@ class AllProjectConfigurer {
       implementation(Libs.fetch)
       implementation(Libs.fetchOkhttp)
       implementation(Libs.androidx_activity)
+      androidTestImplementation(Libs.leakcanary_android_instrumentation)
+
+      // compose
+      implementation(Libs.COMPOSE_MATERIAL3)
+      implementation(Libs.ANDROIDX_ACTIVITY_COMPOSE)
+      implementation(Libs.COMPOSE_TOOLING_PREVIEW)
+      implementation(Libs.COMPOSE_RX_JAVA2)
+      implementation(Libs.COMPOSE_LIVE_DATA)
+
+      // Compose UI test implementation
+      androidTestImplementation(Libs.COMPOSE_UI_TEST_JUNIT)
+      debugImplementation(Libs.COMPOSE_UI_MANIFEST)
+      debugImplementation(Libs.COMPOSE_TOOLING)
     }
   }
 }
