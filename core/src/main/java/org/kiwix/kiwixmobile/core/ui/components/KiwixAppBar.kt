@@ -35,6 +35,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -95,14 +96,17 @@ private fun AppBarTitle(
 private fun ActionMenu(actionMenuItems: List<ActionMenuItem>) {
   Row {
     actionMenuItems.forEach { menuItem ->
-      IconButton(onClick = menuItem.onClick) {
+      IconButton(
+        enabled = menuItem.isEnabled,
+        onClick = menuItem.onClick
+      ) {
         Icon(
           painter = when (val icon = menuItem.icon) {
             is IconItem.Vector -> rememberVectorPainter(icon.imageVector)
             is IconItem.Drawable -> painterResource(icon.drawableRes)
           },
           contentDescription = stringResource(menuItem.contentDescription),
-          tint = menuItem.iconTint
+          tint = if (menuItem.isEnabled) menuItem.iconTint else Color.Gray
         )
       }
     }
@@ -126,12 +130,14 @@ fun PreviewKiwixAppBar() {
         ActionMenuItem(
           Vector(Icons.Default.Delete),
           R.string.delete,
-          {}
+          {},
+          isEnabled = false
         ),
         ActionMenuItem(
           Vector(Icons.Default.Share),
           R.string.share,
-          {}
+          {},
+          isEnabled = true
         ),
         ActionMenuItem(
           Drawable(R.drawable.ic_save),
