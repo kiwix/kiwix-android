@@ -72,6 +72,7 @@ import androidx.constraintlayout.widget.Group
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -890,7 +891,7 @@ abstract class CoreReaderFragment :
       ContextCompat.getDrawable(requireActivity(), R.drawable.ic_close_black_24dp)
     )
     tabSwitcherRoot?.let {
-      if (it.visibility == View.VISIBLE) {
+      if (it.isVisible) {
         setTabSwitcherVisibility(View.GONE)
         startAnimation(it, R.anim.slide_up)
         progressBar?.visibility = View.VISIBLE
@@ -1535,7 +1536,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun safelyGetWebView(position: Int): KiwixWebView? =
-    if (webViewList.size == 0) newMainPageTab() else webViewList[safePosition(position)]
+    if (webViewList.isEmpty()) newMainPageTab() else webViewList[safePosition(position)]
 
   private fun safePosition(position: Int): Int =
     when {
@@ -1545,7 +1546,7 @@ abstract class CoreReaderFragment :
     }
 
   override fun getCurrentWebView(): KiwixWebView? {
-    if (webViewList.size == 0) {
+    if (webViewList.isEmpty()) {
       return newMainPageTab()
     }
     return if (currentWebViewIndex < webViewList.size && currentWebViewIndex > 0) {
@@ -2006,7 +2007,7 @@ abstract class CoreReaderFragment :
   @Suppress("MagicNumber")
   protected open fun openHomeScreen() {
     Handler(Looper.getMainLooper()).postDelayed({
-      if (webViewList.size == 0) {
+      if (webViewList.isEmpty()) {
         createNewTab()
         hideTabSwitcher()
       }
@@ -2126,7 +2127,7 @@ abstract class CoreReaderFragment :
     )
     val bottomAppBar = requireActivity()
       .findViewById<BottomAppBar>(R.id.bottom_toolbar)
-    if (bottomAppBar.visibility == VISIBLE) {
+    if (bottomAppBar.isVisible) {
       // if bottomAppBar is visible then add the height of the bottomAppBar.
       bottomMargin +=
         requireActivity().resources.getDimensionPixelSize(
@@ -2301,7 +2302,7 @@ abstract class CoreReaderFragment :
   }
 
   private fun contentUrl(articleUrl: String?): String =
-    Uri.parse(ZimFileReader.CONTENT_PREFIX + articleUrl).toString()
+    "${ZimFileReader.CONTENT_PREFIX}$articleUrl".toUri().toString()
 
   private fun redirectOrOriginal(contentUrl: String): String {
     zimReaderContainer?.let {

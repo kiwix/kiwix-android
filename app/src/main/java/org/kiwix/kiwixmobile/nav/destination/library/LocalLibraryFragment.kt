@@ -393,7 +393,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
         if (sharedPreferenceUtil.prefIsTest) {
           putExtra(
             "android.provider.extra.INITIAL_URI",
-            Uri.parse("content://com.android.externalstorage.documents/document/primary:Download")
+            "content://com.android.externalstorage.documents/document/primary:Download".toUri()
           )
         }
       }

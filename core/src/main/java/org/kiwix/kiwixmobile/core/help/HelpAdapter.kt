@@ -20,8 +20,8 @@ package org.kiwix.kiwixmobile.core.help
 import android.animation.ObjectAnimator
 import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import org.kiwix.kiwixmobile.core.base.adapter.BaseViewHolder
 import org.kiwix.kiwixmobile.core.databinding.ItemHelpBinding
@@ -50,7 +50,7 @@ internal class HelpAdapter(titleDescriptionMap: Map<String, String>) :
     BaseViewHolder<HelpItem>(itemHelpBinding.root) {
     @SuppressWarnings("MagicNumber")
     fun toggleDescriptionVisibility() {
-      if (itemHelpBinding.itemHelpDescription.visibility == View.GONE) {
+      if (itemHelpBinding.itemHelpDescription.isGone) {
         ObjectAnimator.ofFloat(itemHelpBinding.itemHelpToggleExpand, "rotation", 0f, 180f).start()
         itemHelpBinding.itemHelpDescription.expand()
       } else {

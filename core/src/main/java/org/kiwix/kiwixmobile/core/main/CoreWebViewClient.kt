@@ -18,18 +18,18 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.content.Intent
-import android.net.Uri
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import android.webkit.MimeTypeMap
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.core.net.toUri
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
+import org.kiwix.kiwixmobile.core.utils.files.Log
 
 open class CoreWebViewClient(
   protected val callback: WebViewCallback,
@@ -64,7 +64,7 @@ open class CoreWebViewClient(
     }
 
     // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    val intent = Intent(Intent.ACTION_VIEW, url.toUri())
     callback.openExternalUrl(intent)
     return true
   }
@@ -144,7 +144,7 @@ open class CoreWebViewClient(
     }
     private val LEGACY_CONTENT_PREFIXES = arrayOf(
       "zim://content/",
-      Uri.parse("content://" + instance.packageName + ".zim.base/").toString()
+      "content://${instance.packageName}.zim.base/".toUri().toString()
     )
   }
 }

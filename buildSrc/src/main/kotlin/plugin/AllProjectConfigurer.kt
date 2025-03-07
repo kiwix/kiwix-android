@@ -184,7 +184,7 @@ class AllProjectConfigurer {
       configureExtension<DetektExtension> {
         buildUponDefaultConfig = true
         allRules = false
-        config = target.files("${target.rootDir}/config/detekt/detekt.yml")
+        config.setFrom(target.files("${target.rootDir}/config/detekt/detekt.yml"))
         baseline = project.file("detekt_baseline.xml")
       }
     }

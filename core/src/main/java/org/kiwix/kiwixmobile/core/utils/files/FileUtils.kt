@@ -32,6 +32,7 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.webkit.URLUtil
 import androidx.annotation.RequiresApi
+import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,6 +48,8 @@ import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getSDCardOrUSBMainPathForAndroid10AndAbove
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getSdCardOrUSBMainPathForAndroid9AndBelow
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileInputStream
@@ -417,7 +420,7 @@ object FileUtils {
       for (prefix in contentUriPrefixes) {
         contentQuery(
           context,
-          ContentUris.withAppendedId(Uri.parse(prefix), documentId),
+          ContentUris.withAppendedId(prefix.toUri(), documentId),
           documentsContractWrapper
         )?.let {
           return@queryForActualPath it
