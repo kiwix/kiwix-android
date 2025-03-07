@@ -366,4 +366,25 @@ object Libs {
    */
   const val fetch: String = "com.github.tonyofrancis.Fetch:fetch2:" + Versions.fetch
   const val fetchOkhttp: String = "com.github.tonyofrancis.Fetch:fetch2okhttp:" + Versions.fetch
+
+  /**
+   * https://developer.android.com/reference/kotlin/androidx/compose/material3
+   */
+  const val androidx_compose_material3: String =
+    "androidx.compose.material3:material3-android:" + Versions.androidx_compose_material3_version
+
+  /**
+   * https://developer.android.com/reference/kotlin/androidx/activity/compose
+   */
+  const val androidx_activity_compose: String =
+    "androidx.activity:activity-compose:" + Versions.androidx_activity_compose_version
+
+  /**
+   * https://developer.android.com/develop/ui/compose/documentation
+   */
+  const val androidx_compose_ui: String =
+    "androidx.compose.ui:ui:" + Versions.androidx_compose_ui_version
+
+  const val androidx_compose_runtime: String =
+    "androidx.compose.runtime:runtime-livedata:" + Versions.androidx_compose_runtime_version
 }
