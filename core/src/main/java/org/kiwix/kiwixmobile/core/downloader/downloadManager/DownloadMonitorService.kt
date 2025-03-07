@@ -33,7 +33,6 @@ import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.FetchListener
-import com.tonyodev.fetch2.R
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import com.tonyodev.fetch2core.DownloadBlock
@@ -276,7 +275,7 @@ class DownloadMonitorService : Service() {
     notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
       .setSmallIcon(android.R.drawable.stat_sys_download_done)
       .setContentTitle(notificationTitle)
-      .setContentText(getString(R.string.fetch_notification_download_complete))
+      .setContentText(getString(string.complete))
       .setOngoing(false)
       .setGroup(download.id.toString())
       .setGroupSummary(false)
