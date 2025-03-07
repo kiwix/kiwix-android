@@ -18,5 +18,5 @@
 
 package org.kiwix.kiwixmobile.core.help
 
-//same as HelpItem data class in HelpAdapter.kt
+// same as HelpItem data class in earlier in XML
 data class HelpScreenItemDataClass(val title: String, val description: String)
