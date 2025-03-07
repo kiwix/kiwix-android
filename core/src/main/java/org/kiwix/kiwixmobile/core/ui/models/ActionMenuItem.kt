@@ -26,5 +26,6 @@ data class ActionMenuItem(
   val icon: IconItem,
   @StringRes val contentDescription: Int,
   val onClick: () -> Unit,
-  val iconTint: Color = White
+  val iconTint: Color = White,
+  val isEnabled: Boolean = true
 )

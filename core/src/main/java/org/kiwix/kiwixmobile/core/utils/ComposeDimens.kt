@@ -41,9 +41,11 @@ object ComposeDimens {
   // Padding & Margins
   val SIXTY_DP = 60.dp
   val THIRTY_TWO_DP = 30.dp
+  val TWENTY_DP = 20.dp
   val SEVENTEEN_DP = 17.dp
   val SIXTEEN_DP = 16.dp
   val TWELVE_DP = 12.dp
+  val TEN_DP = 10.dp
   val EIGHT_DP = 8.dp
   val FIVE_DP = 5.dp
   val FOUR_DP = 4.dp
@@ -77,4 +79,7 @@ object ComposeDimens {
   val LARGE_LABEL_TEXT_SIZE = 14.sp
   val MEDIUM_LABEL_TEXT_SIZE = 12.sp
   val SMALL_LABEL_TEXT_SIZE = 10.sp
+
+  // AddNoteDialog dimens
+  val MINIMUM_HEIGHT_OF_NOTE_TEXT_FILED = 120.dp
 }
