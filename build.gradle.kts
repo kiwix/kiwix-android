@@ -17,6 +17,7 @@ buildscript {
 }
 plugins {
   buildSrcVersions
+  id("org.jetbrains.kotlin.plugin.compose") version Versions.org_jetbrains_kotlin apply false
 }
 
 allprojects {
@@ -28,5 +29,5 @@ allprojects {
 }
 
 tasks.create<Delete>("clean") {
-  delete(rootProject.buildDir)
+  delete(rootProject.layout.buildDirectory)
 }

@@ -8,7 +8,8 @@
   android:minHeight="@dimen/material_minimum_height_and_width"
   android:minWidth="@dimen/material_minimum_height_and_width"
   android:paddingStart="12dp"
-  android:paddingEnd="12dp">
+  android:paddingEnd="12dp"
+  tools:ignore="Overdraw">
 
   <TextView
     android:id="@+id/ic_tab_switcher_text"

@@ -366,4 +366,31 @@ object Libs {
    */
   const val fetch: String = "com.github.tonyofrancis.Fetch:fetch2:" + Versions.fetch
   const val fetchOkhttp: String = "com.github.tonyofrancis.Fetch:fetch2okhttp:" + Versions.fetch
+
+  /**
+   * https://developer.android.com/jetpack/androidx/releases/compose-material3
+   */
+  const val COMPOSE_MATERIAL3: String =
+    "androidx.compose.material3:material3:${Versions.COMPOSE_MATERIAL3}"
+
+  /**
+   * https://developer.android.com/reference/kotlin/androidx/activity/compose
+   */
+  const val ANDROIDX_ACTIVITY_COMPOSE: String =
+    "androidx.activity:activity-compose:${Versions.COMPOSE_ACTIVITY_VERSION}"
+
+  const val COMPOSE_TOOLING_PREVIEW =
+    "androidx.compose.ui:ui-tooling-preview:${Versions.COMPOSE_VERSION}"
+
+  const val COMPOSE_TOOLING = "androidx.compose.ui:ui-tooling:${Versions.COMPOSE_VERSION}"
+
+  const val COMPOSE_UI_TEST_JUNIT = "androidx.compose.ui:ui-test-junit4:${Versions.COMPOSE_VERSION}"
+
+  const val COMPOSE_UI_MANIFEST = "androidx.compose.ui:ui-test-manifest:${Versions.COMPOSE_VERSION}"
+
+  const val COMPOSE_RX_JAVA2 =
+    "androidx.compose.runtime:runtime-rxjava2:${Versions.COMPOSE_VERSION}"
+
+  const val COMPOSE_LIVE_DATA =
+    "androidx.compose.runtime:runtime-livedata:${Versions.COMPOSE_VERSION}"
 }
