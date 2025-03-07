@@ -46,10 +46,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.kiwix.kiwixmobile.core.R
+
+// Define constants for spacing, font sizes, etc.
+
+private val HelpItemTitleFontSize = 22.sp
+private val HelpItemDescriptionFontSize = 17.sp
+private val IconSize = 36.dp
+private const val HelpItemAnimationDuration = 300
+private const val HelpItemArrowRotationOpen = 180f
+private const val HelpItemArrowRotationClosed = 0f
 
 @Composable
 fun HelpScreenItem(
@@ -58,68 +71,82 @@ fun HelpScreenItem(
   initiallyOpened: Boolean = false
 ) {
   var isOpen by remember { mutableStateOf(initiallyOpened) }
-  val isDarkTheme = isSystemInDarkTheme()
-  val itemColor = if (isDarkTheme) Color.White else Color.Black
-  val arrowRotation by animateFloatAsState(
-    targetValue = if (isOpen) 180f else 0f,
-    animationSpec = tween(300),
-    label = "arrowRotation"
-  )
+  val itemColor = if (isSystemInDarkTheme()) Color.White else Color.Black
 
-  val interactionSource = remember(::MutableInteractionSource)
+  val topPadding: Dp = dimensionResource(id = R.dimen.dimen_medium_padding)
+  val horizontalPadding: Dp = dimensionResource(id = R.dimen.activity_horizontal_margin)
 
   Column(
     modifier = modifier
-      .fillMaxWidth()
-      .padding(top = 12.dp),
+      .fillMaxWidth(),
     verticalArrangement = Arrangement.Center,
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    Row(
-      horizontalArrangement = Arrangement.SpaceBetween,
-      verticalAlignment = Alignment.CenterVertically,
-      modifier = Modifier
-        .fillMaxWidth()
-        .clickable(interactionSource = interactionSource, indication = null, onClick = {
-          isOpen = !isOpen
-        })
-        .padding(horizontal = 16.dp)
-    ) {
-      Text(
-        text = data.title,
-        fontSize = 18.sp,
-        color = itemColor,
-        fontWeight = FontWeight.SemiBold
-      )
-      Icon(
-        imageVector = Icons.Default.KeyboardArrowDown,
-        contentDescription = "Open or Close DropDown",
-        modifier = Modifier
-          .graphicsLayer {
-            rotationZ = arrowRotation
-          }
-          .size(46.dp),
-        tint = itemColor
-      )
-    }
-
-    Spacer(modifier = Modifier.height(12.dp))
-
+    HelpItemHeader(data.title, isOpen, itemColor, horizontalPadding) { isOpen = !isOpen }
     AnimatedVisibility(visible = isOpen) {
-      Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(start = 16.dp, end = 16.dp)
-      ) {
-        Text(
-          text = data.description,
-          fontSize = 16.sp,
-          textAlign = TextAlign.Left,
-          color = itemColor,
-          modifier = Modifier.padding(bottom = 8.dp)
-        )
-      }
+      Spacer(modifier = Modifier.height(topPadding))
+      HelpItemDescription(data.description, itemColor, horizontalPadding)
     }
+  }
+}
+
+@Composable
+fun HelpItemHeader(
+  title: String,
+  isOpen: Boolean,
+  itemColor: Color,
+  horizontalPadding: Dp,
+  onToggle: () -> Unit
+) {
+  val arrowRotation by animateFloatAsState(
+    targetValue = if (isOpen) HelpItemArrowRotationOpen else HelpItemArrowRotationClosed,
+    animationSpec = tween(HelpItemAnimationDuration),
+    label = "arrowRotation"
+  )
+  val interactionSource = remember(::MutableInteractionSource)
+
+  Row(
+    horizontalArrangement = Arrangement.SpaceBetween,
+    verticalAlignment = Alignment.CenterVertically,
+    modifier = Modifier
+      .fillMaxWidth()
+      .clickable(interactionSource = interactionSource, indication = null, onClick = onToggle)
+      .padding(horizontal = horizontalPadding, vertical = horizontalPadding)
+  ) {
+    Text(
+      text = title,
+      fontSize = HelpItemTitleFontSize,
+      color = itemColor,
+      fontWeight = FontWeight.Normal
+    )
+    Icon(
+      imageVector = Icons.Default.KeyboardArrowDown,
+      contentDescription = stringResource(R.string.expand),
+      modifier = Modifier
+        .graphicsLayer {
+          rotationZ = arrowRotation
+        }
+        .size(IconSize),
+      tint = itemColor
+    )
+  }
+}
+
+@Composable
+fun HelpItemDescription(description: String, itemColor: Color, horizontalPadding: Dp) {
+  Box(
+    contentAlignment = Alignment.Center,
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(start = horizontalPadding, end = horizontalPadding)
+  ) {
+    Text(
+      text = description,
+      fontSize = HelpItemDescriptionFontSize,
+      textAlign = TextAlign.Left,
+      color = itemColor,
+      modifier = Modifier.padding(bottom = horizontalPadding),
+      fontWeight = FontWeight.Normal
+    )
   }
 }
