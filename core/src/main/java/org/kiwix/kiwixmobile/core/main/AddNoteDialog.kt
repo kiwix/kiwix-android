@@ -209,19 +209,22 @@ class AddNoteDialog : DialogFragment() {
       Vector(Icons.Default.Delete),
       R.string.delete,
       { deleteNote() },
-      isEnabled = false
+      isEnabled = false,
+      testingTag = DELETE_MENU_BUTTON_TESTING_TAG
     ),
     ActionMenuItem(
       Vector(Icons.Default.Share),
       R.string.share,
       { shareNote() },
-      isEnabled = false
+      isEnabled = false,
+      testingTag = SHARE_MENU_BUTTON_TESTING_TAG
     ),
     ActionMenuItem(
       Drawable(R.drawable.ic_save),
       R.string.save,
       { saveNote() },
-      isEnabled = false
+      isEnabled = false,
+      testingTag = SAVE_MENU_BUTTON_TESTING_TAG
     )
   )
 

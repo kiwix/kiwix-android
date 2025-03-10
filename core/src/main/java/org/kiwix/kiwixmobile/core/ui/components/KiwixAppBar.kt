@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
@@ -43,6 +44,8 @@ import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.KIWIX_APP_BAR_HEIGHT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+
+const val TOOLBAR_TITLE_TESTING_TAG = "toolbarTitle"
 
 @Composable
 fun KiwixAppBar(
@@ -80,7 +83,7 @@ private fun AppBarTitle(
     text = stringResource(titleId),
     color = White,
     style = MaterialTheme.typography.titleLarge.copy(fontWeight = SemiBold),
-    modifier = Modifier.padding(horizontal = SIXTEEN_DP)
+    modifier = Modifier.padding(horizontal = SIXTEEN_DP).testTag(TOOLBAR_TITLE_TESTING_TAG)
   )
 }
 
@@ -90,7 +93,8 @@ private fun ActionMenu(actionMenuItems: List<ActionMenuItem>) {
     actionMenuItems.forEach { menuItem ->
       IconButton(
         enabled = menuItem.isEnabled,
-        onClick = menuItem.onClick
+        onClick = menuItem.onClick,
+        modifier = Modifier.testTag(menuItem.testingTag)
       ) {
         Icon(
           painter = when (val icon = menuItem.icon) {

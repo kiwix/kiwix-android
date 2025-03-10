@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.main
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,9 +25,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -46,25 +42,26 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.extensions.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
-import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
+import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
-import org.kiwix.kiwixmobile.core.ui.models.IconItem
-import org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable
-import org.kiwix.kiwixmobile.core.ui.models.IconItem.Vector
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MINIMUM_HEIGHT_OF_NOTE_TEXT_FILED
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_DP
+
+const val ADD_NOTE_TEXT_FILED_TESTING_TAG = "addNoteTextFiledTestingTag"
+const val SAVE_MENU_BUTTON_TESTING_TAG = "saveMenuButtonTestingTag"
+const val SHARE_MENU_BUTTON_TESTING_TAG = "shareMenuButtonTestingTag"
+const val DELETE_MENU_BUTTON_TESTING_TAG = "deleteMenuButtonTestingTag"
 
 @Suppress("ComposableLambdaParameterNaming")
 @Composable
@@ -138,7 +135,8 @@ private fun NoteTextField(
       .heightIn(min = MINIMUM_HEIGHT_OF_NOTE_TEXT_FILED)
       .padding(bottom = TEN_DP)
       .padding(horizontal = FOUR_DP)
-      .focusRequester(focusRequester),
+      .focusRequester(focusRequester)
+      .testTag(ADD_NOTE_TEXT_FILED_TESTING_TAG),
     placeholder = { Text(text = stringResource(R.string.note)) },
     singleLine = false,
     shape = RectangleShape,
@@ -156,44 +154,5 @@ private fun NoteTextField(
       focusedIndicatorColor = Color.Transparent,
       unfocusedIndicatorColor = Color.Transparent
     )
-  )
-}
-
-@Preview
-@Preview(name = "Night mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun PreviewAddNoteDialog() {
-  AddNoteDialogScreen(
-    "Demo note",
-    navigationIcon = {
-      NavigationIcon(
-        iconItem = IconItem.Drawable(R.drawable.ic_close_white_24dp),
-        onClick = {}
-      )
-    },
-    noteText = TextFieldValue(""),
-    actionMenuItems = listOf(
-      ActionMenuItem(
-        Vector(Icons.Default.Delete),
-        R.string.delete,
-        { },
-        isEnabled = false
-      ),
-      ActionMenuItem(
-        Vector(Icons.Default.Share),
-        R.string.share,
-        { },
-        isEnabled = false
-      ),
-      ActionMenuItem(
-        Drawable(R.drawable.ic_save),
-        R.string.save,
-        { },
-        isEnabled = false
-      )
-    ),
-    onTextChange = { text -> },
-    isNoteFileExist = true,
-    snackBarHostState = SnackbarHostState()
   )
 }
