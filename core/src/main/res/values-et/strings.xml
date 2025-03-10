@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Macofe
+* Rivoz
 -->
 <resources>
   <string name="menu_help">Abi</string>
@@ -18,4 +19,6 @@
   <string name="pref_language_title">Keel</string>
   <string name="pref_language_chooser">Vali keel</string>
   <string name="library">Raamatukogu</string>
+  <string name="resuming_state">Jätkamine</string>
+  <string name="downloading_state">Allalaadimine</string>
 </resources>
