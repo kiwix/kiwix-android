@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.extensions
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
@@ -27,21 +28,28 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue400
 
 /**
- * A custom Snackbar host for displaying snackbars with a consistent style in the Kiwix app.
+ * A custom SnackbarHost for displaying snackbars with theme-aware action button colors.
  *
- * This Composable wraps the default [SnackbarHost] and applies a custom action text color
- * using the primary color from the Material theme.
+ * This function ensures that the action button color follows the app's theme:
+ * - In **light mode**, the action button color is `DenimBlue400`.
+ * - In **dark mode**, the action button color is `surface`, similar to the XML-based styling.
  *
- * @param snackbarHostState The state that controls the visibility and content of the Snackbar.
+ * @param snackbarHostState The state that controls the Snackbar display.
  */
 @Composable
 fun KiwixSnackbarHost(snackbarHostState: SnackbarHostState) {
+  val actionColor = if (isSystemInDarkTheme()) {
+    MaterialTheme.colorScheme.surface
+  } else {
+    DenimBlue400
+  }
   SnackbarHost(hostState = snackbarHostState) { snackbarData ->
     Snackbar(
       snackbarData = snackbarData,
-      actionColor = MaterialTheme.colorScheme.primary
+      actionColor = actionColor
     )
   }
 }
@@ -57,7 +65,7 @@ fun SnackbarHostState.snack(
   lifecycleScope.launch {
     val result = showSnackbar(
       message = message,
-      actionLabel = actionLabel,
+      actionLabel = actionLabel?.uppercase(),
       duration = snackbarDuration
     )
     if (result == SnackbarResult.ActionPerformed) {

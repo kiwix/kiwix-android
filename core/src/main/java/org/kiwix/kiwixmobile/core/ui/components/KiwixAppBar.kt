@@ -25,9 +25,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -40,14 +37,9 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
-import androidx.compose.ui.tooling.preview.Preview
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
-import org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable
-import org.kiwix.kiwixmobile.core.ui.models.IconItem.Vector
 import org.kiwix.kiwixmobile.core.ui.theme.Black
-import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.KIWIX_APP_BAR_HEIGHT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
@@ -110,41 +102,5 @@ private fun ActionMenu(actionMenuItems: List<ActionMenuItem>) {
         )
       }
     }
-  }
-}
-
-@Preview(name = "NightMode", uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
-@Preview(name = "LightMode", uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO)
-@Composable
-fun PreviewKiwixAppBar() {
-  KiwixTheme {
-    KiwixAppBar(
-      R.string.note,
-      {
-        NavigationIcon(
-          iconItem = IconItem.Drawable(R.drawable.ic_close_white_24dp),
-          onClick = {}
-        )
-      },
-      listOf(
-        ActionMenuItem(
-          Vector(Icons.Default.Delete),
-          R.string.delete,
-          {},
-          isEnabled = false
-        ),
-        ActionMenuItem(
-          Vector(Icons.Default.Share),
-          R.string.share,
-          {},
-          isEnabled = true
-        ),
-        ActionMenuItem(
-          Drawable(R.drawable.ic_save),
-          R.string.save,
-          {}
-        )
-      ),
-    )
   }
 }
