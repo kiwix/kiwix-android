@@ -18,16 +18,20 @@
 
 package org.kiwix.kiwixmobile.core.main
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -46,9 +50,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
+import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable
+import org.kiwix.kiwixmobile.core.ui.models.IconItem.Vector
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
@@ -70,11 +80,14 @@ fun AddNoteDialogScreen(
   val focusRequester = remember { FocusRequester() }
   val focusManager = LocalFocusManager.current
   KiwixTheme {
-    Scaffold(snackbarHost = { SnackbarHost(hostState = snackBarHostState) }) { paddingValues ->
+    Scaffold(
+      snackbarHost = { KiwixSnackbarHost(snackbarHostState = snackBarHostState) }
+    ) { paddingValues ->
       Column(
         modifier = Modifier
           .fillMaxWidth()
           .background(Color.Transparent)
+          .imePadding()
           .padding(paddingValues),
       ) {
         KiwixAppBar(R.string.note, navigationIcon, actionMenuItems)
@@ -143,5 +156,44 @@ private fun NoteTextField(
       focusedIndicatorColor = Color.Transparent,
       unfocusedIndicatorColor = Color.Transparent
     )
+  )
+}
+
+@Preview
+@Preview(name = "Night mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun PreviewAddNoteDialog() {
+  AddNoteDialogScreen(
+    "Demo note",
+    navigationIcon = {
+      NavigationIcon(
+        iconItem = IconItem.Drawable(R.drawable.ic_close_white_24dp),
+        onClick = {}
+      )
+    },
+    noteText = TextFieldValue(""),
+    actionMenuItems = listOf(
+      ActionMenuItem(
+        Vector(Icons.Default.Delete),
+        R.string.delete,
+        { },
+        isEnabled = false
+      ),
+      ActionMenuItem(
+        Vector(Icons.Default.Share),
+        R.string.share,
+        { },
+        isEnabled = false
+      ),
+      ActionMenuItem(
+        Drawable(R.drawable.ic_save),
+        R.string.save,
+        { },
+        isEnabled = false
+      )
+    ),
+    onTextChange = { text -> },
+    isNoteFileExist = true,
+    snackBarHostState = SnackbarHostState()
   )
 }

@@ -33,6 +33,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
@@ -44,7 +45,6 @@ import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
-import org.kiwix.kiwixmobile.core.extensions.rememberSnackbarHostState
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
@@ -173,7 +173,7 @@ class AddNoteDialog : DialogFragment() {
     savedInstanceState: Bundle?
   ): View? = ComposeView(requireContext()).apply {
     setContent {
-      snackBarHostState = rememberSnackbarHostState()
+      snackBarHostState = remember { SnackbarHostState() }
       AddNoteDialogScreen(
         articleTitle.toString(),
         navigationIcon = {

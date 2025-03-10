@@ -18,26 +18,47 @@
 
 package org.kiwix.kiwixmobile.core.extensions
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+/**
+ * A custom Snackbar host for displaying snackbars with a consistent style in the Kiwix app.
+ *
+ * This Composable wraps the default [SnackbarHost] and applies a custom action text color
+ * using the primary color from the Material theme.
+ *
+ * @param snackbarHostState The state that controls the visibility and content of the Snackbar.
+ */
 @Composable
-fun rememberSnackbarHostState(): SnackbarHostState = remember { SnackbarHostState() }
+fun KiwixSnackbarHost(snackbarHostState: SnackbarHostState) {
+  SnackbarHost(hostState = snackbarHostState) { snackbarData ->
+    Snackbar(
+      snackbarData = snackbarData,
+      actionColor = MaterialTheme.colorScheme.primary
+    )
+  }
+}
 
 fun SnackbarHostState.snack(
   message: String,
   actionLabel: String? = null,
   actionClick: (() -> Unit)? = null,
+  // Default duration is 4 seconds.
+  snackbarDuration: SnackbarDuration = SnackbarDuration.Short,
   lifecycleScope: CoroutineScope
 ) {
   lifecycleScope.launch {
     val result = showSnackbar(
       message = message,
-      actionLabel = actionLabel
+      actionLabel = actionLabel,
+      duration = snackbarDuration
     )
     if (result == SnackbarResult.ActionPerformed) {
       actionClick?.invoke()

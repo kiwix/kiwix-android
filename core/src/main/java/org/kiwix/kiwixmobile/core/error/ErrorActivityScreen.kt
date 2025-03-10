@@ -78,7 +78,7 @@ fun ErrorActivityScreen(
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
       CrashTitle(crashTitleStringId)
-      CrashImage()
+      AppIcon()
       CrashMessage(messageStringId)
       CrashCheckBoxList(
         checkBoxData,
@@ -121,7 +121,7 @@ private fun CrashTitle(
 }
 
 @Composable
-private fun CrashImage() {
+private fun AppIcon() {
   Image(
     bitmap = ImageBitmap.loadBitmapFromMipmap(LocalContext.current, R.mipmap.ic_launcher),
     contentDescription = stringResource(id = string.app_name),
