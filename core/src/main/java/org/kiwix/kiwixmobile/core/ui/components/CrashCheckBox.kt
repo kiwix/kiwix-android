@@ -29,9 +29,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue200
+import org.kiwix.kiwixmobile.core.ui.theme.ErrorActivityBackground
+import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CRASH_CHECKBOX_START_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CRASH_CHECKBOX_TOP_PADDING
 
@@ -47,15 +48,15 @@ fun CrashCheckBox(checkBoxItem: Pair<Int, MutableState<Boolean>>) {
       checked = checkBoxItem.second.value,
       onCheckedChange = { checkBoxItem.second.value = it },
       colors = CheckboxDefaults.colors(
-        checkedColor = colorResource(id = R.color.denim_blue200),
-        checkmarkColor = colorResource(id = R.color.error_activity_background),
-        uncheckedColor = colorResource(R.color.denim_blue200)
+        checkedColor = DenimBlue200,
+        checkmarkColor = ErrorActivityBackground,
+        uncheckedColor = DenimBlue200
       )
     )
     Text(
       style = MaterialTheme.typography.bodyMedium,
       text = stringResource(id = checkBoxItem.first),
-      color = colorResource(id = R.color.white),
+      color = White,
       modifier = Modifier.padding(start = CRASH_CHECKBOX_TOP_PADDING)
     )
   }

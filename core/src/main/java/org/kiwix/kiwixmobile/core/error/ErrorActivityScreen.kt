@@ -41,7 +41,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.tonyodev.fetch2.R.string
@@ -49,6 +48,10 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.loadBitmapFromMipmap
 import org.kiwix.kiwixmobile.core.ui.components.CrashCheckBox
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
+import org.kiwix.kiwixmobile.core.ui.theme.AlabasterWhite
+import org.kiwix.kiwixmobile.core.ui.theme.ErrorActivityBackground
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
+import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CRASH_IMAGE_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEVENTEEN_DP
@@ -64,63 +67,91 @@ fun ErrorActivityScreen(
   noThanksButtonClickListener: () -> Unit,
   sendDetailsButtonClickListener: () -> Unit
 ) {
-  Column(
-    modifier = Modifier
-      .fillMaxSize()
-      .background(colorResource(id = R.color.error_activity_background))
-      .systemBarsPadding()
-      .imePadding()
-      .padding(SIXTEEN_DP),
-    horizontalAlignment = Alignment.CenterHorizontally
-  ) {
-    Text(
-      text = stringResource(crashTitleStringId),
-      style = MaterialTheme.typography.headlineSmall,
-      color = colorResource(id = R.color.alabaster_white),
-      modifier = Modifier.padding(top = SIXTY_DP, start = EIGHT_DP, end = EIGHT_DP)
-    )
-
-    Image(
-      bitmap = ImageBitmap.loadBitmapFromMipmap(LocalContext.current, R.mipmap.ic_launcher),
-      contentDescription = stringResource(id = string.app_name),
+  KiwixTheme {
+    Column(
       modifier = Modifier
-        .height(CRASH_IMAGE_SIZE)
-        .padding(top = TWELVE_DP, start = EIGHT_DP, end = EIGHT_DP)
-    )
+        .fillMaxSize()
+        .background(ErrorActivityBackground)
+        .systemBarsPadding()
+        .imePadding()
+        .padding(SIXTEEN_DP),
+      horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+      CrashTitle(crashTitleStringId)
+      AppIcon()
+      CrashMessage(messageStringId)
+      CrashCheckBoxList(
+        checkBoxData,
+        Modifier
+          .weight(1f)
+          .padding(top = SEVENTEEN_DP, bottom = EIGHT_DP)
+      )
 
-    Text(
-      text = stringResource(messageStringId),
-      style = MaterialTheme.typography.bodyMedium,
-      textAlign = TextAlign.Center,
-      color = colorResource(id = R.color.white),
-      modifier = Modifier.padding(start = EIGHT_DP, top = EIGHT_DP, end = EIGHT_DP)
-    )
-
-    Column(modifier = Modifier.weight(1f).padding(top = SEVENTEEN_DP, bottom = EIGHT_DP)) {
-      LazyColumn(
-        modifier = Modifier.fillMaxWidth()
+      // Buttons on the ErrorActivity.
+      Row(
+        modifier = Modifier
+          .fillMaxWidth()
+          .navigationBarsPadding(),
+        horizontalArrangement = Arrangement.SpaceEvenly
       ) {
-        itemsIndexed(checkBoxData) { _, item ->
-          CrashCheckBox(item.first to item.second)
-        }
+        KiwixButton(
+          buttonTextId = R.string.crash_button_confirm,
+          clickListener = { sendDetailsButtonClickListener.invoke() },
+        )
+
+        KiwixButton(
+          clickListener = { noThanksButtonClickListener.invoke() },
+          buttonTextId = R.string.no_thanks
+        )
       }
     }
+  }
+}
 
-    Row(
-      modifier = Modifier
-        .fillMaxWidth()
-        .navigationBarsPadding(),
-      horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-      KiwixButton(
-        buttonTextId = R.string.crash_button_confirm,
-        clickListener = { sendDetailsButtonClickListener.invoke() },
-      )
+@Composable
+private fun CrashTitle(
+  @StringRes titleId: Int
+) {
+  Text(
+    text = stringResource(titleId),
+    style = MaterialTheme.typography.headlineSmall,
+    color = AlabasterWhite,
+    modifier = Modifier.padding(top = SIXTY_DP, start = EIGHT_DP, end = EIGHT_DP)
+  )
+}
 
-      KiwixButton(
-        clickListener = { noThanksButtonClickListener.invoke() },
-        buttonTextId = R.string.no_thanks
-      )
+@Composable
+private fun AppIcon() {
+  Image(
+    bitmap = ImageBitmap.loadBitmapFromMipmap(LocalContext.current, R.mipmap.ic_launcher),
+    contentDescription = stringResource(id = string.app_name),
+    modifier = Modifier
+      .height(CRASH_IMAGE_SIZE)
+      .padding(top = TWELVE_DP, start = EIGHT_DP, end = EIGHT_DP)
+  )
+}
+
+@Composable
+private fun CrashMessage(
+  @StringRes messageId: Int
+) {
+  Text(
+    text = stringResource(messageId),
+    style = MaterialTheme.typography.bodyMedium,
+    textAlign = TextAlign.Center,
+    color = White,
+    modifier = Modifier.padding(start = EIGHT_DP, top = EIGHT_DP, end = EIGHT_DP)
+  )
+}
+
+@Composable
+private fun CrashCheckBoxList(
+  checkBoxData: List<Pair<Int, MutableState<Boolean>>>,
+  modifier: Modifier
+) {
+  LazyColumn(modifier = modifier) {
+    itemsIndexed(checkBoxData) { _, item ->
+      CrashCheckBox(item.first to item.second)
     }
   }
 }

@@ -41,7 +41,6 @@ import org.kiwix.kiwixmobile.core.compat.ResolveInfoFlagsCompat
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.CRASH_AND_FEEDBACK_EMAIL_ADDRESS
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
@@ -92,15 +91,13 @@ open class ErrorActivity : BaseActivity() {
       checkBoxItems = remember {
         getCrashCheckBoxItems().map { it.first to mutableStateOf(it.second) }
       }
-      KiwixTheme {
-        ErrorActivityScreen(
-          crashTitle,
-          crashDescription,
-          checkBoxItems,
-          { restartApp() },
-          { sendDetailsOnMail() }
-        )
-      }
+      ErrorActivityScreen(
+        crashTitle,
+        crashDescription,
+        checkBoxItems,
+        { restartApp() },
+        { sendDetailsOnMail() }
+      )
     }
   }
 
