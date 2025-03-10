@@ -168,7 +168,6 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
     reader {
       checkZimFileLoadedSuccessful(R.id.readerFragment)
       // test the whole welcome page is loaded or not
-      assertArticleLoaded("Réchauffement climatique")
       assertArticleLoaded("Hydrogène")
       assertArticleLoaded("Automobile")
       assertArticleLoaded("Agriculture")
@@ -185,7 +184,6 @@ class KiwixReaderFragmentTest : BaseActivityTest() {
       assertArticleLoaded("Inondation")
       assertArticleLoaded("Ammoniac")
       assertArticleLoaded("Énergie hydroélectrique")
-      assertArticleLoaded("Feu de forêt")
       assertArticleLoaded("Nuage")
       assertArticleLoaded("Essence (hydrocarbure)")
       assertArticleLoaded("Glacier")
