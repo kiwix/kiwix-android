@@ -33,15 +33,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -57,7 +51,6 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MINIMUM_HEIGHT_OF_NOTE_TEXT_FILED
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_DP
-import org.kiwix.kiwixmobile.core.utils.TestingUtils.isRunningTest
 
 const val ADD_NOTE_TEXT_FILED_TESTING_TAG = "addNoteTextFiledTestingTag"
 const val SAVE_MENU_BUTTON_TESTING_TAG = "saveMenuButtonTestingTag"
@@ -71,12 +64,9 @@ fun AddNoteDialogScreen(
   noteText: TextFieldValue,
   actionMenuItems: List<ActionMenuItem>,
   onTextChange: (TextFieldValue) -> Unit,
-  isNoteFileExist: Boolean,
   snackBarHostState: SnackbarHostState,
   navigationIcon: @Composable () -> Unit
 ) {
-  val focusRequester = remember { FocusRequester() }
-  val focusManager = LocalFocusManager.current
   KiwixDialogTheme {
     Scaffold(
       snackbarHost = { KiwixSnackbarHost(snackbarHostState = snackBarHostState) }
@@ -96,17 +86,9 @@ fun AddNoteDialogScreen(
         )
         NoteTextField(
           noteText = noteText,
-          onTextChange = onTextChange,
-          focusRequester = focusRequester
+          onTextChange = onTextChange
         )
       }
-    }
-  }
-
-  LaunchedEffect(isNoteFileExist) {
-    if (!isNoteFileExist && !isRunningTest()) {
-      focusRequester.requestFocus()
-      focusManager.moveFocus(FocusDirection.Down)
     }
   }
 }
@@ -124,8 +106,7 @@ private fun ArticleTitleText(articleTitle: String) {
 @Composable
 private fun NoteTextField(
   noteText: TextFieldValue,
-  onTextChange: (TextFieldValue) -> Unit,
-  focusRequester: FocusRequester
+  onTextChange: (TextFieldValue) -> Unit
 ) {
   TextField(
     value = noteText,
@@ -136,7 +117,6 @@ private fun NoteTextField(
       .heightIn(min = MINIMUM_HEIGHT_OF_NOTE_TEXT_FILED)
       .padding(bottom = TEN_DP)
       .padding(horizontal = FOUR_DP)
-      .focusRequester(focusRequester)
       .testTag(ADD_NOTE_TEXT_FILED_TESTING_TAG),
     placeholder = { Text(text = stringResource(R.string.note)) },
     singleLine = false,

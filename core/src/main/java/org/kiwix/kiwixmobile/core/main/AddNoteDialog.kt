@@ -84,11 +84,10 @@ class AddNoteDialog : DialogFragment() {
 
   private val menuItems = mutableStateOf(actionMenuItems())
   private val noteText = mutableStateOf(TextFieldValue(""))
-  lateinit var snackBarHostState: SnackbarHostState
+  private lateinit var snackBarHostState: SnackbarHostState
 
   // Corresponds to "ArticleUrl" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
   private lateinit var articleNoteFileName: String
-  private var noteFileExists = mutableStateOf(false)
   private var noteEdited = false
 
   // Keeps track of state of the note (whether edited since last save)
@@ -190,7 +189,6 @@ class AddNoteDialog : DialogFragment() {
         onTextChange = { textInputFiled ->
           enableSaveAndShareMenuButtonAndSetTextEdited(textInputFiled)
         },
-        isNoteFileExist = noteFileExists.value,
         snackBarHostState = snackBarHostState
       )
     }
@@ -462,8 +460,8 @@ class AddNoteDialog : DialogFragment() {
   }
 
   private fun readNoteFromFile(noteFile: File) {
-    noteFileExists.value = true
-    noteText.value = TextFieldValue(noteFile.readText())
+    val noteFileText = noteFile.readText()
+    noteText.value = TextFieldValue(noteFileText, selection = TextRange(noteFileText.length))
     enableShareNoteMenuItem() // As note content exists which can be shared
     enableDeleteNoteMenuItem()
     if (!isZimFileExist()) {
