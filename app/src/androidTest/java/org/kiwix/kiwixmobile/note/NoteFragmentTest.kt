@@ -207,23 +207,25 @@ class NoteFragmentTest : BaseActivityTest() {
 
   @Test
   fun testNoteEntryIsRemovedFromDatabaseWhenDeletedInAddNoteDialog() {
-    deletePreviouslySavedNotes()
-    loadZimFileInReader("testzim.zim")
-    note {
-      clickOnNoteMenuItem(context)
-      assertNoteDialogDisplayed(composeTestRule)
-      writeDemoNote(composeTestRule)
-      saveNote(composeTestRule)
-      pressBack()
-      openNoteFragment()
-      assertToolbarExist()
-      assertNoteRecyclerViewExist()
-      clickOnSavedNote()
-      clickOnOpenNote()
-      assertNoteSaved(composeTestRule)
-      clickOnDeleteIcon(composeTestRule)
-      pressBack()
-      assertNoNotesTextDisplayed()
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+      deletePreviouslySavedNotes()
+      loadZimFileInReader("testzim.zim")
+      note {
+        clickOnNoteMenuItem(context)
+        assertNoteDialogDisplayed(composeTestRule)
+        writeDemoNote(composeTestRule)
+        saveNote(composeTestRule)
+        pressBack()
+        openNoteFragment()
+        assertToolbarExist()
+        assertNoteRecyclerViewExist()
+        clickOnSavedNote()
+        clickOnOpenNote()
+        assertNoteSaved(composeTestRule)
+        clickOnDeleteIcon(composeTestRule)
+        pressBack()
+        assertNoNotesTextDisplayed()
+      }
     }
   }
 

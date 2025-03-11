@@ -31,12 +31,13 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils.isFileDescriptorCanOpenW
 import org.kiwix.libzim.Archive
 import org.kiwix.libzim.FdInput
 import java.io.File
+import java.io.Serializable
 
 class ZimReaderSource(
   val file: File? = null,
   val uri: Uri? = null,
   val assetFileDescriptorList: List<AssetFileDescriptor>? = null
-) {
+) : Serializable {
   constructor(uri: Uri) : this(
     uri = uri,
     assetFileDescriptorList = getAssetFileDescriptorFromUri(CoreApp.instance, uri)
