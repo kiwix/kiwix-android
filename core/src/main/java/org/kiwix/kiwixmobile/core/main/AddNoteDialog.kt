@@ -230,11 +230,23 @@ class AddNoteDialog : DialogFragment() {
     )
   )
 
+  /**
+   * Updates the note text and enables the save/share menu buttons when the user edits the text.
+   *
+   * ⚠️ Jetpack Compose triggers `onTextChange` not only when the text changes
+   * but also when the cursor position moves due to recomposition or rendering updates.
+   * This function ensures that menu buttons are only enabled when the actual text is modified,
+   * preventing unnecessary state updates caused by cursor movement.
+   *
+   * @param textFieldValue The latest value of the TextField, including text and cursor position.
+   */
   private fun enableSaveAndShareMenuButtonAndSetTextEdited(textFieldValue: TextFieldValue) {
-    noteEdited = true
+    if (noteText.value.text != textFieldValue.text) {
+      noteEdited = true
+      enableSaveNoteMenuItem()
+      enableShareNoteMenuItem()
+    }
     noteText.value = textFieldValue
-    enableSaveNoteMenuItem()
-    enableShareNoteMenuItem()
   }
 
   private val zimNoteDirectoryName: String
@@ -268,7 +280,7 @@ class AddNoteDialog : DialogFragment() {
 
   // Add onBackPressedCallBack to respond to user pressing 'Back' button on navigation bar
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    val dialog = Dialog(requireContext(), theme)
+    val dialog = Dialog(requireContext())
     requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallBack)
     return dialog
   }
