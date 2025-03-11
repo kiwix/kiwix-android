@@ -51,7 +51,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
-import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MINIMUM_HEIGHT_OF_NOTE_TEXT_FILED
@@ -77,7 +77,7 @@ fun AddNoteDialogScreen(
 ) {
   val focusRequester = remember { FocusRequester() }
   val focusManager = LocalFocusManager.current
-  KiwixTheme {
+  KiwixDialogTheme {
     Scaffold(
       snackbarHost = { KiwixSnackbarHost(snackbarHostState = snackBarHostState) }
     ) { paddingValues ->

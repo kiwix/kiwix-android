@@ -34,7 +34,8 @@ private val DarkColorScheme = darkColorScheme(
   onSecondary = MineShaftGray350,
   onBackground = White,
   onSurface = White,
-  onError = White
+  onError = White,
+  onTertiary = MineShaftGray500
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -47,7 +48,8 @@ private val LightColorScheme = lightColorScheme(
   onSecondary = ScorpionGray,
   onBackground = Black,
   onSurface = Black,
-  onError = AlabasterWhite
+  onError = AlabasterWhite,
+  onTertiary = MineShaftGray600
 )
 
 @Composable
@@ -60,6 +62,30 @@ fun KiwixTheme(
     else -> LightColorScheme
   }
 
+  MaterialTheme(
+    colorScheme = colorScheme,
+    content = content,
+    shapes = shapes,
+    typography = KiwixTypography
+  )
+}
+
+/**
+ * A custom MaterialTheme specifically for dialogs in the Kiwix app.
+ *
+ * This theme applies a modified dark mode background for dialogs while keeping
+ * the rest of the color scheme unchanged. In light mode, it uses the
+ * standard app theme(KiwixTheme).
+ */
+@Composable
+fun KiwixDialogTheme(
+  darkTheme: Boolean = isSystemInDarkTheme(),
+  content: @Composable () -> Unit
+) {
+  val colorScheme = when {
+    darkTheme -> DarkColorScheme.copy(background = MineShaftGray700)
+    else -> LightColorScheme
+  }
   MaterialTheme(
     colorScheme = colorScheme,
     content = content,
