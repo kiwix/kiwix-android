@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.ui.components
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -41,6 +42,8 @@ import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.Black
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
+import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray350
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.KIWIX_APP_BAR_HEIGHT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
@@ -55,23 +58,25 @@ fun KiwixAppBar(
   // Optional search bar, used in fragments that require it
   searchBar: (@Composable () -> Unit)? = null
 ) {
-  Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .height(KIWIX_APP_BAR_HEIGHT)
-      .background(color = Black),
-    verticalAlignment = Alignment.CenterVertically
-  ) {
-    navigationIcon()
-    searchBar?.let {
-      // Display the search bar when provided
-      it()
-    } ?: run {
-      // Otherwise, show the title
-      AppBarTitle(titleId)
+  KiwixTheme {
+    Row(
+      modifier = Modifier
+        .fillMaxWidth()
+        .height(KIWIX_APP_BAR_HEIGHT)
+        .background(color = Black),
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      navigationIcon()
+      searchBar?.let {
+        // Display the search bar when provided
+        it()
+      } ?: run {
+        // Otherwise, show the title
+        AppBarTitle(titleId)
+      }
+      Spacer(Modifier.weight(1f))
+      ActionMenu(actionMenuItems)
     }
-    Spacer(Modifier.weight(1f))
-    ActionMenu(actionMenuItems)
   }
 }
 
@@ -79,11 +84,18 @@ fun KiwixAppBar(
 private fun AppBarTitle(
   @StringRes titleId: Int
 ) {
+  val appBarTitleColor = if (isSystemInDarkTheme()) {
+    MineShaftGray350
+  } else {
+    White
+  }
   Text(
     text = stringResource(titleId),
-    color = White,
+    color = appBarTitleColor,
     style = MaterialTheme.typography.titleLarge.copy(fontWeight = SemiBold),
-    modifier = Modifier.padding(horizontal = SIXTEEN_DP).testTag(TOOLBAR_TITLE_TESTING_TAG)
+    modifier = Modifier
+      .padding(horizontal = SIXTEEN_DP)
+      .testTag(TOOLBAR_TITLE_TESTING_TAG)
   )
 }
 
