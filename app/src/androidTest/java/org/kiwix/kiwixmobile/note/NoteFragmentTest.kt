@@ -221,7 +221,7 @@ class NoteFragmentTest : BaseActivityTest() {
       clickOnSavedNote()
       clickOnOpenNote()
       assertNoteSaved(composeTestRule)
-      clickOnDeleteIcon()
+      clickOnDeleteIcon(composeTestRule)
       pressBack()
       assertNoNotesTextDisplayed()
     }
@@ -245,7 +245,7 @@ class NoteFragmentTest : BaseActivityTest() {
     note {
       clickOnNoteMenuItem(context)
       assertNoteDialogDisplayed(composeTestRule)
-      assertNotDoesNotExist()
+      assertNotDoesNotExist(composeTestRule)
       pressBack()
     }
   }

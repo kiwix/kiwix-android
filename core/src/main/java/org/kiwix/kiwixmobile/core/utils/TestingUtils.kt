@@ -42,6 +42,16 @@ object TestingUtils {
     }
   }
 
+  @JvmStatic
+  fun isRunningTest(): Boolean {
+    return try {
+      Class.forName("androidx.test.espresso.Espresso")
+      true
+    } catch (_: ClassNotFoundException) {
+      false
+    }
+  }
+
   @JvmStatic fun registerIdleCallback(listListener: IdleListener) {
     resources.clear()
     callback = listListener

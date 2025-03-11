@@ -187,7 +187,9 @@ class AddNoteDialog : DialogFragment() {
         },
         noteText = noteText.value,
         actionMenuItems = menuItems.value,
-        onTextChange = { text -> enableSaveAndShareMenuButtonAndSetTextEdited(text) },
+        onTextChange = { textInputFiled ->
+          enableSaveAndShareMenuButtonAndSetTextEdited(textInputFiled)
+        },
         isNoteFileExist = noteFileExists.value,
         snackBarHostState = snackBarHostState
       )
@@ -228,13 +230,9 @@ class AddNoteDialog : DialogFragment() {
     )
   )
 
-  private fun enableSaveAndShareMenuButtonAndSetTextEdited(text: String) {
+  private fun enableSaveAndShareMenuButtonAndSetTextEdited(textFieldValue: TextFieldValue) {
     noteEdited = true
-    noteText.value = TextFieldValue(
-      text = text,
-      // Moves cursor to end
-      selection = TextRange(text.length)
-    )
+    noteText.value = textFieldValue
     enableSaveNoteMenuItem()
     enableShareNoteMenuItem()
   }
@@ -430,7 +428,12 @@ class AddNoteDialog : DialogFragment() {
   }
 
   private fun restoreDeletedNote(text: String) {
-    enableSaveAndShareMenuButtonAndSetTextEdited(text)
+    val restoreNoteTextFieldValue = TextFieldValue(
+      text = text,
+      // Moves cursor to end
+      selection = TextRange(text.length)
+    )
+    enableSaveAndShareMenuButtonAndSetTextEdited(restoreNoteTextFieldValue)
   }
 
   /* String content of the note text file given at:

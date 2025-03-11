@@ -57,6 +57,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MINIMUM_HEIGHT_OF_NOTE_TEXT_FILED
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_DP
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.isRunningTest
 
 const val ADD_NOTE_TEXT_FILED_TESTING_TAG = "addNoteTextFiledTestingTag"
 const val SAVE_MENU_BUTTON_TESTING_TAG = "saveMenuButtonTestingTag"
@@ -69,7 +70,7 @@ fun AddNoteDialogScreen(
   articleTitle: String,
   noteText: TextFieldValue,
   actionMenuItems: List<ActionMenuItem>,
-  onTextChange: (String) -> Unit,
+  onTextChange: (TextFieldValue) -> Unit,
   isNoteFileExist: Boolean,
   snackBarHostState: SnackbarHostState,
   navigationIcon: @Composable () -> Unit
@@ -103,7 +104,7 @@ fun AddNoteDialogScreen(
   }
 
   LaunchedEffect(isNoteFileExist) {
-    if (!isNoteFileExist) {
+    if (!isNoteFileExist && !isRunningTest()) {
       focusRequester.requestFocus()
       focusManager.moveFocus(FocusDirection.Down)
     }
@@ -123,12 +124,12 @@ private fun ArticleTitleText(articleTitle: String) {
 @Composable
 private fun NoteTextField(
   noteText: TextFieldValue,
-  onTextChange: (String) -> Unit,
+  onTextChange: (TextFieldValue) -> Unit,
   focusRequester: FocusRequester
 ) {
   TextField(
     value = noteText,
-    onValueChange = { onTextChange(it.text) },
+    onValueChange = { onTextChange(it) },
     maxLines = 6,
     modifier = Modifier
       .fillMaxWidth()
