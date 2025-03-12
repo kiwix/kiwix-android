@@ -263,7 +263,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private fun startStopServer() {
     when {
       ServerUtils.isServerStarted -> stopServer()
-      selectedBooksPath.size > 0 -> {
+      selectedBooksPath.isNotEmpty() -> {
         when {
           connectivityReporter.checkWifi() -> startWifiDialog()
           connectivityReporter.checkTethering() -> startKiwixHotspot()

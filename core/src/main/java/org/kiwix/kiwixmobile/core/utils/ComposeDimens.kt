@@ -82,4 +82,12 @@ object ComposeDimens {
 
   // AddNoteDialog dimens
   val MINIMUM_HEIGHT_OF_NOTE_TEXT_FILED = 120.dp
+
+  // Material minimum width and height
+  val MATERIAL_MINIMUM_HEIGHT_AND_WIDTH = 48.dp
+
+  // ZimHostFragment dimens
+  val MINIMUM_HEIGHT_OF_QR_CODE = 76.dp
+  val MAXIMUM_HEIGHT_OF_QR_CODE = 128.dp
+  val MINIMUM_HEIGHT_OF_BOOKS_LIST = 256.dp
 }
