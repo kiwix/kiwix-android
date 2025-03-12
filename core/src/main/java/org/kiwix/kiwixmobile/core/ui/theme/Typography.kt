@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.LARGE_BODY_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.LARGE_HEADLINE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.LARGE_LABEL_TEXT_SIZE
@@ -50,10 +49,7 @@ val KiwixTypography = Typography(
   bodyLarge = TextStyle(fontSize = LARGE_BODY_TEXT_SIZE),
   bodyMedium = TextStyle(fontSize = MEDIUM_BODY_TEXT_SIZE),
   bodySmall = TextStyle(fontSize = SMALL_BODY_TEXT_SIZE),
-  labelLarge = TextStyle(
-    fontSize = LARGE_LABEL_TEXT_SIZE,
-    fontWeight = FontWeight.SemiBold,
-  ),
+  labelLarge = TextStyle(fontSize = LARGE_LABEL_TEXT_SIZE),
   labelMedium = TextStyle(fontSize = MEDIUM_LABEL_TEXT_SIZE),
   labelSmall = TextStyle(fontSize = SMALL_LABEL_TEXT_SIZE),
 )

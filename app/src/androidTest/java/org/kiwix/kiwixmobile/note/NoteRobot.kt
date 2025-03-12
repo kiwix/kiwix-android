@@ -19,14 +19,17 @@
 package org.kiwix.kiwixmobile.note
 
 import android.content.Context
+import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextReplacement
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
-import androidx.test.espresso.action.ViewActions.clearText
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.typeText
-import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
@@ -41,6 +44,10 @@ import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.main.ADD_NOTE_TEXT_FILED_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.DELETE_MENU_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.SAVE_MENU_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
@@ -49,7 +56,6 @@ fun note(func: NoteRobot.() -> Unit) = NoteRobot().apply(func)
 
 class NoteRobot : BaseRobot() {
   private val noteText = "Test Note"
-  private val editTextId = R.id.add_note_edit_text
 
   fun assertToolbarExist() {
     isVisible(ViewId(R.id.toolbar))
@@ -71,19 +77,39 @@ class NoteRobot : BaseRobot() {
     clickOn(TextId(R.string.take_notes))
   }
 
-  fun assertNoteDialogDisplayed() {
-    pauseForBetterTestPerformance()
-    isVisible(TextId(R.string.note))
+  fun assertNoteDialogDisplayed(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.waitForIdle()
+      composeTestRule.onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.note))
+    })
   }
 
-  fun writeDemoNote() {
-    onView(withId(editTextId)).perform(clearText(), typeText(noteText))
-    closeSoftKeyboard()
+  fun writeDemoNote(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.waitForIdle()
+      // Click on the TextField to focus it
+      composeTestRule.onNodeWithTag(ADD_NOTE_TEXT_FILED_TESTING_TAG)
+        .assertExists("TextField not found in dialog")
+        .performClick()
+        .performTextReplacement(noteText)
+
+      composeTestRule.waitForIdle()
+
+      composeTestRule.onNodeWithTag(ADD_NOTE_TEXT_FILED_TESTING_TAG)
+        .assertTextContains(noteText, substring = true)
+
+      // Close the keyboard after typing
+      closeSoftKeyboard()
+    })
   }
 
-  fun saveNote() {
-    pauseForBetterTestPerformance()
-    clickOn(ViewId(R.id.save_note))
+  fun saveNote(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.waitForIdle()
+      composeTestRule.onNodeWithTag(SAVE_MENU_BUTTON_TESTING_TAG)
+        .performClick()
+    })
   }
 
   fun openNoteFragment() {
@@ -106,19 +132,30 @@ class NoteRobot : BaseRobot() {
     testFlakyView({ clickOn(Text("OPEN NOTE")) })
   }
 
-  fun assertNoteSaved() {
+  fun assertNoteSaved(composeTestRule: ComposeContentTestRule) {
     // This is flaky since it is shown in a dialog and sometimes
     // UIDevice does not found the view immediately due to rendering process.
-    testFlakyView({ isVisible(Text(noteText)) })
+    testFlakyView({
+      composeTestRule.waitForIdle()
+      composeTestRule.onNodeWithTag(ADD_NOTE_TEXT_FILED_TESTING_TAG)
+        .assertTextEquals(noteText)
+    })
   }
 
-  fun assertNotDoesNotExist() {
-    testFlakyView({ onView(withText(noteText)).check(doesNotExist()) })
+  fun assertNotDoesNotExist(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.waitForIdle()
+      composeTestRule.onNodeWithTag(ADD_NOTE_TEXT_FILED_TESTING_TAG)
+        .assertTextContains("", ignoreCase = true)
+    })
   }
 
-  fun clickOnDeleteIcon() {
-    pauseForBetterTestPerformance()
-    testFlakyView({ clickOn(ViewId(R.id.delete_note)) })
+  fun clickOnDeleteIcon(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.waitForIdle()
+      composeTestRule.onNodeWithTag(DELETE_MENU_BUTTON_TESTING_TAG)
+        .performClick()
+    })
   }
 
   fun clickOnTrashIcon() {

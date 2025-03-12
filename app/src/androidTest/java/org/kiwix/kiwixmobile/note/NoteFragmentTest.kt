@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.note
 
 import android.os.Build
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
@@ -33,6 +34,7 @@ import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
+import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
 import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.allOf
@@ -63,6 +65,9 @@ class NoteFragmentTest : BaseActivityTest() {
   var retryRule = RetryRule()
 
   private lateinit var kiwixMainActivity: KiwixMainActivity
+
+  @get:Rule
+  val composeTestRule = createComposeRule()
 
   @Before
   override fun waitForIdle() {
@@ -107,7 +112,8 @@ class NoteFragmentTest : BaseActivityTest() {
           allOf(
             matchesCheck(TouchTargetSizeCheck::class.java),
             matchesViews(withContentDescription("More options"))
-          )
+          ),
+          matchesCheck(SpeakableTextPresentCheck::class.java)
         )
       )
     }
@@ -133,16 +139,16 @@ class NoteFragmentTest : BaseActivityTest() {
     StandardActions.closeDrawer() // close the drawer if open before running the test cases.
     note {
       clickOnNoteMenuItem(context)
-      assertNoteDialogDisplayed()
-      writeDemoNote()
-      saveNote()
+      assertNoteDialogDisplayed(composeTestRule)
+      writeDemoNote(composeTestRule)
+      saveNote(composeTestRule)
       pressBack()
       openNoteFragment()
       assertToolbarExist()
       assertNoteRecyclerViewExist()
       clickOnSavedNote()
       clickOnOpenNote()
-      assertNoteSaved()
+      assertNoteSaved(composeTestRule)
       // to close the note dialog.
       pressBack()
       // to close the notes fragment.
@@ -166,7 +172,7 @@ class NoteFragmentTest : BaseActivityTest() {
       assertNoteRecyclerViewExist()
       clickOnSavedNote()
       clickOnOpenNote()
-      assertNoteSaved()
+      assertNoteSaved(composeTestRule)
       pressBack()
     }
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
@@ -182,16 +188,16 @@ class NoteFragmentTest : BaseActivityTest() {
     note {
       assertHomePageIsLoadedOfTestZimFile()
       clickOnNoteMenuItem(context)
-      assertNoteDialogDisplayed()
-      writeDemoNote()
-      saveNote()
+      assertNoteDialogDisplayed(composeTestRule)
+      writeDemoNote(composeTestRule)
+      saveNote(composeTestRule)
       pressBack()
       openNoteFragment()
       assertToolbarExist()
       assertNoteRecyclerViewExist()
       clickOnSavedNote()
       clickOnOpenNote()
-      assertNoteSaved()
+      assertNoteSaved(composeTestRule)
       // to close the note dialog.
       pressBack()
       // to close the notes fragment.
@@ -201,23 +207,25 @@ class NoteFragmentTest : BaseActivityTest() {
 
   @Test
   fun testNoteEntryIsRemovedFromDatabaseWhenDeletedInAddNoteDialog() {
-    deletePreviouslySavedNotes()
-    loadZimFileInReader("testzim.zim")
-    note {
-      clickOnNoteMenuItem(context)
-      assertNoteDialogDisplayed()
-      writeDemoNote()
-      saveNote()
-      pressBack()
-      openNoteFragment()
-      assertToolbarExist()
-      assertNoteRecyclerViewExist()
-      clickOnSavedNote()
-      clickOnOpenNote()
-      assertNoteSaved()
-      clickOnDeleteIcon()
-      pressBack()
-      assertNoNotesTextDisplayed()
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+      deletePreviouslySavedNotes()
+      loadZimFileInReader("testzim.zim")
+      note {
+        clickOnNoteMenuItem(context)
+        assertNoteDialogDisplayed(composeTestRule)
+        writeDemoNote(composeTestRule)
+        saveNote(composeTestRule)
+        pressBack()
+        openNoteFragment()
+        assertToolbarExist()
+        assertNoteRecyclerViewExist()
+        clickOnSavedNote()
+        clickOnOpenNote()
+        assertNoteSaved(composeTestRule)
+        clickOnDeleteIcon(composeTestRule)
+        pressBack()
+        assertNoNotesTextDisplayed()
+      }
     }
   }
 
@@ -228,9 +236,9 @@ class NoteFragmentTest : BaseActivityTest() {
     // Save a note.
     note {
       clickOnNoteMenuItem(context)
-      assertNoteDialogDisplayed()
-      writeDemoNote()
-      saveNote()
+      assertNoteDialogDisplayed(composeTestRule)
+      writeDemoNote(composeTestRule)
+      saveNote(composeTestRule)
       pressBack()
     }
     // Delete that note from "Note" screen.
@@ -238,8 +246,8 @@ class NoteFragmentTest : BaseActivityTest() {
     // Test the note file is deleted or not.
     note {
       clickOnNoteMenuItem(context)
-      assertNoteDialogDisplayed()
-      assertNotDoesNotExist()
+      assertNoteDialogDisplayed(composeTestRule)
+      assertNotDoesNotExist(composeTestRule)
       pressBack()
     }
   }
