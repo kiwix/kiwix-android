@@ -19,11 +19,34 @@
 package org.kiwix.kiwixmobile.core.ui.models
 
 import androidx.annotation.DrawableRes
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.material3.Icon
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.painterResource
 
 sealed class IconItem {
   data class Vector(val imageVector: ImageVector) : IconItem()
   data class Drawable(
     @DrawableRes val drawableRes: Int
   ) : IconItem()
+
+  data class Bitmap(val bitmap: ImageBitmap) : IconItem()
+}
+
+/**
+ * Extension function to convert an [IconItem] into a [Painter] for use in Composables.
+ * This ensures that any type of icon can be easily used with the [Icon] Composable.
+ */
+@Composable
+fun IconItem.toPainter(): Painter {
+  return when (this) {
+    is IconItem.Vector -> rememberVectorPainter(imageVector)
+    is IconItem.Drawable -> painterResource(drawableRes)
+    is IconItem.Bitmap -> remember { BitmapPainter(bitmap) }
+  }
 }
