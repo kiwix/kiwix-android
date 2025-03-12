@@ -95,13 +95,13 @@ fun ErrorActivityScreen(
         horizontalArrangement = Arrangement.SpaceEvenly
       ) {
         KiwixButton(
-          buttonTextId = R.string.crash_button_confirm,
+          buttonText = stringResource(R.string.crash_button_confirm),
           clickListener = { sendDetailsButtonClickListener.invoke() },
         )
 
         KiwixButton(
           clickListener = { noThanksButtonClickListener.invoke() },
-          buttonTextId = R.string.no_thanks
+          buttonText = stringResource(R.string.no_thanks)
         )
       }
     }
@@ -151,7 +151,7 @@ private fun CrashCheckBoxList(
 ) {
   LazyColumn(modifier = modifier) {
     itemsIndexed(checkBoxData) { _, item ->
-      CrashCheckBox(item.first to item.second)
+      CrashCheckBox(item)
     }
   }
 }
