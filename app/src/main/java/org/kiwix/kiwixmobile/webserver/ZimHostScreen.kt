@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.webserver
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,13 +29,11 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,28 +41,36 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MATERIAL_MINIMUM_HEIGHT_AND_WIDTH
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MAXIMUM_HEIGHT_OF_QR_CODE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MINIMUM_HEIGHT_OF_BOOKS_LIST
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MINIMUM_HEIGHT_OF_QR_CODE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.ui.BookItem
+import org.kiwix.kiwixmobile.ui.ZimFilesLanguageHeader
 
-@Suppress("ComposableLambdaParameterNaming")
+@Suppress("ComposableLambdaParameterNaming", "LongParameterList")
 @Composable
 fun ZimHostScreen(
   serverIpText: String,
-  shareIconItem: Pair<MutableState<Boolean>, () -> Unit>,
-  qrImageItem: Pair<MutableState<Boolean>, IconItem>,
+  shareIconItem: Pair<Boolean, () -> Unit>,
+  qrImageItem: Pair<Boolean, IconItem>,
   booksList: List<BooksOnDiskListItem>,
-  startServerButtonItem: Pair<String, Color>,
+  startServerButtonItem: Triple<String, Color, () -> Unit>,
+  selectionMode: SelectionMode,
+  onClick: ((BookOnDisk) -> Unit)? = null,
+  onLongClick: ((BookOnDisk) -> Unit)? = null,
+  onMultiSelect: ((BookOnDisk) -> Unit)? = null,
   navigationIcon: @Composable () -> Unit
 ) {
   KiwixTheme {
@@ -78,14 +85,13 @@ fun ZimHostScreen(
           ServerIpText(serverIpText, Modifier.weight(1f))
           ShareIcon(shareIconItem)
         }
-        Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState())) {
-          QRImage(qrImageItem)
-          BookItemList(booksList)
+        Box(modifier = Modifier.weight(1f)) {
+          BookItemList(booksList, selectionMode, qrImageItem, onClick, onLongClick, onMultiSelect)
         }
         KiwixButton(
           startServerButtonItem.first,
-          {},
-          modifier = Modifier.fillMaxWidth(),
+          startServerButtonItem.third,
+          modifier = Modifier.fillMaxWidth().padding(FOUR_DP),
           buttonBackgroundColor = startServerButtonItem.second
         )
       }
@@ -106,14 +112,14 @@ fun ServerIpText(
 }
 
 @Composable
-fun ShareIcon(shareIconItem: Pair<MutableState<Boolean>, () -> Unit>) {
-  if (shareIconItem.first.value) {
+fun ShareIcon(shareIconItem: Pair<Boolean, () -> Unit>) {
+  if (shareIconItem.first) {
     Image(
       painter = painterResource(id = R.drawable.ic_share_35dp),
       contentDescription = stringResource(id = R.string.share_host_address),
       modifier = Modifier
         .clickable { shareIconItem.second.invoke() }
-        .padding(4.dp)
+        .padding(FOUR_DP)
         .heightIn(min = MATERIAL_MINIMUM_HEIGHT_AND_WIDTH)
         .widthIn(min = MATERIAL_MINIMUM_HEIGHT_AND_WIDTH),
       contentScale = ContentScale.Inside
@@ -122,43 +128,56 @@ fun ShareIcon(shareIconItem: Pair<MutableState<Boolean>, () -> Unit>) {
 }
 
 @Composable
-fun QRImage(qrImageItem: Pair<MutableState<Boolean>, IconItem>) {
-  Image(
-    painter = qrImageItem.second.toPainter(),
-    contentDescription = stringResource(id = R.string.qr_code),
-    modifier = Modifier
-      .fillMaxWidth()
-      .heightIn(min = MINIMUM_HEIGHT_OF_QR_CODE, max = MAXIMUM_HEIGHT_OF_QR_CODE)
-      .padding(horizontal = SIXTEEN_DP),
-    contentScale = ContentScale.Fit
-  )
+fun QRImage(qrImageItem: Pair<Boolean, IconItem>) {
+  if (qrImageItem.first) {
+    Image(
+      painter = qrImageItem.second.toPainter(),
+      contentDescription = stringResource(id = R.string.qr_code),
+      modifier = Modifier
+        .fillMaxWidth()
+        .heightIn(min = MINIMUM_HEIGHT_OF_QR_CODE, max = MAXIMUM_HEIGHT_OF_QR_CODE)
+        .padding(horizontal = SIXTEEN_DP),
+      contentScale = ContentScale.Fit
+    )
+  }
 }
 
 @Suppress("UnusedParameter")
 @Composable
-fun BookItemList(booksList: List<BooksOnDiskListItem>) {
+fun BookItemList(
+  booksList: List<BooksOnDiskListItem>,
+  selectionMode: SelectionMode,
+  qrImageItem: Pair<Boolean, IconItem>,
+  onClick: ((BookOnDisk) -> Unit)?,
+  onLongClick: ((BookOnDisk) -> Unit)?,
+  onMultiSelect: ((BookOnDisk) -> Unit)?
+) {
   LazyColumn(
     modifier = Modifier
       .fillMaxSize()
       .heightIn(min = MINIMUM_HEIGHT_OF_BOOKS_LIST),
     content = {
+      // Adding QR image here because of when we scrolls then QR image will go up.
+      item {
+        QRImage(qrImageItem)
+      }
+      itemsIndexed(booksList) { _, bookItem ->
+        when (bookItem) {
+          is BooksOnDiskListItem.LanguageItem -> {
+            ZimFilesLanguageHeader(bookItem)
+          }
+
+          is BooksOnDiskListItem.BookOnDisk -> {
+            BookItem(
+              bookOnDisk = bookItem,
+              selectionMode = selectionMode,
+              onClick = onClick,
+              onLongClick = onLongClick,
+              onMultiSelect = onMultiSelect
+            )
+          }
+        }
+      }
     }
   )
 }
-
-// @Preview
-// @Preview(name = "DarkMode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-// @Composable
-// fun PreviewScreen() {
-//   val shareIconVisibility = remember { mutableStateOf(true) }
-//   ZimHostScreen(
-//     stringResource(R.string.server_textview_default_message),
-//     shareIconVisibility to {},
-//     shareIconVisibility to IconItem.Drawable(org.kiwix.kiwixmobile.R.drawable.launch_screen),
-//     listOf(),
-//     stringResource(R.string.start_server_label) to StartServerGreen,
-//     {
-//       NavigationIcon(onClick = {})
-//     }
-//   )
-// }
