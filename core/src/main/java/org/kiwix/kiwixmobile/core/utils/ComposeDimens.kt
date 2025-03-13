@@ -93,4 +93,5 @@ object ComposeDimens {
 
   // BookItem dimes
   val BOOK_ICON_SIZE = 40.dp
+  val BOOK_DESCRIPTION_LETTER_SPACING = 0.00714285714.em
 }

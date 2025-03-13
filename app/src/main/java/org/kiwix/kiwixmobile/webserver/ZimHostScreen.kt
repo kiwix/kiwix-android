@@ -142,7 +142,6 @@ fun QRImage(qrImageItem: Pair<Boolean, IconItem>) {
   }
 }
 
-@Suppress("UnusedParameter")
 @Composable
 fun BookItemList(
   booksList: List<BooksOnDiskListItem>,
@@ -167,7 +166,7 @@ fun BookItemList(
             ZimFilesLanguageHeader(bookItem)
           }
 
-          is BooksOnDiskListItem.BookOnDisk -> {
+          is BookOnDisk -> {
             BookItem(
               bookOnDisk = bookItem,
               selectionMode = selectionMode,

@@ -19,59 +19,61 @@
 package org.kiwix.kiwixmobile.ui
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.material3.AssistChip
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SuggestionChip
+import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.Companion.YesNoValueTag
+import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.Companion.YesNoValueTag.DetailsTag
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.Companion.YesNoValueTag.PicturesTag
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.Companion.YesNoValueTag.VideoTag
-import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.Companion.YesNoValueTag.DetailsTag
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.TagValue.YES
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TagsView(tags: List<KiwixTag>, modifier: Modifier = Modifier) {
-  KiwixTheme {
-    FlowRow(
-      modifier = modifier,
-      horizontalArrangement = Arrangement.spacedBy(EIGHT_DP),
-      verticalArrangement = Arrangement.spacedBy(FOUR_DP)
+  Row(
+    modifier = modifier,
+    horizontalArrangement = Arrangement.spacedBy(EIGHT_DP)
+  ) {
+    if (tags.isYesOrNotDefined<PicturesTag>()) {
+      TagChip(text = stringResource(R.string.tag_pic))
+    }
+    if (tags.isYesOrNotDefined<VideoTag>()) {
+      TagChip(text = stringResource(R.string.tag_vid))
+    }
+    val shortTextIsSelected = tags.isDefinedAndNo<DetailsTag>()
+    if (tags.isDefinedAndNo<PicturesTag>() &&
+      tags.isDefinedAndNo<VideoTag>() &&
+      !shortTextIsSelected
     ) {
-      if (tags.isYesOrNotDefined<PicturesTag>()) {
-        TagChip(text = stringResource(R.string.tag_pic))
-      }
-      if (tags.isYesOrNotDefined<VideoTag>()) {
-        TagChip(text = stringResource(R.string.tag_vid))
-      }
-      val shortTextIsSelected = tags.isDefinedAndNo<DetailsTag>()
-      if (tags.isDefinedAndNo<PicturesTag>() &&
-        tags.isDefinedAndNo<VideoTag>() &&
-        !shortTextIsSelected
-      ) {
-        TagChip(text = stringResource(R.string.tag_text_only))
-      }
-      if (shortTextIsSelected) {
-        TagChip(text = stringResource(R.string.tag_short_text))
-      }
+      TagChip(text = stringResource(R.string.tag_text_only))
+    }
+    if (shortTextIsSelected) {
+      TagChip(text = stringResource(R.string.tag_short_text))
     }
   }
 }
 
 @Composable
 private fun TagChip(text: String) {
-  AssistChip(
+  val chipColors = SuggestionChipDefaults.suggestionChipColors(
+    disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.24f),
+    disabledLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.87f)
+  )
+  SuggestionChip(
     onClick = {},
     label = { Text(text) },
-    enabled = false
+    enabled = false,
+    shape = MaterialTheme.shapes.extraLarge,
+    colors = chipColors,
+    border = null,
   )
 }
 

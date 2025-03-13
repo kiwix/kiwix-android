@@ -317,7 +317,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     }
   }
 
-  private fun select(bookOnDisk: BooksOnDiskListItem.BookOnDisk) {
+  private fun select(bookOnDisk: BookOnDisk) {
     val tempBooksList: List<BooksOnDiskListItem> = booksList.value.onEach {
       if (it == bookOnDisk) {
         it.isSelected = !it.isSelected
@@ -405,7 +405,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     val qrImage = ip?.let {
       val qr = generateQr.createQR(it)
       IconItem.ImageBitmap(qr.asImageBitmap())
-    } ?: IconItem.Drawable(org.kiwix.kiwixmobile.R.drawable.ic_storage)
+    } ?: IconItem.Drawable(drawable.ic_storage)
     qrImageItem.value = shouldShow to qrImage
   }
 
