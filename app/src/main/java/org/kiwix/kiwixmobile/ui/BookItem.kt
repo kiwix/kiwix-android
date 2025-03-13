@@ -18,7 +18,8 @@
 
 package org.kiwix.kiwixmobile.ui
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,97 +37,129 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.faviconToPainter
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BOOK_ICON_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 
-@Suppress("UnusedParameter", "LongMethod", "ComposableLambdaParameterNaming")
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BookItem(
   bookOnDisk: BookOnDisk,
-  onClick: (BookOnDisk) -> Unit,
-  onLongClick: (BookOnDisk) -> Unit,
-  onMultiSelect: (BookOnDisk) -> Unit,
-  selectionMode: SelectionMode,
-  isCheckboxVisible: Boolean = false,
-  isChecked: Boolean = false,
-  onCheckedChange: (Boolean) -> Unit = {},
-  tags: @Composable () -> Unit = {}
+  onClick: ((BookOnDisk) -> Unit)? = null,
+  onLongClick: ((BookOnDisk) -> Unit)? = null,
+  onMultiSelect: ((BookOnDisk) -> Unit)? = null,
+  selectionMode: SelectionMode = SelectionMode.NORMAL,
+  onCheckedChange: (Boolean) -> Unit = {}
 ) {
   Card(
     modifier = Modifier
       .fillMaxWidth()
-      .padding(dimensionResource(id = R.dimen.card_margin))
-      .clickable { onClick(bookOnDisk) },
+      .padding(FIVE_DP)
+      .combinedClickable(
+        onClick = {
+          when (selectionMode) {
+            SelectionMode.MULTI -> onMultiSelect?.invoke(bookOnDisk)
+            SelectionMode.NORMAL -> onClick?.invoke(bookOnDisk)
+          }
+        },
+        onLongClick = {
+          if (selectionMode == SelectionMode.NORMAL) {
+            onLongClick?.invoke(bookOnDisk)
+          }
+        }
+      ),
     shape = MaterialTheme.shapes.medium,
     elevation = CardDefaults.elevatedCardElevation()
   ) {
-    Row(
-      modifier = Modifier
-        .padding(dimensionResource(id = R.dimen.activity_horizontal_margin))
-        .fillMaxWidth(),
-      verticalAlignment = Alignment.CenterVertically
-    ) {
-      if (isCheckboxVisible) {
-        Checkbox(
-          checked = isChecked,
-          onCheckedChange = onCheckedChange,
-          modifier = Modifier.padding(end = 10.dp)
-        )
-      }
+    BookContent(bookOnDisk, selectionMode, onCheckedChange)
+  }
+}
 
-      Icon(
-        painter = bookOnDisk.book.faviconToPainter(),
-        contentDescription = stringResource(R.string.fav_icon),
-        modifier = Modifier
-          .size(40.dp)
-          .padding(end = 10.dp)
-      )
-
-      Column(
-        modifier = Modifier.weight(1f)
-      ) {
-        Text(
-          text = bookOnDisk.book.title,
-          style = MaterialTheme.typography.titleMedium
-        )
-        Text(
-          text = bookOnDisk.book.description.orEmpty(),
-          style = MaterialTheme.typography.bodyMedium,
-          maxLines = 2,
-          overflow = TextOverflow.Ellipsis,
-          color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Row(
-          verticalAlignment = Alignment.CenterVertically,
-          modifier = Modifier.padding(top = 4.dp)
-        ) {
-          Text(
-            text = bookOnDisk.book.date,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-          )
-          Spacer(modifier = Modifier.width(8.dp))
-          Text(
-            text = bookOnDisk.book.size,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-          )
-          Spacer(modifier = Modifier.width(8.dp))
-          Text(
-            text = bookOnDisk.book.articleCount.orEmpty(),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-          )
-        }
-        Spacer(modifier = Modifier.height(4.dp))
-        tags()
-      }
+@Composable
+private fun BookContent(
+  bookOnDisk: BookOnDisk,
+  selectionMode: SelectionMode,
+  onCheckedChange: (Boolean) -> Unit
+) {
+  Row(
+    modifier = Modifier.padding(SIXTEEN_DP).fillMaxWidth(),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    if (selectionMode == SelectionMode.MULTI) {
+      BookCheckbox(bookOnDisk, onCheckedChange)
     }
+    BookIcon(bookOnDisk.book.faviconToPainter())
+    BookDetails(Modifier.weight(1f), bookOnDisk)
+  }
+}
+
+@Composable
+private fun BookCheckbox(bookOnDisk: BookOnDisk, onCheckedChange: (Boolean) -> Unit) {
+  Checkbox(
+    checked = bookOnDisk.isSelected,
+    onCheckedChange = onCheckedChange,
+    modifier = Modifier.padding(end = TEN_DP)
+  )
+}
+
+@Composable
+fun BookIcon(painter: Painter) {
+  Icon(
+    painter = painter,
+    contentDescription = stringResource(R.string.fav_icon),
+    modifier = Modifier
+      .size(BOOK_ICON_SIZE)
+      .padding(end = TEN_DP)
+  )
+}
+
+@Composable
+private fun BookDetails(modifier: Modifier, bookOnDisk: BookOnDisk) {
+  Column(modifier = modifier) {
+    Text(
+      text = bookOnDisk.book.title,
+      style = MaterialTheme.typography.titleMedium
+    )
+    Text(
+      text = bookOnDisk.book.description.orEmpty(),
+      style = MaterialTheme.typography.bodyMedium,
+      maxLines = 2,
+      overflow = TextOverflow.Ellipsis,
+      color = MaterialTheme.colorScheme.onSurfaceVariant
+    )
+    Row(
+      verticalAlignment = Alignment.CenterVertically,
+      modifier = Modifier.padding(top = FOUR_DP)
+    ) {
+      Text(
+        text = bookOnDisk.book.date,
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant
+      )
+      Spacer(modifier = Modifier.width(EIGHT_DP))
+      Text(
+        text = bookOnDisk.book.size,
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant
+      )
+      Spacer(modifier = Modifier.width(EIGHT_DP))
+      Text(
+        text = bookOnDisk.book.articleCount.orEmpty(),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant
+      )
+    }
+    Spacer(modifier = Modifier.height(FOUR_DP))
+    TagsView(bookOnDisk.tags)
   }
 }

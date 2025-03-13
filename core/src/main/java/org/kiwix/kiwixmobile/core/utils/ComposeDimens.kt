@@ -90,4 +90,7 @@ object ComposeDimens {
   val MINIMUM_HEIGHT_OF_QR_CODE = 76.dp
   val MAXIMUM_HEIGHT_OF_QR_CODE = 128.dp
   val MINIMUM_HEIGHT_OF_BOOKS_LIST = 256.dp
+
+  // BookItem dimes
+  val BOOK_ICON_SIZE = 40.dp
 }
