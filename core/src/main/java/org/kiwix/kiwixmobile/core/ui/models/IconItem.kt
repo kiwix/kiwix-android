@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.core.ui.models
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.material3.Icon
@@ -35,7 +34,7 @@ sealed class IconItem {
     @DrawableRes val drawableRes: Int
   ) : IconItem()
 
-  data class Bitmap(val bitmap: ImageBitmap) : IconItem()
+  data class ImageBitmap(val bitmap: androidx.compose.ui.graphics.ImageBitmap) : IconItem()
 }
 
 /**
@@ -47,6 +46,6 @@ fun IconItem.toPainter(): Painter {
   return when (this) {
     is IconItem.Vector -> rememberVectorPainter(imageVector)
     is IconItem.Drawable -> painterResource(drawableRes)
-    is IconItem.Bitmap -> remember { BitmapPainter(bitmap) }
+    is IconItem.ImageBitmap -> remember { BitmapPainter(bitmap) }
   }
 }
