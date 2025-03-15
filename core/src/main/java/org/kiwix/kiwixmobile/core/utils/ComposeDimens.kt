@@ -47,6 +47,7 @@ object ComposeDimens {
   val TWELVE_DP = 12.dp
   val TEN_DP = 10.dp
   val EIGHT_DP = 8.dp
+  val SIX_DP = 6.dp
   val FIVE_DP = 5.dp
   val FOUR_DP = 4.dp
   val TWO_DP = 2.dp
@@ -79,7 +80,19 @@ object ComposeDimens {
   val LARGE_LABEL_TEXT_SIZE = 14.sp
   val MEDIUM_LABEL_TEXT_SIZE = 12.sp
   val SMALL_LABEL_TEXT_SIZE = 10.sp
+  val MEDIUM_BODY_LETTER_SPACING = 0.00714285714.em
 
   // AddNoteDialog dimens
   val MINIMUM_HEIGHT_OF_NOTE_TEXT_FILED = 120.dp
+
+  // Material minimum width and height
+  val MATERIAL_MINIMUM_HEIGHT_AND_WIDTH = 48.dp
+
+  // ZimHostFragment dimens
+  val MINIMUM_HEIGHT_OF_QR_CODE = 76.dp
+  val MAXIMUM_HEIGHT_OF_QR_CODE = 128.dp
+  val MINIMUM_HEIGHT_OF_BOOKS_LIST = 256.dp
+
+  // BookItem dimes
+  val BOOK_ICON_SIZE = 40.dp
 }

@@ -35,7 +35,8 @@ private val DarkColorScheme = darkColorScheme(
   onBackground = White,
   onSurface = White,
   onError = White,
-  onTertiary = MineShaftGray500
+  onTertiary = MineShaftGray500,
+  surfaceContainer = MineShaftGray850,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -49,7 +50,8 @@ private val LightColorScheme = lightColorScheme(
   onBackground = Black,
   onSurface = Black,
   onError = AlabasterWhite,
-  onTertiary = MineShaftGray600
+  onTertiary = MineShaftGray600,
+  surfaceContainer = AlabasterWhite,
 )
 
 @Composable

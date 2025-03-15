@@ -24,6 +24,8 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
 import javax.inject.Inject
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.set
 
 /**
  * Utility class to generate QR codes.
@@ -47,10 +49,10 @@ class GenerateQR @Inject constructor() {
       it[EncodeHintType.MARGIN] = 1
     }
     val bits = QRCodeWriter().encode(code, BarcodeFormat.QR_CODE, size, size, hints)
-    return Bitmap.createBitmap(size, size, Bitmap.Config.RGB_565).also {
+    return createBitmap(size, size, Bitmap.Config.RGB_565).also {
       for (x in 0 until size) {
         for (y in 0 until size) {
-          it.setPixel(x, y, if (bits[x, y]) foregroundColor else backgroundColor)
+          it[x, y] = if (bits[x, y]) foregroundColor else backgroundColor
         }
       }
     }

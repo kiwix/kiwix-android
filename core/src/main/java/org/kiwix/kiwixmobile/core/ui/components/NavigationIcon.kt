@@ -25,11 +25,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.White
 
 /**
@@ -52,10 +51,7 @@ fun NavigationIcon(
 ) {
   IconButton(onClick = onClick) {
     Icon(
-      painter = when (val icon = iconItem) {
-        is IconItem.Vector -> rememberVectorPainter(icon.imageVector)
-        is IconItem.Drawable -> painterResource(icon.drawableRes)
-      },
+      painter = iconItem.toPainter(),
       contentDescription = stringResource(contentDescription),
       tint = iconTint
     )

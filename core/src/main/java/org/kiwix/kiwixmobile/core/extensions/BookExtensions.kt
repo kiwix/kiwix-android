@@ -18,7 +18,15 @@
 
 package org.kiwix.kiwixmobile.core.extensions
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
@@ -54,3 +62,14 @@ fun Book.buildSearchableText(bookUtils: BookUtils): String =
       append("|")
     }
   }.toString()
+
+@Composable
+fun Book.faviconToPainter(): Painter {
+  val base64String = Base64String(favicon)
+  val bitmap = remember(base64String) { base64String.toBitmap() }
+  return if (bitmap != null) {
+    BitmapPainter(bitmap.asImageBitmap())
+  } else {
+    painterResource(id = R.drawable.default_zim_file_icon)
+  }
+}

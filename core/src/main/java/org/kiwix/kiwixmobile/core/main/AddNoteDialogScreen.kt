@@ -69,7 +69,8 @@ fun AddNoteDialogScreen(
 ) {
   KiwixDialogTheme {
     Scaffold(
-      snackbarHost = { KiwixSnackbarHost(snackbarHostState = snackBarHostState) }
+      snackbarHost = { KiwixSnackbarHost(snackbarHostState = snackBarHostState) },
+      topBar = { KiwixAppBar(R.string.note, navigationIcon, actionMenuItems) }
     ) { paddingValues ->
       Column(
         modifier = Modifier
@@ -78,7 +79,6 @@ fun AddNoteDialogScreen(
           .imePadding()
           .padding(paddingValues),
       ) {
-        KiwixAppBar(R.string.note, navigationIcon, actionMenuItems)
         ArticleTitleText(articleTitle)
         HorizontalDivider(
           modifier = Modifier.padding(vertical = FIVE_DP),

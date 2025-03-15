@@ -34,13 +34,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
-import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray350
@@ -109,10 +107,7 @@ private fun ActionMenu(actionMenuItems: List<ActionMenuItem>) {
         modifier = Modifier.testTag(menuItem.testingTag)
       ) {
         Icon(
-          painter = when (val icon = menuItem.icon) {
-            is IconItem.Vector -> rememberVectorPainter(icon.imageVector)
-            is IconItem.Drawable -> painterResource(icon.drawableRes)
-          },
+          painter = menuItem.icon.toPainter(),
           contentDescription = stringResource(menuItem.contentDescription),
           tint = if (menuItem.isEnabled) menuItem.iconTint else Color.Gray
         )
