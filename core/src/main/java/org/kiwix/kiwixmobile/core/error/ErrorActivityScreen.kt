@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.tonyodev.fetch2.R.string
 import org.kiwix.kiwixmobile.core.R
@@ -137,7 +138,7 @@ private fun CrashMessage(
 ) {
   Text(
     text = stringResource(messageId),
-    style = MaterialTheme.typography.bodyMedium,
+    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal),
     textAlign = TextAlign.Center,
     color = White,
     modifier = Modifier.padding(start = EIGHT_DP, top = EIGHT_DP, end = EIGHT_DP)

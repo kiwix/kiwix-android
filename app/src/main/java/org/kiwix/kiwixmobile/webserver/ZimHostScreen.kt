@@ -18,6 +18,11 @@
 
 package org.kiwix.kiwixmobile.webserver
 
+import android.content.Context
+import android.text.method.LinkMovementMethod
+import android.text.util.Linkify
+import android.view.Gravity
+import android.widget.TextView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -31,16 +36,17 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.text.util.LinkifyCompat
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
@@ -82,11 +88,18 @@ fun ZimHostScreen(
           modifier = Modifier.fillMaxWidth().padding(horizontal = SIXTEEN_DP),
           verticalAlignment = Alignment.CenterVertically
         ) {
-          ServerIpText(serverIpText, Modifier.weight(1f))
+          ServerIpText(serverIpText, Modifier.weight(1f), LocalContext.current)
           ShareIcon(shareIconItem)
         }
         Box(modifier = Modifier.weight(1f)) {
-          BookItemList(booksList, selectionMode, qrImageItem, onClick, onLongClick, onMultiSelect)
+          BookItemList(
+            booksList,
+            selectionMode,
+            qrImageItem,
+            onClick,
+            onLongClick,
+            onMultiSelect
+          )
         }
         KiwixButton(
           startServerButtonItem.first,
@@ -99,20 +112,28 @@ fun ZimHostScreen(
   }
 }
 
+@Suppress("MagicNumber")
 @Composable
-fun ServerIpText(
+private fun ServerIpText(
   serverIpText: String,
-  modifier: Modifier
+  modifier: Modifier,
+  context: Context
 ) {
-  Text(
-    text = serverIpText,
-    modifier = modifier.minimumInteractiveComponentSize(),
-    textAlign = TextAlign.Start,
-  )
+  val serverIpTextView = remember { TextView(context) }
+  AndroidView(factory = { serverIpTextView }, modifier = modifier) { textView ->
+    textView.apply {
+      text = serverIpText
+      textSize = 14F
+      minHeight = context.resources.getDimensionPixelSize(R.dimen.material_minimum_height_and_width)
+      gravity = Gravity.CENTER or Gravity.START
+      LinkifyCompat.addLinks(this, Linkify.WEB_URLS)
+      movementMethod = LinkMovementMethod.getInstance()
+    }
+  }
 }
 
 @Composable
-fun ShareIcon(shareIconItem: Pair<Boolean, () -> Unit>) {
+private fun ShareIcon(shareIconItem: Pair<Boolean, () -> Unit>) {
   if (shareIconItem.first) {
     Image(
       painter = painterResource(id = R.drawable.ic_share_35dp),
@@ -128,7 +149,7 @@ fun ShareIcon(shareIconItem: Pair<Boolean, () -> Unit>) {
 }
 
 @Composable
-fun QRImage(qrImageItem: Pair<Boolean, IconItem>) {
+private fun QRImage(qrImageItem: Pair<Boolean, IconItem>) {
   if (qrImageItem.first) {
     Image(
       painter = qrImageItem.second.toPainter(),
@@ -143,7 +164,7 @@ fun QRImage(qrImageItem: Pair<Boolean, IconItem>) {
 }
 
 @Composable
-fun BookItemList(
+private fun BookItemList(
   booksList: List<BooksOnDiskListItem>,
   selectionMode: SelectionMode,
   qrImageItem: Pair<Boolean, IconItem>,

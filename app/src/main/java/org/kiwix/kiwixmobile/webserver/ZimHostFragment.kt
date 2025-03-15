@@ -71,7 +71,6 @@ import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.kiwixmobile.databinding.ActivityZimHostBinding
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.Companion.ACTION_CHECK_IP_ADDRESS
@@ -105,7 +104,6 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private var ip: String? = null
   private lateinit var serviceConnection: ServiceConnection
   private var dialog: Dialog? = null
-  private var activityZimHostBinding: ActivityZimHostBinding? = null
   private var isHotspotServiceRunning = false
   private var serverIpText = mutableStateOf("")
   private var shareIconItem = mutableStateOf(false to {})
@@ -140,7 +138,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       ActivityResultContracts.RequestPermission()
     ) { isGranted ->
       if (isGranted) {
-        activityZimHostBinding?.startServerButton?.performClick()
+        startServerButtonClick()
       } else {
         if (!ActivityCompat.shouldShowRequestPermissionRationale(
             requireActivity(),
@@ -164,7 +162,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
           Map.Entry<String, @kotlin.jvm.JvmSuppressWildcards Boolean>::value
         )
       if (isGranted) {
-        activityZimHostBinding?.startServerButton?.performClick()
+        startServerButtonClick()
       } else {
         if (!ActivityCompat.shouldShowRequestPermissionRationale(
             requireActivity(),
@@ -192,7 +190,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
         startServerButtonItem = startServerButtonItem.value,
         selectionMode = SelectionMode.MULTI,
         onMultiSelect = { select(it) },
-        booksList = booksList.value,
+        booksList = booksList.value
       ) {
         NavigationIcon(
           onClick = { activity?.onBackPressedDispatcher?.onBackPressed() }
@@ -207,17 +205,6 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    //
-    // bookDelegate =
-    //   BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil, multiSelectAction = ::select)
-    // bookDelegate.selectionMode = SelectionMode.MULTI
-    // booksAdapter =
-    //   BooksOnDiskAdapter(
-    //     bookDelegate,
-    //     BookOnDiskDelegate.LanguageDelegate
-    //   )
-    //
-    // activityZimHostBinding?.recyclerViewZimHost?.adapter = booksAdapter
     presenter.attachView(this)
 
     serviceConnection =
@@ -324,6 +311,10 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       }
       it
     }
+    // Force recomposition by first setting an empty list before assigning the updated list.
+    // This is necessary because modifying an object's property doesn't trigger recomposition,
+    // as Compose still considers the list unchanged.
+    booksList.value = emptyList()
     booksList.value = tempBooksList
     saveHostedBooks(tempBooksList)
     if (ServerUtils.isServerStarted) {
@@ -380,10 +371,6 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   private fun layoutServerStarted() {
     serverIpText.value = getString(R.string.server_started_message, ip)
-    // activityZimHostBinding?.serverTextView?.apply {
-    //   text = getString(R.string.server_started_message, ip)
-    //   movementMethod = LinkMovementMethod.getInstance()
-    // }
     configureUrlSharingIcon(true)
     configureQrIcon(true)
     startServerButtonItem.value =
@@ -419,10 +406,8 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   override fun onDestroyView() {
     super.onDestroyView()
-    activityZimHostBinding?.recyclerViewZimHost?.adapter = null
     unRegisterHotspotService()
     presenter.detachView()
-    activityZimHostBinding = null
   }
 
   private fun unRegisterHotspotService() {

@@ -19,7 +19,8 @@
 package org.kiwix.kiwixmobile.ui
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.SuggestionChipDefaults
@@ -36,9 +37,10 @@ import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.Companion.YesNoValueTag.P
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.Companion.YesNoValueTag.VideoTag
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.TagValue.YES
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TagsView(tags: List<KiwixTag>, modifier: Modifier = Modifier) {
-  Row(
+  FlowRow(
     modifier = modifier,
     horizontalArrangement = Arrangement.spacedBy(EIGHT_DP)
   ) {

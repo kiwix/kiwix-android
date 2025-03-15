@@ -45,13 +45,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.faviconToPainter
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BOOK_DESCRIPTION_LETTER_SPACING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BOOK_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOURTEEN_SP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import org.kiwix.kiwixmobile.core.zim_manager.KiloByte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.ArticleCount
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
@@ -65,7 +64,6 @@ fun BookItem(
   onLongClick: ((BookOnDisk) -> Unit)? = null,
   onMultiSelect: ((BookOnDisk) -> Unit)? = null,
   selectionMode: SelectionMode = SelectionMode.NORMAL,
-  onCheckedChange: (Boolean) -> Unit = {}
 ) {
   KiwixTheme {
     Card(
@@ -89,7 +87,7 @@ fun BookItem(
       elevation = CardDefaults.elevatedCardElevation(),
       colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
     ) {
-      BookContent(bookOnDisk, selectionMode, onCheckedChange)
+      BookContent(bookOnDisk, selectionMode, onMultiSelect, onClick)
     }
   }
 }
@@ -98,16 +96,17 @@ fun BookItem(
 private fun BookContent(
   bookOnDisk: BookOnDisk,
   selectionMode: SelectionMode,
-  onCheckedChange: (Boolean) -> Unit
+  onMultiSelect: ((BookOnDisk) -> Unit)?,
+  onClick: ((BookOnDisk) -> Unit)?,
 ) {
   Row(
     modifier = Modifier
-      .padding(SIXTEEN_DP)
+      .padding(top = SIXTEEN_DP, start = SIXTEEN_DP)
       .fillMaxWidth(),
     verticalAlignment = Alignment.CenterVertically
   ) {
     if (selectionMode == SelectionMode.MULTI) {
-      BookCheckbox(bookOnDisk, onCheckedChange)
+      BookCheckbox(bookOnDisk, selectionMode, onMultiSelect, onClick)
     }
     BookIcon(bookOnDisk.book.faviconToPainter())
     BookDetails(Modifier.weight(1f), bookOnDisk)
@@ -115,10 +114,20 @@ private fun BookContent(
 }
 
 @Composable
-private fun BookCheckbox(bookOnDisk: BookOnDisk, onCheckedChange: (Boolean) -> Unit) {
+private fun BookCheckbox(
+  bookOnDisk: BookOnDisk,
+  selectionMode: SelectionMode,
+  onMultiSelect: ((BookOnDisk) -> Unit)?,
+  onClick: ((BookOnDisk) -> Unit)?
+) {
   Checkbox(
     checked = bookOnDisk.isSelected,
-    onCheckedChange = onCheckedChange
+    onCheckedChange = {
+      when (selectionMode) {
+        SelectionMode.MULTI -> onMultiSelect?.invoke(bookOnDisk)
+        SelectionMode.NORMAL -> onClick?.invoke(bookOnDisk)
+      }
+    }
   )
 }
 
@@ -138,38 +147,36 @@ private fun BookDetails(modifier: Modifier, bookOnDisk: BookOnDisk) {
   Column(modifier = modifier.padding(start = SIXTEEN_DP)) {
     Text(
       text = bookOnDisk.book.title,
-      style = MaterialTheme.typography.titleMedium
+      style = MaterialTheme.typography.titleSmall
     )
+    Spacer(modifier = Modifier.height(TWO_DP))
     Text(
       text = bookOnDisk.book.description.orEmpty(),
-      style = MaterialTheme.typography.bodySmall.copy(
-        fontSize = FOURTEEN_SP,
-        letterSpacing = BOOK_DESCRIPTION_LETTER_SPACING
-      ),
+      style = MaterialTheme.typography.bodyMedium,
       maxLines = 2,
       overflow = TextOverflow.Ellipsis,
       color = MaterialTheme.colorScheme.onSecondary
     )
     Row(
       verticalAlignment = Alignment.CenterVertically,
-      modifier = Modifier.padding(top = FOUR_DP)
+      modifier = Modifier.padding(top = FIVE_DP)
     ) {
       Text(
         text = bookOnDisk.book.date,
-        style = MaterialTheme.typography.bodySmall,
+        style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onTertiary
       )
       Spacer(modifier = Modifier.width(EIGHT_DP))
       Text(
         text = KiloByte(bookOnDisk.book.size).humanReadable,
-        style = MaterialTheme.typography.bodySmall,
+        style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onTertiary
       )
       Spacer(modifier = Modifier.width(EIGHT_DP))
       Text(
         text = ArticleCount(bookOnDisk.book.articleCount.orEmpty())
           .toHumanReadable(LocalContext.current),
-        style = MaterialTheme.typography.bodySmall,
+        style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onTertiary
       )
     }
