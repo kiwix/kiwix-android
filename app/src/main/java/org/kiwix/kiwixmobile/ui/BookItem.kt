@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import org.kiwix.kiwixmobile.core.R
@@ -56,9 +57,12 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.ArticleCount
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 
+const val BOOK_ITEM_CHECKBOX_TESTING_TAG = "bookItemCheckboxTestingTag"
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BookItem(
+  index: Int,
   bookOnDisk: BookOnDisk,
   onClick: ((BookOnDisk) -> Unit)? = null,
   onLongClick: ((BookOnDisk) -> Unit)? = null,
@@ -87,7 +91,7 @@ fun BookItem(
       elevation = CardDefaults.elevatedCardElevation(),
       colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
     ) {
-      BookContent(bookOnDisk, selectionMode, onMultiSelect, onClick)
+      BookContent(bookOnDisk, selectionMode, onMultiSelect, onClick, index)
     }
   }
 }
@@ -98,6 +102,7 @@ private fun BookContent(
   selectionMode: SelectionMode,
   onMultiSelect: ((BookOnDisk) -> Unit)?,
   onClick: ((BookOnDisk) -> Unit)?,
+  index: Int,
 ) {
   Row(
     modifier = Modifier
@@ -106,7 +111,7 @@ private fun BookContent(
     verticalAlignment = Alignment.CenterVertically
   ) {
     if (selectionMode == SelectionMode.MULTI) {
-      BookCheckbox(bookOnDisk, selectionMode, onMultiSelect, onClick)
+      BookCheckbox(bookOnDisk, selectionMode, onMultiSelect, onClick, index)
     }
     BookIcon(bookOnDisk.book.faviconToPainter())
     BookDetails(Modifier.weight(1f), bookOnDisk)
@@ -118,7 +123,8 @@ private fun BookCheckbox(
   bookOnDisk: BookOnDisk,
   selectionMode: SelectionMode,
   onMultiSelect: ((BookOnDisk) -> Unit)?,
-  onClick: ((BookOnDisk) -> Unit)?
+  onClick: ((BookOnDisk) -> Unit)?,
+  index: Int
 ) {
   Checkbox(
     checked = bookOnDisk.isSelected,
@@ -127,7 +133,8 @@ private fun BookCheckbox(
         SelectionMode.MULTI -> onMultiSelect?.invoke(bookOnDisk)
         SelectionMode.NORMAL -> onClick?.invoke(bookOnDisk)
       }
-    }
+    },
+    modifier = Modifier.testTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$index")
   )
 }
 

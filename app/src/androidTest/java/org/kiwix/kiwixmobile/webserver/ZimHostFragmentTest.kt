@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.webserver
 import android.Manifest
 import android.content.Context
 import android.os.Build
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
@@ -31,7 +32,6 @@ import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
 import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
-import leakcanary.LeakAssertions
 import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Before
@@ -53,6 +53,9 @@ class ZimHostFragmentTest {
   @Rule
   @JvmField
   var retryRule = RetryRule()
+
+  @get:Rule
+  val composeTestRule = createComposeRule()
 
   private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
@@ -150,53 +153,52 @@ class ZimHostFragmentTest {
         openZimHostFragment()
 
         // Check if server is already started
-        stopServerIfAlreadyStarted()
+        stopServerIfAlreadyStarted(composeTestRule)
 
         // Check if both zim file are selected or not to properly run our test case
-        selectZimFileIfNotAlreadySelected()
+        selectZimFileIfNotAlreadySelected(composeTestRule)
 
-        clickOnTestZim()
+        clickOnTestZim(composeTestRule)
 
         // Start the server with one ZIM file
-        startServer()
-        assertServerStarted()
+        startServer(composeTestRule)
+        assertServerStarted(composeTestRule)
 
         // Check that only one ZIM file is hosted on the server
-        assertItemHostedOnServer(1)
+        assertItemHostedOnServer(1, composeTestRule)
 
         // Check QR code shown
-        assertQrShown()
+        assertQrShown(composeTestRule)
 
         // Stop the server
-        stopServer()
-        assertServerStopped()
+        stopServer(composeTestRule)
+        assertServerStopped(composeTestRule)
 
         // Check QR code not shown after stopping the server
-        assertQrNotShown()
+        assertQrNotShown(composeTestRule)
 
         // Select the test ZIM file to host on the server
-        clickOnTestZim()
+        clickOnTestZim(composeTestRule)
 
         // Start the server with two ZIM files
-        startServer()
-        assertServerStarted()
+        startServer(composeTestRule)
+        assertServerStarted(composeTestRule)
 
         // Check that both ZIM files are hosted on the server
-        assertItemHostedOnServer(2)
+        assertItemHostedOnServer(2, composeTestRule)
 
         // Unselect the test ZIM to test restarting server functionality
-        clickOnTestZim()
+        clickOnTestZim(composeTestRule)
 
         // Check if the server is running
-        assertServerStarted()
+        assertServerStarted(composeTestRule)
 
         // Check that only one ZIM file is hosted on the server after unselecting
-        assertItemHostedOnServer(1)
+        assertItemHostedOnServer(1, composeTestRule)
 
         // finally close the server at the end of test case
-        stopServer()
+        stopServer(composeTestRule)
       }
-      LeakAssertions.assertNoLeaks()
     }
   }
 

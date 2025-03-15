@@ -43,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
@@ -64,6 +65,9 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.ui.BookItem
 import org.kiwix.kiwixmobile.ui.ZimFilesLanguageHeader
+
+const val START_SERVER_BUTTON_TESTING_TAG = "startServerButtonTestingTag"
+const val QR_IMAGE_TESTING_TAG = "qrImageTestingTag"
 
 @Suppress("ComposableLambdaParameterNaming", "LongParameterList")
 @Composable
@@ -104,7 +108,10 @@ fun ZimHostScreen(
         KiwixButton(
           startServerButtonItem.first,
           startServerButtonItem.third,
-          modifier = Modifier.fillMaxWidth().padding(FOUR_DP),
+          modifier = Modifier
+            .fillMaxWidth()
+            .padding(FOUR_DP)
+            .testTag(START_SERVER_BUTTON_TESTING_TAG),
           buttonBackgroundColor = startServerButtonItem.second
         )
       }
@@ -157,7 +164,8 @@ private fun QRImage(qrImageItem: Pair<Boolean, IconItem>) {
       modifier = Modifier
         .fillMaxWidth()
         .heightIn(min = MINIMUM_HEIGHT_OF_QR_CODE, max = MAXIMUM_HEIGHT_OF_QR_CODE)
-        .padding(horizontal = SIXTEEN_DP),
+        .padding(horizontal = SIXTEEN_DP)
+        .testTag(QR_IMAGE_TESTING_TAG),
       contentScale = ContentScale.Fit
     )
   }
@@ -181,7 +189,7 @@ private fun BookItemList(
       item {
         QRImage(qrImageItem)
       }
-      itemsIndexed(booksList) { _, bookItem ->
+      itemsIndexed(booksList) { index, bookItem ->
         when (bookItem) {
           is BooksOnDiskListItem.LanguageItem -> {
             ZimFilesLanguageHeader(bookItem)
@@ -189,6 +197,7 @@ private fun BookItemList(
 
           is BookOnDisk -> {
             BookItem(
+              index = index,
               bookOnDisk = bookItem,
               selectionMode = selectionMode,
               onClick = onClick,
