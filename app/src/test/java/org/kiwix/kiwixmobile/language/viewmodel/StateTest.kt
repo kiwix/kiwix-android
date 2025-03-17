@@ -21,8 +21,8 @@ package org.kiwix.kiwixmobile.language.viewmodel
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.HeaderItem
-import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.LanguageItem
+import org.kiwix.kiwixmobile.language.composables.LanguageListItem.HeaderItem
+import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.sharedFunctions.language
 

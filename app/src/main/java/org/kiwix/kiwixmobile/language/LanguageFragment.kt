@@ -20,46 +20,18 @@ package org.kiwix.kiwixmobile.language
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
+import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
-import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.R.drawable
-import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
-import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
-import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
-import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
-import org.kiwix.kiwixmobile.core.extensions.setUpSearchView
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
-import org.kiwix.kiwixmobile.databinding.ActivityLanguageBinding
-import org.kiwix.kiwixmobile.language.adapter.LanguageAdapter
-import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.HeaderDelegate
-import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.LanguageItemDelegate
 import org.kiwix.kiwixmobile.language.viewmodel.Action
-import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
-import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
 import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
-import org.kiwix.kiwixmobile.language.viewmodel.State
-import org.kiwix.kiwixmobile.language.viewmodel.State.Content
-import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
-import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
 import javax.inject.Inject
 
 class LanguageFragment : BaseFragment() {
@@ -67,16 +39,8 @@ class LanguageFragment : BaseFragment() {
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
+  private lateinit var composeView: ComposeView
   private val compositeDisposable = CompositeDisposable()
-  private var activityLanguageBinding: ActivityLanguageBinding? = null
-  private var searchView: SearchView? = null
-
-  private val languageAdapter =
-    LanguageAdapter(
-      LanguageItemDelegate { languageViewModel.actions.offer(Select(it)) },
-      HeaderDelegate()
-    )
-
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
   }
@@ -84,24 +48,15 @@ class LanguageFragment : BaseFragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     val activity = requireActivity() as CoreMainActivity
-    val toolbar: Toolbar = view.findViewById(R.id.toolbar)
-    activity.setSupportActionBar(toolbar)
-
-    activity.supportActionBar?.let {
-      it.setDisplayHomeAsUpEnabled(true)
-      it.setHomeAsUpIndicator(drawable.ic_clear_white_24dp)
-      it.setTitle(string.select_languages)
+    composeView.setContent {
+      LanguageScreen(
+        viewModelState = languageViewModel.state,
+        onNavigationClick = activity.onBackPressedDispatcher::onBackPressed,
+        selectLanguageItem = { languageViewModel.actions.offer(Action.Select(it)) },
+        filterText = { languageViewModel.actions.offer(Action.Filter(it)) },
+        saveLanguages = { languageViewModel.actions.offer(Action.SaveAll) },
+      )
     }
-    // set the contentDescription to navigation back button
-    toolbar.getToolbarNavigationIcon()?.setToolTipWithContentDescription(
-      getString(string.toolbar_back_button_content_description)
-    )
-    activityLanguageBinding?.languageRecyclerView?.run {
-      adapter = languageAdapter
-      layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-      setHasFixedSize(true)
-    }
-    languageViewModel.state.observe(viewLifecycleOwner, Observer(::render))
     compositeDisposable.add(
       languageViewModel.effects.subscribe(
         {
@@ -116,63 +71,14 @@ class LanguageFragment : BaseFragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
-    setupMenu()
-    activityLanguageBinding = ActivityLanguageBinding.inflate(inflater, container, false)
-    return activityLanguageBinding?.root
-  }
-
-  private fun setupMenu() {
-    (requireActivity() as MenuHost).addMenuProvider(
-      object : MenuProvider {
-        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-          menuInflater.inflate(R.menu.menu_language, menu)
-          searchView = menu.findItem(R.id.menu_language_search).actionView as SearchView
-          searchView?.apply {
-            setUpSearchView(requireActivity())
-            setOnQueryTextListener(
-              SimpleTextListener { query, _ ->
-                languageViewModel.actions.offer(Filter(query))
-              }
-            )
-          }
-        }
-
-        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-          return when (menuItem.itemId) {
-            R.id.menu_language_save -> {
-              closeKeyboard()
-              languageViewModel.actions.offer(Action.SaveAll)
-              true
-            }
-
-            else -> false
-          }
-        }
-      },
-      viewLifecycleOwner,
-      Lifecycle.State.RESUMED
-    )
-  }
-
-  private fun render(state: State) =
-    when (state) {
-      Loading -> activityLanguageBinding?.languageProgressbar?.show()
-      is Content -> {
-        activityLanguageBinding?.languageProgressbar?.hide()
-        languageAdapter.items = state.viewItems
-      }
-
-      Saving -> Unit
+  ): View {
+    return ComposeView(requireContext()).also {
+      composeView = it
     }
+  }
 
   override fun onDestroyView() {
     super.onDestroyView()
     compositeDisposable.clear()
-    activityLanguageBinding?.root?.removeAllViews()
-    searchView?.setOnQueryTextListener(null)
-    searchView = null
-    activityLanguageBinding?.languageRecyclerView?.adapter = null
-    activityLanguageBinding = null
   }
 }
