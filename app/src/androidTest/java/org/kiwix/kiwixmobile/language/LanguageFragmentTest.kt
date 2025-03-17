@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.language
 
 import android.Manifest
 import android.app.Instrumentation
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -50,6 +51,9 @@ class LanguageFragmentTest {
   @JvmField
   val retryRule = RetryRule()
 
+  @get:Rule
+  val composeTestRule = createComposeRule()
+
   private val permissions =
     arrayOf(
       Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -61,9 +65,7 @@ class LanguageFragmentTest {
   var permissionRules: GrantPermissionRule =
     GrantPermissionRule.grant(*permissions)
 
-  private val instrumentation: Instrumentation by lazy {
-    InstrumentationRegistry.getInstrumentation()
-  }
+  private val instrumentation: Instrumentation by lazy(InstrumentationRegistry::getInstrumentation)
 
   init {
     AccessibilityChecks.enable().setRunChecksFromRootView(true)
@@ -108,45 +110,81 @@ class LanguageFragmentTest {
 
       // search and de-select if german language already selected
       clickOnLanguageIcon()
-      clickOnLanguageSearchIcon()
-      searchLanguage("german")
-      deSelectLanguageIfAlreadySelected()
-      clickOnSaveLanguageIcon()
+      clickOnLanguageSearchIcon(composeTestRule)
+      searchLanguage(
+        composeTestRule = composeTestRule,
+        searchLanguage = "german"
+      )
+      deSelectLanguageIfAlreadySelected(
+        composeTestRule = composeTestRule,
+        matchLanguage = "German"
+      )
+      clickOnSaveLanguageIcon(composeTestRule)
 
       // search and de-select if italian language already selected
       clickOnLanguageIcon()
-      clickOnLanguageSearchIcon()
-      searchLanguage("italiano")
-      deSelectLanguageIfAlreadySelected()
-      clickOnSaveLanguageIcon()
+      clickOnLanguageSearchIcon(composeTestRule)
+      searchLanguage(
+        composeTestRule = composeTestRule,
+        searchLanguage = "italiano"
+      )
+      deSelectLanguageIfAlreadySelected(
+        composeTestRule = composeTestRule,
+        matchLanguage = "Italian"
+      )
+      clickOnSaveLanguageIcon(composeTestRule)
 
       // Search and save language for german
       clickOnLanguageIcon()
-      clickOnLanguageSearchIcon()
-      searchLanguage("german")
-      selectLanguage("German")
-      clickOnSaveLanguageIcon()
+      clickOnLanguageSearchIcon(composeTestRule)
+      searchLanguage(
+        composeTestRule = composeTestRule,
+        searchLanguage = "german"
+      )
+      selectLanguage(
+        composeTestRule = composeTestRule,
+        matchLanguage = "German"
+      )
+      clickOnSaveLanguageIcon(composeTestRule)
 
       // Search and save language for italian
       clickOnLanguageIcon()
-      clickOnLanguageSearchIcon()
-      searchLanguage("italiano")
-      selectLanguage("Italian")
-      clickOnSaveLanguageIcon()
+      clickOnLanguageSearchIcon(composeTestRule)
+      searchLanguage(
+        composeTestRule = composeTestRule,
+        searchLanguage = "italiano"
+      )
+      selectLanguage(
+        composeTestRule = composeTestRule,
+        matchLanguage = "Italian"
+      )
+      clickOnSaveLanguageIcon(composeTestRule)
 
       // verify is german language selected
       clickOnLanguageIcon()
-      clickOnLanguageSearchIcon()
-      searchLanguage("german")
-      checkIsLanguageSelected()
-      clickOnSaveLanguageIcon()
+      clickOnLanguageSearchIcon(composeTestRule)
+      searchLanguage(
+        composeTestRule = composeTestRule,
+        searchLanguage = "german"
+      )
+      checkIsLanguageSelected(
+        composeTestRule = composeTestRule,
+        matchLanguage = "German"
+      )
+      clickOnSaveLanguageIcon(composeTestRule)
 
       // verify is italian language selected
       clickOnLanguageIcon()
-      clickOnLanguageSearchIcon()
-      searchLanguage("italiano")
-      checkIsLanguageSelected()
-      clickOnSaveLanguageIcon()
+      clickOnLanguageSearchIcon(composeTestRule)
+      searchLanguage(
+        composeTestRule = composeTestRule,
+        searchLanguage = "italiano"
+      )
+      checkIsLanguageSelected(
+        composeTestRule = composeTestRule,
+        matchLanguage = "Italian"
+      )
+      clickOnSaveLanguageIcon(composeTestRule)
     }
     LeakAssertions.assertNoLeaks()
   }
