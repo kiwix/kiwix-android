@@ -72,7 +72,7 @@ object ComposeDimens {
   val MEDIUM_HEADLINE_TEXT_SIZE = 28.sp
   val SMALL_HEADLINE_TEXT_SIZE = 24.sp
   val LARGE_TITLE_TEXT_SIZE = 22.sp
-  val MEDIUM_TITLE_TEXT_SIZE = 18.sp
+  val MEDIUM_TITLE_TEXT_SIZE = 20.sp
   val SMALL_TITLE_TEXT_SIZE = 16.sp
   val LARGE_BODY_TEXT_SIZE = 16.sp
   val MEDIUM_BODY_TEXT_SIZE = 14.sp
@@ -93,6 +93,9 @@ object ComposeDimens {
   val MAXIMUM_HEIGHT_OF_QR_CODE = 128.dp
   val MINIMUM_HEIGHT_OF_BOOKS_LIST = 256.dp
 
-  // BookItem dimes
+  // BookItem dimens
   val BOOK_ICON_SIZE = 40.dp
+
+  // LocalLibraryFragment dimens
+  val FAB_ICON_BOTTOM_MARGIN = 66.dp
 }

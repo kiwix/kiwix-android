@@ -46,7 +46,10 @@ val KiwixTypography = Typography(
   headlineMedium = TextStyle(fontSize = MEDIUM_HEADLINE_TEXT_SIZE),
   headlineSmall = TextStyle(fontSize = SMALL_HEADLINE_TEXT_SIZE),
   titleLarge = TextStyle(fontSize = LARGE_TITLE_TEXT_SIZE),
-  titleMedium = TextStyle(fontSize = MEDIUM_TITLE_TEXT_SIZE),
+  titleMedium = TextStyle(
+    fontSize = MEDIUM_TITLE_TEXT_SIZE,
+    fontWeight = FontWeight.Medium,
+  ),
   titleSmall = TextStyle(fontSize = SMALL_TITLE_TEXT_SIZE),
   bodyLarge = TextStyle(fontSize = LARGE_BODY_TEXT_SIZE),
   bodyMedium = TextStyle(

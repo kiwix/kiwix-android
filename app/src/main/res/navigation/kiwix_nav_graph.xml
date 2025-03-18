@@ -66,8 +66,7 @@
   <fragment
     android:id="@+id/libraryFragment"
     android:name="org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragment"
-    android:label="Library"
-    tools:layout="@layout/fragment_destination_library">
+    android:label="Library">
     <action
       android:id="@+id/action_navigation_library_to_navigation_reader"
       app:destination="@id/readerFragment"

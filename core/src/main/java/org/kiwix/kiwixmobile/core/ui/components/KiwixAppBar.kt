@@ -36,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.Black
@@ -45,6 +44,7 @@ import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray350
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.KIWIX_APP_BAR_HEIGHT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 
 const val TOOLBAR_TITLE_TESTING_TAG = "toolbarTitle"
 
@@ -64,6 +64,7 @@ fun KiwixAppBar(
         .background(color = Black),
       verticalAlignment = Alignment.CenterVertically
     ) {
+      Spacer(Modifier.padding(start = TWO_DP))
       navigationIcon()
       searchBar?.let {
         // Display the search bar when provided
@@ -90,7 +91,7 @@ private fun AppBarTitle(
   Text(
     text = stringResource(titleId),
     color = appBarTitleColor,
-    style = MaterialTheme.typography.titleLarge.copy(fontWeight = SemiBold),
+    style = MaterialTheme.typography.titleMedium,
     modifier = Modifier
       .padding(horizontal = SIXTEEN_DP)
       .testTag(TOOLBAR_TITLE_TESTING_TAG)

@@ -41,7 +41,12 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
-import androidx.appcompat.widget.Toolbar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.ComposeView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -84,6 +89,9 @@ import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
+import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
@@ -116,7 +124,9 @@ import javax.inject.Inject
 
 private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
 private const val MATERIAL_BOTTOM_VIEW_ENTER_ANIMATION_DURATION = 225L
+const val LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG = "localFileTransferMenuButtonTestingTag"
 
+@Suppress("LargeClass")
 class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCallback {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -136,8 +146,20 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   private val disposable = CompositeDisposable()
   private var fragmentDestinationLibraryBinding: FragmentDestinationLibraryBinding? = null
   private var permissionDeniedLayoutShowing = false
-  private var fileSelectListState: FileSelectListState? = null
   private var zimFileUri: Uri? = null
+  private lateinit var snackBarHostState: SnackbarHostState
+  private var fileSelectListState = mutableStateOf(FileSelectListState(emptyList()))
+
+  /**
+   * This is a Triple which is responsible for showing and hiding the "No file here",
+   * and "Download books" button.
+   *
+   * A [Triple] containing:
+   *  - [String]: The title text displayed when no files are available.
+   *  - [String]: The label for the download button.
+   *  - [Boolean]: The boolean value for showing or hiding this view.
+   */
+  private var noFilesViewItem = mutableStateOf(Triple("", "", false))
 
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
@@ -154,13 +176,11 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       if (readStorageHasBeenPermanentlyDenied(isGranted)) {
         fragmentDestinationLibraryBinding?.apply {
           permissionDeniedLayoutShowing = true
-          fileManagementNoFiles.visibility = VISIBLE
-          goToDownloadsButtonNoFiles.visibility = VISIBLE
-          fileManagementNoFiles.text =
-            requireActivity().resources.getString(string.grant_read_storage_permission)
-          goToDownloadsButtonNoFiles.text =
-            requireActivity().resources.getString(string.go_to_settings_label)
-          zimfilelist.visibility = GONE
+          noFilesViewItem.value = Triple(
+            requireActivity().resources.getString(string.grant_read_storage_permission),
+            requireActivity().resources.getString(string.go_to_settings_label),
+            true
+          )
         }
       } else if (isGranted) {
         permissionDeniedLayoutShowing = false
@@ -202,25 +222,88 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   ): View? {
     LanguageUtils(requireActivity())
       .changeFont(requireActivity(), sharedPreferenceUtil)
-    fragmentDestinationLibraryBinding =
-      FragmentDestinationLibraryBinding.inflate(
-        inflater,
-        container,
-        false
-      )
-    val toolbar = fragmentDestinationLibraryBinding?.root?.findViewById<Toolbar>(R.id.toolbar)
-    val activity = activity as CoreMainActivity
-    activity.setSupportActionBar(toolbar)
-    activity.supportActionBar?.apply {
-      setDisplayHomeAsUpEnabled(true)
-      setTitle(string.library)
-    }
-    if (toolbar != null) {
-      activity.setupDrawerToggle(toolbar)
-    }
-    setupMenu()
+    // fragmentDestinationLibraryBinding =
+    //   FragmentDestinationLibraryBinding.inflate(
+    //     inflater,
+    //     container,
+    //     false
+    //   )
+    // val toolbar = fragmentDestinationLibraryBinding?.root?.findViewById<Toolbar>(R.id.toolbar)
+    // val activity = activity as CoreMainActivity
+    // activity.setSupportActionBar(toolbar)
+    // activity.supportActionBar?.apply {
+    //   setDisplayHomeAsUpEnabled(true)
+    //   setTitle(string.library)
+    // }
+    // if (toolbar != null) {
+    //   activity.setupDrawerToggle(toolbar)
+    // }
+    // setupMenu()
 
-    return fragmentDestinationLibraryBinding?.root
+    val composeView = ComposeView(requireContext()).apply {
+      setContent {
+        snackBarHostState = remember { SnackbarHostState() }
+        LocalLibraryScreen(
+          state = fileSelectListState.value,
+          snackBarHostState = snackBarHostState,
+          fabButtonClick = { filePickerButtonClick() },
+          actionMenuItems = actionMenuItems(),
+          onClick = { onBookItemClick(it) },
+          onLongClick = { onBookItemLongClick(it) },
+          onMultiSelect = { offerAction(RequestSelect(it)) },
+          onRefresh = {},
+          swipeRefreshItem = true to true,
+          noFilesViewItem = noFilesViewItem.value,
+          onDownloadButtonClick = { downloadBookButtonClick() }
+        ) {
+          NavigationIcon(
+            iconItem = IconItem.Vector(Icons.Filled.Menu),
+            contentDescription = string.open_drawer,
+            onClick = {
+              // Manually handle the navigation open/close.
+              // Since currently we are using the view based navigation drawer in other screens.
+              // Once we fully migrate to jetpack compose we will refactor this code to use the
+              // compose navigation.
+              // TODO Replace with compose based navigation when migration is done.
+              val activity = activity as CoreMainActivity
+              if (activity.navigationDrawerIsOpen()) {
+                activity.closeNavigationDrawer()
+              } else {
+                activity.openNavigationDrawer()
+              }
+            }
+          )
+        }
+      }
+    }
+
+    return composeView
+  }
+
+  private fun actionMenuItems() = listOf(
+    ActionMenuItem(
+      IconItem.Drawable(R.drawable.ic_baseline_mobile_screen_share_24px),
+      string.get_content_from_nearby_device,
+      { navigateToLocalFileTransferFragment() },
+      isEnabled = true,
+      testingTag = LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG
+    )
+  )
+
+  private fun onBookItemClick(bookOnDisk: BookOnDisk) {
+    if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
+      showManageExternalStoragePermissionDialog()
+    } else {
+      offerAction(RequestNavigateTo(bookOnDisk))
+    }
+  }
+
+  private fun onBookItemLongClick(bookOnDisk: BookOnDisk) {
+    if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
+      showManageExternalStoragePermissionDialog()
+    } else {
+      offerAction(RequestMultiSelection(bookOnDisk))
+    }
   }
 
   private fun setupMenu() {
@@ -294,7 +377,6 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
         offerAction(FileSelectActions.UserClickedDownloadBooksButton)
       }
     }
-    setUpFilePickerButton()
 
     fragmentDestinationLibraryBinding?.zimfilelist?.addOnScrollListener(
       SimpleRecyclerViewScrollListener { _, newState ->
@@ -312,6 +394,15 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       }
     )
     showCopyMoveDialogForOpenedZimFileFromStorage()
+  }
+
+  private fun downloadBookButtonClick() {
+    if (permissionDeniedLayoutShowing) {
+      permissionDeniedLayoutShowing = false
+      requireActivity().navigateToAppSettings()
+    } else {
+      offerAction(FileSelectActions.UserClickedDownloadBooksButton)
+    }
   }
 
   private fun showCopyMoveDialogForOpenedZimFileFromStorage() {
@@ -374,13 +465,11 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     }
   }
 
-  private fun setUpFilePickerButton() {
-    fragmentDestinationLibraryBinding?.selectFile?.setOnClickListener {
-      if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
-        showManageExternalStoragePermissionDialog()
-      } else if (requestExternalStorageWritePermission()) {
-        showFileChooser()
-      }
+  private fun filePickerButtonClick() {
+    if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
+      showManageExternalStoragePermissionDialog()
+    } else if (requestExternalStorageWritePermission()) {
+      showFileChooser()
     }
   }
 
@@ -546,7 +635,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
           val effectResult = it.invokeWith(requireActivity() as AppCompatActivity)
           if (effectResult is ActionMode) {
             actionMode = effectResult
-            fileSelectListState?.selectedBooks?.size?.let(::setActionModeTitle)
+            fileSelectListState.value.selectedBooks.size.let(::setActionModeTitle)
           }
         },
         Throwable::printStackTrace
@@ -571,30 +660,19 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   }
 
   private fun render(state: FileSelectListState) {
-    fileSelectListState = state
-    val items: List<BooksOnDiskListItem> = state.bookOnDiskListItems
-    bookDelegate.selectionMode = state.selectionMode
-    booksOnDiskAdapter.items = items
-    if (items.none(BooksOnDiskListItem::isSelected)) {
+    fileSelectListState.value = state
+    if (state.bookOnDiskListItems.none(BooksOnDiskListItem::isSelected)) {
       actionMode?.finish()
       actionMode = null
     }
     setActionModeTitle(state.selectedBooks.size)
-    fragmentDestinationLibraryBinding?.apply {
-      if (items.isEmpty()) {
-        fileManagementNoFiles.text = requireActivity().resources.getString(string.no_files_here)
-        goToDownloadsButtonNoFiles.text =
-          requireActivity().resources.getString(string.download_books)
-
-        fileManagementNoFiles.visibility = View.VISIBLE
-        goToDownloadsButtonNoFiles.visibility = View.VISIBLE
-        zimfilelist.visibility = View.GONE
-      } else {
-        fileManagementNoFiles.visibility = View.GONE
-        goToDownloadsButtonNoFiles.visibility = View.GONE
-        zimfilelist.visibility = View.VISIBLE
-      }
-    }
+    noFilesViewItem.value = Triple(
+      requireActivity().resources.getString(string.no_files_here),
+      requireActivity().resources.getString(string.download_books),
+      // If here are no items available then show the "No files here" text, and "Download books"
+      // button so that user can go to "Online library" screen by clicking this button.
+      state.bookOnDiskListItems.isEmpty()
+    )
   }
 
   private fun setActionModeTitle(selectedBookCount: Int) {
