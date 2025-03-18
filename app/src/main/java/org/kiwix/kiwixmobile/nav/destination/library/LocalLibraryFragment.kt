@@ -29,9 +29,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -51,16 +48,11 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import eu.mhutti1.utils.storage.Bytes
 import eu.mhutti1.utils.storage.StorageDevice
@@ -104,8 +96,6 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.isSplittedZimFile
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.databinding.FragmentDestinationLibraryBinding
@@ -174,42 +164,16 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
           Map.Entry<String, @kotlin.jvm.JvmSuppressWildcards Boolean>::value
         )
       if (readStorageHasBeenPermanentlyDenied(isGranted)) {
-        fragmentDestinationLibraryBinding?.apply {
-          permissionDeniedLayoutShowing = true
-          noFilesViewItem.value = Triple(
-            requireActivity().resources.getString(string.grant_read_storage_permission),
-            requireActivity().resources.getString(string.go_to_settings_label),
-            true
-          )
-        }
+        permissionDeniedLayoutShowing = true
+        noFilesViewItem.value = Triple(
+          requireActivity().resources.getString(string.grant_read_storage_permission),
+          requireActivity().resources.getString(string.go_to_settings_label),
+          true
+        )
       } else if (isGranted) {
         permissionDeniedLayoutShowing = false
       }
     }
-
-  private val bookDelegate: BookOnDiskDelegate.BookDelegate by lazy {
-    BookOnDiskDelegate.BookDelegate(
-      sharedPreferenceUtil,
-      {
-        if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
-          showManageExternalStoragePermissionDialog()
-        } else {
-          offerAction(RequestNavigateTo(it))
-        }
-      },
-      {
-        if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
-          showManageExternalStoragePermissionDialog()
-        } else {
-          offerAction(RequestMultiSelection(it))
-        }
-      },
-      { offerAction(RequestSelect(it)) }
-    )
-  }
-  private val booksOnDiskAdapter: BooksOnDiskAdapter by lazy {
-    BooksOnDiskAdapter(bookDelegate, BookOnDiskDelegate.LanguageDelegate)
-  }
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
@@ -222,23 +186,6 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   ): View? {
     LanguageUtils(requireActivity())
       .changeFont(requireActivity(), sharedPreferenceUtil)
-    // fragmentDestinationLibraryBinding =
-    //   FragmentDestinationLibraryBinding.inflate(
-    //     inflater,
-    //     container,
-    //     false
-    //   )
-    // val toolbar = fragmentDestinationLibraryBinding?.root?.findViewById<Toolbar>(R.id.toolbar)
-    // val activity = activity as CoreMainActivity
-    // activity.setSupportActionBar(toolbar)
-    // activity.supportActionBar?.apply {
-    //   setDisplayHomeAsUpEnabled(true)
-    //   setTitle(string.library)
-    // }
-    // if (toolbar != null) {
-    //   activity.setupDrawerToggle(toolbar)
-    // }
-    // setupMenu()
 
     val composeView = ComposeView(requireContext()).apply {
       setContent {
@@ -306,44 +253,12 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     }
   }
 
-  private fun setupMenu() {
-    (requireActivity() as MenuHost).addMenuProvider(
-      object : MenuProvider {
-        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-          menuInflater.inflate(R.menu.menu_zim_manager, menu)
-          val searchItem = menu.findItem(R.id.action_search)
-          val languageItem = menu.findItem(R.id.select_language)
-          languageItem.isVisible = false
-          searchItem.isVisible = false
-        }
-
-        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-          when (menuItem.itemId) {
-            R.id.get_zim_nearby_device -> {
-              navigateToLocalFileTransferFragment()
-              return true
-            }
-          }
-          return false
-        }
-      },
-      viewLifecycleOwner,
-      Lifecycle.State.RESUMED
-    )
-  }
-
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     setUpSwipeRefreshLayout()
     copyMoveFileHandler?.apply {
       setFileCopyMoveCallback(this@LocalLibraryFragment)
       setLifeCycleScope(lifecycleScope)
-    }
-    fragmentDestinationLibraryBinding?.zimfilelist?.run {
-      adapter = booksOnDiskAdapter
-      layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-      setHasFixedSize(true)
-      visibility = GONE
     }
     zimManageViewModel.fileSelectListStates.observe(viewLifecycleOwner, Observer(::render))
       .also {
@@ -367,15 +282,6 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     }
     if (savedInstanceState != null && savedInstanceState.getBoolean(WAS_IN_ACTION_MODE)) {
       zimManageViewModel.fileSelectActions.offer(FileSelectActions.RestartActionMode)
-    }
-
-    fragmentDestinationLibraryBinding?.goToDownloadsButtonNoFiles?.setOnClickListener {
-      if (permissionDeniedLayoutShowing) {
-        permissionDeniedLayoutShowing = false
-        requireActivity().navigateToAppSettings()
-      } else {
-        offerAction(FileSelectActions.UserClickedDownloadBooksButton)
-      }
     }
 
     fragmentDestinationLibraryBinding?.zimfilelist?.addOnScrollListener(
@@ -660,6 +566,10 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   }
 
   private fun render(state: FileSelectListState) {
+    // Force recomposition by first setting an empty list before assigning the updated list.
+    // This is necessary because modifying an object's property doesn't trigger recomposition,
+    // as Compose still considers the list unchanged.
+    fileSelectListState.value = FileSelectListState(emptyList())
     fileSelectListState.value = state
     if (state.bookOnDiskListItems.none(BooksOnDiskListItem::isSelected)) {
       actionMode?.finish()

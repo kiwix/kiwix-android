@@ -113,9 +113,8 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     mutableStateOf(
       Triple(
         "",
-        StartServerGreen,
-        { startServerButtonClick() }
-      )
+        StartServerGreen
+      ) { startServerButtonClick() }
     )
   private var booksList: MutableState<List<BooksOnDiskListItem>> = mutableStateOf(arrayListOf())
 
@@ -365,7 +364,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       booksList.asSequence()
         .filter(BooksOnDiskListItem::isSelected)
         .filterIsInstance<BookOnDisk>()
-        .mapNotNull { it.book.title }
+        .map { it.book.title }
         .toSet()
   }
 

@@ -101,7 +101,7 @@ fun LocalLibraryScreen(
         if (noFilesViewItem.third) {
           NoFilesView(noFilesViewItem, onDownloadButtonClick)
         } else {
-          BookItemList(state)
+          BookItemList(state, onClick, onLongClick, onMultiSelect)
         }
 
         SelectFileButton(
