@@ -41,7 +41,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.MutableLiveData
 import org.kiwix.kiwixmobile.core.R
@@ -50,7 +49,6 @@ import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
-import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.language.composables.AppBarTextField
 import org.kiwix.kiwixmobile.language.composables.LanguageList
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
@@ -198,63 +196,4 @@ fun LanguageScreen(
       }
     }
   }
-}
-
-@Preview
-@Composable
-fun LanguageScreenPreview() {
-  val languages = listOf(
-    Language(
-      id = 1,
-      active = true,
-      occurencesOfLanguage = 142,
-      language = "English",
-      languageLocalized = "English",
-      languageCode = "eng",
-      languageCodeISO2 = "en"
-    ),
-    Language(
-      id = 2,
-      active = true,
-      occurencesOfLanguage = 86,
-      language = "German",
-      languageLocalized = "Deutsch",
-      languageCode = "deu",
-      languageCodeISO2 = "de"
-    ),
-    Language(
-      id = 3,
-      active = true,
-      occurencesOfLanguage = 72,
-      language = "Italian",
-      languageLocalized = "Italiano",
-      languageCode = "ita",
-      languageCodeISO2 = "it"
-    ),
-    Language(
-      id = 4,
-      active = true,
-      occurencesOfLanguage = 93,
-      language = "French",
-      languageLocalized = "Français",
-      languageCode = "fra",
-      languageCodeISO2 = "fr"
-    ),
-    Language(
-      id = 5,
-      active = true,
-      occurencesOfLanguage = 104,
-      language = "Spanish",
-      languageLocalized = "Español",
-      languageCode = "spa",
-      languageCodeISO2 = "es"
-    )
-  )
-  LanguageScreen(
-    viewModelState = MutableLiveData<State>().apply { value = Content(languages) },
-    selectLanguageItem = {},
-    filterText = {},
-    saveLanguages = {},
-    onNavigationClick = {}
-  )
 }
