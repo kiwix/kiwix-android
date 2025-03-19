@@ -16,10 +16,9 @@
  *
  */
 
-package org.kiwix.kiwixmobile.nav.destination.library
+package org.kiwix.kiwixmobile.nav.destination.library.local
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,9 +42,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
+import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
+import org.kiwix.kiwixmobile.core.ui.components.SwipeRefreshLayout
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
@@ -60,13 +62,14 @@ import org.kiwix.kiwixmobile.ui.ZimFilesLanguageHeader
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Suppress("ComposableLambdaParameterNaming", "LongParameterList", "UnusedParameter")
+@Suppress("ComposableLambdaParameterNaming", "LongParameterList")
 @Composable
 fun LocalLibraryScreen(
   state: FileSelectListState,
   snackBarHostState: SnackbarHostState,
   swipeRefreshItem: Pair<Boolean, Boolean>,
   onRefresh: () -> Unit,
+  scanningProgressItem: Pair<Boolean, Int>,
   noFilesViewItem: Triple<String, String, Boolean>,
   onDownloadButtonClick: () -> Unit,
   fabButtonClick: () -> Unit,
@@ -76,28 +79,26 @@ fun LocalLibraryScreen(
   onMultiSelect: ((BookOnDisk) -> Unit)? = null,
   navigationIcon: @Composable () -> Unit
 ) {
-  // val swipeRefreshState = rememberPullToRefreshState()
   KiwixTheme {
     Scaffold(
       snackbarHost = { KiwixSnackbarHost(snackbarHostState = snackBarHostState) },
       topBar = { KiwixAppBar(R.string.library, navigationIcon, actionMenuItems) },
       modifier = Modifier.systemBarsPadding()
     ) { contentPadding ->
-      Box(
+      SwipeRefreshLayout(
+        isRefreshing = swipeRefreshItem.first,
+        isEnabled = swipeRefreshItem.second,
+        onRefresh = onRefresh,
         modifier = Modifier
           .fillMaxSize()
           .padding(contentPadding)
-        // .pullToRefresh(
-        //   isRefreshing = swipeRefreshItem.first,
-        //   state = swipeRefreshState,
-        //   enabled = swipeRefreshItem.second,
-        //   onRefresh = { onRefresh }
-        // )
-        // .pullToRefreshIndicator(
-        //   state = swipeRefreshState,
-        //   isRefreshing = swipeRefreshItem.first
-        // )
       ) {
+        if (scanningProgressItem.first) {
+          ContentLoadingProgressBar(
+            progressBarStyle = ProgressBarStyle.HORIZONTAL,
+            progress = scanningProgressItem.second
+          )
+        }
         if (noFilesViewItem.third) {
           NoFilesView(noFilesViewItem, onDownloadButtonClick)
         } else {
