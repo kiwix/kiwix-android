@@ -29,7 +29,6 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TextFieldDefaults.indicatorLine
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
@@ -43,18 +42,18 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.language.SEARCH_FIELD_TESTING_TAG
 
-@Suppress("all")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppBarTextField(
   value: String,
-  hint: String,
-  testTag: String,
   onValueChange: (String) -> Unit
 ) {
   val interactionSource = remember(::MutableInteractionSource)
@@ -68,29 +67,20 @@ fun AppBarTextField(
     unfocusedContainerColor = Color.Transparent,
     focusedTextColor = Color.White
   )
-
   val focusRequester = FocusRequester()
   SideEffect(focusRequester::requestFocus)
-
   var textFieldValue by remember {
     mutableStateOf(TextFieldValue(value, TextRange(value.length)))
   }
   textFieldValue = textFieldValue.copy(text = value)
-
   CompositionLocalProvider(
     LocalTextSelectionColors provides LocalTextSelectionColors.current
   ) {
     BasicTextField(
       modifier = Modifier
-        .testTag(testTag)
+        .testTag(SEARCH_FIELD_TESTING_TAG)
         .width(200.dp)
         .padding(start = 20.dp)
-        .indicatorLine(
-          enabled = true,
-          isError = false,
-          interactionSource = interactionSource,
-          colors = colors
-        )
         .focusRequester(focusRequester),
       value = textFieldValue,
       onValueChange = {
@@ -110,10 +100,9 @@ fun AppBarTextField(
           singleLine = true,
           visualTransformation = VisualTransformation.None,
           interactionSource = interactionSource,
-          isError = false,
           placeholder = {
             Text(
-              text = hint,
+              text = stringResource(R.string.search_label),
               color = Color.LightGray
             )
           },
