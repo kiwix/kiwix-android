@@ -25,8 +25,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
@@ -37,7 +35,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
@@ -47,7 +44,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
@@ -82,12 +78,6 @@ fun LanguageScreen(
   var isSearchActive by remember { mutableStateOf(false) }
   var updateListState by remember { mutableStateOf(false) }
   val listState: LazyListState = rememberLazyListState()
-  val coroutineScope = rememberCoroutineScope()
-  val scrollToTop = {
-    coroutineScope.launch {
-      listState.scrollToItem(0)
-    }
-  }
 
   KiwixTheme {
     Scaffold(
@@ -110,7 +100,6 @@ fun LanguageScreen(
                   filterText(searchText)
                 } else {
                   onNavigationClick()
-                  scrollToTop()
                 }
               }
             )
@@ -165,9 +154,7 @@ fun LanguageScreen(
                   filterText(it)
                 },
                 testTag = SEARCH_FIELD_TESTING_TAG,
-                hint = stringResource(R.string.search_label),
-                keyboardOptions = KeyboardOptions.Default,
-                keyboardActions = KeyboardActions.Default
+                hint = stringResource(R.string.search_label)
               )
             }
           } else {
