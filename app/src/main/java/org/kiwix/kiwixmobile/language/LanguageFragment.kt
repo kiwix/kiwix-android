@@ -57,7 +57,6 @@ class LanguageFragment : BaseFragment() {
   private val languageViewModel by lazy { viewModel<LanguageViewModel>(viewModelFactory) }
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-  val activity = requireActivity() as CoreMainActivity
   private lateinit var composeView: ComposeView
   private val compositeDisposable = CompositeDisposable()
 
@@ -68,6 +67,7 @@ class LanguageFragment : BaseFragment() {
   @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    val activity = requireActivity() as CoreMainActivity
     composeView.setContent {
       var searchText by remember { mutableStateOf("") }
       var isSearchActive by remember { mutableStateOf(false) }
