@@ -26,35 +26,42 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.ui.components.SwipeRefreshLayout
-import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FAB_ICON_BOTTOM_MARGIN
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.ui.BookItem
@@ -62,54 +69,65 @@ import org.kiwix.kiwixmobile.ui.ZimFilesLanguageHeader
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Suppress("ComposableLambdaParameterNaming", "LongParameterList")
+@Suppress("ComposableLambdaParameterNaming")
 @Composable
 fun LocalLibraryScreen(
-  state: FileSelectListState,
-  snackBarHostState: SnackbarHostState,
-  swipeRefreshItem: Pair<Boolean, Boolean>,
+  state: LocalLibraryScreenState,
   onRefresh: () -> Unit,
-  scanningProgressItem: Pair<Boolean, Int>,
-  noFilesViewItem: Triple<String, String, Boolean>,
   onDownloadButtonClick: () -> Unit,
   fabButtonClick: () -> Unit,
-  actionMenuItems: List<ActionMenuItem>,
   onClick: ((BookOnDisk) -> Unit)? = null,
   onLongClick: ((BookOnDisk) -> Unit)? = null,
   onMultiSelect: ((BookOnDisk) -> Unit)? = null,
   navigationIcon: @Composable () -> Unit
 ) {
+  val lazyListState = rememberLazyListState()
+  val bottomNavHeightInDp = with(LocalDensity.current) { state.bottomNavigationHeight.toDp() }
+  val bottomNavHeight = remember { mutableStateOf(bottomNavHeightInDp) }
+  LaunchedEffect(lazyListState) {
+    snapshotFlow { lazyListState.firstVisibleItemScrollOffset }
+      .collect { scrollOffset ->
+        bottomNavHeight.value = if (scrollOffset > 0) ZERO.dp else bottomNavHeightInDp
+      }
+  }
   KiwixTheme {
     Scaffold(
-      snackbarHost = { KiwixSnackbarHost(snackbarHostState = snackBarHostState) },
-      topBar = { KiwixAppBar(R.string.library, navigationIcon, actionMenuItems) },
+      snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackBarHostState) },
+      topBar = { KiwixAppBar(R.string.library, navigationIcon, state.actionMenuItems) },
       modifier = Modifier.systemBarsPadding()
     ) { contentPadding ->
       SwipeRefreshLayout(
-        isRefreshing = swipeRefreshItem.first,
-        isEnabled = swipeRefreshItem.second,
+        isRefreshing = state.swipeRefreshItem.first,
+        isEnabled = state.swipeRefreshItem.second,
         onRefresh = onRefresh,
         modifier = Modifier
           .fillMaxSize()
           .padding(contentPadding)
+          .padding(bottom = bottomNavHeight.value)
       ) {
-        if (scanningProgressItem.first) {
+        if (state.scanningProgressItem.first) {
           ContentLoadingProgressBar(
             progressBarStyle = ProgressBarStyle.HORIZONTAL,
-            progress = scanningProgressItem.second
+            progress = state.scanningProgressItem.second
           )
         }
-        if (noFilesViewItem.third) {
-          NoFilesView(noFilesViewItem, onDownloadButtonClick)
+        if (state.noFilesViewItem.third) {
+          NoFilesView(state.noFilesViewItem, onDownloadButtonClick)
         } else {
-          BookItemList(state, onClick, onLongClick, onMultiSelect)
+          BookItemList(
+            state.fileSelectListState,
+            onClick,
+            onLongClick,
+            onMultiSelect,
+            lazyListState
+          )
         }
 
         SelectFileButton(
           fabButtonClick,
           Modifier
             .align(Alignment.BottomEnd)
-            .padding(end = SIXTEEN_DP, bottom = FAB_ICON_BOTTOM_MARGIN)
+            .padding(end = SIXTEEN_DP, bottom = TEN_DP)
         )
       }
     }
@@ -122,8 +140,9 @@ private fun BookItemList(
   onClick: ((BookOnDisk) -> Unit)? = null,
   onLongClick: ((BookOnDisk) -> Unit)? = null,
   onMultiSelect: ((BookOnDisk) -> Unit)? = null,
+  lazyListState: LazyListState,
 ) {
-  LazyColumn(modifier = Modifier.fillMaxSize()) {
+  LazyColumn(modifier = Modifier.fillMaxSize(), state = lazyListState) {
     itemsIndexed(state.bookOnDiskListItems) { index, bookItem ->
       when (bookItem) {
         is BooksOnDiskListItem.LanguageItem -> {
@@ -179,32 +198,3 @@ fun NoFilesView(
     KiwixButton(noFilesViewItem.second, onDownloadButtonClick)
   }
 }
-
-// @Preview
-// @Preview(name = "NightMode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-// @Composable
-// fun PreviewLocalLibrary() {
-//   LocalLibraryScreen(
-//     state = FileSelectListState(listOf(), SelectionMode.NORMAL),
-//     snackBarHostState = SnackbarHostState(),
-//     actionMenuItems = listOf(
-//       ActionMenuItem(
-//         IconItem.Drawable(org.kiwix.kiwixmobile.R.drawable.ic_baseline_mobile_screen_share_24px),
-//         R.string.get_content_from_nearby_device,
-//         { },
-//         isEnabled = true,
-//         testingTag = DELETE_MENU_BUTTON_TESTING_TAG
-//       )
-//     ),
-//     onRefresh = {},
-//     fabButtonClick = {},
-//     swipeRefreshItem = false to true,
-//     noFilesViewItem = Triple(
-//       stringResource(R.string.no_files_here),
-//       stringResource(R.string.download_books),
-//       {}
-//     )
-//   ) {
-//     NavigationIcon(IconItem.Vector(Icons.Filled.Menu), {})
-//   }
-// }
