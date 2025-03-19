@@ -63,13 +63,10 @@ fun AppBarTextField(
   val colors = TextFieldDefaults.colors(
     focusedIndicatorColor = Color.Transparent,
     unfocusedIndicatorColor = Color.Transparent,
-    disabledIndicatorColor = Color.Transparent,
     focusedContainerColor = Color.Transparent,
     disabledContainerColor = Color.Transparent,
-    errorContainerColor = Color.Transparent,
     unfocusedContainerColor = Color.Transparent,
-    focusedTextColor = Color.White,
-    unfocusedTextColor = Color.White,
+    focusedTextColor = Color.White
   )
 
   val focusRequester = FocusRequester()
