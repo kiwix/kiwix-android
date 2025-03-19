@@ -23,8 +23,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
@@ -45,8 +43,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
@@ -59,9 +55,7 @@ fun AppBarTextField(
   value: String,
   hint: String,
   testTag: String,
-  onValueChange: (String) -> Unit,
-  keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-  keyboardActions: KeyboardActions = KeyboardActions.Default,
+  onValueChange: (String) -> Unit
 ) {
   val interactionSource = remember(::MutableInteractionSource)
   val textStyle = LocalTextStyle.current
@@ -100,10 +94,7 @@ fun AppBarTextField(
           interactionSource = interactionSource,
           colors = colors
         )
-        .focusRequester(focusRequester)
-        .semantics {
-          contentDescription = "searchField"
-        },
+        .focusRequester(focusRequester),
       value = textFieldValue,
       onValueChange = {
         textFieldValue = it
@@ -111,8 +102,6 @@ fun AppBarTextField(
       },
       textStyle = textStyle.copy(color = Color.White),
       cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
-      keyboardOptions = keyboardOptions,
-      keyboardActions = keyboardActions,
       interactionSource = interactionSource,
       singleLine = true,
       decorationBox = { innerTextField ->
