@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -36,16 +35,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
@@ -55,7 +54,9 @@ import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
+import org.kiwix.kiwixmobile.core.ui.components.ScrollDirection
 import org.kiwix.kiwixmobile.core.ui.components.SwipeRefreshLayout
+import org.kiwix.kiwixmobile.core.ui.components.rememberLazyListScrollListener
 import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
@@ -81,19 +82,13 @@ fun LocalLibraryScreen(
   onMultiSelect: ((BookOnDisk) -> Unit)? = null,
   navigationIcon: @Composable () -> Unit
 ) {
-  val lazyListState = rememberLazyListState()
-  val bottomNavHeightInDp = with(LocalDensity.current) { state.bottomNavigationHeight.toDp() }
-  val bottomNavHeight = remember { mutableStateOf(bottomNavHeightInDp) }
-  LaunchedEffect(lazyListState) {
-    snapshotFlow { lazyListState.firstVisibleItemScrollOffset }
-      .collect { scrollOffset ->
-        bottomNavHeight.value = if (scrollOffset > 0) ZERO.dp else bottomNavHeightInDp
-      }
-  }
+  val (bottomNavHeight, lazyListState) = rememberScrollBehavior(state)
   KiwixTheme {
     Scaffold(
       snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackBarHostState) },
-      topBar = { KiwixAppBar(R.string.library, navigationIcon, state.actionMenuItems) },
+      topBar = {
+        KiwixAppBar(R.string.library, navigationIcon, state.actionMenuItems, lazyListState)
+      },
       modifier = Modifier.systemBarsPadding()
     ) { contentPadding ->
       SwipeRefreshLayout(
@@ -132,6 +127,31 @@ fun LocalLibraryScreen(
       }
     }
   }
+}
+
+@Composable
+private fun rememberScrollBehavior(
+  state: LocalLibraryScreenState
+): Pair<MutableState<Dp>, LazyListState> {
+  val bottomNavHeightInDp = with(LocalDensity.current) { state.bottomNavigationHeight.toDp() }
+  val bottomNavHeight = remember { mutableStateOf(bottomNavHeightInDp) }
+  val lazyListState = rememberLazyListScrollListener(
+    onScrollChanged = { direction ->
+      when (direction) {
+        ScrollDirection.SCROLL_UP -> {
+          bottomNavHeight.value = bottomNavHeightInDp
+        }
+
+        ScrollDirection.SCROLL_DOWN -> {
+          bottomNavHeight.value = ZERO.dp
+        }
+
+        ScrollDirection.IDLE -> {}
+      }
+    }
+  )
+
+  return bottomNavHeight to lazyListState
 }
 
 @Composable

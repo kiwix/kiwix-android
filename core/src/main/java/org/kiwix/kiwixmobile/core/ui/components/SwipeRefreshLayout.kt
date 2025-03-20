@@ -26,8 +26,10 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.White
 
@@ -51,11 +53,17 @@ fun SwipeRefreshLayout(
   },
   content: @Composable BoxScope.() -> Unit
 ) {
+  val coroutineScope = rememberCoroutineScope()
   Box(
     modifier.pullToRefresh(
       state = state,
       isRefreshing = isRefreshing,
-      onRefresh = onRefresh,
+      onRefresh = {
+        coroutineScope.launch {
+          state.animateToHidden()
+          onRefresh.invoke()
+        }
+      },
       enabled = isEnabled
     ),
     contentAlignment = contentAlignment
