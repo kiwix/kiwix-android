@@ -19,9 +19,6 @@
 package org.kiwix.kiwixmobile.language.composables
 
 import android.content.Context
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -57,18 +54,16 @@ fun LanguageList(
       }
     ) { item ->
       when (item) {
-        is HeaderItem -> HeaderText(item)
+        is HeaderItem -> HeaderText(
+          item = item,
+          modifier = Modifier
+            .animateItem()
+        )
+
         is LanguageItem -> LanguageItemRow(
           context = context,
           modifier = Modifier
-            .animateItem(
-              fadeInSpec = tween(durationMillis = 250),
-              fadeOutSpec = tween(durationMillis = 100),
-              placementSpec = spring(
-                stiffness = Spring.StiffnessLow,
-                dampingRatio = Spring.DampingRatioLowBouncy
-              )
-            )
+            .animateItem()
             .fillMaxWidth()
             .height(64.dp)
             .semantics {

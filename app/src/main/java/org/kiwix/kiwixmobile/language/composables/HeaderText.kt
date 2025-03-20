@@ -29,14 +29,17 @@ import androidx.compose.ui.unit.sp
 import org.kiwix.kiwixmobile.core.R
 
 @Composable
-fun HeaderText(item: LanguageListItem.HeaderItem) {
+fun HeaderText(
+  modifier: Modifier,
+  item: LanguageListItem.HeaderItem
+) {
   Text(
     text = when (item.id) {
       LanguageListItem.HeaderItem.SELECTED -> stringResource(R.string.your_languages)
       LanguageListItem.HeaderItem.OTHER -> stringResource(R.string.other_languages)
       else -> ""
     },
-    modifier = Modifier
+    modifier = modifier
       .padding(horizontal = 16.dp, vertical = 8.dp),
     fontSize = 16.sp,
     style = MaterialTheme.typography.headlineMedium,
