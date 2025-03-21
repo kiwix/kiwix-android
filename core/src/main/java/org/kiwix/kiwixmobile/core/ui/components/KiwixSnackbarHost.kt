@@ -25,6 +25,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue400
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixSnackToastTheme
 
 /**
  * A custom SnackbarHost for displaying snackbars with theme-aware action button colors.
@@ -37,15 +38,17 @@ import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue400
  */
 @Composable
 fun KiwixSnackbarHost(snackbarHostState: SnackbarHostState) {
-  val actionColor = if (isSystemInDarkTheme()) {
-    MaterialTheme.colorScheme.surface
-  } else {
-    DenimBlue400
-  }
-  SnackbarHost(hostState = snackbarHostState) { snackbarData ->
-    Snackbar(
-      snackbarData = snackbarData,
-      actionColor = actionColor
-    )
+  KiwixSnackToastTheme {
+    val actionColor = if (isSystemInDarkTheme()) {
+      MaterialTheme.colorScheme.surface
+    } else {
+      DenimBlue400
+    }
+    SnackbarHost(hostState = snackbarHostState) { snackbarData ->
+      Snackbar(
+        snackbarData = snackbarData,
+        actionColor = actionColor
+      )
+    }
   }
 }

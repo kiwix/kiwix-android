@@ -46,6 +46,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.R.string
@@ -64,6 +65,7 @@ import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FAB_ICON_BOTTOM_MARGIN
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.ui.BookItem
@@ -207,13 +209,14 @@ fun NoFilesView(
   onDownloadButtonClick: () -> Unit
 ) {
   Column(
-    modifier = Modifier.fillMaxSize(),
+    modifier = Modifier.fillMaxSize().padding(horizontal = FOUR_DP),
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.Center
   ) {
     Text(
       text = noFilesViewItem.first,
-      style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Medium)
+      style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Medium),
+      textAlign = TextAlign.Center
     )
     Spacer(modifier = Modifier.height(EIGHT_DP))
     KiwixButton(noFilesViewItem.second, onDownloadButtonClick)
