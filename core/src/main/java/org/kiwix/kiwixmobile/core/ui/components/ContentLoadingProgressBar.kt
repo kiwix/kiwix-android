@@ -42,11 +42,21 @@ fun ContentLoadingProgressBar(
 ) {
   when (progressBarStyle) {
     ProgressBarStyle.CIRCLE -> {
-      CircularProgressIndicator(
-        modifier = modifier,
-        color = progressBarColor,
-        trackColor = progressBarTrackColor
-      )
+      if (progress == ZERO) {
+        // Indeterminate mode - will spin continuously
+        CircularProgressIndicator(
+          modifier = modifier,
+          color = progressBarColor
+        )
+      } else {
+        // Determinate mode - shows specific progress
+        CircularProgressIndicator(
+          modifier = modifier,
+          progress = { progress.toFloat() / HUNDERED },
+          color = progressBarColor,
+          trackColor = progressBarTrackColor
+        )
+      }
     }
 
     ProgressBarStyle.HORIZONTAL -> {

@@ -38,6 +38,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 
 const val LANGUAGE_ITEM_CHECKBOX_TESTING_TAG = "languageItemCheckboxTestingTag"
@@ -87,7 +88,7 @@ fun LanguageItemRow(
     Spacer(modifier = Modifier.weight(1f))
     Text(
       text = stringResource(R.string.books_count, language.occurencesOfLanguage),
-      modifier = Modifier.padding(16.dp),
+      modifier = Modifier.padding(ComposeDimens.SIXTEEN_DP),
       style = MaterialTheme.typography.bodyMedium,
       color = MaterialTheme.colorScheme.onSecondary
     )

@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.language.composables
+package org.kiwix.kiwixmobile.core.ui.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
@@ -48,12 +48,12 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.language.SEARCH_FIELD_TESTING_TAG
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppBarTextField(
   value: String,
+  testTag: String = "",
   onValueChange: (String) -> Unit
 ) {
   val interactionSource = remember(::MutableInteractionSource)
@@ -78,7 +78,7 @@ fun AppBarTextField(
   ) {
     BasicTextField(
       modifier = Modifier
-        .testTag(SEARCH_FIELD_TESTING_TAG)
+        .testTag(testTag)
         .width(200.dp)
         .padding(start = 20.dp)
         .focusRequester(focusRequester),
