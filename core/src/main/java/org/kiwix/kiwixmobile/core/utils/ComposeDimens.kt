@@ -97,5 +97,5 @@ object ComposeDimens {
   val BOOK_ICON_SIZE = 40.dp
 
   // LocalLibraryFragment dimens
-  val FAB_ICON_BOTTOM_MARGIN = 66.dp
+  val FAB_ICON_BOTTOM_MARGIN = 50.dp
 }

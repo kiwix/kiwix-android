@@ -34,12 +34,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -61,8 +63,7 @@ import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FAB_ICON_BOTTOM_MARGIN
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.ui.BookItem
@@ -74,6 +75,7 @@ import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 @Composable
 fun LocalLibraryScreen(
   state: LocalLibraryScreenState,
+  listState: LazyListState,
   onRefresh: () -> Unit,
   onDownloadButtonClick: () -> Unit,
   fabButtonClick: () -> Unit,
@@ -82,14 +84,18 @@ fun LocalLibraryScreen(
   onMultiSelect: ((BookOnDisk) -> Unit)? = null,
   navigationIcon: @Composable () -> Unit
 ) {
-  val (bottomNavHeight, lazyListState) = rememberScrollBehavior(state)
+  val (bottomNavHeight, lazyListState) = rememberScrollBehavior(state, listState)
+  val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
   KiwixTheme {
     Scaffold(
       snackbarHost = { KiwixSnackbarHost(snackbarHostState = state.snackBarHostState) },
       topBar = {
-        KiwixAppBar(R.string.library, navigationIcon, state.actionMenuItems, lazyListState)
+        KiwixAppBar(R.string.library, navigationIcon, state.actionMenuItems, scrollBehavior)
       },
-      modifier = Modifier.systemBarsPadding()
+      floatingActionButton = { SelectFileButton(fabButtonClick) },
+      modifier = Modifier
+        .systemBarsPadding()
+        .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { contentPadding ->
       SwipeRefreshLayout(
         isRefreshing = state.swipeRefreshItem.first,
@@ -117,13 +123,6 @@ fun LocalLibraryScreen(
             lazyListState
           )
         }
-
-        SelectFileButton(
-          fabButtonClick,
-          Modifier
-            .align(Alignment.BottomEnd)
-            .padding(end = SIXTEEN_DP, bottom = TEN_DP)
-        )
       }
     }
   }
@@ -131,11 +130,13 @@ fun LocalLibraryScreen(
 
 @Composable
 private fun rememberScrollBehavior(
-  state: LocalLibraryScreenState
+  state: LocalLibraryScreenState,
+  listState: LazyListState,
 ): Pair<MutableState<Dp>, LazyListState> {
   val bottomNavHeightInDp = with(LocalDensity.current) { state.bottomNavigationHeight.toDp() }
   val bottomNavHeight = remember { mutableStateOf(bottomNavHeightInDp) }
   val lazyListState = rememberLazyListScrollListener(
+    lazyListState = listState,
     onScrollChanged = { direction ->
       when (direction) {
         ScrollDirection.SCROLL_UP -> {
@@ -185,10 +186,10 @@ private fun BookItemList(
 }
 
 @Composable
-private fun SelectFileButton(fabButtonClick: () -> Unit, modifier: Modifier) {
+private fun SelectFileButton(fabButtonClick: () -> Unit) {
   FloatingActionButton(
     onClick = fabButtonClick,
-    modifier = modifier,
+    modifier = Modifier.padding(bottom = FAB_ICON_BOTTOM_MARGIN),
     containerColor = Black,
     shape = MaterialTheme.shapes.extraLarge
   ) {

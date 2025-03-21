@@ -52,6 +52,7 @@ import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.applyEdgeToEdgeInsets
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
@@ -68,6 +69,7 @@ const val NAVIGATE_TO_ZIM_HOST_FRAGMENT = "navigate_to_zim_host_fragment"
 const val ACTION_GET_CONTENT = "GET_CONTENT"
 const val OPENING_ZIM_FILE_DELAY = 300L
 const val GET_CONTENT_SHORTCUT_ID = "get_content_shortcut"
+const val KIWIX_BOTTOM_BAR_ANIMATION_DURATION = 250L
 
 class KiwixMainActivity : CoreMainActivity() {
   private var actionMode: ActionMode? = null
@@ -221,6 +223,25 @@ class KiwixMainActivity : CoreMainActivity() {
       sharedPreferenceUtil.setIsPlayStoreBuildType(BuildConfig.IS_PLAYSTORE)
     }
     setDefaultDeviceLanguage()
+  }
+
+  /**
+   * This is for manually showing/hiding the BottomNavigationView with animation from compose
+   * screens until we migrate the BottomNavigationView to compose. Once we migrate we will remove it.
+   *
+   * TODO Remove this once we migrate to compose.
+   */
+  fun toggleBottomNavigation(isVisible: Boolean) {
+    activityKiwixMainBinding.bottomNavView.animate()
+      ?.translationY(
+        if (isVisible) {
+          ZERO.toFloat()
+        } else {
+          activityKiwixMainBinding.bottomNavView.height.toFloat()
+        }
+      )
+      ?.setDuration(KIWIX_BOTTOM_BAR_ANIMATION_DURATION)
+      ?.start()
   }
 
   private fun setDefaultDeviceLanguage() {

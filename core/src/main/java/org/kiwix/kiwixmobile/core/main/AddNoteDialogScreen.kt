@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -57,6 +58,7 @@ const val SAVE_MENU_BUTTON_TESTING_TAG = "saveMenuButtonTestingTag"
 const val SHARE_MENU_BUTTON_TESTING_TAG = "shareMenuButtonTestingTag"
 const val DELETE_MENU_BUTTON_TESTING_TAG = "deleteMenuButtonTestingTag"
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming")
 @Composable
 fun AddNoteDialogScreen(

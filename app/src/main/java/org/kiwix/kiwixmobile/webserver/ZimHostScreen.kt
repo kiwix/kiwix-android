@@ -35,6 +35,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -69,6 +70,7 @@ import org.kiwix.kiwixmobile.ui.ZimFilesLanguageHeader
 const val START_SERVER_BUTTON_TESTING_TAG = "startServerButtonTestingTag"
 const val QR_IMAGE_TESTING_TAG = "qrImageTestingTag"
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming", "LongParameterList")
 @Composable
 fun ZimHostScreen(

@@ -19,20 +19,20 @@
 package org.kiwix.kiwixmobile.core.ui.components
 
 import androidx.annotation.StringRes
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -47,55 +47,58 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextOverflow
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray350
 import org.kiwix.kiwixmobile.core.ui.theme.White
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.KIWIX_APP_BAR_HEIGHT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 
 const val TOOLBAR_TITLE_TESTING_TAG = "toolbarTitle"
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KiwixAppBar(
   @StringRes titleId: Int,
   navigationIcon: @Composable () -> Unit,
   actionMenuItems: List<ActionMenuItem> = emptyList(),
-  // If this state is provided, the app bar will automatically hide on scroll down and show
-  // on scroll up, same like scrollingToolbar.
-  lazyListState: LazyListState? = null,
+  topAppBarScrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
   // Optional search bar, used in fragments that require it
   searchBar: (@Composable () -> Unit)? = null
 ) {
-  val isToolbarVisible = rememberToolbarVisibility(lazyListState)
-
-  val appBarHeight by animateDpAsState(
-    targetValue = if (isToolbarVisible) KIWIX_APP_BAR_HEIGHT else 0.dp,
-    animationSpec = tween(durationMillis = 250)
-  )
   KiwixTheme {
-    Row(
-      modifier = Modifier
-        .fillMaxWidth()
-        .height(appBarHeight)
-        .background(color = Black),
-      verticalAlignment = Alignment.CenterVertically
-    ) {
-      Spacer(Modifier.padding(start = TWO_DP))
-      navigationIcon()
-      searchBar?.let {
-        // Display the search bar when provided
-        it()
-      } ?: run {
-        // Otherwise, show the title
-        AppBarTitle(titleId)
-      }
-      Spacer(Modifier.weight(1f))
-      ActionMenu(actionMenuItems)
+    TopAppBar(
+      title = { AppBarTitleSection(titleId, searchBar) },
+      navigationIcon = navigationIcon,
+      actions = { ActionMenu(actionMenuItems) },
+      scrollBehavior = topAppBarScrollBehavior,
+      colors = TopAppBarDefaults.topAppBarColors(
+        containerColor = Black,
+        scrolledContainerColor = Black
+      )
+    )
+  }
+}
+
+@Suppress("ComposableLambdaParameterNaming")
+@Composable
+private fun AppBarTitleSection(
+  @StringRes titleId: Int,
+  searchBar: (@Composable () -> Unit)? = null
+) {
+  Box(
+    modifier = Modifier
+      .fillMaxSize()
+      .padding(start = SIXTEEN_DP),
+    contentAlignment = Alignment.CenterStart
+  ) {
+    searchBar?.let {
+      it()
+    } ?: run {
+      AppBarTitle(titleId)
     }
   }
 }
@@ -113,9 +116,10 @@ private fun AppBarTitle(
     text = stringResource(titleId),
     color = appBarTitleColor,
     style = MaterialTheme.typography.titleMedium,
+    overflow = TextOverflow.Ellipsis,
+    maxLines = 1,
     modifier = Modifier
-      .padding(horizontal = SIXTEEN_DP)
-      .testTag(TOOLBAR_TITLE_TESTING_TAG)
+      .testTag(TOOLBAR_TITLE_TESTING_TAG),
   )
 }
 
@@ -139,9 +143,9 @@ private fun ActionMenu(actionMenuItems: List<ActionMenuItem>) {
 }
 
 @Composable
-private fun rememberToolbarVisibility(lazyListState: LazyListState?): Boolean {
+fun rememberBottomNavigationVisibility(lazyListState: LazyListState?): Boolean {
   var isToolbarVisible by remember { mutableStateOf(true) }
-  var lastScrollIndex by remember { mutableIntStateOf(0) }
+  var lastScrollIndex by remember { mutableIntStateOf(ZERO) }
   val updatedLazyListState = rememberUpdatedState(lazyListState)
 
   LaunchedEffect(updatedLazyListState) {

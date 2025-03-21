@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.ui.components
 
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -34,10 +33,10 @@ const val ONE_THOUSAND = 1000
 
 @Composable
 fun rememberLazyListScrollListener(
+  lazyListState: LazyListState,
   onScrollChanged: (ScrollDirection) -> Unit,
   scrollThreshold: Int = 20
 ): LazyListState {
-  val lazyListState = rememberLazyListState()
   val updatedOnScrollChanged = rememberUpdatedState(onScrollChanged)
 
   var previousScrollPosition by remember { mutableIntStateOf(0) }

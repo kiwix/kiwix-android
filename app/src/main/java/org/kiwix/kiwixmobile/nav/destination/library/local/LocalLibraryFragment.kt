@@ -36,9 +36,11 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.app.ActivityCompat
@@ -79,6 +81,7 @@ import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
+import org.kiwix.kiwixmobile.core.ui.components.rememberBottomNavigationVisibility
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
@@ -173,14 +176,19 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   ): View? {
     LanguageUtils(requireActivity())
       .changeFont(requireActivity(), sharedPreferenceUtil)
-
-    val composeView = ComposeView(requireContext()).apply {
+    return ComposeView(requireContext()).apply {
       setContent {
+        val lazyListState = rememberLazyListState()
+        val isBottomNavVisible = rememberBottomNavigationVisibility(lazyListState)
+        LaunchedEffect(isBottomNavVisible) {
+          (requireActivity() as KiwixMainActivity).toggleBottomNavigation(isBottomNavVisible)
+        }
         updateLibraryScreenState(
           bottomNavigationHeight = getBottomNavigationHeight(),
           actionMenuItems = actionMenuItems()
         )
         LocalLibraryScreen(
+          listState = lazyListState,
           state = libraryScreenState.value,
           fabButtonClick = { filePickerButtonClick() },
           onClick = { onBookItemClick(it) },
@@ -192,25 +200,25 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
           NavigationIcon(
             iconItem = IconItem.Vector(Icons.Filled.Menu),
             contentDescription = string.open_drawer,
-            onClick = {
-              // Manually handle the navigation open/close.
-              // Since currently we are using the view based navigation drawer in other screens.
-              // Once we fully migrate to jetpack compose we will refactor this code to use the
-              // compose navigation.
-              // TODO Replace with compose based navigation when migration is done.
-              val activity = activity as CoreMainActivity
-              if (activity.navigationDrawerIsOpen()) {
-                activity.closeNavigationDrawer()
-              } else {
-                activity.openNavigationDrawer()
-              }
-            }
+            onClick = { navigationIconClick() }
           )
         }
       }
     }
+  }
 
-    return composeView
+  private fun navigationIconClick() {
+    // Manually handle the navigation open/close.
+    // Since currently we are using the view based navigation drawer in other screens.
+    // Once we fully migrate to jetpack compose we will refactor this code to use the
+    // compose navigation.
+    // TODO Replace with compose based navigation when migration is done.
+    val activity = activity as CoreMainActivity
+    if (activity.navigationDrawerIsOpen()) {
+      activity.closeNavigationDrawer()
+    } else {
+      activity.openNavigationDrawer()
+    }
   }
 
   private fun actionMenuItems() = listOf(
