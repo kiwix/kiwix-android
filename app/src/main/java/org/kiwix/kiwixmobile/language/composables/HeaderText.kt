@@ -24,9 +24,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 
 @Composable
 fun HeaderText(
@@ -40,8 +39,8 @@ fun HeaderText(
       else -> ""
     },
     modifier = modifier
-      .padding(horizontal = 16.dp, vertical = 8.dp),
-    fontSize = 16.sp,
+      .padding(horizontal = ComposeDimens.SIXTEEN_DP, vertical = ComposeDimens.EIGHT_DP),
+    fontSize = ComposeDimens.FOURTEEN_SP,
     style = MaterialTheme.typography.headlineMedium,
     color = MaterialTheme.colorScheme.onSurfaceVariant
   )

@@ -18,14 +18,13 @@
 
 package org.kiwix.kiwixmobile.language
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,12 +38,10 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
+import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
-import org.kiwix.kiwixmobile.language.composables.AppBarNavigationIcon
-import org.kiwix.kiwixmobile.language.composables.AppBarTextField
 import org.kiwix.kiwixmobile.language.viewmodel.Action
 import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
 import javax.inject.Inject
@@ -64,7 +61,6 @@ class LanguageFragment : BaseFragment() {
     baseActivity.cachedComponent.inject(this)
   }
 
-  @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     val activity = requireActivity() as CoreMainActivity
@@ -79,54 +75,44 @@ class LanguageFragment : BaseFragment() {
       }
 
       KiwixTheme {
-        Scaffold(topBar = {
-          KiwixAppBar(
-            titleId = R.string.select_languages,
-            navigationIcon = {
-              AppBarNavigationIcon(
-                isSearchActive = isSearchActive,
-                onClick = {
-                  if (isSearchActive) {
-                    isSearchActive = false
-                    resetSearchState()
-                  } else {
-                    activity.onBackPressedDispatcher.onBackPressed()
-                  }
-                }
-              )
-            },
-            actionMenuItems = appBarActionMenuList(
-              searchText = searchText,
-              isSearchActive = isSearchActive,
-              onSearchClick = {
-                isSearchActive = true
-              },
-              onClearClick = {
-                resetSearchState()
-              },
-              onSaveClick = {
-                languageViewModel.actions.offer(Action.SaveAll)
-              }
-            ),
-            searchBar = if (isSearchActive) {
-              {
-                AppBarTextField(
-                  value = searchText,
-                  onValueChange = {
-                    searchText = it
-                    languageViewModel.actions.offer(Action.Filter(it))
-                  }
-                )
-              }
-            } else {
-              null
+        LanguageScreen(
+          searchText = searchText,
+          isSearchActive = isSearchActive,
+          appBarTextFieldTestTag = SEARCH_FIELD_TESTING_TAG,
+          languageViewModel = languageViewModel,
+          actionMenuItemList = appBarActionMenuList(
+            searchText = searchText,
+            isSearchActive = isSearchActive,
+            onSearchClick = { isSearchActive = true },
+            onClearClick = { resetSearchState() },
+            onSaveClick = {
+              languageViewModel.actions.offer(Action.SaveAll)
             }
-          )
-        }) {
-          LanguageScreen(
-            languageViewModel = languageViewModel
-          )
-        }
+          ),
+          onAppBarValueChange = {
+            searchText = it
+            languageViewModel.actions.offer(Action.Filter(it))
+          },
+          content = {
+            NavigationIcon(
+              iconItem = if (isSearchActive) {
+                IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack)
+              } else {
+                IconItem.Drawable(
+                  R.drawable.ic_close_white_24dp
+                )
+              },
+              onClick = {
+                if (isSearchActive) {
+                  isSearchActive = false
+                  resetSearchState()
+                } else {
+                  activity.onBackPressedDispatcher.onBackPressed()
+                }
+              }
+            )
+          }
+        )
       }
     }
     compositeAdd(activity)
