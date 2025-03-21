@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library
 
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -52,6 +53,9 @@ class LocalLibraryTest : BaseActivityTest() {
   @Rule
   @JvmField
   var retryRule = RetryRule()
+
+  @get:Rule
+  val composeTestRule = createComposeRule()
 
   init {
     AccessibilityChecks.enable().apply {
@@ -112,9 +116,9 @@ class LocalLibraryTest : BaseActivityTest() {
       it.navigate(R.id.libraryFragment)
     }
     library {
-      refreshList()
-      waitUntilZimFilesRefreshing()
-      deleteZimIfExists()
+      refreshList(composeTestRule)
+      waitUntilZimFilesRefreshing(composeTestRule)
+      deleteZimIfExists(composeTestRule)
     }
     // load a zim file to test, After downloading zim file library list is visible or not
     val loadFileStream =
@@ -137,8 +141,8 @@ class LocalLibraryTest : BaseActivityTest() {
       }
     }
     library {
-      refreshList()
-      assertLibraryListDisplayed()
+      refreshList(composeTestRule)
+      assertLibraryListDisplayed(composeTestRule)
     }
     LeakAssertions.assertNoLeaks()
   }

@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.initial.download
 
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -56,6 +57,9 @@ class InitialDownloadTest : BaseActivityTest() {
   @Rule
   @JvmField
   var retryRule = RetryRule()
+
+  @get:Rule
+  val composeTestRule = createComposeRule()
 
   init {
     AccessibilityChecks.enable().apply {
@@ -111,9 +115,9 @@ class InitialDownloadTest : BaseActivityTest() {
     // delete all the ZIM files showing in the LocalLibrary
     // screen to properly test the scenario.
     library {
-      refreshList()
-      waitUntilZimFilesRefreshing()
-      deleteZimIfExists()
+      refreshList(composeTestRule)
+      waitUntilZimFilesRefreshing(composeTestRule)
+      deleteZimIfExists(composeTestRule)
     }
     initialDownload {
       clickDownloadOnBottomNav()

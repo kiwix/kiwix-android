@@ -45,6 +45,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -73,6 +74,12 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDis
 import org.kiwix.kiwixmobile.ui.BookItem
 import org.kiwix.kiwixmobile.ui.ZimFilesLanguageHeader
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
+
+const val NO_FILE_TEXT_TESTING_TAG = "noFileTextTestingTag"
+const val DOWNLOAD_BUTTON_TESTING_TAG = "downloadButtonTestingTag"
+const val BOOK_LIST_TESTING_TAG = "bookListTestingTag"
+const val CONTENT_LOADING_PROGRESSBAR_TESTING_TAG = "contentLoadingProgressBarTestingTag"
+const val SELECT_FILE_BUTTON_TESTING_TAG = "selectFileButtonTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming")
@@ -112,6 +119,7 @@ fun LocalLibraryScreen(
       ) {
         if (state.scanningProgressItem.first) {
           ContentLoadingProgressBar(
+            modifier = Modifier.testTag(CONTENT_LOADING_PROGRESSBAR_TESTING_TAG),
             progressBarStyle = ProgressBarStyle.HORIZONTAL,
             progress = state.scanningProgressItem.second
           )
@@ -167,7 +175,12 @@ private fun BookItemList(
   onMultiSelect: ((BookOnDisk) -> Unit)? = null,
   lazyListState: LazyListState,
 ) {
-  LazyColumn(modifier = Modifier.fillMaxSize(), state = lazyListState) {
+  LazyColumn(
+    modifier = Modifier
+      .fillMaxSize()
+      .testTag(BOOK_LIST_TESTING_TAG),
+    state = lazyListState
+  ) {
     itemsIndexed(state.bookOnDiskListItems) { index, bookItem ->
       when (bookItem) {
         is BooksOnDiskListItem.LanguageItem -> {
@@ -193,7 +206,9 @@ private fun BookItemList(
 private fun SelectFileButton(fabButtonClick: () -> Unit) {
   FloatingActionButton(
     onClick = fabButtonClick,
-    modifier = Modifier.padding(bottom = FAB_ICON_BOTTOM_MARGIN),
+    modifier = Modifier
+      .padding(bottom = FAB_ICON_BOTTOM_MARGIN)
+      .testTag(SELECT_FILE_BUTTON_TESTING_TAG),
     containerColor = Black,
     shape = MaterialTheme.shapes.extraLarge
   ) {
@@ -219,11 +234,16 @@ fun NoFilesView(
     verticalArrangement = Arrangement.Center
   ) {
     Text(
+      modifier = Modifier.testTag(NO_FILE_TEXT_TESTING_TAG),
       text = noFilesViewItem.first,
       style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Medium),
       textAlign = TextAlign.Center
     )
     Spacer(modifier = Modifier.height(EIGHT_DP))
-    KiwixButton(noFilesViewItem.second, onDownloadButtonClick)
+    KiwixButton(
+      buttonText = noFilesViewItem.second,
+      clickListener = onDownloadButtonClick,
+      modifier = Modifier.testTag(DOWNLOAD_BUTTON_TESTING_TAG)
+    )
   }
 }

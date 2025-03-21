@@ -18,29 +18,33 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library
 
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.longClick
-import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.matcher.RootMatchers.isDialog
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
-import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import junit.framework.AssertionFailedError
-import org.hamcrest.Matchers.not
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
 import org.kiwix.kiwixmobile.localFileTransfer.localFileTransfer
+import org.kiwix.kiwixmobile.nav.destination.library.local.BOOK_LIST_TESTING_TAG
+import org.kiwix.kiwixmobile.nav.destination.library.local.CONTENT_LOADING_PROGRESSBAR_TESTING_TAG
+import org.kiwix.kiwixmobile.nav.destination.library.local.NO_FILE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.refresh
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.utils.RecyclerViewItemCount
 
@@ -58,46 +62,55 @@ class LibraryRobot : BaseRobot() {
     localFileTransfer(func)
   }
 
-  fun assertLibraryListDisplayed() {
-    isVisible(ViewId(R.id.zimfilelist))
+  fun assertLibraryListDisplayed(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.runOnIdle {
+        composeTestRule.onNodeWithTag(BOOK_LIST_TESTING_TAG).assertIsDisplayed()
+      }
+    })
   }
 
-  private fun assertNoFilesTextDisplayed() {
-    pauseForBetterTestPerformance()
-    testFlakyView({ isVisible(ViewId(R.id.file_management_no_files)) })
+  private fun assertNoFilesTextDisplayed(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.runOnIdle {
+        composeTestRule.onNodeWithTag(NO_FILE_TEXT_TESTING_TAG).assertIsDisplayed()
+      }
+    })
   }
 
-  fun refreshList() {
-    pauseForBetterTestPerformance()
-    try {
-      onView(withId(R.id.file_management_no_files)).check(matches(isDisplayed()))
-      refresh(R.id.zim_swiperefresh)
-    } catch (ignore: AssertionFailedError) {
+  fun refreshList(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.runOnIdle {
       try {
-        onView(withId(R.id.zimfilelist)).check(matches(isDisplayed()))
-        refresh(R.id.zim_swiperefresh)
-      } catch (e: AssertionFailedError) {
-        Log.i(
-          "LOCAL_LIBRARY",
-          "No need to refresh the data, since there is no files found"
-        )
+        composeTestRule.onNodeWithTag(NO_FILE_TEXT_TESTING_TAG).assertIsDisplayed()
+        composeTestRule.refresh()
+      } catch (_: AssertionFailedError) {
+        try {
+          composeTestRule.onNodeWithTag(BOOK_LIST_TESTING_TAG).assertIsDisplayed()
+          composeTestRule.refresh()
+        } catch (_: AssertionFailedError) {
+          Log.i(
+            "LOCAL_LIBRARY",
+            "No need to refresh the data, since there is no files found"
+          )
+        }
       }
     }
   }
 
-  fun waitUntilZimFilesRefreshing() {
+  fun waitUntilZimFilesRefreshing(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
-      onView(withId(R.id.scanning_progress_view)).check(matches(not(isDisplayed())))
+      composeTestRule.onNodeWithTag(CONTENT_LOADING_PROGRESSBAR_TESTING_TAG)
+        .assertIsNotDisplayed()
     })
   }
 
-  fun deleteZimIfExists() {
+  fun deleteZimIfExists(composeTestRule: ComposeContentTestRule) {
     try {
       try {
-        onView(withId(R.id.file_management_no_files)).check(matches(isDisplayed()))
+        composeTestRule.onNodeWithTag(NO_FILE_TEXT_TESTING_TAG).assertIsDisplayed()
         // if this view is displaying then we do not need to run the further code.
         return
-      } catch (e: AssertionFailedError) {
+      } catch (_: AssertionFailedError) {
         Log.e("DELETE_ZIM_FILE", "Zim files found in local library so we are deleting them")
       }
       val recyclerViewId: Int = R.id.zimfilelist
@@ -114,7 +127,7 @@ class LibraryRobot : BaseRobot() {
       clickOnFileDeleteIcon()
       clickOnDeleteZimFile()
       pauseForBetterTestPerformance()
-      assertNoFilesTextDisplayed()
+      assertNoFilesTextDisplayed(composeTestRule)
     } catch (e: Exception) {
       Log.i(
         "TEST_DELETE_ZIM",

@@ -29,9 +29,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.White
+
+const val SWIPE_REFRESH_TESTING_TAG = "swipeRefreshTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,17 +58,19 @@ fun SwipeRefreshLayout(
 ) {
   val coroutineScope = rememberCoroutineScope()
   Box(
-    modifier.pullToRefresh(
-      state = state,
-      isRefreshing = isRefreshing,
-      onRefresh = {
-        coroutineScope.launch {
-          state.animateToHidden()
-          onRefresh.invoke()
-        }
-      },
-      enabled = isEnabled
-    ),
+    modifier
+      .testTag(SWIPE_REFRESH_TESTING_TAG)
+      .pullToRefresh(
+        state = state,
+        isRefreshing = isRefreshing,
+        onRefresh = {
+          coroutineScope.launch {
+            state.animateToHidden()
+            onRefresh.invoke()
+          }
+        },
+        enabled = isEnabled
+      ),
     contentAlignment = contentAlignment
   ) {
     content()

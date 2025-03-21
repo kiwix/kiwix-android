@@ -30,7 +30,6 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
-import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
@@ -38,6 +37,7 @@ import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.refresh
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.ui.BOOK_ITEM_CHECKBOX_TESTING_TAG
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
@@ -49,9 +49,11 @@ class ZimHostRobot : BaseRobot() {
     isVisible(TextId(R.string.menu_wifi_hotspot))
   }
 
-  fun refreshLibraryList() {
+  fun refreshLibraryList(composeTestRule: ComposeContentTestRule) {
     pauseForBetterTestPerformance()
-    refresh(org.kiwix.kiwixmobile.R.id.zim_swiperefresh)
+    composeTestRule.runOnIdle {
+      composeTestRule.refresh()
+    }
   }
 
   fun assertZimFilesLoaded() {

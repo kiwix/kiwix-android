@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.download
 
 import android.util.Log
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.NavHostFragment
@@ -50,7 +51,6 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChan
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.topLevel
-import org.kiwix.kiwixmobile.nav.destination.library.LibraryRobot
 import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -67,6 +67,9 @@ class DownloadTest : BaseActivityTest() {
   @Rule
   @JvmField
   var retryRule = RetryRule()
+
+  @get:Rule
+  val composeTestRule = createComposeRule()
 
   private lateinit var kiwixMainActivity: KiwixMainActivity
 
@@ -128,9 +131,9 @@ class DownloadTest : BaseActivityTest() {
       // delete all the ZIM files showing in the LocalLibrary
       // screen to properly test the scenario.
       library {
-        refreshList()
-        waitUntilZimFilesRefreshing()
-        deleteZimIfExists()
+        refreshList(composeTestRule)
+        waitUntilZimFilesRefreshing(composeTestRule)
+        deleteZimIfExists(composeTestRule)
       }
       downloadRobot {
         clickDownloadOnBottomNav()
@@ -158,8 +161,8 @@ class DownloadTest : BaseActivityTest() {
         }
         clickLibraryOnBottomNav()
         // refresh the local library list to show the downloaded zim file
-        library(LibraryRobot::refreshList)
-        checkIfZimFileDownloaded()
+        library { refreshList(composeTestRule) }
+        checkIfZimFileDownloaded(composeTestRule)
       }
     } catch (e: Exception) {
       Assert.fail(
@@ -188,9 +191,9 @@ class DownloadTest : BaseActivityTest() {
       // delete all the ZIM files showing in the LocalLibrary
       // screen to properly test the scenario.
       library {
-        refreshList()
-        waitUntilZimFilesRefreshing()
-        deleteZimIfExists()
+        refreshList(composeTestRule)
+        waitUntilZimFilesRefreshing(composeTestRule)
+        deleteZimIfExists(composeTestRule)
       }
       downloadRobot {
         // change the application language

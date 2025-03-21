@@ -25,6 +25,10 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Environment
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeDown
 import androidx.core.content.ContextCompat
 import androidx.test.core.app.canTakeScreenshot
 import androidx.test.core.app.takeScreenshot
@@ -45,6 +49,7 @@ import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.ui.components.SWIPE_REFRESH_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.File
 import java.io.FileNotFoundException
@@ -252,4 +257,9 @@ object TestUtils {
       .callTimeout(CALL_TIMEOUT, TimeUnit.SECONDS)
       .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
       .build()
+
+  fun ComposeContentTestRule.refresh() {
+    onNodeWithTag(SWIPE_REFRESH_TESTING_TAG)
+      .performTouchInput { swipeDown() }
+  }
 }

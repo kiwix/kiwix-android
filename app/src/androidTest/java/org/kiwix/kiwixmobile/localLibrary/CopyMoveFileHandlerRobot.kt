@@ -18,11 +18,12 @@
 
 package org.kiwix.kiwixmobile.localLibrary
 
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.web.sugar.Web
 import androidx.test.espresso.web.webdriver.DriverAtoms
@@ -35,6 +36,7 @@ import org.kiwix.kiwixmobile.Findable
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.R.id
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.nav.destination.library.local.NO_FILE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
@@ -102,15 +104,11 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
     })
   }
 
-  fun assertZimFileAddedInTheLocalLibrary() {
+  fun assertZimFileAddedInTheLocalLibrary(composeTestRule: ComposeContentTestRule) {
     try {
-      onView(ViewMatchers.withId(id.file_management_no_files)).check(
-        ViewAssertions.matches(
-          ViewMatchers.isDisplayed()
-        )
-      )
+      composeTestRule.onNodeWithTag(NO_FILE_TEXT_TESTING_TAG).assertIsDisplayed()
       throw RuntimeException("ZimFile not added in the local library")
-    } catch (e: AssertionFailedError) {
+    } catch (_: AssertionFailedError) {
       // do nothing zim file is added in the local library
     }
   }

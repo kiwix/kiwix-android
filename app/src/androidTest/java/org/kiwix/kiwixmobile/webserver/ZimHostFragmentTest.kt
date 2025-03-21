@@ -141,14 +141,14 @@ class ZimHostFragmentTest {
       // delete all the ZIM files showing in the LocalLibrary
       // screen to properly test the scenario.
       library {
-        refreshList()
-        waitUntilZimFilesRefreshing()
-        deleteZimIfExists()
+        refreshList(composeTestRule)
+        waitUntilZimFilesRefreshing(composeTestRule)
+        deleteZimIfExists(composeTestRule)
       }
       loadZimFileInApplication("testzim.zim")
       loadZimFileInApplication("small.zim")
       zimHost {
-        refreshLibraryList()
+        refreshLibraryList(composeTestRule)
         assertZimFilesLoaded()
         openZimHostFragment()
 

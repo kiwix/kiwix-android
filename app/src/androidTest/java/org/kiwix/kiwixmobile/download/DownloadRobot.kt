@@ -19,6 +19,9 @@
 package org.kiwix.kiwixmobile.download
 
 import android.view.View
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
@@ -48,6 +51,7 @@ import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.download.DownloadTest.Companion.KIWIX_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.nav.destination.library.local.NO_FILE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
@@ -84,26 +88,28 @@ class DownloadRobot : BaseRobot() {
     try {
       onView(withText(string.swipe_down_for_library)).check(matches(isDisplayed()))
       refreshOnlineList()
-    } catch (e: RuntimeException) {
+    } catch (_: RuntimeException) {
       try {
         // do nothing as currently downloading the online library.
         onView(withId(R.id.onlineLibraryProgressLayout)).check(matches(isDisplayed()))
-      } catch (e: RuntimeException) {
+      } catch (_: RuntimeException) {
         // if not visible try to get the online library.
         refreshOnlineList()
       }
     }
   }
 
-  fun checkIfZimFileDownloaded() {
+  fun checkIfZimFileDownloaded(composeTestRule: ComposeContentTestRule) {
     pauseForBetterTestPerformance()
     try {
       testFlakyView({
-        onView(withId(R.id.file_management_no_files)).check(matches(isDisplayed()))
+        composeTestRule.runOnIdle {
+          composeTestRule.onNodeWithTag(NO_FILE_TEXT_TESTING_TAG).assertIsDisplayed()
+        }
       })
       // if the "No files here" text found that means it failed to download the ZIM file.
       Assert.fail("Couldn't download the zim file. The [No files here] text is visible on screen")
-    } catch (e: AssertionFailedError) {
+    } catch (_: AssertionFailedError) {
       // check if "No files here" text is not visible on
       // screen that means zim file is downloaded successfully.
     }
@@ -175,9 +181,9 @@ class DownloadRobot : BaseRobot() {
     try {
       onView(withSubstring(context.getString(string.paused_state))).check(matches(isDisplayed()))
       resumeDownload()
-    } catch (e: AssertionFailedError) {
+    } catch (_: AssertionFailedError) {
       // do nothing since downloading is In Progress.
-    } catch (e: RuntimeException) {
+    } catch (_: RuntimeException) {
       // do nothing since downloading is In Progress.
     }
   }
@@ -194,7 +200,7 @@ class DownloadRobot : BaseRobot() {
   private fun clickOnYesButton() {
     try {
       onView(withText("YES")).perform(click())
-    } catch (ignore: Exception) {
+    } catch (_: Exception) {
       // stop the downloading for Albanian language
       onView(withText("PO")).perform(click())
     }
@@ -208,7 +214,7 @@ class DownloadRobot : BaseRobot() {
       assertStopDownloadDialogDisplayed()
       clickOnYesButton()
       pauseForBetterTestPerformance()
-    } catch (e: Exception) {
+    } catch (_: Exception) {
       Log.e(
         KIWIX_DOWNLOAD_TEST,
         "Failed to stop downloading. Probably because it is not downloading the zim file"

@@ -29,11 +29,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.clickMenu
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
-import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
-import org.hamcrest.CoreMatchers
 import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
@@ -110,8 +107,8 @@ class NetworkTest {
     }
     clickOn(string.local_zims)
     try {
-      Espresso.onData(CoreMatchers.allOf(ViewMatchers.withId(R.id.zim_swiperefresh)))
-      refresh(R.id.zim_swiperefresh)
+      // Espresso.onData(CoreMatchers.allOf(ViewMatchers.withId(R.id.zim_swiperefresh)))
+      // refresh(R.id.zim_swiperefresh)
       Thread.sleep(500)
     } catch (e: InterruptedException) {
       e.printStackTrace()
@@ -122,21 +119,21 @@ class NetworkTest {
     // onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist)).perform(click());
 
     // Find matching zim files on the device
-    try {
-      val dataInteraction =
-        Espresso.onData(TestUtils.withContent("wikipedia_ab_all_2017-03"))
-          .inAdapterView(ViewMatchers.withId(R.id.zimfilelist))
-      // TODO how can we get a count of the items matching the dataInteraction?
-      dataInteraction.atPosition(0).perform(ViewActions.click())
-      clickMenu(string.library)
-      val dataInteraction1 =
-        Espresso.onData(TestUtils.withContent("wikipedia_ab_all_2017-03"))
-          .inAdapterView(ViewMatchers.withId(R.id.zimfilelist))
-      dataInteraction1.atPosition(0).perform(ViewActions.longClick()) // to delete the zim file
-      BaristaDialogInteractions.clickDialogPositiveButton()
-    } catch (e: Exception) {
-      Log.w(NETWORK_TEST_TAG, "failed to interact with local ZIM file: " + e.localizedMessage)
-    }
+    // try {
+    //   val dataInteraction =
+    //     Espresso.onData(TestUtils.withContent("wikipedia_ab_all_2017-03"))
+    //       .inAdapterView(ViewMatchers.withId(R.id.zimfilelist))
+    //   // TODO how can we get a count of the items matching the dataInteraction?
+    //   dataInteraction.atPosition(0).perform(ViewActions.click())
+    //   clickMenu(string.library)
+    //   val dataInteraction1 =
+    //     Espresso.onData(TestUtils.withContent("wikipedia_ab_all_2017-03"))
+    //       .inAdapterView(ViewMatchers.withId(R.id.zimfilelist))
+    //   dataInteraction1.atPosition(0).perform(ViewActions.longClick()) // to delete the zim file
+    //   BaristaDialogInteractions.clickDialogPositiveButton()
+    // } catch (e: Exception) {
+    //   Log.w(NETWORK_TEST_TAG, "failed to interact with local ZIM file: " + e.localizedMessage)
+    // }
   }
 
   @After fun finish() {
