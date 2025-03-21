@@ -28,6 +28,8 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -209,7 +211,10 @@ fun NoFilesView(
   onDownloadButtonClick: () -> Unit
 ) {
   Column(
-    modifier = Modifier.fillMaxSize().padding(horizontal = FOUR_DP),
+    modifier = Modifier
+      .fillMaxSize()
+      .padding(horizontal = FOUR_DP)
+      .verticalScroll(rememberScrollState()),
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.Center
   ) {
