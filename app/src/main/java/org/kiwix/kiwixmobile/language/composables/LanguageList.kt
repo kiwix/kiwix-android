@@ -26,6 +26,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -33,14 +35,26 @@ import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.HeaderItem
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
+import org.kiwix.kiwixmobile.language.viewmodel.State
+import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 
 @Composable
 fun LanguageList(
+  state: State,
   context: Context,
   listState: LazyListState,
-  viewItem: List<LanguageListItem>,
   selectLanguageItem: (LanguageItem) -> Unit,
 ) {
+  val viewItem = (state as Content).viewItems
+
+  LaunchedEffect(viewItem) {
+    snapshotFlow(listState::firstVisibleItemIndex)
+      .collect {
+        if (listState.firstVisibleItemIndex == 2) {
+          listState.animateScrollToItem(0)
+        }
+      }
+  }
   LazyColumn(
     state = listState
   ) {
