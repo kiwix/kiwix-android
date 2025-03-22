@@ -28,19 +28,17 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.ui.components.AppBarTextField
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
+import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.language.composables.LanguageList
 import org.kiwix.kiwixmobile.language.viewmodel.Action
@@ -54,8 +52,8 @@ fun LanguageScreen(
   isSearchActive: Boolean,
   languageViewModel: LanguageViewModel,
   actionMenuItemList: List<ActionMenuItem>,
+  onClearClick: () -> Unit,
   onAppBarValueChange: (String) -> Unit,
-  appBarTextFieldTestTag: String,
   content: @Composable() () -> Unit,
 ) {
   val state by languageViewModel.state.observeAsState(State.Loading)
@@ -68,11 +66,13 @@ fun LanguageScreen(
       navigationIcon = content,
       actionMenuItems = actionMenuItemList,
       searchBar = if (isSearchActive) {
-        {
-          AppBarTextField(
+        { modifier ->
+          KiwixSearchView(
+            modifier = modifier,
             value = searchText,
-            testTag = appBarTextFieldTestTag,
-            onValueChange = onAppBarValueChange
+            testTag = SEARCH_FIELD_TESTING_TAG,
+            onValueChange = onAppBarValueChange,
+            onClearClick = onClearClick
           )
         }
       } else {
@@ -81,7 +81,8 @@ fun LanguageScreen(
     )
   }) { innerPadding ->
     Column(
-      modifier = Modifier.fillMaxSize()
+      modifier = Modifier
+        .fillMaxSize()
         // setting bottom padding to zero to avoid accounting for Bottom bar
         .padding(
           top = innerPadding.calculateTopPadding(),
@@ -96,21 +97,10 @@ fun LanguageScreen(
         }
 
         is Content -> {
-          val viewItem = (state as Content).viewItems
-
-          LaunchedEffect(viewItem) {
-            snapshotFlow(listState::firstVisibleItemIndex)
-              .collect {
-                if (listState.firstVisibleItemIndex == 2) {
-                  listState.animateScrollToItem(0)
-                }
-              }
-          }
-
           LanguageList(
+            state = state,
             context = context,
             listState = listState,
-            viewItem = viewItem,
             selectLanguageItem = { languageItem ->
               languageViewModel.actions.offer(Action.Select(languageItem))
             }

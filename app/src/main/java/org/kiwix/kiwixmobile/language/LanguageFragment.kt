@@ -78,17 +78,15 @@ class LanguageFragment : BaseFragment() {
         LanguageScreen(
           searchText = searchText,
           isSearchActive = isSearchActive,
-          appBarTextFieldTestTag = SEARCH_FIELD_TESTING_TAG,
           languageViewModel = languageViewModel,
           actionMenuItemList = appBarActionMenuList(
-            searchText = searchText,
             isSearchActive = isSearchActive,
             onSearchClick = { isSearchActive = true },
-            onClearClick = { resetSearchState() },
             onSaveClick = {
               languageViewModel.actions.offer(Action.SaveAll)
             }
           ),
+          onClearClick = { resetSearchState() },
           onAppBarValueChange = {
             searchText = it
             languageViewModel.actions.offer(Action.Filter(it))
@@ -130,10 +128,8 @@ class LanguageFragment : BaseFragment() {
   }
 
   fun appBarActionMenuList(
-    searchText: String,
     isSearchActive: Boolean,
     onSearchClick: () -> Unit,
-    onClearClick: () -> Unit,
     onSaveClick: () -> Unit
   ): List<ActionMenuItem> {
     return listOfNotNull(
@@ -143,13 +139,6 @@ class LanguageFragment : BaseFragment() {
           contentDescription = R.string.search_label,
           onClick = onSearchClick,
           testingTag = SEARCH_ICON_TESTING_TAG
-        )
-
-        searchText.isNotEmpty() -> ActionMenuItem(
-          icon = IconItem.Drawable(R.drawable.ic_clear_white_24dp),
-          contentDescription = R.string.search_label,
-          onClick = onClearClick,
-          testingTag = ""
         )
 
         else -> null // Handle the case when both conditions are false
