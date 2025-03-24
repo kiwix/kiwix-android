@@ -563,6 +563,8 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     // Force recomposition by first setting an empty list before assigning the updated list.
     // This is necessary because modifying an object's property doesn't trigger recomposition,
     // as Compose still considers the list unchanged.
+    updateLibraryScreenState(fileSelectListState = FileSelectListState(emptyList()))
+    // Update the real state for UI.
     updateLibraryScreenState(
       fileSelectListState = state,
       noFilesViewItem = Triple(

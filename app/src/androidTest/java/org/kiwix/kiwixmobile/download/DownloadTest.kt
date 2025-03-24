@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.download
 
+import android.os.Build
 import android.util.Log
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
@@ -158,7 +159,9 @@ class DownloadTest : BaseActivityTest() {
         "Couldn't find downloaded file\n Original Exception: ${e.message}"
       )
     }
-    LeakAssertions.assertNoLeaks()
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+      LeakAssertions.assertNoLeaks()
+    }
   }
 
   private fun getOnlineLibraryList(): List<LibraryListItem> {

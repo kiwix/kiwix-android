@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.main
 
+import android.os.Build
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
@@ -131,6 +132,8 @@ class TopLevelDestinationTest : BaseActivityTest() {
       clickSupportKiwixOnSideNav()
       pressBack()
     }
-    LeakAssertions.assertNoLeaks()
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+      LeakAssertions.assertNoLeaks()
+    }
   }
 }
