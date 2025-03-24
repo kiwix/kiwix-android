@@ -54,10 +54,12 @@ class LibraryRobot : BaseRobot() {
   private val zimFileTitle = "Test_Zim"
 
   fun assertGetZimNearbyDeviceDisplayed(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.apply {
-      waitForIdle()
-      onNodeWithTag(LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG).assertIsDisplayed()
-    }
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG).assertIsDisplayed()
+      }
+    })
   }
 
   fun clickFileTransferIcon(
