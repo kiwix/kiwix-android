@@ -181,7 +181,7 @@ class ZimManageViewModel @Inject constructor(
               .body(
                 ProgressResponseBody(
                   responseBody,
-                  AppProgressListenerProvider(this),
+                  appProgressListener,
                   contentLength
                 )
               )
@@ -194,6 +194,8 @@ class ZimManageViewModel @Inject constructor(
         kiwixService = it
       }
   }
+
+  private var appProgressListener: AppProgressListenerProvider? = AppProgressListenerProvider(this)
 
   private fun getContentLengthOfLibraryXmlFile(): Long {
     val headRequest =
@@ -218,7 +220,7 @@ class ZimManageViewModel @Inject constructor(
             ?: DEFAULT_INT_VALUE.toLong()
         }
       }
-    } catch (ignore: Exception) {
+    } catch (_: Exception) {
       // do nothing
     }
     return DEFAULT_INT_VALUE.toLong()
@@ -237,6 +239,7 @@ class ZimManageViewModel @Inject constructor(
     fileSelectActions.onComplete()
     requestDownloadLibrary.onComplete()
     compositeDisposable = null
+    appProgressListener = null
     super.onCleared()
   }
 

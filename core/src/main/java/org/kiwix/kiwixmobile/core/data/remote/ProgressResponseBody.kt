@@ -30,7 +30,7 @@ import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 
 class ProgressResponseBody(
   private val responseBody: ResponseBody,
-  private val progressListener: OnlineLibraryProgressListener,
+  private val progressListener: OnlineLibraryProgressListener?,
   private val contentLength: Long
 ) : ResponseBody() {
   private lateinit var bufferedSource: BufferedSource
@@ -51,7 +51,7 @@ class ProgressResponseBody(
       override fun read(sink: Buffer, byteCount: Long): Long {
         val bytesRead = super.read(sink, byteCount)
         totalBytesRead += if (bytesRead != DEFAULT_INT_VALUE.toLong()) bytesRead else ZERO.toLong()
-        progressListener.onProgress(totalBytesRead, contentLength)
+        progressListener?.onProgress(totalBytesRead, contentLength)
         return bytesRead
       }
     }

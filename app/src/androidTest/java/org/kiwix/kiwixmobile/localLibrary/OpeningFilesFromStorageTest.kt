@@ -117,7 +117,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
         sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
         // open file picker to select a file to test the real scenario.
         composeTestRule.onNodeWithTag(SELECT_FILE_BUTTON_TESTING_TAG).performClick()
-        uiDevice.findObject(By.textContains(fileName)).click()
+        TestUtils.testFlakyView(uiDevice.findObject(By.textContains(fileName))::click, 10)
 
         copyMoveFileHandler {
           assertCopyMoveDialogDisplayed()

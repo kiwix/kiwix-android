@@ -227,13 +227,13 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     setupMenu()
 
     // hides keyboard when scrolled
-    fragmentDestinationDownloadBinding?.libraryList?.addOnScrollListener(
-      SimpleRecyclerViewScrollListener { _, newState ->
-        if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-          fragmentDestinationDownloadBinding?.libraryList?.closeKeyboard()
-        }
-      }
-    )
+    fragmentDestinationDownloadBinding?.libraryList?.addOnScrollListener(simpleScrollListener)
+  }
+
+  private var simpleScrollListener = SimpleRecyclerViewScrollListener { _, newState ->
+    if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+      fragmentDestinationDownloadBinding?.libraryList?.closeKeyboard()
+    }
   }
 
   private fun setupMenu() {
@@ -373,7 +373,12 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   override fun onDestroyView() {
     super.onDestroyView()
-    fragmentDestinationDownloadBinding?.libraryList?.adapter = null
+    fragmentDestinationDownloadBinding?.apply {
+      librarySwipeRefresh.setOnRefreshListener(null)
+      libraryList.removeOnScrollListener(simpleScrollListener)
+      libraryList.adapter = null
+      root.removeAllViews()
+    }
     fragmentDestinationDownloadBinding = null
   }
 
