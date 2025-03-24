@@ -18,11 +18,13 @@
 
 package org.kiwix.kiwixmobile.webserver
 
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.espresso.Espresso.onView
@@ -40,6 +42,7 @@ import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.refresh
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.ui.BOOK_ITEM_CHECKBOX_TESTING_TAG
+import org.kiwix.kiwixmobile.ui.BOOK_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 
 fun zimHost(func: ZimHostRobot.() -> Unit) = ZimHostRobot().applyWithViewHierarchyPrinting(func)
@@ -50,15 +53,16 @@ class ZimHostRobot : BaseRobot() {
   }
 
   fun refreshLibraryList(composeTestRule: ComposeContentTestRule) {
-    pauseForBetterTestPerformance()
-    composeTestRule.runOnIdle {
-      composeTestRule.refresh()
+    composeTestRule.apply {
+      waitForIdle()
+      refresh()
     }
   }
 
-  fun assertZimFilesLoaded() {
+  fun assertZimFilesLoaded(composeTestRule: ComposeContentTestRule) {
     pauseForBetterTestPerformance()
-    isVisible(Text("Test_Zim"))
+    val zimFileNodes = composeTestRule.onAllNodesWithTag(BOOK_ITEM_TESTING_TAG)
+    zimFileNodes.assertCountEquals(2)
   }
 
   fun openZimHostFragment() {
@@ -137,7 +141,7 @@ class ZimHostRobot : BaseRobot() {
     try {
       composeTestRule.onNodeWithTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$position")
         .assertIsOn()
-    } catch (_: AssertionFailedError) {
+    } catch (_: AssertionError) {
       composeTestRule.onNodeWithTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$position")
         .performClick()
     }

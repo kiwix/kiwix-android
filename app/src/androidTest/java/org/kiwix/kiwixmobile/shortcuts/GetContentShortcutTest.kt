@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.shortcuts
 
 import android.app.Instrumentation
 import android.content.Intent
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -54,6 +55,9 @@ class GetContentShortcutTest {
   @Rule
   @JvmField
   val retryRule = RetryRule()
+
+  @get:Rule
+  val composeTestRule = createComposeRule()
 
   init {
     AccessibilityChecks.enable().setRunChecksFromRootView(true)
@@ -111,8 +115,10 @@ class GetContentShortcutTest {
       }
       clickDownloadOnBottomNav(OnlineLibraryRobot::assertLibraryListDisplayed)
       clickLibraryOnBottomNav {
-        assertGetZimNearbyDeviceDisplayed()
-        clickFileTransferIcon(LocalFileTransferRobot::assertReceiveFileTitleVisible)
+        assertGetZimNearbyDeviceDisplayed(composeTestRule)
+        clickFileTransferIcon(composeTestRule) {
+          LocalFileTransferRobot::assertReceiveFileTitleVisible
+        }
       }
       clickBookmarksOnNavDrawer {
         assertBookMarksDisplayed()

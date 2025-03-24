@@ -30,7 +30,6 @@ import androidx.test.espresso.web.webdriver.DriverAtoms
 import androidx.test.espresso.web.webdriver.Locator
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
-import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
@@ -108,7 +107,7 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
     try {
       composeTestRule.onNodeWithTag(NO_FILE_TEXT_TESTING_TAG).assertIsDisplayed()
       throw RuntimeException("ZimFile not added in the local library")
-    } catch (_: AssertionFailedError) {
+    } catch (_: AssertionError) {
       // do nothing zim file is added in the local library
     }
   }

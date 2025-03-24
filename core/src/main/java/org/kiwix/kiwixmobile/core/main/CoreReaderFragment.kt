@@ -1253,8 +1253,7 @@ abstract class CoreReaderFragment :
       ignore.printStackTrace()
     }
     if (sharedPreferenceUtil?.showIntro() == true) {
-      val activity = requireActivity() as AppCompatActivity?
-      activity?.setSupportActionBar(null)
+      (requireActivity() as? AppCompatActivity)?.setSupportActionBar(null)
     }
     repositoryActions?.dispose()
     safeDispose()
@@ -1281,7 +1280,7 @@ abstract class CoreReaderFragment :
     // to fix IntroFragmentTest see https://github.com/kiwix/kiwix-android/pull/3217
     try {
       requireActivity().unbindService(serviceConnection)
-    } catch (ignore: IllegalArgumentException) {
+    } catch (_: IllegalArgumentException) {
       // to handle if service is already unbounded
     }
     unRegisterReadAloudService()
@@ -1291,6 +1290,7 @@ abstract class CoreReaderFragment :
     donationDialogHandler = null
   }
 
+  @SuppressLint("ClickableViewAccessibility")
   private fun unBindViewsAndBinding() {
     activityMainRoot = null
     noOpenBookButton = null
@@ -1313,11 +1313,15 @@ abstract class CoreReaderFragment :
     videoView = null
     contentFrame = null
     toolbarContainer = null
+    compatCallback?.finish()
+    compatCallback = null
+    toolbar?.setOnTouchListener(null)
     toolbar = null
     progressBar = null
     drawerLayout = null
     closeAllTabsButton = null
     tableDrawerRightContainer = null
+    fragmentReaderBinding?.root?.removeAllViews()
     fragmentReaderBinding = null
     donationLayout?.removeAllViews()
     donationLayout = null
@@ -2508,7 +2512,7 @@ abstract class CoreReaderFragment :
           repositoryActions?.clearWebViewPageHistory()
         }
         val coreApp = sharedPreferenceUtil?.context as CoreApp
-        val settings = coreApp.getMainActivity().getSharedPreferences(
+        val settings = coreApp.getSharedPreferences(
           SharedPreferenceUtil.PREF_KIWIX_MOBILE,
           0
         )

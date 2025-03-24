@@ -42,7 +42,6 @@ import junit.framework.AssertionFailedError
 import junit.framework.TestCase.assertEquals
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.Matcher
-import org.junit.Assert
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
@@ -100,16 +99,14 @@ class DownloadRobot : BaseRobot() {
   }
 
   fun checkIfZimFileDownloaded(composeTestRule: ComposeContentTestRule) {
-    pauseForBetterTestPerformance()
     try {
       testFlakyView({
-        composeTestRule.runOnIdle {
-          composeTestRule.onNodeWithTag(NO_FILE_TEXT_TESTING_TAG).assertIsDisplayed()
-        }
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithTag(NO_FILE_TEXT_TESTING_TAG).assertIsDisplayed()
       })
       // if the "No files here" text found that means it failed to download the ZIM file.
-      Assert.fail("Couldn't download the zim file. The [No files here] text is visible on screen")
-    } catch (_: AssertionFailedError) {
+      throw RuntimeException("Couldn't download the zim file. The [No files here] text is visible on screen")
+    } catch (_: AssertionError) {
       // check if "No files here" text is not visible on
       // screen that means zim file is downloaded successfully.
     }

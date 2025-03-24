@@ -21,19 +21,17 @@ package org.kiwix.kiwixmobile.nav.destination.library
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.longClick
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.longClick
-import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
-import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.matcher.RootMatchers.isDialog
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
-import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
@@ -42,62 +40,71 @@ import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
 import org.kiwix.kiwixmobile.localFileTransfer.localFileTransfer
 import org.kiwix.kiwixmobile.nav.destination.library.local.BOOK_LIST_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.local.CONTENT_LOADING_PROGRESSBAR_TESTING_TAG
+import org.kiwix.kiwixmobile.nav.destination.library.local.LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.local.NO_FILE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.refresh
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
-import org.kiwix.kiwixmobile.utils.RecyclerViewItemCount
+import org.kiwix.kiwixmobile.ui.BOOK_ITEM_TESTING_TAG
+import java.lang.AssertionError
 
 fun library(func: LibraryRobot.() -> Unit) = LibraryRobot().applyWithViewHierarchyPrinting(func)
 
 class LibraryRobot : BaseRobot() {
   private val zimFileTitle = "Test_Zim"
 
-  fun assertGetZimNearbyDeviceDisplayed() {
-    isVisible(ViewId(R.id.get_zim_nearby_device))
+  fun assertGetZimNearbyDeviceDisplayed(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG).assertIsDisplayed()
+    }
   }
 
-  fun clickFileTransferIcon(func: LocalFileTransferRobot.() -> Unit) {
-    clickOn(ViewId(R.id.get_zim_nearby_device))
+  fun clickFileTransferIcon(
+    composeTestRule: ComposeContentTestRule,
+    func: LocalFileTransferRobot.() -> Unit
+  ) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG).performClick()
+    }
     localFileTransfer(func)
   }
 
   fun assertLibraryListDisplayed(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
-      composeTestRule.runOnIdle {
-        composeTestRule.onNodeWithTag(BOOK_LIST_TESTING_TAG).assertIsDisplayed()
-      }
+      composeTestRule.waitForIdle()
+      composeTestRule.onNodeWithTag(BOOK_LIST_TESTING_TAG).assertIsDisplayed()
     })
   }
 
   private fun assertNoFilesTextDisplayed(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
-      composeTestRule.runOnIdle {
-        composeTestRule.onNodeWithTag(NO_FILE_TEXT_TESTING_TAG).assertIsDisplayed()
-      }
+      composeTestRule.waitForIdle()
+      composeTestRule.onNodeWithTag(NO_FILE_TEXT_TESTING_TAG).assertIsDisplayed()
     })
   }
 
   fun refreshList(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.runOnIdle {
+    try {
+      composeTestRule.waitForIdle()
+      composeTestRule.onNodeWithTag(NO_FILE_TEXT_TESTING_TAG).assertIsDisplayed()
+      composeTestRule.refresh()
+    } catch (_: AssertionError) {
       try {
-        composeTestRule.onNodeWithTag(NO_FILE_TEXT_TESTING_TAG).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(BOOK_LIST_TESTING_TAG).assertIsDisplayed()
         composeTestRule.refresh()
-      } catch (_: AssertionFailedError) {
-        try {
-          composeTestRule.onNodeWithTag(BOOK_LIST_TESTING_TAG).assertIsDisplayed()
-          composeTestRule.refresh()
-        } catch (_: AssertionFailedError) {
-          Log.i(
-            "LOCAL_LIBRARY",
-            "No need to refresh the data, since there is no files found"
-          )
-        }
+      } catch (_: AssertionError) {
+        Log.i(
+          "LOCAL_LIBRARY",
+          "No need to refresh the data, since there is no files found"
+        )
       }
     }
   }
 
   fun waitUntilZimFilesRefreshing(composeTestRule: ComposeContentTestRule) {
+    pauseForBetterTestPerformance()
     testFlakyView({
       composeTestRule.onNodeWithTag(CONTENT_LOADING_PROGRESSBAR_TESTING_TAG)
         .assertIsNotDisplayed()
@@ -110,19 +117,13 @@ class LibraryRobot : BaseRobot() {
         composeTestRule.onNodeWithTag(NO_FILE_TEXT_TESTING_TAG).assertIsDisplayed()
         // if this view is displaying then we do not need to run the further code.
         return
-      } catch (_: AssertionFailedError) {
+      } catch (_: AssertionError) {
         Log.e("DELETE_ZIM_FILE", "Zim files found in local library so we are deleting them")
       }
-      val recyclerViewId: Int = R.id.zimfilelist
-      val recyclerViewItemsCount = RecyclerViewItemCount(recyclerViewId).checkRecyclerViewCount()
-      // Scroll to the end of the RecyclerView to ensure all items are visible
-      onView(withId(recyclerViewId))
-        .perform(scrollToPosition<ViewHolder>(recyclerViewItemsCount - 1))
-
-      for (position in 0 until recyclerViewItemsCount) {
-        // Long-click the item to select it
-        onView(withId(recyclerViewId))
-          .perform(actionOnItemAtPosition<ViewHolder>(position, longClick()))
+      val zimFileNodes = composeTestRule.onAllNodesWithTag(BOOK_ITEM_TESTING_TAG)
+      val itemCount = zimFileNodes.fetchSemanticsNodes().size
+      repeat(itemCount) { index ->
+        zimFileNodes[index].performTouchInput { longClick() }
       }
       clickOnFileDeleteIcon()
       clickOnDeleteZimFile()

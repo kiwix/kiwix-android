@@ -183,10 +183,12 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
         LaunchedEffect(isBottomNavVisible) {
           (requireActivity() as KiwixMainActivity).toggleBottomNavigation(isBottomNavVisible)
         }
-        updateLibraryScreenState(
-          bottomNavigationHeight = getBottomNavigationHeight(),
-          actionMenuItems = actionMenuItems()
-        )
+        LaunchedEffect(Unit) {
+          updateLibraryScreenState(
+            bottomNavigationHeight = getBottomNavigationHeight(),
+            actionMenuItems = actionMenuItems()
+          )
+        }
         LocalLibraryScreen(
           listState = lazyListState,
           state = libraryScreenState.value,

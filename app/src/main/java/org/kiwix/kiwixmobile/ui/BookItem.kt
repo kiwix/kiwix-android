@@ -58,6 +58,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 
 const val BOOK_ITEM_CHECKBOX_TESTING_TAG = "bookItemCheckboxTestingTag"
+const val BOOK_ITEM_TESTING_TAG = "bookItemTestingTag"
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -86,7 +87,8 @@ fun BookItem(
               onLongClick?.invoke(bookOnDisk)
             }
           }
-        ),
+        )
+        .testTag(BOOK_ITEM_TESTING_TAG),
       shape = MaterialTheme.shapes.extraSmall,
       elevation = CardDefaults.elevatedCardElevation(),
       colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)

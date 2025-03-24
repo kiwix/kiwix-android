@@ -22,6 +22,7 @@ import android.Manifest
 import android.app.Instrumentation
 import android.content.Context
 import android.os.Build
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -54,6 +55,9 @@ class LocalFileTransferTest {
   @Rule
   @JvmField
   var retryRule = RetryRule()
+
+  @get:Rule
+  val composeTestRule = createComposeRule()
 
   private lateinit var context: Context
   private lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
@@ -133,8 +137,8 @@ class LocalFileTransferTest {
         it.navigate(R.id.libraryFragment)
       }
       library {
-        assertGetZimNearbyDeviceDisplayed()
-        clickFileTransferIcon {
+        assertGetZimNearbyDeviceDisplayed(composeTestRule)
+        clickFileTransferIcon(composeTestRule) {
           assertReceiveFileTitleVisible()
           assertSearchDeviceMenuItemVisible()
           clickOnSearchDeviceMenuItem()
@@ -164,8 +168,8 @@ class LocalFileTransferTest {
       }
     StandardActions.closeDrawer()
     library {
-      assertGetZimNearbyDeviceDisplayed()
-      clickFileTransferIcon {
+      assertGetZimNearbyDeviceDisplayed(composeTestRule)
+      clickFileTransferIcon(composeTestRule) {
         assertClickNearbyDeviceMessageVisible()
         clickOnGotItButton()
         assertDeviceNameMessageVisible()
@@ -175,7 +179,7 @@ class LocalFileTransferTest {
         assertTransferZimFilesListMessageVisible()
         clickOnGotItButton()
         pressBack()
-        assertGetZimNearbyDeviceDisplayed()
+        assertGetZimNearbyDeviceDisplayed(composeTestRule)
       }
     }
     LeakAssertions.assertNoLeaks()
@@ -194,7 +198,9 @@ class LocalFileTransferTest {
     StandardActions.closeDrawer()
     library {
       // test show case view show once.
-      clickFileTransferIcon(LocalFileTransferRobot::assertClickNearbyDeviceMessageNotVisible)
+      clickFileTransferIcon(composeTestRule) {
+        LocalFileTransferRobot::assertClickNearbyDeviceMessageNotVisible
+      }
     }
   }
 
