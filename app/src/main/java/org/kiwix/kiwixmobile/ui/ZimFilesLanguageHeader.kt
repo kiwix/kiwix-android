@@ -25,7 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.LanguageItem
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.LanguageItem
 
 @Composable
 fun ZimFilesLanguageHeader(languageItem: LanguageItem) {

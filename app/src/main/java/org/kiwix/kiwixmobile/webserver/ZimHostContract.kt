@@ -18,7 +18,7 @@
 package org.kiwix.kiwixmobile.webserver
 
 import org.kiwix.kiwixmobile.core.base.BaseContract
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 
 class ZimHostContract {
   interface View : BaseContract.View<Presenter> {

@@ -34,7 +34,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteZims
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
 
 data class DeleteFiles(private val booksOnDiskListItems: List<BookOnDisk>) :

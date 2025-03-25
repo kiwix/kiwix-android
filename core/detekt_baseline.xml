@@ -41,10 +41,7 @@
     <ID>NestedBlockDepth:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$override fun onFling( e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float ): Boolean</ID>
     <ID>NestedBlockDepth:StorageDeviceUtils.kt$StorageDeviceUtils$// Amazingly file.canWrite() does not always return the correct value private fun canWrite(file: File): Boolean</ID>
     <ID>PackageNaming:ArticleCount.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
-    <ID>PackageNaming:BookOnDiskDelegate.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter</ID>
-    <ID>PackageNaming:BooksOnDiskAdapter.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter</ID>
-    <ID>PackageNaming:BooksOnDiskListItem.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter</ID>
-    <ID>PackageNaming:BooksOnDiskViewHolder.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter</ID>
+    <ID>PackageNaming:BooksOnDiskListItem.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
     <ID>PackageNaming:KiloByte.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>PackageNaming:KiwixTag.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>PackageNaming:Language.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>

@@ -55,7 +55,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import org.kiwix.kiwixmobile.core.zim_manager.KiloByte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.ArticleCount
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 
 const val BOOK_ITEM_CHECKBOX_TESTING_TAG = "bookItemCheckboxTestingTag"
 const val BOOK_ITEM_TESTING_TAG = "bookItemTestingTag"

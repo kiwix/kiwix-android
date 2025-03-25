@@ -69,8 +69,8 @@ import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FAB_ICON_BOTTOM_MARGIN
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.ui.BookItem
 import org.kiwix.kiwixmobile.ui.ZimFilesLanguageHeader
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
