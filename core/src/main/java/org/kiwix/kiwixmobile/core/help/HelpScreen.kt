@@ -25,147 +25,66 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
-
-import androidx.navigation.NavController
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.error.DiagnosticReportActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
+import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
+import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray350
+import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray600
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 
-val SendDiagnosticReportFontSize = 18.sp
-
+@Suppress("ComposableLambdaParameterNaming")
 @Composable
 fun HelpScreen(
-  modifier: Modifier = Modifier,
   data: List<HelpScreenItemDataClass>,
-  navController: NavController
+  navigationIcon: @Composable () -> Unit
 ) {
-  val isDarkTheme = isSystemInDarkTheme()
-  val backgroundColor =
-    if (isDarkTheme) colorResource(id = R.color.mine_shaft_gray900) else Color.White
   val dividerColor =
-    if (isDarkTheme) colorResource(id = R.color.mine_shaft_gray600)
-    else colorResource(id = R.color.mine_shaft_gray350)
-
-  Scaffold(
-    modifier = Modifier.fillMaxSize(),
-    topBar = {
-      Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-      ) {
-        HelpTopAppBar(navController)
+    if (isSystemInDarkTheme()) {
+      MineShaftGray600
+    } else {
+      MineShaftGray350
+    }
+  KiwixTheme {
+    Scaffold(
+      topBar = {
+        KiwixAppBar(R.string.menu_help, navigationIcon)
       }
-    },
-    containerColor = backgroundColor
-  ) { innerPadding ->
-    HelpContent(data, dividerColor, innerPadding)
-  }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun HelpTopAppBar(navController: NavController) {
-  // Retrieve the actionBarSize from the current theme
-  val context = LocalContext.current
-  val actionBarHeight = with(LocalDensity.current) {
-    // Obtain the height defined in the theme (usually 56dp on phones)
-    val styledAttributes =
-      context.theme.obtainStyledAttributes(intArrayOf(android.R.attr.actionBarSize))
-    styledAttributes.getDimension(0, 0f).toDp().also { styledAttributes.recycle() }
-  }
-
-  TopAppBar(
-    modifier = Modifier.height(actionBarHeight), // set the height here
-    title = {
-      Row(
-        modifier = Modifier.fillMaxSize(),
-        verticalAlignment = Alignment.CenterVertically
-      ) {
-        Text(
-          modifier = Modifier.padding(
-            start = dimensionResource(R.dimen.activity_horizontal_margin)
-          ),
-          text = stringResource(id = R.string.menu_help),
-          color = Color.White,
-          fontWeight = FontWeight.SemiBold
-        )
+    ) { innerPadding ->
+      Column(modifier = Modifier.padding(innerPadding)) {
+        SendReportRow()
+        HorizontalDivider(color = dividerColor)
+        HelpItemList(data, dividerColor)
       }
-    },
-    navigationIcon = {
-      Row(modifier = Modifier.fillMaxHeight(), verticalAlignment = Alignment.CenterVertically) {
-        IconButton(onClick = navController::popBackStack) {
-          Icon(
-            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-            contentDescription = "Back_Navigation",
-            tint = Color.White
-          )
-        }
-      }
-
-    },
-    colors = TopAppBarDefaults.topAppBarColors(
-      containerColor = Color.Black
-    )
-  )
-}
-
-@Composable
-fun HelpContent(
-  data: List<HelpScreenItemDataClass>,
-  dividerColor: Color,
-  innerPadding: androidx.compose.foundation.layout.PaddingValues
-) {
-  Column(
-    modifier = Modifier
-      .padding(innerPadding)
-  ) {
-    SendReportRow()
-    HelpItemList(data, dividerColor)
+    }
   }
 }
 
 @Composable
 fun SendReportRow() {
   val context = LocalContext.current
-  val isDarkTheme = isSystemInDarkTheme()
+  // val isDarkTheme = isSystemInDarkTheme()
 
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .clickable {
-        (context as? Activity)?.start<DiagnosticReportActivity>()
-      },
+      .clickable { (context as? Activity)?.start<DiagnosticReportActivity>() },
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.Start
   ) {
@@ -173,13 +92,13 @@ fun SendReportRow() {
       painter = painterResource(R.drawable.ic_feedback_orange_24dp),
       contentDescription = stringResource(R.string.send_report),
       modifier = Modifier
-        .padding(dimensionResource(R.dimen.activity_horizontal_margin))
+        .padding(SIXTEEN_DP)
     )
 
     Text(
       text = stringResource(R.string.send_report),
-      color = if (isDarkTheme) Color.LightGray else Color.DarkGray,
-      fontSize = SendDiagnosticReportFontSize
+      // color = if (isDarkTheme) Color.LightGray else Color.DarkGray,
+      style = MaterialTheme.typography.titleMedium
     )
   }
 }
@@ -191,15 +110,8 @@ fun HelpItemList(data: List<HelpScreenItemDataClass>, dividerColor: Color) {
       .fillMaxWidth()
   ) {
     itemsIndexed(data, key = { _, item -> item.title }) { _, item ->
-      HorizontalDivider(
-        color = dividerColor
-      )
       HelpScreenItem(data = item)
-    }
-    item {
-      HorizontalDivider(
-        color = dividerColor
-      )
+      HorizontalDivider(color = dividerColor)
     }
   }
 }

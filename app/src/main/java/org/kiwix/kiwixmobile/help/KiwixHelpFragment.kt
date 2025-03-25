@@ -22,9 +22,6 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.help.HelpFragment
 
 class KiwixHelpFragment : HelpFragment() {
-  override val navHostFragmentId: Int
-    get() = org.kiwix.kiwixmobile.R.id.nav_host_fragment
-
   override fun rawTitleDescriptionMap() =
     if (sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
       listOf(

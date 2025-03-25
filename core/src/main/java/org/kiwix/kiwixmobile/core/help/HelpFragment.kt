@@ -22,14 +22,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toolbar
-import androidx.appcompat.widget.Toolbar
 import androidx.compose.ui.platform.ComposeView
-import androidx.navigation.Navigation
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
@@ -38,54 +35,30 @@ abstract class HelpFragment : BaseFragment() {
   @Inject
   lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
-  protected abstract val navHostFragmentId: Int
-
-  // Instead of keeping the XML binding, we now directly return a ComposeView.
-  protected open fun createFragmentView(
-    inflater: LayoutInflater,
-    container: ViewGroup?
-  ): View {
-    return ComposeView(requireContext()).apply {
-      setContent {
-        // Create the helpScreen data using your rawTitleDescriptionMap.
-        val helpScreenData = transformToHelpScreenData(
-          requireContext(),
-          rawTitleDescriptionMap()
-        )
-        // Retrieve the NavController if your composable needs it.
-        val navController = Navigation.findNavController(requireActivity(), navHostFragmentId)
-        // Call your HelpScreen composable.
-        HelpScreen(data = helpScreenData, navController = navController)
-      }
-    }
-  }
-
   // Each subclass is responsible for providing its own raw data.
   protected open fun rawTitleDescriptionMap(): List<Pair<Int, Any>> = emptyList()
 
-  // The following properties are now optional – if no longer use an XML toolbar or title,
-  // we can remove or update these accordingly.
-  override val fragmentToolbar: Toolbar? by lazy {
-    // Already Applied ad TopAppBAr in scaffold in composable
-    null
-  }
-  override val fragmentTitle: String? by lazy { getString(R.string.menu_help) }
-
   override fun inject(baseActivity: BaseActivity) {
     (baseActivity as CoreMainActivity).cachedComponent.inject(this)
-  }
-
-  // Remove or adjust onViewCreated if you no longer need to manipulate XML-based views.
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-    // Any additional logic that is independent of the XML layout can be kept here.
   }
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? = createFragmentView(inflater, container)
+  ): View? = ComposeView(requireContext()).apply {
+    setContent {
+      // Create the helpScreen data using your rawTitleDescriptionMap.
+      val helpScreenData = transformToHelpScreenData(
+        requireContext(),
+        rawTitleDescriptionMap()
+      )
+      // Call your HelpScreen composable.
+      HelpScreen(data = helpScreenData) {
+        NavigationIcon(onClick = { activity?.onBackPressedDispatcher?.onBackPressed() })
+      }
+    }
+  }
 }
 
 // Util function to modify the data accordingly

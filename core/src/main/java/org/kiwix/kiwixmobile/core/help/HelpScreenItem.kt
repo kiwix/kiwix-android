@@ -60,9 +60,9 @@ import org.kiwix.kiwixmobile.core.R
 private val HelpItemTitleFontSize = 22.sp
 private val HelpItemDescriptionFontSize = 17.sp
 private val IconSize = 36.dp
-private const val HelpItemAnimationDuration = 300
-private const val HelpItemArrowRotationOpen = 180f
-private const val HelpItemArrowRotationClosed = 0f
+private const val HELP_ITEM_ANIMATION_DURATION = 300
+private const val HELP_ITEM_ARROW_ROTATION_OPEN = 180f
+private const val HELP_ITEM_ARROW_ROTATION_CLOSE = 0f
 
 @Composable
 fun HelpScreenItem(
@@ -99,8 +99,8 @@ fun HelpItemHeader(
   onToggle: () -> Unit
 ) {
   val arrowRotation by animateFloatAsState(
-    targetValue = if (isOpen) HelpItemArrowRotationOpen else HelpItemArrowRotationClosed,
-    animationSpec = tween(HelpItemAnimationDuration),
+    targetValue = if (isOpen) HELP_ITEM_ARROW_ROTATION_OPEN else HELP_ITEM_ARROW_ROTATION_CLOSE,
+    animationSpec = tween(HELP_ITEM_ANIMATION_DURATION),
     label = "arrowRotation"
   )
   val interactionSource = remember(::MutableInteractionSource)

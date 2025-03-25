@@ -20,7 +20,6 @@ package plugin
 
 import Config
 import Libs
-import Versions
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.gradle.BaseExtension
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
