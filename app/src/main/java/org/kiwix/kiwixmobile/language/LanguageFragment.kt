@@ -91,7 +91,7 @@ class LanguageFragment : BaseFragment() {
             searchText = it
             languageViewModel.actions.offer(Action.Filter(it))
           },
-          content = {
+          navigationIcon = {
             NavigationIcon(
               iconItem = if (isSearchActive) {
                 IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack)
