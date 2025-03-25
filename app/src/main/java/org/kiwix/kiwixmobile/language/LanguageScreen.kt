@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.language
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -46,6 +47,7 @@ import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
 import org.kiwix.kiwixmobile.language.viewmodel.State
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 
+@SuppressLint("ComposableLambdaParameterNaming")
 @Composable
 fun LanguageScreen(
   searchText: String,
@@ -54,7 +56,7 @@ fun LanguageScreen(
   actionMenuItemList: List<ActionMenuItem>,
   onClearClick: () -> Unit,
   onAppBarValueChange: (String) -> Unit,
-  content: @Composable() () -> Unit,
+  navigationIcon: @Composable() () -> Unit = {}
 ) {
   val state by languageViewModel.state.observeAsState(State.Loading)
   val listState: LazyListState = rememberLazyListState()
@@ -63,7 +65,7 @@ fun LanguageScreen(
   Scaffold(topBar = {
     KiwixAppBar(
       titleId = R.string.select_languages,
-      navigationIcon = content,
+      navigationIcon = navigationIcon,
       actionMenuItems = actionMenuItemList,
       searchBar = if (isSearchActive) {
         { modifier ->

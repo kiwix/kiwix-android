@@ -56,6 +56,7 @@ object ComposeDimens {
   // Font Sizes
   val TWENTY_FOUR_SP = 24.sp
   val FOURTEEN_SP = 14.sp
+  val EIGHTEEN_SP = 18.sp
 
   // Default letter spacing in text according to theme
   val DEFAULT_LETTER_SPACING = 0.0333.em

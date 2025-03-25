@@ -18,9 +18,9 @@
 
 package org.kiwix.kiwixmobile.core.ui.components
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -31,9 +31,11 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KiwixSearchView(
   modifier: Modifier,
@@ -59,7 +61,17 @@ fun KiwixSearchView(
       .focusRequester(focusRequester),
     singleLine = true,
     value = value,
+    placeholder = {
+      Text(
+        text = stringResource(R.string.search_label),
+        color = Color.LightGray,
+        fontSize = ComposeDimens.EIGHTEEN_SP
+      )
+    },
     colors = colors,
+    textStyle = TextStyle.Default.copy(
+      fontSize = ComposeDimens.EIGHTEEN_SP
+    ),
     onValueChange = {
       onValueChange(it.replace("\n", ""))
     },
