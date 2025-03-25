@@ -51,6 +51,7 @@ import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -67,9 +68,9 @@ class SearchFragmentTest : BaseActivityTest() {
   private val rayCharlesZimFileUrl =
     "https://dev.kiwix.org/kiwix-android/test/wikipedia_en_ray_charles_maxi_2023-12.zim"
 
-  @Rule
+  @Rule(order = RETRY_RULE_ORDER)
   @JvmField
-  var retryRule = RetryRule()
+  val retryRule = RetryRule()
 
   private lateinit var kiwixMainActivity: KiwixMainActivity
   private lateinit var uiDevice: UiDevice

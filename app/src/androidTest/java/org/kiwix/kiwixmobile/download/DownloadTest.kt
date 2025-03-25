@@ -28,7 +28,6 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.accessibility.AccessibilityChecks
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -40,11 +39,12 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.topLevel
 import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryFragment
@@ -58,13 +58,12 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import java.util.concurrent.TimeUnit
 
 @LargeTest
-@RunWith(AndroidJUnit4::class)
 class DownloadTest : BaseActivityTest() {
-  @Rule
+  @Rule(order = RETRY_RULE_ORDER)
   @JvmField
-  var retryRule = RetryRule()
+  val retryRule = RetryRule()
 
-  @get:Rule
+  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
   val composeTestRule = createComposeRule()
 
   private lateinit var kiwixMainActivity: KiwixMainActivity
