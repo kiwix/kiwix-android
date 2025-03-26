@@ -533,6 +533,7 @@ class LocalFileTransferFragment :
   override fun onDestroyView() {
     wifiDirectManager.stopWifiDirectManager()
     wifiDirectManager.callbacks = null
+    fragmentLocalFileTransferBinding?.root?.removeAllViews()
     fragmentLocalFileTransferBinding = null
     searchIconView = null
     materialShowCaseSequence = null

@@ -18,19 +18,15 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library
 
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
-import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import leakcanary.LeakAssertions
-import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -39,6 +35,8 @@ import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
@@ -49,19 +47,16 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 
 class LocalLibraryTest : BaseActivityTest() {
-  @Rule
+  @Rule(order = RETRY_RULE_ORDER)
   @JvmField
-  var retryRule = RetryRule()
+  val retryRule = RetryRule()
+
+  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  val composeTestRule = createComposeRule()
 
   init {
     AccessibilityChecks.enable().apply {
       setRunChecksFromRootView(true)
-      setSuppressingResultMatcher(
-        allOf(
-          matchesCheck(DuplicateClickableBoundsCheck::class.java),
-          matchesViews(ViewMatchers.withId(R.id.get_zim_nearby_device))
-        )
-      )
     }
   }
 
@@ -112,9 +107,9 @@ class LocalLibraryTest : BaseActivityTest() {
       it.navigate(R.id.libraryFragment)
     }
     library {
-      refreshList()
-      waitUntilZimFilesRefreshing()
-      deleteZimIfExists()
+      refreshList(composeTestRule)
+      waitUntilZimFilesRefreshing(composeTestRule)
+      deleteZimIfExists(composeTestRule)
     }
     // load a zim file to test, After downloading zim file library list is visible or not
     val loadFileStream =
@@ -137,8 +132,9 @@ class LocalLibraryTest : BaseActivityTest() {
       }
     }
     library {
-      refreshList()
-      assertLibraryListDisplayed()
+      refreshList(composeTestRule)
+      waitUntilZimFilesRefreshing(composeTestRule)
+      assertLibraryListDisplayed(composeTestRule)
     }
     LeakAssertions.assertNoLeaks()
   }

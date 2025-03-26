@@ -26,15 +26,14 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
@@ -43,23 +42,27 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.fail
-import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.nav.destination.library.local.SELECT_FILE_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 
-@RunWith(AndroidJUnit4::class)
 class OpeningFilesFromStorageTest : BaseActivityTest() {
-  @Rule
+  @Rule(order = RETRY_RULE_ORDER)
   @JvmField
-  var retryRule = RetryRule()
+  val retryRule = RetryRule()
+
+  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  val composeTestRule = createComposeRule()
 
   private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private lateinit var kiwixMainActivity: KiwixMainActivity
@@ -112,8 +115,8 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       try {
         sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
         // open file picker to select a file to test the real scenario.
-        Espresso.onView(withId(R.id.select_file)).perform(ViewActions.click())
-        uiDevice.findObject(By.textContains(fileName)).click()
+        composeTestRule.onNodeWithTag(SELECT_FILE_BUTTON_TESTING_TAG).performClick()
+        TestUtils.testFlakyView(uiDevice.findObject(By.textContains(fileName))::click, 10)
 
         copyMoveFileHandler {
           assertCopyMoveDialogDisplayed()

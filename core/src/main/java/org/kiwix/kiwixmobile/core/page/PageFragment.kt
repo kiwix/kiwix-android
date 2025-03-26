@@ -189,7 +189,10 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   override fun onDestroyView() {
     super.onDestroyView()
     compositeDisposable.clear()
-    fragmentPageBinding?.recyclerView?.adapter = null
+    fragmentPageBinding?.apply {
+      recyclerView.adapter = null
+      root.removeAllViews()
+    }
     fragmentPageBinding = null
   }
 

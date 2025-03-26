@@ -36,6 +36,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
@@ -45,9 +46,9 @@ import org.kiwix.kiwixmobile.utils.StandardActions
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class LanguageFragmentTest {
-  @Rule
+  @Rule(order = RETRY_RULE_ORDER)
   @JvmField
-  var retryRule = RetryRule()
+  val retryRule = RetryRule()
 
   private val permissions =
     arrayOf(

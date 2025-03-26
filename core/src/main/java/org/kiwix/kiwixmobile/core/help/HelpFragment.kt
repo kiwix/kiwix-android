@@ -95,6 +95,7 @@ abstract class HelpFragment : BaseFragment() {
 
   override fun onDestroyView() {
     super.onDestroyView()
+    fragmentHelpBinding?.root?.removeAllViews()
     fragmentHelpBinding = null
   }
 }

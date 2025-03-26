@@ -71,8 +71,8 @@ import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULTI
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.MultiModeFinished
@@ -181,7 +181,7 @@ class ZimManageViewModel @Inject constructor(
               .body(
                 ProgressResponseBody(
                   responseBody,
-                  AppProgressListenerProvider(this),
+                  appProgressListener,
                   contentLength
                 )
               )
@@ -194,6 +194,8 @@ class ZimManageViewModel @Inject constructor(
         kiwixService = it
       }
   }
+
+  private var appProgressListener: AppProgressListenerProvider? = AppProgressListenerProvider(this)
 
   private fun getContentLengthOfLibraryXmlFile(): Long {
     val headRequest =
@@ -218,7 +220,7 @@ class ZimManageViewModel @Inject constructor(
             ?: DEFAULT_INT_VALUE.toLong()
         }
       }
-    } catch (ignore: Exception) {
+    } catch (_: Exception) {
       // do nothing
     }
     return DEFAULT_INT_VALUE.toLong()
@@ -237,6 +239,7 @@ class ZimManageViewModel @Inject constructor(
     fileSelectActions.onComplete()
     requestDownloadLibrary.onComplete()
     compositeDisposable = null
+    appProgressListener = null
     super.onCleared()
   }
 

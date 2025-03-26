@@ -326,11 +326,15 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
     handleDrawerOnNavigation()
   }
 
-  private fun navigationDrawerIsOpen(): Boolean =
+  fun navigationDrawerIsOpen(): Boolean =
     drawerContainerLayout.isDrawerOpen(drawerNavView)
 
   fun closeNavigationDrawer() {
     drawerContainerLayout.closeDrawer(drawerNavView)
+  }
+
+  fun openNavigationDrawer() {
+    drawerContainerLayout.openDrawer(drawerNavView)
   }
 
   fun openSupportKiwixExternalLink() {

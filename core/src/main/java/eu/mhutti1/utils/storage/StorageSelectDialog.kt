@@ -133,6 +133,7 @@ class StorageSelectDialog : DialogFragment() {
 
   override fun onDestroyView() {
     super.onDestroyView()
+    storageSelectDialogViewBinding?.root?.removeAllViews()
     storageSelectDialogViewBinding = null
   }
 }

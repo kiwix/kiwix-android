@@ -30,6 +30,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue200
 import org.kiwix.kiwixmobile.core.ui.theme.ErrorActivityBackground
 import org.kiwix.kiwixmobile.core.ui.theme.White
@@ -54,7 +55,7 @@ fun CrashCheckBox(checkBoxItem: Pair<Int, MutableState<Boolean>>) {
       )
     )
     Text(
-      style = MaterialTheme.typography.bodyMedium,
+      style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal),
       text = stringResource(id = checkBoxItem.first),
       color = White,
       modifier = Modifier.padding(start = CRASH_CHECKBOX_TOP_PADDING)

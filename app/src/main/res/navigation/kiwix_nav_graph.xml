@@ -65,9 +65,8 @@
 
   <fragment
     android:id="@+id/libraryFragment"
-    android:name="org.kiwix.kiwixmobile.nav.destination.library.LocalLibraryFragment"
-    android:label="Library"
-    tools:layout="@layout/fragment_destination_library">
+    android:name="org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment"
+    android:label="Library">
     <action
       android:id="@+id/action_navigation_library_to_navigation_reader"
       app:destination="@id/readerFragment"
@@ -126,8 +125,7 @@
   <fragment
     android:id="@+id/zimHostFragment"
     android:name="org.kiwix.kiwixmobile.webserver.ZimHostFragment"
-    android:label="ZimHostFragment"
-    tools:layout="@layout/activity_zim_host" />
+    android:label="ZimHostFragment" />
   <fragment
     android:id="@+id/helpFragment"
     android:name="org.kiwix.kiwixmobile.help.KiwixHelpFragment"

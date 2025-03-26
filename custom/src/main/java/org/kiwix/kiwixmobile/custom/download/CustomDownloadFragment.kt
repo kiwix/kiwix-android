@@ -159,6 +159,7 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
 
   override fun onDestroyView() {
     super.onDestroyView()
+    fragmentCustomDownloadBinding?.root?.removeAllViews()
     fragmentCustomDownloadBinding = null
   }
 }

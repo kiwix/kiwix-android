@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2025 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,11 +16,11 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter
+package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view
 
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag
@@ -43,10 +43,10 @@ sealed class BooksOnDiskListItem {
 
   data class BookOnDisk constructor(
     val databaseId: Long = 0L,
-    val book: Book,
+    val book: LibraryNetworkEntity.Book,
     val file: File = File(""),
     val zimReaderSource: ZimReaderSource,
-    val tags: List<KiwixTag> = KiwixTag.from(book.tags),
+    val tags: List<KiwixTag> = KiwixTag.Companion.from(book.tags),
     override val id: Long = databaseId
   ) : BooksOnDiskListItem() {
     val locale: Locale by lazy {

@@ -22,6 +22,7 @@ import android.Manifest
 import android.app.Instrumentation
 import android.content.Context
 import android.os.Build
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -44,6 +45,8 @@ import org.junit.Test
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -51,9 +54,12 @@ import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.utils.StandardActions
 
 class LocalFileTransferTest {
-  @Rule
+  @Rule(order = RETRY_RULE_ORDER)
   @JvmField
-  var retryRule = RetryRule()
+  val retryRule = RetryRule()
+
+  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  val composeTestRule = createComposeRule()
 
   private lateinit var context: Context
   private lateinit var activityScenario: ActivityScenario<KiwixMainActivity>
@@ -133,8 +139,8 @@ class LocalFileTransferTest {
         it.navigate(R.id.libraryFragment)
       }
       library {
-        assertGetZimNearbyDeviceDisplayed()
-        clickFileTransferIcon {
+        assertGetZimNearbyDeviceDisplayed(composeTestRule)
+        clickFileTransferIcon(composeTestRule) {
           assertReceiveFileTitleVisible()
           assertSearchDeviceMenuItemVisible()
           clickOnSearchDeviceMenuItem()
@@ -164,8 +170,8 @@ class LocalFileTransferTest {
       }
     StandardActions.closeDrawer()
     library {
-      assertGetZimNearbyDeviceDisplayed()
-      clickFileTransferIcon {
+      assertGetZimNearbyDeviceDisplayed(composeTestRule)
+      clickFileTransferIcon(composeTestRule) {
         assertClickNearbyDeviceMessageVisible()
         clickOnGotItButton()
         assertDeviceNameMessageVisible()
@@ -175,7 +181,7 @@ class LocalFileTransferTest {
         assertTransferZimFilesListMessageVisible()
         clickOnGotItButton()
         pressBack()
-        assertGetZimNearbyDeviceDisplayed()
+        assertGetZimNearbyDeviceDisplayed(composeTestRule)
       }
     }
     LeakAssertions.assertNoLeaks()
@@ -194,7 +200,9 @@ class LocalFileTransferTest {
     StandardActions.closeDrawer()
     library {
       // test show case view show once.
-      clickFileTransferIcon(LocalFileTransferRobot::assertClickNearbyDeviceMessageNotVisible)
+      clickFileTransferIcon(composeTestRule) {
+        LocalFileTransferRobot::assertClickNearbyDeviceMessageNotVisible
+      }
     }
   }
 

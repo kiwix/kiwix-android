@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.shortcuts
 
 import android.app.Instrumentation
 import android.content.Intent
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -35,6 +36,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.help.HelpRobot
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
 import org.kiwix.kiwixmobile.main.ACTION_GET_CONTENT
@@ -51,9 +54,12 @@ import org.kiwix.kiwixmobile.webserver.ZimHostRobot
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class GetContentShortcutTest {
-  @Rule
+  @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
+
+  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  val composeTestRule = createComposeRule()
 
   init {
     AccessibilityChecks.enable().setRunChecksFromRootView(true)
@@ -111,8 +117,10 @@ class GetContentShortcutTest {
       }
       clickDownloadOnBottomNav(OnlineLibraryRobot::assertLibraryListDisplayed)
       clickLibraryOnBottomNav {
-        assertGetZimNearbyDeviceDisplayed()
-        clickFileTransferIcon(LocalFileTransferRobot::assertReceiveFileTitleVisible)
+        assertGetZimNearbyDeviceDisplayed(composeTestRule)
+        clickFileTransferIcon(composeTestRule) {
+          LocalFileTransferRobot::assertReceiveFileTitleVisible
+        }
       }
       clickBookmarksOnNavDrawer {
         assertBookMarksDisplayed()

@@ -31,18 +31,20 @@ import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
-import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.widget.Toolbar
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import org.kiwix.kiwixmobile.R.layout
+import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
@@ -55,6 +57,10 @@ import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.qr.GenerateQR
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.ui.theme.StartServerGreen
+import org.kiwix.kiwixmobile.core.ui.theme.StopServerRed
 import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -63,11 +69,8 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.StartServer
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.kiwixmobile.databinding.ActivityZimHostBinding
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.Companion.ACTION_CHECK_IP_ADDRESS
@@ -97,23 +100,27 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   @Inject
   lateinit var generateQr: GenerateQR
 
-  private lateinit var booksAdapter: BooksOnDiskAdapter
-  private lateinit var bookDelegate: BookOnDiskDelegate.BookDelegate
   private var hotspotService: HotspotService? = null
   private var ip: String? = null
   private lateinit var serviceConnection: ServiceConnection
   private var dialog: Dialog? = null
-  private var activityZimHostBinding: ActivityZimHostBinding? = null
   private var isHotspotServiceRunning = false
-  override val fragmentTitle: String? by lazy {
-    getString(R.string.menu_wifi_hotspot)
-  }
-  override val fragmentToolbar: Toolbar? by lazy {
-    activityZimHostBinding?.root?.findViewById(R.id.toolbar)
-  }
+  private var serverIpText = mutableStateOf("")
+  private var shareIconItem = mutableStateOf(false to {})
+  private var qrImageItem: MutableState<Pair<Boolean, IconItem>> =
+    mutableStateOf(false to IconItem.Drawable(drawable.ic_storage))
+  private var startServerButtonItem =
+    mutableStateOf(
+      Triple(
+        "",
+        StartServerGreen
+      ) { startServerButtonClick() }
+    )
+  private var booksList: MutableState<List<BooksOnDiskListItem>> = mutableStateOf(arrayListOf())
+
   private val selectedBooksPath: ArrayList<String>
     get() {
-      return booksAdapter.items
+      return booksList.value
         .filter(BooksOnDiskListItem::isSelected)
         .filterIsInstance<BookOnDisk>()
         .map {
@@ -130,7 +137,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       ActivityResultContracts.RequestPermission()
     ) { isGranted ->
       if (isGranted) {
-        activityZimHostBinding?.startServerButton?.performClick()
+        startServerButtonClick()
       } else {
         if (!ActivityCompat.shouldShowRequestPermissionRationale(
             requireActivity(),
@@ -154,7 +161,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
           Map.Entry<String, @kotlin.jvm.JvmSuppressWildcards Boolean>::value
         )
       if (isGranted) {
-        activityZimHostBinding?.startServerButton?.performClick()
+        startServerButtonClick()
       } else {
         if (!ActivityCompat.shouldShowRequestPermissionRationale(
             requireActivity(),
@@ -173,9 +180,22 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
-    activityZimHostBinding = ActivityZimHostBinding.inflate(inflater, container, false)
-    return activityZimHostBinding?.root
+  ): View? = ComposeView(requireContext()).apply {
+    setContent {
+      ZimHostScreen(
+        serverIpText = serverIpText.value,
+        shareIconItem = shareIconItem.value,
+        qrImageItem = qrImageItem.value,
+        startServerButtonItem = startServerButtonItem.value,
+        selectionMode = SelectionMode.MULTI,
+        onMultiSelect = { select(it) },
+        booksList = booksList.value
+      ) {
+        NavigationIcon(
+          onClick = { activity?.onBackPressedDispatcher?.onBackPressed() }
+        )
+      }
+    }
   }
 
   override fun inject(baseActivity: BaseActivity) {
@@ -184,17 +204,6 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-
-    bookDelegate =
-      BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil, multiSelectAction = ::select)
-    bookDelegate.selectionMode = SelectionMode.MULTI
-    booksAdapter =
-      BooksOnDiskAdapter(
-        bookDelegate,
-        BookOnDiskDelegate.LanguageDelegate
-      )
-
-    activityZimHostBinding?.recyclerViewZimHost?.adapter = booksAdapter
     presenter.attachView(this)
 
     serviceConnection =
@@ -208,18 +217,18 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
           hotspotService?.registerCallBack(this@ZimHostFragment)
         }
       }
+  }
 
-    activityZimHostBinding?.startServerButton?.setOnClickListener {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-      ) {
-        if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
-          handleStoragePermissionAndServer()
-        } else {
-          notificationPermissionListener.launch(POST_NOTIFICATIONS)
-        }
-      } else {
+  private fun startServerButtonClick() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+    ) {
+      if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
         handleStoragePermissionAndServer()
+      } else {
+        notificationPermissionListener.launch(POST_NOTIFICATIONS)
       }
+    } else {
+      handleStoragePermissionAndServer()
     }
   }
 
@@ -263,7 +272,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private fun startStopServer() {
     when {
       ServerUtils.isServerStarted -> stopServer()
-      selectedBooksPath.size > 0 -> {
+      selectedBooksPath.isNotEmpty() -> {
         when {
           connectivityReporter.checkWifi() -> startWifiDialog()
           connectivityReporter.checkTethering() -> startKiwixHotspot()
@@ -294,15 +303,19 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     }
   }
 
-  private fun select(bookOnDisk: BooksOnDiskListItem.BookOnDisk) {
-    val booksList: List<BooksOnDiskListItem> = booksAdapter.items.onEach {
+  private fun select(bookOnDisk: BookOnDisk) {
+    val tempBooksList: List<BooksOnDiskListItem> = booksList.value.onEach {
       if (it == bookOnDisk) {
         it.isSelected = !it.isSelected
       }
       it
     }
-    booksAdapter.items = booksList
-    saveHostedBooks(booksList)
+    // Force recomposition by first setting an empty list before assigning the updated list.
+    // This is necessary because modifying an object's property doesn't trigger recomposition,
+    // as Compose still considers the list unchanged.
+    booksList.value = emptyList()
+    booksList.value = tempBooksList
+    saveHostedBooks(tempBooksList)
     if (ServerUtils.isServerStarted) {
       startWifiHotspot(true)
     }
@@ -351,68 +364,49 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
       booksList.asSequence()
         .filter(BooksOnDiskListItem::isSelected)
         .filterIsInstance<BookOnDisk>()
-        .mapNotNull { it.book.title }
+        .map { it.book.title }
         .toSet()
   }
 
   private fun layoutServerStarted() {
-    activityZimHostBinding?.serverTextView?.apply {
-      text = getString(R.string.server_started_message, ip)
-      movementMethod = LinkMovementMethod.getInstance()
-    }
-    configureUrlSharingIcon()
-    configureQrIcon()
-    activityZimHostBinding?.startServerButton?.text = getString(R.string.stop_server_label)
-    activityZimHostBinding?.startServerButton?.setBackgroundColor(
-      ContextCompat.getColor(requireActivity(), R.color.stopServerRed)
-    )
-    bookDelegate.selectionMode = SelectionMode.MULTI
-    booksAdapter.notifyDataSetChanged()
+    serverIpText.value = getString(R.string.server_started_message, ip)
+    configureUrlSharingIcon(true)
+    configureQrIcon(true)
+    startServerButtonItem.value =
+      Triple(getString(R.string.stop_server_label), StopServerRed) { startServerButtonClick() }
   }
 
-  private fun configureUrlSharingIcon() {
-    activityZimHostBinding?.shareServerUrlIcon?.apply {
-      visibility = View.VISIBLE
-      setOnClickListener {
-        val urlSharingIntent = Intent(Intent.ACTION_SEND)
-        urlSharingIntent.apply {
-          type = "text/plain"
-          putExtra(Intent.EXTRA_TEXT, ip)
-        }
-        startActivity(urlSharingIntent)
+  private fun configureUrlSharingIcon(shouldShow: Boolean) {
+    shareIconItem.value = shouldShow to {
+      val urlSharingIntent = Intent(Intent.ACTION_SEND)
+      urlSharingIntent.apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, ip)
       }
+      startActivity(urlSharingIntent)
     }
   }
 
-  private fun configureQrIcon() {
-    activityZimHostBinding?.serverQrCode?.apply {
-      ip?.let {
-        val qr = generateQr.createQR(it)
-        setImageBitmap(qr)
-        visibility = View.VISIBLE
-      }
-    }
+  private fun configureQrIcon(shouldShow: Boolean) {
+    val qrImage = ip?.let {
+      val qr = generateQr.createQR(it)
+      IconItem.ImageBitmap(qr.asImageBitmap())
+    } ?: IconItem.Drawable(drawable.ic_storage)
+    qrImageItem.value = shouldShow to qrImage
   }
 
   private fun layoutServerStopped() {
-    activityZimHostBinding?.serverTextView?.text =
-      getString(R.string.server_textview_default_message)
-    activityZimHostBinding?.shareServerUrlIcon?.visibility = View.GONE
-    activityZimHostBinding?.serverQrCode?.visibility = View.GONE
-    activityZimHostBinding?.startServerButton?.text = getString(R.string.start_server_label)
-    activityZimHostBinding?.startServerButton?.setBackgroundColor(
-      ContextCompat.getColor(requireActivity(), R.color.startServerGreen)
-    )
-    bookDelegate.selectionMode = SelectionMode.MULTI
-    booksAdapter.notifyDataSetChanged()
+    serverIpText.value = getString(R.string.server_textview_default_message)
+    configureUrlSharingIcon(false)
+    configureQrIcon(false)
+    startServerButtonItem.value =
+      Triple(getString(R.string.start_server_label), StartServerGreen) { startServerButtonClick() }
   }
 
   override fun onDestroyView() {
     super.onDestroyView()
-    activityZimHostBinding?.recyclerViewZimHost?.adapter = null
     unRegisterHotspotService()
     presenter.detachView()
-    activityZimHostBinding = null
   }
 
   private fun unRegisterHotspotService() {
@@ -477,7 +471,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   override fun addBooks(books: List<BooksOnDiskListItem>) {
     // Check if this is the app module, as custom apps may have multiple package names
     if (!requireActivity().isCustomApp()) {
-      booksAdapter.items = books
+      booksList.value = books
     } else {
       val updatedBooksList: MutableList<BooksOnDiskListItem> = arrayListOf()
       books.forEach {
@@ -494,7 +488,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
           updatedBooksList.add(it)
         }
       }
-      booksAdapter.items = updatedBooksList
+      booksList.value = updatedBooksList
     }
   }
 

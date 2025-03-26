@@ -18,30 +18,31 @@
 
 package org.kiwix.kiwixmobile.webserver
 
+import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
+import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.assertThat
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
-import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import junit.framework.AssertionFailedError
-import org.hamcrest.CoreMatchers
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
-import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.R.id
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.refresh
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
-import org.kiwix.kiwixmobile.utils.RecyclerViewItemCount
-import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
-import org.kiwix.kiwixmobile.utils.RecyclerViewSelectedCheckBoxCountAssertion
+import org.kiwix.kiwixmobile.ui.BOOK_ITEM_CHECKBOX_TESTING_TAG
+import org.kiwix.kiwixmobile.ui.BOOK_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 
 fun zimHost(func: ZimHostRobot.() -> Unit) = ZimHostRobot().applyWithViewHierarchyPrinting(func)
@@ -51,14 +52,17 @@ class ZimHostRobot : BaseRobot() {
     isVisible(TextId(R.string.menu_wifi_hotspot))
   }
 
-  fun refreshLibraryList() {
-    pauseForBetterTestPerformance()
-    refresh(org.kiwix.kiwixmobile.R.id.zim_swiperefresh)
+  fun refreshLibraryList(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      refresh()
+    }
   }
 
-  fun assertZimFilesLoaded() {
+  fun assertZimFilesLoaded(composeTestRule: ComposeContentTestRule) {
     pauseForBetterTestPerformance()
-    isVisible(Text("Test_Zim"))
+    val zimFileNodes = composeTestRule.onAllNodesWithTag(BOOK_ITEM_TESTING_TAG)
+    zimFileNodes.assertCountEquals(2)
   }
 
   fun openZimHostFragment() {
@@ -66,15 +70,20 @@ class ZimHostRobot : BaseRobot() {
     clickOn(TextId(R.string.menu_wifi_hotspot))
   }
 
-  fun clickOnTestZim() {
-    pauseForBetterTestPerformance()
-    clickOn(Text("Test_Zim"))
+  fun clickOnTestZim(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}2").performClick()
+      }
+    })
   }
 
-  fun startServer() {
+  fun startServer(composeTestRule: ComposeContentTestRule) {
     // stop the server if it is already running.
-    stopServerIfAlreadyStarted()
-    clickOn(ViewId(id.startServerButton))
+    stopServerIfAlreadyStarted(composeTestRule)
+    composeTestRule.onNodeWithTag(START_SERVER_BUTTON_TESTING_TAG)
+      .performClick()
     assetWifiDialogDisplayed()
     testFlakyView({ onView(withText("PROCEED")).perform(click()) })
   }
@@ -83,24 +92,30 @@ class ZimHostRobot : BaseRobot() {
     testFlakyView({ isVisible(Text("WiFi connection detected")) })
   }
 
-  fun assertServerStarted() {
+  fun assertServerStarted(composeTestRule: ComposeContentTestRule) {
     pauseForBetterTestPerformance()
     // starting server takes a bit so sometimes it fails to find this view.
     // which makes this view flaky so we are testing this with FlakyView.
-    testFlakyView({ isVisible(Text("STOP SERVER")) })
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(START_SERVER_BUTTON_TESTING_TAG)
+          .assertTextEquals(context.getString(R.string.stop_server_label).uppercase())
+      }
+    })
   }
 
-  fun stopServerIfAlreadyStarted() {
+  fun stopServerIfAlreadyStarted(composeTestRule: ComposeContentTestRule) {
     try {
       // Check if the "START SERVER" button is visible because, in most scenarios,
       // this button will appear when the server is already stopped.
       // This will expedite our test case, as verifying the visibility of
       // non-visible views takes more time due to the try mechanism needed
       // to properly retrieve the view.
-      assertServerStopped()
-    } catch (exception: Exception) {
+      assertServerStopped(composeTestRule)
+    } catch (_: Exception) {
       // if "START SERVER" button is not visible it means server is started so close it.
-      stopServer()
+      stopServer(composeTestRule)
       Log.i(
         "ZIM_HOST_FRAGMENT",
         "Stopped the server to perform our test case since it was already running"
@@ -108,66 +123,76 @@ class ZimHostRobot : BaseRobot() {
     }
   }
 
-  fun selectZimFileIfNotAlreadySelected() {
+  fun selectZimFileIfNotAlreadySelected(composeTestRule: ComposeContentTestRule) {
     try {
       // check both files are selected.
-      assertItemHostedOnServer(2)
-    } catch (assertionFailedError: AssertionFailedError) {
+      assertItemHostedOnServer(2, composeTestRule)
+    } catch (_: AssertionFailedError) {
       try {
-        val recyclerViewItemsCount =
-          RecyclerViewItemCount(id.recyclerViewZimHost).checkRecyclerViewCount()
-        (0 until recyclerViewItemsCount)
-          .asSequence()
-          .filter { it != 0 }
-          .forEach(::selectZimFile)
-      } catch (assertionFailedError: AssertionFailedError) {
+        selectZimFile(1, composeTestRule)
+        selectZimFile(2, composeTestRule)
+      } catch (_: AssertionFailedError) {
         Log.i("ZIM_HOST_FRAGMENT", "Failed to select the zim file, probably it is already selected")
       }
     }
   }
 
-  private fun selectZimFile(position: Int) {
+  private fun selectZimFile(position: Int, composeTestRule: ComposeContentTestRule) {
     try {
-      onView(
-        RecyclerViewMatcher(id.recyclerViewZimHost).atPositionOnView(
-          position,
-          R.id.itemBookCheckbox
-        )
-      ).check(matches(ViewMatchers.isChecked()))
-    } catch (assertionError: AssertionFailedError) {
-      onView(
-        RecyclerViewMatcher(id.recyclerViewZimHost).atPositionOnView(
-          position,
-          R.id.itemBookCheckbox
-        )
-      ).perform(click())
+      composeTestRule.onNodeWithTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$position")
+        .assertIsOn()
+    } catch (_: AssertionError) {
+      composeTestRule.onNodeWithTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$position")
+        .performClick()
     }
   }
 
-  fun assertItemHostedOnServer(itemCount: Int) {
-    val checkedCheckboxCount =
-      RecyclerViewSelectedCheckBoxCountAssertion(
-        id.recyclerViewZimHost,
-        R.id.itemBookCheckbox
-      ).countCheckedCheckboxes()
-    assertThat(checkedCheckboxCount, CoreMatchers.`is`(itemCount))
+  fun assertItemHostedOnServer(itemCount: Int, composeTestRule: ComposeContentTestRule) {
+    for (i in 0 until itemCount) {
+      composeTestRule.onNodeWithTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG${i + 1}")
+        .assertIsOn()
+    }
   }
 
-  fun stopServer() {
-    testFlakyView({ onView(withId(id.startServerButton)).perform(click()) })
+  fun stopServer(composeTestRule: ComposeContentTestRule) {
+    testFlakyView(
+      {
+        composeTestRule.apply {
+          waitForIdle()
+          onNodeWithTag(START_SERVER_BUTTON_TESTING_TAG).performClick()
+        }
+      }
+    )
   }
 
-  fun assertServerStopped() {
-    pauseForBetterTestPerformance()
-    isVisible(Text("START SERVER"))
+  fun assertServerStopped(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(START_SERVER_BUTTON_TESTING_TAG)
+          .assertTextEquals(context.getString(R.string.start_server_label).uppercase())
+      }
+    })
   }
 
-  fun assertQrShown() {
-    isVisible(ViewId(id.serverQrCode))
+  fun assertQrShown(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(QR_IMAGE_TESTING_TAG)
+          .assertIsDisplayed()
+      }
+    })
   }
 
-  fun assertQrNotShown() {
-    isNotVisible(ViewId(id.serverQrCode))
+  fun assertQrNotShown(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(QR_IMAGE_TESTING_TAG)
+          .assertIsNotDisplayed()
+      }
+    })
   }
 
   private fun pauseForBetterTestPerformance() {

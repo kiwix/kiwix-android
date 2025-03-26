@@ -21,18 +21,14 @@ package org.kiwix.kiwixmobile.webserver
 import android.Manifest
 import android.content.Context
 import android.os.Build
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
-import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
-import com.google.android.apps.common.testing.accessibility.framework.checks.DuplicateClickableBoundsCheck
 import leakcanary.LeakAssertions
-import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -40,6 +36,8 @@ import org.junit.Test
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -50,9 +48,12 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 
 class ZimHostFragmentTest {
-  @Rule
+  @Rule(order = RETRY_RULE_ORDER)
   @JvmField
-  var retryRule = RetryRule()
+  val retryRule = RetryRule()
+
+  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  val composeTestRule = createComposeRule()
 
   private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
@@ -84,12 +85,6 @@ class ZimHostFragmentTest {
   init {
     AccessibilityChecks.enable().apply {
       setRunChecksFromRootView(true)
-      setSuppressingResultMatcher(
-        allOf(
-          matchesCheck(DuplicateClickableBoundsCheck::class.java),
-          matchesViews(withId(R.id.get_zim_nearby_device))
-        )
-      )
     }
   }
 
@@ -138,66 +133,66 @@ class ZimHostFragmentTest {
       // delete all the ZIM files showing in the LocalLibrary
       // screen to properly test the scenario.
       library {
-        refreshList()
-        waitUntilZimFilesRefreshing()
-        deleteZimIfExists()
+        refreshList(composeTestRule)
+        waitUntilZimFilesRefreshing(composeTestRule)
+        deleteZimIfExists(composeTestRule)
       }
       loadZimFileInApplication("testzim.zim")
       loadZimFileInApplication("small.zim")
       zimHost {
-        refreshLibraryList()
-        assertZimFilesLoaded()
+        refreshLibraryList(composeTestRule)
+        assertZimFilesLoaded(composeTestRule)
         openZimHostFragment()
 
         // Check if server is already started
-        stopServerIfAlreadyStarted()
+        stopServerIfAlreadyStarted(composeTestRule)
 
         // Check if both zim file are selected or not to properly run our test case
-        selectZimFileIfNotAlreadySelected()
+        selectZimFileIfNotAlreadySelected(composeTestRule)
 
-        clickOnTestZim()
+        clickOnTestZim(composeTestRule)
 
         // Start the server with one ZIM file
-        startServer()
-        assertServerStarted()
+        startServer(composeTestRule)
+        assertServerStarted(composeTestRule)
 
         // Check that only one ZIM file is hosted on the server
-        assertItemHostedOnServer(1)
+        assertItemHostedOnServer(1, composeTestRule)
 
         // Check QR code shown
-        assertQrShown()
+        assertQrShown(composeTestRule)
 
         // Stop the server
-        stopServer()
-        assertServerStopped()
+        stopServer(composeTestRule)
+        assertServerStopped(composeTestRule)
 
         // Check QR code not shown after stopping the server
-        assertQrNotShown()
+        assertQrNotShown(composeTestRule)
 
         // Select the test ZIM file to host on the server
-        clickOnTestZim()
+        clickOnTestZim(composeTestRule)
 
         // Start the server with two ZIM files
-        startServer()
-        assertServerStarted()
+        startServer(composeTestRule)
+        assertServerStarted(composeTestRule)
 
         // Check that both ZIM files are hosted on the server
-        assertItemHostedOnServer(2)
+        assertItemHostedOnServer(2, composeTestRule)
 
         // Unselect the test ZIM to test restarting server functionality
-        clickOnTestZim()
+        clickOnTestZim(composeTestRule)
 
         // Check if the server is running
-        assertServerStarted()
+        assertServerStarted(composeTestRule)
 
         // Check that only one ZIM file is hosted on the server after unselecting
-        assertItemHostedOnServer(1)
+        assertItemHostedOnServer(1, composeTestRule)
 
         // finally close the server at the end of test case
-        stopServer()
+        stopServer(composeTestRule)
       }
-      LeakAssertions.assertNoLeaks()
     }
+    LeakAssertions.assertNoLeaks()
   }
 
   private fun loadZimFileInApplication(zimFileName: String) {

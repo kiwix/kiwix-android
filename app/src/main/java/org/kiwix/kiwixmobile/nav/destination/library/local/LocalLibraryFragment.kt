@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2020 Kiwix <android.kiwix.org>
+ * Copyright (c) 2025 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.nav.destination.library
+package org.kiwix.kiwixmobile.nav.destination.library.local
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
@@ -29,33 +29,28 @@ import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
-import androidx.appcompat.widget.Toolbar
-import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import eu.mhutti1.utils.storage.Bytes
 import eu.mhutti1.utils.storage.StorageDevice
@@ -70,6 +65,7 @@ import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isManageExternalStoragePermissionGranted
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
@@ -84,24 +80,23 @@ import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
+import org.kiwix.kiwixmobile.core.ui.components.rememberBottomNavigationVisibility
+import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
-import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener.Companion.SCROLL_DOWN
-import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener.Companion.SCROLL_UP
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.isSplittedZimFile
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BookOnDiskDelegate
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
-import org.kiwix.kiwixmobile.databinding.FragmentDestinationLibraryBinding
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
 import org.kiwix.kiwixmobile.zimManager.MAX_PROGRESS
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions
@@ -116,7 +111,9 @@ import javax.inject.Inject
 
 private const val WAS_IN_ACTION_MODE = "WAS_IN_ACTION_MODE"
 private const val MATERIAL_BOTTOM_VIEW_ENTER_ANIMATION_DURATION = 225L
+const val LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG = "localFileTransferMenuButtonTestingTag"
 
+@Suppress("LargeClass")
 class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCallback {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -134,10 +131,19 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
 
   private var actionMode: ActionMode? = null
   private val disposable = CompositeDisposable()
-  private var fragmentDestinationLibraryBinding: FragmentDestinationLibraryBinding? = null
   private var permissionDeniedLayoutShowing = false
-  private var fileSelectListState: FileSelectListState? = null
   private var zimFileUri: Uri? = null
+  val libraryScreenState = mutableStateOf(
+    LocalLibraryScreenState(
+      fileSelectListState = FileSelectListState(emptyList()),
+      snackBarHostState = SnackbarHostState(),
+      swipeRefreshItem = Pair(false, true),
+      scanningProgressItem = Pair(false, ZERO),
+      noFilesViewItem = Triple("", "", false),
+      actionMenuItems = listOf(),
+      bottomNavigationHeight = ZERO
+    )
+  )
 
   private val zimManageViewModel by lazy {
     requireActivity().viewModel<ZimManageViewModel>(viewModelFactory)
@@ -147,49 +153,17 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     registerForActivityResult(
       ActivityResultContracts.RequestMultiplePermissions()
     ) { permissionResult ->
-      val isGranted =
-        permissionResult.entries.all(
-          Map.Entry<String, @kotlin.jvm.JvmSuppressWildcards Boolean>::value
+      val isGranted = permissionResult.values.all { it }
+      val isPermanentlyDenied = readStorageHasBeenPermanentlyDenied(isGranted)
+      permissionDeniedLayoutShowing = isPermanentlyDenied
+      updateLibraryScreenState(
+        noFilesViewItem = Triple(
+          requireActivity().resources.getString(string.grant_read_storage_permission),
+          requireActivity().resources.getString(string.go_to_settings_label),
+          isPermanentlyDenied
         )
-      if (readStorageHasBeenPermanentlyDenied(isGranted)) {
-        fragmentDestinationLibraryBinding?.apply {
-          permissionDeniedLayoutShowing = true
-          fileManagementNoFiles.visibility = VISIBLE
-          goToDownloadsButtonNoFiles.visibility = VISIBLE
-          fileManagementNoFiles.text =
-            requireActivity().resources.getString(string.grant_read_storage_permission)
-          goToDownloadsButtonNoFiles.text =
-            requireActivity().resources.getString(string.go_to_settings_label)
-          zimfilelist.visibility = GONE
-        }
-      } else if (isGranted) {
-        permissionDeniedLayoutShowing = false
-      }
+      )
     }
-
-  private val bookDelegate: BookOnDiskDelegate.BookDelegate by lazy {
-    BookOnDiskDelegate.BookDelegate(
-      sharedPreferenceUtil,
-      {
-        if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
-          showManageExternalStoragePermissionDialog()
-        } else {
-          offerAction(RequestNavigateTo(it))
-        }
-      },
-      {
-        if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
-          showManageExternalStoragePermissionDialog()
-        } else {
-          offerAction(RequestMultiSelection(it))
-        }
-      },
-      { offerAction(RequestSelect(it)) }
-    )
-  }
-  private val booksOnDiskAdapter: BooksOnDiskAdapter by lazy {
-    BooksOnDiskAdapter(bookDelegate, BookOnDiskDelegate.LanguageDelegate)
-  }
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
@@ -202,116 +176,135 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   ): View? {
     LanguageUtils(requireActivity())
       .changeFont(requireActivity(), sharedPreferenceUtil)
-    fragmentDestinationLibraryBinding =
-      FragmentDestinationLibraryBinding.inflate(
-        inflater,
-        container,
-        false
-      )
-    val toolbar = fragmentDestinationLibraryBinding?.root?.findViewById<Toolbar>(R.id.toolbar)
-    val activity = activity as CoreMainActivity
-    activity.setSupportActionBar(toolbar)
-    activity.supportActionBar?.apply {
-      setDisplayHomeAsUpEnabled(true)
-      setTitle(string.library)
+    return ComposeView(requireContext()).apply {
+      setContent {
+        val lazyListState = rememberLazyListState()
+        val isBottomNavVisible = rememberBottomNavigationVisibility(lazyListState)
+        LaunchedEffect(isBottomNavVisible) {
+          (requireActivity() as KiwixMainActivity).toggleBottomNavigation(isBottomNavVisible)
+        }
+        LaunchedEffect(Unit) {
+          updateLibraryScreenState(
+            bottomNavigationHeight = getBottomNavigationHeight(),
+            actionMenuItems = actionMenuItems()
+          )
+        }
+        LocalLibraryScreen(
+          listState = lazyListState,
+          state = libraryScreenState.value,
+          fabButtonClick = { filePickerButtonClick() },
+          onClick = { onBookItemClick(it) },
+          onLongClick = { onBookItemLongClick(it) },
+          onMultiSelect = { offerAction(RequestSelect(it)) },
+          onRefresh = { onSwipeRefresh() },
+          onDownloadButtonClick = { downloadBookButtonClick() },
+        ) {
+          NavigationIcon(
+            iconItem = IconItem.Vector(Icons.Filled.Menu),
+            contentDescription = string.open_drawer,
+            onClick = { navigationIconClick() }
+          )
+        }
+      }
     }
-    if (toolbar != null) {
-      activity.setupDrawerToggle(toolbar)
-    }
-    setupMenu()
-
-    return fragmentDestinationLibraryBinding?.root
   }
 
-  private fun setupMenu() {
-    (requireActivity() as MenuHost).addMenuProvider(
-      object : MenuProvider {
-        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-          menuInflater.inflate(R.menu.menu_zim_manager, menu)
-          val searchItem = menu.findItem(R.id.action_search)
-          val languageItem = menu.findItem(R.id.select_language)
-          languageItem.isVisible = false
-          searchItem.isVisible = false
-        }
+  private fun navigationIconClick() {
+    // Manually handle the navigation open/close.
+    // Since currently we are using the view based navigation drawer in other screens.
+    // Once we fully migrate to jetpack compose we will refactor this code to use the
+    // compose navigation.
+    // TODO Replace with compose based navigation when migration is done.
+    val activity = activity as CoreMainActivity
+    if (activity.navigationDrawerIsOpen()) {
+      activity.closeNavigationDrawer()
+    } else {
+      activity.openNavigationDrawer()
+    }
+  }
 
-        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-          when (menuItem.itemId) {
-            R.id.get_zim_nearby_device -> {
-              navigateToLocalFileTransferFragment()
-              return true
-            }
-          }
-          return false
-        }
-      },
-      viewLifecycleOwner,
-      Lifecycle.State.RESUMED
+  private fun actionMenuItems() = listOf(
+    ActionMenuItem(
+      IconItem.Drawable(R.drawable.ic_baseline_mobile_screen_share_24px),
+      string.get_content_from_nearby_device,
+      { navigateToLocalFileTransferFragment() },
+      isEnabled = true,
+      testingTag = LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG
+    )
+  )
+
+  private fun onBookItemClick(bookOnDisk: BookOnDisk) {
+    if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
+      showManageExternalStoragePermissionDialog()
+    } else {
+      offerAction(RequestNavigateTo(bookOnDisk))
+    }
+  }
+
+  private fun onBookItemLongClick(bookOnDisk: BookOnDisk) {
+    if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
+      showManageExternalStoragePermissionDialog()
+    } else {
+      offerAction(RequestMultiSelection(bookOnDisk))
+    }
+  }
+
+  private fun updateLibraryScreenState(
+    fileSelectListState: FileSelectListState? = null,
+    snackBarHostState: SnackbarHostState? = null,
+    swipeRefreshItem: Pair<Boolean, Boolean>? = null,
+    scanningProgressItem: Pair<Boolean, Int>? = null,
+    noFilesViewItem: Triple<String, String, Boolean>? = null,
+    actionMenuItems: List<ActionMenuItem>? = null,
+    bottomNavigationHeight: Int? = null
+  ) {
+    libraryScreenState.value = libraryScreenState.value.copy(
+      fileSelectListState = fileSelectListState ?: libraryScreenState.value.fileSelectListState,
+      snackBarHostState = snackBarHostState ?: libraryScreenState.value.snackBarHostState,
+      swipeRefreshItem = swipeRefreshItem ?: libraryScreenState.value.swipeRefreshItem,
+      scanningProgressItem = scanningProgressItem
+        ?: libraryScreenState.value.scanningProgressItem,
+      noFilesViewItem = noFilesViewItem ?: libraryScreenState.value.noFilesViewItem,
+      actionMenuItems = actionMenuItems ?: libraryScreenState.value.actionMenuItems,
+      bottomNavigationHeight = bottomNavigationHeight
+        ?: libraryScreenState.value.bottomNavigationHeight
     )
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    setUpSwipeRefreshLayout()
     copyMoveFileHandler?.apply {
       setFileCopyMoveCallback(this@LocalLibraryFragment)
       setLifeCycleScope(lifecycleScope)
-    }
-    fragmentDestinationLibraryBinding?.zimfilelist?.run {
-      adapter = booksOnDiskAdapter
-      layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-      setHasFixedSize(true)
-      visibility = GONE
     }
     zimManageViewModel.fileSelectListStates.observe(viewLifecycleOwner, Observer(::render))
       .also {
         coreMainActivity.navHostContainer
           .setBottomMarginToFragmentContainerView(0)
-
-        getBottomNavigationView()?.let { bottomNavigationView ->
-          setBottomMarginToSwipeRefreshLayout(bottomNavigationView.measuredHeight)
-        }
       }
     disposable.add(sideEffects())
     disposable.add(fileSelectActions())
     zimManageViewModel.deviceListScanningProgress.observe(viewLifecycleOwner) {
-      fragmentDestinationLibraryBinding?.scanningProgressView?.apply {
-        progress = it
+      updateLibraryScreenState(
         // hide this progress bar when scanning is complete.
-        visibility = if (it == MAX_PROGRESS) GONE else VISIBLE
+        scanningProgressItem = Pair(it != MAX_PROGRESS, it),
         // enable if the previous scanning is completes.
-        fragmentDestinationLibraryBinding?.zimSwiperefresh?.isEnabled = it == MAX_PROGRESS
-      }
+        swipeRefreshItem = Pair(false, it == MAX_PROGRESS)
+      )
     }
     if (savedInstanceState != null && savedInstanceState.getBoolean(WAS_IN_ACTION_MODE)) {
       zimManageViewModel.fileSelectActions.offer(FileSelectActions.RestartActionMode)
     }
-
-    fragmentDestinationLibraryBinding?.goToDownloadsButtonNoFiles?.setOnClickListener {
-      if (permissionDeniedLayoutShowing) {
-        permissionDeniedLayoutShowing = false
-        requireActivity().navigateToAppSettings()
-      } else {
-        offerAction(FileSelectActions.UserClickedDownloadBooksButton)
-      }
-    }
-    setUpFilePickerButton()
-
-    fragmentDestinationLibraryBinding?.zimfilelist?.addOnScrollListener(
-      SimpleRecyclerViewScrollListener { _, newState ->
-        when (newState) {
-          SCROLL_DOWN -> {
-            setBottomMarginToSwipeRefreshLayout(0)
-          }
-
-          SCROLL_UP -> {
-            getBottomNavigationView()?.let {
-              setBottomMarginToSwipeRefreshLayout(it.measuredHeight)
-            }
-          }
-        }
-      }
-    )
     showCopyMoveDialogForOpenedZimFileFromStorage()
+  }
+
+  private fun downloadBookButtonClick() {
+    if (permissionDeniedLayoutShowing) {
+      permissionDeniedLayoutShowing = false
+      requireActivity().navigateToAppSettings()
+    } else {
+      offerAction(FileSelectActions.UserClickedDownloadBooksButton)
+    }
   }
 
   private fun showCopyMoveDialogForOpenedZimFileFromStorage() {
@@ -322,32 +315,28 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     requireArguments().clear()
   }
 
-  private fun setUpSwipeRefreshLayout() {
-    fragmentDestinationLibraryBinding?.zimSwiperefresh?.setOnRefreshListener {
-      if (permissionDeniedLayoutShowing) {
-        fragmentDestinationLibraryBinding?.zimSwiperefresh?.isRefreshing = false
+  private fun onSwipeRefresh() {
+    if (permissionDeniedLayoutShowing) {
+      // When permission denied layout is showing hide the "Swipe refresh".
+      updateLibraryScreenState(swipeRefreshItem = false to true)
+    } else {
+      if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
+        showManageExternalStoragePermissionDialog()
+        // Set loading to false since the dialog is currently being displayed.
+        // If the user clicks on "No" in the permission dialog,
+        // the loading icon remains visible infinitely.
+        updateLibraryScreenState(swipeRefreshItem = false to true)
       } else {
-        if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
-          showManageExternalStoragePermissionDialog()
-          // Set loading to false since the dialog is currently being displayed.
-          // If the user clicks on "No" in the permission dialog,
-          // the loading icon remains visible infinitely.
-          fragmentDestinationLibraryBinding?.zimSwiperefresh?.isRefreshing = false
-        } else {
-          fragmentDestinationLibraryBinding?.zimSwiperefresh?.apply {
-            // hide the swipe refreshing because now we are showing the ContentLoadingProgressBar
-            // to show the progress of how many files are scanned.
-            isRefreshing = false
-            // disable the swipe refresh layout until the ongoing scanning will not complete
-            // to avoid multiple scanning.
-            isEnabled = false
-          }
-          fragmentDestinationLibraryBinding?.scanningProgressView?.apply {
-            visibility = VISIBLE
-            progress = 0
-          }
-          requestFileSystemCheck()
-        }
+        // hide the swipe refreshing because now we are showing the ContentLoadingProgressBar
+        // to show the progress of how many files are scanned.
+        // disable the swipe refresh layout until the ongoing scanning will not complete
+        // to avoid multiple scanning.
+        updateLibraryScreenState(
+          swipeRefreshItem = false to false,
+          // Show the progress Bar.
+          scanningProgressItem = true to ZERO
+        )
+        requestFileSystemCheck()
       }
     }
   }
@@ -366,21 +355,13 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   private fun getBottomNavigationView() =
     requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav_view)
 
-  private fun setBottomMarginToSwipeRefreshLayout(marginBottom: Int) {
-    fragmentDestinationLibraryBinding?.zimSwiperefresh?.apply {
-      val params = layoutParams as CoordinatorLayout.LayoutParams?
-      params?.bottomMargin = marginBottom
-      requestLayout()
-    }
-  }
+  private fun getBottomNavigationHeight() = getBottomNavigationView().measuredHeight
 
-  private fun setUpFilePickerButton() {
-    fragmentDestinationLibraryBinding?.selectFile?.setOnClickListener {
-      if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
-        showManageExternalStoragePermissionDialog()
-      } else if (requestExternalStorageWritePermission()) {
-        showFileChooser()
-      }
+  private fun filePickerButtonClick() {
+    if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {
+      showManageExternalStoragePermissionDialog()
+    } else if (requestExternalStorageWritePermission()) {
+      showFileChooser()
     }
   }
 
@@ -399,7 +380,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       }
     try {
       fileSelectLauncher.launch(Intent.createChooser(intent, "Select a zim file"))
-    } catch (ex: ActivityNotFoundException) {
+    } catch (_: ActivityNotFoundException) {
       activity.toast(resources.getString(R.string.no_app_found_to_open), Toast.LENGTH_SHORT)
     }
   }
@@ -455,7 +436,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   }
 
   private fun isValidZimFile(fileName: String): Boolean =
-    FileUtils.isValidZimFile(fileName) || FileUtils.isSplittedZimFile(fileName)
+    FileUtils.isValidZimFile(fileName) || isSplittedZimFile(fileName)
 
   private suspend fun getZimFileFromUri(
     uri: Uri
@@ -518,7 +499,13 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     ) {
       checkPermissions()
     } else if (!permissionDeniedLayoutShowing) {
-      fragmentDestinationLibraryBinding?.zimfilelist?.visibility = VISIBLE
+      updateLibraryScreenState(
+        noFilesViewItem = Triple(
+          requireActivity().resources.getString(string.no_files_here),
+          requireActivity().resources.getString(string.download_books),
+          false
+        )
+      )
     }
   }
 
@@ -526,8 +513,6 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     super.onDestroyView()
     mainRepositoryActions.dispose()
     actionMode = null
-    fragmentDestinationLibraryBinding?.zimfilelist?.adapter = null
-    fragmentDestinationLibraryBinding = null
     disposable.clear()
     storagePermissionLauncher?.unregister()
     storagePermissionLauncher = null
@@ -546,7 +531,11 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
           val effectResult = it.invokeWith(requireActivity() as AppCompatActivity)
           if (effectResult is ActionMode) {
             actionMode = effectResult
-            fileSelectListState?.selectedBooks?.size?.let(::setActionModeTitle)
+            libraryScreenState
+              .value
+              .fileSelectListState
+              .selectedBooks
+              .size.let(::setActionModeTitle)
           }
         },
         Throwable::printStackTrace
@@ -571,30 +560,26 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   }
 
   private fun render(state: FileSelectListState) {
-    fileSelectListState = state
-    val items: List<BooksOnDiskListItem> = state.bookOnDiskListItems
-    bookDelegate.selectionMode = state.selectionMode
-    booksOnDiskAdapter.items = items
-    if (items.none(BooksOnDiskListItem::isSelected)) {
+    // Force recomposition by first setting an empty list before assigning the updated list.
+    // This is necessary because modifying an object's property doesn't trigger recomposition,
+    // as Compose still considers the list unchanged.
+    updateLibraryScreenState(fileSelectListState = FileSelectListState(emptyList()))
+    // Update the real state for UI.
+    updateLibraryScreenState(
+      fileSelectListState = state,
+      noFilesViewItem = Triple(
+        requireActivity().resources.getString(string.no_files_here),
+        requireActivity().resources.getString(string.download_books),
+        // If here are no items available then show the "No files here" text, and "Download books"
+        // button so that user can go to "Online library" screen by clicking this button.
+        state.bookOnDiskListItems.isEmpty()
+      )
+    )
+    if (state.bookOnDiskListItems.none(BooksOnDiskListItem::isSelected)) {
       actionMode?.finish()
       actionMode = null
     }
     setActionModeTitle(state.selectedBooks.size)
-    fragmentDestinationLibraryBinding?.apply {
-      if (items.isEmpty()) {
-        fileManagementNoFiles.text = requireActivity().resources.getString(string.no_files_here)
-        goToDownloadsButtonNoFiles.text =
-          requireActivity().resources.getString(string.download_books)
-
-        fileManagementNoFiles.visibility = View.VISIBLE
-        goToDownloadsButtonNoFiles.visibility = View.VISIBLE
-        zimfilelist.visibility = View.GONE
-      } else {
-        fileManagementNoFiles.visibility = View.GONE
-        goToDownloadsButtonNoFiles.visibility = View.GONE
-        zimfilelist.visibility = View.VISIBLE
-      }
-    }
   }
 
   private fun setActionModeTitle(selectedBookCount: Int) {
@@ -692,11 +677,11 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   }
 
   private fun showStorageSelectionSnackBar(message: String) {
-    fragmentDestinationLibraryBinding?.zimfilelist?.snack(
-      message,
-      requireActivity().findViewById(R.id.bottom_nav_view),
-      string.download_change_storage,
-      {
+    libraryScreenState.value.snackBarHostState.snack(
+      message = message,
+      actionLabel = getString(string.download_change_storage),
+      lifecycleScope = lifecycleScope,
+      actionClick = {
         lifecycleScope.launch {
           showStorageSelectDialog((requireActivity() as KiwixMainActivity).getStorageDeviceList())
         }
@@ -750,7 +735,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     ) { permissionResult ->
       val isGranted =
         permissionResult.entries.all(
-          Map.Entry<String, @kotlin.jvm.JvmSuppressWildcards Boolean>::value
+          Map.Entry<String, @JvmSuppressWildcards Boolean>::value
         )
       if (isGranted) {
         zimFileUri?.let {

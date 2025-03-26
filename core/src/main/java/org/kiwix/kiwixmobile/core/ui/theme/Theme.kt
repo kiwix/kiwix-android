@@ -23,6 +23,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.TextStyle
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MEDIUM_BODY_LETTER_SPACING
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MEDIUM_BODY_TEXT_SIZE
 
 private val DarkColorScheme = darkColorScheme(
   primary = DenimBlue200,
@@ -35,7 +38,8 @@ private val DarkColorScheme = darkColorScheme(
   onBackground = White,
   onSurface = White,
   onError = White,
-  onTertiary = MineShaftGray500
+  onTertiary = MineShaftGray500,
+  surfaceContainer = MineShaftGray850,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -49,7 +53,8 @@ private val LightColorScheme = lightColorScheme(
   onBackground = Black,
   onSurface = Black,
   onError = AlabasterWhite,
-  onTertiary = MineShaftGray600
+  onTertiary = MineShaftGray600,
+  surfaceContainer = AlabasterWhite,
 )
 
 @Composable
@@ -91,5 +96,39 @@ fun KiwixDialogTheme(
     content = content,
     shapes = shapes,
     typography = KiwixTypography
+  )
+}
+
+/**
+ * A custom theme specifically designed for displaying short-lived UI messages,
+ * such as Snackbars, and Toasts.
+ *
+ * This theme overrides the default `bodyMedium` typography to remove bold styling,
+ * ensuring that Snackbar and Toast messages appear in a normal-weight font.
+ *
+ * @param darkTheme Determines whether the theme should use dark mode colors.
+ * Defaults to the system's dark mode setting.
+ * @param content The composable content that will be wrapped with this theme.
+ */
+@Composable
+fun KiwixSnackToastTheme(
+  darkTheme: Boolean = isSystemInDarkTheme(),
+  content: @Composable () -> Unit
+) {
+  val colorScheme = when {
+    darkTheme -> DarkColorScheme
+    else -> LightColorScheme
+  }
+  val snackBarTypography = KiwixTypography.copy(
+    bodyMedium = TextStyle(
+      fontSize = MEDIUM_BODY_TEXT_SIZE,
+      letterSpacing = MEDIUM_BODY_LETTER_SPACING
+    )
+  )
+  MaterialTheme(
+    colorScheme = colorScheme,
+    content = content,
+    shapes = shapes,
+    typography = snackBarTypography
   )
 }

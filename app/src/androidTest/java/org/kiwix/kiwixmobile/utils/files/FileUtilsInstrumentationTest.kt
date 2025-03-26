@@ -36,6 +36,7 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.files.DocumentResolverWrapper
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.documentProviderContentQuery
@@ -61,9 +62,9 @@ class FileUtilsInstrumentationTest {
   private val downloadUriPrefix = "content://media/external/downloads/"
   private val expectedFilePath = "${Environment.getExternalStorageDirectory()}/$commonPath"
 
-  @Rule
+  @Rule(order = RETRY_RULE_ORDER)
   @JvmField
-  var retryRule = RetryRule()
+  val retryRule = RetryRule()
 
   @Before
   fun executeBefore() {

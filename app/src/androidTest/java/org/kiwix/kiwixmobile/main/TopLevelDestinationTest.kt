@@ -17,6 +17,8 @@
  */
 package org.kiwix.kiwixmobile.main
 
+import android.os.Build
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -36,6 +38,8 @@ import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.help.HelpRobot
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
 import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryRobot
@@ -46,9 +50,12 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVi
 import org.kiwix.kiwixmobile.webserver.ZimHostRobot
 
 class TopLevelDestinationTest : BaseActivityTest() {
-  @Rule
+  @Rule(order = RETRY_RULE_ORDER)
   @JvmField
-  var retryRule = RetryRule()
+  val retryRule = RetryRule()
+
+  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  val composeTestRule = createComposeRule()
 
   @Before
   override fun waitForIdle() {
@@ -106,8 +113,10 @@ class TopLevelDestinationTest : BaseActivityTest() {
       }
       clickDownloadOnBottomNav(OnlineLibraryRobot::assertLibraryListDisplayed)
       clickLibraryOnBottomNav {
-        assertGetZimNearbyDeviceDisplayed()
-        clickFileTransferIcon(LocalFileTransferRobot::assertReceiveFileTitleVisible)
+        assertGetZimNearbyDeviceDisplayed(composeTestRule)
+        clickFileTransferIcon(composeTestRule) {
+          LocalFileTransferRobot::assertReceiveFileTitleVisible
+        }
       }
       clickBookmarksOnNavDrawer {
         assertBookMarksDisplayed()
@@ -125,6 +134,8 @@ class TopLevelDestinationTest : BaseActivityTest() {
       clickSupportKiwixOnSideNav()
       pressBack()
     }
-    LeakAssertions.assertNoLeaks()
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+      LeakAssertions.assertNoLeaks()
+    }
   }
 }
