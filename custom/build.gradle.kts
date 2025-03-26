@@ -22,13 +22,8 @@ plugins {
 plugins.apply(KiwixConfigurationPlugin::class)
 
 android {
-  compileSdkPreview = Config.compileSdk
   defaultConfig {
     applicationId = "org.kiwix"
-    // TODO: We will move this from here to AllProjectConfigure once
-    //  Android 16 stable release is available.
-    minSdk = Config.minSdk
-    targetSdkPreview = Config.targetSdk
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 
