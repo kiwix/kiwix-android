@@ -13,7 +13,6 @@ buildscript {
 }
 plugins {
   `android-library`
-  id("org.jetbrains.kotlin.android")
 }
 plugins.apply(KiwixConfigurationPlugin::class)
 apply(plugin = "io.objectbox")

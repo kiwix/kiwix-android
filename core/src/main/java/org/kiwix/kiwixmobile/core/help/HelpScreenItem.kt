@@ -18,6 +18,11 @@
 
 package org.kiwix.kiwixmobile.core.help
 
+import android.content.Context
+import android.text.method.LinkMovementMethod
+import android.text.util.Linkify
+import android.view.Gravity
+import android.widget.TextView
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -30,11 +35,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
@@ -47,21 +54,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.text.util.LinkifyCompat
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray900
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.HELP_SCREEN_ARROW_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.HELP_SCREEN_ITEM_TITLE_LETTER_SPACING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.HELP_SCREEN_ITEM_TITLE_TEXT_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 
-// Define constants for spacing, font sizes, etc.
-
-private val HelpItemDescriptionFontSize = 17.sp
 private const val HELP_ITEM_ANIMATION_DURATION = 300
 private const val HELP_ITEM_ARROW_ROTATION_OPEN = 180f
 private const val HELP_ITEM_ARROW_ROTATION_CLOSE = 0f
@@ -73,20 +79,18 @@ fun HelpScreenItem(
   initiallyOpened: Boolean = false
 ) {
   var isOpen by remember { mutableStateOf(initiallyOpened) }
-  val itemColor = if (isSystemInDarkTheme()) Color.White else Color.Black
-  val horizontalPadding: Dp = dimensionResource(id = R.dimen.activity_horizontal_margin)
 
   Column(
     modifier = modifier
       .fillMaxWidth()
-      .padding(vertical = EIGHT_DP),
+      .padding(vertical = EIGHT_DP, horizontal = SIXTEEN_DP),
     verticalArrangement = Arrangement.Center,
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    HelpItemHeader(data.title, isOpen, itemColor, horizontalPadding) { isOpen = !isOpen }
+    HelpItemHeader(data.title, isOpen) { isOpen = !isOpen }
     AnimatedVisibility(visible = isOpen) {
       Spacer(modifier = Modifier.height(EIGHT_DP))
-      HelpItemDescription(data.description, itemColor, horizontalPadding)
+      HelpItemDescription(LocalContext.current, data.description)
     }
   }
 }
@@ -95,8 +99,6 @@ fun HelpScreenItem(
 fun HelpItemHeader(
   title: String,
   isOpen: Boolean,
-  itemColor: Color,
-  horizontalPadding: Dp,
   onToggle: () -> Unit
 ) {
   val arrowRotation by animateFloatAsState(
@@ -112,13 +114,11 @@ fun HelpItemHeader(
     modifier = Modifier
       .fillMaxWidth()
       .clickable(interactionSource = interactionSource, indication = null, onClick = onToggle)
-      .padding(horizontal = horizontalPadding, vertical = EIGHT_DP)
   ) {
     Text(
       text = title,
       fontSize = HELP_SCREEN_ITEM_TITLE_TEXT_SIZE,
-      color = itemColor,
-      fontWeight = FontWeight.Medium,
+      style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Medium),
       letterSpacing = HELP_SCREEN_ITEM_TITLE_LETTER_SPACING,
       modifier = Modifier.minimumInteractiveComponentSize()
     )
@@ -129,28 +129,44 @@ fun HelpItemHeader(
         .graphicsLayer {
           rotationZ = arrowRotation
         }
+        .defaultMinSize(
+          minWidth = HELP_SCREEN_ARROW_ICON_SIZE,
+          minHeight = HELP_SCREEN_ARROW_ICON_SIZE
+        )
         .minimumInteractiveComponentSize(),
-      contentScale = ContentScale.Inside,
-      colorFilter = ColorFilter.tint(color = itemColor)
+      colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurface)
     )
   }
 }
 
 @Composable
-fun HelpItemDescription(description: String, itemColor: Color, horizontalPadding: Dp) {
+fun HelpItemDescription(context: Context, description: String) {
+  val textColor = if (isSystemInDarkTheme()) {
+    Color.LightGray
+  } else {
+    MineShaftGray900
+  }
+  val helpItemDescription = remember { TextView(context) }
   Box(
     contentAlignment = Alignment.Center,
     modifier = Modifier
       .fillMaxWidth()
-      .padding(start = horizontalPadding, end = horizontalPadding)
+      .padding(top = SIXTEEN_DP)
   ) {
-    Text(
-      text = description,
-      fontSize = HelpItemDescriptionFontSize,
-      textAlign = TextAlign.Left,
-      color = itemColor,
-      modifier = Modifier.padding(bottom = horizontalPadding),
-      fontWeight = FontWeight.Normal
-    )
+    AndroidView(
+      factory = { helpItemDescription },
+      modifier = Modifier.padding(bottom = SIXTEEN_DP)
+    ) { textView ->
+      textView.apply {
+        text = description
+        setTextAppearance(R.style.TextAppearance_KiwixTheme_Subtitle2)
+        setTextColor(textColor.toArgb())
+        minHeight =
+          context.resources.getDimensionPixelSize(R.dimen.material_minimum_height_and_width)
+        gravity = Gravity.CENTER or Gravity.START
+        LinkifyCompat.addLinks(this, Linkify.WEB_URLS)
+        movementMethod = LinkMovementMethod.getInstance()
+      }
+    }
   }
 }
