@@ -18,12 +18,7 @@ plugins.apply(KiwixConfigurationPlugin::class)
 apply(plugin = "io.objectbox")
 
 android {
-  compileSdkPreview = Config.compileSdk
   defaultConfig {
-    // TODO: We will move this from here to AllProjectConfigure once
-    //  Android 16 stable release is available.
-    minSdk = Config.minSdk
-    targetSdkPreview = Config.targetSdk
     buildConfigField("long", "VERSION_CODE", "".getVersionCode().toString())
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }

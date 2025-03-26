@@ -59,6 +59,13 @@ class AllProjectConfigurer {
         namespace = "org.kiwix.kiwixmobile.core"
       }
 
+      setCompileSdkVersion(Config.compileSdk)
+      defaultConfig {
+        minSdk = Config.minSdk
+        setTargetSdkVersion(Config.targetSdk)
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+      }
+
       buildTypes {
         getByName("debug") {
           isTestCoverageEnabled = true
