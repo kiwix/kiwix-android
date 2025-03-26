@@ -23,8 +23,8 @@ dependencies {
     exclude(group = "com.google.guava", module = "guava")
   }
   implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.8")
-  implementation("com.googlecode.json-simple:json-simple:1.1")
-  implementation("com.squareup.okhttp3:okhttp:4.10.0")
+  implementation("com.googlecode.json-simple:json-simple:1.1.1")
+  implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
   implementation(gradleApi())
   implementation(localGroovy())
