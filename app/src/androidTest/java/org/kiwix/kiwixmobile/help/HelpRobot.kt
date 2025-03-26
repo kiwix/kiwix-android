@@ -27,18 +27,22 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.ViewId
-import org.kiwix.kiwixmobile.core.R.id
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.help.HELP_SCREEN_ITEM_DESCRIPTION_TESTING_TAG
 import org.kiwix.kiwixmobile.core.help.HELP_SCREEN_ITEM_TITLE_TESTING_TAG
+import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 fun help(func: HelpRobot.() -> Unit) = HelpRobot().apply(func)
 
 class HelpRobot : BaseRobot() {
-  fun assertToolbarDisplayed() {
-    isVisible(ViewId(id.toolbar))
+  fun assertToolbarDisplayed(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.menu_help))
+    }
   }
 
   fun clickOnWhatDoesKiwixDo(composeTestRule: ComposeContentTestRule) {
