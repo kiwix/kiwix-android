@@ -72,6 +72,7 @@ import androidx.constraintlayout.widget.Group
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
 import androidx.core.view.MenuHost
@@ -2516,7 +2517,6 @@ abstract class CoreReaderFragment :
           SharedPreferenceUtil.PREF_KIWIX_MOBILE,
           0
         )
-        val editor = settings.edit()
         val webViewHistoryEntityList = arrayListOf<WebViewHistoryEntity>()
         webViewList.forEachIndexed { index, view ->
           if (view.url == null) return@forEachIndexed
@@ -2525,9 +2525,10 @@ abstract class CoreReaderFragment :
         withContext(Dispatchers.IO) {
           repositoryActions?.saveWebViewPageHistory(webViewHistoryEntityList)
         }
-        editor.putString(TAG_CURRENT_FILE, zimReaderContainer?.zimReaderSource?.toDatabase())
-        editor.putInt(TAG_CURRENT_TAB, currentWebViewIndex)
-        editor.apply()
+        settings.edit {
+          putString(TAG_CURRENT_FILE, zimReaderContainer?.zimReaderSource?.toDatabase())
+          putInt(TAG_CURRENT_TAB, currentWebViewIndex)
+        }
         Log.d(
           TAG_KIWIX,
           "Save current zim file to preferences: " +

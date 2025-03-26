@@ -22,6 +22,7 @@ import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import io.objectbox.converter.PropertyConverter
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import java.util.Locale
 
@@ -35,7 +36,7 @@ data class LanguageEntity(
 ) {
   constructor(language: Language) : this(
     0,
-    Locale(language.languageCode),
+    language.languageCode.convertToLocal(),
     language.active,
     language.occurencesOfLanguage
   )
@@ -49,5 +50,5 @@ class StringToLocaleConverter : PropertyConverter<Locale, String> {
     entityProperty?.isO3Language ?: Locale.ENGLISH.isO3Language
 
   override fun convertToEntityProperty(databaseValue: String?): Locale =
-    databaseValue?.let(::Locale) ?: Locale.ENGLISH
+    databaseValue?.convertToLocal() ?: Locale.ENGLISH
 }

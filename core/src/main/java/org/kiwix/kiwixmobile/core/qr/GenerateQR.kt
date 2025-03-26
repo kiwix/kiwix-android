@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.qr
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Color
 import com.google.zxing.BarcodeFormat
@@ -39,6 +40,7 @@ class GenerateQR @Inject constructor() {
    * @param foregroundColor The color of the QR code.
    * @param backgroundColor The background color of the QR code.
    */
+  @SuppressLint("UseKtx")
   fun createQR(
     code: String,
     size: Int = 512,

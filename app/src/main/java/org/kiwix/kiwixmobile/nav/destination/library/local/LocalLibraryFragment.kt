@@ -366,18 +366,17 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   }
 
   private fun showFileChooser() {
-    val intent =
-      Intent().apply {
-        action = Intent.ACTION_OPEN_DOCUMENT
-        type = "*/*"
-        addCategory(Intent.CATEGORY_OPENABLE)
-        if (sharedPreferenceUtil.prefIsTest) {
-          putExtra(
-            "android.provider.extra.INITIAL_URI",
-            "content://com.android.externalstorage.documents/document/primary:Download".toUri()
-          )
-        }
+    val intent = Intent().apply {
+      action = Intent.ACTION_OPEN_DOCUMENT
+      type = "*/*"
+      addCategory(Intent.CATEGORY_OPENABLE)
+      if (sharedPreferenceUtil.prefIsTest) {
+        putExtra(
+          "android.provider.extra.INITIAL_URI",
+          "content://com.android.externalstorage.documents/document/primary:Download".toUri()
+        )
       }
+    }
     try {
       fileSelectLauncher.launch(Intent.createChooser(intent, "Select a zim file"))
     } catch (_: ActivityNotFoundException) {

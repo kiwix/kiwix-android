@@ -21,6 +21,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.database.DataSetObserver
 import android.graphics.Canvas
@@ -776,13 +777,17 @@ class CustomPageIndicator @JvmOverloads constructor(
     val density = context.resources.displayMetrics.density.toInt()
 
     // Load attributes
-    val a =
-      getContext().obtainStyledAttributes(attrs, R.styleable.CustomPageIndicator, defStyle, 0)
-    dotDiameter =
-      a.getDimensionPixelSize(
-        R.styleable.CustomPageIndicator_ipi_dotDiameter,
-        DEFAULT_DOT_SIZE * density
-      )
+    @SuppressLint("UseKtx")
+    val a = getContext().obtainStyledAttributes(
+      attrs,
+      R.styleable.CustomPageIndicator,
+      defStyle,
+      0
+    )
+    dotDiameter = a.getDimensionPixelSize(
+      R.styleable.CustomPageIndicator_ipi_dotDiameter,
+      DEFAULT_DOT_SIZE * density
+    )
     dotRadius = (dotDiameter / 2).toFloat()
     halfDotRadius = dotRadius / 2
     gap =
