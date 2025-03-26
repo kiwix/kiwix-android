@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.help
 
 import android.app.Activity
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -33,6 +34,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,13 +42,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.error.DiagnosticReportActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.start
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
+import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray350
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray600
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.HELP_SCREEN_DIVIDER_HEIGHT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 
 @Suppress("ComposableLambdaParameterNaming")
@@ -69,7 +74,7 @@ fun HelpScreen(
     ) { innerPadding ->
       Column(modifier = Modifier.padding(innerPadding)) {
         SendReportRow()
-        HorizontalDivider(color = dividerColor)
+        HorizontalDivider(color = dividerColor, thickness = HELP_SCREEN_DIVIDER_HEIGHT)
         HelpItemList(data, dividerColor)
       }
     }
@@ -79,7 +84,7 @@ fun HelpScreen(
 @Composable
 fun SendReportRow() {
   val context = LocalContext.current
-  // val isDarkTheme = isSystemInDarkTheme()
+  val isDarkTheme = isSystemInDarkTheme()
 
   Row(
     modifier = Modifier
@@ -91,14 +96,14 @@ fun SendReportRow() {
     Image(
       painter = painterResource(R.drawable.ic_feedback_orange_24dp),
       contentDescription = stringResource(R.string.send_report),
-      modifier = Modifier
-        .padding(SIXTEEN_DP)
+      modifier = Modifier.padding(SIXTEEN_DP)
     )
 
     Text(
       text = stringResource(R.string.send_report),
-      // color = if (isDarkTheme) Color.LightGray else Color.DarkGray,
-      style = MaterialTheme.typography.titleMedium
+      color = if (isDarkTheme) Color.LightGray else Color.DarkGray,
+      style = MaterialTheme.typography.titleMedium,
+      modifier = Modifier.minimumInteractiveComponentSize()
     )
   }
 }
@@ -111,7 +116,40 @@ fun HelpItemList(data: List<HelpScreenItemDataClass>, dividerColor: Color) {
   ) {
     itemsIndexed(data, key = { _, item -> item.title }) { _, item ->
       HelpScreenItem(data = item)
-      HorizontalDivider(color = dividerColor)
+      HorizontalDivider(color = dividerColor, thickness = HELP_SCREEN_DIVIDER_HEIGHT)
     }
   }
 }
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+// @Preview()
+@Composable
+fun PreviewScreen() {
+  HelpScreen(
+    data = transformToHelpScreenData(LocalContext.current, rawTitleDescriptionMap())
+  ) { NavigationIcon(onClick = { }) }
+}
+
+fun rawTitleDescriptionMap(): List<Pair<Int, Any>> =
+  listOf(
+    R.string.help_2 to R.array.description_help_2,
+    R.string.help_5 to R.array.description_help_5,
+    R.string.how_to_update_content to R.array.update_content_description
+  )
+
+// fun transformToHelpScreenData(
+//   context: Context,
+//   rawTitleDescriptionMap: List<Pair<Int, Any>>
+// ): List<HelpScreenItemDataClass> {
+//   return rawTitleDescriptionMap.map { (titleResId, description) ->
+//     val title = context.getString(titleResId)
+//     val descriptionValue = when (description) {
+//       is String -> description
+//       is Int -> context.resources.getStringArray(description).joinToString(separator = "\n")
+//       else -> {
+//         throw IllegalArgumentException("Invalid description resource type for title: $titleResId")
+//       }
+//     }
+//     HelpScreenItemDataClass(title, descriptionValue)
+//   }
+// }

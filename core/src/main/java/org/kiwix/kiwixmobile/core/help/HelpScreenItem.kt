@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.help
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -32,11 +33,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,21 +45,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.HELP_SCREEN_ITEM_TITLE_LETTER_SPACING
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.HELP_SCREEN_ITEM_TITLE_TEXT_SIZE
 
 // Define constants for spacing, font sizes, etc.
 
-private val HelpItemTitleFontSize = 22.sp
 private val HelpItemDescriptionFontSize = 17.sp
-private val IconSize = 36.dp
 private const val HELP_ITEM_ANIMATION_DURATION = 300
 private const val HELP_ITEM_ARROW_ROTATION_OPEN = 180f
 private const val HELP_ITEM_ARROW_ROTATION_CLOSE = 0f
@@ -72,19 +74,18 @@ fun HelpScreenItem(
 ) {
   var isOpen by remember { mutableStateOf(initiallyOpened) }
   val itemColor = if (isSystemInDarkTheme()) Color.White else Color.Black
-
-  val topPadding: Dp = dimensionResource(id = R.dimen.dimen_medium_padding)
   val horizontalPadding: Dp = dimensionResource(id = R.dimen.activity_horizontal_margin)
 
   Column(
     modifier = modifier
-      .fillMaxWidth(),
+      .fillMaxWidth()
+      .padding(vertical = EIGHT_DP),
     verticalArrangement = Arrangement.Center,
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
     HelpItemHeader(data.title, isOpen, itemColor, horizontalPadding) { isOpen = !isOpen }
     AnimatedVisibility(visible = isOpen) {
-      Spacer(modifier = Modifier.height(topPadding))
+      Spacer(modifier = Modifier.height(EIGHT_DP))
       HelpItemDescription(data.description, itemColor, horizontalPadding)
     }
   }
@@ -111,23 +112,26 @@ fun HelpItemHeader(
     modifier = Modifier
       .fillMaxWidth()
       .clickable(interactionSource = interactionSource, indication = null, onClick = onToggle)
-      .padding(horizontal = horizontalPadding, vertical = horizontalPadding)
+      .padding(horizontal = horizontalPadding, vertical = EIGHT_DP)
   ) {
     Text(
       text = title,
-      fontSize = HelpItemTitleFontSize,
+      fontSize = HELP_SCREEN_ITEM_TITLE_TEXT_SIZE,
       color = itemColor,
-      fontWeight = FontWeight.Normal
+      fontWeight = FontWeight.Medium,
+      letterSpacing = HELP_SCREEN_ITEM_TITLE_LETTER_SPACING,
+      modifier = Modifier.minimumInteractiveComponentSize()
     )
-    Icon(
+    Image(
       imageVector = Icons.Default.KeyboardArrowDown,
       contentDescription = stringResource(R.string.expand),
       modifier = Modifier
         .graphicsLayer {
           rotationZ = arrowRotation
         }
-        .size(IconSize),
-      tint = itemColor
+        .minimumInteractiveComponentSize(),
+      contentScale = ContentScale.Inside,
+      colorFilter = ColorFilter.tint(color = itemColor)
     )
   }
 }
