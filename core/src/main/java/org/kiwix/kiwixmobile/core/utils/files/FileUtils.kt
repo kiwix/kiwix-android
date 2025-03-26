@@ -55,7 +55,6 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
-import androidx.core.net.toUri
 
 object FileUtils {
   private val fileOperationMutex = Mutex()
