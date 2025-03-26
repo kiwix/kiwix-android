@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -39,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -52,6 +54,11 @@ import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray600
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.HELP_SCREEN_DIVIDER_HEIGHT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 
+const val SEND_DIAGNOSTIC_REPORT_TESTING_TAG = "sendDiagnosticReportTestingTag"
+const val HELP_SCREEN_ITEM_TITLE_TESTING_TAG = "helpScreenItemTitleTestingTag"
+const val HELP_SCREEN_ITEM_DESCRIPTION_TESTING_TAG = "helpScreenItemDescriptionTestingTag"
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming")
 @Composable
 fun HelpScreen(
@@ -86,7 +93,8 @@ fun SendReportRow() {
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .clickable { (context as? Activity)?.start<DiagnosticReportActivity>() },
+      .clickable { (context as? Activity)?.start<DiagnosticReportActivity>() }
+      .testTag(SEND_DIAGNOSTIC_REPORT_TESTING_TAG),
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.Start
   ) {

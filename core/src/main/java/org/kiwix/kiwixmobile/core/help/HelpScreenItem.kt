@@ -56,7 +56,10 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.util.LinkifyCompat
@@ -114,6 +117,7 @@ fun HelpItemHeader(
     modifier = Modifier
       .fillMaxWidth()
       .clickable(interactionSource = interactionSource, indication = null, onClick = onToggle)
+      .testTag(HELP_SCREEN_ITEM_TITLE_TESTING_TAG)
   ) {
     Text(
       text = title,
@@ -156,6 +160,8 @@ fun HelpItemDescription(context: Context, description: String) {
     AndroidView(
       factory = { helpItemDescription },
       modifier = Modifier.padding(bottom = SIXTEEN_DP)
+        .testTag(HELP_SCREEN_ITEM_DESCRIPTION_TESTING_TAG)
+        .semantics { contentDescription = description }
     ) { textView ->
       textView.apply {
         text = description

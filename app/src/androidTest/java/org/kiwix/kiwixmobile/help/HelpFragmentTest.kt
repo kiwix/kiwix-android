@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.help
 
 import android.os.Build
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.IdlingRegistry
@@ -33,6 +34,7 @@ import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -42,6 +44,13 @@ import org.kiwix.kiwixmobile.utils.KiwixIdlingResource
 
 class HelpFragmentTest : BaseActivityTest() {
   private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+
+  @Rule(order = RETRY_RULE_ORDER)
+  @JvmField
+  val retryRule = RetryRule()
+
+  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  val composeTestRule = createComposeRule()
 
   @Before
   override fun waitForIdle() {
@@ -66,10 +75,6 @@ class HelpFragmentTest : BaseActivityTest() {
       }
   }
 
-  @Rule(order = RETRY_RULE_ORDER)
-  @JvmField
-  val retryRule = RetryRule()
-
   init {
     AccessibilityChecks.enable().setRunChecksFromRootView(true)
   }
@@ -81,16 +86,16 @@ class HelpFragmentTest : BaseActivityTest() {
       it.navigate(R.id.helpFragment)
     }
     help {
-      clickOnWhatDoesKiwixDo()
-      assertWhatDoesKiwixDoIsExpanded()
-      clickOnWhatDoesKiwixDo()
-      clickOnWhereIsContent()
-      assertWhereIsContentIsExpanded()
-      clickOnWhereIsContent()
-      clickOnHowToUpdateContent()
-      assertHowToUpdateContentIsExpanded()
-      clickOnHowToUpdateContent()
-      assertWhyCopyMoveFilesToAppPublicDirectoryIsNotVisible()
+      clickOnWhatDoesKiwixDo(composeTestRule)
+      assertWhatDoesKiwixDoIsExpanded(composeTestRule)
+      clickOnWhatDoesKiwixDo(composeTestRule)
+      clickOnWhereIsContent(composeTestRule)
+      assertWhereIsContentIsExpanded(composeTestRule)
+      clickOnWhereIsContent(composeTestRule)
+      clickOnHowToUpdateContent(composeTestRule)
+      assertHowToUpdateContentIsExpanded(composeTestRule)
+      clickOnHowToUpdateContent(composeTestRule)
+      assertWhyCopyMoveFilesToAppPublicDirectoryIsNotVisible(composeTestRule)
     }
     LeakAssertions.assertNoLeaks()
   }
@@ -103,18 +108,18 @@ class HelpFragmentTest : BaseActivityTest() {
         it.navigate(R.id.helpFragment)
       }
       help {
-        clickOnWhatDoesKiwixDo()
-        assertWhatDoesKiwixDoIsExpanded()
-        clickOnWhatDoesKiwixDo()
-        clickOnWhereIsContent()
-        assertWhereIsContentIsExpanded()
-        clickOnWhereIsContent()
-        clickOnHowToUpdateContent()
-        assertHowToUpdateContentIsExpanded()
-        clickOnHowToUpdateContent()
-        clickWhyCopyMoveFilesToAppPublicDirectory()
-        assertWhyCopyMoveFilesToAppPublicDirectoryIsExpanded()
-        clickWhyCopyMoveFilesToAppPublicDirectory()
+        clickOnWhatDoesKiwixDo(composeTestRule)
+        assertWhatDoesKiwixDoIsExpanded(composeTestRule)
+        clickOnWhatDoesKiwixDo(composeTestRule)
+        clickOnWhereIsContent(composeTestRule)
+        assertWhereIsContentIsExpanded(composeTestRule)
+        clickOnWhereIsContent(composeTestRule)
+        clickOnHowToUpdateContent(composeTestRule)
+        assertHowToUpdateContentIsExpanded(composeTestRule)
+        clickOnHowToUpdateContent(composeTestRule)
+        clickWhyCopyMoveFilesToAppPublicDirectory(composeTestRule)
+        assertWhyCopyMoveFilesToAppPublicDirectoryIsExpanded(composeTestRule)
+        clickWhyCopyMoveFilesToAppPublicDirectory(composeTestRule)
       }
       LeakAssertions.assertNoLeaks()
     }
