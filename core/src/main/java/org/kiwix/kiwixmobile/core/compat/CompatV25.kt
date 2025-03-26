@@ -26,6 +26,7 @@ import android.content.pm.ResolveInfo
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET
 import android.net.NetworkCapabilities.TRANSPORT_WIFI
+import java.util.Locale
 
 open class CompatV25 : Compat {
   override fun queryIntentActivities(
@@ -61,4 +62,6 @@ open class CompatV25 : Compat {
     return connectivity.getNetworkCapabilities(connectivity.activeNetwork)
       ?.hasTransport(TRANSPORT_WIFI) == true
   }
+
+  override fun convertToLocal(language: String): Locale = Locale(language)
 }

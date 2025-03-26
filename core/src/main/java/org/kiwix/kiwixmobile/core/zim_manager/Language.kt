@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.zim_manager
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import java.util.Locale
 
 @Parcelize
@@ -51,7 +52,7 @@ data class Language constructor(
     languageCode: String,
     active: Boolean,
     occurrencesOfLanguage: Int
-  ) : this(Locale(languageCode), active, occurrencesOfLanguage)
+  ) : this(languageCode.convertToLocal(), active, occurrencesOfLanguage)
 
   override fun equals(other: Any?): Boolean =
     (other as Language).language == language && other.active == active

@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.utils
 
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import java.util.Locale
 
 class LanguageContainer private constructor(val languageCode: String, val languageName: String) {
@@ -25,7 +26,7 @@ class LanguageContainer private constructor(val languageCode: String, val langua
 
   companion object {
     private fun chooseLanguageName(languageCode: String): String {
-      val displayLanguage = Locale(languageCode).displayLanguage
+      val displayLanguage = languageCode.convertToLocal().displayLanguage
       return if (displayLanguage.length == 2 || displayLanguage.isEmpty()) {
         Locale.ENGLISH.displayLanguage
       } else {

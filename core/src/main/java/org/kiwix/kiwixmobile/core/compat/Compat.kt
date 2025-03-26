@@ -23,6 +23,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.ConnectivityManager
+import java.util.Locale
 
 /**
  * This interface defines a set of functions that are not available on all platforms.
@@ -76,4 +77,6 @@ interface Compat {
   fun isNetworkAvailable(connectivity: ConnectivityManager): Boolean
 
   fun isWifi(connectivity: ConnectivityManager): Boolean
+
+  fun convertToLocal(language: String): Locale
 }

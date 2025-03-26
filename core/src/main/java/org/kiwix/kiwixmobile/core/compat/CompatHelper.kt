@@ -28,17 +28,14 @@ import android.os.Build
 class CompatHelper private constructor() {
   // Note: Needs ": Compat" or the type system assumes `Compat21`
   private val compatValue: Compat = when {
-    sdkVersion >= Build.VERSION_CODES.TIRAMISU -> CompatV33()
+    Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA -> CompatV36()
+    Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> CompatV33()
     else -> CompatV25()
   }
 
   companion object {
     /** Singleton instance of [CompatHelper] */
     private val instance by lazy(::CompatHelper)
-
-    /** Get the current Android API level.  */
-    val sdkVersion: Int
-      get() = Build.VERSION.SDK_INT
 
     val compat get() = instance.compatValue
 
@@ -79,5 +76,7 @@ class CompatHelper private constructor() {
 
     fun ConnectivityManager.isWifi(): Boolean =
       compat.isWifi(this)
+
+    fun String.convertToLocal() = compat.convertToLocal(this)
   }
 }
