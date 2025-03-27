@@ -69,10 +69,10 @@
   <string name="server_started_message">%s 서버에 접속하려면 브라우저에 이 IP 주소를 입력하십시오</string>
   <string name="qr_code">표시된 QR 코드</string>
   <string name="share_host_address">다른 애플리케이션을 통해 URL 공유</string>
-  <string name="error_file_not_found" fuzzy="true">오류: 선택된 ZIM 파일을 찾을 수 없습니다. %s</string>
+  <string name="error_file_not_found">오류: 선택된 ZIM 파일을 찾을 수 없습니다. %s</string>
   <string name="unable_to_read_zim_file">이 ZIM 파일을 읽을 수 없습니다!</string>
   <string name="zim_not_opened">ZIM 파일을 열 수 없습니다</string>
-  <string name="error_file_invalid" fuzzy="true">오류: 선택한 파일은 올바른 ZIM 파일이 아닙니다. %s</string>
+  <string name="error_file_invalid">오류: 선택한 파일은 올바른 ZIM 파일이 아닙니다. %s</string>
   <string name="error_article_url_not_found">오류: 문서(Url: %1$s)를 불러오는 데 실패했습니다.</string>
   <string name="pref_display_title">표시</string>
   <string name="pref_info_title">정보</string>

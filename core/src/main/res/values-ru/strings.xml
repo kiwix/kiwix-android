@@ -84,7 +84,7 @@
   <string name="server_started_message">Введите этот IP адрес в ваш браузер чтобы получить доступ к серверу %s</string>
   <string name="qr_code">Отобразить QR-код</string>
   <string name="share_host_address">Поделиться URL через другие приложения</string>
-  <string name="error_file_not_found" fuzzy="true">Ошибка: выбранный ZIM-файл не найден. %s</string>
+  <string name="error_file_not_found">Ошибка: выбранный ZIM-файл не найден. %s</string>
   <string name="unable_to_read_zim_file">Не удается прочитать этот ZIM-файл!</string>
   <string name="zim_not_opened">Не удается открыть ZIM-файл</string>
   <string name="error_file_invalid">Ошибка: Выбранный файл не является пригодным ZIM-файлом. %s</string>
@@ -209,7 +209,7 @@
   <string name="pref_external_link_popup_title">Предупреждать когда происходит ввод внешних ссылок</string>
   <string name="pref_external_link_popup_summary">Показать всплывающее сообщение про снятие дополнительных средств мобильным оператором или невозможности работы ссылок в офлайне.</string>
   <string name="external_link_popup_dialog_title">Открываем внешнюю ссылку!</string>
-  <string name="external_link_popup_dialog_message" fuzzy="true">Вы открываете внешнюю ссылку. Её открытие может привести к снятию средств мобильным оператором или может не сработать, если вы офлайн. Хотите продолжить?</string>
+  <string name="external_link_popup_dialog_message">Вы открываете внешнюю ссылку. Её открытие может привести к снятию средств мобильным оператором или может не сработать, если вы офлайн.\nХотите продолжить?</string>
   <string name="do_not_ask_anymore">Больше не спрашивать</string>
   <string name="your_languages">Выбранные языки:</string>
   <string name="other_languages">Другие языки:</string>
@@ -353,7 +353,7 @@
   <string name="move">Переместить</string>
   <string name="copying_zim_file">Копирование ZIM-файла…</string>
   <string name="moving_zim_file">Перемещение ZIM-файла…</string>
-  <string name="copy_move_files_dialog_description" fuzzy="true">Для Kiwix требуется, чтобы ZIM-файл находился в его собственном каталоге данных. Вы хотите скопировать или переместить его туда?</string>
+  <string name="copy_move_files_dialog_description">Для Kiwix требуется, чтобы ZIM-файл находился в его собственном каталоге данных.\nВы хотите скопировать или переместить его туда?</string>
   <string name="copy_file_error_message">Ошибка при копировании ZIM-файла: %s.</string>
   <string name="why_copy_move_files_to_app_directory">Зачем копировать / перемещать файлы в общий каталог приложения?</string>
   <string name="copy_move_files_to_app_directory_description">Из-за политики Google Play на Android 11 и выше наше приложение больше не может напрямую обращаться к файлам, хранящимся в другом месте на вашем устройстве. Чтобы вы могли просматривать выбранные файлы, нам необходимо переместить или скопировать их в специальную папку в каталоге нашего приложения. Это позволяет нам получать доступ к файлам и открывать их.</string>
