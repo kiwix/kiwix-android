@@ -163,6 +163,7 @@ class AllProjectConfigurer {
           add("NonConstantResourceId")
           add("NotifyDataSetChanged")
           add("Aligned16KB") // TODO Remove when properly migrated to Android 16.
+          add("AndroidGradlePluginVersion")
         }
         lintConfig = target.rootProject.file("lintConfig.xml")
       }
