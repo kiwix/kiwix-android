@@ -20,25 +20,32 @@ package org.kiwix.kiwixmobile.error
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.help.SEND_DIAGNOSTIC_REPORT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 
 fun errorActivity(func: ErrorActivityRobot.() -> Unit) = ErrorActivityRobot().apply(func)
 
 class ErrorActivityRobot : BaseRobot() {
-  fun assertSendDiagnosticReportDisplayed() {
+  fun assertSendDiagnosticReportDisplayed(composeTestRule: ComposeContentTestRule) {
     // Wait a bit for properly visible the HelpFragment.
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    isVisible(TextId(R.string.send_report))
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(SEND_DIAGNOSTIC_REPORT_TESTING_TAG).assertIsDisplayed()
+    }
   }
 
-  fun clickOnSendDiagnosticReport() {
-    clickOn(TextId(R.string.send_report))
+  fun clickOnSendDiagnosticReport(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(SEND_DIAGNOSTIC_REPORT_TESTING_TAG).performClick()
+    }
   }
 
   fun assertErrorActivityDisplayed(composeTestRule: ComposeContentTestRule) {

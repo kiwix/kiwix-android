@@ -130,7 +130,7 @@ class TopLevelDestinationTest : BaseActivityTest() {
       }
       clickHostBooksOnSideNav(ZimHostRobot::assertMenuWifiHotspotDiplayed)
       clickSettingsOnSideNav(SettingsRobot::assertMenuSettingsDisplayed)
-      clickHelpOnSideNav(HelpRobot::assertToolbarDisplayed)
+      clickHelpOnSideNav { HelpRobot().assertToolbarDisplayed(composeTestRule) }
       clickSupportKiwixOnSideNav()
       pressBack()
     }

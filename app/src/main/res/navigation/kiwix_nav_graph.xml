@@ -129,8 +129,7 @@
   <fragment
     android:id="@+id/helpFragment"
     android:name="org.kiwix.kiwixmobile.help.KiwixHelpFragment"
-    android:label="HelpFragment"
-    tools:layout="@layout/fragment_help" />
+    android:label="HelpFragment" />
   <fragment
     android:id="@+id/kiwixSettingsFragment"
     android:name="org.kiwix.kiwixmobile.settings.KiwixSettingsFragment"

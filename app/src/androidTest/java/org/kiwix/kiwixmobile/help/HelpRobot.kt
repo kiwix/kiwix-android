@@ -17,78 +17,126 @@
  */
 package org.kiwix.kiwixmobile.help
 
+import androidx.compose.ui.test.assertContentDescriptionEquals
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.TextId
-import org.kiwix.kiwixmobile.Findable.Text
-import org.kiwix.kiwixmobile.Findable.ViewId
-import org.kiwix.kiwixmobile.core.R.id
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.help.HELP_SCREEN_ITEM_DESCRIPTION_TESTING_TAG
+import org.kiwix.kiwixmobile.core.help.HELP_SCREEN_ITEM_TITLE_TESTING_TAG
+import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 fun help(func: HelpRobot.() -> Unit) = HelpRobot().apply(func)
 
 class HelpRobot : BaseRobot() {
-  fun assertToolbarDisplayed() {
-    isVisible(ViewId(id.toolbar))
+  fun assertToolbarDisplayed(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.menu_help))
+    }
   }
 
-  fun clickOnWhatDoesKiwixDo() {
-    testFlakyView({ onView(withText(string.help_2)).perform(click()) })
+  fun clickOnWhatDoesKiwixDo(composeTestRule: ComposeContentTestRule) {
+    clickOnHelpScreenItemTitle(0, composeTestRule)
   }
 
-  fun assertWhatDoesKiwixDoIsExpanded() {
-    isVisible(
-      Text(
-        helpTextFormat(
-          string.help_3,
-          string.help_4
-        )
-      )
+  fun assertWhatDoesKiwixDoIsExpanded(composeTestRule: ComposeContentTestRule) {
+    assertHelpScreenDescriptionDisplayed(
+      helpTextFormat(string.help_3, string.help_4),
+      composeTestRule
     )
   }
 
-  fun clickOnWhereIsContent() {
-    clickOn(TextId(string.help_5))
+  fun clickOnWhereIsContent(composeTestRule: ComposeContentTestRule) {
+    clickOnHelpScreenItemTitle(1, composeTestRule)
   }
 
-  fun assertWhereIsContentIsExpanded() {
-    isVisible(
-      Text(
-        helpTextFormat(
-          string.help_6,
-          string.help_7,
-          string.help_8,
-          string.help_9,
-          string.help_10,
-          string.help_11
-        )
-      )
+  fun assertWhereIsContentIsExpanded(composeTestRule: ComposeContentTestRule) {
+    assertHelpScreenDescriptionDisplayed(
+      helpTextFormat(
+        string.help_6,
+        string.help_7,
+        string.help_8,
+        string.help_9,
+        string.help_10,
+        string.help_11
+      ),
+      composeTestRule
     )
   }
 
-  fun clickOnHowToUpdateContent() {
-    clickOn(TextId(string.how_to_update_content))
+  fun clickOnHowToUpdateContent(composeTestRule: ComposeContentTestRule) {
+    clickOnHelpScreenItemTitle(2, composeTestRule)
   }
 
-  fun assertHowToUpdateContentIsExpanded() {
-    isVisible(TextId(string.update_content_description))
+  fun assertHowToUpdateContentIsExpanded(composeTestRule: ComposeContentTestRule) {
+    assertHelpScreenDescriptionDisplayed(
+      context.getString(string.update_content_description),
+      composeTestRule
+    )
   }
 
-  fun clickWhyCopyMoveFilesToAppPublicDirectory() {
-    clickOn(TextId(string.why_copy_move_files_to_app_directory))
+  fun clickWhyCopyMoveFilesToAppPublicDirectory(composeTestRule: ComposeContentTestRule) {
+    clickOnHelpScreenItemTitle(3, composeTestRule)
   }
 
-  fun assertWhyCopyMoveFilesToAppPublicDirectoryIsExpanded() {
-    isVisible(Text(context.getString(string.copy_move_files_to_app_directory_description)))
+  fun assertWhyCopyMoveFilesToAppPublicDirectoryIsExpanded(composeTestRule: ComposeContentTestRule) {
+    assertHelpScreenDescriptionDisplayed(
+      context.getString(string.copy_move_files_to_app_directory_description),
+      composeTestRule
+    )
   }
 
-  fun assertWhyCopyMoveFilesToAppPublicDirectoryIsNotVisible() {
+  fun assertWhyCopyMoveFilesToAppPublicDirectoryIsNotVisible(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      val itemTitleList = onAllNodesWithTag(HELP_SCREEN_ITEM_TITLE_TESTING_TAG)
+      val itemCount = itemTitleList.fetchSemanticsNodes().size
+      repeat(itemCount) { index ->
+        try {
+          itemTitleList[index]
+            .assertTextEquals(context.getString(string.why_copy_move_files_to_app_directory))
+          // If "Why copy/move files to app public directory?" item is visible throw the error.
+          throw RuntimeException("\"Why copy/move files to app public directory?\" help item is visible in non-playStore variant")
+        } catch (_: AssertionError) {
+          // If not found then nothing will do.
+        }
+      }
+    }
     onView(withText(string.why_copy_move_files_to_app_directory))
       .check(doesNotExist())
+  }
+
+  private fun clickOnHelpScreenItemTitle(index: Int, composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        val itemTitleList = onAllNodesWithTag(HELP_SCREEN_ITEM_TITLE_TESTING_TAG)
+        itemTitleList[index].performClick()
+      }
+    })
+  }
+
+  private fun assertHelpScreenDescriptionDisplayed(
+    description: String,
+    composeTestRule: ComposeContentTestRule
+  ) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(HELP_SCREEN_ITEM_DESCRIPTION_TESTING_TAG)
+          .assertContentDescriptionEquals(description)
+      }
+    })
   }
 
   private fun helpTextFormat(vararg stringIds: Int) =

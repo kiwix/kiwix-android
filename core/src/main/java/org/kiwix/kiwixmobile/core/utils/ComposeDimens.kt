@@ -98,4 +98,10 @@ object ComposeDimens {
 
   // LocalLibraryFragment dimens
   val FAB_ICON_BOTTOM_MARGIN = 50.dp
+
+  // HelpFragment dimens
+  val HELP_SCREEN_DIVIDER_HEIGHT = 0.7.dp
+  val HELP_SCREEN_ITEM_TITLE_TEXT_SIZE = 20.sp
+  val HELP_SCREEN_ITEM_TITLE_LETTER_SPACING = 0.0125.em
+  val HELP_SCREEN_ARROW_ICON_SIZE = 35.dp
 }

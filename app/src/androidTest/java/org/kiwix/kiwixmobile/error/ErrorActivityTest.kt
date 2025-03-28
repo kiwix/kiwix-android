@@ -91,8 +91,8 @@ class ErrorActivityTest : BaseActivityTest() {
       it.navigate(R.id.helpFragment)
     }
     errorActivity {
-      assertSendDiagnosticReportDisplayed()
-      clickOnSendDiagnosticReport()
+      assertSendDiagnosticReportDisplayed(composeTestRule)
+      clickOnSendDiagnosticReport(composeTestRule)
       assertErrorActivityDisplayed(composeTestRule)
       // Click on "No, Thanks" button to see it's functionality working or not.
       clickOnNoThanksButton(composeTestRule)
@@ -101,9 +101,9 @@ class ErrorActivityTest : BaseActivityTest() {
         it.navigate(R.id.helpFragment)
       }
       // Assert HelpFragment is visible or not after clicking on the "No, Thanks" button.
-      assertSendDiagnosticReportDisplayed()
+      assertSendDiagnosticReportDisplayed(composeTestRule)
       // Again click on "Send diagnostic report" button to open the ErrorActivity.
-      clickOnSendDiagnosticReport()
+      clickOnSendDiagnosticReport(composeTestRule)
       assertErrorActivityDisplayed(composeTestRule)
       // Check check boxes are displayed or not.
       assertCheckBoxesDisplayed(composeTestRule)
