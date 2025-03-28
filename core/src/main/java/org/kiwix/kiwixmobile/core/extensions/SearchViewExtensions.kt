@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.extensions
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.ViewGroup.LayoutParams
 import android.widget.EditText
@@ -29,6 +30,7 @@ import org.kiwix.kiwixmobile.core.R
 
 const val CLOSE_ICON_PADDING = 30
 
+@SuppressLint("PrivateResource")
 fun SearchView.setUpSearchView(context: Context) {
   val heightAndWidth = context.resources.getDimensionPixelSize(
     R.dimen.material_minimum_height_and_width

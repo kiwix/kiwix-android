@@ -17,13 +17,15 @@
  */
 package org.kiwix.kiwixmobile.core.utils
 
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import java.util.Locale
 
 /**
  * Created by mhutti1 on 19/04/17.
  */
 class BookUtils {
-  val localeMap = Locale.getISOLanguages().map(::Locale).associateBy { it.isO3Language }
+  val localeMap =
+    Locale.getISOLanguages().map { it.convertToLocal() }.associateBy { it.isO3Language }
 
   // Get the language from the language codes of the parsed xml stream
   @Suppress("MagicNumber")

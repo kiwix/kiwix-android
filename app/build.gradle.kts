@@ -29,12 +29,12 @@ android {
   // it directly in the AndroidManifest file.
   namespace = "org.kiwix.kiwixmobile"
   defaultConfig {
-    base.archivesName.set(apkPrefix)
     resValue("string", "app_name", "Kiwix")
     resValue("string", "app_search_string", "Search Kiwix")
     versionCode = "".getVersionCode()
     versionName = generateVersionName()
     manifestPlaceholders["permission"] = "android.permission.MANAGE_EXTERNAL_STORAGE"
+    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
   lint {
     checkDependencies = true

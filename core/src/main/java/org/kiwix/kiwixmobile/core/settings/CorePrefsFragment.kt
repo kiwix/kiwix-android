@@ -46,6 +46,7 @@ import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
@@ -169,9 +170,7 @@ abstract class CorePrefsFragment :
           if (selectedLang == Locale.ROOT.toString()) {
             getString(R.string.device_default)
           } else {
-            Locale(
-              selectedLang
-            ).displayLanguage
+            selectedLang.convertToLocal().displayLanguage
           }
         languagePref.onPreferenceChangeListener =
           Preference.OnPreferenceChangeListener { _, newValue ->
@@ -206,7 +205,7 @@ abstract class CorePrefsFragment :
     val entries = arrayOfNulls<String>(languageCodeList.size)
     entries[0] = getString(R.string.device_default)
     for (i in 1 until languageCodeList.size) {
-      val locale = Locale(languageCodeList[i])
+      val locale = languageCodeList[i].convertToLocal()
       entries[i] = locale.displayLanguage + " (" + locale.getDisplayLanguage(locale) + ") "
     }
     return entries
@@ -389,7 +388,7 @@ abstract class CorePrefsFragment :
     }
     try {
       fileSelectLauncher.launch(Intent.createChooser(intent, "Select a bookmark file"))
-    } catch (ex: ActivityNotFoundException) {
+    } catch (_: ActivityNotFoundException) {
       activity.toast(
         resources.getString(R.string.no_app_found_to_select_bookmark_file),
         Toast.LENGTH_SHORT
