@@ -118,7 +118,7 @@
   <string name="pref_external_link_popup_title">Avisar cando seguir ligazóns externas</string>
   <string name="pref_external_link_popup_summary">Mostra as previsualizacións de páxinas para avisar sobre os custos adicionais ou cando non funciona en ligazóns desconectadas.</string>
   <string name="external_link_popup_dialog_title">Accedendo á ligazón externa!</string>
-  <string name="external_link_popup_dialog_message" fuzzy="true">Estás introducindo unha ligazón externa. Isto pode xerar gastos por transferencia de datos ou simplemente non funcionará cando está desconectado. Aínda quere continuar?</string>
+  <string name="external_link_popup_dialog_message">Está introducindo unha ligazón externa. Isto pode xerar gastos por transferencia de datos ou simplemente non funcionará cando non teña conexión.\nAínda quere continuar?</string>
   <string name="do_not_ask_anymore">Non preguntar máis</string>
   <string name="your_languages">Linguas escollidas:</string>
   <string name="other_languages">Outras linguas:</string>

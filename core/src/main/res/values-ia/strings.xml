@@ -178,7 +178,7 @@
   <string name="pref_external_link_popup_title">Advertir quando se accede a ligamines externe</string>
   <string name="pref_external_link_popup_summary">Monstrar dialogo pro advertir de costos additional o de ligamines que non functiona foras de linea.</string>
   <string name="external_link_popup_dialog_title">Accesso a ligamine externe!</string>
-  <string name="external_link_popup_dialog_message" fuzzy="true">Tu sta sur le puncto de sequer un ligamine externe. Isto pote comportar costos additional pro le transferimento de datos, o non functiona si tu es foras de linea. Vole tu continuar?</string>
+  <string name="external_link_popup_dialog_message">Tu sta sur le puncto de sequer un ligamine externe. Isto pote comportar costos additional pro le transferimento de datos, o non functiona si tu es foras de linea.\nVole tu continuar?</string>
   <string name="do_not_ask_anymore">Non demandar plus</string>
   <string name="your_languages">Linguas eligite:</string>
   <string name="other_languages">Altere linguas:</string>
@@ -318,7 +318,7 @@
   <string name="preparing_file_for_copy">Preparation pro copiar/displaciar</string>
   <string name="action_copy">Copiar</string>
   <string name="move">Displaciar</string>
-  <string name="copy_move_files_dialog_description" fuzzy="true">Kiwix require que le file ZIM se trova in su proprie directorio de datos. Vole tu copiar o displaciar lo illac?</string>
+  <string name="copy_move_files_dialog_description">Kiwix require que le file ZIM se trova in su proprie directorio de datos.\nVole tu copiar o displaciar lo illac?</string>
   <string name="copy_file_error_message">Error durante le copia del file ZIM: %s.</string>
   <string name="why_copy_move_files_to_app_directory">Proque displaciar/copiar files al directorio public del app?</string>
   <string name="copy_move_files_to_app_directory_description">A causa del politicas de Google Play sur Android 11 e plus recente, iste application non pote plus acceder directemente al files immagazinate in altere locos sur iste apparato. Pro permitter le accesso al files seligite, es necessari displaciar o copiar los in un dossier special in le directorio de iste application. Isto permittera acceder al files e aperir los.</string>

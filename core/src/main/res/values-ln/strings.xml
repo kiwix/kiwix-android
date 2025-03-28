@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* BOKOBA VEROLY
 * CapitainAfrika
 * Lingabo
 * MohitMali
@@ -22,6 +23,7 @@
   <string name="save_media">Bomba Media</string>
   <string name="save_media_error">Libunga esalemaki ntango bazalaki koluka kobomba ba médias!</string>
   <string name="search_label">Boluki</string>
+  <string name="searched_list">Liste ya bato oyo balukaka</string>
   <string name="choose_file">Poná makambo oyo ezali na kati (*.zim)</string>
   <string name="open_in_new_tab">Bofungoli esika na esika ya sika?</string>
   <string name="hotspot_service_channel_name">Esika ya mosala</string>
@@ -51,12 +53,15 @@
   <string name="error_server_already_running">Serveur ezali kosala. Tosengi yo kanga yango mpe meka lisusu.</string>
   <string name="error_ip_address_not_found">Nakokaki te kozwa adrɛsi ya IP.</string>
   <string name="server_started_message">Tyá adresi IP oyo na navigateur na yo mpo na kokɔta na serveur %s</string>
+  <string name="qr_code">Kofungola QR Code</string>
   <string name="share_host_address">Kabola URL na nzela ya ba applications misusu</string>
   <string name="error_file_not_found">Mabunga: Fisyé ZIM oyo oponi ezwami te. %s</string>
-  <string name="unable_to_read_zim_file" fuzzy="true">Epesameli nzela te ya kotanga fisyé ZIM oyo!</string>
-  <string name="zim_not_opened" fuzzy="true">Ekoki te kofungola fisyé ZIM</string>
+  <string name="unable_to_read_zim_file">Kozanga kotanga fiche ZIM oyo!</string>
+  <string name="zim_not_opened">Ekoki te kofungola fisyé ZIM</string>
   <string name="error_file_invalid">Libunga: Fisyé oyo oponi ezali fisyé ZIM ya malamu te. %s</string>
   <string name="error_article_url_not_found">Libunga: Kokɔtisa lisolo (Url: %1$s ) elongi te.</string>
+  <string name="error_loading_random_article_zim_not_loaded">Kozanga makoki ya kotondisa biloko. Fichier ya ZIM etyami malamu te.</string>
+  <string name="could_not_find_random_article">Kozanga likoki ya komona lisolo moko ya mbalakaka. Tosengi yo omeka lisusu na nsima.</string>
   <string name="pref_display_title">Kolakisa</string>
   <string name="pref_info_title">Nsango</string>
   <string name="pref_info_version">Libongoli</string>
@@ -66,20 +71,29 @@
   <string name="pref_back_to_top_summary">Tyá butɔ moko na nsuka ya lokasa mpo na kobaluka tii na likoló</string>
   <string name="pref_language_title">Lokótá</string>
   <string name="pref_language_chooser">Kopona lokota</string>
+  <string name="pref_credits">Bato oyo bapesaka mbongo mpe mikanda ya ndingisa</string>
   <string name="pref_credits_title">Matondi</string>
   <string name="tts_lang_not_supported">Elobeli ya lokasa oyo esimbami te. Ekoki kozala ete lisolo yango etángami malamu te.</string>
   <string name="no_reader_application_installed">Nakokaki te komona application ya lolenge oyo ya fisyé</string>
   <string name="no_email_application_installed">Esengeli kotisa moteki nsango email</string>
+  <string name="no_app_found_to_select_bookmark_file">Aucune application trouvée pour sélectionner un fichier de marque-pages</string>
   <string name="no_section_info">Mitó ya makambo ezwamaki te</string>
   <string name="request_storage">Mpo na kozwa makambo oyo ezali na libanda ya internet, tosengeli kozwa esika na yo ya kobomba biloko</string>
-  <string name="request_write_storage" fuzzy="true">Kozwa ba fisyé ya ZIM esengeli ko zala na ndingisa esika ya ebombelo na yo</string>
+  <string name="request_write_storage">Kozwa ba fisyé ya ZIM esengeli ko zala na ndingisa esika ya ebombelo na yo</string>
   <string name="clear_recent_and_tabs_history_dialog">Ozali na elikya ete olingi kolongola lisolo ya bolukiluki na yo mpe kozongisa makambo nyonso ya mosala?</string>
   <string name="delete_recent_search_item">Kolongola eloko oyo?</string>
   <string name="pref_clear_all_history_title">Longola makambo ya kala</string>
+  <string name="pref_clear_all_history_summary">Bolukiluki ya polele ya mikolo oyo mpe masolo</string>
   <string name="pref_notes">Banɔti</string>
   <string name="pref_permission">Ndingisa</string>
+  <string name="pref_import_bookmark_title">Importer les marque-pages.l</string>
+  <string name="pref_import_bookmark_summary">Kokotisa na mboka mopaya ba bookmarks oyo babombaki</string>
+  <string name="pref_export_bookmark_title">Biloko ya kotɛkisa na mikili ya bapaya</string>
+  <string name="pref_export_bookmark_summary">Na mikili ya bapaya, babombami nyonso</string>
+  <string name="export_bookmark_saved">Makomi ya mikanda ebimisami na %s</string>
   <string name="all_history_cleared">Lisolo mobimba elimbolami</string>
   <string name="pref_clear_all_bookmarks_title">Longola ba marque-pages</string>
+  <string name="clear_all_history_dialog_title">Bolimbisi makambo nyonso ya kala?</string>
   <string name="share">Kopesa</string>
   <string name="selected_file_cab_app_chooser_title">Kopesa ba fisyé ya ZIM na:</string>
   <string name="delete">Kolímwisa</string>
@@ -92,6 +106,7 @@
   <string name="tab_closed">Onglet ekangami</string>
   <string name="tabs_closed">Ba onglets ekangami</string>
   <string name="bookmark_added">Elembo ya buku ebakisamaki</string>
+  <string name="rate_dialog_title">Tosengi yo otesa biso motuya</string>
   <string name="rate_dialog_msg">Soki osepeli kosalela %s, olingi yo ozwa mwa ntango mpo na koyeba motuya na yango. Matɔndi mpo na lisungi na yo!</string>
   <string name="rate_dialog_positive">Ntalo!</string>
   <string name="no_thanks">Te, matondi</string>
@@ -108,12 +123,14 @@
   <string name="local_zims">Esaleli</string>
   <string name="remote_zims">Na Internet</string>
   <string name="library">Ebómbelo múku</string>
-  <string name="delete_zim_body" fuzzy="true">Fisyé ZIM oyo elandi ekolongolama:\n\n%s</string>
+  <string name="delete_zim_body">Fisyé ZIM oyo elandi ekolongolama:\n\n%s</string>
   <string name="delete_zims_toast">Ba fisyé elongolamaki</string>
   <string name="no_files_here">Ba fisyé ezali te awa</string>
   <string name="download_no_space">Esika ekoki te mpo na kozwa yango.</string>
   <string name="download">Bokɔ́ngɔli</string>
+  <string name="download_notification_channel_name">Komisa nkombo ya nzela ya liyebisi</string>
   <string name="space_available">Esika ezali:</string>
+  <string name="move_no_space">Esika ya kokoka te mpo na kokende mpe kosala kopi.</string>
   <string name="zim_simple">Pete</string>
   <string name="zim_no_pic">Bililingi te</string>
   <string name="zim_no_vid">Ba Videos eza te</string>
@@ -123,6 +140,65 @@
   <string name="help_4">Atako Kiwix esalemaki na ebandeli mpo na kopesa Wikipedia na nzela ya internet, etángaka mpe makambo mosusu.</string>
   <string name="help_5">Makambo ezali wapi?</string>
   <string name="help_6">Makambo na biso ezali na site ya Kiwix.</string>
+  <string name="help_7">Bazali disponible lokola ba fichiers ZIM. Ezali na ebele na yango:</string>
+  <string name="help_8">• Wikipedia ezali na ndenge na yango moko mpo na monɔkɔ mokomoko</string>
+  <string name="help_9">• Makambo mosusu lokola Wikileaks to Wikisource ezali mpe</string>
+  <string name="help_10">Okoki kozwa ba fichiers ZIM oyo oponi na kati ya application to kopona na likebi nyonso oyo olingi mpe kozwa yango na ordinatɛrɛ ya Desktop liboso ya kotinda ba fichier ZIM na karte na yo ya SD.</string>
+  <string name="help_11">Ba fichiers ya ZIM oyo bazwaka na kati ya application ezali na liste ya biloko ya kobomba na libanda na kati ya fiche oyo ebengami Kiwix.</string>
+  <string name="pref_storage">Kobomba biloko</string>
+  <string name="pref_current_folder">Folder ya lelo</string>
+  <string name="pref_storage_used">%s utilisé</string>
+  <string name="pref_free_storage">%s ofele</string>
+  <string name="choose_storage_to_download_book">Pona kobomba buku</string>
+  <string name="delete_zim_failed">Bolimbisi ete tokokaki te kolongola ba fichiers misusu. Osengeli komeka kosalela gestionnaire ya ba fichiers.</string>
+  <string name="tts_pause">Bopemi</string>
+  <string name="tts_resume">Kobanda na ebandeli</string>
+  <string name="stop">Esika</string>
+  <string name="notification_pause_button_text">Bopemi</string>
+  <string name="notification_resume_button_text">Bozongeli</string>
+  <string name="internal_storage">Ling</string>
+  <string name="external_storage">Na libanda</string>
+  <string name="yes">Iyo</string>
+  <string name="no">Te</string>
+  <string name="confirm_stop_download_title">Botika kozwa yango?</string>
+  <string name="confirm_stop_download_msg">Ozali na elikya ete olingi kotika kokotisa yango na internet?</string>
+  <string name="download_change_storage">Moponi ya esaleli ya kobomba biloko</string>
+  <string name="tts_not_enabled">Kotanga na mongongo makasi ezali te mpo na fiche ZIM oyo</string>
+  <string name="texttospeech_initialization_failed">Kobanda ya Read Aloud elongaki te. Tosengi yo omeka lisusu</string>
+  <string name="texttospeech_error">Libunga oyo ekanisamaki te na Tanga na mongongo makasi. Svp meka lisusu</string>
+  <string name="next">Oyo elandi</string>
+  <string name="previous">Liboso na yango</string>
+  <string name="wifi_only_title">Pesá nzela ya kozwa makambo na nzela ya réseau mobile?</string>
+  <string name="wifi_only_msg">Soki oponi \"Ɛɛ\" okoyebisama te na mikolo ezali koya. Kasi, okoki ntango nyonso kobongola yango na bisika</string>
+  <string name="pref_wifi_only">Ba contenu kaka na nzela ya WiFi</string>
+  <string name="time_day">mokolo</string>
+  <string name="time_hour">h</string>
+  <string name="time_minute">min</string>
+  <string name="time_second">s</string>
+  <string name="time_left">na lobɔkɔ ya mwasi</string>
+  <string name="time_today">Lelo oyo</string>
+  <string name="time_yesterday">Eleki</string>
+  <string name="pref_external_link_popup_title">Likebisi ntango ozali kokota na ba lien ya libanda</string>
+  <string name="pref_external_link_popup_summary">Komonisa kobima mpo na kokebisa na ntalo ya kobakisa to kosala te na ba lien ya libanda.</string>
+  <string name="external_link_popup_dialog_title">Kokɔta na boyokani ya libanda!</string>
+  <string name="external_link_popup_dialog_message">Ozali kokota na esika ya libanda. Yango ekoki kobakisa ntalo mpo na kotinda bansango to ekosala te soki ozali na internet. Olingi kokoba?</string>
+  <string name="do_not_ask_anymore">Kosenga lisusu te</string>
+  <string name="your_languages">Minɔkɔ misusu:</string>
+  <string name="other_languages">Minɔkɔ misusu:</string>
+  <string name="downloading">Kobimisa:</string>
+  <string name="no_items_msg">Biloko ezali te</string>
+  <string name="crash_description">Emonani lokola to crasher.\n\nOkozala na problème ya kosalisa biso to bongisa problème oyo na kotinda ba informations oyo elandi?</string>
+  <string name="crash_checkbox_language">Ndenge oyo monɔkɔ na yo ezali</string>
+  <string name="crash_checkbox_zimfiles">Liste ya ba fichiers na yo ya ZIM</string>
+  <string name="crash_checkbox_exception">Makambo etali likama yango</string>
+  <string name="crash_checkbox_logs">Makomi ya kosalela</string>
+  <string name="crash_checkbox_device">Makambo etali esaleli</string>
+  <string name="crash_button_confirm">Bitumba ya makasi</string>
+  <string name="shortcut_disabled_message">Nzela ya mokuse ezali te</string>
+  <string name="new_tab_shortcut_label">Tab ya sika</string>
+  <string name="get_content_shortcut_label">Zwá bosepeli</string>
+  <string name="fav_icon">Favicon</string>
+  <string name="articleCount">%s ya masolo</string>
   <string name="complete">Mobimba</string>
   <string name="failed_state">Esimbi te: %s</string>
   <string name="save">Kobómbisa</string>

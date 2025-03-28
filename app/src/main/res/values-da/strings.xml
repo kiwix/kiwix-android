@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Peterleth
+* Saederup92
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">Dit filsystem understøtter ikke filer over 4 GB</string>
+  <string name="detecting_file_system">Registrerer om filsystemet kan oprette 4GB filer</string>
+  <string name="cannot_open_file">Filen kunne ikke åbnes\nPrøv at søge efter denne fil i dit bibliotek</string>
+  <string name="send_files_title">Send filer</string>
+  <string name="receive_files_title">Modtag filer</string>
+  <string name="no_app_found_to_open">Ingen app fundet til at vælge ZIM-fil!</string>
+  <string name="select_zim_file">Vælg ZIM-fil for at læse</string>
+</resources>

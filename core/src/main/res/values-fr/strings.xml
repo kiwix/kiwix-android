@@ -15,6 +15,7 @@
 * Hecatonchire
 * I'm mender
 * Kelson
+* Lingabo
 * Mahabarata
 * McDutchie
 * MohitMali
@@ -34,9 +35,9 @@
 <resources>
   <string name="menu_help">Aide</string>
   <string name="menu_home">Accueil</string>
-  <string name="menu_settings">Options</string>
-  <string name="menu_search_in_text">Rechercher dans la page</string>
-  <string name="bookmarks">Marque-pages</string>
+  <string name="menu_settings">Paramètres</string>
+  <string name="menu_search_in_text">Trouver dans la page</string>
+  <string name="bookmarks">Signets</string>
   <string name="menu_random_article">Article au hasard</string>
   <string name="menu_full_screen">Plein écran</string>
   <string name="menu_exit_full_screen">Sortir du mode plein écran</string>
@@ -102,7 +103,7 @@
   <string name="pref_credits_title">Remerciements</string>
   <string name="tts_lang_not_supported">La langue de cette page n’est pas prise en charge. L’article risque de ne pas être lu correctement.</string>
   <string name="no_reader_application_installed">Impossible de trouver une application installée pour ce type de fichier</string>
-  <string name="no_email_application_installed">Veuillez installer un client E-Mail</string>
+  <string name="no_email_application_installed">Veuillez installer un client e-Mail</string>
   <string name="no_app_found_to_select_bookmark_file">Aucune application trouvée pour sélectionner un fichier de marque-pages</string>
   <string name="no_section_info">Aucun entête de contenu trouvé</string>
   <string name="request_storage">Pour accéder au contenu hors connexion, nous avons besoin d’un accès à votre espace de stockage</string>
@@ -410,4 +411,7 @@
   <string name="donation_dialog_title">Faites un don aujourd’hui</string>
   <string name="donation_dialog_description">%s a besoin de votre aide</string>
   <string name="make_donation">Faire un don</string>
+  <string name="resuming_state">Reprend le travail…</string>
+  <string name="downloading_state">Téléchargement en cours</string>
+  <string name="download_failed_state">Échec</string>
 </resources>

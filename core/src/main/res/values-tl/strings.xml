@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Macofe
+* Shope
 -->
 <resources>
   <string name="menu_help">Tulong</string>
@@ -11,6 +12,13 @@
   <string name="menu_random_article">Alin mang artikulo</string>
   <string name="menu_full_screen">Buong panooran</string>
   <string name="menu_exit_full_screen">Huwag buong panooran</string>
+  <string name="menu_read_aloud">Basahin nang malakas</string>
+  <string name="menu_read_aloud_stop">Itigil basahin nang malakas</string>
+  <string name="menu_support_kiwix">Itaguyod ang Kiwix</string>
+  <string name="menu_about_app">Tungkol sa %s na app</string>
+  <string name="menu_wifi_hotspot">WiFi Hotspot</string>
+  <string name="save_media">I-save ang Media</string>
+  <string name="save_media_error">Nagkaroon ng error noong sinubukang i-save ang media!</string>
   <string name="search_label">Humanap</string>
   <string name="pref_display_title">Palitawin</string>
   <string name="pref_info_title">Kabatiran</string>

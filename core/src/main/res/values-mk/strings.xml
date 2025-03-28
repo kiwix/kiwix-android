@@ -181,7 +181,7 @@
   <string name="pref_external_link_popup_title">Предупреди ме кога се внесуваат надворешни врски</string>
   <string name="pref_external_link_popup_summary">Прикажи отскочници со предупредување за дополнителни трошоци или неработа во вонмрежни врски.</string>
   <string name="external_link_popup_dialog_title">Внесувате надворешна врска!</string>
-  <string name="external_link_popup_dialog_message" fuzzy="true">Внесувате надворешна врска. Ова може да доведе до дополнителни трошоци за податочен пренос или пак просто нема да работи кога не сте на линија. Дали сакате да продолжите?</string>
+  <string name="external_link_popup_dialog_message">Внесувате надворешна врска. Ова може да доведе до дополнителни трошоци за податочен пренос или пак просто нема да работи кога не сте на линија.\nДали сакате да продолжите?</string>
   <string name="do_not_ask_anymore">Повеќе не прашувај</string>
   <string name="your_languages">Избрани јазици:</string>
   <string name="other_languages">Други јазици:</string>
@@ -327,7 +327,7 @@
   <string name="move">Премести</string>
   <string name="copying_zim_file">Ја копирам ZIM податотеката…</string>
   <string name="moving_zim_file">Ја преместувам ZIM-податотеката…</string>
-  <string name="copy_move_files_dialog_description" fuzzy="true">Кивикс бара ZIM-податотеката да биде во сопствена податочна папка. Дали сакате да ја прекопирате или преместите таму?</string>
+  <string name="copy_move_files_dialog_description">Кивикс бара ZIM-податотеката да биде во сопствена податочна папка.\nДали сакате да ја прекопирате или преместите таму?</string>
   <string name="copy_file_error_message">Грешка при копирање на ZIM-податотеката: %s.</string>
   <string name="verify_zim_chunk_dialog_title">Бидете внимателни: Проверете дали сите ZIM-делови се правилно преместени/ископирани!</string>
   <string name="verify_zim_chunks_dialog_message">Можете да ги проверите во папката „Android/media/org.kiwix…/“.\nШтом сте готови, превчитајте го екранот на библиотеката со поминување надолу. Разделената ZIM-податотека потоа ќе се појави во вашата библиотека.</string>
@@ -382,4 +382,7 @@
   <string name="donation_dialog_title">Дарувајте денес</string>
   <string name="donation_dialog_description">На %s му треба вашата помош.</string>
   <string name="make_donation">Дарувајте</string>
+  <string name="resuming_state">Продолжува</string>
+  <string name="downloading_state">Се презема</string>
+  <string name="download_failed_state">Неуспешно</string>
 </resources>
