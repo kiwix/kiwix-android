@@ -12,7 +12,7 @@ jobs:
     name: Automated tests
     strategy:
       matrix:
-        api-level: [ 25, 30, 33, 34, 35 ]
+        api-level: [ 25, 30, 33, 34, 35, 36 ]
       fail-fast: true
     runs-on: ubuntu-22.04
     steps:
@@ -57,7 +57,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ (matrix.api-level == 35) && 'google_apis' || 'default' }}
+          target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
           arch: x86_64
           profile: pixel_2
           ram-size: 3072M
@@ -76,7 +76,7 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ (matrix.api-level == 35) && 'google_apis' || 'default' }}
+          target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
           arch: x86_64
           profile: pixel_2
           ram-size: 3072M
@@ -118,7 +118,7 @@ jobs:
     name: Automated tests for PlayStore variant
     strategy:
       matrix:
-        api-level: [ 25, 30, 33, 34, 35 ]
+        api-level: [ 25, 30, 33, 34, 35, 36 ]
       fail-fast: true
     runs-on: ubuntu-22.04
     steps:
@@ -163,7 +163,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ (matrix.api-level == 35) && 'google_apis' || 'default' }}
+          target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
           arch: x86_64
           profile: pixel_2
           ram-size: 2048M
@@ -182,7 +182,7 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ (matrix.api-level == 35) && 'google_apis' || 'default' }}
+          target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
           arch: x86_64
           profile: pixel_2
           ram-size: 2048M
@@ -199,7 +199,7 @@ jobs:
     name: Automated tests for Custom app
     strategy:
       matrix:
-        api-level: [ 25, 30, 33, 34, 35 ]
+        api-level: [ 25, 30, 33, 34, 35, 36 ]
       fail-fast: true
     runs-on: ubuntu-22.04
     steps:
@@ -244,7 +244,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ (matrix.api-level == 35) && 'google_apis' || 'default' }}
+          target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
           arch: x86_64
           profile: pixel_2
           ram-size: 2048M
@@ -263,7 +263,7 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ (matrix.api-level == 35) && 'google_apis' || 'default' }}
+          target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
           arch: x86_64
           profile: pixel_2
           ram-size: 2048M
@@ -280,7 +280,7 @@ jobs:
     name: Automated tests on Tablet
     strategy:
       matrix:
-        api-level: [ 25, 30, 33, 34, 35 ]
+        api-level: [ 25, 30, 33, 34, 35, 36 ]
       fail-fast: true
     runs-on: ubuntu-22.04
     steps:
@@ -325,7 +325,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ (matrix.api-level == 35) && 'google_apis' || 'default' }}
+          target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
           arch: x86_64
           profile: pixel_2
           ram-size: 2048M
@@ -344,7 +344,7 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ (matrix.api-level == 35) && 'google_apis' || 'default' }}
+          target: ${{ (matrix.api-level >= 35) && 'google_apis' || 'default' }}
           arch: x86_64
           profile: pixel_c
           ram-size: 2048M
