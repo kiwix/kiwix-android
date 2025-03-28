@@ -24,7 +24,7 @@ object Config {
   // levels: https://apilevels.com/
   const val compileSdk = 36 // SDK version used by Gradle to compile our app.
   const val minSdk = 25 // Minimum SDK (Minimum Support Device) is 25 (Android 7.1 Nougat).
-  const val targetSdk = 36 // Target SDK (Maximum Support Device) is Baklava (Android 16).
+  const val targetSdk = 36 // Target SDK (Maximum Support Device) is 36 (Android 16).
 
   val javaVersion = JavaVersion.VERSION_17
 

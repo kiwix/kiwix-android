@@ -21,6 +21,10 @@
 # Enable Wi-Fi on the emulator
 adb shell svc wifi enable
 adb logcat -c
+# Check if the stylus_handwriting_enabled setting exists before disabling
+if adb shell settings list secure | grep -q "stylus_handwriting_enabled"; then
+  adb shell settings put secure stylus_handwriting_enabled 0
+fi
 # shellcheck disable=SC2035
 adb logcat *:E -v color &
 
@@ -61,6 +65,10 @@ while [ $retry -le 3 ]; do
     # Enable Wi-Fi on the emulator
     adb shell svc wifi enable
     adb logcat -c
+    # Check if the stylus_handwriting_enabled setting exists before disabling
+    if adb shell settings list secure | grep -q "stylus_handwriting_enabled"; then
+      adb shell settings put secure stylus_handwriting_enabled 0
+    fi
     # shellcheck disable=SC2035
     adb logcat *:E -v color &
 

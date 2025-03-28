@@ -119,8 +119,11 @@ class ObjectBoxToRoomMigratorTest {
       val expectedSearchTerm = "test search"
       val expectedZimId = "8812214350305159407L"
       val expectedUrl = "http://kiwix.app/mainPage"
-      val recentSearchEntity =
-        RecentSearchEntity(searchTerm = expectedSearchTerm, zimId = expectedZimId, url = expectedUrl)
+      val recentSearchEntity = RecentSearchEntity(
+        searchTerm = expectedSearchTerm,
+        zimId = expectedZimId,
+        url = expectedUrl
+      )
       // insert into object box
       box.put(recentSearchEntity)
       // migrate data into room database
