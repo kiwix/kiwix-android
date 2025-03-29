@@ -28,7 +28,13 @@ android {
   // This is now specified in the Gradle configuration instead of declaring
   // it directly in the AndroidManifest file.
   namespace = "org.kiwix.kiwixmobile"
+  compileSdk = 35
   defaultConfig {
+    minSdk = 25
+    //noinspection OldTargetApi
+    targetSdk = 34 // Update this to the latest version
+    versionCode = 1
+    versionName = "1.0"
     base.archivesName.set(apkPrefix)
     resValue("string", "app_name", "Kiwix")
     resValue("string", "app_search_string", "Search Kiwix")
