@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.zim_manager.Language
-import org.kiwix.kiwixmobile.language.adapter.LanguageListItem
+import org.kiwix.kiwixmobile.language.composables.LanguageListItem
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.language.viewmodel.Action.SaveAll
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
