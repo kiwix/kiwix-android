@@ -60,8 +60,8 @@ android {
   }
 }
 
-fun ProductFlavor.createDownloadTask(file: File): Task {
-  return tasks.create(
+fun ProductFlavor.createDownloadTask(file: File): TaskProvider<Task> {
+  return tasks.register(
     "download${
       name.replaceFirstChar {
         if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it"
@@ -157,8 +157,8 @@ fun writeZimFileDataInChunk(
   outputStream?.close()
 }
 
-fun ProductFlavor.createDownloadTaskForPlayAssetDelivery(file: File): Task {
-  return tasks.create(
+fun ProductFlavor.createDownloadTaskForPlayAssetDelivery(file: File): TaskProvider<Task> {
+  return tasks.register(
     "download${
       name.replaceFirstChar {
         if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it"
@@ -206,10 +206,10 @@ val String.removeAuthenticationFromUrl: String
 fun ProductFlavor.createPublishApkWithExpansionTask(
   file: File,
   applicationVariants: DomainObjectSet<ApplicationVariant>
-): Task {
+): TaskProvider<Task> {
   val capitalizedName =
     name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it" }
-  return tasks.create("publish${capitalizedName}ReleaseApkWithExpansionFile") {
+  return tasks.register("publish${capitalizedName}ReleaseApkWithExpansionFile") {
     group = "publishing"
     description = "Uploads $capitalizedName to the Play Console with an Expansion file"
     doLast {
@@ -237,10 +237,10 @@ fun DomainObjectSet<ApplicationVariant>.releaseVariantsFor(productFlavor: Produc
     .filter { !it.outputFileName.contains("universal") }
     .sortedBy { it.versionCodeOverride }
 
-fun ProductFlavor.createPublishBundleWithAssetPlayDelivery(): Task {
+fun ProductFlavor.createPublishBundleWithAssetPlayDelivery(): TaskProvider<Task> {
   val capitalizedName =
     name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it" }
-  return tasks.create("publish${capitalizedName}ReleaseBundleWithPlayAssetDelivery") {
+  return tasks.register("publish${capitalizedName}ReleaseBundleWithPlayAssetDelivery") {
     group = "publishing"
     description = "Uploads $capitalizedName to the Play Console with an Play Asset delivery mode"
     doLast {
@@ -250,7 +250,7 @@ fun ProductFlavor.createPublishBundleWithAssetPlayDelivery(): Task {
         .transactionWithCommit(packageName) {
           val generatedBundleFile =
             File(
-              "$buildDir/outputs/bundle/${capitalizedName.lowercase(Locale.getDefault())}" +
+              "${layout.buildDirectory}/outputs/bundle/${capitalizedName.lowercase(Locale.getDefault())}" +
                 "Release/custom-${capitalizedName.lowercase(Locale.getDefault())}-release.aab"
             )
           if (generatedBundleFile.exists()) {

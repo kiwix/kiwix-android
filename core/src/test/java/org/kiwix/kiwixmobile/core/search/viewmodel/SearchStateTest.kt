@@ -43,8 +43,9 @@ internal class SearchStateTest {
       val estimatedMatches = 100
       every { suggestionSearchWrapper.estimatedMatches } returns estimatedMatches.toLong()
       // Settings list to hasNext() to ensure it returns true only for the first call.
-      // Otherwise, if we do not set this, the method will always return true when checking if the iterator has a next value,
-      // causing our test case to get stuck in an infinite loop due to this explicit setting.
+      // Otherwise, if we do not set this, the method will always return true when
+      // checking if the iterator has a next value, causing our test case to get stuck
+      // in an infinite loop due to this explicit setting.
       every { searchIteratorWrapper.hasNext() } returnsMany listOf(true, false)
       every { searchIteratorWrapper.next() } returns entryWrapper
       every { entryWrapper.title } returns searchTerm
@@ -119,7 +120,8 @@ internal class SearchStateTest {
       every { entryWrapper.path } returns "path"
       every { suggestionSearchWrapper.getResults(any(), any()) } returns searchIteratorWrapper
 
-      val searchResultsWithTerm = SearchResultsWithTerm(searchTerm, suggestionSearchWrapper, mockk())
+      val searchResultsWithTerm =
+        SearchResultsWithTerm(searchTerm, suggestionSearchWrapper, mockk())
       val searchState = SearchState(searchTerm, searchResultsWithTerm, emptyList(), FromWebView)
       var list: List<SearchListItem.RecentSearchListItem>? = emptyList()
       var list1: List<SearchListItem.RecentSearchListItem>? = emptyList()

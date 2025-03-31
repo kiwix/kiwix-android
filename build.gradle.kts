@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.register
+
 buildscript {
   repositories {
     google()
@@ -28,6 +30,6 @@ allprojects {
   }
 }
 
-tasks.create<Delete>("clean") {
+tasks.register<Delete>("clean") {
   delete(rootProject.layout.buildDirectory)
 }
