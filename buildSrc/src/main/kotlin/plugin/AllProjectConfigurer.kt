@@ -164,6 +164,7 @@ class AllProjectConfigurer {
           add("NotifyDataSetChanged")
           add("Aligned16KB") // TODO Remove when properly migrated to Android 16.
           add("AndroidGradlePluginVersion")
+          add("MemberExtensionConflict")
         }
         lintConfig = target.rootProject.file("lintConfig.xml")
       }
