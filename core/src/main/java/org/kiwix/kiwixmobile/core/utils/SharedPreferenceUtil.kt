@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.SharedPreferences
 import android.os.Build
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
@@ -136,9 +137,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     ContextWrapper(context).externalMediaDirs[0]?.path
       ?: context.filesDir.path // a workaround for emulators
 
-  fun getPrefStorageTitle(defaultTitle: String): String =
-    sharedPreferences.getString(PREF_STORAGE_TITLE, defaultTitle) ?: defaultTitle
-
   fun putPrefBookMarkMigrated(isMigrated: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_BOOKMARKS_MIGRATED, isMigrated) }
 
@@ -167,9 +165,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     sharedPreferences.edit { putBoolean(PREF_WIFI_ONLY, wifiOnly) }
     _prefWifiOnlys.onNext(wifiOnly)
   }
-
-  fun putPrefStorageTitle(storageTitle: String) =
-    sharedPreferences.edit { putString(PREF_STORAGE_TITLE, storageTitle) }
 
   fun putPrefStorage(storage: String) {
     sharedPreferences.edit { putString(PREF_STORAGE, storage) }
@@ -294,9 +289,11 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
       path.substringBefore(context.getString(R.string.android_directory_seperator))
     }
 
+  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.R)
   fun isPlayStoreBuildWithAndroid11OrAbove(): Boolean =
     isPlayStoreBuild && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
 
+  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.R)
   fun isNotPlayStoreBuildWithAndroid11OrAbove(): Boolean =
     !isPlayStoreBuild && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
 
@@ -316,7 +313,6 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     private const val PREF_BACK_TO_TOP = "pref_backtotop"
     private const val PREF_FULLSCREEN = "pref_fullscreen"
     private const val PREF_NEW_TAB_BACKGROUND = "pref_newtab_background"
-    private const val PREF_STORAGE_TITLE = "pref_selected_title"
     const val PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup"
     const val PREF_SHOW_STORAGE_OPTION = "show_storgae_option"
     private const val PREF_IS_FIRST_RUN = "isFirstRun"

@@ -16,7 +16,7 @@ object Versions {
 
   const val org_jetbrains_kotlinx_kotlinx_coroutines: String = "1.10.1"
 
-  const val kotlinx_coroutines_rx3: String = "1.3.9"
+  const val kotlinx_coroutines_rx3: String = "1.10.1"
 
   const val androidx_test_espresso: String = "3.6.1"
 
@@ -40,7 +40,7 @@ object Versions {
 
   const val androidx_test_core: String = "1.6.1"
 
-  const val androidx_test_orchestrator: String = "1.5.0"
+  const val androidx_test_orchestrator: String = "1.5.1"
 
   const val io_objectbox: String = "4.0.3"
 
@@ -48,7 +48,7 @@ object Versions {
 
   const val android_arch_lifecycle_extensions: String = "1.1.1"
 
-  const val com_android_tools_build_gradle: String = "8.7.2"
+  const val com_android_tools_build_gradle: String = "8.11.0-alpha03"
 
   const val de_fayard_buildsrcversions_gradle_plugin: String = "0.7.0"
 
@@ -58,7 +58,7 @@ object Versions {
 
   const val leakcanary_android: String = "2.14"
 
-  const val constraintlayout: String = "2.1.4"
+  const val constraintlayout: String = "2.2.0"
 
   const val swipe_refresh_layout: String = "1.1.0"
 

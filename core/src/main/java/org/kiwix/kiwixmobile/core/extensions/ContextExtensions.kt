@@ -33,6 +33,9 @@ import android.util.TypedValue
 import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.graphics.scale
 import org.kiwix.kiwixmobile.core.base.BaseBroadcastReceiver
 import java.util.Locale
 
@@ -87,14 +90,9 @@ fun Context.getResizedDrawable(resourceId: Int, width: Int, height: Int): Drawab
   val drawable = ContextCompat.getDrawable(this, resourceId)
 
   return if (drawable != null) {
-    val bitmap = Bitmap.createScaledBitmap(
-      getBitmapFromDrawable(drawable),
-      width,
-      height,
-      false
-    )
+    val bitmap = getBitmapFromDrawable(drawable).scale(width, height, false)
 
-    BitmapDrawable(resources, bitmap).apply {
+    bitmap.toDrawable(resources).apply {
       bounds = drawable.bounds
     }
   } else {
@@ -107,11 +105,7 @@ fun Context.getBitmapFromDrawable(drawable: Drawable): Bitmap {
     return drawable.bitmap
   }
 
-  val bitmap = Bitmap.createBitmap(
-    drawable.intrinsicWidth,
-    drawable.intrinsicHeight,
-    Bitmap.Config.ARGB_8888
-  )
+  val bitmap = createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)
   val canvas = Canvas(bitmap)
   drawable.setBounds(0, 0, canvas.width, canvas.height)
   drawable.draw(canvas)

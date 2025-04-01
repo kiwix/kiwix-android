@@ -24,7 +24,7 @@ import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import java.io.File
 
-typealias ProductFlavors = NamedDomainObjectContainer<ProductFlavor>
+typealias ProductFlavors = NamedDomainObjectContainer<out ProductFlavor>
 
 object CustomApps {
 

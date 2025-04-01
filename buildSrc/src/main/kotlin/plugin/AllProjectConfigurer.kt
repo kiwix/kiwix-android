@@ -58,6 +58,7 @@ class AllProjectConfigurer {
       if (isLibrary) {
         namespace = "org.kiwix.kiwixmobile.core"
       }
+
       setCompileSdkVersion(Config.compileSdk)
       defaultConfig {
         minSdk = Config.minSdk
@@ -161,6 +162,9 @@ class AllProjectConfigurer {
           add("UnusedResources")
           add("NonConstantResourceId")
           add("NotifyDataSetChanged")
+          add("Aligned16KB") // TODO Remove when properly migrated to Android 16.
+          add("AndroidGradlePluginVersion")
+          add("MemberExtensionConflict")
         }
         lintConfig = target.rootProject.file("lintConfig.xml")
       }

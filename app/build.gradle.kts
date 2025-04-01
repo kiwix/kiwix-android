@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.tasks.factory.dependsOn
 import com.slack.keeper.optInToKeeper
 import org.w3c.dom.Element
 import plugin.KiwixConfigurationPlugin
@@ -29,12 +30,12 @@ android {
   // it directly in the AndroidManifest file.
   namespace = "org.kiwix.kiwixmobile"
   defaultConfig {
-    base.archivesName.set(apkPrefix)
     resValue("string", "app_name", "Kiwix")
     resValue("string", "app_search_string", "Search Kiwix")
     versionCode = "".getVersionCode()
     versionName = generateVersionName()
     manifestPlaceholders["permission"] = "android.permission.MANAGE_EXTERNAL_STORAGE"
+    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
   lint {
     checkDependencies = true
@@ -130,7 +131,7 @@ dependencies {
   androidTestImplementation(Libs.leakcanary_android_instrumentation)
   testImplementation(Libs.kotlinx_coroutines_test)
 }
-task("generateVersionCodeAndName") {
+tasks.register("generateVersionCodeAndName") {
   val file = File("VERSION_INFO")
   if (!file.exists()) file.createNewFile()
   file.printWriter().use {
@@ -138,7 +139,7 @@ task("generateVersionCodeAndName") {
   }
 }
 
-task("renameTarakFile") {
+tasks.register("renameTarakFile") {
   val taraskFile = File("$rootDir/core/src/main/res/values-b+be+tarask/strings.xml")
   val mainStringsFile = File("$rootDir/core/src/main/res/values/strings.xml")
 
@@ -214,6 +215,10 @@ fun elementToString(element: Element): String {
   return result.writer.toString()
 }
 
-tasks.build {
-  dependsOn("renameTarakFile")
+gradle.projectsEvaluated {
+  tasks.forEach { task ->
+    if (task.name != "renameTarakFile") {
+      task.dependsOn("renameTarakFile")
+    }
+  }
 }

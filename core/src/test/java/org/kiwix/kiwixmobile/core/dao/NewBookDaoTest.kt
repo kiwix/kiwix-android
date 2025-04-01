@@ -91,7 +91,9 @@ internal class NewBookDaoTest {
       }
     }
 
-    private fun expectEmissionOfExistingAndNotExistingBook(isInTrashFolder: Boolean = false): Pair<BookOnDiskEntity, BookOnDiskEntity> {
+    private fun expectEmissionOfExistingAndNotExistingBook(
+      isInTrashFolder: Boolean = false
+    ): Pair<BookOnDiskEntity, BookOnDiskEntity> {
       val query: Query<BookOnDiskEntity> = mockk()
       every { box.query().build() } returns query
       val zimReaderSourceThatExists = mockk<ZimReaderSource>()

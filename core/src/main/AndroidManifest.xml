@@ -52,12 +52,13 @@
   <application
     android:allowBackup="true"
     android:dataExtractionRules="@xml/data_extraction_rules"
+    android:enableOnBackInvokedCallback="false"
     android:fullBackupContent="@xml/backup_rules"
     android:hardwareAccelerated="true"
+    android:hasFragileUserData="true"
     android:largeHeap="true"
     android:requestLegacyExternalStorage="true"
     android:resizeableActivity="true"
-    android:hasFragileUserData="true"
     android:supportsRtl="true"
     android:theme="@style/KiwixTheme"
     tools:targetApi="tiramisu">
@@ -91,6 +92,7 @@
     <activity
       android:name=".error.DiagnosticReportActivity"
       android:exported="false" />
+
     <service android:name=".read_aloud.ReadAloudService" />
     <service
       android:name=".downloader.downloadManager.DownloadMonitorService"

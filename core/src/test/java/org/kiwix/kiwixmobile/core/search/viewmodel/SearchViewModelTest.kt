@@ -50,7 +50,6 @@ import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.ZimSearchResultListItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ActivityResultReceived
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ClickedSearchInText
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ConfirmedDelete
@@ -123,7 +122,6 @@ internal class SearchViewModelTest {
     @Test
     fun `SearchState combines sources from inputs`() =
       runTest {
-        val item = ZimSearchResultListItem("", "")
         val searchTerm = "searchTerm"
         val searchOrigin = FromWebView
         val suggestionSearch: SuggestionSearch = mockk()

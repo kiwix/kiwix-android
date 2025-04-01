@@ -42,6 +42,7 @@ import org.kiwix.kiwixmobile.BuildConfig.DEBUG
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
@@ -475,7 +476,7 @@ class ZimManageViewModel @Inject constructor(
     networkLanguageCounts: MutableMap<String, Int>,
     listToActivateBy: List<Language>
   ) = Locale.getISOLanguages()
-    .map(::Locale)
+    .map { it.convertToLocal() }
     .filter { networkLanguageCounts.containsKey(it.isO3Language) }
     .map { locale ->
       Language(

@@ -20,6 +20,7 @@ apply(plugin = "io.objectbox")
 android {
   defaultConfig {
     buildConfigField("long", "VERSION_CODE", "".getVersionCode().toString())
+    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
   buildTypes {
     getByName("release") {

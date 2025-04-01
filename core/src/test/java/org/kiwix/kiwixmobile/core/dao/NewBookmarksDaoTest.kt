@@ -18,17 +18,17 @@
 
 package org.kiwix.kiwixmobile.core.dao
 
-import org.junit.jupiter.api.Test
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.objectbox.Box
 import io.objectbox.query.Query
 import io.objectbox.query.QueryBuilder
-import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity_
+import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
-import org.kiwix.kiwixmobile.core.page.bookmark
+import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity_
 import org.kiwix.kiwixmobile.core.page.adapter.Page
+import org.kiwix.kiwixmobile.core.page.bookmark
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.BookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 
@@ -69,7 +69,6 @@ internal class NewBookmarksDaoTest {
     every { bookmarkItem.zimName } returns ""
     every { bookmarkItem.databaseId } returns 0L
     newBookmarksDao.getCurrentZimBookmarksUrl(zimFileReader)
-    val bookmarkEntity: BookmarkEntity = mockk()
     every {
       query.property(BookmarkEntity_.bookmarkUrl).findStrings().toList().distinct()
     } returns listOf("")

@@ -21,7 +21,9 @@ package org.kiwix.kiwixmobile.core.search.viewmodel
 import org.kiwix.libzim.SuggestionIterator
 
 class SuggestionIteratorWrapper : SuggestionIterator() {
-  override fun remove() {}
+  override fun remove() {
+    // Do nothing just to ignore the EmptyFunctionBlock detekt error.
+  }
 
   override fun hasNext(): Boolean = super.hasNext()
   override fun next(): SuggestionItemWrapper = super.next() as SuggestionItemWrapper

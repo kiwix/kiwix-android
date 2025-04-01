@@ -56,7 +56,9 @@ class InitialDownloadRobot : BaseRobot() {
     refresh(R.id.librarySwipeRefresh)
   }
 
-  fun waitForDataToLoad(retryCountForDataToLoad: Int = 10) {
+  // Increasing the default timeout for data loading because, on the Android 16 Emulator,
+  // the internet connection is slow, and the library download takes longer.
+  fun waitForDataToLoad(retryCountForDataToLoad: Int = 20) {
     try {
       isVisible(TextId(string.your_languages))
     } catch (e: RuntimeException) {
