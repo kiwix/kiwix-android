@@ -22,7 +22,6 @@ import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -101,7 +100,7 @@ class OnlineLibraryFragmentTest : BaseActivityTest() {
       waitForDataToLoad()
       clickOnSearchIcon()
       searchWikipediaZIMFiles()
-      Espresso.closeSoftKeyboard()
+      pressBack()
       clickLibraryOnBottomNav()
       clickDownloadOnBottomNav()
       assertPreviousSearchRemainsActive()
@@ -120,7 +119,7 @@ class OnlineLibraryFragmentTest : BaseActivityTest() {
       clickOnSearchIcon()
       searchWikipediaZIMFiles()
       clickOnClearSearchIcon()
-      Espresso.closeSoftKeyboard()
+      pressBack()
       clickLibraryOnBottomNav()
       clickDownloadOnBottomNav()
       assertSearchViewIsNotActive(kiwixMainActivity)
