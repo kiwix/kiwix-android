@@ -31,8 +31,8 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.HeaderItem
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.language.viewmodel.State
@@ -79,7 +79,7 @@ fun LanguageList(
           modifier = Modifier
             .animateItem()
             .fillMaxWidth()
-            .height(64.dp)
+            .height(ComposeDimens.SIXTY_FOUR_DP)
             .semantics {
               contentDescription =
                 context.getString(R.string.select_language_content_description)

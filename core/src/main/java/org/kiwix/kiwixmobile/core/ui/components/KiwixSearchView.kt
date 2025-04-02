@@ -23,6 +23,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
@@ -58,6 +59,7 @@ fun KiwixSearchView(
   TextField(
     modifier = modifier
       .testTag(testTag)
+      .minimumInteractiveComponentSize()
       .focusRequester(focusRequester),
     singleLine = true,
     value = value,
@@ -81,7 +83,7 @@ fun KiwixSearchView(
           Icon(
             painter = painterResource(R.drawable.ic_clear_white_24dp),
             tint = Color.White,
-            contentDescription = null
+            contentDescription = stringResource(R.string.searchview_description_clear)
           )
         }
       }

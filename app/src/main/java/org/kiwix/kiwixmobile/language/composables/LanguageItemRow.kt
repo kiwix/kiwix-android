@@ -36,7 +36,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
@@ -54,7 +53,7 @@ fun LanguageItemRow(
   Row(
     modifier = modifier
       .fillMaxWidth()
-      .height(64.dp)
+      .height(ComposeDimens.SIXTY_FOUR_DP)
       .semantics {
         contentDescription = context.getString(R.string.select_language_content_description)
       }
@@ -65,7 +64,7 @@ fun LanguageItemRow(
   ) {
     Checkbox(
       modifier = Modifier
-        .padding(16.dp)
+        .padding(ComposeDimens.SIXTEEN_DP)
         .semantics {
           testTag = "$LANGUAGE_ITEM_CHECKBOX_TESTING_TAG${language.language}"
         },

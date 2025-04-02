@@ -52,6 +52,7 @@ object ComposeDimens {
   val FOUR_DP = 4.dp
   val TWO_DP = 2.dp
   val SEVENTY_DP = 70.dp
+  val SIXTY_FOUR_DP = 64.dp
 
   // Font Sizes
   val TWENTY_FOUR_SP = 24.sp
