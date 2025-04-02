@@ -18,13 +18,13 @@
 
 package org.kiwix.kiwixmobile.language.viewmodel
 
+import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
-import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.language.viewmodel.Action.SaveAll
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Select

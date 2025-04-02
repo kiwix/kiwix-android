@@ -20,62 +20,42 @@ package org.kiwix.kiwixmobile.language
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
-import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.R.drawable
-import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.cachedComponent
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
-import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
-import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
-import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
-import org.kiwix.kiwixmobile.core.extensions.setUpSearchView
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
-import org.kiwix.kiwixmobile.databinding.ActivityLanguageBinding
-import org.kiwix.kiwixmobile.language.adapter.LanguageAdapter
-import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.HeaderDelegate
-import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.LanguageItemDelegate
+import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
+import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.language.viewmodel.Action
-import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
-import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
 import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
-import org.kiwix.kiwixmobile.language.viewmodel.State
-import org.kiwix.kiwixmobile.language.viewmodel.State.Content
-import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
-import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
 import javax.inject.Inject
+
+const val SEARCH_ICON_TESTING_TAG = "search"
+const val SAVE_ICON_TESTING_TAG = "saveLanguages"
+const val SEARCH_FIELD_TESTING_TAG = "searchField"
 
 class LanguageFragment : BaseFragment() {
   private val languageViewModel by lazy { viewModel<LanguageViewModel>(viewModelFactory) }
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-
+  private lateinit var composeView: ComposeView
   private val compositeDisposable = CompositeDisposable()
-  private var activityLanguageBinding: ActivityLanguageBinding? = null
-  private var searchView: SearchView? = null
-
-  private val languageAdapter =
-    LanguageAdapter(
-      LanguageItemDelegate { languageViewModel.actions.offer(Select(it)) },
-      HeaderDelegate()
-    )
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
@@ -84,24 +64,59 @@ class LanguageFragment : BaseFragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     val activity = requireActivity() as CoreMainActivity
-    val toolbar: Toolbar = view.findViewById(R.id.toolbar)
-    activity.setSupportActionBar(toolbar)
+    composeView.setContent {
+      var searchText by remember { mutableStateOf("") }
+      var isSearchActive by remember { mutableStateOf(false) }
 
-    activity.supportActionBar?.let {
-      it.setDisplayHomeAsUpEnabled(true)
-      it.setHomeAsUpIndicator(drawable.ic_clear_white_24dp)
-      it.setTitle(string.select_languages)
+      fun resetSearchState() {
+        // clears the search text and resets the filter
+        searchText = ""
+        languageViewModel.actions.offer(Action.Filter(searchText))
+      }
+
+      KiwixTheme {
+        LanguageScreen(
+          searchText = searchText,
+          isSearchActive = isSearchActive,
+          languageViewModel = languageViewModel,
+          actionMenuItemList = appBarActionMenuList(
+            isSearchActive = isSearchActive,
+            onSearchClick = { isSearchActive = true },
+            onSaveClick = {
+              languageViewModel.actions.offer(Action.SaveAll)
+            }
+          ),
+          onClearClick = { resetSearchState() },
+          onAppBarValueChange = {
+            searchText = it
+            languageViewModel.actions.offer(Action.Filter(it))
+          },
+          navigationIcon = {
+            NavigationIcon(
+              iconItem = if (isSearchActive) {
+                IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack)
+              } else {
+                IconItem.Drawable(
+                  R.drawable.ic_close_white_24dp
+                )
+              },
+              onClick = {
+                if (isSearchActive) {
+                  isSearchActive = false
+                  resetSearchState()
+                } else {
+                  activity.onBackPressedDispatcher.onBackPressed()
+                }
+              }
+            )
+          }
+        )
+      }
     }
-    // set the contentDescription to navigation back button
-    toolbar.getToolbarNavigationIcon()?.setToolTipWithContentDescription(
-      getString(string.toolbar_back_button_content_description)
-    )
-    activityLanguageBinding?.languageRecyclerView?.run {
-      adapter = languageAdapter
-      layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-      setHasFixedSize(true)
-    }
-    languageViewModel.state.observe(viewLifecycleOwner, Observer(::render))
+    compositeAdd(activity)
+  }
+
+  fun compositeAdd(activity: CoreMainActivity) {
     compositeDisposable.add(
       languageViewModel.effects.subscribe(
         {
@@ -112,67 +127,44 @@ class LanguageFragment : BaseFragment() {
     )
   }
 
+  fun appBarActionMenuList(
+    isSearchActive: Boolean,
+    onSearchClick: () -> Unit,
+    onSaveClick: () -> Unit
+  ): List<ActionMenuItem> {
+    return listOfNotNull(
+      when {
+        !isSearchActive -> ActionMenuItem(
+          icon = IconItem.Drawable(R.drawable.action_search),
+          contentDescription = R.string.search_label,
+          onClick = onSearchClick,
+          testingTag = SEARCH_ICON_TESTING_TAG
+        )
+
+        else -> null // Handle the case when both conditions are false
+      },
+      // Second item: always included
+      ActionMenuItem(
+        icon = IconItem.Vector(Icons.Default.Check),
+        contentDescription = R.string.save_languages,
+        onClick = onSaveClick,
+        testingTag = SAVE_ICON_TESTING_TAG
+      )
+    )
+  }
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
-    setupMenu()
-    activityLanguageBinding = ActivityLanguageBinding.inflate(inflater, container, false)
-    return activityLanguageBinding?.root
-  }
-
-  private fun setupMenu() {
-    (requireActivity() as MenuHost).addMenuProvider(
-      object : MenuProvider {
-        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-          menuInflater.inflate(R.menu.menu_language, menu)
-          searchView = menu.findItem(R.id.menu_language_search).actionView as SearchView
-          searchView?.apply {
-            setUpSearchView(requireActivity())
-            setOnQueryTextListener(
-              SimpleTextListener { query, _ ->
-                languageViewModel.actions.offer(Filter(query))
-              }
-            )
-          }
-        }
-
-        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-          return when (menuItem.itemId) {
-            R.id.menu_language_save -> {
-              closeKeyboard()
-              languageViewModel.actions.offer(Action.SaveAll)
-              true
-            }
-
-            else -> false
-          }
-        }
-      },
-      viewLifecycleOwner,
-      Lifecycle.State.RESUMED
-    )
-  }
-
-  private fun render(state: State) =
-    when (state) {
-      Loading -> activityLanguageBinding?.languageProgressbar?.show()
-      is Content -> {
-        activityLanguageBinding?.languageProgressbar?.hide()
-        languageAdapter.items = state.viewItems
-      }
-
-      Saving -> Unit
+  ): View {
+    return ComposeView(requireContext()).also {
+      composeView = it
     }
+  }
 
   override fun onDestroyView() {
     super.onDestroyView()
     compositeDisposable.clear()
-    activityLanguageBinding?.root?.removeAllViews()
-    searchView?.setOnQueryTextListener(null)
-    searchView = null
-    activityLanguageBinding?.languageRecyclerView?.adapter = null
-    activityLanguageBinding = null
   }
 }

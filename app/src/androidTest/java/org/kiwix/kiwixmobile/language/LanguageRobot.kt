@@ -18,27 +18,28 @@
 
 package org.kiwix.kiwixmobile.language
 
+import androidx.compose.ui.test.assertIsOff
+import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.isNotChecked
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
-import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
-import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.language.composables.LANGUAGE_ITEM_CHECKBOX_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
-import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
-import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
 
 fun language(func: LanguageRobot.() -> Unit) = LanguageRobot().applyWithViewHierarchyPrinting(func)
 
@@ -82,57 +83,57 @@ class LanguageRobot : BaseRobot() {
   }
 
   fun clickOnLanguageIcon() {
-    // Wait for a few seconds to properly saved selected language.
+    // Wait for a few seconds to properly save selected language.
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     clickOn(ViewId(R.id.select_language))
   }
 
-  fun clickOnLanguageSearchIcon() {
-    testFlakyView({ onView(withId(R.id.menu_language_search)).perform(click()) })
+  fun clickOnSaveLanguageIcon(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.onNodeWithTag(SAVE_ICON_TESTING_TAG)
+      .performClick()
   }
 
-  fun searchLanguage(searchLanguage: String) {
-    isVisible(ViewId(androidx.appcompat.R.id.search_src_text)).text = searchLanguage
+  fun clickOnLanguageSearchIcon(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.onNodeWithTag(SEARCH_ICON_TESTING_TAG).performClick()
   }
 
-  fun selectLanguage(matchLanguage: String) {
-    testFlakyView({ clickOn(Text(matchLanguage)) })
+  fun searchLanguage(
+    composeTestRule: ComposeContentTestRule,
+    searchLanguage: String
+  ) {
+    val searchField = composeTestRule.onNodeWithTag(SEARCH_FIELD_TESTING_TAG)
+    searchField.performTextInput(text = searchLanguage)
   }
 
-  fun clickOnSaveLanguageIcon() {
-    clickOn(ViewId(R.id.menu_language_save))
-  }
-
-  fun checkIsLanguageSelected() {
-    // Wait for a second to properly visible the searched language on top.
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    onView(
-      RecyclerViewMatcher(R.id.language_recycler_view).atPositionOnView(
-        1,
-        R.id.item_language_checkbox
-      )
-    ).check(
-      matches(isChecked())
-    )
-  }
-
-  fun deSelectLanguageIfAlreadySelected() {
-    // Wait for a second to properly visible the searched language on top.
+  // error prone
+  fun deSelectLanguageIfAlreadySelected(
+    composeTestRule: ComposeContentTestRule,
+    matchLanguage: String
+  ) {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     try {
-      onView(
-        RecyclerViewMatcher(R.id.language_recycler_view).atPositionOnView(
-          1,
-          R.id.item_language_checkbox
-        )
-      ).check(matches(isNotChecked()))
-    } catch (assertionError: AssertionFailedError) {
-      onView(
-        RecyclerViewMatcher(R.id.language_recycler_view).atPositionOnView(
-          1,
-          R.id.item_language_checkbox
-        )
-      ).perform(click())
+      composeTestRule.onNodeWithTag("$LANGUAGE_ITEM_CHECKBOX_TESTING_TAG$matchLanguage")
+        .assertIsOff()
+    } catch (noMatchingNodeException: AssertionError) {
+      composeTestRule.onNodeWithTag("$LANGUAGE_ITEM_CHECKBOX_TESTING_TAG$matchLanguage")
+        .performClick()
     }
+  }
+
+  fun selectLanguage(
+    composeTestRule: ComposeContentTestRule,
+    matchLanguage: String
+  ) {
+    composeTestRule.onNodeWithText(matchLanguage)
+      .performClick()
+  }
+
+  fun checkIsLanguageSelected(
+    composeTestRule: ComposeContentTestRule,
+    matchLanguage: String
+  ) {
+    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
+    composeTestRule.onNodeWithTag("$LANGUAGE_ITEM_CHECKBOX_TESTING_TAG$matchLanguage")
+      .assertIsOn()
   }
 }

@@ -120,8 +120,7 @@
   <fragment
     android:id="@+id/languageFragment"
     android:name="org.kiwix.kiwixmobile.language.LanguageFragment"
-    android:label="LanguageFragment"
-    tools:layout="@layout/activity_language" />
+    android:label="LanguageFragment" />
   <fragment
     android:id="@+id/zimHostFragment"
     android:name="org.kiwix.kiwixmobile.webserver.ZimHostFragment"

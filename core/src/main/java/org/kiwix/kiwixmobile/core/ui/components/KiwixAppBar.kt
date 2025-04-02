@@ -22,8 +22,12 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -78,7 +82,11 @@ fun KiwixAppBar(
       colors = TopAppBarDefaults.topAppBarColors(
         containerColor = Black,
         scrolledContainerColor = Black
-      )
+      ),
+      // Edge-to-Edge mode is already enabled in our application,
+      // so we don't need to apply additional top insets.
+      // This prevents unwanted extra margin at the top.
+      windowInsets = WindowInsets.statusBars.only(WindowInsetsSides.Horizontal)
     )
   }
 }
