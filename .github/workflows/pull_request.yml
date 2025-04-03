@@ -138,6 +138,8 @@ jobs:
           distribution: temurin
 
       - name: Build all configurations
+        env:
+          APK_BUILD: "true"
         run: ./gradlew assemble
 
       - name: Upload APK as Artifacts
