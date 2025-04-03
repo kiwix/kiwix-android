@@ -7,6 +7,7 @@
 * McDutchie
 * MohitMali
 * SuperPotato
+* TorgeirS
 -->
 <resources>
   <string name="menu_help">Hjelp</string>
@@ -20,15 +21,33 @@
   <string name="menu_read_aloud">Les høyt</string>
   <string name="menu_read_aloud_stop">Stopp høytlesning</string>
   <string name="menu_support_kiwix">Støtt Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">Støtt %s</string>
+  <string name="menu_about_app">Om %s-appen</string>
   <string name="save_media">Lagre medier som…</string>
   <string name="save_media_error">En feil oppstod under lagring av mediet!</string>
   <string name="save_media_saved">Lagret medier som %s i din bildemappe.</string>
   <string name="search_label">Søk</string>
   <string name="choose_file">Velg en ZIM-innholdsfil (*.zim)</string>
   <string name="open_in_new_tab">Åpne lenke i ny fane?</string>
+  <string name="go_to_wifi_settings_label">Gå til WIFI-innstillinger</string>
+  <string name="connection_refused">Tilkobling avvist.</string>
+  <string name="no_books_selected_toast_message">Velg bøker først</string>
+  <string name="server_failed_toast_message">Kunne ikke starte tjener.</string>
+  <string name="server_started_successfully_toast_message">Tjeneren startet vellykket.</string>
+  <string name="server_stopped_successfully_toast_message">Tjeneren ble stoppet.</string>
+  <string name="server_textview_default_message">Velg filene du ønsker å ha på tjeneren</string>
+  <string name="progress_dialog_starting_server">Starter tjener</string>
+  <string name="wifi_dialog_title">WiFi-tilkobling oppdaget</string>
+  <string name="hotspot_dialog_neutral_button">FORTSETT</string>
   <string name="start_server_label">Start tjener</string>
   <string name="stop_server_label">Stopp tjener</string>
+  <string name="error_server_already_running">Tjeneren kjører allerede. Stopp den og forsøk på nytt.</string>
+  <string name="error_ip_address_not_found">Klarte ikke å finne IP adressen.</string>
+  <string name="qr_code">Generert QR-kode</string>
+  <string name="share_host_address">Del webadresse via andre programmer</string>
   <string name="error_file_not_found">Feil: Den valgte ZIM-filen ble ikke funnet %s</string>
+  <string name="unable_to_read_zim_file">Kan ikke lese denne ZIM-filen!</string>
+  <string name="zim_not_opened">Kan ikke åpne ZIM-filen</string>
   <string name="error_file_invalid" fuzzy="true">Feil: Den valgte filen er ikke en gyldig ZIM-fil %s</string>
   <string name="error_article_url_not_found">Feil: Kunne ikke laste inn artikkelen (Url: %1$s).</string>
   <string name="pref_display_title">Skjerm</string>
@@ -40,6 +59,7 @@
   <string name="pref_back_to_top_summary">Vis en knapp nederst på siden for å returnere til toppen</string>
   <string name="pref_language_title">Språk</string>
   <string name="pref_language_chooser">Velg et språk</string>
+  <string name="pref_credits">Bidragsytere og lisenser</string>
   <string name="pref_credits_title">Takk til</string>
   <string name="tts_lang_not_supported" fuzzy="true">Dette språket er ikke tilgjengelig for siden eller så er ikke dette språket installert. Denne artikkelen kan kanskje ikke bli riktig lest av.</string>
   <string name="no_reader_application_installed">Kunne ikke finne en installert app for denne typen fil</string>

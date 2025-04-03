@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * 787IYO
+* MercyDansanda
 * MohitMali
 * Muhammad Idriss Criteria
 * Rofiatmustapha12
@@ -331,4 +332,5 @@
   <string name="zim_file_content_description">Fayil na ZIM wanda ke da abun cikin karantawa</string>
   <string name="select_language_content_description">Zaɓin wannan yaren zai ba da fifikon nuna littattafan da za a iya saukewa a cikin yaren da ke saman.</string>
   <string name="toolbar_back_button_content_description">Ku je zuwa allo na baya</string>
+  <string name="searchview_description_clear">Tambaya a bayyane</string>
 </resources>
