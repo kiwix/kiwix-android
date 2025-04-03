@@ -68,7 +68,20 @@ class AppConfigurer {
       val abiCodes = mapOf("arm64-v8a" to 6, "x86" to 3, "x86_64" to 4, "armeabi-v7a" to 5)
       splits {
         abi {
-          isEnable = true
+          // Enable ABI splits only when needed (e.g., when building APKs).
+          // This prevents unnecessary splits when generating an App Bundle (AAB),
+          // as AABs already handle ABI splits automatically.
+          //
+          // The environment variable `APK_BUILD` controls this behavior:
+          // - If set to `"true"`, ABI splits are **enabled** (for APK builds).
+          // - If `"false"` or unset, ABI splits are **disabled** (for App Bundles).
+          //
+          // This approach ensures that:
+          // - **App Bundles (AABs)** remain unaffected (since Google Play handles ABI splits).
+          // - **APK builds** get ABI splits when needed for direct distribution (e.g., custom deployments).
+          //
+          // See: https://github.com/kiwix/kiwix-android/issues/4273
+          isEnable = System.getenv("APK_BUILD")?.toBoolean() ?: false
           reset()
           include(*abiCodes.keys.toTypedArray())
           isUniversalApk = true

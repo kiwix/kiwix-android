@@ -45,6 +45,7 @@ jobs:
           UNIVERSAL_RELEASE_APK: app/build/outputs/apk/standalone/*universal*.apk
           ARCHIVE_NAME: org.kiwix.kiwixmobile.standalone-${{ github.event.release.tag_name }}.apk
           KIWIX_ANDROID_RELEASE_DATE: ${{ env.KIWIX_ANDROID_RELEASE_DATE }}
+          APK_BUILD: "true"
         run: |
           ./gradlew assembleStandalone
           cp ${UNIVERSAL_RELEASE_APK} ${ARCHIVE_NAME}
