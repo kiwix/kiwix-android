@@ -32,14 +32,24 @@ jobs:
           echo "KIWIX_ANDROID_RELEASE_DATE=$DATE" >> $GITHUB_ENV
         shell: bash
 
-      - name: Generate dummy Bundle and APKs
+      - name: Generate dummy Bundle
         env:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
           KIWIX_ANDROID_RELEASE_DATE: ${{ env.KIWIX_ANDROID_RELEASE_DATE }}
         run: |
-          ./gradlew bundlePlayStore assembleRelease --scan
+          ./gradlew bundlePlayStore --scan
+
+      - name: Generate dummy APKs
+        env:
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          KIWIX_ANDROID_RELEASE_DATE: ${{ env.KIWIX_ANDROID_RELEASE_DATE }}
+          APK_BUILD: "true"
+        run: |
+          ./gradlew assembleRelease --scan
 
 
       - name: Get Bundle and APKs name and path

@@ -90,6 +90,12 @@ Kiwix Android is a multi-module project, in 99% of scenarios you will want to bu
 
 We have an [automatic version code generation](https://github.com/kiwix/kiwix-android/blob/main/buildSrc/src/main/kotlin/VersionCodeGenerator.kt) system based on the current date. However, you can override this by setting the environment variable `KIWIX_ANDROID_RELEASE_DATE` to a specific date in the `YYYY-MM-DD` format. This will use the provided date for the version code calculation instead of the current date.
 
+### ABI Splitting for APKs
+
+By default, `ABI` splitting is disabled. In newer Gradle versions, when uploading a `.aab` file, `ABI` splitting must remain disabled.
+However, if you need to generate separate APKs for different ABIs, you can enable `ABI` splitting by setting the `APK_BUILD="true"` environment variable.
+This variable should only be set when building an APK. If you set this variable and attempt to generate a `.aab` file, the build will fail due to Gradle's new enhancements.
+
 ## Libraries Used
 
 - 📚 [Libkiwix](https://github.com/kiwix/java-libkiwix) - Kotlin/Java binding for the core Kiwix library.

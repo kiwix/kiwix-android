@@ -36,6 +36,7 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          APK_BUILD: "true"
         run: ./gradlew assembleNightly
 
       - name: Set date variable
