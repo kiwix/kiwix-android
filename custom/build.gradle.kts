@@ -250,7 +250,7 @@ fun ProductFlavor.createPublishBundleWithAssetPlayDelivery(): TaskProvider<Task>
         .transactionWithCommit(packageName) {
           val generatedBundleFile =
             File(
-              "${layout.buildDirectory}/outputs/bundle/${capitalizedName.lowercase(Locale.getDefault())}" +
+              "${layout.buildDirectory.get()}/outputs/bundle/${capitalizedName.lowercase(Locale.getDefault())}" +
                 "Release/custom-${capitalizedName.lowercase(Locale.getDefault())}-release.aab"
             )
           if (generatedBundleFile.exists()) {
