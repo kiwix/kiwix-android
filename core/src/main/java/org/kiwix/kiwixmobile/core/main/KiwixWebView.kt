@@ -31,6 +31,7 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
@@ -168,18 +169,19 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
     private val sharedPreferenceUtil: SharedPreferenceUtil
   ) :
     Handler(Looper.getMainLooper()) {
-    @SuppressWarnings("NestedBlockDepth")
+    @SuppressWarnings("InjectDispatcher")
     override fun handleMessage(msg: Message) {
       val url = msg.data.getString("url", null)
       val src = msg.data.getString("src", null)
-      if (url != null || src != null) {
-        CoroutineScope(Dispatchers.Main.immediate).launch {
-          val savedFile =
-            FileUtils.downloadFileFromUrl(url, src, zimReaderContainer, sharedPreferenceUtil)
+      if (url == null && src == null) return
+      CoroutineScope(Dispatchers.IO).launch {
+        val savedFile =
+          FileUtils.downloadFileFromUrl(url, src, zimReaderContainer, sharedPreferenceUtil)
+
+        withContext(Dispatchers.Main) {
           savedFile?.let {
-            instance.toast(instance.getString(R.string.save_media_saved, it.name)).also {
-              Log.e("savedFile", "handleMessage: ${savedFile.isFile} ${savedFile.path}")
-            }
+            instance.toast(instance.getString(R.string.save_media_saved, it.name))
+            Log.e("savedFile", "handleMessage: ${savedFile.isFile} ${savedFile.path}")
           } ?: run {
             instance.toast(R.string.save_media_error)
           }
