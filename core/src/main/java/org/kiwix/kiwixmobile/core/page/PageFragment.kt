@@ -31,6 +31,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
@@ -67,7 +68,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private var actionMode: ActionMode? = null
   val compositeDisposable = CompositeDisposable()
-  abstract val screenTitle: String
+  abstract val screenTitle: Int
   abstract val noItemsString: String
   abstract val switchString: String
   abstract val searchQueryHint: String
@@ -78,7 +79,6 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   override val fragmentToolbar: Toolbar? by lazy {
     fragmentPageBinding?.root?.findViewById(R.id.toolbar)
   }
-  override val fragmentTitle: String? by lazy { screenTitle }
 
   private val actionModeCallback: ActionMode.Callback =
     object : ActionMode.Callback {
@@ -145,7 +145,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    setupMenu()
+    // setupMenu()
     val activity = requireActivity() as CoreMainActivity
     fragmentPageBinding?.recyclerView?.apply {
       layoutManager =
@@ -182,8 +182,24 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    fragmentPageBinding = FragmentPageBinding.inflate(inflater, container, false)
-    return fragmentPageBinding?.root
+    return ComposeView(requireContext()).apply {
+      setContent {
+        PageScreen(
+          pageState = pageViewModel.state,
+          effects = pageViewModel.effects,
+          screenTitle = screenTitle,
+          noItemsString = noItemsString,
+          switchString = switchString,
+          searchQueryHint = searchQueryHint,
+          switchIsChecked = switchIsChecked,
+          onSwitchChanged = { isChecked ->
+            pageViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
+          },
+          onItemClick = { pageViewModel.actions.offer(Action.OnItemClick(it)) },
+          onItemLongClick = { pageViewModel.actions.offer(Action.OnItemLongClick(it)) }
+        )
+      }
+    }
   }
 
   override fun onDestroyView() {

@@ -21,7 +21,7 @@ class HistoryFragment : PageFragment() {
 
   override val noItemsString: String by lazy { getString(R.string.no_history) }
   override val switchString: String by lazy { getString(R.string.history_from_current_book) }
-  override val screenTitle: String by lazy { getString(R.string.history) }
+  override val screenTitle: Int by lazy { R.string.history }
   override val deleteIconTitle: String by lazy {
     getString(R.string.pref_clear_all_history_title)
   }

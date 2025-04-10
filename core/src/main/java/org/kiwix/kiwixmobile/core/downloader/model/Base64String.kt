@@ -21,6 +21,13 @@ package org.kiwix.kiwixmobile.core.downloader.model
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
+import org.kiwix.kiwixmobile.core.R
 
 @JvmInline
 value class Base64String(private val encodedString: String?) {
@@ -33,5 +40,15 @@ value class Base64String(private val encodedString: String?) {
     }
   } catch (illegalArgumentException: IllegalArgumentException) {
     null
+  }
+}
+
+@Composable
+fun Base64String.toPainter(): Painter {
+  val bitmap = remember(this) { toBitmap() }
+  return if (bitmap != null) {
+    BitmapPainter(bitmap.asImageBitmap())
+  } else {
+    painterResource(id = R.drawable.default_zim_file_icon)
   }
 }
