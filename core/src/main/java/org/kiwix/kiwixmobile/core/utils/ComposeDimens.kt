@@ -106,4 +106,7 @@ object ComposeDimens {
   val HELP_SCREEN_ITEM_TITLE_TEXT_SIZE = 20.sp
   val HELP_SCREEN_ITEM_TITLE_LETTER_SPACING = 0.0125.em
   val HELP_SCREEN_ARROW_ICON_SIZE = 35.dp
+
+  // Page dimens
+  val PAGE_LIST_ITEM_FAVICON_SIZE = 40.dp
 }
