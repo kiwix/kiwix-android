@@ -385,4 +385,5 @@
   <string name="resuming_state">Продолжува</string>
   <string name="downloading_state">Се презема</string>
   <string name="download_failed_state">Неуспешно</string>
+  <string name="searchview_description_clear">Исчисти барање</string>
 </resources>

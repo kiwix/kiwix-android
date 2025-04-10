@@ -3,6 +3,7 @@
 * Eduardo Addad de Oliveira
 * Eduardoaddad
 * Klgor1803
+* Maakhai
 * Obiru
 * YoReaper
 -->
@@ -12,6 +13,6 @@
   <string name="cannot_open_file">Falha ao abrir arquivo\nPor favor, tente procurar esse arquivo em sua Biblioteca</string>
   <string name="send_files_title">Enviar arquivos</string>
   <string name="receive_files_title">Receber arquivos</string>
-  <string name="no_app_found_to_open" fuzzy="true">Nenhum app encontraro para selecionar o arquivo zim!</string>
-  <string name="select_zim_file" fuzzy="true">Selecione o arquivo zim para ler</string>
+  <string name="no_app_found_to_open">Nenhum app encontrado para selecionar o arquivo ZIM!</string>
+  <string name="select_zim_file">Selecione o arquivo ZIM para ler</string>
 </resources>
