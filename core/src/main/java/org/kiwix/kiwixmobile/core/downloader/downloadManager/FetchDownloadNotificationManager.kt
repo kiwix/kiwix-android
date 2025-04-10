@@ -73,6 +73,8 @@ class FetchDownloadNotificationManager @Inject constructor(
   val context: Context,
   private val downloadRoomDao: DownloadRoomDao
 ) : DefaultFetchNotificationManager(context) {
+  private val notificationBuilderLock = Any()
+
   private val downloadNotificationManager: NotificationManager by lazy {
     context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
   }
@@ -258,34 +260,36 @@ class FetchDownloadNotificationManager @Inject constructor(
     download: Download,
     notificationBuilder: Builder
   ): Notification {
-    val downloadTitle = getDownloadNotificationTitle(download)
-    val notificationTitle =
-      runBlocking(Dispatchers.IO) {
-        downloadRoomDao.getEntityForFileName(downloadTitle)?.title
-          ?: downloadTitle
-      }
-    return notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
-      .setSmallIcon(android.R.drawable.stat_sys_download_done)
-      .setContentTitle(notificationTitle)
-      .setContentText(context.getString(R.string.paused_state))
-      // Set the ongoing true so that could not cancel the pause notification.
-      // However, on Android 14 and above user can cancel the notification by swipe right so we
-      // can't control that see https://developer.android.com/about/versions/14/behavior-changes-all#non-dismissable-notifications
-      .setOngoing(true)
-      .setGroup(download.id.toString())
-      .setGroupSummary(false)
-      .setProgress(HUNDERED, download.progress, false)
-      .addAction(
-        drawable.fetch_notification_cancel,
-        context.getString(R.string.cancel),
-        getActionPendingIntent(fetch, download, DownloadNotification.ActionType.DELETE)
-      )
-      .addAction(
-        drawable.fetch_notification_resume,
-        context.getString(R.string.notification_resume_button_text),
-        getActionPendingIntent(fetch, download, DownloadNotification.ActionType.RESUME)
-      )
-      .build()
+    synchronized(notificationBuilderLock) {
+      val downloadTitle = getDownloadNotificationTitle(download)
+      val notificationTitle =
+        runBlocking(Dispatchers.IO) {
+          downloadRoomDao.getEntityForFileName(downloadTitle)?.title
+            ?: downloadTitle
+        }
+      return notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        .setSmallIcon(android.R.drawable.stat_sys_download_done)
+        .setContentTitle(notificationTitle)
+        .setContentText(context.getString(R.string.paused_state))
+        // Set the ongoing true so that could not cancel the pause notification.
+        // However, on Android 14 and above user can cancel the notification by swipe right so we
+        // can't control that see https://developer.android.com/about/versions/14/behavior-changes-all#non-dismissable-notifications
+        .setOngoing(true)
+        .setGroup(download.id.toString())
+        .setGroupSummary(false)
+        .setProgress(HUNDERED, download.progress, false)
+        .addAction(
+          drawable.fetch_notification_cancel,
+          context.getString(R.string.cancel),
+          getActionPendingIntent(fetch, download, DownloadNotification.ActionType.DELETE)
+        )
+        .addAction(
+          drawable.fetch_notification_resume,
+          context.getString(R.string.notification_resume_button_text),
+          getActionPendingIntent(fetch, download, DownloadNotification.ActionType.RESUME)
+        )
+        .build()
+    }
   }
 
   private fun getActionPendingIntent(
