@@ -18,11 +18,13 @@
 
 package org.kiwix.kiwixmobile.custom.download
 
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.reactivex.disposables.CompositeDisposable
@@ -36,6 +38,12 @@ import org.kiwix.kiwixmobile.core.extensions.setDistinctDisplayedChild
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
+import org.kiwix.kiwixmobile.core.navigateToAppSettings
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.custom.customActivityComponent
 import org.kiwix.kiwixmobile.custom.databinding.FragmentCustomDownloadBinding
 import org.kiwix.kiwixmobile.custom.download.Action.ClickedDownload
@@ -50,6 +58,14 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
   private val downloadViewModel by lazy {
     viewModel<CustomDownloadViewModel>(viewModelFactory)
   }
+
+  @JvmField
+  @Inject
+  var alertDialogShower: DialogShower? = null
+
+  @JvmField
+  @Inject
+  var sharedPreferenceUtil: SharedPreferenceUtil? = null
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -81,20 +97,37 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    fragmentCustomDownloadBinding?.customDownloadRequired
-      ?.cdDownloadButton
-      ?.setOnClickListener {
-        downloadViewModel.actions.offer(
-          ClickedDownload
-        )
+    fragmentCustomDownloadBinding?.apply {
+      customDownloadRequired.cdDownloadButton.setOnClickListener {
+        if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
+          downloadViewModel.actions.offer(ClickedDownload)
+        } else {
+          requestNotificationPermission()
+        }
       }
-    fragmentCustomDownloadBinding?.customDownloadError
-      ?.cdRetryButton
-      ?.setOnClickListener {
-        downloadViewModel.actions.offer(
-          ClickedRetry
-        )
+      customDownloadError.cdRetryButton.setOnClickListener {
+        if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
+          downloadViewModel.actions.offer(ClickedRetry)
+        } else {
+          requestNotificationPermission()
+        }
       }
+    }
+  }
+
+  private fun requestNotificationPermission() {
+    if (!ActivityCompat.shouldShowRequestPermissionRationale(
+        requireActivity(),
+        POST_NOTIFICATIONS
+      )
+    ) {
+      requireActivity().requestNotificationPermission()
+    } else {
+      alertDialogShower?.show(
+        KiwixDialog.NotificationPermissionDialog,
+        requireActivity()::navigateToAppSettings
+      )
+    }
   }
 
   override fun onDestroy() {
