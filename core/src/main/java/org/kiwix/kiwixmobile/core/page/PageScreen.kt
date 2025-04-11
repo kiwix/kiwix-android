@@ -32,46 +32,40 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.MutableLiveData
-import io.reactivex.processors.PublishProcessor
-import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
+import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 
-@Suppress("LongParameterList", "IgnoredReturnValue", "UnusedParameter")
+@Suppress(
+  "LongParameterList",
+  "IgnoredReturnValue",
+  "UnusedParameter",
+  "ComposableLambdaParameterNaming"
+)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PageScreen(
-  pageState: MutableLiveData<out PageState<out Page>>,
-  effects: PublishProcessor<SideEffect<*>>,
+  pageState: PageState<out Page>,
+  pageSwitchItem: Triple<String, Boolean, Boolean>,
   screenTitle: Int,
   noItemsString: String,
-  switchString: String,
   searchQueryHint: String,
-  switchIsChecked: Boolean,
   onSwitchChanged: (Boolean) -> Unit,
-  onItemClick: (Page) -> Unit,
-  onItemLongClick: (Page) -> Unit
+  itemClickListener: OnItemClickListener,
+  actionMenuItems: List<ActionMenuItem>,
+  navigationIcon: @Composable () -> Unit,
 ) {
   val context = LocalActivity.current as CoreMainActivity
-
-  val state by pageState.observeAsState()
-
-  LaunchedEffect(Unit) {
-    effects.subscribe { it.invokeWith(context) }
-  }
 
   KiwixTheme {
     Scaffold(
@@ -79,8 +73,10 @@ fun PageScreen(
         Column {
           KiwixAppBar(
             titleId = screenTitle,
-            navigationIcon = {},
+            navigationIcon = navigationIcon,
+            actionMenuItems = actionMenuItems
           )
+          // hide switches for custom apps, see more info here https://github.com/kiwix/kiwix-android/issues/3523
           if (!context.isCustomApp()) {
             Row(
               modifier = Modifier
@@ -88,14 +84,18 @@ fun PageScreen(
                 .padding(horizontal = SIXTEEN_DP, vertical = EIGHT_DP),
               verticalAlignment = Alignment.CenterVertically
             ) {
-              Text(switchString, modifier = Modifier.weight(1f))
-              Switch(checked = switchIsChecked, onCheckedChange = onSwitchChanged)
+              Text(pageSwitchItem.first, modifier = Modifier.weight(1f))
+              Switch(
+                checked = pageSwitchItem.second,
+                onCheckedChange = onSwitchChanged,
+                enabled = pageSwitchItem.third
+              )
             }
           }
         }
       }
     ) { padding ->
-      val items = state?.visiblePageItems.orEmpty()
+      val items = pageState.pageItems
       Box(modifier = Modifier.padding(padding)) {
         if (items.isEmpty()) {
           Text(
@@ -105,13 +105,12 @@ fun PageScreen(
           )
         } else {
           LazyColumn {
-            items(items) { item ->
+            items(pageState.visiblePageItems) { item ->
               when (item) {
                 is Page -> {
                   PageListItem(
                     page = item,
-                    onClick = { onItemClick(item) },
-                    onLongClick = { onItemLongClick(item) }
+                    itemClickListener = itemClickListener
                   )
                 }
 

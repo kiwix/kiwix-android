@@ -39,6 +39,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.toPainter
+import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PAGE_LIST_ITEM_FAVICON_SIZE
@@ -48,13 +49,15 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 @Composable
 fun PageListItem(
   page: Page,
-  onClick: () -> Unit,
-  onLongClick: () -> Unit
+  itemClickListener: OnItemClickListener
 ) {
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .combinedClickable(onClick = onClick, onLongClick = onLongClick)
+      .combinedClickable(
+        onClick = { itemClickListener.onItemClick(page) },
+        onLongClick = { itemClickListener.onItemLongClick(page) }
+      )
       .background(MaterialTheme.colorScheme.surface)
       .padding(
         horizontal = SIXTEEN_DP,
