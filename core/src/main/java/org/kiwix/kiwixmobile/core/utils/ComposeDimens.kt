@@ -42,6 +42,7 @@ object ComposeDimens {
   val SIXTY_DP = 60.dp
   val THIRTY_TWO_DP = 30.dp
   val TWENTY_DP = 20.dp
+  val TWENTY_TWO_DP = 22.dp
   val SEVENTEEN_DP = 17.dp
   val SIXTEEN_DP = 16.dp
   val TWELVE_DP = 12.dp
@@ -51,12 +52,15 @@ object ComposeDimens {
   val FIVE_DP = 5.dp
   val FOUR_DP = 4.dp
   val TWO_DP = 2.dp
+  val FIFTY_DP = 50.dp
   val SEVENTY_DP = 70.dp
   val SIXTY_FOUR_DP = 64.dp
+  val ONE_HUNDRED_FIFTY = 150.dp
 
   // Font Sizes
   val TWENTY_FOUR_SP = 24.sp
   val FOURTEEN_SP = 14.sp
+  val FIFTEEN_SP = 15.sp
   val EIGHTEEN_SP = 18.sp
 
   // Default letter spacing in text according to theme
