@@ -28,31 +28,26 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.referentialEqualityPolicy
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.databinding.FragmentPageBinding
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
-import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.extensions.setUpSearchView
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
@@ -98,19 +93,28 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
       policy = referentialEqualityPolicy()
     )
 
-  /**
-   * Controls the visibility of the "Switch", and its controls.
-   *
-   * A [Triple] containing:
-   *  - [String]: The text displayed with switch.
-   *  - [Boolean]: Whether the switch is checked or not.
-   *  - [Boolean]: Whether the switch is enabled or disabled.
-   */
-  private val pageSwitchItem = mutableStateOf(Triple("", true, true))
+  private val pageScreenState = mutableStateOf(
+    // Initial values are empty because this is an abstract class.
+    // Before the view is created, the abstract variables have no values.
+    // We update this state in `onViewCreated`, once the view is created and the
+    // abstract variables are initialized.
+    PageFragmentScreenState(
+      pageState = pageState.value,
+      isSearchActive = false,
+      searchQueryHint = "",
+      searchText = "",
+      searchValueChangedListener = {},
+      screenTitle = ZERO,
+      noItemsString = "",
+      switchString = "",
+      switchIsChecked = true,
+      switchIsEnabled = true,
+      onSwitchCheckedChanged = {},
+      deleteIconTitle = ZERO,
+      clearSearchButtonClickListener = {}
+    )
+  )
   private var fragmentPageBinding: FragmentPageBinding? = null
-  override val fragmentToolbar: Toolbar? by lazy {
-    fragmentPageBinding?.root?.findViewById(R.id.toolbar)
-  }
 
   private val actionModeCallback: ActionMode.Callback =
     object : ActionMode.Callback {
@@ -177,15 +181,28 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    pageScreenState.value = pageScreenState.value.copy(
+      isSearchActive = pageScreenState.value.isSearchActive,
+      searchQueryHint = searchQueryHint,
+      searchText = "",
+      searchValueChangedListener = { onTextChanged(it) },
+      clearSearchButtonClickListener = { onTextChanged("") },
+      screenTitle = screenTitle,
+      noItemsString = noItemsString,
+      switchString = switchString,
+      switchIsChecked = pageScreenState.value.switchIsChecked,
+      onSwitchCheckedChanged = { onSwitchCheckedChanged(it) },
+      deleteIconTitle = deleteIconTitle
+    )
     // setupMenu()
     val activity = requireActivity() as CoreMainActivity
-    fragmentPageBinding?.recyclerView?.apply {
-      layoutManager =
-        LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-      adapter = pageAdapter
-      fragmentTitle?.let(::setToolTipWithContentDescription)
-    }
-    fragmentPageBinding?.noPage?.text = noItemsString
+    // fragmentPageBinding?.recyclerView?.apply {
+    //   layoutManager =
+    //     LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+    //   adapter = pageAdapter
+    //   fragmentTitle?.let(::setToolTipWithContentDescription)
+    // }
+    // fragmentPageBinding?.noPage?.text = noItemsString
 
     // fragmentPageBinding?.pageSwitch?.apply {
     //   text = switchString
@@ -216,24 +233,20 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   ): View? {
     return ComposeView(requireContext()).apply {
       setContent {
-        val isSearchActive = remember { mutableStateOf(false) }
         PageScreen(
-          pageState = pageState.value,
-          pageSwitchItem = pageSwitchItem.value,
-          screenTitle = screenTitle,
-          noItemsString = noItemsString,
-          searchQueryHint = searchQueryHint,
-          onSwitchChanged = { onSwitchCheckedChanged(it) },
+          state = pageScreenState.value,
           itemClickListener = this@PageFragment,
           navigationIcon = {
             NavigationIcon(
-              iconItem = navigationIconItem(isSearchActive.value),
-              onClick = navigationIconClick(isSearchActive)
+              iconItem = navigationIconItem(pageScreenState.value.isSearchActive),
+              onClick = navigationIconClick()
             )
           },
           actionMenuItems = actionMenuList(
-            isSearchActive = isSearchActive.value,
-            onSearchClick = { isSearchActive.value = true },
+            isSearchActive = pageScreenState.value.isSearchActive,
+            onSearchClick = {
+              pageScreenState.value = pageScreenState.value.copy(isSearchActive = true)
+            },
             onDeleteClick = { pageViewModel.actions.offer(Action.UserClickedDeleteButton) }
           )
         )
@@ -241,8 +254,13 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     }
   }
 
+  private fun onTextChanged(searchText: String) {
+    pageScreenState.value = pageScreenState.value.copy(searchText = searchText)
+    pageViewModel.actions.offer(Action.Filter(searchText))
+  }
+
   private fun onSwitchCheckedChanged(isChecked: Boolean): () -> Unit = {
-    pageSwitchItem.value = pageSwitchItem.value.copy(second = isChecked)
+    pageScreenState.value = pageScreenState.value.copy(switchIsChecked = isChecked)
     pageViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
   }
 
@@ -252,9 +270,9 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack)
   }
 
-  private fun navigationIconClick(isSearchActive: MutableState<Boolean>): () -> Unit = {
-    if (isSearchActive.value) {
-      isSearchActive.value = false
+  private fun navigationIconClick(): () -> Unit = {
+    if (pageScreenState.value.isSearchActive) {
+      pageScreenState.value = pageScreenState.value.copy(isSearchActive = false)
       pageViewModel.actions.offer(Action.Exit)
     } else {
       requireActivity().onBackPressedDispatcher.onBackPressed()
@@ -293,8 +311,10 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   }
 
   private fun render(state: PageState<*>) {
-    pageState.value = state
-    pageSwitchItem.value = Triple(switchString, switchIsChecked, !state.isInSelectionState)
+    pageScreenState.value = pageScreenState.value.copy(
+      switchIsEnabled = !state.isInSelectionState,
+      pageState = state,
+    )
     if (state.isInSelectionState) {
       if (actionMode == null) {
         actionMode =
