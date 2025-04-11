@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.page
 
 import androidx.activity.compose.LocalActivity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,89 +40,95 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.DateItem
-import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
+import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
+import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 
-@Suppress(
-  "LongParameterList",
-  "IgnoredReturnValue",
-  "UnusedParameter",
-  "ComposableLambdaParameterNaming"
-)
+@Suppress("ComposableLambdaParameterNaming")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PageScreen(
-  pageState: PageState<out Page>,
-  pageSwitchItem: Triple<String, Boolean, Boolean>,
-  screenTitle: Int,
-  noItemsString: String,
-  searchQueryHint: String,
-  onSwitchChanged: (Boolean) -> Unit,
+  state: PageFragmentScreenState,
   itemClickListener: OnItemClickListener,
   actionMenuItems: List<ActionMenuItem>,
-  navigationIcon: @Composable () -> Unit,
+  navigationIcon: @Composable () -> Unit
 ) {
-  val context = LocalActivity.current as CoreMainActivity
-
   KiwixTheme {
     Scaffold(
       topBar = {
         Column {
           KiwixAppBar(
-            titleId = screenTitle,
+            titleId = state.screenTitle,
             navigationIcon = navigationIcon,
-            actionMenuItems = actionMenuItems
+            actionMenuItems = actionMenuItems,
+            searchBar = searchBarIfActive(state)
           )
-          // hide switches for custom apps, see more info here https://github.com/kiwix/kiwix-android/issues/3523
-          if (!context.isCustomApp()) {
-            Row(
-              modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = SIXTEEN_DP, vertical = EIGHT_DP),
-              verticalAlignment = Alignment.CenterVertically
-            ) {
-              Text(pageSwitchItem.first, modifier = Modifier.weight(1f))
-              Switch(
-                checked = pageSwitchItem.second,
-                onCheckedChange = onSwitchChanged,
-                enabled = pageSwitchItem.third
-              )
-            }
-          }
+          PageSwitchRow(state)
         }
       }
     ) { padding ->
-      val items = pageState.pageItems
+      val items = state.pageState.pageItems
       Box(modifier = Modifier.padding(padding)) {
         if (items.isEmpty()) {
           Text(
-            text = noItemsString,
+            text = state.noItemsString,
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.align(Alignment.Center)
           )
         } else {
           LazyColumn {
-            items(pageState.visiblePageItems) { item ->
+            items(state.pageState.visiblePageItems) { item ->
               when (item) {
-                is Page -> {
-                  PageListItem(
-                    page = item,
-                    itemClickListener = itemClickListener
-                  )
-                }
-
-                is DateItem -> {
-                  DateItemText(item)
-                }
+                is Page -> PageListItem(page = item, itemClickListener = itemClickListener)
+                is DateItem -> DateItemText(item)
               }
             }
           }
         }
       }
+    }
+  }
+}
+
+@Composable
+private fun searchBarIfActive(
+  state: PageFragmentScreenState
+): (@Composable () -> Unit)? = {
+  if (state.isSearchActive) {
+    KiwixSearchView(
+      placeholder = state.searchQueryHint,
+      value = state.searchText,
+      testTag = "",
+      onValueChange = { state.searchValueChangedListener(it) },
+      onClearClick = { state.clearSearchButtonClickListener.invoke() }
+    )
+  } else {
+    null
+  }
+}
+
+@Composable
+fun PageSwitchRow(
+  state: PageFragmentScreenState
+) {
+  val context = LocalActivity.current as CoreMainActivity
+  // hide switches for custom apps, see more info here https://github.com/kiwix/kiwix-android/issues/3523
+  if (!context.isCustomApp()) {
+    Row(
+      modifier = Modifier
+        .fillMaxWidth()
+        .background(Black),
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      Text(state.switchString)
+      Switch(
+        checked = state.switchIsChecked,
+        onCheckedChange = { state.onSwitchCheckedChanged(it) },
+        enabled = state.switchIsEnabled
+      )
     }
   }
 }
