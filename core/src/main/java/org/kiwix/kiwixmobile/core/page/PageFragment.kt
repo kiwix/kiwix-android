@@ -24,13 +24,20 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.referentialEqualityPolicy
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -44,7 +51,6 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.databinding.FragmentPageBinding
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.extensions.setUpSearchView
@@ -52,13 +58,20 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.adapter.PageAdapter
+import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesState
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
+import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
+import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
+
+const val SEARCH_ICON_TESTING_TAG = "search"
+const val DELETE_MENU_ICON_TESTING_TAG = "deleteMenuIconTestingTag"
 
 abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActivityExtensions {
   abstract val pageViewModel: PageViewModel<*, *>
@@ -74,7 +87,26 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   abstract val searchQueryHint: String
   abstract val pageAdapter: PageAdapter
   abstract val switchIsChecked: Boolean
-  abstract val deleteIconTitle: String
+  abstract val deleteIconTitle: Int
+  private val pageState: MutableState<PageState<*>> =
+    mutableStateOf(
+      NotesState(
+        emptyList(),
+        true,
+        ""
+      ),
+      policy = referentialEqualityPolicy()
+    )
+
+  /**
+   * Controls the visibility of the "Switch", and its controls.
+   *
+   * A [Triple] containing:
+   *  - [String]: The text displayed with switch.
+   *  - [Boolean]: Whether the switch is checked or not.
+   *  - [Boolean]: Whether the switch is enabled or disabled.
+   */
+  private val pageSwitchItem = mutableStateOf(Triple("", true, true))
   private var fragmentPageBinding: FragmentPageBinding? = null
   override val fragmentToolbar: Toolbar? by lazy {
     fragmentPageBinding?.root?.findViewById(R.id.toolbar)
@@ -119,7 +151,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
               }
             )
           }
-          menu.findItem(R.id.menu_pages_clear).title = deleteIconTitle // Bug fix #3825
+          // menu.findItem(R.id.menu_pages_clear).title = deleteIconTitle // Bug fix #3825
         }
 
         @Suppress("ReturnCount")
@@ -155,16 +187,16 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     }
     fragmentPageBinding?.noPage?.text = noItemsString
 
-    fragmentPageBinding?.pageSwitch?.apply {
-      text = switchString
-      isChecked = switchIsChecked
-      // hide switches for custom apps, see more info here https://github.com/kiwix/kiwix-android/issues/3523
-      visibility = if (requireActivity().isCustomApp()) GONE else VISIBLE
-    }
+    // fragmentPageBinding?.pageSwitch?.apply {
+    //   text = switchString
+    //   isChecked = switchIsChecked
+    //   // hide switches for custom apps, see more info here https://github.com/kiwix/kiwix-android/issues/3523
+    //   visibility = if (requireActivity().isCustomApp()) GONE else VISIBLE
+    // }
     compositeDisposable.add(pageViewModel.effects.subscribe { it.invokeWith(activity) })
-    fragmentPageBinding?.pageSwitch?.setOnCheckedChangeListener { _, isChecked ->
-      pageViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
-    }
+    // fragmentPageBinding?.pageSwitch?.setOnCheckedChangeListener { _, isChecked ->
+    //   pageViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
+    // }
     pageViewModel.state.observe(viewLifecycleOwner, Observer(::render))
 
     // hides keyboard when scrolled
@@ -184,38 +216,85 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   ): View? {
     return ComposeView(requireContext()).apply {
       setContent {
+        val isSearchActive = remember { mutableStateOf(false) }
         PageScreen(
-          pageState = pageViewModel.state,
-          effects = pageViewModel.effects,
+          pageState = pageState.value,
+          pageSwitchItem = pageSwitchItem.value,
           screenTitle = screenTitle,
           noItemsString = noItemsString,
-          switchString = switchString,
           searchQueryHint = searchQueryHint,
-          switchIsChecked = switchIsChecked,
-          onSwitchChanged = { isChecked ->
-            pageViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
+          onSwitchChanged = { onSwitchCheckedChanged(it) },
+          itemClickListener = this@PageFragment,
+          navigationIcon = {
+            NavigationIcon(
+              iconItem = navigationIconItem(isSearchActive.value),
+              onClick = navigationIconClick(isSearchActive)
+            )
           },
-          onItemClick = { pageViewModel.actions.offer(Action.OnItemClick(it)) },
-          onItemLongClick = { pageViewModel.actions.offer(Action.OnItemLongClick(it)) }
+          actionMenuItems = actionMenuList(
+            isSearchActive = isSearchActive.value,
+            onSearchClick = { isSearchActive.value = true },
+            onDeleteClick = { pageViewModel.actions.offer(Action.UserClickedDeleteButton) }
+          )
         )
       }
     }
   }
 
+  private fun onSwitchCheckedChanged(isChecked: Boolean): () -> Unit = {
+    pageSwitchItem.value = pageSwitchItem.value.copy(second = isChecked)
+    pageViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
+  }
+
+  private fun navigationIconItem(isSearchActive: Boolean) = if (isSearchActive) {
+    IconItem.Drawable(R.drawable.ic_close_white_24dp)
+  } else {
+    IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack)
+  }
+
+  private fun navigationIconClick(isSearchActive: MutableState<Boolean>): () -> Unit = {
+    if (isSearchActive.value) {
+      isSearchActive.value = false
+      pageViewModel.actions.offer(Action.Exit)
+    } else {
+      requireActivity().onBackPressedDispatcher.onBackPressed()
+    }
+  }
+
+  private fun actionMenuList(
+    isSearchActive: Boolean,
+    onSearchClick: () -> Unit,
+    onDeleteClick: () -> Unit
+  ): List<ActionMenuItem> {
+    return listOfNotNull(
+      when {
+        !isSearchActive -> ActionMenuItem(
+          icon = IconItem.Drawable(R.drawable.action_search),
+          contentDescription = R.string.search_label,
+          onClick = onSearchClick,
+          testingTag = SEARCH_ICON_TESTING_TAG
+        )
+
+        else -> null
+      },
+      ActionMenuItem(
+        icon = IconItem.Vector(Icons.Default.Delete),
+        // Adding content description for #3825.
+        contentDescription = deleteIconTitle,
+        onClick = onDeleteClick,
+        testingTag = DELETE_MENU_ICON_TESTING_TAG
+      )
+    )
+  }
+
   override fun onDestroyView() {
     super.onDestroyView()
     compositeDisposable.clear()
-    fragmentPageBinding?.apply {
-      recyclerView.adapter = null
-      root.removeAllViews()
-    }
-    fragmentPageBinding = null
   }
 
   private fun render(state: PageState<*>) {
-    pageAdapter.items = state.visiblePageItems
-    fragmentPageBinding?.pageSwitch?.isEnabled = !state.isInSelectionState
-    fragmentPageBinding?.noPage?.visibility = if (state.pageItems.isEmpty()) VISIBLE else GONE
+    pageState.value = state
+    pageSwitchItem.value = Triple(switchString, switchIsChecked, !state.isInSelectionState)
     if (state.isInSelectionState) {
       if (actionMode == null) {
         actionMode =

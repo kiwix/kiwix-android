@@ -38,6 +38,7 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
@@ -46,7 +47,6 @@ import org.kiwix.kiwixmobile.language.viewmodel.Action
 import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
 import javax.inject.Inject
 
-const val SEARCH_ICON_TESTING_TAG = "search"
 const val SAVE_ICON_TESTING_TAG = "saveLanguages"
 const val SEARCH_FIELD_TESTING_TAG = "searchField"
 
