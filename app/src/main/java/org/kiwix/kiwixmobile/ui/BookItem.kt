@@ -44,7 +44,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.extensions.faviconToPainter
+import org.kiwix.kiwixmobile.core.downloader.model.Base64String
+import org.kiwix.kiwixmobile.core.downloader.model.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BOOK_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
@@ -54,8 +55,8 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import org.kiwix.kiwixmobile.core.zim_manager.KiloByte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.ArticleCount
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 
 const val BOOK_ITEM_CHECKBOX_TESTING_TAG = "bookItemCheckboxTestingTag"
 const val BOOK_ITEM_TESTING_TAG = "bookItemTestingTag"
@@ -115,7 +116,7 @@ private fun BookContent(
     if (selectionMode == SelectionMode.MULTI) {
       BookCheckbox(bookOnDisk, selectionMode, onMultiSelect, onClick, index)
     }
-    BookIcon(bookOnDisk.book.faviconToPainter())
+    BookIcon(Base64String(bookOnDisk.book.favicon).toPainter())
     BookDetails(Modifier.weight(1f), bookOnDisk)
   }
 }
