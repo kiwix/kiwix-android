@@ -144,15 +144,6 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     val activity = requireActivity() as CoreMainActivity
     compositeDisposable.add(pageViewModel.effects.subscribe { it.invokeWith(activity) })
     pageViewModel.state.observe(viewLifecycleOwner, Observer(::render))
-
-    // // hides keyboard when scrolled
-    // fragmentPageBinding?.recyclerView?.addOnScrollListener(
-    //   SimpleRecyclerViewScrollListener { _, newState ->
-    //     if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-    //       fragmentPageBinding?.recyclerView?.closeKeyboard()
-    //     }
-    //   }
-    // )
   }
 
   override fun onCreateView(
@@ -266,6 +257,13 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   private fun render(state: PageState<*>) {
     pageScreenState.value = pageScreenState.value.copy(
       switchIsEnabled = !state.isInSelectionState,
+      // First, assign the existing state to force Compose to recognize a change.
+      // This helps when internal properties of items (like `isSelected`) change,
+      // but the list reference itself remains the same — Compose won't detect it otherwise.
+      pageState = pageState.value
+    )
+    // Then, assign the actual updated state to trigger full recomposition.
+    pageScreenState.value = pageScreenState.value.copy(
       pageState = state
     )
     if (state.isInSelectionState) {
