@@ -182,6 +182,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    Log.e("ON_VIEW_CREATED", "onViewCreated: $screenTitle")
     pageScreenState.value = pageScreenState.value.copy(
       searchQueryHint = searchQueryHint,
       searchText = "",
@@ -242,7 +243,6 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   }
 
   private fun onSwitchCheckedChanged(isChecked: Boolean): () -> Unit = {
-    Log.e("PAGE_FRAGMENT", "onSwitchCheckedChanged: $isChecked")
     pageScreenState.value = pageScreenState.value.copy(switchIsChecked = isChecked)
     pageViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
   }

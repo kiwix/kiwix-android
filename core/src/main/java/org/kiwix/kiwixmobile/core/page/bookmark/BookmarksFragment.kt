@@ -16,7 +16,7 @@ class BookmarksFragment : PageFragment() {
     PageAdapter(PageItemDelegate(this))
   }
 
-  override val screenTitle: Int by lazy { R.string.bookmarks }
+  override val screenTitle: Int = R.string.bookmarks
   override val noItemsString: String by lazy { getString(R.string.no_bookmarks) }
   override val switchString: String by lazy { getString(R.string.bookmarks_from_current_book) }
   override val deleteIconTitle: Int by lazy {

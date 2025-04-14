@@ -96,8 +96,8 @@ fun PageScreen(
 @Composable
 private fun searchBarIfActive(
   state: PageFragmentScreenState
-): (@Composable () -> Unit)? = {
-  if (state.isSearchActive) {
+): (@Composable () -> Unit)? = if (state.isSearchActive) {
+  {
     KiwixSearchView(
       placeholder = state.searchQueryHint,
       value = state.searchText,
@@ -105,9 +105,9 @@ private fun searchBarIfActive(
       onValueChange = { state.searchValueChangedListener(it) },
       onClearClick = { state.clearSearchButtonClickListener.invoke() }
     )
-  } else {
-    null
   }
+} else {
+  null
 }
 
 @Composable

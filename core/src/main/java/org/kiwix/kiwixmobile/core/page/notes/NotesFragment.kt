@@ -30,7 +30,7 @@ import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesViewModel
 class NotesFragment : PageFragment() {
   override val pageViewModel by lazy { viewModel<NotesViewModel>(viewModelFactory) }
 
-  override val screenTitle: Int get() = R.string.pref_notes
+  override val screenTitle: Int = R.string.pref_notes
 
   override val pageAdapter: PageAdapter by lazy {
     PageAdapter(PageDelegate.PageItemDelegate(this))
