@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.page
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -182,7 +183,6 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     pageScreenState.value = pageScreenState.value.copy(
-      isSearchActive = pageScreenState.value.isSearchActive,
       searchQueryHint = searchQueryHint,
       searchText = "",
       searchValueChangedListener = { onTextChanged(it) },
@@ -190,30 +190,12 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
       screenTitle = screenTitle,
       noItemsString = noItemsString,
       switchString = switchString,
-      switchIsChecked = pageScreenState.value.switchIsChecked,
-      onSwitchCheckedChanged = { onSwitchCheckedChanged(it) },
+      switchIsChecked = switchIsChecked,
+      onSwitchCheckedChanged = { onSwitchCheckedChanged(it).invoke() },
       deleteIconTitle = deleteIconTitle
     )
-    // setupMenu()
     val activity = requireActivity() as CoreMainActivity
-    // fragmentPageBinding?.recyclerView?.apply {
-    //   layoutManager =
-    //     LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-    //   adapter = pageAdapter
-    //   fragmentTitle?.let(::setToolTipWithContentDescription)
-    // }
-    // fragmentPageBinding?.noPage?.text = noItemsString
-
-    // fragmentPageBinding?.pageSwitch?.apply {
-    //   text = switchString
-    //   isChecked = switchIsChecked
-    //   // hide switches for custom apps, see more info here https://github.com/kiwix/kiwix-android/issues/3523
-    //   visibility = if (requireActivity().isCustomApp()) GONE else VISIBLE
-    // }
     compositeDisposable.add(pageViewModel.effects.subscribe { it.invokeWith(activity) })
-    // fragmentPageBinding?.pageSwitch?.setOnCheckedChangeListener { _, isChecked ->
-    //   pageViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
-    // }
     pageViewModel.state.observe(viewLifecycleOwner, Observer(::render))
 
     // hides keyboard when scrolled
@@ -260,6 +242,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   }
 
   private fun onSwitchCheckedChanged(isChecked: Boolean): () -> Unit = {
+    Log.e("PAGE_FRAGMENT", "onSwitchCheckedChanged: $isChecked")
     pageScreenState.value = pageScreenState.value.copy(switchIsChecked = isChecked)
     pageViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
   }
@@ -313,7 +296,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   private fun render(state: PageState<*>) {
     pageScreenState.value = pageScreenState.value.copy(
       switchIsEnabled = !state.isInSelectionState,
-      pageState = state,
+      pageState = state
     )
     if (state.isInSelectionState) {
       if (actionMode == null) {
