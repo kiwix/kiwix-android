@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.ui.components
 
-import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -98,7 +97,6 @@ private fun AppBarTitleSection(
   @StringRes titleId: Int,
   searchBar: (@Composable () -> Unit)? = null
 ) {
-  Log.e("ON_VIEW_CREATED", "AppBarTitleSection: $titleId , and searchBar = $searchBar")
   Box(
     modifier = Modifier
       .fillMaxSize()
@@ -108,7 +106,6 @@ private fun AppBarTitleSection(
     searchBar?.let {
       it()
     } ?: run {
-      Log.e("ON_VIEW_CREATED", "AppBarTitle: $titleId")
       AppBarTitle(titleId)
     }
   }

@@ -19,26 +19,19 @@
 package org.kiwix.kiwixmobile.core.page
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
-import androidx.appcompat.widget.SearchView
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.referentialEqualityPolicy
 import androidx.compose.ui.platform.ComposeView
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -49,7 +42,6 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.databinding.FragmentPageBinding
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
-import org.kiwix.kiwixmobile.core.extensions.setUpSearchView
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -63,7 +55,6 @@ import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
-import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import javax.inject.Inject
 
 const val SEARCH_ICON_TESTING_TAG = "search"
@@ -141,48 +132,8 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
       }
     }
 
-  private fun setupMenu() {
-    (requireActivity() as MenuHost).addMenuProvider(
-      object : MenuProvider {
-        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-          menuInflater.inflate(R.menu.menu_page, menu)
-          val search = menu.findItem(R.id.menu_page_search).actionView as SearchView
-          search.apply {
-            setUpSearchView(requireActivity())
-            queryHint = searchQueryHint
-            setOnQueryTextListener(
-              SimpleTextListener { query, _ ->
-                pageViewModel.actions.offer(Action.Filter(query))
-              }
-            )
-          }
-          // menu.findItem(R.id.menu_pages_clear).title = deleteIconTitle // Bug fix #3825
-        }
-
-        @Suppress("ReturnCount")
-        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-          when (menuItem.itemId) {
-            android.R.id.home -> {
-              pageViewModel.actions.offer(Action.Exit)
-              return true
-            }
-
-            R.id.menu_pages_clear -> {
-              pageViewModel.actions.offer(Action.UserClickedDeleteButton)
-              return true
-            }
-          }
-          return false
-        }
-      },
-      viewLifecycleOwner,
-      Lifecycle.State.RESUMED
-    )
-  }
-
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    Log.e("ON_VIEW_CREATED", "onViewCreated: $screenTitle")
     pageScreenState.value = pageScreenState.value.copy(
       searchQueryHint = searchQueryHint,
       searchText = "",
@@ -221,13 +172,13 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
           itemClickListener = this@PageFragment,
           navigationIcon = {
             NavigationIcon(
-              iconItem = navigationIconItem(pageScreenState.value.isSearchActive),
               onClick = navigationIconClick()
             )
           },
           actionMenuItems = actionMenuList(
             isSearchActive = pageScreenState.value.isSearchActive,
             onSearchClick = {
+              // Set the `isSearchActive` when the search button is clicked.
               pageScreenState.value = pageScreenState.value.copy(isSearchActive = true)
             },
             onDeleteClick = { pageViewModel.actions.offer(Action.UserClickedDeleteButton) }
@@ -237,31 +188,55 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     }
   }
 
+  /**
+   * Handles changes to the search text input.
+   * - Updates the UI state with the latest search query.
+   * - Sends a filter action to the ViewModel to perform search/filtering logic.
+   *
+   * @param searchText The current text entered in the search bar.
+   */
   private fun onTextChanged(searchText: String) {
     pageScreenState.value = pageScreenState.value.copy(searchText = searchText)
     pageViewModel.actions.offer(Action.Filter(searchText))
   }
 
+  /**
+   * Returns a lambda to handle switch toggle changes.
+   * - Updates the UI state to reflect the new checked status.
+   * - Sends an action to the ViewModel to handle the toggle event (e.g., show all items or filter).
+   *
+   * @param isChecked The new checked state of the switch.
+   */
   private fun onSwitchCheckedChanged(isChecked: Boolean): () -> Unit = {
     pageScreenState.value = pageScreenState.value.copy(switchIsChecked = isChecked)
     pageViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
   }
 
-  private fun navigationIconItem(isSearchActive: Boolean) = if (isSearchActive) {
-    IconItem.Drawable(R.drawable.ic_close_white_24dp)
-  } else {
-    IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack)
-  }
-
+  /**
+   * Handles the click event for the navigation icon.
+   * - If search is active, it deactivates the search mode and clears the search text.
+   * - Otherwise, it triggers the default back navigation.
+   */
   private fun navigationIconClick(): () -> Unit = {
     if (pageScreenState.value.isSearchActive) {
       pageScreenState.value = pageScreenState.value.copy(isSearchActive = false)
-      pageViewModel.actions.offer(Action.Exit)
+      onTextChanged("")
     } else {
       requireActivity().onBackPressedDispatcher.onBackPressed()
     }
   }
 
+  /**
+   * Builds the list of action menu items for the app bar.
+   *
+   * @param isSearchActive Whether the search mode is currently active.
+   * @param onSearchClick Callback to invoke when the search icon is clicked.
+   * @param onDeleteClick Callback to invoke when the delete icon is clicked.
+   * @return A list of [ActionMenuItem]s to be displayed in the app bar.
+   *
+   * - Shows the search icon only when search is not active.
+   * - Always includes the delete icon, with a content description for accessibility (#3825).
+   */
   private fun actionMenuList(
     isSearchActive: Boolean,
     onSearchClick: () -> Unit,
