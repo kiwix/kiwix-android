@@ -39,7 +39,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
@@ -56,6 +58,9 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOURTEEN_SP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PAGE_SWITCH_LEFT_RIGHT_MARGIN
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PAGE_SWITCH_ROW_BOTTOM_MARGIN
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.DateTimeParseException
 
 @Suppress("ComposableLambdaParameterNaming")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -166,8 +171,29 @@ fun PageSwitchRow(
 @Composable
 fun DateItemText(dateItem: DateItem) {
   Text(
-    text = dateItem.dateString,
+    text = getFormattedDateLabel(dateItem.dateString),
     style = MaterialTheme.typography.bodySmall,
     modifier = Modifier.padding(SIXTEEN_DP)
   )
+}
+
+@Composable
+private fun getFormattedDateLabel(dateString: String): String {
+  val today = LocalDate.now()
+  val yesterday = today.minusDays(1)
+
+  val parsedDate = parseDateSafely(dateString)
+  return when (parsedDate) {
+    today -> stringResource(R.string.time_today)
+    yesterday -> stringResource(R.string.time_yesterday)
+    else -> dateString
+  }
+}
+
+private fun parseDateSafely(dateString: String): LocalDate? {
+  return try {
+    LocalDate.parse(dateString, DateTimeFormatter.ofPattern("d MMM yyyy"))
+  } catch (_: DateTimeParseException) {
+    null
+  }
 }
