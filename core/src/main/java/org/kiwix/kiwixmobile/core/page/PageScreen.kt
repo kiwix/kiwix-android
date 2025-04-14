@@ -20,9 +20,12 @@ package org.kiwix.kiwixmobile.core.page
 
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -31,10 +34,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
@@ -43,8 +48,13 @@ import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.DateItem
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
+import org.kiwix.kiwixmobile.core.ui.theme.AlabasterWhite
 import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
+import org.kiwix.kiwixmobile.core.ui.theme.White
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOURTEEN_SP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PAGE_SWITCH_LEFT_RIGHT_MARGIN
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PAGE_SWITCH_ROW_BOTTOM_MARGIN
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 
 @Suppress("ComposableLambdaParameterNaming")
@@ -71,7 +81,11 @@ fun PageScreen(
       }
     ) { padding ->
       val items = state.pageState.pageItems
-      Box(modifier = Modifier.padding(padding)) {
+      Box(
+        modifier = Modifier
+          .padding(padding)
+          .fillMaxSize()
+      ) {
         if (items.isEmpty()) {
           Text(
             text = state.noItemsString,
@@ -114,20 +128,36 @@ private fun searchBarIfActive(
 fun PageSwitchRow(
   state: PageFragmentScreenState
 ) {
+  val switchTextColor = if (isSystemInDarkTheme()) {
+    AlabasterWhite
+  } else {
+    White
+  }
   val context = LocalActivity.current as CoreMainActivity
   // hide switches for custom apps, see more info here https://github.com/kiwix/kiwix-android/issues/3523
   if (!context.isCustomApp()) {
     Row(
       modifier = Modifier
         .fillMaxWidth()
-        .background(Black),
+        .background(Black)
+        .padding(bottom = PAGE_SWITCH_ROW_BOTTOM_MARGIN),
+      horizontalArrangement = Arrangement.Absolute.Right,
       verticalAlignment = Alignment.CenterVertically
     ) {
-      Text(state.switchString)
+      Text(
+        state.switchString,
+        color = switchTextColor,
+        style = TextStyle(fontSize = FOURTEEN_SP)
+      )
       Switch(
         checked = state.switchIsChecked,
         onCheckedChange = { state.onSwitchCheckedChanged(it) },
-        enabled = state.switchIsEnabled
+        enabled = state.switchIsEnabled,
+        modifier = Modifier
+          .padding(horizontal = PAGE_SWITCH_LEFT_RIGHT_MARGIN),
+        colors = SwitchDefaults.colors(
+          uncheckedTrackColor = White
+        )
       )
     }
   }

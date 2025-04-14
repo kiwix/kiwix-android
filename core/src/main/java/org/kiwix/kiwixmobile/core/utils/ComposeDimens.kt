@@ -109,4 +109,6 @@ object ComposeDimens {
 
   // Page dimens
   val PAGE_LIST_ITEM_FAVICON_SIZE = 40.dp
+  val PAGE_SWITCH_LEFT_RIGHT_MARGIN = 10.dp
+  val PAGE_SWITCH_ROW_BOTTOM_MARGIN = 8.dp
 }

@@ -34,14 +34,11 @@ import androidx.compose.runtime.referentialEqualityPolicy
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.core.databinding.FragmentPageBinding
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
-import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -54,7 +51,6 @@ import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
 import javax.inject.Inject
 
 const val SEARCH_ICON_TESTING_TAG = "search"
@@ -106,7 +102,6 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
       clearSearchButtonClickListener = {}
     )
   )
-  private var fragmentPageBinding: FragmentPageBinding? = null
 
   private val actionModeCallback: ActionMode.Callback =
     object : ActionMode.Callback {
@@ -150,14 +145,14 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     compositeDisposable.add(pageViewModel.effects.subscribe { it.invokeWith(activity) })
     pageViewModel.state.observe(viewLifecycleOwner, Observer(::render))
 
-    // hides keyboard when scrolled
-    fragmentPageBinding?.recyclerView?.addOnScrollListener(
-      SimpleRecyclerViewScrollListener { _, newState ->
-        if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-          fragmentPageBinding?.recyclerView?.closeKeyboard()
-        }
-      }
-    )
+    // // hides keyboard when scrolled
+    // fragmentPageBinding?.recyclerView?.addOnScrollListener(
+    //   SimpleRecyclerViewScrollListener { _, newState ->
+    //     if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+    //       fragmentPageBinding?.recyclerView?.closeKeyboard()
+    //     }
+    //   }
+    // )
   }
 
   override fun onCreateView(
