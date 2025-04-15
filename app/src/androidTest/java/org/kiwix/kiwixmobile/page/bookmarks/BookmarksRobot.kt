@@ -53,7 +53,7 @@ fun bookmarks(func: BookmarksRobot.() -> Unit) =
 class BookmarksRobot : BaseRobot() {
   private var retryCountForBookmarkAddedButton = 5
 
-  fun assertBookMarksDisplayed(composeTestRule: ComposeTestRule) {
+  fun assertBookMarksDisplayed(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitForIdle()
       onNodeWithTag(SWITCH_TEXT_TESTING_TAG)
@@ -61,7 +61,7 @@ class BookmarksRobot : BaseRobot() {
     }
   }
 
-  fun clickOnTrashIcon(composeTestRule: ComposeTestRule) {
+  fun clickOnTrashIcon(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitForIdle()
       onNodeWithTag(DELETE_MENU_ICON_TESTING_TAG)

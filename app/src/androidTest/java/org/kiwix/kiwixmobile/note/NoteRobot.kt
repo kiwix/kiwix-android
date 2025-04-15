@@ -22,18 +22,15 @@ import android.content.Context
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextReplacement
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
@@ -42,11 +39,14 @@ import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
-import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.ADD_NOTE_TEXT_FILED_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.DELETE_MENU_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.SAVE_MENU_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.page.NO_ITEMS_TEXT_TESTING_TAG
+import org.kiwix.kiwixmobile.core.page.PAGE_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.page.SWITCH_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
@@ -57,16 +57,20 @@ fun note(func: NoteRobot.() -> Unit) = NoteRobot().apply(func)
 class NoteRobot : BaseRobot() {
   private val noteText = "Test Note"
 
-  fun assertToolbarExist() {
-    isVisible(ViewId(R.id.toolbar))
+  fun assertToolbarExist(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.waitForIdle()
+      composeTestRule.onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.pref_notes))
+    })
   }
 
-  fun assertNoteRecyclerViewExist() {
-    isVisible(ViewId(R.id.recycler_view))
-  }
-
-  fun assertSwitchWidgetExist() {
-    isVisible(ViewId(R.id.page_switch))
+  fun assertSwitchWidgetExist(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(SWITCH_TEXT_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.notes_from_all_books))
+    }
   }
 
   fun clickOnNoteMenuItem(context: Context) {
@@ -117,15 +121,11 @@ class NoteRobot : BaseRobot() {
     testFlakyView({ onView(withText(R.string.pref_notes)).perform(click()) })
   }
 
-  fun clickOnSavedNote() {
-    testFlakyView({
-      onView(withId(R.id.recycler_view)).perform(
-        actionOnItemAtPosition<RecyclerView.ViewHolder>(
-          0,
-          click()
-        )
-      )
-    })
+  fun clickOnSavedNote(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onAllNodesWithTag(PAGE_ITEM_TESTING_TAG)[0].performClick()
+    }
   }
 
   fun clickOnOpenNote() {
@@ -158,8 +158,14 @@ class NoteRobot : BaseRobot() {
     })
   }
 
-  fun clickOnTrashIcon() {
-    testFlakyView({ onView(withContentDescription(R.string.pref_clear_notes)).perform(click()) })
+  fun clickOnTrashIcon(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(DELETE_MENU_ICON_TESTING_TAG)
+          .performClick()
+      }
+    })
   }
 
   fun assertDeleteNoteDialogDisplayed() {
@@ -171,8 +177,12 @@ class NoteRobot : BaseRobot() {
     testFlakyView({ onView(ViewMatchers.withText("DELETE")).perform(click()) })
   }
 
-  fun assertNoNotesTextDisplayed() {
-    testFlakyView({ isVisible(TextId(R.string.no_notes)) })
+  fun assertNoNotesTextDisplayed(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(NO_ITEMS_TEXT_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.no_notes))
+    }
   }
 
   fun assertHomePageIsLoadedOfTestZimFile() {

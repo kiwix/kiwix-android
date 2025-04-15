@@ -47,7 +47,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PAGE_LIST_ITEM_FAVICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 
-const val PAGE_ITEM_TITLE_TESTING_TAG = "pageItemTitleTestingTag"
+const val PAGE_ITEM_TESTING_TAG = "pageItemTestingTag"
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -66,7 +66,8 @@ fun PageListItem(
       .padding(
         horizontal = SIXTEEN_DP,
         vertical = EIGHT_DP
-      ),
+      )
+      .semantics { testTag = PAGE_ITEM_TESTING_TAG },
     verticalAlignment = Alignment.CenterVertically
   ) {
     Image(
@@ -85,9 +86,7 @@ fun PageListItem(
     Text(
       text = page.title,
       style = MaterialTheme.typography.bodyLarge,
-      modifier = Modifier
-        .weight(1f)
-        .semantics { testTag = PAGE_ITEM_TITLE_TESTING_TAG },
+      modifier = Modifier.weight(1f),
       maxLines = 1,
       overflow = TextOverflow.Ellipsis
     )
