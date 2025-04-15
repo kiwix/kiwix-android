@@ -35,6 +35,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
@@ -44,6 +46,8 @@ import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PAGE_LIST_ITEM_FAVICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+
+const val PAGE_ITEM_TITLE_TESTING_TAG = "pageItemTitleTestingTag"
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -81,7 +85,9 @@ fun PageListItem(
     Text(
       text = page.title,
       style = MaterialTheme.typography.bodyLarge,
-      modifier = Modifier.weight(1f),
+      modifier = Modifier
+        .weight(1f)
+        .semantics { testTag = PAGE_ITEM_TITLE_TESTING_TAG },
       maxLines = 1,
       overflow = TextOverflow.Ellipsis
     )

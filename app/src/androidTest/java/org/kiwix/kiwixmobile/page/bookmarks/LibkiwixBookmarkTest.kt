@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.page.bookmarks
 
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
@@ -42,6 +43,7 @@ import org.kiwix.kiwixmobile.core.main.CoreReaderFragment
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.topLevel
@@ -58,6 +60,9 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
+
+  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  val composeTestRule = createComposeRule()
 
   private lateinit var kiwixMainActivity: KiwixMainActivity
 
@@ -119,20 +124,20 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
     bookmarks {
       // delete any bookmark if already saved to properly perform this test case.
       longClickOnSaveBookmarkImage()
-      clickOnTrashIcon()
+      clickOnTrashIcon(composeTestRule)
       assertDeleteBookmarksDialogDisplayed()
       clickOnDeleteButton()
-      assertNoBookMarkTextDisplayed()
+      assertNoBookMarkTextDisplayed(composeTestRule)
       pressBack()
       // Test saving bookmark
       clickOnSaveBookmarkImage()
       clickOnOpenSavedBookmarkButton()
-      assertBookmarkSaved()
+      assertBookmarkSaved(composeTestRule)
       pressBack()
       // Test removing bookmark
       clickOnSaveBookmarkImage()
       longClickOnSaveBookmarkImage()
-      assertBookmarkRemoved()
+      assertBookmarkRemoved(composeTestRule)
       pressBack()
       // Save the bookmark to test whether it remains saved after the application restarts or not.
       clickOnSaveBookmarkImage()
@@ -142,7 +147,7 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
   @Test
   fun testBookmarkRemainsSavedOrNot() {
     topLevel {
-      clickBookmarksOnNavDrawer(BookmarksRobot::assertBookmarkSaved)
+      clickBookmarksOnNavDrawer { assertBookmarkSaved(composeTestRule) }
     }
   }
 
@@ -160,10 +165,10 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
     bookmarks {
       // delete any bookmark if already saved to properly perform this test case.
       longClickOnSaveBookmarkImage()
-      clickOnTrashIcon()
+      clickOnTrashIcon(composeTestRule)
       assertDeleteBookmarksDialogDisplayed()
       clickOnDeleteButton()
-      assertNoBookMarkTextDisplayed()
+      assertNoBookMarkTextDisplayed(composeTestRule)
       pressBack()
     }
     val navHostFragment: NavHostFragment =
@@ -198,7 +203,7 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
     bookmarks {
       // test all the saved bookmarks are showing on the bookmarks screen
       openBookmarkScreen()
-      testAllBookmarkShowing(bookmarkList)
+      testAllBookmarkShowing(bookmarkList, composeTestRule)
     }
   }
 

@@ -49,7 +49,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.TextStyle
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
@@ -71,6 +74,10 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeParseException
+
+const val SWITCH_TEXT_TESTING_TAG = "switchTextTestingTag"
+const val NO_ITEMS_TEXT_TESTING_TAG = "noItemsTextTestingTag"
+const val PAGE_LIST_TEST_TAG = "pageListTestingTag"
 
 @Suppress("ComposableLambdaParameterNaming")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -109,7 +116,9 @@ fun PageScreen(
           Text(
             text = state.noItemsString,
             style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.align(Alignment.Center)
+            modifier = Modifier
+              .align(Alignment.Center)
+              .semantics { testTag = NO_ITEMS_TEXT_TESTING_TAG }
           )
         } else {
           PageList(
@@ -140,7 +149,7 @@ private fun PageList(
       }
   }
 
-  LazyColumn(state = listState) {
+  LazyColumn(state = listState, modifier = Modifier.semantics { testTag = PAGE_LIST_TEST_TAG }) {
     items(state.pageState.visiblePageItems) { item ->
       when (item) {
         is Page -> PageListItem(page = item, itemClickListener = itemClickListener)
@@ -171,14 +180,14 @@ private fun searchBarIfActive(
 fun PageSwitchRow(
   state: PageFragmentScreenState
 ) {
-  val switchTextColor = if (isSystemInDarkTheme()) {
-    AlabasterWhite
-  } else {
-    White
-  }
   val context = LocalActivity.current as CoreMainActivity
   // hide switches for custom apps, see more info here https://github.com/kiwix/kiwix-android/issues/3523
   if (!context.isCustomApp()) {
+    val switchTextColor = if (isSystemInDarkTheme()) {
+      AlabasterWhite
+    } else {
+      White
+    }
     Row(
       modifier = Modifier
         .fillMaxWidth()
@@ -190,7 +199,8 @@ fun PageSwitchRow(
       Text(
         state.switchString,
         color = switchTextColor,
-        style = TextStyle(fontSize = FOURTEEN_SP)
+        style = TextStyle(fontSize = FOURTEEN_SP),
+        modifier = Modifier.testTag(SWITCH_TEXT_TESTING_TAG)
       )
       Switch(
         checked = state.switchIsChecked,
