@@ -21,7 +21,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.material3.Surface
 import androidx.compose.ui.platform.ComposeView
 import androidx.navigation.fragment.findNavController
 import org.kiwix.kiwixmobile.cachedComponent
@@ -45,13 +44,11 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
     super.onViewCreated(view, savedInstanceState)
     composeView.setContent {
       KiwixTheme {
-        Surface {
-          IntroScreen(
-            onButtonClick = {
-              navigateToLibrary()
-            }
-          )
-        }
+        IntroScreen(
+          onButtonClick = {
+            navigateToLibrary()
+          }
+        )
       }
     }
   }

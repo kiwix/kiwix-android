@@ -46,7 +46,7 @@ fun HeadingText(
 }
 
 @Composable
-fun LabelText(
+fun SubHeadingText(
   @StringRes text: Int
 ) {
   Text(
@@ -56,6 +56,6 @@ fun LabelText(
     textAlign = TextAlign.Center,
     text = stringResource(text),
     fontSize = ComposeDimens.MEDIUM_BODY_TEXT_SIZE,
-    color = MaterialTheme.colorScheme.onSecondary
+    color = MaterialTheme.colorScheme.onTertiary
   )
 }

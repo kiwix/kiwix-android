@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,6 +36,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue200
+import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 
 private const val ANIMATION_DURATION: Int = 100
@@ -107,7 +107,7 @@ fun PageIndicator(
       val isSelected = i == pagerState.currentPage
       PageIndicatorView(
         isSelected = isSelected,
-        selectedColor = MaterialTheme.colorScheme.primary,
+        selectedColor = DenimBlue800,
         defaultColor = DenimBlue200,
         defaultRadius = ComposeDimens.TEN_DP,
         selectedLength = ComposeDimens.TWENTY_TWO_DP,
