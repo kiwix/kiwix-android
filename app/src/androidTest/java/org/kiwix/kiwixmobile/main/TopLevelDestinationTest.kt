@@ -119,13 +119,13 @@ class TopLevelDestinationTest : BaseActivityTest() {
         }
       }
       clickBookmarksOnNavDrawer {
-        assertBookMarksDisplayed()
-        clickOnTrashIcon()
+        assertBookMarksDisplayed(composeTestRule)
+        clickOnTrashIcon(composeTestRule)
         assertDeleteBookmarksDialogDisplayed()
       }
       clickHistoryOnSideNav {
-        assertHistoryDisplayed()
-        clickOnTrashIcon()
+        assertHistoryDisplayed(composeTestRule)
+        clickOnTrashIcon(composeTestRule)
         assertDeleteHistoryDialogDisplayed()
       }
       clickHostBooksOnSideNav(ZimHostRobot::assertMenuWifiHotspotDiplayed)
