@@ -18,23 +18,35 @@
 
 package org.kiwix.kiwixmobile.page.history
 
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import applyWithViewHierarchyPrinting
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.ContentDesc
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.page.SWITCH_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 fun history(func: HistoryRobot.() -> Unit) = HistoryRobot().applyWithViewHierarchyPrinting(func)
 
 class HistoryRobot : BaseRobot() {
-  fun assertHistoryDisplayed() {
-    assertDisplayed(R.string.history_from_current_book)
+  fun assertHistoryDisplayed(composeTestRule: ComposeTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(SWITCH_TEXT_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.history_from_current_book))
+    }
   }
 
-  fun clickOnTrashIcon() {
-    clickOn(ContentDesc(R.string.pref_clear_all_history_title))
+  fun clickOnTrashIcon(composeTestRule: ComposeTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(DELETE_MENU_ICON_TESTING_TAG)
+        .performClick()
+    }
   }
 
   fun assertDeleteHistoryDialogDisplayed() {
