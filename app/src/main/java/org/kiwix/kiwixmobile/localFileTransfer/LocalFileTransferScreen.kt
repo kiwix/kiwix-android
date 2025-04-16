@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.localFileTransfer
 
+import android.content.res.Configuration
 import android.net.wifi.p2p.WifiP2pDevice
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
@@ -36,6 +37,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
@@ -62,6 +64,7 @@ import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Vector
 import org.kiwix.kiwixmobile.core.ui.theme.DodgerBlue
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIFTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FILE_FOR_TRANSFER_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FILE_ITEM_ICON_SIZE
@@ -79,13 +82,16 @@ import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENDING
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENT
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.TO_BE_SENT
 
-@Preview(device = "id:Nexus S")
+@Preview(
+  uiMode = Configuration.UI_MODE_NIGHT_NO
+)
+@Preview(name = "Night Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun Preview() {
   LocalFileTransferScreen(
-    deviceName = "Google Pixel 7a",
+    deviceName = "Device Name",
     toolbarTitle = org.kiwix.kiwixmobile.R.string.receive_files_title,
-    isPeerSearching = true,
+    isPeerSearching = false,
     peerDeviceList = listOf(WifiP2pDevice().apply { deviceName = "Redmi note 9" }),
     transferFileList = listOf(
       FileItem("DemoFile.zim")
@@ -119,35 +125,37 @@ fun LocalFileTransferScreen(
   onDeviceItemClick: (WifiP2pDevice) -> Unit,
   navigationIcon: @Composable () -> Unit
 ) {
-  Scaffold(
-    topBar = {
-      KiwixAppBar(
-        titleId = toolbarTitle,
-        actionMenuItems = actionMenuItems,
-        navigationIcon = navigationIcon
-      )
-    }
-  ) { padding ->
-    Column(
-      modifier = Modifier
-        .fillMaxSize()
-        .padding(padding)
-        .background(Color.Transparent)
-    ) {
-      YourDeviceHeader(deviceName)
-      HorizontalDivider(
-        color = DodgerBlue,
-        thickness = ONE_DP,
-        modifier = Modifier.padding(horizontal = FIVE_DP)
-      )
-      NearbyDevicesSection(peerDeviceList, isPeerSearching, onDeviceItemClick)
-      HorizontalDivider(
-        color = DodgerBlue,
-        thickness = ONE_DP,
+  KiwixTheme {
+    Scaffold(
+      topBar = {
+        KiwixAppBar(
+          titleId = toolbarTitle,
+          actionMenuItems = actionMenuItems,
+          navigationIcon = navigationIcon
+        )
+      }
+    ) { padding ->
+      Column(
         modifier = Modifier
-          .padding(horizontal = FIVE_DP)
-      )
-      TransferFilesSection(transferFileList)
+          .fillMaxSize()
+          .padding(padding)
+          .background(Color.Transparent)
+      ) {
+        YourDeviceHeader(deviceName)
+        HorizontalDivider(
+          color = DodgerBlue,
+          thickness = ONE_DP,
+          modifier = Modifier.padding(horizontal = FIVE_DP)
+        )
+        NearbyDevicesSection(peerDeviceList, isPeerSearching, onDeviceItemClick)
+        HorizontalDivider(
+          color = DodgerBlue,
+          thickness = ONE_DP,
+          modifier = Modifier
+            .padding(horizontal = FIVE_DP)
+        )
+        TransferFilesSection(transferFileList)
+      }
     }
   }
 }
@@ -171,7 +179,8 @@ fun NearbyDevicesSection(
         .fillMaxWidth()
         .padding(top = FIVE_DP)
         .align(Alignment.CenterHorizontally),
-      textAlign = TextAlign.Center
+      textAlign = TextAlign.Center,
+      color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.67f)
     )
 
     when {
@@ -186,7 +195,8 @@ fun NearbyDevicesSection(
         modifier = Modifier
           .padding(NO_DEVICE_FOUND_TEXT_PADDING)
           .align(Alignment.CenterHorizontally),
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.67f)
       )
 
       else -> LazyColumn(
@@ -212,7 +222,8 @@ private fun TransferFilesSection(transferFileList: List<FileItem>) {
       modifier = Modifier
         .fillMaxWidth()
         .padding(top = TEN_DP),
-      textAlign = TextAlign.Center
+      textAlign = TextAlign.Center,
+      color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.67f)
     )
 
     LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -231,7 +242,8 @@ private fun YourDeviceHeader(deviceName: String) {
       fontStyle = FontStyle.Italic,
       fontSize = YOUR_DEVICE_TEXT_SIZE,
       modifier = Modifier
-        .padding(top = FIVE_DP, bottom = ONE_DP)
+        .padding(top = FIVE_DP, bottom = ONE_DP),
+      color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.67f)
     )
     val contentDescription = stringResource(R.string.device_name)
     Text(
@@ -240,7 +252,8 @@ private fun YourDeviceHeader(deviceName: String) {
       fontSize = PEER_DEVICE_ITEM_TEXT_SIZE,
       modifier = Modifier
         .minimumInteractiveComponentSize()
-        .semantics { this.contentDescription = contentDescription }
+        .semantics { this.contentDescription = contentDescription },
+      color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.67f)
     )
   }
 }
@@ -260,7 +273,8 @@ fun TransferFileItem(
       fontSize = FILE_ITEM_TEXT_SIZE,
       modifier = Modifier
         .weight(1f)
-        .padding(horizontal = FIVE_DP, vertical = ONE_DP)
+        .padding(horizontal = FIVE_DP, vertical = ONE_DP),
+      color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.67f)
     )
 
     val modifier = Modifier
@@ -309,7 +323,8 @@ fun PeerDeviceItem(
       textAlign = TextAlign.Center,
       modifier = Modifier
         .weight(3f)
-        .padding(horizontal = FIVE_DP, vertical = ONE_DP)
+        .padding(horizontal = FIVE_DP, vertical = ONE_DP),
+      color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.67f)
     )
   }
 }
