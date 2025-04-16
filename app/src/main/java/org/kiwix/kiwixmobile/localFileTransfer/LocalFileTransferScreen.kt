@@ -18,11 +18,12 @@
 
 package org.kiwix.kiwixmobile.localFileTransfer
 
-import android.content.res.Configuration
+import android.content.Context
 import android.net.wifi.p2p.WifiP2pDevice
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
@@ -32,8 +33,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -42,9 +41,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -53,16 +57,15 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.main.DELETE_MENU_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
-import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
+import org.kiwix.kiwixmobile.core.ui.components.KiwixShowCaseView
+import org.kiwix.kiwixmobile.core.ui.components.ShowcaseProperty
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
-import org.kiwix.kiwixmobile.core.ui.models.IconItem
-import org.kiwix.kiwixmobile.core.ui.models.IconItem.Vector
 import org.kiwix.kiwixmobile.core.ui.theme.DodgerBlue
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIFTEEN_DP
@@ -77,40 +80,16 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PEER_DEVICE_ITEM_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.YOUR_DEVICE_TEXT_SIZE
+import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.language.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.ERROR
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENDING
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENT
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.TO_BE_SENT
 
-@Preview(
-  uiMode = Configuration.UI_MODE_NIGHT_NO
-)
-@Preview(name = "Night Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun Preview() {
-  LocalFileTransferScreen(
-    deviceName = "Device Name",
-    toolbarTitle = org.kiwix.kiwixmobile.R.string.receive_files_title,
-    isPeerSearching = false,
-    peerDeviceList = listOf(WifiP2pDevice().apply { deviceName = "Redmi note 9" }),
-    transferFileList = listOf(
-      FileItem("DemoFile.zim")
-    ),
-    actionMenuItems = listOf(
-      ActionMenuItem(
-        Vector(Icons.Default.Search),
-        R.string.search_label,
-        { },
-        isEnabled = true,
-        testingTag = DELETE_MENU_BUTTON_TESTING_TAG
-      )
-    ),
-    onDeviceItemClick = {},
-    navigationIcon = {
-      NavigationIcon(iconItem = IconItem.Drawable(R.drawable.ic_close_white_24dp), onClick = {})
-    }
-  )
-}
+const val YOUR_DEVICE_SHOW_CASE_TAG = "yourDeviceShowCaseTag"
+const val PEER_DEVICE_LIST_SHOW_CASE_TAG = "peerDeviceListShowCaseTag"
+const val FILE_FOR_TRANSFER_SHOW_CASE_TAG = "fileForTransferShowCaseTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming", "LongParameterList")
@@ -123,48 +102,82 @@ fun LocalFileTransferScreen(
   transferFileList: List<FileItem>,
   actionMenuItems: List<ActionMenuItem>,
   onDeviceItemClick: (WifiP2pDevice) -> Unit,
+  sharedPreferenceUtil: SharedPreferenceUtil,
   navigationIcon: @Composable () -> Unit
 ) {
+  val targets = remember { mutableStateMapOf<String, ShowcaseProperty>() }
+  val context = LocalContext.current
   KiwixTheme {
     Scaffold(
       topBar = {
         KiwixAppBar(
           titleId = toolbarTitle,
-          actionMenuItems = actionMenuItems,
+          actionMenuItems = actionMenuItems.map {
+            it.copy(
+              modifier =
+                Modifier.onGloballyPositioned { coordinates ->
+                  targets[SEARCH_ICON_TESTING_TAG] = ShowcaseProperty(
+                    index = ZERO,
+                    coordinates = coordinates,
+                    showCaseMessage = context.getString(string.click_nearby_devices_message)
+                  )
+                }
+            )
+          },
           navigationIcon = navigationIcon
         )
       }
     ) { padding ->
-      Column(
+      Box(
         modifier = Modifier
           .fillMaxSize()
           .padding(padding)
-          .background(Color.Transparent)
       ) {
-        YourDeviceHeader(deviceName)
-        HorizontalDivider(
-          color = DodgerBlue,
-          thickness = ONE_DP,
-          modifier = Modifier.padding(horizontal = FIVE_DP)
-        )
-        NearbyDevicesSection(peerDeviceList, isPeerSearching, onDeviceItemClick)
-        HorizontalDivider(
-          color = DodgerBlue,
-          thickness = ONE_DP,
+        Column(
           modifier = Modifier
-            .padding(horizontal = FIVE_DP)
-        )
-        TransferFilesSection(transferFileList)
+            .fillMaxSize()
+            .background(Color.Transparent)
+        ) {
+          YourDeviceHeader(deviceName, context, targets)
+          HorizontalDivider(
+            color = DodgerBlue,
+            thickness = ONE_DP,
+            modifier = Modifier.padding(horizontal = FIVE_DP)
+          )
+          NearbyDevicesSection(peerDeviceList, isPeerSearching, onDeviceItemClick, context, targets)
+          HorizontalDivider(
+            color = DodgerBlue,
+            thickness = ONE_DP,
+            modifier = Modifier
+              .padding(horizontal = FIVE_DP)
+          )
+          TransferFilesSection(transferFileList, context, targets)
+        }
+        ShowShowCaseToUserIfNotShown(targets, sharedPreferenceUtil)
       }
     }
   }
 }
 
 @Composable
+fun ShowShowCaseToUserIfNotShown(
+  targets: SnapshotStateMap<String, ShowcaseProperty>,
+  sharedPreferenceUtil: SharedPreferenceUtil
+) {
+  // if (sharedPreferenceUtil.prefShowShowCaseToUser) {
+  KiwixShowCaseView(targets = targets) {
+    sharedPreferenceUtil.showCaseViewForFileTransferShown()
+  }
+  // }
+}
+
+@Composable
 fun NearbyDevicesSection(
   peerDeviceList: List<WifiP2pDevice>,
   isPeerSearching: Boolean,
-  onDeviceItemClick: (WifiP2pDevice) -> Unit
+  onDeviceItemClick: (WifiP2pDevice) -> Unit,
+  context: Context,
+  targets: SnapshotStateMap<String, ShowcaseProperty>
 ) {
   Column(
     modifier = Modifier
@@ -194,7 +207,14 @@ fun NearbyDevicesSection(
         text = stringResource(R.string.no_devices_found),
         modifier = Modifier
           .padding(NO_DEVICE_FOUND_TEXT_PADDING)
-          .align(Alignment.CenterHorizontally),
+          .align(Alignment.CenterHorizontally)
+          .onGloballyPositioned { coordinates ->
+            targets[PEER_DEVICE_LIST_SHOW_CASE_TAG] = ShowcaseProperty(
+              index = 2,
+              coordinates = coordinates,
+              showCaseMessage = context.getString(string.transfer_zim_files_list_message)
+            )
+          },
         textAlign = TextAlign.Center,
         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.67f)
       )
@@ -213,7 +233,11 @@ fun NearbyDevicesSection(
 }
 
 @Composable
-private fun TransferFilesSection(transferFileList: List<FileItem>) {
+private fun TransferFilesSection(
+  transferFileList: List<FileItem>,
+  context: Context,
+  targets: SnapshotStateMap<String, ShowcaseProperty>
+) {
   Column(modifier = Modifier.fillMaxWidth()) {
     Text(
       text = stringResource(R.string.files_for_transfer),
@@ -221,7 +245,14 @@ private fun TransferFilesSection(transferFileList: List<FileItem>) {
       fontFamily = FontFamily.Monospace,
       modifier = Modifier
         .fillMaxWidth()
-        .padding(top = TEN_DP),
+        .padding(top = TEN_DP)
+        .onGloballyPositioned { coordinates ->
+          targets[FILE_FOR_TRANSFER_SHOW_CASE_TAG] = ShowcaseProperty(
+            index = 3,
+            coordinates = coordinates,
+            showCaseMessage = context.getString(string.transfer_zim_files_list_message)
+          )
+        },
       textAlign = TextAlign.Center,
       color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.67f)
     )
@@ -235,7 +266,11 @@ private fun TransferFilesSection(transferFileList: List<FileItem>) {
 }
 
 @Composable
-private fun YourDeviceHeader(deviceName: String) {
+private fun YourDeviceHeader(
+  deviceName: String,
+  context: Context,
+  targets: SnapshotStateMap<String, ShowcaseProperty>
+) {
   Column(modifier = Modifier.padding(horizontal = FIFTEEN_DP, vertical = FIVE_DP)) {
     Text(
       text = stringResource(R.string.your_device),
@@ -252,7 +287,14 @@ private fun YourDeviceHeader(deviceName: String) {
       fontSize = PEER_DEVICE_ITEM_TEXT_SIZE,
       modifier = Modifier
         .minimumInteractiveComponentSize()
-        .semantics { this.contentDescription = contentDescription },
+        .semantics { this.contentDescription = contentDescription }
+        .onGloballyPositioned { coordinates ->
+          targets[YOUR_DEVICE_SHOW_CASE_TAG] = ShowcaseProperty(
+            index = 1,
+            coordinates = coordinates,
+            showCaseMessage = context.getString(string.your_device_name_message)
+          )
+        },
       color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.67f)
     )
   }

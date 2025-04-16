@@ -137,6 +137,10 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     ContextWrapper(context).externalMediaDirs[0]?.path
       ?: context.filesDir.path // a workaround for emulators
 
+  fun showCaseViewForFileTransferShown() {
+    sharedPreferences.edit { putBoolean(PREF_SHOW_SHOWCASE, false) }
+  }
+
   fun putPrefBookMarkMigrated(isMigrated: Boolean) =
     sharedPreferences.edit { putBoolean(PREF_BOOKMARKS_MIGRATED, isMigrated) }
 

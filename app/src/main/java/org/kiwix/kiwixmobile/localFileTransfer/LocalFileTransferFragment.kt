@@ -155,6 +155,7 @@ class LocalFileTransferFragment :
         transferFileList = transferFileList.value,
         actionMenuItems = actionMenuItem(),
         onDeviceItemClick = { wifiDirectManager.sendToDevice(it) },
+        sharedPreferenceUtil = sharedPreferenceUtil,
         navigationIcon = {
           NavigationIcon(
             iconItem = IconItem.Drawable(drawable.ic_close_white_24dp),
