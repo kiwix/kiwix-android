@@ -65,7 +65,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
-import org.kiwix.kiwixmobile.core.ui.theme.CornflowerBlue
+import org.kiwix.kiwixmobile.core.ui.theme.DodgerBlue
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PULSE_ALPHA
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PULSE_ANIMATION_END
@@ -154,7 +154,7 @@ private fun DrawScope.drawOverlay(
   baseRadius: Float,
   animatedFraction: Float
 ) {
-  drawRect(color = CornflowerBlue.copy(alpha = SHOWCASE_VIEW_BACKGROUND_COLOR_ALPHA), size = size)
+  drawRect(color = DodgerBlue.copy(alpha = SHOWCASE_VIEW_BACKGROUND_COLOR_ALPHA), size = size)
   drawCircle(
     color = Color.White,
     radius = baseRadius * (ONE + animatedFraction),

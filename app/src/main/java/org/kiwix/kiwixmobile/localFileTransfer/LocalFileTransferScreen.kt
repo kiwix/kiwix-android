@@ -67,6 +67,7 @@ import org.kiwix.kiwixmobile.core.ui.components.ShowcaseProperty
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.theme.DodgerBlue
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DEFAULT_TEXT_ALPHA
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIFTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FILE_FOR_TRANSFER_SHOW_CASE_VIEW_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FILE_FOR_TRANSFER_TEXT_SIZE
@@ -189,7 +190,7 @@ fun NearbyDevicesSection(
         .padding(top = FIVE_DP)
         .align(Alignment.CenterHorizontally),
       textAlign = TextAlign.Center,
-      color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.67f)
+      color = MaterialTheme.colorScheme.onSurface.copy(alpha = DEFAULT_TEXT_ALPHA)
     )
 
     when {
@@ -213,7 +214,7 @@ fun NearbyDevicesSection(
             )
           },
         textAlign = TextAlign.Center,
-        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.67f)
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = DEFAULT_TEXT_ALPHA)
       )
 
       else -> LazyColumn(
@@ -252,7 +253,7 @@ private fun TransferFilesSection(
           )
         },
       textAlign = TextAlign.Center,
-      color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.67f)
+      color = MaterialTheme.colorScheme.onSurface.copy(alpha = DEFAULT_TEXT_ALPHA)
     )
 
     LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -283,7 +284,7 @@ private fun YourDeviceHeader(
             showCaseMessage = context.getString(string.your_device_name_message)
           )
         },
-      color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.67f)
+      color = MaterialTheme.colorScheme.onSurface.copy(alpha = DEFAULT_TEXT_ALPHA)
     )
     val contentDescription = stringResource(R.string.device_name)
     Text(
@@ -293,7 +294,7 @@ private fun YourDeviceHeader(
       modifier = Modifier
         .minimumInteractiveComponentSize()
         .semantics { this.contentDescription = contentDescription },
-      color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.67f)
+      color = MaterialTheme.colorScheme.onSurface.copy(alpha = DEFAULT_TEXT_ALPHA)
     )
   }
 }
@@ -314,7 +315,7 @@ fun TransferFileItem(
       modifier = Modifier
         .weight(1f)
         .padding(horizontal = FIVE_DP, vertical = ONE_DP),
-      color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.67f)
+      color = MaterialTheme.colorScheme.onSurface.copy(alpha = DEFAULT_TEXT_ALPHA)
     )
 
     val modifier = Modifier
@@ -364,7 +365,7 @@ fun PeerDeviceItem(
       modifier = Modifier
         .weight(3f)
         .padding(horizontal = FIVE_DP, vertical = ONE_DP),
-      color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.67f)
+      color = MaterialTheme.colorScheme.onSurface.copy(alpha = DEFAULT_TEXT_ALPHA)
     )
   }
 }

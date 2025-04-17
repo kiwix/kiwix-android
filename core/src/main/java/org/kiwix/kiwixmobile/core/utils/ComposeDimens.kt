@@ -64,6 +64,9 @@ object ComposeDimens {
   // Default letter spacing in text according to theme
   val DEFAULT_LETTER_SPACING = 0.0333.em
 
+  // Default Text alpha.
+  const val DEFAULT_TEXT_ALPHA = 0.67f
+
   // Shape configuration sizes. See Shape.kt
   val EXTRA_SMALL_ROUND_SHAPE_SIZE = 4.dp
   val SMALL_ROUND_SHAPE_SIZE = 8.dp
@@ -125,8 +128,8 @@ object ComposeDimens {
   val NEARBY_DEVICES_TEXT_SIZE = 16.sp
 
   // KiwixShowCase view dimens
-  val SHOWCASE_VIEW_MESSAGE_TEXT_SIZE = 14.sp
-  val SHOWCASE_VIEW_NEXT_BUTTON_TEXT_SIZE = 16.sp
+  val SHOWCASE_VIEW_MESSAGE_TEXT_SIZE = 17.sp
+  val SHOWCASE_VIEW_NEXT_BUTTON_TEXT_SIZE = 20.sp
   val FILE_FOR_TRANSFER_SHOW_CASE_VIEW_SIZE = 100.dp
   val NEARBY_DEVICES_SHOW_CASE_VIEW_SIZE = 100.dp
   const val SHOWCASE_MESSAGE_SHADOW_BLUR_RADIUS = 3f
