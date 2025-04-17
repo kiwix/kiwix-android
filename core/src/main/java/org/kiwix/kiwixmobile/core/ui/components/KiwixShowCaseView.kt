@@ -59,6 +59,8 @@ import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -84,6 +86,9 @@ const val SHOWCASE_VIEW_ROUND_ANIMATION_DURATION = 2000
 const val ONE = 1
 const val TWO = 1
 const val SIXTEEN = 16
+
+const val SHOWCASE_VIEW_NEXT_BUTTON_TESTING_TAG = "showcaseViewNextButtonTestingTag"
+const val SHOWCASE_VIEW_MESSAGE_TESTING_TAG = "showCaseViewMessageTestingTag"
 
 @Composable
 fun KiwixShowCaseView(
@@ -198,7 +203,8 @@ private fun ShowCaseMessage(
               defaultBlurOffsetForMessageAndNextButton(),
               blurRadius = SHOWCASE_MESSAGE_SHADOW_BLUR_RADIUS
             )
-          )
+          ),
+          modifier = Modifier.semantics { testTag = SHOWCASE_VIEW_MESSAGE_TESTING_TAG }
         )
       }
     }
@@ -248,7 +254,10 @@ private fun NextButton(onClick: () -> Unit) {
     verticalArrangement = Arrangement.Bottom,
     horizontalAlignment = Alignment.End
   ) {
-    TextButton(onClick = onClick) {
+    TextButton(
+      onClick = onClick,
+      modifier = Modifier.semantics { testTag = SHOWCASE_VIEW_NEXT_BUTTON_TESTING_TAG }
+    ) {
       Text(
         text = context.getString(R.string.next),
         style = LocalTextStyle.current.copy(

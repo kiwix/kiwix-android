@@ -39,7 +39,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.help.HelpRobot
-import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
 import org.kiwix.kiwixmobile.main.ACTION_GET_CONTENT
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.topLevel
@@ -119,7 +118,7 @@ class GetContentShortcutTest {
       clickLibraryOnBottomNav {
         assertGetZimNearbyDeviceDisplayed(composeTestRule)
         clickFileTransferIcon(composeTestRule) {
-          LocalFileTransferRobot::assertReceiveFileTitleVisible
+          assertReceiveFileTitleVisible(composeTestRule)
         }
       }
       clickBookmarksOnNavDrawer {
