@@ -67,7 +67,6 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getDeviceStatus
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
 import javax.inject.Inject
 
 /**
@@ -85,7 +84,6 @@ import javax.inject.Inject
  */
 
 const val URIS_KEY = "uris"
-const val SHOWCASE_ID = "MaterialShowcaseId"
 
 @SuppressLint("GoogleAppIndexingApiWarning", "Registered")
 class LocalFileTransferFragment :
@@ -102,8 +100,6 @@ class LocalFileTransferFragment :
 
   @Inject
   lateinit var sharedPreferenceUtil: SharedPreferenceUtil
-  private var materialShowCaseSequence: MaterialShowcaseSequence? = null
-  private var searchIconView: View? = null
 
   private val deviceName = mutableStateOf("")
   private val isPeerSearching = mutableStateOf(false)
@@ -409,8 +405,6 @@ class LocalFileTransferFragment :
   override fun onDestroyView() {
     wifiDirectManager.stopWifiDirectManager()
     wifiDirectManager.callbacks = null
-    searchIconView = null
-    materialShowCaseSequence = null
     super.onDestroyView()
   }
 
