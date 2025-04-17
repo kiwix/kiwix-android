@@ -23,7 +23,6 @@ import android.net.wifi.p2p.WifiP2pDevice
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
@@ -69,10 +68,12 @@ import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.theme.DodgerBlue
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIFTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FILE_FOR_TRANSFER_SHOW_CASE_VIEW_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FILE_FOR_TRANSFER_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FILE_ITEM_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FILE_ITEM_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NEARBY_DEVICES_SHOW_CASE_VIEW_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NEARBY_DEVICES_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NEARBY_DEVICE_LIST_HEIGHT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NO_DEVICE_FOUND_TEXT_PADDING
@@ -128,34 +129,29 @@ fun LocalFileTransferScreen(
         )
       }
     ) { padding ->
-      Box(
+      Column(
         modifier = Modifier
           .fillMaxSize()
           .padding(padding)
+          .background(Color.Transparent)
       ) {
-        Column(
+        YourDeviceHeader(deviceName, context, targets)
+        HorizontalDivider(
+          color = DodgerBlue,
+          thickness = ONE_DP,
+          modifier = Modifier.padding(horizontal = FIVE_DP)
+        )
+        NearbyDevicesSection(peerDeviceList, isPeerSearching, onDeviceItemClick, context, targets)
+        HorizontalDivider(
+          color = DodgerBlue,
+          thickness = ONE_DP,
           modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Transparent)
-        ) {
-          YourDeviceHeader(deviceName, context, targets)
-          HorizontalDivider(
-            color = DodgerBlue,
-            thickness = ONE_DP,
-            modifier = Modifier.padding(horizontal = FIVE_DP)
-          )
-          NearbyDevicesSection(peerDeviceList, isPeerSearching, onDeviceItemClick, context, targets)
-          HorizontalDivider(
-            color = DodgerBlue,
-            thickness = ONE_DP,
-            modifier = Modifier
-              .padding(horizontal = FIVE_DP)
-          )
-          TransferFilesSection(transferFileList, context, targets)
-        }
-        ShowShowCaseToUserIfNotShown(targets, sharedPreferenceUtil)
+            .padding(horizontal = FIVE_DP)
+        )
+        TransferFilesSection(transferFileList, context, targets)
       }
     }
+    ShowShowCaseToUserIfNotShown(targets, sharedPreferenceUtil)
   }
 }
 
@@ -212,7 +208,8 @@ fun NearbyDevicesSection(
             targets[PEER_DEVICE_LIST_SHOW_CASE_TAG] = ShowcaseProperty(
               index = 2,
               coordinates = coordinates,
-              showCaseMessage = context.getString(string.transfer_zim_files_list_message)
+              showCaseMessage = context.getString(string.nearby_devices_list_message),
+              customSizeForShowcaseViewCircle = NEARBY_DEVICES_SHOW_CASE_VIEW_SIZE
             )
           },
         textAlign = TextAlign.Center,
@@ -250,7 +247,8 @@ private fun TransferFilesSection(
           targets[FILE_FOR_TRANSFER_SHOW_CASE_TAG] = ShowcaseProperty(
             index = 3,
             coordinates = coordinates,
-            showCaseMessage = context.getString(string.transfer_zim_files_list_message)
+            showCaseMessage = context.getString(string.transfer_zim_files_list_message),
+            customSizeForShowcaseViewCircle = FILE_FOR_TRANSFER_SHOW_CASE_VIEW_SIZE
           )
         },
       textAlign = TextAlign.Center,
@@ -277,7 +275,14 @@ private fun YourDeviceHeader(
       fontStyle = FontStyle.Italic,
       fontSize = YOUR_DEVICE_TEXT_SIZE,
       modifier = Modifier
-        .padding(top = FIVE_DP, bottom = ONE_DP),
+        .padding(top = FIVE_DP, bottom = ONE_DP)
+        .onGloballyPositioned { coordinates ->
+          targets[YOUR_DEVICE_SHOW_CASE_TAG] = ShowcaseProperty(
+            index = 1,
+            coordinates = coordinates,
+            showCaseMessage = context.getString(string.your_device_name_message)
+          )
+        },
       color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.67f)
     )
     val contentDescription = stringResource(R.string.device_name)
@@ -287,14 +292,7 @@ private fun YourDeviceHeader(
       fontSize = PEER_DEVICE_ITEM_TEXT_SIZE,
       modifier = Modifier
         .minimumInteractiveComponentSize()
-        .semantics { this.contentDescription = contentDescription }
-        .onGloballyPositioned { coordinates ->
-          targets[YOUR_DEVICE_SHOW_CASE_TAG] = ShowcaseProperty(
-            index = 1,
-            coordinates = coordinates,
-            showCaseMessage = context.getString(string.your_device_name_message)
-          )
-        },
+        .semantics { this.contentDescription = contentDescription },
       color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.67f)
     )
   }
