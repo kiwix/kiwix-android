@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Abimalayalam
 * Adithyak1997
 * Akhilan
 * Jameela P.
@@ -19,14 +20,21 @@
   <string name="menu_exit_full_screen">പൂർണ സ്ക്രീനിൽ നിന്ന് പുറത്തു കടക്കുക</string>
   <string name="menu_read_aloud">ഉച്ചത്തിൽ വായിക്കുക</string>
   <string name="menu_read_aloud_stop">ഉച്ചത്തിൽ വായിക്കുന്നത് നിർത്തുക</string>
+  <string name="menu_support_kiwix">കിവിക്സിനെ പിന്തുണയ്ക്കുക</string>
+  <string name="menu_support_kiwix_for_custom_apps">%s പിന്തുണയ്ക്കുക</string>
+  <string name="menu_about_app">%s ആപ്പിനെക്കുറിച്ച്</string>
+  <string name="menu_wifi_hotspot">വൈഫൈ ഹോട്ട്‌സ്‌പോട്ട്</string>
   <string name="save_media">മീഡിയ സേവ് ചെയ്യുക</string>
   <string name="save_media_error">മീഡിയ സേവ് ചെയ്യാൻ ശ്രമിക്കുമ്പോൾ ഒരു പിഴവുണ്ടായി!</string>
   <string name="search_label">തിരയുക</string>
+  <string name="searched_list">തിരഞ്ഞ പട്ടിക</string>
   <string name="choose_file">ഒരു കണ്ടന്റ് ഫയൽ (*.zim) തിരഞ്ഞെടുക്കുക</string>
   <string name="open_in_new_tab">കണ്ണി പുതിയ ടാബിൽ തുറക്കണോ?</string>
   <string name="hotspot_service_channel_name">ഹോട്ട്സ്പോട്ട് സേവന ചാനൽ</string>
   <string name="hotspot_failed_title">ഹോട്ട്സ്പോട്ട് തുടങ്ങുന്നത് പരാജയപ്പെട്ടു</string>
+  <string name="hotspot_failed_message">നിങ്ങളുടെ ഹോട്ട്‌സ്‌പോട്ട് ഓണാണെന്ന് തോന്നുന്നു. തുടരാൻ നിങ്ങളുടെ വൈഫൈ ഹോട്ട്‌സ്‌പോട്ട് ഓഫ് ചെയ്യുക.</string>
   <string name="go_to_wifi_settings_label">വൈഫൈ സജ്ജീകരണങ്ങളിലേക്ക് പോവുക</string>
+  <string name="connection_refused">കണക്ഷൻ നിരസിച്ചു.</string>
   <string name="hotspot_running">ഹോട്ട്സ്പോട്ട് ഓടുന്നു</string>
   <string name="no_books_selected_toast_message">പുസ്തകങ്ങൾ ആദ്യം തിരഞ്ഞെടുക്കുക</string>
   <string name="server_failed_message">സെർവർ തുടങ്ങാൻ സാധിച്ചില്ല. ദയവായി ഹോട്ട്സ്പോട്ട് ഓൺ ചെയ്യുക</string>
@@ -34,11 +42,19 @@
   <string name="server_started_successfully_toast_message">സെർവർ വിജയകരമായി തുടങ്ങി.</string>
   <string name="server_stopped_successfully_toast_message">സെർവർ വിജയകരമായി നിർത്തി.</string>
   <string name="hotspot_turned_on">ഹോട്ട്സ്പോട്ട് ഓൺ ആക്കിയിരിക്കുന്നു</string>
+  <string name="hotspot_details_message">നിങ്ങളുടെ വൈഫൈ ഹോട്ട്‌സ്‌പോട്ടിന്റെ വിശദാംശങ്ങൾ താഴെ കൊടുക്കുന്നു. \nSSID : %1$s \nPass : %2$s</string>
+  <string name="server_textview_default_message">സെർവറിൽ ഹോസ്റ്റ് ചെയ്യാൻ ആഗ്രഹിക്കുന്ന ഫയലുകൾ തിരഞ്ഞെടുക്കുക.</string>
   <string name="progress_dialog_starting_server">സെർവർ തുടങ്ങുന്നു</string>
-  <string name="hotspot_dialog_title" fuzzy="true">താങ്കളുടെ വൈഫൈ ഹോട്ട്സ്പോട്ട് ഓൺ ആക്കുക</string>
+  <string name="hotspot_dialog_title">പുസ്തകങ്ങൾ ഹോസ്റ്റ് ചെയ്യുന്നതിനുള്ള നിർദ്ദേശങ്ങൾ</string>
+  <string name="wifi_dialog_title">വൈഫൈ കണക്ഷൻ കണ്ടെത്തി</string>
+  <string name="wifi_dialog_body">മറ്റ് ഉപകരണങ്ങളിൽ പുസ്തകങ്ങൾ ലഭ്യമാക്കുന്നതിന്, എല്ലാ ഉപകരണങ്ങളും ഒരേ വൈഫൈ നെറ്റ്‌വർക്കിലേക്ക് കണക്റ്റുചെയ്‌തിട്ടുണ്ടെന്ന് ഉറപ്പാക്കുക.</string>
+  <string name="hotspot_dialog_message">ഈ സവിശേഷത ഉപയോഗിക്കുന്നതിനു, ആദ്യം നിങ്ങളുടെ വൈഫൈ ഹോട്ട്‌സ്‌പോട്ട് സ്വമേധയാ ഓണാക്കേണ്ടതുണ്ട് അല്ലെങ്കിൽ ഹോസ്റ്റ് ഉപകരണവും റിസീവർ ഉപകരണവും ഒരേ വൈഫൈ നെറ്റ്‌വർക്കിലാണെന്ന് ഉറപ്പാക്കുക.</string>
+  <string name="hotspot_dialog_neutral_button">തുടരുക</string>
+  <string name="hotspot_channel_description">നിങ്ങളുടെ ഹോട്ട്‌സ്‌പോട്ട്/സെർവറിന്റെ അവസ്ഥയെക്കുറിച്ചുള്ള അപ്‌ഡേറ്റുകൾ.</string>
   <string name="hotspot_notification_content_title">കിവിക്സ് ഹോട്ട്സ്പോട്ട്</string>
   <string name="start_server_label">സെർവർ തുടങ്ങുക</string>
   <string name="stop_server_label">സെർവർ നിർത്തുക</string>
+  <string name="error_server_already_running">സെർവർ ഇപ്പോൾ തന്നെ പ്രവർത്തിക്കുന്നുണ്ട്. ദയവായി അത് ഓഫാക്കി വീണ്ടും ശ്രമിക്കുക.</string>
   <string name="error_file_not_found">പിഴവ്: തിരഞ്ഞെടുത്ത സിം ഫയൽ കണ്ടെത്താനായില്ല %s</string>
   <string name="zim_not_opened" fuzzy="true">zim ഫയൽ തുറക്കുവാൻ സാധിച്ചില്ല</string>
   <string name="error_file_invalid">പിഴവ്: തിരഞ്ഞെടുത്ത സിം ഫയൽ സാധുവല്ല. %s</string>

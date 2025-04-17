@@ -145,6 +145,7 @@
   <string name="help_9">• Makambo mosusu lokola Wikileaks to Wikisource ezali mpe</string>
   <string name="help_10">Okoki kozwa ba fichiers ZIM oyo oponi na kati ya application to kopona na likebi nyonso oyo olingi mpe kozwa yango na ordinatɛrɛ ya Desktop liboso ya kotinda ba fichier ZIM na karte na yo ya SD.</string>
   <string name="help_11">Ba fichiers ya ZIM oyo bazwaka na kati ya application ezali na liste ya biloko ya kobomba na libanda na kati ya fiche oyo ebengami Kiwix.</string>
+  <string name="fetching_storage_info">Récupération des détails du stockage…</string>
   <string name="pref_storage">Kobomba biloko</string>
   <string name="pref_current_folder">Folder ya lelo</string>
   <string name="pref_storage_used">%s utilisé</string>

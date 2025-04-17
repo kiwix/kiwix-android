@@ -8,15 +8,18 @@
 * Harrymacdougat
 * HenriqueCrang
 * Klgor1803
+* Maakhai
 * McDutchie
 * Mello25
 * MohitMali
 * Mordecaista
+* Ninawauwau
 * Obiru
 * Re demz
 * Robertpontes
 * Rodrigo codignoli
 * Saturnow
+* TheEduGobi
 * Webysther
 * YoReaper
 -->
@@ -31,7 +34,7 @@
   <string name="menu_exit_full_screen">Sair do modo de tela inteira</string>
   <string name="menu_read_aloud">Ler em voz alta</string>
   <string name="menu_read_aloud_stop">Parar de ler em voz alta</string>
-  <string name="menu_support_kiwix">Suporte Kiwix</string>
+  <string name="menu_support_kiwix">Apoie Kiwix</string>
   <string name="menu_support_kiwix_for_custom_apps">Apoie %s</string>
   <string name="menu_about_app">Sobre %s aplicativo</string>
   <string name="menu_wifi_hotspot">Hotspot de Wi-Fi</string>
@@ -72,10 +75,12 @@
   <string name="qr_code">QR Code renderizado</string>
   <string name="share_host_address">Compartir URL a través de outras aplicações</string>
   <string name="error_file_not_found">Erro: O arquivo ZIM selecionado não pode ser encontrado. %s</string>
-  <string name="unable_to_read_zim_file" fuzzy="true">\nNão é possível ler este arquivo zim!</string>
-  <string name="zim_not_opened" fuzzy="true">Não foi possível abrir o arquivo zim</string>
+  <string name="unable_to_read_zim_file">Não é possível ler este arquivo ZIM!</string>
+  <string name="zim_not_opened">Não foi possível abrir o arquivo ZIM</string>
   <string name="error_file_invalid">Erro: O arquivo selecionado não é um arquivo ZIM válido. %s</string>
   <string name="error_article_url_not_found">Erro: Falha no carregamento do artigo (Url: %1$s).</string>
+  <string name="error_loading_random_article_zim_not_loaded">Não foi possível carregar o artigo. O arquivo ZIM não foi carregado corretamente.</string>
+  <string name="could_not_find_random_article">Não foi possível encontrar um artigo aleatório. Tente novamente mais tarde.</string>
   <string name="pref_display_title">Exibição</string>
   <string name="pref_info_title">Informação</string>
   <string name="pref_info_version">Versão</string>
@@ -93,7 +98,7 @@
   <string name="no_app_found_to_select_bookmark_file">Nenhum aplicativo encontrado para selecionar um arquivo de marcadores</string>
   <string name="no_section_info">Nenhum cabeçalho de conteúdo encontrado</string>
   <string name="request_storage">Para acessar conteúdo off-line precisamos de acesso ao seu armazenamento</string>
-  <string name="request_write_storage" fuzzy="true">Para baixar arquivos zim, precisamos de acesso de gravação ao seu armazenamento</string>
+  <string name="request_write_storage">Para baixar arquivos ZIM, necessitados de permissões de gravação ao seu armazenamento.</string>
   <string name="clear_recent_and_tabs_history_dialog">Tem certeza de que deseja excluir o histórico de pesquisa e redefinir todas as guias ativas?</string>
   <string name="delete_recent_search_item">Eliminar este item?</string>
   <string name="pref_clear_all_history_title">Apagar histórico</string>
@@ -137,7 +142,7 @@
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">Online</string>
   <string name="library">Biblioteca</string>
-  <string name="delete_zim_body" fuzzy="true">Os seguintes arquivos zim serão excluídos:\n\n%s</string>
+  <string name="delete_zim_body">Os seguintes arquivos ZIM serão apagados:\n\n%s</string>
   <string name="delete_zims_toast">Arquivo apagado</string>
   <string name="no_files_here">Nenhum arquivo aqui</string>
   <string name="download_no_space">Espaço insuficiente para baixar o download.</string>
@@ -157,16 +162,20 @@
   <string name="help_7">Eles estão disponíveis como arquivos ZIM. Há muitos deles:</string>
   <string name="help_8">• A Wikipédia está disponível separadamente para cada idioma</string>
   <string name="help_9">• Outros conteúdos como Wikileaks ou Wikisource também estão disponíveis</string>
-  <string name="help_10" fuzzy="true">Você pode baixar os arquivos ZIM no aplicativo ou selecionar cuidadosamente o(s) usuário(s) desejado(s) e fazer download de um computador Desktop antes de transferir os arquivos ZIM para o cartão SD.</string>
+  <string name="help_10">Você pode baixar os arquivos ZIM no aplicativo ou selecionar cuidadosamente os arquivos desejados e fazer download em um computador antes de transferir os arquivos ZIM para o seu cartão SD.</string>
   <string name="help_11">O download de arquivos do ZIM no aplicativo está localizado no diretório de armazenamento externo em uma pasta intitulada Kiwix.</string>
+  <string name="fetching_storage_info">Obtendo informações sobre o armazenamento…</string>
   <string name="pref_storage">Armazenamento</string>
   <string name="pref_current_folder">Pasta atual</string>
   <string name="pref_storage_used">%s usado</string>
   <string name="pref_free_storage">%s livre</string>
+  <string name="choose_storage_to_download_book">Escolha o local de download do livro.</string>
   <string name="delete_zim_failed">Desculpe, não foi possível excluir alguns arquivos. Você deve tentar usar um gerenciador de arquivos.</string>
   <string name="tts_pause">pausar</string>
   <string name="tts_resume">continuar</string>
   <string name="stop">parar</string>
+  <string name="notification_pause_button_text">Pausar</string>
+  <string name="notification_resume_button_text">Continuar</string>
   <string name="internal_storage">Interna</string>
   <string name="external_storage">Externo</string>
   <string name="yes">Sim</string>
@@ -192,15 +201,16 @@
   <string name="pref_external_link_popup_title">Avisar ao seguir links externos</string>
   <string name="pref_external_link_popup_summary">Exibir pop-up para avisar sobre custos adicionais ou não trabalhar em links off-line.</string>
   <string name="external_link_popup_dialog_title">Entrar no link externo!</string>
-  <string name="external_link_popup_dialog_message" fuzzy="true">Você está acessando um link externo. Isso pode levar a custos adicionais para transferência de dados ou não funcionará quando você estiver desconectado. Você quer continuar?</string>
+  <string name="external_link_popup_dialog_message">Você está acessando uma ligação externa. Isso pode levar a custos adicionais para transferência de dados ou não funcionará quando você estiver desconectado. Deseja continuar?</string>
   <string name="do_not_ask_anymore">Não perguntar mais</string>
   <string name="your_languages">Idiomas selecionados:</string>
   <string name="other_languages">Outros idiomas:</string>
+  <string name="downloading">Baixando:</string>
   <string name="no_items_msg">Nenhum item disponível</string>
   <string name="crash_title">Bem, isso é constrangedor</string>
   <string name="crash_description">Parece que caímos.\n\nVocê se importaria em nos ajudar a corrigir esse problema enviando as seguintes informações?</string>
   <string name="crash_checkbox_language">Suas configurações de idioma</string>
-  <string name="crash_checkbox_zimfiles" fuzzy="true">Uma lista de seus arquivos Zim</string>
+  <string name="crash_checkbox_zimfiles">Uma lista de seus arquivos ZIM</string>
   <string name="crash_checkbox_exception">Detalhes do acidente</string>
   <string name="crash_checkbox_logs">Registros de aplicativos</string>
   <string name="crash_checkbox_device">Detalhes do dispositivo</string>
@@ -216,6 +226,8 @@
   <string name="welcome_to_the_family">Bem-vindo à família</string>
   <string name="save_books_offline">Salvar livros off-line</string>
   <string name="download_books_message">Faça o download de livros e leia onde você estiver.</string>
+  <string name="save_books_in_desired_storage">Salve livros no armazenamento desejado</string>
+  <string name="storage_location_hint">Você pode escolher seu local de armazenamento desejado, seja cartão de memória ou armazenamento interno, para baixar os arquivos ZIM na tela de Configurações.</string>
   <string name="unable_to_add_to_bookmarks">Não é possível adicionar aos favoritos</string>
   <string name="go_to_previous_page">Ir para a página anterior</string>
   <string name="go_to_next_page">Vá para a próxima página</string>
@@ -238,9 +250,10 @@
   <string name="complete">Completo</string>
   <string name="paused_state">Pausado</string>
   <string name="failed_state">Falhou: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">O arquivo sim não pode ser baixado. Por favor tente reinstalar a aplicação da Play Store.</string>
+  <string name="custom_download_error_message_for_authentication_failed">O arquivo ZIM não pode ser baixado. Por favor, tente reinstalar o aplicativo através da Play Store.</string>
   <string name="save">Salvar</string>
   <string name="note">Nota</string>
+  <string name="take_notes">Anotações</string>
   <string name="wiki_article_title">Título do artigo da wiki</string>
   <string name="ext_storage_permission_rationale_export_bookmark">Acesso ao armazenamento é requerido para exportar Marcadores</string>
   <string name="ext_storage_write_permission_denied_export_bookmark">Marcadores não podem ser exportados sem acesso ao armazenamento</string>
@@ -267,7 +280,7 @@
   <string name="permission_rationale_location">A permissão de localização é necessária pelo Android para permitir que o aplicativo detecte dispositivos de mesmo nível</string>
   <string name="permission_rationale_nearby">A permissão de dispositivos próximos é necessária pelo Android, para permitir o aplicativo detectar dispositivos próximos</string>
   <string name="permission_refused_location">Não é possível localizar dispositivos pares sem permissões de localização</string>
-  <string name="permission_refused_storage" fuzzy="true">Não é possível acessar arquivos zim sem permissão de armazenamento</string>
+  <string name="permission_refused_storage">Não é possível acessar arquivos ZIM sem permissão de armazenamento</string>
   <string name="request_enable_location">Ativar local para permitir a detecção de pares</string>
   <string name="discovery_needs_location">Não é possível descobrir pares sem serviços de localização</string>
   <string name="request_enable_wifi">Ativar WiFi P2P nas configurações do sistema</string>
@@ -332,6 +345,8 @@
   <string name="preparing_file_for_copy">Preparando-se para copiar/mover</string>
   <string name="action_copy">Copiar</string>
   <string name="move">Mover</string>
+  <string name="copying_zim_file">Copiando arquivo ZIM…</string>
+  <string name="moving_zim_file">Movendo arquivo ZIM…</string>
   <string name="copy_move_files_dialog_description" fuzzy="true">Você quer copiar ou mover o arquivo?</string>
   <string name="copy_file_error_message" fuzzy="true">Erro ao copiar o arquivo zim: %s.</string>
   <string name="why_copy_move_files_to_app_directory" fuzzy="true">Mover/Copiar arquivos para o diretório público do app?</string>
@@ -384,4 +399,6 @@
   <string name="donation_dialog_title">Doar Hoje</string>
   <string name="donation_dialog_description">%s precisa da sua ajuda.</string>
   <string name="make_donation">Fazer uma doação</string>
+  <string name="downloading_state">Instalando</string>
+  <string name="download_failed_state">Falha</string>
 </resources>
