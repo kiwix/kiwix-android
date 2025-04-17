@@ -184,7 +184,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   ): View? {
     fragmentDestinationDownloadBinding =
       FragmentDestinationDownloadBinding.inflate(inflater, container, false)
-    val toolbar = fragmentDestinationDownloadBinding?.root?.findViewById<Toolbar>(R.id.toolbar)
+    val toolbar =
+      fragmentDestinationDownloadBinding?.root?.findViewById<Toolbar>(org.kiwix.kiwixmobile.core.R.id.toolbar)
     val activity = activity as CoreMainActivity
     activity.setSupportActionBar(toolbar)
     activity.supportActionBar?.apply {
