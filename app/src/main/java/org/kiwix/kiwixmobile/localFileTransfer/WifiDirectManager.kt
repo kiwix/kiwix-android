@@ -281,7 +281,7 @@ class WifiDirectManager @Inject constructor(
 
   fun changeStatus(itemIndex: Int, status: FileStatus) {
     filesForTransfer[itemIndex].fileStatus = status
-    callbacks?.onFileStatusChanged(itemIndex)
+    callbacks?.onFileStatusChanged(itemIndex, status)
     if (status == FileStatus.ERROR) {
       context.toast(
         context.getString(R.string.error_transferring, filesForTransfer[itemIndex].fileName)
@@ -344,7 +344,7 @@ class WifiDirectManager @Inject constructor(
     fun onConnectionToPeersLost()
     fun updateListOfAvailablePeers(peers: WifiP2pDeviceList)
     fun onFilesForTransferAvailable(filesForTransfer: List<FileItem>)
-    fun onFileStatusChanged(itemIndex: Int)
+    fun onFileStatusChanged(itemIndex: Int, fileStatus: FileStatus)
     fun onFileTransferComplete()
   }
 

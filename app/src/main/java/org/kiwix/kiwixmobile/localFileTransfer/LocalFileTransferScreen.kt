@@ -82,7 +82,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PEER_DEVICE_ITEM_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.YOUR_DEVICE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.language.SEARCH_ICON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.ERROR
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENDING
 import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENT
@@ -160,11 +160,11 @@ fun ShowShowCaseToUserIfNotShown(
   targets: SnapshotStateMap<String, ShowcaseProperty>,
   sharedPreferenceUtil: SharedPreferenceUtil
 ) {
-  // if (sharedPreferenceUtil.prefShowShowCaseToUser) {
-  KiwixShowCaseView(targets = targets) {
-    sharedPreferenceUtil.showCaseViewForFileTransferShown()
+  if (sharedPreferenceUtil.prefShowShowCaseToUser) {
+    KiwixShowCaseView(targets = targets) {
+      sharedPreferenceUtil.showCaseViewForFileTransferShown()
+    }
   }
-  // }
 }
 
 @Composable
