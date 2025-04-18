@@ -44,6 +44,7 @@ object ComposeDimens {
   val TWENTY_DP = 20.dp
   val SEVENTEEN_DP = 17.dp
   val SIXTEEN_DP = 16.dp
+  val FIFTEEN_DP = 15.dp
   val TWELVE_DP = 12.dp
   val TEN_DP = 10.dp
   val EIGHT_DP = 8.dp
@@ -117,5 +118,9 @@ object ComposeDimens {
   val PEER_DEVICE_ITEM_TEXT_SIZE = 17.sp
   val FILE_ITEM_TEXT_SIZE = 14.sp
   val FILE_ITEM_ICON_SIZE = 24.dp
-  val NEARBY_DEVICE_LIST_HEIGHT = 180.dp
+  val NEARBY_DEVICE_LIST_HEIGHT = 160.dp
+  val NO_DEVICE_FOUND_TEXT_PADDING = 50.dp
+  val YOUR_DEVICE_TEXT_SIZE = 13.sp
+  val FILE_FOR_TRANSFER_TEXT_SIZE = 16.sp
+  val NEARBY_DEVICES_TEXT_SIZE = 16.sp
 }

@@ -52,8 +52,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.DELETE_MENU_BUTTON_TESTING_TAG
@@ -64,23 +62,32 @@ import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Vector
 import org.kiwix.kiwixmobile.core.ui.theme.DodgerBlue
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIFTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FILE_FOR_TRANSFER_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FILE_ITEM_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FILE_ITEM_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NEARBY_DEVICES_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NEARBY_DEVICE_LIST_HEIGHT
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NO_DEVICE_FOUND_TEXT_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PEER_DEVICE_ITEM_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.YOUR_DEVICE_TEXT_SIZE
+import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.ERROR
+import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENDING
+import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.SENT
+import org.kiwix.kiwixmobile.localFileTransfer.FileItem.FileStatus.TO_BE_SENT
 
-@Preview(device = "spec:width=411dp,height=891dp")
+@Preview(device = "id:Nexus S")
 @Composable
 fun Preview() {
   LocalFileTransferScreen(
     deviceName = "Google Pixel 7a",
     toolbarTitle = org.kiwix.kiwixmobile.R.string.receive_files_title,
-    isSearching = false,
-    peerDevices = listOf(WifiP2pDevice().apply { deviceName = "Redmi note 9" }),
-    transferFiles = listOf(
+    isPeerSearching = true,
+    peerDeviceList = listOf(WifiP2pDevice().apply { deviceName = "Redmi note 9" }),
+    transferFileList = listOf(
       FileItem("DemoFile.zim")
     ),
     actionMenuItems = listOf(
@@ -105,9 +112,9 @@ fun Preview() {
 fun LocalFileTransferScreen(
   deviceName: String,
   @StringRes toolbarTitle: Int,
-  isSearching: Boolean,
-  peerDevices: List<WifiP2pDevice>,
-  transferFiles: List<FileItem>,
+  isPeerSearching: Boolean,
+  peerDeviceList: List<WifiP2pDevice>,
+  transferFileList: List<FileItem>,
   actionMenuItems: List<ActionMenuItem>,
   onDeviceItemClick: (WifiP2pDevice) -> Unit,
   navigationIcon: @Composable () -> Unit
@@ -133,22 +140,22 @@ fun LocalFileTransferScreen(
         thickness = ONE_DP,
         modifier = Modifier.padding(horizontal = FIVE_DP)
       )
-      NearbyDevicesSection(peerDevices, isSearching, onDeviceItemClick)
+      NearbyDevicesSection(peerDeviceList, isPeerSearching, onDeviceItemClick)
       HorizontalDivider(
         color = DodgerBlue,
         thickness = ONE_DP,
         modifier = Modifier
           .padding(horizontal = FIVE_DP)
       )
-      TransferFilesSection(transferFiles)
+      TransferFilesSection(transferFileList)
     }
   }
 }
 
 @Composable
 fun NearbyDevicesSection(
-  peerDevices: List<WifiP2pDevice>,
-  isSearching: Boolean,
+  peerDeviceList: List<WifiP2pDevice>,
+  isPeerSearching: Boolean,
   onDeviceItemClick: (WifiP2pDevice) -> Unit
 ) {
   Column(
@@ -158,7 +165,7 @@ fun NearbyDevicesSection(
   ) {
     Text(
       text = stringResource(R.string.nearby_devices),
-      fontSize = 16.sp,
+      fontSize = NEARBY_DEVICES_TEXT_SIZE,
       fontFamily = FontFamily.Monospace,
       modifier = Modifier
         .fillMaxWidth()
@@ -167,29 +174,27 @@ fun NearbyDevicesSection(
       textAlign = TextAlign.Center
     )
 
-    if (isSearching) {
-      ContentLoadingProgressBar(
+    when {
+      isPeerSearching -> ContentLoadingProgressBar(
         modifier = Modifier
-          .padding(50.dp)
+          .padding(NO_DEVICE_FOUND_TEXT_PADDING)
           .align(Alignment.CenterHorizontally)
       )
-    }
 
-    if (peerDevices.isEmpty() && !isSearching) {
-      Text(
+      peerDeviceList.isEmpty() -> Text(
         text = stringResource(R.string.no_devices_found),
         modifier = Modifier
-          .padding(50.dp)
+          .padding(NO_DEVICE_FOUND_TEXT_PADDING)
           .align(Alignment.CenterHorizontally),
         textAlign = TextAlign.Center
       )
-    } else {
-      LazyColumn(
+
+      else -> LazyColumn(
         modifier = Modifier
           .fillMaxWidth()
           .defaultMinSize(minHeight = NEARBY_DEVICE_LIST_HEIGHT)
       ) {
-        items(peerDevices) { device ->
+        items(peerDeviceList) { device ->
           PeerDeviceItem(device, onDeviceItemClick)
         }
       }
@@ -198,11 +203,11 @@ fun NearbyDevicesSection(
 }
 
 @Composable
-private fun TransferFilesSection(transferFiles: List<FileItem>) {
+private fun TransferFilesSection(transferFileList: List<FileItem>) {
   Column(modifier = Modifier.fillMaxWidth()) {
     Text(
       text = stringResource(R.string.files_for_transfer),
-      fontSize = 16.sp,
+      fontSize = FILE_FOR_TRANSFER_TEXT_SIZE,
       fontFamily = FontFamily.Monospace,
       modifier = Modifier
         .fillMaxWidth()
@@ -211,7 +216,7 @@ private fun TransferFilesSection(transferFiles: List<FileItem>) {
     )
 
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-      items(transferFiles) { file ->
+      items(transferFileList) { file ->
         TransferFileItem(file)
       }
     }
@@ -220,19 +225,19 @@ private fun TransferFilesSection(transferFiles: List<FileItem>) {
 
 @Composable
 private fun YourDeviceHeader(deviceName: String) {
-  Column(modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)) {
+  Column(modifier = Modifier.padding(horizontal = FIFTEEN_DP, vertical = FIVE_DP)) {
     Text(
       text = stringResource(R.string.your_device),
       fontStyle = FontStyle.Italic,
-      fontSize = 13.sp,
+      fontSize = YOUR_DEVICE_TEXT_SIZE,
       modifier = Modifier
-        .padding(top = 5.dp, bottom = 1.dp)
+        .padding(top = FIVE_DP, bottom = ONE_DP)
     )
     val contentDescription = stringResource(R.string.device_name)
     Text(
       text = deviceName,
       fontWeight = FontWeight.Bold,
-      fontSize = 17.sp,
+      fontSize = PEER_DEVICE_ITEM_TEXT_SIZE,
       modifier = Modifier
         .minimumInteractiveComponentSize()
         .semantics { this.contentDescription = contentDescription }
@@ -250,7 +255,6 @@ fun TransferFileItem(
       .padding(TEN_DP),
     verticalAlignment = Alignment.CenterVertically
   ) {
-    // File name
     Text(
       text = fileItem.fileName,
       fontSize = FILE_ITEM_TEXT_SIZE,
@@ -259,20 +263,28 @@ fun TransferFileItem(
         .padding(horizontal = FIVE_DP, vertical = ONE_DP)
     )
 
-    if (true) {
-      ContentLoadingProgressBar(
-        modifier = Modifier
-          .size(FILE_ITEM_ICON_SIZE)
-          .padding(horizontal = FIVE_DP, vertical = ONE_DP)
-      )
-    } else {
-      Icon(
-        painter = painterResource(drawable.ic_baseline_wait_24px),
-        contentDescription = stringResource(R.string.status),
-        modifier = Modifier
-          .size(FILE_ITEM_ICON_SIZE)
-          .padding(horizontal = FIVE_DP, vertical = ONE_DP)
-      )
+    val modifier = Modifier
+      .size(FILE_ITEM_ICON_SIZE)
+      .padding(horizontal = FIVE_DP, vertical = ONE_DP)
+    when (fileItem.fileStatus) {
+      SENDING -> ContentLoadingProgressBar(modifier)
+
+      TO_BE_SENT,
+      SENT,
+      ERROR -> {
+        val iconRes = when (fileItem.fileStatus) {
+          FileItem.FileStatus.TO_BE_SENT -> drawable.ic_baseline_wait_24px
+          FileItem.FileStatus.SENT -> drawable.ic_baseline_check_24px
+          FileItem.FileStatus.ERROR -> drawable.ic_baseline_error_24px
+          else -> error("Unhandled status: ${fileItem.fileStatus}")
+        }
+
+        Icon(
+          painter = painterResource(iconRes),
+          contentDescription = stringResource(R.string.status),
+          modifier = modifier
+        )
+      }
     }
   }
 }
