@@ -121,9 +121,8 @@ class NoteFragmentTest : BaseActivityTest() {
       it.navigate(R.id.notesFragment)
     }
     note {
-      assertToolbarExist()
-      assertNoteRecyclerViewExist()
-      assertSwitchWidgetExist()
+      assertToolbarExist(composeTestRule)
+      assertSwitchWidgetExist(composeTestRule)
     }
     LeakAssertions.assertNoLeaks()
   }
@@ -140,9 +139,8 @@ class NoteFragmentTest : BaseActivityTest() {
       saveNote(composeTestRule)
       pressBack()
       openNoteFragment()
-      assertToolbarExist()
-      assertNoteRecyclerViewExist()
-      clickOnSavedNote()
+      assertToolbarExist(composeTestRule)
+      clickOnSavedNote(composeTestRule)
       clickOnOpenNote()
       assertNoteSaved(composeTestRule)
       // to close the note dialog.
@@ -164,9 +162,8 @@ class NoteFragmentTest : BaseActivityTest() {
 
     note {
       openNoteFragment()
-      assertToolbarExist()
-      assertNoteRecyclerViewExist()
-      clickOnSavedNote()
+      assertToolbarExist(composeTestRule)
+      clickOnSavedNote(composeTestRule)
       clickOnOpenNote()
       assertNoteSaved(composeTestRule)
       pressBack()
@@ -189,9 +186,8 @@ class NoteFragmentTest : BaseActivityTest() {
       saveNote(composeTestRule)
       pressBack()
       openNoteFragment()
-      assertToolbarExist()
-      assertNoteRecyclerViewExist()
-      clickOnSavedNote()
+      assertToolbarExist(composeTestRule)
+      clickOnSavedNote(composeTestRule)
       clickOnOpenNote()
       assertNoteSaved(composeTestRule)
       // to close the note dialog.
@@ -213,14 +209,13 @@ class NoteFragmentTest : BaseActivityTest() {
         saveNote(composeTestRule)
         pressBack()
         openNoteFragment()
-        assertToolbarExist()
-        assertNoteRecyclerViewExist()
-        clickOnSavedNote()
+        assertToolbarExist(composeTestRule)
+        clickOnSavedNote(composeTestRule)
         clickOnOpenNote()
         assertNoteSaved(composeTestRule)
         clickOnDeleteIcon(composeTestRule)
         pressBack()
-        assertNoNotesTextDisplayed()
+        assertNoNotesTextDisplayed(composeTestRule)
       }
     }
   }
@@ -252,12 +247,11 @@ class NoteFragmentTest : BaseActivityTest() {
     // delete the notes if any saved to properly run the test scenario
     note {
       openNoteFragment()
-      assertToolbarExist()
-      assertNoteRecyclerViewExist()
-      clickOnTrashIcon()
+      assertToolbarExist(composeTestRule)
+      clickOnTrashIcon(composeTestRule)
       assertDeleteNoteDialogDisplayed()
       clickOnDeleteButton()
-      assertNoNotesTextDisplayed()
+      assertNoNotesTextDisplayed(composeTestRule)
       pressBack()
     }
   }

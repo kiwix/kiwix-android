@@ -133,7 +133,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   private val disposable = CompositeDisposable()
   private var permissionDeniedLayoutShowing = false
   private var zimFileUri: Uri? = null
-  val libraryScreenState = mutableStateOf(
+  private val libraryScreenState = mutableStateOf(
     LocalLibraryScreenState(
       fileSelectListState = FileSelectListState(emptyList()),
       snackBarHostState = SnackbarHostState(),
@@ -156,13 +156,15 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       val isGranted = permissionResult.values.all { it }
       val isPermanentlyDenied = readStorageHasBeenPermanentlyDenied(isGranted)
       permissionDeniedLayoutShowing = isPermanentlyDenied
-      updateLibraryScreenState(
-        noFilesViewItem = Triple(
-          requireActivity().resources.getString(string.grant_read_storage_permission),
-          requireActivity().resources.getString(string.go_to_settings_label),
-          isPermanentlyDenied
+      if (permissionDeniedLayoutShowing) {
+        updateLibraryScreenState(
+          noFilesViewItem = Triple(
+            requireActivity().resources.getString(string.grant_read_storage_permission),
+            requireActivity().resources.getString(string.go_to_settings_label),
+            true
+          )
         )
-      )
+      }
     }
 
   override fun inject(baseActivity: BaseActivity) {

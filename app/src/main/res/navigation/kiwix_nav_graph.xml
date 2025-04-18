@@ -94,13 +94,11 @@
   <fragment
     android:id="@+id/bookmarksFragment"
     android:name="org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment"
-    android:label="BookmarksFragment"
-    tools:layout="@layout/fragment_page" />
+    android:label="BookmarksFragment" />
   <fragment
     android:id="@+id/notesFragment"
     android:name="org.kiwix.kiwixmobile.core.page.notes.NotesFragment"
-    android:label="NotesFragment"
-    tools:layout="@layout/fragment_page" />
+    android:label="NotesFragment" />
   <fragment
     android:id="@+id/introFragment"
     android:name="org.kiwix.kiwixmobile.intro.IntroFragment"
@@ -115,8 +113,7 @@
   <fragment
     android:id="@+id/historyFragment"
     android:name="org.kiwix.kiwixmobile.core.page.history.HistoryFragment"
-    android:label="HistoryFragment"
-    tools:layout="@layout/fragment_page" />
+    android:label="HistoryFragment" />
   <fragment
     android:id="@+id/languageFragment"
     android:name="org.kiwix.kiwixmobile.language.LanguageFragment"

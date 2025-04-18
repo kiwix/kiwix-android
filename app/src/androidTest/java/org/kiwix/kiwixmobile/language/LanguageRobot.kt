@@ -38,6 +38,7 @@ import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.language.composables.LANGUAGE_ITEM_CHECKBOX_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 

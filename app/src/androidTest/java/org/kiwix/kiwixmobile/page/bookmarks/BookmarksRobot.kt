@@ -18,25 +18,29 @@
 
 package org.kiwix.kiwixmobile.page.bookmarks
 
-import androidx.recyclerview.widget.RecyclerView
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.longClick
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.ContentDesc
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
-import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.page.NO_ITEMS_TEXT_TESTING_TAG
+import org.kiwix.kiwixmobile.core.page.PAGE_LIST_TEST_TAG
+import org.kiwix.kiwixmobile.core.page.SWITCH_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
@@ -49,12 +53,20 @@ fun bookmarks(func: BookmarksRobot.() -> Unit) =
 class BookmarksRobot : BaseRobot() {
   private var retryCountForBookmarkAddedButton = 5
 
-  fun assertBookMarksDisplayed() {
-    assertDisplayed(R.string.bookmarks_from_current_book)
+  fun assertBookMarksDisplayed(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(SWITCH_TEXT_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.bookmarks_from_current_book))
+    }
   }
 
-  fun clickOnTrashIcon() {
-    clickOn(ContentDesc(R.string.pref_clear_all_bookmarks_title))
+  fun clickOnTrashIcon(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(DELETE_MENU_ICON_TESTING_TAG)
+        .performClick()
+    }
   }
 
   fun assertDeleteBookmarksDialogDisplayed() {
@@ -66,8 +78,12 @@ class BookmarksRobot : BaseRobot() {
     testFlakyView({ onView(withText("DELETE")).perform(click()) })
   }
 
-  fun assertNoBookMarkTextDisplayed() {
-    testFlakyView({ isVisible(TextId(R.string.no_bookmarks)) })
+  fun assertNoBookMarkTextDisplayed(composeTestRule: ComposeTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(NO_ITEMS_TEXT_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.no_bookmarks))
+    }
   }
 
   fun clickOnSaveBookmarkImage() {
@@ -97,14 +113,20 @@ class BookmarksRobot : BaseRobot() {
     }
   }
 
-  fun assertBookmarkSaved() {
+  fun assertBookmarkSaved(composeTestRule: ComposeContentTestRule) {
     pauseForBetterTestPerformance()
-    isVisible(Text("Test Zim"))
+    composeTestRule.apply {
+      waitForIdle()
+      composeTestRule.onNodeWithText("Test Zim").assertExists()
+    }
   }
 
-  fun assertBookmarkRemoved() {
+  fun assertBookmarkRemoved(composeTestRule: ComposeTestRule) {
     pauseForBetterTestPerformance()
-    onView(withText("Test Zim")).check(ViewAssertions.doesNotExist())
+    composeTestRule.apply {
+      waitForIdle()
+      composeTestRule.onNodeWithText("Test Zim").assertDoesNotExist()
+    }
   }
 
   private fun pauseForBetterTestPerformance() {
@@ -118,13 +140,19 @@ class BookmarksRobot : BaseRobot() {
     })
   }
 
-  fun testAllBookmarkShowing(bookmarkList: ArrayList<LibkiwixBookmarkItem>) {
-    bookmarkList.forEachIndexed { index, libkiwixBookmarkItem ->
-      testFlakyView({
-        onView(withId(R.id.recycler_view))
-          .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(index))
-          .check(matches(hasDescendant(withText(libkiwixBookmarkItem.title))))
-      })
+  fun testAllBookmarkShowing(
+    bookmarkList: ArrayList<LibkiwixBookmarkItem>,
+    composeTestRule: ComposeTestRule
+  ) {
+    composeTestRule.apply {
+      waitForIdle()
+      bookmarkList.forEachIndexed { index, libkiwixBookmarkItem ->
+        testFlakyView({
+          composeTestRule.onNodeWithTag(PAGE_LIST_TEST_TAG)
+            .performScrollToNode(hasText(libkiwixBookmarkItem.title))
+          composeTestRule.onNodeWithText(libkiwixBookmarkItem.title).assertExists()
+        })
+      }
     }
   }
 }

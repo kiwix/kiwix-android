@@ -30,8 +30,7 @@ import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesViewModel
 class NotesFragment : PageFragment() {
   override val pageViewModel by lazy { viewModel<NotesViewModel>(viewModelFactory) }
 
-  override val screenTitle: String
-    get() = getString(R.string.pref_notes)
+  override val screenTitle: Int = R.string.pref_notes
 
   override val pageAdapter: PageAdapter by lazy {
     PageAdapter(PageDelegate.PageItemDelegate(this))
@@ -39,8 +38,8 @@ class NotesFragment : PageFragment() {
 
   override val noItemsString: String by lazy { getString(R.string.no_notes) }
   override val switchString: String by lazy { getString(R.string.notes_from_all_books) }
-  override val deleteIconTitle: String by lazy {
-    getString(R.string.pref_clear_notes)
+  override val deleteIconTitle: Int by lazy {
+    R.string.pref_clear_notes
   }
   override val switchIsChecked: Boolean by lazy { sharedPreferenceUtil.showNotesAllBooks }
 

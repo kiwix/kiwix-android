@@ -39,8 +39,9 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 
 @Composable
 fun KiwixSearchView(
-  modifier: Modifier,
+  modifier: Modifier = Modifier,
   value: String,
+  placeholder: String = stringResource(R.string.search_label),
   testTag: String = "",
   onValueChange: (String) -> Unit,
   onClearClick: () -> Unit
@@ -65,7 +66,7 @@ fun KiwixSearchView(
     value = value,
     placeholder = {
       Text(
-        text = stringResource(R.string.search_label),
+        text = placeholder,
         color = Color.LightGray,
         fontSize = ComposeDimens.EIGHTEEN_SP
       )
