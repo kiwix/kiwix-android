@@ -51,6 +51,7 @@ object ComposeDimens {
   val FIVE_DP = 5.dp
   val FOUR_DP = 4.dp
   val TWO_DP = 2.dp
+  val ONE_DP = 1.dp
   val SEVENTY_DP = 70.dp
   val SIXTY_FOUR_DP = 64.dp
 
@@ -111,4 +112,10 @@ object ComposeDimens {
   val PAGE_LIST_ITEM_FAVICON_SIZE = 40.dp
   val PAGE_SWITCH_LEFT_RIGHT_MARGIN = 10.dp
   val PAGE_SWITCH_ROW_BOTTOM_MARGIN = 8.dp
+
+  // LocalFileTransferFragment dimens
+  val PEER_DEVICE_ITEM_TEXT_SIZE = 17.sp
+  val FILE_ITEM_TEXT_SIZE = 14.sp
+  val FILE_ITEM_ICON_SIZE = 24.dp
+  val NEARBY_DEVICE_LIST_HEIGHT = 180.dp
 }
