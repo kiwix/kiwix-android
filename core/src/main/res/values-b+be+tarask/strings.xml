@@ -31,8 +31,12 @@
   <string name="go_to_wifi_settings_label">Перайсьці да наладаў вай-фаю</string>
   <string name="connection_refused">У падключэньні адмоўлена.</string>
   <string name="hotspot_running">Пункт досягу працуе</string>
+  <string name="no_books_selected_toast_message">Калі ласка, сьпярша абярыце кнігі</string>
   <string name="server_failed_message">Немагчыма запусьціць сэрвэр. Калі ласка, уключыце ваш пункт доступу</string>
   <string name="server_failed_toast_message">Немагчыма запусьціць сэрвэр.</string>
+  <string name="server_started_successfully_toast_message">Сэрвэр запушчаны пасьпяхова.</string>
+  <string name="server_stopped_successfully_toast_message">Сэрвэр спынены пасьпяхова.</string>
+  <string name="hotspot_turned_on">Пункт досягу ўключаны</string>
   <string name="hotspot_details_message">Дэталі вашага лякальнага пункту досягу. \nSSID: %1$s \nСпокліч: %2$s</string>
   <string name="error_file_not_found">Памылка: абраны ZIM-файл ня знойдзены. %s</string>
   <string name="error_file_invalid">Памылка: абраны файл ня ёсьць слушным ZIM-файлам. %s</string>
@@ -89,7 +93,7 @@
   <string name="time_today">Сёньня</string>
   <string name="time_yesterday">Учора</string>
   <string name="pref_external_link_popup_title">Папярэджваць падчас уводу вонкавых спасылак</string>
-  <string name="external_link_popup_dialog_message" fuzzy="true">Вы ўводзіце вонкавую спасылку. Гэта можа прывесьці да зьняцьця грошай мабільным апэратарам ці проста не спрацаваць, калі вы знаходзіцеся ў офлайне. Хочаце працягнуць?</string>
+  <string name="external_link_popup_dialog_message">Вы ўводзіце вонкавую спасылку. Гэта можа прывесьці да зьняцьця грошай мабільным апэратарам ці проста не спрацаваць, калі вы знаходзіцеся ў офлайне.\nХочаце працягнуць?</string>
   <string name="do_not_ask_anymore">Болей не пытаць</string>
   <string name="your_languages">Выбраныя мовы:</string>
   <string name="other_languages">Іншыя мовы:</string>

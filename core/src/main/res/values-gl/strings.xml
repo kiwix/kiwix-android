@@ -21,12 +21,12 @@
   <string name="menu_read_aloud_stop">Deixar de ler en voz alta</string>
   <string name="save_media">Gardar multimedia</string>
   <string name="save_media_error">Houbo un erro ao intentar gardar o multimedia!</string>
-  <string name="save_media_saved" fuzzy="true">Multimedia gardado como %s en Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Multimedia gardado como %s en Downloads/org.kiwix…/</string>
   <string name="search_label">Procurar</string>
   <string name="choose_file">Seleccione un ficheiro de contido (*.zim)</string>
   <string name="open_in_new_tab">Quere abrir a ligazón nunha nova lapela?</string>
   <string name="error_file_not_found">Erro: Non se puido atopar o ficheiro ZIM seleccionado. %s</string>
-  <string name="error_file_invalid" fuzzy="true">Erro: O ficheiro seleccionado non é un ficheiro ZIM válido. %s</string>
+  <string name="error_file_invalid">Erro: O ficheiro seleccionado non é un ficheiro ZIM válido. %s</string>
   <string name="error_article_url_not_found">Erro: Non se puido cargar o artigo (URL: %1$s).</string>
   <string name="pref_display_title">Visualización</string>
   <string name="pref_info_title">Información</string>
@@ -39,7 +39,7 @@
   <string name="pref_language_chooser">Escolla unha lingua</string>
   <string name="pref_credits">Colaboradores e licenzas</string>
   <string name="pref_credits_title">Créditos</string>
-  <string name="tts_lang_not_supported" fuzzy="true">Non se admite a lingua desta páxina, ou non se instalaron os datos de lingua axeitados. Pode que o artigo non se poida ler correctamente.</string>
+  <string name="tts_lang_not_supported">Non se admite a lingua desta páxina. Pode que o artigo non se poida ler correctamente.</string>
   <string name="no_reader_application_installed">Non se puido atopar unha aplicación instalada para este tipo de ficheiro</string>
   <string name="no_section_info">Non se atoparon cabeceiras de contido.</string>
   <string name="request_storage">Para acceder a contido sen conexión necesitamos ter acceso ó seu almacenamento</string>
@@ -89,7 +89,7 @@
   <string name="help_7">Están dispoñibles como ficheiros ZIM. Hai unha chea deles:</string>
   <string name="help_8">• Wikipedia está dispoñible para cada lingua por separado</string>
   <string name="help_9">• Outros contidos, como Wikileaks ou Wikisource tamén están dispoñibles</string>
-  <string name="help_10" fuzzy="true">Pode descargar os ficheiros ZIM elixidos na aplicación, ou ben seleccionar coidadosamente os que queira, descargalos dende un ordenador e transferilos á súa tarxeta SD.</string>
+  <string name="help_10">Pode descargar os ficheiros ZIM elixidos na aplicación ou ben seleccionar coidadosamente os que queira, descargalos dende un ordenador e transferilos á súa tarxeta SD.</string>
   <string name="help_11">Os ficheiros ZIM descargados na aplicación atópanse no directorio de almacenamento externo, nunha carpeta chamada Kiwix.</string>
   <string name="pref_storage">Almacenamento</string>
   <string name="pref_current_folder">Carpeta actual</string>
@@ -102,9 +102,9 @@
   <string name="yes">Si</string>
   <string name="no">Non</string>
   <string name="confirm_stop_download_title">Deter descarga?</string>
-  <string name="confirm_stop_download_msg">Seguro que quere deter esta descarga?</string>
+  <string name="confirm_stop_download_msg">Quere deter esta descarga?</string>
   <string name="download_change_storage">Selector de dispositivo de almacenamento</string>
-  <string name="tts_not_enabled" fuzzy="true">A síntese vocal non está activa para este ficheiro ZIM</string>
+  <string name="tts_not_enabled">A lectura en voz alta non está activa para este ficheiro ZIM</string>
   <string name="next">Seguinte</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">Permitir descargar contido mediante a rede móbil?</string>

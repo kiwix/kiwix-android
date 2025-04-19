@@ -7,6 +7,7 @@
 * McDutchie
 * MohitMali
 * SuperPotato
+* TorgeirS
 -->
 <resources>
   <string name="menu_help">Hjelp</string>
@@ -20,16 +21,34 @@
   <string name="menu_read_aloud">Les høyt</string>
   <string name="menu_read_aloud_stop">Stopp høytlesning</string>
   <string name="menu_support_kiwix">Støtt Kiwix</string>
+  <string name="menu_support_kiwix_for_custom_apps">Støtt %s</string>
+  <string name="menu_about_app">Om %s-appen</string>
   <string name="save_media">Lagre medier som…</string>
   <string name="save_media_error">En feil oppstod under lagring av mediet!</string>
   <string name="save_media_saved">Lagret medier som %s i din bildemappe.</string>
   <string name="search_label">Søk</string>
   <string name="choose_file">Velg en ZIM-innholdsfil (*.zim)</string>
   <string name="open_in_new_tab">Åpne lenke i ny fane?</string>
+  <string name="go_to_wifi_settings_label">Gå til WIFI-innstillinger</string>
+  <string name="connection_refused">Tilkobling avvist.</string>
+  <string name="no_books_selected_toast_message">Velg bøker først</string>
+  <string name="server_failed_toast_message">Kunne ikke starte tjener.</string>
+  <string name="server_started_successfully_toast_message">Tjeneren startet vellykket.</string>
+  <string name="server_stopped_successfully_toast_message">Tjeneren ble stoppet.</string>
+  <string name="server_textview_default_message">Velg filene du ønsker å ha på tjeneren</string>
+  <string name="progress_dialog_starting_server">Starter tjener</string>
+  <string name="wifi_dialog_title">WiFi-tilkobling oppdaget</string>
+  <string name="hotspot_dialog_neutral_button">FORTSETT</string>
   <string name="start_server_label">Start tjener</string>
   <string name="stop_server_label">Stopp tjener</string>
+  <string name="error_server_already_running">Tjeneren kjører allerede. Stopp den og forsøk på nytt.</string>
+  <string name="error_ip_address_not_found">Klarte ikke å finne IP adressen.</string>
+  <string name="qr_code">Generert QR-kode</string>
+  <string name="share_host_address">Del webadresse via andre programmer</string>
   <string name="error_file_not_found">Feil: Den valgte ZIM-filen ble ikke funnet %s</string>
-  <string name="error_file_invalid" fuzzy="true">Feil: Den valgte filen er ikke en gyldig ZIM-fil %s</string>
+  <string name="unable_to_read_zim_file">Kan ikke lese denne ZIM-filen!</string>
+  <string name="zim_not_opened">Kan ikke åpne ZIM-filen</string>
+  <string name="error_file_invalid">Feil: Den valgte filen er ikke en gyldig ZIM-fil. %s</string>
   <string name="error_article_url_not_found">Feil: Kunne ikke laste inn artikkelen (Url: %1$s).</string>
   <string name="pref_display_title">Skjerm</string>
   <string name="pref_info_title">Informasjon</string>
@@ -40,11 +59,25 @@
   <string name="pref_back_to_top_summary">Vis en knapp nederst på siden for å returnere til toppen</string>
   <string name="pref_language_title">Språk</string>
   <string name="pref_language_chooser">Velg et språk</string>
+  <string name="pref_credits">Bidragsytere og lisenser</string>
   <string name="pref_credits_title">Takk til</string>
-  <string name="tts_lang_not_supported" fuzzy="true">Dette språket er ikke tilgjengelig for siden eller så er ikke dette språket installert. Denne artikkelen kan kanskje ikke bli riktig lest av.</string>
+  <string name="tts_lang_not_supported">Språket på denne siden er ikke støttet. Artikkelen kan kanskje ikke leses riktig.</string>
   <string name="no_reader_application_installed">Kunne ikke finne en installert app for denne typen fil</string>
+  <string name="no_email_application_installed">Installer en e-postklient</string>
+  <string name="no_app_found_to_select_bookmark_file">Fant ingen app for å velge en bokmerkefil</string>
   <string name="no_section_info">Ingen innholdstitteler funnet.</string>
-  <string name="request_storage" fuzzy="true">For å få åpnet ZIM-filer trenger vi tilgang til lagringsplassen din</string>
+  <string name="request_storage">For å få tilgang til innhold uten nett trenger vi tilgang til lagringen din</string>
+  <string name="delete_recent_search_item">Slette dette elementet?</string>
+  <string name="pref_notes">Notater</string>
+  <string name="pref_permission">Tillatelser</string>
+  <string name="pref_import_bookmark_title">Importer bokmerker</string>
+  <string name="pref_import_bookmark_summary">Importer de lagrede bokmerkene</string>
+  <string name="pref_export_bookmark_title">Eksporter bokmerker</string>
+  <string name="pref_export_bookmark_summary">Eksporter alle lagrede bokmerker</string>
+  <string name="share">Del</string>
+  <string name="selected_file_cab_app_chooser_title">Del ZIM-filer med:</string>
+  <string name="delete">Slett</string>
+  <string name="cancel">Avbryt</string>
   <string name="got_it">Skjønner</string>
   <string name="did_you_know">Visste du at?</string>
   <string name="undo">Angre</string>
@@ -82,13 +115,21 @@
   <string name="help_9">• Annet innhold som Wikileaks eller Wikisource er også tilgjengelig</string>
   <string name="pref_storage">Lagring</string>
   <string name="pref_current_folder">Nåværende mappe</string>
+  <string name="pref_storage_used">%s brukt</string>
+  <string name="pref_free_storage">%s ledig</string>
+  <string name="choose_storage_to_download_book">Velg lagringsplass for å laste ned boken</string>
   <string name="tts_pause">Pause</string>
   <string name="tts_resume">Fortsett</string>
   <string name="stop">Stopp</string>
+  <string name="notification_pause_button_text">Pause</string>
+  <string name="notification_resume_button_text">Gjenoppta</string>
+  <string name="internal_storage">Intern</string>
+  <string name="external_storage">Ekstern</string>
   <string name="yes">Ja</string>
+  <string name="no">Nei</string>
   <string name="confirm_stop_download_title">Vil du stoppe nedlastingen?</string>
   <string name="confirm_stop_download_msg">Er du sikker på at du vil stoppe denne nedlastingen?</string>
-  <string name="tts_not_enabled" fuzzy="true">Tekst til tale er ikke aktivert for denne ZIM-filen</string>
+  <string name="tts_not_enabled">Les-høyt er ikke aktivert for denne ZIM-filen</string>
   <string name="next">Neste</string>
   <string name="previous">Forrige</string>
   <string name="wifi_only_title">Vil du tillate nedlasting av innhold via mobilnettverket?</string>
@@ -106,7 +147,7 @@
   <string name="crash_title">Vel … Dette er pinlig</string>
   <string name="crash_description">Det ser ut som vi krasjet.\n\nVil du hjelpe oss med å løse dette problemet ved å sende følgende informasjon?</string>
   <string name="crash_checkbox_language">Dine språkinnstillinger</string>
-  <string name="crash_checkbox_zimfiles" fuzzy="true">En liste over Zim-filene dine</string>
+  <string name="crash_checkbox_zimfiles">En liste over ZIM-filene dine</string>
   <string name="crash_checkbox_logs">Applikasjonslogger</string>
   <string name="crash_checkbox_device">Enhetsdetaljer</string>
   <string name="crash_button_confirm">SEND DETALJER</string>
@@ -120,12 +161,31 @@
   <string name="humankind_knowledge">Menneskehetens kunnskap, på telefonen din.</string>
   <string name="welcome_to_the_family">Velkommen til familien</string>
   <string name="save_books_offline">Lagre bøker offline</string>
+  <string name="go_to_previous_page">Gå til forrige side</string>
+  <string name="go_to_next_page">Gå til neste side</string>
+  <string name="table_of_contents">Innholdfortegnelse</string>
+  <string name="select_languages">Velg språk</string>
+  <string name="save_languages">Lagre språk</string>
+  <string name="expand">Utvid</string>
   <string name="history">Historie</string>
   <string name="history_from_current_book">Vis historikk fra alle bøker</string>
-  <string name="search_history" fuzzy="true">Søkehistorikk</string>
+  <string name="search_history">Søkehistorikk</string>
+  <string name="close_all_tabs">Lukk alle faner</string>
   <string name="close_tab">Lukk fane</string>
+  <string name="could_not_restore_tabs">Kunne ikke gjenopprette faner.</string>
+  <string name="complete">Fullført</string>
+  <string name="paused_state">Pauset</string>
+  <string name="failed_state">Mislyktes: %s</string>
+  <string name="save">Lagre</string>
+  <string name="connection_failed">Tilkobling mislyktes</string>
+  <string name="your_device">Din enhet:</string>
   <string name="device_name">Enhetsnavn</string>
+  <string name="nearby_devices">ENHETER I NÆRHETEN</string>
+  <string name="no_devices_found">Ingen enheter funnet. Trykk på søkeknappen for å prøve igjen.</string>
+  <string name="files_for_transfer">FILER TIL OVERFØRING</string>
+  <string name="preparing_files">Klargjør filer for overføring</string>
   <string name="status">Status</string>
+  <string name="pref_clear_notes">Fjern notater</string>
   <string name="tag_pic">Bilde</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Kun tekst</string>
@@ -139,6 +199,7 @@
   <string name="delete_selected_history">Vil du slette valgt historikk?</string>
   <string name="delete_bookmarks">Vil du slette alle bokmerker?</string>
   <string name="delete_selected_bookmarks">Vil du slette valgte bokmerker?</string>
+  <string name="error_invalid_bookmark_file">Feil: Den valgte filen er ikke en gyldig bokmerke-fil.</string>
   <string name="on">På</string>
   <string name="off">Av</string>
   <string name="auto">Auto</string>
@@ -151,15 +212,35 @@
   <string name="reader">Leser</string>
   <string name="open_library">Åpen bibliotek</string>
   <string name="tab_restored">Fanen gjenopprettet</string>
+  <string name="action_copy">Kopier</string>
+  <string name="move">Flytt</string>
+  <string name="copying_zim_file">Kopierer ZIM-fil…</string>
+  <string name="moving_zim_file">Flytter ZIM-fil…</string>
+  <string name="move_file_error_message">Feil ved flytting av ZIM-filen: %s.</string>
   <string name="allowed">Tillatt</string>
   <string name="not_allowed">Ikke tillatt</string>
   <string name="denied_internet_permission_message">Aktiver wifi for å laste ned innhold</string>
   <string name="system_unable_to_grant_permission_message">Systemet kan ikke gi tillatelse!</string>
   <string name="allow">Tillat</string>
+  <string name="swipe_down_for_library">Sveip ned for bibliotek</string>
+  <string name="downloading_library">Laster ned bibliotek \n%s</string>
   <string name="no_notes">Ingen merknader</string>
   <string name="notes_from_all_books">Vis merknader fra alle bøker</string>
   <string name="search_notes">Søk i notater</string>
   <string name="choose_your_action">Velg din handling</string>
   <string name="open_note">Åpne notat</string>
   <string name="open_article">Åpne Artikkel</string>
+  <string name="go_to_settings_label">Gå til innstillinger</string>
+  <string name="your_device_name_message">Enhetsnavnet ditt vises her.</string>
+  <string name="storage_selection_dialog_accessibility_description">Velg lagring for å laste ned ZIM-filer.</string>
+  <string name="select_language_content_description">Hvis du velger dette språket, prioriteres visning av nedlastbare bøker på det språket øverst.</string>
+  <string name="save_or_open_unsupported_files_dialog_title">Lagre eller Åpne denne filen?</string>
+  <string name="save_or_open_unsupported_files_dialog_message">Hvis du velger Åpne, åpnes denne filen i eksternt leserprogram.</string>
+  <string name="donation_dialog_title">Doner i dag</string>
+  <string name="donation_dialog_description">%s trenger din hjelp.</string>
+  <string name="make_donation">Gi en donasjon</string>
+  <string name="resuming_state">Gjenopptar</string>
+  <string name="downloading_state">Laster ned</string>
+  <string name="download_failed_state">Mislyktes</string>
+  <string name="searchview_description_clear">Tøm spørring</string>
 </resources>

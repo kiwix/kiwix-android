@@ -394,4 +394,5 @@
   <string name="resuming_state">재개 중</string>
   <string name="downloading_state">다운로드 중</string>
   <string name="download_failed_state">실패</string>
+  <string name="searchview_description_clear">쿼리 초기화</string>
 </resources>

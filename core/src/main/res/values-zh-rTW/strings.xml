@@ -67,10 +67,12 @@
   <string name="qr_code">呈現 QR 碼</string>
   <string name="share_host_address">透過別種應用程式分享 URL</string>
   <string name="error_file_not_found">錯誤：找不到所選的 ZIM 檔案。 %s</string>
-  <string name="unable_to_read_zim_file" fuzzy="true">無法讀取這個 zim 檔案！</string>
-  <string name="zim_not_opened" fuzzy="true">無法打開 zim 檔案</string>
+  <string name="unable_to_read_zim_file">無法讀取這個 ZIM 檔案！</string>
+  <string name="zim_not_opened">無法打開 ZIM 檔案</string>
   <string name="error_file_invalid">錯誤：所選檔案不是有效的 ZIM 檔。 %s</string>
   <string name="error_article_url_not_found">錯誤：載入條目(網址：%1$s)失敗。</string>
+  <string name="error_loading_random_article_zim_not_loaded">無法載入條目。ZIM 檔案未正確載入。</string>
+  <string name="could_not_find_random_article">無法找到隨機條目。請稍後重試。</string>
   <string name="pref_display_title">顯示</string>
   <string name="pref_info_title">資訊</string>
   <string name="pref_info_version">版本</string>
@@ -88,7 +90,7 @@
   <string name="no_app_found_to_select_bookmark_file">找不到用於選擇書籤檔案的應用程式</string>
   <string name="no_section_info">未找到內容標題</string>
   <string name="request_storage">我們需要存取您的儲存裝置以存取離線內容。</string>
-  <string name="request_write_storage" fuzzy="true">要下載 zim 檔案，我們需要寫入您的儲存裝置權限</string>
+  <string name="request_write_storage">要下載 ZIM 檔案，我們需要寫入您的儲存裝置權限</string>
   <string name="clear_recent_and_tabs_history_dialog">您確定要刪除您的搜尋歷史記錄，並且重新設定所有啟用的分頁嗎？</string>
   <string name="delete_recent_search_item">刪除此項目？</string>
   <string name="pref_clear_all_history_title">清除歷史記錄</string>
@@ -131,8 +133,8 @@
   <string name="speech_not_supported">很抱歉！您的設備不支援語音輸入</string>
   <string name="local_zims">設備</string>
   <string name="remote_zims">線上</string>
-  <string name="library">圖書館</string>
-  <string name="delete_zim_body" fuzzy="true">以下 zim 檔案將會被刪除：\n\n%s</string>
+  <string name="library">文庫</string>
+  <string name="delete_zim_body">以下 ZIM 檔案將被刪除：\n\n%s</string>
   <string name="delete_zims_toast">檔案刪除成功</string>
   <string name="no_files_here">沒有檔案在此</string>
   <string name="download_no_space">沒有足夠的空間來下載。</string>
@@ -152,17 +154,20 @@
   <string name="help_7">它們都是可用的 ZIM 檔案。而在這有很多：</string>
   <string name="help_8">• 維基百科可用於任一語言</string>
   <string name="help_9">• 其它內容如維基解密、或維基文庫也同樣可用</string>
-  <string name="help_10" fuzzy="true">您可以從應用程式來下載您挑選的 ZIM 檔案，或者是仔細選擇從您桌上型電腦所下載 ZIM 檔案來傳輸到您的 SD 記憶卡。</string>
+  <string name="help_10">您可以從應用程式來下載您挑選的 ZIM 檔案，或者是仔細選擇從您桌上型電腦所下載 ZIM 檔案來傳輸到您的 SD 記憶卡。</string>
   <string name="help_11">在應用程式下載的 ZIM 檔案會存放在名為「Kiwix」的外部儲存裝置目錄。</string>
   <string name="fetching_storage_info">正在取得儲存詳細資訊…</string>
   <string name="pref_storage">儲存裝置</string>
   <string name="pref_current_folder">目前資料夾</string>
   <string name="pref_storage_used">已使用 %s</string>
   <string name="pref_free_storage">剩餘 %s</string>
+  <string name="choose_storage_to_download_book">選擇下載書籍的儲存空間</string>
   <string name="delete_zim_failed">很抱歉我們無法刪除一些檔案。您應該嘗試改用檔案管理器。</string>
   <string name="tts_pause">暫停</string>
   <string name="tts_resume">繼續</string>
   <string name="stop">停止</string>
+  <string name="notification_pause_button_text">暫停</string>
+  <string name="notification_resume_button_text">恢復</string>
   <string name="internal_storage">內部</string>
   <string name="external_storage">外部</string>
   <string name="yes">是</string>
@@ -170,9 +175,9 @@
   <string name="confirm_stop_download_title">停止下載？</string>
   <string name="confirm_stop_download_msg">您確定要取消此次下載？</string>
   <string name="download_change_storage">儲存裝置設備選取器</string>
-  <string name="tts_not_enabled" fuzzy="true">轉換為語音的文字無法用在 ZIM 檔案上</string>
-  <string name="texttospeech_initialization_failed" fuzzy="true">文字轉語音的初始化失敗，請重試</string>
-  <string name="texttospeech_error" fuzzy="true">文字轉語音出現意外錯誤，請重試</string>
+  <string name="tts_not_enabled">朗讀無法用在此 ZIM 檔案上</string>
+  <string name="texttospeech_initialization_failed">朗讀初始化失敗，請重試</string>
+  <string name="texttospeech_error">朗讀出現意外錯誤，請重試</string>
   <string name="next">下一個</string>
   <string name="previous">上一個</string>
   <string name="wifi_only_title">允許透過移動網路來下載內容？</string>
@@ -188,15 +193,16 @@
   <string name="pref_external_link_popup_title">當輸入外部連結時警告</string>
   <string name="pref_external_link_popup_summary">顯示彈跳項目來警告有關額外的耗費或不運作在離線連結上。</string>
   <string name="external_link_popup_dialog_title">輸入外部連結！</string>
-  <string name="external_link_popup_dialog_message" fuzzy="true">您正輸入一個外部連結。這可能會導致出額外耗費的資料傳遞，否則當您離線時不要運作。您要繼續嗎？</string>
+  <string name="external_link_popup_dialog_message">您正輸入一個外部連結。這可能會導致出額外耗費的資料傳遞，否則當您離線時不要運作。\n您要繼續嗎？</string>
   <string name="do_not_ask_anymore">不再詢問</string>
   <string name="your_languages">所選語言：</string>
   <string name="other_languages">其它語言：</string>
+  <string name="downloading">正在下載：</string>
   <string name="no_items_msg">沒有可用的項目</string>
   <string name="crash_title">唔…真是丟臉</string>
   <string name="crash_description">看起來是我們這邊出了問題。\n\n您是否願意透過發送以下資訊，來協助我們修正此問題？</string>
   <string name="crash_checkbox_language">您的語言設定</string>
-  <string name="crash_checkbox_zimfiles" fuzzy="true">您的 Zim 檔案清單</string>
+  <string name="crash_checkbox_zimfiles">您的 ZIM 檔案清單</string>
   <string name="crash_checkbox_exception">當機詳情</string>
   <string name="crash_checkbox_logs">應用程式日誌</string>
   <string name="crash_checkbox_device">設備詳情</string>
@@ -212,6 +218,8 @@
   <string name="welcome_to_the_family">歡迎來到這個大家庭</string>
   <string name="save_books_offline">儲存書籍離線</string>
   <string name="download_books_message">下載書籍來隨時隨地閱讀。</string>
+  <string name="save_books_in_desired_storage">將書籍保存在喜好的儲存空間</string>
+  <string name="storage_location_hint">您可以從設定畫面來選擇偏好的儲存位置（SD 卡或內部儲存空間）來下載 ZIM 檔案。</string>
   <string name="unable_to_add_to_bookmarks">無法新增書籤</string>
   <string name="go_to_previous_page">前往上一頁</string>
   <string name="go_to_next_page">前往下一頁</string>
@@ -234,9 +242,10 @@
   <string name="complete">完成</string>
   <string name="paused_state">暫停</string>
   <string name="failed_state">失敗：%s</string>
-  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">無法下載 zim 檔案。請嘗試從 Play 商店重新安裝應用程式。</string>
+  <string name="custom_download_error_message_for_authentication_failed">無法下載 ZIM 檔案。請嘗試從 Play 商店重新安裝應用程式。</string>
   <string name="save">儲存</string>
   <string name="note">註釋</string>
+  <string name="take_notes">做筆記</string>
   <string name="wiki_article_title">wiki 條目標題</string>
   <string name="ext_storage_permission_rationale_export_bookmark">匯出書籤時需要儲存裝置的存取權限</string>
   <string name="ext_storage_write_permission_denied_export_bookmark">若不可存取儲存裝置則無法匯出書籤</string>
@@ -263,7 +272,7 @@
   <string name="permission_rationale_location">Android 需要位置權限來允許應用程式去偵測端點設備</string>
   <string name="permission_rationale_nearby">Android 需要附近設備權限來允許應用程式去偵測端點設備</string>
   <string name="permission_refused_location">沒有位置權限無法定位端點設備</string>
-  <string name="permission_refused_storage" fuzzy="true">沒有儲存權限無法存取 zim 檔案</string>
+  <string name="permission_refused_storage">沒有儲存權限無法存取 ZIM 檔案</string>
   <string name="request_enable_location">啟動位置來允許偵測端點</string>
   <string name="discovery_needs_location">沒有位置服務無法偵測端點</string>
   <string name="request_enable_wifi">啟動系統設定的 WiFi P2P</string>
@@ -328,25 +337,30 @@
   <string name="preparing_file_for_copy">準備拷貝/移動</string>
   <string name="action_copy">拷貝</string>
   <string name="move">移動</string>
-  <string name="copy_move_files_dialog_description" fuzzy="true">您要拷貝或移動檔案嗎？</string>
-  <string name="copy_file_error_message" fuzzy="true">拷貝 zim 檔案時發生錯誤：%s。</string>
-  <string name="why_copy_move_files_to_app_directory" fuzzy="true">將檔案移動/拷貝到應用程式公共目錄？</string>
-  <string name="copy_move_files_to_app_directory_description" fuzzy="true">由於 Android 11（或更高版本）的 Google Play 政策，我們的應用程式已無法直接存取儲存在您設備上其他位置的檔案。為了讓您能查看所選檔案，我們需要將它們移動或拷貝到應用程式目錄中的特殊資料夾裡，這樣才能讓我們能夠存取並開啟檔案。請問您同意嗎？</string>
-  <string name="move_file_error_message" fuzzy="true">移動 zim 檔案時發生錯誤：%s。</string>
+  <string name="copying_zim_file">正在拷貝 ZIM 檔案…</string>
+  <string name="moving_zim_file">正在移動 ZIM 檔案…</string>
+  <string name="copy_move_files_dialog_description">Kiwix 要求 ZIM 檔案應位於自己的資料目錄中。\n您要拷貝或移動檔案於此嗎？</string>
+  <string name="copy_file_error_message">拷貝 ZIM 檔案時發生錯誤：%s。</string>
+  <string name="verify_zim_chunk_dialog_title">請注意：確保所有 ZIM 區塊已正確移動/拷貝！</string>
+  <string name="verify_zim_chunks_dialog_message">您可以在「Android/media/org.kiwix…/」資料夾中驗證它們。\n一旦完成後，向下滑動即可重整文庫畫面。分割後的 ZIM 檔案將會出現在您的文庫中。</string>
+  <string name="why_copy_move_files_to_app_directory">為何要將檔案移動/拷貝到應用程式公共目錄？</string>
+  <string name="copy_move_files_to_app_directory_description">由於 Android 11（或更高版本）的 Google Play 政策，我們的應用程式已無法直接存取儲存在您設備上其他位置的檔案。為了讓您能查看所選檔案，我們需要將它們移動或拷貝到應用程式目錄中的特殊資料夾裡，這樣才能讓我們能夠存取並開啟檔案。</string>
+  <string name="choose_storage_to_copy_move_zim_file">選擇拷貝/移動 ZIM 檔案的儲存空間</string>
+  <string name="move_file_error_message">移動 ZIM 檔案時發生錯誤：%s。</string>
   <string name="how_to_update_content">如何更新內容？</string>
-  <string name="update_content_description" fuzzy="true">要更新內容（zim 檔案）的話，您需要下載這個相似內容的完整最新版本。您可以透過下載段落來進行。</string>
+  <string name="update_content_description">要更新內容（ZIM 檔案）的話，您需要下載這個相似內容的完整最新版本。您可以透過下載段落來進行。</string>
   <string name="all_files_permission_needed">所有檔案需要允許權限</string>
-  <string name="all_files_permission_needed_message" fuzzy="true">為了能在其它設備上存取 ZIM 檔案，我們需要所有檔案允許權限</string>
+  <string name="all_files_permission_needed_message">為了能在其它設備上存取 ZIM 檔案，我們需要所有檔案允許權限</string>
   <string name="allowed">允許</string>
   <string name="not_allowed">不允許</string>
   <string name="denied_internet_permission_message">請啟用 wifi 來下載內容</string>
   <string name="system_unable_to_grant_permission_message">系統無法授予權限！</string>
   <string name="allow">允許</string>
-  <string name="swipe_down_for_library">向下滑動圖書館</string>
-  <string name="reaching_remote_library">取得遠距圖書館</string>
-  <string name="parsing_remote_library">解析遠端圖書館</string>
-  <string name="starting_downloading_remote_library">開始下載線上圖書館</string>
-  <string name="downloading_library">正在下載圖書館\n%s</string>
+  <string name="swipe_down_for_library">向下滑動文庫</string>
+  <string name="reaching_remote_library">取得遠距文庫</string>
+  <string name="parsing_remote_library">解析遠端文庫</string>
+  <string name="starting_downloading_remote_library">開始下載線上文庫</string>
+  <string name="downloading_library">正在下載文庫\n%s</string>
   <string name="no_notes">沒有註釋</string>
   <string name="notes_from_all_books">檢視來自所有書籍的註釋</string>
   <string name="search_notes">搜尋註釋</string>
@@ -359,7 +373,7 @@
   <string name="download_tts_language_message">請點擊下載按鈕。這將會自動下載所需要的語言。</string>
   <string name="external_link_copied_message">外部連結已復製到剪貼簿</string>
   <string name="read_aloud_service_channel_name">朗讀服務頻道</string>
-  <string name="read_aloud_channel_description" fuzzy="true">語音控制文字</string>
+  <string name="read_aloud_channel_description">朗讀控制。</string>
   <string name="read_aloud_running">運行朗讀</string>
   <string name="backward_history">歷史往後</string>
   <string name="forward_history">歷史往前</string>
@@ -377,7 +391,11 @@
   <string name="toolbar_back_button_content_description">前往上一個畫面</string>
   <string name="save_or_open_unsupported_files_dialog_title">儲存或開啟這個檔案？</string>
   <string name="save_or_open_unsupported_files_dialog_message">選擇開啟將在外部閱讀器應用程式中開啟該檔案。</string>
-  <string name="donation_dialog_title">今天就捐款</string>
+  <string name="donation_dialog_title">立即捐款</string>
   <string name="donation_dialog_description">%s需要您的幫忙。</string>
   <string name="make_donation">捐款</string>
+  <string name="resuming_state">正在恢復</string>
+  <string name="downloading_state">正在下載</string>
+  <string name="download_failed_state">失敗</string>
+  <string name="searchview_description_clear">清除查詢</string>
 </resources>
