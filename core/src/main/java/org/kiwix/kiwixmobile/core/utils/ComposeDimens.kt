@@ -44,6 +44,7 @@ object ComposeDimens {
   val TWENTY_DP = 20.dp
   val SEVENTEEN_DP = 17.dp
   val SIXTEEN_DP = 16.dp
+  val FIFTEEN_DP = 15.dp
   val TWELVE_DP = 12.dp
   val TEN_DP = 10.dp
   val EIGHT_DP = 8.dp
@@ -51,6 +52,7 @@ object ComposeDimens {
   val FIVE_DP = 5.dp
   val FOUR_DP = 4.dp
   val TWO_DP = 2.dp
+  val ONE_DP = 1.dp
   val SEVENTY_DP = 70.dp
   val SIXTY_FOUR_DP = 64.dp
 
@@ -61,6 +63,9 @@ object ComposeDimens {
 
   // Default letter spacing in text according to theme
   val DEFAULT_LETTER_SPACING = 0.0333.em
+
+  // Default Text alpha.
+  const val DEFAULT_TEXT_ALPHA = 0.67f
 
   // Shape configuration sizes. See Shape.kt
   val EXTRA_SMALL_ROUND_SHAPE_SIZE = 4.dp
@@ -111,4 +116,27 @@ object ComposeDimens {
   val PAGE_LIST_ITEM_FAVICON_SIZE = 40.dp
   val PAGE_SWITCH_LEFT_RIGHT_MARGIN = 10.dp
   val PAGE_SWITCH_ROW_BOTTOM_MARGIN = 8.dp
+
+  // LocalFileTransferFragment dimens
+  val PEER_DEVICE_ITEM_TEXT_SIZE = 17.sp
+  val FILE_ITEM_TEXT_SIZE = 14.sp
+  val FILE_ITEM_ICON_SIZE = 24.dp
+  val NEARBY_DEVICE_LIST_HEIGHT = 160.dp
+  val NO_DEVICE_FOUND_TEXT_PADDING = 50.dp
+  val YOUR_DEVICE_TEXT_SIZE = 13.sp
+  val FILE_FOR_TRANSFER_TEXT_SIZE = 16.sp
+  val NEARBY_DEVICES_TEXT_SIZE = 16.sp
+
+  // KiwixShowCase view dimens
+  val SHOWCASE_VIEW_MESSAGE_TEXT_SIZE = 17.sp
+  val SHOWCASE_VIEW_NEXT_BUTTON_TEXT_SIZE = 20.sp
+  val FILE_FOR_TRANSFER_SHOW_CASE_VIEW_SIZE = 100.dp
+  val NEARBY_DEVICES_SHOW_CASE_VIEW_SIZE = 100.dp
+  const val SHOWCASE_MESSAGE_SHADOW_BLUR_RADIUS = 3f
+  const val SHOWCASE_MESSAGE_SHADOW_COLOR_ALPHA = 0.5f
+  const val SHOWCASE_VIEW_BACKGROUND_COLOR_ALPHA = 0.8f
+  const val PULSE_ANIMATION_START = 0f
+  const val PULSE_ANIMATION_END = 1f
+  const val PULSE_ALPHA = 0.99f
+  const val PULSE_RADIUS_EXTRA = 20f
 }

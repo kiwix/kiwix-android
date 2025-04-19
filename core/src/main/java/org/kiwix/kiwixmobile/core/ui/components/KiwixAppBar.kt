@@ -138,7 +138,7 @@ private fun ActionMenu(actionMenuItems: List<ActionMenuItem>) {
       IconButton(
         enabled = menuItem.isEnabled,
         onClick = menuItem.onClick,
-        modifier = Modifier.testTag(menuItem.testingTag)
+        modifier = menuItem.modifier.testTag(menuItem.testingTag)
       ) {
         Icon(
           painter = menuItem.icon.toPainter(),

@@ -19,23 +19,25 @@
 package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.util.Log
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.TextId
-import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.ui.components.SHOWCASE_VIEW_MESSAGE_TESTING_TAG
+import org.kiwix.kiwixmobile.core.ui.components.SHOWCASE_VIEW_NEXT_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
+import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
-import uk.co.deanwild.materialshowcaseview.R.id
 
 /**
  * Authored by Ayush Shrivastava on 29/10/20
@@ -45,22 +47,32 @@ fun localFileTransfer(func: LocalFileTransferRobot.() -> Unit) =
   LocalFileTransferRobot().applyWithViewHierarchyPrinting(func)
 
 class LocalFileTransferRobot : BaseRobot() {
-  fun assertReceiveFileTitleVisible() {
-    isVisible(TextId(R.string.receive_files_title))
+  fun assertReceiveFileTitleVisible(composeContentTestRule: ComposeContentTestRule) {
+    composeContentTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.receive_files_title))
+    }
   }
 
-  fun assertSearchDeviceMenuItemVisible() {
-    isVisible(ViewId(R.id.menu_item_search_devices))
+  fun assertSearchDeviceMenuItemVisible(composeContentTestRule: ComposeContentTestRule) {
+    composeContentTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(SEARCH_ICON_TESTING_TAG).assertExists()
+    }
   }
 
-  fun clickOnSearchDeviceMenuItem() {
-    clickOn(ViewId(R.id.menu_item_search_devices))
+  fun clickOnSearchDeviceMenuItem(composeContentTestRule: ComposeContentTestRule) {
+    composeContentTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(SEARCH_ICON_TESTING_TAG).performClick()
+    }
   }
 
-  fun assertLocalFileTransferScreenVisible() {
+  fun assertLocalFileTransferScreenVisible(composeContentTestRule: ComposeContentTestRule) {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
     closeEnableWifiP2PDialogIfVisible()
-    assertReceiveFileTitleVisible()
+    assertReceiveFileTitleVisible(composeContentTestRule)
   }
 
   private fun closeEnableWifiP2PDialogIfVisible() {
@@ -69,7 +81,7 @@ class LocalFileTransferRobot : BaseRobot() {
         onView(withText(string.request_enable_wifi)).check(matches(isDisplayed()))
         pressBack()
       })
-    } catch (ignore: Throwable) {
+    } catch (_: Throwable) {
       Log.i(
         "LOCAL_FILE_TRANSFER_TEST",
         "Couldn't found WIFI P2P dialog, probably this is not exist"
@@ -77,53 +89,66 @@ class LocalFileTransferRobot : BaseRobot() {
     }
   }
 
-  fun assertLocalLibraryVisible() {
-    isVisible(TextId(string.library))
+  fun assertLocalLibraryVisible(composeContentTestRule: ComposeContentTestRule) {
+    composeContentTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
+        .assertTextEquals(context.getString(string.library))
+    }
   }
 
-  fun assertClickNearbyDeviceMessageVisible() {
+  fun assertClickNearbyDeviceMessageVisible(composeContentTestRule: ComposeContentTestRule) {
     pauseForBetterTestPerformance()
-    testFlakyView({
-      onView(withId(id.tv_content))
-        .check(matches(withText(string.click_nearby_devices_message)))
-    })
+    composeContentTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(SHOWCASE_VIEW_MESSAGE_TESTING_TAG)
+        .assertTextEquals(context.getString(string.click_nearby_devices_message))
+    }
   }
 
-  fun clickOnGotItButton() {
+  fun clickOnNextButton(composeContentTestRule: ComposeContentTestRule) {
     pauseForBetterTestPerformance()
-    testFlakyView({
-      onView(withId(id.tv_dismiss))
-        .perform(click())
-    })
+    composeContentTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(SHOWCASE_VIEW_NEXT_BUTTON_TESTING_TAG)
+        .performClick()
+    }
   }
 
-  fun assertDeviceNameMessageVisible() {
+  fun assertDeviceNameMessageVisible(composeContentTestRule: ComposeContentTestRule) {
     pauseForBetterTestPerformance()
-    testFlakyView({
-      onView(withId(id.tv_content))
-        .check(matches(withText(string.your_device_name_message)))
-    })
+    composeContentTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(SHOWCASE_VIEW_MESSAGE_TESTING_TAG)
+        .assertTextEquals(context.getString(string.your_device_name_message))
+    }
   }
 
-  fun assertNearbyDeviceListMessageVisible() {
+  fun assertNearbyDeviceListMessageVisible(composeContentTestRule: ComposeContentTestRule) {
     pauseForBetterTestPerformance()
-    testFlakyView({
-      onView(withId(id.tv_content))
-        .check(matches(withText(string.nearby_devices_list_message)))
-    })
+    composeContentTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(SHOWCASE_VIEW_MESSAGE_TESTING_TAG)
+        .assertTextEquals(context.getString(string.nearby_devices_list_message))
+    }
   }
 
-  fun assertTransferZimFilesListMessageVisible() {
+  fun assertTransferZimFilesListMessageVisible(composeContentTestRule: ComposeContentTestRule) {
     pauseForBetterTestPerformance()
-    testFlakyView({
-      onView(withId(id.tv_content))
-        .check(matches(withText(string.transfer_zim_files_list_message)))
-    })
+    composeContentTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(SHOWCASE_VIEW_MESSAGE_TESTING_TAG)
+        .assertTextEquals(context.getString(string.transfer_zim_files_list_message))
+    }
   }
 
-  fun assertClickNearbyDeviceMessageNotVisible() {
+  fun assertClickNearbyDeviceMessageNotVisible(composeContentTestRule: ComposeContentTestRule) {
     pauseForBetterTestPerformance()
-    onView(withText(string.click_nearby_devices_message)).check(doesNotExist())
+    composeContentTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(SHOWCASE_VIEW_MESSAGE_TESTING_TAG)
+        .assertDoesNotExist()
+    }
   }
 
   private fun pauseForBetterTestPerformance() {

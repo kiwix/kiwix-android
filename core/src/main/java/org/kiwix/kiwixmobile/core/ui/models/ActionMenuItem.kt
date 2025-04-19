@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.ui.models
 
 import androidx.annotation.StringRes
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import org.kiwix.kiwixmobile.core.ui.theme.White
 
@@ -28,5 +29,6 @@ data class ActionMenuItem(
   val onClick: () -> Unit,
   val iconTint: Color = White,
   val isEnabled: Boolean = true,
-  val testingTag: String
+  val testingTag: String,
+  val modifier: Modifier = Modifier
 )

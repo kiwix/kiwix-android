@@ -41,7 +41,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.help.HelpRobot
-import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
 import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryRobot
 import org.kiwix.kiwixmobile.settings.SettingsRobot
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -115,7 +114,7 @@ class TopLevelDestinationTest : BaseActivityTest() {
       clickLibraryOnBottomNav {
         assertGetZimNearbyDeviceDisplayed(composeTestRule)
         clickFileTransferIcon(composeTestRule) {
-          LocalFileTransferRobot::assertReceiveFileTitleVisible
+          assertReceiveFileTitleVisible(composeTestRule)
         }
       }
       clickBookmarksOnNavDrawer {

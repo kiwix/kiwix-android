@@ -337,12 +337,6 @@ object Libs {
    */
   const val junit: String = "androidx.test.ext:junit:" + Versions.junit
 
-  /**
-   * https://github.com/deano2390/MaterialShowcaseView
-   */
-  const val material_show_case_view: String =
-    "com.github.deano2390:MaterialShowcaseView:" + Versions.material_show_case_view
-
   const val roomKtx = "androidx.room:room-ktx:" + Versions.roomVersion
 
   const val roomCompiler = "androidx.room:room-compiler:" + Versions.roomVersion

@@ -53,7 +53,7 @@ import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
-const val SEARCH_ICON_TESTING_TAG = "search"
+const val SEARCH_ICON_TESTING_TAG = "searchIconTestingTag"
 const val DELETE_MENU_ICON_TESTING_TAG = "deleteMenuIconTestingTag"
 
 abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActivityExtensions {
