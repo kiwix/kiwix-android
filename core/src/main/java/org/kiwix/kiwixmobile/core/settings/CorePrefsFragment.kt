@@ -33,6 +33,7 @@ import android.webkit.WebView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.EditTextPreference
@@ -289,7 +290,7 @@ abstract class CorePrefsFragment :
       view.settings.javaScriptEnabled = true
       view.setBackgroundColor(0)
     }
-    alertDialogShower?.show(OpenCredits { view })
+    alertDialogShower?.show(OpenCredits { AndroidView(factory = { view }) })
   }
 
   override fun onPreferenceTreeClick(preference: Preference): Boolean {

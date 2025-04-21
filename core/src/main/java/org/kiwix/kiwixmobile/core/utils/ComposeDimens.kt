@@ -139,4 +139,11 @@ object ComposeDimens {
   const val PULSE_ANIMATION_END = 1f
   const val PULSE_ALPHA = 0.99f
   const val PULSE_RADIUS_EXTRA = 20f
+
+  // AlertDialog dimens
+  val DIALOG_DEFAULT_PADDING_FOR_CONTENT = 16.dp
+  val DIALOG_ICON_END_PADDING = 10.dp
+  val DIALOG_TITLE_BOTTOM_PADDING = 8.dp
+  val DIALOG_MESSAGE_BOTTOM_PADDING = 16.dp
+  val DIALOG_URI_TOP_PADDING = 10.dp
 }

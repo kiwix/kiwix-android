@@ -20,8 +20,6 @@ package org.kiwix.kiwixmobile.webserver
 
 import android.Manifest
 import android.Manifest.permission.POST_NOTIFICATIONS
-import android.annotation.SuppressLint
-import android.app.Dialog
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -57,6 +55,7 @@ import org.kiwix.kiwixmobile.core.navigateToSettings
 import org.kiwix.kiwixmobile.core.qr.GenerateQR
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.StartServerGreen
@@ -65,12 +64,13 @@ import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.StartServer
 import org.kiwix.kiwixmobile.core.utils.files.Log
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService
 import org.kiwix.kiwixmobile.webserver.wifi_hotspot.HotspotService.Companion.ACTION_CHECK_IP_ADDRESS
@@ -103,7 +103,6 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   private var hotspotService: HotspotService? = null
   private var ip: String? = null
   private lateinit var serviceConnection: ServiceConnection
-  private var dialog: Dialog? = null
   private var isHotspotServiceRunning = false
   private var serverIpText = mutableStateOf("")
   private var shareIconItem = mutableStateOf(false to {})
@@ -195,6 +194,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
           onClick = { activity?.onBackPressedDispatcher?.onBackPressed() }
         )
       }
+      DialogHost(alertDialogShower)
     }
   }
 
@@ -284,14 +284,8 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     }
   }
 
-  @SuppressLint("InflateParams")
   private fun startKiwixHotspot() {
-    if (dialog == null) {
-      val dialogView: View =
-        layoutInflater.inflate(R.layout.item_custom_spinner, null)
-      dialog = alertDialogShower.create(StartServer { dialogView })
-    }
-    dialog?.show()
+    alertDialogShower.show(StartServer { ContentLoadingProgressBar() })
     requireActivity().startService(createHotspotIntent(ACTION_CHECK_IP_ADDRESS))
   }
 
@@ -441,7 +435,8 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
     Intent(requireActivity(), HotspotService::class.java).setAction(action)
 
   override fun onServerStarted(ip: String) {
-    dialog?.dismiss() // Dismiss dialog when server started.
+    // Dismiss dialog when server started.
+    alertDialogShower.clear()
     this.ip = ip
     layoutServerStarted()
   }
@@ -451,7 +446,8 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   override fun onServerFailedToStart(errorMessage: Int?) {
-    dialog?.dismiss() // Dismiss dialog if there is some error in starting the server.
+    // Dismiss dialog if there is some error in starting the server.
+    alertDialogShower.clear()
     errorMessage?.let {
       toast(errorMessage)
     }
@@ -519,7 +515,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   override fun onIpAddressInvalid() {
-    dialog?.dismiss()
+    alertDialogShower.clear()
     toast(R.string.server_failed_message, Toast.LENGTH_SHORT)
   }
 

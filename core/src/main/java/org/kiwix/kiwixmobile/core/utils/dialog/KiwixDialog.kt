@@ -19,7 +19,7 @@
 package org.kiwix.kiwixmobile.core.utils.dialog
 
 import android.app.Activity
-import android.view.View
+import androidx.compose.runtime.Composable
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 
@@ -27,12 +27,12 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 sealed class KiwixDialog(
   val title: Int?,
   val message: Int?,
-  val positiveMessage: Int,
-  val negativeMessage: Int?,
+  val confirmButtonText: Int,
+  val dismissButtonText: Int?,
   val cancelable: Boolean = true,
   val icon: Int? = null,
-  val neutralMessage: Int? = null,
-  val getView: (() -> View)? = null
+  val neutralButtonText: Int? = null,
+  val customComposeView: (@Composable (() -> Unit))? = null
 ) {
   data class DeleteZims(override val args: List<Any>) :
     KiwixDialog(
@@ -122,7 +122,7 @@ sealed class KiwixDialog(
     R.string.copy_move_files_dialog_description,
     R.string.action_copy,
     R.string.move,
-    neutralMessage = R.string.cancel,
+    neutralButtonText = R.string.cancel,
     cancelable = false
   )
 
@@ -139,7 +139,7 @@ sealed class KiwixDialog(
     R.string.save_or_open_unsupported_files_dialog_message,
     R.string.open,
     R.string.save,
-    neutralMessage = R.string.no_thanks
+    neutralButtonText = R.string.no_thanks
   )
 
   data class ShowHotspotDetails(override val args: List<Any>) :
@@ -165,9 +165,9 @@ sealed class KiwixDialog(
   object WiFiOnWhenHostingBooks : KiwixDialog(
     R.string.wifi_dialog_title,
     R.string.wifi_dialog_body,
-    positiveMessage = R.string.go_to_wifi_settings_label,
-    negativeMessage = null,
-    neutralMessage = R.string.hotspot_dialog_neutral_button
+    confirmButtonText = R.string.go_to_wifi_settings_label,
+    dismissButtonText = null,
+    neutralButtonText = R.string.hotspot_dialog_neutral_button
   )
 
   data class FileTransferConfirmation(override val args: List<Any>) :
@@ -200,17 +200,17 @@ sealed class KiwixDialog(
     R.string.external_link_popup_dialog_message,
     R.string.yes,
     R.string.no,
-    neutralMessage = R.string.do_not_ask_anymore
+    neutralButtonText = R.string.do_not_ask_anymore
   )
 
-  data class ShowRate(override val args: List<Any>, val customIcon: Int?) :
+  data class ShowRate(override val args: List<Any>, private val customIcon: Int?) :
     KiwixDialog(
       R.string.rate_dialog_title,
       R.string.single_arg_format_string,
       R.string.rate_dialog_positive,
       R.string.no_thanks,
       icon = customIcon,
-      neutralMessage = R.string.rate_dialog_neutral
+      neutralButtonText = R.string.rate_dialog_neutral
     ),
     HasBodyFormatArgs {
     constructor(icon: Int?, activity: Activity) : this(
@@ -227,48 +227,49 @@ sealed class KiwixDialog(
   object ClearAllHistory : KiwixDialog(
     R.string.clear_all_history_dialog_title,
     R.string.clear_recent_and_tabs_history_dialog,
-    positiveMessage = R.string.delete,
-    negativeMessage = R.string.cancel
+    confirmButtonText = R.string.delete,
+    dismissButtonText = R.string.cancel
   )
 
   object ClearAllNavigationHistory : KiwixDialog(
     R.string.clear_all_history_dialog_title,
     R.string.clear_all_navigation_history_message,
-    positiveMessage = R.string.delete,
-    negativeMessage = R.string.cancel
+    confirmButtonText = R.string.delete,
+    dismissButtonText = R.string.cancel
   )
 
   object ClearAllNotes : KiwixDialog(
     R.string.delete_notes_confirmation_msg,
     message = null,
-    positiveMessage = R.string.delete,
-    negativeMessage = R.string.cancel
+    confirmButtonText = R.string.delete,
+    dismissButtonText = R.string.cancel
   )
 
-  data class OpenCredits(val customGetView: (() -> View)?) : KiwixDialog(
+  data class OpenCredits(private val customGetView: @Composable (() -> Unit)?) : KiwixDialog(
     null,
     null,
     android.R.string.ok,
     null,
-    getView = customGetView
+    customComposeView = customGetView
   )
 
-  data class StartServer(val customGetView: (() -> View)?) : KiwixDialog(
+  data class StartServer(private val customGetView: @Composable (() -> Unit)?) : KiwixDialog(
     R.string.progress_dialog_starting_server,
     null,
     R.string.empty_string,
     null,
-    getView = customGetView
+    customComposeView = customGetView
   )
 
-  data class PreparingCopyingFilesDialog(val customGetView: (() -> View)?) : KiwixDialog(
-    R.string.preparing_file_for_copy,
-    null,
-    R.string.empty_string,
-    null,
-    cancelable = false,
-    getView = customGetView
-  )
+  data class PreparingCopyingFilesDialog(private val customGetView: @Composable (() -> Unit)?) :
+    KiwixDialog(
+      R.string.preparing_file_for_copy,
+      null,
+      R.string.empty_string,
+      null,
+      cancelable = false,
+      customComposeView = customGetView
+    )
 
   object NotesDiscardConfirmation : KiwixDialog(
     null,
@@ -312,57 +313,57 @@ sealed class KiwixDialog(
   object ImportBookmarks : KiwixDialog(
     R.string.import_bookmarks_dialog_title,
     message = null,
-    positiveMessage = R.string.yes,
-    negativeMessage = R.string.no
+    confirmButtonText = R.string.yes,
+    dismissButtonText = R.string.no
   )
 
   object DeleteSelectedHistory : KiwixDialog(
     R.string.delete_selected_history,
     null,
-    positiveMessage = R.string.delete,
-    negativeMessage = R.string.cancel
+    confirmButtonText = R.string.delete,
+    dismissButtonText = R.string.cancel
   )
 
   object DeleteAllHistory : KiwixDialog(
     R.string.delete_history,
     null,
-    positiveMessage = R.string.delete,
-    negativeMessage = R.string.cancel
+    confirmButtonText = R.string.delete,
+    dismissButtonText = R.string.cancel
   )
 
   object DeleteAllBookmarks : KiwixDialog(
     R.string.delete_bookmarks,
     null,
-    positiveMessage = R.string.delete,
-    negativeMessage = R.string.cancel
+    confirmButtonText = R.string.delete,
+    dismissButtonText = R.string.cancel
   )
 
   object DeleteSelectedBookmarks : KiwixDialog(
     R.string.delete_selected_bookmarks,
     null,
-    positiveMessage = R.string.delete,
-    negativeMessage = R.string.cancel
+    confirmButtonText = R.string.delete,
+    dismissButtonText = R.string.cancel
   )
 
   object DeleteAllNotes : KiwixDialog(
     R.string.delete_notes_confirmation_msg,
     R.string.delete_note_dialog_message,
-    positiveMessage = R.string.delete,
-    negativeMessage = R.string.cancel
+    confirmButtonText = R.string.delete,
+    dismissButtonText = R.string.cancel
   )
 
   object DeleteSelectedNotes : KiwixDialog(
     R.string.delete_selected_notes,
     R.string.delete_note_dialog_message,
-    positiveMessage = R.string.delete,
-    negativeMessage = R.string.cancel
+    confirmButtonText = R.string.delete,
+    dismissButtonText = R.string.cancel
   )
 
   object ShowNoteDialog : KiwixDialog(
     R.string.choose_your_action,
     null,
-    positiveMessage = R.string.open_article,
-    negativeMessage = R.string.open_note
+    confirmButtonText = R.string.open_article,
+    dismissButtonText = R.string.open_note
   )
 }
 
