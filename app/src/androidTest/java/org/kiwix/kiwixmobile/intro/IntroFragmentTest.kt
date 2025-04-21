@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.intro
 
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -39,6 +40,7 @@ import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -49,6 +51,9 @@ class IntroFragmentTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
+
+  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  val composeTestRule = createComposeRule()
 
   init {
     AccessibilityChecks.enable().apply {
@@ -70,7 +75,8 @@ class IntroFragmentTest : BaseActivityTest() {
     activityScenario.onActivity {
       it.navigate(R.id.introFragment)
     }
-    intro(IntroRobot::swipeLeft) clickGetStarted {}
+    // causes " E No adapter attached; skipping layout " when page changes
+    intro { swipeLeft(composeTestRule) } clickGetStarted {}
     LeakAssertions.assertNoLeaks()
   }
 

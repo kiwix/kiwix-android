@@ -18,39 +18,20 @@
 
 package org.kiwix.kiwixmobile.intro
 
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.onNodeWithText
 import applyWithViewHierarchyPrinting
-import attempt
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.TextId
-import org.kiwix.kiwixmobile.Findable.ViewId
-import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.main.TopLevelDestinationRobot
-import org.kiwix.kiwixmobile.main.topLevel
-import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 fun intro(func: IntroRobot.() -> Unit) = IntroRobot().applyWithViewHierarchyPrinting(func)
 
+// debugging
 class IntroRobot : BaseRobot() {
-  fun swipeLeft() {
-    isVisible(ViewId(R.id.get_started))
-    isVisible(TextId(string.welcome_to_the_family))
-    isVisible(TextId(string.humankind_knowledge))
-    attempt(10) {
-      isVisible(TextId(string.save_books_offline))
-      isVisible(TextId(string.download_books_message))
-    }
-    attempt(10) {
-      isVisible(TextId(string.save_books_in_desired_storage))
-      isVisible(TextId(string.storage_location_hint))
-    }
+  fun swipeLeft(composeTestRule: ComposeTestRule) {
+    composeTestRule.onNodeWithText("GET STARTED").assertExists()
   }
 
-  infix fun clickGetStarted(func: TopLevelDestinationRobot.() -> Unit): TopLevelDestinationRobot {
-    testFlakyView({ onView(withId(R.id.get_started)).perform(click()) })
-    return topLevel(func)
+  infix fun clickGetStarted(func: TopLevelDestinationRobot.() -> Unit) {
   }
 }

@@ -111,7 +111,10 @@ class KiwixSettingsFragmentTest {
     activityScenario.onActivity {
       it.navigate(R.id.introFragment)
     }
-    intro(IntroRobot::swipeLeft) clickGetStarted { }
+    intro {
+      swipeLeft(composeTestRule)
+      clickGetStarted(composeTestRule) {}
+    }
     StandardActions.openDrawer()
     StandardActions.enterSettings()
   }
