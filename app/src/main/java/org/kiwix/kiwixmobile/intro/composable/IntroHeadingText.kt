@@ -27,26 +27,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import org.kiwix.kiwixmobile.core.ui.theme.dimHighlightedTextDark
+import org.kiwix.kiwixmobile.core.ui.theme.dimHighlightedTextLight
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens
-
-private val COLOR_HEADING_TEXT_DARK = Color(0xFFBEBEBE)
-private val COLOR_HEADING_TEXT_LIGHT = Color(0xFFBEBEBE)
 
 @Composable
 fun HeadingText(
   @StringRes text: Int
 ) {
   val isSystemThemeDark = isSystemInDarkTheme()
-  val headingTextDarkColor = COLOR_HEADING_TEXT_DARK
-  val headingTextLightColor = COLOR_HEADING_TEXT_LIGHT
   val color = if (isSystemThemeDark) {
-    headingTextDarkColor
+    dimHighlightedTextDark
   } else {
-    headingTextLightColor
+    dimHighlightedTextLight
   }
   Text(
     modifier = Modifier
