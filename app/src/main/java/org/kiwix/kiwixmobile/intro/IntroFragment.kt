@@ -18,41 +18,22 @@
 package org.kiwix.kiwixmobile.intro
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.core.view.isVisible
+import androidx.compose.ui.platform.ComposeView
 import androidx.navigation.fragment.findNavController
-import androidx.viewpager.widget.ViewPager
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
-import org.kiwix.kiwixmobile.databinding.FragmentIntroBinding
-import org.kiwix.kiwixmobile.zimManager.SimplePageChangeListener
-import java.util.Timer
-import java.util.TimerTask
 import javax.inject.Inject
 
 class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtensions {
-  companion object {
-    private const val TIMER_DELAY: Long = 0
-    private const val TIMER_PERIOD: Long = 2000
-    private const val ANIMATION_DURATION: Long = 800
-  }
-
-  private val handler = Handler(Looper.getMainLooper())
-  private var timer: Timer? = Timer()
-  private var fragmentIntroBinding: FragmentIntroBinding? = null
+  private lateinit var composeView: ComposeView
 
   @Inject
   internal lateinit var presenter: IntroContract.Presenter
-  private var currentPage = 0
-  private lateinit var views: Array<View>
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
@@ -60,34 +41,8 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    fragmentIntroBinding?.getStarted?.setOnClickListener { navigateToLibrary() }
-    fragmentIntroBinding?.viewPager?.let { viewPager ->
-      views =
-        arrayOf(
-          layoutInflater.inflate(R.layout.item_intro_1, viewPager, false),
-          layoutInflater.inflate(R.layout.item_intro_2, viewPager, false),
-          layoutInflater.inflate(R.layout.item_intro_3, viewPager, false)
-        )
-      viewPager.run {
-        adapter = IntroPagerAdapter(views)
-        simplePageChangeListener?.let(::addOnPageChangeListener)
-      }
-      fragmentIntroBinding?.tabIndicator?.setViewPager(viewPager)
-    }
-    timer?.schedule(
-      object : TimerTask() {
-        override fun run() {
-          handler.post {
-            if (currentPage == views.size) currentPage = 0
-            fragmentIntroBinding?.viewPager?.setCurrentItem(currentPage++, true)
-          }
-        }
-      },
-      TIMER_DELAY,
-      TIMER_PERIOD
-    )
-    views.forEach {
-      it.setOnClickListener { dismissAutoRotate() }
+    composeView.setContent {
+      IntroScreen { navigateToLibrary() }
     }
   }
 
@@ -95,52 +50,14 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
-    fragmentIntroBinding = FragmentIntroBinding.inflate(inflater, container, false)
-    return fragmentIntroBinding?.root
-  }
-
-  override fun onDestroyView() {
-    super.onDestroyView()
-    handler.removeCallbacksAndMessages(null)
-    timer?.cancel()
-    timer = null
-    views.forEach {
-      it.setOnClickListener(null)
+  ): View {
+    return ComposeView(requireContext()).also {
+      composeView = it
     }
-    views = emptyArray()
-    simplePageChangeListener = null
-    fragmentIntroBinding = null
   }
 
   private fun navigateToLibrary() {
-    dismissAutoRotate()
     presenter.setIntroShown()
     findNavController().navigate(IntroFragmentDirections.actionIntrofragmentToLibraryFragment())
   }
-
-  private fun updateView(position: Int) {
-    val airplane = views[1].findViewById<ImageView>(R.id.airplane) ?: return
-    airplane.isVisible = position == 1
-    if (position == 1) {
-      airplane.animate().translationX(airplane.width.toFloat()).duration = ANIMATION_DURATION
-    } else {
-      airplane.animate().translationX(-airplane.width.toFloat())
-    }
-    currentPage = position
-  }
-
-  private fun handleDraggingState(state: Int) {
-    if (state == ViewPager.SCROLL_STATE_DRAGGING) {
-      dismissAutoRotate()
-    }
-  }
-
-  private fun dismissAutoRotate() {
-    handler.removeCallbacksAndMessages(null)
-    timer?.cancel()
-  }
-
-  private var simplePageChangeListener: SimplePageChangeListener? =
-    SimplePageChangeListener(::updateView, ::handleDraggingState)
 }
