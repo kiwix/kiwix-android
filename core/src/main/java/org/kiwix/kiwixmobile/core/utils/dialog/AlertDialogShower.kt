@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.utils.dialog
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.res.Configuration
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -47,6 +48,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -80,6 +82,7 @@ class AlertDialogShower @Inject constructor(private val activity: Activity?) : D
 }
 
 @Preview
+@Preview(name = "Night", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun Preview() {
   val alertDialog = AlertDialogShower(null).apply {
@@ -147,7 +150,8 @@ fun ShowCustomComposeView(dialog: KiwixDialog) {
       painterResource(id = it),
       contentDescription = null,
       // Setting end padding to give space between icon and title
-      modifier = Modifier.padding(end = DIALOG_ICON_END_PADDING)
+      modifier = Modifier.padding(end = DIALOG_ICON_END_PADDING),
+      tint = Color.Unspecified
     )
   }
 }
