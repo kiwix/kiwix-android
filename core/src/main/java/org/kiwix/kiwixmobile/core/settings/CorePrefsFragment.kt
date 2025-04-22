@@ -25,6 +25,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -73,6 +74,8 @@ import java.io.InputStream
 import java.util.Locale
 import javax.inject.Inject
 import javax.xml.parsers.DocumentBuilderFactory
+
+const val ZERO_POINT_SEVEN = 0.7
 
 abstract class CorePrefsFragment :
   PreferenceFragmentCompat(),
@@ -311,6 +314,12 @@ abstract class CorePrefsFragment :
       LayoutInflater.from(
         requireActivity()
       ).inflate(R.layout.credits_webview, null) as WebView
+    val maxHeightInPx =
+      (Resources.getSystem().displayMetrics.heightPixels * ZERO_POINT_SEVEN).toInt()
+    view.layoutParams = ViewGroup.LayoutParams(
+      ViewGroup.LayoutParams.MATCH_PARENT,
+      maxHeightInPx
+    )
     view.loadUrl("file:///android_asset/credits.html")
     if (darkModeConfig?.isDarkModeActive() == true) {
       view.settings.javaScriptEnabled = true

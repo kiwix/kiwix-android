@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.utils.dialog
 
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.res.Configuration
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -53,15 +52,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_CUSTOM_VIEW_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_DEFAULT_PADDING_FOR_CONTENT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_ICON_END_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_MESSAGE_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_BOTTOM_PADDING
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_URI_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 import javax.inject.Inject
@@ -80,20 +80,6 @@ class AlertDialogShower @Inject constructor() : DialogShower {
   }
 }
 
-@Preview
-@Preview(name = "Night", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun Preview() {
-  val alertDialog = AlertDialogShower().apply {
-    dialogState.value = Triple(
-      KiwixDialog.SaveOrOpenUnsupportedFiles,
-      arrayOf({}),
-      "https://www.google.com".toUri()
-    )
-  }
-  DialogHost(alertDialog)
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DialogHost(alertDialogShower: AlertDialogShower) {
@@ -109,11 +95,18 @@ fun DialogHost(alertDialogShower: AlertDialogShower) {
         }
       ) {
         Surface(
-          modifier = Modifier.wrapContentSize(),
-          shape = MaterialTheme.shapes.small,
-          tonalElevation = AlertDialogDefaults.TonalElevation
+          modifier = Modifier
+            .wrapContentSize()
+            .wrapContentHeight(),
+          shape = MaterialTheme.shapes.extraSmall,
+          tonalElevation = AlertDialogDefaults.TonalElevation,
+          color = MaterialTheme.colorScheme.background
         ) {
-          Column(modifier = Modifier.padding(DIALOG_DEFAULT_PADDING_FOR_CONTENT)) {
+          Column(
+            modifier = Modifier
+              .padding(horizontal = DIALOG_DEFAULT_PADDING_FOR_CONTENT)
+              .padding(top = DIALOG_DEFAULT_PADDING_FOR_CONTENT)
+          ) {
             Row {
               DialogIcon(dialog)
               DialogTitle(dialog)
@@ -135,7 +128,8 @@ fun ShowCustomComposeView(dialog: KiwixDialog) {
     Box(
       modifier = Modifier
         .fillMaxWidth()
-        .wrapContentHeight(),
+        .wrapContentHeight()
+        .padding(bottom = DIALOG_CUSTOM_VIEW_BOTTOM_PADDING),
       contentAlignment = Alignment.TopStart
     ) {
       it.invoke()
@@ -169,7 +163,7 @@ private fun DialogConfirmButton(
         dialogConfirmButtonClick?.invoke()
       }
     ) {
-      Text(text = confirmButtonText)
+      Text(text = confirmButtonText.uppercase(), fontWeight = FontWeight.Medium)
     }
   }
 }
@@ -187,7 +181,7 @@ private fun DialogDismissButton(
         dismissButtonClick?.invoke()
       }
     ) {
-      Text(text = stringResource(id = it))
+      Text(text = stringResource(id = it).uppercase(), fontWeight = FontWeight.Medium)
     }
   }
 }
@@ -206,7 +200,7 @@ private fun DialogNaturalButton(
       },
       modifier = Modifier.wrapContentWidth(Alignment.Start)
     ) {
-      Text(text = stringResource(id = it))
+      Text(text = stringResource(id = it).uppercase(), fontWeight = FontWeight.Medium)
     }
   }
 }
@@ -238,7 +232,11 @@ private fun DialogTitle(dialog: KiwixDialog) {
   dialog.title?.let {
     Text(
       text = stringResource(id = it),
-      style = MaterialTheme.typography.titleMedium,
+      style = MaterialTheme.typography.titleSmall.copy(
+        fontSize = DIALOG_TITLE_TEXT_SIZE,
+        lineHeight = 32.sp,
+        fontWeight = FontWeight.Medium
+      ),
       modifier = Modifier
         .fillMaxWidth()
         .padding(bottom = DIALOG_TITLE_BOTTOM_PADDING)
