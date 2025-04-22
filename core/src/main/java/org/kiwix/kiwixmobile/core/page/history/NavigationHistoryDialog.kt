@@ -37,6 +37,7 @@ import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryAdapter
 import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryDelegate.NavigationDelegate
 import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import javax.inject.Inject
 
@@ -113,6 +114,7 @@ class NavigationHistoryDialog(
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         setHasFixedSize(true)
       }
+      dialogHostView.setContent { DialogHost(alertDialogShower) }
     }
     deleteItem?.setOnMenuItemClickListener {
       showConfirmClearHistoryDialog()
