@@ -432,7 +432,7 @@ abstract class CoreReaderFragment :
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    fragmentReaderBinding?.dialogHostView?.setContent { DialogHost(alertDialogShower as AlertDialogShower) }
+    addAlertDialogToDialogHost()
     setupMenu()
     donationDialogHandler?.setDonationDialogCallBack(this)
     val activity = requireActivity() as AppCompatActivity?
@@ -531,6 +531,11 @@ abstract class CoreReaderFragment :
       Observer(::storeSearchItem)
     )
     handleClicks()
+  }
+
+  private fun addAlertDialogToDialogHost() {
+    fragmentReaderBinding?.dialogHostView?.setContent { DialogHost(alertDialogShower as AlertDialogShower) }
+    externalLinkOpener?.setAlertDialogShower(alertDialogShower as AlertDialogShower)
   }
 
   private fun prepareViews() {

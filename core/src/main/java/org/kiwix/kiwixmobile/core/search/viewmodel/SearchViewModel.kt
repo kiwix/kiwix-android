@@ -61,6 +61,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScree
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.libzim.SuggestionSearch
 import javax.inject.Inject
 
@@ -89,10 +90,15 @@ class SearchViewModel @Inject constructor(
   private val filter = MutableStateFlow("")
   private val searchOrigin = MutableStateFlow(FromWebView)
   val voiceSearchResult: MutableLiveData<String?> = MutableLiveData(null)
+  private lateinit var alertDialogShower: AlertDialogShower
 
   init {
     viewModelScope.launch { reducer() }
     viewModelScope.launch { actionMapper() }
+  }
+
+  fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
+    this.alertDialogShower = alertDialogShower
   }
 
   @Suppress("DEPRECATION")
@@ -174,7 +180,13 @@ class SearchViewModel @Inject constructor(
     _effects.trySend(SearchInPreviousScreen(state.value.searchTerm)).isSuccess
 
   private fun showDeleteDialog(longClick: OnItemLongClick) {
-    _effects.trySend(ShowDeleteSearchDialog(longClick.searchListItem, actions)).isSuccess
+    _effects.trySend(
+      ShowDeleteSearchDialog(
+        longClick.searchListItem,
+        actions,
+        alertDialogShower
+      )
+    ).isSuccess
   }
 
   private fun saveSearchAndOpenItem(searchListItem: SearchListItem, openInNewTab: Boolean) {

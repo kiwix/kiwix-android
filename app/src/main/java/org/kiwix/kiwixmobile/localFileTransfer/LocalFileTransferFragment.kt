@@ -147,10 +147,12 @@ class LocalFileTransferFragment :
     }
 
     displayFileTransferProgress(filesForTransfer)
-
-    wifiDirectManager.callbacks = this
-    wifiDirectManager.lifecycleCoroutineScope = lifecycleScope
-    wifiDirectManager.startWifiDirectManager(filesForTransfer)
+    wifiDirectManager.apply {
+      callbacks = this@LocalFileTransferFragment
+      lifecycleCoroutineScope = lifecycleScope
+      startWifiDirectManager(filesForTransfer)
+      setAlertDialogShower(alertDialogShower)
+    }
   }
 
   private fun actionMenuItem() = listOf(

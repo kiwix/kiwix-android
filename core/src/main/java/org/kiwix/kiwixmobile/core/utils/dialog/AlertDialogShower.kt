@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.utils.dialog
 
-import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.res.Configuration
@@ -68,7 +67,7 @@ import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 import javax.inject.Inject
 
 @Suppress("UnusedPrivateProperty")
-class AlertDialogShower @Inject constructor(private val activity: Activity?) : DialogShower {
+class AlertDialogShower @Inject constructor() : DialogShower {
   val dialogState = mutableStateOf<Triple<KiwixDialog, Array<out () -> Unit>, Uri?>?>(null)
 
   @OptIn(ExperimentalMaterial3Api::class)
@@ -85,7 +84,7 @@ class AlertDialogShower @Inject constructor(private val activity: Activity?) : D
 @Preview(name = "Night", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun Preview() {
-  val alertDialog = AlertDialogShower(null).apply {
+  val alertDialog = AlertDialogShower().apply {
     dialogState.value = Triple(
       KiwixDialog.SaveOrOpenUnsupportedFiles,
       arrayOf({}),

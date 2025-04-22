@@ -61,7 +61,7 @@ class HistoryViewModel @Inject constructor(
     state: HistoryState,
     viewModelScope: CoroutineScope
   ) =
-    ShowDeleteHistoryDialog(effects, state, pageDao, viewModelScope)
+    ShowDeleteHistoryDialog(effects, state, pageDao, viewModelScope, alertDialogShower)
 
   override fun deselectAllPages(state: HistoryState): HistoryState =
     state.copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })

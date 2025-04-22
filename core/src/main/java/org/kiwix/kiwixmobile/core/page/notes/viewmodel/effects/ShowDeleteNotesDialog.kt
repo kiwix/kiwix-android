@@ -29,15 +29,14 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.effects.DeletePageItems
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteAllNotes
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteSelectedNotes
-import javax.inject.Inject
 
 data class ShowDeleteNotesDialog(
   private val effects: PublishProcessor<SideEffect<*>>,
   private val state: NotesState,
   private val pageDao: PageDao,
-  private val viewModelScope: CoroutineScope
+  private val viewModelScope: CoroutineScope,
+  private val dialogShower: DialogShower
 ) : SideEffect<Unit> {
-  @Inject lateinit var dialogShower: DialogShower
   override fun invokeWith(activity: AppCompatActivity) {
     activity.cachedComponent.inject(this)
     dialogShower.show(

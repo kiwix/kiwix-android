@@ -196,6 +196,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     fragmentDestinationDownloadBinding?.dialogHostView?.setContent {
       DialogHost(alertDialogShower)
     }
+    zimManageViewModel.setAlertDialogShower(alertDialogShower)
     return fragmentDestinationDownloadBinding?.root
   }
 

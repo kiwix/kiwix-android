@@ -51,6 +51,8 @@ import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import javax.inject.Inject
 
 const val SEARCH_ICON_TESTING_TAG = "searchIconTestingTag"
@@ -62,6 +64,8 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+
+  @Inject lateinit var alertDialogShower: AlertDialogShower
   private var actionMode: ActionMode? = null
   val compositeDisposable = CompositeDisposable()
   abstract val screenTitle: Int
@@ -144,6 +148,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
     val activity = requireActivity() as CoreMainActivity
     compositeDisposable.add(pageViewModel.effects.subscribe { it.invokeWith(activity) })
     pageViewModel.state.observe(viewLifecycleOwner, Observer(::render))
+    pageViewModel.alertDialogShower = alertDialogShower
   }
 
   override fun onCreateView(
@@ -170,6 +175,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
             onDeleteClick = { pageViewModel.actions.offer(Action.UserClickedDeleteButton) }
           )
         )
+        DialogHost(alertDialogShower)
       }
     }
   }

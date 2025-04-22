@@ -67,7 +67,6 @@ import javax.inject.Inject
 class CopyMoveFileHandler @Inject constructor(
   private val activity: Activity,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val alertDialogShower: AlertDialogShower,
   private val storageCalculator: StorageCalculator,
   private val fat32Checker: Fat32Checker
 ) {
@@ -82,6 +81,7 @@ class CopyMoveFileHandler @Inject constructor(
   var shouldValidateZimFile: Boolean = false
   private var fileSystemDisposable: Disposable? = null
   private lateinit var fragmentManager: FragmentManager
+  private lateinit var alertDialogShower: AlertDialogShower
 
   private val copyMoveTitle: String by lazy {
     if (isMoveOperation) {
@@ -89,6 +89,10 @@ class CopyMoveFileHandler @Inject constructor(
     } else {
       activity.getString(R.string.copying_zim_file)
     }
+  }
+
+  fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
+    this.alertDialogShower = alertDialogShower
   }
 
   private fun updateProgress(progress: Int) {

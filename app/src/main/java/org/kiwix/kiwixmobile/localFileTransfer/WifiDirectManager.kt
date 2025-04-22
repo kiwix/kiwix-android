@@ -61,7 +61,6 @@ import javax.inject.Inject
 class WifiDirectManager @Inject constructor(
   private val context: Context,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val alertDialogShower: AlertDialogShower,
   private val manager: WifiP2pManager?
 ) : ChannelListener, PeerListListener, ConnectionInfoListener, P2pEventListener {
   var callbacks: Callbacks? = null
@@ -87,6 +86,11 @@ class WifiDirectManager @Inject constructor(
 
   private var hasSenderStartedConnection = false
   lateinit var lifecycleCoroutineScope: LifecycleCoroutineScope
+  private lateinit var alertDialogShower: AlertDialogShower
+
+  fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
+    this.alertDialogShower = alertDialogShower
+  }
 
   // Initialisations for using the WiFi P2P API
   fun startWifiDirectManager(filesForTransfer: List<FileItem>) {

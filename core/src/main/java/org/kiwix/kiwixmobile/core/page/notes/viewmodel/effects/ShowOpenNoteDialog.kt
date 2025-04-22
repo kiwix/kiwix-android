@@ -29,14 +29,13 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.ShowNoteDialog
-import javax.inject.Inject
 
 data class ShowOpenNoteDialog(
   private val effects: PublishProcessor<SideEffect<*>>,
   private val page: Page,
-  private val zimReaderContainer: ZimReaderContainer
+  private val zimReaderContainer: ZimReaderContainer,
+  private val dialogShower: DialogShower
 ) : SideEffect<Unit> {
-  @Inject lateinit var dialogShower: DialogShower
   override fun invokeWith(activity: AppCompatActivity) {
     activity.cachedComponent.inject(this)
     dialogShower.show(
