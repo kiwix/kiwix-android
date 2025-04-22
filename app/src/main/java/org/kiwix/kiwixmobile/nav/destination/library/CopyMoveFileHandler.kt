@@ -513,7 +513,7 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   private fun hidePreparingCopyMoveDialog() {
-    alertDialogShower.clear()
+    alertDialogShower.dismiss()
   }
 
   @SuppressLint("InflateParams")

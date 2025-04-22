@@ -436,7 +436,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   override fun onServerStarted(ip: String) {
     // Dismiss dialog when server started.
-    alertDialogShower.clear()
+    alertDialogShower.dismiss()
     this.ip = ip
     layoutServerStarted()
   }
@@ -447,7 +447,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   override fun onServerFailedToStart(errorMessage: Int?) {
     // Dismiss dialog if there is some error in starting the server.
-    alertDialogShower.clear()
+    alertDialogShower.dismiss()
     errorMessage?.let {
       toast(errorMessage)
     }
@@ -515,7 +515,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   override fun onIpAddressInvalid() {
-    alertDialogShower.clear()
+    alertDialogShower.dismiss()
     toast(R.string.server_failed_message, Toast.LENGTH_SHORT)
   }
 

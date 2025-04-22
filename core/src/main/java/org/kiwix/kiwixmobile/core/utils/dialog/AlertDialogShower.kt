@@ -31,10 +31,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -51,15 +51,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_DEFAULT_PADDING_FOR_CONTENT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_ICON_END_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_MESSAGE_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_BOTTOM_PADDING
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_URI_TOP_PADDING
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_URI_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 import javax.inject.Inject
 
@@ -72,7 +74,7 @@ class AlertDialogShower @Inject constructor(private val activity: Activity?) : D
     dialogState.value = Triple(dialog, clickListeners, uri)
   }
 
-  fun clear() {
+  fun dismiss() {
     dialogState.value = null
   }
 }
@@ -82,9 +84,9 @@ class AlertDialogShower @Inject constructor(private val activity: Activity?) : D
 private fun Preview() {
   val alertDialog = AlertDialogShower(null).apply {
     dialogState.value = Triple(
-      KiwixDialog.WiFiOnWhenHostingBooks,
+      KiwixDialog.SaveOrOpenUnsupportedFiles,
       arrayOf({}),
-      null
+      "https://www.google.com".toUri()
     )
   }
   DialogHost(alertDialog)
@@ -100,7 +102,7 @@ fun DialogHost(alertDialogShower: AlertDialogShower) {
       BasicAlertDialog(
         onDismissRequest = {
           if (dialog.cancelable) {
-            alertDialogShower.clear()
+            alertDialogShower.dismiss()
           }
         }
       ) {
@@ -160,7 +162,7 @@ private fun DialogConfirmButton(
   if (confirmButtonText.isNotEmpty()) {
     TextButton(
       onClick = {
-        alertDialogShower.clear()
+        alertDialogShower.dismiss()
         dialogConfirmButtonClick?.invoke()
       }
     ) {
@@ -178,7 +180,7 @@ private fun DialogDismissButton(
   dialog.dismissButtonText?.let {
     TextButton(
       onClick = {
-        alertDialogShower.clear()
+        alertDialogShower.dismiss()
         dismissButtonClick?.invoke()
       }
     ) {
@@ -191,19 +193,40 @@ private fun DialogDismissButton(
 private fun DialogNaturalButton(
   dialog: KiwixDialog,
   neutralButtonClick: (() -> Unit)?,
-  alertDialogShower: AlertDialogShower,
-  modifier: Modifier
+  alertDialogShower: AlertDialogShower
 ) {
   dialog.neutralButtonText?.let {
     TextButton(
       onClick = {
-        alertDialogShower.clear()
+        alertDialogShower.dismiss()
         neutralButtonClick?.invoke()
       },
-      modifier = modifier
+      modifier = Modifier.wrapContentWidth(Alignment.Start)
     ) {
       Text(text = stringResource(id = it))
     }
+  }
+}
+
+@Composable
+private fun ShowDialogButtons(
+  dialog: KiwixDialog,
+  clickListeners: Array<out () -> Unit>,
+  alertDialogShower: AlertDialogShower
+) {
+  Row(
+    horizontalArrangement = Arrangement.End,
+    verticalAlignment = Alignment.CenterVertically,
+    modifier = Modifier.fillMaxWidth()
+  ) {
+    DialogNaturalButton(
+      dialog,
+      clickListeners.getOrNull(2),
+      alertDialogShower
+    )
+    Spacer(modifier = Modifier.weight(1f))
+    DialogDismissButton(dialog, clickListeners.getOrNull(1), alertDialogShower)
+    DialogConfirmButton(dialog, clickListeners.getOrNull(0), alertDialogShower)
   }
 }
 
@@ -239,12 +262,13 @@ private fun DialogMessage(dialog: KiwixDialog) {
 private fun ShowUri(uri: Uri?) {
   val context = LocalContext.current
   uri?.let {
-    Spacer(modifier = Modifier.height(DIALOG_URI_TOP_PADDING))
     Text(
       text = "</br><a href=$uri> <b>$uri</b>".fromHtml().toString(),
       color = MaterialTheme.colorScheme.primary,
+      fontSize = DIALOG_URI_TEXT_SIZE,
+      textAlign = TextAlign.Center,
       modifier = Modifier
-        .padding(top = DIALOG_URI_TOP_PADDING)
+        .fillMaxWidth()
         .combinedClickable(
           onClick = {
             // nothing to do
@@ -262,28 +286,6 @@ private fun ShowUri(uri: Uri?) {
           }
         )
     )
-  }
-}
-
-@Composable
-private fun ShowDialogButtons(
-  dialog: KiwixDialog,
-  clickListeners: Array<out () -> Unit>,
-  alertDialogShower: AlertDialogShower
-) {
-  Row(
-    horizontalArrangement = Arrangement.End,
-    verticalAlignment = Alignment.CenterVertically,
-    modifier = Modifier.fillMaxWidth()
-  ) {
-    DialogNaturalButton(
-      dialog,
-      clickListeners.getOrNull(2),
-      alertDialogShower,
-      modifier = Modifier.weight(1f)
-    )
-    DialogDismissButton(dialog, clickListeners.getOrNull(1), alertDialogShower)
-    DialogConfirmButton(dialog, clickListeners.getOrNull(0), alertDialogShower)
   }
 }
 
