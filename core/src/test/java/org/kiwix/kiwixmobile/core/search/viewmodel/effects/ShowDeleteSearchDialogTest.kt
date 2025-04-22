@@ -37,8 +37,8 @@ internal class ShowDeleteSearchDialogTest {
     val actions = mockk<Channel<Action>>(relaxed = true)
     val searchListItem = RecentSearchListItem("", "")
     val activity = mockk<CoreMainActivity>()
-    val showDeleteSearchDialog = ShowDeleteSearchDialog(searchListItem, actions)
     val dialogShower = mockk<DialogShower>()
+    val showDeleteSearchDialog = ShowDeleteSearchDialog(searchListItem, actions, dialogShower)
     every { activity.cachedComponent.inject(showDeleteSearchDialog) } answers {
       showDeleteSearchDialog.dialogShower = dialogShower
       Unit

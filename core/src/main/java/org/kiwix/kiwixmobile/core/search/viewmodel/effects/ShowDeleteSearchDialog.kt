@@ -30,7 +30,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteSearch
 data class ShowDeleteSearchDialog(
   private val searchListItem: SearchListItem,
   private val actions: Channel<Action>,
-  private val dialogShower: DialogShower
+  var dialogShower: DialogShower
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     activity.cachedComponent.inject(this)

@@ -48,6 +48,7 @@ import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.Language
@@ -98,6 +99,7 @@ class ZimManageViewModelTest {
   private val defaultLanguageProvider: DefaultLanguageProvider = mockk()
   private val dataSource: DataSource = mockk()
   private val connectivityManager: ConnectivityManager = mockk()
+  private val alertDialogShower: AlertDialogShower = mockk()
 
   @Suppress("DEPRECATION")
   private val networkCapabilities: NetworkCapabilities = mockk()
@@ -165,7 +167,10 @@ class ZimManageViewModelTest {
         dataSource,
         connectivityManager,
         sharedPreferenceUtil
-      ).apply(ZimManageViewModel::setIsUnitTestCase)
+      ).apply {
+        setIsUnitTestCase()
+        setAlertDialogShower(alertDialogShower)
+      }
     testScheduler.triggerActions()
   }
 
@@ -479,7 +484,7 @@ class ZimManageViewModelTest {
         FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
       viewModel.sideEffects.test()
         .also { viewModel.fileSelectActions.offer(RequestDeleteMultiSelection) }
-        .assertValues(DeleteFiles(listOf(selectedBook)))
+        .assertValues(DeleteFiles(listOf(selectedBook), alertDialogShower))
     }
 
     @Test

@@ -49,7 +49,13 @@ internal class ShowDeleteBookmarksDialogTest {
   @Test
   fun `invoke with shows dialog that offers ConfirmDelete action`() {
     val showDeleteBookmarksDialog =
-      ShowDeleteBookmarksDialog(effects, bookmarkState(), newBookmarksDao, viewModelScope)
+      ShowDeleteBookmarksDialog(
+        effects,
+        bookmarkState(),
+        newBookmarksDao,
+        viewModelScope,
+        dialogShower
+      )
     mockkActivityInjection(showDeleteBookmarksDialog)
     val lambdaSlot = slot<() -> Unit>()
     showDeleteBookmarksDialog.invokeWith(activity)
@@ -83,7 +89,8 @@ internal class ShowDeleteBookmarksDialogTest {
             )
           ),
           newBookmarksDao,
-          viewModelScope
+          viewModelScope,
+          dialogShower
         )
       mockkActivityInjection(showDeleteBookmarksDialog)
       showDeleteBookmarksDialog.invokeWith(activity)
@@ -107,7 +114,8 @@ internal class ShowDeleteBookmarksDialogTest {
             )
           ),
           newBookmarksDao,
-          viewModelScope
+          viewModelScope,
+          dialogShower
         )
       mockkActivityInjection(showDeleteBookmarksDialog)
       showDeleteBookmarksDialog.invokeWith(activity)

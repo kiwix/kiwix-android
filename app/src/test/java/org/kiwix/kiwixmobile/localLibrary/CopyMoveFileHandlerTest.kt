@@ -79,10 +79,10 @@ class CopyMoveFileHandlerTest {
     fileHandler = CopyMoveFileHandler(
       activity,
       sharedPreferenceUtil,
-      alertDialogShower,
       storageCalculator,
       fat32Checker
     ).apply {
+      setAlertDialogShower(alertDialogShower)
       setSelectedFileAndUri(null, selectedFile)
       setLifeCycleScope(testScope)
       setFileCopyMoveCallback(this@CopyMoveFileHandlerTest.fileCopyMoveCallback)

@@ -35,7 +35,7 @@ data class ShowDeleteHistoryDialog(
   private val state: HistoryState,
   private val pageDao: PageDao,
   private val viewModelScope: CoroutineScope,
-  private val dialogShower: DialogShower
+  var dialogShower: DialogShower
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     activity.cachedComponent.inject(this)

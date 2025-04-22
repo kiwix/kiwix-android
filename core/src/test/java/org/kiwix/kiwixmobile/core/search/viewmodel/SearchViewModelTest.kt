@@ -73,6 +73,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchInPreviousScree
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.libzim.SuggestionSearch
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -81,6 +82,7 @@ internal class SearchViewModelTest {
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val searchResultGenerator: SearchResultGenerator = mockk()
   private val zimFileReader: ZimFileReader = mockk()
+  private val dialogShower = mockk<AlertDialogShower>(relaxed = true)
   private val testDispatcher = StandardTestDispatcher()
   private val searchMutex: Mutex = mockk()
 
@@ -106,7 +108,14 @@ internal class SearchViewModelTest {
     every { zimReaderContainer.id } returns "id"
     every { recentSearchRoomDao.recentSearches("id") } returns recentsFromDb.consumeAsFlow()
     viewModel =
-      SearchViewModel(recentSearchRoomDao, zimReaderContainer, searchResultGenerator, searchMutex)
+      SearchViewModel(
+        recentSearchRoomDao,
+        zimReaderContainer,
+        searchResultGenerator,
+        searchMutex
+      ).apply {
+        setAlertDialogShower(dialogShower)
+      }
   }
 
   @Nested
@@ -192,7 +201,7 @@ internal class SearchViewModelTest {
         val searchListItem = RecentSearchListItem("", "")
         actionResultsInEffects(
           OnItemLongClick(searchListItem),
-          ShowDeleteSearchDialog(searchListItem, viewModel.actions)
+          ShowDeleteSearchDialog(searchListItem, viewModel.actions, dialogShower)
         )
       }
 
