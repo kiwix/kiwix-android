@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -52,10 +51,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_BUTTON_TEXT_LETTER_SPACING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_CUSTOM_VIEW_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_DEFAULT_PADDING_FOR_CONTENT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_ICON_END_PADDING
@@ -163,7 +163,11 @@ private fun DialogConfirmButton(
         dialogConfirmButtonClick?.invoke()
       }
     ) {
-      Text(text = confirmButtonText.uppercase(), fontWeight = FontWeight.Medium)
+      Text(
+        text = confirmButtonText.uppercase(),
+        fontWeight = FontWeight.Medium,
+        letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING
+      )
     }
   }
 }
@@ -181,7 +185,11 @@ private fun DialogDismissButton(
         dismissButtonClick?.invoke()
       }
     ) {
-      Text(text = stringResource(id = it).uppercase(), fontWeight = FontWeight.Medium)
+      Text(
+        text = stringResource(id = it).uppercase(),
+        fontWeight = FontWeight.Medium,
+        letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING
+      )
     }
   }
 }
@@ -200,7 +208,11 @@ private fun DialogNaturalButton(
       },
       modifier = Modifier.wrapContentWidth(Alignment.Start)
     ) {
-      Text(text = stringResource(id = it).uppercase(), fontWeight = FontWeight.Medium)
+      Text(
+        text = stringResource(id = it).uppercase(),
+        fontWeight = FontWeight.Medium,
+        letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING
+      )
     }
   }
 }
@@ -221,7 +233,7 @@ private fun ShowDialogButtons(
       clickListeners.getOrNull(2),
       alertDialogShower
     )
-    Spacer(modifier = Modifier.weight(1f))
+    // Spacer(modifier = Modifier.weight(1f))
     DialogDismissButton(dialog, clickListeners.getOrNull(1), alertDialogShower)
     DialogConfirmButton(dialog, clickListeners.getOrNull(0), alertDialogShower)
   }
@@ -234,7 +246,6 @@ private fun DialogTitle(dialog: KiwixDialog) {
       text = stringResource(id = it),
       style = MaterialTheme.typography.titleSmall.copy(
         fontSize = DIALOG_TITLE_TEXT_SIZE,
-        lineHeight = 32.sp,
         fontWeight = FontWeight.Medium
       ),
       modifier = Modifier
@@ -266,6 +277,7 @@ private fun ShowUri(uri: Uri?) {
     Text(
       text = "</br><a href=$uri> <b>$uri</b>".fromHtml().toString(),
       color = MaterialTheme.colorScheme.primary,
+      textDecoration = TextDecoration.Underline,
       fontSize = DIALOG_URI_TEXT_SIZE,
       textAlign = TextAlign.Center,
       modifier = Modifier
