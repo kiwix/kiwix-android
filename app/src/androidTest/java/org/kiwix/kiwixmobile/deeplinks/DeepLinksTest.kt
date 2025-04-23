@@ -21,13 +21,14 @@ package org.kiwix.kiwixmobile.deeplinks
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.core.content.FileProvider
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.accessibility.AccessibilityChecks
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
@@ -41,9 +42,10 @@ import org.junit.Test
 import org.junit.jupiter.api.fail
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.page.history.navigationHistory
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -57,6 +59,9 @@ class DeepLinksTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
+
+  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  val composeTestRule = createComposeRule()
   private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
   init {
@@ -98,7 +103,7 @@ class DeepLinksTest : BaseActivityTest() {
     loadZimFileInApplicationAndReturnSchemeTypeUri("file")?.let {
       // Launch the activity to test the deep link
       ActivityScenario.launch<KiwixMainActivity>(createDeepLinkIntent(it)).onActivity {}
-      clickOnCopy()
+      clickOnCopy(composeTestRule)
       navigationHistory {
         checkZimFileLoadedSuccessful(R.id.readerFragment)
         assertZimFileLoaded() // check if the zim file successfully loaded
@@ -110,10 +115,13 @@ class DeepLinksTest : BaseActivityTest() {
     }
   }
 
-  private fun clickOnCopy() {
+  private fun clickOnCopy(composeTestRule: ComposeContentTestRule) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       testFlakyView({
-        onView(withText(string.action_copy)).perform(click())
+        composeTestRule.apply {
+          waitForIdle()
+          onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).performClick()
+        }
       })
     }
   }
@@ -123,7 +131,7 @@ class DeepLinksTest : BaseActivityTest() {
     loadZimFileInApplicationAndReturnSchemeTypeUri("content")?.let {
       // Launch the activity to test the deep link
       ActivityScenario.launch<KiwixMainActivity>(createDeepLinkIntent(it)).onActivity {}
-      clickOnCopy()
+      clickOnCopy(composeTestRule)
       navigationHistory {
         checkZimFileLoadedSuccessful(R.id.readerFragment)
         assertZimFileLoaded() // check if the zim file successfully loaded

@@ -39,6 +39,8 @@ import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
@@ -193,9 +195,17 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     if (toolbar != null) {
       activity.setupDrawerToggle(toolbar)
     }
-    fragmentDestinationDownloadBinding?.dialogHostView?.setContent {
-      DialogHost(alertDialogShower)
+    val composeView = ComposeView(requireContext()).apply {
+      setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+      layoutParams = ViewGroup.LayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT
+      )
+      setContent {
+        DialogHost(alertDialogShower)
+      }
     }
+    fragmentDestinationDownloadBinding?.root?.addView(composeView)
     zimManageViewModel.setAlertDialogShower(alertDialogShower)
     return fragmentDestinationDownloadBinding?.root
   }

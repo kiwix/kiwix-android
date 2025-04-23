@@ -118,8 +118,4 @@ class TopLevelDestinationRobot : BaseRobot() {
       clickOn(TextId(string.menu_support_kiwix))
     }
   }
-
-  fun assertExternalLinkDialogDisplayed() {
-    testFlakyView({ isVisible(TextId(string.external_link_popup_dialog_title)) })
-  }
 }

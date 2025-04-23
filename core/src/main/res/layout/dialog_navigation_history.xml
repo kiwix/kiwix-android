@@ -46,9 +46,4 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
-  <androidx.compose.ui.platform.ComposeView
-    android:id="@+id/dialogHostView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

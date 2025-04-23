@@ -67,6 +67,8 @@ import androidx.annotation.AnimRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Group
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -534,7 +536,17 @@ abstract class CoreReaderFragment :
   }
 
   private fun addAlertDialogToDialogHost() {
-    fragmentReaderBinding?.dialogHostView?.setContent { DialogHost(alertDialogShower as AlertDialogShower) }
+    val composeView = ComposeView(requireContext()).apply {
+      setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+      layoutParams = ViewGroup.LayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT
+      )
+      setContent {
+        DialogHost(alertDialogShower as AlertDialogShower)
+      }
+    }
+    fragmentReaderBinding?.root?.addView(composeView)
     externalLinkOpener?.setAlertDialogShower(alertDialogShower as AlertDialogShower)
   }
 
@@ -1091,7 +1103,7 @@ abstract class CoreReaderFragment :
                 .mapTo(webViewBackWordHistoryList) { it.url }
                 .reverse()
             }
-          } catch (ignore: Exception) {
+          } catch (_: Exception) {
             // Catch any exception thrown by the WebView since
             // `copyBackForwardList` can throw an error.
           }

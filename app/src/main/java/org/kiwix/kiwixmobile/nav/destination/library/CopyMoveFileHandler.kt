@@ -443,7 +443,7 @@ class CopyMoveFileHandler @Inject constructor(
       // create archive object, and check if it has the mainEntry or not to validate the ZIM file.
       archive = ZimReaderSource(destinationFile).createArchive()
       archive?.hasMainEntry() == true
-    } catch (ignore: Exception) {
+    } catch (_: Exception) {
       // if it is a invalid ZIM file
       false
     } finally {
@@ -512,7 +512,7 @@ class CopyMoveFileHandler @Inject constructor(
     return destinationFile
   }
 
-  fun showPreparingCopyMoveDialog() {
+  private fun showPreparingCopyMoveDialog() {
     alertDialogShower.show(KiwixDialog.PreparingCopyingFilesDialog { ContentLoadingProgressBar() })
   }
 

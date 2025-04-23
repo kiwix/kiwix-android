@@ -106,9 +106,4 @@
         tools:ignore="SmallSp" />
     </LinearLayout>
   </androidx.cardview.widget.CardView>
-
-  <androidx.compose.ui.platform.ComposeView
-    android:id="@+id/dialogHostView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

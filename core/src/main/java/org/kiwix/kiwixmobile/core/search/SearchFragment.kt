@@ -30,6 +30,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
@@ -154,7 +156,17 @@ class SearchFragment : BaseFragment() {
       }
     }
     handleBackPress()
-    fragmentSearchBinding?.dialogHostView?.setContent { DialogHost(dialogShower as AlertDialogShower) }
+    val composeView = ComposeView(requireContext()).apply {
+      setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+      layoutParams = ViewGroup.LayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT
+      )
+      setContent {
+        DialogHost(dialogShower as AlertDialogShower)
+      }
+    }
+    fragmentSearchBinding?.root?.addView(composeView)
     searchViewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
   }
 

@@ -26,15 +26,12 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.RootMatchers.isDialog
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferRobot
 import org.kiwix.kiwixmobile.localFileTransfer.localFileTransfer
@@ -46,7 +43,6 @@ import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.refresh
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.ui.BOOK_ITEM_TESTING_TAG
-import java.lang.AssertionError
 
 fun library(func: LibraryRobot.() -> Unit) = LibraryRobot().applyWithViewHierarchyPrinting(func)
 
@@ -128,7 +124,7 @@ class LibraryRobot : BaseRobot() {
         zimFileNodes[index].performTouchInput { longClick() }
       }
       clickOnFileDeleteIcon()
-      clickOnDeleteZimFile()
+      clickOnDeleteZimFile(composeTestRule)
       pauseForBetterTestPerformance()
       assertNoFilesTextDisplayed(composeTestRule)
     } catch (e: Exception) {
@@ -145,10 +141,15 @@ class LibraryRobot : BaseRobot() {
     testFlakyView({ clickOn(ViewId(R.id.zim_file_delete_item)) })
   }
 
-  private fun clickOnDeleteZimFile() {
+  private fun clickOnDeleteZimFile(composeTestRule: ComposeContentTestRule) {
     // This code is flaky since the DELETE button is inside the dialog, and sometimes it visible
     // on window but espresso unable to find it so we are adding a retrying mechanism here.
-    testFlakyView({ onView(withText("DELETE")).inRoot(isDialog()).perform(click()) })
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).performClick()
+      }
+    })
   }
 
   private fun pauseForBetterTestPerformance() {

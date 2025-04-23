@@ -25,6 +25,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -97,7 +99,18 @@ class NavigationHistoryDialog(
       inflateMenu(R.menu.menu_page)
       this.menu?.findItem(R.id.menu_page_search)?.isVisible = false
     }
+    val composeView = ComposeView(requireContext()).apply {
+      setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+      layoutParams = ViewGroup.LayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT
+      )
+      setContent {
+        DialogHost(alertDialogShower)
+      }
+    }
     dialogNavigationHistoryBinding?.apply {
+      root.addView(composeView)
       if (navigationHistoryList.isEmpty()) {
         deleteItem?.isEnabled = false
         deleteItem?.icon?.alpha = DISABLE_ICON_ITEM_ALPHA
@@ -114,7 +127,6 @@ class NavigationHistoryDialog(
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         setHasFixedSize(true)
       }
-      dialogHostView.setContent { DialogHost(alertDialogShower) }
     }
     deleteItem?.setOnMenuItemClickListener {
       showConfirmClearHistoryDialog()

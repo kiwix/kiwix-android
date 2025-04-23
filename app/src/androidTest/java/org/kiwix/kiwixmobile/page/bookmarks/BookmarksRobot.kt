@@ -34,7 +34,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
@@ -42,6 +41,7 @@ import org.kiwix.kiwixmobile.core.page.NO_ITEMS_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.PAGE_LIST_TEST_TAG
 import org.kiwix.kiwixmobile.core.page.SWITCH_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
@@ -69,13 +69,26 @@ class BookmarksRobot : BaseRobot() {
     }
   }
 
-  fun assertDeleteBookmarksDialogDisplayed() {
-    testFlakyView({ isVisible(TextId(R.string.delete_bookmarks)) })
+  fun assertDeleteBookmarksDialogDisplayed(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
+          .assertTextEquals(context.getString(R.string.delete_bookmarks))
+      }
+    })
   }
 
-  fun clickOnDeleteButton() {
+  fun clickOnDeleteButton(composeTestRule: ComposeContentTestRule) {
     pauseForBetterTestPerformance()
-    testFlakyView({ onView(withText("DELETE")).perform(click()) })
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
+          .assertTextEquals(context.getString(R.string.delete).uppercase())
+          .performClick()
+      }
+    })
   }
 
   fun assertNoBookMarkTextDisplayed(composeTestRule: ComposeTestRule) {

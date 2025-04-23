@@ -40,13 +40,11 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChan
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
-import org.kiwix.kiwixmobile.help.HelpRobot
 import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryRobot
 import org.kiwix.kiwixmobile.settings.SettingsRobot
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
-import org.kiwix.kiwixmobile.webserver.ZimHostRobot
 
 class TopLevelDestinationTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
@@ -120,16 +118,16 @@ class TopLevelDestinationTest : BaseActivityTest() {
       clickBookmarksOnNavDrawer {
         assertBookMarksDisplayed(composeTestRule)
         clickOnTrashIcon(composeTestRule)
-        assertDeleteBookmarksDialogDisplayed()
+        assertDeleteBookmarksDialogDisplayed(composeTestRule)
       }
       clickHistoryOnSideNav {
         assertHistoryDisplayed(composeTestRule)
         clickOnTrashIcon(composeTestRule)
-        assertDeleteHistoryDialogDisplayed()
+        assertDeleteHistoryDialogDisplayed(composeTestRule)
       }
-      clickHostBooksOnSideNav(ZimHostRobot::assertMenuWifiHotspotDiplayed)
+      clickHostBooksOnSideNav { assertMenuWifiHotspotDisplayed(composeTestRule) }
       clickSettingsOnSideNav(SettingsRobot::assertMenuSettingsDisplayed)
-      clickHelpOnSideNav { HelpRobot().assertToolbarDisplayed(composeTestRule) }
+      clickHelpOnSideNav { assertToolbarDisplayed(composeTestRule) }
       clickSupportKiwixOnSideNav()
       pressBack()
     }

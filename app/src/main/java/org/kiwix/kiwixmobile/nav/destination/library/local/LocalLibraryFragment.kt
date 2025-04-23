@@ -281,7 +281,9 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     copyMoveFileHandler?.apply {
       setFileCopyMoveCallback(this@LocalLibraryFragment)
       setLifeCycleScope(lifecycleScope)
+      setAlertDialogShower(dialogShower as AlertDialogShower)
     }
+    zimManageViewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
     zimManageViewModel.fileSelectListStates.observe(viewLifecycleOwner, Observer(::render))
       .also {
         coreMainActivity.navHostContainer
@@ -301,8 +303,6 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       zimManageViewModel.fileSelectActions.offer(FileSelectActions.RestartActionMode)
     }
     showCopyMoveDialogForOpenedZimFileFromStorage()
-    zimManageViewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
-    copyMoveFileHandler?.setAlertDialogShower(dialogShower as AlertDialogShower)
   }
 
   private fun downloadBookButtonClick() {

@@ -49,6 +49,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -65,6 +67,12 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_URI_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 import javax.inject.Inject
+
+const val ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG = "alertDialogConfirmButtonTestingTag"
+const val ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG = "alertDialogDismissButtonTestingTag"
+const val ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG = "alertDialogNaturalButtonTestingTag"
+const val ALERT_DIALOG_TITLE_TEXT_TESTING_TAG = "alertDialogTitleTextTestingTag"
+const val ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG = "alertDialogMessageTextTestingTag"
 
 @Suppress("UnusedPrivateProperty")
 class AlertDialogShower @Inject constructor() : DialogShower {
@@ -137,7 +145,8 @@ fun ShowCustomComposeView(dialog: KiwixDialog) {
   }
 }
 
-@Composable fun DialogIcon(dialog: KiwixDialog) {
+@Composable
+fun DialogIcon(dialog: KiwixDialog) {
   dialog.icon?.let {
     Icon(
       painterResource(id = it),
@@ -161,7 +170,8 @@ private fun DialogConfirmButton(
       onClick = {
         alertDialogShower.dismiss()
         dialogConfirmButtonClick?.invoke()
-      }
+      },
+      modifier = Modifier.semantics { testTag = ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG }
     ) {
       Text(
         text = confirmButtonText.uppercase(),
@@ -183,7 +193,8 @@ private fun DialogDismissButton(
       onClick = {
         alertDialogShower.dismiss()
         dismissButtonClick?.invoke()
-      }
+      },
+      modifier = Modifier.semantics { testTag = ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG }
     ) {
       Text(
         text = stringResource(id = it).uppercase(),
@@ -206,7 +217,9 @@ private fun DialogNaturalButton(
         alertDialogShower.dismiss()
         neutralButtonClick?.invoke()
       },
-      modifier = Modifier.wrapContentWidth(Alignment.Start)
+      modifier = Modifier
+        .wrapContentWidth(Alignment.Start)
+        .semantics { testTag = ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG }
     ) {
       Text(
         text = stringResource(id = it).uppercase(),
@@ -251,6 +264,7 @@ private fun DialogTitle(dialog: KiwixDialog) {
       modifier = Modifier
         .fillMaxWidth()
         .padding(bottom = DIALOG_TITLE_BOTTOM_PADDING)
+        .semantics { testTag = ALERT_DIALOG_TITLE_TEXT_TESTING_TAG }
     )
   }
 }
@@ -263,7 +277,8 @@ private fun DialogMessage(dialog: KiwixDialog) {
       text = context.getString(it, *bodyArguments(dialog)),
       modifier = Modifier
         .fillMaxWidth()
-        .padding(bottom = DIALOG_MESSAGE_BOTTOM_PADDING),
+        .padding(bottom = DIALOG_MESSAGE_BOTTOM_PADDING)
+        .semantics { testTag = ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG },
       style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal)
     )
   }

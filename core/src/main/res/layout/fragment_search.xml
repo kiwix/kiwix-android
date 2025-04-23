@@ -53,9 +53,4 @@
     android:visibility="gone"
     tools:visibility="visible" />
 
-  <androidx.compose.ui.platform.ComposeView
-    android:id="@+id/dialogHostView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -125,8 +125,8 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
       // delete any bookmark if already saved to properly perform this test case.
       longClickOnSaveBookmarkImage()
       clickOnTrashIcon(composeTestRule)
-      assertDeleteBookmarksDialogDisplayed()
-      clickOnDeleteButton()
+      assertDeleteBookmarksDialogDisplayed(composeTestRule)
+      clickOnDeleteButton(composeTestRule)
       assertNoBookMarkTextDisplayed(composeTestRule)
       pressBack()
       // Test saving bookmark
@@ -166,8 +166,8 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
       // delete any bookmark if already saved to properly perform this test case.
       longClickOnSaveBookmarkImage()
       clickOnTrashIcon(composeTestRule)
-      assertDeleteBookmarksDialogDisplayed()
-      clickOnDeleteButton()
+      assertDeleteBookmarksDialogDisplayed(composeTestRule)
+      clickOnDeleteButton(composeTestRule)
       assertNoBookMarkTextDisplayed(composeTestRule)
       pressBack()
     }

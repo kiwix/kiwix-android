@@ -127,9 +127,9 @@ class DownloadTest : BaseActivityTest() {
       downloadRobot {
         clickDownloadOnBottomNav()
         waitForDataToLoad()
+        stopDownloadIfAlreadyStarted(composeTestRule)
         val smallestZimFileIndex = getSmallestZimFileIndex(getOnlineLibraryList())
         scrollToZimFileIndex(smallestZimFileIndex)
-        stopDownloadIfAlreadyStarted()
         downloadZimFile(smallestZimFileIndex)
         try {
           // Scroll to the top because now the downloading ZIM files are showing on the top.
@@ -200,14 +200,14 @@ class DownloadTest : BaseActivityTest() {
         }
         clickDownloadOnBottomNav()
         waitForDataToLoad()
-        stopDownloadIfAlreadyStarted()
+        stopDownloadIfAlreadyStarted(composeTestRule)
         downloadZimFile()
         assertDownloadStart()
         pauseDownload()
         assertDownloadPaused()
         resumeDownload()
         assertDownloadResumed()
-        stopDownloadIfAlreadyStarted()
+        stopDownloadIfAlreadyStarted(composeTestRule)
         // select the default device language to perform other test cases.
         topLevel {
           clickSettingsOnSideNav {

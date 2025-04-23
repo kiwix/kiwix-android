@@ -19,6 +19,9 @@
 package org.kiwix.kiwixmobile.settings
 
 import androidx.annotation.StringRes
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
@@ -37,6 +40,8 @@ import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
@@ -129,24 +134,36 @@ class SettingsRobot : BaseRobot() {
     clickRecyclerViewItems(R.string.pref_clear_all_history_title)
   }
 
-  fun assertHistoryDialogDisplayed() {
-    isVisible(TextId(R.string.clear_all_history_dialog_title))
+  fun assertHistoryDialogDisplayed(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.clear_all_history_dialog_title))
+    }
   }
 
   fun clickExportBookmarkPreference() {
     clickRecyclerViewItems(R.string.pref_export_bookmark_title)
   }
 
-  fun assertExportBookmarkDialogDisplayed() {
-    isVisible(TextId(R.string.export_all_bookmarks_dialog_title))
+  fun assertExportBookmarkDialogDisplayed(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.export_all_bookmarks_dialog_title))
+    }
   }
 
   fun clickOnImportBookmarkPreference() {
     clickRecyclerViewItems(R.string.pref_import_bookmark_title)
   }
 
-  fun assertImportBookmarkDialogDisplayed() {
-    isVisible(TextId(R.string.import_bookmarks_dialog_title))
+  fun assertImportBookmarkDialogDisplayed(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.import_bookmarks_dialog_title))
+    }
   }
 
   fun clickNightModePreference() {
@@ -163,9 +180,15 @@ class SettingsRobot : BaseRobot() {
     clickRecyclerViewItems(R.string.pref_credits_title)
   }
 
-  fun assertContributorsDialogDisplayed() {
+  fun assertContributorsDialogDisplayed(composeTestRule: ComposeContentTestRule) {
     // this is inside the dialog and dialog takes a bit to show on the screen.
-    testFlakyView({ isVisible(Text("OK")) })
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG)
+          .assertTextEquals("OK")
+      }
+    })
   }
 
   fun assertZoomTextViewPresent() {

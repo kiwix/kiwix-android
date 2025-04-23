@@ -48,7 +48,6 @@ import org.kiwix.kiwixmobile.settings.SettingsRobot
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
-import org.kiwix.kiwixmobile.webserver.ZimHostRobot
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -124,14 +123,14 @@ class GetContentShortcutTest {
       clickBookmarksOnNavDrawer {
         assertBookMarksDisplayed(composeTestRule)
         clickOnTrashIcon(composeTestRule)
-        assertDeleteBookmarksDialogDisplayed()
+        assertDeleteBookmarksDialogDisplayed(composeTestRule)
       }
       clickHistoryOnSideNav {
         assertHistoryDisplayed(composeTestRule)
         clickOnTrashIcon(composeTestRule)
-        assertDeleteHistoryDialogDisplayed()
+        assertDeleteHistoryDialogDisplayed(composeTestRule)
       }
-      clickHostBooksOnSideNav(ZimHostRobot::assertMenuWifiHotspotDiplayed)
+      clickHostBooksOnSideNav { assertMenuWifiHotspotDisplayed(composeTestRule) }
       clickSettingsOnSideNav(SettingsRobot::assertMenuSettingsDisplayed)
       clickHelpOnSideNav { HelpRobot().assertToolbarDisplayed(composeTestRule) }
       clickSupportKiwixOnSideNav()

@@ -68,7 +68,7 @@ class LanguageRobot : BaseRobot() {
     try {
       onView(ViewMatchers.withText(string.swipe_down_for_library)).check(matches(isDisplayed()))
       refreshOnlineList()
-    } catch (e: RuntimeException) {
+    } catch (_: RuntimeException) {
       try {
         // do nothing as currently downloading the online library.
         onView(withId(R.id.onlineLibraryProgressLayout)).check(matches(isDisplayed()))
@@ -115,7 +115,7 @@ class LanguageRobot : BaseRobot() {
     try {
       composeTestRule.onNodeWithTag("$LANGUAGE_ITEM_CHECKBOX_TESTING_TAG$matchLanguage")
         .assertIsOff()
-    } catch (noMatchingNodeException: AssertionError) {
+    } catch (_: AssertionError) {
       composeTestRule.onNodeWithTag("$LANGUAGE_ITEM_CHECKBOX_TESTING_TAG$matchLanguage")
         .performClick()
     }

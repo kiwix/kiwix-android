@@ -30,8 +30,4 @@ class OnlineLibraryRobot : BaseRobot() {
   fun assertLibraryListDisplayed() {
     isVisible(ViewId(R.id.libraryList))
   }
-
-  fun clickOnGlobeIcon() {
-    clickOn(ViewId(R.id.select_language))
-  }
 }
