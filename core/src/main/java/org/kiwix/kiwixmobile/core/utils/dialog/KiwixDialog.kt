@@ -22,6 +22,7 @@ import android.app.Activity
 import androidx.compose.runtime.Composable
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
 
 @Suppress("LongParameterList")
 sealed class KiwixDialog(
@@ -30,7 +31,7 @@ sealed class KiwixDialog(
   val confirmButtonText: Int,
   val dismissButtonText: Int?,
   val cancelable: Boolean = true,
-  val icon: Int? = null,
+  val iconItem: IconItem? = null,
   val neutralButtonText: Int? = null,
   val customComposeView: (@Composable (() -> Unit))? = null
 ) {
@@ -203,17 +204,17 @@ sealed class KiwixDialog(
     neutralButtonText = R.string.do_not_ask_anymore
   )
 
-  data class ShowRate(override val args: List<Any>, private val customIcon: Int?) :
+  data class ShowRate(override val args: List<Any>, private val customIcon: IconItem?) :
     KiwixDialog(
       R.string.rate_dialog_title,
       R.string.single_arg_format_string,
       R.string.rate_dialog_positive,
       R.string.no_thanks,
-      icon = customIcon,
+      iconItem = customIcon,
       neutralButtonText = R.string.rate_dialog_neutral
     ),
     HasBodyFormatArgs {
-    constructor(icon: Int?, activity: Activity) : this(
+    constructor(icon: IconItem?, activity: Activity) : this(
       listOf(
         String.format(
           activity.getString(R.string.rate_dialog_msg),

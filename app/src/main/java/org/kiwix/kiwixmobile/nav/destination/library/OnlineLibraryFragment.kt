@@ -39,8 +39,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
@@ -72,6 +70,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificat
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
+import org.kiwix.kiwixmobile.core.extensions.getDialogHostComposeView
 import org.kiwix.kiwixmobile.core.extensions.isKeyboardVisible
 import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
 import org.kiwix.kiwixmobile.core.extensions.setUpSearchView
@@ -90,7 +89,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
@@ -195,17 +193,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     if (toolbar != null) {
       activity.setupDrawerToggle(toolbar)
     }
-    val composeView = ComposeView(requireContext()).apply {
-      setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-      layoutParams = ViewGroup.LayoutParams(
-        ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.WRAP_CONTENT
+    fragmentDestinationDownloadBinding?.root?.addView(
+      requireContext().getDialogHostComposeView(
+        alertDialogShower
       )
-      setContent {
-        DialogHost(alertDialogShower)
-      }
-    }
-    fragmentDestinationDownloadBinding?.root?.addView(composeView)
+    )
     zimManageViewModel.setAlertDialogShower(alertDialogShower)
     return fragmentDestinationDownloadBinding?.root
   }

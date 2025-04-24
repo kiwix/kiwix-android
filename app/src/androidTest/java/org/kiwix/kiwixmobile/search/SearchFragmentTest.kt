@@ -32,6 +32,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
+import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -123,7 +124,8 @@ class SearchFragmentTest : BaseActivityTest() {
             matchesViews(
               withContentDescription("More options")
             )
-          )
+          ),
+          matchesCheck(SpeakableTextPresentCheck::class.java)
         )
       )
     }

@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -47,7 +48,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -56,11 +56,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_BUTTON_TEXT_LETTER_SPACING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_CUSTOM_VIEW_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_DEFAULT_PADDING_FOR_CONTENT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_ICON_END_PADDING
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_MESSAGE_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_TEXT_SIZE
@@ -115,7 +117,9 @@ fun DialogHost(alertDialogShower: AlertDialogShower) {
               .padding(horizontal = DIALOG_DEFAULT_PADDING_FOR_CONTENT)
               .padding(top = DIALOG_DEFAULT_PADDING_FOR_CONTENT)
           ) {
-            Row {
+            Row(
+              verticalAlignment = Alignment.CenterVertically
+            ) {
               DialogIcon(dialog)
               DialogTitle(dialog)
             }
@@ -147,13 +151,15 @@ fun ShowCustomComposeView(dialog: KiwixDialog) {
 
 @Composable
 fun DialogIcon(dialog: KiwixDialog) {
-  dialog.icon?.let {
+  dialog.iconItem?.let {
     Icon(
-      painterResource(id = it),
+      it.toPainter(),
       contentDescription = null,
       // Setting end padding to give space between icon and title
-      modifier = Modifier.padding(end = DIALOG_ICON_END_PADDING),
-      tint = Color.Unspecified
+      modifier = Modifier
+        .size(DIALOG_ICON_SIZE)
+        .padding(end = DIALOG_ICON_END_PADDING),
+      tint = Color.Unspecified,
     )
   }
 }

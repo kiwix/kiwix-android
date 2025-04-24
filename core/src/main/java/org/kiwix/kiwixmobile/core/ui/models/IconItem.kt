@@ -18,15 +18,23 @@
 
 package org.kiwix.kiwixmobile.core.ui.models
 
+import android.graphics.Canvas
+import android.graphics.drawable.AdaptiveIconDrawable
+import android.graphics.drawable.BitmapDrawable
+import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.material3.Icon
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.createBitmap
 
 sealed class IconItem {
   data class Vector(val imageVector: ImageVector) : IconItem()
@@ -35,6 +43,7 @@ sealed class IconItem {
   ) : IconItem()
 
   data class ImageBitmap(val bitmap: androidx.compose.ui.graphics.ImageBitmap) : IconItem()
+  data class MipmapImage(val mipmapResId: Int) : IconItem()
 }
 
 /**
@@ -47,5 +56,23 @@ fun IconItem.toPainter(): Painter {
     is IconItem.Vector -> rememberVectorPainter(imageVector)
     is IconItem.Drawable -> painterResource(drawableRes)
     is IconItem.ImageBitmap -> remember { BitmapPainter(bitmap) }
+    is IconItem.MipmapImage -> {
+      val drawable = ContextCompat.getDrawable(LocalContext.current, mipmapResId)
+      val imageBitmap = when {
+        drawable is BitmapDrawable -> drawable.bitmap.asImageBitmap()
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && drawable is AdaptiveIconDrawable -> {
+          val bitmap = createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)
+          val canvas = Canvas(bitmap)
+          drawable.setBounds(0, 0, canvas.width, canvas.height)
+          drawable.draw(canvas)
+          bitmap.asImageBitmap()
+        }
+
+        else -> {
+          createBitmap(0, 0).asImageBitmap()
+        }
+      }
+      return remember { BitmapPainter(imageBitmap) }
+    }
   }
 }

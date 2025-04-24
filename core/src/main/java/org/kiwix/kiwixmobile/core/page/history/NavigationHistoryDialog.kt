@@ -25,21 +25,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.databinding.DialogNavigationHistoryBinding
+import org.kiwix.kiwixmobile.core.extensions.getDialogHostComposeView
 import org.kiwix.kiwixmobile.core.main.DISABLE_ICON_ITEM_ALPHA
 import org.kiwix.kiwixmobile.core.main.ENABLE_ICON_ITEM_ALPHA
 import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryAdapter
 import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryDelegate.NavigationDelegate
 import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import javax.inject.Inject
 
@@ -99,18 +97,8 @@ class NavigationHistoryDialog(
       inflateMenu(R.menu.menu_page)
       this.menu?.findItem(R.id.menu_page_search)?.isVisible = false
     }
-    val composeView = ComposeView(requireContext()).apply {
-      setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-      layoutParams = ViewGroup.LayoutParams(
-        ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.WRAP_CONTENT
-      )
-      setContent {
-        DialogHost(alertDialogShower)
-      }
-    }
     dialogNavigationHistoryBinding?.apply {
-      root.addView(composeView)
+      root.addView(requireContext().getDialogHostComposeView(alertDialogShower))
       if (navigationHistoryList.isEmpty()) {
         deleteItem?.isEnabled = false
         deleteItem?.icon?.alpha = DISABLE_ICON_ITEM_ALPHA

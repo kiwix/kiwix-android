@@ -35,9 +35,11 @@ import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.extensions.applyEdgeToEdgeInsets
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
+import org.kiwix.kiwixmobile.core.extensions.getDialogHostComposeView
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
 import org.kiwix.kiwixmobile.custom.customActivityComponent
@@ -207,6 +209,10 @@ class CustomMainActivity : CoreMainActivity() {
       )
       .build()
     ShortcutManagerCompat.addDynamicShortcuts(this, listOf(newTabShortcut))
+  }
+
+  override fun setDialogHostToActivity(alertDialogShower: AlertDialogShower) {
+    activityCustomMainBinding.root.addView(getDialogHostComposeView(alertDialogShower), 0)
   }
 
   // Outdated shortcut id(new_tab)

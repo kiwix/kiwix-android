@@ -36,8 +36,6 @@ import android.webkit.WebView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -56,6 +54,7 @@ import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
+import org.kiwix.kiwixmobile.core.extensions.getDialogHostComposeView
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -66,7 +65,6 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.OpenCredits
@@ -133,17 +131,7 @@ abstract class CorePrefsFragment :
     val root = super.onCreateView(inflater, container, savedInstanceState) as ViewGroup
     // Adding compose View to preference layout for showing the alertDialog.
     // TODO We will remove this once we will migrate to compose.
-    val composeView = ComposeView(requireContext()).apply {
-      setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-      layoutParams = ViewGroup.LayoutParams(
-        ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.WRAP_CONTENT
-      )
-      setContent {
-        DialogHost(alertDialogShower as AlertDialogShower)
-      }
-    }
-    root.addView(composeView)
+    root.addView(requireContext().getDialogHostComposeView(alertDialogShower as AlertDialogShower))
     return root
   }
 

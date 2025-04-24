@@ -30,8 +30,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
@@ -57,6 +55,7 @@ import org.kiwix.kiwixmobile.core.databinding.FragmentSearchBinding
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
+import org.kiwix.kiwixmobile.core.extensions.getDialogHostComposeView
 import org.kiwix.kiwixmobile.core.extensions.setUpSearchView
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -78,7 +77,6 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import javax.inject.Inject
@@ -156,17 +154,9 @@ class SearchFragment : BaseFragment() {
       }
     }
     handleBackPress()
-    val composeView = ComposeView(requireContext()).apply {
-      setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-      layoutParams = ViewGroup.LayoutParams(
-        ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.WRAP_CONTENT
-      )
-      setContent {
-        DialogHost(dialogShower as AlertDialogShower)
-      }
-    }
-    fragmentSearchBinding?.root?.addView(composeView)
+    fragmentSearchBinding?.root?.addView(
+      requireContext().getDialogHostComposeView(dialogShower as AlertDialogShower)
+    )
     searchViewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
   }
 

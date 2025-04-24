@@ -143,6 +143,7 @@ object ComposeDimens {
   // AlertDialog dimens
   val DIALOG_DEFAULT_PADDING_FOR_CONTENT = 16.dp
   val DIALOG_ICON_END_PADDING = 10.dp
+  val DIALOG_ICON_SIZE = 48.dp
   val DIALOG_TITLE_BOTTOM_PADDING = 8.dp
   val DIALOG_MESSAGE_BOTTOM_PADDING = 16.dp
   val DIALOG_URI_TEXT_SIZE = 14.sp

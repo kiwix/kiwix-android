@@ -67,8 +67,6 @@ import androidx.annotation.AnimRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Group
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -126,6 +124,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigatio
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.findFirstTextView
 import org.kiwix.kiwixmobile.core.extensions.closeFullScreenMode
+import org.kiwix.kiwixmobile.core.extensions.getDialogHostComposeView
 import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.extensions.showFullScreenMode
@@ -173,7 +172,6 @@ import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED_NEW_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
@@ -536,18 +534,11 @@ abstract class CoreReaderFragment :
   }
 
   private fun addAlertDialogToDialogHost() {
-    val composeView = ComposeView(requireContext()).apply {
-      setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-      layoutParams = ViewGroup.LayoutParams(
-        ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.WRAP_CONTENT
-      )
-      setContent {
-        DialogHost(alertDialogShower as AlertDialogShower)
-      }
-    }
-    fragmentReaderBinding?.root?.addView(composeView)
+    fragmentReaderBinding?.root?.addView(
+      requireContext().getDialogHostComposeView(alertDialogShower as AlertDialogShower)
+    )
     externalLinkOpener?.setAlertDialogShower(alertDialogShower as AlertDialogShower)
+    unsupportedMimeTypeHandler?.setAlertDialogShower(alertDialogShower as AlertDialogShower)
   }
 
   private fun prepareViews() {

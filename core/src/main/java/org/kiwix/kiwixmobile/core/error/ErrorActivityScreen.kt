@@ -39,16 +39,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.tonyodev.fetch2.R.string
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.extensions.loadBitmapFromMipmap
 import org.kiwix.kiwixmobile.core.ui.components.CrashCheckBox
 import org.kiwix.kiwixmobile.core.ui.components.KiwixButton
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.AlabasterWhite
 import org.kiwix.kiwixmobile.core.ui.theme.ErrorActivityBackground
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
@@ -124,7 +123,7 @@ private fun CrashTitle(
 @Composable
 private fun AppIcon() {
   Image(
-    bitmap = ImageBitmap.loadBitmapFromMipmap(LocalContext.current, R.mipmap.ic_launcher),
+    painter = IconItem.MipmapImage(R.mipmap.ic_launcher).toPainter(),
     contentDescription = stringResource(id = string.app_name),
     modifier = Modifier
       .height(CRASH_IMAGE_SIZE)

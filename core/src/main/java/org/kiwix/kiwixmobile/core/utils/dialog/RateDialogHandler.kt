@@ -30,6 +30,7 @@ import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.di.ActivityScope
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
@@ -40,16 +41,20 @@ const val VISITS_REQUIRED_TO_SHOW_RATE_DIALOG = 20
 class RateDialogHandler @Inject constructor(
   private val activity: Activity,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val alertDialogShower: AlertDialogShower,
   private val newBookDao: NewBookDao
 ) {
+  private var alertDialogShower: AlertDialogShower? = null
   private var visitCounterPref: RateAppCounter? = null
   private var tempVisitCount = 0
   private var isFirstRun = false
 
+  fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
+    this.alertDialogShower = alertDialogShower
+  }
+
   private fun showRateDialog(iconResId: Int) {
-    alertDialogShower.show(
-      KiwixDialog.ShowRate(iconResId, activity),
+    alertDialogShower?.show(
+      KiwixDialog.ShowRate(IconItem.MipmapImage(iconResId), activity),
       {
         visitCounterPref?.noThanksState = true
         goToRateApp(activity)
@@ -116,7 +121,7 @@ class RateDialogHandler @Inject constructor(
     )
     try {
       activity.startActivity(goToMarket)
-    } catch (e: ActivityNotFoundException) {
+    } catch (_: ActivityNotFoundException) {
       activity.startActivity(Intent(Intent.ACTION_VIEW, kiwixBrowserMarketUri))
     }
   }

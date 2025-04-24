@@ -54,12 +54,14 @@ import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.extensions.applyEdgeToEdgeInsets
+import org.kiwix.kiwixmobile.core.extensions.getDialogHostComposeView
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.databinding.ActivityKiwixMainBinding
 import org.kiwix.kiwixmobile.kiwixActivityComponent
 import org.kiwix.kiwixmobile.nav.destination.reader.KiwixReaderFragmentDirections
@@ -353,6 +355,10 @@ class KiwixMainActivity : CoreMainActivity() {
     // Remove previously added dynamic shortcuts for old ids if any found.
     removeOutdatedIdShortcuts()
     ShortcutManagerCompat.addDynamicShortcuts(this, dynamicShortcutList())
+  }
+
+  override fun setDialogHostToActivity(alertDialogShower: AlertDialogShower) {
+    activityKiwixMainBinding.root.addView(getDialogHostComposeView(alertDialogShower), 0)
   }
 
   // Outdated shortcut ids(new_tab, get_content)

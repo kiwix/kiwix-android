@@ -30,13 +30,18 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.TypedValue
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.AttrRes
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.scale
 import org.kiwix.kiwixmobile.core.base.BaseBroadcastReceiver
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import java.util.Locale
 
 fun Context?.toast(
@@ -120,3 +125,15 @@ fun Context.isServiceRunning(serviceClass: Class<out Service>): Boolean {
 
   return services.any { it.service.className == serviceClass.name }
 }
+
+fun Context.getDialogHostComposeView(alertDialogShower: AlertDialogShower) =
+  ComposeView(this).apply {
+    setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+    layoutParams = ViewGroup.LayoutParams(
+      ViewGroup.LayoutParams.MATCH_PARENT,
+      ViewGroup.LayoutParams.WRAP_CONTENT
+    )
+    setContent {
+      DialogHost(alertDialogShower)
+    }
+  }
