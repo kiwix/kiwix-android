@@ -24,18 +24,20 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -48,22 +50,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_BUTTONS_TEXT_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_BUTTON_ROW_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_BUTTON_TEXT_LETTER_SPACING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_CUSTOM_VIEW_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_DEFAULT_PADDING_FOR_CONTENT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_ICON_END_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_MESSAGE_BOTTOM_PADDING
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_URI_TEXT_SIZE
@@ -102,7 +111,9 @@ fun DialogHost(alertDialogShower: AlertDialogShower) {
           if (dialog.cancelable) {
             alertDialogShower.dismiss()
           }
-        }
+        },
+        properties = DialogProperties(usePlatformDefaultWidth = false),
+        modifier = Modifier.padding(DIALOG_PADDING)
       ) {
         Surface(
           modifier = Modifier
@@ -177,12 +188,19 @@ private fun DialogConfirmButton(
         alertDialogShower.dismiss()
         dialogConfirmButtonClick?.invoke()
       },
-      modifier = Modifier.semantics { testTag = ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG }
+      modifier = Modifier.semantics { testTag = ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG },
+      contentPadding = PaddingValues(
+        top = ButtonDefaults.TextButtonContentPadding.calculateTopPadding(),
+        bottom = ButtonDefaults.TextButtonContentPadding.calculateBottomPadding(),
+        start = ButtonDefaults.TextButtonContentPadding.calculateStartPadding(LocalLayoutDirection.current),
+        end = ZERO.dp
+      )
     ) {
       Text(
         text = confirmButtonText.uppercase(),
         fontWeight = FontWeight.Medium,
-        letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING
+        letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE
       )
     }
   }
@@ -200,12 +218,19 @@ private fun DialogDismissButton(
         alertDialogShower.dismiss()
         dismissButtonClick?.invoke()
       },
-      modifier = Modifier.semantics { testTag = ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG }
+      modifier = Modifier.semantics { testTag = ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG },
+      contentPadding = PaddingValues(
+        top = ButtonDefaults.TextButtonContentPadding.calculateTopPadding(),
+        bottom = ButtonDefaults.TextButtonContentPadding.calculateBottomPadding(),
+        start = ZERO.dp,
+        end = ZERO.dp
+      )
     ) {
       Text(
         text = stringResource(id = it).uppercase(),
         fontWeight = FontWeight.Medium,
-        letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING
+        letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE
       )
     }
   }
@@ -224,13 +249,19 @@ private fun DialogNaturalButton(
         neutralButtonClick?.invoke()
       },
       modifier = Modifier
-        .wrapContentWidth(Alignment.Start)
-        .semantics { testTag = ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG }
+        .semantics { testTag = ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG },
+      contentPadding = PaddingValues(
+        top = ButtonDefaults.TextButtonContentPadding.calculateTopPadding(),
+        bottom = ButtonDefaults.TextButtonContentPadding.calculateBottomPadding(),
+        start = ZERO.dp,
+        end = ZERO.dp
+      )
     ) {
       Text(
         text = stringResource(id = it).uppercase(),
         fontWeight = FontWeight.Medium,
-        letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING
+        letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE
       )
     }
   }
@@ -243,16 +274,17 @@ private fun ShowDialogButtons(
   alertDialogShower: AlertDialogShower
 ) {
   Row(
-    horizontalArrangement = Arrangement.End,
     verticalAlignment = Alignment.CenterVertically,
-    modifier = Modifier.fillMaxWidth()
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(bottom = DIALOG_BUTTON_ROW_BOTTOM_PADDING)
   ) {
     DialogNaturalButton(
       dialog,
       clickListeners.getOrNull(2),
       alertDialogShower
     )
-    // Spacer(modifier = Modifier.weight(1f))
+    Spacer(modifier = Modifier.weight(1f))
     DialogDismissButton(dialog, clickListeners.getOrNull(1), alertDialogShower)
     DialogConfirmButton(dialog, clickListeners.getOrNull(0), alertDialogShower)
   }
