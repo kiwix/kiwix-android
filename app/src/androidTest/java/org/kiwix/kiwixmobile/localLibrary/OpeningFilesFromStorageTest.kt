@@ -106,7 +106,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
 
   @Test
   fun testOpeningFileWithFilePicker() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Build.VERSION.SDK_INT != Build.VERSION_CODES.VANILLA_ICE_CREAM) {
       activityScenario.onActivity {
         kiwixMainActivity = it
         it.navigate(R.id.libraryFragment)
