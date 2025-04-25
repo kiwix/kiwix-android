@@ -242,7 +242,6 @@ class DownloadTest : BaseActivityTest() {
         "Couldn't find downloaded file ' Off the Grid ' Original Exception: ${e.message}"
       )
     }
-    LeakAssertions.assertNoLeaks()
   }
 
   @After

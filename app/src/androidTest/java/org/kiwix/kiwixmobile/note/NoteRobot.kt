@@ -188,7 +188,6 @@ class NoteRobot : BaseRobot() {
   }
 
   fun clickOnDeleteButton(composeTestRule: ComposeContentTestRule) {
-    pauseForBetterTestPerformance()
     testFlakyView(
       {
         composeTestRule.apply {
