@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.core.utils.dialog
 
-import android.app.Dialog
 import android.net.Uri
 
 interface DialogShower {
@@ -26,10 +25,4 @@ interface DialogShower {
     vararg clickListeners: (() -> Unit),
     uri: Uri? = null
   )
-
-  fun create(
-    dialog: KiwixDialog,
-    vararg clickListeners: (() -> Unit),
-    uri: Uri? = null
-  ): Dialog
 }

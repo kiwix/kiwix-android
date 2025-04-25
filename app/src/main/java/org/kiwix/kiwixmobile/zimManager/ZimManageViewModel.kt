@@ -65,6 +65,7 @@ import org.kiwix.kiwixmobile.core.extensions.calculateSearchMatches
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
@@ -150,6 +151,8 @@ class ZimManageViewModel @Inject constructor(
   private var compositeDisposable: CompositeDisposable? = CompositeDisposable()
   val downloadProgress = MutableLiveData<String>()
 
+  private lateinit var alertDialogShower: AlertDialogShower
+
   init {
     compositeDisposable?.addAll(*disposables())
     context.registerReceiver(connectivityBroadcastReceiver)
@@ -157,6 +160,10 @@ class ZimManageViewModel @Inject constructor(
 
   fun setIsUnitTestCase() {
     isUnitTestCase = true
+  }
+
+  fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
+    this.alertDialogShower = alertDialogShower
   }
 
   private fun createKiwixServiceWithProgressListener(): KiwixService {
@@ -268,7 +275,7 @@ class ZimManageViewModel @Inject constructor(
         when (it) {
           is RequestNavigateTo -> OpenFileWithNavigation(it.bookOnDisk)
           is RequestMultiSelection -> startMultiSelectionAndSelectBook(it.bookOnDisk)
-          RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState())
+          RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState(), alertDialogShower)
           RequestShareMultiSelection -> ShareFiles(selectionsFromState())
           MultiModeFinished -> noSideEffectAndClearSelectionState()
           is RequestSelect -> noSideEffectSelectBook(it.bookOnDisk)

@@ -20,8 +20,10 @@ package org.kiwix.kiwixmobile.download
 
 import android.view.View
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
@@ -47,6 +49,8 @@ import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.download.DownloadTest.Companion.KIWIX_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
@@ -191,27 +195,33 @@ class DownloadRobot : BaseRobot() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
   }
 
-  private fun assertStopDownloadDialogDisplayed() {
+  private fun assertStopDownloadDialogDisplayed(composeTestRule: ComposeContentTestRule) {
     pauseForBetterTestPerformance()
-    isVisible(TextId(string.confirm_stop_download_title))
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
+          .assertTextEquals(context.getString(string.confirm_stop_download_title))
+      }
+    })
   }
 
-  private fun clickOnYesButton() {
-    try {
-      onView(withText("YES")).perform(click())
-    } catch (_: Exception) {
-      // stop the downloading for Albanian language
-      onView(withText("PO")).perform(click())
-    }
+  private fun clickOnYesButton(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).performClick()
+      }
+    })
   }
 
-  fun stopDownloadIfAlreadyStarted() {
+  fun stopDownloadIfAlreadyStarted(composeTestRule: ComposeContentTestRule) {
     try {
       pauseForBetterTestPerformance()
       onView(withId(R.id.stop)).check(matches(isDisplayed()))
       stopDownload()
-      assertStopDownloadDialogDisplayed()
-      clickOnYesButton()
+      assertStopDownloadDialogDisplayed(composeTestRule)
+      clickOnYesButton(composeTestRule)
       pauseForBetterTestPerformance()
     } catch (_: Exception) {
       Log.e(

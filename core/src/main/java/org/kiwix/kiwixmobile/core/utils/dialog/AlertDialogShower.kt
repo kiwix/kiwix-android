@@ -18,105 +18,346 @@
 
 package org.kiwix.kiwixmobile.core.utils.dialog
 
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.net.Uri
-import android.view.Gravity
-import android.view.ViewGroup.LayoutParams
-import android.widget.FrameLayout
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.R.attr
-import androidx.appcompat.app.AlertDialog
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.extensions.getAttribute
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
+import org.kiwix.kiwixmobile.core.ui.models.toPainter
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_BUTTONS_TEXT_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_BUTTON_ROW_BOTTOM_PADDING
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_BUTTON_TEXT_LETTER_SPACING
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_CUSTOM_VIEW_BOTTOM_PADDING
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_DEFAULT_PADDING_FOR_CONTENT
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_ICON_END_PADDING
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_ICON_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_MESSAGE_BOTTOM_PADDING
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_PADDING
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_BOTTOM_PADDING
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_TITLE_TEXT_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_URI_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 import javax.inject.Inject
 
-class AlertDialogShower @Inject constructor(private val activity: Activity) : DialogShower {
-  companion object {
-    const val EXTERNAL_LINK_LEFT_MARGIN = 10
-    const val EXTERNAL_LINK_RIGHT_MARGIN = 10
-    const val EXTERNAL_LINK_TOP_MARGIN = 10
-    const val EXTERNAL_LINK_BOTTOM_MARGIN = 0
+const val ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG = "alertDialogConfirmButtonTestingTag"
+const val ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG = "alertDialogDismissButtonTestingTag"
+const val ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG = "alertDialogNaturalButtonTestingTag"
+const val ALERT_DIALOG_TITLE_TEXT_TESTING_TAG = "alertDialogTitleTextTestingTag"
+const val ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG = "alertDialogMessageTextTestingTag"
+
+@Suppress("UnusedPrivateProperty")
+class AlertDialogShower @Inject constructor() : DialogShower {
+  val dialogState = mutableStateOf<Triple<KiwixDialog, Array<out () -> Unit>, Uri?>?>(null)
+
+  @OptIn(ExperimentalMaterial3Api::class)
+  override fun show(dialog: KiwixDialog, vararg clickListeners: () -> Unit, uri: Uri?) {
+    dialogState.value = Triple(dialog, clickListeners, uri)
   }
 
-  override fun show(dialog: KiwixDialog, vararg clickListeners: () -> Unit, uri: Uri?) =
-    create(dialog, *clickListeners, uri = uri).show()
-
-  override fun create(dialog: KiwixDialog, vararg clickListeners: () -> Unit, uri: Uri?): Dialog {
-    return AlertDialog.Builder(activity)
-      .apply {
-        dialog.title?.let(this::setTitle)
-        dialog.icon?.let(this::setIcon)
-
-        dialog.message?.let { setMessage(activity.getString(it, *bodyArguments(dialog))) }
-        setPositiveButton(dialog.positiveMessage) { _, _ ->
-          clickListeners.getOrNull(0)
-            ?.invoke()
-        }
-        dialog.negativeMessage?.let {
-          setNegativeButton(it) { _, _ ->
-            clickListeners.getOrNull(1)
-              ?.invoke()
-          }
-        }
-        dialog.neutralMessage?.let {
-          setNeutralButton(it) { _, _ ->
-            clickListeners.getOrNull(2)
-              ?.invoke()
-          }
-        }
-        uri?.let {
-          val frameLayout = FrameLayout(activity.baseContext)
-
-          val textView = TextView(activity.baseContext).apply {
-            layoutParams = getFrameLayoutParams()
-            gravity = Gravity.CENTER
-            minHeight = resources.getDimensionPixelSize(R.dimen.material_minimum_height_and_width)
-            setLinkTextColor(activity.getAttribute(attr.colorPrimary))
-            setOnLongClickListener {
-              val clipboard =
-                ContextCompat.getSystemService(activity.baseContext, ClipboardManager::class.java)
-              val clip = ClipData.newPlainText("External Url", "$uri")
-              clipboard?.setPrimaryClip(clip)
-              Toast.makeText(
-                activity.baseContext,
-                R.string.external_link_copied_message,
-                Toast.LENGTH_SHORT
-              ).show()
-              true
-            }
-            @SuppressLint("SetTextI18n")
-            text = "</br><a href=$uri> <b>$uri</b>".fromHtml()
-          }
-          frameLayout.addView(textView)
-          setView(frameLayout)
-        }
-        dialog.getView?.let { setView(it()) }
-        setCancelable(dialog.cancelable)
-      }
-      .create()
+  fun dismiss() {
+    dialogState.value = null
   }
-
-  private fun getFrameLayoutParams() = FrameLayout.LayoutParams(
-    LayoutParams.MATCH_PARENT,
-    LayoutParams.WRAP_CONTENT
-  ).apply {
-    topMargin = EXTERNAL_LINK_TOP_MARGIN
-    bottomMargin = EXTERNAL_LINK_BOTTOM_MARGIN
-    leftMargin = EXTERNAL_LINK_LEFT_MARGIN
-    rightMargin = EXTERNAL_LINK_RIGHT_MARGIN
-  }
-
-  private fun bodyArguments(dialog: KiwixDialog) =
-    if (dialog is HasBodyFormatArgs) {
-      dialog.args.toTypedArray()
-    } else {
-      emptyArray()
-    }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DialogHost(alertDialogShower: AlertDialogShower) {
+  val dialogData = alertDialogShower.dialogState.value
+
+  dialogData?.let { (dialog, clickListeners, uri) ->
+    KiwixDialogTheme {
+      BasicAlertDialog(
+        onDismissRequest = {
+          if (dialog.cancelable) {
+            alertDialogShower.dismiss()
+          }
+        },
+        properties = DialogProperties(usePlatformDefaultWidth = false),
+        modifier = Modifier.padding(DIALOG_PADDING)
+      ) {
+        Surface(
+          modifier = Modifier
+            .wrapContentSize()
+            .wrapContentHeight(),
+          shape = MaterialTheme.shapes.extraSmall,
+          tonalElevation = AlertDialogDefaults.TonalElevation,
+          color = MaterialTheme.colorScheme.background
+        ) {
+          Column(
+            modifier = Modifier
+              .padding(horizontal = DIALOG_DEFAULT_PADDING_FOR_CONTENT)
+              .padding(top = DIALOG_DEFAULT_PADDING_FOR_CONTENT)
+          ) {
+            Row(
+              verticalAlignment = Alignment.CenterVertically
+            ) {
+              DialogIcon(dialog)
+              DialogTitle(dialog)
+            }
+            DialogMessage(dialog)
+            ShowUri(uri)
+            ShowCustomComposeView(dialog)
+            ShowDialogButtons(dialog, clickListeners, alertDialogShower)
+          }
+        }
+      }
+    }
+  }
+}
+
+@Composable
+fun ShowCustomComposeView(dialog: KiwixDialog) {
+  dialog.customComposeView?.let {
+    Box(
+      modifier = Modifier
+        .fillMaxWidth()
+        .wrapContentHeight()
+        .padding(bottom = DIALOG_CUSTOM_VIEW_BOTTOM_PADDING),
+      contentAlignment = Alignment.TopStart
+    ) {
+      it.invoke()
+    }
+  }
+}
+
+@Composable
+fun DialogIcon(dialog: KiwixDialog) {
+  dialog.iconItem?.let {
+    Icon(
+      it.toPainter(),
+      contentDescription = null,
+      // Setting end padding to give space between icon and title
+      modifier = Modifier
+        .size(DIALOG_ICON_SIZE)
+        .padding(end = DIALOG_ICON_END_PADDING),
+      tint = Color.Unspecified,
+    )
+  }
+}
+
+@Composable
+private fun DialogConfirmButton(
+  dialog: KiwixDialog,
+  dialogConfirmButtonClick: (() -> Unit)?,
+  alertDialogShower: AlertDialogShower
+) {
+  val confirmButtonText = stringResource(id = dialog.confirmButtonText)
+  if (confirmButtonText.isNotEmpty()) {
+    TextButton(
+      onClick = {
+        alertDialogShower.dismiss()
+        dialogConfirmButtonClick?.invoke()
+      },
+      modifier = Modifier.semantics { testTag = ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG },
+      contentPadding = PaddingValues(
+        top = ButtonDefaults.TextButtonContentPadding.calculateTopPadding(),
+        bottom = ButtonDefaults.TextButtonContentPadding.calculateBottomPadding(),
+        start = ButtonDefaults.TextButtonContentPadding.calculateStartPadding(LocalLayoutDirection.current),
+        end = ZERO.dp
+      )
+    ) {
+      Text(
+        text = confirmButtonText.uppercase(),
+        fontWeight = FontWeight.Medium,
+        letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE
+      )
+    }
+  }
+}
+
+@Composable
+private fun DialogDismissButton(
+  dialog: KiwixDialog,
+  dismissButtonClick: (() -> Unit)?,
+  alertDialogShower: AlertDialogShower
+) {
+  dialog.dismissButtonText?.let {
+    TextButton(
+      onClick = {
+        alertDialogShower.dismiss()
+        dismissButtonClick?.invoke()
+      },
+      modifier = Modifier.semantics { testTag = ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG },
+      contentPadding = PaddingValues(
+        top = ButtonDefaults.TextButtonContentPadding.calculateTopPadding(),
+        bottom = ButtonDefaults.TextButtonContentPadding.calculateBottomPadding(),
+        start = ZERO.dp,
+        end = ZERO.dp
+      )
+    ) {
+      Text(
+        text = stringResource(id = it).uppercase(),
+        fontWeight = FontWeight.Medium,
+        letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE
+      )
+    }
+  }
+}
+
+@Composable
+private fun DialogNaturalButton(
+  dialog: KiwixDialog,
+  neutralButtonClick: (() -> Unit)?,
+  alertDialogShower: AlertDialogShower
+) {
+  dialog.neutralButtonText?.let {
+    TextButton(
+      onClick = {
+        alertDialogShower.dismiss()
+        neutralButtonClick?.invoke()
+      },
+      modifier = Modifier
+        .semantics { testTag = ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG },
+      contentPadding = PaddingValues(
+        top = ButtonDefaults.TextButtonContentPadding.calculateTopPadding(),
+        bottom = ButtonDefaults.TextButtonContentPadding.calculateBottomPadding(),
+        start = ZERO.dp,
+        end = ZERO.dp
+      )
+    ) {
+      Text(
+        text = stringResource(id = it).uppercase(),
+        fontWeight = FontWeight.Medium,
+        letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
+        fontSize = DIALOG_BUTTONS_TEXT_SIZE
+      )
+    }
+  }
+}
+
+@Composable
+private fun ShowDialogButtons(
+  dialog: KiwixDialog,
+  clickListeners: Array<out () -> Unit>,
+  alertDialogShower: AlertDialogShower
+) {
+  Row(
+    verticalAlignment = Alignment.CenterVertically,
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(bottom = DIALOG_BUTTON_ROW_BOTTOM_PADDING)
+  ) {
+    DialogNaturalButton(
+      dialog,
+      clickListeners.getOrNull(2),
+      alertDialogShower
+    )
+    Spacer(modifier = Modifier.weight(1f))
+    DialogDismissButton(dialog, clickListeners.getOrNull(1), alertDialogShower)
+    DialogConfirmButton(dialog, clickListeners.getOrNull(0), alertDialogShower)
+  }
+}
+
+@Composable
+private fun DialogTitle(dialog: KiwixDialog) {
+  dialog.title?.let {
+    Text(
+      text = stringResource(id = it),
+      style = MaterialTheme.typography.titleSmall.copy(
+        fontSize = DIALOG_TITLE_TEXT_SIZE,
+        fontWeight = FontWeight.Medium
+      ),
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(bottom = DIALOG_TITLE_BOTTOM_PADDING)
+        .semantics { testTag = ALERT_DIALOG_TITLE_TEXT_TESTING_TAG }
+    )
+  }
+}
+
+@Composable
+private fun DialogMessage(dialog: KiwixDialog) {
+  val context = LocalContext.current
+  dialog.message?.let {
+    Text(
+      text = context.getString(it, *bodyArguments(dialog)),
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(bottom = DIALOG_MESSAGE_BOTTOM_PADDING)
+        .semantics { testTag = ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG },
+      style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal)
+    )
+  }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun ShowUri(uri: Uri?) {
+  val context = LocalContext.current
+  uri?.let {
+    Text(
+      text = "</br><a href=$uri> <b>$uri</b>".fromHtml().toString(),
+      color = MaterialTheme.colorScheme.primary,
+      textDecoration = TextDecoration.Underline,
+      fontSize = DIALOG_URI_TEXT_SIZE,
+      textAlign = TextAlign.Center,
+      modifier = Modifier
+        .fillMaxWidth()
+        .combinedClickable(
+          onClick = {
+            // nothing to do
+          },
+          onLongClick = {
+            val clipboard =
+              ContextCompat.getSystemService(context, ClipboardManager::class.java)
+            val clip = ClipData.newPlainText("External Url", "$uri")
+            clipboard?.setPrimaryClip(clip)
+            Toast.makeText(
+              context,
+              R.string.external_link_copied_message,
+              Toast.LENGTH_SHORT
+            ).show()
+          }
+        )
+    )
+  }
+}
+
+private fun bodyArguments(dialog: KiwixDialog) =
+  if (dialog is HasBodyFormatArgs) {
+    dialog.args.toTypedArray()
+  } else {
+    emptyArray()
+  }

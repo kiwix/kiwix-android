@@ -18,6 +18,10 @@
 
 package org.kiwix.kiwixmobile.initial.download
 
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
@@ -30,11 +34,12 @@ import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
-import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
@@ -77,11 +82,11 @@ class InitialDownloadRobot : BaseRobot() {
     try {
       onView(withText(string.swipe_down_for_library)).check(matches(isDisplayed()))
       refreshOnlineList()
-    } catch (e: RuntimeException) {
+    } catch (_: RuntimeException) {
       try {
         // do nothing as currently downloading the online library.
         onView(withId(R.id.onlineLibraryProgressLayout)).check(matches(isDisplayed()))
-      } catch (e: RuntimeException) {
+      } catch (_: RuntimeException) {
         // if not visible try to get the online library.
         refreshOnlineList()
       }
@@ -103,12 +108,27 @@ class InitialDownloadRobot : BaseRobot() {
     testFlakyView({ onView(withText(string.choose_storage_to_download_book)) })
   }
 
-  fun assertStopDownloadDialogDisplayed() {
-    testFlakyView({ isVisible(Text("Stop download?")) })
+  fun assertStopDownloadDialogDisplayed(composeTestRule: ComposeContentTestRule) {
+    pauseForBetterTestPerformance()
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
+          .assertTextEquals(context.getString(string.confirm_stop_download_title))
+      }
+    })
   }
 
-  fun clickOnYesToConfirm() {
-    testFlakyView({ onView(withText("YES")).perform(click()) })
+  fun clickOnYesToConfirm(composeTestRule: ComposeContentTestRule) {
+    testFlakyView(
+      {
+        composeTestRule.apply {
+          waitForIdle()
+          onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG)
+            .performClick()
+        }
+      }
+    )
   }
 
   fun clickOnInternalStorage() {
@@ -138,15 +158,15 @@ class InitialDownloadRobot : BaseRobot() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
   }
 
-  fun stopDownloadIfAlreadyStarted() {
+  fun stopDownloadIfAlreadyStarted(composeTestRule: ComposeContentTestRule) {
     try {
       pauseForBetterTestPerformance()
       onView(withId(R.id.stop)).check(matches(isDisplayed()))
       stopDownload()
-      assertStopDownloadDialogDisplayed()
-      clickOnYesToConfirm()
+      assertStopDownloadDialogDisplayed(composeTestRule)
+      clickOnYesToConfirm(composeTestRule)
       pauseForBetterTestPerformance()
-    } catch (e: Exception) {
+    } catch (_: Exception) {
       Log.e(
         "INITIAL_DOWNLOAD_TEST",
         "Failed to stop downloading. Probably because it is not downloading the zim file"

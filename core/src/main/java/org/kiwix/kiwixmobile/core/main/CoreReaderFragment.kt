@@ -124,6 +124,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.observeNavigatio
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.ViewGroupExtensions.findFirstTextView
 import org.kiwix.kiwixmobile.core.extensions.closeFullScreenMode
+import org.kiwix.kiwixmobile.core.extensions.getDialogHostComposeView
 import org.kiwix.kiwixmobile.core.extensions.getToolbarNavigationIcon
 import org.kiwix.kiwixmobile.core.extensions.setToolTipWithContentDescription
 import org.kiwix.kiwixmobile.core.extensions.showFullScreenMode
@@ -170,6 +171,7 @@ import org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED_NEW_TAB
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
@@ -430,6 +432,7 @@ abstract class CoreReaderFragment :
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
+    addAlertDialogToDialogHost()
     setupMenu()
     donationDialogHandler?.setDonationDialogCallBack(this)
     val activity = requireActivity() as AppCompatActivity?
@@ -528,6 +531,14 @@ abstract class CoreReaderFragment :
       Observer(::storeSearchItem)
     )
     handleClicks()
+  }
+
+  private fun addAlertDialogToDialogHost() {
+    fragmentReaderBinding?.root?.addView(
+      requireContext().getDialogHostComposeView(alertDialogShower as AlertDialogShower)
+    )
+    externalLinkOpener?.setAlertDialogShower(alertDialogShower as AlertDialogShower)
+    unsupportedMimeTypeHandler?.setAlertDialogShower(alertDialogShower as AlertDialogShower)
   }
 
   private fun prepareViews() {
@@ -1083,7 +1094,7 @@ abstract class CoreReaderFragment :
                 .mapTo(webViewBackWordHistoryList) { it.url }
                 .reverse()
             }
-          } catch (ignore: Exception) {
+          } catch (_: Exception) {
             // Catch any exception thrown by the WebView since
             // `copyBackForwardList` can throw an error.
           }

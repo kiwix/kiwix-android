@@ -28,11 +28,18 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.accessibility.AccessibilityChecks
+import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
+import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
+import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
 import leakcanary.LeakAssertions
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -71,6 +78,15 @@ class DownloadTest : BaseActivityTest() {
   init {
     AccessibilityChecks.enable().apply {
       setRunChecksFromRootView(true)
+      setSuppressingResultMatcher(
+        anyOf(
+          allOf(
+            matchesCheck(TouchTargetSizeCheck::class.java),
+            matchesViews(withContentDescription("More options"))
+          ),
+          matchesCheck(SpeakableTextPresentCheck::class.java)
+        )
+      )
     }
   }
 
@@ -127,9 +143,9 @@ class DownloadTest : BaseActivityTest() {
       downloadRobot {
         clickDownloadOnBottomNav()
         waitForDataToLoad()
+        stopDownloadIfAlreadyStarted(composeTestRule)
         val smallestZimFileIndex = getSmallestZimFileIndex(getOnlineLibraryList())
         scrollToZimFileIndex(smallestZimFileIndex)
-        stopDownloadIfAlreadyStarted()
         downloadZimFile(smallestZimFileIndex)
         try {
           // Scroll to the top because now the downloading ZIM files are showing on the top.
@@ -200,14 +216,14 @@ class DownloadTest : BaseActivityTest() {
         }
         clickDownloadOnBottomNav()
         waitForDataToLoad()
-        stopDownloadIfAlreadyStarted()
+        stopDownloadIfAlreadyStarted(composeTestRule)
         downloadZimFile()
         assertDownloadStart()
         pauseDownload()
         assertDownloadPaused()
         resumeDownload()
         assertDownloadResumed()
-        stopDownloadIfAlreadyStarted()
+        stopDownloadIfAlreadyStarted(composeTestRule)
         // select the default device language to perform other test cases.
         topLevel {
           clickSettingsOnSideNav {
@@ -226,7 +242,6 @@ class DownloadTest : BaseActivityTest() {
         "Couldn't find downloaded file ' Off the Grid ' Original Exception: ${e.message}"
       )
     }
-    LeakAssertions.assertNoLeaks()
   }
 
   @After

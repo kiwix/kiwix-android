@@ -19,15 +19,16 @@
 package org.kiwix.kiwixmobile.page.history
 
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.SWITCH_TEXT_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 fun history(func: HistoryRobot.() -> Unit) = HistoryRobot().applyWithViewHierarchyPrinting(func)
@@ -49,7 +50,13 @@ class HistoryRobot : BaseRobot() {
     }
   }
 
-  fun assertDeleteHistoryDialogDisplayed() {
-    testFlakyView({ isVisible(TextId(R.string.delete_history)) })
+  fun assertDeleteHistoryDialogDisplayed(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
+          .assertTextEquals(context.getString(R.string.delete_history))
+      }
+    })
   }
 }

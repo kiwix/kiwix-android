@@ -27,16 +27,15 @@ import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
-import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.refresh
@@ -48,8 +47,12 @@ import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 fun zimHost(func: ZimHostRobot.() -> Unit) = ZimHostRobot().applyWithViewHierarchyPrinting(func)
 
 class ZimHostRobot : BaseRobot() {
-  fun assertMenuWifiHotspotDiplayed() {
-    isVisible(TextId(R.string.menu_wifi_hotspot))
+  fun assertMenuWifiHotspotDisplayed(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.menu_wifi_hotspot))
+    }
   }
 
   fun refreshLibraryList(composeTestRule: ComposeContentTestRule) {
@@ -84,12 +87,21 @@ class ZimHostRobot : BaseRobot() {
     stopServerIfAlreadyStarted(composeTestRule)
     composeTestRule.onNodeWithTag(START_SERVER_BUTTON_TESTING_TAG)
       .performClick()
-    assetWifiDialogDisplayed()
-    testFlakyView({ onView(withText("PROCEED")).perform(click()) })
+    assetWifiDialogDisplayed(composeTestRule)
+    testFlakyView({
+      composeTestRule.onNodeWithTag(ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG)
+        .performClick()
+    })
   }
 
-  private fun assetWifiDialogDisplayed() {
-    testFlakyView({ isVisible(Text("WiFi connection detected")) })
+  private fun assetWifiDialogDisplayed(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
+          .assertTextEquals(context.getString(R.string.wifi_dialog_title))
+      }
+    })
   }
 
   fun assertServerStarted(composeTestRule: ComposeContentTestRule) {

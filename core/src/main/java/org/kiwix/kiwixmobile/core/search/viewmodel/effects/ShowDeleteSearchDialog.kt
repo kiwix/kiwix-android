@@ -26,14 +26,12 @@ import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteSearch
-import javax.inject.Inject
 
 data class ShowDeleteSearchDialog(
   private val searchListItem: SearchListItem,
-  private val actions: Channel<Action>
+  private val actions: Channel<Action>,
+  var dialogShower: DialogShower
 ) : SideEffect<Unit> {
-  @Inject lateinit var dialogShower: DialogShower
-
   override fun invokeWith(activity: AppCompatActivity) {
     activity.cachedComponent.inject(this)
     dialogShower.show(

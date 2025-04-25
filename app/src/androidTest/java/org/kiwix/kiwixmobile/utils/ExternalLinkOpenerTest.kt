@@ -50,7 +50,9 @@ internal class ExternalLinkOpenerTest {
     val url = URL("https://github.com/")
     every { intent.data } returns Uri.parse(url.toString())
     val lambdaSlot = slot<() -> Unit>()
-    val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
+    val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil).apply {
+      setAlertDialogShower(alertDialogShower)
+    }
     externalLinkOpener.openExternalUrl(intent)
     verify {
       alertDialogShower.show(
@@ -71,7 +73,9 @@ internal class ExternalLinkOpenerTest {
     val uri = Uri.parse("geo:28.61388888888889,77.20833333333334")
     every { intent.data } returns uri
     val lambdaSlot = slot<() -> Unit>()
-    val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
+    val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil).apply {
+      setAlertDialogShower(alertDialogShower)
+    }
     externalLinkOpener.openExternalUrl(intent)
     verify {
       alertDialogShower.show(
@@ -91,7 +95,9 @@ internal class ExternalLinkOpenerTest {
     every { sharedPreferenceUtil.prefExternalLinkPopup } returns true
     every { intent.data } returns Uri.parse("https://github.com/")
     val lambdaSlot = slot<() -> Unit>()
-    val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
+    val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil).apply {
+      setAlertDialogShower(alertDialogShower)
+    }
     externalLinkOpener.openExternalUrl(intent)
     verify {
       alertDialogShower.show(
@@ -111,7 +117,9 @@ internal class ExternalLinkOpenerTest {
     every { sharedPreferenceUtil.prefExternalLinkPopup } returns true
     every { intent.data } returns Uri.parse("https://github.com/")
     val lambdaSlot = slot<() -> Unit>()
-    val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
+    val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil).apply {
+      setAlertDialogShower(alertDialogShower)
+    }
     externalLinkOpener.openExternalUrl(intent)
     verify {
       alertDialogShower.show(
@@ -132,7 +140,9 @@ internal class ExternalLinkOpenerTest {
   internal fun intentIsStartedIfExternalLinkPopupPreferenceIsFalse() {
     every { intent.resolveActivity(activity.packageManager) } returns mockk()
     every { sharedPreferenceUtil.prefExternalLinkPopup } returns false
-    val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
+    val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil).apply {
+      setAlertDialogShower(alertDialogShower)
+    }
     externalLinkOpener.openExternalUrl(intent)
     verify { activity.startActivity(intent) }
   }
@@ -140,7 +150,9 @@ internal class ExternalLinkOpenerTest {
   @Test
   internal fun toastIfPackageManagerIsNull() {
     every { intent.resolveActivity(activity.packageManager) } returns null
-    val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil, alertDialogShower)
+    val externalLinkOpener = ExternalLinkOpener(activity, sharedPreferenceUtil).apply {
+      setAlertDialogShower(alertDialogShower)
+    }
     mockkStatic(Toast::class)
     justRun {
       Toast.makeText(activity, R.string.no_reader_application_installed, Toast.LENGTH_LONG).show()

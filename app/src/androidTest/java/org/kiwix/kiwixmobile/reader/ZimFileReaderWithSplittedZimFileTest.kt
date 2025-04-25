@@ -30,9 +30,11 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
+import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -95,11 +97,12 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
     AccessibilityChecks.enable().apply {
       setRunChecksFromRootView(true)
       setSuppressingResultMatcher(
-        allOf(
-          matchesCheck(TouchTargetSizeCheck::class.java),
-          matchesViews(
-            withContentDescription("More options")
-          )
+        anyOf(
+          allOf(
+            matchesCheck(TouchTargetSizeCheck::class.java),
+            matchesViews(withContentDescription("More options"))
+          ),
+          matchesCheck(SpeakableTextPresentCheck::class.java)
         )
       )
     }

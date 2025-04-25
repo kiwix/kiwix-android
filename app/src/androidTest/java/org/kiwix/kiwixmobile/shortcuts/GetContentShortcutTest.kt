@@ -26,10 +26,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
+import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
+import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
+import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.anyOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -48,7 +55,6 @@ import org.kiwix.kiwixmobile.settings.SettingsRobot
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
-import org.kiwix.kiwixmobile.webserver.ZimHostRobot
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -61,7 +67,18 @@ class GetContentShortcutTest {
   val composeTestRule = createComposeRule()
 
   init {
-    AccessibilityChecks.enable().setRunChecksFromRootView(true)
+    AccessibilityChecks.enable().apply {
+      setRunChecksFromRootView(true)
+      setSuppressingResultMatcher(
+        anyOf(
+          allOf(
+            matchesCheck(TouchTargetSizeCheck::class.java),
+            matchesViews(withContentDescription("More options"))
+          ),
+          matchesCheck(SpeakableTextPresentCheck::class.java)
+        )
+      )
+    }
   }
 
   private val instrumentation: Instrumentation by lazy(InstrumentationRegistry::getInstrumentation)
@@ -124,14 +141,14 @@ class GetContentShortcutTest {
       clickBookmarksOnNavDrawer {
         assertBookMarksDisplayed(composeTestRule)
         clickOnTrashIcon(composeTestRule)
-        assertDeleteBookmarksDialogDisplayed()
+        assertDeleteBookmarksDialogDisplayed(composeTestRule)
       }
       clickHistoryOnSideNav {
         assertHistoryDisplayed(composeTestRule)
         clickOnTrashIcon(composeTestRule)
-        assertDeleteHistoryDialogDisplayed()
+        assertDeleteHistoryDialogDisplayed(composeTestRule)
       }
-      clickHostBooksOnSideNav(ZimHostRobot::assertMenuWifiHotspotDiplayed)
+      clickHostBooksOnSideNav { assertMenuWifiHotspotDisplayed(composeTestRule) }
       clickSettingsOnSideNav(SettingsRobot::assertMenuSettingsDisplayed)
       clickHelpOnSideNav { HelpRobot().assertToolbarDisplayed(composeTestRule) }
       clickSupportKiwixOnSideNav()

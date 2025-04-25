@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.databinding.DialogNavigationHistoryBinding
+import org.kiwix.kiwixmobile.core.extensions.getDialogHostComposeView
 import org.kiwix.kiwixmobile.core.main.DISABLE_ICON_ITEM_ALPHA
 import org.kiwix.kiwixmobile.core.main.ENABLE_ICON_ITEM_ALPHA
 import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryAdapter
@@ -97,6 +98,7 @@ class NavigationHistoryDialog(
       this.menu?.findItem(R.id.menu_page_search)?.isVisible = false
     }
     dialogNavigationHistoryBinding?.apply {
+      root.addView(requireContext().getDialogHostComposeView(alertDialogShower))
       if (navigationHistoryList.isEmpty()) {
         deleteItem?.isEnabled = false
         deleteItem?.icon?.alpha = DISABLE_ICON_ITEM_ALPHA

@@ -66,6 +66,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.localFileTransfer.WifiDirectManager.Companion.getDeviceStatus
 import javax.inject.Inject
 
@@ -142,13 +143,16 @@ class LocalFileTransferFragment :
           )
         }
       )
+      DialogHost(alertDialogShower)
     }
 
     displayFileTransferProgress(filesForTransfer)
-
-    wifiDirectManager.callbacks = this
-    wifiDirectManager.lifecycleCoroutineScope = lifecycleScope
-    wifiDirectManager.startWifiDirectManager(filesForTransfer)
+    wifiDirectManager.apply {
+      callbacks = this@LocalFileTransferFragment
+      lifecycleCoroutineScope = lifecycleScope
+      startWifiDirectManager(filesForTransfer)
+      setAlertDialogShower(alertDialogShower)
+    }
   }
 
   private fun actionMenuItem() = listOf(

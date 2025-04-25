@@ -57,6 +57,7 @@ import org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Vector
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.File
@@ -191,10 +192,11 @@ class AddNoteDialog : DialogFragment() {
         },
         snackBarHostState = snackBarHostState
       )
+      DialogHost(alertDialogShower)
     }
   }
 
-  fun updateMenuItem(vararg contentDescription: Int, isEnabled: Boolean) {
+  private fun updateMenuItem(vararg contentDescription: Int, isEnabled: Boolean) {
     menuItems.value = menuItems.value.map { item ->
       if (contentDescription.contains(item.contentDescription)) {
         item.copy(isEnabled = isEnabled)

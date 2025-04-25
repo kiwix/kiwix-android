@@ -89,6 +89,8 @@ import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
@@ -207,6 +209,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
             onClick = { navigationIconClick() }
           )
         }
+        DialogHost(dialogShower as AlertDialogShower)
       }
     }
   }
@@ -278,7 +281,9 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     copyMoveFileHandler?.apply {
       setFileCopyMoveCallback(this@LocalLibraryFragment)
       setLifeCycleScope(lifecycleScope)
+      setAlertDialogShower(dialogShower as AlertDialogShower)
     }
+    zimManageViewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
     zimManageViewModel.fileSelectListStates.observe(viewLifecycleOwner, Observer(::render))
       .also {
         coreMainActivity.navHostContainer

@@ -20,24 +20,26 @@ package org.kiwix.kiwixmobile.widgets
 
 import android.graphics.Point
 import android.util.Log
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObjectNotFoundException
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
-import org.hamcrest.core.AllOf.allOf
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.SHORT_WAIT
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
+import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 fun searchWidget(func: SearchWidgetRobot.() -> Unit) =
@@ -52,7 +54,7 @@ class SearchWidgetRobot : BaseRobot() {
       widget.drag(removeTarget)
 
       uiDevice.waitForIdle()
-    } catch (ignore: Exception) {
+    } catch (_: Exception) {
       // nothing to do since widget is not added
       Log.e(
         "SEARCH_WIDGET_TEST",
@@ -65,7 +67,7 @@ class SearchWidgetRobot : BaseRobot() {
     try {
       isVisible(Text("Add automatically"))
       true
-    } catch (ignore: Exception) {
+    } catch (_: Exception) {
       false
     }
 
@@ -76,7 +78,7 @@ class SearchWidgetRobot : BaseRobot() {
   fun findSearchWidget(uiDevice: UiDevice) {
     try {
       assertSearchWidgetAddedToHomeScreen(2)
-    } catch (ignore: RuntimeException) {
+    } catch (_: RuntimeException) {
       // the search widget is not on the home screen, swipe right because
       // the widget has been added to next window
       swipeRightToOpenNextWindow(uiDevice)
@@ -111,7 +113,7 @@ class SearchWidgetRobot : BaseRobot() {
       testFlakyView({ isVisible(Text("Google")) })
       pressBack()
       Log.e("SEARCH_WIDGET_TEST", "Closed the Google speak dialog")
-    } catch (ignore: Exception) {
+    } catch (_: Exception) {
       // do nothing since the Google speak is not recognized in this emulator.
       Log.e("SEARCH_WIDGET_TEST", "Could not close the Google speak dialog.")
     }
@@ -124,10 +126,14 @@ class SearchWidgetRobot : BaseRobot() {
     clickOnElementById(uiDevice, kiwixMainActivity, "search_widget_star")
   }
 
-  fun assertBookmarkScreenVisible() {
+  fun assertBookmarkScreenVisible(composeTestRule: ComposeContentTestRule) {
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
     testFlakyView({
-      onView(allOf(withText(R.string.bookmarks), isDescendantOfA(withId(R.id.toolbar))))
-        .check(matches(isDisplayed()))
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
+          .assertTextEquals(context.getString(R.string.bookmarks))
+      }
     })
   }
 
@@ -157,7 +163,7 @@ class SearchWidgetRobot : BaseRobot() {
           By.res("${kiwixMainActivity.packageName}:id/$elementId")
         ).click()
         return
-      } catch (e: UiObjectNotFoundException) {
+      } catch (_: UiObjectNotFoundException) {
         attempts++
         Log.e("SEARCH_WIDGET_TEST", "Attempt $attempts: Failed to click on $elementId")
       }

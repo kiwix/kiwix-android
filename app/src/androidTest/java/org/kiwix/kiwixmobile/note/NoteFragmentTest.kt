@@ -141,7 +141,7 @@ class NoteFragmentTest : BaseActivityTest() {
       openNoteFragment()
       assertToolbarExist(composeTestRule)
       clickOnSavedNote(composeTestRule)
-      clickOnOpenNote()
+      clickOnOpenNote(composeTestRule)
       assertNoteSaved(composeTestRule)
       // to close the note dialog.
       pressBack()
@@ -164,7 +164,7 @@ class NoteFragmentTest : BaseActivityTest() {
       openNoteFragment()
       assertToolbarExist(composeTestRule)
       clickOnSavedNote(composeTestRule)
-      clickOnOpenNote()
+      clickOnOpenNote(composeTestRule)
       assertNoteSaved(composeTestRule)
       pressBack()
     }
@@ -188,7 +188,7 @@ class NoteFragmentTest : BaseActivityTest() {
       openNoteFragment()
       assertToolbarExist(composeTestRule)
       clickOnSavedNote(composeTestRule)
-      clickOnOpenNote()
+      clickOnOpenNote(composeTestRule)
       assertNoteSaved(composeTestRule)
       // to close the note dialog.
       pressBack()
@@ -211,7 +211,7 @@ class NoteFragmentTest : BaseActivityTest() {
         openNoteFragment()
         assertToolbarExist(composeTestRule)
         clickOnSavedNote(composeTestRule)
-        clickOnOpenNote()
+        clickOnOpenNote(composeTestRule)
         assertNoteSaved(composeTestRule)
         clickOnDeleteIcon(composeTestRule)
         pressBack()
@@ -249,8 +249,8 @@ class NoteFragmentTest : BaseActivityTest() {
       openNoteFragment()
       assertToolbarExist(composeTestRule)
       clickOnTrashIcon(composeTestRule)
-      assertDeleteNoteDialogDisplayed()
-      clickOnDeleteButton()
+      assertDeleteNoteDialogDisplayed(composeTestRule)
+      clickOnDeleteButton(composeTestRule)
       assertNoNotesTextDisplayed(composeTestRule)
       pressBack()
     }

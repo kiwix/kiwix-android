@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.setScheduler
 import java.util.UUID
@@ -52,6 +53,7 @@ internal class BookmarkViewModelTest {
   private val libkiwixBookMarks: LibkiwixBookmarks = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
+  private val dialogShower: AlertDialogShower = mockk()
   private val viewModelScope = CoroutineScope(Dispatchers.IO)
 
   private lateinit var viewModel: BookmarkViewModel
@@ -72,7 +74,10 @@ internal class BookmarkViewModelTest {
     every { sharedPreferenceUtil.showBookmarksAllBooks } returns true
     every { libkiwixBookMarks.bookmarks() } returns itemsFromDb.distinctUntilChanged()
     every { libkiwixBookMarks.pages() } returns libkiwixBookMarks.bookmarks()
-    viewModel = BookmarkViewModel(libkiwixBookMarks, zimReaderContainer, sharedPreferenceUtil)
+    viewModel =
+      BookmarkViewModel(libkiwixBookMarks, zimReaderContainer, sharedPreferenceUtil).apply {
+        alertDialogShower = dialogShower
+      }
   }
 
   @Test
@@ -179,7 +184,8 @@ internal class BookmarkViewModelTest {
           viewModel.effects,
           bookmarkState(),
           libkiwixBookMarks,
-          viewModelScope
+          viewModelScope,
+          dialogShower
         )
       )
     }

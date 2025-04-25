@@ -20,11 +20,9 @@ package org.kiwix.kiwixmobile.nav.destination.library
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Dialog
 import android.content.ContentResolver
 import android.net.Uri
 import android.provider.DocumentsContract
-import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -47,6 +45,7 @@ import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
+import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
@@ -68,14 +67,12 @@ import javax.inject.Inject
 class CopyMoveFileHandler @Inject constructor(
   private val activity: Activity,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val alertDialogShower: AlertDialogShower,
   private val storageCalculator: StorageCalculator,
   private val fat32Checker: Fat32Checker
 ) {
   private var fileCopyMoveCallback: FileCopyMoveCallback? = null
   private var selectedFileUri: Uri? = null
   private var selectedFile: DocumentFile? = null
-  private var copyMovePreparingDialog: Dialog? = null
   private var progressBarDialog: AlertDialog? = null
   private var lifecycleScope: CoroutineScope? = null
   private var progressBar: ProgressBar? = null
@@ -84,6 +81,7 @@ class CopyMoveFileHandler @Inject constructor(
   var shouldValidateZimFile: Boolean = false
   private var fileSystemDisposable: Disposable? = null
   private lateinit var fragmentManager: FragmentManager
+  private lateinit var alertDialogShower: AlertDialogShower
 
   private val copyMoveTitle: String by lazy {
     if (isMoveOperation) {
@@ -91,6 +89,10 @@ class CopyMoveFileHandler @Inject constructor(
     } else {
       activity.getString(R.string.copying_zim_file)
     }
+  }
+
+  fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
+    this.alertDialogShower = alertDialogShower
   }
 
   private fun updateProgress(progress: Int) {
@@ -441,7 +443,7 @@ class CopyMoveFileHandler @Inject constructor(
       // create archive object, and check if it has the mainEntry or not to validate the ZIM file.
       archive = ZimReaderSource(destinationFile).createArchive()
       archive?.hasMainEntry() == true
-    } catch (ignore: Exception) {
+    } catch (_: Exception) {
       // if it is a invalid ZIM file
       false
     } finally {
@@ -510,18 +512,12 @@ class CopyMoveFileHandler @Inject constructor(
     return destinationFile
   }
 
-  @SuppressLint("InflateParams") fun showPreparingCopyMoveDialog() {
-    if (copyMovePreparingDialog == null) {
-      val dialogView: View =
-        activity.layoutInflater.inflate(R.layout.item_custom_spinner, null)
-      copyMovePreparingDialog =
-        alertDialogShower.create(KiwixDialog.PreparingCopyingFilesDialog { dialogView })
-    }
-    copyMovePreparingDialog?.show()
+  private fun showPreparingCopyMoveDialog() {
+    alertDialogShower.show(KiwixDialog.PreparingCopyingFilesDialog { ContentLoadingProgressBar() })
   }
 
   private fun hidePreparingCopyMoveDialog() {
-    copyMovePreparingDialog?.dismiss()
+    alertDialogShower.dismiss()
   }
 
   @SuppressLint("InflateParams")

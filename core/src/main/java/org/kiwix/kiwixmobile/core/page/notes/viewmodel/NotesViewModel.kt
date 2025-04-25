@@ -66,8 +66,8 @@ class NotesViewModel @Inject constructor(
     state.copy(pageItems = state.pageItems.map { it.copy(isSelected = false) })
 
   override fun createDeletePageDialogEffect(state: NotesState, viewModelScope: CoroutineScope) =
-    ShowDeleteNotesDialog(effects, state, pageDao, viewModelScope)
+    ShowDeleteNotesDialog(effects, state, pageDao, viewModelScope, alertDialogShower)
 
   override fun onItemClick(page: Page) =
-    ShowOpenNoteDialog(effects, page, zimReaderContainer)
+    ShowOpenNoteDialog(effects, page, zimReaderContainer, alertDialogShower)
 }

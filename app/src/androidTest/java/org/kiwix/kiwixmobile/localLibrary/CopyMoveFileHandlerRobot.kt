@@ -19,11 +19,12 @@
 package org.kiwix.kiwixmobile.localLibrary
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.web.sugar.Web
 import androidx.test.espresso.web.webdriver.DriverAtoms
@@ -32,9 +33,12 @@ import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable
-import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.R.id
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.local.NO_FILE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
@@ -44,13 +48,22 @@ fun copyMoveFileHandler(func: CopyMoveFileHandlerRobot.() -> Unit) =
   CopyMoveFileHandlerRobot().applyWithViewHierarchyPrinting(func)
 
 class CopyMoveFileHandlerRobot : BaseRobot() {
-  fun assertCopyMoveDialogDisplayed() {
-    isVisible(TextId(R.string.copy_move_files_dialog_description))
+  fun assertCopyMoveDialogDisplayed(composeTestRule: ComposeContentTestRule) {
+    pauseForBetterTestPerformance()
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.copy_move_files_dialog_description))
+    }
   }
 
-  fun assertCopyMoveDialogNotDisplayed() {
+  fun assertCopyMoveDialogNotDisplayed(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
-      onView(withText(R.string.copy_move_files_dialog_description)).check(doesNotExist())
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG)
+          .assertDoesNotExist()
+      }
     })
   }
 
@@ -71,21 +84,36 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
     })
   }
 
-  fun clickOnCopy() {
+  fun clickOnCopy(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
-      onView(withText(R.string.action_copy)).perform(click())
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG)
+          .assertTextEquals(context.getString(R.string.action_copy).uppercase())
+          .performClick()
+      }
     })
   }
 
-  fun clickOnMove() {
+  fun clickOnMove(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
-      onView(withText(R.string.move)).perform(click())
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG)
+          .assertTextEquals(context.getString(R.string.move).uppercase())
+          .performClick()
+      }
     })
   }
 
-  fun clickOnCancel() {
+  fun clickOnCancel(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
-      onView(withText(R.string.cancel)).perform(click())
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG)
+          .assertTextEquals(context.getString(R.string.cancel).uppercase())
+          .performClick()
+      }
     })
   }
 

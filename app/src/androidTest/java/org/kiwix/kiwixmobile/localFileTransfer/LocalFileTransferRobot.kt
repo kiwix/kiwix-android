@@ -23,10 +23,6 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
@@ -36,6 +32,7 @@ import org.kiwix.kiwixmobile.core.ui.components.SHOWCASE_VIEW_MESSAGE_TESTING_TA
 import org.kiwix.kiwixmobile.core.ui.components.SHOWCASE_VIEW_NEXT_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
@@ -71,14 +68,16 @@ class LocalFileTransferRobot : BaseRobot() {
 
   fun assertLocalFileTransferScreenVisible(composeContentTestRule: ComposeContentTestRule) {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
-    closeEnableWifiP2PDialogIfVisible()
+    closeEnableWifiP2PDialogIfVisible(composeContentTestRule)
     assertReceiveFileTitleVisible(composeContentTestRule)
   }
 
-  private fun closeEnableWifiP2PDialogIfVisible() {
+  private fun closeEnableWifiP2PDialogIfVisible(composeContentTestRule: ComposeContentTestRule) {
     try {
       testFlakyView({
-        onView(withText(string.request_enable_wifi)).check(matches(isDisplayed()))
+        composeContentTestRule
+          .onNodeWithTag(ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG)
+          .assertTextEquals(context.getString(string.request_enable_wifi))
         pressBack()
       })
     } catch (_: Throwable) {

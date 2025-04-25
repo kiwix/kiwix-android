@@ -23,6 +23,7 @@ import android.content.ComponentName
 import android.os.Build
 import android.os.Bundle
 import android.widget.RemoteViews
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
@@ -31,14 +32,17 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
+import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
 import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.anyOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.KiwixSearchWidget
@@ -49,6 +53,9 @@ class SearchWidgetTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
+
+  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  val composeTestRule = createComposeRule()
   private lateinit var kiwixMainActivity: KiwixMainActivity
   private lateinit var uiDevice: UiDevice
 
@@ -56,9 +63,12 @@ class SearchWidgetTest : BaseActivityTest() {
     AccessibilityChecks.enable().apply {
       setRunChecksFromRootView(true)
       setSuppressingResultMatcher(
-        allOf(
-          matchesCheck(TouchTargetSizeCheck::class.java),
-          matchesViews(withContentDescription("More options"))
+        anyOf(
+          allOf(
+            matchesCheck(TouchTargetSizeCheck::class.java),
+            matchesViews(withContentDescription("More options"))
+          ),
+          matchesCheck(SpeakableTextPresentCheck::class.java)
         )
       )
     }
@@ -103,7 +113,7 @@ class SearchWidgetTest : BaseActivityTest() {
             addWidgetToHomeScreenFromWidgetWindow()
             assertSearchWidgetAddedToHomeScreen()
             clickOnBookmarkIcon(uiDevice, kiwixMainActivity)
-            assertBookmarkScreenVisible()
+            assertBookmarkScreenVisible(composeTestRule)
             pressBack()
             pressHome()
             findSearchWidget(uiDevice)

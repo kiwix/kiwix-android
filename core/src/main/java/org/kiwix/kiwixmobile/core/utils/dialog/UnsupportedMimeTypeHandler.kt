@@ -35,17 +35,21 @@ import javax.inject.Inject
 class UnsupportedMimeTypeHandler @Inject constructor(
   private val activity: Activity,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val alertDialogShower: AlertDialogShower,
   private val zimReaderContainer: ZimReaderContainer
 ) {
+  private var alertDialogShower: AlertDialogShower? = null
   var intent: Intent = Intent(Intent.ACTION_VIEW)
+
+  fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
+    this.alertDialogShower = alertDialogShower
+  }
 
   fun showSaveOrOpenUnsupportedFilesDialog(
     url: String?,
     documentType: String?,
     lifecycleScope: CoroutineScope?
   ) {
-    alertDialogShower.show(
+    alertDialogShower?.show(
       KiwixDialog.SaveOrOpenUnsupportedFiles,
       { openOrSaveFile(url, documentType, true, lifecycleScope) },
       { openOrSaveFile(url, documentType, false, lifecycleScope) },

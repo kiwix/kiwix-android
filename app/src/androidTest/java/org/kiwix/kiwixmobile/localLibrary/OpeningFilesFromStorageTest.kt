@@ -106,7 +106,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
 
   @Test
   fun testOpeningFileWithFilePicker() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Build.VERSION.SDK_INT != Build.VERSION_CODES.VANILLA_ICE_CREAM) {
       activityScenario.onActivity {
         kiwixMainActivity = it
         it.navigate(R.id.libraryFragment)
@@ -119,8 +119,8 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
         TestUtils.testFlakyView(uiDevice.findObject(By.textContains(fileName))::click, 10)
 
         copyMoveFileHandler {
-          assertCopyMoveDialogDisplayed()
-          clickOnMove()
+          assertCopyMoveDialogDisplayed(composeTestRule)
+          clickOnMove(composeTestRule)
           assertStorageSelectionDialogDisplayed()
           clickOnInternalStorage()
           assertZimFileCopiedAndShowingIntoTheReader()
@@ -149,8 +149,8 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
         openFileManager()
         TestUtils.testFlakyView(uiDevice.findObject(By.textContains(fileName))::click, 10)
         copyMoveFileHandler {
-          assertCopyMoveDialogDisplayed()
-          clickOnMove()
+          assertCopyMoveDialogDisplayed(composeTestRule)
+          clickOnMove(composeTestRule)
           assertStorageSelectionDialogDisplayed()
           clickOnInternalStorage()
           assertZimFileCopiedAndShowingIntoTheReader()
@@ -189,8 +189,8 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       createDeepLinkIntent(uri)
     ).onActivity {}
     copyMoveFileHandler {
-      assertCopyMoveDialogDisplayed()
-      clickOnCancel()
+      assertCopyMoveDialogDisplayed(composeTestRule)
+      clickOnCancel(composeTestRule)
     }
   }
 

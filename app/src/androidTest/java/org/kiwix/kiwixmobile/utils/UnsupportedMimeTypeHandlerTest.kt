@@ -57,9 +57,10 @@ class UnsupportedMimeTypeHandlerTest {
     UnsupportedMimeTypeHandler(
       activity,
       sharedPreferenceUtil,
-      alertDialogShower,
       zimReaderContainer
-    )
+    ).apply {
+      setAlertDialogShower(alertDialogShower)
+    }
 
   @Before
   fun before() {
@@ -198,9 +199,10 @@ class UnsupportedMimeTypeHandlerTest {
       UnsupportedMimeTypeHandler(
         activity,
         sharedPreferenceUtil,
-        alertDialogShower,
         zimReaderContainer
-      )
+      ).apply {
+        setAlertDialogShower(alertDialogShower)
+      }
     mockkStatic(Toast::class)
     justRun {
       Toast.makeText(activity, R.string.save_media_error, Toast.LENGTH_LONG).show()

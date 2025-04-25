@@ -26,6 +26,7 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.setScheduler
 
@@ -34,6 +35,7 @@ internal class HistoryViewModelTest {
   private val historyRoomDao: HistoryRoomDao = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
+  private val dialogShower = mockk<AlertDialogShower>(relaxed = true)
   private val viewModelScope = CoroutineScope(Dispatchers.IO)
 
   private lateinit var viewModel: HistoryViewModel
@@ -56,7 +58,9 @@ internal class HistoryViewModelTest {
     every { sharedPreferenceUtil.showHistoryAllBooks } returns true
     every { historyRoomDao.history() } returns itemsFromDb
     every { historyRoomDao.pages() } returns historyRoomDao.history()
-    viewModel = HistoryViewModel(historyRoomDao, zimReaderContainer, sharedPreferenceUtil)
+    viewModel = HistoryViewModel(historyRoomDao, zimReaderContainer, sharedPreferenceUtil).apply {
+      alertDialogShower = dialogShower
+    }
   }
 
   @Test
@@ -138,7 +142,8 @@ internal class HistoryViewModelTest {
           viewModel.effects,
           historyState(),
           historyRoomDao,
-          viewModelScope
+          viewModelScope,
+          dialogShower
         )
       )
     }

@@ -29,9 +29,14 @@ import javax.inject.Inject
 
 class ExternalLinkOpener @Inject constructor(
   private val activity: Activity,
-  private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val alertDialogShower: AlertDialogShower
+  private val sharedPreferenceUtil: SharedPreferenceUtil
 ) {
+  private lateinit var alertDialogShower: AlertDialogShower
+
+  fun setAlertDialogShower(alertDialogShower: AlertDialogShower) {
+    this.alertDialogShower = alertDialogShower
+  }
+
   fun openExternalUrl(
     intent: Intent,
     showExternalLinkPopup: Boolean = sharedPreferenceUtil.prefExternalLinkPopup

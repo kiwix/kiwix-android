@@ -68,6 +68,7 @@ import org.kiwix.kiwixmobile.core.search.NAV_ARG_SEARCH_STRING
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.RateDialogHandler
 import javax.inject.Inject
 import kotlin.system.exitProcess
@@ -83,6 +84,8 @@ const val NEW_TAB_SHORTCUT_ID = "new_tab_shortcut"
 
 abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   abstract val searchFragmentResId: Int
+
+  @Inject lateinit var alertDialogShower: AlertDialogShower
 
   @Inject lateinit var externalLinkOpener: ExternalLinkOpener
 
@@ -158,6 +161,9 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
 
   override fun onStart() {
     super.onStart()
+    setDialogHostToActivity(alertDialogShower)
+    externalLinkOpener.setAlertDialogShower(alertDialogShower)
+    rateDialogHandler.setAlertDialogShower(alertDialogShower)
     downloadMonitor.startMonitoringDownload()
     stopDownloadServiceIfRunning()
     rateDialogHandler.checkForRateDialog(getIconResId())
@@ -492,4 +498,5 @@ abstract class CoreMainActivity : BaseActivity(), WebViewProvider {
   protected abstract fun getIconResId(): Int
   abstract val readerFragmentResId: Int
   abstract fun createApplicationShortcuts()
+  abstract fun setDialogHostToActivity(alertDialogShower: AlertDialogShower)
 }

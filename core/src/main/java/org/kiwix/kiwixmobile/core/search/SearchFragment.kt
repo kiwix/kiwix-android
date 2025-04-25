@@ -55,6 +55,7 @@ import org.kiwix.kiwixmobile.core.databinding.FragmentSearchBinding
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
+import org.kiwix.kiwixmobile.core.extensions.getDialogHostComposeView
 import org.kiwix.kiwixmobile.core.extensions.setUpSearchView
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -75,6 +76,8 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.SearchState
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import javax.inject.Inject
 
@@ -92,6 +95,8 @@ class SearchFragment : BaseFragment() {
   private var searchMenuItem: MenuItem? = null
   private var findInPageTextView: TextView? = null
   private var fragmentSearchBinding: FragmentSearchBinding? = null
+
+  @Inject lateinit var dialogShower: DialogShower
 
   val searchViewModel by lazy { viewModel<SearchViewModel>(viewModelFactory) }
   private var searchAdapter: SearchAdapter? = null
@@ -149,6 +154,10 @@ class SearchFragment : BaseFragment() {
       }
     }
     handleBackPress()
+    fragmentSearchBinding?.root?.addView(
+      requireContext().getDialogHostComposeView(dialogShower as AlertDialogShower)
+    )
+    searchViewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
   }
 
   /**

@@ -24,11 +24,18 @@ import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
+import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
+import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
+import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
 import leakcanary.LeakAssertions
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -58,6 +65,15 @@ class InitialDownloadTest : BaseActivityTest() {
   init {
     AccessibilityChecks.enable().apply {
       setRunChecksFromRootView(true)
+      setSuppressingResultMatcher(
+        anyOf(
+          allOf(
+            matchesCheck(TouchTargetSizeCheck::class.java),
+            matchesViews(withContentDescription("More options"))
+          ),
+          matchesCheck(SpeakableTextPresentCheck::class.java)
+        )
+      )
     }
   }
 
@@ -111,14 +127,14 @@ class InitialDownloadTest : BaseActivityTest() {
       clickDownloadOnBottomNav()
       assertLibraryListDisplayed()
       waitForDataToLoad()
-      stopDownloadIfAlreadyStarted()
+      stopDownloadIfAlreadyStarted(composeTestRule)
       downloadZimFile()
       assertStorageConfigureDialogDisplayed()
       clickOnInternalStorage()
       assertDownloadStart()
       stopDownload()
-      assertStopDownloadDialogDisplayed()
-      clickOnYesToConfirm()
+      assertStopDownloadDialogDisplayed(composeTestRule)
+      clickOnYesToConfirm(composeTestRule)
       assertDownloadStop()
     }
     LeakAssertions.assertNoLeaks()

@@ -70,6 +70,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificat
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.viewModel
 import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
+import org.kiwix.kiwixmobile.core.extensions.getDialogHostComposeView
 import org.kiwix.kiwixmobile.core.extensions.isKeyboardVisible
 import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
 import org.kiwix.kiwixmobile.core.extensions.setUpSearchView
@@ -88,7 +89,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
-import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
@@ -105,8 +105,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   @Inject lateinit var conMan: ConnectivityManager
 
   @Inject lateinit var downloader: Downloader
-
-  @Inject lateinit var dialogShower: DialogShower
 
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
 
@@ -144,7 +142,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
               downloader.retryDownload(it.downloadId)
             }
           } else {
-            dialogShower.show(
+            alertDialogShower.show(
               KiwixDialog.YesNoDialog.StopDownload,
               { downloader.cancelDownload(it.downloadId) }
             )
@@ -195,6 +193,12 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     if (toolbar != null) {
       activity.setupDrawerToggle(toolbar)
     }
+    fragmentDestinationDownloadBinding?.root?.addView(
+      requireContext().getDialogHostComposeView(
+        alertDialogShower
+      )
+    )
+    zimManageViewModel.setAlertDialogShower(alertDialogShower)
     return fragmentDestinationDownloadBinding?.root
   }
 
@@ -309,7 +313,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun showInternetAccessViaMobileNetworkDialog() {
-    dialogShower.show(
+    alertDialogShower.show(
       WifiOnly,
       {
         showRecyclerviewAndHideSwipeDownForLibraryErrorText()
@@ -595,7 +599,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
             }
 
             noWifiWithWifiOnlyPreferenceSet -> {
-              dialogShower.show(WifiOnly, {
+              alertDialogShower.show(WifiOnly, {
                 sharedPreferenceUtil.putPrefWifiOnly(false)
                 clickOnBookItem()
               })
@@ -667,7 +671,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   private fun showManageExternalStoragePermissionDialog() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      dialogShower.show(
+      alertDialogShower.show(
         KiwixDialog.ManageExternalFilesPermissionDialog,
         {
           this.activity?.let(FragmentActivity::navigateToSettings)

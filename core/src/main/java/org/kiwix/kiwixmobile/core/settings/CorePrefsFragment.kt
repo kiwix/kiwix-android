@@ -25,14 +25,18 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.EditTextPreference
@@ -50,6 +54,7 @@ import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getVersionCode
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
+import org.kiwix.kiwixmobile.core.extensions.getDialogHostComposeView
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.AddNoteDialog
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -59,6 +64,7 @@ import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.OpenCredits
@@ -67,6 +73,8 @@ import java.io.InputStream
 import java.util.Locale
 import javax.inject.Inject
 import javax.xml.parsers.DocumentBuilderFactory
+
+const val ZERO_POINT_SEVEN = 0.7
 
 abstract class CorePrefsFragment :
   PreferenceFragmentCompat(),
@@ -113,6 +121,18 @@ abstract class CorePrefsFragment :
         )
       }
     }
+  }
+
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View {
+    val root = super.onCreateView(inflater, container, savedInstanceState) as ViewGroup
+    // Adding compose View to preference layout for showing the alertDialog.
+    // TODO We will remove this once we will migrate to compose.
+    root.addView(requireContext().getDialogHostComposeView(alertDialogShower as AlertDialogShower))
+    return root
   }
 
   private fun setupZoom() {
@@ -284,12 +304,18 @@ abstract class CorePrefsFragment :
       LayoutInflater.from(
         requireActivity()
       ).inflate(R.layout.credits_webview, null) as WebView
+    val maxHeightInPx =
+      (Resources.getSystem().displayMetrics.heightPixels * ZERO_POINT_SEVEN).toInt()
+    view.layoutParams = ViewGroup.LayoutParams(
+      ViewGroup.LayoutParams.MATCH_PARENT,
+      maxHeightInPx
+    )
     view.loadUrl("file:///android_asset/credits.html")
     if (darkModeConfig?.isDarkModeActive() == true) {
       view.settings.javaScriptEnabled = true
       view.setBackgroundColor(0)
     }
-    alertDialogShower?.show(OpenCredits { view })
+    alertDialogShower?.show(OpenCredits { AndroidView(factory = { view }) })
   }
 
   override fun onPreferenceTreeClick(preference: Preference): Boolean {

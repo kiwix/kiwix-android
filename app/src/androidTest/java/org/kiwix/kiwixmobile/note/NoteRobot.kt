@@ -30,7 +30,6 @@ import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
@@ -38,7 +37,6 @@ import androidx.test.espresso.web.webdriver.Locator
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
-import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.ADD_NOTE_TEXT_FILED_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.DELETE_MENU_BUTTON_TESTING_TAG
@@ -48,6 +46,9 @@ import org.kiwix.kiwixmobile.core.page.NO_ITEMS_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.PAGE_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.SWITCH_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
@@ -82,6 +83,7 @@ class NoteRobot : BaseRobot() {
   }
 
   fun assertNoteDialogDisplayed(composeTestRule: ComposeContentTestRule) {
+    pauseForBetterTestPerformance()
     testFlakyView({
       composeTestRule.waitForIdle()
       composeTestRule.onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
@@ -128,8 +130,15 @@ class NoteRobot : BaseRobot() {
     }
   }
 
-  fun clickOnOpenNote() {
-    testFlakyView({ clickOn(Text("OPEN NOTE")) })
+  fun clickOnOpenNote(composeTestRule: ComposeContentTestRule) {
+    pauseForBetterTestPerformance()
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG)
+          .performClick()
+      }
+    })
   }
 
   fun assertNoteSaved(composeTestRule: ComposeContentTestRule) {
@@ -168,13 +177,26 @@ class NoteRobot : BaseRobot() {
     })
   }
 
-  fun assertDeleteNoteDialogDisplayed() {
-    testFlakyView({ isVisible(TextId(R.string.delete_notes_confirmation_msg)) })
+  fun assertDeleteNoteDialogDisplayed(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
+          .assertTextEquals(context.getString(R.string.delete_notes_confirmation_msg))
+      }
+    })
   }
 
-  fun clickOnDeleteButton() {
-    pauseForBetterTestPerformance()
-    testFlakyView({ onView(ViewMatchers.withText("DELETE")).perform(click()) })
+  fun clickOnDeleteButton(composeTestRule: ComposeContentTestRule) {
+    testFlakyView(
+      {
+        composeTestRule.apply {
+          waitForIdle()
+          onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG)
+            .performClick()
+        }
+      }
+    )
   }
 
   fun assertNoNotesTextDisplayed(composeTestRule: ComposeContentTestRule) {

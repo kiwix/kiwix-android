@@ -34,7 +34,8 @@ internal class ShowDeleteHistoryDialogTest {
           effects,
           historyState(),
           historyDao,
-          viewModelScope
+          viewModelScope,
+          dialogShower
         )
       mockkActivityInjection(showDeleteHistoryDialog)
       val lambdaSlot = slot<() -> Unit>()
@@ -52,7 +53,8 @@ internal class ShowDeleteHistoryDialogTest {
           effects,
           historyState(listOf(historyItem(isSelected = true, zimReaderSource = mockk()))),
           historyDao,
-          viewModelScope
+          viewModelScope,
+          dialogShower
         )
       mockkActivityInjection(showDeleteHistoryDialog)
       showDeleteHistoryDialog.invokeWith(activity)
@@ -67,7 +69,8 @@ internal class ShowDeleteHistoryDialogTest {
           effects,
           historyState(),
           historyDao,
-          viewModelScope
+          viewModelScope,
+          dialogShower
         )
       mockkActivityInjection(showDeleteHistoryDialog)
       showDeleteHistoryDialog.invokeWith(activity)

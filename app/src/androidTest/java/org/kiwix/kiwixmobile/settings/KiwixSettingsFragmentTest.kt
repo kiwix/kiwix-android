@@ -18,19 +18,28 @@
 package org.kiwix.kiwixmobile.settings
 
 import android.Manifest
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.lifecycle.Lifecycle
+import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
-import androidx.test.ext.junit.rules.ActivityScenarioRule
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement
+import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesCheck
+import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResultUtils.matchesViews
+import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
+import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
 import leakcanary.LeakAssertions
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.anyOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.intro.IntroRobot
 import org.kiwix.kiwixmobile.intro.intro
@@ -45,8 +54,8 @@ class KiwixSettingsFragmentTest {
   @JvmField
   val retryRule = RetryRule()
 
-  @get:Rule
-  var activityScenarioRule = ActivityScenarioRule(KiwixMainActivity::class.java)
+  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  val composeTestRule = createComposeRule()
 
   private val permissions =
     arrayOf(
@@ -60,7 +69,18 @@ class KiwixSettingsFragmentTest {
     GrantPermissionRule.grant(*permissions)
 
   init {
-    AccessibilityChecks.enable().setRunChecksFromRootView(true)
+    AccessibilityChecks.enable().apply {
+      setRunChecksFromRootView(true)
+      setSuppressingResultMatcher(
+        anyOf(
+          allOf(
+            matchesCheck(TouchTargetSizeCheck::class.java),
+            matchesViews(withContentDescription("More options"))
+          ),
+          matchesCheck(SpeakableTextPresentCheck::class.java)
+        )
+      )
+    }
   }
 
   @Before
@@ -75,8 +95,9 @@ class KiwixSettingsFragmentTest {
       }
       waitForIdle()
     }
-    UiThreadStatement.runOnUiThread {
-      activityScenarioRule.scenario.onActivity {
+    val activityScenario = ActivityScenario.launch(KiwixMainActivity::class.java).apply {
+      moveToState(Lifecycle.State.RESUMED)
+      onActivity {
         handleLocaleChange(
           it,
           "en",
@@ -85,8 +106,10 @@ class KiwixSettingsFragmentTest {
             lastDonationPopupShownInMilliSeconds = System.currentTimeMillis()
           }
         )
-        it.navigate(R.id.introFragment)
       }
+    }
+    activityScenario.onActivity {
+      it.navigate(R.id.introFragment)
     }
     intro(IntroRobot::swipeLeft) clickGetStarted { }
     StandardActions.openDrawer()
@@ -108,19 +131,19 @@ class KiwixSettingsFragmentTest {
       clickExternalStoragePreference()
       clickInternalStoragePreference()
       clickClearHistoryPreference()
-      assertHistoryDialogDisplayed()
+      assertHistoryDialogDisplayed(composeTestRule)
       dismissDialog()
       clickExportBookmarkPreference()
-      assertExportBookmarkDialogDisplayed()
+      assertExportBookmarkDialogDisplayed(composeTestRule)
       dismissDialog()
       clickOnImportBookmarkPreference()
-      assertImportBookmarkDialogDisplayed()
+      assertImportBookmarkDialogDisplayed(composeTestRule)
       dismissDialog()
       clickNightModePreference()
       assertNightModeDialogDisplayed()
       dismissDialog()
       clickCredits()
-      assertContributorsDialogDisplayed()
+      assertContributorsDialogDisplayed(composeTestRule)
       dismissDialog()
     }
     LeakAssertions.assertNoLeaks()

@@ -122,8 +122,8 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       showMoveFileToPublicDirectoryDialog()
       // should show the permission dialog.
       copyMoveFileHandler {
-        assertCopyMoveDialogDisplayed()
-        clickOnCopy()
+        assertCopyMoveDialogDisplayed(composeTestRule)
+        clickOnCopy(composeTestRule)
         assertStorageSelectionDialogDisplayed()
         clickOnInternalStorage()
         assertZimFileCopiedAndShowingIntoTheReader()
@@ -136,8 +136,8 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       showMoveFileToPublicDirectoryDialog()
       // should show the copyMove dialog.
       copyMoveFileHandler {
-        assertCopyMoveDialogDisplayed()
-        clickOnCopy()
+        assertCopyMoveDialogDisplayed(composeTestRule)
+        clickOnCopy(composeTestRule)
         assertZimFileCopiedAndShowingIntoTheReader()
       }
       assertZimFileAddedInTheLocalLibrary()
@@ -161,8 +161,8 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       showMoveFileToPublicDirectoryDialog()
       // should show the permission dialog.
       copyMoveFileHandler {
-        assertCopyMoveDialogDisplayed()
-        clickOnMove()
+        assertCopyMoveDialogDisplayed(composeTestRule)
+        clickOnMove(composeTestRule)
         assertStorageSelectionDialogDisplayed()
         clickOnInternalStorage()
         assertZimFileCopiedAndShowingIntoTheReader()
@@ -175,8 +175,8 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       showMoveFileToPublicDirectoryDialog()
       // should show the copyMove dialog.
       copyMoveFileHandler {
-        assertCopyMoveDialogDisplayed()
-        clickOnMove()
+        assertCopyMoveDialogDisplayed(composeTestRule)
+        clickOnMove(composeTestRule)
         assertZimFileCopiedAndShowingIntoTheReader()
       }
       assertZimFileAddedInTheLocalLibrary()
@@ -265,10 +265,11 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
     val copyMoveFileHandler = CopyMoveFileHandler(
       kiwixMainActivity,
       sharedPreferenceUtil,
-      AlertDialogShower(kiwixMainActivity),
       StorageCalculator(sharedPreferenceUtil),
       Fat32Checker(sharedPreferenceUtil, listOf(FileWritingFileSystemChecker()))
-    )
+    ).apply {
+      setAlertDialogShower(AlertDialogShower())
+    }
     kiwixMainActivity.lifecycleScope.launch {
       // test fileName when there is already a file available with same name.
       // it should return different name
@@ -318,13 +319,13 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       }
       // test opening images
       tryOpeningInvalidZimFiles(getInvalidZimFileUri(".jpg"))
-      copyMoveFileHandler(CopyMoveFileHandlerRobot::assertCopyMoveDialogNotDisplayed)
+      copyMoveFileHandler { assertCopyMoveDialogNotDisplayed(composeTestRule) }
       // test opening videos
       tryOpeningInvalidZimFiles(getInvalidZimFileUri(".mp4"))
-      copyMoveFileHandler(CopyMoveFileHandlerRobot::assertCopyMoveDialogNotDisplayed)
+      copyMoveFileHandler { assertCopyMoveDialogNotDisplayed(composeTestRule) }
       // test opening pdf
       tryOpeningInvalidZimFiles(getInvalidZimFileUri(".pdf"))
-      copyMoveFileHandler(CopyMoveFileHandlerRobot::assertCopyMoveDialogNotDisplayed)
+      copyMoveFileHandler { assertCopyMoveDialogNotDisplayed(composeTestRule) }
     }
   }
 

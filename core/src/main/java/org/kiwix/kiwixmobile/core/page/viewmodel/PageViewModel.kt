@@ -42,6 +42,7 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.PopFragmentBackstack
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 
 abstract class PageViewModel<T : Page, S : PageState<T>>(
   protected val pageDao: PageDao,
@@ -49,6 +50,8 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
   val zimReaderContainer: ZimReaderContainer
 ) : ViewModel() {
   abstract fun initialState(): S
+
+  lateinit var alertDialogShower: AlertDialogShower
 
   private lateinit var pageViewModelClickListener: PageViewModelClickListener
 
