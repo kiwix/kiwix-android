@@ -84,7 +84,7 @@ import kotlin.math.roundToInt
 
 const val SHOWCASE_VIEW_ROUND_ANIMATION_DURATION = 2000
 const val ONE = 1
-const val TWO = 1
+const val TWO = 2
 const val SIXTEEN = 16
 
 const val SHOWCASE_VIEW_NEXT_BUTTON_TESTING_TAG = "showcaseViewNextButtonTestingTag"

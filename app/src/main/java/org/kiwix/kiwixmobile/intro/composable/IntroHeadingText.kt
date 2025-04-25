@@ -27,12 +27,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import org.kiwix.kiwixmobile.core.ui.theme.dimHighlightedTextDark
 import org.kiwix.kiwixmobile.core.ui.theme.dimHighlightedTextLight
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens
+
+const val INTRO_HEADING_TEXT_TESTING_TAG = "introHeadingTextTestingTag"
+const val INTRO_SUB_HEADING_TEXT_TESTING_TAG = "introSubHeadingTextTestingTag"
 
 @Composable
 fun HeadingText(
@@ -46,7 +50,8 @@ fun HeadingText(
   }
   Text(
     modifier = Modifier
-      .padding(ComposeDimens.SIXTEEN_DP),
+      .padding(ComposeDimens.SIXTEEN_DP)
+      .testTag(INTRO_HEADING_TEXT_TESTING_TAG),
     text = stringResource(text),
     fontWeight = FontWeight.Bold,
     fontSize = ComposeDimens.SMALL_HEADLINE_TEXT_SIZE,
@@ -61,7 +66,8 @@ fun SubHeadingText(
   Text(
     modifier = Modifier
       .fillMaxWidth()
-      .height(ComposeDimens.FIFTY_DP),
+      .height(ComposeDimens.FIFTY_DP)
+      .testTag(INTRO_SUB_HEADING_TEXT_TESTING_TAG),
     textAlign = TextAlign.Center,
     text = stringResource(text),
     fontSize = ComposeDimens.MEDIUM_BODY_TEXT_SIZE,

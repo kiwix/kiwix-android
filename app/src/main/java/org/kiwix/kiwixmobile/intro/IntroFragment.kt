@@ -30,7 +30,7 @@ import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import javax.inject.Inject
 
 class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtensions {
-  private lateinit var composeView: ComposeView
+  private var composeView: ComposeView? = null
 
   @Inject
   internal lateinit var presenter: IntroContract.Presenter
@@ -41,7 +41,7 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    composeView.setContent {
+    composeView?.setContent {
       IntroScreen { navigateToLibrary() }
     }
   }
@@ -59,5 +59,11 @@ class IntroFragment : BaseFragment(), IntroContract.View, FragmentActivityExtens
   private fun navigateToLibrary() {
     presenter.setIntroShown()
     findNavController().navigate(IntroFragmentDirections.actionIntrofragmentToLibraryFragment())
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
+    composeView?.disposeComposition()
+    composeView = null
   }
 }

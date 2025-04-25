@@ -39,6 +39,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import org.kiwix.kiwixmobile.core.R
@@ -47,6 +48,8 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 
 private const val ANIMATION_SPEC: Int = 1200
 private const val INITIAL_OFFSET: Int = -1200
+
+const val GET_STARTED_BUTTON_TESTING_TAG = "getStartedButtonTestingTag"
 
 @Composable
 fun IntroPage(
@@ -107,10 +110,11 @@ fun IndicatorColumn(
     verticalArrangement = Arrangement.Center
   ) {
     KiwixButton(
-      modifier = Modifier.padding(
-        bottom = ComposeDimens.THIRTY_TWO_DP
-      ),
-      buttonText = stringResource(R.string.get_started).uppercase(),
+      modifier =
+        Modifier
+          .padding(bottom = ComposeDimens.THIRTY_TWO_DP)
+          .testTag(GET_STARTED_BUTTON_TESTING_TAG),
+      buttonText = stringResource(R.string.get_started),
       clickListener = onButtonClick
     )
     PageIndicator(pagerState)

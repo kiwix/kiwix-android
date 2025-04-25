@@ -75,8 +75,10 @@ class IntroFragmentTest : BaseActivityTest() {
     activityScenario.onActivity {
       it.navigate(R.id.introFragment)
     }
-    // causes " E No adapter attached; skipping layout " when page changes
-    intro { swipeLeft(composeTestRule) } clickGetStarted {}
+    intro {
+      swipeLeft(composeTestRule)
+      clickGetStarted(composeTestRule) {}
+    }
     LeakAssertions.assertNoLeaks()
   }
 

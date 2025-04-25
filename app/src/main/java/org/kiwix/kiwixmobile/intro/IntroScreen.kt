@@ -31,15 +31,20 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.delay
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
+import org.kiwix.kiwixmobile.core.ui.components.ONE
+import org.kiwix.kiwixmobile.core.ui.components.TWO
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.intro.composable.IndicatorColumn
 import org.kiwix.kiwixmobile.intro.composable.IntroPage
 
 private const val ANIMATION_DURATION: Long = 2000
 private const val PAGE_COUNT: Int = 3
+const val HORIZONTAL_PAGER_TESTING_TAG = "horizontalPagerTestingTag"
 
 @Composable
 fun IntroScreen(
@@ -71,40 +76,46 @@ fun IntroScreen(
         horizontalAlignment = Alignment.CenterHorizontally
       ) {
         HorizontalPager(
-          modifier = Modifier.weight(1f),
+          modifier = Modifier.weight(1f)
+            .testTag(HORIZONTAL_PAGER_TESTING_TAG),
           state = pagerState
         ) { page ->
-          when (page) {
-            0 -> {
-              IntroPage(
-                headingText = R.string.welcome_to_the_family,
-                labelText = R.string.humankind_knowledge,
-                image = org.kiwix.kiwixmobile.R.drawable.kiwix_icon
-              )
-            }
-
-            1 -> {
-              IntroPage(
-                headingText = R.string.save_books_offline,
-                labelText = R.string.download_books_message,
-                image = org.kiwix.kiwixmobile.R.drawable.ic_airplane
-              )
-            }
-
-            2 -> {
-              IntroPage(
-                headingText = R.string.save_books_in_desired_storage,
-                labelText = R.string.storage_location_hint,
-                image = org.kiwix.kiwixmobile.R.drawable.ic_storage
-              )
-            }
-          }
+          IntroPagerContent(page)
         }
         IndicatorColumn(
           pagerState = pagerState,
           onButtonClick = onButtonClick
         )
       }
+    }
+  }
+}
+
+@Composable
+private fun IntroPagerContent(page: Int) {
+  when (page) {
+    ZERO -> {
+      IntroPage(
+        headingText = R.string.welcome_to_the_family,
+        labelText = R.string.humankind_knowledge,
+        image = org.kiwix.kiwixmobile.R.drawable.kiwix_icon
+      )
+    }
+
+    ONE -> {
+      IntroPage(
+        headingText = R.string.save_books_offline,
+        labelText = R.string.download_books_message,
+        image = org.kiwix.kiwixmobile.R.drawable.ic_airplane
+      )
+    }
+
+    TWO -> {
+      IntroPage(
+        headingText = R.string.save_books_in_desired_storage,
+        labelText = R.string.storage_location_hint,
+        image = org.kiwix.kiwixmobile.R.drawable.ic_storage
+      )
     }
   }
 }

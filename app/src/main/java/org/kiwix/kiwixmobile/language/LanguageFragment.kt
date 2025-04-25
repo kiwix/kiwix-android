@@ -54,7 +54,7 @@ class LanguageFragment : BaseFragment() {
   private val languageViewModel by lazy { viewModel<LanguageViewModel>(viewModelFactory) }
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-  private lateinit var composeView: ComposeView
+  private var composeView: ComposeView? = null
   private val compositeDisposable = CompositeDisposable()
 
   override fun inject(baseActivity: BaseActivity) {
@@ -64,7 +64,7 @@ class LanguageFragment : BaseFragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     val activity = requireActivity() as CoreMainActivity
-    composeView.setContent {
+    composeView?.setContent {
       var searchText by remember { mutableStateOf("") }
       var isSearchActive by remember { mutableStateOf(false) }
 
@@ -116,7 +116,7 @@ class LanguageFragment : BaseFragment() {
     compositeAdd(activity)
   }
 
-  fun compositeAdd(activity: CoreMainActivity) {
+  private fun compositeAdd(activity: CoreMainActivity) {
     compositeDisposable.add(
       languageViewModel.effects.subscribe(
         {
@@ -127,7 +127,7 @@ class LanguageFragment : BaseFragment() {
     )
   }
 
-  fun appBarActionMenuList(
+  private fun appBarActionMenuList(
     isSearchActive: Boolean,
     onSearchClick: () -> Unit,
     onSaveClick: () -> Unit
@@ -166,5 +166,7 @@ class LanguageFragment : BaseFragment() {
   override fun onDestroyView() {
     super.onDestroyView()
     compositeDisposable.clear()
+    composeView?.disposeComposition()
+    composeView = null
   }
 }
