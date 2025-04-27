@@ -1,7 +1,7 @@
 <a href="https://play.google.com/store/apps/details?id=org.kiwix.kiwixmobile" target="_blank" align="left">
   <img src="https://play.google.com/intl/en/badges/images/badge_new.png" alt="Get it on Google Play" height="30" />
 </a>
-<a href="https://apt.izzysoft.de/fdroid/index/apk/org.kiwix.kiwixmobile" target="_blank" align="left">
+<a href="https://apt.izzysoft.de/fdroid/index/apk/org.kiwix.kiwixmobile.standalone" target="_blank" align="left">
   <img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid2.png" alt="Get it on IzzyOnDroid" height="29" />
 </a>
 
@@ -38,7 +38,7 @@ For ZIM files downloaded through third-party apps, users can use the file picker
 
 Be careful: Before uninstalling Kiwix, move ZIM files outside the app directory to avoid deletion.
 
-To use the full version of Kiwix and avoid facing this restriction, you can download it directly from the [official repository](https://download.kiwix.org/release/kiwix-android/) or use [IzzyOnDroid](https://apt.izzysoft.de/fdroid/index/apk/org.kiwix.kiwixmobile).
+To use the full version of Kiwix and avoid facing this restriction, you can download it directly from the [official repository](https://download.kiwix.org/release/kiwix-android/) or use [IzzyOnDroid](https://apt.izzysoft.de/fdroid/index/apk/org.kiwix.kiwixmobile.standalone).
 
 We understand that this restriction may cause inconvenience, but it is necessary to comply with the Play Store policies and ensure a smooth user experience. We recommend using the official version of the app available on our website to access the complete set of features.
 
