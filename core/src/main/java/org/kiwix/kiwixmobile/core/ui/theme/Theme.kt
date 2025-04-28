@@ -88,8 +88,12 @@ fun KiwixDialogTheme(
   content: @Composable () -> Unit
 ) {
   val colorScheme = when {
-    darkTheme -> DarkColorScheme.copy(background = MineShaftGray700)
-    else -> LightColorScheme
+    darkTheme -> DarkColorScheme.copy(
+      background = MineShaftGray700,
+      onSurfaceVariant = MineShaftGray350
+    )
+
+    else -> LightColorScheme.copy(onSurfaceVariant = ScorpionGray)
   }
   MaterialTheme(
     colorScheme = colorScheme,

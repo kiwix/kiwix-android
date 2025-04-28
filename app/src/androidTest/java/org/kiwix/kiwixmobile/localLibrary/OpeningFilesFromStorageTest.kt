@@ -121,8 +121,8 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
         copyMoveFileHandler {
           assertCopyMoveDialogDisplayed(composeTestRule)
           clickOnMove(composeTestRule)
-          assertStorageSelectionDialogDisplayed()
-          clickOnInternalStorage()
+          assertStorageSelectionDialogDisplayed(composeTestRule)
+          clickOnInternalStorage(composeTestRule)
           assertZimFileCopiedAndShowingIntoTheReader()
         }
       } catch (ignore: Exception) {
@@ -151,8 +151,8 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
         copyMoveFileHandler {
           assertCopyMoveDialogDisplayed(composeTestRule)
           clickOnMove(composeTestRule)
-          assertStorageSelectionDialogDisplayed()
-          clickOnInternalStorage()
+          assertStorageSelectionDialogDisplayed(composeTestRule)
+          clickOnInternalStorage(composeTestRule)
           assertZimFileCopiedAndShowingIntoTheReader()
         }
       } catch (ignore: Exception) {

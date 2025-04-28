@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2025 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,34 +16,34 @@
  *
  */
 
-package eu.mhutti1.utils.storage
+package org.kiwix.kiwixmobile.storage
 
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import eu.mhutti1.utils.storage.adapter.StorageAdapter
-import eu.mhutti1.utils.storage.adapter.StorageDelegate
-import org.kiwix.kiwixmobile.core.CoreApp
+import eu.mhutti1.utils.storage.StorageDevice
+import org.kiwix.kiwixmobile.KiwixApp
 import org.kiwix.kiwixmobile.core.R.dimen
-import org.kiwix.kiwixmobile.core.databinding.StorageSelectDialogBinding
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isLandScapeMode
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.utils.DimenUtils.getWindowWidth
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
-const val STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE = 16F
+val STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE = 16.sp
 
 class StorageSelectDialog : DialogFragment() {
   var onSelectAction: ((StorageDevice) -> Unit)? = null
-  var titleSize: Float? = null
+  var titleSize: TextUnit? = null
+
+  private var composeView: ComposeView? = null
 
   @Inject
   lateinit var storageCalculator: StorageCalculator
@@ -51,23 +51,8 @@ class StorageSelectDialog : DialogFragment() {
   @Inject
   lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private var aTitle: String? = null
-  private var storageSelectDialogViewBinding: StorageSelectDialogBinding? = null
   private val storageDeviceList = arrayListOf<StorageDevice>()
   private var shouldShowCheckboxSelected: Boolean = true
-
-  private val storageAdapter: StorageAdapter by lazy {
-    StorageAdapter(
-      StorageDelegate(
-        storageCalculator,
-        sharedPreferenceUtil,
-        lifecycleScope,
-        shouldShowCheckboxSelected,
-      ) {
-        onSelectAction?.invoke(it)
-        dismiss()
-      }
-    )
-  }
 
   fun setStorageDeviceList(storageDeviceList: List<StorageDevice>) {
     this.storageDeviceList.addAll(storageDeviceList)
@@ -81,24 +66,29 @@ class StorageSelectDialog : DialogFragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
-    storageSelectDialogViewBinding = StorageSelectDialogBinding.inflate(inflater, container, false)
-    return storageSelectDialogViewBinding?.root
-  }
+  ): View? =
+    ComposeView(requireContext()).apply {
+      setContent {
+        StorageSelectDialogScreen(
+          aTitle,
+          titleSize,
+          storageDeviceList,
+          storageCalculator,
+          sharedPreferenceUtil,
+          shouldShowCheckboxSelected
+        ) {
+          onSelectAction?.invoke(it)
+          dismiss()
+        }
+      }
+    }.also {
+      composeView = it
+    }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    CoreApp.coreComponent.inject(this)
-    storageSelectDialogViewBinding?.title?.apply {
-      text = aTitle
-      titleSize?.let(::setTextSize)
-    }
-    storageSelectDialogViewBinding?.deviceList?.run {
-      adapter = storageAdapter
-      layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-      setHasFixedSize(true)
-    }
-    storageAdapter.items = storageDeviceList
+    (this.context?.applicationContext as KiwixApp).kiwixComponent
+      .inject(this)
   }
 
   override fun show(fm: FragmentManager, text: String?) {
@@ -133,7 +123,7 @@ class StorageSelectDialog : DialogFragment() {
 
   override fun onDestroyView() {
     super.onDestroyView()
-    storageSelectDialogViewBinding?.root?.removeAllViews()
-    storageSelectDialogViewBinding = null
+    composeView?.disposeComposition()
+    composeView = null
   }
 }

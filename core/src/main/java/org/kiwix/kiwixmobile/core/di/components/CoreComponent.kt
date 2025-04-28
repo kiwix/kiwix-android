@@ -23,7 +23,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import dagger.BindsInstance
 import dagger.Component
-import eu.mhutti1.utils.storage.StorageSelectDialog
 import kotlinx.coroutines.sync.Mutex
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.StorageObserver
@@ -115,7 +114,6 @@ interface CoreComponent {
 
   fun inject(application: CoreApp)
   fun inject(kiwixWebView: KiwixWebView)
-  fun inject(storageSelectDialog: StorageSelectDialog)
 
   fun inject(errorActivity: ErrorActivity)
   fun inject(objectBoxToLibkiwixMigrator: ObjectBoxToLibkiwixMigrator)

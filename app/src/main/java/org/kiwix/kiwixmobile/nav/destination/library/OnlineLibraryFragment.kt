@@ -52,9 +52,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tonyodev.fetch2.Status
-import eu.mhutti1.utils.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
 import eu.mhutti1.utils.storage.StorageDevice
-import eu.mhutti1.utils.storage.StorageSelectDialog
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
@@ -94,6 +92,8 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.databinding.FragmentDestinationDownloadBinding
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
+import org.kiwix.kiwixmobile.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryAdapter

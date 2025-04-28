@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.initial.download
 
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.espresso.Espresso.onView
@@ -36,13 +37,14 @@ import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.storage.STORAGE_SELECTION_DIALOG_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.ui.STORAGE_DEVICE_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
 
 fun initialDownload(func: InitialDownloadRobot.() -> Unit) =
@@ -82,11 +84,11 @@ class InitialDownloadRobot : BaseRobot() {
     try {
       onView(withText(string.swipe_down_for_library)).check(matches(isDisplayed()))
       refreshOnlineList()
-    } catch (_: RuntimeException) {
+    } catch (_: Throwable) {
       try {
         // do nothing as currently downloading the online library.
         onView(withId(R.id.onlineLibraryProgressLayout)).check(matches(isDisplayed()))
-      } catch (_: RuntimeException) {
+      } catch (_: Throwable) {
         // if not visible try to get the online library.
         refreshOnlineList()
       }
@@ -104,8 +106,15 @@ class InitialDownloadRobot : BaseRobot() {
     })
   }
 
-  fun assertStorageConfigureDialogDisplayed() {
-    testFlakyView({ onView(withText(string.choose_storage_to_download_book)) })
+  fun assertStorageConfigureDialogDisplayed(composeTestRule: ComposeContentTestRule) {
+    pauseForBetterTestPerformance()
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(STORAGE_SELECTION_DIALOG_TITLE_TESTING_TAG)
+          .assertTextEquals(context.getString(string.choose_storage_to_download_book))
+      }
+    })
   }
 
   fun assertStopDownloadDialogDisplayed(composeTestRule: ComposeContentTestRule) {
@@ -131,14 +140,13 @@ class InitialDownloadRobot : BaseRobot() {
     )
   }
 
-  fun clickOnInternalStorage() {
+  fun clickOnInternalStorage(composeTestRule: ComposeContentTestRule) {
     pauseForBetterTestPerformance()
     testFlakyView({
-      onView(
-        RecyclerViewMatcher(id.device_list).atPosition(
-          0
-        )
-      ).perform(click())
+      composeTestRule.apply {
+        waitForIdle()
+        onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG)[0].performClick()
+      }
     })
   }
 
