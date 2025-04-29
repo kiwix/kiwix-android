@@ -21,11 +21,9 @@ package org.kiwix.kiwixmobile.localLibrary
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.web.sugar.Web
 import androidx.test.espresso.web.webdriver.DriverAtoms
 import androidx.test.espresso.web.webdriver.Locator
@@ -40,9 +38,10 @@ import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_DISMISS_BUTTON_TESTI
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.local.NO_FILE_TEXT_TESTING_TAG
+import org.kiwix.kiwixmobile.storage.STORAGE_SELECTION_DIALOG_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
-import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
+import org.kiwix.kiwixmobile.ui.STORAGE_DEVICE_ITEM_TESTING_TAG
 
 fun copyMoveFileHandler(func: CopyMoveFileHandlerRobot.() -> Unit) =
   CopyMoveFileHandlerRobot().applyWithViewHierarchyPrinting(func)
@@ -67,20 +66,25 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
     })
   }
 
-  fun assertStorageSelectionDialogDisplayed() {
+  fun assertStorageSelectionDialogDisplayed(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
-      onView(withText(R.string.choose_storage_to_copy_move_zim_file))
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(STORAGE_SELECTION_DIALOG_TITLE_TESTING_TAG)
+          .assertTextEquals(context.getString(R.string.choose_storage_to_copy_move_zim_file))
+      }
     })
   }
 
-  fun clickOnInternalStorage() {
+  fun clickOnInternalStorage(composeTestRule: ComposeContentTestRule) {
     pauseForBetterTestPerformance()
     testFlakyView({
-      onView(
-        RecyclerViewMatcher(R.id.device_list).atPosition(
-          0
-        )
-      ).perform(click())
+      testFlakyView({
+        composeTestRule.apply {
+          waitForIdle()
+          onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG)[0].performClick()
+        }
+      })
     })
   }
 

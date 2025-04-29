@@ -24,6 +24,7 @@ import org.kiwix.kiwixmobile.di.KiwixScope
 import org.kiwix.kiwixmobile.di.components.ServiceComponent.Builder
 import org.kiwix.kiwixmobile.di.modules.KiwixModule
 import org.kiwix.kiwixmobile.di.modules.KiwixViewModelModule
+import org.kiwix.kiwixmobile.storage.StorageSelectDialog
 
 @KiwixScope
 @Component(
@@ -33,4 +34,5 @@ import org.kiwix.kiwixmobile.di.modules.KiwixViewModelModule
 interface KiwixComponent {
   fun activityComponentBuilder(): KiwixActivityComponent.Builder
   fun serviceComponent(): Builder
+  fun inject(storageSelectDialog: StorageSelectDialog)
 }

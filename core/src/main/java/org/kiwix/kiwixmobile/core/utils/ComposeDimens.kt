@@ -156,4 +156,9 @@ object ComposeDimens {
   val DIALOG_BUTTON_TEXT_LETTER_SPACING = 1.25.sp
   val DIALOG_BUTTON_ROW_BOTTOM_PADDING = 10.dp
   val DIALOG_BUTTONS_TEXT_SIZE = 14.sp
+
+  // Storage select dialog dimens
+  val FREE_SPACE_TEXTVIEW_SIZE = 12.sp
+  val STORAGE_TITLE_TEXTVIEW_SIZE = 15.sp
+  val PROGRESS_BAR_HEIGHT = 20.dp
 }
