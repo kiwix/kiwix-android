@@ -24,38 +24,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.widget.Toolbar
+import androidx.annotation.StringRes
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.DialogFragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.databinding.DialogNavigationHistoryBinding
-import org.kiwix.kiwixmobile.core.extensions.getDialogHostComposeView
-import org.kiwix.kiwixmobile.core.main.DISABLE_ICON_ITEM_ALPHA
-import org.kiwix.kiwixmobile.core.main.ENABLE_ICON_ITEM_ALPHA
-import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryAdapter
-import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryDelegate.NavigationDelegate
+import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.history.adapter.NavigationHistoryListItem
+import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
+import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
+import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import javax.inject.Inject
 
 class NavigationHistoryDialog(
-  private val toolbarTitle: String,
+  @StringRes private val titleId: Int,
   private val navigationHistoryList: MutableList<NavigationHistoryListItem>,
   private val navigationHistoryClickListener: NavigationHistoryClickListener
 ) : DialogFragment() {
-  private var dialogNavigationHistoryBinding: DialogNavigationHistoryBinding? = null
-  private var navigationHistoryAdapter: NavigationHistoryAdapter? = null
+  private var composeView: ComposeView? = null
 
   @Inject
   lateinit var alertDialogShower: AlertDialogShower
-
-  private val toolbar by lazy {
-    dialogNavigationHistoryBinding?.root?.findViewById<Toolbar>(R.id.toolbar)
-  }
-  private val deleteItem by lazy { toolbar?.menu?.findItem(R.id.menu_pages_clear) }
 
   override fun onStart() {
     super.onStart()
@@ -79,46 +71,34 @@ class NavigationHistoryDialog(
     savedInstanceState: Bundle?
   ): View? {
     super.onCreateView(inflater, container, savedInstanceState)
-    dialogNavigationHistoryBinding =
-      DialogNavigationHistoryBinding.inflate(inflater, container, false)
-    return dialogNavigationHistoryBinding?.root
-  }
-
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-    navigationHistoryAdapter =
-      NavigationHistoryAdapter(NavigationDelegate(::onItemClick)).apply {
-        items = navigationHistoryList
+    return ComposeView(requireContext()).apply {
+      setContent {
+        NavigationHistoryDialogScreen(
+          titleId,
+          navigationHistoryList,
+          listOf(
+            ActionMenuItem(
+              IconItem.Drawable(R.drawable.ic_delete_white_24dp),
+              R.string.pref_clear_all_history_title,
+              { showConfirmClearHistoryDialog() },
+              isEnabled = navigationHistoryList.isNotEmpty(),
+              testingTag = DELETE_MENU_ICON_TESTING_TAG
+            )
+          ),
+          { onItemClick(it) },
+          {
+            NavigationIcon(
+              iconItem = IconItem.Drawable(R.drawable.ic_close_white_24dp),
+              onClick = {
+                dismissNavigationHistoryDialog()
+              }
+            )
+          }
+        )
+        DialogHost(alertDialogShower)
       }
-    toolbar?.apply {
-      title = toolbarTitle
-      setNavigationIcon(R.drawable.ic_close_white_24dp)
-      setNavigationOnClickListener { dismissNavigationHistoryDialog() }
-      inflateMenu(R.menu.menu_page)
-      this.menu?.findItem(R.id.menu_page_search)?.isVisible = false
-    }
-    dialogNavigationHistoryBinding?.apply {
-      root.addView(requireContext().getDialogHostComposeView(alertDialogShower))
-      if (navigationHistoryList.isEmpty()) {
-        deleteItem?.isEnabled = false
-        deleteItem?.icon?.alpha = DISABLE_ICON_ITEM_ALPHA
-        searchNoResults.visibility = View.VISIBLE
-        navigationHistoryRecyclerView.visibility = View.GONE
-      } else {
-        deleteItem?.isEnabled = true
-        deleteItem?.icon?.alpha = ENABLE_ICON_ITEM_ALPHA
-        searchNoResults.visibility = View.GONE
-        navigationHistoryRecyclerView.visibility = View.VISIBLE
-      }
-      navigationHistoryRecyclerView.run {
-        adapter = navigationHistoryAdapter
-        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        setHasFixedSize(true)
-      }
-    }
-    deleteItem?.setOnMenuItemClickListener {
-      showConfirmClearHistoryDialog()
-      true
+    }.also {
+      composeView = it
     }
   }
 
@@ -151,8 +131,8 @@ class NavigationHistoryDialog(
 
   override fun onDestroyView() {
     super.onDestroyView()
-    navigationHistoryAdapter = null
-    dialogNavigationHistoryBinding = null
+    composeView?.disposeComposition()
+    composeView = null
     onBackPressedCallBack.remove()
   }
 

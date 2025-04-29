@@ -42,7 +42,6 @@ import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
-import org.kiwix.kiwixmobile.core.page.adapter.PageAdapter
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesState
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
 import org.kiwix.kiwixmobile.core.page.viewmodel.PageState
@@ -72,7 +71,6 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   abstract val noItemsString: String
   abstract val switchString: String
   abstract val searchQueryHint: String
-  abstract val pageAdapter: PageAdapter
   abstract val switchIsChecked: Boolean
   abstract val deleteIconTitle: Int
   private val pageState: MutableState<PageState<*>> =

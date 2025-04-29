@@ -18,6 +18,10 @@
 package org.kiwix.kiwixmobile.page.history
 
 import android.util.Log
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.longClick
@@ -30,9 +34,11 @@ import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import junit.framework.AssertionFailedError
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.page.DELETE_MENU_ICON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
@@ -54,7 +60,7 @@ class NavigationHistoryRobot : BaseRobot() {
       pauseForBetterTestPerformance()
       isVisible(ViewId(R.id.tab_switcher_close_all_tabs))
       pressBack()
-    } catch (ignore: Exception) {
+    } catch (_: Exception) {
       Log.i(
         "NAVIGATION_HISTORY_TEST",
         "Couldn't found tab switcher, probably it is not visible"
@@ -95,14 +101,18 @@ class NavigationHistoryRobot : BaseRobot() {
     longClickOn(ViewId(R.id.bottom_toolbar_arrow_forward))
   }
 
-  fun assertBackwardNavigationHistoryDialogDisplayed() {
+  fun assertBackwardNavigationHistoryDialogDisplayed(composeTestRule: ComposeContentTestRule) {
     try {
-      isVisible(TextId(R.string.backward_history))
-    } catch (ignore: AssertionFailedError) {
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
+          .assertTextEquals(context.getString(R.string.backward_history))
+      }
+    } catch (_: AssertionError) {
       pauseForBetterTestPerformance()
       if (retryCountForBackwardNavigationHistory > 0) {
         retryCountForBackwardNavigationHistory--
-        assertBackwardNavigationHistoryDialogDisplayed()
+        assertBackwardNavigationHistoryDialogDisplayed(composeTestRule)
       }
     }
   }
@@ -112,31 +122,46 @@ class NavigationHistoryRobot : BaseRobot() {
     clickOn(ViewId(R.id.bottom_toolbar_arrow_back))
   }
 
-  fun assertForwardNavigationHistoryDialogDisplayed() {
+  fun assertForwardNavigationHistoryDialogDisplayed(composeTestRule: ComposeContentTestRule) {
     try {
-      isVisible(TextId(R.string.forward_history))
-    } catch (ignore: AssertionFailedError) {
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
+          .assertTextEquals(context.getString(R.string.forward_history))
+      }
+    } catch (_: AssertionError) {
       pauseForBetterTestPerformance()
       if (retryCountForForwardNavigationHistory > 0) {
         retryCountForForwardNavigationHistory--
-        assertForwardNavigationHistoryDialogDisplayed()
+        assertForwardNavigationHistoryDialogDisplayed(composeTestRule)
       }
     }
   }
 
-  fun clickOnDeleteHistory() {
+  fun clickOnDeleteHistory(composeTestRule: ComposeContentTestRule) {
     pauseForBetterTestPerformance()
-    clickOn(ViewId(R.id.menu_pages_clear))
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(DELETE_MENU_ICON_TESTING_TAG).performClick()
+      }
+    })
   }
 
-  fun assertDeleteDialogDisplayed() {
+  fun assertDeleteDialogDisplayed(composeTestRule: ComposeContentTestRule) {
     try {
-      isVisible(TextId(R.string.clear_all_history_dialog_title))
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
+          .assertTextEquals(context.getString(R.string.clear_all_history_dialog_title))
+      }
     } catch (ignore: AssertionFailedError) {
       pauseForBetterTestPerformance()
       if (retryCountForClearNavigationHistory > 0) {
         retryCountForClearNavigationHistory--
-        assertDeleteDialogDisplayed()
+        assertDeleteDialogDisplayed(composeTestRule)
+      } else {
+        throw RuntimeException("Could not found the NavigationHistoryDeleteDialog. Original exception = $ignore")
       }
     }
   }

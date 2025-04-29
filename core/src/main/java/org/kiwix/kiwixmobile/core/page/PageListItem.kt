@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.toPainter
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
+import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PAGE_LIST_ITEM_FAVICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
@@ -87,7 +88,7 @@ fun PageListItem(
       text = page.title,
       style = MaterialTheme.typography.bodyLarge,
       modifier = Modifier.weight(1f),
-      maxLines = 1,
+      maxLines = ONE,
       overflow = TextOverflow.Ellipsis
     )
   }
