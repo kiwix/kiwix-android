@@ -18,16 +18,21 @@
 
 package org.kiwix.kiwixmobile.intro
 
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToIndex
 import applyWithViewHierarchyPrinting
 import attempt
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.TextId
-import org.kiwix.kiwixmobile.Findable.ViewId
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.ui.components.ONE
+import org.kiwix.kiwixmobile.core.ui.components.TWO
+import org.kiwix.kiwixmobile.intro.composable.GET_STARTED_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.intro.composable.INTRO_HEADING_TEXT_TESTING_TAG
+import org.kiwix.kiwixmobile.intro.composable.INTRO_SUB_HEADING_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.main.TopLevelDestinationRobot
 import org.kiwix.kiwixmobile.main.topLevel
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
@@ -35,22 +40,54 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 fun intro(func: IntroRobot.() -> Unit) = IntroRobot().applyWithViewHierarchyPrinting(func)
 
 class IntroRobot : BaseRobot() {
-  fun swipeLeft() {
-    isVisible(ViewId(R.id.get_started))
-    isVisible(TextId(string.welcome_to_the_family))
-    isVisible(TextId(string.humankind_knowledge))
-    attempt(10) {
-      isVisible(TextId(string.save_books_offline))
-      isVisible(TextId(string.download_books_message))
-    }
-    attempt(10) {
-      isVisible(TextId(string.save_books_in_desired_storage))
-      isVisible(TextId(string.storage_location_hint))
+  fun swipeLeft(composeTestRule: ComposeTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(GET_STARTED_BUTTON_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.get_started).uppercase())
+      attempt(10) {
+        onNodeWithTag(INTRO_HEADING_TEXT_TESTING_TAG)
+          .assertTextEquals(context.getString(string.welcome_to_the_family))
+        onNodeWithTag(INTRO_SUB_HEADING_TEXT_TESTING_TAG)
+          .assertTextEquals(context.getString(string.humankind_knowledge))
+      }
+      scrollToPage(ONE, composeTestRule)
+      attempt(10) {
+        onNodeWithTag(INTRO_HEADING_TEXT_TESTING_TAG)
+          .assertTextEquals(context.getString(string.save_books_offline))
+        onNodeWithTag(INTRO_SUB_HEADING_TEXT_TESTING_TAG)
+          .assertTextEquals(context.getString(string.download_books_message))
+      }
+      scrollToPage(TWO, composeTestRule)
+      attempt(10) {
+        onNodeWithTag(INTRO_HEADING_TEXT_TESTING_TAG)
+          .assertTextEquals(context.getString(string.save_books_in_desired_storage))
+        onNodeWithTag(INTRO_SUB_HEADING_TEXT_TESTING_TAG)
+          .assertTextEquals(context.getString(string.storage_location_hint))
+      }
     }
   }
 
-  infix fun clickGetStarted(func: TopLevelDestinationRobot.() -> Unit): TopLevelDestinationRobot {
-    testFlakyView({ onView(withId(R.id.get_started)).perform(click()) })
+  private fun scrollToPage(index: Int, composeTestRule: ComposeTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(HORIZONTAL_PAGER_TESTING_TAG)
+        .performScrollToIndex(index)
+      waitForIdle()
+    }
+  }
+
+  fun clickGetStarted(
+    composeTestRule: ComposeTestRule,
+    func: TopLevelDestinationRobot.() -> Unit
+  ): TopLevelDestinationRobot {
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(GET_STARTED_BUTTON_TESTING_TAG)
+          .performClick()
+      }
+    })
     return topLevel(func)
   }
 }

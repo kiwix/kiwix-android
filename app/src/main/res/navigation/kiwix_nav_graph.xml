@@ -102,8 +102,7 @@
   <fragment
     android:id="@+id/introFragment"
     android:name="org.kiwix.kiwixmobile.intro.IntroFragment"
-    android:label="IntroFragment"
-    tools:layout="@layout/fragment_intro">
+    android:label="IntroFragment">
     <action
       android:id="@+id/action_introfragment_to_libraryFragment"
       app:destination="@id/libraryFragment"

@@ -19,14 +19,14 @@ package org.kiwix.kiwixmobile.splash
 
 import android.Manifest
 import android.content.Context
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.accessibility.AccessibilityChecks
-import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
@@ -40,9 +40,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
+import org.kiwix.kiwixmobile.intro.composable.GET_STARTED_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
@@ -57,6 +59,8 @@ class KiwixSplashActivityTest {
   @JvmField
   val retryRule = RetryRule()
 
+  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  val composeTestRule = createComposeRule()
   private val permissions =
     arrayOf(
       Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -92,8 +96,11 @@ class KiwixSplashActivityTest {
     }
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     testFlakyView({
-      Espresso.onView(ViewMatchers.withId(R.id.get_started))
-        .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+      composeTestRule.apply {
+        waitForIdle()
+        onNodeWithTag(GET_STARTED_BUTTON_TESTING_TAG)
+          .assertTextEquals(context.getString(R.string.get_started).uppercase())
+      }
     }, 10)
 
     // Verify that the value of the "intro shown" boolean inside
