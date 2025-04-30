@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.note
 import android.content.Context
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
@@ -83,9 +84,11 @@ class NoteRobot : BaseRobot() {
   }
 
   fun assertNoteDialogDisplayed(composeTestRule: ComposeContentTestRule) {
-    pauseForBetterTestPerformance()
     testFlakyView({
       composeTestRule.waitForIdle()
+      composeTestRule.waitUntil(
+        TestUtils.TEST_PAUSE_MS.toLong()
+      ) { composeTestRule.onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG).isDisplayed() }
       composeTestRule.onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
         .assertTextEquals(context.getString(R.string.note))
     })
@@ -131,10 +134,11 @@ class NoteRobot : BaseRobot() {
   }
 
   fun clickOnOpenNote(composeTestRule: ComposeContentTestRule) {
-    pauseForBetterTestPerformance()
     testFlakyView({
       composeTestRule.apply {
-        waitForIdle()
+        waitUntil(
+          TestUtils.TEST_PAUSE_MS.toLong()
+        ) { onNodeWithTag(ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG).isDisplayed() }
         onNodeWithTag(ALERT_DIALOG_DISMISS_BUTTON_TESTING_TAG)
           .performClick()
       }

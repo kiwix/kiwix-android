@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.page.bookmarks
 
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -81,10 +82,11 @@ class BookmarksRobot : BaseRobot() {
   }
 
   fun clickOnDeleteButton(composeTestRule: ComposeContentTestRule) {
-    pauseForBetterTestPerformance()
     testFlakyView({
       composeTestRule.apply {
-        waitForIdle()
+        waitUntil(TestUtils.TEST_PAUSE_MS.toLong()) {
+          onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).isDisplayed()
+        }
         onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG)
           .assertTextEquals(context.getString(R.string.delete).uppercase())
           .performClick()
