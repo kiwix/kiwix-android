@@ -1005,9 +1005,9 @@ abstract class CoreReaderFragment :
        **/
       val dialogFragment = NavigationHistoryDialog(
         if (isForwardHistory) {
-          getString(R.string.forward_history)
+          R.string.forward_history
         } else {
-          getString(R.string.backward_history)
+          R.string.backward_history
         },
         navigationHistoryList,
         this

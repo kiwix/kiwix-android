@@ -23,18 +23,12 @@ import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.page.PageFragment
-import org.kiwix.kiwixmobile.core.page.adapter.PageAdapter
-import org.kiwix.kiwixmobile.core.page.adapter.PageDelegate
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesViewModel
 
 class NotesFragment : PageFragment() {
   override val pageViewModel by lazy { viewModel<NotesViewModel>(viewModelFactory) }
 
   override val screenTitle: Int = R.string.pref_notes
-
-  override val pageAdapter: PageAdapter by lazy {
-    PageAdapter(PageDelegate.PageItemDelegate(this))
-  }
 
   override val noItemsString: String by lazy { getString(R.string.no_notes) }
   override val switchString: String by lazy { getString(R.string.notes_from_all_books) }
