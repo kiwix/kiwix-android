@@ -95,7 +95,8 @@ fun LocalLibraryScreen(
   onMultiSelect: ((BookOnDisk) -> Unit)? = null,
   navigationIcon: @Composable () -> Unit
 ) {
-  val (bottomNavHeight, lazyListState) = rememberScrollBehavior(state, listState)
+  val (bottomNavHeight, lazyListState) =
+    rememberScrollBehavior(state.bottomNavigationHeight, listState)
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
   KiwixTheme {
     Scaffold(
@@ -141,11 +142,11 @@ fun LocalLibraryScreen(
 }
 
 @Composable
-private fun rememberScrollBehavior(
-  state: LocalLibraryScreenState,
+fun rememberScrollBehavior(
+  bottomNavigationHeight: Int,
   listState: LazyListState,
 ): Pair<MutableState<Dp>, LazyListState> {
-  val bottomNavHeightInDp = with(LocalDensity.current) { state.bottomNavigationHeight.toDp() }
+  val bottomNavHeightInDp = with(LocalDensity.current) { bottomNavigationHeight.toDp() }
   val bottomNavHeight = remember { mutableStateOf(bottomNavHeightInDp) }
   val lazyListState = rememberLazyListScrollListener(
     lazyListState = listState,

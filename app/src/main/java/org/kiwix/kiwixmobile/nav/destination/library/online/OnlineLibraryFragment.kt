@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2020 Kiwix <android.kiwix.org>
+ * Copyright (c) 2025 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,13 +16,11 @@
  *
  */
 
-package org.kiwix.kiwixmobile.nav.destination.library
+package org.kiwix.kiwixmobile.nav.destination.library.online
 
 import android.Manifest
-import android.Manifest.permission.POST_NOTIFICATIONS
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Intent
-import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
@@ -54,9 +52,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tonyodev.fetch2.Status
 import eu.mhutti1.utils.storage.StorageDevice
 import kotlinx.coroutines.launch
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
-import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
@@ -88,7 +85,6 @@ import org.kiwix.kiwixmobile.core.utils.SimpleRecyclerViewScrollListener
 import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
-import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.databinding.FragmentDestinationDownloadBinding
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
@@ -156,7 +152,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
             }
             downloader.pauseResumeDownload(
               it.downloadId,
-              it.downloadState.toReadableState(context) == getString(string.paused_state)
+              it.downloadState.toReadableState(context) == getString(R.string.paused_state)
             )
           }
         }
@@ -183,12 +179,12 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     fragmentDestinationDownloadBinding =
       FragmentDestinationDownloadBinding.inflate(inflater, container, false)
     val toolbar =
-      fragmentDestinationDownloadBinding?.root?.findViewById<Toolbar>(org.kiwix.kiwixmobile.core.R.id.toolbar)
+      fragmentDestinationDownloadBinding?.root?.findViewById<Toolbar>(R.id.toolbar)
     val activity = activity as CoreMainActivity
     activity.setSupportActionBar(toolbar)
     activity.supportActionBar?.apply {
       setDisplayHomeAsUpEnabled(true)
-      setTitle(string.download)
+      setTitle(R.string.download)
     }
     if (toolbar != null) {
       activity.setupDrawerToggle(toolbar)
@@ -245,9 +241,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     (requireActivity() as MenuHost).addMenuProvider(
       object : MenuProvider {
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-          menuInflater.inflate(R.menu.menu_zim_manager, menu)
-          val searchItem = menu.findItem(R.id.action_search)
-          val getZimItem = menu.findItem(R.id.get_zim_nearby_device)
+          menuInflater.inflate(org.kiwix.kiwixmobile.R.menu.menu_zim_manager, menu)
+          val searchItem = menu.findItem(org.kiwix.kiwixmobile.R.id.action_search)
+          val getZimItem = menu.findItem(org.kiwix.kiwixmobile.R.id.get_zim_nearby_device)
           getZimItem?.isVisible = false
 
           searchItem.setOnActionExpandListener(
@@ -288,7 +284,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
                 searchItem.expandActionView()
                 // Set the query in searchView which was previously set.
                 setQuery(it, false)
-              } ?: kotlin.run {
+              } ?: run {
               // If no previously saved query found then normally initiate the search.
               zimManageViewModel.onlineBooksSearchedQuery.value = ""
               zimManageViewModel.requestFiltering.onNext("")
@@ -298,8 +294,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
           when (menuItem.itemId) {
-            R.id.select_language -> {
-              requireActivity().navigate(R.id.languageFragment)
+            org.kiwix.kiwixmobile.R.id.select_language -> {
+              requireActivity().navigate(org.kiwix.kiwixmobile.R.id.languageFragment)
               closeKeyboard()
               return true
             }
@@ -314,7 +310,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   private fun showInternetAccessViaMobileNetworkDialog() {
     alertDialogShower.show(
-      WifiOnly,
+      KiwixDialog.YesNoDialog.WifiOnly,
       {
         showRecyclerviewAndHideSwipeDownForLibraryErrorText()
         sharedPreferenceUtil.putPrefWifiOnly(false)
@@ -322,7 +318,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       },
       {
         context.toast(
-          resources.getString(string.denied_internet_permission_message),
+          resources.getString(R.string.denied_internet_permission_message),
           Toast.LENGTH_SHORT
         )
         hideRecyclerviewAndShowSwipeDownForLibraryErrorText()
@@ -341,7 +337,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private fun hideRecyclerviewAndShowSwipeDownForLibraryErrorText() {
     fragmentDestinationDownloadBinding?.apply {
       libraryErrorText.setText(
-        string.swipe_down_for_library
+        R.string.swipe_down_for_library
       )
       libraryErrorText.visibility = View.VISIBLE
       libraryList.visibility = View.GONE
@@ -355,7 +351,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       libraryErrorText.visibility = View.GONE
       librarySwipeRefresh.isEnabled = false
       onlineLibraryProgressLayout.visibility = View.VISIBLE
-      onlineLibraryProgressStatusText.setText(string.reaching_remote_library)
+      onlineLibraryProgressStatusText.setText(R.string.reaching_remote_library)
     }
   }
 
@@ -364,7 +360,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     fragmentDestinationDownloadBinding?.apply {
       librarySwipeRefresh.isEnabled = true
       onlineLibraryProgressLayout.visibility = View.GONE
-      onlineLibraryProgressStatusText.setText(string.reaching_remote_library)
+      onlineLibraryProgressStatusText.setText(R.string.reaching_remote_library)
     }
   }
 
@@ -433,7 +429,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       noInternetSnackbar()
     } else {
       fragmentDestinationDownloadBinding?.libraryErrorText?.setText(
-        string.no_network_connection
+        R.string.no_network_connection
       )
       fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.VISIBLE
     }
@@ -442,9 +438,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   private fun noInternetSnackbar() {
     fragmentDestinationDownloadBinding?.libraryList?.snack(
-      string.no_network_connection,
-      requireActivity().findViewById(R.id.bottom_nav_view),
-      string.menu_settings,
+      R.string.no_network_connection,
+      requireActivity().findViewById(org.kiwix.kiwixmobile.R.id.bottom_nav_view),
+      R.string.menu_settings,
       ::openNetworkSettings
     )
   }
@@ -461,9 +457,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     if (it?.isEmpty() == true) {
       fragmentDestinationDownloadBinding?.libraryErrorText?.setText(
         if (isNotConnected) {
-          string.no_network_connection
+          R.string.no_network_connection
         } else {
-          string.no_items_msg
+          R.string.no_items_msg
         }
       )
       fragmentDestinationDownloadBinding?.libraryErrorText?.visibility = View.VISIBLE
@@ -506,7 +502,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun requestNotificationPermission() {
-    if (!shouldShowRationale(POST_NOTIFICATIONS)) {
+    if (!shouldShowRationale(Manifest.permission.POST_NOTIFICATIONS)) {
       requireActivity().requestNotificationPermission()
     } else {
       alertDialogShower.show(
@@ -521,9 +517,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         true
       } else {
-        hasPermission(WRITE_EXTERNAL_STORAGE).also { permissionGranted ->
+        hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE).also { permissionGranted ->
           if (!permissionGranted) {
-            if (shouldShowRationale(WRITE_EXTERNAL_STORAGE)) {
+            if (shouldShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
               alertDialogShower.show(
                 KiwixDialog.WriteStoragePermissionRationale,
                 {
@@ -568,23 +564,23 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       permissions.isNotEmpty() &&
       permissions[0] == Manifest.permission.WRITE_EXTERNAL_STORAGE
     ) {
-      if (grantResults[0] != PERMISSION_GRANTED) {
+      if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
         if (!sharedPreferenceUtil.isPlayStoreBuildWithAndroid11OrAbove()) {
           checkExternalStorageWritePermission()
         }
       }
     } else if (requestCode == REQUEST_POST_NOTIFICATION_PERMISSION &&
       permissions.isNotEmpty() &&
-      permissions[0] == POST_NOTIFICATIONS
+      permissions[0] == Manifest.permission.POST_NOTIFICATIONS
     ) {
-      if (grantResults[0] == PERMISSION_GRANTED) {
+      if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
         downloadBookItem?.let(::onBookItemClick)
       }
     }
   }
 
   private fun hasPermission(permission: String): Boolean =
-    ContextCompat.checkSelfPermission(requireActivity(), permission) == PERMISSION_GRANTED
+    ContextCompat.checkSelfPermission(requireActivity(), permission) == PackageManager.PERMISSION_GRANTED
 
   @Suppress("NestedBlockDepth")
   private fun onBookItemClick(item: LibraryListItem.BookItem) {
@@ -599,7 +595,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
             }
 
             noWifiWithWifiOnlyPreferenceSet -> {
-              alertDialogShower.show(WifiOnly, {
+              alertDialogShower.show(KiwixDialog.YesNoDialog.WifiOnly, {
                 sharedPreferenceUtil.putPrefWifiOnly(false)
                 clickOnBookItem()
               })
@@ -629,11 +625,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
                   {
                     fragmentDestinationDownloadBinding?.libraryList?.snack(
                       """ 
-                      ${getString(string.download_no_space)}
-                      ${getString(string.space_available)} $it
+                      ${getString(R.string.download_no_space)}
+                      ${getString(R.string.space_available)} $it
                       """.trimIndent(),
-                      requireActivity().findViewById(R.id.bottom_nav_view),
-                      string.download_change_storage,
+                      requireActivity().findViewById(org.kiwix.kiwixmobile.R.id.bottom_nav_view),
+                      R.string.download_change_storage,
                       {
                         lifecycleScope.launch {
                           showStorageSelectDialog(getStorageDeviceList())
@@ -659,7 +655,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         setStorageDeviceList(storageDeviceList)
         setShouldShowCheckboxSelected(false)
       }
-      .show(parentFragmentManager, getString(string.choose_storage_to_download_book))
+      .show(parentFragmentManager, getString(R.string.choose_storage_to_download_book))
 
   private fun clickOnBookItem() {
     if (!requireActivity().isManageExternalStoragePermissionGranted(sharedPreferenceUtil)) {

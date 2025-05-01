@@ -88,7 +88,7 @@
 
   <fragment
     android:id="@+id/downloadsFragment"
-    android:name="org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryFragment"
+    android:name="org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryFragment"
     android:label="Downloads"
     tools:layout="@layout/fragment_destination_download" />
   <fragment
