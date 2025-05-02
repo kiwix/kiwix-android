@@ -20,8 +20,11 @@ package org.kiwix.kiwixmobile.nav.destination.library.online
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
+import org.kiwix.kiwixmobile.core.utils.BookUtils
+import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.BookItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.LibraryDownloadItem
 
 data class OnlineLibraryScreenState(
   /**
@@ -44,10 +47,6 @@ data class OnlineLibraryScreenState(
    * Handles snack bar messages and displays.
    */
   val snackBarHostState: SnackbarHostState,
-  /**
-   * Represents a list of action menu items available in the screen's top app bar.
-   */
-  val actionMenuItems: List<ActionMenuItem>,
   /**
    * Manages the navigation Icon shown on the OnlineLibraryScreen.
    */
@@ -72,4 +71,40 @@ data class OnlineLibraryScreenState(
    *  - [Boolean]: Whether to show or hide this view.
    */
   val noContentViewItem: Pair<String, Boolean>,
+  /**
+   * To get the book language.
+   */
+  val bookUtils: BookUtils,
+  /**
+   * To calculate the available space for book.
+   */
+  val availableSpaceCalculator: AvailableSpaceCalculator,
+  /**
+   * Handles the click on book item.
+   */
+  val onBookItemClick: (BookItem) -> Unit,
+  /**
+   * Handles when pause/resume button click in downloading.
+   */
+  val onPauseResumeButtonClick: (LibraryDownloadItem) -> Unit,
+  /**
+   * Handles when stop button click in downloading.
+   */
+  val onStopButtonClick: (LibraryDownloadItem) -> Unit,
+  /**
+   * Handles the showing of searchBar in toolbar.
+   */
+  val isSearchActive: Boolean,
+  /**
+   * Stores the searchView text, and displayed it inside the searchView.
+   */
+  val searchText: String,
+  /**
+   * Triggers when search query changed.
+   */
+  val searchValueChangedListener: (String) -> Unit,
+  /**
+   * Triggers when clear button clicked.
+   */
+  val clearSearchButtonClickListener: () -> Unit
 )

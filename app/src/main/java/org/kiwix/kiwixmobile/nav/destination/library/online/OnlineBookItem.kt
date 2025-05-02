@@ -18,10 +18,199 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.online
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.zIndex
+import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.downloader.model.Base64String
+import org.kiwix.kiwixmobile.core.downloader.model.toPainter
+import org.kiwix.kiwixmobile.core.extensions.toast
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
+import org.kiwix.kiwixmobile.core.ui.theme.PureGrey
+import org.kiwix.kiwixmobile.core.utils.BookUtils
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
+import org.kiwix.kiwixmobile.core.zim_manager.KiloByte
+import org.kiwix.kiwixmobile.ui.BookDate
+import org.kiwix.kiwixmobile.ui.BookDescription
+import org.kiwix.kiwixmobile.ui.BookIcon
+import org.kiwix.kiwixmobile.ui.BookSize
+import org.kiwix.kiwixmobile.ui.BookTitle
+import org.kiwix.kiwixmobile.ui.TagsView
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.DetectingFileSystem
+import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.BookItem
 
-@Suppress("EmptyFunctionBlock", "UnusedParameter")
+const val ONLINE_BOOK_ITEM_TESTING_TAG = "onlineBookItemTestingTag"
+
 @Composable
-fun OnlineBookItem(item: BookItem) {
+fun OnlineBookItem(
+  item: BookItem,
+  bookUtils: BookUtils,
+  availableSpaceCalculator: AvailableSpaceCalculator,
+  onBookItemClick: (BookItem) -> Unit
+) {
+  var hasAvailableSpaceInStorage by remember { mutableStateOf(false) }
+  LaunchedEffect(item, availableSpaceCalculator) {
+    hasAvailableSpaceInStorage =
+      availableSpaceCalculator.hasAvailableSpaceForBook(item.book)
+  }
+  val isClickable = item.canBeDownloaded && hasAvailableSpaceInStorage
+  KiwixTheme {
+    Card(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(FIVE_DP)
+        .testTag(ONLINE_BOOK_ITEM_TESTING_TAG)
+        .clickable(enabled = isClickable) {
+          onBookItemClick.invoke(item)
+        },
+      shape = MaterialTheme.shapes.extraSmall,
+      elevation = CardDefaults.elevatedCardElevation(),
+      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
+    ) {
+      Box(modifier = Modifier.fillMaxWidth()) {
+        OnlineBookContent(item, bookUtils)
+        ShowDetectingFileSystemUi(isClickable, item, onBookItemClick, hasAvailableSpaceInStorage)
+      }
+    }
+  }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun ShowDetectingFileSystemUi(
+  isClickable: Boolean,
+  item: BookItem,
+  onBookItemClick: (BookItem) -> Unit,
+  hasAvailableSpaceInStorage: Boolean
+) {
+  if (!isClickable) {
+    val context = LocalContext.current
+    Box(
+      modifier = Modifier
+        .fillMaxSize()
+        .background(color = PureGrey)
+        .zIndex(1f)
+        .semantics {
+          contentDescription = context.getString(R.string.detecting_file_system)
+        }
+        .combinedClickable(
+          // Do nothing on normal click.
+          onClick = {},
+          onLongClick = {
+            when (item.fileSystemState) {
+              CannotWrite4GbFile -> context.toast(R.string.file_system_does_not_support_4gb)
+              DetectingFileSystem -> context.toast(R.string.detecting_file_system)
+              else -> {
+                if (item.canBeDownloaded && !hasAvailableSpaceInStorage) {
+                  onBookItemClick.invoke(item)
+                } else {
+                  throw IllegalStateException("impossible invalid state: ${item.fileSystemState}")
+                }
+              }
+            }
+          }
+        )
+    )
+  }
+}
+
+@Composable
+private fun OnlineBookContent(item: BookItem, bookUtils: BookUtils) {
+  Row(
+    modifier = Modifier
+      .padding(top = SIXTEEN_DP, start = SIXTEEN_DP)
+      .fillMaxWidth(),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    BookIcon(Base64String(item.book.favicon).toPainter())
+    Column(
+      modifier = Modifier
+        .weight(1f)
+        .padding(start = SIXTEEN_DP)
+    ) {
+      BookTitle(item.book.title)
+      Spacer(modifier = Modifier.height(TWO_DP))
+      BookDescription(item.book.description.orEmpty())
+      BookSizeAndDateRow(item)
+      BookCreatorAndLanguageRow(item, bookUtils)
+      TagsView(item.tags)
+    }
+  }
+}
+
+@Composable
+private fun BookCreatorAndLanguageRow(item: BookItem, bookUtils: BookUtils) {
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(bottom = FIVE_DP)
+      .padding(end = SIXTEEN_DP),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    BookCreator(item.book.creator, Modifier.weight(1f))
+    BookLanguage(bookUtils.getLanguage(item.book.language))
+  }
+}
+
+@Composable
+private fun BookSizeAndDateRow(item: BookItem) {
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(vertical = FIVE_DP)
+      .padding(end = SIXTEEN_DP),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    BookSize(KiloByte(item.book.size).humanReadable, modifier = Modifier.weight(1f))
+    BookDate(item.book.date)
+  }
+}
+
+@Composable
+private fun BookCreator(creator: String, modifier: Modifier = Modifier) {
+  Text(
+    text = creator,
+    style = MaterialTheme.typography.bodyMedium,
+    color = MaterialTheme.colorScheme.onTertiary,
+    modifier = modifier
+  )
+}
+
+@Composable
+private fun BookLanguage(language: String) {
+  Text(
+    text = language,
+    style = MaterialTheme.typography.bodyMedium,
+    color = MaterialTheme.colorScheme.onTertiary
+  )
 }

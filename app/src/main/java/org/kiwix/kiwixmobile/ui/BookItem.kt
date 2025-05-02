@@ -186,11 +186,12 @@ private fun BookArticleCount(articleCount: String) {
 }
 
 @Composable
-fun BookSize(size: String) {
+fun BookSize(size: String, modifier: Modifier = Modifier) {
   Text(
     text = size,
     style = MaterialTheme.typography.bodyMedium,
-    color = MaterialTheme.colorScheme.onTertiary
+    color = MaterialTheme.colorScheme.onTertiary,
+    modifier = modifier
   )
 }
 

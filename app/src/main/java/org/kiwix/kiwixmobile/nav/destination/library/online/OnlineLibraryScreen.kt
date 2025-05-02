@@ -25,8 +25,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -50,8 +50,10 @@ import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
+import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.SwipeRefreshLayout
+import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray700
 import org.kiwix.kiwixmobile.core.ui.theme.White
@@ -59,7 +61,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_MESSAG
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_PROGRESSBAR_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_PROGRESS_CARD_VIEW_CONTENT_MARGIN
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_PROGRESS_CARD_VIEW_DEFAULT_MARGIN
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_PROGRESS_CARD_VIEW_MAX_WIDTH
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_PROGRESS_CARD_VIEW_WIDTH
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
@@ -69,12 +71,14 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.DividerItem
 
 const val ONLINE_LIBRARY_LIST_TESTING_TAG = "onlineLibraryListTestingTag"
+const val ONLINE_LIBRARY_SEARCH_VIEW_TESTING_TAG = "onlineLibrarySearchViewTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming")
 @Composable
 fun OnlineLibraryScreen(
   state: OnlineLibraryScreenState,
+  actionMenuItems: List<ActionMenuItem>,
   listState: LazyListState
 ) {
   val (bottomNavHeight, lazyListState) =
@@ -88,8 +92,9 @@ fun OnlineLibraryScreen(
         KiwixAppBar(
           string.download,
           state.navigationIcon,
-          state.actionMenuItems,
-          scrollBehavior
+          actionMenuItems,
+          scrollBehavior,
+          searchBar = searchBarIfActive(state)
         )
       },
       modifier = Modifier
@@ -112,6 +117,22 @@ fun OnlineLibraryScreen(
 }
 
 @Composable
+private fun searchBarIfActive(
+  state: OnlineLibraryScreenState
+): (@Composable () -> Unit)? = if (state.isSearchActive) {
+  {
+    KiwixSearchView(
+      value = state.searchText,
+      testTag = ONLINE_LIBRARY_SEARCH_VIEW_TESTING_TAG,
+      onValueChange = { state.searchValueChangedListener(it) },
+      onClearClick = { state.clearSearchButtonClickListener.invoke() }
+    )
+  }
+} else {
+  null
+}
+
+@Composable
 private fun OnlineLibraryScreenContent(
   state: OnlineLibraryScreenState,
   lazyListState: LazyListState
@@ -120,13 +141,13 @@ private fun OnlineLibraryScreenContent(
     modifier = Modifier.fillMaxSize(),
     contentAlignment = Alignment.Center
   ) {
-    if (state.scanningProgressItem.first) {
-      ShowFetchingLibraryLayout(state.scanningProgressItem.second)
-    }
     if (state.noContentViewItem.second) {
       NoContentView(state.noContentViewItem.first)
     } else {
       OnlineLibraryList(state, lazyListState)
+    }
+    if (state.scanningProgressItem.first) {
+      ShowFetchingLibraryLayout(state.scanningProgressItem.second)
     }
   }
 }
@@ -143,8 +164,18 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
       items(libraryList) {
         when (it) {
           is DividerItem -> ShowDividerItem(it)
-          is LibraryListItem.BookItem -> OnlineBookItem(it)
-          is LibraryListItem.LibraryDownloadItem -> DownloadBookItem(it)
+          is LibraryListItem.BookItem -> OnlineBookItem(
+            it,
+            state.bookUtils,
+            state.availableSpaceCalculator,
+            state.onBookItemClick
+          )
+
+          is LibraryListItem.LibraryDownloadItem -> DownloadBookItem(
+            it,
+            onPauseResumeClick = state.onPauseResumeButtonClick,
+            onStopClick = state.onStopButtonClick
+          )
         }
       }
     }
@@ -185,7 +216,7 @@ private fun ShowFetchingLibraryLayout(message: String) {
   }
   Card(
     modifier = Modifier
-      .sizeIn(maxWidth = DOWNLOADING_LIBRARY_PROGRESS_CARD_VIEW_MAX_WIDTH)
+      .width(DOWNLOADING_LIBRARY_PROGRESS_CARD_VIEW_WIDTH)
       .padding(DOWNLOADING_LIBRARY_PROGRESS_CARD_VIEW_DEFAULT_MARGIN),
     shape = MaterialTheme.shapes.small,
     elevation = CardDefaults.cardElevation(defaultElevation = SIX_DP),
@@ -237,7 +268,7 @@ private fun ShowFetchingLibraryLayout(message: String) {
 //     snackBarHostState = SnackbarHostState(),
 //     actionMenuItems = listOf(
 //       ActionMenuItem(
-//         IconItem.Drawable(org.kiwix.kiwixmobile.R.drawable.ic_baseline_mobile_screen_share_24px),
+//         IconItem.Drawable(R.drawable.ic_baseline_mobile_screen_share_24px),
 //         string.get_content_from_nearby_device,
 //         { },
 //         isEnabled = true,

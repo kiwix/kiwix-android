@@ -33,11 +33,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.downloader.model.toPainter
@@ -51,31 +53,46 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
-import org.kiwix.kiwixmobile.ui.BOOK_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.ui.BookDescription
 import org.kiwix.kiwixmobile.ui.BookIcon
 import org.kiwix.kiwixmobile.ui.BookTitle
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.LibraryDownloadItem
 
+const val DOWNLOAD_BOOK_ITEM_TESTING_TAG = "downloadBookItemTestingTag"
+
 @Composable
-fun DownloadBookItem(item: LibraryDownloadItem) {
+fun DownloadBookItem(
+  item: LibraryDownloadItem,
+  onPauseResumeClick: (LibraryDownloadItem) -> Unit,
+  onStopClick: (LibraryDownloadItem) -> Unit
+) {
+  // Automatically invoke onStopClick if the download failed
+  LaunchedEffect(item.id, item.currentDownloadState) {
+    if (item.currentDownloadState == Status.FAILED) {
+      onStopClick.invoke(item)
+    }
+  }
   KiwixTheme {
     Card(
       modifier = Modifier
         .fillMaxWidth()
         .padding(FIVE_DP)
-        .testTag(BOOK_ITEM_TESTING_TAG),
+        .testTag(DOWNLOAD_BOOK_ITEM_TESTING_TAG),
       shape = MaterialTheme.shapes.extraSmall,
       elevation = CardDefaults.elevatedCardElevation(),
       colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
     ) {
-      DownloadBookContent(item)
+      DownloadBookContent(item, onPauseResumeClick, onStopClick)
     }
   }
 }
 
 @Composable
-private fun DownloadBookContent(item: LibraryDownloadItem) {
+private fun DownloadBookContent(
+  item: LibraryDownloadItem,
+  onPauseResumeClick: (LibraryDownloadItem) -> Unit,
+  onStopClick: (LibraryDownloadItem) -> Unit
+) {
   Row(
     modifier = Modifier
       .padding(top = SIXTEEN_DP, start = SIXTEEN_DP)
@@ -85,7 +102,8 @@ private fun DownloadBookContent(item: LibraryDownloadItem) {
     BookIcon(item.favIcon.toPainter())
     Column(
       modifier = Modifier
-        .weight(1f),
+        .weight(1f)
+        .padding(start = SIXTEEN_DP),
       horizontalAlignment = Alignment.Start
     ) {
       BookTitle(item.title)
@@ -93,47 +111,48 @@ private fun DownloadBookContent(item: LibraryDownloadItem) {
       BookDescription(item.description.orEmpty())
       ContentLoadingProgressBar(
         progressBarStyle = ProgressBarStyle.HORIZONTAL,
-        modifier = Modifier.padding(ONE_DP),
+        modifier = Modifier.padding(horizontal = ONE_DP, vertical = FIVE_DP),
         progress = item.progress
       )
       DownloadStateRow(item)
     }
-    PauseStopButtonsRow(item, {}, {})
+    PauseStopButtonsRow(item, onPauseResumeClick, onStopClick)
   }
 }
 
 @Composable
 fun PauseStopButtonsRow(
   item: LibraryDownloadItem,
-  onPauseResumeClick: () -> Unit,
-  onStopClick: () -> Unit
+  onPauseResumeClick: (LibraryDownloadItem) -> Unit,
+  onStopClick: (LibraryDownloadItem) -> Unit
 ) {
+  val context = LocalContext.current
   Row(
     modifier = Modifier
       .fillMaxHeight(),
     verticalAlignment = Alignment.CenterVertically
   ) {
     IconButton(
-      onClick = onPauseResumeClick,
+      onClick = { onPauseResumeClick.invoke(item) },
       modifier = Modifier
         .padding(horizontal = TWO_DP)
         .minimumInteractiveComponentSize()
     ) {
       Icon(
         painter = getPauseResumeButtonIcon(item).toPainter(),
-        contentDescription = null
+        contentDescription = "${context.getString(string.tts_pause)}/${context.getString(string.tts_resume)}"
       )
     }
 
     IconButton(
-      onClick = onStopClick,
+      onClick = { onStopClick.invoke(item) },
       modifier = Modifier
         .minimumInteractiveComponentSize()
         .padding(horizontal = TWO_DP)
     ) {
       Icon(
         painter = painterResource(id = R.drawable.ic_stop_24dp),
-        contentDescription = null
+        contentDescription = context.getString(string.stop)
       )
     }
   }
@@ -159,14 +178,14 @@ private fun DownloadStateRow(item: LibraryDownloadItem) {
   ) {
     Text(
       text = item.downloadState.toReadableState(LocalContext.current).toString(),
-      style = MaterialTheme.typography.bodySmall,
+      style = MaterialTheme.typography.bodyMedium,
       color = MaterialTheme.colorScheme.onTertiary,
       modifier = Modifier.weight(1f)
     )
     Text(
       text = item.readableEta.toString(),
-      style = MaterialTheme.typography.bodySmall,
-      color = MaterialTheme.colorScheme.onSurfaceVariant
+      style = MaterialTheme.typography.bodyMedium,
+      color = MaterialTheme.colorScheme.onTertiary
     )
   }
 }
