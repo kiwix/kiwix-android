@@ -21,11 +21,12 @@ package org.kiwix.kiwixmobile.nav.destination.library.online
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -37,17 +38,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.extensions.hideKeyboardOnLazyColumnScroll
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
@@ -79,7 +81,8 @@ const val ONLINE_LIBRARY_SEARCH_VIEW_TESTING_TAG = "onlineLibrarySearchViewTesti
 fun OnlineLibraryScreen(
   state: OnlineLibraryScreenState,
   actionMenuItems: List<ActionMenuItem>,
-  listState: LazyListState
+  listState: LazyListState,
+  navigationIcon: @Composable () -> Unit,
 ) {
   val (bottomNavHeight, lazyListState) =
     rememberScrollBehavior(state.bottomNavigationHeight, listState)
@@ -91,14 +94,13 @@ fun OnlineLibraryScreen(
       topBar = {
         KiwixAppBar(
           string.download,
-          state.navigationIcon,
+          navigationIcon,
           actionMenuItems,
           scrollBehavior,
           searchBar = searchBarIfActive(state)
         )
       },
       modifier = Modifier
-        .systemBarsPadding()
         .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { paddingValues ->
       SwipeRefreshLayout(
@@ -107,7 +109,11 @@ fun OnlineLibraryScreen(
         onRefresh = state.onRefresh,
         modifier = Modifier
           .fillMaxSize()
-          .padding(paddingValues)
+          .padding(
+            top = paddingValues.calculateTopPadding(),
+            start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+            end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
+          )
           .padding(bottom = bottomNavHeight.value)
       ) {
         OnlineLibraryScreenContent(state, lazyListState)
@@ -157,7 +163,9 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
   LazyColumn(
     modifier = Modifier
       .fillMaxSize()
-      .testTag(ONLINE_LIBRARY_LIST_TESTING_TAG),
+      .testTag(ONLINE_LIBRARY_LIST_TESTING_TAG)
+      // hides keyboard when scrolled
+      .hideKeyboardOnLazyColumnScroll(lazyListState),
     state = lazyListState
   ) {
     state.onlineLibraryList?.let { libraryList ->
@@ -187,8 +195,8 @@ private fun ShowDividerItem(dividerItem: DividerItem) {
   Column(
     modifier = Modifier
       .fillMaxWidth()
-      .padding(horizontal = SIXTEEN_DP, vertical = EIGHT_DP)
-      .minimumInteractiveComponentSize()
+      .padding(horizontal = SIXTEEN_DP)
+      .padding(top = SIXTEEN_DP, bottom = EIGHT_DP)
   ) {
     Text(
       text = stringResource(dividerItem.stringId),
@@ -225,6 +233,7 @@ private fun ShowFetchingLibraryLayout(message: String) {
     Column(
       horizontalAlignment = Alignment.CenterHorizontally,
       modifier = Modifier.padding(DOWNLOADING_LIBRARY_PROGRESS_CARD_VIEW_CONTENT_MARGIN)
+        .fillMaxWidth()
     ) {
       ContentLoadingProgressBar(
         modifier = Modifier.size(DOWNLOADING_LIBRARY_PROGRESSBAR_SIZE),

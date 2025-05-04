@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -42,6 +41,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
@@ -55,6 +55,7 @@ import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.PureGrey
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONLINE_BOOK_DISABLED_COLOR_ALPHA
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import org.kiwix.kiwixmobile.core.zim_manager.KiloByte
@@ -99,7 +100,13 @@ fun OnlineBookItem(
     ) {
       Box(modifier = Modifier.fillMaxWidth()) {
         OnlineBookContent(item, bookUtils)
-        ShowDetectingFileSystemUi(isClickable, item, onBookItemClick, hasAvailableSpaceInStorage)
+        ShowDetectingFileSystemUi(
+          isClickable,
+          item,
+          onBookItemClick,
+          hasAvailableSpaceInStorage,
+          Modifier.matchParentSize()
+        )
       }
     }
   }
@@ -111,15 +118,22 @@ private fun ShowDetectingFileSystemUi(
   isClickable: Boolean,
   item: BookItem,
   onBookItemClick: (BookItem) -> Unit,
-  hasAvailableSpaceInStorage: Boolean
+  hasAvailableSpaceInStorage: Boolean,
+  modifier: Modifier
 ) {
   if (!isClickable) {
     val context = LocalContext.current
     Box(
-      modifier = Modifier
-        .fillMaxSize()
-        .background(color = PureGrey)
+      modifier = modifier
+        .background(color = PureGrey.copy(alpha = ONLINE_BOOK_DISABLED_COLOR_ALPHA))
         .zIndex(1f)
+        .pointerInput(Unit) {
+          awaitPointerEventScope {
+            while (true) {
+              awaitPointerEvent()
+            }
+          }
+        }
         .semantics {
           contentDescription = context.getString(R.string.detecting_file_system)
         }

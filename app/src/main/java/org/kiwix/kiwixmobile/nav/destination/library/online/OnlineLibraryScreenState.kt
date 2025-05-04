@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.nav.destination.library.online
 
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.runtime.Composable
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
@@ -47,10 +46,6 @@ data class OnlineLibraryScreenState(
    * Handles snack bar messages and displays.
    */
   val snackBarHostState: SnackbarHostState,
-  /**
-   * Manages the navigation Icon shown on the OnlineLibraryScreen.
-   */
-  val navigationIcon: @Composable () -> Unit,
   /**
    * Manages the refresh action. When user perform the swipe down action this callback will trigger.
    */

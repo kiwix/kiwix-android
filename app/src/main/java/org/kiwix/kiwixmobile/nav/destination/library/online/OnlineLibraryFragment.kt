@@ -26,18 +26,13 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
-import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.LaunchedEffect
@@ -45,10 +40,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -74,7 +66,6 @@ import org.kiwix.kiwixmobile.core.extensions.closeKeyboard
 import org.kiwix.kiwixmobile.core.extensions.coreMainActivity
 import org.kiwix.kiwixmobile.core.extensions.isKeyboardVisible
 import org.kiwix.kiwixmobile.core.extensions.setBottomMarginToFragmentContainerView
-import org.kiwix.kiwixmobile.core.extensions.setUpSearchView
 import org.kiwix.kiwixmobile.core.extensions.snack
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
@@ -93,7 +84,6 @@ import org.kiwix.kiwixmobile.core.utils.NetworkUtils
 import org.kiwix.kiwixmobile.core.utils.REQUEST_POST_NOTIFICATION_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.utils.SimpleTextListener
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -103,8 +93,6 @@ import org.kiwix.kiwixmobile.storage.STORAGE_SELECT_STORAGE_TITLE_TEXTVIEW_SIZE
 import org.kiwix.kiwixmobile.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
-import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryAdapter
-import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryDelegate
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import javax.inject.Inject
 
@@ -137,12 +125,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         snackBarHostState = SnackbarHostState(),
         swipeRefreshItem = Pair(false, true),
         scanningProgressItem = Pair(
-          false,
+          true,
           ""
         ),
         noContentViewItem = Pair("", false),
         bottomNavigationHeight = ZERO,
-        navigationIcon = {},
         onBookItemClick = { onBookItemClick(it) },
         availableSpaceCalculator = availableSpaceCalculator,
         onRefresh = { refreshFragment() },
@@ -151,41 +138,31 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         onStopButtonClick = { onStopButtonClick(it) },
         isSearchActive = false,
         searchText = "",
-        searchValueChangedListener = {
-          if (it.isNotEmpty()) {
-            // Store only when query is not empty because when device going to sleep,
-            // then `viewLifecycleOwner` tries to clear the written text in searchView
-            // and due to that, this listener fired with empty query which resets the search.
-            zimManageViewModel.onlineBooksSearchedQuery.value = it
-          }
-          zimManageViewModel.requestFiltering.onNext(it)
-        },
-        clearSearchButtonClickListener = {
-          zimManageViewModel.onlineBooksSearchedQuery.value = null
-        }
+        searchValueChangedListener = { onSearchValueChanged(it) },
+        clearSearchButtonClickListener = { onSearchClear() }
       )
     )
   }
 
-  @VisibleForTesting
-  fun getOnlineLibraryList() = libraryAdapter.items
+  private fun onSearchClear() {
+    onlineLibraryScreenState.value.update {
+      copy(searchText = "")
+    }
+    zimManageViewModel.onlineBooksSearchedQuery.value = null
+    zimManageViewModel.requestFiltering.onNext("")
+  }
 
-  private val libraryAdapter: LibraryAdapter by lazy {
-    LibraryAdapter(
-      LibraryDelegate.BookDelegate(
-        bookUtils,
-        ::onBookItemClick,
-        availableSpaceCalculator,
-        lifecycleScope
-      ),
-      LibraryDelegate.DownloadDelegate(
-        {
-        },
-        {
-        }
-      ),
-      LibraryDelegate.DividerDelegate
-    )
+  private fun onSearchValueChanged(searchText: String) {
+    if (searchText.isNotEmpty()) {
+      // Store only when query is not empty because when device going to sleep,
+      // then `viewLifecycleOwner` tries to clear the written text in searchView
+      // and due to that, this listener fired with empty query which resets the search.
+      zimManageViewModel.onlineBooksSearchedQuery.value = searchText
+    }
+    onlineLibraryScreenState.value.update {
+      copy(searchText = searchText)
+    }
+    zimManageViewModel.requestFiltering.onNext(searchText)
   }
 
   private val noWifiWithWifiOnlyPreferenceSet
@@ -202,10 +179,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
-    return ComposeView(requireContext()).also {
-      composeView = it
-    }
+  ): View? = ComposeView(requireContext()).also {
+    composeView = it
   }
 
   private fun getBottomNavigationView() =
@@ -243,12 +218,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    // fragmentDestinationDownloadBinding?.librarySwipeRefresh?.setOnRefreshListener(::refreshFragment)
-    // fragmentDestinationDownloadBinding?.libraryList?.run {
-    //   adapter = libraryAdapter
-    //   layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-    //   setHasFixedSize(true)
-    // }
     composeView?.setContent {
       val lazyListState = rememberLazyListState()
       val isBottomNavVisible = rememberBottomNavigationVisibility(lazyListState)
@@ -259,14 +228,8 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         onlineLibraryScreenState.value.update {
           copy(
             bottomNavigationHeight = getBottomNavigationHeight(),
-            navigationIcon = {
-              NavigationIcon(
-                iconItem = IconItem.Vector(Icons.Filled.Menu),
-                contentDescription = string.open_drawer,
-                onClick = { navigationIconClick(isSearchActive) }
-              )
-            },
-            isSearchActive = isSearchActive
+            isSearchActive = isSearchActive,
+            scanningProgressItem = true to getString(R.string.reaching_remote_library)
           )
         }
       }
@@ -275,6 +238,13 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         listState = lazyListState,
         actionMenuItems = actionMenuItems {
           onlineLibraryScreenState.value.update { copy(isSearchActive = true) }
+        },
+        navigationIcon = {
+          NavigationIcon(
+            iconItem = navigationIconItem(onlineLibraryScreenState.value.value.isSearchActive),
+            contentDescription = string.open_drawer,
+            onClick = { navigationIconClick(onlineLibraryScreenState.value.value.isSearchActive) }
+          )
         }
       )
       DialogHost(alertDialogShower)
@@ -298,22 +268,34 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       }
     }
     zimManageViewModel.downloadProgress.observe(viewLifecycleOwner, ::onLibraryStatusChanged)
+    showPreviouslySearchedTextInSearchView()
+  }
+
+  private fun showPreviouslySearchedTextInSearchView() {
     zimManageViewModel.onlineBooksSearchedQuery.value.takeIf { it?.isNotEmpty() == true }
       ?.let {
         // Set the query in searchView which was previously set.
+        onlineLibraryScreenState.value.update {
+          copy(isSearchActive = true, searchText = it)
+        }
         zimManageViewModel.requestFiltering.onNext(it)
       } ?: run {
       // If no previously saved query found then normally initiate the search.
       zimManageViewModel.onlineBooksSearchedQuery.value = ""
       zimManageViewModel.requestFiltering.onNext("")
     }
-
-    // hides keyboard when scrolled
-    // fragmentDestinationDownloadBinding?.libraryList?.addOnScrollListener(simpleScrollListener)
   }
+
+  private fun navigationIconItem(isSearchActive: Boolean) =
+    if (isSearchActive) {
+      IconItem.Vector(Icons.AutoMirrored.Default.ArrowBack)
+    } else {
+      IconItem.Vector(Icons.Filled.Menu)
+    }
 
   private fun navigationIconClick(isSearchActive: Boolean) {
     if (isSearchActive) {
+      closeSearch()
       requireActivity().onBackPressedDispatcher.onBackPressed()
     } else {
       // Manually handle the navigation open/close.
@@ -353,83 +335,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private fun onLanguageMenuIconClick() {
     requireActivity().navigate(org.kiwix.kiwixmobile.R.id.languageFragment)
     closeKeyboard()
-  }
-
-  // private var simpleScrollListener = SimpleRecyclerViewScrollListener { _, newState ->
-  //   if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-  //     fragmentDestinationDownloadBinding?.libraryList?.closeKeyboard()
-  //   }
-  // }
-
-  private fun setupMenu() {
-    (requireActivity() as MenuHost).addMenuProvider(
-      object : MenuProvider {
-        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-          menuInflater.inflate(org.kiwix.kiwixmobile.R.menu.menu_zim_manager, menu)
-          val searchItem = menu.findItem(org.kiwix.kiwixmobile.R.id.action_search)
-          val getZimItem = menu.findItem(org.kiwix.kiwixmobile.R.id.get_zim_nearby_device)
-          getZimItem?.isVisible = false
-
-          searchItem.setOnActionExpandListener(
-            object : MenuItem.OnActionExpandListener {
-              override fun onMenuItemActionExpand(p0: MenuItem): Boolean = true
-
-              override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
-                // Clear search query when user reset the search.
-                zimManageViewModel.onlineBooksSearchedQuery.value = null
-                return true
-              }
-            }
-          )
-
-          (searchItem?.actionView as? SearchView)?.apply {
-            setUpSearchView(requireActivity())
-            setOnQueryTextListener(
-              SimpleTextListener { query, _ ->
-                if (query.isNotEmpty()) {
-                  // Store only when query is not empty because when device going to sleep,
-                  // then `viewLifecycleOwner` tries to clear the written text in searchView
-                  // and due to that, this listener fired with empty query which resets the search.
-                  zimManageViewModel.onlineBooksSearchedQuery.value = query
-                }
-                zimManageViewModel.requestFiltering.onNext(query)
-              }
-            )
-
-            val closeButton = findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
-            closeButton?.setOnClickListener {
-              // Reset search query when user clicks on close image button in searchView.
-              zimManageViewModel.onlineBooksSearchedQuery.value = null
-              setQuery("", false)
-            }
-            zimManageViewModel.onlineBooksSearchedQuery.value.takeIf { it?.isNotEmpty() == true }
-              ?.let {
-                // Expand the searchView if there is previously saved query exist.
-                searchItem.expandActionView()
-                // Set the query in searchView which was previously set.
-                setQuery(it, false)
-              } ?: run {
-              // If no previously saved query found then normally initiate the search.
-              zimManageViewModel.onlineBooksSearchedQuery.value = ""
-              zimManageViewModel.requestFiltering.onNext("")
-            }
-          }
-        }
-
-        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-          when (menuItem.itemId) {
-            org.kiwix.kiwixmobile.R.id.select_language -> {
-              requireActivity().navigate(org.kiwix.kiwixmobile.R.id.languageFragment)
-              closeKeyboard()
-              return true
-            }
-          }
-          return false
-        }
-      },
-      viewLifecycleOwner,
-      Lifecycle.State.RESUMED
-    )
   }
 
   private fun showInternetAccessViaMobileNetworkDialog() {
@@ -488,7 +393,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   private fun onLibraryStatusChanged(libraryStatus: String) {
     synchronized(lock) {
       onlineLibraryScreenState.value.update {
-        copy(scanningProgressItem = true to libraryStatus)
+        copy(
+          scanningProgressItem = onlineLibraryScreenState.value.value.scanningProgressItem.first to libraryStatus
+        )
       }
     }
   }
@@ -500,11 +407,19 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   override fun onBackPressed(activity: AppCompatActivity): FragmentActivityExtensions.Super {
-    if (isKeyboardVisible()) {
+    if (isKeyboardVisible() || onlineLibraryScreenState.value.value.isSearchActive) {
       closeKeyboard()
+      closeSearch()
       return FragmentActivityExtensions.Super.ShouldNotCall
     }
     return FragmentActivityExtensions.Super.ShouldCall
+  }
+
+  private fun closeSearch() {
+    onlineLibraryScreenState.value.update {
+      copy(isSearchActive = false, searchText = "")
+    }
+    onSearchClear()
   }
 
   private fun onRefreshStateChange(isRefreshing: Boolean?) {
@@ -529,7 +444,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         } else if (noWifiWithWifiOnlyPreferenceSet) {
           hideRecyclerviewAndShowSwipeDownForLibraryErrorText()
         } else if (!noWifiWithWifiOnlyPreferenceSet) {
-          if (libraryAdapter.items.isEmpty()) {
+          if (onlineLibraryScreenState.value.value.onlineLibraryList?.isEmpty() == true) {
             showProgressBarOfFetchingOnlineLibrary()
           }
         }
@@ -544,7 +459,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun showNoInternetConnectionError() {
-    if (libraryAdapter.itemCount > 0) {
+    if (onlineLibraryScreenState.value.value.onlineLibraryList?.isNotEmpty() == true) {
       noInternetSnackbar()
     } else {
       onlineLibraryScreenState.value.update {
@@ -561,12 +476,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       lifecycleScope = lifecycleScope,
       actionClick = { openNetworkSettings() }
     )
-    // fragmentDestinationDownloadBinding?.libraryList?.snack(
-    //   string.no_network_connection,
-    //   requireActivity().findViewById(org.kiwix.kiwixmobile.R.id.bottom_nav_view),
-    //   string.menu_settings,
-    //   ::openNetworkSettings
-    // )
   }
 
   private fun openNetworkSettings() {
