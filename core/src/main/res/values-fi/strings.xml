@@ -129,7 +129,6 @@
   <string name="no">Ei</string>
   <string name="confirm_stop_download_title">Pysäytä lataaminen?</string>
   <string name="confirm_stop_download_msg">Haluatko varmasti pysäyttää tämän latauksen?</string>
-  <string name="download_change_storage">Tallennuslaitteen valitsin</string>
   <string name="tts_not_enabled" fuzzy="true">Teksti puheeksi ei ole käytössä tässä ZIM-tiedostossa</string>
   <string name="next">Seuraava</string>
   <string name="previous">Edellinen</string>

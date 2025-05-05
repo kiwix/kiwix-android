@@ -156,7 +156,6 @@
   <string name="no">Jo</string>
   <string name="confirm_stop_download_title">Të ndalet shkarkim?</string>
   <string name="confirm_stop_download_msg">Jeni i sigurt se dëshironi të ndalet ky shkarkim?</string>
-  <string name="download_change_storage">Përzgjedhës pajisjeje depozitimi</string>
   <string name="tts_not_enabled" fuzzy="true">Për këtë kartelë ZIM s’bëhet dot shndërrim nga tekst në të folur</string>
   <string name="texttospeech_initialization_failed" fuzzy="true">Gatitja e “Tekst në të Folur” dështoi. Ju lutemi, riprovoni</string>
   <string name="texttospeech_error" fuzzy="true">Gabim i papritur në “Tekst në të Folur”. Ju lutemi, riprovoni</string>

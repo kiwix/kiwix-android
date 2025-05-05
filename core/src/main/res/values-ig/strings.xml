@@ -155,7 +155,6 @@
   <string name="no">Mba</string>
   <string name="confirm_stop_download_title">Kwụsị nbudata?</string>
   <string name="confirm_stop_download_msg">Ị ji n’aka n’ịchọrọ ịkwụsị nbudata a?</string>
-  <string name="download_change_storage">Nhọrọ ngwaọrụ nchekwa</string>
   <string name="tts_not_enabled" fuzzy="true">Enweghi isi na ederede gaa na okwu maka faịlụ ZIM a</string>
   <string name="texttospeech_initialization_failed" fuzzy="true">Mmalite ederede gaa na okwu agaghi. Biko nwaa ọzọ</string>
   <string name="texttospeech_error" fuzzy="true">Njehie a na-atụghị anya ya na Ederede gaa na Okwu. Biko nwaa ọzọ</string>

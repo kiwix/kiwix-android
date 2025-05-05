@@ -155,7 +155,6 @@
   <string name="no">Ne</string>
   <string name="confirm_stop_download_title">Ustavim prenos?</string>
   <string name="confirm_stop_download_msg">Ali res želite ustaviti ta prenos?</string>
-  <string name="download_change_storage">Izbirnik naprave za shranjevanje</string>
   <string name="tts_not_enabled" fuzzy="true">Pretvarjanje besedila v govor za to datoteko ZIM ni omogočeno</string>
   <string name="texttospeech_initialization_failed" fuzzy="true">Inicializacija besedila v govor ni uspela. Prosimo, poskusite znova.</string>
   <string name="texttospeech_error" fuzzy="true">Nepričakovana napaka pri pretvorbi besedila v govor. Prosimo, poskusite znova.</string>

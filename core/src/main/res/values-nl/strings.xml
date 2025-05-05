@@ -172,7 +172,6 @@
   <string name="no">Nee</string>
   <string name="confirm_stop_download_title">Download stoppen?</string>
   <string name="confirm_stop_download_msg">Weet u zeker dat u deze download wilt stoppen?</string>
-  <string name="download_change_storage">Selectie opslagapparaat</string>
   <string name="tts_not_enabled">Het hardop voorlezen is voor dit ZIM-bestand niet ingeschakeld</string>
   <string name="texttospeech_initialization_failed">De initialisatie van het hardop voorlezen is mislukt. Probeer het opnieuw</string>
   <string name="texttospeech_error">Onverwachte fout bij het hardop voorlezen. Probeer het opnieuw</string>

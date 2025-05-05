@@ -108,6 +108,7 @@ fun LocalLibraryScreen(
       modifier = Modifier
         .systemBarsPadding()
         .nestedScroll(scrollBehavior.nestedScrollConnection)
+        .padding(bottom = bottomNavHeight.value)
     ) { contentPadding ->
       SwipeRefreshLayout(
         isRefreshing = state.swipeRefreshItem.first,
@@ -116,7 +117,6 @@ fun LocalLibraryScreen(
         modifier = Modifier
           .fillMaxSize()
           .padding(contentPadding)
-          .padding(bottom = bottomNavHeight.value)
       ) {
         if (state.scanningProgressItem.first) {
           ContentLoadingProgressBar(

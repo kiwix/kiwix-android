@@ -114,7 +114,6 @@
   <string name="no">Ne</string>
   <string name="confirm_stop_download_title">Haltigi elŝuton?</string>
   <string name="confirm_stop_download_msg">Ĉu vi certas ke vi volas ĉesigi ĉi tiun elŝuton?</string>
-  <string name="download_change_storage">Elektilo de konservejo</string>
   <string name="tts_not_enabled" fuzzy="true">Parolsintezo estas neebla por ĉi tiu ZIM-dosiero</string>
   <string name="next">Sekven</string>
   <string name="previous">Antaŭen</string>

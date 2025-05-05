@@ -158,7 +158,7 @@
   <string name="no">No</string>
   <string name="confirm_stop_download_title">Stop download?</string>
   <string name="confirm_stop_download_msg">Are you sure you want to stop this download?</string>
-  <string name="download_change_storage" tools:keep="@string/download_change_storage">Storage device selector</string>
+  <string name="change_storage">Change</string>
   <string name="tts_not_enabled">Read Aloud is not enabled for this ZIM file</string>
   <string name="texttospeech_initialization_failed">Initialization of Read Aloud failed. Please try again</string>
   <string name="texttospeech_error">Unexpected error in Read Aloud. Please try again</string>

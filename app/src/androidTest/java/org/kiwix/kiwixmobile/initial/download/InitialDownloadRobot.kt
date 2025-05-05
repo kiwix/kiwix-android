@@ -23,29 +23,18 @@ import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
-import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
-import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
-import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
-import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.nav.destination.library.online.DOWNLOADING_STOP_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.storage.STORAGE_SELECTION_DIALOG_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.ui.STORAGE_DEVICE_ITEM_TESTING_TAG
-import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
 
 fun initialDownload(func: InitialDownloadRobot.() -> Unit) =
   InitialDownloadRobot().applyWithViewHierarchyPrinting(func)
@@ -55,89 +44,15 @@ class InitialDownloadRobot : BaseRobot() {
     clickOn(ViewId(R.id.downloadsFragment))
   }
 
-  fun assertLibraryListDisplayed() {
-    isVisible(ViewId(R.id.libraryList))
-  }
-
-  private fun refreshOnlineList() {
-    refresh(R.id.librarySwipeRefresh)
-  }
-
-  // Increasing the default timeout for data loading because, on the Android 16 Emulator,
-  // the internet connection is slow, and the library download takes longer.
-  fun waitForDataToLoad(retryCountForDataToLoad: Int = 20) {
-    try {
-      isVisible(TextId(string.your_languages))
-    } catch (e: RuntimeException) {
-      if (retryCountForDataToLoad > 0) {
-        // refresh the data if there is "Swipe Down for Library" visible on the screen.
-        refreshOnlineListIfSwipeDownForLibraryTextVisible()
-        waitForDataToLoad(retryCountForDataToLoad - 1)
-        return
-      }
-      // throw the exception when there is no more retry left.
-      throw RuntimeException("Couldn't load the online library list.\n Original exception = $e")
-    }
-  }
-
-  private fun refreshOnlineListIfSwipeDownForLibraryTextVisible() {
-    try {
-      onView(withText(string.swipe_down_for_library)).check(matches(isDisplayed()))
-      refreshOnlineList()
-    } catch (_: Throwable) {
-      try {
-        // do nothing as currently downloading the online library.
-        onView(withId(R.id.onlineLibraryProgressLayout)).check(matches(isDisplayed()))
-      } catch (_: Throwable) {
-        // if not visible try to get the online library.
-        refreshOnlineList()
-      }
-    }
-  }
-
-  fun downloadZimFile() {
-    pauseForBetterTestPerformance()
-    testFlakyView({
-      onView(
-        RecyclerViewMatcher(R.id.libraryList).atPosition(
-          1
-        )
-      ).perform(click())
-    })
-  }
-
   fun assertStorageConfigureDialogDisplayed(composeTestRule: ComposeContentTestRule) {
     pauseForBetterTestPerformance()
     testFlakyView({
       composeTestRule.apply {
-        waitForIdle()
+        waitUntilTimeout()
         onNodeWithTag(STORAGE_SELECTION_DIALOG_TITLE_TESTING_TAG)
           .assertTextEquals(context.getString(string.choose_storage_to_download_book))
       }
     })
-  }
-
-  fun assertStopDownloadDialogDisplayed(composeTestRule: ComposeContentTestRule) {
-    pauseForBetterTestPerformance()
-    testFlakyView({
-      composeTestRule.apply {
-        waitForIdle()
-        onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
-          .assertTextEquals(context.getString(string.confirm_stop_download_title))
-      }
-    })
-  }
-
-  fun clickOnYesToConfirm(composeTestRule: ComposeContentTestRule) {
-    testFlakyView(
-      {
-        composeTestRule.apply {
-          waitForIdle()
-          onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG)
-            .performClick()
-        }
-      }
-    )
   }
 
   fun clickOnInternalStorage(composeTestRule: ComposeContentTestRule) {
@@ -150,35 +65,19 @@ class InitialDownloadRobot : BaseRobot() {
     })
   }
 
-  fun assertDownloadStart() {
-    testFlakyView({ isVisible(ViewId(R.id.stop)) }, 10)
-  }
-
-  fun stopDownload() {
-    testFlakyView({ onView(withId(R.id.stop)).perform(click()) })
-  }
-
-  fun assertDownloadStop() {
-    testFlakyView({ onView(withId(R.id.stop)).check(doesNotExist()) }, 10)
+  fun assertDownloadStop(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntilTimeout()
+      try {
+        onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG)[0].assertExists()
+        throw IllegalStateException("Could not stop download")
+      } catch (_: AssertionError) {
+        // no nothing if the stop button is not visible.
+      }
+    }
   }
 
   private fun pauseForBetterTestPerformance() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-  }
-
-  fun stopDownloadIfAlreadyStarted(composeTestRule: ComposeContentTestRule) {
-    try {
-      pauseForBetterTestPerformance()
-      onView(withId(R.id.stop)).check(matches(isDisplayed()))
-      stopDownload()
-      assertStopDownloadDialogDisplayed(composeTestRule)
-      clickOnYesToConfirm(composeTestRule)
-      pauseForBetterTestPerformance()
-    } catch (_: Exception) {
-      Log.e(
-        "INITIAL_DOWNLOAD_TEST",
-        "Failed to stop downloading. Probably because it is not downloading the zim file"
-      )
-    }
   }
 }

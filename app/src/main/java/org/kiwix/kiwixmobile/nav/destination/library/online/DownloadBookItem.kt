@@ -39,6 +39,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
@@ -59,6 +61,9 @@ import org.kiwix.kiwixmobile.ui.BookTitle
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.LibraryDownloadItem
 
 const val DOWNLOAD_BOOK_ITEM_TESTING_TAG = "downloadBookItemTestingTag"
+const val DOWNLOADING_PAUSE_BUTTON_TESTING_TAG = "downloadingPauseButtonTestingTag"
+const val DOWNLOADING_STOP_BUTTON_TESTING_TAG = "downloadingStopButtonTestingTag"
+const val DOWNLOADING_STATE_TEXT_TESTING_TAG = "downloadingStateTextTestingTag"
 
 @Composable
 fun DownloadBookItem(
@@ -137,6 +142,7 @@ fun PauseStopButtonsRow(
       modifier = Modifier
         .padding(horizontal = TWO_DP)
         .minimumInteractiveComponentSize()
+        .semantics { testTag = DOWNLOADING_PAUSE_BUTTON_TESTING_TAG }
     ) {
       Icon(
         painter = getPauseResumeButtonIcon(item).toPainter(),
@@ -149,6 +155,7 @@ fun PauseStopButtonsRow(
       modifier = Modifier
         .minimumInteractiveComponentSize()
         .padding(horizontal = TWO_DP)
+        .semantics { testTag = DOWNLOADING_STOP_BUTTON_TESTING_TAG }
     ) {
       Icon(
         painter = painterResource(id = R.drawable.ic_stop_24dp),
@@ -180,7 +187,9 @@ private fun DownloadStateRow(item: LibraryDownloadItem) {
       text = item.downloadState.toReadableState(LocalContext.current).toString(),
       style = MaterialTheme.typography.bodyMedium,
       color = MaterialTheme.colorScheme.onTertiary,
-      modifier = Modifier.weight(1f)
+      modifier = Modifier
+        .weight(1f)
+        .testTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)
     )
     Text(
       text = item.readableEta.toString(),

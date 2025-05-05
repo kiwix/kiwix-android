@@ -159,7 +159,6 @@
   <string name="no">No</string>
   <string name="confirm_stop_download_title">Stoppar le discargamento?</string>
   <string name="confirm_stop_download_msg">Es tu secur de voler interrumper iste discargamento?</string>
-  <string name="download_change_storage">Selector de dispositivo de immagazinage</string>
   <string name="tts_not_enabled">Le lectura a voce alte non es activate pro iste file ZIM</string>
   <string name="texttospeech_initialization_failed">Le initialisation del lectura a voce alte ha fallite. Per favor tenta lo de novo</string>
   <string name="texttospeech_error">Error inexpectate in le lectura a voce alte. Per favor tenta lo de novo</string>

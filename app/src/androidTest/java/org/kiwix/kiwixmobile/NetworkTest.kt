@@ -18,7 +18,6 @@
 package org.kiwix.kiwixmobile
 
 import android.Manifest
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.IdlingPolicies
@@ -39,12 +38,13 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.CoreApp.Companion.coreComponent
+import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.di.components.DaggerTestComponent
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource.Companion.getInstance
 import java.util.concurrent.TimeUnit
-import org.kiwix.kiwixmobile.core.R.string
 
 /**
  * Created by mhutti1 on 14/04/17.
@@ -97,9 +97,9 @@ class NetworkTest {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     clickMenu(TestUtils.getResourceString(string.library))
     TestUtils.allowStoragePermissionsIfNeeded()
-    Espresso.onData(TestUtils.withContent("wikipedia_ab_all_2017-03"))
-      .inAdapterView(ViewMatchers.withId(R.id.libraryList))
-      .perform(ViewActions.click())
+    // Espresso.onData(TestUtils.withContent("wikipedia_ab_all_2017-03"))
+    //   .inAdapterView(ViewMatchers.withId(R.id.libraryList))
+    //   .perform(ViewActions.click())
     try {
       Espresso.onView(ViewMatchers.withId(android.R.id.button1)).perform(ViewActions.click())
     } catch (e: RuntimeException) {

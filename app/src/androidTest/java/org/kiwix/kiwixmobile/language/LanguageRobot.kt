@@ -25,22 +25,16 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
-import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.language.composables.LANGUAGE_ITEM_CHECKBOX_TESTING_TAG
+import org.kiwix.kiwixmobile.nav.destination.library.online.LANGUAGE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
 fun language(func: LanguageRobot.() -> Unit) = LanguageRobot().applyWithViewHierarchyPrinting(func)
 
@@ -49,44 +43,12 @@ class LanguageRobot : BaseRobot() {
     clickOn(ViewId(R.id.downloadsFragment))
   }
 
-  fun waitForDataToLoad(retryCountForDataToLoad: Int = 10) {
-    try {
-      isVisible(TextId(string.your_languages))
-    } catch (e: RuntimeException) {
-      if (retryCountForDataToLoad > 0) {
-        // refresh the data if there is "Swipe Down for Library" visible on the screen.
-        refreshOnlineListIfSwipeDownForLibraryTextVisible()
-        waitForDataToLoad(retryCountForDataToLoad - 1)
-        return
-      }
-      // throw the exception when there is no more retry left.
-      throw RuntimeException("Couldn't load the online library list.\n Original exception = $e")
-    }
-  }
-
-  private fun refreshOnlineListIfSwipeDownForLibraryTextVisible() {
-    try {
-      onView(ViewMatchers.withText(string.swipe_down_for_library)).check(matches(isDisplayed()))
-      refreshOnlineList()
-    } catch (_: RuntimeException) {
-      try {
-        // do nothing as currently downloading the online library.
-        onView(withId(R.id.onlineLibraryProgressLayout)).check(matches(isDisplayed()))
-      } catch (e: RuntimeException) {
-        // if not visible try to get the online library.
-        refreshOnlineList()
-      }
-    }
-  }
-
-  private fun refreshOnlineList() {
-    refresh(R.id.librarySwipeRefresh)
-  }
-
-  fun clickOnLanguageIcon() {
+  fun clickOnLanguageIcon(composeTestRule: ComposeContentTestRule) {
     // Wait for a few seconds to properly save selected language.
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-    clickOn(ViewId(R.id.select_language))
+    composeTestRule.apply {
+      waitUntilTimeout()
+      onNodeWithTag(LANGUAGE_MENU_ICON_TESTING_TAG).performClick()
+    }
   }
 
   fun clickOnSaveLanguageIcon(composeTestRule: ComposeContentTestRule) {

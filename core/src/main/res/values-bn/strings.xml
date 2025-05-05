@@ -119,7 +119,6 @@
   <string name="no">না</string>
   <string name="confirm_stop_download_title">ডাউনলোড বন্ধ করবেন?</string>
   <string name="confirm_stop_download_msg">আপনি কি নিশ্চিত যে আপনি এই ডাউনলোড বন্ধ করতে চান?</string>
-  <string name="download_change_storage">ডিভাইসের সংগ্রহস্থল নির্বাচক</string>
   <string name="tts_not_enabled" fuzzy="true">এই জিম ফাইলের জন্য লেখা থেকে বলা সক্রিয় নয়</string>
   <string name="next">পরবর্তী</string>
   <string name="previous">পূর্ববর্তী</string>

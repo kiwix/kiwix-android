@@ -119,7 +119,6 @@
   <string name="no">ვარი</string>
   <string name="confirm_stop_download_title">ვაგუმუოხარგათო?</string>
   <string name="confirm_stop_download_msg">გონებნანო ვაგუმუოხარგუათი?</string>
-  <string name="download_change_storage">ინფორმაციაშ ოჩუაშეშ გიშაგორუა</string>
   <string name="next">უკული</string>
   <string name="previous">კინოხიანი</string>
   <string name="pref_wifi_only">დინოხიშ გიმოხარგუა ხვალე WiFi-ით</string>

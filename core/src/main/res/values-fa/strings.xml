@@ -99,7 +99,6 @@
   <string name="no">نه!</string>
   <string name="confirm_stop_download_title">بارگیری متوقف شود؟</string>
   <string name="confirm_stop_download_msg">آیا اطمینان دارید که می‌خواهید این بارگیری را متوقف کنید؟</string>
-  <string name="download_change_storage">انتخاب دستگاه ذخیره‌سازی</string>
   <string name="next">بعدی</string>
   <string name="previous">قبلی</string>
   <string name="time_day">روز</string>

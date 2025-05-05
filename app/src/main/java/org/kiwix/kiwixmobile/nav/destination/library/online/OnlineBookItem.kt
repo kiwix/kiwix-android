@@ -71,6 +71,7 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.BookItem
 
 const val ONLINE_BOOK_ITEM_TESTING_TAG = "onlineBookItemTestingTag"
+const val ONLINE_BOOK_SIZE_TEXT_TESTING_TAG = "onlineBookSizeTextTestingTag"
 
 @Composable
 fun OnlineBookItem(
@@ -205,7 +206,10 @@ private fun BookSizeAndDateRow(item: BookItem) {
       .padding(end = SIXTEEN_DP),
     verticalAlignment = Alignment.CenterVertically
   ) {
-    BookSize(KiloByte(item.book.size).humanReadable, modifier = Modifier.weight(1f))
+    BookSize(
+      KiloByte(item.book.size).humanReadable,
+      modifier = Modifier.weight(1f).testTag(ONLINE_BOOK_SIZE_TEXT_TESTING_TAG)
+    )
     BookDate(item.book.date)
   }
 }

@@ -57,6 +57,8 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Timer
+import java.util.TimerTask
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -261,5 +263,30 @@ object TestUtils {
   fun ComposeContentTestRule.refresh() {
     onNodeWithTag(SWIPE_REFRESH_TESTING_TAG)
       .performTouchInput { swipeDown() }
+  }
+
+  fun ComposeContentTestRule.waitUntilTimeout(timeoutMillis: Long = TEST_PAUSE_MS.toLong()) {
+    AsyncTimer.start(timeoutMillis)
+    waitUntil(
+      condition = { AsyncTimer.expired },
+      timeoutMillis = timeoutMillis + 1000
+    )
+  }
+
+  object AsyncTimer {
+    var expired = false
+    fun start(delay: Long = 1000) {
+      expired = false
+      val timerTask = TimerTaskImpl {
+        expired = true
+      }
+      Timer().schedule(timerTask, delay)
+    }
+  }
+
+  class TimerTaskImpl(private val runnable: Runnable) : TimerTask() {
+    override fun run() {
+      runnable.run()
+    }
   }
 }

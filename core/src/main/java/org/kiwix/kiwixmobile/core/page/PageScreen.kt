@@ -156,7 +156,7 @@ private fun searchBarIfActive(
     KiwixSearchView(
       placeholder = state.searchQueryHint,
       value = state.searchText,
-      testTag = "",
+      searchViewTextFiledTestTag = "",
       onValueChange = { state.searchValueChangedListener(it) },
       onClearClick = { state.clearSearchButtonClickListener.invoke() }
     )

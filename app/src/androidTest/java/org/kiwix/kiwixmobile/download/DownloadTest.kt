@@ -22,7 +22,6 @@ import android.util.Log
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.IdlingPolicies
@@ -54,14 +53,12 @@ import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.topLevel
-import org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryFragment
 import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource.Companion.getInstance
-import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import java.util.concurrent.TimeUnit
 
 @LargeTest
@@ -142,20 +139,16 @@ class DownloadTest : BaseActivityTest() {
       }
       downloadRobot {
         clickDownloadOnBottomNav()
-        waitForDataToLoad()
+        waitForDataToLoad(composeTestRule = composeTestRule)
         stopDownloadIfAlreadyStarted(composeTestRule)
-        val smallestZimFileIndex = getSmallestZimFileIndex(getOnlineLibraryList())
-        scrollToZimFileIndex(smallestZimFileIndex)
-        downloadZimFile(smallestZimFileIndex)
+        downloadZimFile(composeTestRule)
         try {
-          // Scroll to the top because now the downloading ZIM files are showing on the top.
-          scrollToZimFileIndex(0)
-          assertDownloadStart()
-          pauseDownload()
-          assertDownloadPaused()
-          resumeDownload()
-          assertDownloadResumed()
-          waitUntilDownloadComplete()
+          assertDownloadStart(composeTestRule)
+          pauseDownload(composeTestRule)
+          assertDownloadPaused(composeTestRule)
+          resumeDownload(composeTestRule)
+          assertDownloadResumed(composeTestRule)
+          waitUntilDownloadComplete(composeTestRule = composeTestRule)
         } catch (ignore: Exception) {
           // do nothing as ZIM file already downloaded, since we are downloading the smallest file
           // so it can be downloaded immediately after starting.
@@ -177,15 +170,6 @@ class DownloadTest : BaseActivityTest() {
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       LeakAssertions.assertNoLeaks()
     }
-  }
-
-  private fun getOnlineLibraryList(): List<LibraryListItem> {
-    val navHostFragment: NavHostFragment =
-      kiwixMainActivity.supportFragmentManager
-        .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-    val onlineLibraryFragment =
-      navHostFragment.childFragmentManager.fragments[0] as OnlineLibraryFragment
-    return onlineLibraryFragment.getOnlineLibraryList()
   }
 
   @Test
@@ -215,14 +199,14 @@ class DownloadTest : BaseActivityTest() {
           }
         }
         clickDownloadOnBottomNav()
-        waitForDataToLoad()
+        waitForDataToLoad(composeTestRule = composeTestRule)
         stopDownloadIfAlreadyStarted(composeTestRule)
-        downloadZimFile()
-        assertDownloadStart()
-        pauseDownload()
-        assertDownloadPaused()
-        resumeDownload()
-        assertDownloadResumed()
+        downloadZimFile(composeTestRule)
+        assertDownloadStart(composeTestRule)
+        pauseDownload(composeTestRule)
+        assertDownloadPaused(composeTestRule)
+        resumeDownload(composeTestRule)
+        assertDownloadResumed(composeTestRule)
         stopDownloadIfAlreadyStarted(composeTestRule)
         // select the default device language to perform other test cases.
         topLevel {

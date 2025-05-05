@@ -124,10 +124,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         onlineLibraryList = null,
         snackBarHostState = SnackbarHostState(),
         swipeRefreshItem = Pair(false, true),
-        scanningProgressItem = Pair(
-          true,
-          ""
-        ),
+        scanningProgressItem = Pair(false, ""),
         noContentViewItem = Pair("", false),
         bottomNavigationHeight = ZERO,
         onBookItemClick = { onBookItemClick(it) },
@@ -229,7 +226,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
           copy(
             bottomNavigationHeight = getBottomNavigationHeight(),
             isSearchActive = isSearchActive,
-            scanningProgressItem = true to getString(R.string.reaching_remote_library)
+            scanningProgressItem = false to getString(R.string.reaching_remote_library)
           )
         }
       }
@@ -256,7 +253,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       }
     zimManageViewModel.libraryListIsRefreshing.observe(
       viewLifecycleOwner,
-      Observer(::onRefreshStateChange)
+      Observer { onRefreshStateChange(it, true) }
     )
     zimManageViewModel.networkStates.observe(viewLifecycleOwner, Observer(::onNetworkStateChange))
     zimManageViewModel.shouldShowWifiOnlyDialog.observe(
@@ -370,7 +367,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun showProgressBarOfFetchingOnlineLibrary() {
-    onRefreshStateChange(false)
+    onRefreshStateChange(isRefreshing = false, shouldShowScanningProgressItem = false)
     onlineLibraryScreenState.value.update {
       copy(
         noContentViewItem = "" to false,
@@ -381,7 +378,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun hideProgressBarOfFetchingOnlineLibrary() {
-    onRefreshStateChange(false)
+    onRefreshStateChange(isRefreshing = false, false)
     onlineLibraryScreenState.value.update {
       copy(
         swipeRefreshItem = onlineLibraryScreenState.value.value.swipeRefreshItem.first to true,
@@ -422,7 +419,10 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     onSearchClear()
   }
 
-  private fun onRefreshStateChange(isRefreshing: Boolean?) {
+  private fun onRefreshStateChange(
+    isRefreshing: Boolean?,
+    shouldShowScanningProgressItem: Boolean
+  ) {
     var refreshing = isRefreshing == true
     val onlineLibraryState = onlineLibraryScreenState.value.value
     // do not show the refreshing when the online library is downloading
@@ -432,7 +432,10 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       refreshing = false
     }
     onlineLibraryScreenState.value.update {
-      copy(swipeRefreshItem = refreshing to onlineLibraryState.swipeRefreshItem.second)
+      copy(
+        swipeRefreshItem = refreshing to onlineLibraryState.swipeRefreshItem.second,
+        scanningProgressItem = shouldShowScanningProgressItem to onlineLibraryState.scanningProgressItem.second
+      )
     }
   }
 
@@ -661,7 +664,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
                       ${getString(string.download_no_space)}
                       ${getString(string.space_available)} $it
                       """.trimIndent(),
-                      actionLabel = getString(string.download_change_storage),
+                      actionLabel = getString(string.change_storage),
                       actionClick = {
                         lifecycleScope.launch {
                           showStorageSelectDialog(getStorageDeviceList())

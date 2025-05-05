@@ -46,6 +46,7 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChan
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
+import org.kiwix.kiwixmobile.download.downloadRobot
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -123,19 +124,22 @@ class InitialDownloadTest : BaseActivityTest() {
       waitUntilZimFilesRefreshing(composeTestRule)
       deleteZimIfExists(composeTestRule)
     }
-    initialDownload {
+    downloadRobot {
       clickDownloadOnBottomNav()
-      assertLibraryListDisplayed()
-      waitForDataToLoad()
+      waitForDataToLoad(composeTestRule = composeTestRule)
       stopDownloadIfAlreadyStarted(composeTestRule)
-      downloadZimFile()
+      downloadZimFile(composeTestRule)
+    }
+    initialDownload {
       assertStorageConfigureDialogDisplayed(composeTestRule)
       clickOnInternalStorage(composeTestRule)
-      assertDownloadStart()
-      stopDownload()
-      assertStopDownloadDialogDisplayed(composeTestRule)
-      clickOnYesToConfirm(composeTestRule)
-      assertDownloadStop()
+      downloadRobot {
+        assertDownloadStart(composeTestRule)
+        stopDownload(composeTestRule)
+        assertStopDownloadDialogDisplayed(composeTestRule)
+        clickOnYesButton(composeTestRule)
+      }
+      assertDownloadStop(composeTestRule)
     }
     LeakAssertions.assertNoLeaks()
   }

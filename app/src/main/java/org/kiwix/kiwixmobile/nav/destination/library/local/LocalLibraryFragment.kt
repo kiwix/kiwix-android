@@ -685,7 +685,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   private fun showStorageSelectionSnackBar(message: String) {
     libraryScreenState.value.snackBarHostState.snack(
       message = message,
-      actionLabel = getString(string.download_change_storage),
+      actionLabel = getString(string.change_storage),
       lifecycleScope = lifecycleScope,
       actionClick = {
         lifecycleScope.launch {

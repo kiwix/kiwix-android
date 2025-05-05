@@ -84,7 +84,6 @@
   <string name="no">No</string>
   <string name="confirm_stop_download_title">Aturar la descàrrega?</string>
   <string name="confirm_stop_download_msg">Segur que vols aturar aquesta descàrrega?</string>
-  <string name="download_change_storage">Selector de dispositiu d’emmagatzematge</string>
   <string name="next">Següent</string>
   <string name="external_link_popup_dialog_title">Accés a enllaç extern!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Estàs entrant a un enllaç extern. Això podria ocasionar-te costos addicionals per transferència de dades o, senzillament, no funcionarà si no tens connexió. Vols continuar?</string>

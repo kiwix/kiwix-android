@@ -174,7 +174,6 @@
   <string name="no">नहीं</string>
   <string name="confirm_stop_download_title">डाउनलोड रोकें?</string>
   <string name="confirm_stop_download_msg">क्या आप वास्तव में इस डाउनलोड को रोकना चाहते हैं?</string>
-  <string name="download_change_storage">संग्रहण यंत्र चयनकर्ता</string>
   <string name="tts_not_enabled">इस ज़िम फ़ाइल के लिए \'रीड अलाउड\' सक्षम नहीं है</string>
   <string name="texttospeech_initialization_failed">रीड अलाउड की शुरुआत विफल रही। कृपया पुनः प्रयास करें</string>
   <string name="texttospeech_error">रीड अलाउड में अप्रत्याशित त्रुटि। कृपया पुनः प्रयास करें</string>

@@ -155,7 +155,6 @@
   <string name="no">Hapana</string>
   <string name="confirm_stop_download_title">Acha kupakua?</string>
   <string name="confirm_stop_download_msg">Je, una uhakika unataka kuacha kupakua hii?</string>
-  <string name="download_change_storage">Chagua kifaa cha kuhifadhi</string>
   <string name="tts_not_enabled" fuzzy="true">Ujumbe kwa hotuba haiwezi kufanywa kwa faili hii ya ZIM</string>
   <string name="texttospeech_initialization_failed" fuzzy="true">Kuanzisha maandishi kwa hotuba kushindwa. Tafadhali jaribu tena</string>
   <string name="texttospeech_error" fuzzy="true">Hitilafu isiyotarajiwa katika Maandishi hadi Hotuba. Tafadhali jaribu tena</string>

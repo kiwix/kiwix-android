@@ -82,7 +82,6 @@
   <string name="no">Не</string>
   <string name="confirm_stop_download_title">Зауставити преузимање?</string>
   <string name="confirm_stop_download_msg">Желите ли заиста да зауставите ово преузимање?</string>
-  <string name="download_change_storage">Бирач уређаја за складиштење</string>
   <string name="next">Следеће</string>
   <string name="previous">Претходно</string>
   <string name="wifi_only_msg">Ако одаберете „Да”, нећемо да вас упозоравамо у будућности. Свеједно, увек можете да промените ову опцију у подешавањима.</string>

@@ -126,7 +126,6 @@
   <string name="no">Όχι</string>
   <string name="confirm_stop_download_title">Σταμάτημα λήψης;</string>
   <string name="confirm_stop_download_msg">Είστε σίγουροι ότι θέλετε να σταματήσετε αυτή τη λήψη;</string>
-  <string name="download_change_storage">Επιλογέας συσκευής αποθηκευτικού χώρου</string>
   <string name="tts_not_enabled" fuzzy="true">Το κείμενο σε ομιλία δεν είναι ενεργοποιημένο για αυτό το αρχείο ZIM</string>
   <string name="next">Επόμενο</string>
   <string name="previous">Προηγούμενο</string>

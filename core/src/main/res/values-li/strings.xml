@@ -75,7 +75,6 @@
   <string name="no">Nein</string>
   <string name="confirm_stop_download_title">Sjei oet mit downloade?</string>
   <string name="confirm_stop_download_msg">Wèts se zeker det se dezen download wils laote oetsjeie?</string>
-  <string name="download_change_storage">Opslaagapparaatsillekteerder</string>
   <string name="next">Volgende</string>
   <string name="previous">Veurige</string>
   <string name="pref_wifi_only">Download inhawd allein via de WiFi</string>

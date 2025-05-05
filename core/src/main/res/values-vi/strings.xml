@@ -103,7 +103,6 @@
   <string name="no">Không</string>
   <string name="confirm_stop_download_title">Dừng tải về?</string>
   <string name="confirm_stop_download_msg">Bạn có chắc muốn ngừng việc tải về này không?</string>
-  <string name="download_change_storage">Trình chọn thiết bị lưu trữ</string>
   <string name="tts_not_enabled" fuzzy="true">Tập tin ZIM này không hỗ trợ tìm bằng giọng nói</string>
   <string name="next">Tiếp</string>
   <string name="previous">Trước</string>

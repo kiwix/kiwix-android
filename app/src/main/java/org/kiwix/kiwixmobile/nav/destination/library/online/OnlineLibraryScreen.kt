@@ -43,8 +43,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -72,8 +73,10 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.rememberScrollBehavio
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.DividerItem
 
-const val ONLINE_LIBRARY_LIST_TESTING_TAG = "onlineLibraryListTestingTag"
 const val ONLINE_LIBRARY_SEARCH_VIEW_TESTING_TAG = "onlineLibrarySearchViewTestingTag"
+const val ONLINE_LIBRARY_SEARCH_VIEW_CLOSE_BUTTON_TESTING_TAG = "onlineLibrarySearchViewCloseButtonTestingTag"
+const val NO_CONTENT_VIEW_TEXT_TESTING_TAG = "noContentViewTextTestingTag"
+const val SHOW_FETCHING_LIBRARY_LAYOUT_TESTING_TAG = "showFetchingLibraryLayoutTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming")
@@ -102,6 +105,7 @@ fun OnlineLibraryScreen(
       },
       modifier = Modifier
         .nestedScroll(scrollBehavior.nestedScrollConnection)
+        .padding(bottom = bottomNavHeight.value)
     ) { paddingValues ->
       SwipeRefreshLayout(
         isRefreshing = state.swipeRefreshItem.first,
@@ -114,7 +118,6 @@ fun OnlineLibraryScreen(
             start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
             end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
           )
-          .padding(bottom = bottomNavHeight.value)
       ) {
         OnlineLibraryScreenContent(state, lazyListState)
       }
@@ -129,7 +132,8 @@ private fun searchBarIfActive(
   {
     KiwixSearchView(
       value = state.searchText,
-      testTag = ONLINE_LIBRARY_SEARCH_VIEW_TESTING_TAG,
+      searchViewTextFiledTestTag = ONLINE_LIBRARY_SEARCH_VIEW_TESTING_TAG,
+      clearButtonTestTag = ONLINE_LIBRARY_SEARCH_VIEW_CLOSE_BUTTON_TESTING_TAG,
       onValueChange = { state.searchValueChangedListener(it) },
       onClearClick = { state.clearSearchButtonClickListener.invoke() }
     )
@@ -163,7 +167,6 @@ private fun OnlineLibraryList(state: OnlineLibraryScreenState, lazyListState: La
   LazyColumn(
     modifier = Modifier
       .fillMaxSize()
-      .testTag(ONLINE_LIBRARY_LIST_TESTING_TAG)
       // hides keyboard when scrolled
       .hideKeyboardOnLazyColumnScroll(lazyListState),
     state = lazyListState
@@ -211,7 +214,9 @@ private fun NoContentView(noContentMessage: String) {
   Text(
     text = noContentMessage,
     textAlign = TextAlign.Center,
-    modifier = Modifier.padding(horizontal = FOUR_DP)
+    modifier = Modifier
+      .padding(horizontal = FOUR_DP)
+      .semantics { testTag = NO_CONTENT_VIEW_TEXT_TESTING_TAG }
   )
 }
 
@@ -225,14 +230,18 @@ private fun ShowFetchingLibraryLayout(message: String) {
   Card(
     modifier = Modifier
       .width(DOWNLOADING_LIBRARY_PROGRESS_CARD_VIEW_WIDTH)
-      .padding(DOWNLOADING_LIBRARY_PROGRESS_CARD_VIEW_DEFAULT_MARGIN),
+      .padding(DOWNLOADING_LIBRARY_PROGRESS_CARD_VIEW_DEFAULT_MARGIN)
+      .semantics {
+        testTag = SHOW_FETCHING_LIBRARY_LAYOUT_TESTING_TAG
+      },
     shape = MaterialTheme.shapes.small,
     elevation = CardDefaults.cardElevation(defaultElevation = SIX_DP),
     colors = CardDefaults.cardColors(containerColor = cardContainerColor)
   ) {
     Column(
       horizontalAlignment = Alignment.CenterHorizontally,
-      modifier = Modifier.padding(DOWNLOADING_LIBRARY_PROGRESS_CARD_VIEW_CONTENT_MARGIN)
+      modifier = Modifier
+        .padding(DOWNLOADING_LIBRARY_PROGRESS_CARD_VIEW_CONTENT_MARGIN)
         .fillMaxWidth()
     ) {
       ContentLoadingProgressBar(
@@ -249,55 +258,3 @@ private fun ShowFetchingLibraryLayout(message: String) {
     }
   }
 }
-
-// @Preview(device = "id:Nexus S")
-// // @Preview(device = "id:Nexus S", name = "Night", uiMode = Configuration.UI_MODE_NIGHT_YES)
-// @Composable
-// private fun Preview() {
-//   val context = LocalContext.current
-//   val onlineLibraryState = OnlineLibraryScreenState(
-//     listOf(
-//       DividerItem(0, string.your_languages),
-//       LibraryListItem.LibraryDownloadItem(
-//         downloadId = 0,
-//         favIcon = Base64String(null),
-//         title = "100 Rabbits",
-//         description = "Research and test low-tech solutions, and document findings",
-//         bytesDownloaded = 500,
-//         totalSizeBytes = 1000,
-//         progress = 50,
-//         eta = Seconds(6000),
-//         downloadState = DownloadState.Paused,
-//         currentDownloadState = Status.PAUSED,
-//         id = 0
-//       )
-//     ),
-//     56,
-//     swipeRefreshItem = Pair(false, true),
-//     snackBarHostState = SnackbarHostState(),
-//     actionMenuItems = listOf(
-//       ActionMenuItem(
-//         IconItem.Drawable(R.drawable.ic_baseline_mobile_screen_share_24px),
-//         string.get_content_from_nearby_device,
-//         { },
-//         isEnabled = true,
-//         testingTag = LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG
-//       )
-//     ),
-//     navigationIcon = {
-//       NavigationIcon(
-//         iconItem = IconItem.Vector(Icons.Filled.Menu),
-//         contentDescription = string.open_drawer,
-//         onClick = { }
-//       )
-//     },
-//     {},
-//     scanningProgressItem = Pair(
-//       false,
-//       context.getString(string.starting_downloading_remote_library)
-//     ),
-//     noContentViewItem = Pair(context.getString(string.no_items_msg), false)
-//   )
-//   val lazyList = rememberLazyListState()
-//   OnlineLibraryScreen(onlineLibraryState, lazyList)
-// }

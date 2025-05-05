@@ -190,7 +190,6 @@
   <string name="no">否</string>
   <string name="confirm_stop_download_title">停止下载？</string>
   <string name="confirm_stop_download_msg">您确定要停止此次下载么？</string>
-  <string name="download_change_storage">存储设备选择器</string>
   <string name="tts_not_enabled">朗读功能未对该 ZIM 文件启用</string>
   <string name="texttospeech_initialization_failed">朗读初始化失败。请重试</string>
   <string name="texttospeech_error">朗读出现意外错误。请重试</string>

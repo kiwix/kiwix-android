@@ -119,7 +119,6 @@
   <string name="no">Nej</string>
   <string name="confirm_stop_download_title">Stop overførsel</string>
   <string name="confirm_stop_download_msg">Er du sikker på, at du ønsker at stoppe denne overførsel?</string>
-  <string name="download_change_storage">Valg af lagerenhed</string>
   <string name="tts_not_enabled" fuzzy="true">Tekst til tale er ikke aktiveret for denne ZIM-fil</string>
   <string name="next">Næste</string>
   <string name="previous">Forrige</string>
