@@ -20,9 +20,11 @@ package org.kiwix.kiwixmobile.core.utils.dialog
 
 import android.app.Activity
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.Dp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_CUSTOM_VIEW_BOTTOM_PADDING
 
 @Suppress("LongParameterList")
 sealed class KiwixDialog(
@@ -33,7 +35,8 @@ sealed class KiwixDialog(
   val cancelable: Boolean = true,
   val iconItem: IconItem? = null,
   val neutralButtonText: Int? = null,
-  val customComposeView: (@Composable (() -> Unit))? = null
+  val customComposeView: (@Composable (() -> Unit))? = null,
+  val customComposeViewBottomPadding: Dp = DIALOG_CUSTOM_VIEW_BOTTOM_PADDING
 ) {
   data class DeleteZims(override val args: List<Any>) :
     KiwixDialog(
@@ -126,6 +129,20 @@ sealed class KiwixDialog(
     neutralButtonText = R.string.cancel,
     cancelable = false
   )
+
+  data class CopyMoveProgressBarDialog(
+    private val titleId: Int,
+    private val customViewBottomPadding: Dp,
+    private val customGetView: @Composable (() -> Unit)?
+  ) : KiwixDialog(
+      title = titleId,
+      message = null,
+      cancelable = false,
+      confirmButtonText = R.string.empty_string,
+      dismissButtonText = null,
+      customComposeView = customGetView,
+      customComposeViewBottomPadding = customViewBottomPadding
+    )
 
   data object ShowWarningAboutSplittedZimFile : KiwixDialog(
     R.string.verify_zim_chunk_dialog_title,
