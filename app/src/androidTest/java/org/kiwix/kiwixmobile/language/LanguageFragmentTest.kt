@@ -46,6 +46,7 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChan
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
+import org.kiwix.kiwixmobile.download.downloadRobot
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
@@ -123,12 +124,13 @@ class LanguageFragmentTest {
   @Test
   fun testLanguageFragment() {
     StandardActions.closeDrawer() // close the drawer if open before running the test cases.
-    language {
+    downloadRobot {
       clickDownloadOnBottomNav()
-      waitForDataToLoad()
-
+      waitForDataToLoad(composeTestRule = composeTestRule)
+    }
+    language {
       // search and de-select if german language already selected
-      clickOnLanguageIcon()
+      clickOnLanguageIcon(composeTestRule)
       clickOnLanguageSearchIcon(composeTestRule)
       searchLanguage(
         composeTestRule = composeTestRule,
@@ -141,7 +143,7 @@ class LanguageFragmentTest {
       clickOnSaveLanguageIcon(composeTestRule)
 
       // search and de-select if italian language already selected
-      clickOnLanguageIcon()
+      clickOnLanguageIcon(composeTestRule)
       clickOnLanguageSearchIcon(composeTestRule)
       searchLanguage(
         composeTestRule = composeTestRule,
@@ -154,7 +156,7 @@ class LanguageFragmentTest {
       clickOnSaveLanguageIcon(composeTestRule)
 
       // Search and save language for german
-      clickOnLanguageIcon()
+      clickOnLanguageIcon(composeTestRule)
       clickOnLanguageSearchIcon(composeTestRule)
       searchLanguage(
         composeTestRule = composeTestRule,
@@ -167,7 +169,7 @@ class LanguageFragmentTest {
       clickOnSaveLanguageIcon(composeTestRule)
 
       // Search and save language for italian
-      clickOnLanguageIcon()
+      clickOnLanguageIcon(composeTestRule)
       clickOnLanguageSearchIcon(composeTestRule)
       searchLanguage(
         composeTestRule = composeTestRule,
@@ -180,7 +182,7 @@ class LanguageFragmentTest {
       clickOnSaveLanguageIcon(composeTestRule)
 
       // verify is german language selected
-      clickOnLanguageIcon()
+      clickOnLanguageIcon(composeTestRule)
       clickOnLanguageSearchIcon(composeTestRule)
       searchLanguage(
         composeTestRule = composeTestRule,
@@ -193,7 +195,7 @@ class LanguageFragmentTest {
       clickOnSaveLanguageIcon(composeTestRule)
 
       // verify is italian language selected
-      clickOnLanguageIcon()
+      clickOnLanguageIcon(composeTestRule)
       clickOnLanguageSearchIcon(composeTestRule)
       searchLanguage(
         composeTestRule = composeTestRule,

@@ -156,7 +156,6 @@
   <string name="no">No</string>
   <string name="confirm_stop_download_title">Vuoi interrompere il download?</string>
   <string name="confirm_stop_download_msg">Sei sicuro di voler interrompere il download?</string>
-  <string name="download_change_storage">Seleziona spazio di archiviazione</string>
   <string name="tts_not_enabled">La lettura a voce alta non è abilitata per questo file ZIM</string>
   <string name="texttospeech_initialization_failed">Inizializzazione del motore di sintesi vocale fallita. Riprova</string>
   <string name="texttospeech_error">Errore imprevisto nel motore di sintesi vocale. Riprova</string>

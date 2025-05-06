@@ -128,7 +128,6 @@
   <string name="no">Ket</string>
   <string name="confirm_stop_download_title">Paouez ar pellgargadur ?</string>
   <string name="confirm_stop_download_msg">Ha sur oc’h e fell deoc’h paouez ar pellgargadur-mañ ?</string>
-  <string name="download_change_storage">Diuzer trobarzhell stokañ</string>
   <string name="tts_not_enabled" fuzzy="true">N’eo ket gweredekaet ar sintezenn e komzoù gant ar restr ZIM</string>
   <string name="next">War-lerc’h</string>
   <string name="previous">Kent</string>

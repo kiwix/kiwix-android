@@ -143,7 +143,6 @@
   <string name="no">ߍ߲߬ߍ߲߫</string>
   <string name="confirm_stop_download_title">ߥߎߟߊߟߊߖߛߐߟߌ ߟߊߟߐ߬؟</string>
   <string name="confirm_stop_download_msg">ߌ ߘߍ߲߬ߞߣߍ߬ߦߊ߬ߣߍ߲߫ ߞߴߌ ߦߴߊ߬ ߝߍ߬ ߞߊ߬ ߟߊ߬ߖߌ߰ߒ߬ߞߎ߲߬ߠߌ߲ ߣߌ߲߬ ߠߊߟߐ߬؟</string>
-  <string name="download_change_storage">ߞߍߟߊ߲ ߟߊ߬ߡߙߊ߬ߟߌ߫ ߦߙߐ ߓߊߕߐߡߐ߲ߟߊ߲</string>
   <string name="tts_not_enabled" fuzzy="true">ߛߓߍߟߌ߫ ߞߎߡߕߊ ߡߊ߫ ߟߊߞߎߣߎ߲߫ ZIM ߞߐߕߐ߮ ߣߌ߲߬ ߢߍ߫.</string>
   <string name="texttospeech_initialization_failed" fuzzy="true">ߛߓߍߟߌ߫ ߞߎߡߕߊ ߘߊߦߟߍߟߌ ߓߘߊ߫ ߗߌߙߏ߲߫. ߊ߬ ߡߊߝߍߣߍ߲߫ ߌߞߐ߫ ߝߊ߰ߣߌ߲߫߹</string>
   <string name="texttospeech_error" fuzzy="true">ߝߎ߬ߕߎ߲߬ߕߌ߫ ߡߊߟߐ߲ߓߊߟߌ ߘߏ߫ ߓߘߊ߫ ߓߌ߬ߟߊ߬ ߛߓߍߟߌ߫ ߞߎߡߕߊ ߟߊ߫ ߞߏ߫ ߘߐ߫. ߊ߬ ߡߊߝߍߣߍ߲߫ ߌߞߐ߫ ߖߊ߰ߣߌ߲߫</string>

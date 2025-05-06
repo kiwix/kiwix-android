@@ -88,9 +88,8 @@
 
   <fragment
     android:id="@+id/downloadsFragment"
-    android:name="org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryFragment"
-    android:label="Downloads"
-    tools:layout="@layout/fragment_destination_download" />
+    android:name="org.kiwix.kiwixmobile.nav.destination.library.online.OnlineLibraryFragment"
+    android:label="Downloads" />
   <fragment
     android:id="@+id/bookmarksFragment"
     android:name="org.kiwix.kiwixmobile.core.page.bookmark.BookmarksFragment"

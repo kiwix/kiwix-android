@@ -21,11 +21,13 @@ package org.kiwix.kiwixmobile.core.ui.components
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.ProgressIndicatorDefaults.drawStopIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.HUNDERED
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
@@ -38,14 +40,16 @@ fun ContentLoadingProgressBar(
   progressBarStyle: ProgressBarStyle = ProgressBarStyle.CIRCLE,
   progress: Int = ZERO,
   progressBarColor: Color = DenimBlue400,
-  progressBarTrackColor: Color = MineShaftGray350
+  progressBarTrackColor: Color = MineShaftGray350,
+  circularProgressBarStockWidth: Dp = ProgressIndicatorDefaults.CircularStrokeWidth,
 ) {
   when (progressBarStyle) {
     ProgressBarStyle.CIRCLE -> {
       CircularProgressIndicator(
         modifier = modifier,
         color = progressBarColor,
-        trackColor = progressBarTrackColor
+        trackColor = progressBarTrackColor,
+        strokeWidth = circularProgressBarStockWidth
       )
     }
 

@@ -167,7 +167,6 @@
   <string name="no">Tidak</string>
   <string name="confirm_stop_download_title">Hentikan unduhan?</string>
   <string name="confirm_stop_download_msg">Apakah Anda yakin ingin menghentikan unduhan ini?</string>
-  <string name="download_change_storage">Pemilih perangkat penyimpanan</string>
   <string name="tts_not_enabled">Baca Nyaring tidak diaktifkan untuk berkas ZIM ini</string>
   <string name="texttospeech_initialization_failed">Inisialisasi Baca Nyaring gagal. Silakan coba lagi</string>
   <string name="texttospeech_error">Kesalahan tak terduga dalam Baca Nyaring. Silakan coba lagi</string>

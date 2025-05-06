@@ -103,7 +103,6 @@
   <string name="no">Non</string>
   <string name="confirm_stop_download_title">Deter descarga?</string>
   <string name="confirm_stop_download_msg">Quere deter esta descarga?</string>
-  <string name="download_change_storage">Selector de dispositivo de almacenamento</string>
   <string name="tts_not_enabled">A lectura en voz alta non está activa para este ficheiro ZIM</string>
   <string name="next">Seguinte</string>
   <string name="previous">Anterior</string>

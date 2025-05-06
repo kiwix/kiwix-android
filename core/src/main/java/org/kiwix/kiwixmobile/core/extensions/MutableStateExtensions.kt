@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2022 Kiwix <android.kiwix.org>
+ * Copyright (c) 2025 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,21 +15,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.kiwix.kiwixmobile.zimManager.libraryView
 
-import org.kiwix.kiwixmobile.core.base.BaseContract
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
-import java.util.LinkedList
+package org.kiwix.kiwixmobile.core.extensions
 
-/**
- * Created by EladKeyshawn on 06/04/2017.
- */
-interface LibraryViewCallback : BaseContract.View<Any?> {
-  fun showBooks(books: LinkedList<LibraryNetworkEntity.Book?>?)
-  fun displayNoNetworkConnection()
-  fun displayNoItemsFound()
-  fun displayNoItemsAvailable()
-  fun displayScanningContent()
-  fun stopScanningContent()
-  fun downloadFile(book: LibraryNetworkEntity.Book?)
+import androidx.compose.runtime.MutableState
+
+fun <T> MutableState<T>.update(transform: T.() -> T) {
+  value = value.transform()
 }

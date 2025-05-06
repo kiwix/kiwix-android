@@ -167,7 +167,6 @@
   <string name="no">Nu</string>
   <string name="confirm_stop_download_title">Oprești descărcarea?</string>
   <string name="confirm_stop_download_msg">Ești sigur că vrei să oprești această descărcare?</string>
-  <string name="download_change_storage">Selectează mediul de descărcare</string>
   <string name="tts_not_enabled">Citirea cu voce tare nu este activată pentru acest fișier ZIM</string>
   <string name="texttospeech_initialization_failed">Inițializarea citirii cu voce tare a eșuat. Vă rugăm să încercați din nou</string>
   <string name="texttospeech_error">Eroare neașteptată în Citire cu voce tare. Vă rugăm să încercați din nou</string>

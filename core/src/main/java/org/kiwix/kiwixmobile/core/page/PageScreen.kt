@@ -18,9 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.page
 
-import android.app.Activity
-import android.content.Context
-import android.view.inputmethod.InputMethodManager
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -43,11 +40,8 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -56,6 +50,7 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.TextStyle
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
+import org.kiwix.kiwixmobile.core.extensions.hideKeyboardOnLazyColumnScroll
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -137,19 +132,13 @@ private fun PageList(
   itemClickListener: OnItemClickListener
 ) {
   val listState = rememberLazyListState()
-  val context = LocalContext.current
-
-  LaunchedEffect(listState) {
-    snapshotFlow { listState.isScrollInProgress }
-      .collect { isScrolling ->
-        if (isScrolling) {
-          val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-          imm.hideSoftInputFromWindow((context as? Activity)?.currentFocus?.windowToken, 0)
-        }
-      }
-  }
-
-  LazyColumn(state = listState, modifier = Modifier.semantics { testTag = PAGE_LIST_TEST_TAG }) {
+  LazyColumn(
+    state = listState,
+    modifier = Modifier
+      .semantics { testTag = PAGE_LIST_TEST_TAG }
+      // hides keyboard when scrolled
+      .hideKeyboardOnLazyColumnScroll(listState)
+  ) {
     items(state.pageState.visiblePageItems) { item ->
       when (item) {
         is Page -> PageListItem(page = item, itemClickListener = itemClickListener)
@@ -167,7 +156,7 @@ private fun searchBarIfActive(
     KiwixSearchView(
       placeholder = state.searchQueryHint,
       value = state.searchText,
-      testTag = "",
+      searchViewTextFiledTestTag = "",
       onValueChange = { state.searchValueChangedListener(it) },
       onClearClick = { state.clearSearchButtonClickListener.invoke() }
     )

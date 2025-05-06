@@ -18,47 +18,39 @@
 
 package org.kiwix.kiwixmobile.download
 
-import android.view.View
+import androidx.compose.ui.test.ComposeTimeoutException
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.recyclerview.widget.RecyclerView
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.UiController
-import androidx.test.espresso.ViewAction
-import androidx.test.espresso.action.ViewActions.clearText
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.typeText
-import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withSubstring
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.compose.ui.test.performTextInput
 import applyWithViewHierarchyPrinting
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions
-import com.adevinta.android.barista.interaction.BaristaSwipeRefreshInteractions.refresh
-import junit.framework.AssertionFailedError
-import junit.framework.TestCase.assertEquals
-import org.hamcrest.CoreMatchers.containsString
-import org.hamcrest.Matcher
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.download.DownloadTest.Companion.KIWIX_DOWNLOAD_TEST
-import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.NO_FILE_TEXT_TESTING_TAG
+import org.kiwix.kiwixmobile.nav.destination.library.online.DOWNLOADING_PAUSE_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.nav.destination.library.online.DOWNLOADING_STATE_TEXT_TESTING_TAG
+import org.kiwix.kiwixmobile.nav.destination.library.online.DOWNLOADING_STOP_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.nav.destination.library.online.NO_CONTENT_VIEW_TEXT_TESTING_TAG
+import org.kiwix.kiwixmobile.nav.destination.library.online.ONLINE_BOOK_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.nav.destination.library.online.ONLINE_LIBRARY_SEARCH_VIEW_CLOSE_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.nav.destination.library.online.ONLINE_LIBRARY_SEARCH_VIEW_TESTING_TAG
+import org.kiwix.kiwixmobile.nav.destination.library.online.SHOW_FETCHING_LIBRARY_LAYOUT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.refresh
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
-import org.kiwix.kiwixmobile.utils.RecyclerViewMatcher
-import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
 fun downloadRobot(func: DownloadRobot.() -> Unit) =
   DownloadRobot().applyWithViewHierarchyPrinting(func)
@@ -74,14 +66,19 @@ class DownloadRobot : BaseRobot() {
 
   // Increasing the default timeout for data loading because, on the Android 16 Emulator,
   // the internet connection is slow, and the library download takes longer.
-  fun waitForDataToLoad(retryCountForDataToLoad: Int = 20) {
+  fun waitForDataToLoad(
+    retryCountForDataToLoad: Int = 20,
+    composeTestRule: ComposeContentTestRule
+  ) {
     try {
-      isVisible(TextId(string.your_languages))
-    } catch (e: RuntimeException) {
+      composeTestRule.waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+        composeTestRule.onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)[0].isDisplayed()
+      }
+    } catch (e: ComposeTimeoutException) {
       if (retryCountForDataToLoad > 0) {
         // refresh the data if there is "Swipe Down for Library" visible on the screen.
-        refreshOnlineListIfSwipeDownForLibraryTextVisible()
-        waitForDataToLoad(retryCountForDataToLoad - 1)
+        refreshOnlineListIfSwipeDownForLibraryTextVisible(composeTestRule)
+        waitForDataToLoad(retryCountForDataToLoad - 1, composeTestRule)
         return
       }
       // throw the exception when there is no more retry left.
@@ -89,17 +86,19 @@ class DownloadRobot : BaseRobot() {
     }
   }
 
-  private fun refreshOnlineListIfSwipeDownForLibraryTextVisible() {
+  private fun refreshOnlineListIfSwipeDownForLibraryTextVisible(composeTestRule: ComposeContentTestRule) {
     try {
-      onView(withText(string.swipe_down_for_library)).check(matches(isDisplayed()))
-      refreshOnlineList()
-    } catch (_: RuntimeException) {
+      composeTestRule.onNodeWithTag(NO_CONTENT_VIEW_TEXT_TESTING_TAG).assertIsDisplayed()
+      refreshOnlineList(composeTestRule)
+    } catch (_: AssertionError) {
       try {
         // do nothing as currently downloading the online library.
-        onView(withId(R.id.onlineLibraryProgressLayout)).check(matches(isDisplayed()))
-      } catch (_: RuntimeException) {
+        composeTestRule
+          .onNodeWithTag(SHOW_FETCHING_LIBRARY_LAYOUT_TESTING_TAG)
+          .assertIsDisplayed()
+      } catch (_: AssertionError) {
         // if not visible try to get the online library.
-        refreshOnlineList()
+        refreshOnlineList(composeTestRule)
       }
     }
   }
@@ -107,8 +106,10 @@ class DownloadRobot : BaseRobot() {
   fun checkIfZimFileDownloaded(composeTestRule: ComposeContentTestRule) {
     try {
       testFlakyView({
-        composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithTag(NO_FILE_TEXT_TESTING_TAG).assertIsDisplayed()
+        composeTestRule.apply {
+          waitUntilTimeout()
+          onNodeWithTag(NO_FILE_TEXT_TESTING_TAG).assertIsDisplayed()
+        }
       })
       // if the "No files here" text found that means it failed to download the ZIM file.
       throw RuntimeException("Couldn't download the zim file. The [No files here] text is visible on screen")
@@ -118,61 +119,79 @@ class DownloadRobot : BaseRobot() {
     }
   }
 
-  private fun refreshOnlineList() {
-    refresh(R.id.librarySwipeRefresh)
+  private fun refreshOnlineList(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.refresh()
   }
 
-  fun downloadZimFile(position: Int = 1) {
-    pauseForBetterTestPerformance()
+  fun downloadZimFile(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
-      onView(
-        RecyclerViewMatcher(R.id.libraryList).atPosition(
-          position
-        )
-      ).perform(click())
+      composeTestRule.apply {
+        waitUntilTimeout()
+        onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)[0].performClick()
+      }
     })
   }
 
-  fun assertDownloadStart() {
-    testFlakyView({ onView(withId(R.id.stop)).check(matches(isDisplayed())) })
-  }
-
-  private fun stopDownload() {
-    testFlakyView({ onView(withId(R.id.stop)).perform(click()) })
-  }
-
-  fun pauseDownload() {
-    clickOn(ViewId(R.id.pauseResume))
-  }
-
-  fun assertDownloadPaused() {
+  fun assertDownloadStart(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
-      onView(
-        withText(org.kiwix.kiwixmobile.core.R.string.paused_state)
-      ).check(matches(isDisplayed()))
+      composeTestRule.apply {
+        waitUntil(TestUtils.TEST_PAUSE_MS.toLong()) {
+          onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG)[0].isDisplayed()
+        }
+      }
     })
   }
 
-  fun resumeDownload() {
-    pauseDownload()
+  fun pauseDownload(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        onAllNodesWithTag(DOWNLOADING_PAUSE_BUTTON_TESTING_TAG)[0].performClick()
+      }
+    })
   }
 
-  fun assertDownloadResumed() {
-    pauseForBetterTestPerformance()
-    onView(withText(org.kiwix.kiwixmobile.core.R.string.paused_state)).check(doesNotExist())
+  fun assertDownloadPaused(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
+      waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong()) {
+        composeTestRule.onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)[0]
+          .assertTextEquals(context.getString(org.kiwix.kiwixmobile.core.R.string.paused_state))
+          .isDisplayed()
+      }
+    }
+  }
+
+  fun resumeDownload(composeTestRule: ComposeContentTestRule) {
+    pauseDownload(composeTestRule)
+  }
+
+  fun assertDownloadResumed(composeTestRule: ComposeContentTestRule) {
+    try {
+      composeTestRule.apply {
+        waitUntilTimeout()
+        onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)[0]
+          .assertTextEquals(context.getString(org.kiwix.kiwixmobile.core.R.string.paused_state))
+      }
+      throw IllegalStateException("Could not resume the download")
+    } catch (_: AssertionError) {
+      // do nothing since download is resumed.
+    }
   }
 
   // wait for 5 minutes for downloading the ZIM file
-  fun waitUntilDownloadComplete(retryCountForDownloadingZimFile: Int = 30) {
+  fun waitUntilDownloadComplete(
+    retryCountForDownloadingZimFile: Int = 30,
+    composeTestRule: ComposeContentTestRule
+  ) {
     try {
-      onView(withId(R.id.stop)).check(doesNotExist())
+      composeTestRule.onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG)[0].assertDoesNotExist()
       Log.e(KIWIX_DOWNLOAD_TEST, "Download complete")
-    } catch (e: AssertionFailedError) {
+    } catch (e: AssertionError) {
       if (retryCountForDownloadingZimFile > 0) {
-        resumeDownloadIfPaused()
-        BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
+        resumeDownloadIfPaused(composeTestRule)
+        composeTestRule.waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST.toLong())
         Log.e(KIWIX_DOWNLOAD_TEST, "Downloading in progress")
-        waitUntilDownloadComplete(retryCountForDownloadingZimFile - 1)
+        waitUntilDownloadComplete(retryCountForDownloadingZimFile - 1, composeTestRule)
         return
       }
       // throw the exception when there is no more retry left.
@@ -180,33 +199,30 @@ class DownloadRobot : BaseRobot() {
     }
   }
 
-  private fun resumeDownloadIfPaused() {
+  private fun resumeDownloadIfPaused(composeTestRule: ComposeContentTestRule) {
     try {
-      onView(withSubstring(context.getString(string.paused_state))).check(matches(isDisplayed()))
-      resumeDownload()
-    } catch (_: AssertionFailedError) {
+      composeTestRule
+        .onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)[0]
+        .assertTextEquals(context.getString(org.kiwix.kiwixmobile.core.R.string.paused_state))
+      resumeDownload(composeTestRule)
+    } catch (_: AssertionError) {
       // do nothing since downloading is In Progress.
     } catch (_: RuntimeException) {
       // do nothing since downloading is In Progress.
     }
   }
 
-  private fun pauseForBetterTestPerformance() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
-  }
-
-  private fun assertStopDownloadDialogDisplayed(composeTestRule: ComposeContentTestRule) {
-    pauseForBetterTestPerformance()
+  fun assertStopDownloadDialogDisplayed(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
-        waitForIdle()
+        waitUntilTimeout()
         onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
           .assertTextEquals(context.getString(string.confirm_stop_download_title))
       }
     })
   }
 
-  private fun clickOnYesButton(composeTestRule: ComposeContentTestRule) {
+  fun clickOnYesButton(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
         waitForIdle()
@@ -217,13 +233,17 @@ class DownloadRobot : BaseRobot() {
 
   fun stopDownloadIfAlreadyStarted(composeTestRule: ComposeContentTestRule) {
     try {
-      pauseForBetterTestPerformance()
-      onView(withId(R.id.stop)).check(matches(isDisplayed()))
-      stopDownload()
+      composeTestRule.waitUntilTimeout()
+      stopDownload(composeTestRule)
       assertStopDownloadDialogDisplayed(composeTestRule)
       clickOnYesButton(composeTestRule)
-      pauseForBetterTestPerformance()
-    } catch (_: Exception) {
+      composeTestRule.waitUntilTimeout()
+    } catch (_: AssertionError) {
+      Log.e(
+        KIWIX_DOWNLOAD_TEST,
+        "Failed to stop downloading. Probably because it is not downloading the zim file"
+      )
+    } catch (_: ComposeTimeoutException) {
       Log.e(
         KIWIX_DOWNLOAD_TEST,
         "Failed to stop downloading. Probably because it is not downloading the zim file"
@@ -231,88 +251,59 @@ class DownloadRobot : BaseRobot() {
     }
   }
 
-  fun getSmallestZimFileIndex(it: List<LibraryListItem>?): Int {
-    var zimFileSizeWithIndex: Pair<Int, Long> = 0 to Long.MAX_VALUE
-    it?.forEachIndexed { index, libraryItem ->
-      if (libraryItem is LibraryListItem.BookItem) {
-        val bookSize = libraryItem.book.size.toLong()
-        if (bookSize < 20000L) {
-          return@getSmallestZimFileIndex index
-        } else if (bookSize < zimFileSizeWithIndex.second) {
-          zimFileSizeWithIndex = index to bookSize
-        }
-      }
-    }
-    return zimFileSizeWithIndex.first
-  }
-
-  fun scrollToZimFileIndex(index: Int) {
-    testFlakyView({
-      onView(withId(R.id.libraryList))
-        .perform(scrollToTop(index))
-    })
-  }
-
-  private fun scrollToTop(position: Int): ViewAction {
-    return object : ViewAction {
-      override fun getDescription(): String =
-        "scroll RecyclerView item at position $position to the top"
-
-      override fun getConstraints(): Matcher<View> =
-        androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom(RecyclerView::class.java)
-
-      override fun perform(uiController: UiController, view: View) {
-        val recyclerView = view as RecyclerView
-        val viewHolder = recyclerView.findViewHolderForAdapterPosition(position)
-
-        if (viewHolder?.itemView == null) {
-          recyclerView.scrollToPosition(position)
-          uiController.loopMainThreadUntilIdle()
-        }
-
-        val newViewHolder = recyclerView.findViewHolderForAdapterPosition(position)
-        newViewHolder?.let {
-          val top = newViewHolder.itemView.top
-          recyclerView.scrollBy(0, top)
-        }
-      }
+  fun stopDownload(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      val stopButton = onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG)[0]
+      waitUntil(TestUtils.TEST_PAUSE_MS.toLong()) { stopButton.isDisplayed() }
+      stopButton.performClick()
     }
   }
 
-  fun clickOnSearchIcon() {
-    pauseForBetterTestPerformance()
-    testFlakyView({ clickOn(ViewId(R.id.action_search)) })
+  fun clickOnSearchIcon(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntilTimeout()
+      onNodeWithTag(SEARCH_ICON_TESTING_TAG).performClick()
+    }
   }
 
-  fun clickOnClearSearchIcon() {
-    pauseForBetterTestPerformance()
-    testFlakyView({ clickOn(ViewId(androidx.appcompat.R.id.search_close_btn)) })
-  }
-
-  fun searchWikipediaZIMFiles() {
-    pauseForBetterTestPerformance()
+  fun clickOnClearSearchIcon(composeTestRule: ComposeContentTestRule) {
+    ONLINE_LIBRARY_SEARCH_VIEW_CLOSE_BUTTON_TESTING_TAG
     testFlakyView({
-      val searchView = onView(withId(androidx.appcompat.R.id.search_src_text))
-      searchView.perform(clearText())
-      searchView.perform(typeText("Wikipedia"))
+      composeTestRule.apply {
+        waitUntilTimeout()
+        onNodeWithTag(ONLINE_LIBRARY_SEARCH_VIEW_CLOSE_BUTTON_TESTING_TAG).performClick()
+      }
     })
   }
 
-  fun assertPreviousSearchRemainsActive() {
-    pauseForBetterTestPerformance()
+  fun searchWikipediaZIMFiles(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
-      val searchView = onView(withId(androidx.appcompat.R.id.search_src_text))
-      searchView.check(matches(withText(containsString("Wikipedia"))))
+      composeTestRule.apply {
+        waitUntilTimeout()
+        val searchView = onNodeWithTag(ONLINE_LIBRARY_SEARCH_VIEW_TESTING_TAG)
+        searchView.performTextInput("")
+        searchView.performTextInput("Wikipedia")
+      }
     })
   }
 
-  fun assertSearchViewIsNotActive(kiwixMainActivity: KiwixMainActivity) {
-    pauseForBetterTestPerformance()
+  fun assertPreviousSearchRemainsActive(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
-      assertEquals(
-        kiwixMainActivity.supportActionBar?.title,
-        kiwixMainActivity.getString(string.download)
-      )
+      composeTestRule.apply {
+        waitUntilTimeout()
+        onNodeWithTag(ONLINE_LIBRARY_SEARCH_VIEW_TESTING_TAG)
+          .assertTextEquals("Wikipedia")
+      }
+    })
+  }
+
+  fun assertSearchViewIsNotActive(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.apply {
+        waitUntilTimeout()
+        onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
+          .assertTextEquals(context.getString(string.download))
+      }
     })
   }
 }

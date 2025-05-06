@@ -95,7 +95,8 @@ fun LocalLibraryScreen(
   onMultiSelect: ((BookOnDisk) -> Unit)? = null,
   navigationIcon: @Composable () -> Unit
 ) {
-  val (bottomNavHeight, lazyListState) = rememberScrollBehavior(state, listState)
+  val (bottomNavHeight, lazyListState) =
+    rememberScrollBehavior(state.bottomNavigationHeight, listState)
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
   KiwixTheme {
     Scaffold(
@@ -107,6 +108,7 @@ fun LocalLibraryScreen(
       modifier = Modifier
         .systemBarsPadding()
         .nestedScroll(scrollBehavior.nestedScrollConnection)
+        .padding(bottom = bottomNavHeight.value)
     ) { contentPadding ->
       SwipeRefreshLayout(
         isRefreshing = state.swipeRefreshItem.first,
@@ -115,7 +117,6 @@ fun LocalLibraryScreen(
         modifier = Modifier
           .fillMaxSize()
           .padding(contentPadding)
-          .padding(bottom = bottomNavHeight.value)
       ) {
         if (state.scanningProgressItem.first) {
           ContentLoadingProgressBar(
@@ -141,11 +142,11 @@ fun LocalLibraryScreen(
 }
 
 @Composable
-private fun rememberScrollBehavior(
-  state: LocalLibraryScreenState,
+fun rememberScrollBehavior(
+  bottomNavigationHeight: Int,
   listState: LazyListState,
 ): Pair<MutableState<Dp>, LazyListState> {
-  val bottomNavHeightInDp = with(LocalDensity.current) { state.bottomNavigationHeight.toDp() }
+  val bottomNavHeightInDp = with(LocalDensity.current) { bottomNavigationHeight.toDp() }
   val bottomNavHeight = remember { mutableStateOf(bottomNavHeightInDp) }
   val lazyListState = rememberLazyListScrollListener(
     lazyListState = listState,

@@ -191,7 +191,6 @@
   <string name="no">Nein</string>
   <string name="confirm_stop_download_title">Herunterladen beenden?</string>
   <string name="confirm_stop_download_msg">Sind Sie sicher, dass Sie diesen Download abbrechen möchten?</string>
-  <string name="download_change_storage">Speichergeräteauswahl</string>
   <string name="tts_not_enabled">Die Vorlesefunktion ist für diese ZIM-Datei nicht aktiviert</string>
   <string name="texttospeech_initialization_failed">Die Initialisierung der Vorlesefunktion ist fehlgeschlagen. Bitte versuchen Sie es noch einmal</string>
   <string name="texttospeech_error">Unerwarteter Fehler in der Vorlesefunktion. Bitte versuchen Sie es noch einmal</string>

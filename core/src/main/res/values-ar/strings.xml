@@ -177,7 +177,6 @@
   <string name="no">لا</string>
   <string name="confirm_stop_download_title">إيقاف التنزيل؟</string>
   <string name="confirm_stop_download_msg"> هل تريد بالتأكيد إيقاف هذا التحميل؟</string>
-  <string name="download_change_storage">محدد جهاز التخزين</string>
   <string name="tts_not_enabled">لم يتم تمكين القراءة بصوت عالٍ لملف ZIM هذا</string>
   <string name="texttospeech_initialization_failed">فشلت عملية تهيئة القراءة بصوت عالٍ. يُرجى المحاولة مرة أخرى</string>
   <string name="texttospeech_error">خطأ غير متوقع في القراءة بصوت عالٍ. يُرجى المحاولة مرة أخرى</string>

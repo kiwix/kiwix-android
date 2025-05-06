@@ -49,7 +49,6 @@ import org.kiwix.kiwixmobile.help.HelpRobot
 import org.kiwix.kiwixmobile.main.ACTION_GET_CONTENT
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.topLevel
-import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryRobot
 import org.kiwix.kiwixmobile.nav.destination.library.onlineLibrary
 import org.kiwix.kiwixmobile.settings.SettingsRobot
 import org.kiwix.kiwixmobile.testutils.RetryRule
@@ -127,11 +126,13 @@ class GetContentShortcutTest {
         action = ACTION_GET_CONTENT
       }
     ActivityScenario.launch<KiwixMainActivity>(shortcutIntent)
-    onlineLibrary(OnlineLibraryRobot::assertLibraryListDisplayed)
+    onlineLibrary { assertOnlineLibraryFragmentDisplayed(composeTestRule) }
     topLevel {
       clickReaderOnBottomNav {
       }
-      clickDownloadOnBottomNav(OnlineLibraryRobot::assertLibraryListDisplayed)
+      clickDownloadOnBottomNav {
+        onlineLibrary { assertOnlineLibraryFragmentDisplayed(composeTestRule) }
+      }
       clickLibraryOnBottomNav {
         assertGetZimNearbyDeviceDisplayed(composeTestRule)
         clickFileTransferIcon(composeTestRule) {

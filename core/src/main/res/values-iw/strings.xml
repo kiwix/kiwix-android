@@ -170,7 +170,6 @@
   <string name="no">לא</string>
   <string name="confirm_stop_download_title">לעצור הורדה?</string>
   <string name="confirm_stop_download_msg">לעצור את ההורדה הזאת?</string>
-  <string name="download_change_storage">בורר התקני אחסון</string>
   <string name="tts_not_enabled">הקראה בקול אינה זמינה עבור קובץ ה־ZIM הזה</string>
   <string name="texttospeech_initialization_failed">אתחול ההקראה בקול נכשל. נא לנסות שוב</string>
   <string name="texttospeech_error">שגיאה בלתי־צפויה בטקסט לדיבור. נא לנסות שוב</string>

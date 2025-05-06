@@ -190,7 +190,6 @@
   <string name="no">Нет</string>
   <string name="confirm_stop_download_title">Остановить загрузку?</string>
   <string name="confirm_stop_download_msg">Вы уверены, что хотите остановить эту загрузку?</string>
-  <string name="download_change_storage">Выбор носителя информации</string>
   <string name="tts_not_enabled">Функция чтения вслух для этого ZIM-файла не включена</string>
   <string name="texttospeech_initialization_failed">Не удалось выполнить инициализацию чтения вслух. Пожалуйста, попробуйте снова</string>
   <string name="texttospeech_error">Неожиданная ошибка при чтении вслух. Пожалуйста, попробуйте снова</string>

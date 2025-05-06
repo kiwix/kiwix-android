@@ -154,7 +154,7 @@
   <string name="no">{{Identical|No}}</string>
   <string name="confirm_stop_download_title">This message appears in the “Android Dialog” as a confirmation title message. When the user wants to stop the current running download.</string>
   <string name="confirm_stop_download_msg">This message appears in the “Android Dialog” as a confirmation description message. When the user wants to stop the current running download, so it takes confirmation from the user.</string>
-  <string name="download_change_storage">This message appears in the “Android Snackbar” when there is not enough space to download the zim file then this message shows to the user to select secondary storage.</string>
+  <string name="change_storage">This message appears in the “Android Snackbar” when there is not enough space to download the zim file then this message shows to the user to select secondary storage.</string>
   <string name="tts_not_enabled">This message appears in the “Android Toast” as a warning message. When the selected zim file language is not supported by this Read Aloud feature, we are informing the user that in this zim file, this feature will not work.</string>
   <string name="texttospeech_initialization_failed">This is an error message showing in the “Android Toast”. when there is an error in the initialization of Read Aloud feature.</string>
   <string name="texttospeech_error">This is an error message showing in the “Android Toast”. when there is an error while reading the zim file text via Read Aloud feature.</string>

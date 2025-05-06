@@ -18,16 +18,23 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library
 
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onNodeWithTag
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.ViewId
-import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
 fun onlineLibrary(func: OnlineLibraryRobot.() -> Unit) =
   OnlineLibraryRobot().applyWithViewHierarchyPrinting(func)
 
 class OnlineLibraryRobot : BaseRobot() {
-  fun assertLibraryListDisplayed() {
-    isVisible(ViewId(R.id.libraryList))
+  fun assertOnlineLibraryFragmentDisplayed(composeContentTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeContentTestRule.onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
+        .assertTextEquals(context.getString(string.download))
+    })
   }
 }

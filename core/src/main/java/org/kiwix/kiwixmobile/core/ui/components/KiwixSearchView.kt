@@ -42,7 +42,8 @@ fun KiwixSearchView(
   modifier: Modifier = Modifier,
   value: String,
   placeholder: String = stringResource(R.string.search_label),
-  testTag: String = "",
+  searchViewTextFiledTestTag: String = "",
+  clearButtonTestTag: String = "",
   onValueChange: (String) -> Unit,
   onClearClick: () -> Unit
 ) {
@@ -59,7 +60,7 @@ fun KiwixSearchView(
 
   TextField(
     modifier = modifier
-      .testTag(testTag)
+      .testTag(searchViewTextFiledTestTag)
       .minimumInteractiveComponentSize()
       .focusRequester(focusRequester),
     singleLine = true,
@@ -80,7 +81,7 @@ fun KiwixSearchView(
     },
     trailingIcon = {
       if (value.isNotEmpty()) {
-        IconButton(onClick = onClearClick) {
+        IconButton(onClick = onClearClick, modifier = Modifier.testTag(clearButtonTestTag)) {
           Icon(
             painter = painterResource(R.drawable.ic_clear_white_24dp),
             tint = Color.White,

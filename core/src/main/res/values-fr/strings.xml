@@ -191,7 +191,6 @@
   <string name="no">Non</string>
   <string name="confirm_stop_download_title">Arrêter le téléchargement ?</string>
   <string name="confirm_stop_download_msg">Êtes-vous sûr(e) de vouloir arrêter ce téléchargement ?</string>
-  <string name="download_change_storage">Sélecteur de périphérique de stockage</string>
   <string name="tts_not_enabled">La lecture à voix haute n’est pas activée pour ce fichier ZIM.</string>
   <string name="texttospeech_initialization_failed">L’initialisation de la lecture à voix haute a échoué. Veuillez réessayer.</string>
   <string name="texttospeech_error">Erreur inattendue dans la lecture à voix haute. Veuillez réessayer.</string>

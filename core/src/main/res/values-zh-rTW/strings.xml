@@ -174,7 +174,6 @@
   <string name="no">否</string>
   <string name="confirm_stop_download_title">停止下載？</string>
   <string name="confirm_stop_download_msg">您確定要取消此次下載？</string>
-  <string name="download_change_storage">儲存裝置設備選取器</string>
   <string name="tts_not_enabled">朗讀無法用在此 ZIM 檔案上</string>
   <string name="texttospeech_initialization_failed">朗讀初始化失敗，請重試</string>
   <string name="texttospeech_error">朗讀出現意外錯誤，請重試</string>

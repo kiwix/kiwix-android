@@ -111,7 +111,6 @@
   <string name="no">Nem</string>
   <string name="confirm_stop_download_title">Letöltés megállítása?</string>
   <string name="confirm_stop_download_msg">Biztosan le szeretnéd állítani ezt a letöltést?</string>
-  <string name="download_change_storage">Tároló eszköz kiválasztó</string>
   <string name="tts_not_enabled" fuzzy="true">A szöveg ehhez a beszédhez nincs engedélyezve ennél a ZIM fájlnál</string>
   <string name="next">Következő</string>
   <string name="previous">Előző</string>

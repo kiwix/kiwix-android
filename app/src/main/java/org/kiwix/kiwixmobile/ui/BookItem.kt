@@ -155,42 +155,70 @@ fun BookIcon(painter: Painter) {
 @Composable
 private fun BookDetails(modifier: Modifier, bookOnDisk: BookOnDisk) {
   Column(modifier = modifier.padding(start = SIXTEEN_DP)) {
-    Text(
-      text = bookOnDisk.book.title,
-      style = MaterialTheme.typography.titleSmall
-    )
+    BookTitle(bookOnDisk.book.title)
     Spacer(modifier = Modifier.height(TWO_DP))
-    Text(
-      text = bookOnDisk.book.description.orEmpty(),
-      style = MaterialTheme.typography.bodyMedium,
-      maxLines = 2,
-      overflow = TextOverflow.Ellipsis,
-      color = MaterialTheme.colorScheme.onSecondary
-    )
+    BookDescription(bookOnDisk.book.description.orEmpty())
     Row(
       verticalAlignment = Alignment.CenterVertically,
       modifier = Modifier.padding(top = FIVE_DP)
     ) {
-      Text(
-        text = bookOnDisk.book.date,
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onTertiary
-      )
+      BookDate(bookOnDisk.book.date)
       Spacer(modifier = Modifier.width(EIGHT_DP))
-      Text(
-        text = KiloByte(bookOnDisk.book.size).humanReadable,
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onTertiary
-      )
+      BookSize(KiloByte(bookOnDisk.book.size).humanReadable)
       Spacer(modifier = Modifier.width(EIGHT_DP))
-      Text(
-        text = ArticleCount(bookOnDisk.book.articleCount.orEmpty())
-          .toHumanReadable(LocalContext.current),
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onTertiary
+      BookArticleCount(
+        ArticleCount(bookOnDisk.book.articleCount.orEmpty())
+          .toHumanReadable(LocalContext.current)
       )
     }
     Spacer(modifier = Modifier.height(FOUR_DP))
     TagsView(bookOnDisk.tags)
   }
+}
+
+@Composable
+private fun BookArticleCount(articleCount: String) {
+  Text(
+    text = articleCount,
+    style = MaterialTheme.typography.bodyMedium,
+    color = MaterialTheme.colorScheme.onTertiary
+  )
+}
+
+@Composable
+fun BookSize(size: String, modifier: Modifier = Modifier) {
+  Text(
+    text = size,
+    style = MaterialTheme.typography.bodyMedium,
+    color = MaterialTheme.colorScheme.onTertiary,
+    modifier = modifier
+  )
+}
+
+@Composable
+fun BookDate(date: String) {
+  Text(
+    text = date,
+    style = MaterialTheme.typography.bodyMedium,
+    color = MaterialTheme.colorScheme.onTertiary
+  )
+}
+
+@Composable
+fun BookTitle(title: String) {
+  Text(
+    text = title,
+    style = MaterialTheme.typography.titleSmall
+  )
+}
+
+@Composable
+fun BookDescription(bookDescription: String) {
+  Text(
+    text = bookDescription,
+    style = MaterialTheme.typography.bodyMedium,
+    maxLines = 2,
+    overflow = TextOverflow.Ellipsis,
+    color = MaterialTheme.colorScheme.onSecondary
+  )
 }

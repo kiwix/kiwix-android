@@ -83,7 +83,6 @@
   <string name="external_storage">ภายนอก</string>
   <string name="confirm_stop_download_title">หยุดดาวน์โหลดหรือไม่?</string>
   <string name="confirm_stop_download_msg">คุณแน่ใจหรือไม่ว่าต้องการหยุดดาวน์โหลดนี้?</string>
-  <string name="download_change_storage">ตัวเลือกอุปกรณ์จัดเก็บข้อมูล</string>
   <string name="external_link_popup_dialog_title" fuzzy="true">กำลังเข้าสู่ลิงค์ภายนอก</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">คุณกำลังป้อนลิงก์ภายนอก ซึ่งอาจทำให้มีค่าใช้จ่ายเพิ่มเติมสำหรับการถ่ายโอนข้อมูลหรือจะไม่ทำงานเมื่อคุณออฟไลน์ คุณต้องการดำเนินการต่อหรือไม่?</string>
   <string name="do_not_ask_anymore">อย่าถามอีก</string>

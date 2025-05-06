@@ -163,7 +163,6 @@
   <string name="no">Te</string>
   <string name="confirm_stop_download_title">Botika kozwa yango?</string>
   <string name="confirm_stop_download_msg">Ozali na elikya ete olingi kotika kokotisa yango na internet?</string>
-  <string name="download_change_storage">Moponi ya esaleli ya kobomba biloko</string>
   <string name="tts_not_enabled">Kotanga na mongongo makasi ezali te mpo na fiche ZIM oyo</string>
   <string name="texttospeech_initialization_failed">Kobanda ya Read Aloud elongaki te. Tosengi yo omeka lisusu</string>
   <string name="texttospeech_error">Libunga oyo ekanisamaki te na Tanga na mongongo makasi. Svp meka lisusu</string>

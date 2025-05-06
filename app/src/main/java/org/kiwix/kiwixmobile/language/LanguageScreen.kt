@@ -73,7 +73,7 @@ fun LanguageScreen(
         {
           KiwixSearchView(
             value = searchText,
-            testTag = SEARCH_FIELD_TESTING_TAG,
+            searchViewTextFiledTestTag = SEARCH_FIELD_TESTING_TAG,
             onValueChange = onAppBarValueChange,
             onClearClick = onClearClick,
             modifier = Modifier

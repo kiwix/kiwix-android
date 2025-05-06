@@ -141,7 +141,6 @@
   <string name="no">Nie</string>
   <string name="confirm_stop_download_title">Zastaviť sťahovanie?</string>
   <string name="confirm_stop_download_msg">Naozaj chcete zastaviť toto sťahovanie?</string>
-  <string name="download_change_storage">Výber úložiska zariadenia</string>
   <string name="tts_not_enabled" fuzzy="true">Prevod textu na reč nie je pre tento ZIM súbor povolený</string>
   <string name="texttospeech_initialization_failed" fuzzy="true">Inicializácia prevodu textu na reč zlyhala. Prosím skúste znovu.</string>
   <string name="texttospeech_error" fuzzy="true">Neočakávaná chyba v prevode textu na reč. Prosím skúste znovu.</string>

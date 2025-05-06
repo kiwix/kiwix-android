@@ -42,7 +42,7 @@ import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChan
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
-import org.kiwix.kiwixmobile.nav.destination.library.OnlineLibraryRobot
+import org.kiwix.kiwixmobile.nav.destination.library.onlineLibrary
 import org.kiwix.kiwixmobile.settings.SettingsRobot
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
@@ -111,7 +111,11 @@ class TopLevelDestinationTest : BaseActivityTest() {
     topLevel {
       clickReaderOnBottomNav {
       }
-      clickDownloadOnBottomNav(OnlineLibraryRobot::assertLibraryListDisplayed)
+      clickDownloadOnBottomNav {
+        onlineLibrary {
+          assertOnlineLibraryFragmentDisplayed(composeTestRule)
+        }
+      }
       clickLibraryOnBottomNav {
         assertGetZimNearbyDeviceDisplayed(composeTestRule)
         clickFileTransferIcon(composeTestRule) {
