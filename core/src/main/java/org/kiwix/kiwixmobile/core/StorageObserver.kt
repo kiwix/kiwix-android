@@ -18,14 +18,12 @@
 
 package org.kiwix.kiwixmobile.core
 
-import io.reactivex.Flowable
-import io.reactivex.Single
-import io.reactivex.functions.BiFunction
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
@@ -46,24 +44,19 @@ class StorageObserver @Inject constructor(
   fun getBooksOnFileSystem(
     scanningProgressListener: ScanningProgressListener,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
-  ): Flowable<List<BookOnDisk>> {
+  ): Flow<List<BookOnDisk>> {
     return scanFiles(scanningProgressListener)
-      .withLatestFrom(downloadRoomDao.downloads(), BiFunction(::toFilesThatAreNotDownloading))
-      .flatMapSingle { files ->
-        Single.create { emitter ->
-          CoroutineScope(dispatcher).launch {
-            try {
-              emitter.onSuccess(files.mapNotNull { convertToBookOnDisk(it) })
-            } catch (ignore: Exception) {
-              emitter.onError(ignore)
-            }
-          }
-        }
+      .combine(downloadRoomDao.downloads()) { files, downloads ->
+        toFilesThatAreNotDownloading(files, downloads)
       }
+      .map { files ->
+        files.mapNotNull { convertToBookOnDisk(it) }
+      }
+      .flowOn(dispatcher)
   }
 
-  private fun scanFiles(scanningProgressListener: ScanningProgressListener) =
-    fileSearch.scan(scanningProgressListener).subscribeOn(Schedulers.io())
+  private fun scanFiles(scanningProgressListener: ScanningProgressListener): Flow<List<File>> =
+    fileSearch.scan(scanningProgressListener)
 
   private fun toFilesThatAreNotDownloading(files: List<File>, downloads: List<DownloadModel>) =
     files.filter { fileHasNoMatchingDownload(downloads, it) }

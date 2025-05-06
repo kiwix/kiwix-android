@@ -635,7 +635,9 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   }
 
   private fun requestFileSystemCheck() {
-    zimManageViewModel.requestFileSystemCheck.onNext(Unit)
+    CoroutineScope(Dispatchers.IO).launch {
+      zimManageViewModel.requestFileSystemCheck.emit(Unit)
+    }
   }
 
   private fun offerAction(action: FileSelectActions) {

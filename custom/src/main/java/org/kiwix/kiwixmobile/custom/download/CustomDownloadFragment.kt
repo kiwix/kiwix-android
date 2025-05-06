@@ -25,21 +25,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.data.remote.isAuthenticationUrl
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
+import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.extensions.setDistinctDisplayedChild
 import org.kiwix.kiwixmobile.core.extensions.viewModel
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.hasNotificationPermission
-import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.requestNotificationPermission
 import org.kiwix.kiwixmobile.core.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
@@ -85,13 +86,18 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
     fragmentCustomDownloadBinding =
       FragmentCustomDownloadBinding.inflate(inflater, container, false)
     val activity = requireActivity() as CoreMainActivity
-    downloadViewModel.state.observe(viewLifecycleOwner, Observer(::render))
-    compositeDisposable.add(
-      downloadViewModel.effects.subscribe(
-        { it.invokeWith(activity) },
-        Throwable::printStackTrace
-      )
-    )
+    viewLifecycleOwner.lifecycleScope.launch {
+      downloadViewModel.state.collect { state ->
+        render(state)
+      }
+    }
+
+    viewLifecycleOwner.lifecycleScope.launch {
+      downloadViewModel.effects
+        .collect { effect ->
+          effect.invokeWith(activity)
+        }
+    }
     return fragmentCustomDownloadBinding?.root
   }
 
