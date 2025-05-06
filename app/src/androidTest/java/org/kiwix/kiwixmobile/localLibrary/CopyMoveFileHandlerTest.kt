@@ -54,6 +54,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragment
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
 import org.kiwix.kiwixmobile.zimManager.FileWritingFileSystemChecker
 import java.io.File
@@ -116,7 +117,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         kiwixMainActivity = it
         kiwixMainActivity.navigate(R.id.libraryFragment)
       }
-      copyMoveFileHandler(CopyMoveFileHandlerRobot::pauseForBetterTestPerformance)
+      composeTestRule.waitUntilTimeout()
       // test with first launch
       sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
       showMoveFileToPublicDirectoryDialog()
@@ -126,7 +127,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         clickOnCopy(composeTestRule)
         assertStorageSelectionDialogDisplayed(composeTestRule)
         clickOnInternalStorage(composeTestRule)
-        assertZimFileCopiedAndShowingIntoTheReader()
+        assertZimFileCopiedAndShowingIntoTheReader(composeTestRule)
       }
       assertZimFileAddedInTheLocalLibrary()
 
@@ -138,7 +139,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       copyMoveFileHandler {
         assertCopyMoveDialogDisplayed(composeTestRule)
         clickOnCopy(composeTestRule)
-        assertZimFileCopiedAndShowingIntoTheReader()
+        assertZimFileCopiedAndShowingIntoTheReader(composeTestRule)
       }
       assertZimFileAddedInTheLocalLibrary()
       deleteAllFilesInDirectory(parentFile)
@@ -155,7 +156,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         kiwixMainActivity = it
         kiwixMainActivity.navigate(R.id.libraryFragment)
       }
-      copyMoveFileHandler(CopyMoveFileHandlerRobot::pauseForBetterTestPerformance)
+      composeTestRule.waitUntilTimeout()
       // test with first launch
       sharedPreferenceUtil.shouldShowStorageSelectionDialog = true
       showMoveFileToPublicDirectoryDialog()
@@ -165,7 +166,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         clickOnMove(composeTestRule)
         assertStorageSelectionDialogDisplayed(composeTestRule)
         clickOnInternalStorage(composeTestRule)
-        assertZimFileCopiedAndShowingIntoTheReader()
+        assertZimFileCopiedAndShowingIntoTheReader(composeTestRule)
       }
       assertZimFileAddedInTheLocalLibrary()
       // Test with second launch, this time permission dialog should not show.
@@ -177,7 +178,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
       copyMoveFileHandler {
         assertCopyMoveDialogDisplayed(composeTestRule)
         clickOnMove(composeTestRule)
-        assertZimFileCopiedAndShowingIntoTheReader()
+        assertZimFileCopiedAndShowingIntoTheReader(composeTestRule)
       }
       assertZimFileAddedInTheLocalLibrary()
       kiwixMainActivity.lifecycleScope.launch {
@@ -312,7 +313,7 @@ class CopyMoveFileHandlerTest : BaseActivityTest() {
         kiwixMainActivity = it
         kiwixMainActivity.navigate(R.id.libraryFragment)
       }
-      copyMoveFileHandler(CopyMoveFileHandlerRobot::pauseForBetterTestPerformance)
+      composeTestRule.waitUntilTimeout()
       sharedPreferenceUtil.apply {
         shouldShowStorageSelectionDialog = false
         setIsPlayStoreBuildType(true)

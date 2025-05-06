@@ -318,7 +318,7 @@ class CopyMoveFileHandlerTest {
       fileHandler.notifyFileOperationSuccess(destinationFile, sourceUri)
 
       verify { fileCopyMoveCallback.onFileMoved(destinationFile) }
-      verify { fileHandler.dismissProgressDialog() }
+      verify { fileHandler.dismissCopyMoveProgressDialog() }
       coVerify { fileHandler.deleteSourceFile(sourceUri) }
     }
 
@@ -332,7 +332,7 @@ class CopyMoveFileHandlerTest {
       fileHandler.notifyFileOperationSuccess(destinationFile, sourceUri)
 
       verify { fileCopyMoveCallback.onFileCopied(destinationFile) }
-      verify { fileHandler.dismissProgressDialog() }
+      verify { fileHandler.dismissCopyMoveProgressDialog() }
     }
 
   @Test
@@ -356,7 +356,7 @@ class CopyMoveFileHandlerTest {
 
     fileHandler.handleInvalidZimFile(destinationFile, sourceUri)
 
-    verify { fileHandler.dismissProgressDialog() }
+    verify { fileHandler.dismissCopyMoveProgressDialog() }
     verify {
       fileCopyMoveCallback.onError(
         activity.getString(

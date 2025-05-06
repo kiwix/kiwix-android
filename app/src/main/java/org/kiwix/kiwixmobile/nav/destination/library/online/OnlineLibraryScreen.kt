@@ -74,7 +74,8 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.DividerItem
 
 const val ONLINE_LIBRARY_SEARCH_VIEW_TESTING_TAG = "onlineLibrarySearchViewTestingTag"
-const val ONLINE_LIBRARY_SEARCH_VIEW_CLOSE_BUTTON_TESTING_TAG = "onlineLibrarySearchViewCloseButtonTestingTag"
+const val ONLINE_LIBRARY_SEARCH_VIEW_CLOSE_BUTTON_TESTING_TAG =
+  "onlineLibrarySearchViewCloseButtonTestingTag"
 const val NO_CONTENT_VIEW_TEXT_TESTING_TAG = "noContentViewTextTestingTag"
 const val SHOW_FETCHING_LIBRARY_LAYOUT_TESTING_TAG = "showFetchingLibraryLayoutTestingTag"
 

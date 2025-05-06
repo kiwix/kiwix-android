@@ -67,7 +67,6 @@ import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_BUTTONS_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_BUTTON_ROW_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_BUTTON_TEXT_LETTER_SPACING
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_CUSTOM_VIEW_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_DEFAULT_PADDING_FOR_CONTENT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_ICON_END_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_ICON_SIZE
@@ -152,7 +151,7 @@ fun ShowCustomComposeView(dialog: KiwixDialog) {
       modifier = Modifier
         .fillMaxWidth()
         .wrapContentHeight()
-        .padding(bottom = DIALOG_CUSTOM_VIEW_BOTTOM_PADDING),
+        .padding(bottom = dialog.customComposeViewBottomPadding),
       contentAlignment = Alignment.TopStart
     ) {
       it.invoke()

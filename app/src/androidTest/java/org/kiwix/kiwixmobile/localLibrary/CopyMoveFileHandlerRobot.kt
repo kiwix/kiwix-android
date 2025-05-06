@@ -28,7 +28,6 @@ import androidx.test.espresso.web.sugar.Web
 import androidx.test.espresso.web.webdriver.DriverAtoms
 import androidx.test.espresso.web.webdriver.Locator
 import applyWithViewHierarchyPrinting
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable
 import org.kiwix.kiwixmobile.R.id
@@ -39,8 +38,8 @@ import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_MESSAGE_TEXT_TESTING
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.local.NO_FILE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.storage.STORAGE_SELECTION_DIALOG_TITLE_TESTING_TAG
-import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.ui.STORAGE_DEVICE_ITEM_TESTING_TAG
 
 fun copyMoveFileHandler(func: CopyMoveFileHandlerRobot.() -> Unit) =
@@ -48,9 +47,8 @@ fun copyMoveFileHandler(func: CopyMoveFileHandlerRobot.() -> Unit) =
 
 class CopyMoveFileHandlerRobot : BaseRobot() {
   fun assertCopyMoveDialogDisplayed(composeTestRule: ComposeContentTestRule) {
-    pauseForBetterTestPerformance()
     composeTestRule.apply {
-      waitForIdle()
+      waitUntilTimeout()
       onNodeWithTag(ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG)
         .assertTextEquals(context.getString(R.string.copy_move_files_dialog_description))
     }
@@ -59,7 +57,7 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
   fun assertCopyMoveDialogNotDisplayed(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
-        waitForIdle()
+        waitUntilTimeout()
         onNodeWithTag(ALERT_DIALOG_MESSAGE_TEXT_TESTING_TAG)
           .assertDoesNotExist()
       }
@@ -69,7 +67,7 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
   fun assertStorageSelectionDialogDisplayed(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
-        waitForIdle()
+        waitUntilTimeout()
         onNodeWithTag(STORAGE_SELECTION_DIALOG_TITLE_TESTING_TAG)
           .assertTextEquals(context.getString(R.string.choose_storage_to_copy_move_zim_file))
       }
@@ -77,21 +75,18 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
   }
 
   fun clickOnInternalStorage(composeTestRule: ComposeContentTestRule) {
-    pauseForBetterTestPerformance()
     testFlakyView({
-      testFlakyView({
-        composeTestRule.apply {
-          waitForIdle()
-          onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG)[0].performClick()
-        }
-      })
+      composeTestRule.apply {
+        waitUntilTimeout()
+        onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG)[0].performClick()
+      }
     })
   }
 
   fun clickOnCopy(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
-        waitForIdle()
+        waitUntilTimeout()
         onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG)
           .assertTextEquals(context.getString(R.string.action_copy).uppercase())
           .performClick()
@@ -121,8 +116,8 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
     })
   }
 
-  fun assertZimFileCopiedAndShowingIntoTheReader() {
-    pauseForBetterTestPerformance()
+  fun assertZimFileCopiedAndShowingIntoTheReader(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.waitUntilTimeout()
     isVisible(Findable.ViewId(id.readerFragment))
     testFlakyView({
       Web.onWebView()
@@ -142,9 +137,5 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
     } catch (_: AssertionError) {
       // do nothing zim file is added in the local library
     }
-  }
-
-  fun pauseForBetterTestPerformance() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
   }
 }
