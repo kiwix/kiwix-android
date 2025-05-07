@@ -53,7 +53,6 @@ class CustomDownloadViewModel @Inject constructor(
   private val downloadCustom: DownloadCustom,
   private val navigateToCustomReader: NavigateToCustomReader
 ) : ViewModel() {
-
   private val _state = MutableStateFlow<State>(DownloadRequired)
   val state: StateFlow<State> = _state.asStateFlow()
 

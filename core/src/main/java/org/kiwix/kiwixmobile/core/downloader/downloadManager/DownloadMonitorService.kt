@@ -53,6 +53,7 @@ import javax.inject.Inject
 
 const val THIRTY_TREE = 33
 
+@Suppress("InjectDispatcher")
 class DownloadMonitorService : Service() {
   private val updaterChannel = Channel<suspend () -> Unit>(Channel.UNLIMITED)
   private var updaterJob: Job? = null
@@ -83,12 +84,13 @@ class DownloadMonitorService : Service() {
     setForegroundNotification()
   }
 
+  @Suppress("TooGenericExceptionCaught")
   private fun setupUpdater() {
     updaterJob = scope.launch {
       for (task in updaterChannel) {
         try {
           task()
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
           e.printStackTrace()
         }
       }

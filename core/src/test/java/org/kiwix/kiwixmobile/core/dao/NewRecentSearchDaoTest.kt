@@ -50,7 +50,7 @@ internal class NewRecentSearchDaoTest {
         newRecentSearchDao.recentSearches(zimId)
           .test(this)
           .assertValues(
-            queryResult.map { RecentSearchListItem(it.searchTerm, it.url) }
+            mutableListOf(queryResult.map { RecentSearchListItem(it.searchTerm, it.url) })
           )
           .finish()
       }
@@ -63,7 +63,7 @@ internal class NewRecentSearchDaoTest {
         newRecentSearchDao.recentSearches(null)
           .test(this)
           .assertValues(
-            queryResult.map { RecentSearchListItem(it.searchTerm, it.url) }
+            mutableListOf(queryResult.map { RecentSearchListItem(it.searchTerm, it.url) })
           )
           .finish()
       }
@@ -76,7 +76,7 @@ internal class NewRecentSearchDaoTest {
         newRecentSearchDao.recentSearches("")
           .test(this)
           .assertValues(
-            queryResult.take(1).map { RecentSearchListItem(it.searchTerm, it.url) }
+            mutableListOf(queryResult.take(1).map { RecentSearchListItem(it.searchTerm, it.url) })
           )
           .finish()
       }
@@ -89,7 +89,7 @@ internal class NewRecentSearchDaoTest {
         expectFromRecentSearches(searchResults, "")
         newRecentSearchDao.recentSearches("")
           .test(this)
-          .assertValue { it.size == 100 }
+          .assertLastValue { it.size == 100 }
           .finish()
       }
 

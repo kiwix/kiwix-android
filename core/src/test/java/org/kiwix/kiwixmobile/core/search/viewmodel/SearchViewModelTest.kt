@@ -123,7 +123,7 @@ internal class SearchViewModelTest {
     @Test
     fun `initial state is Initialising`() =
       runTest {
-        viewModel.state.test(this).assertValue(
+        viewModel.state.test(this).assertLastValue(
           SearchState("", SearchResultsWithTerm("", null, searchMutex), emptyList(), FromWebView)
         ).finish()
       }
@@ -143,7 +143,7 @@ internal class SearchViewModelTest {
               searchOrigin = searchOrigin
             )
           }
-          .assertValue(
+          .assertLastValue(
             SearchState(
               searchTerm,
               SearchResultsWithTerm(searchTerm, suggestionSearch, searchMutex),
@@ -322,17 +322,32 @@ class TestObserver<T>(
     completionChannel.send(Unit)
   }
 
+  suspend fun getValues(): MutableList<T> {
+    awaitCompletion()
+    return values
+  }
+
   private suspend fun awaitCompletion() {
     completionChannel.receive()
   }
 
-  suspend fun assertValues(vararg values: T): TestObserver<T> {
+  suspend fun assertValues(listValues: MutableList<T>): TestObserver<T> {
     awaitCompletion()
-    assertThat(values.toList()).containsExactlyElementsOf(this.values)
+    print("provided values = $listValues, and actual value = $values")
+    assertThat(listValues).containsExactlyElementsOf(values)
     return this
   }
 
-  suspend fun assertValue(value: T): TestObserver<T> {
+  suspend fun containsExactlyInAnyOrder(
+    listValues: MutableList<T>,
+    vararg values: T
+  ): TestObserver<T> {
+    awaitCompletion()
+    assertThat(listValues).containsExactlyInAnyOrder(*values)
+    return this
+  }
+
+  suspend fun assertLastValue(value: T): TestObserver<T> {
     awaitCompletion()
     assertThat(values.last()).isEqualTo(value)
     return this
@@ -342,7 +357,7 @@ class TestObserver<T>(
     job?.cancel()
   }
 
-  suspend fun assertValue(value: (T) -> Boolean): TestObserver<T> {
+  suspend fun assertLastValue(value: (T) -> Boolean): TestObserver<T> {
     awaitCompletion()
     assertThat(values.last()).satisfies({ value(it) })
     return this

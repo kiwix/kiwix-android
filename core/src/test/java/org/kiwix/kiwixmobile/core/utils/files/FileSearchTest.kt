@@ -30,11 +30,12 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.reactivex.schedulers.Schedulers
-import org.assertj.core.api.Assertions.assertThat
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.search.viewmodel.test
 import org.kiwix.sharedFunctions.resetSchedulers
 import org.kiwix.sharedFunctions.setScheduler
 import java.io.File
@@ -78,29 +79,31 @@ class FileSearchTest {
   @Nested
   inner class FileSystem {
     @Test
-    fun `scan of directory that doesn't exist returns nothing`() {
+    fun `scan of directory that doesn't exist returns nothing`() = runTest {
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
       fileSearch.scan(scanningProgressListener)
-        .test()
-        .assertValue(listOf())
+        .test(this)
+        .assertValues(mutableListOf())
+        .finish()
     }
 
     @Test
-    fun `scan of directory that has files returns files`() {
+    fun `scan of directory that has files returns files`() = runTest {
       val zimFile = File.createTempFile("fileToFind", ".zim")
       val zimaaFile = File.createTempFile("fileToFind2", ".zimaa")
       File.createTempFile("willNotFind", ".txt")
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
       every { storageDevice.name } returns zimFile.parent
-      val fileList =
-        fileSearch.scan(scanningProgressListener)
-          .test()
-          .values()[0]
-      assertThat(fileList).containsExactlyInAnyOrder(zimFile, zimaaFile)
+      val testObserver = fileSearch.scan(scanningProgressListener)
+        .test(this)
+      testObserver.containsExactlyInAnyOrder(
+        testObserver.getValues(),
+        listOf(zimFile, zimaaFile)
+      ).finish()
     }
 
     @Test
-    fun `scan of directory recursively traverses filesystem`() {
+    fun `scan of directory recursively traverses filesystem`() = runTest {
       val tempRoot =
         File.createTempFile("tofindroot", "extension")
           .parentFile.absolutePath
@@ -112,33 +115,36 @@ class FileSearchTest {
         )
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
       every { storageDevice.name } returns zimFile.parentFile.parent
-      val fileList =
-        fileSearch.scan(scanningProgressListener)
-          .test()
-          .values()[0]
-      assertThat(fileList).containsExactlyInAnyOrder(zimFile)
+      val testObserver = fileSearch.scan(scanningProgressListener)
+        .test(this)
+      testObserver.containsExactlyInAnyOrder(
+        mutableListOf(testObserver.getValues()[0]),
+        listOf(zimFile)
+      ).finish()
     }
   }
 
   @Nested
   inner class MediaStore {
     @Test
-    fun `scan media store, if files are readable they are returned`() {
+    fun `scan media store, if files are readable they are returned`() = runTest {
       val fileToFind = File.createTempFile("fileToFind", ".zim")
       expectFromMediaStore(fileToFind)
       fileSearch.scan(scanningProgressListener)
-        .test()
-        .assertValue(listOf(fileToFind))
+        .test(this)
+        .assertValues(mutableListOf(listOf(fileToFind)))
+        .finish()
     }
 
     @Test
-    fun `scan media store, if files are not readable they are not returned`() {
+    fun `scan media store, if files are not readable they are not returned`() = runTest {
       val unreadableFile = File.createTempFile("fileToFind", ".zim")
       expectFromMediaStore(unreadableFile)
       unreadableFile.delete()
       fileSearch.scan(scanningProgressListener)
-        .test()
-        .assertValue(listOf())
+        .test(this)
+        .assertValues(mutableListOf())
+        .finish()
     }
 
     private fun expectFromMediaStore(fileToFind: File) {

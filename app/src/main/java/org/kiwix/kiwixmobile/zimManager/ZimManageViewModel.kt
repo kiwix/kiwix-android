@@ -23,6 +23,7 @@ import android.net.ConnectivityManager
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -33,16 +34,22 @@ import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.cancel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.rx3.asFlowable
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
@@ -144,7 +151,7 @@ class ZimManageViewModel @Inject constructor(
   }
 
   private var isUnitTestCase: Boolean = false
-  val sideEffects = PublishProcessor.create<SideEffect<Any?>>()
+  val sideEffects: MutableSharedFlow<SideEffect<*>> = MutableSharedFlow()
   val libraryItems: MutableLiveData<List<LibraryListItem>> = MutableLiveData()
   val fileSelectListStates: MutableLiveData<FileSelectListState> = MutableLiveData()
   val deviceListScanningProgress = MutableLiveData<Int>()
@@ -153,18 +160,20 @@ class ZimManageViewModel @Inject constructor(
   val networkStates = MutableLiveData<NetworkState>()
 
   val requestFileSystemCheck = MutableSharedFlow<Unit>(replay = 0)
-  val fileSelectActions = PublishProcessor.create<FileSelectActions>()
+  val fileSelectActions = MutableSharedFlow<FileSelectActions>()
   val requestDownloadLibrary = BehaviorProcessor.createDefault(Unit)
   val requestFiltering = BehaviorProcessor.createDefault("")
   val onlineBooksSearchedQuery = MutableLiveData<String>()
 
   private var compositeDisposable: CompositeDisposable? = CompositeDisposable()
+  private val coroutineJobs: MutableList<Job> = mutableListOf()
   val downloadProgress = MutableLiveData<String>()
 
   private lateinit var alertDialogShower: AlertDialogShower
 
   init {
     compositeDisposable?.addAll(*disposables())
+    observeCoroutineFlows()
     context.registerReceiver(connectivityBroadcastReceiver)
   }
 
@@ -249,12 +258,22 @@ class ZimManageViewModel @Inject constructor(
     onCleared()
   }
 
+  private fun observeCoroutineFlows(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+    coroutineJobs.apply {
+      add(scanBooksFromStorage(dispatcher))
+      add(updateBookItems())
+      add(fileSelectActions())
+    }
+  }
+
   override fun onCleared() {
+    coroutineJobs.forEach {
+      it.cancel()
+    }
+    coroutineJobs.clear()
     compositeDisposable?.clear()
     context.unregisterReceiver(connectivityBroadcastReceiver)
     connectivityBroadcastReceiver.stopNetworkState()
-    // requestFileSystemCheck.cancel()
-    fileSelectActions.onComplete()
     requestDownloadLibrary.onComplete()
     compositeDisposable = null
     appProgressListener = null
@@ -262,37 +281,57 @@ class ZimManageViewModel @Inject constructor(
   }
 
   private fun disposables(): Array<Disposable> {
-    val downloads = downloadDao.downloads()
+    // temporary converting to flowable. TODO we will refactor this in upcoming issue.
+    val downloads = downloadDao.downloads().asFlowable()
     val booksFromDao = books()
     val networkLibrary = PublishProcessor.create<LibraryNetworkEntity>()
     val languages = languageDao.languages()
     return arrayOf(
-      updateBookItems(),
       updateLibraryItems(booksFromDao, downloads, networkLibrary, languages),
       updateLanguagesInDao(networkLibrary, languages),
       updateNetworkStates(),
-      requestsAndConnectivtyChangesToLibraryRequests(networkLibrary),
-      fileSelectActions()
+      requestsAndConnectivtyChangesToLibraryRequests(networkLibrary)
     ).also {
       setUpUncaughtErrorHandlerForOnlineLibrary(networkLibrary)
     }
   }
 
+  private fun scanBooksFromStorage(dispatcher: CoroutineDispatcher = Dispatchers.IO) =
+    viewModelScope.launch {
+      withContext(dispatcher) {
+        books()
+          .asFlow()
+          .let { checkFileSystemForBooksOnRequest(it) }
+          .catch { it.printStackTrace() }
+          .collect { books ->
+            bookDao.insert(books)
+          }
+      }
+    }
+
+  @Suppress("TooGenericExceptionCaught")
   private fun fileSelectActions() =
-    fileSelectActions.subscribe({
-      sideEffects.offer(
-        when (it) {
-          is RequestNavigateTo -> OpenFileWithNavigation(it.bookOnDisk)
-          is RequestMultiSelection -> startMultiSelectionAndSelectBook(it.bookOnDisk)
-          RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState(), alertDialogShower)
-          RequestShareMultiSelection -> ShareFiles(selectionsFromState())
-          MultiModeFinished -> noSideEffectAndClearSelectionState()
-          is RequestSelect -> noSideEffectSelectBook(it.bookOnDisk)
-          RestartActionMode -> StartMultiSelection(fileSelectActions)
-          UserClickedDownloadBooksButton -> NavigateToDownloads
+    viewModelScope.launch {
+      fileSelectActions
+        .collect { action ->
+          try {
+            sideEffects.emit(
+              when (action) {
+                is RequestNavigateTo -> OpenFileWithNavigation(action.bookOnDisk)
+                is RequestMultiSelection -> startMultiSelectionAndSelectBook(action.bookOnDisk)
+                RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState(), alertDialogShower)
+                RequestShareMultiSelection -> ShareFiles(selectionsFromState())
+                MultiModeFinished -> noSideEffectAndClearSelectionState()
+                is RequestSelect -> noSideEffectSelectBook(action.bookOnDisk)
+                RestartActionMode -> StartMultiSelection(fileSelectActions)
+                UserClickedDownloadBooksButton -> NavigateToDownloads
+              }
+            )
+          } catch (e: Throwable) {
+            e.printStackTrace()
+          }
         }
-      )
-    }, Throwable::printStackTrace)
+    }
 
   private fun startMultiSelectionAndSelectBook(
     bookOnDisk: BookOnDisk
@@ -411,7 +450,7 @@ class ZimManageViewModel @Inject constructor(
 
   private fun updateLibraryItems(
     booksFromDao: Flowable<List<BookOnDisk>>,
-    downloads: Flowable<List<DownloadModel>>,
+    downloads: io.reactivex.rxjava3.core.Flowable<List<DownloadModel>>,
     library: Flowable<LibraryNetworkEntity>,
     languages: Flowable<List<Language>>
   ) = Flowable.combineLatest(
@@ -598,11 +637,9 @@ class ZimManageViewModel @Inject constructor(
   private fun checkFileSystemForBooksOnRequest(
     booksFromDao: Flow<List<BookOnDisk>>
   ): Flow<List<BookOnDisk>> = requestFileSystemCheck
-    .onStart {
+    .flatMapLatest {
       // Initial progress
       deviceListScanningProgress.postValue(DEFAULT_PROGRESS)
-    }
-    .flatMapLatest {
       booksFromStorageNotIn(
         booksFromDao,
         object : ScanningProgressListener {
@@ -643,17 +680,20 @@ class ZimManageViewModel @Inject constructor(
   ) = booksFromFileSystem.filterNot { idsInDao.contains(it.book.id) }
 
   private fun updateBookItems() =
-    dataSource.booksOnDiskAsListItems()
-      .subscribe({ newList ->
-        fileSelectListStates.postValue(
-          fileSelectListStates.value?.let {
-            inheritSelections(
-              it,
-              newList.toMutableList()
-            )
+    viewModelScope.launch {
+      dataSource.booksOnDiskAsListItems()
+        // temporary converting to flow, TODO we will refactor this in upcoming issue.
+        .asFlow()
+        .catch { it.printStackTrace() }
+        .collect { newList ->
+          val currentState = fileSelectListStates.value
+          val updatedState = currentState?.let {
+            inheritSelections(it, newList.toMutableList())
           } ?: FileSelectListState(newList)
-        )
-      }, Throwable::printStackTrace)
+
+          fileSelectListStates.postValue(updatedState)
+        }
+    }
 
   private fun inheritSelections(
     oldState: FileSelectListState,
