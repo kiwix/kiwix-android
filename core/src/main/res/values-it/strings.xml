@@ -4,6 +4,7 @@
 * Albano
 * Beta16
 * CloeRiva
+* Clorofolle
 * Einreiher
 * Eleassar
 * Fs00
@@ -22,19 +23,19 @@
   <string name="menu_search_in_text">Trova nella pagina</string>
   <string name="bookmarks">Segnalibri</string>
   <string name="menu_random_article">Voce a caso</string>
-  <string name="menu_full_screen">A tutto schermo</string>
-  <string name="menu_exit_full_screen">Esci dalla modalità a tutto schermo</string>
+  <string name="menu_full_screen">A schermo intero</string>
+  <string name="menu_exit_full_screen">Esci dalla modalità a schermo intero</string>
   <string name="menu_read_aloud">Leggi a voce alta</string>
   <string name="menu_read_aloud_stop">Interrompi lettura a voce alta</string>
   <string name="menu_support_kiwix">Sostieni Kiwix</string>
   <string name="menu_about_app">Informazioni sull’app %s</string>
   <string name="menu_wifi_hotspot">Hotspot Wi-Fi</string>
-  <string name="save_media">Salva file multimediale come…</string>
+  <string name="save_media">Salva file multimediale</string>
   <string name="save_media_error">Si è verificato un errore durante il salvataggio del file multimediale!</string>
-  <string name="save_media_saved">Salvato file multimediale come %s in Downloads/org.kiwix…/</string>
+  <string name="save_media_saved">File multimediale salvato come %s in Downloads/org.kiwix…/</string>
   <string name="search_label">Cerca</string>
   <string name="choose_file">Seleziona un file di contenuto (*.zim)</string>
-  <string name="open_in_new_tab">Vuoi aprire il collegamento in una nuova scheda?</string>
+  <string name="open_in_new_tab">Aprire il collegamento in una nuova scheda?</string>
   <string name="hotspot_service_channel_name">Servizio hotspot</string>
   <string name="hotspot_failed_title">Errore durante l’avvio dell’hotspot</string>
   <string name="hotspot_failed_message">Sembra che il tuo hotspot sia già attivato. Disabilita il tuo hotspot Wi-Fi per continuare.</string>
@@ -107,7 +108,7 @@
   <string name="tab_closed">Scheda chiusa</string>
   <string name="bookmark_added">Segnalibro aggiunto</string>
   <string name="rate_dialog_title">Valutaci</string>
-  <string name="rate_dialog_msg">Se ti piace usare %s, prenditi un momento per valutarlo. Grazie per il vostro sostegno!</string>
+  <string name="rate_dialog_msg">Se ti sta piacendo %s, prenditi un minuto per lasciare una valutazione. Grazie per il sostegno!</string>
   <string name="rate_dialog_positive">Valuta!</string>
   <string name="no_thanks">No, grazie</string>
   <string name="rate_dialog_neutral">Più tardi</string>
@@ -156,6 +157,7 @@
   <string name="no">No</string>
   <string name="confirm_stop_download_title">Vuoi interrompere il download?</string>
   <string name="confirm_stop_download_msg">Sei sicuro di voler interrompere il download?</string>
+  <string name="change_storage">Modifica</string>
   <string name="tts_not_enabled">La lettura a voce alta non è abilitata per questo file ZIM</string>
   <string name="texttospeech_initialization_failed">Inizializzazione del motore di sintesi vocale fallita. Riprova</string>
   <string name="texttospeech_error">Errore imprevisto nel motore di sintesi vocale. Riprova</string>

@@ -2,6 +2,7 @@
 <!-- Authors:
 * 1917 Ekim Devrimi
 * Alidemirtas
+* Andac
 * BaRaN6161 TURK
 * Can
 * Captantrips
@@ -16,6 +17,7 @@
 * Rapsar
 * Rofiatmustapha12
 * Sayginer
+* Slickdaddy
 * Stonecy
 * Trockya
 -->
@@ -38,6 +40,7 @@
   <string name="save_media_error">Medya kaydedilmeye çalışılırken bir hata oluştu!</string>
   <string name="save_media_saved">Medya %s olarak Downloads/org.kiwix…/\'e kaydedildi</string>
   <string name="search_label">Ara</string>
+  <string name="searched_list">Aranan liste</string>
   <string name="choose_file">Bir İçerik Dosyası seçin (*.zim)</string>
   <string name="open_in_new_tab">Bağlantı yeni sekmede açılsın mı?</string>
   <string name="hotspot_service_channel_name">Hotspot Hizmet Kanalı</string>
@@ -67,16 +70,19 @@
   <string name="error_server_already_running">Sunucu zaten çalışıyor. Lütfen kapatıp tekrar deneyin.</string>
   <string name="error_ip_address_not_found">IP adresi bulunamadı.</string>
   <string name="server_started_message">%s sunucusuna erişmek için tarayıcınıza bu ip adresini girin.</string>
+  <string name="qr_code">İşlenmiş QR Kodu</string>
   <string name="share_host_address">URL’yi diğer uygulamalar aracılığıyla paylaşın</string>
   <string name="error_file_not_found">Hata: Seçili ZIM dosyası bulunamadı. %s</string>
-  <string name="unable_to_read_zim_file" fuzzy="true">Bu zim dosyası okunamıyor!</string>
-  <string name="zim_not_opened" fuzzy="true">Zim dosyası açılamıyor</string>
+  <string name="unable_to_read_zim_file">Bu ZIM dosyası okunamıyor!</string>
+  <string name="zim_not_opened">ZIM dosyası açılamıyor</string>
   <string name="error_file_invalid">Hata: Seçili dosya geçerli bir ZIM dosyası değil. %s</string>
   <string name="error_article_url_not_found">Hata: (Url: %1$s) makalesinin yüklemesi başarısız.</string>
+  <string name="error_loading_random_article_zim_not_loaded">Makale açılamıyor. ZIM dosyası düzgün yüklenemedi.</string>
+  <string name="could_not_find_random_article">Rastgele bir makale bulunamadı. Lütfen daha sonra tekrar deneyin.</string>
   <string name="pref_display_title">Görüntüle</string>
   <string name="pref_info_title">Bilgi</string>
   <string name="pref_info_version">Sürüm</string>
-  <string name="pref_dark_mode" fuzzy="true">Gece modu</string>
+  <string name="pref_dark_mode">Gece modu</string>
   <string name="pref_dark_mode_summary">Makaleleri ters çevrilmiş renklerle göster</string>
   <string name="pref_back_to_top">Başa Dön</string>
   <string name="pref_back_to_top_summary">Yukarı kaydırmak için sayfanın sonunda bir düğme görüntüleyin</string>
@@ -87,15 +93,21 @@
   <string name="tts_lang_not_supported">Bu sayfanın dili desteklenmiyor. Makale düzgün okunamayabilir.</string>
   <string name="no_reader_application_installed">Bu dosya türü için yüklü bir uygulama bulunamadı</string>
   <string name="no_email_application_installed">Lütfen bir e-posta istemcisi kurun</string>
+  <string name="no_app_found_to_select_bookmark_file">Yer imi dosyasını seçmek için uygulama bulunamadı</string>
   <string name="no_section_info">İçerik başlığı bulunamadı</string>
   <string name="request_storage">Çevrimdışı içeriğe erişmek için belleğinize erişmemiz gerekmektedir.</string>
-  <string name="request_write_storage" fuzzy="true">Zim dosyalarını indirmek için depolama alanınıza yazma erişimine ihtiyacımız var</string>
+  <string name="request_write_storage">ZIM dosyalarını indirmek için depolama alanınıza yazma erişimine ihtiyacımız var</string>
   <string name="clear_recent_and_tabs_history_dialog">Tüm aktif sekmeleri sıfırlamak ve arama geçmişinizi silmek istediğinize emin misiniz?</string>
   <string name="delete_recent_search_item">Bu öğe silinsin mi?</string>
   <string name="pref_clear_all_history_title">Geçmişi temizle</string>
   <string name="pref_clear_all_history_summary">Son aramalar ve sekmeler geçmişini temizle</string>
   <string name="pref_notes">Notlar</string>
   <string name="pref_permission">İzinler</string>
+  <string name="pref_import_bookmark_title">Yer imlerini içe aktar</string>
+  <string name="pref_import_bookmark_summary">Kaydedilmiş yer imlerini içe aktar</string>
+  <string name="pref_export_bookmark_title">Yer imlerini dışa aktar</string>
+  <string name="pref_export_bookmark_summary">Kaydedilmiş tüm yer imlerini dışa aktar</string>
+  <string name="export_bookmark_saved">Yer imleri %s dosyasına aktarıldı</string>
   <string name="all_history_cleared">Tüm geçmiş temizlendi</string>
   <string name="pref_clear_all_bookmarks_title">Yer imlerini temizle</string>
   <string name="clear_all_history_dialog_title">Tüm Geçmişi Silinsin mi?</string>
@@ -128,12 +140,14 @@
   <string name="local_zims">Cihaz</string>
   <string name="remote_zims">Çevrimiçi</string>
   <string name="library">Kütüphane</string>
-  <string name="delete_zim_body" fuzzy="true">Aşağıdaki zim dosyaları silinecektir:\n\n%s</string>
+  <string name="delete_zim_body">Aşağıdaki ZIM dosyaları silinecektir:\n\n%s</string>
   <string name="delete_zims_toast">Dosyalar başarıyla silindi</string>
   <string name="no_files_here">Dosya yok</string>
   <string name="download_no_space">İndirmek için yetersiz alan.</string>
   <string name="download">İndir</string>
+  <string name="download_notification_channel_name">İleti Kanalı Adını indir</string>
   <string name="space_available">Kullanılabilir Alan:</string>
+  <string name="move_no_space">Taşıma/kopyalama için yeterli alan yok.</string>
   <string name="zim_simple">Basit</string>
   <string name="zim_no_pic">Resim Yok</string>
   <string name="zim_no_vid">Video Yok</string>
@@ -146,14 +160,20 @@
   <string name="help_7">ZIM dosyaları olarak kullanılabilir durumdadırlar. Onlardan çok sayıda vardır:</string>
   <string name="help_8">• Vikipedi her dil için ayrı ayrı kullanılabilir durumdadır.</string>
   <string name="help_9">• Wikileaks veya Vikikaynak gibi diğer kaynaklarımız da kullanılabilir durumdadır</string>
-  <string name="help_10" fuzzy="true">Seçtiğiniz ZIM dosyalarını uygulama içerisinden indirebilir veya istediklerinizi seçerek SD kartınıza aktarmadan önce bir Masaüstü bilgisayarından indirebilirsiniz.</string>
+  <string name="help_10">Seçtiğiniz ZIM dosyalarını uygulama içerisinden indirebilir veya istediklerinizi seçerek SD kartınıza aktarmadan önce bir Masaüstü bilgisayarından indirebilirsiniz.</string>
   <string name="help_11">Uygulama içinden indirilen ZIM dosyaları harici depolama aygıtındaki Kiwix başlıklı bir klasördedir.</string>
+  <string name="fetching_storage_info">Depolama ayrıntıları getiriliyor…</string>
   <string name="pref_storage">Depolama</string>
   <string name="pref_current_folder">Mevcut Klasör</string>
+  <string name="pref_storage_used">%s kullanıldı</string>
+  <string name="pref_free_storage">%s boş</string>
+  <string name="choose_storage_to_download_book">Kitabı indirmek için depolama alanını seçin</string>
   <string name="delete_zim_failed">Üzgünüz, bazı dosyayı silemedik. Bir dosya yöneticisi kullanmayı denemelisiniz.</string>
   <string name="tts_pause">duraklat</string>
   <string name="tts_resume">devam et</string>
   <string name="stop">durdur</string>
+  <string name="notification_pause_button_text">Duraklat</string>
+  <string name="notification_resume_button_text">Devam et</string>
   <string name="internal_storage">Dahili</string>
   <string name="external_storage">Harici</string>
   <string name="yes">Evet</string>
@@ -261,6 +281,7 @@
   <string name="get_content_from_nearby_device">Yakındaki cihazdan içerik alın</string>
   <string name="search_for_peers">Akranları Ara</string>
   <string name="your_device">Cihazınız:</string>
+  <string name="device_name">Cihaz Adı</string>
   <string name="nearby_devices">YAKINDAKİ CİHAZLAR</string>
   <string name="no_devices_found">Cihaz algılanmadı. Tekrar denemek için arama düğmesine dokunun.</string>
   <string name="files_for_transfer">TRANSFER İÇİN DOSYALAR</string>
@@ -303,6 +324,8 @@
   <string name="tabs_restored">Sekmeler geri yüklendi</string>
   <string name="open_drawer">Çekmeceyi Aç</string>
   <string name="close_drawer">Çekmeceyi Kapat</string>
+  <string name="action_copy">Kopyala</string>
+  <string name="move">Taşı</string>
   <string name="how_to_update_content">İçerik nasıl güncellenir?</string>
   <string name="update_content_description" fuzzy="true">İçeriği (bir zim dosyası) güncellemek için, aynı içeriğin en son sürümünü indirmeniz gerekir. Bunu indirme bölümünden yapabilirsiniz.</string>
   <string name="all_files_permission_needed">Tüm Dosyalar İzni Gereklidir</string>
@@ -337,4 +360,5 @@
   <string name="your_device_name_message">Cihazınızın adı burada görünecektir.</string>
   <string name="nearby_devices_list_message">Burada yakındaki cihazların bir listesini bulacaksınız. Dosya aktarımını başlatmak için bir cihazın adına dokunun.</string>
   <string name="transfer_zim_files_list_message">Burada aktarım için mevcut ZIM dosyalarının listesini bulacaksınız.</string>
+  <string name="downloading_state">İndiriliyor</string>
 </resources>
