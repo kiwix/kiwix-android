@@ -83,7 +83,7 @@ class FileSearchTest {
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
       fileSearch.scan(scanningProgressListener)
         .test(this)
-        .assertValues(mutableListOf())
+        .assertValues(mutableListOf(mutableListOf()))
         .finish()
     }
 
@@ -96,8 +96,9 @@ class FileSearchTest {
       every { storageDevice.name } returns zimFile.parent
       val testObserver = fileSearch.scan(scanningProgressListener)
         .test(this)
+      val observedValues = testObserver.getValues()
       testObserver.containsExactlyInAnyOrder(
-        testObserver.getValues(),
+        observedValues,
         listOf(zimFile, zimaaFile)
       ).finish()
     }
@@ -117,8 +118,9 @@ class FileSearchTest {
       every { storageDevice.name } returns zimFile.parentFile.parent
       val testObserver = fileSearch.scan(scanningProgressListener)
         .test(this)
+      val observedValue = testObserver.getValues()[0]
       testObserver.containsExactlyInAnyOrder(
-        mutableListOf(testObserver.getValues()[0]),
+        mutableListOf(observedValue),
         listOf(zimFile)
       ).finish()
     }
@@ -143,7 +145,7 @@ class FileSearchTest {
       unreadableFile.delete()
       fileSearch.scan(scanningProgressListener)
         .test(this)
-        .assertValues(mutableListOf())
+        .assertValues(mutableListOf(mutableListOf()))
         .finish()
     }
 

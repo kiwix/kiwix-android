@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.custom.main
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.pm.PackageManager
 import android.content.res.AssetFileDescriptor
 import android.content.res.AssetManager
@@ -104,6 +105,24 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
 
     // Get the external files directories for the app
     context.getExternalFilesDirs(null).filterNotNull()
+      .filter(File::exists)
+      .forEach { dir ->
+        // Check if the directory's parent is not null
+        dir.parent?.let { parentPath ->
+          // Add the parent directory to the list, so we can scan all the files contained in the folder.
+          // We are doing this because context.getExternalFilesDirs(null) method returns the path to the
+          // "files" folder, which is specific to the app's package name, both for internal and SD card storage.
+          // By obtaining the parent directory, we can scan files from the app-specific directory itself.
+          directoryList.add(File(parentPath))
+        } ?: kotlin.run {
+          // If the parent directory is null, it means the current directory is the target folder itself.
+          // Add the current directory to the list, as it represents the app-specific directory for both internal
+          // and SD card storage. This allows us to scan files directly from this directory.
+          directoryList.add(dir)
+        }
+      }
+    // Get the external files directories for the app
+    ContextWrapper(context).externalMediaDirs.filterNotNull()
       .filter(File::exists)
       .forEach { dir ->
         // Check if the directory's parent is not null

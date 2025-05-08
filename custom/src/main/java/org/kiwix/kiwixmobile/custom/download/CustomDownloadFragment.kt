@@ -106,18 +106,24 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
     fragmentCustomDownloadBinding?.apply {
       customDownloadRequired.cdDownloadButton.setOnClickListener {
         if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
-          downloadViewModel.actions.offer(ClickedDownload)
+          performAction(ClickedDownload)
         } else {
           requestNotificationPermission()
         }
       }
       customDownloadError.cdRetryButton.setOnClickListener {
         if (requireActivity().hasNotificationPermission(sharedPreferenceUtil)) {
-          downloadViewModel.actions.offer(ClickedRetry)
+          performAction(ClickedRetry)
         } else {
           requestNotificationPermission()
         }
       }
+    }
+  }
+
+  private fun performAction(action: Action) {
+    viewLifecycleOwner.lifecycleScope.launch {
+      downloadViewModel.actions.emit(action)
     }
   }
 

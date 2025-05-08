@@ -86,7 +86,7 @@ class StorageObserverTest {
   @Test
   fun `books from disk are filtered by current downloads`() = runTest {
     withFiltering()
-    booksOnFileSystem(this).assertValues(mutableListOf()).finish()
+    booksOnFileSystem(this).assertValues(mutableListOf(mutableListOf())).finish()
   }
 
   @OptIn(ExperimentalCoroutinesApi::class)

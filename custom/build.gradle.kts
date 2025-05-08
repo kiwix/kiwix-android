@@ -60,6 +60,10 @@ android {
   }
 }
 
+dependencies {
+  testImplementation(Libs.kotlinx_coroutines_test)
+}
+
 fun ProductFlavor.createDownloadTask(file: File): TaskProvider<Task> {
   return tasks.register(
     "download${

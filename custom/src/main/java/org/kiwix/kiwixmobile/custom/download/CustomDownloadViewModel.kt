@@ -18,16 +18,18 @@
 
 package org.kiwix.kiwixmobile.custom.download
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -55,23 +57,24 @@ class CustomDownloadViewModel @Inject constructor(
 ) : ViewModel() {
   private val _state = MutableStateFlow<State>(DownloadRequired)
   val state: StateFlow<State> = _state.asStateFlow()
-
-  private val _actions = Channel<Action>(Channel.UNLIMITED)
+  val actions = MutableSharedFlow<Action>(Channel.UNLIMITED)
   private val _effects = MutableSharedFlow<SideEffect<*>>(replay = 0)
   val effects: Flow<SideEffect<*>> = _effects
     .onStart { emit(setPreferredStorageWithMostSpace) }
-
-  val actions = PublishProcessor.create<Action>()
 
   init {
     observeActions()
     observeDownloads(downloadRoomDao)
   }
 
+  @VisibleForTesting
+  fun getStateForTesting() = _state
+
   private fun observeActions() {
     viewModelScope.launch {
-      _actions.consumeAsFlow()
+      actions
         .collect { action ->
+          println("EMITTING action = $action")
           val currentState = _state.value
           val newState = reduce(action, currentState)
           if (newState != currentState) {
@@ -81,12 +84,16 @@ class CustomDownloadViewModel @Inject constructor(
     }
   }
 
-  private fun observeDownloads(downloadRoomDao: DownloadRoomDao) {
+  private fun observeDownloads(
+    downloadRoomDao: DownloadRoomDao,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ) {
     viewModelScope.launch {
       downloadRoomDao.downloads()
-        .map { downloads -> downloads.map(::DownloadItem) }
+        .map { it.map(::DownloadItem) }
+        .flowOn(dispatcher)
         .collect { downloads ->
-          _actions.send(DatabaseEmission(downloads))
+          actions.emit(DatabaseEmission(downloads))
         }
     }
   }
@@ -95,7 +102,10 @@ class CustomDownloadViewModel @Inject constructor(
     return when (action) {
       is DatabaseEmission -> reduceDatabaseEmission(state, action)
       ClickedRetry,
-      ClickedDownload -> state.also { _effects.emit(downloadCustom) }
+      ClickedDownload -> state.also {
+        println("EMITTING downloadCustom")
+        _effects.emit(downloadCustom)
+      }
     }
   }
 
