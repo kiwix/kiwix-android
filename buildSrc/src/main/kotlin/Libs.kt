@@ -30,6 +30,11 @@ object Libs {
     Versions.org_jetbrains_kotlinx_kotlinx_coroutines
 
   /**
+   * https://github.com/cashapp/turbine
+   */
+  const val TURBINE_FLOW_TEST: String = "app.cash.turbine:turbine:" + Versions.TURBINE_FLOW_TEST
+
+  /**
    * https://developer.android.com/testing
    */
   const val espresso_contrib: String = "androidx.test.espresso:espresso-contrib:" +

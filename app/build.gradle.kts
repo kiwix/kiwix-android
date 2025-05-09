@@ -130,6 +130,7 @@ androidComponents {
 dependencies {
   androidTestImplementation(Libs.leakcanary_android_instrumentation)
   testImplementation(Libs.kotlinx_coroutines_test)
+  testImplementation(Libs.TURBINE_FLOW_TEST)
 }
 tasks.register("generateVersionCodeAndName") {
   val file = File("VERSION_INFO")

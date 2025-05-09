@@ -26,8 +26,8 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -37,10 +37,11 @@ import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
-import org.kiwix.kiwixmobile.core.search.viewmodel.test
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.files.FileSearch
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
+import org.kiwix.kiwixmobile.core.utils.files.testFlow
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.sharedFunctions.book
 import org.kiwix.sharedFunctions.bookOnDisk
 import org.kiwix.sharedFunctions.resetSchedulers
@@ -86,7 +87,11 @@ class StorageObserverTest {
   @Test
   fun `books from disk are filtered by current downloads`() = runTest {
     withFiltering()
-    booksOnFileSystem(this).assertValues(mutableListOf(mutableListOf())).finish()
+    testFlow(
+      flow = booksOnFileSystem(),
+      triggerAction = {},
+      assert = { assertThat(awaitItem()).isEqualTo(listOf<BookOnDisk>()) }
+    )
   }
 
   @OptIn(ExperimentalCoroutinesApi::class)
@@ -100,23 +105,25 @@ class StorageObserverTest {
     withNoFiltering()
     every { zimFileReader.toBook() } returns expectedBook
     every { zimFileReader.zimReaderSource } returns zimReaderSource
-    val testObserver = booksOnFileSystem(this)
-    testObserver.assertValues(
-      mutableListOf(
-        mutableListOf(
-          bookOnDisk(
-            book = expectedBook,
-            zimReaderSource = zimReaderSource
+    testFlow(
+      flow = booksOnFileSystem(),
+      triggerAction = {},
+      assert = {
+        assertThat(awaitItem()).isEqualTo(
+          listOf<BookOnDisk>(
+            bookOnDisk(
+              book = expectedBook,
+              zimReaderSource = zimReaderSource
+            )
           )
         )
-      )
-    ).finish()
+      }
+    )
     verify { zimFileReader.dispose() }
   }
 
-  private fun booksOnFileSystem(testScope: TestScope) =
+  private fun booksOnFileSystem() =
     storageObserver.getBooksOnFileSystem(scanningProgressListener)
-      .test(testScope)
       .also {
         downloads.value = listOf(downloadModel)
         files.value = listOf(file)

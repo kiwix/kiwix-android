@@ -62,6 +62,7 @@ android {
 
 dependencies {
   testImplementation(Libs.kotlinx_coroutines_test)
+  testImplementation(Libs.TURBINE_FLOW_TEST)
 }
 
 fun ProductFlavor.createDownloadTask(file: File): TaskProvider<Task> {

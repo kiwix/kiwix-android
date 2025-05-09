@@ -23,6 +23,8 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.NetworkCapabilities.TRANSPORT_WIFI
 import android.os.Build
+import app.cash.turbine.TurbineTestContext
+import app.cash.turbine.test
 import com.jraska.livedata.test
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -34,9 +36,13 @@ import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.TestScheduler
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
@@ -65,7 +71,6 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULTI
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
-import org.kiwix.kiwixmobile.test
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
@@ -213,7 +218,7 @@ class ZimManageViewModelTest {
   inner class Books {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `emissions from dat source are observed`() {
+    fun `emissions from data source are observed`() {
       val expectedList = listOf(bookOnDisk())
       booksOnDiskListItems.onNext(expectedList)
       testScheduler.triggerActions()
@@ -486,10 +491,11 @@ class ZimManageViewModelTest {
           ),
           NORMAL
         )
-      viewModel.sideEffects.test(this)
-        .also { viewModel.fileSelectActions.emit(RequestMultiSelection(bookToSelect)) }
-        .assertValues(mutableListOf(StartMultiSelection(viewModel.fileSelectActions)))
-        .finish()
+      testFlow(
+        flow = viewModel.sideEffects,
+        triggerAction = { viewModel.fileSelectActions.emit(RequestMultiSelection(bookToSelect)) },
+        assert = { assertThat(awaitItem()).isEqualTo(StartMultiSelection(viewModel.fileSelectActions)) }
+      )
       viewModel.fileSelectListStates.test()
         .assertValue(
           FileSelectListState(
@@ -504,10 +510,18 @@ class ZimManageViewModelTest {
       val selectedBook = bookOnDisk().apply { isSelected = true }
       viewModel.fileSelectListStates.value =
         FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
-      viewModel.sideEffects.test(this)
-        .also { viewModel.fileSelectActions.emit(RequestDeleteMultiSelection) }
-        .assertValues(mutableListOf(DeleteFiles(listOf(selectedBook), alertDialogShower)))
-        .finish()
+      testFlow(
+        flow = viewModel.sideEffects,
+        triggerAction = { viewModel.fileSelectActions.emit(RequestDeleteMultiSelection) },
+        assert = {
+          assertThat(awaitItem()).isEqualTo(
+            DeleteFiles(
+              listOf(selectedBook),
+              alertDialogShower
+            )
+          )
+        }
+      )
     }
 
     @Test
@@ -515,10 +529,11 @@ class ZimManageViewModelTest {
       val selectedBook = bookOnDisk().apply { isSelected = true }
       viewModel.fileSelectListStates.value =
         FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
-      viewModel.sideEffects.test(this)
-        .also { viewModel.fileSelectActions.emit(RequestShareMultiSelection) }
-        .assertValues(mutableListOf(ShareFiles(listOf(selectedBook))))
-        .finish()
+      testFlow(
+        flow = viewModel.sideEffects,
+        triggerAction = { viewModel.fileSelectActions.emit(RequestShareMultiSelection) },
+        assert = { assertThat(awaitItem()).isEqualTo(ShareFiles(listOf(selectedBook))) }
+      )
     }
 
     @Test
@@ -526,10 +541,11 @@ class ZimManageViewModelTest {
       val selectedBook = bookOnDisk().apply { isSelected = true }
       viewModel.fileSelectListStates.value =
         FileSelectListState(listOf(selectedBook, bookOnDisk()), NORMAL)
-      viewModel.sideEffects.test(this)
-        .also { viewModel.fileSelectActions.emit(MultiModeFinished) }
-        .assertValues(mutableListOf(None))
-        .finish()
+      testFlow(
+        flow = viewModel.sideEffects,
+        triggerAction = { viewModel.fileSelectActions.emit(MultiModeFinished) },
+        assert = { assertThat(awaitItem()).isEqualTo(None) }
+      )
       viewModel.fileSelectListStates.test().assertValue(
         FileSelectListState(
           listOf(
@@ -545,10 +561,11 @@ class ZimManageViewModelTest {
       val selectedBook = bookOnDisk(0L).apply { isSelected = true }
       viewModel.fileSelectListStates.value =
         FileSelectListState(listOf(selectedBook, bookOnDisk(1L)), NORMAL)
-      viewModel.sideEffects.test(this)
-        .also { viewModel.fileSelectActions.emit(RequestSelect(selectedBook)) }
-        .assertValues(mutableListOf(None))
-        .finish()
+      testFlow(
+        flow = viewModel.sideEffects,
+        triggerAction = { viewModel.fileSelectActions.emit(RequestSelect(selectedBook)) },
+        assert = { assertThat(awaitItem()).isEqualTo(None) }
+      )
       viewModel.fileSelectListStates.test().assertValue(
         FileSelectListState(
           listOf(
@@ -561,10 +578,26 @@ class ZimManageViewModelTest {
 
     @Test
     fun `RestartActionMode offers StartMultiSelection`() = runTest {
-      viewModel.sideEffects.test(this)
-        .also { viewModel.fileSelectActions.emit(RestartActionMode) }
-        .assertValues(mutableListOf(StartMultiSelection(viewModel.fileSelectActions)))
-        .finish()
+      testFlow(
+        flow = viewModel.sideEffects,
+        triggerAction = { viewModel.fileSelectActions.emit(RestartActionMode) },
+        assert = { assertThat(awaitItem()).isEqualTo(StartMultiSelection(viewModel.fileSelectActions)) }
+      )
     }
   }
+}
+
+suspend fun <T> TestScope.testFlow(
+  flow: Flow<T>,
+  triggerAction: suspend () -> Unit,
+  assert: suspend TurbineTestContext<T>.() -> Unit
+) {
+  val job = launch {
+    flow.test {
+      triggerAction()
+      assert()
+      cancelAndIgnoreRemainingEvents()
+    }
+  }
+  job.join()
 }
