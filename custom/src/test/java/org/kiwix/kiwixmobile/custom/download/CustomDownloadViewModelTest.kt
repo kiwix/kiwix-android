@@ -95,7 +95,7 @@ internal class CustomDownloadViewModelTest {
     internal fun `Emission with data moves state from Required to InProgress`() = runTest {
       assertStateTransition(
         this,
-        2,
+        1,
         DownloadRequired,
         DatabaseEmission(listOf(downloadItem())),
         State.DownloadInProgress(listOf(downloadItem()))
@@ -111,7 +111,7 @@ internal class CustomDownloadViewModelTest {
     internal fun `Emission with data moves state from Failed to InProgress`() = runTest {
       assertStateTransition(
         this,
-        2,
+        1,
         DownloadFailed(DownloadState.Pending),
         DatabaseEmission(listOf(downloadItem())),
         State.DownloadInProgress(listOf(downloadItem()))
@@ -133,7 +133,7 @@ internal class CustomDownloadViewModelTest {
     internal fun `Emission with data+failure moves state from InProgress to Failed`() = runTest {
       assertStateTransition(
         this,
-        2,
+        1,
         DownloadInProgress(listOf()),
         DatabaseEmission(listOf(downloadItem(state = Failed(NONE, null)))),
         DownloadFailed(Failed(NONE, null))
@@ -228,7 +228,6 @@ class TestObserver<T>(
   fun startCollecting() {
     job = scope.launch {
       flow.collect {
-        print("RECIVING $it")
         values.add(it)
         completionChannel.trySend(Unit)
       }

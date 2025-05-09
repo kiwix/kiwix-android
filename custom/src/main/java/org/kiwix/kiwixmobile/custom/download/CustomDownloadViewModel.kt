@@ -74,7 +74,6 @@ class CustomDownloadViewModel @Inject constructor(
     viewModelScope.launch {
       actions
         .collect { action ->
-          println("EMITTING action = $action")
           val currentState = _state.value
           val newState = reduce(action, currentState)
           if (newState != currentState) {
@@ -102,10 +101,7 @@ class CustomDownloadViewModel @Inject constructor(
     return when (action) {
       is DatabaseEmission -> reduceDatabaseEmission(state, action)
       ClickedRetry,
-      ClickedDownload -> state.also {
-        println("EMITTING downloadCustom")
-        _effects.emit(downloadCustom)
-      }
+      ClickedDownload -> state.also { _effects.emit(downloadCustom) }
     }
   }
 

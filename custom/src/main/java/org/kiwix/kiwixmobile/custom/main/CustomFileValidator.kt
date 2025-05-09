@@ -122,9 +122,9 @@ class CustomFileValidator @Inject constructor(private val context: Context) {
         }
       }
     // Get the external files directories for the app
-    ContextWrapper(context).externalMediaDirs.filterNotNull()
-      .filter(File::exists)
-      .forEach { dir ->
+    ContextWrapper(context).externalMediaDirs?.filterNotNull()
+      ?.filter(File::exists)
+      ?.forEach { dir ->
         // Check if the directory's parent is not null
         dir.parent?.let { parentPath ->
           // Add the parent directory to the list, so we can scan all the files contained in the folder.

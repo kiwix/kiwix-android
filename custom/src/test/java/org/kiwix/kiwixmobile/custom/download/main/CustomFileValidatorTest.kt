@@ -19,11 +19,13 @@
 package org.kiwix.kiwixmobile.custom.download.main
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.pm.PackageManager
 import android.content.res.AssetFileDescriptor
 import android.content.res.AssetManager
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.fail
@@ -169,6 +171,7 @@ class CustomFileValidatorTest {
     zimFilesArray: Array<File?>?,
     extension: String
   ) {
+    mockkConstructor(ContextWrapper::class)
     zimFilesArray?.forEach {
       it?.let {
         every { it.exists() } returns true
@@ -184,11 +187,11 @@ class CustomFileValidatorTest {
     every { storageDirectory.extension } returns ""
     every { storageDirectory.parent } returns null
     every { storageDirectory.listFiles() } returns zimFilesArray
-
     if (extension == "zim") {
       every {
         context.getExternalFilesDirs(null)
       } returns arrayOf(storageDirectory)
+      every { anyConstructed<ContextWrapper>().externalMediaDirs } returns arrayOf()
     } else {
       every { context.obbDirs } returns arrayOf(storageDirectory)
     }
