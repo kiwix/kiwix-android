@@ -26,11 +26,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import org.assertj.core.api.Assertions.assertThat
 
-fun <T> Flow<T>.test(scope: TestScope, itemCountsToEmitInFlow: Int = 1): TestObserver<T> {
-  val observer = TestObserver(scope, this, itemCountsToEmitInFlow)
-  observer.startCollecting()
-  return observer
-}
+fun <T> Flow<T>.test(scope: TestScope, itemCountsToEmitInFlow: Int = 1): TestObserver<T> =
+  TestObserver(scope, this, itemCountsToEmitInFlow).also { it.startCollecting() }
 
 class TestObserver<T>(
   private val scope: TestScope,

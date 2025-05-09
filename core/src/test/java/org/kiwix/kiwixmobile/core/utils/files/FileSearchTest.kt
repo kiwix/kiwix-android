@@ -96,9 +96,9 @@ class FileSearchTest {
       every { storageDevice.name } returns zimFile.parent
       val testObserver = fileSearch.scan(scanningProgressListener)
         .test(this)
-      val observedValues = testObserver.getValues()
+      val observedValues = testObserver.getValues().first()
       testObserver.containsExactlyInAnyOrder(
-        observedValues,
+        mutableListOf(observedValues),
         listOf(zimFile, zimaaFile)
       ).finish()
     }

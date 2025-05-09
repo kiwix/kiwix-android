@@ -131,6 +131,7 @@ class ZimManageViewModelTest {
   @OptIn(ExperimentalCoroutinesApi::class)
   @AfterAll
   fun teardown() {
+    viewModel.onClearedExposed()
     resetSchedulers()
   }
 
