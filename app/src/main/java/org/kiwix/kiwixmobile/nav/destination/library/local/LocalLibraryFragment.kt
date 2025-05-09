@@ -303,9 +303,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       )
     }
     if (savedInstanceState != null && savedInstanceState.getBoolean(WAS_IN_ACTION_MODE)) {
-      lifecycleScope.launch {
-        zimManageViewModel.fileSelectActions.emit(FileSelectActions.RestartActionMode)
-      }
+      offerAction(FileSelectActions.RestartActionMode)
     }
     showCopyMoveDialogForOpenedZimFileFromStorage()
   }

@@ -45,7 +45,7 @@ class TestObserver<T>(
     job = scope.launch {
       flow.collect {
         values.add(it)
-        completionChannel.trySend(Unit)
+        completionChannel.send(Unit)
       }
     }
   }

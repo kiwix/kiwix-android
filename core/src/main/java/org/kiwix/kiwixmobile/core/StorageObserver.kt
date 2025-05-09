@@ -21,9 +21,9 @@ package org.kiwix.kiwixmobile.core
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
@@ -44,16 +44,13 @@ class StorageObserver @Inject constructor(
   fun getBooksOnFileSystem(
     scanningProgressListener: ScanningProgressListener,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
-  ): Flow<List<BookOnDisk>> {
-    return scanFiles(scanningProgressListener)
-      .combine(downloadRoomDao.downloads()) { files, downloads ->
-        toFilesThatAreNotDownloading(files, downloads)
-      }
-      .map { files ->
-        files.mapNotNull { convertToBookOnDisk(it) }
-      }
-      .flowOn(dispatcher)
-  }
+  ): Flow<List<BookOnDisk>> = flow {
+    val files = scanFiles(scanningProgressListener).first()
+    val downloads = downloadRoomDao.downloads().first()
+    val result = toFilesThatAreNotDownloading(files, downloads)
+      .mapNotNull { convertToBookOnDisk(it) }
+    emit(result)
+  }.flowOn(dispatcher)
 
   private fun scanFiles(scanningProgressListener: ScanningProgressListener): Flow<List<File>> =
     fileSearch.scan(scanningProgressListener)

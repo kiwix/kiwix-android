@@ -41,9 +41,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -667,11 +668,10 @@ class ZimManageViewModel @Inject constructor(
   private fun booksFromStorageNotIn(
     booksFromDao: Flow<List<BookOnDisk>>,
     scanningProgressListener: ScanningProgressListener
-  ): Flow<List<BookOnDisk>> {
-    return storageObserver.getBooksOnFileSystem(scanningProgressListener)
-      .combine(booksFromDao.map { it.map { bookOnDisk -> bookOnDisk.book.id } }) { files, daoBooks ->
-        removeBooksAlreadyInDao(files, daoBooks)
-      }
+  ): Flow<List<BookOnDisk>> = flow {
+    val scannedBooks = storageObserver.getBooksOnFileSystem(scanningProgressListener).first()
+    val daoBookIds = booksFromDao.first().map { it.book.id }
+    emit(removeBooksAlreadyInDao(scannedBooks, daoBookIds))
   }
 
   private fun removeBooksAlreadyInDao(
