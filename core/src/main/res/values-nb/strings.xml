@@ -45,7 +45,7 @@
   <string name="error_ip_address_not_found">Klarte ikke å finne IP adressen.</string>
   <string name="qr_code">Generert QR-kode</string>
   <string name="share_host_address">Del webadresse via andre programmer</string>
-  <string name="error_file_not_found">Feil: Den valgte ZIM-filen ble ikke funnet %s</string>
+  <string name="error_file_not_found">Feil: Den valgte ZIM-filen ble ikke funnet \n. %s</string>
   <string name="unable_to_read_zim_file">Kan ikke lese denne ZIM-filen!</string>
   <string name="zim_not_opened">Kan ikke åpne ZIM-filen</string>
   <string name="error_file_invalid">Feil: Den valgte filen er ikke en gyldig ZIM-fil. %s</string>
@@ -62,7 +62,7 @@
   <string name="pref_credits">Bidragsytere og lisenser</string>
   <string name="pref_credits_title">Takk til</string>
   <string name="tts_lang_not_supported">Språket på denne siden er ikke støttet. Artikkelen kan kanskje ikke leses riktig.</string>
-  <string name="no_reader_application_installed">Kunne ikke finne en installert app for denne typen fil</string>
+  <string name="no_reader_application_installed">Kunne ikke finne et installert program for denne typen fil</string>
   <string name="no_email_application_installed">Installer en e-postklient</string>
   <string name="no_app_found_to_select_bookmark_file">Fant ingen app for å velge en bokmerkefil</string>
   <string name="no_section_info">Ingen innholdstitteler funnet.</string>
@@ -81,7 +81,7 @@
   <string name="got_it">Skjønner</string>
   <string name="did_you_know">Visste du at?</string>
   <string name="undo">Angre</string>
-  <string name="tab_closed">Fanen ble lukket.</string>
+  <string name="tab_closed">Fanen ble lukket</string>
   <string name="bookmark_added">Bokmerke lagt til</string>
   <string name="rate_dialog_title">Vennligst Ranger Oss</string>
   <string name="rate_dialog_msg">Hvis du liker å bruke %s, vennligst ta deg tid til å rate det. Takk for støtten!</string>
@@ -96,12 +96,12 @@
   <string name="new_tab_snack_bar">Artikkel åpnet i ny fane</string>
   <string name="search_widget_text">Søk i Kiwix</string>
   <string name="speech_prompt_text">Snakk for å søke %s</string>
-  <string name="speech_not_supported">Unnskyld! Enheten din støtter ikke tekst til tale</string>
+  <string name="speech_not_supported">Beklager! Enheten din støtter ikke tale som inndata</string>
   <string name="local_zims">Enhet</string>
   <string name="remote_zims">Online</string>
   <string name="library">Bibliotek</string>
   <string name="no_files_here">Ingen filer her</string>
-  <string name="download">laste ned</string>
+  <string name="download">Last ned</string>
   <string name="space_available">Ledig plass:</string>
   <string name="zim_simple">Enkelt</string>
   <string name="zim_no_pic">Ingen bilder</string>
@@ -110,7 +110,7 @@
   <string name="help_2">Hva gjør Kiwix?</string>
   <string name="help_5">Hvor er innholdet?</string>
   <string name="help_6">Innholdet vårt ligger på Kiwix-nettstedet.</string>
-  <string name="help_7">De er tilgjengelige som ZIM-filer. Der er en masse av dem:</string>
+  <string name="help_7">De er tilgjengelige som ZIM-filer. Der er mange av dem:</string>
   <string name="help_8">• Wikipedia er tilgjengelig separat for hvert språk</string>
   <string name="help_9">• Annet innhold som Wikileaks eller Wikisource er også tilgjengelig</string>
   <string name="pref_storage">Lagring</string>
@@ -118,9 +118,9 @@
   <string name="pref_storage_used">%s brukt</string>
   <string name="pref_free_storage">%s ledig</string>
   <string name="choose_storage_to_download_book">Velg lagringsplass for å laste ned boken</string>
-  <string name="tts_pause">Pause</string>
-  <string name="tts_resume">Fortsett</string>
-  <string name="stop">Stopp</string>
+  <string name="tts_pause">pause</string>
+  <string name="tts_resume">fortsett</string>
+  <string name="stop">stopp</string>
   <string name="notification_pause_button_text">Pause</string>
   <string name="notification_resume_button_text">Gjenoppta</string>
   <string name="internal_storage">Intern</string>
@@ -142,7 +142,7 @@
   <string name="time_left">igjen</string>
   <string name="time_today">I dag</string>
   <string name="time_yesterday">I går</string>
-  <string name="pref_external_link_popup_title">Varsle når du legger inn eksterne lenker</string>
+  <string name="pref_external_link_popup_title">Varsle når du går til eksterne lenker</string>
   <string name="other_languages">Andre språk:</string>
   <string name="crash_title">Vel … Dette er pinlig</string>
   <string name="crash_description">Det ser ut som vi krasjet.\n\nVil du hjelpe oss med å løse dette problemet ved å sende følgende informasjon?</string>
@@ -189,13 +189,13 @@
   <string name="tag_pic">Bilde</string>
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Kun tekst</string>
-  <string name="tag_short_text">kort tekst</string>
+  <string name="tag_short_text">Kort tekst</string>
   <string name="storage_permission_denied">Lagringstillatelse nektet</string>
   <string name="no_results">Ingen resultater</string>
   <string name="no_bookmarks">Ingen bokmerker</string>
   <string name="no_history">Ingen historikk</string>
   <string name="device_default">Enhetsstandard</string>
-  <string name="delete_history">Vil du slette all historikk?</string>
+  <string name="delete_history">Slette all historikk?</string>
   <string name="delete_selected_history">Vil du slette valgt historikk?</string>
   <string name="delete_bookmarks">Vil du slette alle bokmerker?</string>
   <string name="delete_selected_bookmarks">Vil du slette valgte bokmerker?</string>
@@ -212,6 +212,7 @@
   <string name="reader">Leser</string>
   <string name="open_library">Åpen bibliotek</string>
   <string name="tab_restored">Fanen gjenopprettet</string>
+  <string name="tabs_restored">Faner gjenopprettet</string>
   <string name="action_copy">Kopier</string>
   <string name="move">Flytt</string>
   <string name="copying_zim_file">Kopierer ZIM-fil…</string>
@@ -222,7 +223,7 @@
   <string name="denied_internet_permission_message">Aktiver wifi for å laste ned innhold</string>
   <string name="system_unable_to_grant_permission_message">Systemet kan ikke gi tillatelse!</string>
   <string name="allow">Tillat</string>
-  <string name="swipe_down_for_library">Sveip ned for bibliotek</string>
+  <string name="swipe_down_for_library">Sveip ned for Bibliotek</string>
   <string name="downloading_library">Laster ned bibliotek \n%s</string>
   <string name="no_notes">Ingen merknader</string>
   <string name="notes_from_all_books">Vis merknader fra alle bøker</string>
@@ -230,6 +231,7 @@
   <string name="choose_your_action">Velg din handling</string>
   <string name="open_note">Åpne notat</string>
   <string name="open_article">Åpne Artikkel</string>
+  <string name="delete_selected_notes">Slett Valgte Notater?</string>
   <string name="go_to_settings_label">Gå til innstillinger</string>
   <string name="your_device_name_message">Enhetsnavnet ditt vises her.</string>
   <string name="storage_selection_dialog_accessibility_description">Velg lagring for å laste ned ZIM-filer.</string>

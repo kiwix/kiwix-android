@@ -67,7 +67,7 @@
   <string name="error_server_already_running">서버가 이미 실행 중입니다. 서버를 끄고 다시 시도해 주세요.</string>
   <string name="error_ip_address_not_found">IP 주소를 찾을 수 없습니다.</string>
   <string name="server_started_message">%s 서버에 접속하려면 브라우저에 이 IP 주소를 입력하십시오</string>
-  <string name="qr_code">표시된 QR 코드</string>
+  <string name="qr_code">표시된 QR코드</string>
   <string name="share_host_address">다른 애플리케이션을 통해 URL 공유</string>
   <string name="error_file_not_found">오류: 선택된 ZIM 파일을 찾을 수 없습니다. %s</string>
   <string name="unable_to_read_zim_file">이 ZIM 파일을 읽을 수 없습니다!</string>

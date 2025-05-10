@@ -17,6 +17,7 @@
 * Lynzrand
 * McDutchie
 * MohitMali
+* Prmsh
 * Shuiwater
 * SomeyaMako
 * StarrySky
@@ -409,4 +410,8 @@
   <string name="donation_dialog_title">今天就捐款</string>
   <string name="donation_dialog_description">%s需要您的帮助。</string>
   <string name="make_donation">捐款</string>
+  <string name="resuming_state">正在恢复</string>
+  <string name="downloading_state">下载中</string>
+  <string name="download_failed_state">失败</string>
+  <string name="searchview_description_clear">清空查询</string>
 </resources>
