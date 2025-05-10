@@ -253,6 +253,8 @@ class AllProjectConfigurer {
       androidTestImplementation(Libs.COMPOSE_UI_TEST_JUNIT)
       debugImplementation(Libs.COMPOSE_UI_MANIFEST)
       debugImplementation(Libs.COMPOSE_TOOLING)
+
+      implementation(Libs.kotlinx_coroutines_rx3)
     }
   }
 }

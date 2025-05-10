@@ -18,10 +18,21 @@
 
 package org.kiwix.kiwixmobile.custom.download
 
-import androidx.lifecycle.MutableLiveData
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.processors.PublishProcessor
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
@@ -44,62 +55,77 @@ class CustomDownloadViewModel @Inject constructor(
   private val downloadCustom: DownloadCustom,
   private val navigateToCustomReader: NavigateToCustomReader
 ) : ViewModel() {
-  val state = MutableLiveData<State>().apply { value = DownloadRequired }
-  val actions = PublishProcessor.create<Action>()
-  private val _effects = PublishProcessor.create<SideEffect<*>>()
-  val effects = _effects.startWith(setPreferredStorageWithMostSpace)
-
-  private val compositeDisposable = CompositeDisposable()
+  private val _state = MutableStateFlow<State>(DownloadRequired)
+  val state: StateFlow<State> = _state.asStateFlow()
+  val actions = MutableSharedFlow<Action>(Channel.UNLIMITED)
+  private val _effects = MutableSharedFlow<SideEffect<*>>(replay = 0)
+  val effects: Flow<SideEffect<*>> = _effects
+    .onStart { emit(setPreferredStorageWithMostSpace) }
 
   init {
-    compositeDisposable.addAll(
-      reducer(),
-      downloadsAsActions(downloadRoomDao)
-    )
+    observeActions()
+    observeDownloads(downloadRoomDao)
   }
 
-  private fun reducer() = actions.map {
-    state.value?.let { value -> reduce(it, value) }
-  }
-    .distinctUntilChanged()
-    .subscribe(state::postValue, Throwable::printStackTrace)
+  @VisibleForTesting
+  fun getStateForTesting() = _state
 
-  private fun downloadsAsActions(downloadRoomDao: DownloadRoomDao) =
-    downloadRoomDao.downloads()
-      .map { it.map(::DownloadItem) }
-      .subscribe(
-        { actions.offer(DatabaseEmission(it)) },
-        Throwable::printStackTrace
-      )
-
-  private fun reduce(action: Action, state: State): State {
-    return when (action) {
-      is DatabaseEmission -> reduceDatabaseEmission(state, action)
-      ClickedRetry,
-      ClickedDownload -> state.also { _effects.offer(downloadCustom) }
+  private fun observeActions() {
+    viewModelScope.launch {
+      actions
+        .collect { action ->
+          val currentState = _state.value
+          val newState = reduce(action, currentState)
+          if (newState != currentState) {
+            _state.value = newState
+          }
+        }
     }
   }
 
-  private fun reduceDatabaseEmission(state: State, action: DatabaseEmission) = when (state) {
-    is DownloadFailed,
-    DownloadRequired ->
-      if (action.downloads.isNotEmpty()) {
-        DownloadInProgress(action.downloads)
-      } else {
-        state
-      }
-
-    is DownloadInProgress ->
-      if (action.downloads.isNotEmpty()) {
-        if (action.downloads[0].downloadState is Failed) {
-          DownloadFailed(action.downloads[0].downloadState)
-        } else {
-          DownloadInProgress(action.downloads)
+  private fun observeDownloads(
+    downloadRoomDao: DownloadRoomDao,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ) {
+    viewModelScope.launch {
+      downloadRoomDao.downloads()
+        .map { it.map(::DownloadItem) }
+        .flowOn(dispatcher)
+        .collect { downloads ->
+          actions.emit(DatabaseEmission(downloads))
         }
-      } else {
-        DownloadComplete.also { _effects.offer(navigateToCustomReader) }
-      }
-
-    DownloadComplete -> state
+    }
   }
+
+  private suspend fun reduce(action: Action, state: State): State {
+    return when (action) {
+      is DatabaseEmission -> reduceDatabaseEmission(state, action)
+      ClickedRetry,
+      ClickedDownload -> state.also { _effects.emit(downloadCustom) }
+    }
+  }
+
+  private suspend fun reduceDatabaseEmission(state: State, action: DatabaseEmission) =
+    when (state) {
+      is DownloadFailed,
+      DownloadRequired ->
+        if (action.downloads.isNotEmpty()) {
+          DownloadInProgress(action.downloads)
+        } else {
+          state
+        }
+
+      is DownloadInProgress ->
+        if (action.downloads.isNotEmpty()) {
+          if (action.downloads[0].downloadState is Failed) {
+            DownloadFailed(action.downloads[0].downloadState)
+          } else {
+            DownloadInProgress(action.downloads)
+          }
+        } else {
+          DownloadComplete.also { _effects.emit(navigateToCustomReader) }
+        }
+
+      DownloadComplete -> state
+    }
 }

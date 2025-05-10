@@ -23,9 +23,12 @@ import android.provider.MediaStore.Files
 import android.provider.MediaStore.MediaColumns
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
-import io.reactivex.Flowable
-import io.reactivex.functions.BiFunction
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import org.kiwix.kiwixmobile.core.extensions.forEachRow
 import org.kiwix.kiwixmobile.core.extensions.get
 import java.io.File
@@ -34,15 +37,22 @@ import javax.inject.Inject
 class FileSearch @Inject constructor(private val context: Context) {
   private val zimFileExtensions = arrayOf("zim", "zimaa")
 
-  fun scan(scanningProgressListener: ScanningProgressListener): Flowable<List<File>> =
-    Flowable.combineLatest(
-      Flowable.fromCallable { scanFileSystem(scanningProgressListener) }
-        .subscribeOn(Schedulers.io()),
-      Flowable.fromCallable(::scanMediaStore).subscribeOn(Schedulers.io()),
-      BiFunction<List<File>, List<File>, List<File>> { filesSystemFiles, mediaStoreFiles ->
-        filesSystemFiles + mediaStoreFiles
-      }
-    )
+  fun scan(
+    scanningProgressListener: ScanningProgressListener,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ): Flow<List<File>> {
+    val fileSystemFlow = flow {
+      emit(scanFileSystem(scanningProgressListener))
+    }.flowOn(dispatcher)
+
+    val mediaStoreFlow = flow {
+      emit(scanMediaStore())
+    }.flowOn(dispatcher)
+
+    return combine(fileSystemFlow, mediaStoreFlow) { filesSystemFiles, mediaStoreFiles ->
+      filesSystemFiles + mediaStoreFiles
+    }
+  }
 
   private fun scanMediaStore() =
     mutableListOf<File>().apply {

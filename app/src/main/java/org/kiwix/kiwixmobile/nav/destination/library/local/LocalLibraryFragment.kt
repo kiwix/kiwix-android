@@ -54,11 +54,11 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import eu.mhutti1.utils.storage.Bytes
 import eu.mhutti1.utils.storage.StorageDevice
-import org.kiwix.kiwixmobile.storage.StorageSelectDialog
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.cachedComponent
@@ -99,6 +99,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.CopyMoveFileHandler
+import org.kiwix.kiwixmobile.storage.StorageSelectDialog
 import org.kiwix.kiwixmobile.zimManager.MAX_PROGRESS
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions
@@ -132,7 +133,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   var copyMoveFileHandler: CopyMoveFileHandler? = null
 
   private var actionMode: ActionMode? = null
-  private val disposable = CompositeDisposable()
+  private val coroutineJobs: MutableList<Job> = mutableListOf()
   private var permissionDeniedLayoutShowing = false
   private var zimFileUri: Uri? = null
   private val libraryScreenState = mutableStateOf(
@@ -289,8 +290,10 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
         coreMainActivity.navHostContainer
           .setBottomMarginToFragmentContainerView(0)
       }
-    disposable.add(sideEffects())
-    disposable.add(fileSelectActions())
+    coroutineJobs.apply {
+      add(sideEffects())
+      add(fileSelectActions())
+    }
     zimManageViewModel.deviceListScanningProgress.observe(viewLifecycleOwner) {
       updateLibraryScreenState(
         // hide this progress bar when scanning is complete.
@@ -300,7 +303,7 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
       )
     }
     if (savedInstanceState != null && savedInstanceState.getBoolean(WAS_IN_ACTION_MODE)) {
-      zimManageViewModel.fileSelectActions.offer(FileSelectActions.RestartActionMode)
+      offerAction(FileSelectActions.RestartActionMode)
     }
     showCopyMoveDialogForOpenedZimFileFromStorage()
   }
@@ -519,7 +522,10 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     super.onDestroyView()
     mainRepositoryActions.dispose()
     actionMode = null
-    disposable.clear()
+    coroutineJobs.forEach {
+      it.cancel()
+    }
+    coroutineJobs.clear()
     storagePermissionLauncher?.unregister()
     storagePermissionLauncher = null
     copyMoveFileHandler?.dispose()
@@ -530,10 +536,9 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
   }
 
   private fun sideEffects() =
-    zimManageViewModel.sideEffects
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe(
-        {
+    lifecycleScope.launch {
+      zimManageViewModel.sideEffects
+        .collect {
           val effectResult = it.invokeWith(requireActivity() as AppCompatActivity)
           if (effectResult is ActionMode) {
             actionMode = effectResult
@@ -543,20 +548,17 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
               .selectedBooks
               .size.let(::setActionModeTitle)
           }
-        },
-        Throwable::printStackTrace
-      )
+        }
+    }
 
   private fun fileSelectActions() =
-    zimManageViewModel.fileSelectActions
-      .observeOn(AndroidSchedulers.mainThread())
-      .filter { it === RequestDeleteMultiSelection }
-      .subscribe(
-        {
+    lifecycleScope.launch {
+      zimManageViewModel.fileSelectActions
+        .filter { it === RequestDeleteMultiSelection }
+        .collect {
           animateBottomViewToOrigin()
-        },
-        Throwable::printStackTrace
-      )
+        }
+    }
 
   private fun animateBottomViewToOrigin() {
     getBottomNavigationView().animate()
@@ -634,12 +636,16 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
     }
   }
 
-  private fun requestFileSystemCheck() {
-    zimManageViewModel.requestFileSystemCheck.onNext(Unit)
+  private fun requestFileSystemCheck(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+    CoroutineScope(dispatcher).launch {
+      zimManageViewModel.requestFileSystemCheck.emit(Unit)
+    }
   }
 
   private fun offerAction(action: FileSelectActions) {
-    zimManageViewModel.fileSelectActions.offer(action)
+    lifecycleScope.launch {
+      zimManageViewModel.fileSelectActions.emit(action)
+    }
   }
 
   private fun navigateToLocalFileTransferFragment() {

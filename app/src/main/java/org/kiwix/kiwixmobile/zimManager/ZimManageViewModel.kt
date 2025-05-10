@@ -23,6 +23,7 @@ import android.net.ConnectivityManager
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -33,6 +34,23 @@ import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.rx3.asFlowable
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
@@ -71,12 +89,12 @@ import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULTI
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
+import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULTI
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.NORMAL
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
-import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.MultiModeFinished
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
@@ -134,7 +152,7 @@ class ZimManageViewModel @Inject constructor(
   }
 
   private var isUnitTestCase: Boolean = false
-  val sideEffects = PublishProcessor.create<SideEffect<Any?>>()
+  val sideEffects: MutableSharedFlow<SideEffect<*>> = MutableSharedFlow()
   val libraryItems: MutableLiveData<List<LibraryListItem>> = MutableLiveData()
   val fileSelectListStates: MutableLiveData<FileSelectListState> = MutableLiveData()
   val deviceListScanningProgress = MutableLiveData<Int>()
@@ -142,19 +160,21 @@ class ZimManageViewModel @Inject constructor(
   val shouldShowWifiOnlyDialog = MutableLiveData<Boolean>()
   val networkStates = MutableLiveData<NetworkState>()
 
-  val requestFileSystemCheck = PublishProcessor.create<Unit>()
-  val fileSelectActions = PublishProcessor.create<FileSelectActions>()
+  val requestFileSystemCheck = MutableSharedFlow<Unit>(replay = 0)
+  val fileSelectActions = MutableSharedFlow<FileSelectActions>()
   val requestDownloadLibrary = BehaviorProcessor.createDefault(Unit)
   val requestFiltering = BehaviorProcessor.createDefault("")
   val onlineBooksSearchedQuery = MutableLiveData<String>()
 
   private var compositeDisposable: CompositeDisposable? = CompositeDisposable()
+  private val coroutineJobs: MutableList<Job> = mutableListOf()
   val downloadProgress = MutableLiveData<String>()
 
   private lateinit var alertDialogShower: AlertDialogShower
 
   init {
     compositeDisposable?.addAll(*disposables())
+    observeCoroutineFlows()
     context.registerReceiver(connectivityBroadcastReceiver)
   }
 
@@ -239,12 +259,22 @@ class ZimManageViewModel @Inject constructor(
     onCleared()
   }
 
+  private fun observeCoroutineFlows(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+    coroutineJobs.apply {
+      add(scanBooksFromStorage(dispatcher))
+      add(updateBookItems())
+      add(fileSelectActions())
+    }
+  }
+
   override fun onCleared() {
+    coroutineJobs.forEach {
+      it.cancel()
+    }
+    coroutineJobs.clear()
     compositeDisposable?.clear()
     context.unregisterReceiver(connectivityBroadcastReceiver)
     connectivityBroadcastReceiver.stopNetworkState()
-    requestFileSystemCheck.onComplete()
-    fileSelectActions.onComplete()
     requestDownloadLibrary.onComplete()
     compositeDisposable = null
     appProgressListener = null
@@ -252,38 +282,57 @@ class ZimManageViewModel @Inject constructor(
   }
 
   private fun disposables(): Array<Disposable> {
-    val downloads = downloadDao.downloads()
+    // temporary converting to flowable. TODO we will refactor this in upcoming issue.
+    val downloads = downloadDao.downloads().asFlowable()
     val booksFromDao = books()
     val networkLibrary = PublishProcessor.create<LibraryNetworkEntity>()
     val languages = languageDao.languages()
     return arrayOf(
-      updateBookItems(),
-      checkFileSystemForBooksOnRequest(booksFromDao),
       updateLibraryItems(booksFromDao, downloads, networkLibrary, languages),
       updateLanguagesInDao(networkLibrary, languages),
       updateNetworkStates(),
-      requestsAndConnectivtyChangesToLibraryRequests(networkLibrary),
-      fileSelectActions()
+      requestsAndConnectivtyChangesToLibraryRequests(networkLibrary)
     ).also {
       setUpUncaughtErrorHandlerForOnlineLibrary(networkLibrary)
     }
   }
 
+  private fun scanBooksFromStorage(dispatcher: CoroutineDispatcher = Dispatchers.IO) =
+    viewModelScope.launch {
+      withContext(dispatcher) {
+        books()
+          .asFlow()
+          .let { checkFileSystemForBooksOnRequest(it) }
+          .catch { it.printStackTrace() }
+          .collect { books ->
+            bookDao.insert(books)
+          }
+      }
+    }
+
+  @Suppress("TooGenericExceptionCaught")
   private fun fileSelectActions() =
-    fileSelectActions.subscribe({
-      sideEffects.offer(
-        when (it) {
-          is RequestNavigateTo -> OpenFileWithNavigation(it.bookOnDisk)
-          is RequestMultiSelection -> startMultiSelectionAndSelectBook(it.bookOnDisk)
-          RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState(), alertDialogShower)
-          RequestShareMultiSelection -> ShareFiles(selectionsFromState())
-          MultiModeFinished -> noSideEffectAndClearSelectionState()
-          is RequestSelect -> noSideEffectSelectBook(it.bookOnDisk)
-          RestartActionMode -> StartMultiSelection(fileSelectActions)
-          UserClickedDownloadBooksButton -> NavigateToDownloads
+    viewModelScope.launch {
+      fileSelectActions
+        .collect { action ->
+          try {
+            sideEffects.emit(
+              when (action) {
+                is RequestNavigateTo -> OpenFileWithNavigation(action.bookOnDisk)
+                is RequestMultiSelection -> startMultiSelectionAndSelectBook(action.bookOnDisk)
+                RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState(), alertDialogShower)
+                RequestShareMultiSelection -> ShareFiles(selectionsFromState())
+                MultiModeFinished -> noSideEffectAndClearSelectionState()
+                is RequestSelect -> noSideEffectSelectBook(action.bookOnDisk)
+                RestartActionMode -> StartMultiSelection(fileSelectActions)
+                UserClickedDownloadBooksButton -> NavigateToDownloads
+              }
+            )
+          } catch (e: Throwable) {
+            e.printStackTrace()
+          }
         }
-      )
-    }, Throwable::printStackTrace)
+    }
 
   private fun startMultiSelectionAndSelectBook(
     bookOnDisk: BookOnDisk
@@ -402,7 +451,7 @@ class ZimManageViewModel @Inject constructor(
 
   private fun updateLibraryItems(
     booksFromDao: Flowable<List<BookOnDisk>>,
-    downloads: Flowable<List<DownloadModel>>,
+    downloads: io.reactivex.rxjava3.core.Flowable<List<DownloadModel>>,
     library: Flowable<LibraryNetworkEntity>,
     languages: Flowable<List<Language>>
   ) = Flowable.combineLatest(
@@ -585,43 +634,31 @@ class ZimManageViewModel @Inject constructor(
       ?: BookItem(book, fileSystemState)
   }
 
-  private fun checkFileSystemForBooksOnRequest(booksFromDao: Flowable<List<BookOnDisk>>): Disposable =
-    requestFileSystemCheck
-      .subscribeOn(Schedulers.io())
-      .observeOn(Schedulers.io())
-      .onBackpressureDrop()
-      .doOnNext { deviceListScanningProgress.postValue(DEFAULT_PROGRESS) }
-      .switchMap(
-        {
-          booksFromStorageNotIn(
-            booksFromDao,
-            object : ScanningProgressListener {
-              override fun onProgressUpdate(scannedDirectory: Int, totalDirectory: Int) {
-                // Calculate the overall progress based on the number of processed directories
-                val overallProgress =
-                  (scannedDirectory.toDouble() / totalDirectory.toDouble() * MAX_PROGRESS).toInt()
-                if (overallProgress != MAX_PROGRESS) {
-                  // Send the progress if it is not 100% because after scanning the entire storage,
-                  // it takes a bit of time to organize the ZIM files, filter them,
-                  // and remove any duplicate ZIM files. We send the 100% progress
-                  // in the doOnNext method to hide the progressBar from the UI
-                  // and display all the filtered ZIM files.
-                  deviceListScanningProgress.postValue(overallProgress)
-                }
-              }
+  @OptIn(ExperimentalCoroutinesApi::class)
+  private fun checkFileSystemForBooksOnRequest(
+    booksFromDao: Flow<List<BookOnDisk>>
+  ): Flow<List<BookOnDisk>> = requestFileSystemCheck
+    .flatMapLatest {
+      // Initial progress
+      deviceListScanningProgress.postValue(DEFAULT_PROGRESS)
+      booksFromStorageNotIn(
+        booksFromDao,
+        object : ScanningProgressListener {
+          override fun onProgressUpdate(scannedDirectory: Int, totalDirectory: Int) {
+            val overallProgress =
+              (scannedDirectory.toDouble() / totalDirectory.toDouble() * MAX_PROGRESS).toInt()
+            if (overallProgress != MAX_PROGRESS) {
+              deviceListScanningProgress.postValue(overallProgress)
             }
-          )
-        },
-        1
+          }
+        }
       )
-      .onBackpressureDrop()
-      .doOnNext { deviceListScanningProgress.postValue(MAX_PROGRESS) }
-      .filter(List<BookOnDisk>::isNotEmpty)
-      .map { it.distinctBy { bookOnDisk -> bookOnDisk.book.id } }
-      .subscribe(
-        bookDao::insert,
-        Throwable::printStackTrace
-      )
+    }
+    .onEach {
+      deviceListScanningProgress.postValue(MAX_PROGRESS)
+    }
+    .filter { it.isNotEmpty() }
+    .map { books -> books.distinctBy { it.book.id } }
 
   private fun books() =
     bookDao.books()
@@ -629,14 +666,13 @@ class ZimManageViewModel @Inject constructor(
       .map { it.sortedBy { book -> book.book.title } }
 
   private fun booksFromStorageNotIn(
-    booksFromDao: Flowable<List<BookOnDisk>>,
+    booksFromDao: Flow<List<BookOnDisk>>,
     scanningProgressListener: ScanningProgressListener
-  ) =
-    storageObserver.getBooksOnFileSystem(scanningProgressListener)
-      .withLatestFrom(
-        booksFromDao.map { it.map { bookOnDisk -> bookOnDisk.book.id } },
-        BiFunction(::removeBooksAlreadyInDao)
-      )
+  ): Flow<List<BookOnDisk>> = flow {
+    val scannedBooks = storageObserver.getBooksOnFileSystem(scanningProgressListener).first()
+    val daoBookIds = booksFromDao.first().map { it.book.id }
+    emit(removeBooksAlreadyInDao(scannedBooks, daoBookIds))
+  }
 
   private fun removeBooksAlreadyInDao(
     booksFromFileSystem: Collection<BookOnDisk>,
@@ -644,17 +680,20 @@ class ZimManageViewModel @Inject constructor(
   ) = booksFromFileSystem.filterNot { idsInDao.contains(it.book.id) }
 
   private fun updateBookItems() =
-    dataSource.booksOnDiskAsListItems()
-      .subscribe({ newList ->
-        fileSelectListStates.postValue(
-          fileSelectListStates.value?.let {
-            inheritSelections(
-              it,
-              newList.toMutableList()
-            )
+    viewModelScope.launch {
+      dataSource.booksOnDiskAsListItems()
+        // temporary converting to flow, TODO we will refactor this in upcoming issue.
+        .asFlow()
+        .catch { it.printStackTrace() }
+        .collect { newList ->
+          val currentState = fileSelectListStates.value
+          val updatedState = currentState?.let {
+            inheritSelections(it, newList.toMutableList())
           } ?: FileSelectListState(newList)
-        )
-      }, Throwable::printStackTrace)
+
+          fileSelectListStates.postValue(updatedState)
+        }
+    }
 
   private fun inheritSelections(
     oldState: FileSelectListState,

@@ -119,6 +119,8 @@ object Versions {
   const val COMPOSE_VERSION = "1.7.8"
 
   const val COMPOSE_MATERIAL3 = "1.3.1"
+
+  const val TURBINE_FLOW_TEST = "1.2.0"
 }
 
 /**

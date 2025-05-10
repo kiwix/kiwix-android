@@ -36,9 +36,13 @@ import com.tonyodev.fetch2.FetchListener
 import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import com.tonyodev.fetch2core.DownloadBlock
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R.string
@@ -49,10 +53,11 @@ import javax.inject.Inject
 
 const val THIRTY_TREE = 33
 
+@Suppress("InjectDispatcher")
 class DownloadMonitorService : Service() {
-  private val updater = PublishSubject.create<() -> Unit>()
-  private var updaterDisposable: Disposable? = null
-  private var monitoringDisposable: Disposable? = null
+  private val updaterChannel = Channel<suspend () -> Unit>(Channel.UNLIMITED)
+  private var updaterJob: Job? = null
+  private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
   private val notificationManager: NotificationManager by lazy {
     getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
   }
@@ -79,11 +84,17 @@ class DownloadMonitorService : Service() {
     setForegroundNotification()
   }
 
+  @Suppress("TooGenericExceptionCaught")
   private fun setupUpdater() {
-    updaterDisposable = updater.subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(
-      { it.invoke() },
-      Throwable::printStackTrace
-    )
+    updaterJob = scope.launch {
+      for (task in updaterChannel) {
+        try {
+          task()
+        } catch (e: Throwable) {
+          e.printStackTrace()
+        }
+      }
+    }
   }
 
   override fun onBind(intent: Intent?): IBinder? = null
@@ -109,7 +120,7 @@ class DownloadMonitorService : Service() {
    *                   should be canceled if the user cancels the download.
    */
   private fun setForegroundNotification(downloadId: Int? = null) {
-    updater.onNext {
+    scope.launch {
       // Cancel the ongoing download notification if the user cancels the download.
       downloadId?.let(::cancelNotificationForId)
       fetch.getDownloads { downloadList ->
@@ -217,14 +228,14 @@ class DownloadMonitorService : Service() {
       download: Download,
       shouldSetForegroundNotification: Boolean = false
     ) {
-      updater.onNext {
+      scope.launch {
         downloadRoomDao.update(download)
         if (download.status == Status.COMPLETED) {
           downloadRoomDao.getEntityForDownloadId(download.id.toLong())?.let {
             showDownloadCompletedNotification(download)
             // to move these downloads in NewBookDao.
             @Suppress("IgnoredReturnValue")
-            downloadRoomDao.downloads().blockingFirst()
+            downloadRoomDao.allDownloads().first()
           }
         }
         // If someone pause the Download then post a notification since fetch removes the
@@ -241,7 +252,7 @@ class DownloadMonitorService : Service() {
     }
 
     private fun delete(download: Download) {
-      updater.onNext {
+      scope.launch {
         downloadRoomDao.delete(download)
         setForegroundNotification(download.id)
       }
@@ -252,7 +263,7 @@ class DownloadMonitorService : Service() {
     fetch: Fetch,
     download: Download
   ) {
-    updater.onNext {
+    scope.launch {
       // Check if there are any ongoing downloads.
       // If the list is empty, it means no other downloads are running,
       // so we need to promote this download to a foreground service.
@@ -358,8 +369,8 @@ class DownloadMonitorService : Service() {
    * Stops the foreground service, disposes of resources, and removes the Fetch listener.
    */
   private fun stopForegroundServiceForDownloads() {
-    monitoringDisposable?.dispose()
-    updaterDisposable?.dispose()
+    updaterChannel.close()
+    updaterJob?.cancel()
     fetch.removeListener(fetchListener)
     stopForeground(STOP_FOREGROUND_DETACH)
     stopSelf()

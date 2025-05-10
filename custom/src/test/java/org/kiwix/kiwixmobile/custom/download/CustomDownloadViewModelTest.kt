@@ -18,17 +18,23 @@
 
 package org.kiwix.kiwixmobile.custom.download
 
-import com.jraska.livedata.test
+import app.cash.turbine.TurbineTestContext
+import app.cash.turbine.test
+import com.tonyodev.fetch2.Error.NONE
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
-import com.tonyodev.fetch2.Error.NONE
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState.Failed
@@ -52,7 +58,7 @@ internal class CustomDownloadViewModelTest {
   private val downloadCustom: DownloadCustom = mockk()
   private val navigateToCustomReader: NavigateToCustomReader = mockk()
 
-  private val downloads: PublishProcessor<List<DownloadModel>> = PublishProcessor.create()
+  private val downloads = MutableStateFlow<List<DownloadModel>>(emptyList())
   private lateinit var customDownloadViewModel: CustomDownloadViewModel
 
   @BeforeEach
@@ -68,43 +74,56 @@ internal class CustomDownloadViewModelTest {
   }
 
   @Test
-  internal fun `effects emits SetPreferred on Subscribe`() {
-    customDownloadViewModel.effects.test().assertValue(setPreferredStorageWithMostSpace)
+  internal fun `effects emits SetPreferred on Subscribe`() = runTest {
+    testFlow(
+      flow = customDownloadViewModel.effects,
+      triggerAction = {},
+      assert = { assertThat(awaitItem()).isEqualTo(setPreferredStorageWithMostSpace) }
+    )
   }
 
   @Test
-  internal fun `initial State is DownloadRequired`() {
-    customDownloadViewModel.state.test().assertValue(State.DownloadRequired)
+  internal fun `initial State is DownloadRequired`() = runTest {
+    testFlow(
+      flow = customDownloadViewModel.state,
+      triggerAction = {},
+      assert = { assertThat(awaitItem()).isEqualTo(State.DownloadRequired) }
+    )
   }
 
   @Nested
   inner class DownloadEmissions {
     @Test
-    internal fun `Emission with data moves state from Required to InProgress`() {
+    internal fun `Emission with data moves state from Required to InProgress`() = runTest {
       assertStateTransition(
+        this,
         DownloadRequired,
         DatabaseEmission(listOf(downloadItem())),
-        State.DownloadInProgress(listOf(downloadItem()))
+        State.DownloadInProgress(listOf(downloadItem())),
+        2
       )
     }
 
     @Test
-    internal fun `Emission without data moves state from Required to Required`() {
-      assertStateTransition(DownloadRequired, DatabaseEmission(listOf()), DownloadRequired)
+    internal fun `Emission without data moves state from Required to Required`() = runTest {
+      assertStateTransition(this, DownloadRequired, DatabaseEmission(listOf()), DownloadRequired)
     }
 
     @Test
-    internal fun `Emission with data moves state from Failed to InProgress`() {
+    internal fun `Emission with data moves state from Failed to InProgress`() = runTest {
       assertStateTransition(
+        this,
         DownloadFailed(DownloadState.Pending),
         DatabaseEmission(listOf(downloadItem())),
-        State.DownloadInProgress(listOf(downloadItem()))
+        State.DownloadInProgress(listOf(downloadItem())),
+        2
       )
     }
 
     @Test
-    internal fun `Emission without data moves state from Failed to Failed`() {
+    internal fun `Emission without data moves state from Failed to Failed`() = runTest {
       assertStateTransition(
+        this,
         DownloadFailed(DownloadState.Pending),
         DatabaseEmission(listOf()),
         DownloadFailed(DownloadState.Pending)
@@ -112,65 +131,112 @@ internal class CustomDownloadViewModelTest {
     }
 
     @Test
-    internal fun `Emission with data+failure moves state from InProgress to Failed`() {
+    internal fun `Emission with data+failure moves state from InProgress to Failed`() = runTest {
       assertStateTransition(
+        this,
         DownloadInProgress(listOf()),
         DatabaseEmission(listOf(downloadItem(state = Failed(NONE, null)))),
-        DownloadFailed(Failed(NONE, null))
+        DownloadFailed(Failed(NONE, null)),
+        2
       )
     }
 
     @Test
-    internal fun `Emission with data moves state from InProgress to InProgress`() {
+    internal fun `Emission with data moves state from InProgress to InProgress`() = runTest {
       assertStateTransition(
+        this,
         DownloadInProgress(listOf(downloadItem(downloadId = 1L))),
         DatabaseEmission(listOf(downloadItem(downloadId = 2L))),
-        DownloadInProgress(listOf(downloadItem(downloadId = 2L)))
+        DownloadInProgress(listOf(downloadItem(downloadId = 2L))),
+        2
       )
     }
 
     @Test
-    internal fun `Emission without data moves state from InProgress to Complete`() {
-      val sideEffects = customDownloadViewModel.effects.test()
-      assertStateTransition(
-        DownloadInProgress(listOf()),
-        DatabaseEmission(listOf()),
-        DownloadComplete
+    internal fun `Emission without data moves state from InProgress to Complete`() = runTest {
+      testFlow(
+        flow = customDownloadViewModel.effects,
+        triggerAction = {
+          assertStateTransition(
+            this,
+            DownloadInProgress(listOf()),
+            DatabaseEmission(listOf()),
+            DownloadComplete,
+            2
+          )
+        },
+        assert = {
+          assertThat(awaitItem()).isEqualTo(setPreferredStorageWithMostSpace)
+          assertThat(awaitItem()).isEqualTo(navigateToCustomReader)
+        }
       )
-      sideEffects.assertValues(setPreferredStorageWithMostSpace, navigateToCustomReader)
     }
 
     @Test
-    internal fun `Any emission does not change state from Complete`() {
+    internal fun `Any emission does not change state from Complete`() = runTest {
       assertStateTransition(
+        this,
         DownloadComplete,
         DatabaseEmission(listOf(downloadItem())),
         DownloadComplete
       )
     }
 
-    private fun assertStateTransition(
+    private suspend fun assertStateTransition(
+      testScope: TestScope,
       initialState: State,
       action: DatabaseEmission,
-      endState: State
+      endState: State,
+      awaitItemCount: Int = 1
     ) {
-      customDownloadViewModel.state.value = initialState
-      customDownloadViewModel.actions.offer(action)
-      customDownloadViewModel.state.test().assertValue(endState)
+      customDownloadViewModel.getStateForTesting().value = initialState
+      testScope.testFlow(
+        flow = customDownloadViewModel.state,
+        triggerAction = { customDownloadViewModel.actions.emit(action) },
+        assert = {
+          val items = (1..awaitItemCount).map { awaitItem() }
+          assertThat(items.last()).isEqualTo(endState)
+        }
+      )
     }
   }
 
   @Test
-  internal fun `clicking Retry triggers DownloadCustom`() {
-    val sideEffects = customDownloadViewModel.effects.test()
-    customDownloadViewModel.actions.offer(ClickedRetry)
-    sideEffects.assertValues(setPreferredStorageWithMostSpace, downloadCustom)
+  internal fun `clicking Retry triggers DownloadCustom`() = runTest {
+    testFlow(
+      flow = customDownloadViewModel.effects,
+      triggerAction = { customDownloadViewModel.actions.emit(ClickedRetry) },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(setPreferredStorageWithMostSpace)
+        assertThat(awaitItem()).isEqualTo(downloadCustom)
+      }
+    )
   }
 
   @Test
-  internal fun `clicking Download triggers DownloadCustom`() {
-    val sideEffects = customDownloadViewModel.effects.test()
-    customDownloadViewModel.actions.offer(ClickedDownload)
-    sideEffects.assertValues(setPreferredStorageWithMostSpace, downloadCustom)
+  internal fun `clicking Download triggers DownloadCustom`() = runTest {
+    testFlow(
+      flow = customDownloadViewModel.effects,
+      triggerAction = { customDownloadViewModel.actions.emit(ClickedDownload) },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(setPreferredStorageWithMostSpace)
+        assertThat(awaitItem()).isEqualTo(downloadCustom)
+      }
+    )
   }
+}
+
+suspend fun <T> TestScope.testFlow(
+  flow: Flow<T>,
+  triggerAction: suspend () -> Unit,
+  assert: suspend TurbineTestContext<T>.() -> Unit
+) {
+  val job = launch {
+    flow.test {
+      triggerAction()
+      assert()
+      cancelAndIgnoreRemainingEvents()
+    }
+  }
+  job.join()
 }

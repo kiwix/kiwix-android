@@ -22,9 +22,12 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -37,12 +40,13 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.files.FileSearch
 import org.kiwix.kiwixmobile.core.utils.files.ScanningProgressListener
+import org.kiwix.kiwixmobile.core.utils.files.testFlow
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.sharedFunctions.book
 import org.kiwix.sharedFunctions.bookOnDisk
 import org.kiwix.sharedFunctions.resetSchedulers
 import org.kiwix.sharedFunctions.setScheduler
 import java.io.File
-import java.util.concurrent.TimeUnit
 
 class StorageObserverTest {
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
@@ -56,8 +60,8 @@ class StorageObserverTest {
   private val libkiwixBookmarks: LibkiwixBookmarks = mockk()
   private val scanningProgressListener: ScanningProgressListener = mockk()
 
-  private val files: PublishProcessor<List<File>> = PublishProcessor.create()
-  private val downloads: PublishProcessor<List<DownloadModel>> = PublishProcessor.create()
+  private val files = MutableStateFlow<List<File>>(emptyList())
+  private val downloads = MutableStateFlow<List<DownloadModel>>(emptyList())
 
   private lateinit var storageObserver: StorageObserver
 
@@ -81,13 +85,18 @@ class StorageObserverTest {
   }
 
   @Test
-  fun `books from disk are filtered by current downloads`() {
+  fun `books from disk are filtered by current downloads`() = runTest {
     withFiltering()
-    booksOnFileSystem().assertValues(listOf())
+    testFlow(
+      flow = booksOnFileSystem(),
+      triggerAction = {},
+      assert = { assertThat(awaitItem()).isEqualTo(listOf<BookOnDisk>()) }
+    )
   }
 
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
-  fun `zim files are read by the file reader`() {
+  fun `zim files are read by the file reader`() = runTest {
     val expectedBook =
       book(
         "id", "title", "1", "favicon", "creator", "publisher", "date",
@@ -96,19 +105,28 @@ class StorageObserverTest {
     withNoFiltering()
     every { zimFileReader.toBook() } returns expectedBook
     every { zimFileReader.zimReaderSource } returns zimReaderSource
-    booksOnFileSystem().assertValues(
-      listOf(bookOnDisk(book = expectedBook, zimReaderSource = zimReaderSource))
+    testFlow(
+      flow = booksOnFileSystem(),
+      triggerAction = {},
+      assert = {
+        assertThat(awaitItem()).isEqualTo(
+          listOf<BookOnDisk>(
+            bookOnDisk(
+              book = expectedBook,
+              zimReaderSource = zimReaderSource
+            )
+          )
+        )
+      }
     )
     verify { zimFileReader.dispose() }
   }
 
   private fun booksOnFileSystem() =
     storageObserver.getBooksOnFileSystem(scanningProgressListener)
-      .test()
       .also {
-        downloads.offer(listOf(downloadModel))
-        files.offer(listOf(file))
-        it.awaitDone(2, TimeUnit.SECONDS)
+        downloads.value = listOf(downloadModel)
+        files.value = listOf(file)
       }
 
   private fun withFiltering() {

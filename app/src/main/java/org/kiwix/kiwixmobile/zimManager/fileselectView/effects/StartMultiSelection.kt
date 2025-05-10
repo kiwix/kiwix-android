@@ -20,7 +20,9 @@ package org.kiwix.kiwixmobile.zimManager.fileselectView.effects
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
-import io.reactivex.processors.PublishProcessor
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.startActionMode
@@ -30,15 +32,27 @@ import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.Req
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
 
 data class StartMultiSelection(
-  val fileSelectActions: PublishProcessor<FileSelectActions>
+  private val fileSelectActions: MutableSharedFlow<FileSelectActions>
 ) : SideEffect<ActionMode?> {
   override fun invokeWith(activity: AppCompatActivity): ActionMode? {
     return activity.startActionMode(
       R.menu.menu_zim_files_contextual,
       mapOf(
-        R.id.zim_file_delete_item to { fileSelectActions.offer(RequestDeleteMultiSelection) },
-        R.id.zim_file_share_item to { fileSelectActions.offer(RequestShareMultiSelection) }
+        R.id.zim_file_delete_item to {
+          activity.lifecycleScope.launch {
+            fileSelectActions.emit(RequestDeleteMultiSelection)
+          }
+        },
+        R.id.zim_file_share_item to {
+          activity.lifecycleScope.launch {
+            fileSelectActions.emit(RequestShareMultiSelection)
+          }
+        }
       )
-    ) { fileSelectActions.offer(MultiModeFinished) }
+    ) {
+      activity.lifecycleScope.launch {
+        fileSelectActions.emit(MultiModeFinished)
+      }
+    }
   }
 }

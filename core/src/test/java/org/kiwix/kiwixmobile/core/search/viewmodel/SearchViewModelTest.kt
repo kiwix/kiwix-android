@@ -29,6 +29,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -123,7 +124,7 @@ internal class SearchViewModelTest {
     @Test
     fun `initial state is Initialising`() =
       runTest {
-        viewModel.state.test(this).assertValue(
+        viewModel.state.test(this).assertLastValue(
           SearchState("", SearchResultsWithTerm("", null, searchMutex), emptyList(), FromWebView)
         ).finish()
       }
@@ -134,7 +135,7 @@ internal class SearchViewModelTest {
         val searchTerm = "searchTerm"
         val searchOrigin = FromWebView
         val suggestionSearch: SuggestionSearch = mockk()
-        viewModel.state.test(this)
+        viewModel.state.test(this, 2)
           .also {
             emissionOf(
               searchTerm = searchTerm,
@@ -143,7 +144,7 @@ internal class SearchViewModelTest {
               searchOrigin = searchOrigin
             )
           }
-          .assertValue(
+          .assertLastValue(
             SearchState(
               searchTerm,
               SearchResultsWithTerm(searchTerm, suggestionSearch, searchMutex),
@@ -279,7 +280,7 @@ internal class SearchViewModelTest {
     }
   }
 
-  private fun TestScope.emissionOf(
+  private fun emissionOf(
     searchTerm: String,
     suggestionSearch: SuggestionSearch,
     databaseResults: List<RecentSearchListItem>,
@@ -291,48 +292,76 @@ internal class SearchViewModelTest {
     viewModel.actions.trySend(Filter(searchTerm)).isSuccess
     recentsFromDb.trySend(databaseResults).isSuccess
     viewModel.actions.trySend(ScreenWasStartedFrom(searchOrigin)).isSuccess
-    testScheduler.apply {
-      advanceTimeBy(500)
-      runCurrent()
-    }
   }
 }
 
-fun <T> Flow<T>.test(scope: TestScope): TestObserver<T> {
-  val observer = TestObserver(scope, this)
+fun <T> Flow<T>.test(scope: TestScope, itemCountsToEmitInFlow: Int = 1): TestObserver<T> {
+  val observer = TestObserver(scope, this, itemCountsToEmitInFlow)
+  scope.launch { observer.startCollecting() }
+  return observer
+}
+
+fun <T> MutableSharedFlow<T>.test(scope: TestScope, itemCountsToEmitInFlow: Int): TestObserver<T> {
+  val observer = TestObserver(scope, this, itemCountsToEmitInFlow)
   scope.launch { observer.startCollecting() }
   return observer
 }
 
 class TestObserver<T>(
   private val scope: TestScope,
-  private val flow: Flow<T>
+  private val flow: Flow<T>,
+  private val itemCountsToEmitInFlow: Int
 ) {
   private val values = mutableListOf<T>()
   private val completionChannel = Channel<Unit>()
   private var job: Job? = null
 
-  suspend fun startCollecting() {
-    job =
-      scope.launch {
-        flow.collect {
-          values.add(it)
-        }
+  fun startCollecting() {
+    job = scope.launch {
+      flow.collect {
+        values.add(it)
+        completionChannel.trySend(Unit)
       }
-    completionChannel.send(Unit)
+    }
+  }
+
+  /**
+   * Returns the list of values collected from the flow.
+   *
+   * If [shouldAwaitCompletion] is true, this method will suspend until the flow
+   * signals completion, ensuring all values have been collected before returning.
+   *
+   * @param shouldAwaitCompletion Whether to wait for the flow to finish collecting before returning the results.
+   * @return A mutable list of values emitted by the flow.
+   */
+  suspend fun getValues(shouldAwaitCompletion: Boolean = true): MutableList<T> {
+    if (shouldAwaitCompletion) {
+      awaitCompletion()
+    }
+    return values
   }
 
   private suspend fun awaitCompletion() {
-    completionChannel.receive()
+    repeat(itemCountsToEmitInFlow) {
+      completionChannel.receive()
+    }
   }
 
-  suspend fun assertValues(vararg values: T): TestObserver<T> {
+  suspend fun assertValues(listValues: MutableList<T>): TestObserver<T> {
     awaitCompletion()
-    assertThat(values.toList()).containsExactlyElementsOf(this.values)
+    assertThat(listValues).containsExactlyElementsOf(values)
     return this
   }
 
-  suspend fun assertValue(value: T): TestObserver<T> {
+  suspend fun containsExactlyInAnyOrder(
+    listValues: MutableList<T>,
+    vararg values: T
+  ): TestObserver<T> {
+    assertThat(listValues).containsExactlyInAnyOrder(*values)
+    return this
+  }
+
+  suspend fun assertLastValue(value: T): TestObserver<T> {
     awaitCompletion()
     assertThat(values.last()).isEqualTo(value)
     return this
@@ -342,7 +371,7 @@ class TestObserver<T>(
     job?.cancel()
   }
 
-  suspend fun assertValue(value: (T) -> Boolean): TestObserver<T> {
+  suspend fun assertLastValue(value: (T) -> Boolean): TestObserver<T> {
     awaitCompletion()
     assertThat(values.last()).satisfies({ value(it) })
     return this

@@ -25,9 +25,10 @@ import androidx.room.Query
 import androidx.room.Update
 import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Status.COMPLETED
-import io.reactivex.Flowable
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
@@ -42,15 +43,15 @@ abstract class DownloadRoomDao {
   lateinit var newBookDao: NewBookDao
 
   @Query("SELECT * FROM DownloadRoomEntity")
-  abstract fun downloadRoomEntity(): Flowable<List<DownloadRoomEntity>>
+  abstract fun downloadRoomEntity(): Flow<List<DownloadRoomEntity>>
 
   @Query("SELECT * FROM DownloadRoomEntity")
   abstract fun getAllDownloads(): Flow<List<DownloadRoomEntity>>
 
-  fun downloads(): Flowable<List<DownloadModel>> =
+  fun downloads(): Flow<List<DownloadModel>> =
     downloadRoomEntity()
       .distinctUntilChanged()
-      .doOnNext(::moveCompletedToBooksOnDiskDao)
+      .onEach(::moveCompletedToBooksOnDiskDao)
       .map { it.map(::DownloadModel) }
 
   fun allDownloads() = getAllDownloads().map { it.map(::DownloadModel) }
