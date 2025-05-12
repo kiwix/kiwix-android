@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.data
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.rx3.rxCompletable
 import kotlinx.coroutines.rx3.rxSingle
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
@@ -156,9 +157,6 @@ class Repository @Inject internal constructor(
 
   override fun getAllWebViewPagesHistory() =
     webViewHistoryRoomDao.getAllWebViewPagesHistory()
-      .first(emptyList())
-      .subscribeOn(ioThread)
-      .observeOn(mainThread)
 
   override suspend fun clearWebViewPagesHistory() {
     webViewHistoryRoomDao.clearWebViewPagesHistory()

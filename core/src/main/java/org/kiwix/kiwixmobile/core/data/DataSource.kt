@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.data
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
@@ -50,6 +51,6 @@ interface DataSource {
   fun deleteNote(noteTitle: String): Completable
   fun deleteNotes(noteList: List<NoteListItem>): Completable
   suspend fun insertWebViewPageHistoryItems(webViewHistoryEntityList: List<WebViewHistoryEntity>)
-  fun getAllWebViewPagesHistory(): Single<List<WebViewHistoryEntity>>
+  fun getAllWebViewPagesHistory(): Flow<List<WebViewHistoryEntity>>
   suspend fun clearWebViewPagesHistory()
 }

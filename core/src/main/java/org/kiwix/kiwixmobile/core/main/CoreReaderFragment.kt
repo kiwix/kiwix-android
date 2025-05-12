@@ -98,6 +98,7 @@ import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.processors.BehaviorProcessor
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -2062,7 +2063,7 @@ abstract class CoreReaderFragment :
           requireActivity().toast(R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
         }
       }
-    } catch (ignore: Exception) {
+    } catch (_: Exception) {
       // Catch the exception while saving the bookmarks for splitted zim files.
       // we have an issue with split zim files, see #3827
       requireActivity().toast(R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT)
@@ -2774,43 +2775,47 @@ abstract class CoreReaderFragment :
     )
   }
 
-  @Suppress("CheckResult", "IgnoredReturnValue")
-  protected fun manageExternalLaunchAndRestoringViewState(
-    restoreOrigin: RestoreOrigin = FromExternalLaunch
+  @Suppress("TooGenericExceptionCaught")
+  protected suspend fun manageExternalLaunchAndRestoringViewState(
+    restoreOrigin: RestoreOrigin = FromExternalLaunch,
+    dispatchersToGetWebViewHistoryFromDatabase: CoroutineDispatcher = Dispatchers.IO
   ) {
     val settings = requireActivity().getSharedPreferences(
       SharedPreferenceUtil.PREF_KIWIX_MOBILE,
       0
     )
     val currentTab = safelyGetCurrentTab(settings)
-    repositoryActions?.loadWebViewPagesHistory()
-      ?.subscribe({ webViewHistoryItemList ->
-        if (webViewHistoryItemList.isEmpty()) {
-          restoreViewStateOnInvalidWebViewHistory()
-          return@subscribe
-        }
-        restoreViewStateOnValidWebViewHistory(
-          webViewHistoryItemList,
-          currentTab,
-          restoreOrigin
-        ) {
-          // This lambda is executed after the tabs have been restored. It checks if there is a
-          // search item to open. If `searchItemToOpen` is not null, it calls `openSearchItem`
-          // to open the specified item, then sets `searchItemToOpen` to null to prevent
-          // any unexpected behavior on future calls. Similarly, if `findInPageTitle` is set,
-          // it invokes `findInPage` and resets `findInPageTitle` to null.
-          searchItemToOpen?.let(::openSearchItem)
-          searchItemToOpen = null
-          findInPageTitle?.let(::findInPage)
-          findInPageTitle = null
-        }
-      }, {
-        Log.e(
-          TAG_KIWIX,
-          "Could not restore tabs. Original exception = ${it.printStackTrace()}"
-        )
+    try {
+      val webViewHistoryList = withContext(dispatchersToGetWebViewHistoryFromDatabase) {
+        // perform database operation on IO thread.
+        repositoryActions?.loadWebViewPagesHistory().orEmpty()
+      }
+      if (webViewHistoryList.isEmpty()) {
         restoreViewStateOnInvalidWebViewHistory()
-      })
+        return
+      }
+      restoreViewStateOnValidWebViewHistory(
+        webViewHistoryList,
+        currentTab,
+        restoreOrigin
+      ) {
+        // This lambda is executed after the tabs have been restored. It checks if there is a
+        // search item to open. If `searchItemToOpen` is not null, it calls `openSearchItem`
+        // to open the specified item, then sets `searchItemToOpen` to null to prevent
+        // any unexpected behavior on future calls. Similarly, if `findInPageTitle` is set,
+        // it invokes `findInPage` and resets `findInPageTitle` to null.
+        searchItemToOpen?.let(::openSearchItem)
+        searchItemToOpen = null
+        findInPageTitle?.let(::findInPage)
+        findInPageTitle = null
+      }
+    } catch (e: Exception) {
+      Log.e(
+        TAG_KIWIX,
+        "Could not restore tabs. Original exception = ${e.printStackTrace()}"
+      )
+      restoreViewStateOnInvalidWebViewHistory()
+    }
   }
 
   private fun safelyGetCurrentTab(settings: SharedPreferences): Int =
