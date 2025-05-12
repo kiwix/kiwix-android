@@ -21,7 +21,7 @@ package org.kiwix.kiwixmobile.core.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 
 @Dao
@@ -34,7 +34,7 @@ abstract class WebViewHistoryRoomDao {
   abstract fun insertWebViewPageHistoryItems(webViewHistoryEntityList: List<WebViewHistoryEntity>)
 
   @Query("SELECT * FROM WebViewHistoryEntity ORDER BY webViewIndex ASC")
-  abstract fun getAllWebViewPagesHistory(): Flowable<List<WebViewHistoryEntity>>
+  abstract fun getAllWebViewPagesHistory(): Flow<List<WebViewHistoryEntity>>
 
   @Query("Delete from WebViewHistoryEntity")
   abstract fun clearWebViewPagesHistory()

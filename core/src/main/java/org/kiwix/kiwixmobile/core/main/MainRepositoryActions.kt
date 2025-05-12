@@ -17,8 +17,8 @@
  */
 package org.kiwix.kiwixmobile.core.main
 
-import io.reactivex.Single
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
@@ -41,7 +41,6 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
   private var deleteNoteDisposable: Disposable? = null
   private var saveWebViewHistoryDisposable: Disposable? = null
   private var clearWebViewHistoryDisposable: Disposable? = null
-  private var getWebViewHistoryDisposable: Disposable? = null
 
   fun saveHistory(history: HistoryItem) {
     saveHistoryDisposable =
@@ -87,15 +86,10 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
     dataSource.clearWebViewPagesHistory()
   }
 
-  fun loadWebViewPagesHistory(): Single<List<WebViewHistoryItem>> =
+  suspend fun loadWebViewPagesHistory(): List<WebViewHistoryItem> =
     dataSource.getAllWebViewPagesHistory()
-      .map { roomEntities ->
-        roomEntities.map(::WebViewHistoryItem)
-      }
-      .onErrorReturn {
-        Log.e(TAG, "Unable to load page history", it)
-        emptyList()
-      }
+      .first()
+      .map(::WebViewHistoryItem)
 
   fun dispose() {
     saveHistoryDisposable?.dispose()
@@ -105,6 +99,5 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
     saveBookDisposable?.dispose()
     saveWebViewHistoryDisposable?.dispose()
     clearWebViewHistoryDisposable?.dispose()
-    getWebViewHistoryDisposable?.dispose()
   }
 }
