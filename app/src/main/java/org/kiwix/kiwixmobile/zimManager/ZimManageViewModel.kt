@@ -48,7 +48,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.rx3.asFlowable
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -284,7 +283,7 @@ class ZimManageViewModel @Inject constructor(
   private fun disposables(): Array<Disposable> {
     // temporary converting to flowable. TODO we will refactor this in upcoming issue.
     val downloads = downloadDao.downloads().asFlowable()
-    val booksFromDao = books()
+    val booksFromDao = books().asFlowable()
     val networkLibrary = PublishProcessor.create<LibraryNetworkEntity>()
     val languages = languageDao.languages()
     return arrayOf(
@@ -301,7 +300,6 @@ class ZimManageViewModel @Inject constructor(
     viewModelScope.launch {
       withContext(dispatcher) {
         books()
-          .asFlow()
           .let { checkFileSystemForBooksOnRequest(it) }
           .catch { it.printStackTrace() }
           .collect { books ->
@@ -450,7 +448,7 @@ class ZimManageViewModel @Inject constructor(
     )
 
   private fun updateLibraryItems(
-    booksFromDao: Flowable<List<BookOnDisk>>,
+    booksFromDao: io.reactivex.rxjava3.core.Flowable<List<BookOnDisk>>,
     downloads: io.reactivex.rxjava3.core.Flowable<List<DownloadModel>>,
     library: Flowable<LibraryNetworkEntity>,
     languages: Flowable<List<Language>>
@@ -662,7 +660,6 @@ class ZimManageViewModel @Inject constructor(
 
   private fun books() =
     bookDao.books()
-      .subscribeOn(Schedulers.io())
       .map { it.sortedBy { book -> book.book.title } }
 
   private fun booksFromStorageNotIn(
@@ -682,8 +679,6 @@ class ZimManageViewModel @Inject constructor(
   private fun updateBookItems() =
     viewModelScope.launch {
       dataSource.booksOnDiskAsListItems()
-        // temporary converting to flow, TODO we will refactor this in upcoming issue.
-        .asFlow()
         .catch { it.printStackTrace() }
         .collect { newList ->
           val currentState = fileSelectListStates.value

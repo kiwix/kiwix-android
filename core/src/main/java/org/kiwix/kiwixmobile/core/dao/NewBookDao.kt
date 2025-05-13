@@ -21,12 +21,12 @@ import io.objectbox.Box
 import io.objectbox.kotlin.inValues
 import io.objectbox.kotlin.query
 import io.objectbox.query.QueryBuilder
-import io.reactivex.rxjava3.core.Completable
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx3.rxSingle
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity_
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
@@ -35,69 +35,41 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 import javax.inject.Inject
 
 class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
-  @Suppress("NoOp")
-  fun books() =
-    box.asFlowable()
-      .flatMap { books ->
-        io.reactivex.rxjava3.core.Flowable.fromIterable(books)
-          .flatMapSingle { bookOnDiskEntity ->
-            val file = bookOnDiskEntity.file
-            val zimReaderSource = ZimReaderSource(file)
-
-            rxSingle { zimReaderSource.canOpenInLibkiwix() }
-              .map { canOpen ->
-                if (canOpen) {
-                  bookOnDiskEntity.zimReaderSource = zimReaderSource
-                }
-                bookOnDiskEntity
-              }
-              .onErrorReturn { bookOnDiskEntity }
-          }
-          .toList()
-          .toFlowable()
-          .flatMap { booksList ->
-            completableFromCoroutine(block = {
-              removeBooksThatAreInTrashFolder(booksList)
-              removeBooksThatDoNotExist(booksList.toMutableList())
-            })
-              .andThen(io.reactivex.rxjava3.core.Flowable.just(booksList))
-          }
-      }
-      .flatMap { booksList ->
-        io.reactivex.rxjava3.core.Flowable.fromIterable(booksList)
-          .flatMapSingle { bookOnDiskEntity ->
-            // Check if the zimReaderSource exists as a suspend function
-            rxSingle { bookOnDiskEntity.zimReaderSource.exists() }
-              .map { exists ->
-                bookOnDiskEntity to exists
-              }
-          }
-          .filter { (bookOnDiskEntity, exists) ->
-            exists && !isInTrashFolder(bookOnDiskEntity.zimReaderSource.toDatabase())
-          }
-          .map(Pair<BookOnDiskEntity, Boolean>::first)
-          .toList()
-          .toFlowable()
-      }
-      .map { it.map(::BookOnDisk) }
-
-  private fun completableFromCoroutine(
-    block: suspend () -> Unit,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
-  ): Completable {
-    return Completable.defer {
-      Completable.create { emitter ->
-        CoroutineScope(dispatcher).launch {
+  @OptIn(ExperimentalCoroutinesApi::class)
+  fun books(dispatcher: CoroutineDispatcher = Dispatchers.IO) =
+    box.asFlow()
+      .mapLatest { booksList ->
+        val updatedBooks = booksList.onEach { bookOnDiskEntity ->
+          val file = bookOnDiskEntity.file
+          val zimReaderSource = ZimReaderSource(file)
           try {
-            block()
-            emitter.onComplete()
-          } catch (ignore: Exception) {
-            emitter.onError(ignore)
+            if (zimReaderSource.canOpenInLibkiwix()) {
+              bookOnDiskEntity.zimReaderSource = zimReaderSource
+            }
+          } catch (_: Exception) {
+            // Do nothing simply return the bookOnDiskEntity.
+          }
+          bookOnDiskEntity
+        }
+        removeBooksThatAreInTrashFolder(updatedBooks)
+        removeBooksThatDoNotExist(updatedBooks.toMutableList())
+
+        updatedBooks.mapNotNull { book ->
+          try {
+            if (book.zimReaderSource.exists() &&
+              !isInTrashFolder(book.zimReaderSource.toDatabase())
+            ) {
+              book
+            } else {
+              null
+            }
+          } catch (_: Exception) {
+            null
           }
         }
       }
-    }
-  }
+      .map { it.map(::BookOnDisk) }
+      .flowOn(dispatcher)
 
   suspend fun getBooks() =
     box.all.map { bookOnDiskEntity ->

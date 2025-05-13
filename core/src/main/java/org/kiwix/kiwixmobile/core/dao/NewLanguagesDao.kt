@@ -18,11 +18,16 @@
 package org.kiwix.kiwixmobile.core.dao
 
 import io.objectbox.Box
+import io.objectbox.kotlin.flow
 import io.objectbox.kotlin.query
 import io.objectbox.query.Query
 import io.objectbox.rx.RxQuery
 import io.reactivex.BackpressureStrategy
 import io.reactivex.BackpressureStrategy.LATEST
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import org.kiwix.kiwixmobile.core.dao.entities.LanguageEntity
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import javax.inject.Inject
@@ -40,6 +45,13 @@ class NewLanguagesDao @Inject constructor(private val box: Box<LanguageEntity>) 
       box.put(languages.map(::LanguageEntity))
     }
   }
+}
+
+@OptIn(ExperimentalCoroutinesApi::class)
+fun <T> Box<T>.asFlow(query: Query<T> = query {}): Flow<List<T>> {
+  return query.flow()
+    .map { it.toList() }
+    .distinctUntilChanged()
 }
 
 internal fun <T> Box<T>.asFlowable(

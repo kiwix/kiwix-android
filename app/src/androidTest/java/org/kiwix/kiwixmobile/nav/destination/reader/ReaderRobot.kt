@@ -26,7 +26,7 @@ import org.kiwix.kiwixmobile.core.R
 fun reader(func: ReaderRobot.() -> Unit) = ReaderRobot().applyWithViewHierarchyPrinting(func)
 
 class ReaderRobot : BaseRobot() {
-  init {
+  fun assertReaderScreenDisplayed() {
     isVisible(ViewId(R.id.activity_main_root))
   }
 }

@@ -22,10 +22,10 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 
 class ZimHostContract {
   interface View : BaseContract.View<Presenter> {
-    fun addBooks(books: List<BooksOnDiskListItem>)
+    suspend fun addBooks(books: List<BooksOnDiskListItem>)
   }
 
   interface Presenter : BaseContract.Presenter<View> {
-    fun loadBooks(previouslyHostedBooks: Set<String>)
+    suspend fun loadBooks(previouslyHostedBooks: Set<String>)
   }
 }

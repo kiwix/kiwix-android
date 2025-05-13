@@ -42,6 +42,8 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -344,7 +346,9 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
 
   override fun onResume() {
     super.onResume()
-    presenter.loadBooks(sharedPreferenceUtil.hostedBooks)
+    lifecycleScope.launch {
+      presenter.loadBooks(sharedPreferenceUtil.hostedBooks)
+    }
     if (ServerUtils.isServerStarted) {
       ip = ServerUtils.getSocketAddress()
       layoutServerStarted()
@@ -464,7 +468,7 @@ class ZimHostFragment : BaseFragment(), ZimHostCallbacks, ZimHostContract.View {
   }
 
   @Suppress("NestedBlockDepth")
-  override fun addBooks(books: List<BooksOnDiskListItem>) {
+  override suspend fun addBooks(books: List<BooksOnDiskListItem>) {
     // Check if this is the app module, as custom apps may have multiple package names
     if (!requireActivity().isCustomApp()) {
       booksList.value = books

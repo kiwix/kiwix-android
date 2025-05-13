@@ -18,8 +18,6 @@
 package org.kiwix.kiwixmobile.core.data
 
 import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Single
 import kotlinx.coroutines.flow.Flow
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
@@ -34,7 +32,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
  * Defines the set of methods which are required to provide the presenter with the requisite data.
  */
 interface DataSource {
-  fun getLanguageCategorizedBooks(): Single<List<BooksOnDiskListItem>>
+  fun getLanguageCategorizedBooks(): Flow<List<BooksOnDiskListItem>>
   fun saveBook(book: BookOnDisk): Completable
   fun saveBooks(book: List<BookOnDisk>): Completable
   fun saveLanguages(languages: List<Language>): Completable
@@ -46,7 +44,7 @@ interface DataSource {
   suspend fun saveBookmark(libkiwixBookmarkItem: LibkiwixBookmarkItem)
   suspend fun deleteBookmarks(bookmarks: List<LibkiwixBookmarkItem>)
   suspend fun deleteBookmark(bookId: String, bookmarkUrl: String)
-  fun booksOnDiskAsListItems(): Flowable<List<BooksOnDiskListItem>>
+  fun booksOnDiskAsListItems(): Flow<List<BooksOnDiskListItem>>
   fun saveNote(noteListItem: NoteListItem): Completable
   fun deleteNote(noteTitle: String): Completable
   fun deleteNotes(noteList: List<NoteListItem>): Completable

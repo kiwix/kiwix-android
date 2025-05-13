@@ -110,6 +110,7 @@ class TopLevelDestinationTest : BaseActivityTest() {
   fun testTopLevelDestination() {
     topLevel {
       clickReaderOnBottomNav {
+        assertReaderScreenDisplayed()
       }
       clickDownloadOnBottomNav {
         onlineLibrary {

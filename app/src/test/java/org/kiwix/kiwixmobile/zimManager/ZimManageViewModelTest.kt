@@ -120,12 +120,11 @@ class ZimManageViewModelTest {
 
   private val downloads = MutableStateFlow<List<DownloadModel>>(emptyList())
   private val booksOnFileSystem = MutableStateFlow<List<BookOnDisk>>(emptyList())
-  private val books: PublishProcessor<List<BookOnDisk>> = PublishProcessor.create()
+  private val books = MutableStateFlow<List<BookOnDisk>>(emptyList())
   private val languages: PublishProcessor<List<Language>> = PublishProcessor.create()
   private val fileSystemStates: BehaviorProcessor<FileSystemState> = BehaviorProcessor.create()
   private val networkStates: PublishProcessor<NetworkState> = PublishProcessor.create()
-  private val booksOnDiskListItems: PublishProcessor<List<BooksOnDiskListItem>> =
-    PublishProcessor.create()
+  private val booksOnDiskListItems = MutableStateFlow<List<BooksOnDiskListItem>>(emptyList())
 
   private val testScheduler = TestScheduler()
 
@@ -218,10 +217,9 @@ class ZimManageViewModelTest {
   inner class Books {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `emissions from data source are observed`() {
+    fun `emissions from data source are observed`() = runTest {
       val expectedList = listOf(bookOnDisk())
-      booksOnDiskListItems.onNext(expectedList)
-      testScheduler.triggerActions()
+      booksOnDiskListItems.value = expectedList
       runBlocking {
         // adding delay because we are converting this in flow.
         delay(3000)
@@ -243,7 +241,7 @@ class ZimManageViewModelTest {
       testScheduler.triggerActions()
       runBlocking { viewModel.requestFileSystemCheck.emit(Unit) }
       testScheduler.triggerActions()
-      books.onNext(listOf(bookToRemove))
+      runBlocking { books.emit(listOf(bookToRemove)) }
       testScheduler.triggerActions()
       runBlocking {
         booksOnFileSystem.emit(
@@ -262,7 +260,7 @@ class ZimManageViewModelTest {
   }
 
   @Nested
-  inner class Lanuages {
+  inner class Languages {
     @Test
     fun `network no result & empty language db activates the default locale`() {
       val expectedLanguage =
@@ -421,7 +419,7 @@ class ZimManageViewModelTest {
       )
     networkStates.onNext(CONNECTED)
     downloads.value = listOf(downloadModel(book = bookDownloading))
-    books.onNext(listOf(bookOnDisk(book = bookAlreadyOnDisk)))
+    books.value = listOf(bookOnDisk(book = bookAlreadyOnDisk))
     languages.onNext(
       listOf(
         language(isActive = true, occurencesOfLanguage = 1, languageCode = "activeLanguage"),
@@ -459,7 +457,7 @@ class ZimManageViewModelTest {
     } returns Single.just(libraryNetworkEntity(listOf(bookOver4Gb)))
     networkStates.onNext(CONNECTED)
     downloads.value = listOf()
-    books.onNext(listOf())
+    books.value = listOf()
     languages.onNext(
       listOf(
         language(isActive = true, occurencesOfLanguage = 1, languageCode = "activeLanguage")
