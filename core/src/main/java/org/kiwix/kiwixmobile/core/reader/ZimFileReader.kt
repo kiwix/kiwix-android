@@ -23,8 +23,6 @@ import android.os.ParcelFileDescriptor
 import android.util.Base64
 import androidx.core.net.toUri
 import eu.mhutti1.utils.storage.KB
-import io.reactivex.Completable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -43,13 +41,11 @@ import org.kiwix.libzim.Item
 import org.kiwix.libzim.SuggestionSearch
 import org.kiwix.libzim.SuggestionSearcher
 import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
-import java.io.OutputStream
-import java.io.PipedInputStream
-import java.io.PipedOutputStream
 import java.net.URLDecoder
 import javax.inject.Inject
 
@@ -216,7 +212,7 @@ class ZimFileReader constructor(
     }
 
   @Suppress("UnreachableCode", "NestedBlockDepth", "ReturnCount")
-  private fun loadContent(uri: String, extension: String): InputStream? {
+  private suspend fun loadContent(uri: String, extension: String): InputStream? {
     val item = getItem(uri)
     if (compressedExtensions.any { it != extension }) {
       item?.itemSize()?.let {
@@ -234,7 +230,7 @@ class ZimFileReader constructor(
         }
       }
     }
-    return loadContent(item, uri)
+    return generateZimContentBytes(item, uri)
   }
 
   fun getMimeTypeFromUrl(uri: String): String? =
@@ -261,7 +257,7 @@ class ZimFileReader constructor(
         jniKiwixReader.getEntryByPath(actualPath)
           .getItem(true)
           .path
-      } catch (ignore: Exception) {
+      } catch (_: Exception) {
         actualPath
       }
     if (url.contains("?")) {
@@ -274,14 +270,6 @@ class ZimFileReader constructor(
   // see https://github.com/kiwix/kiwix-android/issues/3098#issuecomment-1642083152 to know more about the this.
   private fun extractQueryParam(url: String): String =
     "?" + url.substringAfterLast("?", "")
-
-  private fun loadContent(item: Item?, uri: String) =
-    try {
-      val outputStream = PipedOutputStream()
-      PipedInputStream(outputStream).also { streamZimContentToPipe(item, uri, outputStream) }
-    } catch (ioException: IOException) {
-      throw IOException("Could not open pipe for $uri", ioException)
-    }
 
   @Suppress("InjectDispatcher")
   private suspend fun loadAsset(
@@ -346,35 +334,34 @@ class ZimFileReader constructor(
       null
     }
 
-  @Suppress("CheckResult", "IgnoredReturnValue")
-  private fun streamZimContentToPipe(item: Item?, uri: String, outputStream: OutputStream) {
-    Completable.fromAction {
+  @Suppress("InjectDispatcher", "TooGenericExceptionCaught")
+  private suspend fun generateZimContentBytes(item: Item?, uri: String): ByteArrayInputStream =
+    withContext(Dispatchers.IO) {
       try {
-        outputStream.use {
-          if (uri.endsWith(UNINITIALISER_ADDRESS)) {
-            it.write(UNINITIALISE_HTML.toByteArray())
-          } else {
-            item?.let { item ->
-              if ("text/css" == item.mimetype && darkModeConfig.isDarkModeActive()) {
-                it.write(INVERT_IMAGES_VIDEO.toByteArray())
-              }
-              it.write(item.data.data)
+        val output = ByteArrayOutputStream()
+        when {
+          uri.endsWith(UNINITIALISER_ADDRESS) -> output.write(UNINITIALISE_HTML.toByteArray())
+          item != null -> {
+            if ("text/css" == item.mimetype && darkModeConfig.isDarkModeActive()) {
+              output.write(INVERT_IMAGES_VIDEO.toByteArray())
             }
+            output.write(item.data.data)
           }
         }
-      } catch (ignore: Exception) {
-        Log.e(TAG, "error writing pipe for $uri", ignore)
+
+        ByteArrayInputStream(output.toByteArray())
+      } catch (e: Exception) {
+        Log.e(TAG, "Error generating data for $uri", e)
+        ByteArrayInputStream(ByteArray(0))
       }
-    }.subscribeOn(Schedulers.io())
-      .subscribe({ }, Throwable::printStackTrace)
-  }
+    }
 
   fun getItem(url: String): Item? =
     try {
       val actualPath = url.toUri().filePath.decodeUrl
       jniKiwixReader.getEntryByPath(actualPath)
         .getItem(true)
-    } catch (exception: Exception) {
+    } catch (_: Exception) {
       try {
         // check if we can get the article data when there are (#, ?, etc) any of these in the URL.
         // See #3924 for more details.
@@ -415,7 +402,7 @@ class ZimFileReader constructor(
   private fun getSafeMetaData(name: String, missingDelimiterValue: String) =
     try {
       jniKiwixReader.getMetadata(name)
-    } catch (ignore: Exception) {
+    } catch (_: Exception) {
       missingDelimiterValue
     }
 
