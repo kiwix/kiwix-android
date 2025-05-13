@@ -21,17 +21,18 @@ package org.kiwix.kiwixmobile.core.dao
 import android.os.Build
 import android.os.Environment
 import android.util.Base64
-import io.reactivex.BackpressureStrategy
-import io.reactivex.BackpressureStrategy.LATEST
 import io.reactivex.Flowable
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asPublisher
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.rx3.rxSingle
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.R
@@ -71,15 +72,19 @@ class LibkiwixBookmarks @Inject constructor(
   private var bookmarkList: List<LibkiwixBookmarkItem> = arrayListOf()
   private var libraryBooksList: List<String> = arrayListOf()
 
-  @Suppress("CheckResult", "IgnoredReturnValue")
-  private val bookmarkListBehaviour: BehaviorSubject<List<LibkiwixBookmarkItem>>? by lazy {
-    BehaviorSubject.create<List<LibkiwixBookmarkItem>>().also { subject ->
-      rxSingle { getBookmarksList() }
-        .subscribeOn(io.reactivex.rxjava3.schedulers.Schedulers.io())
-        .subscribe(subject::onNext, subject::onError)
+  @Suppress("InjectDispatcher", "TooGenericExceptionCaught")
+  private val bookmarkListFlow: MutableStateFlow<List<LibkiwixBookmarkItem>> by lazy {
+    MutableStateFlow<List<LibkiwixBookmarkItem>>(emptyList()).also { flow ->
+      CoroutineScope(Dispatchers.IO).launch {
+        try {
+          val bookmarks = getBookmarksList()
+          flow.emit(bookmarks)
+        } catch (e: Exception) {
+          e.printStackTrace()
+        }
+      }
     }
   }
-
   private val bookmarksFolderPath: String by lazy {
     if (Build.DEVICE.contains("generic")) {
       // Workaround for emulators: Emulators have limited memory and
@@ -112,30 +117,35 @@ class LibkiwixBookmarks @Inject constructor(
     manager.readBookmarkFile(bookmarkFile.canonicalPath)
   }
 
-  fun bookmarks(): Flowable<List<Page>> =
-    flowableBookmarkList()
+  fun bookmarks(): Flow<List<Page>> =
+    bookmarkListFlow
       .map { it }
 
-  override fun pages(): Flowable<List<Page>> = bookmarks()
+  // Currently kept in RxJava Flowable because `PageViewModel` still expects RxJava streams.
+  // This can be refactored to use Kotlin Flow once `PageViewModel` is migrated to coroutines.
+  override fun pages(): Flowable<List<Page>> =
+    Flowable.fromPublisher(bookmarks().asPublisher())
 
   override fun deletePages(pagesToDelete: List<Page>) =
     deleteBookmarks(pagesToDelete as List<LibkiwixBookmarkItem>)
 
-  suspend fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?): List<String> {
-    return zimFileReader?.let { reader ->
-      getBookmarksList()
-        .filter { it.zimId == reader.id }
-        .map(LibkiwixBookmarkItem::bookmarkUrl)
-    }.orEmpty()
-  }
+  @Suppress("InjectDispatcher")
+  suspend fun getCurrentZimBookmarksUrl(zimFileReader: ZimFileReader?): List<String> =
+    withContext(Dispatchers.IO) {
+      return@withContext zimFileReader?.let { reader ->
+        getBookmarksList()
+          .filter { it.zimId == reader.id }
+          .map(LibkiwixBookmarkItem::bookmarkUrl)
+      }.orEmpty()
+    }
 
-  fun bookmarkUrlsForCurrentBook(zimId: String): Flowable<List<String>> =
-    flowableBookmarkList()
+  @Suppress("InjectDispatcher")
+  fun bookmarkUrlsForCurrentBook(zimId: String): Flow<List<String>> =
+    bookmarkListFlow
       .map { bookmarksList ->
         bookmarksList.filter { it.zimId == zimId }
           .map(LibkiwixBookmarkItem::bookmarkUrl)
-      }
-      .subscribeOn(Schedulers.io())
+      }.flowOn(Dispatchers.IO)
 
   /**
    * Saves bookmarks in libkiwix. The use of `shouldWriteBookmarkToFile` is primarily
@@ -165,7 +175,7 @@ class LibkiwixBookmarks @Inject constructor(
       library.addBookmark(bookmark).also {
         if (shouldWriteBookmarkToFile) {
           writeBookMarksAndSaveLibraryToFile()
-          updateFlowableBookmarkList()
+          updateFlowBookmarkList()
         }
         // dispose the bookmark
         bookmark.dispose()
@@ -185,7 +195,7 @@ class LibkiwixBookmarks @Inject constructor(
           }
         }
       addBookToLibraryIfNotExist(book)
-      updateFlowableBookmarkList()
+      updateFlowBookmarkList()
     } catch (ignore: Exception) {
       Log.e(
         TAG,
@@ -228,7 +238,7 @@ class LibkiwixBookmarks @Inject constructor(
       .also {
         CoroutineScope(dispatcher).launch {
           writeBookMarksAndSaveLibraryToFile()
-          updateFlowableBookmarkList()
+          updateFlowBookmarkList()
         }
       }
   }
@@ -363,27 +373,8 @@ class LibkiwixBookmarks @Inject constructor(
           it.zimReaderSource == libkiwixBookmarkItem.zimReaderSource
       }
 
-  private fun flowableBookmarkList(
-    backpressureStrategy: BackpressureStrategy = LATEST
-  ): Flowable<List<LibkiwixBookmarkItem>> {
-    return Flowable.create({ emitter ->
-      val disposable =
-        bookmarkListBehaviour?.subscribe(
-          { list ->
-            if (!emitter.isCancelled) {
-              emitter.onNext(list.toList())
-            }
-          },
-          emitter::onError,
-          emitter::onComplete
-        )
-
-      emitter.setDisposable(disposable)
-    }, backpressureStrategy)
-  }
-
-  private suspend fun updateFlowableBookmarkList() {
-    bookmarkListBehaviour?.onNext(getBookmarksList())
+  private suspend fun updateFlowBookmarkList() {
+    bookmarkListFlow.emit(getBookmarksList())
   }
 
   // Export the `bookmark.xml` file to the `Download/org.kiwix/` directory of internal storage.

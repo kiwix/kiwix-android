@@ -28,6 +28,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import io.objectbox.Box
 import io.objectbox.BoxStore
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -130,7 +131,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     box = boxStore!!.boxFor(BookmarkEntity::class.java)
 
     // clear the data before running the test case
-    clearBookmarks()
+    runBlocking { clearBookmarks() }
 
     // add a file in fileSystem because we need to actual file path for making object of Archive.
     val loadFileStream =
@@ -162,7 +163,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       objectBoxToLibkiwixMigrator.migrateBookMarks(box)
       // check if data successfully migrated to room
       val actualDataAfterMigration =
-        objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
+        objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().first()
       assertEquals(1, actualDataAfterMigration.size)
       assertEquals(actualDataAfterMigration[0].zimReaderSource?.toDatabase(), expectedZimFilePath)
       assertEquals(actualDataAfterMigration[0].zimId, expectedZimId)
@@ -178,7 +179,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       // Migrate data from empty ObjectBox database
       objectBoxToLibkiwixMigrator.migrateBookMarks(box)
       val actualDataAfterMigration =
-        objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
+        objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().first()
       assertTrue(actualDataAfterMigration.isEmpty())
       // Clear the bookmarks list from device to not affect the other test cases.
       clearBookmarks()
@@ -212,7 +213,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       // Migrate data into Room database
       objectBoxToLibkiwixMigrator.migrateBookMarks(box)
       val actualDataAfterMigration =
-        objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
+        objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().first()
       assertEquals(2, actualDataAfterMigration.size)
       val existingItem =
         actualDataAfterMigration.find {
@@ -250,7 +251,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       objectBoxToLibkiwixMigrator.migrateBookMarks(box)
       // Check if data successfully migrated to Room
       val actualDataAfterMigration =
-        objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
+        objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().first()
       assertEquals(1000, actualDataAfterMigration.size)
       // Clear the bookmarks list from device to not affect the other test cases.
       clearBookmarks()
@@ -276,7 +277,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       objectBoxToLibkiwixMigrator.migrateBookMarks(box)
       // check if data successfully migrated to room
       val actualDataAfterMigration =
-        objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
+        objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().first()
       assertEquals(1, actualDataAfterMigration.size)
       assertEquals(actualDataAfterMigration[0].zimReaderSource?.toDatabase(), null)
       assertEquals(actualDataAfterMigration[0].zimId, expectedZimId)
@@ -307,7 +308,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       objectBoxToLibkiwixMigrator.migrateBookMarks(box)
       // check if data successfully migrated to room
       val actualDataAfterMigration =
-        objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().blockingFirst()
+        objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks().first()
       assertEquals(1, actualDataAfterMigration.size)
       assertEquals(actualDataAfterMigration[0].zimReaderSource?.toDatabase(), null)
       assertEquals(actualDataAfterMigration[0].zimId, expectedZimId)
@@ -317,11 +318,11 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       clearBookmarks()
     }
 
-  private fun clearBookmarks() {
+  private suspend fun clearBookmarks() {
     // delete bookmarks for testing other edge cases
     objectBoxToLibkiwixMigrator.libkiwixBookmarks.deleteBookmarks(
       objectBoxToLibkiwixMigrator.libkiwixBookmarks.bookmarks()
-        .blockingFirst() as List<LibkiwixBookmarkItem>
+        .first() as List<LibkiwixBookmarkItem>
     )
     box.removeAll()
     if (::zimFile.isInitialized) {

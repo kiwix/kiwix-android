@@ -19,6 +19,8 @@ package org.kiwix.kiwixmobile.core.main
 
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
@@ -35,7 +37,6 @@ private const val TAG = "MainPresenter"
 @ActivityScope
 class MainRepositoryActions @Inject constructor(private val dataSource: DataSource) {
   private var saveHistoryDisposable: Disposable? = null
-  private var saveBookmarkDisposable: io.reactivex.rxjava3.disposables.Disposable? = null
   private var saveNoteDisposable: Disposable? = null
   private var saveBookDisposable: Disposable? = null
   private var deleteNoteDisposable: Disposable? = null
@@ -48,16 +49,26 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
         .subscribe({}, { e -> Log.e(TAG, "Unable to save history", e) })
   }
 
-  fun saveBookmark(bookmark: LibkiwixBookmarkItem) {
-    saveBookmarkDisposable =
-      dataSource.saveBookmark(bookmark)
-        .subscribe({}, { e -> Log.e(TAG, "Unable to save bookmark", e) })
+  @Suppress("InjectDispatcher", "TooGenericExceptionCaught")
+  suspend fun saveBookmark(bookmark: LibkiwixBookmarkItem) {
+    withContext(Dispatchers.IO) {
+      try {
+        dataSource.saveBookmark(bookmark)
+      } catch (e: Exception) {
+        Log.e(TAG, "Unable to save bookmark", e)
+      }
+    }
   }
 
-  fun deleteBookmark(bookId: String, bookmarkUrl: String) {
-    dataSource.deleteBookmark(bookId, bookmarkUrl)
-      ?.subscribe({}, { e -> Log.e(TAG, "Unable to delete bookmark", e) })
-      ?: Log.e(TAG, "Unable to delete bookmark")
+  @Suppress("InjectDispatcher", "TooGenericExceptionCaught")
+  suspend fun deleteBookmark(bookId: String, bookmarkUrl: String) {
+    withContext(Dispatchers.IO) {
+      try {
+        dataSource.deleteBookmark(bookId, bookmarkUrl)
+      } catch (e: Exception) {
+        Log.e(TAG, "Unable to delete bookmark", e)
+      }
+    }
   }
 
   fun saveNote(note: NoteListItem) {
@@ -93,7 +104,6 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
 
   fun dispose() {
     saveHistoryDisposable?.dispose()
-    saveBookmarkDisposable?.dispose()
     saveNoteDisposable?.dispose()
     deleteNoteDisposable?.dispose()
     saveBookDisposable?.dispose()

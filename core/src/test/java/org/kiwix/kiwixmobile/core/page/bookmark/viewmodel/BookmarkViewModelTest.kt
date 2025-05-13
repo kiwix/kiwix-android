@@ -21,11 +21,11 @@ package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.processors.PublishProcessor
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.Flowable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.reactive.asPublisher
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -45,7 +45,6 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.sharedFunctions.InstantExecutorExtension
-import org.kiwix.sharedFunctions.setScheduler
 import java.util.UUID
 
 @ExtendWith(InstantExecutorExtension::class)
@@ -58,13 +57,8 @@ internal class BookmarkViewModelTest {
 
   private lateinit var viewModel: BookmarkViewModel
 
-  private val itemsFromDb: PublishProcessor<List<Page>> =
-    PublishProcessor.create()
-
-  init {
-    setScheduler(Schedulers.trampoline())
-    RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
-  }
+  private val itemsFromDb: MutableStateFlow<List<Page>> =
+    MutableStateFlow(emptyList())
 
   @BeforeEach
   fun init() {
@@ -72,8 +66,10 @@ internal class BookmarkViewModelTest {
     every { zimReaderContainer.id } returns "id"
     every { zimReaderContainer.name } returns "zimName"
     every { sharedPreferenceUtil.showBookmarksAllBooks } returns true
-    every { libkiwixBookMarks.bookmarks() } returns itemsFromDb.distinctUntilChanged()
-    every { libkiwixBookMarks.pages() } returns libkiwixBookMarks.bookmarks()
+    every { libkiwixBookMarks.bookmarks() } returns itemsFromDb
+    every { libkiwixBookMarks.pages() } returns Flowable.fromPublisher(
+      libkiwixBookMarks.bookmarks().asPublisher()
+    )
     viewModel =
       BookmarkViewModel(libkiwixBookMarks, zimReaderContainer, sharedPreferenceUtil).apply {
         alertDialogShower = dialogShower
