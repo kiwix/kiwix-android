@@ -94,15 +94,15 @@ import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
-import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.processors.BehaviorProcessor
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -202,7 +202,7 @@ abstract class CoreReaderFragment :
   NavigationHistoryClickListener,
   ShowDonationDialogCallback {
   protected val webViewList: MutableList<KiwixWebView> = ArrayList()
-  private val webUrlsProcessor = BehaviorProcessor.create<String>()
+  private val webUrlsFlow = MutableStateFlow("")
   private var fragmentReaderBinding: FragmentReaderBinding? = null
 
   var toolbar: Toolbar? = null
@@ -333,7 +333,7 @@ abstract class CoreReaderFragment :
   private var tableDrawerRight: RecyclerView? = null
   private var tabCallback: ItemTouchHelper.Callback? = null
   private var donationLayout: FrameLayout? = null
-  private var bookmarkingDisposable: Disposable? = null
+  private var bookmarkingJob: Job? = null
   private var isBookmarked = false
   private lateinit var serviceConnection: ServiceConnection
   private var readAloudService: ReadAloudService? = null
@@ -1269,7 +1269,7 @@ abstract class CoreReaderFragment :
       (requireActivity() as? AppCompatActivity)?.setSupportActionBar(null)
     }
     repositoryActions?.dispose()
-    safeDispose()
+    safelyCancelBookmarkJob()
     unBindViewsAndBinding()
     tabCallback = null
     hideBackToTopTimer?.cancel()
@@ -1546,7 +1546,7 @@ abstract class CoreReaderFragment :
       tabsAdapter?.selected = currentWebViewIndex
       updateBottomToolbarVisibility()
       loadPrefs()
-      updateUrlProcessor()
+      updateUrlFlow()
       updateTableOfContents()
       updateTitle()
     }
@@ -1898,24 +1898,25 @@ abstract class CoreReaderFragment :
   }
 
   protected fun setUpBookmarks(zimFileReader: ZimFileReader) {
-    safeDispose()
-    bookmarkingDisposable = Flowable.combineLatest(
-      libkiwixBookmarks?.bookmarkUrlsForCurrentBook(zimFileReader.id),
-      webUrlsProcessor,
-      List<String?>::contains
-    )
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe({ isBookmarked: Boolean ->
-        this.isBookmarked = isBookmarked
+    safelyCancelBookmarkJob()
+    bookmarkingJob = CoroutineScope(Dispatchers.Main).launch {
+      combine(
+        libkiwixBookmarks?.bookmarkUrlsForCurrentBook(zimFileReader.id) ?: emptyFlow(),
+        webUrlsFlow,
+        List<String?>::contains
+      ).collect { isBookmarked ->
+        this@CoreReaderFragment.isBookmarked = isBookmarked
         bottomToolbarBookmark?.setImageResource(
           if (isBookmarked) R.drawable.ic_bookmark_24dp else R.drawable.ic_bookmark_border_24dp
         )
-      }, Throwable::printStackTrace)
-    updateUrlProcessor()
+      }
+    }
+    updateUrlFlow()
   }
 
-  private fun safeDispose() {
-    bookmarkingDisposable?.dispose()
+  private fun safelyCancelBookmarkJob() {
+    bookmarkingJob?.cancel()
+    bookmarkingJob = null
   }
 
   private fun isNotPreviouslyOpenZim(zimReaderSource: ZimReaderSource?): Boolean =
@@ -2464,8 +2465,8 @@ abstract class CoreReaderFragment :
 
   protected fun urlIsValid(): Boolean = getCurrentWebView()?.url != null
 
-  private fun updateUrlProcessor() {
-    getCurrentWebView()?.url?.let(webUrlsProcessor::offer)
+  private fun updateUrlFlow() {
+    getCurrentWebView()?.url?.let { webUrlsFlow.value = it }
   }
 
   private fun updateNightMode() {
@@ -2673,7 +2674,7 @@ abstract class CoreReaderFragment :
       // If a URL fails to load, update the bookmark toggle.
       // This fixes the scenario where the previous page is bookmarked and the next
       // page fails to load, ensuring the bookmark toggle is unset correctly.
-      updateUrlProcessor()
+      updateUrlFlow()
       Log.d(TAG_KIWIX, String.format(getString(R.string.error_article_url_not_found), url))
     }
   }
@@ -2681,7 +2682,7 @@ abstract class CoreReaderFragment :
   @Suppress("MagicNumber")
   override fun webViewProgressChanged(progress: Int, webView: WebView) {
     if (isAdded) {
-      updateUrlProcessor()
+      updateUrlFlow()
       showProgressBarWithProgress(progress)
       if (progress == 100) {
         hideProgressBar()

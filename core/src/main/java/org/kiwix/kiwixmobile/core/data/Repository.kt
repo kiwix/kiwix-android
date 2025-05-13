@@ -21,9 +21,7 @@ package org.kiwix.kiwixmobile.core.data
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.rx3.rxCompletable
-import kotlinx.coroutines.rx3.rxSingle
+import kotlinx.coroutines.flow.Flow
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
@@ -122,24 +120,19 @@ class Repository @Inject internal constructor(
     }.subscribeOn(ioThread)
 
   override fun getBookmarks() =
-    libkiwixBookmarks.bookmarks() as Flowable<List<LibkiwixBookmarkItem>>
+    libkiwixBookmarks.bookmarks() as Flow<List<LibkiwixBookmarkItem>>
 
-  override fun getCurrentZimBookmarksUrl() =
-    rxSingle {
-      libkiwixBookmarks.getCurrentZimBookmarksUrl(zimReaderContainer.zimFileReader)
-    }.subscribeOn(io.reactivex.rxjava3.schedulers.Schedulers.io())
+  override suspend fun getCurrentZimBookmarksUrl() =
+    libkiwixBookmarks.getCurrentZimBookmarksUrl(zimReaderContainer.zimFileReader)
 
-  override fun saveBookmark(libkiwixBookmarkItem: LibkiwixBookmarkItem) =
-    rxCompletable { libkiwixBookmarks.saveBookmark(libkiwixBookmarkItem) }
-      .subscribeOn(io.reactivex.rxjava3.schedulers.Schedulers.io())
+  override suspend fun saveBookmark(libkiwixBookmarkItem: LibkiwixBookmarkItem) =
+    libkiwixBookmarks.saveBookmark(libkiwixBookmarkItem)
 
-  override fun deleteBookmarks(bookmarks: List<LibkiwixBookmarkItem>) =
-    Completable.fromAction { libkiwixBookmarks.deleteBookmarks(bookmarks) }
-      .subscribeOn(ioThread)
+  override suspend fun deleteBookmarks(bookmarks: List<LibkiwixBookmarkItem>) =
+    libkiwixBookmarks.deleteBookmarks(bookmarks)
 
-  override fun deleteBookmark(bookId: String, bookmarkUrl: String): Completable? =
-    Completable.fromAction { libkiwixBookmarks.deleteBookmark(bookId, bookmarkUrl) }
-      .subscribeOn(ioThread)
+  override suspend fun deleteBookmark(bookId: String, bookmarkUrl: String) =
+    libkiwixBookmarks.deleteBookmark(bookId, bookmarkUrl)
 
   override fun saveNote(noteListItem: NoteListItem): Completable =
     Completable.fromAction { notesRoomDao.saveNote(noteListItem) }

@@ -31,6 +31,7 @@ import com.google.android.apps.common.testing.accessibility.framework.Accessibil
 import com.google.android.apps.common.testing.accessibility.framework.checks.SpeakableTextPresentCheck
 import com.google.android.apps.common.testing.accessibility.framework.checks.TouchTargetSizeCheck
 import io.objectbox.BoxStore
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.anyOf
@@ -171,13 +172,13 @@ class ImportBookmarkTest : BaseActivityTest() {
       // test with empty data file
       var tempBookmarkFile = getTemporaryBookmarkFile(true)
       importBookmarks(tempBookmarkFile)
-      var actualDataAfterImporting = libkiwixBookmarks.bookmarks().blockingFirst()
+      var actualDataAfterImporting = libkiwixBookmarks.bookmarks().first()
       assertEquals(0, actualDataAfterImporting.size)
 
       // import the bookmark
       tempBookmarkFile = getTemporaryBookmarkFile()
       importBookmarks(tempBookmarkFile)
-      actualDataAfterImporting = libkiwixBookmarks.bookmarks().blockingFirst()
+      actualDataAfterImporting = libkiwixBookmarks.bookmarks().first()
       assertEquals(3, actualDataAfterImporting.size)
       assertEquals(actualDataAfterImporting[0].title, "Main Page")
       assertEquals(actualDataAfterImporting[0].url, "https://kiwix.app/A/Main_Page")
@@ -185,7 +186,7 @@ class ImportBookmarkTest : BaseActivityTest() {
 
       // import duplicate bookmarks
       importBookmarks(tempBookmarkFile)
-      actualDataAfterImporting = libkiwixBookmarks.bookmarks().blockingFirst()
+      actualDataAfterImporting = libkiwixBookmarks.bookmarks().first()
       assertEquals(3, actualDataAfterImporting.size)
 
       // delete the temp file
@@ -200,11 +201,11 @@ class ImportBookmarkTest : BaseActivityTest() {
     }
   }
 
-  private fun clearBookmarks() {
+  private suspend fun clearBookmarks() {
     // delete bookmarks for testing other edge cases
     libkiwixBookmarks.deleteBookmarks(
       libkiwixBookmarks.bookmarks()
-        .blockingFirst() as List<LibkiwixBookmarkItem>
+        .first() as List<LibkiwixBookmarkItem>
     )
   }
 
