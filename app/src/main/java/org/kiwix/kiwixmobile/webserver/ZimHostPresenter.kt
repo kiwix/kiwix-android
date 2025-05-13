@@ -17,12 +17,11 @@
  */
 package org.kiwix.kiwixmobile.webserver
 
-import org.kiwix.kiwixmobile.core.utils.files.Log
-import io.reactivex.SingleObserver
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.base.BasePresenter
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.di.ActivityScope
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.webserver.ZimHostContract.Presenter
 import org.kiwix.kiwixmobile.webserver.ZimHostContract.View
@@ -33,31 +32,20 @@ class ZimHostPresenter @Inject internal constructor(
   private val dataSource: DataSource
 ) : BasePresenter<View>(),
   Presenter {
-  override fun loadBooks(previouslyHostedBooks: Set<String>) {
-    dataSource.getLanguageCategorizedBooks()
-      .map { books ->
-        books
-          .filterIsInstance<BooksOnDiskListItem.BookOnDisk>()
-          .forEach {
-            it.isSelected =
-              previouslyHostedBooks.contains(it.book.title) || previouslyHostedBooks.isEmpty()
-          }
-        books
-      }.subscribe(
-        object : SingleObserver<List<BooksOnDiskListItem>> {
-          override fun onSubscribe(d: Disposable) {
-            compositeDisposable.add(d)
-          }
-
-          override fun onSuccess(books: List<BooksOnDiskListItem>) {
-            view?.addBooks(books)
-          }
-
-          override fun onError(e: Throwable) {
-            Log.e(TAG, "Unable to load books", e)
-          }
+  @Suppress("TooGenericExceptionCaught")
+  override suspend fun loadBooks(previouslyHostedBooks: Set<String>) {
+    try {
+      val books = dataSource.getLanguageCategorizedBooks().first()
+      books.forEach { item ->
+        if (item is BooksOnDiskListItem.BookOnDisk) {
+          item.isSelected =
+            previouslyHostedBooks.contains(item.book.title) || previouslyHostedBooks.isEmpty()
         }
-      )
+      }
+      view?.addBooks(books)
+    } catch (e: Exception) {
+      Log.e(TAG, "Unable to load books", e)
+    }
   }
 
   companion object {

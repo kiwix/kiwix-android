@@ -30,12 +30,12 @@ import io.mockk.verify
 import io.objectbox.Box
 import io.objectbox.query.Query
 import io.objectbox.query.QueryBuilder
-import io.objectbox.rx.RxQuery
-import io.reactivex.Observable
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
+import io.objectbox.reactive.SubscriptionBuilder
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookOnDiskEntity_
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.utils.files.testFlow
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.sharedFunctions.book
 import org.kiwix.sharedFunctions.bookOnDisk
@@ -62,40 +63,46 @@ internal class NewBookDaoTest {
   @Nested
   inner class BooksTests {
     @Test
-    fun `books emits entities whose file exists`() {
-      runBlocking {
-        val (expectedEntity, _) = expectEmissionOfExistingAndNotExistingBook()
-        val books = newBookDao.books().test()
-        delay(1000)
-        books.assertValues(listOf(BookOnDisk(expectedEntity)))
-      }
+    fun `books emits entities whose file exists`() = runTest {
+      val (expectedEntity, _) = expectEmissionOfExistingAndNotExistingBook()
+      testFlow(
+        flow = newBookDao.books(),
+        triggerAction = {},
+        assert = { assertThat(awaitItem()).contains(BookOnDisk(expectedEntity)) }
+      )
     }
 
     @SuppressLint("CheckResult")
     @Test
     fun `books deletes entities whose file does not exist`() =
-      runBlocking {
+      runTest {
         val (_, deletedEntity) = expectEmissionOfExistingAndNotExistingBook()
-        newBookDao.books().test()
-        delay(1000)
-        verify { box.remove(listOf(deletedEntity)) }
+        testFlow(
+          flow = newBookDao.books(),
+          triggerAction = {},
+          assert = { verify { box.remove(listOf(deletedEntity)) } }
+        )
       }
 
     @Test
-    fun `books removes entities whose files are in the trash folder`() {
-      runBlocking {
-        val (_, _) = expectEmissionOfExistingAndNotExistingBook(true)
-        val books = newBookDao.books().test()
-        delay(1000)
-        books.assertValues(emptyList())
-      }
+    fun `books removes entities whose files are in the trash folder`() = runTest {
+      val (_, _) = expectEmissionOfExistingAndNotExistingBook(true)
+      testFlow(
+        flow = newBookDao.books(),
+        triggerAction = {},
+        assert = { Assertions.assertEquals(emptyList<BookOnDisk>(), awaitItem()) }
+      )
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun expectEmissionOfExistingAndNotExistingBook(
       isInTrashFolder: Boolean = false
     ): Pair<BookOnDiskEntity, BookOnDiskEntity> {
       val query: Query<BookOnDiskEntity> = mockk()
+      val subscriptionBuilder: SubscriptionBuilder<MutableList<BookOnDiskEntity>> =
+        mockk(relaxed = true)
       every { box.query().build() } returns query
+      every { query.subscribe() } returns subscriptionBuilder
       val zimReaderSourceThatExists = mockk<ZimReaderSource>()
       val zimReaderSourceThatDoesNotExist = mockk<ZimReaderSource>()
       coEvery { zimReaderSourceThatExists.exists() } returns true
@@ -107,11 +114,8 @@ internal class NewBookDaoTest {
       val entityThatExists = bookOnDiskEntity(zimReaderSource = zimReaderSourceThatExists)
       val entityThatDoesNotExist =
         bookOnDiskEntity(zimReaderSource = zimReaderSourceThatDoesNotExist)
-      mockkStatic(RxQuery::class)
-      every { RxQuery.observable(query) } returns
-        Observable.just(
-          listOf(entityThatExists, entityThatDoesNotExist)
-        )
+      mockkStatic(Query::class)
+      mockBoxAsFlow(box, mutableListOf(entityThatExists, entityThatDoesNotExist))
       return entityThatExists to entityThatDoesNotExist
     }
   }
@@ -252,4 +256,9 @@ internal class NewBookDaoTest {
     every { query.findFirst() } returns bookOnDiskEntity
     assertThat(newBookDao.bookMatching(downloadTitle)).isEqualTo(bookOnDiskEntity)
   }
+}
+
+fun <T> mockBoxAsFlow(box: Box<T>, result: List<T>) {
+  mockkStatic("org.kiwix.kiwixmobile.core.dao.NewLanguagesDaoKt")
+  every { box.asFlow(any()) } returns flow { emit(result) }
 }

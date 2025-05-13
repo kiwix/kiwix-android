@@ -19,9 +19,11 @@
 package org.kiwix.kiwixmobile.core.data
 
 import io.reactivex.Completable
-import io.reactivex.Flowable
 import io.reactivex.Scheduler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
@@ -31,7 +33,6 @@ import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.WebViewHistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.di.qualifiers.IO
-import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
 import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
@@ -52,7 +53,6 @@ import javax.inject.Singleton
 @Singleton
 class Repository @Inject internal constructor(
   @param:IO private val ioThread: Scheduler,
-  @param:MainThread private val mainThread: Scheduler,
   private val bookDao: NewBookDao,
   private val libkiwixBookmarks: LibkiwixBookmarks,
   private val historyRoomDao: HistoryRoomDao,
@@ -64,11 +64,10 @@ class Repository @Inject internal constructor(
 ) : DataSource {
   override fun getLanguageCategorizedBooks() =
     booksOnDiskAsListItems()
-      .first(emptyList())
-      .subscribeOn(ioThread)
-      .observeOn(mainThread)
+      .map { it.ifEmpty { emptyList() } }
 
-  override fun booksOnDiskAsListItems(): Flowable<List<BooksOnDiskListItem>> =
+  @Suppress("InjectDispatcher")
+  override fun booksOnDiskAsListItems(): Flow<List<BooksOnDiskListItem>> =
     bookDao.books()
       .map { books ->
         books.flatMap { bookOnDisk ->
@@ -90,6 +89,7 @@ class Repository @Inject internal constructor(
         )
       }
       .map(MutableList<BooksOnDiskListItem>::toList)
+      .flowOn(Dispatchers.IO)
 
   override fun saveBooks(books: List<BookOnDisk>) =
     Completable.fromAction { bookDao.insert(books) }
