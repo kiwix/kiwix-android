@@ -40,7 +40,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.CoreApp
@@ -55,7 +55,7 @@ const val THIRTY_TREE = 33
 
 @Suppress("InjectDispatcher")
 class DownloadMonitorService : Service() {
-  private val updaterChannel = Channel<suspend () -> Unit>(Channel.UNLIMITED)
+  private val taskFlow = MutableSharedFlow<suspend () -> Unit>(extraBufferCapacity = Int.MAX_VALUE)
   private var updaterJob: Job? = null
   private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
   private val notificationManager: NotificationManager by lazy {
@@ -87,10 +87,10 @@ class DownloadMonitorService : Service() {
   @Suppress("TooGenericExceptionCaught")
   private fun setupUpdater() {
     updaterJob = scope.launch {
-      for (task in updaterChannel) {
+      taskFlow.collect { task ->
         try {
-          task()
-        } catch (e: Throwable) {
+          task.invoke()
+        } catch (e: Exception) {
           e.printStackTrace()
         }
       }
@@ -120,7 +120,7 @@ class DownloadMonitorService : Service() {
    *                   should be canceled if the user cancels the download.
    */
   private fun setForegroundNotification(downloadId: Int? = null) {
-    scope.launch {
+    taskFlow.tryEmit {
       // Cancel the ongoing download notification if the user cancels the download.
       downloadId?.let(::cancelNotificationForId)
       fetch.getDownloads { downloadList ->
@@ -228,14 +228,14 @@ class DownloadMonitorService : Service() {
       download: Download,
       shouldSetForegroundNotification: Boolean = false
     ) {
-      scope.launch {
+      taskFlow.tryEmit {
         downloadRoomDao.update(download)
         if (download.status == Status.COMPLETED) {
           downloadRoomDao.getEntityForDownloadId(download.id.toLong())?.let {
             showDownloadCompletedNotification(download)
             // to move these downloads in NewBookDao.
             @Suppress("IgnoredReturnValue")
-            downloadRoomDao.allDownloads().first()
+            downloadRoomDao.downloads().first()
           }
         }
         // If someone pause the Download then post a notification since fetch removes the
@@ -252,7 +252,7 @@ class DownloadMonitorService : Service() {
     }
 
     private fun delete(download: Download) {
-      scope.launch {
+      taskFlow.tryEmit {
         downloadRoomDao.delete(download)
         setForegroundNotification(download.id)
       }
@@ -263,7 +263,7 @@ class DownloadMonitorService : Service() {
     fetch: Fetch,
     download: Download
   ) {
-    scope.launch {
+    taskFlow.tryEmit {
       // Check if there are any ongoing downloads.
       // If the list is empty, it means no other downloads are running,
       // so we need to promote this download to a foreground service.
@@ -369,7 +369,6 @@ class DownloadMonitorService : Service() {
    * Stops the foreground service, disposes of resources, and removes the Fetch listener.
    */
   private fun stopForegroundServiceForDownloads() {
-    updaterChannel.close()
     updaterJob?.cancel()
     fetch.removeListener(fetchListener)
     stopForeground(STOP_FOREGROUND_DETACH)

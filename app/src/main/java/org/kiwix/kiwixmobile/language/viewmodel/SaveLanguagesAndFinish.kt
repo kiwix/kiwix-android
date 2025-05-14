@@ -18,24 +18,30 @@
 package org.kiwix.kiwixmobile.language.viewmodel
 
 import androidx.appcompat.app.AppCompatActivity
-import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 
-@Suppress("IgnoredReturnValue", "CheckResult")
+@Suppress("InjectDispatcher", "TooGenericExceptionCaught")
 data class SaveLanguagesAndFinish(
-  val languages: List<Language>,
-  val languageDao: NewLanguagesDao
+  private val languages: List<Language>,
+  private val languageDao: NewLanguagesDao,
+  private val lifecycleScope: CoroutineScope
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    Flowable.fromCallable { languageDao.insert(languages) }
-      .subscribeOn(Schedulers.io())
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe({
+    lifecycleScope.launch {
+      try {
+        withContext(Dispatchers.IO) {
+          languageDao.insert(languages)
+        }
         activity.onBackPressedDispatcher.onBackPressed()
-      }, Throwable::printStackTrace)
+      } catch (e: Throwable) {
+        e.printStackTrace()
+      }
+    }
   }
 }

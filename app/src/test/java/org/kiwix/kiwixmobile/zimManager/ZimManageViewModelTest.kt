@@ -121,7 +121,7 @@ class ZimManageViewModelTest {
   private val downloads = MutableStateFlow<List<DownloadModel>>(emptyList())
   private val booksOnFileSystem = MutableStateFlow<List<BookOnDisk>>(emptyList())
   private val books = MutableStateFlow<List<BookOnDisk>>(emptyList())
-  private val languages: PublishProcessor<List<Language>> = PublishProcessor.create()
+  private val languages = MutableStateFlow<List<Language>>(emptyList())
   private val fileSystemStates: BehaviorProcessor<FileSystemState> = BehaviorProcessor.create()
   private val networkStates: PublishProcessor<NetworkState> = PublishProcessor.create()
   private val booksOnDiskListItems = MutableStateFlow<List<BooksOnDiskListItem>>(emptyList())
@@ -382,7 +382,7 @@ class ZimManageViewModelTest {
       every { application.getString(any(), any()) } returns ""
       every { kiwixService.library } returns Single.just(libraryNetworkEntity(networkBooks))
       every { defaultLanguageProvider.provide() } returns defaultLanguage
-      languages.onNext(dbBooks)
+      languages.value = dbBooks
       testScheduler.triggerActions()
       networkStates.onNext(CONNECTED)
       testScheduler.triggerActions()
@@ -420,12 +420,11 @@ class ZimManageViewModelTest {
     networkStates.onNext(CONNECTED)
     downloads.value = listOf(downloadModel(book = bookDownloading))
     books.value = listOf(bookOnDisk(book = bookAlreadyOnDisk))
-    languages.onNext(
+    languages.value =
       listOf(
         language(isActive = true, occurencesOfLanguage = 1, languageCode = "activeLanguage"),
         language(isActive = false, occurencesOfLanguage = 1, languageCode = "inactiveLanguage")
       )
-    )
     fileSystemStates.onNext(CanWrite4GbFile)
     testScheduler.advanceTimeBy(500, MILLISECONDS)
     testScheduler.triggerActions()
@@ -458,11 +457,10 @@ class ZimManageViewModelTest {
     networkStates.onNext(CONNECTED)
     downloads.value = listOf()
     books.value = listOf()
-    languages.onNext(
+    languages.value =
       listOf(
         language(isActive = true, occurencesOfLanguage = 1, languageCode = "activeLanguage")
       )
-    )
     fileSystemStates.onNext(CannotWrite4GbFile)
     testScheduler.advanceTimeBy(500, MILLISECONDS)
     testScheduler.triggerActions()

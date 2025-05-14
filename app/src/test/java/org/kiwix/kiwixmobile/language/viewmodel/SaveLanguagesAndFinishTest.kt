@@ -20,31 +20,30 @@ package org.kiwix.kiwixmobile.language.viewmodel
 
 import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.app.AppCompatActivity
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.zim_manager.Language
-import org.kiwix.sharedFunctions.resetSchedulers
-import org.kiwix.sharedFunctions.setScheduler
 
 class SaveLanguagesAndFinishTest {
   @Test
-  fun `invoke saves and finishes`() {
-    setScheduler(Schedulers.trampoline())
+  fun `invoke saves and finishes`() = runTest {
     val languageDao = mockk<NewLanguagesDao>()
     val activity = mockk<AppCompatActivity>()
+    val lifeCycleScope = TestScope(testScheduler)
     val onBackPressedDispatcher = mockk<OnBackPressedDispatcher>()
     every { activity.onBackPressedDispatcher } returns onBackPressedDispatcher
     every { onBackPressedDispatcher.onBackPressed() } answers { }
     val languages = listOf<Language>()
-    SaveLanguagesAndFinish(languages, languageDao).invokeWith(activity)
-    verify {
-      languageDao.insert(languages)
-      onBackPressedDispatcher.onBackPressed()
-    }
-    resetSchedulers()
+    SaveLanguagesAndFinish(languages, languageDao, lifeCycleScope).invokeWith(activity)
+    testScheduler.advanceUntilIdle()
+    coEvery { languageDao.insert(languages) }
+    testScheduler.advanceUntilIdle()
+    verify { onBackPressedDispatcher.onBackPressed() }
   }
 }

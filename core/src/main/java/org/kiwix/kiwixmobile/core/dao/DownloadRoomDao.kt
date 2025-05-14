@@ -43,13 +43,10 @@ abstract class DownloadRoomDao {
   lateinit var newBookDao: NewBookDao
 
   @Query("SELECT * FROM DownloadRoomEntity")
-  abstract fun downloadRoomEntity(): Flow<List<DownloadRoomEntity>>
-
-  @Query("SELECT * FROM DownloadRoomEntity")
   abstract fun getAllDownloads(): Flow<List<DownloadRoomEntity>>
 
   fun downloads(): Flow<List<DownloadModel>> =
-    downloadRoomEntity()
+    getAllDownloads()
       .distinctUntilChanged()
       .onEach(::moveCompletedToBooksOnDiskDao)
       .map { it.map(::DownloadModel) }
