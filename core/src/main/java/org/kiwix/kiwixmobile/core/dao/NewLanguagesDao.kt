@@ -36,7 +36,7 @@ import javax.inject.Singleton
 @Singleton
 class NewLanguagesDao @Inject constructor(private val box: Box<LanguageEntity>) {
   fun languages() =
-    box.asFlowable()
+    box.asFlow()
       .map { it.map(LanguageEntity::toLanguageModel) }
 
   fun insert(languages: List<Language>) {

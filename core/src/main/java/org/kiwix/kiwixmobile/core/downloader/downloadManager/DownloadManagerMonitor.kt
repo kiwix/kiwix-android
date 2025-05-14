@@ -18,16 +18,18 @@
 
 package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
-import android.annotation.SuppressLint
 import android.content.Context
 import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.FetchListener
 import com.tonyodev.fetch2core.DownloadBlock
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import javax.inject.Inject
@@ -37,23 +39,28 @@ const val FIVE = 5
 const val HUNDERED = 100
 const val DEFAULT_INT_VALUE = -1
 
-@SuppressLint("CheckResult")
+@Suppress("InjectDispatcher")
 class DownloadManagerMonitor @Inject constructor(
   val fetch: Fetch,
   val context: Context,
   val downloadRoomDao: DownloadRoomDao,
   private val fetchDownloadNotificationManager: FetchDownloadNotificationManager
 ) : DownloadMonitor {
-  private val updater = PublishSubject.create<() -> Unit>()
-  private var updaterDisposable: Disposable? = null
+  private val taskFlow = MutableSharedFlow<suspend () -> Unit>(extraBufferCapacity = Int.MAX_VALUE)
+  private var updaterJob: Job? = null
+  private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
+  @Suppress("TooGenericExceptionCaught")
   private fun setupUpdater() {
-    updaterDisposable = updater.subscribeOn(Schedulers.io())
-      .observeOn(Schedulers.io())
-      .subscribe(
-        { it.invoke() },
-        Throwable::printStackTrace
-      )
+    updaterJob = coroutineScope.launch {
+      taskFlow.collect { task ->
+        try {
+          task.invoke()
+        } catch (e: Exception) {
+          e.printStackTrace()
+        }
+      }
+    }
   }
 
   private val fetchListener = object : FetchListener {
@@ -123,7 +130,7 @@ class DownloadManagerMonitor @Inject constructor(
   }
 
   private fun update(download: Download) {
-    updater.onNext {
+    taskFlow.tryEmit {
       downloadRoomDao.update(download)
       if (download.isPaused()) {
         fetchDownloadNotificationManager.showDownloadPauseNotification(fetch, download)
@@ -132,7 +139,7 @@ class DownloadManagerMonitor @Inject constructor(
   }
 
   private fun delete(download: Download) {
-    updater.onNext { downloadRoomDao.delete(download) }
+    taskFlow.tryEmit { downloadRoomDao.delete(download) }
   }
 
   override fun startMonitoringDownload() {
@@ -142,6 +149,6 @@ class DownloadManagerMonitor @Inject constructor(
 
   override fun stopListeningDownloads() {
     fetch.removeListener(fetchListener)
-    updaterDisposable?.dispose()
+    updaterJob?.cancel()
   }
 }

@@ -30,14 +30,15 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
@@ -60,10 +61,12 @@ fun LanguageScreen(
   onAppBarValueChange: (String) -> Unit,
   navigationIcon: @Composable() () -> Unit = {}
 ) {
-  val state by languageViewModel.state.observeAsState(State.Loading)
+  val state by languageViewModel.state.collectAsState(State.Loading)
   val listState: LazyListState = rememberLazyListState()
   val context = LocalContext.current
-
+  languageViewModel.effects.CollectSideEffectWithActivity { effect, activity ->
+    effect.invokeWith(activity)
+  }
   Scaffold(topBar = {
     KiwixAppBar(
       titleId = R.string.select_languages,
@@ -106,7 +109,7 @@ fun LanguageScreen(
             context = context,
             listState = listState,
             selectLanguageItem = { languageItem ->
-              languageViewModel.actions.offer(Action.Select(languageItem))
+              languageViewModel.actions.tryEmit(Action.Select(languageItem))
             }
           )
         }

@@ -71,7 +71,7 @@ class LanguageFragment : BaseFragment() {
       fun resetSearchState() {
         // clears the search text and resets the filter
         searchText = ""
-        languageViewModel.actions.offer(Action.Filter(searchText))
+        languageViewModel.actions.tryEmit(Action.Filter(searchText))
       }
 
       KiwixTheme {
@@ -83,13 +83,13 @@ class LanguageFragment : BaseFragment() {
             isSearchActive = isSearchActive,
             onSearchClick = { isSearchActive = true },
             onSaveClick = {
-              languageViewModel.actions.offer(Action.SaveAll)
+              languageViewModel.actions.tryEmit(Action.SaveAll)
             }
           ),
           onClearClick = { resetSearchState() },
           onAppBarValueChange = {
             searchText = it
-            languageViewModel.actions.offer(Action.Filter(it))
+            languageViewModel.actions.tryEmit(Action.Filter(it))
           },
           navigationIcon = {
             NavigationIcon(
@@ -113,18 +113,6 @@ class LanguageFragment : BaseFragment() {
         )
       }
     }
-    compositeAdd(activity)
-  }
-
-  private fun compositeAdd(activity: CoreMainActivity) {
-    compositeDisposable.add(
-      languageViewModel.effects.subscribe(
-        {
-          it.invokeWith(activity)
-        },
-        Throwable::printStackTrace
-      )
-    )
   }
 
   private fun appBarActionMenuList(

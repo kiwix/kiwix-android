@@ -285,7 +285,7 @@ class ZimManageViewModel @Inject constructor(
     val downloads = downloadDao.downloads().asFlowable()
     val booksFromDao = books().asFlowable()
     val networkLibrary = PublishProcessor.create<LibraryNetworkEntity>()
-    val languages = languageDao.languages()
+    val languages = languageDao.languages().asFlowable()
     return arrayOf(
       updateLibraryItems(booksFromDao, downloads, networkLibrary, languages),
       updateLanguagesInDao(networkLibrary, languages),
@@ -451,7 +451,7 @@ class ZimManageViewModel @Inject constructor(
     booksFromDao: io.reactivex.rxjava3.core.Flowable<List<BookOnDisk>>,
     downloads: io.reactivex.rxjava3.core.Flowable<List<DownloadModel>>,
     library: Flowable<LibraryNetworkEntity>,
-    languages: Flowable<List<Language>>
+    languages: io.reactivex.rxjava3.core.Flowable<List<Language>>
   ) = Flowable.combineLatest(
     booksFromDao,
     downloads,
@@ -481,7 +481,7 @@ class ZimManageViewModel @Inject constructor(
 
   private fun updateLanguagesInDao(
     library: Flowable<LibraryNetworkEntity>,
-    languages: Flowable<List<Language>>
+    languages: io.reactivex.rxjava3.core.Flowable<List<Language>>
   ) = library
     .subscribeOn(Schedulers.io())
     .map(LibraryNetworkEntity::book)

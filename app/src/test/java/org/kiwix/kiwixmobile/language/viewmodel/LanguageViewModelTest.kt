@@ -18,13 +18,13 @@
 
 package org.kiwix.kiwixmobile.language.viewmodel
 
-import com.jraska.livedata.test
+import androidx.lifecycle.viewModelScope
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.processors.PublishProcessor
-import io.reactivex.schedulers.Schedulers
-import org.junit.jupiter.api.AfterAll
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.test.runTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -37,130 +37,169 @@ import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
 import org.kiwix.kiwixmobile.language.viewmodel.Action.UpdateLanguages
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
-import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
+import org.kiwix.kiwixmobile.zimManager.testFlow
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import org.kiwix.sharedFunctions.language
-import org.kiwix.sharedFunctions.resetSchedulers
-import org.kiwix.sharedFunctions.setScheduler
 
 fun languageItem(language: Language = language()) =
   LanguageListItem.LanguageItem(language)
 
 @ExtendWith(InstantExecutorExtension::class)
 class LanguageViewModelTest {
-  init {
-    setScheduler(Schedulers.trampoline())
-  }
-
-  @AfterAll
-  fun teardown() {
-    resetSchedulers()
-  }
-
   private val newLanguagesDao: NewLanguagesDao = mockk()
   private lateinit var languageViewModel: LanguageViewModel
-
-  private val languages: PublishProcessor<List<Language>> = PublishProcessor.create()
+  private lateinit var languages: MutableStateFlow<List<Language>>
 
   @BeforeEach
   fun init() {
     clearAllMocks()
+    languages = MutableStateFlow(emptyList())
     every { newLanguagesDao.languages() } returns languages
     languageViewModel =
       LanguageViewModel(newLanguagesDao)
   }
 
   @Test
-  fun `initial state is Loading`() {
-    languageViewModel.state.test()
-      .assertValueHistory(Loading)
+  fun `initial state is Loading`() = runTest {
+    testFlow(
+      flow = languageViewModel.state,
+      triggerAction = {},
+      assert = { assertThat(awaitItem()).isEqualTo(Loading) }
+    )
   }
 
   @Test
-  fun `an empty languages emission does not send update action`() {
-    languageViewModel.actions.test()
-      .also {
-        languages.offer(listOf())
-      }
-      .assertValues()
+  fun `an empty languages emission does not send update action`() = runTest {
+    testFlow(
+      languageViewModel.actions,
+      triggerAction = { languages.emit(listOf()) },
+      assert = { expectNoEvents() }
+    )
   }
 
   @Test
-  fun `a languages emission sends update action`() {
+  fun `a languages emission sends update action`() = runTest {
     val expectedList = listOf(language())
-    languageViewModel.actions.test()
-      .also {
-        languages.offer(expectedList)
+    testFlow(
+      languageViewModel.actions,
+      triggerAction = { languages.emit(expectedList) },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(UpdateLanguages(expectedList))
       }
-      .assertValues(UpdateLanguages(expectedList))
+    )
   }
 
   @Test
-  fun `UpdateLanguages Action changes state to Content when Loading`() {
-    languageViewModel.actions.offer(UpdateLanguages(listOf()))
-    languageViewModel.state.test()
-      .assertValueHistory(Content(listOf()))
-  }
-
-  @Test
-  fun `UpdateLanguages Action has no effect on other states`() {
-    languageViewModel.actions.offer(UpdateLanguages(listOf()))
-    languageViewModel.actions.offer(UpdateLanguages(listOf()))
-    languageViewModel.state.test()
-      .assertValueHistory(Content(listOf()))
-  }
-
-  @Test
-  fun `Filter Action updates Content state `() {
-    languageViewModel.actions.offer(UpdateLanguages(listOf()))
-    languageViewModel.actions.offer(Filter("filter"))
-    languageViewModel.state.test()
-      .assertValueHistory(Content(listOf(), filter = "filter"))
-  }
-
-  @Test
-  fun `Filter Action has no effect on other states`() {
-    languageViewModel.actions.offer(Filter(""))
-    languageViewModel.state.test()
-      .assertValueHistory(Loading)
-  }
-
-  @Test
-  fun `Select Action updates Content state`() {
-    languageViewModel.actions.offer(UpdateLanguages(listOf(language())))
-    languageViewModel.actions.offer(Select(languageItem()))
-    languageViewModel.state.test()
-      .assertValueHistory(Content(listOf(language(isActive = true))))
-  }
-
-  @Test
-  fun `Select Action has no effect on other states`() {
-    languageViewModel.actions.offer(Select(languageItem()))
-    languageViewModel.state.test()
-      .assertValueHistory(Loading)
-  }
-
-  @Test
-  fun `SaveAll changes Content to Saving with SideEffect SaveLanguagesAndFinish`() {
-    languageViewModel.actions.offer(UpdateLanguages(listOf()))
-    languageViewModel.effects.test()
-      .also {
-        languageViewModel.actions.offer(SaveAll)
+  fun `UpdateLanguages Action changes state to Content when Loading`() = runTest {
+    testFlow(
+      languageViewModel.state,
+      triggerAction = { languageViewModel.actions.emit(UpdateLanguages(listOf())) },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(Loading)
+        assertThat(awaitItem()).isEqualTo(Content(listOf()))
       }
-      .assertValues(
-        SaveLanguagesAndFinish(
-          listOf(),
-          newLanguagesDao
+    )
+  }
+
+  @Test
+  fun `UpdateLanguages Action has no effect on other states`() = runTest {
+    testFlow(
+      languageViewModel.state,
+      triggerAction = {
+        languageViewModel.actions.emit(UpdateLanguages(listOf()))
+        languageViewModel.actions.emit(UpdateLanguages(listOf()))
+      },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(Loading)
+        assertThat(awaitItem()).isEqualTo(Content(listOf()))
+      }
+    )
+  }
+
+  @Test
+  fun `Filter Action updates Content state `() = runTest {
+    testFlow(
+      languageViewModel.state,
+      triggerAction = {
+        languageViewModel.actions.tryEmit(UpdateLanguages(listOf()))
+        languageViewModel.actions.tryEmit(Filter("filter"))
+      },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(Loading)
+        assertThat(awaitItem()).isEqualTo(Content(items = listOf(), filter = ""))
+        assertThat(awaitItem()).isEqualTo(Content(listOf(), filter = "filter"))
+      }
+    )
+  }
+
+  @Test
+  fun `Filter Action has no effect on other states`() = runTest {
+    testFlow(
+      languageViewModel.state,
+      triggerAction = { languageViewModel.actions.emit(Filter("")) },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(Loading)
+      }
+    )
+  }
+
+  @Test
+  fun `Select Action updates Content state`() = runTest {
+    testFlow(
+      languageViewModel.state,
+      triggerAction = {
+        languageViewModel.actions.emit(UpdateLanguages(listOf(language())))
+        languageViewModel.actions.emit(Select(languageItem()))
+      },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(Loading)
+        assertThat(awaitItem()).isEqualTo(Content(listOf(language())))
+        assertThat(awaitItem()).isEqualTo(Content(listOf(language(isActive = true))))
+      }
+    )
+  }
+
+  @Test
+  fun `Select Action has no effect on other states`() = runTest {
+    testFlow(
+      languageViewModel.state,
+      triggerAction = { languageViewModel.actions.emit(Select(languageItem())) },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(Loading)
+      }
+    )
+  }
+
+  @Test
+  fun `SaveAll changes Content to Saving with SideEffect SaveLanguagesAndFinish`() = runTest {
+    val languages = listOf<Language>()
+    testFlow(
+      flow = languageViewModel.effects,
+      triggerAction = {
+        languageViewModel.actions.emit(UpdateLanguages(languages))
+        languageViewModel.actions.emit(SaveAll)
+      },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(
+          SaveLanguagesAndFinish(
+            languages,
+            newLanguagesDao,
+            languageViewModel.viewModelScope
+          )
         )
-      )
-    languageViewModel.state.test()
-      .assertValueHistory(Saving)
+      }
+    )
+    testFlow(flow = languageViewModel.state, triggerAction = {}, assert = {
+      assertThat(awaitItem()).isEqualTo(State.Saving)
+    })
   }
 
   @Test
-  fun `SaveAll has no effect on other states`() {
-    languageViewModel.actions.offer(SaveAll)
-    languageViewModel.state.test()
-      .assertValueHistory(Loading)
+  fun `SaveAll has no effect on other states`() = runTest {
+    testFlow(
+      languageViewModel.state,
+      triggerAction = { languageViewModel.actions.emit(SaveAll) },
+      { assertThat(awaitItem()).isEqualTo(Loading) }
+    )
   }
 }

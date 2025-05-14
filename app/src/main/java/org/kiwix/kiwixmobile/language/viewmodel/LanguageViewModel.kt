@@ -18,13 +18,18 @@
 
 package org.kiwix.kiwixmobile.language.viewmodel
 
-import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.processors.PublishProcessor
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.language.viewmodel.Action.SaveAll
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
@@ -37,27 +42,40 @@ import javax.inject.Inject
 class LanguageViewModel @Inject constructor(
   private val languageDao: NewLanguagesDao
 ) : ViewModel() {
-  val state = MutableLiveData<State>().apply { value = Loading }
-  val actions = PublishProcessor.create<Action>()
-  val effects = PublishProcessor.create<SideEffect<*>>()
-
-  private val compositeDisposable = CompositeDisposable()
+  val state = MutableStateFlow<State>(Loading)
+  val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
+  val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
+  private val coroutineJobs = mutableListOf<Job>()
 
   init {
-    compositeDisposable.addAll(
-      actions.map { state.value?.let { value -> reduce(it, value) } }
-        .distinctUntilChanged()
-        .subscribe(state::postValue, Throwable::printStackTrace),
-      languageDao.languages().filter { it.isNotEmpty() }
-        .subscribe(
-          { actions.offer(UpdateLanguages(it)) },
-          Throwable::printStackTrace
-        )
-    )
+    coroutineJobs.apply {
+      add(observeActions())
+      add(observeLanguages())
+    }
   }
 
+  private fun observeActions() =
+    viewModelScope.launch {
+      actions
+        .map { action -> reduce(action, state.value) }
+        .distinctUntilChanged()
+        .collect { newState -> state.value = newState }
+    }
+
+  private fun observeLanguages() =
+    viewModelScope.launch {
+      languageDao.languages()
+        .filter { it.isNotEmpty() }
+        .collect { languages ->
+          actions.tryEmit(UpdateLanguages(languages))
+        }
+    }
+
   override fun onCleared() {
-    compositeDisposable.clear()
+    coroutineJobs.forEach {
+      it.cancel()
+    }
+    coroutineJobs.clear()
     super.onCleared()
   }
 
@@ -71,17 +89,20 @@ class LanguageViewModel @Inject constructor(
           Loading -> Content(action.languages)
           else -> currentState
         }
+
       is Filter -> {
         when (currentState) {
           is Content -> filterContent(action.filter, currentState)
           else -> currentState
         }
       }
+
       is Select ->
         when (currentState) {
           is Content -> updateSelection(action.language, currentState)
           else -> currentState
         }
+
       SaveAll ->
         when (currentState) {
           is Content -> saveAll(currentState)
@@ -91,10 +112,11 @@ class LanguageViewModel @Inject constructor(
   }
 
   private fun saveAll(currentState: Content): State {
-    effects.offer(
+    effects.tryEmit(
       SaveLanguagesAndFinish(
         currentState.items,
-        languageDao
+        languageDao,
+        viewModelScope
       )
     )
     return Saving
