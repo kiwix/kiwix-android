@@ -22,7 +22,14 @@ import android.content.Context
 import android.content.res.Configuration
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.spyk
 import io.mockk.verify
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -34,8 +41,13 @@ class DarkModeConfigTest {
   private lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   private lateinit var context: Context
 
+  @OptIn(ExperimentalCoroutinesApi::class)
+  private val testDispatcher = UnconfinedTestDispatcher()
+
+  @OptIn(ExperimentalCoroutinesApi::class)
   @BeforeEach
   fun setUp() {
+    Dispatchers.setMain(testDispatcher)
     sharedPreferenceUtil = mockk()
     context = mockk()
     darkModeConfig = DarkModeConfig(sharedPreferenceUtil, context)
@@ -97,7 +109,14 @@ class DarkModeConfigTest {
   @Test
   fun `should call setMode during init`() {
     every { sharedPreferenceUtil.darkModes() } returns mockk(relaxed = true)
-    darkModeConfig.init()
+    val spy = spyk(darkModeConfig)
+    spy.init()
     verify { sharedPreferenceUtil.darkModes() }
+  }
+
+  @OptIn(ExperimentalCoroutinesApi::class)
+  @AfterEach
+  fun tearDown() {
+    Dispatchers.resetMain()
   }
 }

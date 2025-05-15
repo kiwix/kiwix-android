@@ -31,7 +31,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.Single
-import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.TestScheduler
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -122,7 +121,8 @@ class ZimManageViewModelTest {
   private val booksOnFileSystem = MutableStateFlow<List<BookOnDisk>>(emptyList())
   private val books = MutableStateFlow<List<BookOnDisk>>(emptyList())
   private val languages = MutableStateFlow<List<Language>>(emptyList())
-  private val fileSystemStates: BehaviorProcessor<FileSystemState> = BehaviorProcessor.create()
+  private val fileSystemStates =
+    MutableStateFlow<FileSystemState>(FileSystemState.DetectingFileSystem)
   private val networkStates: PublishProcessor<NetworkState> = PublishProcessor.create()
   private val booksOnDiskListItems = MutableStateFlow<List<BooksOnDiskListItem>>(emptyList())
 
@@ -425,7 +425,7 @@ class ZimManageViewModelTest {
         language(isActive = true, occurencesOfLanguage = 1, languageCode = "activeLanguage"),
         language(isActive = false, occurencesOfLanguage = 1, languageCode = "inactiveLanguage")
       )
-    fileSystemStates.onNext(CanWrite4GbFile)
+    fileSystemStates.value = CanWrite4GbFile
     testScheduler.advanceTimeBy(500, MILLISECONDS)
     testScheduler.triggerActions()
     viewModel.libraryItems.test()
@@ -461,7 +461,7 @@ class ZimManageViewModelTest {
       listOf(
         language(isActive = true, occurencesOfLanguage = 1, languageCode = "activeLanguage")
       )
-    fileSystemStates.onNext(CannotWrite4GbFile)
+    fileSystemStates.value = CannotWrite4GbFile
     testScheduler.advanceTimeBy(500, MILLISECONDS)
     testScheduler.triggerActions()
     viewModel.libraryItems.test()

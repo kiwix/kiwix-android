@@ -37,10 +37,9 @@ import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.FragmentManager
 import eu.mhutti1.utils.storage.StorageDevice
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
@@ -83,6 +82,7 @@ class CopyMoveFileHandler @Inject constructor(
   private var selectedFileUri: Uri? = null
   private var selectedFile: DocumentFile? = null
   private var lifecycleScope: CoroutineScope? = null
+  private var storageObservingJob: Job? = null
 
   /**
    * Holds the state for the copy/move progress bar.
@@ -94,7 +94,6 @@ class CopyMoveFileHandler @Inject constructor(
   private var progressBarState = mutableStateOf(Pair("", ZERO))
   var isMoveOperation = false
   var shouldValidateZimFile: Boolean = false
-  private var fileSystemDisposable: Disposable? = null
   private lateinit var fragmentManager: FragmentManager
   private lateinit var alertDialogShower: AlertDialogShower
 
@@ -248,17 +247,15 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   fun observeFileSystemState() {
-    if (fileSystemDisposable?.isDisposed == false) return
-    fileSystemDisposable = fat32Checker.fileSystemStates
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe {
-        lifecycleScope?.launch {
-          hidePreparingCopyMoveDialog()
-          if (validateZimFileCanCopyOrMove()) {
-            performCopyMoveOperation()
-          }
+    if (storageObservingJob?.isActive == true) return
+    storageObservingJob = lifecycleScope?.launch {
+      fat32Checker.fileSystemStates.collect {
+        hidePreparingCopyMoveDialog()
+        if (validateZimFileCanCopyOrMove()) {
+          performCopyMoveOperation()
         }
       }
+    }
   }
 
   suspend fun performCopyMoveOperationIfSufficientSpaceAvailable() {
@@ -570,7 +567,8 @@ class CopyMoveFileHandler @Inject constructor(
     (activity as KiwixMainActivity).getStorageDeviceList()
 
   fun dispose() {
-    fileSystemDisposable?.dispose()
+    storageObservingJob?.cancel()
+    storageObservingJob = null
     setFileCopyMoveCallback(null)
     setLifeCycleScope(null)
   }

@@ -19,61 +19,67 @@ package org.kiwix.kiwixmobile.zimManager
 
 import android.os.Build
 import android.os.FileObserver
-import io.reactivex.Flowable
-import io.reactivex.functions.BiFunction
-import io.reactivex.processors.BehaviorProcessor
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.DetectingFileSystem
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
 import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.CANNOT_WRITE_4GB
 import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.CAN_WRITE_4GB
 import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.INCONCLUSIVE
 import java.io.File
 
-@Suppress("IgnoredReturnValue", "CheckResult")
 class Fat32Checker constructor(
   sharedPreferenceUtil: SharedPreferenceUtil,
   private val fileSystemCheckers: List<FileSystemChecker>
 ) {
-  val fileSystemStates: BehaviorProcessor<FileSystemState> = BehaviorProcessor.create()
+  private val _fileSystemStates =
+    MutableStateFlow<FileSystemState>(FileSystemState.DetectingFileSystem)
+  val fileSystemStates: StateFlow<FileSystemState> = _fileSystemStates.asStateFlow()
   private var fileObserver: FileObserver? = null
-  private val requestCheckSystemFileType = BehaviorProcessor.createDefault(Unit)
+  private val requestCheckSystemFileType = MutableSharedFlow<Unit>(replay = 1).apply {
+    tryEmit(Unit)
+  }
+
+  @Suppress("InjectDispatcher")
+  private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
   init {
-    Flowable.combineLatest(
+    scope.launch {
       sharedPreferenceUtil.prefStorages
-        .distinctUntilChanged()
-        .doOnNext { fileSystemStates.offer(DetectingFileSystem) },
-      requestCheckSystemFileType,
-      BiFunction { storage: String, _: Unit -> storage }
-    )
-      .observeOn(Schedulers.io())
-      .subscribeOn(Schedulers.io())
-      .subscribe(
-        {
-          val systemState = toFileSystemState(it)
-          fileSystemStates.offer(systemState)
-          fileObserver = if (systemState == NotEnoughSpaceFor4GbFile) fileObserver(it) else null
-        },
-        Throwable::printStackTrace
-      )
+        .onEach { _fileSystemStates.emit(FileSystemState.DetectingFileSystem) }
+        .combine(requestCheckSystemFileType) { storage, _ -> storage }
+        .collectLatest { storage ->
+          val systemState = toFileSystemState(storage)
+          _fileSystemStates.emit(systemState)
+          fileObserver =
+            if (systemState == NotEnoughSpaceFor4GbFile) fileObserver(storage) else null
+        }
+    }
   }
 
   private fun fileObserver(it: String): FileObserver =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       object : FileObserver(File(it), MOVED_FROM or DELETE) {
         override fun onEvent(event: Int, path: String?) {
-          requestCheckSystemFileType.onNext(Unit)
+          requestCheckSystemFileType.tryEmit(Unit)
         }
       }.apply { startWatching() }
     } else {
       @Suppress("DEPRECATION")
       object : FileObserver(it, MOVED_FROM or DELETE) {
         override fun onEvent(event: Int, path: String?) {
-          requestCheckSystemFileType.onNext(Unit)
+          requestCheckSystemFileType.tryEmit(Unit)
         }
       }.apply { startWatching() }
     }
@@ -86,6 +92,7 @@ class Fat32Checker constructor(
         } else {
           CannotWrite4GbFile
         }
+
       else -> NotEnoughSpaceFor4GbFile
     }
 
