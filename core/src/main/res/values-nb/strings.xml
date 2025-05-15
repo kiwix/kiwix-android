@@ -43,6 +43,7 @@
   <string name="stop_server_label">Stopp tjener</string>
   <string name="error_server_already_running">Tjeneren kjører allerede. Stopp den og forsøk på nytt.</string>
   <string name="error_ip_address_not_found">Klarte ikke å finne IP adressen.</string>
+  <string name="server_started_message">Skriv inn denne IP-adressen i nettleseren din for å få tilgang til serveren %s</string>
   <string name="qr_code">Generert QR-kode</string>
   <string name="share_host_address">Del webadresse via andre programmer</string>
   <string name="error_file_not_found">Feil: Den valgte ZIM-filen ble ikke funnet \n. %s</string>
@@ -50,6 +51,8 @@
   <string name="zim_not_opened">Kan ikke åpne ZIM-filen</string>
   <string name="error_file_invalid">Feil: Den valgte filen er ikke en gyldig ZIM-fil. %s</string>
   <string name="error_article_url_not_found">Feil: Kunne ikke laste inn artikkelen (Url: %1$s).</string>
+  <string name="error_loading_random_article_zim_not_loaded">Kan ikke laste inn artikkelen. ZIM-filen er ikke lastet inn riktig.</string>
+  <string name="could_not_find_random_article">Klarte ikke å hente en tilfeldig artikkel. Prøv igjen senere.</string>
   <string name="pref_display_title">Skjerm</string>
   <string name="pref_info_title">Informasjon</string>
   <string name="pref_info_version">Versjon</string>
@@ -67,7 +70,9 @@
   <string name="no_app_found_to_select_bookmark_file">Fant ingen app for å velge en bokmerkefil</string>
   <string name="no_section_info">Ingen innholdstitteler funnet.</string>
   <string name="request_storage">For å få tilgang til innhold uten nett trenger vi tilgang til lagringen din</string>
+  <string name="request_write_storage">For å laste ned ZIM-filer trenger vi skrivetilgang til lagringsplassen din</string>
   <string name="delete_recent_search_item">Slette dette elementet?</string>
+  <string name="pref_clear_all_history_title">Tøm logg</string>
   <string name="pref_notes">Notater</string>
   <string name="pref_permission">Tillatelser</string>
   <string name="pref_import_bookmark_title">Importer bokmerker</string>
@@ -129,6 +134,7 @@
   <string name="no">Nei</string>
   <string name="confirm_stop_download_title">Vil du stoppe nedlastingen?</string>
   <string name="confirm_stop_download_msg">Er du sikker på at du vil stoppe denne nedlastingen?</string>
+  <string name="change_storage">Endre</string>
   <string name="tts_not_enabled">Les-høyt er ikke aktivert for denne ZIM-filen</string>
   <string name="next">Neste</string>
   <string name="previous">Forrige</string>
@@ -143,6 +149,7 @@
   <string name="time_today">I dag</string>
   <string name="time_yesterday">I går</string>
   <string name="pref_external_link_popup_title">Varsle når du går til eksterne lenker</string>
+  <string name="do_not_ask_anymore">Ikke spør igjen</string>
   <string name="other_languages">Andre språk:</string>
   <string name="crash_title">Vel … Dette er pinlig</string>
   <string name="crash_description">Det ser ut som vi krasjet.\n\nVil du hjelpe oss med å løse dette problemet ved å sende følgende informasjon?</string>
