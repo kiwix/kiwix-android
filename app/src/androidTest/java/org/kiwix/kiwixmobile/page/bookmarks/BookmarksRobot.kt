@@ -53,8 +53,6 @@ fun bookmarks(func: BookmarksRobot.() -> Unit) =
   BookmarksRobot().applyWithViewHierarchyPrinting(func)
 
 class BookmarksRobot : BaseRobot() {
-  private var retryCountForBookmarkAddedButton = 5
-
   fun assertBookMarksDisplayed(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitForIdle()
@@ -111,22 +109,6 @@ class BookmarksRobot : BaseRobot() {
     // wait for disappearing the snack-bar after removing the bookmark
     BaristaSleepInteractions.sleep(5L, TimeUnit.SECONDS)
     testFlakyView({ onView(withId(R.id.bottom_toolbar_bookmark)).perform(longClick()) })
-  }
-
-  fun clickOnOpenSavedBookmarkButton() {
-    try {
-      onView(withText("OPEN")).perform(click())
-    } catch (runtimeException: RuntimeException) {
-      if (retryCountForBookmarkAddedButton > 0) {
-        retryCountForBookmarkAddedButton--
-        clickOnOpenSavedBookmarkButton()
-      } else {
-        throw RuntimeException(
-          "Unable to save the bookmark, original exception is" +
-            " ${runtimeException.localizedMessage}"
-        )
-      }
-    }
   }
 
   fun assertBookmarkSaved(composeTestRule: ComposeContentTestRule) {

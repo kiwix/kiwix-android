@@ -134,9 +134,9 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
       pressBack()
       // Test saving bookmark
       clickOnSaveBookmarkImage()
-      clickOnOpenSavedBookmarkButton()
-      assertBookmarkSaved(composeTestRule)
-      pressBack()
+      topLevel {
+        clickBookmarksOnNavDrawer { assertBookmarkSaved(composeTestRule) }
+      }
       // Test removing bookmark
       clickOnSaveBookmarkImage()
       longClickOnSaveBookmarkImage()

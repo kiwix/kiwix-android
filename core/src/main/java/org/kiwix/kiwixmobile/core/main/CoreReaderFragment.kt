@@ -1899,9 +1899,10 @@ abstract class CoreReaderFragment :
 
   protected fun setUpBookmarks(zimFileReader: ZimFileReader) {
     safelyCancelBookmarkJob()
-    bookmarkingJob = CoroutineScope(Dispatchers.Main).launch {
+    val zimFileReaderId = zimFileReader.id
+    bookmarkingJob = viewLifecycleOwner.lifecycleScope.launch {
       combine(
-        libkiwixBookmarks?.bookmarkUrlsForCurrentBook(zimFileReader.id) ?: emptyFlow(),
+        libkiwixBookmarks?.bookmarkUrlsForCurrentBook(zimFileReaderId) ?: emptyFlow(),
         webUrlsFlow,
         List<String?>::contains
       ).collect { isBookmarked ->
