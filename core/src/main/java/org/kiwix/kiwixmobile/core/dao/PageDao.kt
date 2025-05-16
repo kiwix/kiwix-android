@@ -18,10 +18,10 @@
 
 package org.kiwix.kiwixmobile.core.dao
 
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 
 interface PageDao {
-  fun pages(): Flowable<List<Page>>
+  fun pages(): Flow<List<Page>>
   fun deletePages(pagesToDelete: List<Page>)
 }

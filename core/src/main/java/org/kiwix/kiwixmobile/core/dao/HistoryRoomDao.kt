@@ -24,7 +24,8 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.TypeConverter
 import androidx.room.Update
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
@@ -33,9 +34,9 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 @Dao
 abstract class HistoryRoomDao : PageDao {
   @Query("SELECT * FROM HistoryRoomEntity ORDER BY HistoryRoomEntity.timeStamp DESC")
-  abstract fun historyRoomEntity(): Flowable<List<HistoryRoomEntity>>
+  abstract fun historyRoomEntity(): Flow<List<HistoryRoomEntity>>
 
-  fun history(): Flowable<List<Page>> =
+  fun history(): Flow<List<Page>> =
     historyRoomEntity().map {
       it.map { historyEntity ->
         historyEntity.zimFilePath?.let { filePath ->

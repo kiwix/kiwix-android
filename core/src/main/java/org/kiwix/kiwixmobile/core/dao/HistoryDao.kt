@@ -20,7 +20,8 @@ package org.kiwix.kiwixmobile.core.dao
 import io.objectbox.Box
 import io.objectbox.kotlin.query
 import io.objectbox.query.QueryBuilder
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryEntity_
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -29,8 +30,8 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseV
 import javax.inject.Inject
 
 class HistoryDao @Inject constructor(val box: Box<HistoryEntity>) : PageDao {
-  fun history(): Flowable<List<Page>> =
-    box.asFlowable(
+  fun history(): Flow<List<Page>> =
+    box.asFlow(
       box.query {
         orderDesc(HistoryEntity_.timeStamp)
       }
@@ -46,7 +47,7 @@ class HistoryDao @Inject constructor(val box: Box<HistoryEntity>) : PageDao {
       }
     }
 
-  override fun pages(): Flowable<List<Page>> = history()
+  override fun pages(): Flow<List<Page>> = history()
   override fun deletePages(pagesToDelete: List<Page>) =
     deleteHistory(pagesToDelete as List<HistoryItem>)
 

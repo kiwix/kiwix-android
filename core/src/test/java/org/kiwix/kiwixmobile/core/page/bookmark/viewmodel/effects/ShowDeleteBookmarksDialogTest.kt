@@ -22,9 +22,9 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.processors.PublishProcessor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.base.SideEffect
@@ -40,7 +40,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteSelectedBookmar
 import java.util.UUID
 
 internal class ShowDeleteBookmarksDialogTest {
-  val effects = mockk<PublishProcessor<SideEffect<*>>>(relaxed = true)
+  val effects = mockk<MutableSharedFlow<SideEffect<*>>>(relaxed = true)
   private val newBookmarksDao = mockk<NewBookmarksDao>()
   val activity = mockk<CoreMainActivity>()
   private val dialogShower = mockk<DialogShower>(relaxed = true)
@@ -61,7 +61,7 @@ internal class ShowDeleteBookmarksDialogTest {
     showDeleteBookmarksDialog.invokeWith(activity)
     verify { dialogShower.show(any(), capture(lambdaSlot)) }
     lambdaSlot.captured.invoke()
-    verify { effects.offer(DeletePageItems(bookmarkState(), newBookmarksDao, viewModelScope)) }
+    verify { effects.tryEmit(DeletePageItems(bookmarkState(), newBookmarksDao, viewModelScope)) }
   }
 
   private fun mockkActivityInjection(showDeleteBookmarksDialog: ShowDeleteBookmarksDialog) {

@@ -22,10 +22,11 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import io.reactivex.Flowable
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.entities.NotesRoomEntity
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
@@ -38,9 +39,9 @@ import java.io.File
 @Dao
 abstract class NotesRoomDao : PageDao {
   @Query("SELECT * FROM NotesRoomEntity ORDER BY NotesRoomEntity.noteTitle")
-  abstract fun notesAsEntity(): Flowable<List<NotesRoomEntity>>
+  abstract fun notesAsEntity(): Flow<List<NotesRoomEntity>>
 
-  fun notes(): Flowable<List<Page>> =
+  fun notes(): Flow<List<Page>> =
     notesAsEntity().map {
       it.map { notesEntity ->
         notesEntity.zimFilePath?.let { filePath ->
@@ -53,7 +54,7 @@ abstract class NotesRoomDao : PageDao {
       }
     }
 
-  override fun pages(): Flowable<List<Page>> = notes()
+  override fun pages(): Flow<List<Page>> = notes()
   override fun deletePages(pagesToDelete: List<Page>) =
     deleteNotes(pagesToDelete as List<NoteListItem>)
 

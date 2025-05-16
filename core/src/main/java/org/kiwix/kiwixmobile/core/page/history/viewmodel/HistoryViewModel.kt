@@ -53,7 +53,7 @@ class HistoryViewModel @Inject constructor(
     action: Action.UserClickedShowAllToggle,
     state: HistoryState
   ): HistoryState {
-    effects.offer(UpdateAllHistoryPreference(sharedPreferenceUtil, action.isChecked))
+    effects.tryEmit(UpdateAllHistoryPreference(sharedPreferenceUtil, action.isChecked))
     return state.copy(showAll = action.isChecked)
   }
 

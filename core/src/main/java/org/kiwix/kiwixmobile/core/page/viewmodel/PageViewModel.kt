@@ -18,14 +18,20 @@
 
 package org.kiwix.kiwixmobile.core.page.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.processors.PublishProcessor
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -54,32 +60,29 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
   lateinit var alertDialogShower: AlertDialogShower
 
   private lateinit var pageViewModelClickListener: PageViewModelClickListener
+  private val _state = MutableStateFlow(initialState())
+  val state: StateFlow<S> = _state.asStateFlow()
+  val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
+  val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
+  private val coroutineJobs = mutableListOf<Job>()
 
-  val state: MutableLiveData<S> by lazy {
-    MutableLiveData<S>().apply {
-      value = initialState()
+  init {
+    coroutineJobs.apply {
+      add(observeActions())
+      add(observePages())
     }
   }
 
-  private val compositeDisposable = CompositeDisposable()
-  val effects = PublishProcessor.create<SideEffect<*>>()
-  val actions = PublishProcessor.create<Action>()
+  private fun observeActions() =
+    actions.map { action -> reduce(action, state.value) }
+      .onEach { newState -> _state.value = newState }
+      .launchIn(viewModelScope)
 
-  init {
-    addDisposablesToCompositeDisposable()
-  }
-
-  private fun viewStateReducer(): Disposable =
-    actions.map { state.value?.let { value -> reduce(it, value) } }
-      .subscribe(state::postValue, Throwable::printStackTrace)
-
-  protected fun addDisposablesToCompositeDisposable() {
-    compositeDisposable.addAll(
-      viewStateReducer(),
-      pageDao.pages().subscribeOn(Schedulers.io())
-        .subscribe({ actions.offer(UpdatePages(it)) }, Throwable::printStackTrace)
-    )
-  }
+  private fun observePages(dispatcher: CoroutineDispatcher = Dispatchers.IO) =
+    pageDao.pages()
+      .flowOn(dispatcher)
+      .onEach { actions.tryEmit(UpdatePages(it)) }
+      .launchIn(viewModelScope)
 
   private fun reduce(action: Action, state: S): S =
     when (action) {
@@ -103,7 +106,7 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
   ): S
 
   private fun offerShowDeleteDialog(state: S): S {
-    effects.offer(createDeletePageDialogEffect(state, viewModelScope = viewModelScope))
+    effects.tryEmit(createDeletePageDialogEffect(state, viewModelScope = viewModelScope))
     return state
   }
 
@@ -117,9 +120,9 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
       return copyWithNewItems(state, state.getItemsAfterToggleSelectionOfItem(action.page))
     }
     if (::pageViewModelClickListener.isInitialized) {
-      effects.offer(pageViewModelClickListener.onItemClick(action.page))
+      effects.tryEmit(pageViewModelClickListener.onItemClick(action.page))
     } else {
-      effects.offer(OpenPage(action.page, zimReaderContainer))
+      effects.tryEmit(OpenPage(action.page, zimReaderContainer))
     }
     return state
   }
@@ -131,12 +134,15 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
   abstract fun deselectAllPages(state: S): S
 
   private fun exitFragment(state: S): S {
-    effects.offer(PopFragmentBackstack)
+    effects.tryEmit(PopFragmentBackstack)
     return state
   }
 
   override fun onCleared() {
-    compositeDisposable.clear()
+    coroutineJobs.forEach {
+      it.cancel()
+    }
+    coroutineJobs.clear()
     super.onCleared()
   }
 

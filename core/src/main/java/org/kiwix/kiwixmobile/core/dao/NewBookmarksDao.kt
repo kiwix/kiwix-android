@@ -20,8 +20,11 @@ package org.kiwix.kiwixmobile.core.dao
 import io.objectbox.Box
 import io.objectbox.kotlin.query
 import io.objectbox.query.QueryBuilder
-import io.reactivex.Flowable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity
 import org.kiwix.kiwixmobile.core.dao.entities.BookmarkEntity_
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -31,8 +34,8 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseV
 import javax.inject.Inject
 
 class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) : PageDao {
-  fun bookmarks(): Flowable<List<Page>> =
-    box.asFlowable(
+  fun bookmarks(): Flow<List<Page>> =
+    box.asFlow(
       box.query {
         order(BookmarkEntity_.bookmarkTitle)
       }
@@ -48,7 +51,7 @@ class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) : PageDa
       }
     }
 
-  override fun pages(): Flowable<List<Page>> = bookmarks()
+  override fun pages(): Flow<List<Page>> = bookmarks()
   override fun deletePages(pagesToDelete: List<Page>) =
     deleteBookmarks(pagesToDelete as List<BookmarkItem>)
 
@@ -71,8 +74,11 @@ class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) : PageDa
       .toList()
       .distinct()
 
-  fun bookmarkUrlsForCurrentBook(zimFileReader: ZimFileReader?): Flowable<List<String>> =
-    box.asFlowable(
+  fun bookmarkUrlsForCurrentBook(
+    zimFileReader: ZimFileReader?,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ): Flow<List<String>> =
+    box.asFlow(
       box.query {
         equal(
           BookmarkEntity_.zimId,
@@ -88,7 +94,7 @@ class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) : PageDa
         order(BookmarkEntity_.bookmarkTitle)
       }
     ).map { it.map(BookmarkEntity::bookmarkUrl) }
-      .subscribeOn(Schedulers.io())
+      .flowOn(dispatcher)
 
   fun saveBookmark(bookmarkItem: BookmarkItem) {
     box.put(BookmarkEntity(bookmarkItem))

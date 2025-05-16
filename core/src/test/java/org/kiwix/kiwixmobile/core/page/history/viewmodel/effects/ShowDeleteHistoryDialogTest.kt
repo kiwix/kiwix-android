@@ -4,9 +4,9 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.processors.PublishProcessor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.base.SideEffect
@@ -20,7 +20,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteAllHistory
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteSelectedHistory
 
 internal class ShowDeleteHistoryDialogTest {
-  val effects = mockk<PublishProcessor<SideEffect<*>>>(relaxed = true)
+  val effects = mockk<MutableSharedFlow<SideEffect<*>>>(relaxed = true)
   private val historyDao = mockk<HistoryDao>()
   val activity = mockk<CoreMainActivity>()
   private val dialogShower = mockk<DialogShower>(relaxed = true)
@@ -42,7 +42,7 @@ internal class ShowDeleteHistoryDialogTest {
       showDeleteHistoryDialog.invokeWith(activity)
       verify { dialogShower.show(any(), capture(lambdaSlot)) }
       lambdaSlot.captured.invoke()
-      verify { effects.offer(DeletePageItems(historyState(), historyDao, viewModelScope)) }
+      verify { effects.tryEmit(DeletePageItems(historyState(), historyDao, viewModelScope)) }
     }
 
   @Test

@@ -25,8 +25,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.onEach
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
@@ -55,21 +56,17 @@ class LanguageViewModel @Inject constructor(
   }
 
   private fun observeActions() =
-    viewModelScope.launch {
-      actions
-        .map { action -> reduce(action, state.value) }
-        .distinctUntilChanged()
-        .collect { newState -> state.value = newState }
-    }
+    actions
+      .map { action -> reduce(action, state.value) }
+      .distinctUntilChanged()
+      .onEach { newState -> state.value = newState }
+      .launchIn(viewModelScope)
 
   private fun observeLanguages() =
-    viewModelScope.launch {
-      languageDao.languages()
-        .filter { it.isNotEmpty() }
-        .collect { languages ->
-          actions.tryEmit(UpdateLanguages(languages))
-        }
-    }
+    languageDao.languages()
+      .filter { it.isNotEmpty() }
+      .onEach { languages -> actions.tryEmit(UpdateLanguages(languages)) }
+      .launchIn(viewModelScope)
 
   override fun onCleared() {
     coroutineJobs.forEach {
