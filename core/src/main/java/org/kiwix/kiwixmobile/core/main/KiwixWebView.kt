@@ -27,9 +27,10 @@ import android.util.AttributeSet
 import android.view.ContextMenu
 import android.view.ViewGroup
 import android.webkit.WebView
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.BuildConfig
@@ -64,7 +65,7 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
   @Inject
   lateinit var zimReaderContainer: ZimReaderContainer
 
-  private val compositeDisposable = CompositeDisposable()
+  private var textZoomJob: Job? = null
 
   private fun setWindowVisibility(isFullScreen: Boolean) {
     (context as Activity).window.apply {
@@ -142,18 +143,20 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
 
   override fun onAttachedToWindow() {
     super.onAttachedToWindow()
-    compositeDisposable.add(
-      sharedPreferenceUtil.textZooms
-        .subscribe {
-          settings.textZoom = it
-        }
-    )
+    // cancel any previous running job.
+    textZoomJob?.cancel()
+    textZoomJob = CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
+      sharedPreferenceUtil.textZooms.collect {
+        settings.textZoom = it
+      }
+    }
   }
 
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
     nonVideoView = null
-    compositeDisposable.clear()
+    textZoomJob?.cancel()
+    textZoomJob = null
   }
 
   override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {

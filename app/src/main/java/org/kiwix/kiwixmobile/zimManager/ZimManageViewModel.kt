@@ -400,6 +400,7 @@ class ZimManageViewModel @Inject constructor(
           Flowable.just(Unit)
         } else {
           sharedPreferenceUtil.prefWifiOnlys
+            .asFlowable()
             .doOnNext {
               if (it) {
                 shouldShowWifiOnlyDialog.postValue(true)
@@ -464,7 +465,7 @@ class ZimManageViewModel @Inject constructor(
         .debounce(500, MILLISECONDS)
         .observeOn(Schedulers.io())
     ),
-    fat32Checker.fileSystemStates,
+    fat32Checker.fileSystemStates.asFlowable(),
     Function6(::combineLibrarySources)
   )
     .doOnNext { libraryListIsRefreshing.postValue(false) }

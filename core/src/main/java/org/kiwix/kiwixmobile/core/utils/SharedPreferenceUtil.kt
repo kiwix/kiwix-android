@@ -25,8 +25,10 @@ import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import io.reactivex.Flowable
-import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.DarkModeConfig.Mode.Companion.from
@@ -45,16 +47,16 @@ import javax.inject.Singleton
 class SharedPreferenceUtil @Inject constructor(val context: Context) {
   private val sharedPreferences: SharedPreferences =
     PreferenceManager.getDefaultSharedPreferences(context)
-  private val _prefStorages = PublishProcessor.create<String>()
+  private val _prefStorages = MutableStateFlow("")
   val prefStorages
-    get() = _prefStorages.startWith(prefStorage)
-  private val _textZooms = PublishProcessor.create<Int>()
+    get() = _prefStorages.asStateFlow().onStart { emit(prefStorage) }
+  private val _textZooms = MutableStateFlow(DEFAULT_ZOOM)
   val textZooms
-    get() = _textZooms.startWith(textZoom)
-  private val darkModes = PublishProcessor.create<DarkModeConfig.Mode>()
-  private val _prefWifiOnlys = PublishProcessor.create<Boolean>()
+    get() = _textZooms.asStateFlow().onStart { emit(textZoom) }
+  private val darkModes = MutableStateFlow(DarkModeConfig.Mode.SYSTEM)
+  private val _prefWifiOnlys = MutableStateFlow(true)
   val prefWifiOnlys
-    get() = _prefWifiOnlys.startWith(prefWifiOnly)
+    get() = _prefWifiOnlys.onStart { emit(prefWifiOnly) }
 
   val prefWifiOnly: Boolean
     get() = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true)
@@ -167,12 +169,12 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   fun putPrefWifiOnly(wifiOnly: Boolean) {
     sharedPreferences.edit { putBoolean(PREF_WIFI_ONLY, wifiOnly) }
-    _prefWifiOnlys.onNext(wifiOnly)
+    _prefWifiOnlys.tryEmit(wifiOnly)
   }
 
   fun putPrefStorage(storage: String) {
     sharedPreferences.edit { putString(PREF_STORAGE, storage) }
-    _prefStorages.onNext(storage)
+    _prefStorages.tryEmit(storage)
   }
 
   fun putStoragePosition(pos: Int) {
@@ -227,9 +229,9 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
           ?: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
       )
 
-  fun darkModes(): Flowable<DarkModeConfig.Mode> = darkModes.startWith(darkMode)
+  fun darkModes(): Flow<DarkModeConfig.Mode> = darkModes.onStart { emit(darkMode) }
 
-  fun updateDarkMode() = darkModes.offer(darkMode)
+  fun updateDarkMode() = darkModes.tryEmit(darkMode)
 
   var manageExternalFilesPermissionDialog: Boolean
     get() = sharedPreferences.getBoolean(PREF_MANAGE_EXTERNAL_FILES, true)
@@ -259,7 +261,7 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
     get() = sharedPreferences.getInt(TEXT_ZOOM, DEFAULT_ZOOM)
     set(textZoom) {
       sharedPreferences.edit { putInt(TEXT_ZOOM, textZoom) }
-      _textZooms.offer(textZoom)
+      _textZooms.tryEmit(textZoom)
     }
 
   var shouldShowStorageSelectionDialog: Boolean

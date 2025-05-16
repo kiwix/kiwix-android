@@ -85,7 +85,7 @@ class CopyMoveFileHandlerTest {
       setAlertDialogShower(alertDialogShower)
       setSelectedFileAndUri(null, selectedFile)
       setLifeCycleScope(testScope)
-      setFileCopyMoveCallback(this@CopyMoveFileHandlerTest.fileCopyMoveCallback)
+      setFileCopyMoveCallback(fileCopyMoveCallback)
     }
     every { destinationFile.canRead() } returns true
   }

@@ -20,16 +20,22 @@ package org.kiwix.kiwixmobile.core
 import android.content.Context
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
-@Suppress("CheckResult", "IgnoredReturnValue")
 class DarkModeConfig @Inject constructor(
   val sharedPreferenceUtil: SharedPreferenceUtil,
   val context: Context
 ) {
   fun init() {
-    sharedPreferenceUtil.darkModes().subscribe(::setMode, Throwable::printStackTrace)
+    CoroutineScope(Dispatchers.Main).launch {
+      sharedPreferenceUtil.darkModes().collect {
+        setMode(it)
+      }
+    }
   }
 
   fun isDarkModeActive() =
