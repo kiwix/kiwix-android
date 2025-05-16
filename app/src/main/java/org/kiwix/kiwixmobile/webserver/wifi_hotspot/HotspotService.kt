@@ -24,6 +24,8 @@ import android.os.IBinder
 import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.KiwixApp
@@ -53,6 +55,7 @@ class HotspotService :
 
   @set:Inject
   var hotspotStateReceiver: HotspotStateReceiver? = null
+  private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
   private var zimHostCallbacks: ZimHostCallbacks? = null
   private val serviceBinder: IBinder = HotspotBinder(this)
@@ -64,13 +67,13 @@ class HotspotService :
       .build()
       .inject(this)
     super.onCreate()
-    hotspotStateReceiver?.let(this::registerReceiver)
+    hotspotStateReceiver?.let(::registerReceiver)
   }
 
   override fun onDestroy() {
-    webServerHelper?.dispose()
-    hotspotStateReceiver?.let(this@HotspotService::unregisterReceiver)
+    hotspotStateReceiver?.let(::unregisterReceiver)
     super.onDestroy()
+    serviceScope.cancel()
   }
 
   @Suppress("NestedBlockDepth", "InjectDispatcher")
@@ -79,7 +82,7 @@ class HotspotService :
       ACTION_START_SERVER -> {
         val restartServer = intent.getBooleanExtra(RESTART_SERVER, false)
         intent.getStringArrayListExtra(ZimHostFragment.SELECTED_ZIM_PATHS_KEY)?.let {
-          CoroutineScope(Dispatchers.Main).launch {
+          serviceScope.launch {
             val serverStatus =
               withContext(Dispatchers.IO) {
                 webServerHelper?.startServerHelper(it, restartServer)
@@ -109,7 +112,7 @@ class HotspotService :
         stopHotspotAndDismissNotification()
       }
 
-      ACTION_CHECK_IP_ADDRESS -> webServerHelper?.pollForValidIpAddress()
+      ACTION_CHECK_IP_ADDRESS -> webServerHelper?.pollForValidIpAddress(serviceScope)
       else -> {}
     }
     return START_NOT_STICKY
