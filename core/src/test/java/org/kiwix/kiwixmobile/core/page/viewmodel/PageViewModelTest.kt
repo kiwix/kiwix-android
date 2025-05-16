@@ -18,18 +18,16 @@
 
 package org.kiwix.kiwixmobile.core.page.viewmodel
 
-import com.jraska.livedata.test
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.processors.PublishProcessor
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.schedulers.TestScheduler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
@@ -40,22 +38,22 @@ import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.page.PageImpl
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.pageState
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Exit
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.ExitActionModeMenu
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemClick
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemLongClick
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UpdatePages
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteButton
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedDeleteSelectedPages
-import org.kiwix.kiwixmobile.core.page.viewmodel.Action.UserClickedShowAllToggle
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemClick
+import org.kiwix.kiwixmobile.core.page.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.page.viewmodel.effects.OpenPage
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.PopFragmentBackstack
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.files.testFlow
 import org.kiwix.sharedFunctions.InstantExecutorExtension
-import org.kiwix.sharedFunctions.setScheduler
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(InstantExecutorExtension::class)
@@ -65,14 +63,8 @@ internal class PageViewModelTest {
   private val sharedPreferenceUtil: SharedPreferenceUtil = mockk()
 
   private lateinit var viewModel: TestablePageViewModel
-  private val testScheduler = TestScheduler()
-  private val itemsFromDb: PublishProcessor<List<Page>> =
-    PublishProcessor.create()
-
-  init {
-    setScheduler(testScheduler)
-    RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
-  }
+  private val itemsFromDb: MutableSharedFlow<List<Page>> =
+    MutableSharedFlow<List<Page>>(0)
 
   @BeforeEach
   fun init() {
@@ -91,95 +83,173 @@ internal class PageViewModelTest {
   }
 
   @Test
-  fun `initial state is Initialising`() {
-    viewModel.state.test().assertValue(pageState())
-  }
-
-  @Test
-  fun `Exit calls PopFragmentBackstack`() {
-    viewModel.effects.test().also { viewModel.actions.offer(Exit) }
-      .assertValue(PopFragmentBackstack)
-    viewModel.state.test().assertValue(pageState())
-  }
-
-  @Test
-  fun `ExitActionModeMenu calls deslectAllPages`() {
-    viewModel.actions.offer(ExitActionModeMenu)
-    viewModel.state.test().assertValue(TestablePageState(searchTerm = "deselectAllPagesCalled"))
-  }
-
-  @Test
-  fun `UserClickedShowAllToggle calls offerUpdateToShowAllToggle`() {
-    val action = UserClickedShowAllToggle(true)
-    viewModel.actions.offer(action)
-    viewModel.state.test()
-      .assertValue(TestablePageState(searchTerm = "offerUpdateToShowAllToggleCalled"))
-  }
-
-  @Test
-  fun `UserClickedDeleteButton calls createDeletePageDialogEffect`() {
-    viewModel.actions.offer(UserClickedDeleteButton)
-    assertThat(viewModel.createDeletePageDialogEffectCalled).isEqualTo(true)
-  }
-
-  @Test
-  fun `UserClickedDeleteSelectedPages calls createDeletePageDialogEffect`() {
-    viewModel.actions.offer(UserClickedDeleteSelectedPages)
-    assertThat(viewModel.createDeletePageDialogEffectCalled).isEqualTo(true)
-  }
-
-  @Test
-  internal fun `OnItemClick selects item if one is selected`() {
-    val zimReaderSource: ZimReaderSource = mockk()
-    val page = PageImpl(isSelected = true, zimReaderSource = zimReaderSource)
-    viewModel.state.postValue(TestablePageState(listOf(page)))
-    viewModel.actions.offer(OnItemClick(page))
-    viewModel.state.test()
-      .assertValue(TestablePageState(listOf(PageImpl(zimReaderSource = zimReaderSource))))
-  }
-
-  @Test
-  internal fun `OnItemClick offers OpenPage if none is selected`() {
-    val zimReaderSource: ZimReaderSource = mockk()
-    viewModel.state.postValue(
-      TestablePageState(listOf(PageImpl(zimReaderSource = zimReaderSource)))
+  fun `initial state is Initialising`() = runTest {
+    testFlow(
+      flow = viewModel.state,
+      triggerAction = {},
+      assert = { assertThat(awaitItem()).isEqualTo(pageState()) }
     )
-    viewModel.effects.test()
-      .also { viewModel.actions.offer(OnItemClick(PageImpl(zimReaderSource = zimReaderSource))) }
-      .assertValue(OpenPage(PageImpl(zimReaderSource = zimReaderSource), zimReaderContainer))
-    viewModel.state.test()
-      .assertValue(TestablePageState(listOf(PageImpl(zimReaderSource = zimReaderSource))))
   }
 
   @Test
-  internal fun `OnItemLongClick selects item if none is selected`() {
+  fun `Exit calls PopFragmentBackstack`() = runTest {
+    testFlow(
+      flow = viewModel.effects,
+      triggerAction = { viewModel.actions.tryEmit(Exit) },
+      assert = { assertThat(awaitItem()).isEqualTo(PopFragmentBackstack) }
+    )
+    testFlow(
+      flow = viewModel.state,
+      triggerAction = {},
+      assert = { assertThat(awaitItem()).isEqualTo(pageState()) }
+    )
+  }
+
+  @Test
+  fun `ExitActionModeMenu calls deslectAllPages`() = runTest {
+    testFlow(
+      flow = viewModel.state,
+      triggerAction = { viewModel.actions.tryEmit(ExitActionModeMenu) },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(TestablePageState(searchTerm = ""))
+        assertThat(awaitItem())
+          .isEqualTo(TestablePageState(searchTerm = "deselectAllPagesCalled"))
+      }
+    )
+  }
+
+  @Test
+  fun `UserClickedShowAllToggle calls offerUpdateToShowAllToggle`() = runTest {
+    testFlow(
+      flow = viewModel.state,
+      triggerAction = {
+        viewModel.actions.tryEmit(UserClickedShowAllToggle(true))
+      },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(TestablePageState(searchTerm = ""))
+        assertThat(awaitItem())
+          .isEqualTo(TestablePageState(searchTerm = "offerUpdateToShowAllToggleCalled"))
+      }
+    )
+  }
+
+  @Test
+  fun `UserClickedDeleteButton calls createDeletePageDialogEffect`() = runTest {
+    viewModel.actions.tryEmit(UserClickedDeleteButton)
+    advanceUntilIdle()
+    assertThat(viewModel.createDeletePageDialogEffectCalled).isEqualTo(true)
+  }
+
+  @Test
+  fun `UserClickedDeleteSelectedPages calls createDeletePageDialogEffect`() = runTest {
+    viewModel.actions.tryEmit(UserClickedDeleteSelectedPages)
+    advanceUntilIdle()
+    assertThat(viewModel.createDeletePageDialogEffectCalled).isEqualTo(true)
+  }
+
+  @Test
+  internal fun `OnItemClick selects item if one is selected`() = runTest {
     val zimReaderSource: ZimReaderSource = mockk()
-    val page = PageImpl(zimReaderSource = zimReaderSource)
-    viewModel.state.postValue(TestablePageState(listOf(page)))
-    viewModel.actions.offer(OnItemLongClick(page))
-    viewModel.state.test().assertValue(
-      TestablePageState(
-        listOf(
-          PageImpl(
-            isSelected = true,
-            zimReaderSource = zimReaderSource
+    testFlow(
+      viewModel.state,
+      triggerAction = {
+        val page = PageImpl(isSelected = true, zimReaderSource = zimReaderSource)
+        viewModel.getMutableStateForTestCases().value = TestablePageState(listOf(page))
+        viewModel.actions.tryEmit(OnItemClick(page))
+      },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(TestablePageState())
+        assertThat(awaitItem())
+          .isEqualTo(
+            TestablePageState(
+              listOf(PageImpl(zimReaderSource = zimReaderSource))
+            )
+          )
+      }
+    )
+  }
+
+  @Test
+  internal fun `OnItemClick offers OpenPage if none is selected`() = runTest {
+    val zimReaderSource: ZimReaderSource = mockk()
+    testFlow(
+      viewModel.effects,
+      triggerAction = {
+        viewModel.getMutableStateForTestCases().value =
+          TestablePageState(listOf(PageImpl(zimReaderSource = zimReaderSource)))
+        viewModel.actions.tryEmit(OnItemClick(PageImpl(zimReaderSource = zimReaderSource)))
+      },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(
+          OpenPage(
+            PageImpl(zimReaderSource = zimReaderSource),
+            zimReaderContainer
           )
         )
-      )
+      }
+    )
+    testFlow(
+      viewModel.state,
+      triggerAction = {
+        viewModel.getMutableStateForTestCases().value =
+          TestablePageState(listOf(PageImpl(zimReaderSource = zimReaderSource)))
+        viewModel.actions.tryEmit(OnItemClick(PageImpl(zimReaderSource = zimReaderSource)))
+      },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(
+          TestablePageState(listOf(PageImpl(zimReaderSource = zimReaderSource)))
+        )
+      }
     )
   }
 
   @Test
-  fun `Filter calls updatePagesBasedOnFilter`() {
-    viewModel.actions.offer(Filter("Called"))
-    viewModel.state.test()
-      .assertValue(TestablePageState(searchTerm = "updatePagesBasedOnFilterCalled"))
+  internal fun `OnItemLongClick selects item if none is selected`() = runTest {
+    val zimReaderSource: ZimReaderSource = mockk()
+    val page = PageImpl(zimReaderSource = zimReaderSource)
+    testFlow(
+      viewModel.state,
+      triggerAction = {
+        viewModel.getMutableStateForTestCases().value = TestablePageState(listOf(page))
+        viewModel.actions.tryEmit(OnItemLongClick(page))
+      },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(TestablePageState())
+        assertThat(awaitItem()).isEqualTo(
+          TestablePageState(
+            listOf(
+              PageImpl(
+                isSelected = true,
+                zimReaderSource = zimReaderSource
+              )
+            )
+          )
+        )
+      }
+    )
   }
 
   @Test
-  fun `UpdatePages calls updatePages`() {
-    viewModel.actions.offer(UpdatePages(emptyList()))
-    viewModel.state.test()
-      .assertValue(TestablePageState(searchTerm = "updatePagesCalled"))
+  fun `Filter calls updatePagesBasedOnFilter`() = runTest {
+    testFlow(
+      viewModel.state,
+      triggerAction = { viewModel.actions.tryEmit(Filter("Called")) },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(TestablePageState())
+        assertThat(awaitItem()).isEqualTo(TestablePageState(searchTerm = "updatePagesBasedOnFilterCalled"))
+      }
+    )
+  }
+
+  @Test
+  fun `UpdatePages calls updatePages`() = runTest {
+    testFlow(
+      viewModel.state,
+      triggerAction = { viewModel.actions.tryEmit(UpdatePages(emptyList())) },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(TestablePageState())
+        assertThat(awaitItem()).isEqualTo(TestablePageState(searchTerm = "updatePagesCalled"))
+      }
+    )
   }
 }

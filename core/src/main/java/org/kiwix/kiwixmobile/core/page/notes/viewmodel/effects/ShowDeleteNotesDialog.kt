@@ -19,8 +19,8 @@ package org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects
  */
 
 import androidx.appcompat.app.AppCompatActivity
-import io.reactivex.processors.PublishProcessor
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableSharedFlow
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.PageDao
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
@@ -31,7 +31,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteAllNotes
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.DeleteSelectedNotes
 
 data class ShowDeleteNotesDialog(
-  private val effects: PublishProcessor<SideEffect<*>>,
+  private val effects: MutableSharedFlow<SideEffect<*>>,
   private val state: NotesState,
   private val pageDao: PageDao,
   private val viewModelScope: CoroutineScope,
@@ -42,7 +42,7 @@ data class ShowDeleteNotesDialog(
     dialogShower.show(
       if (state.isInSelectionState) DeleteSelectedNotes else DeleteAllNotes,
       {
-        effects.offer(DeletePageItems(state, pageDao, viewModelScope))
+        effects.tryEmit(DeletePageItems(state, pageDao, viewModelScope))
       }
     )
   }

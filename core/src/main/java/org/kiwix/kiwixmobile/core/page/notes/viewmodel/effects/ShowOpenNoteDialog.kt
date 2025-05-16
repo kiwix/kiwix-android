@@ -19,7 +19,7 @@
 package org.kiwix.kiwixmobile.core.page.notes.viewmodel.effects
 
 import androidx.appcompat.app.AppCompatActivity
-import io.reactivex.processors.PublishProcessor
+import kotlinx.coroutines.flow.MutableSharedFlow
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.cachedComponent
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -31,7 +31,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog.ShowNoteDialog
 
 data class ShowOpenNoteDialog(
-  private val effects: PublishProcessor<SideEffect<*>>,
+  private val effects: MutableSharedFlow<SideEffect<*>>,
   private val page: Page,
   private val zimReaderContainer: ZimReaderContainer,
   private val dialogShower: DialogShower
@@ -40,10 +40,10 @@ data class ShowOpenNoteDialog(
     activity.cachedComponent.inject(this)
     dialogShower.show(
       ShowNoteDialog,
-      { effects.offer(OpenPage(page, zimReaderContainer)) },
+      { effects.tryEmit(OpenPage(page, zimReaderContainer)) },
       {
         val item = page as NoteListItem
-        effects.offer(OpenNote(item))
+        effects.tryEmit(OpenNote(item))
       }
     )
   }

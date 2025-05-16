@@ -21,6 +21,8 @@ package org.kiwix.kiwixmobile.core.page.viewmodel
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
+import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.notes.adapter.NoteListItem
 
 abstract class PageState<T : Page> {
   abstract val pageItems: List<T>
@@ -43,8 +45,12 @@ abstract class PageState<T : Page> {
       val currentItemIdentifier = if (it is LibkiwixBookmarkItem) it.url else it.id
       val pageIdentifier = if (it is LibkiwixBookmarkItem) page.url else page.id
       if (currentItemIdentifier == pageIdentifier) {
-        it.apply {
-          isSelected = !isSelected
+        when (it) {
+          is LibkiwixBookmarkItem -> it.copy(isSelected = !it.isSelected) as T
+          is HistoryItem -> it.copy(isSelected = !it.isSelected) as T
+          is NoteListItem -> it.copy(isSelected = !it.isSelected) as T
+          // For test cases only.
+          else -> it.apply { isSelected = !isSelected }
         }
       } else {
         it

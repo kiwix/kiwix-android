@@ -57,7 +57,7 @@ class BookmarkViewModel @Inject constructor(
     action: Action.UserClickedShowAllToggle,
     state: BookmarkState
   ): BookmarkState {
-    effects.offer(UpdateAllBookmarksPreference(sharedPreferenceUtil, action.isChecked))
+    effects.tryEmit(UpdateAllBookmarksPreference(sharedPreferenceUtil, action.isChecked))
     return state.copy(showAll = action.isChecked)
   }
 

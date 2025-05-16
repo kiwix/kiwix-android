@@ -31,7 +31,6 @@ import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
@@ -41,8 +40,6 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.kiwix.sharedFunctions.resetSchedulers
-import org.kiwix.sharedFunctions.setScheduler
 import java.io.File
 
 class FileSearchTest {
@@ -53,10 +50,6 @@ class FileSearchTest {
   private val contentResolver: ContentResolver = mockk()
   private val storageDevice: StorageDevice = mockk()
   private val scanningProgressListener: ScanningProgressListener = mockk()
-
-  init {
-    setScheduler(Schedulers.trampoline())
-  }
 
   @BeforeEach
   fun init() {
@@ -78,7 +71,6 @@ class FileSearchTest {
   @AfterAll
   fun teardown() {
     deleteTempDirectory()
-    resetSchedulers()
   }
 
   @Nested

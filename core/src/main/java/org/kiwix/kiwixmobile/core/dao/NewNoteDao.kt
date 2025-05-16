@@ -21,7 +21,8 @@ package org.kiwix.kiwixmobile.core.dao
 import io.objectbox.Box
 import io.objectbox.kotlin.query
 import io.objectbox.query.QueryBuilder
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity
 import org.kiwix.kiwixmobile.core.dao.entities.NotesEntity_
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -30,8 +31,8 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderSource.Companion.fromDatabaseV
 import javax.inject.Inject
 
 class NewNoteDao @Inject constructor(val box: Box<NotesEntity>) : PageDao {
-  fun notes(): Flowable<List<Page>> =
-    box.asFlowable(
+  fun notes(): Flow<List<Page>> =
+    box.asFlow(
       box.query {
         order(NotesEntity_.noteTitle)
       }
@@ -47,7 +48,7 @@ class NewNoteDao @Inject constructor(val box: Box<NotesEntity>) : PageDao {
       }
     }
 
-  override fun pages(): Flowable<List<Page>> = notes()
+  override fun pages(): Flow<List<Page>> = notes()
 
   override fun deletePages(pagesToDelete: List<Page>) =
     deleteNotes(pagesToDelete as List<NoteListItem>)

@@ -32,13 +32,16 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.referentialEqualityPolicy
 import androidx.compose.ui.platform.ComposeView
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.reactivex.disposables.CompositeDisposable
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseFragment
 import org.kiwix.kiwixmobile.core.base.FragmentActivityExtensions
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
+import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.OnItemClickListener
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -66,7 +69,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
 
   @Inject lateinit var alertDialogShower: AlertDialogShower
   private var actionMode: ActionMode? = null
-  val compositeDisposable = CompositeDisposable()
+  private val coroutineJobs = mutableListOf<Job>()
   abstract val screenTitle: Int
   abstract val noItemsString: String
   abstract val switchString: String
@@ -116,36 +119,51 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
 
       override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_context_delete) {
-          pageViewModel.actions.offer(Action.UserClickedDeleteSelectedPages)
+          pageViewModel.actions.tryEmit(Action.UserClickedDeleteSelectedPages)
           return true
         }
-        pageViewModel.actions.offer(Action.ExitActionModeMenu)
+        pageViewModel.actions.tryEmit(Action.ExitActionModeMenu)
         return false
       }
 
       override fun onDestroyActionMode(mode: ActionMode) {
-        pageViewModel.actions.offer(Action.ExitActionModeMenu)
+        pageViewModel.actions.tryEmit(Action.ExitActionModeMenu)
         actionMode = null
       }
     }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    pageScreenState.value = pageScreenState.value.copy(
-      searchQueryHint = searchQueryHint,
-      searchText = "",
-      searchValueChangedListener = { onTextChanged(it) },
-      clearSearchButtonClickListener = { onTextChanged("") },
-      screenTitle = screenTitle,
-      noItemsString = noItemsString,
-      switchString = switchString,
-      switchIsChecked = switchIsChecked,
-      onSwitchCheckedChanged = { onSwitchCheckedChanged(it).invoke() },
-      deleteIconTitle = deleteIconTitle
-    )
+    pageScreenState.update {
+      copy(
+        searchQueryHint = this@PageFragment.searchQueryHint,
+        searchText = "",
+        searchValueChangedListener = { onTextChanged(it) },
+        clearSearchButtonClickListener = { onTextChanged("") },
+        screenTitle = this@PageFragment.screenTitle,
+        noItemsString = this@PageFragment.noItemsString,
+        switchString = this@PageFragment.switchString,
+        switchIsChecked = this@PageFragment.switchIsChecked,
+        onSwitchCheckedChanged = { onSwitchChanged(it).invoke() },
+        deleteIconTitle = this@PageFragment.deleteIconTitle
+      )
+    }
     val activity = requireActivity() as CoreMainActivity
-    compositeDisposable.add(pageViewModel.effects.subscribe { it.invokeWith(activity) })
-    pageViewModel.state.observe(viewLifecycleOwner, Observer(::render))
+    cancelCoroutineJobs()
+    coroutineJobs.apply {
+      add(
+        pageViewModel
+          .effects
+          .onEach { it.invokeWith(activity) }
+          .launchIn(lifecycleScope)
+      )
+      add(
+        pageViewModel
+          .state
+          .onEach { render(it) }
+          .launchIn(lifecycleScope)
+      )
+    }
     pageViewModel.alertDialogShower = alertDialogShower
   }
 
@@ -168,9 +186,9 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
             isSearchActive = pageScreenState.value.isSearchActive,
             onSearchClick = {
               // Set the `isSearchActive` when the search button is clicked.
-              pageScreenState.value = pageScreenState.value.copy(isSearchActive = true)
+              pageScreenState.update { copy(isSearchActive = true) }
             },
-            onDeleteClick = { pageViewModel.actions.offer(Action.UserClickedDeleteButton) }
+            onDeleteClick = { pageViewModel.actions.tryEmit(Action.UserClickedDeleteButton) }
           )
         )
         DialogHost(alertDialogShower)
@@ -186,8 +204,8 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
    * @param searchText The current text entered in the search bar.
    */
   private fun onTextChanged(searchText: String) {
-    pageScreenState.value = pageScreenState.value.copy(searchText = searchText)
-    pageViewModel.actions.offer(Action.Filter(searchText))
+    pageScreenState.update { copy(searchText = searchText) }
+    pageViewModel.actions.tryEmit(Action.Filter(searchText))
   }
 
   /**
@@ -197,9 +215,9 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
    *
    * @param isChecked The new checked state of the switch.
    */
-  private fun onSwitchCheckedChanged(isChecked: Boolean): () -> Unit = {
-    pageScreenState.value = pageScreenState.value.copy(switchIsChecked = isChecked)
-    pageViewModel.actions.offer(Action.UserClickedShowAllToggle(isChecked))
+  private fun onSwitchChanged(isChecked: Boolean): () -> Unit = {
+    pageScreenState.update { copy(switchIsChecked = isChecked) }
+    pageViewModel.actions.tryEmit(Action.UserClickedShowAllToggle(isChecked))
   }
 
   /**
@@ -209,7 +227,7 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
    */
   private fun navigationIconClick(): () -> Unit = {
     if (pageScreenState.value.isSearchActive) {
-      pageScreenState.value = pageScreenState.value.copy(isSearchActive = false)
+      pageScreenState.update { copy(isSearchActive = false) }
       onTextChanged("")
     } else {
       requireActivity().onBackPressedDispatcher.onBackPressed()
@@ -255,21 +273,20 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
 
   override fun onDestroyView() {
     super.onDestroyView()
-    compositeDisposable.clear()
+    cancelCoroutineJobs()
+  }
+
+  private fun cancelCoroutineJobs() {
+    coroutineJobs.forEach {
+      it.cancel()
+    }
+    coroutineJobs.clear()
   }
 
   private fun render(state: PageState<*>) {
-    pageScreenState.value = pageScreenState.value.copy(
-      switchIsEnabled = !state.isInSelectionState,
-      // First, assign the existing state to force Compose to recognize a change.
-      // This helps when internal properties of items (like `isSelected`) change,
-      // but the list reference itself remains the same — Compose won't detect it otherwise.
-      pageState = pageState.value
-    )
-    // Then, assign the actual updated state to trigger full recomposition.
-    pageScreenState.value = pageScreenState.value.copy(
-      pageState = state
-    )
+    pageScreenState.update {
+      copy(switchIsEnabled = !state.isInSelectionState, pageState = state)
+    }
     if (state.isInSelectionState) {
       if (actionMode == null) {
         actionMode =
@@ -282,9 +299,9 @@ abstract class PageFragment : OnItemClickListener, BaseFragment(), FragmentActiv
   }
 
   override fun onItemClick(page: Page) {
-    pageViewModel.actions.offer(Action.OnItemClick(page))
+    pageViewModel.actions.tryEmit(Action.OnItemClick(page))
   }
 
   override fun onItemLongClick(page: Page): Boolean =
-    pageViewModel.actions.offer(Action.OnItemLongClick(page))
+    pageViewModel.actions.tryEmit(Action.OnItemLongClick(page))
 }

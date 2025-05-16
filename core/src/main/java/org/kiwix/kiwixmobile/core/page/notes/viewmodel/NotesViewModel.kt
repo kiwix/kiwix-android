@@ -55,7 +55,7 @@ class NotesViewModel @Inject constructor(
     action: Action.UserClickedShowAllToggle,
     state: NotesState
   ): NotesState {
-    effects.offer(UpdateAllNotesPreference(sharedPreferenceUtil, action.isChecked))
+    effects.tryEmit(UpdateAllNotesPreference(sharedPreferenceUtil, action.isChecked))
     return state.copy(showAll = action.isChecked)
   }
 

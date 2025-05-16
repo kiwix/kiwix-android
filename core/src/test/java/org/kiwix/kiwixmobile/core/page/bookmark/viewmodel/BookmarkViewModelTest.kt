@@ -21,11 +21,9 @@ package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.Flowable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.reactive.asPublisher
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -44,6 +42,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.files.testFlow
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import java.util.UUID
 
@@ -67,9 +66,7 @@ internal class BookmarkViewModelTest {
     every { zimReaderContainer.name } returns "zimName"
     every { sharedPreferenceUtil.showBookmarksAllBooks } returns true
     every { libkiwixBookMarks.bookmarks() } returns itemsFromDb
-    every { libkiwixBookMarks.pages() } returns Flowable.fromPublisher(
-      libkiwixBookMarks.bookmarks().asPublisher()
-    )
+    every { libkiwixBookMarks.pages() } returns libkiwixBookMarks.bookmarks()
     viewModel =
       BookmarkViewModel(libkiwixBookMarks, zimReaderContainer, sharedPreferenceUtil).apply {
         alertDialogShower = dialogShower
@@ -106,13 +103,24 @@ internal class BookmarkViewModelTest {
   }
 
   @Test
-  fun `offerUpdateToShowAllToggle offers UpdateAllBookmarksPreference`() {
-    viewModel.effects.test().also {
-      viewModel.offerUpdateToShowAllToggle(
-        Action.UserClickedShowAllToggle(false),
-        bookmarkState()
-      )
-    }.assertValues(UpdateAllBookmarksPreference(sharedPreferenceUtil, false))
+  fun `offerUpdateToShowAllToggle offers UpdateAllBookmarksPreference`() = runTest {
+    testFlow(
+      flow = viewModel.effects,
+      triggerAction = {
+        viewModel.offerUpdateToShowAllToggle(
+          Action.UserClickedShowAllToggle(false),
+          bookmarkState()
+        )
+      },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(
+          UpdateAllBookmarksPreference(
+            sharedPreferenceUtil,
+            false
+          )
+        )
+      }
+    )
   }
 
   @Test

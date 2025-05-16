@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.core.dao
 import android.os.Build
 import android.os.Environment
 import android.util.Base64
-import io.reactivex.Flowable
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +29,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asPublisher
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp
@@ -121,10 +119,7 @@ class LibkiwixBookmarks @Inject constructor(
     bookmarkListFlow
       .map { it }
 
-  // Currently kept in RxJava Flowable because `PageViewModel` still expects RxJava streams.
-  // This can be refactored to use Kotlin Flow once `PageViewModel` is migrated to coroutines.
-  override fun pages(): Flowable<List<Page>> =
-    Flowable.fromPublisher(bookmarks().asPublisher())
+  override fun pages(): Flow<List<Page>> = bookmarks()
 
   override fun deletePages(pagesToDelete: List<Page>) =
     deleteBookmarks(pagesToDelete as List<LibkiwixBookmarkItem>)
