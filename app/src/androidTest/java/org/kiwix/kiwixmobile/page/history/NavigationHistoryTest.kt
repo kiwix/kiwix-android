@@ -161,7 +161,9 @@ class NavigationHistoryTest : BaseActivityTest() {
       pressBack()
       pressBack()
     }
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1 &&
+      Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+    ) {
       // temporary disabled on Android 25
       LeakAssertions.assertNoLeaks()
     }

@@ -29,6 +29,7 @@ import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.accessibility.AccessibilityChecks
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.filters.LargeTest
+import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
@@ -157,7 +158,9 @@ class DownloadTest : BaseActivityTest() {
             "Could not pause download. Original exception = $ignore"
           )
         }
-        clickLibraryOnBottomNav()
+        UiThreadStatement.runOnUiThread {
+          kiwixMainActivity.navigate(R.id.libraryFragment)
+        }
         // refresh the local library list to show the downloaded zim file
         library { refreshList(composeTestRule) }
         checkIfZimFileDownloaded(composeTestRule)
