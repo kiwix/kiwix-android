@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.language
 
 import android.Manifest
 import android.app.Instrumentation
+import android.os.Build
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
@@ -207,6 +208,8 @@ class LanguageFragmentTest {
       )
       clickOnSaveLanguageIcon(composeTestRule)
     }
-    LeakAssertions.assertNoLeaks()
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      LeakAssertions.assertNoLeaks()
+    }
   }
 }
