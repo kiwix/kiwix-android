@@ -31,7 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.ViewModelProvider
-import io.reactivex.disposables.CompositeDisposable
 import org.kiwix.kiwixmobile.cachedComponent
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -55,7 +54,6 @@ class LanguageFragment : BaseFragment() {
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   private var composeView: ComposeView? = null
-  private val compositeDisposable = CompositeDisposable()
 
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.cachedComponent.inject(this)
@@ -153,7 +151,6 @@ class LanguageFragment : BaseFragment() {
 
   override fun onDestroyView() {
     super.onDestroyView()
-    compositeDisposable.clear()
     composeView?.disposeComposition()
     composeView = null
   }

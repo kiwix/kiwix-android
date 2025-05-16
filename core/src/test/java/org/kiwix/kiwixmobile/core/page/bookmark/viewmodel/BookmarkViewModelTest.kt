@@ -32,6 +32,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.ShowDeleteBookmarksDialog
+import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.effects.UpdateAllBookmarksPreference
 import org.kiwix.kiwixmobile.core.page.bookmarkState
 import org.kiwix.kiwixmobile.core.page.libkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action
@@ -41,6 +42,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.files.testFlow
 import org.kiwix.sharedFunctions.InstantExecutorExtension
 import java.util.UUID
 
@@ -102,12 +104,23 @@ internal class BookmarkViewModelTest {
 
   @Test
   fun `offerUpdateToShowAllToggle offers UpdateAllBookmarksPreference`() = runTest {
-    // viewModel.effects.test().also {
-    //   viewModel.offerUpdateToShowAllToggle(
-    //     Action.UserClickedShowAllToggle(false),
-    //     bookmarkState()
-    //   )
-    // }.assertValues(UpdateAllBookmarksPreference(sharedPreferenceUtil, false))
+    testFlow(
+      flow = viewModel.effects,
+      triggerAction = {
+        viewModel.offerUpdateToShowAllToggle(
+          Action.UserClickedShowAllToggle(false),
+          bookmarkState()
+        )
+      },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(
+          UpdateAllBookmarksPreference(
+            sharedPreferenceUtil,
+            false
+          )
+        )
+      }
+    )
   }
 
   @Test

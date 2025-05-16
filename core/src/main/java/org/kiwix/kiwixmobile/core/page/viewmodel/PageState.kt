@@ -49,7 +49,8 @@ abstract class PageState<T : Page> {
           is LibkiwixBookmarkItem -> it.copy(isSelected = !it.isSelected) as T
           is HistoryItem -> it.copy(isSelected = !it.isSelected) as T
           is NoteListItem -> it.copy(isSelected = !it.isSelected) as T
-          else -> it
+          // For test cases only.
+          else -> it.apply { isSelected = !isSelected }
         }
       } else {
         it

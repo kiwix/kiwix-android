@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.core.base
 
-import io.reactivex.disposables.CompositeDisposable
 import org.kiwix.kiwixmobile.core.base.BaseContract.Presenter
 import org.kiwix.kiwixmobile.core.base.BaseContract.View
 
@@ -27,9 +26,6 @@ import org.kiwix.kiwixmobile.core.base.BaseContract.View
 @Suppress("UnnecessaryAbstractClass")
 abstract class BasePresenter<T : View<*>?> : Presenter<T> {
   @JvmField
-  val compositeDisposable = CompositeDisposable()
-
-  @JvmField
   var view: T? = null
 
   override fun attachView(view: T) {
@@ -38,6 +34,5 @@ abstract class BasePresenter<T : View<*>?> : Presenter<T> {
 
   override fun detachView() {
     view = null
-    compositeDisposable.clear()
   }
 }

@@ -22,6 +22,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual.equalTo
@@ -65,7 +66,7 @@ class NoteRoomDaoTest {
 
       // Save and retrieve a notes item
       notesRoomDao.saveNote(noteItem)
-      var notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+      var notesList = notesRoomDao.notes().first() as List<NoteListItem>
       with(notesList.first()) {
         assertThat(zimId, equalTo(noteItem.zimId))
         assertThat(zimUrl, equalTo(noteItem.zimUrl))
@@ -78,25 +79,25 @@ class NoteRoomDaoTest {
 
       // Test update the existing note
       notesRoomDao.saveNote(noteItem)
-      notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+      notesList = notesRoomDao.notes().first() as List<NoteListItem>
       assertEquals(notesList.size, 1)
 
       // Delete the saved note item with all delete methods available in NoteRoomDao.
       // delete via noteTitle
       notesRoomDao.deleteNote(noteItem.title)
-      notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+      notesList = notesRoomDao.notes().first() as List<NoteListItem>
       assertEquals(notesList.size, 0)
 
       // delete with deletePages method
       notesRoomDao.saveNote(noteItem)
       notesRoomDao.deletePages(listOf(noteItem))
-      notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+      notesList = notesRoomDao.notes().first() as List<NoteListItem>
       assertEquals(notesList.size, 0)
 
       // delete with list of NoteListItem
       notesRoomDao.saveNote(noteItem)
       notesRoomDao.deleteNotes(listOf(noteItem))
-      notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+      notesList = notesRoomDao.notes().first() as List<NoteListItem>
       assertEquals(notesList.size, 0)
 
       // Save note with empty title
@@ -107,7 +108,7 @@ class NoteRoomDaoTest {
           noteFilePath = "/storage/emulated/0/Download/Notes/Alpine linux/Installing.txt"
         )
       )
-      notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+      notesList = notesRoomDao.notes().first() as List<NoteListItem>
       assertEquals(notesList.size, 1)
       clearNotes()
 
@@ -127,7 +128,7 @@ class NoteRoomDaoTest {
         )
       kiwixRoomDatabase.notesRoomDao().saveNote(noteItem2)
       kiwixRoomDatabase.notesRoomDao().saveNote(noteItem3)
-      notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+      notesList = notesRoomDao.notes().first() as List<NoteListItem>
       assertEquals(2, notesList.size)
       clearNotes()
 
@@ -139,7 +140,7 @@ class NoteRoomDaoTest {
           "Undefined value was saved into database",
           false
         )
-      } catch (e: Exception) {
+      } catch (_: Exception) {
         assertThat("Undefined value was not saved, as expected.", true)
       }
 
@@ -148,11 +149,11 @@ class NoteRoomDaoTest {
       val noteListItem2 =
         getNoteListItem(title = unicodeTitle, zimUrl = "http://kiwix.app/Installing")
       notesRoomDao.saveNote(noteListItem2)
-      notesList = notesRoomDao.notes().blockingFirst() as List<NoteListItem>
+      notesList = notesRoomDao.notes().first() as List<NoteListItem>
       assertThat(notesList.first().title, equalTo("title Σ"))
     }
 
   private suspend fun clearNotes() {
-    notesRoomDao.deleteNotes(notesRoomDao.notes().blockingFirst() as List<NoteListItem>)
+    notesRoomDao.deleteNotes(notesRoomDao.notes().first() as List<NoteListItem>)
   }
 }

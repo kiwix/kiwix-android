@@ -21,9 +21,6 @@ import io.objectbox.Box
 import io.objectbox.kotlin.flow
 import io.objectbox.kotlin.query
 import io.objectbox.query.Query
-import io.objectbox.rx.RxQuery
-import io.reactivex.BackpressureStrategy
-import io.reactivex.BackpressureStrategy.LATEST
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -53,9 +50,3 @@ fun <T> Box<T>.asFlow(query: Query<T> = query {}): Flow<List<T>> {
     .map { it.toList() }
     .distinctUntilChanged()
 }
-
-internal fun <T> Box<T>.asFlowable(
-  query: Query<T> = query {},
-  backpressureStrategy: BackpressureStrategy = LATEST
-) =
-  RxQuery.observable(query).toFlowable(backpressureStrategy)

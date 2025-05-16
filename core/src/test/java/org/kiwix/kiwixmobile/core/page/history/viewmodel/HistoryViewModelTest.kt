@@ -3,9 +3,6 @@ package org.kiwix.kiwixmobile.core.page.history.viewmodel
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.schedulers.TestScheduler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.ShowDeleteHistoryDialog
+import org.kiwix.kiwixmobile.core.page.history.viewmodel.effects.UpdateAllHistoryPreference
 import org.kiwix.kiwixmobile.core.page.historyItem
 import org.kiwix.kiwixmobile.core.page.historyState
 import org.kiwix.kiwixmobile.core.page.viewmodel.Action.Filter
@@ -26,8 +24,8 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
+import org.kiwix.kiwixmobile.core.utils.files.testFlow
 import org.kiwix.sharedFunctions.InstantExecutorExtension
-import org.kiwix.sharedFunctions.setScheduler
 
 @ExtendWith(InstantExecutorExtension::class)
 internal class HistoryViewModelTest {
@@ -38,13 +36,7 @@ internal class HistoryViewModelTest {
   private val viewModelScope = CoroutineScope(Dispatchers.IO)
 
   private lateinit var viewModel: HistoryViewModel
-  private val testScheduler = TestScheduler()
   private val zimReaderSource: ZimReaderSource = mockk()
-
-  init {
-    setScheduler(testScheduler)
-    RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
-  }
 
   private val itemsFromDb: MutableSharedFlow<List<Page>> =
     MutableSharedFlow<List<Page>>(0)
@@ -88,13 +80,21 @@ internal class HistoryViewModelTest {
   }
 
   @Test
-  fun `offerUpdateToShowAllToggle offers UpdateAllHistoryPreference`() {
-    // viewModel.effects.test().also {
-    //   viewModel.offerUpdateToShowAllToggle(
-    //     UserClickedShowAllToggle(false),
-    //     historyState()
-    //   )
-    // }.assertValues(UpdateAllHistoryPreference(sharedPreferenceUtil, false))
+  fun `offerUpdateToShowAllToggle offers UpdateAllHistoryPreference`() = runTest {
+    testFlow(
+      flow = viewModel.effects,
+      triggerAction = {
+        viewModel.offerUpdateToShowAllToggle(
+          UserClickedShowAllToggle(false),
+          historyState()
+        )
+      },
+      assert = {
+        assertThat(awaitItem()).isEqualTo(
+          UpdateAllHistoryPreference(sharedPreferenceUtil, false)
+        )
+      }
+    )
   }
 
   @Test
