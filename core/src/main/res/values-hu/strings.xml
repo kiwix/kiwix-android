@@ -8,6 +8,7 @@
 * Eukarióta
 * Fitoschido
 * Hanna Tardos
+* Kabika
 * Kelson
 * Macofe
 * MohitMali
@@ -25,14 +26,24 @@
   <string name="menu_exit_full_screen">Kilépés a teljes képernyős nézetből</string>
   <string name="menu_read_aloud">Hangosan felolvas</string>
   <string name="menu_read_aloud_stop">Felolvasás megállítása</string>
+  <string name="menu_support_kiwix">Támogassa a Kiwixet</string>
+  <string name="menu_support_kiwix_for_custom_apps">Támogassa a következőt: %s</string>
+  <string name="menu_about_app">A %s alkalmazásról</string>
   <string name="menu_wifi_hotspot">WiFi Hotspot</string>
   <string name="save_media">Média mentése</string>
   <string name="save_media_error">Hiba történt a média mentése közben!</string>
-  <string name="save_media_saved" fuzzy="true">Média elmentve %s néven ide: Android/media/org.kiwix…/</string>
+  <string name="save_media_saved">Média elmentve %s néven ide: Downloads/org.kiwix…/</string>
   <string name="search_label">Keresés</string>
+  <string name="searched_list">Keresett lista</string>
   <string name="choose_file">Tartalomfájl kiválasztása (*.zim)</string>
   <string name="open_in_new_tab">Hivatkozás megnyitása új lapon?</string>
+  <string name="hotspot_service_channel_name">Hotspot szolgáltatási csatorna</string>
+  <string name="hotspot_failed_title">Nem sikerült elindítani a hotspotot</string>
+  <string name="hotspot_failed_message">Úgy tűnik, hogy a hotspot már be van kapcsolva. Kérjük, tiltsa le a wifi hotspotot a folytatáshoz.</string>
+  <string name="go_to_wifi_settings_label">Menjen a WiFi beállításokhoz</string>
   <string name="connection_refused">Csatlakozás elutasítva.</string>
+  <string name="hotspot_running">Futó hotspot</string>
+  <string name="no_books_selected_toast_message">Kérjük, először válasszon könyveket</string>
   <string name="error_file_not_found">Hiba: A kijelölt ZIM-fájl nem található. %s</string>
   <string name="error_file_invalid">Hiba: A kijelölt fájl nem érvényes ZIM-fájl. %s</string>
   <string name="error_article_url_not_found">Hiba: A cikk (URL: %1$s) betöltése nem sikerült.</string>

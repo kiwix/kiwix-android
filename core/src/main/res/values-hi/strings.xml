@@ -66,10 +66,10 @@
   <string name="server_started_message">सर्वर %s प्रयोग करने के लिए इस आईपी पते को अपने ब्राउज़र में दर्ज करें</string>
   <string name="qr_code">रेंडर किया गया QR कोड</string>
   <string name="share_host_address">अन्य एप्लिकेशन के माध्यम से यूआरएल साझा करें</string>
-  <string name="error_file_not_found" fuzzy="true">त्रुटि: चुनी गयी ZIM फ़ाइल नही मिल सकी। %s</string>
+  <string name="error_file_not_found">त्रुटि: चुनी गयी ZIM फ़ाइल नही मिल सकी। %s</string>
   <string name="unable_to_read_zim_file">इस ZIM फ़ाइल को पढ़ने में असमर्थ!</string>
   <string name="zim_not_opened">ZIM फ़ाइल खोलने में असमर्थ</string>
-  <string name="error_file_invalid" fuzzy="true">त्रुटि: चुनी गयी फ़ाइल एक वैध ZIM फ़ाइल नहीं है। %s</string>
+  <string name="error_file_invalid">त्रुटि: चुनी गयी फ़ाइल एक वैध ZIM फ़ाइल नहीं है। %s</string>
   <string name="error_article_url_not_found">त्रुटि: आलेख (Url:  %1$s ) लोड करना विफल रहा।</string>
   <string name="error_loading_random_article_zim_not_loaded">लेख लोड करने में असमर्थ. ज़िम फ़ाइल ठीक से लोड नहीं की गई है।</string>
   <string name="could_not_find_random_article">कोई यादृच्छिक लेख नहीं मिल सका। कृपया बाद में पुनः प्रयास करें।</string>
@@ -193,10 +193,11 @@
   <string name="pref_external_link_popup_title">बाह्य कड़ियों में प्रवेश करने पर सावधान करें</string>
   <string name="pref_external_link_popup_summary">“अतिरिक्त खर्च एवं ऑफलाइन होने पर काम नहीं करने वाली कड़ी” से सावधान करने हेतु पॉपअप संदेश प्रदर्शित करें।</string>
   <string name="external_link_popup_dialog_title">बहरी कड़ी में प्रवेश किया जा रहा है!</string>
-  <string name="external_link_popup_dialog_message" fuzzy="true">आप बहरी कड़ी में प्रवेश कर रहे हैं। इसके कारण डेटा स्थानांतरण हेतु अतिरिक्त खर्च पड़ सकता है, अथवा ऑफलाइन होने पर यह काम ही नहीं करेगा। क्या आप अभी भी आगे बढ़ना चाहते हैं?</string>
+  <string name="external_link_popup_dialog_message">आप बहरी कड़ी में प्रवेश कर रहे हैं। इसके कारण डेटा स्थानांतरण हेतु अतिरिक्त खर्च पड़ सकता है, अथवा ऑफलाइन होने पर यह काम ही नहीं करेगा। क्या आप जारी रखना चाहते हैं?</string>
   <string name="do_not_ask_anymore">आगे और ना पूछें</string>
   <string name="your_languages">चयनित भाषाएं</string>
   <string name="other_languages">अन्य भाषाएँ</string>
+  <string name="downloading">डाउनलोड हो रहा है:</string>
   <string name="no_items_msg">कोई आइटम उपलब्ध नहीं है</string>
   <string name="crash_title">खैर, यह शर्मनाक है</string>
   <string name="crash_description">ऐसा लगता है जैसे हम दुर्घटनाग्रस्त हो गए।\n\nक्या आप निम्नलिखित जानकारी भेजकर इस समस्या को ठीक करने में हमारी मदद करना चाहेंगे?</string>
@@ -218,6 +219,7 @@
   <string name="save_books_offline">पुस्तकें ऑफ़लाइन सहेजें</string>
   <string name="download_books_message">आप जहां भी हों, किताबें डाउनलोड करें और पढ़ें।</string>
   <string name="save_books_in_desired_storage">पुस्तकों को इच्छित संग्रहण में सहेजें</string>
+  <string name="storage_location_hint">आप मॉनिटर स्क्रीन से ज़िम अपना पसंदीदा भंडार स्थान डाउनलोड करने के लिए,एसडीया कार्ड आंतरिक भंडार, चयन कर सकते हैं।</string>
   <string name="unable_to_add_to_bookmarks">बुकमार्क में जोड़ने में असमर्थ</string>
   <string name="go_to_previous_page">पिछले पृष्ठ पर जाएं</string>
   <string name="go_to_next_page">अगले पृष्ठ पर जाएँ</string>
@@ -234,14 +236,16 @@
   <string name="switch_tabs">टैब स्विच करें</string>
   <string name="close_all_tabs">सभी टैब्स बंद करें</string>
   <string name="close_tab">टैब बंद करें</string>
+  <string name="could_not_restore_tabs">टैब को पुनर्स्थापित नहीं कर सका.</string>
   <string name="pending_state">लंबित</string>
   <string name="running_state">चालू</string>
   <string name="complete">पूर्ण</string>
   <string name="paused_state">रोके गए</string>
   <string name="failed_state">विफल: %s</string>
-  <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">ज़िम फ़ाइल डाउनलोड नहीं की जा सकी. कृपया प्ले स्टोर से एप्लिकेशन को पुनः इंस्टॉल करने का प्रयास करें।</string>
+  <string name="custom_download_error_message_for_authentication_failed">ज़िमफ़ाइल डाउनलोड नहीं की जा सकी. कृपया प्ले स्टोर से एप्लिकेशन को पुनः इंस्टॉल करने का प्रयास करें।</string>
   <string name="save">सहेजें</string>
   <string name="note">टिप्पणी</string>
+  <string name="take_notes">नोट्स बनाएँ</string>
   <string name="wiki_article_title">विकी आलेख शीर्षक</string>
   <string name="ext_storage_permission_rationale_add_note">नोट्स के लिए संग्रहण पहुंच आवश्यक है</string>
   <string name="ext_storage_write_permission_denied_add_note">भंडारण तक पहुंच के बिना नोट्स का उपयोग नहीं किया जा सकता</string>

@@ -7,6 +7,7 @@
 * Fs00
 * Kelson
 * Liuxinyu970226
+* Loran
 * McDutchie
 * MohitMali
 * Robby
@@ -66,7 +67,7 @@
   <string name="zim_not_opened">This message appears in “Android Toast” as an error message when the user opens the application and the previously opened zim file was deleted from the phone storage, then we are showing this error message to the user.</string>
   <string name="error_file_invalid">The message appears in “Android Toast” as a warning message when the user tries to open a file and that file is not the zim file.\n Here %s will be replaced by the ZIM file path which is failed to open.</string>
   <string name="error_article_url_not_found">* This message appears in “Android Toast” as an error message when “Kiwix Reader” is unable to load the given URL.\n* Here %1$s will be replaced by the URL which is failed to load.</string>
-  <string name="pref_display_title">{{Identical|Display}}</string>
+  <string name="pref_display_title">{{Identical|Display}}\n\nThis is the label on the preference settings page. which shows as the display settings list label.</string>
   <string name="pref_info_title">{{Identical|Information}}</string>
   <string name="pref_info_version">{{Identical|Version}}</string>
   <string name="pref_dark_mode">This is part of the preference settings to show the “Dark Mode” setting.</string>
@@ -87,8 +88,10 @@
   <string name="delete_recent_search_item">This message appears in “Android Dialog” when the user long clicks on the item in the searched list. Then we are showing this message to the user to confirm he wants to delete this item from searched history.</string>
   <string name="pref_clear_all_history_title">A preference setting item text for cleaning all history in the application e.g Page history, bookmarks, etc.</string>
   <string name="pref_clear_all_history_summary">This is the “clear history” settings item description it informs the user by clicking this setting he can clear his recent search and tabs history.</string>
-  <string name="pref_notes">{{Identical|Notes}}</string>
+  <string name="pref_notes">{{Identical|Notes}}\n\nThis is a button in the side menu which opens a list of all previously added notes</string>
   <string name="pref_permission">{{Identical|Permissions}}</string>
+  <string name="pref_import_bookmark_title">In settings, under Bookmarks section. Button for importing bookmarks from a file.</string>
+  <string name="export_bookmark_saved">After exporting bookmarks, this is displayed in a toast message.\n%s is the name of the file e.g. bookmark.xml</string>
   <string name="all_history_cleared">This message appears in the “Android Snackbar” to inform the user when all history is cleared.</string>
   <string name="pref_clear_all_bookmarks_title">This is the menu item title, by clicking on the menu item triggers deleting the bookmarks.</string>
   <string name="clear_all_history_dialog_title">This message appears in the “Android Dialog” to take confirmation from the user if he wants to delete the entire history.</string>
@@ -143,12 +146,13 @@
   <string name="help_11">This is a descriptive message explaining where the Zim files are located after downloading. It is showing on the help screen.</string>
   <string name="pref_storage">{{Identical|Storage}}</string>
   <string name="pref_current_folder">This is showing on the preference settings screen, it shows the currently selected storage in which we are downloading the zim files, whether it is internal or external.</string>
+  <string name="pref_storage_used">In settings, under Storage section. Displayed under a bar showing how much storage space is free in internal storage or on sd card. \n%s is the amount of memory used (e.g. \'7 GB\')</string>
   <string name="pref_free_storage">This refers to free (unused) storage space, ’’not’’ to free as in free of charge. Here %s will be replaced by the free space e.g. 20GB.</string>
   <string name="delete_zim_failed">This message appears in the “Android Toast” as an error message. When there are some files that could not be deleted, due to some reason.</string>
   <string name="tts_pause">{{identical|pause}}</string>
   <string name="tts_resume">{{identical|resume}}</string>
   <string name="stop">{{Identical|Stop}}</string>
-  <string name="internal_storage">{{Identical|Internal}}</string>
+  <string name="internal_storage">{{Identical|Internal}}\n\nIn settings, under Storage section. This is in a list and shows that this storage location is the internal storage of the device (as opposed to e.g. an sd card)</string>
   <string name="external_storage">{{Identical|External}}</string>
   <string name="yes">{{Identical|Yes}}</string>
   <string name="no">{{Identical|No}}</string>
@@ -177,6 +181,7 @@
   <string name="do_not_ask_anymore">This message appears in the “Android Dialog of External Links” as a dialog button message. by clicking this button it will not show the “External Links” dialog in the future whenever he clicks on the external links.</string>
   <string name="your_languages">A label for language codes field of selected languages, to notify the user which languages he selected.</string>
   <string name="other_languages">{{Identical|Otherlanguages}}</string>
+  <string name="downloading">This appears on top of a list of currently downloading ZIM files.</string>
   <string name="no_items_msg">This message appears when there are no items available to show the user.</string>
   <string name="crash_title">This is the title message of the error screen when the application crashes.</string>
   <string name="crash_description">This is the descriptive message when the application crashes, asking the user to provide information about the crash.</string>
@@ -218,7 +223,8 @@
   <string name="paused_state">This is used in text to inform the user current state of downloading is paused.</string>
   <string name="failed_state">* It is a text shown on the download screen.\n* It is the download status shown upon failure.\n* Here %s will be replaced dynamically.</string>
   <string name="save">{{Identical|Save}}</string>
-  <string name="note">{{Identical|Note}}</string>
+  <string name="note">{{Identical|Note}}\n\nThis appears on top of the note editor and as a placeholder for the note text</string>
+  <string name="take_notes">this is a button that, when pressed, opens a note editor for the currently open page, from which you can edit or save a new note.</string>
   <string name="wiki_article_title">It is the title’s hint on the add-note page.</string>
   <string name="ext_storage_permission_rationale_add_note">This is used in a toast to inform the user that storage access is required for saving notes.</string>
   <string name="ext_storage_write_permission_denied_add_note">This is used in the toast to inform users without storage access notes can not be saved.</string>
@@ -280,6 +286,10 @@
   <string name="delete_selected_history">Ask if the user wants to delete a number of selected history items.</string>
   <string name="delete_bookmarks">Ask if the user wants to delete all bookmarks.</string>
   <string name="delete_selected_bookmarks">Ask if the user wants to delete a number of selected bookmarks.</string>
+  <string name="export_all_bookmarks_dialog_title">This is displayed in a Yes/No pop-up to confirm exporting bookmarks.</string>
+  <string name="export_all_bookmarks_dialog_message">This is displayed in a pop-up with a Yes/No choice to confirm exporting bookmarks.</string>
+  <string name="bookmark_imported_message">After importing bookmarks, this is displayed in a toast message.</string>
+  <string name="error_invalid_bookmark_file">If the user tries to import a non-valid bookmark file, this is displayed in a toast message.</string>
   <string name="on">This is used in the settings screen to turn on the night mode.</string>
   <string name="off">This is used in the settings screen to turn off the night mode.</string>
   <string name="auto">This is used in the settings screen to turn the night mode on or off automatically depending upon the system settings of the phone.</string>
