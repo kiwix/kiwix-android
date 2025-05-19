@@ -164,7 +164,6 @@ abstract class CorePrefsFragment :
   }
 
   override fun onDestroyView() {
-    presenter?.dispose()
     storagePermissionForNotesLauncher?.unregister()
     storagePermissionForNotesLauncher = null
     super.onDestroyView()
@@ -262,8 +261,10 @@ abstract class CorePrefsFragment :
 
   private fun clearAllHistoryDialog() {
     alertDialogShower?.show(KiwixDialog.ClearAllHistory, {
-      presenter?.clearHistory()
-      Snackbar.make(requireView(), R.string.all_history_cleared, Snackbar.LENGTH_SHORT).show()
+      lifecycleScope.launch {
+        presenter?.clearHistory()
+        Snackbar.make(requireView(), R.string.all_history_cleared, Snackbar.LENGTH_SHORT).show()
+      }
     })
   }
 

@@ -17,28 +17,21 @@
  */
 package org.kiwix.kiwixmobile.core.settings
 
-import org.kiwix.kiwixmobile.core.utils.files.Log
-import io.reactivex.disposables.Disposable
 import org.kiwix.kiwixmobile.core.base.BasePresenter
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.settings.SettingsContract.Presenter
 import org.kiwix.kiwixmobile.core.settings.SettingsContract.View
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import javax.inject.Inject
 
 internal class SettingsPresenter @Inject constructor(private val dataSource: DataSource) :
   BasePresenter<View?>(), Presenter {
-    private var dataSourceDisposable: Disposable? = null
-    override fun clearHistory() {
-      dataSourceDisposable =
-        dataSource.clearHistory()
-          .subscribe({
-            // TODO
-          }, { e ->
-            Log.e("SettingsPresenter", e.message, e)
-          })
-    }
 
-    fun dispose() {
-      dataSourceDisposable?.dispose()
+  override suspend fun clearHistory() {
+    runCatching {
+      dataSource.clearHistory()
+    }.onFailure {
+      Log.e("SettingsPresenter", it.message, it)
     }
   }
+}

@@ -24,15 +24,9 @@ import android.net.ConnectivityManager
 import android.os.storage.StorageManager
 import dagger.Module
 import dagger.Provides
-import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.core.data.remote.ObjectBoxToRoomMigrator
-import org.kiwix.kiwixmobile.core.di.qualifiers.Computation
-import org.kiwix.kiwixmobile.core.di.qualifiers.IO
-import org.kiwix.kiwixmobile.core.di.qualifiers.MainThread
 import org.kiwix.kiwixmobile.core.downloader.DownloadMonitor
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadManagerMonitor
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -67,18 +61,6 @@ class ApplicationModule {
   @Provides
   @Singleton
   fun provideObjectBoxToRoomMigrator() = ObjectBoxToRoomMigrator()
-
-  @IO
-  @Provides
-  fun provideIoThread(): Scheduler = Schedulers.io()
-
-  @MainThread
-  @Provides
-  fun provideMainThread(): Scheduler = AndroidSchedulers.mainThread()
-
-  @Computation
-  @Provides
-  fun provideComputationThread(): Scheduler = Schedulers.computation()
 
   @Provides
   @Singleton

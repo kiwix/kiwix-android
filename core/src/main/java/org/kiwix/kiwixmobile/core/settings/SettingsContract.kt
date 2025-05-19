@@ -22,6 +22,6 @@ import org.kiwix.kiwixmobile.core.base.BaseContract
 interface SettingsContract {
   interface View : BaseContract.View<Presenter?>
   interface Presenter : BaseContract.Presenter<View?> {
-    fun clearHistory()
+    suspend fun clearHistory()
   }
 }

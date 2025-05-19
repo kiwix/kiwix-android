@@ -146,7 +146,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       copy(searchText = "")
     }
     zimManageViewModel.onlineBooksSearchedQuery.value = null
-    zimManageViewModel.requestFiltering.onNext("")
+    zimManageViewModel.requestFiltering.tryEmit("")
   }
 
   private fun onSearchValueChanged(searchText: String) {
@@ -159,7 +159,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     onlineLibraryScreenState.value.update {
       copy(searchText = searchText)
     }
-    zimManageViewModel.requestFiltering.onNext(searchText)
+    zimManageViewModel.requestFiltering.tryEmit(searchText)
   }
 
   private val noWifiWithWifiOnlyPreferenceSet
@@ -275,11 +275,11 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         onlineLibraryScreenState.value.update {
           copy(isSearchActive = true, searchText = it)
         }
-        zimManageViewModel.requestFiltering.onNext(it)
+        zimManageViewModel.requestFiltering.tryEmit(it)
       } ?: run {
       // If no previously saved query found then normally initiate the search.
       zimManageViewModel.onlineBooksSearchedQuery.value = ""
-      zimManageViewModel.requestFiltering.onNext("")
+      zimManageViewModel.requestFiltering.tryEmit("")
     }
   }
 
@@ -505,7 +505,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     if (isNotConnected) {
       showNoInternetConnectionError()
     } else {
-      zimManageViewModel.requestDownloadLibrary.onNext(Unit)
+      zimManageViewModel.requestDownloadLibrary.tryEmit(Unit)
       showRecyclerviewAndHideSwipeDownForLibraryErrorText()
     }
   }

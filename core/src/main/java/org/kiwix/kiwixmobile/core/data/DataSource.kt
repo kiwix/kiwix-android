@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.core.data
 
-import io.reactivex.Completable
 import kotlinx.coroutines.flow.Flow
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
@@ -33,21 +32,21 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
  */
 interface DataSource {
   fun getLanguageCategorizedBooks(): Flow<List<BooksOnDiskListItem>>
-  fun saveBook(book: BookOnDisk): Completable
-  fun saveBooks(book: List<BookOnDisk>): Completable
-  fun saveLanguages(languages: List<Language>): Completable
-  fun saveHistory(history: HistoryItem): Completable
-  fun deleteHistory(historyList: List<HistoryListItem>): Completable
-  fun clearHistory(): Completable
+  suspend fun saveBook(book: BookOnDisk)
+  suspend fun saveBooks(book: List<BookOnDisk>)
+  suspend fun saveLanguages(languages: List<Language>)
+  suspend fun saveHistory(history: HistoryItem)
+  suspend fun deleteHistory(historyList: List<HistoryListItem>)
+  suspend fun clearHistory()
   fun getBookmarks(): Flow<List<LibkiwixBookmarkItem>>
   suspend fun getCurrentZimBookmarksUrl(): List<String>
   suspend fun saveBookmark(libkiwixBookmarkItem: LibkiwixBookmarkItem)
   suspend fun deleteBookmarks(bookmarks: List<LibkiwixBookmarkItem>)
   suspend fun deleteBookmark(bookId: String, bookmarkUrl: String)
   fun booksOnDiskAsListItems(): Flow<List<BooksOnDiskListItem>>
-  fun saveNote(noteListItem: NoteListItem): Completable
-  fun deleteNote(noteTitle: String): Completable
-  fun deleteNotes(noteList: List<NoteListItem>): Completable
+  suspend fun saveNote(noteListItem: NoteListItem)
+  suspend fun deleteNote(noteTitle: String)
+  suspend fun deleteNotes(noteList: List<NoteListItem>)
   suspend fun insertWebViewPageHistoryItems(webViewHistoryEntityList: List<WebViewHistoryEntity>)
   fun getAllWebViewPagesHistory(): Flow<List<WebViewHistoryEntity>>
   suspend fun clearWebViewPagesHistory()

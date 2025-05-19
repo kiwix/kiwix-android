@@ -18,8 +18,9 @@
 
 package org.kiwix.kiwixmobile.core.downloader
 
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
@@ -31,26 +32,24 @@ class DownloaderImpl @Inject constructor(
   private val downloadRoomDao: DownloadRoomDao,
   private val kiwixService: KiwixService
 ) : Downloader {
-  @Suppress("CheckResult", "IgnoredReturnValue")
+  @Suppress("InjectDispatcher")
   override fun download(book: LibraryNetworkEntity.Book) {
-    urlProvider(book)
-      .take(1)
-      .subscribeOn(Schedulers.io())
-      .subscribe(
-        {
+    CoroutineScope(Dispatchers.IO).launch {
+      runCatching {
+        urlProvider(book)?.let {
           downloadRoomDao.addIfDoesNotExist(it, book, downloadRequester)
-        },
-        Throwable::printStackTrace
-      )
+        }
+      }.onFailure {
+        it.printStackTrace()
+      }
+    }
   }
 
-  @Suppress("UnsafeCallOnNullableType")
-  private fun urlProvider(book: Book): Observable<String> =
+  private suspend fun urlProvider(book: Book): String? =
     if (book.url?.endsWith("meta4") == true) {
-      kiwixService.getMetaLinks(book.url!!)
-        .map { it.relevantUrl.value }
+      kiwixService.getMetaLinks(book.url!!)?.relevantUrl?.value
     } else {
-      Observable.just(book.url)
+      book.url
     }
 
   override fun cancelDownload(downloadId: Long) {

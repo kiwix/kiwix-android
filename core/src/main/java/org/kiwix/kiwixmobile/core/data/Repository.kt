@@ -18,12 +18,11 @@
 
 package org.kiwix.kiwixmobile.core.data
 
-import io.reactivex.Completable
-import io.reactivex.Scheduler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
@@ -32,7 +31,6 @@ import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.dao.WebViewHistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
-import org.kiwix.kiwixmobile.core.di.qualifiers.IO
 import org.kiwix.kiwixmobile.core.extensions.HeaderizableList
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.page.history.adapter.HistoryListItem
@@ -52,7 +50,6 @@ import javax.inject.Singleton
 
 @Singleton
 class Repository @Inject internal constructor(
-  @param:IO private val ioThread: Scheduler,
   private val bookDao: NewBookDao,
   private val libkiwixBookmarks: LibkiwixBookmarks,
   private val historyRoomDao: HistoryRoomDao,
@@ -91,33 +88,38 @@ class Repository @Inject internal constructor(
       .map(MutableList<BooksOnDiskListItem>::toList)
       .flowOn(Dispatchers.IO)
 
-  override fun saveBooks(books: List<BookOnDisk>) =
-    Completable.fromAction { bookDao.insert(books) }
-      .subscribeOn(ioThread)
+  @Suppress("InjectDispatcher")
+  override suspend fun saveBooks(books: List<BookOnDisk>) = withContext(Dispatchers.IO) {
+    bookDao.insert(books)
+  }
 
-  override fun saveBook(book: BookOnDisk) =
-    Completable.fromAction { bookDao.insert(listOf(book)) }
-      .subscribeOn(ioThread)
+  @Suppress("InjectDispatcher")
+  override suspend fun saveBook(book: BookOnDisk) = withContext(Dispatchers.IO) {
+    bookDao.insert(listOf(book))
+  }
 
-  override fun saveLanguages(languages: List<Language>) =
-    Completable.fromAction { languageDao.insert(languages) }
-      .subscribeOn(ioThread)
-
-  override fun saveHistory(history: HistoryItem) =
-    Completable.fromAction { historyRoomDao.saveHistory(history) }
-      .subscribeOn(ioThread)
-
-  override fun deleteHistory(historyList: List<HistoryListItem>) =
-    Completable.fromAction {
-      historyRoomDao.deleteHistory(historyList.filterIsInstance(HistoryItem::class.java))
+  @Suppress("InjectDispatcher")
+  override suspend fun saveLanguages(languages: List<Language>) =
+    withContext(Dispatchers.IO) {
+      languageDao.insert(languages)
     }
-      .subscribeOn(ioThread)
 
-  override fun clearHistory() =
-    Completable.fromAction {
-      historyRoomDao.deleteAllHistory()
-      recentSearchRoomDao.deleteSearchHistory()
-    }.subscribeOn(ioThread)
+  @Suppress("InjectDispatcher")
+  override suspend fun saveHistory(history: HistoryItem) = withContext(Dispatchers.IO) {
+    historyRoomDao.saveHistory(history)
+  }
+
+  @Suppress("InjectDispatcher")
+  override suspend fun deleteHistory(historyList: List<HistoryListItem>) =
+    withContext(Dispatchers.IO) {
+      historyRoomDao.deleteHistory(historyList.filterIsInstance<HistoryItem>())
+    }
+
+  @Suppress("InjectDispatcher")
+  override suspend fun clearHistory() = withContext(Dispatchers.IO) {
+    historyRoomDao.deleteAllHistory()
+    recentSearchRoomDao.deleteSearchHistory()
+  }
 
   override fun getBookmarks() =
     libkiwixBookmarks.bookmarks() as Flow<List<LibkiwixBookmarkItem>>
@@ -134,13 +136,17 @@ class Repository @Inject internal constructor(
   override suspend fun deleteBookmark(bookId: String, bookmarkUrl: String) =
     libkiwixBookmarks.deleteBookmark(bookId, bookmarkUrl)
 
-  override fun saveNote(noteListItem: NoteListItem): Completable =
-    Completable.fromAction { notesRoomDao.saveNote(noteListItem) }
-      .subscribeOn(ioThread)
+  @Suppress("InjectDispatcher")
+  override suspend fun saveNote(noteListItem: NoteListItem) =
+    withContext(Dispatchers.IO) {
+      notesRoomDao.saveNote(noteListItem)
+    }
 
-  override fun deleteNotes(noteList: List<NoteListItem>) =
-    Completable.fromAction { notesRoomDao.deleteNotes(noteList) }
-      .subscribeOn(ioThread)
+  @Suppress("InjectDispatcher")
+  override suspend fun deleteNotes(noteList: List<NoteListItem>) =
+    withContext(Dispatchers.IO) {
+      notesRoomDao.deleteNotes(noteList)
+    }
 
   override suspend fun insertWebViewPageHistoryItems(
     webViewHistoryEntityList: List<WebViewHistoryEntity>
@@ -155,7 +161,8 @@ class Repository @Inject internal constructor(
     webViewHistoryRoomDao.clearWebViewPagesHistory()
   }
 
-  override fun deleteNote(noteTitle: String): Completable =
-    Completable.fromAction { notesRoomDao.deleteNote(noteTitle) }
-      .subscribeOn(ioThread)
+  @Suppress("InjectDispatcher")
+  override suspend fun deleteNote(noteTitle: String) = withContext(Dispatchers.IO) {
+    notesRoomDao.deleteNote(noteTitle)
+  }
 }
