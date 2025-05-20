@@ -29,6 +29,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,6 +50,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.retry
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.withContext
@@ -77,11 +79,15 @@ import org.kiwix.kiwixmobile.core.di.modules.KIWIX_DOWNLOAD_URL
 import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DEFAULT_INT_VALUE
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.FIVE
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.calculateSearchMatches
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
+import org.kiwix.kiwixmobile.core.ui.components.ONE
+import org.kiwix.kiwixmobile.core.ui.components.TWO
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -123,6 +129,9 @@ import javax.inject.Inject
 const val DEFAULT_PROGRESS = 0
 const val MAX_PROGRESS = 100
 
+const val THREE = 3
+const val FOUR = 4
+
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: DownloadRoomDao,
   private val bookDao: NewBookDao,
@@ -160,7 +169,11 @@ class ZimManageViewModel @Inject constructor(
 
   val requestFileSystemCheck = MutableSharedFlow<Unit>(replay = 0)
   val fileSelectActions = MutableSharedFlow<FileSelectActions>()
-  val requestDownloadLibrary = MutableStateFlow(Unit)
+  val requestDownloadLibrary = MutableSharedFlow<Unit>(
+    replay = 0,
+    extraBufferCapacity = 1,
+    onBufferOverflow = BufferOverflow.DROP_OLDEST
+  )
   val requestFiltering = MutableStateFlow("")
   val onlineBooksSearchedQuery = MutableLiveData<String>()
   private val coroutineJobs: MutableList<Job> = mutableListOf()
@@ -171,6 +184,13 @@ class ZimManageViewModel @Inject constructor(
   init {
     observeCoroutineFlows()
     context.registerReceiver(connectivityBroadcastReceiver)
+    viewModelScope.launch {
+      // Emit a request to download the library once.
+      // This prevents triggering the download multiple times,
+      // which was a problem in the RxJava version where the download
+      // would be retriggered every time the fragment was recreated.
+      requestDownloadLibrary.emit(Unit)
+    }
   }
 
   fun setIsUnitTestCase() {
@@ -293,11 +313,10 @@ class ZimManageViewModel @Inject constructor(
       }
     }
 
-  @Suppress("TooGenericExceptionCaught")
   private fun fileSelectActions() =
     fileSelectActions
       .onEach { action ->
-        try {
+        runCatching {
           sideEffects.emit(
             when (action) {
               is RequestNavigateTo -> OpenFileWithNavigation(action.bookOnDisk)
@@ -310,8 +329,8 @@ class ZimManageViewModel @Inject constructor(
               UserClickedDownloadBooksButton -> NavigateToDownloads
             }
           )
-        } catch (e: Throwable) {
-          e.printStackTrace()
+        }.onFailure {
+          it.printStackTrace()
         }
       }.launchIn(viewModelScope)
 
@@ -371,36 +390,36 @@ class ZimManageViewModel @Inject constructor(
   @OptIn(ExperimentalCoroutinesApi::class)
   private fun requestsAndConnectivityChangesToLibraryRequests(
     library: MutableSharedFlow<LibraryNetworkEntity>,
-  ) = viewModelScope.launch(Dispatchers.IO) {
-    combine(
-      requestDownloadLibrary,
-      connectivityBroadcastReceiver.networkStates.asFlow()
-        .distinctUntilChanged()
-        .filter { it == CONNECTED }
-    ) { _, _ -> }
+  ) = requestDownloadLibrary.flatMapConcat {
+    connectivityBroadcastReceiver.networkStates.asFlow()
+      .distinctUntilChanged()
+      .filter { networkState -> networkState == CONNECTED }
+      .take(1)
       .flatMapConcat {
-        shouldProceedWithDownload().map { createKiwixServiceWithProgressListener() }
-      }
-      .flatMapConcat { kiwixService ->
-        downloadLibraryFlow(kiwixService)
-      }
-      .filterNotNull()
-      .catch { it.printStackTrace() }
-      .collect {
-        library.emit(it)
+        shouldProceedWithDownload()
+          .flatMapConcat { kiwixService ->
+            downloadLibraryFlow(kiwixService)
+          }
       }
   }
+    .filterNotNull()
+    .catch { it.printStackTrace() }
+    .onEach { library.emit(it) }
+    .launchIn(viewModelScope)
 
-  private fun shouldProceedWithDownload(): Flow<Unit> {
+  private fun shouldProceedWithDownload(): Flow<KiwixService> {
     return if (connectivityManager.isWifi()) {
-      flowOf(Unit)
+      flowOf(createKiwixServiceWithProgressListener())
     } else {
-      sharedPreferenceUtil.prefWifiOnlys
-        .filter {
-          if (it) shouldShowWifiOnlyDialog.postValue(true)
-          !it
+      flow {
+        val wifiOnly = sharedPreferenceUtil.prefWifiOnlys.first()
+        if (wifiOnly) {
+          shouldShowWifiOnlyDialog.postValue(true)
+          // Don't emit anything — just return
+          return@flow
         }
-        .map { }
+        emit(createKiwixServiceWithProgressListener())
+      }
     }
   }
 
@@ -425,6 +444,7 @@ class ZimManageViewModel @Inject constructor(
       networkStates.postValue(state)
     }.launchIn(viewModelScope)
 
+  @Suppress("UNCHECKED_CAST", "InjectDispatcher")
   @OptIn(FlowPreview::class)
   private fun updateLibraryItems(
     booksFromDao: Flow<List<BookOnDisk>>,
@@ -447,13 +467,26 @@ class ZimManageViewModel @Inject constructor(
       library,
       requestFilteringFlow,
       fat32Checker.fileSystemStates
-    ) { books, downloads, langs, libraryNet, filter, fsState ->
-      combineLibrarySources(books, downloads, langs, libraryNet, filter, fsState)
+    ) { args ->
+      val books = args[ZERO] as List<BookOnDisk>
+      val activeDownloads = args[ONE] as List<DownloadModel>
+      val languageList = args[TWO] as List<Language>
+      val libraryNetworkEntity = args[THREE] as LibraryNetworkEntity
+      val filter = args[FOUR] as String
+      val fileSystemState = args[FIVE] as FileSystemState
+      combineLibrarySources(
+        booksOnFileSystem = books,
+        activeDownloads = activeDownloads,
+        allLanguages = languageList,
+        libraryNetworkEntity = libraryNetworkEntity,
+        filter = filter,
+        fileSystemState = fileSystemState
+      )
     }
       .onEach { libraryListIsRefreshing.postValue(false) }
       .catch { throwable ->
         throwable.printStackTrace()
-        Log.e("ZimManageViewModel", "Error----${throwable}")
+        Log.e("ZimManageViewModel", "Error----$throwable")
       }
       .collect { libraryItems.postValue(it) }
   }
@@ -461,7 +494,7 @@ class ZimManageViewModel @Inject constructor(
   private fun updateLanguagesInDao(
     library: MutableSharedFlow<LibraryNetworkEntity>,
     languages: Flow<List<Language>>
-  ) = viewModelScope.launch(Dispatchers.IO) {
+  ) =
     combine(
       library.map { it.book }.filterNotNull(),
       languages
@@ -469,9 +502,10 @@ class ZimManageViewModel @Inject constructor(
       combineToLanguageList(books, existingLanguages)
     }.map { it.sortedBy(Language::language) }
       .filter { it.isNotEmpty() }
+      .distinctUntilChanged()
       .catch { it.printStackTrace() }
-      .collect { languageDao.insert(it) }
-  }
+      .onEach { languageDao.insert(it) }
+      .launchIn(viewModelScope)
 
   private fun combineToLanguageList(
     booksFromNetwork: List<Book>,

@@ -341,6 +341,10 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         showRecyclerviewAndHideSwipeDownForLibraryErrorText()
         sharedPreferenceUtil.putPrefWifiOnly(false)
         zimManageViewModel.shouldShowWifiOnlyDialog.value = false
+        // User allowed downloading over mobile data.
+        // Since the download flow now triggers only when appropriate,
+        // we start the library download explicitly after updating the preference.
+        startDownloadingLibrary()
       },
       {
         context.toast(
@@ -505,8 +509,14 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     if (isNotConnected) {
       showNoInternetConnectionError()
     } else {
-      zimManageViewModel.requestDownloadLibrary.tryEmit(Unit)
+      startDownloadingLibrary()
       showRecyclerviewAndHideSwipeDownForLibraryErrorText()
+    }
+  }
+
+  private fun startDownloadingLibrary() {
+    lifecycleScope.launch {
+      zimManageViewModel.requestDownloadLibrary.emit(Unit)
     }
   }
 

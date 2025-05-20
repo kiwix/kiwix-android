@@ -45,6 +45,7 @@ class DownloaderImpl @Inject constructor(
     }
   }
 
+  @Suppress("UnsafeCallOnNullableType")
   private suspend fun urlProvider(book: Book): String? =
     if (book.url?.endsWith("meta4") == true) {
       kiwixService.getMetaLinks(book.url!!)?.relevantUrl?.value

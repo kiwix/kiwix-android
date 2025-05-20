@@ -26,12 +26,11 @@ import javax.inject.Inject
 
 internal class SettingsPresenter @Inject constructor(private val dataSource: DataSource) :
   BasePresenter<View?>(), Presenter {
-
-  override suspend fun clearHistory() {
-    runCatching {
-      dataSource.clearHistory()
-    }.onFailure {
-      Log.e("SettingsPresenter", it.message, it)
+    override suspend fun clearHistory() {
+      runCatching {
+        dataSource.clearHistory()
+      }.onFailure {
+        Log.e("SettingsPresenter", it.message, it)
+      }
     }
   }
-}
