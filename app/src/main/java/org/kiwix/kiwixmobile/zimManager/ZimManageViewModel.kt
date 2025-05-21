@@ -286,10 +286,9 @@ class ZimManageViewModel @Inject constructor(
     val booksFromDao = books().asFlowable()
     val networkLibrary = PublishProcessor.create<LibraryNetworkEntity>()
     val languages = languageDao.languages().asFlowable()
-    return arrayOf(
+    return arrayOf<Disposable>(
       updateLibraryItems(booksFromDao, downloads, networkLibrary, languages),
       updateLanguagesInDao(networkLibrary, languages),
-      updateNetworkStates(),
       requestsAndConnectivtyChangesToLibraryRequests(networkLibrary)
     ).also {
       setUpUncaughtErrorHandlerForOnlineLibrary(networkLibrary)
@@ -385,13 +384,12 @@ class ZimManageViewModel @Inject constructor(
     return None
   }
 
-  private fun updateNetworkStates() {
+  private fun updateNetworkStates() =
     viewModelScope.launch {
       connectivityBroadcastReceiver.networkStates.collect { state ->
         networkStates.postValue(state)
       }
-    }
-  }
+    }.also { coroutineJobs.add(it) }
 
   private fun requestsAndConnectivtyChangesToLibraryRequests(
     library: PublishProcessor<LibraryNetworkEntity>,

@@ -34,14 +34,16 @@ class ConnectivityBroadcastReceiver @Inject constructor(
     @Suppress("DEPRECATION")
     override val action: String = ConnectivityManager.CONNECTIVITY_ACTION
 
-    private val _networkStates = MutableStateFlow(connectivityManager.networkState)
+    private val _networkStates = MutableStateFlow<NetworkState>(NetworkState.NOT_CONNECTED).apply {
+      tryEmit(connectivityManager.networkState)
+    }
     val networkStates: StateFlow<NetworkState> = _networkStates
 
     override fun onIntentWithActionReceived(
       context: Context,
       intent: Intent
     ) {
-      _networkStates.value = connectivityManager.networkState
+      _networkStates.tryEmit(connectivityManager.networkState)
     }
 
     fun stopNetworkState() {
