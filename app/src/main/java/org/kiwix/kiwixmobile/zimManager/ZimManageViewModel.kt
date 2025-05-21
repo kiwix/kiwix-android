@@ -53,7 +53,6 @@ import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
-import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
@@ -160,7 +159,7 @@ class ZimManageViewModel @Inject constructor(
 
   private var isUnitTestCase: Boolean = false
   val sideEffects: MutableSharedFlow<SideEffect<*>> = MutableSharedFlow()
-  val libraryItems: MutableLiveData<List<LibraryListItem>> = MutableLiveData()
+  val libraryItems = MutableStateFlow<List<LibraryListItem>>(emptyList())
   val fileSelectListStates: MutableLiveData<FileSelectListState> = MutableLiveData()
   val deviceListScanningProgress = MutableLiveData<Int>()
   val libraryListIsRefreshing = MutableLiveData<Boolean>()
@@ -169,11 +168,12 @@ class ZimManageViewModel @Inject constructor(
 
   val requestFileSystemCheck = MutableSharedFlow<Unit>(replay = 0)
   val fileSelectActions = MutableSharedFlow<FileSelectActions>()
-  val requestDownloadLibrary = MutableSharedFlow<Unit>(
+  private val requestDownloadLibrary = MutableSharedFlow<Unit>(
     replay = 0,
     extraBufferCapacity = 1,
     onBufferOverflow = BufferOverflow.DROP_OLDEST
   )
+  private var isOnlineLibraryDownloading = false
   val requestFiltering = MutableStateFlow("")
   val onlineBooksSearchedQuery = MutableLiveData<String>()
   private val coroutineJobs: MutableList<Job> = mutableListOf()
@@ -184,12 +184,17 @@ class ZimManageViewModel @Inject constructor(
   init {
     observeCoroutineFlows()
     context.registerReceiver(connectivityBroadcastReceiver)
-    viewModelScope.launch {
-      // Emit a request to download the library once.
-      // This prevents triggering the download multiple times,
-      // which was a problem in the RxJava version where the download
-      // would be retriggered every time the fragment was recreated.
-      requestDownloadLibrary.emit(Unit)
+  }
+
+  fun requestOnlineLibraryIfNeeded(isExplicitRefresh: Boolean) {
+    val libraryItems = libraryItems.value
+    val shouldDownloadOnlineLibrary =
+      isExplicitRefresh || (!isOnlineLibraryDownloading && libraryItems.isEmpty())
+    if (shouldDownloadOnlineLibrary) {
+      viewModelScope.launch {
+        requestDownloadLibrary.emit(Unit)
+        isOnlineLibraryDownloading = true
+      }
     }
   }
 
@@ -302,16 +307,11 @@ class ZimManageViewModel @Inject constructor(
   }
 
   private fun scanBooksFromStorage(dispatcher: CoroutineDispatcher = Dispatchers.IO) =
-    viewModelScope.launch {
-      withContext(dispatcher) {
-        books()
-          .let { checkFileSystemForBooksOnRequest(it) }
-          .catch { it.printStackTrace() }
-          .collect { books ->
-            bookDao.insert(books)
-          }
-      }
-    }
+    checkFileSystemForBooksOnRequest(books())
+      .catch { it.printStackTrace() }
+      .onEach { books -> bookDao.insert(books) }
+      .flowOn(dispatcher)
+      .launchIn(viewModelScope)
 
   private fun fileSelectActions() =
     fileSelectActions
@@ -390,6 +390,7 @@ class ZimManageViewModel @Inject constructor(
   @OptIn(ExperimentalCoroutinesApi::class)
   private fun requestsAndConnectivityChangesToLibraryRequests(
     library: MutableSharedFlow<LibraryNetworkEntity>,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
   ) = requestDownloadLibrary.flatMapConcat {
     connectivityBroadcastReceiver.networkStates.asFlow()
       .distinctUntilChanged()
@@ -403,8 +404,17 @@ class ZimManageViewModel @Inject constructor(
       }
   }
     .filterNotNull()
-    .catch { it.printStackTrace() }
-    .onEach { library.emit(it) }
+    .catch {
+      it.printStackTrace().also {
+        isOnlineLibraryDownloading = false
+      }
+    }
+    .onEach {
+      library.emit(it).also {
+        isOnlineLibraryDownloading = false
+      }
+    }
+    .flowOn(dispatcher)
     .launchIn(viewModelScope)
 
   private fun shouldProceedWithDownload(): Flow<KiwixService> {
@@ -440,24 +450,24 @@ class ZimManageViewModel @Inject constructor(
   private fun updateNetworkStates() = connectivityBroadcastReceiver.networkStates
     .asFlow()
     .catch { it.printStackTrace() }
-    .onEach { state ->
-      networkStates.postValue(state)
-    }.launchIn(viewModelScope)
+    .onEach { state -> networkStates.postValue(state) }
+    .launchIn(viewModelScope)
 
-  @Suppress("UNCHECKED_CAST", "InjectDispatcher")
+  @Suppress("UNCHECKED_CAST")
   @OptIn(FlowPreview::class)
   private fun updateLibraryItems(
     booksFromDao: Flow<List<BookOnDisk>>,
     downloads: Flow<List<DownloadModel>>,
     library: MutableSharedFlow<LibraryNetworkEntity>,
-    languages: Flow<List<Language>>
-  ) = viewModelScope.launch(Dispatchers.IO) {
+    languages: Flow<List<Language>>,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ) = viewModelScope.launch(dispatcher) {
     val requestFilteringFlow = merge(
       flowOf(""),
       requestFiltering
         .onEach { libraryListIsRefreshing.postValue(true) }
         .debounce(500)
-        .flowOn(Dispatchers.IO)
+        .flowOn(dispatcher)
     )
 
     combine(
@@ -488,12 +498,13 @@ class ZimManageViewModel @Inject constructor(
         throwable.printStackTrace()
         Log.e("ZimManageViewModel", "Error----$throwable")
       }
-      .collect { libraryItems.postValue(it) }
+      .collect { libraryItems.emit(it) }
   }
 
   private fun updateLanguagesInDao(
     library: MutableSharedFlow<LibraryNetworkEntity>,
-    languages: Flow<List<Language>>
+    languages: Flow<List<Language>>,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
   ) =
     combine(
       library.map { it.book }.filterNotNull(),
@@ -505,6 +516,7 @@ class ZimManageViewModel @Inject constructor(
       .distinctUntilChanged()
       .catch { it.printStackTrace() }
       .onEach { languageDao.insert(it) }
+      .flowOn(dispatcher)
       .launchIn(viewModelScope)
 
   private fun combineToLanguageList(

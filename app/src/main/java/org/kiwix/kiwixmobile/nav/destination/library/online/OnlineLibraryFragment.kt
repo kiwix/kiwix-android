@@ -47,6 +47,8 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.tonyodev.fetch2.Status
 import eu.mhutti1.utils.storage.StorageDevice
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R.drawable
 import org.kiwix.kiwixmobile.cachedComponent
@@ -123,13 +125,13 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       OnlineLibraryScreenState(
         onlineLibraryList = null,
         snackBarHostState = SnackbarHostState(),
-        swipeRefreshItem = Pair(false, true),
+        isRefreshing = false,
         scanningProgressItem = Pair(false, ""),
         noContentViewItem = Pair("", false),
         bottomNavigationHeight = ZERO,
         onBookItemClick = { onBookItemClick(it) },
         availableSpaceCalculator = availableSpaceCalculator,
-        onRefresh = { refreshFragment() },
+        onRefresh = { refreshFragment(true) },
         bookUtils = bookUtils,
         onPauseResumeButtonClick = { onPauseResumeButtonClick(it) },
         onStopButtonClick = { onStopButtonClick(it) },
@@ -143,7 +145,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   private fun onSearchClear() {
     onlineLibraryScreenState.value.update {
-      copy(searchText = "")
+      copy(searchText = "", scanningProgressItem = false to "", isRefreshing = true)
     }
     zimManageViewModel.onlineBooksSearchedQuery.value = null
     zimManageViewModel.requestFiltering.tryEmit("")
@@ -157,7 +159,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       zimManageViewModel.onlineBooksSearchedQuery.value = searchText
     }
     onlineLibraryScreenState.value.update {
-      copy(searchText = searchText)
+      copy(searchText = searchText, scanningProgressItem = false to "", isRefreshing = true)
     }
     zimManageViewModel.requestFiltering.tryEmit(searchText)
   }
@@ -246,7 +248,9 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       )
       DialogHost(alertDialogShower)
     }
-    zimManageViewModel.libraryItems.observe(viewLifecycleOwner, Observer(::onLibraryItemsChange))
+    zimManageViewModel.libraryItems
+      .onEach { onLibraryItemsChange(it) }
+      .launchIn(viewLifecycleOwner.lifecycleScope)
       .also {
         coreMainActivity.navHostContainer
           .setBottomMarginToFragmentContainerView(0)
@@ -266,6 +270,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
     zimManageViewModel.downloadProgress.observe(viewLifecycleOwner, ::onLibraryStatusChanged)
     showPreviouslySearchedTextInSearchView()
+    startDownloadingLibrary()
   }
 
   private fun showPreviouslySearchedTextInSearchView() {
@@ -344,7 +349,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
         // User allowed downloading over mobile data.
         // Since the download flow now triggers only when appropriate,
         // we start the library download explicitly after updating the preference.
-        startDownloadingLibrary()
+        startDownloadingLibrary(true)
       },
       {
         context.toast(
@@ -375,7 +380,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     onlineLibraryScreenState.value.update {
       copy(
         noContentViewItem = "" to false,
-        swipeRefreshItem = onlineLibraryScreenState.value.value.swipeRefreshItem.first to false,
+        isRefreshing = false,
         scanningProgressItem = true to getString(string.reaching_remote_library)
       )
     }
@@ -385,7 +390,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     onRefreshStateChange(isRefreshing = false, false)
     onlineLibraryScreenState.value.update {
       copy(
-        swipeRefreshItem = onlineLibraryScreenState.value.value.swipeRefreshItem.first to true,
+        isRefreshing = false,
         scanningProgressItem = false to getString(string.reaching_remote_library)
       )
     }
@@ -395,7 +400,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     synchronized(lock) {
       onlineLibraryScreenState.value.update {
         copy(
-          scanningProgressItem = onlineLibraryScreenState.value.value.scanningProgressItem.first to libraryStatus
+          scanningProgressItem = true to libraryStatus
         )
       }
     }
@@ -437,7 +442,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     }
     onlineLibraryScreenState.value.update {
       copy(
-        swipeRefreshItem = refreshing to onlineLibraryState.swipeRefreshItem.second,
+        isRefreshing = refreshing,
         scanningProgressItem = shouldShowScanningProgressItem to onlineLibraryState.scanningProgressItem.second
       )
     }
@@ -447,11 +452,12 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     when (networkState) {
       NetworkState.CONNECTED -> {
         if (NetworkUtils.isWiFi(requireContext())) {
-          refreshFragment()
+          refreshFragment(false)
         } else if (noWifiWithWifiOnlyPreferenceSet) {
           hideRecyclerviewAndShowSwipeDownForLibraryErrorText()
         } else if (!noWifiWithWifiOnlyPreferenceSet) {
           if (onlineLibraryScreenState.value.value.onlineLibraryList?.isEmpty() == true) {
+            startDownloadingLibrary(true)
             showProgressBarOfFetchingOnlineLibrary()
           }
         }
@@ -505,19 +511,19 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     hideProgressBarOfFetchingOnlineLibrary()
   }
 
-  private fun refreshFragment() {
+  private fun refreshFragment(isExplicitRefresh: Boolean) {
     if (isNotConnected) {
       showNoInternetConnectionError()
     } else {
-      startDownloadingLibrary()
-      showRecyclerviewAndHideSwipeDownForLibraryErrorText()
+      startDownloadingLibrary(isExplicitRefresh)
+      if (isExplicitRefresh) {
+        showRecyclerviewAndHideSwipeDownForLibraryErrorText()
+      }
     }
   }
 
-  private fun startDownloadingLibrary() {
-    lifecycleScope.launch {
-      zimManageViewModel.requestDownloadLibrary.emit(Unit)
-    }
+  private fun startDownloadingLibrary(isExplicitRefresh: Boolean = false) {
+    zimManageViewModel.requestOnlineLibraryIfNeeded(isExplicitRefresh)
   }
 
   private fun downloadFile() {

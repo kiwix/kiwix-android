@@ -112,8 +112,8 @@ fun OnlineLibraryScreen(
         .padding(bottom = bottomNavHeight.value)
     ) { paddingValues ->
       SwipeRefreshLayout(
-        isRefreshing = state.swipeRefreshItem.first,
-        isEnabled = state.swipeRefreshItem.second,
+        isRefreshing = state.isRefreshing && !state.scanningProgressItem.first,
+        isEnabled = !state.scanningProgressItem.first,
         onRefresh = state.onRefresh,
         modifier = Modifier
           .fillMaxSize()
