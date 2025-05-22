@@ -180,10 +180,13 @@
   <string name="close_all_tabs">Lukk alle faner</string>
   <string name="close_tab">Lukk fane</string>
   <string name="could_not_restore_tabs">Kunne ikke gjenopprette faner.</string>
+  <string name="pending_state">Venter</string>
+  <string name="running_state">Pågår</string>
   <string name="complete">Fullført</string>
   <string name="paused_state">Pauset</string>
   <string name="failed_state">Mislyktes: %s</string>
   <string name="save">Lagre</string>
+  <string name="notes_deletion_unsuccessful">Noen filer ble ikke slettet</string>
   <string name="connection_failed">Tilkobling mislyktes</string>
   <string name="your_device">Din enhet:</string>
   <string name="device_name">Enhetsnavn</string>
