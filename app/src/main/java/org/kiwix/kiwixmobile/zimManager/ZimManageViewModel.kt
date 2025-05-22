@@ -33,6 +33,8 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
@@ -159,13 +161,15 @@ class ZimManageViewModel @Inject constructor(
 
   private var isUnitTestCase: Boolean = false
   val sideEffects: MutableSharedFlow<SideEffect<*>> = MutableSharedFlow()
-  val libraryItems = MutableStateFlow<List<LibraryListItem>>(emptyList())
+  private val _libraryItems = MutableStateFlow<List<LibraryListItem>>(emptyList())
+  val libraryItems: StateFlow<List<LibraryListItem>> = _libraryItems.asStateFlow()
   val fileSelectListStates: MutableLiveData<FileSelectListState> = MutableLiveData()
   val deviceListScanningProgress = MutableLiveData<Int>()
   val libraryListIsRefreshing = MutableLiveData<Boolean>()
+  val onlineLibraryDownloading = MutableStateFlow(false)
   val shouldShowWifiOnlyDialog = MutableLiveData<Boolean>()
   val networkStates = MutableLiveData<NetworkState>()
-
+  val networkLibrary = MutableSharedFlow<LibraryNetworkEntity>(replay = 0)
   val requestFileSystemCheck = MutableSharedFlow<Unit>(replay = 0)
   val fileSelectActions = MutableSharedFlow<FileSelectActions>()
   private val requestDownloadLibrary = MutableSharedFlow<Unit>(
@@ -173,7 +177,9 @@ class ZimManageViewModel @Inject constructor(
     extraBufferCapacity = 1,
     onBufferOverflow = BufferOverflow.DROP_OLDEST
   )
-  private var isOnlineLibraryDownloading = false
+
+  @Volatile
+  var isOnlineLibraryDownloading = false
   val requestFiltering = MutableStateFlow("")
   val onlineBooksSearchedQuery = MutableLiveData<String>()
   private val coroutineJobs: MutableList<Job> = mutableListOf()
@@ -187,14 +193,10 @@ class ZimManageViewModel @Inject constructor(
   }
 
   fun requestOnlineLibraryIfNeeded(isExplicitRefresh: Boolean) {
-    val libraryItems = libraryItems.value
-    val shouldDownloadOnlineLibrary =
-      isExplicitRefresh || (!isOnlineLibraryDownloading && libraryItems.isEmpty())
-    if (shouldDownloadOnlineLibrary) {
-      viewModelScope.launch {
-        requestDownloadLibrary.emit(Unit)
-        isOnlineLibraryDownloading = true
-      }
+    if (isOnlineLibraryDownloading && !isExplicitRefresh) return
+    isOnlineLibraryDownloading = true
+    viewModelScope.launch {
+      requestDownloadLibrary.tryEmit(Unit)
     }
   }
 
@@ -282,7 +284,6 @@ class ZimManageViewModel @Inject constructor(
   private fun observeCoroutineFlows(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
     val downloads = downloadDao.downloads()
     val booksFromDao = books()
-    val networkLibrary = MutableSharedFlow<LibraryNetworkEntity>(replay = 0)
     val languages = languageDao.languages()
     coroutineJobs.apply {
       add(scanBooksFromStorage(dispatcher))
@@ -399,7 +400,9 @@ class ZimManageViewModel @Inject constructor(
       .flatMapConcat {
         shouldProceedWithDownload()
           .flatMapConcat { kiwixService ->
-            downloadLibraryFlow(kiwixService)
+            downloadLibraryFlow(kiwixService).also {
+              onlineLibraryDownloading.tryEmit(true)
+            }
           }
       }
   }
@@ -407,11 +410,15 @@ class ZimManageViewModel @Inject constructor(
     .catch {
       it.printStackTrace().also {
         isOnlineLibraryDownloading = false
+        onlineLibraryDownloading.tryEmit(false)
       }
     }
     .onEach {
       library.emit(it).also {
-        isOnlineLibraryDownloading = false
+        // Setting this to true because once library downloaded we don't need to download again
+        // until user wants to refresh the online library.
+        isOnlineLibraryDownloading = true
+        onlineLibraryDownloading.tryEmit(false)
       }
     }
     .flowOn(dispatcher)
@@ -495,10 +502,11 @@ class ZimManageViewModel @Inject constructor(
     }
       .onEach { libraryListIsRefreshing.postValue(false) }
       .catch { throwable ->
+        libraryListIsRefreshing.postValue(false)
         throwable.printStackTrace()
         Log.e("ZimManageViewModel", "Error----$throwable")
       }
-      .collect { libraryItems.emit(it) }
+      .collect { _libraryItems.emit(it) }
   }
 
   private fun updateLanguagesInDao(

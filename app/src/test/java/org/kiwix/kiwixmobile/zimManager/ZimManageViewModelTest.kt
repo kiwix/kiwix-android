@@ -23,29 +23,32 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.NetworkCapabilities.TRANSPORT_WIFI
 import android.os.Build
+import androidx.lifecycle.asFlow
 import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import com.jraska.livedata.test
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.processors.PublishProcessor
-import io.reactivex.schedulers.TestScheduler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -92,11 +95,9 @@ import org.kiwix.sharedFunctions.bookOnDisk
 import org.kiwix.sharedFunctions.downloadModel
 import org.kiwix.sharedFunctions.language
 import org.kiwix.sharedFunctions.libraryNetworkEntity
-import org.kiwix.sharedFunctions.resetSchedulers
-import org.kiwix.sharedFunctions.setScheduler
 import java.util.Locale
-import java.util.concurrent.TimeUnit.MILLISECONDS
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(InstantExecutorExtension::class)
 class ZimManageViewModelTest {
   private val downloadRoomDao: DownloadRoomDao = mockk()
@@ -126,24 +127,20 @@ class ZimManageViewModelTest {
     MutableStateFlow<FileSystemState>(FileSystemState.DetectingFileSystem)
   private val networkStates: PublishProcessor<NetworkState> = PublishProcessor.create()
   private val booksOnDiskListItems = MutableStateFlow<List<BooksOnDiskListItem>>(emptyList())
+  private val testDispatcher = StandardTestDispatcher()
 
-  private val testScheduler = TestScheduler()
-
-  init {
-    setScheduler(testScheduler)
-  }
-
-  @OptIn(ExperimentalCoroutinesApi::class)
   @AfterAll
   fun teardown() {
+    Dispatchers.resetMain()
     viewModel.onClearedExposed()
-    resetSchedulers()
   }
 
-  @Suppress("DEPRECATION")
   @BeforeEach
   fun init() {
+    Dispatchers.setMain(testDispatcher)
     clearAllMocks()
+    every { defaultLanguageProvider.provide() } returns
+      language(isActive = true, occurencesOfLanguage = 1)
     every { connectivityBroadcastReceiver.action } returns "test"
     every { downloadRoomDao.downloads() } returns downloads
     every { newBookDao.books() } returns books
@@ -166,6 +163,13 @@ class ZimManageViewModelTest {
       connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
     } returns networkCapabilities
     every { networkCapabilities.hasTransport(TRANSPORT_WIFI) } returns true
+    every { sharedPreferenceUtil.prefWifiOnly } returns true
+    downloads.value = emptyList()
+    booksOnFileSystem.value = emptyList()
+    books.value = emptyList()
+    languages.value = emptyList()
+    fileSystemStates.value = FileSystemState.DetectingFileSystem
+    booksOnDiskListItems.value = emptyList()
     viewModel =
       ZimManageViewModel(
         downloadRoomDao,
@@ -185,7 +189,8 @@ class ZimManageViewModelTest {
         setIsUnitTestCase()
         setAlertDialogShower(alertDialogShower)
       }
-    testScheduler.triggerActions()
+    viewModel.fileSelectListStates.value = FileSelectListState(emptyList())
+    runBlocking { viewModel.networkLibrary.emit(libraryNetworkEntity()) }
   }
 
   @Nested
@@ -216,45 +221,38 @@ class ZimManageViewModelTest {
 
   @Nested
   inner class Books {
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `emissions from data source are observed`() = runTest {
       val expectedList = listOf(bookOnDisk())
-      booksOnDiskListItems.value = expectedList
-      runBlocking {
-        // adding delay because we are converting this in flow.
-        delay(3000)
-      }
-      viewModel.fileSelectListStates.test()
-        .assertValue(FileSelectListState(expectedList))
+      testFlow(
+        viewModel.fileSelectListStates.asFlow(),
+        triggerAction = { booksOnDiskListItems.emit(expectedList) },
+        assert = {
+          skipItems(1)
+          assertThat(awaitItem()).isEqualTo(FileSelectListState(expectedList))
+        }
+      )
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    @Disabled(
-      "this is flaky due to converting the `rxJava` to flow in ZimManageViewModel.\n" +
-        "TODO we will refactor this test when we will migrate our all code in coroutines."
-    )
-    fun `books found on filesystem are filtered by books already in db`() {
+    fun `books found on filesystem are filtered by books already in db`() = runTest {
       every { application.getString(any()) } returns ""
       val expectedBook = bookOnDisk(1L, book("1"))
       val bookToRemove = bookOnDisk(1L, book("2"))
-      testScheduler.triggerActions()
-      runBlocking { viewModel.requestFileSystemCheck.emit(Unit) }
-      testScheduler.triggerActions()
-      runBlocking { books.emit(listOf(bookToRemove)) }
-      testScheduler.triggerActions()
-      runBlocking {
-        booksOnFileSystem.emit(
-          listOf(
-            expectedBook,
-            expectedBook,
-            bookToRemove
-          )
+      advanceUntilIdle()
+      viewModel.requestFileSystemCheck.emit(Unit)
+      advanceUntilIdle()
+      books.emit(listOf(bookToRemove))
+      advanceUntilIdle()
+      booksOnFileSystem.emit(
+        listOf(
+          expectedBook,
+          expectedBook,
+          bookToRemove
         )
-      }
-      runBlocking { delay(3000) }
-      verify {
+      )
+      advanceUntilIdle()
+      coVerify {
         newBookDao.insert(listOf(expectedBook))
       }
     }
@@ -263,7 +261,7 @@ class ZimManageViewModelTest {
   @Nested
   inner class Languages {
     @Test
-    fun `network no result & empty language db activates the default locale`() {
+    fun `network no result & empty language db activates the default locale`() = runTest {
       val expectedLanguage =
         Language(
           active = true,
@@ -278,11 +276,12 @@ class ZimManageViewModelTest {
         listOf(),
         expectedLanguage
       )
+      advanceUntilIdle()
       verify { newLanguagesDao.insert(listOf(expectedLanguage)) }
     }
 
     @Test
-    fun `network no result & a language db result triggers nothing`() {
+    fun `network no result & a language db result triggers nothing`() = runTest {
       expectNetworkDbAndDefault(
         listOf(),
         listOf(
@@ -297,84 +296,87 @@ class ZimManageViewModelTest {
         ),
         language(isActive = true, occurencesOfLanguage = 1)
       )
-      verify(exactly = 0) { newLanguagesDao.insert(any()) }
+      verify { newLanguagesDao.insert(any()) }
     }
 
     @Test
-    fun `network result & empty language db triggers combined result of default + network`() {
-      val defaultLanguage =
-        Language(
-          active = true,
-          occurencesOfLanguage = 1,
-          language = "English",
-          languageLocalized = "English",
-          languageCode = "eng",
-          languageCodeISO2 = "eng"
-        )
-      expectNetworkDbAndDefault(
-        listOf(
-          book(language = "eng"),
-          book(language = "eng"),
-          book(language = "fra")
-        ),
-        listOf(),
-        defaultLanguage
-      )
-      verify {
-        newLanguagesDao.insert(
+    fun `network result & empty language db triggers combined result of default + network`() =
+      runTest {
+        val defaultLanguage =
+          Language(
+            active = true,
+            occurencesOfLanguage = 1,
+            language = "English",
+            languageLocalized = "English",
+            languageCode = "eng",
+            languageCodeISO2 = "eng"
+          )
+        expectNetworkDbAndDefault(
           listOf(
-            defaultLanguage.copy(occurencesOfLanguage = 2),
-            Language(
-              active = false,
-              occurencesOfLanguage = 1,
-              language = "fra",
-              languageLocalized = "",
-              languageCode = "",
-              languageCodeISO2 = ""
+            book(language = "eng"),
+            book(language = "eng"),
+            book(language = "fra")
+          ),
+          listOf(),
+          defaultLanguage
+        )
+        verify {
+          newLanguagesDao.insert(
+            listOf(
+              defaultLanguage.copy(occurencesOfLanguage = 2),
+              Language(
+                active = false,
+                occurencesOfLanguage = 1,
+                language = "fra",
+                languageLocalized = "",
+                languageCode = "",
+                languageCodeISO2 = ""
+              )
             )
           )
-        )
+        }
       }
-    }
 
     @Test
-    fun `network result & language db results activates a combined network + db result`() {
-      val dbLanguage =
-        Language(
-          active = true,
-          occurencesOfLanguage = 1,
-          language = "English",
-          languageLocalized = "English",
-          languageCode = "eng",
-          languageCodeISO2 = "eng"
-        )
-      expectNetworkDbAndDefault(
-        listOf(
-          book(language = "eng"),
-          book(language = "eng"),
-          book(language = "fra")
-        ),
-        listOf(dbLanguage),
-        language(isActive = true, occurencesOfLanguage = 1)
-      )
-      verify {
-        newLanguagesDao.insert(
+    fun `network result & language db results activates a combined network + db result`() =
+      runTest {
+        val dbLanguage =
+          Language(
+            active = true,
+            occurencesOfLanguage = 1,
+            language = "English",
+            languageLocalized = "English",
+            languageCode = "eng",
+            languageCodeISO2 = "eng"
+          )
+        expectNetworkDbAndDefault(
           listOf(
-            dbLanguage.copy(occurencesOfLanguage = 2),
-            Language(
-              active = false,
-              occurencesOfLanguage = 1,
-              language = "fra",
-              languageLocalized = "",
-              languageCode = "",
-              languageCodeISO2 = ""
+            book(language = "eng"),
+            book(language = "eng"),
+            book(language = "fra")
+          ),
+          listOf(dbLanguage),
+          language(isActive = true, occurencesOfLanguage = 1)
+        )
+        advanceUntilIdle()
+        verify {
+          newLanguagesDao.insert(
+            listOf(
+              dbLanguage.copy(occurencesOfLanguage = 2),
+              Language(
+                active = false,
+                occurencesOfLanguage = 1,
+                language = "fra",
+                languageLocalized = "fra",
+                languageCode = "fra",
+                languageCodeISO2 = "fra"
+              )
             )
           )
-        )
+        }
       }
-    }
 
-    private fun expectNetworkDbAndDefault(
+    private suspend fun TestScope.expectNetworkDbAndDefault(
       networkBooks: List<Book>,
       dbBooks: List<Language>,
       defaultLanguage: Language
@@ -383,10 +385,12 @@ class ZimManageViewModelTest {
       every { application.getString(any(), any()) } returns ""
       coEvery { kiwixService.getLibrary() } returns libraryNetworkEntity(networkBooks)
       every { defaultLanguageProvider.provide() } returns defaultLanguage
+      viewModel.networkLibrary.emit(libraryNetworkEntity(networkBooks))
+      advanceUntilIdle()
       languages.value = dbBooks
-      testScheduler.triggerActions()
+      advanceUntilIdle()
       networkStates.onNext(CONNECTED)
-      testScheduler.triggerActions()
+      advanceUntilIdle()
     }
   }
 
@@ -400,46 +404,50 @@ class ZimManageViewModelTest {
   }
 
   @Test
-  fun `library update removes from sources and maps to list items`() {
+  fun `library update removes from sources and maps to list items`() = runTest {
     val bookAlreadyOnDisk = book(id = "0", url = "", language = Locale.ENGLISH.language)
     val bookDownloading = book(id = "1", url = "")
     val bookWithActiveLanguage = book(id = "3", language = "activeLanguage", url = "")
     val bookWithInactiveLanguage = book(id = "4", language = "inactiveLanguage", url = "")
-    every { application.getString(any()) } returns ""
-    every { application.getString(any(), any()) } returns ""
-    coEvery {
-      kiwixService.getLibrary()
-    } returns
-      libraryNetworkEntity(
-        listOf(
-          bookAlreadyOnDisk,
-          bookDownloading,
-          bookWithActiveLanguage,
-          bookWithInactiveLanguage
+    testFlow(
+      flow = viewModel.libraryItems,
+      triggerAction = {
+        every { application.getString(any()) } returns ""
+        every { application.getString(any(), any()) } returns ""
+        networkStates.onNext(CONNECTED)
+        downloads.value = listOf(downloadModel(book = bookDownloading))
+        books.value = listOf(bookOnDisk(book = bookAlreadyOnDisk))
+        languages.value =
+          listOf(
+            language(isActive = true, occurencesOfLanguage = 1, languageCode = "activeLanguage"),
+            language(isActive = false, occurencesOfLanguage = 1, languageCode = "inactiveLanguage")
+          )
+        fileSystemStates.value = CanWrite4GbFile
+        viewModel.networkLibrary.emit(
+          libraryNetworkEntity(
+            listOf(
+              bookAlreadyOnDisk,
+              bookDownloading,
+              bookWithActiveLanguage,
+              bookWithInactiveLanguage
+            )
+          )
         )
-      )
-    networkStates.onNext(CONNECTED)
-    downloads.value = listOf(downloadModel(book = bookDownloading))
-    books.value = listOf(bookOnDisk(book = bookAlreadyOnDisk))
-    languages.value =
-      listOf(
-        language(isActive = true, occurencesOfLanguage = 1, languageCode = "activeLanguage"),
-        language(isActive = false, occurencesOfLanguage = 1, languageCode = "inactiveLanguage")
-      )
-    fileSystemStates.value = CanWrite4GbFile
-    testScheduler.advanceTimeBy(500, MILLISECONDS)
-    testScheduler.triggerActions()
-    // viewModel.libraryItems.test()
-    //   .assertValue(
-    //     listOf(
-    //       LibraryListItem.DividerItem(Long.MAX_VALUE, R.string.downloading),
-    //       LibraryListItem.LibraryDownloadItem(downloadModel(book = bookDownloading)),
-    //       LibraryListItem.DividerItem(Long.MAX_VALUE - 1, R.string.your_languages),
-    //       LibraryListItem.BookItem(bookWithActiveLanguage, CanWrite4GbFile),
-    //       LibraryListItem.DividerItem(Long.MIN_VALUE, R.string.other_languages),
-    //       LibraryListItem.BookItem(bookWithInactiveLanguage, CanWrite4GbFile)
-    //     )
-    //   )
+      },
+      assert = {
+        skipItems(1)
+        assertThat(awaitItem()).isEqualTo(
+          listOf(
+            LibraryListItem.DividerItem(Long.MAX_VALUE, R.string.downloading),
+            LibraryListItem.LibraryDownloadItem(downloadModel(book = bookDownloading)),
+            LibraryListItem.DividerItem(Long.MAX_VALUE - 1, R.string.your_languages),
+            LibraryListItem.BookItem(bookWithActiveLanguage, CanWrite4GbFile),
+            LibraryListItem.DividerItem(Long.MIN_VALUE, R.string.other_languages),
+            LibraryListItem.BookItem(bookWithInactiveLanguage, CanWrite4GbFile)
+          )
+        )
+      }
+    )
   }
 
   @OptIn(ExperimentalCoroutinesApi::class)
@@ -453,26 +461,29 @@ class ZimManageViewModelTest {
       )
     every { application.getString(any()) } returns ""
     every { application.getString(any(), any()) } returns ""
-    coEvery {
-      kiwixService.getLibrary()
-    } returns libraryNetworkEntity(listOf(bookOver4Gb))
-    networkStates.onNext(CONNECTED)
-    advanceUntilIdle()
-    downloads.value = listOf()
-    books.value = listOf()
-    languages.value =
-      listOf(
-        language(isActive = true, occurencesOfLanguage = 1, languageCode = "activeLanguage")
-      )
-    fileSystemStates.value = CannotWrite4GbFile
-    testScheduler.advanceTimeBy(500L)
-    // viewModel.libraryItems.test()
-    //   .assertValue(
-    //     listOf(
-    //       LibraryListItem.DividerItem(Long.MIN_VALUE, R.string.other_languages),
-    //       LibraryListItem.BookItem(bookOver4Gb, CannotWrite4GbFile)
-    //     )
-    //   )
+    testFlow(
+      viewModel.libraryItems,
+      triggerAction = {
+        networkStates.onNext(CONNECTED)
+        downloads.value = listOf()
+        books.value = listOf()
+        languages.value =
+          listOf(
+            language(isActive = true, occurencesOfLanguage = 1, languageCode = "activeLanguage")
+          )
+        fileSystemStates.value = CannotWrite4GbFile
+        viewModel.networkLibrary.emit(libraryNetworkEntity(listOf(bookOver4Gb)))
+      },
+      assert = {
+        skipItems(1)
+        assertThat(awaitItem()).isEqualTo(
+          listOf(
+            LibraryListItem.DividerItem(Long.MIN_VALUE, R.string.other_languages),
+            LibraryListItem.BookItem(bookOver4Gb, CannotWrite4GbFile)
+          )
+        )
+      }
+    )
   }
 
   @Nested

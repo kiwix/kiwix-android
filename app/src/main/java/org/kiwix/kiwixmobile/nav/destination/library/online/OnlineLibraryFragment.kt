@@ -145,7 +145,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
 
   private fun onSearchClear() {
     onlineLibraryScreenState.value.update {
-      copy(searchText = "", scanningProgressItem = false to "", isRefreshing = true)
+      copy(searchText = "")
     }
     zimManageViewModel.onlineBooksSearchedQuery.value = null
     zimManageViewModel.requestFiltering.tryEmit("")
@@ -159,7 +159,7 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       zimManageViewModel.onlineBooksSearchedQuery.value = searchText
     }
     onlineLibraryScreenState.value.update {
-      copy(searchText = searchText, scanningProgressItem = false to "", isRefreshing = true)
+      copy(searchText = searchText)
     }
     zimManageViewModel.requestFiltering.tryEmit(searchText)
   }
@@ -248,29 +248,49 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
       )
       DialogHost(alertDialogShower)
     }
-    zimManageViewModel.libraryItems
-      .onEach { onLibraryItemsChange(it) }
-      .launchIn(viewLifecycleOwner.lifecycleScope)
-      .also {
-        coreMainActivity.navHostContainer
-          .setBottomMarginToFragmentContainerView(0)
-      }
-    zimManageViewModel.libraryListIsRefreshing.observe(
-      viewLifecycleOwner,
-      Observer { onRefreshStateChange(it, true) }
-    )
-    zimManageViewModel.networkStates.observe(viewLifecycleOwner, Observer(::onNetworkStateChange))
-    zimManageViewModel.shouldShowWifiOnlyDialog.observe(
-      viewLifecycleOwner
-    ) {
-      if (it && !NetworkUtils.isWiFi(requireContext())) {
-        showInternetAccessViaMobileNetworkDialog()
-        hideProgressBarOfFetchingOnlineLibrary()
-      }
-    }
-    zimManageViewModel.downloadProgress.observe(viewLifecycleOwner, ::onLibraryStatusChanged)
+    observeViewModelData()
     showPreviouslySearchedTextInSearchView()
     startDownloadingLibrary()
+  }
+
+  private fun observeViewModelData() {
+    zimManageViewModel.apply {
+      // Observe when library items changes.
+      libraryItems
+        .onEach { onLibraryItemsChange(it) }
+        .launchIn(viewLifecycleOwner.lifecycleScope)
+        .also {
+          coreMainActivity.navHostContainer
+            .setBottomMarginToFragmentContainerView(0)
+        }
+      // Observe when online library downloading.
+      onlineLibraryDownloading
+        .onEach {
+          if (it) {
+            showProgressBarOfFetchingOnlineLibrary()
+          } else {
+            hideProgressBarOfFetchingOnlineLibrary()
+          }
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+      // Observe when library list refreshing e.g. applying filters.
+      libraryListIsRefreshing.observe(
+        viewLifecycleOwner,
+        Observer { onRefreshStateChange(it) }
+      )
+      // Observe network changes.
+      networkStates.observe(viewLifecycleOwner, Observer(::onNetworkStateChange))
+      // Observe `shouldShowWifiOnlyDialog` should show.
+      shouldShowWifiOnlyDialog.observe(
+        viewLifecycleOwner
+      ) {
+        if (it && !NetworkUtils.isWiFi(requireContext())) {
+          showInternetAccessViaMobileNetworkDialog()
+          hideProgressBarOfFetchingOnlineLibrary()
+        }
+      }
+      // Observe the download progress.
+      downloadProgress.observe(viewLifecycleOwner, ::onLibraryStatusChanged)
+    }
   }
 
   private fun showPreviouslySearchedTextInSearchView() {
@@ -365,18 +385,15 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     onlineLibraryScreenState.value.update {
       copy(noContentViewItem = "" to false)
     }
-    showProgressBarOfFetchingOnlineLibrary()
   }
 
   private fun hideRecyclerviewAndShowSwipeDownForLibraryErrorText() {
     onlineLibraryScreenState.value.update {
       copy(noContentViewItem = getString(string.swipe_down_for_library) to true)
     }
-    hideProgressBarOfFetchingOnlineLibrary()
   }
 
   private fun showProgressBarOfFetchingOnlineLibrary() {
-    onRefreshStateChange(isRefreshing = false, shouldShowScanningProgressItem = false)
     onlineLibraryScreenState.value.update {
       copy(
         noContentViewItem = "" to false,
@@ -387,7 +404,6 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
   }
 
   private fun hideProgressBarOfFetchingOnlineLibrary() {
-    onRefreshStateChange(isRefreshing = false, false)
     onlineLibraryScreenState.value.update {
       copy(
         isRefreshing = false,
@@ -428,35 +444,29 @@ class OnlineLibraryFragment : BaseFragment(), FragmentActivityExtensions {
     onSearchClear()
   }
 
-  private fun onRefreshStateChange(
-    isRefreshing: Boolean?,
-    shouldShowScanningProgressItem: Boolean
-  ) {
-    var refreshing = isRefreshing == true
-    val onlineLibraryState = onlineLibraryScreenState.value.value
-    // do not show the refreshing when the online library is downloading
-    if (onlineLibraryState.scanningProgressItem.first ||
-      onlineLibraryState.noContentViewItem.second
-    ) {
-      refreshing = false
-    }
+  private fun onRefreshStateChange(isRefreshing: Boolean?) {
+    val refreshing = isRefreshing == true
     onlineLibraryScreenState.value.update {
-      copy(
-        isRefreshing = refreshing,
-        scanningProgressItem = shouldShowScanningProgressItem to onlineLibraryState.scanningProgressItem.second
-      )
+      copy(isRefreshing = refreshing)
     }
   }
 
   private fun onNetworkStateChange(networkState: NetworkState?) {
     when (networkState) {
       NetworkState.CONNECTED -> {
-        if (NetworkUtils.isWiFi(requireContext())) {
-          refreshFragment(false)
-        } else if (noWifiWithWifiOnlyPreferenceSet) {
-          hideRecyclerviewAndShowSwipeDownForLibraryErrorText()
-        } else if (!noWifiWithWifiOnlyPreferenceSet) {
-          if (onlineLibraryScreenState.value.value.onlineLibraryList?.isEmpty() == true) {
+        when {
+          NetworkUtils.isWiFi(requireContext()) -> {
+            if (!zimManageViewModel.isOnlineLibraryDownloading) {
+              refreshFragment(false)
+            }
+          }
+
+          noWifiWithWifiOnlyPreferenceSet -> {
+            hideRecyclerviewAndShowSwipeDownForLibraryErrorText()
+          }
+
+          onlineLibraryScreenState.value.value.onlineLibraryList.isNullOrEmpty() &&
+            !zimManageViewModel.isOnlineLibraryDownloading -> {
             startDownloadingLibrary(true)
             showProgressBarOfFetchingOnlineLibrary()
           }
