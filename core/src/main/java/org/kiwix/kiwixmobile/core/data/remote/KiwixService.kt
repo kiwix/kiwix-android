@@ -19,25 +19,22 @@
 
 package org.kiwix.kiwixmobile.core.data.remote
 
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Url
 
 interface KiwixService {
-  @get:GET(LIBRARY_NETWORK_PATH) val library: Single<LibraryNetworkEntity?>
+  @GET(LIBRARY_NETWORK_PATH)
+  suspend fun getLibrary(): LibraryNetworkEntity?
 
   @GET
-  fun getMetaLinks(
+  suspend fun getMetaLinks(
     @Url url: String
-  ): Observable<MetaLinkNetworkEntity?>
+  ): MetaLinkNetworkEntity?
 
   /******** Helper class that sets up new services  */
   object ServiceCreator {
@@ -47,7 +44,6 @@ interface KiwixService {
         .baseUrl(baseUrl)
         .client(okHttpClient)
         .addConverterFactory(SimpleXmlConverterFactory.create())
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
         .build()
       return retrofit.create(KiwixService::class.java)
     }

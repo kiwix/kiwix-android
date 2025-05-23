@@ -27,7 +27,6 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
@@ -71,8 +70,6 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
   private var fragmentCustomDownloadBinding: FragmentCustomDownloadBinding? = null
-
-  private val compositeDisposable = CompositeDisposable()
   override fun inject(baseActivity: BaseActivity) {
     baseActivity.customActivityComponent.inject(this)
   }
@@ -144,7 +141,6 @@ class CustomDownloadFragment : BaseFragment(), FragmentActivityExtensions {
 
   override fun onDestroy() {
     super.onDestroy()
-    compositeDisposable.clear()
     activity?.finish()
   }
 

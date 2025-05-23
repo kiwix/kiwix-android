@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.nav.destination.library.online
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -31,6 +32,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -109,8 +112,8 @@ fun OnlineLibraryScreen(
         .padding(bottom = bottomNavHeight.value)
     ) { paddingValues ->
       SwipeRefreshLayout(
-        isRefreshing = state.swipeRefreshItem.first,
-        isEnabled = state.swipeRefreshItem.second,
+        isRefreshing = state.isRefreshing && !state.scanningProgressItem.first,
+        isEnabled = !state.scanningProgressItem.first,
         onRefresh = state.onRefresh,
         modifier = Modifier
           .fillMaxSize()
@@ -212,13 +215,21 @@ private fun ShowDividerItem(dividerItem: DividerItem) {
 
 @Composable
 private fun NoContentView(noContentMessage: String) {
-  Text(
-    text = noContentMessage,
-    textAlign = TextAlign.Center,
+  Column(
     modifier = Modifier
-      .padding(horizontal = FOUR_DP)
-      .semantics { testTag = NO_CONTENT_VIEW_TEXT_TESTING_TAG }
-  )
+      .fillMaxSize()
+      .verticalScroll(rememberScrollState()),
+    verticalArrangement = Arrangement.Center,
+    horizontalAlignment = Alignment.CenterHorizontally
+  ) {
+    Text(
+      text = noContentMessage,
+      textAlign = TextAlign.Center,
+      modifier = Modifier
+        .padding(horizontal = FOUR_DP)
+        .semantics { testTag = NO_CONTENT_VIEW_TEXT_TESTING_TAG }
+    )
+  }
 }
 
 @Composable

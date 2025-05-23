@@ -520,7 +520,6 @@ class LocalLibraryFragment : BaseFragment(), CopyMoveFileHandler.FileCopyMoveCal
 
   override fun onDestroyView() {
     super.onDestroyView()
-    mainRepositoryActions.dispose()
     actionMode = null
     coroutineJobs.forEach {
       it.cancel()

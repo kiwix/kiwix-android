@@ -1268,7 +1268,6 @@ abstract class CoreReaderFragment :
     if (sharedPreferenceUtil?.showIntro() == true) {
       (requireActivity() as? AppCompatActivity)?.setSupportActionBar(null)
     }
-    repositoryActions?.dispose()
     safelyCancelBookmarkJob()
     unBindViewsAndBinding()
     tabCallback = null
@@ -2658,7 +2657,9 @@ abstract class CoreReaderFragment :
             timeStamp,
             zimFileReader!!
           )
-          repositoryActions?.saveHistory(history)
+          lifecycleScope.launch {
+            repositoryActions?.saveHistory(history)
+          }
         }
       }
       updateBottomToolbarVisibility()

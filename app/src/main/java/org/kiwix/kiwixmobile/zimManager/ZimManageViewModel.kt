@@ -24,32 +24,37 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.reactivex.Flowable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.exceptions.UndeliverableException
-import io.reactivex.functions.BiFunction
-import io.reactivex.functions.Function6
-import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.processors.BehaviorProcessor
-import io.reactivex.processors.PublishProcessor
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.retry
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx3.asFlowable
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.reactive.asFlow
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
@@ -75,11 +80,15 @@ import org.kiwix.kiwixmobile.core.di.modules.KIWIX_DOWNLOAD_URL
 import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DEFAULT_INT_VALUE
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.FIVE
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.calculateSearchMatches
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
+import org.kiwix.kiwixmobile.core.ui.components.ONE
+import org.kiwix.kiwixmobile.core.ui.components.TWO
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -113,16 +122,16 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.DividerItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.LibraryDownloadItem
-import java.io.IOException
 import java.util.LinkedList
 import java.util.Locale
-import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
 const val DEFAULT_PROGRESS = 0
 const val MAX_PROGRESS = 100
-private const val TAG_RX_JAVA_DEFAULT_ERROR_HANDLER = "RxJavaDefaultErrorHandler"
+
+const val THREE = 3
+const val FOUR = 4
 
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: DownloadRoomDao,
@@ -152,29 +161,43 @@ class ZimManageViewModel @Inject constructor(
 
   private var isUnitTestCase: Boolean = false
   val sideEffects: MutableSharedFlow<SideEffect<*>> = MutableSharedFlow()
-  val libraryItems: MutableLiveData<List<LibraryListItem>> = MutableLiveData()
+  private val _libraryItems = MutableStateFlow<List<LibraryListItem>>(emptyList())
+  val libraryItems: StateFlow<List<LibraryListItem>> = _libraryItems.asStateFlow()
   val fileSelectListStates: MutableLiveData<FileSelectListState> = MutableLiveData()
   val deviceListScanningProgress = MutableLiveData<Int>()
   val libraryListIsRefreshing = MutableLiveData<Boolean>()
+  val onlineLibraryDownloading = MutableStateFlow(false)
   val shouldShowWifiOnlyDialog = MutableLiveData<Boolean>()
   val networkStates = MutableLiveData<NetworkState>()
-
+  val networkLibrary = MutableSharedFlow<LibraryNetworkEntity>(replay = 0)
   val requestFileSystemCheck = MutableSharedFlow<Unit>(replay = 0)
   val fileSelectActions = MutableSharedFlow<FileSelectActions>()
-  val requestDownloadLibrary = BehaviorProcessor.createDefault(Unit)
-  val requestFiltering = BehaviorProcessor.createDefault("")
-  val onlineBooksSearchedQuery = MutableLiveData<String>()
+  private val requestDownloadLibrary = MutableSharedFlow<Unit>(
+    replay = 0,
+    extraBufferCapacity = 1,
+    onBufferOverflow = BufferOverflow.DROP_OLDEST
+  )
 
-  private var compositeDisposable: CompositeDisposable? = CompositeDisposable()
+  @Volatile
+  var isOnlineLibraryDownloading = false
+  val requestFiltering = MutableStateFlow("")
+  val onlineBooksSearchedQuery = MutableLiveData<String>()
   private val coroutineJobs: MutableList<Job> = mutableListOf()
   val downloadProgress = MutableLiveData<String>()
 
   private lateinit var alertDialogShower: AlertDialogShower
 
   init {
-    compositeDisposable?.addAll(*disposables())
     observeCoroutineFlows()
     context.registerReceiver(connectivityBroadcastReceiver)
+  }
+
+  fun requestOnlineLibraryIfNeeded(isExplicitRefresh: Boolean) {
+    if (isOnlineLibraryDownloading && !isExplicitRefresh) return
+    isOnlineLibraryDownloading = true
+    viewModelScope.launch {
+      requestDownloadLibrary.tryEmit(Unit)
+    }
   }
 
   fun setIsUnitTestCase() {
@@ -259,10 +282,17 @@ class ZimManageViewModel @Inject constructor(
   }
 
   private fun observeCoroutineFlows(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+    val downloads = downloadDao.downloads()
+    val booksFromDao = books()
+    val languages = languageDao.languages()
     coroutineJobs.apply {
       add(scanBooksFromStorage(dispatcher))
       add(updateBookItems())
       add(fileSelectActions())
+      add(updateLibraryItems(booksFromDao, downloads, networkLibrary, languages))
+      add(updateLanguagesInDao(networkLibrary, languages))
+      add(updateNetworkStates())
+      add(requestsAndConnectivityChangesToLibraryRequests(networkLibrary))
     }
   }
 
@@ -271,66 +301,39 @@ class ZimManageViewModel @Inject constructor(
       it.cancel()
     }
     coroutineJobs.clear()
-    compositeDisposable?.clear()
     context.unregisterReceiver(connectivityBroadcastReceiver)
     connectivityBroadcastReceiver.stopNetworkState()
-    requestDownloadLibrary.onComplete()
-    compositeDisposable = null
     appProgressListener = null
     super.onCleared()
   }
 
-  private fun disposables(): Array<Disposable> {
-    // temporary converting to flowable. TODO we will refactor this in upcoming issue.
-    val downloads = downloadDao.downloads().asFlowable()
-    val booksFromDao = books().asFlowable()
-    val networkLibrary = PublishProcessor.create<LibraryNetworkEntity>()
-    val languages = languageDao.languages().asFlowable()
-    return arrayOf(
-      updateLibraryItems(booksFromDao, downloads, networkLibrary, languages),
-      updateLanguagesInDao(networkLibrary, languages),
-      updateNetworkStates(),
-      requestsAndConnectivtyChangesToLibraryRequests(networkLibrary)
-    ).also {
-      setUpUncaughtErrorHandlerForOnlineLibrary(networkLibrary)
-    }
-  }
-
   private fun scanBooksFromStorage(dispatcher: CoroutineDispatcher = Dispatchers.IO) =
-    viewModelScope.launch {
-      withContext(dispatcher) {
-        books()
-          .let { checkFileSystemForBooksOnRequest(it) }
-          .catch { it.printStackTrace() }
-          .collect { books ->
-            bookDao.insert(books)
-          }
-      }
-    }
+    checkFileSystemForBooksOnRequest(books())
+      .catch { it.printStackTrace() }
+      .onEach { books -> bookDao.insert(books) }
+      .flowOn(dispatcher)
+      .launchIn(viewModelScope)
 
-  @Suppress("TooGenericExceptionCaught")
   private fun fileSelectActions() =
-    viewModelScope.launch {
-      fileSelectActions
-        .collect { action ->
-          try {
-            sideEffects.emit(
-              when (action) {
-                is RequestNavigateTo -> OpenFileWithNavigation(action.bookOnDisk)
-                is RequestMultiSelection -> startMultiSelectionAndSelectBook(action.bookOnDisk)
-                RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState(), alertDialogShower)
-                RequestShareMultiSelection -> ShareFiles(selectionsFromState())
-                MultiModeFinished -> noSideEffectAndClearSelectionState()
-                is RequestSelect -> noSideEffectSelectBook(action.bookOnDisk)
-                RestartActionMode -> StartMultiSelection(fileSelectActions)
-                UserClickedDownloadBooksButton -> NavigateToDownloads
-              }
-            )
-          } catch (e: Throwable) {
-            e.printStackTrace()
-          }
+    fileSelectActions
+      .onEach { action ->
+        runCatching {
+          sideEffects.emit(
+            when (action) {
+              is RequestNavigateTo -> OpenFileWithNavigation(action.bookOnDisk)
+              is RequestMultiSelection -> startMultiSelectionAndSelectBook(action.bookOnDisk)
+              RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState(), alertDialogShower)
+              RequestShareMultiSelection -> ShareFiles(selectionsFromState())
+              MultiModeFinished -> noSideEffectAndClearSelectionState()
+              is RequestSelect -> noSideEffectSelectBook(action.bookOnDisk)
+              RestartActionMode -> StartMultiSelection(fileSelectActions)
+              UserClickedDownloadBooksButton -> NavigateToDownloads
+            }
+          )
+        }.onFailure {
+          it.printStackTrace()
         }
-    }
+      }.launchIn(viewModelScope)
 
   private fun startMultiSelectionAndSelectBook(
     bookOnDisk: BookOnDisk
@@ -385,117 +388,144 @@ class ZimManageViewModel @Inject constructor(
     return None
   }
 
-  @Suppress("NoNameShadowing")
-  private fun requestsAndConnectivtyChangesToLibraryRequests(
-    library: PublishProcessor<LibraryNetworkEntity>,
-  ) =
-    Flowable.combineLatest(
-      requestDownloadLibrary,
-      connectivityBroadcastReceiver.networkStates.distinctUntilChanged().filter(
-        CONNECTED::equals
-      )
-    ) { _, _ -> }
-      .switchMap {
-        if (connectivityManager.isWifi()) {
-          Flowable.just(Unit)
-        } else {
-          sharedPreferenceUtil.prefWifiOnlys
-            .asFlowable()
-            .doOnNext {
-              if (it) {
-                shouldShowWifiOnlyDialog.postValue(true)
-              }
+  @OptIn(ExperimentalCoroutinesApi::class)
+  private fun requestsAndConnectivityChangesToLibraryRequests(
+    library: MutableSharedFlow<LibraryNetworkEntity>,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ) = requestDownloadLibrary.flatMapConcat {
+    connectivityBroadcastReceiver.networkStates.asFlow()
+      .distinctUntilChanged()
+      .filter { networkState -> networkState == CONNECTED }
+      .take(1)
+      .flatMapConcat {
+        shouldProceedWithDownload()
+          .flatMapConcat { kiwixService ->
+            downloadLibraryFlow(kiwixService).also {
+              onlineLibraryDownloading.tryEmit(true)
             }
-            .filter { !it }
-            .map { }
-        }
-      }
-      .subscribeOn(Schedulers.io())
-      .observeOn(Schedulers.io())
-      .concatMap {
-        Flowable.fromCallable {
-          synchronized(this, ::createKiwixServiceWithProgressListener)
-        }
-      }
-      .concatMap {
-        kiwixService.library
-          .toFlowable()
-          .retry(5)
-          .doOnSubscribe {
-            downloadProgress.postValue(
-              context.getString(R.string.starting_downloading_remote_library)
-            )
-          }
-          .map { response ->
-            downloadProgress.postValue(context.getString(R.string.parsing_remote_library))
-            response
-          }
-          .doFinally {
-            downloadProgress.postValue(context.getString(R.string.parsing_remote_library))
-          }
-          .onErrorReturn {
-            it.printStackTrace()
-            LibraryNetworkEntity().apply { book = LinkedList() }
           }
       }
-      .subscribe(library::onNext, Throwable::printStackTrace).also {
-        compositeDisposable?.add(it)
-      }
-
-  private fun updateNetworkStates() =
-    connectivityBroadcastReceiver.networkStates.subscribe(
-      networkStates::postValue,
-      Throwable::printStackTrace
-    )
-
-  private fun updateLibraryItems(
-    booksFromDao: io.reactivex.rxjava3.core.Flowable<List<BookOnDisk>>,
-    downloads: io.reactivex.rxjava3.core.Flowable<List<DownloadModel>>,
-    library: Flowable<LibraryNetworkEntity>,
-    languages: io.reactivex.rxjava3.core.Flowable<List<Language>>
-  ) = Flowable.combineLatest(
-    booksFromDao,
-    downloads,
-    languages.filter(List<Language>::isNotEmpty),
-    library,
-    Flowable.merge(
-      Flowable.just(""),
-      requestFiltering
-        .doOnNext { libraryListIsRefreshing.postValue(true) }
-        .debounce(500, MILLISECONDS)
-        .observeOn(Schedulers.io())
-    ),
-    fat32Checker.fileSystemStates.asFlowable(),
-    Function6(::combineLibrarySources)
-  )
-    .doOnNext { libraryListIsRefreshing.postValue(false) }
-    .doOnError { throwable ->
-      if (throwable is OutOfMemoryError) {
-        Log.e("ZimManageViewModel", "Error----${throwable.printStackTrace()}")
+  }
+    .filterNotNull()
+    .catch {
+      it.printStackTrace().also {
+        isOnlineLibraryDownloading = false
+        onlineLibraryDownloading.tryEmit(false)
       }
     }
-    .subscribeOn(Schedulers.io())
-    .subscribe(
-      libraryItems::postValue,
-      Throwable::printStackTrace
+    .onEach {
+      library.emit(it).also {
+        // Setting this to true because once library downloaded we don't need to download again
+        // until user wants to refresh the online library.
+        isOnlineLibraryDownloading = true
+        onlineLibraryDownloading.tryEmit(false)
+      }
+    }
+    .flowOn(dispatcher)
+    .launchIn(viewModelScope)
+
+  private fun shouldProceedWithDownload(): Flow<KiwixService> {
+    return if (connectivityManager.isWifi()) {
+      flowOf(createKiwixServiceWithProgressListener())
+    } else {
+      flow {
+        val wifiOnly = sharedPreferenceUtil.prefWifiOnlys.first()
+        if (wifiOnly) {
+          shouldShowWifiOnlyDialog.postValue(true)
+          // Don't emit anything — just return
+          return@flow
+        }
+        emit(createKiwixServiceWithProgressListener())
+      }
+    }
+  }
+
+  private fun downloadLibraryFlow(
+    kiwixService: KiwixService
+  ): Flow<LibraryNetworkEntity?> = flow {
+    downloadProgress.postValue(context.getString(R.string.starting_downloading_remote_library))
+    val response = kiwixService.getLibrary()
+    downloadProgress.postValue(context.getString(R.string.parsing_remote_library))
+    emit(response)
+  }
+    .retry(5)
+    .catch { e ->
+      e.printStackTrace()
+      emit(LibraryNetworkEntity().apply { book = LinkedList() })
+    }
+
+  private fun updateNetworkStates() = connectivityBroadcastReceiver.networkStates
+    .asFlow()
+    .catch { it.printStackTrace() }
+    .onEach { state -> networkStates.postValue(state) }
+    .launchIn(viewModelScope)
+
+  @Suppress("UNCHECKED_CAST")
+  @OptIn(FlowPreview::class)
+  private fun updateLibraryItems(
+    booksFromDao: Flow<List<BookOnDisk>>,
+    downloads: Flow<List<DownloadModel>>,
+    library: MutableSharedFlow<LibraryNetworkEntity>,
+    languages: Flow<List<Language>>,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ) = viewModelScope.launch(dispatcher) {
+    val requestFilteringFlow = merge(
+      flowOf(""),
+      requestFiltering
+        .onEach { libraryListIsRefreshing.postValue(true) }
+        .debounce(500)
+        .flowOn(dispatcher)
     )
 
+    combine(
+      booksFromDao,
+      downloads,
+      languages.filter { it.isNotEmpty() },
+      library,
+      requestFilteringFlow,
+      fat32Checker.fileSystemStates
+    ) { args ->
+      val books = args[ZERO] as List<BookOnDisk>
+      val activeDownloads = args[ONE] as List<DownloadModel>
+      val languageList = args[TWO] as List<Language>
+      val libraryNetworkEntity = args[THREE] as LibraryNetworkEntity
+      val filter = args[FOUR] as String
+      val fileSystemState = args[FIVE] as FileSystemState
+      combineLibrarySources(
+        booksOnFileSystem = books,
+        activeDownloads = activeDownloads,
+        allLanguages = languageList,
+        libraryNetworkEntity = libraryNetworkEntity,
+        filter = filter,
+        fileSystemState = fileSystemState
+      )
+    }
+      .onEach { libraryListIsRefreshing.postValue(false) }
+      .catch { throwable ->
+        libraryListIsRefreshing.postValue(false)
+        throwable.printStackTrace()
+        Log.e("ZimManageViewModel", "Error----$throwable")
+      }
+      .collect { _libraryItems.emit(it) }
+  }
+
   private fun updateLanguagesInDao(
-    library: Flowable<LibraryNetworkEntity>,
-    languages: io.reactivex.rxjava3.core.Flowable<List<Language>>
-  ) = library
-    .subscribeOn(Schedulers.io())
-    .map(LibraryNetworkEntity::book)
-    .withLatestFrom(
-      languages,
-      BiFunction(::combineToLanguageList)
-    )
-    .map { it.sortedBy(Language::language) }
-    .filter(List<Language>::isNotEmpty)
-    .subscribe(
-      languageDao::insert,
-      Throwable::printStackTrace
-    )
+    library: MutableSharedFlow<LibraryNetworkEntity>,
+    languages: Flow<List<Language>>,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+  ) =
+    combine(
+      library.map { it.book }.filterNotNull(),
+      languages
+    ) { books, existingLanguages ->
+      combineToLanguageList(books, existingLanguages)
+    }.map { it.sortedBy(Language::language) }
+      .filter { it.isNotEmpty() }
+      .distinctUntilChanged()
+      .catch { it.printStackTrace() }
+      .onEach { languageDao.insert(it) }
+      .flowOn(dispatcher)
+      .launchIn(viewModelScope)
 
   private fun combineToLanguageList(
     booksFromNetwork: List<Book>,
@@ -678,18 +708,16 @@ class ZimManageViewModel @Inject constructor(
   ) = booksFromFileSystem.filterNot { idsInDao.contains(it.book.id) }
 
   private fun updateBookItems() =
-    viewModelScope.launch {
-      dataSource.booksOnDiskAsListItems()
-        .catch { it.printStackTrace() }
-        .collect { newList ->
-          val currentState = fileSelectListStates.value
-          val updatedState = currentState?.let {
-            inheritSelections(it, newList.toMutableList())
-          } ?: FileSelectListState(newList)
+    dataSource.booksOnDiskAsListItems()
+      .catch { it.printStackTrace() }
+      .onEach { newList ->
+        val currentState = fileSelectListStates.value
+        val updatedState = currentState?.let {
+          inheritSelections(it, newList.toMutableList())
+        } ?: FileSelectListState(newList)
 
-          fileSelectListStates.postValue(updatedState)
-        }
-    }
+        fileSelectListStates.postValue(updatedState)
+      }.launchIn(viewModelScope)
 
   private fun inheritSelections(
     oldState: FileSelectListState,
@@ -705,36 +733,5 @@ class ZimManageViewModel @Inject constructor(
           newBookOnDisk.apply { isSelected = firstOrNull?.isSelected == true }
         }
     )
-  }
-
-  private fun setUpUncaughtErrorHandlerForOnlineLibrary(
-    library: PublishProcessor<LibraryNetworkEntity>
-  ) {
-    RxJavaPlugins.setErrorHandler { exception ->
-      if (exception is RuntimeException && exception.cause == IOException()) {
-        Log.i(
-          TAG_RX_JAVA_DEFAULT_ERROR_HANDLER,
-          "Caught undeliverable exception: ${exception.cause}"
-        )
-      }
-      when (exception) {
-        is UndeliverableException -> {
-          library.onNext(
-            LibraryNetworkEntity().apply { book = LinkedList() }
-          ).also {
-            Log.i(
-              TAG_RX_JAVA_DEFAULT_ERROR_HANDLER,
-              "Caught undeliverable exception: ${exception.cause}"
-            )
-          }
-        }
-
-        else -> {
-          Thread.currentThread().also { thread ->
-            thread.uncaughtExceptionHandler?.uncaughtException(thread, exception)
-          }
-        }
-      }
-    }
   }
 }

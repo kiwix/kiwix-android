@@ -26,7 +26,7 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 
-@Suppress("InjectDispatcher", "TooGenericExceptionCaught")
+@Suppress("InjectDispatcher")
 data class SaveLanguagesAndFinish(
   private val languages: List<Language>,
   private val languageDao: NewLanguagesDao,
@@ -34,13 +34,13 @@ data class SaveLanguagesAndFinish(
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     lifecycleScope.launch {
-      try {
+      runCatching {
         withContext(Dispatchers.IO) {
           languageDao.insert(languages)
         }
         activity.onBackPressedDispatcher.onBackPressed()
-      } catch (e: Throwable) {
-        e.printStackTrace()
+      }.onFailure {
+        it.printStackTrace()
       }
     }
   }

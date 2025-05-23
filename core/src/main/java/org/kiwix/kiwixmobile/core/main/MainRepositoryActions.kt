@@ -17,9 +17,8 @@
  */
 package org.kiwix.kiwixmobile.core.main
 
-import io.reactivex.disposables.Disposable
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.dao.entities.WebViewHistoryEntity
 import org.kiwix.kiwixmobile.core.data.DataSource
@@ -36,57 +35,61 @@ private const val TAG = "MainPresenter"
 
 @ActivityScope
 class MainRepositoryActions @Inject constructor(private val dataSource: DataSource) {
-  private var saveHistoryDisposable: Disposable? = null
-  private var saveNoteDisposable: Disposable? = null
-  private var saveBookDisposable: Disposable? = null
-  private var deleteNoteDisposable: Disposable? = null
-  private var saveWebViewHistoryDisposable: Disposable? = null
-  private var clearWebViewHistoryDisposable: Disposable? = null
-
-  fun saveHistory(history: HistoryItem) {
-    saveHistoryDisposable =
-      dataSource.saveHistory(history)
-        .subscribe({}, { e -> Log.e(TAG, "Unable to save history", e) })
+  @Suppress("InjectDispatcher")
+  suspend fun saveHistory(history: HistoryItem) {
+    runCatching {
+      withContext(Dispatchers.IO) {
+        dataSource.saveHistory(history)
+      }
+    }.onFailure {
+      Log.e(TAG, "Unable to save history", it)
+    }
   }
 
-  @Suppress("InjectDispatcher", "TooGenericExceptionCaught")
+  @Suppress("InjectDispatcher")
   suspend fun saveBookmark(bookmark: LibkiwixBookmarkItem) {
-    withContext(Dispatchers.IO) {
-      try {
+    runCatching {
+      withContext(Dispatchers.IO) {
         dataSource.saveBookmark(bookmark)
-      } catch (e: Exception) {
-        Log.e(TAG, "Unable to save bookmark", e)
       }
+    }.onFailure {
+      Log.e(TAG, "Unable to save bookmark", it)
     }
   }
 
-  @Suppress("InjectDispatcher", "TooGenericExceptionCaught")
+  @Suppress("InjectDispatcher")
   suspend fun deleteBookmark(bookId: String, bookmarkUrl: String) {
-    withContext(Dispatchers.IO) {
-      try {
+    runCatching {
+      withContext(Dispatchers.IO) {
         dataSource.deleteBookmark(bookId, bookmarkUrl)
-      } catch (e: Exception) {
-        Log.e(TAG, "Unable to delete bookmark", e)
       }
+    }.onFailure {
+      Log.e(TAG, "Unable to delete bookmark", it)
     }
   }
 
-  fun saveNote(note: NoteListItem) {
-    saveNoteDisposable =
+  suspend fun saveNote(note: NoteListItem) {
+    runCatching {
       dataSource.saveNote(note)
-        .subscribe({}, { e -> Log.e(TAG, "Unable to save note", e) })
+    }.onFailure {
+      Log.e(TAG, "Unable to save note", it)
+    }
   }
 
-  fun deleteNote(noteTitle: String) {
-    deleteNoteDisposable =
+  suspend fun deleteNote(noteTitle: String) {
+    runCatching {
       dataSource.deleteNote(noteTitle)
-        .subscribe({}, { e -> Log.e(TAG, "Unable to delete note", e) })
+    }.onFailure {
+      Log.e(TAG, "Unable to delete note", it)
+    }
   }
 
-  fun saveBook(book: BookOnDisk) {
-    saveBookDisposable =
+  suspend fun saveBook(book: BookOnDisk) {
+    runCatching {
       dataSource.saveBook(book)
-        .subscribe({}, { e -> Log.e(TAG, "Unable to save book", e) })
+    }.onFailure {
+      Log.e(TAG, "Unable to save book", it)
+    }
   }
 
   suspend fun saveWebViewPageHistory(webViewHistoryEntityList: List<WebViewHistoryEntity>) {
@@ -101,13 +104,4 @@ class MainRepositoryActions @Inject constructor(private val dataSource: DataSour
     dataSource.getAllWebViewPagesHistory()
       .first()
       .map(::WebViewHistoryItem)
-
-  fun dispose() {
-    saveHistoryDisposable?.dispose()
-    saveNoteDisposable?.dispose()
-    deleteNoteDisposable?.dispose()
-    saveBookDisposable?.dispose()
-    saveWebViewHistoryDisposable?.dispose()
-    clearWebViewHistoryDisposable?.dispose()
-  }
 }

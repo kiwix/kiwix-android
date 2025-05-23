@@ -37,11 +37,9 @@ data class OnlineLibraryScreenState(
   /**
    * Controls the visibility and behavior of the "Pull to refresh" animation.
    *
-   * A [Pair] containing:
    *  - [Boolean]: The first boolean triggers/hides the "pull to refresh" animation.
-   *  - [Boolean]: The second boolean enables/disables the "pull to refresh" gesture.
    */
-  val swipeRefreshItem: Pair<Boolean, Boolean>,
+  val isRefreshing: Boolean,
   /**
    * Handles snack bar messages and displays.
    */

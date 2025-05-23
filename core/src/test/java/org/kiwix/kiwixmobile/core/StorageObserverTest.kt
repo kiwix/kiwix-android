@@ -22,13 +22,11 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
@@ -44,8 +42,6 @@ import org.kiwix.kiwixmobile.core.utils.files.testFlow
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.sharedFunctions.book
 import org.kiwix.sharedFunctions.bookOnDisk
-import org.kiwix.sharedFunctions.resetSchedulers
-import org.kiwix.sharedFunctions.setScheduler
 import java.io.File
 
 class StorageObserverTest {
@@ -64,15 +60,6 @@ class StorageObserverTest {
   private val downloads = MutableStateFlow<List<DownloadModel>>(emptyList())
 
   private lateinit var storageObserver: StorageObserver
-
-  init {
-    setScheduler(Schedulers.trampoline())
-  }
-
-  @AfterAll
-  fun teardown() {
-    resetSchedulers()
-  }
 
   @BeforeEach fun init() {
     clearAllMocks()
