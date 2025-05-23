@@ -95,6 +95,11 @@ import org.kiwix.sharedFunctions.resetSchedulers
 import org.kiwix.sharedFunctions.setScheduler
 import java.util.Locale
 import java.util.concurrent.TimeUnit.MILLISECONDS
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import org.junit.jupiter.api.AfterEach
 
 @ExtendWith(InstantExecutorExtension::class)
 class ZimManageViewModelTest {
@@ -128,6 +133,9 @@ class ZimManageViewModelTest {
 
   private val testScheduler = TestScheduler()
 
+  @OptIn(ExperimentalCoroutinesApi::class)
+  private val testDispatcher = StandardTestDispatcher()
+
   init {
     setScheduler(testScheduler)
   }
@@ -139,7 +147,7 @@ class ZimManageViewModelTest {
     resetSchedulers()
   }
 
-  @Suppress("DEPRECATION")
+  @OptIn(ExperimentalCoroutinesApi::class)
   @BeforeEach
   fun init() {
     clearAllMocks()
@@ -153,7 +161,7 @@ class ZimManageViewModelTest {
     } returns booksOnFileSystem
     every { newLanguagesDao.languages() } returns languages
     every { fat32Checker.fileSystemStates } returns fileSystemStates
-    every { connectivityBroadcastReceiver.networkStates } returns networkStates
+    every { connectivityBroadcastReceiver.networkStates } returns MutableStateFlow(NetworkState.NOT_CONNECTED)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       every { application.registerReceiver(any(), any(), any()) } returns mockk()
     } else {
@@ -185,6 +193,18 @@ class ZimManageViewModelTest {
         setAlertDialogShower(alertDialogShower)
       }
     testScheduler.triggerActions()
+  }
+
+  @OptIn(ExperimentalCoroutinesApi::class)
+  @BeforeEach
+  fun setup() {
+    Dispatchers.setMain(testDispatcher)
+  }
+
+  @OptIn(ExperimentalCoroutinesApi::class)
+  @AfterEach
+  fun tearDown() {
+    Dispatchers.resetMain()
   }
 
   @Nested
@@ -390,10 +410,14 @@ class ZimManageViewModelTest {
   }
 
   @Test
-  fun `network states observed`() {
-    networkStates.offer(NOT_CONNECTED)
-    viewModel.networkStates.test()
-      .assertValue(NOT_CONNECTED)
+  fun `network states observed`() = runTest {
+    val networkStateFlow = MutableStateFlow(NetworkState.NOT_CONNECTED)
+    every { connectivityBroadcastReceiver.networkStates } returns networkStateFlow
+
+    viewModel.networkStates.test().also {
+      networkStateFlow.value = NetworkState.NOT_CONNECTED
+      it.assertValue(NetworkState.NOT_CONNECTED)
+    }
   }
 
   @Test

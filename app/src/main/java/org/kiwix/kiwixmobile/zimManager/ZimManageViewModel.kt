@@ -286,10 +286,14 @@ class ZimManageViewModel @Inject constructor(
     val booksFromDao = books().asFlowable()
     val networkLibrary = PublishProcessor.create<LibraryNetworkEntity>()
     val languages = languageDao.languages().asFlowable()
+
+    viewModelScope.launch {
+      updateNetworkStates()
+    }
+
     return arrayOf(
       updateLibraryItems(booksFromDao, downloads, networkLibrary, languages),
       updateLanguagesInDao(networkLibrary, languages),
-      updateNetworkStates(),
       requestsAndConnectivtyChangesToLibraryRequests(networkLibrary)
     ).also {
       setUpUncaughtErrorHandlerForOnlineLibrary(networkLibrary)
@@ -385,13 +389,19 @@ class ZimManageViewModel @Inject constructor(
     return None
   }
 
-  @Suppress("NoNameShadowing")
+  private fun updateNetworkStates() =
+    viewModelScope.launch {
+      connectivityBroadcastReceiver.networkStates.collect { state ->
+        networkStates.postValue(state)
+      }
+    }.also { coroutineJobs.add(it) }
+
   private fun requestsAndConnectivtyChangesToLibraryRequests(
     library: PublishProcessor<LibraryNetworkEntity>,
   ) =
     Flowable.combineLatest(
       requestDownloadLibrary,
-      connectivityBroadcastReceiver.networkStates.distinctUntilChanged().filter(
+      connectivityBroadcastReceiver.networkStates.asFlowable().distinctUntilChanged().filter(
         CONNECTED::equals
       )
     ) { _, _ -> }
@@ -441,12 +451,6 @@ class ZimManageViewModel @Inject constructor(
       .subscribe(library::onNext, Throwable::printStackTrace).also {
         compositeDisposable?.add(it)
       }
-
-  private fun updateNetworkStates() =
-    connectivityBroadcastReceiver.networkStates.subscribe(
-      networkStates::postValue,
-      Throwable::printStackTrace
-    )
 
   private fun updateLibraryItems(
     booksFromDao: io.reactivex.rxjava3.core.Flowable<List<BookOnDisk>>,
