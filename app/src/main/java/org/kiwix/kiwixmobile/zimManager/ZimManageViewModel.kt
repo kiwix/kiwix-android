@@ -174,7 +174,6 @@ class ZimManageViewModel @Inject constructor(
   init {
     compositeDisposable?.addAll(*disposables())
     observeCoroutineFlows()
-    updateNetworkStates()
     context.registerReceiver(connectivityBroadcastReceiver)
   }
 
@@ -291,6 +290,7 @@ class ZimManageViewModel @Inject constructor(
     return arrayOf(
       updateLibraryItems(booksFromDao, downloads, networkLibrary, languages),
       updateLanguagesInDao(networkLibrary, languages),
+      updateNetworkStates(),
       requestsAndConnectivtyChangesToLibraryRequests(networkLibrary)
     ).also {
       setUpUncaughtErrorHandlerForOnlineLibrary(networkLibrary)
