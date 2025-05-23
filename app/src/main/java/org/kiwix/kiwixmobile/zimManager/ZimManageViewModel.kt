@@ -174,6 +174,7 @@ class ZimManageViewModel @Inject constructor(
   init {
     compositeDisposable?.addAll(*disposables())
     observeCoroutineFlows()
+    updateNetworkStates()
     context.registerReceiver(connectivityBroadcastReceiver)
   }
 
@@ -280,13 +281,14 @@ class ZimManageViewModel @Inject constructor(
     super.onCleared()
   }
 
-  private fun disposables(): Array<Disposable> {
+  private fun disposables() = run {
     // temporary converting to flowable. TODO we will refactor this in upcoming issue.
     val downloads = downloadDao.downloads().asFlowable()
     val booksFromDao = books().asFlowable()
     val networkLibrary = PublishProcessor.create<LibraryNetworkEntity>()
     val languages = languageDao.languages().asFlowable()
-    return arrayOf<Disposable>(
+    
+    arrayOf(
       updateLibraryItems(booksFromDao, downloads, networkLibrary, languages),
       updateLanguagesInDao(networkLibrary, languages),
       requestsAndConnectivtyChangesToLibraryRequests(networkLibrary)
