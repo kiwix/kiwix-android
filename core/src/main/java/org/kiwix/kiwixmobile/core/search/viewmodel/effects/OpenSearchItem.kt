@@ -27,7 +27,7 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationRes
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.SEARCH_ITEM_TITLE_KEY
 import org.kiwix.kiwixmobile.core.reader.addContentPrefix
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
+import org.kiwix.kiwixmobile.core.search.SearchListItem
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
 
 data class OpenSearchItem(

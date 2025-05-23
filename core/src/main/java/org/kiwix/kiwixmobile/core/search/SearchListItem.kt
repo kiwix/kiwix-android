@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2020 Kiwix <android.kiwix.org>
+ * Copyright (c) 2025 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,13 +16,17 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.search.adapter
+package org.kiwix.kiwixmobile.core.search
 
-import org.kiwix.kiwixmobile.core.base.adapter.AdapterDelegate
-import org.kiwix.kiwixmobile.core.base.adapter.BaseDelegateAdapter
+sealed class SearchListItem {
+  abstract val value: String
+  abstract val url: String?
 
-class SearchAdapter(
-  vararg delegates: AdapterDelegate<SearchListItem>
-) : BaseDelegateAdapter<SearchListItem>(*delegates) {
-  override fun getIdFor(item: SearchListItem) = item.value.hashCode().toLong()
+  data class RecentSearchListItem(override val value: String, override val url: String?) :
+    SearchListItem()
+
+  data class ZimSearchResultListItem constructor(
+    override val value: String,
+    override val url: String?
+  ) : SearchListItem()
 }

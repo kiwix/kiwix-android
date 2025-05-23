@@ -23,7 +23,7 @@ import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchRoomEntity
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
+import org.kiwix.kiwixmobile.core.search.SearchListItem
 
 @Dao
 abstract class RecentSearchRoomDao {

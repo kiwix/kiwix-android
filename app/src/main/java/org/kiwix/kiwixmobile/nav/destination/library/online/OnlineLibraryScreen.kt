@@ -51,7 +51,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.extensions.hideKeyboardOnLazyColumnScroll
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
@@ -72,6 +71,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
 import org.kiwix.kiwixmobile.nav.destination.library.local.rememberScrollBehavior
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.DividerItem
@@ -258,7 +258,7 @@ private fun ShowFetchingLibraryLayout(message: String) {
     ) {
       ContentLoadingProgressBar(
         modifier = Modifier.size(DOWNLOADING_LIBRARY_PROGRESSBAR_SIZE),
-        circularProgressBarStockWidth = 3.dp,
+        circularProgressBarStockWidth = THREE_DP,
         progressBarTrackColor = cardContainerColor
       )
       Text(

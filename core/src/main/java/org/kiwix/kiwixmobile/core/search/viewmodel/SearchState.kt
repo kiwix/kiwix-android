@@ -21,7 +21,7 @@ package org.kiwix.kiwixmobile.core.search.viewmodel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.yield
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
+import org.kiwix.kiwixmobile.core.search.SearchListItem
 import org.kiwix.kiwixmobile.core.utils.files.Log
 
 data class SearchState(
