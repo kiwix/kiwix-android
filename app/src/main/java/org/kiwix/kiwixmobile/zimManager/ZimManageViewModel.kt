@@ -281,14 +281,14 @@ class ZimManageViewModel @Inject constructor(
     super.onCleared()
   }
 
-  private fun disposables() = run {
+  private fun disposables(): Array<Disposable> {
     // temporary converting to flowable. TODO we will refactor this in upcoming issue.
     val downloads = downloadDao.downloads().asFlowable()
     val booksFromDao = books().asFlowable()
     val networkLibrary = PublishProcessor.create<LibraryNetworkEntity>()
     val languages = languageDao.languages().asFlowable()
     
-    arrayOf(
+    return arrayOf(
       updateLibraryItems(booksFromDao, downloads, networkLibrary, languages),
       updateLanguagesInDao(networkLibrary, languages),
       requestsAndConnectivtyChangesToLibraryRequests(networkLibrary)
