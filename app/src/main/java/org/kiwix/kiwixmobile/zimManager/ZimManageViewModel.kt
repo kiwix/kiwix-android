@@ -287,7 +287,6 @@ class ZimManageViewModel @Inject constructor(
     val networkLibrary = PublishProcessor.create<LibraryNetworkEntity>()
     val languages = languageDao.languages().asFlowable()
 
-    // Launch network states update in viewModelScope
     viewModelScope.launch {
       updateNetworkStates()
     }
