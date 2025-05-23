@@ -27,8 +27,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
+import org.kiwix.kiwixmobile.core.search.SearchListItem.RecentSearchListItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 
 internal class SearchStateTest {
@@ -123,8 +122,8 @@ internal class SearchStateTest {
       val searchResultsWithTerm =
         SearchResultsWithTerm(searchTerm, suggestionSearchWrapper, mockk())
       val searchState = SearchState(searchTerm, searchResultsWithTerm, emptyList(), FromWebView)
-      var list: List<SearchListItem.RecentSearchListItem>? = emptyList()
-      var list1: List<SearchListItem.RecentSearchListItem>? = emptyList()
+      var list: List<RecentSearchListItem>? = emptyList()
+      var list1: List<RecentSearchListItem>? = emptyList()
       val job =
         launch(Dispatchers.IO) {
           delay(1000)

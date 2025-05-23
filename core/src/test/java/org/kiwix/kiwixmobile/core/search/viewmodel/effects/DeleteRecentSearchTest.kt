@@ -27,8 +27,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
+import org.kiwix.kiwixmobile.core.search.SearchListItem
+import org.kiwix.kiwixmobile.core.search.SearchListItem.RecentSearchListItem
 
 internal class DeleteRecentSearchTest {
   @Test

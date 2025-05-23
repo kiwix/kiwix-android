@@ -25,7 +25,7 @@ import io.mockk.verify
 import kotlinx.coroutines.channels.Channel
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
+import org.kiwix.kiwixmobile.core.search.SearchListItem.RecentSearchListItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ConfirmedDelete
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogShower

@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity_
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
+import org.kiwix.kiwixmobile.core.search.SearchListItem.RecentSearchListItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.test
 import org.kiwix.sharedFunctions.recentSearchEntity
 
