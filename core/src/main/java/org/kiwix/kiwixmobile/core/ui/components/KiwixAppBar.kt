@@ -19,6 +19,9 @@
 package org.kiwix.kiwixmobile.core.ui.components
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -59,6 +62,7 @@ import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray350
 import org.kiwix.kiwixmobile.core.ui.theme.White
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ACTION_MENU_TEXTVIEW_BUTTON_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 
 const val TOOLBAR_TITLE_TESTING_TAG = "toolbarTitle"
@@ -140,11 +144,27 @@ private fun ActionMenu(actionMenuItems: List<ActionMenuItem>) {
         onClick = menuItem.onClick,
         modifier = menuItem.modifier.testTag(menuItem.testingTag)
       ) {
-        Icon(
-          painter = menuItem.icon.toPainter(),
-          contentDescription = stringResource(menuItem.contentDescription),
-          tint = if (menuItem.isEnabled) menuItem.iconTint else Color.Gray
-        )
+        // If icon is not null show the icon.
+        menuItem.icon?.let {
+          Icon(
+            painter = it.toPainter(),
+            contentDescription = stringResource(menuItem.contentDescription),
+            tint = if (menuItem.isEnabled) menuItem.iconTint else Color.Gray
+          )
+        } ?: run {
+          // Else show the textView button in menuItem.
+          Text(
+            text = stringResource(id = menuItem.iconButtonText).uppercase(),
+            color = Color.White,
+            modifier = menuItem.modifier
+              .clickable(
+                indication = LocalIndication.current,
+                interactionSource = remember { MutableInteractionSource() },
+                onClick = menuItem.onClick
+              )
+              .padding(ACTION_MENU_TEXTVIEW_BUTTON_PADDING),
+          )
+        }
       }
     }
   }

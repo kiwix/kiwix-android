@@ -23,7 +23,7 @@ import io.objectbox.query.QueryBuilder
 import kotlinx.coroutines.flow.map
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity
 import org.kiwix.kiwixmobile.core.dao.entities.RecentSearchEntity_
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem.RecentSearchListItem
+import org.kiwix.kiwixmobile.core.search.SearchListItem.RecentSearchListItem
 import javax.inject.Inject
 
 class NewRecentSearchDao @Inject constructor(
