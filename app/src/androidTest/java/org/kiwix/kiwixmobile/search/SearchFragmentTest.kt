@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.search
 
 import android.os.Build
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
@@ -25,7 +26,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.PreferenceManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.accessibility.AccessibilityChecks
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import androidx.test.platform.app.InstrumentationRegistry
@@ -47,11 +47,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.R.id
 import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryFragmentDirections.actionNavigationLibraryToNavigationReader
@@ -72,6 +72,9 @@ class SearchFragmentTest : BaseActivityTest() {
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   val retryRule = RetryRule()
+
+  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  val composeTestRule = createComposeRule()
 
   private lateinit var kiwixMainActivity: KiwixMainActivity
   private lateinit var uiDevice: UiDevice
@@ -117,10 +120,6 @@ class SearchFragmentTest : BaseActivityTest() {
         anyOf(
           allOf(
             matchesCheck(TouchTargetSizeCheck::class.java),
-            matchesViews(ViewMatchers.withId(id.menu_searchintext))
-          ),
-          allOf(
-            matchesCheck(TouchTargetSizeCheck::class.java),
             matchesViews(
               withContentDescription("More options")
             )
@@ -142,28 +141,32 @@ class SearchFragmentTest : BaseActivityTest() {
     search { checkZimFileSearchSuccessful(R.id.readerFragment) }
     openSearchWithQuery("Android", testZimFile)
     search {
-      clickOnSearchItemInSearchList()
+      clickOnSearchItemInSearchList(composeTestRule)
       checkZimFileSearchSuccessful(R.id.readerFragment)
     }
 
     openSearchWithQuery(zimFile = testZimFile)
     search {
       // test with fast typing/deleting
-      searchWithFrequentlyTypedWords(searchUnitTestingQuery)
-      assertSearchSuccessful(searchUnitTestResult)
-      deleteSearchedQueryFrequently(searchUnitTestingQuery, uiDevice)
+      searchWithFrequentlyTypedWords(searchUnitTestingQuery, composeTestRule = composeTestRule)
+      assertSearchSuccessful(searchUnitTestResult, composeTestRule)
+      deleteSearchedQueryFrequently(
+        searchUnitTestingQuery,
+        uiDevice,
+        composeTestRule = composeTestRule
+      )
 
       // test with a short delay typing/deleting to
       // properly test the cancelling of previously searching task
-      searchWithFrequentlyTypedWords(searchUnitTestingQuery, 50)
-      assertSearchSuccessful(searchUnitTestResult)
-      deleteSearchedQueryFrequently(searchUnitTestingQuery, uiDevice, 50)
+      searchWithFrequentlyTypedWords(searchUnitTestingQuery, 50, composeTestRule)
+      assertSearchSuccessful(searchUnitTestResult, composeTestRule)
+      deleteSearchedQueryFrequently(searchUnitTestingQuery, uiDevice, 50, composeTestRule)
 
       // test with a long delay typing/deleting to
       // properly execute the search query letter by letter
-      searchWithFrequentlyTypedWords(searchUnitTestingQuery, 300)
-      assertSearchSuccessful(searchUnitTestResult)
-      deleteSearchedQueryFrequently(searchUnitTestingQuery, uiDevice, 300)
+      searchWithFrequentlyTypedWords(searchUnitTestingQuery, 300, composeTestRule)
+      assertSearchSuccessful(searchUnitTestResult, composeTestRule)
+      deleteSearchedQueryFrequently(searchUnitTestingQuery, uiDevice, 300, composeTestRule)
       // to close the keyboard
       pressBack()
       // go to reader screen
@@ -190,39 +193,46 @@ class SearchFragmentTest : BaseActivityTest() {
     openSearchWithQuery(zimFile = downloadingZimFile)
     search {
       // test with fast typing/deleting
-      searchWithFrequentlyTypedWords(searchQueryForDownloadedZimFile)
-      assertSearchSuccessful(searchResultForDownloadedZimFile)
-      deleteSearchedQueryFrequently(searchQueryForDownloadedZimFile, uiDevice)
+      searchWithFrequentlyTypedWords(
+        searchQueryForDownloadedZimFile,
+        composeTestRule = composeTestRule
+      )
+      assertSearchSuccessful(searchResultForDownloadedZimFile, composeTestRule)
+      deleteSearchedQueryFrequently(
+        searchQueryForDownloadedZimFile,
+        uiDevice,
+        composeTestRule = composeTestRule
+      )
 
       // test with a short delay typing/deleting to
       // properly test the cancelling of previously searching task
-      searchWithFrequentlyTypedWords(searchQueryForDownloadedZimFile, 50)
-      assertSearchSuccessful(searchResultForDownloadedZimFile)
-      deleteSearchedQueryFrequently(searchQueryForDownloadedZimFile, uiDevice, 50)
+      searchWithFrequentlyTypedWords(searchQueryForDownloadedZimFile, 50, composeTestRule)
+      assertSearchSuccessful(searchResultForDownloadedZimFile, composeTestRule)
+      deleteSearchedQueryFrequently(searchQueryForDownloadedZimFile, uiDevice, 50, composeTestRule)
 
       // test with a long delay typing/deleting to
       // properly execute the search query letter by letter
-      searchWithFrequentlyTypedWords(searchQueryForDownloadedZimFile, 300)
-      assertSearchSuccessful(searchResultForDownloadedZimFile)
-      deleteSearchedQueryFrequently(searchQueryForDownloadedZimFile, uiDevice, 300)
+      searchWithFrequentlyTypedWords(searchQueryForDownloadedZimFile, 300, composeTestRule)
+      assertSearchSuccessful(searchResultForDownloadedZimFile, composeTestRule)
+      deleteSearchedQueryFrequently(searchQueryForDownloadedZimFile, uiDevice, 300, composeTestRule)
       // open the reader fragment for next text case.
-      openKiwixReaderFragmentWithFile(downloadingZimFile)
+      clickOnNavigationIcon(composeTestRule)
     }
 
     // Added test for checking the crash scenario where the application was crashing when we
     // frequently searched for article, and clicked on the searched item.
     search {
       // test by searching 10 article and clicking on them
-      searchAndClickOnArticle(searchQueryForDownloadedZimFile)
-      searchAndClickOnArticle("A Song")
-      searchAndClickOnArticle("The Ra")
-      searchAndClickOnArticle("The Ge")
-      searchAndClickOnArticle("Wish")
-      searchAndClickOnArticle("WIFI")
-      searchAndClickOnArticle("Woman")
-      searchAndClickOnArticle("Big Ba")
-      searchAndClickOnArticle("My Wor")
-      searchAndClickOnArticle("100")
+      searchAndClickOnArticle(searchQueryForDownloadedZimFile, composeTestRule)
+      searchAndClickOnArticle("A Song", composeTestRule)
+      searchAndClickOnArticle("The Ra", composeTestRule)
+      searchAndClickOnArticle("The Ge", composeTestRule)
+      searchAndClickOnArticle("Wish", composeTestRule)
+      searchAndClickOnArticle("WIFI", composeTestRule)
+      searchAndClickOnArticle("Woman", composeTestRule)
+      searchAndClickOnArticle("Big Ba", composeTestRule)
+      searchAndClickOnArticle("My Wor", composeTestRule)
+      searchAndClickOnArticle("100", composeTestRule)
       assertArticleLoaded()
     }
     removeTemporaryZimFilesToFreeUpDeviceStorage()

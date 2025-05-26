@@ -84,7 +84,7 @@ class SearchViewModel @Inject constructor(
       FromWebView
     )
   val state: MutableStateFlow<SearchState> = MutableStateFlow(initialState)
-  private val _effects = Channel<SideEffect<*>>()
+  private val _effects = Channel<SideEffect<*>>(Channel.UNLIMITED)
   val effects = _effects.receiveAsFlow()
   val actions = Channel<Action>(Channel.UNLIMITED)
   private val filter = MutableStateFlow("")

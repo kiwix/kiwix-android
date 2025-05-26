@@ -31,6 +31,7 @@ import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
 import org.kiwix.kiwixmobile.language.composables.LANGUAGE_ITEM_CHECKBOX_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.LANGUAGE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils

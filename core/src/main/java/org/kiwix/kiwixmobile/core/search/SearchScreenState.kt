@@ -62,6 +62,10 @@ data class SearchScreenState(
    */
   val onNewTabIconClick: (SearchListItem) -> Unit,
   /**
+   * Handles the Keyboard submit button click.
+   */
+  val onKeyboardSubmitButtonClick: (String) -> Unit,
+  /**
    * Manages the navigationIcon shown in the toolbar.
    */
   val navigationIcon: @Composable() () -> Unit

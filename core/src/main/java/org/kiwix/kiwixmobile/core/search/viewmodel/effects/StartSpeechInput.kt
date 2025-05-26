@@ -46,7 +46,7 @@ data class StartSpeechInput(private val actions: Channel<Action>) : SideEffect<U
         },
         REQ_CODE_SPEECH_INPUT
       )
-    } catch (a: ActivityNotFoundException) {
+    } catch (_: ActivityNotFoundException) {
       actions.trySend(StartSpeechInputFailed).isSuccess
     }
   }

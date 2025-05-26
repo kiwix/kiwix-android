@@ -20,16 +20,11 @@ package org.kiwix.kiwixmobile.core.search
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -58,6 +53,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.Action.Filter
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnItemLongClick
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.OnOpenInNewTabClick
+import org.kiwix.kiwixmobile.core.search.viewmodel.SearchOrigin.FromWebView
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchState
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
@@ -79,7 +75,15 @@ class SearchFragment : BaseFragment() {
   val searchViewModel by lazy { viewModel<SearchViewModel>(viewModelFactory) }
   private var isDataLoading = mutableStateOf(false)
   private var renderingJob: Job? = null
-  private var isFindInPageMenuItemEnabled = mutableStateOf(false)
+
+  /**
+   * Represents the state of the FIND_IN_PAGE menu item.
+   *
+   * A [Pair] containing:
+   *  - [Boolean]: Whether the menu item is enabled (clickable).
+   *  - [Boolean]: Whether the menu item is visible.
+   */
+  private var findInPageMenuItem = mutableStateOf(false to false)
   private var composeView: ComposeView? = null
   private val searchScreenState = mutableStateOf(
     SearchScreenState(
@@ -97,7 +101,10 @@ class SearchFragment : BaseFragment() {
       navigationIcon = {
         NavigationIcon(onClick = { requireActivity().onBackPressedDispatcher.onBackPressed() })
       },
-      onLoadMore = { loadMoreSearchResult() }
+      onLoadMore = { loadMoreSearchResult() },
+      onKeyboardSubmitButtonClick = {
+        getSearchListItemForQuery(it)?.let(::onItemClick)
+      }
     )
   )
 
@@ -125,10 +132,10 @@ class SearchFragment : BaseFragment() {
         DialogHost(dialogShower as AlertDialogShower)
       }
     }
+    searchViewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
     observeViewModelData()
     handleSearchArgument()
     handleBackPress()
-    searchViewModel.setAlertDialogShower(dialogShower as AlertDialogShower)
   }
 
   private fun handleSearchArgument() {
@@ -136,15 +143,18 @@ class SearchFragment : BaseFragment() {
     if (searchStringFromArguments != null) {
       onSearchValueChanged(searchStringFromArguments)
     }
-    searchViewModel.actions.trySend(Action.CreatedWithArguments(arguments)).isSuccess
+    val argsCopy = Bundle(arguments)
+    searchViewModel.actions.trySend(Action.CreatedWithArguments(argsCopy)).isSuccess
     arguments?.remove(EXTRA_IS_WIDGET_VOICE)
   }
 
   private fun observeViewModelData() {
     viewLifecycleOwner.lifecycleScope.launch {
-      viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
+      Log.e("VOICE_SEARCH", "Starting observeViewModelData")
+      viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
         launch {
           searchViewModel.effects.collect { effect ->
+            Log.e("VOICE_SEARCH", "Collected effect: ${effect::class.simpleName}")
             effect.invokeWith(this@SearchFragment.coreMainActivity)
           }
         }
@@ -221,41 +231,6 @@ class SearchFragment : BaseFragment() {
     findNavController().popBackStack(readerFragmentResId, false)
   }
 
-  private fun setupMenu() {
-    (requireActivity() as MenuHost).addMenuProvider(
-      object : MenuProvider {
-        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-          // menuInflater.inflate(R.menu.menu_search, menu)
-          // searchView?.apply {
-          //   setUpSearchView(requireActivity())
-          //   searchView?.setOnQueryTextListener(
-          //     SimpleTextListener { query, isSubmit ->
-          //       if (query.isNotEmpty()) {
-          //         setIsPageSearchEnabled(true)
-          //         when {
-          //           isSubmit -> {
-          //             // if user press the search/enter button on keyboard,
-          //             // try to open the article if present
-          //             getSearchListItemForQuery(query)?.let(::onItemClick)
-          //           }
-          //
-          //           else -> searchViewModel.actions.trySend(Filter(query)).isSuccess
-          //         }
-          //       } else {
-          //         setIsPageSearchEnabled(false)
-          //       }
-          //     }
-          //   )
-          // }
-        }
-
-        override fun onMenuItemSelected(menuItem: MenuItem) = true
-      },
-      viewLifecycleOwner,
-      Lifecycle.State.RESUMED
-    )
-  }
-
   private fun getSearchListItemForQuery(query: String): SearchListItem? =
     searchScreenState.value.searchList.firstOrNull {
       it.value.equals(query, ignoreCase = true)
@@ -277,16 +252,23 @@ class SearchFragment : BaseFragment() {
     searchViewModel.actions.trySend(Filter(searchText)).isSuccess
   }
 
-  private fun actionMenuItems() = listOf(
-    ActionMenuItem(
-      contentDescription = R.string.menu_search_in_text,
-      onClick = {
-        searchViewModel.actions.trySend(ClickedSearchInText).isSuccess
-      },
-      testingTag = FIND_IN_PAGE_TESTING_TAG,
-      iconButtonText = R.string.menu_search_in_text,
-      isEnabled = isFindInPageMenuItemEnabled.value
-    )
+  private fun actionMenuItems() = listOfNotNull(
+    // Check if the `FIND_IN_PAGE` is visible or not.
+    // If visible then show it in menu.
+    if (findInPageMenuItem.value.second) {
+      ActionMenuItem(
+        contentDescription = R.string.menu_search_in_text,
+        onClick = {
+          searchViewModel.actions.trySend(ClickedSearchInText).isSuccess
+        },
+        testingTag = FIND_IN_PAGE_TESTING_TAG,
+        iconButtonText = R.string.menu_search_in_text,
+        isEnabled = findInPageMenuItem.value.first
+      )
+    } else {
+      // If `FIND_IN_PAGE` is not visible return null so that it will not show on the menu item.
+      null
+    }
   )
 
   @Suppress("InjectDispatcher")
@@ -310,7 +292,7 @@ class SearchFragment : BaseFragment() {
       return
     }
     isDataLoading.value = false
-    // searchInTextMenuItem?.actionView?.isVisible = state.searchOrigin == FromWebView
+    findInPageMenuItem.value = findInPageMenuItem.value.first to (state.searchOrigin == FromWebView)
     setIsPageSearchEnabled(state.searchTerm)
     searchScreenState.update { copy(isLoading = true) }
     renderingJob =
@@ -341,7 +323,7 @@ class SearchFragment : BaseFragment() {
   }
 
   private fun setIsPageSearchEnabled(searchText: String) {
-    isFindInPageMenuItemEnabled.value = searchText.isNotBlank()
+    findInPageMenuItem.value = searchText.isNotBlank() to findInPageMenuItem.value.second
   }
 
   private fun onItemClick(it: SearchListItem) {

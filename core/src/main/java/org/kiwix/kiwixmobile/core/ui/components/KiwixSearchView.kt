@@ -18,6 +18,8 @@
 
 package org.kiwix.kiwixmobile.core.ui.components
 
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -30,10 +32,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 
@@ -45,8 +49,10 @@ fun KiwixSearchView(
   searchViewTextFiledTestTag: String = "",
   clearButtonTestTag: String = "",
   onValueChange: (String) -> Unit,
-  onClearClick: () -> Unit
+  onClearClick: () -> Unit,
+  onKeyboardSubmitButtonClick: (String) -> Unit = {}
 ) {
+  val keyboardController = LocalSoftwareKeyboardController.current
   val colors = TextFieldDefaults.colors(
     focusedIndicatorColor = Color.Transparent,
     unfocusedIndicatorColor = Color.Transparent,
@@ -89,6 +95,15 @@ fun KiwixSearchView(
           )
         }
       }
-    }
+    },
+    keyboardOptions = KeyboardOptions.Default.copy(
+      imeAction = ImeAction.Done
+    ),
+    keyboardActions = KeyboardActions(
+      onDone = {
+        keyboardController?.hide()
+        onKeyboardSubmitButtonClick.invoke(value)
+      }
+    )
   )
 }

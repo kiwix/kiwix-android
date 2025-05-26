@@ -19,9 +19,6 @@
 package org.kiwix.kiwixmobile.core.ui.components
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.LocalIndication
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -37,6 +34,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -62,7 +60,6 @@ import org.kiwix.kiwixmobile.core.ui.theme.Black
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray350
 import org.kiwix.kiwixmobile.core.ui.theme.White
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ACTION_MENU_TEXTVIEW_BUTTON_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 
 const val TOOLBAR_TITLE_TESTING_TAG = "toolbarTitle"
@@ -139,30 +136,32 @@ private fun AppBarTitle(
 private fun ActionMenu(actionMenuItems: List<ActionMenuItem>) {
   Row {
     actionMenuItems.forEach { menuItem ->
-      IconButton(
-        enabled = menuItem.isEnabled,
-        onClick = menuItem.onClick,
-        modifier = menuItem.modifier.testTag(menuItem.testingTag)
-      ) {
-        // If icon is not null show the icon.
-        menuItem.icon?.let {
+      val modifier = menuItem.modifier.testTag(menuItem.testingTag)
+      // If icon is not null show the icon.
+      menuItem.icon?.let {
+        IconButton(
+          enabled = menuItem.isEnabled,
+          onClick = menuItem.onClick,
+          modifier = modifier
+        ) {
           Icon(
             painter = it.toPainter(),
             contentDescription = stringResource(menuItem.contentDescription),
             tint = if (menuItem.isEnabled) menuItem.iconTint else Color.Gray
           )
-        } ?: run {
-          // Else show the textView button in menuItem.
+        }
+      } ?: run {
+        // Else show the textView button in menuItem.
+        TextButton(
+          enabled = menuItem.isEnabled,
+          onClick = menuItem.onClick,
+          modifier = modifier
+        ) {
           Text(
             text = stringResource(id = menuItem.iconButtonText).uppercase(),
-            color = Color.White,
-            modifier = menuItem.modifier
-              .clickable(
-                indication = LocalIndication.current,
-                interactionSource = remember { MutableInteractionSource() },
-                onClick = menuItem.onClick
-              )
-              .padding(ACTION_MENU_TEXTVIEW_BUTTON_PADDING),
+            color = if (menuItem.isEnabled) Color.White else Color.Gray,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
           )
         }
       }

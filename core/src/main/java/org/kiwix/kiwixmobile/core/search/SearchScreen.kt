@@ -69,9 +69,10 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEARCH_ITEM_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
 
-const val SEARCH_FIELD_TESTING_TAG = "searchField"
+const val SEARCH_FIELD_TESTING_TAG = "searchFieldTestingTag"
 const val NO_SEARCH_RESULT_TESTING_TAG = "noSearchResultTestingTag"
 const val FIND_IN_PAGE_TESTING_TAG = "findInPageTestingTag"
+const val SEARCH_ITEM_TESTING_TAG = "searchItemTestingTag"
 const val LOADING_ITEMS_BEFORE = 3
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -95,7 +96,8 @@ fun SearchScreen(
               searchViewTextFiledTestTag = SEARCH_FIELD_TESTING_TAG,
               onValueChange = searchScreenState.onSearchViewValueChange,
               onClearClick = searchScreenState.onSearchViewClearClick,
-              modifier = Modifier
+              modifier = Modifier,
+              onKeyboardSubmitButtonClick = searchScreenState.onKeyboardSubmitButtonClick
             )
           }
         )
@@ -223,7 +225,8 @@ private fun SearchListItem(
         .combinedClickable(
           onClick = { onItemClick(searchListItem) },
           onLongClick = { onItemLongClick?.invoke(searchListItem) }
-        ),
+        )
+        .semantics { testTag = SEARCH_ITEM_TESTING_TAG },
       fontSize = SEARCH_ITEM_TEXT_SIZE,
     )
 

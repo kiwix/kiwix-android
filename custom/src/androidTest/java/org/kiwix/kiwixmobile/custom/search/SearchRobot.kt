@@ -19,14 +19,19 @@
 package org.kiwix.kiwixmobile.custom.search
 
 import android.view.KeyEvent
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextClearance
+import androidx.compose.ui.test.performTextInput
 import androidx.core.view.GravityCompat
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
@@ -40,56 +45,68 @@ import androidx.test.espresso.web.webdriver.Locator
 import androidx.test.uiautomator.UiDevice
 import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDrawerWithGravity
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
-import com.adevinta.android.barista.internal.matcher.HelperMatchers
 import org.hamcrest.CoreMatchers.containsString
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
+import org.kiwix.kiwixmobile.core.search.SEARCH_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.custom.R.id
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils
+import org.kiwix.kiwixmobile.custom.testutils.TestUtils.TEST_PAUSE_MS
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.custom.testutils.TestUtils.waitUntilTimeout
 
 fun search(searchRobot: SearchRobot.() -> Unit) = SearchRobot().searchRobot()
 
 class SearchRobot {
-  fun searchWithFrequentlyTypedWords(query: String, wait: Long = 0L) {
+  fun searchWithFrequentlyTypedWords(
+    query: String,
+    wait: Long = 0L,
+    composeTestRule: ComposeContentTestRule
+  ) {
     testFlakyView({
-      val searchView = Espresso.onView(ViewMatchers.withId(androidx.appcompat.R.id.search_src_text))
-      searchView.perform(ViewActions.clearText())
-      for (char in query) {
-        searchView.perform(ViewActions.typeText(char.toString()))
-        if (wait != 0L) {
-          BaristaSleepInteractions.sleep(wait)
+      composeTestRule.apply {
+        waitUntilTimeout()
+        val searchView = onNodeWithTag(SEARCH_FIELD_TESTING_TAG)
+        searchView.performTextInput("")
+        for (char in query) {
+          searchView.performTextInput(char.toString())
+          if (wait != 0L) {
+            waitUntilTimeout(wait)
+          }
         }
       }
     })
   }
 
-  fun assertSearchSuccessful(searchResult: String) {
-    testFlakyView({
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
-      Espresso.onView(ViewMatchers.withId(R.id.search_list)).check(
-        ViewAssertions.matches(
-          HelperMatchers.atPosition(
-            0,
-            ViewMatchers.hasDescendant(ViewMatchers.withSubstring(searchResult))
-          )
-        )
+  fun assertSearchSuccessful(searchResult: String, composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntil(
+        timeoutMillis = TEST_PAUSE_MS.toLong(),
+        condition = {
+          onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG)
+            .fetchSemanticsNodes().isNotEmpty()
+        }
       )
-    })
+      onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG)[0]
+        .assert(hasText(searchResult))
+    }
   }
 
-  fun deleteSearchedQueryFrequently(textToDelete: String, uiDevice: UiDevice, wait: Long = 0L) {
-    testFlakyView({
-      for (i in textToDelete.indices) {
-        uiDevice.pressKeyCode(KeyEvent.KEYCODE_DEL)
-        if (wait != 0L) {
-          BaristaSleepInteractions.sleep(wait)
-        }
+  fun deleteSearchedQueryFrequently(
+    textToDelete: String,
+    uiDevice: UiDevice,
+    wait: Long = 0L,
+    composeTestRule: ComposeContentTestRule
+  ) {
+    repeat(textToDelete.length) {
+      uiDevice.pressKeyCode(KeyEvent.KEYCODE_DEL)
+      if (wait != 0L) {
+        BaristaSleepInteractions.sleep(wait)
       }
+    }
 
-      // clear search query if any remains due to any condition not to affect any other test scenario
-      val searchView = Espresso.onView(ViewMatchers.withId(androidx.appcompat.R.id.search_src_text))
-      searchView.perform(ViewActions.clearText())
-    })
+    // clear search query if any remains due to any condition not to affect any other test scenario
+    composeTestRule.onNodeWithTag(SEARCH_FIELD_TESTING_TAG).performTextClearance()
   }
 
   private fun openSearchScreen() {
@@ -99,26 +116,21 @@ class SearchRobot {
     })
   }
 
-  fun searchAndClickOnArticle(searchString: String) {
-    // Wait a bit to properly load the ZIM file in the reader.
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
+  fun searchAndClickOnArticle(searchString: String, composeTestRule: ComposeContentTestRule) {
+    // wait a bit to properly load the ZIM file in the reader
+    composeTestRule.waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
     openSearchScreen()
     // Wait a bit to properly visible the search screen.
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
-    searchWithFrequentlyTypedWords(searchString)
-    clickOnSearchItemInSearchList()
+    composeTestRule.waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
+    searchWithFrequentlyTypedWords(searchString, composeTestRule = composeTestRule)
+    clickOnSearchItemInSearchList(composeTestRule)
   }
 
-  private fun clickOnSearchItemInSearchList() {
-    testFlakyView({
-      BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
-      Espresso.onView(ViewMatchers.withId(R.id.search_list)).perform(
-        RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-          0,
-          ViewActions.click()
-        )
-      )
-    })
+  private fun clickOnSearchItemInSearchList(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntilTimeout()
+      onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG)[0].performClick()
+    }
   }
 
   fun assertArticleLoaded() {
