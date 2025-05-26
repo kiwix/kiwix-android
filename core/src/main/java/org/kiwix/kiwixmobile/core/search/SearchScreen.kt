@@ -252,7 +252,7 @@ fun InfiniteListHandler(
     derivedStateOf {
       val lastVisibleItemIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
       val totalItemCount = listState.layoutInfo.totalItemsCount
-      !isLoadingMoreResult && lastVisibleItemIndex >= (totalItemCount - buffer)
+      !isLoadingMoreResult && lastVisibleItemIndex >= totalItemCount - buffer
     }
   }
 
