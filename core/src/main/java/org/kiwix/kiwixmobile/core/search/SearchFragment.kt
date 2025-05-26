@@ -150,11 +150,9 @@ class SearchFragment : BaseFragment() {
 
   private fun observeViewModelData() {
     viewLifecycleOwner.lifecycleScope.launch {
-      Log.e("VOICE_SEARCH", "Starting observeViewModelData")
       viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
         launch {
           searchViewModel.effects.collect { effect ->
-            Log.e("VOICE_SEARCH", "Collected effect: ${effect::class.simpleName}")
             effect.invokeWith(this@SearchFragment.coreMainActivity)
           }
         }
