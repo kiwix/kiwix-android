@@ -34,6 +34,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -135,16 +136,34 @@ private fun AppBarTitle(
 private fun ActionMenu(actionMenuItems: List<ActionMenuItem>) {
   Row {
     actionMenuItems.forEach { menuItem ->
-      IconButton(
-        enabled = menuItem.isEnabled,
-        onClick = menuItem.onClick,
-        modifier = menuItem.modifier.testTag(menuItem.testingTag)
-      ) {
-        Icon(
-          painter = menuItem.icon.toPainter(),
-          contentDescription = stringResource(menuItem.contentDescription),
-          tint = if (menuItem.isEnabled) menuItem.iconTint else Color.Gray
-        )
+      val modifier = menuItem.modifier.testTag(menuItem.testingTag)
+      // If icon is not null show the icon.
+      menuItem.icon?.let {
+        IconButton(
+          enabled = menuItem.isEnabled,
+          onClick = menuItem.onClick,
+          modifier = modifier
+        ) {
+          Icon(
+            painter = it.toPainter(),
+            contentDescription = stringResource(menuItem.contentDescription),
+            tint = if (menuItem.isEnabled) menuItem.iconTint else Color.Gray
+          )
+        }
+      } ?: run {
+        // Else show the textView button in menuItem.
+        TextButton(
+          enabled = menuItem.isEnabled,
+          onClick = menuItem.onClick,
+          modifier = modifier
+        ) {
+          Text(
+            text = stringResource(id = menuItem.iconButtonText).uppercase(),
+            color = if (menuItem.isEnabled) Color.White else Color.Gray,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+          )
+        }
       }
     }
   }

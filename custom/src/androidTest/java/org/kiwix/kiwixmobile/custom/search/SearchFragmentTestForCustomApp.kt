@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.custom.search
 import android.Manifest
 import android.content.Context
 import android.content.res.AssetFileDescriptor
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.NavHostFragment
@@ -52,6 +53,8 @@ import org.kiwix.kiwixmobile.core.search.SearchFragment
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
 import org.kiwix.kiwixmobile.custom.main.CustomReaderFragment
 import org.kiwix.kiwixmobile.custom.testutils.RetryRule
@@ -80,9 +83,12 @@ class SearchFragmentTestForCustomApp {
     InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
   }
 
-  @Rule
+  @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   var retryRule = RetryRule()
+
+  @get:Rule(order = COMPOSE_TEST_RULE_ORDER)
+  val composeTestRule = createComposeRule()
 
   private lateinit var customMainActivity: CustomMainActivity
   private lateinit var uiDevice: UiDevice
@@ -151,24 +157,24 @@ class SearchFragmentTestForCustomApp {
     openZimFileInReader(zimFile = downloadingZimFile)
     openSearchWithQuery()
     val searchTerm = "gard"
-    val searchedItem = "Gardanta Spirito"
+    val searchedItem = "Gardanta Spirito - Андивионский Научный Альянс"
     search {
       // test with fast typing/deleting
-      searchWithFrequentlyTypedWords(searchTerm)
-      assertSearchSuccessful(searchedItem)
-      deleteSearchedQueryFrequently(searchTerm, uiDevice)
+      searchWithFrequentlyTypedWords(searchTerm, composeTestRule = composeTestRule)
+      assertSearchSuccessful(searchedItem, composeTestRule)
+      deleteSearchedQueryFrequently(searchTerm, uiDevice, composeTestRule = composeTestRule)
 
       // test with a short delay typing/deleting to
       // properly test the cancelling of previously searching task
-      searchWithFrequentlyTypedWords(searchTerm, 50)
-      assertSearchSuccessful(searchedItem)
-      deleteSearchedQueryFrequently(searchTerm, uiDevice, 50)
+      searchWithFrequentlyTypedWords(searchTerm, 50, composeTestRule)
+      assertSearchSuccessful(searchedItem, composeTestRule)
+      deleteSearchedQueryFrequently(searchTerm, uiDevice, 50, composeTestRule)
 
       // test with a long delay typing/deleting to
       // properly execute the search query letter by letter
-      searchWithFrequentlyTypedWords(searchTerm, 300)
-      assertSearchSuccessful(searchedItem)
-      deleteSearchedQueryFrequently(searchTerm, uiDevice, 300)
+      searchWithFrequentlyTypedWords(searchTerm, 300, composeTestRule)
+      assertSearchSuccessful(searchedItem, composeTestRule)
+      deleteSearchedQueryFrequently(searchTerm, uiDevice, 300, composeTestRule)
       // to close the keyboard
       pressBack()
       // go to reader screen
@@ -179,16 +185,16 @@ class SearchFragmentTestForCustomApp {
     // frequently searched for article, and clicked on the searched item.
     search {
       // test by searching 10 article and clicking on them
-      searchAndClickOnArticle(searchTerm)
-      searchAndClickOnArticle("eilum")
-      searchAndClickOnArticle("page")
-      searchAndClickOnArticle("list")
-      searchAndClickOnArticle("ladder")
-      searchAndClickOnArticle("welc")
-      searchAndClickOnArticle("js")
-      searchAndClickOnArticle("hizo")
-      searchAndClickOnArticle("fad")
-      searchAndClickOnArticle("forum")
+      searchAndClickOnArticle(searchTerm, composeTestRule)
+      searchAndClickOnArticle("eilum", composeTestRule)
+      searchAndClickOnArticle("page", composeTestRule)
+      searchAndClickOnArticle("list", composeTestRule)
+      searchAndClickOnArticle("ladder", composeTestRule)
+      searchAndClickOnArticle("welc", composeTestRule)
+      searchAndClickOnArticle("js", composeTestRule)
+      searchAndClickOnArticle("hizo", composeTestRule)
+      searchAndClickOnArticle("fad", composeTestRule)
+      searchAndClickOnArticle("forum", composeTestRule)
       assertArticleLoaded()
     }
   }

@@ -19,28 +19,33 @@
 package org.kiwix.kiwixmobile.search
 
 import android.view.KeyEvent
-import androidx.recyclerview.widget.RecyclerView
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextClearance
+import androidx.compose.ui.test.performTextInput
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.clearText
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.typeText
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
-import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.Locator
 import androidx.test.uiautomator.UiDevice
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
-import com.adevinta.android.barista.internal.matcher.HelperMatchers.atPosition
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
+import org.kiwix.kiwixmobile.core.search.SEARCH_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
+import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
 fun search(func: SearchRobot.() -> Unit) = SearchRobot().applyWithViewHierarchyPrinting(func)
 
@@ -50,15 +55,11 @@ class SearchRobot : BaseRobot() {
   val searchQueryForDownloadedZimFile = "A Fool"
   val searchResultForDownloadedZimFile = "A Fool for You"
 
-  fun clickOnSearchItemInSearchList() {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
-    isVisible(ViewId(R.id.search_list))
-    onView(withId(R.id.search_list)).perform(
-      actionOnItemAtPosition<RecyclerView.ViewHolder>(
-        0,
-        click()
-      )
-    )
+  fun clickOnSearchItemInSearchList(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntilTimeout()
+      onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG)[0].performClick()
+    }
   }
 
   fun checkZimFileSearchSuccessful(readerFragment: Int) {
@@ -66,31 +67,47 @@ class SearchRobot : BaseRobot() {
     isVisible(ViewId(readerFragment))
   }
 
-  fun searchWithFrequentlyTypedWords(query: String, wait: Long = 0L) {
+  fun searchWithFrequentlyTypedWords(
+    query: String,
+    wait: Long = 0L,
+    composeTestRule: ComposeContentTestRule
+  ) {
     testFlakyView({
-      val searchView = onView(withId(androidx.appcompat.R.id.search_src_text))
-      for (char in query) {
-        searchView.perform(typeText(char.toString()))
-        if (wait != 0L) {
-          BaristaSleepInteractions.sleep(wait)
+      composeTestRule.apply {
+        waitUntilTimeout()
+        val searchView = onNodeWithTag(SEARCH_FIELD_TESTING_TAG)
+        searchView.performTextInput("")
+        for (char in query) {
+          searchView.performTextInput(char.toString())
+          if (wait != 0L) {
+            waitUntilTimeout(wait)
+          }
         }
       }
     })
   }
 
-  fun assertSearchSuccessful(searchResult: String) {
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
-    val recyclerViewId = R.id.search_list
-
-    onView(withId(recyclerViewId)).check(
-      matches(
-        atPosition(0, hasDescendant(withText(searchResult)))
+  fun assertSearchSuccessful(searchResult: String, composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntil(
+        timeoutMillis = TEST_PAUSE_MS.toLong(),
+        condition = {
+          onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG)
+            .fetchSemanticsNodes().isNotEmpty()
+        }
       )
-    )
+      onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG)[0]
+        .assert(hasText(searchResult))
+    }
   }
 
-  fun deleteSearchedQueryFrequently(textToDelete: String, uiDevice: UiDevice, wait: Long = 0L) {
-    for (i in textToDelete.indices) {
+  fun deleteSearchedQueryFrequently(
+    textToDelete: String,
+    uiDevice: UiDevice,
+    wait: Long = 0L,
+    composeTestRule: ComposeContentTestRule
+  ) {
+    repeat(textToDelete.length) {
       uiDevice.pressKeyCode(KeyEvent.KEYCODE_DEL)
       if (wait != 0L) {
         BaristaSleepInteractions.sleep(wait)
@@ -98,20 +115,22 @@ class SearchRobot : BaseRobot() {
     }
 
     // clear search query if any remains due to any condition not to affect any other test scenario
-    val searchView = onView(withId(androidx.appcompat.R.id.search_src_text))
-    searchView.perform(clearText())
+    composeTestRule.onNodeWithTag(SEARCH_FIELD_TESTING_TAG).performTextClearance()
+  }
+
+  fun clickOnNavigationIcon(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
   }
 
   private fun openSearchScreen() {
     testFlakyView({ onView(withId(R.id.menu_search)).perform(click()) })
   }
 
-  fun searchAndClickOnArticle(searchString: String) {
-    // wait a bit to properly load the ZIM file in the reader
-    BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
+  fun searchAndClickOnArticle(searchString: String, composeTestRule: ComposeContentTestRule) {
     openSearchScreen()
-    searchWithFrequentlyTypedWords(searchString)
-    clickOnSearchItemInSearchList()
+    searchWithFrequentlyTypedWords(searchString, composeTestRule = composeTestRule)
+    clickOnSearchItemInSearchList(composeTestRule)
+    checkZimFileSearchSuccessful(org.kiwix.kiwixmobile.R.id.readerFragment)
   }
 
   fun assertArticleLoaded() {

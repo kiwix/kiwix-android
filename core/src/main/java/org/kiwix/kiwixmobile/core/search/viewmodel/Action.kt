@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.search.viewmodel
 
 import android.content.Intent
 import android.os.Bundle
-import org.kiwix.kiwixmobile.core.search.adapter.SearchListItem
+import org.kiwix.kiwixmobile.core.search.SearchListItem
 
 sealed class Action {
   object ExitedSearch : Action()
