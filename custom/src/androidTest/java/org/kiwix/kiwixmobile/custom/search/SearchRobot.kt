@@ -118,10 +118,10 @@ class SearchRobot {
 
   fun searchAndClickOnArticle(searchString: String, composeTestRule: ComposeContentTestRule) {
     // wait a bit to properly load the ZIM file in the reader
-    composeTestRule.waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
+    composeTestRule.waitUntilTimeout()
     openSearchScreen()
     // Wait a bit to properly visible the search screen.
-    composeTestRule.waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
+    composeTestRule.waitUntilTimeout()
     searchWithFrequentlyTypedWords(searchString, composeTestRule = composeTestRule)
     clickOnSearchItemInSearchList(composeTestRule)
   }
