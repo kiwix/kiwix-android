@@ -33,7 +33,6 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.processors.PublishProcessor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -44,6 +43,7 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
@@ -125,7 +125,7 @@ class ZimManageViewModelTest {
   private val languages = MutableStateFlow<List<Language>>(emptyList())
   private val fileSystemStates =
     MutableStateFlow<FileSystemState>(FileSystemState.DetectingFileSystem)
-  private val networkStates: PublishProcessor<NetworkState> = PublishProcessor.create()
+  private val networkStates = MutableStateFlow(NetworkState.NOT_CONNECTED)
   private val booksOnDiskListItems = MutableStateFlow<List<BooksOnDiskListItem>>(emptyList())
   private val testDispatcher = StandardTestDispatcher()
 
@@ -170,6 +170,7 @@ class ZimManageViewModelTest {
     languages.value = emptyList()
     fileSystemStates.value = FileSystemState.DetectingFileSystem
     booksOnDiskListItems.value = emptyList()
+    networkStates.value = NOT_CONNECTED
     viewModel =
       ZimManageViewModel(
         downloadRoomDao,
@@ -386,18 +387,17 @@ class ZimManageViewModelTest {
       coEvery { kiwixService.getLibrary() } returns libraryNetworkEntity(networkBooks)
       every { defaultLanguageProvider.provide() } returns defaultLanguage
       viewModel.networkLibrary.emit(libraryNetworkEntity(networkBooks))
-      advanceUntilIdle()
+      runCurrent()
       languages.value = dbBooks
-      advanceUntilIdle()
-      networkStates.onNext(CONNECTED)
+      runCurrent()
+      networkStates.value = CONNECTED
       advanceUntilIdle()
     }
   }
 
-  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun `network states observed`() = runTest {
-    networkStates.offer(NOT_CONNECTED)
+    networkStates.tryEmit(NOT_CONNECTED)
     advanceUntilIdle()
     viewModel.networkStates.test()
       .assertValue(NOT_CONNECTED)
@@ -414,15 +414,20 @@ class ZimManageViewModelTest {
       triggerAction = {
         every { application.getString(any()) } returns ""
         every { application.getString(any(), any()) } returns ""
-        networkStates.onNext(CONNECTED)
-        downloads.value = listOf(downloadModel(book = bookDownloading))
-        books.value = listOf(bookOnDisk(book = bookAlreadyOnDisk))
-        languages.value =
+        networkStates.tryEmit(CONNECTED)
+        advanceUntilIdle()
+        downloads.tryEmit(listOf(downloadModel(book = bookDownloading)))
+        advanceUntilIdle()
+        books.tryEmit(listOf(bookOnDisk(book = bookAlreadyOnDisk)))
+        advanceUntilIdle()
+        languages.tryEmit(
           listOf(
             language(isActive = true, occurencesOfLanguage = 1, languageCode = "activeLanguage"),
             language(isActive = false, occurencesOfLanguage = 1, languageCode = "inactiveLanguage")
           )
-        fileSystemStates.value = CanWrite4GbFile
+        )
+        fileSystemStates.tryEmit(CanWrite4GbFile)
+        advanceUntilIdle()
         viewModel.networkLibrary.emit(
           libraryNetworkEntity(
             listOf(
@@ -450,7 +455,6 @@ class ZimManageViewModelTest {
     )
   }
 
-  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun `library marks files over 4GB as can't download if file system state says to`() = runTest {
     val bookOver4Gb =
@@ -464,14 +468,15 @@ class ZimManageViewModelTest {
     testFlow(
       viewModel.libraryItems,
       triggerAction = {
-        networkStates.onNext(CONNECTED)
-        downloads.value = listOf()
-        books.value = listOf()
-        languages.value =
+        networkStates.tryEmit(CONNECTED)
+        downloads.tryEmit(listOf())
+        books.tryEmit(listOf())
+        languages.tryEmit(
           listOf(
             language(isActive = true, occurencesOfLanguage = 1, languageCode = "activeLanguage")
           )
-        fileSystemStates.value = CannotWrite4GbFile
+        )
+        fileSystemStates.tryEmit(CannotWrite4GbFile)
         viewModel.networkLibrary.emit(libraryNetworkEntity(listOf(bookOver4Gb)))
       },
       assert = {

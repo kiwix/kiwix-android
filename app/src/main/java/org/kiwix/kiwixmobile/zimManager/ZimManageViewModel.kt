@@ -54,7 +54,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
@@ -302,7 +301,6 @@ class ZimManageViewModel @Inject constructor(
     }
     coroutineJobs.clear()
     context.unregisterReceiver(connectivityBroadcastReceiver)
-    connectivityBroadcastReceiver.stopNetworkState()
     appProgressListener = null
     super.onCleared()
   }
@@ -393,8 +391,7 @@ class ZimManageViewModel @Inject constructor(
     library: MutableSharedFlow<LibraryNetworkEntity>,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
   ) = requestDownloadLibrary.flatMapConcat {
-    connectivityBroadcastReceiver.networkStates.asFlow()
-      .distinctUntilChanged()
+    connectivityBroadcastReceiver.networkStates
       .filter { networkState -> networkState == CONNECTED }
       .take(1)
       .flatMapConcat {
@@ -455,8 +452,6 @@ class ZimManageViewModel @Inject constructor(
     }
 
   private fun updateNetworkStates() = connectivityBroadcastReceiver.networkStates
-    .asFlow()
-    .catch { it.printStackTrace() }
     .onEach { state -> networkStates.postValue(state) }
     .launchIn(viewModelScope)
 
@@ -531,21 +526,25 @@ class ZimManageViewModel @Inject constructor(
     booksFromNetwork: List<Book>,
     allLanguages: List<Language>
   ) = when {
-    booksFromNetwork.isEmpty() && allLanguages.isEmpty() -> defaultLanguage()
-    booksFromNetwork.isEmpty() && allLanguages.isNotEmpty() -> emptyList()
-    booksFromNetwork.isNotEmpty() && allLanguages.isEmpty() ->
+    booksFromNetwork.isEmpty() -> {
+      if (allLanguages.isEmpty()) {
+        defaultLanguage()
+      } else {
+        emptyList()
+      }
+    }
+
+    allLanguages.isEmpty() ->
       fromLocalesWithNetworkMatchesSetActiveBy(
         networkLanguageCounts(booksFromNetwork),
         defaultLanguage()
       )
 
-    booksFromNetwork.isNotEmpty() && allLanguages.isNotEmpty() ->
+    else ->
       fromLocalesWithNetworkMatchesSetActiveBy(
         networkLanguageCounts(booksFromNetwork),
         allLanguages
       )
-
-    else -> throw RuntimeException("Impossible state")
   }
 
   private fun networkLanguageCounts(booksFromNetwork: List<Book>) =
