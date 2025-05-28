@@ -60,7 +60,7 @@ fun LanguageScreen(
   actionMenuItemList: List<ActionMenuItem>,
   onClearClick: () -> Unit,
   onAppBarValueChange: (String) -> Unit,
-  navigationIcon: @Composable() () -> Unit = {}
+  navigationIcon: @Composable() () -> Unit
 ) {
   val state by languageViewModel.state.collectAsState(State.Loading)
   val listState: LazyListState = rememberLazyListState()

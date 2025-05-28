@@ -255,7 +255,7 @@ abstract class CorePrefsFragment :
 
   override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
     if (key == SharedPreferenceUtil.PREF_DARK_MODE) {
-      sharedPreferenceUtil?.updateDarkMode()
+      sharedPreferenceUtil?.updateDarkMode(key)
     }
   }
 
@@ -508,8 +508,8 @@ abstract class CorePrefsFragment :
     const val PREF_CLEAR_ALL_NOTES = "pref_clear_all_notes"
     const val PREF_CREDITS = "pref_credits"
     const val PREF_PERMISSION = "pref_permissions"
-    private const val ZOOM_OFFSET = 2
-    private const val ZOOM_SCALE = 25
+    const val ZOOM_OFFSET = 2
+    const val ZOOM_SCALE = 25
     private const val INTERNAL_TEXT_ZOOM = "text_zoom"
     private const val PREF_EXPORT_BOOKMARK = "pref_export_bookmark"
     private const val PREF_IMPORT_BOOKMARK = "pref_import_bookmark"
