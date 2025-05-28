@@ -214,7 +214,6 @@ class AllProjectConfigurer {
       androidTestImplementation(Libs.navigation_testing)
       implementation(Libs.logging_interceptor)
       implementation(Libs.retrofit)
-      implementation(Libs.adapter_rxjava2)
       testImplementation(Libs.junit_jupiter)
       testImplementation(Libs.mockk)
       testImplementation(Libs.assertj_core)
@@ -228,13 +227,10 @@ class AllProjectConfigurer {
       implementation(Libs.core_ktx)
       implementation(Libs.fragment_ktx)
       implementation(Libs.collection_ktx)
-      implementation(Libs.rxandroid)
-      implementation(Libs.rxjava)
       implementation(Libs.preference_ktx)
       implementation(Libs.roomKtx)
       annotationProcessor(Libs.roomCompiler)
       implementation(Libs.roomRuntime)
-      implementation(Libs.roomRxjava2)
       kapt(Libs.roomCompiler)
       implementation(Libs.tracing)
       implementation(Libs.fetch)
@@ -246,15 +242,12 @@ class AllProjectConfigurer {
       implementation(Libs.COMPOSE_MATERIAL3)
       implementation(Libs.ANDROIDX_ACTIVITY_COMPOSE)
       implementation(Libs.COMPOSE_TOOLING_PREVIEW)
-      implementation(Libs.COMPOSE_RX_JAVA2)
       implementation(Libs.COMPOSE_LIVE_DATA)
 
       // Compose UI test implementation
       androidTestImplementation(Libs.COMPOSE_UI_TEST_JUNIT)
       debugImplementation(Libs.COMPOSE_UI_MANIFEST)
       debugImplementation(Libs.COMPOSE_TOOLING)
-
-      implementation(Libs.kotlinx_coroutines_rx3)
     }
   }
 }

@@ -103,7 +103,6 @@ This variable should only be set when building an APK. If you set this variable 
 - 🔄 [Retrofit](https://square.github.io/retrofit/) - Turns REST API into a Java interface.
 - 🌐 [OkHttp](https://github.com/square/okhttp) - HTTP client for Android and Java.
 - 🎭  [Mockito](https://github.com/mockito/mockito) - Mocking framework for unit tests.
-- ⚡ [RxJava](https://github.com/ReactiveX/RxJava) - Reactive Extensions for the JVM.
 - 🗃️ [ObjectBox](https://github.com/objectbox/objectbox-java) - Reactive NoSQL Database.
 - 🐒 [MockK](https://github.com/mockk/mockk) - Kotlin mocking library.
 - 🧪 [JUnit5](https://github.com/junit-team/junit5/) - Next-generation JUnit.

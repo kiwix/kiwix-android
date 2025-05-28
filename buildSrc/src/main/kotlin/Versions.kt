@@ -16,8 +16,6 @@ object Versions {
 
   const val org_jetbrains_kotlinx_kotlinx_coroutines: String = "1.10.1"
 
-  const val kotlinx_coroutines_rx3: String = "1.10.1"
-
   const val androidx_test_espresso: String = "3.6.1"
 
   const val tracing: String = "1.2.0"
@@ -86,8 +84,6 @@ object Versions {
 
   const val appcompat: String = "1.7.0"
 
-  const val rxandroid: String = "2.1.1"
-
   const val core_ktx: String = "1.15.0"
 
   const val androidx_activity: String = "1.9.3"
@@ -99,8 +95,6 @@ object Versions {
   const val multidex: String = "2.0.1"
 
   const val barista: String = "4.3.0"
-
-  const val rxjava: String = "2.2.21"
 
   const val webkit: String = "1.12.1"
 
