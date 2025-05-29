@@ -16,27 +16,37 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.settings
+package org.kiwix.kiwixmobile.core.settings.viewmodel
 
 import android.app.Application
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.ui.components.TWO
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
+
+const val ZOOM_OFFSET = 2
+const val ZOOM_SCALE = 25
 
 class SettingsViewModel @Inject constructor(
   private val context: Application,
   val sharedPreferenceUtil: SharedPreferenceUtil
 ) : ViewModel() {
+  private val _actions = MutableSharedFlow<Action>()
+  val actions: SharedFlow<Action> = _actions
   private val darkMode: StateFlow<DarkModeConfig.Mode> = sharedPreferenceUtil.darkModes()
-    .stateIn(viewModelScope, SharingStarted.Eagerly, sharedPreferenceUtil.darkMode)
+    .stateIn(viewModelScope, SharingStarted.Companion.Eagerly, sharedPreferenceUtil.darkMode)
 
   val darkModeLabel: StateFlow<String> = darkMode
     .map { mode ->
@@ -46,7 +56,11 @@ class SettingsViewModel @Inject constructor(
         DarkModeConfig.Mode.SYSTEM -> context.getString(R.string.auto)
       }
     }
-    .stateIn(viewModelScope, SharingStarted.Eagerly, getLabelFor(sharedPreferenceUtil.darkMode))
+    .stateIn(
+      viewModelScope,
+      SharingStarted.Companion.Eagerly,
+      getLabelFor(sharedPreferenceUtil.darkMode)
+    )
 
   var backToTopEnabled = mutableStateOf(sharedPreferenceUtil.prefBackToTop)
 
@@ -55,18 +69,26 @@ class SettingsViewModel @Inject constructor(
   val textZoom: StateFlow<Int> = sharedPreferenceUtil.textZooms
     .stateIn(
       scope = viewModelScope,
-      started = SharingStarted.Eagerly,
+      started = SharingStarted.Companion.Eagerly,
       initialValue = sharedPreferenceUtil.textZoom
     )
+
+  private val _textZoomPosition = MutableStateFlow(TWO)
+  val textZoomPosition: StateFlow<Int> = _textZoomPosition
 
   var newTabInBackground = mutableStateOf(sharedPreferenceUtil.prefNewTabBackground)
 
   val wifiOnly: StateFlow<Boolean> = sharedPreferenceUtil.prefWifiOnlys
     .stateIn(
       scope = viewModelScope,
-      started = SharingStarted.Eagerly,
+      started = SharingStarted.Companion.Eagerly,
       initialValue = sharedPreferenceUtil.prefWifiOnly
     )
+
+  fun sendAction(action: Action) =
+    viewModelScope.launch {
+      _actions.emit(action)
+    }
 
   private fun getLabelFor(mode: DarkModeConfig.Mode): String {
     return when (mode) {
@@ -85,8 +107,9 @@ class SettingsViewModel @Inject constructor(
     backToTopEnabled.value = enabled
   }
 
-  fun setTextZoom(zoom: Int) {
-    sharedPreferenceUtil.textZoom = zoom
+  fun setTextZoom(position: Int) {
+    _textZoomPosition.value = position
+    sharedPreferenceUtil.textZoom = (position + ZOOM_OFFSET) * ZOOM_SCALE
   }
 
   fun setNewTabInBackground(enabled: Boolean) {

@@ -36,6 +36,7 @@ import javax.inject.Inject
 
 const val ZERO = 0
 const val FIVE = 5
+const val SIX = 6
 const val HUNDERED = 100
 const val DEFAULT_INT_VALUE = -1
 

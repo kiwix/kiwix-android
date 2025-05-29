@@ -56,7 +56,6 @@ import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchResultGenerator
-import org.kiwix.kiwixmobile.core.settings.CoreSettingsFragment
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Singleton
@@ -118,7 +117,5 @@ interface CoreComponent {
   fun inject(errorActivity: ErrorActivity)
   fun inject(objectBoxToLibkiwixMigrator: ObjectBoxToLibkiwixMigrator)
   fun inject(objectBoxToRoomMigrator: ObjectBoxToRoomMigrator)
-
-  fun inject(settingsFragment: CoreSettingsFragment)
   fun coreServiceComponent(): CoreServiceComponent.Builder
 }

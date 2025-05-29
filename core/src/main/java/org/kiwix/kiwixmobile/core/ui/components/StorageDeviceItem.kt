@@ -16,7 +16,7 @@
  *
  */
 
-package org.kiwix.kiwixmobile.ui
+package org.kiwix.kiwixmobile.core.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -47,8 +47,6 @@ import org.kiwix.kiwixmobile.core.extensions.getUsedSpace
 import org.kiwix.kiwixmobile.core.extensions.storagePathAndTitle
 import org.kiwix.kiwixmobile.core.extensions.usedPercentage
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
-import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
-import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP

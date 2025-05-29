@@ -34,7 +34,7 @@ import org.kiwix.kiwixmobile.storage.STORAGE_SELECTION_DIALOG_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
-import org.kiwix.kiwixmobile.ui.STORAGE_DEVICE_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.ui.components.STORAGE_DEVICE_ITEM_TESTING_TAG
 
 fun initialDownload(func: InitialDownloadRobot.() -> Unit) =
   InitialDownloadRobot().applyWithViewHierarchyPrinting(func)

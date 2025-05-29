@@ -175,4 +175,9 @@ object ComposeDimens {
   val MINIMUM_HEIGHT_OF_SEARCH_ITEM = 64.dp
   val SEARCH_ITEM_TEXT_SIZE = 16.sp
   val LOAD_MORE_PROGRESS_BAR_SIZE = 40.dp
+
+  // Settings screen dimes
+  val STORAGE_LOADING_PROGRESS_BAR_SIZE = 40.dp
+  val CATEGORY_TITLE_TEXT_SIZE = 14.sp
+  val PREFERENCE_TITLE_TEXT_SIZE = 18.sp
 }
