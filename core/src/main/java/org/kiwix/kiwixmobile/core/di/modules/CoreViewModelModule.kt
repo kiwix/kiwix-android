@@ -29,6 +29,7 @@ import org.kiwix.kiwixmobile.core.page.bookmark.viewmodel.BookmarkViewModel
 import org.kiwix.kiwixmobile.core.page.history.viewmodel.HistoryViewModel
 import org.kiwix.kiwixmobile.core.page.notes.viewmodel.NotesViewModel
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
+import org.kiwix.kiwixmobile.core.settings.viewmodel.SettingsViewModel
 
 @Module
 abstract class CoreViewModelModule {
@@ -54,4 +55,9 @@ abstract class CoreViewModelModule {
   @IntoMap
   @ViewModelKey(BookmarkViewModel::class)
   abstract fun bindBookmarksViewModel(bookmarksViewModel: BookmarkViewModel): ViewModel
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(SettingsViewModel::class)
+  abstract fun bindSettingsViewModel(settingsViewModel: SettingsViewModel): ViewModel
 }

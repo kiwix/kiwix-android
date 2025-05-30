@@ -31,6 +31,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.BuildConfig
@@ -145,11 +147,9 @@ open class KiwixWebView @SuppressLint("SetJavaScriptEnabled") constructor(
     super.onAttachedToWindow()
     // cancel any previous running job.
     textZoomJob?.cancel()
-    textZoomJob = CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
-      sharedPreferenceUtil.textZooms.collect {
-        settings.textZoom = it
-      }
-    }
+    textZoomJob = sharedPreferenceUtil.textZooms
+      .onEach { settings.textZoom = it }
+      .launchIn(CoroutineScope(SupervisorJob() + Dispatchers.Main))
   }
 
   override fun onDetachedFromWindow() {

@@ -22,9 +22,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.View
-import androidx.lifecycle.lifecycleScope
 import eu.mhutti1.utils.storage.StorageDevice
-import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BaseActivity
 import org.kiwix.kiwixmobile.core.extensions.update
@@ -55,16 +53,17 @@ class KiwixSettingsFragment : CoreSettingsFragment() {
         return@setStorage
       }
       showHideProgressBarWhileFetchingStorageInfo(true)
-      lifecycleScope.launch {
-        storageDeviceList = (requireActivity() as KiwixMainActivity).getStorageDeviceList()
-        showHideProgressBarWhileFetchingStorageInfo(false)
-        setUpStoragePreference()
-      }
+      storageDeviceList = (requireActivity() as KiwixMainActivity).getStorageDeviceList()
+      showHideProgressBarWhileFetchingStorageInfo(false)
+      setUpStoragePreference()
     }
   }
 
   private fun setUpStoragePreference() {
-    settingsScreenState.value.update { copy(storageDeviceList = storageDeviceList) }
+    settingsScreenState.value.value =
+      settingsScreenState.value.value.copy(storageDeviceList = emptyList())
+    settingsScreenState.value.value =
+      settingsScreenState.value.value.copy(storageDeviceList = storageDeviceList)
   }
 
   /**

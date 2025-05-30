@@ -144,9 +144,6 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
         DialogHost(alertDialogShower as AlertDialogShower)
       }
     }
-    lifecycleScope.launch {
-      setStorage()
-    }
     settingsScreenState.value.update {
       copy(versionInformation = "$versionName Build: $versionCode")
     }
@@ -173,6 +170,9 @@ abstract class CoreSettingsFragment : SettingsContract.View, BaseFragment() {
         Action.OpenCredits -> openCredits()
       }
     }.launchIn(lifecycleScope)
+    lifecycleScope.launch {
+      setStorage()
+    }
   }
 
   override fun onCreateView(

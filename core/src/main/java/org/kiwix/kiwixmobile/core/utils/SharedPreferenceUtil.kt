@@ -50,9 +50,8 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   private val _prefStorages = MutableStateFlow("")
   val prefStorages
     get() = _prefStorages.asStateFlow().onStart { emit(prefStorage) }
-  private val _textZooms = MutableStateFlow(DEFAULT_ZOOM)
-  val textZooms
-    get() = _textZooms.asStateFlow().onStart { emit(textZoom) }
+  private val _textZooms = MutableStateFlow(textZoom)
+  val textZooms get() = _textZooms.asStateFlow()
   private val darkModes = MutableStateFlow(DarkModeConfig.Mode.SYSTEM)
   private val _prefWifiOnlys = MutableStateFlow(true)
   val prefWifiOnlys

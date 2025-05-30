@@ -34,8 +34,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.material3.AlertDialog
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -44,7 +45,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -69,11 +69,14 @@ import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ImportBookmarks
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.OnStorageItemClick
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.OpenCredits
 import org.kiwix.kiwixmobile.core.settings.viewmodel.SettingsViewModel
+import org.kiwix.kiwixmobile.core.settings.viewmodel.ZOOM_OFFSET
+import org.kiwix.kiwixmobile.core.settings.viewmodel.ZOOM_SCALE
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.StorageDeviceItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CATEGORY_TITLE_TEXT_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DIALOG_DEFAULT_PADDING_FOR_CONTENT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
@@ -83,6 +86,9 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.STORAGE_LOADING_PROGRESS_B
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.handleLocaleChange
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogConfirmButton
+import org.kiwix.kiwixmobile.core.utils.dialog.DialogTitle
+import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -201,7 +207,7 @@ private fun LanguageCategory(settingScreenState: SettingScreenState) {
     val selectedIndex = languageCodes.indexOf(selectedCode)
     SettingsCategory(stringResource(R.string.pref_language_title)) {
       ListPreference(
-        title = stringResource(R.string.pref_language_title),
+        titleId = R.string.pref_language_title,
         summary = languageDisplayNames.getOrNull(selectedIndex) ?: selectedCode,
         options = languageDisplayNames,
         selectedOption = languageDisplayNames[selectedIndex]
@@ -319,7 +325,7 @@ private fun DisplayCategory(settingsViewModel: SettingsViewModel) {
   val darkModeLabel by settingsViewModel.darkModeLabel.collectAsState()
   val backToTopEnabled by settingsViewModel.backToTopEnabled
   val textZoom by settingsViewModel.textZoom.collectAsState()
-  val textZoomPosition by settingsViewModel.textZoomPosition.collectAsState()
+  val textZoomPosition = (textZoom / ZOOM_SCALE) - ZOOM_OFFSET
   SettingsCategory(stringResource(R.string.pref_display_title)) {
     DarkModePreference(darkModeLabel = darkModeLabel, settingsViewModel = settingsViewModel)
     SwitchPreference(
@@ -352,7 +358,7 @@ fun DarkModePreference(
   }
 
   ListPreference(
-    title = stringResource(id = R.string.pref_dark_mode),
+    titleId = R.string.pref_dark_mode,
     summary = stringResource(id = R.string.pref_dark_mode_summary),
     options = entries,
     selectedOption = darkModeLabel,
@@ -443,9 +449,10 @@ private fun SeekBarPreference(
   }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListPreference(
-  title: String,
+  titleId: Int,
   summary: String,
   options: List<String>,
   selectedOption: String,
@@ -459,53 +466,68 @@ fun ListPreference(
       .fillMaxWidth()
       .clickable { showDialog = true }
   ) {
-    PreferenceItem(title, summary) { showDialog = true }
+    PreferenceItem(stringResource(titleId), summary) { showDialog = true }
   }
 
   if (showDialog) {
-    AlertDialog(
-      onDismissRequest = { showDialog = false },
-      title = {
-        Text(text = title)
-      },
-      text = {
-        Column {
-          options.forEach { option ->
-            Row(
-              verticalAlignment = Alignment.CenterVertically,
-              modifier = Modifier
-                .fillMaxWidth()
-                .selectable(
-                  selected = option == selected,
-                  onClick = {
-                    selected = option
-                    onOptionSelected(option)
-                    showDialog = false
-                  }
-                )
-                .padding(vertical = EIGHT_DP)
-            ) {
-              RadioButton(
-                selected = option == selected,
-                onClick = {
-                  selected = option
-                  onOptionSelected(option)
-                  showDialog = false
-                }
-              )
-              Text(text = option, style = MaterialTheme.typography.bodyLarge)
-            }
-          }
-        }
-      },
-      confirmButton = {
-        TextButton(onClick = {
+    KiwixBasicDialogFrame(
+      onDismissRequest = { showDialog = false }
+    ) {
+      DialogTitle(titleId)
+      ListOptions(
+        modifier = Modifier
+          .fillMaxWidth()
+          .weight(1f, fill = false)
+          .verticalScroll(rememberScrollState()),
+        options = options,
+        selected = selected,
+        onOptionSelected = {
+          selected = it
+          onOptionSelected(it)
           showDialog = false
-        }) {
-          Text(stringResource(R.string.cancel))
         }
+      )
+      Spacer(modifier = Modifier.height(DIALOG_DEFAULT_PADDING_FOR_CONTENT))
+      Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End
+      ) {
+        DialogConfirmButton(
+          confirmButtonText = stringResource(R.string.cancel),
+          dialogConfirmButtonClick = { showDialog = false },
+          null
+        )
       }
-    )
+    }
+  }
+}
+
+@Composable
+private fun ListOptions(
+  modifier: Modifier,
+  options: List<String>,
+  selected: String,
+  onOptionSelected: (String) -> Unit
+) {
+  Column(modifier = modifier) {
+    options.forEach { option ->
+      Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+          .fillMaxWidth()
+          .selectable(
+            selected = option == selected,
+            onClick = { onOptionSelected(option) }
+          )
+          .padding(vertical = EIGHT_DP)
+      ) {
+        RadioButton(
+          selected = option == selected,
+          onClick = { onOptionSelected(option) }
+        )
+        Text(text = option, style = MaterialTheme.typography.bodyLarge)
+      }
+    }
   }
 }
 

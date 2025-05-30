@@ -23,7 +23,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -32,7 +31,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.ui.components.TWO
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import javax.inject.Inject
 
@@ -73,9 +71,6 @@ class SettingsViewModel @Inject constructor(
       initialValue = sharedPreferenceUtil.textZoom
     )
 
-  private val _textZoomPosition = MutableStateFlow(TWO)
-  val textZoomPosition: StateFlow<Int> = _textZoomPosition
-
   var newTabInBackground = mutableStateOf(sharedPreferenceUtil.prefNewTabBackground)
 
   val wifiOnly: StateFlow<Boolean> = sharedPreferenceUtil.prefWifiOnlys
@@ -108,7 +103,6 @@ class SettingsViewModel @Inject constructor(
   }
 
   fun setTextZoom(position: Int) {
-    _textZoomPosition.value = position
     sharedPreferenceUtil.textZoom = (position + ZOOM_OFFSET) * ZOOM_SCALE
   }
 

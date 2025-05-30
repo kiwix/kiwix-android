@@ -24,7 +24,6 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import org.kiwix.kiwixmobile.core.di.ViewModelKey
 import org.kiwix.kiwixmobile.core.di.modules.CoreViewModelModule
-import org.kiwix.kiwixmobile.core.settings.viewmodel.SettingsViewModel
 import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
 import org.kiwix.kiwixmobile.zimManager.ZimManageViewModel
 
@@ -39,9 +38,4 @@ abstract class KiwixViewModelModule {
   @IntoMap
   @ViewModelKey(LanguageViewModel::class)
   abstract fun bindLanguageViewModel(languageViewModel: LanguageViewModel): ViewModel
-
-  @Binds
-  @IntoMap
-  @ViewModelKey(SettingsViewModel::class)
-  abstract fun bindSettingsViewModel(settingsViewModel: SettingsViewModel): ViewModel
 }
