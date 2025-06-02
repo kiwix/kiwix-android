@@ -18,32 +18,31 @@
 
 package org.kiwix.kiwixmobile.settings
 
-import androidx.annotation.StringRes
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.filter
+import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.recyclerview.widget.RecyclerView
-import androidx.test.espresso.Espresso.onData
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
-import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withResourceName
-import androidx.test.espresso.matcher.ViewMatchers.withSubstring
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performScrollToNode
 import applyWithViewHierarchyPrinting
-import org.hamcrest.Matchers
-import org.hamcrest.Matchers.anything
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.Findable.StringId.TextId
-import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.settings.DIALOG_PREFERENCE_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.settings.PREFERENCE_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.settings.SEEKBAR_PREFERENCE_TESTING_TAG
+import org.kiwix.kiwixmobile.core.settings.SETTINGS_LIST_TESTING_TAG
+import org.kiwix.kiwixmobile.core.settings.SWITCH_PREFERENCE_TESTING_TAG
+import org.kiwix.kiwixmobile.core.ui.components.STORAGE_DEVICE_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
-import org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
+import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
 /**
  * Authored by Ayush Shrivastava on 25/8/20
@@ -53,85 +52,78 @@ fun settingsRobo(func: SettingsRobot.() -> Unit) =
   SettingsRobot().applyWithViewHierarchyPrinting(func)
 
 class SettingsRobot : BaseRobot() {
-  fun assertMenuSettingsDisplayed() {
-    isVisible(TextId(R.string.menu_settings))
+  fun assertMenuSettingsDisplayed(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.menu_settings))
+    }
   }
 
-  private fun clickRecyclerViewItems(
-    @StringRes vararg stringIds: Int
-  ) {
-    onView(
-      withResourceName("recycler_view")
-    ).perform(
-      actionOnItem<RecyclerView.ViewHolder>(
-        hasDescendant(Matchers.anyOf(*stringIds.matchers())),
-        ViewActions.click()
-      )
-    )
+  fun toggleBackToTopPref(composeTestRule: ComposeContentTestRule) {
+    clickSwitchPreference(context.getString(R.string.pref_back_to_top), composeTestRule)
   }
 
-  private fun clickRecyclerViewItemsContainingText(
-    @StringRes vararg stringIds: Int
-  ) {
-    onView(
-      withResourceName("recycler_view")
-    ).perform(
-      actionOnItem<RecyclerView.ViewHolder>(
-        hasDescendant(Matchers.anyOf(*stringIds.subStringMatchers())),
-        ViewActions.click()
-      )
-    )
-  }
-
-  fun toggleBackToTopPref() {
-    clickRecyclerViewItems(R.string.pref_back_to_top)
-  }
-
-  fun toggleOpenNewTabInBackground() {
-    clickRecyclerViewItems(R.string.pref_newtab_background_title)
-  }
-
-  fun toggleExternalLinkWarningPref() {
-    clickRecyclerViewItems(R.string.pref_external_link_popup_title)
-  }
-
-  fun toggleWifiDownloadsOnlyPref() {
-    clickRecyclerViewItems(R.string.pref_wifi_only)
-  }
-
-  fun clickLanguagePreference() {
-    testFlakyView({
-      onView(
-        withResourceName("recycler_view")
-      ).perform(
-        actionOnItem<RecyclerView.ViewHolder>(
-          hasDescendant(
-            Matchers.anyOf(
-              withText("shqip"),
-              withText("English"),
-              withText(R.string.device_default)
-            )
-          ),
-          ViewActions.click()
+  private fun clickSwitchPreference(title: String, composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      composeTestRule.onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
+        .performScrollToNode(
+          hasTestTag(SWITCH_PREFERENCE_TESTING_TAG) and hasContentDescription(title)
         )
-      )
-    })
+      composeTestRule
+        .onAllNodesWithTag(SWITCH_PREFERENCE_TESTING_TAG, true)
+        .filter(hasContentDescription(title))
+        .onFirst()
+        .performScrollTo()
+        .performClick()
+    }
   }
 
-  fun assertLanguagePrefDialogDisplayed() {
-    isVisible(TextId(R.string.pref_language_title))
+  fun toggleOpenNewTabInBackground(composeTestRule: ComposeContentTestRule) {
+    clickSwitchPreference(context.getString(R.string.pref_newtab_background_title), composeTestRule)
   }
 
-  fun clickInternalStoragePreference() {
-    clickRecyclerViewItemsContainingText(R.string.internal_storage)
+  fun toggleExternalLinkWarningPref(composeTestRule: ComposeContentTestRule) {
+    clickSwitchPreference(
+      context.getString(R.string.pref_external_link_popup_title),
+      composeTestRule
+    )
   }
 
-  fun clickExternalStoragePreference() {
-    clickRecyclerViewItemsContainingText(R.string.external_storage)
+  fun toggleWifiDownloadsOnlyPref(composeTestRule: ComposeContentTestRule) {
+    clickSwitchPreference(context.getString(R.string.pref_wifi_only), composeTestRule)
   }
 
-  fun clickClearHistoryPreference() {
-    clickRecyclerViewItems(R.string.pref_clear_all_history_title)
+  fun clickLanguagePreference(composeTestRule: ComposeContentTestRule) {
+    clickPreferenceItem(context.getString(R.string.pref_language_title), composeTestRule)
+  }
+
+  fun assertLanguagePrefDialogDisplayed(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.pref_language_title))
+    }
+  }
+
+  fun clickInternalStoragePreference(composeTestRule: ComposeContentTestRule) {
+    clickOnStorageItem(0, composeTestRule)
+  }
+
+  fun clickExternalStoragePreference(composeTestRule: ComposeContentTestRule) {
+    clickOnStorageItem(1, composeTestRule)
+  }
+
+  private fun clickOnStorageItem(position: Int, composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position].performClick()
+    }
+  }
+
+  fun clickClearHistoryPreference(composeTestRule: ComposeContentTestRule) {
+    clickPreferenceItem(context.getString(R.string.pref_clear_all_history_title), composeTestRule)
   }
 
   fun assertHistoryDialogDisplayed(composeTestRule: ComposeContentTestRule) {
@@ -142,8 +134,20 @@ class SettingsRobot : BaseRobot() {
     }
   }
 
-  fun clickExportBookmarkPreference() {
-    clickRecyclerViewItems(R.string.pref_export_bookmark_title)
+  fun clickClearNotesPreference(composeTestRule: ComposeContentTestRule) {
+    clickPreferenceItem(context.getString(R.string.pref_clear_all_notes_title), composeTestRule)
+  }
+
+  fun assertNotesDialogDisplayed(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.delete_notes_confirmation_msg))
+    }
+  }
+
+  fun clickExportBookmarkPreference(composeTestRule: ComposeContentTestRule) {
+    clickPreferenceItem(context.getString(R.string.pref_export_bookmark_title), composeTestRule)
   }
 
   fun assertExportBookmarkDialogDisplayed(composeTestRule: ComposeContentTestRule) {
@@ -154,8 +158,8 @@ class SettingsRobot : BaseRobot() {
     }
   }
 
-  fun clickOnImportBookmarkPreference() {
-    clickRecyclerViewItems(R.string.pref_import_bookmark_title)
+  fun clickOnImportBookmarkPreference(composeTestRule: ComposeContentTestRule) {
+    clickPreferenceItem(context.getString(R.string.pref_import_bookmark_title), composeTestRule)
   }
 
   fun assertImportBookmarkDialogDisplayed(composeTestRule: ComposeContentTestRule) {
@@ -166,18 +170,36 @@ class SettingsRobot : BaseRobot() {
     }
   }
 
-  fun clickNightModePreference() {
-    clickRecyclerViewItems(R.string.pref_dark_mode)
+  fun clickNightModePreference(composeTestRule: ComposeContentTestRule) {
+    clickPreferenceItem(context.getString(R.string.pref_dark_mode), composeTestRule)
   }
 
-  fun assertNightModeDialogDisplayed() {
-    for (nightModeString in nightModeStrings()) {
-      isVisible(Text(nightModeString))
+  private fun clickPreferenceItem(title: String, composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      composeTestRule.onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
+        .performScrollToNode(
+          hasTestTag(PREFERENCE_ITEM_TESTING_TAG) and hasContentDescription(title)
+        )
+      composeTestRule
+        .onAllNodesWithTag(PREFERENCE_ITEM_TESTING_TAG, true)
+        .filter(hasContentDescription(title))
+        .onFirst()
+        .performScrollTo()
+        .performClick()
     }
   }
 
-  fun clickCredits() {
-    clickRecyclerViewItems(R.string.pref_credits_title)
+  fun assertNightModeDialogDisplayed(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntilTimeout()
+      onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
+        .assertTextEquals(context.getString(R.string.pref_dark_mode))
+    }
+  }
+
+  fun clickCredits(composeTestRule: ComposeContentTestRule) {
+    clickPreferenceItem(context.getString(R.string.pref_credits), composeTestRule)
   }
 
   fun assertContributorsDialogDisplayed(composeTestRule: ComposeContentTestRule) {
@@ -191,40 +213,41 @@ class SettingsRobot : BaseRobot() {
     })
   }
 
-  fun assertZoomTextViewPresent() {
-    clickRecyclerViewItems(R.string.pref_text_zoom_title)
+  fun assertZoomTextViewPresent(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      composeTestRule.onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
+        .performScrollToNode(
+          hasTestTag(SEEKBAR_PREFERENCE_TESTING_TAG) and hasContentDescription(context.getString(R.string.pref_text_zoom_title))
+        )
+      composeTestRule
+        .onAllNodesWithTag(SEEKBAR_PREFERENCE_TESTING_TAG)
+        .filter(hasContentDescription(context.getString(R.string.pref_text_zoom_title)))
+        .onFirst()
+        .performScrollTo()
+        .performClick()
+    }
   }
 
-  fun assertVersionTextViewPresent() {
-    clickRecyclerViewItems(R.string.pref_info_version)
+  fun assertVersionTextViewPresent(composeTestRule: ComposeContentTestRule) {
+    clickPreferenceItem(context.getString(R.string.pref_info_version), composeTestRule)
   }
 
-  fun selectAlbanianLanguage() {
-    testFlakyView({
-      onData(anything()).inAdapterView(withId(androidx.appcompat.R.id.select_dialog_listview))
-        .atPosition(2)
-        .perform(click())
-    })
+  fun selectAlbanianLanguage(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onAllNodesWithTag(DIALOG_PREFERENCE_ITEM_TESTING_TAG, true)[2].performClick()
+    }
   }
 
-  fun selectDeviceDefaultLanguage() {
-    testFlakyView({
-      onData(anything()).inAdapterView(withId(androidx.appcompat.R.id.select_dialog_listview))
-        .atPosition(0)
-        .perform(click())
-    })
+  fun selectDeviceDefaultLanguage(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onAllNodesWithTag(DIALOG_PREFERENCE_ITEM_TESTING_TAG, true)[0].performClick()
+    }
   }
 
   fun dismissDialog() {
     pressBack()
   }
-
-  private fun nightModeStrings(): Array<String> =
-    context.resources.getStringArray(R.array.pref_dark_modes_entries)
-
-  private fun IntArray.matchers() = map(::withText).toTypedArray()
-  private fun IntArray.subStringMatchers() =
-    map {
-      withSubstring(getResourceString(it))
-    }.toTypedArray()
 }

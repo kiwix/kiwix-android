@@ -43,7 +43,6 @@ import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.nav.destination.library.onlineLibrary
-import org.kiwix.kiwixmobile.settings.SettingsRobot
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
@@ -134,7 +133,7 @@ class TopLevelDestinationTest : BaseActivityTest() {
         assertDeleteHistoryDialogDisplayed(composeTestRule)
       }
       clickHostBooksOnSideNav { assertMenuWifiHotspotDisplayed(composeTestRule) }
-      clickSettingsOnSideNav(SettingsRobot::assertMenuSettingsDisplayed)
+      clickSettingsOnSideNav { assertMenuSettingsDisplayed(composeTestRule) }
       clickHelpOnSideNav { assertToolbarDisplayed(composeTestRule) }
       clickSupportKiwixOnSideNav()
       pressBack()

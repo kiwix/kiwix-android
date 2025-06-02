@@ -50,9 +50,8 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   private val _prefStorages = MutableStateFlow("")
   val prefStorages
     get() = _prefStorages.asStateFlow().onStart { emit(prefStorage) }
-  private val _textZooms = MutableStateFlow(DEFAULT_ZOOM)
-  val textZooms
-    get() = _textZooms.asStateFlow().onStart { emit(textZoom) }
+  private val _textZooms = MutableStateFlow(textZoom)
+  val textZooms get() = _textZooms.asStateFlow()
   private val darkModes = MutableStateFlow(DarkModeConfig.Mode.SYSTEM)
   private val _prefWifiOnlys = MutableStateFlow(true)
   val prefWifiOnlys
@@ -76,11 +75,17 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
   val prefFullScreen: Boolean
     get() = sharedPreferences.getBoolean(PREF_FULLSCREEN, false)
 
-  val prefBackToTop: Boolean
+  var prefBackToTop: Boolean
     get() = sharedPreferences.getBoolean(PREF_BACK_TO_TOP, false)
+    set(backToTop) {
+      sharedPreferences.edit { putBoolean(PREF_BACK_TO_TOP, backToTop) }
+    }
 
-  val prefNewTabBackground: Boolean
+  var prefNewTabBackground: Boolean
     get() = sharedPreferences.getBoolean(PREF_NEW_TAB_BACKGROUND, false)
+    set(newTabInBackground) {
+      sharedPreferences.edit { putBoolean(PREF_NEW_TAB_BACKGROUND, newTabInBackground) }
+    }
 
   val prefExternalLinkPopup: Boolean
     get() = sharedPreferences.getBoolean(PREF_EXTERNAL_LINK_POPUP, true)
@@ -231,7 +236,10 @@ class SharedPreferenceUtil @Inject constructor(val context: Context) {
 
   fun darkModes(): Flow<DarkModeConfig.Mode> = darkModes.onStart { emit(darkMode) }
 
-  fun updateDarkMode() = darkModes.tryEmit(darkMode)
+  fun updateDarkMode(selectedMode: String) {
+    sharedPreferences.edit { putString(PREF_DARK_MODE, selectedMode) }
+    darkModes.tryEmit(darkMode)
+  }
 
   var manageExternalFilesPermissionDialog: Boolean
     get() = sharedPreferences.getBoolean(PREF_MANAGE_EXTERNAL_FILES, true)

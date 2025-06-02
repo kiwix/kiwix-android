@@ -58,7 +58,7 @@ class DarkModeConfig @Inject constructor(
 
     companion object {
       @JvmStatic fun from(darkMode: Int) =
-        values().firstOrNull { it.value == darkMode }
+        Mode.entries.firstOrNull { it.value == darkMode }
           ?: throw RuntimeException("Invalid dark mode $darkMode")
     }
   }
@@ -72,7 +72,7 @@ class DarkModeConfig @Inject constructor(
     companion object {
       @JvmStatic
       fun from(uiMode: Int) =
-        values().firstOrNull { it.value == uiMode }
+        UiMode.entries.firstOrNull { it.value == uiMode }
           ?: throw RuntimeException("Invalid dark mode $uiMode")
     }
   }

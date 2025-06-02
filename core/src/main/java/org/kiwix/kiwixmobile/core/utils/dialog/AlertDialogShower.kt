@@ -26,6 +26,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -104,41 +105,53 @@ fun DialogHost(alertDialogShower: AlertDialogShower) {
   val dialogData = alertDialogShower.dialogState.value
 
   dialogData?.let { (dialog, clickListeners, uri) ->
-    KiwixDialogTheme {
-      BasicAlertDialog(
-        onDismissRequest = {
-          if (dialog.cancelable) {
-            alertDialogShower.dismiss()
-          }
-        },
-        properties = DialogProperties(usePlatformDefaultWidth = false),
-        modifier = Modifier.padding(DIALOG_PADDING)
+    KiwixBasicDialogFrame(
+      onDismissRequest = { alertDialogShower.dismiss() },
+      cancelable = dialog.cancelable,
+    ) {
+      Row(
+        verticalAlignment = Alignment.CenterVertically
       ) {
-        Surface(
+        DialogIcon(dialog)
+        DialogTitle(dialog.title)
+      }
+      DialogMessage(dialog)
+      ShowUri(uri)
+      ShowCustomComposeView(dialog)
+      ShowDialogButtons(dialog, clickListeners, alertDialogShower)
+    }
+  }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun KiwixBasicDialogFrame(
+  onDismissRequest: () -> Unit,
+  cancelable: Boolean = true,
+  content: @Composable ColumnScope.() -> Unit
+) {
+  KiwixDialogTheme {
+    BasicAlertDialog(
+      onDismissRequest = {
+        if (cancelable) onDismissRequest()
+      },
+      properties = DialogProperties(usePlatformDefaultWidth = false),
+      modifier = Modifier.padding(DIALOG_PADDING)
+    ) {
+      Surface(
+        modifier = Modifier
+          .wrapContentSize()
+          .wrapContentHeight(),
+        shape = MaterialTheme.shapes.extraSmall,
+        tonalElevation = AlertDialogDefaults.TonalElevation,
+        color = MaterialTheme.colorScheme.background
+      ) {
+        Column(
           modifier = Modifier
-            .wrapContentSize()
-            .wrapContentHeight(),
-          shape = MaterialTheme.shapes.extraSmall,
-          tonalElevation = AlertDialogDefaults.TonalElevation,
-          color = MaterialTheme.colorScheme.background
-        ) {
-          Column(
-            modifier = Modifier
-              .padding(horizontal = DIALOG_DEFAULT_PADDING_FOR_CONTENT)
-              .padding(top = DIALOG_DEFAULT_PADDING_FOR_CONTENT)
-          ) {
-            Row(
-              verticalAlignment = Alignment.CenterVertically
-            ) {
-              DialogIcon(dialog)
-              DialogTitle(dialog)
-            }
-            DialogMessage(dialog)
-            ShowUri(uri)
-            ShowCustomComposeView(dialog)
-            ShowDialogButtons(dialog, clickListeners, alertDialogShower)
-          }
-        }
+            .padding(horizontal = DIALOG_DEFAULT_PADDING_FOR_CONTENT)
+            .padding(top = DIALOG_DEFAULT_PADDING_FOR_CONTENT),
+          content = content
+        )
       }
     }
   }
@@ -175,16 +188,15 @@ fun DialogIcon(dialog: KiwixDialog) {
 }
 
 @Composable
-private fun DialogConfirmButton(
-  dialog: KiwixDialog,
+fun DialogConfirmButton(
+  confirmButtonText: String,
   dialogConfirmButtonClick: (() -> Unit)?,
-  alertDialogShower: AlertDialogShower
+  alertDialogShower: AlertDialogShower?
 ) {
-  val confirmButtonText = stringResource(id = dialog.confirmButtonText)
   if (confirmButtonText.isNotEmpty()) {
     TextButton(
       onClick = {
-        alertDialogShower.dismiss()
+        alertDialogShower?.dismiss()
         dialogConfirmButtonClick?.invoke()
       },
       modifier = Modifier.semantics { testTag = ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG },
@@ -285,13 +297,17 @@ private fun ShowDialogButtons(
     )
     Spacer(modifier = Modifier.weight(1f))
     DialogDismissButton(dialog, clickListeners.getOrNull(1), alertDialogShower)
-    DialogConfirmButton(dialog, clickListeners.getOrNull(0), alertDialogShower)
+    DialogConfirmButton(
+      stringResource(dialog.confirmButtonText),
+      clickListeners.getOrNull(0),
+      alertDialogShower
+    )
   }
 }
 
 @Composable
-private fun DialogTitle(dialog: KiwixDialog) {
-  dialog.title?.let {
+fun DialogTitle(title: Int?) {
+  title?.let {
     Text(
       text = stringResource(id = it),
       style = MaterialTheme.typography.titleSmall.copy(

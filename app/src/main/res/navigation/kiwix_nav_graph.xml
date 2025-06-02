@@ -127,8 +127,7 @@
   <fragment
     android:id="@+id/kiwixSettingsFragment"
     android:name="org.kiwix.kiwixmobile.settings.KiwixSettingsFragment"
-    android:label="KiwixSettingsFragment"
-    tools:layout="@layout/settings" />
+    android:label="KiwixSettingsFragment" />
   <fragment
     android:id="@+id/searchFragment"
     android:name="org.kiwix.kiwixmobile.core.search.SearchFragment"
@@ -141,8 +140,7 @@
   <fragment
     android:id="@+id/localFileTransferFragment"
     android:name="org.kiwix.kiwixmobile.localFileTransfer.LocalFileTransferFragment"
-    android:label="LocalFileTransferFragment"
-    tools:layout="@layout/fragment_local_file_transfer">
+    android:label="LocalFileTransferFragment">
     <argument
       android:name="uris"
       android:defaultValue="@null"

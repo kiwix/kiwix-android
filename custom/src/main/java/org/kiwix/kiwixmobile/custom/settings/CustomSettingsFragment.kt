@@ -18,14 +18,45 @@
 
 package org.kiwix.kiwixmobile.custom.settings
 
+import android.os.Bundle
+import android.view.View
 import org.kiwix.kiwixmobile.core.base.BaseActivity
+import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.settings.CoreSettingsFragment
+import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.main.CustomMainActivity
 
 class CustomSettingsFragment : CoreSettingsFragment() {
-  override fun createPreferenceFragment() = CustomPrefsFragment()
+  override suspend fun setStorage() {
+    settingsScreenState.value.update { copy(shouldShowStorageCategory = false) }
+  }
 
   override fun inject(baseActivity: BaseActivity) {
     (baseActivity as CustomMainActivity).cachedComponent.inject(this)
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    if (BuildConfig.DISABLE_EXTERNAL_LINK) {
+      hideExternalLinksPreference()
+    }
+    settingsScreenState.value.update {
+      copy(
+        shouldShowPrefWifiOnlyPreference = false,
+        shouldShowLanguageCategory = BuildConfig.ENFORCED_LANG.isEmpty(),
+        permissionItem = false to ""
+      )
+    }
+  }
+
+  /**
+   * If "external links" are disabled in a custom app,
+   * this function hides the external links preference from settings
+   * and sets the shared preference to not show the external link popup
+   * when opening external links.
+   */
+  private fun hideExternalLinksPreference() {
+    settingsScreenState.value.update { copy(shouldShowExternalLinkPreference = false) }
+    sharedPreferenceUtil?.putPrefExternalLinkPopup(false)
   }
 }

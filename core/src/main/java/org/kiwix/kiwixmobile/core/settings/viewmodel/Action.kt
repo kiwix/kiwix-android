@@ -1,6 +1,6 @@
 /*
  * Kiwix Android
- * Copyright (c) 2019 Kiwix <android.kiwix.org>
+ * Copyright (c) 2025 Kiwix <android.kiwix.org>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,6 +16,16 @@
  *
  */
 
-package org.kiwix.kiwixmobile.core.search
+package org.kiwix.kiwixmobile.core.settings.viewmodel
 
-data class SearchSuggestion(val title: String, val url: String)
+import eu.mhutti1.utils.storage.StorageDevice
+
+sealed class Action {
+  object ClearAllHistory : Action()
+  object ClearAllNotes : Action()
+  object OpenCredits : Action()
+  object ExportBookmarks : Action()
+  object ImportBookmarks : Action()
+  object AllowPermission : Action()
+  data class OnStorageItemClick(val storageDevice: StorageDevice) : Action()
+}
