@@ -193,12 +193,12 @@ class DownloadTest : BaseActivityTest() {
         // change the application language
         topLevel {
           clickSettingsOnSideNav {
-            clickLanguagePreference()
-            assertLanguagePrefDialogDisplayed()
-            selectDeviceDefaultLanguage()
-            clickLanguagePreference()
-            assertLanguagePrefDialogDisplayed()
-            selectAlbanianLanguage()
+            clickLanguagePreference(composeTestRule)
+            assertLanguagePrefDialogDisplayed(composeTestRule)
+            selectDeviceDefaultLanguage(composeTestRule)
+            clickLanguagePreference(composeTestRule)
+            assertLanguagePrefDialogDisplayed(composeTestRule)
+            selectAlbanianLanguage(composeTestRule)
           }
         }
         clickDownloadOnBottomNav()
@@ -214,11 +214,11 @@ class DownloadTest : BaseActivityTest() {
         // select the default device language to perform other test cases.
         topLevel {
           clickSettingsOnSideNav {
-            clickLanguagePreference()
-            assertLanguagePrefDialogDisplayed()
-            selectDeviceDefaultLanguage()
+            clickLanguagePreference(composeTestRule)
+            assertLanguagePrefDialogDisplayed(composeTestRule)
+            selectDeviceDefaultLanguage(composeTestRule)
             // check if the device default language is selected or not.
-            clickLanguagePreference()
+            clickLanguagePreference(composeTestRule)
             // close the language dialog.
             pressBack()
           }

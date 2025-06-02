@@ -50,7 +50,6 @@ import org.kiwix.kiwixmobile.main.ACTION_GET_CONTENT
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.main.topLevel
 import org.kiwix.kiwixmobile.nav.destination.library.onlineLibrary
-import org.kiwix.kiwixmobile.settings.SettingsRobot
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.closeSystemDialogs
 import org.kiwix.kiwixmobile.testutils.TestUtils.isSystemUINotRespondingDialogVisible
@@ -151,7 +150,7 @@ class GetContentShortcutTest {
         assertDeleteHistoryDialogDisplayed(composeTestRule)
       }
       clickHostBooksOnSideNav { assertMenuWifiHotspotDisplayed(composeTestRule) }
-      clickSettingsOnSideNav(SettingsRobot::assertMenuSettingsDisplayed)
+      clickSettingsOnSideNav { assertMenuSettingsDisplayed(composeTestRule) }
       clickHelpOnSideNav { HelpRobot().assertToolbarDisplayed(composeTestRule) }
       clickSupportKiwixOnSideNav()
       pressBack()

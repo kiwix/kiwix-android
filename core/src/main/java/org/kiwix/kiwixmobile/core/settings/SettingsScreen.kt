@@ -55,6 +55,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.W400
 import org.kiwix.kiwixmobile.core.R
@@ -92,6 +95,12 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
 import java.util.Locale
 import kotlin.math.roundToInt
 
+const val PREFERENCE_ITEM_TESTING_TAG = "preferenceItemTestingTag"
+const val SWITCH_PREFERENCE_TESTING_TAG = "switchPreferenceTestingTag"
+const val SEEKBAR_PREFERENCE_TESTING_TAG = "seekBarPreferenceTestingTag"
+const val DIALOG_PREFERENCE_ITEM_TESTING_TAG = "dialogPreferenceItemTestingTag"
+const val SETTINGS_LIST_TESTING_TAG = "settingsListTestingTag"
+
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("ComposableLambdaParameterNaming")
 @Composable
@@ -113,6 +122,9 @@ fun SettingsScreen(
         modifier = Modifier
           .fillMaxSize()
           .padding(innerPadding)
+          .semantics {
+            testTag = SETTINGS_LIST_TESTING_TAG
+          }
       ) {
         item { DisplayCategory(settingsViewModel) }
         item { ExtrasCategory(settingsViewModel, settingScreenState) }
@@ -403,6 +415,11 @@ private fun SwitchPreference(
     modifier = Modifier
       .fillMaxWidth()
       .padding(vertical = TWELVE_DP)
+      .clickable(onClick = { onCheckedChange.invoke(!checked) })
+      .semantics {
+        testTag = SWITCH_PREFERENCE_TESTING_TAG
+        contentDescription = title
+      }
   ) {
     Row(
       modifier = Modifier.fillMaxWidth(),
@@ -434,6 +451,10 @@ private fun SeekBarPreference(
     modifier = Modifier
       .fillMaxWidth()
       .padding(vertical = TWELVE_DP)
+      .semantics {
+        testTag = SEEKBAR_PREFERENCE_TESTING_TAG
+        contentDescription = title
+      }
   ) {
     PreferenceTitleText(title)
     PreferenceSummaryText(summary)
@@ -520,6 +541,10 @@ private fun ListOptions(
             onClick = { onOptionSelected(option) }
           )
           .padding(vertical = EIGHT_DP)
+          .semantics {
+            testTag = DIALOG_PREFERENCE_ITEM_TESTING_TAG
+            contentDescription = option
+          }
       ) {
         RadioButton(
           selected = option == selected,
@@ -538,6 +563,10 @@ private fun PreferenceItem(title: String, summary: String, onClick: () -> Unit) 
       .fillMaxWidth()
       .clickable(onClick = onClick)
       .padding(vertical = TWELVE_DP)
+      .semantics {
+        testTag = PREFERENCE_ITEM_TESTING_TAG
+        contentDescription = title
+      }
   ) {
     PreferenceTitleText(title)
     PreferenceSummaryText(summary)
