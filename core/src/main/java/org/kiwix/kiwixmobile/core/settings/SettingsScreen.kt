@@ -23,6 +23,7 @@ import android.content.Context
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -30,6 +31,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -100,6 +102,8 @@ const val SWITCH_PREFERENCE_TESTING_TAG = "switchPreferenceTestingTag"
 const val SEEKBAR_PREFERENCE_TESTING_TAG = "seekBarPreferenceTestingTag"
 const val DIALOG_PREFERENCE_ITEM_TESTING_TAG = "dialogPreferenceItemTestingTag"
 const val SETTINGS_LIST_TESTING_TAG = "settingsListTestingTag"
+
+private const val DIALOG_LIST_MAX_HEIGHT_RATIO = 0.8f
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("ComposableLambdaParameterNaming")
@@ -495,19 +499,22 @@ fun ListPreference(
       onDismissRequest = { showDialog = false }
     ) {
       DialogTitle(titleId)
-      ListOptions(
-        modifier = Modifier
-          .fillMaxWidth()
-          .weight(1f, fill = false)
-          .verticalScroll(rememberScrollState()),
-        options = options,
-        selected = selected,
-        onOptionSelected = {
-          selected = it
-          onOptionSelected(it)
-          showDialog = false
-        }
-      )
+      BoxWithConstraints {
+        val listMaxHeight = this.maxHeight * DIALOG_LIST_MAX_HEIGHT_RATIO
+        ListOptions(
+          modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(max = listMaxHeight)
+            .verticalScroll(rememberScrollState()),
+          options = options,
+          selected = selected,
+          onOptionSelected = {
+            selected = it
+            onOptionSelected(it)
+            showDialog = false
+          }
+        )
+      }
       Spacer(modifier = Modifier.height(DIALOG_DEFAULT_PADDING_FOR_CONTENT))
       Row(
         modifier = Modifier.fillMaxWidth(),
