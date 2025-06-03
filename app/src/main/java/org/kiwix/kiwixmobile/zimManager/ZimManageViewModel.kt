@@ -70,12 +70,12 @@ import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.LIBRARY_NETWORK_PATH
+import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.OPDS_LIBRARY_NETWORK_PATH
 import org.kiwix.kiwixmobile.core.data.remote.ProgressResponseBody
 import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
 import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
-import org.kiwix.kiwixmobile.core.di.modules.KIWIX_DOWNLOAD_URL
+import org.kiwix.kiwixmobile.core.di.modules.KIWIX_OPDS_LIBRARY_URL
 import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DEFAULT_INT_VALUE
@@ -83,7 +83,6 @@ import org.kiwix.kiwixmobile.core.downloader.downloadManager.FIVE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.core.extensions.calculateSearchMatches
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.ui.components.ONE
@@ -97,6 +96,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.CONNECTED
+import org.kiwix.kiwixmobile.core.zim_manager.OnlineLibraryManager
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode.MULTI
@@ -121,7 +121,6 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.DividerItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.LibraryDownloadItem
-import java.util.LinkedList
 import java.util.Locale
 import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
@@ -145,7 +144,8 @@ class ZimManageViewModel @Inject constructor(
   private val defaultLanguageProvider: DefaultLanguageProvider,
   private val dataSource: DataSource,
   private val connectivityManager: ConnectivityManager,
-  private val sharedPreferenceUtil: SharedPreferenceUtil
+  private val sharedPreferenceUtil: SharedPreferenceUtil,
+  private val onlineLibraryManager: OnlineLibraryManager
 ) : ViewModel() {
   sealed class FileSelectActions {
     data class RequestNavigateTo(val bookOnDisk: BookOnDisk) : FileSelectActions()
@@ -168,7 +168,7 @@ class ZimManageViewModel @Inject constructor(
   val onlineLibraryDownloading = MutableStateFlow(false)
   val shouldShowWifiOnlyDialog = MutableLiveData<Boolean>()
   val networkStates = MutableLiveData<NetworkState>()
-  val networkLibrary = MutableSharedFlow<LibraryNetworkEntity>(replay = 0)
+  val networkLibrary = MutableSharedFlow<List<org.kiwix.libkiwix.Book>>(replay = 0)
   val requestFileSystemCheck = MutableSharedFlow<Unit>(replay = 0)
   val fileSelectActions = MutableSharedFlow<FileSelectActions>()
   private val requestDownloadLibrary = MutableSharedFlow<Unit>(
@@ -238,7 +238,10 @@ class ZimManageViewModel @Inject constructor(
           } ?: originalResponse
         }
         .build()
-    return KiwixService.ServiceCreator.newHackListService(customOkHttpClient, KIWIX_DOWNLOAD_URL)
+    return KiwixService.ServiceCreator.newHackListService(
+      customOkHttpClient,
+      KIWIX_OPDS_LIBRARY_URL
+    )
       .also {
         kiwixService = it
       }
@@ -249,7 +252,7 @@ class ZimManageViewModel @Inject constructor(
   private fun getContentLengthOfLibraryXmlFile(): Long {
     val headRequest =
       Request.Builder()
-        .url("$KIWIX_DOWNLOAD_URL$LIBRARY_NETWORK_PATH")
+        .url("$KIWIX_OPDS_LIBRARY_URL$OPDS_LIBRARY_NETWORK_PATH")
         .head()
         .header("Accept-Encoding", "identity")
         .build()
@@ -388,7 +391,7 @@ class ZimManageViewModel @Inject constructor(
 
   @OptIn(ExperimentalCoroutinesApi::class)
   private fun requestsAndConnectivityChangesToLibraryRequests(
-    library: MutableSharedFlow<LibraryNetworkEntity>,
+    library: MutableSharedFlow<List<org.kiwix.libkiwix.Book>>,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
   ) = requestDownloadLibrary.flatMapConcat {
     connectivityBroadcastReceiver.networkStates
@@ -439,16 +442,17 @@ class ZimManageViewModel @Inject constructor(
 
   private fun downloadLibraryFlow(
     kiwixService: KiwixService
-  ): Flow<LibraryNetworkEntity?> = flow {
+  ): Flow<List<org.kiwix.libkiwix.Book>> = flow {
     downloadProgress.postValue(context.getString(R.string.starting_downloading_remote_library))
     val response = kiwixService.getLibrary()
     downloadProgress.postValue(context.getString(R.string.parsing_remote_library))
-    emit(response)
+    onlineLibraryManager.parseOPDSStream(response, KIWIX_OPDS_LIBRARY_URL)
+    emit(onlineLibraryManager.getOnlineBooks())
   }
     .retry(5)
     .catch { e ->
       e.printStackTrace()
-      emit(LibraryNetworkEntity().apply { book = LinkedList() })
+      emit(emptyList())
     }
 
   private fun updateNetworkStates() = connectivityBroadcastReceiver.networkStates
@@ -460,7 +464,7 @@ class ZimManageViewModel @Inject constructor(
   private fun updateLibraryItems(
     booksFromDao: Flow<List<BookOnDisk>>,
     downloads: Flow<List<DownloadModel>>,
-    library: MutableSharedFlow<LibraryNetworkEntity>,
+    library: MutableSharedFlow<List<org.kiwix.libkiwix.Book>>,
     languages: Flow<List<Language>>,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
   ) = viewModelScope.launch(dispatcher) {
@@ -483,7 +487,7 @@ class ZimManageViewModel @Inject constructor(
       val books = args[ZERO] as List<BookOnDisk>
       val activeDownloads = args[ONE] as List<DownloadModel>
       val languageList = args[TWO] as List<Language>
-      val libraryNetworkEntity = args[THREE] as LibraryNetworkEntity
+      val libraryNetworkEntity = args[THREE] as List<org.kiwix.libkiwix.Book>
       val filter = args[FOUR] as String
       val fileSystemState = args[FIVE] as FileSystemState
       combineLibrarySources(
@@ -505,12 +509,12 @@ class ZimManageViewModel @Inject constructor(
   }
 
   private fun updateLanguagesInDao(
-    library: MutableSharedFlow<LibraryNetworkEntity>,
+    library: MutableSharedFlow<List<org.kiwix.libkiwix.Book>>,
     languages: Flow<List<Language>>,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
   ) =
     combine(
-      library.map { it.book }.filterNotNull(),
+      library,
       languages
     ) { books, existingLanguages ->
       combineToLanguageList(books, existingLanguages)
@@ -523,7 +527,7 @@ class ZimManageViewModel @Inject constructor(
       .launchIn(viewModelScope)
 
   private fun combineToLanguageList(
-    booksFromNetwork: List<Book>,
+    booksFromNetwork: List<org.kiwix.libkiwix.Book>,
     allLanguages: List<Language>
   ) = when {
     booksFromNetwork.isEmpty() -> {
@@ -547,8 +551,8 @@ class ZimManageViewModel @Inject constructor(
       )
   }
 
-  private fun networkLanguageCounts(booksFromNetwork: List<Book>) =
-    booksFromNetwork.mapNotNull(Book::language)
+  private fun networkLanguageCounts(booksFromNetwork: List<org.kiwix.libkiwix.Book>) =
+    booksFromNetwork.mapNotNull { it.language }
       .fold(
         mutableMapOf<String, Int>()
       ) { acc, language -> acc.increment(language) }
@@ -585,14 +589,14 @@ class ZimManageViewModel @Inject constructor(
     booksOnFileSystem: List<BookOnDisk>,
     activeDownloads: List<DownloadModel>,
     allLanguages: List<Language>,
-    libraryNetworkEntity: LibraryNetworkEntity,
+    onlineBooks: List<org.kiwix.libkiwix.Book>,
     filter: String,
     fileSystemState: FileSystemState
   ): List<LibraryListItem> {
     val activeLanguageCodes =
       allLanguages.filter(Language::active)
         .map(Language::languageCode)
-    val allBooks = libraryNetworkEntity.book!! - booksOnFileSystem.map(BookOnDisk::book).toSet()
+    val allBooks = onlineBooks - booksOnFileSystem.map(BookOnDisk::book).toSet()
     val downloadingBooks =
       activeDownloads.mapNotNull { download ->
         allBooks.firstOrNull { it.id == download.book.id }
