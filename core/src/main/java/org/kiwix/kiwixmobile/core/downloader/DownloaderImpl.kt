@@ -23,8 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import javax.inject.Inject
 
 class DownloaderImpl @Inject constructor(
@@ -33,7 +32,7 @@ class DownloaderImpl @Inject constructor(
   private val kiwixService: KiwixService
 ) : Downloader {
   @Suppress("InjectDispatcher")
-  override fun download(book: LibraryNetworkEntity.Book) {
+  override fun download(book: LibkiwixBook) {
     CoroutineScope(Dispatchers.IO).launch {
       runCatching {
         urlProvider(book)?.let {
@@ -46,7 +45,7 @@ class DownloaderImpl @Inject constructor(
   }
 
   @Suppress("UnsafeCallOnNullableType")
-  private suspend fun urlProvider(book: Book): String? =
+  private suspend fun urlProvider(book: LibkiwixBook): String? =
     if (book.url?.endsWith("meta4") == true) {
       kiwixService.getMetaLinks(book.url!!)?.relevantUrl?.value
     } else {

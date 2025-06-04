@@ -50,6 +50,7 @@
     <ID>PackageNaming:TagsView.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>PackageNaming:ConnectivityBroadcastReceiver.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>PackageNaming:NetworkState.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
+    <ID>PackageNaming:OnlineLibraryManager.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun getAllZimParts(book: Book): List&lt;File></ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic suspend fun getLocalFilePathByUri( context: Context, uri: Uri ): String?</ID>
     <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic suspend fun hasPart(file: File): Boolean</ID>

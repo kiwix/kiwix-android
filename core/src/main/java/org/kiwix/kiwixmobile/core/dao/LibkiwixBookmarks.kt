@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.core.dao
 
 import android.os.Build
 import android.os.Environment
-import android.util.Base64
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,11 +35,11 @@ import org.kiwix.kiwixmobile.core.DarkModeConfig
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.isCustomApp
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
+import org.kiwix.kiwixmobile.core.extensions.getFavicon
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.adapter.LibkiwixBookmarkItem
-import org.kiwix.kiwixmobile.core.reader.ILLUSTRATION_SIZE
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
@@ -285,10 +284,7 @@ class LibkiwixBookmarks @Inject constructor(
           }
 
         // Check if the book has an illustration of the specified size and encode it to Base64.
-        val favicon =
-          book?.getIllustration(ILLUSTRATION_SIZE)?.data?.let {
-            Base64.encodeToString(it, Base64.DEFAULT)
-          }
+        val favicon = book?.getFavicon()
 
         val zimReaderSource = book?.path?.let { ZimReaderSource(File(it)) }
         // Return the LibkiwixBookmarkItem, filtering out null results.

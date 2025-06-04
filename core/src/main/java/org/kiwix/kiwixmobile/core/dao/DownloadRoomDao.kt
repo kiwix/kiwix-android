@@ -33,7 +33,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import javax.inject.Inject
 
@@ -100,7 +100,7 @@ abstract class DownloadRoomDao {
 
   fun addIfDoesNotExist(
     url: String,
-    book: LibraryNetworkEntity.Book,
+    book: LibkiwixBook,
     downloadRequester: DownloadRequester
   ) {
     if (doesNotAlreadyExist(book)) {
@@ -113,6 +113,6 @@ abstract class DownloadRoomDao {
     }
   }
 
-  private fun doesNotAlreadyExist(book: LibraryNetworkEntity.Book) =
+  private fun doesNotAlreadyExist(book: LibkiwixBook) =
     count(book.id) == 0
 }

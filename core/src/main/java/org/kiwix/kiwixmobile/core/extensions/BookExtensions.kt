@@ -18,30 +18,32 @@
 
 package org.kiwix.kiwixmobile.core.extensions
 
+import android.util.Base64
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
+import org.kiwix.kiwixmobile.core.reader.ILLUSTRATION_SIZE
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.NetworkUtils
+import org.kiwix.libkiwix.Book
 
-fun Book.calculateSearchMatches(
+fun LibkiwixBook.calculateSearchMatches(
   filter: String,
   bookUtils: BookUtils
 ) {
   val searchableText = buildSearchableText(bookUtils)
   searchMatches = filter.split("\\s+")
     .foldRight(
-      0,
-      { filterWord, acc ->
-        if (searchableText.contains(filterWord, true)) {
-          acc + 1
-        } else {
-          acc
-        }
+      0
+    ) { filterWord, acc ->
+      if (searchableText.contains(filterWord, true)) {
+        acc + 1
+      } else {
+        acc
       }
-    )
+    }
 }
 
-fun Book.buildSearchableText(bookUtils: BookUtils): String =
+fun LibkiwixBook.buildSearchableText(bookUtils: BookUtils): String =
   StringBuilder().apply {
     append(title)
     append("|")
@@ -54,3 +56,7 @@ fun Book.buildSearchableText(bookUtils: BookUtils): String =
       append("|")
     }
   }.toString()
+
+fun Book.getFavicon(): String? = getIllustration(ILLUSTRATION_SIZE)?.data?.let {
+  Base64.encodeToString(it, Base64.DEFAULT)
+}

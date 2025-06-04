@@ -18,11 +18,12 @@
 
 package org.kiwix.kiwixmobile.core.zim_manager
 
-import org.kiwix.libkiwix.Book
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
+import javax.inject.Inject
 
-class OnlineLibraryManager(
+class OnlineLibraryManager @Inject constructor(
   val library: Library,
   val manager: Manager
 ) {
@@ -33,12 +34,12 @@ class OnlineLibraryManager(
       it.printStackTrace()
     }.isSuccess
 
-  suspend fun getOnlineBooks(): List<Book> {
-    val onlineBooksList = arrayListOf<Book>()
+  suspend fun getOnlineBooks(): List<LibkiwixBook> {
+    val onlineBooksList = arrayListOf<LibkiwixBook>()
     runCatching {
       library.booksIds.forEach { bookId ->
         val book = library.getBookById(bookId)
-        onlineBooksList.add(book)
+        onlineBooksList.add(LibkiwixBook(book))
       }
     }.onFailure { it.printStackTrace() }
     return onlineBooksList

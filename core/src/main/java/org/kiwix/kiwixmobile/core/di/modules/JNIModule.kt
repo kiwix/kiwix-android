@@ -28,7 +28,6 @@ import org.kiwix.kiwixmobile.core.zim_manager.OnlineLibraryManager
 import org.kiwix.libkiwix.JNIKiwix
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -38,19 +37,17 @@ class JNIModule {
 
   @Provides
   @Singleton
-  @Named("bookmarks")
   fun provideLibrary(): Library = Library()
 
   @Provides
   @Singleton
-  @Named("bookmarks")
   fun providesManager(library: Library): Manager = Manager(library)
 
   @Provides
   @Singleton
   fun providesLibkiwixBookmarks(
-    @Named("bookmarks") library: Library,
-    @Named("bookmarks") manager: Manager,
+    library: Library,
+    manager: Manager,
     sharedPreferenceUtil: SharedPreferenceUtil,
     bookDao: NewBookDao,
     zimReaderContainer: ZimReaderContainer
@@ -59,18 +56,8 @@ class JNIModule {
 
   @Provides
   @Singleton
-  @Named("onlineLibrary")
-  fun provideOnlineLibrary(): Library = Library()
-
-  @Provides
-  @Singleton
-  @Named("onlineLibrary")
-  fun providesOnlineManager(library: Library): Manager = Manager(library)
-
-  @Provides
-  @Singleton
   fun provideOnlineLibraryParser(
-    @Named("onlineLibrary") library: Library,
-    @Named("onlineLibrary") manager: Manager
-  ) = OnlineLibraryManager(library, manager)
+    library: Library,
+    manager: Manager
+  ): OnlineLibraryManager = OnlineLibraryManager(library, manager)
 }

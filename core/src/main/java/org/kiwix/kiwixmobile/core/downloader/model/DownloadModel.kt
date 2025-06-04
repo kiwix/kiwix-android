@@ -17,10 +17,10 @@
  */
 package org.kiwix.kiwixmobile.core.downloader.model
 
-import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.Error
+import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.core.dao.entities.DownloadRoomEntity
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.utils.StorageUtils
 
 data class DownloadModel(
@@ -33,7 +33,7 @@ data class DownloadModel(
   val state: Status,
   val error: Error,
   val progress: Int,
-  val book: Book
+  val book: LibkiwixBook
 ) {
   val bytesRemaining: Long by lazy { totalSizeOfDownload - bytesDownloaded }
   val fileNameFromUrl: String by lazy { StorageUtils.getFileNameFromUrl(book.url) }

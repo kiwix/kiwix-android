@@ -66,6 +66,12 @@ object Libs {
   /**
    * https://github.com/square/retrofit
    */
+  const val converter_scalars: String = "com.squareup.retrofit2:converter-scalars:" +
+    Versions.com_squareup_retrofit2
+
+  /**
+   * https://github.com/square/retrofit
+   */
   const val converter_simplexml: String = "com.squareup.retrofit2:converter-simplexml:" +
     Versions.com_squareup_retrofit2
 

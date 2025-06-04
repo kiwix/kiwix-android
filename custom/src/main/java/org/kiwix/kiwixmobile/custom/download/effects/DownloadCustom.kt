@@ -21,7 +21,7 @@ package org.kiwix.kiwixmobile.custom.download.effects
 import androidx.appcompat.app.AppCompatActivity
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.downloader.Downloader
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import javax.inject.Inject
 
@@ -45,7 +45,7 @@ data class DownloadCustom @Inject constructor(val downloader: Downloader) : Side
     name: String = "",
     favIcon: String = ""
   ) =
-    Book().apply {
+    LibkiwixBook().apply {
       this.id = id
       this.title = title
       this.description = description

@@ -82,7 +82,7 @@ import org.kiwix.kiwixmobile.core.downloader.downloadManager.DEFAULT_INT_VALUE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.FIVE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.ZERO
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.extensions.calculateSearchMatches
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.ui.components.ONE
@@ -131,6 +131,7 @@ const val MAX_PROGRESS = 100
 const val THREE = 3
 const val FOUR = 4
 
+@Suppress("LongParameterList")
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: DownloadRoomDao,
   private val bookDao: NewBookDao,
@@ -168,7 +169,7 @@ class ZimManageViewModel @Inject constructor(
   val onlineLibraryDownloading = MutableStateFlow(false)
   val shouldShowWifiOnlyDialog = MutableLiveData<Boolean>()
   val networkStates = MutableLiveData<NetworkState>()
-  val networkLibrary = MutableSharedFlow<List<org.kiwix.libkiwix.Book>>(replay = 0)
+  val networkLibrary = MutableSharedFlow<List<LibkiwixBook>>(replay = 0)
   val requestFileSystemCheck = MutableSharedFlow<Unit>(replay = 0)
   val fileSelectActions = MutableSharedFlow<FileSelectActions>()
   private val requestDownloadLibrary = MutableSharedFlow<Unit>(
@@ -391,7 +392,7 @@ class ZimManageViewModel @Inject constructor(
 
   @OptIn(ExperimentalCoroutinesApi::class)
   private fun requestsAndConnectivityChangesToLibraryRequests(
-    library: MutableSharedFlow<List<org.kiwix.libkiwix.Book>>,
+    library: MutableSharedFlow<List<LibkiwixBook>>,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
   ) = requestDownloadLibrary.flatMapConcat {
     connectivityBroadcastReceiver.networkStates
@@ -442,12 +443,16 @@ class ZimManageViewModel @Inject constructor(
 
   private fun downloadLibraryFlow(
     kiwixService: KiwixService
-  ): Flow<List<org.kiwix.libkiwix.Book>> = flow {
+  ): Flow<List<LibkiwixBook>> = flow {
     downloadProgress.postValue(context.getString(R.string.starting_downloading_remote_library))
     val response = kiwixService.getLibrary()
     downloadProgress.postValue(context.getString(R.string.parsing_remote_library))
-    onlineLibraryManager.parseOPDSStream(response, KIWIX_OPDS_LIBRARY_URL)
-    emit(onlineLibraryManager.getOnlineBooks())
+    val isLibraryParsed = onlineLibraryManager.parseOPDSStream(response, KIWIX_OPDS_LIBRARY_URL)
+    if (isLibraryParsed) {
+      emit(onlineLibraryManager.getOnlineBooks())
+    } else {
+      emit(emptyList())
+    }
   }
     .retry(5)
     .catch { e ->
@@ -464,7 +469,7 @@ class ZimManageViewModel @Inject constructor(
   private fun updateLibraryItems(
     booksFromDao: Flow<List<BookOnDisk>>,
     downloads: Flow<List<DownloadModel>>,
-    library: MutableSharedFlow<List<org.kiwix.libkiwix.Book>>,
+    library: MutableSharedFlow<List<LibkiwixBook>>,
     languages: Flow<List<Language>>,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
   ) = viewModelScope.launch(dispatcher) {
@@ -487,14 +492,14 @@ class ZimManageViewModel @Inject constructor(
       val books = args[ZERO] as List<BookOnDisk>
       val activeDownloads = args[ONE] as List<DownloadModel>
       val languageList = args[TWO] as List<Language>
-      val libraryNetworkEntity = args[THREE] as List<org.kiwix.libkiwix.Book>
+      val libraryNetworkEntity = args[THREE] as List<LibkiwixBook>
       val filter = args[FOUR] as String
       val fileSystemState = args[FIVE] as FileSystemState
       combineLibrarySources(
         booksOnFileSystem = books,
         activeDownloads = activeDownloads,
         allLanguages = languageList,
-        libraryNetworkEntity = libraryNetworkEntity,
+        onlineBooks = libraryNetworkEntity,
         filter = filter,
         fileSystemState = fileSystemState
       )
@@ -509,7 +514,7 @@ class ZimManageViewModel @Inject constructor(
   }
 
   private fun updateLanguagesInDao(
-    library: MutableSharedFlow<List<org.kiwix.libkiwix.Book>>,
+    library: MutableSharedFlow<List<LibkiwixBook>>,
     languages: Flow<List<Language>>,
     dispatcher: CoroutineDispatcher = Dispatchers.IO
   ) =
@@ -527,7 +532,7 @@ class ZimManageViewModel @Inject constructor(
       .launchIn(viewModelScope)
 
   private fun combineToLanguageList(
-    booksFromNetwork: List<org.kiwix.libkiwix.Book>,
+    booksFromNetwork: List<LibkiwixBook>,
     allLanguages: List<Language>
   ) = when {
     booksFromNetwork.isEmpty() -> {
@@ -551,8 +556,8 @@ class ZimManageViewModel @Inject constructor(
       )
   }
 
-  private fun networkLanguageCounts(booksFromNetwork: List<org.kiwix.libkiwix.Book>) =
-    booksFromNetwork.mapNotNull { it.language }
+  private fun networkLanguageCounts(booksFromNetwork: List<LibkiwixBook>) =
+    booksFromNetwork.map { it.language }
       .fold(
         mutableMapOf<String, Int>()
       ) { acc, language -> acc.increment(language) }
@@ -589,7 +594,7 @@ class ZimManageViewModel @Inject constructor(
     booksOnFileSystem: List<BookOnDisk>,
     activeDownloads: List<DownloadModel>,
     allLanguages: List<Language>,
-    onlineBooks: List<org.kiwix.libkiwix.Book>,
+    onlineBooks: List<LibkiwixBook>,
     filter: String,
     fileSystemState: FileSystemState
   ): List<LibraryListItem> {
@@ -634,7 +639,7 @@ class ZimManageViewModel @Inject constructor(
   }
 
   private fun createLibrarySection(
-    books: List<Book>,
+    books: List<LibkiwixBook>,
     activeDownloads: List<DownloadModel>,
     fileSystemState: FileSystemState,
     sectionStringId: Int,
@@ -648,7 +653,7 @@ class ZimManageViewModel @Inject constructor(
     }
 
   private fun applySearchFilter(
-    unDownloadedBooks: List<Book>,
+    unDownloadedBooks: List<LibkiwixBook>,
     filter: String
   ) = if (filter.isEmpty()) {
     unDownloadedBooks
@@ -657,7 +662,7 @@ class ZimManageViewModel @Inject constructor(
     unDownloadedBooks.filter { it.searchMatches > 0 }
   }
 
-  private fun List<Book>.asLibraryItems(
+  private fun List<LibkiwixBook>.asLibraryItems(
     activeDownloads: List<DownloadModel>,
     fileSystemState: FileSystemState
   ) = map { book ->

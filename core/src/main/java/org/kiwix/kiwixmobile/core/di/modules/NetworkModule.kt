@@ -38,7 +38,7 @@ const val CONNECTION_TIMEOUT = 10L
 const val READ_TIMEOUT = 300L
 const val CALL_TIMEOUT = 300L
 const val USER_AGENT = "kiwix-android-version:${BuildConfig.VERSION_CODE}"
-const val KIWIX_OPDS_LIBRARY_URL = "https://opds.library.kiwix.org/v2"
+const val KIWIX_OPDS_LIBRARY_URL = "https://opds.library.kiwix.org/v2/"
 
 @Module
 class NetworkModule {
