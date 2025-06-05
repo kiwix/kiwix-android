@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* BOKOBA VEROLY
+-->
+<resources>
+  <string name="retry">Beto mekaka diaka</string>
+  <string name="invalid_installation">Bima ya kukonda mfunu. Beto ke lomba nge na kukotisa ZIM. Yindula nde WiFi kele mpi nge kele ti kisika ya kubumba bima mingi</string>
+</resources>
