@@ -21,14 +21,16 @@ package org.kiwix.kiwixmobile.core.data.remote
 
 import okhttp3.OkHttpClient
 import org.kiwix.kiwixmobile.core.entity.MetaLinkNetworkEntity
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Url
 
 interface KiwixService {
   @GET(OPDS_LIBRARY_NETWORK_PATH)
-  suspend fun getLibrary(): String?
+  suspend fun getLibrary(): Response<String>
 
   @GET
   suspend fun getMetaLinks(
@@ -43,7 +45,7 @@ interface KiwixService {
         .baseUrl(baseUrl)
         .client(okHttpClient)
         .addConverterFactory(ScalarsConverterFactory.create())
-        // .addConverterFactory(SimpleXmlConverterFactory.create())
+        .addConverterFactory(SimpleXmlConverterFactory.create())
         .build()
       return retrofit.create(KiwixService::class.java)
     }
@@ -52,6 +54,6 @@ interface KiwixService {
   companion object {
     // To fetch the full OPDS catalog.
     // TODO we will change this to pagination later once we migrate to OPDS properly.
-    const val OPDS_LIBRARY_NETWORK_PATH = "entries?count=-1"
+    const val OPDS_LIBRARY_NETWORK_PATH = "v2/entries?count=-1"
   }
 }

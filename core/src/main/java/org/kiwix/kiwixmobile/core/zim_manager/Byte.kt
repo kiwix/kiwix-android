@@ -23,10 +23,10 @@ import kotlin.math.log10
 import kotlin.math.pow
 
 @JvmInline
-value class KiloByte(private val kilobyteString: String?) {
+value class Byte(private val byteString: String?) {
   val humanReadable
-    get() = kilobyteString?.toLongOrNull()?.let {
-      val units = arrayOf("KB", "MB", "GB", "TB")
+    get() = byteString?.toLongOrNull()?.let {
+      val units = arrayOf("B", "KB", "MB", "GB", "TB")
       val conversion = (log10(it.toDouble()) / log10(1024.0)).toInt()
       DecimalFormat("#,##0.#")
         .format(it / 1024.0.pow(conversion.toDouble())) +

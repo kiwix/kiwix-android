@@ -285,6 +285,7 @@ class LibkiwixBookmarks @Inject constructor(
 
         // Check if the book has an illustration of the specified size and encode it to Base64.
         val favicon = book?.getFavicon()
+        Log.e(TAG, "getBookmarksList: $favicon")
 
         val zimReaderSource = book?.path?.let { ZimReaderSource(File(it)) }
         // Return the LibkiwixBookmarkItem, filtering out null results.

@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.zimManager.libraryView.adapter
 
 import androidx.annotation.StringRes
 import com.tonyodev.fetch2.Status
-import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.downloader.model.Seconds
@@ -61,7 +60,7 @@ sealed class LibraryListItem {
 
   data class LibraryDownloadItem(
     val downloadId: Long,
-    val favIcon: Base64String,
+    val favIconUrl: String,
     val title: String,
     val description: String?,
     val bytesDownloaded: Long,
@@ -76,7 +75,7 @@ sealed class LibraryListItem {
 
     constructor(downloadModel: DownloadModel) : this(
       downloadModel.downloadId,
-      Base64String(downloadModel.book.favicon),
+      downloadModel.book.favicon,
       downloadModel.book.title,
       downloadModel.book.description,
       downloadModel.bytesDownloaded,

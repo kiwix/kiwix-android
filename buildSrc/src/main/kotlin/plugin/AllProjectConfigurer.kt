@@ -243,6 +243,8 @@ class AllProjectConfigurer {
       implementation(Libs.ANDROIDX_ACTIVITY_COMPOSE)
       implementation(Libs.COMPOSE_TOOLING_PREVIEW)
       implementation(Libs.COMPOSE_LIVE_DATA)
+      implementation(Libs.COIL3_COMPOSE)
+      implementation(Libs.COIL3_OKHTTP_COMPOSE)
 
       // Compose UI test implementation
       androidTestImplementation(Libs.COMPOSE_UI_TEST_JUNIT)

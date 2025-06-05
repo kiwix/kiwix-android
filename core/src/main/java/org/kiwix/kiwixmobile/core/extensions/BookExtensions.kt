@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.extensions
 
 import android.util.Base64
+import android.util.Log
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.reader.ILLUSTRATION_SIZE
@@ -57,6 +58,20 @@ fun LibkiwixBook.buildSearchableText(bookUtils: BookUtils): String =
     }
   }.toString()
 
-fun Book.getFavicon(): String? = getIllustration(ILLUSTRATION_SIZE)?.data?.let {
-  Base64.encodeToString(it, Base64.DEFAULT)
-}
+fun Book?.getFavicon(): String? =
+  runCatching {
+    val illustration = this?.getIllustration(ILLUSTRATION_SIZE)
+    illustration?.url()?.ifBlank {
+      illustration.data?.let {
+        Base64.encodeToString(it, Base64.DEFAULT)
+      }
+    }
+  }.getOrElse {
+    it.printStackTrace().also {
+      this?.illustrations?.forEach { illustration ->
+        Log.e("BOOK", "getFavicon: ${illustration.data} and ${illustration.url()}")
+      }
+      Log.e("BOOK", "getFavicon: ${this?.title}")
+    }
+    ""
+  }

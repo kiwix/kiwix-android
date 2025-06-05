@@ -446,13 +446,19 @@ class ZimManageViewModel @Inject constructor(
   ): Flow<List<LibkiwixBook>> = flow {
     downloadProgress.postValue(context.getString(R.string.starting_downloading_remote_library))
     val response = kiwixService.getLibrary()
+    val resolvedUrl = response.raw().networkResponse?.request?.url
+      ?: response.raw().request.url
+    val baseHostUrl = "${resolvedUrl.scheme}://${resolvedUrl.host}"
     downloadProgress.postValue(context.getString(R.string.parsing_remote_library))
-    val isLibraryParsed = onlineLibraryManager.parseOPDSStream(response, KIWIX_OPDS_LIBRARY_URL)
-    if (isLibraryParsed) {
-      emit(onlineLibraryManager.getOnlineBooks())
-    } else {
-      emit(emptyList())
-    }
+    val libraryXml = response.body()
+    val isLibraryParsed = onlineLibraryManager.parseOPDSStream(libraryXml, baseHostUrl)
+    emit(
+      if (isLibraryParsed) {
+        onlineLibraryManager.getOnlineBooks()
+      } else {
+        emptyList()
+      }
+    )
   }
     .retry(5)
     .catch { e ->

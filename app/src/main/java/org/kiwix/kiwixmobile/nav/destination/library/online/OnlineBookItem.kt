@@ -48,8 +48,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.zIndex
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.downloader.model.Base64String
-import org.kiwix.kiwixmobile.core.downloader.model.toPainter
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.PureGrey
@@ -58,7 +56,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONLINE_BOOK_DISABLED_COLOR_ALPHA
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
-import org.kiwix.kiwixmobile.core.zim_manager.KiloByte
+import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.kiwixmobile.ui.BookDate
 import org.kiwix.kiwixmobile.ui.BookDescription
 import org.kiwix.kiwixmobile.ui.BookIcon
@@ -167,7 +165,7 @@ private fun OnlineBookContent(item: BookItem, bookUtils: BookUtils) {
       .fillMaxWidth(),
     verticalAlignment = Alignment.CenterVertically
   ) {
-    BookIcon(Base64String(item.book.favicon).toPainter())
+    BookIcon(item.book.favicon, isOnlineLibrary = true)
     Column(
       modifier = Modifier
         .weight(1f)
@@ -207,7 +205,7 @@ private fun BookSizeAndDateRow(item: BookItem) {
     verticalAlignment = Alignment.CenterVertically
   ) {
     BookSize(
-      KiloByte(item.book.size).humanReadable,
+      Byte(item.book.size).humanReadable,
       modifier = Modifier.weight(1f).testTag(ONLINE_BOOK_SIZE_TEXT_TESTING_TAG)
     )
     BookDate(item.book.date)
