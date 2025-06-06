@@ -24,7 +24,6 @@ import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.dao.NewBookDao
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.core.zim_manager.OnlineLibraryManager
 import org.kiwix.libkiwix.JNIKiwix
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
@@ -53,11 +52,4 @@ class JNIModule {
     zimReaderContainer: ZimReaderContainer
   ): LibkiwixBookmarks =
     LibkiwixBookmarks(library, manager, sharedPreferenceUtil, bookDao, zimReaderContainer)
-
-  @Provides
-  @Singleton
-  fun provideOnlineLibraryParser(
-    library: Library,
-    manager: Manager
-  ): OnlineLibraryManager = OnlineLibraryManager(library, manager)
 }

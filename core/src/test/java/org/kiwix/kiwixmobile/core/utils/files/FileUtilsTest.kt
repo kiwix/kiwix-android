@@ -22,16 +22,16 @@ import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import java.io.File
 
 class FileUtilsTest {
   private val mockFile: File = mockk()
-  private val testBook = Book().apply { file = mockFile }
+  private val testBook = LibkiwixBook().apply { file = mockFile }
   private val testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c"
   private val fileName = "/data/user/0/org.kiwix.kiwixmobile/files${File.separator}$testId"
 

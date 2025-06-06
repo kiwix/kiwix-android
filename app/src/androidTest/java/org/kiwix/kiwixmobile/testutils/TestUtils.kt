@@ -48,7 +48,7 @@ import org.kiwix.kiwixmobile.core.di.modules.CALL_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.CONNECTION_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.READ_TIMEOUT
 import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.ui.components.SWIPE_REFRESH_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.File
@@ -150,7 +150,7 @@ object TestUtils {
   @JvmStatic fun withContent(content: String): Matcher<Any?> {
     return object : BoundedMatcher<Any?, Any?>(Any::class.java) {
       public override fun matchesSafely(myObj: Any?): Boolean {
-        if (myObj !is LibraryNetworkEntity.Book) {
+        if (myObj !is LibkiwixBook) {
           return false
         }
         return if (myObj.url != null) {

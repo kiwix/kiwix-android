@@ -22,7 +22,7 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.downloader.Downloader
-import org.kiwix.sharedFunctions.book
+import org.kiwix.sharedFunctions.libkiwixBook
 
 internal class DownloadCustomTest {
   @Test
@@ -35,7 +35,7 @@ internal class DownloadCustomTest {
   }
 
   private fun expectedBook() =
-    book(
+    libkiwixBook(
       "custom",
       "",
       "",

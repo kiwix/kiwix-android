@@ -121,6 +121,8 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.DividerItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.adapter.LibraryListItem.LibraryDownloadItem
+import org.kiwix.libkiwix.Library
+import org.kiwix.libkiwix.Manager
 import java.util.Locale
 import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
@@ -146,7 +148,6 @@ class ZimManageViewModel @Inject constructor(
   private val dataSource: DataSource,
   private val connectivityManager: ConnectivityManager,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val onlineLibraryManager: OnlineLibraryManager
 ) : ViewModel() {
   sealed class FileSelectActions {
     data class RequestNavigateTo(val bookOnDisk: BookOnDisk) : FileSelectActions()
@@ -159,6 +160,12 @@ class ZimManageViewModel @Inject constructor(
     object UserClickedDownloadBooksButton : FileSelectActions()
   }
 
+  private val library by lazy { Library() }
+  private val manager by lazy { Manager(library) }
+
+  private val onlineLibraryManager by lazy {
+    OnlineLibraryManager(library, manager)
+  }
   private var isUnitTestCase: Boolean = false
   val sideEffects: MutableSharedFlow<SideEffect<*>> = MutableSharedFlow()
   private val _libraryItems = MutableStateFlow<List<LibraryListItem>>(emptyList())
@@ -412,6 +419,7 @@ class ZimManageViewModel @Inject constructor(
       it.printStackTrace().also {
         isOnlineLibraryDownloading = false
         onlineLibraryDownloading.tryEmit(false)
+        library.emit(emptyList())
       }
     }
     .onEach {

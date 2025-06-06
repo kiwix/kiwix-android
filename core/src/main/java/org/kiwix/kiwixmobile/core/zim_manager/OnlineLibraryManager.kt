@@ -21,12 +21,8 @@ package org.kiwix.kiwixmobile.core.zim_manager
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
-import javax.inject.Inject
 
-class OnlineLibraryManager @Inject constructor(
-  val library: Library,
-  val manager: Manager
-) {
+class OnlineLibraryManager(val library: Library, val manager: Manager) {
   suspend fun parseOPDSStream(content: String?, urlHost: String): Boolean =
     runCatching {
       manager.readOpds(content, urlHost)

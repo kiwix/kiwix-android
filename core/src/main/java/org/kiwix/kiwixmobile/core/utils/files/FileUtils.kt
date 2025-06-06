@@ -42,7 +42,7 @@ import kotlinx.coroutines.sync.withLock
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.ChunkUtils
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -494,7 +494,7 @@ object FileUtils {
 
   @Suppress("NestedBlockDepth")
   @JvmStatic
-  suspend fun getAllZimParts(book: Book): List<File> {
+  suspend fun getAllZimParts(book: LibkiwixBook): List<File> {
     val files = ArrayList<File>()
     book.file?.let {
       if (it.path.endsWith(".zim") || it.path.endsWith(".zim.part")) {

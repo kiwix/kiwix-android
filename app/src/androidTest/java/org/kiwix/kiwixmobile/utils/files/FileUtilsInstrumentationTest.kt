@@ -35,7 +35,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.kiwix.kiwixmobile.core.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.files.DocumentResolverWrapper
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
@@ -109,7 +109,7 @@ class FileUtilsInstrumentationTest {
         }
         char1++
       }
-      val book = LibraryNetworkEntity.Book()
+      val book = LibkiwixBook()
       book.file = File(fileName + "bg")
       val files = getAllZimParts(book)
 

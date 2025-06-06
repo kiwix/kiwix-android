@@ -204,7 +204,7 @@ class LibkiwixBookmarks @Inject constructor(
         library.addBook(libKiwixBook).also {
           // now library has changed so update our library list.
           libraryBooksList = library.booksIds.toList()
-          Log.d(
+          Log.e(
             TAG,
             "Added Book to Library:\n" +
               "ZIM File Path: ${book.path}\n" +
@@ -233,12 +233,41 @@ class LibkiwixBookmarks @Inject constructor(
         CoroutineScope(dispatcher).launch {
           writeBookMarksAndSaveLibraryToFile()
           updateFlowBookmarkList()
+          removeBookFromLibraryIfNoRelatedBookmarksAreStored(dispatcher, bookmarks)
         }
       }
   }
 
   fun deleteBookmark(bookId: String, bookmarkUrl: String) {
     deleteBookmarks(listOf(LibkiwixBookmarkItem(zimId = bookId, bookmarkUrl = bookmarkUrl)))
+  }
+
+  /**
+   * Removes books from the library that no longer have any associated bookmarks.
+   *
+   * This function checks if any of the books associated with the given deleted bookmarks
+   * are still referenced by other existing bookmarks. If not, those books are removed from the library.
+   *
+   * @param dispatcher The coroutine dispatcher to run the operation on (typically Dispatchers.IO).
+   * @param deletedBookmarks The list of bookmarks that were just deleted.
+   */
+  private suspend fun removeBookFromLibraryIfNoRelatedBookmarksAreStored(
+    dispatcher: CoroutineDispatcher,
+    deletedBookmarks: List<LibkiwixBookmarkItem>
+  ) {
+    withContext(dispatcher) {
+      val currentBookmarks = getBookmarksList()
+      val deletedZimIds = deletedBookmarks.map { it.zimId }.distinct()
+
+      deletedZimIds.forEach { zimId ->
+        val stillExists = currentBookmarks.any { it.zimId == zimId }
+        if (!stillExists) {
+          library.removeBookById(zimId)
+          Log.d(TAG, "Removed book from library since no bookmarks exist for: $zimId")
+        }
+      }
+    }
+    writeBookMarksAndSaveLibraryToFile()
   }
 
   /**
@@ -285,7 +314,6 @@ class LibkiwixBookmarks @Inject constructor(
 
         // Check if the book has an illustration of the specified size and encode it to Base64.
         val favicon = book?.getFavicon()
-        Log.e(TAG, "getBookmarksList: $favicon")
 
         val zimReaderSource = book?.path?.let { ZimReaderSource(File(it)) }
         // Return the LibkiwixBookmarkItem, filtering out null results.
